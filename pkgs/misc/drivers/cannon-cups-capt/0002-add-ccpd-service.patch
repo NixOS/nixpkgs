@@ -1,0 +1,32 @@
+From c17bef56af57eaa95113d792abdaf22ffc9688d0 Mon Sep 17 00:00:00 2001
+From: wisut hantanong <wizzup@gmail.com>
+Date: Wed, 10 Jul 2019 16:14:42 +0700
+Subject: [PATCH] add ccpd.service
+
+---
+ ccpd.service | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+ create mode 100644 Misc/ccpd.service
+
+diff --git a/ccpd.service b/ccpd.service
+new file mode 100644
+index 0000000..387bc9f
+--- /dev/null
++++ b/ccpd.service
+@@ -0,0 +1,13 @@
++# original : https://aur.archlinux.org/cgit/aur.git/plain/ccpd.service?h=capt-src
++
++[Unit]
++Description=Canon CAPT daemon
++Requires=org.cups.cupsd.service
++After=org.cups.cupsd.service
++
++[Service]
++Type=forking
++ExecStart=/usr/bin/ccpd
++
++[Install]
++WantedBy=printer.target
+-- 
+2.22.0
+
