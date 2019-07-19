@@ -4650,11 +4650,6 @@
     github = "shlevy";
     name = "Shea Levy";
   };
-  shmish111 = {
-    email = "shmish111@gmail.com";
-    github = "shmish111";
-    name = "David Smith";
-  };
   shou = {
     email = "x+g@shou.io";
     github = "Shou";
