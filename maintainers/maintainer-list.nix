@@ -5239,9 +5239,9 @@
     name = "Christian Zagrodnick";
   };
   zalakain = {
-    email = "contact@unaizalakain.info";
+    email = "ping@umazalakain.info";
     github = "umazalakain";
-    name = "Unai Zalakain";
+    name = "Uma Zalakain";
   };
   zaninime = {
     email = "francesco@zanini.me";
