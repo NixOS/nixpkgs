@@ -586,4 +586,10 @@ self: super: builtins.intersectAttrs super {
   # Tests require internet
   dhall_1_24_0 = dontCheck super.dhall_1_24_0;
 
+  jsaddle-wkwebview = overrideCabal super.jsaddle-wkwebview (old: {
+    broken = false;
+    libraryFrameworkDepends = (old.libraryFrameworkDepends or [])
+                              ++ (with pkgs.darwin.apple_sdk.frameworks; [ Cocoa WebKit ]);
+  });
+
 }
