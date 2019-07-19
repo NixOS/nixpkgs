@@ -1797,11 +1797,6 @@
     github = "freezeboy";
     name = "freezeboy";
   };
-  Fresheyeball = {
-    email = "fresheyeball@gmail.com";
-    github = "fresheyeball";
-    name = "Isaac Shapira";
-  };
   fridh = {
     email = "fridh@fridh.nl";
     github = "fridh";
