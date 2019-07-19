@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "graphene-hardened-malloc-${version}";
-  version = "190405.003.2019.04.01.19";
+  version = "1";
 
   src = fetchurl {
-    url = "https://github.com/GrapheneOS/hardened_malloc/archive/PQ2A.${version}.tar.gz";
-    sha256 = "1qczmajy3q07jd236dmal4iq5xxcsrkyw26gc9r4vs4wj4m42d11";
+    url = "https://github.com/GrapheneOS/hardened_malloc/archive/${version}.tar.gz";
+    sha256 = "1z3kb9fr6w9fcdc42bh8k5b4r10sn5hrwwk4m691qjdgk5hlj3aa";
   };
 
   installPhase = ''
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     substitute preload.sh $out/bin/preload-hardened-malloc --replace "\$dir" $out/lib
     chmod 0555 $out/bin/preload-hardened-malloc
   '';
+
+  separateDebugInfo = true;
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     make
 
     # these tests don't actually appear to generate overflows currently
-    rm read_after_free_small string_overflow
+    rm read_after_free_small string_overflow eight_byte_overflow_large
 
     for t in `find . -regex ".*/[a-z_]+"` ; do
       echo "Running $t..."
