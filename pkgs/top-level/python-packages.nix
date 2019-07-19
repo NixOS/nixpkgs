@@ -101,6 +101,30 @@ let
   disabledIf = x: drv:
     if x then throw "${removePythonPrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
 
+  buildAzureNamespacePythonPackage = namespaces: attrs:
+    let
+      # namespaceDirs [ "azure" "cli" "mgmt" ] -> [ "azure" "azure/cli" "azure/cli/mgmt"]
+      namespaceDirs = pkgs.lib.foldl (accum: namespace:
+      ( let next = if accum == [] then namespace else (last accum) + "/" + namespace;
+        in accum ++ [ next ])
+      ) [] namespaces;
+    in
+      buildPythonPackage (attrs // {
+        postPatch = ''
+          sed -i '/namespace-package/d' setup.cfg
+          rm -f azure_bdist_wheel.py
+        '';
+        postInstall =
+          if isPy3k then pkgs.lib.concatMapStrings
+            (namespace: ''rm -f "$out/${python.sitePackages}/${namespace}/__init__.py";'')
+            namespaceDirs
+          else pkgs.lib.concatMapStrings
+            (namespace: ''
+              echo "__path__ = __import__('pkgutil').extend_path(__path__, __name__)" \
+                > "$out/${python.sitePackages}/${namespace}/__init__.py"; '')
+            namespaceDirs;
+      });
+
 in {
 
   inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy3k isPyPy pythonAtLeast pythonOlder;
@@ -234,37 +258,11 @@ in {
     withPython = true;
   });
 
-  buildAzureNamespacePythonPackage =
-    let
-      # namespaceDirs [ "azure" "cli" "mgmt" ] -> [ "azure" "azure/cli" "azure/cli/mgmt"]
-      # would be cleaner if we had lib.foldl1
-      namespaceDirs = namespaces: (pkgs.lib.foldl (accum: namespace:
-      ( let next = if accum.fst == "" then namespace else accum.fst + "/" + namespace;
-        in { fst = next; snd = accum.snd ++ [ next ]; })
-      ) { fst = ""; snd = []; } namespaces).snd;
-    in
-      namespaces: attrs: buildPythonPackage (attrs // {
-        # GNU+BSD sed friendly inplace command
-        postPatch = ''
-          sed '/namespace-package/d' setup.cfg > setup.cfg
-          rm -f azure_bdist_wheel.py
-        '';
-      postInstall =
-        if isPy3k then pkgs.lib.concatMapStrings
-          (namespace: ''rm -f "$out/${python.sitePackages}/${namespace}/__init__.py";'')
-          (namespaceDirs namespaces)
-        else pkgs.lib.concatMapStrings
-          (namespace: ''
-            echo "__path__ = __import__('pkgutil').extend_path(__path__, __name__)" \
-              > "$out/${python.sitePackages}/${namespace}/__init__.py"; '')
-          (namespaceDirs namespaces);
-      });
+  buildAzurePythonPackage         = buildAzureNamespacePythonPackage [ "azure" ];
 
-  buildAzurePythonPackage         = self.buildAzureNamespacePythonPackage [ "azure" ];
+  buildAzureCosmosdbPythonPackage = buildAzureNamespacePythonPackage [ "azure" "cosmosdb" ];
 
-  buildAzureCosmosdbPythonPackage = self.buildAzureNamespacePythonPackage [ "azure" "cosmosdb" ];
-
-  buildAzureMgmtPythonPackage     = self.buildAzureNamespacePythonPackage [ "azure" "mgmt" ];
+  buildAzureMgmtPythonPackage     = buildAzureNamespacePythonPackage [ "azure" "mgmt" ];
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
 
