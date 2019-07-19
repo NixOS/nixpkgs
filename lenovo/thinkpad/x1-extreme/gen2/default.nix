@@ -5,7 +5,6 @@ with lib;
 {
   imports = [
     ../.
-    ../../../../common/pc/laptop/cpu-throttling-bug.nix
   ];
 
   # Fixes an issue with incorrect battery reporting. See
@@ -44,4 +43,6 @@ with lib;
       videoDrivers = [ "intel" ];
     })
   ];
+
+  services.throttled.enable = lib.mkDefault true;
 }

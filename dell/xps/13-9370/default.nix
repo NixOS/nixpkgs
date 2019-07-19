@@ -5,7 +5,6 @@
     ../../../common/cpu/intel/kaby-lake
     ../../../common/pc/laptop
     ../../../common/pc/laptop/acpi_call.nix
-    ../../../common/pc/laptop/cpu-throttling-bug.nix
   ];
 
   # Force S3 sleep mode. See README.wiki for details.
@@ -13,4 +12,6 @@
 
   # touchpad goes over i2c
   boot.blacklistedKernelModules = [ "psmouse" ];
+
+  services.throttled.enable = lib.mkDefault true;
 }

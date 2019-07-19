@@ -1,9 +1,8 @@
-{ nixos, pkgs, config, stdenv, ... }:
+{ nixos, lib, pkgs, config, stdenv, ... }:
 {
   imports = [
     ../../../common/cpu/intel
     ../../../common/pc/laptop/acpi_call.nix
-    ../../../common/pc/laptop/cpu-throttling-bug.nix
     ../.
   ];
 
@@ -26,5 +25,7 @@
 
     LABEL="pulseaudio_end"
     '';
+    
+    throttled.enable = lib.mkDefault true;
   };
 }
