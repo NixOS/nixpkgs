@@ -5151,6 +5151,11 @@
     github = "uri-canva";
     name = "Uri Baghin";
   };
+  uroshercog = {
+    email = "uros.hercog@gmail.com";
+    github = "uroshercog";
+    name = "Uroš Hercog";
+  };
   uskudnik = {
     email = "urban.skudnik@gmail.com";
     github = "uskudnik";
