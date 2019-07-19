@@ -1258,11 +1258,6 @@
     github = "DerTim1";
     name = "Tim Digel";
   };
-  desiderius = {
-    email = "didier@devroye.name";
-    github = "desiderius";
-    name = "Didier J. Devroye";
-  };
   devhell = {
     email = "\"^\"@regexmail.net";
     github = "devhell";
