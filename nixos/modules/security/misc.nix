@@ -48,13 +48,13 @@ with lib;
         e.g., shared caches).  This attack vector is unproven.
 
         Disabling SMT is a supplement to the L1 data cache flushing mitigation
-        (see <xref linkend="opt-security.virtualization.flushL1DataCache"/>)
+        (see <xref linkend="opt-security.virtualisation.flushL1DataCache"/>)
         versus malicious VM guests (SMT could "bring back" previously flushed
         data).
       '';
     };
 
-    security.virtualization.flushL1DataCache = mkOption {
+    security.virtualisation.flushL1DataCache = mkOption {
       type = types.nullOr (types.enum [ "never" "cond" "always" ]);
       default = null;
       description = ''
@@ -114,8 +114,8 @@ with lib;
       boot.kernelParams = [ "nosmt" ];
     })
 
-    (mkIf (config.security.virtualization.flushL1DataCache != null) {
-      boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualization.flushL1DataCache}" ];
+    (mkIf (config.security.virtualisation.flushL1DataCache != null) {
+      boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}" ];
     })
   ];
 }
