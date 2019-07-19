@@ -5572,11 +5572,6 @@
     github = "xeji";
     name = "Uli Baum";
   };
-  xnaveira = {
-    email = "xnaveira@gmail.com";
-    github = "xnaveira";
-    name = "Xavier Naveira";
-  };
   xnwdd = {
     email = "nwdd+nixos@no.team";
     github = "xnwdd";
