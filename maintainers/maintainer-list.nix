@@ -517,11 +517,6 @@
     github = "atnnn";
     name = "Etienne Laurin";
   };
-  auntie = {
-    email = "auntieNeo@gmail.com";
-    github = "auntie";
-    name = "Jonathan Glines";
-  };
   avaq = {
     email = "avaq+nixos@xs4all.nl";
     github = "avaq";
