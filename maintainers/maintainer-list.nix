@@ -3446,11 +3446,6 @@
     github = "fstamour";
     name = "Francis St-Amour";
   };
-  mredaelli = {
-    email = "massimo@typish.io";
-    github = "mredaelli";
-    name = "Massimo Redaelli";
-  };
   mrkkrp = {
     email = "markkarpov92@gmail.com";
     github = "mrkkrp";
