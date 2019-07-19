@@ -2822,11 +2822,6 @@
     github = "leo60228";
     name = "leo60228";
   };
-  leonardoce = {
-    email = "leonardo.cecchi@gmail.com";
-    github = "leonardoce";
-    name = "Leonardo Cecchi";
-  };
   lethalman = {
     email = "lucabru@src.gnome.org";
     github = "lethalman";
