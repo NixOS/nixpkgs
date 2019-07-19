@@ -548,6 +548,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
+        exiftool
         gitAndTools.git
         gnutar
         gzip
