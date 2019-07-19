@@ -6,12 +6,12 @@ rec {
   # Each
   interpreters = rec {
 
-    # R20 is the default version.
-    erlang = erlangR20; # The main switch to change default Erlang version.
-    erlang_odbc = erlangR20_odbc;
-    erlang_javac = erlangR20_javac;
-    erlang_odbc_javac = erlangR20_odbc_javac;
-    erlang_nox = erlangR20_nox;
+    # R22 is the default version.
+    erlang = erlangR22; # The main switch to change default Erlang version.
+    erlang_odbc = erlangR22_odbc;
+    erlang_javac = erlangR22_javac;
+    erlang_odbc_javac = erlangR22_odbc_javac;
+    erlang_nox = erlangR22_nox;
 
     # These are standard Erlang versions, using the generic builder.
     erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {

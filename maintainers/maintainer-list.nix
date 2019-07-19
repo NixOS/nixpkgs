@@ -250,6 +250,11 @@
     github = "akru";
     name = "Alexander Krupenkin ";
   };
+  alexarice = {
+    email = "alexrice999@hotmail.co.uk";
+    github = "alexarice";
+    name = "Alex Rice";
+  };
   alexchapman = {
     email = "alex@farfromthere.net";
     github = "AJChapman";
@@ -2454,6 +2459,11 @@
     email = "me@joelt.io";
     name = "Joel Taylor";
   };
+  joepie91 = {
+    email = "admin@cryto.net";
+    name = "Sven Slootweg";
+    github = "joepie91";
+  };
   johanot = {
     email = "write@ownrisk.dk";
     github = "johanot";
@@ -4537,11 +4547,6 @@
     github = "rzetterberg";
     name = "Richard Zetterberg";
   };
-  s1lvester = {
-    email = "s1lvester@bockhacker.me";
-    github = "s1lvester";
-    name = "Markus Silvester";
-  };
   samdroid-apps = {
     email = "sam@sam.today";
     github = "samdroid-apps";
@@ -5763,9 +5768,9 @@
     name = "Christian Zagrodnick";
   };
   zalakain = {
-    email = "contact@unaizalakain.info";
+    email = "ping@umazalakain.info";
     github = "umazalakain";
-    name = "Unai Zalakain";
+    name = "Uma Zalakain";
   };
   zaninime = {
     email = "francesco@zanini.me";

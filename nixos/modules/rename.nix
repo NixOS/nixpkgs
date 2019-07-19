@@ -19,6 +19,7 @@ with lib;
         let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
         in if value != "" then [ value ] else []))
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
+    (mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
     (mkRenamedOptionModule [ "services" "i2pd" "extIp" ] [ "services" "i2pd" "address" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])

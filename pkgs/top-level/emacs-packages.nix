@@ -417,6 +417,39 @@ let
 
   zeitgeist = callPackage ../applications/editors/emacs-modes/zeitgeist { };
 
+  zmq = melpaBuild rec {
+    pname = "zmq";
+    ename = "zmq";
+    version = "0.10.10";
+    src = fetchFromGitHub {
+      owner = "dzop";
+      repo = "emacs-zmq";
+      rev = "v0.10.10";
+      sha256 = "0ngxm5mm0kqgvn8977ryrngamx0khzlw86d8vz5s0jhm2kgwnqp8";
+    };
+    recipe = fetchurl {
+      url = "https://raw.githubusercontent.com/milkypostman/melpa/72f4dcc2723de826bf1af7235ac6d9119a243c63/recipes/zmq";
+      sha256 = "14bbh00a58xgxyxl8zjxl57rf6351fnwsnk4cvvy341fvf86dklc";
+      name = "recipe";
+    };
+    stripDebugList = [ "share" ];
+    packageRequires = [ emacs ];
+    nativeBuildInputs = [ external.autoconf external.automake external.pkgconfig external.libtool external.zeromq ];
+    preBuild = ''
+      make
+    '';
+    postInstall = ''
+      mv $out/share/emacs/site-lisp/elpa/zmq-*/src/.libs/emacs-zmq.so $out/share/emacs/site-lisp/elpa/zmq-*
+      rm -r $out/share/emacs/site-lisp/elpa/zmq-*/src
+      rm $out/share/emacs/site-lisp/elpa/zmq-*/Makefile
+    '';
+    meta = {
+      homepage = "https://melpa.org/#/zmq";
+      description = "Emacs bindings to ØMQ";
+      license = lib.licenses.gpl2;
+    };
+  };
+
   };
 
 in
