@@ -27,13 +27,9 @@ stdenv.mkDerivation rec {
     # Guide & README
     install -Dm664 guide-capt-2.7xUK.tar.gz $out/share/doc/capt-src/guide-capt-2.7xUK.tar.gz
     install -Dm664 README-capt-2.71UK.txt $out/share/doc/capt-src/README-capt-2.71UK.txt
-    install -dm755 $out/share/ppd/cupsfilters
   '';
 
   meta = with stdenv.lib; {
-    description = "Canon CAPT driver";
-    longDescription = ''
-      Canon CAPT driver
-    '';
+    description = "Canon CAPT driver - documentation module";
   };
 }

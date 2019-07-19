@@ -151,9 +151,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Canon CAPT driver";
-    longDescription = ''
-      Canon CAPT driver
-    '';
+    description = "Canon CAPT driver - capt module";
   };
 }

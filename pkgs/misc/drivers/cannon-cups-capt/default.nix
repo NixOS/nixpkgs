@@ -1,11 +1,6 @@
-{ nixpkgs ? import <nixpkgs> {}}:
-with nixpkgs;
-
-# rec {
-#   common = callPackage ./common.nix {};
-#   capt = callPackage ./capt.nix { cndrvcups-common = common;};
-#   doc = callPackage ./doc.nix {};
-# }
+{ stdenv, callPackage,
+  tree
+}:
 
 let
   common = callPackage ./common.nix {};
@@ -15,10 +10,11 @@ in
   stdenv.mkDerivation rec {
     name = "${pname}-${version}";
     pname = "capt-driverpack";
-    version = "0.1";
+    version = "2.71";
 
-    #TODO: inline systemd service file and set src to null
-    src = ./Misc;
+    src = null;
+
+    patches = [ ./0002-add-ccpd-service.patch ];
 
     buildInputs = [
       common capt doc
@@ -27,6 +23,8 @@ in
 
     # install directions based on arch PKGBUILD file
     # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=capt-src
+
+    phases = [ "patchPhase" "installPhase" ];
 
     installPhase = ''
       set -ex
@@ -38,7 +36,7 @@ in
       tree ${capt} > $out/capt_build.log
       tree ${doc} > $out/doc_build.log
 
-      ##TODO: check how Nix's systemd works and edit `ccpd.service`
+      ##TODO: check how Nix's systemd works
       ## Installation of the custom Arch Linux CCPD systemd service
       substituteInPlace ccpd.service \
         --replace ExecStart=/usr/bin/ccpd ExecStart=${capt}/bin/ccpd
@@ -60,4 +58,21 @@ in
       #   ln -s $_f $out/share/ppd/cupsfilters
       # done
     '';
+
+    meta = with stdenv.lib; {
+      description = "Canon CAPT driver pack";
+      homepage = https://global.canon;
+      maintainers = [ maintainers.wizzup ];
+      platforms = platforms.linux;
+
+      #NOTE: desc taken from : https://th.canon/th/support/0100459601/7
+      longDescription = ''
+        This CAPT printer driver provides printing functions for Canon LBP printers operating under the CUPS (Common Unix Printing System) environment, a printing system that functions on Linux operating systems.
+      '';
+
+      #FIXME: not sure about license
+      #       https://th.canon/en/support/0100459601/7
+      # license = licenses.gpl3Plus;
+    };
+
   }
