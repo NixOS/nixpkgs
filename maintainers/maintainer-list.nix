@@ -2330,11 +2330,6 @@
     github = "jethrokuan";
     name = "Jethro Kuan";
   };
-  jfb = {
-    email = "james@yamtime.com";
-    github = "tftio";
-    name = "James Felix Black";
-  };
   jflanglois = {
     email = "yourstruly@julienlanglois.me";
     github = "jflanglois";
