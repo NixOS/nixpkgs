@@ -202,6 +202,8 @@ let
 
     csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
 
+    cudf = callPackage ../development/ocaml-modules/cudf/default.nix { };
+
     curses = callPackage ../development/ocaml-modules/curses { };
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
@@ -223,6 +225,8 @@ let
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
+
+    dose3 = callPackage ../development/ocaml-modules/dose3 { };
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
@@ -699,7 +703,15 @@ let
 
     omd = callPackage ../development/ocaml-modules/omd { };
 
+    opam-core = callPackage ../development/ocaml-modules/opam-core { };
+
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
+
+    opam-format = callPackage ../development/ocaml-modules/opam-format { };
+
+    opam-repository = callPackage ../development/ocaml-modules/opam-repository { };
+
+    opam-state = callPackage ../development/ocaml-modules/opam-state { };
 
     opium = callPackage ../development/ocaml-modules/opium { };
 

@@ -255,6 +255,8 @@ in
 
   etBook = callPackage ../data/fonts/et-book { };
 
+  esy = callPackage ../development/tools/ocaml/esy { };
+
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };
