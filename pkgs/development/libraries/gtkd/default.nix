@@ -5,11 +5,11 @@ let
   inherit (gst_all_1) gstreamer gst-plugins-base;
 in stdenv.mkDerivation rec {
   name = "gtkd-${version}";
-  version = "3.8.5";
+  version = "3.9.0";
 
   src = fetchzip {
     url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "12n2njsaplra7x15nqwrj2hrf8a27pfjj2mck4mkzxv03qk6mqky";
+    sha256 = "12kc4s5gp6gn456d8pzhww1ggi9qbxldmcpp6855297g2x8xxy5p";
     stripRoot = false;
   };
 
