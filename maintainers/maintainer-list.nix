@@ -5602,11 +5602,6 @@
     github = "xzfc";
     name = "Albert Safin";
   };
-  y0no = {
-    email = "y0no@y0no.fr";
-    github = "y0no";
-    name = "Yoann Ono";
-  };
   yarny = {
     email = "41838844+Yarny0@users.noreply.github.com";
     github = "Yarny0";
