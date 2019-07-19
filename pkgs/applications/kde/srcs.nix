@@ -579,11 +579,11 @@
     };
   };
   kdenlive = {
-    version = "19.04.1";
+    version = "19.04.3";
     src = fetchurl {
-      url = "${mirror}/stable/applications/19.04.1/src/kdenlive-19.04.1.tar.xz";
-      sha256 = "feb3202ee1aa0f47acc12ad7d6ca78977a4c9af0d705f8792ca2f8e3e6defbe5";
-      name = "kdenlive-19.04.1.tar.xz";
+      url = "${mirror}/stable/applications/19.04.3/src/kdenlive-19.04.3.tar.xz";
+      sha256 = "07iagll0x1s2j5sryfh73zy95ampkdxxjxjcif3s57bmx569b0f9";
+      name = "kdenlive-19.04.3.tar.xz";
     };
   };
   kdepim-addons = {
