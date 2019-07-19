@@ -47,6 +47,14 @@ in
         description = "The name of the ip interface to listen to";
       };
 
+      dropPrivileges = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether the vault service should be run as a non-root vault user.
+        '';
+      };
+
       tlsCertFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -133,8 +141,8 @@ in
       restartIfChanged = false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
 
       serviceConfig = {
-        User = "vault";
-        Group = "vault";
+        User = if cfg.dropPrivileges then "vault" else null;
+        Group = if cfg.dropPrivileges then "vault" else null;
         ExecStart = "${cfg.package}/bin/vault server -config ${configFile}";
         PrivateDevices = true;
         PrivateTmp = true;
