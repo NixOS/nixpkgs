@@ -537,6 +537,8 @@ in
 
   airfield = callPackage ../tools/networking/airfield { };
 
+  apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
+
   airsonic = callPackage ../servers/misc/airsonic { };
 
   airspy = callPackage ../applications/radio/airspy { };

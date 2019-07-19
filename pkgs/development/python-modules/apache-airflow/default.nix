@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchFromGitHub
 , alembic
 , configparser
 , croniter
@@ -12,6 +14,7 @@
 , flask_login
 , flask-swagger
 , flask_wtf
+, flask-bcrypt
 , funcsigs
 , future
 , GitPython
@@ -19,6 +22,7 @@
 , iso8601
 , json-merge-patch
 , jinja2
+, ldap3
 , lxml
 , markdown
 , pandas
@@ -29,6 +33,7 @@
 , python-dateutil
 , requests
 , setproctitle
+, snakebite
 , sqlalchemy
 , tabulate
 , tenacity
@@ -78,9 +83,11 @@ buildPythonPackage rec {
   version = "1.10.3";
 
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "73840fa3d2f3a523010ce685aa15714d01a4cf42bd6bd77716c4321f82bab140";
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "airflow";
+    rev = version;
+    sha256 = "040d1wbkcapkgb220yzk2dicnghhynj24m2xlbmqg6j54f007j94";
   };
 
   propagatedBuildInputs = [
@@ -91,6 +98,7 @@ buildPythonPackage rec {
     flask
     flask-appbuilder1
     flask-admin
+    flask-bcrypt
     flask-caching
     flask_login
     flask-swagger
@@ -102,6 +110,7 @@ buildPythonPackage rec {
     iso8601
     json-merge-patch
     jinja2
+    ldap3
     lxml
     markdown
     pandas
@@ -124,6 +133,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals isPy27 [ enum34 typing ];
 
   checkInputs = [
+    snakebite
     nose
   ];
 
@@ -142,6 +152,9 @@ buildPythonPackage rec {
      --replace "future>=0.16.0, <0.17" "future" \
      --replace "tenacity==4.12.0" "tenacity" \
      --replace "werkzeug>=0.14.1, <0.15.0" "werkzeug"
+
+   substituteInPlace tests/core.py \
+     --replace "/bin/bash" "${stdenv.shell}"
   '';
 
   checkPhase = ''
@@ -149,14 +162,15 @@ buildPythonPackage rec {
    export AIRFLOW_HOME=$HOME
    export AIRFLOW__CORE__UNIT_TEST_MODE=True
    export AIRFLOW_DB="$HOME/airflow.db"
+   export PATH=$PATH:$out/bin
 
-   $out/bin/airflow initdb
-   $out/bin/airflow resetdb
-   nosetests --cover-package=airflow
+   airflow version
+   airflow initdb
+   airflow resetdb -y
+   nosetests tests.core.CoreTest
+   ## all tests
+   # nosetests --cover-package=airflow
   '';
-
-  # tests are extremely complex to run
-  doCheck = false;
 
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";
