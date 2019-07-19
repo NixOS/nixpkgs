@@ -2672,6 +2672,10 @@ in
 
   epubcheck = callPackage ../tools/text/epubcheck { };
 
+  lipx = callPackage ../tools/misc/lipx {
+    python = python3;
+  };
+
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   s-tar = callPackage ../tools/archivers/s-tar {};
