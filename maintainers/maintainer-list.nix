@@ -2325,11 +2325,6 @@
     github = "jerith666";
     name = "Matt McHenry";
   };
-  jeschli = {
-    email = "jeschli@gmail.com";
-    github = "jeschli";
-    name = "Markus Hihn";
-  };
   jethro = {
     email = "jethrokuan95@gmail.com";
     github = "jethrokuan";
