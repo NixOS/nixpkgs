@@ -745,11 +745,6 @@
     github = "boj";
     name = "Brian Jones";
   };
-  boothead = {
-    email = "ben@perurbis.com";
-    github = "boothead";
-    name = "Ben Ford";
-  };
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
     github = "borisbabic";
