@@ -1875,11 +1875,6 @@
     github = "garrison";
     name = "Jim Garrison";
   };
-  gavin = {
-    email = "gavin.rogers@holo.host";
-    github = "gavinrogers";
-    name = "Gavin Rogers";
-  };
   gebner = {
     email = "gebner@gebner.org";
     github = "gebner";
