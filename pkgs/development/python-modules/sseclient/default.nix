@@ -1,14 +1,14 @@
 { stdenv, buildPythonPackage, fetchPypi
 , requests, six
-, backports_unittest-mock, pluggy, pytest, pytestrunner }:
+, backports_unittest-mock, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "sseclient";
-  version = "0.0.19";
+  version = "0.0.24";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a2ea3f4c8525ae9a677bc8193df5db88e23bcaafcc34938a1ee665975703a9f";
+    sha256 = "1b4c5119b9381cb6ddaf3236f3f7e1437a14e488d1ed61336873a839788481b0";
   };
 
   propagatedBuildInputs = [ requests six ];

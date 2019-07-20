@@ -9,10 +9,10 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "frog";
+  name = "frog-${release.version}";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
-                   name = "frog-${release.version}.tar.gz"; };
+                   name = "frog-v${release.version}.tar.gz"; };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ automake autoconf bzip2 libtar libtool autoconf-archive
                   libxml2 icu

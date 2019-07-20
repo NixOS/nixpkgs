@@ -1,15 +1,12 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , lib
-, idris
 }:
 build-idris-package  {
   name = "vdom";
   version = "0.6.0";
 
-  idrisDeps = [ prelude base ];
+  ipkgName = "idris-vdom";
 
   src = fetchFromGitHub {
     owner = "brandondyck";
@@ -23,6 +20,5 @@ build-idris-package  {
     homepage = https://github.com/brandondyck/idris-vdom;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

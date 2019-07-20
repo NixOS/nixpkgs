@@ -1,8 +1,6 @@
-{ stdenv, appleDerivation }:
+{ appleDerivation }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/include
 

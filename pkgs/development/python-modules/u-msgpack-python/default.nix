@@ -1,18 +1,17 @@
 { buildPythonPackage
 , lib
-, fetchurl
+, fetchPypi
 , glibcLocales
 , python
 }:
 
 buildPythonPackage rec {
   pname = "u-msgpack-python";
-  version = "2.5.0";
-  name = "${pname}-${version}";
+  version = "2.5.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "7ff18ae3721fa75571f9329c08f7c0120416a6ae36194bd8674f65b3b78d0702";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "6c02a0654a5e11f8fad532ed634109ed49cdc929f7b972848773e4e0ce52f30c";
   };
 
   LC_ALL="en_US.UTF-8";

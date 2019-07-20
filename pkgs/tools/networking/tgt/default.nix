@@ -1,23 +1,27 @@
 { stdenv, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
 , docbook_xsl }:
 
-let
-  version = "1.0.73";
-in stdenv.mkDerivation rec {
-  name = "tgt-${version}";
+stdenv.mkDerivation rec {
+  pname = "tgt";
+  version = "1.0.79";
 
   src = fetchFromGitHub {
     owner = "fujita";
-    repo = "tgt";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0alrdrklh5wq8x4xbp30zwnxkp0brx1mjkbp70dhaz0zbzvyydr0";
+    sha256 = "18bp7fcpv7879q3ppdxlqj7ayqmlh5zwrkz8gch6rq9lkmmrklrf";
   };
 
   buildInputs = [ libxslt systemd libaio docbook_xsl ];
 
-  DESTDIR = "$(out)";
-  PREFIX = "/";
-  SD_NOTIFY="1";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "SD_NOTIFY=1"
+  ];
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile

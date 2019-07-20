@@ -2,7 +2,7 @@
 <article xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink">
  <title>Nixpkgs Release Notes</title>
- <section>
+ <section xml:id="release-notes-0.14">
   <title>Release 0.14 (June 4, 2012)</title>
 
   <para>
@@ -17,7 +17,7 @@
    packages by numerous contributors. For details, see the commit logs.
   </para>
  </section>
- <section>
+ <section xml:id="release-notes-0.13">
   <title>Release 0.13 (February 5, 2010)</title>
 
   <para>
@@ -51,7 +51,7 @@
    </itemizedlist>
   </para>
  </section>
- <section>
+ <section xml:id="release-notes-0.12">
   <title>Release 0.12 (April 24, 2009)</title>
 
   <para>
@@ -145,7 +145,7 @@
    <literal>nix-dev</literal> mailing list.
   </para>
  </section>
- <section>
+ <section xml:id="release-notes-0.11">
   <title>Release 0.11 (September 11, 2007)</title>
 
   <para>
@@ -344,7 +344,7 @@ export NIX_MIRRORS_sourceforge=http://osdn.dl.sourceforge.net/sourceforge/</prog
    Bravenboer, Michael Raskin, Wouter den Breejen and Yury G. Kudryashov.
   </para>
  </section>
- <section>
+ <section xml:id="release-notes-0.10">
   <title>Release 0.10 (October 12, 2006)</title>
 
   <note>
@@ -547,7 +547,7 @@ stdenv.mkDerivation {
    Bravenboer, Merijn de Jonge, Rob Vermaas and Roy van den Broek.
   </para>
  </section>
- <section>
+ <section xml:id="release-notes-0.9">
   <title>Release 0.9 (January 31, 2006)</title>
 
   <para>
@@ -676,7 +676,7 @@ stdenv.mkDerivation {
    Martin Bravenboer, Rob Vermaas and Roy van den Broek.
   </para>
  </section>
- <section>
+ <section xml:id="release-notes-0.8">
   <title>Release 0.8 (April 11, 2005)</title>
 
   <para>
@@ -700,7 +700,7 @@ stdenv.mkDerivation {
    </itemizedlist>
   </para>
  </section>
- <section>
+ <section xml:id="release-notes-0.7">
   <title>Release 0.7 (March 14, 2005)</title>
 
   <itemizedlist>

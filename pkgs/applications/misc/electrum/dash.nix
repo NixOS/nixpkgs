@@ -22,7 +22,7 @@ python2Packages.buildPythonApplication rec {
     qrcode
     requests
     pyaes
-    tlslite
+    tlslite-ng
     x11_hash
     mnemonic
     jsonrpclib

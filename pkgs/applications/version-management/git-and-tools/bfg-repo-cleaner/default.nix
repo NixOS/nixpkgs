@@ -8,7 +8,7 @@ in
   stdenv.mkDerivation {
     inherit version jarName;
 
-    name = "bfg-repo-cleaner";
+    name = "bfg-repo-cleaner-${version}";
 
     src = fetchurl {
       url = mavenUrl;

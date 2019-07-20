@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch,
+{ stdenv, fetchFromGitHub,
   bzip2, nix, perl, perlPackages,
 }:
 

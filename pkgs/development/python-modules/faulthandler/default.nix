@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, fetchpatch }:
+{ stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "faulthandler";
@@ -13,6 +13,6 @@ buildPythonPackage rec {
     description = "Dump the Python traceback";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ sauyon ];
-    homepage = http://faulthandler.readthedocs.io/;
+    homepage = https://faulthandler.readthedocs.io/;
   };
 }

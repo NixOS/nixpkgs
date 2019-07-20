@@ -1,6 +1,0 @@
-to regenerate Gemfile.nix and Gemfile.lock you need to
-
-  % nix-build bootstrap.nix
-  % cp result/Gemfile.nix ./
-  % cp result/Gemfile.lock ./
-

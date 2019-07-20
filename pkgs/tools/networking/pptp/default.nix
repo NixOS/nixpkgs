@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl which ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "PPTP client for Linux";
     homepage = http://pptpclient.sourceforge.net/;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

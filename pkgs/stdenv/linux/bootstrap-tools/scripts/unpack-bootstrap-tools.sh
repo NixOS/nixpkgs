@@ -9,6 +9,9 @@ echo Patching the bootstrap tools...
 if test -f $out/lib/ld.so.?; then
    # MIPS case
    LD_BINARY=$out/lib/ld.so.?
+elif test -f $out/lib/ld64.so.?; then
+   # ppc64(le)
+   LD_BINARY=$out/lib/ld64.so.?
 else
    # i686, x86_64 and armv5tel
    LD_BINARY=$out/lib/ld-*so.?

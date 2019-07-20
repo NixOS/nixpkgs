@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, libpcap, pkgconfig, openssl
+{ stdenv, fetchurl, fetchpatch, libpcap, pkgconfig, openssl, lua5_3
 , graphicalSupport ? false
 , libX11 ? null
 , gtk2 ? null
 , withPython ? false # required for the `ndiff` binary
 , python2Packages ? null
 , makeWrapper ? null
+, withLua ? true
 }:
 
 assert withPython -> python2Packages != null;
@@ -26,7 +27,17 @@ in stdenv.mkDerivation rec {
     sha256 = "063fg8adx23l4irrh5kn57hsmi1xvjkar4vm4k6g94ppan4hcyw4";
   };
 
-  patches = ./zenmap.patch;
+  patches = [ ./zenmap.patch ]
+    ++ optionals stdenv.cc.isClang [(
+      # Fixes a compile error due an ambiguous reference to bind(2) in
+      # nping/EchoServer.cc, which is otherwise resolved to std::bind.
+      # Also fixes a missing include.
+      # https://github.com/nmap/nmap/pull/1363
+      fetchpatch {
+        url = "https://github.com/nmap/nmap/commit/5bbe66f1bd8cbd3718f5805139e2e8139e6849bb.diff";
+        sha256 = "088r8ylpc9hachsxs4r17cqfa1ncyspbjvkc573lill7rk1r9m0s";
+      }
+    )];
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace libz/configure \
@@ -35,10 +46,18 @@ in stdenv.mkDerivation rec {
         --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  configureFlags = []
+  configureFlags = [
+    (if withLua then "--with-liblua=${lua5_3}" else "--without-liblua")
+  ]
     ++ optional (!pythonSupport) "--without-ndiff"
     ++ optional (!graphicalSupport) "--without-zenmap"
     ;
+
+  makeFlags = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.bintools.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"
+    "CC=${stdenv.cc.targetPrefix}gcc"
+  ];
 
   postInstall = optionalString pythonSupport ''
       wrapProgram $out/bin/ndiff --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH"
@@ -52,6 +71,8 @@ in stdenv.mkDerivation rec {
     ++ optionals graphicalSupport [
       libX11 gtk2 pygtk pysqlite pygobject2 pycairo
     ];
+
+  doCheck = false; # fails 3 tests, probably needs the net
 
   meta = {
     description = "A free and open source utility for network discovery and security auditing";

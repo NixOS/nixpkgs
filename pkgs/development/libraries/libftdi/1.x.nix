@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, libusb1, confuse
+{ stdenv, fetchurl, cmake, pkgconfig, libusb1, libconfuse
 , cppSupport ? true, boost ? null
 , pythonSupport ? true, python ? null, swig ? null
 , docSupport ? true, doxygen ? null
@@ -12,15 +12,19 @@ stdenv.mkDerivation rec {
   name = "libftdi1-1.4";
 
   src = fetchurl {
-    url = "http://www.intra2net.com/en/developer/libftdi/download/${name}.tar.bz2";
+    url = "https://www.intra2net.com/en/developer/libftdi/download/${name}.tar.bz2";
     sha256 = "0x0vncf6i92slgrn0h7ghkskqbglbs534220qa84d0qg114zndpc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = with stdenv.lib; [ cmake confuse ]
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = with stdenv.lib; [ libconfuse ]
     ++ optionals cppSupport [ boost ]
     ++ optionals pythonSupport [ python swig ]
     ++ optionals docSupport [ doxygen ];
+
+  preBuild = stdenv.lib.optionalString docSupport ''
+    make doc_i
+  '';
 
   propagatedBuildInputs = [ libusb1 ];
 

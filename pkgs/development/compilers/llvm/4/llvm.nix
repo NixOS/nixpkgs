@@ -6,26 +6,26 @@
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , release_version
 , zlib
 , compiler-rt_src
-, libcxxabi
 , debugVersion ? false
 , enableManpages ? false
-, enableSharedLibraries ? true
-, darwin
+, enableSharedLibraries ? !enableManpages
 }:
 
 let
   src = fetch "llvm" "0l9bf7kdwhlj0kq1hawpyxhna1062z3h7qcz2y8nfl9dz2qksy6s";
 
-  # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with stdenv.lib;
-    concatStringsSep "." (take 2 (splitString "." release_version));
-in stdenv.mkDerivation (rec {
+  # Used when creating a versioned symlinks of libLLVM.dylib
+  versionSuffixes = with stdenv.lib;
+    let parts = splitString "." release_version; in
+    imap (i: _: concatStringsSep "." (take i parts)) parts;
+in
+
+stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
   unpackPhase = ''
@@ -42,8 +42,7 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+  buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -57,7 +56,7 @@ in stdenv.mkDerivation (rec {
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
 
     substituteInPlace cmake/modules/AddLLVM.cmake \
-      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir INSTALL_NAME_DIR "$lib/lib")" \
+      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../lib" ''${extra_libdir})' ""
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
@@ -85,7 +84,7 @@ in stdenv.mkDerivation (rec {
     patch -p0 < ${../aarch64.patch}
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${../TLI-musl.patch}
-    patch -p1 -i ${./dynamiclibrary-musl.patch}
+    patch -p1 -i ${../dynamiclibrary-musl.patch}
     patch -p1 -i ${./sanitizers-nongnu.patch} -d projects/compiler-rt
   '';
 
@@ -102,6 +101,10 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
     "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
+
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ]
   ++ stdenv.lib.optional enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
@@ -117,21 +120,10 @@ in stdenv.mkDerivation (rec {
   ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ]
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
   ];
 
   postBuild = ''
     rm -fR $out
-
-    paxmark m bin/{lli,llvm-rtdyld}
-    paxmark m unittests/ExecutionEngine/MCJIT/MCJITTests
-    paxmark m unittests/ExecutionEngine/Orc/OrcJITTests
-    paxmark m unittests/Support/SupportTests
-    paxmark m bin/lli-child-target
   '';
 
   preCheck = ''
@@ -147,8 +139,9 @@ in stdenv.mkDerivation (rec {
   + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+    ${stdenv.lib.concatMapStringsSep "\n" (v: ''
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
+    '') versionSuffixes}
   '';
 
   doCheck = stdenv.isLinux && (!stdenv.isi686);
@@ -163,7 +156,7 @@ in stdenv.mkDerivation (rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric dtzWill ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {

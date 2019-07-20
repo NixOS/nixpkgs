@@ -12,7 +12,10 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
     ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
-  configurePhase = stdenv.lib.optionalString (!stdenv.isLinux) ''
+  configurePhase = ''
+    substituteInPlace Makefile \
+      --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
+  '' + stdenv.lib.optionalString (!stdenv.isLinux) ''
     sed 's/#EXTRA/EXTRA/' -i Makefile
   '' + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed 's/^PDF/#PDF/' -i Makefile

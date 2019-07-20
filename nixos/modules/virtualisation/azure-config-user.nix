@@ -1,4 +1,4 @@
-{ config, pkgs, modulesPath, ... }:
+{ modulesPath, ... }:
 
 {
   # To build the configuration or use nix-env, you need to run

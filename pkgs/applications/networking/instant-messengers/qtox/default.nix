@@ -7,7 +7,7 @@
 , AVFoundation ? null }:
 
 let
-  version = "1.15.0";
+  version = "1.16.3";
   rev = "v${version}";
 
 in mkDerivation rec {
@@ -16,7 +16,7 @@ in mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "qTox";
     repo   = "qTox";
-    sha256 = "1garwnlmg452b0bwx36rsh08s15q3zylb26l01iiwg4l9vcaldh9";
+    sha256 = "0qd4nvbrjnnfnk8ghsxq3cd1n1qf1ck5zg6ib11ij2pg03s146pa";
     inherit rev;
   };
 
@@ -44,7 +44,7 @@ in mkDerivation rec {
     description = "Qt Tox client";
     homepage    = https://tox.chat;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ viric jgeerds akaWolf peterhoeg ];
+    maintainers = with maintainers; [ akaWolf peterhoeg ];
     platforms   = platforms.all;
   };
 }

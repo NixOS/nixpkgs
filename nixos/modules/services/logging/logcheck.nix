@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.logcheck;
 
-  defaultRules = pkgs.runCommand "logcheck-default-rules" {} ''
+  defaultRules = pkgs.runCommand "logcheck-default-rules" { preferLocalBuild = true; } ''
                    cp -prd ${pkgs.logcheck}/etc/logcheck $out
                    chmod u+w $out
                    rm -r $out/logcheck.*
@@ -213,7 +213,7 @@ in
         mapAttrsToList writeIgnoreRule cfg.ignore
         ++ mapAttrsToList writeIgnoreCronRule cfg.ignoreCron;
 
-    users.extraUsers = optionalAttrs (cfg.user == "logcheck") (singleton
+    users.users = optionalAttrs (cfg.user == "logcheck") (singleton
       { name = "logcheck";
         uid = config.ids.uids.logcheck;
         shell = "/bin/sh";
@@ -227,7 +227,7 @@ in
     '';
 
     services.cron.systemCronJobs =
-        let withTime = name: {timeArgs, ...}: ! (builtins.isNull timeArgs);
+        let withTime = name: {timeArgs, ...}: timeArgs != null;
             mkCron = name: {user, cmdline, timeArgs, ...}: ''
               ${timeArgs} ${user} ${cmdline}
             '';

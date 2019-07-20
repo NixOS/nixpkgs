@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv
-, drake, ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost
-, libebml, zlib, libmatroska, libogg, libvorbis, flac, libxslt, cmark
+{ stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv, drake
+, ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost, libebml, zlib
+, fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark
 , withGUI ? true
   , qtbase ? null
   , qtmultimedia ? null
@@ -11,14 +11,14 @@ assert withGUI -> qtbase != null && qtmultimedia != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "mkvtoolnix-${version}";
-  version = "23.0.0";
+  pname = "mkvtoolnix";
+  version = "35.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "13n2jvwws87bws483dncvhf9vqsjy3l0lxh7x741g71075299w73";
+    sha256 = "163msz6l1d5vwirr1c6cm820kwxcjinwh91svf8ddg5181nwhmrx";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    expat file xdg_utils boost libebml zlib
+    expat file xdg_utils boost libebml zlib fmt
     libmatroska libogg libvorbis flac cmark
   ] ++ optional  stdenv.isDarwin libiconv
     ++ optionals withGUI [ qtbase qtmultimedia ];

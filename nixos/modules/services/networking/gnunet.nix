@@ -126,15 +126,15 @@ in
 
   config = mkIf config.services.gnunet.enable {
 
-    users.extraUsers.gnunet = {
+    users.users.gnunet = {
       group = "gnunet";
       description = "GNUnet User";
       home = homeDir;
-      createHome = true; 
+      createHome = true;
       uid = config.ids.uids.gnunet;
     };
 
-    users.extraGroups.gnunet.gid = config.ids.gids.gnunet;
+    users.groups.gnunet.gid = config.ids.gids.gnunet;
 
     # The user tools that talk to `gnunetd' should come from the same source,
     # so install them globally.
@@ -146,7 +146,7 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.miniupnpc ];
       environment.TMPDIR = "/tmp";
-      serviceConfig.PrivateTemp = true;
+      serviceConfig.PrivateTmp = true;
       serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c ${configFile}";
       serviceConfig.User = "gnunet";
       serviceConfig.UMask = "0007";

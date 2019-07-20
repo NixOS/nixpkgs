@@ -1,11 +1,11 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "xfce";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow shlevy ];
+    maintainers = [ eelco shlevy ];
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
 
     { imports = [ ./common/user-account.nix ];
 

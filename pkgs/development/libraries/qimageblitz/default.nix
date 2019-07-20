@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lib, cmake, qt4}:
+{stdenv, fetchurl, cmake, qt4}:
 
 let
   pn = "qimageblitz";

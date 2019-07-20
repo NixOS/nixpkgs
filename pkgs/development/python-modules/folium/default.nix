@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , pytest
 , numpy
 , nbconvert
@@ -8,21 +9,22 @@
 , mock
 , jinja2
 , branca
-, six
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.5.0";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "748944521146d85c6cd6230acf234e885864cd0f42fea3758d655488517e5e6e";
+    sha256 = "66901483808839ed895a685ca7bc4731379f4a627d73a83b77f0df1847b14892";
   };
 
-  checkInputs = [ pytest numpy nbconvert pandas mock ];
-  propagatedBuildInputs = [ jinja2 branca six requests ];
+  disabled = pythonOlder "3.5";
+
+  checkInputs = [ pytest nbconvert pandas mock ];
+  propagatedBuildInputs = [ jinja2 branca requests numpy ];
 
   # No tests in archive
   doCheck = false;

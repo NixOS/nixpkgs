@@ -30,7 +30,7 @@ ${optionalString (cfg.bind_host != null) ''
 bind_host: "${cfg.bind_host}"
 ''}
 server_name: "${cfg.server_name}"
-pid_file: "/var/run/matrix-synapse.pid"
+pid_file: "/run/matrix-synapse.pid"
 web_client: ${boolToString cfg.web_client}
 ${optionalString (cfg.public_baseurl != null) ''
 public_baseurl: "${cfg.public_baseurl}"
@@ -342,7 +342,7 @@ in {
       };
       database_type = mkOption {
         type = types.enum [ "sqlite3" "psycopg2" ];
-        default = if versionAtLeast config.system.nixos.stateVersion "18.03"
+        default = if versionAtLeast config.system.stateVersion "18.03"
           then "psycopg2"
           else "sqlite3";
         description = ''
@@ -554,7 +554,10 @@ in {
       };
       trusted_third_party_id_servers = mkOption {
         type = types.listOf types.str;
-        default = ["matrix.org"];
+        default = [
+          "matrix.org"
+          "vector.im"
+        ];
         description = ''
           The list of identity servers trusted to verify third party identifiers by this server.
         '';
@@ -635,7 +638,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = [
+    users.users = [
       { name = "matrix-synapse";
         group = "matrix-synapse";
         home = cfg.dataDir;
@@ -644,7 +647,7 @@ in {
         uid = config.ids.uids.matrix-synapse;
       } ];
 
-    users.extraGroups = [
+    users.groups = [
       { name = "matrix-synapse";
         gid = config.ids.gids.matrix-synapse;
       } ];
@@ -691,6 +694,7 @@ in {
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
+        ExecReload = "${pkgs.utillinux}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
       };
     };

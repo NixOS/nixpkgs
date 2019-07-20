@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "7.7";
 
   src = fetchurl {
-    url = "http://www.w3.org/Tools/HTML-XML-utils/${name}.tar.gz";
+    url = "https://www.w3.org/Tools/HTML-XML-utils/${name}.tar.gz";
     sha256 = "1vwqp5q276j8di9zql3kygf31z2frp2c59yjqlrvvwcvccvkcdwr";
   };
 

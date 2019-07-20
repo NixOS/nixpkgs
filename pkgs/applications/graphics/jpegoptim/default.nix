@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "jpegoptim-${version}";
 
   src = fetchurl {
-    url = "http://www.kokkonen.net/tjko/src/${name}.tar.gz";
+    url = "https://www.kokkonen.net/tjko/src/${name}.tar.gz";
     sha256 = "1dss7907fclfl8zsw0bl4qcw0hhz6fqgi3867w0jyfm3q9jfpcc8";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optimize JPEG files";
-    homepage = http://www.kokkonen.net/tjko/projects.html ;
+    homepage = https://www.kokkonen.net/tjko/projects.html ;
     license = licenses.gpl2;
     maintainers = [ maintainers.aristid ];
     platforms = platforms.all;

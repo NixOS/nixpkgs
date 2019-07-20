@@ -8,7 +8,6 @@
 , six
 , nose
 , Mako
-, python
 , cudaSupport ? false, cudatoolkit , nvidia_x11
 , openclSupport ? true, ocl-icd, clblas
 }:
@@ -67,8 +66,9 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ cmake ];
+
   buildInputs = [
-    cmake
     cython
     nose
   ];

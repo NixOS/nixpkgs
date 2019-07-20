@@ -29,15 +29,15 @@ let
    };
 in rec {
   deu2eng = makeDictdDBFreedict (fetchurl {
-    url = http://prdownloads.sourceforge.net/freedict/deu-eng.tar.gz;
+    url = mirror://sourceforge/freedict/deu-eng.tar.gz;
     sha256 = "0dqrhv04g4f5s84nbgisgcfwk5x0rpincif0yfhfh4sc1bsvzsrb";
   }) "deu-eng" "de_DE";
   eng2deu = makeDictdDBFreedict (fetchurl {
-    url = http://prdownloads.sourceforge.net/freedict/eng-deu.tar.gz;
+    url = mirror://sourceforge/freedict/eng-deu.tar.gz;
     sha256 = "01x12p72sa3071iff3jhzga8588440f07zr56r3x98bspvdlz73r";
   }) "eng-deu" "en_EN";
   nld2eng = makeDictdDBFreedict (fetchurl {
-    url = http://prdownloads.sourceforge.net/freedict/nld-eng.tar.gz;
+    url = mirror://sourceforge/freedict/nld-eng.tar.gz;
     sha256 = "1vhw81pphb64fzsjvpzsnnyr34ka2fxizfwilnxyjcmpn9360h07";
   }) "nld-eng" "nl_NL";
   eng2nld =  makeDictdDBFreedict (fetchurl {

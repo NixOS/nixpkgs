@@ -1,6 +1,6 @@
 { stdenv, fetchurl
-, xproto, motif, libX11, libXt, libXpm, bison
-, flex, automake, autoconf, libtool
+, xorgproto, motif, libX11, libXt, libXpm, bison
+, flex, automake, autoconf, libtool, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [ libtool automake autoconf flex ];
-  buildInputs = [ xproto motif xproto libX11 libXt libXpm bison ];
+  buildInputs = [ xorgproto motif libX11 libXt libXpm bison ];
 
   sourceRoot = "alliance/src/";
 
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
   '';
 
   allianceInstaller = ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cp -v -r -n --no-preserve=mode  $out/etc/* /etc/ > /etc/alliance-install.log
   '';
 
   allianceUnInstaller = ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     awk '{print \$3}' /etc/alliance-install.log | xargs rm
     awk '{print \$3}' /etc/alliance-install.log | xargs rmdir
     rm /etc/alliance-install.log

@@ -210,7 +210,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = proxyUser;
         uid = config.ids.uids.nntp-proxy;
         description = "NNTP-Proxy daemon user";

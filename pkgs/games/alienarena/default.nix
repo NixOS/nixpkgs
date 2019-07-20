@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "alienarena-7.65";
 
   src = fetchurl {
-    url = "http://icculus.org/alienarena/Files/alienarena-7.65-linux20130207.tar.gz";
+    url = "https://icculus.org/alienarena/Files/alienarena-7.65-linux20130207.tar.gz";
     sha256 = "03nnv4m2xmswr0020hssajncdb8sy95jp5yccsm53sgxga4r8igg";
   };
 

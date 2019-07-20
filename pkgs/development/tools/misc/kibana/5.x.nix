@@ -6,14 +6,14 @@ let
   archOverrides = {
     "i686" = "x86";
   };
-  info = splitString "-" stdenv.system;
+  info = splitString "-" stdenv.hostPlatform.system;
   arch = (elemAt info 0);
   elasticArch = archOverrides."${arch}" or arch;
   plat = elemAt info 1;
   shas = {
-    "x86_64-linux"  = "1rg4j5jm8mkscrwlbx5qk3qjnblyr8z9x5npvyi73zm0ism0gv4j";
-    "i686-linux"    = "14swgx9sf23pns2pj30yyhd0p0rnykdimdrnj8rb0r1pqszw57qx";
-    "x86_64-darwin" = "10l13r47nx74xicnjgb56nvgvx2al1zx1p8f09pjldaa2gjlll2k";
+    "x86_64-linux"  = "0hzr47hyw54b9j4c33n6f6n3pala6kjhyvinfszgikbghyhb7fsa";
+    "i686-linux"    = "0bka4h31cw10ii4pfygc81pwc3wr32pzw3v4k4bi8rnqbk280fmn";
+    "x86_64-darwin" = "0jqc2g89rqkla0alqxr14sh4pccfn514jrwr7mkjivxdapygh1ll";
   };
 in stdenv.mkDerivation rec {
   name = "kibana-${version}";
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${elasticArch}.tar.gz";
-    sha256 = shas."${stdenv.system}" or (throw "Unknown architecture");
+    sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
   };
 
   buildInputs = [ makeWrapper ];

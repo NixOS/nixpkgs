@@ -35,7 +35,7 @@ let
       description = "Controller for Ubiquiti UniFi access points";
       license = licenses.unfree;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ wkennington ];
+      maintainers = with maintainers; [ erictapen ];
     };
   };
 
@@ -44,18 +44,18 @@ in rec {
   # https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
 
   unifiLTS = generic {
-    version = "5.6.37";
-    sha256  = "0kiksqsbmmfva1blbpg2wl4c3w7j6dzzqmwp6028g7bh303c47qa";
+    version = "5.6.42";
+    sha256  = "0wxkv774pw43c15jk0sg534l5za4j067nr85r5fw58iar3w2l84x";
   };
 
   unifiStable = generic {
-    version = "5.7.23";
-    sha256  = "14jkhp9jl341zsyk5adh3g98mhqwfbd42c7wahzc31bxq8a0idp7";
+    version = "5.10.23";
+    sha256  = "0ak8crx3anxsx4r3b9k0rihgafkgsxj7f64z48nrk1l8m7f0wwxg";
   };
 
   unifiTesting = generic {
-    version = "5.8.14";
-    suffix  = "-7ef9535d1b";
-    sha256  = "09gr7zkck6npjhhmd27c9ymyna6anwj3w9v9zjicz9skbrddkccq";
+    version = "5.11.18";
+    suffix = "-996baf2ca5";
+    sha256 = "14yyfn39ix8bnn0cb6bn0ly6pqxg81lvy83y40bk0y8vxfg6maqc";
   };
 }

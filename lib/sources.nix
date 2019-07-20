@@ -12,8 +12,8 @@ rec {
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
   cleanSourceFilter = name: type: let baseName = baseNameOf (toString name); in ! (
-    # Filter out Subversion and CVS directories.
-    (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
+    # Filter out version control software files/directories
+    (baseName == ".git" || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
     # Filter out editor backup / swap files.
     lib.hasSuffix "~" baseName ||
     builtins.match "^\\.sw[a-z]$" baseName != null ||
@@ -26,6 +26,10 @@ rec {
     (type == "symlink" && lib.hasPrefix "result" baseName)
   );
 
+  # Filters a source tree removing version control files and directories using cleanSourceWith
+  #
+  # Example:
+  #          cleanSource ./.
   cleanSource = src: cleanSourceWith { filter = cleanSourceFilter; inherit src; };
 
   # Like `builtins.filterSource`, except it will compose with itself,
@@ -69,7 +73,7 @@ rec {
   # Get the commit id of a git repo
   # Example: commitIdFromGitRepo <nixpkgs/.git>
   commitIdFromGitRepo =
-    let readCommitFromFile = path: file:
+    let readCommitFromFile = file: path:
       with builtins;
         let fileName       = toString path + "/" + file;
             packedRefsName = toString path + "/packed-refs";
@@ -79,20 +83,20 @@ rec {
                  # Sometimes git stores the commitId directly in the file but
                  # sometimes it stores something like: «ref: refs/heads/branch-name»
                  matchRef    = match "^ref: (.*)$" fileContent;
-             in if   isNull matchRef
+             in if   matchRef == null
                 then fileContent
-                else readCommitFromFile path (lib.head matchRef)
+                else readCommitFromFile (lib.head matchRef) path
            # Sometimes, the file isn't there at all and has been packed away in the
            # packed-refs file, so we have to grep through it:
            else if lib.pathExists packedRefsName
            then
              let fileContent = readFile packedRefsName;
                  matchRef    = match (".*\n([^\n ]*) " + file + "\n.*") fileContent;
-             in if   isNull matchRef
+             in if   matchRef == null
                 then throw ("Could not find " + file + " in " + packedRefsName)
                 else lib.head matchRef
            else throw ("Not a .git directory: " + path);
-    in lib.flip readCommitFromFile "HEAD";
+    in readCommitFromFile "HEAD";
 
   pathHasContext = builtins.hasContext or (lib.hasPrefix builtins.storeDir);
 

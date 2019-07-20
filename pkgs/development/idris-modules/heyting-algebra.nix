@@ -1,15 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , lib
-, idris
 }:
 build-idris-package  {
   name = "heyting-algebra";
   version = "2017-08-18";
 
-  idrisDeps = [ prelude contrib ];
+  idrisDeps = [ contrib ];
 
   src = fetchFromGitHub {
     owner = "Risto-Stevcev";
@@ -23,6 +21,5 @@ build-idris-package  {
     homepage = https://github.com/Risto-Stevcev/idris-heyting-algebra;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

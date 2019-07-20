@@ -1,4 +1,4 @@
-{ qtModule, stdenv, lib, qtbase, substituteAll, systemd }:
+{ qtModule, stdenv, lib, qtbase, systemd }:
 
 let inherit (lib) getLib optional; in
 

@@ -2,20 +2,24 @@
 , glib, gtk3, gtk-doc, libgudev, pkgconfig, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "iio-sensor-proxy-${version}";
-  version = "2.4";
+  pname = "iio-sensor-proxy";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner  = "hadess";
-    repo   = "iio-sensor-proxy";
+    repo   = pname;
     rev    = version;
-    sha256 = "1c8izq73c00gvv0jc6zby5hcircs4cb16a1d3ivp1i1iflknj46n";
+    sha256 = "05ipljw78d8z90cnkygcrpd0qq4vh14bb9hy06vqxnpdbyq46fxh";
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     ./autogen.sh --prefix=$out \
       --with-udevrulesdir=$out/lib/udev/rules.d \
       --with-systemdsystemunitdir=$out/lib/systemd/system
+
+    runHook postConfigure
   '';
 
   buildInputs = [

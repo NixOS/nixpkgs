@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, ncurses, ocamlPackages, graphviz
-, ltl2ba, coq, alt-ergo, why3, autoconf
+, ltl2ba, coq, why3, autoconf
 }:
 
 let
@@ -9,24 +9,24 @@ in
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
-  version = "20171101";
-  slang   = "Sulfur";
+  version = "18.0";
+  slang   = "Argon";
 
   src = fetchurl {
-    url    = "http://frama-c.com/download/frama-c-${slang}-${version}.tar.gz";
-    sha256 = "1vwjfqmm1r36gkybsy3a7m89q5zicf4rnz5vlsn9imnpjpl9gjw1";
+    url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    sha256 = "0a88k2mhafj7pz3dzgsqkrc9digkxpnvr9jqq9nbzwq8qr02bca2";
   };
 
   why2 = fetchurl {
-    url    = "http://why.lri.fr/download/why-2.39.tar.gz";
-    sha256 = "0nf17jl00s7q9z8gkbamnf7mglvxqrm3967c17ic4c9xz8g125a8";
+    url    = "http://why.lri.fr/download/why-2.40.tar.gz";
+    sha256 = "0h1mbpxsgwvf3pbl0qbg22j6f4v1ffka24ap1ajbjk9b1yb3ali8";
   };
 
   nativeBuildInputs = [ autoconf makeWrapper ];
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib alt-ergo ltl2ba ocamlgraph
-    lablgtk coq graphviz zarith why3 apron camlp4
+    ncurses ocaml findlib ltl2ba ocamlgraph
+    lablgtk coq graphviz zarith why3 apron
   ];
 
 

@@ -34,7 +34,7 @@ in {
   meta.maintainers = with pkgs.stdenv.lib.maintainers; [ basvandijk ];
   nodes = {
 
-    alice = { nodes, ... } : {
+    alice = { ... } : {
       virtualisation.vlans = [ 0 ];
       networking = {
         dhcpcd.enable = false;
@@ -42,7 +42,7 @@ in {
       };
     };
 
-    moon = {pkgs, config, nodes, ...} :
+    moon = { config, ...} :
       let strongswan = config.services.strongswan-swanctl.package;
       in {
         virtualisation.vlans = [ 0 1 ];
@@ -94,7 +94,7 @@ in {
         };
       };
 
-    carol = {pkgs, config, nodes, ...} :
+    carol = { config, ...} :
       let strongswan = config.services.strongswan-swanctl.package;
       in {
         virtualisation.vlans = [ 1 ];

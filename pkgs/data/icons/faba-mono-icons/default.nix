@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     description = "The full set of Faba monochrome panel icons";
     homepage = https://snwh.org/moka;
     license = licenses.gpl3;
-    platforms = platforms.all;
+    # moka-icon-theme dependency is restricted to linux
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

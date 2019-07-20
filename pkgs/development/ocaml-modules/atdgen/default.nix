@@ -1,25 +1,26 @@
-{stdenv, atd, yojson, menhir, easy-format, biniou, cppo, buildOcaml, fetchurl, which}:
+{ buildDunePackage, atd, biniou, yojson }:
 
-buildOcaml rec {
-  name = "atdgen";
-  version = "1.6.0";
+let runtime =
+  buildDunePackage {
+    pname = "atdgen-runtime";
+    inherit (atd) version src;
 
-  src = fetchurl {
-    url = "https://github.com/mjambon/atdgen/archive/v${version}.tar.gz";
-    sha256 = "1icdxgb7qqq1pcbfqi0ikryiwaljd594z3acyci8g3bnlq0yc7zn";
-  };
+    propagatedBuildInputs = [ biniou yojson ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    make PREFIX=$out install
-  '';
+    meta = { inherit (atd.meta) license; };
+  }
+; in
 
-  buildInputs = [ which atd biniou yojson ];
+buildDunePackage {
+  pname = "atdgen";
+  inherit (atd) version src;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mjambon/atdgen;
-    description = "Generates optimized boilerplate OCaml code for JSON and Biniou IO from type definitions";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.jwilberding ];
+  buildInputs = [ atd ];
+
+  propagatedBuildInputs = [ runtime ];
+
+  meta = {
+    description = "Generates efficient JSON serializers, deserializers and validators";
+    inherit (atd.meta) license;
   };
 }

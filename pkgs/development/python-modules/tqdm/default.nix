@@ -5,18 +5,15 @@
 , coverage
 , glibcLocales
 , flake8
-, matplotlib
-, pandas
 }:
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.21.0";
-  name = "${pname}-${version}";
+  version = "4.32.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b94af236084ceaad93a6ada00bd9976900b172ec9b821828ed0d4b53f7431170";
+    sha256 = "0a860bf2683fdbb4812fe539a6c22ea3f1777843ea985cb8c3807db448a0f7ab";
   };
 
   buildInputs = [ nose coverage glibcLocales flake8 ];
@@ -28,6 +25,10 @@ buildPythonPackage rec {
   '';
 
   LC_ALL="en_US.UTF-8";
+
+#   doCheck = !stdenv.isDarwin;
+  # Test suite is too big and slow.
+  doCheck = false;
 
   meta = {
     description = "A Fast, Extensible Progress Meter";

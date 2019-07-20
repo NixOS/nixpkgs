@@ -14,11 +14,30 @@ stdenv.mkDerivation rec {
     sha256 = "1s7s2lc5f0ig1yy7ygsh3sddm3sbq4mxwybqsj8lp9wjdxs7qfrs";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [
+    "format"
+    "strictoverflow" # causes runtime failure (tested in checkPhase)
+  ];
+
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace GNUmakefile --replace gcc cc
+  '';
 
   preBuild = ''
       echo Building PALP optimized for ${dim} dimensions
       sed -i "s/^#define[^a-zA-Z]*POLY_Dmax.*/#define POLY_Dmax ${dim}/" Global.h
+  '';
+
+  # palp has no tests of its own. This test is an adapted sage test that failed
+  # when #28029 was merged.
+  doCheck = true;
+  checkPhase = ''
+    ./nef.x -f -N << EOF | grep -q 'np='
+      3 6
+      1  0  0 -1  0  0
+      0  1  0  0 -1  0
+      0  0  1  0  0 -1
+    EOF
   '';
 
   installPhase = ''
@@ -62,6 +81,6 @@ stdenv.mkDerivation rec {
     # the right license.
     license = licenses.gpl2;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }

@@ -1,6 +1,6 @@
 # builder for Emacs packages built for packages.el
 
-{ lib, stdenv, fetchurl, emacs, texinfo }:
+{ lib, stdenv, emacs, texinfo }:
 
 with lib;
 

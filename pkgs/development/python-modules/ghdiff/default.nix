@@ -1,17 +1,16 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
 , zope_testrunner, six, chardet}:
 
 buildPythonPackage rec {
   pname = "ghdiff";
   version = "0.4";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/g/ghdiff/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "17mdhi2sq9017nq8rkjhhc87djpi5z99xiil0xz17dyplr7nmkqk";
   };
 
-  buildInputs = [ zope_testrunner ];
+  checkInputs = [ zope_testrunner ];
   propagatedBuildInputs = [ six chardet ];
 
   meta = with stdenv.lib; {

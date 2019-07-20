@@ -1,4 +1,4 @@
-{ stdenv, fetchbzr, x11 }:
+{ stdenv, fetchbzr, xlibsWrapper }:
 
 let
   version = "4";
@@ -13,14 +13,14 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    x11
+    xlibsWrapper
   ];
 
-  buildPhase = if stdenv.system == "x86_64-linux" then ''
+  buildPhase = if stdenv.hostPlatform.system == "x86_64-linux" then ''
     make all64
-  '' else if stdenv.system == "i686-linux" then ''
+  '' else if stdenv.hostPlatform.system == "i686-linux" then ''
     make all32
-  '' else throw "xwinwrap is not supported on ${stdenv.system}";
+  '' else throw "xwinwrap is not supported on ${stdenv.hostPlatform.system}";
 
   installPhase = ''
     mkdir -p $out/bin

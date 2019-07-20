@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, ruby, makeWrapper }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv rec {
   pname = "rubocop";
@@ -9,9 +9,9 @@ bundlerEnv rec {
 
   meta = with lib; {
     description = "Automatic Ruby code style checking tool";
-    homepage = http://rubocop.readthedocs.io/en/latest/;
+    homepage = "https://docs.rubocop.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ leemachin ];
+    maintainers = with maintainers; [ marsam leemachin ];
     platforms = platforms.unix;
   };
 }

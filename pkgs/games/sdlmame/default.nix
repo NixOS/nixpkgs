@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "0.151.u0-1";
   name    = "sdlmame-${version}";
 
-  src = if stdenv.system == "x86_64-linux"
+  src = if stdenv.hostPlatform.system == "x86_64-linux"
     then fetchurl {
       url    = "http://seblu.net/a/archive/packages/s/sdlmame/${name}-x86_64.pkg.tar.xz";
       sha256 = "1j9vjxhrhsskrlk5wr7al4wk2hh3983kcva42mqal09bmc8qg3m9";

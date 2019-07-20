@@ -3,13 +3,20 @@
 with lib;
 
 let cfg = config.services.cloud-init;
-    path = with pkgs; [ cloud-init nettools utillinux e2fsprogs shadow openssh iproute ];
+    path = with pkgs; [
+      cloud-init
+      iproute
+      nettools
+      openssh
+      shadow
+      utillinux
+    ] ++ optional cfg.btrfs.enable btrfs-progs
+      ++ optional cfg.ext4.enable e2fsprogs
+    ;
 in
 {
   options = {
-
     services.cloud-init = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -26,6 +33,22 @@ in
           public key provisioning, and cloud-init is useful for that
           parts. Thus, be wary that using cloud-init in NixOS might
           come as some cost.
+        '';
+      };
+
+      btrfs.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Allow the cloud-init service to operate `btrfs` filesystem.
+        '';
+      };
+
+      ext4.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Allow the cloud-init service to operate `ext4` filesystem.
         '';
       };
 
@@ -96,7 +119,7 @@ in
           { Type = "oneshot";
             ExecStart = "${pkgs.cloud-init}/bin/cloud-init init --local";
             RemainAfterExit = "yes";
-            TimeoutSec = "0";
+            TimeoutSec = "infinity";
             StandardOutput = "journal+console";
           };
       };
@@ -104,8 +127,9 @@ in
     systemd.services.cloud-init =
       { description = "Initial cloud-init job (metadata service crawler)";
         wantedBy = [ "multi-user.target" ];
-        wants = [ "local-fs.target" "cloud-init-local.service" "sshd.service" "sshd-keygen.service" ];
-        after = [ "local-fs.target" "network.target" "cloud-init-local.service" ];
+        wants = [ "local-fs.target" "network-online.target" "cloud-init-local.service"
+                  "sshd.service" "sshd-keygen.service" ];
+        after = [ "local-fs.target" "network-online.target" "cloud-init-local.service" ];
         before = [ "sshd.service" "sshd-keygen.service" ];
         requires = [ "network.target "];
         path = path;
@@ -113,7 +137,7 @@ in
           { Type = "oneshot";
             ExecStart = "${pkgs.cloud-init}/bin/cloud-init init";
             RemainAfterExit = "yes";
-            TimeoutSec = "0";
+            TimeoutSec = "infinity";
             StandardOutput = "journal+console";
           };
       };
@@ -121,15 +145,15 @@ in
     systemd.services.cloud-config =
       { description = "Apply the settings specified in cloud-config";
         wantedBy = [ "multi-user.target" ];
-        wants = [ "network.target" ];
-        after = [ "network.target" "syslog.target" "cloud-config.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" "syslog.target" "cloud-config.target" ];
 
         path = path;
         serviceConfig =
           { Type = "oneshot";
             ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=config";
             RemainAfterExit = "yes";
-            TimeoutSec = "0";
+            TimeoutSec = "infinity";
             StandardOutput = "journal+console";
           };
       };
@@ -137,15 +161,15 @@ in
     systemd.services.cloud-final =
       { description = "Execute cloud user/final scripts";
         wantedBy = [ "multi-user.target" ];
-        wants = [ "network.target" ];
-        after = [ "network.target" "syslog.target" "cloud-config.service" "rc-local.service" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" "syslog.target" "cloud-config.service" "rc-local.service" ];
         requires = [ "cloud-config.target" ];
         path = path;
         serviceConfig =
           { Type = "oneshot";
             ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=final";
             RemainAfterExit = "yes";
-            TimeoutSec = "0";
+            TimeoutSec = "infinity";
             StandardOutput = "journal+console";
           };
       };

@@ -1,14 +1,13 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-  version = "3.0.3";
   pname = "robotframework";
-  disabled = isPy3k;
-  name = pname + "-" + version;
+  version = "3.1.2";
 
-  src = fetchurl {
-    url = "mirror://pypi/r/robotframework/${name}.tar.gz";
-    sha256 = "a5ffe9283c9247c3a1e81228fcc009819d8f94b48768170268a3e6274a998bca";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "f10dd7c0c8c7962a4f80dd1e026b5db731b9391bc6e1f9ebb96d685eb1230dbc";
+    extension = "zip";
   };
 
   meta = with stdenv.lib; {

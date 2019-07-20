@@ -1,11 +1,11 @@
-{ lua, writeText }:
+{ lua, writeText, toLuaModule }:
 
 { buildInputs ? [], disabled ? false, ... } @ attrs:
 
 if disabled then
   throw "${attrs.name} not supported by interpreter lua-${lua.luaversion}"
 else
-  lua.stdenv.mkDerivation (
+  toLuaModule( lua.stdenv.mkDerivation (
     {
       makeFlags = [
         "PREFIX=$(out)"
@@ -29,9 +29,9 @@ else
           if [[ $LUA_PATH = *"$package_path"* ]]; then return; fi
 
           if [[ -z $LUA_PATH ]]; then
-            export LUA_PATH="$package_path/?.lua"
+            export LUA_PATH="$package_path/?.lua;$package_path/?/init.lua"
           else
-            export LUA_PATH="$LUA_PATH;$package_path/?.lua"
+            export LUA_PATH="$LUA_PATH;$package_path/?.lua;$package_path/?/init.lua"
           fi
         }
 
@@ -51,4 +51,4 @@ else
         addEnvHooks "$hostOffset" addLuaLibCPath
       '';
     }
-  )
+  ) )

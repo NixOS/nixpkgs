@@ -1,55 +1,56 @@
 { stdenv
 , fetchFromGitHub
-, gettext
-, libxml2
-, pkgconfig
-, gtk3
-, granite
-, gnome3
-, gobjectIntrospection
-, json-glib
 , cmake
+, gdk_pixbuf
+, gtk3
+, gettext
 , ninja
+, pantheon
+, pkgconfig
+, json-glib
 , libgudev
 , libevdev
-, vala
+, libgee
+, libsoup
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "spice-up-${version}";
-  version = "1.3.2";
+  pname = "spice-up";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Spice-up";
     rev = version;
-    sha256 = "087cdi7na93pgz7vf046h94v5ydvpiccpwhllq85ix8g4pa5rp85";
+    sha256 = "1pix911l4ddn50026a5sbpqfzba6fmw40m1yzbknmkgd2ny28f0m";
   };
-  USER = "nix-build-user";
+
+  USER = "pbuilder";
 
   nativeBuildInputs = [
-    pkgconfig
-    wrapGAppsHook
-    vala
     cmake
-    ninja
     gettext
-    libxml2
-    gobjectIntrospection # For setup hook
+    ninja
+    pkgconfig
+    pantheon.vala
+    wrapGAppsHook
   ];
   buildInputs = [
+    pantheon.elementary-icon-theme
+    pantheon.granite
+    gdk_pixbuf
     gtk3
-    granite
-    gnome3.libgee
     json-glib
-    libgudev
     libevdev
+    libgee
+    libgudev
+    libsoup
   ];
 
   meta = with stdenv.lib; {
-    description = "Create simple and beautiful presentations on the Linux desktop";
+    description = "Create simple and beautiful presentations";
     homepage = https://github.com/Philip-Scott/Spice-up;
-    maintainers = with maintainers; [ samdroid-apps ];
+    maintainers = with maintainers; [ samdroid-apps kjuvi ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     # The COPYING file has GPLv3; some files have GPLv2+ and some have GPLv3+
     license = licenses.gpl3Plus;

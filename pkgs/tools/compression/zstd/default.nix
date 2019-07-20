@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub, gnugrep
 , fixDarwinDylibNames
+, file
 , legacySupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
-    sha256 = "090ba7dnv5z2v4vlb8b275b0n7cqsdzjqvr3b6a0w65z13mgy2nw";
+    sha256 = "1gfxi3ymgavjfxh84rhfjan7l4pymwfrn051nwc7n0s3mxp09m6v";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
@@ -19,14 +20,21 @@ stdenv.mkDerivation rec {
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
   ];
 
+  checkInputs = [ file ];
+  doCheck = true;
+  preCheck = ''
+    substituteInPlace tests/playTests.sh \
+      --replace 'MD5SUM="md5 -r"' 'MD5SUM="md5sum"'
+  '';
+
   installFlags = [
     "PREFIX=$(out)"
   ];
 
   preInstall = ''
     substituteInPlace programs/zstdgrep \
-      --replace "=grep" "=${gnugrep}/bin/grep" \
-      --replace "=zstdcat" "=$out/bin/zstdcat"
+      --replace ":-grep" ":-${gnugrep}/bin/grep" \
+      --replace ":-zstdcat" ":-$out/bin/zstdcat"
 
     substituteInPlace programs/zstdless \
       --replace "zstdcat" "$out/bin/zstdcat"

@@ -7,10 +7,19 @@ let
 
   cfg = config.services.compton;
 
+  literalAttrs = v:
+    if isString v then toString v
+    else if isAttrs v then "{\n"
+      + concatStringsSep "\n" (mapAttrsToList
+        (name: value: "${literalAttrs name} = ${literalAttrs value};")
+        v)
+      + "\n}"
+    else generators.toPretty {} v;
+
   floatBetween = a: b: with lib; with types;
     addCheck str (x: versionAtLeast x a && versionOlder x b);
 
-  pairOf = x: with types; addCheck (listOf x) (y: lib.length y == 2);
+  pairOf = x: with types; addCheck (listOf x) (y: length y == 2);
 
   opacityRules = optionalString (length cfg.opacityRules != 0)
     (concatMapStringsSep ",\n" (rule: ''"${rule}"'') cfg.opacityRules);
@@ -23,8 +32,7 @@ let
       fade-in-step  = ${elemAt cfg.fadeSteps 0};
       fade-out-step = ${elemAt cfg.fadeSteps 1};
       fade-exclude  = ${toJSON cfg.fadeExclude};
-    '' + 
-    optionalString cfg.shadow ''
+    '' + optionalString cfg.shadow ''
 
       # shadows
       shadow = true;
@@ -37,7 +45,9 @@ let
       # opacity
       active-opacity   = ${cfg.activeOpacity};
       inactive-opacity = ${cfg.inactiveOpacity};
-      menu-opacity     = ${cfg.menuOpacity};
+
+      wintypes:
+      ${literalAttrs cfg.wintypes};
 
       opacity-rule = [
         ${opacityRules}
@@ -45,7 +55,7 @@ let
 
       # other options
       backend = ${toJSON cfg.backend};
-      vsync = ${toJSON cfg.vSync};
+      vsync = ${boolToString cfg.vSync};
       refresh-rate = ${toString cfg.refreshRate};
     '' + cfg.extraOptions);
 
@@ -93,7 +103,7 @@ in {
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
-        "focused = 1" 
+        "focused = 1"
       ];
       description = ''
         List of conditions of windows that should not be faded.
@@ -133,7 +143,7 @@ in {
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
-        "focused = 1" 
+        "focused = 1"
       ];
       description = ''
         List of conditions of windows that should have no shadow.
@@ -168,6 +178,15 @@ in {
       '';
     };
 
+    wintypes = mkOption {
+      type = types.attrs;
+      default = { popup_menu = { opacity = cfg.menuOpacity; }; dropdown_menu = { opacity = cfg.menuOpacity; }; };
+      example = {};
+      description = ''
+        Rules for specific window types.
+      '';
+    };
+
     opacityRules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -189,15 +208,22 @@ in {
     };
 
     vSync = mkOption {
-      type = types.enum [
-        "none" "drm" "opengl"
-        "opengl-oml" "opengl-swc" "opengl-mswc"
-      ];
-      default = "none";
-      example = "opengl-swc";
+      type = with types; either bool
+        (enum [ "none" "drm" "opengl" "opengl-oml" "opengl-swc" "opengl-mswc" ]);
+      default = false;
+      apply = x:
+        let
+          res = x != "none";
+          msg = "The type of services.compton.vSync has changed to bool:"
+                + " interpreting ${x} as ${boolToString res}";
+        in
+          if isBool x then x
+          else warn msg res;
+
       description = ''
-        Enable vertical synchronization using the specified method.
-        See <literal>compton(1)</literal> man page an explanation.
+        Enable vertical synchronization. Chooses the best method
+        (drm, opengl, opengl-oml, opengl-swc, opengl-mswc) automatically.
+        The bool value should be used, the others are just for backwards compatibility.
       '';
     };
 
@@ -238,6 +264,12 @@ in {
       description = "Compton composite manager";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
+
+      # Temporarily fixes corrupt colours with Mesa 18
+      environment = mkIf (cfg.backend == "glx") {
+        allow_rgb10_configs = "false";
+      };
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/compton --config ${configFile}";
         RestartSec = 3;

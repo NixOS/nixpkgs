@@ -92,12 +92,12 @@ in
     warnings = optional options.services.matterbridge.configFile.isDefined
       "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
 
-    users.extraUsers = optional (cfg.user == "matterbridge")
+    users.users = optional (cfg.user == "matterbridge")
       { name = "matterbridge";
         group = "matterbridge";
       };
 
-    users.extraGroups = optional (cfg.group == "matterbridge")
+    users.groups = optional (cfg.group == "matterbridge")
       { name = "matterbridge";
       };
 

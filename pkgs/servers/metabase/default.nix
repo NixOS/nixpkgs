@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "metabase-${version}";
-  version = "0.29.2";
+  version = "0.32.9";
 
   src = fetchurl {
     url = "http://downloads.metabase.com/v${version}/metabase.jar";
-    sha256 = "02cba755mfim8q403gj02ggc0gg4ckcyalxkw09k0jqi5irdi4h1";
+    sha256 = "08iybb1m2pmimn0fs95kd948yf6c1xmg5kkzm9ykx4cpb9pn1yw0";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     makeWrapper ${jre}/bin/java $out/bin/metabase --add-flags "-jar $src"

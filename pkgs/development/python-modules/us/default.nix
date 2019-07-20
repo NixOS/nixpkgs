@@ -15,6 +15,13 @@ buildPythonPackage rec {
     sha256 = "1niglalkp7pinibzbxjdz9mxx9qmwkrh8884dag3kr72cfkrpp09";
   };
 
+  # Upstream requires jellyfish==0.5.6 but we have 0.6.1
+  postPatch = ''
+    substituteInPlace setup.py --replace "jellyfish==" "jellyfish>="
+  '';
+
+  doCheck = false; # pypi version doesn't include tests
+
   meta = {
     description = "A package for easily working with US and state metadata";
     longDescription = ''

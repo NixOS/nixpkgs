@@ -7,7 +7,7 @@ rec {
 
   description = ''Create vectors allocated in static memory.'';
 
-  deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."fiveam" args."trivial-features" ];
+  deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."fiveam" args."trivial-features" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/static-vectors/2017-10-19/static-vectors-v1.8.3.tgz'';
@@ -27,7 +27,9 @@ rec {
     static-vectors DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
+     (NAME cffi-toolchain FILENAME cffi-toolchain)
      (NAME fiveam FILENAME fiveam)
      (NAME trivial-features FILENAME trivial-features))
-    DEPENDENCIES (alexandria babel cffi cffi-grovel fiveam trivial-features)
+    DEPENDENCIES
+    (alexandria babel cffi cffi-grovel cffi-toolchain fiveam trivial-features)
     VERSION v1.8.3 SIBLINGS NIL PARASITES (static-vectors/test)) */

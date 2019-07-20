@@ -6,13 +6,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "epoxy-${version}";
-  version = "1.5.0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "anholt";
     repo = "libepoxy";
     rev = "${version}";
-    sha256 = "1ixpqb10pmdy3n9nxd5inflig9dal5502ggadcns5b58j6jr0yv0";
+    sha256 = "03nrmf161xyj3q9zsigr5qj5vx5dsfxxyjva73cm1mgqqc5d60px";
   };
 
   outputs = [ "out" "dev" ];
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   patches = [ ./libgl-path.patch ];
 
   NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
+
+  doCheck = false; # needs X11
 
   meta = {
     description = "A library for handling OpenGL function pointer management";

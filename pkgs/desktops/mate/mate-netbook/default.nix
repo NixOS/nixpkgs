@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-netbook-${version}";
-  version = "1.20.0";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1w92kny1fnlwbq4b8y50n5s1vsvvl4xrvspsp9lqfxyz3jxiwbrz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "00n162bskbvxhy4k2w14f9zwlsg3wgi43228ssx7sc2p95psmm64";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Installing these utilities is recommended for netbooks and similar
       devices with low resolution displays.
     '';
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = with licenses; [ gpl3 lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

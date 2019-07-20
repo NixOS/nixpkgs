@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, fetchsvn, pkgconfig, scons, libGLU_combined, SDL2, SDL2_image
-, libvorbis, bullet, curl, gettext, writeTextFile, writeShellScriptBin
+, libvorbis, bullet, curl, gettext, writeTextFile
 
 , data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
-    rev = 1386;
+    rev = "1386";
     sha256 = "0ka6zir9hg0md5p03dl461jkvbk05ywyw233hnc3ka6shz3vazi1";
   }
 }:

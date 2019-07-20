@@ -1,28 +1,33 @@
 { stdenv, fetchFromGitHub
-, cmake, ninja, pkgconfig, vala, gobjectIntrospection, gettext, wrapGAppsHook
-, gtk3, glib, granite, libgee, libgda, gtksourceview, libxml2 }:
+, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
+, gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
 
 
 let
-  version = "0.5.4";
   sqlGda = libgda.override {
     mysqlSupport = true;
     postgresSupport = true;
   };
 
 in stdenv.mkDerivation rec {
-  name = "sequeler-${version}";
+  pname = "sequeler";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
-    repo = "sequeler";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "05c7y6xdyq3h9bn90pbz03jhy9kabmgpxi4zz0i26q0qphljskbx";
+    sha256 = "1x2ikagjsgnhhhwkj09ihln17mq4wjq3wwbnf02j2p3jpp4i8w1i";
   };
 
-  nativeBuildInputs = [ cmake ninja pkgconfig vala gobjectIntrospection gettext wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig pantheon.vala gettext wrapGAppsHook python3 desktop-file-utils ];
 
-  buildInputs = [ gtk3 glib granite libgee sqlGda gtksourceview libxml2 ];
+  buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libssh2 ];
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   meta = with stdenv.lib; {
     description = "Friendly SQL Client";
@@ -34,7 +39,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/Alecaddd/sequeler;
     license = licenses.gpl3;
-    maintainers = [ maintainers.etu ];
+    maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
     platforms = platforms.linux;
   };
 }

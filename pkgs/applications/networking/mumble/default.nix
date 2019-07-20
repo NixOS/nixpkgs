@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchgit, fetchpatch, pkgconfig
-, qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig
+, qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf3_6, speex, libcap
 , alsaLib, python
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
@@ -22,11 +22,15 @@ let
     nativeBuildInputs = [ pkgconfig python ]
       ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmake ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
-    buildInputs = [ boost protobuf avahi ]
+
+    # protobuf is freezed to 3.6 because of this bug: https://github.com/mumble-voip/mumble/issues/3617
+    # this could be reverted to the latest version in a future release of mumble as it is already fixed in master
+    buildInputs = [ boost protobuf3_6 avahi ]
       ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
       ++ (overrides.buildInputs or [ ]);
 
     qmakeFlags = [
+      "CONFIG+=c++11"
       "CONFIG+=shared"
       "CONFIG+=no-g15"
       "CONFIG+=packaged"
@@ -62,7 +66,7 @@ let
       description = "Low-latency, high quality voice chat software";
       homepage = https://mumble.info;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ viric jgeerds wkennington ];
+      maintainers = with maintainers; [ ];
       platforms = platforms.linux;
     };
   });
@@ -117,23 +121,34 @@ let
       sha256 = "1s60vaici3v034jzzi20x23hsj6mkjlc0glipjq4hffrg9qgnizh";
     };
 
-    # Fix compile error against boost 1.66 (#33655):
-    patches = singleton (fetchpatch {
-      url = "https://github.com/mumble-voip/mumble/commit/"
-          + "ea861fe86743c8402bbad77d8d1dd9de8dce447e.patch";
-      sha256 = "1r50dc8dcl6jmbj4abhnay9div7y56kpmajzqd7ql0pm853agwbh";
-    });
+    patches = [
+      # Fix compile error against boost 1.66 (#33655):
+      (fetchpatch {
+        url = "https://github.com/mumble-voip/mumble/commit/"
+            + "ea861fe86743c8402bbad77d8d1dd9de8dce447e.patch";
+        sha256 = "1r50dc8dcl6jmbj4abhnay9div7y56kpmajzqd7ql0pm853agwbh";
+      })
+      # Fixes hang on reconfiguring audio (often including startup)
+      # https://github.com/mumble-voip/mumble/pull/3418
+      (fetchpatch {
+        url = "https://github.com/mumble-voip/mumble/commit/"
+            + "fbbdf2e8ab7d93ed6f7680268ad0689b7eaa71ad.patch";
+        sha256 = "1yhj62mlwm6q42i4aclbia645ha97d3j4ycxhgafr46dbjs0gani";
+      })
+    ];
   };
 
   gitSource = rec {
-    version = "2018-01-12";
+    version = "2019-07-10";
     qtVersion = 5;
 
     # Needs submodules
-    src = fetchgit {
-      url = "https://github.com/mumble-voip/mumble";
-      rev = "e348e47f4af68eaa8e0f87d1d9fc28c5583e421e";
-      sha256 = "12z41qfaq6w3i4wcw8pvyb8wwwa8gs3ar5zx6aqx6yssc6513lr3";
+    src = fetchFromGitHub {
+      owner = "mumble-voip";
+      repo = "mumble";
+      rev = "41b265584654c7ac216fd3ccb9c141734d3f839b";
+      sha256 = "00irlzz5q4drmsfbwrkyy7p7w8a5fc1ip5vyicq3g3cy58dprpqr";
+      fetchSubmodules = true;
     };
   };
 in {
@@ -142,5 +157,7 @@ in {
   murmur     = server stableSource;
   murmur_git = (server gitSource).overrideAttrs (old: {
     meta = old.meta // { broken = iceSupport; };
+
+    nativeBuildInputs = old.nativeBuildInputs or [] ++ [ qt5.wrapQtAppsHook ];
   });
 }

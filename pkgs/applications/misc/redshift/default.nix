@@ -1,22 +1,25 @@
-{ stdenv, fetchFromGitHub, fetchurl, autoconf, automake, gettext, intltool
-, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobjectIntrospection
+{ stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
+, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
 , gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
 
-, withCoreLocation ? stdenv.isDarwin, CoreLocation, Foundation, Cocoa
 , withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
 , withDrm ? stdenv.isLinux, libdrm
-, withGeoclue ? stdenv.isLinux, geoclue }:
+
+, withGeolocation ? true
+, withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
+, withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
+}:
 
 stdenv.mkDerivation rec {
   name = "redshift-${version}";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "jonls";
     repo = "redshift";
     rev = "v${version}";
-    sha256 = "0jfi4wqklqw2rm0r2xwalyzir88zkdvqj0z5id0l5v20vsrfiiyj";
+    sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
   };
 
   patches = [
@@ -44,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobjectIntrospection
+    gobject-introspection
     gtk3
     python
     hicolor-icon-theme
@@ -60,6 +63,15 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap";
 
   postFixup = "wrapPythonPrograms";
+
+  # the geoclue agent may inspect these paths and expect them to be
+  # valid without having the correct $PATH set
+  postInstall = ''
+    substituteInPlace $out/share/applications/redshift.desktop \
+      --replace 'Exec=redshift' "Exec=$out/bin/redshift"
+    substituteInPlace $out/share/applications/redshift.desktop \
+      --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
+  '';
 
   enableParallelBuilding = true;
 

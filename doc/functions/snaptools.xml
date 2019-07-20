@@ -1,0 +1,74 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="sec-pkgs-snapTools">
+ <title>pkgs.snapTools</title>
+
+ <para>
+  <varname>pkgs.snapTools</varname> is a set of functions for creating
+  Snapcraft images. Snap and Snapcraft is not used to perform these operations.
+ </para>
+
+ <section xml:id="ssec-pkgs-snapTools-makeSnap-signature">
+  <title>The makeSnap Function</title>
+
+  <para>
+   <function>makeSnap</function> takes a single named argument,
+   <parameter>meta</parameter>. This argument mirrors
+   <link xlink:href="https://docs.snapcraft.io/snap-format">the upstream
+   <filename>snap.yaml</filename> format</link> exactly.
+  </para>
+
+  <para>
+   The <parameter>base</parameter> should not be be specified, as
+   <function>makeSnap</function> will force set it.
+  </para>
+
+  <para>
+   Currently, <function>makeSnap</function> does not support creating GUI
+   stubs.
+  </para>
+ </section>
+
+ <section xml:id="ssec-pkgs-snapTools-build-a-snap-hello">
+  <title>Build a Hello World Snap</title>
+
+  <example xml:id="ex-snapTools-buildSnap-hello">
+   <title>Making a Hello World Snap</title>
+   <para>
+    The following expression packages GNU Hello as a Snapcraft snap.
+   </para>
+<programlisting><xi:include href="./snap/example-hello.nix" parse="text" /></programlisting>
+   <para>
+    <command>nix-build</command> this expression and install it with
+    <command>snap install ./result --dangerous</command>.
+    <command>hello</command> will now be the Snapcraft version of the package.
+   </para>
+  </example>
+ </section>
+
+ <section xml:id="ssec-pkgs-snapTools-build-a-snap-firefox">
+  <title>Build a Hello World Snap</title>
+
+  <example xml:id="ex-snapTools-buildSnap-firefox">
+   <title>Making a Graphical Snap</title>
+   <para>
+    Graphical programs require many more integrations with the host. This
+    example uses Firefox as an example, because it is one of the most
+    complicated programs we could package.
+   </para>
+<programlisting><xi:include href="./snap/example-firefox.nix" parse="text" /></programlisting>
+   <para>
+    <command>nix-build</command> this expression and install it with
+    <command>snap install ./result --dangerous</command>.
+    <command>nix-example-firefox</command> will now be the Snapcraft version of
+    the Firefox package.
+   </para>
+   <para>
+    The specific meaning behind plugs can be looked up in the
+    <link xlink:href="https://docs.snapcraft.io/supported-interfaces">Snapcraft
+    interface documentation</link>.
+   </para>
+  </example>
+ </section>
+</section>

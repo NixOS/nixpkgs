@@ -29,7 +29,7 @@ with lib;
 
   config = mkIf config.services.gnome3.seahorse.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.seahorse ];
+    environment.systemPackages = [ pkgs.gnome3.seahorse pkgs.gnome3.dconf ];
 
     services.dbus.packages = [ pkgs.gnome3.seahorse ];
 

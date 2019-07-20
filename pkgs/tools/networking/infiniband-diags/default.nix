@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, rdma-core,
-  glib, opensm, perl, makeWrapper }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, rdma-core
+, opensm, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "infiniband-diags-${version}";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "infiniband-diags";
     rev = version;
-    sha256 = "06x8yy3ly1vzraznc9r8pfsal9mjavxzhgrla3q2493j5jz0sx76";
+    sha256 = "0dhidwscvv8rffgjl6ygrz7daf61wbgabzhb6v8wh5kccml90mxi";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig makeWrapper ];
 
-  buildInputs = [ rdma-core glib opensm perl ];
+  buildInputs = [ rdma-core opensm perl ];
 
   preConfigure = ''
     export CFLAGS="-I${opensm}/include/infiniband"
     ./autogen.sh
   '';
 
-  configureFlags = "--with-perl-installdir=\${out}/lib/perl5/site_perl --sbindir=\${out}/bin";
+  configureFlags = [ "--with-perl-installdir=\${out}/${perl.libPrefix}" "--sbindir=\${out}/bin" ];
 
   postInstall = ''
     rmdir $out/var/run $out/var
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
       echo "wrapping $pls"
-      wrapProgram $pls --prefix PERL5LIB : "$out/lib/perl5/site_perl"
+      wrapProgram $pls --prefix PERL5LIB : "$out/${perl.libPrefix}"
     done
   '';
 

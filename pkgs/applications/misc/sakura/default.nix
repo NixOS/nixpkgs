@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.6.0";
 
   src = fetchurl {
-    url = "http://launchpad.net/sakura/trunk/${version}/+download/${name}.tar.bz2";
+    url = "https://launchpad.net/sakura/trunk/${version}/+download/${name}.tar.bz2";
     sha256 = "1q463qm41ym7jb3kbzjz7b6x549vmgkb70arpkhsf86yxly1y5m1";
   };
 

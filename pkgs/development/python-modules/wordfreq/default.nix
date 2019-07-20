@@ -6,27 +6,28 @@
 , msgpack
 , mecab-python3
 , jieba
-, nose
+, pytest
 , pythonOlder
 , fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "wordfreq";
-  version = "2.0";
+  version = "2.2.0";
 
    src = fetchFromGitHub {
     owner = "LuminosoInsight";
     repo = "wordfreq";
-    rev = "e3a1b470d9f8e0d82e9f179ffc41abba434b823b";
-    sha256 = "1wjkhhj7nxfnrghwvmvwc672s30lp4b7yr98gxdxgqcq6wdshxwv";
+    # upstream don't tag by version
+    rev = "bc12599010c8181a725ec97d0b3990758a48da36";
+    sha256 = "195794vkzq5wsq3mg1dgfhlnz2f7vi1xajlifq6wkg4lzwyq262m";
    };
 
-  checkInputs = [ nose ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     # These languages require additional dictionaries
-    nosetests -e test_japanese -e test_korean -e test_languages
+    pytest tests -k 'not test_japanese and not test_korean and not test_languages and not test_french_and_related'
   '';
    
   propagatedBuildInputs = [ regex langcodes ftfy msgpack mecab-python3 jieba ];

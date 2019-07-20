@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, fetchurl, fetchpatch, makeWrapper }:
+{ stdenv, appleDerivation, makeWrapper }:
 
 appleDerivation {
   nativeBuildInputs = [ makeWrapper ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bison, flex, libsepol, libselinux, bzip2, libaudit
+{ stdenv, fetchurl, pkgconfig, bison, flex, libsepol, libselinux, bzip2, audit
 , enablePython ? true, swig ? null, python ? null
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bison flex pkgconfig ];
-  buildInputs = [ libsepol libselinux bzip2 libaudit ]
+  buildInputs = [ libsepol libselinux bzip2 audit ]
     ++ optionals enablePython [ swig python ];
 
   preBuild = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
 
-  meta = libsepol.meta // {
+  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "Policy management tools for SELinux";
     license = stdenv.lib.licenses.lgpl21;
   };

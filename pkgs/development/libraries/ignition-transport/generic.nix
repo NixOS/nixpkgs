@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, utillinux,
+{ stdenv, cmake, pkgconfig, utillinux,
   protobuf, zeromq, cppzmq,
   version, src    # parametrize version and src so we can easily have pkgs
                   # for different versions

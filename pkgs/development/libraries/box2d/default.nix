@@ -1,23 +1,27 @@
-{ stdenv, fetchurl, unzip, cmake, libGLU_combined, freeglut, libX11, xproto, inputproto
+{ stdenv, fetchurl, unzip, cmake, libGLU_combined, freeglut, libX11, xorgproto
 , libXi, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "box2d-${version}";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "https://github.com/erincatto/Box2D/archive/v${version}.tar.gz";
-    sha256 = "1dmbswh4x2n5l3c9h0k72m0z4rdpzfy1xl8m8p3rf5rwkvk3bkg2";
+    sha256 = "0llpcifl8zbjbpxdwz87drd01m3lwnv82xb4av6kca1xn4w2gmkm";
   };
 
   sourceRoot = "Box2D-${version}/Box2D";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    unzip cmake libGLU_combined freeglut libX11 xproto inputproto libXi
+    unzip cmake libGLU_combined freeglut libX11 xorgproto libXi
   ];
 
-  cmakeFlags = [ "-DBOX2D_INSTALL=ON" "-DBOX2D_BUILD_SHARED=ON" ];
+  cmakeFlags = [
+    "-DBOX2D_INSTALL=ON"
+    "-DBOX2D_BUILD_SHARED=ON"
+    "-DBOX2D_BUILD_EXAMPLES=OFF"
+  ];
 
   prePatch = ''
     substituteInPlace Box2D/Common/b2Settings.h \

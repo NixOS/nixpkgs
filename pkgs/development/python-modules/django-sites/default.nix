@@ -2,8 +2,24 @@
 
 buildPythonPackage rec {
   pname = "django-sites";
-  name = "${pname}-${version}";
-  version = "0.9";
+  version = "0.10";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "f6f9ae55a05288a95567f5844222052b6b997819e174f4bde4e7c23763be6fc3";
+  };
+  # LICENSE file appears to be missing from pypi package, but expected by the installer
+  # https://github.com/niwinz/django-sites/issues/11
+  postPatch = ''
+    touch LICENSE
+  '';
+
+  propagatedBuildInputs = [ django ];
+
+  # required files for test don't seem to be included in pypi package, full source for 0.10
+  # version doesn't appear to be present on github
+  # https://github.com/niwinz/django-sites/issues/9
+  doCheck = false;
 
   meta = {
     description = ''
@@ -13,14 +29,4 @@ buildPythonPackage rec {
     homepage = https://github.com/niwinz/django-sites;
     license = lib.licenses.bsd3;
   };
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "05nrydk4a5a99qrxjrcnacs8nbbq5pfjikdpj4w9yn5yfayp057s";
-  };
-
-  propagatedBuildInputs = [ django ];
-
-  # django.core.exceptions.ImproperlyConfigured: Requested settings, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
-  doCheck = false;
 }

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.1.2";
 
   src = fetchurl {
-    url = "http://dev-www.libreoffice.org/src/libabw/${name}.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libabw/${name}.tar.xz";
     sha256 = "11949iscdb99f2jplxjd39282jxcrf2fw0sqbh5dl7gqb96r8whb";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.documentfoundation.org/DLP/Libraries/libabw;
     description = "Library parsing abiword documents";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mpl20;
   };
 }

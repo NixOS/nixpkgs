@@ -3,9 +3,9 @@
 
 let
   inherit (builtins) head tail length;
-  inherit (lib.trivial) and or;
+  inherit (lib.trivial) and;
   inherit (lib.strings) concatStringsSep;
-  inherit (lib.lists) fold concatMap concatLists all deepSeqList;
+  inherit (lib.lists) fold concatMap concatLists;
 in
 
 rec {
@@ -94,6 +94,15 @@ rec {
   attrValues = builtins.attrValues or (attrs: attrVals (attrNames attrs) attrs);
 
 
+  /* Given a set of attribute names, return the set of the corresponding
+     attributes from the given set.
+
+     Example:
+       getAttrs [ "a" "b" ] { a = 1; b = 2; c = 3; }
+       => { a = 1; b = 2; }
+  */
+  getAttrs = names: attrs: genAttrs names (name: attrs.${name});
+
   /* Collect each attribute named `attr' from a list of attribute
      sets.  Sets that don't contain the named attribute are ignored.
 
@@ -145,7 +154,7 @@ rec {
   foldAttrs = op: nul: list_of_attrs:
     fold (n: a:
         fold (name: o:
-          o // (listToAttrs [{inherit name; value = op n.${name} (a.${name} or nul); }])
+          o // { ${name} = op n.${name} (a.${name} or nul); }
         ) a (attrNames n)
     ) {} list_of_attrs;
 
@@ -195,8 +204,9 @@ rec {
           { x = "foo"; y = "bar"; }
        => { x = "x-foo"; y = "y-bar"; }
   */
-  mapAttrs = f: set:
-    listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set));
+  mapAttrs = builtins.mapAttrs or
+    (f: set:
+      listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set)));
 
 
   /* Like `mapAttrs', but allows the name of each attribute to be
@@ -383,11 +393,12 @@ rec {
   recursiveUpdateUntil = pred: lhs: rhs:
     let f = attrPath:
       zipAttrsWith (n: values:
+        let here = attrPath ++ [n]; in
         if tail values == []
-        || pred attrPath (head (tail values)) (head values) then
+        || pred here (head (tail values)) (head values) then
           head values
         else
-          f (attrPath ++ [n]) values
+          f here values
       );
     in f [] [rhs lhs];
 
@@ -433,12 +444,15 @@ rec {
     useful for deep-overriding.
 
     Example:
-      x = { a = { b = 4; c = 3; }; }
-      overrideExisting x { a = { b = 6; d = 2; }; }
-      => { a = { b = 6; d = 2; }; }
+      overrideExisting {} { a = 1; }
+      => {}
+      overrideExisting { b = 2; } { a = 1; }
+      => { b = 2; }
+      overrideExisting { a = 3; b = 2; } { a = 1; }
+      => { a = 1; b = 2; }
   */
   overrideExisting = old: new:
-    old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] old.${attr} new)) (attrNames old));
+    mapAttrs (name: value: new.${name} or value) old;
 
   /* Get a package output.
      If no output is found, fallback to `.out` and then to the default.

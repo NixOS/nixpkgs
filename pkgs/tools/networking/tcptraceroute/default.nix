@@ -1,4 +1,4 @@
-{ stdenv , pkgs , fetchurl, libpcap, libnet
+{ stdenv  , fetchurl, libpcap, libnet
 }:
 
 stdenv.mkDerivation rec {

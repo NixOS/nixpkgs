@@ -6,13 +6,13 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-multiple-output">
  <title>Multiple-output packages</title>
- <section>
+ <section xml:id="sec-multiple-outputs-introduction">
   <title>Introduction</title>
 
   <para>
    The Nix language allows a derivation to produce multiple outputs, which is
    similar to what is utilized by other Linux distribution packaging systems.
-   The outputs reside in separate nix store paths, so they can be mostly
+   The outputs reside in separate Nix store paths, so they can be mostly
    handled independently of each other, including passing to build inputs,
    garbage collection or binary substitution. The exception is that building
    from source always produces all the outputs.
@@ -38,7 +38,7 @@
    </para>
   </note>
  </section>
- <section>
+ <section xml:id="sec-multiple-outputs-installing">
   <title>Installing a split package</title>
 
   <para>
@@ -84,7 +84,7 @@
    </listitem>
   </itemizedlist>
  </section>
- <section>
+ <section xml:id="sec-multiple-outputs-using-split-packages">
   <title>Using a split package</title>
 
   <para>
@@ -101,8 +101,15 @@
    contain <varname>$outputBin</varname> and <varname>$outputLib</varname> are
    also added. (See <xref linkend="multiple-output-file-type-groups" />.)
   </para>
+
+  <para>
+   In some cases it may be desirable to combine different outputs under a
+   single store path. A function <literal>symlinkJoin</literal> can be used to
+   do this. (Note that it may negate some closure size benefits of using a
+   multiple-output package.)
+  </para>
  </section>
- <section>
+ <section xml:id="sec-multiple-outputs-">
   <title>Writing a split derivation</title>
 
   <para>
@@ -188,8 +195,8 @@
 
    <variablelist>
     <varlistentry>
-     <term><varname>
-         $outputDev</varname>
+     <term>
+      <varname> $outputDev</varname>
      </term>
      <listitem>
       <para>
@@ -200,8 +207,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputBin</varname>
+     <term>
+      <varname> $outputBin</varname>
      </term>
      <listitem>
       <para>
@@ -211,8 +218,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputLib</varname>
+     <term>
+      <varname> $outputLib</varname>
      </term>
      <listitem>
       <para>
@@ -223,8 +230,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputDoc</varname>
+     <term>
+      <varname> $outputDoc</varname>
      </term>
      <listitem>
       <para>
@@ -235,8 +242,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputDevdoc</varname>
+     <term>
+      <varname> $outputDevdoc</varname>
      </term>
      <listitem>
       <para>
@@ -248,8 +255,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputMan</varname>
+     <term>
+      <varname> $outputMan</varname>
      </term>
      <listitem>
       <para>
@@ -259,8 +266,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputDevman</varname>
+     <term>
+      <varname> $outputDevman</varname>
      </term>
      <listitem>
       <para>
@@ -270,8 +277,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputInfo</varname>
+     <term>
+      <varname> $outputInfo</varname>
      </term>
      <listitem>
       <para>
@@ -283,7 +290,7 @@
    </variablelist>
   </section>
 
-  <section>
+  <section xml:id="sec-multiple-outputs-caveats">
    <title>Common caveats</title>
 
    <itemizedlist>

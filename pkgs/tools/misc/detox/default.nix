@@ -12,6 +12,10 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
+  postInstall = ''
+    install -m644 safe.tbl $out/share/detox/
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://detox.sourceforge.net/;
     description = "Utility designed to clean up filenames";
@@ -23,6 +27,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 }

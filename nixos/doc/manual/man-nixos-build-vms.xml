@@ -12,14 +12,28 @@
   </refname><refpurpose>build a network of virtual machines from a network of NixOS configurations</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
-  <cmdsynopsis><command>nixos-build-vms</command>
-   <arg><option>--show-trace</option>
+  <cmdsynopsis>
+   <command>nixos-build-vms</command> 
+   <arg>
+    <option>--show-trace</option>
    </arg>
-   <arg><option>--no-out-link</option>
+    
+   <arg>
+    <option>--no-out-link</option>
    </arg>
-   <arg><option>--help</option>
-   </arg>
-   <arg choice="plain"><replaceable>network.nix</replaceable>
+    
+   <arg>
+    <option>--help</option>
+  </arg>
+
+  <arg>
+    <option>--option</option>
+    <replaceable>name</replaceable>
+    <replaceable>value</replaceable>
+  </arg>
+
+   <arg choice="plain">
+    <replaceable>network.nix</replaceable>
    </arg>
   </cmdsynopsis>
  </refsynopsisdiv>
@@ -78,7 +92,8 @@
   </para>
   <variablelist>
    <varlistentry>
-    <term><option>--show-trace</option>
+    <term>
+     <option>--show-trace</option>
     </term>
     <listitem>
      <para>
@@ -87,7 +102,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--no-out-link</option>
+    <term>
+     <option>--no-out-link</option>
     </term>
     <listitem>
      <para>
@@ -96,11 +112,24 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>-h</option>, <option>--help</option>
+    <term>
+     <option>-h</option>, <option>--help</option>
     </term>
     <listitem>
      <para>
       Shows the usage of this command to the user.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
+    </term>
+    <listitem>
+     <para>Set the Nix configuration option
+      <replaceable>name</replaceable> to <replaceable>value</replaceable>.
+      This overrides settings in the Nix configuration file (see
+      <citerefentry><refentrytitle>nix.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>).
      </para>
     </listitem>
    </varlistentry>

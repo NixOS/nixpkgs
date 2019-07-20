@@ -2,18 +2,13 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, kactivities
 , kconfig
 , kcrash
 , kguiaddons
 , kiconthemes
 , ki18n
 , kinit
-, kio
-, kio-extras
-, kwindowsystem
 , kdbusaddons
-, plasma-framework
 , knotifications
 , knewstuff
 , karchive
@@ -30,6 +25,9 @@
 , qtquickcontrols
 , qtscript
 , qtwebkit
+, rttr
+, kpurpose
+, kdeclarative
 }:
 
 mkDerivation {
@@ -62,6 +60,9 @@ mkDerivation {
     shared-mime-info
     libv4l
     ffmpeg
+    rttr
+    kpurpose
+    kdeclarative
   ];
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.

@@ -4,22 +4,22 @@
 
 stdenv.mkDerivation rec {
   name = "git-repo-${version}";
-  version = "1.12.37";
+  version = "1.13.3";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "0qp7jqhblv7xblfgpcq4n18dyjdv8shz7r60c3vnjxx2fngkj2jd";
+    sha256 = "0wyr6fyc9kzzw6y2cxvri35ib1sh156n6lnv119j5r1rzvc2lg6r";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python ];
 
-  # TODO: Cleanup
   patchPhase = ''
-    CA_PATH="$(echo '${cacert}/etc/ssl/certs/ca-bundle.crt' | sed 's/\//\\\//g')" # / -> \/
-    sed -i -E 's/urlopen\(url\)/urlopen(url, cafile="'$CA_PATH'")/' repo
+    substituteInPlace repo --replace \
+      'urllib.request.urlopen(url)' \
+      'urllib.request.urlopen(url, cafile="${cacert}/etc/ssl/certs/ca-bundle.crt")'
   '';
 
   installPhase = ''

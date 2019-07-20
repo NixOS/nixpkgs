@@ -1,0 +1,13 @@
+diff --git a/t/test-lib.sh b/t/test-lib.sh
+index 8665b0a9b6..8bb892b1af 100644
+--- a/t/test-lib.sh
++++ b/t/test-lib.sh
+@@ -1227,7 +1227,7 @@ elif test -n "$GIT_TEST_INSTALLED"
+ then
+ 	GIT_EXEC_PATH=$($GIT_TEST_INSTALLED/git --exec-path)  ||
+ 	error "Cannot run git from $GIT_TEST_INSTALLED."
+-	PATH=$GIT_TEST_INSTALLED:$GIT_BUILD_DIR/t/helper:$PATH
++	PATH=$GIT_TEST_INSTALLED:$GIT_BUILD_DIR/t/helper:$GIT_BUILD_DIR:$PATH
+ 	GIT_EXEC_PATH=${GIT_TEST_EXEC_PATH:-$GIT_EXEC_PATH}
+ else # normal case, use ../bin-wrappers only unless $with_dashes:
+ 	if test -n "$no_bin_wrappers"

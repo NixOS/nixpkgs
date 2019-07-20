@@ -1,6 +1,17 @@
-{ stdenv, fetchurl, version, sha256, ... }@args:
+{ version, sha256 }:
+{ stdenv, fetchurl
+# By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
+# then stops downstream builds (mariadb in particular) from detecting it. This
+# option should remove the prefix and give us a working jemalloc.
+# Causes segfaults with some software (ex. rustc), but defaults to true for backward
+# compatibility.
+, stripPrefix ? stdenv.hostPlatform.isDarwin
+, disableInitExecTls ? false
+}:
 
-stdenv.mkDerivation (rec {
+with stdenv.lib;
+
+stdenv.mkDerivation rec {
   name = "jemalloc-${version}";
   inherit version;
 
@@ -9,14 +20,12 @@ stdenv.mkDerivation (rec {
     inherit sha256;
   };
 
-  # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
-  # then stops downstream builds (mariadb in particular) from detecting it. This
-  # option should remove the prefix and give us a working jemalloc.
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--with-jemalloc-prefix="
-                   # jemalloc is unable to correctly detect transparent hugepage support on
-                   # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
-                   # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
-                   ++ stdenv.lib.optional stdenv.isAarch32 "--disable-thp";
+  # see the comment on stripPrefix
+  configureFlags = []
+    ++ optional stripPrefix "--with-jemalloc-prefix="
+    ++ optional disableInitExecTls "--disable-initial-exec-tls"
+  ;
+
   doCheck = true;
 
   enableParallelBuilding = true;
@@ -30,6 +39,5 @@ stdenv.mkDerivation (rec {
     '';
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
-} // (builtins.removeAttrs args [ "stdenv" "fetchurl" "version" "sha256" ]))
+}

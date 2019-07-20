@@ -17,6 +17,9 @@ let param = {
   "4.06" = {
     version = "5.1+4.06.0";
     sha256 = "1ww4cspdpgjjsgiv71s0im5yjkr3544x96wsq1vpdacq7dr7zwiw"; };
+  "4.07" = {
+    version = "5.1+4.06.0";
+    sha256 = "1ww4cspdpgjjsgiv71s0im5yjkr3544x96wsq1vpdacq7dr7zwiw"; };
 }."${ocaml.meta.branch}";
 in
   stdenv.mkDerivation {

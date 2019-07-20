@@ -180,35 +180,6 @@ in
           # programs to be wrapped.
           WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          # Remove the old /var/setuid-wrappers path from the system...
-          #
-          # TODO: this is only necessary for upgrades 16.09 => 17.x;
-          # this conditional removal block needs to be removed after
-          # the release.
-          if [ -d /var/setuid-wrappers ]; then
-            rm -rf /var/setuid-wrappers
-            ln -s /run/wrappers/bin /var/setuid-wrappers
-          fi
-
-          # Remove the old /run/setuid-wrappers-dir path from the
-          # system as well...
-          #
-          # TODO: this is only necessary for upgrades 16.09 => 17.x;
-          # this conditional removal block needs to be removed after
-          # the release.
-          if [ -d /run/setuid-wrapper-dirs ]; then
-            rm -rf /run/setuid-wrapper-dirs
-            ln -s /run/wrappers/bin /run/setuid-wrapper-dirs
-          fi
-
-          # TODO: this is only necessary for upgrades 16.09 => 17.x;
-          # this conditional removal block needs to be removed after
-          # the release.
-          if readlink -f /run/booted-system | grep nixos-17 > /dev/null; then
-            rm -rf /run/setuid-wrapper-dirs
-            rm -rf /var/setuid-wrappers
-          fi
-
           # We want to place the tmpdirs for the wrappers to the parent dir.
           wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
           chmod a+rx $wrapperDir

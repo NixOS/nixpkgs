@@ -12,17 +12,16 @@
 , pytest
 , nose
 , parameterized
-, matplotlib
 }:
 
 buildPythonPackage rec {
   pname = "pymc3";
-  version = "3.2";
+  version = "3.7";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hpzhkpv7sbwkcva7x914yvzcf1d1a952ynbcx6mvlgv5lqghc39";
+    sha256 = "0ijna2ghvniryllr56qr4vi4k9q58mq21yx36nj5kg2j17f7rkbr";
   };
 
   # No need for coverage stats in Nix builds
@@ -57,7 +56,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
-    homepage = http://github.com/pymc-devs/pymc3;
+    homepage = https://github.com/pymc-devs/pymc3;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ilya-kolpakov ];
   };

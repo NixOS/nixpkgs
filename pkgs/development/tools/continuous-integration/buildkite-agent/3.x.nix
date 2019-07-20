@@ -1,12 +1,15 @@
-{ callPackage, fetchFromGitHub, ... } @ args:
+{ bash, callPackage, fetchFromGitHub, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "09smyrzp1xkczlmh8vqb7bmjb2b5d6yf9birjgaw36c6m44bpfvs";
+    sha256 = "0sr1rxl92d4wdipl66f1yymx5bmyj1y85v6k22v57rzr6yhyfmsf";
   };
-  version = "3.0.1";
+  version = "3.8.4";
   hasBootstrapScript = false;
+  postPatch = ''
+    substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash
+  '';
 })

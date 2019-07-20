@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cmarkgfm";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "977d7061779c7ebc5cbe7af71adb795ced96058552fe5f6b646d95b5055959be";
+    sha256 = "f20900f16377f2109783ae9348d34bc80530808439591c3d3df73d5c7ef1a00c";
   };
 
   propagatedBuildInputs = [ cffi ];

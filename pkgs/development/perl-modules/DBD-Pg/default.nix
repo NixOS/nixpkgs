@@ -1,11 +1,12 @@
 { stdenv, fetchurl, buildPerlPackage, DBI, postgresql }:
 
-buildPerlPackage rec {
-  name = "DBD-Pg-3.5.3";
+buildPerlPackage {
+  pname = "DBD-Pg";
+  version = "3.7.4";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/T/TU/TURNSTEP/${name}.tar.gz";
-    sha256 = "03m9w1cd0yyrbqwkwcl92j1cpmasmm69f3hwvcrlfsi5fnwsk63y";
+    url = "mirror://cpan/authors/id/T/TU/TURNSTEP/DBD-Pg-3.7.4.tar.gz";
+    sha256 = "0gkqlvbmzbdm0g4k328nlkjdg3wrjm5i2n9jxj1i8sqxkm79rylz";
   };
 
   buildInputs = [ postgresql ];
@@ -13,8 +14,10 @@ buildPerlPackage rec {
 
   makeMakerFlags = "POSTGRES_HOME=${postgresql}";
 
+  # tests freeze in a sandbox
+  doCheck = false;
+
   meta = {
-    homepage = http://search.cpan.org/dist/DBD-Pg/;
     description = "DBI PostgreSQL interface";
     license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     platforms = stdenv.lib.platforms.unix;

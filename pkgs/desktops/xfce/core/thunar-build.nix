@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool
 , gtk, dbus-glib, libstartup_notification, libnotify, libexif, pcre, udev
-, exo, libxfce4util, xfconf, xfce4-panel, wrapGAppsHook
+, exo, libxfce4util, xfconf, xfce4-panel, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -26,12 +26,11 @@ stdenv.mkDerivation rec {
     intltool
     gtk dbus-glib libstartup_notification libnotify libexif pcre udev
     exo libxfce4util xfconf xfce4-panel
+    hicolor-icon-theme
   ];
   # TODO: optionality?
 
   enableParallelBuilding = true;
-
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   meta = {
     homepage = http://thunar.xfce.org/;

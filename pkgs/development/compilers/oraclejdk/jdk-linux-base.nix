@@ -1,15 +1,15 @@
 { productVersion
 , patchVersion
-, downloadUrl
+, buildVersion
 , sha256
 , jceName
-, jceDownloadUrl
+, releaseToken
 , sha256JCE
 }:
 
 { swingSupport ? true
 , stdenv
-, requireFile
+, fetchurl
 , makeWrapper
 , unzip
 , file
@@ -17,6 +17,8 @@
 , installjdk ? true
 , pluginSupport ? true
 , installjce ? false
+, config
+, licenseAccepted ? config.oraclejdk.accept_license or false
 , glib
 , libxml2
 , libav_0_8
@@ -36,6 +38,13 @@
 
 assert swingSupport -> xorg != null;
 
+if !licenseAccepted then throw ''
+    You must accept the Oracle Binary Code License Agreement for Java SE at
+    https://www.oracle.com/technetwork/java/javase/terms/license/index.html
+    by setting nixpkgs config option 'oraclejdk.accept_license = true;'
+  ''
+else assert licenseAccepted;
+
 let
 
   /**
@@ -46,14 +55,14 @@ let
     x86_64-linux  = "amd64";
     armv7l-linux  = "arm";
     aarch64-linux = "aarch64";
-  }.${stdenv.system};
+  }.${stdenv.hostPlatform.system};
 
   jce =
     if installjce then
-      requireFile {
-        name = jceName;
-        url = jceDownloadUrl;
+      fetchurl {
+        url = "http://download.oracle.com/otn-pub/java/jce/${productVersion}/${jceName}";
         sha256 = sha256JCE;
+        curlOpts = "-b oraclelicense=a";
       }
     else
       "";
@@ -67,19 +76,24 @@ let
 
 in
 
+assert sha256 ? ${stdenv.hostPlatform.system};
+
 let result = stdenv.mkDerivation rec {
   name =
     if installjdk then "oraclejdk-${productVersion}u${patchVersion}" else "oraclejre-${productVersion}u${patchVersion}";
 
-  src = requireFile {
-    name = {
-      i686-linux    = "jdk-${productVersion}u${patchVersion}-linux-i586.tar.gz";
-      x86_64-linux  = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
-      armv7l-linux  = "jdk-${productVersion}u${patchVersion}-linux-arm32-vfp-hflt.tar.gz";
-      aarch64-linux = "jdk-${productVersion}u${patchVersion}-linux-arm64-vfp-hflt.tar.gz";
-    }.${stdenv.system};
-    url = downloadUrl;
-    sha256 = sha256.${stdenv.system};
+  src = let
+    platformName = {
+      i686-linux    = "linux-i586";
+      x86_64-linux  = "linux-x64";
+      armv7l-linux  = "linux-arm32-vfp-hflt";
+      aarch64-linux = "linux-arm64-vfp-hflt";
+    }.${stdenv.hostPlatform.system};
+    javadlPlatformName = "linux-i586";
+  in fetchurl {
+   url = "http://javadl.oracle.com/webapps/download/GetFile/1.${productVersion}.0_${patchVersion}-b${buildVersion}/${releaseToken}/${javadlPlatformName}/jdk-${productVersion}u${patchVersion}-${platformName}.tar.gz";
+   curlOpts = "-b oraclelicense=a";
+   sha256 = sha256.${stdenv.hostPlatform.system};
   };
 
   nativeBuildInputs = [ file ]
@@ -92,14 +106,6 @@ let result = stdenv.mkDerivation rec {
 
   installPhase = ''
     cd ..
-
-    # Set PaX markings
-    exes=$(file $sourceRoot/bin/* $sourceRoot/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    for file in $exes; do
-      paxmark m "$file" || true
-      # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
-      ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
-    done
 
     if test -z "$installjdk"; then
       mv $sourceRoot/jre $out
@@ -195,4 +201,4 @@ let result = stdenv.mkDerivation rec {
     platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]; # some inherit jre.meta.platforms
   };
 
-}; in result
+}; in stdenv.lib.trivial.warn "Public updates for Oracle Java SE 8 released after January 2019 will not be available for business, commercial or production use without a commercial license. See https://java.com/en/download/release_notice.jsp for more information." result

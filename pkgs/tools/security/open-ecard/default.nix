@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/${appName} \
       --add-flags "-cp $out/share/java/cifs-${version}.jar" \
       --add-flags "-jar $out/share/java/richclient-${version}.jar" \
-      --suffix LD_LIBRARY_PATH ':' ${pcsclite}/lib
+      --suffix LD_LIBRARY_PATH ':' ${stdenv.lib.getLib pcsclite}/lib
   '';
 
   meta = with stdenv.lib; {

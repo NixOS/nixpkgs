@@ -1,5 +1,5 @@
 { stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python
-, fetchurl, lib, valgrind, makeWrapper, fetchFromGitHub }:
+, lib, valgrind, makeWrapper, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   src = fetchFromGitHub {

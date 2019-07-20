@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, perl, libsixel, yasm
+{ stdenv, fetchFromGitHub, pkgconfig, libsixel, yasm
 }:
 
 stdenv.mkDerivation rec {

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     $(for coreDir in $cores
     do
-      $(ln -s $coreDir/*.so $out/lib/.)
+      $(ln -s $coreDir/* $out/lib/.)
     done)
 
     ln -s -t $out ${retroarch}/share
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
     makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch \
       --suffix-each LD_LIBRARY_PATH ':' "$cores" \
-      --add-flags "-L $out/lib/ --menu" \
+      --add-flags "-L $out/lib/" \
   '';
 
   cores = map (x: x + x.libretroCore) cores;

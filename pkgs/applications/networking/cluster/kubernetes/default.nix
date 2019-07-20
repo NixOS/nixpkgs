@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync
-, iptables, coreutils
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
 , components ? [
     "cmd/kubeadm"
     "cmd/kubectl"
@@ -7,7 +6,7 @@
     "cmd/kube-apiserver"
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
-    "plugin/cmd/kube-scheduler"
+    "cmd/kube-scheduler"
     "test/e2e/e2e.test"
   ]
 }:
@@ -16,23 +15,22 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.9.7";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1dykh48c6bvypg51mlxjdyrggpjq597mjj83xgj1pfadsy6pp9bh";
+    sha256 = "1r31ssf8bdbz8fdsprhkc34jqhz5rcs3ixlf0mbjcbq0xr7y651z";
   };
 
-  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60373
-  buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
+  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
 
   postPatch = ''
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
-    substituteInPlace "hack/generate-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
+    substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
     # hack/update-munge-docs.sh only performs some tests on the documentation.
     # They broke building k8s; disabled for now.
     echo "true" > "hack/update-munge-docs.sh"
@@ -40,10 +38,10 @@ stdenv.mkDerivation rec {
     patchShebangs ./hack
   '';
 
-  WHAT="--use_go_build ${concatStringsSep " " components}";
+  WHAT="${concatStringsSep " " components}";
 
   postBuild = ''
-    ./hack/generate-docs.sh
+    ./hack/update-generated-docs.sh
     (cd build/pause && cc pause.c -o pause)
   '';
 
@@ -54,8 +52,11 @@ stdenv.mkDerivation rec {
     cp build/pause/pause "$pause/bin/pause"
     cp -R docs/man/man1 "$man/share/man"
 
+    cp cluster/addons/addon-manager/namespace.yaml $out/share
     cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons
     patchShebangs $out/bin/kube-addons
+    substituteInPlace $out/bin/kube-addons \
+      --replace /opt/namespace.yaml $out/share/namespace.yaml
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
 
     $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
@@ -63,14 +64,14 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go_1_9} '{}' +
+    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
     homepage = https://kubernetes.io;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [johanot offline];
     platforms = platforms.unix;
   };
 }

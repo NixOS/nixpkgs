@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   shortname = "minijail";
   name = "${shortname}-${version}";
-  version = "android-8.0.0_r34";
+  version = "android-9.0.0_r3";
 
   src = fetchgit {
     url = "https://android.googlesource.com/platform/external/minijail";
     rev = version;
-    sha256 = "1d0q08cgks6h6ffsw3zw8dz4rm9y2djj2pwwy3xi6flx7vwy0psf";
+    sha256 = "1g1g52s3q61amcnx8cv1332sbixpck1bmjzgsrjiw5ix7chrzkp2";
   };
 
   buildInputs = [ libcap ];

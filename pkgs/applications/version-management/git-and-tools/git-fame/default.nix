@@ -1,4 +1,4 @@
-{ stdenv, bundlerEnv, ruby, fetchFromGitHub, makeWrapper, bundler }:
+{ stdenv, bundlerEnv, ruby }:
 
 bundlerEnv rec {
   inherit ruby;

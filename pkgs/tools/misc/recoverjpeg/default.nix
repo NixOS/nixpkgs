@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "recoverjpeg-${version}";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "https://www.rfc1149.net/download/recoverjpeg/${name}.tar.gz";
-    sha256 = "01vayn2b3mqmyqz2ka2j3k4a93bjdvkhv5ry9207v04r83r7iwfp";
+    sha256 = "009jgxi8lvdp00dwfj0n4x5yqrf64x00xdkpxpwgl2v8wcqn56fv";
   };
 
   nativeBuildInputs = [ makeWrapper ];

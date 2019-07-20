@@ -36,6 +36,6 @@ stdenv.mkDerivation {
     description = ''Library for import of reflowable e-book formats'';
     license = stdenv.lib.licenses.lgpl21Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

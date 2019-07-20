@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fontconfig, python, freefont_ttf, makeFontsConf }:
+{ lib, buildPythonPackage, fetchPypi, fontconfig, python, cython, freefont_ttf, makeFontsConf }:
 
 let
   fontsConf = makeFontsConf {
@@ -7,7 +7,6 @@ let
 in buildPythonPackage rec {
   pname = "Python-fontconfig";
   version = "0.5.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,6 +14,11 @@ in buildPythonPackage rec {
   };
 
   buildInputs = [ fontconfig ];
+  nativeBuildInputs = [ cython ];
+
+  preBuild = ''
+    ${python.interpreter} setup.py build_ext -i
+  '';
 
   checkPhase = ''
     export FONTCONFIG_FILE=${fontsConf};

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkgconfig, qt4, protobuf, libqrencode
+{ stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkgconfig, qt4, protobuf, qrencode, hexdump
 , withGui }:
 
 with stdenv.lib;
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkgconfig
+    hexdump
   ];
 
   buildInputs = [
@@ -28,8 +29,10 @@ stdenv.mkDerivation rec {
   ] ++ optionals withGui [
     qt4
     protobuf
-    libqrencode
+    qrencode
   ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"

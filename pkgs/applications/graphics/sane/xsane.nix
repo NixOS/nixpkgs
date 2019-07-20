@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.sane-project.org/;
     description = "Graphical scanning frontend for sane";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric peti];
+    maintainers = with stdenv.lib.maintainers; [peti];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

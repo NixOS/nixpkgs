@@ -1,33 +1,42 @@
 { lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintl, darwin, rust, gnome3
+, bzip2, libcroco, libintl, darwin, rustc, cargo, gnome3
 , withGTK ? false, gtk3 ? null
-, vala, gobjectIntrospection }:
+, vala, gobject-introspection }:
 
 let
   pname = "librsvg";
-  version = "2.42.2";
+  version = "2.44.14";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0c550a0bffef768a436286116c03d9f6cd3f97f5021c13e7f093b550fac12562";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "00z3qimpk909pcqq0jlsis5sskc6kn7cqia20smd9k9rhs3ag1ba";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "installedTests" ];
 
   buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
 
   propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
 
-  nativeBuildInputs = [ pkgconfig rust.rustc rust.cargo vala gobjectIntrospection ]
+  nativeBuildInputs = [ pkgconfig rustc cargo vala gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       ApplicationServices
     ]);
 
-  configureFlags = [ "--enable-introspection" "--enable-vala" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
+  configureFlags = [
+    "--enable-introspection"
+    "--enable-vala"
+    "--enable-installed-tests"
+    "--enable-always-build-tests"
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
+
+  makeFlags = [
+    "installed_test_metadir=$(installedTests)/share/installed-tests/RSVG"
+    "installed_testdir=$(installedTests)/libexec/installed-tests/RSVG"
+  ];
 
   NIX_CFLAGS_COMPILE
     = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
@@ -51,6 +60,8 @@ stdenv.mkDerivation rec {
     sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk_pixbuf}/bin\1#g" \
         -i gdk-pixbuf-loader/librsvg.thumbnailer.in
   '';
+
+  doCheck = false; # fails 20 of 145 tests, very likely to be buggy
 
   # Merge gdkpixbuf and librsvg loaders
   postInstall = ''

@@ -1,24 +1,26 @@
 { stdenv, glib, fetchurl, fetchpatch, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
-, perl, perlXMLParser, evolution-data-server, gnome-doc-utils, avahi, autoreconfHook
-, libsigcxx, gtk, dbus-glib, libnotify, libXext, xextproto, gnome3, boost, libsecret
-, pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib, hicolor-icon-theme
-, libXrandr, randrproto, which, libxslt, libtasn1, gmp, nettle, sqlite, makeWrapper }:
+, perlPackages, evolution-data-server, gnome-doc-utils, avahi, autoreconfHook
+, libsigcxx, gtk2, dbus-glib, libnotify, libXext, xorgproto, gnome3, boost, libsecret
+, pkgconfig, libxml2, unixODBC, db, nspr, nss, zlib
+, libXrandr, which, libxslt, libtasn1, gmp, nettle, sqlite, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ekiga-4.0.1";
+  pname = "ekiga";
+  version = "4.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/ekiga/4.0/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "5f4f491c9496cf65ba057a9345d6bb0278f4eca07bcda5baeecf50bfcd9a4a3b";
   };
 
   buildInputs = [ cyrus_sasl gettext openldap ptlib opal libXv rarian intltool
-                  perl perlXMLParser evolution-data-server gnome-doc-utils avahi
-                  libsigcxx gtk dbus-glib libnotify libXext xextproto sqlite
-                  gnome3.libsoup glib gnome3.defaultIconTheme boost
-                  autoreconfHook pkgconfig libxml2 videoproto unixODBC db nspr
-                  nss zlib libsecret libXrandr randrproto which libxslt libtasn1
-                  gmp nettle makeWrapper ];
+                  evolution-data-server gnome-doc-utils avahi
+                  libsigcxx gtk2 dbus-glib libnotify libXext xorgproto sqlite
+                  gnome3.libsoup glib gnome3.adwaita-icon-theme boost
+                  autoreconfHook pkgconfig libxml2 unixODBC db nspr
+                  nss zlib libsecret libXrandr which libxslt libtasn1
+                  gmp nettle makeWrapper ]
+    ++ (with perlPackages; [ perl XMLParser ]);
 
   preAutoreconf = ''
     substituteInPlace configure.ac --replace AM_GCONF_SOURCE_2 ""
@@ -51,16 +53,21 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with stdenv.lib; {
-    description = "VOIP/Videoconferencing app with full SIP and H.323 support";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-  };
-
   passthru = {
     updateInfo = {
       downloadPage = "mirror://gnome/sources/ekiga";
     };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "VOIP/Videoconferencing app with full SIP and H.323 support";
+    homepage = "https://www.ekiga.org/";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }
 

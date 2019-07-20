@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Martyr is a Java framework around the IRC protocol to allow application writers easy manipulation of the protocol and client state";
     homepage = http://martyr.sourceforge.net/;
+    license = stdenv.lib.licenses.lgpl21;
   };
 }

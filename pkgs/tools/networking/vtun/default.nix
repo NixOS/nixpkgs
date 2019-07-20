@@ -20,10 +20,11 @@ stdenv.mkDerivation rec {
   '';
   buildInputs = [ lzo openssl zlib yacc flex ];
 
-  configureFlags = ''
-    --with-lzo-headers=${lzo}/include/lzo
-    --with-ssl-headers=${openssl.dev}/include/openssl
-    --with-blowfish-headers=${openssl.dev}/include/openssl'';
+  configureFlags = [
+    "--with-lzo-headers=${lzo}/include/lzo"
+    "--with-ssl-headers=${openssl.dev}/include/openssl"
+    "--with-blowfish-headers=${openssl.dev}/include/openssl"
+  ];
 
   meta = with stdenv.lib; {
       description = "Virtual Tunnels over TCP/IP with traffic shaping, compression and encryption";

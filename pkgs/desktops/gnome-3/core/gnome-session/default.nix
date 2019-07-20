@@ -1,26 +1,36 @@
-{ fetchurl, stdenv, meson, ninja, pkgconfig, gnome3, glib, gtk, gsettings-desktop-schemas
-, gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412
-, libxslt, gettext, makeWrapper, systemd, xorg, epoxy }:
+{ fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk3, gsettings-desktop-schemas
+, gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
+, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash }:
 
 stdenv.mkDerivation rec {
   name = "gnome-session-${version}";
-  version = "3.28.1";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-session/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "14nmbirgrp2nm16khbz109saqdlinlbrlhjnbjydpnrlimfgg4xq";
+    url = "mirror://gnome/sources/gnome-session/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0zrzkpd406i159mla7bfs5npa32fgqh66aip1rfq02rgsgmc9m5v";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      gsettings = "${glib.bin}/bin/gsettings";
+      dbusLaunch = "${dbus.lib}/bin/dbus-launch";
+      grep = "${gnugrep}/bin/grep";
+      bash = "${bash}/bin/bash";
+    })
+  ];
 
   mesonFlags = [ "-Dsystemd=true" ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext makeWrapper
-    xmlto libxslt docbook_xsl docbook_xml_dtd_412
+    xmlto libxslt docbook_xsl docbook_xml_dtd_412 python3
     dbus # for DTD
   ];
 
   buildInputs = [
-    glib gtk libICE gnome-desktop json-glib xorg.xtrans gnome3.defaultIconTheme
+    glib gtk3 libICE gnome-desktop json-glib xorg.xtrans gnome3.adwaita-icon-theme
     gnome3.gnome-settings-daemon gsettings-desktop-schemas systemd epoxy
   ];
 
@@ -29,15 +39,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  # FIXME: glib binaries shouldn't be in .dev!
+  # `bin/gnome-session` will reset the environment when run in wayland, we
+  # therefor wrap `libexec/gnome-session-binary` instead which is the actual
+  # binary needing wrapping
   preFixup = ''
-    for desktopFile in $(grep -rl "Exec=gnome-session" $out/share)
-    do
-      echo "Patching gnome-session path in: $desktopFile"
-      sed -i "s,^Exec=gnome-session,Exec=$out/bin/gnome-session," $desktopFile
-    done
-    wrapProgram "$out/bin/gnome-session" \
-      --prefix PATH : "${glib.dev}/bin" \
+    wrapProgram "$out/libexec/gnome-session-binary" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --suffix XDG_DATA_DIRS : "${gnome3.gnome-shell}/share"\

@@ -6,12 +6,9 @@
 , isPy3k
 }:
 
-let
+buildPythonPackage rec{
   pname = "yenc";
   version = "0.4.0";
-in buildPythonPackage {
-  name = "${pname}-${version}";
-
   src = fetchurl {
     url = "https://bitbucket.org/dual75/yenc/get/${version}.tar.gz";
     sha256 = "0zkyzxgq30mbrzpnqam4md0cb09d5falh06m0npc81nnlhcghkp7";

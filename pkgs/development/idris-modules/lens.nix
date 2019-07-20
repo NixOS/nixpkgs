@@ -1,16 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , bifunctors
 , lib
-, idris
 }:
-
 build-idris-package  {
   name = "lens";
   version = "2017-09-25";
 
-  idrisDeps = [ prelude bifunctors ];
+  idrisDeps = [ bifunctors ];
 
   src = fetchFromGitHub {
     owner = "HuwCampbell";
@@ -24,6 +21,5 @@ build-idris-package  {
     homepage = https://github.com/HuwCampbell/idris-lens;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

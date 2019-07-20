@@ -13,8 +13,8 @@ let
       xauth_path ${dmcfg.xauthBin}
       default_xserver ${dmcfg.xserverBin}
       xserver_arguments ${toString dmcfg.xserverArgs}
-      sessiondir ${dmcfg.session.desktops}
-      login_cmd exec ${pkgs.runtimeShell} ${dmcfg.session.script} "%session"
+      sessiondir ${dmcfg.session.desktops}/share/xsessions
+      login_cmd exec ${pkgs.runtimeShell} ${dmcfg.session.wrapper} "%session"
       halt_cmd ${config.systemd.package}/sbin/shutdown -h now
       reboot_cmd ${config.systemd.package}/sbin/shutdown -r now
       logfile /dev/stderr
@@ -28,7 +28,7 @@ let
   # Unpack the SLiM theme, or use the default.
   slimThemesDir =
     let
-      unpackedTheme = pkgs.runCommand "slim-theme" {}
+      unpackedTheme = pkgs.runCommand "slim-theme" { preferLocalBuild = true; }
         ''
           mkdir -p $out
           cd $out
@@ -49,7 +49,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = config.services.xserver.enable;
+        default = false;
         description = ''
           Whether to enable SLiM as the display manager.
         '';

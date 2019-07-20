@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gtk, polkit
+{ stdenv, fetchurl, pkgconfig, intltool, gtk, polkit
 , libxfce4util, libxfce4ui, xfce4-panel, libwnck, dbus-glib, xfconf, libglade, xorg
 , hicolor-icon-theme
 }:
@@ -35,11 +35,10 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-xsession-prefix=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.xfce.org/projects/xfce4-session;
+    homepage = https://www.xfce.org/projects/xfce4-session;
     description = "Session manager for Xfce";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.eelco ];
   };
 }
-

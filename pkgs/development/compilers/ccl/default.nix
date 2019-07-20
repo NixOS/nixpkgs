@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bootstrap_cmds, coreutils, glibc, m4 }:
+{ stdenv, fetchurl, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
 
 let
   options = rec {
@@ -29,7 +29,7 @@ let
     };
     armv6l-linux = armv7l-linux;
   };
-  cfg = options."${stdenv.system}" or (throw "missing source url for platform ${stdenv.system}");
+  cfg = options."${stdenv.hostPlatform.system}" or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
 in
 
 stdenv.mkDerivation rec {
@@ -76,10 +76,12 @@ stdenv.mkDerivation rec {
     cp -r .  "$out/share/ccl-installation"
 
     mkdir -p "$out/bin"
-    echo -e '#!${stdenv.shell}\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
+    echo -e '#!${runtimeShell}\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
     chmod a+x "$out"/bin/"${CCL_RUNTIME}"
     ln -s "$out"/bin/"${CCL_RUNTIME}" "$out"/bin/ccl
   '';
+
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "Clozure Common Lisp";

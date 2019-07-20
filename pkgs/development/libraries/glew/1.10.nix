@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, libGLU, x11, libXmu, libXi
-, buildPlatform, hostPlatform
+{ stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
 , AGL ? null
 }:
 
@@ -13,12 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "01zki46dr5khzlyywr3cg615bcal32dazfazkf360s1znqh17i4r";
   };
 
-  buildInputs = [ x11 libXmu libXi ] ++ optionals stdenv.isDarwin [ AGL ];
+  buildInputs = [ xlibsWrapper libXmu libXi ]
+              ++ optionals stdenv.isDarwin [ AGL ];
   propagatedBuildInputs = [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
-    ${optionalString (hostPlatform != buildPlatform) ''
+    ${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "SYSTEM=${if hostPlatform.isMinGW then "mingw" else hostPlatform.parsed.kernel.name}"
+    "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
   ];
 
   meta = with stdenv.lib; {

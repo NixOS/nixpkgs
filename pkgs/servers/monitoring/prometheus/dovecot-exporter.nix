@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "dovecot_exporter-${version}";
-  version = "0.1.1";
+  version = "0.1.3";
 
   goPackagePath = "github.com/kumina/dovecot_exporter";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "kumina";
     repo = "dovecot_exporter";
     rev = version;
-    sha256 = "0i7nfgkb5jqdbgr16i29jdsvh69dx9qgn6nazpw78k0lgy7mpidn";
+    sha256 = "1lnxnnm45fhcyv40arcvpiiibwdnxdwhkf8sbjpifx1wspvphcj9";
   };
 
   goDeps = ./dovecot-exporter-deps.nix;

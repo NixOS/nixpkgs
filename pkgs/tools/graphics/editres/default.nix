@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libXt libXaw libXres utilmacros ];
 
-  configureFlags = "--with-appdefaultdir=$(out)/share/X11/app-defaults/editres";
+  configureFlags = [ "--with-appdefaultdir=$(out)/share/X11/app-defaults/editres" ];
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://cgit.freedesktop.org/xorg/app/editres/;
     description = "A dynamic resource editor for X Toolkit applications";
-
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 }

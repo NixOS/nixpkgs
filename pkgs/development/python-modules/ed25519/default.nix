@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "ed25519";
   version = "1.4";
 

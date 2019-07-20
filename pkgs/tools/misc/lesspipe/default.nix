@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "lesspipe-${version}";
-  version = "1.82";
+  pname = "lesspipe";
+  version = "1.83";
 
   buildInputs = [ perl ];
   preConfigure = "patchShebangs .";
@@ -11,8 +11,16 @@ stdenv.mkDerivation rec {
     owner = "wofr06";
     repo = "lesspipe";
     rev = version;
-    sha256 = "0vb7bpap8vy003ha10hc7hxl17y47sgdnrjpihgqxkn8k0bfqbbq";
+    sha256 = "1vqch6k4fz5pyf8szlnqm3qhlvgs9l4njd13yczjh4kpaxpn0rxb";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      file = "${file}/bin/file";
+      tput = "${ncurses}/bin/tput";
+    })
+  ];
 
   meta = with stdenv.lib; {
     description = "A preprocessor for less";

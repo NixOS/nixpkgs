@@ -2,7 +2,6 @@
 , unzip }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "python-simple-hipchat";
   version = "0.4.0";
 

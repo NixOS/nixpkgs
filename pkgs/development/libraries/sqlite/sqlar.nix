@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://sqlite.org/sqlar;
     description = "SQLite Archive utilities";
+    license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];
   };

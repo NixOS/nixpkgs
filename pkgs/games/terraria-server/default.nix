@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   urlVersion = lib.replaceChars ["."] [""] version;
 
   src = fetchurl {
-    url = "http://terraria.org/server/terraria-server-${urlVersion}.zip";
+    url = "https://terraria.org/server/terraria-server-${urlVersion}.zip";
     sha256 = "0l7j2n6ip4hxph7dfal7kzdm3dqnm1wba6zc94gafkh97wr35ck3";
   };
 

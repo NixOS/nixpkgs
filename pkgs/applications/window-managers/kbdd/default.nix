@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, pkgconfig, dbus-glib, autoreconfHook, xorg }:
+{ stdenv, fetchFromGitHub, pkgconfig, dbus-glib, autoreconfHook, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "kbdd";
+  pname = "kbdd";
+  version = "unstable-2017-01-29";
 
-  src = fetchgit {
-    url = https://github.com/qnikst/kbdd;
-    rev = "47dee0232f157cd865e43d92005a2ba107f6fd75";
-    sha256 = "1ys9w1lncsfg266g9sfnm95an2add3g51mryg0hnrzcqa4knz809";
+  src = fetchFromGitHub {
+    owner = "qnikst";
+    repo = "kbdd";
+    rev = "0e1056f066ab6e3c74fd0db0c9710a9a2b2538c3";
+    sha256 = "068iqkqxh7928xlmz2pvnykszn9bcq2qgkkiwf37k1vm8fdmgzlj";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

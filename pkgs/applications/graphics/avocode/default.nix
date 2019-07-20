@@ -1,23 +1,24 @@
-{ stdenv, lib, makeDesktopItem, fetchurl, unzip
-, gdk_pixbuf, glib, gtk2, atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome2
-, xorg, mozjpeg
+{ stdenv, makeDesktopItem, fetchurl, unzip
+, gdk_pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, hicolor-icon-theme, libuuid
 }:
 
 stdenv.mkDerivation rec {
   name = "avocode-${version}";
-  version = "2.26.1";
+  version = "3.8.1";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "0npwwz5m4klswc32fs82icpqqfx9v4786sksiwykj75dsznyv3x8";
+    sha256 = "1akrrnv0ajzvbhflbpmh4ckcqfqrgdjqfp6d4jqvspqi56zmsr83";
   };
 
-  libPath = stdenv.lib.makeLibraryPath (with xorg; with gnome2; [
+  libPath = stdenv.lib.makeLibraryPath (with xorg; [
     stdenv.cc.cc.lib
     gdk_pixbuf
     glib
-    gtk2
+    gtk3
     atk
+    at-spi2-atk
     pango
     cairo
     freetype
@@ -29,7 +30,6 @@ stdenv.mkDerivation rec {
     cups
     expat
     udev
-    GConf
     libX11
     libxcb
     libXi
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXScrnSaver
+    libuuid
   ]);
 
   desktopItem = makeDesktopItem {
@@ -54,7 +55,8 @@ stdenv.mkDerivation rec {
     comment = "The bridge between designers and developers";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [makeWrapper wrapGAppsHook];
+  buildInputs = [ unzip gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
 
   # src is producing multiple folder on unzip so we must
   # override unpackCmd to extract it into newly created folder
@@ -83,7 +85,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/avocode
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-      patchelf --set-rpath ${libPath}:$out/ $file
+      patchelf --set-rpath ${libPath}:$out/ $file || true
     done
   '';
 

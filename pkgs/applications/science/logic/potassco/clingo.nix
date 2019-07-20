@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "clingo";
-  version = "5.2.2";
+  version = "5.3.0";
 
   src = fetchzip {
     url = "https://github.com/potassco/clingo/archive/v${version}.tar.gz";
-    sha256 = "04rjwpna37gzm8vxr09z3z6ay8y8cxbjd8lga7xvqfpn2l178zjm";
+    sha256 = "01czx26p8gv81ahrh650x208hjhd8bx1kb688fmk1m4pw4yg5bfv";
   };
 
   buildInputs = [];

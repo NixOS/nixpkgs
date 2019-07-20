@@ -1,58 +1,47 @@
 { stdenv
-, bash
-, gnused
 , fetchFromGitHub
-, gettext
 , pkgconfig
 , gtk3
-, granite
-, gnome3
+, glib
+, pantheon
+, libsoup
+, gtksourceview
+, libgee
 , cmake
-, ninja
-, vala
 , libqalculate
-, elementary-cmake-modules
-, wrapGAppsHook }:
+, cln
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "nasc-${version}";
-  version = "0.4.6";
+  pname = "nasc";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "parnold-x";
-    repo = "nasc";
+    repo = pname;
     rev = version;
-    sha256 = "01n4ldj5phrsv97vb04qvs9c1ip6v8wygx9llj704hly1il9fb54";
+    sha256 = "036v3dx8yasp19j88lflibqnpfi5d0nk7qkcnr80zn1lvawf4wgn";
   };
 
-  XDG_DATA_DIRS = stdenv.lib.concatStringsSep ":" [
-    "${granite}/share"
-    "${gnome3.libgee}/share"
-  ];
-
   nativeBuildInputs = [
+    cmake
+    pantheon.vala
     pkgconfig
     wrapGAppsHook
-    vala
-    cmake
-    gettext
-  ];
-  buildInputs = [
-    libqalculate
-    gtk3
-    granite
-    gnome3.libgee
-    gnome3.libsoup
-    gnome3.gtksourceview
   ];
 
-  prePatch = ''
-    substituteInPlace ./libqalculatenasc/libtool \
-      --replace "/bin/bash" "${bash}/bin/bash" \
-      --replace "/bin/sed" "${gnused}/bin/sed"
-    substituteInPlace ./libqalculatenasc/configure.inc \
-      --replace 'ac_default_path="/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin"' 'ac_default_path=$PATH'
-  '';
+  buildInputs = [
+    cln
+    libsoup
+    gtk3
+    glib
+    gtksourceview
+    libgee
+    libqalculate
+    pantheon.elementary-icon-theme
+    pantheon.granite
+  ];
 
   meta = with stdenv.lib; {
     description = "Do maths like a normal person";

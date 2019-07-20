@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   name = "neoload-4.1.4";
 
   src = fetchurl (
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       { url = http://neoload.installers.neotys.com/documents/download/neoload/v4.1/neoload_4_1_4_linux_x64.sh;
         sha256 = "199jcf5a0nwfm8wfld2rcjgq64g91vvz2bkmki8dxfzf1yasifcd"; }
     else

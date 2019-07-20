@@ -6,28 +6,38 @@ let
   cfg = config.services.home-assistant;
 
   # cfg.config != null can be assumed here
-  configFile = pkgs.writeText "configuration.json"
+  configJSON = pkgs.writeText "configuration.json"
     (builtins.toJSON (if cfg.applyDefaultConfig then
-    (lib.recursiveUpdate defaultConfig cfg.config) else cfg.config));
+    (recursiveUpdate defaultConfig cfg.config) else cfg.config));
+  configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
+    ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
+  '';
 
-  availableComponents = pkgs.home-assistant.availableComponents;
+  lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
+    (builtins.toJSON cfg.lovelaceConfig);
+  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { preferLocalBuild = true; } ''
+    ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigJSON} -o $out
+  '';
 
-  # Given component "parentConfig.platform", returns whether config.parentConfig
-  # is a list containing a set with set.platform == "platform".
+  availableComponents = cfg.package.availableComponents;
+
+  usedPlatforms = config:
+    if isAttrs config then
+      optional (config ? platform) config.platform
+      ++ concatMap usedPlatforms (attrValues config)
+    else if isList config then
+      concatMap usedPlatforms config
+    else [ ];
+
+  # Given a component "platform", looks up whether it is used in the config
+  # as `platform = "platform";`.
   #
-  # For example, the component sensor.luftdaten is used as follows:
+  # For example, the component mqtt.sensor is used as follows:
   # config.sensor = [ {
-  #   platform = "luftdaten";
+  #   platform = "mqtt";
   #   ...
   # } ];
-  useComponentPlatform = component:
-    let
-      path = splitString "." component;
-      parentConfig = attrByPath (init path) null cfg.config;
-      platform = last path;
-    in isList parentConfig && any
-      (item: item.platform or null == platform)
-      parentConfig;
+  useComponentPlatform = component: elem component (usedPlatforms cfg.config);
 
   # Returns whether component is used in config
   useComponent = component:
@@ -37,14 +47,16 @@ let
   # List of components used in config
   extraComponents = filter useComponent availableComponents;
 
-  package = if cfg.autoExtraComponents
+  package = if (cfg.autoExtraComponents && cfg.config != null)
     then (cfg.package.override { inherit extraComponents; })
     else cfg.package;
 
   # If you are changing this, please update the description in applyDefaultConfig
   defaultConfig = {
     homeassistant.time_zone = config.time.timeZone;
-    http.server_port = (toString cfg.port);
+    http.server_port = cfg.port;
+  } // optionalAttrs (cfg.lovelaceConfig != null) {
+    lovelace.mode = "yaml";
   };
 
 in {
@@ -99,6 +111,53 @@ in {
       '';
     };
 
+    configWritable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to make <filename>configuration.yaml</filename> writable.
+        This only has an effect if <option>config</option> is set.
+        This will allow you to edit it from Home Assistant's web interface.
+        However, bear in mind that it will be overwritten at every start of the service.
+      '';
+    };
+
+    lovelaceConfig = mkOption {
+      default = null;
+      type = with types; nullOr attrs;
+      # from https://www.home-assistant.io/lovelace/yaml-mode/
+      example = literalExample ''
+        {
+          title = "My Awesome Home";
+          views = [ {
+            title = "Example";
+            cards = [ {
+              type = "markdown";
+              title = "Lovelace";
+              content = "Welcome to your **Lovelace UI**.";
+            } ];
+          } ];
+        }
+      '';
+      description = ''
+        Your <filename>ui-lovelace.yaml</filename> as a Nix attribute set.
+        Setting this option will automatically add
+        <literal>lovelace.mode = "yaml";</literal> to your <option>config</option>.
+        Beware that setting this option will delete your previous <filename>ui-lovelace.yaml</filename>
+      '';
+    };
+
+    lovelaceConfigWritable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to make <filename>ui-lovelace.yaml</filename> writable.
+        This only has an effect if <option>lovelaceConfig</option> is set.
+        This will allow you to edit it from Home Assistant's web interface.
+        However, bear in mind that it will be overwritten at every start of the service.
+      '';
+    };
+
     package = mkOption {
       default = pkgs.home-assistant;
       defaultText = "pkgs.home-assistant";
@@ -110,7 +169,9 @@ in {
       '';
       description = ''
         Home Assistant package to use.
-        Override <literal>extraPackages</literal> in order to add additional dependencies.
+        Override <literal>extraPackages</literal> or <literal>extraComponents</literal> in order to add additional dependencies.
+        If you specify <option>config</option> and do not set <option>autoExtraComponents</option>
+        to <literal>false</literal>, overriding <literal>extraComponents</literal> will have no effect.
       '';
     };
 
@@ -128,18 +189,31 @@ in {
         you might need to specify it in <literal>extraPackages</literal>.
       '';
     };
+
+    openFirewall = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Whether to open the firewall for the specified port.";
+    };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [ "network.target" ];
-      preStart = lib.optionalString (cfg.config != null) ''
-        config=${cfg.configDir}/configuration.yaml
-        rm -f $config
-        ${pkgs.remarshal}/bin/json2yaml -i ${configFile} -o $config
-        chmod 444 $config
-      '';
+      preStart = optionalString (cfg.config != null) (if cfg.configWritable then ''
+        cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
+      '' else ''
+        rm -f "${cfg.configDir}/configuration.yaml"
+        ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
+      '') + optionalString (cfg.lovelaceConfig != null) (if cfg.lovelaceConfigWritable then ''
+        cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+      '' else ''
+        rm -f "${cfg.configDir}/ui-lovelace.yaml"
+        ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+      '');
       serviceConfig = {
         ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
         User = "hass";
@@ -147,6 +221,7 @@ in {
         Restart = "on-failure";
         ProtectSystem = "strict";
         ReadWritePaths = "${cfg.configDir}";
+        KillSignal = "SIGINT";
         PrivateTmp = true;
         RemoveIPC = true;
       };
@@ -162,13 +237,13 @@ in {
       after = wants;
     };
 
-    users.extraUsers.hass = {
+    users.users.hass = {
       home = cfg.configDir;
       createHome = true;
       group = "hass";
       uid = config.ids.uids.hass;
     };
 
-    users.extraGroups.hass.gid = config.ids.gids.hass;
+    users.groups.hass.gid = config.ids.gids.hass;
   };
 }

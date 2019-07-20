@@ -1,25 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, usbmuxd, fuse, gnutls, libgcrypt,
-  libplist, libimobiledevice }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, usbmuxd, fuse, libimobiledevice }:
 
 stdenv.mkDerivation rec {
-  name = "ifuse-1.1.3";
+  pname = "ifuse";
+  version = "2018-10-08";
 
-  nativeBuildInputs = [ pkgconfig fuse libplist usbmuxd gnutls libgcrypt libimobiledevice ];
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "${meta.homepage}/downloads/${name}.tar.bz2";
-    sha256 = "1p9a4n36jb194cnp6v57cz2bggwbywaz8pbpb95ch83pzdkdx257";
+  src = fetchFromGitHub {
+    owner = "libimobiledevice";
+    repo = pname;
+    rev = "e75d32c34d0e8b80320f0a007d5ecbb3f55ef7f0";
+    sha256 = "1b9w2i0sliswlkkb890l9i0rxrf631xywxf8ihygfmjdsfw47h1m";
   };
 
-  meta = {
-    homepage = http://www.libimobiledevice.org;
-    license = stdenv.lib.licenses.lgpl21Plus;
+  nativeBuildInputs = [ autoreconfHook pkgconfig fuse usbmuxd libimobiledevice ];
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/libimobiledevice/ifuse;
     description = "A fuse filesystem implementation to access the contents of iOS devices";
     longDescription = ''
-    Mount directories of an iOS device locally using fuse. By default the media
-    directory is mounted, options allow to also mount the sandbox container of an
-    app, an app's documents folder or even the root filesystem on jailbroken
-    devices.'';
-    inherit (usbmuxd.meta) platforms maintainers;
+      Mount directories of an iOS device locally using fuse. By default the media
+      directory is mounted, options allow to also mount the sandbox container of an
+      app, an app's documents folder or even the root filesystem on jailbroken
+      devices.
+    '';
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ infinisil ];
   };
 }

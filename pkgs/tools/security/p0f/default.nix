@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     cp ./tools/p0f-sendsyn6 $out/sbin
   '';
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "Passive network reconnaissance and fingerprinting tool";
     homepage    = "http://lcamtuf.coredump.cx/p0f3/";

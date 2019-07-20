@@ -22,5 +22,6 @@ buildGoPackage rec {
   meta = {
     description = "Proxy for for simulating network conditions.";
     maintainers = with lib.maintainers; [ avnik ];
+    license = lib.licenses.mit;
   };
 }

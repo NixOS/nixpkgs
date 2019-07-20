@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl, fetchpatch }:
+{ lib, callPackage, fetchurl, stdenv }:
 
 let
   generic = args: callPackage (import ./generic.nix args) { };
@@ -16,35 +16,53 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = generic {
-    version = "390.48";
-    sha256_32bit = "1y6n2hfz9vd0h7gd31fgxcl76s5pjf8afwqyq5slqpcxpd78j5ai";
-    sha256_64bit = "16a3blvizcksmaxr644s857yanw3i3vcvqvn7qnwbsbqpmxga09c";
-    settingsSha256 = "058xaiw5g0kxrvc3lvy4424fqbjkvmsznj2v73cgbm25i1m83krl";
-    persistencedSha256 = "0y86bhzl42lqyrbibqzf8a8yd49zbq3ryb78vgsl13i44f9sl79k";
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_430 else legacy_390;
 
-    patches = [ ./fix_missing_symbol.patch ];
+  # No active beta right now
+  beta = stable;
+
+  stable_430 = generic {
+    version = "430.34";
+    sha256_64bit = "0c3x25gilibbgazvp20d5sfmmgcf0gfqf024nzzqryxg4m05h39b";
+    settingsSha256 = "1xpf9gbpq5xynxm6f401ab09aa243h1sk2vcxvzjwqgcil36zzad";
+    persistencedSha256 = "00dd0m87nwqfv9i23bvbqgcz10x9mvfxg9249nvhp4y3ha65rms6";
   };
 
-  beta = stable; # not enough interest to maintain beta ATM
+  # Last one supporting x86
+  legacy_390 = generic {
+    version = "390.116";
+    sha256_32bit = "0aavzi99ps7r6nrchf4h9gw3fkvm2z6wppkqkz5fwcy7x03ky4qk";
+    sha256_64bit = "106qc62a7m9imchqfq8rfn8fwyrjxg383354q7z2wr8112fyhyg1";
+    settingsSha256 = "0n4pj8dzkr7ccwrn5p46mn59cnijdhg8zmn3idjzrk56pq0hbgjr";
+    persistencedSha256 = "0bnjr0smhlwlqpyg9m6lca3b7brl2mw8aypc6p7525dn9d9kv6kb";
 
+    patches = [
+    (fetchurl {
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-4.16.patch?h=2ad07241ea525a6b6b555b6cb96a97634a4b2cb0";
+      sha256 = "11b3dp0na496rn13v5q4k66bf61174800g36rcwj42r0xj9cfak2";
+    })
+    (fetchurl {
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-5.1.patch?h=42d50ef8d6048608d18bdf2c296dd335260c5a1a";
+      sha256 = "03v46ym2bcckg9q2xrilkg21hfiwypr6gl4jmly2q3m4yza9ja6r";
+    })];
+  };
 
   legacy_340 = generic {
-    version = "340.104";
-    sha256_32bit = "1l8w95qpxmkw33c4lsf5ar9w2fkhky4x23rlpqvp1j66wbw1b473";
-    sha256_64bit = "18k65gx6jg956zxyfz31xdp914sq3msn665a759bdbryksbk3wds";
-    settingsSha256 = "1vvpqimvld2iyfjgb9wvs7ca0b0f68jzfdpr0icbyxk4vhsq7sxk";
-    persistencedSha256 = "0zqws2vsrxbxhv6z0nn2galnghcsilcn3s0f70bpm6jqj9wzy7x8";
+    version = "340.107";
+    sha256_32bit = "0mh83affz6bim26ws7kkwwcfj2s6vkdy4d45hifsbshr82qd52wd";
+    sha256_64bit = "0pv9yv3x0kg9hfkmc50xb54ahxkbnyy2vyy4hj2h0s6m9sb5kqz3";
+    settingsSha256 = "1zf0fy9jj6ipm5vk153swpixqm75iricmx7x49pmr97kzyczaxa7";
+    persistencedSha256 = "0v225jkiqk9rma6whxs1a4fyr4haa75bvi52ss3vsyn62zzl24na";
     useGLVND = false;
 
-    patches = maybePatch_drm_legacy ++ [ ./vm_operations_struct-fault.patch ];
+    patches = [ ./vm_operations_struct-fault.patch ];
   };
 
   legacy_304 = generic {
     version = "304.137";
     sha256_32bit = "1y34c2gvmmacxk2c72d4hsysszncgfndc4s1nzldy2q9qagkg66a";
     sha256_64bit = "1qp3jv6279k83k3z96p6vg3dd35y9bhmlyyyrkii7sib7bdmc7zb";
-    settingsSha256 = "0i5znfq6jkabgi8xpcy12pdpww6a67i8mq60z1kjq36mmnb25pmi";
+    settingsSha256 = "129f0j0hxzjd7g67qwxn463rxp295fsq8lycwm6272qykmab46cj";
     persistencedSha256 = null;
     useGLVND = false;
     useProfiles = false;
@@ -65,5 +83,6 @@ rec {
         '';
     in applyPatches [ "fix-typos" ];
     patches = maybePatch_drm_legacy;
+    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
   };
 }

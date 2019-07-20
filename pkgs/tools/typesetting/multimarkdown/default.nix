@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
       glossary entries (LaTeX only)
       document metadata (e.g. title, author, date, etc.)
     '';
-    homepage = http://fletcherpenney.net/multimarkdown/;
+    homepage = https://fletcherpenney.net/multimarkdown/;
     # licensed under GPLv2+ or MIT:
     # https://raw.githubusercontent.com/fletcher/MultiMarkdown-4/master/LICENSE
-    license = with stdenv.lib.licenses; [ gpl2Plus ];
+    license = with stdenv.lib.licenses; [ gpl2Plus mit ];
     platforms = platforms.all;
     maintainers = with stdenv.lib.maintainers; [ lowfatcomputing ];
   };

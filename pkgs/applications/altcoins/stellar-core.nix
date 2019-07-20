@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, autoconf, libtool, automake, pkgconfig, git
+{ stdenv, fetchgit, autoconf, libtool, automake, pkgconfig, git
 , bison, flex, postgresql }:
 
 let

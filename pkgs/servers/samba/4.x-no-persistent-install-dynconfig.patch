@@ -1,15 +1,18 @@
-diff -ru3 samba-4.4.6/dynconfig/wscript samba-4.4.6-new/dynconfig/wscript
---- samba-4.4.6/dynconfig/wscript	2016-01-26 14:45:46.000000000 +0300
-+++ samba-4.4.6-new/dynconfig/wscript	2016-10-15 22:21:18.159705132 +0300
-@@ -416,11 +416,3 @@
+--- a/dynconfig/wscript	2018-12-23 20:28:42.908832206 -0800
++++ b/dynconfig/wscript	2018-12-23 20:31:55.568835627 -0800
+@@ -419,15 +419,3 @@
                          public_headers=os_path_relpath(os.path.join(Options.launch_dir, version_header), bld.curdir),
                          header_path='samba',
                          cflags=cflags)
 -
 -    # install some extra empty directories
--    bld.INSTALL_DIRS("", "${CONFIGDIR} ${PRIVATE_DIR} ${LOGFILEBASE}");
--    bld.INSTALL_DIRS("", "${PRIVATE_DIR} ${PRIVILEGED_SOCKET_DIR}")
--    bld.INSTALL_DIRS("", "${STATEDIR} ${CACHEDIR}");
+-    bld.INSTALL_DIR("${CONFIGDIR}")
+-    bld.INSTALL_DIR("${LOGFILEBASE}")
+-    bld.INSTALL_DIR("${PRIVILEGED_SOCKET_DIR}")
+-    bld.INSTALL_DIR("${PRIVATE_DIR}", 0o700)
+-    bld.INSTALL_DIR("${BINDDNS_DIR}", 0o770)
+-    bld.INSTALL_DIR("${STATEDIR}")
+-    bld.INSTALL_DIR("${CACHEDIR}")
 -
 -    # these might be on non persistent storage
 -    bld.INSTALL_DIRS("", "${LOCKDIR} ${PIDDIR} ${SOCKET_DIR}")

@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/alecthomas/chroma";
-      rev =  "1b755a90bd109f170385cb3964f0abdfd3451145";
-      sha256 = "1ilmavg291qhb0xq881f5h172zw40aaynqfb0y4yjyq13jnrf8p8";
+      rev =  "0c0b382eca61a71c1eb4cb4dea2bc78aa4939d96";
+      sha256 = "0chpzs542s366vv01bfhrajdrbhmrvc3gi8jhpw3xgz6wfkivcp4";
     };
   }
   {
@@ -46,21 +46,21 @@
     };
   }
   {
-    goPackagePath  = "github.com/mkchoi212/fac";
-    fetch = {
-      type = "git";
-      url = "https://github.com/mkchoi212/fac";
-      rev =  "642a3ad8d8b4b76c7eb201e6f69b3bddb210c502";
-      sha256 = "10rsmnixs3lybnj4xv09b2ya6x0hjjd03y148f78qfppyz2hsvaz";
-    };
-  }
-  {
     goPackagePath  = "github.com/nsf/termbox-go";
     fetch = {
       type = "git";
       url = "https://github.com/nsf/termbox-go";
-      rev =  "21a4d435a86280a2927985fd6296de56cbce453e";
-      sha256 = "0afbb0nr9rqzlpg5n7dg070w5scdvckyzyy525mhndp8phhzwpg7";
+      rev =  "5c94acc5e6eb520f1bcd183974e01171cc4c23b3";
+      sha256 = "1fi8imdgwvlsgifw2qfl3ww0lsrgkfsimkzz7bnrq41nar78s0fw";
+    };
+  }
+  {
+    goPackagePath  = "gopkg.in/yaml.v2";
+    fetch = {
+      type = "git";
+      url = "https://github.com/go-yaml/yaml";
+      rev =  "5420a8b6744d3b0345ab293f6fcba19c978f1183";
+      sha256 = "0dwjrs2lp2gdlscs7bsrmyc5yf6mm4fvgw71bzr9mv2qrd2q73s1";
     };
   }
 ]

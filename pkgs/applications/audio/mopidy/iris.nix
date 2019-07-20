@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
-  version = "3.18.0";
+  version = "3.38.0";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "0j56pj7cqymdk22bjw33c9rz4n36k693gs3w6kg6y68as8l6qpvb";
+    sha256 = "0w86g037jdihh6a16x7y82qk8yk30frkj23k9axcj9fjyp30r0x5";
   };
 
   propagatedBuildInputs = [
@@ -14,13 +14,9 @@ pythonPackages.buildPythonApplication rec {
     mopidy-local-images
   ] ++ (with pythonPackages; [
     configobj
-    pylast
-    spotipy
-    raven
-    tornado
+    requests
+    tornado_4
   ]);
-
-  postPatch = "sed -i /tornado/d setup.py";
 
   # no tests implemented
   doCheck = false;

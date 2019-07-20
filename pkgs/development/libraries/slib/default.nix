@@ -1,28 +1,18 @@
 { fetchurl, stdenv, unzip, scheme, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "slib-3b2";
+  name = "slib-3b5";
 
   src = fetchurl {
-    url = "http://groups.csail.mit.edu/mac/ftpdir/scm/${name}.zip";
-    sha256 = "1s6a7f3ha2bhwj4nkg34n0j511ww1nlgrn5xis8k53l8ghdrrjxi";
+    url = "https://groups.csail.mit.edu/mac/ftpdir/scm/${name}.zip";
+    sha256 = "0q0p2d53p8qw2592yknzgy2y1p5a9k7ppjx0cfrbvk6242c4mdpq";
   };
 
   patches = [ ./catalog-in-library-vicinity.patch ];
 
   buildInputs = [ unzip scheme texinfo ];
 
-  configurePhase = ''
-    mkdir -p "$out"
-    sed -i "Makefile" \
-        -e "s|^[[:blank:]]*prefix[[:blank:]]*=.*$|prefix = $out/|g"
-  '';
-
-  buildPhase = "make infoz";
-
-  installPhase = ''
-    make install
-
+  postInstall = ''
     ln -s mklibcat{.scm,}
     SCHEME_LIBRARY_PATH="$out/lib/slib" make catalogs
 

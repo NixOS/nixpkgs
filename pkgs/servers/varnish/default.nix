@@ -1,21 +1,21 @@
 { stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
-, python, pythonPackages, makeWrapper }:
+, python2, makeWrapper }:
 
 let
-  common = { version, sha256 }:
+  common = { version, sha256, extraBuildInputs ? [] }:
     stdenv.mkDerivation rec {
       name = "varnish-${version}";
 
       src = fetchurl {
-        url = "http://varnish-cache.org/_downloads/${name}.tgz";
+        url = "https://varnish-cache.org/_downloads/${name}.tgz";
         inherit sha256;
       };
 
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        pcre libxslt groff ncurses readline python libedit
-        pythonPackages.docutils makeWrapper
-      ];
+        pcre libxslt groff ncurses readline python2 libedit
+        python2.pkgs.docutils makeWrapper
+      ] ++ extraBuildInputs;
 
       buildFlags = "localstatedir=/var/spool";
 
@@ -32,22 +32,23 @@ let
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = https://www.varnish-cache.org;
         license = licenses.bsd2;
-        maintainers = with maintainers; [ garbas fpletz ];
+        maintainers = with maintainers; [ fpletz ];
         platforms = platforms.unix;
       };
     };
 in
 {
   varnish4 = common {
-    version = "4.1.9";
-    sha256 = "11zwyasz2fn9qxc87r175wb5ba7388sd79mlygjmqn3yv2m89n12";
+    version = "4.1.10";
+    sha256 = "08kwx0il6cqxsx3897042plh1yxjaanbaqjbspfl0xgvyvxk6j1n";
   };
   varnish5 = common {
     version = "5.2.1";
     sha256 = "1cqlj12m426c1lak1hr1fx5zcfsjjvka3hfirz47hvy1g2fjqidq";
   };
   varnish6 = common {
-    version = "6.0.0";
-    sha256 = "1vhbdch33m6ig4ijy57zvrramhs9n7cba85wd8rizgxjjnf87cn7";
+    version = "6.1.1";
+    sha256 = "0gf9hzzrr1lndbbqi8cwlfasi7l517cy3nbgna88i78lm247rvp0";
+    extraBuildInputs = [ python2.pkgs.sphinx ];
   };
 }

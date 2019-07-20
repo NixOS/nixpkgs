@@ -6,11 +6,14 @@
 # compiler and the linker just "work".
 
 { name ? ""
-, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, propagateDoc ? cc != null && cc ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
+, libcxx ? null
 }:
 
 with stdenvNoCC.lib;
@@ -42,22 +45,42 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  default_cxx_stdlib_compile = optionalString (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools)
-    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)";
-
-  dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
+  default_cxx_stdlib_compile = if (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc) && !(targetPlatform.useLLVM or false) then
+    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
+  else if targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false) && !(targetPlatform.useLLVM or false) then
+    "-isystem ${libcxx}/include/c++/v1"
+  else "";
 
   # The "infix salt" is a arbitrary string added in the middle of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
   # without interfering. For the moment, it is defined as the target triple,
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
-  infixSalt = dashlessTarget;
+  infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
     if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
+
+  # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
+  isGccArchSupported = arch:
+    if cc.isGNU or false then
+      { skylake        = versionAtLeast ccVersion "6.0";
+        skylake-avx512 = versionAtLeast ccVersion "6.0";
+        cannonlake     = versionAtLeast ccVersion "8.0";
+        icelake-client = versionAtLeast ccVersion "8.0";
+        icelake-server = versionAtLeast ccVersion "8.0";
+        knm            = versionAtLeast ccVersion "8.0";
+      }.${arch} or true
+    else if cc.isClang or false then
+      { cannonlake     = versionAtLeast ccVersion "5.0";
+        icelake-client = versionAtLeast ccVersion "7.0";
+        icelake-server = versionAtLeast ccVersion "7.0";
+        knm            = versionAtLeast ccVersion "7.0";
+      }.${arch} or true
+    else
+      false;
 
 in
 
@@ -71,13 +94,13 @@ assert nativePrefix == bintools.nativePrefix;
 
 stdenv.mkDerivation {
   name = targetPrefix
-    + (if name != "" then name else "${ccName}-wrapper")
+    + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${ccName}-wrapper")
     + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
 
   preferLocalBuild = true;
 
   inherit cc libc_bin libc_dev libc_lib bintools coreutils_bin;
-  shell = getBin shell + stdenv.lib.optionalString (stdenv ? shellPath) stdenv.shellPath;
+  shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   inherit targetPrefix infixSalt;
@@ -188,10 +211,16 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${targetPrefix}gccgo
     '';
 
+  strictDeps = true;
   propagatedBuildInputs = [ bintools ];
   depsTargetTargetPropagated = extraPackages;
 
-  setupHook = ./setup-hook.sh;
+  wrapperName = "CC_WRAPPER";
+
+  setupHooks = [
+    ../setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
 
   postFixup =
     ''
@@ -226,7 +255,7 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include ${optionalString isGNU "-idirafter ${cc}/lib/gcc/*/*/include-fixed"}" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}${libc.libdir or "/lib/"} -idirafter ${libc_dev}${libc.incdir or "/include"} ${optionalString isGNU "-idirafter ${cc}/lib/gcc/*/*/include-fixed"}" > $out/nix-support/libc-cflags
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
@@ -250,16 +279,15 @@ stdenv.mkDerivation {
 
       echo "$ccLDFlags" > $out/nix-support/cc-ldflags
       echo "$ccCFlags" > $out/nix-support/cc-cflags
-    ''
-
-    + optionalString propagateDoc ''
+    '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
+      echo " -L${libcxx}/lib" >> $out/nix-support/cc-ldflags
+    '' + optionalString propagateDoc ''
       ##
       ## Man page and info support
       ##
 
-      mkdir -p $man/nix-support $info/nix-support
-      printWords ${cc.man or ""}  > $man/nix-support/propagated-user-env-packages
-      printWords ${cc.info or ""}  > $info/nix-support/propagated-user-env-packages
+      ln -s ${cc.man} $man
+      ln -s ${cc.info} $info
     ''
 
     + ''
@@ -270,14 +298,69 @@ stdenv.mkDerivation {
       export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
     ''
 
+    # Machine flags. These are necessary to support
+
+    # TODO: We should make a way to support miscellaneous machine
+    # flags and other gcc flags as well.
+
+    # Always add -march based on cpu in triple. Sometimes there is a
+    # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
+    # that case.
+    + optionalString ((targetPlatform ? platform.gcc.arch) &&
+                      isGccArchSupported targetPlatform.platform.gcc.arch) ''
+      echo "-march=${targetPlatform.platform.gcc.arch}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # -mcpu is not very useful. You should use mtune and march
+    # instead. It’s provided here for backwards compatibility.
+    + optionalString (targetPlatform ? platform.gcc.cpu) ''
+      echo "-mcpu=${targetPlatform.platform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # -mfloat-abi only matters on arm32 but we set it here
+    # unconditionally just in case. If the abi specifically sets hard
+    # vs. soft floats we use it here.
+    + optionalString (targetPlatform ? platform.gcc.float-abi) ''
+      echo "-mfloat-abi=${targetPlatform.platform.gcc.float-abi}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.fpu) ''
+      echo "-mfpu=${targetPlatform.platform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.mode) ''
+      echo "-mmode=${targetPlatform.platform.gcc.mode}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.tune &&
+                      isGccArchSupported targetPlatform.platform.gcc.tune) ''
+      echo "-mtune=${targetPlatform.platform.gcc.tune}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # TODO: categorize these and figure out a better place for them
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
+    '' + optionalString targetPlatform.isMinGW ''
+      hardening_unsupported_flags+=" stackprotector"
+    '' + optionalString targetPlatform.isAvr ''
+      hardening_unsupported_flags+=" stackprotector pic"
+    '' + optionalString (targetPlatform.libc == "newlib") ''
+      hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString targetPlatform.isNetBSD ''
+      hardening_unsupported_flags+=" stackprotector fortify"
+    ''
+
+    + optionalString targetPlatform.isWasm ''
+      hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    ''
+
+    + optionalString (libc != null && targetPlatform.isAvr) ''
+      for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
+        echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+      done
     ''
 
     + ''
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
-      substituteAll ${./utils.sh} $out/nix-support/utils.sh
+      substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
 
       ##
       ## Extra custom steps
@@ -288,7 +371,7 @@ stdenv.mkDerivation {
 
   inherit expand-response-params;
 
-  # for substitution in utils.sh
+  # for substitution in utils.bash
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";
 
   meta =
@@ -297,5 +380,6 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
+      priority = 10;
   };
 }

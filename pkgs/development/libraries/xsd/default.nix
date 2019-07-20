@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "4.0.0";
 
   src = fetchurl {
-    url = "http://codesynthesis.com/download/xsd/4.0/xsd-4.0.0+dep.tar.bz2";
+    url = "https://codesynthesis.com/download/xsd/4.0/xsd-4.0.0+dep.tar.bz2";
     sha256 = "05wqhmd5cd4pdky8i8qysnh96d2h16ly8r73whmbxkajiyf2m9gc";
   };
 

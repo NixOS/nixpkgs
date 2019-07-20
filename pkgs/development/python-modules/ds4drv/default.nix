@@ -5,7 +5,6 @@
 
 buildPythonPackage rec {
   pname = "ds4drv";
-  name = "${pname}-${version}";
   version = "0.5.1";
 
   # PyPi only carries py3 wheel

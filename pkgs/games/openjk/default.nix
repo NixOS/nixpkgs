@@ -20,13 +20,14 @@ let
     categories = "Game;";
   };
 in stdenv.mkDerivation rec {
-  name = "OpenJK-2017-08-11";
+  pname = "OpenJK";
+  version = "2019-06-24";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "a0828f06e0181c62e110f2f78d30acb5036b4113";
-    sha256 = "1wbb643z2nyhyirzzy3rz03wjqglwmsgnj7w5cl8167f9f9j9w0m";
+    rev = "e8b5c135eccb05ddae67e00ff944001f373fddd4";
+    sha256 = "0qkbn59swhnb0anvy9gq945rkb58j6axlcfgb7sff0m4swqw2394";
   };
 
   dontAddPrefix = true;

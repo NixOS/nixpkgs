@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     HOME=$TMPDIR
   '';
 
-  configureFlags = "
-    --without-arts --disable-docs
-    --x-includes=${libX11.dev}/include
-    --x-libraries=${libX11.out}/lib
-    --with-qt-dir=${qt3}
-  ";
+  configureFlags = [
+    "--without-arts" "--disable-docs"
+    "--x-includes=${libX11.dev}/include"
+    "--x-libraries=${libX11.out}/lib"
+    "--with-qt-dir=${qt3}"
+  ];
 
   preInstall = ''
     mkdir -p $out/share/emacs/site-lisp/

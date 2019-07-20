@@ -1,36 +1,40 @@
-{ pkgs, fetchgit, stdenv, makeWrapper, taskwarrior, ncurses,
-perl, perlPackages }:
+{ stdenv, fetchFromGitHub
+, makeWrapper, which
+, taskwarrior, ncurses, perlPackages }:
 
-let
-  version = "1.2";
-in
-stdenv.mkDerivation {
-  name = "vit-${version}";
+stdenv.mkDerivation rec {
+  pname = "vit";
+  version = "1.3";
 
-  src = fetchgit {
-    url = "https://git.tasktools.org/scm/ex/vit.git";
-    rev = "7d0042ca30e9d09cfbf9743b3bc72096e4a8fe1e";
-    sha256 = "92cad7169b3870145dff02256e547ae270996a314b841d3daed392ac6722827f";
+  src = fetchFromGitHub {
+    owner = "scottkosty";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0a34rh5w8393wf7jwwr0f74rp1zv2vz606z5j8sr7w19k352ijip";
   };
 
   preConfigure = ''
     substituteInPlace Makefile.in \
       --replace sudo ""
     substituteInPlace configure \
-      --replace /usr/bin/perl ${perl}/bin/perl
+      --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
+    substituteInPlace cmdline.pl \
+      --replace "view " "vim -R "
   '';
 
   postInstall = ''
     wrapProgram $out/bin/vit --prefix PERL5LIB : $PERL5LIB
   '';
 
-  buildInputs = [ taskwarrior ncurses perlPackages.Curses perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper which ];
+  buildInputs = [ taskwarrior ncurses ]
+    ++ (with perlPackages; [ perl Curses TryTiny TextCharWidth ]);
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Visual Interactive Taskwarrior";
-    maintainers = with pkgs.lib.maintainers; [ ];
-    platforms = pkgs.lib.platforms.all;
-    license = pkgs.lib.licenses.gpl3;
+    maintainers = with maintainers; [ dtzWill ];
+    platforms = platforms.all;
+    license = licenses.gpl3;
   };
 }
 

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "05zbc02z7vm19byafi05i1rnkxc6yrfkhnm30ly68zzyipkmzx1l";
-    url = "http://www.ip2location.com/downloads/ip2location-${version}.tar.gz";
+    url = "https://www.ip2location.com/downloads/ip2location-${version}.tar.gz";
   };
 
   enableParallelBuilding = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       weather, MCC, MNC, mobile brand name, elevation and usage type of
       any IP address or host name in the IP2Location databases.
     '';
-    homepage = http://www.ip2location.com/free/applications;
+    homepage = https://www.ip2location.com/free/applications;
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     platforms = platforms.linux;
   };

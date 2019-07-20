@@ -1,4 +1,4 @@
-{ stdenv
+{ config, stdenv
 , fetchFromGitHub
 , fetchpatch
 , which
@@ -14,7 +14,7 @@
 , liburcu
 , libuuid
 , libkrb5
-, debug ? false
+, debug ? config.coreclr.debug or false
 }:
 
 stdenv.mkDerivation rec {
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://dotnet.github.io/core/;
+    homepage = https://github.com/dotnet/core/;
     description = ".NET is a general purpose development platform";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kuznero ];

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("PREFIX=$out")
     makeFlagsArray+=("DESTDIR=$out")
     makeFlagsArray+=("LOCALEDIR=$out/share/locale")
-    makeFlagsArray+=("LIBSEPOLA=${libsepol}/lib/libsepol.a")
+    makeFlagsArray+=("LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a")
     makeFlagsArray+=("BASHCOMPLETIONDIR=$out/share/bash-completion/completions")
     makeFlagsArray+=("PYTHON=${python3}/bin/python")
     makeFlagsArray+=("PYTHONLIBDIR=lib/${python3.libPrefix}/site-packages")

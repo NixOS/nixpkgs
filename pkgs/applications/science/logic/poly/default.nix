@@ -1,17 +1,20 @@
-{stdenv, fetchurl, gmp, cmake, python}:
+{stdenv, fetchFromGitHub, gmp, cmake, python}:
 
-let version = "0.1.4";
-in
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  pname = "libpoly";
+  version = "0.1.7";
 
-stdenv.mkDerivation {
-  name = "libpoly-${version}";
-
-  src = fetchurl {
-    url = "https://github.com/SRI-CSL/libpoly/archive/v${version}.tar.gz";
-    sha256 = "16x1pk2a3pcb5a0dzyw28ccjwkhmbsck4hy80ss7kx0dd7qgpi7j";
+  src = fetchFromGitHub {
+    owner = "SRI-CSL";
+    repo = "libpoly";
+    rev = "v${version}";
+    sha256 = "0i5ar4lhs88glk0rvkmag656ii434i6i1q5dspx6d0kyg78fii64";
   };
 
-  buildInputs = [ cmake gmp python ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ gmp python ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/SRI-CSL/libpoly;

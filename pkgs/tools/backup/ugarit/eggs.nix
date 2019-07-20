@@ -1,4 +1,4 @@
-{ pkgs, stdenv, eggDerivation, fetchegg }:
+{ eggDerivation, fetchegg }:
 rec {
   aes = eggDerivation {
     name = "aes-1.5";

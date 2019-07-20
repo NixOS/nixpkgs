@@ -1,16 +1,20 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flask
 }:
 
 buildPythonPackage rec {
   pname = "Flask-Silk";
-  version = "0.2";
+  version = "2018-06-28";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1gjzighx4f0w39sq9xvzr1kwb4y7yv9qrgzvli1p89gy16piz8l0";
+  # master fixes flask import syntax and has no major changes
+  # new release requested: https://github.com/sublee/flask-silk/pull/6
+  src = fetchFromGitHub {
+    owner = "sublee";
+    repo = "flask-silk";
+    rev = "3a8166550f9a0ec52edae7bf31d9818c4c15c531";
+    sha256 = "0mplziqw52jfspas6vsm210lmxqqzgj0dxm8y0i3gpbyyykwcmh0";
   };
 
   propagatedBuildInputs = [

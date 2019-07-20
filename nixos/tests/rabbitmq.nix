@@ -3,11 +3,11 @@
 import ./make-test.nix ({ pkgs, ... }: {
   name = "rabbitmq";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow offline ];
+    maintainers = [ eelco offline ];
   };
 
   nodes = {
-    one = { config, pkgs, ... }: {
+    one = { ... }: {
       services.rabbitmq.enable = true;
     };
   };

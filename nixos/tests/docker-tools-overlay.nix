@@ -9,7 +9,7 @@ import ./make-test.nix ({ pkgs, ... }:
 
   nodes = {
     docker =
-      { config, pkgs, ... }:
+      { ... }:
       {
         virtualisation.docker.enable = true;
         virtualisation.docker.storageDriver = "overlay";  # defaults to overlay2

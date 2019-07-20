@@ -8,12 +8,22 @@
       *    jssecacerts
       *    cacerts
       */
-@@ -144,6 +145,9 @@
+@@ -132,7 +133,8 @@
+                 public TrustStoreDescriptor run() {
+                     // Get the system properties for trust store.
+                     String storePropName = System.getProperty(
+-                            "javax.net.ssl.trustStore", jsseDefaultStore);
++                            "javax.net.ssl.trustStore",
++                            System.getenv("JAVAX_NET_SSL_TRUSTSTORE"));
+                     String storePropType = System.getProperty(
+                             "javax.net.ssl.trustStoreType",
+                             KeyStore.getDefaultType());
+@@ -144,6 +146,9 @@
                      String temporaryName = "";
                      File temporaryFile = null;
                      long temporaryTime = 0L;
-+                    if (storePropName == null){
-+                        storePropName = System.getenv("JAVAX_NET_SSL_TRUSTSTORE");
++                    if (storePropName == null) {
++                        storePropName = jsseDefaultStore;
 +                    }
                      if (!"NONE".equals(storePropName)) {
                          String[] fileNames =

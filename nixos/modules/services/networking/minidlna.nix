@@ -84,13 +84,13 @@ in
         '') cfg.mediaDirs}
       '';
 
-    users.extraUsers.minidlna = {
+    users.users.minidlna = {
       description = "MiniDLNA daemon user";
       group = "minidlna";
       uid = config.ids.uids.minidlna;
     };
 
-    users.extraGroups.minidlna.gid = config.ids.gids.minidlna;
+    users.groups.minidlna.gid = config.ids.gids.minidlna;
 
     systemd.services.minidlna =
       { description = "MiniDLNA Server";
@@ -98,16 +98,10 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" "local-fs.target" ];
 
-        preStart =
-          ''
-            mkdir -p /var/cache/minidlna
-            chown -R minidlna:minidlna /var/cache/minidlna
-          '';
-
         serviceConfig =
           { User = "minidlna";
             Group = "minidlna";
-            PermissionsStartOnly = true;
+            CacheDirectory = "minidlna";
             RuntimeDirectory = "minidlna";
             PIDFile = "/run/minidlna/pid";
             ExecStart =

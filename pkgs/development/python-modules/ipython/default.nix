@@ -12,27 +12,34 @@
 , jedi
 , decorator
 , pickleshare
-, simplegeneric
 , traitlets
 , prompt_toolkit
 , pexpect
 , appnope
-, typing
 , backcall
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "6.3.1";
+  version = "7.5.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a6ac981381b3f5f604b37a293369963485200e3639fb0404fa76092383c10c41";
+    sha256 = "e840810029224b56cd0d9e7719dc3b39cf84d577f8ac686547c8ba7a06eeab26";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ipython/ipython/commit/e1b53e9ef91a43b9e275bb9e48b4253218375d87.patch";
+      sha256 = "sha256:0q7zsgalwxss6aikhakbdkvvz0g4ac4sa3ncrklm74ksqh56rsgb";
+    })
+  ];
 
   buildInputs = [ glibcLocales ];
 
@@ -42,13 +49,12 @@ buildPythonPackage rec {
     jedi
     decorator
     pickleshare
-    simplegeneric
     traitlets
     prompt_toolkit
+    pygments
     pexpect
     backcall
-  ] ++ lib.optionals stdenv.isDarwin [appnope]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ];
+  ] ++ lib.optionals stdenv.isDarwin [appnope];
 
   LC_ALL="en_US.UTF-8";
 
@@ -58,15 +64,10 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  # IPython 6.0.0 and above does not support Python < 3.3.
-  # The last IPython version to support older Python versions
-  # is 5.3.x.
-  disabled = pythonOlder "3.3";
-
   meta = {
     description = "IPython: Productive Interactive Computing";
     homepage = http://ipython.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor jgeerds fridh ];
+    maintainers = with lib.maintainers; [ bjornfor fridh ];
   };
 }

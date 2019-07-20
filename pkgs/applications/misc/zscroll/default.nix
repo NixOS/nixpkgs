@@ -1,4 +1,4 @@
-{ stdenv, lib, python3, python3Packages, fetchFromGitHub }:
+{ stdenv, python3, python3Packages, fetchFromGitHub }:
 
 let version = "1.0"; in
 

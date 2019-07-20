@@ -1,14 +1,13 @@
-{ stdenv, fetchPypi, fetchpatch
+{ stdenv, fetchPypi
 , buildPythonPackage, python
 }:
 buildPythonPackage rec {
   pname = "parse";
-  version = "1.8.2";
-  name = "${pname}-${version}";
+  version = "1.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lj9v1q4imszyhvipb6drsm3xdl35nan011mqxxas1yaypixsj40";
+    sha256 = "0hkic57kaxd5s56ylbwslmngqnpab864mjj8c0ayawfk6is6as0v";
   };
 
   checkPhase = ''

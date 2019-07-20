@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "1.5.3";
+  version = "1.5.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1whfjl44gy15ha6palpwa2m0xi36dsvpaz8vw0cvb2k2lbdfsxf0";
+    sha256 = "d564872083af40bbcc7091340f17db778a316525c7c76497d58d11b98ca2aa74";
   };
 
   propagatedBuildInputs = [ protobuf ];

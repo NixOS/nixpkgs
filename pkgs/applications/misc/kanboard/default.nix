@@ -1,12 +1,14 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "kanboard-${version}";
-  version = "1.0.48";
+  version = "1.2.9";
 
-  src = fetchzip {
-    url = "https://github.com/kanboard/kanboard/releases/download/v${version}/${name}.zip";
-    sha256 = "0ipyijlfcnfqlz9n20wcnaf9pw404a675x404pm9h2n4ld8x6m5v";
+  src = fetchFromGitHub {
+    owner = "kanboard";
+    repo = "kanboard";
+    rev = "v${version}";
+    sha256 = "1hdr95cpxgdzrzhffs63gdl0g7122ma2zg8bkqwp42p5xphx0xan";
   };
 
   dontBuild = true;

@@ -1,4 +1,6 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, matplotlib, netperf, procps, pyqt5 }:
+{ stdenv, buildPythonApplication, fetchFromGitHub, matplotlib, procps, pyqt5
+, sphinx
+}:
 
 buildPythonApplication rec {
   pname = "flent";
@@ -6,11 +8,14 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tohojo";
     repo = "flent";
-    rev = version;
-    sha256 = "0rl4ahynl6ymw7r04vpg9p90pplrxc41rjlzvm0swxsvpw40yvkm";
+    rev = "v${version}";
+    sha256 = "1llcdakk0nk9xlpjjz7mv4a80yq4sjnbqhaqvyj9m6lbcxgssh2r";
   };
 
-  buildInputs = [ netperf ];
+  buildInputs = [ sphinx ];
+
+  checkInputs = [ procps ];
+
   propagatedBuildInputs = [
     matplotlib
     procps

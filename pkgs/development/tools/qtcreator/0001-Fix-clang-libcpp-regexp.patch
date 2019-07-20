@@ -1,0 +1,15 @@
+diff --git a/src/plugins/cpptools/headerpathfilter.cpp b/src/plugins/cpptools/headerpathfilter.cpp
+index b514c46..5f96358 100644
+--- a/src/plugins/cpptools/headerpathfilter.cpp
++++ b/src/plugins/cpptools/headerpathfilter.cpp
+@@ -92,8 +92,8 @@ HeaderPaths::iterator resourceIterator(HeaderPaths &headerPaths, bool isMacOs)
+ {
+     // include/c++, include/g++, libc++\include and libc++abi\include
+     static const QString cppIncludes = R"((.*\/include\/.*(g\+\+|c\+\+).*))"
+-                                       R"(|(.*libc\+\+\/include))"
+-                                       R"(|(.*libc\+\+abi\/include))";
++                                       R"(|(.*libc\+\+.*\/include))"
++                                       R"(|(.*libc\+\+abi.*\/include))";
+     static const QRegularExpression includeRegExp("\\A(" + cppIncludes + ")\\z");
+ 
+     // The same as includeRegExp but also matches /usr/local/include

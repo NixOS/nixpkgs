@@ -1,36 +1,36 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qttools }:
+{ stdenv, fetchFromGitHub, qmake, qttools, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gpxsee-${version}";
-  version = "4.19";
+  pname = "gpxsee";
+  version = "7.9";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "1xjf2aawf633c1ydhpcsjhdlfkjkfsjbcgjd737xpfv1wjz99l4l";
+    sha256 = "029l5dhc9nnxiw7p0s4gyfkcqw709z7lz96aq8krs75mfk4fv07k";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [ qmake makeWrapper ];
+  buildInputs = [ qttools ];
 
   preConfigure = ''
-    substituteInPlace src/config.h --replace /usr/share/gpxsee $out/share/gpxsee
     lrelease lang/*.ts
   '';
 
-  preFixup = ''
-    install -Dm755 GPXSee $out/bin/GPXSee
+  enableParallelBuilding = true;
 
-    mkdir -p $out/share/gpxsee
-    cp pkg/maps.txt $out/share/gpxsee
+  postInstall = ''
+    wrapProgram $out/bin/gpxsee \
+      --prefix XDG_DATA_DIRS ":" $out/share
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.gpxsee.org/;
-    description = "GPX viewer and analyzer";
+    homepage = https://www.gpxsee.org/;
+    description = "GPS log file viewer and analyzer";
     longDescription = ''
-      GPXSee is a Qt-based GPS log file viewer and analyzer that supports GPX,
-      TCX, KML, FIT, IGC and NMEA files.
+      GPXSee is a Qt-based GPS log file viewer and analyzer that supports
+      all common GPS log file formats.
     '';
     license = licenses.gpl3;
     maintainers = [ maintainers.womfoo ];

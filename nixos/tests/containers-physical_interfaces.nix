@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    server = { config, pkgs, ... }:
+    server = { ... }:
       {
         virtualisation.memorySize = 256;
         virtualisation.vlans = [ 1 ];
@@ -23,7 +23,7 @@ import ./make-test.nix ({ pkgs, ...} : {
           };
         };
       };
-    bridged = { config, pkgs, ... }: {
+    bridged = { ... }: {
       virtualisation.memorySize = 128;
       virtualisation.vlans = [ 1 ];
 
@@ -41,7 +41,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
     };
 
-    bonded = { config, pkgs, ... }: {
+    bonded = { ... }: {
       virtualisation.memorySize = 128;
       virtualisation.vlans = [ 1 ];
 
@@ -62,7 +62,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
     };
 
-    bridgedbond = { config, pkgs, ... }: {
+    bridgedbond = { ... }: {
       virtualisation.memorySize = 128;
       virtualisation.vlans = [ 1 ];
 

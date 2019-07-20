@@ -8,7 +8,7 @@ let
   systemhealth = with pkgs; stdenv.mkDerivation {
     name = "systemhealth-1.0";
     src = fetchurl {
-      url = "http://www.brianlane.com/static/downloads/systemhealth/systemhealth-1.0.tar.bz2";
+      url = "https://www.brianlane.com/downloads/systemhealth/systemhealth-1.0.tar.bz2";
       sha256 = "1q69lz7hmpbdpbz36zb06nzfkj651413n9icx0njmyr3xzq1j9qy";
     };
     buildInputs = [ python ];

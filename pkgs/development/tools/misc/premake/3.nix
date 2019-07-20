@@ -18,6 +18,9 @@ stdenv.mkDerivation {
     install -Dm755 bin/premake $out/bin/premake
   '';
 
+  premake_cmd = "premake";
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = http://industriousone.com/premake;
     description = "A simple build configuration and project generation tool using lua";

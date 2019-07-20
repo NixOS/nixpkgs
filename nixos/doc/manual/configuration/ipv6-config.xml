@@ -39,7 +39,7 @@
 <xref linkend="opt-networking.defaultGateway6"/> = {
   address = "fe00::1";
   interface = "enp0s3";
-}
+};
 </programlisting>
  </para>
 

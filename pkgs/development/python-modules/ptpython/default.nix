@@ -1,17 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, wcwidth, six, prompt_toolkit, docopt
-, jedi, pygments }:
+{ stdenv, buildPythonPackage, fetchPypi, prompt_toolkit, docopt , jedi, pygments }:
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "0.41";
-  name  = "${pname}-${version}";
+  version = "2.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hcaaadkp5n37hxggraynifa33wx1akklzvf6y4rvgjxbjl2g2x7";
+    sha256 = "1m34jbwj3j3762mg1vynpgciqw4kqdzdqjvd62mwhbjkly7ddsgb";
   };
 
-  propagatedBuildInputs = [ wcwidth six prompt_toolkit docopt jedi pygments ];
+  propagatedBuildInputs = [ prompt_toolkit docopt jedi pygments ];
 
   # no tests to run
   doCheck = false;

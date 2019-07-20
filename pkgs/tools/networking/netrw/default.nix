@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "http://mamuti.net/files/netrw/netrw-${version}.tar.bz2"
+      "https://mamuti.net/files/netrw/netrw-${version}.tar.bz2"
       "http://www.sourcefiles.org/Networking/FTP/Other/netrw-${version}.tar.bz2"
     ];
     sha256 = "1gnl80i5zkyj2lpnb4g0q0r5npba1x6cnafl2jb3i3pzlfz1bndr";

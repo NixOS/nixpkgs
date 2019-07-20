@@ -1,7 +1,7 @@
-diff --git a/api/Makefile.am b/api/Makefile.am
+diff --git a/src/api/Makefile.am b/src/api/Makefile.am
 index d8c1e54..46ead13 100644
---- a/api/Makefile.am
-+++ b/api/Makefile.am
+--- a/src/api/Makefile.am
++++ b/src/api/Makefile.am
 @@ -42,7 +42,7 @@ libtesseract_api_la_CPPFLAGS = $(AM_CPPFLAGS)
  if VISIBILITY
  libtesseract_api_la_CPPFLAGS += -DTESS_EXPORTS

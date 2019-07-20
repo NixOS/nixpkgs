@@ -34,7 +34,7 @@ with lib;
 
     services.dbus.packages = [ pkgs.rtkit ];
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "rtkit";
         uid = config.ids.uids.rtkit;
         description = "RealtimeKit daemon";

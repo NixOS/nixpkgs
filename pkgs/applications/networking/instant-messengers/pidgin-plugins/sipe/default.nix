@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, pidgin, intltool, libxml2, nss, nspr }:
+{ stdenv, fetchurl, pidgin, intltool, libxml2, gmime, nss }:
 
-let version = "1.23.2"; in
-
-stdenv.mkDerivation {
-  name = "pidgin-sipe-${version}";
+stdenv.mkDerivation rec {
+  pname = "pidgin-sipe";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sipe/pidgin-sipe-${version}.tar.gz";
-    sha256 = "1xj4nn5h103q4agar167xwcp98qf8knrgs918nl07qaxp9g4558w";
+    url = "mirror://sourceforge/sipe/${pname}-${version}.tar.gz";
+    sha256 = "04cxprz6dbcsc4n2jg72mr1r9630nhrywn0zim9kwvbgps3wdd9c";
   };
 
-  meta = with stdenv.lib; {
-    description = "SIPE plugin for Pidgin IM";
-    homepage = http://sipe.sourceforge.net/;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-  };
+  nativeBuildInputs = [ intltool ];
+  buildInputs = [ pidgin gmime libxml2 nss ];
+  enableParallelBuilding = true;
 
   postInstall = "find $out -ls; ln -s \$out/lib/purple-2 \$out/share/pidgin-sipe";
 
-  buildInputs = [ pidgin intltool libxml2 nss nspr ];
-
+  meta = with stdenv.lib; {
+    description = "SIPE plugin for Pidgin IM";
+    homepage = "http://sipe.sourceforge.net/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+  };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "smc-6.6.3";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cp misc/smc.ico "$out/share/icons/"
 
     cat > "$out/bin/smc" << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     ${jre}/bin/java -jar "$out/share/java/Smc.jar" "\$@"
     EOF
     chmod a+x "$out/bin/smc"

@@ -1,23 +1,31 @@
-{ stdenv, fetchurl, help2man }:
+{ stdenv, fetchFromGitHub, autoreconfHook, coreutils }:
 
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.2";
   name = "light-${version}";
-  src = fetchurl {
-    url = "https://github.com/haikarainen/light/archive/v${version}.tar.gz";
-    sha256 = "974608ee42ffe85cfd23184306d56d86ec4e6f4b0518bafcb7b3330998b1af64";
+  src = fetchFromGitHub {
+    owner = "haikarainen";
+    repo = "light";
+    rev = "v${version}";
+    sha256 = "1h286va0r1xgxlnxfaaarrj3qhxmjjsivfn3khwm0wq1mhkfihra";
   };
-  buildInputs = [ help2man ];
 
-  installPhase = "mkdir -p $out/bin; cp light $out/bin/";
+  configureFlags = [ "--with-udev" ];
 
-  preFixup = "make man; mkdir -p $out/man/man1; mv light.1.gz $out/man/man1";
+  nativeBuildInputs = [ autoreconfHook ];
+
+  # ensure udev rules can find the commands used
+  postPatch = ''
+    substituteInPlace 90-backlight.rules \
+      --replace '/bin/chgrp' '${coreutils}/bin/chgrp' \
+      --replace '/bin/chmod' '${coreutils}/bin/chmod'
+  '';
 
   meta = {
     description = "GNU/Linux application to control backlights";
     homepage = https://haikarainen.github.io/light/;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
+    maintainers = with stdenv.lib.maintainers; [ puffnfresh dtzWill ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

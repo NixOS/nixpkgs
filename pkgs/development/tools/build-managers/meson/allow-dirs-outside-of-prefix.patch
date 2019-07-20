@@ -1,6 +1,6 @@
 --- a/mesonbuild/coredata.py
 +++ b/mesonbuild/coredata.py
-@@ -282,18 +282,13 @@
+@@ -375,18 +375,13 @@
          '''
          if option.endswith('dir') and os.path.isabs(value) and \
             option not in builtin_dir_noprefix_options:
@@ -22,4 +22,4 @@
 +                value = value[skip:]
          return value
  
-     def init_builtins(self, options):
+     def init_builtins(self):

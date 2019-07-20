@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, python2Packages, makeWrapper, docutils, unzip
+{ stdenv, fetchurl, python2Packages, makeWrapper, unzip
 , guiSupport ? false, tk ? null
-, ApplicationServices, cf-private }:
+, ApplicationServices }:
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
-  version = "4.5.2";
+  version = "4.9.1";
   name = "mercurial-${version}";
   inherit (python2Packages) docutils hg-git dulwich python;
 in python2Packages.buildPythonApplication {
@@ -13,7 +13,7 @@ in python2Packages.buildPythonApplication {
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/${name}.tar.gz";
-    sha256 = "14732hhw2ibvy5khqxjc8a983z3rib5vp9lqfbws80lm3kyryjm4";
+    sha256 = "0iybbkd9add066729zg01kwz5hhc1s6lhp9rrnsmzq6ihyxj3p8v";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
@@ -49,15 +49,16 @@ in python2Packages.buildPythonApplication {
       cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
       chmod u+x $out/share/cgi-bin/hgweb.cgi
 
-      # install bash completion
-      install -D -v contrib/bash_completion $out/share/bash-completion/completions/mercurial
+      # install bash/zsh completions
+      install -v -m644 -D contrib/bash_completion $out/share/bash-completion/completions/_hg
+      install -v -m644 -D contrib/zsh_completion $out/share/zsh/site-functions/_hg
     '';
 
   meta = {
     inherit version;
     description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = http://mercurial.selenic.com/;
-    downloadPage = "http://mercurial.selenic.com/release/";
+    homepage = https://www.mercurial-scm.org;
+    downloadPage = https://www.mercurial-scm.org/release/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     updateWalker = true;

@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "openfst";
-  version = "1.6.7";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "http://www.openfst.org/twiki/pub/FST/FstDownload/${name}.tar.gz";
-    sha256 = "1xqpc1qlvghprwih99immsjh3ba08lg754cf5icnmpkwh9nlh6p2";
+    sha256 = "0fqgk8195kz21is09gwzwnrg7fr9526bi9mh4apyskapz27pbhr1";
   };
   meta = {
     description = "Library for working with finite-state transducers";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.openfst.org/twiki/bin/view/FST/WebHome;
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.dfordivam ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
 

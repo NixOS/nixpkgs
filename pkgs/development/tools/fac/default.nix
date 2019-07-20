@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, makeWrapper, git }:
+{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, git }:
 
 buildGoPackage rec {
   name = "fac-${version}";
-  version = "1.1.0";
+  version = "2.0.0";
 
   goPackagePath = "github.com/mkchoi212/fac";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "mkchoi212";
     repo = "fac";
     rev = "v${version}";
-    sha256 = "054j8yrblf1frcfn3dwrjbgf000i3ngbaz2c172nwbx75g309ihx";
+    sha256 = "054bbiw0slz9szy3ap2sh5dy97w3g7ms27rd3ww3i1zdhvnggwpc";
   };
 
   goDeps = ./deps.nix;

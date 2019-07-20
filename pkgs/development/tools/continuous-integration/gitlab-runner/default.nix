@@ -1,16 +1,16 @@
-{ lib, buildGoPackage, fetchFromGitLab, fetchurl, go-bindata }:
+{ lib, buildGoPackage, fetchFromGitLab, fetchurl }:
 
 let
-  version = "10.7.1";
+  version = "12.0.2";
   # Gitlab runner embeds some docker images these are prebuilt for arm and x86_64
   docker_x86_64 = fetchurl {
-    url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/docker/prebuilt-x86_64.tar.xz";
-    sha256 = "0vvi9czvl9ina3hrfd5qb557wyyspndagbzrjzmv0bbjspxgb4c5";
+    url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/helper-images/prebuilt-x86_64.tar.xz";
+    sha256 = "0b1xkksd4rgqvjahp5bf53sk887z2fxwr7rf8vqs9j9aw54zm5cn";
   };
 
   docker_arm = fetchurl {
-    url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/docker/prebuilt-arm.tar.xz";
-    sha256 = "1vb85asz5y9x7zzambvdfcy05nyr4kryx5zsfz7nbna7hidi2s86";
+    url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/helper-images/prebuilt-arm.tar.xz";
+    sha256 = "1cjl64g3ymnrs9c3fl28aydfzf18ik4vnjcvijv28c3gm1i6chs0";
   };
 in
 buildGoPackage rec {
@@ -29,31 +29,16 @@ buildGoPackage rec {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "0v4c2631yzizhbiym3qzl8p4vjy5a081ry66qpl21ma9ib2cm9r5";
+    sha256 = "0cbh11libcyfdgrvnl1aa11x90ac7zgn1d9myc4dwmqzfdm4kdlb";
   };
 
   patches = [ ./fix-shell-path.patch ];
 
-  buildInputs = [ go-bindata ];
-
-  preBuild = ''
-    (
-    # go-bindata names the assets after the filename thus we create a symlink with the name we want
-    cd go/src/${goPackagePath}
-    ln -sf ${docker_x86_64} prebuilt-x86_64.tar.xz
-    ln -sf ${docker_arm} prebuilt-arm.tar.xz
-    go-bindata \
-        -pkg docker \
-        -nocompress \
-        -nomemcopy \
-        -o executors/docker/bindata.go \
-        prebuilt-x86_64.tar.xz \
-        prebuilt-arm.tar.xz
-    )
-  '';
-
   postInstall = ''
-    install -d $out/bin
+    touch $bin/bin/hello
+    install -d $bin/bin/helper-images
+    ln -sf ${docker_x86_64} $bin/bin/helper-images/prebuilt-x86_64.tar.xz
+    ln -sf ${docker_arm} $bin/bin/helper-images/prebuilt-arm.tar.xz
   '';
 
   meta = with lib; {

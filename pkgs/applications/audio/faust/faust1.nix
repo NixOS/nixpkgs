@@ -18,7 +18,7 @@ let
 
   meta = with stdenv.lib; {
     homepage = http://faust.grame.fr/;
-    downloadPage = http://sourceforge.net/projects/faudiostream/files/;
+    downloadPage = https://sourceforge.net/projects/faudiostream/files/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ magnetophon pmahoney ];

@@ -1,4 +1,4 @@
-{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, bison, p7zip }:
+{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, p7zip }:
 
 assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.0";
 

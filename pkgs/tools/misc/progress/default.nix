@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "progress-${version}";
-  version = "0.13.1";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "Xfennec";
     repo = "progress";
     rev = "v${version}";
-    sha256 = "13nhczzb0zqg5zfpf5vcfi6aahyb8lrr52pvpjgi1zfkh2m9vnig";
+    sha256 = "1lk2v4b767klib93an4g3f7z5qrv9kdk9jf7545vw1immc4kamrl";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
