@@ -4601,6 +4601,11 @@
     github = "scriptkiddi";
     name = "Fritz Otlinghaus";
   };
+  scubed2 = {
+    email = "scubed2@gmail.com";
+    github = "scubed2";
+    name = "Sterling Stein";
+  };
   sdll = {
     email = "sasha.delly@gmail.com";
     github = "sdll";
