@@ -1168,6 +1168,8 @@ in {
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
+  vdf = callPackage ../development/python-modules/vdf { };
+
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
