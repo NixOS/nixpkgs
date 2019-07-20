@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "bpftrace-${version}";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "refs/tags/v${version}";
-    sha256 = "1kp6as3i67dnw5v3vc1cj5hmrq6c8pjpg9g38g1qcnc9i6drl1r8";
+    sha256 = "17qf1c3h99iyxkc0xzix4jnxwqvxbg9ki23zm7l04qw73lj01g1m";
   };
 
   enableParallelBuilding = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   # nicely without wrappers.
   patchPhase = ''
     patch -p1 < ${./fix-kernel-include-dir.patch}
-    substituteInPlace ./src/clang_parser.cpp \
+    substituteInPlace ./src/utils.cpp \
       --subst-var-by NIX_KERNEL_SRC '${kernel.dev}/lib/modules/${kernel.modDirVersion}'
   '';
 

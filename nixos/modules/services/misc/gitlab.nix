@@ -52,7 +52,7 @@ let
     gitlab_url = "http+unix://${pathUrlQuote gitlabSocket}";
     http_settings.self_signed_cert = false;
     repos_path = "${cfg.statePath}/repositories";
-    secret_file = "${cfg.statePath}/config/gitlab_shell_secret";
+    secret_file = "${cfg.statePath}/gitlab_shell_secret";
     log_file = "${cfg.statePath}/log/gitlab-shell.log";
     custom_hooks_dir = "${cfg.statePath}/custom_hooks";
     redis = {
@@ -109,7 +109,7 @@ let
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
         hooks_path = "${cfg.statePath}/shell/hooks";
-        secret_file = "${cfg.statePath}/config/gitlab_shell_secret";
+        secret_file = "${cfg.statePath}/gitlab_shell_secret";
         upload_pack = true;
         receive_pack = true;
       };
@@ -132,14 +132,9 @@ let
     HOME = "${cfg.statePath}/home";
     UNICORN_PATH = "${cfg.statePath}/";
     GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
-    GITLAB_STATE_PATH = cfg.statePath;
-    GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     SCHEMA = "${cfg.statePath}/db/schema.rb";
+    GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
-    GITLAB_SHELL_PATH = "${cfg.packages.gitlab-shell}";
-    GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/shell/config.yml";
-    GITLAB_SHELL_SECRET_PATH = "${cfg.statePath}/config/gitlab_shell_secret";
-    GITLAB_SHELL_HOOKS_PATH = "${cfg.statePath}/shell/hooks";
     GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
@@ -502,23 +497,43 @@ in {
     systemd.tmpfiles.rules = [
       "d /run/gitlab 0755 ${cfg.user} ${cfg.group} -"
       "d ${gitlabEnv.HOME} 0750 ${cfg.user} ${cfg.group} -"
+      "z ${gitlabEnv.HOME}/.ssh/authorized_keys 0600 ${cfg.user} ${cfg.group} -"
       "d ${cfg.backupPath} 0750 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.statePath} 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/builds 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/config 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/db 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/log 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/repositories 2770 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/shell 0750 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.statePath}/tmp 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/tmp/pids 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/tmp/sockets 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/uploads 0700 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.statePath}/custom_hooks 0700 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/custom_hooks/pre-receive.d 0700 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/custom_hooks/post-receive.d 0700 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/custom_hooks/update.d 0700 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path} 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/artifacts 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/lfs-objects 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/pages 0750 ${cfg.user} ${cfg.group} -"
-    ];
+      "L+ ${cfg.statePath}/lib - - - - ${cfg.packages.gitlab}/share/gitlab/lib"
+      "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
+      "L+ /run/gitlab/log - - - - ${cfg.statePath}/log"
+      "L+ /run/gitlab/tmp - - - - ${cfg.statePath}/tmp"
+      "L+ /run/gitlab/uploads - - - - ${cfg.statePath}/uploads"
+
+      "L+ /run/gitlab/shell-config.yml - - - - ${pkgs.writeText "config.yml" (builtins.toJSON gitlabShellConfig)}"
+
+      "L+ ${cfg.statePath}/config/gitlab.yml - - - - ${pkgs.writeText "gitlab.yml" (builtins.toJSON gitlabConfig)}"
+      "L+ ${cfg.statePath}/config/database.yml - - - - ${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)}"
+      "L+ ${cfg.statePath}/config/secrets.yml - - - - ${pkgs.writeText "secrets.yml" (builtins.toJSON secretsConfig)}"
+      "L+ ${cfg.statePath}/config/unicorn.rb - - - - ${./defaultUnicornConfig.rb}"
+
+      "L+ ${cfg.statePath}/config/initializers/extra-gitlab.rb - - - - ${extraGitlabRb}"
+    ] ++ optional cfg.smtp.enable
+      "L+ ${cfg.statePath}/config/initializers/smtp_settings.rb - - - - ${smtpSettings}" ;
 
     systemd.services.gitlab-sidekiq = {
       after = [ "network.target" "redis.service" "gitlab.service" ];
@@ -609,40 +624,14 @@ in {
         gnupg
       ];
       preStart = ''
-        cp -rf ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
-        rm -rf ${cfg.statePath}/config
-        mkdir ${cfg.statePath}/config
-        if [ -e ${cfg.statePath}/lib ]; then
-          rm ${cfg.statePath}/lib
-        fi
+        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+        ${pkgs.sudo}/bin/sudo -u ${cfg.user} rm -rf ${cfg.statePath}/db/*
+        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
 
-        ln -sf ${cfg.packages.gitlab}/share/gitlab/lib ${cfg.statePath}/lib
-        [ -L /run/gitlab/config ] || ln -sf ${cfg.statePath}/config /run/gitlab/config
-        [ -L /run/gitlab/log ] || ln -sf ${cfg.statePath}/log /run/gitlab/log
-        [ -L /run/gitlab/tmp ] || ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
-        [ -L /run/gitlab/uploads ] || ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
-        cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
-        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
-        ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
-        ${optionalString cfg.smtp.enable ''
-          ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
-        ''}
-        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
+        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
 
-        # JSON is a subset of YAML
-        ln -sf ${pkgs.writeText "gitlab.yml" (builtins.toJSON gitlabConfig)} ${cfg.statePath}/config/gitlab.yml
-        ln -sf ${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} ${cfg.statePath}/config/database.yml
-        ln -sf ${pkgs.writeText "secrets.yml" (builtins.toJSON secretsConfig)} ${cfg.statePath}/config/secrets.yml
-        ln -sf ${./defaultUnicornConfig.rb} ${cfg.statePath}/config/unicorn.rb
-
-        # Install the shell required to push repositories
-        ln -sf ${pkgs.writeText "config.yml" (builtins.toJSON gitlabShellConfig)} /run/gitlab/shell-config.yml
-        [ -L ${cfg.statePath}/shell/hooks ] ||  ln -sf ${cfg.packages.gitlab-shell}/hooks ${cfg.statePath}/shell/hooks
-        ${cfg.packages.gitlab-shell}/bin/install
-
-        chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}/
-        chmod -R ug+rwX,o-rwx+X ${cfg.statePath}/
-        chown -R ${cfg.user}:${cfg.group} /run/gitlab
+        ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${cfg.packages.gitlab-shell}/bin/install
 
         if ! test -e "${cfg.statePath}/db-created"; then
           if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
@@ -655,7 +644,7 @@ in {
 
           ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${gitlab-rake}/bin/gitlab-rake db:schema:load
 
-          touch "${cfg.statePath}/db-created"
+          ${pkgs.sudo}/bin/sudo -u ${cfg.user} touch "${cfg.statePath}/db-created"
         fi
 
         # Always do the db migrations just to be sure the database is up-to-date
@@ -664,22 +653,13 @@ in {
         if ! test -e "${cfg.statePath}/db-seeded"; then
           ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${gitlab-rake}/bin/gitlab-rake db:seed_fu \
             GITLAB_ROOT_PASSWORD='${cfg.initialRootPassword}' GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
-          touch "${cfg.statePath}/db-seeded"
+          ${pkgs.sudo}/bin/sudo -u ${cfg.user} touch "${cfg.statePath}/db-seeded"
         fi
 
-        # The gitlab:shell:create_hooks task seems broken for fixing links
-        # so we instead delete all the hooks and create them anew
+        # We remove potentially broken links to old gitlab-shell versions
         rm -f ${cfg.statePath}/repositories/**/*.git/hooks
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${gitlab-rake}/bin/gitlab-rake gitlab:shell:create_hooks
 
         ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${pkgs.git}/bin/git config --global core.autocrlf "input"
-
-        # Change permissions in the last step because some of the
-        # intermediary scripts like to create directories as root.
-        chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}
-        chmod -R ug+rwX,o-rwx ${cfg.statePath}/repositories
-        chmod -R ug-s ${cfg.statePath}/repositories
-        find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
       '';
 
       serviceConfig = {

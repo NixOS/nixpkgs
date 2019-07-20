@@ -11,6 +11,7 @@
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
+  ./config/xdg/portal.nix
   ./config/appstream.nix
   ./config/xdg/sounds.nix
   ./config/gtk/gtk-icon-cache.nix
@@ -139,6 +140,7 @@
   ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
+  ./programs/tsm-client.nix
   ./programs/udevil.nix
   ./programs/venus.nix
   ./programs/vim.nix
@@ -210,6 +212,7 @@
   ./services/backup/restic-rest-server.nix
   ./services/backup/rsnapshot.nix
   ./services/backup/tarsnap.nix
+  ./services/backup/tsm.nix
   ./services/backup/znapzend.nix
   ./services/cluster/hadoop/default.nix
   ./services/cluster/kubernetes/addons/dns.nix

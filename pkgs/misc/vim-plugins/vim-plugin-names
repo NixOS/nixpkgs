@@ -242,7 +242,6 @@ neoclide/coc-jest
 neoclide/coc-json
 neoclide/coc-lists
 neoclide/coc-neco
-neoclide/coc.nvim
 neoclide/coc-pairs
 neoclide/coc-prettier
 neoclide/coc-python

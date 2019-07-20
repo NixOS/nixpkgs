@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "2.0";
+  version = "2.1";
 in stdenv.mkDerivation rec {
   name = "libbytesize-${version}";
 
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     owner = "storaged-project";
     repo = "libbytesize";
     rev = version;
-    sha256 = "0m950idlyv6mbkhr8ngnda5l5wwb5lzs4wn4kxl73cvdlcvklmwj";
+    sha256 = "0qb6zx2fdghm21lishlcrhnwf4wwy5p69dsgp0504kn93ii7mw3m";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

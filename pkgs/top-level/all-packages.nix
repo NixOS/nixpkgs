@@ -814,6 +814,8 @@ in
 
   httperf = callPackage ../tools/networking/httperf { };
 
+  ili2c = callPackage ../tools/misc/ili2c { };
+
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
@@ -1942,7 +1944,12 @@ in
     enableExtraPlugins = true;
   });
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor { kindlegen = null; };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { 
+    # kindlegen is unfree, don't enable by default
+    kindlegen = null; 
+    # epubcheck pulls in Java, which is problematic on some platforms
+    epubcheck = null;
+  };
 
   asunder = callPackage ../applications/audio/asunder { };
 
@@ -2682,6 +2689,9 @@ in
 
   teamocil = callPackage ../tools/misc/teamocil { };
 
+  tsm-client = callPackage ../tools/backup/tsm-client { jdk8 = null; };
+  tsm-client-withGui = callPackage ../tools/backup/tsm-client { };
+
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
@@ -2836,6 +2846,8 @@ in
   eventstat = callPackage ../os-specific/linux/eventstat { };
 
   evtest = callPackage ../applications/misc/evtest { };
+
+  evtest-qt = libsForQt5.callPackage ../applications/misc/evtest-qt { };
 
   exa = callPackage ../tools/misc/exa { };
 
@@ -8305,9 +8317,8 @@ in
   inherit (beam.packages.erlang)
     rebar rebar3-open rebar3
     hexRegistrySnapshot fetchHex beamPackages
-    hex2nix;
+    hex2nix relxExe;
 
-  inherit (beam.packages.erlangR18) relxExe;
   inherit (beam.packages.erlangR19) cuter;
 
   groovy = callPackage ../development/interpreters/groovy { };
@@ -9000,8 +9011,8 @@ in
   #     };
   # You can use a different directory, but whichever directory you choose
   # should be owned by user root, group nixbld with permissions 0770.
-  ccacheWrapper = makeOverridable ({ extraConfig ? "" }:
-     wrapCC (ccache.links extraConfig)) {};
+  ccacheWrapper = makeOverridable ({ extraConfig ? "", unwrappedCC ? stdenv.cc.cc }:
+     wrapCC (ccache.links {inherit unwrappedCC extraConfig;})) {};
   ccacheStdenv = lowPrio (overrideCC stdenv buildPackages.ccacheWrapper);
 
   cccc = callPackage ../development/tools/analysis/cccc { };
@@ -9689,6 +9700,8 @@ in
   sbt-extras = callPackage ../development/tools/build-managers/sbt-extras { };
 
   scss-lint = callPackage ../development/tools/scss-lint { };
+
+  shake = haskell.lib.justStaticExecutables haskellPackages.shake;
 
   shallot = callPackage ../tools/misc/shallot { };
 
@@ -12968,6 +12981,8 @@ in
       withQt5 = true;
     };
 
+    qtutilities = callPackage ../development/libraries/qtutilities { };
+
     qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
     qtkeychain = callPackage ../development/libraries/qtkeychain {
@@ -14220,6 +14235,7 @@ in
 
   couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
     spidermonkey = spidermonkey_1_8_5;
+    erlang = erlangR21;
   };
 
   couchpotato = callPackage ../servers/couchpotato {};
@@ -14730,7 +14746,7 @@ in
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
-    elixir = elixir_1_6;
+    elixir = elixir_1_8;
     erlang = erlang_nox;
   };
 
@@ -17758,7 +17774,7 @@ in
       inherit (pythonPackages) elpy;
       inherit
         autoconf automake git libffi libpng pkgconfig poppler rtags w3m zlib
-        substituteAll rustPlatform cmake llvmPackages;
+        substituteAll rustPlatform cmake llvmPackages libtool zeromq;
     };
   };
 
@@ -19002,7 +19018,14 @@ in
 
   luppp = callPackage ../applications/audio/luppp { };
 
-  lutris = callPackage ../applications/misc/lutris { };
+  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
+    inherit (gnome3) gnome-desktop libgnome-keyring webkitgtk;
+    wine = wineWowPackages.staging;
+  };
+  lutris = callPackage ../applications/misc/lutris/chrootenv.nix { };
+  lutris-free = lutris.override {
+    steamSupport = false;
+  };
 
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
@@ -24253,6 +24276,8 @@ in
   sequeler = callPackage ../applications/misc/sequeler { };
 
   sequelpro = callPackage ../applications/misc/sequelpro {};
+
+  sidequest = callPackage ../applications/misc/sidequest {};
 
   maphosts = callPackage ../tools/networking/maphosts {};
 
