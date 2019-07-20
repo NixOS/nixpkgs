@@ -55,6 +55,11 @@ let
     [service]
     DISABLE_REGISTRATION = ${boolToString cfg.disableRegistration}
 
+    ${optionalString (cfg.mailerPasswordFile != null) ''
+      [mailer]
+      PASSWD = #mailerpass#
+    ''}
+
     ${cfg.extraConfig}
   '';
 in
@@ -255,6 +260,13 @@ in
         description = "Upper level of template and static files path.";
       };
 
+      mailerPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/mailpw";
+        description = "Path to a file containing the SMTP password.";
+      };
+
       disableRegistration = mkEnableOption "the registration lock" // {
         description = ''
           By default any user can create an account on this <literal>gitea</literal> instance.
@@ -344,9 +356,15 @@ in
           KEY="$(head -n1 ${secretKey})"
           DBPASS="$(head -n1 ${cfg.database.passwordFile})"
           JWTSECRET="$(head -n1 ${jwtSecret})"
+          ${if (cfg.mailerPasswordFile == null) then ''
+            MAILERPASSWORD="#mailerpass#"
+          '' else ''
+            MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+          ''}
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
               -e "s,#jwtsecet#,$JWTSECET,g" \
+              -e "s,#mailerpass#,$MAILERPASSWORD,g" \
               -i ${runConfig}
           chmod 640 ${runConfig} ${secretKey} ${jwtSecret}
         ''}
