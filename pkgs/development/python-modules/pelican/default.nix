@@ -12,13 +12,19 @@ buildPythonPackage rec {
     owner = "getpelican";
     repo = "pelican";
     rev = version;
-    sha256 = "0ag8il1b8ckfcv0f87ryrmw52k9m3xd025b4m6fvr8lsffyzv626";
+    sha256 = "1ww3kc5bzp5q7b23n2vmzqch1z06l7vrscn0h96cscvk45sxc7yz";
+    # Remove unicode file names which leads to different checksums on HFS+
+    # vs. other filesystems because of unicode normalisation.
+    extraPostFetch = ''
+      rm -r $out/pelican/tests/output/custom_locale/posts
+    '';
   };
 
   doCheck = true;
 
+  # Exclude custom locale test, which files were removed above to fix the source checksum
   checkPhase = ''
-    python -Wd -m unittest discover
+    nosetests -sv --exclude=test_custom_locale_generation_works pelican
   '';
 
   buildInputs = [
@@ -29,7 +35,6 @@ buildPythonPackage rec {
     # pandoc
     git
     mock
-    nose
     markdown
     typogrify
   ];
@@ -37,6 +42,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
     blinker pillow beautifulsoup4 markupsafe lxml
+  ];
+
+  checkInputs = [
+    nose
   ];
 
   postPatch= ''
