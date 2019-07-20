@@ -1,7 +1,7 @@
 { theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
 cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk_pixbuf,
 libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
-at-spi2-atk, libuuid
+at-spi2-atk, libuuid, nodePackages
 }:
 
 let
@@ -66,7 +66,7 @@ in stdenv.mkDerivation {
     gtk3  # needed for GSETTINGS_SCHEMAS_PATH
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper nodePackages.asar ];
 
   dontUnpack = true;
   buildCommand = ''
@@ -93,18 +93,20 @@ in stdenv.mkDerivation {
       --replace /usr/bin/ $out/bin/ \
       --replace /usr/share/ $out/share/
   '' + stdenv.lib.optionalString (theme != null) ''
-    cat <<EOF >> $out/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js
+    asar extract $out/lib/slack/resources/app.asar $out/lib/slack/resources/app.asar.unpacked
+    cat <<EOF >> $out/lib/slack/resources/app.asar.unpacked/dist/ssb-interop.bundle.js
+
     var fs = require('fs');
     document.addEventListener('DOMContentLoaded', function() {
-    let tt__customCss = ".menu ul li a:not(.inline_menu_link) {color: #fff !important;}"
       fs.readFile('${theme}/theme.css', 'utf8', function(err, css) {
-            \$("<style></style>").appendTo('head').html(css + tt__customCss);
-            \$("<style></style>").appendTo('head').html('#reply_container.upload_in_threads .inline_message_input_container {background: padding-box #545454}');
-            \$("<style></style>").appendTo('head').html('.p-channel_sidebar {background: #363636 !important}');
-            \$("<style></style>").appendTo('head').html('#client_body:not(.onboarding):not(.feature_global_nav_layout):before {background: inherit;}');
+        let s = document.createElement('style');
+        s.type = 'text/css';
+        s.innerHTML = css;
+        document.head.appendChild(s);
       });
     });
     EOF
+    asar pack $out/lib/slack/resources/app.asar.unpacked $out/lib/slack/resources/app.asar
   '';
 
   meta = with stdenv.lib; {
