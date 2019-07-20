@@ -1,3 +1,5 @@
+# Python 2 expression
+
 { buildPythonPackage
 , fetchPypi
 , python
@@ -30,11 +32,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.25.0";
+  version = "0.24.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "914341ad2d5b1ea522798efa4016430b66107d05781dbfe7cf05eba8f37df995";
+    sha256 = "18imlm8xbhcbwy4wa957a1fkamrcb0z988z006jpfda3ki09z4ag";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -114,7 +116,7 @@ in buildPythonPackage rec {
     homepage = http://pandas.pydata.org/;
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];
+    maintainers = with stdenv.lib.maintainers; [ raskin knedlsepp ];
     platforms = stdenv.lib.platforms.unix;
   };
 }
