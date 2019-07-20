@@ -12,8 +12,9 @@ types = ["jre", "jdk"]
 impls = ["hotspot", "openj9"]
 
 arch_to_nixos = {
-    "x64": "x86_64",
-    "aarch64": "aarch64",
+    "x64": ("x86_64",),
+    "aarch64": ("aarch64",),
+    "arm": ("armv6l", "armv7l"),
 }
 
 def get_sha256(url):
@@ -42,12 +43,13 @@ def generate_sources(release, assets):
             "vmType": asset["openjdk_impl"],
         })
 
-        arch_map[arch_to_nixos[asset["architecture"]]] = {
-            "url": asset["binary_link"],
-            "sha256": get_sha256(asset["checksum_link"]),
-            "version": version,
-            "build": build,
-        }
+        for nixos_arch in arch_to_nixos[asset["architecture"]]:
+            arch_map[nixos_arch] = {
+                "url": asset["binary_link"],
+                "sha256": get_sha256(asset["checksum_link"]),
+                "version": version,
+                "build": build,
+            }
 
     return out
 
