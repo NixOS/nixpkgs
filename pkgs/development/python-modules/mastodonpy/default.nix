@@ -30,6 +30,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   checkPhase = ''
+    rm pytest.ini
     py.test
   '';
 

@@ -22385,6 +22385,8 @@ in
 
   toot = callPackage ../applications/misc/toot { };
 
+  tootstream = callPackage ../applications/misc/tootstream { };
+
   tootle = callPackage ../applications/misc/tootle { };
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
