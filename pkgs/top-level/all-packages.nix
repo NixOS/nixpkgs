@@ -21822,6 +21822,8 @@ in
 
   newtonwars = callPackage ../games/newtonwars { };
 
+  nxengine-evo = callPackage ../games/nxengine-evo { };
+
   odamex = callPackage ../games/odamex { };
 
   oilrush = callPackage ../games/oilrush { };
