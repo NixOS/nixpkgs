@@ -18496,6 +18496,12 @@ in
 
   spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
 
+  spotifyd = callPackage ../applications/audio/spotifyd {
+    withALSA = stdenv.isLinux;
+    withPulseAudio = config.pulseaudio or true;
+    withPortAudio = stdenv.isDarwin;
+  };
+
   super-productivity = callPackage ../applications/networking/super-productivity { };
 
   wlc = callPackage ../development/libraries/wlc { };
