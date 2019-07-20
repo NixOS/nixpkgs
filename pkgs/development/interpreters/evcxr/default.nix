@@ -1,4 +1,4 @@
-{ cargo, fetchFromGitHub, makeWrapper, pkgconfig, rustPlatform, stdenv }:
+{ cargo, fetchFromGitHub, makeWrapper, pkgconfig, rustPlatform, stdenv, gcc }:
 
 rustPlatform.buildRustPackage rec {
   name = "evcxr-${version}";
@@ -11,13 +11,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1apc93z9vvf6qks5x2pad45rnrj9kjl812rj78w5zmmizccp2fhf";
   };
 
-  cargoSha256 = "0bd6yna8yyrqjv4w7qr2923nljbjjlbkyad6vjlgfp33yn2pz1iv";
+  cargoSha256 = "153pxqj4jhlbacr7607q9yfw6h96ns5igbvssis8j3gn0xp6ssg6";
   cargoPatches = [ ./cargo-lock.patch ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ cargo ];
   postInstall = ''
-    wrapProgram $out/bin/evcxr --prefix PATH : ${cargo}/bin
+    wrapProgram $out/bin/evcxr --prefix PATH : ${stdenv.lib.makeBinPath [ cargo gcc ]}
     rm $out/bin/testing_runtime
   '';
 
