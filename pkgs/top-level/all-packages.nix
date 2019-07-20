@@ -6516,7 +6516,9 @@ in
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
 
-  video2midi = callPackage ../tools/audio/video2midi { };
+  video2midi = callPackage ../tools/audio/video2midi {
+    pythonPackages = python3Packages;
+  };
 
   vifm = callPackage ../applications/misc/vifm { };
 
