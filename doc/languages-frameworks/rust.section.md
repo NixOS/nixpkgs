@@ -64,6 +64,14 @@ When the `Cargo.lock`, provided by upstream, is not in sync with the
 added in `cargoPatches` will also be prepended to the patches in `patches` at
 build-time.
 
+Any binaries and libraries built will be copied into `$out/lib` and `$out/bin`
+as part of the provided `installPhase`, and Rust packages will also run
+`cargo test` as part of their `checkPhase` by default. Customizations to the
+derivation can find Cargo's build outputs in `$releaseDir` and should not rely
+on assumptions regarding the location of any other target directory in order to
+remain compatible with cross builds.
+
+
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation
