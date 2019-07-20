@@ -923,6 +923,8 @@ in {
 
   mask-rcnn = callPackage ../development/python-modules/mask-rcnn { };
 
+  mastodonpy = callPackage ../development/python-modules/mastodonpy { };
+
   matchpy = callPackage ../development/python-modules/matchpy { };
 
   maxminddb = callPackage ../development/python-modules/maxminddb { };
