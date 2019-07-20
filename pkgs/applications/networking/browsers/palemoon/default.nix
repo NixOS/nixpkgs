@@ -130,6 +130,6 @@ in stdenv.mkDerivation rec {
     homepage    = "https://www.palemoon.org/";
     license     = licenses.mpl20;
     maintainers = with maintainers; [ rnhmjoj AndersonTorres OPNA2608 ];
-    platforms   = platforms.linux;
+    platforms   = [ "i686-linux" "x86_64-linux" ];
   };
 }
