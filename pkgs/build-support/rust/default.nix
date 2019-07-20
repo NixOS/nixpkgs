@@ -44,7 +44,10 @@ let
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${stdenv.hostPlatform.config}/${buildType}";
+
+  # sidestep assumptions currently made about "target/release"
+  cargoTargetDir = "target/nix-cargo";
+  releaseDir = "${cargoTargetDir}/${stdenv.hostPlatform.config}/${buildType}";
 
 in stdenv.mkDerivation (args // {
   inherit cargoDeps;
@@ -58,6 +61,8 @@ in stdenv.mkDerivation (args // {
 
   PKG_CONFIG_ALLOW_CROSS =
     if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
+
+  inherit releaseDir buildType;
 
   postUnpack = ''
     eval "$cargoDepsHook"
@@ -80,7 +85,9 @@ in stdenv.mkDerivation (args // {
   configurePhase = args.configurePhase or ''
     runHook preConfigure
     mkdir -p .cargo
-    cat >> .cargo/config <<'EOF'
+    cat >> .cargo/config <<EOF
+    [build]
+    target-dir = "$(pwd)/${cargoTargetDir}"
     [target."${stdenv.buildPlatform.config}"]
     "linker" = "${ccForBuild}"
     ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
@@ -89,6 +96,13 @@ in stdenv.mkDerivation (args // {
     ''}
     EOF
     cat .cargo/config
+
+    if [[ ! -e target/release ]]; then
+      # for out-of-tree derivations that may have hardcoded "target/release"
+      mkdir -p target
+      ln -sr $releaseDir target/release
+    fi
+
     runHook postConfigure
   '';
 
@@ -119,8 +133,6 @@ in stdenv.mkDerivation (args // {
   '';
 
   doCheck = args.doCheck or true;
-
-  inherit releaseDir;
 
   installPhase = args.installPhase or ''
     runHook preInstall
