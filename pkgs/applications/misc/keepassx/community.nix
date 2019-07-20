@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     export LC_ALL="en_US.UTF-8"
     export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
     make test ARGS+="-E testgui --output-on-failure"
   '';
 
