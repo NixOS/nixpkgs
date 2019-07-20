@@ -1168,6 +1168,8 @@ in {
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
+  vdf = callPackage ../development/python-modules/vdf { };
+
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
@@ -5918,6 +5920,10 @@ in {
   gast = callPackage ../development/python-modules/gast { };
 
   IBMQuantumExperience = callPackage ../development/python-modules/ibmquantumexperience { };
+
+  ibis = callPackage ../development/python-modules/ibis { };
+
+  ibis-framework = callPackage ../development/python-modules/ibis-framework { };
 
   qiskit = callPackage ../development/python-modules/qiskit { };
 

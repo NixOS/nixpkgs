@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
   ];
 
+  # Remove example program which fail on Darwin
+  postPatch = if stdenv.isDarwin then ''
+    substituteInPlace meson.build \
+      --replace "executable('rmlvo-to-keymap', 'test/rmlvo-to-keymap.c', dependencies: test_dep)" ""
+  '' else null;
+
   doCheck = false; # fails, needs unicode locale
 
   meta = with stdenv.lib; {
