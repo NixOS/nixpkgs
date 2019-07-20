@@ -1,51 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, pyrsistent
-, setuptools
-, six
-, functools32
-, setuptools_scm
-, perf
-, twisted
-, python
-}:
+{ stdenv, buildPythonPackage, fetchPypi, python
+, nose, mock, vcversioner, functools32 }:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "3.0.1";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03g20i1xfg4qdlk4475pl4pp7y0h37g1fbgs5qhy678q9xb822hc";
+    sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
   };
 
-  nativeBuildInputs = [
-    setuptools_scm
-  ];
+  checkInputs = [ nose mock vcversioner ];
+  propagatedBuildInputs = [ functools32 ];
 
-  propagatedBuildInputs = [
-    attrs
-    pyrsistent
-    setuptools
-    six
-    functools32
-  ];
-
-  checkInputs = [
-    twisted
-    perf
-  ];
-
-  checkPhase = ''
-    ${python.interpreter} setup.py test --test-suite=jsonschema.tests
+  postPatch = ''
+    substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py \
+      --replace "python" "${python.pythonForBuild.interpreter}"
   '';
 
-  meta = with lib; {
-    description = "An implementation of JSON Schema validation for Python";
+  checkPhase = ''
+    nosetests
+  '';
+
+  meta = with stdenv.lib; {
     homepage = https://github.com/Julian/jsonschema;
+    description = "An implementation of JSON Schema validation for Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }
