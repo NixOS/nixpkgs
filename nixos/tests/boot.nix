@@ -78,21 +78,21 @@ let
 in {
 
     biosCdrom = makeBootTest "bios-cdrom" {
-      cdrom = ''glob("${iso}/iso/*.iso")'';
+      cdrom = "$(echo ${iso}/iso/*.iso)";
     };
 
     biosUsb = makeBootTest "bios-usb" {
-      usb = ''glob("${iso}/iso/*.iso")'';
+      usb = "$(echo ${iso}/iso/*.iso)";
     };
 
     uefiCdrom = makeBootTest "uefi-cdrom" {
-      cdrom = ''glob("${iso}/iso/*.iso"'';
-      bios = ''"${pkgs.OVMF.fd}/FV/OVMF.fd"'';
+      cdrom = "$(echo ${iso}/iso/*.iso)";
+      bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
     };
 
     uefiUsb = makeBootTest "uefi-usb" {
-      usb = ''glob("${iso}/iso/*.iso")'';
-      bios = ''"${pkgs.OVMF.fd}/FV/OVMF.fd"'';
+      usb = "$(echo ${iso}/iso/*.iso)";
+      bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
     };
 
     biosNetboot = makeNetbootTest "bios" {};
