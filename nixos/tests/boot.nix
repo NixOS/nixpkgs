@@ -61,7 +61,8 @@ let
         ];
       };
       machineConfig = perlAttrs ({
-        qemuFlags = "-boot order=n -netdev user,id=net0,tftp=${ipxeBootDir}/,bootfile=netboot.ipxe -m 2000";
+        qemuFlags = "-boot order=n -m 2000";
+        netBackendArgs = "tftp=${ipxeBootDir},bootfile=netboot.ipxe";
       } // extraConfig);
     in
       makeTest {
@@ -100,6 +101,6 @@ in {
     uefiNetboot = makeNetbootTest "uefi" {
       bios = ''"${pkgs.OVMF.fd}/FV/OVMF.fd"'';
       # Custom ROM is needed for EFI PXE boot. I failed to understand exactly why, because QEMU should still use iPXE for EFI.
-      netRomFile = ''"${pkgs.ipxe}/ipxe.efirom"'';
+      netFrontendArgs = ''romfile="${pkgs.ipxe}/ipxe.efirom"'';
     };
 }
