@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper }:
+{ stdenv, fetchurl, makeWrapper, autoPatchelfHook }:
 
 let
   version = "3.8.0";
@@ -19,44 +19,20 @@ stdenv.mkDerivation {
       else "0s835dnaw662sb2v5ahqiwry0qjcpl7ff9krnhbw2iblsbqis3fj";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
 
-  buildPhase =
-    ''
-      echo "patching ts3server"
-      patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
-        --force-rpath \
-        ts3server
-      cp tsdns/tsdnsserver tsdnsserver
-      patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
-        --force-rpath \
-        tsdnsserver
-    '';
+  buildInputs = [ stdenv.cc.cc ];
 
-  installPhase =
-    ''
-      # Delete unecessary libraries - these are provided by nixos.
-      #rm *.so*
+  installPhase = ''
+    # Install files.
+    mkdir -p $out/lib/teamspeak
+    mv * $out/lib/teamspeak/
 
-      # Install files.
-      mkdir -p $out/lib/teamspeak
-      mv * $out/lib/teamspeak/
-
-      # Make symlinks to the binaries from bin.
-      mkdir -p $out/bin/
-      ln -s $out/lib/teamspeak/ts3server $out/bin/ts3server
-      ln -s $out/lib/teamspeak/tsdnsserver $out/bin/tsdnsserver
-
-      wrapProgram $out/lib/teamspeak/ts3server --prefix LD_LIBRARY_PATH : $out/lib/teamspeak
-      wrapProgram $out/lib/teamspeak/tsdnsserver --prefix LD_LIBRARY_PATH : $out/lib/tsdnsserver
-    '';
-
-  dontStrip = true;
-  dontPatchELF = true;
+    # Make symlinks to the binaries from bin.
+    mkdir -p $out/bin/
+    ln -s $out/lib/teamspeak/ts3server $out/bin/ts3server
+    ln -s $out/lib/teamspeak/tsdnsserver $out/bin/tsdnsserver
+  '';
 
   meta = {
     description = "TeamSpeak voice communication server";
