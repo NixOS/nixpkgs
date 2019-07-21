@@ -12,10 +12,10 @@ let
   }).gradle_4_10;
 
   makePackage = args: stdenv.mkDerivation ({
-    version = "${major}${update}-${repover}";
+    version = "${major}${update}-${build}";
 
     src = fetchurl {
-      url = "http://hg.openjdk.java.net/openjfx/${major}/rt/archive/${repover}.tar.gz";
+      url = "https://hg.openjdk.java.net/openjfx/${major}/rt/archive/${repover}.tar.gz";
       sha256 = "1h7qsylr7rnwnbimqjyn3whszp9kv4h3gpicsrb3mradxc9yv194";
     };
 
