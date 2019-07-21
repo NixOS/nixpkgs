@@ -1,22 +1,24 @@
 { stdenv, fetchgit, libX11 }:
 
 stdenv.mkDerivation {
-  name = "disk-indicator-2014-05-19";
+  name = "disk-indicator-2018-12-18";
 
   src = fetchgit {
     url = git://github.com/MeanEYE/Disk-Indicator.git;
-    rev = "51ef4afd8141b8d0659cbc7dc62189c56ae9c2da";
-    sha256 = "10jx6mx9qarn21p2l2jayxkn1gmqhvck1wymgsr4jmbwxl8ra5kd";
+    rev = "ec2d2f6833f038f07a72d15e2d52625c23e10b12";
+    sha256 = "08q9cnjgxscx5rcn1nxdzsb81mam2yh8aqff4sr5a7vs24is06ki";
   };
 
   buildInputs = [ libX11 ];
 
   patchPhase = ''
-    substituteInPlace ./makefile --replace "COMPILER=c99" "COMPILER=gcc -std=c99"
-    substituteInPlace ./makefile --replace "COMPILE_FLAGS=" "COMPILE_FLAGS=-O2 "
+    substituteInPlace ./Makefile --replace "COMPILER=c99" "COMPILER=gcc -std=c99"
+    substituteInPlace ./Makefile --replace "COMPILE_FLAGS=" "COMPILE_FLAGS=-O2 "
+    patchShebangs ./configure.sh
   '';
 
-  buildPhase = "make -f makefile";
+  configurePhase = "./configure.sh --all";
+  buildPhase = "make -f Makefile";
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
