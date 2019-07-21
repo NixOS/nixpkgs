@@ -16,6 +16,7 @@
 , enableThreads ? true
 , enableSmpSupport ? true
 , enableKernelPoll ? true
+, ssl ? openssl,
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
 , wxSupport ? true, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
@@ -50,7 +51,7 @@ in stdenv.mkDerivation ({
 
   nativeBuildInputs = [ autoconf makeWrapper perl gnum4 libxslt libxml2 ];
 
-  buildInputs = [ ncurses openssl ]
+  buildInputs = [ ncurses ssl ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
