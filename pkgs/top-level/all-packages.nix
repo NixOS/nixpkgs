@@ -4042,6 +4042,8 @@ in
 
   klick = callPackage ../applications/audio/klick { };
 
+  klystrack = callPackage ../applications/audio/klystrack { };
+
   knockknock = callPackage ../tools/security/knockknock { };
 
   kore = callPackage ../development/web/kore { };
