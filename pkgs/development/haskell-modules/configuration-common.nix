@@ -386,6 +386,7 @@ self: super: {
   xsd = dontCheck super.xsd;
   snap-core = dontCheck super.snap-core;
   sourcemap = dontCheck super.sourcemap;
+  zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
 
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
