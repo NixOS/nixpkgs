@@ -4651,6 +4651,8 @@ in {
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
+  setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
+
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
   shippai = callPackage ../development/python-modules/shippai {};
