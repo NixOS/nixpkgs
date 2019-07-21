@@ -53,6 +53,14 @@ self: super: let
 
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
+  gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
+  gcc5Stdenv = foldl (flip id) super.gcc5Stdenv staticAdapters;
+  gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
+  gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
+  gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;
+  gcc9Stdenv = foldl (flip id) super.gcc9Stdenv staticAdapters;
+  clangStdenv = foldl (flip id) super.clangStdenv staticAdapters;
+  libcxxStdenv = foldl (flip id) super.libcxxStdenv staticAdapters;
 
   haskell = super.haskell // {
     packageOverrides = composeExtensions
