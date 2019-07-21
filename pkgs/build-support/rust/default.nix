@@ -14,6 +14,7 @@
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
 , buildType ? "release"
+, meta ? {}
 
 , cargoVendorDir ? null
 , ... } @ args:
@@ -147,4 +148,9 @@ in stdenv.mkDerivation (args // {
   '';
 
   passthru = { inherit cargoDeps; } // (args.passthru or {});
+
+  meta = {
+    # default to Rust's platforms
+    platforms = rustc.meta.platforms;
+  } // meta;
 })
