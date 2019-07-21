@@ -62,6 +62,7 @@ rec {
         ];
         mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
+      static = true;
     };
 
   /* Modify a stdenv so that the specified attributes are added to
