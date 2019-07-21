@@ -1944,9 +1944,9 @@ in
     enableExtraPlugins = true;
   });
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor { 
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor {
     # kindlegen is unfree, don't enable by default
-    kindlegen = null; 
+    kindlegen = null;
     # epubcheck pulls in Java, which is problematic on some platforms
     epubcheck = null;
   };
@@ -5491,6 +5491,10 @@ in
 
   pythonSexy = pythonPackages.libsexy;
 
+  pyditz = callPackage ../applications/misc/pyditz {
+    pythonPackages = python27Packages;
+  };
+
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   pywal = with python3Packages; toPythonApplication pywal;
@@ -6512,7 +6516,9 @@ in
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
 
-  video2midi = callPackage ../tools/audio/video2midi { };
+  video2midi = callPackage ../tools/audio/video2midi {
+    pythonPackages = python3Packages;
+  };
 
   vifm = callPackage ../applications/misc/vifm { };
 
@@ -8100,6 +8106,9 @@ in
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-raze = callPackage ../development/tools/rust/cargo-raze {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
 
@@ -8303,6 +8312,10 @@ in
   dhallPackages = import ../development/dhall-modules { inherit pkgs; };
 
   duktape = callPackage ../development/interpreters/duktape { };
+
+  evcxr = callPackage ../development/interpreters/evcxr {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   beam = callPackage ./beam-packages.nix { };
 
@@ -16624,7 +16637,9 @@ in
 
   plano-theme = callPackage ../data/themes/plano { };
 
-  plata-theme = callPackage ../data/themes/plata {};
+  plata-theme = callPackage ../data/themes/plata {
+    inherit (mate) marco;
+  };
 
   poly = callPackage ../data/fonts/poly { };
 
@@ -21812,6 +21827,8 @@ in
   njam = callPackage ../games/njam { };
 
   newtonwars = callPackage ../games/newtonwars { };
+
+  nxengine-evo = callPackage ../games/nxengine-evo { };
 
   odamex = callPackage ../games/odamex { };
 

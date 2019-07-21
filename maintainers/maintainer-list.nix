@@ -542,6 +542,15 @@
     github = "averelld";
     name = "averelld";
   };
+  avitex = {
+    email = "theavitex@gmail.com";
+    github = "avitex";
+    name = "avitex";
+    keys = [{
+      longkeyid = "rsa4096/0x8B366C443CABE942";
+      fingerprint = "271E 136C 178E 06FA EA4E  B854 8B36 6C44 3CAB E942";
+    }];
+  };
   avnik = {
     email = "avn@avnik.info";
     github = "avnik";
@@ -4147,6 +4156,11 @@
     github = "proglodyte";
     name = "Proglodyte";
   };
+  protoben = {
+    email = "protob3n@gmail.com";
+    github = "protoben";
+    name = "Ben Hamlin";
+  };
   prusnak = {
     email = "stick@gk2.sk";
     github = "prusnak";
@@ -4644,6 +4658,11 @@
     email = "nixos@scriptkiddi.de";
     github = "scriptkiddi";
     name = "Fritz Otlinghaus";
+  };
+  scubed2 = {
+    email = "scubed2@gmail.com";
+    github = "scubed2";
+    name = "Sterling Stein";
   };
   sdll = {
     email = "sasha.delly@gmail.com";

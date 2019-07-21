@@ -248,7 +248,6 @@ in
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
   tinydns = handleTest ./tinydns.nix {};
-  tomcat = handleTest ./tomcat.nix {};
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
   udisks2 = handleTest ./udisks2.nix {};

@@ -1673,6 +1673,8 @@ in {
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
+  cerberus11 = callPackage ../development/python-modules/cerberus11 { };
+
   certifi = callPackage ../development/python-modules/certifi { };
 
   characteristic = callPackage ../development/python-modules/characteristic { };
@@ -2778,6 +2780,8 @@ in {
   django-sites = callPackage ../development/python-modules/django-sites { };
 
   django-sr = callPackage ../development/python-modules/django-sr { };
+
+  django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
