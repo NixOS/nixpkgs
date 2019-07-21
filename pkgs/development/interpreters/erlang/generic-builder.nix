@@ -16,7 +16,7 @@
 , enableThreads ? true
 , enableSmpSupport ? true
 , enableKernelPoll ? true
-, ssl ? openssl,
+, ssl ? openssl
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
 , wxSupport ? true, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
