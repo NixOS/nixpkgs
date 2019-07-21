@@ -2716,6 +2716,49 @@ nativeBuildInputs = [ breakpointHook ];
     </varlistentry>
     <varlistentry>
      <term>
+      installShellFiles
+     </term>
+     <listitem>
+      <para>
+       This hook helps with installing manpages and shell completion files. It
+       exposes 2 shell functions <literal>installManPage</literal> and
+       <literal>installShellCompletion</literal> that can be used from your
+       <literal>postInstall</literal> hook.
+      </para>
+      <para>
+       The <literal>installManPage</literal> function takes one or more paths
+       to manpages to install. The manpages must have a section suffix, and may
+       optionally be compressed (with <literal>.gz</literal> suffix). This
+       function will place them into the correct directory.
+      </para>
+      <para>
+       The <literal>installShellCompletion</literal> function takes one or more
+       paths to shell completion files. By default it will autodetect the shell
+       type from the completion file extension, but you may also specify it by
+       passing one of <literal>--bash</literal>, <literal>--fish</literal>, or
+       <literal>--zsh</literal>. These flags apply to all paths listed after
+       them (up until another shell flag is given). Each path may also have a
+       custom installation name provided by providing a flag <literal>--name
+       NAME</literal> before the path. If this flag is not provided, zsh
+       completions will be renamed automatically such that
+       <literal>foobar.zsh</literal> becomes <literal>_foobar</literal>.
+<programlisting>
+nativeBuildInputs = [ installShellFiles ];
+postInstall = ''
+  installManPage doc/foobar.1 doc/barfoo.3
+  # explicit behavior
+  installShellCompletion --bash --name foobar.bash share/completions.bash
+  installShellCompletion --fish --name foobar.fish share/completions.fish
+  installShellCompletion --zsh --name _foobar share/completions.zsh
+  # implicit behavior
+  installShellCompletion share/completions/foobar.{bash,fish,zsh}
+'';
+</programlisting>
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       libiconv, libintl
      </term>
      <listitem>

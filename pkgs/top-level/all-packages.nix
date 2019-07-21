@@ -360,6 +360,8 @@ in
     inherit url;
   };
 
+  installShellFiles = callPackage ../build-support/install-shell-files {};
+
   lazydocker = callPackage ../tools/misc/lazydocker { };
 
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
