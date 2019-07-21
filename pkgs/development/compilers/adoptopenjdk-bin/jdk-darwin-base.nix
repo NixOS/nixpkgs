@@ -46,9 +46,6 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
   passthru.home = result;
 
-  # for backward compatibility
-  passthru.architecture = "";
-
   meta = with stdenv.lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
