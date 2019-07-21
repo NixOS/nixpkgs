@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
   postInstall = ''
-    wrapProgram $out/lib/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
+    wrapProgram $out/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
   '';
 
   enableParallelBuilding = true;
