@@ -3280,6 +3280,8 @@ in
 
   gitea = callPackage ../applications/version-management/gitea { };
 
+  gl2ps = callPackage ../development/libraries/gl2ps { };
+
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glmark2 = callPackage ../tools/graphics/glmark2 { };

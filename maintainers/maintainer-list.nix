@@ -5386,6 +5386,15 @@
     github = "twey";
     name = "James ‘Twey’ Kay";
   };
+  twhitehead = {
+    name = "Tyson Whitehead";
+    email = "twhitehead@gmail.com";
+    github = "twhitehead";
+    keys = [{
+      longkeyid = "rsa2048/0x594258F0389D2802";
+      fingerprint = "E631 8869 586F 99B4 F6E6  D785 5942 58F0 389D 2802";
+    }];
+  };
   typetetris = {
     email = "ericwolf42@mail.com";
     github = "typetetris";
