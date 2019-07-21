@@ -10,7 +10,7 @@
 
 let
   major = "11";
-  update = ".0.3";
+  update = ".0.4";
   build = "ga";
 
   openjdk = stdenv.mkDerivation rec {
