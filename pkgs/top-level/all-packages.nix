@@ -782,6 +782,8 @@ in
 
   ezstream = callPackage ../tools/audio/ezstream { };
 
+  fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
+
   genymotion = callPackage ../development/mobile/genymotion { };
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
