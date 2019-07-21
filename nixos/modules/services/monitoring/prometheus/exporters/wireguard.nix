@@ -23,12 +23,24 @@ in {
         to set the peers up.
       '';
     };
+
+    singleSubnetPerField = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        By default, all allowed IPs and subnets are comma-separated in the
+        <literal>allowed_ips</literal> field. With this option enabled,
+        a single IP and subnet will be listed in fields like <literal>allowed_ip_0</literal>,
+        <literal>allowed_ip_1</literal> and so on.
+      '';
+    };
   };
   serviceOpts = {
     script = ''
       ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
         -p ${toString cfg.port} \
         ${optionalString cfg.verbose "-v"} \
+        ${optionalString cfg.singleSubnetPerField "-s"} \
         ${optionalString (cfg.wireguardConfig != null) "-n ${cfg.wireguardConfig}"}
     '';
 
