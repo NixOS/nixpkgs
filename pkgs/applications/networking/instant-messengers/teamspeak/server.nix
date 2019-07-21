@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     ];
     sha256 = if stdenv.is64bit
       then "1bzmqqqpwn6q2pvkrkkxq0ggs8crxbkwaxlggcdxjlyg95cyq8k1"
-      else "0s835dnaw662sb2v5ahqiwry0qjcpl7ff9krnhbw2iblsbqis3fj";
+      else "0p5rqwdsvbria5dzjjm5mj8vfy0zpfs669wpbwxd4g3n4vh03kyw";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
