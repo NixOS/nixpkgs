@@ -46,10 +46,6 @@ let
       # vda is a filesystem without partition table
       forceInstall = true;
     };
-    fileSystems."/mnt" = {
-      device = "/dev/vdb1";
-      options = [ "ro" ];
-    };
     nix.binaryCaches = lib.mkForce [ ];
     nix.extraOptions = ''
       hashed-mirrors =
