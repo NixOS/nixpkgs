@@ -8031,7 +8031,9 @@ in
 
   duktape = callPackage ../development/interpreters/duktape { };
 
-  evcxr = callPackage ../development/interpreters/evcxr { };
+  evcxr = callPackage ../development/interpreters/evcxr {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   beam = callPackage ./beam-packages.nix { };
 
