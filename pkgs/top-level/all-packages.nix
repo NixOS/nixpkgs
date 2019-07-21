@@ -3668,6 +3668,8 @@ in
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
+  helio-workstation = callPackage ../applications/audio/helio-workstation { };
+
   hevea = callPackage ../tools/typesetting/hevea { };
 
   hexd = callPackage ../tools/misc/hexd { };
