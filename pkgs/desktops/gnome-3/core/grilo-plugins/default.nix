@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0nync07gah3jkpb5ph5d3gwbygmabnih2m3hfz7lkvjl2l5pgpac";
+    sha256 = "1hv84b56qjic8vz8iz46ikhrxx31l29ilbr8dm5qcghbd8ikw8j1";
   };
 
   nativeBuildInputs = [
