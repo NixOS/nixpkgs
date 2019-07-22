@@ -125,10 +125,12 @@
    You will need to reboot after enabling this driver to prevent a clash with
    other kernel modules.
   </para>
+  <note>
   <para>
-   Note: for recent AMD GPUs you most likely want to keep either the defaults
+   For recent AMD GPUs you most likely want to keep either the defaults
    or <literal>"amdgpu"</literal> (both free).
   </para>
+  </note>
  </simplesect>
  <simplesect xml:id="sec-x11-touchpads">
   <title>Touchpads</title>
