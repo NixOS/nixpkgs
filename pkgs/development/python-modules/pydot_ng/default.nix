@@ -5,6 +5,8 @@
 , pytest
 , unittest2
 , pkgs
+, mock
+, substituteAll
 }:
 
 buildPythonPackage rec {
@@ -16,13 +18,23 @@ buildPythonPackage rec {
     sha256 = "8c8073b97aa7030c28118961e2c6c92f046e4cb57aeba7df87146f7baa6530c5";
   };
 
-  buildInputs = [ pytest unittest2 ];
+  patches = [ 
+    (substituteAll {
+      src = ./0001-graphviz_path.patch;
+      graphviz = "${pkgs.graphviz}/bin";
+    })
+  ];
+
+  postPatch =
+    ''
+    substituteInPlace pydot_ng/__init__.py \
+      --replace "NIX_GRAPHVIZ_PATH" "'${pkgs.graphviz}/bin'"
+    '';
+
+  checkInputs = [ pytest unittest2 mock ];
   propagatedBuildInputs = [ pkgs.graphviz pyparsing ];
 
-  checkPhase = ''
-    mkdir test/my_tests
-    py.test test
-  '';
+  checkPhase = "pytest test";
 
   meta = with stdenv.lib; {
     homepage = "https://pypi.python.org/pypi/pydot-ng";
