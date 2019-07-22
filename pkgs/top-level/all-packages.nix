@@ -17021,6 +17021,7 @@ in
 
   bitcoin = altcoins.bitcoin;
   clightning = altcoins.clightning;
+  lnd = altcoins.lnd;
 
   bitcoin-xt = altcoins.bitcoin-xt;
   cryptop = altcoins.cryptop;
