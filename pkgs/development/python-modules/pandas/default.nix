@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , python
+, pythonOlder
 , stdenv
 , pytest
 , glibcLocales
@@ -30,11 +31,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.24.2";
+  version = "0.25.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18imlm8xbhcbwy4wa957a1fkamrcb0z988z006jpfda3ki09z4ag";
+    sha256 = "15grgprsisq5rzkvy7bq0myi0rhb8cb41ylfg4iaa7jv5nnl2hwi";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -88,6 +89,8 @@ in buildPythonPackage rec {
     "test_locale"
     "test_clipboard"
   ]);
+
+  disabled = pythonOlder "3.5";
 
   doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
