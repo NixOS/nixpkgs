@@ -1,5 +1,6 @@
 { pkgs, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
-, libxml2, libxslt, ncurses, openssl, perl, autoconf
+, libxml2, libxslt, ncurses, perl, autoconf
+, openssl ? null
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , libGLU_combined ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
@@ -16,7 +17,7 @@
 , enableThreads ? true
 , enableSmpSupport ? true
 , enableKernelPoll ? true
-, ssl ? openssl
+, openssl ? openssl
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
 , wxSupport ? true, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
@@ -51,7 +52,7 @@ in stdenv.mkDerivation ({
 
   nativeBuildInputs = [ autoconf makeWrapper perl gnum4 libxslt libxml2 ];
 
-  buildInputs = [ ncurses ssl ]
+  buildInputs = [ ncurses openssl ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
