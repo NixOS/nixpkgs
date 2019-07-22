@@ -31,12 +31,13 @@ mkDerivation rec {
     dtkcore
   ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags \
-      INCLUDE_INSTALL_DIR=$out/include \
-      LIB_INSTALL_DIR=$out/lib \
-      QT_HOST_DATA=$out"
-  '';
+  outRef = placeholder "out";
+
+  qmakeFlags = [
+    "INCLUDE_INSTALL_DIR=${outRef}/include"
+    "LIB_INSTALL_DIR=${outRef}/lib"
+    "QT_HOST_DATA=${outRef}"
+  ];
 
   enableParallelBuilding = true;
 
