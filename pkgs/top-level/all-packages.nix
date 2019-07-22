@@ -6262,6 +6262,8 @@ in
 
   theharvester = callPackage ../tools/security/theharvester { };
 
+  inherit (nodePackages) thelounge;
+
   thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
