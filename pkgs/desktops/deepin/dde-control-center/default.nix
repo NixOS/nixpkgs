@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, deepin, qttools, qtdeclarative,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, deepin, qttools, qtdeclarative,
  networkmanager, qtsvg, qtx11extras,  dtkcore, dtkwidget, geoip, gsettings-qt,
  dde-network-utils, networkmanager-qt, xorg, mtdev, fontconfig, freetype, dde-api,
  dde-daemon, qt5integration, deepin-desktop-base, deepin-desktop-schemas, dbus,
  systemd, dde-qt-dbus-factory, qtmultimedia, qtbase, glib, gnome3, which,
- substituteAll, wrapGAppsHook, tzdata
+ substituteAll, tzdata, wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-control-center";
   version = "4.10.11";

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "udisks2-qt5";
   version = "0.0.1";

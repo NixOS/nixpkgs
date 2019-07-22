@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, dtkcore,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qtx11extras, dtkcore,
   deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dtkwm";
   version = "2.0.11";

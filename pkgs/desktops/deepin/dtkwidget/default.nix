@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, qtmultimedia,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, qtmultimedia,
   qtsvg, qtx11extras, librsvg, libstartup_notification, gsettings-qt,
   dde-qt-dbus-factory, dtkcore, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dtkwidget";
   version = "2.0.14";

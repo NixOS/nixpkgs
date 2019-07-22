@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, qttools,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, qttools,
   deepin-gettext-tools, dtkcore, dtkwidget, deepin
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-calendar";
   version = "1.2.10";
