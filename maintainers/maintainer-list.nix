@@ -1148,6 +1148,19 @@
     github = "cwoac";
     name = "Oliver Matthews";
   };
+  cypherpunk2140 = {
+    email = "stefan.mihaila@pm.me";
+    github = "cypherpunk2140";
+    name = "Ștefan D. Mihăilă";
+    keys = [
+      { longkeyid = "rsa4096/6E68A39BF16A3ECB";
+        fingerprint = "CBC9 C7CC 51F0 4A61 3901 C723 6E68 A39B F16A 3ECB";
+      }
+      { longkeyid = "rsa4096/6220AD7846220A52";
+        fingerprint = "7EAB 1447 5BBA 7DDE 7092 7276 6220 AD78 4622 0A52";
+      }
+    ];
+  };
   dalance = {
     email = "dalance@gmail.com";
     github = "dalance";
