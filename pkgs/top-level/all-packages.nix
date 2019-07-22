@@ -663,6 +663,8 @@ in
 
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
+  brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
