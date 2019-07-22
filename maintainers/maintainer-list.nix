@@ -1237,6 +1237,11 @@
     github = "deepfire";
     name = "Kosyrev Serge";
   };
+  delan = {
+    name = "Delan Azabani";
+    email = "delan@azabani.com";
+    github = "delan";
+  };
   delroth = {
     email = "delroth@gmail.com";
     github = "delroth";
