@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qtx11extras, libSM,
-  mtdev, cairo, deepin }:
+  mtdev, cairo, deepin, qtbase }:
 
 mkDerivation rec {
   name = "${pname}-${version}";
@@ -25,9 +25,9 @@ mkDerivation rec {
     cairo
   ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags INSTALL_PATH=$out/$qtPluginPrefix/platforms"
-  '';
+  qmakeFlags = [
+    "INSTALL_PATH=${placeholder ''out''}/${qtbase.qtPluginPrefix}/platforms"
+  ];
 
   enableParallelBuilding = true;
 
