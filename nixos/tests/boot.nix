@@ -17,7 +17,7 @@ let
         ];
     }).config.system.build.isoImage;
 
-  perlAttrs = params: "{ ${concatStringsSep "," (mapAttrsToList (name: param: "${name} => '${toString param}'") params)} }";
+  perlAttrs = params: "{ ${concatStringsSep ", " (mapAttrsToList (name: param: "${name} => ${builtins.toJSON param}") params)} }";
 
   makeBootTest = name: extraConfig:
     let
@@ -61,7 +61,8 @@ let
         ];
       };
       machineConfig = perlAttrs ({
-        qemuFlags = "-boot order=n -netdev user,id=net0,tftp=${ipxeBootDir}/,bootfile=netboot.ipxe -m 2000";
+        qemuFlags = "-boot order=n -m 2000";
+        netBackendArgs = "tftp=${ipxeBootDir},bootfile=netboot.ipxe";
       } // extraConfig);
     in
       makeTest {
@@ -78,28 +79,28 @@ let
 in {
 
     biosCdrom = makeBootTest "bios-cdrom" {
-      cdrom = ''glob("${iso}/iso/*.iso")'';
+      cdrom = "${iso}/iso/${iso.isoName}";
     };
 
     biosUsb = makeBootTest "bios-usb" {
-      usb = ''glob("${iso}/iso/*.iso")'';
+      usb = "${iso}/iso/${iso.isoName}";
     };
 
     uefiCdrom = makeBootTest "uefi-cdrom" {
-      cdrom = ''glob("${iso}/iso/*.iso"'';
-      bios = ''"${pkgs.OVMF.fd}/FV/OVMF.fd"'';
+      cdrom = "${iso}/iso/${iso.isoName}";
+      bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
     };
 
     uefiUsb = makeBootTest "uefi-usb" {
-      usb = ''glob("${iso}/iso/*.iso")'';
-      bios = ''"${pkgs.OVMF.fd}/FV/OVMF.fd"'';
+      usb = "${iso}/iso/${iso.isoName}";
+      bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
     };
 
     biosNetboot = makeNetbootTest "bios" {};
 
     uefiNetboot = makeNetbootTest "uefi" {
-      bios = ''"${pkgs.OVMF.fd}/FV/OVMF.fd"'';
+      bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
       # Custom ROM is needed for EFI PXE boot. I failed to understand exactly why, because QEMU should still use iPXE for EFI.
-      netRomFile = ''"${pkgs.ipxe}/ipxe.efirom"'';
+      netFrontendArgs = "romfile=${pkgs.ipxe}/ipxe.efirom";
     };
 }

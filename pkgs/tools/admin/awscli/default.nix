@@ -2,6 +2,7 @@
 , python
 , groff
 , less
+, fetchpatch
 }:
 
 let
@@ -27,6 +28,11 @@ let
           inherit version;
           sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
         };
+        # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
+        patches = lib.singleton (fetchpatch {
+          url = "https://github.com/yaml/pyyaml/commit/c5b135fe39d41cffbdc006f28ccb2032df6005e0.patch";
+          sha256 = "0x1v45rkmj194c41d1nqi3ihj9z4rsy8zvpfcd8p960g1fia7fhn";
+        });
       });
     };
   };

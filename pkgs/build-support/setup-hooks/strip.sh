@@ -25,7 +25,7 @@ _doStrip() {
 
         stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
         if [ -n "$stripDebugList" ]; then
-            stripDirs "$stripCmd" "$stripDebugList" "${stripDebugFlags:---strip-unneeded}"
+            stripDirs "$stripCmd" "$stripDebugList" "${stripDebugFlags:--S}"
         fi
 
         stripAllList=${stripAllList:-}

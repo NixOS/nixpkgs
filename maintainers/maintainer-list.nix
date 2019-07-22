@@ -542,6 +542,15 @@
     github = "averelld";
     name = "averelld";
   };
+  avitex = {
+    email = "theavitex@gmail.com";
+    github = "avitex";
+    name = "avitex";
+    keys = [{
+      longkeyid = "rsa4096/0x8B366C443CABE942";
+      fingerprint = "271E 136C 178E 06FA EA4E  B854 8B36 6C44 3CAB E942";
+    }];
+  };
   avnik = {
     email = "avn@avnik.info";
     github = "avnik";
@@ -1227,6 +1236,11 @@
     email = "_deepfire@feelingofgreen.ru";
     github = "deepfire";
     name = "Kosyrev Serge";
+  };
+  delan = {
+    name = "Delan Azabani";
+    email = "delan@azabani.com";
+    github = "delan";
   };
   delroth = {
     email = "delroth@gmail.com";
@@ -3272,6 +3286,11 @@
     email = "softs@metabarcoding.org";
     name = "Celine Mercier";
   };
+  metadark = {
+    email = "kira.bruneau@gmail.com";
+    name = "Kira Bruneau";
+    github = "metadark";
+  };
   mfossen = {
     email = "msfossen@gmail.com";
     github = "mfossen";
@@ -4142,6 +4161,11 @@
     github = "proglodyte";
     name = "Proglodyte";
   };
+  protoben = {
+    email = "protob3n@gmail.com";
+    github = "protoben";
+    name = "Ben Hamlin";
+  };
   prusnak = {
     email = "stick@gk2.sk";
     github = "prusnak";
@@ -4639,6 +4663,11 @@
     email = "nixos@scriptkiddi.de";
     github = "scriptkiddi";
     name = "Fritz Otlinghaus";
+  };
+  scubed2 = {
+    email = "scubed2@gmail.com";
+    github = "scubed2";
+    name = "Sterling Stein";
   };
   sdll = {
     email = "sasha.delly@gmail.com";
@@ -5361,6 +5390,15 @@
     email = "twey@twey.co.uk";
     github = "twey";
     name = "James ‘Twey’ Kay";
+  };
+  twhitehead = {
+    name = "Tyson Whitehead";
+    email = "twhitehead@gmail.com";
+    github = "twhitehead";
+    keys = [{
+      longkeyid = "rsa2048/0x594258F0389D2802";
+      fingerprint = "E631 8869 586F 99B4 F6E6  D785 5942 58F0 389D 2802";
+    }];
   };
   typetetris = {
     email = "ericwolf42@mail.com";

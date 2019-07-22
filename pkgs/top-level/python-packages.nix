@@ -1170,6 +1170,8 @@ in {
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
+  vdf = callPackage ../development/python-modules/vdf { };
+
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
@@ -1672,6 +1674,8 @@ in {
   celery = callPackage ../development/python-modules/celery { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
+
+  cerberus11 = callPackage ../development/python-modules/cerberus11 { };
 
   certifi = callPackage ../development/python-modules/certifi { };
 
@@ -2781,6 +2785,8 @@ in {
 
   django-sr = callPackage ../development/python-modules/django-sr { };
 
+  django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
+
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_tagging_0_4_3 = if
@@ -3814,6 +3820,8 @@ in {
 
   numba = callPackage ../development/python-modules/numba { };
 
+  numcodecs = callPackage ../development/python-modules/numcodecs { };
+
   numexpr = callPackage ../development/python-modules/numexpr { };
 
   Nuitka = callPackage ../development/python-modules/nuitka { };
@@ -3895,6 +3903,8 @@ in {
   WSME = callPackage ../development/python-modules/WSME { };
 
   zake = callPackage ../development/python-modules/zake { };
+
+  zarr = callPackage ../development/python-modules/zarr { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
 

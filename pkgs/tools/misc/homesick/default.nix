@@ -1,6 +1,6 @@
-{ lib, bundlerEnv, git}:
+{ lib, bundlerEnv, bundlerUpdateScript, git }:
 bundlerEnv {
-  name = "homesick-1.1.6";
+  pname = "homesick";
 
   gemdir = ./.;
 
@@ -9,6 +9,8 @@ bundlerEnv {
     rm $out/bin/thor
     sed 1a'ENV["PATH"] = "${git}/bin:#{ENV["PATH"] ? ":#{ENV["PATH"]}" : "" }"' -i $out/bin/homesick
   '';
+
+  passthru.updateScript = bundlerUpdateScript "homesick";
 
   meta = with lib; {
     description = "Your home directory is your castle. Don't leave your dotfiles behind";
@@ -20,7 +22,7 @@ bundlerEnv {
       '';
     homepage = https://github.com/technicalpickles/homesick;
     license = licenses.mit;
-    maintainers = with maintainers; [ aaronschif ];
+    maintainers = with maintainers; [ aaronschif nicknovitski ];
     platforms = platforms.unix;
   };
 }

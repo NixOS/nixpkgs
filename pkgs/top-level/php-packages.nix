@@ -189,11 +189,11 @@ let
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
-  mailparse = assert !isPhp73; buildPecl rec {
-    version = "3.0.2";
+  mailparse = buildPecl rec {
+    version = "3.0.3";
     pname = "mailparse";
 
-    sha256 = "0fw447ralqihsjnn0fm2hkaj8343cvb90v0d1wfclgz49256y6nq";
+    sha256 = "00nk14jbdbln93mx3ag691avc11ff94hkadrcv5pn51c6ihsxbmz";
   };
 
   memcached = buildPecl rec {

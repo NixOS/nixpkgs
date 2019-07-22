@@ -5,14 +5,14 @@
 , openssl, libsigcxx, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libtorrent-${version}";
-  version = "0.13.7";
+  pname = "libtorrent";
+  version = "0.13.8";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
-    repo = "libtorrent";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "027qanwcisxhx0bq8dn8cpg8563q0k2pm8ls278f04n7jqvvwkp0";
+    sha256 = "1h5y6ab3gs20yyprdfwcw8fh1c6czs4yrdj0kf54d2vp9qwz685r";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/rakshasa/libtorrent";
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";
 
     platforms = platforms.unix;

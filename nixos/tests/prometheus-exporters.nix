@@ -331,11 +331,12 @@ let
             inherit (snakeoil.peer1) publicKey;
           };
         };
+        systemd.services.prometheus-wireguard-exporter.after = [ "wireguard-wg0.service" ];
       };
       exporterTest = ''
         waitForUnit("prometheus-wireguard-exporter.service");
         waitForOpenPort(9586);
-        succeed("curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'");
+        waitUntilSucceeds("curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'");
       '';
     };
   };
