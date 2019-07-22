@@ -9801,6 +9801,8 @@ in
 
   teensy-loader-cli = callPackage ../development/tools/misc/teensy-loader-cli { };
 
+  terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
+
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
