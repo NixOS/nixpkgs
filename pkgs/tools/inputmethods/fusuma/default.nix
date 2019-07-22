@@ -1,4 +1,4 @@
-{ lib, bundlerApp, makeWrapper, libinput }:
+{ lib, bundlerApp, bundlerUpdateScript, makeWrapper, libinput }:
 
 bundlerApp {
   pname = "fusuma";
@@ -12,11 +12,13 @@ bundlerApp {
       --prefix PATH : ${lib.makeBinPath [ libinput ]}
   '';
 
+  passthru.updateScript = bundlerUpdateScript "fusuma";
+
   meta = with lib; {
     description = "Multitouch gestures with libinput driver on X11, Linux";
     homepage    = https://github.com/iberianpig/fusuma;
     license     = licenses.mit;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ jfrankenau nicknovitski ];
     platforms   = platforms.linux;
   };
 }

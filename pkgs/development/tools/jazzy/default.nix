@@ -1,12 +1,11 @@
-{ lib, bundlerApp, ruby }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
 bundlerApp rec {
-  inherit ruby;
   pname = "jazzy";
   gemdir = ./.;
   exes = [ "jazzy" ];
 
-  passthru.updateScript = ./update;
+  passthru.updateScript = bundlerUpdateScript "jazzy";
 
   meta = with lib; {
     description     = "A command-line utility that generates documentation for Swift or Objective-C";
@@ -16,6 +15,7 @@ bundlerApp rec {
     maintainers     = with maintainers; [
       peterromfeldhk
       lilyball
+      nicknovitski
     ];
   };
 }

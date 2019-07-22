@@ -8671,6 +8671,7 @@ in
   bundler = callPackage ../development/ruby-modules/bundler { };
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
+  bundlerUpdateScript = callPackage ../development/ruby-modules/bundler-update-script { };
 
   bundler-audit = callPackage ../tools/security/bundler-audit { };
 

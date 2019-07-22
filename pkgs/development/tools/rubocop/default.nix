@@ -1,4 +1,4 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
 bundlerEnv rec {
   pname = "rubocop";
@@ -6,6 +6,8 @@ bundlerEnv rec {
   inherit ruby;
 
   gemdir = ./.;
+
+  passthru.updateScript = bundlerUpdateScript "rubocop";
 
   meta = with lib; {
     description = "Automatic Ruby code style checking tool";
