@@ -195,6 +195,13 @@
      <xref linkend="opt-programs.zsh.loginShellInit" /> and <xref linkend="opt-programs.zsh.promptInit" /> may break if it relies on those options being set.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>prometheus-nginx-exporter</literal> package now uses the offical exporter provided by NGINX Inc.
+      Its metrics are differently structured and are incompatible to the old ones. For information about the metrics,
+      have a look at the <link xlink:href="https://github.com/nginxinc/nginx-prometheus-exporter">official repo</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

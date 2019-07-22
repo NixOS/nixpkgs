@@ -3,10 +3,11 @@
 , pkgs ? import ../.. { inherit system config; }
 }:
 
-with pkgs.lib;
-with import ../lib/testing.nix { inherit system pkgs; };
-
 let
+  inherit (import ../lib/testing.nix { inherit system pkgs; }) makeTest;
+  inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
+                     removeSuffix replaceChars singleton splitString;
+
   escape' = str: replaceChars [''"'' "$" "\n"] [''\\\"'' "\\$" ""] str;
 
 /*
@@ -73,7 +74,7 @@ let
       exporterTest = ''
         waitForUnit("prometheus-bind-exporter.service");
         waitForOpenPort(9119);
-        succeed("curl -sSf http://localhost:9119/metrics" | grep -q 'bind_query_recursions_total 0');
+        succeed("curl -sSf http://localhost:9119/metrics | grep -q 'bind_query_recursions_total 0'");
       '';
     };
 
@@ -311,6 +312,7 @@ let
       };
       exporterTest = ''
         waitForUnit("prometheus-varnish-exporter.service");
+        waitForOpenPort(6081);
         waitForOpenPort(9131);
         succeed("curl -sSf http://localhost:9131/metrics | grep -q 'varnish_up 1'");
       '';
