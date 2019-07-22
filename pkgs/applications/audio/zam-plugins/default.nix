@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "zam-plugins-${version}";
-  version = "3.10";
+  version = "3.11";
 
   src = fetchgit {
     url = "https://github.com/zamaudio/zam-plugins.git";
     deepClone = true;
-    rev = "a3321af1892a6994d64fb705e48ae8adf8d7df20";
-    sha256 = "0yqrs21ph2lx00p0jlc70qkmzfrnf9ihg1r3i9j5n2r903ljdg5p";
+    rev = "af338057e42dd5d07cba1889bfc74eda517c6147";
+    sha256 = "1qbskhcvy2k2xv0f32lw13smz5g72v0yy47zv6vnhnaiaqf3f2d5";
   };
 
   nativeBuildInputs = [ pkgconfig ];

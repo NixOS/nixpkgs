@@ -1,4 +1,4 @@
-{ lib, bundlerApp, bundler, bundix }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
 bundlerApp {
   pname = "xcpretty";
@@ -7,13 +7,7 @@ bundlerApp {
   exes = [ "xcpretty" ];
 
   passthru = {
-    updateScript = ''
-      set -e
-      echo
-      cd ${toString ./.}
-      ${bundler}/bin/bundle lock --update
-      ${bundix}/bin/bundix
-    '';
+    updateScript = bundlerUpdateScript "xcpretty";
   };
 
   meta = with lib; {

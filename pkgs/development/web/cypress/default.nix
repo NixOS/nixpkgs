@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip }:
+{ stdenv, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook }:
 
 stdenv.mkDerivation rec{
   pname = "cypress";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec{
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
 
   buildInputs = with xorg; [
     libXScrnSaver libXdamage libXtst

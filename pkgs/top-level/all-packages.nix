@@ -553,6 +553,8 @@ in
 
   ansifilter = callPackage ../tools/text/ansifilter {};
 
+  antora = nodePackages_10_x."@antora/cli";
+
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };
@@ -779,6 +781,8 @@ in
   esh = callPackage ../tools/text/esh { };
 
   ezstream = callPackage ../tools/audio/ezstream { };
+
+  fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
@@ -1944,9 +1948,9 @@ in
     enableExtraPlugins = true;
   });
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor { 
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor {
     # kindlegen is unfree, don't enable by default
-    kindlegen = null; 
+    kindlegen = null;
     # epubcheck pulls in Java, which is problematic on some platforms
     epubcheck = null;
   };
@@ -3279,6 +3283,8 @@ in
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   gitea = callPackage ../applications/version-management/gitea { };
+
+  gl2ps = callPackage ../development/libraries/gl2ps { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
@@ -5493,6 +5499,10 @@ in
 
   pythonSexy = pythonPackages.libsexy;
 
+  pyditz = callPackage ../applications/misc/pyditz {
+    pythonPackages = python27Packages;
+  };
+
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   pywal = with python3Packages; toPythonApplication pywal;
@@ -6514,7 +6524,9 @@ in
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
 
-  video2midi = callPackage ../tools/audio/video2midi { };
+  video2midi = callPackage ../tools/audio/video2midi {
+    pythonPackages = python3Packages;
+  };
 
   vifm = callPackage ../applications/misc/vifm { };
 
@@ -8102,6 +8114,9 @@ in
   cargo-make = callPackage ../development/tools/rust/cargo-make {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-raze = callPackage ../development/tools/rust/cargo-raze {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
 
@@ -8305,6 +8320,10 @@ in
   dhallPackages = import ../development/dhall-modules { inherit pkgs; };
 
   duktape = callPackage ../development/interpreters/duktape { };
+
+  evcxr = callPackage ../development/interpreters/evcxr {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   beam = callPackage ./beam-packages.nix { };
 
@@ -8654,6 +8673,7 @@ in
   bundler = callPackage ../development/ruby-modules/bundler { };
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
+  bundlerUpdateScript = callPackage ../development/ruby-modules/bundler-update-script { };
 
   bundler-audit = callPackage ../tools/security/bundler-audit { };
 
@@ -16626,7 +16646,9 @@ in
 
   plano-theme = callPackage ../data/themes/plano { };
 
-  plata-theme = callPackage ../data/themes/plata {};
+  plata-theme = callPackage ../data/themes/plata {
+    inherit (mate) marco;
+  };
 
   poly = callPackage ../data/fonts/poly { };
 
@@ -21815,6 +21837,8 @@ in
 
   newtonwars = callPackage ../games/newtonwars { };
 
+  nxengine-evo = callPackage ../games/nxengine-evo { };
+
   odamex = callPackage ../games/odamex { };
 
   oilrush = callPackage ../games/oilrush { };
@@ -22028,6 +22052,12 @@ in
 
   linux-steam-integration = callPackage ../games/linux-steam-integration {
     gtk = pkgs.gtk3;
+  };
+
+  protontricks = callPackage ../tools/package-management/protontricks {
+    inherit (python3Packages) buildPythonApplication vdf;
+    inherit (gnome3) zenity;
+    wine = wineWowPackages.minimal;
   };
 
   stepmania = callPackage ../games/stepmania {
@@ -23885,6 +23915,8 @@ in
   sane-backends-git = callPackage ../applications/graphics/sane/backends/git.nix (config.sane or {});
 
   brlaser = callPackage ../misc/cups/drivers/brlaser { };
+
+  fxlinuxprint = callPackage ../misc/cups/drivers/fxlinuxprint { };
 
   brscan4 = callPackage ../applications/graphics/sane/backends/brscan4 { };
 

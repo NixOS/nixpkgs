@@ -17,11 +17,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "2.6.1566.44-1";
+  version = "2.6.1566.49-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "0bqx78bikcgrpg7qg10jylxa582fcxiwah7g2151hadvy8xl15ab";
+    sha256 = "1hl7aqq3i6mkkg7sdcax26kn08p8mqwlq4xpg4v05ivdvyh5ac9d";
   };
 
   unpackPhase = ''
@@ -69,6 +69,8 @@ in stdenv.mkDerivation rec {
     cp -r usr/share/{applications,xfce4} "$out"/share
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace /usr/bin/${vivaldiName} "$out"/bin/vivaldi
+    substituteInPlace "$out"/share/applications/*.desktop \
+      --replace vivaldi-stable vivaldi
     local d
     for d in 16 22 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps

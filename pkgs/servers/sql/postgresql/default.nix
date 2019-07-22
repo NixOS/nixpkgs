@@ -6,6 +6,9 @@ let
       , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
       , pkgconfig, libxml2, tzdata
 
+      # This is important to obtain a version of `libpq` that does not depend on systemd.
+      , enableSystemd ? (lib.versionAtLeast "9.6" version && !stdenv.isDarwin)
+
       # for postgreql.pkgs
       , this, self, newScope, buildEnv
 
@@ -31,7 +34,7 @@ let
     buildInputs =
       [ zlib readline openssl libxml2 makeWrapper ]
       ++ lib.optionals icuEnabled [ icu ]
-      ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ]
+      ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = lib.optionals icuEnabled [ pkgconfig ];
@@ -51,7 +54,7 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
-      (lib.optionalString (atLeast "9.6" && !stdenv.isDarwin) "--with-systemd")
+      (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals icuEnabled [ "--with-icu" ];
 
@@ -151,6 +154,9 @@ let
     # below. See #22653
     pathsToLink = ["/" "/bin"];
 
+    # Note: the duplication of executables is about 4MB size.
+    # So a nicer solution was patching postgresql to allow setting the
+    # libdir explicitely.
     postBuild = ''
       mkdir -p $out/bin
       rm $out/bin/{pg_config,postgres,pg_ctl}

@@ -100,6 +100,7 @@ in
   graphene = handleTest ./graphene.nix {};
   grafana = handleTest ./grafana.nix {};
   graphite = handleTest ./graphite.nix {};
+  graylog = handleTest ./graylog.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
@@ -247,8 +248,8 @@ in
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
+  tiddlywiki = handleTest ./tiddlywiki.nix {};
   tinydns = handleTest ./tinydns.nix {};
-  tomcat = handleTest ./tomcat.nix {};
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
   udisks2 = handleTest ./udisks2.nix {};

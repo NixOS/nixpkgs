@@ -4,7 +4,7 @@ with lib;
   options.xdg.portal = {
     enable =
       mkEnableOption "<link xlink:href='https://github.com/flatpak/xdg-desktop-portal'>xdg desktop integration</link>"//{
-        default = true;
+        default = config.services.xserver.enable;
       };
 
     extraPortals = mkOption {
