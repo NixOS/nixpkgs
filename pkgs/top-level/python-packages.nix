@@ -5630,6 +5630,8 @@ in {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
+  snakebite = callPackage ../development/python-modules/snakebite { };
+
   snapperGUI = callPackage ../development/python-modules/snappergui { };
 
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
