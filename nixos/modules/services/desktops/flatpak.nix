@@ -38,5 +38,13 @@ in {
       "$HOME/.local/share/flatpak/exports"
       "/var/lib/flatpak/exports"
     ];
+
+    users.users.flatpak = {
+      description = "Flatpak system helper";
+      group = "flatpak";
+      isSystemUser = true;
+    };
+
+    users.groups.flatpak = { };
   };
 }
