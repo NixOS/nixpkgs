@@ -1111,6 +1111,17 @@ let
     };
   };
 
+  ghcid = buildVimPluginFrom2Nix {
+    pname = "ghcid";
+    version = "2019-07-04";
+    src = fetchFromGitHub {
+      owner = "ndmitchell";
+      repo = "ghcid";
+      rev = "08dff021a806c252d8eeccf44fa30e8d4118b137";
+      sha256 = "05w4lqqs25m10rpjglkm1ggyssl9kig0nbd0qkg0l38zhc87afjr";
+    };
+  };
+
   ghcmod-vim = buildVimPluginFrom2Nix {
     pname = "ghcmod-vim";
     version = "2016-06-19";
