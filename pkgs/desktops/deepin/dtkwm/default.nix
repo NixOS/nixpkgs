@@ -23,12 +23,13 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags \
-      QT_HOST_DATA=$out \
-      INCLUDE_INSTALL_DIR=$out/include \
-      LIB_INSTALL_DIR=$out/lib"
-  '';
+  outRef = placeholder "out";
+
+  qmakeFlags = [
+    "QT_HOST_DATA=${outRef}"
+    "INCLUDE_INSTALL_DIR=${outRef}/include"
+    "LIB_INSTALL_DIR=${outRef}/lib"
+  ];
 
   passthru.updateScript = deepin.updateScript { inherit name; };
 
