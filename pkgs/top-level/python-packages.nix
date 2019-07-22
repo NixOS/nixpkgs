@@ -2137,6 +2137,8 @@ in {
 
   demjson = callPackage ../development/python-modules/demjson { };
 
+  deprecated = callPackage ../development/python-modules/deprecated { };
+
   deprecation = callPackage ../development/python-modules/deprecation { };
 
   derpconf = callPackage ../development/python-modules/derpconf { };
