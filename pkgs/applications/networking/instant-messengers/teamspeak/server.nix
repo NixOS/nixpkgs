@@ -1,13 +1,10 @@
-{ stdenv, fetchurl, makeWrapper, autoPatchelfHook }:
+{ stdenv, fetchurl, autoPatchelfHook }:
 
 let
-  version = "3.8.0";
   arch = if stdenv.is64bit then "amd64" else "x86";
-  libDir = if stdenv.is64bit then "lib64" else "lib";
-in
-
-stdenv.mkDerivation {
-  name = "teamspeak-server-${version}";
+in stdenv.mkDerivation rec {
+  pname = "teamspeak-server";
+  version = "3.8.0";
 
   src = fetchurl {
     urls = [
@@ -19,9 +16,9 @@ stdenv.mkDerivation {
       else "0p5rqwdsvbria5dzjjm5mj8vfy0zpfs669wpbwxd4g3n4vh03kyw";
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
-
   buildInputs = [ stdenv.cc.cc ];
+
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
     # Install files.
