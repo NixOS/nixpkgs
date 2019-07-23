@@ -7,7 +7,7 @@ let
 in {
 
   options.services.greenclip = {
-    enable = mkEnableOption "Whether to enable the greenclip daemon that will listen to selections";
+    enable = mkEnableOption "Greenclip daemon";
 
     package = mkOption {
       type = types.package;
