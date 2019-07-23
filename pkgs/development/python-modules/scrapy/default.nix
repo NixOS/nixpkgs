@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, glibcLocales, mock, pytest, botocore,
+{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, mock, pytest, botocore,
   testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
   service-identity, parsel, pydispatcher, cssselect, lib }:
 buildPythonPackage rec {
-  version = "1.7.1";
+  version = "1.7.2";
   pname = "Scrapy";
 
   checkInputs = [ glibcLocales mock pytest botocore testfixtures pillow ];
@@ -16,12 +16,6 @@ buildPythonPackage rec {
     # root and readonly. As a consequence scrapy can't edit the
     # project templates.
     ./permissions-fix.patch
-
-    # Fix configparser import for python2. See: https://github.com/scrapy/scrapy/pull/3887
-    (fetchpatch {
-      url = "https://github.com/scrapy/scrapy/commit/21345dc9ec60dcc1cd2e5c0eace5788aa502ce23.patch";
-      sha256 = "09834rcjyggvyj6zignvfga2xbqkknygly5p4a96k2mvz0xn3v6z";
-    })
   ];
 
   LC_ALL="en_US.UTF-8";
@@ -37,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "da8987d199092c3bb33d4d1d021507cd933aa67f5177e2d36f31343e8a6bd7f1";
+    sha256 = "7a4ed68cfb44dc86e1895f0fb46257ee4adb1090754ac21faec205763f054464";
   };
 
   postInstall = ''
