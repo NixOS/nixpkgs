@@ -553,7 +553,7 @@ in
 
   ansifilter = callPackage ../tools/text/ansifilter {};
 
-  antora = nodePackages_10_x."@antora/cli";
+  antora = callPackage ../development/tools/documentation/antora {};
 
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
