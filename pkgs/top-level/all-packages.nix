@@ -17585,6 +17585,18 @@ in
   emacsPackages = emacs26Packages;
   emacsPackagesNg = emacs26PackagesNg;
 
+  emacsHead = callPackage ../applications/editors/emacs/head.nix {
+    # use override to enable additional features
+    libXaw = xorg.libXaw;
+    Xaw3d = null;
+    gconf = null;
+    alsaLib = null;
+    imagemagick = null;
+    acl = null;
+    gpm = null;
+    inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
+  };
+
   emacs26 = callPackage ../applications/editors/emacs {
     # use override to enable additional features
     libXaw = xorg.libXaw;
