@@ -5090,6 +5090,8 @@ in
 
   oppai-ng = callPackage ../tools/misc/oppai-ng { };
 
+  update-dotdee = with python3Packages; toPythonApplication update-dotdee;
+
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
   opae = callPackage ../development/libraries/opae { };

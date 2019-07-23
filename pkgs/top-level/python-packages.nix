@@ -4807,6 +4807,8 @@ in {
 
   update-copyright = callPackage ../development/python-modules/update-copyright {};
 
+  update-dotdee = callPackage ../development/python-modules/update-dotdee { };
+
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
   uproot = callPackage ../development/python-modules/uproot {};
