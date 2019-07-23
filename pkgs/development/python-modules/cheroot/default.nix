@@ -1,39 +1,30 @@
-{ stdenv, fetchPypi, buildPythonPackage, fetchpatch
-, more-itertools, six
-, pytest, pytestcov, portend
-, backports_unittest-mock
+{ stdenv, fetchPypi, buildPythonPackage
+, more-itertools, six, setuptools_scm, setuptools-scm-git-archive
+, pytest, pytestcov, portend, pytest-testmon, pytest-mock
+, backports_unittest-mock, pyopenssl, requests, trustme, requests-unixsocket
 , backports_functools_lru_cache }:
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "6.3.3";
+  version = "6.5.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e3ac15e1efffc81425a693e99b3c09d7ea4bf947255d8d4c38e2cf76f3a4d25";
+    sha256 = "f6a85e005adb5bc5f3a92b998ff0e48795d4d98a0fbb7edde47a7513d4100601";
   };
 
-  patches = fetchpatch {
-    name = "cheroot-fix-setup-python3.patch";
-    url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/cheroot-fix-setup-python3.patch?h=packages/python-cheroot&id=9b33cb0885b3c0d91adeacae23761a4321eb0e64";
-    sha256 = "1rlgz0qln536y00mfqlf0i9hz3f53id73wh47cg5q2vcsw1w2bpc";
-  };
+  nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
 
   propagatedBuildInputs = [ more-itertools six backports_functools_lru_cache ];
 
-  checkInputs = [ pytest pytestcov portend backports_unittest-mock ];
+  checkInputs = [ pytest pytestcov portend backports_unittest-mock pytest-mock pytest-testmon pyopenssl requests trustme requests-unixsocket ];
 
-# Disable testmon, it needs pytest-testmon, which we do not currently have in nikpkgs,
-# and is only used to skip some tests that are already known to work.
-  postPatch = ''
-    substituteInPlace "./pytest.ini" --replace "--testmon" ""
-    substituteInPlace setup.py --replace "use_scm_version=True" "version=\"${version}\"" \
-  --replace "'setuptools_scm>=1.15.0'," "" \
-  --replace "'setuptools_scm_git_archive>=1.0'," "" \
-  '';
-
+  # Disable doctest plugin because times out
+  # Deselect test_bind_addr_unix on darwin because times out
+  # Deselect test_http_over_https_error on darwin because builtin cert fails
   checkPhase = ''
-    py.test cheroot
+    substituteInPlace pytest.ini --replace "--doctest-modules" ""
+    pytest ${stdenv.lib.optionalString stdenv.isDarwin "--deselect=cheroot/test/test_ssl.py::test_http_over_https_error --deselect=cheroot/test/test_server.py::test_bind_addr_unix"}
   '';
 
   meta = with stdenv.lib; {
