@@ -12,6 +12,10 @@ buildPythonPackage rec {
     sha256 = "00v3689175aqzdscrxpffm712ylp8jvcpqdg51ca22ni6721p51l";
   };
 
+  postPatch = ''
+    sed -e "/'jsondiff=jsondiff.cli:main_deprecated',/d" -i setup.py
+  '';
+
   # No tests
   doCheck = false;
 
