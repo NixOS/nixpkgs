@@ -119,6 +119,15 @@ in
         '';
       };
 
+      initdbFlags = mkOption {
+        type = with types; listOf str;
+        default = [];
+        description = ''
+          Additional flags passed to <literal>initdb<literal> during data dir
+          initialisation.
+        '';
+      };
+
       initialScript = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -257,10 +266,10 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.postgresql.enable {
+  config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.groupAccess -> builtins.compareVersions cfg.package.version "11.0" >= 0;
+      { assertion = cfg.groupAccess -> versionAtLeast cfg.package.version "11.0";
         message = ''
           'groupAccess' is not available for PostgreSQL < 11.
         '';
@@ -276,8 +285,12 @@ in
             else pkgs.postgresql_9_4);
 
     services.postgresql.dataDir =
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"
-                 else "/var/db/postgresql");
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09"
+                  then "/var/lib/postgresql/${cfg.package.psqlSchema}"
+                  else "/var/db/postgresql");
+
+    services.postgresql.initdbFlags =
+      mkDefault (lib.optional cfg.groupAccess "--allow-group-access");
 
     services.postgresql.authentication = mkAfter
       ''
@@ -324,9 +337,7 @@ in
           ''
             # Initialise the database.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              initdb -U ${cfg.superUser} ${
-                lib.optionalString cfg.groupAccess "--allow-group-access"
-              }
+              initdb -U ${cfg.superUser} ${lib.concatStringsSep " " cfg.initdbFlags}
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
             fi
