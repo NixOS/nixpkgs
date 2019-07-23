@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   # https://github.com/eqrion/cbindgen/issues/338
-  RUSTC_BOOTSTRAP = 1;
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A project for generating C bindings from Rust code";
