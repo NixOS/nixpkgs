@@ -3711,6 +3711,8 @@ in
 
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
+  humanfriendly = with python3Packages; toPythonApplication humanfriendly;
+
   hwinfo = callPackage ../tools/system/hwinfo { };
 
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
