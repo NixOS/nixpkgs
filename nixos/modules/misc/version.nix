@@ -49,7 +49,9 @@ in
 
     stateVersion = mkOption {
       type = types.str;
-      default = cfg.release;
+      # Deliberately no default, as automatically upgrading the stateVersion can
+      # lead systems to stop working.
+      example = cfg.release;
       description = ''
         Every once in a while, a new NixOS release may change
         configuration defaults in a way incompatible with stateful
