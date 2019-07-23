@@ -1,31 +1,31 @@
-{ stdenv, fetchFromGitHub, curl, git, gmp, libsigsegv, meson, ncurses, ninja
-, openssl, pkgconfig, re2c, zlib
-}:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "urbit-${version}";
-  version = "0.7.3";
+let
 
-  src = fetchFromGitHub {
-    owner = "urbit";
-    repo = "urbit";
+  pname = "urbit";
+
+  version = "0.8.0";
+
+  urbit-derivs = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "192843pjzh8z55fd0x70m3l1vncmixljia3nphgn7j7x4976xkp2";
-    fetchSubmodules = true;
+    sha256 = "047x05mm23kljy9yr8fi3hg6ygiikq4ll8fy7s3k8w3z6b43y7i6";
   };
 
-  nativeBuildInputs = [ pkgconfig ninja meson ];
-  buildInputs = [ curl git gmp libsigsegv ncurses openssl re2c zlib ];
+in
 
-  postPatch = ''
-    patchShebangs .
-  '';
+  with import urbit-derivs;
 
-  meta = with stdenv.lib; {
-    description = "An operating function";
-    homepage = https://urbit.org;
-    license = licenses.mit;
-    maintainers = with maintainers; [ mudri ];
-    platforms = with platforms; linux;
-  };
-}
+  urbit.overrideAttrs (_: {
+    inherit pname version;
+
+    meta = with stdenv.lib; {
+      description = "A personal server operating function";
+      homepage = https://urbit.org;
+      license = licenses.mit;
+      maintainers = with maintainers; [ jtobin ];
+      platforms = with platforms; linux ++ darwin;
+    };
+  })
+
