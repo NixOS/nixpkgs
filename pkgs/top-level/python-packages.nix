@@ -1465,6 +1465,8 @@ in {
 
   capstone = callPackage ../development/python-modules/capstone { };
 
+  capturer = callPackage ../development/python-modules/capturer { };
+
   cement = callPackage ../development/python-modules/cement {};
 
   cgen = callPackage ../development/python-modules/cgen { };
