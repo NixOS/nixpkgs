@@ -1,54 +1,78 @@
-{ buildPythonPackage, fetchPypi, jinja2, werkzeug, flask, cfn-lint
-, requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker, responses
-, six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml, python-jose }:
+{ lib, buildPythonPackage, fetchPypi, isPy27
+, aws-xray-sdk
+, backports_tempfile
+, boto
+, boto3
+, botocore
+, cfn-lint
+, docker
+, flask
+, freezegun
+, jinja2
+, jsondiff
+, mock
+, nose
+, pyaml
+, python-jose
+, pytz
+, requests
+, responses
+, six
+, sshpubkeys
+, sure
+, werkzeug
+, xmltodict
+}:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.3.8";
+  version = "1.3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9cb02134148fbe3ed81f11d6ab9bd71bbd6bc2db7e59a45de77fb1d0fedb744e";
+    sha256 = "0vlq015irqqwdknk1an7qqkg1zjk18c7jd89r7zbxxfwy3bgzwwj";
   };
 
   postPatch = ''
-    # regarding aws-xray-sdk: https://github.com/spulec/moto/commit/31eac49e1555c5345021a252cb0c95043197ea16
-    # regarding python-jose: https://github.com/spulec/moto/pull/1927
     substituteInPlace setup.py \
-      --replace "aws-xray-sdk<0.96," "aws-xray-sdk" \
-      --replace "jsondiff==1.1.1" "jsondiff>=1.1.1" \
-      --replace "python-jose<3.0.0" "python-jose<4.0.0"
+      --replace "jsondiff==1.1.2" "jsondiff~=1.1"
+    sed -i '/datetime/d' setup.py # should be taken care of by std library
   '';
 
   propagatedBuildInputs = [
     aws-xray-sdk
     boto
     boto3
+    botocore
     cfn-lint
-    dateutil
-    flask
-    httpretty
+    docker
+    flask # required for server
     jinja2
-    pytz
-    werkzeug
-    requests
-    six
-    xmltodict
+    jsondiff
     mock
     pyaml
-    backports_tempfile
-    cookies
-    jsondiff
-    botocore
-    docker
-    responses
     python-jose
-  ];
+    pytz
+    six
+    requests
+    responses
+    sshpubkeys
+    werkzeug
+    xmltodict
+  ] ++ lib.optionals isPy27 [ backports_tempfile ];
 
-  checkInputs = [ boto3 nose sure freezegun ];
+  checkInputs = [ boto3 freezegun nose sure ];
 
-  checkPhase = "nosetests";
+  checkPhase = ''nosetests -v ./tests/ \
+                  -e test_invoke_function_from_sns \
+                  -e test_invoke_requestresponse_function \
+                  -e test_context_manager \
+                  -e test_decorator_start_and_stop'';
 
-  # TODO: make this true; I think lots of the tests want network access but we can probably run the others
-  doCheck = false;
+  meta = with lib; {
+    description = "This project extends the Application Insights API surface to support Python";
+    homepage = https://github.com/spulec/moto;
+    license = licenses.asl20;
+    maintainers = [ ];
+  };
 }
