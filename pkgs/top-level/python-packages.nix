@@ -4819,6 +4819,8 @@ in {
 
   user-agents = callPackage ../development/python-modules/user-agents { };
 
+  verboselogs = callPackage ../development/python-modules/verboselogs { };
+
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
   virtkey = callPackage ../development/python-modules/virtkey {
