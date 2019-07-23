@@ -1121,6 +1121,8 @@ in {
 
   spglib = callPackage ../development/python-modules/spglib { };
 
+  sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
+
   sslib = callPackage ../development/python-modules/sslib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
