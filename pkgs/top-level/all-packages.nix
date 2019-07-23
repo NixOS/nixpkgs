@@ -7040,7 +7040,7 @@ in
 
   zsh-powerlevel9k = callPackage ../shells/zsh/zsh-powerlevel9k { };
 
-  zsh-powerlevel10k = callPackage ../shells/zsh/zsh-powerlevel10zsh-powerlevel9k = callPackage ../shells/zsh/zsh-powerlevel9k { };zsh-powerlevel9k = callPackage ../shells/zsh/zsh-powerlevel9k { };zsh-powerlevel9k = callPackage ../shells/zsh/zsh-powerlevel9k { };k { };
+  zsh-powerlevel10k = callPackage ../shells/zsh/zsh-powerlevel10lk { };
 
   zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
 
