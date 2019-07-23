@@ -2448,6 +2448,8 @@ in {
 
   natsort = callPackage ../development/python-modules/natsort { };
 
+  naturalsort = callPackage ../development/python-modules/naturalsort { };
+
   ncclient = callPackage ../development/python-modules/ncclient {};
 
   logfury = callPackage ../development/python-modules/logfury { };
