@@ -1489,6 +1489,8 @@ in {
 
   colorcet = callPackage ../development/python-modules/colorcet { };
 
+  coloredlogs = callPackage ../development/python-modules/coloredlogs { };
+
   colorclass = callPackage ../development/python-modules/colorclass {};
 
   colorlog = callPackage ../development/python-modules/colorlog { };
