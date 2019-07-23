@@ -333,6 +333,11 @@
     github = "andersk";
     name = "Anders Kaseorg";
   };
+  anderslundstedt = {
+    email = "git@anderslundstedt.se";
+    github = "anderslundstedt";
+    name = "Anders Lundstedt";
+  };
   AndersonTorres = {
     email = "torres.anderson.85@protonmail.com";
     github = "AndersonTorres";
