@@ -4085,6 +4085,8 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
+  property-manager = callPackage ../development/python-modules/property-manager { };
+
   prompt_toolkit = let
     filename = if isPy3k then ../development/python-modules/prompt_toolkit else ../development/python-modules/prompt_toolkit/1.nix;
   in callPackage filename { };
