@@ -28,6 +28,7 @@ let
     import ./l10ns.nix {
       lib = stdenv.lib;
       inherit requireFile lang;
+      majorVersion = "11";
     };
 in
 stdenv.mkDerivation rec {
@@ -73,6 +74,8 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
+  phases = "unpackPhase installPhase fixupPhase";
+
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="
     # find offset from file
@@ -98,7 +101,8 @@ stdenv.mkDerivation rec {
 
     # Fix xkeyboard config path for Qt
     for path in mathematica Mathematica; do
-      sed -i -e "2iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"\n" $path
+      line=$(grep -n QT_PLUGIN_PATH $path | sed 's/:.*//')
+      sed -i -e "$line iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"" $path
     done
   '';
 
@@ -132,19 +136,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  dontBuild = true;
-
   # all binaries are already stripped
   dontStrip = true;
 
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Wolfram Mathematica computational software system";
     homepage = http://www.wolfram.com/mathematica/;
-    license = licenses.unfree;
-    maintainers = with maintainers; [ herberteuler ];
-    platforms = [ "x86_64-linux" ];
+    license = stdenv.lib.licenses.unfree;
   };
 }
