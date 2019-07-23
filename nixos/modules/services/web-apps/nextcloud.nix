@@ -297,8 +297,23 @@ in {
 
       systemd.services = {
         "nextcloud-setup" = let
+          c = cfg.config;
+          writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
+            ${optionalString (c.dbpassFile != null) ''
+              function nix_read_pwd() {
+                $file = "${c.dbpassFile}";
+                if (!file_exists($file)) {
+                  throw new \RuntimeException(sprintf(
+                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't exist!",
+                    $file
+                  ));
+                }
+
+                return trim(file_get_contents($file));
+              }
+            ''}
             $CONFIG = [
               'apps_paths' => [
                 [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
@@ -309,19 +324,27 @@ in {
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
               'log_level' => '${builtins.toString cfg.logLevel}',
-              ${optionalString (cfg.config.overwriteProtocol != null) "'overwriteprotocol' => '${cfg.config.overwriteProtocol}',"}
+              ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
+              ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
+              ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
+              ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
+              ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
+              ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
+              ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
+              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
+              'dbtype' => '${c.dbtype}',
+              'trusted_domains' => ${writePhpArrary c.extraTrustedDomains},
             ];
           '';
           occInstallCmd = let
-            c = cfg.config;
-            adminpass = if c.adminpassFile != null
-              then ''"$(<"${toString c.adminpassFile}")"''
-              else ''"${toString c.adminpass}"'';
             dbpass = if c.dbpassFile != null
               then ''"$(<"${toString c.dbpassFile}")"''
               else if c.dbpass != null
               then ''"${toString c.dbpass}"''
               else null;
+            adminpass = if c.adminpassFile != null
+              then ''"$(<"${toString c.adminpassFile}")"''
+              else ''"${toString c.adminpass}"'';
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--database" = ''"${c.dbtype}"'';

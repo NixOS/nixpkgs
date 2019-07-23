@@ -3816,6 +3816,8 @@ in {
 
   numba = callPackage ../development/python-modules/numba { };
 
+  numcodecs = callPackage ../development/python-modules/numcodecs { };
+
   numexpr = callPackage ../development/python-modules/numexpr { };
 
   Nuitka = callPackage ../development/python-modules/nuitka { };
@@ -3898,6 +3900,8 @@ in {
   WSME = callPackage ../development/python-modules/WSME { };
 
   zake = callPackage ../development/python-modules/zake { };
+
+  zarr = callPackage ../development/python-modules/zarr { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
 
@@ -4650,6 +4654,8 @@ in {
   serpy = callPackage ../development/python-modules/serpy { };
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
+
+  setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
 
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 

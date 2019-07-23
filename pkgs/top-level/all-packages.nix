@@ -553,6 +553,8 @@ in
 
   ansifilter = callPackage ../tools/text/ansifilter {};
 
+  antora = nodePackages_10_x."@antora/cli";
+
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };
@@ -660,6 +662,8 @@ in
   awless = callPackage ../tools/virtualization/awless { };
 
   brakeman = callPackage ../development/tools/analysis/brakeman { };
+
+  brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
@@ -779,6 +783,8 @@ in
   esh = callPackage ../tools/text/esh { };
 
   ezstream = callPackage ../tools/audio/ezstream { };
+
+  fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
@@ -3279,6 +3285,8 @@ in
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   gitea = callPackage ../applications/version-management/gitea { };
+
+  gl2ps = callPackage ../development/libraries/gl2ps { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
@@ -8114,7 +8122,9 @@ in
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
-  rls = callPackage ../development/tools/rust/rls { };
+  rls = callPackage ../development/tools/rust/rls {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
@@ -8665,6 +8675,7 @@ in
   bundler = callPackage ../development/ruby-modules/bundler { };
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
+  bundlerUpdateScript = callPackage ../development/ruby-modules/bundler-update-script { };
 
   bundler-audit = callPackage ../tools/security/bundler-audit { };
 
@@ -9793,6 +9804,8 @@ in
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
 
   teensy-loader-cli = callPackage ../development/tools/misc/teensy-loader-cli { };
+
+  terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
@@ -17010,6 +17023,7 @@ in
 
   bitcoin = altcoins.bitcoin;
   clightning = altcoins.clightning;
+  lnd = altcoins.lnd;
 
   bitcoin-xt = altcoins.bitcoin-xt;
   cryptop = altcoins.cryptop;
@@ -22487,6 +22501,8 @@ in
 
   emboss = callPackage ../applications/science/biology/emboss { };
 
+  est-sfs = callPackage ../applications/science/biology/est-sfs { };
+
   ezminc = callPackage ../applications/science/biology/EZminc { };
 
   exonerate = callPackage ../applications/science/biology/exonerate { };
@@ -23906,6 +23922,8 @@ in
   sane-backends-git = callPackage ../applications/graphics/sane/backends/git.nix (config.sane or {});
 
   brlaser = callPackage ../misc/cups/drivers/brlaser { };
+
+  fxlinuxprint = callPackage ../misc/cups/drivers/fxlinuxprint { };
 
   brscan4 = callPackage ../applications/graphics/sane/backends/brscan4 { };
 

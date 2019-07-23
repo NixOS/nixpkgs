@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -16,32 +16,40 @@ in
         Can be enabled with services.nginx.statusPage = true.
       '';
     };
-    telemetryEndpoint = mkOption {
+    telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
       description = ''
         Path under which to expose metrics.
       '';
     };
-    insecure = mkOption {
+    sslVerify = mkOption {
       type = types.bool;
       default = true;
       description = ''
-        Ignore server certificate if using https.
+        Whether to perform certificate verification for https.
       '';
     };
+
   };
   serviceOpts = {
     serviceConfig = {
       DynamicUser = true;
       ExecStart = ''
-        ${pkgs.prometheus-nginx-exporter}/bin/nginx_exporter \
-          --nginx.scrape_uri '${cfg.scrapeUri}' \
-          --telemetry.address ${cfg.listenAddress}:${toString cfg.port} \
-          --telemetry.endpoint ${cfg.telemetryEndpoint} \
-          --insecure ${toString cfg.insecure} \
+        ${pkgs.prometheus-nginx-exporter}/bin/nginx-prometheus-exporter \
+          --nginx.scrape-uri '${cfg.scrapeUri}' \
+          --nginx.ssl-verify ${toString cfg.sslVerify} \
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          --web.telemetry-path ${cfg.telemetryPath} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
   };
+  imports = [
+    (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
+    (mkRemovedOptionModule [ "insecure" ] ''
+      This option was replaced by 'prometheus.exporters.nginx.sslVerify'.
+    '')
+    ({ options.warnings = options.warnings; })
+  ];
 }
