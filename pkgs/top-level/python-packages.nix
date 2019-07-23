@@ -2176,6 +2176,8 @@ in {
 
   execnet = callPackage ../development/python-modules/execnet { };
 
+  executor = callPackage ../development/python-modules/executor { };
+
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
   facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
