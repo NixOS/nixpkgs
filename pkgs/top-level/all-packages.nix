@@ -25798,4 +25798,6 @@ in
 
   kcli = callPackage ../development/tools/kcli {};
 
+  screamingfrogseospider = callPackage ../tools/misc/screamingfrogseospider {};
+
 }
