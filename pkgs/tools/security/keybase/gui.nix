@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
-  dontPatchElf = true;
+  dontPatchELF = true;
 
   unpackPhase = ''
     ar xf $src
