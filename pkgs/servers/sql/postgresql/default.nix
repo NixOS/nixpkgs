@@ -7,7 +7,7 @@ let
       , pkgconfig, libxml2, tzdata
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? (lib.versionAtLeast "9.6" version && !stdenv.isDarwin)
+      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
 
       # for postgreql.pkgs
       , this, self, newScope, buildEnv
