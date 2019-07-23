@@ -232,10 +232,13 @@ stdenv.mkDerivation rec {
 
       # downstream packages using buildBazelPackage
       # fixed-output hashes of the fetch phase need to be spot-checked manually
-      downstream = recurseIntoAttrs {
-        inherit (python3.pkgs) dm-sonnet;
+      downstream = recurseIntoAttrs ({
         inherit bazel-watcher;
-      };
+      }
+      // (lib.optionalAttrs stdenv.isLinux {
+          # dm-sonnet is only packaged for linux
+          dm-sonnet-linux = python3.pkgs.dm-sonnet;
+      }));
     };
 
   # update the list of workspace dependencies
