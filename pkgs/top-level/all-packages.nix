@@ -19869,7 +19869,7 @@ in
 
   properties-cpp = callPackage ../development/libraries/properties-cpp { };
 
-  protonmail-bridge = libsForQt511.callPackage ../applications/networking/protonmail-bridge { };
+  protonmail-bridge = libsForQt512.callPackage ../applications/networking/protonmail-bridge { };
 
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
