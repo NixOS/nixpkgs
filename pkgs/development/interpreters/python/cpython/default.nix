@@ -135,6 +135,8 @@ in with passthru; stdenv.mkDerivation {
     "--with-system-expat"
     "--with-system-ffi"
     "--with-openssl=${openssl.dev}"
+  ] ++ optionals (pythonAtLeast "3.5") [
+    "--enable-optimizations"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
