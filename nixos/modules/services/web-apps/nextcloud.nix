@@ -333,7 +333,7 @@ in {
               ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
               ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
               'dbtype' => '${c.dbtype}',
-              'trusted_domains' => ${writePhpArrary c.extraTrustedDomains},
+              'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
             ];
           '';
           occInstallCmd = let
