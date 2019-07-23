@@ -2954,6 +2954,15 @@
     github = "listx";
     name = "Linus Arver";
   };
+  livnev = {
+    email = "lev@liv.nev.org.uk";
+    github = "livnev";
+    name = "Lev Livnev";
+    keys = [{
+      longkeyid = "rsa2048/0x68FF81E6A7850F49";
+      fingerprint = "74F5 E5CC 19D3 B5CB 608F  6124 68FF 81E6 A785 0F49";
+    }];
+  };
   luis = {
       email = "luis.nixos@gmail.com";
       github = "Luis-Hebendanz";
