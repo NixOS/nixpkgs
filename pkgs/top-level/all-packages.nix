@@ -858,6 +858,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
+  kjv = callPackage ../applications/misc/kjv { };
+
   luigi = callPackage ../applications/networking/cluster/luigi { };
 
   m-cli = callPackage ../os-specific/darwin/m-cli { };
