@@ -1662,6 +1662,12 @@ in
 
   hr = callPackage ../applications/misc/hr { };
 
+  hyperkit = callPackage ../applications/virtualization/hyperkit {
+    inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet SystemConfiguration;
+    inherit (darwin.apple_sdk.libs) xpc;
+    inherit (darwin) libobjc dtrace;
+  };
+
   hyx = callPackage ../tools/text/hyx { };
 
   icdiff = callPackage ../tools/text/icdiff {};
