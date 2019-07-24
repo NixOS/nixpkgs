@@ -1,4 +1,14 @@
-{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile, isPyPy }:
+{ lib
+, fetchFromGitHub
+, python
+, buildPythonPackage
+, gfortran
+, pytest
+, cython
+, blas
+, writeTextFile
+, isPyPy
+}:
 
 let
   blasImplementation = lib.nameFromURL blas.name "-";
@@ -18,14 +28,22 @@ in buildPythonPackage rec {
   pname = "numpy";
   version = "1.16.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "7242be12a58fec245ee9734e625964b97cf7e3f2f7d016603f9e56660ce479c7";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "15gnn4pz653qfm24c2wd3lcgix2xk6lwiqxa8f73jbrhzmfl70jd";
   };
 
-  nativeBuildInputs = [ gfortran pytest ];
-  buildInputs = [ blas ];
+  nativeBuildInputs = [
+    gfortran
+    pytest
+    cython
+  ];
+
+  buildInputs = [
+    blas
+  ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -68,6 +86,6 @@ in buildPythonPackage rec {
   meta = {
     description = "Scientific tools for Python";
     homepage = http://numpy.scipy.org/;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh costrouc ];
   };
 }
