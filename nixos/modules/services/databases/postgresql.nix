@@ -38,7 +38,7 @@ let
       ${cfg.extraConfig}
     '';
 
-    dirMode = if cfg.groupAccess then "0750" else "0700";
+    dirMode = if cfg.groupAccess == true then "0750" else "0700";
 
 in
 
@@ -83,11 +83,14 @@ in
       };
 
       groupAccess = mkOption {
-        type = types.bool;
-        default = false;
+        type = with types; nullOr bool;
+        default = null;
         description = ''
-          Allow read access for group (0750 mask for data directory).
+          When true, allow read access for group (<literal>0750</literal> mask for data directory).
           Supported only for PostgreSQL 11+.
+          </para><para>
+          When false, force a restrictive <literal>0700</literal> mask on data directory, so
+          PostgreSQL won't fail due to too permissive mask.
         '';
       };
 
@@ -262,7 +265,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.groupAccess -> versionAtLeast cfg.package.version "11.0";
+      { assertion = cfg.groupAccess == true -> versionAtLeast cfg.package.version "11.0";
         message = ''
           'groupAccess' is not available for PostgreSQL < 11.
         '';
@@ -283,7 +286,7 @@ in
                   else "/var/db/postgresql");
 
     services.postgresql.initdbArgs =
-      mkBefore (optional cfg.groupAccess "--allow-group-access");
+      mkBefore (optional (cfg.groupAccess == true) "--allow-group-access");
 
     services.postgresql.authentication = mkAfter
       ''
@@ -339,7 +342,9 @@ in
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
-            chmod ${dirMode} "${cfg.dataDir}"
+            ${optionalString (cfg.groupAccess != null) ''
+              chmod ${dirMode} "${cfg.dataDir}"
+            ''}
 
             exec postgres
           '';
