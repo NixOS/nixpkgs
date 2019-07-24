@@ -106,7 +106,6 @@ in
       $machine->succeed("${c1}/bin/switch-to-configuration test >&2");
       $machine->succeed("journalctl -u postgresql | grep -q -i stopped"); # was restarted
       $machine->succeed("echo select 1 | sudo -u postgres psql"); # works after restart
-      $machine->succeed("sudo -u admin ls -la / >&2");
       $machine->succeed("sudo -u admin ls ${dataDir}");
 
       $machine->shutdown;

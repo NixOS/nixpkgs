@@ -339,7 +339,6 @@ in
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
-            echo chmod ${dirMode} "${cfg.dataDir}"
             chmod ${dirMode} "${cfg.dataDir}"
 
             exec postgres
