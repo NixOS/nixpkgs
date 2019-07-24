@@ -257,9 +257,6 @@ with lib;
     (mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
     (mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
 
-    # Buildkite Agent
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "meta-data"] [ "services" "buildkite-agent" "tags" ])
-
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]

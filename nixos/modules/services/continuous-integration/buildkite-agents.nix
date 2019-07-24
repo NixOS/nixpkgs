@@ -56,7 +56,9 @@ let
       fullName = mkOption {
         readOnly = true;
         default = fullName;
-        description = "Unit name of buildkite agent";
+        description = ''
+          Full name of the systemd service unit and of the user it runs as.
+        '';
       };
 
       runtimePackages = mkOption {
@@ -80,7 +82,7 @@ let
         type = types.str;
         default = "%hostname-${name}-%n";
         description = ''
-          The name of the agent.
+          The name of the agent as seen in the buildkite dashboard.
         '';
       };
 
@@ -213,7 +215,11 @@ in {
     type = types.attrsOf (types.submodule buildkiteOptions);
     default = {};
     description = ''
-      Attribute set of extra agents.
+      Attribute set of buildkite agents.
+
+      The attribute key is combined with the hostname and a unique integer to
+      create the final agent name. This can be overridden by setting the `name`
+      attribute.
     '';
   };
 
