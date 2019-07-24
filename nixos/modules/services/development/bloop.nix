@@ -25,10 +25,13 @@ in {
     systemd.user.services.bloop = {
       description = "Bloop Scala build server";
 
+      environment = {
+        PATH = mkForce "${makeBinPath [ config.programs.java.package ]}";
+      };
       serviceConfig = {
-        Type      = "simple";
-        ExecStart = ''${pkgs.bloop}/bin/blp-server'';
-        Restart   = "always";
+        Type        = "simple";
+        ExecStart   = ''${pkgs.bloop}/bin/bloop server'';
+        Restart     = "always";
       };
     };
 

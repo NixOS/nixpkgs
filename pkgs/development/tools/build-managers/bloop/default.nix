@@ -1,28 +1,12 @@
-{ stdenv, lib, fetchurl, coursier, jdk, jre, python, makeWrapper }:
+{ stdenv, lib, fetchurl, coursier, python, makeWrapper }:
 
 let
   baseName = "bloop";
   version = "1.3.2";
   nailgunCommit = "9327a60a"; # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
 
-  deps = stdenv.mkDerivation {
-    name = "${baseName}-deps-${version}";
-    buildCommand = ''
-      export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch ch.epfl.scala:bloop-frontend_2.12:${version} \
-        -r "bintray:scalameta/maven" \
-        -r "bintray:scalacenter/releases" \
-        -r "https://oss.sonatype.org/content/repositories/staging" > deps
-      mkdir -p $out/share/java
-      cp $(< deps) $out/share/java/
-    '';
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "1npq02npk6qiwghgr3bqd1ala1kv8hwq1qkmyffvigcq7frkz4r8";
-  };
-
   client = stdenv.mkDerivation {
-    name = "${baseName}-client-${nailgunCommit}";
+    name = "${baseName}-client-${version}";
 
     src = fetchurl {
       url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
@@ -31,10 +15,25 @@ let
 
     phases = [ "installPhase" ];
 
-    installPhase = ''
-      cp $src $out
-      chmod +x $out
+    installPhase = ''cp $src $out'';
+  };
+
+  server = stdenv.mkDerivation {
+    name = "${baseName}-server-${version}";
+    buildCommand = ''
+      mkdir -p $out/bin
+
+      export COURSIER_CACHE=$(pwd)
+      ${coursier}/bin/coursier bootstrap ch.epfl.scala:bloop-frontend_2.12:${version} \
+        -r "bintray:scalameta/maven" \
+        -r "bintray:scalacenter/releases" \
+        -r "https://oss.sonatype.org/content/repositories/staging" \
+        --deterministic \
+        -f --main bloop.Server -o $out/bin/blp-server
     '';
+    outputHashMode = "recursive";
+    outputHashAlgo = "sha256";
+    outputHash     = "0k9zc9q793fkfwcssbkmzb0nxmgb99rwi0pjkqhvf719vmgvhc2a";
   };
 
   zsh = stdenv.mkDerivation {
@@ -53,7 +52,7 @@ in
 stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
-  buildInputs = [ jdk makeWrapper deps ];
+  buildInputs = [ makeWrapper ];
 
   phases = [ "installPhase" ];
 
@@ -61,12 +60,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/zsh/site-functions
 
+    ln -s ${server}/bin/blp-server $out/blp-server
     ln -s ${zsh} $out/share/zsh/site-functions/_bloop
 
-    makeWrapper ${jre}/bin/java $out/bin/blp-server \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
-      --add-flags "-cp $CLASSPATH bloop.Server"
-    makeWrapper ${client} $out/bin/bloop \
+    cp ${client} $out/bloop
+    chmod +x $out/bloop
+    makeWrapper $out/bloop $out/bin/bloop \
       --prefix PATH : ${lib.makeBinPath [ python ]}
   '';
 
