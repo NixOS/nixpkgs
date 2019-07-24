@@ -84,53 +84,30 @@ in
           services.postgresql.package = pkgs.postgresql_11;
           services.postgresql.dataDir = dataDir;
 
-          # users.groups.backup = {};
-          users.users.backup.isNormalUser = true;
-          users.users.backup.group = "wheel";
-
-          systemd.tmpfiles.rules = [
-            "d ${dataDir} 0750 postgres wheel -"
-          ];
+          users.users.admin.isNormalUser = true;
+          users.users.admin.extraGroups = [ "postgres" ];
 
           nesting.clone = [
             {
               services.postgresql.groupAccess = true;
             }
-
-            ({ config, lib, ... }: {
-              services.postgresql.package = lib.mkForce pkgs.postgresql_10;
-              services.postgresql.dataDir = lib.mkForce (dataDir + "_10");
-              systemd.tmpfiles.rules = [
-                "d ${dataDir}_10 0750 postgres wheel -"
-              ];
-              systemd.services.postgresql.postStart = lib.mkAfter ''
-                chmod 750 ${config.services.postgresql.dataDir}
-              '';
-            })
           ];
         };
     testScript = { nodes, ... }: let
       c1 = "${nodes.machine.config.system.build.toplevel}/fine-tune/child-1";
-      c2 = "${nodes.machine.config.system.build.toplevel}/fine-tune/child-2";
     in ''
       $machine->start;
       $machine->waitForUnit("postgresql");
       $machine->succeed("echo select 1 | sudo -u postgres psql");
 
       # by default, mode is 0700
-      $machine->fail("sudo -u backup ls ${dataDir}");
+      $machine->fail("sudo -u admin ls ${dataDir}");
 
       $machine->succeed("${c1}/bin/switch-to-configuration test >&2");
       $machine->succeed("journalctl -u postgresql | grep -q -i stopped"); # was restarted
       $machine->succeed("echo select 1 | sudo -u postgres psql"); # works after restart
-      $machine->succeed("sudo -u backup ls ${dataDir}");
-
-      # This tests a hack for PG <11: restore permissions to 0700 just before PG starts
-      # and put it back to 0750 after PG had started
-      $machine->succeed("${c2}/bin/switch-to-configuration test >&2");
-      $machine->succeed("systemctl restart postgresql");
-      $machine->waitForUnit("postgresql");   # works after restart
-      $machine->succeed("sudo -u backup ls ${dataDir}_10");
+      $machine->succeed("sudo -u admin ls -la / >&2");
+      $machine->succeed("sudo -u admin ls ${dataDir}");
 
       $machine->shutdown;
     '';

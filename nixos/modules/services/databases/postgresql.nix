@@ -85,17 +85,9 @@ in
       groupAccess = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Allow read access for group (0750 mask for data directory).
-          Supported only for PostgreSQL 11+. PostgreSQL 10 and lower doesn't
-          support starting server with 0750 mask, but a workaround like
-          <programlisting>
-          systemd.services.postgresql.postStart = lib.mkAfter '''
-            chmod 750 ''${config.services.postgresql.dataDir}
-          ''';
-          </programlisting>
-          may be used instead.
+          Supported only for PostgreSQL 11+.
         '';
       };
 
@@ -119,11 +111,12 @@ in
         '';
       };
 
-      initdbFlags = mkOption {
+      initdbArgs = mkOption {
         type = with types; listOf str;
         default = [];
+        example = [ "--data-checksums" ];
         description = ''
-          Additional flags passed to <literal>initdb<literal> during data dir
+          Additional arguments passed to <literal>initdb<literal> during data dir
           initialisation.
         '';
       };
@@ -289,8 +282,8 @@ in
                   then "/var/lib/postgresql/${cfg.package.psqlSchema}"
                   else "/var/db/postgresql");
 
-    services.postgresql.initdbFlags =
-      mkDefault (lib.optional cfg.groupAccess "--allow-group-access");
+    services.postgresql.initdbArgs =
+      mkBefore (optional cfg.groupAccess "--allow-group-access");
 
     services.postgresql.authentication = mkAfter
       ''
@@ -329,7 +322,7 @@ in
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
               mkdir -m ${dirMode} -p ${cfg.dataDir}
               rm -f ${cfg.dataDir}/*.conf
-              chown -R postgres ${cfg.dataDir}
+              chown -R postgres:postgres ${cfg.dataDir}
             fi
           ''; # */
 
@@ -337,7 +330,7 @@ in
           ''
             # Initialise the database.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              initdb -U ${cfg.superUser} ${lib.concatStringsSep " " cfg.initdbFlags}
+              initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
             fi
@@ -346,6 +339,7 @@ in
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
+            echo chmod ${dirMode} "${cfg.dataDir}"
             chmod ${dirMode} "${cfg.dataDir}"
 
             exec postgres
@@ -357,7 +351,7 @@ in
             Group = "postgres";
             PermissionsStartOnly = true;
             RuntimeDirectory = "postgresql";
-            Type = if lib.versionAtLeast cfg.package.version "9.6"
+            Type = if versionAtLeast cfg.package.version "9.6"
                    then "notify"
                    else "simple";
 
