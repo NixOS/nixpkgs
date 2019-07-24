@@ -8886,6 +8886,9 @@ in
   apacheKafka_2_1 = callPackage ../servers/apache-kafka { majorVersion = "2.1"; };
   apacheKafka_2_2 = callPackage ../servers/apache-kafka { majorVersion = "2.2"; };
 
+  apachePulsar = apachePulsar_2_4;
+  apachePulsar_2_4 = callPackage ../servers/apache-pulsar { };
+
   kt = callPackage ../tools/misc/kt {};
 
   arpa2cm = callPackage ../development/tools/build-managers/arpa2cm { };
