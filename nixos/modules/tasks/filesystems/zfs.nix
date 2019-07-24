@@ -563,8 +563,8 @@ in
         description = ''
           Pushbullet access token.
           This grants full access to your account -- protect it accordingly!
-          &#60;https://www.pushbullet.com/get-started&#62;
-          &#60;https://www.pushbullet.com/account&#62;
+          <link xlink:href="https://www.pushbullet.com/get-started"/>
+          <link xlink:href="https://www.pushbullet.com/account"/>
           NOTICE: Filling your access token in here will make it world-readable
           for any user on the system.
         '';
@@ -575,7 +575,7 @@ in
         default = null;
         description = ''
           Pushbullet channel tag for push notification feeds that can be subscribed to.
-          &#60;https://www.pushbullet.com/my-channel&#62;
+          <literal>https://www.pushbullet.com/my-channel</literal>
           If not defined, push notifications will instead be sent to all devices
           associated with the account specified by the access token.
         '';
