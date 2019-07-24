@@ -21,7 +21,7 @@ let
   enableAutoSnapshots = cfgSnapshots.enable;
   enableAutoScrub = cfgScrub.enable;
   enableZfs = inInitrd || inSystem || enableAutoSnapshots || enableAutoScrub;
-  enableZED = cfgZEd.enable;
+  enableZED = cfgZED.enable;
   
   kernel = config.boot.kernelPackages;
 
@@ -527,12 +527,13 @@ in
 
       email.program = mkOption {
         type = types.nullOr types.str;
-        default = null;
+        default = "sendmail";
         example = "mail";
         description = ''
           Name or path of executable responsible for sending notifications via email;
           the mail program must be capable of reading a message body from stdin.
           Email will only be sent if an email address is defined.
+          By default it will use pkgs.system-sendmail.
         '';
       };
 
