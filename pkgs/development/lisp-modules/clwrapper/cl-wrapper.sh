@@ -8,7 +8,12 @@ eval "$NIX_LISP_PREHOOK"
 NIX_LISP_COMMAND="$1"
 shift
 
-[ -z "$NIX_LISP" ] && NIX_LISP="${NIX_LISP_COMMAND##*/}"
+if [ -z "$NIX_LISP" ]; then
+    while [ -h "${NIX_LISP_COMMAND}" ]; do
+        NIX_LISP_COMMAND="$(readlink -n "${NIX_LISP_COMMAND}")"
+    done
+    NIX_LISP="${NIX_LISP_COMMAND##*/}"
+fi
 
 export NIX_LISP NIX_LISP_LOAD_FILE NIX_LISP_EXEC_CODE NIX_LISP_COMMAND NIX_LISP_FINAL_PARAMETERS
 
