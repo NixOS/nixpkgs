@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
-    # ./clean-env.patch
+    ./clean-env-head.patch
     ./tramp-detect-wrapped-gvfsd.patch
   ];
 
