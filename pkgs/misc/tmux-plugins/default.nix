@@ -1,4 +1,5 @@
 { fetchgit
+, fetchFromGitHub
 , lib
 , pkgs
 , reattach-to-user-namespace
@@ -212,6 +213,16 @@ in rec {
       url = "https://github.com/tmux-plugins/tmux-sidebar";
       rev = "23014524cab53f8d36373983500fe05a527a444d";
       sha256 = "1w363587isdip1r81h0vkp5163lpa83lvasg8l04h43sbip2y6i8";
+    };
+  };
+
+  tmux-colors-solarized = mkDerivation {
+    pluginName = "tmuxcolors";
+    src = fetchFromGitHub {
+      owner = "seebi";
+      repo = "tmux-colors-solarized";
+      rev = "e5e7b4f1af37f8f3fc81ca17eadee5ae5d82cd09";
+      sha256 = "1l3i82abzi4b395cgdsjg7lcfaq15kyyhijwvrgchzxi95z3hl4x";
     };
   };
 
