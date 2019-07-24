@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "x2goclient";
-  version = "unstable-2018-11-30";
+  version = "unstable-2019-07-24";
 
   src = fetchgit {
    url = "git://code.x2go.org/x2goclient.git";
-   rev = "659655675f11ffd361ab9fb48fa77a01a1536fe8";
-   sha256 = "05gfs11m259bchy3k0ihqpwg9wf8lp94rbca5dzla9fjzrb7pyy4";
+   rev = "704c4ab92d20070dd160824c9b66a6d1c56dcc49";
+   sha256 = "1pndp3lfzwifyxqq0gps3p1bwakw06clbk6n8viv020l4bsfmq5f";
   };
 
   buildInputs = [ cups libssh libXpm nx-libs openldap openssh
