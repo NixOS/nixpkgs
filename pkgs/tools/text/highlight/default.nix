@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, getopt, lua, boost, pkgconfig, gcc }:
+{ stdenv, fetchFromGitLab, getopt, lua, boost, pkgconfig, gcc }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "highlight-${version}";
-  version = "3.43";
+  version = "3.52";
 
-  src = fetchFromGitHub {
-    owner = "andre-simon";
+  src = fetchFromGitLab {
+    owner = "saalen";
     repo = "highlight";
     rev = "v${version}";
-    sha256 = "126nsf4cjxflg2kiv72qf1xl5fsilk0jqcncs6qqgm72cpjfmlsy";
+    sha256 = "0zhn1k70ck82ks7ckzsy1yiz686ym2ps7c28wjmkgxfpyjanilrq";
   };
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin  gcc ;
 
