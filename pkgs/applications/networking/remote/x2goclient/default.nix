@@ -1,7 +1,7 @@
 { stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
-, makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
+, mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "x2goclient";
   version = "unstable-2019-07-24";
 
@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cups libssh libXpm nx-libs openldap openssh
                   qtbase qtsvg qtx11extras qttools phonon pkgconfig ];
-  nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
      substituteInPlace Makefile \
@@ -28,9 +27,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installTargets = [ "install_client" "install_man" ];
-  postInstall = ''
-    wrapProgram "$out/bin/x2goclient" --suffix PATH : "${nx-libs}/bin:${openssh}/libexec";
-  '';
+
+  qtWrapperArgs = [ ''--suffix PATH : ${nx-libs}/bin:${openssh}/libexec'' ];
 
   meta = with stdenv.lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
