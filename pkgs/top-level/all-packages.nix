@@ -19444,10 +19444,10 @@ in
     githubSupport = true;
     mpdSupport = true;
     pulseSupport  = true;
-    iwSupport = true;
+    iwSupport = false;
     nlSupport = true;
     i3Support = true;
-    i3GapsSupport = true;
+    i3GapsSupport = false;
   };
 
   ptex = callPackage ../development/libraries/ptex {};
