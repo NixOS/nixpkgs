@@ -1377,6 +1377,8 @@ in
 
   cucumber = callPackage ../development/tools/cucumber {};
 
+  dabtools = callPackage ../applications/radio/dabtools { };
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   dale = callPackage ../development/compilers/dale { };
