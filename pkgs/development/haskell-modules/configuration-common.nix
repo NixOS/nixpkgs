@@ -1130,7 +1130,7 @@ self: super: {
     hi-file-parser = dontCheck (unmarkBroken super.hi-file-parser);  # Avoid depending on newer hspec versions.
     http-download = dontCheck (unmarkBroken super.http-download);
     pantry-tmp = dontCheck (unmarkBroken super.pantry-tmp);
-    rio = self.rio_0_1_10_0;
+    rio = self.rio_0_1_11_0;
     rio-prettyprint = unmarkBroken super.rio-prettyprint;
   }));
 
