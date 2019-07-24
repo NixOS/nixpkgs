@@ -1,9 +1,21 @@
 { fetchurl, fetchpatch, stdenv, lib, pkgconfig
-, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null, gtk2 ? null, gcr ? null, qt ? null
+, libgpgerror, libassuan
+, libcap ? null, libsecret ? null, ncurses ? null, gtk2 ? null, gcr ? null
+, qt4 ? null, qt5 ? null
 , enableEmacs ? false
 }:
 
-stdenv.mkDerivation rec {
+assert qt5 != null -> qt4 == null;
+assert qt4 != null -> qt5 == null;
+
+let
+  mkDerivation =
+    if qt5 != null
+      then qt5.mkDerivation
+      else stdenv.mkDerivation;
+in
+
+mkDerivation rec {
   name = "pinentry-1.1.0";
 
   src = fetchurl {
@@ -12,7 +24,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libgpgerror libassuan libcap libsecret gtk2 gcr ncurses qt ];
+  buildInputs =
+    [ libgpgerror libassuan libcap libsecret gtk2 gcr ncurses qt4 ]
+    ++ stdenv.lib.optional (qt5 != null) qt5.qtbase;
 
   prePatch = ''
     substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
@@ -34,7 +48,7 @@ stdenv.mkDerivation rec {
     (stdenv.lib.enableFeature enableEmacs         "pinentry-emacs")
     (stdenv.lib.enableFeature (gtk2 != null)      "pinentry-gtk2")
     (stdenv.lib.enableFeature (gcr != null)       "pinentry-gnome3")
-    (stdenv.lib.enableFeature (qt != null)        "pinentry-qt")
+    (stdenv.lib.enableFeature (qt4 != null || qt5 != null) "pinentry-qt")
 
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-libgpg-error-prefix=${libgpgerror.dev}"
