@@ -121,8 +121,10 @@ nix_lisp_build_system(){
 
 eval "$NIX_LISP_PRELAUNCH_HOOK"
 
-[ -z "$NIX_LISP_SKIP_CODE" ] && "$NIX_LISP_COMMAND" $NIX_LISP_EARLY_OPTIONS \
-	$NIX_LISP_EXEC_CODE "${NIX_LISP_ASDF_LOAD:-"(load \"$NIX_LISP_ASDF/lib/common-lisp/asdf/build/asdf.$NIX_LISP_FASL_TYPE\")"}" \
-	$NIX_LISP_EXEC_CODE "$NIX_LISP_ASDF_REGISTRY_CODE" \
-	${NIX_LISP_FINAL_PARAMETERS[*]:+"${NIX_LISP_FINAL_PARAMETERS[@]}"} \
-	"$@"
+if [ -z "$NIX_LISP_SKIP_CODE" ]; then
+    "$NIX_LISP_COMMAND" $NIX_LISP_EARLY_OPTIONS \
+	                $NIX_LISP_EXEC_CODE "${NIX_LISP_ASDF_LOAD:-"(load \"$NIX_LISP_ASDF/lib/common-lisp/asdf/build/asdf.$NIX_LISP_FASL_TYPE\")"}" \
+	                $NIX_LISP_EXEC_CODE "$NIX_LISP_ASDF_REGISTRY_CODE" \
+	                ${NIX_LISP_FINAL_PARAMETERS[*]:+"${NIX_LISP_FINAL_PARAMETERS[@]}"} \
+	                "$@"
+fi
