@@ -92,10 +92,10 @@ rec {
 
   firefox-esr-68 = common rec {
     pname = "firefox-esr";
-    ffversion = "68.0esr";
+    ffversion = "68.0.1esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "29iqxxwkz2zgk2ppgq05w0bhs8c0938gina5s8brmwn6zn15nv379pa82a9djpzjryl6c5ff0hk0z7gx6n3xvf7w7ky9010h9il0kbg";
+      sha512 = "27ncapq18rdlrf0kp5r09spcqazi0g8nbzbfxijs9pi3cvlkayagi3fbbzzq5jkn0n3j580vadc6v1v3zibvdwb5s3c6bz559a7nra2";
     };
 
     patches = [
