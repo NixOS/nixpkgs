@@ -1101,6 +1101,8 @@ in {
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
+  simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
+
   singledispatch = callPackage ../development/python-modules/singledispatch { };
 
   sip = callPackage ../development/python-modules/sip { };
