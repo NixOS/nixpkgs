@@ -16012,7 +16012,9 @@ in
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
-
+  
+  riscv-gnu-toolchain = callPackage ../development/compilers/riscv-gnu-toolchain {};
+  
   riscv-pk = callPackage ../misc/riscv-pk { };
 
   riscv-pk-with-kernel = riscv-pk.override {

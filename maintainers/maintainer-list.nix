@@ -2343,6 +2343,11 @@
     github = "javaguirre";
     name = "Javier Aguirre";
   };
+  jaykru = {
+    email = "j@dank.systems";
+    github = "jaykru";
+    name = "Jay Kruer";
+  };
   jb55 = {
     email = "jb55@jb55.com";
     github = "jb55";
