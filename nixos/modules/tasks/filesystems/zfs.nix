@@ -21,7 +21,8 @@ let
   enableAutoSnapshots = cfgSnapshots.enable;
   enableAutoScrub = cfgScrub.enable;
   enableZfs = inInitrd || inSystem || enableAutoSnapshots || enableAutoScrub;
-
+  enableZED = cfgZEd.enable;
+  
   kernel = config.boot.kernelPackages;
 
   packages = if config.boot.zfs.enableUnstable then {
@@ -497,6 +498,14 @@ in
     };
 
     services.zfs.zed = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enable the ZFS Event Daemon (ZED).
+        '';
+      };
+
       debugLog = mkOption {
         default = null;
         type = types.nullOr types.path;
@@ -853,5 +862,23 @@ in
         };
       };
     })
+    
+    (mkIf enableZED {
+      systemd.services.zfs-zed = {
+        description = "ZFS Event Daemon (zed)";
+        documentation = [ "man:zed(8)" ];
+        wantedBy = [ "zfs.target" ];
+        aliases = [ "zed.service" ];
+        restartIfChanged = true;
+        restartTriggers = [ "on-abort" ];
+        serviceConfig = {
+          Type = "oneshot";
+        };
+        script = ''
+          ${packages.zfsUser}/sbin/zed -F
+        '';
+      };
+    })
+    
   ];
 }
