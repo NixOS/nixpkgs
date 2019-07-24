@@ -24077,6 +24077,8 @@ in
 
   vault = callPackage ../tools/security/vault { };
 
+  vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
+
   vaultenv = haskellPackages.vaultenv;
 
   vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
