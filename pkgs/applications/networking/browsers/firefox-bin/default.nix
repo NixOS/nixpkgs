@@ -9,7 +9,7 @@
 , fontconfig
 , freetype
 , gconf
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , gtk2
@@ -104,7 +104,7 @@ stdenv.mkDerivation {
       fontconfig
       freetype
       gconf
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
       gtk2

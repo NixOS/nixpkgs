@@ -10,7 +10,7 @@
 , expat
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gnome2
 , gnome3
@@ -52,7 +52,7 @@ rpath = lib.makeLibraryPath [
   expat
   fontconfig
   freetype
-  gdk_pixbuf
+  gdk-pixbuf
   glib
   gnome2.GConf
   gtk3

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, meson, ninja, pkgconfig, python3, wrapGAppsHook
-, glib, pipewire, systemd, libvncserver, libsecret, libnotify, gdk_pixbuf, gnome3 }:
+, glib, pipewire, systemd, libvncserver, libsecret, libnotify, gdk-pixbuf, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib pipewire systemd libvncserver libsecret libnotify
-    gdk_pixbuf # For libnotify
+    gdk-pixbuf # For libnotify
   ];
 
   postPatch = ''

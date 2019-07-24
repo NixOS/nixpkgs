@@ -1,7 +1,7 @@
 { stdenv, intltool, fetchurl, python3
 , pkgconfig, gtk3, glib, gobject-introspection
 , wrapGAppsHook, itstool, libxml2, docbook_xsl
-, gnome3, gdk_pixbuf, libxslt, gsettings-desktop-schemas }:
+, gnome3, gdk-pixbuf, libxslt, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   name = "glade-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib libxml2 python3 python3.pkgs.pygobject3
     gsettings-desktop-schemas
-    gdk_pixbuf gnome3.adwaita-icon-theme
+    gdk-pixbuf gnome3.adwaita-icon-theme
   ];
 
   enableParallelBuilding = true;

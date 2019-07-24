@@ -7,7 +7,7 @@
 , pytest
 , glibc
 , gtk2-x11
-, gdk_pixbuf
+, gdk-pixbuf
 }:
 
 buildPythonPackage rec {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
             elif name == 'gdk-x11-2.0':
                 path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
             elif name == 'gdk_pixbuf-2.0':
-                path = '${gdk_pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
+                path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
             if path is not None:
                 return ctypes.cdll.LoadLibrary(path)
         raise Exception("Could not load library {}".format(names))

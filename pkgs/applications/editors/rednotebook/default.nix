@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub
-, gdk_pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
+, gdk-pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
 , pygobject3, pyyaml
 }:
 
@@ -20,7 +20,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
-    gdk_pixbuf glib gtk3 gtksourceview pango webkitgtk
+    gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk
     pygobject3 pyyaml
   ];
 

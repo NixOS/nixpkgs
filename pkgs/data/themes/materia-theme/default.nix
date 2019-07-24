@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnome3, glib, libxml2, gtk-engine-murrine, gdk_pixbuf, librsvg, bc }:
+{ stdenv, fetchFromGitHub, gnome3, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
 
 stdenv.mkDerivation rec {
   pname = "materia-theme";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ glib libxml2 bc ];
 
-  buildInputs = [ gnome3.gnome-themes-extra gdk_pixbuf librsvg ];
+  buildInputs = [ gnome3.gnome-themes-extra gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gdk_pixbuf, gtk_engines, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, gdk-pixbuf, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "plano-theme";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0p9j4p32489jb6d67jhf9x26my0mddcc6a174x713drch8zvb96l";
   };
 
-  buildInputs = [ gdk_pixbuf gtk_engines ];
+  buildInputs = [ gdk-pixbuf gtk_engines ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
