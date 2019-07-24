@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, removeReferencesTo, stdenv }:
+{ go, cacert, git, lib, removeReferencesTo, stdenv, runCommandNoCC, makeWrapper, bazaar }:
 
 { name ? "${args'.pname}-${args'.version}"
 , src
@@ -33,10 +33,16 @@ let
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
+  bazaarNoCertValidation =
+    runCommandNoCC "bzr-no-cert-validation" {
+      inherit bazaar;
+      buildInputs = [ makeWrapper ];
+    } "makeWrapper $bazaar/bin/bzr $out/bin/bzr --add-flags -Ossl.cert_reqs=none";
+
   go-modules = go.stdenv.mkDerivation {
     name = "${name}-go-modules";
 
-    nativeBuildInputs = [ go git cacert ];
+    nativeBuildInputs = [ go git cacert bazaarNoCertValidation ];
 
     inherit (args) src;
     inherit (go) GOOS GOARCH;
@@ -202,5 +208,5 @@ let
   });
 in if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"
-else
-  package
+   else
+     package
