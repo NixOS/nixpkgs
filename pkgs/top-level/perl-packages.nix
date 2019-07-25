@@ -8456,6 +8456,20 @@ let
     buildInputs = [ TestDifferences TestMemoryCycle ];
   };
 
+  HTMLStripScriptsParser = buildPerlPackage {
+    pname = "HTML-StripScripts-Parser";
+    version = "1.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DRTECH/HTML-StripScripts-Parser-1.03.tar.gz;
+      sha256 = "478c1a4e46eb77fa7bce96ba288168f0b98c27f250e00dc6312365081aed3407";
+    };
+    propagatedBuildInputs = [ HTMLParser HTMLStripScripts ];
+    meta = {
+      description = "XSS filter using HTML::Parser";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTMLTableExtract = buildPerlPackage {
     pname = "HTML-TableExtract";
     version = "2.13";
