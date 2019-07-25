@@ -1,4 +1,8 @@
-{ stdenv, bazel, cacert }:
+{ stdenv
+, bazel
+, cacert
+, lib
+}:
 
 args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
 
@@ -115,6 +119,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
     # wrappers picking them up, pass them in explicitly via `--copt`, `--linkopt`
     # and related flags.
     #
+    '' + (lib.optionalString stdenv.isDarwin ''
     copts=()
     host_copts=()
     for flag in $NIX_CFLAGS_COMPILE; do
@@ -131,6 +136,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       linkopts+=( "--linkopt=$flag" )
       host_linkopts+=( "--host_linkopt=$flag" )
     done
+    '') + ''
 
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
     USER=homeless-shelter \
@@ -139,10 +145,12 @@ in stdenv.mkDerivation (fBuildAttrs // {
       --output_user_root="$bazelUserRoot" \
       build \
       -j $NIX_BUILD_CORES \
+      '' + (lib.optionalString stdenv.isDarwin ''
       "''${copts[@]}" \
       "''${host_copts[@]}" \
       "''${linkopts[@]}" \
       "''${host_linkopts[@]}" \
+      '') + ''
       $bazelFlags \
       $bazelTarget
 
