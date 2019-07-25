@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, gettext, git }:
+{ stdenv, fetchFromGitHub, pythonPackages, gettext, git, qt5 }:
 
 let
   inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify;
@@ -16,6 +16,7 @@ in buildPythonApplication rec {
 
   buildInputs = [ git gettext ];
   propagatedBuildInputs = [ pyqt5 sip pyinotify ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   doCheck = false;
 
