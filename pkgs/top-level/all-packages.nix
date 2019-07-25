@@ -8093,6 +8093,9 @@ in
   rust = callPackage ../development/compilers/rust {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+  rust-nightly-bin = callPackage ../development/compilers/rust/nightly-bin.nix {};
+  rustNightlyPlatform = pkgs.recurseIntoAttrs (pkgs.makeRustPlatform rust-nightly-bin);
+
   rustPackages = rust.packages.stable;
   inherit (rustPackages) cargo rustc rustPlatform;
   inherit (rust) makeRustPlatform;
