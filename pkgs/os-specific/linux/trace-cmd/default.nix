@@ -4,7 +4,7 @@ let
   shortRev = builtins.substring 0 7 srcSpec.rev;
 in stdenv.mkDerivation rec {
   name    = "trace-cmd-${version}";
-  version = "2.8-${shortRev}";
+  version = "2.9-dev-${shortRev}";
 
   src = fetchgit srcSpec;
 
@@ -28,6 +28,10 @@ in stdenv.mkDerivation rec {
     "includedir=${placeholder "dev"}/include/trace-cmd"
     "BASH_COMPLETE_DIR=${placeholder "out"}/etc/bash_completion.d"
   ];
+
+  postInstall = ''
+    mv $dev/include/trace-cmd/traceevent $dev/include/traceevent
+  '';
 
   meta = with stdenv.lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";

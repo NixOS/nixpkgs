@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchgit, qtbase, cmake, json_c, mesa_glu, freeglut, trace-cmd }:
+{ stdenv, mkDerivation, fetchgit, qtbase, cmake, json_c, mesa_glu, freeglut, trace-cmd, pkg-config, doxygen, graphviz }:
 let
   srcSpec = import ./src.nix;
   shortRev = builtins.substring 0 7 srcSpec.rev;
@@ -10,17 +10,16 @@ in mkDerivation rec {
 
   sourceRoot = "trace-cmd-${shortRev}/kernel-shark";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake doxygen graphviz ];
 
-  buildInputs = [ qtbase json_c mesa_glu freeglut ];
+  buildInputs = [ qtbase json_c mesa_glu freeglut pkg-config ];
 
   cmakeFlags = [
     "-D_INSTALL_PREFIX=${placeholder "out"}"
-    "-DTRACECMD_BIN_DIR=${trace-cmd}/bin"
-    "-DTRACECMD_INCLUDE_DIR=${trace-cmd.dev}/include/trace-cmd"
-    "-DTRACECMD_LIBRARY_DIR=${trace-cmd.lib}/lib"
-    "-DTRACEEVENT_INCLUDE_DIR=${trace-cmd.dev}/include/trace-cmd"
-    "-DTRACEEVENT_LIBRARY_DIR=${trace-cmd.lib}/lib"
+    "-DTRACECMD_EXECUTABLE=${trace-cmd}/bin/trace-cmd"
+    "-DTRACECMD_INCLUDE_DIR=${trace-cmd.dev}/include"
+    "-DTRACECMD_LIBRARY=${trace-cmd.lib}/lib/libtracecmd.a"
+    "-DTRACEEVENT_LIBRARY=${trace-cmd.lib}/lib/libtraceevent.a"
   ];
 
   meta = with stdenv.lib; {
