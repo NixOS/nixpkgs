@@ -1,18 +1,22 @@
 { stdenv, fetchurl, pkgconfig, libpng, openssl, curl, gtk2, check, SDL
 , libxml2, libidn, perl, nettools, perlPackages, xxd
 , libXcursor, libXrandr, makeWrapper
+, libwebp
 , uilib ? "framebuffer"
 , buildsystem
 , nsgenbind
 , libnsfb
 , libwapcaplet
 , libparserutils
+, libnslog
 , libcss
 , libhubbub
 , libdom
 , libnsbmp
 , libnsgif
+, libsvgtiny
 , libnsutils
+, libnspsl
 , libutf8proc
 , wrapGAppsHook
 }:
@@ -38,17 +42,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng openssl curl gtk2 check libxml2 libidn perl
     nettools perlPackages.HTMLParser libXcursor libXrandr makeWrapper SDL
+    libwebp
     buildsystem
     nsgenbind
     libnsfb
     libwapcaplet
     libparserutils
+    libnslog
     libcss
     libhubbub
     libdom
     libnsbmp
     libnsgif
+    libsvgtiny
     libnsutils
+    libnspsl
     libutf8proc
  ];
 
