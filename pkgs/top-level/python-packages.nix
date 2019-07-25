@@ -476,6 +476,8 @@ in {
 
   cozy = callPackage ../development/python-modules/cozy { };
 
+  cq-editor = callPackage ../development/python-modules/cq-editor { };
+
   curio = callPackage ../development/python-modules/curio { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };
