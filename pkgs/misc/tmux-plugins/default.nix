@@ -91,6 +91,15 @@ in rec {
     };
   };
 
+  ctrlw = mkDerivation {
+    pluginName = "ctrlw";
+    src = fetchgit {
+      url = "https://github.com/eraserhd/tmux-ctrlw";
+      rev = "2354b5d56828813d0f7a4b228ca74b6134c2695f";
+      sha256 = "00hy1axmki8h2285mivsj923z327xkq89wfl2x4dxc71xjhdl216";
+    };
+  };
+
   fpp = mkDerivation {
     pluginName = "fpp";
     src = fetchgit {
