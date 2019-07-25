@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "go-ethereum";
-  version = "1.9.0";
+  version = "1.9.1";
 
   goPackagePath = "github.com/ethereum/go-ethereum";
 
@@ -17,7 +17,7 @@ buildGoPackage rec {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03gkrvps1syvyjna7769n4j3mlpxcgdj461gzds2l90k02ajvh7x";
+    sha256 = "05vnjdjwahdp2j7c6g81jchpdhxmdpbr20mjzpszylp9824v4cba";
   };
 
   meta = with stdenv.lib; {

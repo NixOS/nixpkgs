@@ -22,7 +22,9 @@ let
 
     editor = if cfg.editor then "True" else "False";
 
-    inherit (cfg) consoleMode configurationLimit;
+    configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
+
+    inherit (cfg) consoleMode;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -58,12 +60,15 @@ in {
     };
 
     configurationLimit = mkOption {
-      default = 100;
+      default = null;
       example = 120;
-      type = types.int;
+      type = types.nullOr types.int;
       description = ''
-        Maximum of configurations in boot menu. Otherwise boot partition could
-        run out of disk space.
+        Maximum number of latest generations in the boot menu. 
+        Useful to prevent boot partition running out of disk space.
+
+        <literal>null</literal> means no limit i.e. all generations 
+        that were not garbage collected yet.
       '';
     };
 

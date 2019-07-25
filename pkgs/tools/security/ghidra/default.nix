@@ -6,11 +6,11 @@
 
 in stdenv.mkDerivation {
 
-  name = "ghidra-9.0";
+  name = "ghidra-9.0.2";
 
   src = fetchurl {
-    url = https://ghidra-sre.org/ghidra_9.0_PUBLIC_20190228.zip;
-    sha256 = "3b65d29024b9decdbb1148b12fe87bcb7f3a6a56ff38475f5dc9dd1cfc7fd6b2";
+    url = https://ghidra-sre.org/ghidra_9.0.2_PUBLIC_20190403.zip;
+    sha256 = "10ffd65c266e9f5b631c8ed96786c41ef30e2de939c3c42770573bb3548f8e9f";
   };
 
   nativeBuildInputs = [

@@ -8,15 +8,16 @@ let
       rev = "3b9ba7b26a64d49a55e8b6ccea570a7f32c11ead";
       sha256 = "0f2nr8dgn1ab7hr7jrdmr1zla9g9h8216q4yf4wnff9qkln8sbbs";
     };
-    v20181016 = {
-      version = "20181016";
-      rev = "8049479c5aee00ed0b92e5edc7c8996aebf48208";
-      sha256 = "14f9rlwh8vgmcl6njykvsiwxx0jn623375afixk26mzpy12zdcph";
+    v20190414 = {
+      version = "20190414";
+      rev = "706fdb4065cc2302d92ac2bce62cb59713253119";
+      sha256 = "16lg4xs2wzbdbsn148xiacgl4wq4xwfqjnjkdhfr3w0qh1s81hay";
     };
   in {
     "8.6" = v20180709;
     "8.7" = v20180709;
-    "8.8" = v20181016;
+    "8.8" = v20190414;
+    "8.9" = v20190414;
   };
   param = params."${coq.coq-version}";
 in

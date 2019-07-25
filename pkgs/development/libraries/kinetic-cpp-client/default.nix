@@ -1,5 +1,5 @@
 { stdenv, fetchgit, fetchurl, cmake, protobuf, libunwind, openssl, glog
-, google-gflags, gmock, gtest
+, gflags, gmock, gtest
 }:
 
 let
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake protobuf ];
-  buildInputs = [ libunwind glog google-gflags gmock gtest ];
+  buildInputs = [ libunwind glog gflags gmock gtest ];
 
   # The headers and library include from these and there is no provided pc file
   propagatedBuildInputs = [ protobuf openssl ];

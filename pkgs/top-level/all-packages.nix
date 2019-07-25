@@ -553,7 +553,7 @@ in
 
   ansifilter = callPackage ../tools/text/ansifilter {};
 
-  antora = nodePackages_10_x."@antora/cli";
+  antora = callPackage ../development/tools/documentation/antora {};
 
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
@@ -662,6 +662,8 @@ in
   awless = callPackage ../tools/virtualization/awless { };
 
   brakeman = callPackage ../development/tools/analysis/brakeman { };
+
+  brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
@@ -855,6 +857,8 @@ in
   khd = callPackage ../os-specific/darwin/khd {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
+
+  kjv = callPackage ../applications/misc/kjv { };
 
   luigi = callPackage ../applications/networking/cluster/luigi { };
 
@@ -1259,7 +1263,7 @@ in
   cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
 
   ceres-solver = callPackage ../development/libraries/ceres-solver {
-    google-gflags = null; # only required for examples/tests
+    gflags = null; # only required for examples/tests
   };
 
   gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
@@ -2147,10 +2151,14 @@ in
   };
 
   citrix_workspace_unwrapped = callPackage ../applications/networking/remote/citrix-workspace { };
+  citrix_workspace_unwrapped_19_6_0 = citrix_workspace_unwrapped.override { version = "19.6.0"; };
   citrix_workspace_unwrapped_19_3_0 = citrix_workspace_unwrapped.override { version = "19.3.0"; };
 
   citrix_workspace = callPackage ../applications/networking/remote/citrix-workspace/wrapper.nix {
     citrix_workspace = citrix_workspace_unwrapped;
+  };
+  citrix_workspace_19_6_0 = callPackage ../applications/networking/remote/citrix-workspace/wrapper.nix {
+    citrix_workspace = citrix_workspace_unwrapped_19_6_0;
   };
   citrix_workspace_19_3_0 = callPackage ../applications/networking/remote/citrix-workspace/wrapper.nix {
     citrix_workspace = citrix_workspace_unwrapped_19_3_0;
@@ -2688,6 +2696,8 @@ in
   s-tar = callPackage ../tools/archivers/s-tar {};
 
   sonota = callPackage ../tools/misc/sonota { };
+
+  sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
   tealdeer = callPackage ../tools/misc/tealdeer { };
 
@@ -3672,6 +3682,8 @@ in
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
+  helio-workstation = callPackage ../applications/audio/helio-workstation { };
+
   hevea = callPackage ../tools/typesetting/hevea { };
 
   hexd = callPackage ../tools/misc/hexd { };
@@ -4003,6 +4015,8 @@ in
   kakoune-unwrapped = callPackage ../applications/editors/kakoune { };
   kakoune = wrapKakoune kakoune-unwrapped { };
 
+  kak-lsp = callPackage ../tools/misc/kak-lsp { };
+
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
@@ -4047,6 +4061,8 @@ in
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
   klick = callPackage ../applications/audio/klick { };
+
+  klystrack = callPackage ../applications/audio/klystrack { };
 
   knockknock = callPackage ../tools/security/knockknock { };
 
@@ -5308,6 +5324,8 @@ in
   pinentry = callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
     gcr = null;
+    qt4 = null;
+    qt5 = null;
   };
 
   pinentry_ncurses = res.pinentry.override {
@@ -5323,11 +5341,13 @@ in
   };
 
   pinentry_qt4 = res.pinentry.override {
-    qt = qt4;
+    gtk2 = null;
+    inherit qt4;
   };
 
   pinentry_qt5 = res.pinentry.override {
-    qt = qt5.qtbase;
+    gtk2 = null;
+    inherit qt5;
   };
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
@@ -6257,6 +6277,8 @@ in
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   theharvester = callPackage ../tools/security/theharvester { };
+
+  inherit (nodePackages) thelounge;
 
   thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
 
@@ -8119,10 +8141,15 @@ in
   };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
+  cargo-generate = callPackage ../development/tools/rust/cargo-generate {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
-  rls = callPackage ../development/tools/rust/rls { };
+  rls = callPackage ../development/tools/rust/rls {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
@@ -9677,6 +9704,8 @@ in
 
   redo = callPackage ../development/tools/build-managers/redo { };
 
+  redo-apenwarr = callPackage ../development/tools/build-managers/redo-apenwarr { };
+
   redo-sh = callPackage ../development/tools/build-managers/redo-sh { };
 
   reno = callPackage ../development/tools/reno { };
@@ -9802,6 +9831,8 @@ in
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
 
   teensy-loader-cli = callPackage ../development/tools/misc/teensy-loader-cli { };
+
+  terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
@@ -10747,8 +10778,7 @@ in
   goocanvas2 = callPackage ../development/libraries/goocanvas/2.x.nix { };
   goocanvasmm2 = callPackage ../development/libraries/goocanvasmm { };
 
-  google-gflags = callPackage ../development/libraries/google-gflags { };
-  gflags = google-gflags; # TODO: move to aliases.nix
+  gflags = callPackage ../development/libraries/gflags { };
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
@@ -17019,6 +17049,7 @@ in
 
   bitcoin = altcoins.bitcoin;
   clightning = altcoins.clightning;
+  lnd = altcoins.lnd;
 
   bitcoin-xt = altcoins.bitcoin-xt;
   cryptop = altcoins.cryptop;
@@ -17086,7 +17117,7 @@ in
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip { };
 
-  barrier = callPackage ../applications/misc/barrier {};
+  barrier = libsForQt5.callPackage ../applications/misc/barrier {};
 
   bashSnippets = callPackage ../applications/misc/bashSnippets { };
 
@@ -17144,7 +17175,10 @@ in
   bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
     inherit (pkgs) bitwig-studio1;
   };
-  bitwig-studio = bitwig-studio2;
+  bitwig-studio3 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix {
+    inherit (pkgs) bitwig-studio1;
+  };
+  bitwig-studio = bitwig-studio3;
 
   bgpdump = callPackage ../tools/networking/bgpdump { };
 
@@ -17792,11 +17826,13 @@ in
     };
 
     external = {
-      inherit (haskellPackages) ghc-mod structured-haskell-mode Agda hindent;
+      inherit (haskellPackages)
+        ghc-mod structured-haskell-mode Agda hindent;
       inherit (pythonPackages) elpy;
       inherit
-        autoconf automake git libffi libpng pkgconfig poppler rtags w3m zlib
-        substituteAll rustPlatform cmake llvmPackages libtool zeromq;
+        autoconf automake editorconfig-core-c git libffi libpng pkgconfig
+        poppler rtags w3m zlib substituteAll rustPlatform cmake llvmPackages
+        libtool zeromq;
     };
   };
 
@@ -18519,6 +18555,12 @@ in
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
   spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
+
+  spotifyd = callPackage ../applications/audio/spotifyd {
+    withALSA = stdenv.isLinux;
+    withPulseAudio = config.pulseaudio or true;
+    withPortAudio = stdenv.isDarwin;
+  };
 
   super-productivity = callPackage ../applications/networking/super-productivity { };
 
@@ -19416,10 +19458,10 @@ in
     githubSupport = true;
     mpdSupport = true;
     pulseSupport  = true;
-    iwSupport = true;
+    iwSupport = false;
     nlSupport = true;
     i3Support = true;
-    i3GapsSupport = true;
+    i3GapsSupport = false;
   };
 
   ptex = callPackage ../development/libraries/ptex {};
@@ -19851,7 +19893,7 @@ in
 
   properties-cpp = callPackage ../development/libraries/properties-cpp { };
 
-  protonmail-bridge = libsForQt511.callPackage ../applications/networking/protonmail-bridge { };
+  protonmail-bridge = libsForQt512.callPackage ../applications/networking/protonmail-bridge { };
 
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
@@ -20670,6 +20712,8 @@ in
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
+  tree-from-tags = callPackage ../applications/audio/tree-from-tags { };
+
   tdrop = callPackage ../applications/misc/tdrop { };
 
   tree = callPackage ../tools/system/tree {};
@@ -21340,6 +21384,8 @@ in
   xvidcap = callPackage ../applications/video/xvidcap {
     inherit (gnome2) scrollkeeper libglade;
   };
+
+  xygrib = libsForQt5.callPackage ../applications/misc/xygrib/default.nix {};
 
   xzgv = callPackage ../applications/graphics/xzgv { };
 
@@ -22496,6 +22542,8 @@ in
 
   emboss = callPackage ../applications/science/biology/emboss { };
 
+  est-sfs = callPackage ../applications/science/biology/est-sfs { };
+
   ezminc = callPackage ../applications/science/biology/EZminc { };
 
   exonerate = callPackage ../applications/science/biology/exonerate { };
@@ -22688,6 +22736,7 @@ in
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
   mathematica10 = callPackage ../applications/science/math/mathematica/10.nix { };
+  mathematica11 = callPackage ../applications/science/math/mathematica/11.nix { };
 
   metis = callPackage ../development/libraries/science/math/metis {};
 
@@ -24446,5 +24495,4 @@ in
   dapper = callPackage ../development/tools/dapper { };
 
   kube3d =  callPackage ../applications/networking/cluster/kube3d {};
-
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, boost, libevent, double-conversion, glog
-, google-gflags, libiberty, openssl }:
+, gflags, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
   name = "folly-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     boost
     double-conversion
     glog
-    google-gflags
+    gflags
     libevent
     libiberty
     openssl

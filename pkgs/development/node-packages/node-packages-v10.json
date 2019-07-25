@@ -1,7 +1,8 @@
 [
   "@angular/cli"
-, "asar"
 , "@antora/cli"
+, "@antora/site-generator-default" 
+, "asar"
 , "aws-azure-login"
 , "azure-functions-core-tools"
 , "bash-language-server"
@@ -126,6 +127,7 @@
 , "textlint-rule-terminology"
 , "textlint-rule-unexpanded-acronym"
 , "textlint-rule-write-good"
+, "thelounge"
 , "three"
 , "tiddlywiki"
 , "triton"

@@ -33,7 +33,7 @@ let
       ${cfg.extraConfig}
 
       ${ concatMapStrings
-          ({ name, file, master ? true, slaves ? [], masters ? [] }:
+          ({ name, file, master ? true, slaves ? [], masters ? [], extraConfig ? "" }:
             ''
               zone "${name}" {
                 type ${if master then "master" else "slave"};
@@ -52,6 +52,7 @@ let
                    ''
                 }
                 allow-query { any; };
+                ${extraConfig}
               };
             '')
           cfg.zones }
@@ -131,6 +132,7 @@ in
           file = "/var/dns/example.com";
           masters = ["192.168.0.1"];
           slaves = [];
+          extraConfig = "";
         }];
       };
 

@@ -1123,6 +1123,8 @@ in {
 
   spglib = callPackage ../development/python-modules/spglib { };
 
+  sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
+
   sslib = callPackage ../development/python-modules/sslib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
@@ -4660,6 +4662,8 @@ in {
   serpy = callPackage ../development/python-modules/serpy { };
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
+
+  setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
 
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 

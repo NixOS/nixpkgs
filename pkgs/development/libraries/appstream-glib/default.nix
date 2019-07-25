@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Objects and helper methods to read and write AppStream metadata";
     homepage = https://people.freedesktop.org/~hughsient/appstream-glib/;
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lethalman matthewbauer ];
   };
 }
