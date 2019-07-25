@@ -33,12 +33,18 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";
-    longDescription = "
-      Monty implements supplementary useful functions for Python that are not part of the
-      standard library. Examples include useful utilities like transparent support for zipped files, useful design
-      patterns such as singleton and cached_class, and many more.
-    ";
+    description = ''
+      Serves as a complement to the Python standard library by providing a suite
+      of tools to solve many common problems
+    '';
+
+    longDescription = ''
+      Monty implements supplementary useful functions for Python that are not
+      part of the standard library. Examples include useful utilities like
+      transparent support for zipped files, useful design patterns such as
+      singleton and cached_class, and many more.
+    '';
+
     homepage = https://github.com/materialsvirtuallab/monty;
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];

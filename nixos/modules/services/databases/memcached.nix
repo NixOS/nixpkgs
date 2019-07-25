@@ -20,9 +20,7 @@ in
 
       enable = mkOption {
         default = false;
-        description = "
-          Whether to enable Memcached.
-        ";
+        description = "Whether to enable Memcached.";
       };
 
       user = mkOption {

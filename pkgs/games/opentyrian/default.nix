@@ -16,16 +16,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [SDL SDL_net];
 
-  patchPhase = "
+  patchPhase = ''
     substituteInPlace src/file.c --replace /usr/share $out/share
-  ";
+  '';
+
   buildPhase = "make release";
-  installPhase = "
+  installPhase = ''
     mkdir -p $out/bin
     cp ./opentyrian $out/bin
     mkdir -p $out/share/opentyrian/data
     cp -r $data/* $out/share/opentyrian/data
-  ";
+  '';
 
   meta = {
     description = ''Open source port of the game "Tyrian"'';

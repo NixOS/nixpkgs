@@ -14,10 +14,10 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  installPhase = "
+  installPhase = ''
     mkdir -p $out/share/texmf-nix
     cp -prd * $out/share/texmf-nix
-  ";
+  '';
 
   meta = with stdenv.lib; {
     description = "TeX package to draw plots directly in TeX in two and three dimensions";

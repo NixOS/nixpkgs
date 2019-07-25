@@ -8,19 +8,19 @@
 
   options = {
 
-    services.deepin.core.enable = lib.mkEnableOption "
+    services.deepin.core.enable = lib.mkEnableOption ''
       Basic dbus and systemd services, groups and users needed by the
       Deepin Desktop Environment.
-    ";
+    '';
 
-    services.deepin.deepin-menu.enable = lib.mkEnableOption "
+    services.deepin.deepin-menu.enable = lib.mkEnableOption ''
       DBus service for unified menus in Deepin Desktop Environment.
-    ";
+    '';
 
-    services.deepin.deepin-turbo.enable = lib.mkEnableOption "
+    services.deepin.deepin-turbo.enable = lib.mkEnableOption ''
       Turbo service for the Deepin Desktop Environment. It is a daemon
       that helps to launch applications faster.
-    ";
+    '';
 
   };
 

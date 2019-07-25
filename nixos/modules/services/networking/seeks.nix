@@ -23,18 +23,18 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Whether to enable the Seeks server.
-        ";
+        '';
       };
 
       confDir = mkOption {
         default = "";
         type = types.str;
-        description = "
+        description = ''
           The Seeks server configuration. If it is not specified,
           a default configuration is used.
-        ";
+        '';
       };
 
     };

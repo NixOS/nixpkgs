@@ -111,10 +111,10 @@ in
       serverXml = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = ''
           Verbatim server.xml configuration.
           This is mutually exclusive with the virtualHosts options.
-        ";
+        '';
       };
 
       commonLibs = mkOption {

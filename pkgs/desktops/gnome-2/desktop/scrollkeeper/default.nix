@@ -8,10 +8,10 @@ stdenv.mkDerivation {
   };
 
   # The fuloong2f is not supported by scrollkeeper-0.3.14 config.guess
-  preConfigure = "
+  preConfigure = ''
     substituteInPlace extract/dtds/Makefile.am --replace /usr/bin/xmlcatalog xmlcatalog
     cp ${automake}/share/automake*/config.{sub,guess} .
-  ";
+  '';
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libxml2 libxslt gettext ]

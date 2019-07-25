@@ -24,11 +24,11 @@ buildGoModule rec {
 
   buildInputs = [ python3 perl ];
 
-  buildPhase = "
+  buildPhase = ''
     runHook preBuild
     # we use make instead of go build
     runHook postBuild
-  ";
+  '';
 
   installPhase = ''
     runHook preInstall

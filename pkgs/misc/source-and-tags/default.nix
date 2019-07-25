@@ -53,17 +53,18 @@
                { name = "${deriv.name}_haskell";
                  # tagCmd = "${toString ghcsAndLibs.ghc68.ghc}/bin/hasktags --ignore-close-implementation --ctags `find . -type f -name \"*.*hs\"`; sort tags > \$TAG_FILE"; }
                  # *.*hs.* to catch gtk2hs .hs.pp files
-                 tagCmd = "
-                   srcs=\"`find . -type f -name \"*.*hs\"; find . -type f -name \"*.*hs*\";`\"
-                   [ -z \"$srcs\" ] || {
-                    # without this creating tag files for lifted-base fails
-                    export LC_ALL=en_US.UTF-8
-                    export LANG=en_US.UTF-8
-                    ${if stdenv.isLinux then "export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive;" else ""}
+                 tagCmd = ''
+                   srcs="$(find . -type f -name "*.*hs"; find . -type f -name "*.*hs*";)"
+                   [ -z "$srcs" ] || {
+                     # without this creating tag files for lifted-base fails
+                     export LC_ALL=en_US.UTF-8
+                     export LANG=en_US.UTF-8
+                     ${if stdenv.isLinux then "export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive;" else ""}
 
-                    ${toString hasktags}/bin/hasktags --ignore-close-implementation --ctags .
-                    mv tags \$TAG_FILE
-                   }";
+                     ${toString hasktags}/bin/hasktags --ignore-close-implementation --ctags .
+                     mv tags $TAG_FILE
+                   }
+                 '';
               }
           ];
        };

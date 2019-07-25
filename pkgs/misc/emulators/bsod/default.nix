@@ -17,11 +17,13 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Blue Screen Of Death emulator for Unix";
-    longDescription = "
+    longDescription = ''
       This program will let you UNIX user experience the authentic
       microsoft windows experience.  Bsod displays the famous windows xp
       blue screen of death on the console.  Errors and drivers causing the
-      error are selected randomly from a large set of examples.";
+      error are selected randomly from a large set of examples.
+    '';
+
     homepage = http://www.vanheusden.com/bsod/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

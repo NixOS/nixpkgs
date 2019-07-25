@@ -22,9 +22,9 @@ in
 
       enable = mkOption {
         default = false;
-        description = "
+        description = ''
           Whether to enable Yandex-disk client. See https://disk.yandex.ru/
-        ";
+        '';
       };
 
       username = mkOption {

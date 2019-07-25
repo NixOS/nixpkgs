@@ -24,11 +24,11 @@ in
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "
+        description = ''
           The path of the Searx server configuration file. If no file
           is specified, a default file is used (default config file has
           debug mode enabled).
-        ";
+        '';
       };
 
       package = mkOption {

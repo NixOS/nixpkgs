@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installPhase = "
+  installPhase = ''
     mkdir $out/bin -p
     cp ctrtool $out/bin/ctrtool
-  ";
+  '';
 
   meta = with stdenv.lib; {
     license = licenses.mit;

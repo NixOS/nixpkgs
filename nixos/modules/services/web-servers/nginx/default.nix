@@ -284,57 +284,57 @@ in
       statusPage = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Enable status page reachable from localhost on http://127.0.0.1/nginx_status.
-        ";
+        '';
       };
 
       recommendedTlsSettings = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Enable recommended TLS settings.
-        ";
+        '';
       };
 
       recommendedOptimisation = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Enable recommended optimisation settings.
-        ";
+        '';
       };
 
       recommendedGzipSettings = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Enable recommended gzip settings.
-        ";
+        '';
       };
 
       recommendedProxySettings = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Enable recommended proxy settings.
-        ";
+        '';
       };
 
       package = mkOption {
         default = pkgs.nginxStable;
         defaultText = "pkgs.nginxStable";
         type = types.package;
-        description = "
+        description = ''
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as <literal>nginxMainline</literal>.
-        ";
+        '';
       };
 
       logError = mkOption {
         default = "stderr";
-        description = "
+        description = ''
           Configures logging.
           The first parameter defines a file that will store the log. The
           special value stderr selects the standard error file. Logging to
@@ -345,7 +345,7 @@ in
           increasing severity. Setting a certain log level will cause all
           messages of the specified and more severe log levels to be logged.
           If this parameter is omitted then error is used.
-        ";
+        '';
       };
 
       preStart =  mkOption {
@@ -356,19 +356,19 @@ in
           test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
           chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
         '';
-        description = "
+        description = ''
           Shell commands executed before the service's nginx is started.
-        ";
+        '';
       };
 
       config = mkOption {
         default = "";
-        description = "
+        description = ''
           Verbatim nginx.conf configuration.
           This is mutually exclusive with the structured configuration
           via virtualHosts and the recommendedXyzSettings configuration
           options. See appendConfig for appending to the generated http block.
-        ";
+        '';
       };
 
       appendConfig = mkOption {
@@ -405,12 +405,12 @@ in
       httpConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = ''
           Configuration lines to be set inside the http block.
           This is mutually exclusive with the structured configuration
           via virtualHosts and the recommendedXyzSettings configuration
           options. See appendHttpConfig for appending to the generated http block.
-        ";
+        '';
       };
 
       eventsConfig = mkOption {
@@ -424,18 +424,18 @@ in
       appendHttpConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = ''
           Configuration lines to be appended to the generated http block.
           This is mutually exclusive with using config and httpConfig for
           specifying the whole http block verbatim.
-        ";
+        '';
       };
 
       stateDir = mkOption {
         default = "/var/spool/nginx";
-        description = "
+        description = ''
           Directory holding all state for nginx to run.
-        ";
+        '';
       };
 
       user = mkOption {

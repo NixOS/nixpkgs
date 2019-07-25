@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
 
   SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
 
-  preConfigure = "
+  preConfigure = ''
     substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
     substituteInPlace configure --replace 'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
     substituteInPlace configure --replace /usr /no-such-path
-  " + optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace \
       'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
       'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
@@ -72,9 +72,9 @@ stdenv.mkDerivation rec {
       -lSystem
   '';
 
-  postInstall = "
+  postInstall = ''
     (cd $out/include && ln -s wx-*/* .)
-  ";
+  '';
 
   passthru = {
     inherit compat28 compat30 unicode;

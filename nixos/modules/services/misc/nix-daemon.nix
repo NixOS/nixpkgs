@@ -133,7 +133,7 @@ in
       useSandbox = mkOption {
         type = types.either types.bool (types.enum ["relaxed"]);
         default = true;
-        description = "
+        description = ''
           If set, Nix will perform builds in a sandboxed environment that it
           will set up automatically for each build. This prevents impurities
           in builds by disallowing access to dependencies outside of the Nix
@@ -142,7 +142,7 @@ in
           impact due to the initial setup time of a sandbox for each build. It
           doesn't affect derivation hashes, so changing this option will not
           trigger a rebuild of packages.
-        ";
+        '';
       };
 
       sandboxPaths = mkOption {

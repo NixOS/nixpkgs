@@ -13,9 +13,9 @@ in
       default = pkgs.cryptpad;
       defaultText = "pkgs.cryptpad";
       type = types.package;
-      description = "
+      description = ''
         Cryptpad package to use.
-      ";
+      '';
     };
 
     configFile = mkOption {

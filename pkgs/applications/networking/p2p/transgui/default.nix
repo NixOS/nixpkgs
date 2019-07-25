@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     libX11 glib gtk2 gdk_pixbuf pango atk cairo openssl
   ];
 
-  NIX_LDFLAGS = "
+  NIX_LDFLAGS = ''
     -L${stdenv.cc.cc.lib}/lib
     -lX11 -lglib-2.0 -lgtk-x11-2.0 -lgdk-x11-2.0
     -lgdk_pixbuf-2.0 -lpango-1.0 -latk-1.0 -lcairo -lc -lcrypto
-  ";
+  '';
 
   prePatch = ''
     substituteInPlace restranslator.pas --replace /usr/ $out/

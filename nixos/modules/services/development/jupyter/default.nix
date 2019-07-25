@@ -130,13 +130,15 @@ in {
           };
         }
       '';
-      description = "Declarative kernel config
 
-      Kernels can be declared in any language that supports and has the required
-      dependencies to communicate with a jupyter server.
-      In python's case, it means that ipykernel package must always be included in
-      the list of packages of the targeted environment.
-      ";
+      description = ''
+        Declarative kernel config
+
+        Kernels can be declared in any language that supports and has the
+        required dependencies to communicate with a jupyter server. In python's
+        case, it means that ipykernel package must always be included in the
+        list of packages of the targeted environment.
+      '';
     };
   };
 

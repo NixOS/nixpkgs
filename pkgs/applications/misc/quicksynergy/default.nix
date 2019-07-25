@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     gtk2
     synergy
   ];
-  preBuild = "
+  preBuild = ''
     sed -i 's@/usr/bin@${synergy.out}/bin@' src/synergy_config.c
-  ";
+  '';
   meta = {
     description = "GUI application to share mouse and keyboard between computers";
-    longDescription = "
+    longDescription = ''
       QuickSynergy is a graphical interface (GUI) for easily configuring
       Synergy2, an application that allows the user to share his mouse and
       keyboard between two or more computers.
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
       operating systems, such as Mac OS, Linux and Windows.
 
       Remember to open port 24800 (used by synergys program) if you want to
-      host mouse and keyboard.";
+      host mouse and keyboard.
+    '';
     homepage = https://sourceforge.net/projects/quicksynergy/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.spinus ];

@@ -11,16 +11,16 @@ with lib;
 
       enable = mkOption {
         default = false;
-        description = "
+        description = ''
           Whether to enable OpenFire XMPP server.
-        ";
+        '';
       };
 
       usePostgreSQL = mkOption {
         default = true;
-        description = "
+        description = ''
           Whether you use PostgreSQL service for your storage back-end.
-        ";
+        '';
       };
 
     };

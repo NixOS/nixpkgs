@@ -38,69 +38,69 @@ in
 
       enable = mkOption {
         default = false;
-        description = "
+        description = ''
           Enable IRCD.
-        ";
+        '';
       };
 
       serverName = mkOption {
         default = "hades.arpa";
-        description = "
+        description = ''
           IRCD server name.
-        ";
+        '';
       };
 
       sid = mkOption {
         default = "0NL";
-        description = "
+        description = ''
           IRCD server unique ID in a net of servers.
-        ";
+        '';
       };
 
       description = mkOption {
         default = "Hybrid-7 IRC server.";
-        description = "
+        description = ''
           IRCD server description.
-        ";
+        '';
       };
 
       rsaKey = mkOption {
         default = null;
         example = literalExample "/root/certificates/irc.key";
-        description = "
+        description = ''
           IRCD server RSA key.
-        ";
+        '';
       };
 
       certificate = mkOption {
         default = null;
         example = literalExample "/root/certificates/irc.pem";
-        description = "
+        description = ''
           IRCD server SSL certificate. There are some limitations - read manual.
-        ";
+        '';
       };
 
       adminEmail = mkOption {
         default = "<bit-bucket@example.com>";
         example = "<name@domain.tld>";
-        description = "
+        description = ''
           IRCD server administrator e-mail.
-        ";
+        '';
       };
 
       extraIPs = mkOption {
         default = [];
         example = ["127.0.0.1"];
-        description = "
+        description = ''
           Extra IP's to bind.
-        ";
+        '';
       };
 
       extraPort = mkOption {
         default = "7117";
-        description = "
+        description = ''
           Extra port to avoid filtering.
-        ";
+        '';
       };
 
     };
