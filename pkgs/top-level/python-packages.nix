@@ -5981,6 +5981,8 @@ in {
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   mwparserfromhell = callPackage ../development/python-modules/mwparserfromhell { };
+  uvicorn = callPackage ../development/python-modules/uvicorn { };
+
 });
 
 in fix' (extends overrides packages)
