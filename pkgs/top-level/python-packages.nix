@@ -1165,6 +1165,8 @@ in {
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
 
+  pytest-xvfb = callPackage ../development/python-modules/pytest-xvfb { };
+
   pytmx = callPackage ../development/python-modules/pytmx { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
