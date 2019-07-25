@@ -133,6 +133,7 @@ JuliaEditorSupport/julia-vim
 junegunn/fzf.vim
 junegunn/goyo.vim
 junegunn/limelight.vim
+junegunn/seoul256.vim
 junegunn/vim-easy-align
 junegunn/vim-github-dashboard
 junegunn/vim-peekaboo
