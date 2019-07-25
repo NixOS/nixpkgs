@@ -79,6 +79,7 @@ in stdenv.mkDerivation (args // {
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
+    export CARGO_HOME=$TMPDIR
     mkdir -p .cargo
     cat >> .cargo/config <<'EOF'
     [target."${stdenv.buildPlatform.config}"]
