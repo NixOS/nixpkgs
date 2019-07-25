@@ -4283,6 +4283,8 @@ in
 
     libsvgtiny = callPackage ../applications/misc/netsurf/libsvgtiny { };
 
+    libnspsl = callPackage ../applications/misc/netsurf/libnspsl { };
+
     libutf8proc = callPackage ../applications/misc/netsurf/libutf8proc { };
 
     browser = callPackage ../applications/misc/netsurf/browser { };
