@@ -1,5 +1,5 @@
 { stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune
-, menhir, merlin_extend, ppx_tools_versioned, utop
+, menhir, merlin-extend, ppx_tools_versioned, utop
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
+  propagatedBuildInputs = [ menhir merlin-extend ppx_tools_versioned ];
 
   buildInputs = [ ocaml findlib dune utop menhir ];
 
