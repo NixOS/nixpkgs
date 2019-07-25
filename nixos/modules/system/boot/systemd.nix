@@ -497,7 +497,7 @@ in
       '';
     };
 
-    systemd.generator-packages = mkOption {
+    systemd.generatorPackages = mkOption {
       default = [];
       type = types.listOf types.package;
       example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
@@ -762,10 +762,10 @@ in
 
     environment.etc = let
       # generate contents for /etc/systemd/system-generators from
-      # systemd.generators and systemd.generator-packages
+      # systemd.generators and systemd.generatorPackages
       generators = pkgs.runCommand "system-generators" {
           preferLocalBuild = true;
-          packages = cfg.generator-packages;
+          packages = cfg.generatorPackages;
         } ''
         mkdir -p $out
         for package in $packages
