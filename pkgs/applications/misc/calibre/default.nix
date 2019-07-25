@@ -1,7 +1,7 @@
 { stdenv, fetchurl, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
 , makeWrapper, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
-, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo
+, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo, qt5
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake removeReferencesTo ];
+  nativeBuildInputs = [ makeWrapper pkgconfig qmake removeReferencesTo qt5.wrapQtAppsHook ];
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
