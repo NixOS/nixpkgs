@@ -3,21 +3,12 @@
 , src
 , platform
 , versionType
+, autoPatchelfHook
 }:
 
 let
-  inherit (stdenv.lib) optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
-
-  bootstrapping = versionType == "bootstrap";
-
-  installComponents
-    = "rustc,rust-std-${platform}"
-    + (optionalString bootstrapping ",cargo")
-    ;
-in
-
-rec {
+in rec {
   rustc = stdenv.mkDerivation rec {
     name = "rustc-${versionType}-${version}";
 
@@ -34,25 +25,15 @@ rec {
     buildInputs = [ bash ]
       ++ stdenv.lib.optional stdenv.isDarwin Security;
 
+    nativeBuildInputs = stdenv.lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+
     postPatch = ''
       patchShebangs .
     '';
 
     installPhase = ''
       ./install.sh --prefix=$out \
-        --components=${installComponents}
-
-      ${optionalString (stdenv.isLinux && bootstrapping) ''
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/rustc"
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/rustdoc"
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/cargo"
-      ''}
+        --components=rustc,rust-std-${platform},${stdenv.lib.optionalString (versionType == "bootstrap") ",cargo"}
 
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
@@ -78,6 +59,8 @@ rec {
     buildInputs = [ makeWrapper bash ]
       ++ stdenv.lib.optional stdenv.isDarwin Security;
 
+    nativeBuildInputs = stdenv.lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+
     postPatch = ''
       patchShebangs .
     '';
@@ -86,12 +69,6 @@ rec {
       patchShebangs ./install.sh
       ./install.sh --prefix=$out \
         --components=cargo
-
-      ${optionalString (stdenv.isLinux && bootstrapping) ''
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/cargo"
-      ''}
 
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"
