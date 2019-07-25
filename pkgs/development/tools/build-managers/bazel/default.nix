@@ -235,9 +235,10 @@ stdenv.mkDerivation rec {
       downstream = recurseIntoAttrs ({
         inherit bazel-watcher;
       }
-      // (lib.optionalAttrs stdenv.isLinux {
           # dm-sonnet is only packaged for linux
-          dm-sonnet-linux = python3.pkgs.dm-sonnet;
+      // (lib.optionalAttrs stdenv.isLinux {
+          # TODO(timokau) dm-sonnet is broken currently
+          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
       }));
     };
 
