@@ -1473,6 +1473,8 @@ in {
 
   capstone = callPackage ../development/python-modules/capstone { };
 
+  capturer = callPackage ../development/python-modules/capturer { };
+
   cement = callPackage ../development/python-modules/cement {};
 
   cgen = callPackage ../development/python-modules/cgen { };
@@ -1496,6 +1498,8 @@ in {
   circus = callPackage ../development/python-modules/circus {};
 
   colorcet = callPackage ../development/python-modules/colorcet { };
+
+  coloredlogs = callPackage ../development/python-modules/coloredlogs { };
 
   colorclass = callPackage ../development/python-modules/colorclass {};
 
@@ -2186,6 +2190,8 @@ in {
 
   execnet = callPackage ../development/python-modules/execnet { };
 
+  executor = callPackage ../development/python-modules/executor { };
+
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
   facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
@@ -2460,6 +2466,8 @@ in {
 
   natsort = callPackage ../development/python-modules/natsort { };
 
+  naturalsort = callPackage ../development/python-modules/naturalsort { };
+
   ncclient = callPackage ../development/python-modules/ncclient {};
 
   logfury = callPackage ../development/python-modules/logfury { };
@@ -2676,6 +2684,8 @@ in {
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
   roman = callPackage ../development/python-modules/roman { };
+
+  rotate-backups = callPackage ../tools/backup/rotate-backups { };
 
   librosa = callPackage ../development/python-modules/librosa { };
 
@@ -4107,6 +4117,8 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
+  property-manager = callPackage ../development/python-modules/property-manager { };
+
   prompt_toolkit = let
     filename = if isPy3k then ../development/python-modules/prompt_toolkit else ../development/python-modules/prompt_toolkit/1.nix;
   in callPackage filename { };
@@ -4846,6 +4858,8 @@ in {
 
   update-copyright = callPackage ../development/python-modules/update-copyright {};
 
+  update-dotdee = callPackage ../development/python-modules/update-dotdee { };
+
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
   uproot = callPackage ../development/python-modules/uproot {};
@@ -4857,6 +4871,8 @@ in {
   urwid = callPackage ../development/python-modules/urwid {};
 
   user-agents = callPackage ../development/python-modules/user-agents { };
+
+  verboselogs = callPackage ../development/python-modules/verboselogs { };
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
