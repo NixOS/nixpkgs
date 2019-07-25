@@ -4281,6 +4281,8 @@ in
 
     libnsutils = callPackage ../applications/misc/netsurf/libnsutils { };
 
+    libsvgtiny = callPackage ../applications/misc/netsurf/libsvgtiny { };
+
     libutf8proc = callPackage ../applications/misc/netsurf/libutf8proc { };
 
     browser = callPackage ../applications/misc/netsurf/browser { };
