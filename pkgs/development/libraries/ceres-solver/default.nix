@@ -2,13 +2,13 @@
 , eigen
 , fetchurl
 , cmake
-, google-gflags
+, gflags
 , glog
 , runTests ? false
 }:
 
-# google-gflags is required to run tests
-assert runTests -> google-gflags != null;
+# gflags is required to run tests
+assert runTests -> gflags != null;
 
 stdenv.mkDerivation rec {
   name = "ceres-solver-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ eigen glog ]
-    ++ stdenv.lib.optional runTests google-gflags;
+    ++ stdenv.lib.optional runTests gflags;
 
   # The Basel BUILD file conflicts with the cmake build directory on
   # case-insensitive filesystems, eg. darwin.

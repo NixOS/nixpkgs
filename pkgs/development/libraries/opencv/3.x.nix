@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
-, glog, boost, google-gflags, protobuf
+, glog, boost, gflags, protobuf
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-       [ zlib pcre hdf5 glog boost google-gflags ]
+       [ zlib pcre hdf5 glog boost gflags ]
     ++ lib.optional useSystemProtobuf protobuf
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2

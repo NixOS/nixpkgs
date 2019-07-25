@@ -699,11 +699,13 @@ let
       PREEMPT_VOLUNTARY = yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
-      # Enable memory hotplug support
-      # Allows you to dynamically add & remove memory to a VM client running NixOS without requiring a reboot
+      # Enable CPU/memory hotplug support
+      # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
+      ACPI_HOTPLUG_CPU = yes;
       ACPI_HOTPLUG_MEMORY = yes;
       MEMORY_HOTPLUG = yes;
       MEMORY_HOTREMOVE = yes;
+      HOTPLUG_CPU = yes;
       MIGRATION = yes;
       SPARSEMEM = yes;
 

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   name = "lf-${version}";
-  version = "12";
+  version = "13";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "1pjydnwlc6mrnwz13s13c91nvjvb1ibwl944ppg8xq8dcy9b2cs4";
+    sha256 = "1ld3q75v8rvp169w5p85z1vznqs9bhck6bm2f6fykxx16hmpb6ga";
   };
 
   modSha256 = "14fvn8yjm9cnpsmzgxw2dypr3h8h36mxrbk7zma42w8rsp46jpz7";
