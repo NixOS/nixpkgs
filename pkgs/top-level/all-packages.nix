@@ -20749,6 +20749,17 @@ in
 
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
+  syncthingtray-minimal = libsForQt5.callPackage ../applications/misc/syncthingtray { };
+  syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray {
+    # Could be qt5.qtwebengine as well
+    webviewProvider = qt5.qtwebkit;
+    # Could be qt5.qtdeclarative as well
+    jsProvider = qt5.qtscript;
+    enableKioPluginSupport = true;
+    enablePlasmoidSupport = true;
+    systemdSupport = true;
+  };
+
   synergy = callPackage ../applications/misc/synergy {
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa CoreServices ScreenSaver;
