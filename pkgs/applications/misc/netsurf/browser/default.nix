@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libpng, openssl, curl, gtk2, check, SDL
-, libxml2, libidn, perl, nettools, perlPackages
+, libxml2, libidn, perl, nettools, perlPackages, xxd
 , libXcursor, libXrandr, makeWrapper
 , uilib ? "framebuffer"
 , buildsystem
@@ -14,21 +14,28 @@
 , libnsgif
 , libnsutils
 , libutf8proc
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
 
   name = "netsurf-${version}";
-  version = "3.5";
+  version = "3.9";
 
   # UI libs incldue Framebuffer, and gtk
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/netsurf/releases/source/netsurf-${version}-src.tar.gz";
-    sha256 = "1k0x8mzgavfy7q9kywl6kzsc084g1xlymcnsxi5v6jp279nsdwwq";
+    sha256 = "1hzcm2s2wh5sapgr000lg63hcdbj6hyajxl43xa1x80kc5piqbyp";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    xxd
+  ] ++ stdenv.lib.optionals (uilib == "gtk") [
+    wrapGAppsHook
+  ];
+
   buildInputs = [ libpng openssl curl gtk2 check libxml2 libidn perl
     nettools perlPackages.HTMLParser libXcursor libXrandr makeWrapper SDL
     buildsystem
@@ -63,7 +70,7 @@ stdenv.mkDerivation rec {
     cmd=$(case "${uilib}" in framebuffer) echo nsfb;; gtk) echo nsgtk;; esac)
     cp $cmd $out/bin/netsurf
     wrapProgram $out/bin/netsurf --set NETSURFRES $out/share/Netsurf/${uilib}/res
-    tar -hcf - ${uilib}/res | (cd $out/share/Netsurf/ && tar -xvpf -)
+    tar -hcf - frontends/${uilib}/res | (cd $out/share/Netsurf/ && tar -xvpf -)
   '';
 
   meta = with stdenv.lib; {
