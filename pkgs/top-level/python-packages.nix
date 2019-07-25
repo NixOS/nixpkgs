@@ -947,6 +947,8 @@ in {
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
 
+  pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
+
   pyside = callPackage ../development/python-modules/pyside { };
 
   pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
