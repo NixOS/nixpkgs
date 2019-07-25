@@ -1,20 +1,22 @@
 diff --git a/Documentation/Makefile b/Documentation/Makefile
-index 21e42fd..b74c912 100644
+index 21e42fd..826361d 100644
 --- a/Documentation/Makefile
 +++ b/Documentation/Makefile
-@@ -108,7 +108,9 @@ $(IMGS_INSTALL): %.png.install : %.png force
+@@ -108,7 +108,11 @@ $(IMGS_INSTALL): %.png.install : %.png force
  
  GUI_INSTALL = $(HTML_INSTALL) $(IMGS_INSTALL)
  
 -install: $(MAN1_INSTALL) $(MAN5_INSTALL) $(GUI_INSTALL)
 +install_man: $(MAN1_INSTALL) $(MAN5_INSTALL)
 +
-+install: install_man $(GUI_INSTALL)
++install_gui: $(GUI_INSTALL)
++
++install: install_man install_gui
  
  clean:
  	(cd $(obj); \
 diff --git a/Makefile b/Makefile
-index 3e63e9e..65743c6 100644
+index 3e63e9e..146fe88 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -292,7 +292,7 @@ libtraceevent.a: $(LIBTRACEEVENT_STATIC)
@@ -35,12 +37,15 @@ index 3e63e9e..65743c6 100644
  	$(Q)$(call do_install,$(src)/include/traceevent/event-parse.h,$(includedir_SQ)/traceevent)
  	$(Q)$(call do_install,$(src)/include/traceevent/trace-seq.h,$(includedir_SQ)/traceevent)
  	$(Q)$(call do_install,$(src)/include/trace-cmd/trace-cmd.h,$(includedir_SQ))
-@@ -359,6 +361,9 @@ doc:
+@@ -359,6 +361,12 @@ doc:
  doc_clean:
  	$(MAKE) -C $(src)/Documentation clean
  
 +install_man:
 +	$(MAKE) -C $(src)/Documentation install_man
++
++install_gui_docs:
++	$(MAKE) -C $(src)/Documentation install_gui
 +
  install_doc:
  	$(MAKE) -C $(src)/Documentation install

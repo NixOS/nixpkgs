@@ -8,7 +8,11 @@ in mkDerivation rec {
 
   src = fetchgit srcSpec;
 
-  sourceRoot = "trace-cmd-${shortRev}/kernel-shark";
+  patches = [ ./fix-Makefiles.patch ];
+
+  outputs = [ "out" "doc" ];
+
+  preConfigure = "pushd kernel-shark";
 
   nativeBuildInputs = [ cmake doxygen graphviz ];
 
@@ -21,6 +25,12 @@ in mkDerivation rec {
     "-DTRACECMD_LIBRARY=${trace-cmd.lib}/lib/libtracecmd.a"
     "-DTRACEEVENT_LIBRARY=${trace-cmd.lib}/lib/libtraceevent.a"
   ];
+
+  preInstall = ''
+    popd
+    make install_gui_docs prefix=$doc
+    pushd kernel-shark/build
+  '';
 
   meta = with stdenv.lib; {
     description = "GUI for trace-cmd which is an interface for the Linux kernel ftrace subsystem";
