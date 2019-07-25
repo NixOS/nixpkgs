@@ -5981,6 +5981,9 @@ in {
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   mwparserfromhell = callPackage ../development/python-modules/mwparserfromhell { };
+
+  starlette = callPackage ../development/python-modules/starlette { };
+
   uvicorn = callPackage ../development/python-modules/uvicorn { };
 
 });
