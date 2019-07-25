@@ -1,4 +1,8 @@
-{ stdenv, bazel, cacert }:
+{ stdenv
+, bazel
+, cacert
+, lib
+}:
 
 args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
 
@@ -109,6 +113,31 @@ in stdenv.mkDerivation (fBuildAttrs // {
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
+    '' + lib.optionalString stdenv.isDarwin ''
+    # Bazel sandboxes the execution of the tools it invokes, so even though we are
+    # calling the correct nix wrappers, the values of the environment variables
+    # the wrappers are expecting will not be set. So instead of relying on the
+    # wrappers picking them up, pass them in explicitly via `--copt`, `--linkopt`
+    # and related flags.
+    #
+    copts=()
+    host_copts=()
+    for flag in $NIX_CFLAGS_COMPILE; do
+      copts+=( "--copt=$flag" )
+      host_copts+=( "--host_copt=$flag" )
+    done
+    for flag in $NIX_CXXSTDLIB_COMPILE; do
+      copts+=( "--copt=$flag" )
+      host_copts+=( "--host_copt=$flag" )
+    done
+    linkopts=()
+    host_linkopts=()
+    for flag in $NIX_LD_FLAGS; do
+      linkopts+=( "--linkopt=$flag" )
+      host_linkopts+=( "--host_linkopt=$flag" )
+    done
+    '' + ''
+
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
     USER=homeless-shelter \
     bazel \
@@ -116,6 +145,12 @@ in stdenv.mkDerivation (fBuildAttrs // {
       --output_user_root="$bazelUserRoot" \
       build \
       -j $NIX_BUILD_CORES \
+      '' + lib.optionalString stdenv.isDarwin ''
+      "''${copts[@]}" \
+      "''${host_copts[@]}" \
+      "''${linkopts[@]}" \
+      "''${host_linkopts[@]}" \
+      '' + ''
       $bazelFlags \
       $bazelTarget
 
