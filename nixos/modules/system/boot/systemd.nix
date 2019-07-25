@@ -504,6 +504,23 @@ in
       description = "Packages providing systemd generators.";
     };
 
+    systemd.shutdown = mkOption {
+      type = types.attrsOf types.path;
+      default = {};
+      description = ''
+        Definition of systemd shutdown executables.
+        For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
+        <literal>/etc/systemd/system-shutdown/NAME</literal> to <literal>VALUE</literal>.
+      '';
+    };
+
+    systemd.shutdownPackages = mkOption {
+      default = [];
+      type = types.listOf types.package;
+      example = literalExample "[ pkgs.mdadm ]";
+      description = "Packages providing systemd shutdown executables.";
+    };
+
     systemd.defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.str;
@@ -761,18 +778,21 @@ in
     environment.systemPackages = [ systemd ];
 
     environment.etc = let
-      # generate contents for /etc/systemd/system-generators from
-      # systemd.generators and systemd.generatorPackages
-      generators = pkgs.runCommand "system-generators" {
+      # generate contents for /etc/systemd/system-${type} from attrset of links and packages
+      hooks = type: links: packages: pkgs.runCommand "system-${type}" {
           preferLocalBuild = true;
-          packages = cfg.generatorPackages;
-        } ''
+          packages = packages;
+      } ''
+        set -e
         mkdir -p $out
         for package in $packages
         do
-          ln -s $package/lib/systemd/system-generators/* $out/
-        done;
-        ${concatStrings (mapAttrsToList (generator: target: "ln -s ${target} $out/${generator};\n") cfg.generators)}
+          for hook in $package/lib/systemd/system-${type}/*
+          do
+            ln -s $hook $out/
+          done
+        done
+        ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
       '';
     in ({
       "systemd/system".source = generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
@@ -834,7 +854,8 @@ in
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
 
-      "systemd/system-generators" = { source = generators; };
+      "systemd/system-generators" = { source = hooks "generators" cfg.generators cfg.generatorPackages; };
+      "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown cfg.shutdownPackages; };
     });
 
     services.dbus.enable = true;
