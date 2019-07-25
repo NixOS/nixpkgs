@@ -8456,6 +8456,19 @@ let
     buildInputs = [ TestDifferences TestMemoryCycle ];
   };
 
+  HTMLStripScripts = buildPerlPackage {
+    pname = "HTML-StripScripts";
+    version = "1.06";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DRTECH/HTML-StripScripts-1.06.tar.gz;
+      sha256 = "222bfb7ec1fdfa465e32da3dc4abed2edc7364bbe19e8e3c513c7d585b0109ad";
+    };
+    meta = {
+      description = "Strip scripting constructs out of HTML";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTMLStripScriptsParser = buildPerlPackage {
     pname = "HTML-StripScripts-Parser";
     version = "1.03";
