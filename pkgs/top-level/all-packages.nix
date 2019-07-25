@@ -750,6 +750,8 @@ in
 
   cue = callPackage ../development/tools/cue { };
 
+  dazel = python36Packages.callPackage ../development/tools/dazel { };
+
   deskew = callPackage ../applications/graphics/deskew { };
 
   detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
