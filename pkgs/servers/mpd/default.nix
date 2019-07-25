@@ -101,13 +101,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.21.10";
+      version = "0.21.11";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "1syh4qa4x7w7syh49qjz0m7gaiwnpjwkglbb21191csqh6jdk2nk";
+        sha256 = "1ld2s0wyaz629j827ang1xm5i3l9kpwvjpya4vzh9gxr97fmbmlq";
       };
 
       buildInputs = [ glib boost ]
@@ -118,6 +118,7 @@ let
 
       enableParallelBuilding = true;
 
+      mesonAutoFeatures = "disabled";
       mesonFlags =
         map (x: "-D${x}=enabled") features_
         ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
