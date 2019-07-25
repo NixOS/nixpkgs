@@ -53,12 +53,16 @@ rec {
   # Filter sources by a list of regular expressions.
   #
   # E.g. `src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]`
-  sourceByRegex = src: regexes: cleanSourceWith {
-    filter = (path: type:
-      let relPath = lib.removePrefix (toString src + "/") (toString path);
-      in lib.any (re: builtins.match re relPath != null) regexes);
-    inherit src;
-  };
+  sourceByRegex = src: regexes:
+    let
+      isFiltered = src ? _isLibCleanSourceWith;
+      origSrc = if isFiltered then src.origSrc else src;
+    in lib.cleanSourceWith {
+      filter = (path: type:
+        let relPath = lib.removePrefix (toString origSrc + "/") (toString path);
+        in lib.any (re: builtins.match re relPath != null) regexes);
+      inherit src;
+    };
 
   # Get all files ending with the specified suffices from the given
   # directory or its descendants.  E.g. `sourceFilesBySuffices ./dir
