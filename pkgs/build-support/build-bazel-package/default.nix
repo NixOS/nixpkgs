@@ -113,13 +113,13 @@ in stdenv.mkDerivation (fBuildAttrs // {
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
+    '' + lib.optionalString stdenv.isDarwin ''
     # Bazel sandboxes the execution of the tools it invokes, so even though we are
     # calling the correct nix wrappers, the values of the environment variables
     # the wrappers are expecting will not be set. So instead of relying on the
     # wrappers picking them up, pass them in explicitly via `--copt`, `--linkopt`
     # and related flags.
     #
-    '' + lib.optionalString stdenv.isDarwin ''
     copts=()
     host_copts=()
     for flag in $NIX_CFLAGS_COMPILE; do
