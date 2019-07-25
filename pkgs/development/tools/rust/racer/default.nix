@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll }:
+{ stdenv, fetchFromGitHub, rustPlatform, rustNightlyPlatform, makeWrapper, substituteAll }:
 
-rustPlatform.buildRustPackage rec {
+rustNightlyPlatform.buildRustPackage rec {
   name = "racer-${version}";
-  version = "2.0.14";
+  version = "2.1.22";
 
   src = fetchFromGitHub {
     owner = "racer-rust";
     repo = "racer";
-    rev = version;
-    sha256 = "0kgax74qa09axq7b175ph3psprgidwgsml83wm1qwdq16gpxiaif";
+    rev = "v${version}";
+    sha256 = "1n808h4jqxkvpjwmj8jgi4y5is5zvr8vn42mwb3yi13mix32cysa";
   };
 
-  cargoSha256 = "119xfkglpfq26bz411rjj31i088vr0847p571cxph5v3dfxbgz4y";
+  cargoSha256 = "0njaa9vk2i9g1c6sq20b7ls97nl532rfv3is7d8dwz51nrwk6jxs";
 
   buildInputs = [ makeWrapper ];
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     })
     ./ignore-tests.patch
   ];
-  doCheck = true;
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
