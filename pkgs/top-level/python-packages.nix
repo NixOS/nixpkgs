@@ -6043,6 +6043,8 @@ in {
 
   uvicorn = callPackage ../development/python-modules/uvicorn { };
 
+  pydantic = callPackage ../development/python-modules/pydantic { };
+
 });
 
 in fix' (extends overrides packages)
