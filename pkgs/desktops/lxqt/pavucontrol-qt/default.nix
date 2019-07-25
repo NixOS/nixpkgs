@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt, libpulseaudio,
-  pcre, qtbase, qttools, qtx11extras }:
+  pcre, qt5, qtbase, qttools, qtx11extras }:
 
-stdenv.mkDerivation rec {
+qt5.mkDerivation rec {
   pname = "pavucontrol-qt";
   version = "0.14.1";
 
