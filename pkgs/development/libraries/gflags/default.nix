@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "google-gflags-${version}";
+  pname = "gflags";
   version = "2.2.2";
 
   src = fetchFromGitHub {
