@@ -96,7 +96,7 @@ nodePackages // {
     '';
   };
 
-  scuttlebot = nodePackages.scuttlebot.override {
+  ssb-server = nodePackages.ssb-server.override {
     buildInputs = [ pkgs.automake pkgs.autoconf nodePackages.node-gyp-build ];
   };
 
@@ -124,5 +124,9 @@ nodePackages // {
 
       nodePackages.node-pre-gyp
     ];
+  };
+
+  thelounge = nodePackages.thelounge.override {
+    buildInputs = [ nodePackages.node-pre-gyp ];
   };
 }

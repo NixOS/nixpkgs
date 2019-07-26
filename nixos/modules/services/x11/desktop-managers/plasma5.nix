@@ -21,6 +21,13 @@ in
         description = "Enable the Plasma 5 (KDE 5) desktop environment.";
       };
 
+      phononBackend = mkOption {
+        type = types.enum [ "gstreamer" "vlc" ];
+        default = "gstreamer";
+        example = "vlc";
+        description = "Phonon audio backend to install.";
+      };
+
       enableQt4Support = mkOption {
         type = types.bool;
         default = true;
@@ -161,12 +168,14 @@ in
 
           qtvirtualkeyboard
 
-          libsForQt5.phonon-backend-gstreamer
-
           xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ]
-
-        ++ lib.optionals cfg.enableQt4Support [ pkgs.phonon-backend-gstreamer ]
+        
+        # Phonon audio backend
+        ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
+        ++ lib.optional (cfg.phononBackend == "gstreamer" && cfg.enableQt4Support) pkgs.phonon-backend-gstreamer
+        ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
+        ++ lib.optional (cfg.phononBackend == "vlc" && cfg.enableQt4Support) pkgs.phonon-backend-vlc
 
         # Optional hardware support features
         ++ lib.optional config.hardware.bluetooth.enable bluedevil
@@ -223,6 +232,8 @@ in
       security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
+
+      xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = ''

@@ -6,15 +6,15 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "exa-${version}";
-  version = "0.8.0";
+  version = "0.9.0";
 
-  cargoSha256 = "0kaldln4fb9n53190m2r130mcblkjx32glzj9rk8hrz6dd6yhfb0";
+  cargoSha256 = "1hgjp23rjd90wyf0nq6d5akjxdfjlaps54dv23zgwjvkhw24fidf";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "exa";
     rev = "v${version}";
-    sha256 = "0jy11a3xfnfnmyw1kjmv4ffavhijs8c940kw24vafklnacx5n88m";
+    sha256 = "14qlm9zb9v22hxbbi833xaq2b7qsxnmh15s317200vz5f1305hhw";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
@@ -52,6 +52,6 @@ buildRustPackage rec {
     '';
     homepage = https://the.exa.website;
     license = licenses.mit;
-    maintainers = [ maintainers.ehegnes ];
+    maintainers = with maintainers; [ ehegnes lilyball ];
   };
 }

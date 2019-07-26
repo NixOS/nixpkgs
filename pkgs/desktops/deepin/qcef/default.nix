@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools,
   qtwebchannel, qtx11extras,
   gnome2, nss, nspr, alsaLib, atk, cairo, cups, dbus,
-  expat, fontconfig, gdk_pixbuf, glib, gtk2,
+  expat, fontconfig, gdk-pixbuf, glib, gtk2,
   libxcb, pango, pulseaudio, xorg, deepin }:
 
 let
@@ -14,7 +14,7 @@ let
     dbus
     expat
     fontconfig
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gtk2

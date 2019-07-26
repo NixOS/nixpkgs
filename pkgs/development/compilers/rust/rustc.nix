@@ -17,11 +17,11 @@ let
   llvmShared = llvm_7.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.35.0";
+  version = "1.36.0";
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "0bbizy6b7002v1rdhrxrf5gijclbyizdhkglhp81ib3bf5x66kas";
+    sha256 = "06xv2p6zq03lidr0yaf029ii8wnjjqa894nkmrm6s0rx47by9i04";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -205,6 +205,8 @@ in stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
   # https://github.com/rust-lang/rust/issues/30181
   # enableParallelBuilding = false;
+
+  setupHooks = ./setup-hook.sh;
 
   requiredSystemFeatures = [ "big-parallel" ];
 

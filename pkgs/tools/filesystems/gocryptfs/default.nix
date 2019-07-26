@@ -2,13 +2,13 @@
 { stdenv, buildGoPackage, fetchFromGitHub, openssl, pandoc, pkgconfig }:
 
 let
-  version = "v1.6.1";
   goFuseVersion = with stdenv.lib; substring 0 7 (head (filter (
     d: d.goPackagePath == "github.com/hanwen/go-fuse"
   ) (import ./deps.nix))).fetch.rev;
 in
 buildGoPackage rec {
-  name = "gocryptfs-${version}";
+  pname = "gocryptfs";
+  version = "1.7"; # TODO: Drop `patches` with next release. Remove `fix-unix2syscall_darwin.go-build-failure.patch`.
 
   goPackagePath = "github.com/rfjakob/gocryptfs";
 
@@ -17,10 +17,14 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     owner = "rfjakob";
-    repo = "gocryptfs";
-    rev = version;
-    sha256 = "0aqbl25g48b4jp6l09k6kic6w3p0q7d9ip2wvrcvh8lhnrbdkhzd";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1sr3i73haw07faqpw785cdda2kna8q3a0zhwab1p3i935rvp4qaa";
   };
+
+  # Fixes build on darwin
+  # Source: https://github.com/rfjakob/gocryptfs/commit/b1468a732fa26550f2a6f8a21cc7bd47b65a8c96
+  patches = [ ./fix-unix2syscall_darwin.go-build-failure.patch ];
 
   postPatch = "rm -r tests";
 

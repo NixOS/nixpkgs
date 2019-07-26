@@ -2,7 +2,7 @@
 
 # Dynamic libraries
 , alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
-, gdk_pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
+, gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
 , libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
 , libxcb, libuuid, nspr, nss, pango
 
@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "10.8.0";
+  version = "10.9.5";
 
   src = fetchurl {
     url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/draw.io-x86_64-${version}.rpm";
-    sha256 = "0c5wymzhbp72x0yhvw7vb4akkdvj97npl9kglk79vqjbzfn5di9k";
+    sha256 = "13687d5bfxj7wlbh5j13pvxvs69whlg820wllk3pb1xb3syynlpn";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     cups
     dbus
     expat
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk3
     libX11

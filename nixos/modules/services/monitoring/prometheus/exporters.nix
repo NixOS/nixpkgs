@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{ config, pkgs, lib, options, ... }:
 
 let
+  inherit (lib) concatStrings foldl foldl' genAttrs literalExample maintainers
+                mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
+                optional types;
+
   cfg = config.services.prometheus.exporters;
 
   # each attribute in `exporterOpts` is expected to have specified:
@@ -17,25 +19,28 @@ let
   #  Note that `extraOpts` is optional, but a script for the exporter's
   #  systemd service must be provided by specifying either
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
-  exporterOpts = {
-    blackbox  = import ./exporters/blackbox.nix  { inherit config lib pkgs; };
-    collectd  = import ./exporters/collectd.nix  { inherit config lib pkgs; };
-    dnsmasq   = import ./exporters/dnsmasq.nix   { inherit config lib pkgs; };
-    dovecot   = import ./exporters/dovecot.nix   { inherit config lib pkgs; };
-    fritzbox  = import ./exporters/fritzbox.nix  { inherit config lib pkgs; };
-    json      = import ./exporters/json.nix      { inherit config lib pkgs; };
-    minio     = import ./exporters/minio.nix     { inherit config lib pkgs; };
-    nginx     = import ./exporters/nginx.nix     { inherit config lib pkgs; };
-    node      = import ./exporters/node.nix      { inherit config lib pkgs; };
-    postfix   = import ./exporters/postfix.nix   { inherit config lib pkgs; };
-    snmp      = import ./exporters/snmp.nix      { inherit config lib pkgs; };
-    surfboard = import ./exporters/surfboard.nix { inherit config lib pkgs; };
-    tor       = import ./exporters/tor.nix       { inherit config lib pkgs; };
-    unifi     = import ./exporters/unifi.nix     { inherit config lib pkgs; };
-    varnish   = import ./exporters/varnish.nix   { inherit config lib pkgs; };
-    bind      = import ./exporters/bind.nix      { inherit config lib pkgs; };
-    wireguard = import ./exporters/wireguard.nix { inherit config lib pkgs; };
-  };
+
+  exporterOpts = genAttrs [
+    "bind"
+    "blackbox"
+    "collectd"
+    "dnsmasq"
+    "dovecot"
+    "fritzbox"
+    "json"
+    "minio"
+    "nginx"
+    "node"
+    "postfix"
+    "snmp"
+    "surfboard"
+    "tor"
+    "unifi"
+    "varnish"
+    "wireguard"
+  ] (name:
+    import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
+  );
 
   mkExporterOpts = ({ name, port }: {
     enable = mkEnableOption "the prometheus ${name} exporter";
@@ -97,9 +102,10 @@ let
     };
   });
 
-  mkSubModule = { name, port, extraOpts, ... }: {
+  mkSubModule = { name, port, extraOpts, imports }: {
     ${name} = mkOption {
       type = types.submodule {
+        inherit imports;
         options = (mkExporterOpts {
           inherit name port;
         } // extraOpts);
@@ -112,13 +118,15 @@ let
   mkSubModules = (foldl' (a: b: a//b) {}
     (mapAttrsToList (name: opts: mkSubModule {
       inherit name;
-      inherit (opts) port serviceOpts;
+      inherit (opts) port;
       extraOpts = opts.extraOpts or {};
+      imports = opts.imports or [];
     }) exporterOpts)
   );
 
   mkExporterConf = { name, conf, serviceOpts }:
     mkIf conf.enable {
+      warnings = conf.warnings or [];
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"

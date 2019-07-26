@@ -2,10 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
-, pythonOlder
+, isPy3k
+, pytest
 }:
 
-if !(pythonOlder "3.3") then null else buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "backports.functools_lru_cache";
   version = "1.5";
 
@@ -15,7 +16,15 @@ if !(pythonOlder "3.3") then null else buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools_scm ];
-  doCheck = false; # No proper test
+
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    pytest
+  '';
+
+  # Test fail on Python 2
+  doCheck = isPy3k;
 
   meta = {
     description = "Backport of functools.lru_cache";

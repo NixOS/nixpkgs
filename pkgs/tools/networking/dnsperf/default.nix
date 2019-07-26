@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook
+{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkgconfig
 , bind, zlib, openssl, libcap
 }:
 
 stdenv.mkDerivation rec {
   name = "dnsperf-${version}";
-  version = "2.2.0";
+  version = "2.3.1";
 
   # The same as the initial commit of the new GitHub repo (only readme changed).
   src = fetchFromGitHub {
     owner = "DNS-OARC";
     repo = "dnsperf";
     rev = "v${version}";
-    sha256 = "1acbpgk1d7hjs48j3w6xkmyf9xlxhqskjy50a16f9dvjwvvxp84b";
+    sha256 = "0yxwm5xi9ry154ayzn2h27bnwwc202bsna8h6i4a65pn76nrn81w";
   };
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
   buildInputs = [ bind zlib openssl ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libcap.lib ];
 

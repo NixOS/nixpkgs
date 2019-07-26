@@ -1,8 +1,4 @@
-{ lib, bundlerApp }:
-
-# Updated with:
-# rm gemset.nix Gemfile.lock
-# nix-shell -p bundler bundix --run 'bundle lock && bundix'
+{ lib, bundlerApp, bundlerUpdateScript }:
 
 bundlerApp {
   pname = "sup";
@@ -20,11 +16,13 @@ bundlerApp {
     "sup-tweak-labels"
   ];
 
+  passthru.updateScript = bundlerUpdateScript "sup";
+
   meta = with lib; {
     description = "A curses threads-with-tags style email client";
     homepage    = http://sup-heliotrope.github.io;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ cstrahan lovek323 manveru ];
+    maintainers = with maintainers; [ cstrahan lovek323 manveru nicknovitski ];
     platforms   = platforms.unix;
   };
 }

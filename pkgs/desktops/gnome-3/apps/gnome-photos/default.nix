@@ -3,7 +3,7 @@
 , itstool, gegl, babl, libdazzle, gfbgraph, grilo-plugins
 , grilo, gnome-online-accounts
 , desktop-file-utils, wrapGAppsHook
-, gnome3, gdk_pixbuf, gexiv2, geocode-glib
+, gnome3, gdk-pixbuf, gexiv2, geocode-glib
 , dleyna-renderer, dbus, meson, ninja, python3, gsettings-desktop-schemas }:
 
 let
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 glib gegl babl libgdata libdazzle
     gsettings-desktop-schemas
-    gdk_pixbuf gnome3.adwaita-icon-theme
+    gdk-pixbuf gnome3.adwaita-icon-theme
     gfbgraph grilo-plugins grilo
     gnome-online-accounts tracker
     gexiv2 geocode-glib dleyna-renderer

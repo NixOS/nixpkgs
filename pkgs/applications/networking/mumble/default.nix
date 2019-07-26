@@ -139,15 +139,15 @@ let
   };
 
   gitSource = rec {
-    version = "2018-07-01";
+    version = "2019-07-10";
     qtVersion = 5;
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
-      rev = "c19ac8c0b0f934d2ff206858d7cb66352d6eb418";
-      sha256 = "1mzp1bgn49ycs16d6r8icqq35wq25198fs084vyq6j5f78ni7pvz";
+      rev = "41b265584654c7ac216fd3ccb9c141734d3f839b";
+      sha256 = "00irlzz5q4drmsfbwrkyy7p7w8a5fc1ip5vyicq3g3cy58dprpqr";
       fetchSubmodules = true;
     };
   };

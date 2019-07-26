@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, zlib, openssl, libarchive }:
+{ stdenv, fetchFromGitHub, pkgconfig, which, zlib, openssl_1_1, libarchive }:
 
 stdenv.mkDerivation rec {
-  name = "xbps-${version}";
-  version = "0.53";
+  pname = "xbps";
+  version = "0.56";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "xbps";
     rev = version;
-    sha256 = "1zicin2z5j7vg2ixzpd6nahjhrjwdcavm817wzgs9x013b596paa";
+    sha256 = "0hqvq6fq62l5sgm4fy3zb0ks889d21mqz4f4my3iifs6c9f50na2";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
 
-  buildInputs = [ zlib openssl libarchive ];
+  buildInputs = [ zlib openssl_1_1 libarchive ];
 
   patches = [ ./cert-paths.patch ];
 

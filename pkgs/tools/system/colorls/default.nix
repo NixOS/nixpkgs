@@ -1,4 +1,4 @@
-{ lib, bundlerApp, ruby, ... }:
+{ lib, bundlerApp, ruby, bundlerUpdateScript }:
 
 bundlerApp rec {
   pname = "colorls";
@@ -6,11 +6,13 @@ bundlerApp rec {
   gemdir = ./.;
   exes = [ "colorls" ];
 
+  passthru.updateScript = bundlerUpdateScript "colorls";
+
   meta = with lib; {
     description = "Prettified LS";
     homepage    = https://github.com/athityakumar/colorls;
     license     = with licenses; mit;
-    maintainers = with maintainers; [ lukebfox ];
+    maintainers = with maintainers; [ lukebfox nicknovitski ];
     platforms   = ruby.meta.platforms;
   };
 }

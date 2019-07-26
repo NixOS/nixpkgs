@@ -1,14 +1,14 @@
-{ lib, bundlerEnv, ruby
+{ lib, bundlerEnv, ruby, bundlerUpdateScript
 }:
 
-# Bundix:
-# nix-shell -p bundix zlib
 bundlerEnv rec {
   pname = "doing";
   version = (import ./gemset.nix).doing.version;
 
   inherit ruby;
   gemdir = ./.;
+
+  passthru.updateScript = bundlerUpdateScript "doing";
 
   meta = with lib; {
     description = "A command line tool for keeping track of what you’re doing and tracking what you’ve done.";
@@ -19,7 +19,7 @@ bundlerEnv rec {
     '';
     homepage    = https://brettterpstra.com/projects/doing/;
     license     = licenses.mit;
-    maintainers = with maintainers; [ ktf ];
+    maintainers = with maintainers; [ ktf nicknovitski ];
     platforms   = platforms.unix;
   };
 }

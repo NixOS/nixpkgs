@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with pkgs;
 with lib;
 
 let
@@ -12,12 +11,13 @@ let
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
-  configFile = writeText "NetworkManager.conf" ''
+  configFile = pkgs.writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
     dhcp=${cfg.dhcp}
     dns=${cfg.dns}
-    rc-manager=${cfg.rc-manager}
+    # If resolvconf is disabled that means that resolv.conf is managed by some other module.
+    rc-manager=${if config.networking.resolvconf.enable then "resolvconf" else "unmanaged"}
 
     [keyfile]
     ${optionalString (cfg.unmanaged != [])
@@ -65,19 +65,19 @@ let
     });
   '';
 
-  ns = xs: writeText "nameservers" (
+  ns = xs: pkgs.writeText "nameservers" (
     concatStrings (map (s: "nameserver ${s}\n") xs)
   );
 
-  overrideNameserversScript = writeScript "02overridedns" ''
+  overrideNameserversScript = pkgs.writeScript "02overridedns" ''
     #!/bin/sh
-    tmp=`${coreutils}/bin/mktemp`
-    ${gnused}/bin/sed '/nameserver /d' /etc/resolv.conf > $tmp
-    ${gnugrep}/bin/grep 'nameserver ' /etc/resolv.conf | \
-      ${gnugrep}/bin/grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
-    ${optionalString (cfg.appendNameservers != []) "${coreutils}/bin/cat $tmp $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf"}
-    ${optionalString (cfg.insertNameservers != []) "${coreutils}/bin/cat $tmp ${ns cfg.insertNameservers} $tmp.ns > /etc/resolv.conf"}
-    ${coreutils}/bin/rm -f $tmp $tmp.ns
+    PATH=${with pkgs; makeBinPath [ gnused gnugrep coreutils ]}
+    tmp=$(mktemp)
+    sed '/nameserver /d' /etc/resolv.conf > $tmp
+    grep 'nameserver ' /etc/resolv.conf | \
+      grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
+    cat $tmp ${ns cfg.insertNameservers} $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf
+    rm -f $tmp $tmp.ns
   '';
 
   dispatcherTypesSubdirMap = {
@@ -176,7 +176,8 @@ in {
       # Ugly hack for using the correct gnome3 packageSet
       basePackages = mkOption {
         type = types.attrsOf types.package;
-        default = { inherit networkmanager modemmanager wpa_supplicant
+        default = { inherit (pkgs)
+                            networkmanager modemmanager wpa_supplicant
                             networkmanager-openvpn networkmanager-vpnc
                             networkmanager-openconnect networkmanager-fortisslvpn
                             networkmanager-l2tp networkmanager-iodine; };
@@ -254,25 +255,6 @@ in {
         default = "default";
         description = ''
           Set the DNS (<literal>resolv.conf</literal>) processing mode.
-          </para>
-          <para>
-          A description of these modes can be found in the main section of
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
-            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          </link>
-          or in
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
-        '';
-      };
-
-      rc-manager = mkOption {
-        type = types.enum [ "symlink" "file" "resolvconf" "netconfig" "unmanaged" "none" ];
-        default = "resolvconf";
-        description = ''
-          Set the <literal>resolv.conf</literal> management mode.
           </para>
           <para>
           A description of these modes can be found in the main section of
@@ -425,13 +407,10 @@ in {
       { source = "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";
       }
-      { source = "${networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
-        target = "NetworkManager/VPN/nm-strongswan-service.name";
-      }
       { source = "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
         target = "NetworkManager/VPN/nm-iodine-service.name";
       }
-    ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
+    ] ++ optional (cfg.appendNameservers != [] || cfg.insertNameservers != [])
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
@@ -440,11 +419,15 @@ in {
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
         mode = "0544";
       }) cfg.dispatcherScripts
-      ++ optional (dynamicHostsEnabled)
+      ++ optional dynamicHostsEnabled
            { target = "NetworkManager/dnsmasq.d/dyndns.conf";
              text = concatMapStrings (n: ''
                hostsdir=/run/NetworkManager/hostsdirs/${n}
              '') (attrNames cfg.dynamicHosts.hostsDirs);
+           }
+      ++ optional cfg.enableStrongSwan
+           { source = "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
+             target = "NetworkManager/VPN/nm-strongswan-service.name";
            };
 
     environment.systemPackages = cfg.packages;
@@ -512,7 +495,7 @@ in {
     networking = {
       useDHCP = false;
       # use mkDefault to trigger the assertion about the conflict above
-      wireless.enable = lib.mkDefault false;
+      wireless.enable = mkDefault false;
     };
 
     security.polkit.extraConfig = polkitConf;

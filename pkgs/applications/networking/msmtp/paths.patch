@@ -59,7 +59,8 @@ index bdb4fb8..1363a67 100755
  ##
  log() {
 +  local NAME=msmtpq
-   local ARG RC PFX="$('date' +'%Y %d %b %H:%M:%S')"
+   local ARG RC PFX
+   PFX="$('date' +'%Y %d %b %H:%M:%S')"
                                       # time stamp prefix - "2008 13 Mar 03:59:45 "
    if [ "$1" = '-e' ] ; then          # there's an error exit code
 @@ -154,10 +157,19 @@ log() {

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll
-, pkgconfig, gobject-introspection, gdk_pixbuf
+, pkgconfig, gobject-introspection, gdk-pixbuf
 , gtk3, mate, python3, dropbox }:
 
 let
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     gobject-introspection
-    gdk_pixbuf
+    gdk-pixbuf
     (python3.withPackages (ps: with ps; [
       docutils
       pygobject3

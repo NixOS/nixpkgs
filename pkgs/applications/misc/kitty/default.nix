@@ -1,6 +1,6 @@
 { stdenv, substituteAll, fetchFromGitHub, python3Packages, glfw, libunistring,
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
-  libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
+  libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
   which, dbus,
   Cocoa,
@@ -57,6 +57,8 @@ buildPythonApplication rec {
     optipng
   ];
 
+  propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;
+
   outputs = [ "out" "terminfo" ];
 
   patches = [
@@ -69,6 +71,10 @@ buildPythonApplication rec {
     ./no-werror.patch
     ./png2icns.patch
   ];
+
+  preConfigure  = stdenv.lib.optional (!stdenv.isDarwin) ''
+    substituteInPlace glfw/egl_context.c --replace "libEGL.so.1" "${stdenv.lib.getLib libGL}/lib/libEGL.so.1"
+  '';
 
   buildPhase = if stdenv.isDarwin then ''
     make app

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, symlinkJoin, writeShellScriptBin, callPackage, defaultCrateOverrides
-, wayland, wlc, cairo, libxkbcommon, pam, python3Packages, lemonbar, gdk_pixbuf
+, wayland, wlc, cairo, libxkbcommon, pam, python3Packages, lemonbar, gdk-pixbuf
 }:
 
 let
@@ -22,7 +22,7 @@ let
   way-cooler = ((way_cooler_ { builtin-lua = true; }).override {
     crateOverrides = defaultCrateOverrides // {
 
-    way-cooler = attrs: { buildInputs = [ wlc cairo libxkbcommon fakegit gdk_pixbuf wayland ]; };
+    way-cooler = attrs: { buildInputs = [ wlc cairo libxkbcommon fakegit gdk-pixbuf wayland ]; };
   };}).overrideAttrs (oldAttrs: rec {
     postBuild = ''
       mkdir -p $out/etc

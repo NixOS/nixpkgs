@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     xen
   ] ++ optionals spiceSupport [
     spice-gtk spice-protocol libcap gdbm
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
 
   # Required for USB redirection PolicyKit rules file

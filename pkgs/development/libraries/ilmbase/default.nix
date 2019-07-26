@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.isx86_64;
 
   meta = with stdenv.lib; {
-    homepage = http://www.openexr.com/;
+    homepage = https://www.openexr.com/;
     license = licenses.bsd3;
     platforms = platforms.all;
   };

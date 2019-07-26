@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     export LC_ALL="en_US.UTF-8"
     export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
     make test ARGS+="-E testgui --output-on-failure"
   '';
 
@@ -112,7 +113,7 @@ stdenv.mkDerivation rec {
     longDescription = "A community fork of KeePassX, which is itself a port of KeePass Password Safe. The goal is to extend and improve KeePassX with new features and bugfixes to provide a feature-rich, fully cross-platform and modern open-source password manager. Accessible via native cross-platform GUI, CLI, and browser integration with the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser).";
     homepage = https://keepassxc.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ s1lvester jonafato ];
+    maintainers = with maintainers; [ jonafato ];
     platforms = with platforms; linux ++ darwin;
   };
 }

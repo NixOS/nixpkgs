@@ -237,8 +237,8 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.rootpwFile != null || cfg.rootpw != null;
-        message = "Either services.openldap.rootpw or services.openldap.rootpwFile must be set";
+        assertion = cfg.configDir != null || cfg.rootpwFile != null || cfg.rootpw != null;
+        message = "services.openldap: Unless configDir is set, either rootpw or rootpwFile must be set";
       }
     ];
 

@@ -26,7 +26,7 @@ with lib;
 
   security.allowSimultaneousMultithreading = mkDefault false;
 
-  security.virtualization.flushL1DataCache = mkDefault "always";
+  security.virtualisation.flushL1DataCache = mkDefault "always";
 
   security.apparmor.enable = mkDefault true;
 

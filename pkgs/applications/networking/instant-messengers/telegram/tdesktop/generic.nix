@@ -28,13 +28,17 @@ mkDerivation rec {
     sha256 = archPatchesHash;
   };
 
-  # TODO: libtgvoip.patch no-gtk2.patch
-  # TODO: Avoid tdesktop_lottie_animation_qtdebug.patch and tdesktop_qtlottie_qtdebug.patch
-  patches = [ "${archPatches}/tdesktop.patch" "${archPatches}/tdesktop_lottie_animation_qtdebug.patch" ];
+  patches = [
+    "${archPatches}/tdesktop.patch"
+    "${archPatches}/no-gtk2.patch"
+    # "${archPatches}/Use-system-wide-font.patch"
+    "${archPatches}/tdesktop_lottie_animation_qtdebug.patch"
+    "${archPatches}/issue6219.patch"
+  ];
 
   postPatch = ''
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
-      --replace '"appindicator"' '"${libappindicator-gtk3}/lib/libappindicator3.so"'
+      --replace '"appindicator3"' '"${libappindicator-gtk3}/lib/libappindicator3.so"'
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libnotify.cpp \
       --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
@@ -75,12 +79,14 @@ mkDerivation rec {
   CPPFLAGS = NIX_CFLAGS_COMPILE;
 
   preConfigure = ''
+    patch -R -Np1 -i "${archPatches}/demibold.patch"
+
     pushd "Telegram/ThirdParty/libtgvoip"
     patch -Np1 -i "${archPatches}/libtgvoip.patch"
     popd
-    pushd "Telegram/ThirdParty/qtlottie"
-    patch -Np1 -i "${archPatches}/tdesktop_qtlottie_qtdebug.patch"
-    popd
+
+    # disable static-qt for rlottie
+    sed "/RLOTTIE_WITH_STATIC_QT/d" -i "Telegram/gyp/lib_rlottie.gyp"
 
     sed -i Telegram/gyp/telegram_linux.gypi \
       -e 's,/usr,/does-not-exist,g' \
@@ -117,6 +123,8 @@ mkDerivation rec {
 
     export ASM=$(type -p gcc)
   '';
+
+  cmakeFlags = [ "-UTDESKTOP_OFFICIAL_TARGET" ];
 
   installPhase = ''
     install -Dm755 Telegram $out/bin/telegram-desktop
