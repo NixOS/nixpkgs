@@ -6045,6 +6045,7 @@ in {
 
   pydantic = callPackage ../development/python-modules/pydantic { };
 
+  fastapi = callPackage ../development/python-modules/fastapi { };
 });
 
 in fix' (extends overrides packages)
