@@ -1312,6 +1312,8 @@ in
 
   clprover = callPackage ../applications/science/logic/clprover/clprover.nix { };
 
+  coloredlogs = with python3Packages; toPythonApplication coloredlogs;
+
   colord-kde = libsForQt5.callPackage ../tools/misc/colord-kde {};
 
   colpack = callPackage ../applications/science/math/colpack { };
@@ -2871,6 +2873,8 @@ in
 
   execline = skawarePackages.execline;
 
+  executor = with python3Packages; toPythonApplication executor;
+
   exif = callPackage ../tools/graphics/exif { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
@@ -3740,6 +3744,8 @@ in
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
+
+  humanfriendly = with python3Packages; toPythonApplication humanfriendly;
 
   hwinfo = callPackage ../tools/system/hwinfo { };
 
@@ -5123,6 +5129,8 @@ in
   };
 
   oppai-ng = callPackage ../tools/misc/oppai-ng { };
+
+  update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
@@ -13159,6 +13167,8 @@ in
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
+
+  rotate-backups = with python3Packages; toPythonApplication rotate-backups;
 
   rote = callPackage ../development/libraries/rote { };
 

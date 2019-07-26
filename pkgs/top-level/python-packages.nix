@@ -684,9 +684,11 @@ in {
 
   maxminddb = callPackage ../development/python-modules/maxminddb { };
 
-  monty = callPackage ../development/python-modules/monty { };
-
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
+
+  mkl-service = callPackage ../development/python-modules/mkl-service { };
+
+  monty = callPackage ../development/python-modules/monty { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
@@ -1473,6 +1475,8 @@ in {
 
   capstone = callPackage ../development/python-modules/capstone { };
 
+  capturer = callPackage ../development/python-modules/capturer { };
+
   cement = callPackage ../development/python-modules/cement {};
 
   cgen = callPackage ../development/python-modules/cgen { };
@@ -1496,6 +1500,8 @@ in {
   circus = callPackage ../development/python-modules/circus {};
 
   colorcet = callPackage ../development/python-modules/colorcet { };
+
+  coloredlogs = callPackage ../development/python-modules/coloredlogs { };
 
   colorclass = callPackage ../development/python-modules/colorclass {};
 
@@ -2186,6 +2192,8 @@ in {
 
   execnet = callPackage ../development/python-modules/execnet { };
 
+  executor = callPackage ../development/python-modules/executor { };
+
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
   facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
@@ -2460,6 +2468,8 @@ in {
 
   natsort = callPackage ../development/python-modules/natsort { };
 
+  naturalsort = callPackage ../development/python-modules/naturalsort { };
+
   ncclient = callPackage ../development/python-modules/ncclient {};
 
   logfury = callPackage ../development/python-modules/logfury { };
@@ -2676,6 +2686,8 @@ in {
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
   roman = callPackage ../development/python-modules/roman { };
+
+  rotate-backups = callPackage ../tools/backup/rotate-backups { };
 
   librosa = callPackage ../development/python-modules/librosa { };
 
@@ -4109,6 +4121,8 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
+  property-manager = callPackage ../development/python-modules/property-manager { };
+
   prompt_toolkit = let
     filename = if isPy3k then ../development/python-modules/prompt_toolkit else ../development/python-modules/prompt_toolkit/1.nix;
   in callPackage filename { };
@@ -4439,6 +4453,21 @@ in {
   pyaml = callPackage ../development/python-modules/pyaml { };
 
   pyyaml = callPackage ../development/python-modules/pyyaml { };
+
+  pyyaml_3 = (callPackage ../development/python-modules/pyyaml { }).overridePythonAttrs (oldAttrs: rec {
+    version = "3.13";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
+    };
+    # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
+    patches = singleton (pkgs.fetchpatch {
+      url = "https://github.com/yaml/pyyaml/commit/c5b135fe39d41cffbdc006f28ccb2032df6005e0.patch";
+      sha256 = "0x1v45rkmj194c41d1nqi3ihj9z4rsy8zvpfcd8p960g1fia7fhn";
+    });
+    # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
+    doCheck = false;
+  });
 
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
@@ -4833,6 +4862,8 @@ in {
 
   update-copyright = callPackage ../development/python-modules/update-copyright {};
 
+  update-dotdee = callPackage ../development/python-modules/update-dotdee { };
+
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
   uproot = callPackage ../development/python-modules/uproot {};
@@ -4844,6 +4875,8 @@ in {
   urwid = callPackage ../development/python-modules/urwid {};
 
   user-agents = callPackage ../development/python-modules/user-agents { };
+
+  verboselogs = callPackage ../development/python-modules/verboselogs { };
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
