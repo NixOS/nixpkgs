@@ -11,4 +11,5 @@ mkDerivation {
     bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative kcoreaddons
     kdbusaddons kded kiconthemes knotifications kwidgetsaddons
   ];
+  propagatedBuildInputs = [ bluez-qt ];
 }
