@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     hicolor-icon-theme
   ];
+
   buildInputs = [
     glib
     gtk3
@@ -67,15 +68,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -e $'2iimports.package._findEffectiveEntryPointName = () => \'com.github.johnfactotum.Foliate\' ' \
       -i $out/bin/com.github.johnfactotum.Foliate
-
-    # Also, create alias for sane usage from commandline, sheesh:
-    ln -s $out/bin/com.github.johnfactotum.Foliate $out/bin/foliate
   '';
 
   meta = with stdenv.lib; {
     description = "Simple and modern GTK eBook reader";
     homepage = "https://johnfactotum.github.io/foliate/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dtzWill ];
   };
 }
