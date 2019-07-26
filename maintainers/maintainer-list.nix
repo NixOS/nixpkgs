@@ -5926,4 +5926,9 @@
     github = "mattmelling";
     name = "Matt Melling";
   };
+  wd15 = {
+    email = "daniel.wheeler2@gmail.com";
+    github = "wd15";
+    name = "Daniel Wheeler";
+  };
 }
