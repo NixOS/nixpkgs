@@ -45,9 +45,6 @@ let
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   releaseDir = "target/${stdenv.hostPlatform.config}/${buildType}";
-
-  releaseFlag = if buildType == "release" then "--release" else "";
-
 in stdenv.mkDerivation (args // {
   inherit cargoDeps;
 
@@ -105,7 +102,7 @@ in stdenv.mkDerivation (args // {
       "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
       "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
       cargo build \
-        ${releaseFlag} \
+        ${stdenv.lib.optionalString (buildType == "release") "--release"} \
         --target ${stdenv.hostPlatform.config} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
