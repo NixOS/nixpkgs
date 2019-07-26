@@ -18575,10 +18575,7 @@ in
 
   super-productivity = callPackage ../applications/networking/super-productivity { };
 
-  wlc = callPackage ../development/libraries/wlc { };
   wlroots = callPackage ../development/libraries/wlroots { };
-
-  orbment = callPackage ../applications/window-managers/orbment { };
 
   sway = callPackage ../applications/window-managers/sway { };
   swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
@@ -18587,11 +18584,6 @@ in
 
   waybar = callPackage ../applications/misc/waybar {
     pulseSupport = config.pulseaudio or false;
-  };
-
-  velox = callPackage ../applications/window-managers/velox {
-    stConf = config.st.conf or null;
-    stPatches = config.st.patches or null;
   };
 
   i3 = callPackage ../applications/window-managers/i3 {
