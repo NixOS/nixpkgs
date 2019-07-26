@@ -7,7 +7,6 @@
   services.udev.packages = [ pkgs.mdadm ];
 
   systemd.packages = [ pkgs.mdadm ];
-  systemd.shutdownPackages = [ pkgs.mdadm ];
 
   boot.initrd.availableKernelModules = [ "md_mod" "raid0" "raid1" "raid10" "raid456" ];
 

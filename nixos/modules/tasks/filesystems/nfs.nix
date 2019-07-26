@@ -56,7 +56,6 @@ in
     boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
 
     systemd.packages = [ pkgs.nfs-utils ];
-    systemd.generatorPackages = [ pkgs.nfs-utils ];
 
     environment.etc = {
       "idmapd.conf".source = idmapdConfFile;

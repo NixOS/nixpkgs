@@ -427,7 +427,8 @@ in
     systemd.packages = mkOption {
       default = [];
       type = types.listOf types.package;
-      description = "Packages providing systemd units.";
+      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      description = "Packages providing systemd units and hooks.";
     };
 
     systemd.targets = mkOption {
@@ -497,13 +498,6 @@ in
       '';
     };
 
-    systemd.generatorPackages = mkOption {
-      default = [];
-      type = types.listOf types.package;
-      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
-      description = "Packages providing systemd generators.";
-    };
-
     systemd.shutdown = mkOption {
       type = types.attrsOf types.path;
       default = {};
@@ -512,13 +506,6 @@ in
         For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
         <literal>/etc/systemd/system-shutdown/NAME</literal> to <literal>VALUE</literal>.
       '';
-    };
-
-    systemd.shutdownPackages = mkOption {
-      default = [];
-      type = types.listOf types.package;
-      example = literalExample "[ pkgs.mdadm ]";
-      description = "Packages providing systemd shutdown executables.";
     };
 
     systemd.defaultUnit = mkOption {
@@ -779,9 +766,9 @@ in
 
     environment.etc = let
       # generate contents for /etc/systemd/system-${type} from attrset of links and packages
-      hooks = type: links: packages: pkgs.runCommand "system-${type}" {
+      hooks = type: links: pkgs.runCommand "system-${type}" {
           preferLocalBuild = true;
-          packages = packages;
+          packages = cfg.packages;
       } ''
         set -e
         mkdir -p $out
@@ -854,8 +841,8 @@ in
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
 
-      "systemd/system-generators" = { source = hooks "generators" cfg.generators cfg.generatorPackages; };
-      "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown cfg.shutdownPackages; };
+      "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
+      "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
     });
 
     services.dbus.enable = true;
