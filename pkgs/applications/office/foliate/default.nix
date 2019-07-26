@@ -11,14 +11,9 @@
 , gtk3
 , gsettings-desktop-schemas
 , webkitgtk
-, gdk_pixbuf
 , glib
 , desktop-file-utils
 , hicolor-icon-theme /* setup hook */
-, cairo
-, libgee
-, pantheon /* granite */
-, libxml2
 , libarchive
 /*, hyphen */
 , dict
@@ -47,17 +42,12 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
   buildInputs = [
-    gdk_pixbuf
     glib
     gtk3
     gjs
     webkitgtk
     gsettings-desktop-schemas
     gobject-introspection
-    cairo
-    libgee
-    pantheon.granite
-    libxml2
     libarchive
     # TODO: Add once packaged, unclear how language packages best handled
     # hyphen
