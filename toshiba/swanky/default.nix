@@ -13,9 +13,6 @@ in
     ../../common/pc/laptop
   ];
 
-  # Sound only properly works out of the box on 4.18+ kernels.
-  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-
   # Required for screen brightness control:
   boot.kernelParams = [ "acpi_backlight=vendor" ];
 
