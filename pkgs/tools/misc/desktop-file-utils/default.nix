@@ -1,22 +1,15 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, libintl }:
+{ stdenv, fetchurl, pkgconfig, glib, libintl }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "desktop-file-utils-0.23";
+  pname = "desktop-file-utils";
+  version = "0.24";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/desktop-file-utils/releases/${name}.tar.xz";
-    sha256 = "119kj2w0rrxkhg4f9cf5waa55jz1hj8933vh47vcjipcplql02bc";
+    url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
+    sha256 = "1nc3bwjdrpcrkbdmzvhckq0yngbcxspwj2n1r7jr3gmx1jk5vpm1";
   };
-
-  patches = [
-    # Makes font a recognized media type. Committed upstream, but no release has been made.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xdg/desktop-file-utils/commit/92af4108750ceaf4191fd54e255885c7d8a78b70.patch";
-      sha256 = "14sqy10p5skp6hv4hgiwnj9hpr460250x42k5z0390l6nr6gahsq";
-    })
-  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib libintl ];
