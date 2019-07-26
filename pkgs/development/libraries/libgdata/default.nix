@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gcr
     glib
-    gnome3.gnome-online-accounts
     liboauth
     libsoup
     libxml2
@@ -55,6 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
+    gnome3.gnome-online-accounts
     json-glib
   ];
 
