@@ -19824,6 +19824,8 @@ in
 
   pidgin-window-merge = callPackage ../applications/networking/instant-messengers/pidgin-plugins/window-merge { };
 
+  purple-events = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-events { };
+
   purple-discord = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-discord { };
 
   purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
