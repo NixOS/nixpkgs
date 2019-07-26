@@ -1,8 +1,6 @@
 { config, lib, pkgs, utils, ... }:
 #
-# todo:
-#   - crontab for scrubs, etc
-#   - zfs tunables
+# TODO: zfs tunables
 
 with utils;
 with lib;
@@ -13,6 +11,7 @@ let
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
   cfgScrub = config.services.zfs.autoScrub;
+  cfgTrim = config.services.zfs.trim;
 
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
@@ -268,14 +267,26 @@ in
       };
     };
 
-    services.zfs.autoScrub = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
+    services.zfs.trim = {
+      enable = mkEnableOption "Enables periodic TRIM on all ZFS pools.";
+
+      interval = mkOption {
+        default = "weekly";
+        type = types.str;
+        example = "daily";
         description = ''
-          Enables periodic scrubbing of ZFS pools.
+          How often we run trim. For most desktop and server systems
+          a sufficient trimming frequency is once a week.
+
+          The format is described in
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
+    };
+
+    services.zfs.autoScrub = {
+      enable = mkEnableOption "Enables periodic scrubbing of ZFS pools.";
 
       interval = mkOption {
         default = "Sun, 02:00";
@@ -533,6 +544,18 @@ in
           OnCalendar = cfgScrub.interval;
           Persistent = "yes";
         };
+      };
+    })
+
+    (mkIf cfgTrim.enable {
+      systemd.services.zpool-trim = {
+        description = "ZFS pools trim";
+        after = [ "zfs-import.target" ];
+        path = [ packages.zfsUser ];
+        startAt = cfgTrim.interval;
+        script = ''
+          zpool list -H -o name | xargs -n1 zpool trim
+        '';
       };
     })
   ];
