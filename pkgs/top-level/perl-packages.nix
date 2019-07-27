@@ -2293,10 +2293,10 @@ let
 
   ClassInspector = buildPerlPackage {
     pname = "Class-Inspector";
-    version = "1.34";
+    version = "1.36";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/Class-Inspector-1.34.tar.gz;
-      sha256 = "1n7h3jzwdz5a8gmz515xfr7ic82dl5sbdrk5d2fskiycngf8d6py";
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Class-Inspector-1.36.tar.gz;
+      sha256 = "0kk900bp8iq7bw5jyllfb31gvf93mmp24n4x90j7qs3jlhimsafc";
     };
     meta = {
       description = "Get information about a class and its structure";
