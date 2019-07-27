@@ -1,7 +1,7 @@
 # Checks derivation meta and attrs for problems (like brokenness,
 # licenses, etc).
 
-{ lib, config, hostPlatform, meta }:
+{ lib, config, hostPlatform }:
 
 let
   # If we're in hydra, we can dispense with the more verbose error
@@ -76,7 +76,7 @@ let
 
   showLicense = license: license.shortName or "unknown";
 
-  pos_str = meta.position or "«unknown-file»";
+  pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
     unfree = remediate_whitelist "Unfree";
@@ -143,12 +143,12 @@ let
       ${lib.concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
     '';
 
-  handleEvalIssue = attrs: { reason , errormsg ? "" }:
+  handleEvalIssue = { meta, attrs }: { reason , errormsg ? "" }:
     let
       msg = if inHydra
         then "Failed to evaluate ${attrs.name or "«name-missing»"}: «${reason}»: ${errormsg}"
         else ''
-          Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
+          Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
 
         '' + (builtins.getAttr reason remediation) attrs;
 
@@ -245,12 +245,12 @@ let
       { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
     else { valid = true; };
 
-  assertValidity = attrs: let
+  assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
     in validity // {
       # Throw an error if trying to evaluate an non-valid derivation
       handled = if !validity.valid
-        then handleEvalIssue attrs (removeAttrs validity ["valid"])
+        then handleEvalIssue { inherit meta attrs; } (removeAttrs validity ["valid"])
         else true;
   };
 

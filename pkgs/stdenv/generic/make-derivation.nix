@@ -1,6 +1,13 @@
 { lib, config, stdenv }:
 
-rec {
+let
+  checkMeta = import ./check-meta.nix {
+    inherit lib config;
+    # Nix itself uses the `system` field of a derivation to decide where
+    # to build it. This is a bit confusing for cross compilation.
+    inherit (stdenv) hostPlatform;
+  };
+in rec {
   # `mkDerivation` wraps the builtin `derivation` function to
   # produce derivations that use this stdenv and its shell.
   #
@@ -263,12 +270,7 @@ rec {
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         };
 
-      validity = import ./check-meta.nix {
-        inherit lib config meta;
-        # Nix itself uses the `system` field of a derivation to decide where
-        # to build it. This is a bit confusing for cross compilation.
-        inherit (stdenv) hostPlatform;
-      } attrs;
+      validity = checkMeta { inherit meta attrs; };
 
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not
