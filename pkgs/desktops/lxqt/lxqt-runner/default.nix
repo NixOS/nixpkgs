@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-globalkeys, qtx11extras,
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-globalkeys, qtx11extras,
 menu-cache, muparser, pcre }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-runner";
   version = "0.14.1";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool used to launch programs quickly by typing their names";
     homepage = https://github.com/lxqt/lxqt-runner;
     license = licenses.lgpl21;

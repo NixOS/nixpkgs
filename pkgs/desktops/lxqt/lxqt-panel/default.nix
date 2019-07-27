@@ -1,5 +1,5 @@
 {
-  stdenv, fetchFromGitHub,
+  lib, mkDerivation, fetchFromGitHub,
   cmake, pkgconfig, lxqt-build-tools,
   qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
   kguiaddons, liblxqt, libqtxdg, lxqt-globalkeys, libsysstat,
@@ -7,7 +7,7 @@
   lxmenu-data, pcre, libXdamage
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-panel";
   version = "0.14.1";
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The LXQt desktop panel";
     homepage = https://github.com/lxqt/lxqt-panel;
     license = licenses.lgpl21;

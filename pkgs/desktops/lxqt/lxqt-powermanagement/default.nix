@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, solid, kidletime, liblxqt, libqtxdg }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, solid, kidletime, liblxqt, libqtxdg }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-powermanagement";
   version = "0.14.1";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Power management module for LXQt";
     homepage = https://github.com/lxqt/lxqt-powermanagement;
     license = licenses.lgpl21;

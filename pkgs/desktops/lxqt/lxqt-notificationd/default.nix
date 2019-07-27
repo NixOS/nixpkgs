@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, qtx11extras }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, qtx11extras }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-notificationd";
   version = "0.14.1";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The LXQt notification daemon";
     homepage = https://github.com/lxqt/lxqt-notificationd;
     license = licenses.lgpl21;

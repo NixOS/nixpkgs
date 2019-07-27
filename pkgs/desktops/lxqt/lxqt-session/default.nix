@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, qtx11extras, kwindowsystem, liblxqt, libqtxdg, xorg, xdg-user-dirs }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, qtx11extras, kwindowsystem, liblxqt, libqtxdg, xorg, xdg-user-dirs }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-session";
   version = "0.14.1";
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An alternative session manager ported from the original razor-session";
     homepage = https://github.com/lxqt/lxqt-session;
     license = licenses.lgpl21;

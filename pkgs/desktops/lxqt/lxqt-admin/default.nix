@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, polkit-qt }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, polkit-qt }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-admin";
   version = "0.14.1";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LXQt system administration tool";
     homepage = https://github.com/lxqt/lxqt-admin;
     license = licenses.lgpl21;

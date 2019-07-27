@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase,
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase,
   qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt,
   libqtxdg, xorg }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-config";
   version = "0.14.1";
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     sed -i "/\''${XORG_LIBINPUT_INCLUDE_DIRS}/a ${xorg.xf86inputlibinput.dev}/include/xorg" lxqt-config-input/CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to configure LXQt and the underlying operating system";
     homepage = https://github.com/lxqt/lxqt-config;
     license = licenses.lgpl21;

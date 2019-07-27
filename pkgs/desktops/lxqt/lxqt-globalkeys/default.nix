@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-globalkeys";
   version = "0.14.1";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon used to register global keyboard shortcuts";
     homepage = https://github.com/lxqt/lxqt-globalkeys;
     license = licenses.lgpl21;

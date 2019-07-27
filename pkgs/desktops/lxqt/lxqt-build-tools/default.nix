@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, glib }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, glib }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-build-tools";
   version = "0.6.0";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''cmakeFlags+=" -DLXQT_ETC_XDG_DIR=$out/etc/xdg"'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Various packaging tools and scripts for LXQt applications";
     homepage = https://github.com/lxqt/lxqt-build-tools;
     license = licenses.lgpl21;
