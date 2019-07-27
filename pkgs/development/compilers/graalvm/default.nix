@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "19.1.0";
+  version = "19.1.1";
   truffleMake = ./truffle.make;
   R = fetchurl {
     url = "http://cran.rstudio.com/src/base/R-3/R-3.5.1.tar.gz";
@@ -145,10 +145,10 @@ let
   ];
 
   graal-mxcachegit = [
-    { sha256 = "0wmdqbiydrr3rhcxgfxa644gsdqndhmqqn93kw6l4c9yzgnkk3w1"; name = "graaljs";     url = "https://github.com/graalvm/graaljs.git";     rev = "vm-${version}"; }
+    { sha256 = "05z2830ng71bhgsxc0zyc74l1bz7hg54la8j1r99993fhhch4y36"; name = "graaljs";     url = "https://github.com/graalvm/graaljs.git";     rev = "vm-${version}"; }
     { sha256 = "0ai5x4n1c2lcfkfpp29zn1bcmp3khc5hvssyw1qr1l2zy79fxwjp"; name = "truffleruby"; url = "https://github.com/oracle/truffleruby.git";  rev = "vm-${version}"; }
     { sha256 = "010079qsl6dff3yca8vlzcahq9z1ppyr758shjkm1f7izwphjv7p"; name = "fastr";       url = "https://github.com/oracle/fastr.git";        rev = "vm-${version}"; }
-    { sha256 = "00r9wdd7xfj1q6w91kwz9zcaapi8hd6yq19inyq1jklab8r68psi"; name = "graalpython"; url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
+    { sha256 = "0hcqbasqs0yb7p1sal63qbxqxh942gh5vzl95pfdlflmc2g82v4q"; name = "graalpython"; url = "https://github.com/graalvm/graalpython.git"; rev = "vm-${version}"; }
   ];
 
   ninja-syntax = python27.pkgs.buildPythonPackage rec {
@@ -172,13 +172,13 @@ let
 in rec {
 
   mx = stdenv.mkDerivation rec {
-    version = "5.224.10";
+    version = "5.223.0";
     pname = "mx";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "mx";
       rev    = version;
-      sha256 = "13qa31flabsflsbjcm785zfxrgp6sgdxcmglz2bw0rcfcln00zq4";
+      sha256 = "0q51dnm6n1472p93dxr4jh8d7cv09a70pq89cdgxwh42vapykrn9";
     };
     nativeBuildInputs = [ makeWrapper ];
     prePatch = ''
@@ -217,13 +217,13 @@ in rec {
   };
 
   jvmci8 = stdenv.mkDerivation rec {
-    version = "20-b04";
+    version = "19.2-b01";
     name = "jvmci-${version}";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
       rev    = "jvmci-${version}";
-      sha256 = "1k9szvnl5j3vg645si7s9lb93bkfl4ifc2z8ngnlb23ircsn3qdx";
+      sha256 = "0maipj871vaxvap4576m0pzblzqxfjjzmwap3ndd84ny8d6vbqaa";
     };
     buildInputs = [ mx mercurial openjdk ];
     postUnpack = ''
@@ -289,7 +289,7 @@ in rec {
       owner  = "oracle";
       repo   = "graal";
       rev    = "vm-${version}";
-      sha256 = "00142hyspgjblj8j49qmdvgc24193n0g95fh2if9c7574q3zspvd";
+      sha256 = "0abx6adk91yzaf1md4qbidxykpqcgphh6j4hj01ry57s4if0j66f";
     };
     patches = [ ./002_setjmp.c.patch ./003_mx_truffle.py.patch ];
     buildInputs = [ mx zlib mercurial jvmci8 git clang llvm
@@ -410,7 +410,7 @@ in rec {
       description = "High-Performance Polyglot VM";
       license = licenses.gpl2;
       maintainers = with maintainers; [ volth hlolli ];
-      platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+      platforms = [ "x86_64-linux" /*"aarch64-linux" "x86_64-darwin"*/ ];
     };
   };
 }
