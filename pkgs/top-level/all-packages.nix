@@ -24356,6 +24356,8 @@ in
 
   sequelpro = callPackage ../applications/misc/sequelpro {};
 
+  sequoia = callPackage ../tools/security/sequoia { };
+
   sidequest = callPackage ../applications/misc/sidequest {};
 
   maphosts = callPackage ../tools/networking/maphosts {};

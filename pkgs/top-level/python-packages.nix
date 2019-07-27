@@ -4610,6 +4610,10 @@ in {
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
 
+  sequoia = toPythonModule (callPackage ../tools/security/sequoia {
+    pythonSupport = true;
+  });
+
   safe = callPackage ../development/python-modules/safe { };
 
   sampledata = callPackage ../development/python-modules/sampledata { };
