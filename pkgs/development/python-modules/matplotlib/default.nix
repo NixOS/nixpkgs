@@ -1,6 +1,7 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
+{ stdenv, fetchFromGitHub, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3
+, pytest
 , enableGhostscript ? true, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobject-introspection
 , enableGtk3 ? false, cairo
@@ -27,9 +28,11 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1febd22afe1489b13c6749ea059d392c03261b2950d1d45c17e3aed812080c93";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "01nns3idrbl7571qqvfzprrjln3k8mp97j6j44m0m4sfg6srr1qr";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
@@ -51,6 +54,10 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ stdenv.lib.optionals enableQt [ pyqt4 ];
 
+  checkInputs = [
+    pytest
+  ];
+
   patches =
     [ ./basedirlist.patch ];
 
@@ -68,14 +75,6 @@ buildPythonPackage rec {
     stdenv.lib.optionalString enableTk
       "sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py";
 
-  checkPhase = ''
-    ${python.interpreter} tests.py
-  '';
-
-  # Test data is not included in the distribution (the `tests` folder
-  # is missing)
-  doCheck = false;
-
   prePatch = ''
     # Failing test: ERROR: matplotlib.tests.test_style.test_use_url
     sed -i 's/test_use_url/fails/' lib/matplotlib/tests/test_style.py
@@ -83,12 +82,27 @@ buildPythonPackage rec {
     sed -i 's/TestTinyPages/fails/' lib/matplotlib/sphinxext/tests/test_tinypages.py
     # Transient errors
     sed -i 's/test_invisible_Line_rendering/noop/' lib/matplotlib/tests/test_lines.py
+
+    substituteInPlace setup.py \
+      --replace "cmdclass['install_lib'] = install_lib_with_jquery" ""
+
+    substituteInPlace setup.py \
+      --replace "version=__version__" "version='${version}'"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    pushd dist
+    pytest
+    popd dist
+    runHook postCheck
   '';
 
   meta = with stdenv.lib; {
     description = "Python plotting library, making publication quality plots";
-    homepage    = "https://matplotlib.org/";
-    maintainers = with maintainers; [ lovek323 ];
+    homepage = "https://matplotlib.org/";
+    licenses = licences.psfl;
+    maintainers = with maintainers; [ lovek323 costrouc ];
   };
 
 }

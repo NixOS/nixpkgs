@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , fetchpatch
 , glibcLocales
 , mpmath
@@ -10,17 +10,16 @@ buildPythonPackage rec {
   pname = "sympy";
   version = "1.4"; # Upgrades may break sage. Please test or ping @timokau.
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1q937csy8rd18pk2fz1ssj7jyj7l3rjx4nzbiz5vcymfhrb1x8bi";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "sympy-${version}";
+    sha256 = "0rpp82alvli7w3cab7h4dyydkk00nkc6nf3ph35kjywxpdnp3fsm";
   };
 
-  checkInputs = [ glibcLocales ];
-
-  propagatedBuildInputs = [ mpmath ];
-
-  # tests take ~1h
-  doCheck = false;
+  propagatedBuildInputs = [
+    mpmath
+  ];
 
   patches = [
     # to be fixed by https://github.com/sympy/sympy/pull/13476
@@ -30,14 +29,10 @@ buildPythonPackage rec {
     })
   ];
 
-  preCheck = ''
-    export LANG="en_US.UTF-8"
-  '';
-
   meta = {
     description = "A Python library for symbolic mathematics";
     homepage    = http://www.sympy.org/;
     license     = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lovek323 timokau ];
+    maintainers = with lib.maintainers; [ lovek323 timokau costrouc ];
   };
 }

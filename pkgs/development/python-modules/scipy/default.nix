@@ -1,27 +1,42 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy}:
+{ lib
+, fetchFromGitHub
+, python
+, buildPythonPackage
+, gfortran
+, nose
+, pytest
+, numpy
+, cython
+}:
 
 buildPythonPackage rec {
   pname = "scipy";
   version = "1.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c3bb4bd2aca82fb498247deeac12265921fe231502a6bc6edea3ee7fe6c40a7a";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "17xfnn7r21z7ncclmlgi6r9d5rxihnybzgdfby557i14zqklvk1c";
   };
 
-  checkInputs = [ nose pytest ];
-  nativeBuildInputs = [ gfortran ];
-  buildInputs = [ numpy.blas ];
-  propagatedBuildInputs = [ numpy ];
+  nativeBuildInputs = [
+    gfortran
+    cython
+  ];
 
-  # Remove tests because of broken wrapper
-  prePatch = ''
-    rm scipy/linalg/tests/test_lapack.py
-  '';
+  buildInputs = [
+    numpy.blas
+  ];
 
-  # INTERNALERROR, solved with https://github.com/scipy/scipy/pull/8871
-  # however, it does not apply cleanly.
-  doCheck = false;
+  checkInputs = [
+    nose
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
@@ -51,6 +66,6 @@ buildPythonPackage rec {
   meta = {
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
     homepage = https://www.scipy.org/;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh costrouc ];
   };
 }
