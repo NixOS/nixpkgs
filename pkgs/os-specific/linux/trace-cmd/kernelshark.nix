@@ -1,7 +1,7 @@
 { stdenv, mkDerivation, fetchgit, qtbase, cmake, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
 mkDerivation rec {
   pname = "kernelshark";
-  version = "1.0.0";
+  version = "0.9.8";
 
   src = fetchgit (import ./src.nix);
 
@@ -17,7 +17,7 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-D_INSTALL_PREFIX=${placeholder "out"}"
-    "-DTRACECMD_EXECUTABLE=${trace-cmd}/bin/trace-cmd"
+    "-DTRACECMD_BIN_DIR=${trace-cmd}/bin"
     "-DTRACECMD_INCLUDE_DIR=${trace-cmd.dev}/include"
     "-DTRACECMD_LIBRARY=${trace-cmd.lib}/lib/libtracecmd.a"
     "-DTRACEEVENT_LIBRARY=${trace-cmd.lib}/lib/libtraceevent.a"

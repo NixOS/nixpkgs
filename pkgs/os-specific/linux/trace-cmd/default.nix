@@ -1,12 +1,9 @@
 { stdenv, fetchgit, asciidoc, docbook_xsl, libxslt }:
-let
-  srcSpec = import ./src.nix;
-  shortRev = builtins.substring 0 7 srcSpec.rev;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name    = "trace-cmd-${version}";
-  version = "2.9-dev-${shortRev}";
+  version = "2.8.3";
 
-  src = fetchgit srcSpec;
+  src = fetchgit (import ./src.nix);
 
   patches = [ ./fix-Makefiles.patch ];
 
