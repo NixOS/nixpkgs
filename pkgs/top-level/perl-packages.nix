@@ -14680,10 +14680,10 @@ let
 
   RegexpGrammars = buildPerlModule {
     pname = "Regexp-Grammars";
-    version = "1.051";
+    version = "1.052";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.051.tar.gz;
-      sha256 = "fa595a4893b57a004fdc5c296b2bdaf10a3ffb3da64cd53a9d80678805d81e40";
+      url = mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.052.tar.gz;
+      sha256 = "d552e7aaec956fc9ff0c56602fc95bc5c97ef815a0a8df7f42d1128f39534a62";
     };
     meta = {
       description = "Add grammatical parsing features to Perl 5.10 regexes";
