@@ -14630,12 +14630,12 @@ let
 
   Redis = buildPerlModule {
     pname = "Redis";
-    version = "1.991";
+    version = "1.995";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAMS/Redis-1.991.tar.gz;
-      sha256 = "f7d1a934fa9360a26e480f896f97be0fd62807f9d9baca65a9aa8d007ff2acaa";
+      url = mirror://cpan/authors/id/D/DA/DAMS/Redis-1.995.tar.gz;
+      sha256 = "a0b07b284ff12bb852a3120723f1e63ab279df575d6c52a78f914565a9f0b906";
     };
-    buildInputs = [ IOString ModuleBuildTiny PodCoverageTrustPod TestCPANMeta TestDeep TestFatal TestSharedFork TestTCP ];
+    buildInputs = [ IOString ModuleBuildTiny TestDeep TestFatal TestSharedFork TestTCP ];
     propagatedBuildInputs = [ IOSocketTimeout TryTiny ];
     meta = {
       homepage = https://github.com/PerlRedis/perl-redis;
