@@ -6970,10 +6970,10 @@ let
 
   GamesSolitaireVerify = buildPerlModule {
     pname = "Games-Solitaire-Verify";
-    version = "0.2201";
+    version = "0.2202";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.2201.tar.gz;
-      sha256 = "b434d7db89d0f01dd70ce2ff8e3b281f85eb3fa4eaa6c9baa77c418dd012ec57";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.2202.tar.gz;
+      sha256 = "14fe240613b41c9d3e7cc560eaabd78bd13ded66d2838b738b74f7d1811d9263";
     };
     buildInputs = [ DirManifest TestDifferences ];
     propagatedBuildInputs = [ ClassXSAccessor ExceptionClass ListMoreUtils PathTiny ];
