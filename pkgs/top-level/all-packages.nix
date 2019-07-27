@@ -8411,6 +8411,8 @@ in
 
   souffle = callPackage ../development/compilers/souffle { };
 
+  spirv-llvm-translator = callPackage ../development/compilers/spirv-llvm-translator { };
+
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper { };
 
   # sqldeveloper_18 needs JavaFX, which currently only is available inside the
