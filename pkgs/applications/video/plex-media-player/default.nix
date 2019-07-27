@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, cmake, python3
+{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, cmake, python3, mkDerivation
 , libX11, libXrandr, qtbase, qtwebchannel, qtwebengine, qtx11extras
 , libvdpau, SDL2, mpv, libGL }:
 let
@@ -34,7 +34,7 @@ let
       sha256 = "0yssii01nx6ixg3mikqjn8hz34dalma0rfr8spj115xwr7aq8ixk";
     };
   };
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   name = "plex-media-player-${version}";
   version = "2.36.0.988";
   vsnHash = "0150ae52";
