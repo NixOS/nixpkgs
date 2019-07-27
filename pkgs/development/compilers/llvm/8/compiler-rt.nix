@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.parsed.kernel.name == "none") [
+    "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
+    "-DCOMPILER_RT_OS_DIR=baremetal"
   ];
 
   outputs = [ "out" "dev" ];
