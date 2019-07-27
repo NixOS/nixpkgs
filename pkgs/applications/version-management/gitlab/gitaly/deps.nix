@@ -285,7 +285,7 @@
       type = "git";
       url = "https://github.com/libgit2/git2go";
       rev = "ecaeb7a21d47";
-      sha256 = "1sh30jnzjag7ddhr4if65j8vpcpj4rw93sf1g033jf91flrzyx23";
+      sha256 = "14r7ryff93r49g94f6kg66xc0y6rwb31lj22s3qmzmlgywk0pgvr";
     };
   }
   {
@@ -294,7 +294,7 @@
       type = "git";
       url = "https://github.com/lightstep/lightstep-tracer-go";
       rev = "v0.15.6";
-      sha256 = "0g5bh3xdrsz30npk79h5ia340xyw97424xfrfzv3acqw3qg2sqn8";
+      sha256 = "10n5r66g44s6rnz5kf86s4a3p1g55kc1kxqhnk7bx7mlayndgpmb";
     };
   }
   {
@@ -483,7 +483,7 @@
       type = "git";
       url = "https://github.com/uber/jaeger-client-go";
       rev = "v2.15.0";
-      sha256 = "1qvqkf20dp5fyfg7qd3jc29q1yv0qjz2mkxa02j1v3n8ka134rff";
+      sha256 = "0ki23m9zrf3vxp839fnp9ckr4m28y6mpad8g5s5lr5k8jkl0sfwj";
     };
   }
   {
