@@ -13852,10 +13852,10 @@ let
 
   PlackMiddlewareRemoveRedundantBody = buildPerlPackage {
     pname = "Plack-Middleware-RemoveRedundantBody";
-    version = "0.08";
+    version = "0.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SW/SWEETKID/Plack-Middleware-RemoveRedundantBody-0.08.tar.gz;
-      sha256 = "ab0979e447d04f210226239f466e685215fda58b58ca10822a1ee8731161a39d";
+      url = mirror://cpan/authors/id/S/SW/SWEETKID/Plack-Middleware-RemoveRedundantBody-0.09.tar.gz;
+      sha256 = "80d45f93d6b7290b0bd8b3cedd84a37fc501456cc3dec02ec7aad81c0018087e";
     };
     propagatedBuildInputs = [ Plack ];
     meta = {
