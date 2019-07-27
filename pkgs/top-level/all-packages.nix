@@ -15586,6 +15586,8 @@ in
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
+  intel-compute-runtime = callPackage ../os-specific/linux/intel-compute-runtime { };
+
   intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
 
   iomelt = callPackage ../os-specific/linux/iomelt { };
