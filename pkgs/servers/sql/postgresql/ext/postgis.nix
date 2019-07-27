@@ -10,6 +10,7 @@
 , pkgconfig
 , file
 , protobufc
+, libiconv
 }:
 stdenv.mkDerivation rec {
   name = "postgis-${version}";
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pnva72f2w4jcgnl1y7nw5rdly4ipx3hji4c9yc9s0hna1n2ijxn";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ];
+  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc libiconv ];
   nativeBuildInputs = [ perl pkgconfig ];
   dontDisableStatic = true;
 
@@ -43,14 +44,13 @@ stdenv.mkDerivation rec {
     sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
             " \
         "raster/scripts/python/Makefile";
-  '';
-
-  preInstall = ''
     mkdir -p $out/bin
+    ln -s ${postgresql}/bin/postgres $out/bin/postgres
   '';
 
   # create aliases for all commands adding version information
   postInstall = ''
+    rm $out/bin/postgres
     for prog in $out/bin/*; do # */
       ln -s $prog $prog-${version}
     done
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = https://postgis.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
