@@ -7915,6 +7915,8 @@ in
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
+  intel-graphics-compiler = callPackage ../development/compilers/intel-graphics-compiler { };
+
   intercal = callPackage ../development/compilers/intercal { };
 
   irony-server = callPackage ../development/tools/irony-server {
