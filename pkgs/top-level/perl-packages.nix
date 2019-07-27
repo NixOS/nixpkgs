@@ -878,6 +878,19 @@ let
     doCheck = false; /* test fails */
   };
 
+  BCOW = buildPerlPackage {
+    pname = "B-COW";
+    version = "0.001";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/B-COW-0.001.tar.gz;
+      sha256 = "1n5hfhm72q96cpplc8hjfwkv7haq0xnq2db6ql611jdv17z3sp4d";
+    };
+    meta = {
+      description = "B::COW additional B helpers to check COW status";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   BFlags = buildPerlPackage {
     pname = "B-Flags";
     version = "0.17";
@@ -2557,15 +2570,16 @@ let
 
   Clone = buildPerlPackage {
     pname = "Clone";
-    version = "0.41";
+    version = "0.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GARU/Clone-0.41.tar.gz;
-      sha256 = "060mlm31lacirpnp5fl9jqk4m9cl07vjlh89k83qk25wykf5dh78";
+      url = mirror://cpan/authors/id/G/GA/GARU/Clone-0.42.tar.gz;
+      sha256 = "1r87rdm0nilfayxwlzvylwc8r3hr5m24180x437j30qpizdk1aal";
     };
     meta = {
       description = "Recursively copy Perl datatypes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ BCOW ];
   };
 
   CloneChoose = buildPerlPackage {
