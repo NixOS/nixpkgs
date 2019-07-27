@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = http://www.nlnetlabs.nl/projects/ldns/;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dtzWill ];
   };
 }
