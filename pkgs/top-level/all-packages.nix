@@ -12599,6 +12599,8 @@ in
 
   lzo = callPackage ../development/libraries/lzo { };
 
+  opencl-clang = callPackage ../development/libraries/opencl-clang { };
+
   mapnik = callPackage ../development/libraries/mapnik { };
 
   marisa = callPackage ../development/libraries/marisa {};
