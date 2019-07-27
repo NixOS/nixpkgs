@@ -1,12 +1,9 @@
 { stdenv, mkDerivation, fetchgit, qtbase, cmake, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
-let
-  srcSpec = import ./src.nix;
-  shortRev = builtins.substring 0 7 srcSpec.rev;
-in mkDerivation rec {
+mkDerivation rec {
   pname = "kernelshark";
-  version = "0.9.8-${shortRev}";
+  version = "1.0.0";
 
-  src = fetchgit srcSpec;
+  src = fetchgit (import ./src.nix);
 
   patches = [ ./fix-Makefiles.patch ];
 
