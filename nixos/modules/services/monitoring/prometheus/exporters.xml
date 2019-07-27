@@ -17,7 +17,7 @@
    exporter</link>, it provides hardware and OS metrics from the host it's
    running on. The exporter could be configured as follows:
 <programlisting>
-  services.promtheus.exporters.node = {
+  services.prometheus.exporters.node = {
     enable = true;
     enabledCollectors = [
       "logind"

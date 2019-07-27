@@ -52,7 +52,7 @@ Type "help" for help.
 
   <para>
    By default, PostgreSQL stores its databases in
-   <filename>/var/db/postgresql</filename>. You can override this using
+   <filename>/var/lib/postgresql/$psqlSchema</filename>. You can override this using
    <xref linkend="opt-services.postgresql.dataDir"/>, e.g.
 <programlisting>
 <xref linkend="opt-services.postgresql.dataDir"/> = "/data/postgresql";

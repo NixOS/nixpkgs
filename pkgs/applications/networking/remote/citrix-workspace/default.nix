@@ -22,22 +22,11 @@
 , fontconfig
 , gtk_engines
 , alsaLib
-, libidn
 , zlib
-, version ? "19.3.0"
+, version ? "19.6.0"
 }:
 
 let
-  # In 56e1bdc7f9c (libidn: 1.34 -> 1.35), libidn.so.11 became libidn.so.12.
-  # Citrix looks for the former so we build version 1.34 to please the binary
-  libidn_134 = libidn.overrideDerivation (_: rec {
-    name = "libidn-1.34";
-    src = fetchurl {
-      url = "mirror://gnu/libidn/${name}.tar.gz";
-      sha256 = "0g3fzypp0xjcgr90c5cyj57apx1cmy0c6y9lvw2qdcigbyby469p";
-    };
-  });
-
   versionInfo = let
     supportedVersions = {
       "19.3.0" = {
@@ -48,13 +37,27 @@ let
         x86hash   = "1hxgj5lk5ghbpssbqjd404qr84gls967vwrh8ww5hg3pn86kyf8w";
         x64suffix = "5";
         x86suffix = "5";
+        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-1903.html;
+      };
+
+      "19.6.0" = {
+        major     = "19";
+        minor     = "6";
+        patch     = "0";
+        x64hash   = "0szqlfmigzgf0309i6ikxkizxaf4ri7qmhys75m0zi3bpwx6hzhs";
+        x86hash   = "16v3kgavrh62z6vxcbw6mn7h0bfishpl7m92k7g1p2882r1f8vaf";
+        x64suffix = "60";
+        x86suffix = "60";
         homepage  = https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html;
       };
     };
 
     # Copied this file largely from the citrix-receiver package
     # Leaving this here even though there are no deprecations yet
-    # for ease of future maintenance
+    # for ease of future maintenance.
+    #
+    # The lifespans of Citrix products can be found here:
+    # https://www.citrix.com/support/product-lifecycle/milestones/receiver.html
     deprecatedVersions = let
       versions = [ ];
     in
@@ -117,7 +120,6 @@ let
         xorg.libXinerama
         xorg.libXfixes
         libpng12
-        libidn_134
         zlib
         gtk_engines
         freetype
@@ -208,6 +210,7 @@ let
         inherit homepage;
         description = "Citrix Workspace";
         platforms   = platforms.linux;
+        maintainers = with maintainers; [ ma27 ];
       };
     };
 

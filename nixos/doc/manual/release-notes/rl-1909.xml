@@ -149,9 +149,20 @@
    </listitem>
    <listitem>
     <para>
-     Several of the apache subservices have been replaced with full NixOS
-     modules including LimeSurvey, WordPress, and Zabbix.
-     These modules can be enabled using the <option>services.limesurvey.enable</option>,
+     The httpd service no longer attempts to start the postgresql service. If you have come to depend
+     on this behaviour then you can preserve the behavior with the following configuration:
+     <literal>systemd.services.httpd.after = [ "postgresql.service" ];</literal>
+    </para>
+    <para>
+     The option <option>services.httpd.extraSubservices</option> has been
+     marked as deprecated. You may still use this feature, but it will be
+     removed in a future release of NixOS. You are encouraged to convert any
+     httpd subservices you may have written to a full NixOS module.
+    </para>
+    <para>
+     Most of the httpd subservices packaged with NixOS have been replaced with
+     full NixOS modules including LimeSurvey, WordPress, and Zabbix. These
+     modules can be enabled using the <option>services.limesurvey.enable</option>,
      <option>services.wordpress.enable</option>, and <option>services.zabbixWeb.enable</option> options.
     </para>
    </listitem>

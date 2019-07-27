@@ -125,4 +125,8 @@ nodePackages // {
       nodePackages.node-pre-gyp
     ];
   };
+
+  thelounge = nodePackages.thelounge.override {
+    buildInputs = [ nodePackages.node-pre-gyp ];
+  };
 }

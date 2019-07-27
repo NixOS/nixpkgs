@@ -41,13 +41,29 @@ let
   };
 
   # Helper functions for packages that use Module::Build to build.
-  buildPerlModule = { buildInputs ? [], ... } @ args:
-    buildPerlPackage (args // {
-      buildInputs = buildInputs ++ [ ModuleBuild ];
-      preConfigure = "touch Makefile.PL";
-      buildPhase = "perl Build.PL --prefix=$out; ./Build build";
-      installPhase = "./Build install";
-      checkPhase = "./Build test";
+  buildPerlModule = args:
+    buildPerlPackage ({
+      buildPhase = ''
+        runHook preBuild
+        perl Build.PL --prefix=$out; ./Build build
+        runHook postBuild
+      '';
+      installPhase = ''
+        runHook preInstall
+        ./Build install
+        runHook postInstall
+      '';
+      checkPhase = ''
+        runHook preCheck
+        ./Build test
+        runHook postCheck
+      '';
+    } // args // {
+      preConfigure = ''
+        touch Makefile.PL
+        ${args.preConfigure or ""}
+      '';
+      buildInputs = (args.buildInputs or []) ++ [ ModuleBuild ];
     });
 
   /* Construct a perl search path (such as $PERL5LIB)
@@ -431,10 +447,6 @@ let
     };
     buildInputs = [ pkgs.curl FileWhich IOAll ModuleBuildTiny PathClass TestException TestNoWarnings TestOutput TestSpec TestTempDirTiny ];
     propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl locallib ];
-
-    preConfigure = ''
-      patchShebangs .
-    '';
 
     doCheck = false;
 
@@ -6119,7 +6131,7 @@ let
       sha256 = "c065fcd3e2f22ae769937bcc971b91f80294d5009fac140bfba83bf7d35305e3";
     };
     configurePhase = ''
-      preConfigure || true
+      runHook preConfigure
       perl Build.PL PREFIX="$out" prefix="$out"
     '';
     propagatedBuildInputs = [ IPCSystemSimple ];

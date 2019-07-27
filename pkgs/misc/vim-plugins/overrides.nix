@@ -186,6 +186,10 @@ self: super: {
     dependencies = with super; [ super.self ];
   });
 
+  ghcid = super.ghcid.overrideAttrs(old: {
+    configurePhase = "cd plugins/nvim";
+  });
+
   gist-vim = super.gist-vim.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });

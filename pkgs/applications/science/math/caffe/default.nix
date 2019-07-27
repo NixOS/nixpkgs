@@ -3,7 +3,7 @@
 , fetchurl
 , cmake
 , boost
-, google-gflags
+, gflags
 , glog
 , hdf5-cpp
 , opencv3
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
       ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
 
-  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp opencv3 openblas ]
+  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 openblas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
                 ++ lib.optional lmdbSupport lmdb

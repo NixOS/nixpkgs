@@ -145,8 +145,6 @@ in
       isSystem = true;
     };
 
-    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
     networking.networkmanager.enable = mkDefault true;
     networking.networkmanager.basePackages =
       { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
