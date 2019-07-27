@@ -18919,6 +18919,8 @@ in
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
+  k9s = callPackage ../applications/networking/cluster/k9s { };
+
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
