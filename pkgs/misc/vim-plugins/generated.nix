@@ -1849,6 +1849,17 @@ let
     };
   };
 
+  nvim-typescript = buildVimPluginFrom2Nix {
+    pname = "nvim-typescript";
+    version = "2019-07-27";
+    src = fetchFromGitHub {
+      owner = "mhartington";
+      repo = "nvim-typescript";
+      rev = "7ce48efd9bd0710d96443c224e8b915d45ae5dd1";
+      sha256 = "0718kivzpva1c32hb1518z7zvxcfsswg4kpl8jn0zkpb02r4pw0g";
+    };
+  };
+
   nvim-yarp = buildVimPluginFrom2Nix {
     pname = "nvim-yarp";
     version = "2019-05-21";

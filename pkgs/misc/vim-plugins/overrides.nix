@@ -10,6 +10,7 @@
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
+, callPackage, runCommand, nodePackages
 
 # coc-go dependency
 , go
@@ -224,6 +225,34 @@ self: super: {
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
   });
+
+  nvim-typescript = let
+    # node2nix dynamically resolves nodeDependencies
+    nvim-typescript-shell = (callPackage (
+      runCommand "nvim-typescript-rplugin.nix" {
+        nativeBuildInputs = [nodePackages.node2nix];
+      } ''
+        mkdir -p $out
+        cd ${super.nvim-typescript.src}/rplugin/node/nvim_typescript
+        node2nix --input package.json \
+                 --lock package-lock.json \
+                 --include-peer-dependencies \
+                 --nodejs-10 \
+                 --development \
+                 --output $out/node-packages.nix \
+                 --node-env $out/node-env.nix \
+                 --composition $out/default.nix
+      ''
+    ) {}).shell;
+  in
+    super.nvim-typescript.overrideAttrs(old: {
+      inherit (nvim-typescript-shell) buildInputs;
+      postInstall = ''
+        cd $out/share/vim-plugins/nvim-typescript/rplugin/node/nvim_typescript
+        cp -r ${nvim-typescript-shell.nodeDependencies}/lib/node_modules node_modules
+        npm run build
+      '';
+    });
 
   sved = let
     # we put the script in its own derivation to benefit the magic of wrapGAppsHook
