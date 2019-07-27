@@ -863,23 +863,6 @@ in
         };
       };
     })
-    
-    (mkIf enableZED {
-      systemd.services.zfs-zed = {
-        description = "ZFS Event Daemon (zed)";
-        documentation = [ "man:zed(8)" ];
-        wantedBy = [ "zfs.target" ];
-        aliases = [ "zed.service" ];
-        restartIfChanged = true;
-        restartTriggers = [ "on-abort" ];
-        serviceConfig = {
-          Type = "oneshot";
-        };
-        script = ''
-          ${packages.zfsUser}/sbin/zed -F
-        '';
-      };
-    })
-    
+
   ];
 }
