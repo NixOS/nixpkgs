@@ -1,0 +1,20 @@
+--- a/cnijfilter/src/bjfimage.c	2019-07-27 21:25:05.901136465 +0200
++++ b/cnijfilter/src/bjfimage.c	2019-07-27 22:15:11.027228225 +0200
+@@ -38,6 +38,8 @@
+ */
+ 
+ #include <stdio.h>
++#include <string.h>
++#include <unistd.h>
+ #include <stdlib.h>
+ #include <png.h>
+ 
+@@ -1574,7 +1576,7 @@
+ 		goto onErr;
+ 	}
+ 
+-	if (setjmp (png_jmpbuf(png_p))
++	if (setjmp (png_jmpbuf(png_p)))
+ 	{
+ 		png_destroy_read_struct(&png_p, &info_p, (png_infopp)NULL);
+ 		goto onErr;
