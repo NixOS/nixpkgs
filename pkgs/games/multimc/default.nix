@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
 
 let
   libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   name = "multimc-${version}";
   version = "0.6.4";
   src = fetchFromGitHub {
@@ -21,7 +21,11 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/{applications,pixmaps}
     cp ../application/resources/multimc/scalable/multimc.svg $out/share/pixmaps
     cp ../application/package/linux/multimc.desktop $out/share/applications
-    wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} --prefix PATH : ${jdk}/bin/
+    # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
+    wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} --prefix PATH : ${jdk}/bin/:${xorg.xrandr}/bin/
+
+    # MultiMC's CMakeLists.txt puts libraries in bin directory, causing them to be set executable, causing nixpkgs' wrapQtAppsHook to wrap them
+    chmod -x $out/bin/*.so
 
     # As of https://github.com/MultiMC/MultiMC5/blob/7ea1d68244fdae1e7672fb84199ee71e168b31ca/application/package/linux/multimc.desktop,
     # the desktop icon refers to `multimc`, but the executable actually gets
