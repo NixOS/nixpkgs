@@ -12951,6 +12951,7 @@ in
 
   mkLibsForQt5 = self: with self; {
 
+
     ### KDE FRAMEWORKS
 
     inherit (kdeFrameworks.override { libsForQt5 = self; })
@@ -13364,6 +13365,8 @@ in
   soil = callPackage ../development/libraries/soil { };
 
   sonic = callPackage ../development/libraries/sonic { };
+
+  sope = pkgs.callPackage ../development/libraries/sope { };
 
   soprano = callPackage ../development/libraries/soprano { };
 
@@ -14934,6 +14937,8 @@ in
   slimserver = callPackage ../servers/slimserver { };
 
   smcroute = callPackage ../servers/smcroute { };
+
+  sogo = callPackage ../servers/web-apps/sogo { };
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
