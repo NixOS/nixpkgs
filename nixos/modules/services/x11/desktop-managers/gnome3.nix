@@ -229,7 +229,7 @@ in {
 
     # Use the correct gnome3 packageSet
     networking.networkmanager.basePackages =
-      { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
+      { inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
         inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
                               networkmanager-openconnect networkmanager-fortisslvpn
                               networkmanager-iodine networkmanager-l2tp; };
