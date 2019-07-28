@@ -5859,6 +5859,15 @@
     github = "zraexy";
     name = "David Mell";
   };
+  zyradyl = {
+    email = "zyra@zyradyl.moe";
+    github = "zyradyl";
+    keys = [{
+      longkeyid = "rsa4096/0x777457F87573F3ED";
+      fingerprint = "DDCE 7874 4833 D540 5E08 5E7A 7774 57F8 7573 F3ED";
+    }];
+    name = "Zephyr Spencer";
+  };
   zx2c4 = {
     email = "Jason@zx2c4.com";
     github = "zx2c4";
