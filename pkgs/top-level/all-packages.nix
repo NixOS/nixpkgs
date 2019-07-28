@@ -5897,6 +5897,8 @@ in
 
   seexpr = callPackage ../development/compilers/seexpr { };
 
+  sendxmpp-rs = callPackage ../tools/networking/sendxmpp-rs { };
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
