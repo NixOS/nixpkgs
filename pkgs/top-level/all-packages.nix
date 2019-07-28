@@ -17448,6 +17448,8 @@ in
 
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
 
+  dablin = callPackage ../applications/radio/dablin { };
+
   darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.darcs) (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
   });
