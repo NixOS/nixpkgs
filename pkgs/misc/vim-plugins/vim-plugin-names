@@ -215,6 +215,7 @@ mhinz/vim-startify
 michaeljsmith/vim-indent-object
 mileszs/ack.vim
 mindriot101/vim-yapf
+mk12/vim-lean
 mkasa/lushtags
 mopp/sky-color-clock.vim
 morhetz/gruvbox
