@@ -357,11 +357,10 @@ let
   # format a list of lists into the colon-separated lines of /etc/passwd and similar
   mkDatabase = concatMapStrings (entry: concatMapStringsSep ":" toString entry + "\n");
 
-  accountsAreDeterministic = !cfg.mutableUsers &&
-    # assigning IDs based on unused ones would lead to those IDs changing
-    # whenever other config options turn preassigned IDs on or off
-    all (u: u.uid != null) (attrValues cfg.users) &&
-    all (g: g.gid != null) (attrValues cfg.groups);
+  accountsAreDeterministic = !cfg.mutableUsers && cfg.enforceStaticIds;
+
+  nonStaticUsers = concatMap (u: optional (u.uid == null) u.name) (attrValues cfg.users);
+  nonStaticGroups = concatMap (g: optional (g.gid == null) g.name) (attrValues cfg.groups);
 
   # If accountsAreDeterministic, then IDs are all integers, not null, so we can
   # sort by ID instead of by name.
@@ -446,6 +445,26 @@ in {
         passwords will be reset according to the
         <literal>users.users</literal> configuration on activation.
         </para></warning>
+      '';
+    };
+
+    users.enforceStaticIds = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to require that every user and group has a statically assigned
+        uid/gid.
+
+        If you want the <literal>/etc/passwd</literal> and
+        <literal>/etc/group</literal> files to be computed at build-time and
+        symlinked from the Nix store into <literal>/etc</literal>, then set
+        this option to <literal>true</literal> and
+        <literal>users.mutableUsers</literal> to <literal>false</literal>.
+
+        If this option is set to <literal>false</literal>, then the uid/gid
+        options in <literal>users.users</literal> and
+        <literal>users.groups</literal> may be <literal>null</literal>, which
+        causes those IDs to be assigned when the configuration is activated.
       '';
     };
 
@@ -668,6 +687,12 @@ in {
     environment.profiles = [ "/etc/profiles/per-user/$USER" ];
 
     assertions = [
+      { assertion = cfg.enforceStaticIds -> nonStaticUsers == [];
+        message = "These users need to have UIDs assigned: ${concatStringsSep " " nonStaticUsers}";
+      }
+      { assertion = cfg.enforceStaticIds -> nonStaticGroups == [];
+        message = "These groups need to have GIDs assigned: ${concatStringsSep " " nonStaticGroups}";
+      }
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
       }
