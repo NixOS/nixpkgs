@@ -12931,7 +12931,7 @@ in
       inherit stdenv fetchurl fetchFromGitHub makeSetupHook makeWrapper;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
-      inherit harfbuzz;
+      harfbuzz = harfbuzzFull;
       inherit libGL;
       inherit perl;
       inherit gtk3;
