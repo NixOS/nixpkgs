@@ -3444,6 +3444,17 @@ let
     };
   };
 
+  vim-hybrid-material = buildVimPluginFrom2Nix {
+    pname = "vim-hybrid-material";
+    version = "2018-11-12";
+    src = fetchFromGitHub {
+      owner = "kristijanhusak";
+      repo = "vim-hybrid-material";
+      rev = "f2e92ac7e5c4bb75d72f0abaea939e4364e00e2e";
+      sha256 = "01b9n598106qh68ky3fykczq13pldi221r7lrxvg0vnv2zp1z5qd";
+    };
+  };
+
   vim-iced-coffee-script = buildVimPluginFrom2Nix {
     pname = "vim-iced-coffee-script";
     version = "2013-12-26";
