@@ -6399,6 +6399,8 @@ in
 
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
 
+  kernelshark = libsForQt5.callPackage ../os-specific/linux/trace-cmd/kernelshark.nix { };
+
   traceroute = callPackage ../tools/networking/traceroute { };
 
   tracebox = callPackage ../tools/networking/tracebox { };
