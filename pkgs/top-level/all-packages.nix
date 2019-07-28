@@ -18925,6 +18925,8 @@ in
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
 
+  linkerd = callPackage ../applications/networking/cluster/linkerd { };
+
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
