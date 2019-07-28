@@ -113,23 +113,39 @@ let
       '';
     };
 
-    gcloudtrace = {
+    tracing = cfg: {
+      tracing.config-file = {
+        toArgs = _opt: path: optionToArgs "tracing.config-file" path;
+        option = mkOption {
+          type = with types; nullOr str;
+          default = if cfg.tracing.config == null then null
+                    else toString (toYAML "tracing.yaml" cfg.tracing.config);
+          defaultText = ''
+            if config.services.thanos.<cmd>.tracing.config == null then null
+            else toString (toYAML "tracing.yaml" config.services.thanos.<cmd>.tracing.config);
+          '';
+          description = ''
+            Path to YAML file that contains tracing configuration.
+          '';
+        };
+      };
 
-      gcloudtrace.project = mkParam types.str ''
-        GCP project to send Google Cloud Trace tracings to.
+      tracing.config =
+        {
+          toArgs = _opt: _attrs: [];
+          option = nullOpt types.attrs ''
+            Tracing configuration.
 
-        If <literal>null</literal>, tracing will be disabled.
-      '';
+            When not <literal>null</literal> the attribute set gets converted to
+            a YAML file and stored in the Nix store. The option
+            <option>tracing.config-file</option> will default to its path.
 
-      gcloudtrace.sample-factor = mkParamDef types.int 1 ''
-        How often we send traces <literal>1/&lt;sample-factor&gt;</literal>.
-
-        If <literal>0</literal> no trace will be sent periodically, unless
-        forced by baggage item.
-      '';
+            If <option>tracing.config-file</option> is set this option has no effect.
+          '';
+        };
     };
 
-    common = params.log // params.gcloudtrace // {
+    common = cfg: params.log // params.tracing cfg // {
 
       http-address = mkParamDef types.str "0.0.0.0:10902" ''
         Listen <literal>host:port</literal> for HTTP endpoints.
@@ -190,7 +206,7 @@ let
         };
     };
 
-    sidecar = params.common // params.objstore cfg.sidecar // {
+    sidecar = params.common cfg.sidecar // params.objstore cfg.sidecar // {
 
       prometheus.url = mkParamDef types.str "http://localhost:9090" ''
         URL at which to reach Prometheus's API.
@@ -224,7 +240,7 @@ let
 
     };
 
-    store = params.common // params.objstore cfg.store // {
+    store = params.common cfg.store // params.objstore cfg.store // {
 
       stateDir = mkStateDirParam "data-dir" "thanos-store" ''
         Data directory relative to <literal>/var/lib</literal>
@@ -262,7 +278,7 @@ let
       '';
     };
 
-    query = params.common // {
+    query = params.common cfg.query // {
 
       grpc-client-tls-secure = mkFlagParam ''
         Use TLS when talking to the gRPC server
@@ -385,7 +401,7 @@ let
       '';
     };
 
-    rule = params.common // params.objstore cfg.rule // {
+    rule = params.common cfg.rule // params.objstore cfg.rule // {
 
       labels = mkAttrsParam "label" ''
         Labels to be applied to all generated metrics.
@@ -497,7 +513,7 @@ let
       '';
     };
 
-    compact = params.log // params.gcloudtrace // params.objstore cfg.compact // {
+    compact = params.log // params.tracing cfg.compact // params.objstore cfg.compact // {
 
       http-address = mkParamDef types.str "0.0.0.0:10902" ''
         Listen <literal>host:port</literal> for HTTP endpoints.
@@ -553,7 +569,7 @@ let
       '';
     };
 
-    downsample = params.log // params.gcloudtrace // params.objstore cfg.downsample // {
+    downsample = params.log // params.tracing cfg.downsample // params.objstore cfg.downsample // {
 
       stateDir = mkStateDirParam "data-dir" "thanos-downsample" ''
         Data directory relative to <literal>/var/lib</literal>
@@ -562,7 +578,7 @@ let
 
     };
 
-    receive = params.common // params.objstore cfg.receive // {
+    receive = params.common cfg.receive // params.objstore cfg.receive // {
 
       remote-write.address = mkParamDef types.str "0.0.0.0:19291" ''
         Address to listen on for remote write requests.
