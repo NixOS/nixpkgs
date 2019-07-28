@@ -32,13 +32,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "emacs-libvterm-${version}";
-  version = "unstable-2019-04-28";
+  version = "unstable-2019-07-22";
 
   src = fetchFromGitHub {
     owner = "akermu";
     repo = "emacs-libvterm";
-    rev = "6adcedf3e4aaadeeaff97437044fba17aeb466d4";
-    sha256 = "1j6qr5bmajig3idhwsaa3zm72w13q9zn77z2dlrhhx3p4bbds3f8";
+    rev = "301fe9fdfd5fb2496c8428a11e0812fd8a4c0820";
+    sha256 = "0i1hn5gcxayqcbjrnpgczvbicq2vsyn59646ary3crs0mz9wlbpr";
   };
 
   nativeBuildInputs = [ cmake ];
