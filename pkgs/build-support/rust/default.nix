@@ -40,16 +40,39 @@ let
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
-  ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
-  cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
-  ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-  cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
+  ccBinFor = platform: let
+    cc = if platform == stdenv.buildPlatform then buildPackages.stdenv.cc else stdenv.cc;
+    ccBin = suffix: "${cc}/bin/${cc.targetPrefix}${suffix}";
+  in {
+    cc = ccBin "cc";
+    cxx = ccBin "c++";
+    ar = "${cc.bintools.bintools}/bin/${cc.targetPrefix}ar";
+  };
+  cargoTargetVar = target: suffix: with stdenv.lib;
+    "CARGO_TARGET_${replaceStrings [ "-" ] [ "_" ] (toUpper target)}_${suffix}";
+
+  buildCcBin = ccBinFor stdenv.buildPlatform;
+  hostCcBin = ccBinFor stdenv.hostPlatform;
+
+  ccEnv = {
+    "AR_${stdenv.buildPlatform.config}" = buildCcBin.ar;
+    "CC_${stdenv.buildPlatform.config}" = buildCcBin.cc;
+    "CXX_${stdenv.buildPlatform.config}" = buildCcBin.cxx;
+    ${cargoTargetVar stdenv.buildPlatform.config "LINKER"} = buildCcBin.cc;
+    ${cargoTargetVar stdenv.buildPlatform.config "AR"} = buildCcBin.ar;
+  } // stdenv.lib.optionalAttrs (stdenv.buildPlatform.config != stdenv.hostPlatform.config) {
+    "AR_${stdenv.hostPlatform.config}" = hostCcBin.ar;
+    "CC_${stdenv.hostPlatform.config}" = hostCcBin.cc;
+    "CXX_${stdenv.hostPlatform.config}" = hostCcBin.cxx;
+    ${cargoTargetVar stdenv.hostPlatform.config "LINKER"} = hostCcBin.cc;
+    ${cargoTargetVar stdenv.hostPlatform.config "AR"} = hostCcBin.ar;
+  };
 
   # sidestep assumptions currently made about "target/release"
   cargoTargetDir = "target/nix-cargo";
   releaseDir = "${cargoTargetDir}/${stdenv.hostPlatform.config}/${buildType}";
 
-in stdenv.mkDerivation (args // {
+in stdenv.mkDerivation (args // ccEnv // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
@@ -88,12 +111,6 @@ in stdenv.mkDerivation (args // {
     cat >> .cargo/config <<EOF
     [build]
     target-dir = "$(pwd)/${cargoTargetDir}"
-    [target."${stdenv.buildPlatform.config}"]
-    "linker" = "${ccForBuild}"
-    ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${stdenv.hostPlatform.config}"]
-    "linker" = "${ccForHost}"
-    ''}
     EOF
     cat .cargo/config
 
@@ -111,11 +128,6 @@ in stdenv.mkDerivation (args // {
 
     (
     set -x
-    env \
-      "CC_${stdenv.buildPlatform.config}"="${ccForBuild}" \
-      "CXX_${stdenv.buildPlatform.config}"="${cxxForBuild}" \
-      "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
-      "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
       cargo build \
         ${stdenv.lib.optionalString (buildType != "debug") "--${buildType}"} \
         --target ${stdenv.hostPlatform.config} \
