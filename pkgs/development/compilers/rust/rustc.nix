@@ -3,11 +3,20 @@
 , llvm_7, ncurses, darwin, git, cmake, curl, rustPlatform
 , which, libffi, gdb
 , withBundledLLVM ? false
+, buildEnv
 }:
 
 let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
+
+  muslRoot = buildEnv {
+    name = "musl-root";
+    paths = [
+      pkgsBuildTarget.targetPackages.llvmPackages_8.libraries.libunwind
+      pkgsBuildTarget.targetPackages.stdenv.cc.libc
+    ];
+  };
 
   llvmSharedForBuild = pkgsBuildBuild.llvm_7.override { enableSharedLibraries = true; };
   llvmSharedForHost = pkgsBuildHost.llvm_7.override { enableSharedLibraries = true; };
@@ -92,6 +101,8 @@ in stdenv.mkDerivation rec {
     "${setBuild}.llvm-config=${llvmSharedForBuild}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
+  ] ++ optional (stdenv.targetPlatform.libc == "musl") [
+    "${setTarget}.musl-root=${muslRoot}"
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
