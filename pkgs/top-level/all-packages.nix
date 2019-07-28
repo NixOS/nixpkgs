@@ -18976,6 +18976,7 @@ in
   libowfat = callPackage ../development/libraries/libowfat { };
 
   librecad = callPackage ../applications/misc/librecad { };
+  librecad-git = callPackage ../applications/misc/librecad/git.nix { };
 
   libreoffice = hiPrio libreoffice-still;
   libreoffice-unwrapped = libreoffice.libreoffice;
