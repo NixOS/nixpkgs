@@ -4340,8 +4340,6 @@ in
 
   nodePackages = nodePackages_10_x;
 
-  npm2nix = nodePackages.npm2nix;
-
   now-cli = callPackage ../development/web/now-cli {};
 
   file-rename = callPackage ../tools/filesystems/file-rename { };
@@ -6400,6 +6398,8 @@ in
   chaps = callPackage ../tools/security/chaps { };
 
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
+
+  kernelshark = libsForQt5.callPackage ../os-specific/linux/trace-cmd/kernelshark.nix { };
 
   traceroute = callPackage ../tools/networking/traceroute { };
 
