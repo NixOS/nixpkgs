@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, qt5, libsForQt5
 , bison, flex, eigen, boost, libGLU_combined, glew, opencsg, cgal
 , mpfr, gmp, glib, pkgconfig, harfbuzz, gettext, freetype, fontconfig
-, double-conversion, lib3mf, libzip
+, double-conversion, lib3mf, libzip, mkDerivation
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "openscad";
   version = "2019.05";
 
