@@ -13,12 +13,12 @@ let
 
 in buildPythonPackage rec {
   pname = "PyQt";
-  version = "5.11.3";
+  version = "5.12.3";
   format = "other";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "0wqh4srqkcc03rvkwrcshaa028psrq58xkys6npnyhqxc0apvdf9";
+    url = "https://www.riverbankcomputing.com/static/Downloads/PyQt5/${version}/PyQt5_gpl-${version}.tar.gz";
+    sha256 = "041155bdzp57jy747p5d59740c55yy3241cy1x2lgcdsvqvzmc0d";
   };
 
   outputs = [ "out" "dev" ];
