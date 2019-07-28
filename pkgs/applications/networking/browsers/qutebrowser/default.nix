@@ -21,12 +21,12 @@ let
 
 in python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.6.3";
+  version = "1.7.0";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0z9an14vlv0r48x7fk0mk7465gnhh19dx1w63lyhsgnfqy5pzlhy";
+    sha256 = "0wyjmb2qvnw3gn0ypgckwblmn7kasi12dfwp343hi6wscqripw7i";
   };
 
   # Needs tox
@@ -71,7 +71,7 @@ in python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
-    install -Dm644 misc/qutebrowser.desktop \
+    install -Dm644 misc/org.qutebrowser.qutebrowser.desktop \
         "$out/share/applications/qutebrowser.desktop"
 
     # Install icons
@@ -99,6 +99,6 @@ in python3Packages.buildPythonApplication rec {
     homepage    = https://github.com/The-Compiler/qutebrowser;
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jagajaga rnhmjoj ];
+    maintainers = with maintainers; [ jagajaga koral rnhmjoj ];
   };
 }
