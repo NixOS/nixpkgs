@@ -18799,6 +18799,8 @@ in
 
   josm = callPackage ../applications/misc/josm { };
 
+  jormungandr = callPackage ../applications/altcoins/jormungandr { };
+
   jbrout = callPackage ../applications/graphics/jbrout { };
 
   jwm = callPackage ../applications/window-managers/jwm { };
