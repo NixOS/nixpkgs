@@ -4,14 +4,14 @@
 , autoconf-archive
 
 , autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
-, notifySupport ? true,         libnotify ? null, gdk_pixbuf ? null
+, notifySupport ? true,         libnotify ? null, gdk-pixbuf ? null
 , traySupport ? true,           gnome2 ? null
 , pgpSupport ? true,            gpgme ? null
 , pythonPluginSupport ? true,   python ? null
 }:
 
 assert autoAwaySupport     -> libXScrnSaver != null && libX11 != null;
-assert notifySupport       -> libnotify != null && gdk_pixbuf != null;
+assert notifySupport       -> libnotify != null && gdk-pixbuf != null;
 assert traySupport         -> gnome2 != null;
 assert pgpSupport          -> gpgme != null;
 assert pythonPluginSupport -> python != null;
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     expect readline libuuid glib openssl expat ncurses libotr
     curl libmesode cmocka libmicrohttpd stabber
   ] ++ optionals autoAwaySupport     [ libXScrnSaver libX11 ]
-    ++ optionals notifySupport       [ libnotify gdk_pixbuf ]
+    ++ optionals notifySupport       [ libnotify gdk-pixbuf ]
     ++ optionals traySupport         [ gnome2.gtk ]
     ++ optionals pgpSupport          [ gpgme ]
     ++ optionals pythonPluginSupport [ python ];

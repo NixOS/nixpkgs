@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libxml2, gdk_pixbuf, librsvg, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, libxml2, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "sierra-gtk-theme";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ libxml2 ];
 
-  buildInputs = [ gdk_pixbuf librsvg ];
+  buildInputs = [ gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

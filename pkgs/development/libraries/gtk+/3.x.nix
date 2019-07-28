@@ -13,7 +13,7 @@
 , glib
 , cairo
 , pango
-, gdk_pixbuf
+, gdk-pixbuf
 , atk
 , at-spi2-atk
 , gobject-introspection
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     cairo
     expat
     fribidi
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gsettings-desktop-schemas
     libICE

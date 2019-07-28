@@ -10,7 +10,7 @@
 , dbus
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , gst-plugins-base
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
       gst-plugins-base

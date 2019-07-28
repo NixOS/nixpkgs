@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libGL, xorg, cairo
-, libpng, gtk2, glib, gdk_pixbuf, fontconfig, freetype, curl
+, libpng, gtk2, glib, gdk-pixbuf, fontconfig, freetype, curl
 , dbus-glib, alsaLib, libpulseaudio, systemd, pango
 }:
 
@@ -24,7 +24,7 @@ let
     ];
 
   rpathProgram = makeLibraryPath
-    [ gdk_pixbuf
+    [ gdk-pixbuf
       glib
       gtk2
       xorg.libX11

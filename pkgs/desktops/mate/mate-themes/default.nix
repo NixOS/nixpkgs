@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, mate, gtk2, gtk3,
-  gtk_engines, gtk-engine-murrine, gdk_pixbuf, librsvg }:
+  gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "mate-themes-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool gtk3 ];
 
-  buildInputs = [ mate.mate-icon-theme gtk2 gtk_engines gdk_pixbuf librsvg ];
+  buildInputs = [ mate.mate-icon-theme gtk2 gtk_engines gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

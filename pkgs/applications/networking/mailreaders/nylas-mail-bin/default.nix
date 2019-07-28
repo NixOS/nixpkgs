@@ -10,7 +10,7 @@
 , fontconfig
 , freetype
 , gcc-unwrapped
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gnome2
 , libgnome-keyring
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     gcc-unwrapped
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gnome2.gtk

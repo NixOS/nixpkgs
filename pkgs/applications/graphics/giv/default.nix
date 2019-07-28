@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gdk_pixbuf, scons, pkgconfig, gtk2, glib
+{ stdenv, fetchFromGitHub, gdk-pixbuf, scons, pkgconfig, gtk2, glib
 , pcre, cfitsio, perl, gob2, vala, libtiff, json-glib }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   patches = [ ./build.patch ];
 
   nativeBuildInputs = [ scons pkgconfig vala perl gob2 ];
-  buildInputs = [ gdk_pixbuf gtk2 glib pcre cfitsio libtiff json-glib ];
+  buildInputs = [ gdk-pixbuf gtk2 glib pcre cfitsio libtiff json-glib ];
 
   meta = with stdenv.lib; {
     description = "Cross platform image and hierarchical vector viewer based";

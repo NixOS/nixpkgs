@@ -22,7 +22,7 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
+, cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf
 , libselinux ? null, libsepol ? null
@@ -159,7 +159,7 @@ in
 
   gdk_pixbuf2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ rake gdk_pixbuf ];
+    buildInputs = [ rake gdk-pixbuf ];
   };
 
   gpgme = attrs: {
@@ -255,7 +255,7 @@ in
       pkgconfig
       cairo
       pango
-      gdk_pixbuf
+      gdk-pixbuf
       libxml2
       python3
     ];

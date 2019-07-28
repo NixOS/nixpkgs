@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, makeDesktopItem, unzip, fpc, lazarus,
-libX11, glib, gtk2, gdk_pixbuf, pango, atk, cairo, openssl }:
+libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "transgui";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     unzip fpc lazarus stdenv.cc
-    libX11 glib gtk2 gdk_pixbuf pango atk cairo openssl
+    libX11 glib gtk2 gdk-pixbuf pango atk cairo openssl
   ];
 
   NIX_LDFLAGS = "
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "INSTALL_PREFIX=$(out)"
   ];
 
-  LCL_PLATFORM = "gtk2"; 
+  LCL_PLATFORM = "gtk2";
 
   desktopItem = makeDesktopItem rec {
     name = "transgui";
@@ -63,10 +63,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/icons/hicolor/48x48/apps"
     cp transgui.png "$out/share/icons/hicolor/48x48/apps"
     mkdir -p "$out/share/transgui"
-    cp -r "./lang" "$out/share/transgui" 
+    cp -r "./lang" "$out/share/transgui"
   '';
 
-  meta = { 
+  meta = {
     description = "A cross platform front-end for the Transmission Bit-Torrent client";
     homepage = https://sourceforge.net/p/transgui;
     license = stdenv.lib.licenses.gpl2Plus;

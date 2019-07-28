@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk_pixbuf, libnotify, makeWrapper, pkgconfig, xorg
+{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk-pixbuf, libnotify, makeWrapper, pkgconfig, xorg
 , enableAlsaUtils ? true, alsaUtils, coreutils
 , enableNetwork ? true, dnsutils, iproute, wirelesstools }:
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
+  buildInputs = [ dbus gdk-pixbuf libnotify xorg.libX11 ];
 
   cargoSha256 = "1r2wczfkdpvjc7iylwajkminraaz1ix6n724in0dvv5klfcdxlxb";
 

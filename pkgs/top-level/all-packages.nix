@@ -10927,7 +10927,7 @@ in
 
   gdata-sharp = callPackage ../development/libraries/gdata-sharp { };
 
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
+  gdk-pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gnome-sharp = callPackage ../development/libraries/gnome-sharp { mono = mono4; };
 

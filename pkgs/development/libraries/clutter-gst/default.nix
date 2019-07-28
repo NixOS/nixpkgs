@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, clutter, gtk3, glib, cogl, gnome3, gdk_pixbuf }:
+{ fetchurl, stdenv, pkgconfig, clutter, gtk3, glib, cogl, gnome3, gdk-pixbuf }:
 
 let
   pname = "clutter-gst";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "17czmpl92dzi4h3rn5rishk015yi3jwiw29zv8qan94xcmnbssgy";
   };
 
-  propagatedBuildInputs = [ clutter gtk3 glib cogl gdk_pixbuf ];
+  propagatedBuildInputs = [ clutter gtk3 glib cogl gdk-pixbuf ];
   nativeBuildInputs = [ pkgconfig ];
 
   postBuild = "rm -rf $out/share/gtk-doc";

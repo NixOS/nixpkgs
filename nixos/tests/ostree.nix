@@ -12,7 +12,7 @@ import ./make-test.nix ({ pkgs, lib, ... }: {
       gnome-desktop-testing ostree gnupg (python3.withPackages (p: with p; [ pyyaml ]))
     ];
 
-    environment.variables.GI_TYPELIB_PATH = lib.makeSearchPath "lib/girepository-1.0" (with pkgs; [ gtk3 pango.out ostree gdk_pixbuf atk ]); # for GJS tests
+    environment.variables.GI_TYPELIB_PATH = lib.makeSearchPath "lib/girepository-1.0" (with pkgs; [ gtk3 pango.out ostree gdk-pixbuf atk ]); # for GJS tests
   };
 
   testScript = ''
