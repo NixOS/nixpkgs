@@ -357,6 +357,7 @@ thinca/vim-themis
 thinca/vim-visualstar
 thosakwe/vim-flutter
 tikhomirov/vim-glsl
+tmux-plugins/vim-tmux
 tomasr/molokai
 tomlion/vim-solidity
 tommcdo/vim-lion
