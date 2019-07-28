@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem
 
 , alsaLib, at-spi2-atk, atk, cairo, cups, dbus, dpkg, expat, fontconfig
-, freetype, gdk_pixbuf, glib, gtk3, hunspell, libX11, libXScrnSaver
+, freetype, gdk-pixbuf, glib, gtk3, hunspell, libX11, libXScrnSaver
 , libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr
 , libXrender, libXtst, libnotify, libuuid, nspr, nss, pango, pciutils
 , pulseaudio, udev, xdg_utils, xorg
@@ -71,7 +71,7 @@ let
     nativeBuildInputs = [ dpkg ];
     rpath = stdenv.lib.makeLibraryPath [
       alsaLib at-spi2-atk atk cairo cups dbus expat fontconfig freetype
-      gdk_pixbuf glib gtk3 hunspell libX11 libXScrnSaver libXcomposite
+      gdk-pixbuf glib gtk3 hunspell libX11 libXScrnSaver libXcomposite
       libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
       libXtst libnotify libuuid nspr nss pango pciutils pulseaudio
       stdenv.cc.cc udev xdg_utils xorg.libxcb
