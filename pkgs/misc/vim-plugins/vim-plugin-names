@@ -412,6 +412,7 @@ vim-scripts/changeColorScheme.vim
 vim-scripts/Colour-Sampler-Pack
 vim-scripts/DoxygenToolkit.vim
 vim-scripts/emodeline
+vim-scripts/gitignore.vim
 vim-scripts/Improved-AnsiEsc
 vim-scripts/jdaddy.vim
 vim-scripts/matchit.zip
