@@ -5001,6 +5001,15 @@
     github = "sternenseemann";
     name = "Lukas Epple";
   };
+  steshaw = {
+    name = "Steven Shaw";
+    email = "steven@steshaw.org";
+    github = "steshaw";
+    keys = [{
+      longkeyid = "rsa4096/0x1D9A17DFD23DCB91";
+      fingerprint = "0AFE 77F7 474D 1596 EE55  7A29 1D9A 17DF D23D CB91";
+    }];
+  };
   stesie = {
     email = "stesie@brokenpipe.de";
     github = "stesie";
@@ -5925,5 +5934,10 @@
     email = "mattmelling@fastmail.com";
     github = "mattmelling";
     name = "Matt Melling";
+  };
+  wd15 = {
+    email = "daniel.wheeler2@gmail.com";
+    github = "wd15";
+    name = "Daniel Wheeler";
   };
 }

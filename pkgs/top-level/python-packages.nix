@@ -1077,6 +1077,8 @@ in {
 
   rlp = callPackage ../development/python-modules/rlp { };
 
+  rq = callPackage ../development/python-modules/rq { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };
@@ -1098,6 +1100,8 @@ in {
   shellingham = callPackage ../development/python-modules/shellingham {};
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
+
+  simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
 
   singledispatch = callPackage ../development/python-modules/singledispatch { };
 
@@ -6034,6 +6038,14 @@ in {
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   mwparserfromhell = callPackage ../development/python-modules/mwparserfromhell { };
+
+  starlette = callPackage ../development/python-modules/starlette { };
+
+  uvicorn = callPackage ../development/python-modules/uvicorn { };
+
+  pydantic = callPackage ../development/python-modules/pydantic { };
+
+  fastapi = callPackage ../development/python-modules/fastapi { };
 });
 
 in fix' (extends overrides packages)

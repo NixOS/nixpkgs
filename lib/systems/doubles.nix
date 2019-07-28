@@ -26,7 +26,7 @@ let
 
     "riscv32-linux" "riscv64-linux"
 
-    "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "powerpc-none" "msp430-none"
+    "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "powerpc-none" "msp430-none" "riscv64-none" "riscv32-none"
   ];
 
   allParsed = map parse.mkSystemFromString all;

@@ -1,9 +1,9 @@
 { stdenv, fetchurl }:
 
 let
-  rev = "5cdbb97898d727d2b35c25a3117e9a79e474d97b";
-  sha256 = "14qikp91l2aj8j9i0nh0nf9ibz65b8bpd3lbyarqshhrpvb5jp79";
-  version = "2019-06-04";
+  rev = "e2a6a9cd9da70175881ab991220c86aa87179509";
+  sha256 = "1gw0kpszgflk3vqjlm5igd2rznh36mb2j1iqrcqi6pzxlpccv1lg";
+  version = "2019-07-25";
 in stdenv.mkDerivation {
   inherit version;
 
