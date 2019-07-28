@@ -4457,6 +4457,17 @@ let
     };
   };
 
+  vim-tmux = buildVimPluginFrom2Nix {
+    pname = "vim-tmux";
+    version = "2019-03-22";
+    src = fetchFromGitHub {
+      owner = "tmux-plugins";
+      repo = "vim-tmux";
+      rev = "4e77341a2f8b9b7e41e81e9debbcecaea5987c85";
+      sha256 = "16fgc0lx1jr8zbayanf5w677ssiw5xb8vwfaca295c8xlk760c3m";
+    };
+  };
+
   vim-tmux-navigator = buildVimPluginFrom2Nix {
     pname = "vim-tmux-navigator";
     version = "2019-01-29";
