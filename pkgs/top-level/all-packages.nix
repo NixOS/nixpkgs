@@ -15843,6 +15843,7 @@ in
 
   aggregateModules = modules:
     callPackage ../os-specific/linux/kmod/aggregator.nix {
+      inherit (buildPackages) kmod;
       inherit modules;
     };
 
