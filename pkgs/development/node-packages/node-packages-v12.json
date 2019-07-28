@@ -1,6 +1,7 @@
 [
-  "nijs"
-, "coffee-script"
+  "coffee-script"
 , "grunt-cli"
+, "matrix-appservice-irc"
+, "nijs"
 , "node2nix"
 ]
