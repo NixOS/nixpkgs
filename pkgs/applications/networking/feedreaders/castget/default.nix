@@ -1,0 +1,33 @@
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, glib, ronn, curl, id3lib, libxml2 }:
+
+stdenv.mkDerivation rec {
+  pname = "castget";
+  version = "1_2_4";
+
+  src = fetchFromGitHub {
+    owner = "mlj";
+    repo = pname;
+    rev = "rel_${version}";
+    sha256 = "1pfrjmsikv35cc0praxgim26zq4r7dfp1pkn6n9fz3fm73gxylyv";
+  };
+  prePatch = ''
+    touch NEWS
+    touch README
+    touch ChangeLog
+  '';
+
+  buildInputs = [ glib curl id3lib libxml2 ];
+  nativeBuildInputs = [ ronn autoreconfHook pkgconfig ];
+
+  meta = with stdenv.lib; {
+    description = "A simple, command-line based RSS enclosure downloader";
+    longDescription = ''
+      castget is a simple, command-line based RSS enclosure downloader. It is
+      primarily intended for automatic, unattended downloading of podcasts.
+    '';
+    homepage = "http://castget.johndal.com/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+  };
+}
