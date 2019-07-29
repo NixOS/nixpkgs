@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "18bp7fcpv7879q3ppdxlqj7ayqmlh5zwrkz8gch6rq9lkmmrklrf";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
 
-  buildInputs = [ libxslt systemd libaio docbook_xsl ];
+  buildInputs = [ systemd libaio ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
