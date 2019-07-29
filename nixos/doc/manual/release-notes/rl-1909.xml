@@ -213,6 +213,14 @@
       have a look at the <link xlink:href="https://github.com/nginxinc/nginx-prometheus-exporter">official repo</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>shibboleth-sp</literal> package has been updated to version 3.
+     It is largely backward compatible, for further information refer to the
+     <link xlink:href="https://wiki.shibboleth.net/confluence/display/SP3/ReleaseNotes">release notes</link>
+     and <link xlink:href="https://wiki.shibboleth.net/confluence/display/SP3/UpgradingFromV2">upgrade guide</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
