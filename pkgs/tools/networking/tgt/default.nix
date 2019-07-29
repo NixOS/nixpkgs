@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
-, docbook_xsl }:
+{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
+, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, utillinux
+}:
 
 stdenv.mkDerivation rec {
   pname = "tgt";
@@ -11,6 +12,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "18bp7fcpv7879q3ppdxlqj7ayqmlh5zwrkz8gch6rq9lkmmrklrf";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ libxslt systemd libaio docbook_xsl ];
 
@@ -31,7 +34,10 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    sed -i 's|#!/usr/bin/perl|#! ${perl}/bin/perl -I${perlPackages.ConfigGeneral}/${perl.libPrefix}|' $out/sbin/tgt-admin
+    substituteInPlace $out/sbin/tgt-admin \
+      --replace "#!/usr/bin/perl" "#! ${perl}/bin/perl -I${perlPackages.ConfigGeneral}/${perl.libPrefix}"
+    wrapProgram $out/sbin/tgt-admin --prefix PATH : \
+      ${lib.makeBinPath [ lsof sg3_utils (placeholder "out") ]}
   '';
 
   enableParallelBuilding = true;
