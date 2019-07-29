@@ -5,16 +5,15 @@
 , xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
 }:
 
-let
-  version = "2.8.2";
-in stdenv.mkDerivation rec {
-  name = "udisks-${version}";
+stdenv.mkDerivation rec {
+  pname = "udisks";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
-    rev = name;
-    sha256 = "000xf99id1f6w8l20jxm3f2g32v9wx68rzv6q2bwrfz6vmy76xwy";
+    rev = "${pname}-${version}";
+    sha256 = "01wx2x8xyal595dhdih7rva2bz7gqzgwdp56gi0ikjdzayx17wcf";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
@@ -33,7 +32,10 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./force-path.patch;
-      path = stdenv.lib.makeBinPath [ btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils xfsprogs ntfs3g parted utillinux ];
+      path = stdenv.lib.makeBinPath [
+        btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils
+        xfsprogs ntfs3g parted utillinux
+      ];
     })
   ];
 
@@ -59,6 +61,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
+    "--with-tmpfilesdir=no"
   ];
 
   makeFlags = [
@@ -66,13 +69,15 @@ in stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
-  doCheck = false; # fails
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
-    homepage = https://www.freedesktop.org/wiki/Software/udisks/;
-    license = licenses.gpl2Plus; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
-    maintainers = with maintainers; [];
+    homepage = "https://www.freedesktop.org/wiki/Software/udisks/";
+    license = with licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
+    maintainers = with maintainers; [ johnazoidberg ];
     platforms = platforms.linux;
   };
 }
