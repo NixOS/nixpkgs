@@ -5903,6 +5903,8 @@ in
 
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
+  sequoia-tool = callPackage ../tools/security/sequoia-tool { inherit (llvmPackages) libclang; };
+
   sewer = callPackage ../tools/admin/sewer { };
 
   screenfetch = callPackage ../tools/misc/screenfetch { };
