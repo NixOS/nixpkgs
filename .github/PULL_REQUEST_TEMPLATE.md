@@ -18,4 +18,6 @@
 - [ ] Ensured that relevant documentation is up to date
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
 
----
+###### Notify maintainers
+
+cc @
