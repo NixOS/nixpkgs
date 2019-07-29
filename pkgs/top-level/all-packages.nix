@@ -20227,10 +20227,6 @@ in
 
   rdup = callPackage ../tools/backup/rdup { };
 
-  realpine = callPackage ../applications/networking/mailreaders/realpine {
-    tcl = tcl-8_5;
-  };
-
   reaper = callPackage ../applications/audio/reaper { };
 
   recode = callPackage ../tools/text/recode { };
