@@ -8264,6 +8264,8 @@ in
 
   urweb = callPackage ../development/compilers/urweb { };
 
+  vlang = callPackage ../development/compilers/vlang { };
+
   inherit (callPackage ../development/compilers/vala { })
     vala_0_36
     vala_0_38
