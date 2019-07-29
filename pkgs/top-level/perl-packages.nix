@@ -687,6 +687,8 @@ let
     propagatedBuildInputs = [ pkgs.openssl IPCRun3 ];
     patchPhase = ''
       sed -i 's|my $openssl_bin = "openssl";|my $openssl_bin = "${pkgs.openssl}/bin/openssl";|' lib/Authen/ModAuthPubTkt.pm
+      # -dss1 doesn't exist for dgst in openssl 1.1, -sha1 can also handle DSA keys now
+      sed -i 's|-dss1|-sha1|' lib/Authen/ModAuthPubTkt.pm
     '';
     meta = {
       description = "Generate Tickets (Signed HTTP Cookies) for mod_auth_pubtkt protected websites";
