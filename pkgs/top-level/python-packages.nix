@@ -529,6 +529,8 @@ in {
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
 
+  oath = callPackage ../development/python-modules/oath { };
+
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
