@@ -14,7 +14,11 @@ buildPythonPackage rec {
   checkPhase = ''
     export HOME=$PWD
     # skip some tests that fail because of minimal rounding errors
-    py.test imblearn --ignore=imblearn/metrics/classification.py
+    # or large dependencies
+    py.test imblearn -k 'not classification \
+                         and not _generator \
+                         and not _forest \
+                         and not wrong_memory'
     py.test doc/*.rst
   '';
 
