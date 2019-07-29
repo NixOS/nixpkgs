@@ -33,7 +33,6 @@ buildPythonApplication rec {
 
   buildInputs = [
     harfbuzz
-    libcanberra
     ncurses
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     Cocoa
@@ -46,7 +45,7 @@ buildPythonApplication rec {
     python3
     zlib
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    fontconfig glfw libunistring libX11
+    fontconfig glfw libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus
   ];
