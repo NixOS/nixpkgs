@@ -36,9 +36,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "iSCSI Target daemon with rdma support";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "iSCSI Target daemon with RDMA support";
+    homepage = "http://stgt.sourceforge.net/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }
