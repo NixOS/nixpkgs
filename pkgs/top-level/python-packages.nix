@@ -5173,6 +5173,8 @@ in {
 
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
+  openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
+
   freezegun = callPackage ../development/python-modules/freezegun { };
 
   taskw = callPackage ../development/python-modules/taskw { };
