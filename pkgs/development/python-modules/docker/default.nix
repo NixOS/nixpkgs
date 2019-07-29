@@ -1,15 +1,20 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy27
-, six, requests, websocket_client, mock, pytest
-, paramiko, backports_ssl_match_hostname
+, backports_ssl_match_hostname
+, mock
+, paramiko
+, pytest
+, requests
+, six
+, websocket_client
 }:
 
 buildPythonPackage rec {
-  version = "4.0.1";
+  version = "4.0.2";
   pname = "docker";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1284sqy3r6nxyz43vrpzqf25hsidpr0v4cgnbvavg2dl47bkf77n";
+    sha256 = "0r1i46h8x1vfvadayyvmh5hc6mpzgv3vvp6pv4g1wavamya2wnyc";
   };
 
   propagatedBuildInputs = [
