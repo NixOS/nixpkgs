@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, autoPatchelfHook, env
+{ stdenv, fetchurl, mkDerivation, makeWrapper, makeDesktopItem, autoPatchelfHook
+, wrapQtAppsHook
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
 , qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
@@ -21,23 +22,18 @@ let
     };
   };
 
-  qtDeps = [
-    qtbase qtdeclarative qtlocation qtquickcontrols qtquickcontrols2 qtscript
-    qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
-  ];
-
-  qtEnv = env "zoom-us-qt-${qtbase.version}" qtDeps;
-
-in stdenv.mkDerivation {
+in mkDerivation {
   name = "zoom-us-${version}";
 
   src = srcs.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
 
   buildInputs = [
-    dbus glib libGL libX11 libXfixes libuuid libxcb qtEnv libjpeg_turbo
-  ] ++ qtDeps;
+    dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo
+    qtbase qtdeclarative qtlocation qtquickcontrols qtquickcontrols2 qtscript
+    qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
+  ];
 
   runtimeDependencies = optional pulseaudioSupport libpulseaudio;
 
@@ -60,20 +56,12 @@ in stdenv.mkDerivation {
     in ''
       runHook preInstall
 
-      packagePath=$out/share/zoom-us
-      mkdir -p $packagePath $out/bin
+      mkdir -p $out/{bin,share/zoom-us}
 
-      cp -ar ${files} $packagePath
+      cp -ar ${files} $out/share/zoom-us
 
       # TODO Patch this somehow; tries to dlopen './libturbojpeg.so' from cwd
-      ln -s $(readlink -e "${libjpeg_turbo.out}/lib/libturbojpeg.so") $packagePath/libturbojpeg.so
-
-      ln -s ${qtEnv}/bin/qt.conf $packagePath
-
-      makeWrapper $packagePath/zoom $out/bin/zoom-us \
-        --prefix PATH : "${makeBinPath [ coreutils glib.dev pciutils procps qttools.dev utillinux ]}" \
-        --prefix LD_PRELOAD : "${libv4l}/lib/libv4l/v4l2convert.so" \
-        --run "cd $packagePath"
+      ln -s $(readlink -e "${libjpeg_turbo.out}/lib/libturbojpeg.so") $out/share/zoom-us/libturbojpeg.so
 
       runHook postInstall
     '';
@@ -86,7 +74,14 @@ in stdenv.mkDerivation {
     genericName = "Video Conference";
     categories = "Network;Application;";
     mimeType = "x-scheme-handler/zoommtg;";
-  }).buildCommand;
+  }).buildCommand + ''
+    ln -s $out/share/zoom-us/zoom $out/bin/zoom-us
+  '';
+
+  qtWrapperArgs = [
+    ''--prefix PATH : ${makeBinPath [ coreutils glib.dev pciutils procps qttools.dev utillinux ]}''
+    ''--prefix LD_PRELOAD : ${libv4l}/lib/libv4l/v4l2convert.so''
+  ];
 
   passthru.updateScript = ./update.sh;
 
