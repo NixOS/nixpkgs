@@ -22,10 +22,10 @@ rec {
   beta = stable;
 
   stable_430 = generic {
-    version = "430.34";
-    sha256_64bit = "0c3x25gilibbgazvp20d5sfmmgcf0gfqf024nzzqryxg4m05h39b";
-    settingsSha256 = "1xpf9gbpq5xynxm6f401ab09aa243h1sk2vcxvzjwqgcil36zzad";
-    persistencedSha256 = "00dd0m87nwqfv9i23bvbqgcz10x9mvfxg9249nvhp4y3ha65rms6";
+    version = "430.40";
+    sha256_64bit = "1myzhy1mf27dcx0admm3pbbkfdd9p66lw0cq2mz1nwds92gqj07p";
+    settingsSha256 = "0rg9dxg02pnpi0a1yi3a41wn6kmlk0dm6dvfbazyqi4gbzr12qrl";
+    persistencedSha256 = "0findlrs5v1m7gl0vxkpd04lh54pib80w5vp4j77qb5snhgvckhq";
   };
 
   # Last one supporting x86
@@ -37,14 +37,14 @@ rec {
     persistencedSha256 = "02v76202qcnh8hvg4y9wmk9swdlv7z39ppfd1c850nlv158vn5nf";
 
     patches = [
-    (fetchurl {
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-4.16.patch?h=2ad07241ea525a6b6b555b6cb96a97634a4b2cb0";
-      sha256 = "11b3dp0na496rn13v5q4k66bf61174800g36rcwj42r0xj9cfak2";
-    })
+      (fetchurl {
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-4.16.patch?h=2ad07241ea525a6b6b555b6cb96a97634a4b2cb0";
+        sha256 = "11b3dp0na496rn13v5q4k66bf61174800g36rcwj42r0xj9cfak2";
+      })
 
-    (fetchurl {
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-5.1.patch?h=42d50ef8d6048608d18bdf2c296dd335260c5a1a";
-      sha256 = "03v46ym2bcckg9q2xrilkg21hfiwypr6gl4jmly2q3m4yza9ja6r";
+      (fetchurl {
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-5.1.patch?h=42d50ef8d6048608d18bdf2c296dd335260c5a1a";
+        sha256 = "03v46ym2bcckg9q2xrilkg21hfiwypr6gl4jmly2q3m4yza9ja6r";
       })
     ];
   };
