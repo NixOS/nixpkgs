@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "http://stgt.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ johnazoidberg ];
   };
 }
