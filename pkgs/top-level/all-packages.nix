@@ -18379,9 +18379,7 @@ in
 
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
-  getxbook = callPackage ../applications/misc/getxbook {
-    openssl = openssl_1_0_2;
-  };
+  getxbook = callPackage ../applications/misc/getxbook { };
 
   ghq = gitAndTools.ghq;
 
