@@ -2845,7 +2845,6 @@ in
 
   encfs = callPackage ../tools/filesystems/encfs {
     tinyxml2 = tinyxml-2;
-    openssl = openssl_1_0_2;
   };
 
   enscript = callPackage ../tools/text/enscript { };
