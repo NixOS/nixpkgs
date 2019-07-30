@@ -76,16 +76,16 @@ in buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postBuild = lib.optionalString stdenv.isDarwin "make app";
+  postBuild = lib.optionalString stdenv.isDarwin "make app RELEASE_DIR=$releaseDir";
 
   installPhase = ''
     runHook preInstall
 
-    install -D target/release/alacritty $out/bin/alacritty
+    install -D $releaseDir/alacritty $out/bin/alacritty
 
   '' + (if stdenv.isDarwin then ''
     mkdir $out/Applications
-    cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
+    cp -r $releaseDir/osx/Alacritty.app $out/Applications/Alacritty.app
   '' else ''
     install -D extra/linux/alacritty.desktop -t $out/share/applications/
     install -D extra/logo/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg

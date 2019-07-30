@@ -41,13 +41,39 @@ let
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
-  ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
-  cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
-  ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-  cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${stdenv.hostPlatform.config}/${buildType}";
+  ccBinFor = platform: let
+    cc = if platform == stdenv.buildPlatform then buildPackages.stdenv.cc else stdenv.cc;
+    ccBin = suffix: "${cc}/bin/${cc.targetPrefix}${suffix}";
+  in {
+    cc = ccBin "cc";
+    cxx = ccBin "c++";
+    ar = "${cc.bintools.bintools}/bin/${cc.targetPrefix}ar";
+  };
+  cargoTargetVar = target: suffix: with stdenv.lib;
+    "CARGO_TARGET_${replaceStrings [ "-" ] [ "_" ] (toUpper target)}_${suffix}";
 
-in stdenv.mkDerivation (args // {
+  buildCcBin = ccBinFor stdenv.buildPlatform;
+  hostCcBin = ccBinFor stdenv.hostPlatform;
+
+  ccEnv = {
+    "AR_${stdenv.buildPlatform.config}" = buildCcBin.ar;
+    "CC_${stdenv.buildPlatform.config}" = buildCcBin.cc;
+    "CXX_${stdenv.buildPlatform.config}" = buildCcBin.cxx;
+    ${cargoTargetVar stdenv.buildPlatform.config "LINKER"} = buildCcBin.cc;
+    ${cargoTargetVar stdenv.buildPlatform.config "AR"} = buildCcBin.ar;
+  } // stdenv.lib.optionalAttrs (stdenv.buildPlatform.config != stdenv.hostPlatform.config) {
+    "AR_${stdenv.hostPlatform.config}" = hostCcBin.ar;
+    "CC_${stdenv.hostPlatform.config}" = hostCcBin.cc;
+    "CXX_${stdenv.hostPlatform.config}" = hostCcBin.cxx;
+    ${cargoTargetVar stdenv.hostPlatform.config "LINKER"} = hostCcBin.cc;
+    ${cargoTargetVar stdenv.hostPlatform.config "AR"} = hostCcBin.ar;
+  };
+
+  # sidestep assumptions currently made about "target/release"
+  cargoTargetDir = "target/nix-cargo";
+  releaseDir = "${cargoTargetDir}/${stdenv.hostPlatform.config}/${buildType}";
+
+in stdenv.mkDerivation (args // ccEnv // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
@@ -59,6 +85,8 @@ in stdenv.mkDerivation (args // {
 
   PKG_CONFIG_ALLOW_CROSS =
     if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
+
+  inherit releaseDir buildType;
 
   postUnpack = ''
     eval "$cargoDepsHook"
@@ -81,15 +109,18 @@ in stdenv.mkDerivation (args // {
   configurePhase = args.configurePhase or ''
     runHook preConfigure
     mkdir -p .cargo
-    cat >> .cargo/config <<'EOF'
-    [target."${stdenv.buildPlatform.config}"]
-    "linker" = "${ccForBuild}"
-    ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${stdenv.hostPlatform.config}"]
-    "linker" = "${ccForHost}"
-    ''}
+    cat >> .cargo/config <<EOF
+    [build]
+    target-dir = "$(pwd)/${cargoTargetDir}"
     EOF
     cat .cargo/config
+
+    if [[ ! -e target/release ]]; then
+      # for out-of-tree derivations that may have hardcoded "target/release"
+      mkdir -p target
+      ln -sr $releaseDir target/release
+    fi
+
     runHook postConfigure
   '';
 
@@ -98,23 +129,11 @@ in stdenv.mkDerivation (args // {
 
     (
     set -x
-    env \
-      "CC_${stdenv.buildPlatform.config}"="${ccForBuild}" \
-      "CXX_${stdenv.buildPlatform.config}"="${cxxForBuild}" \
-      "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
-      "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
       cargo build \
-        --${buildType} \
+        ${stdenv.lib.optionalString (buildType != "debug") "--${buildType}"} \
         --target ${stdenv.hostPlatform.config} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
-
-    # rename the output dir to a architecture independent one
-    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
-    for target in "''${targets[@]}"; do
-      rm -rf "$target/../../${buildType}"
-      ln -srf "$target" "$target/../../"
-    done
 
     runHook postBuild
   '';
@@ -127,8 +146,6 @@ in stdenv.mkDerivation (args // {
   '';
 
   doCheck = args.doCheck or true;
-
-  inherit releaseDir;
 
   installPhase = args.installPhase or ''
     runHook preInstall

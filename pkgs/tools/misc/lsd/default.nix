@@ -14,9 +14,9 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "095jf63jyd485fk8pl7grvycn7pkwnxdm5lwkmfl9p46m8q1qqr2";
 
   preFixup = ''
-    install -Dm644 -t $out/share/zsh/site-functions/ target/release/build/lsd-*/out/_lsd
-    install -Dm644 -t $out/share/fish/vendor_completions.d/ target/release/build/lsd-*/out/lsd.fish
-    install -Dm644 -t $out/share/bash-completion/completions/ target/release/build/lsd-*/out/lsd.bash
+    install -Dm644 -t $out/share/zsh/site-functions/ $releaseDir/build/lsd-*/out/_lsd
+    install -Dm644 -t $out/share/fish/vendor_completions.d/ $releaseDir/build/lsd-*/out/lsd.fish
+    install -Dm644 -t $out/share/bash-completion/completions/ $releaseDir/build/lsd-*/out/lsd.bash
   '';
 
   # Some tests fail, but Travis ensures a proper build

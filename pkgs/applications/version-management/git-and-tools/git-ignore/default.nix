@@ -24,7 +24,7 @@ buildRustPackage rec {
   outputs = [ "out" "man" ];
   preFixup = ''
     mkdir -p "$man/man/man1"
-    cp target/release/build/git-ignore-*/out/git-ignore.1 "$man/man/man1/"
+    cp $releaseDir/build/git-ignore-*/out/git-ignore.1 "$man/man/man1/"
   '';
 
   meta = with stdenv.lib; {
