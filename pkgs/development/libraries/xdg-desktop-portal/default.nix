@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 wrapGAppsHook ];
   buildInputs = [ glib pipewire fontconfig flatpak acl dbus geoclue2 fuse gsettings-desktop-schemas ];
 
-  doCheck = true; # XXX: investigate!
+  doCheck = false; # impure!
 
   configureFlags = [
     "--enable-installed-tests"
