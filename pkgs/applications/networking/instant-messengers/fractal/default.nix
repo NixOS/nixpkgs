@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , gettext
@@ -13,28 +14,29 @@
 , glib
 , libhandy
 , gtk3
-, libsecret
 , dbus
 , openssl
 , sqlite
 , gst_all_1
+, cairo
+, gdk_pixbuf
+, gspell
 , wrapGAppsHook
-, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fractal";
-  version = "4.0.0";
+  version = "4.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    sha256 = "05q47jdgbi5jz01280msb8gxnbsrgf2jvglfm6k40f1xw4wxkrzy";
+    sha256 = "0clwsmd6h759bzlazfq5ig56dbx7npx3h43yspk87j1rm2dp1177";
   };
 
-  cargoSha256 = "1ax5dv200v8mfx0418bx8sbwpbp6zj469xg75hp78kqfiv83pn1g";
+  cargoSha256 = "1hwjajkphl5439dymglgj3h92hxgbf7xpipzrga7ga8m10nx1dhl";
 
   nativeBuildInputs = [
     cargo
@@ -48,8 +50,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    cairo
     dbus
+    gdk_pixbuf
     glib
+    gspell
+    gst_all_1.gst-editing-services
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -57,21 +63,21 @@ rustPlatform.buildRustPackage rec {
     gtksourceview
     hicolor-icon-theme
     libhandy
-    libsecret
     openssl
     sqlite
   ];
 
-  patches = [
-    # Fixes build with >= gstreamer 1.15.1
+  cargoPatches = [
+    # https://gitlab.gnome.org/GNOME/fractal/merge_requests/446
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/fractal/commit/e78f36c25c095ea09c9c421187593706ad7c4065.patch";
-      sha256 = "1qv7ayhkhgrrldag2lzs9ql17nbc1d72j375ljhhf6cms89r19ir";
+      url = "https://gitlab.gnome.org/GNOME/fractal/commit/2778acdc6c50bc6f034513029b66b0b092bc4c38.patch";
+      sha256 = "08v17xmbwrjw688ps4hsnd60d5fm26xj72an3zf6yszha2b97j6y";
     })
   ];
 
   postPatch = ''
-    patchShebangs scripts/meson_post_install.py
+    chmod +x scripts/test.sh
+    patchShebangs scripts/meson_post_install.py scripts/test.sh
   '';
 
   # Don't use buildRustPackage phases, only use it for rust deps setup
