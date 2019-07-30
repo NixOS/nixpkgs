@@ -17549,7 +17549,11 @@ in
 
   dmenu = callPackage ../applications/misc/dmenu { };
 
-  dmenu2 = callPackage ../applications/misc/dmenu2 { };
+  # TODO (@primeos): Remove after the 19.09 branch-off:
+  dmenu2 = throw ''
+    The fork "dmenu2" is not maintained by upstream anymore. Please use the
+    original "dmenu" instead.
+  '';
 
   dmensamenu = callPackage ../applications/misc/dmensamenu {
     inherit (python3Packages) buildPythonApplication requests;
