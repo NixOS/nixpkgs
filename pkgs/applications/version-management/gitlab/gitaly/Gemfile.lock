@@ -49,7 +49,7 @@ GEM
     ffi (1.10.0)
     gemojione (3.3.0)
       json
-    gitaly-proto (1.32.0)
+    gitaly-proto (1.36.0)
       grpc (~> 1.0)
     github-linguist (6.4.1)
       charlock_holmes (~> 0.7.6)
@@ -147,7 +147,7 @@ GEM
       msgpack (>= 0.4.3)
       optimist (>= 3.0.0)
     rdoc (4.3.0)
-    rouge (3.3.0)
+    rouge (3.5.1)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -217,7 +217,7 @@ DEPENDENCIES
   bundler (>= 1.17.3)
   factory_bot
   faraday (~> 0.12)
-  gitaly-proto (~> 1.32.0)
+  gitaly-proto (~> 1.36.0)
   github-linguist (~> 6.1)
   gitlab-gollum-lib (~> 4.2.7.7)
   gitlab-gollum-rugged_adapter (~> 0.4.4.2)
