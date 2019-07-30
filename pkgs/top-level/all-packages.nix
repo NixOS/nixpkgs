@@ -13978,9 +13978,7 @@ in
 
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
-  xml-security-c = callPackage ../development/libraries/xml-security-c {
-    openssl = openssl_1_0_2;
-  };
+  xml-security-c = callPackage ../development/libraries/xml-security-c { };
 
   xml-tooling-c = callPackage ../development/libraries/xml-tooling-c { };
 
