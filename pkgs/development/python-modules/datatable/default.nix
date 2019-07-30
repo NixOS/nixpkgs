@@ -1,8 +1,10 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , llvm
+, openmp
 , typesentry
 , blessed
 , pytest
@@ -20,7 +22,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5";
 
   propagatedBuildInputs = [ typesentry blessed ];
-  buildInputs = [ llvm ];
+  buildInputs = [ llvm ] ++ lib.optionals stdenv.isDarwin [ openmp ];
   checkInputs = [ pytest ];
 
   LLVM = llvm;
