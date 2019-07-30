@@ -2115,9 +2115,7 @@ in
 
   chunkfs = callPackage ../tools/filesystems/chunkfs { };
 
-  chunksync = callPackage ../tools/backup/chunksync {
-    openssl = openssl_1_0_2;
-  };
+  chunksync = callPackage ../tools/backup/chunksync { };
 
   cipherscan = callPackage ../tools/security/cipherscan {
     openssl = if stdenv.hostPlatform.system == "x86_64-linux"
