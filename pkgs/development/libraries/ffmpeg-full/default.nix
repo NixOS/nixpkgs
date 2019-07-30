@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -230,12 +230,17 @@ assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "0gdnprc7gk4b7ckq8wbxbrj7i00r76r9a5g9mj7iln40512j0c0c";
+    sha256 = "1qd7a10gs12ifcp31gramcgqjl77swskjfp7cijibgyg5yl4kw7i";
   };
+  patches = [(fetchpatch { # remove on update
+    name = "fix-hardcoded-tables.diff";
+    url = "http://git.ffmpeg.org/gitweb/ffmpeg.git/commitdiff_plain/c8232e50074f";
+    sha256 = "0jlksks4fjajby8fjk7rfp414gxfdgd6q9khq26i52xvf4kg2dw6";
+  })];
 
   prePatch = ''
     patchShebangs .
