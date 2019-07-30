@@ -48,10 +48,6 @@ in stdenv.mkDerivation rec {
     moveToOutput "lib/*.a" $static
   '';
 
-  preConfigure = ''cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_BINDIR=$bin/bin"'';
-
-  enableParallelBuilding = true;
-
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
   meta = with stdenv.lib; {
