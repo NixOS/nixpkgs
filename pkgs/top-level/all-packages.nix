@@ -3985,9 +3985,7 @@ in
 
   go-jira = callPackage ../applications/misc/go-jira { };
 
-  john = callPackage ../tools/security/john {
-    openssl = openssl_1_0_2;
-  };
+  john = callPackage ../tools/security/john { };
 
   joplin = nodePackages.joplin;
 
