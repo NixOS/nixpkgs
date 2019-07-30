@@ -91,7 +91,7 @@ in buildPythonPackage rec {
   lib.optionalString (stdenv.isLinux) ''
     rrPath="$out/${python.sitePackages}/tensorflow/:$out/${python.sitePackages}/tensorflow/contrib/tensor_forest/:${rpath}"
     internalLibPath="$out/${python.sitePackages}/tensorflow/python/_pywrap_tensorflow_internal.so"
-    find $out -name '*${stdenv.hostPlatform.extensions.sharedLibrary}' -exec patchelf --set-rpath "$rrPath" {} \;
+    find $out \( -name '*.so' -or -name '*.so.*' \) -exec patchelf --set-rpath "$rrPath" {} \;
   '';
 
 
