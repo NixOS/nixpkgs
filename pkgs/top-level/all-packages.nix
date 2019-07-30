@@ -17081,7 +17081,6 @@ in
 
   alpine = callPackage ../applications/networking/mailreaders/alpine {
     tcl = tcl-8_5;
-    openssl = openssl_1_0_2;
   };
 
   msgviewer = callPackage ../applications/networking/mailreaders/msgviewer { };
