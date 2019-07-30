@@ -14362,9 +14362,7 @@ in
 
   bftpd = callPackage ../servers/ftp/bftpd {};
 
-  bind = callPackage ../servers/dns/bind {
-    openssl = openssl_1_0_2;
-  };
+  bind = callPackage ../servers/dns/bind { };
   dnsutils = bind.dnsutils;
 
   inherit (callPackages ../servers/bird { })
