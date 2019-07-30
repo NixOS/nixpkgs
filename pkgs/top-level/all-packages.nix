@@ -4326,26 +4326,17 @@ in
   nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {};
   nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix { enableNpm = false; };
 
-  nodejs-10_x = callPackage ../development/web/nodejs/v10.nix {
-    openssl = openssl_1_1;
-  };
+  nodejs-10_x = callPackage ../development/web/nodejs/v10.nix { };
   nodejs-slim-10_x = callPackage ../development/web/nodejs/v10.nix {
     enableNpm = false;
-    openssl = openssl_1_1;
   };
-  nodejs-11_x = callPackage ../development/web/nodejs/v11.nix {
-    openssl = openssl_1_1;
-  };
+  nodejs-11_x = callPackage ../development/web/nodejs/v11.nix { };
   nodejs-slim-11_x = callPackage ../development/web/nodejs/v11.nix {
     enableNpm = false;
-    openssl = openssl_1_1;
   };
-  nodejs-12_x = callPackage ../development/web/nodejs/v12.nix {
-    openssl = openssl_1_1;
-  };
+  nodejs-12_x = callPackage ../development/web/nodejs/v12.nix { };
   nodejs-slim-12_x = callPackage ../development/web/nodejs/v12.nix {
     enableNpm = false;
-    openssl = openssl_1_1;
   };
 
   # Update this when adding the newest nodejs major version!
@@ -4390,9 +4381,7 @@ in
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
-  ldns = callPackage ../development/libraries/ldns {
-    openssl = openssl_1_1;
-  };
+  ldns = callPackage ../development/libraries/ldns { };
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
@@ -6423,7 +6412,6 @@ in
   toml2nix = (callPackage ../tools/toml2nix { }).toml2nix { };
 
   tor = callPackage ../tools/security/tor {
-    openssl = openssl_1_1;
     # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
     libevent = libevent.override {
       sslSupport = false;
@@ -11633,9 +11621,7 @@ in
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
-  libgda = callPackage ../development/libraries/libgda {
-    openssl = openssl_1_1;
-  };
+  libgda = callPackage ../development/libraries/libgda { };
 
   libgdamm = callPackage ../development/libraries/libgdamm { };
 
@@ -14600,14 +14586,12 @@ in
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
-    openssl = openssl_1_1;
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.dav nginxModules.moreheaders ];
-    openssl = openssl_1_1;
   };
 
   nginxModules = callPackage ../servers/http/nginx/modules.nix { };
@@ -16803,7 +16787,6 @@ in
 
   powerline-rs = callPackage ../tools/misc/powerline-rs {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
 
   profont = callPackage ../data/fonts/profont { };

@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, wrapQtAppsHook, openssl_1_1, pcre, qtwebengine, libsecret
+, inotify-tools, wrapQtAppsHook, openssl, pcre, qtwebengine, libsecret
 , libcloudproviders
 }:
 
@@ -16,17 +16,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake wrapQtAppsHook ];
 
-  buildInputs = [ qtbase qtwebkit qtkeychain qttools qtwebengine sqlite openssl_1_1.out pcre inotify-tools libcloudproviders ];
+  buildInputs = [ qtbase qtwebkit qtkeychain qttools qtwebengine sqlite openssl.out pcre inotify-tools libcloudproviders ];
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = "${openssl_1_1.out}/lib/libssl.so ${openssl_1_1.out}/lib/libcrypto.so";
+  NIX_LDFLAGS = "${openssl.out}/lib/libssl.so ${openssl.out}/lib/libcrypto.so";
 
   cmakeFlags = [
     "-UCMAKE_INSTALL_LIBDIR"
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DOPENSSL_LIBRARIES=${openssl_1_1.out}/lib"
-    "-DOPENSSL_INCLUDE_DIR=${openssl_1_1.dev}/include"
+    "-DOPENSSL_LIBRARIES=${openssl.out}/lib"
+    "-DOPENSSL_INCLUDE_DIR=${openssl.dev}/include"
     "-DINOTIFY_LIBRARY=${inotify-tools}/lib/libinotifytools.so"
     "-DINOTIFY_INCLUDE_DIR=${inotify-tools}/include"
   ];
