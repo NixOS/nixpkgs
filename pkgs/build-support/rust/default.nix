@@ -80,7 +80,6 @@ in stdenv.mkDerivation (args // {
     "linker" = "${ccForHost}"
     ''}
     EOF
-    cat .cargo/config
 
     unset cargoDepsCopy
     export RUST_LOG=${logLevel}
