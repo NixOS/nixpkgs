@@ -1542,9 +1542,7 @@ in
 
   facedetect = callPackage ../tools/graphics/facedetect { };
 
-  facter = callPackage ../tools/system/facter {
-    openssl = openssl_1_0_2;
-  };
+  facter = callPackage ../tools/system/facter { };
 
   fasd = callPackage ../tools/misc/fasd { };
 
