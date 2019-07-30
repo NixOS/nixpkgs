@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = [ maintainers.twey ];
+    broken = true; # TODO: Build is failing!
   };
 }
