@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub }:
 
 let
-  version = "5.9.0";
+  version = "5.10.0";
 in fetchFromGitHub rec {
   name = "font-awesome-${version}";
 
@@ -14,7 +14,7 @@ in fetchFromGitHub rec {
     install -m444 -Dt $out/share/fonts/opentype otfs/*.otf
   '';
 
-  sha256 = "0sz7mn7g968vp5hszs05grpphd7zr3073az8lyy1lj0096zvjjii";
+  sha256 = "11nga1drlpkrmw307ga6plbj5z1b70cnckr465z8z6vkbcd6jkv3";
 
   meta = with lib; {
     description = "Font Awesome - OTF font";
