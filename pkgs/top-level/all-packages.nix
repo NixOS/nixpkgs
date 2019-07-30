@@ -13535,7 +13535,6 @@ in
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
     readline = null;
     ncurses = null;
-    openssl = openssl_1_0_2;
   });
 
   standardnotes = callPackage ../applications/editors/standardnotes { };
