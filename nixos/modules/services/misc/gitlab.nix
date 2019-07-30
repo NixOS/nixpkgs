@@ -659,7 +659,7 @@ in {
         fi
 
         # We remove potentially broken links to old gitlab-shell versions
-        rm -f ${cfg.statePath}/repositories/**/*.git/hooks
+        rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
 
         ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${pkgs.git}/bin/git config --global core.autocrlf "input"
       '';
