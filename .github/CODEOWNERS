@@ -139,3 +139,6 @@
 
 # Bazel
 /pkgs/development/tools/build-managers/bazel @mboes @Profpatsch
+
+# Ranger
+/pkgs/applications/misc/ranger @toonn
