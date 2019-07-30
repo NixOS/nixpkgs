@@ -88,50 +88,103 @@ done
 #  Read our variables.
 if [[ -e /etc/os-release ]]; then
   . /etc/os-release
+  OS_RELEASE_FOUND=1
 else
-  echo "Error: /etc/os-release is not present, aborting." >&2
-  exit 1
+  # This is e.g. relevant for the Nix build sandbox and compatible with the
+  # original lsb_release binary:
+  OS_RELEASE_FOUND=0
+  NAME="n/a"
+  PRETTY_NAME="(none)"
+  VERSION_ID="n/a"
+  VERSION_CODENAME="n/a"
 fi
 
 # Default output
 if [[ "$version" = "0" ]] && [[ "$id" = "0" ]] && \
    [[ "$description" = "0" ]] && [[ "$release" = "0" ]] && \
    [[ "$codename" = "0" ]] && [[ "$all" = "0" ]]; then
-  echo "No LSB modules are available." >&2
+  if [[ "$OS_RELEASE_FOUND" = "1" ]]; then
+    echo "No LSB modules are available." >&2
+  else
+    if [[ "$short" = "0" ]]; then
+      printf "LSB Version:\tn/a\n"
+    else
+      printf "n/a\n"
+    fi
+  fi
   exit 0
 fi
 
 # Now output the data - The order of these was chosen to match
 # what the original lsb_release used.
 
+SHORT_OUTPUT=""
+append_short_output() {
+  if [[ "$1" = "n/a" ]]; then
+    SHORT_OUTPUT+=" $1"
+  else
+    SHORT_OUTPUT+=" \"$1\""
+  fi
+}
+
 if [[ "$all" = "1" ]] || [[ "$version" = "1" ]]; then
-  echo "No LSB modules are available." >&2
+  if [[ "$OS_RELEASE_FOUND" = "1" ]]; then
+    if [[ "$short" = "0" ]]; then
+      echo "No LSB modules are available." >&2
+    else
+      append_short_output "n/a"
+    fi
+  else
+    if [[ "$short" = "0" ]]; then
+      printf "LSB Version:\tn/a\n"
+    else
+      append_short_output "n/a"
+    fi
+  fi
 fi
 
 if [[ "$all" = "1" ]] || [[ "$id" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
-    printf "Distributor ID:\t"
+    printf "Distributor ID:\t$NAME\n"
+  else
+    append_short_output "$NAME"
   fi
-  echo "$NAME"
 fi
 
 if [[ "$all" = "1" ]] || [[ "$description" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
-    printf "Description:\t"
+    printf "Description:\t$PRETTY_NAME\n"
+  else
+    append_short_output "$PRETTY_NAME"
   fi
-  echo "$PRETTY_NAME"
 fi
 
 if [[ "$all" = "1" ]] || [[ "$release" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
-    printf "Release:\t"
+    printf "Release:\t$VERSION_ID\n"
+  else
+    append_short_output "$VERSION_ID"
   fi
-  echo "$VERSION_ID"
 fi
 
 if [[ "$all" = "1" ]] || [[ "$codename" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
-    printf "Codename:\t"
+    printf "Codename:\t$VERSION_CODENAME\n"
+  else
+    append_short_output "$VERSION_CODENAME"
   fi
-  echo "$VERSION_CODENAME"
+fi
+
+if [[ "$short" = "1" ]]; then
+  # Output in one line without the first space:
+  echo "${SHORT_OUTPUT:1}"
+fi
+
+# For compatibility with the original lsb_release:
+if [[ "$OS_RELEASE_FOUND" = "0" ]]; then
+  if [[ "$all" = "1" ]] || [[ "$id" = "1" ]] || \
+     [[ "$description" = "1" ]] || [[ "$release" = "1" ]] || \
+     [[ "$codename" = "1" ]]; then
+    exit 3
+  fi
 fi
