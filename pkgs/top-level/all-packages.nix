@@ -4927,6 +4927,8 @@ in
 
   mpack = callPackage ../tools/networking/mpack { };
 
+  mtm = callPackage ../tools/misc/mtm { };
+
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
