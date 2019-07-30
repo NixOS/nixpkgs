@@ -1,9 +1,30 @@
-{ stdenv, fetchFromGitLab, meson, ninja, gettext, cargo, rustc, python3, rustPlatform, pkgconfig, gtksourceview
-, hicolor-icon-theme, glib, libhandy, gtk3, libsecret, dbus, openssl, sqlite, gst_all_1, wrapGAppsHook, fetchpatch }:
+{ stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, gettext
+, cargo
+, rustc
+, python3
+, rustPlatform
+, pkgconfig
+, gtksourceview
+, hicolor-icon-theme
+, glib
+, libhandy
+, gtk3
+, libsecret
+, dbus
+, openssl
+, sqlite
+, gst_all_1
+, wrapGAppsHook
+, fetchpatch
+}:
 
 rustPlatform.buildRustPackage rec {
+  pname = "fractal";
   version = "4.0.0";
-  name = "fractal-${version}";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -13,12 +34,32 @@ rustPlatform.buildRustPackage rec {
     sha256 = "05q47jdgbi5jz01280msb8gxnbsrgf2jvglfm6k40f1xw4wxkrzy";
   };
 
+  cargoSha256 = "1ax5dv200v8mfx0418bx8sbwpbp6zj469xg75hp78kqfiv83pn1g";
+
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext cargo rustc python3 wrapGAppsHook
+    cargo
+    gettext
+    meson
+    ninja
+    pkgconfig
+    python3
+    rustc
+    wrapGAppsHook
   ];
+
   buildInputs = [
-    glib gtk3 libhandy dbus openssl sqlite gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-bad
-    gtksourceview hicolor-icon-theme libsecret
+    dbus
+    glib
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    gtk3
+    gtksourceview
+    hicolor-icon-theme
+    libhandy
+    libsecret
+    openssl
+    sqlite
   ];
 
   patches = [
@@ -39,13 +80,11 @@ rustPlatform.buildRustPackage rec {
   checkPhase = null;
   installPhase = null;
 
-  cargoSha256 = "1ax5dv200v8mfx0418bx8sbwpbp6zj469xg75hp78kqfiv83pn1g";
-
   meta = with stdenv.lib; {
     description = "Matrix group messaging app";
     homepage = https://gitlab.gnome.org/GNOME/fractal;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill worldofpeace ];
   };
 }
 
