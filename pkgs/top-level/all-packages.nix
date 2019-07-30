@@ -14466,9 +14466,7 @@ in
 
   freepops = callPackage ../servers/mail/freepops { };
 
-  freeradius = callPackage ../servers/freeradius {
-    openssl = openssl_1_0_2;
-  };
+  freeradius = callPackage ../servers/freeradius { };
 
   freeswitch = callPackage ../servers/sip/freeswitch {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
