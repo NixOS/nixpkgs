@@ -84,8 +84,18 @@ stdenv.mkDerivation {
     "-Dldconfig=false"
     "-Dsmack=true"
     "-Db_pie=true"
-    "-Dsystem-uid-max=499" #TODO: debug why awking around in /etc/login.defs doesn't work
-    "-Dsystem-gid-max=499"
+    /*
+    As of now, systemd doesn't allow runtime configuration of these values. So
+    the settings in /etc/login.defs have no effect on it. Many people think this
+    should be supported however, see
+    - https://github.com/systemd/systemd/issues/3855
+    - https://github.com/systemd/systemd/issues/4850
+    - https://github.com/systemd/systemd/issues/9769
+    - https://github.com/systemd/systemd/issues/9843
+    - https://github.com/systemd/systemd/issues/10184
+    */
+    "-Dsystem-uid-max=999"
+    "-Dsystem-gid-max=999"
     # "-Dtime-epoch=1"
 
     (if !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
