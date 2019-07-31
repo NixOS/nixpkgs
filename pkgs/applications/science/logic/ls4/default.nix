@@ -15,11 +15,6 @@ stdenv.mkDerivation rec {
   gcc -g -O3 -c aiger.c
   '';
 
-  buildPhase = ''
-  runHook preBuild
-  make
-  '';
-
   installPhase = ''
   install -D ls4 $out/bin/ls4
   '';
