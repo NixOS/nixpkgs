@@ -755,6 +755,8 @@ in
 
   crumbs = callPackage ../applications/misc/crumbs { };
 
+  crc32c = callPackage ../development/libraries/crc32c { };
+
   cue = callPackage ../development/tools/cue { };
 
   deskew = callPackage ../applications/graphics/deskew { };
