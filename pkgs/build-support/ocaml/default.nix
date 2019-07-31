@@ -1,4 +1,4 @@
-{ stdenv, writeText, ocaml, findlib, ocamlbuild, camlp4 }:
+{ stdenv, writeText, ocaml, findlib, ocamlbuild }:
 
 { name, version, buildInputs ? [],
   createFindlibDestdir ?  true,
@@ -19,7 +19,7 @@ in
 stdenv.mkDerivation (args // {
   name = "ocaml-${name}-${version}";
 
-  buildInputs = [ ocaml findlib ocamlbuild camlp4 ] ++ buildInputs;
+  buildInputs = [ ocaml findlib ocamlbuild ] ++ buildInputs;
 
   setupHook = if setupHook == null && hasSharedObjects
   then writeText "setupHook.sh" ''

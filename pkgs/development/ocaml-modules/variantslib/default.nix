@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, ocaml, fetchurl, type_conv }:
+{ stdenv, buildOcaml, ocaml, fetchurl, camlp4, type_conv }:
 
 if stdenv.lib.versionAtLeast ocaml.version "4.06"
 then throw "variantslib-109.15.03 is not available for OCaml ${ocaml.version}"
@@ -15,6 +15,7 @@ buildOcaml rec {
     sha256 = "a948dcdd4ca54786fe0646386b6e37a9db03bf276c6557ea374d82740bf18055";
   };
 
+  buildInputs = [ camlp4 ];
   propagatedBuildInputs = [ type_conv ];
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type_conv}:
+{stdenv, buildOcaml, fetchurl, camlp4, type_conv}:
 
 buildOcaml rec {
   name = "typerep";
@@ -11,6 +11,7 @@ buildOcaml rec {
     sha256 = "4f1ab611a00aaf774e9774b26b687233e0c70d91f684415a876f094a9969eada";
   };
 
+  buildInputs = [ camlp4 ];
   propagatedBuildInputs = [ type_conv ];
 
   meta = with stdenv.lib; {

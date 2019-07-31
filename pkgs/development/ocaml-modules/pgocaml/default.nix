@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildOcaml, ocaml, calendar, csv, re }:
+{ stdenv, fetchurl, buildOcaml, ocaml, camlp4, calendar, csv, re }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4"
 then throw "pgocaml is not available for OCaml ${ocaml.version}"
@@ -12,7 +12,7 @@ buildOcaml {
     sha256 = "18lymxlvcf4nwxawkidq3pilsp5rhl0l8ifq6pjk3ssjlx9w53pg";
   };
 
-  buildInputs = [ ];
+  buildInputs = [ camlp4 ];
   propagatedBuildInputs = [ calendar csv re ];
 
   configureFlags = [ "--enable-p4" ];

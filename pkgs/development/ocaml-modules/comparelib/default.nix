@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type_conv}:
+{stdenv, buildOcaml, fetchurl, camlp4, type_conv}:
 
 buildOcaml rec {
   name = "comparelib";
@@ -11,6 +11,7 @@ buildOcaml rec {
     sha256 = "02l343drgi4200flfx73nzdk61zajwidsqjk9n80b2d37lvhazlf";
   };
 
+  buildInputs = [ camlp4 ];
   propagatedBuildInputs = [ type_conv ];
 
   meta = with stdenv.lib; {

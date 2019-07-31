@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type_conv, pa_ounit}:
+{stdenv, buildOcaml, fetchurl, camlp4, type_conv, pa_ounit}:
 
 buildOcaml rec {
   name = "pa_bench";
@@ -11,7 +11,7 @@ buildOcaml rec {
     sha256 = "1cd6291gdnk6h8ziclg6x3if8z5xy67nfz9gx8sx4k2cwv0j29k5";
   };
 
-  buildInputs = [ pa_ounit ];
+  buildInputs = [ camlp4 pa_ounit ];
   propagatedBuildInputs = [ type_conv ];
 
   meta = with stdenv.lib; {

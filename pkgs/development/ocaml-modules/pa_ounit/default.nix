@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, ocaml, fetchurl, ounit }:
+{ stdenv, buildOcaml, ocaml, fetchurl, camlp4, ounit }:
 
 if stdenv.lib.versionAtLeast ocaml.version "4.06"
 then throw "pa_ounit is not available for OCaml ${ocaml.version}"
@@ -12,6 +12,8 @@ buildOcaml rec {
     url = "https://github.com/janestreet/pa_ounit/archive/${version}.tar.gz";
     sha256 = "0vi0p2hxcrdsl0319c9s8mh9hmk2i4ir6c6vrj8axkc37zkgc437";
   };
+
+  buildInputs = [ camlp4 ];
 
   propagatedBuildInputs = [ ounit ];
 
