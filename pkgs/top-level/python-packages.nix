@@ -251,6 +251,24 @@ in {
     in
       attrs: buildPythonPackage (attrs // { inherit postPatch postInstall; });
 
+  buildAzureMgmtPythonPackage =
+    let
+      # remove python2 vs python3 namespace workarounds
+      # use GNU+BSD safe sed replacement
+      postPatch = ''
+        sed '/azure-namespace-package/d' setup.cfg > setup.cfg
+        rm -f azure_bdist_wheel.py
+      '';
+      postInstall = (if isPy3k then ''
+        rm -f "$out/${python.sitePackages}"/azure{,/mgmt}/__init__.py
+      '' else ''
+        echo "__path__ = __import__('pkgutil').extend_path(__path__, __name__)" \
+            | tee "$out/${python.sitePackages}"/azure/__init__.py \
+             > "$out/${python.sitePackages}"/azure/mgmt/__init__.py
+      '');
+    in
+      attrs: buildPythonPackage (attrs // { inherit postPatch postInstall; });
+
   azure = callPackage ../development/python-modules/azure { };
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
