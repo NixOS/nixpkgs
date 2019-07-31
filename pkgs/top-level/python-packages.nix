@@ -5700,15 +5700,22 @@ in {
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow =
-    if stdenv.isDarwin
-    then callPackage ../development/python-modules/tensorflow/bin.nix { }
-    else callPackage ../development/python-modules/tensorflow/bin.nix rec {
-      cudaSupport = pkgs.config.cudaSupport or false;
-      inherit (pkgs.linuxPackages) nvidia_x11;
-      cudatoolkit = pkgs.cudatoolkit_10_0;
-      cudnn = pkgs.cudnn_cudatoolkit_10_0;
-    };
+  tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit_10;
+    cudnn = pkgs.cudnn_cudatoolkit_10;
+  };
+
+  tensorflow-build = callPackage ../development/python-modules/tensorflow {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit_10;
+    cudnn = pkgs.cudnn_cudatoolkit_10;
+    nccl = pkgs.nccl_cudatoolkit_10;
+  };
+
+  tensorflow = if stdenv.isDarwin then self.tensorflow-bin else self.tensorflow-build;
 
   tensorflowWithoutCuda = self.tensorflow.override {
     cudaSupport = false;
