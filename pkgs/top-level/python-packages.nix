@@ -6114,6 +6114,8 @@ in {
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
   wget = callPackage ../development/python-modules/wget { };
+
+  runway-python = callPackage ../development/python-modules/runway-python { };
 });
 
 in fix' (extends overrides packages)
