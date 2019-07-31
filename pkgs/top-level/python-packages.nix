@@ -4716,6 +4716,8 @@ in {
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
 
+  shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
+
   shodan = callPackage ../development/python-modules/shodan { };
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
