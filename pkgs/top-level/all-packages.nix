@@ -1093,15 +1093,17 @@ in
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
+  libtensorflow-bin = callPackage ../development/libraries/science/math/tensorflow/bin.nix {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (linuxPackages) nvidia_x11;
+    cudatoolkit = cudatoolkit_10_0;
+    cudnn = cudnn_cudatoolkit_10_0;
+  };
+
   libtensorflow =
     if python.pkgs.tensorflow ? libtensorflow
     then python.pkgs.tensorflow.libtensorflow
-    else callPackage ../development/libraries/science/math/tensorflow/bin.nix {
-      cudaSupport = pkgs.config.cudaSupport or false;
-      inherit (linuxPackages) nvidia_x11;
-      cudatoolkit = cudatoolkit_10_0;
-      cudnn = cudnn_cudatoolkit_10_0;
-    };
+    else libtensorflow-bin;
 
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
 
