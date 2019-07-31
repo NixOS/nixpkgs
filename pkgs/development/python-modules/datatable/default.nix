@@ -5,6 +5,8 @@
 , pythonOlder
 , llvm
 , openmp
+, libcxx
+, libcxxabi
 , typesentry
 , blessed
 , pytest
@@ -18,6 +20,15 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1s8z81zffrckvdwrrl0pkjc7gsdvjxw59xgg6ck81dl7gkh5grjk";
   };
+
+  patches = lib.optionals stdenv.isDarwin [ ./fix-darwin-build.patch ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace ci/setup_utils.py \
+      --subst-var-by libomp.dylib ${lib.getLib openmp}/lib/libomp.dylib \
+      --subst-var-by libc++.1.dylib ${lib.getLib libcxx}/lib/libc++.1.dylib \
+      --subst-var-by libc++abi.dylib ${lib.getLib libcxxabi}/lib/libc++abi.dylib
+  '';
 
   disabled = pythonOlder "3.5";
 
