@@ -1,15 +1,16 @@
-{ stdenv
-, lib
+{ blessed
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
-, llvm
-, openmp
+, lib
 , libcxx
 , libcxxabi
-, typesentry
-, blessed
+, llvm
+, openmp
 , pytest
+, pythonOlder
+, stdenv
+, substituteAll
+, typesentry
 }:
 
 buildPythonPackage rec {
@@ -26,17 +27,15 @@ buildPythonPackage rec {
     # the native dependencies to the build directory.
     ./remove-compiler-monkeypatch_disable-native-relocation.patch
   ] ++ lib.optionals stdenv.isDarwin [
-    # Replace the library auto-detection with hardcoded paths. These paths are
-    # then replaced by the following postPatch.
-    ./hardcode-library-paths.patch
-  ];
+    # Replace the library auto-detection with hardcoded paths.
+    (substituteAll {
+      src = ./hardcode-library-paths.patch;
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace ci/setup_utils.py \
-      --subst-var-by libomp.dylib ${lib.getLib openmp}/lib/libomp.dylib \
-      --subst-var-by libc++.1.dylib ${lib.getLib libcxx}/lib/libc++.1.dylib \
-      --subst-var-by libc++abi.dylib ${lib.getLib libcxxabi}/lib/libc++abi.dylib
-  '';
+      libomp_dylib = "${lib.getLib openmp}/lib/libomp.dylib";
+      libcxx_dylib = "${lib.getLib libcxx}/lib/libc++.1.dylib";
+      libcxxabi_dylib = "${lib.getLib libcxxabi}/lib/libc++abi.dylib";
+    })
+  ];
 
   disabled = pythonOlder "3.5";
 

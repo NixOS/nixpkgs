@@ -37,7 +37,7 @@ index 66b385a..6255af0 100644
 -            else:
 -                log.fatal("`locate` command returned the following error:\n%s"
 -                          % stderr.decode())
-+        resolved = ["@libomp.dylib@", "@libc++.1.dylib@", "@libc++abi.dylib@"]
++        resolved = ["@libomp_dylib@", "@libcxx_dylib@", "@libcxxabi_dylib@"]
          return resolved
  
  
