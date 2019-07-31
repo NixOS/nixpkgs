@@ -4295,6 +4295,8 @@ in
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
+  nfpm = callPackage ../tools/package-management/nfpm { };
+
   nginx-config-formatter = callPackage ../tools/misc/nginx-config-formatter { };
 
   ninka = callPackage ../development/tools/misc/ninka { };
