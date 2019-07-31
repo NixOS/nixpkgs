@@ -12346,6 +12346,8 @@ in
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
+  libmodulemd = callPackage ../development/libraries/libmodulemd { };
+
   libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
 
   libversion = callPackage ../development/libraries/libversion { };
