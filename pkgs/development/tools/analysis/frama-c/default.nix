@@ -4,17 +4,17 @@
 
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
-  ocamlpath = "${mkocamlpath ocamlPackages.apron}:${mkocamlpath ocamlPackages.mlgmpidl}";
+  ocamlpath = "$OCAMLPATH:${mkocamlpath ocamlPackages.apron}:${mkocamlpath ocamlPackages.mlgmpidl}";
 in
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
-  version = "18.0";
-  slang   = "Argon";
+  version = "19.0";
+  slang   = "Potassium";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "0a88k2mhafj7pz3dzgsqkrc9digkxpnvr9jqq9nbzwq8qr02bca2";
+    sha256 = "190n1n4k0xbycz25bn0d2gnfxd8w6scz3nlixl7w2k2jvpqlcs3n";
   };
 
   why2 = fetchurl {
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = with ocamlPackages; [
     ncurses ocaml findlib ltl2ba ocamlgraph
     lablgtk coq graphviz zarith why3 apron
+    yojson num menhir
   ];
 
 
@@ -56,7 +57,6 @@ stdenv.mkDerivation rec {
 
   # Enter frama-c directory before patching
   prePatch = ''cd frama*'';
-  patches = [ ./dynamic.diff ];
   postPatch = ''
     # strip absolute paths to /usr/bin
     for file in ./configure ./share/Makefile.common ./src/*/configure; do #*/
