@@ -45,12 +45,6 @@ in stdenv.mkDerivation rec {
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib";
 
-  # Enable nightly features in stable compiles (used for
-  # bootstrapping, see https://github.com/rust-lang/rust/pull/37265).
-  # This loosens the hard restrictions on bootstrapping-compiler
-  # versions.
-  RUSTC_BOOTSTRAP = "1";
-
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
 
