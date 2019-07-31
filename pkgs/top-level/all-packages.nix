@@ -1276,6 +1276,8 @@ in
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  croc = callPackage ../tools/networking/croc { };
+
   cddl = callPackage ../development/tools/cddl { };
 
   cedille = callPackage ../applications/science/logic/cedille
