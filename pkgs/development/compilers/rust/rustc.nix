@@ -86,6 +86,8 @@ in stdenv.mkDerivation rec {
     "${setBuild}.llvm-config=${llvmSharedForBuild}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
+  ] ++ optional stdenv.isLinux [
+    "--enable-profiler" # build libprofiler_builtins
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
