@@ -1,9 +1,8 @@
-{ lib, bundlerEnv, bundlerUpdateScript, ruby_2_4, perl, autoconf }:
+{ lib, bundlerEnv, bundlerUpdateScript, perl, autoconf }:
 
 bundlerEnv rec {
   pname = "chef-dk";
 
-  ruby = ruby_2_4;
   gemdir = ./.;
 
   buildInputs = [ perl autoconf ];
