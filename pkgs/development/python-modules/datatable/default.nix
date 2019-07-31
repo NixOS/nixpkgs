@@ -21,7 +21,10 @@ buildPythonPackage rec {
     sha256 = "1s8z81zffrckvdwrrl0pkjc7gsdvjxw59xgg6ck81dl7gkh5grjk";
   };
 
-  patches = lib.optionals stdenv.isDarwin [ ./fix-darwin-build.patch ];
+  patches = lib.optionals stdenv.isDarwin [
+    ./fix-darwin-build.patch
+    ./darwin-remove-compiler-monkeypatch.patch
+  ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace ci/setup_utils.py \
