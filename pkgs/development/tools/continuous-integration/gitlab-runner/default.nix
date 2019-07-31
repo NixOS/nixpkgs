@@ -5,7 +5,7 @@ let
   # Gitlab runner embeds some docker images these are prebuilt for arm and x86_64
   docker_x86_64 = fetchurl {
     url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/helper-images/prebuilt-x86_64.tar.xz";
-    sha256 = "0zrlprzbjnssrf0qjb80fy50ypryrqhmkqrpad68bnsz7da34idk";
+    sha256 = "1yx530h5rz7wmd012962f9dfj0hvj1m7zab5vchndna4svzzycch";
   };
 
   docker_arm = fetchurl {
