@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, vtk }:
+{ stdenv, fetchurl, cmake, vtk, darwin }:
 
 stdenv.mkDerivation rec {
   version = "3.0.0";
@@ -23,8 +23,11 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  buildInputs = [ cmake vtk ];
-  propagatedBuildInputs = [ ];
+  buildInputs = [
+    cmake vtk
+  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ApplicationServices Cocoa
+  ]);
 
   meta = with stdenv.lib; {
     description = "The grassroots cross-platform DICOM implementation";
