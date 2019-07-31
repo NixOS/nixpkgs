@@ -21,9 +21,14 @@ buildPythonPackage rec {
     sha256 = "1s8z81zffrckvdwrrl0pkjc7gsdvjxw59xgg6ck81dl7gkh5grjk";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
-    ./fix-darwin-build.patch
-    ./darwin-remove-compiler-monkeypatch.patch
+  patches = [
+    # Disable the compiler monkey patching, and remove the task that's copying
+    # the native dependencies to the build directory.
+    ./remove-compiler-monkeypatch_disable-native-relocation.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Replace the library auto-detection with hardcoded paths. These paths are
+    # then replaced by the following postPatch.
+    ./hardcode-library-paths.patch
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
