@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0w0aiszjd58ynxpacwcgf052zpmbpcym4dhci64vbfgch6wryz0w";
   };
 
+  patches = [ ./scons.patch ];
+
   sconsFlags = [
     "openssl=${openssl.dev}"
     "boost_includedir=${boost.dev}/include"
@@ -23,12 +25,13 @@ stdenv.mkDerivation rec {
     installFlags+=" SWIFT_INSTALLDIR=$out"
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "An XMPP library for C++, used by the Swift client";
     homepage    = http://swift.im/swiften.html;
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = [ maintainers.twey ];
-    broken = true; # TODO: Build is failing!
   };
 }
