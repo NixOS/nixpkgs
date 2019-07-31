@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "A solver for temporal logic, in particular a PLTL-prover based on labelled superposition with partial model guidance. Based off of minisat";
     homepage = "https://github.com/quickbeam123/ls4";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.x86;
     maintainers = with maintainers; [changlinli];
   };
 }
