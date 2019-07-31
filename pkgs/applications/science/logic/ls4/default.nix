@@ -1,24 +1,27 @@
 { zlib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "ls4-${version}";
+  pname = "ls4";
 
-  version = "1.0";
+  version = "unstable-2019-07-31";
 
   buildInputs = [ zlib ];
 
-  buildPhase = ''
+  preBuild = ''
   cd core
   # These object files were committed into the git repo, perhaps accidentally
   rm -f aiger.o
   rm -f aiger.o_32
   gcc -g -O3 -c aiger.c
+  '';
+
+  buildPhase = ''
+  runHook preBuild
   make
   '';
 
   installPhase = ''
-  mkdir -p $out/bin
-  cp ls4 $out/bin
+  install -D ls4 $out/bin/ls4
   '';
 
   src = fetchFromGitHub {
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "A solver for temporal logic, in particular a PLTL-prover based on labelled superposition with partial model guidance. Based off of minisat.";
+    description = "A solver for temporal logic, in particular a PLTL-prover based on labelled superposition with partial model guidance. Based off of minisat";
     homepage = "https://github.com/quickbeam123/ls4";
     license = licenses.mit;
     platforms = platforms.unix;
