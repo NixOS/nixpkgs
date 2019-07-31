@@ -18609,7 +18609,7 @@ in
 
   spotifyd = callPackage ../applications/audio/spotifyd {
     withALSA = stdenv.isLinux;
-    withPulseAudio = config.pulseaudio or true;
+    withPulseAudio = config.pulseaudio or false;
     withPortAudio = stdenv.isDarwin;
   };
 
