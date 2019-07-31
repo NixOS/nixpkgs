@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = https://postgis.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
-    platforms = platforms.all;
+    inherit (postgresql.meta) platforms;
   };
 }
