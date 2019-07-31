@@ -9,13 +9,13 @@ with stdenv.lib;
 
 let
   pname = "pango";
-  version = "1.43.0";
+  version = "1.44.5";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1lnxldmv1a12dq5h0dlq5jyzl4w75k76dp8cn360x2ijlm9w5h6j";
+    sha256 = "1hbzgn23hr2mlz144l5qd822ckm61w66553gkca90hyvxv5xy9w5";
   };
 
   # FIXME: docs fail on darwin
@@ -33,22 +33,12 @@ in stdenv.mkDerivation rec {
     CoreGraphics
     CoreText
   ]);
-  propagatedBuildInputs = [ cairo glib libintl ] ++
+  propagatedBuildInputs = [ cairo glib libintl harfbuzz ] ++
     optional x11Support libXft;
 
-  patches = [
-    (fetchpatch {
-      # Add gobject-2 to .pc file
-      url = "https://gitlab.gnome.org/GNOME/pango/commit/546f4c242d6f4fe312de3b7c918a848e5172e18d.patch";
-      sha256 = "1cqhy4xbwx3ad7z5d1ks7smf038b9as8c6qy84rml44h0fgiq4m2";
-    })
-  ];
-
   mesonFlags = [
-    "-Denable_docs=${if stdenv.isDarwin then "false" else "true"}"
+    "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
   ];
-
-  enableParallelBuilding = true;
 
   # Fontconfig error: Cannot load default config file
   FONTCONFIG_FILE = makeFontsConf {
