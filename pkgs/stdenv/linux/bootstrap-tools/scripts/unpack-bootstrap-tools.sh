@@ -1,5 +1,6 @@
 # Unpack the bootstrap tools tarball.
 echo Unpacking the bootstrap tools...
+# . ./.attrs.sh
 $builder mkdir $out
 < $tarball $builder unxz | $builder tar x -C $out
 

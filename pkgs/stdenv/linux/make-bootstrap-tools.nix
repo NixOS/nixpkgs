@@ -217,6 +217,7 @@ in with pkgs; rec {
     inherit (stdenv.hostPlatform) system; # We cannot "cross test"
     builder = bootstrapFiles.busybox;
     args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
+    __structuredAttrs = true;
 
     buildCommand = ''
       export PATH=${bootstrapTools}/bin

@@ -79,6 +79,7 @@ let
       builder = shell;
 
       args = ["-e" ./builder.sh];
+      __structuredAttrs = true;
 
       setup = setupScript;
 

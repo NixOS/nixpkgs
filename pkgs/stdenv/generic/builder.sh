@@ -1,3 +1,5 @@
+source .attrs.sh
+
 export PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi

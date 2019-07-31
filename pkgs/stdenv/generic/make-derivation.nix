@@ -199,6 +199,7 @@ in rec {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
+          __structuredAttrs = true;
 
           # The `system` attribute of a derivation has special meaning to Nix.
           # Derivations set it to choose what sort of machine could be used to

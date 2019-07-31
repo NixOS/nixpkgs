@@ -3,11 +3,12 @@
 derivation {
   name = "bootstrap-tools";
 
-  builder = bootstrapFiles.busybox;
+  builder = "${bootstrapFiles.busybox}";
 
   args = [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
 
   tarball = bootstrapFiles.bootstrapTools;
+#   __structuredAttrs = true;
 
   inherit system;
 
