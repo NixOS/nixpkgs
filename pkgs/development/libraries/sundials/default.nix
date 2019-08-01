@@ -15,9 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "19ca4nmlf6i9ijqcibyvpprxzsdfnackgjs6dw51fq13gg1f2398";
   };
 
+  patches = [ (fetchurl {
+    # https://github.com/LLNL/sundials/pull/19
+    url = "https://github.com/LLNL/sundials/commit/1350421eab6c5ab479de5eccf6af2dcad1eddf30.patch";
+    sha256 = "0g67lixp9m85fqpb9rzz1hl1z8ibdg0ldwq5z6flj5zl8a7cw52l";
+  })];
+
   cmakeFlags = [
     "-DEXAMPLES_INSTALL_PATH=${placeholder "out"}/share/examples"
   ];
+
+  doCheck = true;
+  checkPhase = "make test";
 
   meta = with stdenv.lib; {
     description = "Suite of nonlinear differential/algebraic equation solvers";
