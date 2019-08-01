@@ -12,6 +12,8 @@ let
 
     buildOcaml = callPackage ../build-support/ocaml { };
 
+    buildOasisPackage = callPackage ../build-support/ocaml/oasis.nix { buildOcaml = buildOcaml; };
+
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
 
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
