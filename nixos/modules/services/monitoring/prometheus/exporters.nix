@@ -28,6 +28,7 @@ let
     "dovecot"
     "fritzbox"
     "json"
+    "mail"
     "minio"
     "nginx"
     "node"
@@ -162,13 +163,19 @@ in
   };
 
   config = mkMerge ([{
-    assertions = [{
+    assertions = [ {
       assertion = (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null);
       message = ''
         Please ensure you have either `services.prometheus.exporters.snmp.configuration'
           or `services.prometheus.exporters.snmp.configurationPath' set!
       '';
-    }];
+    } {
+      assertion = (cfg.mail.configFile == null) != (cfg.mail.configuration == {});
+      message = ''
+        Please specify either 'services.prometheus.exporters.mail.configuration'
+          or 'services.prometheus.exporters.mail.configFile'.
+      '';
+    } ];
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;

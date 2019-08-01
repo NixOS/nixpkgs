@@ -188,6 +188,48 @@ let
       '';
     };
 
+    mail = {
+      exporterConfig = {
+        enable = true;
+        user = "mailexporter";
+        configuration = {
+          monitoringInterval = "2s";
+          mailCheckTimeout = "10s";
+          servers = [ {
+            name = "testserver";
+            server = "localhost";
+            port = 25;
+            from = "mailexporter@localhost";
+            to = "mailexporter@localhost";
+            detectionDir = "/var/spool/mail/mailexporter/new";
+          } ];
+        };
+      };
+      metricProvider = {
+        services.postfix.enable = true;
+        systemd.services.prometheus-mail-exporter = {
+          after = [ "postfix.service" ];
+          requires = [ "postfix.service" ];
+          preStart = ''
+            mkdir -p 0600 mailexporter/new
+          '';
+          serviceConfig = {
+            ProtectHome = true;
+            ReadOnlyPaths = "/";
+            ReadWritePaths = "/var/spool/mail";
+            WorkingDirectory = "/var/spool/mail";
+          };
+        };
+        users.users.mailexporter.isSystemUser = true;
+      };
+      exporterTest = ''
+        waitForUnit("postfix.service")
+        waitForUnit("prometheus-mail-exporter.service")
+        waitForOpenPort(9225)
+        waitUntilSucceeds("curl -sSf http://localhost:9225/metrics | grep -q 'mail_deliver_success{configname=\"testserver\"} 1'")
+      '';
+    };
+
     nginx = {
       exporterConfig = {
         enable = true;
