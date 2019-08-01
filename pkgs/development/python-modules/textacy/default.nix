@@ -30,8 +30,6 @@ buildPythonPackage rec {
     sha256 = "50402545ac92b1a931c2365e341cb35c4ebe5575525f1dcc5265901ff3895a5f";
   };
 
-  disabled = isPy27; # 2.7 requires backports.csv
-
   propagatedBuildInputs = [
     cachetools
     cld2-cffi
@@ -64,5 +62,8 @@ buildPythonPackage rec {
     homepage = "http://textacy.readthedocs.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvl ];
+    # ftfy and jellyfish no longer support python2
+    # latest scikitlearn not supported for this: https://github.com/chartbeat-labs/textacy/issues/260
+    broken = true;
   };
 }
