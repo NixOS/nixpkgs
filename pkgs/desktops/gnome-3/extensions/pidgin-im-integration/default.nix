@@ -1,13 +1,12 @@
 { stdenv, fetchFromGitHub, glib }:
 
 stdenv.mkDerivation rec {
+  pname = "gnome-shell-extension-pidgin-im-integration";
   version = "1.0.1";
-  basename = "pidgin-im-gnome-shell-extension";
-  name = "${basename}-${version}";
 
   src = fetchFromGitHub {
     owner = "muffinmad";
-    repo = "${basename}";
+    repo = "pidgin-im-gnome-shell-extension";
     rev = "v${version}";
     sha256 = "1567s2sfqig4jw0nrn134f5vkx0yq31q044grv3xk4vpl1f3z2lr";
   };
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$extensions_dir"
     mv *.js metadata.json dbus.xml gnome-shell-extension-pidgin.pot "$extensions_dir"
 
-    schemas_dir="$share_dir/gsettings-schemas/${name}/glib-2.0/schemas"
+    schemas_dir="$share_dir/gsettings-schemas/${pname}-${version}/glib-2.0/schemas"
     mkdir -p "$schemas_dir"
     mv schemas/* "$schemas_dir" # fix Emacs syntax highlighting: */
     glib-compile-schemas "$schemas_dir"
