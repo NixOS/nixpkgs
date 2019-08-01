@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, mkDerivation, makeWrapper, makeDesktopItem, autoPatchelfHook
-, wrapQtAppsHook
+{ stdenv, fetchurl, mkDerivation, autoPatchelfHook
+, fetchFromGitHub
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
 , qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
@@ -22,12 +22,20 @@ let
     };
   };
 
+  # Used for icons, appdata, and desktop file.
+  desktopIntegration = fetchFromGitHub {
+    owner = "flathub";
+    repo = "us.zoom.Zoom";
+    rev = "0d294e1fdd2a4ef4e05d414bc680511f24d835d7";
+    sha256 = "0rm188844a10v8d6zgl2pnwsliwknawj09b02iabrvjw5w1lp6wl";
+  };
+
 in mkDerivation {
   name = "zoom-us-${version}";
 
   src = srcs.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
     dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo
@@ -66,15 +74,26 @@ in mkDerivation {
       runHook postInstall
     '';
 
-  postInstall = (makeDesktopItem {
-    name = "zoom-us";
-    exec = "$out/bin/zoom-us %U";
-    icon = "$out/share/zoom-us/application-x-zoom.png";
-    desktopName = "Zoom";
-    genericName = "Video Conference";
-    categories = "Network;Application;";
-    mimeType = "x-scheme-handler/zoommtg;";
-  }).buildCommand + ''
+  postInstall = ''
+    mkdir -p $out/share/{applications,appdata,icons}
+
+    # Desktop File
+    cp ${desktopIntegration}/us.zoom.Zoom.desktop $out/share/applications
+    substituteInPlace $out/share/applications/us.zoom.Zoom.desktop \
+        --replace "Exec=zoom" "Exec=$out/bin/zoom-us"
+
+    # Appdata
+    cp ${desktopIntegration}/us.zoom.Zoom.appdata.xml $out/share/appdata
+
+    # Icons
+    for icon_size in 64 96 128 256; do
+        path=$icon_size'x'$icon_size
+        icon=${desktopIntegration}/us.zoom.Zoom.$icon_size.png
+
+        mkdir -p $out/share/icons/hicolor/$path/apps
+        cp $icon $out/share/icons/hicolor/$path/apps/us.zoom.Zoom.png
+    done
+
     ln -s $out/share/zoom-us/zoom $out/bin/zoom-us
   '';
 
