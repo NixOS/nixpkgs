@@ -467,7 +467,7 @@ in
         fi
       '';
 
-    nix.nrBuildUsers = mkDefault (lib.max 32 cfg.maxJobs);
+    nix.nrBuildUsers = mkDefault (lib.max 32 (if cfg.maxJobs == "auto" then 0 else cfg.maxJobs));
 
     users.users = nixbldUsers;
 
