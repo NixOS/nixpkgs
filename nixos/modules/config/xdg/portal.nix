@@ -51,7 +51,7 @@ with lib;
       systemd.packages = packages;
 
       environment.variables = {
-        GTK_USE_PORTAL = optional cfg.gtkUsePortal "1";
+        GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
         XDG_DESKTOP_PORTAL_PATH = map (p: "${p}/share/xdg-desktop-portal/portals") cfg.extraPortals;
       };
     };
