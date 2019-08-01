@@ -1,4 +1,5 @@
 { lib, fetchurl, fetchFromGitHub, callPackage
+, perl
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -9,8 +10,8 @@
 let
 
 common =
-  { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline
+  { lib, stdenv, fetchurl, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
+  , pkgconfig, boehmgc, libsodium, brotli, boost, editline
   , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns, jq
   , busybox-sandbox-shell
   , storeDir
@@ -19,7 +20,7 @@ common =
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 
-  , name, suffix ? "", src, includesPerl ? false, fromGit ? false
+  , name, suffix ? "", src, fromGit ? false
 
   }:
   let
@@ -77,9 +78,9 @@ common =
           "--enable-gc"
         ]
         ++ lib.optionals (!is20) [
-          "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
-          "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
-          "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
+          "--with-dbi=${perl.pkgs.DBI}/${perl.libPrefix}"
+          "--with-dbd-sqlite=${perl.pkgs.DBDSQLite}/${perl.libPrefix}"
+          "--with-www-curl=${perl.pkgs.WWWCurl}/${perl.libPrefix}"
         ] ++ lib.optionals (is20 && stdenv.isLinux) [
           "--with-sandbox-shell=${sh}/bin/busybox"
         ]
@@ -123,7 +124,10 @@ common =
       passthru = {
         inherit fromGit;
 
-        perl-bindings = if includesPerl then nix else stdenv.mkDerivation {
+        perl-bindings = if perl.pkgs.hasPerlModule nix then
+                          nix    # Nix1 has the perl bindings by default, so no need to build the manually.
+                        else
+                          perl.pkgs.toPerlModule(stdenv.mkDerivation {
           name = "nix-perl-${version}";
 
           inherit src;
@@ -138,14 +142,14 @@ common =
             ++ lib.optional is20 boost;
 
           configureFlags =
-            [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
-              "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
+            [ "--with-dbi=${perl.pkgs.DBI}/${perl.libPrefix}"
+              "--with-dbd-sqlite=${perl.pkgs.DBDSQLite}/${perl.libPrefix}"
             ];
 
           preConfigure = "export NIX_STATE_DIR=$TMPDIR";
 
           preBuild = "unset NIX_INDENT_MAKE";
-        };
+        });
       };
     };
   in nix;
@@ -154,18 +158,15 @@ in rec {
 
   nix = nixStable;
 
-  nix1 = callPackage common rec {
+  nix1 = perl.pkgs.toPerlModule(callPackage common rec {
     name = "nix-1.11.16";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
 
-    # Nix1 has the perl bindings by default, so no need to build the manually.
-    includesPerl = true;
-
     inherit storeDir stateDir confDir boehmgc;
-  };
+  });
 
   nixStable = callPackage common (rec {
     name = "nix-2.2.2";
