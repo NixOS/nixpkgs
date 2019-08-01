@@ -3,7 +3,6 @@ rec {
   #### CORE EFL
   efl = callPackage ./efl.nix {
     openjpeg = pkgs.openjpeg_1;
-    openssl = pkgs.openssl_1_0_2;
   };
 
   #### WINDOW MANAGER
