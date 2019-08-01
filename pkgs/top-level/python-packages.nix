@@ -482,7 +482,9 @@ in {
 
   btchip = callPackage ../development/python-modules/btchip { };
 
-  datatable = callPackage ../development/python-modules/datatable { };
+  datatable = callPackage ../development/python-modules/datatable {
+    inherit (pkgs.llvmPackages) openmp libcxx libcxxabi;
+  };
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
