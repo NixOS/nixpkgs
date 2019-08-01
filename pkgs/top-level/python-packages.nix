@@ -502,6 +502,8 @@ in {
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
 
+  diofant = callPackage ../development/python-modules/diofant { };
+
   docrep = callPackage ../development/python-modules/docrep { };
 
   dominate = callPackage ../development/python-modules/dominate { };
@@ -2353,7 +2355,11 @@ in {
 
   image-match = callPackage ../development/python-modules/image-match { };
 
-  imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
+  imbalanced-learn =
+    if isPy27 then
+      callPackage ../development/python-modules/imbalanced-learn/0.4.nix { }
+    else
+      callPackage ../development/python-modules/imbalanced-learn { };
 
   immutables = callPackage ../development/python-modules/immutables {};
 
@@ -4022,6 +4028,8 @@ in {
 
   fixtures = callPackage ../development/python-modules/fixtures { };
 
+  fipy = callPackage ../development/python-modules/fipy { };
+
   pelican = callPackage ../development/python-modules/pelican {
     inherit (pkgs) glibcLocales git;
   };
@@ -4287,6 +4295,8 @@ in {
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
+  pysparse = callPackage ../development/python-modules/pysparse { };
+
   pyupdate = callPackage ../development/python-modules/pyupdate {};
 
   pyx = callPackage ../development/python-modules/pyx { };
@@ -4462,6 +4472,8 @@ in {
   pywinrm = callPackage ../development/python-modules/pywinrm { };
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
+
+  pyamg = callPackage ../development/python-modules/pyamg { };
 
   pyaml = callPackage ../development/python-modules/pyaml { };
 
@@ -4693,6 +4705,8 @@ in {
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
+  scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
+
   scp = callPackage ../development/python-modules/scp {};
 
   seaborn = callPackage ../development/python-modules/seaborn { };
@@ -4714,6 +4728,8 @@ in {
   simanneal = callPackage ../development/python-modules/simanneal { };
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
+
+  shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
   shodan = callPackage ../development/python-modules/shodan { };
 
@@ -5177,6 +5193,8 @@ in {
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
+
+  openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
@@ -5697,15 +5715,22 @@ in {
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow =
-    if stdenv.isDarwin
-    then callPackage ../development/python-modules/tensorflow/bin.nix { }
-    else callPackage ../development/python-modules/tensorflow/bin.nix rec {
-      cudaSupport = pkgs.config.cudaSupport or false;
-      inherit (pkgs.linuxPackages) nvidia_x11;
-      cudatoolkit = pkgs.cudatoolkit_10_0;
-      cudnn = pkgs.cudnn_cudatoolkit_10_0;
-    };
+  tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit_10;
+    cudnn = pkgs.cudnn_cudatoolkit_10;
+  };
+
+  tensorflow-build = callPackage ../development/python-modules/tensorflow {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit_10;
+    cudnn = pkgs.cudnn_cudatoolkit_10;
+    nccl = pkgs.nccl_cudatoolkit_10;
+  };
+
+  tensorflow = if stdenv.isDarwin then self.tensorflow-bin else self.tensorflow-build;
 
   tensorflowWithoutCuda = self.tensorflow.override {
     cudaSupport = false;

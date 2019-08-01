@@ -4,7 +4,7 @@
 , lib
 }:
 
-args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
+args@{ name, bazelFlags ? [], bazelBuildFlags ? [], bazelFetchFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
 
 let
   fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" ];
@@ -12,11 +12,11 @@ let
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
 
 in stdenv.mkDerivation (fBuildAttrs // {
-  inherit name bazelFlags bazelTarget;
+  inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps";
-    inherit bazelFlags bazelTarget;
+    inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 
@@ -49,6 +49,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
         fetch \
         --loading_phase_threads=1 \
         $bazelFlags \
+        $bazelFetchFlags \
         $bazelTarget
 
       runHook postBuild
@@ -60,13 +61,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
-      rm -rf $bazelOut/external/{local_*,\@local_*}
+      rm -rf $bazelOut/external/{local_*,\@local_*.marker}
 
-      # Patching markers to make them deterministic
-      find $bazelOut/external -name '@*\.marker' -exec sed -i \
-        -e 's, -\?[0-9][0-9]*$, 1,' \
-        -e '/^ENV:TMP.*/d' \
-        '{}' \;
+      # Clear markers
+      find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
 
       # Remove all vcs files
       rm -rf $(find $bazelOut/external -type d -name .git)
@@ -152,6 +150,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       "''${host_linkopts[@]}" \
       '' + ''
       $bazelFlags \
+      $bazelBuildFlags \
       $bazelTarget
 
     runHook postBuild

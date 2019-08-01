@@ -7,6 +7,9 @@
 , passthru ? {}
 , patches ? []
 
+# A function to override the go-modules derivation
+, overrideModAttrs ? (_oldAttrs : {})
+
 # modSha256 is the sha256 of the vendored dependencies
 , modSha256
 
@@ -27,13 +30,13 @@
 with builtins;
 
 let
-  args = removeAttrs args' [ "modSha256" "disabled" ];
+  args = removeAttrs args' [ "overrideModAttrs" "modSha256" "disabled" ];
 
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
-  go-modules = go.stdenv.mkDerivation {
+  go-modules = go.stdenv.mkDerivation (let modArgs = {
     name = "${name}-go-modules";
 
     nativeBuildInputs = [ go git cacert ];
@@ -79,7 +82,7 @@ let
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash = modSha256;
-  };
+  }; in modArgs // overrideModAttrs modArgs);
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;

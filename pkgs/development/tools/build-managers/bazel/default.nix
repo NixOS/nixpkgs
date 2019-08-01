@@ -14,8 +14,8 @@
 , runtimeShell
 # Downstream packages for tests
 , bazel-watcher
-# Always assume all markers valid (don't redownload dependencies).
-# Also, don't clean up environment variables.
+# Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
+# Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
 , gcc-unwrapped
 , autoPatchelfHook

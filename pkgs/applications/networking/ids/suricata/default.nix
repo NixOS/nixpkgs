@@ -1,0 +1,125 @@
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, makeWrapper
+, file
+, geoip
+, hyperscan
+, jansson
+, libcap_ng
+, libevent
+, libnet
+, libnetfilter_log
+, libnetfilter_queue
+, libnfnetlink
+, libpcap
+, libyaml
+, luajit
+, nspr
+, nss
+, pcre
+, python
+, zlib
+, redisSupport ? true, redis, hiredis
+, rustSupport ? true, rustc, cargo
+}: let
+  libmagic = file;
+  hyperscanSupport = stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+in
+stdenv.mkDerivation rec {
+  pname = "suricata";
+  version = "4.1.4";
+
+  src = fetchurl {
+    url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
+    sha256 = "02901wjf90171rhkymcgp0h48hkn3wv8iwrhz4d8ppraz68hv99d";
+  };
+
+  nativeBuildInputs = [
+    makeWrapper
+    pkgconfig
+  ];
+
+  buildInputs = [
+    geoip
+    jansson
+    libcap_ng
+    libevent
+    libmagic
+    libnet
+    libnetfilter_log
+    libnetfilter_queue
+    libnfnetlink
+    libpcap
+    libyaml
+    luajit
+    nspr
+    nss
+    pcre
+    python
+    zlib
+  ]
+  ++ lib.optional hyperscanSupport [ hyperscan ]
+  ++ lib.optional redisSupport [ redis hiredis ]
+  ++ lib.optional rustSupport [ rustc cargo ]
+  ;
+
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--disable-gccmarch-native"
+    "--enable-afl"
+    "--enable-af-packet"
+    "--enable-gccprotect"
+    "--enable-geoip"
+    "--enable-luajit"
+    "--enable-nflog"
+    "--enable-nfqueue"
+    "--enable-pie"
+    "--disable-prelude"
+    "--enable-python"
+    "--enable-unix-socket"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-libnet-includes=${libnet}/include"
+    "--with-libnet-libraries=${libnet}/lib"
+  ]
+  ++ lib.optional hyperscanSupport [
+    "--with-libhs-includes=${hyperscan}/include"
+    "--with-libhs-libraries=${hyperscan}/lib"
+  ]
+  ++ lib.optional redisSupport [ "--enable-hiredis" ]
+  ++ lib.optional rustSupport [
+    "--enable-rust"
+    "--enable-rust-experimental"
+  ];
+
+  installFlags = [
+    "e_localstatedir=\${TMPDIR}"
+    "e_logdir=\${TMPDIR}"
+    "e_logcertsdir=\${TMPDIR}"
+    "e_logfilesdir=\${TMPDIR}"
+    "e_rundir=\${TMPDIR}"
+    "e_sysconfdir=\${out}/etc/suricata"
+    "e_sysconfrulesdir=\${out}/etc/suricata/rules"
+    "localstatedir=\${TMPDIR}"
+    "runstatedir=\${TMPDIR}"
+    "sysconfdir=\${out}/etc"
+  ];
+
+  installTargets = "install install-conf";
+
+  postInstall = ''
+    wrapProgram "$out/bin/suricatasc" \
+      --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out")
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A free and open source, mature, fast and robust network threat detection engine";
+    homepage = "https://suricata-ids.org";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ magenbluten ];
+  };
+}

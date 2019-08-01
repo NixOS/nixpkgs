@@ -719,6 +719,8 @@ let
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
+    toml = callPackage ../development/ocaml-modules/toml { };
+
     topkg = callPackage ../development/ocaml-modules/topkg { };
 
     tsdl = callPackage ../development/ocaml-modules/tsdl { };
