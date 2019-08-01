@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, mkDerivation, makeWrapper, autoPatchelfHook
-, wrapQtAppsHook, fetchFromGitHub
+{ stdenv, fetchurl, mkDerivation, autoPatchelfHook
+, fetchFromGitHub
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
 , qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
@@ -35,7 +35,7 @@ in mkDerivation {
 
   src = srcs.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
     dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo
