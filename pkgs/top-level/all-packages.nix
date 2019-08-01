@@ -747,7 +747,7 @@ in
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
 
-  colorls = callPackage ../tools/misc/colorls {};
+  colorls = callPackage ../tools/misc/colorls { };
 
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
@@ -1367,8 +1367,6 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
     xcbuildHook = xcbuild6Hook;
   };
-
-  colorls = callPackage ../tools/system/colorls { };
 
   compsize = callPackage ../os-specific/linux/compsize { };
 
