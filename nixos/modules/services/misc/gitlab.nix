@@ -12,7 +12,6 @@ let
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
-  pgSuperUser = config.services.postgresql.superUser;
 
   databaseConfig = {
     production = {
@@ -237,8 +236,11 @@ in {
 
       databaseHost = mkOption {
         type = types.str;
-        default = "127.0.0.1";
-        description = "Gitlab database hostname.";
+        default = "";
+        description = ''
+          Gitlab database hostname. An empty string means <quote>use
+          local unix socket connection</quote>.
+        '';
       };
 
       databasePasswordFile = mkOption {
@@ -249,6 +251,17 @@ in {
 
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
+        '';
+      };
+
+      databaseCreateLocally = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether a database should be automatically created on the
+          local host. Set this to <literal>false</literal> if you plan
+          on provisioning a local database yourself or use an external
+          one.
         '';
       };
 
@@ -498,12 +511,16 @@ in {
 
     assertions = [
       {
-        assertion = cfg.initialRootPasswordFile != null;
-        message = "services.gitlab.initialRootPasswordFile must be set!";
+        assertion = cfg.databaseCreateLocally -> (cfg.user == cfg.databaseUsername);
+        message = "For local automatic database provisioning services.gitlab.user and services.gitlab.databaseUsername should be identical.";
       }
       {
-        assertion = cfg.databasePasswordFile != null;
-        message = "services.gitlab.databasePasswordFile must be set!";
+        assertion = (cfg.databaseHost != "") -> (cfg.databasePasswordFile != null);
+        message = "When services.gitlab.databaseHost is customized, services.gitlab.databasePasswordFile must be set!";
+      }
+      {
+        assertion = cfg.initialRootPasswordFile != null;
+        message = "services.gitlab.initialRootPasswordFile must be set!";
       }
       {
         assertion = cfg.secrets.secretFile != null;
@@ -527,8 +544,31 @@ in {
 
     # Redis is required for the sidekiq queue runner.
     services.redis.enable = mkDefault true;
+
     # We use postgres as the main data store.
-    services.postgresql.enable = mkDefault true;
+    services.postgresql = optionalAttrs cfg.databaseCreateLocally {
+      enable = true;
+      ensureUsers = singleton { name = cfg.databaseUsername; };
+    };
+    # The postgresql module doesn't currently support concepts like
+    # objects owners and extensions; for now we tack on what's needed
+    # here.
+    systemd.services.postgresql.postStart = mkAfter (optionalString cfg.databaseCreateLocally ''
+      $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
+      current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.databaseName}'")
+      if [[ "$current_owner" != "${cfg.databaseUsername}" ]]; then
+          $PSQL -tAc 'ALTER DATABASE "${cfg.databaseName}" OWNER TO "${cfg.databaseUsername}"'
+          if [[ -e "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}" ]]; then
+              echo "Reassigning ownership of database ${cfg.databaseName} to user ${cfg.databaseUsername} failed on last boot. Failing..."
+              exit 1
+          fi
+          touch "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
+          $PSQL "${cfg.databaseName}" -tAc "REASSIGN OWNED BY \"$current_owner\" TO \"${cfg.databaseUsername}\""
+          rm "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
+      fi
+      $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+    '');
+
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault true;
 
@@ -675,15 +715,15 @@ in {
         gnupg
       ];
       preStart = ''
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} rm -rf ${cfg.statePath}/db/*
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
+        cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+        rm -rf ${cfg.statePath}/db/*
+        cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
 
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${cfg.packages.gitlab-shell}/bin/install
+        ${cfg.packages.gitlab-shell}/bin/install
 
         ${optionalString cfg.smtp.enable ''
-          install -o ${cfg.user} -g ${cfg.group} -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
+          install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
           ${optionalString (cfg.smtp.passwordFile != null) ''
             smtp_password=$(<'${cfg.smtp.passwordFile}')
             ${pkgs.replace}/bin/replace-literal -e '@smtpPassword@' "$smtp_password" '${cfg.statePath}/config/initializers/smtp_settings.rb'
@@ -694,6 +734,24 @@ in {
           umask u=rwx,g=,o=
 
           ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
+
+          ${if cfg.databasePasswordFile != null then ''
+              export db_password="$(<'${cfg.databasePasswordFile}')"
+
+              if [[ -z "$db_password" ]]; then
+                >&2 echo "Database password was an empty string!"
+                exit 1
+              fi
+
+              ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
+                                '.production.password = $ENV.db_password' \
+                                >'${cfg.statePath}/config/database.yml'
+            ''
+            else ''
+              ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
+                                >'${cfg.statePath}/config/database.yml'
+            ''
+          }
 
           if [[ -h '${cfg.statePath}/config/secrets.yml' ]]; then
             rm '${cfg.statePath}/config/secrets.yml'
@@ -708,54 +766,19 @@ in {
                                               db_key_base: $ENV.otp,
                                               openid_connect_signing_key: $ENV.jws}}' \
                             > '${cfg.statePath}/config/secrets.yml'
-
-          chown ${cfg.user}:${cfg.group} '${cfg.statePath}/config/secrets.yml' '${cfg.statePath}/gitlab_shell_secret'
         )
 
-        export db_password="$(<'${cfg.databasePasswordFile}')"
-
-        if [[ -z "$db_password" ]]; then
-          >&2 echo "Database password was an empty string!"
-          exit 1
-        fi
-
-        ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                          '.production.password = $ENV.db_password' \
-                          >'${cfg.statePath}/config/database.yml'
-        chown ${cfg.user}:${cfg.group} '${cfg.statePath}/config/database.yml'
-
-        if ! test -e "${cfg.statePath}/db-created"; then
-          if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
-            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '$db_password'"
-            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} ${config.services.postgresql.package}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName}
-
-            # enable required pg_trgm extension for gitlab
-            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql ${cfg.databaseName} -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
-          fi
-
-          ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${gitlab-rake}/bin/gitlab-rake db:schema:load
-
-          ${pkgs.sudo}/bin/sudo -u ${cfg.user} touch "${cfg.statePath}/db-created"
-        fi
-
-        # Always do the db migrations just to be sure the database is up-to-date
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${gitlab-rake}/bin/gitlab-rake db:migrate
-
-        if ! test -e "${cfg.statePath}/db-seeded"; then
-          initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
-          ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${gitlab-rake}/bin/gitlab-rake db:seed_fu \
-            GITLAB_ROOT_PASSWORD="$initial_root_password" GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
-          ${pkgs.sudo}/bin/sudo -u ${cfg.user} touch "${cfg.statePath}/db-seeded"
-        fi
+        initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
+        ${gitlab-rake}/bin/gitlab-rake gitlab:db:configure GITLAB_ROOT_PASSWORD="$initial_root_password" \
+                                                           GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
 
         # We remove potentially broken links to old gitlab-shell versions
         rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
 
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${pkgs.git}/bin/git config --global core.autocrlf "input"
+        ${pkgs.git}/bin/git config --global core.autocrlf "input"
       '';
 
       serviceConfig = {
-        PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
