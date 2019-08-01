@@ -147,6 +147,7 @@ in
   mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
+  mediawiki = handleTest ./mediawiki.nix {};
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
   miniflux = handleTest ./miniflux.nix {};
