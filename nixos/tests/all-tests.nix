@@ -56,7 +56,7 @@ in
   containers-physical_interfaces = handleTest ./containers-physical_interfaces.nix {};
   containers-restart_networking = handleTest ./containers-restart_networking.nix {};
   containers-tmpfs = handleTest ./containers-tmpfs.nix {};
-  #couchdb = handleTest ./couchdb.nix {}; # spidermonkey-1.8.5 is marked as broken
+  couchdb = handleTest ./couchdb.nix {};
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
   dnscrypt-proxy = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy.nix {};
