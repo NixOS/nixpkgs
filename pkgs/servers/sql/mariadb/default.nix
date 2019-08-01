@@ -27,14 +27,14 @@ galeraLibs = buildEnv {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.3.15";
+  version = "10.3.17";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "0s399nxk2z8fgdr527p64y74zwjc3gpv7psf1n2r6ksl9njr3wr7";
+    sha256 = "15vh15az16932q42y9dxpzwxldmh0x4hvzrar3f8kblsqm7ym890";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -103,7 +103,7 @@ common = rec { # attributes common to both builds
 };
 
 client = stdenv.mkDerivation (common // {
-  name = "mariadb-client-${common.version}";
+  pname = "mariadb-client";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -132,7 +132,7 @@ client = stdenv.mkDerivation (common // {
 });
 
 everything = stdenv.mkDerivation (common // {
-  name = "mariadb-${common.version}";
+  pname = "mariadb";
 
   outputs = [ "out" "dev" "man" ];
 
