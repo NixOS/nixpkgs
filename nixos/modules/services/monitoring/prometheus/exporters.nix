@@ -32,6 +32,7 @@ let
     "nginx"
     "node"
     "postfix"
+    "postgres"
     "snmp"
     "surfboard"
     "tor"
