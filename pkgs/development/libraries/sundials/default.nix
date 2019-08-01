@@ -1,14 +1,21 @@
 { stdenv
 , cmake
 , fetchurl
-, python }:
+, python
+, liblapack
+, gfortran
+, lapackSupport ? true }:
 
-stdenv.mkDerivation rec {
+let liblapackShared = liblapack.override {
+  shared = true;
+};
+
+in stdenv.mkDerivation rec {
   pname = "sundials";
   version = "4.1.0";
 
+  buildInputs = [ python ] ++ stdenv.lib.optionals (lapackSupport) [ gfortran ];
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ python ];
 
   src = fetchurl {
     url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
@@ -23,6 +30,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DEXAMPLES_INSTALL_PATH=${placeholder "out"}/share/examples"
+  ] ++ stdenv.lib.optionals (lapackSupport) [
+    "-DSUNDIALS_INDEX_TYPE=int32_t"
+    "-DLAPACK_ENABLE=ON"
+    "-DLAPACK_LIBRARIES=${liblapackShared}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary};${liblapackShared}/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
   doCheck = true;
@@ -35,5 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ flokli idontgetoutmuch ];
     license     = licenses.bsd3;
   };
-
 }
