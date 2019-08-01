@@ -11272,7 +11272,9 @@ in
     stdenv = gccStdenv;
   };
 
-  languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
+  languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix {
+    inherit pkgs;
+  });
 
   lasem = callPackage ../development/libraries/lasem { };
 
