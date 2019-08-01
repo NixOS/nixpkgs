@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "traefik-${version}";
-  version = "1.7.9";
+  version = "1.7.12";
 
   goPackagePath = "github.com/containous/traefik";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "containous";
     repo = "traefik";
     rev = "v${version}";
-    sha256 = "0lncygkqws5jvbhpx2qlr18y8b325y9a6690ll9azlphxydrv44m";
+    sha256 = "1nrr0a0ibrd346i6jdxzvbgj5frcrwwm2rk3c6fpck42a6mw6plz";
   };
 
   buildInputs = [ go-bindata bash ];

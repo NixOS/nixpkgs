@@ -167,6 +167,7 @@ stdenv.mkDerivation {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ adev ak ];
     platforms = platforms.unix;
+    broken = true;
   };
 
   passthru.version = version;

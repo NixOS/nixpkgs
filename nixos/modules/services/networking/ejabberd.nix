@@ -11,7 +11,7 @@ let
     ${cfg.ctlConfig}
   '';
 
-  ectl = ''${cfg.package}/bin/ejabberdctl ${if cfg.configFile == null then "" else "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
+  ectl = ''${cfg.package}/bin/ejabberdctl ${optionalString (cfg.configFile != null) "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
 
   dumps = lib.escapeShellArgs cfg.loadDumps;
 
@@ -111,28 +111,17 @@ in {
       description = "ejabberd server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.findutils pkgs.coreutils pkgs.runit ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
+      path = [ pkgs.findutils pkgs.coreutils ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
 
       serviceConfig = {
-        ExecStart = ''${ectl} foreground'';
-        # FIXME: runit is used for `chpst` -- can we get rid of this?
-        ExecStop = ''${pkgs.runit}/bin/chpst -u "${cfg.user}:${cfg.group}" ${ectl} stop'';
-        ExecReload = ''${pkgs.runit}/bin/chpst -u "${cfg.user}:${cfg.group}" ${ectl} reload_config'';
         User = cfg.user;
         Group = cfg.group;
-        PermissionsStartOnly = true;
+        ExecStart = "${ectl} foreground";
+        ExecStop = "${ectl} stop";
+        ExecReload = "${ectl} reload_config";
       };
 
       preStart = ''
-        mkdir -p -m750 "${cfg.logsDir}"
-        chown "${cfg.user}:${cfg.group}" "${cfg.logsDir}"
-
-        mkdir -p -m750 "/var/lock/ejabberdctl"
-        chown "${cfg.user}:${cfg.group}" "/var/lock/ejabberdctl"
-
-        mkdir -p -m750 "${cfg.spoolDir}"
-        chown -R "${cfg.user}:${cfg.group}" "${cfg.spoolDir}"
-
         if [ -z "$(ls -A '${cfg.spoolDir}')" ]; then
           touch "${cfg.spoolDir}/.firstRun"
         fi
@@ -149,12 +138,17 @@ in {
           for src in ${dumps}; do
             find "$src" -type f | while read dump; do
               echo "Loading configuration dump at $dump"
-              chpst -u "${cfg.user}:${cfg.group}" ${ectl} load "$dump"
+              ${ectl} load "$dump"
             done
           done
         fi
       '';
     };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.logsDir}' 0750 ${cfg.user} ${cfg.group} -"
+      "d '${cfg.spoolDir}' 0700 ${cfg.user} ${cfg.group} -"
+    ];
 
     security.pam.services.ejabberd = {};
 

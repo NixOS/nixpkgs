@@ -14,13 +14,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "rspamd-${version}";
-  version = "1.8.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    sha256 = "1aikmscb3hywac4sf4xkl4kw0x3syzphfrmxhigz2jjqzxn8f50k";
+    sha256 = "0b8n7xazmzjb6jf8sk0jg0x861nf1ayzxsvjaymw1qjgpn371r51";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DDEBIAN_BUILD=ON"
-    "-DRUNDIR=/var/run/rspamd"
+    "-DRUNDIR=/run/rspamd"
     "-DDBDIR=/var/lib/rspamd"
     "-DLOGDIR=/var/log/rspamd"
     "-DLOCAL_CONFDIR=/etc/rspamd"

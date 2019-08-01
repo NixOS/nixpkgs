@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "kakoune-${version}";
+  pname = "kakoune-unwrapped";
   version = "2019.01.20";
   src = fetchFromGitHub {
     repo = "kakoune";

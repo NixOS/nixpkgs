@@ -4,7 +4,7 @@ rustPlatform.buildRustPackage rec {
   name = "elan-${version}";
   version = "0.7.5";
 
-  cargoSha256 = "0vv7kr7rc3lvas7ngp5dp99ajjd5v8k5937ish7zqz1k4970q2f1";
+  cargoSha256 = "0lc320m3vw76d6pa5wp6c9jblac6lmyf9qqnxmsnkn4ixdhnghsd";
 
   src = fetchFromGitHub {
     owner = "kha";

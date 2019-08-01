@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper
-, boost, python3
+{ stdenv, fetchFromGitHub, cmake
+, boost, python3, eigen
 , icestorm, trellis
 
 # TODO(thoughtpolice) Currently the GUI build seems broken at runtime on my
 # laptop (and over a remote X server on my server...), so mark it broken for
 # now, with intent to fix later.
 , enableGui ? false
-, qtbase
+, qtbase, wrapQtAppsHook
 }:
 
 let
@@ -27,18 +27,20 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nextpnr-${version}";
-  version = "2019.02.20";
+  version = "2019.04.19";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "nextpnr";
-    rev    = "e8d3aaaf34895a073e4023192d97fc936d090990";
-    sha256 = "0ijqpjnn7x16crd6cmd4nmgay320flizmjb7bbvg9hv464z3p4x7";
+    rev    = "5344bc3b65f4e06f983db781e9a82d30b3f1512b";
+    sha256 = "1y14jpa948cwk0i19bsfqh7yxsxkgskm4xym4z179sjcvcdvrn3a";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs
+     = [ cmake ]
+    ++ (stdenv.lib.optional enableGui wrapQtAppsHook);
   buildInputs
-     = [ boostPython python3 ]
+     = [ boostPython python3 eigen ]
     ++ (stdenv.lib.optional enableGui qtbase);
 
   enableParallelBuilding = true;
@@ -46,6 +48,7 @@ stdenv.mkDerivation rec {
     [ "-DARCH=generic;ice40;ecp5"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
       "-DTRELLIS_ROOT=${trellisRoot}/trellis"
+      "-DUSE_OPENMP=ON"
     ] ++ (stdenv.lib.optional (!enableGui) "-DBUILD_GUI=OFF");
 
   # Fix the version number. This is a bit stupid (and fragile) in practice
@@ -53,13 +56,6 @@ stdenv.mkDerivation rec {
   patchPhase = with builtins; ''
     substituteInPlace ./CMakeLists.txt \
       --replace 'git log -1 --format=%h' 'echo ${substring 0 11 src.rev}'
-  '';
-
-  postInstall = stdenv.lib.optionalString enableGui ''
-    for x in generic ice40 ecp5; do
-      wrapProgram $out/bin/nextpnr-$x \
-        --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtbase.qtCompatVersion}/plugins
-    done
   '';
 
   meta = with stdenv.lib; {

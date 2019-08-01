@@ -45,9 +45,9 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  default_cxx_stdlib_compile = if (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc) then
+  default_cxx_stdlib_compile = if (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc) && !(targetPlatform.useLLVM or false) then
     "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
-  else if targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false) then
+  else if targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false) && !(targetPlatform.useLLVM or false) then
     "-isystem ${libcxx}/include/c++/v1"
   else "";
 
@@ -62,6 +62,25 @@ let
     if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
+
+  # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
+  isGccArchSupported = arch:
+    if cc.isGNU or false then
+      { skylake        = versionAtLeast ccVersion "6.0";
+        skylake-avx512 = versionAtLeast ccVersion "6.0";
+        cannonlake     = versionAtLeast ccVersion "8.0";
+        icelake-client = versionAtLeast ccVersion "8.0";
+        icelake-server = versionAtLeast ccVersion "8.0";
+        knm            = versionAtLeast ccVersion "8.0";
+      }.${arch} or true
+    else if cc.isClang or false then
+      { cannonlake     = versionAtLeast ccVersion "5.0";
+        icelake-client = versionAtLeast ccVersion "7.0";
+        icelake-server = versionAtLeast ccVersion "7.0";
+        knm            = versionAtLeast ccVersion "7.0";
+      }.${arch} or true
+    else
+      false;
 
 in
 
@@ -279,19 +298,56 @@ stdenv.mkDerivation {
       export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
     ''
 
+    # Machine flags. These are necessary to support
+
+    # TODO: We should make a way to support miscellaneous machine
+    # flags and other gcc flags as well.
+
+    # Always add -march based on cpu in triple. Sometimes there is a
+    # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
+    # that case.
+    + optionalString ((targetPlatform ? platform.gcc.arch) &&
+                      isGccArchSupported targetPlatform.platform.gcc.arch) ''
+      echo "-march=${targetPlatform.platform.gcc.arch}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # -mcpu is not very useful. You should use mtune and march
+    # instead. It’s provided here for backwards compatibility.
+    + optionalString (targetPlatform ? platform.gcc.cpu) ''
+      echo "-mcpu=${targetPlatform.platform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # -mfloat-abi only matters on arm32 but we set it here
+    # unconditionally just in case. If the abi specifically sets hard
+    # vs. soft floats we use it here.
+    + optionalString (targetPlatform ? platform.gcc.float-abi) ''
+      echo "-mfloat-abi=${targetPlatform.platform.gcc.float-abi}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.fpu) ''
+      echo "-mfpu=${targetPlatform.platform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.mode) ''
+      echo "-mmode=${targetPlatform.platform.gcc.mode}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.tune &&
+                      isGccArchSupported targetPlatform.platform.gcc.tune) ''
+      echo "-mtune=${targetPlatform.platform.gcc.tune}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # TODO: categorize these and figure out a better place for them
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
-    ''
-
-    + optionalString targetPlatform.isMinGW ''
+    '' + optionalString targetPlatform.isMinGW ''
       hardening_unsupported_flags+=" stackprotector"
-    ''
-
-    + optionalString targetPlatform.isAvr ''
+    '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
+    '' + optionalString (targetPlatform.libc == "newlib") ''
+      hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString targetPlatform.isNetBSD ''
+      hardening_unsupported_flags+=" stackprotector fortify"
     ''
 
-    + optionalString (targetPlatform.libc == "newlib") ''
+    + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     ''
 

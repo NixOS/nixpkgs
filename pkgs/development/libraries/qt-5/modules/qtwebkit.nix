@@ -1,6 +1,6 @@
 { qtModule, stdenv, lib, fetchurl
 , qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
-, fontconfig, gdk_pixbuf, gtk2, libwebp, libxml2, libxslt
+, fontconfig, gtk2, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin
@@ -28,7 +28,7 @@ qtModule {
     ++ optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
     ++ optional usingAnnulenWebkitFork qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
-    ++ optionals (stdenv.isDarwin) (with darwin; with apple_sdk.frameworks; [ cf-private ICU OpenGL ])
+    ++ optionals (stdenv.isDarwin) (with darwin; with apple_sdk.frameworks; [ ICU OpenGL ])
     ++ optional usingAnnulenWebkitFork hyphen;
   nativeBuildInputs = [
     bison2 flex gdb gperf perl pkgconfig python2 ruby
@@ -58,7 +58,8 @@ qtModule {
     ++ optionals flashplayerFix
       [
         ''-DNIXPKGS_LIBGTK2="${getLib gtk2}/lib/libgtk-x11-2.0"''
-        ''-DNIXPKGS_LIBGDK2="${getLib gdk_pixbuf}/lib/libgdk-x11-2.0"''
+        # this file used to exist in gdk_pixbuf?
+        ''-DNIXPKGS_LIBGDK2="${getLib gtk2}/lib/libgdk-x11-2.0"''
       ]
     ++ optional (!stdenv.isDarwin) ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
 

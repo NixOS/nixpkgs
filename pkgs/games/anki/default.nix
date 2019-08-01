@@ -1,10 +1,8 @@
 { stdenv
 , buildPythonApplication
-, callPackage
 , lib
 , python
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , lame
 , mplayer

@@ -25,6 +25,9 @@
 , qtquickcontrols
 , qtscript
 , qtwebkit
+, rttr
+, kpurpose
+, kdeclarative
 }:
 
 mkDerivation {
@@ -57,6 +60,9 @@ mkDerivation {
     shared-mime-info
     libv4l
     ffmpeg
+    rttr
+    kpurpose
+    kdeclarative
   ];
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.

@@ -1,20 +1,21 @@
-{ stdenv, fetchzip, lib }:
+{ lib, fetchFromGitHub }:
 
 let
   version = "1.008";
   pname = "b612";
-in
-
-fetchzip rec {
+in fetchFromGitHub {
   name = "${pname}-font-${version}";
-  url = "https://github.com/polarsys/b612/archive/${version}.zip";
-  sha256 = "0r3lana1q9w3siv8czb3p9rrb5d9svp628yfbvvmnj7qvjrmfsiq";
+  owner = "polarsys";
+  repo = "b612";
+  rev = version;
   postFetch = ''
+    tar xf $downloadedFile --strip=1
     mkdir -p $out/share/fonts/truetype/${pname}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/${pname}
+    cp fonts/ttf/*.ttf $out/share/fonts/truetype/${pname}
   '';
+  sha256 = "0r3lana1q9w3siv8czb3p9rrb5d9svp628yfbvvmnj7qvjrmfsiq";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://b612-font.com/;
     description = "Highly legible font family for use on aircraft cockpit screens";
     longDescription = ''

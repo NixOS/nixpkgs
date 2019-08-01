@@ -4,7 +4,10 @@ luarocks.overrideAttrs(old: {
   src = fetchFromGitHub {
     owner = "teto";
     repo = "luarocks";
-    rev = "8fb03a9bc8f4fa079d26c0f02804139bb2578848";
-    sha256 = "09iwjvs9sbk6vwhrh7sijmfpji6wvg5bbdraw7l5lpnr9jj5wy91";
+    rev = "38ed82ba3e5682d7d55ef9a870dfb464ca180df9";
+    sha256 = "0vlzywiv3sxkpjg1fzzxicmfr6kh04fxw5q9n8vsd2075xjxg6bs";
   };
+  patches = [
+    ./darwin-3.0.x.patch
+  ];
 })

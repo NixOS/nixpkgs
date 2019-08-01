@@ -1,7 +1,5 @@
-{ stdenv, fetchurl, afl, python2, zlib, pkgconfig, glib, ncurses, perl
-, attr, libcap, vde2, texinfo, libuuid, flex, bison, lzo, snappy
-, libaio, libcap_ng, gnutls, pixman, autoconf
-, writeText
+{ stdenv, fetchurl, afl, python2, zlib, pkgconfig, glib, perl
+, texinfo, libuuid, flex, bison, pixman, autoconf
 }:
 
 with stdenv.lib;
@@ -41,9 +39,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    zlib glib pixman ncurses attr libcap
-    vde2 libuuid lzo snappy libcap_ng gnutls
-  ] ++ optionals (stdenv.isLinux) [ libaio ];
+    zlib glib pixman libuuid
+  ];
 
   enableParallelBuilding = true;
 
@@ -63,9 +60,9 @@ stdenv.mkDerivation rec {
       "--disable-gtk"
       "--disable-sdl"
       "--disable-vnc"
+      "--disable-kvm"
       "--target-list=${cpuTarget}"
       "--enable-pie"
-      "--enable-kvm"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
     ];

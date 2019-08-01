@@ -19,33 +19,35 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "03ymvfhk8azyvdm6j4pbqx2fsh178kw81yqwkycbhmm6mnyc8yv1";
+      sha256 = "17gqrfnqbhp9hhlb57nxii18pb5cnxn3k8p2djiw699qkx3aqs13";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1pw4w3v81mp8alm6vxq10242xxwv8rfs59bjxrmy0pfkjgsr4x4v";
+      sha256 = "1bgvwgyshh0icb07dacrip0q5xs5l2315m1gz5ggz5dhnf0vrz0q";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "222.0.0";
+  version = "255.0.0";
 
   src = fetchurl (sources name stdenv.hostPlatform.system);
 
   buildInputs = [ python makeWrapper ];
 
-  phases = [ "installPhase" "fixupPhase" ];
+  doBuild = false;
+
+  patches = [
+    ./gcloud-path.patch
+  ];
 
   installPhase = ''
-    mkdir -p "$out"
-    tar -xzf "$src" -C "$out" google-cloud-sdk
+    mkdir -p $out/google-cloud-sdk
+    cp -R * .install $out/google-cloud-sdk/
 
-    mkdir $out/google-cloud-sdk/lib/surface/alpha
+    mkdir -p $out/google-cloud-sdk/lib/surface/{alpha,beta}
     cp ${./alpha__init__.py} $out/google-cloud-sdk/lib/surface/alpha/__init__.py
-
-    mkdir $out/google-cloud-sdk/lib/surface/beta
     cp ${./beta__init__.py} $out/google-cloud-sdk/lib/surface/beta/__init__.py
 
     # create wrappers with correct env
@@ -68,8 +70,8 @@ in stdenv.mkDerivation rec {
     disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
-    mkdir -p "$out/etc/bash_completion.d/"
-    mv "$out/google-cloud-sdk/completion.bash.inc" "$out/etc/bash_completion.d/gcloud.inc"
+    mkdir -p $out/etc/bash_completion.d
+    mv $out/google-cloud-sdk/completion.bash.inc $out/etc/bash_completion.d/gcloud.inc
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.

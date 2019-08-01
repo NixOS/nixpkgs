@@ -3,17 +3,23 @@
 
 stdenv.mkDerivation rec {
   name = "ncmpc-${version}";
-  version = "0.33";
+  version = "0.34";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "ncmpc";
     rev    = "v${version}";
-    sha256 = "1ymnxb85v2pc0qpk0yz5gdxayc0ialk82ba521lgdw66li7fr4as";
+    sha256 = "0ffby37qdg251c1w0vl6rmd13akbydnf12468z4vrl0ybwfd7fc4";
   };
 
   buildInputs = [ glib ncurses mpd_clientlib boost ];
   nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+
+  mesonFlags = [
+    "-Dlirc=disabled"
+    "-Dregex=disabled"
+    "-Ddocumentation=disabled"
+  ];
 
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";

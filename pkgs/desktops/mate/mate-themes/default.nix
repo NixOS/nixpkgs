@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-themes-${version}";
-  version = "3.22.18";
+  version = "3.22.20";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/themes/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0538bw8qismp16ymxbjk0ww7yjw1ch5v3f3d4vib3770xvgmmcfm";
+    url = "http://pub.mate-desktop.org/releases/themes/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0c3dhf8p9nc2maky4g9xr04iil9wwbdkmhpzynlc6lfg4ksqq2bx";
   };
 
   nativeBuildInputs = [ pkgconfig intltool gtk3 ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A set of themes from MATE";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

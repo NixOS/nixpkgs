@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, findXMLCatalogs, python2, libgcrypt
+{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
@@ -17,6 +17,24 @@ stdenv.mkDerivation rec {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
     sha256 = "1j1q1swnsy8jgi9x7mclvkrqhfgn09886gdlr9wzk7a08i8n0dlf";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-11068.patch";
+      url = "https://gitlab.gnome.org/GNOME/libxslt/commit/e03553605b45c88f0b4b2980adfbbb8f6fca2fd6.patch";
+      sha256 = "0pkpb4837km15zgg6h57bncp66d5lwrlvkr73h0lanywq7zrwhj8";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxslt/commit/c5eb6cf3aba0af048596106ed839b4ae17ecbcb1.patch";
+      name = "CVE-2019-13117.patch";
+      sha256 = "0ynfq8y5h623cypj1426iiz7796n3mqbjqa24ndvh2am6rl5lw15";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxslt/commit/6ce8de69330783977dd14f6569419489875fb71b.patch";
+      name = "CVE-2019-13118.patch";
+      sha256 = "0bglz9m9sh2vi50qxcm06iqrazw3h45ycgxnp15iankq95z283iq";
+    })
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
 

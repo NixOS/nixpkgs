@@ -1,9 +1,15 @@
-{ stdenv
-, buildPythonPackage
+{ buildPythonPackage
+, pytest
 , nose
 , scipy
+, scikitlearn
+, stdenv
 , xgboost
 , substituteAll
+, pandas
+, matplotlib
+, graphviz
+, datatable
 }:
 
 buildPythonPackage rec {
@@ -14,6 +20,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./lib-path-for-python.patch;
       libpath = "${xgboost}/lib";
+      extention = stdenv.hostPlatform.extensions.sharedLibrary;
     })
   ];
 
@@ -21,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ scipy ];
   buildInputs = [ xgboost ];
-  checkInputs = [ nose ];
+  checkInputs = [ nose pytest scikitlearn pandas matplotlib graphviz datatable ];
 
   checkPhase = ''
     ln -sf ../demo .

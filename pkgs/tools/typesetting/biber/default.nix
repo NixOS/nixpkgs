@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, perlPackages, texlive }:
+{ stdenv, perlPackages, texlive }:
 
 let
   biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
 in
 
-perlPackages.buildPerlModule rec {
-  name = "biber-${version}";
+perlPackages.buildPerlModule {
+  pname = "biber";
   inherit (biberSource) version;
 
   src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
@@ -19,10 +19,7 @@ perlPackages.buildPerlModule rec {
     UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
     ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit SortKey
     TestDifferences
-  ];
-
-  checkInputs = with perlPackages; [
-    UnicodeCollate
+    PerlIOutf8_strict
   ];
 
   meta = with stdenv.lib; {

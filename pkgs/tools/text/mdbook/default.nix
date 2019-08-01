@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ stdenv, fetchFromGitHub, rustPlatform, CoreServices, darwin }:
 
 rustPlatform.buildRustPackage rec {
   name = "mdbook-${version}";
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1xmw4v19ff6mvimwk5l437wslzw5npy60zdb8r4319bjf32pw9pn";
   };
 
-  cargoSha256 = "0kcc0b2644qbalz7dnqwxsjdmw1h57k0rjrvwqh8apj2sgl64gyv";
+  cargoSha256 = "1xpsc4qff2lrq15mz1gvmw6n5vl88sfwpjbsnp5ja5k1im156lam";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
@@ -21,9 +21,5 @@ rustPlatform.buildRustPackage rec {
     license = [ licenses.asl20 licenses.mit ];
     maintainers = [ maintainers.havvy ];
     platforms = platforms.all;
-
-    # Because CoreServices needs to be updated,
-    # but Apple won't release the source.
-    broken = stdenv.isDarwin;
   };
 }

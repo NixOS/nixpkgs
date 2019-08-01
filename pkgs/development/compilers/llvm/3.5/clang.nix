@@ -4,8 +4,10 @@ let
 in stdenv.mkDerivation {
   name = "clang-${version}";
 
+  src = fetch "cfe" "0846h8vn3zlc00jkmvrmy88gc6ql6014c02l4jv78fpvfigmgssg";
+
   unpackPhase = ''
-    unpackFile ${fetch "cfe" "0846h8vn3zlc00jkmvrmy88gc6ql6014c02l4jv78fpvfigmgssg"}
+    unpackFile $src
     mv cfe-${version}.src clang
     sourceRoot=$PWD/clang
     unpackFile ${clang-tools-extra_src}

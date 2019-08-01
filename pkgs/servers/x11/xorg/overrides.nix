@@ -1,11 +1,11 @@
 { abiCompat ? null,
-  stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
-  automake, autoconf, gettext, libiconv, libtool, intltool, mtdev, libevdev, libinput,
-  freetype, tradcpp, fontconfig, meson, ninja,
+  stdenv, makeWrapper, fetchurl, fetchpatch, buildPackages,
+  automake, autoconf, gettext, libiconv, libtool, intltool,
+  freetype, tradcpp, fontconfig, meson, ninja, ed,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
-  mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
+  mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6,
-  cf-private, ApplicationServices, Carbon, Cocoa, Xplugin
+  ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
 let
@@ -49,10 +49,6 @@ self: super:
     meta = attrs.meta // { license = lib.licenses.unfreeRedistributable; };
   });
 
-  fontcursormisc = super.fontcursormisc.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.mkfontscale ];
-  });
-
   fontmiscmisc = super.fontmiscmisc.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -74,9 +70,7 @@ self: super:
     inherit tradcpp;
   });
 
-  mkfontdir = super.mkfontdir.overrideAttrs (attrs: {
-    preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${self.mkfontscale}/bin";
-  });
+  mkfontdir = self.mkfontscale;
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
@@ -204,6 +198,9 @@ self: super:
   libXi = super.libXi.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = [ self.libXfixes ];
+    configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "xorg_cv_malloc0_returns_null=no"
+    ];
   });
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
@@ -288,10 +285,6 @@ self: super:
     meta = attrs.meta // { platforms = stdenv.lib.platforms.linux; };
   });
 
-  oclock = super.oclock.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.libxkbfile ];
-  });
-
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -337,7 +330,6 @@ self: super:
     outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
-    buildInputs = attrs.buildInputs ++ [ mtdev libevdev ];
   });
 
   xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
@@ -349,19 +341,12 @@ self: super:
   });
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: rec {
-    name = "xf86-input-libinput-0.28.0";
-    src = fetchurl {
-      url = "mirror://xorg/individual/driver/${name}.tar.bz2";
-      sha256 = "189h8vl0005yizwrs4d0sng6j8lwkd3xi1zwqg8qavn2bw34v691";
-    };
     outputs = [ "out" "dev" ];
-    buildInputs = attrs.buildInputs ++ [ libinput ];
     installFlags = "sdkdir=\${dev}/include/xorg";
   });
 
   xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # *.pc pulls xorgserver.dev
-    buildInputs = attrs.buildInputs ++ [mtdev libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   });
 
@@ -397,7 +382,7 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa_noglu llvm_6 ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ mesa llvm_6 ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
@@ -426,10 +411,7 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [intltool];
-
-    #TODO: resurrect patches for US_intl?
-    patches = [ ./xkeyboard-config-eo.patch ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [intltool];
 
     configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
 
@@ -440,6 +422,85 @@ self: super:
       mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
     '';
   });
+
+  # xkeyboardconfig variant extensible with custom layouts.
+  # See nixos/modules/services/x11/extra-layouts.nix
+  xkeyboardconfig_custom = { layouts ? { } }:
+  let
+    patchIn = name: layout:
+    with layout;
+    with lib;
+    ''
+        # install layout files
+        ${optionalString (compatFile   != null) "cp '${compatFile}'   'compat/${name}'"}
+        ${optionalString (geometryFile != null) "cp '${geometryFile}' 'geometry/${name}'"}
+        ${optionalString (keycodesFile != null) "cp '${keycodesFile}' 'keycodes/${name}'"}
+        ${optionalString (symbolsFile  != null) "cp '${symbolsFile}'  'symbols/${name}'"}
+        ${optionalString (typesFile    != null) "cp '${typesFile}'    'types/${name}'"}
+
+        # patch makefiles
+        for type in compat geometry keycodes symbols types; do
+          if ! test -f "$type/${name}"; then
+            continue
+          fi
+          test "$type" = geometry && type_name=geom || type_name=$type
+          ${ed}/bin/ed -v $type/Makefile.am <<EOF
+        /''${type_name}_DATA =
+        a
+        ${name} \\
+        .
+        w
+        EOF
+          ${ed}/bin/ed -v $type/Makefile.in <<EOF
+        /''${type_name}_DATA =
+        a
+        ${name} \\
+        .
+        w
+        EOF
+        done
+
+        # add model description
+        ${ed}/bin/ed -v rules/base.xml <<EOF
+        /<\/modelList>
+        -
+        a
+        <model>
+          <configItem>
+            <name>${name}</name>
+            <_description>${layout.description}</_description>
+            <vendor>${layout.description}</vendor>
+          </configItem>
+        </model>
+        .
+        w
+        EOF
+
+        # add layout description
+        ${ed}/bin/ed -v rules/base.xml <<EOF
+        /<\/layoutList>
+        -
+        a
+        <layout>
+          <configItem>
+            <name>${name}</name>
+            <_shortDescription>${name}</_shortDescription>
+            <_description>${layout.description}</_description>
+            <languageList>
+              ${concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
+            </languageList>
+          </configItem>
+          <variantList/>
+        </layout>
+        .
+        w
+        EOF
+    '';
+  in
+    self.xkeyboardconfig.overrideAttrs (old: {
+      buildInputs = old.buildInputs ++ [ automake ];
+      postPatch   = with lib; concatStrings (mapAttrsToList patchIn layouts);
+    });
 
   xload = super.xload.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ gettext ];
@@ -487,11 +548,7 @@ self: super:
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
             nativeBuildInputs = [ pkgconfig ];
-            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ]
-              ++ stdenv.lib.optionals stdenv.isDarwin [
-                # Needed for NSDefaultRunLoopMode symbols.
-                cf-private
-              ];
+            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
             postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
         } else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
@@ -522,7 +579,7 @@ self: super:
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = commonBuildInputs ++ [ libdrm mesa_noglu ];
+        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
@@ -614,8 +671,16 @@ self: super:
       }));
 
   lndir = super.lndir.overrideAttrs (attrs: {
+    buildInputs = [];
     preConfigure = ''
+      export XPROTO_CFLAGS=" "
+      export XPROTO_LIBS=" "
       substituteInPlace lndir.c \
+        --replace '<X11/Xos.h>' '<string.h>' \
+        --replace '<X11/Xfuncproto.h>' '<unistd.h>' \
+        --replace '_X_ATTRIBUTE_PRINTF(1,2)' '__attribute__((__format__(__printf__,1,2)))' \
+        --replace '_X_ATTRIBUTE_PRINTF(2,3)' '__attribute__((__format__(__printf__,2,3)))' \
+        --replace '_X_NORETURN' '__attribute__((noreturn))' \
         --replace 'n_dirs--;' ""
     '';
   });
@@ -690,7 +755,7 @@ self: super:
   });
 
   xwd = super.xwd.overrideAttrs (attrs: {
-    buildInputs = with self; attrs.buildInputs ++ [libXt libxkbfile];
+    buildInputs = with self; attrs.buildInputs ++ [libXt];
   });
 
   xrdb = super.xrdb.overrideAttrs (attrs: {
@@ -704,6 +769,17 @@ self: super:
   xrandr = super.xrandr.overrideAttrs (attrs: {
     postInstall = ''
       rm $out/bin/xkeystone
+    '';
+  });
+
+  xcalc = super.xcalc.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or [] ++ [
+      "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
+    ];
+    nativeBuildInputs = attrs.nativeBuildInputs or [] ++ [ makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/xcalc \
+        --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults
     '';
   });
 }

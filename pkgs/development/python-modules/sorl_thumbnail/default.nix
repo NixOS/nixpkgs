@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://sorl-thumbnail.readthedocs.org/en/latest/;
+    homepage = https://sorl-thumbnail.readthedocs.org/en/latest/;
     description = "Thumbnails for Django";
     license = licenses.bsd3;
   };

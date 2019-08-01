@@ -2,11 +2,11 @@
 , expat, libxml2, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "squid-4.4";
+  name = "squid-4.8";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v4/${name}.tar.xz";
-    sha256 = "10pfx44mps5ng1806rqdwx8jv8b2n25kjvx37dcd4x2mgzdfc1a9";
+    sha256 = "0432m0ix046rkja7r7qpydgsm2kf1w393xym15nx6h9kv4jb7kbq";
   };
 
   buildInputs = [

@@ -30,7 +30,7 @@
   buildInputs = [ makeWrapper ];
 
   # colon is bash form of no-op (do nothing)
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/share/runelite

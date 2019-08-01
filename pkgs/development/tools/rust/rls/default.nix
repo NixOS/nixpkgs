@@ -1,42 +1,46 @@
 { stdenv, fetchFromGitHub, rustPlatform
-, openssh, openssl, pkgconfig, cmake, zlib, curl }:
+, openssh, openssl, pkgconfig, cmake, zlib, curl, libiconv
+, CoreFoundation, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rls-${version}";
+  pname = "rls";
   # with rust 1.x you can only build rls version 1.x.y
-  version = "1.31.7";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
-    repo = "rls";
+    repo = pname;
     rev = version;
-    sha256 = "0n33pf7sm31y55rllb8wv3mn75srspr4yj2y6cpcdyf15n47c8cf";
+    sha256 = "1mclv0admxv48pndyqghxc4nf1amhbd700cgrzjshf9jrnffxmrn";
   };
 
-  cargoSha256 = "0jcsggq4ay8f4vb8n6gh8z995icvvbjkzapxf6jq6qkg6jp3vv17";
+  cargoSha256 = "1yli9540510xmzqnzfi3p6rh23bjqsviflqw95a0fawf2rnj8sin";
 
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP=1;
 
-  # clippy is hard to build with stable rust so we disable clippy lints
-  cargoBuildFlags = [ "--no-default-features" ];
+  # rls-rustc links to rustc_private crates
+  CARGO_BUILD_RUSTFLAGS = if stdenv.isDarwin then "-C rpath" else null;
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ openssh openssl curl zlib ];
+  buildInputs = [ openssh openssl curl zlib libiconv ]
+    ++ (stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
 
   doCheck = true;
-  # the default checkPhase has no way to pass --no-default-features
-  checkPhase = ''
-    runHook preCheck
-    echo "Running cargo test"
-    cargo test --no-default-features
-    runHook postCheck
+  preCheck = ''
+    # client tests are flaky
+    rm tests/client.rs
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/rls --version
   '';
 
   meta = with stdenv.lib; {
     description = "Rust Language Server - provides information about Rust programs to IDEs and other tools";
     homepage = https://github.com/rust-lang/rls/;
-    license = licenses.mit;
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ symphorien ];
     platforms = platforms.all;
   };

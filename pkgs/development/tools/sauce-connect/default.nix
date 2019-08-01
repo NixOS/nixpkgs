@@ -4,12 +4,12 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "sauce-connect-${version}";
-  version = "4.5.1";
+  version = "4.5.3";
 
   src = fetchurl (
     if stdenv.hostPlatform.system == "x86_64-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux.tar.gz";
-      sha256 = "0lpfvlax7k8r65bh01i3kzrlmx0vnm9vhhir8k1gp2f4rv6z4lyx";
+      sha256 = "05fv9rggibx6dbdw8ywwwq45i9gdc53b7i7jhvl01m1sn2ygrrqd";
     } else if stdenv.hostPlatform.system == "i686-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux32.tar.gz";
       sha256 = "1h9n1mzmrmlrbd0921b0sgg7m8z0w71pdb5sif6h1b9f97cp353x";

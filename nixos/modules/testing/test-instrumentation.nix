@@ -129,9 +129,6 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     users.users.root.initialHashedPassword = mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
-
-    # set default stateVersion to avoid warnings during eval
-    system.stateVersion = mkDefault "18.03";
   };
 
 }

@@ -27,10 +27,7 @@ in {
           dbtype = "pgsql";
           dbname = "nextcloud";
           dbuser = "nextcloud";
-          dbhost = "localhost";
-          dbpassFile = toString (pkgs.writeText "db-pass-file" ''
-            hunter2
-          '');
+          dbhost = "/run/postgresql";
           inherit adminuser;
           adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
             ${adminpass}
@@ -84,10 +81,12 @@ in {
 
       services.postgresql = {
         enable = true;
-        initialScript = pkgs.writeText "psql-init" ''
-          create role nextcloud with login password 'hunter2';
-          create database nextcloud with owner nextcloud;
-        '';
+        ensureDatabases = [ "nextcloud" ];
+        ensureUsers = [
+          { name = "nextcloud";
+            ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
+          }
+        ];
       };
     };
   };

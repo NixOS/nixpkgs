@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libgcrypt ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
 
+  configureFlags = [
+    "--with-libgcrypt-prefix=${libgcrypt.dev}"
+  ];
+
   enableParallelBuilding = true;
 
   installCheckInputs = [ python3 python3.pkgs.dbus-python python3.pkgs.pygobject3 xvfb_run dbus gnome3.gjs ];

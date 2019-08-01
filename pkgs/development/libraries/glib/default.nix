@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, fetchpatch, gettext, meson, ninja, pkgconfig, perl, python3, glibcLocales
+{ config, stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3, glibcLocales
 , libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
@@ -46,7 +46,7 @@ let
   '';
 
   binPrograms = optional (!stdenv.isDarwin) "gapplication" ++ [ "gdbus" "gio" "gsettings" ];
-  version = "2.58.2";
+  version = "2.60.4";
 in
 
 stdenv.mkDerivation rec {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0jrxfm4gn1qz3y1450z709v74ys2bkjr8yffkgy106kgagb4xcn7";
+    sha256 = "1p9k8z83272mkm4d4fhm5jhwhyw2basrwbz47yl5wbmrvk2ix51b";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
@@ -66,26 +66,6 @@ stdenv.mkDerivation rec {
       ./schema-override-variable.patch
       # Require substituteInPlace in postPatch
       ./fix-gio-launch-desktop-path.patch
-      # https://gitlab.gnome.org/GNOME/glib/issues/1626
-      # https://gitlab.gnome.org/GNOME/glib/merge_requests/557
-      (fetchpatch {
-        url = https://gitlab.gnome.org/GNOME/glib/commit/85c4031696add9797e2334ced20678edcd96c869.patch;
-        sha256 = "1hmyvhx89wip2a26gk1rvd87k0pjfia51s0ysybjyzf5f1pzw877";
-      })
-      # https://gitlab.gnome.org/GNOME/glib/issues/1645
-      (fetchpatch {
-        url = https://gitlab.gnome.org/GNOME/glib/commit/e695ca9f310c393d8f39694f77471dbcb06daa9e.diff;
-        sha256 = "1jkb2bdnni0xdyn86xrx9z0fdwxrm7y08lagz8x5x01wglkwa26w";
-      })
-      # https://gitlab.gnome.org/GNOME/glib/issues/1643
-      (fetchpatch {
-        url = https://gitlab.gnome.org/GNOME/glib/commit/c792e5adaa8ae3a45e6ff3ff71168ad8d040a0d4.patch;
-        sha256 = "022x70qfn5wlv5gz3nlg0bwiwjxcd7l11j3qvbms2y8d1ffh5rfd";
-      })
-      (fetchpatch {
-        url = https://gitlab.gnome.org/GNOME/glib/commit/30ccbc386026cecac6ef3a77d8fa4f3c24ac68d7.patch;
-        sha256 = "04y3pxgzlx92cppwibx4rlsyvwxb37aq52x2lr6ajfgykv2nzpr3";
-      })
     ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -101,9 +81,6 @@ stdenv.mkDerivation rec {
     utillinuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-    # Needed for CFURLCreateFromFSRef, etc. which have deen deprecated
-    # since 10.9 and are not part of swift-corelibs CoreFoundation.
-    darwin.cf-private
   ]);
 
   nativeBuildInputs = [
@@ -116,15 +93,15 @@ stdenv.mkDerivation rec {
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
     "-Dgtk_doc=${if stdenv.hostPlatform == stdenv.buildPlatform then "true" else "false"}"
+    "-Dnls=enabled"
   ];
 
   LC_ALL = "en_US.UTF-8";
 
-  NIX_CFLAGS_COMPILE = optional stdenv.isSunOS "-DBSD_COMP";
+  NIX_CFLAGS_COMPILE = (optional stdenv.isSunOS "-DBSD_COMP")
+    ++ [ "-Wno-error=nonnull" ];
 
   postPatch = ''
-    substituteInPlace meson.build --replace "install_dir : 'bin'," "install_dir : glib_bindir,"
-
     # substitute fix-gio-launch-desktop-path.patch
     substituteInPlace gio/gdesktopappinfo.c --replace "@bindir@" "$out/bin"
 

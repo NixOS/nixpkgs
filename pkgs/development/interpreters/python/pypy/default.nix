@@ -1,7 +1,7 @@
 { stdenv, substituteAll, fetchurl
 , zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
-, callPackage, self, gdbm, db, lzma
+, self, gdbm, db, lzma
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})
@@ -24,6 +24,7 @@ let
     executable = "pypy${if isPy3k then "3" else ""}";
     pythonForBuild = self; # No cross-compiling for now.
     sitePackages = "site-packages";
+    hasDistutilsCxxPatch = false;
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
@@ -108,6 +109,9 @@ in with passthru; stdenv.mkDerivation rec {
       "test_pathlib"
       # disable tarfile because it assumes gid 0 exists
       "test_tarfile"
+      # disable __all__ because of spurious imp/importlib warning and
+      # warning-to-error test policy
+      "test___all__"
     ];
   in ''
     export TERMINFO="${ncurses.out}/share/terminfo/";
@@ -133,6 +137,9 @@ in with passthru; stdenv.mkDerivation rec {
 
     # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
     echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+
+    # Include a sitecustomize.py file
+    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
   '';
 
   inherit passthru;
@@ -144,5 +151,6 @@ in with passthru; stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ andersk ];
+    broken = true; # TODO: Tests are failing!
   };
 }

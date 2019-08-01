@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, substituteAll
+{ stdenv, fetchurl
 , pkgconfig, autoreconfHook
 , gmp, python, iptables, ldns, unbound, openssl, pcsclite
 , openresolv
 , systemd, pam
 , curl
-, kmod
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
-, libpcap
 , darwin
 }:
 
@@ -19,11 +17,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.7.2";
+  version = "5.8.0"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchurl {
     url = "https://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "0w6cks42lvvyj5ivyhqyqxya48x93yzfpz281q3xmqicdskkp3ih";
+    sha256 = "0cq9m86ydd2i0awxkv4a256f4926p2f9pzlisyskl9fngl6f3c8m";
   };
 
   dontPatchELF = true;
@@ -34,19 +32,12 @@ stdenv.mkDerivation rec {
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam iptables ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
-    ++ optionals enableNetworkManager [ networkmanager ]
-    # ad-hoc fix for https://github.com/NixOS/nixpkgs/pull/51787
-    # Remove when the above PR lands in master
-    ++ [ libpcap ];
+    ++ optionals enableNetworkManager [ networkmanager ];
 
   patches = [
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
-    (optional stdenv.isLinux (substituteAll {
-      src = ./modprobe-path.patch;
-      inherit kmod;
-    }))
   ];
 
   postPatch = optionalString stdenv.isLinux ''
@@ -55,10 +46,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
     '';
-
-  preConfigure = ''
-    configureFlagsArray+=("--with-systemdsystemunitdir=$out/etc/systemd/system")
-  '';
 
   configureFlags =
     [ "--enable-swanctl"
@@ -74,7 +61,7 @@ stdenv.mkDerivation rec {
       "--enable-curl" ]
     ++ optionals stdenv.isLinux [
       "--enable-farp" "--enable-dhcp"
-      "--enable-systemd"
+      "--enable-systemd" "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
       "--enable-xauth-pam"
       "--enable-forecast"
       "--enable-connmark"

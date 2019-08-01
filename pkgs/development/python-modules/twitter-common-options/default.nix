@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname   = "twitter.common.options";
-  version = "0.3.10";
+  version = "0.3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9eeaf078462afdfa5ba237727c908a8b3b8b28d172838dbe58d3addf722da6c8";
+    sha256 = "a495bcdffc410039bc4166f1a30c2caa3c92769d7a161a4a39d3651836dd27e1";
   };
 
   meta = with stdenv.lib; {

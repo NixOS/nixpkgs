@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "ccid drivers for pcsclite";
     homepage = https://ccid.apdu.fr/;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

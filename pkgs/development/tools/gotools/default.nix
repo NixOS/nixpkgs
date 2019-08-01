@@ -2,16 +2,26 @@
 
 buildGoModule rec {
   name = "gotools-unstable-${version}";
-  version = "2019-03-05";
-  rev = "00c44ba9c14f88ffdd4fb5bfae57fe8dd6d6afb1";
+  version = "2019-07-06";
+  rev = "72ffa07ba3db8d09f5215feec0f89464f3028f8e";
 
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "04rpdi52j26szx5kiyfmwad1sg7lfplxrkbwkr3b1kfafh1whgw5";
+    sha256 = "0c0s5aiwj807vxfzwrah32spwq8cnxvy0j117i5cbsqw2df80pgv";
   };
 
-  modSha256 = "00yjcs26cm5civ96sikbd3wjmhx153xbyd805s3shca1mg99y7mm";
+  # Build of golang.org/x/tools/gopls fails with:
+  #   can't load package: package golang.org/x/tools/gopls: unknown import path "golang.org/x/tools/gopls": cannot find module providing package golang.org/x/tools/gopls
+  # That is most probably caused by golang.org/x/tools/gopls containing a separate Go module.
+  # In order to fix this, we simply remove the module.
+  # Note that build of golang.org/x/tools/cmd/gopls provides identical binary as golang.org/x/tools/gopls.
+  # See https://github.com/NixOS/nixpkgs/pull/64335.
+  postPatch = ''
+    rm -rf gopls
+  '';
+
+  modSha256 = "16nkrpki9fnxsrxxxs9ljz49plcz393z0sqq2knkk30pmncpwd3q";
 
   postConfigure = ''
     # Make the builtin tools available here

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, protobuf, ncurses, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkgconfig
 , makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
 , libutempter ? null, withUtempter ? stdenv.isLinux }:
 
@@ -15,7 +15,15 @@ stdenv.mkDerivation rec {
     ++ (with perlPackages; [ perl IOTty ])
     ++ lib.optional withUtempter libutempter;
 
-  patches = [ ./ssh_path.patch ./utempter_path.patch ];
+  patches = [
+    ./ssh_path.patch
+    ./utempter_path.patch
+    # Fix w/c++17, ::bind vs std::bind
+    (fetchpatch {
+      url = "https://github.com/mobile-shell/mosh/commit/e5f8a826ef9ff5da4cfce3bb8151f9526ec19db0.patch";
+      sha256 = "15518rb0r5w1zn4s6981bf1sz6ins6gpn2saizfzhmr13hw4gmhm";
+    })
+  ];
   postPatch = ''
     substituteInPlace scripts/mosh.pl \
         --subst-var-by ssh "${openssh}/bin/ssh"

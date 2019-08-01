@@ -10,20 +10,21 @@
 , construct
 , libusb1
 , rlp
+, shamir-mnemonic
 }:
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.11.2";
+  version = "0.11.4";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a6f4b47b37a21247535fc43411cb70a8c61ef0a5a2dfee668bd05611e2741fb8";
+    sha256 = "aeb3f56a4c389495617f27bf218471b7969f636d25ddc491dfefeb8a1b3cd499";
   };
 
-  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp ];
+  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic ];
 
   # build requires UTF-8 locale
   LANG = "en_US.UTF-8";
@@ -41,8 +42,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
-    homepage = https://github.com/trezor/python-trezor;
+    homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ np prusnak ];
+    maintainers = with lib.maintainers; [ np prusnak mmahut "1000101" ];
   };
 }

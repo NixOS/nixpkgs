@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       use minimal CPU and memory resources, and provide fast
       throughput in both directions.
     '';
-    homepage = https://libwebsockets.org;
+    homepage = https://github.com/warmcat/libwebsockets;
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.all;
   };

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   patches = [ ./pure-configure.patch ];
 
   meta = with stdenv.lib; {
-    homepage = http://coturn.net/;
+    homepage = https://coturn.net/;
     license = with licenses; [ bsd3 ];
     description = "A TURN server";
     platforms = platforms.all;

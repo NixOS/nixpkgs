@@ -5,12 +5,9 @@
 , bcrypt
 , pynacl
 , pyasn1
-, python
 , pytest
 , pytest-relaxed
 , mock
-, isPyPy
-, isPy33
 }:
 
 buildPythonPackage rec {

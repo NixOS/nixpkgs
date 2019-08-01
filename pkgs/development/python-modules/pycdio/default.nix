@@ -23,8 +23,8 @@ buildPythonPackage rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
-  buildInputs = [ setuptools nose pkgs.swig pkgs.libcdio ]
+  nativeBuildInputs = [ nose pkgs.pkgconfig pkgs.swig ];
+  buildInputs = [ setuptools pkgs.libcdio ]
     ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
 
   # Run tests using nosetests but first need to install the binaries

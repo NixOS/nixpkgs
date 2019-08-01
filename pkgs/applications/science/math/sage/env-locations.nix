@@ -28,6 +28,7 @@ writeTextFile rec {
     export GPDOCDIR="${pari}/share/pari/doc"
     export SINGULARPATH='${singular}/share/singular'
     export SINGULAR_SO='${singular}/lib/libSingular.so'
+    export GAP_SO='${gap}/lib/libgap.so'
     export SINGULAR_EXECUTABLE='${singular}/bin/Singular'
     export MAXIMA_FAS='${maxima-ecl}/lib/maxima/${maxima-ecl.version}/binary-ecl/maxima.fas'
     export MAXIMA_PREFIX="${maxima-ecl}"

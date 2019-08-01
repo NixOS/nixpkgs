@@ -1,15 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
 , entrypoints, jsonschema, numpy, pandas, six, toolz, typing
 , pythonOlder, recommonmark }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "2.3.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f4bc7cd132c0005deb6b36c7041ee213a69bbdfcd8c0b1a9f1ae8c1fba733f6";
+    sha256 = "1zdznkybw3g8fd280h5j5cnnwcv30610gp8fl8vwqda1w2p6pgvp";
   };
 
   postPatch = ''

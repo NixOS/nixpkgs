@@ -1,15 +1,19 @@
-{ lib, python3Packages }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, pyyaml
+}:
 
-python3Packages.buildPythonApplication rec {
-  version = "0.8.2";
+buildPythonApplication rec {
+  version = "0.9.2";
   pname = "gita";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "16jpnl323x86dkrnh4acyvi9jknhgi3r0ccv63rkjcmd0srkaxkk";
+    sha256 = "1aycqq4crsa57ghpv7xc497rf4y8x43fcfd0v9prd2kn6h1793r0";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     pyyaml
   ];
 

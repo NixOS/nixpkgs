@@ -25,13 +25,14 @@ let
     '';
   };
 in stdenv.mkDerivation rec {
-  name = "w3m-0.5.3+git20180125";
+  pname = "w3m";
+  version = "0.5.3+git20190105";
 
   src = fetchFromGitHub {
     owner = "tats";
-    repo = "w3m";
-    rev = "v0.5.3+git20180125";
-    sha256 = "0dafdfx1yhrvhbqzslkcapj09dvf64m2jadz3wl2icni0k4msq90";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1fbg2p8qh2gvi3g4iz4q6vc0k70pf248r4yndi5lcn2m3mzvjx0i";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";

@@ -11,11 +11,11 @@ let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
-  name = "rsyslog-8.39.0";
+  name = "rsyslog-8.1907.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
-    sha256 = "1d3ac448b8gj58vg7n99ffv2rvpnhhin1ni5vyby73aksvz9c7y7";
+    sha256 = "1dcz0w5xalqsi2xjb5j7c9mq5kf9s9kq9j2inpv4w5wkrrg569zb";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];

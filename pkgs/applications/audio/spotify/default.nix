@@ -1,5 +1,5 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng
+, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
 , at-spi2-atk
 }:
@@ -36,6 +36,7 @@ let
     glib
     gtk2
     libgcrypt
+    libnotify
     libpng
     nss
     pango

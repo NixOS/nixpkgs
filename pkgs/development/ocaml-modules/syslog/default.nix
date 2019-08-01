@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ];
 
+  buildFlags = [ "all" "opt" ];
+
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {

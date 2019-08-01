@@ -59,6 +59,10 @@ self:
         inherit (self.melpaPackages) easy-kill;
       };
 
+      editorconfig = super.editorconfig.overrideAttrs (attrs: {
+        propagatedUserEnvPkgs = [ external.editorconfig-core-c ];
+      });
+
       egg = super.egg.overrideAttrs (attrs: {
         # searches for Git at build time
         nativeBuildInputs =
@@ -82,9 +86,6 @@ self:
       evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
         packageRequires = with self; [ evil highlight ];
       });
-
-      # missing OCaml
-      flycheck-ocaml = markBroken super.flycheck-ocaml;
 
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
@@ -133,11 +134,7 @@ self:
       maxframe = markBroken super.maxframe;
 
       magit =
-        (super.magit.override {
-          # version of magit-popup needs to match magit
-          # https://github.com/magit/magit/issues/3286
-          inherit (self.melpaPackages) magit-popup;
-        }).overrideAttrs (attrs: {
+        super.magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
@@ -178,9 +175,6 @@ self:
         nativeBuildInputs =
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
       });
-
-      # missing OCaml
-      merlin = markBroken super.merlin;
 
       mhc = super.mhc.override {
         inherit (self.melpaPackages) calfw;
@@ -239,6 +233,12 @@ self:
       # upstream issue: missing file header
       textmate = markBroken super.textmate;
 
+      treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       # missing OCaml
       utop = markBroken super.utop;
 
@@ -270,6 +270,7 @@ self:
       removeAttrs (super // overrides)
       [
         "show-marks"  # missing dependency: fm
+        "lenlen-theme"  # missing dependency: color-theme-solarized
       ];
   in
     melpaPackages // { inherit melpaPackages; }

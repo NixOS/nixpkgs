@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, libGL, libXrandr, libXinerama, libXcursor, libX11
-, cf-private, Cocoa, Kernel, fixDarwinDylibNames
+, Cocoa, Kernel, fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation rec {
@@ -19,13 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    libX11 libXrandr libXinerama libXcursor
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa Kernel fixDarwinDylibNames
-    # Needed for NSDefaultRunLoopMode symbols.
-    cf-private
-  ];
+  buildInputs = [ libX11 libXrandr libXinerama libXcursor ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel fixDarwinDylibNames ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
@@ -35,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
-    homepage = http://www.glfw.org/;
+    homepage = https://www.glfw.org/;
     license = licenses.zlib;
     maintainers = with maintainers; [ marcweber ];
     platforms = platforms.unix;

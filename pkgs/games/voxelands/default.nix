@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Infinite-world block sandbox game based on Minetest";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ c0dehero ];
+    maintainers = with maintainers; [ ];
   };
 }

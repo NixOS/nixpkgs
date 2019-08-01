@@ -1,4 +1,4 @@
-{ fetchurl, lib, unzip, nettools, pythonPackages, texinfo }:
+{ fetchurl, lib, nettools, pythonPackages, texinfo }:
 
 # FAILURES: The "running build_ext" phase fails to compile Twisted
 # plugins, because it tries to write them into Twisted's (immutable)
@@ -50,16 +50,14 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = with pythonPackages; [ sphinx texinfo ];
 
-  buildInputs = with pythonPackages; [ unzip numpy mock ];
-
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with pythonPackages; [
     twisted foolscap nevow simplejson zfec pycryptopp darcsver
     setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface
-    service-identity pyyaml magic-wormhole treq
+    service-identity pyyaml magic-wormhole treq characteristic
   ];
 
-  checkInputs = with pythonPackages; [ hypothesis ];
+  checkInputs = with pythonPackages; [ mock hypothesis twisted ];
 
   # Install the documentation.
   postInstall = ''

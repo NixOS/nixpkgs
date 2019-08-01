@@ -83,6 +83,10 @@ in
         gid = config.ids.gids.ircd;
       };
 
+      systemd.tmpfiles.rules = [
+        "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
+      ];
+
       systemd.services.charybdis = {
         description = "Charybdis IRC daemon";
         wantedBy = [ "multi-user.target" ];
@@ -93,12 +97,7 @@ in
           ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
           Group = cfg.group;
           User = cfg.user;
-          PermissionsStartOnly = true; # preStart needs to run with root permissions
         };
-        preStart = ''
-          ${coreutils}/bin/mkdir -p ${cfg.statedir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.statedir}
-        '';
       };
 
     }

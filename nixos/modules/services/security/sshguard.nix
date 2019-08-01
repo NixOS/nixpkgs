@@ -107,8 +107,6 @@ in {
       path = with pkgs; [ iptables ipset iproute systemd ];
 
       postStart = ''
-        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:ip family inet
-        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:ip family inet6
         ${pkgs.iptables}/bin/iptables  -I INPUT -m set --match-set sshguard4 src -j DROP
         ${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP
       '';

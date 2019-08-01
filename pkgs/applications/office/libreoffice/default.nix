@@ -4,7 +4,7 @@
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
 , openssl, gperf, cppunit, GConf, ORBit2, poppler, utillinux
-, librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw, mariadb
+, librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw, mysql
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
@@ -48,14 +48,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0i8pmgdm0i6klb06s3nwad9xz4whbvb5mjjqjqvl6fh0flk6zs1p";
+      sha256 = "0ahyrkg1sa4a0igvvd98spjlm5k34cddpwpxl7qhir8ldgighk2c";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "14hd6rnq9316p78zharqznps80mxxwz3n80zm15cpj3xg3dr57v1";
+      sha256 = "0zrfm8kw6m60wz6mn4y5jhlng90ya045nxyh46sib9nl4nd4d98s";
     };
 
   };
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ];
+  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ] ++ lib.optional stdenv.isx86_64 "-mno-fma";
 
   patches = [
     ./xdg-open-brief.patch
@@ -258,7 +258,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
 
-    for a in sbase scalc sdraw smath swriter simpress soffice; do
+    for a in sbase scalc sdraw smath swriter simpress soffice unopkg; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
     done
 
@@ -345,24 +345,25 @@ in stdenv.mkDerivation rec {
     make slowcheck
   '';
 
+  nativeBuildInputs = [ wrapGAppsHook gdb fontforge autoconf automake bison pkgconfig libtool ];
+
   buildInputs = with xorg;
-    [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
+    [ ant ArchiveZip boost cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gtk3 gtk2
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU_combined mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base glib mariadb
+      gst_all_1.gst-plugins-base glib mysql.connector-c
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
       python3 sablotron sane-backends unzip vigra which zip zlib
-      mdds bluez5 libcmis libwps libabw libzmf libtool
+      mdds bluez5 libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
       librevenge libe-book libmwaw glm glew ncurses epoxy
       libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
     ]
     ++ lib.optional kdeIntegration kdelibs4;
-  nativeBuildInputs = [ wrapGAppsHook gdb fontforge ];
 
   passthru = {
     inherit srcs jdk;

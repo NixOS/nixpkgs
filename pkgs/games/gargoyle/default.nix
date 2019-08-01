@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, substituteAll, jam, cctools, pkgconfig
-, SDL, SDL_mixer, SDL_sound, cf-private, gtk2, libvorbis, smpeg }:
+, SDL, SDL_mixer, SDL_sound, gtk2, libvorbis, smpeg }:
 
 let
 
@@ -32,15 +32,17 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ jam pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin cctools;
 
   buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ cf-private smpeg libvorbis ];
-
-  patches = [ ./darwin.patch ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ smpeg libvorbis ];
 
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
   installPhase =
   if stdenv.isDarwin then
-    (substituteAll { inherit (stdenv) shell; src = ./darwin.sh; })
+  (substituteAll {
+    inherit (stdenv) shell;
+    isExecutable = true;
+    src = ./darwin.sh;
+  })
   else jamenv + ''
     jam -j$NIX_BUILD_CORES install
     mkdir -p "$out/bin"

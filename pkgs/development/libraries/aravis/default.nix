@@ -33,13 +33,13 @@ in
   stdenv.mkDerivation rec {
 
     pname = "aravis";
-    version = "0.6.1";
+    version = "0.6.3";
 
     src = fetchFromGitHub {
       owner = "AravisProject";
       repo = pname;
       rev= "ARAVIS_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "0v0hv1iyhp2azxij3ighp1b4rsw99zyqmkpdqnnxdmkcna031iga";
+      sha256 = "0lmgx854z522dwcxsg37bxdyiai9fnycpx1nvgayksj38h39kfn2";
     };
 
     outputs = [ "bin" "dev" "out" "lib" ];

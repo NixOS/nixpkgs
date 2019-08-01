@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     bin_path = "$out/bin";
     install_freedesktop_items = substituteAll {
       inherit (stdenv) shell;
+      isExecutable = true;
       src = ./install_freedesktop_items.sh;
     };
     runtime_paths = lib.makeBinPath [

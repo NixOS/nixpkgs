@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig, python3
+{ stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig
 , wafHook }:
 
 stdenv.mkDerivation  rec {

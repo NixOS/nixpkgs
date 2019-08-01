@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ qt.qmake makeWrapper ];
+  nativeBuildInputs = [ qt.qmake qt.wrapQtAppsHook ];
   buildInputs = [ qt.qtbase ];
 
   qmakeFlags = [ "CONFIG-=app_bundle" ];
@@ -27,11 +27,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp qtchan $out/bin
-  '';
-
-  preFixup = ''
-    wrapProgram $out/bin/qtchan \
-      --suffix QT_PLUGIN_PATH : ${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}
   '';
 
   meta = with stdenv.lib; {

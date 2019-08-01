@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, lib }:
+{ buildGoPackage, fetchFromGitHub, lib }:
 
 buildGoPackage rec {
   pname = "aws-env";

@@ -258,7 +258,7 @@ let
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
     gdtools = [ pkgs.cairo.dev pkgs.fontconfig.lib pkgs.freetype.dev ];
-    git2r = [ pkgs.zlib.dev pkgs.openssl.dev pkgs.libssh2.dev ];
+    git2r = [ pkgs.zlib.dev pkgs.openssl.dev pkgs.libssh2.dev pkgs.libgit2 pkgs.pkgconfig ];
     GLAD = [ pkgs.gsl_1 ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
     gmp = [ pkgs.gmp.dev ];
@@ -424,7 +424,6 @@ let
     showtext = [ pkgs.pkgconfig ];
     spate = [ pkgs.pkgconfig ];
     stringi = [ pkgs.pkgconfig ];
-    sys = [ pkgs.libapparmor ];
     sysfonts = [ pkgs.pkgconfig ];
     tesseract = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
@@ -443,6 +442,11 @@ let
     Matrix = [ pkgs.libiconv ];
     mgcv = [ pkgs.libiconv ];
     igraph = [ pkgs.libiconv ];
+    ape = [ pkgs.libiconv ];
+    expm = [ pkgs.libiconv ];
+    mnormt = [ pkgs.libiconv ];
+    phangorn = [ pkgs.libiconv ];
+    quadprog = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
@@ -531,7 +535,6 @@ let
     "gWidgetstcltk"
     "HH"
     "HiveR"
-    "HomoPolymer"
     "ic50"
     "iDynoR"
     "in2extRemes"
@@ -558,14 +561,12 @@ let
     "MplusAutomation"
     "mpmcorrelogram"
     "mritc"
-    "MTurkR"
     "multgee"
     "multibiplotGUI"
     "nodiv"
     "OligoSpecificitySystem"
     "onemap"
     "OpenRepGrid"
-    "palaeoSig"
     "paleoMAS"
     "pbatR"
     "PBSadmb"
@@ -629,7 +630,6 @@ let
     "rgl"
     "RHRV"
     "rich"
-    "rioja"
     "RNCEP"
     "RQDA"
     "RSDA"

@@ -18,6 +18,9 @@ buildPythonPackage rec {
     py.test tests
   '';
 
+  # Prevent circular dependency
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Core utilities for Python packages";
     homepage = https://github.com/pypa/packaging;

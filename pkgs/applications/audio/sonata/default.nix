@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, gettext, intltool, wrapGAppsHook
-, python3Packages, gnome3, gtk3, gobject-introspection}:
+, python3Packages, gnome3, gtk3, gsettings-desktop-schemas, gobject-introspection }:
 
 let
   inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2;
@@ -20,7 +20,7 @@ in buildPythonApplication rec {
   buildInputs = [
     intltool wrapGAppsHook
     gnome3.adwaita-icon-theme
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
   ];
 
   postPatch = ''

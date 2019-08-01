@@ -2,14 +2,14 @@
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "1.25.1";
+  version = "1.27.0";
   pname = "rtv";
 
   src = fetchFromGitHub {
     owner = "michael-lazar";
     repo = "rtv";
     rev = "v${version}";
-    sha256 = "0pfsf17g37d2v1xrsbfdbv460vs7m955h6q51z71rhb840r9812p";
+    sha256 = "1hw7xy2kjxq7y3wcibcz4l7zj8icvigialqr17l362xry0y17y5j";
   };
 
   # Tests try to access network

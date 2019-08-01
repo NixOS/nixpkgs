@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, boost, zlib, clang
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, zlib, clang
 , ncurses, pytest, docutils, pygments, numpy, scipy, scikitlearn }:
 
 buildPythonPackage rec {

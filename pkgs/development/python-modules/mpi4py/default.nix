@@ -1,31 +1,17 @@
-{ stdenv, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
+{ stdenv, fetchPypi, python, buildPythonPackage, mpi, openssh }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mzgd26dfv4vwbci8gq77ss9f0x26i9aqzq9b9vs9ndxhlnv0mxl";
+    sha256 = "1q28xl36difma1wq0acq111cqxjya32kn3lxp6fbidz3wg8jkmpq";
   };
 
   passthru = {
     inherit mpi;
   };
-
-  patches = [
-    (fetchpatch {
-      # Disable tests failing with 3.1.x and MPI_THREAD_MULTIPLE (upstream patch)
-      url = "https://bitbucket.org/mpi4py/mpi4py/commits/c2b6b7e642a182f9b00a2b8e9db363214470548a/raw";
-      sha256 = "0n6bz3kj4vcqb6q7d0mlj5vl6apn7i2bvfc9mpg59vh3wy47119q";
-    })
-    (fetchpatch {
-      # Open MPI: Workaround removal of MPI_{LB|UB} (upstream patch)
-      url = "https://bitbucket.org/mpi4py/mpi4py/commits/39ca784226460f9e519507269ebb29635dc8bd90/raw";
-      sha256 = "02kxikdlsrlq8yr5hca42536mxbrq4k4j8nqv7p1p2r0q21a919q";
-    })
-
-  ];
 
   postPatch = ''
     substituteInPlace test/test_spawn.py --replace \

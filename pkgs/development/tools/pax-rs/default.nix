@@ -13,7 +13,7 @@ buildRustPackage rec {
     homepage = https://github.com/nathan/pax;
     license = licenses.mit;
     maintainers = [ maintainers.klntsky ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 
   src =
@@ -26,7 +26,7 @@ buildRustPackage rec {
       };
 
       cargo-lock = fetchurl {
-        url = "https://gist.github.com/8084/c7863424d7df0c379782015f6bb3b399/raw/1cf7481e33984fd1510dc77ed677606d08fa8eb6/Cargo.lock";
+        url = "https://gist.github.com/klntsky/c7863424d7df0c379782015f6bb3b399/raw/1cf7481e33984fd1510dc77ed677606d08fa8eb6/Cargo.lock";
         sha256 = "0ff1b64b99cbca1cc2ceabcd2e4f7bc3411e3a2a9fbb9db2204d9240fe38ddeb";
       };
     in
@@ -36,5 +36,5 @@ buildRustPackage rec {
       cp ${cargo-lock} $out/Cargo.lock
     '';
 
-  cargoSha256 = "0sdk090sp89vgwz5a71f481a5sk13kcqb29cx1dslfq59sp4j6y7";
+  cargoSha256 = "132a9vnlyp78zxiw5xrazadvx0scs7h2vbm5wz612dmh436mwnxg";
 }

@@ -1,18 +1,18 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 , javaSupport ? (!stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64)
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.5.3";
+  name = "R-3.6.1";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "1337irx9y0r3jm1rcq1dcwnxsgfhnvgjs5wadcyh17vhpnvkgyib";
+    sha256 = "128kifbq0w25y8aq77w289ddax5i5w2djcfsqgffrb3i7syrxajv";
   };
 
   dontUseImakeConfigure = true;
@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ]
     ++ stdenv.lib.optional javaSupport jdk;
 
-  patches = [ ./no-usr-local-search-paths.patch ];
+  patches = [
+    ./no-usr-local-search-paths.patch
+  ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
@@ -69,6 +71,11 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
+  # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
+  # but Nix cannot detect it as a run-time dependency because the installed file
+  # is compiled and compressed, which hides the store path.
+  postFixup = "echo ${which} > $out/nix-support/undetected-runtime-dependencies";
+
   doCheck = true;
   preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
@@ -103,6 +110,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     hydraPlatforms = platforms.linux;
 
-    maintainers = [ maintainers.peti ];
+    maintainers = with maintainers; [ peti timokau ];
   };
 }

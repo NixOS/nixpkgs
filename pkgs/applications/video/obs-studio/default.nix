@@ -1,6 +1,6 @@
 { config, stdenv
+, mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , fdk_aac
 , ffmpeg
@@ -11,6 +11,7 @@
 , libXdmcp
 , qtbase
 , qtx11extras
+, qtsvg
 , speex
 , libv4l
 , x264
@@ -34,15 +35,15 @@
 
 let
   optional = stdenv.lib.optional;
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "23.0.2";
+  version = "23.2.1";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
     rev = "${version}";
-    sha256 = "1c0a5vy4h3qwz69qw3bydyk7r651ib5a9jna4yj6c25p3p9isdvp";
+    sha256 = "05brixq2z98mvn1q2rgdl27xj798509nv8yh6h0yzqyk9gly4anz";
   };
 
   nativeBuildInputs = [ cmake
@@ -60,6 +61,7 @@ in stdenv.mkDerivation rec {
                   libXdmcp
                   qtbase
                   qtx11extras
+                  qtsvg
                   speex
                   x264
                   vlc

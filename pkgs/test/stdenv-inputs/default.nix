@@ -4,7 +4,7 @@ let
   foo = stdenv.mkDerivation {
     name = "foo-test";
 
-    unpackPhase = ":";
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p $out/bin $out/include $out/lib
@@ -22,7 +22,7 @@ let
     name = "bar-test";
     outputs = [ "out" "dev" ];
 
-    unpackPhase = ":";
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p $out/bin $dev/include $dev/lib

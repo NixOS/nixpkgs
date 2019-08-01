@@ -17,10 +17,9 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  stdenv, fetchurl, fetchpatch, makeSetupHook,
+  stdenv, fetchurl, fetchpatch, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
-  cf-private,
 
   # options
   developerBuild ? false,
@@ -38,12 +37,14 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
+    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = [ ./qtwebengine-no-build-skip.patch ];
+    qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
+      ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
+      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [ ./qtwebkit.patch ];
     qtvirtualkeyboard = [
       (fetchpatch {
@@ -66,14 +67,18 @@ let
 
   };
 
-  mkDerivation =
-    import ../mkDerivation.nix
-    { inherit stdenv; inherit (stdenv) lib; }
-    { inherit debug; };
-
   qtModule =
     import ../qtModule.nix
-    { inherit mkDerivation perl; inherit (stdenv) lib; }
+    {
+      inherit perl;
+      inherit (stdenv) lib;
+      # Use a variant of mkDerivation that does not include wrapQtApplications
+      # to avoid cyclic dependencies between Qt modules.
+      mkDerivation =
+        import ../mkDerivation.nix
+        { inherit (stdenv) lib; inherit debug; wrapQtAppsHook = null; }
+        stdenv.mkDerivation;
+    }
     { inherit self srcs patches; };
 
   addPackages = self: with self;
@@ -81,7 +86,11 @@ let
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
     in {
 
-      inherit mkDerivation;
+      mkDerivationWith =
+        import ../mkDerivation.nix
+        { inherit (stdenv) lib; inherit debug; inherit (self) wrapQtAppsHook; };
+
+      mkDerivation = mkDerivationWith stdenv.mkDerivation;
 
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
@@ -92,20 +101,17 @@ let
       };
 
       qtcharts = callPackage ../modules/qtcharts.nix {};
-      qtconnectivity = callPackage ../modules/qtconnectivity.nix {
-        inherit cf-private;
-      };
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {
-        inherit cf-private;
-      };
+      qtmacextras = callPackage ../modules/qtmacextras.nix {};
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
+      qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
@@ -142,6 +148,12 @@ let
           fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
         };
       } ../hooks/qmake-hook.sh;
+
+      wrapQtAppsHook = makeSetupHook {
+        deps =
+          [ self.qtbase.dev makeWrapper ]
+          ++ optional stdenv.isLinux self.qtwayland.dev;
+      } ../hooks/wrap-qt-apps-hook.sh;
     };
 
    self = makeScope newScope addPackages;

@@ -16,7 +16,7 @@
   imports = [
    &lt;nixpkgs/nixos/modules/profiles/profile-name.nix&gt;
   ];
- </programlisting>
+</programlisting>
  <para>
   Even if some of these profiles seem only useful in the context of install
   media, many are actually intended to be used in real installs.

@@ -10,11 +10,11 @@ let
   inherit (pythonPackages) python;
 in pythonPackages.buildPythonApplication rec {
   name = "mailnag-${version}";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://github.com/pulb/mailnag/archive/v${version}.tar.gz";
-    sha256 = "ec7ac027d93bc7d88fc270858f5a181453a6ff07f43cab20563d185818801fee";
+    sha256 = "0cp5pad6jzd5c14pddbi9ap5bi78wjhk1x2p0gbblmvmcasw309s";
   };
 
   buildInputs = [

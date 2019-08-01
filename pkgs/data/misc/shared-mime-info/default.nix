@@ -1,13 +1,13 @@
 {stdenv, fetchurl, pkgconfig, gettext, perlPackages, intltool
 , libxml2, glib}:
 
-let version = "1.10"; in
+let version = "1.12"; in
 stdenv.mkDerivation rec {
   name = "shared-mime-info-${version}";
 
   src = fetchurl {
-    url = "http://freedesktop.org/~hadess/${name}.tar.xz";
-    sha256 = "1gxyvwym3xgpmp262gfn8jg5sla6k5hy6m6dmy6grgiq90xsh9f6";
+    url = "https://gitlab.freedesktop.org/xdg/shared-mime-info/uploads/80c7f1afbcad2769f38aeb9ba6317a51/shared-mime-info-1.12.tar.xz";
+    sha256 = "0gj0pp36qpsr9w6v4nywnjpcisadwkndapqsjn0ny3gd0zzg1chq";
   };
 
   nativeBuildInputs = [ pkgconfig gettext intltool ] ++ (with perlPackages; [ perl XMLParser ]);

@@ -1,17 +1,26 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, gettext, itstool, libcanberra-gtk3, librsvg, libxml2 }:
+, gettext, meson, libcanberra-gtk3, librsvg, itstool, vala
+, python3, ninja, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   name = "four-in-a-row-${version}";
-  version = "3.28.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1iszaay2r92swb0q67lmip6r1w3hw2dwmlgnz9v2h6blgdyncs4k";
+    sha256 = "0h4wmbkdp7x3gp9sbxmvla316m8n6iy4f5sq0ksldj0z7ghlx9zl";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook gettext itstool libxml2 ];
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook gettext meson itstool vala
+    ninja python3 desktop-file-utils
+  ];
   buildInputs = [ gtk3 libcanberra-gtk3 librsvg gnome3.adwaita-icon-theme ];
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

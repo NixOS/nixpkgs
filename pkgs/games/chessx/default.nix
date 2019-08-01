@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "chessx-${version}";
-  version = "1.4.6";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/chessx/chessx-${version}.tgz";
-    sha256 = "1vb838byzmnyglm9mq3khh3kddb9g4g111cybxjzalxxlc81k5dd";
+    sha256 = "09rqyra28w3z9ldw8sx07k5ap3sjlli848p737maj7c240rasc6i";
   };
 
   buildInputs = [
@@ -31,9 +31,6 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/applications"
     cp -pr release/chessx "$out/bin"
     cp -pr unix/chessx.desktop "$out/share/applications"
-
-    wrapProgram $out/bin/chessx \
-      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
 
     runHook postInstall
   '';

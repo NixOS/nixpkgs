@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch
+{ stdenv, lib, fetchurl
 , zlib, xz, python2, ncurses, findXMLCatalogs
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null

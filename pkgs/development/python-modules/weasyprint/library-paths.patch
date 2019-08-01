@@ -1,0 +1,38 @@
+diff --git a/weasyprint/fonts.py b/weasyprint/fonts.py
+index 377716c1..2016e01c 100644
+--- a/weasyprint/fonts.py
++++ b/weasyprint/fonts.py
+@@ -48,11 +48,8 @@ else:
+     # with OSError: dlopen() failed to load a library: cairo / cairo-2
+     # So let's hope we find the same file as cairo already did ;)
+     # Same applies to pangocairo requiring pangoft2
+-    fontconfig = dlopen(ffi, 'fontconfig', 'libfontconfig',
+-                        'libfontconfig-1.dll',
+-                        'libfontconfig.so.1', 'libfontconfig-1.dylib')
+-    pangoft2 = dlopen(ffi, 'pangoft2-1.0', 'libpangoft2-1.0-0',
+-                      'libpangoft2-1.0.so', 'libpangoft2-1.0.dylib')
++    fontconfig = dlopen(ffi, '@fontconfig@')
++    pangoft2 = dlopen(ffi, '@pangoft2@')
+ 
+     ffi.cdef('''
+         // FontConfig
+diff --git a/weasyprint/text.py b/weasyprint/text.py
+index 035074e9..08e40395 100644
+--- a/weasyprint/text.py
++++ b/weasyprint/text.py
+@@ -243,12 +243,9 @@ def dlopen(ffi, *names):
+     return ffi.dlopen(names[0])  # pragma: no cover
+ 
+ 
+-gobject = dlopen(ffi, 'gobject-2.0', 'libgobject-2.0-0', 'libgobject-2.0.so',
+-                 'libgobject-2.0.dylib')
+-pango = dlopen(ffi, 'pango-1.0', 'libpango-1.0-0', 'libpango-1.0.so',
+-               'libpango-1.0.dylib')
+-pangocairo = dlopen(ffi, 'pangocairo-1.0', 'libpangocairo-1.0-0',
+-                    'libpangocairo-1.0.so', 'libpangocairo-1.0.dylib')
++gobject = dlopen(ffi, '@gobject@')
++pango = dlopen(ffi, '@pango@')
++pangocairo = dlopen(ffi, '@pangocairo@')
+ 
+ gobject.g_type_init()
+ 

@@ -4,23 +4,21 @@
 }:
 
 buildGoPackage rec {
-  name = "wtf-${version}";
-  version = "0.4.0";
-
-  goPackagePath = "github.com/senorprogrammer/wtf";
+  pname = "wtf";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
-    owner = "senorprogrammer";
-    repo = "wtf";
-    rev = "${version}";
-    sha256 = "1vgjqmw27baiq9brmnafic3w3hw11p5qc6ahbdxi5n5n4bx7j6vn";
+    owner = "wtfutil";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1qiwl6z5rraspjqry8dwnx8fgl9vv70sn5kgvh8074vl651yjq8c";
   };
 
-  buildFlagsArray = [ "-ldflags=" "-X main.version=${version}" ];
+  goPackagePath = "github.com/wtfutil/wtf";
 
   meta = with lib; {
     description = "The personal information dashboard for your terminal";
-    homepage = http://wtfutil.com/;
+    homepage = "https://wtfutil.com/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

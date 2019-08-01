@@ -1,4 +1,4 @@
-{ stdenv, lib, meson, ninja, fetchurl, fetchFromGitHub
+{ stdenv, lib, meson, ninja, fetchFromGitHub
 , pkgconfig, zathura_core, cairo , gtk-mac-integration, girara, mupdf }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     zathura_core girara mupdf cairo
-  ] ++ stdenv.lib.optional stdenv.isDarwin [
-    gtk-mac-integration
-  ];
+  ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
 

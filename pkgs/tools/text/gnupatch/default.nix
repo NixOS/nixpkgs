@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
       url = https://sources.debian.org/data/main/p/patch/2.7.6-2/debian/patches/Fix_arbitrary_command_execution_in_ed-style_patches.patch;
       sha256 = "1bpy16n3hm5nv9xkrn6c4wglzsdzj3ss1biq16w9kfv48p4hx2vg";
     })
+    # https://git.savannah.gnu.org/cgit/patch.git/commit/?id=9c986353e420ead6e706262bf204d6e03322c300
+    ./CVE-2018-6952.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "apmplanner2-${version}";
-  # TODO revert Qt59 to Qt5 in pkgs/top-level/all-packages.nix on next release
-  version = "2.0.26";
+  # TODO revert Qt511 to Qt5 in pkgs/top-level/all-packages.nix on next release
+  version = "2.0.27-rc1";
   src = fetchFromGitHub {
     owner = "ArduPilot";
     repo = "apm_planner";
     rev = "${version}";
-    sha256 = "0bnyi1r8k8ij5sq2zqv7mfbrxm0xdw97qrx3sk4rinqv2g6h6di4";
+    sha256 = "1k0786mjzi49nb6yw4chh9l4dmkf9gybpxg9zqkr5yg019nyzcvd";
   };
 
   qtInputs = [

@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Low-level communication layer for PRAW";
-    homepage = http://praw.readthedocs.org/;
+    homepage = https://praw.readthedocs.org/;
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ];

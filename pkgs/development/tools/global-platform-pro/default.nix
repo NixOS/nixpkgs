@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, maven, writeText, makeWrapper, jre_headless, pcsclite }:
+{ stdenv, fetchFromGitHub, jdk, maven, makeWrapper, jre_headless, pcsclite }:
 
 # TODO: This is quite a bit of duplicated logic with gephi. Factor it out?
 stdenv.mkDerivation rec {

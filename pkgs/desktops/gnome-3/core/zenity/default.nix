@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "zenity-${version}";
-  version = "3.30.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/zenity/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1wipnp46pd238z9ck5rsckbaw7yla6c936fswq5w94k4c6bgcplr";
+    sha256 = "15fdh8xfdhnwcynyh4byx3mrjxbyprqnwxzi7qn3g5wwaqryg1p7";
   };
 
   preBuild = ''

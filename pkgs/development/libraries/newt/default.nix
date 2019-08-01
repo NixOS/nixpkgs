@@ -1,11 +1,12 @@
 { fetchurl, stdenv, slang, popt }:
 
 stdenv.mkDerivation rec {
-  name = "newt-0.52.20";
+  pname = "newt";
+  version = "0.52.21";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/n/e/newt/${name}.tar.gz";
-    sha256 = "1g3dpfnvaw7vljbr7nzq1rl88d6r8cmrvvng9inphgzwxxmvlrld";
+    url = "https://fedorahosted.org/releases/n/e/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0cdvbancr7y4nrj8257y5n45hmhizr8isynagy4fpsnpammv8pi6";
   };
 
   patchPhase = ''

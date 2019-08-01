@@ -14,25 +14,24 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-# Mesa requires AMDGPU target
-# BPF is used by bcc
-, enableTargets ? [ stdenv.hostPlatform stdenv.targetPlatform "AMDGPU" "BPF" ]
 }:
 
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
-  src = fetch "llvm" "1qpls3vk85lydi5b4axl0809fv932qgsqgdgrk098567z4jc7mmn";
+  # Used when creating a versioned symlinks of libLLVM.dylib
+  versionSuffixes = with stdenv.lib;
+    let parts = splitString "." release_version; in
+    imap (i: _: concatStringsSep "." (take i parts)) parts;
+in
 
-  # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with stdenv.lib;
-    concatStringsSep "." (take 2 (splitString "." release_version));
-
-in stdenv.mkDerivation (rec {
+stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
+  src = fetch "llvm" "1qpls3vk85lydi5b4axl0809fv932qgsqgdgrk098567z4jc7mmn";
+
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
   '';
@@ -136,8 +135,9 @@ in stdenv.mkDerivation (rec {
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+    ${stdenv.lib.concatMapStringsSep "\n" (v: ''
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
+    '') versionSuffixes}
   '';
 
   doCheck = stdenv.isLinux && (!stdenv.isi686);
@@ -145,8 +145,6 @@ in stdenv.mkDerivation (rec {
   checkTarget = "check-all";
 
   enableParallelBuilding = true;
-
-  passthru.src = src;
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";

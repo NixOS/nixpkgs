@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, gettext
-, vim, glib, libxml2, openssl, ncurses, popt, screen
+, vim, glib, libxml2, ncurses, popt, screen
 }:
 
 stdenv.mkDerivation rec {

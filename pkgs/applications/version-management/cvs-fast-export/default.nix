@@ -7,7 +7,7 @@ with stdenv; with lib;
 mkDerivation rec {
   name = "cvs-fast-export-${meta.version}";
   meta = {
-    version = "1.45";
+    version = "1.48";
     description = "Export an RCS or CVS history as a fast-import stream";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dfoxfranke ];
@@ -16,8 +16,8 @@ mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-1.45.tar.gz";
-    sha256 = "19pxg6p0pcgyd2fbnh3wy1kazv6vcfi5lzc2whhdi1w9kj4r9c4z";
+    url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-1.48.tar.gz";
+    sha256 = "16gw24y5x96mx6zby8cys0f03x1bqw4r7g1390qlpg75pbydqlf9";
   };
 
   buildInputs = [

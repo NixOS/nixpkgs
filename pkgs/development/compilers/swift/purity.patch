@@ -11,7 +11,7 @@ diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
 index fe3c0191bb..c6a482bece 100644
 --- a/lib/Driver/ToolChains/Gnu.cpp
 +++ b/lib/Driver/ToolChains/Gnu.cpp
-@@ -398,13 +398,6 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -380,13 +380,6 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
    if (!Args.hasArg(options::OPT_static)) {
      if (Args.hasArg(options::OPT_rdynamic))
        CmdArgs.push_back("-export-dynamic");

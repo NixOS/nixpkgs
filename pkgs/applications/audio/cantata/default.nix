@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, vlc
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, vlc
 , qtbase, qtmultimedia, qtsvg, qttools
 
 # Cantata doesn't build with cdparanoia enabled so we disable that

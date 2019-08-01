@@ -3,6 +3,7 @@
 , oggSupport ? true, libogg, libvorbis
 , openalSupport ? true, openal
 , zipSupport ? true, zlib
+, Cocoa, OpenAL
 }:
 
 let
@@ -28,6 +29,7 @@ let
     nativeBuildInputs = [ cmake ];
 
     buildInputs = [ SDL2 libGL ]
+      ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ]
       ++ lib.optionals oggSupport [ libogg libvorbis ]
       ++ lib.optional openalSupport openal
       ++ lib.optional zipSupport zlib;

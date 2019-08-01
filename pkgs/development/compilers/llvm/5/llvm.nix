@@ -9,23 +9,25 @@
 , version
 , release_version
 , zlib
-, libcxxabi
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !enableManpages
 }:
 
 let
-  src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
+  # Used when creating a versioned symlinks of libLLVM.dylib
+  versionSuffixes = with stdenv.lib;
+    let parts = splitString "." release_version; in
+    imap (i: _: concatStringsSep "." (take i parts)) parts;
+in
 
-  # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with stdenv.lib;
-    concatStringsSep "." (take 2 (splitString "." release_version));
-in stdenv.mkDerivation (rec {
+stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
+  src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
+
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
   '';
@@ -119,8 +121,9 @@ in stdenv.mkDerivation (rec {
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLTO.dylib" "$lib/lib/libLTO.dylib"
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+    ${stdenv.lib.concatMapStringsSep "\n" (v: ''
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
+    '') versionSuffixes}
   '';
 
   doCheck = stdenv.isLinux && (!stdenv.isi686);
@@ -129,8 +132,7 @@ in stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  passthru.src = src;
-
+  requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;

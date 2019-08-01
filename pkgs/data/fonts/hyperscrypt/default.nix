@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, lib }:
+{ fetchzip, lib }:
 
 let
   version = "1.1";
@@ -15,7 +15,7 @@ fetchzip rec {
     unzip -j $downloadedFile \*${pname}.otf -d $out/share/fonts/opentype/${pname}.otf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://velvetyne.fr/fonts/hyper-scrypt/;
     description = "A modern stencil typeface inspired by stained glass technique";
     longDescription = ''

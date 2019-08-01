@@ -3,17 +3,17 @@
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
 , harfbuzz, mypaint-brushes, libwebp, libheif, libgudev, openexr
-, AppKit, Cocoa, gtk-mac-integration-gtk2, cf-private }:
+, AppKit, Cocoa, gtk-mac-integration-gtk2 }:
 
 let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
-  name = "gimp-${version}";
-  version = "2.10.8";
+  pname = "gimp";
+  version = "2.10.12";
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "16sb4kslwin2jbgdb4nhks78pd0af8mvj8g5hap3hj946p7w2jfq";
+    url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "0wdcr8d2ink4swn5r4v13bsiya6s3xm4ya97sdbhs4l40y7bb03x";
   };
 
   nativeBuildInputs = [ pkgconfig intltool gettext wrapPython ];
@@ -24,9 +24,7 @@ in stdenv.mkDerivation rec {
     libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp libheif
     python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    # cf-private is needed to get some things not in swift-corefoundation.
-    # For instance _OBJC_CLASS_$_NSArray is missing.
-    AppKit Cocoa gtk-mac-integration-gtk2 cf-private
+    AppKit Cocoa gtk-mac-integration-gtk2
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
 
   pythonPath = [ pygtk ];
@@ -69,7 +67,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--without-webkit" # old version is required
     "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-    "--with-icc-directory=/var/run/current-system/sw/share/color/icc"
+    "--with-icc-directory=/run/current-system/sw/share/color/icc"
   ];
 
   # on Darwin,

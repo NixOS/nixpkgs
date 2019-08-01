@@ -2,14 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "iverilog-${version}";
-  version = "2018.12.15";
+  version = "2019.03.27";
 
   src = fetchFromGitHub {
-    owner = "steveicarus";
-    repo = "iverilog";
-    rev = "7cd078e7ab184069b3b458fe6df7e83962254816";
-    sha256 = "1zc7lsa77dbsxjfz7vdgclmg97r0kw08xss7yfs4vyv5v5gnn98d";
+    owner  = "steveicarus";
+    repo   = "iverilog";
+    rev    = "a9388a895eb85a9d7f2924b89f839f94e1b6d7c4";
+    sha256 = "01d48sy3pzg9x1xpczqrsii2ckrvgnrfj720wiz22jdn90nirhhr";
   };
+
+  enableParallelBuilding = true;
 
   patchPhase = ''
     chmod +x $PWD/autoconf.sh

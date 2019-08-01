@@ -161,7 +161,9 @@ rec {
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 
   markBroken = drv: overrideCabal drv (drv: { broken = true; hydraPlatforms = []; });
+  unmarkBroken = drv: overrideCabal drv (drv: { broken = false; });
   markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
+  markUnbroken = drv: overrideCabal drv (drv: { broken = false; });
 
   enableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = true; });
   disableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = false; });
@@ -180,6 +182,8 @@ rec {
 
   enableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = true; });
   disableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = false; });
+
+  enableSeparateBinOutput = drv: overrideCabal drv (drv: { enableSeparateBinOutput = true; });
 
   appendPatch = drv: x: appendPatches drv [x];
   appendPatches = drv: xs: overrideCabal drv (drv: { patches = (drv.patches or []) ++ xs; });

@@ -5,20 +5,20 @@
 
 let
   name = "openrct2-${version}";
-  version = "0.2.1";
+  version = "0.2.3";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${version}";
-    sha256 = "0dl1f0gvq0ifaii66c7bwp8k822krcdn9l44prnyds6smrdmd3dq";
+    sha256 = "01mj6jlbl2cn3wpk6sy34ldzdl0qykpn7fncznjykklj2nqzr4ig";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
-    rev = "v1.0.6";
-    sha256 = "1yhyafsk2lyasgj1r7h2n4k7vp5q792aj86ggpbmd6bcp4kk6hbm";
+    rev = "v1.0.11";
+    sha256 = "1bh7mngpqnhzwnhhawq5y3a6hbvwxis2yagk4dcmc4w1fifq2y66";
   };
 
   title-sequences-src = fetchFromGitHub {

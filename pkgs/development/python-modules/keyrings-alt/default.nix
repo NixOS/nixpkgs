@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder, six
-, pytest, pytest-flake8, backports_unittest-mock, keyring, setuptools_scm
+, pytest, backports_unittest-mock, keyring, setuptools_scm
 }:
 
 buildPythonPackage rec {

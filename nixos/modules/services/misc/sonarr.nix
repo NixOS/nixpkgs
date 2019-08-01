@@ -39,24 +39,19 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.sonarr = {
       description = "Sonarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        test -d ${cfg.dataDir} || {
-          echo "Creating sonarr data directory in ${cfg.dataDir}"
-          mkdir -p ${cfg.dataDir}
-        }
-        chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
-        chmod 0700 ${cfg.dataDir}
-      '';
 
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        PermissionsStartOnly = "true";
         ExecStart = "${pkgs.sonarr}/bin/NzbDrone -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };

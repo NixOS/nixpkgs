@@ -68,6 +68,9 @@ in buildRubyGem rec {
 
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"
+
+    mkdir -p $out/share/bash-completion/completions/
+    cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
   '' +
   lib.optionalString withLibvirt ''
     substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
@@ -82,6 +85,13 @@ in buildRubyGem rec {
       echo 'Vagrant smoke check failed'
       return 1
     fi
+  '';
+
+  # `patchShebangsAuto` patches this one script which is intended to run
+  # on foreign systems.
+  postFixup = ''
+    sed -i -e '1c#!/bin/sh -' \
+      $out/lib/ruby/gems/*/gems/vagrant-*/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   passthru = {

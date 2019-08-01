@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, substituteAll
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala
 , python3, desktop-file-utils, gtk3, granite, libgee, elementary-icon-theme
 , appstream, libpeas, editorconfig-core-c, gtksourceview3, gtkspell3, libsoup
 , vte, webkitgtk, zeitgeist, ctags, libgit2-glib, wrapGAppsHook }:

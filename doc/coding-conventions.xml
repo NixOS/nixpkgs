@@ -921,7 +921,7 @@ src = fetchFromGitHub {
     <para>
      You can convert between formats with nix-hash, for example:
 <screen>
-$ nix-hash --type sha256 --to-base32 <replaceable>HASH</replaceable>
+<prompt>$ </prompt>nix-hash --type sha256 --to-base32 <replaceable>HASH</replaceable>
 </screen>
     </para>
    </listitem>
@@ -1038,7 +1038,7 @@ patches = [ ./0001-changes.patch ];
      <para>
       Move to the root directory of the source code you're patching.
 <screen>
-$ cd the/program/source</screen>
+<prompt>$ </prompt>cd the/program/source</screen>
      </para>
     </listitem>
     <listitem>
@@ -1046,8 +1046,8 @@ $ cd the/program/source</screen>
       If a git repository is not already present, create one and stage all of
       the source files.
 <screen>
-$ git init
-$ git add .</screen>
+<prompt>$ </prompt>git init
+<prompt>$ </prompt>git add .</screen>
      </para>
     </listitem>
     <listitem>
@@ -1060,7 +1060,7 @@ $ git add .</screen>
      <para>
       Use git to create a diff, and pipe the output to a patch file:
 <screen>
-$ git diff > nixpkgs/pkgs/the/package/0001-changes.patch</screen>
+<prompt>$ </prompt>git diff > nixpkgs/pkgs/the/package/0001-changes.patch</screen>
      </para>
     </listitem>
    </orderedlist>

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, gnupg1compat, bzip2, xz, graphviz }:
+{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, gnupg, bzip2, xz, graphviz }:
 
 let
 
@@ -34,7 +34,7 @@ buildGoPackage {
     mkdir -p $bin/share/bash-completion/completions
     ln -s ${aptlyCompletionSrc}/aptly $bin/share/bash-completion/completions
     wrapProgram "$bin/bin/aptly" \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg1compat bzip2 xz graphviz ]}"
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
   '';
 
   meta = with stdenv.lib; {

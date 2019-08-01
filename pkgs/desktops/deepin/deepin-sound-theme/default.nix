@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sw4nrn7q7wk1hpicm05apyc0mihaw42iqm52wb8ib8gm1qiylr9";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=${placeholder ''out''}" ];
 
   passthru.updateScript = deepin.updateScript { inherit name; };
 

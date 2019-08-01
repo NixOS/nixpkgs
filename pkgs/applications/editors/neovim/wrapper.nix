@@ -12,7 +12,8 @@ neovim:
 
 let
   wrapper = {
-      withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
+      extraMakeWrapperArgs ? ""
+    , withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
     , withPython3 ? true,  extraPython3Packages ? (_: []) /* the function you would have passed to python.withPackages */
     , withNodeJs? false
     , withRuby ? true
@@ -113,7 +114,7 @@ let
         # https://github.com/neovim/neovim/issues/9413
         wrapProgram $out/bin/nvim \
           --set NVIM_SYSTEM_RPLUGIN_MANIFEST $out/rplugin.vim \
-          --add-flags "-u ${vimUtils.vimrcFile configure}"
+          --add-flags "-u ${vimUtils.vimrcFile configure}" ${extraMakeWrapperArgs}
       '';
 
     preferLocalBuild = true;

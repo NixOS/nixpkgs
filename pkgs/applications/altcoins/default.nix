@@ -1,4 +1,4 @@
-{ callPackage, boost155, boost165, openssl_1_1, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3, buildGo110Package }:
+{ callPackage, boost155, boost165, openssl_1_1, darwin, libsForQt5, libsForQt59, miniupnpc_2, python3, buildGo110Package }:
 
 rec {
 
@@ -65,6 +65,8 @@ rec {
   };
   litecoind = litecoin.override { withGui = false; };
 
+  lnd = callPackage ./lnd.nix { };
+
   masari = callPackage ./masari.nix { boost = boost165; };
 
   memorycoin  = callPackage ./memorycoin.nix { boost = boost165; withGui = true; };
@@ -75,15 +77,16 @@ rec {
   namecoin  = callPackage ./namecoin.nix  { withGui = true; };
   namecoind = callPackage ./namecoin.nix { withGui = false; };
 
+  pivx = libsForQt59.callPackage ./pivx.nix { withGui = true; };
+  pivxd = callPackage ./pivx.nix { withGui = false; };
+
   ethabi = callPackage ./ethabi.nix { };
 
   stellar-core = callPackage ./stellar-core.nix { };
 
   sumokoin = callPackage ./sumokoin.nix { boost = boost165; };
 
-  wownero = callPackage ./wownero.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
-  };
+  wownero = callPackage ./wownero.nix {};
 
   zcash = callPackage ./zcash {
     withGui = false;

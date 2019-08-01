@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "5.000";
@@ -17,7 +17,7 @@ in fetchzip rec {
 
   sha256 = "1qr2wjdmm93167b0w9cidlf3wwsyjx4838ja9jmm4jkyian5whhp";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://software.sil.org/gentium/;
     description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
     longDescription = ''

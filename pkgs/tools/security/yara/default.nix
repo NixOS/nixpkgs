@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.9.0";
+  version = "3.10.0";
   name = "yara-${version}";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     rev = "v${version}";
-    sha256 = "1a707nx1py1q1z9fc18c93gjd4k5k6k53a93qw09jlcc67xk2sz7";
+    sha256 = "1qxqk324cyvi4n09s79786ciig1gdyhs9dnsm07hf95a3kh6w5z2";
   };
 
   buildInputs = [ autoconf automake libtool pcre]

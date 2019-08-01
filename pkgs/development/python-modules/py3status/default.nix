@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , requests
 , pytz
 , tzlocal
@@ -23,11 +22,11 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.16";
+  version = "3.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xrfph277bgjln3jbpzpgkhxad04fjvj7s3xfil42q1sxi4s3q3g";
+    sha256 = "10ikvdx39phr7n01qa6y9i5lqg3blv0d6y1pwqniczaf558cfp3l";
   };
 
   doCheck = false;
@@ -50,6 +49,6 @@ buildPythonPackage rec {
     description = "Extensible i3status wrapper";
     license = licenses.bsd3;
     homepage = https://github.com/ultrabug/py3status;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

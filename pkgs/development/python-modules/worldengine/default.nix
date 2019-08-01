@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , nose
 , noise
@@ -33,7 +34,6 @@ buildPythonPackage rec {
     ln -s ${src-data} worldengine-data
   '';
 
-  buildInputs = [ nose ];
   propagatedBuildInputs = [ noise numpy pyplatec protobuf purepng h5py gdal ];
 
   prePatch = ''
@@ -46,9 +46,10 @@ buildPythonPackage rec {
       --replace 'PyPlatec==1.4.0' 'PyPlatec' \
   '';
 
-  doCheck = true;
-
-  postCheck = ''
+  # with python<3.5, unittest fails to discover tests because of their filenames
+  # so nose is used instead.
+  checkInputs = stdenv.lib.optional (pythonOlder "3.5") [ nose ];
+  postCheck = stdenv.lib.optionalString (pythonOlder "3.5") ''
     nosetests tests
   '';
 

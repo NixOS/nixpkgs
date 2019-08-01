@@ -16,35 +16,45 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_418 else legacy_390;
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_430 else legacy_390;
 
   # No active beta right now
   beta = stable;
 
-  stable_418 = generic {
-    version = "418.43";
-    sha256_64bit = "0zrjd8wfc8cknfwiyy3llsnn1mympfxxszz7gzakncp3vs1jrghq";
-    settingsSha256 = "1rzxxn7nrhwndl2lgjakxi0rblfkqjyl1n70fl7rcs6g75mi1qsq";
-    persistencedSha256 = "14m4x5r0yc23sg4xx523ccfpxsr6dgm2n3xy9zdibl1cpzz50ikc";
+  stable_430 = generic {
+    version = "430.40";
+    sha256_64bit = "1myzhy1mf27dcx0admm3pbbkfdd9p66lw0cq2mz1nwds92gqj07p";
+    settingsSha256 = "0rg9dxg02pnpi0a1yi3a41wn6kmlk0dm6dvfbazyqi4gbzr12qrl";
+    persistencedSha256 = "0findlrs5v1m7gl0vxkpd04lh54pib80w5vp4j77qb5snhgvckhq";
   };
 
   # Last one supporting x86
   legacy_390 = generic {
-    version = "390.116";
-    sha256_32bit = "0aavzi99ps7r6nrchf4h9gw3fkvm2z6wppkqkz5fwcy7x03ky4qk";
-    sha256_64bit = "106qc62a7m9imchqfq8rfn8fwyrjxg383354q7z2wr8112fyhyg1";
-    settingsSha256 = "0inmzjhnlal5ih2iyv2x4y3jx7c4lz9xln8sy9j20yj9azp51qz0";
-    persistencedSha256 = "04ycijijlcbib2afcxjsyyzza1i3adh17sddrz3sah7rj38mrlgx";
+    version = "390.129";
+    sha256_32bit = "0dkgkp0zx40hf1fsq5xnvbschp7r3c1x1pnpdxna24pi4s62cm2q";
+    sha256_64bit = "0h0jcckqpd63vaj95lvdgj2sbbn9y1ri1xx7r2snxfx0plhwz46n";
+    settingsSha256 = "1w5nkxs7a40mq0qf97nhfazdqhfn1bvr54v50s8p0ggixb6vdm3l";
+    persistencedSha256 = "02v76202qcnh8hvg4y9wmk9swdlv7z39ppfd1c850nlv158vn5nf";
 
-    patches = lib.optional (kernel.meta.branch == "4.19") ./drm_mode_connector.patch;
+    patches = [
+      (fetchurl {
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-4.16.patch?h=2ad07241ea525a6b6b555b6cb96a97634a4b2cb0";
+        sha256 = "11b3dp0na496rn13v5q4k66bf61174800g36rcwj42r0xj9cfak2";
+      })
+
+      (fetchurl {
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-5.1.patch?h=42d50ef8d6048608d18bdf2c296dd335260c5a1a";
+        sha256 = "03v46ym2bcckg9q2xrilkg21hfiwypr6gl4jmly2q3m4yza9ja6r";
+      })
+    ];
   };
 
   legacy_340 = generic {
     version = "340.107";
     sha256_32bit = "0mh83affz6bim26ws7kkwwcfj2s6vkdy4d45hifsbshr82qd52wd";
     sha256_64bit = "0pv9yv3x0kg9hfkmc50xb54ahxkbnyy2vyy4hj2h0s6m9sb5kqz3";
-    settingsSha256 = "1rgaa24acdyqa1rqrx56293vxpskr792njqqpigqmps04llsx703";
-    persistencedSha256 = "0nwv6kh4gxgy80x1zs6gcg5hy3amg25xhsfa2v4mwqa36sblxz6l";
+    settingsSha256 = "1zf0fy9jj6ipm5vk153swpixqm75iricmx7x49pmr97kzyczaxa7";
+    persistencedSha256 = "0v225jkiqk9rma6whxs1a4fyr4haa75bvi52ss3vsyn62zzl24na";
     useGLVND = false;
 
     patches = [ ./vm_operations_struct-fault.patch ];
@@ -54,7 +64,7 @@ rec {
     version = "304.137";
     sha256_32bit = "1y34c2gvmmacxk2c72d4hsysszncgfndc4s1nzldy2q9qagkg66a";
     sha256_64bit = "1qp3jv6279k83k3z96p6vg3dd35y9bhmlyyyrkii7sib7bdmc7zb";
-    settingsSha256 = "0i5znfq6jkabgi8xpcy12pdpww6a67i8mq60z1kjq36mmnb25pmi";
+    settingsSha256 = "129f0j0hxzjd7g67qwxn463rxp295fsq8lycwm6272qykmab46cj";
     persistencedSha256 = null;
     useGLVND = false;
     useProfiles = false;

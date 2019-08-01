@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, fetchpatch, expat, libiconv, libjpeg, libpng, libtiff, zlib
+{ stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
 # darwin only attributes
-, cf-private, derez, rez, setfile
+, derez, rez, setfile
 , AGL, Cocoa, Kernel
 }:
 
@@ -16,14 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat libiconv libjpeg libpng libtiff zlib
     derez rez setfile
-    Cocoa Kernel
-
-    # Needed for CFURLGetFSRef, etc. which have deen deprecated
-    # since 10.9 and are not part of swift-corelibs CoreFoundation.
-    cf-private
+    AGL Cocoa Kernel
   ];
-
-  propagatedBuildInputs = [ AGL ];
 
   postPatch = ''
     substituteInPlace configure --replace "-framework System" -lSystem

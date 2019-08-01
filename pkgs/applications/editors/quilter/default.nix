@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, meson, ninja, python3
+{ stdenv, fetchFromGitHub, pkgconfig, meson, ninja, python3
 , gtk3, desktop-file-utils, gtksourceview, webkitgtk, gtkspell3, pantheon
 , libgee, discount, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "quilter";
-  version = "1.8.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "0i8rvvc5g74bgfjgsmmgpj42xmhjaz14jjzl9s5nzwpy1fn7vv0p";
+    sha256 = "10r6d695avxj31yghb82ymgnd7f1dawwbqz3gfy0rycjza9dxvv8";
   };
 
   nativeBuildInputs = [

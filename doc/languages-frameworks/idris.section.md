@@ -11,10 +11,21 @@ $ # On non-NixOS
 $ nix-env -i nixpkgs.idris
 ```
 
-This however only provides the `prelude` and `base` libraries. To install additional libraries:
+This however only provides the `prelude` and `base` libraries. To install idris with additional libraries, you can use the `idrisPackages.with-packages` function, e.g. in an overlay in `~/.config/nixpkgs/overlays/my-idris.nix`:
+
+```nix
+self: super: {
+  myIdris = with self.idrisPackages; with-packages [ contrib pruviloj ];
+}
+```
+
+And then:
 
 ```
-$ nix-env -iE 'pkgs: pkgs.idrisPackages.with-packages (with pkgs.idrisPackages; [ contrib pruviloj ])'
+$ # On NixOS
+$ nix-env -iA nixos.myIdris
+$ # On non-NixOS
+$ nix-env -iA nixpkgs.myIdris
 ```
 
 To see all available Idris packages:

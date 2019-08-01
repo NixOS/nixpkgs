@@ -23,7 +23,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.xfce4-13.tumbler;
+        default = pkgs.xfce4-14.tumbler;
         description = "Which tumbler package to use";
         example = pkgs.xfce4-12.tumbler;
       };

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, qmake, qttools, qtbase, qtsvg, qttranslations, qtdeclarative, qtxmlpatterns, qtwayland, qtwebsockets }:
+{ stdenv, fetchurl, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwayland, qtwebsockets }:
 
 stdenv.mkDerivation rec {
   pname = "qownnotes";
-  version = "19.3.0";
+  version = "19.7.3";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
     # Can grab official version like so:
     # $ curl https://download.tuxfamily.org/qownnotes/src/qownnotes-19.1.8.tar.xz.sha256
-    sha256 = "09265d9xgqmdw3fbf94fj2irgq2dp2jhkfd2kq33axfzgpm85bdz";
+    sha256 = "1d4an3yzr77c6pz5cv1vbsrl2v5r62qdckk3l5y5dcv7jikb1l8l";
   };
 
   nativeBuildInputs = [ qmake qttools ];

@@ -1,5 +1,5 @@
 { avahiSupport ? false # build support for Avahi in libinfinity
-, stdenv, fetchurl, fetchFromGitHub, autoconf, automake, pkgconfig, wrapGAppsHook
+, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, wrapGAppsHook
 , gtkmm3, gsasl, gtksourceview3, libxmlxx, libinfinity, intltool, itstool, gnome3 }:
 
 let

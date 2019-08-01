@@ -20,7 +20,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.19.2";
+  version = "2.22.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1scbggzghkzzfqg4ky3qh7h9w87c3zya4ls5disz7dbx56is7sgw";
+    sha256 = "17zj6jwx3s6bybd290f1mj5iym1r64560rmnf0p63x4akxclp7hm";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
@@ -96,7 +96,9 @@ stdenv.mkDerivation {
 
   postBuild = ''
     make -C contrib/subtree
-  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + (stdenv.lib.optionalString perlSupport ''
+    make -C contrib/diff-highlight
+  '') + (stdenv.lib.optionalString stdenv.isDarwin ''
     make -C contrib/credential/osxkeychain
   '') + (stdenv.lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret
@@ -162,7 +164,7 @@ stdenv.mkDerivation {
       EOS
       )"
       perl -0777 -i -pe "$SCRIPT" \
-        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,stash,submodule,subtree,web--browse}
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse}
 
 
       # Also put git-http-backend into $PATH, so that we can use smart

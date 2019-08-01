@@ -24,10 +24,10 @@ lib.makeScope pkgs.newScope (self: with self; {
   corePackages = with gnome3; [
     pkgs.desktop-file-utils
     pkgs.shared-mime-info # for update-mime-database
-    glib # for gsettings
-    gtk3.out # for gtk-update-icon-cache
+    pkgs.glib # for gsettings
+    pkgs.gtk3.out # for gtk-update-icon-cache
     glib-networking gvfs dconf gnome-backgrounds gnome-control-center
-    gnome-menus gnome-settings-daemon gnome-shell
+    pkgs.gnome-menus gnome-settings-daemon gnome-shell
     gnome-themes-extra adwaita-icon-theme gnome-shell-extensions
     pkgs.hicolor-icon-theme
   ];
@@ -41,7 +41,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
-    gnome-power-manager gnome-todo gnome-usage
+    gnome-power-manager gnome-todo pkgs.gnome-usage
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -54,7 +54,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   gnome3 = self // { recurseForDerivations = false; };
-  vala = pkgs.vala_0_42;
+  vala = pkgs.vala_0_44;
   gegl_0_4 = pkgs.gegl_0_4.override { gtk = pkgs.gtk3; };
 
 # ISO installer
@@ -84,7 +84,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gjs = callPackage ./core/gjs { };
 
   glib-networking = pkgs.glib-networking.override {
-    inherit gsettings-desktop-schemas;
+    inherit (pkgs) gsettings-desktop-schemas;
   };
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
@@ -144,8 +144,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   grilo = callPackage ./core/grilo { };
 
   grilo-plugins = callPackage ./core/grilo-plugins { };
-
-  gsettings-desktop-schemas = callPackage ./core/gsettings-desktop-schemas { };
 
   gucharmap = callPackage ./core/gucharmap { };
 
@@ -228,6 +226,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   ghex = callPackage ./apps/ghex { };
 
   glade = callPackage ./apps/glade { };
+
+  gnome-books = callPackage ./apps/gnome-books { };
 
   gnome-boxes = callPackage ./apps/gnome-boxes { };
 
@@ -345,9 +345,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   nautilus-python = callPackage ./misc/nautilus-python { };
 
-  pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
-
-  gtkhtml = callPackage ./misc/gtkhtml { };
+  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant1; };
 
   pomodoro = callPackage ./misc/pomodoro { };
 
@@ -393,8 +391,11 @@ lib.makeScope pkgs.newScope (self: with self; {
       libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
       easytag meld orca rhythmbox shotwell gnome-usage
       clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus gdl;
+  inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
   defaultIconTheme = adwaita-icon-theme;
   gtk = gtk3;
   gtkmm = gtkmm3;
   rest = librest;
+
+  pidgin-im-gnome-shell-extension = pkgs.gnomeExtensions.pidgin-im-integration; # added 2019-08-01
 })

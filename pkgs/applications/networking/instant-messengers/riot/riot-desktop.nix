@@ -1,16 +1,21 @@
-{ stdenv, fetchFromGitHub, yarn2nix, makeWrapper, makeDesktopItem, electron, riot-web }:
+{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron, riot-web }:
+
+# Note for maintainers:
+# Versions of `riot-web` and `riot-desktop` should be kept in sync.
+
+with (import ./yarn2nix.nix { inherit pkgs; });
 
 let
   executableName = "riot-desktop";
-  version = "1.0.4";
+  version = "1.3.0";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "152mi81miams5a7l9rd12bnf6wkd1r0lyicgr35r5fq0p6z7a4dk";
+    sha256 = "00142b0zcnwfdgvb84k2a0amyb67j3mm0d8p191aqk3bxv1xpxk1";
   };
 
-in yarn2nix.mkYarnPackage rec {
+in mkYarnPackage rec {
   name = "riot-desktop-${version}";
   inherit version;
 
@@ -48,6 +53,12 @@ in yarn2nix.mkYarnPackage rec {
       --add-flags "$out/share/riot/electron"
   '';
 
+  # Do not attempt generating a tarball for riot-web again.
+  # note: `doDist = false;` does not work.
+  distPhase = ''
+    true
+  '';
+
   # The desktop item properties should be kept in sync with data from upstream:
   # * productName and description from
   #   https://github.com/vector-im/riot-web/blob/develop/electron_app/package.json
@@ -70,7 +81,7 @@ in yarn2nix.mkYarnPackage rec {
     description = "A feature-rich client for Matrix.org";
     homepage = https://about.riot.im/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ pacien worldofpeace ];
     inherit (electron.meta) platforms;
   };
 }

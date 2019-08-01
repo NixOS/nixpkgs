@@ -1,10 +1,11 @@
 { stdenv, lib, fetchurl, fetchpatch, substituteAll
 , libXrender, libXinerama, libXcursor, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, libGLSupported, libGLU, openssl, dbus, cups, pkgconfig
+, libmng, which, libGLU, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , flashplayerFix ? false, gdk_pixbuf
 , gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
@@ -13,7 +14,7 @@
 , examples ? false
 , demos ? false
 # darwin support
-, cf-private, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
+, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
 }:
 
 let
@@ -100,7 +101,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
         gtk = gtk2.out;
-        gdk_pixbuf = gdk_pixbuf.out;
       })
     ++ lib.optional stdenv.isAarch64 (fetchpatch {
         url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
@@ -189,7 +189,7 @@ stdenv.mkDerivation rec {
       postgresql sqlite libjpeg libmng libtiff icu ]
     ++ lib.optionals (mysql != null) [ mysql.connector-c ]
     ++ lib.optionals gtkStyle [ gtk2 gdk_pixbuf ]
-    ++ lib.optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
@@ -231,5 +231,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.lgpl21Plus; # or gpl3
     maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];
     platforms   = lib.platforms.unix;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

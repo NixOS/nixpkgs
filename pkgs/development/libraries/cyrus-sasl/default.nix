@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
-, pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false
+, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
 , buildPackages, pruneLibtoolFiles }:
 
 with stdenv.lib;

@@ -21,32 +21,23 @@ let
 
   availableComponents = cfg.package.availableComponents;
 
-  # Given component "parentConfig.platform", returns whether config.parentConfig
-  # is a list containing a set with set.platform == "platform".
+  usedPlatforms = config:
+    if isAttrs config then
+      optional (config ? platform) config.platform
+      ++ concatMap usedPlatforms (attrValues config)
+    else if isList config then
+      concatMap usedPlatforms config
+    else [ ];
+
+  # Given a component "platform", looks up whether it is used in the config
+  # as `platform = "platform";`.
   #
-  # For example, the component sensor.luftdaten is used as follows:
+  # For example, the component mqtt.sensor is used as follows:
   # config.sensor = [ {
-  #   platform = "luftdaten";
+  #   platform = "mqtt";
   #   ...
   # } ];
-  #
-  # Beginning with 0.87 Home Assistant is migrating their components to the
-  # scheme "platform.subComponent", e.g. "hue.light" instead of "light.hue".
-  # See https://developers.home-assistant.io/blog/2019/02/19/the-great-migration.html.
-  # Hence, we also check whether we find an entry in the config when interpreting
-  # the first part of the path as the component.
-  useComponentPlatform = component:
-    let
-      path = splitString "." component;
-      # old: platform is the last part of path
-      parentConfig = attrByPath (init path) null cfg.config;
-      platform = last path;
-      # new: platform is the first part of the path
-      parentConfig' = attrByPath (tail path) null cfg.config;
-      platform' = head path;
-    in
-      (isList parentConfig && any (item: item.platform or null == platform) parentConfig)
-      || (isList parentConfig' && any (item: item.platform or null == platform') parentConfig');
+  useComponentPlatform = component: elem component (usedPlatforms cfg.config);
 
   # Returns whether component is used in config
   useComponent = component:

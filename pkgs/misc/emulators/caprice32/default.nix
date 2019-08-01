@@ -2,18 +2,22 @@
 
 stdenv.mkDerivation rec {
 
-  repo = "caprice32";
-  version = "unstable-2018-03-05";
-  rev = "317fe638111e245d67e301f6f295094d3c859a70";
-  name = "${repo}-${version}";
+  pname = "caprice32";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
-    inherit rev repo;
+    repo = "caprice32";
+    rev = "v${version}";
     owner = "ColinPitrat";
-    sha256 = "1bywpmkizixcnr057k8zq9nlw0zhcmwkiriln0krgdcm7d3h9b86";
+    sha256 = "056vrf5yq1574g93ix8hnjqqbdqza3qcjv0f8rvpsslqcbizma9y";
   };
 
   postPatch = "substituteInPlace cap32.cfg --replace /usr/local $out";
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpng SDL freetype zlib ];
+
+  #fix GIT_HASH avoid depend on git 
+  makeFlags = [ "GIT_HASH=${src.rev}" "DESTDIR=$(out)" "prefix=/"];
 
   meta = with stdenv.lib; {
     description = "A complete emulation of CPC464, CPC664 and CPC6128";
@@ -21,9 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.genesis ];
     platforms = platforms.linux;
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpng SDL freetype zlib ];
-  makeFlags = [ "GIT_HASH=${src.rev}" "DESTDIR=$(out)" "prefix=/"];
+  };  
 }

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   installTargets = "install${stdenv.lib.optionalString withLibrary "-full"}";
 
   meta = {
-    homepage = http://invisible-island.net/dialog/dialog.html;
+    homepage = https://invisible-island.net/dialog/dialog.html;
     description = "Display dialog boxes from shell";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.spacefrogg ];

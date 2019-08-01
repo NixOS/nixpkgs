@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig
 , meson, ninja, vala, desktop-file-utils, libxml2
-, gtk3, python3, granite, libgee, gobject-introspection
-, elementary-icon-theme, appstream, wrapGAppsHook }:
+, gtk3, python3, granite, libgee, elementary-icon-theme
+, appstream, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "calculator";
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream
     desktop-file-utils
-    gobject-introspection
     libxml2
     meson
     ninja

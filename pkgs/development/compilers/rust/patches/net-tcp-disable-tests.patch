@@ -1,8 +1,7 @@
-diff --git a/src/libstd/net/tcp.rs b/src/libstd/net/tcp.rs
-index 0f60b5b3e..9b08415e7 100644
---- a/src/libstd/net/tcp.rs
-+++ b/src/libstd/net/tcp.rs
-@@ -962,6 +962,7 @@ mod tests {
+diff -ru rustc-1.36.0-src-orig/src/libstd/net/tcp.rs rustc-1.36.0-src/src/libstd/net/tcp.rs
+--- rustc-1.36.0-src-orig/src/libstd/net/tcp.rs	2019-07-03 10:00:00.000000000 +0200
++++ rustc-1.36.0-src/src/libstd/net/tcp.rs	2019-07-07 11:33:35.378130207 +0200
+@@ -973,6 +973,7 @@
          }
      }
  
@@ -10,7 +9,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn listen_localhost() {
          let socket_addr = next_test_ip4();
-@@ -1020,6 +1021,7 @@ mod tests {
+@@ -1031,6 +1032,7 @@
          })
      }
  
@@ -18,7 +17,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn read_eof() {
          each_ip(&mut |addr| {
-@@ -1039,6 +1041,7 @@ mod tests {
+@@ -1050,6 +1052,7 @@
          })
      }
  
@@ -26,7 +25,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn write_close() {
          each_ip(&mut |addr| {
-@@ -1065,6 +1068,7 @@ mod tests {
+@@ -1076,6 +1079,7 @@
          })
      }
  
@@ -34,7 +33,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn multiple_connect_serial() {
          each_ip(&mut |addr| {
-@@ -1087,6 +1091,7 @@ mod tests {
+@@ -1098,6 +1102,7 @@
          })
      }
  
@@ -42,7 +41,7 @@ index 0f60b5b3e..9b08415e7 100644
      #[test]
      fn multiple_connect_interleaved_greedy_schedule() {
          const MAX: usize = 10;
-@@ -1123,6 +1128,7 @@ mod tests {
+@@ -1134,6 +1139,7 @@
      }
  
      #[test]
@@ -50,7 +49,7 @@ index 0f60b5b3e..9b08415e7 100644
      fn multiple_connect_interleaved_lazy_schedule() {
          const MAX: usize = 10;
          each_ip(&mut |addr| {
-@@ -1401,6 +1407,7 @@ mod tests {
+@@ -1467,6 +1473,7 @@
      }
  
      #[test]
@@ -58,47 +57,36 @@ index 0f60b5b3e..9b08415e7 100644
      fn clone_while_reading() {
          each_ip(&mut |addr| {
              let accept = t!(TcpListener::bind(&addr));
-@@ -1421,7 +1422,10 @@ mod tests {
+@@ -1597,7 +1604,7 @@
  
-     // FIXME: re-enabled bitrig/openbsd tests once their socket timeout code
+     // FIXME: re-enabled openbsd tests once their socket timeout code
      //        no longer has rounding errors.
--    #[cfg_attr(any(target_os = "bitrig", target_os = "netbsd", target_os = "openbsd"), ignore)]
-+    #[cfg_attr(any(target_os = "bitrig",
-+                   target_os = "netbsd",
-+                   target_os = "openbsd",
-+                   target_os = "macos"), ignore)]
+-    #[cfg_attr(any(target_os = "netbsd", target_os = "openbsd"), ignore)]
++    #[cfg_attr(any(target_os = "netbsd", target_os = "openbsd", target_os = "macos"), ignore)]
+     #[cfg_attr(target_env = "sgx", ignore)] // FIXME: https://github.com/fortanix/rust-sgx/issues/31
      #[test]
      fn timeouts() {
-         let addr = next_test_ip4();
-@@ -1596,6 +1603,7 @@ mod tests {
+@@ -1643,6 +1650,7 @@
          drop(listener);
      }
  
 +    #[cfg_attr(target_os = "macos", ignore)]
      #[test]
+     #[cfg_attr(target_env = "sgx", ignore)] // FIXME: https://github.com/fortanix/rust-sgx/issues/31
+     fn test_read_with_timeout() {
+@@ -1687,6 +1695,7 @@
+         drop(listener);
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     #[cfg_attr(target_env = "sgx", ignore)]
      fn nodelay() {
-         let addr = next_test_ip4();
-@@ -1610,6 +1618,7 @@ mod tests {
-         assert_eq!(false, t!(stream.nodelay()));
+@@ -1719,6 +1728,7 @@
+         assert_eq!(ttl, t!(stream.ttl()));
      }
  
 +    #[cfg_attr(target_os = "macos", ignore)]
      #[test]
-     fn ttl() {
-         let ttl = 100;
-@@ -1647,6 +1656,7 @@ mod tests {
-         }
-     }
- 
-+    #[cfg_attr(target_os = "macos", ignore)]
-     #[test]
-     fn peek() {
-         each_ip(&mut |addr| {
-@@ -1679,6 +1689,7 @@ mod tests {
-     }
- 
-     #[test]
-+    #[cfg_attr(any(target_os = "linux", target_os = "macos"), ignore)]
-     fn connect_timeout_unroutable() {
-         // this IP is unroutable, so connections should always time out,
-         // provided the network is reachable to begin with.
+     #[cfg_attr(target_env = "sgx", ignore)]
+     fn set_nonblocking() {

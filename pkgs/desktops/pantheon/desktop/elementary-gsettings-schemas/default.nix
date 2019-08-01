@@ -1,4 +1,4 @@
-{ stdenv, runCommand, gnome3, elementary-default-settings, nixos-artwork, glib, gala, epiphany, elementary-settings-daemon, gtk3, plank, gsettings-desktop-schemas
+{ stdenv, runCommand, mutter, elementary-default-settings, nixos-artwork, glib, gala, epiphany, elementary-settings-daemon, gtk3, plank, gsettings-desktop-schemas
 , extraGSettingsOverrides ? ""
 , extraGSettingsOverridePackages ? []
 }:
@@ -9,7 +9,7 @@ let
     elementary-settings-daemon
     epiphany
     gala
-    gnome3.mutter
+    mutter
     gsettings-desktop-schemas
     gtk3
     plank
@@ -23,7 +23,7 @@ with stdenv.lib;
 runCommand "elementary-gsettings-desktop-schemas" {}
   ''
      mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
-     cp -rf ${gnome3.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+     cp -rf ${gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
      ${concatMapStrings (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n") gsettingsOverridePackages}
 

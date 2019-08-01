@@ -3,9 +3,10 @@ and (2) make sure `gitman.info' isn't produced since it's broken (duplicate
 node names).
 
 diff --git a/Documentation/Makefile b/Documentation/Makefile
+index 26a2342bea..ceccd67ebb 100644
 --- a/Documentation/Makefile
 +++ b/Documentation/Makefile
-@@ -122,7 +122,7 @@
+@@ -132,7 +132,7 @@ HTML_REPO = ../../git-htmldocs
  
  MAKEINFO = makeinfo
  INSTALL_INFO = install-info
@@ -14,7 +15,7 @@ diff --git a/Documentation/Makefile b/Documentation/Makefile
  DBLATEX = dblatex
  ASCIIDOC_DBLATEX_DIR = /etc/asciidoc/dblatex
  DBLATEX_COMMON = -p $(ASCIIDOC_DBLATEX_DIR)/asciidoc-dblatex.xsl -s $(ASCIIDOC_DBLATEX_DIR)/asciidoc-dblatex.sty
-@@ -240,7 +240,7 @@
+@@ -250,7 +250,7 @@ man1: $(DOC_MAN1)
  man5: $(DOC_MAN5)
  man7: $(DOC_MAN7)
  
@@ -23,7 +24,7 @@ diff --git a/Documentation/Makefile b/Documentation/Makefile
  
  pdf: user-manual.pdf
  
-@@ -256,10 +256,9 @@
+@@ -266,10 +266,9 @@ install-man: man
  
  install-info: info
  	$(INSTALL) -d -m 755 $(DESTDIR)$(infodir)

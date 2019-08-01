@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     asetus (0.3.0)
-    backports (3.12.0)
+    backports (3.14.0)
     charlock_holmes (0.7.6)
     emk-sinatra-url-for (0.2.1)
       sinatra (>= 0.9.1.1)
@@ -13,9 +13,9 @@ GEM
     htmlentities (4.3.4)
     json (2.2.0)
     multi_json (1.13.1)
-    net-ssh (5.1.0)
+    net-ssh (5.2.0)
     net-telnet (0.1.1)
-    oxidized (0.26.2)
+    oxidized (0.26.3)
       asetus (~> 0.1)
       net-ssh (~> 5)
       net-telnet (~> 0.1.1)
@@ -45,8 +45,8 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rugged (0.28.0)
-    sass (3.7.3)
+    rugged (0.28.1)
+    sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -70,7 +70,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  oxidized (= 0.26.2)
+  oxidized (= 0.26.3)
   oxidized-script (= 0.6.0)
   oxidized-web (= 0.13.1)
 

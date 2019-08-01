@@ -43,11 +43,11 @@ assert withRest -> curl != null && withJson;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "freeradius-${version}";
-  version = "3.0.17";
+  version = "3.0.19";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    sha256 = "0bc35knv46z729l4h22rirqns5v6jb0fzcffnjayhs8wjysfkfyy";
+    sha256 = "0v5b46rq878093ff549ijccy98md1l7l4rvshjxs672il0zvq5i4";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

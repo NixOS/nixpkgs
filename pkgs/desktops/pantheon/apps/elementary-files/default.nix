@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, gettext, vala
 , python3, desktop-file-utils, libcanberra, gtk3, libgee, granite, libnotify
 , libunity, pango, plank, bamf, sqlite, libdbusmenu-gtk3, zeitgeist, glib-networking
-, elementary-icon-theme, gobject-introspection, wrapGAppsHook }:
+, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "files";
-  version = "4.1.5";
+  version = "4.1.8";
 
   name = "elementary-${pname}-${version}";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0z0pisg7py2k6i31v18z5fgpj8x64m1s5clfq4vbbjrcjwx6dcx5";
+    sha256 = "1frslwbqnv3mwv5dpb1sbhxnwl87cps2ambkkhnn9wwckjpm7p8f";
   };
 
   passthru = {
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     gettext
     glib-networking
-    gobject-introspection
     meson
     ninja
     pkgconfig

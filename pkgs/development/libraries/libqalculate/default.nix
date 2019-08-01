@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libqalculate";
-  version = "3.0.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "0i21c92r94mp03673cvngvqph268ir4j89d5s9qzxgq2zjw5pc8q";
+    sha256 = "0f82jss3kjxsk8znvrg1vfh756nnc15sbzr34ww1dvvrxipi7sns";
   };
 
   outputs = [ "out" "dev" "doc" ];

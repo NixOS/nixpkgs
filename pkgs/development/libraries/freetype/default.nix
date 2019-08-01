@@ -13,8 +13,8 @@ let
   inherit (stdenv.lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
-  name = "freetype-${version}";
-  version = "2.9.1";
+  pname = "freetype";
+  version = "2.10.0";
 
   meta = with stdenv.lib; {
     description = "A font rendering engine";
@@ -32,8 +32,8 @@ in stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://savannah/freetype/${name}.tar.bz2";
-    sha256 = "0kg8w6qyiizlyzh4a8lpzslipcbv96hcg3rqqpnxba8ffbm8g3fv";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "01mybx78n3n9dhzylbrdy42wxdwfn8rp514qdkzjy6b5ij965k7w";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype

@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
-, unittest2, scripttest, pytz, pylint, mock
+, unittest2, scripttest, pytz, mock
 , testtools, pbr, tempita, decorator, sqlalchemy
 , six, sqlparse, testrepository
 }:
@@ -20,6 +20,8 @@ buildPythonPackage rec {
 
   checkInputs = [ unittest2 scripttest pytz mock testtools testrepository ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
+
+  doCheck = !stdenv.isDarwin;
 
   prePatch = ''
     sed -i -e /tempest-lib/d \

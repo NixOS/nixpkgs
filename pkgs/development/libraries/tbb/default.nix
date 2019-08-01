@@ -2,13 +2,13 @@
 
 with stdenv.lib; stdenv.mkDerivation rec {
   name = "tbb-${version}";
-  version = "2018_U5";
+  version = "2019_U8";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "tbb";
     rev = version;
-    sha256 = "080df8h2whnly6n9pslpg07dc9vr0p45gqgy9qijpjvxkjwfkdkp";
+    sha256 = "0z0kh1a5g28gckcxlv3x7qqskh5fsl8knf2ypbbvk7z9ln9k3wfq";
   };
 
   makeFlags = concatStringsSep " " (
@@ -19,11 +19,10 @@ with stdenv.lib; stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
 
   installPhase = ''
-    mkdir -p $out/{lib,share/doc}
+    mkdir -p $out/lib
     cp "build/"*release*"/"*${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib/
     mv include $out/
     rm $out/include/index.html
-    mv doc/html $out/share/doc/tbb
   '';
 
   enableParallelBuilding = true;

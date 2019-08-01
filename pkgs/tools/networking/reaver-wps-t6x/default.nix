@@ -1,25 +1,20 @@
 { stdenv, fetchFromGitHub, libpcap, pixiewps, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.3";
-  name = "reaver-wps-t6x-${version}";
+  pname = "reaver-wps-t6x";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "t6x";
     repo = "reaver-wps-fork-t6x";
     rev = "v${version}";
-    sha256 = "1bccwp67q1q0h5m38gqxn9imq5rb75jbmv7fjr2n38v10jcga2pb";
+    sha256 = "03v5jyb4if74rpg0mcd8700snb120b6w2gnsa3aqdgj5676ic5dn";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpcap pixiewps ];
 
-  preConfigure = "cd src";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp reaver wash $out/bin/
-  '';
+  sourceRoot = "source/src";
 
   meta = with stdenv.lib; {
     description = "Online and offline brute force attack against WPS";

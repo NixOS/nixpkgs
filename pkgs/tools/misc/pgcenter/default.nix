@@ -1,19 +1,17 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "pgcenter";
-  version = "0.6.1";
-
-  goPackagePath = "github.com/lesovsky/pgcenter";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner  = "lesovsky";
     repo   = "pgcenter";
     rev    = "v${version}";
-    sha256 = "12wyi6vc3i0dq76mrvv5r632ks90xppcra5g7rjf54vg4291kycy";
+    sha256 = "0mh0s83gkjhrm9ip5r1bb6y5n0nl1rlh99570yv7p3yvyhmh2292";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "0kassq52v07zmffs6l066g0d3kfv6wmrh9g5cgk79bmyq13clqjj";
 
   meta = with stdenv.lib; {
     homepage = https://pgcenter.org/;

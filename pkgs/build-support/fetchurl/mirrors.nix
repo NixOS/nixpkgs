@@ -19,8 +19,11 @@ rec {
     https://kent.dl.sourceforge.net/sourceforge/
   ];
 
-  # SourceForge.jp.
-  sourceforgejp = [
+  # OSDN (formerly SourceForge.jp).
+  osdn = [
+    https://osdn.dl.osdn.jp/
+    https://osdn.mirror.constant.com/
+    https://mirrors.gigenet.com/OSDN/
     https://osdn.dl.sourceforge.jp/
     https://jaist.dl.sourceforge.jp/
   ];
@@ -308,6 +311,8 @@ rec {
   hackage = [
     http://hackage.haskell.org/package/
     http://hdiff.luite.com/packages/archive/package/
+    http://hackage.fpcomplete.com/package/
+    http://objects-us-east-1.dream.io/hackage-mirror/package/
   ];
 
   # Roy marples mirrors
@@ -404,9 +409,10 @@ rec {
 
   # Alsa Project
   alsa = [
-     ftp://ftp.alsa-project.org/pub/
-     http://alsa.cybermirror.org/
-     http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/
-     http://alsa.mirror.fr/
+    https://www.alsa-project.org/files/pub/
+    ftp://ftp.alsa-project.org/pub/
+    http://alsa.cybermirror.org/
+    http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/
+    http://alsa.mirror.fr/
   ];
 }

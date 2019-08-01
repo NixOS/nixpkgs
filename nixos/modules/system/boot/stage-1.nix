@@ -11,7 +11,9 @@ let
 
   udev = config.systemd.package;
 
-  modulesTree = config.system.modulesTree;
+  kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+
+  modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
   firmware = config.hardware.firmware;
 
 
@@ -30,7 +32,7 @@ let
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
   # A utility for enumerating the shared-library dependencies of a program
-  findLibs = pkgs.writeShellScriptBin "find-libs" ''
+  findLibs = pkgs.buildPackages.writeShellScriptBin "find-libs" ''
     set -euo pipefail
 
     declare -A seen
@@ -290,6 +292,7 @@ let
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
   initialRamdisk = pkgs.makeInitrd {
+    name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor prepend;
 
     contents =

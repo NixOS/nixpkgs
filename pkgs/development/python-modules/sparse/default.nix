@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , numpy
 , scipy
 , numba
@@ -9,11 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.6.0";
+  version = "0.7.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2ac6fcbf68b38b999eae98467cf4880b942c13a72036868f78d65a10aeba808d";
+    sha256 = "0ija4pl8wg36ldsdv5jmqr5i75qi17vijcwwf2jdn1k15kqg35j4";
   };
 
   checkInputs = [ pytest ];

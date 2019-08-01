@@ -1,20 +1,19 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, cmake, sip }:
+{ stdenv, buildPythonPackage, python, pythonOlder, fetchFromGitHub, cmake, sip }:
 
 buildPythonPackage rec {
   pname = "libsavitar";
-  version = "3.6.0";
+  version = "4.1.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libSavitar";
     rev = version;
-    sha256 = "1bz8ga0n9aw65hqzajbr93dcv5g555iaihbhs1jq2k47cx66klzv";
+    sha256 = "132bgcvjkr61pzf244hwz8gxzpg1i50na4bkcipwnyxdravdkkgf";
   };
 
   postPatch = ''
-    # To workaround buggy SIP detection which overrides PYTHONPATH
-    sed -i '/SET(ENV{PYTHONPATH}/d' cmake/FindSIP.cmake
+    sed -i 's#''${Python3_SITELIB}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
   nativeBuildInputs = [ cmake ];

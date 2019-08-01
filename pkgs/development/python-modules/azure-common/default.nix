@@ -4,29 +4,34 @@
 , azure-nspkg
 , isPyPy
 , python
+, isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "1.1.18";
+  version = "1.1.21";
   pname = "azure-common";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "5fd62ae10b1add97d3c69af970328ec3bd869184396bcf6bfa9c7bc94d688424";
+    sha256 = "25d696d2affbf5fe9b13aebe66271fce545e673e7e1eeaaec2d73599ba639d63";
   };
 
-  propagatedBuildInputs = [ azure-nspkg ];
+  propagatedBuildInputs = [
+    azure-nspkg
+  ];
 
-  postInstall = ''
+  postInstall = if isPy3k then "" else ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
   '';
 
+  doCheck = false;
+
   meta = with pkgs.lib; {
-    description = "Microsoft Azure SDK for Python";
-    homepage = "https://azure.microsoft.com/en-us/develop/python/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ olcai ];
+    description = "This is the Microsoft Azure common code";
+    homepage = https://github.com/Azure/azure-sdk-for-python/tree/master/azure-common;
+    license = licenses.mit;
+    maintainers = with maintainers; [ olcai mwilsoninsight ];
   };
 }

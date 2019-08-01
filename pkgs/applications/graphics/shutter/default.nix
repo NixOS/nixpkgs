@@ -14,11 +14,11 @@ let
     ];
 in
 stdenv.mkDerivation rec {
-  name = "shutter-0.94.2";
+  name = "shutter-0.94.3";
 
   src = fetchurl {
-    url = "https://launchpad.net/shutter/0.9x/0.94.2/+download/shutter-0.94.2.tar.gz";
-    sha256 = "0mas7npm935j4rhqqjn226822s9sa4bsxrkp0b5fjj3z096k6vw0";
+    url = "https://launchpad.net/shutter/0.9x/0.94.3/+download/shutter-0.94.3.tar.gz";
+    sha256 = "01wv5k6zqfqa2rss461lpdpjxpfk4awzfdc6j2qk6bh4g4zgmgl5";
   };
 
   nativeBuildInputs = [ makeWrapper ];

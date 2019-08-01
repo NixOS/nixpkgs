@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, zlib }:
+{ stdenv, fetchurl, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname   = "niftyreg";

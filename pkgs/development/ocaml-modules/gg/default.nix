@@ -5,7 +5,7 @@ let
 
   pname = "gg";
   version = "0.9.1";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert versionAtLeast (getVersion ocaml) "4.01.0";

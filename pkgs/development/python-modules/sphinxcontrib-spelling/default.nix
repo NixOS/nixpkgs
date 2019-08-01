@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44a9445b237ade895ae1fccbe6f41422489b1ffb2a026c1b78b0c1c1c229f9bf";
+    sha256 = "7bcbaabef7aa9c176b81d960b20d0f67817ccea5e098968c366d2db4ad76d476";
   };
 
   propagatedBuildInputs = [ sphinx pyenchant pbr ];

@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       production, performance and DJing, with a focus on flexible
       editing tools and a super-fast workflow.
     '';
-    homepage = http://www.bitwig.com/;
+    homepage = https://www.bitwig.com/;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus mrVanDalo ];

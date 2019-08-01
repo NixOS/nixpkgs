@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, umockdev, gobject-introspection
+{ stdenv, fetchFromGitHub, autoreconfHook, gobject-introspection
 , pkgconfig, glib, systemd, libgudev, vala }:
 
 stdenv.mkDerivation rec {

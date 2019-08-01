@@ -1,10 +1,8 @@
-{ stdenv, qtModule, qtbase, cf-private }:
+{ stdenv, qtModule, qtbase }:
 
 qtModule {
   name = "qtmacextras";
-  qtInputs = [ qtbase ]
-    # Needed for _OBJC_CLASS_$_NSData symbols.
-    ++ stdenv.lib.optional stdenv.isDarwin cf-private;
+  qtInputs = [ qtbase ];
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ periklis ];
     platforms = platforms.darwin;

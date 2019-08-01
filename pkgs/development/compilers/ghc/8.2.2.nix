@@ -1,8 +1,9 @@
-{ stdenv, targetPackages
+{ stdenv, pkgsBuildTarget, targetPackages
 
 # build-tools
 , bootPkgs
 , autoconf, autoreconfHook, automake, coreutils, fetchurl, fetchpatch, perl, python3, sphinx
+, bash
 , runCommand
 
 , libiconv ? null, ncurses
@@ -70,11 +71,9 @@ let
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc") libiconv;
 
-  toolsForTarget =
-    if hostPlatform == buildPlatform then
-      [ targetPackages.stdenv.cc ] ++ stdenv.lib.optional useLLVM llvmPackages.llvm
-    else assert targetPlatform == hostPlatform; # build != host == target
-      [ stdenv.cc ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
+  toolsForTarget = [
+    pkgsBuildTarget.targetPackages.stdenv.cc
+  ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
 
@@ -220,7 +219,7 @@ stdenv.mkDerivation (rec {
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = [ perl ] ++ (libDeps hostPlatform);
+  buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;
@@ -231,6 +230,10 @@ stdenv.mkDerivation (rec {
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
+
+  # See #63511 - the only unstripped file is the debug rts which isn't meant to
+  # be stripped.
+  dontStrip = true;
 
   checkTarget = "test";
   doCheck = false; # fails with "testsuite/tests: No such file or directory.  Stop."

@@ -8,8 +8,10 @@ let
   self = stdenv.mkDerivation ({
     name = "clang-${version}";
 
+    src = fetch "cfe" "0svk1f70hvpwrjp6x5i9kqwrqwxnmcrw5s7f4cxyd100mdd12k08";
+
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "0svk1f70hvpwrjp6x5i9kqwrqwxnmcrw5s7f4cxyd100mdd12k08"}
+      unpackFile $src
       mv cfe-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
@@ -24,6 +26,7 @@ let
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
+      "-DCLANGD_BUILD_XPC=OFF"
     ] ++ stdenv.lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -35,7 +38,16 @@ let
       "-DLINK_POLLY_INTO_TOOLS=ON"
     ];
 
-    patches = [ ./purity.patch ];
+    patches = [
+      ./purity.patch
+      ./clang-xpc.patch
+      # Backport for -static-pie, which the latter touches, and which is nice in
+      # its own right.
+      ./static-pie.patch
+      # Backport for the `--unwindlib=[libgcc|compiler-rt]` flag, which is
+      # needed for our bootstrapping to not interfere with C.
+      ./unwindlib.patch
+    ];
 
     postPatch = ''
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \

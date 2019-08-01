@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkgconfig, vala, gettext, python3
-, appstream-glib, desktop-file-utils, glibcLocales, wrapGAppsHook
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, vala, gettext, python3
+, appstream-glib, desktop-file-utils, wrapGAppsHook
 , gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas, hicolor-icon-theme
 , curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo, libxml2
 }:
 
 stdenv.mkDerivation rec {
   pname = "feedreader";
-  version = "2.8.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "jangernert";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qm7scrz8xm68zizcfn13ll4ksdd004fahki7gbwqagsr1fg62y8";
+    sha256 = "154lzvd8acs4dyc91nlabpr284yrij8jkhgm0h18hp3cy0a11rv8";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ]);
 
   postPatch = ''
-    patchShebangs meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
   '';
 
   meta = with stdenv.lib; {

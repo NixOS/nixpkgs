@@ -15,15 +15,21 @@ let
     };
 
     "8.8" = {
-      version = "1.0";
-      rev = "v1.0-8.8";
-      sha256 = "0dd7zd5j2sv5cw3mfwg33ss2vcj634q3qykakc41sv7f3rfgqfnn";
+      version = "1.2";
+      rev = "v1.2-8.8";
+      sha256 = "06452fyzalz7zcjjp73qb7d6xvmqb6skljkivf8pfm55fsc8s7kx";
     };
 
     "8.9" = {
-      version = "1.2beta";
-      rev = "v1.2-beta-8.9";
-      sha256 = "1sj7vyarmvp1w5kvbhgpgap1yd0yrj4n1jrla0wv70k0jrq5hhpz";
+      version = "1.2";
+      rev = "v1.2-8.9";
+      sha256 = "1q3wvicr43bgy7xn1diwh4j43mnrhprrc2xd22qlbz9cl6bhf8bj";
+    };
+
+    "8.10" = {
+      version = "1.2";
+      rev = "v1.2-8.10";
+      sha256 = "1v5kx0xzxzsbs5r4w08rm1lrmjjggnd3ap0sd1my88ds17jzyasd";
     };
   };
   param = params."${coq.coq-version}";

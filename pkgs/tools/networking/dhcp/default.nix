@@ -1,5 +1,6 @@
 { stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper
 , coreutils, gnused, openldap ? null
+, buildPackages, lib
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,11 @@ stdenv.mkDerivation rec {
       ./set-hostname.patch
     ];
 
-  buildInputs = [ perl makeWrapper openldap ];
+  nativeBuildInputs = [ perl ];
+
+  buildInputs = [ makeWrapper openldap ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = [
     "--enable-failover"
@@ -31,6 +36,7 @@ stdenv.mkDerivation rec {
     "--enable-early-chroot"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.optional stdenv.isLinux "--with-randomdev=/dev/random")
   ] ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=pointer-compare" ];
@@ -57,6 +63,8 @@ stdenv.mkDerivation rec {
       substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
       sed -i "includes/dhcpd.h" \
 	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
+
+      export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
 
   meta = with stdenv.lib; {

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [zlib] ++ stdenv.lib.optional stdenv.isLinux utillinux;
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
 
   doCheck = stdenv.isLinux;
   checkTarget = "tests";

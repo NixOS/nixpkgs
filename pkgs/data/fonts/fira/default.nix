@@ -1,18 +1,23 @@
-{ stdenv, fetchzip }:
+{ lib, fetchFromGitHub }:
 
-fetchzip rec {
-  name = "fira-4.106";
+let
+  version = "4.106";
+in fetchFromGitHub {
+  name = "fira-${version}";
 
-  url = https://github.com/mozilla/Fira/archive/4.106.zip;
+  owner = "mozilla";
+  repo = "Fira";
+  rev = version;
 
   postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile Fira-4.106/otf/FiraSans\*.otf -d $out/share/fonts/opentype
+    tar xf $downloadedFile --strip=1
+    mkdir -p $out/share/fonts/opentype
+    cp otf/*.otf $out/share/fonts/opentype
   '';
 
   sha256 = "0c97nmihcq0ki7ywj8zn048a2bgrszc61lb9p0djfi65ar52jab4";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://mozilla.github.io/Fira/;
     description = "Sans-serif font for Firefox OS";
     longDescription = ''

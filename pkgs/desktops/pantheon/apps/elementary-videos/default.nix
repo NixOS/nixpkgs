@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, python3
 , desktop-file-utils, gtk3, granite, libgee, clutter-gst, clutter-gtk, gst_all_1
-, gobject-introspection, elementary-icon-theme, wrapGAppsHook }:
+, elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "videos";
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig
