@@ -6,7 +6,7 @@
 #   services.dbus.packages = [ pkgs.flameshot ];
 #   environment.systemPackages = [ pkgs.flameshot ];
 mkDerivation rec {
-  name = "flameshot-${version}";
+  pname = "flameshot";
   version = "0.6.0";
 
   src = fetchFromGitHub {
