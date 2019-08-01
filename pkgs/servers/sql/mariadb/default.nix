@@ -53,11 +53,7 @@ common = rec { # attributes common to both builds
   patches = [
     ./cmake-includedir.patch
     ./cmake-libmariadb-includedir.patch
-  ] ++ optionals stdenv.isDarwin [
-      # Derived from "Fixed c++11 narrowing error"
-      # https://github.com/MariaDB/server/commit/a0dfefb0f8a47145e599a5f1b0dc576fa7634b92
-      ./fix-c++11-narrowing-error.patch
-    ];
+  ];
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
