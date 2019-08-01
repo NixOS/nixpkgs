@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook
+{ stdenv, mkDerivation, fetchurl, autoreconfHook
 , libarchive, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
 , pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
@@ -23,7 +23,7 @@ with stdenv.lib;
 
 assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "vlc-${version}";
   version = "3.0.7.1";
 
