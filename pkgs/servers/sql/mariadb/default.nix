@@ -4,6 +4,7 @@
 , fixDarwinDylibNames, cctools, CoreServices
 , asio, buildEnv, check, scons
 , less
+, withoutClient ? false
 }:
 
 with stdenv.lib;
@@ -14,9 +15,9 @@ libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 mytopEnv = perl.withPackages (p: with p; [ DataDumper DBDmysql DBI TermReadKey ]);
 
-mariadb = everything // {
+mariadb = server // {
   inherit client; # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
-  server = everything; # a full single-output build, including everything in `client` again
+  server = server; # MariaDB Server
   inherit connector-c; # libmysqlclient.so
   inherit galera;
 };
@@ -146,8 +147,8 @@ client = stdenv.mkDerivation (common // {
   enableParallelBuilding = true; # the client should be OK
 });
 
-everything = stdenv.mkDerivation (common // {
-  pname = "mariadb";
+server = stdenv.mkDerivation (common // {
+  pname = "mariadb-server";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -158,6 +159,10 @@ everything = stdenv.mkDerivation (common // {
     libxml2 boost judy libevent cracklib
   ] ++ optional (stdenv.isLinux && !stdenv.isAarch32) numactl
     ++ optional (!stdenv.isDarwin) mytopEnv;
+
+  patches = common.patches ++ [
+    ./cmake-without-client.patch
+  ];
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -171,6 +176,8 @@ everything = stdenv.mkDerivation (common // {
     "-DWITH_INNODB_DISALLOW_WRITES=ON"
     "-DWITHOUT_EXAMPLE=1"
     "-DWITHOUT_FEDERATED=1"
+  ] ++ stdenv.lib.optionals withoutClient [
+    "-DWITHOUT_CLIENT=ON"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_TOKUDB=1"
@@ -188,16 +195,16 @@ everything = stdenv.mkDerivation (common // {
   postInstall = common.postInstall + ''
     chmod +x "$out"/bin/wsrep_sst_common
     rm -r "$out"/data # Don't need testing data
-    rm "$out"/bin/{mysql_find_rows,mysql_waitpid,mysqlaccess,mysqladmin,mysqlbinlog,mysqlcheck}
-    rm "$out"/bin/{mysqldump,mysqlhotcopy,mysqlimport,mysqlshow,mysqlslap,mysqltest}
+    rm "$out"/lib/mysql/plugin/daemon_example.ini
+    rm "$out"/lib/mysql/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
+    mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
+  '' + optionalString withoutClient ''
     ${ # We don't build with GSSAPI on Darwin
       optionalString (! stdenv.isDarwin) ''
         rm "$out"/lib/mysql/plugin/auth_gssapi_client.so
       ''
     }
-    rm "$out"/lib/mysql/plugin/{client_ed25519.so,daemon_example.ini}
-    rm "$out"/lib/mysql/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
-    mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
+    rm "$out"/lib/mysql/plugin/client_ed25519.so
   '' + optionalString (! stdenv.isDarwin) ''
     sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
   '';
