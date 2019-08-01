@@ -53,15 +53,16 @@ in
       # lead systems to stop working.
       example = cfg.release;
       description = ''
-        Every once in a while, a new NixOS release may change
-        configuration defaults in a way incompatible with stateful
-        data. For instance, if the default version of PostgreSQL
-        changes, the new version will probably be unable to read your
-        existing databases. To prevent such breakage, you can set the
-        value of this option to the NixOS release with which you want
-        to be compatible. The effect is that NixOS will option
-        defaults corresponding to the specified release (such as using
-        an older version of PostgreSQL).
+        This option exists to prevent breakage for NixOS modules that depend on
+        state which can't be controlled by them. The value of this option
+        represents the <em>initial</em> NixOS version installed, and should
+        therefore <em>not</em> be ever changed unless you make sure to run all
+        necessary migrations yourself. By fixing this value, NixOS modules can
+        know what version your state is in, such that they can make incompatible
+        changes for new installations, without breaking the module for all
+        existing installations. For example this is used in the postgresql
+        module, where a new module version uses a newer postgresql version which
+        can't read the databases of older versions.
       '';
     };
 
