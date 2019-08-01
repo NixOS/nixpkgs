@@ -379,8 +379,6 @@ mapAliases ({
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
-  yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix"; # added 2019-04-12
-  mkYarnPackage = yarn2nix; # added 2019-04-12
   youtubeDL = youtube-dl;  # added 2014-10-26
   zdfmediathk = mediathekview; # added 2019-01-19
 

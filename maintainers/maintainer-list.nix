@@ -2156,6 +2156,11 @@
     github = "hlolli";
     name = "Hlodver Sigurdsson";
   };
+  hugoreeves = {
+    email = "hugolreeves@gmail.com";
+    github = "hugoreeves";
+    name = "Hugo Reeves";
+  };
   hodapp = {
     email = "hodapp87@gmail.com";
     github = "Hodapp87";

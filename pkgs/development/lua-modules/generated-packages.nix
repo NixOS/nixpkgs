@@ -1106,11 +1106,11 @@ luuid = buildLuarocksPackage {
 };
 luv = buildLuarocksPackage {
   pname = "luv";
-  version = "1.29.1-2";
+  version = "1.30.0-0";
 
   src = fetchurl {
-    url    = https://luarocks.org/luv-1.29.1-2.src.rock;
-    sha256 = "180g06lkhapb76nhlgsa8ik8z6mrlkvq9mpb8rx74lr101h1yqxg";
+    url    = https://luarocks.org/luv-1.30.0-0.src.rock;
+    sha256 = "1z5sdq9ld4sm5pws9qxpk9cadv9i7ycwad1zwsa57pj67gly11vi";
   };
   disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];

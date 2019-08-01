@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \
       --replace ${fcitx} $out
-    substituteInPlace po/cmake_install.cmake \
-      --replace ${fcitx} $out
     substituteInPlace data/cmake_install.cmake \
       --replace ${fcitx} $out
     substituteInPlace dictmanager/cmake_install.cmake \

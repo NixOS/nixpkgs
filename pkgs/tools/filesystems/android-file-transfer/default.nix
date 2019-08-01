@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, fuse, readline, pkgconfig, qtbase }:
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, fuse, readline, pkgconfig, qtbase }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "android-file-transfer";
   version = "3.9";
 

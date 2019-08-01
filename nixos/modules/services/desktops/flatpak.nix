@@ -22,6 +22,12 @@ in {
   ###### implementation
   config = mkIf cfg.enable {
 
+    assertions = [
+      { assertion = (config.xdg.portal.enable == true);
+        message = "To use Flatpak you must enable XDG Desktop Portals with xdg.portal.enable.";
+      }
+    ];
+
     environment.systemPackages = [ pkgs.flatpak ];
 
     services.dbus.packages = [ pkgs.flatpak ];

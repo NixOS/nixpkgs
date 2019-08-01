@@ -177,7 +177,7 @@ in {
       basePackages = mkOption {
         type = types.attrsOf types.package;
         default = { inherit (pkgs)
-                            networkmanager modemmanager wpa_supplicant
+                            networkmanager modemmanager wpa_supplicant crda
                             networkmanager-openvpn networkmanager-vpnc
                             networkmanager-openconnect networkmanager-fortisslvpn
                             networkmanager-l2tp networkmanager-iodine; };

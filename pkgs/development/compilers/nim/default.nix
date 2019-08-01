@@ -4,12 +4,12 @@
   boehmgc, sfml, tzdata, coreutils, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "nim-${version}";
-  version = "0.20.0";
+  pname = "nim";
+  version = "0.20.2";
 
   src = fetchurl {
-    url = "https://nim-lang.org/download/${name}.tar.xz";
-    sha256 = "144sd7icg2p6qsrr29jdnl11hr34daxq4h16ywwrayz866w7kx2i";
+    url = "https://nim-lang.org/download/${pname}-${version}.tar.xz";
+    sha256 = "0pibil10x0c181kw705phlwk8bn8dy5ghqd9h9fm6i9afrz5ryp1";
   };
 
   doCheck = !stdenv.isDarwin;
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Statically typed, imperative programming language";
-    homepage = https://nim-lang.org/;
+    homepage = "https://nim-lang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ ehmry peterhoeg ];
     platforms = with platforms; linux ++ darwin; # arbitrary

@@ -1093,11 +1093,17 @@ in
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
-  libtensorflow = callPackage ../development/libraries/libtensorflow {
+  libtensorflow-bin = callPackage ../development/libraries/science/math/tensorflow/bin.nix {
+    cudaSupport = pkgs.config.cudaSupport or false;
     inherit (linuxPackages) nvidia_x11;
-    cudatoolkit = cudatoolkit_9_0;
-    cudnn = cudnn_cudatoolkit_9_0;
+    cudatoolkit = cudatoolkit_10_0;
+    cudnn = cudnn_cudatoolkit_10_0;
   };
+
+  libtensorflow =
+    if python.pkgs.tensorflow ? libtensorflow
+    then python.pkgs.tensorflow.libtensorflow
+    else libtensorflow-bin;
 
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
 
@@ -1276,6 +1282,8 @@ in
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  croc = callPackage ../tools/networking/croc { };
+
   cddl = callPackage ../development/tools/cddl { };
 
   cedille = callPackage ../applications/science/logic/cedille
@@ -1382,6 +1390,8 @@ in
   csvs-to-sqlite = with python3Packages; toPythonApplication csvs-to-sqlite;
 
   cucumber = callPackage ../development/tools/cucumber {};
+
+  dabtools = callPackage ../applications/radio/dabtools { };
 
   daemontools = callPackage ../tools/admin/daemontools { };
 
@@ -2174,7 +2184,13 @@ in
 
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
-  codimd = callPackage ../servers/web-apps/codimd { };
+  codimd = callPackage ../servers/web-apps/codimd {
+    nodejs = nodejs-10_x;
+    yarn2nix = yarn2nix-moretea.override {
+      nodejs = nodejs-10_x;
+      yarn = yarn.override { nodejs = nodejs-10_x; };
+    };
+  };
 
   colord = callPackage ../tools/misc/colord { };
 
@@ -4560,7 +4576,7 @@ in
 
   mairix = callPackage ../tools/text/mairix { };
 
-  makemkv = callPackage ../applications/video/makemkv { };
+  makemkv = libsForQt5.callPackage ../applications/video/makemkv { };
 
   makerpm = callPackage ../development/tools/makerpm { };
 
@@ -4596,6 +4612,8 @@ in
         inherit mecab-nodic;
       };
     };
+
+  mediawiki = callPackage ../servers/web-apps/mediawiki { };
 
   memtier-benchmark = callPackage ../tools/networking/memtier-benchmark { };
 
@@ -4918,6 +4936,8 @@ in
   milu = callPackage ../applications/misc/milu { };
 
   mpack = callPackage ../tools/networking/mpack { };
+
+  mtm = callPackage ../tools/misc/mtm { };
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
@@ -5513,6 +5533,8 @@ in
 
   pwgen = callPackage ../tools/security/pwgen { };
 
+  pwgen-secure = callPackage ../tools/security/pwgen-secure { };
+
   pwnat = callPackage ../tools/networking/pwnat { };
 
   pwndbg = python3Packages.callPackage ../development/tools/misc/pwndbg { };
@@ -5901,6 +5923,8 @@ in
 
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
+  sequoia-tool = callPackage ../tools/security/sequoia-tool { inherit (llvmPackages) libclang; };
+
   sewer = callPackage ../tools/admin/sewer { };
 
   screenfetch = callPackage ../tools/misc/screenfetch { };
@@ -6030,6 +6054,8 @@ in
   soapui = callPackage ../applications/networking/soapui { };
 
   sshguard = callPackage ../tools/security/sshguard {};
+
+  suricata = callPackage ../applications/networking/ids/suricata { };
 
   softhsm = callPackage ../tools/security/softhsm {
     inherit (darwin) libobjc;
@@ -7006,6 +7032,8 @@ in
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
+
+  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { };
 
   yasr = callPackage ../applications/audio/yasr { };
 
@@ -8165,7 +8193,9 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
-  rustracer = callPackage ../development/tools/rust/racer { };
+  rustracer = callPackage ../development/tools/rust/racer {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   rustracerd = callPackage ../development/tools/rust/racerd { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
@@ -8259,6 +8289,8 @@ in
   urn = callPackage ../development/compilers/urn { };
 
   urweb = callPackage ../development/compilers/urweb { };
+
+  vlang = callPackage ../development/compilers/vlang { };
 
   inherit (callPackage ../development/compilers/vala { })
     vala_0_36
@@ -12931,7 +12963,7 @@ in
       inherit stdenv fetchurl fetchFromGitHub makeSetupHook makeWrapper;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
-      inherit harfbuzz;
+      harfbuzz = harfbuzzFull;
       inherit libGL;
       inherit perl;
       inherit gtk3;
@@ -14952,6 +14984,8 @@ in
 
   syncserver = callPackage ../servers/syncserver { };
 
+  thanos = callPackage ../servers/monitoring/thanos { };
+
   inherit (callPackages ../servers/http/tomcat { })
     tomcat7
     tomcat8
@@ -15839,6 +15873,7 @@ in
 
   aggregateModules = modules:
     callPackage ../os-specific/linux/kmod/aggregator.nix {
+      inherit (buildPackages) kmod;
       inherit modules;
     };
 
@@ -16446,7 +16481,8 @@ in
 
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
-  font-awesome_5 = callPackage ../data/fonts/font-awesome-5 { };
+  font-awesome_4 = (callPackage ../data/fonts/font-awesome-5 { }).v4;
+  font-awesome_5 = (callPackage ../data/fonts/font-awesome-5 { }).v5;
   font-awesome = font-awesome_5;
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
@@ -17445,6 +17481,8 @@ in
   cwm = callPackage ../applications/window-managers/cwm { };
 
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
+
+  dablin = callPackage ../applications/radio/dablin { };
 
   darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.darcs) (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
@@ -18799,6 +18837,8 @@ in
 
   josm = callPackage ../applications/misc/josm { };
 
+  jormungandr = callPackage ../applications/altcoins/jormungandr { };
+
   jbrout = callPackage ../applications/graphics/jbrout { };
 
   jwm = callPackage ../applications/window-managers/jwm { };
@@ -19670,7 +19710,7 @@ in
 
   openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
 
-  openscad = callPackage ../applications/graphics/openscad {};
+  openscad = libsForQt5.callPackage ../applications/graphics/openscad {};
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
 
@@ -20554,7 +20594,7 @@ in
 
   tambura = callPackage ../applications/audio/tambura { };
 
-  teamspeak_client = libsForQt511.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
+  teamspeak_client = libsForQt512.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskell = callPackage ../applications/misc/taskell { };
@@ -20573,8 +20613,14 @@ in
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  tdesktopPackages = dontRecurseIntoAttrs (callPackage ../applications/networking/instant-messengers/telegram/tdesktop { });
-  tdesktop = tdesktopPackages.stable;
+  # TODO (@primeos): Remove after the 19.09 branch-off:
+  tdesktopPackages = throw ''
+    The attributes "tdesktopPackages.*" where removed as the preview version
+    will not be maintained anymore (there are regular stable releases and we
+    depend on the patches from Arch Linux which only track the stable version
+    as well). Please switch to "tdesktop" (stable version).
+  '';
+  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
 
