@@ -85,6 +85,7 @@ common = rec { # attributes common to both builds
     "-DWITH_SSL=system"
     "-DWITH_PCRE=system"
     "-DWITH_SAFEMALLOC=OFF"
+    "-DWITH_UNIT_TESTS=OFF"
     "-DEMBEDDED_LIBRARY=OFF"
   ] ++ optional stdenv.isDarwin [
     # On Darwin without sandbox, CMake will find the system java and attempt to build with java support, but
@@ -137,7 +138,7 @@ client = stdenv.mkDerivation (common // {
 
   postInstall =  common.postInstall + ''
     rm -r "$out"/share/doc
-    rm "$out"/bin/{mytop,wsrep_sst_rsync_wan}
+    rm "$out"/bin/{mysqltest,mytop,wsrep_sst_rsync_wan}
     rm "$out"/lib/mysql/plugin/daemon_example.ini
     libmysqlclient_path=$(readlink -f $out/lib/mysql/libmysqlclient${libExt})
     rm "$out"/lib/mysql/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
@@ -196,6 +197,7 @@ server = stdenv.mkDerivation (common // {
 
   postInstall = common.postInstall + ''
     chmod +x "$out"/bin/wsrep_sst_common
+    rm "$out"/bin/mysql_client_test
     rm -r "$out"/data # Don't need testing data
     rm "$out"/lib/mysql/plugin/daemon_example.ini
     rm "$out"/lib/mysql/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
