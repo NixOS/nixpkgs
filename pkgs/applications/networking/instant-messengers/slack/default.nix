@@ -113,6 +113,7 @@ in stdenv.mkDerivation {
     description = "Desktop client for Slack";
     homepage = https://slack.com;
     license = licenses.unfree;
+    maintainers = [ maintainers.mmahut ];
     platforms = [ "x86_64-linux" ];
   };
 }
