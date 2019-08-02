@@ -728,6 +728,19 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
+  libXTrap = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXt }: stdenv.mkDerivation {
+    name = "libXTrap-1.0.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/lib/libXTrap-1.0.1.tar.bz2;
+      sha256 = "0bi5wxj6avim61yidh9fd3j4n8czxias5m8vss9vhxjnk1aksdwg";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
   libXau = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "libXau-1.0.9";
     builder = ./builder.sh;
@@ -2834,7 +2847,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xtrap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXt }: stdenv.mkDerivation {
+  xtrap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXt, libXTrap }: stdenv.mkDerivation {
     name = "xtrap-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2843,7 +2856,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXt ];
+    buildInputs = [ libX11 libXt libXTrap ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
