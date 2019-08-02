@@ -274,6 +274,30 @@ let
       '';
     };
 
+    postgres = {
+      exporterConfig = {
+        enable = true;
+        runAsLocalSuperUser = true;
+      };
+      metricProvider = {
+        services.postgresql.enable = true;
+      };
+      exporterTest = ''
+        waitForUnit("prometheus-postgres-exporter.service");
+        waitForOpenPort(9187);
+        waitForUnit("postgresql.service");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_exporter_last_scrape_error 0'");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 1'");
+        systemctl("stop postgresql.service");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -qv 'pg_exporter_last_scrape_error 0'");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 0'");
+        systemctl("start postgresql.service");
+        waitForUnit("postgresql.service");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_exporter_last_scrape_error 0'");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 1'");
+      '';
+    };
+
     snmp = {
       exporterConfig = {
         enable = true;
