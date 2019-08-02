@@ -14750,6 +14750,8 @@ in
 
   ifdtool = callPackage ../tools/misc/ifdtool { };
 
+  cbmem = callPackage ../tools/misc/cbmem { };
+
   nvramtool = callPackage ../tools/misc/nvramtool { };
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
