@@ -2570,10 +2570,10 @@ let
 
   Clone = buildPerlPackage {
     pname = "Clone";
-    version = "0.42";
+    version = "0.43";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GARU/Clone-0.42.tar.gz;
-      sha256 = "1r87rdm0nilfayxwlzvylwc8r3hr5m24180x437j30qpizdk1aal";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Clone-0.43.tar.gz;
+      sha256 = "1npf5s4b90ds6lv8gn76b2w4bdh0z5ni5zk4skgc2db5d12560lr";
     };
     meta = {
       description = "Recursively copy Perl datatypes";
