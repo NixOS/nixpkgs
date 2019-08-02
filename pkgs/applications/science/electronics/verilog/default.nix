@@ -1,31 +1,31 @@
 { stdenv, fetchFromGitHub, autoconf, gperf, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "iverilog-${version}";
-  version = "2019.03.27";
+  pname = "iverilog";
+  version = "unstable-2019-08-01";
 
   src = fetchFromGitHub {
     owner  = "steveicarus";
-    repo   = "iverilog";
-    rev    = "a9388a895eb85a9d7f2924b89f839f94e1b6d7c4";
-    sha256 = "01d48sy3pzg9x1xpczqrsii2ckrvgnrfj720wiz22jdn90nirhhr";
+    repo = pname;
+    rev    = "c383d2048c0bd15f5db083f14736400546fb6215";
+    sha256 = "1zs0gyhws0qa315magz3w5m45v97knczdgbf2zn4d7bdb7cv417c";
   };
 
   enableParallelBuilding = true;
 
-  patchPhase = ''
+  preConfigure = ''
     chmod +x $PWD/autoconf.sh
     $PWD/autoconf.sh
   '';
 
   buildInputs = [ autoconf gperf flex bison ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Icarus Verilog compiler";
     repositories.git = https://github.com/steveicarus/iverilog.git;
-    homepage = http://www.icarus.com;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [winden];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://iverilog.icarus.com/";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ winden ];
+    platforms = platforms.linux;
   };
 }
