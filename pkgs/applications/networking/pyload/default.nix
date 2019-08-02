@@ -45,16 +45,16 @@ in pythonPackages.buildPythonApplication rec {
   '';
 
   preBuild = ''
-    paver generate_setup
+    ${pythonPackages.paver}/bin/paver generate_setup
   '';
 
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Free and open source downloader for 1-click-hosting sites";
     homepage = https://github.com/pyload/pyload;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.mahe ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.mahe ];
+    platforms = platforms.all;
   };
 }
