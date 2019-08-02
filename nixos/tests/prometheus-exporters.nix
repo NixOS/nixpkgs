@@ -191,7 +191,6 @@ let
     mail = {
       exporterConfig = {
         enable = true;
-        user = "mailexporter";
         configuration = {
           monitoringInterval = "2s";
           mailCheckTimeout = "10s";
@@ -199,9 +198,9 @@ let
             name = "testserver";
             server = "localhost";
             port = 25;
-            from = "mailexporter@localhost";
-            to = "mailexporter@localhost";
-            detectionDir = "/var/spool/mail/mailexporter/new";
+            from = "mail-exporter@localhost";
+            to = "mail-exporter@localhost";
+            detectionDir = "/var/spool/mail/mail-exporter/new";
           } ];
         };
       };
@@ -211,7 +210,7 @@ let
           after = [ "postfix.service" ];
           requires = [ "postfix.service" ];
           preStart = ''
-            mkdir -p 0600 mailexporter/new
+            mkdir -p 0600 mail-exporter/new
           '';
           serviceConfig = {
             ProtectHome = true;
