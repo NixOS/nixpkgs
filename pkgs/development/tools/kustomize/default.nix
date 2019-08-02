@@ -1,15 +1,15 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "kustomize-${version}";
-  version = "3.0.0";
-  # rev is the 3.0.0 commit, mainly for kustomize version command output
-  rev = "e0bac6ad192f33d993f11206e24f6cda1d04c4ec";
+  pname = "kustomize";
+  version = "3.1.0";
+  # rev is the 3.1.0 commit, mainly for kustomize version command output
+  rev = "95f3303493fdea243ae83b767978092396169baf";
 
   goPackagePath = "sigs.k8s.io/kustomize";
   subPackages = [ "cmd/kustomize" ];
 
-  buildFlagsArray = let t = "${goPackagePath}/pkg/commands/misc"; in ''
+  buildFlagsArray = let t = "${goPackagePath}/v3/pkg/commands/misc"; in ''
     -ldflags=
       -s -X ${t}.kustomizeVersion=${version}
          -X ${t}.gitCommit=${rev}
@@ -17,9 +17,9 @@ buildGoModule rec {
   '';
 
   src = fetchFromGitHub {
-    sha256 = "1ywppn97gfgrwlq1nrj4kdvrdanq5ahqaa636ynyp9yiv9ibziq6";
+    sha256 = "0kigcirkjvnj3xi1p28p9yp3s0lff24q5qcvf8ahjwvpbwka14sh";
     rev = "v${version}";
-    repo = "kustomize";
+    repo = pname;
     owner = "kubernetes-sigs";
   };
 
