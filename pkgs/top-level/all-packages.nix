@@ -1482,6 +1482,8 @@ in
     gtk = gtk3;
   };
 
+  dsvpn = callPackage ../applications/networking/dsvpn { };
+
   dtools = callPackage ../development/tools/dtools { };
 
   dtrx = callPackage ../tools/compression/dtrx { };
