@@ -191,10 +191,10 @@ let
 
   asa = buildPerlPackage {
      pname = "asa";
-     version = "1.03";
+     version = "1.04";
      src = fetchurl {
-       url = mirror://cpan/authors/id/A/AD/ADAMK/asa-1.03.tar.gz;
-       sha256 = "1w97m0gf3n9av61d0qcw7d1i1rac4gm0fd2ba5wyh53df9d7p0i2";
+       url = mirror://cpan/authors/id/E/ET/ETHER/asa-1.04.tar.gz;
+       sha256 = "0pk783s1h2f45zbmm6a62yfgy71w4sqh8ppgs4cyxfikwxs3p0z5";
      };
      meta = {
        description = "Lets your class/object say it works like something else";
