@@ -235,6 +235,7 @@ in
     systemd.user.services.ssh-agent = mkIf cfg.startAgent
       { description = "SSH Agent";
         wantedBy = [ "default.target" ];
+        unitConfig.ConditionUser = "!@system";
         serviceConfig =
           { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
             ExecStart =

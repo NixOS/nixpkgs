@@ -129,6 +129,8 @@ in {
 
   py3to2 = callPackage ../development/python-modules/3to2 { };
 
+  pynamodb = callPackage ../development/python-modules/pynamodb { };
+
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
