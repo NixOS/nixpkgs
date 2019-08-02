@@ -103,7 +103,7 @@ in buildRubyGem rec {
     description = "A tool for building complete development environments";
     homepage = https://www.vagrantup.com/;
     license = licenses.mit;
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with maintainers; [ aneeshusa angristan ];
     platforms = with platforms; linux ++ darwin;
   };
 }
