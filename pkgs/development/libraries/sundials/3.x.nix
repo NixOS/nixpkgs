@@ -22,11 +22,13 @@ in stdenv.mkDerivation rec {
     sha256 = "0238r1qnwqz13wcjzfsbcfi8rfnlxcjjmxq2vpf2qf5jgablvna7";
   };
 
-  patches = [ (fetchurl {
-    # https://github.com/LLNL/sundials/pull/19
-    url = "https://github.com/LLNL/sundials/commit/1350421eab6c5ab479de5eccf6af2dcad1eddf30.patch";
-    sha256 = "0g67lixp9m85fqpb9rzz1hl1z8ibdg0ldwq5z6flj5zl8a7cw52l";
-  })];
+  patches = [
+    (fetchurl {
+      # https://github.com/LLNL/sundials/pull/19
+      url = "https://github.com/LLNL/sundials/commit/1350421eab6c5ab479de5eccf6af2dcad1eddf30.patch";
+      sha256 = "0g67lixp9m85fqpb9rzz1hl1z8ibdg0ldwq5z6flj5zl8a7cw52l";
+    })
+  ];
 
   cmakeFlags = [
     "-DEXAMPLES_INSTALL_PATH=${placeholder "out"}/share/examples"
