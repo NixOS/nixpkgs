@@ -88,7 +88,7 @@ let
     };
     user = mkOption {
       type = types.str;
-      default = "nobody";
+      default = "${name}-exporter";
       description = ''
         User name under which the ${name} exporter shall be run.
         Has no effect when <option>systemd.services.prometheus-${name}-exporter.serviceConfig.DynamicUser</option> is true.
@@ -96,7 +96,7 @@ let
     };
     group = mkOption {
       type = types.str;
-      default = "nobody";
+      default = "${name}-exporter";
       description = ''
         Group under which the ${name} exporter shall be run.
         Has no effect when <option>systemd.services.prometheus-${name}-exporter.serviceConfig.DynamicUser</option> is true.
@@ -129,6 +129,18 @@ let
   mkExporterConf = { name, conf, serviceOpts }:
     mkIf conf.enable {
       warnings = conf.warnings or [];
+      users.users = (mkIf (conf.user == "${name}-exporter") {
+        "${name}-exporter" = {
+          description = ''
+            Prometheus ${name} exporter service user
+          '';
+          isSystemUser = true;
+          inherit (conf) group;
+        };
+      });
+      users.groups = (mkIf (conf.group == "${name}-exporter") {
+        "${name}-exporter" = {};
+      });
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"

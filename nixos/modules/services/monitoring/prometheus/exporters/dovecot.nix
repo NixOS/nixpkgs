@@ -39,8 +39,8 @@ in
             mail_plugins = $mail_plugins old_stats
             service old-stats {
               unix_listener old-stats {
-                user = nobody
-                group = nobody
+                user = dovecot-exporter
+                group = dovecot-exporter
               }
             }
           ''';
