@@ -4219,9 +4219,13 @@
     name = "Ben Hamlin";
   };
   prusnak = {
-    email = "stick@gk2.sk";
+    email = "pavol@rusnak.io";
     github = "prusnak";
     name = "Pavol Rusnak";
+    keys = [{
+      longkeyid = "rsa4096/0x91F3B339B9A02A3D";
+      fingerprint = "86E6 792F C27B FD47 8860  C110 91F3 B339 B9A0 2A3D";
+    }];
   };
   pshendry = {
     email = "paul@pshendry.com";
