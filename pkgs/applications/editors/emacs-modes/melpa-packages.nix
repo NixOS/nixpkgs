@@ -4,12 +4,11 @@
 
 To update the list of packages from MELPA,
 
-1. Clone https://github.com/ttuegel/emacs2nix.
-2. Clone https://github.com/milkypostman/melpa.
-3. Run `./melpa-packages.sh --melpa PATH_TO_MELPA_CLONE` from emacs2nix.
-4. Copy the new `melpa-generated.nix` file into Nixpkgs.
-5. Check for evaluation errors: `nix-instantiate ./. -A emacsPackagesNg.melpaPackages`.
-6. `git add pkgs/applications/editors/emacs-modes/melpa-generated.nix && git commit -m "melpa-packages $(date -Idate)"`
+1. Run ./update-melpa
+2. Check for evaluation errors:
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackagesNg.melpaStablePackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackagesNg.melpaPackages
+3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
 */
 
@@ -18,7 +17,9 @@ To update the list of packages from MELPA,
 self:
 
   let
-    imported = import ./melpa-generated.nix { inherit (self) callPackage; };
+    inherit (import ./libgenerated.nix lib self) melpaDerivation;
+    imported = lib.listToAttrs (map (melpaDerivation "unstable")
+                                    (lib.importJSON ./recipes-archive-melpa.json));
     super = builtins.removeAttrs imported [
       "swbuff-x" # required dependency swbuff is missing
     ];
@@ -264,6 +265,29 @@ self:
             '';
         });
       });
+
+      # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
+      _0blayout = super."0blayout";
+      _0xc = super."0xc";
+      _2048-game = super."2048-game";
+      _4clojure = super."4clojure";
+      at = super."@";
+      desktop-plus = super."desktop+";
+      # filesets-plus = super."filesets+";
+      ghub-plus = super."ghub+";
+      git-gutter-plus = super."git-gutter+";
+      git-gutter-fringe-plus = super."git-gutter-fringe+";
+      ido-completing-read-plus = super."ido-completing-read+";
+      image-plus = super."image+";
+      image-dired-plus = super."image-dired+";
+      markdown-mode-plus = super."markdown-mode+";
+      package-plus = super."package+";
+      rect-plus = super."rect+";
+      term-plus = super."term+";
+      term-plus-key-intercept = super."term+key-intercept";
+      term-plus-mux = super."term+mux";
+      xml-plus = super."xml+";
+
     };
 
     melpaPackages =
