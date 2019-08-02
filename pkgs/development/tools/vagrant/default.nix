@@ -96,6 +96,7 @@ in buildRubyGem rec {
 
   passthru = {
     inherit ruby deps;
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
