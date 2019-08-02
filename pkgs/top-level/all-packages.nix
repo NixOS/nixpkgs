@@ -24572,4 +24572,6 @@ in
   kube3d =  callPackage ../applications/networking/cluster/kube3d {};
 
   zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
+
+  runwayml = callPackage ../applications/graphics/runwayml {};
 }
