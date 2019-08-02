@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
       "-DgRPC_PROTOBUF_PROVIDER=package"
       "-DgRPC_GFLAGS_PROVIDER=package"
       "-DBUILD_SHARED_LIBS=ON"
+      "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     ];
 
   # CMake creates a build directory by default, this conflicts with the
