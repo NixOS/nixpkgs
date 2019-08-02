@@ -53,6 +53,7 @@ common = rec { # attributes common to both builds
   patches = [
     ./cmake-includedir.patch
     ./cmake-libmariadb-includedir.patch
+    ./cmake-fix-crypt-libs.patch
   ];
 
   cmakeFlags = [
