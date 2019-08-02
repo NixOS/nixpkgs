@@ -7,15 +7,6 @@ let
   };
 in
 nodePackages // {
-  aws-azure-login = nodePackages.aws-azure-login.override {
-    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
-
-    buildInputs = [ pkgs.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/aws-azure-login" --set PUPPETEER_EXECUTABLE_PATH "${pkgs.chromium}/bin/chromium"
-    '';
-  };
-
   bower2nix = nodePackages.bower2nix.override {
     buildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
@@ -71,10 +62,6 @@ nodePackages // {
     postInstall = ''
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}
     '';
-  };
-
-  npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0".override {
-    postInstall = "npm run-script prepublish";
   };
 
   pnpm = nodePackages.pnpm.override {

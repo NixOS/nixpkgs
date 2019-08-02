@@ -1,5 +1,9 @@
 { stdenv, fetchurl, ocaml, findlib, opaline }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "dune is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   pname = "dune";
   version = "1.11.0";

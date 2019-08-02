@@ -14,6 +14,7 @@
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
 , buildType ? "release"
+, meta ? {}
 
 , cargoVendorDir ? null
 , ... } @ args:
@@ -45,7 +46,6 @@ let
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   releaseDir = "target/${stdenv.hostPlatform.config}/${buildType}";
-
 in stdenv.mkDerivation (args // {
   inherit cargoDeps;
 
@@ -103,7 +103,7 @@ in stdenv.mkDerivation (args // {
       "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
       "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
       cargo build \
-        --${buildType} \
+        ${stdenv.lib.optionalString (buildType == "release") "--release"} \
         --target ${stdenv.hostPlatform.config} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
@@ -147,4 +147,9 @@ in stdenv.mkDerivation (args // {
   '';
 
   passthru = { inherit cargoDeps; } // (args.passthru or {});
+
+  meta = {
+    # default to Rust's platforms
+    platforms = rustc.meta.platforms;
+  } // meta;
 })

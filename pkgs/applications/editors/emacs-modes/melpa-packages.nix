@@ -233,6 +233,12 @@ self:
       # upstream issue: missing file header
       textmate = markBroken super.textmate;
 
+      treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       # missing OCaml
       utop = markBroken super.utop;
 

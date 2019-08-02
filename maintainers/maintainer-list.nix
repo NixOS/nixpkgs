@@ -393,6 +393,11 @@
     github = "aneeshusa";
     name = "Aneesh Agrawal";
   };
+  angristan = {
+    email = "angristan@pm.me";
+    github = "angristan";
+    name = "Stanislas Lange";
+  };
   ankhers = {
     email = "justin.k.wood@gmail.com";
     github = "ankhers";
@@ -2155,6 +2160,11 @@
     email = "hlolli@gmail.com";
     github = "hlolli";
     name = "Hlodver Sigurdsson";
+  };
+  hugoreeves = {
+    email = "hugolreeves@gmail.com";
+    github = "hugoreeves";
+    name = "Hugo Reeves";
   };
   hodapp = {
     email = "hodapp87@gmail.com";

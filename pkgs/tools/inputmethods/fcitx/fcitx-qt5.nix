@@ -1,6 +1,12 @@
-{ stdenv, fetchFromGitLab, cmake, fcitx, pkgconfig, qtbase, extra-cmake-modules }:
+{ lib, mkDerivation, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, fcitx
+, pkgconfig
+, qtbase
+}:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "fcitx-qt5";
   version = "1.2.3";
 
@@ -17,12 +23,12 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace platforminputcontext/cmake_install.cmake \
-      --replace ${qtbase.out} $out
+      --replace ${qtbase.bin} $out
     substituteInPlace quickphrase-editor/cmake_install.cmake \
       --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = https://gitlab.com/fcitx/fcitx-qt5;
     description = "Qt5 IM Module for Fcitx";
     license     = licenses.gpl2;

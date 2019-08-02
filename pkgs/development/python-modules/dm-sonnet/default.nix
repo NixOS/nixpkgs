@@ -36,7 +36,7 @@ let
     bazelTarget = ":install";
 
     fetchAttrs = {
-      sha256 = "141k2caj5hlk31gnqryp6w2mzyz4i5s1rf8f3qr18isxy235k3w6";
+      sha256 = "0mxma7jajm42v1hv6agl909xra0azihj588032ivhlmmh403x6wg";
     };
 
     bazelFlags = [

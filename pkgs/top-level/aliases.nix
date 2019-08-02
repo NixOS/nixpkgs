@@ -379,8 +379,6 @@ mapAliases ({
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
-  yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix"; # added 2019-04-12
-  mkYarnPackage = yarn2nix; # added 2019-04-12
   youtubeDL = youtube-dl;  # added 2014-10-26
   zdfmediathk = mediathekview; # added 2019-01-19
 
@@ -419,6 +417,10 @@ mapAliases ({
     gst-plugins-good = pkgs.gst-plugins-good;
     gst-plugins-ugly = pkgs.gst-plugins-ugly;
   };
+
+  # added 2019-08-01
+  mumble_git = pkgs.mumble_rc;
+  murmur_git = pkgs.murmur_rc;
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;

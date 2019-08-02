@@ -81,6 +81,8 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
+  '' + optionalString stdenv.isAarch64 ''
+    sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
   '';
 
   preInstall = ''

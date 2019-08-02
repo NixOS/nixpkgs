@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
+{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
 , libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5
 , libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
 , asio, buildEnv, check, scons
+, less
 }:
 
 with stdenv.lib;
@@ -10,6 +11,8 @@ with stdenv.lib;
 let # in mariadb # spans the whole file
 
 libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+
+mytopEnv = perl.withPackages (p: with p; [ DataDumper DBDmysql DBI TermReadKey ]);
 
 mariadb = everything // {
   inherit client; # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
@@ -133,12 +136,13 @@ everything = stdenv.mkDerivation (common // {
 
   outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = common.nativeBuildInputs ++ [ bison ];
+  nativeBuildInputs = common.nativeBuildInputs ++ [ bison ] ++ optional (!stdenv.isDarwin) makeWrapper;
 
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optional (stdenv.isLinux && !stdenv.isAarch32) numactl;
+  ] ++ optional (stdenv.isLinux && !stdenv.isAarch32) numactl
+    ++ optional (!stdenv.isDarwin) mytopEnv;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -161,6 +165,8 @@ everything = stdenv.mkDerivation (common // {
     cmakeFlags="$cmakeFlags \
       -DINSTALL_SHAREDIR=$dev/share/mysql
       -DINSTALL_SUPPORTFILESDIR=$dev/share/mysql"
+  '' + optionalString (!stdenv.isDarwin) ''
+    patchShebangs scripts/mytop.sh
   '';
 
   postInstall = ''
@@ -179,6 +185,11 @@ everything = stdenv.mkDerivation (common // {
     mkdir -p "$dev"/lib && mv "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a} "$dev"/lib
   '' + optionalString (! stdenv.isDarwin) ''
     sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
+  '';
+
+  # perlPackages.DBDmysql is broken on darwin
+  postFixup = optionalString (!stdenv.isDarwin) ''
+    wrapProgram $out/bin/mytop --set PATH ${less}/bin/less
   '';
 
   CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
