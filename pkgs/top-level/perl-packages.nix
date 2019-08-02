@@ -9863,10 +9863,10 @@ let
 
   MCE = buildPerlPackage {
      pname = "MCE";
-     version = "1.842";
+     version = "1.843";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.842.tar.gz;
-       sha256 = "1bihijd3hdcw3qb404cdkq0g8c0xi86h2pn54crjjc3madclnf57";
+       url = mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.843.tar.gz;
+       sha256 = "0x1s4xxxc9jj46h6i8mr8sczz0qavhal5639img1n8b96nsj6cf7";
      };
      meta = {
        description = "Many-Core Engine for Perl providing parallel processing capabilities";
