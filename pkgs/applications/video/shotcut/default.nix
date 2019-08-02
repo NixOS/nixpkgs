@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, pkgconfig, qtbase
-, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquickcontrols
-, qtgraphicaleffects, libmlt
+{ stdenv, mkDerivation, fetchFromGitHub, SDL2, frei0r, gettext, mlt
+, jack1, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras
+, qtwebsockets, qtquickcontrols, qtgraphicaleffects, libmlt
 , qmake, makeWrapper, qttools }:
 
 assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
 assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "shotcut-${version}";
   version = "19.07.15";
 
