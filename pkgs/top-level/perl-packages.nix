@@ -6726,10 +6726,10 @@ let
 
   FilesysDiskUsage = buildPerlPackage {
     pname = "Filesys-DiskUsage";
-    version = "0.12";
+    version = "0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MANWAR/Filesys-DiskUsage-0.12.tar.gz;
-      sha256 = "e8afee07014df5868f9a2784e041c82c3c8c38550f4cd48bec56d0d6c4997273";
+      url = mirror://cpan/authors/id/M/MA/MANWAR/Filesys-DiskUsage-0.13.tar.gz;
+      sha256 = "fd3e52c6f6241271a281348d1d43c44154c2f61a32543db46aa9e15692d1b713";
     };
     buildInputs = [ TestWarn ];
     meta = {
