@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, autoconf, gperf, flex, bison }:
+{ stdenv, fetchFromGitHub, autoconf, gperf, flex, bison, readline, ncurses
+, bzip2, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "iverilog";
@@ -13,12 +15,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  prePatch = ''
+    substituteInPlace configure.in \
+      --replace "AC_CHECK_LIB(termcap, tputs)" "AC_CHECK_LIB(termcap, tputs)"
+  '';
+
   preConfigure = ''
     chmod +x $PWD/autoconf.sh
     $PWD/autoconf.sh
   '';
 
-  buildInputs = [ autoconf gperf flex bison ];
+  nativeBuildInputs = [ autoconf gperf flex bison ];
+
+  buildInputs = [ readline ncurses bzip2 zlib ];
 
   meta = with stdenv.lib; {
     description = "Icarus Verilog compiler";
