@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, doxygen, makeWrapper
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
 , msgpack, neovim, pythonPackages, qtbase }:
 
 let
-  unwrapped = stdenv.mkDerivation rec {
+  unwrapped = mkDerivation rec {
     pname = "neovim-qt-unwrapped";
-    version = "0.2.11";
+    version = "0.2.12";
 
     src = fetchFromGitHub {
       owner  = "equalsraf";
       repo   = "neovim-qt";
       rev    = "v${version}";
-      sha256 = "0pc1adxc89p2rdvb6nxyqr9sjzqz9zw2dg7a4ardxsl3a8jga1wh";
+      sha256 = "09s3044j0y8nmyi8ykslfii6fx7k9mckmdvb0jn2xmdabpb60i20";
     };
 
     cmakeFlags = [
@@ -24,7 +24,7 @@ let
       jinja2 python msgpack
     ]);
 
-    nativeBuildInputs = [ cmake doxygen makeWrapper ];
+    nativeBuildInputs = [ cmake doxygen ];
 
     enableParallelBuilding = true;
 
