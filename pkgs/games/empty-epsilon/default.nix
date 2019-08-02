@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Open source bridge simulator based on Artemis";
     homepage = https://daid.github.io/EmptyEpsilon/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz lheckemann ];
     platforms = platforms.linux;
   };
 }
