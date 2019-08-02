@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.phpfpm;
 
-  stateDir = "/run/phpfpm";
+  runtimeDir = "/run/phpfpm";
 
   fpmCfgFile = pool: poolOpts: pkgs.writeText "phpfpm-${pool}.conf" ''
     [global]
@@ -103,7 +103,7 @@ let
       };
 
       config = {
-        socket = if poolOpts.listen == "" then "${stateDir}/${name}.sock" else poolOpts.listen;
+        socket = if poolOpts.listen == "" then "${runtimeDir}/${name}.sock" else poolOpts.listen;
         group = mkDefault poolOpts.user;
       };
     };
@@ -194,9 +194,6 @@ in {
         after = [ "network.target" ];
         wantedBy = [ "phpfpm.target" ];
         partOf = [ "phpfpm.target" ];
-        preStart = ''
-          mkdir -p ${stateDir}
-        '';
         serviceConfig = let
           cfgFile = fpmCfgFile pool poolOpts;
           iniFile = phpIni poolOpts;
@@ -210,6 +207,8 @@ in {
           Type = "notify";
           ExecStart = "${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
           ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+          RuntimeDirectory = "phpfpm";
+          RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
         };
       }
     ) cfg.pools;
