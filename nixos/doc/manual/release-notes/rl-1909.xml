@@ -214,6 +214,11 @@
       have a look at the <link xlink:href="https://github.com/nginxinc/nginx-prometheus-exporter">official repo</link>.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       Nodejs 8 is scheduled EOL under the lifetime of 19.09 and has been dropped.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
