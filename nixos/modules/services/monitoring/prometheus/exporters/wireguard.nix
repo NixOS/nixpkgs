@@ -47,7 +47,6 @@ in {
     path = [ pkgs.wireguard-tools ];
 
     serviceConfig = {
-      DynamicUser = true;
       AmbientCapabilities = [ "CAP_NET_ADMIN" ];
     };
   };

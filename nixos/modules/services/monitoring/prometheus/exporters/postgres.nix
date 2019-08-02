@@ -34,6 +34,7 @@ in
   serviceOpts = {
     environment.DATA_SOURCE_NAME = cfg.dataSourceName;
     serviceConfig = {
+      DynamicUser = false;
       User = mkIf cfg.runAsLocalSuperUser (mkForce "postgres");
       ExecStart = ''
         ${pkgs.prometheus-postgres-exporter}/bin/postgres_exporter \

@@ -57,7 +57,6 @@ in
                  else "${pkgs.writeText "snmp-eporter-conf.yml" (builtins.toJSON cfg.configuration)}";
     in {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-snmp-exporter.bin}/bin/snmp_exporter \
           --config.file=${configFile} \

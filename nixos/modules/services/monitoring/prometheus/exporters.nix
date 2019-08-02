@@ -127,9 +127,12 @@ let
   );
 
   mkExporterConf = { name, conf, serviceOpts }:
+    let
+      enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
+    in
     mkIf conf.enable {
       warnings = conf.warnings or [];
-      users.users = (mkIf (conf.user == "${name}-exporter") {
+      users.users = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
         "${name}-exporter" = {
           description = ''
             Prometheus ${name} exporter service user
@@ -138,7 +141,7 @@ let
           inherit (conf) group;
         };
       });
-      users.groups = (mkIf (conf.group == "${name}-exporter") {
+      users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
         "${name}-exporter" = {};
       });
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
@@ -151,7 +154,8 @@ let
         serviceConfig.Restart = mkDefault "always";
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
-      } serviceOpts ] ++ optional (!(serviceOpts.serviceConfig.DynamicUser or false)) {
+        serviceConfig.DynamicUser = mkDefault enableDynamicUser;
+      } serviceOpts ] ++ optional (!enableDynamicUser) {
         serviceConfig.User = conf.user;
         serviceConfig.Group = conf.group;
       });

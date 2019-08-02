@@ -59,6 +59,7 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = false;
       ExecStart = ''
         ${pkgs.prometheus-dovecot-exporter}/bin/dovecot_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
