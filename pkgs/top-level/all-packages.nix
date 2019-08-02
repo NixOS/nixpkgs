@@ -6805,6 +6805,14 @@ with pkgs;
     modules = [ ];
   };
 
+  inherit (callPackages ../servers/openhab {})
+    openhab
+    openhab-v1-addons
+    openhab-v2-addons
+    openhab-milestone
+    openhab-milestone-v1-addons
+    openhab-milestone-v2-addons;
+
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
