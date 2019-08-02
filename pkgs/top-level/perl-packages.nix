@@ -6321,10 +6321,10 @@ let
 
   FileCopyRecursive = buildPerlPackage {
     pname = "File-Copy-Recursive";
-    version = "0.44";
+    version = "0.45";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DM/DMUEY/File-Copy-Recursive-0.44.tar.gz;
-      sha256 = "1r3frbl61kr7ig9bzd60fka772cd504v3kx9kgnwvcy1inss06df";
+      url = mirror://cpan/authors/id/D/DM/DMUEY/File-Copy-Recursive-0.45.tar.gz;
+      sha256 = "0mqivx4nbzagl3s2kxka72050sfb75xvn25j8a0f6ic3ibvir5yk";
     };
     buildInputs = [ PathTiny TestDeep TestFatal TestFile TestWarnings ];
   };
