@@ -1,11 +1,16 @@
-{ lib
+{ blessed
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
+, lib
+, libcxx
+, libcxxabi
 , llvm
-, typesentry
-, blessed
+, openmp
 , pytest
+, pythonOlder
+, stdenv
+, substituteAll
+, typesentry
 }:
 
 buildPythonPackage rec {
@@ -17,10 +22,25 @@ buildPythonPackage rec {
     sha256 = "1s8z81zffrckvdwrrl0pkjc7gsdvjxw59xgg6ck81dl7gkh5grjk";
   };
 
+  patches = [
+    # Disable the compiler monkey patching, and remove the task that's copying
+    # the native dependencies to the build directory.
+    ./remove-compiler-monkeypatch_disable-native-relocation.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Replace the library auto-detection with hardcoded paths.
+    (substituteAll {
+      src = ./hardcode-library-paths.patch;
+
+      libomp_dylib = "${lib.getLib openmp}/lib/libomp.dylib";
+      libcxx_dylib = "${lib.getLib libcxx}/lib/libc++.1.dylib";
+      libcxxabi_dylib = "${lib.getLib libcxxabi}/lib/libc++abi.dylib";
+    })
+  ];
+
   disabled = pythonOlder "3.5";
 
   propagatedBuildInputs = [ typesentry blessed ];
-  buildInputs = [ llvm ];
+  buildInputs = [ llvm ] ++ lib.optionals stdenv.isDarwin [ openmp ];
   checkInputs = [ pytest ];
 
   LLVM = llvm;

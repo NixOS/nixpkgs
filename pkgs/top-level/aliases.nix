@@ -417,6 +417,10 @@ mapAliases ({
     gst-plugins-good = pkgs.gst-plugins-good;
     gst-plugins-ugly = pkgs.gst-plugins-ugly;
   };
+
+  # added 2019-08-01
+  mumble_git = pkgs.mumble_rc;
+  murmur_git = pkgs.murmur_rc;
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;

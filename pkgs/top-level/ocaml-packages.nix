@@ -436,7 +436,7 @@ let
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
 
-    merlin_extend = callPackage ../development/ocaml-modules/merlin_extend { };
+    merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
