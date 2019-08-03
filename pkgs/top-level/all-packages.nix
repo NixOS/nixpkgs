@@ -802,6 +802,8 @@ in
 
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
 
+  github-commenter = callPackage ../development/tools/github-commenter { };
+
   gitless = callPackage ../applications/version-management/gitless { };
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
