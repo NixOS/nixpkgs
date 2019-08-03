@@ -1111,7 +1111,7 @@ self: super: {
     '';
   });
 
-  hsdev_0_3_3_1 = super.hsdev_0_3_3_1.overrideScope (self: super: {
+  hsdev_0_3_3_2 = super.hsdev_0_3_3_2.overrideScope (self: super: {
     haskell-names = self.haskell-names_0_9_6;
     network = self.network_3_0_1_1;
   });
