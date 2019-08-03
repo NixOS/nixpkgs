@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, php }:
 
 stdenv.mkDerivation rec {
-  name = "matomo-${version}";
+  pname = "matomo";
   version = "3.10.0";
 
   src = fetchurl {
