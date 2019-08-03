@@ -1,10 +1,10 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, mkDerivation
 , qmake, qtbase, qtquickcontrols
 , python3, pyotherside
 , pcsclite, yubikey-personalization
 , yubikey-manager, makeWrapper }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "yubioath-desktop";
   version = "4.3.6";
 
