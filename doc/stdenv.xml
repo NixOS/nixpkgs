@@ -704,7 +704,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
 
      <para>
       For information about how to run the updates, execute
-      <cmdsynopsis><command>nix-shell</command> <arg>maintainers/scripts/update.nix</arg></cmdsynopsis>.
+      <command>nix-shell maintainers/scripts/update.nix</command>.
      </para>
     </listitem>
    </varlistentry>
