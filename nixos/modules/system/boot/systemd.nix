@@ -427,7 +427,8 @@ in
     systemd.packages = mkOption {
       default = [];
       type = types.listOf types.package;
-      description = "Packages providing systemd units.";
+      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      description = "Packages providing systemd units and hooks.";
     };
 
     systemd.targets = mkOption {
@@ -497,11 +498,14 @@ in
       '';
     };
 
-    systemd.generator-packages = mkOption {
-      default = [];
-      type = types.listOf types.package;
-      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
-      description = "Packages providing systemd generators.";
+    systemd.shutdown = mkOption {
+      type = types.attrsOf types.path;
+      default = {};
+      description = ''
+        Definition of systemd shutdown executables.
+        For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
+        <literal>/etc/systemd/system-shutdown/NAME</literal> to <literal>VALUE</literal>.
+      '';
     };
 
     systemd.defaultUnit = mkOption {
@@ -761,18 +765,21 @@ in
     environment.systemPackages = [ systemd ];
 
     environment.etc = let
-      # generate contents for /etc/systemd/system-generators from
-      # systemd.generators and systemd.generator-packages
-      generators = pkgs.runCommand "system-generators" {
+      # generate contents for /etc/systemd/system-${type} from attrset of links and packages
+      hooks = type: links: pkgs.runCommand "system-${type}" {
           preferLocalBuild = true;
-          packages = cfg.generator-packages;
-        } ''
+          packages = cfg.packages;
+      } ''
+        set -e
         mkdir -p $out
         for package in $packages
         do
-          ln -s $package/lib/systemd/system-generators/* $out/
-        done;
-        ${concatStrings (mapAttrsToList (generator: target: "ln -s ${target} $out/${generator};\n") cfg.generators)}
+          for hook in $package/lib/systemd/system-${type}/*
+          do
+            ln -s $hook $out/
+          done
+        done
+        ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
       '';
     in ({
       "systemd/system".source = generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
@@ -834,7 +841,8 @@ in
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
 
-      "systemd/system-generators" = { source = generators; };
+      "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
+      "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
     });
 
     services.dbus.enable = true;
