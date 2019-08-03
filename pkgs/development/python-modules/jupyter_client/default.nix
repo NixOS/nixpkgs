@@ -7,10 +7,6 @@
 , dateutil
 , isPyPy
 , py
-, ipykernel
-, ipython
-, mock
-, pytest
 , tornado
 }:
 
@@ -20,15 +16,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "98e8af5edff5d24e4d31e73bc21043130ae9d955a91aa93fc0bc3b1d0f7b5880";
+    sha256 = "102qgc7isfxwq0zsj6m9apcyj2hk8c8c4fz7656lxlpmvxgazs4q";
   };
 
-  checkInputs = [ ipykernel ipython mock pytest ];
-  propagatedBuildInputs = [traitlets jupyter_core pyzmq dateutil tornado ] ++ lib.optional isPyPy py;
-
-  checkPhase = ''
-    py.test
-  '';
+  propagatedBuildInputs = [
+    traitlets
+    jupyter_core
+    pyzmq
+    dateutil
+    tornado
+  ] ++ lib.optional isPyPy py;
 
   # Circular dependency with ipykernel
   doCheck = false;
