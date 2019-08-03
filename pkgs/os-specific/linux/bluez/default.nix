@@ -1,35 +1,49 @@
 { stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  pythonPackages, readline, udev, libical,
-  systemd, enableWiimote ? false }:
-
-assert stdenv.isLinux;
+  python3, readline, udev, libical, systemd, fetchpatch,
+  enableWiimote ? false, enableMidi ? false, enableSixaxis ? false }:
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.48";
+  name = "bluez-5.50";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "140fjyxa2q4y35d9n52vki649jzb094pf71hxkkvlrpgf8q75a5r";
+    sha256 = "048r91vx9gs5nwwbah2s0xig04nwk14c5s0vb7qmaqdvighsmz2z";
   };
 
-  pythonPath = with pythonPackages;
-    [ dbus-python pygobject2 pygobject3 recursivePthLoader ];
+  pythonPath = with python3.pkgs; [
+    dbus-python pygobject2 pygobject3 recursivePthLoader
+  ];
 
   buildInputs = [
-    pkgconfig dbus glib alsaLib pythonPackages.python pythonPackages.wrapPython
+    dbus glib alsaLib python3 python3.pkgs.wrapPython
     readline udev libical
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
+
   outputs = [ "out" "dev" "test" ];
 
-  patches = [ ./bluez-5.37-obexd_without_systemd-1.patch ];
+  patches = [
+    ./bluez-5.37-obexd_without_systemd-1.patch
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=1880b299086659844889cdaf687133aca5eaf102";
+      name = "CVE-2018-10910-1.patch";
+      sha256 = "17spsxza27gif8jpxk7360ynvwii1llfdfwg35rwywjjmvww0qj4";
+    })
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=9213ff7642a33aa481e3c61989ad60f7985b9984";
+      name = "CVE-2018-10910-2.patch";
+      sha256 = "0j7klbhym64yhn86dbsmybqmwx47bviyyhx931izl1p29z2mg8hn";
+    })
+  ];
 
-  preConfigure = ''
-      substituteInPlace tools/hid2hci.rules --replace /sbin/udevadm ${systemd}/bin/udevadm
-      substituteInPlace tools/hid2hci.rules --replace "hid2hci " "$out/lib/udev/hid2hci "
-    '';
+  postConfigure = ''
+    substituteInPlace tools/hid2hci.rules \
+      --replace /sbin/udevadm ${systemd}/bin/udevadm \
+      --replace "hid2hci " "$out/lib/udev/hid2hci "
+  '';
 
-  configureFlags = [
+  configureFlags = (with stdenv.lib; [
     "--localstatedir=/var"
     "--enable-library"
     "--enable-cups"
@@ -40,8 +54,9 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-systemduserunitdir=$(out)/etc/systemd/user"
     "--with-udevdir=$(out)/lib/udev"
-    ] ++
-    stdenv.lib.optional enableWiimote [ "--enable-wiimote" ];
+    ] ++ optional enableWiimote [ "--enable-wiimote" ]
+      ++ optional enableMidi    [ "--enable-midi" ]
+      ++ optional enableSixaxis [ "--enable-sixaxis" ]);
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
@@ -73,14 +88,21 @@ stdenv.mkDerivation rec {
     # Add extra configuration
     mkdir $out/etc/bluetooth
     ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
+
+    # Add missing tools, ref https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/bluez
+    for files in `find tools/ -type f -perm -755`; do
+      filename=$(basename $files)
+      install -Dm755 tools/$filename $out/bin/$filename
+    done
   '';
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.bluez.org/;
-    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
     description = "Bluetooth support for Linux";
+    homepage = http://www.bluez.org/;
+    license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
+    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
   };
 }

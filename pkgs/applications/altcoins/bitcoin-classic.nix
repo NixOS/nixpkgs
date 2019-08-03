@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt5" ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Peer-to-peer electronic cash system (Classic client)";
     longDescription= ''
@@ -46,6 +48,7 @@ stdenv.mkDerivation rec {
     homepage = https://bitcoinclassic.com/;
     maintainers = with maintainers; [ jefdaj ];
     license = licenses.mit;
+    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

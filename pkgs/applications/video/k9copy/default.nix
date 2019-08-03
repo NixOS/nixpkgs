@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, cmake, automoc4
+, cmake
 , dvdauthor, xineLib, libmpeg2, libav, libdvdread, libdvdnav, dvdplusrwtools
 , phonon, qtx11extras
 , extra-cmake-modules, kio, kiconthemes, ki18n, kdesu, kdoctools, solid
@@ -56,5 +56,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ flosse ];
     platforms = stdenv.lib.platforms.unix;
+    # TODO: The software is deprecated and the build is broken, see:
+    # https://github.com/NixOS/nixpkgs/pull/63260#issuecomment-503506487
+    broken = true;
   };
 }

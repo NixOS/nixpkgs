@@ -23,8 +23,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/beorn7/perks";
-      rev = "4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9";
-      sha256 = "1hrybsql68xw57brzj805xx2mghydpdiysv3gbhr7f5wlxj2514y";
+      rev = "3a771d992973f24aa725d07868b467d1ddfceafb";
+      sha256 = "1l2lns4f5jabp61201sh88zf3b0q793w4zdgp9nll7mmfcxxjif3";
+    };
+  }
+  {
+    goPackagePath = "github.com/gogo/protobuf";
+    fetch = {
+      type = "git";
+      url = "https://github.com/gogo/protobuf";
+      rev = "4aa4cc277ae58d2fab6cfe51dd17df5dceaf457d";
+      sha256 = "009z6rpivyakgsxs0zkm94c9i7l65hcw2ljvah94wq3y6v6j47gs";
     };
   }
   {
@@ -32,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/golang/protobuf";
-      rev = "c65a0412e71e8b9b3bfd22925720d23c0f054237";
-      sha256 = "1ch3czyzq5abl6zm1l0dfsi09xj43ql9jcbmbhfhxz954pw03v3v";
+      rev = "0f2620f554cf5c8e281a2eb655a035f5a0f6dc90";
+      sha256 = "0lxngq1a8cnsy6dlr6gi8pjv3fir2wiw76qh075pa9g02h7ywhv3";
     };
   }
   {
@@ -50,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/client_golang";
-      rev = "06bc6e01f4baf4ee783ffcd23abfcb0b0f9dfada";
-      sha256 = "0dvv21214sn702kc25y5l0gd9d11358976d3w31fgwx7456mjx26";
+      rev = "b5bfa0eb2c8d46bd91dc58271e973c5f0bbebcfa";
+      sha256 = "1msxzkdgi0ing4ddmp0s4qrf267n6ylafw9mbz5yrr7spb1dgxgk";
     };
   }
   {
@@ -59,8 +68,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/client_model";
-      rev = "99fa1f4be8e564e8a6b613da7fa6f46c9edafc6c";
-      sha256 = "19y4ywsivhpxj7ikf2j0gm9k3cmyw37qcbfi78n526jxcc7kw998";
+      rev = "5c3871d89910bfb32f5fcab2aa4b9ec68e65a99f";
+      sha256 = "04psf81l9fjcwascsys428v03fx4fi894h7fhrj2vvcz723q57k0";
     };
   }
   {
@@ -68,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/common";
-      rev = "89604d197083d4781071d3c65855d24ecfb0a563";
-      sha256 = "169rdlaf2mk9z4fydz7ajmngyhmf3q1lk96yhvx46bn986x5xkyn";
+      rev = "c7de2306084e37d54b8be01f3541a8464345e9a5";
+      sha256 = "11dqfm2d0m4sjjgyrnayman96g59x2apmvvqby9qmww2qj2k83ig";
     };
   }
   {
@@ -77,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/procfs";
-      rev = "cb4147076ac75738c9a7d279075a253c0cc5acbd";
-      sha256 = "0zhlrik0f9q1lj6cisgnxgbz4darbcix52hm5abi24l2ahchf5ca";
+      rev = "05ee40e3a273f7245e8777337fc7b46e533a9a92";
+      sha256 = "0f6fnczxa42b9rys2h3l0m8fy3x5hrhaq707vq0lbx5fcylw8lis";
     };
   }
   {

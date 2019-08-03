@@ -4,7 +4,6 @@ with lib;
 
 let
 
-  uid = config.ids.uids.mediatomb;
   gid = config.ids.gids.mediatomb;
   cfg = config.services.mediatomb;
 
@@ -267,12 +266,12 @@ in {
       serviceConfig.User = "${cfg.user}";
     };
 
-    users.extraGroups = optionalAttrs (cfg.group == "mediatomb") (singleton {
+    users.groups = optionalAttrs (cfg.group == "mediatomb") (singleton {
       name = "mediatomb";
       gid = gid;
     });
 
-    users.extraUsers = optionalAttrs (cfg.user == "mediatomb") (singleton {
+    users.users = optionalAttrs (cfg.user == "mediatomb") (singleton {
       name = "mediatomb";
       isSystemUser = true;
       group = cfg.group;

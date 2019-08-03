@@ -1,4 +1,4 @@
-#!/bin/sh
+#!@shell@
 
 inPreprocessorMode () {
     hasE=0

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, waf }:
+{ lib, stdenv, fetchurl, python, wafHook }:
 
 stdenv.mkDerivation rec {
   name = "pflask-${version}";
@@ -10,18 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "2545fca37f9da484b46b6fb5e3a9bbba6526a9725189fe4af5227ef6e6fca440";
   };
 
+  nativeBuildInputs = [ wafHook ];
   buildInputs = [ python ];
-
-  configurePhase = ''
-    ln -s ${waf} waf
-    python waf configure --prefix=$out
-  '';
-  buildPhase = ''
-    python waf build
-  '';
-  installPhase = ''
-    python waf install
-  '';
 
   meta = {
     description = "Lightweight process containers for Linux";

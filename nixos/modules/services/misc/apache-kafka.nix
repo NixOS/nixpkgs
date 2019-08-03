@@ -124,12 +124,14 @@ in {
 
     environment.systemPackages = [cfg.package];
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "apache-kafka";
       uid = config.ids.uids.apache-kafka;
       description = "Apache Kafka daemon user";
       home = head cfg.logDirs;
     };
+
+    systemd.tmpfiles.rules = map (logDir: "d '${logDir} 0700 apache-kafka - - -") cfg.logDirs;
 
     systemd.services.apache-kafka = {
       description = "Apache Kafka Daemon";
@@ -145,15 +147,8 @@ in {
             ${serverConfig}
         '';
         User = "apache-kafka";
-        PermissionsStartOnly = true;
         SuccessExitStatus = "0 143";
       };
-      preStart = ''
-        mkdir -m 0700 -p ${concatStringsSep " " cfg.logDirs}
-        if [ "$(id -u)" = 0 ]; then
-           chown apache-kafka ${concatStringsSep " " cfg.logDirs};
-        fi
-      '';
     };
 
   };

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An array language from Nial Systems";
-    homepage = http://www.nial.com;
+    homepage = https://github.com/vrthra/qnial;
     license = stdenv.lib.licenses.artistic1;
     maintainers = [ stdenv.lib.maintainers.vrthra ];
     platforms = stdenv.lib.platforms.linux;

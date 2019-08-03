@@ -11,7 +11,7 @@ let
     "i686-darwin"   = "0zniyn0s41fxqrajbgwxbcsj5vzf9m7a6yvdz2b11mphr00kpbbs";
     "x86_64-cygwin" = "02slfh1bbpijay4skj85cjiv7z43ha8vm5aa1lwiqjk86qbl1f3h";
     "i686-cygwin"   = "02slfh1bbpijay4skj85cjiv7z43ha8vm5aa1lwiqjk86qbl1f3h";
-  }."${stdenv.system}" or (throw "system #{stdenv.system.} is not supported");
+  }."${stdenv.hostPlatform.system}" or (throw "system #{stdenv.hostPlatform.system.} is not supported");
 
   url = {
     "x86_64-linux"  = "http://kindlegen.s3.amazonaws.com/kindlegen_linux_2.6_i386_v${fileVersion}.tar.gz";
@@ -20,7 +20,7 @@ let
     "i686-darwin"   = "http://kindlegen.s3.amazonaws.com/KindleGen_Mac_i386_v${fileVersion}.zip";
     "x86_64-cygwin" = "http://kindlegen.s3.amazonaws.com/kindlegen_win32_v${fileVersion}.zip";
     "i686-cygwin"   = "http://kindlegen.s3.amazonaws.com/kindlegen_win32_v${fileVersion}.zip";
-  }."${stdenv.system}" or (throw "system #{stdenv.system.} is not supported");
+  }."${stdenv.hostPlatform.system}" or (throw "system #{stdenv.hostPlatform.system.} is not supported");
 
 in stdenv.mkDerivation rec {
   name = "kindlegen-${version}";

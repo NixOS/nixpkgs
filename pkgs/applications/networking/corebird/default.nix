@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, glib, gtk3, json-glib, sqlite, libsoup, gettext, vala_0_40
-, meson, ninja, pkgconfig, gnome3, gst_all_1, wrapGAppsHook, gobjectIntrospection
-, glib-networking }:
+, meson, ninja, pkgconfig, gnome3, gst_all_1, wrapGAppsHook, gobject-introspection
+, glib-networking, python3 }:
 
 stdenv.mkDerivation rec {
   version = "1.7.4";
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja vala_0_40 pkgconfig wrapGAppsHook
-    gobjectIntrospection # for setup hook
+    meson ninja vala_0_40 pkgconfig wrapGAppsHook python3
+    gobject-introspection # for setup hook
   ];
 
   buildInputs = [
     glib gtk3 json-glib sqlite libsoup gettext gnome3.dconf gnome3.gspell glib-networking
-  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good (gst-plugins-bad.override { gtkSupport = true; }) gst-libav ]);
+  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-bad (gst-plugins-good.override { gtkSupport = true; }) gst-libav ]);
 
   postPatch = ''
     chmod +x data/meson_post_install.py # patchShebangs requires executable file

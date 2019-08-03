@@ -22,14 +22,14 @@ in
 rec {
   name = "quake3";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ domenkozar eelco chaoflow ];
+    maintainers = [ domenkozar eelco ];
   };
 
   # TODO: lcov doesn't work atm
   #makeCoverageReport = true;
 
   client =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
       hardware.opengl.driSupport = true;
@@ -40,7 +40,7 @@ rec {
 
   nodes =
     { server =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
 
         { systemd.services."quake3-server" =
             { wantedBy = [ "multi-user.target" ];

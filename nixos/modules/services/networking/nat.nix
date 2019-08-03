@@ -38,19 +38,19 @@ let
     # NAT the marked packets.
     ${optionalString (cfg.internalInterfaces != []) ''
       iptables -w -t nat -A nixos-nat-post -m mark --mark 1 \
-        -o ${cfg.externalInterface} ${dest}
+        ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
     ''}
 
     # NAT packets coming from the internal IPs.
     ${concatMapStrings (range: ''
       iptables -w -t nat -A nixos-nat-post \
-        -s '${range}' -o ${cfg.externalInterface} ${dest}
+        -s '${range}' ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
     '') cfg.internalIPs}
 
     # NAT from external ports to internal ports.
     ${concatMapStrings (fwd: ''
       iptables -w -t nat -A nixos-nat-pre \
-        -i ${cfg.externalInterface} -p ${fwd.proto} \
+        -i ${toString cfg.externalInterface} -p ${fwd.proto} \
         --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
 
@@ -81,7 +81,7 @@ let
 
     ${optionalString (cfg.dmzHost != null) ''
       iptables -w -t nat -A nixos-nat-pre \
-        -i ${cfg.externalInterface} -j DNAT \
+        -i ${toString cfg.externalInterface} -j DNAT \
         --to-destination ${cfg.dmzHost}
     ''}
 
@@ -134,7 +134,8 @@ in
     };
 
     networking.nat.externalInterface = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       example = "eth1";
       description =
         ''
@@ -235,6 +236,15 @@ in
   config = mkMerge [
     { networking.firewall.extraCommands = mkBefore flushNat; }
     (mkIf config.networking.nat.enable {
+
+      assertions = [
+        { assertion = (cfg.dmzHost != null)    -> (cfg.externalInterface != null);
+          message = "networking.nat.dmzHost requires networking.nat.externalInterface";
+        }
+        { assertion = (cfg.forwardPorts != []) -> (cfg.externalInterface != null);
+          message = "networking.nat.forwardPorts requires networking.nat.externalInterface";
+        }
+      ];
 
       environment.systemPackages = [ pkgs.iptables ];
 

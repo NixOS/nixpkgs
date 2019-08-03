@@ -17,16 +17,20 @@ python2Packages.buildPythonApplication rec {
   propagatedBuildInputs = []
   ++ stdenv.lib.optionals withSFTP [ python2Packages.paramiko ];
 
-  # Bazaar can't find the certificates alone
-  patches = [ ./add_certificates.patch ];
+  patches = [
+    # Bazaar can't find the certificates alone
+    ./add_certificates.patch
+    ./CVE-2017-14176.patch
+  ];
   postPatch = ''
     substituteInPlace bzrlib/transport/http/_urllib2_wrappers.py \
       --subst-var-by certPath /etc/ssl/certs/ca-certificates.crt
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://bazaar-vcs.org/;
     description = "A distributed version control system that Just Works";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 }

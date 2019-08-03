@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "http://download.scrolls.com/client/linux.tar.gz";
+    url = "https://download.scrolls.com/client/linux.tar.gz";
     sha256 = "ead1fd14988aa07041fedfa7f845c756cd5077a5a402d85bfb749cb669ececec";
   };
 

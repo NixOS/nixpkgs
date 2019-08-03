@@ -11,7 +11,6 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
       lib.mkMerge [
         { virtualisation.vlans = [ 2 1 ];
           networking.firewall.enable = withFirewall;
-          networking.firewall.allowPing = true;
           networking.nat.internalIPs = [ "192.168.1.0/24" ];
           networking.nat.externalInterface = "eth1";
         }
@@ -25,15 +24,14 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
     name = "nat" + (if withFirewall then "WithFirewall" else "Standalone")
                  + (lib.optionalString withConntrackHelpers "withConntrackHelpers");
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ eelco chaoflow rob wkennington ];
+      maintainers = [ eelco rob ];
     };
 
     nodes =
       { client =
-          { config, pkgs, nodes, ... }:
+          { pkgs, nodes, ... }:
           lib.mkMerge [
             { virtualisation.vlans = [ 1 ];
-              networking.firewall.allowPing = true;
               networking.defaultGateway =
                 (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
             }
@@ -44,19 +42,19 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
           ];
 
         router =
-        { config, pkgs, ... }: lib.mkMerge [
+        { ... }: lib.mkMerge [
           routerBase
           { networking.nat.enable = true; }
         ];
 
         routerDummyNoNat =
-        { config, pkgs, ... }: lib.mkMerge [
+        { ... }: lib.mkMerge [
           routerBase
           { networking.nat.enable = false; }
         ];
 
         server =
-          { config, pkgs, ... }:
+          { ... }:
           { virtualisation.vlans = [ 2 ];
             networking.firewall.enable = false;
             services.httpd.enable = true;

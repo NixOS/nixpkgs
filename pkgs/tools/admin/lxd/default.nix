@@ -1,23 +1,51 @@
-{ stdenv, lib, pkgconfig, lxc, buildGoPackage, fetchFromGitHub }:
+{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
+, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
+, squashfsTools, iproute, iptables, ebtables, libcap, dqlite
+, sqlite-replication
+, writeShellScriptBin, apparmor-profiles, apparmor-parser
+, criu
+, bash
+}:
 
 buildGoPackage rec {
-  name = "lxd-${version}";
-  version = "2.16";
-  rev = "lxd-${version}";
+  pname = "lxd";
+  version = "3.13";
 
   goPackagePath = "github.com/lxc/lxd";
 
-  src = fetchFromGitHub {
-    inherit rev;
-    owner = "lxc";
-    repo = "lxd";
-    sha256 = "0i2mq9m8k9kznwz1i0xb48plp1ffpzvbdrvqvagis4sm17yab3fn";
+  src = fetchurl {
+    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "1kasnzd8hw9biyx8avbjmpfax1pdbp9g543g8hs6xpksmk93hl82";
   };
 
-  goDeps = ./deps.nix;
+  preBuild = ''
+    # unpack vendor
+    pushd go/src/github.com/lxc/lxd
+    rm dist/src/github.com/lxc/lxd
+    cp -r dist/src/* ../../..
+    rm -r dist
+    popd
+  '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ lxc ];
+  buildFlags = [ "-tags libsqlite3" ];
+
+  postInstall = ''
+    # test binaries, code generation
+    rm $bin/bin/{deps,macaroon-identity,generate}
+
+    wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
+      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash criu
+      (writeShellScriptBin "apparmor_parser" ''
+        exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+      '')
+    ]}
+
+    mkdir -p "$bin/share/bash-completion/completions/"
+    cp -av go/src/github.com/lxc/lxd/scripts/bash/lxd-client "$bin/share/bash-completion/completions/lxc"
+  '';
+
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  buildInputs = [ lxc acl libcap dqlite sqlite-replication ];
 
   meta = with stdenv.lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";

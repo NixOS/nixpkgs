@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, python34Packages, }:
+{ stdenv, fetchFromGitHub, python3Packages, }:
 
-python34Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   version = "0.9.7";
-  name = "canto-daemon-${version}";
-  namePrefix = "";
+  pname = "canto-daemon";
 
   src = fetchFromGitHub {
     owner = "themoken";
@@ -12,7 +11,7 @@ python34Packages.buildPythonApplication rec {
     sha256 = "1si53r8cd4avfc56r315zyrghkppnjd6n125z1agfv59i7hdmk3n";
   };
 
-  propagatedBuildInputs = with python34Packages; [ feedparser ];
+  propagatedBuildInputs = with python3Packages; [ feedparser ];
 
   meta = {
     description = "Daemon for the canto Atom/RSS feed reader";

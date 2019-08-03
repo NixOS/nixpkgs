@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig, libGLU_combined
-, SDL, SDL_image, libpng, zlib, libvorbis, libogg, libmikmod
+, SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
 , haskellPackages ? null

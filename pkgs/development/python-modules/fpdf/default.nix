@@ -1,4 +1,4 @@
-{ stdenv, lib, writeText, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "fpdf";

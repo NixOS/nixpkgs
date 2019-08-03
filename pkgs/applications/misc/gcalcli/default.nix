@@ -1,41 +1,36 @@
-{ stdenv, lib, fetchFromGitHub, pythonPackages
+{ stdenv, lib, fetchFromGitHub, python3
 , libnotify ? null }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "3.4.0";
-  name = "gcalcli-${version}";
+with python3.pkgs;
+
+buildPythonApplication rec {
+  pname = "gcalcli";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner  = "insanum";
-    repo   = "gcalcli";
+    repo   = pname;
     rev    = "v${version}";
-    sha256 = "171awccgnmfv4j7m2my9387sjy60g18kzgvscl6pzdid9fn9rrm8";
+    sha256 = "1qlmslywm4dfimggly4p0ckn2gj165mq1p0wkry9jpb3sg1m5fdf";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
-    dateutil
-    gflags
-    google_api_python_client
-    httplib2
-    oauth2client
-    parsedatetime
-    six
-    vobject
-  ]
-  ++ lib.optional (!pythonPackages.isPy3k) futures;
-
-  # there are no tests as of 3.4.0
-  doCheck = false;
-
-  postInstall = lib.optionalString stdenv.isLinux ''
-    substituteInPlace $out/bin/gcalcli \
-      --replace "command = 'notify-send -u critical -a gcalcli %s'" \
-                "command = '${libnotify}/bin/notify-send -i view-calendar-upcoming-events -u critical -a Calendar %s'"
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace gcalcli/argparsers.py \
+      --replace "'notify-send" "'${libnotify}/bin/notify-send"
   '';
 
+  propagatedBuildInputs = [
+    dateutil gflags httplib2 parsedatetime six vobject
+    google_api_python_client oauth2client uritemplate
+    libnotify
+  ] ++ lib.optional (!isPy3k) futures;
+
+  # There are no tests as of 4.0.0a4
+  doCheck = false;
+
   meta = with lib; {
-    homepage = https://github.com/insanum/gcalcli;
     description = "CLI for Google Calendar";
+    homepage = https://github.com/insanum/gcalcli;
     license = licenses.mit;
     maintainers = with maintainers; [ nocoolnametom ];
     inherit version;

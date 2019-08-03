@@ -1,9 +1,9 @@
-{stdenv, fetchurl, rpmextract, python, wirelesstools, gettext}:
+{buildPythonPackage, fetchurl, rpmextract, python, wirelesstools, gettext}:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "rhpl";
   version = "0.218";
-  name = "${pname}-${version}";
+  format = "other";
 
   src = fetchurl {
     url = http://ftp-stud.hs-esslingen.de/pub/Mirrors/archive.fedoraproject.org/fedora/linux/releases/10/Everything/source/SRPMS//rhpl-0.218-1.src.rpm;
@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
 
   builder = ./builder.sh;
 
-  buildInputs = [ rpmextract python wirelesstools gettext ];
+  nativeBuildInputs = [ rpmextract  gettext ];
+  buildInputs = [ wirelesstools ];
 }

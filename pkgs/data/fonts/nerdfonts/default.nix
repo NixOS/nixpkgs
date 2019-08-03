@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, bash, which, withFont ? "" }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "2.0.0";
   name = "nerdfonts-${version}";
   src = fetchFromGitHub {
     owner = "ryanoasis";
     repo = "nerd-fonts";
     rev = version;
-    sha256 = "0h12d33wnhs5w8r3h1gqil98442vf7a13ms3nwldsam4naapsqxz";
+    sha256 = "09i467hyskvzj2wn5sj6shvc9pb0a0rx5iknjkkkbg1ng3bla7nm";
   };
   dontPatchShebangs = true;
   buildInputs = [ which ];
@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/ryanoasis/nerd-fonts;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ ];
     hydraPlatforms = []; # 'Output limit exceeded' on Hydra
   };
 }

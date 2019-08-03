@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, puredata, makeWrapper, plugins }:
+{ symlinkJoin, puredata, makeWrapper, plugins }:
 
 let
 puredataFlags = map (x: "-path ${x}/") plugins;

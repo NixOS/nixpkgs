@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, which, libtool, pkgconfig,
-  alsaLib, portaudio, 
-  pulseaudioSupport ? true, libpulseaudio }:
+{ config, stdenv, lib, fetchFromGitHub
+, autoconf, automake, which, libtool, pkgconfig
+, portaudio, alsaLib
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   name = "pcaudiolib-${version}";

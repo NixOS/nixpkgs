@@ -1,50 +1,50 @@
-{ stdenv, meson, ninja, fetchurl, pkgconfig, gettext, gnome3
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, dbus
 , glib, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
-, gnomeSupport ? false, gnome, makeWrapper
+, gnomeSupport ? false, gnome, gcr, wrapGAppsHook
 , libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
-, libsecret, libgdata
+, libsecret, libgdata, python3
 }:
 
 let
   pname = "gvfs";
-  version = "1.36.0";
-in
-stdenv.mkDerivation rec {
+  version = "1.40.2";
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1fsn6aa9a68cfbna9s00l1ry4ym1fr7ii2f45hzj2fipxfpqihwy";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "07lpcfric3h0302n9b1pwa38mjb76r9s98kg2867y2d1qvzfivxx";
   };
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
+    # patchShebangs requires executable file
+    chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+    patchShebangs test test-driver
   '';
 
   nativeBuildInputs = [
-    meson ninja
-    pkgconfig gettext makeWrapper
+    meson ninja python3
+    pkgconfig gettext wrapGAppsHook
     libxml2 libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
-  buildInputs =
-    [ glib libgudev udisks2 libgcrypt
-      libgphoto2 avahi libarchive fuse libcdio
-      samba libmtp libcap polkit libimobiledevice libbluray
-      libcdio-paranoia libnfs openssh
-      # ToDo: a ligther version of libsoup to have FTP/HTTP support?
-    ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
-      libsoup gcr
-      gnome-online-accounts libsecret libgdata
-    ]);
+  buildInputs = [
+    glib libgudev udisks2 libgcrypt dbus
+    libgphoto2 avahi libarchive fuse libcdio
+    samba libmtp libcap polkit libimobiledevice libbluray
+    libcdio-paranoia libnfs openssh
+    # ToDo: a ligther version of libsoup to have FTP/HTTP support?
+  ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
+    libsoup gcr
+    glib-networking # TLS support
+    gnome-online-accounts libsecret libgdata
+  ]);
 
   mesonFlags = [
-    "-Dgio_module_dir=${placeholder "out"}/lib/gio/modules"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
-    "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
     "-Dtmpfilesdir=no"
   ] ++ stdenv.lib.optionals (!gnomeSupport) [
     "-Dgcr=false" "-Dgoa=false" "-Dkeyring=false" "-Dhttp=false"
@@ -54,15 +54,8 @@ stdenv.mkDerivation rec {
     "-Dsmb=false"
   ];
 
-  enableParallelBuilding = true;
-
-  preFixup = ''
-    for f in $out/libexec/*; do
-      wrapProgram $f \
-        ${stdenv.lib.optionalString gnomeSupport "--prefix GIO_EXTRA_MODULES : \"${stdenv.lib.getLib gnome.dconf}/lib/gio/modules\""} \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-    done
-  '';
+  doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
+  doInstallCheck = doCheck;
 
   passthru = {
     updateScript = gnome3.updateScript {

@@ -1,37 +1,48 @@
-{ stdenv, fetchFromGitHub, cmake, perl
-, file, glib, gmime, libevent, luajit, openssl, pcre, pkgconfig, sqlite, ragel, icu, libfann }:
+{ stdenv, lib, fetchFromGitHub, cmake, perl
+, file, glib, libevent, luajit, openssl, pcre, pkgconfig, sqlite, ragel, icu
+, hyperscan, libfann, gd, jemalloc, openblas
+, withFann ? true
+, withGd ? false
+, withBlas ? true
+, withHyperscan ? stdenv.isx86_64
+}:
+
+assert withHyperscan -> stdenv.isx86_64;
 
 let libmagic = file;  # libmagic provided by file package ATM
 in
 
 stdenv.mkDerivation rec {
   name = "rspamd-${version}";
-  version = "1.6.6";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
-    owner = "vstakhov";
+    owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    sha256 = "04jqrki7rlxywdig264kavy1h5882rspi2drkbdzrk35jjq8rh3h";
+    sha256 = "0b8n7xazmzjb6jf8sk0jg0x861nf1ayzxsvjaymw1qjgpn371r51";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ glib gmime libevent libmagic luajit openssl pcre sqlite ragel icu libfann];
+  buildInputs = [ glib libevent libmagic luajit openssl pcre sqlite ragel icu jemalloc ]
+    ++ lib.optional withFann libfann
+    ++ lib.optional withGd gd
+    ++ lib.optional withHyperscan hyperscan
+    ++ lib.optional withBlas openblas;
 
-  postPatch = ''
-    substituteInPlace conf/common.conf --replace "\$CONFDIR/rspamd.conf.local" "/etc/rspamd/rspamd.conf.local"
-    substituteInPlace conf/common.conf --replace "\$CONFDIR/rspamd.conf.local.override" "/etc/rspamd/rspamd.conf.local.override"
-  '';
-
-  cmakeFlags = ''
-    -DDEBIAN_BUILD=ON
-    -DRUNDIR=/var/run/rspamd
-    -DDBDIR=/var/lib/rspamd
-    -DLOGDIR=/var/log/rspamd
-  '';
+  cmakeFlags = [
+    "-DDEBIAN_BUILD=ON"
+    "-DRUNDIR=/run/rspamd"
+    "-DDBDIR=/var/lib/rspamd"
+    "-DLOGDIR=/var/log/rspamd"
+    "-DLOCAL_CONFDIR=/etc/rspamd"
+    "-DENABLE_JEMALLOC=ON"
+  ] ++ lib.optional withFann "-DENABLE_FANN=ON"
+    ++ lib.optional withHyperscan "-DENABLE_HYPERSCAN=ON"
+    ++ lib.optional withGd "-DENABLE_GD=ON";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/vstakhov/rspamd;
+    homepage = https://rspamd.com;
     license = licenses.asl20;
     description = "Advanced spam filtering system";
     maintainers = with maintainers; [ avnik fpletz ];

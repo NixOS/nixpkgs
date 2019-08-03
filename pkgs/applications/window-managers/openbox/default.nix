@@ -6,20 +6,24 @@ stdenv.mkDerivation rec {
   name = "openbox-${version}";
   version = "3.6.1";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    libxml2
-    libXinerama libXcursor libXau libXrandr libICE libSM
-    libstartup_notification makeWrapper
+  nativeBuildInputs = [
+    pkgconfig
+    makeWrapper
     python2.pkgs.wrapPython
   ];
 
-  pythonPath = with python2.pkgs; [
-    pyxdg
+  buildInputs = [
+    libxml2
+    libXinerama libXcursor libXau libXrandr libICE libSM
+    libstartup_notification
   ];
 
   propagatedBuildInputs = [
     pango imlib2
+  ];
+
+  pythonPath = with python2.pkgs; [
+    pyxdg
   ];
 
   src = fetchurl {
@@ -41,7 +45,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/openbox-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-gnome-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-kde-session" --prefix XDG_DATA_DIRS : "$out/share"
-    wrapPythonPrograms
+    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
   '';
 
   meta = {

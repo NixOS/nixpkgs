@@ -53,10 +53,9 @@ in mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-L${mysql.connector-c}/lib/mysql" "-I${mysql.connector-c}/include/mysql" ];
 
-  postFixup = ''
-    wrapProgram $out/bin/tora \
-      --prefix PATH : ${lib.getBin graphviz}/bin
-  '';
+  qtWrapperArgs = [
+    ''--prefix PATH : ${lib.getBin graphviz}/bin''
+  ];
 
   meta = with lib; {
     description = "Tora SQL tool";

@@ -1,28 +1,30 @@
-{ stdenv, fetchurl, jdk, rlwrap, makeWrapper }:
+{ stdenv, fetchurl, jdk11, rlwrap, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "clojure-${version}";
-  version = "1.9.0.329";
+  pname = "clojure";
+  version = "1.10.1.466";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "1g1mi75285z977vrqbihmmmrmdcnznxbw3r6wkzh571sc1yyrlrj";
+    sha256 = "1rh4isdac7l8k8p45cqim8lfccjzxw7z173xqnpgk3z307jj4n90";
   };
 
   buildInputs = [ makeWrapper ];
 
   outputs = [ "out" "prefix" ];
 
-  installPhase = ''
+  installPhase = let
+    binPath = stdenv.lib.makeBinPath [ rlwrap jdk11 ];
+  in ''
     mkdir -p $prefix/libexec
     cp clojure-tools-${version}.jar $prefix/libexec
-    cp {,example-}deps.edn $prefix
+    cp example-deps.edn $prefix
 
     substituteInPlace clojure --replace PREFIX $prefix
 
     install -Dt $out/bin clj clojure
-    wrapProgram $out/bin/clj --suffix PATH ${rlwrap}/bin
-    wrapProgram $out/bin/clojure --suffix PATH ${jdk}/bin
+    wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
+    wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
   '';
 
   meta = with stdenv.lib; {
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ jlesquembre ];
     platforms = platforms.unix;
   };
 }

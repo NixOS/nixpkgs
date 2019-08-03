@@ -1,0 +1,22 @@
+diff --git a/cctools/ld64/src/ld/OutputFile.cpp b/cctools/ld64/src/ld/OutputFile.cpp
+index 8859882..158c7d2 100644
+--- a/cctools/ld64/src/ld/OutputFile.cpp
++++ b/cctools/ld64/src/ld/OutputFile.cpp
+@@ -2786,7 +2786,7 @@ void OutputFile::writeOutputFile(ld::Internal& state)
+ #ifdef __APPLE__ // ld64-port
+ 			struct statfs fsInfo;
+ 			if ( statfs(_options.outputFilePath(), &fsInfo) != -1 ) {
+-				if ( strcmp(fsInfo.f_fstypename, "hfs") == 0) {
++				if ( (strcmp(fsInfo.f_fstypename, "hfs") == 0) || (strcmp(fsInfo.f_fstypename, "apfs") == 0) ) {
+ 					(void)unlink(_options.outputFilePath());
+ 					outputIsMappableFile = true;
+ 				}
+@@ -2814,7 +2814,7 @@ void OutputFile::writeOutputFile(ld::Internal& state)
+ #ifdef __APPLE__ // ld64-port
+ 			struct statfs fsInfo;
+ 			if ( statfs(dirPath, &fsInfo) != -1 ) {
+-				if ( strcmp(fsInfo.f_fstypename, "hfs") == 0) {
++				if ( (strcmp(fsInfo.f_fstypename, "hfs") == 0) || (strcmp(fsInfo.f_fstypename, "apfs") == 0) ) {
+ 					outputIsMappableFile = true;
+ 				}
+ 			}

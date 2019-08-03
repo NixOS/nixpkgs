@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, getopt, lua, boost, pkgconfig, gcc }:
+{ stdenv, fetchFromGitLab, getopt, lua, boost, pkgconfig, gcc }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "highlight-${version}";
-  version = "3.42";
+  version = "3.52";
 
-  src = fetchFromGitHub {
-    owner = "andre-simon";
+  src = fetchFromGitLab {
+    owner = "saalen";
     repo = "highlight";
-    rev = "${version}";
-    sha256 = "1fxx827igzqjn5rri57b8980hnd3ixz3j7smfxwi1ivfhlfznzgr";
+    rev = "v${version}";
+    sha256 = "0zhn1k70ck82ks7ckzsy1yiz686ym2ps7c28wjmkgxfpyjanilrq";
   };
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin  gcc ;
 
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/"
+    makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/ CXX=$CXX AR=$AR"
   '';
 
   meta = with stdenv.lib; {

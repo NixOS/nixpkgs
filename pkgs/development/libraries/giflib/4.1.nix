@@ -10,9 +10,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with stdenv.lib; {
+    description = "A library for reading and writing gif images";
     branch = "4.1";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }
 

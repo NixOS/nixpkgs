@@ -3,22 +3,17 @@
 assert (openssl != null) == (gnutls == null);
 
 stdenv.mkDerivation rec {
-  name = "openconnect-7.08";
+  pname = "openconnect";
+  version = "8.03";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.infradead.org/pub/openconnect/${name}.tar.gz"
+      "ftp://ftp.infradead.org/pub/openconnect/${pname}-${version}.tar.gz"
     ];
-    sha256 = "00wacb79l2c45f94gxs63b9z25wlciarasvjrb8jb8566wgyqi0w";
+    sha256 = "1wlypi68kqqg2mdck8wvf6aanhrmf9i7z6lngyxvcrp23jdzz34h";
   };
 
   outputs = [ "out" "dev" ];
-
-  preConfigure = ''
-      export PKG_CONFIG=${pkgconfig}/bin/pkg-config
-      export LIBXML2_CFLAGS="-I ${libxml2.dev}/include/libxml2"
-      export LIBXML2_LIBS="-L${libxml2.out}/lib -lxml2"
-    '';
 
   configureFlags = [
     "--with-vpnc-script=${vpnc}/etc/vpnc/vpnc-script"

@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, utils, stdenv, ... }:
+{ config, options, lib, pkgs, utils, ... }:
 
 with lib;
 with utils;
@@ -45,51 +45,6 @@ let
       exit 1
     '';
   });
-
-  # Collect all interfaces that are defined for a device
-  # as device:interface key:value pairs.
-  wlanDeviceInterfaces =
-    let
-      allDevices = unique (mapAttrsToList (_: v: v.device) cfg.wlanInterfaces);
-      interfacesOfDevice = d: filterAttrs (_: v: v.device == d) cfg.wlanInterfaces;
-    in
-      genAttrs allDevices (d: interfacesOfDevice d);
-
-  # Convert device:interface key:value pairs into a list, and if it exists,
-  # place the interface which is named after the device at the beginning.
-  wlanListDeviceFirst = device: interfaces:
-    if hasAttr device interfaces
-    then mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n==device) interfaces) ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
-    else mapAttrsToList (n: v: v // {_iName = n;}) interfaces;
-
-  # udev script that configures a physical wlan device and adds virtual interfaces
-  wlanDeviceUdevScript = device: interfaceList: pkgs.writeScript "wlan-${device}-udev-script" ''
-    #!${pkgs.runtimeShell}
-
-    # Change the wireless phy device to a predictable name.
-    if [ -e "/sys/class/net/${device}/phy80211/name" ]; then
-      ${pkgs.iw}/bin/iw phy `${pkgs.coreutils}/bin/cat /sys/class/net/${device}/phy80211/name` set name ${device} || true
-    fi
-
-    # Crate new, virtual interfaces and configure them at the same time
-    ${flip concatMapStrings (drop 1 interfaceList) (i: ''
-    ${pkgs.iw}/bin/iw dev ${device} interface add ${i._iName} type ${i.type} \
-      ${optionalString (i.type == "mesh" && i.meshID != null) "mesh_id ${i.meshID}"} \
-      ${optionalString (i.type == "monitor" && i.flags != null) "flags ${i.flags}"} \
-      ${optionalString (i.type == "managed" && i.fourAddr != null) "4addr ${if i.fourAddr then "on" else "off"}"} \
-      ${optionalString (i.mac != null) "addr ${i.mac}"}
-    '')}
-
-    # Reconfigure and rename the default interface that already exists
-    ${flip concatMapStrings (take 1 interfaceList) (i: ''
-      ${pkgs.iw}/bin/iw dev ${device} set type ${i.type}
-      ${optionalString (i.type == "mesh" && i.meshID != null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${i.meshID}"}
-      ${optionalString (i.type == "monitor" && i.flags != null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${i.flags}"}
-      ${optionalString (i.type == "managed" && i.fourAddr != null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if i.fourAddr then "on" else "off"}"}
-      ${optionalString (i.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${i.mac}"}
-      ${optionalString (device != i._iName) "${pkgs.iproute}/bin/ip link set dev ${device} name ${i._iName}"}
-    '')}
-  '';
 
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
@@ -386,7 +341,7 @@ in
         You should try to make this ID unique among your machines. You can
         generate a random 32-bit ID using the following commands:
 
-        <literal>cksum /etc/machine-id | while read c rest; do printf "%x" $c; done</literal>
+        <literal>head -c 8 /etc/machine-id</literal>
 
         (this derives it from the machine-id that systemd generates) or
 
@@ -1040,7 +995,7 @@ in
       '';
 
     environment.etc."hostid" = mkIf (cfg.hostId != null)
-      { source = pkgs.runCommand "gen-hostid" {} ''
+      { source = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
           hi="${cfg.hostId}"
           ${if pkgs.stdenv.isBigEndian then ''
             echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
@@ -1062,7 +1017,6 @@ in
         pkgs.iproute
         pkgs.iputils
         pkgs.nettools
-        pkgs.openresolv
       ]
       ++ optionals config.networking.wireless.enable [
         pkgs.wirelesstools # FIXME: obsolete?
@@ -1098,7 +1052,7 @@ in
       };
     } // (listToAttrs (flip map interfaces (i:
       let
-        deviceDependency = if config.boot.isContainer
+        deviceDependency = if (config.boot.isContainer || i.name == "lo")
           then []
           else [ (subsystemDevice i.name) ];
       in
@@ -1132,7 +1086,24 @@ in
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
 
-    services.udev.packages = mkIf (cfg.wlanInterfaces != {}) [
+    services.udev.packages =  [
+      (pkgs.writeTextFile rec {
+        name = "ipv6-privacy-extensions.rules";
+        destination = "/etc/udev/rules.d/98-${name}";
+        text = ''
+          # enable and prefer IPv6 privacy addresses by default
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.%k.use_tempaddr=2"
+        '';
+      })
+      (pkgs.writeTextFile rec {
+        name = "ipv6-privacy-extensions.rules";
+        destination = "/etc/udev/rules.d/99-${name}";
+        text = concatMapStrings (i: ''
+          # enable IPv6 privacy addresses but prefer EUI-64 addresses for ${i.name}
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${i.name}.use_tempaddr=1"
+        '') (filter (i: !i.preferTempAddress) interfaces);
+      })
+    ] ++ lib.optional (cfg.wlanInterfaces != {})
       (pkgs.writeTextFile {
         name = "99-zzz-40-wlanInterfaces.rules";
         destination = "/etc/udev/rules.d/99-zzz-40-wlanInterfaces.rules";
@@ -1206,8 +1177,7 @@ in
             # Generate the same systemd events for both 'add' and 'move' udev events.
             ACTION=="move", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}
           '');
-      }) ];
-
+      });
   };
 
 }

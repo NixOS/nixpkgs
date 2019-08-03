@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, utillinux,
+{ stdenv, cmake, pkgconfig, utillinux,
   protobuf, zeromq, cppzmq,
   version, src    # parametrize version and src so we can easily have pkgs
                   # for different versions
@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://ignitionrobotics.org/libraries/math;
+    homepage = https://ignitionrobotics.org/libraries/math;
     description = "Math library by Ingition Robotics, created for the Gazebo project";
     license = licenses.asl20;
     maintainers = with maintainers; [ pxc ];
     platforms = platforms.all;
+    broken = true; # 2018-04-10
   };
 }

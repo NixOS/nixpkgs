@@ -2,25 +2,26 @@
   rkbin = fetchFromGitHub {
     owner = "ayufan-rock64";
     repo = "rkbin";
-    rev = "d8b90685b3d93c358936babdd854f1018bc6d35e";
-    sha256 = "0wrh3xa968sdp0j9n692jnv3071ymab719zc56vllba0aaabiaxr";
+    rev = "f79a708978232a2b6b06c2e4173c5314559e0d3a";
+    sha256 = "0h7xm4ck3p3380c6bqm5ixrkxwcx6z5vysqdwvfa7gcqx5d6x5zz";
   };
 in buildUBoot rec {
-  name = "uboot-${defconfig}-${version}";
-  version = "2018.01";
+  version = "2017.09";
 
   src = fetchFromGitHub {
     owner = "ayufan-rock64";
     repo = "linux-u-boot";
-    rev = "19e31fac0dee3c4f6b2ea4371e4321f79db0f495";
-    sha256 = "1vmv7q9yafsc0zivd0qdfmf930dvhzkf4a3j6apxxgx9g10wgwrg";
+    rev = "56bd9582537a70c30387de3ce9038a56d2c77bfe";
+    sha256 = "1m0k8ivzhmg9y4x0k7fz7y71pgblzxy81m6x32iivz5kjnxdnv4i";
   };
+
+  extraPatches = [ ./rock64-fdt-dtc-compatibility.patch ];
 
   extraMakeFlags = [ "BL31=${armTrustedFirmwareRK3328}/bl31.elf" "u-boot.itb" "all" ];
 
-  # So close to being blob free... But U-Boot TPL causes the kernel to hang
+  # Close to being blob free, but the U-Boot TPL causes the kernel to hang after a few minutes
   postBuild = ''
-    ./tools/mkimage -n rk3328 -T rksd -d ${rkbin}/rk33/rk3328_ddr_786MHz_v1.06.bin idbloader.img
+    ./tools/mkimage -n rk3328 -T rksd -d ${rkbin}/rk33/rk3328_ddr_786MHz_v1.13.bin idbloader.img
     cat spl/u-boot-spl.bin >> idbloader.img
     dd if=u-boot.itb of=idbloader.img seek=448 conv=notrunc
   '';

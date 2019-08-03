@@ -84,7 +84,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = optionalAttrs (cfg.user == defaultUser) (singleton
+    users.users = optionalAttrs (cfg.user == defaultUser) (singleton
       { name = defaultUser;
         isSystemUser = true;
         createHome = false;
@@ -117,14 +117,12 @@ in
         enable = true;
         serviceConfig = {
           User = cfg.user;
-          PermissionsStartOnly = true;
         };
-        preStart = ''
-          mkdir -m 0700 -p ${cfg.location}
-          chown -R ${cfg.user} ${cfg.location}
-        '';
         script = backupScript;
       };
+      tmpfiles.rules = [
+        "d ${cfg.location} 0700 ${cfg.user} - - -"
+      ];
     };
   };
 

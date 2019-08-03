@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "PyWebDAV";
   version = "0.9.8";
-  name = "${pname}-${version}";
   disabled = isPy3k;
   src = fetchPypi {
     inherit pname version;

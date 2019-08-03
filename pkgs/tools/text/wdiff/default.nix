@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, texinfo }:
+{ stdenv, fetchurl, texinfo, which }:
 
 stdenv.mkDerivation rec {
   name = "wdiff-1.2.2";
@@ -10,8 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ texinfo ];
 
+  checkInputs = [ which ];
+
   meta = {
-    homepage = http://www.gnu.org/software/wdiff/;
+    homepage = https://www.gnu.org/software/wdiff/;
     description = "Comparing files on a word by word basis";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.eelco ];

@@ -1,31 +1,30 @@
 { stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn,
-  libiconv, botan2, systemd, pkgconfig, udns, pandoc, procps } :
+  libiconv, botan2, systemd, pkgconfig, udns, pandoc, coreutils } :
 
 stdenv.mkDerivation rec {
   name = "biboumi-${version}";
-  version = "7.2";
+  version = "8.3";
 
   src = fetchurl {
     url = "https://git.louiz.org/biboumi/snapshot/biboumi-${version}.tar.xz";
-    sha256 = "0gyr2lp2imrjm5hvijcq0s7k9fzkirfl70cprjy9r4yvq6mg1jvd";
+    sha256 = "0896f52nh8vd0idkdznv3gj6wqh1nqhjbwv0m560f0h62f01vm7k";
   };
 
   louiz_catch = fetchgit {
     url = https://lab.louiz.org/louiz/Catch.git;
-    rev = "35f510545d55a831372d3113747bf1314ff4f2ef";
-    sha256 = "1l5b32sgr9zc2hlfr445hwwxv18sh3cn5q1xmvf588z6jyf88g2g";
+    rev = "0a34cc201ef28bf25c88b0062f331369596cb7b7"; # v2.2.1
+    sha256 = "0ad0sjhmzx61a763d2ali4vkj8aa1sbknnldks7xlf4gy83jfrbl";
   };
 
   patches = [ ./catch.patch ];
 
   nativeBuildInputs = [ cmake pkgconfig pandoc ];
   buildInputs = [ libuuid expat sqlite libiconv libidn botan2 systemd
-    udns procps ];
+    udns ];
 
-  inherit procps;
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi
-    substituteInPlace unit/biboumi.service.cmake --replace /bin/kill $procps/bin/kill
+    substituteInPlace unit/biboumi.service.cmake --replace /bin/kill ${coreutils}/bin/kill
     cp $louiz_catch/single_include/catch.hpp tests/
     # echo "policy_directory=$out/etc/biboumi" >> conf/biboumi.cfg
     # TODO include conf/biboumi.cfg as example somewhere

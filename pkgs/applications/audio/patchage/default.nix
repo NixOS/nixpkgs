@@ -1,5 +1,5 @@
 { stdenv, alsaLib, boost, dbus-glib, fetchsvn, ganv, glibmm
-, gtkmm2, libjack2, pkgconfig, python2
+, gtkmm2, libjack2, pkgconfig, python2, wafHook
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib boost dbus-glib ganv glibmm gtkmm2 libjack2
-    pkgconfig python2
+    pkgconfig python2 wafHook
   ];
-
-  configurePhase = "python waf configure --prefix=$out";
-  buildPhase = "python waf build";
-  installPhase = "python waf install";
 
   meta = {
     description = "Modular patch bay for Jack and ALSA systems";

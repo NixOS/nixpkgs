@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig
 , openexr, zlib, imagemagick, libGLU_combined, freeglut, fftwFloat
-, fftw, gsl, libexif, perl, opencv, qt4
+, fftw, gsl, libexif, perl, opencv, qt5
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
     openexr zlib imagemagick libGLU_combined freeglut fftwFloat
-    fftw gsl libexif perl opencv qt4
+    fftw gsl libexif perl opencv qt5.qtbase
   ];
 
   patches = [ ./threads.patch ./pfstools.patch ];

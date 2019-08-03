@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoconf, makeDesktopItem
-, libX11, gdk_pixbuf, cairo, libXft, gtk3, vte
+, libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
 , openssl, libssh2 #build-in ssh
@@ -7,16 +7,16 @@
 
 stdenv.mkDerivation rec {
   name = "mlterm-${version}";
-  version = "3.8.4";
+  version = "3.8.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/mlterm/01release/${name}/${name}.tar.gz";
-    sha256 = "07ih7953pr1jr99rayjn57ba5a0cr3niqkmvy9n59lcc1qwcrwf9";
+    sha256 = "1jq3fv2wqhszfipkzj8d0lykr6g0zzksn7xy4d3kwincmzfskv7k";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf ];
   buildInputs = [
-    libX11 gdk_pixbuf.dev cairo libXft gtk3 vte
+    libX11 gdk-pixbuf.dev cairo libXft gtk3 vte
     harfbuzz fribidi m17n_lib openssl libssh2
   ];
 

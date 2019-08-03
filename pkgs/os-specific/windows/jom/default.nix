@@ -16,14 +16,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ flex qmake4Hook ];
 
   QTDIR = qt48;
-  
-  crossAttrs = {
-    # cmakeFlags = "-DWIN32=1 -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_RC_COMPILER=${stdenv.cc.targetPrefix}windres";
-    QTDIR = qt48.crossDrv;
-    preBuild = ''
-      export NIX_CROSS_CFLAGS_COMPILE=-fpermissive
-    '';
-  };
+
+  # cmakeFlags = "-DWIN32=1 -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_RC_COMPILER=${stdenv.cc.targetPrefix}windres";
+
+  preBuild = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export NIX_CROSS_CFLAGS_COMPILE=-fpermissive
+  '';
 
   meta = {
     homepage = http://qt-project.org/wiki/jom;

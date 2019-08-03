@@ -12,7 +12,8 @@ with stdenv.lib;
 assert guiSupport -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.0.30";
+  name = "gnupg-${version}";
+  version = "2.0.30";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
   '' + stdenv.lib.optionalString stdenv.isLinux ''
-    sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+    sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     find . -name pcsc-wrapper.c | xargs sed -i 's/typedef unsinged int pcsc_dword_t/typedef unsigned int pcsc_dword_t/'
   '' + ''

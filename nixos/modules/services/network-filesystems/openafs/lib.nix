@@ -1,4 +1,4 @@
-{ lib, ...}:
+{ config, lib, ...}:
 
 let
   inherit (lib) concatStringsSep mkOption types;
@@ -8,7 +8,8 @@ in rec {
   mkCellServDB = cellName: db: ''
     >${cellName}
   '' + (concatStringsSep "\n" (map (dbm: if (dbm.ip != "" && dbm.dnsname != "") then dbm.ip + " #" + dbm.dnsname else "")
-                                   db));
+                                   db))
+     + "\n";
 
   # CellServDB configuration type
   cellServDBConfig = {
@@ -25,4 +26,8 @@ in rec {
       description = "DNS full-qualified domain name of a database server";
     };
   };
+
+  openafsMod = config.services.openafsClient.packages.module;
+  openafsBin = config.services.openafsClient.packages.programs;
+  openafsSrv = config.services.openafsServer.package;
 }

@@ -1,14 +1,20 @@
-{ stdenv, buildPythonPackage, fetchurl }:
+{ stdenv
+, buildPythonPackage
+, fetchurl
+, glibcLocales
+}:
 
 buildPythonPackage rec {
   pname = "rpmfluff";
-  version = "0.5.3";
-  name  = "${pname}-${version}";
+  version = "0.5.7.1";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/${pname}/${name}.tar.xz";
-    sha256 = "1i45f012ngpxs83m3dpmaj3hs8z7r9sbf05vnvzgs3hpgsbhxa7r";
+  url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "19vnlzma8b0aghdiixk0q3wc10y6306hsnic0qvswaaiki94fss1";
   };
+
+  LC_ALL="en_US.utf-8";
+  buildInputs = [ glibcLocales ];
 
   meta = with stdenv.lib; {
     description = "lightweight way of building RPMs, and sabotaging them";

@@ -3,20 +3,34 @@
 
 with lib;
 
-{
+let
+  cfg = config.services.pipewire;
+  packages = with pkgs; [ pipewire ];
+
+in {
   ###### interface
   options = {
     services.pipewire = {
       enable = mkEnableOption "pipewire service";
+
+      socketActivation = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Automatically run pipewire when connections are made to the pipewire socket.
+        '';
+      };
     };
   };
 
 
   ###### implementation
-  config = mkIf config.services.pipewire.enable {
-    environment.systemPackages = [ pkgs.pipewire ];
+  config = mkIf cfg.enable {
+    environment.systemPackages = packages;
 
-    systemd.packages = [ pkgs.pipewire ];
+    systemd.packages = packages;
+
+    systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
   };
 
   meta.maintainers = with lib.maintainers; [ jtojnar ];

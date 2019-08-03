@@ -1,14 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-lib-1.1.5";
+  name = "alsa-lib-1.1.9";
 
   src = fetchurl {
-    urls = [
-     "ftp://ftp.alsa-project.org/pub/lib/${name}.tar.bz2"
-     "http://alsa.cybermirror.org/lib/${name}.tar.bz2"
-    ];
-    sha256 = "1rhacnlj0grvfagjx5qzsnbhw7m7lyccghqs4jsv0dnsqv9qmxpl";
+    url = "mirror://alsa/lib/${name}.tar.bz2";
+    sha256 = "0jwr9g4yxg9gj6xx0sb2r6wrdl8amrjd19hilkrq4rirynp770s8";
   };
 
   patches = [

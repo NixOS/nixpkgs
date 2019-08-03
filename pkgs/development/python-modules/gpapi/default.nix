@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi, requests, protobuf, pycryptodome }:
 
 buildPythonPackage rec {
-  version = "0.4.2";
+  version = "0.4.3";
   pname = "gpapi";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "1fv2y3xbwn512fjxrdwgq6cz0xjd7mh54nq1f18wyz8w40vcznns";
+    sha256 = "9fd1351eb29c4da92d3a0ed2cd4e3c1634ea16afddbca133f6acc54766d61b02";
   };
 
   propagatedBuildInputs = [ requests protobuf pycryptodome ];

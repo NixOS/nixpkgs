@@ -1,14 +1,14 @@
 { stdenv, fetchurl, libowfat, zlib, openssl }:
 
 let
-  version = "0.13";
+  version = "0.15";
 in
 stdenv.mkDerivation rec {
   name = "gatling-${version}";
 
   src = fetchurl {
-    url = "http://dl.fefe.de/${name}.tar.bz2";
-    sha256 = "0icjx20ws8gqxgpm77dx7p9zcwi1fv162in6igx04rmnyzyla8dl";
+    url = "https://www.fefe.de/gatling/${name}.tar.xz";
+    sha256 = "194srqyja3pczpbl6l169zlvx179v7ln0m6yipmhvj6hrv82k8vg";
   };
 
   buildInputs = [  libowfat zlib openssl.dev ];

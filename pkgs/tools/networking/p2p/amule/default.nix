@@ -8,10 +8,7 @@
 assert httpServer -> libpng != null;
 assert client -> libX11 != null;
 with stdenv;
-let
-  # Enable/Disable Feature
-  edf = enabled: flag: if enabled then "--enable-" + flag else "--disable-" + flag;
-in
+
 mkDerivation rec {
   name = "aMule-2.3.2";
 
@@ -25,17 +22,20 @@ mkDerivation rec {
     ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;
 
+  # See: https://github.com/amule-project/amule/issues/126
+  patches = [ ./upnp-1.8.patch ];
+
   enableParallelBuilding = true;
 
-  configureFlags = ''
-    --with-crypto-prefix=${cryptopp}
-    --disable-debug
-    --enable-optimize
-    ${edf monolithic "monolithic"}
-    ${edf daemon "amule-daemon"}
-    ${edf client "amule-gui"}
-    ${edf httpServer "webserver"}
-  '';
+  configureFlags = [
+    "--with-crypto-prefix=${cryptopp}"
+    "--disable-debug"
+    "--enable-optimize"
+    (stdenv.lib.enableFeature monolithic "monolithic")
+    (stdenv.lib.enableFeature daemon "amule-daemon")
+    (stdenv.lib.enableFeature client "amule-gui")
+    (stdenv.lib.enableFeature httpServer "webserver")
+  ];
 
   postConfigure = ''
     sed -i "src/libs/ec/file_generator.pl"     \
@@ -65,7 +65,7 @@ mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
     maintainers = [ stdenv.lib.maintainers.phreedom ];
   };
 }

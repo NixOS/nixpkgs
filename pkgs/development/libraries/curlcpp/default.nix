@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "curlcpp-${version}";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "JosephP91";
     repo = "curlcpp";
     rev = "${version}";
-    sha256 = "1akibhrmqsy0dlz9lq93508bhkh7r1l0aycbzy2x45a9gqxfdi4q";
+    sha256 = "025qg5hym73xrvyhalv3jgbf9jqnnzkdjs3zwsgbpqx58zyd5bg5";
   };
 
   buildInputs = [ cmake curl ];

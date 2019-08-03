@@ -3,16 +3,16 @@
 
 stdenv.mkDerivation rec {
   name = "stunt-rally-${version}";
-  version = "2.6";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "https://github.com/stuntrally/stuntrally/archive/${version}.tar.gz";
-    sha256 = "1jmsxd2isq9q5paz43c3xw11vr5md1ym8h34b768vxr6gp90khwc";
+    sha256 = "1zxq3x2g9pzafa2awx9jzqd33z6gnqj231cs07paxzrm89y51w4v";
   };
 
   tracks = fetchurl {
     url = "https://github.com/stuntrally/tracks/archive/${version}.tar.gz";
-    sha256 = "0yv88l9s03kp1xkkwnigh0jj593vi3r7vgyg0jn7i8d22q2p1kjb";
+    sha256 = "0x6lgpa4c2grl0vrhqrcs7jcysa3mmvpdl1v5xa0dsf6vkvfr0zs";
   };
 
   # include/OGRE/OgreException.h:265:126: error: invalid conversion from
@@ -22,13 +22,9 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     pushd data
     tar xf ${tracks}
-    mv tracks-2.6 tracks
+    mv tracks-${version} tracks
     popd
   '';
-
-  patches = [
-    ./gcc6.patch
-  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis 

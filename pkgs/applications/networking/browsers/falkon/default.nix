@@ -1,15 +1,19 @@
 { stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, qmake
-, libpthreadstubs, libxcb, libXdmcp, qtsvg, qttools, qtwebengine, qtx11extras, kwallet, openssl }:
+, libpthreadstubs, libxcb, libXdmcp
+, qtsvg, qttools, qtwebengine, qtx11extras
+, qtwayland
+, kwallet
+}:
 
 stdenv.mkDerivation rec {
   name = "falkon-${version}";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "falkon";
     rev    = "v${version}";
-    sha256 = "148idxvx32iwg18m3b7s22awcijnbrywz9r8gnfrq6gpwr0m2jna";
+    sha256 = "1w64slh9wpcfi4v7ds9wci1zvwh0dh787ndpi6hd4kmdgnswvsw7";
   };
 
   preConfigure = ''
@@ -21,9 +25,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpthreadstubs libxcb libXdmcp
+    qtsvg qttools qtwebengine qtx11extras
     kwallet
-    qtsvg qtwebengine qtx11extras
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qmake qttools ];
 

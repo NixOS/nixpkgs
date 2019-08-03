@@ -1,0 +1,25 @@
+diff --git a/src/meshlabplugins/edit_paint/paintbox.cpp b/src/meshlabplugins/edit_paint/paintbox.cpp
+index 2097a5b..6bcd1a4 100644
+--- a/src/meshlabplugins/edit_paint/paintbox.cpp
++++ b/src/meshlabplugins/edit_paint/paintbox.cpp
+@@ -23,6 +23,7 @@
+ 
+ #include "paintbox.h"
+ #include <QFileDialog>
++#include <QAction>
+ 
+ Paintbox::Paintbox(QWidget * parent, Qt::WindowFlags flags) : QWidget(parent, flags)
+ {
+diff --git a/src/meshlabplugins/render_gdp/shaderDialog.h b/src/meshlabplugins/render_gdp/shaderDialog.h
+index a62d3b5..7eb1594 100644
+--- a/src/meshlabplugins/render_gdp/shaderDialog.h
++++ b/src/meshlabplugins/render_gdp/shaderDialog.h
+@@ -32,6 +32,8 @@
+ #include "shaderStructs.h"
+ #include "ui_shaderDialog.h"
+ #include <QMap>
++#include <QSlider>
++#include <QLineEdit>
+ 
+ class QGLWidget;
+ 

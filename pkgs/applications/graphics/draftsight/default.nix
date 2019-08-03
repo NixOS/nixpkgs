@@ -1,12 +1,10 @@
-{ stdenv, requireFile, dpkg, makeWrapper, gcc, libGLU_combined, xdg_utils,
-  dbus_tools, alsaLib, cups, fontconfig, glib, icu, libpng12,
-  xkeyboard_config, gstreamer, zlib, libxslt, libxml2, sqlite, orc,
+{ stdenv, fetchurl, dpkg, makeWrapper, gcc, libGLU_combined, xdg_utils,
+  dbus, alsaLib, cups, fontconfig, glib, icu, libpng12,
+  xkeyboard_config, zlib, libxslt, libxml2, sqlite, orc,
   libX11, libXcursor, libXrandr, libxcb, libXi, libSM, libICE,
   libXrender, libXcomposite }:
 
-assert stdenv.system == "x86_64-linux";
-
-let version = "2017-SP2"; in
+let version = "2018SP2"; in
 stdenv.mkDerivation {
   name = "draftsight-${version}";
 
@@ -33,7 +31,7 @@ stdenv.mkDerivation {
           $out/bin/$exe \
           --prefix "QT_XKB_CONFIG_ROOT" ":" "${xkeyboard_config}/share/X11/xkb"
     done
-    for lib in $out/draftsight/opt/dassault-systemes/DraftSight/Libraries/*.so; do
+    for lib in $out/draftsight/opt/dassault-systemes/DraftSight/Libraries/*.so*; do
       # DraftSight ships with broken symlinks for some reason
       if [ -f $(readlink -f $lib) ]
       then
@@ -43,6 +41,19 @@ stdenv.mkDerivation {
         echo "Ignoring broken link $lib"
       fi
     done
+    for lib in $out/draftsight/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/*.so*; do
+      if [ -f $(readlink $lib) ]
+      then
+        echo "Patching $lib..."
+        chmod u+w $lib
+        patchelf --set-rpath $libPath:\$ORIGIN/../Libraries $lib
+      else
+        echo "Ignoring broken link $lib"
+      fi
+    done
+    # These libraries shouldn't really be here anyway:
+    find $out/draftsight/opt/dassault-systemes/DraftSight/APISDK/Samples/C++ \
+         -type d -name _lib | xargs rm -r
   '';
 
   # TODO: Figure out why HelpGuide segfaults at startup.
@@ -53,15 +64,15 @@ stdenv.mkDerivation {
   # that it dlopen()'s libraries in paths removed by shrinking RPATH.
   dontPatchELF = true;
 
-  src = requireFile {
+  src = fetchurl {
     name = "draftSight.deb";
-    url = "https://www.3ds.com/?eID=3ds_brand_download&uid=41&pidDown=13426&L=0";
-    sha256 = "04i3dqza6y4p2059pqg5inp3qzr5jmiqplzzk7h1a6gh380v1rbr";
+    url = "http://dl-ak.solidworks.com/nonsecure/draftsight/${version}/draftSight.deb";
+    sha256 = "05lrvml0zkzqg0sj6sj2h8h66hxdmsw5fg9fwz923r1y8j48qxdx";
   };
 
   libPath = stdenv.lib.makeLibraryPath [ gcc.cc libGLU_combined xdg_utils
-    dbus_tools alsaLib cups.lib fontconfig glib icu libpng12
-    xkeyboard_config gstreamer zlib libxslt libxml2 sqlite orc libX11
+    dbus alsaLib cups.lib fontconfig glib icu libpng12
+    xkeyboard_config zlib libxslt libxml2 sqlite orc libX11
     libXcursor libXrandr libxcb libXi libSM libICE libXrender
     libXcomposite ];
 
@@ -71,6 +82,6 @@ stdenv.mkDerivation {
     homepage = https://www.3ds.com/products-services/draftsight-cad-software/;
     license = stdenv.lib.licenses.unfree;
     maintainers = with maintainers; [ hodapp ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

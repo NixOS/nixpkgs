@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "gsm-${version}";
-  version = "1.0.17";
+  version = "1.0.18";
 
   src = fetchurl {
     url = "http://www.quut.com/gsm/${name}.tar.gz";
-    sha256 = "00bns0d4wwrvc60lj2w7wz4yk49q1f6rpdrwqzrxsha9d78mfnl5";
+    sha256 = "041amvpz8cvxykl3pwqldrzxligmmzcg8ncdnxbg32rlqf3q1xh4";
   };
 
   patchPhase = ''

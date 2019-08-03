@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchFromGitHub,
+{ stdenv, fetchFromGitHub,
 automake, pkgconfig, lv2, fftw, cmake, xorg, libjack2, libsamplerate, libsndfile
 }:
 

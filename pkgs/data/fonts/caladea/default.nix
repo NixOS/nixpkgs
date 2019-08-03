@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   version = "20130214";
@@ -15,7 +15,7 @@ in fetchzip rec {
   '';
   sha256 = "0kwm42ggr8kvcn3554cpmv90xzam1sdncx7x3zs3bzp88mxrnv1z";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # This font doesn't appear to have any official web site but this
     # one provides some good information and samples.
     homepage = http://openfontlibrary.org/en/font/caladea;

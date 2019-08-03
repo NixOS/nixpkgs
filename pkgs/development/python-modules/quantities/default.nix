@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "quantities";
-  version = "0.12.1";
+  version = "0.12.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a03e8511db603c57ca80dee851c43f08d0457f4d592bcac2e154570756cb934";
+    sha256 = "582f3c7aeba897846761e966615e01202a5e5d06add304492931b05085d19883";
   };
 
   propagatedBuildInputs = [ numpy ];

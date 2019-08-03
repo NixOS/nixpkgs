@@ -2,6 +2,7 @@ shopt -s extglob
 
 [ -z "$DF_DIR" ] && DF_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/df_linux"
 env_dir="@env@"
+exe="$env_dir/@exe@"
 
 update_path() {
   local path="$1"

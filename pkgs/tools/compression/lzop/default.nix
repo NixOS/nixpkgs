@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "lzop-1.04";
   src = fetchurl {
-    url = "http://www.lzop.org/download/${name}.tar.gz";
+    url = "https://www.lzop.org/download/${name}.tar.gz";
     sha256 = "0h9gb8q7y54m9mvy3jvsmxf21yx8fc3ylzh418hgbbv0i8mbcwky";
   };
 

@@ -1,0 +1,26 @@
+diff --git a/src/Indicator.vala b/src/Indicator.vala
+index cd7ca49..0bef9c7 100644
+--- a/src/Indicator.vala
++++ b/src/Indicator.vala
+@@ -94,7 +94,7 @@ public class Keyboard.Indicator : Wingpanel.Indicator {
+     private void show_keyboard_map () {
+         close ();
+ 
+-        string command = "gkbd-keyboard-display \"--layout=" + layouts.get_current_with_variant () + "\"";
++        string command = "@libgnomekbd_path@gkbd-keyboard-display \"--layout=" + layouts.get_current_with_variant () + "\"";
+ 
+         try {
+             AppInfo.create_from_commandline (command, null, AppInfoCreateFlags.NONE).launch (null, null);
+diff --git a/src/LayoutsManager.vala b/src/LayoutsManager.vala
+index 1bac80e..67df847 100644
+--- a/src/LayoutsManager.vala
++++ b/src/LayoutsManager.vala
+@@ -97,7 +97,7 @@ public class Keyboard.Widgets.LayoutManager : Gtk.ScrolledWindow {
+ 
+     public string? get_name_for_xkb_layout (string language, string? variant) {
+         debug ("get_name_for_xkb_layout (%s, %s)", language, variant);
+-        Xml.Doc* doc = Xml.Parser.parse_file ("/usr/share/X11/xkb/rules/evdev.xml");
++        Xml.Doc* doc = Xml.Parser.parse_file ("@config@");
+         if (doc == null) {
+             critical ("'evdev.xml' not found or permissions incorrect\n");
+             return null;

@@ -28,9 +28,11 @@ stdenv.mkDerivation {
   '';
 
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.nicemice.net/par/;
     description = "Paragraph reflow for email";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    # See https://fedoraproject.org/wiki/Licensing/Par for license details
+    license = licenses.free;
   };
 }

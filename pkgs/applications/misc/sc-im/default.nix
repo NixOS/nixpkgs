@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/andmarti1424/sc-im;
     description = "SC-IM - Spreadsheet Calculator Improvised - SC fork";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.linux; # Cannot test others
+    maintainers = [ ];
+    platforms = platforms.unix;
   };
 
 }

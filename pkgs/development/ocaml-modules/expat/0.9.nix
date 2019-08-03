@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --replace "gcc" "\$(CC)"
   '';
 
-  configurePhase = "true";  	# Skip configure
+  dontConfigure = true;  	# Skip configure
 
   buildPhase = ''
     make all allopt

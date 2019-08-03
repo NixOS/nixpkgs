@@ -1,5 +1,5 @@
 { clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, gyp, which, ninja,
-  python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese,
+  python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb,
   fcitx, gettext }:
 let
   japanese_usage_dictionary = fetchFromGitHub {

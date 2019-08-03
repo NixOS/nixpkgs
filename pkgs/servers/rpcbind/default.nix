@@ -1,40 +1,36 @@
-{ fetchurl, stdenv, pkgconfig, libnsl, libtirpc, fetchpatch
+{ fetchgit, stdenv, pkgconfig, libnsl, libtirpc, autoreconfHook
 , useSystemd ? true, systemd }:
 
 stdenv.mkDerivation rec {
   name = "rpcbind-${version}";
-  version = "0.2.4";
+  version = "1.2.5";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/rpcbind/${version}/${name}.tar.bz2";
-    sha256 = "0rjc867mdacag4yqvs827wqhkh27135rp9asj06ixhf71m9rljh7";
+  src = fetchgit {
+    url = "git://git.linux-nfs.org/projects/steved/rpcbind.git";
+    rev = "c0c89b3bf2bdf304a5fe3cab626334e0cdaf1ef2";
+    sha256 = "1k5rr0pia70ifyp877rbjdd82377fp7ii0sqvv18qhashr6489va";
   };
 
   patches = [
     ./sunrpc.patch
-    (fetchpatch {
-      name = "CVE-2017-8779.patch";
-      url = "https://raw.githubusercontent.com/guidovranken/rpcbomb/e6da9e489aa8ad000b0ad5ac9abc5b4eefc3a769/rpcbind_patch.txt";
-      sha256 = "0w231w8fxihgrn526np078j3vbj3ylvjvxjmfpjvqhga5zg821ab";
-    })
   ];
 
   buildInputs = [ libnsl libtirpc ]
              ++ stdenv.lib.optional useSystemd systemd;
 
   configureFlags = [
-    "--with-systemdsystemunitdir=${if useSystemd then "$(out)/etc/systemd/system" else "no"}"
+    "--with-systemdsystemunitdir=${if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"}"
     "--enable-warmstarts"
     "--with-rpcuser=rpc"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "ONC RPC portmapper";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    homepage = https://sourceforge.net/projects/rpcbind/;
+    homepage = https://linux-nfs.org/;
     maintainers = with maintainers; [ abbradar ];
     longDescription = ''
       Universal addresses to RPC program number mapper.

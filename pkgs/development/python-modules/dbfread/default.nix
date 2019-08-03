@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "dbfread";
     version = "2.0.7";
 
@@ -12,7 +11,7 @@ buildPythonPackage rec {
 
     meta = with stdenv.lib; {
       description = "Read DBF Files with Python";
-      homepage    = http://dbfread.readthedocs.org/;
+      homepage    = https://dbfread.readthedocs.org/;
       license     = with licenses; [ mit ];
       maintainers = with maintainers; [ vrthra ];
     };

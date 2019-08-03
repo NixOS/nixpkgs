@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ...} : 
 
 let
-  client = { config, pkgs, ... }: {
+  client = { pkgs, ... }: {
     imports = [ ./common/x11.nix ];
     environment.systemPackages = [ pkgs.mumble ];
   };
@@ -9,11 +9,11 @@ in
 {
   name = "mumble";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ thoughtpolice eelco chaoflow ];
+    maintainers = [ thoughtpolice eelco ];
   };
 
   nodes = {
-    server = { config, pkgs, ... }: {
+    server = { config, ... }: {
       services.murmur.enable       = true;
       services.murmur.registerName = "NixOS tests";
       networking.firewall.allowedTCPPorts = [ config.services.murmur.port ];

@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, zlib, tbb }:
+{ stdenv, fetchFromGitHub, zlib, tbb, python, perl }:
 
 stdenv.mkDerivation rec {
   pname = "bowtie2";
-  version = "2.3.4.1";
+  version = "2.3.5.1";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07cvcy6483araayj41arjzpxjmf4fmn4iqyl6gp6zmrbzw72wwzj";
+    sha256 = "1l1f0yhjqqvy4lpxfml1xwv7ayimwbpzazvp0281gb4jb5f5mr1a";
   };
 
-  buildInputs = [ zlib tbb ];
+  buildInputs = [ zlib tbb python perl ];
 
   installFlags = [ "prefix=$(out)" ];
 
@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://bowtie-bio.sf.net/bowtie2;
     maintainers = with maintainers; [ rybern ];
     platforms = platforms.all;
+    broken = stdenv.isAarch64;
   };
 }

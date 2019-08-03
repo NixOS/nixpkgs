@@ -1,4 +1,4 @@
-{ lib, haskellLib, fetchpatch, makeWrapper, haskellPackages
+{ lib, haskellLib, makeWrapper, haskellPackages
 , mueval
 , withDjinn ? true
 , aspell ? null

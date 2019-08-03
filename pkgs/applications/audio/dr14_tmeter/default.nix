@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python3Packages, pkgs }:
 
 python3Packages.buildPythonApplication rec {
-  name = "dr14_tmeter-${version}";
+  pname = "dr14_tmeter";
   version = "1.0.16";
 
   disabled = !python3Packages.isPy3k;

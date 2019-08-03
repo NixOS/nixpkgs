@@ -21,11 +21,11 @@ in {
   };
 
   nodes = {
-    client = { lib, pkgs, ... }: {
+    client = { ... }: {
       imports = [ client_base ];
     };
 
-    client_c1 = { lib, pkgs, ... }: {
+    client_c1 = { lib, ... }: {
       imports = [ client_base ];
 
       containers.test1.config = {
@@ -34,7 +34,7 @@ in {
         services.httpd.adminAddr = "nixos@example.com";
       };
     };
-    client_c2 = { lib, pkgs, ... }: {
+    client_c2 = { lib, ... }: {
       imports = [ client_base ];
 
       containers.test1.config = {
@@ -45,7 +45,6 @@ in {
   };
 
   testScript = {nodes, ...}: let
-    originalSystem = nodes.client.config.system.build.toplevel;
     c1System = nodes.client_c1.config.system.build.toplevel;
     c2System = nodes.client_c2.config.system.build.toplevel;
   in ''

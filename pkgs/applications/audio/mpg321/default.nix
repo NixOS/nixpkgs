@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://mpg321.sourceforge.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.rycee ];
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

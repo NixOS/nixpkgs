@@ -1,34 +1,26 @@
 # builder for Emacs packages built for packages.el
 # using MELPA package-build.el
 
-{ lib, stdenv, fetchurl, emacs, texinfo }:
+{ lib, stdenv, fetchFromGitHub, emacs, texinfo }:
 
 with lib;
 
-{ pname
+{ /*
+    pname: Nix package name without special symbols and without version or
+    "emacs-" prefix.
+  */
+  pname
+  /*
+    ename: Original Emacs package name, possibly containing special symbols.
+  */
+, ename ? null
 , version
-
-, recipeFile ? null
-
-, files ? null
-, fileSpecs ? [ "*.el" "*.el.in" "dir"
-                "*.info" "*.texi" "*.texinfo"
-                "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-              ]
-
+, recipe
 , meta ? {}
-
 , ...
 }@args:
 
 let
-
-  packageBuild = fetchurl {
-    url = https://raw.githubusercontent.com/milkypostman/melpa/2b3eb31c077fcaff94b74b757c1ce17650333943/package-build.el;
-    sha256 = "1biwg2pqmmdz5iwqbjdszljazqymvgyyjcnc255nr6qz8mhnx67j";
-  };
-
-  targets = concatStringsSep " " (if files == null then fileSpecs else files);
 
   defaultMeta = {
     homepage = args.src.meta.homepage or "http://melpa.org/#/${pname}";
@@ -37,33 +29,62 @@ let
 in
 
 import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
-  inherit packageBuild;
 
-  buildPhase =
-    if recipeFile == null
-      then ''
-        runHook preBuild
+  ename =
+    if ename == null
+    then pname
+    else ename;
 
-        export archive=$(emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
-            -f melpa2nix-build-package \
-            ${pname} ${version} ${targets})
+  packageBuild = fetchFromGitHub {
+    owner = "melpa";
+    repo = "package-build";
+    rev = "0a22c3fbbf661822ec1791739953b937a12fa623";
+    sha256 = "0dpy5p34il600sc8ic5jdgb3glya9si3lrvhxab0swks8fdydjgs";
+  };
 
-        runHook postBuild
-      ''
-      else ''
-        runHook preBuild
+  elpa2nix = ./elpa2nix.el;
+  melpa2nix = ./melpa2nix.el;
 
-        export archive=$(emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
-            -f melpa2nix-build-package-from-recipe \
-            ${recipeFile} ${version})
+  preUnpack = ''
+    mkdir -p "$NIX_BUILD_TOP/recipes"
+    if [ -n "$recipe" ]; then
+      cp "$recipe" "$NIX_BUILD_TOP/recipes/$ename"
+    fi
 
-        runHook postBuild
-      '';
+    ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
+
+    mkdir -p "$NIX_BUILD_TOP/packages"
+  '';
+
+  postUnpack = ''
+    mkdir -p "$NIX_BUILD_TOP/working"
+    ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    cd "$NIX_BUILD_TOP"
+
+    emacs --batch -Q \
+        -L "$NIX_BUILD_TOP/package-build" \
+        -l "$melpa2nix" \
+        -f melpa2nix-build-package \
+        $ename $version
+
+    runHook postBuild
+    '';
 
   installPhase = ''
     runHook preInstall
 
-    emacs --batch -Q -l ${./elpa2nix.el} \
+    archive="$NIX_BUILD_TOP/packages/$ename-$version.el"
+    if [ ! -f "$archive" ]; then
+        archive="$NIX_BUILD_TOP/packages/$ename-$version.tar"
+    fi
+
+    emacs --batch -Q \
+        -l "$elpa2nix" \
         -f elpa2nix-install-package \
         "$archive" "$out/share/emacs/site-lisp/elpa"
 
@@ -73,6 +94,4 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
   meta = defaultMeta // meta;
 }
 
-// removeAttrs args [ "files" "fileSpecs"
-                      "meta"
-                    ])
+// removeAttrs args [ "meta" ])

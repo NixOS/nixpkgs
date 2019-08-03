@@ -1,6 +1,9 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 
 let
   inherit (pkgs) lib;
@@ -9,7 +12,7 @@ let
     default = {
       name = "sddm";
 
-      machine = { lib, ... }: {
+      machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
@@ -21,7 +24,7 @@ let
       enableOCR = true;
 
       testScript = { nodes, ... }: let
-        user = nodes.machine.config.users.extraUsers.alice;
+        user = nodes.machine.config.users.users.alice;
       in ''
         startAll;
         $machine->waitForText(qr/select your user/i);
@@ -39,7 +42,7 @@ let
         maintainers = [ ttuegel ];
       };
 
-      machine = { lib, ... }: {
+      machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
         services.xserver.displayManager.sddm = {
@@ -54,7 +57,7 @@ let
         services.xserver.desktopManager.default = "none";
       };
 
-      testScript = { nodes, ... }: ''
+      testScript = { ... }: ''
         startAll;
         $machine->waitForFile("/home/alice/.Xauthority");
         $machine->succeed("xauth merge ~alice/.Xauthority");

@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ config, lib }:
+{ lib, ... }:
 
 with lib;
 {
@@ -31,6 +31,7 @@ with lib;
         addr = mkOption { type = str;  description = "IP address.";  };
         port = mkOption { type = int;  description = "Port number."; default = 80; };
         ssl  = mkOption { type = bool; description = "Enable SSL.";  default = false; };
+        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "reuseport" "deferred" ]; };
       }; });
       default = [];
       example = [
@@ -62,13 +63,14 @@ with lib;
         This is useful if you have many subdomains and want to avoid hitting the
         <link xlink:href="https://letsencrypt.org/docs/rate-limits/">rate limit</link>.
         Alternately, you can generate a certificate through <option>enableACME</option>.
+        <emphasis>Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using  <xref linkend="opt-security.acme.certs"/>.</emphasis>
       '';
     };
 
     acmeRoot = mkOption {
       type = types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = "Directory to store certificates and keys managed by the ACME service.";
+      description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
     };
 
     acmeFallbackHost = mkOption {
@@ -126,6 +128,13 @@ with lib;
       type = types.path;
       example = "/var/host.key";
       description = "Path to server SSL certificate key.";
+    };
+
+    sslTrustedCertificate = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/var/root.cert";
+      description = "Path to root SSL certificate for stapling and client certificates.";
     };
 
     http2 = mkOption {
@@ -190,6 +199,14 @@ with lib;
 
         WARNING: This is implemented to store the password in plain text in the
         nix store.
+      '';
+    };
+
+    basicAuthFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Basic Auth password file for a vhost.
       '';
     };
 

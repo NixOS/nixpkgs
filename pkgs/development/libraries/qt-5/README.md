@@ -5,7 +5,7 @@
 Let `$major` be the major version number, e.g. `5.9`.
 
 1. Change the version number in the `$major/fetch.sh`.
-2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/qt-5/$major`
+2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$major`
    from the top of the Nixpkgs tree.
 
 See below if it is necessary to update any patches.
@@ -16,7 +16,7 @@ Let `$major` be the new major version number, e.g. `5.10`.
 
 1. Copy the subdirectory from the previous major version to `$major`.
 2. Change the version number in `$major/fetch.sh`.
-3. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/qt-5/$major`
+3. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$major`
    from the top of the Nixpkgs tree.
 4. Add a top-level attribute in `pkgs/top-level/all-packages.nix` for the new
    major version.

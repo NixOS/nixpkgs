@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 let
-  version = "2.10";
+  version = "2.11.0";
 in stdenv.mkDerivation {
   name = "todo.txt-cli-${version}";
 
   src = fetchurl {
     url = "https://github.com/ginatrapani/todo.txt-cli/releases/download/v${version}/todo.txt_cli-${version}.tar.gz";
-    sha256 = "1agn4zzbizrrylvbfi053b5mpb39bvl1gzziw08xibzfdyi1g55m";
+    sha256 = "0majx8lcvhh8ji54qi0sxr833wchdss95fjc92byd8g3lfz27rsz";
   };
 
   installPhase = ''

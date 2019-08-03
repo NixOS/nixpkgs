@@ -3,11 +3,10 @@
 buildPythonPackage rec {
   pname = "koji";
   version = "1.13.0";
-  name = "${pname}-${version}";
   format = "other";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/koji/${name}.tar.bz2";
+    url = "https://releases.pagure.org/koji/${pname}-${version}.tar.bz2";
     sha256 = "18b18rcbdqqw33g7h20hf5bpbci2ixdi05yda1fvpv30c1kkzd8w";
   };
 
@@ -26,6 +25,6 @@ buildPythonPackage rec {
 
   meta = {
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

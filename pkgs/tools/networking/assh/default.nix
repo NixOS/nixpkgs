@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, openssh, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, openssh, makeWrapper }:
 
 buildGoPackage rec {
   name = "assh-${version}";

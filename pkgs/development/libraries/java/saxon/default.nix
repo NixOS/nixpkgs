@@ -71,12 +71,12 @@ in {
 
   saxon-he = common {
     pname = "saxon-he";
-    version = "9.8.0.6";
+    version = "9.9.0.1";
     prog = "saxon-he";
     jar = "saxon9he";
     src = fetchurl {
-      url = mirror://sourceforge/saxon/Saxon-HE/9.8/SaxonHE9-8-0-6J.zip;
-      sha256 = "03r4djm298rxz8q7jph63h9niglrl3rifxskq1b3bclx5rgxi2lk";
+      url = mirror://sourceforge/saxon/Saxon-HE/9.9/SaxonHE9-9-0-1J.zip;
+      sha256 = "1inxd7ia7rl9fxfrw8dy9sb7rqv76ipblaki5262688wf2dscs60";
     };
     description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";
   };

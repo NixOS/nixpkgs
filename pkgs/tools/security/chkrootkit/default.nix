@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "chkrootkit-0.52";
+  name = "chkrootkit-0.53";
 
   src = fetchurl {
     url = "ftp://ftp.pangeia.com.br/pub/seg/pac/${name}.tar.gz";
-    sha256 = "04d2yxpy99y90rvrlc9fqmlffs6iyfbghxbhvv12j1xfr2ww0y65";
+    sha256 = "1da5ry3p7jb6xs6xlfml1ly09q2rs5q6n5axif17d29k7gixlqkj";
   };
 
   # TODO: a lazy work-around for linux build failure ...

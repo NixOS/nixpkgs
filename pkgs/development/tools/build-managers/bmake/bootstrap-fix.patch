@@ -1,0 +1,10 @@
+--- bmake/make-bootstrap.sh.in.orig     2019-02-19 10:55:21.733606117 -0800
++++ bmake/make-bootstrap.sh.in  2019-02-19 10:56:02.150771541 -0800
+@@ -4,6 +4,7 @@
+ 
+ srcdir=@srcdir@
+ 
++prefix="@prefix@"
+ DEFAULT_SYS_PATH="@default_sys_path@"
+ 
+ case "@use_meta@" in

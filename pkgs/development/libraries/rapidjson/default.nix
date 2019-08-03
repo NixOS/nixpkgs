@@ -13,14 +13,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  # detected by gcc7
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ];
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace example/CMakeLists.txt --replace "-Werror" ""
+  '';
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
     homepage = "http://rapidjson.org/";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

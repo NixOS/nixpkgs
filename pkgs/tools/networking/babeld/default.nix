@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "babeld-1.8.0";
+  name = "babeld-1.8.4";
 
   src = fetchurl {
     url = "http://www.pps.univ-paris-diderot.fr/~jch/software/files/${name}.tar.gz";
-    sha256 = "0v2jkav2sb0rpx3fmi5chhii08lc92pxf306nyha2amq9wib3a0i";
+    sha256 = "11wbs1x17lr7jk2578zwy3cdwc6zhxwv97nnp13z14613320s1wq";
   };
 
   preBuild = ''

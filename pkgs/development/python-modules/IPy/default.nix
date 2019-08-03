@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "IPy";
-  version = "0.83";
+  version = "1.00";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "61da5a532b159b387176f6eabf11946e7458b6df8fb8b91ff1d345ca7a6edab8";
+    sha256 = "08d6kcacj67mvh0b6y765ipccy6gi4w2ndd4v1l3im2qm1cgcarg";
   };
 
   checkInputs = [ nose ];

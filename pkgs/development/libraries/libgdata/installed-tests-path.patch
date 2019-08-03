@@ -1,0 +1,94 @@
+diff --git a/gdata/tests/meson.build b/gdata/tests/meson.build
+index 52154e7a..1a44d1d8 100644
+--- a/gdata/tests/meson.build
++++ b/gdata/tests/meson.build
+@@ -1,5 +1,12 @@
+-tests_execdir = gdata_libexecdir / 'installed-tests' / gdata_name
+-tests_metadir = gdata_datadir / 'installed-tests' / gdata_name
++tests_bindir = get_option('installed_test_bindir') / 'installed-tests' / gdata_name
++if tests_bindir == ''
++    test_bindir = gdata_libexecdir / 'installed-tests' / gdata_name
++endif
++
++tests_datadir = get_option('installed_test_datadir') / 'installed-tests' / gdata_name
++if tests_datadir == ''
++    tests_datadir = gdata_datadir / 'installed-tests' / gdata_name
++endif
+ 
+ tests_sources = files(
+   'common.c',
+@@ -48,7 +55,7 @@ foreach test_name, extra_args: tests
+     dependencies: common_deps + extra_args.get('dependencies', []),
+     sources: tests_sources,
+     install: install_tests,
+-    install_dir: tests_execdir,
++    install_dir: tests_bindir,
+   )
+ 
+   test(
+@@ -63,7 +70,7 @@ if install_tests
+   foreach test_name, extra_args: tests
+     tests_conf = {
+       'TEST_TYPE': 'session',
+-      'TEST_ABS_PATH': gdata_prefix / tests_execdir / test_name,
++      'TEST_ABS_PATH': tests_bindir / test_name,
+     }
+ 
+     configure_file (
+@@ -71,13 +78,13 @@ if install_tests
+       output: test_name + '.test',
+       configuration: tests_conf,
+       install: true,
+-      install_dir: tests_metadir,
++      install_dir: tests_datadir,
+     )
+   endforeach
+ 
+   install_subdir(
+     'traces',
+-    install_dir: tests_execdir,
++    install_dir: tests_bindir,
+   )
+ 
+   test_data = [
+@@ -96,6 +103,6 @@ if install_tests
+ 
+   install_data(
+     test_data,
+-    install_dir: tests_execdir,
++    install_dir: tests_bindir,
+   )
+ endif
+diff --git a/meson.build b/meson.build
+index 7d2f5254..bed3e189 100644
+--- a/meson.build
++++ b/meson.build
+@@ -20,9 +20,9 @@ gdata_api_version_minor = 0
+ 
+ # Define the install directories
+ gdata_prefix = get_option('prefix')
+-gdata_datadir = get_option('datadir')
+-gdata_libexecdir = get_option('libexecdir')
+-gdata_includedir = get_option('includedir')
++gdata_datadir = gdata_prefix / get_option('datadir')
++gdata_libexecdir = gdata_prefix / get_option('libexecdir')
++gdata_includedir = gdata_prefix / get_option('includedir')
+ 
+ gdata_include_subdir = gdata_name / 'gdata'
+ 
+diff --git a/meson_options.txt b/meson_options.txt
+index 25cc6b55..6fc2cfa3 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -43,3 +43,11 @@ option('vapi',
+   type: 'boolean',
+   value: true,
+   description: 'Enable creation of vapi files')
++
++option('installed_test_datadir', type: 'string',
++  value: '',
++  description: 'Installation directory for data files in tests')
++
++option('installed_test_bindir', type: 'string',
++  value: '',
++  description: 'Installation directory for binary files in tests')

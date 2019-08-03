@@ -20,7 +20,7 @@ stdenv.mkDerivation
   '';
 
   meta = {
-    homepage = http://www.twobarleycorns.net/tkcvs.html;
+    homepage = https://tkcvs.sourceforge.io;
     description = "TCL/TK GUI for cvs and subversion";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

@@ -1,15 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , lightyear
 , lib
-, idris
 }:
 build-idris-package  {
   name = "protobuf";
   version = "2017-08-12";
 
-  idrisDeps = [ prelude lightyear ];
+  idrisDeps = [ lightyear ];
 
   src = fetchFromGitHub {
     owner = "artagnon";
@@ -23,6 +21,5 @@ build-idris-package  {
     homepage = https://github.com/artagnon/idris-protobuf;
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

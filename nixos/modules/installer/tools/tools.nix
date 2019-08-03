@@ -1,13 +1,11 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
-  cfg = config.installer;
-
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
     isExecutable = true;
@@ -38,8 +36,8 @@ let
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    path = [ pkgs.btrfs-progs ];
-    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
+    path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
+    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}";
     inherit (config.system.nixos) release;
   };
 
@@ -76,7 +74,7 @@ in
       ];
 
     system.build = {
-      inherit nixos-install nixos-prepare-root nixos-generate-config nixos-option nixos-rebuild nixos-enter;
+      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
     };
 
   };

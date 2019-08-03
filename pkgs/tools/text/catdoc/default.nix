@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = "--disable-wordview";
+  configureFlags = [ "--disable-wordview" ];
 
   meta = with stdenv.lib; {
     description = "MS-Word/Excel/PowerPoint to text converter";

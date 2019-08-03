@@ -39,7 +39,10 @@ stdenv.mkDerivation rec {
 
   linkCxxAbi = stdenv.isLinux;
 
-  setupHook = ./setup-hook.sh;
+  setupHooks = [
+    ../../../../../build-support/setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
 
   meta = {
     homepage = http://libcxx.llvm.org/;

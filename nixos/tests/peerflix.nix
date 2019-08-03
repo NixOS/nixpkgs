@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     peerflix =
-      { config, pkgs, ... }:
+      { ... }:
         {
           services.peerflix.enable = true;
         };

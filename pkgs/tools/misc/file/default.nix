@@ -1,25 +1,28 @@
-{ stdenv, fetchurl, file, zlib }:
+{ stdenv, fetchurl, file, zlib, libgnurx }:
 
 stdenv.mkDerivation rec {
   name = "file-${version}";
-  version = "5.32";
+  version = "5.37";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.astron.com/pub/file/${name}.tar.gz"
       "https://distfiles.macports.org/file/${name}.tar.gz"
     ];
-    sha256 = "0l1bfa0icng9vdwya00ff48fhvjazi5610ylbhl35qi13d6xqfc6";
+    sha256 = "0zz0p9bqnswfx0c16j8k62ivjq1m16x10xqv4hy9lcyxyxkkkhg9";
   };
 
   nativeBuildInputs = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ]
+              ++ stdenv.lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   doCheck = true;
 
+  makeFlags = if stdenv.hostPlatform.isWindows then "FILE_COMPILE=file"
+              else null;
 
   meta = with stdenv.lib; {
-    homepage = http://darwinsys.com/file;
+    homepage = https://darwinsys.com/file;
     description = "A program that shows the type of files";
     license = licenses.bsd2;
     platforms = platforms.all;

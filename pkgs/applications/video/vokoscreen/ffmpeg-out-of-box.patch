@@ -1,20 +1,20 @@
 diff --git a/settings/QvkSettings.cpp b/settings/QvkSettings.cpp
-index bbf2abf..187efad 100644
+index 3008e62..07485bd 100644
 --- a/settings/QvkSettings.cpp
 +++ b/settings/QvkSettings.cpp
-@@ -56,17 +56,8 @@ void QvkSettings::readAll()
-       GIFPlayer = settings.value( "GIFplayer" ).toString();
+@@ -66,17 +66,8 @@ void QvkSettings::readAll()
        Minimized = settings.value( "Minimized", 0 ).toUInt();
+       MinimizedByStart = settings.value( "MinimizedByStart", 0 ).toUInt();
        Countdown = settings.value( "Countdown", 0 ).toUInt();
 -      QFile file;
 -      if ( file.exists( qApp->applicationDirPath().append( "/bin/ffmpeg" ) ) == true )
 -      {
--	vokoscreenWithLibs = true;
+-        vokoscreenWithLibs = true;
 -        Recorder = qApp->applicationDirPath().append( "/bin/ffmpeg" );
 -      }
 -      else
 -      {
--	vokoscreenWithLibs = false;
+-        vokoscreenWithLibs = false;
 -        Recorder = settings.value( "Recorder", "ffmpeg" ).toString();
 -      }
 +      vokoscreenWithLibs = true;
@@ -22,10 +22,3 @@ index bbf2abf..187efad 100644
      settings.endGroup();
      
      settings.beginGroup( "Videooptions" );
-@@ -398,4 +389,4 @@ double QvkSettings::getShowClickTime()
- int QvkSettings::getShowKeyOnOff()
- {
-   return showKeyOnOff; 
--}
-\ No newline at end of file
-+}

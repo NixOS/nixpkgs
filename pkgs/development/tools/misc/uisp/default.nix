@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Tool for AVR microcontrollers which can interface to many hardware in-system programmers";
     license = stdenv.lib.licenses.gpl2;
-    homepage = http://savannah.nongnu.org/projects/uisp;
+    homepage = https://savannah.nongnu.org/projects/uisp;
     platforms = stdenv.lib.platforms.linux;
   };
 }

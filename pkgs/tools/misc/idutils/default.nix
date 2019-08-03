@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       contents of certain character strings.
     '';
 
-    homepage = http://www.gnu.org/software/idutils/;
+    homepage = https://www.gnu.org/software/idutils/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];

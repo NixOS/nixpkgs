@@ -1,0 +1,23 @@
+diff -ur firefox-65.0-orig/docshell/base/nsAboutRedirector.cpp firefox-65.0/docshell/base/nsAboutRedirector.cpp
+--- firefox-65.0-orig/docshell/base/nsAboutRedirector.cpp       2019-01-23 00:48:28.988747428 +0100
++++ firefox-65.0/docshell/base/nsAboutRedirector.cpp    2019-01-23 00:51:13.378188397 +0100
+@@ -67,8 +67,6 @@
+     {"about", "chrome://global/content/aboutAbout.xhtml", 0},
+     {"addons", "chrome://mozapps/content/extensions/extensions.xul",
+      nsIAboutModule::ALLOW_SCRIPT},
+-    {"buildconfig", "chrome://global/content/buildconfig.html",
+-     nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT},
+     {"checkerboard", "chrome://global/content/aboutCheckerboard.xhtml",
+      nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT |
+          nsIAboutModule::ALLOW_SCRIPT},
+diff -ur firefox-65.0-orig/toolkit/content/jar.mn firefox-65.0/toolkit/content/jar.mn
+--- firefox-65.0-orig/toolkit/content/jar.mn    2019-01-23 00:48:35.033372506 +0100
++++ firefox-65.0/toolkit/content/jar.mn 2019-01-23 00:50:45.126565924 +0100
+@@ -36,7 +36,6 @@
+    content/global/plugins.css
+    content/global/browser-child.js
+    content/global/browser-content.js
+-*   content/global/buildconfig.html
+    content/global/buildconfig.css
+    content/global/contentAreaUtils.js
+    content/global/datepicker.xhtml

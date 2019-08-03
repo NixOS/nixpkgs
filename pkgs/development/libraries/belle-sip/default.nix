@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, antlr3_4, libantlr3c, jre, polarssl, fetchFromGitHub
+{ stdenv, antlr3_4, libantlr3c, jre, polarssl, fetchFromGitHub
   , cmake, zlib, bctoolbox
 }:
 

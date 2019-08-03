@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig
 , gtk
-, thunarx-2-dev, python2
+, thunar-bare, python2, hicolor-icon-theme
+, wafHook
 }:
 
 stdenv.mkDerivation rec {
@@ -14,21 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "08vhzzzwshyz371yl7fzfylmhvchhv3s5kml3dva4v39jhvrpnkf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
     gtk
-    thunarx-2-dev python2
+    thunar-bare python2 hicolor-icon-theme
   ];
-
-  configurePhase = "python2 waf configure --prefix=$out";
-
-  buildPhase = "python2 waf";
-
-  installPhase = ''
-    python2 waf install
-  '';
-
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   enableParallelBuilding = true;
 

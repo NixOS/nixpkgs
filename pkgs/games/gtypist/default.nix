@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/gtypist;
+    homepage = https://www.gnu.org/software/gtypist;
     description = "Universal typing tutor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;

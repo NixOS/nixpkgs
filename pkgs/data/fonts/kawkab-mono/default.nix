@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 fetchzip rec {
   name = "kawkab-mono-20151015";
@@ -15,8 +15,7 @@ fetchzip rec {
   meta = {
     description = "An arab fixed-width font";
     homepage = https://makkuk.com/kawkab-mono/;
-    license = stdenv.lib.licenses.ofl;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.ofl;
   };
 }
 

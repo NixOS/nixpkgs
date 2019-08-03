@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
-  version = "4.7.1";
-  name = "antlr4-python3-runtime-${version}";
+  pname = "antlr4-python3-runtime";
+  version = "4.7.2";
   disabled = !isPy3k;
 
-  src = fetchurl {
-    url = "mirror://pypi/a/antlr4-python3-runtime/${name}.tar.gz";
-    sha256 = "1lrzmagawmavyw1n1z0qarvs2jmbnbv0p89dah8g7klj8hnbf9hv";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "02xm7ccsf51vh4xsnhlg6pvchm1x3ckgv9kwm222w5drizndr30n";
   };
 
   meta = {
     description = "Runtime for ANTLR";
-    homepage = "http://www.antlr.org/";
+    homepage = "https://www.antlr.org/";
     license = stdenv.lib.licenses.bsd3;
   };
 }

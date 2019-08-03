@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, idna, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, idna }:
 
 buildPythonPackage rec {
   pname = "hyperlink";
@@ -10,12 +10,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ idna ];
-
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    py.test $out
-  '';
 
   meta = with stdenv.lib; {
     description = "A featureful, correct URL for Python";

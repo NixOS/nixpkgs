@@ -1,67 +1,67 @@
-{ stdenv, fetchgit, intltool, itstool, meson, ninja, pkgconfig, wrapGAppsHook
-, glib, glib-networking, gsettings-desktop-schemas, gst_all_1, gtk3, gobjectIntrospection
-, gtkspell3, libsecret, python36, python36Packages, webkitgtk }:
+{ stdenv, fetchgit, meson, ninja, pkgconfig
+, python3, gtk3, libsecret, gst_all_1, webkitgtk
+, glib-networking, gtkspell3, hunspell, desktop-file-utils
+, gobject-introspection, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
-  name = "eolie-${version}";
-  version = "0.9.16";
+python3.pkgs.buildPythonApplication rec {
+  pname = "eolie";
+  version = "0.9.60";
+
+  format = "other";
+  doCheck = false;
 
   src = fetchgit {
-    url = https://gitlab.gnome.org/gnumdk/eolie;
-    rev = version;
-    sha256 = "0mvhr6hy4nx7xaq9r9qp5rb0y293kjjryw5ykzb473cr3iwzk25b";
+    url = "https://gitlab.gnome.org/World/eolie";
+    rev = "refs/tags/${version}";
+    fetchSubmodules = true;
+    sha256 = "1mhl7p8pwp8lqx5z15r0lx1y4mb2c1gjwy3w6041cyc4hyb91693";
   };
 
   nativeBuildInputs = [
-    intltool
-    itstool
+    desktop-file-utils
+    gobject-introspection
     meson
     ninja
     pkgconfig
     wrapGAppsHook
-    gobjectIntrospection
   ];
 
-  buildInputs = [
-    glib
+  buildInputs = with gst_all_1; [
     glib-networking
-    gsettings-desktop-schemas
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav
+    gobject-introspection
+    gst-libav
+    gst-plugins-base
+    gst-plugins-ugly
+    gstreamer
     gtk3
     gtkspell3
+    hunspell
     libsecret
-    python36
-    python36Packages.pygobject3
-    python36Packages.pycairo
-    python36Packages.dateutil
-    python36Packages.dbus-python
-    python36Packages.beautifulsoup4
-    python36Packages.pycrypto
-    python36Packages.requests
     webkitgtk
   ];
 
-  wrapPrefixVariables = [ "PYTHONPATH" ];
+  propagatedBuildInputs = with python3.pkgs; [
+    beautifulsoup4
+    pycairo
+    pygobject3
+    python-dateutil
+  ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
+    chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
   '';
 
-  patches = [
-    ./0001-Extend-the-python-path-rather-than-replacing-it.patch
-  ];
+  preFixup = ''
+    buildPythonPath "$out $propagatedBuildInputs"
+    patchPythonScript "$out/libexec/eolie-sp"
+  '';
 
   meta = with stdenv.lib; {
     description = "A new GNOME web browser";
     homepage = https://wiki.gnome.org/Apps/Eolie;
-    license = licenses.gpl3;
-    maintainers = [ maintainers.samdroid-apps ];
+    license  = licenses.gpl3Plus;
+    maintainers = with maintainers; [ samdroid-apps worldofpeace ];
     platforms = platforms.linux;
   };
 }

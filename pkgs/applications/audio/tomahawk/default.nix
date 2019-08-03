@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     homepage = http://tomahawk-player.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    broken = true; # 2018-06-25
   };
 }

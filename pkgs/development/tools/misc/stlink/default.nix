@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "In-circuit debug and programming for ST-Link devices";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor maintainers.rongcuid ];
   };
 }

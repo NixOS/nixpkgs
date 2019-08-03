@@ -1,23 +1,42 @@
-{ stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
-, boost, zlib, python27Packages, swig, gfortran, soqt, libf2c, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, cmake, ninja, coin3d, xercesc, ode, eigen, qt5, opencascade-occt, gts
+, hdf5, vtk, medfile, zlib, python3Packages, swig, gfortran, libXmu
+, soqt, libf2c, libGLU, makeWrapper, pkgconfig
+, mpi ? null }:
+
+assert mpi != null;
 
 let
-  pythonPackages = python27Packages;
+  pythonPackages = python3Packages;
 in stdenv.mkDerivation rec {
   name = "freecad-${version}";
-  version = "0.16.6712";
+  version = "0.18.2";
 
   src = fetchurl {
     url = "https://github.com/FreeCAD/FreeCAD/archive/${version}.tar.gz";
-    sha256 = "14hs26gvv7gbg9misxq34v4nrds2sbxjhj4yyw5kq3zbvl517alp";
+    sha256 = "1r5rhaiq22yhrfpmcmzx6bflqj6q9asbyjyfja4x4rzfy9yh0a4v";
   };
 
-  buildInputs = with pythonPackages; [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
-    zlib python swig gfortran soqt libf2c makeWrapper matplotlib
-    pycollada pyside pysideShiboken pysideTools pivy
-  ];
+  nativeBuildInputs = [ cmake ninja pkgconfig pythonPackages.pyside2-tools ];
+  buildInputs = [ cmake coin3d xercesc ode eigen opencascade-occt gts
+    zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
+    libGLU libXmu
+  ] ++ (with qt5; [
+    qtbase qttools qtwebkit
+  ]) ++ (with pythonPackages; [
+    matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
+  ]);
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DBUILD_QT5=ON"
+    "-DSHIBOKEN_INCLUDE_DIR=${pythonPackages.shiboken2}/include"
+    "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
+    ("-DPYSIDE_INCLUDE_DIR=${pythonPackages.pyside2}/include"
+      + ";${pythonPackages.pyside2}/include/PySide2/QtCore"
+      + ";${pythonPackages.pyside2}/include/PySide2/QtWidgets"
+      + ";${pythonPackages.pyside2}/include/PySide2/QtGui"
+      )
+    "-DPYSIDE_LIBRARY=PySide2::pyside2"
+  ];
 
   # This should work on both x86_64, and i686 linux
   preBuild = ''
@@ -32,39 +51,11 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/FreeCAD --prefix PYTHONPATH : $PYTHONPATH \
       --set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1
-
-    mkdir -p $out/share/mime/packages
-    cat << EOF > $out/share/mime/packages/freecad.xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-      <mime-type type="application/x-extension-fcstd">
-        <sub-class-of type="application/zip"/>
-        <comment>FreeCAD Document</comment>
-        <glob pattern="*.fcstd"/>
-      </mime-type>
-    </mime-info>
-    EOF
-
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications/* $out/share/applications/
-    for entry in $out/share/applications/*.desktop; do
-      substituteAllInPlace $entry
-    done
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "freecad";
-    desktopName = "FreeCAD";
-    genericName = "CAD Application";
-    comment = meta.description;
-    exec = "@out@/bin/FreeCAD %F";
-    categories = "Science;Education;Engineering;";
-    startupNotify = "true";
-    mimeType = "application/x-extension-fcstd;";
-    extraEntries = ''
-      Path=@out@/share/freecad
-    '';
-  };
+  postFixup = ''
+    mv $out/share/doc $out
+  '';
 
   meta = with stdenv.lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";

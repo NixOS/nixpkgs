@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.fastcgi.com/;
     license = "FastCGI see LICENSE.TERMS";
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

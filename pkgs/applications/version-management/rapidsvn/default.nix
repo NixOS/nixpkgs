@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, wxGTK, subversion, apr, aprutil, python }:
+{ stdenv, fetchurl, wxGTK, subversion, apr, aprutil, python }:
 
 stdenv.mkDerivation rec {
   name = "rapidsvn-${version}";

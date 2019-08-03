@@ -71,17 +71,21 @@ in
 
   config = mkIf cfg.enable (lib.mkMerge [
     {
-      users.extraUsers = singleton {
+      users.users = singleton {
         name = cfg.user;
         description = "Charybdis IRC daemon user";
         uid = config.ids.uids.ircd;
         group = cfg.group;
       };
 
-      users.extraGroups = singleton {
+      users.groups = singleton {
         name = cfg.group;
         gid = config.ids.gids.ircd;
       };
+
+      systemd.tmpfiles.rules = [
+        "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
+      ];
 
       systemd.services.charybdis = {
         description = "Charybdis IRC daemon";
@@ -90,15 +94,10 @@ in
           BANDB_DBPATH = "${cfg.statedir}/ban.db";
         };
         serviceConfig = {
-          ExecStart   = "${charybdis}/bin/charybdis-ircd -foreground -logfile /dev/stdout -configfile ${configFile}";
+          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
           Group = cfg.group;
           User = cfg.user;
-          PermissionsStartOnly = true; # preStart needs to run with root permissions
         };
-        preStart = ''
-          ${coreutils}/bin/mkdir -p ${cfg.statedir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.statedir}
-        '';
       };
 
     }

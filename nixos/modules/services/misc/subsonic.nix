@@ -130,7 +130,7 @@ let cfg = config.services.subsonic; in {
                 ! [ -e "${cfg.home}" ] &&
                 [ -d "$oldHome" ] &&
                 [ $(${pkgs.coreutils}/bin/stat -c %u "$oldHome") -eq \
-                    ${toString config.users.extraUsers.subsonic.uid} ]; then
+                    ${toString config.users.users.subsonic.uid} ]; then
             logger Moving "$oldHome" to "${cfg.home}"
             ${pkgs.coreutils}/bin/mv -T "$oldHome" "${cfg.home}"
         fi
@@ -152,7 +152,7 @@ let cfg = config.services.subsonic; in {
       };
     };
 
-    users.extraUsers.subsonic = {
+    users.users.subsonic = {
       description = "Subsonic daemon user";
       home = cfg.home;
       createHome = true;
@@ -160,6 +160,6 @@ let cfg = config.services.subsonic; in {
       uid = config.ids.uids.subsonic;
     };
 
-    users.extraGroups.subsonic.gid = config.ids.gids.subsonic;
+    users.groups.subsonic.gid = config.ids.gids.subsonic;
   };
 }

@@ -5,11 +5,13 @@ let
 in fetchzip rec {
   name = "dina-font-${version}";
 
-  url = "http://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";
+  # `meta.homepage` has no direct download link
+  url = "https://github.com/ProgrammingFonts/ProgrammingFonts/archive/b15ef365146be7eef4a46979cfe157c5aeefb7c0.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.bdf -d $out/share/fonts
+    unzip -j $downloadedFile '*/Dina/*.bdf' -d $out/share/fonts
+    chmod u-x $out/share/fonts/*
   '';
 
   sha256 = "02a6hqbq18sw69npylfskriqhvj1nsk65hjjyd05nl913ycc6jl7";
@@ -25,6 +27,5 @@ in fetchzip rec {
     downloadPage = https://www.donationcoder.com/Software/Jibz/Dina/;
     license = licenses.free;
     maintainers = [ maintainers.prikhi ];
-    platforms = platforms.unix;
   };
 }

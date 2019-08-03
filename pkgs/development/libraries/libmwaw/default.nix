@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="libmwaw";
-    version="0.3.13";
+    version="0.3.15";
     name="${baseName}-${version}";
-    hash="1sjs3nc39im232h5bf81w3il8ivd7w2bc2qssxf7k74g8hlcfmfv";
-    url="mirror://sourceforge/libmwaw/libmwaw/libmwaw-0.3.13/libmwaw-0.3.13.tar.xz";
-    sha256="1sjs3nc39im232h5bf81w3il8ivd7w2bc2qssxf7k74g8hlcfmfv";
+    hash="1cdhm9yhanyv3w4vr73zhgyynmkhhkp3dyld7m11jd2yy04vnh04";
+    url="mirror://sourceforge/libmwaw/libmwaw/libmwaw-0.3.15/libmwaw-0.3.15.tar.xz";
+    sha256="1cdhm9yhanyv3w4vr73zhgyynmkhhkp3dyld7m11jd2yy04vnh04";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     description = ''Import library for some old mac text documents'';
     license = stdenv.lib.licenses.mpl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

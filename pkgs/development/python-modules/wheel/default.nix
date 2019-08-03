@@ -9,12 +9,11 @@
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.30.0";
-  name = "${pname}-${version}";
+  version = "0.33.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9515fe0a94e823fd90b08d22de45d7bde57c90edce705b22f5e1ecf7e1b653c8";
+    sha256 = "62fcfa03d45b5b722539ccbc07b190e4bfff4bb9e3a4d470dd9f6a0981002565";
   };
 
   checkInputs = [ pytest pytestcov coverage ];

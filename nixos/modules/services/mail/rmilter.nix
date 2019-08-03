@@ -8,7 +8,7 @@ let
   postfixCfg = config.services.postfix;
   cfg = config.services.rmilter;
 
-  inetSocket = addr: port: "inet:[${toString port}@${addr}]";
+  inetSocket = addr: port: "inet:${addr}:${toString port}";
   unixSocket = sock: "unix:${sock}";
 
   systemdSocket = if cfg.bindSocket.type == "unix" then cfg.bindSocket.path
@@ -52,7 +52,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = cfg.rspamd.enable;
+        default = false;
         description = "Whether to run the rmilter daemon.";
       };
 
@@ -89,7 +89,7 @@ in
 
       bindSocket.path = mkOption {
        type = types.str;
-       default = "/run/rmilter/rmilter.sock";
+       default = "/run/rmilter.sock";
        description = ''
           Path to Unix domain socket to listen on.
         '';
@@ -97,7 +97,7 @@ in
 
       bindSocket.address = mkOption {
         type = types.str;
-        default = "::1";
+        default = "[::1]";
         example = "0.0.0.0";
         description = ''
           Inet address to listen on.
@@ -193,15 +193,18 @@ in
   config = mkMerge [
 
     (mkIf cfg.enable {
+      warnings = [
+        ''`config.services.rmilter' is deprecated, `rmilter' deprecated and unsupported by upstream, and will be removed from next releases. Use built-in rspamd milter instead.''
+      ];
 
-      users.extraUsers = singleton {
+      users.users = singleton {
         name = cfg.user;
         description = "rmilter daemon";
         uid = config.ids.uids.rmilter;
         group = cfg.group;
       };
 
-      users.extraGroups = singleton {
+      users.groups = singleton {
         name = cfg.group;
         gid = config.ids.gids.rmilter;
       };
@@ -238,12 +241,12 @@ in
     })
 
     (mkIf (cfg.enable && cfg.rspamd.enable && rspamdCfg.enable) {
-      users.extraUsers.${cfg.user}.extraGroups = [ rspamdCfg.group ];
+      users.users.${cfg.user}.extraGroups = [ rspamdCfg.group ];
     })
 
     (mkIf (cfg.enable && cfg.postfix.enable) {
       services.postfix.extraConfig = cfg.postfix.configFragment;
-      users.extraUsers.${postfixCfg.user}.extraGroups = [ cfg.group ];
+      users.users.${postfixCfg.user}.extraGroups = [ cfg.group ];
     })
   ];
 }

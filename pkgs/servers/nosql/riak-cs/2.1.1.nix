@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlang, git, wget, which, pam, coreutils, riak
+{ stdenv, lib, fetchurl, unzip, erlang, git, wget, which, pam
 , Carbon ? null, Cocoa ? null }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux [ pam ];
 
   src = fetchurl {
-    url = "http://s3.amazonaws.com/downloads.basho.com/riak-cs/2.1/2.1.1/riak-cs-2.1.1.tar.gz";
+    url = "https://s3.amazonaws.com/downloads.basho.com/riak-cs/2.1/2.1.1/riak-cs-2.1.1.tar.gz";
     sha256 = "115cac127aac6d759c1b429a52e0d18e491c0719a6530b1b88aa52c4efdbedd5";
   };
 
@@ -65,5 +65,6 @@ stdenv.mkDerivation rec {
     platforms   = [ "x86_64-linux" "x86_64-darwin" ];
     license     = licenses.asl20;
     maintainers = with maintainers; [ mdaiter ];
+    knownVulnerabilities = [ "CVE-2017-3163 - see https://github.com/NixOS/nixpkgs/issues/33876" ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "sqlite-zandronum-3.0";

@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     description = "On-the-fly display switch utility";
     homepage = http://willem.engen.nl/projects/disper/;
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl3;
   };
 
 }

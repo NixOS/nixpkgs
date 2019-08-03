@@ -19,7 +19,7 @@ in rec {
     m2Path = "/junit/junit/${version}";
 
     meta = {
-      homepage = http://junit.org/junit4/;
+      homepage = https://junit.org/junit4/;
       description = "Simple framework to write repeatable tests. It is an instance of the xUnit architecture for unit testing frameworks";
       license = stdenv.lib.licenses.epl10;
       platforms = stdenv.lib.platforms.all;

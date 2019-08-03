@@ -1,15 +1,13 @@
 { build-idris-package
 , fetchFromGitLab
-, prelude
 , lightyear
 , lib
-, idris
 }:
 build-idris-package  {
   name = "graphviz";
   version = "2017-01-16";
 
-  idrisDeps = [ prelude lightyear ];
+  idrisDeps = [ lightyear ];
 
   src = fetchFromGitLab {
     owner = "mgttlinger";
@@ -24,9 +22,8 @@ build-idris-package  {
 
   meta = {
     description = "Parser and library for graphviz dot files";
-    homepage = https://github.com/mgttlinger/idris-graphviz;
+    homepage = https://gitlab.com/mgttlinger/idris-graphviz;
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

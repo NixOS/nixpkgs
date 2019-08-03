@@ -8,7 +8,7 @@
 attrs // {
   unpackPhase = ''
     mkdir dist
-    cp $src dist/"''${src#*-}"
+    cp "$src" "dist/$(stripHash "$src")"
   '';
 
   # Wheels are pre-compiled

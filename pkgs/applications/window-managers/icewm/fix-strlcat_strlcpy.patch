@@ -1,0 +1,236 @@
+--- src/apppstatus.cc	2017-07-30 10:59:06.000000000 +0200
++++ src/apppstatus.cc	2017-08-09 09:12:54.332052762 +0200
+@@ -366,7 +366,7 @@
+             sscanf(p, "%s %s %s %s %s", val[0], val[1], val[2], val[3], val[4]);
+             for (i = 0; i < 4; i++) {
+                 if (strncmp(val[i+1], "?", 1) != 0)
+-                    strlcpy(phoneNumber, val[i+1], sizeof phoneNumber);
++                    my_strlcpy(phoneNumber, val[i+1], sizeof phoneNumber);
+             }
+         }
+ 
+--- src/base.h	2017-07-30 10:59:06.000000000 +0200
++++ src/base.h	2017-08-09 09:11:13.082025484 +0200
+@@ -44,9 +44,9 @@
+ /*** String Functions *********************************************************/
+ 
+ /* Prefer this as a safer alternative over strcpy. Return strlen(from). */
+-size_t strlcpy(char *dest, const char *from, size_t dest_size);
++size_t my_strlcpy(char *dest, const char *from, size_t dest_size);
+ /* Prefer this over strcat. Return strlen(dest) + strlen(from). */
+-size_t strlcat(char *dest, const char *from, size_t dest_size);
++size_t my_strlcat(char *dest, const char *from, size_t dest_size);
+ 
+ char *newstr(char const *str);
+ char *newstr(char const *str, int len);
+--- src/gnome2.cc	2017-07-30 10:59:06.000000000 +0200
++++ src/gnome2.cc	2017-08-09 09:11:21.819027846 +0200
+@@ -158,8 +158,8 @@
+     const int plen = strlen(fPath);
+ 
+     char tmp[256];
+-    strlcpy(tmp, fPath, sizeof tmp);
+-    strlcat(tmp, "/.directory", sizeof tmp);
++    my_strlcpy(tmp, fPath, sizeof tmp);
++    my_strlcat(tmp, "/.directory", sizeof tmp);
+ 
+     if (isDir && !stat(tmp, &sb)) { // looks like kde/gnome1 style
+ 
+@@ -279,8 +279,8 @@
+ 
+             while ((file = readdir(dir)) != NULL) {
+                 char fullpath[256];
+-                strlcpy(fullpath, dirname, sizeof fullpath);
+-                strlcat(fullpath, file->d_name, sizeof fullpath);
++                my_strlcpy(fullpath, dirname, sizeof fullpath);
++                my_strlcat(fullpath, file->d_name, sizeof fullpath);
+                 GnomeDesktopItem *ditem =
+                     gnome_desktop_item_new_from_file(fullpath,
+                                                      (GnomeDesktopItemLoadFlags)0,
+--- src/icehelp.cc	2017-07-30 10:59:06.000000000 +0200
++++ src/icehelp.cc	2017-08-09 09:11:31.490030459 +0200
+@@ -1790,8 +1790,8 @@
+     const size_t size = 9 + strlen(cfmt) + strlen(cstr) + strlen(crea);
+     char *cbuf = (char *)malloc(size);
+     snprintf(cbuf, size, cfmt, cstr);
+-    strlcat(cbuf, ":\n ", size);
+-    strlcat(cbuf, crea, size);
++    my_strlcat(cbuf, ":\n ", size);
++    my_strlcat(cbuf, crea, size);
+ 
+     node *root = new node(node::div);
+     flist<node> nodes(root);
+--- src/icesm.cc	2017-07-30 10:59:06.000000000 +0200
++++ src/icesm.cc	2017-08-09 09:13:12.946057758 +0200
+@@ -28,10 +28,10 @@
+         wordexp_t w;
+         if (wordexp(trim(buf), &w, 0) != 0 || w.we_wordc == 0)
+             return false;
+-        size_t len = strlcpy(buf, trim(w.we_wordv[0]), bufsiz);
++        size_t len = my_strlcpy(buf, trim(w.we_wordv[0]), bufsiz);
+         for (size_t k = 1; k < w.we_wordc && len < bufsiz; ++k) {
+-            strlcat(buf, " ", bufsiz);
+-            len = strlcat(buf, trim(w.we_wordv[k]), bufsiz);
++            my_strlcat(buf, " ", bufsiz);
++            len = my_strlcat(buf, trim(w.we_wordv[k]), bufsiz);
+         }
+         wordfree(&w);
+         if (len >= bufsiz)
+@@ -39,7 +39,7 @@
+ #else
+         char *str = trim(buf);
+         if (str > buf)
+-            strlcpy(buf, str, bufsiz);
++            my_strlcpy(buf, str, bufsiz);
+ #endif
+         if (buf[0] == '#' || buf[0] == '=')
+             buf[0] = 0;
+--- src/icesound.cc	2017-07-30 10:59:06.000000000 +0200
++++ src/icesound.cc	2017-08-09 09:11:26.686029161 +0200
+@@ -145,8 +145,8 @@
+     char * findSample(int sid)  {
+         char basefname[1024];
+ 
+-        strlcpy(basefname, gui_events[sid].name, sizeof basefname);
+-        strlcat(basefname, ".wav", sizeof basefname);
++        my_strlcpy(basefname, gui_events[sid].name, sizeof basefname);
++        my_strlcat(basefname, ".wav", sizeof basefname);
+ 
+         return findSample(basefname);
+     }
+--- src/misc.cc	2017-07-30 10:59:06.000000000 +0200
++++ src/misc.cc	2017-08-09 09:13:39.372064834 +0200
+@@ -448,7 +448,7 @@
+ #endif
+ 
+ /* Prefer this as a safer alternative over strcpy. Return strlen(from). */
+-size_t strlcpy(char *dest, const char *from, size_t dest_size)
++size_t my_strlcpy(char *dest, const char *from, size_t dest_size)
+ {
+     const char *in = from;
+     if (dest_size > 0) {
+@@ -463,12 +463,12 @@
+ }
+ 
+ /* Prefer this over strcat. Return strlen(dest) + strlen(from). */
+-size_t strlcat(char *dest, const char *from, size_t dest_size)
++size_t my_strlcat(char *dest, const char *from, size_t dest_size)
+ {
+     char *to = dest;
+     char *const stop = to + dest_size - 1;
+     while (to < stop && *to) ++to;
+-    return to - dest + strlcpy(to, from, dest_size - (to - dest));
++    return to - dest + my_strlcpy(to, from, dest_size - (to - dest));
+ }
+ 
+ char *newstr(char const *str) {
+--- src/strtest.cc	2017-07-30 10:59:06.000000000 +0200
++++ src/strtest.cc	2017-08-09 09:13:24.395060823 +0200
+@@ -286,63 +286,63 @@
+     strtest tester("strlc");
+     char d[10] = "@";
+     size_t n;
+-    n = strlcpy(d, "", 0);
++    n = my_strlcpy(d, "", 0);
+     sequal(d, "@");
+     assert(d, n == 0);
+ 
+-    n = strlcpy(d, "a", 0);
++    n = my_strlcpy(d, "a", 0);
+     sequal(d, "@");
+     assert(d, n == 1);
+ 
+-    n = strlcpy(d, "", 1);
++    n = my_strlcpy(d, "", 1);
+     sequal(d, "");
+     assert(d, n == 0);
+ 
+-    n = strlcpy(d, "a", 1);
++    n = my_strlcpy(d, "a", 1);
+     sequal(d, "");
+     assert(d, n == 1);
+ 
+-    n = strlcpy(d, "a", 2);
++    n = my_strlcpy(d, "a", 2);
+     sequal(d, "a");
+     assert(d, n == 1);
+ 
+-    n = strlcpy(d, "ab", 2);
++    n = my_strlcpy(d, "ab", 2);
+     sequal(d, "a");
+     assert(d, n == 2);
+ 
+-    n = strlcpy(d, "ab", 3);
++    n = my_strlcpy(d, "ab", 3);
+     sequal(d, "ab");
+     assert(d, n == 2);
+ 
+-    n = strlcpy(d, "abc", sizeof d);
++    n = my_strlcpy(d, "abc", sizeof d);
+     sequal(d, "abc");
+     assert(d, n == 3);
+ 
+-    n = strlcat(d, "def", 4);
++    n = my_strlcat(d, "def", 4);
+     sequal(d, "abc");
+     assert(d, n == 6);
+ 
+-    n = strlcat(d, "def", sizeof d);
++    n = my_strlcat(d, "def", sizeof d);
+     sequal(d, "abcdef");
+     assert(d, n == 6);
+ 
+-    n = strlcat(d, "ghijkl", sizeof d);
++    n = my_strlcat(d, "ghijkl", sizeof d);
+     sequal(d, "abcdefghi");
+     assert(d, n == 12);
+ 
+-    n = strlcpy(d, "123", sizeof d);
++    n = my_strlcpy(d, "123", sizeof d);
+     sequal(d, "123");
+     assert(d, n == 3);
+ 
+-    n = strlcpy(d, d + 1, sizeof d);
++    n = my_strlcpy(d, d + 1, sizeof d);
+     sequal(d, "23");
+     assert(d, n == 2);
+ 
+-    n = strlcpy(d, d + 1, sizeof d);
++    n = my_strlcpy(d, d + 1, sizeof d);
+     sequal(d, "3");
+     assert(d, n == 1);
+ 
+-    n = strlcpy(d, d + 1, sizeof d);
++    n = my_strlcpy(d, d + 1, sizeof d);
+     sequal(d, "");
+     assert(d, n == 0);
+ }
+@@ -418,7 +418,7 @@
+         while (a.next()) {
+             const char *e = a.entry();
+             assert(e, strcoll(buf, e) < 0);
+-            strlcpy(buf, e, sizeof buf);
++            my_strlcpy(buf, e, sizeof buf);
+         }
+         assert(buf, strcoll(buf, "~~~~~~~~~") < 0);
+     }
+@@ -437,7 +437,7 @@
+             cstring c(s.entry());
+             const char *e = c.c_str();
+             assert(e, strcoll(buf, e) < 0);
+-            strlcpy(buf, e, sizeof buf);
++            my_strlcpy(buf, e, sizeof buf);
+         }
+         assert(buf, strcoll(buf, "~~~~~~~~~") < 0);
+     }
+--- src/udir.cc	2017-07-30 10:59:06.000000000 +0200
++++ src/udir.cc	2017-08-09 09:13:28.346061883 +0200
+@@ -66,7 +66,7 @@
+     if (impl) {
+         DirPtr dirp(impl);
+         if (dirp.next()) {
+-            strlcpy(fEntry, dirp.name(), sizeof fEntry);
++            my_strlcpy(fEntry, dirp.name(), sizeof fEntry);
+             return true;
+         }
+     }

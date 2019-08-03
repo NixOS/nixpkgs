@@ -1,17 +1,21 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "wireless-tools-${version}";
-  version = "30.pre2";
+  pname = "wireless-tools";
+  version = "30.pre9";
 
   src = fetchurl {
     url = "http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/wireless_tools.${version}.tar.gz";
-    sha256 = "01lgf592nk8fnk7l5afqvar4szkngwpgcv4xh58qsg9wkkjlhnls";
+    sha256 = "0qscyd44jmhs4k32ggp107hlym1pcyjzihiai48xs7xzib4wbndb";
   };
 
-  preBuild = "
-    makeFlagsArray=(PREFIX=$out CC=$CC LDCONFIG=: AR=$AR RANLIB=$RANLIB)
-  ";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "CC:=$(CC)"
+    "AR:=$(AR)"
+    "RANLIB:=$(RANLIB)"
+    "LDCONFIG=:"
+  ];
 
   meta = {
     platforms = stdenv.lib.platforms.linux;

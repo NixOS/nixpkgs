@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cairo, gdk_pixbuf, libconfig, pango, pkgconfig
+{ stdenv, fetchFromGitHub, cairo, gdk-pixbuf, libconfig, pango, pkgconfig
 , xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt, makeWrapper, docbook_xsl
 , configFile ? null, lib
-, rev, sha256, version
+, rev, sha256, version, patches ? []
 }:
 
 stdenv.mkDerivation {
@@ -14,11 +14,13 @@ stdenv.mkDerivation {
     repo  = "yabar";
   };
 
+  inherit patches;
+
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cairo gdk_pixbuf libconfig pango xcbutilwm docbook_xsl
+    cairo gdk-pixbuf libconfig pango xcbutilwm docbook_xsl
     alsaLib wirelesstools asciidoc libxslt makeWrapper
   ];
 

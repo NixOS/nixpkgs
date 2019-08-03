@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "beast-0.7.1";
 
   src = fetchurl {
-    url = "http://ftp.gtk.org/pub/beast/v0.7/${name}.tar.bz2";
+    url = "https://ftp.gtk.org/pub/beast/v0.7/${name}.tar.bz2";
     sha256 = "0jyl1i1918rsn4296w07fsf6wx3clvad522m3bzgf8ms7gxivg5l";
   };
 

@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C++ library to facilitate using C++ design patterns";
-    homepage = http://www.gnu.org/software/commoncpp/;
+    homepage = https://www.gnu.org/software/commoncpp/;
     license = stdenv.lib.licenses.lgpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

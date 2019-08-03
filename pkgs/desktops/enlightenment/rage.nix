@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, gst_all_1, pcre, curl, wrapGAppsHook }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, gst_all_1, pcre, mesa, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "rage-${version}";
   version = "0.3.0";
-  
+
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/rage/${name}.tar.xz";
     sha256 = "0gfzdd4jg78bkmj61yg49w7bzspl5m1nh6agqgs8k7qrq9q26xqy";
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     (pkgconfig.override { vanilla = true; })
+    mesa.dev
     wrapGAppsHook
   ];
 
@@ -24,16 +25,11 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
     pcre
-    curl
- ];
-
-  postInstall = ''
-    wrapProgram $out/bin/rage --prefix LD_LIBRARY_PATH : ${curl.out}/lib
-  '';
+  ];
 
   meta = {
     description = "Video + Audio player along the lines of mplayer";
-    homepage = http://enlightenment.org/;
+    homepage = https://enlightenment.org/;
     maintainers = with stdenv.lib.maintainers; [ matejc ftrvxmtrx romildo ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;

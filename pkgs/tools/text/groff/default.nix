@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff
+{ stdenv, fetchurl, perl
 , ghostscript #for postscript and html output
 , psutils, netpbm #for html output
 , buildPackages
@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  patches = [ ./look-for-ar.patch ];
+  patches = [
+    ./look-for-ar.patch
+    ./mdate-determinism.patch
+  ];
 
   postPatch = stdenv.lib.optionalString (psutils != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
@@ -50,15 +53,14 @@ stdenv.mkDerivation rec {
     "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
   ];
 
-  doCheck = true;
-
-  crossAttrs = {
+  makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff
     # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
-    preBuild = ''
-      makeFlags="GROFF_BIN_PATH=${buildPackages.groff}/bin GROFFBIN=${buildPackages.groff}/bin/groff"
-    '';
-  };
+    "GROFF_BIN_PATH=${buildPackages.groff}/bin"
+    "GROFFBIN=${buildPackages.groff}/bin/groff"
+  ];
+
+  doCheck = true;
 
   # Remove example output with (random?) colors and creation date
   # to avoid non-determinism in the output.
@@ -108,7 +110,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/groff/;
+    homepage = https://www.gnu.org/software/groff/;
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

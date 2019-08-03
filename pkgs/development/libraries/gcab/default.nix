@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, gettext, gobjectIntrospection, pkgconfig, meson, ninja, glibcLocales, git, vala, glib, zlib }:
+{ stdenv, fetchurl, gettext, gobject-introspection, pkgconfig
+, meson, ninja, glibcLocales, git, vala, glib, zlib, gnome3
+}:
 
 stdenv.mkDerivation rec {
-  name = "gcab-${version}";
-  version = "1.1";
+  pname = "gcab";
+  version = "1.2";
 
   LC_ALL = "en_US.UTF-8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gcab/${version}/${name}.tar.xz";
-    sha256 = "0l19sr6pg0cfcddmi5n79d08mjjbhn427ip5jlsy9zddq9r24aqr";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "038h5kk41si2hc9d9169rrlvp8xgsxq27kri7hv2vr39gvz9cbas";
   };
 
-  nativeBuildInputs = [ meson ninja glibcLocales git pkgconfig vala gettext gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja glibcLocales git pkgconfig vala gettext gobject-introspection ];
 
   buildInputs = [ glib zlib ];
 
@@ -20,9 +22,17 @@ stdenv.mkDerivation rec {
     "-Dtests=false"
   ];
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
   };
 
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+    homepage = "https://wiki.gnome.org/msitools";
+    maintainers = [ maintainers.lethalman ];
+  };
 }

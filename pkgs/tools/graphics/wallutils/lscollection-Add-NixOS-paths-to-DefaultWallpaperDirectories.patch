@@ -1,0 +1,25 @@
+From 9d064428cec970ced9be6753d6250b20a45a9fe2 Mon Sep 17 00:00:00 2001
+From: Michael Weiss <dev.primeos@gmail.com>
+Date: Fri, 19 Apr 2019 11:56:50 +0200
+Subject: [PATCH] lscollection: Add NixOS paths to DefaultWallpaperDirectories
+
+---
+ collections.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/collections.go b/collections.go
+index ef74ea6..9f9a608 100644
+--- a/collections.go
++++ b/collections.go
+@@ -21,7 +21,7 @@ const (
+ )
+ 
+ var (
+-	DefaultWallpaperDirectories = []string{"/usr/share/pixmaps", "/usr/share/wallpapers", "/usr/share/backgrounds", "/usr/local/share/pixmaps", "/usr/local/share/wallpapers", "/usr/local/share/backgrounds", "/usr/share/archlinux"}
++	DefaultWallpaperDirectories = []string{"/run/current-system/sw/share/pixmaps", "/run/current-system/sw/share/wallpapers", "/run/current-system/sw/share/backgrounds", "/usr/share/pixmaps", "/usr/share/wallpapers", "/usr/share/backgrounds", "/usr/local/share/pixmaps", "/usr/local/share/wallpapers", "/usr/local/share/backgrounds", "/usr/share/archlinux"}
+ )
+ 
+ type SearchResults struct {
+-- 
+2.19.2
+

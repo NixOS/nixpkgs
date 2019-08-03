@@ -8,4 +8,3 @@ callPackage ./generic.nix (args // rec {
   };
 
 })
-

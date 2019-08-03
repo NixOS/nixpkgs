@@ -39,6 +39,6 @@ in stdenv.mkDerivation {
     homepage = "https://www.gnu.org/software/guile-ncurses/";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

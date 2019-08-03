@@ -1,14 +1,13 @@
 { stdenv, fetchurl
 , automake, autoconf, libtool, pkgconfig, autoconf-archive
-, libxml2, icu
-, languageMachines }:
+ }:
 
 let
   release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-uctodata.json);
 in
 
 stdenv.mkDerivation {
-  name = "uctodata";
+  name = "uctodata-${release.version}";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "uctodata-${release.version}.tar.gz"; };

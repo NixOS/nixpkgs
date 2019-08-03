@@ -16,7 +16,10 @@ stdenv.mkDerivation {
     sha256 = "0x969152znxxjbj7387xb38waslr4yv6bnj5jmhb4rpqxphvk54f";
   };
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Simple tool to make temporary file handling in shells scripts safe and simple";
+    homepage = https://www.mktemp.org;
+    license = licenses.isc;
+    platforms = platforms.unix;
   };
 }

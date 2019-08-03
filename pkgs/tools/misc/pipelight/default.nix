@@ -1,8 +1,7 @@
-{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU_combined, perl, wineStaging
- }:
+{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU_combined, wine-staging }:
 
 let
-  wine_custom = wineStaging;
+  wine_custom = wine-staging;
 
   mozillaPluginPath = "/lib/mozilla/plugins";
 

@@ -64,11 +64,30 @@ with lib;
       '';
     };
 
+    return = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "301 http://example.com$request_uri;";
+      description = ''
+        Adds a return directive, for e.g. redirections.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
       description = ''
         These lines go to the end of the location verbatim.
+      '';
+    };
+
+    priority = mkOption {
+      type = types.int;
+      default = 1000;
+      description = ''
+        Order of this location block in relation to the others in the vhost.
+        The semantics are the same as with `lib.mkOrder`. Smaller values have
+        a greater priority.
       '';
     };
   };

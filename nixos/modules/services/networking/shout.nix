@@ -1,4 +1,4 @@
-{ pkgs, lib, config, options, ... }:
+{ pkgs, lib, config, ... }:
 
 with lib;
 
@@ -6,7 +6,7 @@ let
   cfg = config.services.shout;
   shoutHome = "/var/lib/shout";
 
-  defaultConfig = pkgs.runCommand "config.js" {} ''
+  defaultConfig = pkgs.runCommand "config.js" { preferLocalBuild = true; } ''
     EDITOR=true ${pkgs.shout}/bin/shout config --home $PWD
     mv config.js $out
   '';
@@ -82,7 +82,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "shout";
       uid = config.ids.uids.shout;
       description = "Shout daemon user";

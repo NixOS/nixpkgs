@@ -1,4 +1,4 @@
-{ stdenv, fetchzip
+{ lib, fetchzip
 , version ? "0.3.5"
 , sha256 ? "1gfgl7qimp76q4z0nv55vv57yfs4kscdr329np701k0xnhncwvrk"
 }:
@@ -14,7 +14,7 @@ fetchzip {
     unzip -j $downloadedFile \*.conf -d $out/etc/fonts/conf.d
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/ttuegel/fontconfig-penultimate;
     description = "Sensible defaults for Fontconfig";
     license = licenses.asl20;

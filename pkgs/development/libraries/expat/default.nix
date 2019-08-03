@@ -1,11 +1,11 @@
-{ stdenv, fetchpatch, fetchurl }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "expat-2.2.5";
+  name = "expat-2.2.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/expat/${name}.tar.bz2";
-    sha256 = "1xpd78sp7m34jqrw5x13bz7kgz0n6aj15wn4zj4gfx3ypbpk5p6r";
+    sha256 = "067cfhqwiswm4zynw7xaxl59mrrimaiyjhnn8byxma1i98pi1jfb";
   };
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers

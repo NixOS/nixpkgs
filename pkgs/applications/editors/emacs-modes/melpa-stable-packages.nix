@@ -4,22 +4,23 @@
 
 To update the list of packages from MELPA,
 
-1. Clone https://github.com/ttuegel/emacs2nix.
-2. Clone https://github.com/milkypostman/melpa.
-3. Run `./melpa-stable-packages.sh --melpa PATH_TO_MELPA_CLONE` from emacs2nix.
-4. Copy the new `melpa-stable-generated.nix` file into Nixpkgs.
-5. Check for evaluation errors: `nix-instantiate ./. -A emacsPackagesNg.melpaStablePackages`.
-6. `git add pkgs/applications/editors/emacs-modes/melpa-stable-generated.nix && git commit -m "melpa-stable-packages $(date -Idate)"`
+
+1. Run ./update-melpa
+2. Check for evaluation errors:
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackagesNg.melpaStablePackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackagesNg.melpaPackages
+3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
 */
 
-{ lib }:
+{ lib, external }:
 
 self:
 
   let
-    imported = import ./melpa-stable-generated.nix { inherit (self) callPackage; };
-
+    inherit (import ./libgenerated.nix lib self) melpaDerivation;
+    imported = lib.listToAttrs (map (melpaDerivation "stable")
+                                    (lib.importJSON ./recipes-archive-melpa.json));
     super = imported;
 
     dontConfigure = pkg: pkg.override (args: {
@@ -28,16 +29,13 @@ self:
       });
     });
 
-    markBroken = pkg: pkg.override (args: {
+    markBroken = pkg: if pkg != null then pkg.override (args: {
       melpaBuild = drv: args.melpaBuild (drv // {
         meta = (drv.meta or {}) // { broken = true; };
       });
-    });
+    }) else null;
 
     overrides = {
-      # upstream issue: mismatched filename
-      ack-menu = markBroken super.ack-menu;
-
       # Expects bash to be at /bin/bash
       ac-rtags = markBroken super.ac-rtags;
 
@@ -81,10 +79,6 @@ self:
         inherit (self.melpaPackages) ess ctable popup;
       };
 
-      ess-R-object-popup = super.ess-R-object-popup.override {
-        inherit (self.melpaPackages) ess popup;
-      };
-
       # upstream issue: doesn't build
       eterm-256color = markBroken super.eterm-256color;
 
@@ -100,17 +94,22 @@ self:
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
-      # upstream issue: missing file header
-      fold-dwim = markBroken super.fold-dwim;
+      # upstream issue: missing dependency
+      fold-dwim-org = markBroken super.fold-dwim-org;
 
       # build timeout
       graphene = markBroken super.graphene;
 
-      # upstream issue: mismatched filename
-      helm-lobsters = markBroken super.helm-lobsters;
-
       # Expects bash to be at /bin/bash
       helm-rtags = markBroken super.helm-rtags;
+
+      # Build same version as Haskell package
+      hindent = super.hindent.overrideAttrs (attrs: {
+        version = external.hindent.version;
+        src = external.hindent.src;
+        packageRequires = [ self.haskell-mode ];
+        propagatedUserEnvPkgs = [ external.hindent ];
+      });
 
       # upstream issue: missing file header
       ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
@@ -130,11 +129,31 @@ self:
       # upstream issue: missing file header
       link = markBroken super.link;
 
-      # upstream issue: mismatched filename
-      link-hint = markBroken super.link-hint;
-
       # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
+
+      magit =
+        (super.magit.override {
+          # version of magit-popup needs to match magit
+          # https://github.com/magit/magit/issues/3286
+          inherit (self.melpaStablePackages) magit-popup;
+        }).overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+      magit-todos = super.magit-todos.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-filenotify = super.magit-filenotify.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # missing OCaml
       merlin = markBroken super.merlin;
@@ -158,9 +177,6 @@ self:
       # upstream issue: truncated file
       powershell = markBroken super.powershell;
 
-      # upstream issue: mismatched filename
-      processing-snippets = markBroken super.processing-snippets;
-
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
 
@@ -179,11 +195,39 @@ self:
       # missing OCaml
       utop = markBroken super.utop;
 
+      vdiff-magit =
+        (super.vdiff-magit.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        }));
+
       # upstream issue: missing file header
       voca-builder = markBroken super.voca-builder;
 
       # upstream issue: missing file header
       window-numbering = markBroken super.window-numbering;
+
+      # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
+      _0blayout = super."0blayout";
+      _0xc = super."0xc";
+      _2048-game = super."2048-game";
+      _4clojure = super."4clojure";
+      at = super."@";
+      desktop-plus = super."desktop+";
+      ghub-plus = super."ghub+";
+      git-gutter-plus = super."git-gutter+";
+      git-gutter-fringe-plus = super."git-gutter-fringe+";
+      ido-completing-read-plus = super."ido-completing-read+";
+      image-plus = super."image+";
+      image-dired-plus = super."image-dired+";
+      markdown-mode-plus = super."markdown-mode+";
+      package-plus = super."package+";
+      rect-plus = super."rect+";
+      term-plus = super."term+";
+      term-plus-key-intercept = super."term+key-intercept";
+      term-plus-mux = super."term+mux";
+      xml-plus = super."xml+";
+
     };
 
     melpaStablePackages = super // overrides;

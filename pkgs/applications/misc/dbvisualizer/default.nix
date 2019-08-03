@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, coreutils, makeWrapper }:
+{ stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "dbvisualizer-9.5.7";

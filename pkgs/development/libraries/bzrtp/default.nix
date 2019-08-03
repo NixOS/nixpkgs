@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fetchFromGitHub, bctoolbox, sqlite }:
+{ stdenv, cmake, fetchFromGitHub, bctoolbox, sqlite }:
 
 stdenv.mkDerivation rec {
   baseName = "bzrtp";

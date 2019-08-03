@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   version = "2014.10";
@@ -9,16 +9,13 @@ in fetchzip rec {
 
   postFetch = ''
     tar -xzvf $downloadedFile --strip-components=1
-
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    cp -v "Desktop Fonts/OTF/"*.otf $out/share/fonts/opentype
-    cp -v README.md $out/share/doc/${name}
+    install -m444 -Dt $out/share/fonts/opentype "Desktop Fonts/OTF/"*.otf
+    install -m444 -Dt $out/share/doc/${name}    README.md
   '';
 
   sha256 = "0mg65f0ydyfmb43jqr1f34njpd10w8npw15cbb7z0nxmy4nkl842";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://aldusleaf.org/crimson.html;
     description = "A font family inspired by beautiful oldstyle typefaces";
     license = licenses.ofl;

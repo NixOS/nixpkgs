@@ -31,9 +31,10 @@ stdenv.mkDerivation rec {
       --prefix PATH : "$prefix/bin:$PATH"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/ljanyst/carddav-util;
     description = "A CardDAV import/export utility";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.isc;
   };
 }

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "XStatic-Bootbox";
-  version = "4.3.0.1";
+  version = "4.4.0.1";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0wks1lsqngn3gvlhzrvaan1zj8w4wr58xi0pfqhrzckbghvvr0gj";
+    sha256 = "1g00q38g1k576lxjlwglv4w3fj4z0z8lxlwpc66wyhjglj4r4bwd";
   };
 
   # no tests implemented

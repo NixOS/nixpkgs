@@ -1,12 +1,12 @@
-{ stdenv, fetchpatch, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
+{ stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   name = "herwig-${version}";
-  version = "7.1.2";
+  version = "7.1.5";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "0wr2mmmf5rlvcc6xgdagafm6vb5g6ifvrjc7kd86gs9jip32p29i";
+    url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
+    sha256 = "0jnrv59zfa41gc37pqr3vaiz5jkh7w0k0alcax37b3mlbsnacr9r";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ++ (with lhapdf.pdf_sets; [ MMHT2014lo68cl MMHT2014nlo68cl ]);
 
   postPatch = ''
-    patchShebangs ./cat_with_cpplines
+    patchShebangs ./
   '';
 
   configureFlags = [
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage    = https://herwig.hepforge.org/;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    broken      = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }

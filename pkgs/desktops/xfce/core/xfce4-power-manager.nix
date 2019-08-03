@@ -35,11 +35,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://goodies.xfce.org/projects/applications/xfce4-power-manager;
+    homepage = https://goodies.xfce.org/projects/applications/xfce4-power-manager;
     description = "A power manager for the Xfce Desktop Environment";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.eelco ];
   };
 }
-

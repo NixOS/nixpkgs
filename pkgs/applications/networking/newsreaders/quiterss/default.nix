@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, qttools, qtwebkit, pkgconfig, sqlite }:
+{ stdenv, fetchFromGitHub, qmake, pkgconfig, wrapQtAppsHook
+, qtbase, qttools, qtwebkit, sqlite
+}:
 
 stdenv.mkDerivation rec {
   name = "quiterss-${version}";
-  version = "0.18.9";
+  version = "0.18.12";
 
   src = fetchFromGitHub {
     owner = "QuiteRSS";
     repo = "quiterss";
     rev = "${version}";
-    sha256 = "0n2rgzyxw6m29i8m8agri3cp5dbpjblhhyklvxsyzmkksnsxpw58";
+    sha256 = "0xav9qr8n6310636nfbgx4iix65fs3ya5rz2isxsf38bkjm7r3pa";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
   buildInputs = [ qtbase qttools qtwebkit sqlite.dev ];
 
   meta = with stdenv.lib; {

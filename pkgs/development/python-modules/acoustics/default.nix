@@ -1,23 +1,27 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, cython, pytest, numpy, scipy, matplotlib, pandas, tabulate }:
+{ lib, buildPythonPackage, fetchPypi
+, pytest, numpy, scipy, matplotlib, pandas, tabulate, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "acoustics";
-  version = "0.1.2";
-  name = "${pname}-${version}";
+  version = "0.2.1";
 
-  buildInputs = [ cython pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ numpy scipy matplotlib pandas tabulate ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b75a47de700d01e704de95953a6e969922b2f510d7eefe59f7f8980ad44ad1b7";
+    sha256 = "d7cec62d3e7a7eb26026f2aacc726fb1dd0b044574cbdee83da654b847543c20";
   };
 
-  # Tests not distributed
-  doCheck = false;
+  checkPhase = ''
+    pushd tests
+    py.test ./.
+    popd
+  '';
 
-  meta = with stdenv.lib; {
+  disabled = pythonOlder "3.6";
+
+  meta = with lib; {
     description = "A package for acousticians";
     maintainers = with maintainers; [ fridh ];
     license = with licenses; [ bsd3 ];

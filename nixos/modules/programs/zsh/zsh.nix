@@ -11,7 +11,8 @@ let
   cfg = config.programs.zsh;
 
   zshAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias ${k}='${v}'") cfg.shellAliases
+    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
+      (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
 in
@@ -34,13 +35,12 @@ in
       };
 
       shellAliases = mkOption {
-        default = config.environment.shellAliases;
+        default = {};
         description = ''
-          Set of aliases for zsh shell. Overrides the default value taken from
-           <option>environment.shellAliases</option>.
+          Set of aliases for zsh shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
         '';
-        type = types.attrs; # types.attrsOf types.stringOrPath;
+        type = with types; attrsOf (nullOr (either str path));
       };
 
       shellInit = mkOption {
@@ -69,12 +69,41 @@ in
 
       promptInit = mkOption {
         default = ''
-          autoload -U promptinit && promptinit && prompt walters
+          if [ "$TERM" != dumb ]; then
+              autoload -U promptinit && promptinit && prompt walters
+          fi
         '';
         description = ''
           Shell script code used to initialise the zsh prompt.
         '';
         type = types.lines;
+      };
+
+      histSize = mkOption {
+        default = 2000;
+        description = ''
+          Change history size.
+        '';
+        type = types.int;
+      };
+
+      histFile = mkOption {
+        default = "$HOME/.zsh_history";
+        description = ''
+          Change history file.
+        '';
+        type = types.str;
+      };
+
+      setOptions = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "HIST_IGNORE_DUPS" "SHARE_HISTORY" "HIST_FCNTL_LOCK"
+        ];
+        example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
+        description = ''
+          Configure zsh options.
+        '';
       };
 
       enableCompletion = mkOption {
@@ -85,18 +114,26 @@ in
         type = types.bool;
       };
 
-      enableAutosuggestions = mkOption {
-        default = false;
+
+      enableGlobalCompInit = mkOption {
+        default = cfg.enableCompletion;
         description = ''
-          Enable zsh-autosuggestions
+          Enable execution of compinit call for all interactive zsh shells.
+
+          This option can be disabled if the user wants to extend its
+          <literal>fpath</literal> and a custom <literal>compinit</literal>
+          call in the local config is required.
         '';
         type = types.bool;
       };
+
     };
 
   };
 
   config = mkIf cfg.enable {
+
+    programs.zsh.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
     environment.etc."zshenv".text =
       ''
@@ -108,7 +145,9 @@ in
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
         export __ETC_ZSHENV_SOURCED=1
 
-        ${config.system.build.setEnvironment.text}
+        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+            . ${config.system.build.setEnvironment}
+        fi
 
         ${cfge.shellInit}
 
@@ -116,7 +155,7 @@ in
 
         # Read system-wide modifications.
         if test -f /etc/zshenv.local; then
-          . /etc/zshenv.local
+            . /etc/zshenv.local
         fi
       '';
 
@@ -135,7 +174,7 @@ in
 
         # Read system-wide modifications.
         if test -f /etc/zprofile.local; then
-          . /etc/zprofile.local
+            . /etc/zprofile.local
         fi
       '';
 
@@ -150,29 +189,25 @@ in
 
         . /etc/zinputrc
 
-        # history defaults
-        SAVEHIST=2000
-        HISTSIZE=2000
-        HISTFILE=$HOME/.zsh_history
-
-        setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
+        # Don't export these, otherwise other shells (bash) will try to use same histfile
+        SAVEHIST=${toString cfg.histSize}
+        HISTSIZE=${toString cfg.histSize}
+        HISTFILE=${cfg.histFile}
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
         # Tell zsh how to find installed completions
         for p in ''${(z)NIX_PROFILES}; do
-          fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
+            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
         done
 
-        ${optionalString cfg.enableCompletion "autoload -U compinit && compinit"}
-
-        ${optionalString (cfg.enableAutosuggestions)
-          "source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-        }
+        ${optionalString cfg.enableGlobalCompInit "autoload -U compinit && compinit"}
 
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
+
+        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
 
         ${zshAliases}
 
@@ -180,7 +215,7 @@ in
 
         # Read system-wide modifications.
         if test -f /etc/zshrc.local; then
-          . /etc/zshrc.local
+            . /etc/zshrc.local
         fi
       '';
 
@@ -195,7 +230,6 @@ in
 
     environment.shells =
       [ "/run/current-system/sw/bin/zsh"
-        "/var/run/current-system/sw/bin/zsh"
         "${pkgs.zsh}/bin/zsh"
       ];
 

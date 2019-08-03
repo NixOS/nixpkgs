@@ -1,19 +1,17 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerEnv rec {
-  name = "cucumber-${version}";
+bundlerApp {
+  pname = "cucumber";
+  gemdir = ./.;
+  exes = [ "cucumber" ];
 
-  version = (import gemset).cucumber.version;
-  inherit ruby;
-  # expects Gemfile, Gemfile.lock and gemset.nix in the same directory
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  passthru.updateScript = bundlerUpdateScript "cucumber";
 
   meta = with lib; {
     description = "A tool for executable specifications";
     homepage    = https://cucumber.io/;
     license     = with licenses; mit;
+    maintainers = with maintainers; [ manveru nicknovitski ];
     platforms   = platforms.unix;
   };
 }

@@ -16,7 +16,7 @@ mkDerivation {
     platforms = platforms.linux;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
-  propagatedBuildInputs = [
+  buildInputs = [
     # qt
     qtwebkit
     # kde
@@ -32,11 +32,17 @@ mkDerivation {
   ];
   propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
   postFixup =
-    let k3bPath = lib.makeBinPath [
-          cdrdao cdrtools dvdplusrwtools libburn normalize sox transcode
-          vcdimager
-        ];
+    let
+      binPath = lib.makeBinPath [
+        cdrdao cdrtools dvdplusrwtools libburn normalize sox transcode
+        vcdimager flac
+      ];
+      libraryPath = lib.makeLibraryPath [
+        cdparanoia
+      ];
     in ''
-      wrapProgram "$out/bin/k3b" --prefix PATH : "${k3bPath}"
+      wrapProgram "$out/bin/k3b"     \
+        --prefix PATH : "${binPath}" \
+        --prefix LD_LIBRARY_PATH : ${libraryPath}
     '';
 }

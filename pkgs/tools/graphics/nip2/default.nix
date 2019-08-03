@@ -2,11 +2,12 @@
 fftw, gsl, goffice, libgsf }:
 
 stdenv.mkDerivation rec {
-  name = "nip2-8.3.0";
+  pname = "nip2";
+  version = "8.7.1";
 
   src = fetchurl {
-    url = "http://www.vips.ecs.soton.ac.uk/supported/current/${name}.tar.gz";
-    sha256 = "0vr12gyfvhxx2a28y74lzfg379d1fk0g9isc69k0vdgpn4y1i8aa";
+    url = "https://github.com/libvips/nip2/releases/download/v${version}/nip2-${version}.tar.gz";
+    sha256 = "0l7n427njif53npqn02gfjjly8y3khbrkzqxp10j5vp9h97psgiw";
   };
 
   buildInputs =
@@ -15,10 +16,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.vips.ecs.soton.ac.uk;
+    homepage = "https://github.com/libvips/nip2";
     description = "Graphical user interface for VIPS image processing system";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kovirobi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

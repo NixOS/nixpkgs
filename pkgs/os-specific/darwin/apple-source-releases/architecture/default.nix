@@ -1,19 +1,17 @@
 { stdenv, appleDerivation }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
 
-  postUnpack = ''
-    substituteInPlace $sourceRoot/Makefile \
-      --replace "/usr/include" "/include" \
-      --replace "/usr/bin/" "" \
-      --replace "/bin/" ""
+  postPatch = ''
+    substituteInPlace Makefile \
+        --replace '/bin/mkdir' 'mkdir' \
+        --replace '/usr/bin/install' 'install'
   '';
 
-  installPhase = ''
-    export DSTROOT=$out
-    make install
-  '';
+  installFlags = [ "EXPORT_DSTDIR=/include/architecture" ];
+
+  DSTROOT = "$(out)";
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ copumpkin ];

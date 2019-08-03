@@ -1,21 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, cups, ghostscript }:
+{ stdenv, fetchFromGitHub, cmake, zlib, cups }:
 
 stdenv.mkDerivation rec {
-
-  name = "brlaser";
+  name = "brlaser-${version}";
+  version = "4";
 
   src = fetchFromGitHub {
     owner = "pdewacht";
     repo = "brlaser";
-    rev = "a52149823373e11f918d9e6a56eda7242935c99b";
-    sha256 = "12d8g0aispdj2virf6vrvb0vx6d6ardjg3qyav75shsm1f94ids6";
+    rev = "v${version}";
+    sha256 = "1yy4mpf68c82h245srh2sd1yip29w6kx14gxk4hxkv496gf55lw5";
   };
 
-  buildInputs = [ cmake zlib cups ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib cups ];
 
-  preConfigure = ''
-    cmakeFlags="$cmakeFlags -DCUPS_SERVER_BIN=$out/lib/cups/ -DCUPS_DATA_DIR=$out/share/cups/"
-  '';
+  cmakeFlags = [ "-DCUPS_SERVER_BIN=lib/cups" "-DCUPS_DATA_DIR=share/cups" ];
 
   meta = with stdenv.lib; {
     description = "A CUPS driver for Brother laser printers";
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = https://github.com/pdewacht/brlaser;
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ StijnDW ];
   };
 }

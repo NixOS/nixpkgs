@@ -1,45 +1,53 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, boost, bison, flex, openjdk, doxygen, perl, graphviz }:
+{ stdenv, fetchFromGitHub
+, perl, ncurses, zlib, sqlite, libffi
+, autoreconfHook, mcpp, bison, flex, doxygen, graphviz
+, makeWrapper
+}:
 
+
+let
+  toolsPath = stdenv.lib.makeBinPath [ mcpp ];
+in
 stdenv.mkDerivation rec {
-  version = "1.0.0";
   name    = "souffle-${version}";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "13j14227dgxcm25z9iizcav563wg2ak9338pb03aqqz8yqxbmz4n";
+    sha256 = "06sa250z3v8hs91p6cqdzlwwaq96j6zmfrrld1fzd1b620aa5iys";
   };
 
-  buildInputs = [
-    autoconf automake boost bison flex openjdk
-    # Used for docs
-    doxygen perl graphviz
-  ];
+  nativeBuildInputs = [ autoreconfHook bison flex mcpp doxygen graphviz makeWrapper perl ];
+  buildInputs = [ ncurses zlib sqlite libffi ];
 
+  # these propagated inputs are needed for the compiled Souffle mode to work,
+  # since generated compiler code uses them. TODO: maybe write a g++ wrapper
+  # that adds these so we can keep the propagated inputs clean?
+  propagatedBuildInputs = [ ncurses zlib sqlite libffi ];
+
+  # see 565a8e73e80a1bedbb6cc037209c39d631fc393f and parent commits upstream for
+  # Wno-error fixes
   patchPhase = ''
+    substituteInPlace ./src/Makefile.am \
+      --replace '-Werror' '-Werror -Wno-error=deprecated -Wno-error=other'
+
     substituteInPlace configure.ac \
-      --replace "m4_esyscmd([git describe --tags --abbrev=0 | tr -d '\n'])" "${version}"
+      --replace "m4_esyscmd([git describe --tags --always | tr -d '\n'])" "${version}"
   '';
 
-  # Without this, we get an obscure error about not being able to find a library version
-  # without saying what library it's looking for. Turns out it's searching global paths
-  # for boost and failing there, so we tell it what's what here.
-  configureFlags = [ "--with-boost-libdir=${boost}/lib" ];
+  postInstall = ''
+    wrapProgram "$out/bin/souffle" --prefix PATH : "${toolsPath}"
+  '';
 
-  preConfigure = "./bootstrap";
-
-  # in 1.0.0: parser.hh:40:0: error: unterminated #ifndef
-  enableParallelBuilding = false;
-
-  # See https://github.com/souffle-lang/souffle/issues/176
-  hardeningDisable = [ "fortify" ];
+  outputs = [ "out" ];
 
   meta = with stdenv.lib; {
     description = "A translator of declarative Datalog programs into the C++ language";
     homepage    = "http://souffle-lang.github.io/";
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ thoughtpolice copumpkin wchresta ];
     license     = licenses.upl;
   };
 }

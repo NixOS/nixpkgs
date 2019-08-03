@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost }:
+{ stdenv, fetchFromGitHub, cmake, boost166 }:
 
 stdenv.mkDerivation rec {
   name = "SkypeExport-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost ];
+  buildInputs = [ boost166 ];
 
   preConfigure = "cd src/SkypeExport/_gccbuild/linux";
   installPhase = "install -Dt $out/bin SkypeExport";

@@ -86,10 +86,10 @@ in
 
           <note>
             <para>If you use the firewall consider adding the following:</para>
-            <programlisting>
-              networking.firewall.allowedTCPPorts = [ 139 445 ];
-              networking.firewall.allowedUDPPorts = [ 137 138 ];
-            </programlisting>
+          <programlisting>
+            networking.firewall.allowedTCPPorts = [ 139 445 ];
+            networking.firewall.allowedUDPPorts = [ 137 138 ];
+          </programlisting>
           </note>
         '';
       };
@@ -214,12 +214,10 @@ in
             }
           ];
         # Always provide a smb.conf to shut up programs like smbclient and smbspool.
-        environment.etc = singleton
-          { source =
-              if cfg.enable then configFile
-              else pkgs.writeText "smb-dummy.conf" "# Samba is disabled.";
-            target = "samba/smb.conf";
-          };
+        environment.etc."samba/smb.conf".source = mkOptionDefault (
+          if cfg.enable then configFile
+          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
+        );
       }
 
       (mkIf cfg.enable {

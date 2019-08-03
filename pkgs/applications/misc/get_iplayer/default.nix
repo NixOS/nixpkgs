@@ -1,11 +1,11 @@
-{stdenv, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, buildPerlPackage, perlPackages, rtmpdump}:
+{stdenv, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, perlPackages, rtmpdump}:
 
 with stdenv.lib;
 
-buildPerlPackage rec {
-  name = "get_iplayer-${version}";
+perlPackages.buildPerlPackage rec {
+  pname = "get_iplayer";
   version = "2.99";
-  
+
   src = fetchFromGitHub {
     owner = "get-iplayer";
     repo = "get_iplayer";
@@ -34,5 +34,5 @@ buildPerlPackage rec {
     homepage = https://squarepenguin.co.uk/;
     platforms = platforms.all;
   };
-  
+
 }

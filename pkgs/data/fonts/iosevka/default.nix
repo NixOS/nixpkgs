@@ -1,7 +1,6 @@
 {
   stdenv, lib,
   fetchFromGitHub, fetchurl,
-  runCommand, writeText,
   nodejs, ttfautohint-nox, otfcc,
 
   # Custom font set options.
@@ -26,13 +25,13 @@ in
 let pname = if set != null then "iosevka-${set}" else "iosevka"; in
 
 let
-  version = "1.14.1";
+  version = "1.14.3";
   name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "be5invis";
     repo ="Iosevka";
     rev = "v${version}";
-    sha256 = "0m6kj1zfv9w6lyykhsfqdx2a951k8qa76licqikz5spm13n22z43";
+    sha256 = "0ba8hwxi88bp2jb9xfhk95nnlv8ykl74cv62xr4ybzm3b8ahpwqf";
   };
 in
 

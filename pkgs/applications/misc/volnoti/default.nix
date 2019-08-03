@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, pkgconfig, dbus, gdk_pixbuf, glib, libX11, gtk2, librsvg
+, pkgconfig, dbus, gdk-pixbuf, glib, libX11, gtk2, librsvg
 , dbus-glib, autoreconfHook, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook wrapGAppsHook ];
 
   buildInputs = [
-    dbus gdk_pixbuf glib libX11 gtk2 dbus-glib librsvg
+    dbus gdk-pixbuf glib libX11 gtk2 dbus-glib librsvg
   ];
 
   meta = with stdenv.lib; {

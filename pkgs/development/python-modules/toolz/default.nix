@@ -6,12 +6,11 @@
 
 buildPythonPackage rec{
   pname = "toolz";
-  version = "0.9.0";
-  name = "${pname}-${version}";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "929f0a7ea7f61c178bd951bdae93920515d3fbdbafc8e6caf82d752b9b3b31c9";
+    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
   };
 
   checkInputs = [ nose ];
@@ -22,10 +21,10 @@ buildPythonPackage rec{
     nosetests toolz/tests
   '';
 
-  meta = {
-    homepage = "http://github.com/pytoolz/toolz/";
+  meta = with lib; {
+    homepage = https://github.com/pytoolz/toolz;
     description = "List processing tools and functional utilities";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }

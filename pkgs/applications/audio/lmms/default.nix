@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, alsaLib ? null, fftwFloat, fltk13
-, fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
+, fluidsynth_1 ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
 , libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
-, qtbase, qttools, SDL ? null }:
+, qtbase, qtx11extras, qttools, SDL ? null }:
 
 stdenv.mkDerivation rec {
   name = "lmms-${version}";
-  version = "1.2.0-rc4";
+  version = "1.2.0-rc7";
 
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
     rev = "v${version}";
-    sha256 = "1n3py18zqbvfnkdiz4wc6z60xaajpkd3kn1wxmby5dmc4vccvjj5";
+    sha256 = "1hshzf2sbdfw37y9rz1ksgvn81kp2n23dp74lsaasc2n7wzjwdis";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake qttools pkgconfig ];
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     alsaLib
     fftwFloat
     fltk13
-    fluidsynth
+    fluidsynth_1
     lame
     libgig
     libjack2
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     libvorbis
     portaudio
     qtbase
+    qtx11extras
     SDL # TODO: switch to SDL2 in the next version
   ];
 

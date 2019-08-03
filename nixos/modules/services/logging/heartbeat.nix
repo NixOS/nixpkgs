@@ -54,16 +54,18 @@ in
 
   config = mkIf cfg.enable {
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' - nobody nogroup - -"
+    ];
+
     systemd.services.heartbeat = with pkgs; {
       description = "heartbeat log shipper";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p "${cfg.stateDir}"/{data,logs}
-        chown nobody:nogroup "${cfg.stateDir}"/{data,logs}
       '';
       serviceConfig = {
         User = "nobody";
-        PermissionsStartOnly = true;
         AmbientCapabilities = "cap_net_raw";
         ExecStart = "${pkgs.heartbeat}/bin/heartbeat -c \"${heartbeatYml}\" -path.data \"${cfg.stateDir}/data\" -path.logs \"${cfg.stateDir}/logs\"";
       };

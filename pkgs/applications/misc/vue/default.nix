@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "vue-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out"/{share/vue,bin}
     cp ${src} "$out/share/vue/vue.jar"
-    echo '#!${stdenv.shell}' >> "$out/bin/vue"
+    echo '#!${runtimeShell}' >> "$out/bin/vue"
     echo '${jre}/bin/java -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue"
     chmod a+x "$out/bin/vue"
   '';

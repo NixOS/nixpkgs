@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ph1l62hy163m2hgybhkccqbcj6brna1vdbr7536zc37lzjxq9rn";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [
     jre

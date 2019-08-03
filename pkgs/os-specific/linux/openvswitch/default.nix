@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
-, procps, libcap_ng, openssl, python27, iproute , perl
+, procps, libcap_ng, openssl, python27 , perl
 , kernel ? null }:
 
 with stdenv.lib;

@@ -1,33 +1,55 @@
-{ stdenv, fetchFromGitHub, python, asciidoc, re2c }:
+{ stdenv, fetchFromGitHub, fetchpatch, python, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "ninja-${version}";
-  version = "1.8.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
     rev = "v${version}";
-    sha256 = "16scq9hcq6c5ap6sy8j4qi75qps1zvrf3p79j1vbrvnqzp928i5f";
+    sha256 = "1q0nld3g0d210zmdjyjzjz2xb2bw1s58gj6zsx7p8q30yh0wg610";
   };
 
-  nativeBuildInputs = [ python asciidoc re2c ];
+  patches = [
+    # Make builds reproducible by generating the same IDs from the same inputs.
+    (fetchpatch {
+      name = "consistent-doc-ids";
+      url = "https://github.com/ninja-build/ninja/commit/9aa947471fcfc607bec6d92a1a6eed5c692edbaf.patch";
+      sha256 = "0zsg46jflsh644jccrcgyfalr7fkzrv041kyi8644nyk923gcrl9";
+    })
+    # https://github.com/ninja-build/ninja/issues/1510 - fix w/musl, possibly BSDs?
+    # 
+    (fetchpatch {
+      name = "fix-issue-1510.patch";
+      url = https://github.com/makepost/ninja/commit/567815df38a2ff54ad7478a90bd75c91e434236a.patch;
+      sha256 = "0zd0xyi7h2066nw1dsk76c7yf71b0f7v4p5nljda7jxi01vpdh69";
+    })
+  ];
+
+  nativeBuildInputs = [ python re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
 
   buildPhase = ''
     python configure.py --bootstrap
-    asciidoc doc/manual.asciidoc
+  '' + optionalString buildDocs ''
+    # "./ninja -vn manual" output copied here to support cross compilation.
+    asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
+    xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
   '';
 
   installPhase = ''
     install -Dm555 -t $out/bin ninja
-    install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
     install -Dm444 misc/bash-completion $out/share/bash-completion/completions/ninja
     install -Dm444 misc/zsh-completion $out/share/zsh/site-functions/_ninja
+  '' + optionalString buildDocs ''
+    install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
   '';
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Small build system with a focus on speed";
     longDescription = ''
       Ninja is a small build system with a focus on speed. It differs from

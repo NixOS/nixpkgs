@@ -3,7 +3,6 @@
 let
   cfg = config.services.crashplan;
   crashplan = pkgs.crashplan;
-  varDir = "/var/lib/crashplan";
 in
 
 with lib;

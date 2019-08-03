@@ -4,7 +4,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ aszlig ];
   };
 
-  machine = { lib, ... }: {
+  machine = { ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.lightdm.enable = true;
@@ -16,7 +16,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   enableOCR = true;
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.extraUsers.alice;
+    user = nodes.machine.config.users.users.alice;
   in ''
     startAll;
     $machine->waitForText(qr/${user.description}/);

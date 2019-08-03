@@ -1,4 +1,4 @@
-{ stdenv, lib, version, src
+{ stdenv, version, src
 , autoreconfHook, zlib, gtest
 , ...
 }:

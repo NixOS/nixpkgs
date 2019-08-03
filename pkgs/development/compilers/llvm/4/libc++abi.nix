@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     export TRIPLE=x86_64-apple-darwin
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -d $(ls -d libcxx-*) -i ${../libcxx-0001-musl-hacks.patch}
-    patch -p1 -d $(ls -d libcxx-*) -i ${./libc++/max_align_t.patch}
+    patch -p1 -d $(ls -d libcxx-*) -i ${../libcxx-max_align_t.patch}
   '';
 
   installPhase = if stdenv.isDarwin
@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     ''
     else ''
       install -d -m 755 $out/include $out/lib
+      install -m 644 lib/libc++abi.a $out/lib
       install -m 644 lib/libc++abi.so.1.0 $out/lib
       install -m 644 ../include/cxxabi.h $out/include
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so

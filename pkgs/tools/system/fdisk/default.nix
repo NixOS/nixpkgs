@@ -1,7 +1,7 @@
 { fetchurl, stdenv, parted, libuuid, gettext, guile }:
 
 stdenv.mkDerivation rec {
-  name = "gnufdisk-2.0.0a"; # .0a1 seems broken, see http://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
+  name = "gnufdisk-2.0.0a"; # .0a1 seems broken, see https://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
 
   src = fetchurl {
     url = "mirror://gnu/fdisk/${name}.tar.gz";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/fdisk/;
+    homepage = https://www.gnu.org/software/fdisk/;
 
     platforms = stdenv.lib.platforms.linux;
   };

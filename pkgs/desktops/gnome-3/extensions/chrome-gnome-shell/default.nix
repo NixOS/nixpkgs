@@ -1,7 +1,7 @@
 {stdenv, fetchurl, cmake, ninja, jq, python3, gnome3, wrapGAppsHook}:
 
 let
-  version = "10";
+  version = "10.1";
 
   inherit (python3.pkgs) python pygobject3 requests;
 in stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/chrome-gnome-shell/${version}/${name}.tar.xz";
-    sha256 = "1wp6qvcp758yfj8xlj15sk1d3jsb1p8136y8xxwpi9wfdjpzjs8j";
+    sha256 = "0f54xyamm383ypbh0ndkza0pif6ljddg2f947p265fkqj3p4zban";
   };
 
   nativeBuildInputs = [ cmake ninja jq wrapGAppsHook ];

@@ -12,7 +12,7 @@ import ./make-test.nix ({ pkgs, ...} :
 
 nodes = {
   gocd_server =
-    { config, pkgs, ... }:
+    { ... }:
     {
       virtualisation.memorySize = 2046;
       services.gocd-server.enable = true;

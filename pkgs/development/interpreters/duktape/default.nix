@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "duktape-${version}";
-  version = "2.2.0";
+  version = "2.4.0";
   src = fetchurl {
     url = "http://duktape.org/duktape-${version}.tar.xz";
-    sha256 = "050csp065ll67dck94s0vdad5r5ck4jwsz1fn1y0fcvn88325xv2";
+    sha256 = "1z3i0ymnkk6q48bmbgh59g1ryrwjdv46vrf6nbnmqfv3s43r7a46";
   };
 
   buildPhase = ''
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An embeddable Javascript engine, with a focus on portability and compact footprint";
-    homepage = "http://duktape.org/";
-    downloadPage = "http://duktape.org/download.html";
+    homepage = https://duktape.org/;
+    downloadPage = https://duktape.org/download.html;
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
     platforms = platforms.linux;

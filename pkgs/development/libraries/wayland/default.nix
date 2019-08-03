@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig
-, libffi, docbook_xsl, doxygen, graphviz, libxslt, xmlto, libxml2
+, libffi, libxml2, wayland
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 }:
 
@@ -7,17 +7,28 @@
 assert expat != null;
 
 stdenv.mkDerivation rec {
-  name = "wayland-${version}";
-  version = "1.14.0";
+  pname = "wayland";
+  version = "1.17.0";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1f3sla6h0bw15fz8pjc67jhwj7pwmfdc7qlj42j5k9v116ycm07d";
+    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "194ibzwpdcn6fvk4xngr4bf5axpciwg2bj82fdvz88kfmjw13akj";
   };
 
-  configureFlags = [ "--with-scanner" "--disable-documentation" ];
+  separateDebugInfo = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  configureFlags = [
+    "--disable-documentation"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "--with-host-scanner"
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # for wayland-scanner during build
+    wayland
+  ];
 
   buildInputs = [ libffi /* docbook_xsl doxygen graphviz libxslt xmlto */ expat libxml2 ];
 
@@ -26,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage    = https://wayland.freedesktop.org/;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ codyopel wkennington ];
+    maintainers = with lib.maintainers; [ codyopel ];
   };
 
   passthru.version = version;

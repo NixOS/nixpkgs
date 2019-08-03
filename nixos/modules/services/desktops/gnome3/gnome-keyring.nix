@@ -33,7 +33,14 @@ with lib;
 
     environment.systemPackages = [ pkgs.gnome3.gnome-keyring ];
 
-    services.dbus.packages = [ pkgs.gnome3.gnome-keyring pkgs.gnome3.gcr ];
+    services.dbus.packages = [ pkgs.gnome3.gnome-keyring pkgs.gcr ];
+
+    security.pam.services.login.enableGnomeKeyring = true;
+
+    security.wrappers.gnome-keyring-daemon = {
+      source = "${pkgs.gnome3.gnome-keyring}/bin/gnome-keyring-daemon";
+      capabilities = "cap_ipc_lock=ep";
+    };
 
   };
 

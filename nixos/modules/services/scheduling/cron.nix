@@ -64,8 +64,8 @@ in
           sendmail. See <option>security.wrappers</option>
 
           If neither /var/cron/cron.deny nor /var/cron/cron.allow exist only root
-          will is allowed to have its own crontab file. The /var/cron/cron.deny file
-          is created automatically for you. So every user can use a crontab.
+          is allowed to have its own crontab file. The /var/cron/cron.deny file
+          is created automatically for you, so every user can use a crontab.
 
           Many nixos modules set systemCronJobs, so if you decide to disable vixie cron
           and enable another cron daemon, you may want it to get its system crontab

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "polyml-${version}";
-  version = "5.7";
+  version = "5.8";
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.ac --replace stdc++ c++
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "polyml";
     repo = "polyml";
     rev = "v${version}";
-    sha256 = "10nsljmcl0zjbcc7ifc991ypwfwq5gh4rcp5rg4nnb706c6bs16y";
+    sha256 = "1s7q77bivppxa4vd7gxjj5dbh66qnirfxnkzh1ql69rfx1c057n3";
   };
 
   meta = with stdenv.lib; {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
-    homepage = http://www.polyml.org/;
+    homepage = https://www.polyml.org/;
     license = licenses.lgpl21;
     platforms = with platforms; (linux ++ darwin);
     maintainers = with maintainers; [ z77z yurrriq ];

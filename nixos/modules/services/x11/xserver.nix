@@ -1,10 +1,8 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
-
-  kernelPackages = config.boot.kernelPackages;
 
   # Abbreviations.
   cfg = config.services.xserver;
@@ -13,7 +11,11 @@ let
 
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
-    virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
+    # Alias so people can keep using "virtualbox" instead of "vboxvideo".
+    virtualbox = { modules = [ xorg.xf86videovboxvideo ]; driverName = "vboxvideo"; };
+
+    # Alias so that "radeon" uses the xf86-video-ati driver.
+    radeon = { modules = [ xorg.xf86videoati ]; driverName = "ati"; };
 
     # modesetting does not have a xf86videomodesetting package as it is included in xorgserver
     modesetting = {};
@@ -60,7 +62,9 @@ let
       '';
       description = ''
         Extra lines to append to the <literal>Monitor</literal> section
-        verbatim.
+        verbatim. Available options are documented in the MONITOR section in
+        <citerefentry><refentrytitle>xorg.conf</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry>.
       '';
     };
   };
@@ -112,6 +116,7 @@ let
     { xfs = optionalString (cfg.useXFS != false)
         ''FontPath "${toString cfg.useXFS}"'';
       inherit (cfg) config;
+      preferLocalBuild = true;
     }
       ''
         echo 'Section "Files"' >> $out
@@ -158,15 +163,6 @@ in
         default = false;
         description = ''
           Whether to enable the X server.
-        '';
-      };
-
-      plainX = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether the X11 session can be plain (without DM/WM) and
-          the Xsession script will be used as fallback or not.
         '';
       };
 
@@ -248,12 +244,27 @@ in
       videoDrivers = mkOption {
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
-        example = [ "vesa" ];
+        default = [ "radeon" "cirrus" "vesa" "vmware" "modesetting" ];
+        example = [
+          "ati_unfree" "amdgpu" "amdgpu-pro"
+          "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+        ];
+        # TODO(@oxij): think how to easily add the rest, like those nvidia things
+        relatedPackages = concatLists
+          (mapAttrsToList (n: v:
+            optional (hasPrefix "xf86video" n) {
+              path  = [ "xorg" n ];
+              title = removePrefix "xf86video" n;
+            }) pkgs.xorg);
         description = ''
           The names of the video drivers the configuration
           supports. They will be tried in order until one that
           supports your card is found.
+          Don't combine those with "incompatible" OpenGL implementations,
+          e.g. free ones (mesa-based) with proprietary ones.
+
+          For unfree "nvidia*", the supported GPU lists are on
+          https://www.nvidia.com/object/unix.html
         '';
       };
 
@@ -337,6 +348,7 @@ in
 
       xkbDir = mkOption {
         type = types.path;
+        default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         description = ''
           Path used for -xkbdir xserver parameter.
         '';
@@ -371,6 +383,12 @@ in
         default = "";
         example = "HorizSync 28-49";
         description = "Contents of the first Monitor section of the X server configuration file.";
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Additional contents (sections) included in the X server configuration file";
       };
 
       xrandrHeads = mkOption {
@@ -534,6 +552,15 @@ in
 
   config = mkIf cfg.enable {
 
+    services.xserver.displayManager.lightdm.enable =
+      let dmconf = cfg.displayManager;
+          default = !( dmconf.auto.enable
+                    || dmconf.gdm.enable
+                    || dmconf.sddm.enable
+                    || dmconf.slim.enable
+                    || dmconf.xpra.enable );
+      in mkIf (default) true;
+
     hardware.opengl.enable = mkDefault true;
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
@@ -548,8 +575,6 @@ in
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
 
-    nixpkgs.config = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { xorg.abiCompat = "1.18"; };
-
     assertions = [
       { assertion = config.security.polkit.enable;
         message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
@@ -561,11 +586,6 @@ in
                 + "${toString (length primaryHeads)} heads set to primary: "
                 + concatMapStringsSep ", " (x: x.output) primaryHeads;
       })
-      { assertion = cfg.desktopManager.default == "none" && cfg.windowManager.default == "none" -> cfg.plainX;
-        message = "Either the desktop manager or the window manager shouldn't be `none`! "
-                + "To explicitly allow this, you can also set `services.xserver.plainX` to `true`. "
-                + "The `default` value looks for enabled WMs/DMs and select the first one.";
-      }
     ];
 
     environment.etc =
@@ -620,8 +640,14 @@ in
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
-    environment.pathsToLink =
-      [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
+    environment.pathsToLink = [ "/share/X11" ];
+
+    xdg = {
+      autostart.enable = true;
+      menus.enable = true;
+      mime.enable = true;
+      icons.enable = true;
+    };
 
     # The default max inotify watches is 8192.
     # Nowadays most apps require a good number of inotify watches,
@@ -639,12 +665,9 @@ in
         restartIfChanged = false;
 
         environment =
-          {
-            XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
-            LD_LIBRARY_PATH = concatStringsSep ":" (
-              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" "/run/opengl-driver/lib" ]
-              ++ concatLists (catAttrs "libPath" cfg.drivers));
-          } // cfg.displayManager.job.environment;
+          optionalAttrs config.hardware.opengl.setLdLibraryPath
+            { LD_LIBRARY_PATH = pkgs.addOpenGLRunpath.driverLink; }
+          // cfg.displayManager.job.environment;
 
         preStart =
           ''
@@ -686,11 +709,10 @@ in
         xorg.xf86inputevdev.out
       ];
 
-    services.xserver.xkbDir = mkDefault "${pkgs.xkeyboard_config}/etc/X11/xkb";
-
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
       nativeBuildInputs = [ pkgs.xkbvalidate ];
+      preferLocalBuild = true;
     } ''
       validate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
@@ -747,6 +769,7 @@ in
             Driver "${driver.driverName or driver.name}"
             ${if cfg.useGlamor then ''Option "AccelMethod" "glamor"'' else ""}
             ${cfg.deviceSection}
+            ${driver.deviceSection or ""}
             ${xrandrDeviceSection}
           EndSection
 
@@ -758,6 +781,7 @@ in
             ''}
 
             ${cfg.screenSection}
+            ${driver.screenSection or ""}
 
             ${optionalString (cfg.defaultDepth != 0) ''
               DefaultDepth ${toString cfg.defaultDepth}
@@ -787,6 +811,8 @@ in
         '')}
 
         ${xrandrMonitorSections}
+
+        ${cfg.extraConfig}
       '';
 
     fonts.enableDefaultFonts = mkDefault true;

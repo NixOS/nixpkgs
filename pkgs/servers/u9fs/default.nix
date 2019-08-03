@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "u9fs-20110513";
   src = fetchhg {
-    url = http://bitbucket.org/plan9-from-bell-labs/u9fs;
+    url = https://bitbucket.org/plan9-from-bell-labs/u9fs;
     rev = "9474edb23b11";
     sha256 = "0irwyk8vnvx0fmz8lmbdb2jrlvas8imr61jr76a1pkwi9wpf2wv6";
   };

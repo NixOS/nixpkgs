@@ -1,35 +1,88 @@
-{ stdenv, fetchurl, vala, intltool, pkgconfig, gtk3, glib
-, json-glib, wrapGAppsHook, libpeas, bash, gobjectIntrospection
-, gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, librsvg, libsecret
-, libsoup }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, vala
+, gettext
+, pkgconfig
+, gtk3
+, glib
+, json-glib
+, wrapGAppsHook
+, libpeas
+, bash
+, gobject-introspection
+, libsoup
+, gtksourceview
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, gnome3
+, gtkspell3
+, shared-mime-info
+, libgee
+, libgit2-glib
+, libsecret
+, meson
+, ninja
+, python3
+, hicolor-icon-theme
+, libdazzle
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gitg";
-  version = "3.26.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "26730d437d6a30d6e341b9e8da99d2134dce4b96022c195609f45062f82b54d5";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1wzsv7bh0a2w70f938hkpzbb9xkyrp3bil65c0q3yf2v72nbbn81";
   };
 
-  preCheck = ''
-    substituteInPlace tests/libgitg/test-commit.c --replace "/bin/bash" "${bash}/bin/bash"
+  patches = [
+    # https://gitlab.gnome.org/GNOME/gitg/issues/213
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gitg/merge_requests/83.patch";
+      sha256 = "1f7wx1d3k5pnp8zbrqssip57b9jxn3hc7a83psm7fny970qmd18z";
+    })
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+
+    substituteInPlace tests/libgitg/test-commit.vala --replace "/bin/bash" "${bash}/bin/bash"
   '';
+
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/ INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
-
   buildInputs = [
-    gtk3 glib json-glib libgee libpeas gnome3.libsoup
-    libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings-desktop-schemas
-    libsecret gobjectIntrospection gnome3.adwaita-icon-theme
+    adwaita-icon-theme
+    glib
+    gsettings-desktop-schemas
+    gtk3
+    gtksourceview
+    gtkspell3
+    json-glib
+    libdazzle
+    libgee
+    libgit2-glib
+    libpeas
+    libsecret
+    libsoup
   ];
 
-  nativeBuildInputs = [ vala wrapGAppsHook intltool pkgconfig ];
+  nativeBuildInputs = [
+    gobject-introspection
+    hicolor-icon-theme
+    gettext
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

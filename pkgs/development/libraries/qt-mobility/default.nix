@@ -42,11 +42,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 libX11 bluez perl ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Qt Mobility";
     homepage = http://qt.nokia.com/products/qt-addons/mobility;
-    maintainers = with stdenv.lib.maintainers; [qknight];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ maintainers.qknight ];
+    platforms = platforms.linux;
+    license = with licenses; [ bsd3 fdl13 gpl3 lgpl21 ];
   };
 }
 

@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   pname = "django-multiselectfield";
-  name = "${pname}-${version}";
   version = "0.1.8";
 
   src = fetchPypi {

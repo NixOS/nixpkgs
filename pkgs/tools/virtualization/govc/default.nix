@@ -2,7 +2,7 @@
   
 buildGoPackage rec {
   name = "govc-${version}";
-  version = "0.16.0";
+  version = "0.20.0";
 
   goPackagePath = "github.com/vmware/govmomi";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "vmware";
     repo = "govmomi";
-    sha256 = "09fllx7l2hsjrv1jl7g06xngjy0xwn5n5zng6x8dspgsl6kblyqp";
+    sha256 = "16pgjhlps21vk3cb5h2y0b6skq095rd8kl0618rwrz84chdnzahk";
   };
 
   meta = {

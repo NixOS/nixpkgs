@@ -79,6 +79,10 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} - - -"
+    ];
+
     systemd.services.collectd = {
       description = "Collectd Monitoring Agent";
       after = [ "network.target" ];
@@ -87,17 +91,12 @@ in {
       serviceConfig = {
         ExecStart = "${cfg.package}/sbin/collectd -C ${conf} -f";
         User = cfg.user;
-        PermissionsStartOnly = true;
+        Restart = "on-failure";
+        RestartSec = 3;
       };
-
-      preStart = ''
-        mkdir -p "${cfg.dataDir}"
-        chmod 755 "${cfg.dataDir}"
-        chown -R ${cfg.user} "${cfg.dataDir}"
-      '';
     };
 
-    users.extraUsers = optional (cfg.user == "collectd") {
+    users.users = optional (cfg.user == "collectd") {
       name = "collectd";
     };
   };

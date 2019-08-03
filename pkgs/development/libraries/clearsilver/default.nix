@@ -10,7 +10,14 @@ stdenv.mkDerivation rec {
 
   PYTHON_SITE = "$(out)/site-packages";
 
-  configureFlags = "--with-python=${python}/bin/python --disable-apache --disable-perl --disable-ruby --disable-java --disable-csharp";
+  configureFlags = [
+    "--with-python=${python}/bin/python"
+    "--disable-apache"
+    "--disable-perl"
+    "--disable-ruby"
+    "--disable-java"
+    "--disable-csharp"
+  ];
 
   preInstall = ''
     mkdir -p $out

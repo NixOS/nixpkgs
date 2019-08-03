@@ -2,16 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "usbredir-${version}";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchurl {
-    url = "http://spice-space.org/download/usbredir/${name}.tar.bz2";
-    sha256 = "1wsnmk4wjpdhbn1zaxg6bmyxspcki2zgy0am9lk037rnl4krwzj0";
+    url = "https://spice-space.org/download/usbredir/${name}.tar.bz2";
+    sha256 = "002yik1x7kn0427xahvnhjby2np14a6xqw7c3dx530n9h5d9rg47";
   };
 
-  # Works around bunch of "format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t {aka long long unsigned int}'" warnings
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional (!stdenv.is64bit) "-Wno-error=format"
-    ++ [ "-Wno-error=format-truncation" ]; # newly detected with gcc-7
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb ];

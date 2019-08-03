@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , pkgconfig, gettext, pythonPackages
-, gtk2, gdk_pixbuf, upower
+, gtk2, gdk-pixbuf, upower
 , makeWrapper }:
 
 let
@@ -16,9 +16,9 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig gettext python gtk2 pygtk dbus-python gdk_pixbuf upower makeWrapper ];
+  [ pkgconfig gettext python gtk2 pygtk dbus-python gdk-pixbuf upower makeWrapper ];
 
-  configurePhase = "true";
+  dontConfigure = true;
 
   buildPhase = ''
     python setup.py build
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
-    broken = true;  # see https://github.com/NixOS/nixpkgs/pull/4031#issuecomment-56283520 
+    broken = true;  # see https://github.com/NixOS/nixpkgs/pull/4031#issuecomment-56283520
   };
 }
 

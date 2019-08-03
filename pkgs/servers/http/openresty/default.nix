@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, fetchgit, openssl, zlib, pcre, postgresql, libxml2, libxslt,
+{ stdenv, fetchurl, openssl, zlib, pcre, postgresql, libxml2, libxslt,
 gd, geoip, perl }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "openresty-${version}";
-  version = "1.13.6.1";
+  version = "1.15.8.1";
 
   src = fetchurl {
-    url = "http://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "0sv93nw1j597mdpnibmgaa3nnghdk0z6k27vavm8w2c1z9n6w96i";
+    url = "https://openresty.org/download/openresty-${version}.tar.gz";
+    sha256 = "0hh8aygyzxgb0cyafqin70nbi87jpnjvxbf00dljssbpl66278c9";
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip postgresql ];

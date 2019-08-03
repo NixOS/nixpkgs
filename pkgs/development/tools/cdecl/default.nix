@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "cdecl-2.5";
   src = fetchurl {
-    url = "http://www.cdecl.org/files/cdecl-blocks-2.5.tar.gz";
+    url = "https://www.cdecl.org/files/cdecl-blocks-2.5.tar.gz";
     sha256 = "1b7k0ra30hh8mg8fqv0f0yzkaac6lfg6n376drgbpxg4wwml1rly";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Translator English -- C/C++ declarations";
     license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [viric joelteon];
+    maintainers = with stdenv.lib.maintainers; [joelteon];
     platforms = stdenv.lib.platforms.unix;
   };
 }

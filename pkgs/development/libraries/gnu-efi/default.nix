@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnu-efi-${version}";
-  version = "3.0.6";
+  version = "3.0.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnu-efi/${name}.tar.bz2";
-    sha256 = "149cyadpn2jm4zxfn1qmpm520iqssp9p07d650rs5ghgv015jl91";
+    sha256 = "1w3p4aqlc5j93q44la7dc8cr3hky20zvsd0h0k2lyzhwmrzfl5b7";
   };
 
   buildInputs = [ pciutils ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
     "RANLIB=${stdenv.cc.targetPrefix}ranlib"
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-  ] ++ stdenv.lib.optional stdenv.isArm "ARCH=arm"
+  ] ++ stdenv.lib.optional stdenv.isAarch32 "ARCH=arm"
     ++ stdenv.lib.optional stdenv.isAarch64 "ARCH=aarch64";
 
   meta = with stdenv.lib; {

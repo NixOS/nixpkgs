@@ -19,12 +19,14 @@ export QMAKEPATH
 QMAKEMODULES=
 export QMAKEMODULES
 
-addToQMAKEPATH() {
-    if [ -d "$1/mkspecs" ]; then
+qmakePathHook() {
+    if [ -d "$1/mkspecs" ]
+    then
         QMAKEMODULES="${QMAKEMODULES}${QMAKEMODULES:+:}/mkspecs"
         QMAKEPATH="${QMAKEPATH}${QMAKEPATH:+:}$1"
     fi
 }
+envBuildHostHooks+=(qmakePathHook)
 
 # Propagate any runtime dependency of the building package.
 # Each dependency is propagated to the user environment and as a build
@@ -32,18 +34,18 @@ addToQMAKEPATH() {
 # package depending on the building package. (This is necessary in case
 # the building package does not provide runtime dependencies itself and so
 # would not be propagated to the user environment.)
-qtEnvHook() {
-    addToQMAKEPATH "$1"
-    if providesQtRuntime "$1"; then
-        if [ "z${!outputBin}" != "z${!outputDev}" ]; then
-            propagatedBuildInputs+=" $1"
-        fi
-        propagatedUserEnvPkgs+=" $1"
+qtEnvHostTargetHook() {
+    if providesQtRuntime "$1" && [ "z${!outputBin}" != "z${!outputDev}" ]
+    then
+        propagatedBuildInputs+=" $1"
     fi
 }
-envHostTargetHooks+=(qtEnvHook)
+envHostTargetHooks+=(qtEnvHostTargetHook)
 
 postPatchMkspecs() {
+    # Prevent this hook from running multiple times
+    dontPatchMkspecs=1
+
     local bin="${!outputBin}"
     local dev="${!outputDev}"
     local doc="${!outputDoc}"

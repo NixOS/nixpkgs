@@ -1,0 +1,28 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    abnc (0.1.0)
+    cbor-diag (0.5.2)
+      json
+      treetop (~> 1)
+    cddl (0.8.5)
+      abnc
+      cbor-diag
+      colorize
+      json
+      regexp-examples
+    colorize (0.8.1)
+    json (2.1.0)
+    polyglot (0.3.5)
+    regexp-examples (1.4.2)
+    treetop (1.6.10)
+      polyglot (~> 0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cddl
+
+BUNDLED WITH
+   1.14.6

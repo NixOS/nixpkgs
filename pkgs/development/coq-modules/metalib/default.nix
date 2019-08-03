@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 which coq lngen ott coq.findlib ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 which coq lngen ott findlib ];
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.6";
+    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" ];
   };
 
 }

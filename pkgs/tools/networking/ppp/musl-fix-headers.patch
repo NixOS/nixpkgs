@@ -89,12 +89,12 @@ index 3d3bf4e..b5f82d3 100644
     use different frame types... sigh... */
  
 diff --git a/pppd/plugins/rp-pppoe/pppoe.h b/pppd/plugins/rp-pppoe/pppoe.h
-index 9ab2eee..4d68147 100644
+index c4aaa6e..70aef85 100644
 --- a/pppd/plugins/rp-pppoe/pppoe.h
 +++ b/pppd/plugins/rp-pppoe/pppoe.h
-@@ -86,18 +86,6 @@ typedef unsigned long UINT32_t;
- 
- #include <netinet/in.h>
+@@ -88,18 +88,6 @@ typedef unsigned long UINT32_t;
+ #include <linux/if_ether.h>
+ #endif
  
 -#ifdef HAVE_NETINET_IF_ETHER_H
 -#include <sys/types.h>
@@ -108,9 +108,9 @@ index 9ab2eee..4d68147 100644
 -#endif
 -
 -
- 
  /* Ethernet frame types according to RFC 2516 */
  #define ETH_PPPOE_DISCOVERY 0x8863
+ #define ETH_PPPOE_SESSION   0x8864
 diff --git a/pppd/sys-linux.c b/pppd/sys-linux.c
 index 6d71530..86d224e 100644
 --- a/pppd/sys-linux.c

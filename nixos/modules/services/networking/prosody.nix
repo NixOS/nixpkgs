@@ -228,6 +228,7 @@ let
 
   createSSLOptsStr = o: ''
     ssl = {
+      cafile = "/etc/ssl/certs/ca-bundle.crt";
       key = "${o.key}";
       certificate = "${o.cert}";
       ${concatStringsSep "\n" (mapAttrsToList (name: value: "${name} = ${toLua value};") o.extraOptions)}
@@ -293,6 +294,24 @@ in
             withCommunityModules = [ "auth_external" ];
           };
         '';
+      };
+
+      dataDir = mkOption {
+        type = types.string;
+        description = "Directory where Prosody stores its data";
+        default = "/var/lib/prosody";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "prosody";
+        description = "User account under which prosody runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "prosody";
+        description = "Group account under which prosody runs.";
       };
 
       allowRegistration = mkOption {
@@ -403,6 +422,13 @@ in
         description = "List of administrators of the current host";
       };
 
+      authentication = mkOption {
+        type = types.enum [ "internal_plain" "internal_hashed" "cyrus" "anonymous" ];
+        default = "internal_hashed";
+        example = "internal_plain";
+        description = "Authentication mechanism used for logins.";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -421,11 +447,11 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".text = ''
 
-      pidfile = "/var/lib/prosody/prosody.pid"
+      pidfile = "/run/prosody/prosody.pid"
 
       log = "*syslog"
 
-      data_path = "/var/lib/prosody"
+      data_path = "${cfg.dataDir}"
       plugin_paths = {
         ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
       }
@@ -458,6 +484,7 @@ in
 
       s2s_secure_domains = ${toLua cfg.s2sSecureDomains}
 
+      authentication = ${toLua cfg.authentication}
 
       ${ cfg.extraConfig }
 
@@ -469,15 +496,15 @@ in
         '') cfg.virtualHosts) }
     '';
 
-    users.extraUsers.prosody = {
+    users.users.prosody = mkIf (cfg.user == "prosody") {
       uid = config.ids.uids.prosody;
       description = "Prosody user";
       createHome = true;
-      group = "prosody";
-      home = "/var/lib/prosody";
+      inherit (cfg) group;
+      home = "${cfg.dataDir}";
     };
 
-    users.extraGroups.prosody = {
+    users.groups.prosody = mkIf (cfg.group == "prosody") {
       gid = config.ids.gids.prosody;
     };
 
@@ -488,10 +515,13 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
       serviceConfig = {
-        User = "prosody";
+        User = cfg.user;
+        Group = cfg.group;
         Type = "forking";
-        PIDFile = "/var/lib/prosody/prosody.pid";
+        RuntimeDirectory = [ "prosody" ];
+        PIDFile = "/run/prosody/prosody.pid";
         ExecStart = "${cfg.package}/bin/prosodyctl start";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
 

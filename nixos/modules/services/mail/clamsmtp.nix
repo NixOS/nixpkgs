@@ -176,4 +176,6 @@ in
         }
       ) cfg.instances);
     };
+
+  meta.maintainers = with lib.maintainers; [ ekleog ];
 }

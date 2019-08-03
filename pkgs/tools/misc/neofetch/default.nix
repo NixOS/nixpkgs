@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "neofetch-${version}";
-  version = "3.3.0";
+  version = "6.0.0";
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "neofetch";
     rev = version;
-    sha256 = "1f1hvd635wv81qg802jdi0yggi4631w9nlznipaxkvk4y1zpdq5j";
+    sha256 = "0j0r40llyry1sgc6p9wd7jrpydps2lnj4rwajjp37697g2bik89i";
   };
 
   dontBuild = true;

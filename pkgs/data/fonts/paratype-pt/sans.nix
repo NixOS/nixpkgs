@@ -3,7 +3,10 @@
 fetchzip rec {
   name = "paratype-pt-sans";
 
-  url = "http://www.paratype.ru/uni/public/PTSans.zip";
+  url = [
+    https://company.paratype.com/system/attachments/629/original/ptsans.zip
+    http://rus.paratype.ru/system/attachments/629/original/ptsans.zip
+  ];
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -14,7 +17,7 @@ fetchzip rec {
   sha256 = "01fkd417gv98jf3a6zyfi9w2dkqsbddy1vacga2672yf0kh1z1r0";
 
   meta = with stdenv.lib; {
-    homepage = http://www.paratype.ru/public/; 
+    homepage = http://www.paratype.ru/public/;
     description = "An open Paratype font";
 
     license = "Open Paratype license";

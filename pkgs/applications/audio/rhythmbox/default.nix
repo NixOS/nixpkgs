@@ -4,8 +4,10 @@
 , perlPackages
 , gtk3
 , intltool
+, libpeas
 , libsoup
 , gnome3
+, totem-pl-parser
 , tdb
 , json-glib
 , itstool
@@ -15,13 +17,13 @@
 }:
 let
   pname = "rhythmbox";
-  version = "3.4.2";
+  version = "3.4.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0hzcns8gf5yb0rm4ss8jd8qzarcaplp5cylk6plwilsqfvxj4xn2";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1yx3n7p9vmv23jsv98fxwq95n78awdxqm8idhyhxx2d6vk4w1hgx";
   };
 
   nativeBuildInputs = [
@@ -38,9 +40,9 @@ in stdenv.mkDerivation rec {
     json-glib
 
     gtk3
-    gnome3.libpeas
-    gnome3.totem-pl-parser
-    gnome3.defaultIconTheme
+    libpeas
+    totem-pl-parser
+    gnome3.adwaita-icon-theme
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base

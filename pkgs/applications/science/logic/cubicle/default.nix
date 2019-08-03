@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "cubicle-${version}";
-  version = "1.1.1";
+  version = "1.1.2";
   src = fetchurl {
     url = "http://cubicle.lri.fr/cubicle-${version}.tar.gz";
-    sha256 = "1sny9c4fm14k014pk62ibpwbrjjirkx8xmhs9jg7q1hk7y7x3q2h";
+    sha256 = "10kk80jdmpdvql88sdjsh7vqzlpaphd8vip2lp47aarxjkwjlz1q";
   };
 
   postPatch = ''

@@ -6,12 +6,11 @@
 
 buildPythonPackage rec {
   pname = "jsonpatch";
-  version = "1.21";
-  name = "${pname}-${version}";
+  version = "1.23";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11f5ffdf543a83047a2f54ac28f8caad7f34724cb1ea26b27547fd974f1a2153";
+    sha256 = "49f29cab70e9068db3b1dc6b656cbe2ee4edf7dfe9bf5a0055f17a4b6804a4b9";
   };
 
   # test files are missing

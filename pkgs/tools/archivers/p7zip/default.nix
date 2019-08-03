@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "p7zip-${version}";
@@ -10,16 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch rec {
-      name = "CVE-2016-9296.patch";
-      url = "https://src.fedoraproject.org/cgit/rpms/p7zip.git/plain/${name}?id=4b3973f6a5d";
-      sha256 = "09wbkzai46bwm8zmplsz0m4jck3qn7snr68i9p1gsih300zidj0m";
-    })
-    (fetchpatch rec {
-      name = "CVE-2017-17969.patch";
-      url = "https://anonscm.debian.org/cgit/users/robert/p7zip.git/plain/debian/patches/13-${name}?h=debian/16.02%2bdfsg-5";
-      sha256 = "16lbf6rgyl7xwxfjgg1243jvi39yb3i5pgqfnxswyc0jzhxv81d7";
-    })
+    ./12-CVE-2016-9296.patch
+    ./13-CVE-2017-17969.patch
   ];
 
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional
@@ -28,6 +20,10 @@ stdenv.mkDerivation rec {
 
     # I think this is a typo and should be CXX? Either way let's kill it
     sed -i '/XX=\/usr/d' makefile.macosx_llvm_64bits
+  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace makefile.machine \
+      --replace 'CC=gcc'  'CC=${stdenv.cc.targetPrefix}gcc' \
+      --replace 'CXX=g++' 'CXX=${stdenv.cc.targetPrefix}g++'
   '';
 
   preConfigure = ''
@@ -41,11 +37,14 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+
   meta = {
     homepage = http://p7zip.sourceforge.net/;
     description = "A port of the 7-zip archiver";
     # license = stdenv.lib.licenses.lgpl21Plus; + "unRAR restriction"
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.raskin ];
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

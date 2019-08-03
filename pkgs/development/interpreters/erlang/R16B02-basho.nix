@@ -27,7 +27,7 @@ mkDerivation rec {
   installTargets = "install";
   postInstall = let
     manpages = pkgs.fetchurl {
-      url = "http://www.erlang.org/download/otp_doc_man_R16B02.tar.gz";
+      url = "https://www.erlang.org/download/otp_doc_man_R16B02.tar.gz";
       sha256 = "12apxjmmd591y9g9bhr97z5jbd1jarqg7wj0y2sqhl21hc1yp75p";
     };
   in ''

@@ -125,7 +125,7 @@ in
       message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
     }) cfg.backends;
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "statsd";
       uid = config.ids.uids.statsd;
       description = "Statsd daemon user";

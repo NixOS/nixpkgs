@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.softether.org/;
     license = licenses.gpl2;
     maintainers = [ maintainers.rick68 ];
-    platforms = filter (p: p != "aarch64-linux") platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

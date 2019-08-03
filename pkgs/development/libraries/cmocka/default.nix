@@ -1,13 +1,13 @@
 { fetchurl, stdenv, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "cmocka-${version}";
+  pname = "cmocka";
   majorVersion = "1.1";
-  version = "${majorVersion}.1";
+  version = "${majorVersion}.5";
 
   src = fetchurl {
     url = "https://cmocka.org/files/${majorVersion}/cmocka-${version}.tar.xz";
-    sha256 = "f02ef48a7039aa77191d525c5b1aee3f13286b77a13615d11bc1148753fc0389";
+    sha256 = "1dm8pdvkyfa8dsbz9bpq7wwgixjij4sii9bbn5sgvqjm5ljdik7h";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,0 +1,45 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -429,11 +429,11 @@
+ if test "x$enable_pygobject" = "xyes"; then
+     PKG_CHECK_MODULES(PYTHON, [pygobject-3.0 >= $PYGOBJECT_REQUIRED])
+ 
+-    pyoverridesdir=`$PYTHON -c "import gi; print(gi._overridesdir)"`
++    pyoverridesdir="$prefix/@pythonSitePackages@/gi/overrides"
+     AC_SUBST(pyoverridesdir)
+ 
+     if test x"$enable_python2" = x"yes"; then
+-        py2overridesdir=`$PYTHON2 -c "import gi; print(gi._overridesdir)"`
++        py2overridesdir="$prefix/@pythonSitePackages@/gi/overrides"
+         AC_SUBST(py2overridesdir)
+     fi
+ fi
+@@ -462,7 +462,7 @@
+     PYTHON2_VERSION=`$PYTHON2 -c "import sys; sys.stdout.write(sys.version[[:3]])"`
+     PYTHON2_LIBDIR="$PYTHON2_PREFIX/lib/python$PYTHON2_VERSION"
+     python2dir="$PYTHON2_LIBDIR/site-packages"
+-    pkgpython2dir="$python2dir/ibus"
++    pkgpython2dir="$prefix/@pythonSitePackages@/ibus"
+     AC_SUBST(pkgpython2dir)
+ else
+     enable_python_library="no (disabled, use --enable-python-library to enable)"
+--- a/data/dconf/Makefile.am
++++ b/data/dconf/Makefile.am
+@@ -50,7 +50,7 @@
+ 
+ install-data-hook:
+ 	if test -z "$(DESTDIR)"; then \
+-	    dconf update; \
++	    true; \
+ 	fi
+ 
+ EXTRA_DIST = \
+--- a/setup/ibus-setup.in
++++ b/setup/ibus-setup.in
+@@ -27,5 +27,5 @@
+ export IBUS_DATAROOTDIR=@datarootdir@
+ export IBUS_LOCALEDIR=@localedir@
+ export IBUS_LIBEXECDIR=${libexecdir}
+-exec @PYTHON@ @prefix@/share/ibus/setup/main.py $@
++exec @pythonInterpreter@ @prefix@/share/ibus/setup/main.py $@
+ 

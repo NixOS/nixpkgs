@@ -16,14 +16,16 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace " -o root -g root" "" \
+      --replace "/usr" "$out" \
+      --replace "/etc/udev" "$out/lib/udev"
+    substituteInPlace *.rules \
       --replace "/usr" "$out"
-    sed "/rules\.d/d" -i Makefile
   '';
 
   enableParallelBuilding = true;
 
   preInstall = ''
-    mkdir -p $out/bin
+    mkdir -p $out/{bin,lib/udev/rules.d}
   '';
 
   meta = with stdenv.lib; {

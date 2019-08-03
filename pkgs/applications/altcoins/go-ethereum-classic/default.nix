@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "go-ethereum-classic-${version}";

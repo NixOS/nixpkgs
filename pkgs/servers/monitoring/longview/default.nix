@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl makeWrapper glibc ]
     ++ (with perlPackages; [
-      LWPUserAgent
+      LWP
       LWPProtocolHttps
       MozillaCA
       CryptSSLeay

@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     makeWrapper ${sencha-bare}/sencha $out/bin/sencha

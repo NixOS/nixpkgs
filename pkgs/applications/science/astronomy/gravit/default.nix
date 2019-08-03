@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "gravit-0.5.1";
 
   src = fetchurl {
-    url = "http://gravit.slowchop.com/media/downloads/${name}.tgz";
+    url = "https://gravit.slowchop.com/media/downloads/${name}.tgz";
     sha256 = "14vf7zj2bgrl96wsl3f1knsggc8h9624354ajzd72l46y09x5ky7";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://gravit.slowchop.com;
+    homepage = https://gravit.slowchop.com;
     description = "Beautiful OpenGL-based gravity simulator";
     license = stdenv.lib.licenses.gpl2;
 
@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.mesaPlatforms;
+    hydraPlatforms = stdenv.lib.platforms.linux; # darwin times out
   };
 }

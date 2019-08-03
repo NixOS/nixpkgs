@@ -1,0 +1,77 @@
+diff --git a/plugins/sapic/Makefile b/plugins/sapic/Makefile
+index 8f1b1866..678accbe 100644
+--- a/plugins/sapic/Makefile
++++ b/plugins/sapic/Makefile
+@@ -1,18 +1,18 @@
+ TARGET = sapic
+-OBJS= color.cmo exceptions.cmo btree.cmo position.cmo positionplusinit.cmo var.cmo term.cmo fact.cmo atomformulaaction.cmo action.cmo atom.cmo formula.cmo tamarin.cmo sapicterm.cmo sapicvar.cmo sapicaction.cmo lexer.cmo  sapic.cmo annotatedsapicaction.cmo annotatedsapictree.cmo progressfunction.cmo restrictions.cmo annotatedrule.cmo translationhelper.cmo basetranslation.cmo firsttranslation.cmo main.cmo 
++OBJS= color.cmx exceptions.cmx btree.cmx position.cmx positionplusinit.cmx var.cmx term.cmx fact.cmx atomformulaaction.cmx action.cmx atom.cmx formula.cmx tamarin.cmx sapicterm.cmx sapicvar.cmx sapicaction.cmx lexer.cmx  sapic.cmx annotatedsapicaction.cmx annotatedsapictree.cmx progressfunction.cmx restrictions.cmx annotatedrule.cmx translationhelper.cmx basetranslation.cmx firsttranslation.cmx main.cmx
+ FLAGS=-g
+ 
+-OCAMLC    := $(shell command -v ocamlc    2> /dev/null)
++OCAMLOPT  := $(shell command -v ocamlopt  2> /dev/null)
+ OCAMLLEX  := $(shell command -v ocamllex  2> /dev/null)
+ OCAMLYACC := $(shell command -v ocamlyacc 2> /dev/null)
+ OCAMLDEP  := $(shell command -v ocamldep  2> /dev/null)
+-OCAMLC_GTEQ_402 := $(shell expr `ocamlc -version | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\.\([0-9]\)/0\1/g' -e 's/^[0-9]\{3,4\}$$/&00/'` \>= 40200)
++OCAMLC_GTEQ_402 := $(shell expr `ocamlopt -version | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\.\([0-9]\)/0\1/g' -e 's/^[0-9]\{3,4\}$$/&00/'` \>= 40200)
+ 
+ default: sapic
+ 
+ sapic:
+-ifdef OCAMLC
+-	@echo "Found ocamlc."
++ifdef OCAMLOPT
++	@echo "Found ocamlopt."
+ ifdef OCAMLLEX
+ 	@echo "Found ocamllex."
+ ifdef OCAMLYACC
+@@ -22,9 +22,9 @@ ifdef OCAMLDEP
+ ifeq "$(OCAMLC_GTEQ_402)" "1"
+ 	@echo "Building SAPIC."
+ 	$(MAKE) $(OBJS)
+-	ocamlc $(FLAGS) -o $@ str.cma $(OBJS)
+-	@echo "Installing SAPIC into ~/.local/bin/"
+-	cp sapic ~/.local/bin
++	ocamlopt $(FLAGS) -o $@ str.cmxa $(OBJS)
++#	@echo "Installing SAPIC into ~/.local/bin/"
++#	cp sapic ~/.local/bin
+ else
+ 	@echo "Found OCAML version < 4.02. SAPIC will not be installed."
+ endif
+@@ -38,7 +38,7 @@ else
+ 	@echo "ocamllex not found. SAPIC will not be installed."
+ endif
+ else
+-	@echo "ocamlc not found. SAPIC will not be installed."
++	@echo "ocamlopt not found. SAPIC will not be installed."
+ endif
+ 
+ depend:
+@@ -48,20 +48,20 @@ lexer.ml: sapic.cmi
+ 
+ .PHONY: clean
+ clean:
+-	rm -rf *.cmi *.cmo $(TARGET)
++	rm -rf *.cmi **.cmx $(TARGET)
+ 	rm -rf sapic.ml sapic.mli lexer.ml lexer.mli
+ 
+-.SUFFIXES: .ml .mli .mll .mly .cmo .cmi
++.SUFFIXES: .ml .mli .mll .mly .cmx .cmi
+ 
+-.ml.cmo:
+-	ocamlc $(FLAGS) -c $<
++.ml.cmx:
++	ocamlopt $(FLAGS) -c $<
+ .mli.cmi:
+-	ocamlc $(FLAGS) -c $<
++	ocamlopt $(FLAGS) -c $<
+ .mll.ml:
+ 	ocamllex $<
+ .mly.ml:
+ 	ocamlyacc $<
+ .ml.mli:
+-	ocamlc -i $< > $@
++	ocamlopt -i $< > $@
+ 
+ -include .depend

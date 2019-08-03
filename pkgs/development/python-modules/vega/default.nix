@@ -3,12 +3,11 @@
 
 buildPythonPackage rec {
   pname = "vega";
-  version = "0.5.0";
-  name = "${pname}-${version}";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9871bce3a00bb775d9f7f8212aa237f99f11ca7cfe6ecf246773f5559f20c38c";
+    sha256 = "0f39kfinn297gjhms9jys3ixdlsn0dz3gndgacyimp77jhzir4v1";
   };
 
   buildInputs = [ pytest ];
@@ -25,6 +24,6 @@ buildPythonPackage rec {
     homepage = https://github.com/vega/ipyvega;
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

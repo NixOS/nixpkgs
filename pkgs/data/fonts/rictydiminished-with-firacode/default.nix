@@ -22,22 +22,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/share/fonts/rictydiminished-with-firacode
-    cp *.ttf $out/share/fonts/rictydiminished-with-firacode
+    install -m444 -Dt $out/share/fonts/rictydiminished-with-firacode *.ttf
   '';
 
   nativeBuildInputs = [
     fontforge
     (pythonFull.withPackages (ps: [
       ps.jinja2
-      ps."3to2"
+      ps.py3to2
       ps.fonttools
     ]))
   ];
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "09ldviapljn4bb1mcxap2pkz7cq3wr2k2qialbnav5y7ii82acd4";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/hakatashi/RictyDiminished-with-FiraCode;

@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.3";
+  version = "5.5";
   name = "rawtherapee-" + version;
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
     rev = version;
-    sha256 = "1r6sx9zl1wkykgfx6k26268xadair6hzl15v5hmiri9sdhrn33q7";
+    sha256 = "13clnx7rwkfa7wxgsim1xdx2pd7gwmmdad1m8a3fvywr20ml8xzk";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "RAW converter and digital photo processing software";
     homepage = http://www.rawtherapee.com/;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ viric jcumming mahe the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ jcumming mahe the-kenny ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

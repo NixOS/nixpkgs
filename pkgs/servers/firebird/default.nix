@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libedit, ncurses, automake, autoconf, libtool
+{stdenv, fetchurl, libedit, automake, autoconf, libtool
 ,
   # icu = null: use icu which comes with firebird
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SQL relational database management system";
-    homepage = http://www.firebirdnews.org;
+    homepage = https://www.firebirdnews.org;
     license = ["IDPL" "Interbase-1.0"];
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

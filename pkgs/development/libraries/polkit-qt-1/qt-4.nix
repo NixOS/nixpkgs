@@ -25,9 +25,10 @@ stdenv.mkDerivation {
       done
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A Qt wrapper around PolKit";
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ maintainers.ttuegel ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
   };
 }

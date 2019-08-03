@@ -43,13 +43,13 @@ index 5316e0e7..272c6430 100755
      from libqtile.scripts import qtile_top
      qtile_top.main()
 diff --git a/libqtile/utils.py b/libqtile/utils.py
-index 36ed0a58..bca9eab3 100644
+index 550ed02677e..1358a66f3df 100644
 --- a/libqtile/utils.py
 +++ b/libqtile/utils.py
-@@ -240,3 +240,11 @@ def describe_attributes(obj, attrs, func=None):
-             pairs.append('%s=%s' % (attr, value))
- 
-     return ', '.join(pairs)
+@@ -272,3 +272,11 @@ def safe_import(module_names, class_name, globals_, fallback=None):
+         logger.debug("%s", traceback.format_exc())
+         if fallback:
+             globals_[class_name] = fallback(module_path, class_name, error)
 +
 +
 +def restore_os_environment():

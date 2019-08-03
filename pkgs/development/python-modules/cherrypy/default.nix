@@ -1,31 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi
-, cheroot, portend, routes, six
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k
 , setuptools_scm
-, backports_unittest-mock, codecov, coverage, objgraph, pathpy, pytest, pytest-sugar, pytestcov
+, cheroot, portend, more-itertools, zc_lockfile, routes
+, objgraph, pytest, pytestcov, pathpy, requests_toolbelt, pytest-services
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  pname = "CherryPy";
-  version = "14.0.0";
+  pname = "cherrypy";
+  version = "18.1.2";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "5f5ee020d6547a8d452b3560775ca2374ffe2ff8c0aec1b272e93b6af80d850e";
+    pname = "CherryPy";
+    inherit version;
+    sha256 = "1w3hpsg7q8shdmscmbqk00w90lcw3brary7wl1a56k5h7nx33pj8";
   };
 
-  propagatedBuildInputs = [ cheroot portend routes six ];
+  propagatedBuildInputs = [
+    # required
+    cheroot portend more-itertools zc_lockfile
+    # optional
+    routes
+  ];
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
 
-  checkInputs = [ backports_unittest-mock codecov coverage objgraph pathpy pytest pytest-sugar pytestcov ];
+  checkInputs = [
+    objgraph pytest pytestcov pathpy requests_toolbelt pytest-services
+  ];
 
+  # Disable doctest plugin because times out
   checkPhase = ''
-    LANG=en_US.UTF-8 pytest
+    substituteInPlace pytest.ini --replace "--doctest-modules" ""
+    pytest --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes ${stdenv.lib.optionalString stdenv.isDarwin "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
   '';
 
-  meta = with lib; {
-    homepage = "http://www.cherrypy.org";
+  meta = with stdenv.lib; {
+    homepage = https://www.cherrypy.org;
     description = "A pythonic, object-oriented HTTP framework";
     license = licenses.bsd3;
   };

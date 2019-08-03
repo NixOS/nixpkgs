@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "628f99e2cda77dd323992ede8b05961b41f4352f";
-      sha256 = "0dbr4czbjpnkira9bhackq01s9b13yvw5dscnxi3mr9adb89y9pm";
+      rev = "25253087ea42da08900c4c1fc34c04bdb4a97d5a";
+      sha256 = "0p6mf53f4l9b26yc4qlm1s7yls73hsw8klyfhmnxhk2mq8k6ix4m";
     };
   }
   {
@@ -50,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/go-version";
-      rev = "4fe82ae3040f80a03d04d2cccb5606a626b8e1ee";
-      sha256 = "0gq4207s1yf2nq4c2ir3bsai29svzz4830g1vbvzdrpis58r1x4m";
+      rev = "23480c0665776210b5fbbac6eaaee40e3e6a96b7";
+      sha256 = "056zs67diq3m7skmmq3pnz6wymfcg55dfs5zf86xkfqqpj10kyf7";
     };
   }
   {
@@ -59,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/hcl";
-      rev = "23c074d0eceb2b8a5bfdbb271ab780cde70f05a8";
-      sha256 = "0db4lpqb5m130rmfy3s3gjjf4dxllypmyrzxv6ggqhkmwmc7w4mc";
+      rev = "f40e974e75af4e271d97ce0fc917af5898ae7bda";
+      sha256 = "1w5w3m40xv85gngw8g1kjbcgah1vl4ardbpg2cxgj1svf80zazxx";
     };
   }
   {
@@ -104,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/stretchr/testify";
-      rev = "b89eecf5ca5db6d3ba60b237ffe3df7bafb7662f";
-      sha256 = "0g946ii8qjaynvidj648z8izl91i6yhy0ir6g3qsrn136im3r8wk";
+      rev = "c679ae2cc0cb27ec3293fea7e254e47386f05d69";
+      sha256 = "1rrdn7k83j492rzhqwkh6956sj8m2nbk44d7r1xa9nsn3hfwj691";
     };
   }
   {

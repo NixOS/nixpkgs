@@ -1,0 +1,49 @@
+From 264f2f6a04d25156bba43524a6b172d2e99c53f4 Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Fri, 21 Dec 2018 17:39:45 -0500
+Subject: [PATCH] Disable tests that fail on OSX.
+
+Some of the failures are due to the use of GNU ls.
+---
+ test.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/test.py b/test.py
+index 68ef40c..2f53360 100644
+--- a/test.py
++++ b/test.py
+@@ -352,6 +352,7 @@ exit(3)
+         self.assertEqual(sed(_in="one test three", e="s/test/two/").strip(),
+                 "one two three")
+ 
++    @not_osx
+     def test_ok_code(self):
+         from sh import ls, ErrorReturnCode_1, ErrorReturnCode_2
+ 
+@@ -498,6 +499,7 @@ while True:
+         self.assertEqual(out, match)
+ 
+ 
++    @not_osx
+     def test_environment(self):
+         """ tests that environments variables that we pass into sh commands
+         exist in the environment, and on the sh module """
+@@ -861,6 +863,7 @@ print(sys.argv[1])
+         self.assertTrue(now - start > sleep_time)
+ 
+ 
++    @not_osx
+     def test_background_exception(self):
+         from sh import ls, ErrorReturnCode_1, ErrorReturnCode_2
+         p = ls("/ofawjeofj", _bg=True) # should not raise
+@@ -2036,6 +2039,7 @@ else:
+         self.assertEqual(p, "test")
+ 
+ 
++    @not_osx
+     def test_signal_exception(self):
+         from sh import SignalException_15
+ 
+-- 
+2.20.0
+

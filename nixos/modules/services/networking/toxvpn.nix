@@ -1,11 +1,11 @@
-{ config, stdenv, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
 {
   options = {
     services.toxvpn = {
-      enable = mkEnableOption "enable toxvpn running on startup";
+      enable = mkEnableOption "toxvpn running on startup";
 
       localip = mkOption {
         type        = types.string;
@@ -57,7 +57,7 @@ with lib;
 
     environment.systemPackages = [ pkgs.toxvpn ];
 
-    users.extraUsers = {
+    users.users = {
       toxvpn = {
         uid        = config.ids.uids.toxvpn;
         home       = "/var/lib/toxvpn";

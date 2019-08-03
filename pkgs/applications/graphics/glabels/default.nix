@@ -1,36 +1,42 @@
 { stdenv, fetchurl, barcode, gnome3, autoreconfHook
-, gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book
-, intltool, itstool, makeWrapper, pkgconfig, which
+, gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book, gsettings-desktop-schemas
+, intltool, itstool, makeWrapper, pkgconfig, hicolor-icon-theme
 }:
 
 stdenv.mkDerivation rec {
-  name = "glabels-${version}";
-  version = "3.4.0";
+  pname = "glabels";
+  version = "3.4.1";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/glabels/3.4/glabels-3.4.0.tar.xz";
-    sha256 = "04345crf5yrhq6rlrymz630rxnm8yw41vx04hb6xn2nkjn9hf3nl";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0f2rki8i27pkd9r0gz03cdl1g4vnmvp0j49nhxqn275vi8lmgr0q";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper intltool ];
   buildInputs = [
     barcode gtk3 gtk-doc gnome3.yelp-tools
-    gnome3.gnome-common gnome3.gsettings-desktop-schemas
+    gnome3.gnome-common gsettings-desktop-schemas
     itstool libxml2 librsvg libe-book libtool
-    
+    hicolor-icon-theme
   ];
 
   preFixup = ''
-    rm "$out/share/icons/hicolor/icon-theme.cache"
     wrapProgram "$out/bin/glabels-3" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = {
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
+  meta = with stdenv.lib; {
     description = "Create labels and business cards";
-    homepage = http://glabels.org/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    homepage = https://glabels.org/;
+    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.nico202 ];
   };
 }

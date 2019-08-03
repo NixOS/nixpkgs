@@ -2,7 +2,6 @@
 , nose, mock, vcversioner, functools32 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "jsonschema";
   version = "2.6.0";
 
@@ -11,15 +10,17 @@ buildPythonPackage rec {
     sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
   };
 
-  buildInputs = [ nose mock vcversioner ];
+  checkInputs = [ nose mock vcversioner ];
   propagatedBuildInputs = [ functools32 ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py \
-      --replace "python" "${python}/bin/${python.executable}"
+      --replace "python" "${python.pythonForBuild.interpreter}"
   '';
 
-  checkPhase = "nosetests";
+  checkPhase = ''
+    nosetests
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Julian/jsonschema;

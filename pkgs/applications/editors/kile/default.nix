@@ -1,6 +1,6 @@
 { mkDerivation
 , lib
-, fetchgit
+, fetchurl
 , extra-cmake-modules
 , kdoctools
 , wrapGAppsHook
@@ -22,13 +22,11 @@
 }:
 
 mkDerivation rec {
-  name = "kile-${version}";
-  version = "2017-02-09";
+  name = "kile-2.9.92";
 
-  src = fetchgit {
-    url = git://anongit.kde.org/kile.git;
-    rev = "f77f6e627487c152f111e307ad6dc71699ade746";
-    sha256 = "0wpqaix9ssa28cm7qqjj0zfrscjgk8s3kmi5b4kk8h583gsrikib";
+  src = fetchurl {
+    url = "mirror://sourceforge/kile/${name}.tar.bz2";
+    sha256 = "177372dc25b1d109e037a7dbfc64b5dab2efe538320c87f4a8ceada21e9097f2";
 
   };
 

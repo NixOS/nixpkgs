@@ -1,37 +1,104 @@
-{ stdenv, appleDerivation, xcbuild }:
+{ stdenv, appleDerivation, lib
+, Librpcsvc, apple_sdk, pam, CF, openbsm }:
 
 appleDerivation rec {
   # xcbuild fails with:
   # /nix/store/fc0rz62dh8vr648qi7hnqyik6zi5sqx8-xcbuild-wrapper/nix-support/setup-hook: line 1:  9083 Segmentation fault: 11  xcodebuild OTHER_CFLAGS="$NIX_CFLAGS_COMPILE" OTHER_CPLUSPLUSFLAGS="$NIX_CFLAGS_COMPILE" OTHER_LDFLAGS="$NIX_LDFLAGS" build
+  # see issue facebook/xcbuild#188
   # buildInputs = [ xcbuild ];
 
-  # # temporary install phase until xcodebuild has "install" support
-  # installPhase = ''
-  #   mkdir -p $out/bin/
-  #   install system_cmds-*/Build/Products/Release/* $out/bin/
+  buildInputs = [ Librpcsvc apple_sdk.frameworks.OpenDirectory pam CF
+                  apple_sdk.frameworks.IOKit openbsm ];
+  # NIX_CFLAGS_COMPILE = lib.optionalString hostPlatform.isi686 "-D__i386__"
+  #                    + lib.optionalString hostPlatform.isx86_64 "-D__x86_64__"
+  #                    + lib.optionalString hostPlatform.isAarch32 "-D__arm__";
+  NIX_CFLAGS_COMPILE = [ "-DDAEMON_UID=1"
+                         "-DDAEMON_GID=1"
+                         "-DDEFAULT_AT_QUEUE=\'a\'"
+                         "-DDEFAULT_BATCH_QUEUE=\'b\'"
+                         "-DPERM_PATH=\"/usr/lib/cron/\""
+                         "-DOPEN_DIRECTORY"
+                         "-DNO_DIRECT_RPC"
+                         "-DAPPLE_GETCONF_UNDERSCORE"
+                         "-DAPPLE_GETCONF_SPEC"
+                         "-DUSE_PAM"
+                         "-DUSE_BSM_AUDIT"
+                         "-D_PW_NAME_LEN=MAXLOGNAME"
+                         "-D_PW_YPTOKEN=\"__YP!\""
+                         "-DAHZV1=64 "
+                         "-DAU_SESSION_FLAG_HAS_TTY=0x4000"
+                         "-DAU_SESSION_FLAG_HAS_AUTHENTICATED=0x4000"
+                       ] ++ lib.optional (!stdenv.isLinux) " -D__FreeBSD__ ";
 
-  #   for n in 1 5 8; do
-  #     mkdir -p $out/share/man/man$n
-  #     install */*.$n $out/share/man/man$n
-  #   done
-  # '';
+  patchPhase = ''
+    substituteInPlace login.tproj/login.c \
+      --replace bsm/audit_session.h bsm/audit.h
+    substituteInPlace login.tproj/login_audit.c \
+      --replace bsm/audit_session.h bsm/audit.h
+  '';
 
-  # For now we just build sysctl because that's all I need... Please open a
-  # PR if you need any other utils before we fix the xcodebuild.
-  buildPhase = "cc sysctl.tproj/sysctl.c -o sysctl";
+  buildPhase = ''
+    for dir in *.tproj; do
+      name=$(basename $dir)
+      name=''${name%.tproj}
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      install sysctl $out/bin
-      for n in 5 8; do
-        mkdir -p $out/share/man/man$n
-        install sysctl.tproj/*.$n $out/share/man/man$n
+      CFLAGS=""
+      case $name in
+           arch) CFLAGS="-framework CoreFoundation";;
+           atrun) CFLAGS="-Iat.tproj";;
+           chkpasswd)
+             CFLAGS="-framework OpenDirectory -framework CoreFoundation -lpam";;
+           getconf)
+               for f in getconf.tproj/*.gperf; do
+                   cfile=''${f%.gperf}.c
+                   LC_ALL=C awk -f getconf.tproj/fake-gperf.awk $f > $cfile
+               done
+           ;;
+           iostat) CFLAGS="-framework IOKit -framework CoreFoundation";;
+           login) CFLAGS="-lbsm -lpam";;
+           nvram) CFLAGS="-framework CoreFoundation -framework IOKit";;
+           sadc) CFLAGS="-framework IOKit -framework CoreFoundation";;
+           sar) CFLAGS="-Isadc.tproj";;
+      esac
+
+      echo "Building $name"
+
+      case $name in
+
+           # These are all broken currently.
+           arch) continue;;
+           chpass) continue;;
+           dirhelper) continue;;
+           dynamic_pager) continue;;
+           fs_usage) continue;;
+           latency) continue;;
+           pagesize) continue;;
+           passwd) continue;;
+           reboot) continue;;
+           sc_usage) continue;;
+           shutdown) continue;;
+           trace) continue;;
+
+           *) cc $dir/*.c -I''${dir} $CFLAGS -o $name ;;
+      esac
+    done
+  '';
+
+  installPhase = ''
+    for dir in *.tproj; do
+      name=$(basename $dir)
+      name=''${name%.tproj}
+      [ -x $name ] && install -D $name $out/bin/$name
+      for n in 1 2 3 4 5 6 7 8 9; do
+        for f in $dir/*.$n; do
+          install -D $f $out/share/man/man$n/$(basename $f)
+        done
       done
-    '';
+    done
+  '';
 
   meta = {
     platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ shlevy ];
+    maintainers = with stdenv.lib.maintainers; [ shlevy matthewbauer ];
   };
 }

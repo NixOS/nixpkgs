@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Qt password manager compatible with its Win32 and Pocket PC versions";
     homepage = https://www.keepassx.org/;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ qknight jgeerds ];
+    maintainers = with stdenv.lib.maintainers; [ qknight ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

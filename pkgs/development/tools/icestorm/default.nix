@@ -1,25 +1,48 @@
-{ stdenv, fetchFromGitHub, python3, libftdi, pkgconfig }:
+{ stdenv, fetchFromGitHub
+, pkgconfig, libftdi
+, python3, pypy3
+}:
+
+let
+  pypyCompatible = stdenv.isx86_64; /* pypy3 seems broken on i686 */
+  pythonPkg      = if pypyCompatible then pypy3 else python3;
+  pythonInterp   = pythonPkg.interpreter;
+in
 
 stdenv.mkDerivation rec {
   name = "icestorm-${version}";
-  version = "2018.03.21";
+  version = "2019.04.16";
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "4476d83f76fa0222be0b691fe27c1e0228266f82";
-    sha256 = "1r43vwwz61rvdpc3kylg8yzv0flz9p4j3yc1cc4h904zsdwjx39a";
+    rev    = "d9ea2e15fccebbbce59409b0ae7a1481d78aab86";
+    sha256 = "1qa37p7hm7c2ga26xcvsd8xkqrp4hm0w6yh7cvz2q988yjzal5ky";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python3 libftdi ];
+  buildInputs = [ pythonPkg libftdi ];
   makeFlags = [ "PREFIX=$(out)" ];
+
+  enableParallelBuilding = true;
 
   # fix icebox_vlog chipdb path. icestorm issue:
   #   https://github.com/cliffordwolf/icestorm/issues/125
+  #
+  # also, fix up the path to the chosen Python interpreter. for pypy-compatible
+  # platforms, it offers significant performance improvements.
   patchPhase = ''
     substituteInPlace ./icebox/icebox_vlog.py \
       --replace /usr/local/share "$out/share"
+
+    for x in icefuzz/Makefile icebox/Makefile icetime/Makefile; do
+      substituteInPlace "$x" --replace python3 "${pythonInterp}"
+    done
+
+    for x in $(find . -type f -iname '*.py'); do
+      substituteInPlace "$x" \
+        --replace '/usr/bin/env python3' '${pythonInterp}'
+    done
   '';
 
   meta = {
@@ -30,9 +53,9 @@ stdenv.mkDerivation rec {
       FPGAs and providing simple tools for analyzing and
       creating bitstream files.
     '';
-    homepage = http://www.clifford.at/icestorm/;
-    license = stdenv.lib.licenses.isc;
+    homepage    = http://www.clifford.at/icestorm/;
+    license     = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.linux;
   };
 }

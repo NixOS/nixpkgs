@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     description = ''Command-line interface to IPMI-enabled devices'';
     license = licenses.bsd3;
     homepage = https://sourceforge.net/projects/ipmitool/;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
   };
 }

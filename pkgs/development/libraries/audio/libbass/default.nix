@@ -1,4 +1,4 @@
-{ stdenv, unzip, fetchurl, writeText }:
+{ stdenv, unzip, fetchurl }:
 
 let
   version = "24";
@@ -11,7 +11,7 @@ let
         x86_64-linux = "x64/libbass.so";
       };
       urlpath = "bass${version}-linux.zip";
-      sha256 = "1a2z9isabkymz7qmkgklbjpj2wxkvv1cngfp9aj0c9178v97pjd7";
+      sha256 = "1hjxp1akj8367qlglv5rqpwq2dimfz3bkllwq39abavz4sp8smjz";
     };
 
     bass_fx = {
@@ -21,7 +21,7 @@ let
         x86_64-linux = "x64/libbass_fx.so";
       };
       urlpath = "z/0/bass_fx${version}-linux.zip";
-      sha256 = "0j1cbq88j3vnqf2bibcqnfhciz904w48ldgycyh9d8954hwyg22m";
+      sha256 = "1q0g74z7iyhxqps5b3gnnbic8v2jji1r0mkvais57lsx8y21sbin";
     };
   };
 
@@ -41,8 +41,8 @@ let
     dontBuild = true;
     installPhase =
       let so =
-            if bass.so ? ${stdenv.system} then bass.so.${stdenv.system}
-            else throw "${name} not packaged for ${stdenv.system} (yet).";
+            if bass.so ? ${stdenv.hostPlatform.system} then bass.so.${stdenv.hostPlatform.system}
+            else throw "${name} not packaged for ${stdenv.hostPlatform.system} (yet).";
       in ''
         mkdir -p $out/{lib,include}
         install -m644 -t $out/lib/ ${so}

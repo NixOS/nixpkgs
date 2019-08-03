@@ -1,26 +1,49 @@
-{ lib, fetchPypi, buildPythonPackage,
-  protobuf, hidapi, ecdsa, mnemonic, requests, pyblake2, click, libusb1
+{ lib, fetchPypi, buildPythonPackage, isPy3k, python, pytest
+, typing-extensions
+, protobuf
+, hidapi
+, ecdsa
+, mnemonic
+, requests
+, pyblake2
+, click
+, construct
+, libusb1
+, rlp
+, shamir-mnemonic
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "trezor";
-  version = "0.9.0";
+  version = "0.11.4";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2dd01e11d669cb8f5e40fcf1748bcabc41fb5f41edb010fc807dc3088f9bd7de";
+    sha256 = "aeb3f56a4c389495617f27bf218471b7969f636d25ddc491dfefeb8a1b3cd499";
   };
 
-  propagatedBuildInputs = [ protobuf hidapi ecdsa mnemonic requests pyblake2 click libusb1 ];
+  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic ];
 
-  # There are no actual tests: "ImportError: No module named tests"
-  doCheck = false;
+  # build requires UTF-8 locale
+  LANG = "en_US.UTF-8";
+
+  checkInputs = [
+    pytest
+  ];
+
+  # disable test_tx_api.py as it requires being online
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m pytest --pyarg trezorlib.tests.unit_tests --ignore trezorlib/tests/unit_tests/test_tx_api.py
+    runHook postCheck
+  '';
 
   meta = {
     description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
-    homepage = https://github.com/trezor/python-trezor;
+    homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ np ];
+    maintainers = with lib.maintainers; [ np prusnak mmahut "1000101" ];
   };
 }

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace 'struct luaL_reg ' 'struct luaL_Reg '
   '';
 
-  configurePhase = ":";
+  dontConfigure = true;
   installPhase = ''
     mkdir -p $out/bin
     mv ./wrk $out/bin/wrk2

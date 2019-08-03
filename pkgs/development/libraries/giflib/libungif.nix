@@ -9,7 +9,9 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Library and utilities for processing GIFs";
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

@@ -1,16 +1,13 @@
 { stdenv
 , fetchurl, lzip
-, hostPlatform, buildPlatform
 }:
 
-let inherit (stdenv.lib) optionals; in
-
 stdenv.mkDerivation rec {
-  name = "ddrescue-1.23";
+  name = "ddrescue-1.24";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/${name}.tar.lz";
-    sha256 = "13cd6c0x91zq10vdlyl6r5rib47bmsn5sshmkin3igwj8pa2vbm9";
+    sha256 = "11qh0bbzf00mfb4yq35gnv5m260k4d7q9ixklry6bqvhvvp3ypab";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -44,7 +41,7 @@ stdenv.mkDerivation rec {
          second and successive copies.
       '';
 
-    homepage = http://www.gnu.org/software/ddrescue/ddrescue.html;
+    homepage = https://www.gnu.org/software/ddrescue/ddrescue.html;
 
     license = licenses.gpl3Plus;
 

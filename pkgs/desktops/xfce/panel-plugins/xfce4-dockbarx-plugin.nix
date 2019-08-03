@@ -1,4 +1,5 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python2, bash, vala, dockbarx, gtk2, xfce, pythonPackages }:
+{ stdenv, pkgconfig, fetchFromGitHub, python2, bash, vala
+, dockbarx, gtk2, xfce, pythonPackages, wafHook }:
 
 stdenv.mkDerivation rec {
   ver = "0.5";
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ dockbarx ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ python2 vala gtk2 pythonPackages.wrapPython ]
     ++ (with xfce; [ libxfce4util xfce4-panel xfconf xfce4-dev-tools ])
     ++ pythonPath;
@@ -24,12 +25,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/dockbarx.vala --replace /usr/share/            $out/share/
     substituteInPlace src/dockbarx.vala --replace '/usr/bin/env python2' ${bash}/bin/bash
   '';
-
-  configurePhase = "python waf configure --prefix=$out";
-
-  buildPhase = "python waf build";
-
-  installPhase = "python waf install";
 
   postFixup = ''
     wrapPythonProgramsIn "$out/share/xfce4/panel/plugins" "$out $pythonPath"

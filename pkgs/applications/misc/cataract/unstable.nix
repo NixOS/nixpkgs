@@ -1,13 +1,4 @@
-{ callPackage
-, stdenv
-, fetchgit
-, autoconf
-, automake
-, glib
-, pkgconfig
-, libxml2
-, exiv2
-, imagemagick }:
+{ callPackage }:
 
 callPackage ./build.nix {
   version = "unstable-2016-10-18";

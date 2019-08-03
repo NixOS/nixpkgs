@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
   name = "ocaml-make-${version}";
 
   src = fetchurl {
-    url = "http://bitbucket.org/mmottl/ocaml-makefile/downloads/ocaml-makefile-${version}.tar.gz";
+    url = "https://bitbucket.org/mmottl/ocaml-makefile/downloads/ocaml-makefile-${version}.tar.gz";
     inherit sha256;
   };
 

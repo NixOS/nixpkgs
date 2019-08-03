@@ -11,28 +11,28 @@ in
 
 stdenv.mkDerivation rec {
   name = "modsecurity-${version}";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "https://www.modsecurity.org/tarball/${version}/${name}.tar.gz";
-    sha256 = "41a8f73476ec891f3a9e8736b98b64ea5c2105f1ce15ea57a1f05b4bf2ffaeb5";
+    sha256 = "0611nskd2y6yagrciqafxdn4rxbdk2v4swf45kc1sgwx2sfh34j1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [  curl apacheHttpd pcre apr aprutil libxml2 ] ++
     optional luaSupport lua5;
 
-  configureFlags = ''
-    --enable-standalone-module
-    --enable-static
-    --with-curl=${curl.dev}
-    --with-apxs=${apacheHttpd.dev}/bin/apxs
-    --with-pcre=${pcre.dev}
-    --with-apr=${apr.dev}
-    --with-apu=${aprutil.dev}/bin/apu-1-config
-    --with-libxml=${libxml2.dev}
-    --with-lua=${luaValue}
-  '';
+  configureFlags = [
+    "--enable-standalone-module"
+    "--enable-static"
+    "--with-curl=${curl.dev}"
+    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
+    "--with-pcre=${pcre.dev}"
+    "--with-apr=${apr.dev}"
+    "--with-apu=${aprutil.dev}/bin/apu-1-config"
+    "--with-libxml=${libxml2.dev}"
+    "--with-lua=${luaValue}"
+  ];
 
   outputs = ["out" "nginx"];
   # by default modsecurity's install script copies compiled output to httpd's modules folder

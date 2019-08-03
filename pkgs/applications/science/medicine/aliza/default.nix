@@ -2,11 +2,12 @@
 
 with stdenv.lib;
 stdenv.mkDerivation {
-  name = "aliza";
+  pname = "aliza";
+  version = "1.48.10";
   src = fetchurl {
-    # Hosted on muoniurn's google drive
-    url = "https://drive.google.com/uc?export=download&id=1zMYfSUqMaYuvuF41zAFUC5ndR55wD7Ip";
-    sha256 = "0prlmzz8qbqqkr0plk781afq25dvy4pv89vlgccpim79psqlchl3";
+    # See https://www.aliza-dicom-viewer.com/download
+    url = "https://drive.google.com/uc?export=download&id=16WEScARaSrzJpJkyGuOUxDF95eUwGyET";
+    sha256 = "1ls16cwd0fmb5axxmy9lgf8cqrf7g7swm26f0gr2vqp4z9bw6qn3";
     name = "aliza.rpm";
   };
 
@@ -48,5 +49,6 @@ stdenv.mkDerivation {
     homepage = http://www.aliza-dicom-viewer.com;
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ mounium ];
+    platforms = platforms.linux;
   };
 }

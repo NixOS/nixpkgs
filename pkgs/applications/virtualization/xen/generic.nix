@@ -86,14 +86,14 @@ stdenv.mkDerivation (rec {
 
     # Fake git: just print what it wants and die
     cat > fake-bin/wget << EOF
-    #!/bin/sh -e
+    #!${stdenv.shell} -e
     echo ===== FAKE WGET: Not fetching \$*
     [ -e \$3 ]
     EOF
 
     # Fake git: just print what it wants and die
     cat > fake-bin/git << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     echo ===== FAKE GIT: Not cloning \$*
     [ -e \$3 ]
     EOF
@@ -109,7 +109,7 @@ stdenv.mkDerivation (rec {
     # (prefetched stuff has lots of files)
     find . -type f | xargs sed -i 's@/usr/bin/\(python\|perl\)@/usr/bin/env \1@g'
     find . -type f -not -path "./tools/hotplug/Linux/xendomains.in" \
-      | xargs sed -i 's@/bin/bash@/bin/sh@g'
+      | xargs sed -i 's@/bin/bash@${stdenv.shell}@g'
 
     # Get prefetched stuff
     ${withXenfiles (name: x: ''
@@ -120,7 +120,8 @@ stdenv.mkDerivation (rec {
   '';
 
   patches = [ ./0000-fix-ipxe-src.patch
-              ./0000-fix-install-python.patch ]
+              ./0000-fix-install-python.patch
+              ./acpica-utils-20180427.patch]
          ++ (config.patches or []);
 
   postPatch = ''
@@ -221,6 +222,8 @@ stdenv.mkDerivation (rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   # TODO(@oxij): Stop referencing args here
   meta = {
     homepage = http://www.xen.org/;
@@ -232,5 +235,6 @@ stdenv.mkDerivation (rec {
                     + withXenfiles (name: x: ''* ${name}: ${x.meta.description or "(No description)"}.'');
     platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ eelco tstrobel oxij ];
+    license = stdenv.lib.licenses.gpl2;
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

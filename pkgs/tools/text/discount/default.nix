@@ -1,16 +1,27 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.3";
-  name = "discount-${version}";
+  version = "2.2.6";
+  pname = "discount";
 
-  src = fetchurl {
-    url = "http://www.pell.portland.or.us/~orc/Code/discount/discount-${version}.tar.bz2";
-    sha256 = "17797xiaq0kk152pj4rvd9grg4i518x3glnwg1lgl8rry3dbrzx8";
+  src = fetchFromGitHub {
+    owner = "Orc";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1y066jkxfas0vdixbqq66j9p00a102sbfgq5gbrblfczqjrmc38w";
   };
 
   patches = ./fix-configure-path.patch;
   configureScript = "./configure.sh";
+
+  configureFlags = [
+    "--enable-all-features"
+    "--pkg-config"
+    "--shared"
+    "--with-fenced-code"
+  ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Implementation of Markdown markup language in C";

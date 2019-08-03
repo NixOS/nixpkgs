@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "django-sr";
-  name = "${pname}-${version}";
   version = "0.0.4";
 
   meta = {

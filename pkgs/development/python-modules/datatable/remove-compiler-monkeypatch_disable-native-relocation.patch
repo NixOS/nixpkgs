@@ -1,0 +1,28 @@
+diff --git a/setup.py b/setup.py
+index 58fc875..8032561 100644
+--- a/setup.py
++++ b/setup.py
+@@ -141,23 +141,6 @@ if cmd in ("build", "bdist_wheel", "build_ext", "install"):
+     extra_link_args = get_extra_link_args()
+     cpp_files = get_c_sources("c")
+ 
+-    with TaskContext("Copy dynamic libraries") as log:
+-        # Copy system libraries into the datatable/lib folder, so that they can
+-        # be packaged with the wheel
+-        libs = find_linked_dynamic_libraries()
+-        for libpath in libs:
+-            trgfile = os.path.join("datatable", "lib",
+-                                   os.path.basename(libpath))
+-            if os.path.exists(trgfile):
+-                log.info("File %s already exists, skipped" % trgfile)
+-            else:
+-                log.info("Copying %s to %s" % (libpath, trgfile))
+-                shutil.copy(libpath, trgfile)
+-
+-    if ismacos():
+-        monkey_patch_compiler()
+-
+-
+ # Create the git version file
+ if cmd in ("build", "sdist", "bdist_wheel", "install"):
+     make_git_version_file(True)

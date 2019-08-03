@@ -1,36 +1,29 @@
 {
-  mkDerivation, fetchFromGitHub, fetchurl, lib,
+  mkDerivation, fetchFromGitHub, lib,
   extra-cmake-modules, kdoctools, wrapGAppsHook,
-  baloo, karchive, kconfig, kcrash, kfilemetadata, kinit, kirigami, knewstuff, plasma-framework
+  baloo, karchive, kconfig, kcrash, kfilemetadata, kinit, kirigami2, knewstuff, plasma-framework
 }:
 
 let
   pname = "peruse";
-  version = "1.2";
-  unarr = fetchFromGitHub {
-    owner  = "zeniko";
-    repo   = "unarr";
-    rev    = "d1be8c43a82a4320306c8e835a86fdb7b2574ca7";
-    sha256 = "03ds5da69zipa25rsp76l6xqivrh3wcgygwyqa5x2rgcz3rjnlpr";
-  };
+  version = "1.2.20180816";
+
 in mkDerivation rec {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${name}.tar.xz";
-    sha256 = "1ik2627xynkichsq9x28rkczqn3l3p06q6vw5jdafdh3hisccmjq";
+  # The last formal release from 2016 uses kirigami1 which is deprecated
+  src = fetchFromGitHub {
+    owner  = "KDE";
+    repo   = pname;
+    rev    = "f50027c6c9c680c4e2ce1dba4ec43364e661e7a3";
+    sha256 = "1217fa6w9ryh499agcc67mnp8k9dah4r0sw74qzsbk4p154jbgch";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
 
-  propagatedBuildInputs = [ baloo karchive kconfig kcrash kfilemetadata kinit kirigami knewstuff plasma-framework ];
+  propagatedBuildInputs = [ baloo karchive kconfig kcrash kfilemetadata kinit kirigami2 knewstuff plasma-framework ];
 
   pathsToLink = [ "/etc/xdg/peruse.knsrc"];
-
-  preConfigure = ''
-    rm -rf src/qtquick/karchive-rar/external/unarr
-    ln -s ${unarr} src/qtquick/karchive-rar/external/unarr
-  '';
 
   meta = with lib; {
     license = licenses.gpl2;

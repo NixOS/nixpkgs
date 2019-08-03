@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, db, boost, gmp, mpfr, miniupnpc, qt4, qmake4Hook, unzip }:
+{ fetchFromGitHub, stdenv, db, boost, gmp, mpfr, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   version = "0.8.6-2";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1v1qwv4x5agjba82s1vknmdgq67y26wzdwbmwwqavv7f7y3y860h";
   };
+
+  enableParallelBuilding = false;
 
   qmakeFlags = ["USE_UPNP=-"];
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python gettext intltool gtk gvfs];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/applications/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/applications/${p_name}";
     description = "A frontend to easily manage connections to remote filesystems";
     platforms = stdenv.lib.platforms.linux;
   };

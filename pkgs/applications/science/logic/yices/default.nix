@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, gmp-static, gperf, autoreconfHook, libpoly }:
+{ stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
 
 stdenv.mkDerivation rec {
   name    = "yices-${version}";
-  version = "2.5.4";
+  version = "2.6.1";
 
-  src = fetchurl {
-    url = "https://github.com/SRI-CSL/yices2/archive/Yices-${version}.tar.gz";
-    name = "${name}-src.tar.gz";
-    sha256 = "1k8wmlddi3zv5kgg6xbch3a0s0xqsmsfc7y6z8zrgcyhswl36h7p";
+  src = fetchFromGitHub {
+    owner  = "SRI-CSL";
+    repo   = "yices2";
+    rev    = "Yices-${version}";
+    sha256 = "04vf468spsh00jh7gj94cjnq8kjyfwy9l6r4z7l2pm0zgwkqgyhm";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -26,9 +27,11 @@ stdenv.mkDerivation rec {
 
   # Includes a fix for the embedded soname being libyices.so.2.5, but
   # only installing the libyices.so.2.5.x file.
-  installPhase = ''
+  installPhase = let
+    ver_XdotY = builtins.concatStringsSep "." (stdenv.lib.take 2 (stdenv.lib.splitString "." version));
+  in ''
       make install LDCONFIG=true
-      (cd $out/lib && ln -s -f libyices.so.${version} libyices.so.2.5)
+      ln -sfr $out/lib/libyices.so.{${version},${ver_XdotY}}
   '';
 
   meta = with stdenv.lib; {
@@ -36,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://yices.csl.sri.com";
     license     = licenses.gpl3;
     platforms   = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -2,13 +2,13 @@
 
 buildOcaml rec {
   name = "pipebang";
-  version = "110.01.00";
+  version = "113.00.00";
 
   minimumSupportedOcamlVersion = "4.00";
 
   src = fetchurl {
     url = "https://github.com/janestreet/pipebang/archive/${version}.tar.gz";
-    sha256 = "a8858d9607c15cdf0a775196be060c8d91de724fc80a347d7a76ef1d38329096";
+    sha256 = "0acm2y8wxvnapa248lkgm0vcc44hlwhrjxqkx1awjxzcmarnxhfk";
   };
 
   meta = with stdenv.lib; {

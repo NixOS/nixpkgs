@@ -1,14 +1,13 @@
-{ buildPythonPackage, isPy3k, fetchPypi, stdenv, exiv2, boost, libcxx }:
+{ buildPythonPackage, isPy3k, fetchPypi, stdenv, exiv2, boost, libcxx, substituteAll, python }:
 
 buildPythonPackage rec {
   pname = "py3exiv2";
-  version = "0.2.1";
-  name = "${pname}-${version}";
+  version = "0.7.0";
   disabled = !(isPy3k);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06q7mlqy05c3jr61nmz93fxb6ilizfyggbh5sg0krwjap2sw1fr8";
+    sha256 = "1gcvmglyl8ad2f336w88gwkd5djjsxdx1ind9wnlbqc3jn9i05cg";
   };
 
   buildInputs = [ exiv2 boost ];
@@ -17,7 +16,12 @@ buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   # fix broken libboost_python3 detection
-  patches = [ ./setup.patch ];
+  patches = [
+    (substituteAll {
+      src = ./setup.patch;
+      version = "3${stdenv.lib.versions.minor python.version}";
+    })
+  ];
 
   meta = {
     homepage = "https://launchpad.net/py3exiv2";

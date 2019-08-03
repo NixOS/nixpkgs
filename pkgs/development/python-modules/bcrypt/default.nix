@@ -1,16 +1,15 @@
-{ stdenv, buildPythonPackage, isPyPy, fetchurl
+{ stdenv, buildPythonPackage, isPyPy, fetchPypi
 , cffi, pycparser, mock, pytest, py, six }:
 
 with stdenv.lib;
 
 buildPythonPackage rec {
-  version = "3.1.4";
+  version = "3.1.7";
   pname = "bcrypt";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/b/bcrypt/${name}.tar.gz";
-    sha256 = "67ed1a374c9155ec0840214ce804616de49c3df9c5bc66740687c1c9b1cd9e8d";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0b0069c752ec14172c5f78208f1863d7ad6755a6fae6fe76ec2c80d13be41e42";
   };
   buildInputs = [ pycparser mock pytest py ];
   propagatedBuildInputs = [ six ] ++ optional (!isPyPy) cffi;

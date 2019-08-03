@@ -1,29 +1,39 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, python3, dconf, gobjectIntrospection
-, intltool, libsoup, libxml2, libsecret, icu, sqlite
-, p11-kit, db, nspr, nss, libical, gperf, makeWrapper
-, vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
+{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobject-introspection
+, intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr
+, p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre
+, vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib
+, glib, gtk3, gnome-online-accounts, libgweather, libgdata }:
 
 stdenv.mkDerivation rec {
   name = "evolution-data-server-${version}";
-  version = "3.28.0";
+  version = "3.32.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1ybyyy6nls11az8lbri1y9527snz5h7qbhyfqvk0vc6vzvald5gv";
+    url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0zsc9xwy6ixk3x0dx69ax5isrdw8qxjdxg2i5fr95s40nss7rxl3";
   };
 
-  nativeBuildInputs = [
-    cmake ninja pkgconfig intltool python3 gperf makeWrapper gobjectIntrospection vala
-  ];
-  buildInputs = with gnome3; [
-    glib libsoup libxml2 gtk gnome-online-accounts
-    gcr p11-kit libgweather libgdata libaccounts-glib json-glib
-    icu sqlite kerberos openldap webkitgtk
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit tzdata;
+    })
+    ./hardcode-gsettings.patch
   ];
 
-  propagatedBuildInputs = [ libsecret nss nspr libical db ];
+  nativeBuildInputs = [
+    cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobject-introspection vala
+  ];
+  buildInputs = [
+    glib libsoup libxml2 gtk3 gnome-online-accounts
+    gcr p11-kit libgweather libgdata libaccounts-glib json-glib
+    icu sqlite kerberos openldap webkitgtk glib-networking
+    libcanberra-gtk3 pcre
+  ];
+
+  propagatedBuildInputs = [ libsecret nss nspr libical db libsoup ];
 
   cmakeFlags = [
     "-DENABLE_UOA=OFF"
@@ -33,14 +43,10 @@ stdenv.mkDerivation rec {
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
 
-
-  preFixup = ''
-    for f in $(find $out/libexec/ -type f -executable); do
-      wrapProgram "$f" \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
-    done
+  postPatch = ''
+    substituteInPlace src/libedataserver/e-source-registry.c --subst-var-by ESD_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
   '';
+
 
   passthru = {
     updateScript = gnome3.updateScript {

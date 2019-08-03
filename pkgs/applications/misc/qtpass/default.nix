@@ -1,26 +1,21 @@
 { stdenv, fetchFromGitHub, git, gnupg, pass, qtbase, qtsvg, qttools, qmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "qtpass-${version}";
-  version = "1.2.1";
+  pname = "qtpass";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner  = "IJHack";
     repo   = "QtPass";
     rev    = "v${version}";
-    sha256 = "0pp38b3fifkfwqcb6vi194ccgb8j3zc8j8jq8ww5ib0wvhldzsg8";
+    sha256 = "1vfhfyccrxq9snyvayqfzm5rqik8ny2gysyv7nipc91kvhq3bhky";
   };
-
-  patches = [ ./hidpi.patch ];
 
   buildInputs = [ git gnupg pass qtbase qtsvg qttools ];
 
   nativeBuildInputs = [ makeWrapper qmake ];
 
-  postPatch = ''
-    substituteInPlace qtpass.pro --replace "SUBDIRS += src tests main" "SUBDIRS += src main"
-    substituteInPlace qtpass.pro --replace "main.depends = tests" "main.depends = src"
-  '';
+  enableParallelBuilding = true;
 
   postInstall = ''
     install -D qtpass.desktop $out/share/applications/qtpass.desktop

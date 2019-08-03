@@ -20,13 +20,12 @@ stdenv.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  sha256 = "0rfly7r6blr2ykxlv0f6my2w41vvxcw85chspljd2p1fxlr28jd7";
+  outputHash = "0rfly7r6blr2ykxlv0f6my2w41vvxcw85chspljd2p1fxlr28jd7";
 
   meta = {
     description = "Unicode VGA font";
     maintainers = [stdenv.lib.maintainers.ftrvxmtrx];
     homepage = http://www.inp.nsk.su/~bolkhov/files/fonts/univga/;
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
   };
 }

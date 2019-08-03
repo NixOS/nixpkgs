@@ -35,7 +35,7 @@ let
     nativeBuildInputs = [ makeWrapper pkgconfig ];
     buildInputs = libs;
     PYTHON = if buildWithPypy
-      then "${pypy}/pypy-c/.pypy-c-wrapped"
+      then "${pypy}/pypy-c/pypy-c"
       else "${python2.interpreter}";
     unpackPhase = ''
       cp -R ${pixie-src} pixie-src

@@ -10,7 +10,7 @@ let
   alternativeConfig = builtins.toFile "lumail2.lua"
     (builtins.readFile alternativeGlobalConfigFilePath);
 
-  globalConfig = if isNull alternativeGlobalConfigFilePath then ''
+  globalConfig = if alternativeGlobalConfigFilePath == null then ''
     mkdir -p $out/etc/lumail2
     cp global.config.lua $out/etc/lumail2.lua
     for n in ./lib/*.lua; do

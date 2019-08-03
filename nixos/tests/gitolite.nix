@@ -58,7 +58,7 @@ in
   nodes = {
 
     server =
-      { config, pkgs, lib, ... }:
+      { ... }:
       {
         services.gitolite = {
           enable = true;
@@ -68,7 +68,7 @@ in
       };
 
     client =
-      { config, pkgs, lib, ... }:
+      { pkgs, ... }:
       {
         environment.systemPackages = [ pkgs.git ];
         programs.ssh.extraConfig = ''
@@ -78,8 +78,8 @@ in
             # there's nobody around that can input password
             PreferredAuthentications publickey
         '';
-        users.extraUsers.alice = { isNormalUser = true; };
-        users.extraUsers.bob = { isNormalUser = true; };
+        users.users.alice = { isNormalUser = true; };
+        users.users.bob = { isNormalUser = true; };
       };
 
   };

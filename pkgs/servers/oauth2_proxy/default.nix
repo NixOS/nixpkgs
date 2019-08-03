@@ -1,17 +1,24 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "oauth2_proxy-${version}";
-  version = "20160120-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "10f47e325b782a60b8689653fa45360dee7fbf34";
+  pname = "oauth2_proxy";
+  version = "3.2.0";
   
-  goPackagePath = "github.com/bitly/oauth2_proxy";
+  goPackagePath = "github.com/pusher/${pname}";
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/bitly/oauth2_proxy";
-    sha256 = "13f6kaq15f6ial9gqzrsx7i94jhd5j70js2k93qwxcw1vkh1b6si";
+  src = fetchFromGitHub {
+    repo = pname;
+    owner = "pusher";
+    sha256 = "0k73ggyh12g2vzjq91i9d3bxbqfvh5k6njzza1lvkzasgp07wisg";
+    rev = "v${version}";
   };
 
   goDeps = ./deps.nix;
+
+  meta = with lib; {
+    description = "A reverse proxy that provides authentication with Google, Github or other provider";
+    homepage = https://github.com/pusher/oauth2_proxy/;
+    license = licenses.mit;
+    maintainers = [ maintainers.yorickvp ];
+  };
 }

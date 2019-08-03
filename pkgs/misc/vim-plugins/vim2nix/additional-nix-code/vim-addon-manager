@@ -1,1 +1,0 @@
-    buildInputs = stdenv.lib.optional stdenv.isDarwin Cocoa;

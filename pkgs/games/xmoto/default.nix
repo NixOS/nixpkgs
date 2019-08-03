@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.5.11";
 
   src = fetchurl {
-    url = "http://download.tuxfamily.org/xmoto/xmoto/${version}/xmoto-${version}-src.tar.gz";
+    url = "https://download.tuxfamily.org/xmoto/xmoto/${version}/xmoto-${version}-src.tar.gz";
     sha256 = "1ci6r8zd0l7z28cy92ddf9dmqbdqwinz2y1cny34c61b57wsd155";
   };
 
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Obstacled race game";
     homepage = http://xmoto.tuxfamily.org;
-    maintainers = with maintainers; [ raskin viric pSub ];
+    maintainers = with maintainers; [ raskin pSub ];
     platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

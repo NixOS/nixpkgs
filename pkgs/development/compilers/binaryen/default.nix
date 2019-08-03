@@ -1,12 +1,12 @@
-{ stdenv, cmake, fetchFromGitHub, emscriptenRev ? null }:
+{ stdenv, cmake, python, fetchFromGitHub, emscriptenRev ? null }:
 
 let
-  defaultVersion = "44";
+  defaultVersion = "86";
 
   # Map from git revs to SHA256 hashes
   sha256s = {
-    "version_44" = "0zsqppc05fm62807w6vyccxkk2y2gar7kxbxxixq8zz3xsp6w84p";
-    "1.37.36" = "1wgzfzjjzkiaz0rf2lnwrcvlcsjvjhyvbyh58jxhqq43vi34zyjc";
+    "version_86" = "12h5018rdwg7vjni0mz91vkpdwyqw0nfacig3vg9dvyn4fnfm76z";
+    "1.38.28" = "172s7y5f38736ic8ri3mnbdqcrkadd40a26cxcfwbscc53phl11v";
   };
 in
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     inherit rev;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake python ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/WebAssembly/binaryen;

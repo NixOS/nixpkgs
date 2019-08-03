@@ -16,8 +16,8 @@
 # Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
 # to see what will break when upgrading. Consider a new versioned attribute.
 let
-  installationPath = if stdenv.system == "x86_64-linux" then "x86_64" else "i386";
-  appendPath = if stdenv.system == "x86_64-linux" then "64" else "";
+  installationPath = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "i386";
+  appendPath = if stdenv.hostPlatform.system == "x86_64-linux" then "64" else "";
   libPath = stdenv.lib.makeLibraryPath [ cups libusb ] + ":$out/lib:${stdenv.cc.cc.lib}/lib${appendPath}";
 in stdenv.mkDerivation rec {
   name = "samsung-UnifiedLinuxDriver-${version}";

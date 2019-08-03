@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.1";
+  version = "0.8.0";
   name = "gpac-${version}";
 
   src = fetchFromGitHub {
     owner = "gpac";
     repo = "gpac";
     rev = "v${version}";
-    sha256 = "197c5968p5bzvk0ga347fwgkqh4j1v3z65wlx65c5m9gwfxz2k2q";
+    sha256 = "1w1dyrn6900yi8ngchfzy5hvxr6yc60blvdq8y8mczimmmq8khb5";
   };
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box

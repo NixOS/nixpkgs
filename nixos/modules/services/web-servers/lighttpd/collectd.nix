@@ -12,7 +12,7 @@ let
 
   defaultCollectionCgi = config.services.collectd.package.overrideDerivation(old: {
     name = "collection.cgi";
-    configurePhase = "true";
+    dontConfigure = true;
     buildPhase = "true";
     installPhase = ''
       substituteInPlace contrib/collection.cgi --replace '"/etc/collection.conf"' '$ENV{COLLECTION_CONF}'
@@ -48,7 +48,7 @@ in
           "/collectd" => "${cfg.collectionCgi}"
         )
         setenv.add-environment = (
-          "PERL5LIB" => "${with pkgs; lib.makePerlPath [ perlPackages.CGI perlPackages.HTMLParser perlPackages.URI rrdtool ]}",
+          "PERL5LIB" => "${with pkgs.perlPackages; makePerlPath [ CGI HTMLParser URI pkgs.rrdtool ]}",
           "COLLECTION_CONF" => "${collectionConf}"
         )
       }

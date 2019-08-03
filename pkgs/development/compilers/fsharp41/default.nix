@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "/bin/sh"
+    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "${stdenv.shell}"
     ./autogen.sh --prefix $out
   '';
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A functional CLI language";
-    homepage = http://fsharp.org/;
+    homepage = https://fsharp.org/;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
     platforms = with stdenv.lib.platforms; unix;

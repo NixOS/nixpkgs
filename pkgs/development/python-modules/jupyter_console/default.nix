@@ -7,16 +7,17 @@
 , ipykernel
 , prompt_toolkit
 , pygments
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_console";
-  version = "5.2.0";
-  name = "${pname}-${version}";
+  version = "6.0.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "545dedd3aaaa355148093c5609f0229aeb121b4852995c2accfa64fe3e0e55cd";
+    sha256 = "308ce876354924fb6c540b41d5d6d08acfc946984bf0c97777c1ddcb42e0b2f5";
   };
 
   checkInputs = [ nose ];
@@ -33,8 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Jupyter terminal console";
-    homepage = "http://jupyter.org/";
+    homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
   };
 }

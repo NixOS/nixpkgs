@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool ];
 
   meta = {
-    homepage = http://lxde.org/;
+    homepage = https://lxde.org/;
     license = stdenv.lib.licenses.gpl2;
     description = "Freedesktop.org desktop menus for LXDE";
     platforms = stdenv.lib.platforms.linux;

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, cairomm, cmake, lv2, libpthreadstubs, libXdmcp, libXft, ntk, pcre, fftwFloat, zita-resampler }:
 
 stdenv.mkDerivation rec {
-  name = "infamousPlugins-v${version}";
-  version = "0.2.04";
+  name = "infamousPlugins-${version}";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ssj71";
     repo = "infamousPlugins";
     rev = "v${version}";
-    sha256 = "0hmqk80w4qxq09iag7b7srf2g0wigkyhzq0ywxvhz2iz0hq9k0dh";
+    sha256 = "1r72agk5nxf5k0mghcc2j90z43j5d9i7rqjmf49jfyqnd443isip";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];

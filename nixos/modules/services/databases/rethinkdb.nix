@@ -41,7 +41,7 @@ in
       };
 
       pidpath = mkOption {
-        default = "/var/run/rethinkdb";
+        default = "/run/rethinkdb";
         description = "Location where each instance's pid file is located.";
       };
 
@@ -96,12 +96,12 @@ in
       '';
     };
 
-    users.extraUsers.rethinkdb = mkIf (cfg.user == "rethinkdb")
+    users.users.rethinkdb = mkIf (cfg.user == "rethinkdb")
       { name = "rethinkdb";
         description = "RethinkDB server user";
       };
 
-    users.extraGroups = optionalAttrs (cfg.group == "rethinkdb") (singleton
+    users.groups = optionalAttrs (cfg.group == "rethinkdb") (singleton
       { name = "rethinkdb";
       });
 

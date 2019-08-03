@@ -1,9 +1,9 @@
-{ stdenv, lib, config, fetchFromGitHub, fetchpatch
+{ stdenv, lib, config, fetchFromGitHub
 , cmake
-, glog, google-gflags, gtest
+, glog, gflags, gtest
 , protobuf, snappy
 , python, future, six, python-protobuf, numpy, pydot
-, eigen3
+, eigen
 , doxygen
 , useCuda ? (config.cudaSupport or false), cudatoolkit ? null
 , useCudnn ? (config.cudnnSupport or false), cudnn ? null
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" ];
   propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
-  buildInputs = [ glog google-gflags protobuf snappy eigen3 ]
+  buildInputs = [ glog gflags protobuf snappy eigen ]
     ++ lib.optional useCuda cudatoolkit
     ++ lib.optional useCudnn cudnn
     ++ lib.optional useOpenmp openmp
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     ${installExtraSrc cub}
     ${installExtraSrc pybind11}
     # XXX hack
-    export NIX_CFLAGS_COMPILE="-I ${eigen3}/include/eigen3/ $NIX_CFLAGS_COMPILE"
+    export NIX_CFLAGS_COMPILE="-I ${eigen}/include/eigen3/ $NIX_CFLAGS_COMPILE"
   '';
 
   postInstall = ''
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
       algorithms. You can bring your creations to scale using the power of GPUs in the
       cloud or to the masses on mobile with Caffe2's cross-platform libraries.
     '';
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    platforms = with stdenv.lib.platforms; linux;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
   };

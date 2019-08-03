@@ -1,15 +1,15 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, gnupg1compat, bzip2, xz, graphviz }:
+{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, gnupg, bzip2, xz, graphviz }:
 
 let
 
-  version = "1.2.0";
+  version = "1.3.0";
   rev = "v${version}";
 
   aptlySrc = fetchFromGitHub {
     inherit rev;
-    owner = "smira";
+    owner = "aptly-dev";
     repo = "aptly";
-    sha256 = "1acnkmgarz9rp0skkh7zzwkhisjlmbl74jqjmqd3mn42y528c34b";
+    sha256 = "032gw8qkxcgc0jyrvzqh7jkbmk4k0gf7j74hyhclfnjmd9548f5l";
   };
 
   aptlyCompletionSrc = fetchFromGitHub {
@@ -26,7 +26,7 @@ buildGoPackage {
 
   src = aptlySrc;
 
-  goPackagePath = "github.com/smira/aptly";
+  goPackagePath = "github.com/aptly-dev/aptly";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -34,14 +34,14 @@ buildGoPackage {
     mkdir -p $bin/share/bash-completion/completions
     ln -s ${aptlyCompletionSrc}/aptly $bin/share/bash-completion/completions
     wrapProgram "$bin/bin/aptly" \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg1compat bzip2 xz graphviz ]}"
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
   '';
 
   meta = with stdenv.lib; {
     homepage = https://www.aptly.info;
     description = "Debian repository management tool";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.montag451 ];
   };
 }

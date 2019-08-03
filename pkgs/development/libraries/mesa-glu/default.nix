@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, mesa_noglu }:
+{ stdenv, fetchurl, pkgconfig, libGL, ApplicationServices }:
 
 stdenv.mkDerivation rec {
-  name = "glu-9.0.0";
+  name = "glu-${version}";
+  version = "9.0.0";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/glu/${name}.tar.bz2";
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ mesa_noglu ];
+  propagatedBuildInputs = [ libGL ]
+    ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
 
   outputs = [ "out" "dev" ];
 
@@ -21,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://cgit.freedesktop.org/mesa/glu/;
     license = stdenv.lib.licenses.sgi-b-20;
     platforms = stdenv.lib.platforms.unix;
+    broken = stdenv.hostPlatform.isAndroid;
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "untex-${version}";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchurl {
-    url = "https://www.ctan.org/tex-archive/support/untex/${name}.tar.gz";
-    sha256 = "07p836jydd5yjy905m5ylnnac1h4cc4jsr41panqb808mlsiwmmy";
+    url = "ftp://ftp.thp.uni-duisburg.de/pub/source/${name}.tar.gz";
+    sha256 = "1jww43pl9qvg6kwh4h8imp966fzd62dk99pb4s93786lmp3kgdjv";
   };
 
   hardeningDisable = [ "format" ];

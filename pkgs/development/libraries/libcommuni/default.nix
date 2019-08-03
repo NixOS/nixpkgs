@@ -19,12 +19,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   dontUseQmakeConfigure = true;
-  configureFlags = "-config release";
+  configureFlags = [ "-config" "release" ];
+
   preConfigure = ''
     sed -i -e 's|/bin/pwd|pwd|g' configure
   '';
 
-  doCheck = true;
+  # The tests fail on darwin because of install_name if they run
+  # before the frameworks are installed.
+  doCheck = false;
+  doInstallCheck = true;
+  installCheckTarget = "check";
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = "rm -rf lib";

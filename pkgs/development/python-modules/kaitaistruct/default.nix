@@ -1,7 +1,6 @@
-{ stdenv, kaitaistruct, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "kaitaistruct";
   version = "0.8";
 

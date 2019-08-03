@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "nose_warnings_filters";
   version = "0.1.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,6 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nose ];
 
+  checkInputs = [ nose ];
   checkPhase = ''
     nosetests -v
   '';

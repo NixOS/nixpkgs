@@ -30,5 +30,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  meta.platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    platforms = platforms.unix;
+    license = licenses.gpl3;
+  };
 }

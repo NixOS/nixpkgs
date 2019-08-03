@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python2Packages, dbus-glib, dbus_daemon
+{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python2Packages, dbus-glib, dbus
 , telepathy-farstream, telepathy-glib, fetchpatch }:
 
 let
@@ -7,14 +7,14 @@ in stdenv.mkDerivation rec {
   name = "telepathy-qt-0.9.7";
 
   src = fetchurl {
-    url = "http://telepathy.freedesktop.org/releases/telepathy-qt/${name}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/telepathy-qt/${name}.tar.gz";
     sha256 = "0krxd4hhfx6r0ja19wh3848j7gn1rv8jrnakgmkbmi7bww5x7fi1";
   };
 
   nativeBuildInputs = [ cmake pkgconfig python ];
   propagatedBuildInputs = [ qtbase telepathy-farstream telepathy-glib ];
   buildInputs = [ dbus-glib ];
-  checkInputs = [ dbus_daemon dbus-python ];
+  checkInputs = [ dbus.daemon dbus-python ];
 
   patches = [
     # https://github.com/TelepathyIM/telepathy-qt/issues/25

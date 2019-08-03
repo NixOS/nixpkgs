@@ -1,0 +1,23 @@
+diff -Naur proto-lens-0.2.2.0/proto-lens.cabal proto-lens-0.2.2.0-patched/proto-lens.cabal
+--- proto-lens-0.2.2.0/proto-lens.cabal	2018-08-13 18:05:41.704823370 +0200
++++ proto-lens-0.2.2.0-patched/proto-lens.cabal	2018-08-13 18:07:42.352372300 +0200
+@@ -33,7 +33,7 @@
+                        Data.ProtoLens.Encoding.Wire
+                        Data.ProtoLens.TextFormat.Parser
+   build-depends:  attoparsec == 0.13.*
+-                , base >= 4.8 && < 4.11
++                , base >= 4.8
+                 , bytestring == 0.10.*
+                 , containers == 0.5.*
+                 , data-default-class >= 0.0 && < 0.2
+diff -Naur proto-lens-0.2.2.0/src/Data/ProtoLens/TextFormat.hs proto-lens-0.2.2.0-patched/src/Data/ProtoLens/TextFormat.hs
+--- proto-lens-0.2.2.0/src/Data/ProtoLens/TextFormat.hs	2017-04-28 02:16:46.000000000 +0200
++++ proto-lens-0.2.2.0-patched/src/Data/ProtoLens/TextFormat.hs	2018-08-13 18:08:06.371486594 +0200
+@@ -17,6 +17,7 @@
+     readMessageOrDie,
+     ) where
+ 
++import Prelude hiding ((<>))
+ import Lens.Family2 ((&),(^.),(.~), set, over)
+ import Control.Arrow (left)
+ import qualified Data.ByteString

@@ -59,4 +59,10 @@ stdenv.mkDerivation rec {
     homepage = http://www.netlib.org/blas/;
     platforms = stdenv.lib.platforms.unix;
   };
+
+  # We use linkName to pass a different name to --with-blas-libs for
+  # fflas-ffpack and linbox, because we use blas on darwin but openblas
+  # elsewhere.
+  # See see https://github.com/NixOS/nixpkgs/pull/45013.
+  passthru.linkName = "blas";
 }

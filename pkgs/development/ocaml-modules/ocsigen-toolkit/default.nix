@@ -1,32 +1,37 @@
-{ stdenv, fetchurl, buildOcaml, ocaml, eliom, opam }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, opaline
+, calendar, eliom, js_of_ocaml-ppx_deriving_json
+}:
 
-buildOcaml rec
-{
- name = "ocsigen-toolkit";
- version = "1.0.0";
+stdenv.mkDerivation rec {
+ pname = "ocsigen-toolkit";
+ name = "ocaml${ocaml.version}-${pname}-${version}";
+ version = "2.0.0";
 
- propagatedBuildInputs = [ eliom ];
- buildInputs = [ opam ];
-
- createFindlibDestdir = true;
+ propagatedBuildInputs = [ calendar eliom js_of_ocaml-ppx_deriving_json ];
+ buildInputs = [ ocaml findlib opaline ];
 
  installPhase =
   ''
     export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH
     make install
-    opam-installer --prefix=$out
+    opaline -prefix $out
   '';
 
-  src = fetchurl {
-    sha256 = "0wm4fnss7vlkd03ybgfrk63kpip6m6p6kdqjn3f64n11256mwzj2";
-    url = "https://github.com/ocsigen/${name}/archive/${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = pname;
+    rev = version;
+    sha256 = "0gkiqw3xi31l9q9h89fnr5gfmxi9w9lg9rlv16h4ssjgrgq3y5cw";
   };
+
+  createFindlibDestdir = true;
 
   meta = {
     homepage = http://ocsigen.org/ocsigen-toolkit/;
     description = " User interface widgets for Ocsigen applications";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
+    inherit (ocaml.meta) platforms;
   };
 
 

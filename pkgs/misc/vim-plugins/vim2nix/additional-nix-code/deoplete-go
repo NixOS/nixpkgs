@@ -1,7 +1,0 @@
-    buildInputs = [ python3 ]; 
-    buildPhase = ''
-      pushd ./rplugin/python3/deoplete/ujson
-      python3 setup.py build --build-base=$PWD/build --build-lib=$PWD/build
-      popd
-      find ./rplugin/ -name "ujson*.so" -exec mv -v {} ./rplugin/python3/ \;
-    '';

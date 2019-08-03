@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "pyprof2calltree";
-  version = "1.4.3";
+  version = "1.4.4";
 
   # Fetch from GitHub because the PyPi packaged version does not
   # include all test files.
@@ -10,7 +10,7 @@ buildPythonApplication rec {
     owner = "pwaller";
     repo = "pyprof2calltree";
     rev = "v" + version;
-    sha256 = "0i0a895zal193cpvzbv68fch606g4ik27rvzbby3vxk61zlxfqy5";
+    sha256 = "1vrip41ib7nmkwa8rjny1na1wyp7nvvgvm0h9bd21i262kbm4nqx";
   };
 
   meta = with lib; {

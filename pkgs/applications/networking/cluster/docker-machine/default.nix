@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "machine-${version}";
-  version = "0.14.0";
+  version = "0.16.1";
 
   goPackagePath = "github.com/docker/machine";
 
@@ -11,16 +11,16 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "docker";
     repo = "machine";
-    sha256 = "0hd5sklmvkhhpfn318hq9w0f7x14165h1l2mdn9iv4447z1iibff";
+    sha256 = "0xxzxi5v7ji9j2k7kxhi0ah91lfa7b9rg3nywgx0lkv8dlgp8kmy";
   };
 
   postInstall = ''
-    mkdir -p $bin/share/bash-completion/completions/
-    cp go/src/github.com/docker/machine/contrib/completion/bash/* $bin/share/bash-completion/completions/
-  '';
+    mkdir -p \
+      $bin/share/bash-completion/completions/ \
+      $bin/share/zsh/site-functions/
 
-  postFixup =  ''
-    mv $bin/bin/cmd $bin/bin/docker-machine
+    cp go/src/github.com/docker/machine/contrib/completion/bash/* $bin/share/bash-completion/completions/
+    cp go/src/github.com/docker/machine/contrib/completion/zsh/* $bin/share/zsh/site-functions/
   '';
 
   meta = with stdenv.lib; {

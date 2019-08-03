@@ -1,14 +1,13 @@
 { stdenv, lib, file, fetchurl, unzip }:
-assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   name    = "terraria-server-${version}";
-  version = "1.3.1.1";
+  version = "1.3.5.3";
   urlVersion = lib.replaceChars ["."] [""] version;
 
   src = fetchurl {
-    url = "http://terraria.org/server/terraria-server-${urlVersion}.zip";
-    sha256 = "0bwh0na0dy6cjc1xchd5sp3c7av50q38hk03219dmqd72n9p44rq";
+    url = "https://terraria.org/server/terraria-server-${urlVersion}.zip";
+    sha256 = "0l7j2n6ip4hxph7dfal7kzdm3dqnm1wba6zc94gafkh97wr35ck3";
   };
 
   buildInputs = [ file unzip ];
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = http://terraria.org;
     description = "Dedicated server for Terraria, a 2D action-adventure sandbox";
-    platforms = platforms.linux;
+    platforms = ["x86_64-linux"];
     license = licenses.unfree;
   };
 }

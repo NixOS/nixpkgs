@@ -6,8 +6,8 @@ libxslt,
 libusb,
 sane-backends,
 rpm, cpio,
-eject,
-patchelf, gcc
+getopt,
+patchelf, autoPatchelfHook, gcc
 }:
 
 let common_meta = {
@@ -25,8 +25,73 @@ in
 # adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
 
 let plugins = {
+  v330 = stdenv.mkDerivation rec {
+    name = "iscan-v330-bundle";
+    version = "1.0.1";
+    pluginVersion = "0.2.0";
+
+    src = fetchurl {
+      url = "https://download2.ebz.epson.net/iscan/plugin/perfection-v330/rpm/x64/iscan-perfection-v330-bundle-${version}.x64.rpm.tar.gz";
+      sha256 = "f6fa455f04cdfbc3d38526573260746e9546830de93ba182d0365f557d2f7df9";
+    };
+
+    buildInputs = [ patchelf rpm ];
+
+    installPhase = ''
+      ${rpm}/bin/rpm2cpio "plugins/esci-interpreter-perfection-v330-${pluginVersion}-1.x86_64.rpm" | ${cpio}/bin/cpio -idmv
+      mkdir $out{,/share,/lib}
+      cp -r ./usr/share/{iscan-data,esci}/ $out/share/
+      cp -r ./usr/lib64/esci $out/lib
+      '';
+
+    preFixup = ''
+      lib=$out/lib/esci/libesci-interpreter-perfection-v330.so
+      rpath=${gcc.cc.lib}/lib/
+      patchelf --set-rpath $rpath $lib
+      '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x0142 "$plugin/lib/esci/libesci-interpreter-perfection-v330 $plugin/share/esci/esfwad.bin"
+        '';
+      hw = "Perfection V330 Photo";
+      };
+    meta = common_meta // { description = "Plugin to support "+passthru.hw+" scanner in sane."; };
+  };
+  x770 =   stdenv.mkDerivation rec {
+    pname = "iscan-gt-x770-bundle";
+    version = "1.0.1";
+    pluginVersion = "2.1.2-1";
+
+    nativeBuildInputs = [ patchelf rpm ];
+    src = fetchurl {
+      url = "https://download2.ebz.epson.net/iscan/plugin/gt-x770/rpm/x64/iscan-gt-x770-bundle-${version}.x64.rpm.tar.gz";
+      sha256 = "0m9c60rszzdvq1pqfzygzzrjycm1giy465lj29108j7hsnfcv56r";
+    };
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-gt-x770-${pluginVersion}.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+      '';
+    preFixup = ''
+      lib=$out/lib/esci/libesint7C.so
+      rpath=${gcc.cc.lib}/lib/
+      patchelf --set-rpath $rpath $lib
+      '';
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x0130 "$plugin/lib/esci/libesint7C $plugin/share/esci/esfw7C.bin"
+        '';
+      hw = "Perfection V500 Photo";
+      };
+    meta = common_meta // { description = "iscan esci x770 plugin for "+passthru.hw; };
+    };
   f720 = stdenv.mkDerivation rec {
-    name = "iscan-gt-f720-bundle";
+    pname = "iscan-gt-f720-bundle";
     version = "1.0.1";
     pluginVersion = "0.1.1-2";
 
@@ -55,6 +120,74 @@ let plugins = {
       };
 
     meta = common_meta // { description = "iscan esci f720 plugin for "+passthru.hw; };
+  };
+  s80 = stdenv.mkDerivation rec {
+    pname = "iscan-gt-s80-bundle";
+    version = "1.0.1";
+    esciPluginVersion = "0.2.1-1";
+    esdipPluginVersion = "1.0.0-5";
+
+    buildInputs = [ patchelf ];
+    src = fetchurl {
+      url = "https://download2.ebz.epson.net/iscan/plugin/gt-s80/rpm/x64/iscan-gt-s80-bundle-${version}.x64.rpm.tar.gz";
+      sha256 = "14j11znx5ga2ykpyg6kjg7lbrddyr9pwxrsa82dmdishd1j7zji9";
+    };
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio esci-interpreter-gt-s80-${esciPluginVersion}.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ${rpm}/bin/rpm2cpio iscan-plugin-esdip-${esdipPluginVersion}.ltdl7.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mkdir $out/share/esci
+      '';
+    preFixup = ''
+      rpath=${gcc.cc.lib}/lib/
+      patchelf --set-rpath $rpath $out/lib/esci/libesci-interpreter-gt-s80.so
+      patchelf --set-rpath $rpath $out/lib/esci/libesci-interpreter-gt-s50.so
+      patchelf --set-rpath $rpath $out/lib/iscan/esdip
+      patchelf --set-rpath $rpath $out/lib/iscan/libesdtr.so.0
+      patchelf --set-rpath $rpath $out/lib/iscan/libesdtr2.so.0
+      '';
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x0136 "$plugin/lib/esci/libesci-interpreter-gt-s80.so"
+        $registry --add interpreter usb 0x04b8 0x0137 "$plugin/lib/esci/libesci-interpreter-gt-s50.so"
+        $registry --add interpreter usb 0x04b8 0x0143 "$plugin/lib/esci/libesci-interpreter-gt-s50.so"
+        $registry --add interpreter usb 0x04b8 0x0144 "$plugin/lib/esci/libesci-interpreter-gt-s80.so"
+        '';
+      hw = "ES-D200, ED-D350, ES-D400, GT-S50, GT-S55, GT-S80, GT-S85";
+      };
+
+    meta = common_meta // { description = "iscan esci s80 plugin for "+passthru.hw; };
+  };
+  network = stdenv.mkDerivation rec {
+    pname = "iscan-nt-bundle";
+    version = "1.0.0";
+    ntPluginVersion = "1.1.1-1";
+
+    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = [ autoPatchelfHook ];
+
+    src = fetchurl {
+      url = "https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${version}.x64.rpm.tar.gz";
+      sha256 = "1k3dmv4ml21k6mafvcvgfymb1acpcdxpvyrbfh2yf07jzmn5if4f";
+    };
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-network-nt-${ntPluginVersion}.x86_64.rpm | ${cpio}/bin/cpio -idmv
+
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mkdir $out/share/esci
+      '';
+    passthru = {
+      registrationCommand = "";
+      hw = "network";
+    };
+
+    meta = common_meta // { description = "iscan network plugin"; };
   };
 };
 in
@@ -121,10 +254,12 @@ stdenv.mkDerivation rec {
     cp backend/epkowa.conf $out/etc/sane.d
     echo "epkowa" > $out/etc/sane.d/dll.conf
     ln -s ${iscan-data}/share/iscan-data $out/share/iscan-data
+    mkdir -p $out/lib/iscan
+    ln -s ${plugins.network}/lib/iscan/network $out/lib/iscan/network
     '';
   postFixup = ''
     # iscan-registry is a shell script requiring getopt
-    wrapProgram $out/bin/iscan-registry --prefix PATH : ${eject}/bin
+    wrapProgram $out/bin/iscan-registry --prefix PATH : ${getopt}/bin
     registry=$out/bin/iscan-registry;
     '' +
     stdenv.lib.concatStrings (stdenv.lib.mapAttrsToList (name: value: ''

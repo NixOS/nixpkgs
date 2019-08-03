@@ -1,11 +1,10 @@
-{ buildPythonPackage, fetchPypi, python
+{ buildPythonPackage, fetchPypi
 , pytest, pytestcov
 }:
 
 buildPythonPackage rec {
   pname = "plaster";
   version = "1.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

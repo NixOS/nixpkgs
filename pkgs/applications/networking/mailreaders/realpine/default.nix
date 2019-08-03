@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, tcl, openssl, pam, pkgconfig, gettext, kerberos
+{stdenv, fetchurl, ncurses, tcl, openssl, pam, kerberos
 , openldap
 }:
 # NOTE: Please check if any changes here are applicable to ../alpine/ as well
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.asl20;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = http://re-alpine.sf.net/;
-    downloadPage = "http://sourceforge.net/projects/re-alpine/files/";
+    homepage = https://sourceforge.net/projects/re-alpine/;
+    downloadPage = "https://sourceforge.net/projects/re-alpine/files/";
   };
 }

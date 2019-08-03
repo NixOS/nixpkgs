@@ -1,7 +1,7 @@
-{ stdenv, bash, coreutils, curl, diffutils, gawk, gnugrep, gnused, openssl, makeWrapper, fetchFromGitHub }:
+{ stdenv, coreutils, curl, diffutils, gawk, gnugrep, gnused, openssl, makeWrapper, fetchFromGitHub }:
 let
   pkgName = "dehydrated";
-  version = "0.6.1";
+  version = "0.6.5";
 in
 stdenv.mkDerivation rec {
   name = pkgName + "-" + version;
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "lukas2511";
     repo = "dehydrated";
     rev = "v${version}";
-    sha256 = "0390fnycl3l4yqacwvaf7dp08rx2vvs27s06q7b478qzrn59flz4";
+    sha256 = "14k7ykry16zp09i0bqb5pqaclvnjcb6p3x8knm9v5q0bdvlplkjv";
   };
 
   buildInputs = [ makeWrapper ];

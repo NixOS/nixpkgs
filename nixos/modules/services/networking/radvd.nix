@@ -52,7 +52,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.radvd =
+    users.users.radvd =
       { uid = config.ids.uids.radvd;
         description = "Router Advertisement Daemon User";
       };

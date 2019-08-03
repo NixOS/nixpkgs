@@ -1,28 +1,25 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , patricia
 , lib
-, idris
 }:
 build-idris-package  {
   name = "semidirect";
-  version = "2018-02-06";
+  version = "2018-07-02";
 
-  idrisDeps = [ prelude contrib patricia ];
+  idrisDeps = [ contrib patricia ];
 
   src = fetchFromGitHub {
     owner = "clayrat";
     repo = "idris-semidirect";
-    rev = "884c26c095784f8fd489c323d6673f2a8710a741";
-    sha256 = "0w36xkfxsqm6r91f0vs6qpmallrfwa09ql8i317xwm86nfk7akj9";
+    rev = "e19c58f7a25c53bba2ab058821e038bae3c093d2";
+    sha256 = "0182r9z34kbv3l78pw4qf48ng3hqj4sqzy53074mb0b2c3pikcrl";
   };
 
   meta = {
     description = "Semidirect products in Idris";
     homepage = https://github.com/clayrat/idris-semidirect;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

@@ -1,0 +1,34 @@
+{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, future, pyusb, ipython, pygreat }:
+
+buildPythonPackage rec {
+  pname = "GreatFET";
+  version = "2019.5.1.dev0";
+
+  src = fetchFromGitHub {
+    owner = "greatscottgadgets";
+    repo = "greatfet";
+    rev = "a927f21d59ccface00635146103a807c1d2b0ad8";
+    sha256 = "054vkx4xkbhxhh5grjbs9kw3pjkv1zapp91ysrqr0c8mg1pc7zxv";
+  };
+
+  disabled = !isPy3k;
+
+  propagatedBuildInputs = [ future pyusb ipython pygreat ];
+
+  doCheck = false;
+
+  preBuild = ''
+    cd host
+    echo "$version" > ../VERSION
+  '';
+
+  meta = {
+    description = "Hardware hacking with the greatfet";
+    homepage = https://greatscottgadgets.com/greatfet;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mog ];
+  };
+}
+
+

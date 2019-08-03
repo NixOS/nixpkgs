@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, clang }:
 
 stdenv.mkDerivation {
-  name = "blocksruntime";
+  name = "blocksruntime-20140624";
 
   src = fetchFromGitHub {
     owner = "mackyle";

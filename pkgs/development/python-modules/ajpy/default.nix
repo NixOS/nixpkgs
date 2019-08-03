@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ajpy";
-  version = "0.0.2";
+  version = "0.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "740e7daf728ba58dabaf4af2c4305262eb207a6e41791424a146a21396ceb9ad";
+    sha256 = "0a5f62b765f59ffc37e759d3f343de16cd782cc4e9e8be09c73b71dfbe383d9b";
   };
 
   # ajpy doesn't have tests

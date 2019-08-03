@@ -1,22 +1,23 @@
-{ stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
+{ config, stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
 , obex_data_server, xdg_utils, libnotify, dnsmasq, dhcp
-, hicolor-icon-theme, librsvg, wrapGAppsHook, gobjectIntrospection
-, withPulseAudio ? true, libpulseaudio }:
+, hicolor-icon-theme, librsvg, wrapGAppsHook, gobject-introspection
+, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
 let
+  pythonPackages = python3Packages;
   binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp ];
 
 in stdenv.mkDerivation rec {
   name = "blueman-${version}";
-  version = "2.0.5";
+  version = "2.0.8";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${name}.tar.xz";
-    sha256 = "1jl83z56c01ypvv98mxn74kpbv58yrccggp1rbmnw1dnvjxvjbic";
+    sha256 = "0kkh6jppqcn3yf70vnny1l015kxrz3dxw4g774gl02lh9ixx1bq4";
   };
 
   nativeBuildInputs = [
-    gobjectIntrospection intltool pkgconfig pythonPackages.cython
+    gobject-introspection intltool pkgconfig pythonPackages.cython
     pythonPackages.wrapPython wrapGAppsHook
   ];
 

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "9pfs";
+  name = "9pfs-20150918";
 
   src = fetchFromGitHub {
     owner = "mischief";
@@ -22,9 +22,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    #homepage = https://github.com/spewspew/9pfs; # the account apparently doesn't exist
+    homepage = https://github.com/mischief/9pfs;
     description = "FUSE-based client of the 9P network filesystem protocol";
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
+    license = with lib.licenses; [ lpl-102 bsd2 ];
   };
 }

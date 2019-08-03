@@ -8,9 +8,11 @@
 , common-updater-scripts
 , majorVersion
 , nix
+, runtimeShell
 }:
 
 writeScript "update-nodejs" ''
+  #!${runtimeShell}
   PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep jq gnupg nix ]}
 
   HOME=`mktemp -d`

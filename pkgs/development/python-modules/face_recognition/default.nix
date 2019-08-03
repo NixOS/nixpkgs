@@ -1,25 +1,34 @@
 { buildPythonPackage, fetchFromGitHub, pillow, click, dlib, numpy
-, face_recognition_models, scipy, stdenv, flake8, tox, pytest, glibcLocales
+, face_recognition_models, stdenv, flake8, pytest, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "face_recognition";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "ageitgey";
-    rev = "fe421d4acd76e8a19098e942b7bd9c3bbef6ebc4"; # no tags available in Git, pure revs are pushed to pypi
-    sha256 = "0wv5qxkg7xv1cr43zhhbixaqgj08xw2l7yvwl8g3fb2kdxyndw1c";
+    rev = "634db2e4309a365cee2503cb65d6f2e88f519d1e";
+    sha256 = "06zw5hq417d5yp17zynhxhb73074lx2qy64fqfzf711rw5vrn2mx";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace "flake8==2.6.0" "flake8"
   '';
 
-  propagatedBuildInputs = [ pillow click dlib numpy face_recognition_models scipy ];
+  propagatedBuildInputs = [ pillow click dlib numpy face_recognition_models ];
 
-  checkInputs = [ flake8 tox pytest glibcLocales ];
+  # Our dlib is compiled with AVX instructions by default which breaks
+  # with "Illegal instruction" on some builders due to missing hardware features.
+  #
+  # As this makes the build fairly unreliable, it's better to skip the test and to ensure that
+  # the build is working and after each change to the package, manual testing should be done.
+  doCheck = false;
+
+  # Although tests are disabled by default, checkPhase still exists, so
+  # maintainers can check the package's functionality locally before modifying it.
+  checkInputs = [ flake8 pytest glibcLocales ];
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test
   '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey, curl, help2man, python
+{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey, curl, help2man
 , sphinx, which, file, pkgconfig, getopt }:
 
 stdenv.mkDerivation rec {
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
 
   If you wish to ignore this error pass --enable-js-trunk to ./configure.
   */
-  configureFlags = ''
-    --enable-js-trunk
-  '';
+  configureFlags = [
+    "--enable-js-trunk"
+  ];
 
   meta = with stdenv.lib; {
     description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = http://couchdb.apache.org;
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

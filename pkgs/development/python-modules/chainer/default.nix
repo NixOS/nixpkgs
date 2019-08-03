@@ -1,4 +1,4 @@
-{ stdenv, lib, python
+{ stdenv, lib
 , buildPythonPackage, fetchPypi, isPy3k
 , filelock, protobuf, numpy, pytest, mock
 , cupy, cudaSupport ? false
@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "chainer";
-  version = "3.4.0";
+  version = "5.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7bcd8fc1a39b3602b4a78a0be6012721ba6c8792c4d14773496a4c6d038f886";
+    sha256 = "cc8390a7f445a14a1bc71d54de348be247158fe2813a5ef11c5046265001c8c4";
   };
 
   checkInputs = [

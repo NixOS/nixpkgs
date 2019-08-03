@@ -8,38 +8,39 @@
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , zlib
 , compiler-rt_src
-, libcxxabi
 , debugVersion ? false
 , enableSharedLibraries ? true
 }:
 
-let
-  src = fetch "llvm" "1ybmnid4pw2hxn12ax5qa5kl1ldfns0njg8533y3mzslvd5cx0kf";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
+  src = fetch "llvm" "1ybmnid4pw2hxn12ax5qa5kl1ldfns0njg8533y3mzslvd5cx0kf";
+
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}.src llvm
     sourceRoot=$PWD/llvm
     unpackFile ${compiler-rt_src}
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ]
-    ++ stdenv.lib.optional stdenv.isDarwin libcxxabi;
+  buildInputs = [ perl groff cmake libxml2 python libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
   # Fix a segfault in llc
   # See http://lists.llvm.org/pipermail/llvm-dev/2016-October/106500.html
-  patches = [ ./D17533-1.patch ] ++
-    stdenv.lib.optionals (!stdenv.isDarwin) [./fix-llvm-config.patch];
+  patches = [ ./D17533-1.patch ]
+   ++ stdenv.lib.optional (!stdenv.isDarwin) ./fix-llvm-config.patch
+   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+     ../TLI-musl.patch
+     ../dynamiclibrary-musl.patch
+   ];
 
   # hacky fix: New LLVM releases require a newer macOS SDK than
   # 10.9. This is a temporary measure until nixpkgs darwin support is
@@ -51,7 +52,7 @@ in stdenv.mkDerivation rec {
       --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$out/lib")" \
       --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
   ''
-  + stdenv.lib.optionalString (stdenv ? glibc) ''
+  + ''
     (
       cd projects/compiler-rt
       patch -p1 < ${
@@ -76,6 +77,10 @@ in stdenv.mkDerivation rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
+
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ] ++ stdenv.lib.optional enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
   ] ++ stdenv.lib.optional (!isDarwin)
@@ -83,12 +88,15 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals ( isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    # Not yet supported
+    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+    "-DCOMPILER_RT_BUILD_XRAY=OFF"
+
   ];
 
   postBuild = ''
     rm -fR $out
-
-    paxmark m bin/{lli,llvm-rtdyld}
   '';
 
   postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
@@ -97,13 +105,11 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.src = src;
-
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

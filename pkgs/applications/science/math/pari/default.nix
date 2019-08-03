@@ -1,24 +1,53 @@
-{ stdenv, fetchurl
-, gmp, readline, libX11, libpthreadstubs, tex, perl }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, gmp
+, readline
+, libX11
+, tex
+, perl
+, withThread ? true, libpthreadstubs
+}:
+
+assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
-
-  name = "pari-${version}";
-  version = "2.9.4";
+  pname = "pari";
+  version = "2.11.1";
 
   src = fetchurl {
-    url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "0ir6m3a8r46md5x6zk4xf159qra7aqparby9zk03k81hjrrxr72g";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
+    sha256 = "1jfax92jpydjd02fwl30r6b8kfzqqd6sm4yx94gidyz9lqjb7a94";
   };
 
-  buildInputs = [ gmp readline libX11 libpthreadstubs tex perl ];
+  patches = [
+    # Fix a off-by-one bug that can potentially lead to segfaults (accepted upstream)
+    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2117
+    # https://trac.sagemath.org/ticket/27335
+    (fetchpatch {
+      name = "fix-off-by-one-error.patch";
+      # only relevant parts of https://pari.math.u-bordeaux.fr/cgi-bin/gitweb.cgi?p=pari.git;a=patch;h=aa1ee6e0898d177e6bcf49237d82c804bc410985
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pari/patches/red_montgomery.patch?id=bbea55c96e1f05302b3c7f593cf64492497047c5";
+      sha256 = "0vqkmhgv9splsdswp6zjnkj50z76rc1m6k9iy3cf9dxwqw3h3nr6";
+    })
+  ];
+
+  buildInputs = [
+    gmp
+    readline
+    libX11
+    tex
+    perl
+  ] ++ stdenv.lib.optionals withThread [
+    libpthreadstubs
+  ];
 
   configureScript = "./Configure";
   configureFlags = [
-    "--mt=pthread"
     "--with-gmp=${gmp.dev}"
     "--with-readline=${readline.dev}"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin";
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin"
+  ++ stdenv.lib.optional withThread "--mt=pthread";
 
   preConfigure = ''
     export LD=$CC
@@ -55,10 +84,10 @@ stdenv.mkDerivation rec {
           run 3 or 4 times faster.) gp2c currently only understands a subset
            of the GP language.
     '';
-    homepage    = "http://pari.math.u-bordeaux.fr/";
-    downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
+    homepage    = http://pari.math.u-bordeaux.fr;
+    downloadPage = http://pari.math.u-bordeaux.fr/download.html;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes raskin AndersonTorres ];
+    maintainers = with maintainers; [ ertes raskin AndersonTorres timokau ];
     platforms   = platforms.linux ++ platforms.darwin;
     updateWalker = true;
   };

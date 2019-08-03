@@ -1,23 +1,23 @@
-{ stdenv, lib, fetchurl, file, openssl, mlton
-, mysql, postgresql, sqlite, gcc
+{ stdenv, fetchurl, file, openssl, mlton
+, mysql, postgresql, sqlite, gcc, icu
 }:
 
 stdenv.mkDerivation rec {
   name = "urweb-${version}";
-  version = "20170720";
+  version = "20190217";
 
   src = fetchurl {
-    url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "17qh9mcmlhbv6r52yij8l9ik7j7x6x7c09lf6pznnbdh4sf8p5wb";
+    url = "https://github.com/urweb/urweb/releases/download/${version}/${name}.tar.gz";
+    sha256 = "1cl0x0sy7w1lazszc8q06q3wx0x0rczxh27vimrsw54s6s9y096s";
   };
 
-  buildInputs = [ openssl mlton mysql.connector-c postgresql sqlite ];
+  buildInputs = [ openssl mlton mysql.connector-c postgresql sqlite icu ];
 
   prePatch = ''
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
   '';
 
-  configureFlags = "--with-openssl=${openssl.dev}";
+  configureFlags = [ "--with-openssl=${openssl.dev}" ];
 
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";

@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/open-cobol/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ericsagnes the-kenny ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

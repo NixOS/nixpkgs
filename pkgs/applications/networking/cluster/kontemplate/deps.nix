@@ -5,8 +5,8 @@
     fetch = {
       type   = "git";
       url    = "https://github.com/Masterminds/semver";
-      rev    = "517734cc7d6470c0d07130e40fd40bdeb9bcd3fd";
-      sha256 = "1625b5sxpmlz60jw67j1ljfcc09d4lhxg3z6gc4am8s2rrdgwij6";
+      rev    = "c84ddcca87bf5a941b138dde832a7e20b0159ad8";
+      sha256 = "1dcfdr018a0yszjpvr3wshvq9cc3kvy95l55si556p617wsn1wan";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type   = "git";
       url    = "https://github.com/Masterminds/sprig";
-      rev    = "e039e20e500c2c025d9145be375e27cf42a94174";
-      sha256 = "1yhpyzq6ghwl0242phjpbc9358fcw63pxrcxsyv9n4dm0w15va3m";
+      rev    = "77bb58b7f5e10889a1195c21b9e7a96ee166f199";
+      sha256 = "0q4g12f3nvda1skz33qzbbdd2vj3gjfwf361hyzlx20s71brk3bk";
     };
   }
   {
@@ -50,8 +50,17 @@
     fetch = {
       type   = "git";
       url    = "https://github.com/ghodss/yaml";
-      rev    = "0ca9ea5df5451ffdf184b4428c902747c2c11cd7";
-      sha256 = "0skwmimpy7hlh7pva2slpcplnm912rp3igs98xnqmn859kwa5v8g";
+      rev    = "e9ed3c6dfb39bb1a32197cb10d527906fe4da4b6";
+      sha256 = "07cf0j3wbsl1gmn175mdgljcarfz4xbqd6pgc7b08a5lcn7zwhjz";
+    };
+  }
+  {
+    goPackagePath = "github.com/google/uuid";
+    fetch = {
+      type   = "git";
+      url    = "https://github.com/google/uuid";
+      rev    = "dec09d789f3dba190787f8b4454c7d3c936fed9e";
+      sha256 = "1hc4w67p6zkh2qk7wm1yrl69jjrjjk615mly5ll4iidn1m4mzi4i";
     };
   }
   {
@@ -59,8 +68,8 @@
     fetch = {
       type   = "git";
       url    = "https://github.com/huandu/xstrings";
-      rev    = "3959339b333561bf62a38b424fd41517c2c90f40";
-      sha256 = "0f1jyd80grpr88gwhljx2x0xgsyzw07807n4z4axxxlybh5f0nh1";
+      rev    = "7bb0250b58e5c15670406e6f93ffda43281305b1";
+      sha256 = "1fc8q65xvsxpa12p8hcjqap2pf72zqlwpm165js9kwbgm2sf977c";
     };
   }
   {
@@ -68,17 +77,8 @@
     fetch = {
       type   = "git";
       url    = "https://github.com/imdario/mergo";
-      rev    = "d806ba8c21777d504a2090a2ca4913c750dd3a33";
-      sha256 = "12n3lfbfxvnag916c6dpxl48j29s482zwsqjc6wk4vb68qbz2nl3";
-    };
-  }
-  {
-    goPackagePath = "github.com/satori/go.uuid";
-    fetch = {
-      type   = "git";
-      url    = "https://github.com/satori/go.uuid";
-      rev    = "5bf94b69c6b68ee1b541973bb8e1144db23a194b";
-      sha256 = "0l782l4srv36pj8pfgn61996d0vjifld4a569rbjwq5h14pd0c07";
+      rev    = "9f23e2d6bd2a77f959b2bf6acdbefd708a83a4a4";
+      sha256 = "1lbzy8p8wv439sqgf0n21q52flf2wbamp6qa1jkyv6an0nc952q7";
     };
   }
   {
@@ -86,8 +86,8 @@
     fetch = {
       type   = "git";
       url    = "https://go.googlesource.com/crypto";
-      rev    = "ab89591268e0c8b748cbe4047b00197516011af5";
-      sha256 = "1cbg8wlv1hmdps9ksa4kym5zy0mb2yjykw4ns7yqv7nmz4s5xajr";
+      rev    = "de0752318171da717af4ce24d0a2e8626afaeb11";
+      sha256 = "1ps1dl2a5lwr3vbwcy8n4i1v73m567y024sk961fk281phrzp13i";
     };
   }
   {
@@ -95,8 +95,8 @@
     fetch = {
       type   = "git";
       url    = "https://gopkg.in/alecthomas/kingpin.v2";
-      rev    = "1087e65c9441605df944fb12c33f0fe7072d18ca";
-      sha256 = "18llqzkdqf62qbqcv2fd3j0igl6cwwn4dissf5skkvxrcxjcmmj0";
+      rev    = "947dcec5ba9c011838740e680966fd7087a71d0d";
+      sha256 = "0mndnv3hdngr3bxp7yxfd47cas4prv98sqw534mx7vp38gd88n5r";
     };
   }
   {
@@ -104,8 +104,8 @@
     fetch = {
       type   = "git";
       url    = "https://gopkg.in/yaml.v2";
-      rev    = "eb3733d160e74a9c7e442f435eb3bea458e1d19f";
-      sha256 = "1srhvcaa9db3a6xj29mkjr5kg33y71pclrlx4vcwz5m1lgb5c7q6";
+      rev    = "5420a8b6744d3b0345ab293f6fcba19c978f1183";
+      sha256 = "0dwjrs2lp2gdlscs7bsrmyc5yf6mm4fvgw71bzr9mv2qrd2q73s1";
     };
   }
 ]

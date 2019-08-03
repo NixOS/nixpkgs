@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, aalib, ncurses, xorg, libmikmod }:
+{ stdenv, lib, fetchurl, darwin, aalib, ncurses, xorg, libmikmod }:
 
 stdenv.mkDerivation rec {
   name    = "bb-${version}";
@@ -12,13 +12,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     aalib ncurses libmikmod
     xorg.libXau xorg.libXdmcp xorg.libX11
-  ];
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudio;
 
-  meta = with stdenv.lib; {
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -i -e '/^#include <malloc.h>$/d' *.c
+  '';
+
+  meta = with lib; {
     homepage    = http://aa-project.sourceforge.net/bb;
     description = "AA-lib demo";
     license     = licenses.gpl2;
     maintainers = [ maintainers.rnhmjoj ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }

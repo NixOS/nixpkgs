@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "01lklz7l9klqmmsncikwjnk3glzyz15c30118s82yd1chwpwhpfl";
   };
 
-  server = "${caddy.bin}/bin/caddy";
+  server = "${caddy}/bin/caddy";
   linkcheck = "${linkchecker}/bin/linkchecker";
 
   nativeBuildInputs = [ asciidoctor ];

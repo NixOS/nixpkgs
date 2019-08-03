@@ -9,30 +9,26 @@
 , enableOpenGL ? false, libGLU_combined  ? null
 
 # GUI toolkits
-, enableGTK ? true,  gtk2 ? null, gnome2 ? null, gnome3 ? null
+, enableGTK ? true,  gtk2 ? null, gnome2 ? null
 , enableSDL ? false
 , enableQt  ? false, qt4  ? null
 
 # media
-, enableFFmpeg    ? true,  ffmpeg_2 ? null
-, enableGstreamer ? false, gst-plugins-base ? null
-                         , gst-plugins-ugly ? null
-                         , gst-ffmpeg ? null
+, enableFFmpeg   ? true, ffmpeg_2 ? null
 
 # misc
-, enableJemalloc ? true, jemalloc  ? null
+, enableJemalloc ? true, jemalloc ? null
 , enableHwAccel  ? true
 , enablePlugins  ? false, xulrunner ? null, npapi_sdk ? null
 }:
 
 with stdenv.lib;
 
-let 
+let
   available = x: x != null;
 
   sound =
-    if enableFFmpeg    then "ffmpeg" else
-    if enableGstreamer then "gst"    else "none";
+    if enableFFmpeg then "ffmpeg" else "none";
 
   renderers = []
     ++ optional enableAGG    "agg"
@@ -52,13 +48,12 @@ assert enableCairo  -> available cairo;
 assert enableOpenGL -> available libGLU_combined;
 
 # GUI toolkits
-assert enableGTK -> all available [ gtk2 gnome2.gtkglext gnome3.gconf ];
+assert enableGTK -> all available [ gtk2 gnome2.gtkglext gnome2.GConf ];
 assert enableSDL -> available SDL;
 assert enableQt  -> available qt4;
 
 # media libraries
 assert enableFFmpeg    -> available ffmpeg_2 ;
-assert enableGstreamer -> all available [ gst-plugins-base gst-plugins-ugly gst-ffmpeg ];
 
 # misc
 assert enableJemalloc -> available jemalloc;
@@ -71,12 +66,12 @@ assert length renderers == 0 -> throw "at least one renderer must be enabled";
 
 stdenv.mkDerivation rec {
   name = "gnash-${version}";
-  version = "0.8.11-2017-03-08";
+  version = "0.8.11-2019-30-01";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/gnash.git";
-    rev = "8a11e60585db4ed6bc4eafadfbd9b3123ced45d9";
-    sha256 = "1qas084gc4s9cb2jbwi2s1h4hk7m92xmrsb596sd14h0i44dai02";
+    rev = "583ccbc1275c7701dc4843ec12142ff86bb305b4";
+    sha256 = "0fh0bljn0i6ypyh6l99afi855p7ki7lm869nq1qj6k8hrrwhmfry";
   };
 
   postPatch = ''
@@ -96,8 +91,7 @@ stdenv.mkDerivation rec {
     ++ optional  enableJemalloc  jemalloc
     ++ optional  enableHwAccel   libGLU_combined
     ++ optionals enablePlugins   [ xulrunner npapi_sdk ]
-    ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome3.gconf ]
-    ++ optionals enableGstreamer [ gst-plugins-base gst-plugins-ugly gst-ffmpeg ];
+    ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome2.GConf ];
 
   configureFlags = with stdenv.lib; [
     "--with-boost-incl=${boost.dev}/include"

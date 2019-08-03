@@ -3,7 +3,7 @@
 let
   pname = "otfm";
   version = "0.3.0";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   propagatedBuildInputs = [ uutf result ];
-
-  unpackCmd = "tar xjf $src";
 
   inherit (topkg) buildPhase installPhase;
 

@@ -58,6 +58,9 @@ let
     ${text}
   ''; in "${dir}/bin/${name}";
 
+  defaultInterface = { default = mapAttrs (name: value: cfg."${name}") commonOptions; };
+  allInterfaces = defaultInterface // cfg.interfaces;
+
   startScript = writeShScript "firewall-start" ''
     ${helpers}
 
@@ -123,7 +126,7 @@ let
       # Perform a reverse-path test to refuse spoofers
       # For now, we just drop, as the raw table doesn't have a log-refuse yet
       ip46tables -t raw -N nixos-fw-rpfilter 2> /dev/null || true
-      ip46tables -t raw -A nixos-fw-rpfilter -m rpfilter ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
+      ip46tables -t raw -A nixos-fw-rpfilter -m rpfilter --validmark ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
 
       # Allows this host to act as a DHCP4 client without first having to use APIPA
       iptables -t raw -A nixos-fw-rpfilter -p udp --sport 67 --dport 68 -j RETURN
@@ -148,38 +151,42 @@ let
     ip46tables -A nixos-fw -m conntrack --ctstate ESTABLISHED,RELATED -j nixos-fw-accept
 
     # Accept connections to the allowed TCP ports.
-    ${concatMapStrings (port:
+    ${concatStrings (mapAttrsToList (iface: cfg:
+      concatMapStrings (port:
         ''
-          ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept
+          ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPorts
-    }
+    ) allInterfaces)}
 
     # Accept connections to the allowed TCP port ranges.
-    ${concatMapStrings (rangeAttr:
+    ${concatStrings (mapAttrsToList (iface: cfg:
+      concatMapStrings (rangeAttr:
         let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
         ''
-          ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept
+          ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPortRanges
-    }
+    ) allInterfaces)}
 
     # Accept packets on the allowed UDP ports.
-    ${concatMapStrings (port:
+    ${concatStrings (mapAttrsToList (iface: cfg:
+      concatMapStrings (port:
         ''
-          ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept
+          ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPorts
-    }
+    ) allInterfaces)}
 
     # Accept packets on the allowed UDP port ranges.
-    ${concatMapStrings (rangeAttr:
+    ${concatStrings (mapAttrsToList (iface: cfg:
+      concatMapStrings (rangeAttr:
         let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
         ''
-          ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept
+          ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPortRanges
-    }
+    ) allInterfaces)}
 
     # Accept IPv4 multicast.  Not a big security risk since
     # probably nobody is listening anyway.
@@ -242,6 +249,9 @@ let
 
     # Don't allow traffic to leak out until the script has completed
     ip46tables -A INPUT -j nixos-drop
+
+    ${cfg.extraStopCommands}
+
     if ${startScript}; then
       ip46tables -D INPUT -j nixos-drop 2>/dev/null || true
     else
@@ -251,6 +261,55 @@ let
     fi
   '';
 
+  canonicalizePortList =
+    ports: lib.unique (builtins.sort builtins.lessThan ports);
+
+  commonOptions = {
+    allowedTCPPorts = mkOption {
+      type = types.listOf types.port;
+      default = [ ];
+      apply = canonicalizePortList;
+      example = [ 22 80 ];
+      description =
+        '' 
+          List of TCP ports on which incoming connections are
+          accepted.
+        '';
+    };
+
+    allowedTCPPortRanges = mkOption {
+      type = types.listOf (types.attrsOf types.port);
+      default = [ ];
+      example = [ { from = 8999; to = 9003; } ];
+      description =
+        '' 
+          A range of TCP ports on which incoming connections are
+          accepted.
+        '';
+    };
+
+    allowedUDPPorts = mkOption {
+      type = types.listOf types.port;
+      default = [ ];
+      apply = canonicalizePortList;
+      example = [ 53 ];
+      description =
+        ''
+          List of open UDP ports.
+        '';
+    };
+
+    allowedUDPPortRanges = mkOption {
+      type = types.listOf (types.attrsOf types.port);
+      default = [ ];
+      example = [ { from = 60000; to = 61000; } ];
+      description =
+        ''
+          Range of open UDP ports.
+        '';
+    };
+  };
+
 in
 
 {
@@ -259,243 +318,212 @@ in
 
   options = {
 
-    networking.firewall.enable = mkOption {
-      type = types.bool;
-      default = true;
-      description =
-        ''
-          Whether to enable the firewall.  This is a simple stateful
-          firewall that blocks connection attempts to unauthorised TCP
-          or UDP ports on this machine.  It does not affect packet
-          forwarding.
-        '';
-    };
+    networking.firewall = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          ''
+            Whether to enable the firewall.  This is a simple stateful
+            firewall that blocks connection attempts to unauthorised TCP
+            or UDP ports on this machine.  It does not affect packet
+            forwarding.
+          '';
+      };
 
-    networking.firewall.logRefusedConnections = mkOption {
-      type = types.bool;
-      default = true;
-      description =
-        ''
-          Whether to log rejected or dropped incoming connections.
-        '';
-    };
+      logRefusedConnections = mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          ''
+            Whether to log rejected or dropped incoming connections.
+          '';
+      };
 
-    networking.firewall.logRefusedPackets = mkOption {
-      type = types.bool;
-      default = false;
-      description =
-        ''
-          Whether to log all rejected or dropped incoming packets.
-          This tends to give a lot of log messages, so it's mostly
-          useful for debugging.
-        '';
-    };
+      logRefusedPackets = mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          ''
+            Whether to log all rejected or dropped incoming packets.
+            This tends to give a lot of log messages, so it's mostly
+            useful for debugging.
+          '';
+      };
 
-    networking.firewall.logRefusedUnicastsOnly = mkOption {
-      type = types.bool;
-      default = true;
-      description =
-        ''
-          If <option>networking.firewall.logRefusedPackets</option>
-          and this option are enabled, then only log packets
-          specifically directed at this machine, i.e., not broadcasts
-          or multicasts.
-        '';
-    };
+      logRefusedUnicastsOnly = mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          ''
+            If <option>networking.firewall.logRefusedPackets</option>
+            and this option are enabled, then only log packets
+            specifically directed at this machine, i.e., not broadcasts
+            or multicasts.
+          '';
+      };
 
-    networking.firewall.rejectPackets = mkOption {
-      type = types.bool;
-      default = false;
-      description =
-        ''
-          If set, refused packets are rejected rather than dropped
-          (ignored).  This means that an ICMP "port unreachable" error
-          message is sent back to the client (or a TCP RST packet in
-          case of an existing connection).  Rejecting packets makes
-          port scanning somewhat easier.
-        '';
-    };
+      rejectPackets = mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          ''
+            If set, refused packets are rejected rather than dropped
+            (ignored).  This means that an ICMP "port unreachable" error
+            message is sent back to the client (or a TCP RST packet in
+            case of an existing connection).  Rejecting packets makes
+            port scanning somewhat easier.
+          '';
+      };
 
-    networking.firewall.trustedInterfaces = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      example = [ "enp0s2" ];
-      description =
-        ''
-          Traffic coming in from these interfaces will be accepted
-          unconditionally.  Traffic from the loopback (lo) interface
-          will always be accepted.
-        '';
-    };
+      trustedInterfaces = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "enp0s2" ];
+        description =
+          ''
+            Traffic coming in from these interfaces will be accepted
+            unconditionally.  Traffic from the loopback (lo) interface
+            will always be accepted.
+          '';
+      };
 
-    networking.firewall.allowedTCPPorts = mkOption {
-      type = types.listOf types.int;
-      default = [ ];
-      example = [ 22 80 ];
-      description =
-        ''
-          List of TCP ports on which incoming connections are
-          accepted.
-        '';
-    };
+      allowPing = mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          ''
+            Whether to respond to incoming ICMPv4 echo requests
+            ("pings").  ICMPv6 pings are always allowed because the
+            larger address space of IPv6 makes network scanning much
+            less effective.
+          '';
+      };
 
-    networking.firewall.allowedTCPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.int);
-      default = [ ];
-      example = [ { from = 8999; to = 9003; } ];
-      description =
-        ''
-          A range of TCP ports on which incoming connections are
-          accepted.
-        '';
-    };
+      pingLimit = mkOption {
+        type = types.nullOr (types.separatedString " ");
+        default = null;
+        example = "--limit 1/minute --limit-burst 5";
+        description =
+          ''
+            If pings are allowed, this allows setting rate limits
+            on them.  If non-null, this option should be in the form of
+            flags like "--limit 1/minute --limit-burst 5"
+          '';
+      };
 
-    networking.firewall.allowedUDPPorts = mkOption {
-      type = types.listOf types.int;
-      default = [ ];
-      example = [ 53 ];
-      description =
-        ''
-          List of open UDP ports.
-        '';
-    };
+      checkReversePath = mkOption {
+        type = types.either types.bool (types.enum ["strict" "loose"]);
+        default = kernelHasRPFilter;
+        example = "loose";
+        description =
+          ''
+            Performs a reverse path filter test on a packet.  If a reply
+            to the packet would not be sent via the same interface that
+            the packet arrived on, it is refused.
 
-    networking.firewall.allowedUDPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.int);
-      default = [ ];
-      example = [ { from = 60000; to = 61000; } ];
-      description =
-        ''
-          Range of open UDP ports.
-        '';
-    };
+            If using asymmetric routing or other complicated routing, set
+            this option to loose mode or disable it and setup your own
+            counter-measures.
 
-    networking.firewall.allowPing = mkOption {
-      type = types.bool;
-      default = true;
-      description =
-        ''
-          Whether to respond to incoming ICMPv4 echo requests
-          ("pings").  ICMPv6 pings are always allowed because the
-          larger address space of IPv6 makes network scanning much
-          less effective.
-        '';
-    };
+            This option can be either true (or "strict"), "loose" (only
+            drop the packet if the source address is not reachable via any
+            interface) or false.  Defaults to the value of
+            kernelHasRPFilter.
 
-    networking.firewall.pingLimit = mkOption {
-      type = types.nullOr (types.separatedString " ");
-      default = null;
-      example = "--limit 1/minute --limit-burst 5";
-      description =
-        ''
-          If pings are allowed, this allows setting rate limits
-          on them.  If non-null, this option should be in the form of
-          flags like "--limit 1/minute --limit-burst 5"
-        '';
-    };
+            (needs kernel 3.3+)
+          '';
+      };
 
-    networking.firewall.checkReversePath = mkOption {
-      type = types.either types.bool (types.enum ["strict" "loose"]);
-      default = kernelHasRPFilter;
-      example = "loose";
-      description =
-        ''
-          Performs a reverse path filter test on a packet.  If a reply
-          to the packet would not be sent via the same interface that
-          the packet arrived on, it is refused.
+      logReversePathDrops = mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          ''
+            Logs dropped packets failing the reverse path filter test if
+            the option networking.firewall.checkReversePath is enabled.
+          '';
+      };
 
-          If using asymmetric routing or other complicated routing, set
-          this option to loose mode or disable it and setup your own
-          counter-measures.
+      connectionTrackingModules = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "ftp" "irc" "sane" "sip" "tftp" "amanda" "h323" "netbios_sn" "pptp" "snmp" ];
+        description =
+          ''
+            List of connection-tracking helpers that are auto-loaded.
+            The complete list of possible values is given in the example.
 
-          This option can be either true (or "strict"), "loose" (only
-          drop the packet if the source address is not reachable via any
-          interface) or false.  Defaults to the value of
-          kernelHasRPFilter.
+            As helpers can pose as a security risk, it is advised to
+            set this to an empty list and disable the setting
+            networking.firewall.autoLoadConntrackHelpers unless you
+            know what you are doing. Connection tracking is disabled
+            by default.
 
-          (needs kernel 3.3+)
-        '';
-    };
+            Loading of helpers is recommended to be done through the
+            CT target.  More info:
+            https://home.regit.org/netfilter-en/secure-use-of-helpers/
+          '';
+      };
 
-    networking.firewall.logReversePathDrops = mkOption {
-      type = types.bool;
-      default = false;
-      description =
-        ''
-          Logs dropped packets failing the reverse path filter test if
-          the option networking.firewall.checkReversePath is enabled.
-        '';
-    };
+      autoLoadConntrackHelpers = mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          ''
+            Whether to auto-load connection-tracking helpers.
+            See the description at networking.firewall.connectionTrackingModules
 
-    networking.firewall.connectionTrackingModules = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      example = [ "ftp" "irc" "sane" "sip" "tftp" "amanda" "h323" "netbios_sn" "pptp" "snmp" ];
-      description =
-        ''
-          List of connection-tracking helpers that are auto-loaded.
-          The complete list of possible values is given in the example.
+            (needs kernel 3.5+)
+          '';
+      };
 
-          As helpers can pose as a security risk, it is advised to
-          set this to an empty list and disable the setting
-          networking.firewall.autoLoadConntrackHelpers unless you
-          know what you are doing. Connection tracking is disabled
-          by default.
+      extraCommands = mkOption {
+        type = types.lines;
+        default = "";
+        example = "iptables -A INPUT -p icmp -j ACCEPT";
+        description =
+          ''
+            Additional shell commands executed as part of the firewall
+            initialisation script.  These are executed just before the
+            final "reject" firewall rule is added, so they can be used
+            to allow packets that would otherwise be refused.
+          '';
+      };
 
-          Loading of helpers is recommended to be done through the
-          CT target.  More info:
-          https://home.regit.org/netfilter-en/secure-use-of-helpers/
-        '';
-    };
+      extraPackages = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        example = literalExample "[ pkgs.ipset ]";
+        description =
+          ''
+            Additional packages to be included in the environment of the system
+            as well as the path of networking.firewall.extraCommands.
+          '';
+      };
 
-    networking.firewall.autoLoadConntrackHelpers = mkOption {
-      type = types.bool;
-      default = false;
-      description =
-        ''
-          Whether to auto-load connection-tracking helpers.
-          See the description at networking.firewall.connectionTrackingModules
+      extraStopCommands = mkOption {
+        type = types.lines;
+        default = "";
+        example = "iptables -P INPUT ACCEPT";
+        description =
+          ''
+            Additional shell commands executed as part of the firewall
+            shutdown script.  These are executed just after the removal
+            of the NixOS input rule, or if the service enters a failed
+            state.
+          '';
+      };
 
-          (needs kernel 3.5+)
-        '';
-    };
-
-    networking.firewall.extraCommands = mkOption {
-      type = types.lines;
-      default = "";
-      example = "iptables -A INPUT -p icmp -j ACCEPT";
-      description =
-        ''
-          Additional shell commands executed as part of the firewall
-          initialisation script.  These are executed just before the
-          final "reject" firewall rule is added, so they can be used
-          to allow packets that would otherwise be refused.
-        '';
-    };
-
-    networking.firewall.extraPackages = mkOption {
-      type = types.listOf types.package;
-      default = [ ];
-      example = literalExample "[ pkgs.ipset ]";
-      description =
-        ''
-          Additional packages to be included in the environment of the system
-          as well as the path of networking.firewall.extraCommands.
-        '';
-    };
-
-    networking.firewall.extraStopCommands = mkOption {
-      type = types.lines;
-      default = "";
-      example = "iptables -P INPUT ACCEPT";
-      description =
-        ''
-          Additional shell commands executed as part of the firewall
-          shutdown script.  These are executed just after the removal
-          of the NixOS input rule, or if the service enters a failed
-          state.
-        '';
-    };
+      interfaces = mkOption {
+        default = { };
+        type = with types; attrsOf (submodule [ { options = commonOptions; } ]);
+        description =
+          ''
+            Interface-specific open ports.
+          '';
+      };
+    } // commonOptions;
 
   };
 

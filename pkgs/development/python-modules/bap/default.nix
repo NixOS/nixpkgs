@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "bap";
   version = "1.3.1";
-  name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap-python";

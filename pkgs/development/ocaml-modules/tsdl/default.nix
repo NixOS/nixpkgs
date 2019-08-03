@@ -7,7 +7,7 @@ else
 let
   pname = "tsdl";
   version = "0.9.4";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 stdenv.mkDerivation {
@@ -21,8 +21,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ocaml findlib ocamlbuild topkg result ocb-stubblr ];
   propagatedBuildInputs = [ SDL2 ctypes ];
-
-  unpackCmd = "tar xjf $src";
 
   preConfigure = ''
     # The following is done to avoid an additional dependency (ncurses)

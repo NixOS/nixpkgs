@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-daemon";
-  version = "2.1.2";
+  version = "2.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "261c859be5c12ae7d4286dc6951e87e9e1a70a882a8b41fd926efc1ec4214f73";
+    sha256 = "affeca9e5adfce2666a63890af9d6aff79f670f7511899edaddca7f96593cc25";
   };
 
   # A test fail within chroot builds.
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to implement a well-behaved Unix daemon process";
-    homepage = https://alioth.debian.org/projects/python-daemon/;
+    homepage = "https://pagure.io/python-daemon/";
     license = [ licenses.gpl3Plus licenses.asl20 ];
   };
 }
