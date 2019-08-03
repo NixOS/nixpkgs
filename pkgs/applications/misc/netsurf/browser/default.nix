@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpng, openssl, curl, gtk2, check, SDL
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libpng, openssl, curl, gtk2, check, SDL
 , libxml2, libidn, perl, nettools, perlPackages, xxd
 , libXcursor, libXrandr, makeWrapper
 , libwebp
@@ -32,6 +32,15 @@ stdenv.mkDerivation rec {
     url = "http://download.netsurf-browser.org/netsurf/releases/source/netsurf-${version}-src.tar.gz";
     sha256 = "1hzcm2s2wh5sapgr000lg63hcdbj6hyajxl43xa1x80kc5piqbyp";
   };
+
+  patches = [
+    # GTK: prefer using curl's intrinsic defaults for CURLOPT_CA*
+    (fetchpatch {
+	  name = "0001-GTK-prefer-using-curl-s-intrinsic-defaults-for-CURLO.patch";
+      url = "http://source.netsurf-browser.org/netsurf.git/patch/?id=87177d8aa109206d131e0d80a2080ce55dab01c7";
+      sha256 = "08bc60pc5k5qpckqv21zgmgszj3rpwskfc84shs8vg92vkimv2ai";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig
