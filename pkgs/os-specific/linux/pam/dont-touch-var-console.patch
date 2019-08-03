@@ -1,0 +1,9 @@
+diff --git a/modules/pam_console/Makefile.am b/modules/pam_console/Makefile.am
+index 3dee4ff..592c970 100644
+--- a/modules/pam_console/Makefile.am
++++ b/modules/pam_console/Makefile.am
+@@ -64,4 +64,3 @@ configfile.c: configfile.tab.c configfile.lex.c
+ install-data-local:
+ 	mkdir -p $(DESTDIR)$(secureconfdir)/console.apps
+ 	mkdir -p $(DESTDIR)$(permsddir)
+-	mkdir -m $(LOCKMODE) -p -p $(DESTDIR)$(LOCKDIR)
