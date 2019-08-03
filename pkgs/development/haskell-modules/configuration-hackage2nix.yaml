@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 13.27
+  # LTS Haskell 13.30
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -345,6 +345,7 @@ default-package-overrides:
   - bzlib ==0.5.0.5
   - bzlib-conduit ==0.3.0.1
   - c2hs ==0.28.6
+  - Cabal ==2.4.1.0
   - cabal2spec ==2.2.2.1
   - cabal-doctest ==1.0.6
   - cabal-rpm ==0.12.6
@@ -901,6 +902,7 @@ default-package-overrides:
   - hashids ==1.0.2.4
   - hashmap ==1.3.3
   - hashtables ==1.2.3.3
+  - haskeline ==0.7.5.0
   - haskell-gi ==0.21.5
   - haskell-gi-base ==0.21.5
   - haskell-gi-overloading ==1.0
@@ -1375,6 +1377,7 @@ default-package-overrides:
   - mono-traversable ==1.0.11.0
   - mono-traversable-instances ==0.1.0.0
   - mountpoints ==1.0.2
+  - mtl ==2.2.2
   - mtl-compat ==0.2.2
   - mtl-prelude ==2.0.3.1
   - multiarg ==0.30.0.10
@@ -1500,6 +1503,7 @@ default-package-overrides:
   - parallel-io ==0.3.3
   - paripari ==0.6.0.0
   - parseargs ==0.2.0.9
+  - parsec ==3.1.13.0
   - parsec-class ==1.0.0.0
   - parsec-numbers ==0.1.0
   - parsec-numeric ==0.1.0.0
@@ -1913,6 +1917,7 @@ default-package-overrides:
   - statistics ==0.15.0.0
   - stb-image-redux ==0.2.1.2
   - step-function ==0.2
+  - stm ==2.5.0.0
   - stm-chans ==3.0.0.4
   - stm-conduit ==4.0.1
   - stm-delay ==0.1.1.1
@@ -2021,6 +2026,7 @@ default-package-overrides:
   - testing-feat ==1.1.0.0
   - testing-type-modifiers ==0.1.0.1
   - texmath ==0.11.2.2
+  - text ==1.2.3.1
   - text-binary ==0.2.1.1
   - text-builder ==0.6.5.1
   - text-conversions ==0.3.0
@@ -2277,6 +2283,7 @@ default-package-overrides:
   - xdg-basedir ==0.2.2
   - xeno ==0.3.5.1
   - xenstore ==0.1.1
+  - xhtml ==3000.2.2.1
   - xls ==0.1.2
   - xlsx ==0.7.2
   - xlsx-tabular ==0.2.2.1
@@ -2427,6 +2434,7 @@ package-maintainers:
     - funcmp
     - git-annex
     - hackage-db
+    - haskell-ci
     - hledger
     - hledger-interest
     - hledger-ui
@@ -2791,6 +2799,7 @@ broken-packages:
   - apelsin
   - api-builder
   - api-tools
+  - api-yoti
   - apiary
   - apiary-authenticate
   - apiary-clientsession
@@ -2887,6 +2896,7 @@ broken-packages:
   - atomic-primops-vector
   - atomo
   - ats-format
+  - ats-pkg
   - ats-setup
   - ats-storable
   - attic-schedule
@@ -2956,7 +2966,9 @@ broken-packages:
   - azurify
   - b9
   - babylon
+  - backblaze-b2-hs
   - backdropper
+  - backstop
   - backtracking-exceptions
   - backward-state
   - bag
@@ -3003,6 +3015,7 @@ broken-packages:
   - bdcs-api
   - beam
   - beam-newtype-field
+  - beam-postgres
   - beam-th
   - beamable
   - beautifHOL
@@ -3171,6 +3184,7 @@ broken-packages:
   - blunt
   - BNFC-meta
   - bno055-haskell
+  - board-games
   - bogre-banana
   - bolt
   - boltzmann-brain
@@ -3183,11 +3197,13 @@ broken-packages:
   - boolexpr
   - boombox
   - boomslang
+  - boots
   - borel
   - boring-window-switcher
   - bot
   - bounded-array
   - bowntz
+  - box
   - braid
   - brain-bleep
   - Bravo
@@ -3319,6 +3335,7 @@ broken-packages:
   - call-haskell-from-anything
   - camfort
   - campfire
+  - canon
   - canonical-filepath
   - canonical-json
   - canteven-http
@@ -3413,6 +3430,9 @@ broken-packages:
   - checked
   - Checked
   - checkmate
+  - chell
+  - chell-hunit
+  - chell-quickcheck
   - chessIO
   - chevalier-common
   - chiasma
@@ -3743,6 +3763,7 @@ broken-packages:
   - crf-chain2-generic
   - crf-chain2-tiers
   - critbit
+  - criterion-compare
   - criterion-plus
   - criterion-to-html
   - criu-rpc
@@ -3863,6 +3884,7 @@ broken-packages:
   - data-type
   - data-util
   - data-variant
+  - database-id-groundhog
   - database-study
   - datadog
   - datadog-tracing
@@ -3974,8 +3996,11 @@ broken-packages:
   - dgim
   - dgs
   - dhall-check
+  - dhall-lsp-server
   - dhall-nix
+  - dhall-to-cabal
   - dhcp-lease-parser
+  - dhrun
   - dia-base
   - dia-functions
   - diagrams-boolean
@@ -4029,7 +4054,6 @@ broken-packages:
   - dirtree
   - discogs-haskell
   - discord-gateway
-  - discord-haskell
   - discord-hs
   - discord-rest
   - discord-types
@@ -4192,6 +4216,7 @@ broken-packages:
   - effect-handlers
   - effect-stack
   - effin
+  - egison
   - egison-quote
   - egison-tutorial
   - ehaskell
@@ -4232,6 +4257,7 @@ broken-packages:
   - entangle
   - EntrezHTTP
   - entwine
+  - enum-text-rio
   - EnumContainers
   - enumerate
   - enumerate-function
@@ -4500,6 +4526,7 @@ broken-packages:
   - FM-SBLEX
   - fmark
   - FModExRaw
+  - fmt-for-rio
   - fn-extra
   - foldl-incremental
   - foldl-statistics
@@ -4629,6 +4656,7 @@ broken-packages:
   - gact
   - game-probability
   - gameclock
+  - gamgee
   - Gamgine
   - gamma
   - Ganymede
@@ -4743,6 +4771,7 @@ broken-packages:
   - ghcjs-promise
   - ghcjs-xhr
   - ghclive
+  - ghcprofview
   - ght
   - gi-cairo-again
   - gi-dbusmenu
@@ -4756,7 +4785,12 @@ broken-packages:
   - gi-gstpbutils
   - gi-gsttag
   - gi-gstvideo
+  - gi-gtk
+  - gi-gtk-declarative
+  - gi-gtk-declarative-app-simple
+  - gi-gtk-hs
   - gi-gtkosxapplication
+  - gi-gtksource
   - gi-handy
   - gi-notify
   - gi-ostree
@@ -4764,6 +4798,7 @@ broken-packages:
   - gi-poppler
   - gi-secret
   - gi-soup
+  - gi-vte
   - gi-wnck
   - gi-xlib
   - giak
@@ -4945,6 +4980,7 @@ broken-packages:
   - gtfs
   - gtk-serialized-event
   - gtk-sni-tray
+  - gtk-strut
   - gtk-toy
   - gtk2hs-hello
   - gtk2hs-rpn
@@ -5109,6 +5145,7 @@ broken-packages:
   - hArduino
   - hardware-edsl
   - HaRe
+  - harg
   - hark
   - harmony
   - HarmTrace
@@ -5512,6 +5549,7 @@ broken-packages:
   - hjson-query
   - hjsonpointer
   - hjsonschema
+  - hjugement-cli
   - HJVM
   - hkgr
   - hlatex
@@ -5999,8 +6037,10 @@ broken-packages:
   - identifiers
   - idiii
   - idna2008
+  - idris
   - IDynamic
   - ieee-utils
+  - iexcloud
   - ifcxt
   - IFS
   - ig
@@ -6323,6 +6363,8 @@ broken-packages:
   - ks-test
   - KSP
   - ktx
+  - kubernetes-client
+  - kubernetes-client-core
   - kure
   - kure-your-boilerplate
   - KyotoCabinet
@@ -6339,6 +6381,7 @@ broken-packages:
   - lambda-calculator
   - lambda-canvas
   - lambda-devs
+  - lambda-options
   - lambda-toolbox
   - lambda2js
   - lambdaBase
@@ -6740,6 +6783,7 @@ broken-packages:
   - marxup
   - masakazu-bot
   - MASMGen
+  - massiv-test
   - master-plan
   - matchers
   - math-grads
@@ -6791,6 +6835,7 @@ broken-packages:
   - mellon-gpio
   - mellon-web
   - melody
+  - membrain
   - memcache-conduit
   - memcache-haskell
   - memcached-binary
@@ -7140,6 +7185,7 @@ broken-packages:
   - network-netpacket
   - network-protocol-xmpp
   - network-rpca
+  - network-run
   - network-server
   - network-service
   - network-simple
@@ -7316,6 +7362,7 @@ broken-packages:
   - optional
   - options-time
   - optparse-applicative-simple
+  - optparse-enum
   - orc
   - orchestrate
   - OrchestrateDB
@@ -7371,6 +7418,7 @@ broken-packages:
   - pang-a-lambda
   - pangraph
   - panpipe
+  - pantry
   - pantry-tmp
   - papa-export
   - papa-implement
@@ -7419,6 +7467,7 @@ broken-packages:
   - pasta
   - pastis
   - pasty
+  - patat
   - patches-vector
   - Pathfinder
   - pathfindingcore
@@ -7653,6 +7702,7 @@ broken-packages:
   - postgresql-named
   - postgresql-query
   - postgresql-simple-bind
+  - postgresql-simple-named
   - postgresql-simple-queue
   - postgresql-simple-sop
   - postgresql-simple-typed
@@ -7979,8 +8029,10 @@ broken-packages:
   - Referees
   - refh
   - reflection-extras
+  - reflex
   - reflex-animation
   - reflex-backend-wai
+  - reflex-basic-host
   - reflex-dom-svg
   - reflex-gloss
   - reflex-gloss-scene
@@ -8104,6 +8156,8 @@ broken-packages:
   - rfc1413-server
   - rhythm-game-tutorial
   - RichConditional
+  - ridley
+  - ridley-extras
   - riemann
   - riff
   - ring-buffer
@@ -8263,6 +8317,7 @@ broken-packages:
   - scotty-binding-play
   - scotty-blaze
   - scotty-fay
+  - scotty-form
   - scotty-format
   - scotty-hastache
   - scotty-resource
@@ -8773,6 +8828,7 @@ broken-packages:
   - statsd-client
   - statsdi
   - stb-image-redux
+  - stc-lang
   - stdata
   - stdf
   - stdio
@@ -8802,6 +8858,7 @@ broken-packages:
   - StrappedTemplates
   - stratum-tool
   - stratux
+  - stratux-demo
   - stratux-http
   - stratux-types
   - stratux-websockets
@@ -8896,6 +8953,7 @@ broken-packages:
   - symantic-cli
   - symantic-http-test
   - symantic-lib
+  - symantic-xml
   - symengine
   - symengine-hs
   - sync
@@ -9017,6 +9075,7 @@ broken-packages:
   - terminal-punch
   - terminal-text
   - termination-combinators
+  - termonad
   - termplot
   - terntup
   - terrahs
@@ -9187,6 +9246,7 @@ broken-packages:
   - trace-function-call
   - traced
   - tracetree
+  - tracing
   - tracker
   - traction
   - tracy
@@ -9208,6 +9268,8 @@ broken-packages:
   - translatable-intset
   - translate
   - translate-cli
+  - trasa-extra
+  - trasa-th
   - travis
   - travis-meta-yaml
   - trawl
@@ -9386,6 +9448,7 @@ broken-packages:
   - unsequential
   - unused
   - uom-plugin
+  - up
   - update-nix-fetchgit
   - Updater
   - uploadcare
@@ -9405,6 +9468,7 @@ broken-packages:
   - urldecode
   - UrlDisp
   - urldisp-happstack
+  - urlpath
   - URLT
   - urn
   - urn-random
@@ -9489,6 +9553,7 @@ broken-packages:
   - verilog
   - versioning
   - versioning-servant
+  - vflow-types
   - vfr-waypoints
   - vgrep
   - vhd
@@ -9682,6 +9747,7 @@ broken-packages:
   - writer-cps-lens
   - writer-cps-monads-tf
   - writer-cps-morph
+  - ws
   - wsdl
   - wsedit
   - wss-client
@@ -9702,6 +9768,7 @@ broken-packages:
   - wxSimpleCanvas
   - wxturtle
   - wyvern
+  - X
   - x-dsp
   - X11-extras
   - X11-rm
@@ -9808,6 +9875,7 @@ broken-packages:
   - yate
   - yavie
   - yaya
+  - yaya-hedgehog
   - yaya-unsafe
   - ycextra
   - yeller
