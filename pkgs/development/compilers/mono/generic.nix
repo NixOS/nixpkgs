@@ -22,9 +22,6 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
 
-  # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
-  dontDisableStatic = true;
-
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
     "--x-libraries=${libX11.out}/lib"
