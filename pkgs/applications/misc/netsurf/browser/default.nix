@@ -86,8 +86,15 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/Netsurf/${uilib}
     cmd=$(case "${uilib}" in framebuffer) echo nsfb;; gtk) echo nsgtk;; esac)
     cp $cmd $out/bin/netsurf
-    wrapProgram $out/bin/netsurf --set NETSURFRES $out/share/Netsurf/${uilib}/res
     tar -hcf - frontends/${uilib}/res | (cd $out/share/Netsurf/ && tar -xvpf -)
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set NETSURFRES $out/share/Netsurf/${uilib}/res
+    )
+  '' + stdenv.lib.optionalString (uilib != "gtk") ''
+    wrapProgram $out/bin/netsurf "''${gappsWrapperArgs[@]}"
   '';
 
   meta = with stdenv.lib; {
