@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, scdoc
-, systemd, pango, cairo, gdk_pixbuf
+, systemd, pango, cairo, gdk-pixbuf
 , wayland, wayland-protocols }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig scdoc wayland-protocols ];
-  buildInputs = [ systemd pango cairo gdk_pixbuf wayland ];
+  buildInputs = [ systemd pango cairo gdk-pixbuf wayland ];
 
   mesonFlags = [ "-Dzsh-completions=true" ];
 

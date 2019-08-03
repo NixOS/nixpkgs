@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, atk, cairo, dmd, gdk_pixbuf, gnome3, gst_all_1, librsvg
+{ stdenv, fetchzip, atk, cairo, dmd, gdk-pixbuf, gnome3, gst_all_1, librsvg
 , glib, gtk3, gtksourceview, libgda, libpeas, pango, pkgconfig, which, vte }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dmd pkgconfig which ];
   propagatedBuildInputs = [
-    atk cairo gdk_pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview
+    atk cairo gdk-pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview
     libgda libpeas librsvg pango vte
   ];
 
@@ -28,8 +28,8 @@ in stdenv.mkDerivation rec {
       --replace libcairo.so.2 ${cairo}/lib/libcairo.so.2 \
       --replace libcairo.dylib ${cairo}/lib/libcairo.dylib
     substituteInPlace generated/gtkd/gdkpixbuf/c/functions.d \
-      --replace libgdk_pixbuf-2.0.so.0 ${gdk_pixbuf}/lib/libgdk_pixbuf-2.0.so.0 \
-      --replace libgdk_pixbuf-2.0.0.dylib ${gdk_pixbuf}/lib/libgdk_pixbuf-2.0.0.dylib
+      --replace libgdk_pixbuf-2.0.so.0 ${gdk-pixbuf}/lib/libgdk_pixbuf-2.0.so.0 \
+      --replace libgdk_pixbuf-2.0.0.dylib ${gdk-pixbuf}/lib/libgdk_pixbuf-2.0.0.dylib
     substituteInPlace generated/gtkd/atk/c/functions.d \
       --replace libatk-1.0.so.0 ${atk}/lib/libatk-1.0.so.0 \
       --replace libatk-1.0.0.dylib ${atk}/lib/libatk-1.0.0.dylib

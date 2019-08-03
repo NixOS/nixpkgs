@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, python3, xmlbird,
-cairo, gdk_pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala,
+cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala,
 gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ python3 pkgconfig vala gobject-introspection wrapGAppsHook ];
-  buildInputs = [ xmlbird libgee cairo gdk_pixbuf glib gtk3 webkitgtk libnotify sqlite gsettings-desktop-schemas ];
+  buildInputs = [ xmlbird libgee cairo gdk-pixbuf glib gtk3 webkitgtk libnotify sqlite gsettings-desktop-schemas ];
 
   postPatch = "patchShebangs .";
 

@@ -22,15 +22,27 @@ buildPythonPackage rec {
     sha256 = "0g8xl4158ngyhiynrkk72jpawnk4isznbijz0w085g269fps0vp2";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  checkInputs = [
+    pytest
+    matplotlib
+    sympy
+    pytestcov
+  ];
 
   buildInputs = [ glibcLocales ];
-  checkInputs = [ matplotlib sympy pytestcov pytest ];
-  propagatedBuildInputs = [ coverage ipykernel jupyter_client nbformat pytest six ];
+
+  propagatedBuildInputs = [
+    coverage
+    ipykernel
+    jupyter_client
+    nbformat
+    pytest
+    six
+  ];
 
   # ignore impure tests
   checkPhase = ''
-    pytest tests --current-env --ignore tests/test_timeouts.py
+    pytest tests --ignore tests/test_timeouts.py
   '';
 
   meta = with lib; {

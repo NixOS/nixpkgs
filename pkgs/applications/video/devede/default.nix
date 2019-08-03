@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, python3Packages, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor
-, gtk3, gettext, wrapGAppsHook, gdk_pixbuf, gobject-introspection }:
+, gtk3, gettext, wrapGAppsHook, gdk-pixbuf, gobject-introspection }:
 
 let
   inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3;
@@ -34,7 +34,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    gtk3 pygobject3 gdk_pixbuf dbus-python ffmpeg mplayer dvdauthor vcdimager cdrkit urllib3
+    gtk3 pygobject3 gdk-pixbuf dbus-python ffmpeg mplayer dvdauthor vcdimager cdrkit urllib3
   ];
 
   postPatch = ''

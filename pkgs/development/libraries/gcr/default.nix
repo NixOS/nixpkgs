@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnupg, p11-kit, glib
-, libgcrypt, libtasn1, dbus-glib, gtk3, pango, gdk_pixbuf, atk
+, libgcrypt, libtasn1, dbus-glib, gtk3, pango, gdk-pixbuf, atk
 , gobject-introspection, makeWrapper, libxslt, vala, gnome3
 , python2 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = let
     gpg = gnupg.override { guiSupport = false; }; # prevent build cycle with pinentry_gnome
   in [
-    gpg libgcrypt libtasn1 dbus-glib pango gdk_pixbuf atk
+    gpg libgcrypt libtasn1 dbus-glib pango gdk-pixbuf atk
   ];
 
   propagatedBuildInputs = [ glib gtk3 p11-kit ];

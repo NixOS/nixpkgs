@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, gdk_pixbuf
+, gdk-pixbuf
 , gtk3
 , gettext
 , ninja
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pantheon.elementary-icon-theme
     pantheon.granite
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     json-glib
     libevdev

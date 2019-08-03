@@ -2,7 +2,7 @@
 
 # Dynamic libraries
 , alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
-, gdk_pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
+, gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
 , libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
 , libxcb, libuuid, nspr, nss, pango
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     cups
     dbus
     expat
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk3
     libX11

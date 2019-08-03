@@ -592,6 +592,8 @@ in {
 
   glymur = callPackage ../development/python-modules/glymur { };
 
+  glob2 = callPackage ../development/python-modules/glob2 { };
+
   glom = callPackage ../development/python-modules/glom { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
@@ -3852,9 +3854,18 @@ in {
 
   Nuitka = callPackage ../development/python-modules/nuitka { };
 
-  numpy = callPackage ../development/python-modules/numpy {
-    blas = pkgs.openblasCompat;
-  };
+  numpy = let
+    numpy_ = callPackage ../development/python-modules/numpy {
+      blas = pkgs.openblasCompat;
+    };
+    numpy_2 = numpy_.overridePythonAttrs(oldAttrs: rec {
+      version = "1.16.4";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "1ivrwh66cmly7xh1dl7pybizfz5rcicn4kkkx5g29v4gll9bwhkj";
+      };
+    });
+  in if pythonOlder "3.5" then numpy_2 else numpy_;
 
   numpydoc = callPackage ../development/python-modules/numpydoc { };
 
@@ -3916,8 +3927,7 @@ in {
 
   cachetools = callPackage ../development/python-modules/cachetools {};
 
-  cmd2_9 = callPackage ../development/python-modules/cmd2 {};
-  cmd2 = self.cmd2_9;
+  cmd2 = callPackage ../development/python-modules/cmd2 {};
 
   warlock = callPackage ../development/python-modules/warlock { };
 
@@ -3965,7 +3975,10 @@ in {
 
   pagerduty = callPackage ../development/python-modules/pagerduty { };
 
-  pandas = callPackage ../development/python-modules/pandas { };
+  pandas = if isPy3k then
+    callPackage ../development/python-modules/pandas { }
+  else
+    callPackage ../development/python-modules/pandas/2.nix { };
 
   panel = callPackage ../development/python-modules/panel { };
 

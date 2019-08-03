@@ -2,7 +2,7 @@
 , meson, ninja, gettext, pkgconfig, wrapGAppsHook, itstool, desktop-file-utils
 , vala, gobject-introspection, libxml2, gtk3, glib, gsound, sound-theme-freedesktop
 , gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop, geocode-glib
-, gnome3, gdk_pixbuf, geoclue2, libgweather }:
+, gnome3, gdk-pixbuf, geoclue2, libgweather }:
 
 stdenv.mkDerivation rec {
   name = "gnome-clocks-${version}";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     gobject-introspection # for finding vapi files
   ];
   buildInputs = [
-    gtk3 glib gsettings-desktop-schemas gdk_pixbuf adwaita-icon-theme
+    gtk3 glib gsettings-desktop-schemas gdk-pixbuf adwaita-icon-theme
     gnome-desktop geocode-glib geoclue2 libgweather gsound
   ];
 

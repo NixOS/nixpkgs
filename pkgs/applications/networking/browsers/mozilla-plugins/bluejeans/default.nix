@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, gtk2, glib, gdk_pixbuf, dpkg, libXext, libXfixes
+{ stdenv, fetchurl, xorg, gtk2, glib, gdk-pixbuf, dpkg, libXext, libXfixes
 , libXrender, libuuid, libXrandr, libXcomposite, libpulseaudio
 }:
 
@@ -10,7 +10,7 @@ let
     [gtk2 glib stdenv.cc.cc];
 
   rpathPlugin = makeLibraryPath
-    ([ stdenv.cc.cc gtk2 glib xorg.libX11 gdk_pixbuf libXext libXfixes libXrender libXrandr libXcomposite libpulseaudio ] ++ optional (libuuid != null) libuuid);
+    ([ stdenv.cc.cc gtk2 glib xorg.libX11 gdk-pixbuf libXext libXfixes libXrender libXrandr libXcomposite libpulseaudio ] ++ optional (libuuid != null) libuuid);
 
 in
 

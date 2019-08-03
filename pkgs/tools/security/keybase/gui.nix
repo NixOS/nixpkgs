@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, atk, cairo, cups, udev
-, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, gtk3
+, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
 , runtimeShell, gsettings-desktop-schemas }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gsettings-desktop-schemas
     gtk3
