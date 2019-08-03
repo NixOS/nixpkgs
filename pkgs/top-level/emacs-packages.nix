@@ -49,13 +49,18 @@ let
     inherit lib stdenv texinfo;
   };
 
-  melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
+  # Contains both melpa stable & unstable
+  melpaGeneric = import ../applications/editors/emacs-modes/melpa-packages.nix {
     inherit external lib;
   };
 
-  melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {
-    inherit external lib;
-  };
+  melpaStablePackages = self: let
+    m = melpaGeneric "stable" self;
+  in {melpaStablePackages = m;} // m;
+
+  melpaPackages = self: let
+    m = melpaGeneric "unstable" self;
+  in {melpaPackages = m;} // m;
 
   orgPackages = import ../applications/editors/emacs-modes/org-packages.nix { };
 
@@ -455,12 +460,11 @@ let
 
   };
 
-in
-  lib.makeScope newScope (self:
-    {}
-    // elpaPackages self
-    // melpaStablePackages self
-    // melpaPackages self
-    // orgPackages self
-    // packagesFun self
-  )
+in lib.makeScope newScope (self:
+  removeAttrs ({}
+  // elpaPackages self
+  // melpaStablePackages self
+  // melpaPackages self
+  // orgPackages self
+  // packagesFun self) [ "override" "overrideDerivation" ]
+)
