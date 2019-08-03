@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ledger-live-desktop";
-  version = "1.9.1";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    sha256 = "0b919ilvv3zi17fnzngnnmg28dxqlq0dvj3fdvb50kh3ibrhdcfz";
+    sha256 = "0sn0ri8kqvy36d6vjwsb0mh54nwic58416m6q5drl1schsn6wyvj";
   };
 
   nativeBuildInputs = [ makeWrapper ];
