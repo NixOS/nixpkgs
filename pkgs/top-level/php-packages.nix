@@ -493,7 +493,9 @@ let
     };
   };
 
-  pthreads = assert (pkgs.config.php.zts or false); assert !isPhp73; buildPecl rec {
+  pthreads = if isPhp73 then pthreads32-dev else pthreads32;
+
+  pthreads32 = assert (pkgs.config.php.zts or false); assert !isPhp73; buildPecl rec {
     version = "3.2.0";
     pname = "pthreads";
 
@@ -505,6 +507,20 @@ let
     };
 
     buildInputs = with pkgs; [ pcre.dev ];
+  };
+
+  pthreads32-dev = assert (pkgs.config.php.zts or false); assert isPhp73; buildPecl rec {
+    version = "3.2.0-dev";
+    pname = "pthreads";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "krakjoe";
+      repo = "pthreads";
+      rev = "4d1c2483ceb459ea4284db4eb06646d5715e7154";
+      sha256 = "07kdxypy0bgggrfav2h1ccbv67lllbvpa3s3zsaqci0gq4fyi830";
+    };
+
+    buildInputs = with pkgs; [ pcre2.dev ];
   };
 
   redis = buildPecl rec {
