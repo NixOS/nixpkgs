@@ -1129,7 +1129,7 @@ self: super: {
     concurrent-output = self.concurrent-output_1_10_10; # needed for new ansi-terminal version
     hi-file-parser = dontCheck (unmarkBroken super.hi-file-parser);  # Avoid depending on newer hspec versions.
     http-download = dontCheck (unmarkBroken super.http-download);
-    pantry-tmp = dontCheck (unmarkBroken super.pantry-tmp);
+    pantry = dontCheck (unmarkBroken super.pantry);
     rio = self.rio_0_1_11_0;
     rio-prettyprint = unmarkBroken super.rio-prettyprint;
     unliftio = self.unliftio_0_2_12;
