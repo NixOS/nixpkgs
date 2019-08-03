@@ -19,7 +19,7 @@ index 718aa7f..1a1dcff 100644
 +    'cairo': '@cairo@/lib/libcairo@ext@',
 +    'glib-2.0': '@glib@/lib/libglib-2.0@ext@',
 +    'gobject-2.0': '@glib@/lib/libgobject-2.0@ext@',
-+    'gdk-pixbuf-2.0': '@gdk_pixbuf@/lib/libgdk_pixbuf-2.0@ext@',
++    'gdk_pixbuf-2.0': '@gdk_pixbuf@/lib/libgdk_pixbuf-2.0@ext@',
 +}
 
 -def dlopen(ffi, *names):
