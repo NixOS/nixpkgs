@@ -1,21 +1,26 @@
-{ stdenv, fetchurl, buildOcaml, ocaml, calendar, csv, re }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, camlp4
+, ppx_tools_versioned, result, rresult
+, calendar, csv, hex, re
+}:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4"
+if !stdenv.lib.versionAtLeast ocaml.version "4.05"
 then throw "pgocaml is not available for OCaml ${ocaml.version}"
 else
 
-buildOcaml {
-  name = "pgocaml";
-  version = "2.3";
-  src = fetchurl {
-    url = https://github.com/darioteixeira/pgocaml/archive/v2.3.tar.gz;
-    sha256 = "18lymxlvcf4nwxawkidq3pilsp5rhl0l8ifq6pjk3ssjlx9w53pg";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-pgocaml-${version}";
+  version = "3.2";
+  src = fetchFromGitHub {
+    owner = "darioteixeira";
+    repo = "pgocaml";
+    rev = "v${version}";
+    sha256 = "0jxzr5niv8kdh90pr57b1qb500zkkasxb8b8l7w9cydcfprnlk24";
   };
 
-  buildInputs = [ ];
-  propagatedBuildInputs = [ calendar csv re ];
+  buildInputs = [ ocaml findlib ocamlbuild camlp4 ppx_tools_versioned result rresult ];
+  propagatedBuildInputs = [ calendar csv hex re ];
 
-  configureFlags = [ "--enable-p4" ];
+  configureFlags = [ "--enable-p4" "--enable-ppx" ];
 
   createFindlibDestdir = true;
 
@@ -24,5 +29,6 @@ buildOcaml {
     homepage = http://pgocaml.forge.ocamlcore.org/;
     license = licenses.lgpl2;
     maintainers = with maintainers; [ vbgl ];
+    inherit (ocaml.meta) platforms;
   };
 }
