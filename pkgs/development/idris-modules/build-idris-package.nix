@@ -1,5 +1,5 @@
 # Build an idris package
-{ stdenv, lib, idrisPackages, gmp }:
+{ stdenv, lib, gmp, prelude, base, with-packages, idris }:
   { idrisDeps ? []
   , noPrelude ? false
   , noBase ? false
@@ -11,15 +11,15 @@
   }@attrs:
 let
   allIdrisDeps = idrisDeps
-    ++ lib.optional (!noPrelude) idrisPackages.prelude
-    ++ lib.optional (!noBase) idrisPackages.base;
-  idris-with-packages = idrisPackages.with-packages allIdrisDeps;
+    ++ lib.optional (!noPrelude) prelude
+    ++ lib.optional (!noBase) base;
+  idris-with-packages = with-packages allIdrisDeps;
   newAttrs = builtins.removeAttrs attrs [
     "idrisDeps" "noPrelude" "noBase"
     "name" "version" "ipkgName" "extraBuildInputs"
   ] // {
     meta = attrs.meta // {
-      platforms = attrs.meta.platforms or idrisPackages.idris.meta.platforms;
+      platforms = attrs.meta.platforms or idris.meta.platforms;
     };
   };
 in
