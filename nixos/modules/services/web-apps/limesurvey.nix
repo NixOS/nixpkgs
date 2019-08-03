@@ -203,11 +203,10 @@ in
     };
 
     services.phpfpm.pools.limesurvey = {
+      inherit user group;
       extraConfig = ''
         listen.owner = ${config.services.httpd.user};
         listen.group = ${config.services.httpd.group};
-        user = ${user};
-        group = ${group};
 
         env[LIMESURVEY_CONFIG] = ${limesurveyConfig}
 

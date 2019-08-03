@@ -15,6 +15,8 @@ let
 
     [${pool}]
     listen = ${poolOpts.socket}
+    user = ${poolOpts.user}
+    group = ${poolOpts.group}
     ${poolOpts.extraConfig}
   '';
 
@@ -71,10 +73,19 @@ let
           '';
         };
 
+        user = mkOption {
+          type = types.str;
+          description = "User account under which this pool runs.";
+        };
+
+        group = mkOption {
+          type = types.str;
+          description = "Group account under which this pool runs.";
+        };
+
         extraConfig = mkOption {
           type = types.lines;
           example = ''
-            user = nobody
             pm = dynamic
             pm.max_children = 75
             pm.start_servers = 10
@@ -93,6 +104,7 @@ let
 
       config = {
         socket = if poolOpts.listen == "" then "${stateDir}/${name}.sock" else poolOpts.listen;
+        group = mkDefault poolOpts.user;
       };
     };
 
@@ -138,9 +150,10 @@ in {
         example = literalExample ''
          {
            mypool = {
+             user = "php";
+             group = "php";
              phpPackage = pkgs.php;
              extraConfig = '''
-               user = nobody
                pm = dynamic
                pm.max_children = 75
                pm.start_servers = 10
