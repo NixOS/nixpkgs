@@ -1,42 +1,48 @@
-{
- stdenv,
- appimage-run,
- fetchurl,
- runtimeShell,
-}:
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper, appimage-run }:
 
 stdenv.mkDerivation rec {
-  github-user = "LedgerHQ";
   pname = "ledger-live-desktop";
   version = "1.9.1";
 
   src = fetchurl {
-    url = "https://github.com/${github-user}/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
+    url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
     sha256 = "0b919ilvv3zi17fnzngnnmg28dxqlq0dvj3fdvb50kh3ibrhdcfz";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ appimage-run ];
+
+  desktopIcon = fetchurl {
+    url = "https://raw.githubusercontent.com/LedgerHQ/${pname}/v${version}/build/icon.png";
+    sha256 = "1mmfaf0yk7xf1kgbs3ka8wsbz1qgh60xj6z91ica1i7lw2qbdd5h";
+  };
+
+  desktopItem = makeDesktopItem {
+    name = pname;
+    exec = "${placeholder "out"}/bin/${pname}";
+    icon = pname;
+    desktopName = "Ledger Live";
+    categories = "Utility;";
+  };
 
   unpackPhase = ":";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share}
-    cp $src $out/share/${pname}
-    echo "#!${runtimeShell}" > $out/bin/${pname}
-    echo "${appimage-run}/bin/appimage-run $out/share/${pname}" >> $out/bin/${pname}
-    chmod +x $out/bin/${pname} $out/share/${pname}
+    ${desktopItem.buildCommand}
+    install -D $src $out/share/${src.name}
+    install -Dm -x ${desktopIcon} \
+      $out/share/icons/hicolor/1024x1024/apps/${pname}.png
+    makeWrapper ${appimage-run}/bin/appimage-run $out/bin/${pname} \
+      --add-flags $out/share/${src.name}
 
     runHook postInstall
   '';
 
   meta = with stdenv.lib; {
-    description = ''
-    The companion to your Ledger hardware wallet
-    Easily set up and manage your Ledger device
-    '';
-    homepage = https://www.ledger.com/live;
+    description = "Wallet app for Ledger Nano S and Ledger Blue";
+    homepage = "https://www.ledger.com/live";
     license = licenses.mit;
     maintainers = with maintainers; [ thedavidmeister ];
     platforms = [ "x86_64-linux" ];
