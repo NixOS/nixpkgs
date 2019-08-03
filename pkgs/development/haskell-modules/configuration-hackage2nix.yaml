@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 13.27
+  # LTS Haskell 13.30
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -345,6 +345,7 @@ default-package-overrides:
   - bzlib ==0.5.0.5
   - bzlib-conduit ==0.3.0.1
   - c2hs ==0.28.6
+  - Cabal ==2.4.1.0
   - cabal2spec ==2.2.2.1
   - cabal-doctest ==1.0.6
   - cabal-rpm ==0.12.6
@@ -901,6 +902,7 @@ default-package-overrides:
   - hashids ==1.0.2.4
   - hashmap ==1.3.3
   - hashtables ==1.2.3.3
+  - haskeline ==0.7.5.0
   - haskell-gi ==0.21.5
   - haskell-gi-base ==0.21.5
   - haskell-gi-overloading ==1.0
@@ -1375,6 +1377,7 @@ default-package-overrides:
   - mono-traversable ==1.0.11.0
   - mono-traversable-instances ==0.1.0.0
   - mountpoints ==1.0.2
+  - mtl ==2.2.2
   - mtl-compat ==0.2.2
   - mtl-prelude ==2.0.3.1
   - multiarg ==0.30.0.10
@@ -1500,6 +1503,7 @@ default-package-overrides:
   - parallel-io ==0.3.3
   - paripari ==0.6.0.0
   - parseargs ==0.2.0.9
+  - parsec ==3.1.13.0
   - parsec-class ==1.0.0.0
   - parsec-numbers ==0.1.0
   - parsec-numeric ==0.1.0.0
@@ -1913,6 +1917,7 @@ default-package-overrides:
   - statistics ==0.15.0.0
   - stb-image-redux ==0.2.1.2
   - step-function ==0.2
+  - stm ==2.5.0.0
   - stm-chans ==3.0.0.4
   - stm-conduit ==4.0.1
   - stm-delay ==0.1.1.1
@@ -2021,6 +2026,7 @@ default-package-overrides:
   - testing-feat ==1.1.0.0
   - testing-type-modifiers ==0.1.0.1
   - texmath ==0.11.2.2
+  - text ==1.2.3.1
   - text-binary ==0.2.1.1
   - text-builder ==0.6.5.1
   - text-conversions ==0.3.0
@@ -2277,6 +2283,7 @@ default-package-overrides:
   - xdg-basedir ==0.2.2
   - xeno ==0.3.5.1
   - xenstore ==0.1.1
+  - xhtml ==3000.2.2.1
   - xls ==0.1.2
   - xlsx ==0.7.2
   - xlsx-tabular ==0.2.2.1
