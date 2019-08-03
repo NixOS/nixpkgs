@@ -1132,6 +1132,7 @@ self: super: {
     pantry-tmp = dontCheck (unmarkBroken super.pantry-tmp);
     rio = self.rio_0_1_11_0;
     rio-prettyprint = unmarkBroken super.rio-prettyprint;
+    unliftio = self.unliftio_0_2_12;
   }));
 
   # musl fixes
