@@ -1,0 +1,8 @@
+#! /usr/bin/env nix-shell
+#! nix-shell --show-trace -i sh -p git nix nix-prefetch-git nix-prefetch-hg "import ./updater-emacs.nix"
+
+# "with import ../../../.. {}; emacsWithPackages (epkgs: with epkgs.melpaPackages; [ promise semaphore ])"
+
+exec emacs --fg-daemon=updater --quick -l update-melpa.el -f run-updater "$@"
+
+# exec emacs update-melpa.el "$@"

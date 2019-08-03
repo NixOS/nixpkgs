@@ -1,8 +1,8 @@
 diff --git a/mx.py b/mx.py
-index d119b62..471fe98 100644
+index af7a9c2..08c0ea8 100755
 --- a/mx.py
 +++ b/mx.py
-@@ -4961,30 +4961,6 @@ class PackedResourceLibrary(ResourceLibrary):
+@@ -4976,30 +4976,6 @@ class PackedResourceLibrary(ResourceLibrary):
  
      def get_path(self, resolve):
          extract_path = _make_absolute(self.extract_path, self.suite.dir)
@@ -33,7 +33,7 @@ index d119b62..471fe98 100644
          return extract_path
  
      def _check_download_needed(self):
-@@ -5885,7 +5861,7 @@ class HgConfig(VC):
+@@ -5900,7 +5876,7 @@ class HgConfig(VC):
  
      def update_to_branch(self, vcdir, branch, abortOnError=True):
          cmd = ['update', branch]
@@ -42,7 +42,7 @@ index d119b62..471fe98 100644
  
      def add(self, vcdir, path, abortOnError=True):
          return self.run(['hg', '-q', '-R', vcdir, 'add', path]) == 0
-@@ -5922,7 +5898,7 @@ class HgConfig(VC):
+@@ -5937,7 +5913,7 @@ class HgConfig(VC):
                  return None
  
      def parent_info(self, vcdir, abortOnError=True):
@@ -51,7 +51,7 @@ index d119b62..471fe98 100644
          author, date = out.split("|||")
          ts, _ = date.split(" ")
          return self._sanitize_parent_info({
-@@ -8287,46 +8263,8 @@ class SuiteImport:
+@@ -8301,46 +8277,8 @@ class SuiteImport:
          version = import_dict.get("version")
          suite_dir = None
          version_from = import_dict.get("versionFrom")
@@ -100,7 +100,7 @@ index d119b62..471fe98 100644
  
      @staticmethod
      def get_source_urls(source, kind=None):
-@@ -8367,8 +8305,6 @@ class Suite(object):
+@@ -8381,8 +8319,6 @@ class Suite(object):
      :type dists: list[Distribution]
      """
      def __init__(self, mxDir, primary, internal, importing_suite, load, vc, vc_dir, dynamicallyImported=False):
@@ -109,7 +109,7 @@ index d119b62..471fe98 100644
          self.imported_by = [] if primary else [importing_suite]
          self.mxDir = mxDir
          self.dir = dirname(mxDir)
-@@ -8396,7 +8332,7 @@ class Suite(object):
+@@ -8410,7 +8346,7 @@ class Suite(object):
          self._outputRoot = None
          self._preloaded_suite_dict = None
          self.vc = vc
@@ -118,7 +118,7 @@ index d119b62..471fe98 100644
          self._preload_suite_dict()
          self._init_imports()
          if load:
-@@ -9295,7 +9231,9 @@ def get_dynamic_imports():
+@@ -9310,7 +9246,9 @@ def get_dynamic_imports():
  class SourceSuite(Suite):
      """A source suite"""
      def __init__(self, mxDir, primary=False, load=True, internal=False, importing_suite=None, dynamicallyImported=False):
@@ -129,7 +129,7 @@ index d119b62..471fe98 100644
          Suite.__init__(self, mxDir, primary, internal, importing_suite, load, vc, vc_dir, dynamicallyImported=dynamicallyImported)
          logvv("SourceSuite.__init__({}), got vc={}, vc_dir={}".format(mxDir, self.vc, self.vc_dir))
          self.projects = []
-@@ -9344,17 +9282,7 @@ class SourceSuite(Suite):
+@@ -9359,17 +9297,7 @@ class SourceSuite(Suite):
          """
          Gets the release tag from VC or create a time based once if VC is unavailable
          """
@@ -148,7 +148,7 @@ index d119b62..471fe98 100644
  
      def scm_metadata(self, abortOnError=False):
          scm = self.scm
-@@ -12526,55 +12454,8 @@ def _attempt_download(url, path, jarEntryName=None):
+@@ -12541,55 +12469,8 @@ def _attempt_download(url, path, jarEntryName=None):
      return False
  
  def download(path, urls, verbose=False, abortOnError=True, verifyOnly=False):
@@ -206,7 +206,7 @@ index d119b62..471fe98 100644
  
  def update_file(path, content, showDiff=False):
      """
-@@ -13378,6 +13259,7 @@ class Archiver(SafeFileCreation):
+@@ -13393,6 +13274,7 @@ class Archiver(SafeFileCreation):
  
      def _add_zip(self, filename, archive_name, provenance):
          self._add_provenance(archive_name, provenance)
@@ -214,7 +214,7 @@ index d119b62..471fe98 100644
          self.zf.write(filename, archive_name)
  
      def _add_str_zip(self, data, archive_name, provenance):
-@@ -18526,12 +18408,35 @@ def _find_suite_import(importing_suite, suite_import, fatalIfMissing=True, load=
+@@ -18541,12 +18423,35 @@ def _find_suite_import(importing_suite, suite_import, fatalIfMissing=True, load=
          Attempts to locate an existing suite in the local context
          Returns the path to the mx.name dir if found else None
          """

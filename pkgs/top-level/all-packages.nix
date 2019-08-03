@@ -653,7 +653,7 @@ in
 
   iamy = callPackage ../tools/admin/iamy { };
 
-  azure-cli = nodePackages_8_x.azure-cli;
+  azure-cli = nodePackages_10_x.azure-cli;
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
@@ -1481,6 +1481,8 @@ in
   dragon-drop = callPackage ../tools/X11/dragon-drop {
     gtk = gtk3;
   };
+
+  dsvpn = callPackage ../applications/networking/dsvpn { };
 
   dtools = callPackage ../development/tools/dtools { };
 
@@ -4313,9 +4315,6 @@ in
 
   nodejs-slim = nodejs-slim-10_x;
 
-  nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {};
-  nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix { enableNpm = false; };
-
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix {
     openssl = openssl_1_1;
   };
@@ -4348,10 +4347,6 @@ in
 
   nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
-  });
-
-  nodePackages_8_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v8.nix {
-    nodejs = pkgs.nodejs-8_x;
   });
 
   nodePackages = nodePackages_10_x;
@@ -7657,9 +7652,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc865.override {
-    overrides = haskell.packageOverrides;
-  });
+  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc865;
 
   inherit (haskellPackages) ghc;
 
@@ -11272,7 +11265,9 @@ in
     stdenv = gccStdenv;
   };
 
-  languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
+  languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix {
+    inherit pkgs;
+  });
 
   lasem = callPackage ../development/libraries/lasem { };
 
@@ -12834,6 +12829,8 @@ in
 
   protobuf = protobuf3_7;
 
+  protobuf3_9 = callPackage ../development/libraries/protobuf/3.9.nix { };
+  protobuf3_8 = callPackage ../development/libraries/protobuf/3.8.nix { };
   protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
   protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
@@ -14753,6 +14750,8 @@ in
 
   ifdtool = callPackage ../tools/misc/ifdtool { };
 
+  cbmem = callPackage ../tools/misc/cbmem { };
+
   nvramtool = callPackage ../tools/misc/nvramtool { };
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
@@ -14801,6 +14800,7 @@ in
   prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
+  prometheus-mail-exporter = callPackage ../servers/monitoring/prometheus/mail-exporter.nix { };
   prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
   prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
@@ -14808,6 +14808,7 @@ in
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
+  prometheus-postgres-exporter = callPackage ../servers/monitoring/prometheus/postgres-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix {
@@ -16536,7 +16537,7 @@ in
 
 
   iosevka = callPackage ../data/fonts/iosevka {
-    nodejs = nodejs-8_x;
+    nodejs = nodejs-10_x;
   };
   iosevka-bin = callPackage ../data/fonts/iosevka/bin.nix {};
 
@@ -17549,7 +17550,11 @@ in
 
   dmenu = callPackage ../applications/misc/dmenu { };
 
-  dmenu2 = callPackage ../applications/misc/dmenu2 { };
+  # TODO (@primeos): Remove after the 19.09 branch-off:
+  dmenu2 = throw ''
+    The fork "dmenu2" is not maintained by upstream anymore. Please use the
+    original "dmenu" instead.
+  '';
 
   dmensamenu = callPackage ../applications/misc/dmensamenu {
     inherit (python3Packages) buildPythonApplication requests;
@@ -19424,7 +19429,7 @@ in
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
-    }) mumble mumble_git murmur;
+    }) mumble mumble_rc murmur;
 
   inherit (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
@@ -19432,7 +19437,7 @@ in
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
       iceSupport = false;
-    }) murmur_git;
+    }) murmur_rc;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
     mumble_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
@@ -22412,6 +22417,7 @@ in
     mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
+    pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
     sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
     system-monitor = callPackage ../desktops/gnome-3/extensions/system-monitor { };
@@ -23902,6 +23908,10 @@ in
   sam-ba = callPackage ../tools/misc/sam-ba { };
 
   sndio = callPackage ../misc/sndio { };
+
+  # Oclgrind 18.3 does not work with newer LLVMs (but HEAD does, so
+  # fix this after next release).
+  oclgrind = callPackage ../development/tools/analysis/oclgrind { llvmPackages = llvmPackages_6; };
 
   opkg = callPackage ../tools/package-management/opkg { };
 

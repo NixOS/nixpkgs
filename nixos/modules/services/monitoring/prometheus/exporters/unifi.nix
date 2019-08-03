@@ -51,7 +51,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-unifi-exporter}/bin/unifi_exporter \
           -telemetry.addr ${cfg.listenAddress}:${toString cfg.port} \

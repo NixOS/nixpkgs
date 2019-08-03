@@ -195,6 +195,8 @@ mapAliases ({
   m3d-linux = m33-linux; # added 2016-08-13
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
+  mariadb-client = hiPrio mariadb.client; #added 2019.07.28
+  mysql-client = hiPrio mariadb.client;
   memtest86 = memtest86plus; # added 2019-05-08
   mesa_noglu = mesa; # added 2019-05-28
   # NOTE: 2018-07-12: legacy alias:
@@ -417,6 +419,10 @@ mapAliases ({
     gst-plugins-good = pkgs.gst-plugins-good;
     gst-plugins-ugly = pkgs.gst-plugins-ugly;
   };
+
+  # added 2019-08-01
+  mumble_git = pkgs.mumble_rc;
+  murmur_git = pkgs.murmur_rc;
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;

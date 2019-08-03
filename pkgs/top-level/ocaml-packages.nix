@@ -376,6 +376,8 @@ let
 
     lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
+    lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
+
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { lwt = lwt2; };
     lambdaTerm =
       if lib.versionOlder "4.02" ocaml.version
@@ -436,7 +438,7 @@ let
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
 
-    merlin_extend = callPackage ../development/ocaml-modules/merlin_extend { };
+    merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
@@ -590,6 +592,10 @@ let
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
+
+    secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
+      inherit (pkgs) secp256k1;
+    };
 
     seq = callPackage ../development/ocaml-modules/seq { };
 

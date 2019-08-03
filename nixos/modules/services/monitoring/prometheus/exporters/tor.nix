@@ -26,7 +26,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-tor-exporter}/bin/prometheus-tor-exporter \
           -b ${cfg.listenAddress} \

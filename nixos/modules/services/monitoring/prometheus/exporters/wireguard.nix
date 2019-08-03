@@ -36,19 +36,17 @@ in {
     };
   };
   serviceOpts = {
-    script = ''
-      ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
-        -p ${toString cfg.port} \
-        ${optionalString cfg.verbose "-v"} \
-        ${optionalString cfg.singleSubnetPerField "-s"} \
-        ${optionalString (cfg.wireguardConfig != null) "-n ${cfg.wireguardConfig}"}
-    '';
-
     path = [ pkgs.wireguard-tools ];
 
     serviceConfig = {
-      DynamicUser = true;
       AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+      ExecStart = ''
+        ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
+          -p ${toString cfg.port} \
+          ${optionalString cfg.verbose "-v"} \
+          ${optionalString cfg.singleSubnetPerField "-s"} \
+          ${optionalString (cfg.wireguardConfig != null) "-n ${cfg.wireguardConfig}"}
+      '';
     };
   };
 }
