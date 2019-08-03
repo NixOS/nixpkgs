@@ -273,9 +273,9 @@ in rec {
       if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
       EOF
     '';
+    postFixup = openjdk.postFixup or null;
     dontStrip = true; # stripped javac crashes with "segmentaion fault"
     inherit (openjdk) meta;
-    inherit (openjdk) postFixup;
   };
 
   graalvm8 = stdenv.mkDerivation rec {
