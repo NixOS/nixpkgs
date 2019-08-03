@@ -72,14 +72,6 @@ in stdenv.mkDerivation (args // {
     substitute $config .cargo/config \
       --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
-    unset cargoDepsCopy
-
-    export RUST_LOG=${logLevel}
-  '' + (args.postUnpack or "");
-
-  configurePhase = args.configurePhase or ''
-    runHook preConfigure
-    mkdir -p .cargo
     cat >> .cargo/config <<'EOF'
     [target."${stdenv.buildPlatform.config}"]
     "linker" = "${ccForBuild}"
@@ -88,7 +80,13 @@ in stdenv.mkDerivation (args // {
     "linker" = "${ccForHost}"
     ''}
     EOF
-    cat .cargo/config
+
+    unset cargoDepsCopy
+    export RUST_LOG=${logLevel}
+  '' + (args.postUnpack or "");
+
+  configurePhase = args.configurePhase or ''
+    runHook preConfigure
     runHook postConfigure
   '';
 

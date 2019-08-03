@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake nasm ];
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin" "-DENABLE_STATIC=0" ];
+  cmakeFlags = [
+    "-DENABLE_STATIC=0"
+  ];
 
   doInstallCheck = true;
   installCheckTarget = "test";

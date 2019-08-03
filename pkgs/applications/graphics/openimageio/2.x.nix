@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
     "-DUSE_PYTHON=OFF"
     "-DUSE_QT=OFF"
     # GNUInstallDirs
-    "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin"
-    "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "dev"}/include"
     "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkgconfig
   ];
 
