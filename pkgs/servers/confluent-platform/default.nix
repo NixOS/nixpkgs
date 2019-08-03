@@ -5,11 +5,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "confluent-platform-${version}";
-  version = "5.2.1";
+  version = "5.3.0";
 
   src = fetchurl {
     url = "http://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}-${scalaVersion}.tar.gz";
-    sha256 = "11fdcc557aca782e87352ed6e655c37c71fb7b3a003796ee956970b01dedbbb1";
+    sha256 = "14cilq63fib5yvj40504aj6wssi7xw4f7c2jadlzdmdxzh4ixqmp";
   };
 
   buildInputs = [ jre makeWrapper bash ];
