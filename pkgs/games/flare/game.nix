@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flare-game";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lfra4ww8za08vcgza2jvh3jrwi6zryk4ljyj32lpp9v4ws9hdh4";
+    sha256 = "18m2qfbbaqklm20gnr7wzrwbmylp1jh781a4p1dq0hymqcg92x5l";
   };
 
   nativeBuildInputs = [ cmake ];
