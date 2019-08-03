@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf }:
+{ stdenv, fetchFromGitHub, cmake, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "flare-engine";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf ];
+  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf ]
+    ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
   meta = with stdenv.lib; {
     description = "Free/Libre Action Roleplaying Engine";
