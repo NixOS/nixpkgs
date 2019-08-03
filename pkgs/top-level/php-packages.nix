@@ -493,13 +493,18 @@ let
     };
   };
 
-  pthreads = assert (pkgs.config.php.zts or false); buildPecl rec {
-    version = "3.1.5";
+  pthreads = assert (pkgs.config.php.zts or false); assert !isPhp73; buildPecl rec {
+    version = "3.2.0";
     pname = "pthreads";
 
-    sha256 = "1ziap0py3zrc7qj9lw4nzq6wx1viyj8v9y1babchizzan014x6p5";
+    src = pkgs.fetchFromGitHub {
+      owner = "krakjoe";
+      repo = "pthreads";
+      rev = "v${version}";
+      sha256 = "17hypm75d4w7lvz96jb7s0s87018yzmmap0l125d5fd7abnhzfvv";
+    };
 
-    meta.broken = true;
+    buildInputs = with pkgs; [ pcre.dev ];
   };
 
   redis = buildPecl rec {
