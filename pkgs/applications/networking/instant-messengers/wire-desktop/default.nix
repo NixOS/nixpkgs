@@ -18,7 +18,7 @@ let
   version = {
     "x86_64-linux" = "3.9.2895";
     "x86_64-darwin" = "3.9.2943";
-  }.${system};
+  }.${system} or "";
 
   sha256 = {
     "x86_64-linux" = "0wrn95m64j4b7ym44h9zawq13kg4m12aixlyyzp56bfyczmjq4a5";
