@@ -6088,6 +6088,8 @@ in {
   pydantic = callPackage ../development/python-modules/pydantic { };
 
   fastapi = callPackage ../development/python-modules/fastapi { };
+
+  stringcase = callPackage ../development/python-modules/stringcase { };
 });
 
 in fix' (extends overrides packages)
