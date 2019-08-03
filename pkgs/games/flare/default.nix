@@ -1,7 +1,7 @@
 { lib, buildEnv, callPackage, makeWrapper }:
 
 buildEnv {
-  name = "flare-1.10";
+  name = "flare-1.11";
 
   paths = [
     (callPackage ./engine.nix {})
