@@ -9,11 +9,11 @@ let
   pythonPackages = python3Packages;
 in stdenv.mkDerivation rec {
   name = "freecad-${version}";
-  version = "0.18.2";
+  version = "0.18.3";
 
   src = fetchurl {
     url = "https://github.com/FreeCAD/FreeCAD/archive/${version}.tar.gz";
-    sha256 = "1r5rhaiq22yhrfpmcmzx6bflqj6q9asbyjyfja4x4rzfy9yh0a4v";
+    sha256 = "07j7azgnicmd8cqnyskp15y44ykgj5qqz5y3w1jdynrv3yrvk1kz";
   };
 
   nativeBuildInputs = [ cmake ninja pkgconfig pythonPackages.pyside2-tools ];
