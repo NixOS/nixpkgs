@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 buildGoPackage rec {
-  name = "countdown-${version}";
+  pname = "countdown-${version}";
   version = "1.0.0";
 
   goPackagePath = "github.com/antonmedv/countdown";
@@ -17,7 +17,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/antonmedv/countdown;
     description = "Terminal countdown timer";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ monotux ];
     platforms = platforms.unix;
     license = licenses.mit;
   };
