@@ -1,25 +1,33 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libpng, openssl, curl, gtk2, check, SDL
-, libXcursor, libXrandr, makeWrapper
-, libwebp
-, libxml2, libidn, perl, perlPackages, xxd
+{ stdenv, fetchurl, fetchpatch, makeWrapper, wrapGAppsHook
+
+# Buildtime dependencies.
+
+, check, pkgconfig, xxd
+
+# Runtime dependencies.
+
+, curl, expat, libXcursor, libXrandr, libidn, libjpeg, libpng, libwebp, libxml2
+, openssl, perl, perlPackages
+
+# uilib-specific dependencies
+
+, gtk2 # GTK 2
+, SDL  # Framebuffer
+
+# Configuration
+
 , uilib ? "framebuffer"
-, nsgenbind
-, libnsfb
-, libwapcaplet
-, libparserutils
-, libnslog
-, libcss
-, libhubbub
-, libdom
-, libnsbmp
-, libnsgif
-, libsvgtiny
-, libnsutils
-, libnspsl
-, libutf8proc
-, wrapGAppsHook
+
+# Netsurf-specific dependencies
+
+, libcss, libdom, libhubbub, libnsbmp, libnsfb, libnsgif
+, libnslog, libnspsl, libnsutils, libparserutils, libsvgtiny, libutf8proc
+, libwapcaplet, nsgenbind
 }:
 
+let
+  inherit (stdenv.lib) optional optionals;
+in
 stdenv.mkDerivation rec {
 
   name = "netsurf-${version}";
@@ -40,59 +48,37 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    makeWrapper
     perl
     perlPackages.HTMLParser
     pkgconfig
     xxd
-  ] ++ stdenv.lib.optionals (uilib == "gtk") [
-    wrapGAppsHook
-  ];
+  ]
+  ++ optional (uilib == "gtk") wrapGAppsHook
+  ;
 
-  buildInputs = [ libpng openssl curl gtk2 check libxml2 libidn
-    libXcursor libXrandr makeWrapper SDL
-    libwebp
-    nsgenbind
-    libnsfb
-    libwapcaplet
-    libparserutils
-    libnslog
-    libcss
-    libhubbub
-    libdom
-    libnsbmp
-    libnsgif
-    libsvgtiny
-    libnsutils
-    libnspsl
+  buildInputs = [ 
+    check curl libXcursor libXrandr libidn libjpeg libpng libwebp libxml2 openssl
+    # Netsurf-specific libraries
+    nsgenbind libnsfb libwapcaplet libparserutils libnslog libcss
+    libhubbub libdom libnsbmp libnsgif libsvgtiny libnsutils libnspsl
     libutf8proc
- ];
+  ]
+  ++ optionals (uilib == "framebuffer") [ expat SDL ]
+  ++ optional (uilib == "gtk") gtk2
+  ;
 
   preConfigure = ''
     cat <<EOF > Makefile.conf
-    override NETSURF_GTK_RESOURCES := $out/share/Netsurf/${uilib}/res
+    override NETSURF_GTK_RES_PATH  := $out/share/
     override NETSURF_USE_GRESOURCE := YES
     EOF
   '';
 
   makeFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
     "TARGET=${uilib}"
   ];
-
-  installPhase = ''
-    mkdir -p $out/bin $out/share/Netsurf/${uilib}
-    cmd=$(case "${uilib}" in framebuffer) echo nsfb;; gtk) echo nsgtk;; esac)
-    cp $cmd $out/bin/netsurf
-    tar -hcf - frontends/${uilib}/res | (cd $out/share/Netsurf/ && tar -xvpf -)
-  '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --set NETSURFRES $out/share/Netsurf/${uilib}/res
-    )
-  '' + stdenv.lib.optionalString (uilib != "gtk") ''
-    wrapProgram $out/bin/netsurf "''${gappsWrapperArgs[@]}"
-  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.netsurf-browser.org/;
