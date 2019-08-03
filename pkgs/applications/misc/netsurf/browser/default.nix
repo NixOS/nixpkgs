@@ -1,9 +1,8 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, libpng, openssl, curl, gtk2, check, SDL
-, libxml2, libidn, perl, nettools, perlPackages, xxd
 , libXcursor, libXrandr, makeWrapper
 , libwebp
+, libxml2, libidn, perl, perlPackages, xxd
 , uilib ? "framebuffer"
-, buildsystem
 , nsgenbind
 , libnsfb
 , libwapcaplet
@@ -26,8 +25,6 @@ stdenv.mkDerivation rec {
   name = "netsurf-${version}";
   version = "3.9";
 
-  # UI libs incldue Framebuffer, and gtk
-
   src = fetchurl {
     url = "http://download.netsurf-browser.org/netsurf/releases/source/netsurf-${version}-src.tar.gz";
     sha256 = "1hzcm2s2wh5sapgr000lg63hcdbj6hyajxl43xa1x80kc5piqbyp";
@@ -43,16 +40,17 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    perl
+    perlPackages.HTMLParser
     pkgconfig
     xxd
   ] ++ stdenv.lib.optionals (uilib == "gtk") [
     wrapGAppsHook
   ];
 
-  buildInputs = [ libpng openssl curl gtk2 check libxml2 libidn perl
-    nettools perlPackages.HTMLParser libXcursor libXrandr makeWrapper SDL
+  buildInputs = [ libpng openssl curl gtk2 check libxml2 libidn
+    libXcursor libXrandr makeWrapper SDL
     libwebp
-    buildsystem
     nsgenbind
     libnsfb
     libwapcaplet
@@ -78,7 +76,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
     "TARGET=${uilib}"
   ];
 
