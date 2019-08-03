@@ -1313,7 +1313,7 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   # The old LTS-13.x version does not compile.
-  ip = self.ip_1_5_0;
+  ip = self.ip_1_5_1;
 
   # Needs deque >= 0.3, but latest version on stackage is 2.7
   butcher = super.butcher.override { deque = self.deque_0_4_2_3; };
