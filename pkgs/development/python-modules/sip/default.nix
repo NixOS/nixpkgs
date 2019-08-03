@@ -2,24 +2,37 @@
 
 buildPythonPackage rec {
   pname = sip-module;
-  version = "4.19.14";
+  version = "4.19.18";
   format = "other";
 
   disabled = isPyPy;
 
   src = fetchurl {
     url = "https://www.riverbankcomputing.com/static/Downloads/sip/${version}/sip-${version}.tar.gz";
-    sha256 = "11xgs3rf5qh5qh459biwnc2j5y08jps3j0p6hcgi7f63pifpdwqf";
+    sha256 = "07kyd56xgbb40ljb022rq82shgxprlbl0z27mpf1b6zd00w8dgf0";
   };
 
   configurePhase = ''
     ${python.executable} ./configure.py \
       --sip-module ${sip-module} \
-      -d $out/lib/${python.libPrefix}/site-packages \
+      -d $out/${python.sitePackages} \
       -b $out/bin -e $out/include
   '';
 
   enableParallelBuilding = true;
+
+  installCheckPhase = let
+    modules = [
+      sip-module
+      "sipconfig"
+    ];
+    imports = lib.concatMapStrings (module: "import ${module};") modules;
+  in ''
+    echo "Checking whether modules can be imported..."
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH ${python.interpreter} -c "${imports}"
+  '';
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
