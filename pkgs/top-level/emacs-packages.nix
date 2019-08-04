@@ -304,19 +304,6 @@ let
       inherit (external.rtags) meta;
     };
 
-    lcs = melpaBuild rec {
-      pname   = "lcs";
-      version = circe.version;
-      src     = circe.src;
-      recipe  = writeText "recipe" ''
-        (lcs :repo "jorgenschaefer/circe" :fetcher github :files ("lcs.el"))
-      '';
-      meta = {
-        description = "Longest Common Sequence (LCS) library for Emacs";
-        license = gpl3Plus;
-      };
-    };
-
     lib-requires =
       callPackage ../applications/editors/emacs-modes/lib-requires { };
 
