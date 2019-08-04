@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy, zlib
-, libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, libtool
-, curl }:
+{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy, zlib,
+  libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, curl, CoreFoundation, cctools
+}:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
@@ -35,20 +35,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ scons ];
   buildInputs = [
-    sasl
-    boost
-    gperftools
-    pcre-cpp
-    snappy
-    zlib
-    libyamlcpp
-    sasl
-    openssl.dev
-    openssl.out
-    libpcap
-    python
-    curl
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security libtool ];
+    sasl boost gperftools pcre-cpp snappy
+    zlib libyamlcpp sasl openssl.dev openssl.out libpcap python curl
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
@@ -60,6 +49,9 @@ in stdenv.mkDerivation rec {
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/third_party/asio-master/asio/include/asio/detail/config.hpp --replace ASIO_HAS_STD_EXPERIMENTAL_STRING_VIEW ASIO_HAS_STD_STRING_VIEW
+
+    substituteInPlace src/third_party/mozjs-45/extract/js/src/jsmath.cpp --replace 'defined(HAVE_SINCOS)' 0
 
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
@@ -80,7 +72,7 @@ in stdenv.mkDerivation rec {
     "--release"
     "--ssl"
     #"--rocksdb" # Don't have this packaged yet
-    "--wiredtiger=${if stdenv.is64bit then "on" else "off"}"
+    "--wiredtiger=on"
     "--js-engine=mozjs"
     "--use-sasl-client"
     "--disable-warnings-as-errors"
@@ -92,6 +84,10 @@ in stdenv.mkDerivation rec {
     sconsFlags+=" CXX=$CXX"
   '' + optionalString stdenv.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
+  '' + optionalString stdenv.isDarwin ''
+    sconsFlags+=" CPPPATH=${openssl.dev}/include"
+  '' + optionalString stdenv.isDarwin ''
+    sconsFlags+=" LIBPATH=${openssl.out}/lib"
   '';
 
   preInstall = ''
