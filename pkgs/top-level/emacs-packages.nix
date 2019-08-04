@@ -315,19 +315,6 @@ let
 
     gn = callPackage ../applications/editors/emacs-modes/gn { };
 
-    shorten = melpaBuild rec {
-      pname   = "shorten";
-      version = circe.version;
-      src     = circe.src;
-      recipe  = writeText "recipe" ''
-        (shorten :repo "jorgenschaefer/circe" :fetcher github :files ("shorten.el"))
-      '';
-      meta = {
-        description = "String shortening to unique prefix library for Emacs";
-        license = gpl3Plus;
-      };
-    };
-
     structured-haskell-mode = self.shm;
 
     thingatpt-plus = callPackage ../applications/editors/emacs-modes/thingatpt-plus { };
