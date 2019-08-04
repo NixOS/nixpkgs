@@ -1,26 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy, zlib,
-  libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, curl, CoreFoundation, cctools
-}:
+{ stdenv, fetchurl, scons, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
+, sasl, openssl, libpcap, python27, curl, Security, CoreFoundation, cctools }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
 
 with stdenv.lib;
 
-{ version, sha256, patches ? [ ] }@args:
+{ version, sha256, patches ? [] }@args:
 
 let
   python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
   system-libraries = [
-    "pcre"
-    #"asio" -- XXX use package?
-    #"wiredtiger"
     "boost"
+    "pcre"
     "snappy"
-    "zlib"
-    #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
-    #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
     "yaml"
+    "zlib"
+    #"asio" -- XXX use package?
+    #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
+    #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
+    #"wiredtiger"
   ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
   inherit (stdenv.lib) systems subtractLists;
 
@@ -35,8 +34,18 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ scons ];
   buildInputs = [
-    sasl boost gperftools pcre-cpp snappy
-    zlib libyamlcpp sasl openssl.dev openssl.out libpcap python curl
+    boost
+    curl
+    gperftools
+    libpcap
+    libyamlcpp
+    openssl.dev
+    openssl.out
+    pcre-cpp
+    python
+    sasl
+    snappy
+    zlib
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
@@ -84,10 +93,6 @@ in stdenv.mkDerivation rec {
     sconsFlags+=" CXX=$CXX"
   '' + optionalString stdenv.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
-  '' + optionalString stdenv.isDarwin ''
-    sconsFlags+=" CPPPATH=${openssl.dev}/include"
-  '' + optionalString stdenv.isDarwin ''
-    sconsFlags+=" LIBPATH=${openssl.out}/lib"
   '';
 
   preInstall = ''
