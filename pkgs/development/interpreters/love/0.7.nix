@@ -2,6 +2,7 @@
 , SDL, libGLU_combined, openal, lua
 , libdevil, freetype, physfs
 , libmodplug, mpg123, libvorbis, libogg
+, libmng
 }:
 
 stdenv.mkDerivation rec {
@@ -11,10 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "0s7jywkvydlshlgy11ilzngrnybmq5xlgzp2v2dhlffwrfqdqym5";
   };
 
+  # see discussion on arch linux user repository (https://aur.archlinux.org/packages/love07/?setlang=cs#comment-684696)
+  patches = [ ./0.7-gl-prototypes.patch ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     SDL libGLU_combined openal lua
-    libdevil freetype physfs libmodplug mpg123 libvorbis libogg
+    libdevil freetype physfs libmodplug mpg123 libvorbis libogg libmng
   ];
 
   preConfigure = ''
