@@ -3502,6 +3502,11 @@
     github = "mogorman";
     name = "Matthew O'Gorman";
   };
+  monotux = {
+    name = "Oscar Carlsson";
+    email = "oscar@spindel.tax";
+    github = "oscarcarlsson";
+  };
   Mogria = {
     email = "m0gr14@gmail.com";
     github = "mogria";
