@@ -28,4 +28,4 @@ self:
 
     orgPackages = super // overrides;
 
-  in orgPackages // { inherit orgPackages; }
+  in orgPackages

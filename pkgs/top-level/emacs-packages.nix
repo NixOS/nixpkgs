@@ -46,7 +46,7 @@ with lib.licenses;
 
 let
 
-  elpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
+  mkElpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
     inherit lib stdenv texinfo;
   };
 
@@ -54,28 +54,16 @@ let
   melpaGeneric = import ../applications/editors/emacs-modes/melpa-packages.nix {
     inherit external lib pkgs;
   };
+  mkMelpaStablePackages = melpaGeneric "stable";
+  mkMelpaPackages = melpaGeneric "unstable";
 
-  melpaStablePackages = self: let
-    m = melpaGeneric "stable" self;
-  in {melpaStablePackages = m;} // m;
-
-  melpaPackages = self: let
-    m = melpaGeneric "unstable" self;
-  in {melpaPackages = m;} // m;
-
-  orgPackages = import ../applications/editors/emacs-modes/org-packages.nix { };
+  mkOrgPackages = import ../applications/editors/emacs-modes/org-packages.nix { };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
     inherit lib lndir makeWrapper stdenv runCommand;
   };
 
-  packagesFun = self: with self; {
-
-    inherit emacs melpaBuild trivialBuild;
-
-    emacsWithPackages = emacsWithPackages self;
-
-    ## START HERE
+  mkManualPackages = self: with self; {
 
     elisp-ffi = melpaBuild rec {
       pname = "elisp-ffi";
@@ -221,11 +209,20 @@ let
 
   };
 
-in lib.makeScope newScope (self:
-  removeAttrs ({}
-  // elpaPackages self
-  // melpaStablePackages self
-  // melpaPackages self
-  // orgPackages self
-  // packagesFun self) [ "override" "overrideDerivation" ]
-)
+in lib.makeScope newScope (self: lib.makeOverridable ({
+  elpaPackages ? mkElpaPackages self
+  , melpaStablePackages ? mkMelpaStablePackages self
+  , melpaPackages ? mkMelpaPackages self
+  , orgPackages ? mkOrgPackages self
+  , manualPackages ? mkManualPackages self
+}: ({}
+  // elpaPackages // { inherit elpaPackages; }
+  // melpaStablePackages // { inherit melpaStablePackages; }
+  // melpaPackages // { inherit melpaPackages; }
+  // orgPackages // { inherit orgPackages; }
+  // manualPackages
+  // {
+    inherit emacs melpaBuild trivialBuild;
+    emacsWithPackages = emacsWithPackages self;
+  })
+) {})
