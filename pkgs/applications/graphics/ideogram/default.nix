@@ -1,0 +1,59 @@
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, python3
+, glib
+, gtk3
+, meson
+, ninja
+, libgee
+, pantheon
+, desktop-file-utils
+, xorg
+, wrapGAppsHook
+}:
+
+stdenv.mkDerivation rec {
+  pname = "ideogram";
+  version = "1.2.2";
+
+  src = fetchFromGitHub {
+    owner = "cassidyjames";
+    repo = pname;
+    rev = version;
+    sha256 = "1qakgg3y4n2vcnykk2004ndvwmjbk2yy0p4j30mlb7p14dxscif6";
+  };
+
+  nativeBuildInputs = [
+    desktop-file-utils
+    meson
+    ninja
+    pantheon.vala
+    pkgconfig
+    python3
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    libgee
+    pantheon.granite
+    xorg.libX11
+    xorg.libXtst
+  ];
+
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Insert emoji anywhere, even in non-native apps - designed for elementary OS";
+    homepage = https://github.com/cassidyjames/ideogram;
+    license = licenses.gpl2Plus;
+    maintainers = pantheon.maintainers;
+    platforms = platforms.linux;
+  };
+
+}
