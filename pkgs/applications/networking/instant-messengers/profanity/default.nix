@@ -20,13 +20,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "boothj5";
+    owner = "profanity-im";
     repo = "profanity";
     rev = "${version}";
-    sha256 = "0f5kfzy22wzyj7rnd2nbj93q96ga87b53wlg8lfg83qdphx1ymz9";
+    sha256 = "15adg7ndjkzy04lizjmnvv0pf0snhzp6a8x74mndcm0zma0dia0z";
   };
 
   patches = [ ./patches/packages-osx.patch ./patches/undefined-macros.patch ];
