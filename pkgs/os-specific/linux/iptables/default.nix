@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://git.netfilter.org/iptables/patch/?id=2908eda10bf9fc81119d4f3ad672c67918ab5955";
       sha256 = "1dci4c8b7gcdrf77l2aicrcwlbp320xjz76fhavams0b4kgs6yr3";
     })
+    (fetchpatch {
+      url = "https://git.netfilter.org/iptables/patch/iptables/xshared.c?id=2ae1099a42e6a0f06de305ca13a842ac83d4683e";
+      name = "CVE-2019-11360.patch";
+      sha256 = "0ssk2ad5lfb1ifa6jgk76s4mm68hdkz7g8bjmdzi2yv3l06lf2dp";
+    })
   ];
 
   nativeBuildInputs = [ bison flex pkgconfig pruneLibtoolFiles ];
