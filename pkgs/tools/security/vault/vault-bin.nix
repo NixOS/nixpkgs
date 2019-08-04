@@ -1,12 +1,10 @@
 { stdenv, fetchurl, unzip }:
 
 let
-
   version = "1.1.3";
+
   sources = let
-
     base = "https://releases.hashicorp.com/vault/${version}";
-
   in {
     "x86_64-linux" = fetchurl {
       url = "${base}/vault_${version}_linux_amd64.zip";
@@ -30,28 +28,26 @@ let
     };
   };
 
-in
-  stdenv.mkDerivation {
+in stdenv.mkDerivation {
+  name = "vault-bin-${version}";
 
-    src = sources."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = sources."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-    name = "vault-bin-${version}";
+  nativeBuildInputs = [ unzip ];
 
-    nativeBuildInputs = [ unzip ];
+  sourceRoot = ".";
 
-    unpackPhase = "unzip $src -d vault";
+  installPhase = ''
+    mkdir -p $out/bin $out/share/bash-completion/completions
+    mv vault $out/bin
+    echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
+  '';
 
-    installPhase = ''
-      mkdir -p $out/bin $out/share/bash-completion/completions
-      mv vault/vault $out/bin
-      echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = https://www.vaultproject.io;
-      description = "A tool for managing secrets, this binary includes the UI";
-      platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "i686-darwin" ];
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ offline psyanticy ];
-    };
-  }
+  meta = with stdenv.lib; {
+    homepage = https://www.vaultproject.io;
+    description = "A tool for managing secrets, this binary includes the UI";
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "i686-darwin" ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ offline psyanticy ];
+  };
+}
