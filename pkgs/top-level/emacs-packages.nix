@@ -286,8 +286,6 @@ let
       };
     };
 
-    redshank = callPackage ../applications/editors/emacs-modes/redshank { };
-
     rtags = melpaBuild rec {
       pname = "rtags";
       version = "2.12";
