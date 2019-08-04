@@ -1,23 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, perl
+{ stdenv, fetchurl, pkgconfig, bison, flex
 , buildsystem
-, libparserutils
 }:
 
 stdenv.mkDerivation rec {
 
   name = "netsurf-${libname}-${version}";
-  libname = "libhubbub";
-  version = "0.3.6";
+  libname = "libnslog";
+  version = "0.1.2";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "1x3v7xvagx85v9h3pypzc86rcxs4mij87mmcqkp8pq50q6awfmnp";
+    sha256 = "1ggs6xvxp8fbg5w8pifalipm458ygr9ab6j2yvj8fnnmxwvdh4jd";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl
+  nativeBuildInputs = [ pkgconfig bison flex ];
+  buildInputs = [
     buildsystem
-    libparserutils
   ];
 
   makeFlags = [
@@ -27,9 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.netsurf-browser.org/;
-    description = "HTML5 parser library for netsurf browser";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.vrthra ];
+    description = "NetSurf Parametric Logging Library";
+    license = licenses.mit;
+    maintainers = [ maintainers.samueldr ];
     platforms = platforms.linux;
   };
 }

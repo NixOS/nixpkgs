@@ -1,23 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, perl
+{ stdenv, fetchurl, pkgconfig, gperf
 , buildsystem
+, libdom
+, libhubbub
 , libparserutils
+, libwapcaplet
 }:
 
 stdenv.mkDerivation rec {
 
   name = "netsurf-${libname}-${version}";
-  libname = "libhubbub";
-  version = "0.3.6";
+  libname = "libsvgtiny";
+  version = "0.1.7";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "1x3v7xvagx85v9h3pypzc86rcxs4mij87mmcqkp8pq50q6awfmnp";
+    sha256 = "10bpkmvfpydj74im3r6kqm9vnvgib6afy0alx71q5n0w5yawy39c";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl
+  nativeBuildInputs = [ pkgconfig gperf ];
+  buildInputs = [
     buildsystem
+    libdom
+    libhubbub
     libparserutils
+    libwapcaplet
   ];
 
   makeFlags = [
@@ -27,9 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.netsurf-browser.org/;
-    description = "HTML5 parser library for netsurf browser";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.vrthra ];
+    description = "NetSurf SVG decoder";
+    license = licenses.mit;
+    maintainers = [ maintainers.samueldr ];
     platforms = platforms.linux;
   };
 }

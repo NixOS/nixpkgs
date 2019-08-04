@@ -4285,6 +4285,8 @@ in
 
     libparserutils = callPackage ../applications/misc/netsurf/libparserutils { };
 
+    libnslog = callPackage ../applications/misc/netsurf/libnslog { };
+
     libcss = callPackage ../applications/misc/netsurf/libcss { };
 
     libhubbub = callPackage ../applications/misc/netsurf/libhubbub { };
@@ -4298,6 +4300,10 @@ in
     libnsfb = callPackage ../applications/misc/netsurf/libnsfb { };
 
     libnsutils = callPackage ../applications/misc/netsurf/libnsutils { };
+
+    libsvgtiny = callPackage ../applications/misc/netsurf/libsvgtiny { };
+
+    libnspsl = callPackage ../applications/misc/netsurf/libnspsl { };
 
     libutf8proc = callPackage ../applications/misc/netsurf/libutf8proc { };
 

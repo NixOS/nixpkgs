@@ -1,23 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, perl
+{ stdenv, fetchurl, pkgconfig
 , buildsystem
-, libparserutils
 }:
 
 stdenv.mkDerivation rec {
 
   name = "netsurf-${libname}-${version}";
-  libname = "libhubbub";
-  version = "0.3.6";
+  libname = "libnspsl";
+  version = "0.1.5";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "1x3v7xvagx85v9h3pypzc86rcxs4mij87mmcqkp8pq50q6awfmnp";
+    sha256 = "0siq8zjfxv75i9fw6q5hkaijpdm1w3zskd5qk6vsvz8cqan4vifd";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl
+  buildInputs = [
     buildsystem
-    libparserutils
   ];
 
   makeFlags = [
@@ -27,9 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.netsurf-browser.org/;
-    description = "HTML5 parser library for netsurf browser";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.vrthra ];
+    description = "NetSurf Public Suffix List - Handling library";
+    license = licenses.mit;
+    maintainers = [ maintainers.samueldr ];
     platforms = platforms.linux;
   };
 }
