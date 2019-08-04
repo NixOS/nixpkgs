@@ -380,10 +380,6 @@ let
       };
     };
 
-    nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {
-      inherit lib;
-    };
-
     org-mac-link =
       callPackage ../applications/editors/emacs-modes/org-mac-link { };
 
