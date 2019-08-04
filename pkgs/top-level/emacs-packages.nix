@@ -410,9 +410,6 @@ let
     stgit = callPackage ../applications/editors/emacs-modes/stgit { };
 
     structured-haskell-mode = self.shm;
-    shm = (melpaPackages self).shm.overrideAttrs (attrs: {
-      propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
-    });
 
     thingatpt-plus = callPackage ../applications/editors/emacs-modes/thingatpt-plus { };
 

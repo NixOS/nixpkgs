@@ -151,6 +151,10 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         stgit = markBroken super.stgit;
 
+        shm = super.shm.overrideAttrs (attrs: {
+          propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
+        });
+
         # upstream issue: missing file header
         tawny-mode = markBroken super.tawny-mode;
 
