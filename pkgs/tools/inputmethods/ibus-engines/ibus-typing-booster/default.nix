@@ -12,7 +12,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ibus-typing-booster-${version}";
+  pname = "ibus-typing-booster";
   version = "2.6.4";
 
   src = fetchFromGitHub {
