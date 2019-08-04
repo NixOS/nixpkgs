@@ -105,6 +105,27 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         initsplit = markBroken super.initsplit;
 
+        irony = super.irony.overrideAttrs(old: {
+          preConfigure = ''
+            cd server
+          '';
+          preBuild = ''
+            make
+          '';
+          postInstall = ''
+            mkdir -p $out
+            mv $out/share/emacs/site-lisp/elpa/*/server/bin $out
+            rm -rf $out/share/emacs/site-lisp/elpa/*/server
+          '';
+          preCheck = ''
+            cd source/server
+          '';
+          dontUseCmakeBuildDir = true;
+          doCheck = true;
+          packageRequires = [ self.emacs ];
+          nativeBuildInputs = [ external.cmake external.llvmPackages.llvm external.llvmPackages.clang ];
+        });
+
         # tries to write a log file to $HOME
         insert-shebang = super.insert-shebang.overrideAttrs (attrs: {
           HOME = "/tmp";
@@ -355,6 +376,13 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # Expects bash to be at /bin/bash
         helm-rtags = markBroken super.helm-rtags;
+
+        # Fails with "package does not untar cleanly into ..."
+        irony = shared.irony.overrideAttrs(old: {
+          meta = old.meta // {
+            broken = true;
+          };
+        });
 
         magit-annex = super.magit-annex.overrideAttrs (attrs: {
           # searches for Git at build time
