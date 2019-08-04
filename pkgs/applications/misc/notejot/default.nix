@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, pkgconfig, meson, ninja, python3, pantheon
-, gtk3, gtksourceview, json-glib, gnome3, wrapGAppsHook }:
+, gtk3, gtksourceview, json-glib, libgee, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "notejot";
-  version = "1.5.5";
+  version = "1.5.8";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "0khf6mwidybfgnq4zmhf3af4w6aicipmi12fvs722fqlf1lrkdmd";
+    sha256 = "1v7f4xy5iwdjyf4416qpiwzifi68n466faia1hxzsq18fb1ri0af";
   };
 
   nativeBuildInputs = [
@@ -22,16 +22,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.libgee
     gtk3
     gtksourceview
     json-glib
+    libgee
     pantheon.elementary-icon-theme
     pantheon.granite
   ];
 
   postPatch = ''
-    chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
