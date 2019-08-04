@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       wrapProgram $p \
         --set JAVA_HOME "${jre}" \
         --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
-        --prefix PATH : "${bash}/bin:${gnused}/bin"
+        --prefix PATH : "${jre}/bin:${bash}/bin:${gnused}/bin"
     done
   '';
 
