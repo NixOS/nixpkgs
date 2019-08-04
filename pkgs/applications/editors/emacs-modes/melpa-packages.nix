@@ -183,6 +183,22 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         window-numbering = markBroken super.window-numbering;
 
+        zmq = super.zmq.overrideAttrs(old: {
+          stripDebugList = [ "share" ];
+          preBuild = ''
+            make
+          '';
+          nativeBuildInputs = [
+            external.autoconf external.automake external.pkgconfig external.libtool
+            (external.zeromq.override { enableDrafts = true; })
+          ];
+          postInstall = ''
+            mv $out/share/emacs/site-lisp/elpa/zmq-*/src/.libs/emacs-zmq.so $out/share/emacs/site-lisp/elpa/zmq-*
+            rm -r $out/share/emacs/site-lisp/elpa/zmq-*/src
+            rm $out/share/emacs/site-lisp/elpa/zmq-*/Makefile
+          '';
+        });
+
         # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
         _0blayout = super."0blayout";
         _0xc = super."0xc";
