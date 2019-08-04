@@ -6,14 +6,14 @@
 
 let
   pname = "kronometer";
-  version = "2.2.2";
+  version = "2.2.3";
 in
 mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "142f1kqygil6d4pvh6pallin355h2rq5s1hs6gd11plcin6rkg2j";
+    sha256 = "05hs8729a3aqjpwmn2xdf2sriacrll4sj4ax3lm4s1ravj09n9bm";
   };
 
   meta = with lib; {
