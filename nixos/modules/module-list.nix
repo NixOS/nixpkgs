@@ -379,6 +379,7 @@
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
   ./services/games/crossfire-server.nix
+  ./services/games/deliantra-server.nix
   ./services/games/factorio.nix
   ./services/games/freeciv.nix
   ./services/games/minecraft-server.nix
