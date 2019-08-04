@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
+, enableShared ? true
+, enableStatic ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "doc" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
     export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
@@ -28,7 +30,8 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
     ++ lib.optional enableLargeConfig "--enable-large-config"
-    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static";
+    ++ lib.optional (!enableShared) "--disable-shared"
+    ++ lib.optional enableStatic "--enable-static";
 
   doCheck = true; # not cross;
 

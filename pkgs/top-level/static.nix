@@ -60,6 +60,11 @@ in {
       haskellStaticAdapter;
   };
 
+  boehmgc = super.boehmgc.override {
+    enableShared = false;
+    enableStatic = true;
+  };
+
   ncurses = super.ncurses.override {
     enableStatic = true;
   };
