@@ -721,6 +721,8 @@ let
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
+    tcslib = callPackage ../development/ocaml-modules/tcslib { };
+
     toml = callPackage ../development/ocaml-modules/toml { };
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
