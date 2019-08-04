@@ -222,25 +222,6 @@ let
 
     emacs-libvterm = callPackage ../applications/editors/emacs-modes/emacs-libvterm { };
 
-    evil-jumper = melpaBuild rec {
-      pname   = "evil-jumper";
-      version = "20151017";
-      src = fetchFromGitHub {
-        owner  = "bling";
-        repo   = pname;
-        rev    = "fcadf2d93aaea3ba88a2ae63a860b9c1f0568167";
-        sha256 = "0axx6cc9z9c1wh7qgm6ya54dsp3bn82bnb0cwj1rpv509qqmwgsj";
-      };
-      recipe = writeText "recipe" ''
-        (evil-jumper :repo "bling/evil-jumper" :fetcher github)
-      '';
-      packageRequires = [ evil ];
-      meta = {
-        description = "Jump across buffer boundaries and revive dead buffers if necessary";
-        license = gpl3Plus;
-      };
-    };
-
     ess-R-object-popup =
       callPackage ../applications/editors/emacs-modes/ess-R-object-popup { };
 
