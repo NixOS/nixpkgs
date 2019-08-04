@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qt4, pkgconfig, libsamplerate, fftwSinglePrec, which, cmake
 , darwin }:
 
-let version = "1.0.9"; in
+let version = "1.1.0"; in
 
 stdenv.mkDerivation rec {
   name = "liblastfm-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/lastfm/liblastfm/tarball/${version}";
     name = "${name}.tar.gz";
-    sha256 = "09qiaxsxw6g2m7mvkffpfsi5wis8nl1x4lgnk0sa30859z54iw53";
+    sha256 = "1j34xc30vg7sfszm2jx9mlz9hy7p1l929fka9wnfcpbib8gfi43x";
   };
 
   prefixKey = "--prefix ";
