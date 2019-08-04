@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   meta = with stdenv.lib; {
     description = "Create books from MarkDown";
     homepage = https://github.com/rust-lang-nursery/mdbook;
-    license = [ licenses.asl20 licenses.mit ];
+    license = [ licenses.mpl20 ];
     maintainers = [ maintainers.havvy ];
     platforms = platforms.all;
   };
