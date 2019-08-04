@@ -12,7 +12,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
 */
 
-{ lib, external }: variant: self: let
+{ lib, external, pkgs }: variant: self: let
 
   dontConfigure = pkg: if pkg != null then pkg.override (args: {
     melpaBuild = drv: args.melpaBuild (drv // {
@@ -75,6 +75,17 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # build timeout
         graphene = markBroken super.graphene;
+
+        pdf-tools = super.pdf-tools.overrideAttrs(old: {
+          nativeBuildInputs = [ external.pkgconfig ];
+          buildInputs = with external; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
+          preBuild = "make server/epdfinfo";
+          recipe = pkgs.writeText "recipe" ''
+            (pdf-tools
+            :repo "politza/pdf-tools" :fetcher github
+            :files ("lisp/pdf-*.el" "server/epdfinfo"))
+          '';
+        });
 
         # Build same version as Haskell package
         hindent = super.hindent.overrideAttrs (attrs: {

@@ -39,6 +39,7 @@
 , melpaBuild
 
 , external
+, pkgs
 }:
 
 with lib.licenses;
@@ -51,7 +52,7 @@ let
 
   # Contains both melpa stable & unstable
   melpaGeneric = import ../applications/editors/emacs-modes/melpa-packages.nix {
-    inherit external lib;
+    inherit external lib pkgs;
   };
 
   melpaStablePackages = self: let
@@ -75,30 +76,6 @@ let
     emacsWithPackages = emacsWithPackages self;
 
     ## START HERE
-
-    pdf-tools = melpaBuild rec {
-      pname = "pdf-tools";
-      version = "0.90";
-      src = fetchFromGitHub {
-        owner = "politza";
-        repo = "pdf-tools";
-        rev = "v${version}";
-        sha256 = "0iv2g5kd14zk3r5dzdw7b7hk4b5w7qpbilcqkja46jgxbb6xnpl9";
-      };
-      nativeBuildInputs = [ external.pkgconfig ];
-      buildInputs = with external; [ autoconf automake libpng zlib poppler ];
-      preBuild = "make server/epdfinfo";
-      recipe = writeText "recipe" ''
-        (pdf-tools
-        :repo "politza/pdf-tools" :fetcher github
-        :files ("lisp/pdf-*.el" "server/epdfinfo"))
-      '';
-      packageRequires = [ tablist let-alist ];
-      meta = {
-        description = "Emacs support library for PDF files";
-        license = gpl3;
-      };
-    };
 
     elisp-ffi = melpaBuild rec {
       pname = "elisp-ffi";
