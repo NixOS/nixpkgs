@@ -170,8 +170,6 @@ let
       };
     };
 
-    emacs-libvterm = callPackage ../applications/editors/emacs-modes/emacs-libvterm { };
-
     ess-R-object-popup =
       callPackage ../applications/editors/emacs-modes/ess-R-object-popup { };
 
