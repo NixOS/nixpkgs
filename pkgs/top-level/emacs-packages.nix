@@ -182,9 +182,9 @@ let
     icicles = callPackage ../applications/editors/emacs-modes/icicles { };
 
     rtags = melpaBuild rec {
+      inherit (external.rtags) version src meta;
+
       pname = "rtags";
-      version = "2.12";
-      src = external.rtags.src;
 
       dontConfigure = true;
 
@@ -194,7 +194,6 @@ let
          :repo "andersbakken/rtags" :fetcher github
          :files ("src/*.el"))
       '';
-      inherit (external.rtags) meta;
     };
 
     lib-requires =
