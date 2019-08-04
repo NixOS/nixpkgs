@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-turbo";
   version = "0.0.3";

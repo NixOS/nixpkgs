@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, xdg_utils, qttools, qtx11extras,
+{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, pkgconfig, xdg_utils, qttools, qtx11extras,
   dtkcore, dtkwidget, dtkwm, deepin-turbo, deepin-shortcut-viewer,
   deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-screenshot";
   version = "4.2.1";
