@@ -129,47 +129,6 @@ let
       };
     };
 
-    elpy = melpaBuild rec {
-      pname   = "elpy";
-      version = external.elpy.version;
-      src = fetchFromGitHub {
-        owner  = "jorgenschaefer";
-        repo   = pname;
-        rev    = "39ea47c73f040ce8dcc1c2d2639ebc0eb57ab8c8";
-        sha256 = "0q3av1qv4m6aj4bil608f688hjpr5px8zqnnrdqx784nz98rpjrs";
-      };
-      recipe = writeText "recipe" ''
-        (elpy :repo "jorgenschaefer/elpy" :fetcher github)
-      '';
-
-      patchPhase = ''
-        for file in elpy.el elpy-pkg.el; do
-          substituteInPlace $file \
-              --replace "company \"0.8.2\"" "company \"${company.version}\"" \
-              --replace "find-file-in-project \"3.3\"" "find-file-in-project \"${(melpaPackages self).find-file-in-project.version}\"" \
-              --replace "highlight-indentation \"0.5.0\"" "highlight-indentation \"${highlight-indentation.version}\"" \
-              --replace "pyvenv \"1.3\"" "pyvenv \"${pyvenv.version}\"" \
-              --replace "yasnippet \"0.8.0\"" "yasnippet \"${yasnippet.version}\""
-       done
-      '';
-
-      packageRequires = [
-        company find-file-in-project highlight-indentation pyvenv yasnippet
-      ];
-
-      propagatedUserEnvPkgs = [ external.elpy ] ++ packageRequires;
-
-      meta = {
-        description = "Emacs Python Development Environment";
-        longDescription = ''
-          Elpy is an Emacs package to bring powerful Python editing to Emacs.
-          It combines a number of other packages, both written in Emacs Lisp as
-          well as Python.
-        '';
-        license = gpl3Plus;
-      };
-    };
-
     ess-R-object-popup =
       callPackage ../applications/editors/emacs-modes/ess-R-object-popup { };
 

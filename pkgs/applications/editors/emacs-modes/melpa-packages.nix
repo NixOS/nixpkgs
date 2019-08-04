@@ -60,6 +60,10 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         elmine = markBroken super.elmine;
 
+        elpy = super.elpy.overrideAttrs(old: {
+          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs ++ [ external.elpy ];
+        });
+
         evil-magit = super.evil-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
