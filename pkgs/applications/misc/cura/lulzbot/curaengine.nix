@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch, cmake, libarcusLulzbot, stb, protobuf }:
+{ stdenv, callPackage, fetchgit, fetchpatch, cmake, libarcusLulzbot, stb, protobuf }:
 
 stdenv.mkDerivation rec {
   name = "curaengine-lulzBot-${version}";

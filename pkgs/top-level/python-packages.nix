@@ -3238,7 +3238,6 @@ in {
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
   libarcus = callPackage ../development/python-modules/libarcus { inherit (pkgs) protobuf; };
-  libarcusLulzbot = callPackage ../development/python-modules/libarcus/lulzbot.nix { inherit (pkgs) protobuf; };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
@@ -3259,7 +3258,6 @@ in {
   };
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
-  libsavitarLulzbot = callPackage ../development/python-modules/libsavitar/lulzbot.nix { };
 
   libplist = disabledIf isPy3k
     (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
@@ -5539,7 +5537,6 @@ in {
   twilio = callPackage ../development/python-modules/twilio { };
 
   uranium = callPackage ../development/python-modules/uranium { };
-  uraniumLulzbot = callPackage ../development/python-modules/uranium/lulzbot.nix { };
 
   uuid = callPackage ../development/python-modules/uuid { };
 

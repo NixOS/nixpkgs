@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python, cmake
+{ stdenv, callPackage, fetchurl, fetchgit, buildPythonPackage, fetchFromGitHub, python, cmake
 , pyqt5, numpy, scipy, shapely, libarcusLulzbot, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cmake doxygen ];
 
   # Qt 5.12+ support; see https://code.alephobjects.com/rU70b73ba0a270799b9eacf78e400aa8b8ab3fb2ee
-  patches = [ ./qt512-support.patch ];
+  patches = [ ./uranium-qt512-support.patch ];
 
   postPatch = ''
     sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt

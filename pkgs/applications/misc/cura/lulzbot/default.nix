@@ -1,4 +1,4 @@
-{ lib, fetchgit, curaengineLulzbot, cmake, jq, python3Packages, qtbase, qtquickcontrols2 }:
+{ lib, callPackage, fetchgit, cmake, jq, python3Packages, qtbase, qtquickcontrols2 }:
 
 let
   # admittedly, we're using (printer firmware) blobs when we could compile them ourselves.
@@ -8,10 +8,22 @@ let
     rev = "cdc046494bbfe1f65bfb34659a257eef9a0100a0";
     sha256 = "0v0s036gxdjiglas2yzw95alv60sw3pq5k1zrrhmw9mxr4irrblb";
   };
-  curaengine = curaengineLulzbot;
-  libarcus = python3Packages.libarcusLulzbot;
-  uranium = python3Packages.uraniumLulzbot;
-  libsavitar = python3Packages.libsavitarLulzbot;
+
+  libarcusLulzbot = callPackage ./libarcus.nix {
+    inherit (python3Packages) buildPythonPackage sip pythonOlder;
+  };
+  libsavitarLulzbot = callPackage ./libsavitar.nix {
+    inherit (python3Packages) buildPythonPackage sip pythonOlder;
+  };
+
+  inherit (python3Packages) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
+  curaengine = callPackage ./curaengine.nix {
+    inherit libarcusLulzbot;
+  };
+  uraniumLulzbot = callPackage ./uranium.nix {
+    inherit callPackage libarcusLulzbot;
+    inherit (python3Packages) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
+  };
 in
 python3Packages.buildPythonApplication rec {
   name = "cura-lulzbot-${version}";
@@ -26,11 +38,11 @@ python3Packages.buildPythonApplication rec {
   format = "other"; # using cmake to build
   buildInputs = [ qtbase qtquickcontrols2 ];
   # numpy-stl temporarily disabled due to https://code.alephobjects.com/T8415
-  propagatedBuildInputs = with python3Packages; [ pyserial requests zeroconf ] ++ [ libsavitar uranium libarcus ]; # numpy-stl
+  propagatedBuildInputs = with python3Packages; [ pyserial requests zeroconf ] ++ [ libsavitarLulzbot uraniumLulzbot libarcusLulzbot ]; # numpy-stl
   nativeBuildInputs = [ cmake python3Packages.wrapPython ];
 
   cmakeFlags = [
-    "-DURANIUM_DIR=${uranium.src}"
+    "-DURANIUM_DIR=${uraniumLulzbot.src}"
     "-DCURA_VERSION=${version}"
   ];
 
@@ -42,16 +54,16 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     substituteInPlace "$out/bin/cura-lulzbot" --replace 'import cura.CuraApplication' 'import Savitar; import cura.CuraApplication'
     ln -sT "${curaBinaryData}/cura/resources/firmware" "$out/share/cura/resources/firmware"
-    ln -sT "${uranium}/share/uranium" "$out/share/uranium"
+    ln -sT "${uraniumLulzbot}/share/uranium" "$out/share/uranium"
     ${jq}/bin/jq --arg out "$out" '.build=$out' >"$out/version.json" <<'EOF'
     ${builtins.toJSON {
       cura = version;
       cura_version = version;
       binarydata = curaBinaryDataVersion;
       engine = curaengine.version;
-      libarcus = libarcus.version;
-      libsavitar = libsavitar.version;
-      uranium = uranium.version;
+      libarcus = libarcusLulzbot.version;
+      libsavitar = libsavitarLulzbot.version;
+      uranium = uraniumLulzbot.version;
     }}
     EOF
   '';
