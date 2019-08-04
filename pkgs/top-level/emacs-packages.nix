@@ -307,20 +307,6 @@ let
     lib-requires =
       callPackage ../applications/editors/emacs-modes/lib-requires { };
 
-    lui = melpaBuild rec {
-      pname   = "lui";
-      version = circe.version;
-      src     = circe.src;
-      packageRequires = [ tracking ];
-      recipe  = writeText "recipe" ''
-        (lcs :repo "jorgenschaefer/circe" :fetcher github :files ("lui*.el"))
-      '';
-      meta = {
-        description = "User interface library for Emacs";
-        license = gpl3Plus;
-      };
-    };
-
     org-mac-link =
       callPackage ../applications/editors/emacs-modes/org-mac-link { };
 
