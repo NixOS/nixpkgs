@@ -403,8 +403,6 @@ let
       };
     };
 
-    stgit = callPackage ../applications/editors/emacs-modes/stgit { };
-
     structured-haskell-mode = self.shm;
 
     thingatpt-plus = callPackage ../applications/editors/emacs-modes/thingatpt-plus { };
