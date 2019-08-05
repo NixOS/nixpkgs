@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pgcli";
-  version = "2.0.2";
+  version = "2.1.1";
 
   # Python 2 won't have prompt_toolkit 2.x.x
   # See: https://github.com/NixOS/nixpkgs/blob/f49e2ad3657dede09dc998a4a98fd5033fb52243/pkgs/top-level/python-packages.nix#L3408
