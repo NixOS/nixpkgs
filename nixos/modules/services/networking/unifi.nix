@@ -148,7 +148,7 @@ in
 
     systemd.tmpfiles.rules = [
       "e '${stateDir}' 0700 unifi - - -"
-      "e '${stateDir}/data' 0700 unifi - - -"
+      "d '${stateDir}/data' 0700 unifi - - -"
     ];
 
     systemd.services.unifi = {
