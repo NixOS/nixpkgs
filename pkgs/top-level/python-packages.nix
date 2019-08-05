@@ -5247,6 +5247,8 @@ in {
 
   units = callPackage ../development/python-modules/units { };
 
+  unittest-data-provider = callPackage ../development/python-modules/unittest-data-provider { };
+
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
