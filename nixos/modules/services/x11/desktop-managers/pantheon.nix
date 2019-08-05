@@ -102,6 +102,10 @@ in
           # Makes qt applications look less alien
           export QT_QPA_PLATFORMTHEME=gtk3
           export QT_STYLE_OVERRIDE=adwaita
+
+          # Settings from elementary-default-settings
+          export GTK_CSD=1
+          export GTK_MODULES=$GTK_MODULES:pantheon-filechooser-module
       fi
     '';
 

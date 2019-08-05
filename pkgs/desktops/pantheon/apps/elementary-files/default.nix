@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   name = "elementary-${pname}-${version}";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
