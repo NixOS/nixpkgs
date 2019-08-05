@@ -98,8 +98,12 @@ stdenv.mkDerivation rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  NIX_CFLAGS_COMPILE = (optional stdenv.isSunOS "-DBSD_COMP")
-    ++ [ "-Wno-error=nonnull" ];
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=nonnull"
+    # Default for release buildtype but passed manually because
+    # we're using plain
+    "-DG_DISABLE_CAST_CHECKS"
+  ];
 
   postPatch = ''
     # substitute fix-gio-launch-desktop-path.patch
