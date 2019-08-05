@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pythia-${version}";
-  version = "8.240";
+  version = "8.243";
 
   src = fetchurl {
     url = "http://home.thep.lu.se/~torbjorn/pythia8/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
-    sha256 = "13cd86030j1f00n4xw30g26cgir3a5lsn9n0z13dh1vprbc9ax6j";
+    sha256 = "0y8w5gdaczg8vdw63rkgjr1dcvqs2clqkdia34p30xcwgm1jgv7q";
   };
 
   buildInputs = [ boost fastjet hepmc zlib rsync lhapdf ];
