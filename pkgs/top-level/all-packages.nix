@@ -4757,8 +4757,6 @@ in
 
   mosh = callPackage ../tools/networking/mosh { };
 
-  motuclient = callPackage ../applications/science/misc/motu-client { };
-
   mpage = callPackage ../tools/text/mpage { };
 
   mprime = callPackage ../tools/misc/mprime { };
