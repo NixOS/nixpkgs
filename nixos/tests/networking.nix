@@ -21,7 +21,7 @@ let
         useNetworkd = networkd;
         firewall.checkReversePath = true;
         firewall.allowedUDPPorts = [ 547 ];
-        interfaces = mkOverride 0 (listToAttrs (flip map vlanIfs (n:
+        interfaces = mkOverride 0 (listToAttrs (forEach vlanIfs (n:
           nameValuePair "eth${toString n}" {
             ipv4.addresses = [ { address = "192.168.${toString n}.1"; prefixLength = 24; } ];
             ipv6.addresses = [ { address = "fd00:1234:5678:${toString n}::1"; prefixLength = 64; } ];

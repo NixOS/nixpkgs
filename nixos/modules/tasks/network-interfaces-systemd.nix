@@ -74,7 +74,7 @@ in
         enable = true;
         networks."99-main" = genericNetwork mkDefault;
       }
-      (mkMerge (flip map interfaces (i: {
+      (mkMerge (forEach interfaces (i: {
         netdevs = mkIf i.virtual ({
           "40-${i.name}" = {
             netdevConfig = {
@@ -90,7 +90,7 @@ in
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
             (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
-          address = flip map (interfaceIps i)
+          address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
           networkConfig.IPv6PrivacyExtensions = "kernel";
         } ];
@@ -102,7 +102,7 @@ in
             Kind = "bridge";
           };
         };
-        networks = listToAttrs (flip map bridge.interfaces (bi:
+        networks = listToAttrs (forEach bridge.interfaces (bi:
           nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
             DHCP = mkOverride 0 (dhcpStr false);
             networkConfig.Bridge = name;
@@ -173,7 +173,7 @@ in
 
         };
 
-        networks = listToAttrs (flip map bond.interfaces (bi:
+        networks = listToAttrs (forEach bond.interfaces (bi:
           nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
             DHCP = mkOverride 0 (dhcpStr false);
             networkConfig.Bond = name;
