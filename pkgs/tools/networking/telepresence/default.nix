@@ -11,7 +11,7 @@ let
       leaveDotGit = true;
     };
 
-    buildInputs = p.buildInputs ++ [ git ];
+    nativeBuildInputs = p.nativeBuildInputs ++ [ git ];
     postPatch = "rm sshuttle/tests/client/test_methods_nat.py";
     postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
   });
