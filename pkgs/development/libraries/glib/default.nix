@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     # Default for release buildtype but passed manually because
     # we're using plain
     "-DG_DISABLE_CAST_CHECKS"
-  ] ++ optional stdenv.isSunOS "-DBSD_COMP";
+  ];
 
   postPatch = ''
     # substitute fix-gio-launch-desktop-path.patch
