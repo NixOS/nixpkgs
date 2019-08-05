@@ -2369,6 +2369,8 @@ in
 
   cocoapods-beta = lowPrio (callPackage ../development/mobile/cocoapods { beta = true; });
 
+  coinomi = callPackage ../applications/altcoins/coinomi { };
+
   compass = callPackage ../development/tools/compass { };
 
   conda = callPackage ../tools/package-management/conda { };
