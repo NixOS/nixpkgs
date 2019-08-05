@@ -1,0 +1,101 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "315900437a8d78024a4c5f4e80e2ce0a",
+    "packages": [
+        {
+            "name": "svanderburg/composer2nix",
+            "version": "v0.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/svanderburg/composer2nix.git",
+                "reference": "2fb157acaf0ecbe34436195c694637396f7258a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/svanderburg/composer2nix/zipball/2fb157acaf0ecbe34436195c694637396f7258a6",
+                "reference": "2fb157acaf0ecbe34436195c694637396f7258a6",
+                "shasum": ""
+            },
+            "require": {
+                "svanderburg/pndp": "0.0.2"
+            },
+            "require-dev": {
+                "phpdocumentor/phpdocumentor": "2.9.x"
+            },
+            "bin": [
+                "bin/composer2nix"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Composer2Nix\\": "src/Composer2Nix"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sander van der Burg",
+                    "email": "svanderburg@gmail.com",
+                    "homepage": "http://sandervanderburg.nl"
+                }
+            ],
+            "description": "Generate Nix expressions to build PHP composer packages",
+            "time": "2018-06-29T20:58:30+00:00"
+        },
+        {
+            "name": "svanderburg/pndp",
+            "version": "v0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/svanderburg/pndp.git",
+                "reference": "4bfe9c4120c23354ab8dc295957dc3009a39bff0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/svanderburg/pndp/zipball/4bfe9c4120c23354ab8dc295957dc3009a39bff0",
+                "reference": "4bfe9c4120c23354ab8dc295957dc3009a39bff0",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpdocumentor/phpdocumentor": "2.9.x"
+            },
+            "bin": [
+                "bin/pndp-build"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PNDP\\": "src/PNDP"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sander van der Burg",
+                    "email": "svanderburg@gmail.com",
+                    "homepage": "http://sandervanderburg.nl"
+                }
+            ],
+            "description": "PNDP: An internal DSL for Nix in PHP",
+            "time": "2017-10-22T12:43:22+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
