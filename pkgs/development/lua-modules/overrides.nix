@@ -40,6 +40,10 @@ with super;
       { name = "CRYPTO"; dep = pkgs.openssl; }
       { name = "OPENSSL"; dep = pkgs.openssl; }
     ];
+
+    # https://github.com/wahern/cqueues/issues/227
+    NIX_CFLAGS_COMPILE = if pkgs.stdenv.hostPlatform.isDarwin then [ "-DCLOCK_MONOTONIC" "-DCLOCK_REALTIME" ] else null;
+
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
