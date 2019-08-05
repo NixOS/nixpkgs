@@ -24,15 +24,15 @@ rec {
   /*  Apply the function to each element in the list. Same as `map`, but arguments
       flipped.
 
-      Type: foreach :: [a] -> (a -> b) -> [b]
+      Type: forEach :: [a] -> (a -> b) -> [b]
 
       Example:
-        foreach [ 1 2 ] (x:
+        forEach [ 1 2 ] (x:
           toString x
         )
         => [ "1" "2" ]
   */
-  foreach = xs: f: map f xs;
+  forEach = xs: f: map f xs;
 
   /* “right fold” a binary function `op` between successive elements of
      `list` with `nul' as the starting value, i.e.,
