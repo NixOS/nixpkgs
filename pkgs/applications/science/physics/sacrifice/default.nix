@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, hepmc, lhapdf, pythia, makeWrapper }:
+{ stdenv, fetchurl, boost, hepmc2, lhapdf, pythia, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "sacrifice-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "10bvpq63kmszy1habydwncm0j1dgvam0fkrmvkgbkvf804dcjp6g";
   };
 
-  buildInputs = [ boost hepmc lhapdf pythia ];
+  buildInputs = [ boost hepmc2 lhapdf pythia ];
   nativeBuildInputs = [ makeWrapper ];
 
   patches = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-HepMC=${hepmc}"
+    "--with-HepMC=${hepmc2}"
     "--with-pythia=${pythia}"
   ];
 

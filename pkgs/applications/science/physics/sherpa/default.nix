@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, hepmc, fastjet, lhapdf, rivet, sqlite }:
+{ stdenv, fetchurl, gfortran, hepmc2, fastjet, lhapdf, rivet, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "sherpa-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
-    "--enable-hepmc2=${hepmc}"
+    "--enable-hepmc2=${hepmc2}"
     "--enable-fastjet=${fastjet}"
     "--enable-lhapdf=${lhapdf}"
     "--enable-rivet=${rivet}"

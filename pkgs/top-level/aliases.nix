@@ -145,6 +145,7 @@ mapAliases ({
   gupnptools = gupnp-tools;  # added 2015-12-19
   gutenberg = zola;  # added 2018-11-17
   heimdalFull = heimdal; # added 2018-05-01
+  hepmc = hepmc2; # added 2019-08-05
   hicolor_icon_theme = hicolor-icon-theme; # added 2018-02-25
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08

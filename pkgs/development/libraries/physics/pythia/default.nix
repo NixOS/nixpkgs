@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, fastjet, hepmc, lhapdf, rsync, zlib }:
+{ stdenv, fetchurl, boost, fastjet, hepmc2, lhapdf, rsync, zlib }:
 
 stdenv.mkDerivation rec {
   name = "pythia-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0y8w5gdaczg8vdw63rkgjr1dcvqs2clqkdia34p30xcwgm1jgv7q";
   };
 
-  buildInputs = [ boost fastjet hepmc zlib rsync lhapdf ];
+  buildInputs = [ boost fastjet hepmc2 zlib rsync lhapdf ];
 
   preConfigure = ''
     patchShebangs ./configure
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
-    "--with-hepmc2=${hepmc}"
+    "--with-hepmc2=${hepmc2}"
     "--with-lhapdf6=${lhapdf}"
   ];
 

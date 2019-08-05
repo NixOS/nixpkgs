@@ -23336,7 +23336,7 @@ in
 
   g4py = callPackage ../development/libraries/physics/geant4/g4py { };
 
-  hepmc = callPackage ../development/libraries/physics/hepmc { };
+  hepmc2 = callPackage ../development/libraries/physics/hepmc2 { };
 
   hepmc3 = callPackage ../development/libraries/physics/hepmc3 { };
 

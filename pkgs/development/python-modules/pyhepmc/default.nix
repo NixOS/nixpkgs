@@ -42,9 +42,9 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ pkgs.swig ];
-  buildInputs = [ pkgs.hepmc ];
+  buildInputs = [ pkgs.hepmc2 ];
 
-  HEPMCPATH = pkgs.hepmc;
+  HEPMCPATH = pkgs.hepmc2;
 
   checkPhase = ''
     ${python.interpreter} test/test1.py
