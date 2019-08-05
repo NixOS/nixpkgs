@@ -21,14 +21,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gtk3
     meson
     ninja
     python3
   ];
 
-  buildInputs = [ gtk3 ];
-
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
 
   mesonFlags = [
     "-Dvolume_icons=false" # Tries to install some icons to /
