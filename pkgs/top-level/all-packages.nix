@@ -22200,6 +22200,8 @@ in
 
   t4kcommon = callPackage ../games/t4kcommon { };
 
+  taisei = callPackage ../games/taisei { };
+
   tcl2048 = callPackage ../games/tcl2048 { };
 
   the-powder-toy = callPackage ../games/the-powder-toy {
