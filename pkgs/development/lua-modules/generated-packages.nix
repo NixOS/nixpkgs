@@ -196,11 +196,11 @@ coxpcall = buildLuarocksPackage {
 };
 cqueues = buildLuarocksPackage {
   pname = "cqueues";
-  version = "20171014.52-0";
+  version = "20190731.52-0";
 
   src = fetchurl {
-    url    = https://luarocks.org/cqueues-20171014.52-0.src.rock;
-    sha256 = "0q3iy1ja20nq2sn2n6badzhjq5kni86pfc09n5g2c46q9ja3vfzx";
+    url    = https://luarocks.org/cqueues-20190731.52-0.src.rock;
+    sha256 = "07rs34amsxf2bc5ccqdad0c63c70737r54316cbd9qh1a2wbvz8s";
   };
   disabled = (lua.luaversion != "5.2");
   propagatedBuildInputs = [ lua ];
