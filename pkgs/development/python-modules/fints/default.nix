@@ -2,13 +2,13 @@
   requests, mt-940, sepaxml, bleach, isPy3k }:
 
 buildPythonPackage rec {
-  version = "2.1.1";
+  version = "2.2.0";
   pname = "fints";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06p6p0xxw0n10hmf7z4k1l29fya0sja433s6lasjr1bal5asdhaq";
+    sha256 = "1apsxin6a7535vwc0kp82i1wzsg94imb4h18r8cdwjslb6wy4gwz";
   };
 
   propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
