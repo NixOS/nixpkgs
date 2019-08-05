@@ -606,7 +606,9 @@ in {
 
   gsd = callPackage ../development/python-modules/gsd { };
 
-  gssapi = callPackage ../development/python-modules/gssapi { };
+  gssapi = callPackage ../development/python-modules/gssapi {
+    inherit (pkgs) darwin krb5Full;
+  };
 
   guestfs = callPackage ../development/python-modules/guestfs { };
 
@@ -3437,6 +3439,10 @@ in {
   knack = callPackage ../development/python-modules/knack { };
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
+
+  k5test = callPackage ../development/python-modules/k5test {
+    inherit (pkgs) krb5Full findutils which;
+  };
 
   pylast = callPackage ../development/python-modules/pylast { };
 
