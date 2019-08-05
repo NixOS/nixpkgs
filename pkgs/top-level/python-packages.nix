@@ -745,6 +745,8 @@ in {
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
 
+  oath = callPackage ../development/python-modules/oath { };
+
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
@@ -1060,6 +1062,8 @@ in {
   python-socketio = callPackage ../development/python-modules/python-socketio { };
 
   python-utils = callPackage ../development/python-modules/python-utils { };
+
+  python-vipaccess = callPackage ../development/python-modules/python-vipaccess { };
 
   pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
