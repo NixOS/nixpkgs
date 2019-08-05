@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   dontBuild = true;
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/etc/gtk-3.0

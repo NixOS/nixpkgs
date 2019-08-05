@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   };
 
   dontBuild = true;
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/share/applications
