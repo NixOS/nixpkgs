@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, glibc, gnome2, gnome3
+, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
 , gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
 , at-spi2-atk }:
 
@@ -7,7 +7,7 @@ let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.47.0.59";
+  version = "8.50.0.38";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -25,7 +25,7 @@ let
     libsecret
 
     gnome2.GConf
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
 
     gnome3.gnome-keyring
@@ -58,7 +58,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
-        sha256 = "0haiccmimbj1nyyyj556b0a181walmxwbbr0m18m2w67wi5z783r";
+        sha256 = "1g0aacp4qgzp3018w1s685yr3ssqlw0z2x6ifrj01k4ig82jfkn6";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";

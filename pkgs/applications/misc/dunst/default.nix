@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
 , pkgconfig, which, perl, libXrandr
-, cairo, dbus, systemd, gdk_pixbuf, glib, libX11, libXScrnSaver
+, cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
 , libXinerama, libnotify, pango, xorgproto, librsvg, dunstify ? false
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkgconfig which systemd makeWrapper ];
 
   buildInputs = [
-    cairo dbus gdk_pixbuf glib libX11 libXScrnSaver
+    cairo dbus gdk-pixbuf glib libX11 libXScrnSaver
     libXinerama libnotify pango xorgproto librsvg libXrandr
   ];
 

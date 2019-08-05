@@ -1,15 +1,15 @@
 { stdenv, buildGoModule, fetchurl
-, go, scdoc
+, go, ncurses, scdoc
 , python3, perl, w3m, dante
 }:
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/aerc/archive/${version}.tar.gz";
-    sha256 = "0rpwjjnaq8mj619ajzyl3kad7sysbz87qz2ds0jyy7kvyzv6r7zb";
+    sha256 = "1ky1nl5b54lf5jnac2kb5404fplwnwypjplas8imdlsf517fw32n";
   };
 
   nativeBuildInputs = [
@@ -38,12 +38,13 @@ buildGoModule rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/aerc --prefix PATH ":" "$out/share/aerc/filters"
+    wrapProgram $out/bin/aerc --prefix PATH ":" \
+      "$out/share/aerc/filters:${stdenv.lib.makeBinPath [ ncurses.dev ]}"
     wrapProgram $out/share/aerc/filters/html --prefix PATH ":" \
       ${stdenv.lib.makeBinPath [ w3m dante ]}
   '';
 
-  modSha256 = "0p8lp6xwg6jacrnxzw3q73mqxy9wzj5vs0k1saa48ardqd2f7b00";
+  modSha256 = "0fc9m1qb8innypc8cxzbqyrfkawawyaqq3gqy7lqwmyh32f300jh";
 
   meta = with stdenv.lib; {
     description = "aerc is an email client for your terminal";

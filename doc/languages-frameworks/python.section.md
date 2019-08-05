@@ -603,6 +603,7 @@ All parameters from `stdenv.mkDerivation` function are still supported. The foll
 * `preShellHook`: Hook to execute commands before `shellHook`.
 * `postShellHook`: Hook to execute commands after `shellHook`.
 * `removeBinByteCode ? true`: Remove bytecode from `/bin`. Bytecode is only created when the filenames end with `.py`.
+* `setupPyGlobalFlags ? []`: List of flags passed to `setup.py` command.
 * `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
 
 The `stdenv.mkDerivation` function accepts various parameters for describing build inputs (see "Specifying dependencies"). The following are of special

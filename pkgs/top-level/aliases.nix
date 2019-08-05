@@ -107,6 +107,7 @@ mapAliases ({
   fuseki = apache-jena-fuseki; # added 2018-04-25
   gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
   gdb-multitarget = gdb; # added 2017-11-13
+  gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   glib_networking = glib-networking; # added 2018-02-25
@@ -123,6 +124,7 @@ mapAliases ({
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
   goimports = gotools; # added 2018-09-16
+  google-gflags = gflags; # added 2019-07-25
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
@@ -193,6 +195,8 @@ mapAliases ({
   m3d-linux = m33-linux; # added 2016-08-13
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
+  mariadb-client = hiPrio mariadb.client; #added 2019.07.28
+  mysql-client = hiPrio mariadb.client;
   memtest86 = memtest86plus; # added 2019-05-08
   mesa_noglu = mesa; # added 2019-05-28
   # NOTE: 2018-07-12: legacy alias:
@@ -377,8 +381,6 @@ mapAliases ({
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
-  yarn2nix = throw "Use upstream https://github.com/moretea/yarn2nix"; # added 2019-04-12
-  mkYarnPackage = yarn2nix; # added 2019-04-12
   youtubeDL = youtube-dl;  # added 2014-10-26
   zdfmediathk = mediathekview; # added 2019-01-19
 
@@ -417,6 +419,10 @@ mapAliases ({
     gst-plugins-good = pkgs.gst-plugins-good;
     gst-plugins-ugly = pkgs.gst-plugins-ugly;
   };
+
+  # added 2019-08-01
+  mumble_git = pkgs.mumble_rc;
+  murmur_git = pkgs.murmur_rc;
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;

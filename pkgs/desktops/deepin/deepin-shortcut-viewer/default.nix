@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, dtkcore, dtkwidget,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, dtkcore, dtkwidget,
   qt5integration, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-shortcut-viewer";
   version = "1.3.5";

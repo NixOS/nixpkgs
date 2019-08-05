@@ -1,16 +1,16 @@
 { stdenv, fetchurl, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
 , makeWrapper, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
-, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo
+, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo, qt5
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.44.0";
+  version = "3.45.2";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "13d3cbn8qbjd8a19qprra6gmib1d818c3zgf3q70kx6b2fq58lzi";
+    sha256 = "1379g375s3h0fgv9qg43hrg16knd76ym7qkffpn1qyc7kkhv8a05";
   };
 
   patches = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake removeReferencesTo ];
+  nativeBuildInputs = [ makeWrapper pkgconfig qmake removeReferencesTo qt5.wrapQtAppsHook ];
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
@@ -47,6 +47,11 @@ stdenv.mkDerivation rec {
     # the following are distributed with calibre, but we use upstream instead
     odfpy
   ]);
+
+  qtWrapperArgs = [
+    "--prefix PYTHONPATH: $PYTHONPATH"
+    "--prefix PATH: ${poppler_utils.out}/bin}"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -70,9 +75,8 @@ stdenv.mkDerivation rec {
     sed -i "s/env python[0-9.]*/python/" $PYFILES
     sed -i "2i import sys; sys.argv[0] = 'calibre'" $out/bin/calibre
 
-    for a in $out/bin/*; do
-      wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix PATH : ${poppler_utils.out}/bin
+    for program in $out/bin/*; do
+      wrapQtApp $program
     done
 
     # Replace @out@ by the output path.
@@ -93,6 +97,10 @@ stdenv.mkDerivation rec {
   #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
   preFixup = ''
     remove-references-to -t ${podofo.dev} $out/lib/calibre/calibre/plugins/podofo.so
+  '';
+
+  postFixup = ''
+
   '';
 
   disallowedReferences = [ podofo.dev ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, abseil-cpp, google-gflags, which
+{ stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
 , lsb-release, glog, protobuf, cbc, zlib
 , ensureNewerSourcesForZipFilesHook, python, swig
 , pythonProtobuf }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     cat <<EOF > Makefile.local
     UNIX_ABSL_DIR=${abseil-cpp}
-    UNIX_GFLAGS_DIR=${google-gflags}
+    UNIX_GFLAGS_DIR=${gflags}
     UNIX_GLOG_DIR=${glog}
     UNIX_PROTOBUF_DIR=${protobuf}
     UNIX_CBC_DIR=${cbc}
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     python.pkgs.setuptools python.pkgs.wheel
   ];
   propagatedBuildInputs = [
-    abseil-cpp google-gflags glog protobuf cbc
+    abseil-cpp gflags glog protobuf cbc
     pythonProtobuf python.pkgs.six
   ];
 

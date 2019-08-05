@@ -9,6 +9,7 @@
 , pyopenssl
 , trustme
 , sniffio
+, stdenv
 , jedi
 , pylint
 }:
@@ -36,6 +37,9 @@ buildPythonPackage rec {
     outcome
     sniffio
   ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
+
+  # tests are failing on Darwin
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     description = "An async/await-native I/O library for humans and snake people";

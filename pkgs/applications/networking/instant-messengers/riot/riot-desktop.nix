@@ -7,12 +7,12 @@ with (import ./yarn2nix.nix { inherit pkgs; });
 
 let
   executableName = "riot-desktop";
-  version = "1.2.2";
+  version = "1.3.0";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "0ak1icl3apqn1b210jqj9ysnn40808lzrdwibdmv47c30hhq10fb";
+    sha256 = "00142b0zcnwfdgvb84k2a0amyb67j3mm0d8p191aqk3bxv1xpxk1";
   };
 
 in mkYarnPackage rec {
@@ -81,7 +81,7 @@ in mkYarnPackage rec {
     description = "A feature-rich client for Matrix.org";
     homepage = https://about.riot.im/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ pacien worldofpeace ];
     inherit (electron.meta) platforms;
   };
 }

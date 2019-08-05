@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = ''A set of tools to optimize deflate-compressed files'';
     license = licenses.gpl3 ;
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     homepage = https://github.com/amadvance/advancecomp;
 
   };

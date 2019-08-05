@@ -9,7 +9,7 @@
 
 let
   pname = "gobject-introspection";
-  version = "1.60.1";
+  version = "1.60.2";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1cr4r3lh5alrks9q2ycs1kn2crnkhrhn2wrmibng6dndkr4x2i6q";
+    sha256 = "172ymc1vbg2rclq1rszx4y32vm900nn1mc4qg1a4mqxjiwvf5pzz";
   };
 
   outputs = [ "out" "dev" "man" ];

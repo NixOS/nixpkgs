@@ -26,7 +26,9 @@ with lib;
 
   security.allowSimultaneousMultithreading = mkDefault false;
 
-  security.virtualization.flushL1DataCache = mkDefault "always";
+  security.forcePageTableIsolation = mkDefault true;
+
+  security.virtualisation.flushL1DataCache = mkDefault "always";
 
   security.apparmor.enable = mkDefault true;
 
@@ -42,9 +44,6 @@ with lib;
 
     # Disable legacy virtual syscalls
     "vsyscall=none"
-
-    # Enable PTI even if CPU claims to be safe from meltdown
-    "pti=on"
   ];
 
   boot.blacklistedKernelModules = [

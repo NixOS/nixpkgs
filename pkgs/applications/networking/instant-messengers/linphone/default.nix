@@ -2,7 +2,7 @@
 , zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, libsoup, udev
 , ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip, bzrtp
 , mediastreamer-openh264, bctoolbox, makeWrapper, fetchFromGitHub, cmake
-, libmatroska, bcunit, doxygen, gdk_pixbuf, glib, cairo, pango, polarssl
+, libmatroska, bcunit, doxygen, gdk-pixbuf, glib, cairo, pango, polarssl
 , python, graphviz, belcard
 , withGui ? true
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     readline openldap cyrus_sasl libupnp zlib libxml2 gtk2 libnotify speex ffmpeg libX11
     polarssl libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
-    bctoolbox libmatroska bcunit gdk_pixbuf glib cairo pango bzrtp belcard
+    bctoolbox libmatroska bcunit gdk-pixbuf glib cairo pango bzrtp belcard
   ];
 
   nativeBuildInputs = [

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost, zeromq, rapidcheck
-, zlib, miniupnpc, qtbase ? null, qttools ? null, utillinux, protobuf, python3, qrencode, libevent
+, zlib, miniupnpc, qtbase ? null, qttools ? null, wrapQtAppsHook ? null, utillinux, protobuf, python3, qrencode, libevent
 , withGui }:
 
 with stdenv.lib;
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec{
     sha256 = "5e4e6890e07b620a93fdb24605dae2bb53e8435b2a93d37558e1db1913df405f";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs =
+    [ pkgconfig autoreconfHook ]
+    ++ optional withGui wrapQtAppsHook;
   buildInputs = [ openssl db48 boost zlib zeromq
                   miniupnpc protobuf libevent]
                   ++ optionals stdenv.isLinux [ utillinux ]
@@ -34,10 +36,11 @@ stdenv.mkDerivation rec{
 
   doCheck = true;
 
-  # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
-  # See also https://github.com/NixOS/nixpkgs/issues/24256
-  checkFlags = optionals withGui [ "QT_PLUGIN_PATH=${qtbase}/lib/qt-5.${versions.minor qtbase.version}/plugins" ]
-    ++ [ "LC_ALL=C.UTF-8" ];
+  checkFlags =
+    [ "LC_ALL=C.UTF-8" ]
+    # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
+    # See also https://github.com/NixOS/nixpkgs/issues/24256
+    ++ optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 

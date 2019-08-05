@@ -56,3 +56,16 @@ index 2cb76a8..f59ad5e 100644
    end
  
    def api
+diff --git a/go/internal/command/fallback/fallback.go b/go/internal/command/fallback/fallback.go
+index 2cb76a8..f59ad5e 100644
+--- a/go/internal/command/fallback/fallback.go
++++ b/go/internal/command/fallback/fallback.go
+@@ -21,7 +21,7 @@
+ )
+ 
+ func (c *Command) Execute() error {
+-	rubyCmd := filepath.Join(c.RootDir, "bin", RubyProgram)
++	rubyCmd := filepath.Join("/run/current-system/sw/bin", RubyProgram)
+ 
+ 	// Ensure rubyArgs[0] is the full path to gitlab-shell-ruby
+ 	rubyArgs := append([]string{rubyCmd}, c.Args[1:]...)

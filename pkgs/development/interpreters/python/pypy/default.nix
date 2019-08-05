@@ -137,6 +137,9 @@ in with passthru; stdenv.mkDerivation rec {
 
     # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
     echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
+
+    # Include a sitecustomize.py file
+    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
   '';
 
   inherit passthru;
@@ -148,5 +151,6 @@ in with passthru; stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ andersk ];
+    broken = true; # TODO: Tests are failing!
   };
 }

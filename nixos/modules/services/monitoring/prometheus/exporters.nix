@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{ config, pkgs, lib, options, ... }:
 
 let
+  inherit (lib) concatStrings foldl foldl' genAttrs literalExample maintainers
+                mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
+                optional types;
+
   cfg = config.services.prometheus.exporters;
 
   # each attribute in `exporterOpts` is expected to have specified:
@@ -17,25 +19,30 @@ let
   #  Note that `extraOpts` is optional, but a script for the exporter's
   #  systemd service must be provided by specifying either
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
-  exporterOpts = {
-    blackbox  = import ./exporters/blackbox.nix  { inherit config lib pkgs; };
-    collectd  = import ./exporters/collectd.nix  { inherit config lib pkgs; };
-    dnsmasq   = import ./exporters/dnsmasq.nix   { inherit config lib pkgs; };
-    dovecot   = import ./exporters/dovecot.nix   { inherit config lib pkgs; };
-    fritzbox  = import ./exporters/fritzbox.nix  { inherit config lib pkgs; };
-    json      = import ./exporters/json.nix      { inherit config lib pkgs; };
-    minio     = import ./exporters/minio.nix     { inherit config lib pkgs; };
-    nginx     = import ./exporters/nginx.nix     { inherit config lib pkgs; };
-    node      = import ./exporters/node.nix      { inherit config lib pkgs; };
-    postfix   = import ./exporters/postfix.nix   { inherit config lib pkgs; };
-    snmp      = import ./exporters/snmp.nix      { inherit config lib pkgs; };
-    surfboard = import ./exporters/surfboard.nix { inherit config lib pkgs; };
-    tor       = import ./exporters/tor.nix       { inherit config lib pkgs; };
-    unifi     = import ./exporters/unifi.nix     { inherit config lib pkgs; };
-    varnish   = import ./exporters/varnish.nix   { inherit config lib pkgs; };
-    bind      = import ./exporters/bind.nix      { inherit config lib pkgs; };
-    wireguard = import ./exporters/wireguard.nix { inherit config lib pkgs; };
-  };
+
+  exporterOpts = genAttrs [
+    "bind"
+    "blackbox"
+    "collectd"
+    "dnsmasq"
+    "dovecot"
+    "fritzbox"
+    "json"
+    "mail"
+    "minio"
+    "nginx"
+    "node"
+    "postfix"
+    "postgres"
+    "snmp"
+    "surfboard"
+    "tor"
+    "unifi"
+    "varnish"
+    "wireguard"
+  ] (name:
+    import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
+  );
 
   mkExporterOpts = ({ name, port }: {
     enable = mkEnableOption "the prometheus ${name} exporter";
@@ -81,7 +88,7 @@ let
     };
     user = mkOption {
       type = types.str;
-      default = "nobody";
+      default = "${name}-exporter";
       description = ''
         User name under which the ${name} exporter shall be run.
         Has no effect when <option>systemd.services.prometheus-${name}-exporter.serviceConfig.DynamicUser</option> is true.
@@ -89,7 +96,7 @@ let
     };
     group = mkOption {
       type = types.str;
-      default = "nobody";
+      default = "${name}-exporter";
       description = ''
         Group under which the ${name} exporter shall be run.
         Has no effect when <option>systemd.services.prometheus-${name}-exporter.serviceConfig.DynamicUser</option> is true.
@@ -97,9 +104,10 @@ let
     };
   });
 
-  mkSubModule = { name, port, extraOpts, ... }: {
+  mkSubModule = { name, port, extraOpts, imports }: {
     ${name} = mkOption {
       type = types.submodule {
+        inherit imports;
         options = (mkExporterOpts {
           inherit name port;
         } // extraOpts);
@@ -112,13 +120,30 @@ let
   mkSubModules = (foldl' (a: b: a//b) {}
     (mapAttrsToList (name: opts: mkSubModule {
       inherit name;
-      inherit (opts) port serviceOpts;
+      inherit (opts) port;
       extraOpts = opts.extraOpts or {};
+      imports = opts.imports or [];
     }) exporterOpts)
   );
 
   mkExporterConf = { name, conf, serviceOpts }:
+    let
+      enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
+    in
     mkIf conf.enable {
+      warnings = conf.warnings or [];
+      users.users = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
+        "${name}-exporter" = {
+          description = ''
+            Prometheus ${name} exporter service user
+          '';
+          isSystemUser = true;
+          inherit (conf) group;
+        };
+      });
+      users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
+        "${name}-exporter" = {};
+      });
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
@@ -129,7 +154,8 @@ let
         serviceConfig.Restart = mkDefault "always";
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
-      } serviceOpts ] ++ optional (!(serviceOpts.serviceConfig.DynamicUser or false)) {
+        serviceConfig.DynamicUser = mkDefault enableDynamicUser;
+      } serviceOpts ] ++ optional (!enableDynamicUser) {
         serviceConfig.User = conf.user;
         serviceConfig.Group = conf.group;
       });
@@ -154,13 +180,19 @@ in
   };
 
   config = mkMerge ([{
-    assertions = [{
+    assertions = [ {
       assertion = (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null);
       message = ''
         Please ensure you have either `services.prometheus.exporters.snmp.configuration'
           or `services.prometheus.exporters.snmp.configurationPath' set!
       '';
-    }];
+    } {
+      assertion = (cfg.mail.configFile == null) != (cfg.mail.configuration == {});
+      message = ''
+        Please specify either 'services.prometheus.exporters.mail.configuration'
+          or 'services.prometheus.exporters.mail.configFile'.
+      '';
+    } ];
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;

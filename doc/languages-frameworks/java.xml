@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "...";
   src = fetchurl { ... };
 
-  buildInputs = [ jdk ant ];
+  nativeBuildInputs = [ jdk ant ];
 
   buildPhase = "ant";
 }
@@ -30,7 +30,8 @@ stdenv.mkDerivation {
   <filename>foo.jar</filename> in its <filename>share/java</filename>
   directory, and another package declares the attribute
 <programlisting>
-buildInputs = [ jdk libfoo ];
+buildInputs = [ libfoo ];
+nativeBuildInputs = [ jdk ];
 </programlisting>
   then <envar>CLASSPATH</envar> will be set to
   <filename>/nix/store/...-libfoo/share/java/foo.jar</filename>.
@@ -46,7 +47,7 @@ buildInputs = [ jdk libfoo ];
   script to run it using the OpenJRE. You can use
   <literal>makeWrapper</literal> for this:
 <programlisting>
-buildInputs = [ makeWrapper ];
+nativeBuildInputs = [ makeWrapper ];
 
 installPhase =
   ''
@@ -76,7 +77,7 @@ installPhase =
   It is possible to use a different Java compiler than <command>javac</command>
   from the OpenJDK. For instance, to use the GNU Java Compiler:
 <programlisting>
-buildInputs = [ gcj ant ];
+nativeBuildInputs = [ gcj ant ];
 </programlisting>
   Here, Ant will automatically use <command>gij</command> (the GNU Java
   Runtime) instead of the OpenJRE.

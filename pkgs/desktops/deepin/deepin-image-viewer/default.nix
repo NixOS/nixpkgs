@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, qtsvg,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, qtsvg,
   qtx11extras, dtkcore, dtkwidget, qt5integration, freeimage, libraw,
   libexif, deepin
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-image-viewer";
   version = "1.3.17";

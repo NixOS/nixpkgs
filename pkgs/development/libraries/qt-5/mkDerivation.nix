@@ -1,8 +1,8 @@
-{ stdenv, lib }:
+{ lib, debug, wrapQtAppsHook }:
 
 let inherit (lib) optional; in
 
-{ debug }:
+mkDerivation:
 
 args:
 
@@ -24,7 +24,9 @@ let
 
     enableParallelBuilding = args.enableParallelBuilding or true;
 
+    nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ wrapQtAppsHook ];
+
   };
 in
 
-stdenv.mkDerivation (args // args_)
+mkDerivation (args // args_)

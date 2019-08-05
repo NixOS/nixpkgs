@@ -85,6 +85,7 @@ in
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   flatpak = handleTest ./flatpak.nix {};
   flatpak-builder = handleTest ./flatpak-builder.nix {};
+  fluentd = handleTest ./fluentd.nix {};
   fsck = handleTest ./fsck.nix {};
   fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64
   gdk-pixbuf = handleTest ./gdk-pixbuf.nix {};
@@ -100,6 +101,7 @@ in
   graphene = handleTest ./graphene.nix {};
   grafana = handleTest ./grafana.nix {};
   graphite = handleTest ./graphite.nix {};
+  graylog = handleTest ./graylog.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
@@ -145,6 +147,7 @@ in
   mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
+  mediawiki = handleTest ./mediawiki.nix {};
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
   miniflux = handleTest ./miniflux.nix {};
@@ -247,8 +250,8 @@ in
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
+  tiddlywiki = handleTest ./tiddlywiki.nix {};
   tinydns = handleTest ./tinydns.nix {};
-  tomcat = handleTest ./tomcat.nix {};
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
   udisks2 = handleTest ./udisks2.nix {};

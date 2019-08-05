@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl, fetchFromGitHub
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
-, glog, boost, google-gflags, protobuf
+, glog, boost, gflags, protobuf
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -31,7 +31,7 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, cf-private, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
+, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
 }:
 
 let
@@ -187,7 +187,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-       [ zlib pcre hdf5 glog boost google-gflags protobuf ]
+       [ zlib pcre hdf5 glog boost gflags protobuf ]
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
     ++ lib.optional enableCuda cudatoolkit
-    ++ lib.optionals stdenv.isDarwin [ cf-private AVFoundation Cocoa VideoDecodeAcceleration bzip2 ]
+    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;

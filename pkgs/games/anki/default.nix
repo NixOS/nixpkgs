@@ -7,7 +7,7 @@
 , lame
 , mplayer
 , libpulseaudio
-, pyqt5
+, pyqtwebengine
 , decorator
 , beautifulsoup4
 , sqlalchemy
@@ -83,7 +83,7 @@ buildPythonApplication rec {
     outputs = [ "out" "doc" "man" ];
 
     propagatedBuildInputs = [
-      pyqt5 sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
+      pyqtwebengine sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
       markdown
     ]
       ++ lib.optional plotsSupport matplotlib

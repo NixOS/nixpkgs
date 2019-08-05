@@ -48,6 +48,12 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/mutter328/raw/fff28bebda02111b4c534952465ff967ba7efced/f/0075-backends-Update-to-new-output-setting-for-tablets-to.patch";
       sha256 = "141p3an83s042f67fw2fqmr79i5g634ndrbpd8cs47fd4wwiwpj5";
     })
+    # https://gitlab.gnome.org/GNOME/mutter/merge_requests/670
+    # Needed for gala redorder workspace
+    (fetchpatch {
+      url = "https://github.com/elementary/os-patches/commit/d636a44885c5be662997f8e19f7dcd26670b3219.patch";
+      sha256 = "12pbxk6f39a09jxjam5a5hxl4whp3cifzpck2m7fpp0n98nc63qh";
+    })
   ];
 
   configureFlags = [

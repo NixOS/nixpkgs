@@ -154,7 +154,8 @@ in {
     services.hardware.bolt.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
     systemd.packages = [ pkgs.gnome3.vino ];
-    services.flatpak.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    xdg.portal.enable = true;
+    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
@@ -229,7 +230,7 @@ in {
 
     # Use the correct gnome3 packageSet
     networking.networkmanager.basePackages =
-      { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
+      { inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
         inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
                               networkmanager-openconnect networkmanager-fortisslvpn
                               networkmanager-iodine networkmanager-l2tp; };

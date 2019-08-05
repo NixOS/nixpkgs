@@ -47,6 +47,7 @@ ctrlpvim/ctrlp.vim
 dag/vim2hs
 dag/vim-fish
 dannyob/quickfixstatus
+darfink/starsearch.vim
 dart-lang/dart-vim-plugin
 davidhalter/jedi-vim
 deoplete-plugins/deoplete-jedi
@@ -98,6 +99,7 @@ heavenshell/vim-jsdoc
 hecal3/vim-leader-guide
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
+hotwatermorning/auto-git-diff
 hsanson/vim-android
 ianks/vim-tsx
 icymind/NeoSolarized
@@ -118,6 +120,7 @@ jceb/vim-hier
 jceb/vim-orgmode
 jeetsukumaran/vim-buffergator
 jeffkreeftmeijer/neovim-sensible
+jelera/vim-javascript-syntax
 jgdavey/tslime.vim
 jhradilek/vim-docbk
 jiangmiao/auto-pairs
@@ -125,6 +128,7 @@ jistr/vim-nerdtree-tabs
 jlanzarotta/bufexplorer
 jnurmine/zenburn
 jonbri/vim-colorstepper
+jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 josa42/coc-go
 jpalardy/vim-slime
@@ -155,11 +159,13 @@ KeitaNakamura/neodark.vim
 keith/swift.vim
 kien/rainbow_parentheses.vim
 konfekt/fastfold
+kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
 lambdalisue/vim-gista
 lambdalisue/vim-pager
 latex-box-team/latex-box
 leafgarland/typescript-vim
+leanprover/lean.vim
 ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
@@ -170,6 +176,7 @@ LucHermitte/lh-vim-lib
 ludovicchabant/vim-gutentags
 ludovicchabant/vim-lawrencium
 lukaszkorecki/workflowish
+lumiliet/vim-twig
 luochen1990/rainbow
 lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
@@ -194,6 +201,7 @@ MarcWeber/vim-addon-sql
 MarcWeber/vim-addon-syntax-checker
 MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
+MaxMEllon/vim-jsx-pretty
 markonm/traces.vim
 martinda/Jenkinsfile-vim-syntax
 mattn/emmet-vim
@@ -213,6 +221,7 @@ mhinz/vim-startify
 michaeljsmith/vim-indent-object
 mileszs/ack.vim
 mindriot101/vim-yapf
+mk12/vim-lean
 mkasa/lushtags
 mopp/sky-color-clock.vim
 morhetz/gruvbox
@@ -229,6 +238,7 @@ ncm2/ncm2-jedi
 ncm2/ncm2-path
 ncm2/ncm2-tmux
 ncm2/ncm2-ultisnips
+ndmitchell/ghcid
 neoclide/coc-css
 neoclide/coc-denite
 neoclide/coc-emmet
@@ -242,7 +252,6 @@ neoclide/coc-jest
 neoclide/coc-json
 neoclide/coc-lists
 neoclide/coc-neco
-neoclide/coc.nvim
 neoclide/coc-pairs
 neoclide/coc-prettier
 neoclide/coc-python
@@ -311,6 +320,7 @@ roxma/nvim-yarp
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 Rykka/riv.vim
+samoshkin/vim-mergetool
 sbdchd/neoformat
 scrooloose/nerdcommenter
 scrooloose/nerdtree
@@ -342,6 +352,7 @@ sjl/splice.vim
 sk1418/last256
 slashmili/alchemist.vim
 sonph/onehalf
+stefandtw/quickfix-reflector.vim
 t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime
@@ -357,6 +368,7 @@ thinca/vim-themis
 thinca/vim-visualstar
 thosakwe/vim-flutter
 tikhomirov/vim-glsl
+tmux-plugins/vim-tmux
 tomasr/molokai
 tomlion/vim-solidity
 tommcdo/vim-lion
@@ -410,6 +422,7 @@ vim-scripts/changeColorScheme.vim
 vim-scripts/Colour-Sampler-Pack
 vim-scripts/DoxygenToolkit.vim
 vim-scripts/emodeline
+vim-scripts/gitignore.vim
 vim-scripts/Improved-AnsiEsc
 vim-scripts/jdaddy.vim
 vim-scripts/matchit.zip

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchzip, python3Packages
-, makeWrapper, wrapGAppsHook, qtbase, glib-networking
+, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
 , withPdfReader        ? true
@@ -10,23 +10,23 @@ assert withMediaPlayback -> gst_all_1 != null;
 
 let
   pdfjs = let
-    version = "1.10.100";
+    version = "2.1.266";
   in
   fetchzip rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
+    sha256 = "1ybbnpz2jcdikzwr7r13lq528vxj3bpms1fqmg3n1zgs30cqpkby";
     stripRoot = false;
   };
 
-in python3Packages.buildPythonApplication rec {
+in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.6.3";
+  version = "1.7.0";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0z9an14vlv0r48x7fk0mk7465gnhh19dx1w63lyhsgnfqy5pzlhy";
+    sha256 = "0wyjmb2qvnw3gn0ypgckwblmn7kasi12dfwp343hi6wscqripw7i";
   };
 
   # Needs tox
@@ -41,12 +41,12 @@ in python3Packages.buildPythonApplication rec {
   ]);
 
   nativeBuildInputs = [
-    makeWrapper wrapGAppsHook asciidoc
+    wrapQtAppsHook wrapGAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    pyyaml pyqt5 jinja2 pygments
+    pyyaml pyqt5 pyqtwebengine jinja2 pygments
     pypeg2 cssutils pyopengl attrs
     # scripts and userscripts libs
     tldextract beautifulsoup4
@@ -56,6 +56,9 @@ in python3Packages.buildPythonApplication rec {
   patches = [
     ./fix-restart.patch
   ];
+
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
 
   postPatch = ''
     substituteInPlace qutebrowser/app.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
@@ -71,8 +74,8 @@ in python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
-    install -Dm644 misc/qutebrowser.desktop \
-        "$out/share/applications/qutebrowser.desktop"
+    install -Dm644 misc/org.qutebrowser.qutebrowser.desktop \
+        "$out/share/applications/org.qutebrowser.qutebrowser.desktop"
 
     # Install icons
     for i in 16 24 32 48 64 128 256 512; do
@@ -93,6 +96,12 @@ in python3Packages.buildPythonApplication rec {
     for i in $scripts; do
       patchPythonScript "$i"
     done
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/qutebrowser \
+      "''${gappsWrapperArgs[@]}" \
+      "''${qtWrapperArgs[@]}"
   '';
 
   meta = with stdenv.lib; {

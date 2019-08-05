@@ -24,14 +24,6 @@ with lib;
     '';
   };
 
-  port = mkOption {
-    type = types.int;
-    default = 0;
-    description = ''
-      Port for the server. Option will be removed, use <option>listen</option> instead.
-  '';
-  };
-
   listen = mkOption {
      type = types.listOf (types.submodule (
           {

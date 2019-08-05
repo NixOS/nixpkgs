@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, cmake, qtscript, qtwebengine, gdal, proj, routino, quazip }:
+{ mkDerivation, lib, fetchurl, fetchpatch, cmake, qtscript, qtwebengine, gdal, proj, routino, quazip }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "qmapshack-${version}";
   version = "1.13.0";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://bitbucket.org/maproom/qmapshack/wiki/Home;
     description = "Plan your next outdoor trip";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -26,7 +26,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-dnsmasq-exporter}/bin/dnsmasq_exporter \
           --listen ${cfg.listenAddress}:${toString cfg.port} \

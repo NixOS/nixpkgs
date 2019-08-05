@@ -21,7 +21,7 @@ let
 
   knownHostsText = (flip (concatMapStringsSep "\n") knownHosts
     (h: assert h.hostNames != [];
-      concatStringsSep "," h.hostNames + " "
+      optionalString h.certAuthority "@cert-authority " + concatStringsSep "," h.hostNames + " "
       + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
     )) + "\n";
 
@@ -128,6 +128,14 @@ in
         default = {};
         type = types.loaOf (types.submodule ({ name, ... }: {
           options = {
+            certAuthority = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                This public key is an SSH certificate authority, rather than an
+                individual host's key.
+              '';
+            };
             hostNames = mkOption {
               type = types.listOf types.str;
               default = [];
@@ -227,6 +235,7 @@ in
     systemd.user.services.ssh-agent = mkIf cfg.startAgent
       { description = "SSH Agent";
         wantedBy = [ "default.target" ];
+        unitConfig.ConditionUser = "!@system";
         serviceConfig =
           { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
             ExecStart =

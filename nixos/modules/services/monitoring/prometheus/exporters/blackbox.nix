@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -18,7 +18,6 @@ in
   serviceOpts = {
     serviceConfig = {
       AmbientCapabilities = [ "CAP_NET_RAW" ]; # for ping probes
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-blackbox-exporter}/bin/blackbox_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
