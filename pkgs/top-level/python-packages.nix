@@ -3434,6 +3434,10 @@ in {
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
+  k5test = callPackage ../development/python-modules/k5test {
+    inherit (pkgs) krb5Full findutils which;
+  };
+
   pylast = callPackage ../development/python-modules/pylast { };
 
   pylru = callPackage ../development/python-modules/pylru { };
