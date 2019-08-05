@@ -8060,6 +8060,8 @@ in
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
+  msbuild = callPackage ../development/tools/build-managers/msbuild { mono = mono6; };
+
   mosml = callPackage ../development/compilers/mosml { };
 
   mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
