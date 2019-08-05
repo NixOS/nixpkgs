@@ -30,8 +30,8 @@ let
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
-  src = fetch "llvm" "0k124sxkfhfi1rca6kzkdraf4axhx99x3cw2rk55056628dvwwl8";
-  polly_src = fetch "polly" "1x4xv3j226rqdddp7b61d71wsx2b8vmmri02ycx27y2fg7ba7xg3";
+  src = fetch "llvm" "1rvm5gqp5v8hfn17kqws3zhk94w4kxndal12bqa0y57p09nply24";
+  polly_src = fetch "polly" "1lfjdz3ilj5xmjxvicd8f5ykybks67ry2pdb777352r3mzlgg8g8";
 
   unpackPhase = ''
     unpackFile $src

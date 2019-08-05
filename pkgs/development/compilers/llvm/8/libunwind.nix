@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "libunwind-${version}";
 
-  src = fetch "libunwind" "0q7ndlldid9wchnny0a936llwxj7zgb9gxp46wjjxvwwkik3l97z";
+  src = fetch "libunwind" "0vhgcgzsb33l83qaikrkj87ypqb48mi607rccczccwiiv8ficw0q";
 
   nativeBuildInputs = [ cmake ];
 
