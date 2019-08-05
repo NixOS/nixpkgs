@@ -23638,8 +23638,9 @@ in
   inherit (callPackage ../applications/networking/cluster/kops {})
     mkKops
     kops_1_12
+    kops_1_13
     ;
-  kops = kops_1_12;
+  kops = kops_1_13;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
