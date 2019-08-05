@@ -29,8 +29,6 @@ self = stdenv.mkDerivation rec {
   buildInputs = [ boost libedit libevent lz4 ncurses openssl pkgconfig protobuf readline zlib ]
      ++ stdenv.lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
 
-  enableParallelBuilding = true;
-
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
