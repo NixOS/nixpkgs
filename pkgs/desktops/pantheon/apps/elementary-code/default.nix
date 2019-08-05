@@ -4,22 +4,22 @@
 , vte, webkitgtk, zeitgeist, ctags, libgit2-glib, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  pname = "code";
+  pname = "elementary-code";
   version = "3.1.1";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "code";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "0l469fi5vbcazwfhy320nr8wrzz96jbrqn4hag0kdm16wvf5x1yc";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 

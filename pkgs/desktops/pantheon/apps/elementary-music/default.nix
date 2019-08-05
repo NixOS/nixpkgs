@@ -6,22 +6,22 @@
 , elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  pname = "music";
+  pname = "elementary-music";
   version = "5.0.4";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "music";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "02qjsf9xnfh043xbls9mll2r1wcdvclw60x8wysv12rhbm90gwvp";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 

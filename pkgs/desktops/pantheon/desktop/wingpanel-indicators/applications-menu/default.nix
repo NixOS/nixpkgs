@@ -4,22 +4,22 @@
 , bc }:
 
 stdenv.mkDerivation rec {
-  pname = "applications-menu";
+  pname = "wingpanel-applications-menu";
   version = "2.4.3";
 
-  name = "wingpanel-${pname}-${version}";
+  repoName = "applications-menu";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "15mwfynaa57jii43x77iaz5gqjlylh5zxc70am8zgp8vhgzflvyd";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "wingpanel-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 

@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "extra-elementary-contracts";
   version = "2018-08-21";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "worldofpeace";
     repo = pname;

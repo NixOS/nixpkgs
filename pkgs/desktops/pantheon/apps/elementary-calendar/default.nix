@@ -5,22 +5,22 @@
 , elementary-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  pname = "calendar";
+  pname = "elementary-calendar";
   version = "5.0";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "calendar";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "0yiis5ig98gjw4s2qh8lppkdmv1cgi6qchxqncsjdki7yxyyni35";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
