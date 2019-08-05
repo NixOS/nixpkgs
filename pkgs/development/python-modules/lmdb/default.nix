@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "0.95";
+  version = "0.96";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nx9f193gzl33r1lbqhb96h1igya7pz8wmahr8m9x5zgc05hal91";
+    sha256 = "0wpahad7wac34r1hxa1jhk0bsll39n7667cljyr5251kj12ksfgr";
   };
 
   checkInputs = [ pytest cffi ];
