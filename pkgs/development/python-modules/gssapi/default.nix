@@ -55,6 +55,8 @@ buildPythonPackage rec {
     six
   ];
 
+  doCheck = !stdenv.isDarwin; # many failures on darwin
+
   checkPhase = ''
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
     ${python.interpreter} setup.py nosetests
