@@ -105,6 +105,7 @@ in
 
           # Settings from elementary-default-settings
           export GTK_CSD=1
+          export GTK_MODULES=$GTK_MODULES:pantheon-filechooser-module
       fi
     '';
 
