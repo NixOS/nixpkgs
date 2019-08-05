@@ -106,6 +106,10 @@ let
     };
   };
 
+  composer2nix = pkgs.callPackage ../development/php-packages/composer2nix {
+    inherit php buildComposerEnv;
+  };
+
   couchbase = buildPecl rec {
     version = "2.6.1";
     pname = "couchbase";
