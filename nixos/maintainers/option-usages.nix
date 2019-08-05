@@ -102,7 +102,7 @@ let
       # builtins multiply by 4 the memory usage and the time used to compute
       # each options.
       tryCollectOptions = moduleResult:
-        foreach (excludeOptions (collect isOption moduleResult)) (opt:
+        flip map (excludeOptions (collect isOption moduleResult)) (opt:
           { name = showOption opt.loc; } // builtins.tryEval (strict opt.value));
      in
        keepNames (

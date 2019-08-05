@@ -59,7 +59,7 @@ let
       versions = [ ];
     in
       lib.listToAttrs
-        (lib.foreach versions
+        (lib.flip map versions
           (v: lib.nameValuePair v (throw "Unsupported citrix_workspace version: ${v}")));
   in
     deprecatedVersions // supportedVersions;
