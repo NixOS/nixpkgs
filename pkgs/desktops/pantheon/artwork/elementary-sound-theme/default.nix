@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-sound-theme";

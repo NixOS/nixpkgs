@@ -1,7 +1,29 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala
-, python3, desktop-file-utils, gtk3, granite, libgee, elementary-icon-theme
-, appstream, libpeas, editorconfig-core-c, gtksourceview3, gtkspell3, libsoup
-, vte, webkitgtk, zeitgeist, ctags, libgit2-glib, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, python3
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, elementary-icon-theme
+, appstream
+, libpeas
+, editorconfig-core-c
+, gtksourceview3
+, gtkspell3
+, libsoup
+, vte
+, webkitgtk
+, zeitgeist
+, ctags
+, libgit2-glib
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
@@ -36,8 +58,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ctags
-    elementary-icon-theme
     editorconfig-core-c
+    elementary-icon-theme
     granite
     gtk3
     gtksourceview3

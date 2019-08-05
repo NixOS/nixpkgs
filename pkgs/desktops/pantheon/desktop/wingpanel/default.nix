@@ -1,5 +1,20 @@
-{ stdenv, fetchFromGitHub, pantheon, wrapGAppsHook, pkgconfig, meson, ninja
-, vala, gala, gtk3, libgee, granite, gettext, mutter, json-glib, python3 }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, wrapGAppsHook
+, pkgconfig
+, meson
+, ninja
+, vala
+, gala
+, gtk3
+, libgee
+, granite
+, gettext
+, mutter
+, json-glib
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";

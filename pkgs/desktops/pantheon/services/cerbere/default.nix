@@ -1,4 +1,15 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, glib, libgee, vala, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, glib
+, libgee
+, vala
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "cerbere";

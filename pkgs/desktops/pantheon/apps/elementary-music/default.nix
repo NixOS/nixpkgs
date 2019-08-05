@@ -1,9 +1,31 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, ninja, vala, desktop-file-utils, gtk3, granite
-, python3, libgee, clutter-gtk, json-glib, libgda, libgpod
-, libnotify, libpeas, libsoup, zeitgeist, gst_all_1, taglib
-, libdbusmenu, libsignon-glib, libaccounts-glib
-, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, python3
+, libgee
+, clutter-gtk
+, json-glib
+, libgda
+, libgpod
+, libnotify
+, libpeas
+, libsoup
+, zeitgeist
+, gst_all_1
+, taglib
+, libdbusmenu
+, libsignon-glib
+, libaccounts-glib
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
@@ -51,9 +73,9 @@ stdenv.mkDerivation rec {
     libgda
     libgee
     libgpod
-    libsignon-glib
     libnotify
     libpeas
+    libsignon-glib
     libsoup
     taglib
     zeitgeist

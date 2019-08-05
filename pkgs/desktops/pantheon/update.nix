@@ -1,5 +1,21 @@
-{ runCommand, nix, bash, git, jq, nix-prefetch-scripts, coreutils, common-updater-scripts, gnugrep, gnused, curl }:
-{ repoName, attrPath ? repoName, versionPolicy ? "release" }:
+{ runCommand
+, nix
+, bash
+, git
+, jq
+, nix-prefetch-scripts
+, coreutils
+, common-updater-scripts
+, gnugrep
+, gnused
+, curl
+}:
+
+{ repoName
+, attrPath ? repoName
+, versionPolicy ? "release"
+}:
+
 let
   script = ./update.sh;
 

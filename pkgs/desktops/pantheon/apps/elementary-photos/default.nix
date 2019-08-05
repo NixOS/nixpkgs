@@ -1,7 +1,35 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, desktop-file-utils
-, gtk3, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2
-, granite, gst_all_1, libgudev, json-glib, libraw, librest, libsoup, sqlite, python3
-, scour, webkitgtk, libwebp, appstream, libunity, wrapGAppsHook, elementary-icon-theme }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, desktop-file-utils
+, gtk3
+, libaccounts-glib
+, libexif
+, libgee
+, geocode-glib
+, gexiv2
+, libgphoto2
+, granite
+, gst_all_1
+, libgudev
+, json-glib
+, libraw
+, librest
+, libsoup
+, sqlite
+, python3
+, scour
+, webkitgtk
+, libwebp
+, appstream
+, libunity
+, wrapGAppsHook
+, elementary-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
@@ -52,10 +80,10 @@ stdenv.mkDerivation rec {
     libgphoto2
     libgudev
     libraw
+    librest
     libsoup
     libunity
     libwebp
-    librest
     scour
     sqlite
     webkitgtk

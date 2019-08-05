@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-gtk-theme";

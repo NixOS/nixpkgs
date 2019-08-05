@@ -1,5 +1,19 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, libxml2, desktop-file-utils
-, gtk3, glib, granite, libgee, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, libxml2
+, desktop-file-utils
+, gtk3
+, glib
+, granite
+, libgee
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";

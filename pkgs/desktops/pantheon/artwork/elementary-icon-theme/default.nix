@@ -1,4 +1,12 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, python3,ninja, hicolor-icon-theme, gtk3 }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, python3
+, ninja
+, hicolor-icon-theme
+, gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";

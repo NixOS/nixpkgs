@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, substituteAll, pkgconfig
-, vala, libgee, granite, gtk3, libxml2, switchboard, tzdata }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, substituteAll
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, libxml2
+, switchboard
+, tzdata
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";

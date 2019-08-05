@@ -1,4 +1,9 @@
-{ stdenv, substituteAll, fetchFromGitHub, file-roller, gnome-bluetooth }:
+{ stdenv
+, substituteAll
+, fetchFromGitHub
+, file-roller
+, gnome-bluetooth
+}:
 
 stdenv.mkDerivation rec {
   pname = "extra-elementary-contracts";

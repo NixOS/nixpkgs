@@ -1,4 +1,14 @@
-{ stdenv, fetchFromGitHub, pantheon, makeWrapper, meson, ninja, desktop-file-utils, glib, coreutils, elementary-settings-daemon, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, desktop-file-utils
+, glib
+, coreutils
+, elementary-settings-daemon
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-dpms-helper";
@@ -22,7 +32,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    makeWrapper
     meson
     ninja
     wrapGAppsHook

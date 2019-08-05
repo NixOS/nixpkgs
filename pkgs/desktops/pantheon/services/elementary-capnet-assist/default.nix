@@ -1,5 +1,19 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, vala
-, desktop-file-utils, gtk3, granite, libgee, gcr, webkitgtk, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, gcr
+, webkitgtk
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
@@ -40,7 +54,9 @@ stdenv.mkDerivation rec {
   ];
 
   # Not useful here or in elementary - See: https://github.com/elementary/capnet-assist/issues/3
-  patches = [ ./remove-capnet-test.patch ];
+  patches = [
+    ./remove-capnet-test.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

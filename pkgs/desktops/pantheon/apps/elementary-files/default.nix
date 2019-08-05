@@ -1,7 +1,29 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, gettext, vala
-, python3, desktop-file-utils, libcanberra, gtk3, libgee, granite, libnotify
-, libunity, pango, plank, bamf, sqlite, libdbusmenu-gtk3, zeitgeist, glib-networking
-, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, gettext
+, vala
+, python3
+, desktop-file-utils
+, libcanberra
+, gtk3
+, libgee
+, granite
+, libnotify
+, libunity
+, pango
+, plank
+, bamf
+, sqlite
+, libdbusmenu-gtk3
+, zeitgeist
+, glib-networking
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
@@ -57,7 +79,8 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
 
-    substituteInPlace filechooser-module/FileChooserDialog.vala --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
+    substituteInPlace filechooser-module/FileChooserDialog.vala \
+      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
   '';
 
   meta = with stdenv.lib; {

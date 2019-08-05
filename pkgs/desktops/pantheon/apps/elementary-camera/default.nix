@@ -1,6 +1,25 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala
-, desktop-file-utils, python3, gettext, libxml2, gtk3, granite, libgee, gst_all_1
-, libcanberra, clutter-gtk, clutter-gst, elementary-icon-theme, appstream, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, python3
+, gettext
+, libxml2
+, gtk3
+, granite
+, libgee
+, gst_all_1
+, libcanberra
+, clutter-gtk
+, clutter-gst
+, elementary-icon-theme
+, appstream
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";

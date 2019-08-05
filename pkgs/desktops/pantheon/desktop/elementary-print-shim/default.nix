@@ -1,4 +1,12 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, gtk3 }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-print-shim";

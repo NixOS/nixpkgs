@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, pantheon }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+}:
 
 stdenv.mkDerivation rec {
   pname = "elementary-redacted-script";

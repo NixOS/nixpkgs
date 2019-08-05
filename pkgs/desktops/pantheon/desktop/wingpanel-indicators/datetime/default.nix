@@ -1,6 +1,24 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pantheon, pkgconfig, meson, python3
-, ninja, vala, gtk3, granite, wingpanel, evolution-data-server
-, libical, libgee, libxml2, libsoup, elementary-calendar, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, evolution-data-server
+, libical
+, libgee
+, libxml2
+, libsoup
+, elementary-calendar
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
