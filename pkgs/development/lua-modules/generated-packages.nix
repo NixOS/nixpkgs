@@ -926,11 +926,11 @@ luafilesystem = buildLuarocksPackage {
 };
 luaossl = buildLuarocksPackage {
   pname = "luaossl";
-  version = "20190612-0";
+  version = "20190731-0";
 
   src = fetchurl {
-    url    = https://luarocks.org/luaossl-20190612-0.src.rock;
-    sha256 = "0q47rsfjnx3rbbr9jl2j5nlj56c6mwmnnma9m4rrbsza2p98wb4s";
+    url    = https://luarocks.org/luaossl-20190731-0.src.rock;
+    sha256 = "0gardlh547hah5w4kfsdg05jmxzrxr21macqigcmp5hw1l67jn5m";
   };
   propagatedBuildInputs = [ lua ];
 
