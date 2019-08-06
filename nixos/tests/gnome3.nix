@@ -1,5 +1,5 @@
 import ./make-test.nix ({ pkgs, ...} : {
-  name = "gnome3-gdm";
+  name = "gnome3";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ lethalman ];
   };
@@ -18,6 +18,7 @@ import ./make-test.nix ({ pkgs, ...} : {
           user = "alice";
         };
       };
+
       services.xserver.desktopManager.gnome3.enable = true;
 
       virtualisation.memorySize = 1024;
