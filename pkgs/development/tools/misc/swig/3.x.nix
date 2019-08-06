@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swig";
-  version = "3.0.12";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "swig";
     repo = "swig";
     rev = "rel-${version}";
-    sha256 = "1wyffskbkzj5zyhjnnpip80xzsjcr3p0q5486z3wdwabnysnhn8n";
+    sha256 = "0yx33972jd3214xr3mrap0j5clma9bvs42qz8x38dfz62xlsi78v";
   };
 
   PCRE_CONFIG = "${pcre.dev}/bin/pcre-config";
