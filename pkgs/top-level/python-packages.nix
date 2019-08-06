@@ -1482,6 +1482,8 @@ in {
 
   bidict = callPackage ../development/python-modules/bidict { };
 
+  bids-validator = callPackage ../development/python-modules/bids-validator { };
+
   binwalk = callPackage ../development/python-modules/binwalk { };
 
   binwalk-full = appendToName "full" (self.binwalk.override {
