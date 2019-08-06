@@ -1,15 +1,17 @@
 { stdenv, fetchurl, postgresql, openssl, pam ? null, libmemcached ? null }:
 
 stdenv.mkDerivation rec {
-  name = "pgpool-II-3.4.14";
+  pname = "pgpool-II";
+  version = "4.0.5";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "http://www.pgpool.net/download.php?f=${name}.tar.gz";
-    sha256 = "1paak83f4lv48xckmf2znryrvhmdz86w4v97mcw2gxm50hcl74sw";
+    sha256 = "0v2g2ksikn10kxsa8i47gv0kbklrsscvlddza3caf522q1k0fic4";
   };
 
-  patches = [ ./pgpool-II-3.4.14-glibc-2.26.patch ];
+  patches = [ ./pgpool.patch ];
 
   buildInputs = [ postgresql openssl pam libmemcached ];
 
