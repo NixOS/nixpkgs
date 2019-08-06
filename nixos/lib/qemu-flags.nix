@@ -1,11 +1,8 @@
 # QEMU flags shared between various Nix expressions.
 { pkgs }:
 
-let
+rec {
   zeroPad = n: if n < 10 then "0${toString n}" else toString n;
-in
-
-{
 
   qemuNICFlags = nic: net: machine:
     [ "-device virtio-net-pci,netdev=vlan${toString nic},mac=52:54:00:12:${zeroPad net}:${zeroPad machine}"

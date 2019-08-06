@@ -63,6 +63,7 @@ rec {
                   [ { address = "192.168.${toString fst}.${toString m.snd}";
                       prefixLength = 24;
                   } ];
+                  macAddress = "52:54:00:12:${zeroPad snd}:${zeroPad m.snd}";
                 });
             in
             { key = "ip-address";
