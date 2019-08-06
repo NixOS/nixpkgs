@@ -9919,6 +9919,8 @@ in
 
   teensy-loader-cli = callPackage ../development/tools/misc/teensy-loader-cli { };
 
+  terracognita = callPackage ../development/tools/misc/terracognita { };
+
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
