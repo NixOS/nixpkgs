@@ -22,9 +22,11 @@ echo "kernel version is $version"
 closure=
 for module in $rootModules; do
     echo "root module: $module"
-    deps=$(modprobe --config no-config -d $kernel --set-version "$version" --show-depends "$module" \
-        | sed 's/^insmod //') \
-        || if test -z "$allowMissing"; then exit 1; fi
+    # obtain the module dependencies with modprobe. Extracts the module name from modprobe output and throws away the insmod part and the module arguments.
+    deps=$(modprobe --config no-config -d "$kernel" --set-version "$version" --show-depends "$module" \
+        | sed 's/^insmod \([^ ]*\).*/\1/')
+
+    if test 0 -ne $? && test -z "$allowMissing"; then exit 1; fi
     if [[ "$deps" != builtin* ]]; then
         closure="$closure $deps"
     fi
