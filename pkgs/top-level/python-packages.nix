@@ -1069,6 +1069,8 @@ in {
 
   pytricia =  callPackage ../development/python-modules/pytricia { };
 
+  pytrends = callPackage ../development/python-modules/pytrends { };
+
   py-vapid = callPackage ../development/python-modules/py-vapid { };
 
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
