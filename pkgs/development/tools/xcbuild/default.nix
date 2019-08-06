@@ -40,6 +40,9 @@ in stdenv.mkDerivation rec {
   postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
+      --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
   '';
 
   enableParallelBuilding = true;
