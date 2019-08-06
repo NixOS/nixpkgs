@@ -1357,6 +1357,8 @@ in {
     gui = false;
   };
 
+  delegator-py = callPackage ../development/python-modules/delegator-py { };
+
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
   arrow = callPackage ../development/python-modules/arrow { };
