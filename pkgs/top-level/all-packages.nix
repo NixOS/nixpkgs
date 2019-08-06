@@ -20277,6 +20277,8 @@ in
 
   seadrive-daemon = callPackage ../applications/networking/seadrive-daemon { };
   
+  seadrive-gui = libsForQt5.callPackage ../applications/networking/seadrive-gui { };
+
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   seeks = callPackage ../tools/networking/p2p/seeks {
