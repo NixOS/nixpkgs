@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   pname = "xmloscopy";
   version = "0.1.3";
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
     dev_only_shellcheck
   ];
