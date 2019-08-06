@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitLab
-, meson, ninja, nasm
+, meson, ninja, nasm, pkgconfig
+, withTools ? false, SDL2
 }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "1fbalfzw8j00vwbrh9h8kjdx6h99dr10vmvbpg3rhsspmxq9h66h";
   };
 
-  nativeBuildInputs = [ meson ninja nasm ];
+  nativeBuildInputs = [ meson ninja nasm pkgconfig ];
   # TODO: doxygen (currently only HTML and not build by default).
+  buildInputs = stdenv.lib.optional withTools SDL2;
+
+  mesonFlags= [
+    "-Denable_tools=${stdenv.lib.boolToString withTools}"
+  ];
 
   meta = with stdenv.lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";
