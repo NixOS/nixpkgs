@@ -4,14 +4,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.3";
+  version = "0.10.0";
   pname = "mwclient";
 
   src = fetchFromGitHub {
     owner = "mwclient";
     repo = "mwclient";
     rev = "v${version}";
-    sha256 = "1kbrmq8zli2j93vmc2887bs7mqr4q1n908nbi1jjcci5v4cd4cqw";
+    sha256 = "1c3q6lwmb05yqywc4ya98ca7hsl15niili8rccl4n1yqp77c103v";
   };
 
   checkInputs = [ pytest pytestpep8 pytestcache pytestcov responses mock ];
