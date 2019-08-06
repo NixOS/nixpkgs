@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vifm-${version}";
+  pname = "vifm";
   version = "0.10.1";
 
   src = fetchurl {
