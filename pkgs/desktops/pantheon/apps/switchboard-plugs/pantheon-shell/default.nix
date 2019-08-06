@@ -50,8 +50,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/Views/Appearance.vala --subst-var-by GALA_GSETTINGS_PATH ${gala}/share/gsettings-schemas/${gala.name}/glib-2.0/schemas
-    substituteInPlace src/Views/Appearance.vala --subst-var-by WINGPANEL_GSETTINGS_PATH ${wingpanel}/share/gsettings-schemas/${wingpanel.name}/glib-2.0/schemas
+    substituteInPlace src/Views/Appearance.vala \
+      --subst-var-by GALA_GSETTINGS_PATH ${gala}/share/gsettings-schemas/${gala.name}/glib-2.0/schemas
+    substituteInPlace src/Views/Appearance.vala \
+      --subst-var-by WINGPANEL_GSETTINGS_PATH ${wingpanel}/share/gsettings-schemas/${wingpanel.name}/glib-2.0/schemas
   '';
 
 

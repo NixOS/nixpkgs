@@ -1,22 +1,25 @@
-{ stdenv, fetchFromGitHub, pantheon }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+}:
 
 stdenv.mkDerivation rec {
-  pname = "default-settings";
+  pname = "elementary-default-settings";
   version = "5.1.0";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "default-settings";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "0l73py4rr56i4dalb2wh1c6qiwmcjkm0l1j75jp5agcnxldh5wym";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
@@ -25,6 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   dontBuild = true;
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/etc/gtk-3.0

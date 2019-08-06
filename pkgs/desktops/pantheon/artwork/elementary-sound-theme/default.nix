@@ -1,22 +1,28 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
-  pname = "sound-theme";
+  pname = "elementary-sound-theme";
   version = "1.0";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "sound-theme";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "1dc583lq61c361arjl3s44d2k72c46bqvcqv1c3s69f2ndsnxjdz";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
