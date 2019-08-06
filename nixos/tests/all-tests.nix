@@ -139,7 +139,7 @@ in
   ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
   lidarr = handleTest ./lidarr.nix {};
-  #lightdm = handleTest ./lightdm.nix {};
+  lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   login = handleTest ./login.nix {};
   loki = handleTest ./loki.nix {};

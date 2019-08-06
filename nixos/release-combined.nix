@@ -104,7 +104,7 @@ in rec {
         #(all nixos.tests.keymap.neo)
         #(all nixos.tests.keymap.qwertz)
         (all nixos.tests.plasma5)
-        #(all nixos.tests.lightdm)
+        (all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
         (all nixos.tests.mutableUsers)
