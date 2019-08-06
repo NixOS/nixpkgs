@@ -132,7 +132,7 @@
   };
   "build/macosx/avrdude-6.3.0-arduino9-i386-apple-darwin11.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avrdude-6.3.0-arduino9-i386-apple-darwin11.tar.bz2";
-    sha256 = "0rc4x8mcsva4v6j7ssfj8rdyg14l2pd9ivgdm39m5wnz8b06p85z11703f0r82aq3mmkiy7vwa4jfjhs9826qpp724hbng9dx74kk86r";
+    sha256 = "0rc4x8mcsva4v6j7ssfj8rdyg14l2pd9ivgdm39m5wnz8b06p85z";
   };
   "build/macosx/appbundler/appbundler-1.0ea-arduino4.jar.zip" = fetchurl {
     url = "https://downloads.arduino.cc/appbundler-1.0ea-arduino4.jar.zip";
