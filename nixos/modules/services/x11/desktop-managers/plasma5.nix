@@ -178,7 +178,7 @@ in
         ++ lib.optional (cfg.phononBackend == "vlc" && cfg.enableQt4Support) pkgs.phonon-backend-vlc
 
         # Optional hardware support features
-        ++ lib.optional config.hardware.bluetooth.enable bluedevil
+        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
