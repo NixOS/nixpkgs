@@ -8,11 +8,11 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "8.0.16";
+  version = "8.0.17";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-8.0/${pname}-${version}.tar.gz";
-    sha256 = "1spa6lkvgww4si0yjs0w4cpyr99gmmvvidsp53gbp2yw42cyi7wd";
+    sha256 = "1mjrlxn8vigi69r0r674j2dibdnkaar01ji5965gsyx7k60z7qy6";
   };
 
   patches = [
@@ -45,6 +45,7 @@ self = stdenv.mkDerivation rec {
     "-DWITH_ARCHIVE_STORAGE_ENGINE=yes"
     "-DWITH_BLACKHOLE_STORAGE_ENGINE=yes"
     "-DWITH_FEDERATED_STORAGE_ENGINE=yes"
+    "-DWITH_ROUTER=no" ## mysqlrouter is new addition in 8.0 source-tree, but it currently fails to build on Darwin (tested: macOS 10.12.6 + mysql 8.0.17)
     "-DHAVE_IPV6=yes"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -65,7 +66,7 @@ self = stdenv.mkDerivation rec {
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   prePatch = ''
-    sed -i -e "s|/usr/bin/libtool|libtool|" cmake/merge_archives.cmake.in
+    sed -i -e "s|/usr/bin/libtool|libtool|" cmake/libutils.cmake
   '';
   postInstall = ''
     moveToOutput "lib/*.a" $static
