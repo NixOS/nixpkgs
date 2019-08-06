@@ -5,7 +5,7 @@ fzf, coreutils, libxml2, libxslt, jing, findutils, gnugrep, gnused,
 docbook5
 }:
 stdenv.mkDerivation rec {
-  name = "xmloscopy-${version}";
+  pname = "xmloscopy";
   version = "0.1.3";
 
   buildInputs = [
