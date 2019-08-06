@@ -4,7 +4,7 @@ buildOasisPackage rec {
   name = "tcslib";
   version = "0.3";
 
-  minimumSupportedOCamlVersion = "4.03.0";
+  minimumOCamlVersion = "4.03.0";
 
   src = fetchFromGitHub {
     owner  = "tcsprojects";
