@@ -839,6 +839,8 @@ in {
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
+  pybids = callPackage ../development/python-modules/pybids { };
+
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
   pybullet = callPackage ../development/python-modules/pybullet { };
