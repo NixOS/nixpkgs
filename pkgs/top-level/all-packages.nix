@@ -10240,9 +10240,7 @@ in
 
   cdk = callPackage ../development/libraries/cdk {};
 
-  cdo = callPackage ../development/libraries/cdo {
-    stdenv = gccStdenv;
-  };
+  cdo = callPackage ../development/libraries/cdo { };
 
   cimg = callPackage  ../development/libraries/cimg { };
 
