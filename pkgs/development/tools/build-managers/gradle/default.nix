@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, makeWrapper }:
+{ stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
 rec {
   gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation rec {
@@ -12,8 +12,8 @@ rec {
 
       gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
       test -f $gradle_launcher_jar
-      makeWrapper ${jdk}/bin/java $out/bin/gradle \
-        --set JAVA_HOME ${jdk} \
+      makeWrapper ${java}/bin/java $out/bin/gradle \
+        --set JAVA_HOME ${java} \
         --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
     '';
 
@@ -33,7 +33,7 @@ rec {
         echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
       '';
 
-    buildInputs = [ unzip jdk makeWrapper ];
+    buildInputs = [ unzip java makeWrapper ];
 
     meta = {
       description = "Enterprise-grade build system";
@@ -51,7 +51,9 @@ rec {
     };
   };
 
-  gradle_latest = gradleGen rec {
+  gradle_latest = gradle_5_3;
+
+  gradle_5_3 = gradleGen rec {
     name = "gradle-5.3.1";
     nativeVersion = "0.17";
 
