@@ -131,6 +131,12 @@ self:
       # upstream issue: missing file header
       jsfmt = markBroken super.jsfmt;
 
+      kubernetes = super.kubernetes.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
 
