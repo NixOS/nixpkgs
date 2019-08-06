@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, bash, cpio, autoconf, pkgconfig, file, which, unzip, zip, cups, freetype
-, alsaLib, bootjdk, perl, fontconfig, zlib, lndir
+, alsaLib, bootjdk, perl, liberation_ttf, fontconfig, zlib, lndir
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , setJavaClassPath
@@ -18,8 +18,8 @@ let
       "i386"
     else "amd64";
 
-  major = "11";
-  update = ".0.3";
+  major = "12";
+  update = ".0.2";
   build = "ga";
   repover = "jdk-${major}${update}-${build}";
 
@@ -28,7 +28,7 @@ let
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/${repover}.tar.gz";
-      sha256 = "1v6pam38iidlhz46046h17hf5kki6n3kl302awjcyxzk7bmkvb8x";
+      sha256 = "1ndlxmikyy298z7lqpr1bd0zxq7yx6xidj8y3c8mw9m9fy64h9c7";
     };
 
     nativeBuildInputs = [ pkgconfig ];
@@ -45,6 +45,14 @@ let
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap.patch
+      # -Wformat etc. are stricter in newer gccs, per
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
+      # so grab the work-around from
+      # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
+      (fetchurl {
+        url = https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch;
+        sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
+      })
     ] ++ lib.optionals (!minimal && enableGnome2) [
       ./swing-use-gtk-jdk10.patch
     ];
@@ -55,18 +63,14 @@ let
 
       configureFlagsArray=(
         "--with-boot-jdk=${bootjdk.home}"
-        "--with-update-version=${major}${update}"
-        "--with-build-number=${build}"
-        "--with-milestone=fcs"
         "--enable-unlimited-crypto"
-        "--disable-debug-symbols"
         "--with-zlib=system"
         "--with-giflib=system"
         "--with-stdc++lib=dynamic"
 
         # glibc 2.24 deprecated readdir_r so we need this
         # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
-        "--with-extra-cflags=-Wno-error=deprecated-declarations -Wno-error=format-contains-nul -Wno-error=unused-result"
+        "--with-extra-cflags=-Wno-error=deprecated-declarations -Wno-error=unused-result"
     ''
     + lib.optionalString (architecture == "amd64") " \"--with-jvm-features=zgc\""
     + lib.optionalString minimal " \"--enable-headless-only\""

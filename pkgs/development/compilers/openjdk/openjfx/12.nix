@@ -2,9 +2,9 @@
 , gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib, ffmpeg, python, ruby }:
 
 let
-  major = "11";
-  update = ".0.3";
-  build = "1";
+  major = "12";
+  update = "";
+  build = "14";
   repover = "${major}${update}+${build}";
   gradle_ = (gradleGen.override {
     jdk = bootjdk;
@@ -14,8 +14,8 @@ let
     version = "${major}${update}-${repover}";
 
     src = fetchurl {
-      url = "http://hg.openjdk.java.net/openjfx/${major}/rt/archive/${repover}.tar.gz";
-      sha256 = "1h7qsylr7rnwnbimqjyn3whszp9kv4h3gpicsrb3mradxc9yv194";
+      url = "http://hg.openjdk.java.net/openjfx/${major}-dev/rt/archive/${repover}.tar.gz";
+      sha256 = "16jjfjkrg57wsj9mmm52i2kl3byz3ba1f9f8wwc8zwqm4cpjzliz";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg ];
@@ -58,8 +58,8 @@ let
     outputHashMode = "recursive";
     outputHash =
       # Downloaded AWT jars differ by platform.
-      if stdenv.system == "x86_64-linux" then "0d4msxswdav1xsfkpr0qd3xgqkcbxzf47v1zdy5jmg5w4bs6a78a"
-      else if stdenv.system == "i686-linux" then "0mjlyf6jvbis7nrm5d394sjv4hjw6k3753hr1nwdxk8skwc3ry08"
+      if stdenv.system == "x86_64-linux" then "1z5qar5l28ja4pkf5l5m48xbv3x1yrnilsv9lpf2j3vkdk9h1nci"
+      else if stdenv.system == "i686-linux" then "0rbygvjc7w197fi5nxldqdrm6mpiyd3n45042g3gd4s5qk08spjd"
       else throw "Unsupported platform";
   };
 
