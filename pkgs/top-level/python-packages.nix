@@ -3862,6 +3862,8 @@ in {
 
   ntplib = callPackage ../development/python-modules/ntplib { };
 
+  num2words = callPackage ../development/python-modules/num2words { };
+
   numba = callPackage ../development/python-modules/numba { };
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
