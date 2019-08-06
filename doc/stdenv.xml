@@ -2806,17 +2806,78 @@ postInstall = ''
     </varlistentry>
     <varlistentry>
      <term>
-      meson
+      Meson
      </term>
      <listitem>
       <para>
-       Overrides the configure phase to run meson to generate Ninja files. You
-       can disable this behavior by setting configurePhase to a custom value,
-       or by setting dontUseMesonConfigure. To run these files, you should
-       accompany meson with ninja. mesonFlags controls only the flags passed to
-       meson. By default, parallel building is enabled as Meson supports
+       Overrides the configure phase to run meson to generate Ninja files. To
+       run these files, you should accompany Meson with ninja. By default,
+       <varname>enableParallelBuilding</varname> is enabled as Meson supports
        parallel building almost everywhere.
       </para>
+      <variablelist>
+       <title>Variables controlling Meson</title>
+       <varlistentry>
+        <term>
+         <varname>mesonFlags</varname>
+        </term>
+        <listitem>
+         <para>
+          Controls the flags passed to meson.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>mesonBuildType</varname>
+        </term>
+        <listitem>
+         <para>
+          Which
+          <link
+          xlink:href="https://mesonbuild.com/Builtin-options.html#core-options"><command>--buildtype</command></link>
+          to pass to Meson. We default to <literal>plain</literal>.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>mesonAutoFeatures</varname>
+        </term>
+        <listitem>
+         <para>
+          What value to set
+          <link
+          xlink:href="https://mesonbuild.com/Builtin-options.html#core-options"><command>-Dauto_features=</command></link>
+          to. We default to <command>enabled</command>.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>mesonWrapMode</varname>
+        </term>
+        <listitem>
+         <para>
+          What value to set
+          <link
+          xlink:href="https://mesonbuild.com/Builtin-options.html#core-options"><command>-Dwrap_mode=</command></link>
+          to. We default to <command>nodownload</command> as we disallow
+          network access.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>dontUseMesonConfigure</varname>
+        </term>
+        <listitem>
+         <para>
+          Disables using Meson's <varname>configurePhase</varname>.
+         </para>
+        </listitem>
+       </varlistentry>
+      </variablelist>
      </listitem>
     </varlistentry>
     <varlistentry>
