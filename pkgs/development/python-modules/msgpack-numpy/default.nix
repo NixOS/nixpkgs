@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Practical Machine Learning for NLP in Python";
+    description = "Numpy data type serialization using msgpack";
     homepage = https://github.com/lebedov/msgpack-numpy;
     license = licenses.bsd3;
     maintainers = with maintainers; [ aborsu ];
