@@ -1,14 +1,10 @@
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="package-specific-user-notes">
  <title>Package-specific usage notes</title>
  <para>
-         These chapters includes some notes
-         that apply to specific packages and should
-         answer some of the frequently asked questions
-         related to Nixpkgs use.
-
-  Some useful information related to package use
-  can be found in <link linkend="chap-package-notes">package-specific development notes</link>.
-
+  These chapters includes some notes that apply to specific packages and should
+  answer some of the frequently asked questions related to Nixpkgs use. Some
+  useful information related to package use can be found in
+  <link linkend="chap-package-notes">package-specific development notes</link>.
  </para>
  <section xml:id="opengl">
   <title>OpenGL</title>
@@ -47,7 +43,6 @@
    <literal>locales</literal> of the package.
   </para>
  </section>
-
  <section xml:id="sec-emacs">
   <title>Emacs</title>
 
@@ -204,46 +199,43 @@ overrides = self: super: rec {
 </screen>
   </section>
  </section>
-
  <section xml:id="dlib">
   <title>DLib</title>
 
   <para>
-    <link xlink:href="http://dlib.net/">DLib</link> is a modern, C++-based toolkit which
-    provides several machine learning algorithms.
+   <link xlink:href="http://dlib.net/">DLib</link> is a modern, C++-based
+   toolkit which provides several machine learning algorithms.
   </para>
 
   <section xml:id="compiling-without-avx-support">
    <title>Compiling without AVX support</title>
 
    <para>
-     Especially older CPUs don't support
-     <link xlink:href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX</link>
-     (<abbrev>Advanced Vector Extensions</abbrev>) instructions that are used by DLib to
-     optimize their algorithms.
+    Especially older CPUs don't support
+    <link xlink:href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX</link>
+    (<abbrev>Advanced Vector Extensions</abbrev>) instructions that are used by
+    DLib to optimize their algorithms.
    </para>
 
    <para>
-    On the affected hardware errors like <literal>Illegal instruction</literal> will occur.
-    In those cases AVX support needs to be disabled:
+    On the affected hardware errors like <literal>Illegal instruction</literal>
+    will occur. In those cases AVX support needs to be disabled:
 <programlisting>self: super: {
   dlib = super.dlib.override { avxSupport = false; };
 }</programlisting>
    </para>
   </section>
  </section>
-
  <section xml:id="unfree-software">
   <title>Unfree software</title>
 
   <para>
    All users of Nixpkgs are free software users, and many users (and
    developers) of Nixpkgs want to limit and tightly control their exposure to
-   unfree software. At the same time, many users need (or want)
-   to run some specific
-   pieces of proprietary software. Nixpkgs includes some expressions for unfree
-   software packages. By default unfree software cannot be installed and
-   doesn’t show up in searches. To allow installing unfree software in a
+   unfree software. At the same time, many users need (or want) to run some
+   specific pieces of proprietary software. Nixpkgs includes some expressions
+   for unfree software packages. By default unfree software cannot be installed
+   and doesn’t show up in searches. To allow installing unfree software in a
    single Nix invocation one can export
    <literal>NIXPKGS_ALLOW_UNFREE=1</literal>. For a persistent solution, users
    can set <literal>allowUnfree</literal> in the Nixpkgs configuration.
@@ -256,7 +248,6 @@ overrides = self: super: rec {
    <literal>true</literal> for unfree packages that should be allowed.
   </para>
  </section>
-
  <section xml:id="sec-steam">
   <title>Steam</title>
 
@@ -407,21 +398,24 @@ overrides = self: super: rec {
    </para>
   </section>
  </section>
-
  <section xml:id="sec-citrix">
   <title>Citrix Receiver &amp; Citrix Workspace App</title>
 
   <para>
    <note>
     <para>
-     Please note that the <literal>citrix_receiver</literal> package has been deprecated since its
-     development was <link xlink:href="https://docs.citrix.com/en-us/citrix-workspace-app.html">discontinued by upstream</link>
-     and has been replaced by <link xlink:href="https://www.citrix.com/products/workspace-app/">the citrix workspace app</link>.
+     Please note that the <literal>citrix_receiver</literal> package has been
+     deprecated since its development was
+     <link xlink:href="https://docs.citrix.com/en-us/citrix-workspace-app.html">discontinued
+     by upstream</link> and has been replaced by
+     <link xlink:href="https://www.citrix.com/products/workspace-app/">the
+     citrix workspace app</link>.
     </para>
    </note>
-   <link xlink:href="https://www.citrix.com/products/receiver/">Citrix Receiver</link> and
-   <link xlink:href="https://www.citrix.com/products/workspace-app/">Citrix Workspace App</link>
-   are a remote desktop viewers which provide access to
+   <link xlink:href="https://www.citrix.com/products/receiver/">Citrix
+   Receiver</link> and
+   <link xlink:href="https://www.citrix.com/products/workspace-app/">Citrix
+   Workspace App</link> are a remote desktop viewers which provide access to
    <link xlink:href="https://www.citrix.com/products/xenapp-xendesktop/">XenDesktop</link>
    installations.
   </para>
@@ -432,24 +426,24 @@ overrides = self: super: rec {
    <para>
     The tarball archive needs to be downloaded manually as the license
     agreements of the vendor for
-    <link xlink:href="https://www.citrix.com/downloads/citrix-receiver/">Citrix Receiver</link>
-    or <link xlink:href="https://www.citrix.de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html">Citrix Workspace</link>
-    need to be accepted first.
-    Then run <command>nix-prefetch-url file://$PWD/linuxx64-$version.tar.gz</command>.
-    With the archive available
-    in the store the package can be built and installed with Nix.
+    <link xlink:href="https://www.citrix.com/downloads/citrix-receiver/">Citrix
+    Receiver</link> or
+    <link xlink:href="https://www.citrix.de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html">Citrix
+    Workspace</link> need to be accepted first. Then run
+    <command>nix-prefetch-url file://$PWD/linuxx64-$version.tar.gz</command>.
+    With the archive available in the store the package can be built and
+    installed with Nix.
    </para>
 
    <warning>
     <title>Caution with <command>nix-shell</command> installs</title>
     <para>
-     It's recommended to install <literal>Citrix Receiver</literal>
-     and/or <literal>Citrix Workspace</literal> using
-     <literal>nix-env -i</literal> or globally to
-     ensure that the <literal>.desktop</literal> files are installed properly
-     into <literal>$XDG_CONFIG_DIRS</literal>. Otherwise it won't be possible to
-     open <literal>.ica</literal> files automatically from the browser to start
-     a Citrix connection.
+     It's recommended to install <literal>Citrix Receiver</literal> and/or
+     <literal>Citrix Workspace</literal> using <literal>nix-env -i</literal> or
+     globally to ensure that the <literal>.desktop</literal> files are
+     installed properly into <literal>$XDG_CONFIG_DIRS</literal>. Otherwise it
+     won't be possible to open <literal>.ica</literal> files automatically from
+     the browser to start a Citrix connection.
     </para>
    </warning>
   </section>
@@ -458,8 +452,8 @@ overrides = self: super: rec {
    <title>Custom certificates</title>
 
    <para>
-    The <literal>Citrix Workspace App</literal>
-    in <literal>nixpkgs</literal> trust several certificates
+    The <literal>Citrix Workspace App</literal> in <literal>nixpkgs</literal>
+    trust several certificates
     <link xlink:href="https://curl.haxx.se/docs/caextract.html">from the
     Mozilla database</link> by default. However several companies using Citrix
     might require their own corporate certificate. On distros with imperative

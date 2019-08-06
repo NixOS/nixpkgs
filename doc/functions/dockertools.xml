@@ -325,10 +325,9 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
     </term>
     <listitem>
      <para>
-       Shell commands to run while building the final layer, without access
-       to most of the layer contents. Changes to this layer are "on top"
-       of all the other layers, so can create additional directories
-       and files.
+      Shell commands to run while building the final layer, without access to
+      most of the layer contents. Changes to this layer are "on top" of all the
+      other layers, so can create additional directories and files.
      </para>
     </listitem>
    </varlistentry>
@@ -493,28 +492,23 @@ pullImage {
   </calloutlist>
 
   <para>
-    <literal>nix-prefetch-docker</literal> command can be used to get required
-    image parameters:
-
+   <literal>nix-prefetch-docker</literal> command can be used to get required
+   image parameters:
 <screen>
 <prompt>$ </prompt>nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
 </screen>
-
-    Since a given <varname>imageName</varname> may transparently refer to a
-    manifest list of images which support multiple architectures and/or
-    operating systems, you can supply the <option>--os</option> and
-    <option>--arch</option> arguments to specify exactly which image you want.
-    By default it will match the OS and architecture of the host the command is
-    run on.
-
+   Since a given <varname>imageName</varname> may transparently refer to a
+   manifest list of images which support multiple architectures and/or
+   operating systems, you can supply the <option>--os</option> and
+   <option>--arch</option> arguments to specify exactly which image you want.
+   By default it will match the OS and architecture of the host the command is
+   run on.
 <screen>
 <prompt>$ </prompt>nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
 </screen>
-
-    Desired image name and tag can be set using
-    <option>--final-image-name</option> and <option>--final-image-tag</option>
-    arguments:
-
+   Desired image name and tag can be set using
+   <option>--final-image-name</option> and <option>--final-image-tag</option>
+   arguments:
 <screen>
 <prompt>$ </prompt>nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr.io/my-project/mysql --final-image-tag prod
 </screen>
