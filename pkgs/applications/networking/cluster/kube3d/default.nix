@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "kube3d";
-  version = "1.1.0";
+  version = "1.3.1";
 
   goPackagePath = "github.com/rancher/k3d";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "rancher";
     repo   = "k3d";
     rev    = "v${version}";
-    sha256 = "180q7a95znpkhfqcaw3asqrq22r6ppw98qsggp2wfm746mllg5pc";
+    sha256 = "0bdpjnzyxd6mdc1qv0ml89qds6305kn3wmyci2kv6g2y7r7wxvm2";
   };
 
   goDeps = ./deps.nix;
