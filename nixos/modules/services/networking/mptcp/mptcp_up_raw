@@ -1,0 +1,50 @@
+#!/bin/sh
+# A script for setting up routing tables for MPTCP
+
+# see http://multipath-tcp.org/pmwiki.php/Users/ConfigureRouting
+# can check with (ins)[root@client:~]# journalctl -b -u NetworkManager-dispatcher.service
+# Copy this script into /etc/network/if-up.d/
+
+set -ex
+STATUS=$2
+
+RT_TABLE=/etc/iproute2/rt_tables
+
+if [ "$DEVICE_IFACE" = "lo" ]; then
+
+	logger -p user.debug -t mptcp "if localhost or $MODE then abort "
+	exit 0
+elif [ -z "$DEVICE_IFACE" ]; then
+	logger -p user.info -t mptcp "Ignoring empty interface"
+	exit 0
+fi
+
+
+if [ $(grep -c "$DEVICE_IFACE" "$RT_TABLE") -eq 0 ]; then
+	echo "Adding new routing table $DEVICE_IFACE"
+
+	logger -p user.info -t mptcp "Adding new routing table $DEVICE_IFACE"
+	NUM=$(wc -l < "$RT_TABLE")
+	# RT_TABLE doesn't contain a newline
+	echo -e "\n$NUM  $DEVICE_IFACE" >> "$RT_TABLE"
+fi
+
+if [ -n "$DHCP4_IP_ADDRESS" ]; then
+	SUBNET=`echo $IP4_ADDRESS_0 | cut -d \   -f 1 | cut -d / -f 2`
+	ip route add to "$DHCP4_NETWORK_NUMBER/$SUBNET" dev "$DEVICE_IFACE" scope link table "$DEVICE_IFACE"
+	ip route add default via $DHCP4_ROUTERS dev "$DEVICE_IFACE" table "$DEVICE_IFACE"
+	ip rule add from "$DHCP4_IP_ADDRESS" table "$DEVICE_IFACE"
+else
+	# PPP-interface
+	IPADDR=`echo $IP4_ADDRESS_0 | cut -d \   -f 1 | cut -d / -f 1`
+
+	# if gateway is set (manual configuration)
+	if [ ! -z "$IP4_GATEWAY" ]; then
+		ip route add default via "$IP4_GATEWAY" dev "$DEVICE_IFACE" table "$DEVICE_IFACE"
+	else
+		ip route add default dev "$DEVICE_IP_IFACE" scope link table "$DEVICE_IFACE"
+	fi
+
+	ip rule add from "$IPADDR" table "$DEVICE_IFACE"
+fi
+
