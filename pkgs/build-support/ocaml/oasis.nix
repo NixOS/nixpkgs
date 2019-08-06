@@ -1,6 +1,6 @@
 { buildOcaml, ocaml_oasis }:
 
-{ name, version, buildInputs ? [], ...
+{ buildInputs ? [], ...
 }@args:
 
 buildOcaml (args // {
