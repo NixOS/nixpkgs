@@ -123,8 +123,8 @@ in {
   };
 
   subversion = common {
-    version = "1.12.0";
-    sha256 = "1prfbrd1jnndb5fcsvwnzvdi7c0bpirb6pmfq03w21x0v1rprbkz";
+    version = "1.12.2";
+    sha256 = "0wgpw3kzsiawzqk4y0xgh1z93kllxydgv4lsviim45y5wk4bbl1v";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 }
