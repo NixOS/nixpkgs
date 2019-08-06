@@ -1083,6 +1083,11 @@
     github = "codyopel";
     name = "Cody Opel";
   };
+  cohencyril = {
+    email = "cyril.cohen@inria.fr";
+    github = "CohenCyril";
+    name = "Cyril Cohen";
+  };
   colemickens = {
     email = "cole.mickens@gmail.com";
     github = "colemickens";
