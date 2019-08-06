@@ -447,6 +447,7 @@ let
     mnormt = [ pkgs.libiconv ];
     phangorn = [ pkgs.libiconv ];
     quadprog = [ pkgs.libiconv ];
+    sundialr = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
