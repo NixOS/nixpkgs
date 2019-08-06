@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   # shell completions
   postInstall = ''
-    install -Dm555 scripts/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
-    install -Dm555 scripts/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
-    install -Dm555 scripts/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
+    install -Dm555 misc/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
+    install -Dm555 misc/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
+    install -Dm555 misc/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
   '';
 
   meta = {
