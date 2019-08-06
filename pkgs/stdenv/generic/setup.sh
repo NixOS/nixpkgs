@@ -787,14 +787,17 @@ dumpVars() {
 # Utility function: echo the base name of the given path, with the
 # prefix `HASH-' removed, if present.
 stripHash() {
-    local strippedName
+    local strippedName casematchOpt=0
     # On separate line for `set -e`
-    strippedName="$(basename "$1")"
-    if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
-        echo "$strippedName" | cut -c34-
+    strippedName="$(basename -- "$1")"
+    shopt -q nocasematch && casematchOpt=1
+    shopt -u nocasematch
+    if [[ "$strippedName" =~ ^[a-z0-9]{32}- ]]; then
+        echo "${strippedName:33}"
     else
         echo "$strippedName"
     fi
+    if (( casematchOpt )); then shopt -s nocasematch; fi
 }
 
 
