@@ -5003,8 +5003,6 @@ in {
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
 
-  wikipedia = callPackage ../development/python-modules/wikipedia { };
-
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
   magic-wormhole-mailbox-server = callPackage ../development/python-modules/magic-wormhole-mailbox-server { };
