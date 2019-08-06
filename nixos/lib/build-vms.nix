@@ -57,9 +57,15 @@ rec {
       nodes_ = flip map machinesNumbered (m: nameValuePair m.fst
         [ ( { config, nodes, ... }:
             let
+              # Hack: if eth0 is not used by the default slirp configuration then the first
+              # managed interface should be eth0 and not eth1
+              offset = if config.virtualisation.qemu.networkingOptions != "" then 1 else 0;
               interfacesNumbered = zipLists config.virtualisation.vlans (range 1 255);
               interfaces = flip map interfacesNumbered ({ fst, snd }:
-                nameValuePair "eth${toString snd}" { ipv4.addresses =
+                let
+                  snd2 = snd - offset;
+                in
+                nameValuePair "eth${toString snd2}" { ipv4.addresses =
                   [ { address = "192.168.${toString fst}.${toString m.snd}";
                       prefixLength = 24;
                   } ];
