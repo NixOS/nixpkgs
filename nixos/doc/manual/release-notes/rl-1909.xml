@@ -338,10 +338,17 @@
        For nginx, the dependencies are still automatically managed when <option>services.nginx.virtualhosts.&lt;name&gt;.enableACME</option> is enabled just like before. What changed is that nginx now directly depends on the specific certificates that it needs,
        instead of depending on the catch-all <literal>acme-certificates.target</literal>. This target unit was also removed from the codebase.
        This will mean nginx will no longer depend on certificates it isn't explicitly managing and fixes a bug with certificate renewal
-       ordering racing with nginx restarting which could lead to nginx getting in a broken state as described at 
+       ordering racing with nginx restarting which could lead to nginx getting in a broken state as described at
         <link xlink:href="https://github.com/NixOS/nixpkgs/issues/60180">NixOS/nixpkgs#60180</link>.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The old deprecated <literal>emacs</literal> package sets have been dropped.
+       What used to be called <literal>emacsPackagesNg</literal> is now simply called <literal>emacsPackages</literal>.
+     </para>
+   </listitem>
+
   </itemizedlist>
  </section>
 
