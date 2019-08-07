@@ -48,6 +48,7 @@ in {
         ExecStart = "${pkgs.roon-server}/opt/start.sh";
         LimitNOFILE = 8192;
         User = cfg.user;
+        Group = cfg.group;
       };
     };
     
@@ -58,14 +59,14 @@ in {
       allowedUDPPorts = [ 9003 ];
     };
 
-    users.groups = singleton {
-      name = cfg.group;
-    };
-    users.users = singleton {
-      name = cfg.user;
-      isSystemUser = true;
-      description = "Roon Server user";
-      groups = [ cfg.group "audio" ];
-    };
+    
+    users.groups."${cfg.group}" = {};
+    users.users."${cfg.user}" =
+      if cfg.user == "roon-server" then {
+        isSystemUser = true;
+        description = "Roon Server user";
+        groups = [ cfg.group "audio" ];
+      }
+      else {};
   };
 }
