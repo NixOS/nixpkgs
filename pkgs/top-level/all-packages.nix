@@ -11009,7 +11009,7 @@ in
 
   gdk-pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
-  gnome-sharp = callPackage ../development/libraries/gnome-sharp { mono = mono4; };
+  gnome-sharp = callPackage ../development/libraries/gnome-sharp { };
 
   gnome-menus = callPackage ../development/libraries/gnome-menus { };
 
