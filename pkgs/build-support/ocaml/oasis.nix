@@ -1,17 +1,19 @@
 { stdenv, ocaml_oasis, ocaml, findlib, ocamlbuild }:
 
-{ name, version, buildInputs ? [], meta ? { platforms = ocaml.meta.platforms or []; },
-  minimumOcamlVersion ? null,
+{ pname, version, buildInputs ? [], meta ? { platforms = ocaml.meta.platforms or []; },
+  minimumOCamlVersion ? null,
   createFindlibDestdir ? true,
   dontStrip ? true,
   ...
 }@args:
 
- assert minimumOcamlVersion != null ->
-          stdenv.lib.versionOlder minimumOcamlVersion ocaml.version;
+if args ? minimumOCamlVersion &&
+   ! stdenv.lib.versionAtLeast ocaml.version args.minimumOCamlVersion
+then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation (args // {
-  name = "ocaml${ocaml.version}-${name}-${version}";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis ] ++ buildInputs;
 

@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, ocamlPackages, buildOasisPackage, ounit, ocaml_extlib, num }:
 
 buildOasisPackage rec {
-  name = "tcslib";
+  pname = "tcslib";
   version = "0.3";
 
   minimumOCamlVersion = "4.03.0";
