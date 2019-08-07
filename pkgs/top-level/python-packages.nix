@@ -5270,6 +5270,8 @@ in {
 
   tiros = callPackage ../development/python-modules/tiros { };
 
+  tinydb = callPackage ../development/python-modules/tinydb { };
+
   tifffile = callPackage ../development/python-modules/tifffile { };
 
   tmdb3 = callPackage ../development/python-modules/tmdb3 { };
