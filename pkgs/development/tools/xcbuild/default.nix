@@ -43,8 +43,8 @@ in stdenv.mkDerivation rec {
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # Apple Open Sourced LZFSE, but not libcompression, and it isn't
     # part of an impure framework we can add
-    sed '/#define HAVE_LIBCOMPRESSION 1/d' \
-      -i Libraries/libcar/Sources/Rendition.cpp
+    substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
+      --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
   '';
 
   enableParallelBuilding = true;
