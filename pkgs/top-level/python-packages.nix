@@ -2306,6 +2306,8 @@ in {
     inherit (pkgs.gitAndTools) git-annex;
   };
 
+  git-revise = callPackage ../development/python-modules/git-revise { };
+
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
