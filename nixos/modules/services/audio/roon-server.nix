@@ -63,6 +63,7 @@ in {
     };
     users.users = singleton {
       name = cfg.user;
+      isSystemUser = true;
       description = "Roon Server user";
       groups = [ cfg.group "audio" ];
     };
