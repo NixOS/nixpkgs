@@ -19,7 +19,7 @@ buildGoPackage rec {
     git
     gnupg
     xclip
-  ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard );
+  ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard);
 
   postInstall = ''
     mkdir -p \
