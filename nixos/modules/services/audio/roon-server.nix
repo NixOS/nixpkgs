@@ -33,9 +33,7 @@ in {
       serviceConfig = {
         ExecStart = "${pkgs.roon-server}/opt/start.sh";
         LimitNOFILE = 8192;
-        DynamicUser = true;
         SupplementaryGroups = "audio";
-        StateDirectory = name;
       };
     };
     
