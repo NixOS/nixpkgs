@@ -747,6 +747,8 @@ in
 
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
+  codespell = with python3Packages; toPythonApplication codespell;
+
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
   ctrtool = callPackage ../tools/archivers/ctrtool { };
