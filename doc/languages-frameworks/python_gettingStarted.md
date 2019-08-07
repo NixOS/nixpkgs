@@ -10,8 +10,11 @@ with import <nixpkgs> {};
 ```
 
 3. Set up temporary Python environment with nix-shell: `$ nix-shell python.nix`
-4. Run/execute any python script in `nix-shell`: `$ nix-shell python.nix --run "python3 mypyscript.py" `
-5. Use imperative pip in a virtualenv like in other OS: 
+4. Run/execute any python script in nix-shell: `$ nix-shell python.nix --run "python3 mypyscript.py" `
+
+Or try this as an alternative concept: 
+
+1. imperative pip in a virtualenv like in other OS: 
 ```
 with import <nixpkgs> {};
 with python36Packages;
@@ -52,8 +55,8 @@ stdenv.mkDerivation {
   '';
 }
 ```
-6. run it `$ nix-shell how_u_called_it.nix`
-7. In `requirements.txt` list whatever python modules e.g. matplotlib, pandas
-8. Therefore you could look for packages e.g. numpy `$ nix-env -qa '.*numpy.*'`
-9. Exit `$ nix-shell` like Ctrl+D or type `$ exit`.
-10. Now u should be ready to have an easy imperativ venv
+2. run it `$ nix-shell "how_u_called_it.nix"`
+3. In a`requirements.txt` file list whatever python modules e.g. matplotlib, pandas
+4. Therefore you could look for packages e.g. numpy `$ nix-env -qa '.*numpy.*'`
+5. Exit `$ nix-shell` like Ctrl+D or type `$ exit`.
+6. Now u should be ready to have an easy imperativ venv with pip
