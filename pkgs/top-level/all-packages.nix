@@ -9418,6 +9418,8 @@ in
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
 
+  flexibee = callPackage ../applications/office/flexibee { };
+
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
 
   geis = callPackage ../development/libraries/geis {
