@@ -12,6 +12,8 @@ let
 
     buildOcaml = callPackage ../build-support/ocaml { };
 
+    buildOasisPackage = callPackage ../build-support/ocaml/oasis.nix { };
+
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
 
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
@@ -724,6 +726,8 @@ let
     stog = callPackage ../applications/misc/stog { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
+
+    tcslib = callPackage ../development/ocaml-modules/tcslib { };
 
     toml = callPackage ../development/ocaml-modules/toml { };
 
