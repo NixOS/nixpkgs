@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 # TODO: support non-postgresql
 
@@ -492,16 +492,56 @@ in {
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        example = {
-          gitlab = {
-            default_projects_features = {
-              builds = false;
+        example = literalExample ''
+          {
+            gitlab = {
+              default_projects_features = {
+                builds = false;
+              };
+            };
+            omniauth = {
+              enabled = true;
+              auto_sign_in_with_provider = "openid_connect";
+              allow_single_sign_on = ["openid_connect"];
+              block_auto_created_users = false;
+              providers = [
+                {
+                  name = "openid_connect";
+                  label = "OpenID Connect";
+                  args = {
+                    name = "openid_connect";
+                    scope = ["openid" "profile"];
+                    response_type = "code";
+                    issuer = "https://keycloak.example.com/auth/realms/My%20Realm";
+                    discovery = true;
+                    client_auth_method = "query";
+                    uid_field = "preferred_username";
+                    client_options = {
+                      identifier = "gitlab";
+                      secret = { _secret = "/var/keys/gitlab_oidc_secret"; };
+                      redirect_uri = "https://git.example.com/users/auth/openid_connect/callback";
+                    };
+                  };
+                }
+              ];
             };
           };
-        };
+        '';
         description = ''
-          Extra options to be merged into config/gitlab.yml as nix
-          attribute set.
+          Extra options to be added under
+          <literal>production</literal> in
+          <filename>config/gitlab.yml</filename>, as a nix attribute
+          set.
+
+          Options containing secret data should be set to an attribute
+          set containing the attribute <literal>_secret</literal> - a
+          string pointing to a file containing the value the option
+          should be set to. See the example to get a better picture of
+          this: in the resulting
+          <filename>config/gitlab.yml</filename> file, the
+          <literal>production.omniauth.providers[0].args.client_options.secret</literal>
+          key will be set to the contents of the
+          <filename>/var/keys/gitlab_oidc_secret</filename> file.
         '';
       };
     };
@@ -620,7 +660,6 @@ in {
 
       "L+ /run/gitlab/shell-config.yml - - - - ${pkgs.writeText "config.yml" (builtins.toJSON gitlabShellConfig)}"
 
-      "L+ ${cfg.statePath}/config/gitlab.yml - - - - ${pkgs.writeText "gitlab.yml" (builtins.toJSON gitlabConfig)}"
       "L+ ${cfg.statePath}/config/unicorn.rb - - - - ${./defaultUnicornConfig.rb}"
       "L+ ${cfg.statePath}/config/initializers/extra-gitlab.rb - - - - ${extraGitlabRb}"
     ];
@@ -751,6 +790,11 @@ in {
               ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
                                 >'${cfg.statePath}/config/database.yml'
             ''
+          }
+
+          ${utils.genJqSecretsReplacementSnippet
+              gitlabConfig
+              "${cfg.statePath}/config/gitlab.yml"
           }
 
           if [[ -h '${cfg.statePath}/config/secrets.yml' ]]; then
