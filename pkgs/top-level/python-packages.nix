@@ -626,6 +626,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  handout = callPackage ../development/python-modules/handout { };
+
   helper = callPackage ../development/python-modules/helper { };
 
   histbook = callPackage ../development/python-modules/histbook { };
