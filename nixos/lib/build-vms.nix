@@ -67,7 +67,7 @@ rec {
             in
             { key = "ip-address";
               config =
-                { networking.hostName = m.fst;
+                { networking.hostName = mkDefault m.fst;
 
                   networking.interfaces = listToAttrs interfaces;
 
