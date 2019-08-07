@@ -577,6 +577,8 @@ let
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
+    pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
+
     piqi = callPackage ../development/ocaml-modules/piqi {
       base64 = base64_2;
     };
