@@ -5599,6 +5599,11 @@
     github = "viric";
     name = "Lluís Batlle i Rossell";
   };
+  virusdave = {
+    email = "dave.nicponski@gmail.com";
+    github = "virusdave";
+    name = "Dave Nicponski";
+  };
   vizanto = {
     email = "danny@prime.vc";
     github = "vizanto";
