@@ -26,5 +26,10 @@ clangStdenv.mkDerivation {
     homepage = https://github.com/Golevka/emacs-clang-complete-async;
     description = "An emacs plugin to complete C and C++ code using libclang";
     license = clangStdenv.lib.licenses.gpl3Plus;
+
+    # Fails with:
+    # ./src/completion.h:5:10: fatal error: 'clang-c/Index.h' file not found
+    # include <clang-c/Index.h>
+    broken = true;
   };
 }
