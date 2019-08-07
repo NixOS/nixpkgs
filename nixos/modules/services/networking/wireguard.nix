@@ -98,6 +98,19 @@ let
         "main".'';
       };
 
+      fwmark = mkOption {
+        default = null;
+        example = 51820;
+        type = types.nullOr types.int;
+        description = ''
+          Mark packets with this value in fwmark.
+
+          Useful for whole-internet VPNs to allow all traffic to go
+          through wireguard, except for packets destined to the
+          wireguard endpoint.
+        '';
+      };
+
       peers = mkOption {
         default = [];
         description = "Peers linked to the interface.";
@@ -316,12 +329,22 @@ let
           wg set ${name} private-key ${privKey} ${
             optionalString (values.listenPort != null) " listen-port ${toString values.listenPort}"}
 
+          ${optionalString (values.fwmark != null) ''
+            wg set ${name} fwmark "${toString values.fwmark}"
+            ip rule add not fwmark "${toString values.fwmark}" table "${toString values.table}"
+            ip rule add table "${values.table}" suppress_prefixlength 0
+          ''}
+
           ip link set up dev ${name}
 
           ${values.postSetup}
         '';
 
         postStop = ''
+          ${optionalString (values.fwmark != null) ''
+            ip rule delete not fwmark "${toString values.fwmark}" table "${toString values.table}"
+            ip rule delete table "${values.table}" suppress_prefixlength 0
+          ''}
           ip link del dev ${name}
           ${values.postShutdown}
         '';
@@ -391,6 +414,7 @@ in
           message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
         }) all_peers;
 
+    networking.firewall.checkReversePath = "loose";
     boot.extraModulePackages = [ kernel.wireguard ];
     environment.systemPackages = [ pkgs.wireguard-tools ];
 
