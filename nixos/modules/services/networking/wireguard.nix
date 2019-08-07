@@ -342,8 +342,8 @@ let
 
         postStop = ''
           ${optionalString (values.fwmark != null) ''
-            ip rule delete not fwmark "${toString values.fwmark}" table "${toString values.table}"
-            ip rule delete table "${values.table}" suppress_prefixlength 0
+            ip rule delete not fwmark "${toString values.fwmark}" table "${toString values.table}" || true
+            ip rule delete table "${values.table}" suppress_prefixlength 0 || true
           ''}
           ip link del dev ${name}
           ${values.postShutdown}
