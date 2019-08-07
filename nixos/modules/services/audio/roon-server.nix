@@ -60,12 +60,10 @@ in {
 
     users.groups = singleton {
       name = cfg.group;
-      gid = config.ids.gids.roon-server;
     };
     users.users = singleton {
       name = cfg.user;
       description = "Roon Server user";
-      uid = config.ids.uids.roon-server;
       groups = [ cfg.group "audio" ];
     };
   };
