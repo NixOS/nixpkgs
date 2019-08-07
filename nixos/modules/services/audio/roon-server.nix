@@ -19,6 +19,20 @@ in {
           TCP: 9100 - 9200
         '';
       };
+      user = mkOption {
+        type = types.string;
+        default = "roon-server";
+        description = ''
+          User to run the Roon Server as.
+        '';
+      };
+      group = mkOption {
+        type = types.string;
+        default = "roon-server";
+        description = ''
+          Group to run the Roon Server as.
+        '';
+      };
     };
   };
 
@@ -33,7 +47,7 @@ in {
       serviceConfig = {
         ExecStart = "${pkgs.roon-server}/opt/start.sh";
         LimitNOFILE = 8192;
-        SupplementaryGroups = "audio";
+        User = cfg.user;
       };
     };
     
@@ -42,6 +56,17 @@ in {
         { from = 9100; to = 9200; }
       ];
       allowedUDPPorts = [ 9003 ];
+    };
+
+    users.groups = singleton {
+      name = cfg.group;
+      gid = config.ids.gids.roon-server;
+    };
+    users.users = singleton {
+      name = cfg.user;
+      description = "Roon Server user";
+      uid = config.ids.uids.roon-server;
+      groups = [ cfg.group "audio" ];
     };
   };
 }
