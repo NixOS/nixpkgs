@@ -1581,6 +1581,8 @@ in
 
   firecracker = callPackage ../applications/virtualization/firecracker { };
 
+  firestarter = callPackage ../applications/misc/firestarter { };
+
   fsmon = callPackage ../tools/misc/fsmon { };
 
   fsql = callPackage ../tools/misc/fsql { };
