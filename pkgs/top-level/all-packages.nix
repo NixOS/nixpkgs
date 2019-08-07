@@ -7714,7 +7714,7 @@ in
 
   fsharp = callPackage ../development/compilers/fsharp { };
 
-  fsharp41 = callPackage ../development/compilers/fsharp41 { mono = mono4; };
+  fsharp41 = callPackage ../development/compilers/fsharp41 { mono = mono6; };
 
   fstar = callPackage ../development/compilers/fstar { };
 
