@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./installation-cd-graphical-kde.nix ];
+  imports = [ ./installation-cd-graphical-plasma5.nix ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 }
