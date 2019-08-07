@@ -12281,7 +12281,7 @@ in
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
-  libv4l = lowPrio (v4l_utils.override {
+  libv4l = lowPrio (v4l-utils.override {
     withUtils = false;
   });
 
@@ -16325,7 +16325,7 @@ in
     systemd = null;
   }) else utillinux;
 
-  v4l_utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
+  v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
   vndr = callPackage ../development/tools/vndr { };
 

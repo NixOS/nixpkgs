@@ -362,6 +362,7 @@ mapAliases ({
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
+  v4l_utils = v4l-utils; # added 2019-08-07
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
