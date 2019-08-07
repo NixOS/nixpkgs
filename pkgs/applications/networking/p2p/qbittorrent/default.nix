@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig
-, boost, libtorrentRasterbar, qtbase, qttools, qtsvg
+{ stdenv, fetchFromGitHub, makeWrapper, pkgconfig
+, boost, libtorrentRasterbar, python, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
     ++ optional guiSupport dbus; # D(esktop)-Bus depends on GUI support
@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
     ++ optional debugSupport "--enable-debug";
 
   enableParallelBuilding = true;
+
+  # NOTE: 2019-08-06: Python is needed at runtime for tracker search
+  postInstall = "wrapProgram $out/bin/${
+    if guiSupport
+    then "qbittorrent"
+    else "qbittorrent-nox"
+  } --prefix PATH ${makeBinPath [ python ]}";
 
   meta = {
     description = "Featureful free software BitTorrent client";

@@ -20036,7 +20036,9 @@ in
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
+  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent {
+    python = python3;
+  };
 
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
 
