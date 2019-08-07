@@ -1,11 +1,9 @@
-{ stdenv, ocaml_oasis, ocaml, findlib, ocamlbuild, camlp4 }:
+{ stdenv, ocaml_oasis, ocaml, findlib, ocamlbuild }:
 
 { name, version, buildInputs ? [], meta ? { platforms = ocaml.meta.platforms or []; },
   minimumOcamlVersion ? null,
   createFindlibDestdir ? true,
   dontStrip ? true,
-  hasSharedObjects ? false,
-  setupHook ? null,
   ...
 }@args:
 
@@ -13,9 +11,9 @@
           stdenv.lib.versionOlder minimumOcamlVersion ocaml.version;
 
 stdenv.mkDerivation (args // {
-  name = "ocaml-${name}-${version}";
+  name = "ocaml${ocaml.version}-${name}-${version}";
 
-  buildInputs = [ ocaml findlib ocamlbuild camlp4 ocaml_oasis ] ++ buildInputs;
+  buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis ] ++ buildInputs;
 
   inherit createFindlibDestdir;
   inherit dontStrip;
@@ -42,11 +40,5 @@ stdenv.mkDerivation (args // {
     prefix=$OCAMLFIND_DESTDIR ocaml setup.ml -install
     runHook postInstall
   '';
-
-  setupHook = if setupHook == null && hasSharedObjects
-              then stdenv.writeText "setupHook.sh" ''
-              export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
-              ''
-              else setupHook;
 
 })
