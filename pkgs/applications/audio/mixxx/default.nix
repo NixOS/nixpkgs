@@ -36,6 +36,7 @@ mkDerivation rec {
 
   fixupPhase = ''
     wrapProgram $out/bin/mixxx \
+      --set QT_PLUGIN_PATH "${qtbase.bin}/${qtbase.qtPluginPrefix}" \
       --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
   '';
 
