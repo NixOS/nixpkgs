@@ -2194,6 +2194,8 @@ in {
 
   elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
 
+  elementpath = callPackage ../development/python-modules/elementpath { };
+
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
   enzyme = callPackage ../development/python-modules/enzyme {};
@@ -4977,6 +4979,8 @@ in {
   };
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
+
+  xmlschema = callPackage ../development/python-modules/xmlschema { };
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
