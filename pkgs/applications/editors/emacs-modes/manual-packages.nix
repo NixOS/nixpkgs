@@ -142,4 +142,22 @@
 
   zeitgeist = callPackage ./zeitgeist { };
 
+  # From old emacsPackages (pre emacsPackagesNg)
+  cedet = callPackage ./cedet { };
+  cedille = callPackage ./cedille { cedille = pkgs.cedille; };
+  coffee = callPackage ./coffee { };
+  colorThemeSolarized = callPackage ./color-theme-solarized {
+    colorTheme = self.color-theme;
+  };
+  cua = callPackage ./cua { };
+  emacsClangCompleteAsync = callPackage ./emacs-clang-complete-async { };
+  emacsSessionManagement = callPackage ./session-management-for-emacs { };
+  hsc3Mode = callPackage ./hsc3 { };
+  hol_light_mode = callPackage ./hol_light { };
+  ido-ubiquitous = callPackage ./ido-ubiquitous { };
+  ocamlMode = callPackage ./ocaml { };
+  prologMode = callPackage ./prolog { };
+  rectMark = callPackage ./rect-mark { };
+  sunriseCommander = callPackage ./sunrise-commander { };
+
 }
