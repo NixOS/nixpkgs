@@ -20977,7 +20977,7 @@ in
 
   virtscreen = callPackage ../tools/admin/virtscreen {};
 
-  virtualbox = callPackage ../applications/virtualization/virtualbox {
+  virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
   };
