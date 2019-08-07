@@ -16,6 +16,7 @@ let
   _self = with self; {
 
   inherit perl;
+  perlPackages = self;
 
   callPackage = pkgs.newScope self;
 
