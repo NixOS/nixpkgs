@@ -7,7 +7,7 @@ let
   build = "14";
   repover = "${major}${update}+${build}";
   gradle_ = (gradleGen.override {
-    jdk = bootjdk;
+    java = bootjdk;
   }).gradle_4_10;
 
   makePackage = args: stdenv.mkDerivation ({
