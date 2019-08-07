@@ -3490,6 +3490,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  ripgrep-all = callPackage ../tools/text/ripgrep-all {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
   groff = callPackage ../tools/text/groff {
