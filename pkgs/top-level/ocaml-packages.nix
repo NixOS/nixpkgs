@@ -444,6 +444,8 @@ let
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
+    minisat = callPackage ../development/ocaml-modules/minisat { };
+
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
