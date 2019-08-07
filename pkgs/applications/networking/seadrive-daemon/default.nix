@@ -7,26 +7,20 @@
 # Package dependencies
 , curl
 , fuse
+, libevent
 , libsearpc
+, openssl_1_1
 , sqlite
 }:
 
-let
-  # Grab libevent-2.0 from old nixpkgs
-  # seadrive specifically looks for libevent-2.0 and fails with libevent-2.1
-  libevent-2_0-src = fetchurl {
-    url = "https://github.com/NixOS/nixpkgs/raw/3be19de8e4eba036d1c6ae81295beee1871a7fef~1/pkgs/development/libraries/libevent/default.nix";
-    sha256 = "07x7i3bsm8xngap2baivbza0fnj3jalmfq57avymzfyqy17sb2j4";
-  };
-  libevent-2_0 = callPackage libevent-2_0-src {};
-in stdenv.mkDerivation rec {
-  version = "1.0.0";
+stdenv.mkDerivation rec {
+  version = "1.0.6";
   pname = "seadrive-daemon";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://deb.seadrive.org/jessie/pool/main/s/${pname}/${pname}_${version}_amd64.deb";
-    sha256 = "09nbgcgqzxdb4f1c6dw8azvhpcap88frc64da0d49f7lrikgd49l";
+    url = "https://deb.seadrive.org/buster/pool/main/s/${pname}/${pname}_${version}_amd64.deb";
+    sha256 = "1rhh1s1627w74l2bsw6pmnid7h2rjsii2ng8qhw9wa8q6g1xc0yp";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -38,8 +32,9 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     curl
     fuse
-    libevent-2_0
+    libevent
     libsearpc
+    openssl_1_1
     sqlite
   ];
 
