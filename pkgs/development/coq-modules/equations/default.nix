@@ -15,9 +15,9 @@ let
     };
 
     "8.8" = {
-      version = "1.2beta2";
-      rev = "v1.2-beta2-8.8";
-      sha256 = "1v9asdlhhks25ngnjn4dafx7nrcc5p0lhriqckh3y79nxbgpq4lx";
+      version = "1.2";
+      rev = "v1.2-8.8";
+      sha256 = "06452fyzalz7zcjjp73qb7d6xvmqb6skljkivf8pfm55fsc8s7kx";
     };
 
     "8.9" = {
