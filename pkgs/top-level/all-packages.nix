@@ -20878,6 +20878,8 @@ in
 
   unpaper = callPackage ../tools/graphics/unpaper { };
 
+  unison-ucm = callPackage ../development/compilers/unison { };
+
   urh = callPackage ../applications/radio/urh { };
 
   uuagc = haskell.lib.justStaticExecutables haskellPackages.uuagc;
