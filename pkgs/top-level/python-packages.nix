@@ -6110,6 +6110,8 @@ in {
   fastapi = callPackage ../development/python-modules/fastapi { };
 
   stringcase = callPackage ../development/python-modules/stringcase { };
+
+  webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 });
 
 in fix' (extends overrides packages)
