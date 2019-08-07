@@ -39,6 +39,11 @@
      To gain root privileges in the graphical session use <literal>sudo</literal> without a password.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      We now distribute a GNOME3 graphical ISO.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 

@@ -10,12 +10,19 @@ with lib;
 
   services.xserver.desktopManager.gnome3.enable = true;
 
-  services.xserver.displayManager.slim.enable = mkForce false;
+  services.xserver.displayManager.slim.enable = lib.mkForce false;
 
-  # Auto-login as root.
-  services.xserver.displayManager.gdm.autoLogin = {
+  # wayland can be problematic for some hardware
+  services.xserver.desktopManager.default = "gnome-xorg";
+
+  services.xserver.displayManager.gdm = {
     enable = true;
-    user = "root";
+    # This might be problematic on a live system
+    autoSuspend = false;
+    autoLogin = {
+      enable = true;
+      user = "live";
+    };
   };
 
 }
