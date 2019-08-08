@@ -35,8 +35,8 @@
    </listitem>
    <listitem>
     <para>
-     The installer is no longer running the graphical session as root.
-     To gain root privileges in the graphical session use <literal>sudo</literal> without a password.
+     The installer now uses a less privileged <literal>live</literal> user whereas before we logged in as root.
+     To gain root privileges use <literal>sudo</literal> without a password.
     </para>
   </listitem>
   <listitem>

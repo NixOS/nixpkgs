@@ -1,5 +1,5 @@
 # This module defines a NixOS installation CD that contains X11 and
-# KDE 5.
+# Plasma 5.
 
 { config, lib, pkgs, ... }:
 
