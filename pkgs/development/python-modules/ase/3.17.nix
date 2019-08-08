@@ -1,7 +1,6 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, isPy27
 , numpy
 , scipy
 , matplotlib
@@ -12,12 +11,11 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.18.0";
-  disabled = isPy27;
+  version = "3.17.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ycp1yksysiiz902gn762030sfmirxm950pwpw2rcrpjvq95zm1r";
+    sha256 = "1d4gxypaahby45zcpl0rffcn2z7n55dg9lcd8sv6jjsmbbf9vr4g";
   };
 
   propagatedBuildInputs = [ numpy scipy matplotlib flask pillow psycopg2 ];

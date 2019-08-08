@@ -183,7 +183,10 @@ in {
 
   asciitree = callPackage ../development/python-modules/asciitree { };
 
-  ase = callPackage ../development/python-modules/ase { };
+  ase = if isPy27 then
+          callPackage ../development/python-modules/ase/3.17.nix { }
+        else
+          callPackage ../development/python-modules/ase { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
