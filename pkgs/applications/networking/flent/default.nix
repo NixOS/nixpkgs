@@ -1,6 +1,5 @@
 { stdenv, buildPythonApplication, fetchFromGitHub, matplotlib, procps, pyqt5
-, sphinx
-}:
+, sphinx }:
 
 buildPythonApplication rec {
   pname = "flent";
@@ -16,15 +15,11 @@ buildPythonApplication rec {
 
   checkInputs = [ procps ];
 
-  propagatedBuildInputs = [
-    matplotlib
-    procps
-    pyqt5
-  ];
+  propagatedBuildInputs = [ matplotlib procps pyqt5 ];
 
   meta = with stdenv.lib; {
     description = "The FLExible Network Tester";
-    homepage = https://flent.org;
+    homepage = "https://flent.org";
     license = licenses.gpl3;
 
     maintainers = [ maintainers.mmlb ];
