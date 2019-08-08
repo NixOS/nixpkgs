@@ -252,7 +252,7 @@ in
         example = ["host1:2181" "host2:2181"];
       };
       zkConfigExhibitorPath = mkOption {
-        type = types.string;
+        type = types.str;
         description = ''
           If the ZooKeeper shared config is also running Exhibitor, the URI path for the REST call
         '';

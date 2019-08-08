@@ -14,7 +14,7 @@ with lib;
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "nullmailer";
         description = ''
           User to use to run nullmailer-send.
@@ -22,7 +22,7 @@ with lib;
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "nullmailer";
         description = ''
           Group to use to run nullmailer-send.

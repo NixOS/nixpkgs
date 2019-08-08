@@ -45,7 +45,7 @@ in {
       };
 
       networkInterfaceBlacklist = mkOption {
-        type = with types; listOf string;
+        type = with types; listOf str;
         default = [ "vmnet" "vboxnet" "virbr" "ifb" "ve" ];
         description = ''
           Default blacklisted interfaces, this includes NixOS containers interfaces (ve).
@@ -53,7 +53,7 @@ in {
       };
 
       extraFlags = mkOption {
-        type = with types; listOf string;
+        type = with types; listOf str;
         default = [ ];
         example = [ "--nodnsproxy" ];
         description = ''
