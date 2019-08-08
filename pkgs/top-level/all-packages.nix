@@ -24280,7 +24280,9 @@ in
 
   vttest = callPackage ../tools/misc/vttest { };
 
-  wasm-pack = callPackage ../development/tools/wasm-pack { };
+  wasm-pack = callPackage ../development/tools/wasm-pack {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   wavegain = callPackage ../applications/audio/wavegain { };
 
