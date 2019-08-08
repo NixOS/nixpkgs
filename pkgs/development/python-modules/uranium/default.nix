@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = https://github.com/Ultimaker/Uranium;
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar gebner ];
   };
 }
