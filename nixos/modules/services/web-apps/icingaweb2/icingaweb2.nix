@@ -166,25 +166,23 @@ in {
   config = mkIf cfg.enable {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       "${poolName}" = {
-        extraConfig = ''
-          listen.owner = nginx
-          listen.group = nginx
-          listen.mode = 0600
-          user = icingaweb2
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 2
-          pm.min_spare_servers = 2
-          pm.max_spare_servers = 10
+        user = "icingaweb2";
+        phpOptions = ''
+          extension = ${pkgs.phpPackages.imagick}/lib/php/extensions/imagick.so
+          date.timezone = "${cfg.timezone}"
         '';
+        settings = mapAttrs (name: mkDefault) {
+          "listen.owner" = "nginx";
+          "listen.group" = "nginx";
+          "listen.mode" = "0600";
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 2;
+          "pm.min_spare_servers" = 2;
+          "pm.max_spare_servers" = 10;
+        };
       };
     };
-
-    services.phpfpm.phpOptions = mkIf (cfg.pool == "${poolName}")
-      ''
-        extension = ${pkgs.phpPackages.imagick}/lib/php/extensions/imagick.so
-        date.timezone = "${cfg.timezone}"
-      '';
 
     systemd.services."phpfpm-${poolName}".serviceConfig.ReadWritePaths = [ "/etc/icingaweb2" ];
 

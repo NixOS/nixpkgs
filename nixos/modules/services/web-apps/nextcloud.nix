@@ -411,24 +411,20 @@ in {
       };
 
       services.phpfpm = {
-        pools.nextcloud = let
-          phpAdminValues = (toKeyValue
-            (foldr (a: b: a // b) {}
-              (mapAttrsToList (k: v: { "php_admin_value[${k}]" = v; })
-                phpOptions)));
-        in {
-          phpOptions = phpOptionsExtensions;
+        pools.nextcloud = {
+          user = "nextcloud";
+          group = "nginx";
+          phpOptions = phpOptionsExtensions + phpOptionsStr;
           phpPackage = phpPackage;
-          extraConfig = ''
-            listen.owner = nginx
-            listen.group = nginx
-            user = nextcloud
-            group = nginx
-            ${cfg.poolConfig}
-            env[NEXTCLOUD_CONFIG_DIR] = ${cfg.home}/config
-            env[PATH] = /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin
-            ${phpAdminValues}
-          '';
+          phpEnv = {
+            NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
+            PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
+          };
+          settings = mapAttrs (name: mkDefault) {
+            "listen.owner" = "nginx";
+            "listen.group" = "nginx";
+          };
+          extraConfig = cfg.poolConfig;
         };
       };
 
