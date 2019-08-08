@@ -3712,7 +3712,7 @@ in {
 
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
-  mpv = callPackage ../development/python-modules/mpv { };
+  mpv = callPackage ../development/python-modules/mpv { mpv = pkgs.mpv; };
 
   mrbob = callPackage ../development/python-modules/mrbob {};
 
