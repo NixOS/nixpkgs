@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5
+{ stdenv, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5, qt5
 , sphinx }:
 
 buildPythonApplication rec {
@@ -10,10 +10,17 @@ buildPythonApplication rec {
   };
 
   buildInputs = [ sphinx ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   checkInputs = [ procps ];
 
   propagatedBuildInputs = [ matplotlib procps pyqt5 ];
+
+  postInstall = ''
+    for program in $out/bin/*; do
+      wrapQtApp $program --prefix PYTHONPATH : $PYTHONPATH
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "The FLExible Network Tester";
