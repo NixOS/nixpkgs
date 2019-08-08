@@ -32,17 +32,34 @@ with lib;
     #services.rogue.enable = true;
 
     # Disable some other stuff we don't need.
-    security.sudo.enable = mkDefault false;
     services.udisks2.enable = mkDefault false;
 
+    # Use less privileged live user
+    users.extraUsers.live = {
+      isNormalUser = true;
+      uid = 1000;
+      extraGroups = [ "wheel" "networkmanager" "video" ];
+      # Allow the graphical user to login without password
+      initialHashedPassword = "";
+    };
+
+    # Allow the user to log in as root without a password.
+    users.users.root.initialHashedPassword = "";
+
+    # Allow passwordless sudo from live user
+    security.sudo = {
+      enable = mkDefault true;
+      wheelNeedsPassword = mkForce false;
+    };
+
     # Automatically log in at the virtual consoles.
-    services.mingetty.autologinUser = "root";
+    services.mingetty.autologinUser = "live";
 
     # Some more help text.
     services.mingetty.helpLine =
       ''
 
-        The "root" account has an empty password.  ${
+        The "live" and "root" account have empty passwords.  ${
           optionalString config.services.xserver.enable
             "Type `systemctl start display-manager' to\nstart the graphical user interface."}
       '';
@@ -86,8 +103,5 @@ with lib;
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
     networking.firewall.logRefusedConnections = mkDefault false;
-
-    # Allow the user to log in as root without a password.
-    users.users.root.initialHashedPassword = "";
   };
 }

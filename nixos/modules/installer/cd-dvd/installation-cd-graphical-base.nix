@@ -8,20 +8,6 @@ with lib;
 {
   imports = [ ./installation-cd-base.nix ];
 
-  users.extraUsers.live = {
-    isNormalUser = true;
-    uid = 1000;
-    extraGroups = [ "wheel" "networkmanager" "video" ];
-    # Allow the graphical user to login without password
-    initialHashedPassword = "";
-  };
-
-  # Allow passwordless sudo from live user
-  security.sudo = {
-    enable = lib.mkForce true;
-    wheelNeedsPassword = lib.mkForce false;
-  };
-
   # Whitelist wheel users to do anything
   # This is useful for things like pkexec
   security.polkit.extraConfig = ''
