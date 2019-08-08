@@ -20472,14 +20472,13 @@ in
     curaengine = curaengine_stable;
   };
 
-  curaengine = callPackage ../applications/misc/curaengine {
-    inherit (python3.pkgs) libarcus;
-  };
+  curaengine = callPackage ../applications/misc/curaengine { inherit (python3.pkgs) libarcus; };
+
   cura = qt5.callPackage ../applications/misc/cura { };
 
   curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
 
-  curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
+  curaLulzbot = qt5.callPackage ../applications/misc/cura/lulzbot/default.nix { };
 
   curaByDagoma = callPackage ../applications/misc/curabydagoma { };
 
