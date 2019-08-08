@@ -9,7 +9,7 @@
 }:
 
 let
-  deblibsasl = callPackage ./deblibsasl {};
+  deblibsasl = callPackage ../deblibsasl {};
 in stdenv.mkDerivation rec {
   version = "2.4.2";
   pname = "deblibldap";

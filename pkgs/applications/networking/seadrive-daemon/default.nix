@@ -11,8 +11,8 @@
 }:
 
 let
-  deblibcurl = callPackage ./deblibcurl {};
-  deblibssl = callPackage ./deblibssl {};
+  deblibcurl = callPackage ./lib/deblibcurl {};
+  deblibssl = callPackage ./lib/deblibssl {};
   libevent_2_0 = callPackage (fetchurl {
     url = "https://github.com/NixOS/nixpkgs/raw/3be19de8e4eba036d1c6ae81295beee1871a7fef~1/pkgs/development/libraries/libevent/default.nix";
     sha256 = "07x7i3bsm8xngap2baivbza0fnj3jalmfq57avymzfyqy17sb2j4";

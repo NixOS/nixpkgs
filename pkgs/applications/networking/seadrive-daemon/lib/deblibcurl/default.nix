@@ -15,7 +15,7 @@
 }:
 
 let
-  deblibldap = callPackage ./deblibldap {};
+  deblibldap = callPackage ../deblibldap {};
   deblibssl = callPackage ../deblibssl {};
 in stdenv.mkDerivation rec {
   version = "7.52.1";
