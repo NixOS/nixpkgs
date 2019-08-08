@@ -29,6 +29,11 @@ mkDerivation rec {
     "-DCURA_VERSION=${version}"
   ];
 
+  makeWrapperArgs = [
+    # hacky workaround for https://github.com/NixOS/nixpkgs/issues/59901
+    "--set OMP_NUM_THREADS 1"
+  ];
+
   postPatch = ''
     sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt
     sed -i 's, executable_name = .*, executable_name = "${curaengine}/bin/CuraEngine",' plugins/CuraEngineBackend/CuraEngineBackend.py
