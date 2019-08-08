@@ -20608,7 +20608,7 @@ in
 
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
 
-  surf-display = callPackages ../desktops/surf-display { };
+  surf-display = callPackage ../desktops/surf-display { };
 
   sunvox = callPackage ../applications/audio/sunvox { };
 
