@@ -33,6 +33,12 @@
      PHP 7.1 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 19.09 release.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The installer is no longer running the graphical session as root.
+     To gain root privileges in the graphical session use <literal>sudo</literal> without a password.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 

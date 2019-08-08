@@ -29,8 +29,9 @@
   </para>
 
   <para>
-   You are logged-in automatically as <literal>root</literal>. (The
-   <literal>root</literal> user account has an empty password.)
+   You are logged-in automatically as <literal>live</literal>.
+   The <literal>live</literal> user account has an empty password so you
+   can use <command>sudo</command> without a password.
   </para>
 
   <para>
