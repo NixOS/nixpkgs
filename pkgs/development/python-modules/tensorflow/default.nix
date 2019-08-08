@@ -267,7 +267,7 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "1dpfyagcx1p4vzfabsl9v5i75332vv2mhk90897i75k6ciq292qs"
+        "1jrf5m1daazwawgvlv0z21qyf1l5aa4l19bfh961pll325xrh76h"
       else
         "1wnhma450zh72raiq7ddd9lyq3a056cjqiy6i7y4sidiy09ncvcg";
     };
