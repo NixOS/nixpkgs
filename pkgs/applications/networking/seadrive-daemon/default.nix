@@ -13,7 +13,9 @@
 , sqlite
 }:
 
-stdenv.mkDerivation rec {
+let
+  deblibcurl = callPackage ./deblibcurl {};
+in stdenv.mkDerivation rec {
   version = "1.0.6";
   pname = "seadrive-daemon";
   name = "${pname}-${version}";
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    curl
+    deblibcurl
     fuse
     libevent
     libsearpc
