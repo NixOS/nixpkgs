@@ -28,7 +28,6 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./pkg_config_additions.patch
-    ./dont_clobber_environment.patch
   ];
 
   enableParallelBuilding = true;
