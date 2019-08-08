@@ -3465,6 +3465,8 @@ in
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
+  google-clasp = callPackage ../development/misc/google-clasp { };
+
   google-compute-engine = python2.pkgs.google-compute-engine;
 
   google-compute-engine-oslogin = callPackage ../tools/virtualization/google-compute-engine-oslogin { };
