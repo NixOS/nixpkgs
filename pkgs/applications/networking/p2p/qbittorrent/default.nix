@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
@@ -6,9 +6,9 @@
 }:
 
 assert guiSupport -> (dbus != null);
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "qbittorrent-${version}";
   version = "4.1.7";
 
