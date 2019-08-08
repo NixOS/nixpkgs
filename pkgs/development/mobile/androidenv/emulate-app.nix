@@ -1,6 +1,12 @@
 { composeAndroidPackages, stdenv, lib }:
 { name, app ? null
-, platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default"
+, platformVersion ? "16"
+, abiVersion ? "armeabi-v7a"
+, systemImageType ? "default"
+, useGoogleAPIs ? false
+, includeExtras ? []
+, platformToolsVersion ? "28.0.1"
+, emulatorVersion ? "28.0.14"
 , enableGPU ? false, extraAVDFiles ? []
 , package ? null, activity ? null
 , avdHomeDir ? null, sdkExtraArgs ? {}
@@ -8,6 +14,7 @@
 
 let
   sdkArgs = {
+    inherit useGoogleAPIs includeExtras platformToolsVersion emulatorVersion;
     platformVersions = [ platformVersion ];
     includeEmulator = true;
     includeSystemImages = true;
