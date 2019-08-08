@@ -5,11 +5,11 @@
 , lib
 , stdenv
 # Package dependencies
+, gnutls
 }:
 
 let
   deblibc = callPackage ./deblibc {};
-  debgnutls = callPackage ./debgnutls {};
   deblibsasl = callPackage ./deblibsasl {};
 in stdenv.mkDerivation rec {
   version = "2.4.2";
@@ -29,8 +29,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     deblibc
-    debgnutls
     deblibsasl
+    gnutls
   ];
 
   # Lib files need to be in $out/lib for autoPatchelfHook and other to find
