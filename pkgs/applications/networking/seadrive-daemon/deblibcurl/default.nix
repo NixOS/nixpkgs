@@ -10,20 +10,21 @@
 , libssh2
 , libpsl
 , nghttp2
-, openssl_1_1
+, openssl-chacha
 , rtmpdump
 }:
 
 let
   deblibldap = callPackage ./deblibldap {};
+  deblibssl = callPackage ../deblibssl {};
 in stdenv.mkDerivation rec {
-  version = "7.64.0";
+  version = "7.52.1";
   pname = "deblibcurl";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://ftp.us.debian.org/debian/pool/main/c/curl/libcurl4_7.64.0-4_amd64.deb";
-    sha256 = "142cwmsl8iwq9hkh7w2lncywgf95i9nbja9a6kjbd6zfy4gi5gdi";
+    url = "http://ftp.us.debian.org/debian/pool/main/c/curl/libcurl3_7.52.1-5+deb9u9_amd64.deb";
+    sha256 = "0dwn9b6l6z9saig4il64apxqwgcln76p5wm0hf65i4vnm545gigq";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -33,13 +34,14 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    deblibldap
+    deblibssl
     e2fsprogs
     krb5
     libpsl
     libssh2
     nghttp2
-    deblibldap
-    openssl_1_1
+    #openssl-chacha
     rtmpdump
   ];
 
@@ -51,7 +53,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://packages.debian.org/buster/libcurl4";
+    homepage = "https://packages.debian.org/stretch/libcurl3";
     description = "Easy-to-use client-side URL transfer library (OpenSSL flavour)";
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.curl;

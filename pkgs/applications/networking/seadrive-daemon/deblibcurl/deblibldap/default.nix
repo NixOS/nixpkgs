@@ -9,7 +9,6 @@
 }:
 
 let
-  deblibc = callPackage ./deblibc {};
   deblibsasl = callPackage ./deblibsasl {};
 in stdenv.mkDerivation rec {
   version = "2.4.2";
@@ -17,8 +16,8 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://ftp.us.debian.org/debian/pool/main/o/openldap/libldap-2.4-2_2.4.47+dfsg-3_amd64.deb";
-    sha256 = "074wba8iq08wa78ry1ys904l2rd7hv02g7qvp6b9b6s49c40jkaa";
+    url = "http://ftp.us.debian.org/debian/pool/main/o/openldap/libldap-2.4-2_2.4.44+dfsg-5+deb9u2_amd64.deb";
+    sha256 = "1nk9j4a92ab9wqz76vd74m4mfkp6h2qcaly8sp9zavlwbbrwvgsp";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -28,7 +27,6 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    deblibc
     deblibsasl
     gnutls
   ];
@@ -41,7 +39,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://packages.debian.org/buster/libldap-2.4-2";
+    homepage = "https://packages.debian.org/stretch/libldap-2.4-2";
     description = "These are the run-time libraries for the OpenLDAP (Lightweight Directory Access Protocol) servers and clients.";
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.openldap;
