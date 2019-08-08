@@ -702,19 +702,18 @@ in
         zfsSupport = true;
       };
 
-      
-      environment.etc."zfs/zed.d/all-syslog.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/all-syslog.sh";
-      environment.etc."zfs/zed.d/data-notify.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/data-notify.sh";
-      environment.etc."zfs/zed.d/pool_import-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/pool_import-led.sh";
-      environment.etc."zfs/zed.d/resilver_finish-notify.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/resilver_finish-notify.sh";
-      environment.etc."zfs/zed.d/resilver_finish-start-scrub.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/resilver_finish-start-scrub.sh";
-      environment.etc."zfs/zed.d/scrub_finish-notify.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/scrub_finish-notify.sh";
-      environment.etc."zfs/zed.d/statechange-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/statechange-led.sh";
-      environment.etc."zfs/zed.d/statechange-notify.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/statechange-notify.sh";
-      environment.etc."zfs/zed.d/vdev_attach-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/vdev_attach-led.sh";
-      environment.etc."zfs/zed.d/vdev_clear-led.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/vdev_clear-led.sh";
-      environment.etc."zfs/zed.d/zed-functions.sh".source = "${packages.zfsUser}/etc/zfs/zed.d/zed-functions.sh";
-      environment.etc."zfs/zed.d/zed.rc".text = zedConf;
+      environment.etc = genAttrs (map (file: "zfs/zed.d/${file}") [
+        "all-syslog.sh"
+        "data-notify.sh"
+        "pool_import-led.sh"
+        "resilver_finish-notify.sh"
+        "resilver-finish-start-scrub.sh"
+        "scrub_finish-notify.sh"
+        "statechange-led.sh"
+        "vdev_attach-led.sh"
+        "vdev_clear-led.sh"
+        "zed-functions.sh"
+      ]) (file: { source = "${packages.zfsUser}/etc/${file}"; });
 
       system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ packages.zfsUser ]
