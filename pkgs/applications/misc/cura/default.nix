@@ -1,21 +1,21 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
 
 mkDerivation rec {
-  name = "cura-${version}";
-  version = "4.1.0";
+  pname = "cura";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "1mfpnjrh3splpkadgml3v71k939g56zb9hbmzghwfjwlrf8valmz";
+    sha256 = "1qnai8vmgy5lx3lapw96j41i8mw9p6r99i3qzs709l9yzrix6l86";
   };
 
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
-    rev = version;
-    sha256 = "0yp2162msxfwpixzvassn23p7r3swjpwk4nhsjka5w6fm8pv0wpl";
+    rev = "4.2.0"; # TODO: change back to `version` after 4.2.1
+    sha256 = "17x43v0np58qbdfk3wz1k7i9pl0plndx9gmf7y0n23nl9f1qzb0m";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
