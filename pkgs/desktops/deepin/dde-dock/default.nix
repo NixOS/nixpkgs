@@ -31,7 +31,7 @@ unwrapped = mkDerivation rec {
     deepin-desktop-schemas
     dtkcore
     dtkwidget
-    glib.bin
+    glib
     gsettings-qt
     libdbusmenu
     polkit
@@ -63,6 +63,14 @@ unwrapped = mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DDOCK_TRAY_USE_NATIVE_POPUP=YES" ];
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
 
   postFixup = ''
     searchHardCodedPaths $out
