@@ -98,8 +98,9 @@ let
       done
     '';
 
+    propagatedBuildInputs = [ zlib ]; # $out/bin/native-image needs zlib to build native executables
+    
     doInstallCheck = true;
-    buildInputs = [ zlib ]; # actually "installCheckInputs", native-image needs <zlib.h>
     installCheckPhase = ''
       echo ${stdenv.lib.escapeShellArg ''
                public class HelloWorld {
