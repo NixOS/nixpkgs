@@ -35,9 +35,8 @@ with lib;
     services.udisks2.enable = mkDefault false;
 
     # Use less privileged live user
-    users.extraUsers.live = {
+    users.users.live = {
       isNormalUser = true;
-      uid = 1000;
       extraGroups = [ "wheel" "networkmanager" "video" ];
       # Allow the graphical user to login without password
       initialHashedPassword = "";
