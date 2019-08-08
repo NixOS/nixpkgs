@@ -20703,6 +20703,8 @@ in
 
   telepathy-idle = callPackage ../applications/networking/instant-messengers/telepathy/idle {};
 
+  tendermint = callPackage ../tools/networking/tendermint {};
+
   termdown = (newScope pythonPackages) ../applications/misc/termdown { };
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
