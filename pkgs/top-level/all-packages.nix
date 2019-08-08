@@ -23876,6 +23876,10 @@ in
         in
           nixosTesting.makeTest calledTest;
 
+  nixosOptionsDoc = attrs: 
+    (import ../../nixos/lib/make-options-doc/default.nix)
+    ({ inherit pkgs lib; } // attrs);
+
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nixdoc = callPackage ../tools/nix/nixdoc {};
