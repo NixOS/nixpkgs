@@ -151,6 +151,8 @@ in
 
   castxml = callPackage ../development/tools/castxml { };
 
+  clj-kondo = callPackage ../development/tools/clj-kondo { };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   conftest = callPackage ../development/tools/conftest {};
