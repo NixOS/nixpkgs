@@ -2786,6 +2786,8 @@ in {
 
   django-allauth = callPackage ../development/python-modules/django-allauth { };
 
+  django-anymail = callPackage ../development/python-modules/django-anymail {};
+
   django_appconf = callPackage ../development/python-modules/django_appconf { };
 
   django_colorful = callPackage ../development/python-modules/django_colorful { };
