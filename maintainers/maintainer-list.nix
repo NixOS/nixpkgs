@@ -3151,7 +3151,7 @@
   };
   ma9e = {
     email = "sean@lfo.team";
-    github = "ma9e";
+    github = "furrycatherder";
     name = "Sean Haugh";
   };
   madjar = {
