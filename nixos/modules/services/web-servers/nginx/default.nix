@@ -162,7 +162,7 @@ let
     ${cfg.appendConfig}
   '';
 
-  configPath = if cfg.exposeConfig
+  configPath = if cfg.enableReload
     then "/etc/nginx/nginx.conf"
     else configFile;
 
@@ -435,12 +435,13 @@ in
         ";
       };
 
-      exposeConfig = mkOption {
+      enableReload = mkOption {
         default = false;
         type = types.bool;
         description = ''
-          Whether to expose generated config file as /etc/nginx/nginx.conf.
-          This also allows nginx reload config on changes instead of restart.
+          Reload nginx when configuration file changes (instead of restart).
+          The configuration file is exposed at <filename>/etc/nginx/nginx.conf</filename>.
+          See also <literal>systemd.services.*.restartIfChanged</literal>.
         '';
       };
 
@@ -662,11 +663,11 @@ in
       };
     };
 
-    environment.etc."nginx/nginx.conf" = mkIf cfg.exposeConfig {
+    environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
       source = configFile;
     };
 
-    systemd.services.nginx-config-reload = mkIf cfg.exposeConfig {
+    systemd.services.nginx-config-reload = mkIf cfg.enableReload {
       wantedBy = [ "nginx.service" ];
       restartTriggers = [ configFile ];
       script = ''

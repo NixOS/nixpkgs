@@ -43,14 +43,13 @@ import ./make-test.nix ({ pkgs, ... }: {
       services.nginx.enableReload = true;
 
       nesting.clone = [
-          ({ ... }: {
-            _module.args.nodes = nodes;
+          {
             services.nginx.virtualHosts."1.my.test".listen = [ { addr = "127.0.0.1"; port = 8080; }];
-          })
-          ({ pkgs, ... }: {
-            _module.args.nodes = nodes;
+          }
+
+          {
             services.nginx.package = pkgs.nginxUnstable;
-          })
+          }
       ];
 
     };
@@ -104,12 +103,12 @@ import ./make-test.nix ({ pkgs, ... }: {
       $webserver->waitForOpenPort("8080");
       $webserver->fail("journalctl -u nginx | grep -q -i stopped");
       $webserver->succeed("journalctl -u nginx | grep -q -i reloaded");
-    }
+    };
 
     subtest "restart when nginx package changes", sub {
       $webserver->succeed("${c2System}/bin/switch-to-configuration test >&2");
       $webserver->waitForUnit("nginx");
       $webserver->succeed("journalctl -u nginx | grep -q -i stopped");
-    }
+    };
   '';
 })
