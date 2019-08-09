@@ -164,6 +164,12 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
+        magit-gitflow = super.magit-gitflow.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
       kubernetes = super.kubernetes.overrideAttrs (attrs: {
         # searches for Git at build time
         nativeBuildInputs =
@@ -388,12 +394,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           meta = old.meta // {
             broken = true;
           };
-        });
-
-        magit-gitflow = super.magit-gitflow.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
         magithub = super.magithub.overrideAttrs (attrs: {
