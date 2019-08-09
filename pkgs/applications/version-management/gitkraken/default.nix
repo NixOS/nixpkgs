@@ -3,6 +3,7 @@
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
+, e2fsprogs, krb5
 }:
 
 with stdenv.lib;
@@ -55,6 +56,8 @@ stdenv.mkDerivation rec {
     openssl
     at-spi2-atk
     libuuid
+    e2fsprogs
+    krb5
   ];
 
   desktopItem = makeDesktopItem {
