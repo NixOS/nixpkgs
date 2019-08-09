@@ -21934,6 +21934,8 @@ in
     inherit (pythonPackages) rdflib;
   };
 
+  ideogram = callPackage ../applications/graphics/ideogram { };
+
   instead = callPackage ../games/instead {
     lua = lua5;
   };
