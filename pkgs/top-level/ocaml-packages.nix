@@ -450,6 +450,8 @@ let
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
+    mmap =  callPackage ../development/ocaml-modules/mmap { };
+
     mparser =  callPackage ../development/ocaml-modules/mparser { };
 
     mstruct =  callPackage ../development/ocaml-modules/mstruct { };
