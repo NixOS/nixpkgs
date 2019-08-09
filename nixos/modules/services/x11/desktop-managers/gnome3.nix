@@ -125,7 +125,6 @@ in {
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
     services.gnome3.glib-networking.enable = true;
-    services.gnome3.gnome-documents.enable = mkDefault true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-remote-desktop.enable = mkDefault true;
@@ -158,6 +157,7 @@ in {
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
     programs.gnome-disks.enable = mkDefault true;
+    programs.gnome-documents.enable = mkDefault true;
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
