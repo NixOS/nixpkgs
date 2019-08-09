@@ -5387,7 +5387,7 @@
   };
   tobim = {
     email = "nix@tobim.fastmail.fm";
-    github = "tobimpub";
+    github = "tobim";
     name = "Tobias Mayer";
   };
   tobiasBora = {
