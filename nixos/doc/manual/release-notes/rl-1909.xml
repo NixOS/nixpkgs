@@ -33,6 +33,15 @@
      PHP 7.1 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 19.09 release.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The binfmt module is now easier to use. Additional systems can
+       be added through <option>boot.binfmt.emulatedSystems</option>.
+       For instance, <literal>boot.binfmt.emulatedSystems = [
+       "wasm32-wasi" "x86_64-windows" "aarch64-linux" ];</literal> will
+       set up binfmt interpreters for each of those listed systems.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
