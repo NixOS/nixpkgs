@@ -124,7 +124,6 @@ in {
     services.dleyna-server.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
-    services.gnome3.file-roller.enable = mkDefault true;
     services.gnome3.glib-networking.enable = true;
     services.gnome3.gnome-disks.enable = mkDefault true;
     services.gnome3.gnome-documents.enable = mkDefault true;
@@ -158,6 +157,7 @@ in {
 
     # Enable default programs
     programs.evince.enable = mkDefault true;
+    programs.file-roller.enable = mkDefault true;
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
