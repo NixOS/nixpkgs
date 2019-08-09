@@ -127,7 +127,7 @@ in
 
       startWhenNeeded = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           If set, CUPS is socket-activated; that is,
           instead of having it permanently running as a daemon,
