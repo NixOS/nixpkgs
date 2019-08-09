@@ -4850,7 +4850,7 @@
   };
   siddharthist = {
     email = "langston.barrett@gmail.com";
-    github = "siddharthist";
+    github = "langston-barrett";
     name = "Langston Barrett";
   };
   siers = {
