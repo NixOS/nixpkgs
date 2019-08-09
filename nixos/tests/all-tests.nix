@@ -183,6 +183,7 @@ in
   nginx = handleTest ./nginx.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
+  nixos-generate-config = handleTest ./nixos-generate-config.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
   nzbget = handleTest ./nzbget.nix {};
