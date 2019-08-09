@@ -20076,6 +20076,10 @@ in
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
+  qlandkartegt = libsForQt5.callPackage ../applications/misc/qlandkartegt {};
+
+  garmindev = callPackage ../applications/misc/qlandkartegt/garmindev.nix {};
+
   qmapshack = libsForQt5.callPackage ../applications/misc/qmapshack { };
 
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
