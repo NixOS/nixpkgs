@@ -149,6 +149,7 @@ mapAliases ({
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08
   idea = jetbrains; # added 2017-04-03
+  infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
   jbuilder = dune; # added 2018-09-09
   joseki = apache-jena-fuseki; # added 2016-02-28
