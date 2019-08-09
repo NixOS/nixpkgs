@@ -1376,6 +1376,8 @@ in
 
   colorls = callPackage ../tools/system/colorls { };
 
+  coloursum = callPackage ../tools/text/coloursum { };
+
   compsize = callPackage ../os-specific/linux/compsize { };
 
   coturn = callPackage ../servers/coturn { };
