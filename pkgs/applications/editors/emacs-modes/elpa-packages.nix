@@ -50,4 +50,4 @@ self:
 
     elpaPackages = super // overrides;
 
-  in elpaPackages // { inherit elpaBuild elpaPackages; }
+  in elpaPackages // { inherit elpaBuild; }

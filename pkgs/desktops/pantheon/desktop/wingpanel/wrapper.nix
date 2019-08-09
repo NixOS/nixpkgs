@@ -1,4 +1,11 @@
-{ lib, makeWrapper, symlinkJoin, wingpanel, wingpanelIndicators, switchboard-with-plugs, indicators ? null }:
+{ lib
+, makeWrapper
+, symlinkJoin
+, wingpanel
+, wingpanelIndicators
+, switchboard-with-plugs
+, indicators ? null
+}:
 
 let
   selectedIndicators = if indicators == null then wingpanelIndicators else indicators;

@@ -40,15 +40,10 @@ with super;
       { name = "CRYPTO"; dep = pkgs.openssl; }
       { name = "OPENSSL"; dep = pkgs.openssl; }
     ];
-    patches = [
-      # https://github.com/wahern/cqueues/issues/216 &
-      # https://github.com/wahern/cqueues/issues/217
-      (pkgs.fetchpatch {
-        name = "find-version-fix.patch";
-        url = "https://github.com/wahern/cqueues/pull/217.patch";
-        sha256 = "0068ql0jlxmjkvhzydyy52sjd0k4vad6b8w4y5szpbv4vb2lzcsc";
-      })
-    ];
+
+    # https://github.com/wahern/cqueues/issues/227
+    NIX_CFLAGS_COMPILE = if pkgs.stdenv.hostPlatform.isDarwin then [ "-DCLOCK_MONOTONIC" "-DCLOCK_REALTIME" ] else null;
+
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it

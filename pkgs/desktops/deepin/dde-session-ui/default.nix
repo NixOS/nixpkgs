@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, dbus, dde-daemon,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, dbus, dde-daemon,
   dde-qt-dbus-factory, deepin, deepin-desktop-schemas,
   deepin-gettext-tools, deepin-icon-theme, deepin-wallpapers, dtkcore,
   dtkwidget, gnugrep, gsettings-qt, hicolor-icon-theme, lightdm_qt,
   onboard, qtsvg, qttools, qtx11extras, setxkbmap, utillinux, which,
   xkeyboard_config, xorg, xrandr, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-session-ui";
   version = "4.9.12";
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # wrapGAppsHook does not work with binaries outside of $out/bin or $out/libexec
     for binary in $out/lib/deepin-daemon/*; do
-      wrapProgram $binary "''${gappsWrapperArgs[@]}"
+      wrapProgram $binary "''${qtWrapperArgs[@]}"
     done
 
     searchHardCodedPaths $out  # debugging

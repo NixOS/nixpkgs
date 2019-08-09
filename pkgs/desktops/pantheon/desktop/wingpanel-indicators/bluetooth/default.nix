@@ -1,6 +1,20 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3
-, ninja, vala, gtk3, granite, libnotify, wingpanel, libgee, libxml2
-, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, granite
+, libnotify
+, wingpanel
+, libgee
+, libxml2
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-bluetooth";

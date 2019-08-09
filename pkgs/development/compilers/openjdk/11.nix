@@ -44,6 +44,7 @@ let
       ./fix-java-home-jdk10.patch
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
+      ./increase-javadoc-heap.patch
     ] ++ lib.optionals (!minimal && enableGnome2) [
       ./swing-use-gtk-jdk10.patch
     ];

@@ -1,6 +1,6 @@
 let
 
-# the default list from v1.8.5, except with applications/mod_signalwire also disabled
+# the default list from v1.8.7, except with applications/mod_signalwire also disabled
 defaultModules = mods: with mods; [
   applications.commands
   applications.conference
@@ -86,11 +86,11 @@ modulesConf = let
 in
 
 stdenv.mkDerivation rec {
-  name = "freeswitch-1.8.5";
+  name = "freeswitch-1.8.7";
 
   src = fetchurl {
     url = "https://files.freeswitch.org/freeswitch-releases/${name}.tar.bz2";
-    sha256 = "00xdrx84pw2v5pw1r5gfbb77nmvlfj275pmd48yfrc9g8c91j1sr";
+    sha256 = "0k52mxdfc5w9fdnz8kvfjiwnnjjhnpkirnyrfkhq7bad84m731z4";
   };
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl

@@ -39,12 +39,7 @@ in stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit flashrom efibootmgr bubblewrap;
-      tpm2_tools = "${tpm2-tools}";
-    })
-
+    ./fix-paths.patch
     ./add-option-for-installation-sysconfdir.patch
 
     # installed tests are installed to different output
@@ -77,7 +72,11 @@ in stdenv.mkDerivation rec {
   # doCheck = true;
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      # See programs reached with fu_common_find_program_in_path in source
+      --prefix PATH : "${stdenv.lib.makeBinPath [ flashrom efibootmgr bubblewrap tpm2-tools ]}"
+    )
   '';
 
   mesonFlags = [

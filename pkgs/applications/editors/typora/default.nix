@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, electron_3, dpkg, gtk3, glib, gsettings-desktop-schemas, wrapGAppsHook }:
+{ stdenv, fetchurl, makeWrapper, electron_5, dpkg, gtk3, glib, gsettings-desktop-schemas, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "typora";
-  version = "0.9.72";
+  version = "0.9.73";
 
   src = fetchurl {
     url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-    sha256 = "0q7fj77pr3ykpwgip87h12qxvpvlzs15mi9w3phqm3p9mmm9rlrs";
+    sha256 = "1fgcb4bx5pw8ah5j30d38gw7qi1cmqarfhvgdns9f2n0d57bvvw3";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_3}/bin/electron $out/bin/typora \
+    makeWrapper ${electron_5}/bin/electron $out/bin/typora \
       --add-flags $out/share/typora \
       "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}"
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = https://typora.io;
     license = licenses.unfree;
     maintainers = with maintainers; [ jensbin worldofpeace ];
-    inherit (electron_3.meta) platforms;
+    platforms = [ "x86_64-linux"];
   };
 }

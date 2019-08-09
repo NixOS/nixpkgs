@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, qtsvg, dtkcore,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, qtsvg, dtkcore,
   dtkwidget, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-calculator";
   version = "1.0.11";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     searchHardCodedPaths $out  # debugging
   '';
-  
+
   passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {

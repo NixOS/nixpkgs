@@ -72,7 +72,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "11d4qyhmc774h2xyrpyn9rxx99x3vjs0fcxsg49gj5ayzmykafap";
+      sha256 = "1pz12l0awshdq5xyac5awjd902sy9l65z6ihya4pzapik4gqfdcd";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -159,16 +159,11 @@ self: super: {
     then super.double-conversion
     else addExtraLibrary super.double-conversion pkgs.libcxx;
 
-  inline-c-cpp = if !pkgs.stdenv.isDarwin
-    then super.inline-c-cpp
-    else
-      let drv = addExtraLibrary (overrideCabal super.inline-c-cpp (drv: {
-          postPatch = ''
-            substituteInPlace inline-c-cpp.cabal --replace  stdc++ c++
-          '';
-        })) pkgs.libcxx;
-      in # https://github.com/fpco/inline-c/issues/75
-         dontCheck drv;
+  inline-c-cpp = overrideCabal super.inline-c-cpp (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace inline-c-cpp.cabal --replace "-optc-std=c++11" ""
+    '';
+  });
 
   inline-java = addBuildDepend super.inline-java pkgs.jdk;
 
@@ -1111,7 +1106,7 @@ self: super: {
     '';
   });
 
-  hsdev_0_3_3_1 = super.hsdev_0_3_3_1.overrideScope (self: super: {
+  hsdev_0_3_3_2 = super.hsdev_0_3_3_2.overrideScope (self: super: {
     haskell-names = self.haskell-names_0_9_6;
     network = self.network_3_0_1_1;
   });
@@ -1129,9 +1124,10 @@ self: super: {
     concurrent-output = self.concurrent-output_1_10_10; # needed for new ansi-terminal version
     hi-file-parser = dontCheck (unmarkBroken super.hi-file-parser);  # Avoid depending on newer hspec versions.
     http-download = dontCheck (unmarkBroken super.http-download);
-    pantry-tmp = dontCheck (unmarkBroken super.pantry-tmp);
-    rio = self.rio_0_1_10_0;
+    pantry = dontCheck (unmarkBroken super.pantry);
+    rio = self.rio_0_1_11_0;
     rio-prettyprint = unmarkBroken super.rio-prettyprint;
+    unliftio = self.unliftio_0_2_12;
   }));
 
   # musl fixes
@@ -1253,8 +1249,8 @@ self: super: {
   cmark-gfm = self.cmark-gfm_0_2_0;
   pandoc = dontCheck (doDistribute super.pandoc_2_7_3);  # test suite failure: https://github.com/jgm/pandoc/issues/5582
   pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
-  skylighting = self.skylighting_0_8_1_1;
-  skylighting-core = self.skylighting-core_0_8_1_1;
+  skylighting = self.skylighting_0_8_2;
+  skylighting-core = self.skylighting-core_0_8_2;
 
   # Current versions of tasty-hedgehog need hedgehog 1.x, which
   # we don't have in LTS-13.x.
@@ -1299,8 +1295,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_24_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_24_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_25_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_25_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1313,7 +1309,7 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   # The old LTS-13.x version does not compile.
-  ip = self.ip_1_5_0;
+  ip = self.ip_1_5_1;
 
   # Needs deque >= 0.3, but latest version on stackage is 2.7
   butcher = super.butcher.override { deque = self.deque_0_4_2_3; };
