@@ -16,6 +16,7 @@ let
 in {
   imports =
     [
+      ./git.nix
       ./meta.nix
     ];
 
