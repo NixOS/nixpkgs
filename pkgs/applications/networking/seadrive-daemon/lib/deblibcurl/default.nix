@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir --parent $out
     mv * $out/
-    cp $out/lib/x86_64-linux-gnu/* $out/lib/
+    mv $out/lib/x86_64-linux-gnu/* $out/lib/
   '';
 
   meta = {
