@@ -30,6 +30,9 @@ unwrapped = stdenv.mkDerivation rec {
     sha256 = "b37ff9ceefbaa4e4527d183fb1bbb63e641d34d9889ce92715128bc1423c7ef4";
   };
 
+  # https://gitlab.labs.nic.cz/knot/knot-resolver/issues/496
+  postPatch = "sed '/prefill.test.lua/d' -i modules/meson.build";
+
   outputs = [ "out" "dev" ];
 
   preConfigure = ''
