@@ -1094,3 +1094,63 @@ index 99d87e2e46..a4eab2aa72 100644
  !!ELSE
      set(imported_location \"$${CMAKE_BIN_DIR}uic$$CMAKE_BIN_SUFFIX\")
  !!ENDIF
+diff --git a/src/corelib/kernel/qcore_mac_p.h b/src/corelib/kernel/qcore_mac_p.h
+index b14a494296..779c4eda95 100644
+--- a/src/corelib/kernel/qcore_mac_p.h
++++ b/src/corelib/kernel/qcore_mac_p.h
+@@ -211,7 +211,7 @@ private:
+ 
+ // --------------------------------------------------------------------------
+ 
+-#if !defined(QT_BOOTSTRAPPED)
++#if 0
+ 
+ QT_END_NAMESPACE
+ #include <os/activity.h>
+@@ -289,7 +289,19 @@ QT_MAC_WEAK_IMPORT(_os_activity_current);
+ 
+ #define QT_APPLE_SCOPED_LOG_ACTIVITY(...) QAppleLogActivity scopedLogActivity = QT_APPLE_LOG_ACTIVITY(__VA_ARGS__).enter();
+ 
+-#endif // !defined(QT_BOOTSTRAPPED)
++#else // !defined(QT_BOOTSTRAPPED)
++
++#define QT_APPLE_LOG_ACTIVITY_WITH_PARENT3(...)
++#define QT_APPLE_LOG_ACTIVITY_WITH_PARENT2(...)
++#define QT_APPLE_LOG_ACTIVITY_WITH_PARENT(...)
++
++#define QT_APPLE_LOG_ACTIVITY2(...)
++#define QT_APPLE_LOG_ACTIVITY1(...)
++#define QT_APPLE_LOG_ACTIVITY(...)
++
++#define QT_APPLE_SCOPED_LOG_ACTIVITY(...)
++
++#endif
+ 
+ // -------------------------------------------------------------------------
+ 
+diff --git a/src/testlib/qappletestlogger.cpp b/src/testlib/qappletestlogger.cpp
+index 2c1005ad80..244147ea7d 100644
+--- a/src/testlib/qappletestlogger.cpp
++++ b/src/testlib/qappletestlogger.cpp
+@@ -43,7 +43,7 @@
+ 
+ QT_BEGIN_NAMESPACE
+ 
+-#if defined(QT_USE_APPLE_UNIFIED_LOGGING)
++#if defined(QT_USE_APPLE_UNIFIED_LOGGING) && 0
+ 
+ using namespace QTestPrivate;
+ 
+diff --git a/src/testlib/qtestlog.cpp b/src/testlib/qtestlog.cpp
+index 1268730cc6..a50e9b0764 100644
+--- a/src/testlib/qtestlog.cpp
++++ b/src/testlib/qtestlog.cpp
+@@ -524,7 +524,7 @@ void QTestLog::addLogger(LogMode mode, const char *filename)
+ #endif
+     }
+ 
+-#if defined(QT_USE_APPLE_UNIFIED_LOGGING)
++#if defined(QT_USE_APPLE_UNIFIED_LOGGING) && 0
+     // Logger that also feeds messages to AUL. It needs to wrap the existing
+     // logger, as it needs to be able to short circuit the existing logger
+     // in case AUL prints to stderr.

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }@args:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -32,7 +32,7 @@ let
     cd ${pkgs.nextcloud}
     exec /run/wrappers/bin/sudo -u nextcloud \
       NEXTCLOUD_CONFIG_DIR="${cfg.home}/config" \
-      ${config.services.phpfpm.phpPackage}/bin/php \
+      ${phpPackage}/bin/php \
       -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
   '';
@@ -172,7 +172,7 @@ in {
           Database host.
 
           Note: for using Unix authentication with PostgreSQL, this should be
-          set to <literal>/tmp</literal>.
+          set to <literal>/run/postgresql</literal>.
         '';
       };
       dbport = mkOption {
@@ -257,6 +257,23 @@ in {
         '';
       };
     };
+    autoUpdateApps = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Run regular auto update of all apps installed from the nextcloud app store.
+        '';
+      };
+      startAt = mkOption {
+        type = with types; either str (listOf str);
+        default = "05:00:00";
+        example = "Sun 14:00:00";
+        description = ''
+          When to run the update. See `systemd.services.&lt;name&gt;.startAt`.
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -280,8 +297,23 @@ in {
 
       systemd.services = {
         "nextcloud-setup" = let
+          c = cfg.config;
+          writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
+            ${optionalString (c.dbpassFile != null) ''
+              function nix_read_pwd() {
+                $file = "${c.dbpassFile}";
+                if (!file_exists($file)) {
+                  throw new \RuntimeException(sprintf(
+                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't exist!",
+                    $file
+                  ));
+                }
+
+                return trim(file_get_contents($file));
+              }
+            ''}
             $CONFIG = [
               'apps_paths' => [
                 [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
@@ -292,19 +324,27 @@ in {
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
               'log_level' => '${builtins.toString cfg.logLevel}',
-              ${optionalString (cfg.config.overwriteProtocol != null) "'overwriteprotocol' => '${cfg.config.overwriteProtocol}',"}
+              ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
+              ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
+              ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
+              ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
+              ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
+              ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
+              ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
+              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
+              'dbtype' => '${c.dbtype}',
+              'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
             ];
           '';
           occInstallCmd = let
-            c = cfg.config;
-            adminpass = if c.adminpassFile != null
-              then ''"$(<"${toString c.adminpassFile}")"''
-              else ''"${toString c.adminpass}"'';
             dbpass = if c.dbpassFile != null
               then ''"$(<"${toString c.dbpassFile}")"''
               else if c.dbpass != null
               then ''"${toString c.dbpass}"''
               else null;
+            adminpass = if c.adminpassFile != null
+              then ''"$(<"${toString c.adminpassFile}")"''
+              else ''"${toString c.adminpass}"'';
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--database" = ''"${c.dbtype}"'';
@@ -360,7 +400,12 @@ in {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${pkgs.php}/bin/php -f ${pkgs.nextcloud}/cron.php";
+          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${pkgs.nextcloud}/cron.php";
+        };
+        "nextcloud-update-plugins" = mkIf cfg.autoUpdateApps.enable {
+          serviceConfig.Type = "oneshot";
+          serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+          startAt = cfg.autoUpdateApps.startAt;
         };
       };
 

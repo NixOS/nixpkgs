@@ -1,4 +1,4 @@
-{ stdenv, writeScript, fetchurl, groff, system-sendmail }:
+{ stdenv, fetchurl, groff, system-sendmail }:
 
 stdenv.mkDerivation rec {
   name = "mdadm-4.1";

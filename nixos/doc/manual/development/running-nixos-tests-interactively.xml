@@ -9,17 +9,17 @@
   The test itself can be run interactively. This is particularly useful when
   developing or debugging a test:
 <screen>
-$ nix-build nixos/tests/login.nix -A driver
-$ ./result/bin/nixos-test-driver
+<prompt>$ </prompt>nix-build nixos/tests/login.nix -A driver
+<prompt>$ </prompt>./result/bin/nixos-test-driver
 starting VDE switch for network 1
-&gt;
+<prompt>&gt;</prompt>
 </screen>
   You can then take any Perl statement, e.g.
 <screen>
-&gt; startAll
-&gt; testScript
-&gt; $machine->succeed("touch /tmp/foo")
-&gt; print($machine->succeed("pwd")) # Show stdout of command
+<prompt>&gt;</prompt> startAll
+<prompt>&gt;</prompt> testScript
+<prompt>&gt;</prompt> $machine->succeed("touch /tmp/foo")
+<prompt>&gt;</prompt> print($machine->succeed("pwd")) # Show stdout of command
 </screen>
   The function <command>testScript</command> executes the entire test script
   and drops you back into the test driver command line upon its completion.
@@ -30,8 +30,8 @@ starting VDE switch for network 1
  <para>
   To just start and experiment with the VMs, run:
 <screen>
-$ nix-build nixos/tests/login.nix -A driver
-$ ./result/bin/nixos-run-vms
+<prompt>$ </prompt>nix-build nixos/tests/login.nix -A driver
+<prompt>$ </prompt>./result/bin/nixos-run-vms
 </screen>
   The script <command>nixos-run-vms</command> starts the virtual machines
   defined by test.

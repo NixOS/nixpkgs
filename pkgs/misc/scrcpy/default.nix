@@ -9,33 +9,30 @@
 }:
 
 let
-  version = "1.5";
+  version = "1.8";
   prebuilt_server = fetchurl {
-    url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}-fixversion/scrcpy-server-v${version}.jar";
-    sha256 = "1pi47khfrs9pygs32l9rj8l927z0sdm8bhkrzzkk6ki9c1psnynr";
+    url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}.jar";
+    sha256 = "1h755k5xpchlm7wq2yk5mlwjnh7y4yhviffixacby0srj3pmb443";
   };
 in
 stdenv.mkDerivation rec {
-  name = "scrcpy-${version}";
+  pname = "scrcpy";
   inherit version;
+
   src = fetchFromGitHub {
     owner = "Genymobile";
-    repo = "scrcpy";
-    rev = "v${version}-fixversion";
-    sha256 = "0magmc44pahw1f4jhzkhjlfc31mk3qq43hzn9513idcl4kh4sb8i";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1cx7y3w699s3i8s53l1mb7lkrnbix457hf17liwh00jzb0i7aga7";
   };
 
   # postPatch:
   #   screen.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
   #   This can happen when running on non-NixOS because then scrcpy seems to have a hard time using the host OpenGL-supporting hardware.
   #   It would be better to fix the OpenGL problem, but that seems much more intrusive.
-  #
-  #   command.c: When copying over the prebuilt binary to mobile, it also copies the permissions of the nix store, and thus it cannot delete normally.
   postPatch = ''
     substituteInPlace app/src/screen.c \
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
-    substituteInPlace app/src/command.c \
-      --replace 'const char *const adb_cmd[] = {"shell", "rm", path};' 'const char *const adb_cmd[] = {"shell", "rm", "-f", path};'
   '';
 
   nativeBuildInputs = [ makeWrapper meson ninja pkgconfig ];

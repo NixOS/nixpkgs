@@ -1,56 +1,41 @@
 { stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
-, libmbim, libqmi, systemd, fetchpatch }:
+, libmbim, libqmi, systemd, vala, gobject-introspection, dbus }:
 
 stdenv.mkDerivation rec {
-  name = "modem-manager-${version}";
-  version = "1.7.990";
+  pname = "modem-manager";
+  version = "1.10.0";
 
   package = "ModemManager";
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
-    sha256 = "1v4hixmghlrw7w4ajq2x4k62js0594h223d0yma365zwqr7hjrfl";
+    sha256 = "1qkfnxqvaraz1npahqvm5xc73mbxxic8msnsjmlwkni5c2ckj3zx";
   };
 
-  nativeBuildInputs = [ gettext pkgconfig ];
+  nativeBuildInputs = [ vala gobject-introspection gettext pkgconfig ];
 
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
-  patches = [
-    # Patch dependency on glib headers, this breaks packages using core headers (networkmanager-qt)
-    (fetchpatch {
-      url = "https://cgit.freedesktop.org/ModemManager/ModemManager/patch/?id=0f377f943eeb81472fd73189f2c3d8fc65b8c609";
-      sha256 = "0av0sqdvbhwjnhqqylkc7rmqcj6awqmz5693l9x93nlwp7zya95j";
-    })
-  ];
-
   configureFlags = [
     "--with-polkit"
-    "--with-udev-base-dir=$(out)/lib/udev"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-udev-base-dir=${placeholder ''out''}/lib/udev"
+    "--with-dbus-sys-dir=${placeholder ''out''}/etc/dbus-1/system.d"
+    "--with-systemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-suspend-resume=systemd"
+    "--with-systemd-suspend-resume"
+    "--with-systemd-journal"
   ];
 
-  installFlags = [ "DESTDIR=\${out}" ];
-
-  preInstall = ''
-    mkdir -p $out/etc/systemd/system
+  preCheck = ''
+    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
   '';
 
-  postInstall = ''
-    # rename to modem-manager to be in style
-    mv $out/$out/etc/systemd/system/ModemManager.service $out/etc/systemd/system/modem-manager.service
-    rm -rf $out/$out/etc
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
+  doCheck = true;
 
+  postInstall = ''
     # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
     # aliases ourselves.
-    ln -s $out/etc/systemd/system/modem-manager.service \
+    ln -s $out/etc/systemd/system/ModemManager.service \
       $out/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service
   '';
 

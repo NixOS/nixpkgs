@@ -6,17 +6,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "kipi-plugins-${version}";
-  version = "5.9.0";
+  pname    = "kipi-plugins";
+  version = "5.9.1";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/digikam/digikam-${version}.tar.xz";
-    sha256 = "06qdalf2mwx2f43p3bljy3vn5bk8n3x539kha6ky2vzxvkp343b6";
+    url = "http://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0hjm05nkz0w926sn4lav5258rda6zkd6gfnqd8hh3fa2q0dd7cq4";
   };
-
-  prePatch = ''
-    cd extra/kipi-plugins
-  '';
 
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

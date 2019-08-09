@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "goa-${version}";
-  version = "1.4.0";
+  version = "1.4.1";
 
   goPackagePath = "github.com/goadesign/goa";
   subPackages = [ "goagen" ];
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "goadesign";
     repo = "goa";
     rev = "v${version}";
-    sha256 = "1qx3c7dyq5wqxidfrk3ywc55fk64najj63f2jmfisfq4ixgwxdw9";
+    sha256 = "0qcd4ii6arlpsivfdhcwidvnd8zbxxvf574jyxyvm1aazl8sqxj7";
   };
 
   goDeps = ./deps.nix;

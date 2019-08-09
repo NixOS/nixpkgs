@@ -70,10 +70,6 @@ stdenv.mkDerivation ({
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/maxima.system.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "18zafig8vflhkr80jq2ivk46k92dkszqlyq8cfmj0b2vcfjwwbar";
     })
-    # There are some transient test failures. I hope this disables all those tests.
-    # If those test failures ever happen in the non-ecl version, that should be
-    # reportetd upstream.
-    ./known-ecl-failures.patch
   ];
 
   # The test suite is disabled since 5.42.2 because of the following issues:

@@ -1,22 +1,28 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
+, fetchPypi
 , nose
-, pkgs
+, pkgconfig
+, libjpeg
+, libpng
+, libtiff
+, libwebp
 , numpy
 }:
 
 buildPythonPackage rec {
   pname = "python-imread";
-  version = "0.6";
+  version = "0.7.0";
 
-  src = pkgs.fetchurl {
-    url = "https://github.com/luispedro/imread/archive/release-${version}.tar.gz";
-    sha256 = "0i14bc67200zhzxc41g5dfp2m0pr1zaa2gv59p2va1xw0ji2dc0f";
+  src = fetchPypi {
+    inherit version;
+    pname = "imread";
+    sha256 = "0yb0fmy6ilh5fvbk69wl2bzqgss2g0951668mx8z9yyj4jhr1z2y";
   };
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
-  buildInputs = [ nose pkgs.libjpeg pkgs.libpng pkgs.libtiff pkgs.libwebp ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ nose libjpeg libpng libtiff libwebp ];
   propagatedBuildInputs = [ numpy ];
 
   meta = with stdenv.lib; {

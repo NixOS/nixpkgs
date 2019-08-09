@@ -6,13 +6,13 @@
 
 let
   pname = "network-manager-applet";
-  version = "1.8.20";
+  version = "1.8.22";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1v1lvw9ak37gxha11rv49sai1vdyv128hdy0kliibiv6alavn385";
+    sha256 = "1vbyhxknixyrf75pbjl3rxcy32m8y9cx5s30s3598vgza081rvzb";
   };
 
   mesonFlags = [
@@ -33,9 +33,14 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobject-introspection python3 gtk-doc docbook_xsl docbook_xml_dtd_43 libxml2 ];
 
+  # Needed for wingpanel-indicator-network and switchboard-plug-network
+  patches = [ ./hardcode-gsettings.patch ];
+
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
+
+    substituteInPlace src/wireless-security/eap-method.c --subst-var-by NM_APPLET_GSETTINGS $lib/share/gsettings-schemas/${name}/glib-2.0/schemas
   '';
 
   passthru = {

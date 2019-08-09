@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, callPackage, makeWrapper
-, buildGoPackage, runc, libelf, libcap, libseccomp, glibc }:
+, buildGoPackage, runc, glibc }:
 
 with lib; let
 

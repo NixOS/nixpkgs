@@ -14,6 +14,8 @@ buildPythonApplication rec {
 
   buildInputs = [ sphinx ];
 
+  checkInputs = [ procps ];
+
   propagatedBuildInputs = [
     matplotlib
     procps

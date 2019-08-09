@@ -1,6 +1,7 @@
 [<img src="https://nixos.org/logo/nixos-hires.png" width="500px" alt="logo" />](https://nixos.org/nixos)
 
 [![Code Triagers Badge](https://www.codetriage.com/nixos/nixpkgs/badges/users.svg)](https://www.codetriage.com/nixos/nixpkgs)
+[![Open Collective supporters](https://opencollective.com/nixos/tiers/supporter/badge.svg?label=Supporter&color=brightgreen)](https://opencollective.com/nixos)
 
 Nixpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
 manager. It is periodically built and tested by the [Hydra](https://hydra.nixos.org/)
@@ -12,12 +13,12 @@ build daemon as so-called channels. To get channel information via git, add
 ```
 
 For stability and maximum binary package support, it is recommended to maintain
-custom changes on top of one of the channels, e.g. `nixos-18.09` for the latest
+custom changes on top of one of the channels, e.g. `nixos-19.03` for the latest
 release and `nixos-unstable` for the latest successful build of master:
 
 ```
 % git remote update channels
-% git rebase channels/nixos-18.09
+% git rebase channels/nixos-19.03
 ```
 
 For pull requests, please rebase onto nixpkgs `master`.
@@ -31,9 +32,9 @@ For pull requests, please rebase onto nixpkgs `master`.
 * [Manual (NixOS)](https://nixos.org/nixos/manual/)
 * [Community maintained wiki](https://nixos.wiki/)
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for 18.09 release](https://hydra.nixos.org/jobset/nixos/release-18.09)
+* [Continuous package builds for 19.03 release](https://hydra.nixos.org/jobset/nixos/release-19.03)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for 18.09 release](https://hydra.nixos.org/job/nixos/release-18.09/tested#tabs-constituents)
+* [Tests for 19.03 release](https://hydra.nixos.org/job/nixos/release-19.03/tested#tabs-constituents)
 
 Communication:
 

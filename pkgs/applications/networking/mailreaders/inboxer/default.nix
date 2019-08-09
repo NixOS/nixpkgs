@@ -1,5 +1,5 @@
 { stdenv, fetchurl, binutils, patchelf, makeWrapper
-, expat, xorg, gdk_pixbuf, glib, gnome2, cairo, atk, freetype
+, expat, xorg, gdk-pixbuf, glib, gnome2, cairo, atk, freetype
 , fontconfig, dbus, nss, nspr, gtk2-x11, alsaLib, cups, libpulseaudio, udev }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       xorg.libXtst
       xorg.libXScrnSaver
       xorg.libxcb
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       gnome2.pango
       gnome2.GConf

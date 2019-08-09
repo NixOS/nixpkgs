@@ -53,6 +53,7 @@ let
     /**/ if libc == null then null
     else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
     else if targetPlatform.libc == "bionic"           then "/system/bin/linker"
+    else if targetPlatform.libc == "nblibc"           then "${libc_lib}/libexec/ld.elf_so"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
@@ -186,10 +187,12 @@ stdenv.mkDerivation {
         }.${targetPlatform.parsed.cpu.name}
       else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
       else if targetPlatform.isSparc then "sparc"
+      else if targetPlatform.isMsp430 then "msp430"
       else if targetPlatform.isAvr then "avr"
       else if targetPlatform.isAlpha then "alpha"
-      else throw "unknown emulation for platform: " + targetPlatform.config;
-    in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
+      else throw "unknown emulation for platform: ${targetPlatform.config}";
+    in if targetPlatform.useLLVM or false then ""
+       else targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
@@ -327,6 +330,7 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
+      priority = 10;
   } // optionalAttrs useMacosReexportHack {
     platforms = stdenv.lib.platforms.darwin;
   };

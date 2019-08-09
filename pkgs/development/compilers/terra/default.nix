@@ -37,26 +37,20 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -pv $out/lib
-    cp -v release/lib/terra.so $out/lib
-
-    mkdir -pv $bin/bin
-    cp -v release/bin/terra $bin/bin
-
-    mkdir -pv $static/lib
-    cp -v release/lib/libterra.a $static/lib
+    install -Dm755 -t $bin/bin release/bin/terra
+    install -Dm755 -t $out/lib release/lib/terra${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm644 -t $static/lib release/lib/libterra.a
 
     mkdir -pv $dev/include
     cp -rv release/include/terra $dev/include
-  ''
-  ;
+  '';
 
   buildInputs = with llvmPackages; [ lua llvm clang-unwrapped ncurses ];
 
   meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
     description = "A low-level counterpart to Lua";
-    platforms = [ "x86_64-linux" ];
+    homepage = http://terralang.org/;
+    platforms = platforms.x86_64;
     maintainers = with maintainers; [ jb55 ];
     license = licenses.mit;
   };

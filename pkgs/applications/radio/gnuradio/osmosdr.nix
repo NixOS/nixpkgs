@@ -13,7 +13,7 @@
 assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
-  name = "gnuradio-osmosdr-${version}";
+  name = "gr-osmosdr-${version}";
   version = "2018-08-15";
 
   src = fetchgit {

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, requireFile, makeWrapper, unzip, autoPatchelfHook, pkgs, pkgs_i686, licenseAccepted ? false}:
+{requireFile, autoPatchelfHook, pkgs, pkgs_i686, licenseAccepted ? false}:
 
 { toolsVersion ? "25.2.5"
 , platformToolsVersion ? "28.0.1"
@@ -26,7 +26,7 @@ let
   # Determine the Android os identifier from Nix's system identifier
   os = if stdenv.system == "x86_64-linux" then "linux"
     else if stdenv.system == "x86_64-darwin" then "macosx"
-    else throw "No tarballs found for system architecture: ${stdenv.system}";
+    else throw "No Android SDK tarballs are available for system architecture: ${stdenv.system}";
 
   # Generated Nix packages
   packages = import ./generated/packages.nix {

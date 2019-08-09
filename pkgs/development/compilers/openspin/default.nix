@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "openspin-${version}";

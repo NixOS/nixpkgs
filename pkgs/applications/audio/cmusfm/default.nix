@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, libnotify, gdk_pixbuf }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, libnotify, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
   version = "2018-10-11";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # building
   configureFlags = [ "--enable-libnotify" ];
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ curl libnotify gdk_pixbuf ];
+  buildInputs = [ curl libnotify gdk-pixbuf ];
 
   meta = with stdenv.lib; {
     description = "Last.fm and Libre.fm standalone scrobbler for the cmus music player";

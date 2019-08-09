@@ -7,7 +7,7 @@ assert tkremind -> tcllib != null;
 assert tkremind -> makeWrapper != null;
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optional optionalString;
   tclLibraries = stdenv.lib.optionals tkremind [ tcllib tk ];
   tclLibPaths = stdenv.lib.concatStringsSep " "
     (map (p: "${p}/lib/${p.libPrefix}") tclLibraries);

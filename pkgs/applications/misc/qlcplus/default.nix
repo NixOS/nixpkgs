@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   name = "qlcplus-${version}";
-  version = "4.12.0";
+  version = "4.12.1";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    sha256 = "056ccgcz3rpbic2hqg4r1rq8svq7070j2h6l3hbb1p8h3qxwamzh";
+    sha256 = "1kz2zbz7blnm91dysn949bjsy4xqxg658k47p3gbl0pjl58c44hp";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
@@ -27,6 +27,12 @@ mkDerivation rec {
             -e "s@\$\$LIBSDIR/qt4/plugins@''${qtPluginPrefix}@" \
             -e "s@/etc/udev/rules.d@''${out}/lib/udev/rules.d@" \
       variables.pri
+  '';
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    ln -sf $out/lib/*/libqlcplus* $out/lib
   '';
 
   meta = with stdenv.lib; {

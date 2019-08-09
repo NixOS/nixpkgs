@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gnuradio-osmosdr
+{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
+, mkDerivation
 # drivers (optional):
 , rtl-sdr, hackrf
 , pulseaudioSupport ? true, libpulseaudio
@@ -6,7 +7,7 @@
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "gqrx-${version}";
   version = "2.11.5";
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    qtbase qtsvg gnuradio boost gnuradio-osmosdr rtl-sdr hackrf
+    qtbase qtsvg gnuradio boost gr-osmosdr rtl-sdr hackrf
   ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   enableParallelBuilding = true;

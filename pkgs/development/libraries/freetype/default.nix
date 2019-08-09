@@ -13,8 +13,8 @@ let
   inherit (stdenv.lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
-  name = "freetype-${version}";
-  version = "2.9.1";
+  pname = "freetype";
+  version = "2.10.1";
 
   meta = with stdenv.lib; {
     description = "A font rendering engine";
@@ -32,11 +32,12 @@ in stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://savannah/freetype/${name}.tar.bz2";
-    sha256 = "0kg8w6qyiizlyzh4a8lpzslipcbv96hcg3rqqpnxba8ffbm8g3fv";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0vx2dg1jh5kq34dd6ifpjywkpapp8a7p1bvyq9yq5zi1i94gmnqn";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
+
   # dependence on harfbuzz is looser than the reverse dependence
   nativeBuildInputs = [ pkgconfig which makeWrapper ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.

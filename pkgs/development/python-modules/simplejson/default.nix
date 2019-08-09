@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , stdenv
-, isPy3k
 , pytest
 }:
 

@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, libSM,
-  mtdev, cairo, deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qtx11extras, libSM,
+  mtdev, cairo, deepin, qtbase }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "qt5dxcb-plugin";
-  version = "1.1.13";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "12lvh3agw3qdviqf32brmzba5kscnj5al5jhc08lq69a9kmip05x";
+    sha256 = "1zvab6qxdr49pmk6mbk7s0md7bx585p32lca0xbg8mrkajz7g8rq";
   };
 
   nativeBuildInputs = [
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     cairo
   ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags INSTALL_PATH=$out/$qtPluginPrefix/platforms"
-  '';
+  qmakeFlags = [
+    "INSTALL_PATH=${placeholder ''out''}/${qtbase.qtPluginPrefix}/platforms"
+  ];
 
   enableParallelBuilding = true;
 

@@ -17,7 +17,7 @@ sourcePerArch:
 , cairo
 , alsaLib
 , atk
-, gdk_pixbuf
+, gdk-pixbuf
 , zlib
 , elfutils
 }:
@@ -35,7 +35,7 @@ let
 
   libraries = [
     stdenv.cc.libc glib libxml2 ffmpeg_2 libxslt libGL
-    xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf
+    xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk-pixbuf
     atk zlib elfutils
   ] ++ (stdenv.lib.optionals swingSupport [
     xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt
@@ -71,6 +71,10 @@ let result = stdenv.mkDerivation rec {
 
     # Remove some broken manpages.
     rm -rf $out/man/ja*
+
+    # Remove embedded freetype to avoid problems like
+    # https://github.com/NixOS/nixpkgs/issues/57733
+    rm $out/lib/libfreetype.so
 
     # for backward compatibility
     ln -s $out $out/jre

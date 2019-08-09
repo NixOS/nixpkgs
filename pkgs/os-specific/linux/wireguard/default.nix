@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ] ++ kernel.moduleBuildDependencies;
 
-  buildPhase = "make module";
+  buildFlags = [ "module" ];
+  installTargets = [ "module-install" ];
 
   meta = with stdenv.lib; {
     inherit (wireguard-tools.meta) homepage license maintainers;

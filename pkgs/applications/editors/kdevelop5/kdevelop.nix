@@ -8,16 +8,15 @@
 }:
 
 let
-  pname = "kdevelop";
-  version = "5.3.1";
   qtVersion = "5.${lib.versions.minor qtbase.version}";
 in
 mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "kdevelop";
+  version = "5.3.3";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "1098ra7qpal6578hsv20kvxc63v47sp85wjhqr5rgzr2fm7jf6fr";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "0778587qvi268ab2fgggfl40cv2swgr8q891q1paflp3m1xirpff";
   };
 
   nativeBuildInputs = [
@@ -43,6 +42,8 @@ mkDerivation rec {
     "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${(builtins.parseDrvName llvmPackages.clang.name).version}/include"
   ];
 
+  dontWrapQtApps = true;
+
   postPatch = ''
     # FIXME: temporary until https://invent.kde.org/kde/kdevelop/merge_requests/8 is merged
     substituteInPlace kdevplatform/language/backgroundparser/parsejob.cpp --replace \
@@ -55,8 +56,7 @@ mkDerivation rec {
     wrapProgram "$out/bin/kdevelop!" \
       --prefix PATH ":" "${lib.makeBinPath [ qttools kde-cli-tools ]}"
 
-    wrapProgram "$out/bin/kdevelop" \
-      --prefix QT_PLUGIN_PATH : $out/lib/qt-${qtVersion}/plugins
+    wrapQtApp "$out/bin/kdevelop"
 
     # Fix the (now wrapped) kdevelop! to find things in right places:
     # - Fixup the one use where KDEV_BASEDIR is assumed to contain kdevelop.
@@ -76,7 +76,7 @@ mkDerivation rec {
         programing languages. It is based on KDevPlatform, KDE and Qt
         libraries and is under development since 1998.
       '';
-    homepage = https://www.kdevelop.org;
+    homepage = "https://www.kdevelop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
   };
 }

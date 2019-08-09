@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "terminus-font";
-  version = "4.47";
+  version = "4.48";
   name = "${pname}-${version}"; # set here for use in URL below
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${name}/${name}.tar.gz";
-    sha256 = "15qjcpalcxjiwsjgjg5k88vkwp56cs2nnx4ghya6mqp4i1c206qg";
+    sha256 = "1bwlkj39rqbyq57v5yssayav6hzv1n11b9ml2s0dpiyfsn6rqy9l";
   };
 
   nativeBuildInputs = [ python3 bdftopcf mkfontdir mkfontscale ];
@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     homepage = http://terminus-font.sourceforge.net/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.linux;
   };
 }

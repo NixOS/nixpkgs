@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pulseview-0.4.0";
+  name = "pulseview-0.4.1";
 
   src = fetchurl {
     url = "https://sigrok.org/download/source/pulseview/${name}.tar.gz";
-    sha256 = "1f8f2342d5yam98mmcb8f9g2vslcwv486bmi4x45pxn68l82ky3q";
+    sha256 = "0bvgmkgz37n2bi9niskpl05hf7rsj1lj972fbrgnlz25s4ywxrwy";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

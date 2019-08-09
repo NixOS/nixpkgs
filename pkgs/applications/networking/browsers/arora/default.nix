@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.phreedom ];
     description = "A cross-platform Qt4 Webkit browser";
     homepage = https://github.com/Arora/arora;
+    license = with licenses; [ gpl2 gpl3 ];
   };
 }

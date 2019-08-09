@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/samuel/python-pagerduty;
+    homepage = https://github.com/samuel/python-pagerduty;
     description = "Library for the PagerDuty service API";
     license = licenses.bsd0;
   };

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, glib, gtk3, wrapGAppsHook, desktop-file-utils
-, gettext, itstool, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_43, systemd, python3 }:
+, gettext, itstool, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_43, systemd, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   name = "gnome-logs-${version}";
-  version = "3.30.0";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1rsk2whps7rwl01mmjmhwwww4iv09fsszils9zmgqd79y7l3fmyh";
+    sha256 = "0hh3nnbq7q2xbflvaywanm0j3dqhb04ngphskhnjx2sg7px12068";
   };
 
   mesonFlags = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     meson ninja pkgconfig wrapGAppsHook gettext itstool desktop-file-utils
     libxml2 libxslt docbook_xsl docbook_xml_dtd_43
   ];
-  buildInputs = [ glib gtk3 systemd gnome3.gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
+  buildInputs = [ glib gtk3 systemd gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py

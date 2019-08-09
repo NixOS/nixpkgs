@@ -59,7 +59,7 @@ let
 
   # return the names of all dependencies in the transitive closure
   transitiveClosure = dep:
-  if isNull dep then
+  if dep == null then
     # propagatedBuildInputs might contain null
     # (although that might be considered a programming error in the derivation)
     []
@@ -99,6 +99,13 @@ stdenv.mkDerivation rec {
     for pkg in ${lib.concatStringsSep " " input_names}; do
       touch "installed/$pkg"
     done
+
+    # threejs version is in format 0.<version>.minor, but sage currently still
+    # relies on installed_packages for the online version of threejs to work
+    # and expects the format r<version>. This is a hotfix for now.
+    # upstream: https://trac.sagemath.org/ticket/26434
+    rm "installed/threejs"*
+    touch "installed/threejs-r${lib.versions.minor three.version}"
   '';
 
   installPhase = ''

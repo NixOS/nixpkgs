@@ -6,6 +6,7 @@
 , completeDeps
 , crateAuthors
 , crateDescription
+, crateHomepage
 , crateFeatures
 , crateName
 , crateVersion
@@ -22,7 +23,7 @@ let version_ = lib.splitString "-" crateVersion;
     version = lib.splitString "." (lib.head version_);
     rustcOpts = lib.lists.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
-        (["-C codegen-units=1"] ++ extraRustcOpts);
+        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
     buildDeps = makeDeps buildDependencies;
     authors = lib.concatStringsSep ":" crateAuthors;
     optLevel = if release then 3 else 0;
@@ -91,12 +92,11 @@ in ''
   export CARGO_PKG_VERSION_MAJOR=${builtins.elemAt version 0}
   export CARGO_PKG_VERSION_MINOR=${builtins.elemAt version 1}
   export CARGO_PKG_VERSION_PATCH=${builtins.elemAt version 2}
+  export CARGO_PKG_VERSION_PRE="${versionPre}"
+  export CARGO_PKG_HOMEPAGE="${crateHomepage}"
   export NUM_JOBS=1
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
-  if [[ -n "${versionPre}" ]]; then
-    export CARGO_PKG_VERSION_PRE="${versionPre}"
-  fi
 
   BUILD=""
   if [[ ! -z "${build}" ]] ; then

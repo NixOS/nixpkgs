@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "yanone-kaffeesatz-2004";
@@ -14,9 +14,9 @@ fetchzip {
 
   meta = {
     description = "The free font classic";
-    maintainers = with stdenv.lib.maintainers; [ mt-caret ];
-    platforms = with stdenv.lib.platforms; all;
+    maintainers = with lib.maintainers; [ mt-caret ];
+    platforms = with lib.platforms; all;
     homepage = https://yanone.de/fonts/kaffeesatz/;
-    license = stdenv.lib.licenses.ofl;
+    license = lib.licenses.ofl;
   };
 }

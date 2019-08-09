@@ -8,7 +8,6 @@
 , gdb
 , numpy
 , ncurses
-, fetchpatch
 }:
 
 let
@@ -26,11 +25,11 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.29.5";
+  version = "0.29.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1";
+    sha256 = "c29d069a4a30f472482343c866f7486731ad638ef9af92bfe5fca9c7323d638e";
   };
 
   nativeBuildInputs = [
@@ -59,7 +58,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
-    homepage = http://cython.org;
+    homepage = https://cython.org;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fridh ];
   };

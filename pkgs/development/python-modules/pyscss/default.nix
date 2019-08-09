@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Scss compiler for Python";
-    homepage = http://pyscss.readthedocs.org/en/latest/;
+    homepage = https://pyscss.readthedocs.org/en/latest/;
     license = licenses.mit;
   };
 

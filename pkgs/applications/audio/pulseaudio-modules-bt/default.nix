@@ -7,6 +7,7 @@
 , patchelf
 , fdk_aac
 , libtool
+, ldacbt
 , cmake
 , bluez
 , dbus
@@ -23,18 +24,18 @@ let
 
 in stdenv.mkDerivation rec {
   name = "pulseaudio-modules-bt-${version}";
-  version = "unstable-2019-01-05";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "EHfive";
     repo = "pulseaudio-modules-bt";
-    rev = "4b0cde160c96f40d860fef267a6ded49ae045be0";
-    sha256 = "15jw5nf2dhqqdwzyh2x5kdkrq7f3qn140gw6gmspcai9kplhk24w";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "00xmidcw4fvpbmg0nsm2gk5zw26fpyjbc0pjk6mzr570zbnyqqbn";
   };
 
   patches = [
     ./fix-install-path.patch
+    ./fix-aac-defaults.patch
   ];
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ in stdenv.mkDerivation rec {
     ffmpeg_4
     fdk_aac
     libtool
+    ldacbt
     bluez
     dbus
     sbc
@@ -67,7 +69,7 @@ in stdenv.mkDerivation rec {
     for so in $out/lib/pulse-${pulseaudio.version}/modules/*.so; do
       orig_rpath=$(patchelf --print-rpath "$so")
       patchelf \
-        --set-rpath "${lib.getLib ffmpeg_4}/lib:$out/lib/pulse-${pulseaudio.version}/modules:$orig_rpath" \
+        --set-rpath "${ldacbt}/lib:${lib.getLib ffmpeg_4}/lib:$out/lib/pulse-${pulseaudio.version}/modules:$orig_rpath" \
         "$so"
     done
   '';

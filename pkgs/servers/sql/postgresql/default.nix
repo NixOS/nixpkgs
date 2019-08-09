@@ -6,6 +6,9 @@ let
       , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
       , pkgconfig, libxml2, tzdata
 
+      # This is important to obtain a version of `libpq` that does not depend on systemd.
+      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
+
       # for postgreql.pkgs
       , this, self, newScope, buildEnv
 
@@ -31,14 +34,14 @@ let
     buildInputs =
       [ zlib readline openssl libxml2 makeWrapper ]
       ++ lib.optionals icuEnabled [ icu ]
-      ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ]
+      ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = lib.optionals icuEnabled [ pkgconfig ];
 
     enableParallelBuilding = !stdenv.isDarwin;
 
-    makeFlags = [ "world" ];
+    buildFlags = [ "world" ];
 
     NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
 
@@ -51,7 +54,7 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
-      (lib.optionalString (atLeast "9.6" && !stdenv.isDarwin) "--with-systemd")
+      (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals icuEnabled [ "--with-icu" ];
 
@@ -60,7 +63,8 @@ let
         (if atLeast "9.6" then ./patches/less-is-more-96.patch             else ./patches/less-is-more.patch)
         (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
         ./patches/specify_pkglibdir_at_runtime.patch
-      ];
+        ./patches/findstring.patch
+      ] ++ lib.optional stdenv.isLinux ./patches/socketdir-in-run.patch;
 
     installTargets = [ "install-world" ];
 
@@ -100,6 +104,10 @@ let
         # initdb needs access to "locale" command from glibc.
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
+
+    doCheck = !stdenv.isDarwin;
+    # autodetection doesn't seem to able to find this, but it's there.
+    checkTarget = "check";
 
     doInstallCheck = false; # needs a running daemon?
 
@@ -146,6 +154,9 @@ let
     # below. See #22653
     pathsToLink = ["/" "/bin"];
 
+    # Note: the duplication of executables is about 4MB size.
+    # So a nicer solution was patching postgresql to allow setting the
+    # libdir explicitely.
     postBuild = ''
       mkdir -p $out/bin
       rm $out/bin/{pg_config,postgres,pg_ctl}
@@ -157,41 +168,41 @@ let
 in self: {
 
   postgresql_9_4 = self.callPackage generic {
-    version = "9.4.20";
+    version = "9.4.24";
     psqlSchema = "9.4";
-    sha256 = "0zzqjz5jrn624hzh04drpj6axh30a9k6bgawid6rwk45nbfxicgf";
+    sha256 = "0acl1wmah3r1a0qjjmpc256glccrjnzq4pkwklx4d9s6vmkks9aj";
     this = self.postgresql_9_4;
     inherit self;
   };
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.15";
+    version = "9.5.19";
     psqlSchema = "9.5";
-    sha256 = "0i2lylgmsmy2g1ixlvl112fryp7jmrd0i2brk8sxb7vzzpg3znnv";
+    sha256 = "1cqvbsyfs9048wbvdv0vhhaksjyjqv2vvh6ij4vqmjibc4kal34n";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.11";
+    version = "9.6.15";
     psqlSchema = "9.6";
-    sha256 = "0c55akrkzqd6p6a8hr0338wk246hl76r9j16p4zn3s51d7f0l99q";
+    sha256 = "02hp69h2p02asfblkaahblzdz2zmawd2r11h6237y5j7yadgxn9w";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.6";
+    version = "10.10";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0jv26y3f10svrjxzsgqxg956c86b664azyk2wppzpa5x11pjga38";
+    sha256 = "0lzj46dwd9cw94gnqm36bxd7jlhfdyqjrfzr3c4xd3prfn2rnkxd";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.2";
+    version = "11.5";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "01clq2lw0v83zh5dc89xdr3mmap0jr37kdkh401ph6f2177bjxi6";
+    sha256 = "106ikalvrilihlvhq7xj7snq98hgbgq6qsgjrd252wgw1c327pvz";
     this = self.postgresql_11;
     inherit self;
   };

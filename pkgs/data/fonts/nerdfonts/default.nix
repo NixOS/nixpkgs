@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/ryanoasis/nerd-fonts;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ ];
     hydraPlatforms = []; # 'Output limit exceeded' on Hydra
   };
 }

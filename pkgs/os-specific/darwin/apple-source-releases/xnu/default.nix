@@ -1,11 +1,11 @@
-{ appleDerivation, bootstrap_cmds, bison, flex, gnum4, unifdef, perl, python }:
+{ appleDerivation, lib, bootstrap_cmds, bison, flex
+, gnum4, unifdef, perl, python
+, headersOnly ? true }:
 
-appleDerivation {
-  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+appleDerivation ({
+  nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python ];
 
-  buildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python ];
-
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace "/bin/" "" \
       --replace "MAKEJOBS := " '# MAKEJOBS := '
@@ -40,7 +40,27 @@ appleDerivation {
     patchShebangs .
   '';
 
-  installPhase = ''
+  PLATFORM = "MacOSX";
+  SDKVERSION = "10.11";
+  CC = "cc";
+  CXX = "c++";
+  MIG = "mig";
+  MIGCOM = "migcom";
+  STRIP = "strip";
+  NM = "nm";
+  UNIFDEF = "unifdef";
+  DSYMUTIL = "dsymutil";
+  HOST_OS_VERSION = "10.10";
+  HOST_CC = "cc";
+  HOST_FLEX = "flex";
+  HOST_BISON = "bison";
+  HOST_GM4 = "m4";
+  MIGCC = "cc";
+  ARCHS = "x86_64";
+
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  preBuild = ''
     # This is a bit of a hack...
     mkdir -p sdk/usr/local/libexec
 
@@ -56,49 +76,27 @@ appleDerivation {
 
     export SDKROOT_RESOLVED=$PWD/sdk
     export HOST_SDKROOT_RESOLVED=$PWD/sdk
-    export PLATFORM=MacOSX
-    export SDKVERSION=10.11
-
-    export CC=cc
-    export CXX=c++
-    export MIG=${bootstrap_cmds}/bin/mig
-    export MIGCOM=${bootstrap_cmds}/libexec/migcom
-    export STRIP=sentinel-missing
-    export LIPO=sentinel-missing
-    export LIBTOOL=sentinel-missing
-    export NM=sentinel-missing
-    export UNIFDEF=${unifdef}/bin/unifdef
-    export DSYMUTIL=sentinel-missing
-    export CTFCONVERT=sentinel-missing
-    export CTFMERGE=sentinel-missing
-    export CTFINSERT=sentinel-missing
-    export NMEDIT=sentinel-missing
-
-    export HOST_OS_VERSION=10.7
-    export HOST_CC=cc
-    export HOST_FLEX=${flex}/bin/flex
-    export HOST_BISON=${bison}/bin/bison
-    export HOST_GM4=${gnum4}/bin/m4
-    export HOST_CODESIGN='echo dummy_codesign'
-    export HOST_CODESIGN_ALLOCATE=echo
 
     export BUILT_PRODUCTS_DIR=.
-
     export DSTROOT=$out
-    make installhdrs
+  '';
 
+  buildFlags = lib.optionalString headersOnly "exporthdrs";
+  installTargets = lib.optionalString headersOnly "installhdrs";
+
+  postInstall = lib.optionalString headersOnly ''
     mv $out/usr/include $out
+
+    (cd BUILD/obj/EXPORT_HDRS && find -type f -exec install -D \{} $out/include/\{} \;)
 
     # TODO: figure out why I need to do this
     cp libsyscall/wrappers/*.h $out/include
-    mkdir -p $out/include/os
-    cp libsyscall/os/tsd.h $out/include/os/tsd.h
+    install -D libsyscall/os/tsd.h $out/include/os/tsd.h
     cp EXTERNAL_HEADERS/AssertMacros.h $out/include
     cp EXTERNAL_HEADERS/Availability*.h $out/System/Library/Frameworks/Kernel.framework/Versions/A/Headers/
+    cp -r EXTERNAL_HEADERS/corecrypto $out/include
 
     # Build the mach headers we crave
-    export MIGCC=cc
-    export ARCHS="x86_64"
     export SRCROOT=$PWD/libsyscall
     export DERIVED_SOURCES_DIR=$out/include
     export SDKROOT=$out
@@ -108,14 +106,13 @@ appleDerivation {
 
     # Get rid of the System prefix
     mv $out/System/* $out/
+    rmdir $out/System
 
     # TODO: do I need this?
     mv $out/internal_hdr/include/mach/*.h $out/include/mach
 
     # Get rid of some junk lying around
-    rm -rf $out/internal_hdr
-    rm -rf $out/usr
-    rm -rf $out/local
+    rm -rf $out/internal_hdr $out/usr $out/local
 
     # Add some symlinks
     ln -s $out/Library/Frameworks/System.framework/Versions/B \
@@ -123,8 +120,18 @@ appleDerivation {
     ln -s $out/Library/Frameworks/System.framework/Versions/Current/PrivateHeaders \
           $out/Library/Frameworks/System.framework/Headers
 
-    # IOKit (and possibly the others) is incomplete, so let's not make it visible from here...
+    # IOKit (and possibly the others) is incomplete,
+    # so let's not make it visible from here...
     mkdir $out/Library/PrivateFrameworks
     mv $out/Library/Frameworks/IOKit.framework $out/Library/PrivateFrameworks
   '';
-}
+} // lib.optionalAttrs headersOnly {
+  HOST_CODESIGN = "echo";
+  HOST_CODESIGN_ALLOCATE = "echo";
+  LIPO = "echo";
+  LIBTOOL = "echo";
+  CTFCONVERT = "echo";
+  CTFMERGE = "echo";
+  CTFINSERT = "echo";
+  NMEDIT = "echo";
+})

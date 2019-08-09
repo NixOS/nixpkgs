@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, idna, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, idna }:
 
 buildPythonPackage rec {
   pname = "hyperlink";

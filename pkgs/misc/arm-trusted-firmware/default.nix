@@ -6,7 +6,7 @@ let
             , platform
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "2.0"
+            , version ? "2.1"
             , ... } @ args:
            stdenv.mkDerivation (rec {
 
@@ -17,7 +17,7 @@ let
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "refs/tags/v${version}";
-      sha256 = "087pkwa6slxff0aiz3v42gww007nww97bl1p96fvvs7rr1y14gjx";
+      sha256 = "1gy5qskrjy8n3kxdcm1dx8b45l5b75n0pm8pq80wl6xic1ycy24r";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -57,15 +57,7 @@ in rec {
   inherit buildArmTrustedFirmware;
 
   armTrustedFirmwareAllwinner = buildArmTrustedFirmware rec {
-    version = "1.0";
-    src = fetchFromGitHub {
-      owner = "apritzel";
-      repo = "arm-trusted-firmware";
-      # Branch: `allwinner`
-      rev = "91f2402d941036a0db092d5375d0535c270b9121";
-      sha256 = "0lbipkxb01w97r6ah8wdbwxir3013rp249fcqhlzh2gjwhp5l1ys";
-    };
-    platform = "sun50iw1p1";
+    platform = "sun50i_a64";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };

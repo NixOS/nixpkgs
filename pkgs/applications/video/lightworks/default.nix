@@ -1,12 +1,12 @@
 { stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
-, gnome3, gdk_pixbuf, cairo, libjpeg_original, glib, gnome2, libGLU
+, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, gnome2, libGLU
 , nvidia_cg_toolkit, zlib, openssl, portaudio
 }:
 let
   fullPath = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc
-    gnome3.gtk
-    gdk_pixbuf
+    gtk3
+    gdk-pixbuf
     cairo
     libjpeg_original
     glib
@@ -21,7 +21,7 @@ let
   lightworks = stdenv.mkDerivation rec {
     version = "14.0.0";
     name = "lightworks-${version}";
-    
+
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
@@ -60,7 +60,7 @@ let
       wrapProgram $out/lib/lightworks/ntcardvt \
         --prefix LD_LIBRARY_PATH : ${fullPath}:$out/lib/lightworks \
         --set FONTCONFIG_FILE $out/lib/lightworks/fonts.conf
-       
+
       cp -r usr/share $out/share
     '';
 

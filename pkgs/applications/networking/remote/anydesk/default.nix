@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem
-, atk, cairo, gdk_pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
+, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
 , lsb-release, freetype, fontconfig, pangox_compat, polkit, polkit_gnome }:
 
 let
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    atk cairo gdk_pixbuf glib gtk2 stdenv.cc.cc pango
+    atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
     gnome2.gtkglext libGLU_combined freetype fontconfig
     pangox_compat polkit polkit_gnome
   ] ++ (with xorg; [
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit description;
-    homepage = http://www.anydesk.com;
+    homepage = https://www.anydesk.com;
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ peterhoeg ];

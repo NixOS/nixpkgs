@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, fetchFromGitHub
-, qmake, qtbase, qtquickcontrols, qtsvg
-, python3, pyotherside, ncurses
+{ stdenv, fetchurl, mkDerivation
+, qmake, qtbase, qtquickcontrols
+, python3, pyotherside
 , pcsclite, yubikey-personalization
 , yubikey-manager, makeWrapper }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "yubioath-desktop";
-  version = "4.3.4";
+  version = "4.3.6";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
-    sha256 = "0hb7j71032sigs8zd5r8yr0m59sjkb24vhs2l4jarpvj8q7hv30d";
+    sha256 = "0s04anjbb5zm98kfdpp9hr68k3mx3gqlp8fa1miy7nq87pr4f7a5";
   };
 
   doCheck = false;
 
-  buildInputs = [ stdenv qtbase qtquickcontrols pyotherside python3 ];
+  buildInputs = [ stdenv qtbase qtquickcontrols python3 ];
 
   nativeBuildInputs = [ qmake makeWrapper python3.pkgs.wrapPython ];
 
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     wrapProgram $out/bin/yubioath-desktop \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
+      --prefix QML2_IMPORT_PATH : "${pyotherside}/${qtbase.qtQmlPrefix}" \
       --prefix LD_PRELOAD : "${yubikey-personalization}/lib/libykpers-1.so" \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib"
 

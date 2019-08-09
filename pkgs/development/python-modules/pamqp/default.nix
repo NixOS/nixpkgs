@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.1.0";
+  version = "2.3.0";
   pname = "pamqp";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e1fa1107a195993fca6e04f1eb7286b60e223c958944d7808a501258ccc0ef8c";
+    sha256 = "1s4lwbsiikz3czqad7jarb7k303q0wamla0rirghvwl9bslgbl2w";
   };
 
   buildInputs = [ mock nose pep8 pylint mccabe ];

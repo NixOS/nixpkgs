@@ -3,7 +3,7 @@
 , withGui ? false, gtk2 ? null, withTeensyduino ? false
   /* Packages needed for Teensyduino */
 , upx, fontconfig, xorg, gcc
-, atk, glib, pango, gdk_pixbuf, libpng12, expat, freetype,
+, atk, glib, pango, gdk-pixbuf, libpng12, expat, freetype,
 }:
 
 assert withGui -> gtk2 != null;
@@ -36,7 +36,7 @@ let
     fontconfig
     freetype
     gcc.cc.lib
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk2
     libpng12
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     substituteInPlace build/build.xml --replace "get src" "get error"
 
     cd ./arduino-core && ant
-    cd ../build && ant 
+    cd ../build && ant
     cd ..
   '';
 

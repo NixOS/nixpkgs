@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pip
 , pbr
 , mock
 , python-jenkins
@@ -15,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "2.9.1";
+  version = "2.10.1";
   disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fba5f3efe8bd06d559f06a5d3bd68da5a7395541fcd370053a8174d08519e3d0";
+    sha256 = "0iynzxrjmdkrriw4pcf8as8afckvmq4jk457lxg52wh29l39wb30";
   };
 
   postPatch = ''
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
     homepage = "https://docs.openstack.org/infra/system-config/jjb.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 
 }

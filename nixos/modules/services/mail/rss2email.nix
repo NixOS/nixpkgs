@@ -94,6 +94,10 @@ in {
 
     services.rss2email.config.to = cfg.to;
 
+    systemd.tmpfiles.rules = [
+      "d /var/rss2email 0700 rss2email rss2email - -"
+    ];
+
     systemd.services.rss2email = let
       conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} ({
           DEFAULT = cfg.config;
@@ -105,22 +109,16 @@ in {
     in
     {
       preStart = ''
-        mkdir -p /var/rss2email
-        chmod 700 /var/rss2email
-
         cp ${conf} /var/rss2email/conf.cfg
         if [ ! -f /var/rss2email/db.json ]; then
           echo '{"version":2,"feeds":[]}' > /var/rss2email/db.json
         fi
-
-        chown -R rss2email:rss2email /var/rss2email
       '';
       path = [ pkgs.system-sendmail ];
       serviceConfig = {
         ExecStart =
           "${pkgs.rss2email}/bin/r2e -c /var/rss2email/conf.cfg -d /var/rss2email/db.json run";
         User = "rss2email";
-        PermissionsStartOnly = "true";
       };
     };
 

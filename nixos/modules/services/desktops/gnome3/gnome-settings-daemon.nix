@@ -18,7 +18,7 @@ in
 
     services.gnome3.gnome-settings-daemon = {
 
-      enable = mkEnableOption "GNOME Settings Daemon.";
+      enable = mkEnableOption "GNOME Settings Daemon";
 
       # There are many forks of gnome-settings-daemon
       package = mkOption {

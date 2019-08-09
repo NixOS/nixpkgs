@@ -6,7 +6,7 @@
 assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
-  name = "gnuradio-nacl-${version}";
+  name = "gr-nacl-${version}";
   version = "2017-04-10";
 
   src = fetchFromGitHub {

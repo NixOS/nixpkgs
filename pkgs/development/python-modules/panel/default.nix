@@ -7,12 +7,6 @@
 , markdown
 , pyct
 , testpath
-, pytest
-, scipy
-, plotly
-, altair
-, vega_datasets
-, hvplot
 }:
 
 buildPythonPackage rec {

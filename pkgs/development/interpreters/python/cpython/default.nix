@@ -10,7 +10,6 @@
 , sqlite
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , zlib
-, callPackage
 , self
 , CF, configd
 , python-setup-hook
@@ -39,7 +38,7 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit pythonForBuild;
+    inherit hasDistutilsCxxPatch pythonForBuild;
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
@@ -87,6 +86,9 @@ in with passthru; stdenv.mkDerivation {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+  ] ++ optionals (isPy35 || isPy36) [
+    # Determinism: Write null timestamps when compiling python files.
+    ./3.5/force_bytecode_determinism.patch
   ] ++ optionals isPy35 [
     # Backports support for LD_LIBRARY_PATH from 3.6
     ./3.5/ld_library_path.patch
@@ -101,10 +103,17 @@ in with passthru; stdenv.mkDerivation {
     # Upstream distutils is calling C compiler to compile C++ code, which
     # only works for GCC and Apple Clang. This makes distutils to call C++
     # compiler when needed.
-    (fetchpatch {
-      url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";
-      sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
-    })
+    (
+      if isPy35 then
+        ./3.5/python-3.x-distutils-C++.patch
+      else if isPy37 then
+        ./3.7/python-3.x-distutils-C++.patch
+      else
+        fetchpatch {
+          url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";
+          sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
+        }
+    )
   ];
 
   postPatch = ''
@@ -161,8 +170,8 @@ in with passthru; stdenv.mkDerivation {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
     export MACOSX_DEPLOYMENT_TARGET=10.6
   '' + optionalString (isPy3k && pythonOlder "3.7") ''
-    # Determinism: The interpreter is patched to write null timestamps when compiling python files.
-    # This way python does not try to update them when we freeze timestamps in nix store.
+    # Determinism: The interpreter is patched to write null timestamps when compiling Python files
+    #   so Python doesn't try to update the bytecode when seeing frozen timestamps in Nix's store.
     export DETERMINISTIC_BUILD=1;
   '' + optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
@@ -211,6 +220,9 @@ in with passthru; stdenv.mkDerivation {
     # Further get rid of references. https://github.com/NixOS/nixpkgs/issues/51668
     find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out '{}' +
     find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out '{}' +
+
+    # Include a sitecustomize.py file
+    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
 
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails

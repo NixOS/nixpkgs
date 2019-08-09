@@ -1,20 +1,19 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, cmake, sip }:
+{ stdenv, buildPythonPackage, python, pythonOlder, fetchFromGitHub, cmake, sip }:
 
 buildPythonPackage rec {
   pname = "libsavitar";
-  version = "3.6.0";
+  version = "4.2.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libSavitar";
     rev = version;
-    sha256 = "1bz8ga0n9aw65hqzajbr93dcv5g555iaihbhs1jq2k47cx66klzv";
+    sha256 = "0cqskd8rcg7pih8nj3s2i137lwxpibmdmym6f8hii14ashny73i1";
   };
 
   postPatch = ''
-    # To workaround buggy SIP detection which overrides PYTHONPATH
-    sed -i '/SET(ENV{PYTHONPATH}/d' cmake/FindSIP.cmake
+    sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -28,6 +27,6 @@ buildPythonPackage rec {
     homepage = https://github.com/Ultimaker/libSavitar;
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar orivej ];
+    maintainers = with maintainers; [ abbradar orivej gebner ];
   };
 }

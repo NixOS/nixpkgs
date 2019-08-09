@@ -1,28 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, gobject-introspection, glib
-, clutter-gtk, clutter-gst, gnome3, aspell, hspell, gtksourceview, gjs
+{ stdenv, fetchurl, pkgconfig, meson, gettext, gobject-introspection, glib
+, clutter-gtk, clutter-gst, gnome3, gtksourceview, gjs
 , webkitgtk, libmusicbrainz5, icu, wrapGAppsHook, gst_all_1
-, gdk_pixbuf, librsvg, gtk3, harfbuzz }:
+, gdk-pixbuf, librsvg, gtk3, harfbuzz, ninja }:
 
 stdenv.mkDerivation rec {
   name = "sushi-${version}";
-  version = "3.30.0";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/sushi/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0zpaiw5r734fky3zq95a6szwn7srbkpixajqg2xvdivhhx4mbnnj";
+    sha256 = "02idvqjk76lii9xyg3b1yz4rw721709bdm5j8ikjym6amcghl0aj";
   };
 
-  nativeBuildInputs = [ pkgconfig file intltool gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [
+    pkgconfig meson ninja gettext gobject-introspection wrapGAppsHook
+  ];
   buildInputs = [
     glib gtk3 gnome3.evince icu harfbuzz
-    clutter-gtk clutter-gst gjs gtksourceview gdk_pixbuf
+    clutter-gtk clutter-gst gjs gtksourceview gdk-pixbuf
     librsvg libmusicbrainz5 webkitgtk
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-    # cannot find -laspell, -lhspell
-    aspell hspell
   ];
-
-  enableParallelBuilding = true;
 
   passthru = {
     updateScript = gnome3.updateScript {

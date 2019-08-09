@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0srjwxipwsfzmpi0v32d1l5lzk9gi5in8ayg33sq8wyp8ygnbji6";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out"/{lib/antlr,bin}
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       frameworks. From a grammar, ANTLR generates a parser that can build and
       walk parse trees.
     '';
-    homepage = http://www.antlr.org/;
+    homepage = https://www.antlr.org/;
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

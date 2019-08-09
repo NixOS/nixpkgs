@@ -1,6 +1,7 @@
-{ config, stdenv, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
+{ config, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
+, extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
 , nativeOnly ? false
 , runtimeOnly ? false
@@ -15,6 +16,9 @@ let
   commonTargetPkgs = pkgs: with pkgs;
     [
       steamPackages.steam-fonts
+      # Needed for operating system detection until
+      # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
+      lsb-release
       # Errors in output without those
       pciutils
       python2
@@ -28,12 +32,19 @@ let
       iana-etc
       # Steam Play / Proton
       python3
+      # Steam VR
+      procps
+      usbutils
     ] ++ lib.optional withJava jdk
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
 
   ldPath = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
            ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
+
+  setupSh = writeScript "setup.sh" ''
+    #!${runtimeShell}
+  '';
 
   runSh = writeScript "run.sh" ''
     #!${runtimeShell}
@@ -82,7 +93,7 @@ in buildFHSUserEnv rec {
     gtk2
     bzip2
     zlib
-    gdk_pixbuf
+    gdk-pixbuf
 
     # Without these it silently fails
     xorg.libXinerama
@@ -130,7 +141,7 @@ in buildFHSUserEnv rec {
     libidn
     tbb
     wayland
-    mesa_noglu
+    mesa
     libxkbcommon
 
     # Other things from runtime
@@ -159,7 +170,7 @@ in buildFHSUserEnv rec {
     librsvg
     xorg.libXft
     libvdpau
-  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs);
+  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs) ++ extraLibraries pkgs;
 
   extraBuildCommands = if (!nativeOnly) then ''
     mkdir -p steamrt
@@ -168,6 +179,7 @@ in buildFHSUserEnv rec {
       ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
     ''}
     ln -s ${runSh} steamrt/run.sh
+    ln -s ${setupSh} steamrt/setup.sh
   '' else ''
     ln -s /usr/lib/libbz2.so usr/lib/libbz2.so.1.0
     ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''

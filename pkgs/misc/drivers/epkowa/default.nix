@@ -7,7 +7,7 @@ libusb,
 sane-backends,
 rpm, cpio,
 getopt,
-patchelf, gcc
+patchelf, autoPatchelfHook, gcc
 }:
 
 let common_meta = {
@@ -161,6 +161,34 @@ let plugins = {
 
     meta = common_meta // { description = "iscan esci s80 plugin for "+passthru.hw; };
   };
+  network = stdenv.mkDerivation rec {
+    pname = "iscan-nt-bundle";
+    version = "1.0.0";
+    ntPluginVersion = "1.1.1-1";
+
+    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = [ autoPatchelfHook ];
+
+    src = fetchurl {
+      url = "https://download2.ebz.epson.net/iscan/general/rpm/x64/iscan-bundle-${version}.x64.rpm.tar.gz";
+      sha256 = "1k3dmv4ml21k6mafvcvgfymb1acpcdxpvyrbfh2yf07jzmn5if4f";
+    };
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-network-nt-${ntPluginVersion}.x86_64.rpm | ${cpio}/bin/cpio -idmv
+
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mkdir $out/share/esci
+      '';
+    passthru = {
+      registrationCommand = "";
+      hw = "network";
+    };
+
+    meta = common_meta // { description = "iscan network plugin"; };
+  };
 };
 in
 
@@ -226,6 +254,8 @@ stdenv.mkDerivation rec {
     cp backend/epkowa.conf $out/etc/sane.d
     echo "epkowa" > $out/etc/sane.d/dll.conf
     ln -s ${iscan-data}/share/iscan-data $out/share/iscan-data
+    mkdir -p $out/lib/iscan
+    ln -s ${plugins.network}/lib/iscan/network $out/lib/iscan/network
     '';
   postFixup = ''
     # iscan-registry is a shell script requiring getopt

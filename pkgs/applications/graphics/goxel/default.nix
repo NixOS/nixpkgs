@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "goxel-${version}";
-  version = "0.8.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
     rev = "v${version}";
-    sha256 = "14rycn6sd3wp90c9ghpif1al3rv1fdgvhmpldmwap0pk790kfxs1";
+    sha256 = "1mdw4bs7hvfn0yngd9ial5wzlfkcbhr3wzldb1w7s3s48agixkdr";
   };
 
   patches = [ ./disable-imgui_ini.patch ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Open Source 3D voxel editor";
     homepage = https://guillaumechereau.github.io/goxel/;
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" ]; # see https://github.com/guillaumechereau/goxel/issues/125
+    platforms = platforms.linux;
     maintainers = with maintainers; [ tilpner ];
   };
 }

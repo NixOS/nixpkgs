@@ -3,19 +3,19 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-sudoku-${version}";
-  version = "3.30.0";
+  version = "3.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-sudoku/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1xy986s51jnrcqwan2hy4bjdg6797yr9s7gxx2z2q4j4gkx3qa1f";
+    sha256 = "1wwdjflw1lbx3cv6gvqcgp5jnjkrq37ld6mjbjj03g3vr90qaf0l";
   };
 
   nativeBuildInputs = [ meson ninja vala pkgconfig gobject-introspection gettext itstool libxml2 python3 desktop-file-utils wrapGAppsHook ];
   buildInputs = [ gtk3 libgee json-glib qqwing ];
 
   postPatch = ''
-    chmod +x post_install.py # patchShebangs requires executable file
-    patchShebangs post_install.py
+    chmod +x build-aux/post_install.py
+    patchShebangs build-aux/post_install.py
   '';
 
   passthru = {

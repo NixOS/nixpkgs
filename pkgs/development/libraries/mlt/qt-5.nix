@@ -7,13 +7,13 @@ let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation rec {
   name = "mlt-${version}";
-  version = "6.12.0";
+  version = "6.16.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0pzm3mjbbdl2rkbswgyfkx552xlxh2qrwzsi2a4dicfr92rfgq6w";
+    sha256 = "1362fv63p34kza9v4b71b6wakgvsa2vdx9y0g28x3yh4cp4k97kx";
   };
 
   buildInputs = [

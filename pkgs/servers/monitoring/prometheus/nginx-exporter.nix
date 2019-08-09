@@ -2,23 +2,25 @@
 
 buildGoPackage rec {
   name = "nginx_exporter-${version}";
-  version = "0.1.0";
+  version = "0.4.1";
 
-  goPackagePath = "github.com/discordianfish/nginx_exporter";
+  goPackagePath = "github.com/nginxinc/nginx-prometheus-exporter";
+
+  buildFlagsArray = [
+    "-ldflags=" "-X main.version=${version}"
+  ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    owner = "discordianfish";
-    repo = "nginx_exporter";
-    sha256 = "1xwxnvkzslaj44r44ag24a9qfzjdxwz67hhpkdq42193zqpnlim7";
+    owner = "nginxinc";
+    repo = "nginx-prometheus-exporter";
+    sha256 = "0c5bxl9xrd4gh2w5wyrzghmbcy9k1khydzml5cm0rsyqhwsvs8m5";
   };
 
-  goDeps = ./nginx-exporter_deps.nix;
-
   meta = with stdenv.lib; {
-    description = "Metrics relay from nginx stats to Prometheus";
-    homepage = https://github.com/discordianfish/nginx_exporter;
-    license = licenses.mit;
+    description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";
+    homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
+    license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz willibutz ];
     platforms = platforms.unix;
   };

@@ -43,7 +43,7 @@ let
         description = "Tool for building, changing, and versioning infrastructure";
         homepage = https://www.terraform.io/;
         license = licenses.mpl20;
-        maintainers = with maintainers; [ jgeerds zimbatm peterhoeg kalbasit ];
+        maintainers = with maintainers; [ zimbatm peterhoeg kalbasit ];
       };
     } // attrs');
 
@@ -88,8 +88,8 @@ let
   plugins = removeAttrs terraform-providers ["override" "overrideDerivation" "recurseForDerivations"];
 in rec {
   terraform_0_11 = pluggable (generic {
-    version = "0.11.11";
-    sha256 = "1hsi5sibs0fk1620wzzxrc1gqjs6slqrjvlqcgvgg1yl22q9g7f5";
+    version = "0.11.14";
+    sha256 = "1bzz5wy13gh8j47mxxp6ij6yh20xmxd9n5lidaln3mf1bil19dmc";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
@@ -97,8 +97,8 @@ in rec {
   terraform_0_11-full = terraform_0_11.full;
 
   terraform_0_12 = pluggable (generic {
-    version = "0.12.0-beta1";
-    sha256 = "0djakf2agbhpfqis4x0lf2i8s1ahvrdyfkcgr6lzp0nsks652rcm";
+    version = "0.12.6";
+    sha256 = "0vxvciv4amblxx50wivlm60fyj1ardfgdpj3l8cj9fhi79b3khxl";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });

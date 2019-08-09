@@ -47,11 +47,11 @@ let
           #     Baz=baz
           #     Qux=qux
           #   </Foo>
-          set = concatMap (subname: [
+          set = concatMap (subname: optionals (value.${subname} != null) ([
               "<${name} ${subname}>"
             ] ++ map (line: "\t${line}") (toLines value.${subname}) ++ [
               "</${name}>"
-            ]) (filter (v: v != null) (attrNames value));
+            ])) (filter (v: v != null) (attrNames value));
 
         }.${builtins.typeOf value};
 
@@ -151,7 +151,7 @@ in
         '';
         description = ''
           Configuration for ZNC, see
-          <literal>https://wiki.znc.in/Configuration</literal> for details. The
+          <link xlink:href="https://wiki.znc.in/Configuration"/> for details. The
           Nix value declared here will be translated directly to the xml-like
           format ZNC expects. This is much more flexible than the legacy options
           under <option>services.znc.confOptions.*</option>, but also can't do

@@ -1,18 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
   dtkcore, dtkwidget, ffmpeg, ffmpegthumbnailer, mpv, pulseaudio,
   libdvdnav, libdvdread, xorg, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-movie-reborn";
-  version = "3.2.14";
+  version = "3.2.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1i9sdg2p6qp57rqzrnjbxnqj3mg1qggzyq3yykw271vs8h85a707";
+    sha256 = "16mxym7dm6qk90q2w7xqm62047rq0lirrjmnnpaxshzaww9gngkh";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake

@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.isDarwin [ ./bsm-add-audit_token_to_pid.patch ];
 
+  configureFlags = [ "ac_cv_file__usr_include_mach_audit_triggers_defs=no" ];
+
   meta = {
     homepage = http://www.openbsm.org/;
     platforms = lib.platforms.unix;

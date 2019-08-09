@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pam, xmlsec, autoreconfHook, pkgconfig, libxml2, gtkdoc, perl, gengetopt, bison, help2man }:
+{ stdenv, fetchFromGitLab, pam, xmlsec, autoreconfHook, pkgconfig, libxml2, gtk-doc, perl, gengetopt, bison, help2man }:
 
 let
   securityDependency =
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ securityDependency libxml2 perl gengetopt bison ];
 
-  nativeBuildInputs = [ autoreconfHook gtkdoc help2man pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook gtk-doc help2man pkgconfig ];
 
   # man file generation fails when true
   enableParallelBuilding = false;

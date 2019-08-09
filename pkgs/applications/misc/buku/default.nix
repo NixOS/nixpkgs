@@ -1,14 +1,14 @@
-{ stdenv, python3, fetchFromGitHub, fetchpatch }:
+{ stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "4.1";
+  version = "4.2.2";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "166l1fmpqn4hys4l0ssc4yd590mmav1w62vm9l5ijhjhmlnrzfax";
+    sha256 = "1wy5i1av1s98yr56ybiq66kv0vg48zci3fp91zfgj04nh2966w1w";
   };
 
   checkInputs = [
@@ -18,6 +18,7 @@ with python3.pkgs; buildPythonApplication rec {
     pylint
     flake8
     pyyaml
+    mypy_extensions
   ];
 
   propagatedBuildInputs = [

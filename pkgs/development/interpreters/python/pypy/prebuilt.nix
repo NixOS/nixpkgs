@@ -34,13 +34,12 @@ let
     executable = "pypy${if isPy3k then "3" else ""}";
     pythonForBuild = self; # Not possible to cross-compile with.
     sitePackages = "site-packages";
+    hasDistutilsCxxPatch = false;
   };
   pname = "${passthru.executable}_prebuilt";
   version = with sourceVersion; "${major}.${minor}.${patch}";
 
   majorVersion = substring 0 1 pythonVersion;
-
-  setupHook = python-setup-hook sitePackages;
 
   deps = [
     bzip2
@@ -85,6 +84,10 @@ in with passthru; stdenv.mkDerivation {
     echo "Removing bytecode"
     find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
     popd
+
+    # Include a sitecustomize.py file
+    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+
   '';
 
   doInstallCheck = true;

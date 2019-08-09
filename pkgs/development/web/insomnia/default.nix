@@ -1,6 +1,7 @@
 { stdenv, makeWrapper, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk_pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2, at-spi2-atk 
+, gdk-pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2, at-spi2-atk
+, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
 , libudev0-shim, glibc, curl, openssl, autoPatchelfHook
@@ -17,19 +18,20 @@ let
   ];
 in stdenv.mkDerivation rec {
   name = "insomnia-${version}";
-  version = "6.3.2";
+  version = "6.5.3";
 
   src = fetchurl {
     url = "https://github.com/getinsomnia/insomnia/releases/download/v${version}/insomnia_${version}_amd64.deb";
-    sha256 = "15zf5nmsmz3ajb4xmhm3gynn36qp0ark0gah8qd0hqq76n9jmjnp";
+    sha256 = "0km7anw5xpcfr6j7pwqhv26pk7nxv1jywqlz0lpvgj6w85aafcm3";
   };
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     autoPatchelfHook
     dpkg
     makeWrapper
+    gobject-introspection wrapGAppsHook
   ];
-  
+
   buildInputs = [
     alsaLib
     at-spi2-atk
@@ -40,12 +42,13 @@ in stdenv.mkDerivation rec {
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gnome2.pango
     gtk2
     gtk3
+    gsettings-desktop-schemas
     libX11
     libXScrnSaver
     libXcomposite
@@ -76,6 +79,7 @@ in stdenv.mkDerivation rec {
     mv $out/share/insomnia/*.so $out/lib/
 
     ln -s $out/share/insomnia/insomnia $out/bin/insomnia
+    sed -i 's|\/opt\/Insomnia|'$out'/bin|g' $out/share/applications/insomnia.desktop
   '';
 
   preFixup = ''

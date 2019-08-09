@@ -27,15 +27,15 @@ let
       sha256 = "8dc4dae9b1a81bb3a42abb283df785ba3eb00ade29b13875821c69f03e00680e";
     };
     cmdliner = fetchurl {
-      url = "http://erratique.ch/software/cmdliner/releases/cmdliner-0.9.7.tbz";
+      url = "https://erratique.ch/software/cmdliner/releases/cmdliner-0.9.7.tbz";
       sha256 = "9c19893cffb5d3c3469ee0cce85e3eeeba17d309b33b9ace31aba06f68f0bf7a";
     };
     uutf = fetchurl {
-      url = "http://erratique.ch/software/uutf/releases/uutf-0.9.3.tbz";
+      url = "https://erratique.ch/software/uutf/releases/uutf-0.9.3.tbz";
       sha256 = "1f364f89b1179e5182a4d3ad8975f57389d45548735d19054845e06a27107877";
     };
     jsonm = fetchurl {
-      url = "http://erratique.ch/software/jsonm/releases/jsonm-0.9.1.tbz";
+      url = "https://erratique.ch/software/jsonm/releases/jsonm-0.9.1.tbz";
       sha256 = "3fd4dca045d82332da847e65e981d8b504883571d299a3f7e71447d46bc65f73";
     };
     opam = fetchurl {

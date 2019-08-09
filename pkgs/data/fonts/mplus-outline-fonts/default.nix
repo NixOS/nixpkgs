@@ -1,11 +1,11 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
-  version = "063";
+  version = "063a";
 in fetchzip rec {
   name = "mplus-${version}";
 
-  url = "mirror://sourceforgejp/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
+  url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
 
   postFetch = ''
     tar -xJf $downloadedFile --strip-components=1
@@ -13,11 +13,11 @@ in fetchzip rec {
     cp *.ttf $out/share/fonts/truetype
   '';
 
-  sha256 = "0d485l2ihxfk039rrrnfviamlbj13cwky0c752m4ikwvgiqiq94y";
+  sha256 = "1khbkch2r96ppifc93bmy1v047pgciyhfmcjb98ggncp5ix885xz";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "M+ Outline Fonts";
-    homepage = http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/index-en.html;
+    homepage = "https://mplus-fonts.osdn.jp/about-en.html";
     license = licenses.mit;
     maintainers = with maintainers; [ henrytill ];
     platforms = platforms.all;

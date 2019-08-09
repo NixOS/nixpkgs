@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/zopefoundation/zope.contenttype;
+    homepage = https://github.com/zopefoundation/zope.contenttype;
     description = "A utility module for content-type (MIME type) handling";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

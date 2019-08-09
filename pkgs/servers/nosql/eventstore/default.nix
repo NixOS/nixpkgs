@@ -1,43 +1,75 @@
-{ stdenv, fetchFromGitHub, git, mono, v8, runtimeShell }:
+{ stdenv
+, fetchFromGitHub
+, fetchurl
+, makeWrapper
+, dotnet-sdk
+, mono
+, Nuget
+}:
 
-# There are some similarities with the pinta derivation. We should
-# have a helper to make it easy to package these Mono apps.
+let
+
+  deps = import ./deps.nix { inherit fetchurl; };
+
+in
 
 stdenv.mkDerivation rec {
+
   name = "EventStore-${version}";
-  version = "4.1.1";
+  version = "5.0.0";
+
   src = fetchFromGitHub {
-    owner  = "EventStore";
-    repo   = "EventStore";
-    rev    = "oss-v${version}";
-    sha256 = "1069ncb9ps1wi71yw1fzkfd9rfsavccw8xj3a3miwd9x72w8636f";
+    owner = "EventStore";
+    repo = "EventStore";
+    rev = "oss-v${version}";
+    sha256 = "1qdnkaxiryyz8yhwqncmshsg8wi4v69dcxnvgvl4hn81zsj6fasw";
   };
 
-  buildPhase = ''
-    mkdir -p src/libs/x64/nixos
-    pushd src/EventStore.Projections.v8Integration
-    cc -o ../libs/x64/nixos/libjs1.so -fPIC -lv8 -shared -std=c++0x *.cpp
-    popd
+  buildInputs = [
+    makeWrapper
+    dotnet-sdk
+    mono
+    Nuget
+  ];
 
-    patchShebangs build.sh
-    ./build.sh ${version} release nixos
+  # that dependency seems to not be required for building, but pulls in libcurl which fails to be located.
+  # see: https://github.com/EventStore/EventStore/issues/1897
+  patchPhase = ''
+    for f in $(find . -iname "*.csproj"); do
+      sed -i '/Include="Microsoft.SourceLink.GitHub"/d' $f
+    done
+  '';
+
+  buildPhase = ''
+    mkdir home
+    export HOME=$PWD/home
+    export DOTNET_CLI_TELEMETRY_OPTOUT=1
+    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+    export FrameworkPathOverride=${mono}/lib/mono/4.7.1-api
+
+    # disable default-source so nuget does not try to download from online-repo
+    nuget sources Disable -Name "nuget.org"
+    # add all dependencies to a source called 'nixos'
+    for package in ${toString deps}; do
+      nuget add $package -Source nixos
+    done
+
+    dotnet restore --source nixos src/EventStore.sln
+    dotnet build --no-restore -c Release src/EventStore.sln
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,lib/eventstore/clusternode}
-    cp -r bin/clusternode/* $out/lib/eventstore/clusternode/
-    cat > $out/bin/clusternode << EOF
-    #!${runtimeShell}
-    exec ${mono}/bin/mono $out/lib/eventstore/clusternode/EventStore.ClusterNode.exe "\$@"
-    EOF
-    chmod +x $out/bin/clusternode
+    mkdir -p $out/{bin,lib/eventstore}
+    cp -r bin/Release/* $out/lib/eventstore
+    makeWrapper "${mono}/bin/mono" $out/bin/eventstored \
+      --add-flags "$out/lib/eventstore/EventStore.ClusterNode/net471/EventStore.ClusterNode.exe"
   '';
 
-  nativeBuildInputs = [ git ];
-  buildInputs = [ v8 mono ];
+  doCheck = true;
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-  dontStrip = true;
+  checkPhase = ''
+    dotnet test src/EventStore.Projections.Core.Tests/EventStore.Projections.Core.Tests.csproj -- RunConfiguration.TargetPlatform=x64
+  '';
 
   meta = {
     homepage = https://geteventstore.com/;
@@ -46,4 +78,5 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     platforms = [ "x86_64-linux" ];
   };
+
 }

@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.0";
+  version = "1.2.1";
   name = "htpdate-${version}";
 
   src = fetchurl {
     url = "http://www.vervest.org/htp/archive/c/${name}.tar.xz";
-    sha256 = "00xwppq3aj951m0srjvxmr17kiaaflyjmbfkvpnfs3jvqhzczci2";
+    sha256 = "1gqw3lg4wwkn8snf4pf21s3qidhb4h791f2ci7i7i0d6kd86jv0q";
   };
 
   makeFlags = [

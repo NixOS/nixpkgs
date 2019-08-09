@@ -5,7 +5,7 @@
 , soundtouch, sfml, vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
-, CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
+, CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
 
 let
   desktopItem = makeDesktopItem {
@@ -20,13 +20,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "dolphin-emu-${version}";
-  version = "2019-02-16";
+  version = "5.0-10751";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "286aafd4ed2949f0b93230fee969c6a32fe75f07";
-    sha256 = "0l0cpq8s7wnng7mhbnzf4v84zggqsqdykrzfyz5avvbv9pla7jwp";
+    rev = "64c0ff576c6d3ea2ee35e6b6d7ea8c814442d53f";
+    sha256 = "19351j3gys9kgxpdjv1dckaiv74dylcdh1kx0z9qz8llv9s1r0s3";
   };
 
   enableParallelBuilding = true;
@@ -41,12 +41,15 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     bluez udev libevdev alsaLib vulkan-loader
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    CoreBluetooth cf-private OpenGL ForceFeedback IOKit
+    CoreBluetooth OpenGL ForceFeedback IOKit
   ];
 
   cmakeFlags = [
     "-DUSE_SHARED_ENET=ON"
     "-DENABLE_LTO=ON"
+    "-DDOLPHIN_WC_REVISION=${src.rev}"
+    "-DDOLPHIN_WC_DESCRIBE=${version}"
+    "-DDOLPHIN_WC_BRANCH=master"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
   ];

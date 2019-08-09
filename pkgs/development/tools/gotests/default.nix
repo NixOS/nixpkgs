@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "gotests-${version}";
-  version = "1.5.2";
+  version = "1.5.3";
   rev = "v${version}";
 
   goPackagePath = "github.com/cweill/gotests";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "cweill";
     repo = "gotests";
-    sha256 = "0ff2jvpc1xb5jr6dv9izlpfavxaivzirqmdmicpznrqjz0d56pri";
+    sha256 = "1c0hly31ax0wk01zdx0l0yl40xybaizjfb3gjxia2z0mgx330dq9";
   };
 
   meta = {

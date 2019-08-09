@@ -7,7 +7,7 @@
 , xvfb_run, dbus
 
 # Optional dependencies
-, enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly
+, enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly, libnice
 , enableE2E ? true
 , enableSecrets ? true, libsecret
 , enableRST ? true, docutils
@@ -20,11 +20,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
   majorVersion = "1.1";
-  version = "${majorVersion}.2";
+  version = "${majorVersion}.3";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
-    sha256 = "1lx03cgi58z54xb7mhs6bc715lc00w5mpysf9n3q8zgn759fm0rj";
+    sha256 = "0bzxwcpdd4ydh6d6mzpr0gxwhcb0x9ympk55fpvm1hcw9d28a716";
   };
 
   postPatch = ''
@@ -33,14 +33,14 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   buildInputs = [
-    gobject-introspection gtk3 gnome3.adwaita-icon-theme
-  ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly ]
+    gobject-introspection gtk3 gnome3.adwaita-icon-theme wrapGAppsHook
+  ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly libnice ]
     ++ lib.optional enableSecrets libsecret
     ++ lib.optional enableSpelling gspell
     ++ lib.optional enableUPnP gupnp-igd;
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook
+    gettext
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

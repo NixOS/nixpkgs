@@ -11,6 +11,15 @@ in
 {
 
   options.programs.gnupg = {
+    package = mkOption {
+      type = types.package;
+      default = pkgs.gnupg;
+      defaultText = "pkgs.gnupg";
+      description = ''
+        The gpg package that should be used.
+      '';
+    };
+
     agent.enable = mkOption {
       type = types.bool;
       default = false;
@@ -75,7 +84,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    systemd.packages = [ pkgs.gnupg ];
+    systemd.packages = [ cfg.package ];
 
     environment.interactiveShellInit = ''
       # Bind gpg-agent to this TTY if gpg commands are used.
@@ -84,12 +93,12 @@ in
     '' + (optionalString cfg.agent.enableSSHSupport ''
       # SSH agent protocol doesn't support changing TTYs, so bind the agent
       # to every new TTY.
-      ${pkgs.gnupg}/bin/gpg-connect-agent --quiet updatestartuptty /bye > /dev/null
+      ${cfg.package}/bin/gpg-connect-agent --quiet updatestartuptty /bye > /dev/null
     '');
 
     environment.extraInit = mkIf cfg.agent.enableSSHSupport ''
       if [ -z "$SSH_AUTH_SOCK" ]; then
-        export SSH_AUTH_SOCK=$(${pkgs.gnupg}/bin/gpgconf --list-dirs agent-ssh-socket)
+        export SSH_AUTH_SOCK=$(${cfg.package}/bin/gpgconf --list-dirs agent-ssh-socket)
       fi
     '';
 

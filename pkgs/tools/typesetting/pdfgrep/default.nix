@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://pdfgrep.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ qknight fpletz ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

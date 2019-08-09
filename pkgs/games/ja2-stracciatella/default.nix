@@ -22,7 +22,7 @@ let
     name = "libstracciatella-${version}";
     inherit version;
     src = libstracciatellaSrc;
-    cargoSha256 = "0gxp5ps1lzmrg19h6k31fgxjdnjl6amry2vmb612scxcwklxryhm";
+    cargoSha256 = "0a1pc8wyvgmna0a5cbpv3mh0h4nzjxlm887ymcq00cy1ciq5nmj4";
     doCheck = false;
   };
 in

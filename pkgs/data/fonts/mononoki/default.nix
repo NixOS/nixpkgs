@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "1.2";
@@ -14,7 +14,7 @@ in fetchzip {
 
   sha256 = "19y4xg7ilm21h9yynyrwcafdqn05zknpmmjrb37qim6p0cy2glff";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/madmalik/mononoki;
     description = "A font for programming and code review";
     license = licenses.ofl;

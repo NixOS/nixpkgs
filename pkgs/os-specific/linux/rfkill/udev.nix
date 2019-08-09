@@ -27,13 +27,14 @@
 let
   rfkillHook =
     substituteAll {
-    inherit (stdenv) shell;
-    src = ./rfkill-hook.sh;
-  };
+      inherit (stdenv) shell;
+      isExecutable = true;
+      src = ./rfkill-hook.sh;
+    };
 in stdenv.mkDerivation {
   name = "rfkill-udev";
 
-  unpackPhase = "true";
+  dontUnpack = true;
   dontBuild = true;
 
   installPhase = ''
@@ -44,7 +45,6 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/bin/";
     cp ${rfkillHook} "$out/bin/rfkill-hook.sh"
-    chmod +x "$out/bin/rfkill-hook.sh";
   '';
 
   meta = {

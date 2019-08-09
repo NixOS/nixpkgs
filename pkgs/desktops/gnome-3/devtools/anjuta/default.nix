@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, flex, bison, libxml2, intltool,
-  gdl, libgda, gtksourceview,
+  gdl, libgda, gtksourceview, gsettings-desktop-schemas,
   itstool, python3, ncurses, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     flex bison gtk3 libxml2 gnome3.gjs gdl
     libgda gtksourceview
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
   ];
 
   preFixup = ''

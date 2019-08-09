@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, nettle, gnutls
 , libev, protobufc, guile, geoip, libseccomp, gperf, readline
-, lz4, libgssglue, ronn, coreutils, pam
+, lz4, libgssglue, ronn, pam
 }:
 
 stdenv.mkDerivation rec {
   name = "ocserv-${version}";
-  version = "0.12.2";
+  version = "0.12.4";
 
   src = fetchFromGitLab {
     owner = "openconnect";
     repo = "ocserv";
     rev = "ocserv_${stdenv.lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "13lijg5qkkpn35laaimpw9l5g2dnnbmqn74lpcknmp6nm6j2wvci";
+    sha256 = "0lybz93ah6n5b82ywshhmsmf65im8rk6gkxnzxfbxpqxra79j517";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

@@ -1,17 +1,17 @@
 { stdenv, fetchurl, meson, ninja, gettext, python3, pkgconfig, gnome3, gtk3
-, gobject-introspection, gdk_pixbuf, librsvg, libgweather
-, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup
+, gobject-introspection, gdk-pixbuf, librsvg, libgweather
+, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup, gsettings-desktop-schemas
 , webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
 
 let
   pname = "gnome-maps";
-  version = "3.30.3";
+  version = "3.32.2.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0s1k6v1yzchbv6big09fdhmm0rzyjdh2y7qg6fsp7d0x4qnch9nq";
+    sha256 = "1m191iq1gjaqz79ci3dkbmwrkxp7pzknngimlf5bqib5x8yairlb";
   };
 
   doCheck = true;
@@ -21,8 +21,8 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     gtk3 geoclue2 gjs libgee folks gfbgraph
     geocode-glib libchamplain libsoup
-    gdk_pixbuf librsvg libgweather
-    gnome3.gsettings-desktop-schemas evolution-data-server
+    gdk-pixbuf librsvg libgweather
+    gsettings-desktop-schemas evolution-data-server
     gnome-online-accounts gnome3.adwaita-icon-theme
     webkitgtk
   ];

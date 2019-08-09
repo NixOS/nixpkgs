@@ -6,11 +6,11 @@ assert stdenv.isLinux -> libcap != null;
 stdenv.mkDerivation rec {
   name = "chrony-${version}";
 
-  version = "3.4";
+  version = "3.5";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/chrony/${name}.tar.gz";
-    sha256 = "17vb1sy79lsjif23v66mgn39lbgmxy59mf7mi9ffb9qh4ryf8xxg";
+    sha256 = "1d9r2dhslll4kzdmxrj0qfgwq1b30d4l3s5cwr8yr93029dpj0jf";
   };
 
   postPatch = ''

@@ -258,6 +258,16 @@ foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
     }
 }
 
+# Add bcache module, if needed.
+my @bcacheDevices = glob("/dev/bcache*");
+if (scalar @bcacheDevices > 0) {
+    push @initrdAvailableKernelModules, "bcache";
+}
+
+# Prevent unbootable systems if LVM snapshots are present at boot time.
+if (`lsblk -o TYPE` =~ "lvm") {
+    push @initrdKernelModules, "dm-snapshot";
+}
 
 my $virt = `systemd-detect-virt`;
 chomp $virt;
@@ -319,10 +329,19 @@ my @swapDevices;
 if (@swaps) {
     shift @swaps;
     foreach my $swap (@swaps) {
-        $swap =~ /^(\S+)\s/;
-        next unless -e $1;
-        my $dev = findStableDevPath $1;
-        push @swapDevices, "{ device = \"$dev\"; }";
+        my @fields = split ' ', $swap;
+        my $swapFilename = $fields[0];
+        my $swapType = $fields[1];
+        next unless -e $swapFilename;
+        my $dev = findStableDevPath $swapFilename;
+        if ($swapType =~ "partition") {
+            push @swapDevices, "{ device = \"$dev\"; }";
+        } elsif ($swapType =~ "file") {
+            # swap *files* are more likely specified in configuration.nix, so
+            # ignore them here.
+        } else {
+            die "Unsupported swap type: $swapType\n";
+        }
     }
 }
 
@@ -422,6 +441,10 @@ EOF
         }
     }
 
+    # Don't emit tmpfs entry for /tmp, because it most likely comes from the
+    # boot.tmpOnTmpfs option in configuration.nix (managed declaratively).
+    next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
+
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
@@ -464,6 +487,21 @@ EOF
     }
 }
 
+# For lack of a better way to determine it, guess whether we should use a
+# bigger font for the console from the display mode on the first
+# framebuffer. A way based on the physical size/actual DPI reported by
+# the monitor would be nice, but I don't know how to do this without X :)
+my $fb_modes_file = "/sys/class/graphics/fb0/modes";
+if (-f $fb_modes_file && -r $fb_modes_file) {
+    my $modes = read_file($fb_modes_file);
+    $modes =~ m/([0-9]+)x([0-9]+)/;
+    my $console_width = $1, my $console_height = $2;
+    if ($console_width > 1920) {
+        push @attrs, "# High-DPI console";
+        push @attrs, 'i18n.consoleFont = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
+    }
+}
+
 
 # Generate the hardware configuration file.
 
@@ -497,6 +535,7 @@ sub multiLineList {
 }
 
 my $initrdAvailableKernelModules = toNixStringList(uniq @initrdAvailableKernelModules);
+my $initrdKernelModules = toNixStringList(uniq @initrdKernelModules);
 my $kernelModules = toNixStringList(uniq @kernelModules);
 my $modulePackages = toNixList(uniq @modulePackages);
 
@@ -516,6 +555,7 @@ my $hwConfig = <<EOF;
   imports =${\multiLineList("    ", @imports)};
 
   boot.initrd.availableKernelModules = [$initrdAvailableKernelModules ];
+  boot.initrd.kernelModules = [$initrdKernelModules ];
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap

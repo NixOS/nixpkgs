@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, dtkcore, dtkwidget,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, dtkcore, dtkwidget,
   qt5integration, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-menu";
-  version = "3.4.1";
+  version = "3.4.8";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0aga4d4qwd7av6aa4cynhk0sidns7m7y6x0rq1swnkpr9ksr80gi";
+    sha256 = "09i0ybllymlj7s46pxma5py6x8nknfja4gxn5gj9kpf2c37qsqjc";
   };
 
   nativeBuildInputs = [
     pkgconfig
     qmake
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -25,7 +26,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i deepin-menu.pro -e "s,/usr,$out,"
+    searchHardCodedPaths
+    fixPath $out /usr \
+      data/com.deepin.menu.service \
+      deepin-menu.desktop \
+      deepin-menu.pro
   '';
 
   enableParallelBuilding = true;

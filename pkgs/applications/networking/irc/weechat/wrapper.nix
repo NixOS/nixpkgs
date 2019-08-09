@@ -1,4 +1,4 @@
-{ stdenv, lib, runCommand, writeScriptBin, buildEnv
+{ lib, runCommand, writeScriptBin, buildEnv
 , pythonPackages, perlPackages, runtimeShell
 }:
 
@@ -6,7 +6,8 @@ weechat:
 
 let
   wrapper = {
-    configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
+    installManPages ? true
+  , configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
   }:
 
   let
@@ -14,8 +15,10 @@ let
     availablePlugins = let
         simplePlugin = name: {pluginFile = "${weechat.${name}}/lib/weechat/plugins/${name}.so";};
       in rec {
-        python = {
-          pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
+        python = (simplePlugin "python") // {
+          extraEnv = ''
+            export PATH="${pythonPackages.python}/bin:$PATH"
+          '';
           withPackages = pkgsFun: (python // {
             extraEnv = ''
               export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
@@ -65,14 +68,22 @@ let
       ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
       exec ${weechat}/bin/${bin} "$@" --run-command ${lib.escapeShellArg init}
     '') // {
-      inherit (weechat) name;
+      inherit (weechat) name man;
       unwrapped = weechat;
+      outputs = [ "out" "man" ];
     };
   in buildEnv {
     name = "weechat-bin-env-${weechat.version}";
+    extraOutputsToInstall = lib.optionals installManPages [ "man" ];
     paths = [
       (mkWeechat "weechat")
       (mkWeechat "weechat-headless")
+      (runCommand "weechat-out-except-bin" { } ''
+        mkdir $out
+        ln -sf ${weechat}/include $out/include
+        ln -sf ${weechat}/lib $out/lib
+        ln -sf ${weechat}/share $out/share
+      '')
     ];
     meta = builtins.removeAttrs weechat.meta [ "outputsToInstall" ];
   };

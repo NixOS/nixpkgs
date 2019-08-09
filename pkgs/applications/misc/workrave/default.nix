@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "workrave-${version}";
-  version = "1.10.23";
+  version = "1.10.31";
 
   src = let
   in fetchFromGitHub {
-    sha256 = "1qhlwfhwk5agv4904d6bsf83k9k89q7bms6agg967vsca4905vcw";
+    sha256 = "0v2mx2idaxlsyv5w66b7pknlill9j9i2gqcs3vq54gak7ix9fj1p";
     rev = with stdenv.lib;
       "v" + concatStringsSep "_" (splitString "." version);
     repo = "workrave";

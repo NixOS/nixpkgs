@@ -4,7 +4,7 @@ let
   inherit (python3.pkgs) fonttools;
 
   common =
-    { version, repo, sha256, nativeBuildInputs, postPatch ? null, outputHash }:
+    { version, repo, sha256, nativeBuildInputs, postPatch ? null }:
     stdenv.mkDerivation rec {
       pname = "liberation-fonts";
       inherit version;
@@ -18,16 +18,14 @@ let
       inherit nativeBuildInputs postPatch;
 
       installPhase = ''
-        mkdir -p $out/share/fonts/truetype
-        cp -v $( find . -name '*.ttf') $out/share/fonts/truetype
+        find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
 
-        mkdir -p "$out/share/doc/${pname}-${version}"
-        cp -v AUTHORS ChangeLog COPYING License.txt README "$out/share/doc/${pname}-${version}" || true
+        install -m444 -Dt $out/share/doc/${pname}-${version} AUTHORS     || true
+        install -m444 -Dt $out/share/doc/${pname}-${version} ChangeLog   || true
+        install -m444 -Dt $out/share/doc/${pname}-${version} COPYING     || true
+        install -m444 -Dt $out/share/doc/${pname}-${version} License.txt || true
+        install -m444 -Dt $out/share/doc/${pname}-${version} README      || true
       '';
-
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-      inherit outputHash;
 
       meta = with stdenv.lib; {
         description = "Liberation Fonts, replacements for Times New Roman, Arial, and Courier New";
@@ -48,7 +46,6 @@ let
         maintainers = [
           maintainers.raskin
         ];
-        platforms = platforms.unix;
       };
     };
 
@@ -58,7 +55,6 @@ in {
     version = "1.07.5";
     nativeBuildInputs = [ fontforge ];
     sha256 = "1ffl10mf78hx598sy9qr5m6q2b8n3mpnsj73bwixnd4985gsz56v";
-    outputHash = "16jn17p22z2vip58aza2dfg1ri31ki6z3hsnmidfqfi7v8k83vq4";
   };
   liberation_ttf_v2 = common rec {
     repo = "liberation-fonts";
@@ -70,6 +66,5 @@ in {
         'font = ttLib.TTFont(fontfile, recalcTimestamp=False)'
     '';
     sha256 = "14bn1zlhyr4qaz5z2sx4h115pnbd41ix1vky8fxm2lx76xrjjiaa";
-    outputHash = "14c0c5n4vzd5y0hf9jkh48h12kkd8hlg94npbmv41j449g6wv6vn";
   };
 }

@@ -22,8 +22,9 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobject-introspection, gdk_pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib
+, cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
+, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
+, bison, flex, pango, python3, patchelf
 , libselinux ? null, libsepol ? null
 }@args:
 
@@ -77,6 +78,11 @@ in
 
   charlock_holmes = attrs: {
     buildInputs = [ which icu zlib ];
+  };
+
+  cld3 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ protobuf ];
   };
 
   curb = attrs: {
@@ -153,7 +159,7 @@ in
 
   gdk_pixbuf2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ rake gdk_pixbuf ];
+    buildInputs = [ rake gdk-pixbuf ];
   };
 
   gpgme = attrs: {
@@ -174,9 +180,17 @@ in
 
   gtk2 = attrs: {
     nativeBuildInputs = [ pkgconfig ] ++ lib.optionals stdenv.isLinux [ utillinux libselinux libsepol ];
-    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
+    buildInputs = [
+      fribidi
+      gobject-introspection
+      gtk2
+      harfbuzz
+      pcre
+      xorg.libpthreadstubs
+      xorg.libXdmcp
+    ];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
-    CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
+    # CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
   };
 
   gobject-introspection = attrs: {
@@ -199,6 +213,10 @@ in
 
   iconv = attrs: {
     buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+  };
+
+  idn-ruby = attrs: {
+    buildInputs = [ libidn ];
   };
 
   # disable bundle install as it can't install anything in addition to what is
@@ -226,6 +244,32 @@ in
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
     ];
+  };
+
+  mathematical = attrs: {
+    buildInputs = [
+      cmake
+      bison
+      flex
+      glib
+      pkgconfig
+      cairo
+      pango
+      gdk-pixbuf
+      libxml2
+      python3
+    ];
+
+    # The ruby build script takes care of this
+    dontUseCmakeConfigure = true;
+
+    # For some reason 'mathematical.so' is missing cairo and glib in its RPATH, add them explicitly here
+    postFixup = lib.optionalString stdenv.isLinux ''
+      soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
+      ${patchelf}/bin/patchelf \
+        --set-rpath "${lib.makeLibraryPath [ glib cairo ]}:$(${patchelf}/bin/patchelf --print-rpath "$soPath")" \
+        "$soPath"
+    '';
   };
 
   magic = attrs: {
@@ -275,13 +319,30 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  opus-ruby = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/opus-ruby.rb \
+        --replace "ffi_lib 'opus'" \
+                  "ffi_lib '${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    '';
+  };
+
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
   };
 
   pango = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 xorg.libXdmcp pcre xorg.libpthreadstubs ];
+    buildInputs = [
+      fribidi
+      gobject-introspection
+      gtk2
+      harfbuzz
+      pcre
+      xorg.libpthreadstubs
+      xorg.libXdmcp
+    ];
   };
 
   patron = attrs: {
@@ -331,6 +392,10 @@ in
     buildInputs = [ imagemagick which ];
   };
 
+  rpam2 = attrs: {
+    buildInputs = [ linux-pam ];
+  };
+
   ruby-libvirt = attrs: {
     buildInputs = [ libvirt pkgconfig ];
     buildFlags = [
@@ -368,7 +433,7 @@ in
 
   rugged = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ cmake openssl libssh2 zlib ];
+    buildInputs = [ which cmake openssl libssh2 zlib ];
     dontUseCmakeConfigure = true;
   };
 
@@ -406,6 +471,7 @@ in
   sup = attrs: {
     dontBuild = false;
     # prevent sup from trying to dynamically install `xapian-ruby`.
+    nativeBuildInputs = [ rake ];
     postPatch = ''
       cp ${./mkrf_conf_xapian.rb} ext/mkrf_conf_xapian.rb
 
@@ -425,6 +491,13 @@ in
 
   taglib-ruby = attrs: {
     buildInputs = [ taglib ];
+  };
+
+  thrift = attrs: {
+    # See: https://stackoverflow.com/questions/36378190/cant-install-thrift-gem-on-os-x-el-capitan/36523125#36523125
+    # Note that thrift-0.8.0 is a dependency of fluent-plugin-scribe which is a dependency of fluentd.
+    buildFlags = lib.optional (stdenv.isDarwin && lib.versionOlder attrs.version "0.9.2.0")
+      "--with-cppflags=\"-D_FORTIFY_SOURCE=0 -Wno-macro-redefined -Wno-shift-negative-value\"";
   };
 
   timfel-krb5-auth = attrs: {
@@ -468,7 +541,7 @@ in
   xapian-ruby = attrs: {
     # use the system xapian
     dontBuild = false;
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ rake pkgconfig ];
     buildInputs = [ xapian_1_2_22 zlib ];
     postPatch = ''
       cp ${./xapian-Rakefile} Rakefile
@@ -478,8 +551,11 @@ in
     '';
   };
 
-   zookeeper = attrs: {
-     buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
-   };
+  zlib = attrs: {
+    buildInputs = [ zlib ];
+  };
 
+  zookeeper = attrs: {
+    buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
+  };
 }

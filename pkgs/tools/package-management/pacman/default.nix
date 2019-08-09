@@ -3,11 +3,11 @@ zlib, bzip2, lzma }:
 
 stdenv.mkDerivation rec {
   name = "pacman-${version}";
-  version = "5.1.2";
+  version = "5.1.3";
 
   src = fetchurl {
     url = "https://git.archlinux.org/pacman.git/snapshot/pacman-${version}.tar.gz";
-    sha256 = "19fr60h0ffxzjxmlmhrfcq8447l0bkxnh64fwjagqn133d3dgd5x";
+    sha256 = "108xp6dhvp02jnzskhgzjmp9jvrxhhkffvmpvs3rrif7vj47xd76";
   };
 
   configureFlags = [

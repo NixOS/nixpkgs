@@ -107,3 +107,21 @@ index 09bf1ab..837aa98 100644
  
  
  def _geos_version():
+diff --git a/tests/test_dlls.py b/tests/test_dlls.py
+index 35f9cc2..3dfcaac 100644
+--- a/tests/test_dlls.py
++++ b/tests/test_dlls.py
+@@ -12,12 +12,7 @@ class LoadingTestCase(unittest.TestCase):
+     @unittest.skipIf(sys.platform == "win32", "FIXME: adapt test for win32")
+     def test_fallbacks(self):
+         load_dll('geos_c', fallbacks=[
+-            os.path.join(sys.prefix, "lib", "libgeos_c.dylib"), # anaconda (Mac OS X)
+-            '/opt/local/lib/libgeos_c.dylib',  # MacPorts
+-            '/usr/local/lib/libgeos_c.dylib',  # homebrew (Mac OS X)
+-            os.path.join(sys.prefix, "lib", "libgeos_c.so"), # anaconda (Linux)
+-            'libgeos_c.so.1',
+-            'libgeos_c.so'])
++            '@libgeos_c@'])
+ 
+ 
+ def test_suite():

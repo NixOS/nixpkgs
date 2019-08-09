@@ -1,26 +1,26 @@
-{ stdenv, meson, ninja, gettext, fetchurl, gdk_pixbuf, tracker
+{ stdenv, meson, ninja, gettext, fetchurl, gdk-pixbuf, tracker
 , libxml2, python3, libnotify, wrapGAppsHook, libmediaart
 , gobject-introspection, gnome-online-accounts, grilo, grilo-plugins
 , pkgconfig, gtk3, glib, desktop-file-utils, appstream-glib
-, itstool, gnome3, gst_all_1, libdazzle, libsoup }:
+, itstool, gnome3, gst_all_1, libdazzle, libsoup, gsettings-desktop-schemas }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "3.30.2";
+  version = "3.32.2";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1d9gd9rqy71hibfrz4zglimvgv6yn1pw22cnrn7pbdz6k4yq209d";
+    sha256 = "0cn7l1d3ayima1w3bxpshijabd7ibhnvqxv2mpvffzizk04ln6hk";
   };
 
   nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
   buildInputs = with gst_all_1; [
     gtk3 glib libmediaart gnome-online-accounts gobject-introspection
-    gdk_pixbuf gnome3.adwaita-icon-theme python3
+    gdk-pixbuf gnome3.adwaita-icon-theme python3
     grilo grilo-plugins libnotify libdazzle libsoup
-    gnome3.gsettings-desktop-schemas tracker
+    gsettings-desktop-schemas tracker
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
   ];
   propagatedBuildInputs = with python3.pkgs; [ pycairo dbus-python pygobject3 ];

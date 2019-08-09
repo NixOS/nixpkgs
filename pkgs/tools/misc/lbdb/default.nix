@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, perlPackages, finger_bsd, makeWrapper
+{ stdenv, fetchurl, fetchpatch, perl, perlPackages, finger_bsd, makeWrapper
 , abook ? null
 , gnupg ? null
 , goobook ? null
@@ -32,7 +32,14 @@ stdenv.mkDerivation {
     ++ optional   (khard != null) "--with-khard"
     ++ optional      (mu != null) "--with-mu";
 
-  patches = [ ./add-methods-to-rc.patch ];
+  patches = [ ./add-methods-to-rc.patch
+    # fix undefined exec_prefix. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/RolandRosenfeld/lbdb/commit/60b7bae255011f59212d96adfbded459d6a27129.patch";
+      sha256 = "129zg086glmlalrg395jq8ljcp787dl3rxjf9v7apsd8mqfdkl2v";
+      excludes = [ "debian/changelog" ];
+    })
+  ];
   postFixup = "wrapProgram $out/lib/mutt_ldap_query --prefix PERL5LIB : "
     + "${AuthenSASL}/${perl.libPrefix}"
     + ":${ConvertASN1}/${perl.libPrefix}"
@@ -43,6 +50,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     platforms = platforms.all;
     description = "The Little Brother's Database";
-    maintainers = [ maintainers.kaiha ];
+    maintainers = [ maintainers.kaiha maintainers.bfortz ];
   };
 }

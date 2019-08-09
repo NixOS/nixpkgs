@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip rec {
   name = "undefined-medium-1.0";
@@ -10,9 +10,9 @@ fetchzip rec {
     unzip -j $downloadedFile ${name}/fonts/otf/\*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256 = "0v3p1g9f1c0d6b9lhrvm1grzivm7ddk7dvn96zl5hdzr2y60y1rw";
+  sha256 = "1wa04jzbffshwcxm705yb5wja8wakn8j7fvim1mlih2z1sqw0njk";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://undefined-medium.com/;
     description = "A pixel grid-based monospace typeface";
     longDescription = ''

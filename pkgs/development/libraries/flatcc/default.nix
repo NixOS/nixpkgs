@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flatcc";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "dvidelabs";
     repo = "flatcc";
     rev = "v${version}";
-    sha256 = "sha256:0cb6s9q1cbigss1q7dra0ix2a0iqlh2xxwncbrnmqv17h4lwvglr";
+    sha256 = "06wnwvnkhw1rk0y3nncjmcyjy3bgpw8i9xqd5gpbhbrm38718cjk";
   };
 
   nativeBuildInputs = [ cmake ];

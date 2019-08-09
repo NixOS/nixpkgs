@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     inherit (cfg) sha256;
   };
 
-  patches = [ ./imagetragick.patch ] ++ cfg.patches;
+  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -100,7 +100,6 @@ stdenv.mkDerivation rec {
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ the-kenny ];
-    broken = ghostscript != null; # https://github.com/NixOS/nixpkgs/issues/55118
     license = licenses.asl20;
   };
 }

@@ -9,19 +9,23 @@
 , json_c
 , pkgconfig
 , file
+, protobufc
+, libiconv
 }:
 stdenv.mkDerivation rec {
   name = "postgis-${version}";
-  version = "2.5.1";
+  version = "2.5.2";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "14bsh4kflp4bxilypkpmhrpldknc9s9vgiax8yfhxbisyib704zv";
+    sha256 = "0pnva72f2w4jcgnl1y7nw5rdly4ipx3hji4c9yc9s0hna1n2ijxn";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj perl gdal json_c pkgconfig ];
+  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
+                ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [ perl pkgconfig ];
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
@@ -29,9 +33,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-    configureFlags="--datadir=$out/share --datarootdir=$out/share --bindir=$out/bin --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
+    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
 
-    makeFlags="PERL=${perl}/bin/perl datadir=$out/share pkglibdir=$out/lib bindir=$out/bin"
+    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin"
   '';
   postConfigure = ''
     sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
@@ -41,14 +45,18 @@ stdenv.mkDerivation rec {
     sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
             " \
         "raster/scripts/python/Makefile";
-  '';
-
-  preInstall = ''
     mkdir -p $out/bin
+
+    # postgis' build system assumes it is being installed to the same place as postgresql, and looks
+    # for the postgres binary relative to $PREFIX. We gently support this system using an illusion.
+    ln -s ${postgresql}/bin/postgres $out/bin/postgres
   '';
 
   # create aliases for all commands adding version information
   postInstall = ''
+    # Teardown the illusory postgres used for building; see postConfigure.
+    rm $out/bin/postgres
+
     for prog in $out/bin/*; do # */
       ln -s $prog $prog-${version}
     done
@@ -59,9 +67,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Geographic Objects for PostgreSQL";
-    homepage = http://postgis.refractions.net;
+    homepage = https://postgis.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    inherit (postgresql.meta) platforms;
   };
 }

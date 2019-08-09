@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ guile cairo expat ];
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = false; # Cannot find unit-test module from guile-lib
   checkInputs = [ guile-lib ];
 
   meta = with stdenv.lib; {

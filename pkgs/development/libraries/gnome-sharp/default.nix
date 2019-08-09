@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 mono gtk-sharp-2_0 ]
   ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui ]);
 
+  patches = [ ./fix-mono-path.patch ];
+
   preConfigure = ''
     ./bootstrap-${lib.versions.majorMinor version}
   '';
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.mono-project.com/docs/gui/gtksharp/;
+    homepage = https://www.mono-project.com/docs/gui/gtksharp/;
     description = "A .NET language binding for assorted GNOME libraries";
     license = licenses.lgpl21;
     platforms = platforms.linux;

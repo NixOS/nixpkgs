@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
-, pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false
+, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
 , buildPackages, pruneLibtoolFiles }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cyrus-sasl-${version}${optionalString (kerberos == null) "-without-kerberos"}";
+  name = "cyrus-sasl-${version}";
   version = "2.1.27";
 
   src = fetchurl {

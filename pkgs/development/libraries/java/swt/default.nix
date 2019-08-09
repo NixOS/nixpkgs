@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, unzip, jdk, pkgconfig, gtk2
 , libXt, libXtst, libXi, libGLU_combined, webkitgtk, libsoup, xorg
-, pango, gdk_pixbuf, glib
+, pango, gdk-pixbuf, glib
 }:
 
 let
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip pkgconfig ];
   buildInputs = [ jdk gtk2 libXt libXtst libXi libGLU_combined webkitgtk libsoup ];
 
-  NIX_LFLAGS = (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk_pixbuf glib ]) ++
+  NIX_LFLAGS = (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) ++
     [ "-lX11" "-lpango-1.0" "-lgdk_pixbuf-2.0" "-lglib-2.0" ];
 
   buildPhase = ''

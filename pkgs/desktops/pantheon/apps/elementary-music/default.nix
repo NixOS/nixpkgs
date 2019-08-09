@@ -1,27 +1,49 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, ninja, vala, desktop-file-utils, libxml2, gtk3, granite
-, python3, libgee, clutter-gtk, json-glib, libgda, libgpod
-, libnotify, libpeas, libsoup, zeitgeist, gst_all_1, taglib
-, libdbusmenu, libsignon-glib, libaccounts-glib
-, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, python3
+, libgee
+, clutter-gtk
+, json-glib
+, libgda
+, libgpod
+, libnotify
+, libpeas
+, libsoup
+, zeitgeist
+, gst_all_1
+, taglib
+, libdbusmenu
+, libsignon-glib
+, libaccounts-glib
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "music";
-  version = "5.0.3";
+  pname = "elementary-music";
+  version = "5.0.4";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "music";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "0qbny4484kr7lihg54rbhfwah9k43iivk3rivfvn7i5w66vn5spl";
+    sha256 = "02qjsf9xnfh043xbls9mll2r1wcdvclw60x8wysv12rhbm90gwvp";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
@@ -51,9 +73,9 @@ stdenv.mkDerivation rec {
     libgda
     libgee
     libgpod
-    libsignon-glib
     libnotify
     libpeas
+    libsignon-glib
     libsoup
     taglib
     zeitgeist

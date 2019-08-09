@@ -1,49 +1,65 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, vala, gnome3,
-  bamf, clutter-gtk, pantheon, libcanberra-gtk3, libwnck3,
-  deepin-mutter, deepin-wallpapers, deepin-desktop-schemas,
-  hicolor-icon-theme, deepin }:
+  dbus, bamf, clutter-gtk, pantheon, libgee, libcanberra-gtk3,
+  libwnck3, deepin-menu, deepin-mutter, deepin-wallpapers,
+  deepin-desktop-schemas, wrapGAppsHook, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-wm";
-  version = "1.9.34";
+  version = "1.9.38";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "13hydcalifdc6723k8l4pk905y9sxic5x1fqww0fyx7j6b3hm13f";
+    sha256 = "1qhdnv4x78f0gkr94q0j8x029fk9ji4m9jdipgrdm83pnahib80g";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
     libtool
-    gnome3.gnome-common
     vala
+    gnome3.gnome-common
+    wrapGAppsHook
+    deepin.setupHook
   ];
 
   buildInputs = [
-    gnome3.gnome-desktop
-    gnome3.libgee
     bamf
     clutter-gtk
-    pantheon.granite
-    libcanberra-gtk3
-    libwnck3
+    dbus
+    deepin-desktop-schemas
+    deepin-menu
     deepin-mutter
     deepin-wallpapers
-    deepin-desktop-schemas
-    hicolor-icon-theme
+    gnome3.gnome-desktop
+    libcanberra-gtk3
+    libgee
+    libwnck3
+    pantheon.granite
   ];
 
   postPatch = ''
-    sed -i src/Background/BackgroundSource.vala \
-      -e 's;/usr/share/backgrounds/default_background.jpg;${deepin-wallpapers}/share/backgrounds/deepin/desktop.jpg;'
+    searchHardCodedPaths  # debugging
+
+    # fix background path
+    fixPath ${deepin-wallpapers} /usr/share/backgrounds src/Background/BackgroundSource.vala
+    sed -i 's|default_background.jpg|deepin/desktop.jpg|' src/Background/BackgroundSource.vala
+
+    # fix executable paths in desktop files
+    sed -i -e "s,Exec=dbus-send,Exec=${dbus}/bin/dbus-send," data/gala-multitaskingview.desktop.in
+    sed -i -e "s,Exec=deepin-wm,Exec=$out/bin/deepin-wm," data/gala.desktop
   '';
 
+  NIX_CFLAGS_COMPILE = "-DWNCK_I_KNOW_THIS_IS_UNSTABLE";
+
   preConfigure = ''
-    ./autogen.sh
+    NOCONFIGURE=1 ./autogen.sh
+  '';
+
+  postFixup = ''
+    searchHardCodedPaths $out  # debugging
   '';
 
   enableParallelBuilding = true;

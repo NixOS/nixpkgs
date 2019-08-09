@@ -1,4 +1,4 @@
-{ stdenv, buildPackages
+{ stdenv, pkgsBuildBuild, buildPackages
 , fetchurl, makeWrapper, gawk, pkgconfig
 , libtool, readline, gmp
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-                           buildPackages.buildPackages.guile_1_8;
+                           pkgsBuildBuild.guile_1_8;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool ];
 

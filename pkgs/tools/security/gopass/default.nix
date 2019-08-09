@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, wl-clipboard, makeWrapper }:
 
 buildGoPackage rec {
-  version = "1.8.4";
-  name = "gopass-${version}";
+  pname = "gopass";
+  version = "1.8.6";
 
   goPackagePath = "github.com/gopasspw/gopass";
 
@@ -10,16 +10,16 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     owner = "gopasspw";
-    repo = "gopass";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1gw16k09vwarh5qz118s7w2j090phdrrgd2h1q52pv93jpi3br7n";
+    sha256 = "0v3sx9hb03bdn4rvsv2r0jzif6p1rx47hrkpsbnwva31k396mck2";
   };
 
-  wrapperPath = with stdenv.lib; makeBinPath ([
+  wrapperPath = stdenv.lib.makeBinPath ([
     git
     gnupg
     xclip
-  ]);
+  ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard);
 
   postInstall = ''
     mkdir -p \

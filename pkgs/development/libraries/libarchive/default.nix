@@ -1,5 +1,5 @@
 {
-  fetchurl, fetchpatch, stdenv, pkgconfig,
+  fetchFromGitHub, stdenv, pkgconfig, autoreconfHook,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
 
   # Optional but increases closure only negligibly.
@@ -10,16 +10,18 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   name = "libarchive-${version}";
-  version = "3.3.3";
+  version = "3.4.0";
 
-  src = fetchurl {
-    url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "0bhfncid058p7n1n8v29l6wxm3mhdqfassscihbsxfwz3iwb2zms";
+  src = fetchFromGitHub {
+    owner = "libarchive";
+    repo = "libarchive";
+    rev = "v${version}";
+    sha256 = "063f5bw9qmksj3iy6094qxwawx174cx00q1fg6l698wqw7xn8ihq";
   };
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ sharutils zlib bzip2 openssl xz lzo ]
     ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
     ++ stdenv.lib.optional xarSupport libxml2;

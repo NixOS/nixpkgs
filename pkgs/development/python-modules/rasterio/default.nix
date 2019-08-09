@@ -1,23 +1,23 @@
-{ buildPythonPackage, lib, fetchFromGitHub
+{ buildPythonPackage, lib, fetchFromGitHub, isPy3k
 , cython
 , numpy, affine, attrs, cligj, click-plugins, snuggs, gdal
-, pytest, pytestcov, packaging, hypothesis, boto3
+, pytest, pytestcov, packaging, hypothesis, boto3, mock
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.0.18";
+  version = "1.0.24";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "rasterio";
     rev = version;
-    sha256 = "05miivbn2c5slc5nn7fpdn1da42qwzg4z046i71f4r70bc49vsj9";
+    sha256 = "0k5y4h0c4cjn1xl5fayh3a001kl42vvrhjyhp5r2fwn22z56a02p";
   };
 
-  checkInputs = [ boto3 pytest pytestcov packaging hypothesis ];
-  buildInputs = [ cython ];
+  checkInputs = [ boto3 pytest pytestcov packaging hypothesis ] ++ lib.optional (!isPy3k) mock;
+  nativeBuildInputs = [ cython gdal ];
   propagatedBuildInputs = [ gdal numpy attrs affine cligj click-plugins snuggs ];
 
   meta = with lib; {

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, v8, perl, postgresql }:
 
 stdenv.mkDerivation rec {
-  name = "plv8-${version}";
-  version = "2.3.8";
+  pname = "plv8";
+  version = "2.3.12";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ v8 postgresql ];
@@ -11,26 +11,25 @@ stdenv.mkDerivation rec {
     owner = "plv8";
     repo = "plv8";
     rev = "v${version}";
-    sha256 = "0hrmn1zzzdf52zwldg6axv57p0f3b279l9s8lbpijcv60fqrzx16";
+    sha256 = "1yi1ibiibvd0x4z5dm698w32ljrj3yr4j25jm1zkgkwd4ii8y644";
   };
 
-  makeFlags = [ "--makefile=Makefile.shared" ];
+  makefile = "Makefile.shared";
+
+  buildFlags = [ "all" ];
 
   preConfigure = ''
     patchShebangs ./generate_upgrade.sh
   '';
 
-  buildPhase = "make -f Makefile.shared all";
-
   installPhase = ''
-    mkdir -p $out/bin
     install -D plv8*.so                                        -t $out/lib
-    install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/extension
+    install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {
-    description = "PL/v8 - A Procedural Language in JavaScript powered by V8";
-    homepage = https://pgxn.org/dist/plv8/;
+    description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
+    homepage = "https://plv8.github.io/";
     maintainers = with maintainers; [ volth ];
     platforms = platforms.linux;
     license = licenses.postgresql;

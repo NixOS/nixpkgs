@@ -1,18 +1,18 @@
 { stdenv, fetchurl, autoreconfHook, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43, docbook_xsl, which, libxml2
 , gobject-introspection, gtk-doc, intltool, libxslt, pkgconfig, xmlto, appstream-glib, substituteAll, glibcLocales, yacc, xdg-dbus-proxy, p11-kit
-, bubblewrap, bzip2, dbus, glib, gpgme, json-glib, libarchive, libcap, libseccomp, coreutils, gettext, python2, hicolor-icon-theme
-, libsoup, lzma, ostree, polkit, python3, systemd, xorg, valgrind, glib-networking, wrapGAppsHook, gnome3 }:
+, bubblewrap, bzip2, dbus, glib, gpgme, json-glib, libarchive, libcap, libseccomp, coreutils, gettext, hicolor-icon-theme
+, libsoup, lzma, ostree, polkit, python3, systemd, xorg, valgrind, glib-networking, wrapGAppsHook, gnome3, gsettings-desktop-schemas, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.2.3";
+  version = "1.2.4";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "man" "doc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0i0dn3w3545lvmjlzqj3j70lk8yrq64r9frp1rk6a161gwq20ixv";
+    sha256 = "1qf3ys84fzv11z6f6li59rxjdjbyrv7cyi9539k73r9i9pckjr8v";
   };
 
   patches = [
@@ -25,9 +25,15 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       p11 = p11-kit;
     })
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      inherit (builtins) storeDir;
+    })
     # patch taken from gtk_doc
     ./respect-xml-catalog-files-var.patch
     ./use-flatpak-from-path.patch
+    ./unset-env-vars.patch
+    ./validate-icon-pixbuf.patch
   ];
 
   nativeBuildInputs = [
@@ -38,7 +44,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bubblewrap bzip2 dbus gnome3.dconf glib gpgme json-glib libarchive libcap libseccomp
     libsoup lzma ostree polkit python3 systemd xorg.libXau
-    gnome3.gsettings-desktop-schemas glib-networking
+    gsettings-desktop-schemas glib-networking
+    librsvg # for flatpak-validate-icon
   ];
 
   checkInputs = [ valgrind ];

@@ -56,5 +56,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ flosse ];
     platforms = stdenv.lib.platforms.unix;
+    # TODO: The software is deprecated and the build is broken, see:
+    # https://github.com/NixOS/nixpkgs/pull/63260#issuecomment-503506487
+    broken = true;
   };
 }

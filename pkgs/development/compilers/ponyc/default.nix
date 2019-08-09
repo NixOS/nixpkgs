@@ -2,14 +2,14 @@
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation ( rec {
-  name = "ponyc-${version}";
-  version = "0.27.0";
+  pname = "ponyc";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "ponylang";
-    repo = "ponyc";
+    repo = pname;
     rev = version;
-    sha256 = "11vdfvv9xirfi92y7zza9pqimfx33w74vw7rg5n7l60qqc8y2cla";
+    sha256 = "1yi41a03039yz9rf34l9iq8haf5vb6gwzplr04rahfhd8xsd38gq";
   };
 
   buildInputs = [ llvm makeWrapper which ];

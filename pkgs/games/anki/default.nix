@@ -1,15 +1,13 @@
 { stdenv
 , buildPythonApplication
-, callPackage
 , lib
 , python
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , lame
 , mplayer
 , libpulseaudio
-, pyqt5
+, pyqtwebengine
 , decorator
 , beautifulsoup4
 , sqlalchemy
@@ -33,10 +31,10 @@ let
     # when updating, also update rev-manual to a recent version of
     # https://github.com/dae/ankidocs
     # The manual is distributed independently of the software.
-    version = "2.1.9";
-    sha256-pkg = "0p4admjxs0gwc54hby9kc1isg99ghxd5kpy08w9hrk3mcyq74z3i";
-    rev-manual = "c2c443bf991089534b0193029f6ee34908124e80";
-    sha256-manual = "1jwm5zrydc6qis7zslfqj56d083kpbzbl51n0x4czhskm9pjh7qd";
+    version = "2.1.11";
+    sha256-pkg = "0rcjam7f017yg0fx5apdc309lsx59lfw33nikczz7hrw6gby6z3q";
+    rev-manual = "f933104fecd8a83c33494bdb2b59817a3318202f";
+    sha256-manual = "12j4x1bh8x6yinym4d1ard32vfl22iq2wz1lfwz6s3ljhggkc52h";
 
     manual = stdenv.mkDerivation {
       name = "anki-manual-${version}";
@@ -85,7 +83,7 @@ buildPythonApplication rec {
     outputs = [ "out" "doc" "man" ];
 
     propagatedBuildInputs = [
-      pyqt5 sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
+      pyqtwebengine sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
       markdown
     ]
       ++ lib.optional plotsSupport matplotlib
@@ -187,6 +185,6 @@ buildPythonApplication rec {
       license = licenses.agpl3Plus;
       broken = stdenv.hostPlatform.isAarch64;
       platforms = platforms.mesaPlatforms;
-      maintainers = with maintainers; [ the-kenny Profpatsch ];
+      maintainers = with maintainers; [ the-kenny Profpatsch enzime ];
     };
 }

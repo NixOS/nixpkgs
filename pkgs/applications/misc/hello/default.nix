@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
       It is fully customizable.
     '';
     homepage = https://www.gnu.org/software/hello/manual/;
+    changelog = "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;

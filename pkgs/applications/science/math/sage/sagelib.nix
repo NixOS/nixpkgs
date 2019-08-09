@@ -1,4 +1,5 @@
 { sage-src
+, env-locations
 , perl
 , buildPythonPackage
 , arb
@@ -47,6 +48,8 @@
 , jupyter_core
 , libhomfly
 , libbraiding
+, gmpy2
+, pplpy
 }:
 
 # This is the core sage python package. Everything else is just wrappers gluing
@@ -115,14 +118,19 @@ buildPythonPackage rec {
     cysignals
     libhomfly
     libbraiding
+    gmpy2
+    pplpy
   ];
 
   buildPhase = ''
     export SAGE_ROOT="$PWD"
     export SAGE_LOCAL="$SAGE_ROOT"
     export SAGE_SHARE="$SAGE_LOCAL/share"
-    export JUPYTER_PATH="$SAGE_LOCAL/jupyter"
 
+    # set locations of dependencies (needed for nbextensions like threejs)
+    . ${env-locations}/sage-env-locations
+
+    export JUPYTER_PATH="$SAGE_LOCAL/jupyter"
     export PATH="$SAGE_ROOT/build/bin:$SAGE_ROOT/src/bin:$PATH"
 
     export SAGE_NUM_THREADS="$NIX_BUILD_CORES"

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals enableGDML [ xercesc ]
     ++ stdenv.lib.optionals enableXM [ motif ]
     ++ stdenv.lib.optionals enableQT [ qtbase ]
-    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt ];
+    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt motif ];
 
   postFixup = ''
     # Don't try to export invalid environment variables.

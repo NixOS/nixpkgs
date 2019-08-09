@@ -17,7 +17,7 @@ let
   defaultDir = "/var/lib/${user}";
   home = if useCustomDir then cfg.storageDir else defaultDir;
 
-  useCustomDir = !(builtins.isNull cfg.storageDir);
+  useCustomDir = cfg.storageDir != null;
 
   socket = "/run/phpfpm/${dirName}.sock";
 
@@ -155,6 +155,7 @@ in {
           default = "zmpass";
           description = ''
             Username for accessing the database.
+            Not used if <literal>createLocally</literal> is set.
           '';
         };
       };
@@ -189,6 +190,12 @@ in {
 
   config = lib.mkIf cfg.enable {
 
+    assertions = [
+      { assertion = cfg.database.createLocally -> cfg.database.username == user;
+        message = "services.zoneminder.database.username must be set to ${user} if services.zoneminder.database.createLocally is set true";
+      }
+    ];
+
     environment.etc = {
       "zoneminder/60-defaults.conf".source = defaultsFile;
       "zoneminder/80-nixos.conf".source    = configFile;
@@ -204,13 +211,12 @@ in {
       };
 
       mysql = lib.mkIf cfg.database.createLocally {
+        enable = true;
+        package = lib.mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
           name = cfg.database.username;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-          initialDatabases = [
-            { inherit (cfg.database) name; schema = "${pkg}/share/zoneminder/db/zm_create.sql"; }
-          ];
         }];
       };
 
@@ -228,6 +234,8 @@ in {
 
               location / {
                 try_files $uri $uri/ /index.php?$args =404;
+
+                rewrite ^/skins/.*/css/fonts/(.*)$ /fonts/$1 permanent;
 
                 location ~ /api/(css|img|ico) {
                   rewrite ^/api(.+)$ /api/app/webroot/$1 break;
@@ -254,7 +262,7 @@ in {
                   fastcgi_pass ${fcgi.socketType}:${fcgi.socketAddress};
                 }
 
-                location /cache {
+                location /cache/ {
                   alias /var/cache/${dirName};
                 }
 
@@ -313,11 +321,16 @@ in {
           procps
           psmisc
         ];
-        after = [ "mysql.service" "nginx.service" ];
+        after = [ "nginx.service" ] ++ lib.optional cfg.database.createLocally "mysql.service";
         wantedBy = [ "multi-user.target" ];
         restartTriggers = [ defaultsFile configFile ];
-        preStart = lib.mkIf useCustomDir ''
+        preStart = lib.optionalString useCustomDir ''
           install -dm775 -o ${user} -g ${group} ${cfg.storageDir}/{${lib.concatStringsSep "," libDirs}}
+        '' + lib.optionalString cfg.database.createLocally ''
+          if ! test -e "/var/lib/${dirName}/db-created"; then
+            ${config.services.mysql.package}/bin/mysql < ${pkg}/share/zoneminder/db/zm_create.sql
+            touch "/var/lib/${dirName}/db-created"
+          fi
         '';
         serviceConfig = {
           User = user;

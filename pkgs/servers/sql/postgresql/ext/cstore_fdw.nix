@@ -18,15 +18,15 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{lib,share/extension}
 
     cp *.so      $out/lib
-    cp *.sql     $out/share/extension
-    cp *.control $out/share/extension
+    cp *.sql     $out/share/postgresql/extension
+    cp *.control $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {
     description = "Columnar storage for PostgreSQL";
     homepage    = https://www.citusdata.com/;
     maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = platforms.linux;
+    platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;
   };
 }

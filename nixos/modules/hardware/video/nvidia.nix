@@ -1,6 +1,6 @@
 # This module provides the proprietary NVIDIA X11 / OpenGL drivers.
 
-{ stdenv, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -79,6 +79,14 @@ in
       '';
     };
 
+    hardware.nvidia.optimus_prime.allowExternalGpu = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Configure X to allow external NVIDIA GPUs when using optimus.
+      '';
+    };
+
     hardware.nvidia.optimus_prime.nvidiaBusId = lib.mkOption {
       type = lib.types.string;
       default = "";
@@ -130,10 +138,10 @@ in
     services.xserver.drivers = singleton {
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
-      libPath = [ nvidia_x11 ];
       deviceSection = optionalString optimusCfg.enable
         ''
           BusID "${optimusCfg.nvidiaBusId}"
+          ${optionalString optimusCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
         '';
       screenSection =
         ''

@@ -1,9 +1,10 @@
 { stdenv, lib, fetchurl, bash, cpio, autoconf, pkgconfig, file, which, unzip, zip, cups, freetype
-, alsaLib, bootjdk, perl, liberation_ttf, fontconfig, zlib, lndir
+, alsaLib, bootjdk, perl, fontconfig, zlib, lndir
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
+, enableJavaFX ? true, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
@@ -18,16 +19,16 @@ let
     else "amd64";
 
   major = "11";
-  update = ".0.2";
-  build = "9";
-  repover = "jdk-${major}${update}+${build}";
+  update = ".0.3";
+  build = "ga";
+  repover = "jdk-${major}${update}-${build}";
 
   openjdk = stdenv.mkDerivation {
-    name = "openjdk-${major}${update}-b${build}";
+    name = "openjdk-${major}${update}-${build}";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/${repover}.tar.gz";
-      sha256 = "0xc7nksvj72cgw8zrmvlcwaasinpij1j1959398a4nqvzpvpxg30";
+      sha256 = "1v6pam38iidlhz46046h17hf5kki6n3kl302awjcyxzk7bmkvb8x";
     };
 
     nativeBuildInputs = [ pkgconfig ];
@@ -43,6 +44,7 @@ let
       ./fix-java-home-jdk10.patch
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
+      ./increase-javadoc-heap.patch
     ] ++ lib.optionals (!minimal && enableGnome2) [
       ./swing-use-gtk-jdk10.patch
     ];
@@ -68,6 +70,7 @@ let
     ''
     + lib.optionalString (architecture == "amd64") " \"--with-jvm-features=zgc\""
     + lib.optionalString minimal " \"--enable-headless-only\""
+    + lib.optionalString (!minimal && enableJavaFX) " \"--with-import-modules=${openjfx}\""
     + ");"
     # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
     # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716

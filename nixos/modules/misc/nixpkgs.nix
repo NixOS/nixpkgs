@@ -127,13 +127,14 @@ in
       default = [];
       example = literalExample
         ''
-          [ (self: super: {
+          [
+            (self: super: {
               openssh = super.openssh.override {
                 hpnSupport = true;
                 kerberos = self.libkrb5;
               };
-            };
-          ) ]
+            })
+          ]
         '';
       type = types.listOf overlayType;
       description = ''
@@ -195,7 +196,6 @@ in
     system = mkOption {
       type = types.str;
       example = "i686-linux";
-      default = { system = builtins.currentSystem; };
       description = ''
         Specifies the Nix platform type on which NixOS should be built.
         It is better to specify <code>nixpkgs.localSystem</code> instead.

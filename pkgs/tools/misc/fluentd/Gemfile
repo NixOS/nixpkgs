@@ -1,7 +1,6 @@
 source "https://rubygems.org"
 
 gem 'fluentd'
-gem 'fluent-plugin-elasticsearch'
 gem 'fluent-plugin-record-reformer'
 gem 'fluent-plugin-s3'
 gem 'fluent-plugin-kinesis'

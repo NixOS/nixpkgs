@@ -11,6 +11,9 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
+  # To prevent infinite recursion with pytest
+  doCheck = false;
+
   checkPhase = ''
     pytest
   '';

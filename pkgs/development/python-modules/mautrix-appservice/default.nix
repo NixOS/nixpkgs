@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "mautrix-appservice";
-  version = "0.3.8";
+  version = "0.3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5752c6d84bf952698aec500b16542f6d2aacea37efd5be59087b5d9ea38c98f";
+    sha256 = "60192920cff75afdd096eea3a43276e33ec15f4f00bd04d2d1dda616c84f22a5";
   };
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, check, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, check, cmake, pkgconfig
 , libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
 , libXrender, fontconfig, libXext, libXft, libsodium, libopus }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight Tox client";
     homepage = https://github.com/uTox/uTox;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ domenkozar jgeerds ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.all;
   };
 }

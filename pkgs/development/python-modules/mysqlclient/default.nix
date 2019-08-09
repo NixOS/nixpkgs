@@ -4,6 +4,10 @@ buildPythonPackage rec {
   pname = "mysqlclient";
   version = "1.4.2.post1";
 
+  nativeBuildInputs = [
+    mysql.connector-c
+  ];
+
   buildInputs = [
     mysql.connector-c
   ];

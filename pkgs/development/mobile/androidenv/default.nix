@@ -5,7 +5,7 @@
 
 rec {
   composeAndroidPackages = import ./compose-android-packages.nix {
-    inherit (pkgs) stdenv fetchurl requireFile makeWrapper unzip autoPatchelfHook;
+    inherit (pkgs) requireFile autoPatchelfHook;
     inherit pkgs pkgs_i686 licenseAccepted;
   };
 

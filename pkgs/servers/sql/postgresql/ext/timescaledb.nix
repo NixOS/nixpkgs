@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   name = "timescaledb-${version}";
-  version = "1.0.0";
+  version = "1.4.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl ];
@@ -17,35 +17,30 @@ stdenv.mkDerivation rec {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "1359jc0dw8q3f0iipqfadzs8lvri9qa5w59ziz00x1d09ppw2q40";
+    sha256 = "1gbca0fyaxjkwijdp2ah4iykwq5xabz9kkf8ak76sif4lz64y54b";
   };
+
+  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.
   patchPhase = ''
     for x in CMakeLists.txt sql/CMakeLists.txt; do
       substituteInPlace "$x" \
-        --replace 'DESTINATION "''${PG_SHAREDIR}/extension"' "DESTINATION \"$out/share/extension\""
+        --replace 'DESTINATION "''${PG_SHAREDIR}/extension"' "DESTINATION \"$out/share/postgresql/extension\""
     done
 
-    for x in src/CMakeLists.txt src/loader/CMakeLists.txt; do
+    for x in src/CMakeLists.txt src/loader/CMakeLists.txt tsl/src/CMakeLists.txt; do
       substituteInPlace "$x" \
         --replace 'DESTINATION ''${PG_PKGLIBDIR}' "DESTINATION \"$out/lib\""
     done
   '';
 
-  postInstall = ''
-    # work around an annoying bug, by creating $out/bin, so buildEnv doesn't freak out later
-    # see https://github.com/NixOS/nixpkgs/issues/22653
-
-    mkdir -p $out/bin
-  '';
-
   meta = with stdenv.lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage    = https://www.timescale.com/;
-    maintainers = with maintainers; [ volth ];
-    platforms   = platforms.linux;
+    maintainers = with maintainers; [ volth marsam ];
+    platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;
   };
 }

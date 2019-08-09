@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   # The tests are long-running and not that useful
   doCheck = false;
 
-  cargoSha256 = "1rq947s82icl7gdkjynjwz426bpmd96dip2dv2y7p8rg7yz29x0m";
+  cargoSha256 = "03g7155jpg8k1ymk95m8rlhlszkxyq0rv32966n4gk5yziijvk4k";
 
   meta = with stdenv.lib; {
     description = "Terminal-based personal organizer";

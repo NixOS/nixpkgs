@@ -16,11 +16,11 @@ let
     } // (optionalAttrs vhostConfig.enableACME {
       sslCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
       sslCertificateKey = "${acmeDirectory}/${serverName}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${serverName}/full.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
     }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
       sslCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
       sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/full.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -44,19 +44,7 @@ let
     }
   ''));
 
-  awkFormat = builtins.toFile "awkFormat-nginx.awk" ''
-    awk -f
-    {sub(/^[ \t]+/,"");idx=0}
-    /\{/{ctx++;idx=1}
-    /\}/{ctx--}
-    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
-  '';
-
-  configFile = pkgs.runCommand "nginx.conf" {} (''
-    awk -f ${awkFormat} ${pre-configFile} | sed '/^\s*$/d' > $out
-  '');
-
-  pre-configFile = pkgs.writeText "pre-nginx.conf" ''
+  configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log ${cfg.logError};
     daemon off;
@@ -76,7 +64,7 @@ let
       include ${cfg.package}/conf/uwsgi_params;
 
       ${optionalString (cfg.resolver.addresses != []) ''
-        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
+        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
       ''}
       ${upstreamConfig}
 
@@ -201,7 +189,7 @@ let
         listenString = { addr, port, ssl, extraParameters ? [], ... }:
           "listen ${addr}:${toString port} "
           + optionalString ssl "ssl "
-          + optionalString vhost.http2 "http2 "
+          + optionalString (ssl && vhost.http2) "http2 "
           + optionalString vhost.default "default_server "
           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";";
@@ -280,21 +268,11 @@ let
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${optionalString (config.alias != null) "alias ${config.alias};"}
+      ${optionalString (config.return != null) "return ${config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
-  mkBasicAuth = vhostName: authDef: let
-    htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
-      concatStringsSep "\n" (mapAttrsToList (user: password: ''
-        ${user}:{PLAIN}${password}
-      '') authDef)
-    );
-  in ''
-    auth_basic secured;
-    auth_basic_user_file ${htpasswdFile};
-  '';
-
   mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
     concatStringsSep "\n" (mapAttrsToList (user: password: ''
       ${user}:{PLAIN}${password}
@@ -543,6 +521,15 @@ in
               description = ''
                 By default, nginx caches answers using the TTL value of a response.
                 An optional valid parameter allows overriding it
+              '';
+            };
+            ipv6 = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
+                If looking up of IPv6 addresses is not desired, the ipv6=off parameter can be
+                specified.
               '';
             };
           };

@@ -2,13 +2,13 @@
 
 let
   pname = "gnome-color-manager";
-  version = "3.30.0";
+  version = "3.32.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "105bqqq3yvdn5lx94mkl0d450f0l8lmwfjjcwyls1pycmj0vifwh";
+    sha256 = "1vpxa2zjz3lkq9ldjg0fl65db9s6b4kcs8nyaqfz3jygma7ifg3w";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool desktop-file-utils ];

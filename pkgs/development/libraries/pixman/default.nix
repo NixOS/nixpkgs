@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libpng, glib /*just passthru*/ }:
+{ stdenv, fetchurl, pkgconfig, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
   name = "pixman-${version}";
-  version = "0.36.0";
+  version = "0.38.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/${name}.tar.bz2";
-    sha256 = "1p40fygy9lcn6ypkzh14azksi570brcpr3979bjpff8qk76c14px";
+    sha256 = "0l0m48lnmdlmnaxn2021qi5cj366d9fzfjxkqgcj9bs14pxbgaw4";
   };
 
   nativeBuildInputs = [ pkgconfig ];

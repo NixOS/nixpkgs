@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://gource.io/;
+    homepage = https://gource.io/;
     description = "A Software version control visualization tool";
     license = licenses.gpl3Plus;
     longDescription = ''

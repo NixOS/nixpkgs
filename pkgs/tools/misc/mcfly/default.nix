@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/share/mcfly/mcfly.bash
   '';
 
-  cargoSha256 = "0asldrf6s23f9aylk9f8zimmaskgqv3vkdhfnrd26zl9axm0a0ap";
+  cargoSha256 = "1bf65kagvhsi6lg8187ihi5j45hkq9d8v6j7rzmmfhngdzvcfr69";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/cantino/mcfly;

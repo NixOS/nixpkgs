@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, automake, autoconf
+{ stdenv, lib, fetchFromGitHub, pkgconfig, automake, autoconf
 , zlib, boost, openssl, libtool, python, libiconv, geoip, ncurses
 }:
 

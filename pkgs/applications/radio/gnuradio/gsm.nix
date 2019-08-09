@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
-, makeWrapper, cppunit, libosmocore, gnuradio-osmosdr
+, makeWrapper, cppunit, libosmocore, gr-osmosdr
 , pythonSupport ? true, python, swig
 }:
 
 assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
-  name = "gnuradio-gsm-${version}";
+  name = "gr-gsm-${version}";
   version = "2016-08-25";
 
   src = fetchFromGitHub {
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake boost gnuradio makeWrapper cppunit libosmocore gnuradio-osmosdr
+    cmake boost gnuradio makeWrapper cppunit libosmocore gr-osmosdr
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''
     for prog in "$out"/bin/*; do
-        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:${gnuradio-osmosdr}/lib/${python.libPrefix}/site-packages:$(toPythonPath "$out")
+        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:${gr-osmosdr}/lib/${python.libPrefix}/site-packages:$(toPythonPath "$out")
     done
   '';
 

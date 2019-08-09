@@ -1,25 +1,49 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, gettext, vala
-, python3, desktop-file-utils, libcanberra, gtk3, libgee, granite, libnotify
-, libunity, pango, plank, bamf, sqlite, libdbusmenu-gtk3, zeitgeist, glib-networking
-, elementary-icon-theme, gobject-introspection, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, gettext
+, vala
+, python3
+, desktop-file-utils
+, libcanberra
+, gtk3
+, libgee
+, granite
+, libnotify
+, libunity
+, pango
+, plank
+, bamf
+, sqlite
+, libdbusmenu-gtk3
+, zeitgeist
+, glib-networking
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "files";
-  version = "4.1.5";
+  pname = "elementary-files";
+  version = "4.1.9";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "files";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "0z0pisg7py2k6i31v18z5fgpj8x64m1s5clfq4vbbjrcjwx6dcx5";
+    sha256 = "12p1li9a7kqdlgkq20svaly5kr661ww93qngaiic6zv1bdw2bpmv";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
@@ -27,7 +51,6 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     gettext
     glib-networking
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -58,7 +81,8 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
 
-    substituteInPlace filechooser-module/FileChooserDialog.vala --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
+    substituteInPlace filechooser-module/FileChooserDialog.vala \
+      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
   '';
 
   meta = with stdenv.lib; {

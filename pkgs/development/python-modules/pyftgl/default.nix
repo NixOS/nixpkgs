@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub
 , boost, freetype, ftgl, libGLU_combined
 , python
 }:

@@ -177,7 +177,7 @@ let
       folder = mkOption {
         type = types.str;
         default = "";
-        description = "Add dashboards to the speciied folder";
+        description = "Add dashboards to the specified folder";
       };
       type = mkOption {
         type = types.str;
@@ -552,6 +552,8 @@ in {
       description = "Grafana user";
       home = cfg.dataDir;
       createHome = true;
+      group = "grafana";
     };
+    users.groups.grafana = {};
   };
 }

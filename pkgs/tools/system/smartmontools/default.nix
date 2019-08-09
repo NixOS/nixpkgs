@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook
+{ stdenv, fetchurl, autoreconfHook
 , IOKit ? null , ApplicationServices ? null }:
 
 let

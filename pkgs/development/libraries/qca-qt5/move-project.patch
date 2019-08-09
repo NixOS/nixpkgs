@@ -1,19 +1,17 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 453fd8a..5f6ee11 100644
+index 2f2b5d0..971dee3 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -6,13 +6,13 @@ if(NOT CMAKE_INSTALL_PREFIX)
+@@ -6,10 +6,11 @@ if(NOT CMAKE_INSTALL_PREFIX)
    unset(CMAKE_INSTALL_PREFIX CACHE)
  endif(NOT CMAKE_INSTALL_PREFIX)
-
+ 
 -project(qca)
-
- if(NOT APPLE)
-   cmake_minimum_required(VERSION 2.8.12)
- else()
-   cmake_minimum_required(VERSION 3.0)
- endif()
+ 
+ cmake_minimum_required(VERSION 3.4)
+ 
 +project(qca)
-
++
  set(QCA_LIB_MAJOR_VERSION "2")
- set(QCA_LIB_MINOR_VERSION "1")
+ set(QCA_LIB_MINOR_VERSION "2")
+ set(QCA_LIB_PATCH_VERSION "1")

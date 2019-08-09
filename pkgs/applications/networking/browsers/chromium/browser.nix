@@ -38,6 +38,25 @@ mkChromiumDerivation (base: rec {
       mkdir -vp "$logo_output_path"
       cp -v "$icon_file" "$logo_output_path/$packageName.png"
     done
+
+    # Install Desktop Entry
+    install -D chrome/installer/linux/common/desktop.template \
+      $out/share/applications/chromium-browser.desktop
+
+    substituteInPlace $out/share/applications/chromium-browser.desktop \
+      --replace "@@MENUNAME@@" "Chromium" \
+      --replace "@@PACKAGE@@" "chromium" \
+      --replace "Exec=/usr/bin/@@USR_BIN_SYMLINK_NAME@@" "Exec=chromium"
+
+    # Append more mime types to the end
+    sed -i '/^MimeType=/ s,$,x-scheme-handler/webcal;x-scheme-handler/mailto;x-scheme-handler/about;x-scheme-handler/unknown,' \
+      $out/share/applications/chromium-browser.desktop
+
+    # See https://github.com/NixOS/nixpkgs/issues/12433
+    sed -i \
+      -e '/\[Desktop Entry\]/a\' \
+      -e 'StartupWMClass=chromium-browser' \
+      $out/share/applications/chromium-browser.desktop
   '';
 
   passthru = { inherit sandboxExecutableName; };
@@ -47,7 +66,7 @@ mkChromiumDerivation (base: rec {
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ bendlas ];
+    maintainers = with maintainers; [ bendlas ivan ];
     license = licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];

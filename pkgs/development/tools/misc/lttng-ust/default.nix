@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   name = "lttng-ust-${version}";
-  version = "2.10.3";
+  version = "2.10.4";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-ust/${name}.tar.bz2";
-    sha256 = "0aw580xx6x9hgbxrzil7yqv12j8yvi5d9iibldx3z5jz1pwj114y";
+    sha256 = "0rx9q5r9qcdx3i9i0rx28p33yl52sd6f35qj7qs4li2w42xv9mbm";
   };
 
   buildInputs = [ python ];

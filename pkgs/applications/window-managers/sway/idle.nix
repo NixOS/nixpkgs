@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "swayidle-${version}";
-  version = "1.2";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
     rev = version;
-    sha256 = "0b65flajwn2i6k2kdxxgw25w7ikzzmm595f4j5x1wac1rb0yah9w";
+    sha256 = "05qi96j58xqxjiighay1d39rfanxcpn6vlynj23mb5dymxvlaq9n";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig scdoc ];

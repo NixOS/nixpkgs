@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Socket.IO integration for Flask applications";
-    homepage = http://github.com/miguelgrinberg/Flask-SocketIO/;
+    homepage = https://github.com/miguelgrinberg/Flask-SocketIO/;
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

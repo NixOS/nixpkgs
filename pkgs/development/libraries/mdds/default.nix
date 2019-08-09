@@ -1,17 +1,17 @@
 { stdenv, fetchurl, boost }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.1";
-  name = "mdds-${version}";
+  pname = "mdds";
+  version = "1.4.3";
 
   src = fetchurl {
-    url = "https://kohei.us/files/mdds/src/mdds-${version}.tar.bz2";
-    sha256 = "18g511z1lgfxrga2ld9yr95phmyfbd3ymbv4q5g5lyjn4ljcvf6w";
+    url = "https://kohei.us/files/${pname}/src/${pname}-${version}.tar.bz2";
+    sha256 = "10cw6irdm6d15nxnys2v5akp8yz52qijpcjvw0frwq7nz5d3vki5";
   };
 
   postInstall = ''
-   mkdir -p "$out/lib/pkgconfig"
-   cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
+    mkdir -p "$out/lib/pkgconfig"
+    cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
   '';
 
   checkInputs = [ boost ];

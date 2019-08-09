@@ -1,12 +1,12 @@
 { stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
-, file, librsvg, gnome3, gdk_pixbuf, python3
+, file, librsvg, gnome3, gdk-pixbuf, python3
 , telepathy-glib, telepathy-farstream, glibcLocales
 , clutter-gtk, clutter-gst, gst_all_1, cogl, gnome-online-accounts
 , gcr, libsecret, folks, libpulseaudio, telepathy-mission-control
 , telepathy-logger, libnotify, clutter, libsoup, gnutls
 , evolution-data-server, yelp-xsl
 , libcanberra-gtk3, p11-kit, farstream, libtool, shared-mime-info
-, wrapGAppsHook, itstool, libxml2, libxslt, icu, libgee
+, wrapGAppsHook, itstool, libxml2, libxslt, icu, libgee, gsettings-desktop-schemas
 , isocodes, enchant, libchamplain, geoclue2, geocode-glib, cheese, libgudev }:
 
 stdenv.mkDerivation rec {
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
     gtk3 glib webkitgtk icu gnome-online-accounts
     telepathy-glib clutter-gtk clutter-gst cogl
     gst_all_1.gstreamer gst_all_1.gst-plugins-base
-    gcr libsecret libpulseaudio gdk_pixbuf
+    gcr libsecret libpulseaudio gdk-pixbuf
     libnotify clutter libsoup gnutls libgee p11-kit
     libcanberra-gtk3 telepathy-farstream farstream
-    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
     librsvg
     # Spell-checking
     enchant isocodes

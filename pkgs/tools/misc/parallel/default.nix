@@ -1,11 +1,11 @@
 { fetchurl, stdenv, perl, makeWrapper, procps }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20190222";
+  name = "parallel-20190722";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "073bj0ji9liq07j6a7y9i4kxfkv06kvavhh7654f2bgfavfbmcc6";
+    sha256 = "19xwdkmia2dw2hry9sbaq0ln79qy9dsqx11hq2s9dcyvhhqqdl0f";
   };
 
   nativeBuildInputs = [ makeWrapper ];

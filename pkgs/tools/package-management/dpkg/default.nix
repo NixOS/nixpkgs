@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "dpkg-${version}";
-  version = "1.19.5";
+  version = "1.19.7";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "0i1mwqf60n25f89zfvp7fsa4v5rlqxhkhqah35g6j2k1ffcpqcpd";
+    sha256 = "1s4nlaqz4c3p5r85f4il8m21825sfy2s9wgz4ajhl332vzggw9sc";
   };
 
   configureFlags = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ perl zlib bzip2 xz ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper perl ];
 
   postInstall =
     ''

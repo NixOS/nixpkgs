@@ -2,47 +2,45 @@
 , fetchFromGitHub
 , pkgconfig
 , gtk3
+, glib
 , pantheon
-, gnome3
+, libsoup
 , gtksourceview
 , libgee
 , cmake
 , libqalculate
-, gobject-introspection
-, wrapGAppsHook }:
+, cln
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "nasc-${version}";
-  version = "0.5.1";
+  pname = "nasc";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "parnold-x";
-    repo = "nasc";
+    repo = pname;
     rev = version;
-    sha256 = "13y5fnm7g3xgdxmdydlgly73nigh8maqbf9d6c9bpyzxkxq1csy5";
+    sha256 = "036v3dx8yasp19j88lflibqnpfi5d0nk7qkcnr80zn1lvawf4wgn";
   };
-
-  postPatch = ''
-    # libqalculatenasc.so is not installed, and nasc fails to start
-    substituteInPlace libqalculatenasc/CMakeLists.txt --replace SHARED STATIC
-  '';
 
   nativeBuildInputs = [
     cmake
     pantheon.vala
-    gobject-introspection # for setup-hook
     pkgconfig
     wrapGAppsHook
   ];
 
   buildInputs = [
-    pantheon.elementary-icon-theme
+    cln
+    libsoup
+    gtk3
+    glib
     gtksourceview
     libgee
-    gnome3.libsoup
-    pantheon.granite
-    gtk3
     libqalculate
+    pantheon.elementary-icon-theme
+    pantheon.granite
   ];
 
   meta = with stdenv.lib; {

@@ -14,11 +14,6 @@ let
 
       requires = [ "postgresql.service" ];
 
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.location}
-        chown postgres ${cfg.location}
-      '';
-
       script = ''
         umask 0077 # ensure backup is only readable by postgres user
 
@@ -32,7 +27,6 @@ let
 
       serviceConfig = {
         Type = "oneshot";
-        PermissionsStartOnly = "true";
         User = "postgres";
       };
 
@@ -107,6 +101,11 @@ in {
         message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
       }];
     }
+    (mkIf cfg.enable {
+      systemd.tmpfiles.rules = [
+        "d '${cfg.location}' 0700 postgres - - -"
+      ];
+    })
     (mkIf (cfg.enable && cfg.backupAll) {
       systemd.services.postgresqlBackup =
         postgresqlBackupService "all" "${config.services.postgresql.package}/bin/pg_dumpall";

@@ -2,17 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "mate-user-share-${version}";
-  version = "1.20.1";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0v5xilk978zl5443vlxf25z8z1g5sw9xl5sq76gvrmdlz2parfrn";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1krsar1pwa8720qz2dckcg0f6z9mvfk49djdxaz1afvi7blmqd6k";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
     itstool
+    libxml2
     wrapGAppsHook
   ];
 
@@ -21,7 +22,6 @@ stdenv.mkDerivation rec {
     dbus-glib
     libnotify
     libcanberra-gtk3
-    libxml2
     mate.caja
     hicolor-icon-theme
     # Should mod_dnssd and apacheHttpd be runtime dependencies?

@@ -20,14 +20,14 @@
      scripts.
     </para>
 <programlisting>
-      stdenv.mkDerivation {
-        name = "libfoo-1.2.3";
-        # ...
-        buildPhase = ''
-          $CC -o hello hello.c
-        '';
-      }
-    </programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  # ...
+  buildPhase = ''
+    $CC -o hello hello.c
+  '';
+}
+</programlisting>
    </listitem>
    <listitem>
     <para>
@@ -39,12 +39,12 @@
      <function>fixupPhase</function>.
     </para>
 <programlisting>
-      stdenv.mkDerivation {
-        name = "libfoo-1.2.3";
-        # ...
-        makeFlags = stdenv.lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/libfoo.dylib";
-      }
-    </programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  # ...
+  makeFlags = stdenv.lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/libfoo.dylib";
+}
+</programlisting>
    </listitem>
    <listitem>
     <para>
@@ -62,19 +62,19 @@
      <manvolnum>1</manvolnum></citerefentry> manpage.
     </para>
 <programlisting>
-      dyld: Library not loaded: /nix/store/7hnmbscpayxzxrixrgxvvlifzlxdsdir-jq-1.5-lib/lib/libjq.1.dylib
-      Referenced from: /private/tmp/nix-build-jq-1.5.drv-0/jq-1.5/tests/../jq
-      Reason: image not found
-      ./tests/jqtest: line 5: 75779 Abort trap: 6
-    </programlisting>
+dyld: Library not loaded: /nix/store/7hnmbscpayxzxrixrgxvvlifzlxdsdir-jq-1.5-lib/lib/libjq.1.dylib
+Referenced from: /private/tmp/nix-build-jq-1.5.drv-0/jq-1.5/tests/../jq
+Reason: image not found
+./tests/jqtest: line 5: 75779 Abort trap: 6
+</programlisting>
 <programlisting>
-      stdenv.mkDerivation {
-        name = "libfoo-1.2.3";
-        # ...
-        doInstallCheck = true;
-        installCheckTarget = "check";
-      }
-    </programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  # ...
+  doInstallCheck = true;
+  installCheckTarget = "check";
+}
+</programlisting>
    </listitem>
    <listitem>
     <para>
@@ -85,15 +85,15 @@
      on xcode.
     </para>
 <programlisting>
-      stdenv.mkDerivation {
-        name = "libfoo-1.2.3";
-        # ...
-        prePatch = ''
-          substituteInPlace Makefile \
-              --replace '/usr/bin/xcrun clang' clang
-        '';
-      }
-    </programlisting>
+stdenv.mkDerivation {
+  name = "libfoo-1.2.3";
+  # ...
+  prePatch = ''
+    substituteInPlace Makefile \
+        --replace '/usr/bin/xcrun clang' clang
+  '';
+}
+</programlisting>
     <para>
      The package <literal>xcbuild</literal> can be used to build projects that
      really depend on Xcode. However, this replacement is not 100% compatible

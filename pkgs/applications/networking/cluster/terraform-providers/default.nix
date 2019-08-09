@@ -24,7 +24,9 @@ let
     };
 in
   {
+    elasticsearch = callPackage ./elasticsearch {};
     gandi = callPackage ./gandi {};
     ibm = callPackage ./ibm {};
     libvirt = callPackage ./libvirt {};
+    ansible = callPackage ./ansible {};
   } // lib.mapAttrs (n: v: toDrv v) list

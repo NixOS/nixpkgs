@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "telethon-session-sqlalchemy";
-  version = "0.2.9.post1";
+  version = "0.2.15";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbe6a8ca32dd42aa1830b91f08f0458d728dc9eedca0ca27814a34c0b566100e";
+    sha256 = "2ba603d95d5be6ddecd8ecaeaffba00b75b49dd80eb77f6228dd7b793ca67fd2";
   };
 
   propagatedBuildInputs = [

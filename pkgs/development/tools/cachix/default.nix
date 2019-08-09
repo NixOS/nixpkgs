@@ -1,8 +1,6 @@
 { haskellPackages, haskell }:
 
-(haskellPackages.override {
-  overrides = self: super: {
-    cachix = haskell.lib.justStaticExecutables (super.callPackage ./cachix.nix {});
-    cachix-api = super.callPackage ./cachix-api.nix {};
-  };
-}).cachix
+haskell.lib.justStaticExecutables (haskellPackages.extend (self: super: {
+    cachix = haskell.lib.doDistribute (self.cachix_0_2_1 or self.cachix);
+    cachix-api = self.cachix-api_0_2_1 or self.cachix-api;
+})).cachix

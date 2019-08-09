@@ -1,8 +1,6 @@
 { lib, newScope, pkgs, config }:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) system;
-
   liftJaneStreet = self: super: super.janeStreet // super;
 
   mkOcamlPackages = ocaml:
@@ -13,6 +11,8 @@ let
     # Libs
 
     buildOcaml = callPackage ../build-support/ocaml { };
+
+    buildOasisPackage = callPackage ../build-support/ocaml/oasis.nix { };
 
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
 
@@ -53,26 +53,17 @@ let
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
+    base64_2 = callPackage ../development/ocaml-modules/base64/2.0.nix { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
-    bap = callPackage ../development/ocaml-modules/bap {
-      inherit (janeStreet_0_9_0) core_kernel ppx_jane parsexp;
-      ezjsonm = ezjsonm.override {
-        inherit (janeStreet_0_9_0) sexplib;
-        hex = hex.override {
-          cstruct = cstruct.override {
-            inherit (janeStreet_0_9_0) sexplib;
-          };
-        };
-      };
-      uri = uri.override {
-        inherit (janeStreet_0_9_0) ppx_sexp_conv sexplib;
-      };
-    };
+    bap = callPackage ../development/ocaml-modules/bap { };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
+
+    bistro = callPackage ../development/ocaml-modules/bistro { };
 
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
@@ -144,6 +135,7 @@ let
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
     cohttp_p4 = callPackage ../development/ocaml-modules/cohttp/0.19.3.nix {
+      base64 = base64_2;
       lwt = lwt2;
     };
 
@@ -223,9 +215,9 @@ let
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
-    earley = callPackage ../development/ocaml-modules/earley { };
+    dune = callPackage ../development/tools/ocaml/dune { };
 
-    earley_ocaml = callPackage ../development/ocaml-modules/earley_ocaml { };
+    earley = callPackage ../development/ocaml-modules/earley { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
@@ -281,6 +273,8 @@ let
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
 
+    hmap = callPackage ../development/ocaml-modules/hmap { };
+
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
     inotify = callPackage ../development/ocaml-modules/inotify { };
@@ -335,7 +329,10 @@ let
     then callPackage ../development/tools/ocaml/js_of_ocaml/3.0.nix { }
     else js_of_ocaml_2;
 
-    js_of_ocaml_2 = callPackage ../development/tools/ocaml/js_of_ocaml { lwt = lwt2; };
+    js_of_ocaml_2 = callPackage ../development/tools/ocaml/js_of_ocaml {
+      base64 = base64_2;
+      lwt = lwt2;
+    };
 
     js_of_ocaml-camlp4 = callPackage ../development/tools/ocaml/js_of_ocaml/camlp4.nix {};
 
@@ -355,9 +352,7 @@ let
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
-    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 {
-      cairo2 = cairo2.override { enableGtkSupport = false; };
-    };
+    lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
 
     lablgtk3-gtkspell3 = callPackage ../development/ocaml-modules/lablgtk3/gtkspell3.nix { };
 
@@ -380,6 +375,10 @@ let
     };
 
     labltk = callPackage ../development/ocaml-modules/labltk { };
+
+    lacaml = callPackage ../development/ocaml-modules/lacaml { };
+
+    lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { lwt = lwt2; };
     lambdaTerm =
@@ -435,13 +434,17 @@ let
 
     markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
 
+    mdx = callPackage ../development/ocaml-modules/mdx { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
 
-    merlin_extend = callPackage ../development/ocaml-modules/merlin_extend { };
+    merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
 
     mezzo = callPackage ../development/compilers/mezzo { };
+
+    minisat = callPackage ../development/ocaml-modules/minisat { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
@@ -516,11 +519,15 @@ let
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
+    ocaml-sat-solvers = callPackage ../development/ocaml-modules/ocaml-sat-solvers { };
+
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
 
     ocamlsdl= callPackage ../development/ocaml-modules/ocamlsdl { };
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
+
+    syslog = callPackage ../development/ocaml-modules/syslog { };
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
@@ -550,13 +557,13 @@ let
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
-    ojquery = callPackage ../development/ocaml-modules/ojquery {
-      ocaml_lwt = lwt3;
-    };
-
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
+
+    opium = callPackage ../development/ocaml-modules/opium { };
+
+    opium_kernel = callPackage ../development/ocaml-modules/opium_kernel { };
 
     opti = callPackage ../development/ocaml-modules/opti { };
 
@@ -570,7 +577,12 @@ let
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
-    piqi = callPackage ../development/ocaml-modules/piqi { };
+    pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
+
+    piqi = callPackage ../development/ocaml-modules/piqi {
+      base64 = base64_2;
+    };
+
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
@@ -588,6 +600,10 @@ let
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
+
+    secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
+      inherit (pkgs) secp256k1;
+    };
 
     seq = callPackage ../development/ocaml-modules/seq { };
 
@@ -679,6 +695,8 @@ let
 
     ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
 
+    printbox = callPackage ../development/ocaml-modules/printbox { };
+
     process = callPackage ../development/ocaml-modules/process { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
@@ -714,6 +732,10 @@ let
     stog = callPackage ../applications/misc/stog { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
+
+    tcslib = callPackage ../development/ocaml-modules/tcslib { };
+
+    toml = callPackage ../development/ocaml-modules/toml { };
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
 
@@ -788,8 +810,8 @@ let
     janeStreet = import ../development/ocaml-modules/janestreet {
       inherit janePackage ocamlbuild angstrom ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re zarith ppxlib;
-      inherit (pkgs) stdenv openssl;
+      inherit ppx_deriving re ppxlib;
+      inherit (pkgs) openssl;
     };
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
@@ -1055,9 +1077,7 @@ let
       enableX11 = config.unison.enableX11 or true;
     };
 
-    hol_light = callPackage ../applications/science/logic/hol_light {
-      camlp5 = callPackage ../development/tools/ocaml/camlp5 { legacy = true; };
-    };
+    hol_light = callPackage ../applications/science/logic/hol_light { };
 
   })).overrideScope' liftJaneStreet;
 
@@ -1082,7 +1102,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_08 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.08.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_07;
+  ocamlPackages_latest = ocamlPackages_4_08;
 
   ocamlPackages = ocamlPackages_4_06;
 }

@@ -1,4 +1,4 @@
-{ stdenv, python3, glibcLocales, fetchpatch }:
+{ stdenv, python3, glibcLocales }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;

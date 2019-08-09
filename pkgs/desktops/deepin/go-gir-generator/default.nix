@@ -1,25 +1,17 @@
 { stdenv, fetchFromGitHub, pkgconfig, go, gobject-introspection,
-  libgudev, deepin, fetchurl }:
+  libgudev, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "go-gir-generator";
-  version = "1.1.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0grp4ffy3vmlknzmymnxq1spwshff2ylqsw82pj4y2v2fcvnqfvb";
+    sha256 = "1ydzll8zlk897iqcihvv6p046p0rzr4qqz2drmz2nx95njp8n03a";
   };
-
-  patches = [
-    # fix: dde-api build error with gobject-introspection 1.58+
-    (fetchurl {
-      url = https://github.com/linuxdeepin/go-gir-generator/commit/a7ab229201e28d1be727f5021b3588fa4a1acf5f.patch;
-      sha256 = "13ywalwkjg8wwvd0pvmc2rv1h38airyvimdn9jfb5wis9xm48401";
-    })
-  ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -36,8 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "PREFIX=$(out)"
-    "GOCACHE=$TMPDIR/go-cache"
+    "PREFIX=${placeholder ''out''}"
+    "GOCACHE=$(TMPDIR)/go-cache"
   ];
 
   passthru.updateScript = deepin.updateScript { inherit name; };

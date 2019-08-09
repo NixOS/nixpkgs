@@ -112,7 +112,7 @@ rec {
     # Function to call
     f:
     # Argument to check for null before passing it to `f`
-    a: if isNull a then a else f a;
+    a: if a == null then a else f a;
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)

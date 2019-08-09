@@ -9,7 +9,7 @@
 , pcsclite ? null
 , systemd ? null
 , buildServer ? true
-, optimize ? true
+, nocaps ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (pcsclite != null) ''
     substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
       --replace "libpcsclite.so" "${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so"
+  '' + lib.optionalString nocaps ''
+    substituteInPlace "libfreerdp/locale/keyboard_xkbfile.c" \
+      --replace "RDP_SCANCODE_CAPSLOCK" "RDP_SCANCODE_LCONTROL"
   '';
 
   buildInputs = with lib; [
@@ -58,7 +61,7 @@ stdenv.mkDerivation rec {
     ++ optional (cups != null)                "-DWITH_CUPS=ON"
     ++ optional (pcsclite != null)            "-DWITH_PCSC=ON"
     ++ optional buildServer                   "-DWITH_SERVER=ON"
-    ++ optional (optimize && stdenv.isx86_64) "-DWITH_SSE2=ON";
+    ++ optional (stdenv.isx86_64)             "-DWITH_SSE2=ON";
 
   meta = with lib; {
     description = "A Remote Desktop Protocol Client";

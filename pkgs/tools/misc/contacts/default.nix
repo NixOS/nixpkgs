@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xcbuildHook, cf-private, Foundation, AddressBook }:
+{ stdenv, fetchurl, xcbuildHook, Foundation, AddressBook }:
 
 stdenv.mkDerivation rec {
   version = "1.1a-3";
@@ -10,12 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ xcbuildHook ];
-
-  buildInputs = [
-    Foundation AddressBook
-    # Needed for OBJC_CLASS_$_NSArray symbols.
-    cf-private
-  ];
+  buildInputs = [ Foundation AddressBook ];
 
   installPhase = ''
     mkdir -p $out/bin

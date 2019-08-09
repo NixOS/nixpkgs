@@ -8,13 +8,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "toybox";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "00q6vlc06xbhcjcyqkyp66d1pv7qgwhs00gk4vyixhjqh80giwzl";
+    sha256 = "0mi1glrqmri3v6imbf8k20ylf0kmpv9prbnbggmcqfa0pswpyl4v";
   };
 
   buildInputs = lib.optionals enableStatic [ stdenv.cc.libc stdenv.cc.libc.static ];
@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
   #doCheck = true;
   checkInputs = [ which ]; # used for tests with checkFlags = [ "DEBUG=true" ];
   checkTarget = "tests";
+
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with stdenv.lib; {
     description = "Lightweight implementation of some Unix command line utilities";

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "py3exiv2";
-  version = "0.5.0";
+  version = "0.7.0";
   disabled = !(isPy3k);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09mv7hcczayzjbd4dsrph16ab21slaiamgph9lwr1kjdw7ri5cpg";
+    sha256 = "1gcvmglyl8ad2f336w88gwkd5djjsxdx1ind9wnlbqc3jn9i05cg";
   };
 
   buildInputs = [ exiv2 boost ];

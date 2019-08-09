@@ -1,6 +1,5 @@
 { stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
 , openssl, libpng, lua5, pkgconfig, libidn, expat, fetchpatch
-, gcc5 # TODO(@Dridus) remove this at next hash break
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, shared-mime-info
 , autoconf, automake, intltool, libtool, pkgconfig, cmake
 , ruby, librsvg
 , ncurses, m17n_lib, m17n_db, expat
@@ -126,6 +126,12 @@ stdenv.mkDerivation rec {
   #--with-prime            Build a plugin for PRIME [default=yes]
   #--with-sj3              Use SJ3 [default=no]
   #--with-osx-dcs          Build with OS X Dictionary Services [default=no]
+
+  # TODO: fix this in librsvg/glib later
+  # https://github.com/NixOS/nixpkgs/pull/57027#issuecomment-475461733
+  preBuild = ''
+    export XDG_DATA_DIRS="${shared-mime-info}/share"
+  '';
 
   dontUseCmakeConfigure = true;
 

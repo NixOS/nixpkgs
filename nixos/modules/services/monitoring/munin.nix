@@ -8,7 +8,7 @@
 # spawn-fcgi -s /run/munin/fastcgi-graph.sock -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-graph
 # spawn-fcgi -s /run/munin/fastcgi-html.sock  -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-html
 # https://paste.sh/vofcctHP#-KbDSXVeWoifYncZmLfZzgum
-# nginx http://munin.readthedocs.org/en/latest/example/webserver/nginx.html
+# nginx https://munin.readthedocs.org/en/latest/example/webserver/nginx.html
 
 
 with lib;

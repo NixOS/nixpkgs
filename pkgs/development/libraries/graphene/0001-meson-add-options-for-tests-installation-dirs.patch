@@ -1,0 +1,79 @@
+From c550bf4a41e9f86351b0a65ea3d6c9ab616e27c0 Mon Sep 17 00:00:00 2001
+From: worldofpeace <worldofpeace@protonmail.ch>
+Date: Thu, 16 May 2019 21:15:15 -0400
+Subject: [PATCH] meson: add options for tests installation dirs
+
+---
+ meson_options.txt     |  6 ++++++
+ src/tests/meson.build | 19 ++++++++++++++-----
+ 2 files changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/meson_options.txt b/meson_options.txt
+index c938805..c1e9e95 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -19,6 +19,12 @@ option('arm_neon', type: 'boolean',
+ option('tests', type: 'boolean',
+        value: true,
+        description: 'Build the test suite (requires GObject)')
++option('installed_test_datadir', type: 'string',
++       value: '',
++       description: 'Installation directory for data files in tests')
++option('installed_test_bindir', type: 'string',
++       value: '',
++       description: 'Installation directory for binary files in tests')
+ option('benchmarks', type: 'boolean',
+        value: true,
+        description: 'Build the benchmarks suite (requires GObject)')
+diff --git a/src/tests/meson.build b/src/tests/meson.build
+index 62129c6..0186400 100644
+--- a/src/tests/meson.build
++++ b/src/tests/meson.build
+@@ -22,8 +22,17 @@ unit_tests = [
+ python = python3.find_python()
+ gen_installed_test = join_paths(meson.current_source_dir(), 'gen-installed-test.py')
+ 
+-installed_test_datadir = join_paths(get_option('prefix'), get_option('datadir'), 'installed-tests', graphene_api_path)
+-installed_test_bindir = join_paths(get_option('prefix'), get_option('libexecdir'), 'installed-tests', graphene_api_path)
++test_suffix = join_paths('installed-tests', graphene_api_path)
++
++test_datadir = join_paths(get_option('installed_test_datadir'), test_suffix)
++if test_datadir == ''
++    test_datadir = join_paths(get_option('prefix'), get_option('datadir'), test_suffix)
++endif
++
++test_bindir = join_paths(get_option('installed_test_bindir'), test_suffix)
++if test_bindir == ''
++    test_bindir = join_paths(get_option('prefix'), get_option('libexecdir'), test_suffix)
++endif
+ 
+ foreach unit: unit_tests
+   wrapper = '@0@.test'.format(unit)
+@@ -32,13 +41,13 @@ foreach unit: unit_tests
+                        command: [
+                          python,
+                          gen_installed_test,
+-                         '--testdir=@0@'.format(installed_test_bindir),
++                         '--testdir=@0@'.format(test_bindir),
+                          '--testname=@0@'.format(unit),
+                          '--outdir=@OUTDIR@',
+                          '--outfile=@0@'.format(wrapper),
+                        ],
+                        install: true,
+-                       install_dir: installed_test_datadir)
++                       install_dir: test_datadir)
+ 
+   exe = executable(unit, unit + '.c',
+                    dependencies: graphene_dep,
+@@ -50,7 +59,7 @@ foreach unit: unit_tests
+                      '-DGLIB_DISABLE_DEPRECATION_WARNINGS',
+                    ],
+                    install: true,
+-                   install_dir: installed_test_bindir)
++                   install_dir: test_bindir)
+ 
+   test(unit, exe, args: [ '--tap', '-k' ])
+ endforeach
+-- 
+2.21.0
+

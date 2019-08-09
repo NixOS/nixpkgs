@@ -1,18 +1,17 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
-, librsvg, pango, gtk, bzip2, json-glib, intltool, autoreconfHook, libraw
-, gexiv2, libwebp, gnome3, libintl }:
+, librsvg, pango, gtk, bzip2, json-glib, gettext, autoreconfHook, libraw
+, gexiv2, libwebp, libintl }:
 
-let
-  version = "0.4.12";
-in stdenv.mkDerivation rec {
-  name = "gegl-${version}";
+stdenv.mkDerivation rec {
+  pname = "gegl";
+  version = "0.4.16";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "0ljqxc4iyy2hrj31pxcy1xp4xm5zbx1nigqisphmg4p8mcz2jrz9";
+    url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "0njydcr6qdmfzh4fxx544681qxdpf7y6b2f47jcypn810dlxy4h1";
   };
 
   enableParallelBuilding = true;
@@ -26,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib json-glib babl ]; # for gegl-4.0.pc
 
-  nativeBuildInputs = [ pkgconfig intltool which autoreconfHook libintl ];
+  nativeBuildInputs = [ pkgconfig gettext which autoreconfHook libintl ];
 
   meta = with stdenv.lib; {
     description = "Graph-based image processing framework";

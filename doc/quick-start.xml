@@ -9,8 +9,8 @@
     <para>
      Checkout the Nixpkgs source tree:
 <screen>
-$ git clone https://github.com/NixOS/nixpkgs
-$ cd nixpkgs</screen>
+<prompt>$ </prompt>git clone https://github.com/NixOS/nixpkgs
+<prompt>$ </prompt>cd nixpkgs</screen>
     </para>
    </listitem>
    <listitem>
@@ -23,7 +23,7 @@ $ cd nixpkgs</screen>
      See <xref linkend="sec-organisation" /> for some hints on the tree
      organisation. Create a directory for your package, e.g.
 <screen>
-$ mkdir pkgs/development/libraries/libfoo</screen>
+<prompt>$ </prompt>mkdir pkgs/development/libraries/libfoo</screen>
     </para>
    </listitem>
    <listitem>
@@ -34,8 +34,8 @@ $ mkdir pkgs/development/libraries/libfoo</screen>
      as arguments, and returns a build of the package in the Nix store. The
      expression should usually be called <filename>default.nix</filename>.
 <screen>
-$ emacs pkgs/development/libraries/libfoo/default.nix
-$ git add pkgs/development/libraries/libfoo/default.nix</screen>
+<prompt>$ </prompt>emacs pkgs/development/libraries/libfoo/default.nix
+<prompt>$ </prompt>git add pkgs/development/libraries/libfoo/default.nix</screen>
     </para>
     <para>
      You can have a look at the existing Nix expressions under
@@ -180,7 +180,7 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
      with some descriptive name for the variable, e.g.
      <varname>libfoo</varname>.
 <screen>
-$ emacs pkgs/top-level/all-packages.nix</screen>
+<prompt>$ </prompt>emacs pkgs/top-level/all-packages.nix</screen>
     </para>
     <para>
      The attributes in that file are sorted by category (like “Development /
@@ -193,7 +193,7 @@ $ emacs pkgs/top-level/all-packages.nix</screen>
      To test whether the package builds, run the following command from the
      root of the nixpkgs source tree:
 <screen>
-$ nix-build -A libfoo</screen>
+<prompt>$ </prompt>nix-build -A libfoo</screen>
      where <varname>libfoo</varname> should be the variable name defined in the
      previous step. You may want to add the flag <option>-K</option> to keep
      the temporary build directory in case something fails. If the build
@@ -205,7 +205,7 @@ $ nix-build -A libfoo</screen>
     <para>
      If you want to install the package into your profile (optional), do
 <screen>
-$ nix-env -f . -iA libfoo</screen>
+<prompt>$ </prompt>nix-env -f . -iA libfoo</screen>
     </para>
    </listitem>
    <listitem>

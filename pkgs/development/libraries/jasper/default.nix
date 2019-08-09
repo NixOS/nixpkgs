@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "jasper-${version}";
-  version = "2.0.14";
+  version = "2.0.16";
 
   src = fetchFromGitHub {
     repo = "jasper";
     owner = "mdadams";
     rev = "version-${version}";
-    sha256 = "0aarg8nbik9wrm7fx0451sbm5ypfdfr6i169pxzi354mpdp8gg7f";
+    sha256 = "05l75yd1zsxwv25ykwwwjs8961szv7iywf16nc6vc6qpby27ckv6";
   };
 
   patches = [

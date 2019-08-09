@@ -91,6 +91,9 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   PAGE_POISONING_NO_SANITY = yes;
   PAGE_POISONING_ZERO      = yes;
 
+  # Enable the SafeSetId LSM
+  SECURITY_SAFESETID = whenAtLeast "5.1" yes;
+
   # Reboot devices immediately if kernel experiences an Oops.
   PANIC_ON_OOPS = yes;
   PANIC_TIMEOUT = freeform "-1";

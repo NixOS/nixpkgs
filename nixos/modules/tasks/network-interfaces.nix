@@ -1017,7 +1017,6 @@ in
         pkgs.iproute
         pkgs.iputils
         pkgs.nettools
-        pkgs.openresolv
       ]
       ++ optionals config.networking.wireless.enable [
         pkgs.wirelesstools # FIXME: obsolete?
@@ -1087,7 +1086,24 @@ in
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
 
-    services.udev.packages = mkIf (cfg.wlanInterfaces != {}) [
+    services.udev.packages =  [
+      (pkgs.writeTextFile rec {
+        name = "ipv6-privacy-extensions.rules";
+        destination = "/etc/udev/rules.d/98-${name}";
+        text = ''
+          # enable and prefer IPv6 privacy addresses by default
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.%k.use_tempaddr=2"
+        '';
+      })
+      (pkgs.writeTextFile rec {
+        name = "ipv6-privacy-extensions.rules";
+        destination = "/etc/udev/rules.d/99-${name}";
+        text = concatMapStrings (i: ''
+          # enable IPv6 privacy addresses but prefer EUI-64 addresses for ${i.name}
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${i.name}.use_tempaddr=1"
+        '') (filter (i: !i.preferTempAddress) interfaces);
+      })
+    ] ++ lib.optional (cfg.wlanInterfaces != {})
       (pkgs.writeTextFile {
         name = "99-zzz-40-wlanInterfaces.rules";
         destination = "/etc/udev/rules.d/99-zzz-40-wlanInterfaces.rules";
@@ -1161,8 +1177,7 @@ in
             # Generate the same systemd events for both 'add' and 'move' udev events.
             ACTION=="move", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}
           '');
-      }) ];
-
+      });
   };
 
 }

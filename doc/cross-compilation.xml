@@ -12,11 +12,12 @@
    computing power and memory to compile their own programs. One might think
    that cross-compilation is a fairly niche concern. However, there are
    significant advantages to rigorously distinguishing between build-time and
-   run-time environments! This applies even when one is developing and
-   deploying on the same machine. Nixpkgs is increasingly adopting the opinion
-   that packages should be written with cross-compilation in mind, and nixpkgs
-   should evaluate in a similar way (by minimizing cross-compilation-specific
-   special cases) whether or not one is cross-compiling.
+   run-time environments! Significant, because the benefits apply even when one
+   is developing and deploying on the same machine. Nixpkgs is increasingly
+   adopting the opinion that packages should be written with cross-compilation
+   in mind, and nixpkgs should evaluate in a similar way (by minimizing
+   cross-compilation-specific special cases) whether or not one is
+   cross-compiling.
   </para>
 
   <para>
@@ -30,7 +31,7 @@
  <section xml:id="sec-cross-packaging">
   <title>Packaging in a cross-friendly manner</title>
 
-  <section xml:id="sec-cross-platform-parameters">
+  <section xml:id="ssec-cross-platform-parameters">
    <title>Platform parameters</title>
 
    <para>
@@ -218,8 +219,20 @@
    </variablelist>
   </section>
 
-  <section xml:id="sec-cross-specifying-dependencies">
-   <title>Specifying Dependencies</title>
+  <section xml:id="ssec-cross-dependency-categorization">
+   <title>Theory of dependency categorization</title>
+
+   <note>
+    <para>
+     This is a rather philosophical description that isn't very
+     Nixpkgs-specific. For an overview of all the relevant attributes given to
+     <varname>mkDerivation</varname>, see
+     <xref
+     linkend="ssec-stdenv-dependencies"/>. For a description of how
+     everything is implemented, see
+     <xref linkend="ssec-cross-dependency-implementation" />.
+    </para>
+   </note>
 
    <para>
     In this section we explore the relationship between both runtime and
@@ -227,84 +240,98 @@
    </para>
 
    <para>
-    A runtime dependency between 2 packages implies that between them both the
-    host and target platforms match. This is directly implied by the meaning of
-    "host platform" and "runtime dependency": The package dependency exists
-    while both packages are running on a single host platform.
+    A run time dependency between two packages requires that their host
+    platforms match. This is directly implied by the meaning of "host platform"
+    and "runtime dependency": The package dependency exists while both packages
+    are running on a single host platform.
    </para>
 
    <para>
-    A build time dependency, however, implies a shift in platforms between the
-    depending package and the depended-on package. The meaning of a build time
-    dependency is that to build the depending package we need to be able to run
-    the depended-on's package. The depending package's build platform is
-    therefore equal to the depended-on package's host platform. Analogously,
-    the depending package's host platform is equal to the depended-on package's
-    target platform.
+    A build time dependency, however, has a shift in platforms between the
+    depending package and the depended-on package. "build time dependency"
+    means that to build the depending package we need to be able to run the
+    depended-on's package. The depending package's build platform is therefore
+    equal to the depended-on package's host platform.
    </para>
 
    <para>
-    In this manner, given the 3 platforms for one package, we can determine the
-    three platforms for all its transitive dependencies. This is the most
-    important guiding principle behind cross-compilation with Nixpkgs, and will
-    be called the <wordasword>sliding window principle</wordasword>.
+    If both the dependency and depending packages aren't compilers or other
+    machine-code-producing tools, we're done. And indeed
+    <varname>buildInputs</varname> and <varname>nativeBuildInputs</varname>
+    have covered these simpler build-time and run-time (respectively) changes
+    for many years. But if the dependency does produce machine code, we might
+    need to worry about its target platform too. In principle, that target
+    platform might be any of the depending package's build, host, or target
+    platforms, but we prohibit dependencies from a "later" platform to an
+    earlier platform to limit confusion because we've never seen a legitimate
+    use for them.
    </para>
 
    <para>
-    Some examples will make this clearer. If a package is being built with a
-    <literal>(build, host, target)</literal> platform triple of <literal>(foo,
-    bar, bar)</literal>, then its build-time dependencies would have a triple
-    of <literal>(foo, foo, bar)</literal>, and <emphasis>those
-    packages'</emphasis> build-time dependencies would have a triple of
-    <literal>(foo, foo, foo)</literal>. In other words, it should take two
-    "rounds" of following build-time dependency edges before one reaches a
-    fixed point where, by the sliding window principle, the platform triple no
-    longer changes. Indeed, this happens with cross-compilation, where only
-    rounds of native dependencies starting with the second necessarily coincide
-    with native packages.
+    Finally, if the depending package is a compiler or other
+    machine-code-producing tool, it might need dependencies that run at "emit
+    time". This is for compilers that (regrettably) insist on being built
+    together with their source langauges' standard libraries. Assuming build !=
+    host != target, a run-time dependency of the standard library cannot be run
+    at the compiler's build time or run time, but only at the run time of code
+    emitted by the compiler.
    </para>
-
-   <note>
-    <para>
-     The depending package's target platform is unconstrained by the sliding
-     window principle, which makes sense in that one can in principle build
-     cross compilers targeting arbitrary platforms.
-    </para>
-   </note>
 
    <para>
-    How does this work in practice? Nixpkgs is now structured so that
-    build-time dependencies are taken from <varname>buildPackages</varname>,
-    whereas run-time dependencies are taken from the top level attribute set.
-    For example, <varname>buildPackages.gcc</varname> should be used at
-    build-time, while <varname>gcc</varname> should be used at run-time. Now,
-    for most of Nixpkgs's history, there was no
-    <varname>buildPackages</varname>, and most packages have not been
-    refactored to use it explicitly. Instead, one can use the six
-    (<emphasis>gasp</emphasis>) attributes used for specifying dependencies as
-    documented in <xref linkend="ssec-stdenv-dependencies"/>. We "splice"
-    together the run-time and build-time package sets with
-    <varname>callPackage</varname>, and then <varname>mkDerivation</varname>
-    for each of four attributes pulls the right derivation out. This splicing
-    can be skipped when not cross-compiling as the package sets are the same,
-    but is a bit slow for cross-compiling. Because of this, a
-    best-of-both-worlds solution is in the works with no splicing or explicit
-    access of <varname>buildPackages</varname> needed. For now, feel free to
-    use either method.
+    Putting this all together, that means we have dependencies in the form
+    "host → target", in at most the following six combinations:
+    <table>
+     <caption>Possible dependency types</caption>
+     <thead>
+      <tr>
+       <th>Dependency's host platform</th>
+       <th>Dependency's target platform</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td>build</td>
+       <td>build</td>
+      </tr>
+      <tr>
+       <td>build</td>
+       <td>host</td>
+      </tr>
+      <tr>
+       <td>build</td>
+       <td>target</td>
+      </tr>
+      <tr>
+       <td>host</td>
+       <td>host</td>
+      </tr>
+      <tr>
+       <td>host</td>
+       <td>target</td>
+      </tr>
+      <tr>
+       <td>target</td>
+       <td>target</td>
+      </tr>
+     </tbody>
+    </table>
    </para>
 
-   <note>
-    <para>
-     There is also a "backlink" <varname>targetPackages</varname>, yielding a
-     package set whose <varname>buildPackages</varname> is the current package
-     set. This is a hack, though, to accommodate compilers with lousy build
-     systems. Please do not use this unless you are absolutely sure you are
-     packaging such a compiler and there is no other way.
-    </para>
-   </note>
+   <para>
+    Some examples will make this table clearer. Suppose there's some package
+    that is being built with a <literal>(build, host, target)</literal>
+    platform triple of <literal>(foo, bar, baz)</literal>. If it has a
+    build-time library dependency, that would be a "host → build" dependency
+    with a triple of <literal>(foo, foo, *)</literal> (the target platform is
+    irrelevant). If it needs a compiler to be built, that would be a "build →
+    host" dependency with a triple of <literal>(foo, foo, *)</literal> (the
+    target platform is irrelevant). That compiler, would be built with another
+    compiler, also "build → host" dependency, with a triple of <literal>(foo,
+    foo, foo)</literal>.
+   </para>
   </section>
 
-  <section xml:id="sec-cross-cookbook">
+  <section xml:id="ssec-cross-cookbook">
    <title>Cross packaging cookbook</title>
 
    <para>
@@ -450,21 +477,202 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
  <section xml:id="sec-cross-infra">
   <title>Cross-compilation infrastructure</title>
 
-  <para>
-   To be written.
-  </para>
+  <section xml:id="ssec-cross-dependency-implementation">
+   <title>Implementation of dependencies</title>
 
-  <note>
    <para>
-    If one explores Nixpkgs, they will see derivations with names like
-    <literal>gccCross</literal>. Such <literal>*Cross</literal> derivations is
-    a holdover from before we properly distinguished between the host and
-    target platforms—the derivation with "Cross" in the name covered the
-    <literal>build = host != target</literal> case, while the other covered the
-    <literal>host = target</literal>, with build platform the same or not based
-    on whether one was using its <literal>.nativeDrv</literal> or
-    <literal>.crossDrv</literal>. This ugliness will disappear soon.
+    The categorizes of dependencies developed in
+    <xref
+    linkend="ssec-cross-dependency-categorization"/> are specified as
+    lists of derivations given to <varname>mkDerivation</varname>, as
+    documented in <xref linkend="ssec-stdenv-dependencies"/>. In short,
+    each list of dependencies for "host → target" of "foo → bar" is called
+    <varname>depsFooBar</varname>, with exceptions for backwards
+    compatibility that <varname>depsBuildHost</varname> is instead called
+    <varname>nativeBuildInputs</varname> and <varname>depsHostTarget</varname>
+    is instead called <varname>buildInputs</varname>. Nixpkgs is now structured
+    so that each <varname>depsFooBar</varname> is automatically taken from
+    <varname>pkgsFooBar</varname>. (These <varname>pkgsFooBar</varname>s are
+    quite new, so there is no special case for
+    <varname>nativeBuildInputs</varname> and <varname>buildInputs</varname>.)
+    For example, <varname>pkgsBuildHost.gcc</varname> should be used at
+    build-time, while <varname>pkgsHostTarget.gcc</varname> should be used at
+    run-time.
    </para>
-  </note>
+
+   <para>
+    Now, for most of Nixpkgs's history, there were no
+    <varname>pkgsFooBar</varname> attributes, and most packages have not been
+    refactored to use it explicitly. Prior to those, there were just
+    <varname>buildPackages</varname>, <varname>pkgs</varname>, and
+    <varname>targetPackages</varname>. Those are now redefined as aliases to
+    <varname>pkgsBuildHost</varname>, <varname>pkgsHostTarget</varname>, and
+    <varname>pkgsTargetTarget</varname>. It is acceptable, even
+    recommended, to use them for libraries to show that the host platform is
+    irrelevant.
+   </para>
+
+   <para>
+    But before that, there was just <varname>pkgs</varname>, even though both
+    <varname>buildInputs</varname> and <varname>nativeBuildInputs</varname>
+    existed. [Cross barely worked, and those were implemented with some hacks
+    on <varname>mkDerivation</varname> to override dependencies.] What this
+    means is the vast majority of packages do not use any explicit package set
+    to populate their dependencies, just using whatever
+    <varname>callPackage</varname> gives them even if they do correctly sort
+    their dependencies into the multiple lists described above. And indeed,
+    asking that users both sort their dependencies, <emphasis>and</emphasis>
+    take them from the right attribute set, is both too onerous and redundant,
+    so the recommended approach (for now) is to continue just categorizing by
+    list and not using an explicit package set.
+   </para>
+
+   <para>
+    To make this work, we "splice" together the six
+    <varname>pkgsFooBar</varname> package sets and have
+    <varname>callPackage</varname> actually take its arguments from that. This
+    is currently implemented in <filename>pkgs/top-level/splice.nix</filename>.
+    <varname>mkDerivation</varname> then, for each dependency attribute, pulls
+    the right derivation out from the splice. This splicing can be skipped when
+    not cross-compiling as the package sets are the same, but still is a bit
+    slow for cross-compiling. We'd like to do something better, but haven't
+    come up with anything yet.
+   </para>
+  </section>
+
+  <section xml:id="ssec-bootstrapping">
+   <title>Bootstrapping</title>
+
+   <para>
+    Each of the package sets described above come from a single bootstrapping
+    stage. While <filename>pkgs/top-level/default.nix</filename>, coordinates
+    the composition of stages at a high level,
+    <filename>pkgs/top-level/stage.nix</filename> "ties the knot" (creates the
+    fixed point) of each stage. The package sets are defined per-stage however,
+    so they can be thought of as edges between stages (the nodes) in a graph.
+    Compositions like <literal>pkgsBuildTarget.targetPackages</literal> can be
+    thought of as paths to this graph.
+   </para>
+
+   <para>
+    While there are many package sets, and thus many edges, the stages can also
+    be arranged in a linear chain. In other words, many of the edges are
+    redundant as far as connectivity is concerned. This hinges on the type of
+    bootstrapping we do. Currently for cross it is:
+    <orderedlist>
+     <listitem>
+      <para>
+       <literal>(native, native, native)</literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal>(native, native, foreign)</literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal>(native, foreign, foreign)</literal>
+      </para>
+     </listitem>
+    </orderedlist>
+    In each stage, <varname>pkgsBuildHost</varname> refers the the previous
+    stage, <varname>pkgsBuildBuild</varname> refers to the one before that, and
+    <varname>pkgsHostTarget</varname> refers to the current one, and
+    <varname>pkgsTargetTarget</varname> refers to the next one. When there is
+    no previous or next stage, they instead refer to the current stage. Note
+    how all the invariants regarding the mapping between dependency and depending
+    packages' build host and target platforms are preserved.
+    <varname>pkgsBuildTarget</varname> and <varname>pkgsHostHost</varname> are
+    more complex in that the stage fitting the requirements isn't always a
+    fixed chain of "prevs" and "nexts" away (modulo the "saturating"
+    self-references at the ends). We just special case each instead. All the primary
+    edges are implemented is in <filename>pkgs/stdenv/booter.nix</filename>,
+    and secondarily aliases in <filename>pkgs/top-level/stage.nix</filename>.
+   </para>
+
+   <note>
+    <para>
+     Note the native stages are bootstrapped in legacy ways that predate the
+     current cross implementation. This is why the the bootstrapping stages
+     leading up to the final stages are ignored inthe previous paragraph.
+    </para>
+   </note>
+
+   <para>
+    If one looks at the 3 platform triples, one can see that they overlap such
+    that one could put them together into a chain like:
+<programlisting>
+(native, native, native, foreign, foreign)
+</programlisting>
+    If one imagines the saturating self references at the end being replaced
+    with infinite stages, and then overlays those platform triples, one ends up
+    with the infinite tuple:
+<programlisting>
+(native..., native, native, native, foreign, foreign, foreign...)
+</programlisting>
+    On can then imagine any sequence of platforms such that there are bootstrap
+    stages with their 3 platforms determined by "sliding a window" that is the
+    3 tuple through the sequence. This was the original model for
+    bootstrapping. Without a target platform (assume a better world where all
+    compilers are multi-target and all standard libraries are built in their
+    own derivation), this is sufficient. Conversely if one wishes to cross
+    compile "faster", with a "Canadian Cross" bootstraping stage where
+    <literal>build != host != target</literal>, more bootstrapping stages are
+    needed since no sliding window providess the pesky
+    <varname>pkgsBuildTarget</varname> package set since it skips the Canadian
+    cross stage's "host".
+   </para>
+
+   <note>
+    <para>
+     It is much better to refer to <varname>buildPackages</varname> than
+     <varname>targetPackages</varname>, or more broadly package sets that do
+     not mention "target". There are three reasons for this.
+    </para>
+    <para>
+     First, it is because bootstrapping stages do not have a unique
+     <varname>targetPackages</varname>. For example a <literal>(x86-linux,
+     x86-linux, arm-linux)</literal> and <literal>(x86-linux, x86-linux,
+     x86-windows)</literal> package set both have a <literal>(x86-linux,
+     x86-linux, x86-linux)</literal> package set. Because there is no canonical
+     <varname>targetPackages</varname> for such a native (<literal>build ==
+     host == target</literal>) package set, we set their
+     <varname>targetPackages</varname>
+    </para>
+    <para>
+     Second, it is because this is a frequent source of hard-to-follow
+     "infinite recursions" / cycles. When only package sets that don't mention
+     target are used, the package set forms a directed acyclic graph. This
+     means that all cycles that exist are confined to one stage. This means
+     they are a lot smaller, and easier to follow in the code or a backtrace. It
+     also means they are present in native and cross builds alike, and so more
+     likely to be caught by CI and other users.
+    </para>
+    <para>
+     Thirdly, it is because everything target-mentioning only exists to
+     accommodate compilers with lousy build systems that insist on the compiler
+     itself and standard library being built together. Of course that is bad
+     because bigger derivations means longer rebuilds. It is also problematic because
+     it tends to make the standard libraries less like other libraries than
+     they could be, complicating code and build systems alike. Because of the
+     other problems, and because of these innate disadvantages, compilers ought
+     to be packaged another way where possible.
+    </para>
+   </note>
+
+   <note>
+    <para>
+     If one explores Nixpkgs, they will see derivations with names like
+     <literal>gccCross</literal>. Such <literal>*Cross</literal> derivations is
+     a holdover from before we properly distinguished between the host and
+     target platforms—the derivation with "Cross" in the name covered the
+     <literal>build = host != target</literal> case, while the other covered
+     the <literal>host = target</literal>, with build platform the same or not
+     based on whether one was using its <literal>.nativeDrv</literal> or
+     <literal>.crossDrv</literal>. This ugliness will disappear soon.
+    </para>
+   </note>
+  </section>
  </section>
 </chapter>

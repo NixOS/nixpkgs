@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "bruteforce-luks-${version}";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
-    sha256 = "14ckm31wbzf3lnk472bywjjlh9kysb793nsh2gp04aa5hp5lym58";
+    sha256 = "0ws5bm5pczhvqrlhl60h8a9rdwk6xlh9wr5ndnkyxvv7m90qpy9b";
     rev = version;
     repo = "bruteforce-luks";
     owner = "glv2";

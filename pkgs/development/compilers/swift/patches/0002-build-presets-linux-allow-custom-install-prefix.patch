@@ -9,17 +9,17 @@ Subject: [PATCH 2/4] build-presets: (linux) allow custom install prefix
 
 diff --git a/utils/build-presets.ini b/utils/build-presets.ini
 index e6b0af3581..1095cbaab7 100644
---- a/utils/build-presets.ini
-+++ b/utils/build-presets.ini
-@@ -723,7 +723,7 @@ install-lldb
- install-llbuild
+--- a/utils/build-presets.ini	2019-04-11 14:51:40.060259462 +0200
++++ b/utils/build-presets.ini	2019-04-11 15:16:17.471137969 +0200
+@@ -728,7 +728,7 @@
  install-swiftpm
  install-xctest
+ install-libicu
 -install-prefix=/usr
 +install-prefix=%(install_prefix)s
- swift-install-components=autolink-driver;compiler;clang-builtin-headers;stdlib;swift-remote-mirror;sdk-overlay;license;sourcekit-inproc
- build-swift-static-stdlib
- build-swift-static-sdk-overlay
+ swift-install-components=autolink-driver;compiler;clang-resource-dir-symlink;stdlib;swift-remote-mirror;sdk-overlay;license;sourcekit-inproc
+ llvm-install-components=llvm-cov;llvm-profdata;IndexStore;clang;clang-headers;compiler-rt
+ install-libcxx
 -- 
 2.12.2
 

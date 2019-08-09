@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, xorg, dbus, virtualbox }:
+, zlib, xorg, dbus, virtualbox }:
 
 let
   version = virtualbox.version;
@@ -19,32 +19,23 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0f3w9wjd5aj2khzqh37vdg86wqbbx4gx9aidaai9syn9sk8ca9xr";
+    sha256 = "1njgxb18r8a1m8fk2b32mmnbwciip3wcxwyhza5k73bx4q2sifac";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
 
-  patchFlags = [ "-p1" "-d" "install/src/vboxguest-${version}" ];
-
-  patches = [
-    ./fix_kerndir.patch
-    ./fix_kernincl.patch
-  ];
+  # If you add a patch you probably need this.
+  #patchFlags = [ "-p1" "-d" "install/src/vboxguest-${version}" ];
 
   hardeningDisable = [ "pic" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
   nativeBuildInputs = [ patchelf makeWrapper ];
-  buildInputs = [ cdrkit dbus ] ++ kernel.moduleBuildDependencies;
+  buildInputs = [ cdrkit ] ++ kernel.moduleBuildDependencies;
 
-  installPhase = ''
-    mkdir -p $out
-    cp -r install/* $out
-  '';
-
-  buildCommand = with xorg; ''
+  unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
         isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
         chmod 755 ./VBoxLinuxAdditions.run
@@ -63,39 +54,30 @@ stdenv.mkDerivation {
       ''
       else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
     }
+  '';
 
-    cd ../
-    patchPhase
-    cd install/src
+  doConfigure = false;
 
-    # Build kernel modules
-    export INSTALL_MOD_PATH=$out
-
+  buildPhase = ''
+    # Build kernel modules.
+    cd src
     find . -type f | xargs sed 's/depmod -a/true/' -i
-
     cd vboxguest-${version}
-
+    # Run just make first. If we only did make install, we get symbol warnings during build.
     make
-
     cd ../..
 
     # Change the interpreter for various binaries
-    for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} other/mount.vboxsf
-    do
-        ${if stdenv.hostPlatform.system == "i686-linux" then ''
-          patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $i
-        ''
-        else if stdenv.hostPlatform.system == "x86_64-linux" then ''
-          patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2 $i
-        ''
-        else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
-        }
-        patchelf --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc dbus libX11 libXt libXext libXmu libXfixes libXrandr libXcursor ]} $i
+    for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} other/mount.vboxsf; do
+        patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} $i
+        patchelf --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc zlib
+          xorg.libX11 xorg.libXt xorg.libXext xorg.libXmu xorg.libXfixes xorg.libXrandr xorg.libXcursor ]} $i
     done
 
     for i in lib/VBoxOGL*.so
     do
-        patchelf --set-rpath ${lib.makeLibraryPath [ "$out" dbus libXcomposite libXdamage libXext libXfixes ]} $i
+        patchelf --set-rpath ${lib.makeLibraryPath [ "$out"
+          xorg.libXcomposite xorg.libXdamage xorg.libXext xorg.libXfixes ]} $i
     done
 
     # FIXME: Virtualbox 4.3.22 moved VBoxClient-all (required by Guest Additions
@@ -105,6 +87,13 @@ stdenv.mkDerivation {
     # Remove references to /usr from various scripts and files
     sed -i -e "s|/usr/bin|$out/bin|" other/vboxclient.desktop
     sed -i -e "s|/usr/bin|$out/bin|" bin/VBoxClient-all
+  '';
+
+  installPhase = ''
+    # Install kernel modules.
+    cd src/vboxguest-${version}
+    make install INSTALL_MOD_PATH=$out
+    cd ../..
 
     # Install binaries
     install -D -m 755 other/mount.vboxsf $out/bin/mount.vboxsf
@@ -118,11 +107,17 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/VBoxClient-all \
             --prefix PATH : "${which}/bin"
 
-    # Install OpenGL libraries
-    mkdir -p $out/lib
-    cp -v lib/VBoxOGL*.so $out/lib
-    mkdir -p $out/lib/dri
-    ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
+    # Don't install VBoxOGL for now
+    # It seems to be broken upstream too, and fixing it is far down the priority list:
+    # https://www.virtualbox.org/pipermail/vbox-dev/2017-June/014561.html
+    # Additionally, 3d support seems to rely on VBoxOGL.so being symlinked from
+    # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
+    # either. (#18457)
+    ## Install OpenGL libraries
+    #mkdir -p $out/lib
+    #cp -v lib/VBoxOGL*.so $out/lib
+    #mkdir -p $out/lib/dri
+    #ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
 
     # Install desktop file
     mkdir -p $out/share/autostart
@@ -131,21 +126,18 @@ stdenv.mkDerivation {
     # Install Xorg drivers
     mkdir -p $out/lib/xorg/modules/{drivers,input}
     install -m 644 other/vboxvideo_drv_${xserverABI}.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
+  '';
 
-    # Install kernel modules
-    cd src
+  # Stripping breaks these binaries for some reason.
+  dontStrip = true;
 
-    for i in *
-    do
-        cd $i
-        kernelVersion=$(cd ${kernel.dev}/lib/modules; ls)
-        export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
-        find . -type f | xargs sed -i -e "s|-o root||g" \
-                                      -e "s|-g root||g"
-        make install
-        cd ..
+  # Some code dlopen() libdbus, patch RUNPATH in fixupPhase so it isn't stripped.
+  postFixup = ''
+    for i in $(grep -F libdbus-1.so -l -r $out/{lib,bin}); do
+      origRpath=$(patchelf --print-rpath "$i")
+      patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ dbus ]}" "$i"
     done
-  ''; # */
+  '';
 
   meta = {
     description = "Guest additions for VirtualBox";

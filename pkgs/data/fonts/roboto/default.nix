@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "2.138";
@@ -22,8 +22,8 @@ in fetchzip rec {
       Chrome OS, and the recommended font for Google’s visual language,
       Material Design.
     '';
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

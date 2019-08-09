@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/neithere/argh/;
+    homepage = https://github.com/neithere/argh/;
     description = "An unobtrusive argparse wrapper with natural syntax";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ domenkozar ];

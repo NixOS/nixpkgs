@@ -5,7 +5,7 @@
 , glog
 , gmock
 , openssl
-, google-gflags
+, gflags
 , gnuradio
 , orc
 , pkgconfig
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     glog
     gmock
     openssl.dev
-    google-gflags
+    gflags
     gnuradio
     orc
     pkgconfig
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DGFlags_ROOT_DIR=${google-gflags}/lib"
+    "-DGFlags_ROOT_DIR=${gflags}/lib"
     "-DGLOG_INCLUDE_DIR=${glog}/include"
     "-DENABLE_UNIT_TESTING=OFF"
 

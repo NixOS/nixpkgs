@@ -8,16 +8,16 @@ stdenv.mkDerivation rec {
   name = "emscripten-fastcomp-${rev}";
 
   src = fetchFromGitHub {
-    owner = "kripken";
+    owner = "emscripten-core";
     repo = "emscripten-fastcomp";
-    sha256 = "04j698gmp686b5lricjakm5hyh2z2kh28m1ffkghmkyz4zkzmx98";
+    sha256 = "0bd0l5k2fa4k0nax2cpxi003pqffqivx4z4m2j5xdha1a12sid8i";
     inherit rev;
   };
 
   srcFL = fetchFromGitHub {
-    owner = "kripken";
+    owner = "emscripten-core";
     repo = "emscripten-fastcomp-clang";
-    sha256 = "1ici51mmpgg80xk3y8f376nbbfak6rz27qdy98l8lxkrymklp5g5";
+    sha256 = "1iw2qplhp489qzw0rma73sab7asnm27g4m95sr36c6kq9cq6agri";
     inherit rev;
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kripken/emscripten-fastcomp;
+    homepage = https://github.com/emscripten-core/emscripten-fastcomp;
     description = "Emscripten LLVM";
     platforms = platforms.all;
     maintainers = with maintainers; [ qknight matthewbauer ];

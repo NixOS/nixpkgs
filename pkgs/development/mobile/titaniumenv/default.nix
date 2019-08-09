@@ -1,4 +1,4 @@
-{pkgs, pkgs_i686, androidenv, xcodeenv, tiVersion ? "7.1.0.GA"}:
+{pkgs, androidenv, xcodeenv, tiVersion ? "7.1.0.GA"}:
 
 rec {
   titaniumsdk = let
@@ -12,7 +12,7 @@ rec {
 
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv python which file jdk nodejs;
-    inherit (pkgs.nodePackages_8_x) alloy titanium;
+    inherit (pkgs.nodePackages_10_x) alloy titanium;
     inherit (androidenv) composeAndroidPackages;
     inherit (xcodeenv) composeXcodeWrapper;
     inherit titaniumsdk;

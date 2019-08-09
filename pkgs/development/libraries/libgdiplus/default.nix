@@ -3,13 +3,13 @@
 , libXrender, libexif, autoreconfHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "libgdiplus-5.6";
+  name = "libgdiplus-5.6.1";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "libgdiplus";
-    rev = "5.6";
-    sha256 = "11xr84kng74j3pd8sx74q80a71k6dw0a502qgibcxlyqh666lfb7";
+    rev = "5.6.1";
+    sha256 = "023xf3l2s0mxcdbl2viglzrkhx3lwcrpm66fiq7cfdqz80d4vsj2";
   };
 
   NIX_LDFLAGS = "-lgif";

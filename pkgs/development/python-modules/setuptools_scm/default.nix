@@ -18,6 +18,6 @@ buildPythonPackage rec {
     homepage = https://bitbucket.org/pypa/setuptools_scm/;
     description = "Handles managing your python package versions in scm metadata";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 }

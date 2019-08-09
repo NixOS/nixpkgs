@@ -15,22 +15,22 @@
 
 stdenv.mkDerivation rec {
   name = "visualboyadvance-m-${version}";
-  version = "2.1.0";
+  version = "2.1.3";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     rev = "v${version}";
-    sha256 = "1dppfvy24rgg3h84gv33l1y7zznkv3zxn2hf98w85pca6k1y2afz";
+    sha256 = "0ibpn05jm6zvvrjyxbmh8qwm1qd26v0dzq45cp233ksvapw1h77h";
   };
+
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
     cairo
-    cmake
     ffmpeg
     gettext
     libGLU_combined
     openal
-    pkgconfig
     SDL2
     sfml
     zip

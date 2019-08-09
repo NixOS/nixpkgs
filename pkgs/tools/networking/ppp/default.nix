@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, libpcap }:
+{ stdenv, fetchurl, substituteAll, libpcap, openssl }:
 
 stdenv.mkDerivation rec {
   version = "2.4.7";
@@ -27,10 +27,14 @@ stdenv.mkDerivation rec {
         url = "https://anonscm.debian.org/git/collab-maint/pkg-ppp.git/plain/debian/patches/0016-pppoe-include-netinet-in.h-before-linux-in.h.patch";
         sha256 = "1xnmqn02kc6g5y84xynjwnpv9cvrfn3nyv7h7r8j8xi7qf2aj4q8";
       })
+      (fetchurl {
+        url = https://www.nikhef.nl/~janjust/ppp/ppp-2.4.7-eaptls-mppe-1.102.patch;
+        sha256 = "04war8l5szql53l36043hvzgfwqp3v76kj8brbz7wlf7vs2mlkia";
+      })
       ./musl-fix-headers.patch
     ];
 
-  buildInputs = [ libpcap ];
+  buildInputs = [ libpcap openssl ];
 
   postPatch = ''
     # strip is not found when cross compiling with seemingly no way to point

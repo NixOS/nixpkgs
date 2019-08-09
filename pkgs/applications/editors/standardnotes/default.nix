@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ appimage-run ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/{bin,share}

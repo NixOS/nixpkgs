@@ -2,7 +2,6 @@
 with lib;
 let
   gce = pkgs.google-compute-engine;
-  cfg = config.virtualisation.googleComputeImage;
 in
 {
   imports = [
@@ -12,6 +11,7 @@ in
 
 
   fileSystems."/" = {
+    fsType = "ext4";
     device = "/dev/disk/by-label/nixos";
     autoResize = true;
   };

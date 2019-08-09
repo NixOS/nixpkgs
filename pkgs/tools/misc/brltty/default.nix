@@ -6,11 +6,11 @@ assert alsaSupport -> alsaLib != null;
 assert systemdSupport -> systemd != null;
 
 stdenv.mkDerivation rec {
-  name = "brltty-5.6";
+  name = "brltty-6.0";
 
   src = fetchurl {
     url = "http://brltty.com/archive/${name}.tar.gz";
-    sha256 = "06by51n35w0jq14w1vimxk3ssrlmiiw49wpxw29rasc106mpysfn";
+    sha256 = "0lmp9ab8gp4yv8m3qx4gxns3prrh7kvh8sfcd6vc45h40cgcsjxg";
   };
 
   nativeBuildInputs = [ pkgconfig python3.pkgs.cython ];

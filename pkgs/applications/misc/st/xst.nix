@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
   inherit name;
 
   src = fetchFromGitHub {
-    owner = "neeasade";
+    owner = "gnotclub";
     repo = "xst";
     rev = "v${version}";
     sha256 = "1fh4y2w0icaij99kihl3w8j5d5b38d72afp17c81pi57f43ss6pc";

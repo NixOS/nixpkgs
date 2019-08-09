@@ -48,6 +48,9 @@ let version = "7.4.0";
         ./riscv-no-relax.patch
       ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
+      ++ optionals targetPlatform.isNetBSD [
+        ../libstdc++-netbsd-ctypes.patch
+      ]
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
         url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
@@ -302,6 +305,7 @@ stdenv.mkDerivation ({
       "--disable-gnu-indirect-function"
     ]
     ++ optional (targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
+    ++ optional targetPlatform.isNetBSD "--disable-libcilkrts"
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;

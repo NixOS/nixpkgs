@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "pythonix";
-  version = "0.1.4";
+  version = "0.1.6";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "pythonix";
     rev = "v${version}";
-    sha256 = "1q1fagfwzvmcm1n3a0liay7m5krazmhw9l001m90rrz2x7vrsqwk";
+    sha256 = "1qzcrpn333hsgn6fj1m1s3cvaf0ny8qpygamcrazqv57xmwyr8h5";
   };
 
   disabled = !isPy3k;
@@ -24,6 +24,5 @@ buildPythonPackage rec {
     '';
     maintainers = [ maintainers.mic92 ];
     license = licenses.mit;
-    broken = true;
   };
 }

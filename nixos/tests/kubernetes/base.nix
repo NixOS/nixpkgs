@@ -30,7 +30,10 @@ let
         { config, pkgs, lib, nodes, ... }:
           mkMerge [
             {
-              boot.postBootCommands = "rm -fr /var/lib/kubernetes/secrets /tmp/shared/*";
+              boot = {
+                postBootCommands = "rm -fr /var/lib/kubernetes/secrets /tmp/shared/*";
+                kernel.sysctl = { "fs.inotify.max_user_instances" = 256; };
+              };
               virtualisation.memorySize = mkDefault 1536;
               virtualisation.diskSize = mkDefault 4096;
               networking = {

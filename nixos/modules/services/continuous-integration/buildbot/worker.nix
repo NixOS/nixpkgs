@@ -118,10 +118,10 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pythonPackages.buildbot-worker;
-        defaultText = "pkgs.pythonPackages.buildbot-worker";
+        default = pkgs.python3Packages.buildbot-worker;
+        defaultText = "pkgs.python3Packages.buildbot-worker";
         description = "Package to use for buildbot worker.";
-        example = literalExample "pkgs.python3Packages.buildbot-worker";
+        example = literalExample "pkgs.python2Packages.buildbot-worker";
       };
 
       packages = mkOption {

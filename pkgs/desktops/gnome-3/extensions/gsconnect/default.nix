@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, substituteAll, python3, openssl
+{ stdenv, fetchFromGitHub, substituteAll, python3, openssl, folks, gsound
 , meson, ninja, libxml2, pkgconfig, gobject-introspection, wrapGAppsHook
 , glib, gtk3, at-spi2-core, upower, openssh, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-gsconnect-${version}";
-  version = "20";
+  version = "23";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    sha256 = "1x5lrb4hdw482hr5dh4ki0p1651w1s0ijs96vs65vrh15cd60h02";
+    sha256 = "011asrhkly9zhvnng2mh9v06yw39fx244pmqz5yk9rd9m4c32xid";
   };
 
   patches = [
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     glib # libgobject
     gtk3
     at-spi2-core # atspi
-    gnome3.folks # libfolks
+    folks # libfolks
     gnome3.nautilus # TODO: this contaminates the package with nautilus and gnome-autoar typelibs but it is only needed for the extension
     gnome3.nautilus-python
-    gnome3.gsound
+    gsound
     upower
     gnome3.caribou
     gnome3.gjs # for running daemon
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # TODO: figure out why folks GIR does not contain shared-library attribute
     # https://github.com/NixOS/nixpkgs/issues/47226
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gnome3.folks ]}")
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ folks ]}")
   '';
 
   postFixup = ''

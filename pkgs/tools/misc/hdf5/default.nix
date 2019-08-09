@@ -16,11 +16,11 @@ assert !cpp || mpi == null;
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.4";
+  version = "1.10.5";
   name = "hdf5-${version}";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
-    sha256 = "1pr85fa1sh2ky6ai2hs3f21lp252grl2cq3wbyi4rh7dm83gyrqj";
+    sha256 = "0i3g6v521vigzbx8wpd32ibsiiw92r65ca3qdbn0d8fj8f4fmmk8";
   };
 
   passthru = {
@@ -47,10 +47,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./bin-mv.patch
-    # upstream patches for openmpi-4 compatiblity
-    # To be removed with the upgrade to 1.10.5
-    ./0001-Updated-H5S-to-use-the-MPI-2-function-MPI_Type_get_e.patch
-    ./0001-Yanked-all-MPI-1-calls.patch
   ];
 
   postInstall = ''

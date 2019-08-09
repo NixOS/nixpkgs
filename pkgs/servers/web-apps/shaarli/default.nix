@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "shaarli-${version}";
-  version = "0.10.3";
+  version = "0.11.0";
 
   src = fetchurl {
     url = "https://github.com/shaarli/Shaarli/releases/download/v${version}/shaarli-v${version}-full.tar.gz";
-    sha256 = "1jcjkyhqwh1pv0a98bidf8az6mc34l4snnsl6lc7m2gxr55099j8";
+    sha256 = "1x3a2chagng749cv48zkvjvfwbggqskv6ckkbbmp4fx9qzy2c32k";
   };
 
   outputs = [ "out" "doc" ];

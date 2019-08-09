@@ -1,30 +1,32 @@
-{ stdenv, fetchFromGitHub, glib, xorg, gdk_pixbuf, pulseaudio,
+{ stdenv, fetchFromGitHub, glib, xorg, gdk-pixbuf, pulseaudio,
   mobile-broadband-provider-info, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "go-lib";
-  version = "1.3.0";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0g84v1adnnyqc1mv45n3wlvnivkm1fi8ywszzgwx8irl3iddfvxv";
+    sha256 = "05z7ayl23cm8mbn4vkn3isy5kgwxljc26ifmzrhmnqm5yibd6lsf";
   };
 
   buildInputs = [
     glib
     xorg.libX11
-    gdk_pixbuf
+    gdk-pixbuf
     pulseaudio
     mobile-broadband-provider-info
   ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "GOSITE_DIR=$(out)/share/go"
-  ];
+  installPhase = ''
+    mkdir -p $out/share/go/src/pkg.deepin.io/lib
+    cp -a * $out/share/go/src/pkg.deepin.io/lib
+
+    rm -r $out/share/go/src/pkg.deepin.io/lib/debian
+  '';
 
   passthru.updateScript = deepin.updateScript { inherit name; };
 

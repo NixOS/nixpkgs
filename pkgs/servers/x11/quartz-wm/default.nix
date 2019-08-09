@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, pixman, pkgconfig, AppKit, Foundation, Xplugin, cf-private }:
+{ stdenv, fetchurl, xorg, pixman, pkgconfig, AppKit, Foundation, Xplugin }:
 
 let version = "1.3.1";
 in stdenv.mkDerivation {
@@ -20,8 +20,6 @@ in stdenv.mkDerivation {
     pixman
     pkgconfig
     AppKit Xplugin Foundation
-    # Needed for CFNotificationCenterAddObserver symbols.
-    cf-private
   ];
   meta = with stdenv.lib; {
     license = licenses.apsl20;

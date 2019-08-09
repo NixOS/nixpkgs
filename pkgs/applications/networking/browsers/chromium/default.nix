@@ -1,6 +1,7 @@
-{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_7
-, makeWrapper, makeDesktopItem, ed
+{ newScope, config, stdenv, llvmPackages, gcc8Stdenv, llvmPackages_8
+, makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
+, libva ? null
 
 # package customization
 , channel ? "stable"
@@ -10,14 +11,15 @@
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
+, useVaapi ? false # test video on radeon, before enabling this
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
 }:
 
 let
-  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_7.stdenv;
-  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_7;
+  stdenv_ = if stdenv.isAarch64 then gcc8Stdenv else llvmPackages_8.stdenv;
+  llvmPackages_ = if stdenv.isAarch64 then llvmPackages else llvmPackages_8;
 in let
   stdenv = stdenv_;
   llvmPackages = llvmPackages_;
@@ -32,6 +34,7 @@ in let
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableNaCl gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
+              useVaapi
               enableWideVine;
     };
 
@@ -40,31 +43,6 @@ in let
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash enableWideVine;
     };
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "chromium-browser";
-    exec = "chromium %U";
-    icon = "chromium";
-    comment = "An open source web browser from Google";
-    desktopName = "Chromium";
-    genericName = "Web browser";
-    mimeType = stdenv.lib.concatStringsSep ";" [
-      "text/html"
-      "text/xml"
-      "application/xhtml+xml"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-      "x-scheme-handler/ftp"
-      "x-scheme-handler/mailto"
-      "x-scheme-handler/webcal"
-      "x-scheme-handler/about"
-      "x-scheme-handler/unknown"
-    ];
-    categories = "Network;WebBrowser";
-    extraEntries = ''
-      StartupWMClass=chromium-browser
-    '';
   };
 
   suffix = if channel != "stable" then "-" + channel else "";
@@ -92,6 +70,10 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
+    libPath = stdenv.lib.makeLibraryPath ([]
+      ++ stdenv.lib.optional useVaapi libva
+    );
+
   in with stdenv.lib; ''
     mkdir -p "$out/bin"
 
@@ -109,6 +91,8 @@ in stdenv.mkDerivation {
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
 
+    export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:${libPath}"
+
     # libredirect causes chromium to deadlock on startup
     export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
 
@@ -122,11 +106,10 @@ in stdenv.mkDerivation {
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
 
-    mkdir -p "$out/share/applications"
+    mkdir -p "$out/share"
     for f in '${chromium.browser}'/share/*; do # hello emacs */
       ln -s -t "$out/share/" "$f"
     done
-    cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
   inherit (chromium.browser) packageName;

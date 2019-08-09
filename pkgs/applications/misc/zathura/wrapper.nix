@@ -27,6 +27,6 @@ in symlinkJoin {
     '';
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = with maintainers;[ garbas smironov ];
+    maintainers = with maintainers;[ smironov ];
   };
 }

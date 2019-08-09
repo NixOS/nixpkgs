@@ -1,26 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
 , attrs, click, cligj, click-plugins, six, munch, enum34
-, pytest, boto3
-, gdal
+, pytest, boto3, mock
+, gdal_2 # can't bump to 3 yet, https://github.com/Toblerity/Fiona/issues/745
 }:
 
 buildPythonPackage rec {
   pname = "Fiona";
-  version = "1.8.4";
+  version = "1.8.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aec9ab2e3513c9503ec123b1a8573bee55fc6a66e2ac07088c3376bf6738a424";
+    sha256 = "0gpvdrayam4qvpqvz0911nlyvf7ib3slsyml52qx172vhpldycgs";
   };
 
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   nativeBuildInputs = [
-    gdal # for gdal-config
+    gdal_2 # for gdal-config
   ];
 
   buildInputs = [
-    gdal
+    gdal_2
   ];
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     boto3
-  ];
+  ] ++ stdenv.lib.optional (pythonOlder "3.4") mock;
 
   checkPhase = ''
     rm -r fiona # prevent importing local fiona

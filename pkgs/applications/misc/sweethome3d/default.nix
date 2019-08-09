@@ -74,15 +74,15 @@ let
 in rec {
 
   application = mkSweetHome3D rec {
-    version = "6.0";
+    version = "6.1.2";
     module = "SweetHome3D";
     name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
     src = fetchsvn {
       url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
-      sha256 = "1l4kc1c2iwkggmcdb2wksb4vrh97ll804vc51yawhdlq9g567ky9";
-      rev = "6647";
+      sha256 = "14svi112kml175dblzcdjzhlfwbp1cy6rki49mqb3632hwmif6ya";
+      rev = "6750";
     };
     desktopName = "Sweet Home 3D";
     icons = {

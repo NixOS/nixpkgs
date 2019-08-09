@@ -7,6 +7,7 @@
 , gst-plugins-bad ? null
 , libnotify ? null
 , gnome3 ? null
+, gtk3 ? null
 , enableUsb ? true
 , enablePacketSocket ? true
 , enableViewer ? true
@@ -26,19 +27,19 @@ in
   assert enableViewer -> enableGstPlugin;
   assert enableViewer -> libnotify != null;
   assert enableViewer -> gnome3 != null;
+  assert enableViewer -> gtk3 != null;
   assert enableViewer -> gstreamerAtLeastVersion1;
 
   stdenv.mkDerivation rec {
 
     pname = "aravis";
-    version = "0.5.13";
-    name = "${pname}-${version}";
+    version = "0.6.3";
 
     src = fetchFromGitHub {
       owner = "AravisProject";
-      repo = "aravis";
-      rev= "c56e530b8ef53b84e17618ea2f334d2cbae04f48";
-      sha256 = "1dj24dir239zmiscfhyy1m8z5rcbw0m1vx9lipx0r7c39bzzj5gy";
+      repo = pname;
+      rev= "ARAVIS_${builtins.replaceStrings ["."] ["_"] version}";
+      sha256 = "0lmgx854z522dwcxsg37bxdyiai9fnycpx1nvgayksj38h39kfn2";
     };
 
     outputs = [ "bin" "dev" "out" "lib" ];
@@ -55,7 +56,7 @@ in
       ++ stdenv.lib.optional enableUsb libusb
       ++ stdenv.lib.optional enablePacketSocket audit
       ++ stdenv.lib.optionals (enableViewer || enableGstPlugin) [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]
-      ++ stdenv.lib.optionals (enableViewer) [ libnotify gnome3.gtk3 gnome3.adwaita-icon-theme ];
+      ++ stdenv.lib.optionals (enableViewer) [ libnotify gtk3 gnome3.adwaita-icon-theme ];
 
     preAutoreconf = ''./autogen.sh'';
 
@@ -80,7 +81,7 @@ in
       longDescription = ''
         Implements the gigabit ethernet and USB3 protocols used by industrial cameras.
       '';
-      homepage = https://aravisproject.github.io/docs/aravis-0.5;
+      homepage = "https://aravisproject.github.io/docs/aravis-0.5";
       license = stdenv.lib.licenses.lgpl2;
       maintainers = [];
       platforms = stdenv.lib.platforms.unix;

@@ -34,7 +34,7 @@ let
 
   bashAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
-      (filterAttrs (k: v: !isNull v) cfg.shellAliases)
+      (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
 in
@@ -226,9 +226,7 @@ in
 
     environment.shells =
       [ "/run/current-system/sw/bin/bash"
-        "/var/run/current-system/sw/bin/bash"
         "/run/current-system/sw/bin/sh"
-        "/var/run/current-system/sw/bin/sh"
         "${pkgs.bashInteractive}/bin/bash"
         "${pkgs.bashInteractive}/bin/sh"
       ];

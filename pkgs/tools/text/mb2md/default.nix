@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, perlPackages }:
+{ stdenv, fetchurl, makeWrapper, perlPackages }:
 
 let
   perlDeps = with perlPackages; [ TimeDate ];

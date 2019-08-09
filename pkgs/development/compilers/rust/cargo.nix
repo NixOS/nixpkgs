@@ -1,13 +1,11 @@
 { stdenv, file, curl, pkgconfig, python, openssl, cmake, zlib
 , makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
 , CoreFoundation, Security
-, version
-, patches ? []
-, src }:
+}:
 
 rustPlatform.buildRustPackage rec {
-  name = "cargo-${version}";
-  inherit version src patches;
+  name = "cargo-${rustc.version}";
+  inherit (rustc) version src;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
@@ -19,14 +17,14 @@ rustPlatform.buildRustPackage rec {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cacert file curl python openssl cmake zlib makeWrapper libgit2 ]
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
+  buildInputs = [ cacert file curl python openssl zlib libgit2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
-  LIBGIT2_SYS_USE_PKG_CONFIG=1;
+  LIBGIT2_SYS_USE_PKG_CONFIG = 1;
 
   # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
-  RUSTC_BOOTSTRAP=1;
+  RUSTC_BOOTSTRAP = 1;
 
   # FIXME: Use impure version of CoreFoundation because of missing symbols.
   # CFURLSetResourcePropertyForKey is defined in the headers but there's no

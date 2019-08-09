@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = https://ezix.org/project/wiki/HardwareLiSter;
     description = "Provide detailed information on the hardware configuration of the machine";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom jgeerds ];
+    maintainers = with maintainers; [ phreedom ];
     platforms = platforms.linux;
   };
 }
