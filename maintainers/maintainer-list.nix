@@ -2107,7 +2107,7 @@
   };
   hamhut1066 = {
     email = "github@hamhut1066.com";
-    github = "hamhut1066";
+    github = "moredhel";
     name = "Hamish Hutchings";
   };
   hansjoergschurr = {
