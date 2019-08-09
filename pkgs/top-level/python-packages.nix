@@ -579,6 +579,8 @@ in {
 
   filemagic = callPackage ../development/python-modules/filemagic { };
 
+  fsspec = callPackage ../development/python-modules/fsspec { };
+
   fuse = callPackage ../development/python-modules/fuse-python {
     inherit (pkgs) fuse pkgconfig;
   };
