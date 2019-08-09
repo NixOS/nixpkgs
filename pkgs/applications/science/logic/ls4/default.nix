@@ -1,11 +1,11 @@
-{ zlib, stdenv, fetchFromGitHub }:
+{ zlib, gcc, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "ls4";
 
   version = "unstable-2019-07-31";
 
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib gcc ];
 
   preBuild = ''
   cd core
