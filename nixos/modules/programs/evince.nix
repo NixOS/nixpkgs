@@ -6,14 +6,21 @@ with lib;
 
 {
 
+  # Added 2019-08-09
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "gnome3" "evince" "enable" ]
+      [ "programs" "evince" "enable" ])
+  ];
+
   ###### interface
 
   options = {
 
-    services.gnome3.evince = {
+    programs.evince = {
 
       enable = mkEnableOption
-        "systemd and dbus services for Evince, the GNOME document viewer";
+        "Evince, the GNOME document viewer";
 
     };
 
@@ -22,7 +29,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gnome3.evince.enable {
+  config = mkIf config.programs.evince.enable {
 
     environment.systemPackages = [ pkgs.evince ];
 

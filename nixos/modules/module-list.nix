@@ -106,6 +106,7 @@
   ./programs/digitalbitbox/default.nix
   ./programs/dmrconfig.nix
   ./programs/environment.nix
+  ./programs/evince.nix
   ./programs/firejail.nix
   ./programs/fish.nix
   ./programs/freetds.nix
@@ -280,7 +281,6 @@
   ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
-  ./services/desktops/gnome3/evince.nix
   ./services/desktops/gnome3/evolution-data-server.nix
   ./services/desktops/gnome3/file-roller.nix
   ./services/desktops/gnome3/glib-networking.nix
