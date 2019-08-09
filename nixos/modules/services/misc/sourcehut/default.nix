@@ -18,6 +18,7 @@ in {
     [
       ./git.nix
       ./meta.nix
+      ./paste.nix
     ];
 
   options.services.sourcehut = {
