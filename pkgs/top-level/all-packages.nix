@@ -19247,6 +19247,8 @@ in
 
   mako = callPackage ../applications/misc/mako { };
 
+  mandelbulber = libsForQt5.callPackage ../applications/graphics/mandelbulber { };
+
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
   marathon = callPackage ../applications/networking/cluster/marathon { };
