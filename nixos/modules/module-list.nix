@@ -111,6 +111,7 @@
   ./programs/firejail.nix
   ./programs/fish.nix
   ./programs/freetds.nix
+  ./programs/gnome-disks.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
   ./programs/iftop.nix
@@ -284,7 +285,6 @@
   ./services/desktops/gnome3/chrome-gnome-shell.nix
   ./services/desktops/gnome3/evolution-data-server.nix
   ./services/desktops/gnome3/glib-networking.nix
-  ./services/desktops/gnome3/gnome-disks.nix
   ./services/desktops/gnome3/gnome-documents.nix
   ./services/desktops/gnome3/gnome-keyring.nix
   ./services/desktops/gnome3/gnome-online-accounts.nix
