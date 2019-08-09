@@ -1905,6 +1905,8 @@ in {
 
   pkginfo = callPackage ../development/python-modules/pkginfo { };
 
+  pre-commit = callPackage ../development/python-modules/pre-commit { };
+
   pretend = callPackage ../development/python-modules/pretend { };
 
   detox = callPackage ../development/python-modules/detox { };
