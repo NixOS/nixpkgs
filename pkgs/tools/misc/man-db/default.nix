@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "man-db-2.7.5";
+  name = "man-db-2.8.6.1";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/${name}.tar.xz";
-    sha256 = "056a3il7agfazac12yggcg4gf412yq34k065im0cpfxbcw6xskaw";
+    sha256 = "0a1sh5gxa16k6irzf3q2lli8m204w9ik1xm62wjgf1mzknxs4xrc";
   };
 
   outputs = [ "out" "doc" ];
@@ -23,10 +23,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-setuid"
+    "--disable-cache-owner"
     "--localstatedir=/var"
     # Don't try /etc/man_db.conf by default, so we avoid error messages.
-    "--with-config-file=\${out}/etc/man_db.conf"
-    "--with-systemdtmpfilesdir=\${out}/lib/tmpfiles.d"
+    "--with-config-file=${placeholder "out"}/etc/man_db.conf"
+    "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
   preConfigure = ''
