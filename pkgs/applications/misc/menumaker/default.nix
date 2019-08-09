@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "menumaker-${version}";
-  version = "0.99.10";
+  version = "0.99.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/menumaker/${name}.tar.gz";
-    sha256 = "1mm4cvg3kphkkd8nwrhcg6d9nm5ar7mgc0wf6fxk6zck1l7xn8ky";
+    sha256 = "0dprndnhwm7b803zkp4pisiq06ic9iv8vr42in5is47jmvdim0wx";
   };
 
   format = "other";
