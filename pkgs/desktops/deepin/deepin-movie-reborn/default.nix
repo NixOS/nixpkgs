@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
   dtkcore, dtkwidget, ffmpeg, ffmpegthumbnailer, mpv, pulseaudio,
   libdvdnav, libdvdread, xorg, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-movie-reborn";
   version = "3.2.24";

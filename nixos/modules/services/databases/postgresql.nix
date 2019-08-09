@@ -251,6 +251,10 @@ in
 
     environment.systemPackages = [ postgresql ];
 
+    environment.pathsToLink = [
+     "/share/postgresql"
+    ];
+
     systemd.services.postgresql =
       { description = "PostgreSQL Server";
 

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "wurlitzer";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23e85af0850b98add77bef0a1eb47b243baab29160131d349234c9dfc9e57add";
+    sha256 = "0nab45pfgqdxhhyshf717xfzniss2h3bx19zdaq9gqr6v8lw6wpr";
   };
 
   checkInputs = [ mock pytest ];

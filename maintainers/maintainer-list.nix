@@ -1083,6 +1083,11 @@
     github = "codyopel";
     name = "Cody Opel";
   };
+  cohencyril = {
+    email = "cyril.cohen@inria.fr";
+    github = "CohenCyril";
+    name = "Cyril Cohen";
+  };
   colemickens = {
     email = "cole.mickens@gmail.com";
     github = "colemickens";
@@ -1697,6 +1702,11 @@
       longkeyid = "rsa4096/0xD57EFA625C9A925F";
       fingerprint = "67FE 98F2 8C44 CF22 1828  E12F D57E FA62 5C9A 925F";
     }];
+  };
+  evanjs = {
+    email = "evanjsx@gmail.com";
+    github = "evanjs";
+    name = "Evan Stoll";
   };
   evck = {
     email = "eric@evenchick.com";
@@ -5598,6 +5608,11 @@
     email = "viric@viric.name";
     github = "viric";
     name = "Lluís Batlle i Rossell";
+  };
+  virusdave = {
+    email = "dave.nicponski@gmail.com";
+    github = "virusdave";
+    name = "Dave Nicponski";
   };
   vizanto = {
     email = "danny@prime.vc";

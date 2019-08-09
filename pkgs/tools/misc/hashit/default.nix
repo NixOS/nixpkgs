@@ -1,32 +1,31 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, pantheon, python3, gnome3, gtk3, gobject-introspection, desktop-file-utils, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, pantheon, python3, libgee, gtk3, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "hashit";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
     repo = pname;
     rev = version;
-    sha256 = "1ba38qmwdk7vkarsxqn89irbymzx52gbks4isx0klg880xm2z4dv";
+    sha256 = "1s8fbzg1z2ypn55xg1pfm5xh15waq55fkp49j8rsqiq8flvg6ybf";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
+    pantheon.vala
     pkgconfig
     python3
-    pantheon.vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    pantheon.elementary-icon-theme
-    gnome3.libgee
-    pantheon.granite
     gtk3
+    libgee
+    pantheon.elementary-icon-theme
+    pantheon.granite
   ];
 
   postPatch = ''
@@ -35,10 +34,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A simple app for checking usual checksums";
+    description = "A simple app for checking usual checksums - Designed for elementary OS";
     homepage = https://github.com/artemanufrij/hashit;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = pantheon.maintainers;
     platforms = platforms.linux;
   };
 }

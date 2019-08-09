@@ -49,8 +49,7 @@ stdenv.mkDerivation rec {
   ]);
 
   qtWrapperArgs = [
-    "--prefix PYTHONPATH: $PYTHONPATH"
-    "--prefix PATH: ${poppler_utils.out}/bin}"
+    "--prefix PATH : ${poppler_utils.out}/bin"
   ];
 
   installPhase = ''
@@ -76,7 +75,7 @@ stdenv.mkDerivation rec {
     sed -i "2i import sys; sys.argv[0] = 'calibre'" $out/bin/calibre
 
     for program in $out/bin/*; do
-      wrapQtApp $program
+      wrapQtApp $program --prefix PYTHONPATH : $PYTHONPATH
     done
 
     # Replace @out@ by the output path.

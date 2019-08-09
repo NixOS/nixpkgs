@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, dde-qt-dbus-factory,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, dde-qt-dbus-factory,
   dde-session-ui, deepin, deepin-desktop-schemas, deepin-wallpapers,
   dtkcore, dtkwidget, gsettings-qt, qtsvg, qttools, qtx11extras,
   which, xdg_utils, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-launcher";
   version = "4.6.13";
