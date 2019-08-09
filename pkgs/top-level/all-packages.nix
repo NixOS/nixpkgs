@@ -9010,6 +9010,8 @@ in
 
   awf = callPackage ../development/tools/misc/awf { };
 
+  electron_6 = callPackage ../development/tools/electron/6.x.nix { };
+
   electron_5 = callPackage ../development/tools/electron/5.x.nix { };
 
   electron_4 = callPackage ../development/tools/electron { };
