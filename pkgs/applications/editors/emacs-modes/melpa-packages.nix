@@ -319,7 +319,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         xml-plus = super."xml+";
       };
 
-      stable = {
+      stable = shared // {
         # part of a larger package
         # upstream issue: missing package version
         cmake-mode = markBroken (dontConfigure super.cmake-mode);
