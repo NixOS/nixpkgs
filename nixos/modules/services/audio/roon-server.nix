@@ -20,14 +20,14 @@ in {
         '';
       };
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "roon-server";
         description = ''
           User to run the Roon Server as.
         '';
       };
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "roon-server";
         description = ''
           Group to run the Roon Server as.
