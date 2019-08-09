@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
+, pythonOlder
 , cloudpickle
 , numpy
 , toolz
@@ -13,6 +14,8 @@
 buildPythonPackage rec {
   pname = "dask";
   version = "1.2.2";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
