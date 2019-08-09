@@ -3758,7 +3758,6 @@
   };
   nfjinjing = {
     email = "nfjinjing@gmail.com";
-    github = "nfjinjing";
     name = "Jinjing Wang";
   };
   nh2 = {
