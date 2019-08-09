@@ -1758,7 +1758,7 @@
   };
   f-breidenstein = {
     email = "mail@felixbreidenstein.de";
-    github = "f-breidenstein";
+    github = "fleaz";
     name = "Felix Breidenstein";
   };
   fadenb = {
