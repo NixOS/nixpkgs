@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ninja, coin3d, xercesc, ode, eigen, qt5, opencascade-occt, gts
+{ stdenv, mkDerivation, fetchurl, cmake, ninja, coin3d, xercesc, ode, eigen, qt5, opencascade-occt, gts
 , hdf5, vtk, medfile, zlib, python3Packages, swig, gfortran, libXmu
 , soqt, libf2c, libGLU, makeWrapper, pkgconfig
 , mpi ? null }:
@@ -7,7 +7,7 @@ assert mpi != null;
 
 let
   pythonPackages = python3Packages;
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   name = "freecad-${version}";
   version = "0.18.3";
 
@@ -46,12 +46,13 @@ in stdenv.mkDerivation rec {
   # Their main() removes PYTHONPATH=, and we rely on it.
   preConfigure = ''
     sed '/putenv("PYTHONPATH/d' -i src/Main/MainGui.cpp
+
+    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/FreeCAD --prefix PYTHONPATH : $PYTHONPATH \
-      --set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1
-  '';
+  qtWrapperArgs = [
+    "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+  ];
 
   postFixup = ''
     mv $out/share/doc $out
@@ -59,9 +60,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
-    homepage = https://www.freecadweb.org/;
+    homepage = "https://www.freecadweb.org/";
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.viric ];
+    maintainers = with maintainers; [ viric gebner ];
     platforms = platforms.linux;
   };
 }
