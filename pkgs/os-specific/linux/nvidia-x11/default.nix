@@ -13,6 +13,17 @@ let
             + "xf86-video-nvidia-legacy-0010-kernel-4.14.patch";
         sha256 = "18clfpw03g8dxm61bmdkmccyaxir3gnq451z6xqa2ilm3j820aa5";
       });
+
+  patch_4_16 =
+    (fetchurl {
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-4.16.patch?h=2ad07241ea525a6b6b555b6cb96a97634a4b2cb0";
+      sha256 = "11b3dp0na496rn13v5q4k66bf61174800g36rcwj42r0xj9cfak2";
+    });
+  patch_5_1 =
+      (fetchurl {
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-5.1.patch?h=42d50ef8d6048608d18bdf2c296dd335260c5a1a";
+        sha256 = "03v46ym2bcckg9q2xrilkg21hfiwypr6gl4jmly2q3m4yza9ja6r";
+      });
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
@@ -36,17 +47,9 @@ rec {
     settingsSha256 = "1w5nkxs7a40mq0qf97nhfazdqhfn1bvr54v50s8p0ggixb6vdm3l";
     persistencedSha256 = "02v76202qcnh8hvg4y9wmk9swdlv7z39ppfd1c850nlv158vn5nf";
 
-    patches = [
-      (fetchurl {
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-4.16.patch?h=2ad07241ea525a6b6b555b6cb96a97634a4b2cb0";
-        sha256 = "11b3dp0na496rn13v5q4k66bf61174800g36rcwj42r0xj9cfak2";
-      })
-
-      (fetchurl {
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-5.1.patch?h=42d50ef8d6048608d18bdf2c296dd335260c5a1a";
-        sha256 = "03v46ym2bcckg9q2xrilkg21hfiwypr6gl4jmly2q3m4yza9ja6r";
-      })
-    ];
+    patches = if builtins.compareVersions (kernel.version or "0") "5.1" < 0
+      then [patch_4_16]
+      else [patch_4_16 patch_5_1];
   };
 
   legacy_340 = generic {
