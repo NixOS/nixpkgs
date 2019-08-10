@@ -18,6 +18,7 @@ in {
     [
       ./git.nix
       ./hg.nix
+      ./todo.nix
       ./meta.nix
       ./paste.nix
     ];
