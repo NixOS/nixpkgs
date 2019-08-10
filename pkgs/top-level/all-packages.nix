@@ -5551,6 +5551,8 @@ in
 
   pubs = callPackage ../tools/misc/pubs {};
 
+  pure-prompt = callPackage ../shells/zsh/pure-prompt { };
+
   pv = callPackage ../tools/misc/pv { };
 
   pwgen = callPackage ../tools/security/pwgen { };
