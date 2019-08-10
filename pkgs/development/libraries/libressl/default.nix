@@ -23,6 +23,10 @@ let
       rm configure
     '';
 
+    # Ensure that the output libraries do not require an executable stack.
+    # Without this, libcrypto would be built with the executable stack flag set.
+    NIX_LDFLAGS = ["-z" "noexecstack"];
+
     enableParallelBuilding = true;
 
     outputs = [ "bin" "dev" "out" "man" "nc" ];
