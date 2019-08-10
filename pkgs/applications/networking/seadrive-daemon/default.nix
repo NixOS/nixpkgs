@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.seafile.com/en/home/";
-    description = "The SeaDrive client enables you to access files on the Seafile server without syncing to local disk. It works like a network drive.";
+    description = "Enables you to access files on the Seafile server without syncing to local disk. It works like a network drive";
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.unfree;
   };
