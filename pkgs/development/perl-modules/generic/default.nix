@@ -1,14 +1,11 @@
 { lib, stdenv, perl, buildPerl, toPerlModule }:
 
-{ buildInputs ? [], nativeBuildInputs ? [], ... } @ attrs:
+{ pname, version, buildInputs ? [], nativeBuildInputs ? [], ... } @ attrs:
 
-assert attrs?pname -> attrs?version;
-assert attrs?pname -> !(attrs?name);
 
-(if attrs ? name then
-  lib.trivial.warn "builtPerlPackage: `name' (\"${attrs.name}\") is deprecated, use `pname' and `version' instead"
- else
-  (x: x))
+if attrs ? name then
+  throw "builtPerlPackage: `name' (\"${attrs.name}\") is deprecated, use `pname' and `version' instead"
+else
 toPerlModule(stdenv.mkDerivation (
   (
   lib.recursiveUpdate
@@ -34,15 +31,15 @@ toPerlModule(stdenv.mkDerivation (
     # https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
     PERL_USE_UNSAFE_INC = "1";
 
-    meta.homepage = "https://metacpan.org/release/${attrs.pname or (builtins.parseDrvName attrs.name).name}"; # TODO: phase-out `attrs.name`
+    meta.homepage = "https://metacpan.org/release/${pname}";
     meta.platforms = perl.meta.platforms;
   }
   attrs
   )
   //
   {
-    pname = "perl${perl.version}-${attrs.pname or (builtins.parseDrvName attrs.name).name}"; # TODO: phase-out `attrs.name`
-    version = attrs.version or (builtins.parseDrvName attrs.name).version;                   # TODO: phase-out `attrs.name`
+    pname = "perl${perl.version}-${pname}";
+    inherit version;
     builder = ./builder.sh;
     buildInputs = buildInputs ++ [ perl ];
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
