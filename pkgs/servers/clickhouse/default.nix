@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "clickhouse-${version}";
-  version = "19.9.2.4";
+  version = "19.13.1.11";
 
   src = fetchFromGitHub {
     owner  = "yandex";
     repo   = "ClickHouse";
     rev    = "v${version}-stable";
-    sha256 = "1mw6nk8b4b91wdg6d18156x8kcivjdlpb9jp59c1zs6pspg8y0jh";
+    sha256 = "1j9jhgl2z84id5z6rbvyal7aha5v3m8pd393cmcsf1bf0fiz8qmc";
   };
 
   nativeBuildInputs = [ cmake libtool ninja ];
