@@ -12817,7 +12817,8 @@ in
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_2_8
-    libressl_2_9;
+    libressl_2_9
+    libressl_3_0;
 
   libressl = libressl_2_9;
 
