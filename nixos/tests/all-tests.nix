@@ -93,8 +93,8 @@ in
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
   gjs = handleTest ./gjs.nix {};
-  gnome3 = handleTestOn ["x86_64-linux"] ./gnome3.nix {}; # libsmbios is unsupported on aarch64
-  gnome3-gdm = handleTestOn ["x86_64-linux"] ./gnome3-gdm.nix {}; # libsmbios is unsupported on aarch64
+  gnome3-xorg = handleTest ./gnome3-xorg.nix {};
+  gnome3 = handleTest ./gnome3.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
   google-oslogin = handleTest ./google-oslogin {};
@@ -139,7 +139,7 @@ in
   ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
   lidarr = handleTest ./lidarr.nix {};
-  #lightdm = handleTest ./lightdm.nix {};
+  lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   login = handleTest ./login.nix {};
   loki = handleTest ./loki.nix {};
