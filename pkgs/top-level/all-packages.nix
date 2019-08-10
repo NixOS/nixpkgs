@@ -29097,7 +29097,7 @@ in
   crawl = callPackage ../games/crawl { };
 
   inherit (import ../games/crossfire pkgs)
-    crossfire-server crossfire-arch crossfire-maps;
+    crossfire-server crossfire-arch crossfire-maps crossfire-client;
 
   crrcsim = callPackage ../games/crrcsim {};
 
