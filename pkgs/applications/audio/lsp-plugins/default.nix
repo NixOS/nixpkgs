@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.1.9";
+  version = "1.1.10";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
     repo = "${pname}";
     rev = "${name}";
-    sha256 = "1dzpl7f354rwp37bkr9h2yyafykcdn6m1qqfshqg77fj0pcsw8r2";
+    sha256 = "4a73917b732df80310488687c7ce0fd93f70c659c867eb6e217dbc1b2215cf31";
   };
 
   nativeBuildInputs = [ pkgconfig php expat ];
