@@ -5,13 +5,11 @@ with lib;
 let
   cfg = config.services.dwm-status;
 
-  order = concatMapStringsSep "," (feature: ''"${feature}"'') cfg.order;
+  features = [ "audio" "backlight" "battery" "cpu_load" "network" "time" ];
 
-  configFile = pkgs.writeText "dwm-status.toml" ''
-    order = [${order}]
+  configText = builtins.toJSON ({ inherit (cfg) order; } // cfg.extraConfig);
 
-    ${cfg.extraConfig}
-  '';
+  configFile = pkgs.writeText "dwm-status.json" configText;
 in
 
 {
@@ -29,24 +27,31 @@ in
         default = pkgs.dwm-status;
         defaultText = "pkgs.dwm-status";
         example = "pkgs.dwm-status.override { enableAlsaUtils = false; }";
-        description = ''
-          Which dwm-status package to use.
-        '';
+        description = "Which dwm-status package to use.";
       };
 
       order = mkOption {
-        type = types.listOf (types.enum [ "audio" "backlight" "battery" "cpu_load" "network" "time" ]);
-        description = ''
-          List of enabled features in order.
-        '';
+        type = types.listOf (types.enum features);
+        description = "List of enabled features in order.";
       };
 
       extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Extra config in TOML format.
+        type = types.attrs;
+        default = {};
+        example = literalExample ''
+          {
+            separator = "#";
+
+            battery = {
+              notifier_levels = [ 2 5 10 15 20 ];
+            };
+
+            time = {
+              format = "%H:%M";
+            };
+          }
         '';
+        description = "Extra config of dwm-status.";
       };
 
     };
@@ -61,7 +66,7 @@ in
     services.upower.enable = elem "battery" cfg.order;
 
     systemd.user.services.dwm-status = {
-      description = "Highly performant and configurable DWM status service";
+      description = "DWM status service";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
 
