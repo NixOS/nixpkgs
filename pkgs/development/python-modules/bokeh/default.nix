@@ -1,74 +1,45 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
-, isPyPy
-, mock
-, pytest
-, flask
-, jinja2
-, markupsafe
-, werkzeug
-, itsdangerous
-, dateutil
-, requests
-, six
-, pygments
-, pystache
-, markdown
-, pyyaml
-, pyzmq
-, tornado
-, colorama
-, isPy3k
 , futures
-, websocket_client
+, isPy3k
+, isPyPy
+, jinja2
+, lib
+, mock
 , numpy
-, pandas
-, greenlet
-, python
-, bkcharts
 , pillow
+, pytest
+, python
+, python-dateutil
+, pyyaml
 , selenium
+, six
+, tornado
 }:
 
 buildPythonPackage rec {
   pname = "bokeh";
-  version = "1.0.4";
+  version = "1.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ceeb6a75afc1b2de00c2b8b6da121dec3fb77031326897b80d4375a70e96aebf";
+    sha256 = "0m27j29jpi977y95k272xc24qkl5bkniy046cil116hrbgnppng2";
   };
 
   disabled = isPyPy;
-
-  # Some test that uses tornado fails
-#   doCheck = false;
 
   checkInputs = [ mock pytest pillow selenium ];
 
   propagatedBuildInputs = [
     pillow
-    flask
     jinja2
-    markupsafe
-    werkzeug
-    itsdangerous
-    dateutil
-    requests
+    python-dateutil
     six
-    pygments
-    pystache
-    markdown
     pyyaml
-    pyzmq
     tornado
-    colorama
-    bkcharts
+    numpy
   ]
-  ++ lib.optionals ( !isPy3k ) [ futures ]
-  ++ lib.optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
-  ++ lib.optionals ( !isPyPy ) [ numpy pandas greenlet ];
+  ++ lib.optionals ( !isPy3k ) [ futures ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s bokeh/tests
