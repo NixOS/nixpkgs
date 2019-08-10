@@ -18606,11 +18606,17 @@ in
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
-  chronos = callPackage ../applications/networking/cluster/chronos { };
-
   chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
 
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
+
+  inherit (callPackages ../applications/networking/browsers/chromium-git { })
+    chromium-git_75
+    chromium-git_76
+    chromium-git_77
+    chromium-git_78;
+
+  chronos = callPackage ../applications/networking/cluster/chronos { };
 
   chuck = callPackage ../applications/audio/chuck {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel;
