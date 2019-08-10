@@ -4,7 +4,7 @@
 let platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if stdenv.isDarwin then "0w4dvkbi9jbybq7kvcgdccv8byp4ahlah45w2z8fwq961h3qnhg1"
+    platformSha = if stdenv.isDarwin then "005ax54l7752lhrvlpsyn2yywr4zh58psc7sc1qv9p86d414pmkq"
                      else if stdenv.isLinux then "1b3n6d2xgvqybmh61smyr415sfaymiilixlvs04yxm6ajsbnsm82"
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
