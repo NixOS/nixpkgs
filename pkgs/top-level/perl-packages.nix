@@ -3818,6 +3818,23 @@ let
      };
   };
 
+  CoroEV = buildPerlPackage rec {
+    pname = "CoroEV";
+    version = "6.55";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-${version}.tar.gz";
+      sha256 = "43d79c027170fcda4ca0ee92734605bc95e122686f5071b94d90764c81ae8a30";
+    };
+    buildInputs = [ CanaryStability ];
+    propagatedBuildInputs = [ AnyEvent Coro EV Guard commonsense ];
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+    preConfigure = ''
+      cd EV
+    '';
+  };
+
   Corona = buildPerlPackage {
      pname = "Corona";
      version = "0.1004";
