@@ -6377,6 +6377,19 @@ let
     };
   };
 
+  DigestMD5 = buildPerlPackage rec {
+    pname = "Digest-MD5";
+    version = "2.55";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAAS/${pname}-${version}.tar.gz";
+      sha256 = "03b198a2d14425d951e5e50a885d3818c3162c8fe4c21e18d7798a9a179d0e3c";
+    };
+    meta = {
+      description = "Perl interface to the MD-5 algorithm";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DigestMD5File = buildPerlPackage {
     pname = "Digest-MD5-File";
     version = "0.08";
