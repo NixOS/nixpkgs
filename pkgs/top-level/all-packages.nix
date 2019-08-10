@@ -9389,6 +9389,8 @@ in
 
   flootty = callPackage ../development/tools/flootty { };
 
+  fffuu = haskell.lib.justStaticExecutables (haskellPackages.callPackage ../tools/misc/fffuu { });
+
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
