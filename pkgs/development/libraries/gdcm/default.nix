@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, vtk }:
+{ stdenv, fetchurl, cmake, vtk, darwin }:
 
 stdenv.mkDerivation rec {
   version = "3.0.1";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  buildInputs = [ cmake vtk ];
+  buildInputs = [ cmake vtk ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices darwin.apple_sdk.frameworks.Cocoa ];
   propagatedBuildInputs = [ ];
 
   meta = with stdenv.lib; {
