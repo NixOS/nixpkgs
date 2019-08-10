@@ -11702,6 +11702,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
 
+  libsystemtap = callPackage ../development/libraries/libsystemtap { };
+
   libgtop = callPackage ../development/libraries/libgtop {};
 
   libLAS = callPackage ../development/libraries/libLAS { };
