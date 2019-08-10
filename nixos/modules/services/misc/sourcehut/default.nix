@@ -17,6 +17,7 @@ in {
   imports =
     [
       ./git.nix
+      ./hg.nix
       ./meta.nix
       ./paste.nix
     ];
