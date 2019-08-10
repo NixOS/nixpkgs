@@ -5607,7 +5607,7 @@ let
     };
     propagatedBuildInputs = [ AnyEvent CompressLZF JSONXS commonsense ];
     meta = {
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
