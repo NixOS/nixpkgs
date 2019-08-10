@@ -1201,10 +1201,6 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
-  # The LTS-13.x versions doesn't suffice to build these packages.
-  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
-  hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
-
   # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
   these = doJailbreak super.these; # until these >= 0.7.6
