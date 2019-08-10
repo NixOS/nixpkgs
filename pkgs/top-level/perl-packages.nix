@@ -3289,6 +3289,18 @@ let
     };
   };
 
+   CompressLZF = buildPerlPackage rec {
+    pname = "Compress-LZF";
+    version = "3.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      sha256 = "5d1f5df48ce13b4dee1cc9f278ecdbf8177877b0b98815a4eb3c91c3466716f2";
+    };
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CompressRawBzip2 = buildPerlPackage {
     pname = "Compress-Raw-Bzip2";
     version = "2.096";
