@@ -1,12 +1,20 @@
-# GPaste daemon.
+# GPaste.
 { config, lib, pkgs, ... }:
 
 with lib;
 
 {
+
+  # Added 2019-08-09
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "gnome3" "gpaste" "enable" ]
+      [ "programs" "gpaste" "enable" ])
+  ];
+
   ###### interface
   options = {
-    services.gnome3.gpaste = {
+     programs.gpaste = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -18,10 +26,9 @@ with lib;
   };
 
   ###### implementation
-  config = mkIf config.services.gnome3.gpaste.enable {
+  config = mkIf config.programs.gpaste.enable {
     environment.systemPackages = [ pkgs.gnome3.gpaste ];
     services.dbus.packages = [ pkgs.gnome3.gpaste ];
-    services.xserver.desktopManager.gnome3.sessionPath = [ pkgs.gnome3.gpaste ];
     systemd.packages = [ pkgs.gnome3.gpaste ];
   };
 }

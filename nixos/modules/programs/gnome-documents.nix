@@ -1,4 +1,4 @@
-# GNOME Documents daemon.
+# GNOME Documents.
 
 { config, pkgs, lib, ... }:
 
@@ -6,17 +6,24 @@ with lib;
 
 {
 
+  # Added 2019-08-09
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "gnome3" "gnome-documents" "enable" ]
+      [ "programs" "gnome-documents" "enable" ])
+  ];
+
   ###### interface
 
   options = {
 
-    services.gnome3.gnome-documents = {
+    programs.gnome-documents = {
 
       enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable GNOME Documents services, a document
+          Whether to enable GNOME Documents, a document
           manager application for GNOME.
         '';
       };
@@ -28,7 +35,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gnome3.gnome-documents.enable {
+  config = mkIf config.programs.gnome-documents.enable {
 
     environment.systemPackages = [ pkgs.gnome3.gnome-documents ];
 

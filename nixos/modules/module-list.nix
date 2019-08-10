@@ -106,9 +106,14 @@
   ./programs/digitalbitbox/default.nix
   ./programs/dmrconfig.nix
   ./programs/environment.nix
+  ./programs/evince.nix
+  ./programs/file-roller.nix
   ./programs/firejail.nix
   ./programs/fish.nix
   ./programs/freetds.nix
+  ./programs/gnome-disks.nix
+  ./programs/gnome-documents.nix
+  ./programs/gpaste.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
   ./programs/iftop.nix
@@ -280,12 +285,8 @@
   ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
-  ./services/desktops/gnome3/evince.nix
   ./services/desktops/gnome3/evolution-data-server.nix
-  ./services/desktops/gnome3/file-roller.nix
   ./services/desktops/gnome3/glib-networking.nix
-  ./services/desktops/gnome3/gnome-disks.nix
-  ./services/desktops/gnome3/gnome-documents.nix
   ./services/desktops/gnome3/gnome-keyring.nix
   ./services/desktops/gnome3/gnome-online-accounts.nix
   ./services/desktops/gnome3/gnome-remote-desktop.nix
@@ -293,7 +294,6 @@
   ./services/desktops/gnome3/gnome-settings-daemon.nix
   ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix
-  ./services/desktops/gnome3/gpaste.nix
   ./services/desktops/gnome3/gvfs.nix
   ./services/desktops/gnome3/rygel.nix
   ./services/desktops/gnome3/seahorse.nix
