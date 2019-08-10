@@ -1290,6 +1290,22 @@ let
     '';
   };
 
+  BDB = buildPerlPackage rec {
+    pname = "BDB";
+    version = "1.92";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      sha256 = "a3f2ca9d2baefc1aaa40908b2f9cb9292fda3e7d797e38bbd78eabb9d9daeb6b";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.db4.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.db4.out}/lib -ldb";
+    buildInputs = [ pkgs.db4 ];
+    propagatedBuildInputs = [ commonsense ];
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   BHooksEndOfScope = buildPerlPackage {
     pname = "B-Hooks-EndOfScope";
     version = "0.24";
