@@ -6,11 +6,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.14";
+  version = "0.9.15";
 
   src = fetchurl {
     url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "1nywkkyxlpzq3s9anza9k67j5689pfclfha218frih36qdb0j258";
+    sha256 = "14s8x2qp1li05pailflw1nprp79q0aa7lb92hnwa1air8756z7al";
   };
 
   # Disable version check and fix install tests
@@ -64,6 +64,7 @@ python3Packages.buildPythonApplication rec {
     requests
     colorlog
     pyprind
+    tenacity
   ];
 
   makeWrapperArgs = [
