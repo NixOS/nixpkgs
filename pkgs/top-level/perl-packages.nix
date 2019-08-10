@@ -391,6 +391,20 @@ let
     };
   };
 
+  AnyEventBDB = buildPerlPackage rec {
+    pname = "AnyEvent-BDB";
+    version = "1.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
+      sha256 = "93e36010940464626e5f31b9faedd65e12ed8d1abf16ce052febf23f495aefc8";
+    };
+    buildInputs = [ CanaryStability ];
+    propagatedBuildInputs = [ BDB AnyEvent ];
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AnyEventCacheDNS = buildPerlModule {
     pname = "AnyEvent-CacheDNS";
     version = "0.08";
