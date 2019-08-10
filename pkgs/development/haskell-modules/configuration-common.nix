@@ -1238,17 +1238,8 @@ self: super: {
     '';
   });
 
-  # Use latest pandoc despite what LTS says.
-  # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  cmark-gfm = self.cmark-gfm_0_2_0;
-  pandoc = dontCheck (doDistribute super.pandoc_2_7_3);  # test suite failure: https://github.com/jgm/pandoc/issues/5582
-  pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
-  skylighting = self.skylighting_0_8_2;
-  skylighting-core = self.skylighting-core_0_8_2;
-
-  # Current versions of tasty-hedgehog need hedgehog 1.x, which
-  # we don't have in LTS-13.x.
-  tasty-hedgehog = super.tasty-hedgehog.override { hedgehog = self.hedgehog_1_0; };
+  # test suite failure: https://github.com/jgm/pandoc/issues/5582
+  pandoc = dontCheck super.pandoc;
 
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
