@@ -1763,6 +1763,11 @@
     github = "fare";
     name = "Francois-Rene Rideau";
   };
+  farlion = {
+    email = "florian.peter@gmx.at";
+    github = "workflow";
+    name = "Florian Peter";
+  };
   fdns = {
     email = "fdns02@gmail.com";
     github = "fdns";

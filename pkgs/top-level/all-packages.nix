@@ -11702,6 +11702,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
 
+  libsystemtap = callPackage ../development/libraries/libsystemtap { };
+
   libgtop = callPackage ../development/libraries/libgtop {};
 
   libLAS = callPackage ../development/libraries/libLAS { };
@@ -13652,6 +13654,10 @@ in
   theft = callPackage ../development/libraries/theft { };
 
   thrift = callPackage ../development/libraries/thrift {
+    inherit (pythonPackages) twisted;
+  };
+
+  thrift-0_10 = callPackage ../development/libraries/thrift/0.10.nix {
     inherit (pythonPackages) twisted;
   };
 
@@ -24135,6 +24141,10 @@ in
   };
 
   sct = callPackage ../tools/X11/sct {};
+
+  scylladb = callPackage ../servers/scylladb {
+   thrift = thrift-0_10;
+   };
 
   seafile-shared = callPackage ../misc/seafile-shared { };
 
