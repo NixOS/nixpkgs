@@ -2,6 +2,8 @@
 , makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 , libva ? null
+, gcc, nspr, nss, patchelfUnstable, runCommand
+, lib
 
 # package customization
 , channel ? "stable"
@@ -34,15 +36,53 @@ in let
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableNaCl gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
-              useVaapi
-              enableWideVine;
+              useVaapi;
     };
 
-    browser = callPackage ./browser.nix { inherit channel enableWideVine; };
+    browser = callPackage ./browser.nix { inherit channel; };
 
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash;
     };
+  };
+
+  mkrpath = p: "${lib.makeSearchPathOutput "lib" "lib64" p}:${lib.makeLibraryPath p}";
+  widevine = let upstream-info = chromium.upstream-info; in stdenv.mkDerivation {
+    name = "chromium-binary-plugin-widevine";
+
+    src = upstream-info.binary;
+
+    nativeBuildInputs = [ patchelfUnstable ];
+
+    phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
+
+    unpackCmd = let
+      chan = if upstream-info.channel == "dev"    then "chrome-unstable"
+        else if upstream-info.channel == "stable" then "chrome"
+        else "chrome-${upstream-info.channel}";
+    in ''
+      mkdir -p plugins
+      ar p "$src" data.tar.xz | tar xJ -C plugins --strip-components=4 \
+        ./opt/google/${chan}/libwidevinecdm.so
+    '';
+
+    doCheck = true;
+    checkPhase = ''
+      ! find -iname '*.so' -exec ldd {} + | grep 'not found'
+    '';
+
+    PATCH_RPATH = mkrpath [ gcc.cc glib nspr nss ];
+
+    patchPhase = ''
+      patchelf --set-rpath "$PATCH_RPATH" libwidevinecdm.so
+    '';
+
+    installPhase = ''
+      install -vD libwidevinecdm.so \
+        "$out/lib/libwidevinecdm.so"
+    '';
+
+    meta.platforms = lib.platforms.x86_64;
   };
 
   suffix = if channel != "stable" then "-" + channel else "";
@@ -51,6 +91,16 @@ in let
 
   version = chromium.browser.version;
 
+  chromiumWV = let browser = chromium.browser; in if enableWideVine then
+    runCommand (browser.name + "-wv") { version = browser.version; }
+      ''
+        mkdir -p $out
+        cp -R ${browser}/* $out/
+        chmod u+w $out/libexec/chromium*
+        cp ${widevine}/lib/libwidevinecdm.so $out/libexec/chromium/
+        # patchelf?
+      ''
+    else browser;
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;
@@ -68,7 +118,7 @@ in stdenv.mkDerivation {
   outputs = ["out" "sandbox"];
 
   buildCommand = let
-    browserBinary = "${chromium.browser}/libexec/chromium/chromium";
+    browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
     libPath = stdenv.lib.makeLibraryPath ([]
       ++ stdenv.lib.optional useVaapi libva

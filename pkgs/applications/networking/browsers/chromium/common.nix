@@ -24,7 +24,6 @@
 
 # package customization
 , enableNaCl ? false
-, enableWideVine ? false
 , useVaapi ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
@@ -133,11 +132,12 @@ let
       ++ optional pulseSupport libpulseaudio
       ++ optional (versionAtLeast version "72") jdk.jre;
 
-    patches = optional enableWideVine ./patches/widevine.patch ++ [
+    patches = [
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
       ./patches/jumbo-sorted.patch
       ./patches/no-build-timestamps.patch
+      ./patches/widevine.patch
 
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
@@ -245,7 +245,7 @@ let
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;
-      enable_widevine = enableWideVine;
+      enable_widevine = true;
       use_cups = cupsSupport;
 
       treat_warnings_as_errors = false;
