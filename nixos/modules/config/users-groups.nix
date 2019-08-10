@@ -564,7 +564,10 @@ in {
       };
     }) (filterAttrs (_: u: u.packages != []) cfg.users));
 
-    environment.profiles = [ "/etc/profiles/per-user/$USER" ];
+    environment.profiles = [
+      "$HOME/.nix-profile"
+      "/etc/profiles/per-user/$USER"
+    ];
 
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
