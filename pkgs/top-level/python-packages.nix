@@ -1493,6 +1493,8 @@ in {
 
   boltztrap2 = callPackage ../development/python-modules/boltztrap2 { };
 
+  boolean-py = callPackage ../development/python-modules/boolean-py { };
+
   bumps = callPackage ../development/python-modules/bumps {};
 
   cached-property = callPackage ../development/python-modules/cached-property { };
