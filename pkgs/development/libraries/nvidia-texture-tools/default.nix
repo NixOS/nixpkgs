@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "nvidia-texture-tools-${version}";
-  version = "2.1.1";
+  version = "unstable-2019-08-10";
 
   src = fetchFromGitHub {
     owner = "castano";
     repo = "nvidia-texture-tools";
-    rev = version;
-    sha256 = "19b54w8y1x79q1hn2vdms5ckc4lzkzalqi2vifa3a3j7dn446vzn";
+    rev = "662d223626185f7c6c7e0d822a4796a691acc05a";
+    sha256 = "0s598qzcfnbw18vp4rha96hpar7j9mml7w6swzmvkk8pdlgrwsn5";
   };
 
   nativeBuildInputs = [ cmake ];
