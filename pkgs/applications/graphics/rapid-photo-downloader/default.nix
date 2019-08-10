@@ -64,6 +64,7 @@ python3Packages.buildPythonApplication rec {
     requests
     colorlog
     pyprind
+    tenacity
   ];
 
   makeWrapperArgs = [
