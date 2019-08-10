@@ -2450,6 +2450,8 @@ in {
 
   libthumbor = callPackage ../development/python-modules/libthumbor { };
 
+  license-expression = callPackage ../development/python-modules/license-expression { };
+
   lightblue = callPackage ../development/python-modules/lightblue { };
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
