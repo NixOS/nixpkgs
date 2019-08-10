@@ -3,6 +3,11 @@ pkgs:
 let
   callPackage = pkgs.callPackage;
 in rec {
+  crossfire-client = callPackage ./crossfire-client.nix {
+    version = "1.73.0"; rev = 20680;
+    sha256 = "192y9nmskrx907h16p8rl4cvksnh5m0q8kz9cxw376sq7gam7g0y";
+  };
+
   crossfire-server-stable = callPackage ./crossfire-server.nix {
     version = "1.71.0"; rev = 19312;
     sha256 = "0ymr31n9w88yd7nb3lfgiwjppvsz77ajqdg47l2b9d2fl342sm9i";

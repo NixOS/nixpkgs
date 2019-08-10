@@ -28731,7 +28731,8 @@ in
 
   inherit (import ../games/crossfire pkgs)
     crossfire-server-stable crossfire-arch-stable crossfire-maps-stable
-    crossfire-server-latest crossfire-arch-latest crossfire-maps-latest;
+    crossfire-server-latest crossfire-arch-latest crossfire-maps-latest
+    crossfire-client;
 
   crrcsim = callPackage ../games/crrcsim {};
 
