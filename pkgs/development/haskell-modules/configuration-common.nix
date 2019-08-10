@@ -1092,10 +1092,6 @@ self: super: {
   # haskell-names-0.9.4: Break out of “tasty >=0.12 && <1.2”
   haskell-names = doJailbreak super.haskell-names;
 
-  haskell-names_0_9_6 = super.haskell-names_0_9_6.overrideScope (self: super: {
-    haskell-src-exts = self.haskell-src-exts_1_21_0;
-  });
-
   # hdocs-0.5.3.1: Break out of “haddock-api ==2.21.*”
   # cannot use doJailbreak due to https://github.com/peti/jailbreak-cabal/issues/7
   hdocs = overrideCabal super.hdocs (drv: {
