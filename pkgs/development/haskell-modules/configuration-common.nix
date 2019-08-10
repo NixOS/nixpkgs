@@ -1035,8 +1035,6 @@ self: super: {
   # https://github.com/dmwit/encoding/pull/3
   encoding = appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch;
 
-  clock = dontCheck (appendPatch super.clock ./patches/clock-0.7.2.patch);
-
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
 
