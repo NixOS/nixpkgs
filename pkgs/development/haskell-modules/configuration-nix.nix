@@ -279,10 +279,7 @@ self: super: builtins.intersectAttrs super {
       let dontCheckDarwin = if pkgs.stdenv.isDarwin
                             then dontCheck
                             else pkgs.lib.id;
-      in dontCheckDarwin (super.llvm-hs.override {
-        llvm-config = pkgs.llvm_8;
-        llvm-hs-pure = super.llvm-hs-pure_8_0_0;
-      });
+      in dontCheckDarwin (super.llvm-hs.override { llvm-config = pkgs.llvm_8; });
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
