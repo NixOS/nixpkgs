@@ -6,6 +6,7 @@ sourcePerArch:
 , autoPatchelfHook
 , alsaLib
 , freetype
+, fontconfig
 , zlib
 , xorg
 }:
@@ -26,8 +27,8 @@ let result = stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib freetype zlib xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi
-    xorg.libXrender
+    alsaLib freetype fontconfig zlib xorg.libX11 xorg.libXext xorg.libXtst
+    xorg.libXi xorg.libXrender
   ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -52,9 +53,14 @@ let result = stdenv.mkDerivation rec {
     mkdir -p $out/nix-support
 
     # Set JAVA_HOME automatically.
-    cat <<EOF >> $out/nix-support/setup-hook
+    cat <<EOF >> "$out/nix-support/setup-hook"
     if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
     EOF
+  '';
+
+  preFixup = ''
+    find "$out" -name libfontmanager.so -exec \
+      patchelf --add-needed libfontconfig.so {} \;
   '';
 
   # FIXME: use multiple outputs or return actual JRE package
