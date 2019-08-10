@@ -7279,7 +7279,6 @@ broken-packages:
   - network-address
   - network-anonymous-i2p
   - network-anonymous-tor
-  - network-bsd
   - network-builder
   - network-bytestring
   - network-connection

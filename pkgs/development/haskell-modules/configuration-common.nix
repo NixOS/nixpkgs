@@ -1256,7 +1256,7 @@ self: super: {
   yesod-markdown = doJailbreak super.yesod-markdown;
 
   # These packages needs network 3.x, which is not in LTS-13.x.
-  network-bsd = super.network-bsd.override { network = self.network_3_0_1_1; };
+  network-bsd_2_8_1_0 = super.network-bsd_2_8_1_0.override { network = self.network_3_0_1_1; };
   lambdabot-core = super.lambdabot-core.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
   lambdabot-reference-plugins = super.lambdabot-reference-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
   lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; });
