@@ -90,8 +90,46 @@ let
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
+  # TODO: declarations: link to github
+  singleAsciiDoc = name: value: ''
+    == ${name}
+
+    ${value.description}
+
+    [discrete]
+    === details
+
+    Type:: ${value.type}
+    ${ if pkgs.lib.hasAttr "default" value
+       then ''
+        Default::
+        +
+        ----
+        ${builtins.toJSON value.default}
+        ----
+      ''
+      else "No Default:: {blank}"
+    }
+    ${ if value.readOnly
+       then "Read Only:: {blank}"
+      else ""
+    }
+    ${ if pkgs.lib.hasAttr "example" value
+       then ''
+        Example::
+        +
+        ----
+        ${builtins.toJSON value.example}
+        ----
+      ''
+      else "No Example:: {blank}"
+    }
+  '';
+
 in rec {
   inherit optionsNix;
+
+  optionsAsciiDoc = pkgs.lib.concatStringsSep "\n" (pkgs.lib.mapAttrsToList singleAsciiDoc optionsNix);
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
