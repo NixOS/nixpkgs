@@ -1,5 +1,5 @@
 { stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand
-, python2, gn, ninja, llvmPackages_8, nodejs, jre8, bison, gperf, pkg-config
+, python2, gn, ninja, llvmPackages_8, nodejs, jre8, bison, gperf, pkg-config, protobuf
 , dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf
 , glib, gtk3, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU_combined, libXdamage
 }:
@@ -90,7 +90,8 @@ let
       name = "chromium-git-${version}";
       inherit src;
 
-      nativeBuildInputs = [ gn ninja python2 pkg-config jre8 gperf bison ];
+      nativeBuildInputs = [ gn ninja python2 pkg-config jre8 gperf bison ]
+        ++ lib.optionals (lib.versionOlder version "76.0") [ protobuf python2.pkgs.jinja2 ];
       buildInputs = [
         dbus at-spi2-atk atk at-spi2-core nspr nss pciutils utillinux kerberos
         gdk-pixbuf glib gtk3 alsaLib libXScrnSaver libXcursor libXtst libGLU_combined libXdamage
@@ -161,15 +162,20 @@ let
       buildPhase = ''
         ( cd src
           ninja -C out/Release chrome
+
+          find chrome/test/chromedriver -exec touch -t 198001010000.00 {} +   # fix zip issues with timestamps older than 1980
+          ninja -C out/Release chromedriver
         )
       '';
 
       installPhase = ''
         ( cd src/out/Release
+          mkdir -p locales resources extensions   # the directories are optional, ensure they exist for following `cp` success
+
           mkdir -p $out/bin
-          mkdir -p extensions # the directory is optional, ensure it exists for following `cp` success
-          cp -r chrome locales resources extensions *.so *.pak *.dat *.bin $out/bin/
-          ln -s $out/bin/chrome $out/bin/chrome-${version}
+          cp -r chrome chromedriver locales resources extensions *.so *.pak *.dat *.bin $out/bin/
+          ln -s -f $out/bin/chrome       $out/bin/chrome-${version}
+          ln -s -f $out/bin/chromedriver $out/bin/chromedriver-${version}
         )
       '';
 
@@ -182,6 +188,7 @@ let
         maintainers = with maintainers; [ volth ];
       };
     };
+
 in {
   chromium-git_75 = common { version = "75.0.3770.156"; };
   chromium-git_76 = common { version = "76.0.3809.114"; };
