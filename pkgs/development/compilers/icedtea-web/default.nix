@@ -46,6 +46,11 @@ stdenv.mkDerivation rec {
 
   mozillaPlugin = "/lib";
 
+  postInstall = ''
+    mkdir -p $out/share/applications
+    cp javaws.desktop itweb-settings.desktop policyeditor.desktop $out/share/applications
+  '';
+
   meta = {
     description = "Java web browser plugin and an implementation of Java Web Start";
     longDescription = ''
