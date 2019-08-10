@@ -91,7 +91,7 @@ let
       inherit src;
 
       nativeBuildInputs = [ gn ninja python2 pkg-config jre8 gperf bison ]
-        ++ lib.optionals (lib.versionOlder version "76.0") [ protobuf python2.pkgs.jinja2 ];
+        ++ lib.optionals (lib.versionOlder version "76.0") [ protobuf python2.pkgs.jinja2 python2.pkgs.ply ];
       buildInputs = [
         dbus at-spi2-atk atk at-spi2-core nspr nss pciutils utillinux kerberos
         gdk-pixbuf glib gtk3 alsaLib libXScrnSaver libXcursor libXtst libGLU_combined libXdamage
