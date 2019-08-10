@@ -159,5 +159,8 @@ in stdenv.mkDerivation rec {
       free = false;
     };
     maintainers = with maintainers; [ markuskowa ];
+    # 2019-08-09
+    # fails to build and had stability issues earlier
+    broken = true;
   };
 }
