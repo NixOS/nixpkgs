@@ -2,7 +2,7 @@
   dbus, alsaLib, cups, fontconfig, glib, icu, libpng12,
   xkeyboard_config, zlib, libxslt, libxml2, sqlite, orc,
   libX11, libXcursor, libXrandr, libxcb, libXi, libSM, libICE,
-  libXrender, libXcomposite }:
+  libXrender, libXcomposite, harfbuzz }:
 
 let version = "2019SP0"; in
 stdenv.mkDerivation {
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     dbus alsaLib cups.lib fontconfig glib icu libpng12
     xkeyboard_config zlib libxslt libxml2 sqlite orc libX11
     libXcursor libXrandr libxcb libXi libSM libICE libXrender
-    libXcomposite ];
+    libXcomposite harfbuzz ];
 
   meta = with stdenv.lib; {
     description = "2D design & drafting application, meant to be similar to AutoCAD";
