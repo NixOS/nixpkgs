@@ -457,6 +457,20 @@ let
     };
   };
 
+  AnyEventIRC = buildPerlPackage rec {
+    pname = "AnyEvent-IRC";
+    version = "0.97";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EL/ELMEX/${pname}-${version}.tar.gz";
+      sha256 = "bfd7cf645c3c8c611471057128611447e20f1adf01516c69624cbd8bc77f5bf0";
+    };
+    propagatedBuildInputs = [ AnyEvent ObjectEvent commonsense ];
+    meta = {
+      description = "An event based IRC protocol client API";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AnyEventRabbitMQ = buildPerlPackage {
     pname = "AnyEvent-RabbitMQ";
     version = "1.22";
