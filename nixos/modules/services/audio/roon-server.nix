@@ -49,6 +49,7 @@ in {
         LimitNOFILE = 8192;
         User = cfg.user;
         Group = cfg.group;
+        StateDirectory = name;
       };
     };
     
