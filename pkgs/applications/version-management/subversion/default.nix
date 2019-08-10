@@ -116,13 +116,13 @@ in {
   };
 
   subversion19 = common {
-    version = "1.9.9";
-    sha256 = "1ll13ychbkp367c7zsrrpda5nygkryma5k18qfr8wbaq7dbvxzcd";
+    version = "1.9.12";
+    sha256 = "15z33gdnfiqblm5515020wfdwnp2837r3hnparava6m2fgyiafiw";
   };
 
   subversion_1_10 = common {
-    version = "1.10.4";
-    sha256 = "18c1vdq32nil76w678lxmp73jsbqha3dmzgmfrj76nc0xjmywql2";
+    version = "1.10.6";
+    sha256 = "19zc215mhpnm92mlyl5jbv57r5zqp6cavr3s2g9yglp6j4kfgj0q";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 
