@@ -1289,7 +1289,4 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
-  # The old LTS-13.x version does not compile.
-  ip = self.ip_1_5_1;
-
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
