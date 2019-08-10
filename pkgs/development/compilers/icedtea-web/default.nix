@@ -1,24 +1,45 @@
-{ stdenv, fetchurl, jdk, gtk2, xulrunner, zip, pkgconfig, perl, npapi_sdk, bash, bc }:
+{ stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, gtk2, xulrunner, zip, pkgconfig, npapi_sdk, bash, bc }:
 
 stdenv.mkDerivation rec {
   name = "icedtea-web-${version}";
 
-  version = "1.7.1";
+  version = "1.8.3";
 
-  src = fetchurl {
-    url = "http://icedtea.wildebeest.org/download/source/${name}.tar.gz";
-    sha256 = "1b9z0i9b1dsc2qpfdzbn2fi4vi3idrhm7ig45g1ny40ymvxcwwn9";
+  src = fetchFromGitHub {
+    owner = "AdoptOpenJDK";
+    repo = "IcedTea-Web";
+    rev = name;
+    sha256 = "0bm5k11i2vgb54ch1bawsmjbwnqnp04saadwm2f2mggmmdc6b1qq";
   };
 
-  nativeBuildInputs = [ pkgconfig bc perl ];
-  buildInputs = [ gtk2 xulrunner zip npapi_sdk ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig bc ];
+  buildInputs = [ cargo rustc gtk2 xulrunner zip npapi_sdk ];
 
   preConfigure = ''
     #patchShebangs javac.in
     configureFlagsArray+=("BIN_BASH=${bash}/bin/bash")
   '';
 
+  patches = [ ./patches/0001-make-cargo-work-with-nix-build-on-linux.patch ];
+
+  doCheck = true;
+  preCheck = ''
+    # Needed for the below rust-launcher tests to pass
+    # dirs_paths_helper::tests::check_config_files_paths
+    # dirs_paths_helper::tests::check_legacy_config_files_paths
+
+    mkdir -p $HOME/.icedtea
+    touch $HOME/.icedtea/deployment.properties
+
+    mkdir -p $XDG_CONFIG_HOME/icedtea-web
+    touch $XDG_CONFIG_HOME/icedtea-web/deployment.properties
+  '';
+
+  HOME = "/build";
+  XDG_CONFIG_HOME = "/build";
+
   configureFlags = [
+    "--with-itw-libs=DISTRIBUTION"
     "--with-jdk-home=${jdk.home}"
     "--disable-docs"
   ];
