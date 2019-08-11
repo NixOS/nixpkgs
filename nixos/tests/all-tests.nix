@@ -210,6 +210,7 @@ in
   plotinus = handleTest ./plotinus.nix {};
   postgis = handleTest ./postgis.nix {};
   postgresql = handleTest ./postgresql.nix {};
+  postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
   powerdns = handleTest ./powerdns.nix {};
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   printing = handleTest ./printing.nix {};
