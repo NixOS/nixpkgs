@@ -14979,6 +14979,8 @@ in
 
   ifdtool = callPackage ../tools/misc/ifdtool { };
 
+  ectool = callPackage ../tools/misc/ectool { };
+
   cbmem = callPackage ../tools/misc/cbmem { };
 
   nvramtool = callPackage ../tools/misc/nvramtool { };
