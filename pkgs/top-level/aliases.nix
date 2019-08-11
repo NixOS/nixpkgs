@@ -231,6 +231,7 @@ mapAliases ({
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nologin = shadow; # added 2018-04-25
   nxproxy = nx-libs; # added 2019-02-15
+  nylas-mail-bin = throw "deprecated in 2019-09-11: abandoned by upstream";
   opencascade_oce = opencascade; # added 2018-04-25
   opencl-icd = ocl-icd; # added 2017-01-20
   openexr_ctl = ctl; # added 2018-04-25
