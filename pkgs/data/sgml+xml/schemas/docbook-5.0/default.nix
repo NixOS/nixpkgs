@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip, findXMLCatalogs }:
 
 stdenv.mkDerivation rec {
   pname = "docbook5";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip ];
+
+  propagatedBuildInputs = [ findXMLCatalogs ];
 
   installPhase =
     ''

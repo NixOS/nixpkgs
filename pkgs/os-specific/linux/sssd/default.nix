@@ -7,9 +7,6 @@
   docbook_xsl, docbook_xml_dtd_44,
   withSudo ? false }:
 
-let
-  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
-in
 stdenv.mkDerivation rec {
   name = "sssd-${version}";
   version = "1.16.4";
@@ -23,7 +20,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   preConfigure = ''
-    export SGML_CATALOG_FILES="${docbookFiles}"
     export PYTHONPATH=${ldap}/lib/python2.7/site-packages
     export PATH=$PATH:${openldap}/libexec
 
@@ -39,7 +35,7 @@ stdenv.mkDerivation rec {
       --with-syslog=journald
       --without-selinux
       --without-semanage
-      --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
+      --with-xml-catalog-path=$(echo "$XML_CATALOG_FILES" | sed "s/ *\([^ ]*\).*/\1/")
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
     )
@@ -48,6 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  nativeBuildInputs = [ docbook_xsl docbook_xml_dtd_44 ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils doxygen python python3 popt
                   talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
@@ -56,7 +53,7 @@ stdenv.mkDerivation rec {
                   nss_wrapper ncurses Po4a http-parser jansson ];
 
   makeFlags = [
-    "SGML_CATALOG_FILES=${docbookFiles}"
+    "SGML_CATALOG_FILES="
   ];
 
   installFlags = [
