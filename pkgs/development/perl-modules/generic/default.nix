@@ -41,7 +41,7 @@ toPerlModule(stdenv.mkDerivation (
     pname = "perl${perl.version}-${pname}";
     inherit version;
     builder = ./builder.sh;
-    buildInputs = buildInputs ++ [ perl ]; # the only reason for host platform's `perl` here is to support authomatic `patchShebang` of programs which may be in `$out/bin`
+    buildInputs = buildInputs ++ [ perl ]; # the only reason for host platform's `perl` here is to support automatic `patchShebang` of programs which may be in `$out/bin`
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
     fullperl = buildPerl;
   }
