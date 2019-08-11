@@ -215,6 +215,23 @@ let
     buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
+  mongodb = buildPecl {
+    pname = "mongodb";
+    version = "1.5.5";
+
+    sha256 = "0gpywk3wkimjrva1p95a7abvl3s8yccalf6yimn3nbkpvn2kknm6";
+
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [
+      cyrus_sasl
+      icu
+      openssl
+      snappy
+      zlib
+      (if isPhp73 then pcre2 else pcre)
+    ] ++ lib.optional (pkgs.stdenv.isDarwin) pkgs.darwin.apple_sdk.frameworks.Security;
+  };
+
   oci8 = buildPecl rec {
     version = "2.2.0";
     pname = "oci8";
