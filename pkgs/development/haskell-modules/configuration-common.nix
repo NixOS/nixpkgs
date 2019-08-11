@@ -1281,4 +1281,7 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
+  # need newer version of ghc-libparser
+  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_0_20190723; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
