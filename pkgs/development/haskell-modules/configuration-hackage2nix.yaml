@@ -5990,7 +5990,6 @@ broken-packages:
   - hp2any-core
   - hp2any-graph
   - hp2any-manager
-  - hpack
   - hpack-convert
   - hpack-dhall
   - hpaco
