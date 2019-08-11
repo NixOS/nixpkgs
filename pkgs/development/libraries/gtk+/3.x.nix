@@ -1,33 +1,61 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
-, xorg, epoxy, json_glib, libxkbcommon, gmp
-, waylandSupport ? stdenv.isLinux, wayland, wayland-protocols
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, gettext
+, meson
+, ninja
+, python3
+, makeWrapper
+, shared-mime-info
+, isocodes
+, expat
+, glib
+, cairo
+, pango
+, gdk-pixbuf
+, atk
+, at-spi2-atk
+, gobject-introspection
+, fribidi
+, xorg
+, epoxy
+, json-glib
+, libxkbcommon
+, gmp
+, gnome3
+, hicolor-icon-theme
+, gsettings-desktop-schemas
+, sassc
+, x11Support ? stdenv.isLinux
+, waylandSupport ? stdenv.isLinux
+, mesa
+, wayland
+, wayland-protocols
 , xineramaSupport ? stdenv.isLinux
-, cupsSupport ? stdenv.isLinux, cups ? null
-, darwin, gnome3
+, cupsSupport ? stdenv.isLinux
+, cups ? null
+, AppKit
+, Cocoa
 }:
 
 assert cupsSupport -> cups != null;
 
 with stdenv.lib;
 
-let
-  ver_maj = "3.22";
-  ver_min = "26";
-  version = "${ver_maj}.${ver_min}";
-in
 stdenv.mkDerivation rec {
-  name = "gtk+3-${version}";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "61eef0d320e541976e2dfe445729f12b5ade53050ee9de6184235cb60cd4b967";
-  };
+  pname = "gtk+3";
+  version = "3.24.10";
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
+  setupHook = ./gtk3-setup-hook.sh;
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
+    sha256 = "00qvq1r96ikdalv7xzgng1kad9i0rcahqk01gwhxl3xrw83z3a1m";
+  };
 
   patches = [
     ./3.0-immodules.cache.patch
@@ -36,49 +64,115 @@ stdenv.mkDerivation rec {
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
     })
+    # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1002
+    ./01-build-Fix-path-handling-in-pkgconfig.patch
+  ] ++ optionals stdenv.isDarwin [
+    # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
+    # let’s drop that dependency in similar way to how other parts of the library do it
+    # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
+    ./3.0-darwin-x11.patch
   ];
 
-  buildInputs = [ libxkbcommon epoxy json_glib ];
-  propagatedBuildInputs = with xorg; with stdenv.lib;
-    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk gnome3.gsettings_desktop_schemas
-      libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
-    ++ optionals waylandSupport [ wayland wayland-protocols ]
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa ])
-    ++ optional xineramaSupport libXinerama
-    ++ optional cupsSupport cups;
+  mesonFlags = [
+    "-Dtests=false"
+  ];
+
+  postPatch = ''
+    files=(
+      build-aux/meson/post-install.py
+      demos/gtk-demo/geninclude.py
+      gdk/broadway/gen-c-array.py
+      gdk/gen-gdk-gresources-xml.py
+      gtk/cursor/dnd-copy.png
+      gtk/gen-gtk-gresources-xml.py
+      gtk/gen-rc.py
+      gtk/gentypefuncs.py
+    )
+
+    chmod +x ''${files[@]}
+    patchShebangs ''${files[@]}
+  '';
+
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    hicolor-icon-theme # setup-hook
+    makeWrapper
+    meson
+    ninja
+    pkgconfig
+    python3
+    sassc
+    setupHook
+  ];
+
+  buildInputs = [
+    libxkbcommon
+    epoxy
+    json-glib
+    isocodes
+  ]
+  ++ optional stdenv.isDarwin AppKit
+  ;
+
+  propagatedBuildInputs = with xorg; [
+    at-spi2-atk
+    atk
+    cairo
+    expat
+    fribidi
+    gdk-pixbuf
+    glib
+    gsettings-desktop-schemas
+    libICE
+    libSM
+    libXcomposite
+    libXcursor
+    libXi
+    libXrandr
+    libXrender
+    pango
+  ]
+  ++ optional stdenv.isDarwin Cocoa  # explicitly propagated, always needed
+  ++ optionals waylandSupport [ mesa wayland wayland-protocols ]
+  ++ optional xineramaSupport libXinerama
+  ++ optional cupsSupport cups
+  ;
   #TODO: colord?
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-lintl";
-
-  # demos fail to install, no idea where's the problem
-  preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
-
-  enableParallelBuilding = true;
-
-  configureFlags = optional stdenv.isDarwin [
-    "--disable-debug"
-    "--disable-dependency-tracking"
-    "--disable-glibtest"
-    "--with-gdktarget=quartz"
-    "--enable-quartz-backend"
-  ] ++ optional stdenv.isLinux [
-    "--enable-x11-backend"
-  ] ++ optional waylandSupport [
-    "--enable-wayland-backend"
-  ];
+  doCheck = false; # needs X11
 
   postInstall = optionalString (!stdenv.isDarwin) ''
-    substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \
-      --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
     # The updater is needed for nixos env and it's tiny.
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
+
+    # TODO: patch glib directly
+    for f in $dev/bin/gtk-encode-symbolic-svg; do
+      wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    done
   '';
 
-  meta = with stdenv.lib; {
-    description = "A multi-platform toolkit for creating graphical user interfaces";
+  # Wrap demos
+  postFixup =  optionalString (!stdenv.isDarwin) ''
+    demos=(gtk3-demo gtk3-demo-application gtk3-icon-browser gtk3-widget-factory)
 
+    for program in ''${demos[@]}; do
+      wrapProgram $dev/bin/$program \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
+    done
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gtk+";
+      attrPath = "gtk3";
+    };
+  };
+
+  meta = {
+    description = "A multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK+ is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform
@@ -89,11 +183,8 @@ stdenv.mkDerivation rec {
       proprietary software with GTK+ without any license fees or
       royalties.
     '';
-
     homepage = https://www.gtk.org/;
-
     license = licenses.lgpl2Plus;
-
     maintainers = with maintainers; [ raskin vcunat lethalman ];
     platforms = platforms.all;
   };

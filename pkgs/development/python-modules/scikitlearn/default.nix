@@ -1,34 +1,58 @@
-{ stdenv, buildPythonPackage, fetchpatch, fetchPypi, python
-, nose, pillow
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
 , gfortran, glibcLocales
-, numpy, scipy
+, numpy, scipy, pytest, pillow
+, cython
+, joblib
+, llvmPackages
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.19.1";
-  name = "${pname}-${version}";
+  version = "0.21.2";
+  # UnboundLocalError: local variable 'message' referenced before assignment
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5ca0ad32ee04abe0d4ba02c8d89d501b4e5e0304bdf4d45c2e9875a735b323a0";
+    sha256 = "1nvj9j16y1hz9gm0qwzpnx2zmz55c63k1fai643migsyll9c7bqa";
   };
 
-  buildInputs = [ nose pillow gfortran glibcLocales ];
-  propagatedBuildInputs = [ numpy scipy numpy.blas ];
+  buildInputs = [
+    pillow
+    gfortran
+    glibcLocales
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
+
+  nativeBuildInputs = [
+    cython
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    numpy.blas
+    joblib
+  ];
+  checkInputs = [ pytest ];
 
   LC_ALL="en_US.UTF-8";
 
-  # Disable doctests on OSX: https://github.com/scikit-learn/scikit-learn/issues/10213
+  doCheck = !stdenv.isAarch64;
+  # Skip test_feature_importance_regression - does web fetch
   checkPhase = ''
-    HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests ${stdenv.lib.optionalString stdenv.isDarwin "--doctest-options=+SKIP"} $out/${python.sitePackages}/sklearn/
+    cd $TMPDIR
+    HOME=$TMPDIR OMP_NUM_THREADS=1 pytest -k "not test_feature_importance_regression" --pyargs sklearn
   '';
 
   meta = with stdenv.lib; {
     description = "A set of python modules for machine learning and data mining";
     homepage = http://scikit-learn.org;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    maintainers = with maintainers; [ ];
   };
 }

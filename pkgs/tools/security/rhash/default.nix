@@ -1,32 +1,26 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, which }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.3";
+  version = "1.3.8";
   name = "rhash-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/rhash/${name}-src.tar.gz";
-    sha1 = "0981bdc98ba7ef923b1a6cd7fd8bb0374cff632e";
-    sha256 = "0nii6p4m2x8rkaf8r6smgfwb1q4hpf117kkg64yr6gyqgdchnljv";
+  src = fetchFromGitHub {
+    owner = "rhash";
+    repo = "RHash";
+    rev = "v${version}";
+    sha256 = "0i00wl63hn80g0s9gdi772gchbghwgkvn4nbb5227y2wwy30yyi2";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
+  nativeBuildInputs = [ which ];
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];
+  # configure script is not autotools-based, doesn't support these options
+  configurePlatforms = [ ];
 
-  # we build the static library because of two makefile bugs
-  # * .h files installed for static library target only
-  # * .so.0 -> .so link only created in the static library install target
-  buildPhase = ''
-    make lib-shared lib-static build-shared CC=cc PREFIX=$out
-  '';
+  doCheck = true;
 
-  # we don't actually want the static library, so we remove it after it
-  # gets installed
-  installPhase = ''
-    make DESTDIR="$out" PREFIX="/" install-shared install-lib-shared install-lib-static
-    rm $out/lib/librhash.a
-  '';
+  checkTarget = "test-full";
+
+  installTargets = [ "install" "install-lib-shared" "install-lib-so-link" "install-lib-headers" ];
 
   meta = with stdenv.lib; {
     homepage = http://rhash.anz.ru;

@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, doxygen, extra-cmake-modules, wrapGAppsHook, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -6,8 +6,9 @@
 , qtbase
 , qtxmlpatterns
 , qtsvg
-, qtwebkit
+, qtwebengine
 
+, akonadi-contacts
 , kcalcore
 , kconfigwidgets
 , kcoreaddons
@@ -23,6 +24,7 @@
 , boost
 , eigen
 , exiv2
+, ffmpeg
 , flex
 , jasper
 , lcms2
@@ -34,8 +36,8 @@
 , libqtav
 , libusb1
 , marble
-, mesa
-, mysql
+, libGL
+, libGLU
 , opencv3
 , pcre
 , threadweaver
@@ -49,14 +51,14 @@
 }:
 
 mkDerivation rec {
-  name    = "digikam-${version}";
-  version = "5.8.0";
+  pname   = "digikam";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "digikam";
     rev    = "v${version}";
-    sha256 = "1bvidg0fn92xvw5brhb34lm7m4iy4jb5xpvnhbgh8vik2m4n41w1";
+    sha256 = "1l1nb1nwicmip2jxhn5gzr7h60igvns0zs3kzp36r6qf4wvg3v2z";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -66,6 +68,7 @@ mkDerivation rec {
     boost
     eigen
     exiv2
+    ffmpeg
     flex
     jasper
     lcms2
@@ -76,15 +79,17 @@ mkDerivation rec {
     liblqr1
     libqtav
     libusb1
-    mesa
+    libGL
+    libGLU
     opencv3
     pcre
 
     qtbase
     qtxmlpatterns
     qtsvg
-    qtwebkit
+    qtwebengine
 
+    akonadi-contacts
     kcalcore
     kconfigwidgets
     kcoreaddons
@@ -100,14 +105,18 @@ mkDerivation rec {
     threadweaver
   ];
 
+  enableParallelBuilding = true;
+
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
     "-DENABLE_MEDIAPLAYER=1"
+    "-DENABLE_QWEBENGINE=on"
   ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
+    gappsWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
@@ -116,7 +125,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Photo Management Program";
     license = licenses.gpl2;
-    homepage = http://www.digikam.org;
+    homepage = https://www.digikam.org;
     maintainers = with maintainers; [ the-kenny ];
     platforms = platforms.linux;
   };

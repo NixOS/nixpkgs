@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, makeWrapper
 , glib, gstreamer, gst-plugins-base, gtk
-, libxfce4util, libxfce4ui, xfce4panel, xfconf, libunique ? null
+, libxfce4util, libxfce4ui, xfce4-panel, xfconf, libunique ? null
 , pulseaudioSupport ? false, gst-plugins-good
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool glib gstreamer gtk
-      libxfce4util libxfce4ui xfce4panel xfconf libunique makeWrapper
+      libxfce4util libxfce4ui xfce4-panel xfconf libunique makeWrapper
     ] ++ gst_plugins;
 
   postInstall =
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit gst_plugins; };
 
   meta = {
-    homepage = http://www.xfce.org/projects/xfce4-mixer; # referenced but inactive
+    homepage = https://www.xfce.org/projects/xfce4-mixer; # referenced but inactive
     description = "A volume control application for the Xfce desktop environment";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

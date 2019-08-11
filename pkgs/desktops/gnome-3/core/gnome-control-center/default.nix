@@ -1,53 +1,81 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, wrapGAppsHook
-, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio
-, gdk_pixbuf, librsvg, libnotify, libgudev
+{ fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, ibus, gettext, upower, wrapGAppsHook
+, libcanberra-gtk3, accountsservice, libpwquality, libpulseaudio
+, gdk-pixbuf, librsvg, libgudev, libsecret, gnome-color-manager
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
-, cracklib, libkrb5, networkmanagerapplet, networkmanager
-, libwacom, samba, shared_mime_info, tzdata, libtool
-, docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk
-, fontconfig, sound-theme-freedesktop, grilo }:
+, libkrb5, networkmanagerapplet, networkmanager, glibc
+, libwacom, samba, shared-mime-info, tzdata, libgnomekbd
+, docbook_xsl, modemmanager, clutter, clutter-gtk, cheese, gnome-session
+, fontconfig, sound-theme-freedesktop, grilo, python3
+, gtk3, glib, glib-networking, gsettings-desktop-schemas
+, gnome-desktop, gnome-settings-daemon, gnome-online-accounts
+, vino, gnome-bluetooth, tracker, adwaita-icon-theme
+, udisks2, gsound, libhandy, cups, mutter }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  pname = "gnome-control-center";
+  version = "3.32.2";
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "03np0mhfl9kkdw4cb711pda0cli9zgh2bq2gqn2zwbdi3qnhk9gs";
+  };
 
   nativeBuildInputs = [
-    pkgconfig intltool wrapGAppsHook libtool libxslt docbook_xsl docbook_xsl_ns
-    shared_mime_info
+    meson ninja pkgconfig gettext wrapGAppsHook libxslt docbook_xsl
+    shared-mime-info python3
   ];
 
-  buildInputs = with gnome3; [
-    ibus gtk glib glib_networking upower gsettings_desktop_schemas
-    libxml2 gnome_desktop gnome_settings_daemon polkit libgtop
-    gnome_online_accounts libsoup colord libpulseaudio fontconfig colord-gtk
-    accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify
-    grilo libpwquality cracklib vino libcanberra_gtk3 libgudev
-    gdk_pixbuf defaultIconTheme librsvg clutter clutter_gtk
+  buildInputs = [
+    ibus gtk3 glib glib-networking upower gsettings-desktop-schemas
+    libxml2 gnome-desktop gnome-settings-daemon polkit libgtop
+    gnome-online-accounts libsoup colord libpulseaudio fontconfig colord-gtk
+    accountsservice libkrb5 networkmanagerapplet libwacom samba
+    grilo libpwquality vino libcanberra-gtk3 libgudev libsecret
+    gdk-pixbuf adwaita-icon-theme librsvg clutter clutter-gtk cheese
     networkmanager modemmanager gnome-bluetooth tracker
+    udisks2 gsound libhandy
+    mutter # schemas for the keybindings
   ];
 
-  preBuild = ''
-    substituteInPlace panels/datetime/tz.h --replace "/usr/share/zoneinfo/zone.tab" "${tzdata}/share/zoneinfo/zone.tab"
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      gcm = gnome-color-manager;
+      gnome_desktop = gnome-desktop;
+      inherit glibc libgnomekbd tzdata;
+      inherit cups networkmanagerapplet;
+    })
+  ];
 
-    substituteInPlace panels/region/cc-region-panel.c --replace "gkbd-keyboard-display" "${gnome3.libgnomekbd}/bin/gkbd-keyboard-display"
-
-    # hack to make test-endianess happy
-    mkdir -p $out/share/locale
-    substituteInPlace panels/datetime/test-endianess.c --replace "/usr/share/locale/" "$out/share/locale/"
+  postPatch = ''
+    chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
+    patchShebangs build-aux/meson/meson_post_install.py
   '';
+
+  mesonFlags = [
+    "-Dgnome_session_libexecdir=${gnome-session}/libexec"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:${sound-theme-freedesktop}/share"
+      --prefix XDG_DATA_DIRS : "${sound-theme-freedesktop}/share"
       # Thumbnailers (for setting user profile pictures)
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      # WM keyboard shortcuts
+      --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
     for i in $out/share/applications/*; do
-      substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
+      substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
     done
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Utilities to configure the GNOME desktop";

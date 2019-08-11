@@ -1,13 +1,16 @@
-{ stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, libnotify, libxcb, nspr, nss, systemd, xorg }:
+{ theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
+cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk-pixbuf,
+libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
+at-spi2-atk, libuuid, nodePackages
+}:
 
 let
 
-  version = "3.0.0";
+  version = "4.0.1";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
+    at-spi2-atk
     atk
     cairo
     cups
@@ -18,15 +21,17 @@ let
     freetype
     glib
     gnome2.GConf
-    gnome2.gdk_pixbuf
-    gnome2.gtk
-    gnome2.pango
+    gdk-pixbuf
+    gtk3
+    pango
     libnotify
     libxcb
+    libappindicator-gtk3
     nspr
     nss
     stdenv.cc.cc
     systemd
+    libuuid
 
     xorg.libxkbfile
     xorg.libX11
@@ -43,21 +48,27 @@ let
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "17hq31x9k03rvj2sdsdfj6j75v30yrywlsbca4d56a0qsdzysxkw";
+        sha256 = "1g7c8jka750pblsfzjvfyf7sp1m409kybqagml9miif1v71scxv2";
       }
     else
-      throw "Slack is not supported on ${stdenv.system}";
+      throw "Slack is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
   name = "slack-${version}";
 
   inherit src;
 
-  buildInputs = [ dpkg ];
-  unpackPhase = "true";
+  buildInputs = [
+    dpkg
+    gtk3  # needed for GSETTINGS_SCHEMAS_PATH
+  ];
+
+  nativeBuildInputs = [ makeWrapper nodePackages.asar ];
+
+  dontUnpack = true;
   buildCommand = ''
     mkdir -p $out
     dpkg -x $src $out
@@ -72,20 +83,37 @@ in stdenv.mkDerivation {
       patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
     done
 
-    # Fix the symlink
+    # Replace the broken bin/slack symlink with a startup wrapper
     rm $out/bin/slack
-    ln -s $out/lib/slack/slack $out/bin/slack
+    makeWrapper $out/lib/slack/slack $out/bin/slack \
+      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \
       --replace /usr/bin/ $out/bin/ \
       --replace /usr/share/ $out/share/
+  '' + stdenv.lib.optionalString (theme != null) ''
+    asar extract $out/lib/slack/resources/app.asar $out/lib/slack/resources/app.asar.unpacked
+    cat <<EOF >> $out/lib/slack/resources/app.asar.unpacked/dist/ssb-interop.bundle.js
+
+    var fs = require('fs');
+    document.addEventListener('DOMContentLoaded', function() {
+      fs.readFile('${theme}/theme.css', 'utf8', function(err, css) {
+        let s = document.createElement('style');
+        s.type = 'text/css';
+        s.innerHTML = css;
+        document.head.appendChild(s);
+      });
+    });
+    EOF
+    asar pack $out/lib/slack/resources/app.asar.unpacked $out/lib/slack/resources/app.asar
   '';
 
   meta = with stdenv.lib; {
     description = "Desktop client for Slack";
     homepage = https://slack.com;
     license = licenses.unfree;
+    maintainers = [ maintainers.mmahut ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,35 +1,43 @@
-{ stdenv, buildPythonPackage, fetchurl
-, six, requests, websocket_client
-, ipaddress, backports_ssl_match_hostname, docker_pycreds
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
+, backports_ssl_match_hostname
+, mock
+, paramiko
+, pytest
+, requests
+, six
+, websocket_client
 }:
-buildPythonPackage rec {
-  version = "2.7.0";
-  pname = "docker";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/docker/${name}.tar.gz";
-    sha256 = "144248308e8ea31c4863c6d74e1b55daf97cc190b61d0fe7b7313ab920d6a76c";
+buildPythonPackage rec {
+  version = "4.0.2";
+  pname = "docker";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0r1i46h8x1vfvadayyvmh5hc6mpzgv3vvp6pv4g1wavamya2wnyc";
   };
 
   propagatedBuildInputs = [
     six
     requests
     websocket_client
-    ipaddress
-    backports_ssl_match_hostname
-    docker_pycreds
+    paramiko
+  ] ++ stdenv.lib.optional isPy27 backports_ssl_match_hostname;
+
+  checkInputs = [
+    mock
+    pytest
   ];
 
-  # Flake8 version conflict
-  doCheck = false;
+  # Other tests touch network
+  checkPhase = ''
+    ${pytest}/bin/pytest tests/unit/
+  '';
 
   meta = with stdenv.lib; {
     description = "An API client for docker written in Python";
     homepage = https://github.com/docker/docker-py;
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      jgeerds
-    ];
+    maintainers = with maintainers; [ jonringer ];
   };
 }

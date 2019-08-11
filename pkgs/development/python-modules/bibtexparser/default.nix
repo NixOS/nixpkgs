@@ -1,20 +1,28 @@
 { lib
-, buildPythonPackage
-, fetchPypi
+, buildPythonPackage, fetchFromGitHub
+, future, pyparsing
+, glibcLocales, nose, unittest2
 }:
 
 buildPythonPackage rec {
   pname = "bibtexparser";
-  version = "0.6.2";
-  name = "${pname}-${version}";
+  version = "1.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5888219ac5db1c63ae0ad4db52ec7ad87fe7a32bd60e62ee87bceedb8ebf73b8";
+  # PyPI tarball does not ship tests
+  src = fetchFromGitHub {
+    owner = "sciunto-org";
+    repo = "python-${pname}";
+    rev = "v${version}";
+    sha256 = "1yj3hqnmkjh0sjjhmlm4097mmz98kna8rn0dd9g8zaw9g1a35h8c";
   };
 
-  # No tests in archive
-  doCheck = false;
+  propagatedBuildInputs = [ future pyparsing ];
+
+  checkInputs = [ nose unittest2 glibcLocales ];
+
+  checkPhase = ''
+    LC_ALL="en_US.UTF-8" nosetests
+  '';
 
   meta = {
     description = "Bibtex parser for python 2.7 and 3.3 and newer";

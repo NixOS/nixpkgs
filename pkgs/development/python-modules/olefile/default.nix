@@ -1,13 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "olefile";
-  version = "0.44";
-  name = "${pname}-${version}";
+  version = "0.46";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1bbk1xplmrhymqpk6rkb15sg7v9qfih7zh23p6g2fxxas06cmwk1";
+    sha256 = "133b031eaf8fd2c9399b78b8bc5b8fcbe4c31e85295749bb17a87cba8f3c3964";
   };
 
   meta = with stdenv.lib; {

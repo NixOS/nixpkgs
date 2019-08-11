@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy26, argparse, attrs, hypothesis, py
-, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
+, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
+, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
 }:
 buildPythonPackage rec {
-  version = "3.3.2";
+  version = "4.6.3";
   pname = "pytest";
 
   preCheck = ''
@@ -12,18 +13,36 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "53548280ede7818f4dc2ad96608b9f08ae2cc2ca3874f2ceb6f97e3583f25bc4";
+    sha256 = "4a784f1d4f2ef198fe9b7aef793e9fa1a3b2f84e822d9b3a64a181293a572d45";
   };
 
-  checkInputs = [ hypothesis ];
+  checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy ]
-    ++ (stdenv.lib.optional (!isPy3k) funcsigs)
-    ++ (stdenv.lib.optional isPy26 argparse);
+  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
+    ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
+    ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+
+  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
+  checkPhase = ''
+    runHook preCheck
+    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths"
+    runHook postCheck
+  '';
+
+  # Remove .pytest_cache when using py.test in a Nix build
+  setupHook = writeText "pytest-hook" ''
+    pytestcachePhase() {
+        find $out -name .pytest_cache -type d -exec rm -rf {} +
+    }
+
+    preDistPhases+=" pytestcachePhase"
+  '';
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
-    platforms = platforms.unix;
+    homepage = https://docs.pytest.org;
     description = "Framework for writing tests";
+    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

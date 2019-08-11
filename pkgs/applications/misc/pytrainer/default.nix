@@ -1,49 +1,87 @@
-{ stdenv, fetchFromGitHub, perl, python2Packages, sqlite, gpsbabel
-, withWebKit ? false }:
+{ stdenv
+, fetchFromGitHub
+, perl
+, python3
+, sqlite
+, gpsbabel
+, gnome3
+, gobject-introspection
+, wrapGAppsHook
+, gtk3
+, xvfb_run
+, webkitgtk
+, glib-networking
+, glibcLocales
+, tzdata
+, substituteAll
+}:
 
 let
-
-  # Pytrainer needs a matplotlib with GTK backend. Also ensure we are
-  # using the pygtk with glade support as needed by pytrainer.
-  matplotlibGtk = python2Packages.matplotlib.override {
-    enableGtk2 = true;
-    pygtk = python2Packages.pyGtkGlade;
+  # Pytrainer needs a matplotlib with GTK backend.
+  matplotlibGtk = python3.pkgs.matplotlib.override {
+    enableGtk3 = true;
   };
 
 in
 
-python2Packages.buildPythonApplication rec {
-  name = "pytrainer-${version}";
-  version = "1.11.0";
+python3.pkgs.buildPythonApplication rec {
+  pname = "pytrainer";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
     rev = "v${version}";
-    sha256 = "1x4f1ydjql0aisvxs5kyi9lx35b4q3768dx42fyzq1nxdwzaqyvy";
+    sha256 = "1w5z1xwb2g6j2izm89b7lv9n92r1zhsr8bglxcn7jc5gwbvwysvd";
   };
 
-  namePrefix = "";
-
   patches = [
-    # The test fails in the UTC timezone and C locale.
-    ./fix-test-tz.patch
-
-    # The existing use of pywebkitgtk shows raw HTML text instead of
-    # map. This patch solves the problems by showing the file from a
-    # string, which allows setting an explicit MIME type.
-    ./pytrainer-webkit.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      perl = "${perl}/bin/perl";
+    })
   ];
 
-  propagatedBuildInputs = with python2Packages; [
-    dateutil lxml matplotlibGtk pyGtkGlade sqlalchemy_migrate
-  ] ++ stdenv.lib.optional withWebKit [ pywebkitgtk ];
+  postPatch = ''
+    substituteInPlace ./setup.py \
+      --replace "'mysqlclient'," ""
+  '';
 
-  buildInputs = [ perl gpsbabel sqlite ];
+  propagatedBuildInputs = with python3.pkgs; [
+    dateutil
+    lxml
+    matplotlibGtk
+    pygobject3
+    sqlalchemy
+    sqlalchemy_migrate
+    psycopg2
+    requests
+    certifi
+  ];
 
-  # This package contains no binaries to patch or strip.
-  dontPatchELF = true;
-  dontStrip = true;
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+    xvfb_run
+  ];
+
+  buildInputs = [
+    gpsbabel
+    sqlite
+    gtk3
+    webkitgtk
+    glib-networking
+    glibcLocales
+    gnome3.adwaita-icon-theme
+  ];
+
+  checkPhase = ''
+    env HOME=$TEMPDIR TZDIR=${tzdata}/share/zoneinfo \
+      TZ=Europe/Kaliningrad \
+      LC_ALL=en_US.UTF-8 \
+      xvfb-run -s '-screen 0 800x600x24' \
+      ${python3.interpreter} setup.py test
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/pytrainer/pytrainer/wiki;

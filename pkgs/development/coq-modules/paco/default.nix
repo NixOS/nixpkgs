@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lcmdr0y2d7gzyvr8dal3pi7fibbd60bpi1l32fw89xiyrgqhsqy";
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 unzip ];
+  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 unzip ];
   propagatedBuildInputs = [ coq ];
 
   preBuild = "cd src";
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     description = "A Coq library implementing parameterized coinduction";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
+  };
+
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
   };
 
 }

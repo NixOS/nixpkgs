@@ -1,28 +1,39 @@
-{ lib, fetchFromGitHub, python, buildPythonPackage, pytest, pkgconfig, cairo, xlibsWrapper, isPyPy }:
+{ lib, fetchFromGitHub, meson, ninja, buildPythonPackage, pytest, pkgconfig, cairo, xlibsWrapper, isPy33, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pycairo";
-  version = "1.15.4";
-  name = "${pname}-${version}";
+  version = "1.18.1";
 
-  disabled = isPyPy;
+  format = "other";
+
+  disabled = isPy33;
 
   src = fetchFromGitHub {
     owner = "pygobject";
     repo = "pycairo";
     rev = "v${version}";
-    sha256 = "02vzmfxx8nl6dbwzc911wcj7hqspgqz6v9xmq6579vwfla0vaglv";
+    sha256 = "0f4l7d1ibkk8xdspyv5zx8fah9z3x775bd91zirnp37vlgqds7xj";
   };
 
-  postPatch = ''
-    # we are unable to pass --prefix to bdist_wheel
-    # see https://github.com/NixOS/nixpkgs/pull/32034#discussion_r153285955
-    substituteInPlace setup.py --replace '"prefix": self.install_base' "'prefix': '$out'"
-  '';
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python cairo xlibsWrapper ];
+  buildInputs = [
+    cairo
+    xlibsWrapper
+  ];
+
   checkInputs = [ pytest ];
 
-  meta.platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  mesonFlags = [ "-Dpython=${if isPy3k then "python3" else "python"}" ];
+
+  meta = with lib; {
+    description = "Python 2/3 bindings for cairo";
+    homepage = https://pycairo.readthedocs.io/;
+    license = with licenses; [ lgpl2 mpl11 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  };
 }

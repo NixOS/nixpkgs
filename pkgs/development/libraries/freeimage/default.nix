@@ -19,6 +19,10 @@ stdenv.mkDerivation {
       url = patchURL + "/Fix-CVE-2016-5684.patch";
       sha256 = "14ffgqbnwg28r6sjvm3z89zbnnm9ghbc81hdhrzxlyk3vwvd6cw3";
     })
+    (fetchurl {
+      url = https://raw.githubusercontent.com/buildroot/buildroot/2018.05/package/libfreeimage/0005-Manage-powf64-with-glibc.patch;
+      sha256 = "1lis479ad5cfkhqm044nk4x97wfwm3hry3bvij1w5xkndnlfppc2";
+    })
   ];
 
   buildInputs = [ unzip ] ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
@@ -56,6 +60,8 @@ stdenv.mkDerivation {
   postInstall = stdenv.lib.optionalString (!stdenv.isDarwin) "make -f Makefile.fip install";
 
   NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Open Source library for accessing popular graphics image file formats";

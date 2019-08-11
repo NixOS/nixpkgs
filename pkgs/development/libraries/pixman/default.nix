@@ -1,19 +1,19 @@
-{ fetchurl, stdenv, pkgconfig, libpng, glib /*just passthru*/ }:
+{ stdenv, fetchurl, pkgconfig, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
-  name = "pixman-0.34.0";
+  name = "pixman-${version}";
+  version = "0.38.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/${name}.tar.bz2";
-    sha256 = "184lazwdpv67zrlxxswpxrdap85wminh1gmq1i5lcz6iycw39fir";
+    sha256 = "0l0m48lnmdlmnaxn2021qi5cj366d9fzfjxkqgcj9bs14pxbgaw4";
   };
 
-  patches = [];
-
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = stdenv.lib.optional doCheck libpng;
 
-  configureFlags = stdenv.lib.optional stdenv.isArm "--disable-arm-iwmmxt";
+  buildInputs = [ libpng ];
+
+  configureFlags = stdenv.lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
 
   doCheck = true;
 

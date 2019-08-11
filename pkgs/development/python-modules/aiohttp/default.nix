@@ -2,35 +2,56 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, attrs
 , chardet
 , multidict
 , async-timeout
 , yarl
+, idna-ssl
+, typing-extensions
+, pytestrunner
 , pytest
 , gunicorn
-, pytest-raisesregexp
+, pytest-timeout
+, async_generator
+, pytest_xdist
+, pytestcov
+, pytest-mock
+, trustme
+, brotlipy
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "2.3.7";
-  name = "${pname}-${version}";
+  version = "3.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe294df38e9c67374263d783a7a29c79372030f5962bd5734fa51c6f4bbfee3b";
+    sha256 = "9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf";
   };
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.5";
 
-  doCheck = false; # Too many tests fail.
+  checkInputs = [
+    pytestrunner pytest gunicorn pytest-timeout async_generator pytest_xdist
+    pytest-mock pytestcov trustme brotlipy
+  ];
 
-  checkInputs = [ pytest gunicorn pytest-raisesregexp ];
-  propagatedBuildInputs = [ async-timeout chardet multidict yarl ];
+  propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
+    ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
 
-  meta = {
-    description = "Http client/server for asyncio";
-    license = with lib.licenses; [ asl20 ];
-    homepage = https://github.com/KeepSafe/aiohttp/;
+  # Don't error on cryptography deprecation warning
+  postPatch = ''
+    substituteInPlace pytest.ini --replace "filterwarnings = error" ""
+  '';
+
+  # coroutine 'noop2' was never awaited
+  doCheck = false;
+
+  meta = with lib; {
+    description = "Asynchronous HTTP Client/Server for Python and asyncio";
+    license = licenses.asl20;
+    homepage = https://github.com/aio-libs/aiohttp;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

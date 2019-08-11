@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
 
-  name = "wiggle-1.0";
+  name = "wiggle-1.1";
 
   src = fetchurl {
-    url = "https://github.com/neilbrown/wiggle/archive/v1.0.tar.gz";
-    sha256 = "0552dkdvl001b2jasj0jwb69s7zy6wbc8gcysqj69b4qgl9c54cs";
+    url = "https://github.com/neilbrown/wiggle/archive/v1.1.tar.gz";
+    sha256 = "0gg1c0zcrd5fgawvjccmdscm3fka8h1qz4v807kvy1b2y1cf9c4w";
   };
 
   buildInputs = [ ncurses groff ];

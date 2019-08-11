@@ -1,13 +1,37 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, intltool, gobjectIntrospection, gjs, gdk_pixbuf, librsvg }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, glib, gtk3, pango, wrapGAppsHook, python3
+, gobject-introspection, gjs, libunistring, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-characters-${version}";
+  version = "3.32.1";
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-characters/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1mpg125x9k879ryg8xgbm9w1amx6b3iq9sqv7xfii7kzaanjb4js";
+  };
+
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-characters";
+      attrPath = "gnome3.gnome-characters";
+    };
+  };
+
+  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 gobject-introspection ];
   buildInputs = [
-    gtk3 gjs gdk_pixbuf gobjectIntrospection
-    librsvg gnome3.gsettings_desktop_schemas gnome3.defaultIconTheme
+    glib gtk3 gjs pango gsettings-desktop-schemas
+    adwaita-icon-theme libunistring
+    # typelib
+    gnome-desktop
+  ];
+
+  mesonFlags = [
+    "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
   ];
 
   meta = with stdenv.lib; {

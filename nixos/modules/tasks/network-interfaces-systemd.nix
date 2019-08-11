@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, utils, ... }:
 
 with utils;
 with lib;
@@ -9,16 +9,10 @@ let
   interfaces = attrValues cfg.interfaces;
 
   interfaceIps = i:
-    i.ip4 ++ optionals cfg.enableIPv6 i.ip6
-    ++ optional (i.ipAddress != null) {
-      address = i.ipAddress;
-      prefixLength = i.prefixLength;
-    } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
-      address = i.ipv6Address;
-      prefixLength = i.ipv6PrefixLength;
-    };
+    i.ipv4.addresses
+    ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
-  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "none";
+  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "no";
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
@@ -65,7 +59,14 @@ in
           in {
             DHCP = override (dhcpStr cfg.useDHCP);
           } // optionalAttrs (gateway != [ ]) {
-            gateway = override gateway;
+            routes = override [
+              {
+                routeConfig = {
+                  Gateway = gateway;
+                  GatewayOnLink = false;
+                };
+              }
+            ];
           } // optionalAttrs (domains != [ ]) {
             domains = override domains;
           };
@@ -74,27 +75,24 @@ in
         networks."99-main" = genericNetwork mkDefault;
       }
       (mkMerge (flip map interfaces (i: {
-        netdevs = mkIf i.virtual (
-          let
-            devType = if i.virtualType != null then i.virtualType
-              else (if hasPrefix "tun" i.name then "tun" else "tap");
-          in {
-            "40-${i.name}" = {
-              netdevConfig = {
-                Name = i.name;
-                Kind = devType;
-              };
-              "${devType}Config" = optionalAttrs (i.virtualOwner != null) {
-                User = i.virtualOwner;
-              };
+        netdevs = mkIf i.virtual ({
+          "40-${i.name}" = {
+            netdevConfig = {
+              Name = i.name;
+              Kind = i.virtualType;
             };
-          });
+            "${i.virtualType}Config" = optionalAttrs (i.virtualOwner != null) {
+              User = i.virtualOwner;
+            };
+          };
+        });
         networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
             (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
           address = flip map (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
+          networkConfig.IPv6PrivacyExtensions = "kernel";
         } ];
       })))
       (mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {

@@ -1,15 +1,17 @@
-{ stdenv, lib, requireFile, makeWrapper, substituteAll, p7zip
-, gawk, utillinux, xorg, glib, dbus_glib, zlib
+{ stdenv, lib, makeWrapper, p7zip
+, gawk, utillinux, xorg, glib, dbus-glib, zlib
 , kernel ? null, libsOnly ? false
 , undmg, fetchurl
 }:
 
 assert (!libsOnly) -> kernel != null;
+# Disable for kernels 4.15 and above due to compatibility issues
+assert kernel != null -> stdenv.lib.versionOlder kernel.version "4.15";
 
 let xorgFullVer = (builtins.parseDrvName xorg.xorgserver.name).version;
     xorgVer = lib.concatStringsSep "." (lib.take 2 (lib.splitString "." xorgFullVer));
-    x64 = if stdenv.system == "x86_64-linux" then true
-          else if stdenv.system == "i686-linux" then false
+    x64 = if stdenv.hostPlatform.system == "x86_64-linux" then true
+          else if stdenv.hostPlatform.system == "i686-linux" then false
           else throw "Parallels Tools for Linux only support {x86-64,i686}-linux targets";
 in
 stdenv.mkDerivation rec {
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" "format" ];
 
   # also maybe python2 to generate xorg.conf
-  nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ];
+  nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ] ++ kernel.moduleBuildDependencies;
 
   inherit libsOnly;
 
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
 
   libPath = with xorg;
             stdenv.lib.makeLibraryPath ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
-            ++ lib.optionals (!libsOnly) [ libXi glib dbus_glib zlib ]);
+            ++ lib.optionals (!libsOnly) [ libXi glib dbus-glib zlib ]);
 
 
   installPhase = ''

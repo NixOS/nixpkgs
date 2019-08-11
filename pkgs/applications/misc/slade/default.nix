@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Doom editor";
     homepage = http://slade.mancubus.net/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];
   };
 }

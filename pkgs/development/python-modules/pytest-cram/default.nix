@@ -1,16 +1,16 @@
-{lib, buildPythonPackage, fetchPypi, pytest, cram, bash, writeText}:
+{lib, buildPythonPackage, fetchPypi, pytest, cram, bash}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "0.1.1";
+  version = "0.2.0";
   pname = "pytest-cram";
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ cram ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ad05999iqzyjay9y5lc0cnd3jv8qxqlzsvxzp76shslmhrv0c4f";
+    sha256 = "006p5dr3q794sbwwmxmdls3nwq0fvnyrxxmc03pgq8n74chl71qn";
+    extension = "zip";
   };
 
   postPatch = ''
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # the imported and collected modules are different.
   checkPhase = ''
     rm pytest_cram/tests/__init__.py
-    pytest pytest_cram
+    pytest pytest_cram/ --ignore=pytest_cram/tests/test_examples.py
   '';
 
   meta = {

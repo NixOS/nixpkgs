@@ -2,15 +2,15 @@
   stdenv, lib,
   src, patches, version, qtCompatVersion,
 
-  coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby, which,
+  coreutils, bison, flex, gdb, gperf, lndir, perl, pkgconfig, python2,
+  which,
   # darwin support
-  darwin, libiconv, libcxx,
+  darwin, libiconv,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
-  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xlibs,
+  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
   zlib,
 
   # optional dependencies
@@ -18,8 +18,8 @@
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
-  mesaSupported ? (!stdenv.isDarwin),
-  mesa,
+  libGLSupported ? !stdenv.isDarwin,
+  libGL,
   buildExamples ? false,
   buildTests ? false,
   developerBuild ? false,
@@ -30,7 +30,6 @@ assert withGtk3 -> dconf != null;
 assert withGtk3 -> gtk3 != null;
 
 let
-  system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
   compareVersion = v: builtins.compareVersions version v;
 in
 
@@ -54,9 +53,10 @@ stdenv.mkDerivation {
       if stdenv.isDarwin
       then with darwin.apple_sdk.frameworks;
         [
+          # TODO: move to buildInputs, this should not be propagated.
           AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL
-          darwin.libobjc libiconv
+          darwin.libobjc libiconv MetalKit
         ]
       else
         [
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
           libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
           xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
         ]
-        ++ lib.optional mesaSupported mesa
+        ++ lib.optional libGLSupported libGL
     );
 
   buildInputs =
@@ -84,8 +84,7 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig python2 which ]
-    ++ lib.optional (!stdenv.isDarwin) patchelf;
+    [ bison flex gperf lndir perl pkgconfig python2 which ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -142,11 +141,16 @@ stdenv.mkDerivation {
         # Note on the above: \x27 is a way if including a single-quote
         # character in the sed string arguments.
       else
-        lib.optionalString mesaSupported
+        lib.optionalString libGLSupported
           ''
             sed -i mkspecs/common/linux.conf \
-                -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
-                -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
+                -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
+                -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
+          '' +
+        lib.optionalString (stdenv.hostPlatform.isx86_32 && stdenv.cc.isGNU)
+          ''
+            sed -i mkspecs/common/gcc-base-unix.conf \
+                -e "/^QMAKE_LFLAGS_SHLIB/ s/-shared/-shared -static-libgcc/"
           ''
     );
 
@@ -192,30 +196,15 @@ stdenv.mkDerivation {
     [
       "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
       ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
-      ''-DNIXPKGS_LIBRESOLV="${stdenv.cc.libc.out}/lib/libresolv"''
+      ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ]
 
-    ++ (
-      if stdenv.isDarwin
-      then
-        [
-          "-Wno-missing-sysroot"
-          "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
-          "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
-          # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
-          # 10.9 which necessitates the above macro definition that mentions
-          # 10.10
-        ]
-      else
-        lib.optional mesaSupported ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
-        ++ lib.optionals withGtk3
-          [
-            ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-            ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-          ]
-    )
-
+    ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
+    ++ lib.optionals withGtk3 [
+         ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+         ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+       ]
     ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC";
 
   prefixKey = "-prefix ";
@@ -244,9 +233,12 @@ stdenv.mkDerivation {
       "-gui"
       "-widgets"
       "-opengl desktop"
-      "-qml-debug"
       "-icu"
       "-pch"
+    ]
+    ++ lib.optionals (compareVersion "5.11.0" < 0)
+    [
+      "-qml-debug"
     ]
     ++ lib.optionals (compareVersion "5.9.0" < 0)
     [
@@ -258,17 +250,20 @@ stdenv.mkDerivation {
       "-no-warnings-are-errors"
     ]
     ++ (
-      if (!system-x86_64)
+      if (!stdenv.hostPlatform.isx86_64)
       then [ "-no-sse2" ]
-      else lib.optional (compareVersion "5.9.0" >= 0) [ "-sse2" ]
+      else lib.optionals (compareVersion "5.9.0" >= 0) {
+        "default"        = [ "-sse2" "-no-sse3" "-no-ssse3" "-no-sse4.1" "-no-sse4.2" "-no-avx" "-no-avx2" ];
+        "westmere"       = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2" "-no-avx" "-no-avx2" ];
+        "sandybridge"    = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        "ivybridge"      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        "haswell"        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        "broadwell"      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        "skylake"        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        "skylake-avx512" = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+      }.${stdenv.hostPlatform.platform.gcc.arch or "default"}
     )
     ++ [
-      "-no-sse3"
-      "-no-ssse3"
-      "-no-sse4.1"
-      "-no-sse4.2"
-      "-no-avx"
-      "-no-avx2"
       "-no-mips_dsp"
       "-no-mips_dspr2"
     ]
@@ -295,10 +290,10 @@ stdenv.mkDerivation {
       then
         [
           "-platform macx-clang"
-          "-no-use-gold-linker"
           "-no-fontconfig"
           "-qt-freetype"
           "-qt-libpng"
+          "-no-framework"
         ]
       else
         [
@@ -322,12 +317,15 @@ stdenv.mkDerivation {
           "-glib"
           "-system-libjpeg"
           "-system-libpng"
-          # gold linker of binutils 2.28 generates duplicate symbols
-          # TODO: remove for newer version of binutils
-          "-no-use-gold-linker"
         ]
         ++ lib.optional withGtk3 "-gtk"
         ++ lib.optional (compareVersion "5.9.0" >= 0) "-inotify"
+        ++ lib.optionals (compareVersion "5.10.0" >= 0) [
+          # Without these, Qt stops working on kernels < 3.17. See:
+          # https://github.com/NixOS/nixpkgs/issues/38832
+          "-no-feature-renameat2"
+          "-no-feature-getentropy"
+        ]
     );
 
   enableParallelBuilding = true;
@@ -368,24 +366,6 @@ stdenv.mkDerivation {
     ''
 
     + (
-      if stdenv.isDarwin
-      then
-        ''
-          fixDarwinDylibNames_rpath() {
-            local flags=()
-
-            for fn in "$@"; do
-              flags+=(-change "@rpath/$fn.framework/Versions/5/$fn" "$out/lib/$fn.framework/Versions/5/$fn")
-            done
-
-            for fn in "$@"; do
-              echo "$fn: fixing dylib"
-              install_name_tool -id "$out/lib/$fn.framework/Versions/5/$fn" "''${flags[@]}" "$out/lib/$fn.framework/Versions/5/$fn"
-            done
-          }
-          fixDarwinDylibNames_rpath "QtConcurrent" "QtPrintSupport" "QtCore" "QtSql" "QtDBus" "QtTest" "QtGui" "QtWidgets" "QtNetwork" "QtXml" "QtOpenGL"
-        ''
-      else
         # fixup .pc file (where to find 'moc' etc.)
         ''
           sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
@@ -399,8 +379,9 @@ stdenv.mkDerivation {
     homepage = http://www.qt.io;
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ qknight ttuegel periklis ];
+    maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
   };
 
 }

@@ -2,7 +2,7 @@
 , jbig2dec, libjpeg , darwin
 , enableX11 ? true, libX11, libXext, libXi, libXrandr
 , enableCurl ? true, curl, openssl
-, enableGL ? true, freeglut, mesa_glu
+, enableGL ? true, freeglut, libGLU
 }:
 
 let
@@ -14,43 +14,41 @@ let
 
 
 in stdenv.mkDerivation rec {
-  version = "1.12.0";
+  version = "1.14.0";
   name = "mupdf-${version}";
 
   src = fetchurl {
-    url = "http://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "0mc7a92zri27lk17wdr2iffarbfi4lvrmxhc53sz84hm5yl56qsw";
+    url = "https://mupdf.com/downloads/archive/${name}-source.tar.gz";
+    sha256 = "093p7lv6pgyymagn28n58fs0np928r0i5p2az9cc4gwccwx4hhy4";
   };
 
-  patches = [
-    # Compatibility with new openjpeg
-    (fetchpatch {
-      name = "mupdf-1.12-openjpeg-version.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=a910cd33a2b311712f83710dc042fbe80c104306";
-      sha256 = "05i9v2ia586jyjqdb7g68ss4vkfwgp6cwhagc8zzggsba83azyqk";
-    })
-  ]
-
-  # Use shared libraries to decrease size
-  ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.12-shared_libs-1.patch
-
-  ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+  patches =
+    # Use shared libraries to decrease size
+    [( fetchpatch
+      {
+          name = "CVE-2018-18662";
+          url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=164ddc22ee0d5b63a81d5148f44c37dd132a9356";
+          sha256 = "1jkzh20n3b854871h86cy5y7fvy0d5wyqy51b3fg6gj3a0jqpzzd";
+      }
+    )]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
   ;
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
   '';
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut mesa_glu ]
+  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
                 ++ lib.optionals enableCurl [ curl openssl ]
                 ++ lib.optionals enableGL (
                   if stdenv.isDarwin then
                     with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
                   else
-                    [ freeglut mesa_glu ])
+                    [ freeglut libGLU ])
                 ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
@@ -69,7 +67,7 @@ in stdenv.mkDerivation rec {
     Name: mupdf
     Description: Library for rendering PDF documents
     Version: ${version}
-    Libs: -L$out/lib -lmupdf -lmupdfthird
+    Libs: -L$out/lib -lmupdf -lmupdf-third
     Cflags: -I$dev/include
     EOF
 
@@ -89,11 +87,11 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://mupdf.com;
+    homepage = https://mupdf.com;
     repositories.git = git://git.ghostscript.com/mupdf.git;
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ viric vrthra fpletz ];
+    maintainers = with maintainers; [ vrthra fpletz ];
     platforms = platforms.unix;
   };
 }

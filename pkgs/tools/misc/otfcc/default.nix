@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, premake5, ninja, hostPlatform }:
+{ stdenv, fetchFromGitHub, premake5 }:
 
 stdenv.mkDerivation rec {
   name = "otfcc-${version}";
-  version = "0.8.6";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "caryll";
     repo = "otfcc";
     rev = "v${version}";
-    sha256 = "0yy9awffxxs0cdlf0akld73ndnwmylxvplac4k6j7641m3vk1g8p";
+    sha256 = "1rnjfqqyc6d9nhlh8if9k37wk94mcwz4wf3k239v6idg48nrk10b";
   };
 
-  nativeBuildInputs = [ premake5 ninja ];
+  nativeBuildInputs = [ premake5 ];
 
-  configurePhase = ''
-    premake5 ninja
+  # Don’t guess where our makefiles will end up. Just use current
+  # directory.
+  patchPhase = ''
+    substituteInPlace premake5.lua \
+      --replace 'location "build/gmake"' 'location "."'
   '';
-
-  ninjaFlags = let x = if hostPlatform.isi686 then "x86" else "x64"; in
-    [ "-C" "build/ninja" "otfccdump_release_${x}" "otfccbuild_release_${x}" ];
 
   installPhase = ''
     mkdir -p $out/bin

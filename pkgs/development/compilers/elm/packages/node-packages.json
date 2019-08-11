@@ -1,0 +1,7 @@
+[
+    "elm-test",
+    "elm-verify-examples",
+    "elm-doc-preview",
+    "elm-analyse",
+    "elm-upgrade"
+]

@@ -56,7 +56,7 @@ in
 
   config = mkIf config.services.toxBootstrapd.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "tox-bootstrapd";
         uid = config.ids.uids.tox-bootstrapd;
         description = "Tox bootstrap daemon user";
@@ -69,7 +69,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig =
-        { ExecStart = "${pkg}/bin/tox-bootstrapd ${cfgFile}";
+        { ExecStart = "${pkg}/bin/tox-bootstrapd --config=${cfgFile}";
           Type = "forking";
           inherit PIDFile;
           User = "tox-bootstrapd";

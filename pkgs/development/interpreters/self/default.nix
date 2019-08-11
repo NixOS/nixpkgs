@@ -1,4 +1,4 @@
-{ fetchurl, fetchgit, stdenv, xorg, makeWrapper, ncurses, cmake }:
+{ fetchgit, stdenv, xorg, makeWrapper, ncurses, cmake }:
 
 stdenv.mkDerivation rec {
   # The Self wrapper stores source in $XDG_DATA_HOME/self or ~/.local/share/self 

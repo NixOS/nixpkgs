@@ -1,6 +1,5 @@
-{pkgs, buildLispPackage, clwrapper, quicklisp-to-nix-packages}:
+{pkgs, quicklisp-to-nix-packages}:
 let
-  addDeps = newdeps: x: {deps = x.deps ++ newdeps;};
   addNativeLibs = libs: x: { propagatedBuildInputs = libs; };
   skipBuildPhase = x: {
     overrides = y: ((x.overrides y) // { buildPhase = "true"; });
@@ -11,13 +10,14 @@ in
 {
   stumpwm = x:{
     overrides = y: (x.overrides y) // {
+      linkedSystems = [];
       preConfigure = ''
         export configureFlags="$configureFlags --with-$NIX_LISP=common-lisp.sh";
       '';
       postInstall = ''
-        "$out/bin/stumpwm-lisp-launcher.sh" --eval '(asdf:make :stumpwm)' \
-          --eval '(setf (asdf/system:component-entry-point (asdf:find-system :stumpwm)) (function stumpwm:stumpwm))' \
-          --eval '(asdf:perform (quote asdf:program-op) :stumpwm)'
+        export NIX_LISP_PRELAUNCH_HOOK="nix_lisp_build_system stumpwm \
+                '(function stumpwm:stumpwm)' '$linkedSystems'"
+        "$out/bin/stumpwm-lisp-launcher.sh"
 
         cp "$out/lib/common-lisp/stumpwm/stumpwm" "$out/bin"
       '';
@@ -47,10 +47,10 @@ in
   cxml = skipBuildPhase;
   wookie = addNativeLibs (with pkgs; [libuv openssl]);
   lev = addNativeLibs [pkgs.libev];
-  "cl+ssl" = addNativeLibs [pkgs.openssl];
+  cl_plus_ssl = addNativeLibs [pkgs.openssl];
   cl-colors = skipBuildPhase;
   cl-libuv = addNativeLibs [pkgs.libuv];
-  cl-async-ssl = addNativeLibs [pkgs.openssl];
+  cl-async-ssl = addNativeLibs [pkgs.openssl (import ./openssl-lib-marked.nix)];
   cl-async-test = addNativeLibs [pkgs.openssl];
   clsql = x: {
     propagatedBuildInputs = with pkgs; [mysql.connector-c postgresql sqlite zlib];
@@ -69,12 +69,10 @@ in
         export NIX_LISP_ASDF_PATHS="$NIX_LISP_ASDF_PATHS
 $out/lib/common-lisp/query-fs"
 	export HOME=$PWD
-        "$out/bin/query-fs-lisp-launcher.sh" --eval '(asdf:make :query-fs)' \
-          --eval "(progn $(for i in $linkedSystems; do echo "(asdf:make :$i)"; done) )" \
-          --eval '(setf (asdf/system:component-entry-point (asdf:find-system :query-fs))
-                           (function query-fs:run-fs-with-cmdline-args))' \
-          --eval '(asdf:perform (quote asdf:program-op) :query-fs)'
-	cp "$out/lib/common-lisp/query-fs/query-fs" "$out/bin/"
+        export NIX_LISP_PRELAUNCH_HOOK="nix_lisp_build_system query-fs \
+                    '(function query-fs:run-fs-with-cmdline-args)' '$linkedSystems'"
+        "$out/bin/query-fs-lisp-launcher.sh"
+        cp "$out/lib/common-lisp/query-fs/query-fs" "$out/bin/"
       '';
     };
   };
@@ -141,5 +139,30 @@ $out/lib/common-lisp/query-fs"
     asdFilesToKeep = (x.asdFilesToKeep or []) ++ [
       "cl-unification-lib.asd"
     ];
+  };
+  simple-date = x: {
+    deps = with quicklisp-to-nix-packages; [
+      fiveam md5 usocket
+    ];
+    parasites = [
+      # Needs pomo? Wants to do queries unconditionally?
+      # "simple-date/tests"
+    ];
+  };
+  cl-postgres = x: {
+    deps = pkgs.lib.filter (x: x.outPath != quicklisp-to-nix-packages.simple-date.outPath) x.deps;
+    parasites = (x.parasites or []) ++ [
+      "simple-date" "simple-date/postgres-glue"
+    ];
+    asdFilesToKeep = x.asdFilesToKeep ++ ["simple-date.asd"];
+  };
+  buildnode = x: {
+    deps = pkgs.lib.filter (x: x.name != quicklisp-to-nix-packages.buildnode-xhtml.name) x.deps;
+    parasites = pkgs.lib.filter (x: x!= "buildnode-test") x.parasites;
+  };
+  postmodern = x: {
+    overrides = y : (x.overrides y) // {
+      meta.broken = true; # 2018-04-10
+    };
   };
 }

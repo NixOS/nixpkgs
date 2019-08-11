@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, gmp
-, buildPlatform, hostPlatform
-}:
+{ stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "mpfr-3.1.3";
+  version = "4.0.2";
+  name = "mpfr-${version}";
 
   src = fetchurl {
-    url = "mirror://gnu/mpfr/${name}.tar.bz2";
-    sha256 = "1z8akfw9wbmq91vrx04bw86mmnxw2sw5qm5cr8ix5b3w2mcv8fzn";
+    urls = [
+      #"https://www.mpfr.org/${name}/${name}.tar.xz"
+      "mirror://gnu/mpfr/${name}.tar.xz"
+    ];
+    sha256 = "12m3amcavhpqygc499s3fzqlb8f2j2rr7fkqsm10xbjfc04fffqx";
   };
-
-  patches = [ ./upstream.patch ];
 
   outputs = [ "out" "dev" "doc" "info" ];
 
@@ -18,15 +18,15 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gmp ];
 
   configureFlags =
-    stdenv.lib.optional hostPlatform.isSunOS "--disable-thread-safe" ++
-    stdenv.lib.optional hostPlatform.is64bit "--with-pic";
+    stdenv.lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe" ++
+    stdenv.lib.optional stdenv.hostPlatform.is64bit "--with-pic";
 
   doCheck = true; # not cross;
 
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.mpfr.org/;
+    homepage = https://www.mpfr.org/;
     description = "Library for multiple-precision floating-point arithmetic";
 
     longDescription = ''

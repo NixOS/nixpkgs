@@ -26,8 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   libsForQt5, lib, fetchurl,
-  gconf,
-  debug ? false,
+  gconf, gsettings-desktop-schemas
 }:
 
 let
@@ -103,9 +102,10 @@ let
       breeze-qt5 = callPackage ./breeze-qt5.nix {};
       breeze-grub = callPackage ./breeze-grub.nix {};
       breeze-plymouth = callPackage ./breeze-plymouth {};
+      discover = callPackage ./discover.nix {};
       kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
       kde-cli-tools = callPackage ./kde-cli-tools.nix {};
-      kde-gtk-config = callPackage ./kde-gtk-config {};
+      kde-gtk-config = callPackage ./kde-gtk-config { inherit gsettings-desktop-schemas; };
       kdecoration = callPackage ./kdecoration.nix {};
       kdeplasma-addons = callPackage ./kdeplasma-addons.nix {};
       kgamma5 = callPackage ./kgamma5.nix {};
@@ -124,8 +124,9 @@ let
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
+      plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
-      plasma-integration = callPackage ./plasma-integration.nix {};
+      plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
       plasma-vault = callPackage ./plasma-vault {};
@@ -135,6 +136,8 @@ let
       powerdevil = callPackage ./powerdevil.nix {};
       sddm-kcm = callPackage ./sddm-kcm.nix {};
       systemsettings = callPackage ./systemsettings.nix {};
+      user-manager = callPackage ./user-manager.nix {};
+      xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
     };
 in
 lib.makeScope libsForQt5.newScope packages

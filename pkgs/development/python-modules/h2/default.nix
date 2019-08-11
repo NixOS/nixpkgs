@@ -2,13 +2,12 @@
 , enum34, hpack, hyperframe }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "h2";
-  version = "3.0.1";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r3f43r0v7sqgdjjg5ngw0dndk2v6cyd0jncpwya54m37y42z5mj";
+    sha256 = "1d1svhixk3hr78ph3nx8wi7sagx1xrvm712mmk028i2rhb92p8xq";
   };
 
   propagatedBuildInputs = [ enum34 hpack hyperframe ];

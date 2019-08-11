@@ -1,22 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, python, serd, pcre }:
+{ stdenv, fetchurl, pkgconfig, python, serd, pcre, wafHook }:
 
 stdenv.mkDerivation rec {
   name = "sord-${version}";
-  version = "0.16.0";
+  version = "0.16.2";
 
   src = fetchurl {
-    url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "0nh3i867g9z4kdlnk82cg2kcw8r02qgifxvkycvzb4vfjv4v4g4x";
+    url = "https://download.drobilla.net/${name}.tar.bz2";
+    sha256 = "13fshxwpipjrvsah1m2jw1kf022z2q5vpw24bzcznglgvms13x89";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ python serd pcre ];
-
-  configurePhase = "${python.interpreter} waf configure --prefix=$out";
-
-  buildPhase = "${python.interpreter} waf";
-
-  installPhase = "${python.interpreter} waf install";
 
   meta = with stdenv.lib; {
     homepage = http://drobilla.net/software/sord;

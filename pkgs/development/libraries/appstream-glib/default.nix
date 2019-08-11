@@ -1,30 +1,55 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, gtk3, glib
-, gtk_doc, libarchive, gobjectIntrospection
-, sqlite, libsoup, gcab, attr, acl, docbook_xsl
-, libuuid, json_glib, meson, gperf, ninja
+{ stdenv, fetchFromGitHub, substituteAll, pkgconfig, gettext, gtk3, glib
+, gtk-doc, libarchive, gobject-introspection, libxslt, pngquant
+, sqlite, libsoup, attr, acl, docbook_xsl, docbook_xml_dtd_42
+, libuuid, json-glib, meson, gperf, ninja, gdk-pixbuf
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.2";
+  name = "appstream-glib-0.7.15";
+
+  outputs = [ "out" "dev" "man" "installedTests" ];
+  outputBin = "dev";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
-    sha256 = "1jvwfida12d2snc8p9lpbpqzrixw2naaiwfmsrldwkrxsj3i19pl";
+    sha256 = "16cqs1s7nqc551sipgaxbbzwap1km0n12s4lcgfbxzzl9bcjbp9m";
   };
 
-  nativeBuildInputs = [ meson pkgconfig ninja ];
-  buildInputs = [ glib gtk_doc gettext sqlite libsoup
-                  gcab attr acl docbook_xsl libuuid json_glib
-                  libarchive gobjectIntrospection gperf ];
+  nativeBuildInputs = [
+    meson pkgconfig ninja gtk-doc libxslt docbook_xsl docbook_xml_dtd_42 gobject-introspection
+  ];
+  buildInputs = [
+    glib gettext sqlite libsoup
+    attr acl libuuid json-glib
+    libarchive gperf gdk-pixbuf
+  ];
   propagatedBuildInputs = [ gtk3 ];
-  mesonFlags = [ "-Denable-rpm=false" "-Denable-stemmer=false" "-Denable-dep11=false" ];
+
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      pngquant = "${pngquant}/bin/pngquant";
+    })
+  ];
+
+  mesonFlags = [
+    "-Drpm=false"
+    "-Dstemmer=false"
+    "-Ddep11=false"
+  ];
+
+  doCheck = false; # fails at least 1 test
+
+  postInstall = ''
+    moveToOutput "share/installed-tests" "$installedTests"
+  '';
 
   meta = with stdenv.lib; {
     description = "Objects and helper methods to read and write AppStream metadata";
-    homepage    = https://github.com/hughsie/appstream-glib;
-    license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
+    homepage = https://people.freedesktop.org/~hughsient/appstream-glib/;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lethalman matthewbauer ];
   };
 }

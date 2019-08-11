@@ -8,6 +8,7 @@ let
     if cfg.configFile == null then
       pkgs.runCommand "config.toml" {
         buildInputs = [ pkgs.remarshal ];
+        preferLocalBuild = true;
       } ''
         remarshal -if json -of toml \
           < ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
@@ -64,6 +65,16 @@ in {
       '';
     };
 
+    group = mkOption {
+      default = "traefik";
+      type = types.string;
+      example = "docker";
+      description = ''
+        Set the group that traefik runs under.
+        For the docker backend this needs to be set to <literal>docker</literal> instead.
+      '';
+    };
+
     package = mkOption {
       default = pkgs.traefik;
       defaultText = "pkgs.traefik";
@@ -73,21 +84,19 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 traefik traefik - -"
+    ];
+
     systemd.services.traefik = {
       description = "Traefik web server";
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        PermissionsStartOnly = true;
         ExecStart = ''${cfg.package.bin}/bin/traefik --configfile=${configFile}'';
-        ExecStartPre = [
-          ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}"''
-          ''${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"''
-          ''${pkgs.coreutils}/bin/chown -R traefik:traefik "${cfg.dataDir}"''
-        ];
         Type = "simple";
         User = "traefik";
-        Group = "traefik";
+        Group = cfg.group;
         Restart = "on-failure";
         StartLimitInterval = 86400;
         StartLimitBurst = 5;
@@ -104,12 +113,12 @@ in {
       };
     };
 
-    users.extraUsers.traefik = {
+    users.users.traefik = {
       group = "traefik";
       home = cfg.dataDir;
       createHome = true;
     };
 
-    users.extraGroups.traefik = {};
+    users.groups.traefik = {};
   };
 }

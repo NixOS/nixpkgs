@@ -1,18 +1,22 @@
 { stdenv, fetchurl, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.1";
+  version = "1.7.0";
   name = "hunspell-${version}";
 
   src = fetchurl {
     url = "https://github.com/hunspell/hunspell/archive/v${version}.tar.gz";
-    sha256 = "0j9c20sj7bgd6f77193g1ihy8w905byk2gdhdc0r9dsh7irr7x9h";
+    sha256 = "12mwwqz6qkx7q1lg9vpjiiwh4fk4c8xs6g6g0xa2ia0hp5pbh9xv";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
 
   buildInputs = [ ncurses readline ];
   nativeBuildInputs = [ autoreconfHook ];
+
+  postPatch = ''
+    patchShebangs tests
+  '';
 
   autoreconfFlags = "-vfi";
 
@@ -44,6 +48,7 @@ stdenv.mkDerivation rec {
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.
     '';
     platforms = platforms.all;
+    license = with licenses; [ gpl2 lgpl21 mpl11 ];
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

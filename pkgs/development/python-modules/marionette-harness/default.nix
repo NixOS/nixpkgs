@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -14,13 +13,12 @@
 
 buildPythonPackage rec {
   pname = "marionette-harness";
-  version = "4.3.0";
-  name = "${pname}-${version}";
+  version = "4.5.0";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a98bb65a0c63f60d9e3d7ef21dabc9c29676917dc2ec0d46851a3ed694c820cc";
+    sha256 = "241c7f6032d01b0d78f5c0d13ea691935ddce9f8fce991319cc4fe860d61a7c4";
   };
 
   propagatedBuildInputs = [ mozprofile mozversion browsermob-proxy moztest 

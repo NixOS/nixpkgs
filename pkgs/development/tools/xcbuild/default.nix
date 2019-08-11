@@ -1,4 +1,5 @@
-{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng, CoreServices, CoreGraphics, ImageIO, ninja }:
+{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng
+, CoreServices, CoreGraphics, ImageIO, ninja }:
 
 let
   googletest = fetchFromGitHub {
@@ -17,7 +18,8 @@ let
 in stdenv.mkDerivation rec {
   name    = "xcbuild-${version}";
 
-  # Once a version is released that includes https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,
+  # Once a version is released that includes
+  # https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,
   # we can stop doing this -pre thing.
   version = "0.1.2-pre";
 
@@ -34,10 +36,15 @@ in stdenv.mkDerivation rec {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
-  # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
   postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # Apple Open Sourced LZFSE, but not libcompression, and it isn't
+    # part of an impure framework we can add
+    substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
+      --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
   '';
 
   enableParallelBuilding = true;
@@ -48,7 +55,7 @@ in stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=strict-aliasing";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = [ "-GNinja" ];
 
@@ -60,5 +67,6 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/facebook/xcbuild;
     platforms = platforms.unix;
     maintainers = with maintainers; [ copumpkin matthewbauer ];
+    license = with licenses; [ bsd2 bsd3 ];
   };
 }

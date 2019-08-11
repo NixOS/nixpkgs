@@ -2,13 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libmateweather-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "2";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1q3rvmm533cgiif9hbdp6a92dm727g5i2dv5d8krfa0nl36i468y";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1ribgcwl4ncfbcf9bkcbxrgc7yzajdnxg12837psngymkqswlp6a";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

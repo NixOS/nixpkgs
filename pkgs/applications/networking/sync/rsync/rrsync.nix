@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, perl, rsync }:
+{ stdenv, fetchurl, perl, rsync }:
 
 let
-  base = import ./base.nix { inherit stdenv fetchurl fetchpatch; };
+  base = import ./base.nix { inherit stdenv fetchurl; };
 in
 stdenv.mkDerivation rec {
   name = "rrsync-${base.version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   # Skip configure and build phases.
   # We just want something from the support directory
-  configurePhase = "true";
+  dontConfigure = true;
   dontBuild = true;
 
   postPatch = ''

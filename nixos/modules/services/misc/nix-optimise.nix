@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -40,6 +40,8 @@ in
 
     systemd.services.nix-optimise =
       { description = "Nix Store Optimiser";
+        # No point running it inside a nixos-container. It should be on the host instead.
+        unitConfig.ConditionVirtualization = "!container";
         serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
         startAt = optionals cfg.automatic cfg.dates;
       };

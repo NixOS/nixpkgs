@@ -19,11 +19,11 @@ assert withFonts -> freetype != null;
 
 stdenv.mkDerivation rec {
   name = "libbluray-${version}";
-  version  = "1.0.0";
+  version  = "1.1.2";
 
   src = fetchurl {
     url = "http://get.videolan.org/libbluray/${version}/${name}.tar.bz2";
-    sha256 = "1k3lag4lxi2jjd3zh4wcb5l3hadzm54j5kagh92yzfy76p9svqzp";
+    sha256 = "0hhbgkm11fw4pwbrklm76aiy54r6d7hk06yhl2fxq05i74i4bpd3";
   };
 
   patches = optional withJava ./BDJ-JARFILE-path.patch;
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags =  with stdenv.lib;
-                    optional (! withJava) "--disable-bdjava"
+                    optional (! withJava) "--disable-bdjava-jar"
                  ++ optional (! withMetadata) "--without-libxml2"
                  ++ optional (! withFonts) "--without-freetype"
                  ;

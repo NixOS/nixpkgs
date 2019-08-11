@@ -5,12 +5,11 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2017.7.27.1";
-  name = "${pname}-${version}";
+  version = "2019.6.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "40523d2efb60523e113b44602298f0960e900388cf3bb6043f645cf57ea9e3f5";
+    sha256 = "945e3ba63a0b9f577b1395204e13c3a231f9bc0223888be653286534e5873695";
   };
 
   meta = {

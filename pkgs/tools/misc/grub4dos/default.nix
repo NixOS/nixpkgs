@@ -6,13 +6,13 @@ let arch =
   else throw "Unknown architecture";
 in stdenv.mkDerivation rec {
   name = "grub4dos-${version}";
-  version = "0.4.6a-2016-12-24";
+  version = "0.4.6a-2019-05-12";
 
   src = fetchFromGitHub {
     owner = "chenall";
     repo = "grub4dos";
-    rev = "ca0371bb1e2365bfe4e44031a3b8b59e8c58ce0d";
-    sha256 = "0a9m7n5la3dmbfx6n5iqlfbm607r1mww0wkimn29mlsc30d8aamr";
+    rev = "e8224a2d20760139ffaeafa07838e2c3c54de783";
+    sha256 = "0i7n71za43qnlsxfvjrv1z5g1w5jl9snpbnas7rw97rry7cgyswf";
   };
 
   nativeBuildInputs = [ nasm ];
@@ -29,6 +29,9 @@ in stdenv.mkDerivation rec {
 
   dontStrip = true;
   dontPatchELF = true;
+
+  # make[2]: *** No rule to make target 'pre_stage2_fullsize', needed by 'all-am'.  Stop.
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = http://grub4dos.chenall.net/;

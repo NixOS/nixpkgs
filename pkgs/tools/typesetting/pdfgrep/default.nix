@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pdfgrep-${version}";
-  version = "2.0.1";
+  version = "2.1.2";
 
   src = fetchurl {
     url = "https://pdfgrep.org/download/${name}.tar.gz";
-    sha256 = "07llkrkcfjwd3ybai9ad10ybhr0biffcplmy7lw4fb87nd2dfw03";
+    sha256 = "1fia10djcxxl7n9jw2prargw4yzbykk6izig2443ycj9syhxrwqf";
   };
 
   postPatch = ''
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://pdfgrep.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ qknight fpletz ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

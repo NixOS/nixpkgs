@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, gettext
 , libjpeg, libtiff, libungif, libpng, imlib, expat
-, freetype, fontconfig, pkgconfig, gdk_pixbuf
+, freetype, fontconfig, pkgconfig, gdk-pixbuf
 , mkfontdir, libX11, libXft, libXext, libXinerama
 , libXrandr, libICE, libSM, libXpm, libXdmcp, libxcb
 , libpthreadstubs, pcre }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
   [ cmake gettext libjpeg libtiff libungif libpng imlib expat
-    freetype fontconfig pkgconfig gdk_pixbuf mkfontdir libX11
+    freetype fontconfig pkgconfig gdk-pixbuf mkfontdir libX11
     libXft libXext libXinerama libXrandr libICE libSM libXpm
     libXdmcp libxcb libpthreadstubs pcre ];
 
@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     export cmakeFlags="-DPREFIX=$out -DCFGDIR=/etc/icewm"
   '';
 
+  patches = [ ./fix-strlcat_strlcpy.patch ] ++
+    stdenv.lib.optional stdenv.hostPlatform.isMusl ./musl.patch;
+
+  patchFlags = [ "-p0" ];
+
   meta = {
     description = "A simple, lightweight X window manager";
     longDescription = ''
@@ -34,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.icewm.org/;
     license = licenses.lgpl2;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

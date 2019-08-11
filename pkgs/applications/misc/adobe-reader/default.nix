@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libX11, cups, zlib, libxml2, pango, atk, gtk2, glib
-, gdk_pixbuf }:
+, gdk-pixbuf }:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.hostPlatform.system == "i686-linux";
 
 let version = "9.5.5"; in
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   # versions.
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk_pixbuf ];
+    [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf ];
 
   passthru.mozillaPlugin = "/libexec/adobe-reader/Browser/intellinux";
 

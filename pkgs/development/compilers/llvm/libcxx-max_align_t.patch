@@ -1,0 +1,54 @@
+From 917331c88bd2afce0cf0fdbcab55a64541b5bcf0 Mon Sep 17 00:00:00 2001
+From: "David L. Jones" <dlj@google.com>
+Date: Fri, 10 Feb 2017 01:27:42 +0000
+Subject: [PATCH] Check for musl-libc's max_align_t in addition to other
+ variants.
+
+Summary:
+Libcxx will define its own max_align_t when it is not available. However, the
+availability checks today only check for Clang's definition and GCC's
+definition. In particular, it does not check for musl's definition, which is the
+same as GCC's but guarded with a different macro.
+
+Reviewers: mclow.lists, EricWF
+
+Reviewed By: EricWF
+
+Subscribers: chandlerc, cfe-commits
+
+Differential Revision: https://reviews.llvm.org/D28478
+
+git-svn-id: https://llvm.org/svn/llvm-project/libcxx/trunk@294683 91177308-0d34-0410-b5e6-96231b3b80d8
+---
+ include/cstddef  | 3 ++-
+ include/stddef.h | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/include/cstddef b/include/cstddef
+index edd106c00..103898b7d 100644
+--- a/include/cstddef
++++ b/include/cstddef
+@@ -48,7 +48,8 @@ _LIBCPP_BEGIN_NAMESPACE_STD
+ using ::ptrdiff_t;
+ using ::size_t;
+ 
+-#if defined(__CLANG_MAX_ALIGN_T_DEFINED) || defined(_GCC_MAX_ALIGN_T)
++#if defined(__CLANG_MAX_ALIGN_T_DEFINED) || defined(_GCC_MAX_ALIGN_T) || \
++    defined(__DEFINED_max_align_t)
+ // Re-use the compiler's <stddef.h> max_align_t where possible.
+ using ::max_align_t;
+ #else
+diff --git a/include/stddef.h b/include/stddef.h
+index 8841bbea2..faf8552d8 100644
+--- a/include/stddef.h
++++ b/include/stddef.h
+@@ -53,7 +53,8 @@ using std::nullptr_t;
+ }
+ 
+ // Re-use the compiler's <stddef.h> max_align_t where possible.
+-#if !defined(__CLANG_MAX_ALIGN_T_DEFINED) && !defined(_GCC_MAX_ALIGN_T)
++#if !defined(__CLANG_MAX_ALIGN_T_DEFINED) && !defined(_GCC_MAX_ALIGN_T) && \
++    !defined(__DEFINED_max_align_t)
+ typedef long double max_align_t;
+ #endif
+ 

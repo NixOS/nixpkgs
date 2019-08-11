@@ -4,16 +4,16 @@
 , cffi
 , numpy
 , portaudio
+, substituteAll
 }:
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  name = "${pname}-${version}";
-  version = "0.3.9";
+  version = "0.3.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c9e833f8c8ccc67c0291c3448b29e9acc548fe56d15ee6f7fdd7037e00319f8";
+    sha256 = "01x2hm3xxzhxrjcj21si4ggmvkwmy5hag7f6yabqlhwskws721cd";
   };
 
   propagatedBuildInputs = [ cffi numpy portaudio ];
@@ -21,9 +21,12 @@ buildPythonPackage rec {
   # No tests included nor upstream available.
   doCheck = false;
 
-  prePatch = ''
-    substituteInPlace src/sounddevice.py --replace "'portaudio'" "'${portaudio}/lib/libportaudio.so.2'"
-  '';
+  patches = [
+    (substituteAll {
+      src = ./fix-portaudio-library-path.patch;
+      portaudio = "${portaudio}/lib/libportaudio.so.2";
+    })
+  ];
 
   meta = {
     description = "Play and Record Sound with Python";

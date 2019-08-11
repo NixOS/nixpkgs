@@ -1,13 +1,36 @@
-{ stdenv, fetchurl, vala, libxslt, pkgconfig, glib, dbus_glib, gnome3
-, libxml2, intltool, docbook_xsl_ns, docbook_xsl, wrapGAppsHook }:
+{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3
+, libxml2, gettext, docbook_xsl, hicolor-icon-theme, wrapGAppsHook, gobject-introspection }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "dconf-editor";
+  version = "3.32.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1fmsmlh16njjm948grz20mzrsvb4wjj7pl1fvkrkxqi7mhr177gi";
+  };
 
-  buildInputs = [ vala libxslt glib dbus_glib gnome3.gtk libxml2 gnome3.defaultIconTheme
-                  intltool docbook_xsl docbook_xsl_ns gnome3.dconf ];
+  nativeBuildInputs = [
+    meson ninja vala libxslt pkgconfig wrapGAppsHook
+    gettext docbook_xsl libxml2 gobject-introspection python3
+    hicolor-icon-theme # for setup-hook
+  ];
+
+  buildInputs = [ glib gtk3 gnome3.dconf ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "${pname}";
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

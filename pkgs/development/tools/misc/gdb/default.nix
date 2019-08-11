@@ -1,52 +1,54 @@
 { stdenv
 
 # Build time
-, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs
+, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
 
-, buildPlatform, hostPlatform, targetPlatform
-
-, pythonSupport ? hostPlatform == buildPlatform && !hostPlatform.isCygwin, python ? null
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
-
-# Additional dependencies for GNU/Hurd.
-, mig ? null, hurd ? null
 
 }:
 
 let
   basename = "gdb-${version}";
-  version = "8.0.1";
+  version = "8.3";
 in
 
-assert targetPlatform.isHurd -> mig != null && hurd != null;
-assert pythonSupport -> python != null;
+assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   name =
-    stdenv.lib.optionalString (targetPlatform != hostPlatform)
-                              (targetPlatform.config + "-")
+    stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                              (stdenv.targetPlatform.config + "-")
     + basename;
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "1qwmcbaxf0jc7yjl0fimgcfj2yqcrl6h7azgs1d838kbwf9mzg9x";
+    sha256 = "0bnpzz0rl672xg5547q5qck2sxi6cnyixmk8bbb4gifw17ipwbw0";
   };
 
-  patches = [ ./debug-info-from-env.patch ];
+  postPatch = if stdenv.isDarwin then ''
+    substituteInPlace gdb/darwin-nat.c \
+      --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+  '' else null;
 
-  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ]
-    # TODO(@Ericson2314) not sure if should be host or target
-    ++ stdenv.lib.optional targetPlatform.isHurd mig;
+  patches = [
+    ./debug-info-from-env.patch
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    ./darwin-target-match.patch
+  ];
+
+  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
 
   buildInputs = [ ncurses readline gmp mpfr expat zlib guile ]
-    ++ stdenv.lib.optional pythonSupport python
-    ++ stdenv.lib.optional targetPlatform.isHurd hurd
+    ++ stdenv.lib.optional pythonSupport python3
     ++ stdenv.lib.optional doCheck dejagnu;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   enableParallelBuilding = true;
 
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
 
   configureFlags = with stdenv.lib; [
     "--enable-targets=all" "--enable-64-bit-bfd"
@@ -87,7 +89,7 @@ stdenv.mkDerivation rec {
       program was doing at the moment it crashed.
     '';
 
-    homepage = http://www.gnu.org/software/gdb/;
+    homepage = https://www.gnu.org/software/gdb/;
 
     license = stdenv.lib.licenses.gpl3Plus;
 

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, python}:
 
 stdenv.mkDerivation {
-  name = "doclifter-2.15";
+  name = "doclifter-2.19";
   src = fetchurl {
-    url = http://www.catb.org/~esr/doclifter/doclifter-2.15.tar.gz;
-    sha256 = "14k750bxp0kpnm130pp22vx3vmppfnzwisc042din1416ka07yv0";
+    url = http://www.catb.org/~esr/doclifter/doclifter-2.19.tar.gz;
+    sha256 = "1as6z7mdjrrkw2kism41q5ybvyzvwcmj9qzla2fz98v9f4jbj2s2";
   };
   buildInputs = [ python ];
   

@@ -1,17 +1,22 @@
-{ stdenv, fetchurl, openssl, lzo, zlib, iproute, which, ronn }:
+{ stdenv, fetchFromGitHub, openssl, lzo, zlib, iproute, which, ronn }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.4";
-  name = "zerotierone";
+  pname = "zerotierone";
+  version = "1.4.0";
 
-  src = fetchurl {
-    url = "https://github.com/zerotier/ZeroTierOne/archive/${version}.tar.gz";
-    sha256 = "0n035f2qslw1srxjlm0szrnvb3va3sspbpxqqhng08dp68vmn9wz";
+  src = fetchFromGitHub {
+    owner = "zerotier";
+    repo = "ZeroTierOne";
+    rev = version;
+    sha256 = "14iwhlxmxsnvnm9rrp6rysiz461w0v5nsmnz5p91rfi351103a63";
   };
 
   preConfigure = ''
-      substituteInPlace ./osdep/LinuxEthernetTap.cpp \
-        --replace 'execlp("ip",' 'execlp("${iproute}/bin/ip",'
+      substituteInPlace ./osdep/ManagedRoute.cpp \
+        --replace '/usr/sbin/ip' '${iproute}/bin/ip'
+
+      substituteInPlace ./osdep/ManagedRoute.cpp \
+        --replace '/sbin/ip' '${iproute}/bin/ip'
 
       patchShebangs ./doc/build.sh
       substituteInPlace ./doc/build.sh \
@@ -38,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = https://www.zerotier.com;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ sjmackenzie zimbatm ehmry ];
-    platforms = platforms.allBut [ "i686-linux" ];
+    maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz ];
+    platforms = platforms.x86_64 ++ platforms.aarch64;
   };
 }

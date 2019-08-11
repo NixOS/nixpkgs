@@ -1,67 +1,98 @@
-{ mkDerivation, lib, fetchgit, pkgconfig, gyp, cmake
-, qtbase, qtimageformats
-, gtk3, libappindicator-gtk3, dee
-, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio
-, gcc
+{ mkDerivation, lib, fetchFromGitHub, fetchsvn, fetchpatch
+, pkgconfig, pythonPackages, cmake, wrapGAppsHook, wrapQtAppsHook, gcc8
+, qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
+, dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
+
+with lib;
 
 mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "1.1.23";
+  version = "1.8.0";
 
-  # Submodules
-  src = fetchgit {
-    url = "git://github.com/telegramdesktop/tdesktop";
+  # Telegram-Desktop with submodules
+  src = fetchFromGitHub {
+    owner = "telegramdesktop";
+    repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "0pdjrypjg015zvg8iydrja8kzvq0jsi1wz77r2cxvyyb4rkgyv7x";
+    sha256 = "09r62dra6gab8hiyzyysslgqkzswf8vwfkcixbcb0jk5la0m07yy";
     fetchSubmodules = true;
   };
 
-  tgaur = fetchgit {
-    url = "https://aur.archlinux.org/telegram-desktop-systemqt.git";
-    rev = "885d0594d8dfa0a17c14140579a3d27ef2b9bdd0";
-    sha256 = "0cdci8d8j3czhznp7gqn16w32j428njmzxr34pdsv40gggh0lbpn";
+  # Arch patches (svn export telegram-desktop/trunk)
+  archPatches = fetchsvn {
+    url = "svn://svn.archlinux.org/community/telegram-desktop/trunk";
+    # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
+    rev = "498563";
+    sha256 = "0g2y6impygqhfiqnyxc1ivxwl8j82q9qcnkqcjn6mwj3cisyxwnl";
+  };
+  privateHeadersPatch = fetchpatch {
+    url = "https://github.com/telegramdesktop/tdesktop/commit/b9d3ba621eb8af638af46c6b3cfd7a8330bf0dd5.patch";
+    sha256 = "1s5xvcp9dk0jfywssk8xfcsh7bk5xxif8xqnba0413lfx5rgvs5v";
   };
 
-  buildInputs = [
-    gtk3 libappindicator-gtk3 dee qtbase qtimageformats ffmpeg openalSoft minizip
-    libopus alsaLib libpulseaudio
+  patches = [
+    "${archPatches}/tdesktop.patch"
+    "${archPatches}/no-gtk2.patch"
+    # "${archPatches}/Use-system-wide-font.patch"
+    "${archPatches}/tdesktop_lottie_animation_qtdebug.patch"
   ];
 
-  nativeBuildInputs = [ pkgconfig gyp cmake gcc ];
+  postPatch = ''
+    substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
+      --replace '"appindicator3"' '"${libappindicator-gtk3}/lib/libappindicator3.so"'
+    substituteInPlace Telegram/SourceFiles/platform/linux/linux_libnotify.cpp \
+      --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
+  '';
 
-  patches = [ "${tgaur}/tdesktop.patch" ];
+  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook wrapQtAppsHook gcc8 ];
+
+  # We want to run wrapProgram manually (with additional parameters)
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
+  buildInputs = [
+    qtbase qtimageformats gtk3 libappindicator-gtk3
+    dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
+  ];
 
   enableParallelBuilding = true;
 
-  GYP_DEFINES = lib.concatStringsSep "," [
+  GYP_DEFINES = concatStringsSep "," [
     "TDESKTOP_DISABLE_CRASH_REPORTS"
     "TDESKTOP_DISABLE_AUTOUPDATE"
     "TDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
   ];
 
   NIX_CFLAGS_COMPILE = [
-    "-DTDESKTOP_DISABLE_AUTOUPDATE"
     "-DTDESKTOP_DISABLE_CRASH_REPORTS"
+    "-DTDESKTOP_DISABLE_AUTOUPDATE"
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
     "-I${minizip}/include/minizip"
     # See Telegram/gyp/qt.gypi
-    "-I${qtbase.dev}/mkspecs/linux-g++"
-  ] ++ lib.concatMap (x: [
-    "-I${qtbase.dev}/include/${x}"
-    "-I${qtbase.dev}/include/${x}/${qtbase.version}"
-    "-I${qtbase.dev}/include/${x}/${qtbase.version}/${x}"
-    "-I${libopus.dev}/include/opus"
-    "-I${alsaLib.dev}/include/alsa"
-    "-I${libpulseaudio.dev}/include/pulse"
-  ]) [ "QtCore" "QtGui" ];
+    "-I${getDev qtbase}/mkspecs/linux-g++"
+  ] ++ concatMap (x: [
+    "-I${getDev qtbase}/include/${x}"
+    "-I${getDev qtbase}/include/${x}/${qtbase.version}"
+    "-I${getDev qtbase}/include/${x}/${qtbase.version}/${x}"
+    "-I${getDev libopus}/include/opus"
+    "-I${getDev alsaLib}/include/alsa"
+    "-I${getDev libpulseaudio}/include/pulse"
+    ]) [ "QtCore" "QtGui" "QtDBus" ];
   CPPFLAGS = NIX_CFLAGS_COMPILE;
 
   preConfigure = ''
+    # Patches to revert:
+    patch -R -Np1 -i "${archPatches}/demibold.patch"
+    patch -R -Np1 -i "${privateHeadersPatch}"
 
+    # Patches to apply:
     pushd "Telegram/ThirdParty/libtgvoip"
-    patch -Np1 -i "${tgaur}/libtgvoip.patch"
+    patch -Np1 -i "${archPatches}/libtgvoip.patch"
     popd
+
+    # disable static-qt for rlottie
+    sed "/RLOTTIE_WITH_STATIC_QT/d" -i "Telegram/gyp/lib_rlottie.gyp"
 
     sed -i Telegram/gyp/telegram_linux.gypi \
       -e 's,/usr,/does-not-exist,g' \
@@ -69,42 +100,66 @@ mkDerivation rec {
       -e 's,-flto,,g'
 
     sed -i Telegram/gyp/qt.gypi \
+      -e "s,/usr/include/qt/QtCore/,${qtbase.dev}/include/QtCore/,g" \
+      -e 's,\d+",\d+" | head -n1,g'
+    sed -i Telegram/gyp/qt_moc.gypi \
       -e "s,/usr/bin/moc,moc,g"
     sed -i Telegram/gyp/qt_rcc.gypi \
       -e "s,/usr/bin/rcc,rcc,g"
 
+    # Build system assumes x86, but it works fine on non-x86 if we patch this one flag out
+    sed -i Telegram/ThirdParty/libtgvoip/libtgvoip.gyp \
+      -e "/-msse2/d"
+
     gyp \
+      -Dapi_id=17349 \
+      -Dapi_hash=344583e45741c457fe1862106095a5eb \
       -Dbuild_defines=${GYP_DEFINES} \
       -Gconfig=Release \
       --depth=Telegram/gyp \
       --generator-output=../.. \
       -Goutput_dir=out \
-       --format=cmake \
+      --format=cmake \
       Telegram/gyp/Telegram.gyp
 
     cd out/Release
 
     NUM=$((`wc -l < CMakeLists.txt` - 2))
-    sed -i "$NUM r $tgaur/CMakeLists.inj" CMakeLists.txt
+    sed -i "$NUM r $archPatches/CMakeLists.inj" CMakeLists.txt
 
     export ASM=$(type -p gcc)
   '';
 
+  cmakeFlags = [ "-UTDESKTOP_OFFICIAL_TARGET" ];
+
   installPhase = ''
     install -Dm755 Telegram $out/bin/telegram-desktop
+
     mkdir -p $out/share/applications $out/share/kde4/services
-    sed "s,/usr/bin,$out/bin,g" $tgaur/telegram-desktop.desktop > $out/share/applications/telegram-desktop.desktop
-    sed "s,/usr/bin,$out/bin,g" $tgaur/tg.protocol > $out/share/kde4/services/tg.protocol
+    install -m444 "$src/lib/xdg/telegramdesktop.desktop" "$out/share/applications/telegram-desktop.desktop"
+    sed "s,/usr/bin,$out/bin,g" $archPatches/tg.protocol > $out/share/kde4/services/tg.protocol
     for icon_size in 16 32 48 64 128 256 512; do
-      install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram-desktop.png"
+      install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram.png"
     done
   '';
 
-  meta = with lib; {
+  postFixup = ''
+    # This is necessary to run Telegram in a pure environment.
+    # We also use gappsWrapperArgs from wrapGAppsHook.
+    wrapProgram $out/bin/telegram-desktop \
+      "''${gappsWrapperArgs[@]}" \
+      "''${qtWrapperArgs[@]}" \
+      --prefix PATH : ${xdg_utils}/bin \
+      --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
+    sed -i $out/bin/telegram-desktop \
+      -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
+  '';
+
+  meta = {
     description = "Telegram Desktop messaging app";
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = https://desktop.telegram.org/;
-    maintainers = with maintainers; [ abbradar garbas ];
+    maintainers = with maintainers; [ primeos abbradar ];
   };
 }

@@ -1,22 +1,26 @@
-{ stdenv, fetchurl, cmake, qtbase }:
+{ stdenv, fetchFromGitHub, cmake, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "qgit-2.6";
+  name = "qgit-2.8";
 
-  src = fetchurl {
-    url = "http://libre.tibirna.org/attachments/download/12/${name}.tar.gz";
-    sha256 = "1brrhac6s6jrw3djhgailg5d5s0vgrfvr0sczqgzpp3i6pxf8qzl";
+  src = fetchFromGitHub {
+    owner = "tibirna";
+    repo = "qgit";
+    rev = name;
+    sha256 = "01l6mz2f333x3zbfr68mizwpsh6sdsnadcavpasidiych1m5ry8f";
   };
 
   buildInputs = [ qtbase ];
 
   nativeBuildInputs = [ cmake ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     license = licenses.gpl2;
-    homepage = http://libre.tibirna.org/projects/qgit/wiki/QGit;
+    homepage = https://github.com/tibirna/qgit;
     description = "Graphical front-end to Git";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg markuskowa ];
     inherit (qtbase.meta) platforms;
   };
 }

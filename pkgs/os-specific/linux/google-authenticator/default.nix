@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "google-authenticator-libpam-${version}";
-  version = "1.03";
+  version = "1.06";
 
   src = fetchurl {
     url = "https://github.com/google/google-authenticator-libpam/archive/${version}.tar.gz";
-    sha256 = "0wb95z5v1w4sk0p7y9pbn4v95w9hrbf80vw9k2z2sgs0156ljkb7";
+    sha256 = "01kb1ppsc2fz1i3crdwi6ic8gyphjv89f5li6ypv3pp88v3kxw2j";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ pam ];
 
   preConfigure = ''
-    sed -i "s|libqrencode.so.3|${qrencode}/lib/libqrencode.so.3|" src/google-authenticator.c
+    sed -i "s|libqrencode.so.4|${qrencode.out}/lib/libqrencode.so.4|" src/google-authenticator.c
   '';
 
   installPhase = ''

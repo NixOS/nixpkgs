@@ -1,14 +1,15 @@
-{stdenv, fetchFromGitHub, pkgconfig
+{ stdenv, fetchFromGitHub, pkgconfig
 , python
 , intltool
 , docbook2x, docbook_xml_dtd_412, libxslt
 , sword, clucene_core, biblesync
-, gnome_doc_utils
+, gnome-doc-utils
 , libgsf, gconf
 , gtkhtml, libglade, scrollkeeper
 , webkitgtk
-, dbus_glib, enchant, isocodes, libuuid, icu
+, dbus-glib, enchant, isocodes, libuuid, icu
 , wrapGAppsHook
+, wafHook
 }:
 
 stdenv.mkDerivation rec {
@@ -22,10 +23,10 @@ stdenv.mkDerivation rec {
     sha256 = "1vwf1ps6nrajxl1qbs6v1cgykmq5wn4j09j10gbcd3b2nvrprf3g";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook wafHook ];
   buildInputs = [ python intltool docbook2x docbook_xml_dtd_412 libxslt
-                  sword clucene_core biblesync gnome_doc_utils libgsf gconf gtkhtml
-                  libglade scrollkeeper webkitgtk dbus_glib enchant isocodes libuuid icu ];
+                  sword clucene_core biblesync gnome-doc-utils libgsf gconf gtkhtml
+                  libglade scrollkeeper webkitgtk dbus-glib enchant isocodes libuuid icu ];
 
   prePatch = ''
     patchShebangs .;
@@ -36,17 +37,7 @@ stdenv.mkDerivation rec {
     export SWORD_HOME=${sword};
   '';
 
-  configurePhase = ''
-    python waf configure --prefix=$out --enable-webkit2
-  '';
-
-  buildPhase = ''
-    python waf build
-  '';
-
-  installPhase = ''
-    python waf install
-  '';
+  wafConfigureFlags = [ "--enable-webkit2" ];
 
   meta = with stdenv.lib; {
     description = "A GTK Bible study tool";

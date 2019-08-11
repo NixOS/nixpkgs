@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.0";
   name = pname + "-" + version;
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [ python ];
 

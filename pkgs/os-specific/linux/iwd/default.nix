@@ -1,43 +1,44 @@
-{ stdenv, fetchgit, autoreconfHook, readline, python3Packages }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, ell, coreutils, readline, python3Packages }:
 
-let
-  ell = fetchgit {
-     url = https://git.kernel.org/pub/scm/libs/ell/ell.git;
-     rev = "8192131685be0f27d6f51b14b78ef93fa7f3c692";
-     sha256 = "1k74qz3w0l4zq8llrxc4p62xy0c0n33f260vy3d14wx5rhvf0544";
-  };
-in stdenv.mkDerivation rec {
-  name = "iwd-unstable-2017-12-14";
+stdenv.mkDerivation rec {
+  pname = "iwd";
+
+  version = "0.19";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
-    rev = "cf3372235c4592ca7366b27548abc4e89a982414";
-    sha256 = "0dg28j919w1v8sqr6jdj12c233rsjzd2jzkcpag1hx2h3g35hnlz";
+    rev = version;
+    sha256 = "0848r06bnx5k6wlmy425hljc3f03x9xx0r83vdvf630jryc9llmz";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    pkgconfig
     python3Packages.wrapPython
   ];
 
   buildInputs = [
+    ell
     readline
     python3Packages.python
   ];
-  
+
   pythonPath = [
     python3Packages.dbus-python
     python3Packages.pygobject3
   ];
 
-  enableParallelBuilding = true;
-
   configureFlags = [
-    "--with-dbusconfdir=$(out)/etc/"
+    "--with-dbus-datadir=${placeholder "out"}/etc/"
+    "--with-dbus-busdir=${placeholder "out"}/share/dbus-1/system-services/"
+    "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
+    "--with-systemd-modloaddir=${placeholder "out"}/etc/modules-load.d/" # maybe
+    "--localstatedir=/var/"
+    "--enable-wired"
+    "--enable-external-ell"
   ];
 
   postUnpack = ''
-    ln -s ${ell} ell
     patchShebangs .
   '';
 
@@ -50,6 +51,13 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapPythonPrograms
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.ead.service \
+                      --replace /bin/false ${coreutils}/bin/false
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.iwd.service \
+                      --replace /bin/false ${coreutils}/bin/false
   '';
 
   meta = with stdenv.lib; {

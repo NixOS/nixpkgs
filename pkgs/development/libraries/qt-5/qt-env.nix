@@ -1,4 +1,4 @@
-{ lib, buildEnv, qtbase }: name: paths:
+{ buildEnv, qtbase }: name: paths:
 
 buildEnv {
   inherit name;
@@ -13,9 +13,9 @@ buildEnv {
     cat >"$out/bin/qt.conf" <<EOF
     [Paths]
     Prefix = $out
-    Plugins = $qtPluginPrefix
-    Qml2Imports = $qtQmlPrefix
-    Documentation = $qtDocPrefix
+    Plugins = ${qtbase.qtPluginPrefix}
+    Qml2Imports = ${qtbase.qtQmlPrefix}
+    Documentation = ${qtbase.qtDocPrefix}
     EOF
   '';
 }

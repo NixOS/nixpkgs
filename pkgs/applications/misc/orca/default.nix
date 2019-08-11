@@ -1,44 +1,46 @@
-{ stdenv, lib, pkgconfig, fetchurl, buildPythonApplication
-, autoreconfHook, wrapGAppsHook
-, intltool, yelp_tools, itstool, libxmlxx3
+{ stdenv, pkgconfig, fetchurl, buildPythonApplication
+, autoreconfHook, wrapGAppsHook, gobject-introspection
+, intltool, yelp-tools, itstool, libxmlxx3
 , python, pygobject3, gtk3, gnome3, substituteAll
-, at_spi2_atk, at_spi2_core, pyatspi, dbus, dbus-python, pyxdg
-, xkbcomp, gsettings_desktop_schemas, liblouis
-, speechd, brltty, setproctitle, gst_all_1, gst-python
+, at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
+, xkbcomp, procps, lsof, coreutils, gsettings-desktop-schemas
+, speechd, brltty, liblouis, setproctitle, gst_all_1, gst-python
 }:
 
-with lib;
-let
-  version = "3.26.0";
-  majorVersion = builtins.concatStringsSep "." (take 2 (splitString "." version));
-in buildPythonApplication rec {
-  name = "orca-${version}";
+buildPythonApplication rec {
+  pname = "orca";
+  version = "3.32.0";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/orca/${majorVersion}/${name}.tar.xz";
-    sha256 = "0xk5k9cbswymma60nrfj00dl97wypx59c107fb1hwi75gm0i07a7";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "05jqzlg0f1x53hyl0l9282ynmw37159g6dsbrid12b7sjs12cc1i";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
+      cat = "${coreutils}/bin/cat";
+      lsof = "${lsof}/bin/lsof";
+      pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })
   ];
 
   nativeBuildInputs = [
     autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    intltool yelp_tools itstool
+    intltool yelp-tools itstool gobject-introspection
   ];
 
   propagatedBuildInputs = [
     pygobject3 pyatspi dbus-python pyxdg brltty liblouis speechd gst-python setproctitle
   ];
 
+  strictDeps = false;
+
   buildInputs = [
-    python gtk3 at_spi2_atk at_spi2_core dbus gsettings_desktop_schemas
+    python gtk3 at-spi2-atk at-spi2-core dbus gsettings-desktop-schemas
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
 
@@ -47,7 +49,13 @@ in buildPythonApplication rec {
     intltoolize
   '';
 
-  meta = {
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Orca;
     description = "Screen reader";
     longDescription = ''

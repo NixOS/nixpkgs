@@ -1,11 +1,10 @@
-{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
-, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc
+{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
+, fixDarwinDylibNames
+, docbook_xml_dtd_42, readline
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
-, kerberos, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls, libgcrypt, libgpgerror
-, ncurses, libunwind, libibverbs, librdmacm, systemd
+, krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
+, gnutls, ncurses, libunwind, systemd, jansson, lmdb, gpgme
 
-, enableInfiniband ? false
 , enableLDAP ? false
 , enablePrinting ? false
 , enableMDNS ? false
@@ -13,39 +12,47 @@
 , enableRegedit ? true
 , enableCephFS ? false
 , enableGlusterFS ? false
+, enableAcl ? (!stdenv.isDarwin)
+, enablePam ? (!stdenv.isDarwin)
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   name = "samba-${version}";
-  version = "4.6.11";
+  version = "4.10.6";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "07gd41y4ajdiansfqa8c5wvrincgddfzyfgh1pf7g388zaq7l6q5";
+    sha256 = "0hpgdqlyczj98pkh2ldglvvnkrb1q541r3qikdvxq0qjvd9fpywy";
   };
 
   outputs = [ "out" "dev" "man" ];
 
   patches =
     [ ./4.x-no-persistent-install.patch
+      ./patch-source3__libads__kerberos_keytab.c.patch
+      ./4.x-no-persistent-install-dynconfig.patch
+      ./4.x-fix-makeflags-parsing.patch
     ];
+
+  nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
 
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-      docbook_xml_dtd_45 */ readline talloc popt iniparser
-      libbsd libarchive zlib acl fam libiconv gettext libunwind kerberos
+      docbook_xml_dtd_45 */ readline popt iniparser jansson
+      libbsd libarchive zlib fam libiconv gettext libunwind krb5Full
     ]
-    ++ optionals stdenv.isLinux [ libaio pam systemd ]
-    ++ optionals (enableInfiniband && stdenv.isLinux) [ libibverbs librdmacm ]
+    ++ optionals stdenv.isLinux [ libaio systemd ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
-    ++ optional enableDomainController gnutls
+    ++ optionals enableDomainController [ gnutls gpgme lmdb ]
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
-    ++ optional (enableGlusterFS && stdenv.isLinux) glusterfs;
+    ++ optional (enableGlusterFS && stdenv.isLinux) glusterfs
+    ++ optional enableAcl acl
+    ++ optional enablePam pam;
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -53,21 +60,33 @@ stdenv.mkDerivation rec {
 
     # Fix the XML Catalog Paths
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
+
+    patchShebangs ./buildtools/bin
+  '' + optionalString stdenv.isDarwin ''
+     substituteInPlace libcli/dns/wscript_build \
+       --replace "bld.SAMBA_BINARY('resolvconftest'" "True or bld.SAMBA_BINARY('resolvconftest'"
   '';
 
   configureFlags =
     [ "--with-static-modules=NONE"
       "--with-shared-modules=ALL"
       "--with-system-mitkrb5"
+      "--with-system-mitkdc" "${krb5Full}"
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
+      "--disable-rpath"
     ]
-    ++ optional (!enableDomainController) "--without-ad-dc"
-    ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ];
+    ++ [(if enableDomainController
+         then "--with-experimental-mit-ad-dc"
+         else "--without-ad-dc")]
+    ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ]
+    ++ optional (!enableAcl) "--without-acl-support"
+    ++ optional (!enablePam) "--without-pam";
 
-  # To build in parallel.
-  buildPhase = "python buildtools/bin/waf build -j $NIX_BUILD_CORES";
+  preBuild = ''
+      export MAKEFLAGS="-j $NIX_BUILD_CORES"
+  '';
 
   # Some libraries don't have /lib/samba in RPATH but need it.
   # Use find -type f -executable -exec echo {} \; -exec sh -c 'ldd {} | grep "not found"' \;
@@ -86,10 +105,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.samba.org/;
+    homepage = https://www.samba.org/;
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.unix;
+    maintainers = with maintainers; [ aneeshusa ];
   };
 }

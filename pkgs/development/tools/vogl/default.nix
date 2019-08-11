@@ -3,7 +3,7 @@
 , qtbase, qtx11extras
 , libdwarf, libjpeg_turbo, libunwind, lzma, tinyxml, libX11
 , SDL2, SDL2_gfx, SDL2_image, SDL2_ttf
-, freeglut, mesa_glu
+, freeglut, libGLU
 , fetchpatch
 }:
 
@@ -33,7 +33,7 @@ mkDerivation rec {
     qtbase qtx11extras
     libdwarf libjpeg_turbo libunwind lzma tinyxml libX11
     SDL2 SDL2_gfx SDL2_image SDL2_ttf
-    freeglut mesa_glu
+    freeglut libGLU
   ];
 
   dontUseCmakeBuildDir = true;

@@ -1,28 +1,123 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, intltool, glib, libnotify, lcms2, libXtst
-, libxkbfile, libpulseaudio, libcanberra_gtk3, upower, colord, libgweather, polkit
-, geoclue2, librsvg, xf86_input_wacom, udev, libgudev, libwacom, libxslt, libtool, networkmanager
-, docbook_xsl, docbook_xsl_ns, wrapGAppsHook, ibus, xkeyboard_config, tzdata }:
+{ stdenv
+, substituteAll
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gnome3
+, perl
+, gettext
+, gtk3
+, glib
+, libnotify
+, libgnomekbd
+, lcms2
+, libpulseaudio
+, mousetweaks
+, alsaLib
+, libcanberra-gtk3
+, upower
+, colord
+, libgweather
+, polkit
+, gsettings-desktop-schemas
+, geoclue2
+, systemd
+, libgudev
+, libwacom
+, libxslt
+, libxml2
+, networkmanager
+, gnome-desktop
+, geocode-glib
+, docbook_xsl
+, wrapGAppsHook
+, python3
+, tzdata
+, nss
+}:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  pname = "gnome-settings-daemon";
+  version = "3.32.1";
 
-  # fatal error: gio/gunixfdlist.h: No such file or directory
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
-  buildInputs = with gnome3;
-    [ intltool pkgconfig ibus gtk glib gsettings_desktop_schemas networkmanager
-      libnotify gnome_desktop lcms2 libXtst libxkbfile libpulseaudio
-      libcanberra_gtk3 upower colord libgweather xkeyboard_config
-      polkit geocode_glib geoclue2 librsvg xf86_input_wacom udev libgudev libwacom libxslt
-      libtool docbook_xsl docbook_xsl_ns wrapGAppsHook gnome_themes_standard ];
-
-  postPatch = ''
-    substituteInPlace plugins/datetime/tz.h --replace /usr/share/zoneinfo/zone.tab ${tzdata}/share/zoneinfo/zone.tab
-  '';
-
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "02d0s0g2mmqfib44r3sf0499r08p61s8l2ndsjssbam1bi7x2dks";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit tzdata mousetweaks;
+    })
+    ./global-backlight-helper.patch
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    perl
+    gettext
+    libxml2
+    libxslt
+    docbook_xsl
+    wrapGAppsHook
+    python3
+  ];
+
+  buildInputs = [
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    networkmanager
+    libnotify
+    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
+    gnome-desktop
+    lcms2
+    libpulseaudio
+    alsaLib
+    libcanberra-gtk3
+    upower
+    colord
+    libgweather
+    nss
+    polkit
+    geocode-glib
+    geoclue2
+    systemd
+    libgudev
+    libwacom
+  ];
+
+  mesonFlags = [
+    "-Dudev_dir=${placeholder "out"}/lib/udev"
+  ];
+
+  # So the polkit policy can reference /run/current-system/sw/bin/gnome-settings-daemon/gsd-backlight-helper
+  postFixup = ''
+    mkdir -p $out/bin/gnome-settings-daemon
+    ln -s $out/libexec/gsd-backlight-helper $out/bin/gnome-settings-daemon/gsd-backlight-helper
+  '';
+
+  postPatch = ''
+    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
+      chmod +x $f
+      patchShebangs $f
+    done
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
+
+  meta = with stdenv.lib; {
+    license = licenses.gpl2Plus;
+    maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
+  };
 }

@@ -1,29 +1,51 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_38, enchant
-, wrapGAppsHook, gdk_pixbuf, cmake, desktop_file_utils
-, libnotify, libcanberra_gtk3, libsecret, gmime
-, libpthreadstubs, sqlite
-, gnome3, librsvg, gnome_doc_utils, webkitgtk }:
+{ stdenv, fetchurl, pkgconfig, gtk3, vala, enchant2, wrapGAppsHook, meson, ninja
+, desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
+, libnotify, libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext
+, sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
+, xvfb_run, dbus, shared-mime-info, libunwind, libunity, folks, glib-networking }:
 
-let
-  majorVersion = "0.12";
-in
 stdenv.mkDerivation rec {
-  name = "geary-${majorVersion}.0";
+  pname = "geary";
+  version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/geary/${majorVersion}/${name}.tar.xz";
-    sha256 = "0ii4qaqfqx90kvqwg0g9jahygkir4mb03ja55fa55yyx6cq0kwff";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "07y5ii5bn7fgdpr88307fwxiafm5fwdxmzwhi6h1y4z880nnzp7f";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  nativeBuildInputs = [
+    desktop-file-utils gettext itstool libxml2 meson ninja
+    pkgconfig vala wrapGAppsHook python3
+  ];
 
-  nativeBuildInputs = [ vala_0_38 intltool pkgconfig wrapGAppsHook cmake desktop_file_utils gnome_doc_utils ];
-  buildInputs = [ gtk3 enchant webkitgtk libnotify libcanberra_gtk3 gnome3.libgee libsecret gmime sqlite
-                  libpthreadstubs gnome3.gsettings_desktop_schemas gnome3.gcr
-                  gdk_pixbuf librsvg gnome3.defaultIconTheme ];
+  buildInputs = [
+    adwaita-icon-theme enchant2 gcr gmime gnome-online-accounts
+    gsettings-desktop-schemas gtk3 isocodes json-glib libcanberra-gtk3
+    libgee libnotify libsecret sqlite webkitgtk glib-networking
+    libunwind libunity folks
+  ];
 
-  preConfigure = ''
-    substituteInPlace src/CMakeLists.txt --replace '`''${PKG_CONFIG_EXECUTABLE} --variable=girdir gobject-introspection-1.0`' '${webkitgtk.dev}/share/gir-1.0'
+  checkInputs = [ xvfb_run dbus ];
+
+  mesonFlags = [
+    "-Dcontractor=true" # install the contractor file (Pantheon specific)
+  ];
+
+  postPatch = ''
+    chmod +x build-aux/post_install.py
+    patchShebangs build-aux/post_install.py
+
+    chmod +x desktop/geary-attach
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    NO_AT_BRIDGE=1 \
+    XDG_DATA_DIRS=:$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share \
+    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test -v --no-stdsplit
   '';
 
   preFixup = ''
@@ -31,13 +53,18 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "$out/bin")
   '';
 
-  enableParallelBuilding = true;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Geary;
     description = "Mail client for GNOME 3";
     maintainers = gnome3.maintainers;
-    license = licenses.lgpl2;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

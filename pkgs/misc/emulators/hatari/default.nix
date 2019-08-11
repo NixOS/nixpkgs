@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, SDL, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "hatari-1.8.0";
+  name = "hatari-2.2.1";
 
   src = fetchurl {
-    url = "http://download.tuxfamily.org/hatari/1.8.0/${name}.tar.bz2";
-    sha256 = "1szznnndmbyc71751hir3dhybmbrx3rnxs6klgbv9qvqlmmlikvy";
+    url = "https://download.tuxfamily.org/hatari/2.2.1/${name}.tar.bz2";
+    sha256 = "0q3g23vnx58w666723v76ilh9j353md3sn48cmlq9gkll8qfzbqi";
   };
 
   # For pthread_cancel

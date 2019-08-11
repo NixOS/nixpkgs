@@ -1,19 +1,28 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
-, git, coreutils, bash, gzip, openssh
+, git, bash, gzip, openssh, pam
 , sqliteSupport ? true
+, pamSupport ? true
 }:
 
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "gitea-${version}";
-  version = "1.3.2";
+  pname = "gitea";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${version}";
-    sha256 = "11gzb6x8zixmkm57x8hdncmdbbvppzld3yf7p7m0abigg8zyybsj";
+    sha256 = "1z7rkhxkymv7rgc7blh9ps5sqrgl4sryf0rqcp16nh9n5snfm1rm";
+    # Required to generate the same checksum on MacOS due to unicode encoding differences
+    # More information: https://github.com/NixOS/nixpkgs/pull/48128
+    extraPostFetch = ''
+      rm -rf $out/integrations
+      rm -rf $out/vendor/github.com/Unknown/cae/tz/testdata
+      rm -rf $out/vendor/github.com/Unknown/cae/zip/testdata
+      rm -rf $out/vendor/gopkg.in/macaron.v1/fixtures
+    '';
   };
 
   patches = [ ./static-root-path.patch ];
@@ -23,15 +32,25 @@ buildGoPackage rec {
     substituteInPlace modules/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optional pamSupport pam;
 
-  buildFlags = optionalString sqliteSupport "-tags sqlite";
+  preBuild = let
+    tags = optional pamSupport "pam"
+        ++ optional sqliteSupport "sqlite";
+    tagsString = concatStringsSep " " tags;
+  in ''
+    export buildFlagsArray=(
+      -tags="${tagsString}"
+      -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
+    )
+  '';
 
   outputs = [ "bin" "out" "data" ];
 
   postInstall = ''
     mkdir $data
-    cp -R $src/{public,templates} $data
+    cp -R $src/{public,templates,options} $data
     mkdir -p $out
     cp -R $src/options/locale $out/locale
 
@@ -43,8 +62,8 @@ buildGoPackage rec {
 
   meta = {
     description = "Git with a cup of tea";
-    homepage = http://gitea.io;
+    homepage = https://gitea.io;
     license = licenses.mit;
-    maintainers = [ maintainers.disassembler ];
+    maintainers = with maintainers; [ disassembler kolaente ];
   };
 }

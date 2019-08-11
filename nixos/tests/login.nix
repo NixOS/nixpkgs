@@ -3,11 +3,11 @@ import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
 {
   name = "login";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   machine =
-    { config, pkgs, lib, ... }:
+    { pkgs, lib, ... }:
     { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
     };
 

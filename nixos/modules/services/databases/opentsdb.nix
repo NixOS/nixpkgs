@@ -97,13 +97,13 @@ in {
       };
     };
 
-    users.extraUsers.opentsdb = {
+    users.users.opentsdb = {
       description = "OpenTSDB Server user";
       group = "opentsdb";
       uid = config.ids.uids.opentsdb;
     };
 
-    users.extraGroups.opentsdb.gid = config.ids.gids.opentsdb;
+    users.groups.opentsdb.gid = config.ids.gids.opentsdb;
 
   };
 }

@@ -7,34 +7,32 @@
 , dateutil
 , isPyPy
 , py
-, ipykernel
-, ipython
-, mock
-, pytest
+, tornado
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "5.2.1";
+  version = "5.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "462790d46b244f0a631ea5e3cd5cdbad6874d5d24cc0ff512deb7c16cdf8653d";
+    sha256 = "102qgc7isfxwq0zsj6m9apcyj2hk8c8c4fz7656lxlpmvxgazs4q";
   };
 
-  checkInputs = [ ipykernel ipython mock pytest ];
-  propagatedBuildInputs = [traitlets jupyter_core pyzmq dateutil] ++ lib.optional isPyPy py;
-
-  checkPhase = ''
-    py.test
-  '';
+  propagatedBuildInputs = [
+    traitlets
+    jupyter_core
+    pyzmq
+    dateutil
+    tornado
+  ] ++ lib.optional isPyPy py;
 
   # Circular dependency with ipykernel
   doCheck = false;
 
   meta = {
     description = "Jupyter protocol implementation and client libraries";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

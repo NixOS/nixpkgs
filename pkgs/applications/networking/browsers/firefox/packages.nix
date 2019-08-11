@@ -1,72 +1,218 @@
-{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
+{ lib, callPackage, fetchurl, fetchFromGitHub, overrideCC, gccStdenv, gcc6 }:
 
-let common = opts: callPackage (import ./common.nix opts); in
+let
+
+  common = opts: callPackage (import ./common.nix opts) {};
+
+  # Needed on older branches since rustc: 1.32.0 -> 1.33.0
+  missing-documentation-patch = fetchurl {
+    name = "missing-documentation.patch";
+    url = "https://aur.archlinux.org/cgit/aur.git/plain/deny_missing_docs.patch"
+        + "?h=firefox-esr&id=03bdd01f9cf";
+    sha256 = "1i33n3fgwc8d0v7j4qn7lbdax0an6swar12gay3q2nwrhg3ic4fb";
+  };
+in
 
 rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "57.0.4";
+    ffversion = "68.0.1";
     src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "58846037aebbf14b85e6b3a46dbe617c780c6916e437ea4ee32a2502a6b55e3689921a0be28b920dedf2f966195df04ac8e45411caeb2601a168ec08b4827cf0";
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "20rqfa5sdaagryk00iywnbap0bmhq1c74pfbxi3pq1cs52qs5nhjqn3xm6910zwcn5nw08i9qd5jkg5blvqrjzw780nh8qbrwsm3d4n";
     };
 
-    patches =
-      [ ./no-buildconfig.patch ./env_var_for_system_dir.patch ]
-      ++ lib.optional stdenv.isi686 (fetchpatch {
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
-        sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
-      });
+    patches = [
+      ./no-buildconfig-ffx65.patch
+    ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
       homepage = http://www.mozilla.com/en-US/firefox/;
-      maintainers = with lib.maintainers; [ eelco ];
-      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ eelco andir ];
+      platforms = lib.platforms.unix;
+      license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
+      versionKey = "ffversion";
     };
-  } {};
+  };
 
-  firefox-esr = common rec {
+  # Do not remove. This is the last version of Firefox that supports
+  # the old plugins. While this package is unsafe to use for browsing
+  # the web, there are many old useful plugins targeting offline
+  # activities (e.g. ebook readers, syncronous translation, etc) that
+  # will probably never be ported to WebExtensions API.
+  firefox-esr-52 = (common rec {
     pname = "firefox-esr";
-    version = "52.5.3esr";
+    ffversion = "52.9.0esr";
     src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "7b9c87905c53bc681dc6475e05596449fed88850f9dc07c8223d0d3edd2dd9d8a0dd88ebae1cd59eced2165696df9370de5e85cc03cded58ec4d0f622634417f";
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "bfca42668ca78a12a9fb56368f4aae5334b1f7a71966fbba4c32b9c5e6597aac79a6e340ac3966779d2d5563eb47c054ab33cc40bfb7306172138ccbd3adb2b9";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = [
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
+    ];
+
+    meta = firefox.meta // {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [ "Support ended in August 2018." ];
+    };
+  }).override {
+    stdenv = overrideCC gccStdenv gcc6; # gcc7 fails with "undefined reference to `__divmoddi4'"
+    gtk3Support = false;
+  };
+
+  firefox-esr-60 = common rec {
+    pname = "firefox-esr";
+    ffversion = "60.8.0esr";
+
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "0332b6049b97e488e55a3b9540baad3bd159e297084e9a625b8492497c73f86eb3e144219dabc5e9f2c2e4a27630d83d243c919cd4f86b7f59f47133ed3afc54";
+    };
+
+    patches = [
+      ./no-buildconfig-ffx65.patch
+
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
+
+      missing-documentation-patch
+    ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
     };
     updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-unwrapped";
+      attrPath = "firefox-esr-60-unwrapped";
       versionSuffix = "esr";
+      versionKey = "ffversion";
     };
-  } {};
+  };
+
+  firefox-esr-68 = common rec {
+    pname = "firefox-esr";
+    ffversion = "68.0.1esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "27ncapq18rdlrf0kp5r09spcqazi0g8nbzbfxijs9pi3cvlkayagi3fbbzzq5jkn0n3j580vadc6v1v3zibvdwb5s3c6bz559a7nra2";
+    };
+
+    patches = [
+      ./no-buildconfig-ffx65.patch
+    ];
+
+    meta = firefox.meta // {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-68-unwrapped";
+      versionSuffix = "esr";
+      versionKey = "ffversion";
+    };
+  };
 
 } // (let
 
-  commonAttrs = {
-    overrides = {
-      unpackPhase = ''
-        # fetchFromGitHub produces ro sources, root dir gets a name that
-        # is too long for shebangs. fixing
-        cp -a $src tor-browser
-        chmod -R +w tor-browser
-        cd tor-browser
+  iccommon = args: common (args // {
+    pname = "icecat";
+    isIceCatLike = true;
 
-        # set times for xpi archives
-        find . -exec touch -d'2010-01-01 00:00' {} \;
+    meta = (args.meta or {}) // {
+      description = "The GNU version of the Firefox web browser";
+      longDescription = ''
+        GNUzilla is the GNU version of the Mozilla suite, and GNU
+        IceCat is the GNU version of the Firefox web browser.
+
+        Notable differences from mainline Firefox:
+
+        - entirely free software, no non-free plugins, addons,
+          artwork,
+        - no telemetry, no "studies",
+        - sane privacy and security defaults (for instance, unlike
+          Firefox, IceCat does _zero_ network requests on startup by
+          default, which means that with IceCat you won't need to
+          unplug your Ethernet cable each time you want to create a
+          new browser profile without announcing that action to a
+          bunch of data-hungry corporations),
+        - all essential privacy and security settings can be
+          configured directly from the main screen,
+        - optional first party isolation (like TorBrowser),
+        - comes with HTTPS Everywhere (like TorBrowser), Tor Browser
+          Button (like TorBrowser Bundle), LibreJS, and SpyBlock
+          plugins out of the box.
+
+        This package can be installed together with Firefox and
+        TorBrowser, it will use distinct binary names and profile
+        directories.
       '';
+      homepage = "https://www.gnu.org/software/gnuzilla/";
+      platforms = lib.platforms.unix;
+      license = with lib.licenses; [ mpl20 gpl3Plus ];
+    };
+  });
+
+in rec {
+
+  icecat = iccommon rec {
+    ffversion = "60.3.0";
+    icversion = "${ffversion}-gnu1";
+
+    src = fetchurl {
+      url = "mirror://gnu/gnuzilla/${ffversion}/icecat-${icversion}.tar.bz2";
+      sha256 = "0icnl64nxcyf7dprpdpygxhabsvyhps8c3ixysj9bcdlj9q34ib1";
     };
 
-    meta = {
+    patches = [
+      ./no-buildconfig.patch
+      missing-documentation-patch
+    ];
+  };
+
+  # Similarly to firefox-esr-52 above.
+  icecat-52 = iccommon rec {
+    ffversion = "52.6.0";
+    icversion = "${ffversion}-gnu1";
+
+    src = fetchurl {
+      url = "mirror://gnu/gnuzilla/${ffversion}/icecat-${icversion}.tar.bz2";
+      sha256 = "09fn54glqg1aa93hnz5zdcy07cps09dbni2b4200azh6nang630a";
+    };
+
+    patches = [
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
+    ];
+
+    meta.knownVulnerabilities = [ "Support ended in August 2018." ];
+  };
+
+}) // (let
+
+  tbcommon = args: common (args // {
+    pname = "tor-browser";
+    isTorBrowserLike = true;
+
+    unpackPhase = ''
+      # fetchFromGitHub produces ro sources, root dir gets a name that
+      # is too long for shebangs. fixing
+      cp -a $src tor-browser
+      chmod -R +w tor-browser
+      cd tor-browser
+
+      # set times for xpi archives
+      find . -exec touch -d'2010-01-01 00:00' {} \;
+    '';
+
+    meta = (args.meta or {}) // {
       description = "A web browser built from TorBrowser source tree";
       longDescription = ''
         This is a version of TorBrowser with bundle-related patches
@@ -82,61 +228,61 @@ rec {
         It will use your default Firefox profile if you're not careful
         even! Be careful!
 
-        It will clash with firefox binary if you install both. But its
-        not a problem since you should run browsers in separate
-        users/VMs anyway.
+        It will clash with firefox binary if you install both. But it
+        should not be a problem because you should run browsers in
+        separate users/VMs anyway.
 
         Create new profile by starting it as
 
         $ firefox -ProfileManager
 
         and then configure it to use your tor instance.
+
+        Or just use `tor-browser-bundle` package that packs this
+        `tor-browser` back into a sanely-built bundle.
       '';
-      homepage = https://www.torproject.org/projects/torbrowser.html;
-      platforms = lib.platforms.linux;
+      homepage = "https://www.torproject.org/projects/torbrowser.html";
+      platforms = lib.platforms.unix;
+      license = with lib.licenses; [ mpl20 bsd3 ];
     };
-  };
+  });
 
 in rec {
 
-  tor-browser-6-5 = common (rec {
-    pname = "tor-browser";
-    version = "6.5.2";
-    isTorBrowserLike = true;
-    extraConfigureFlags = [ "--disable-loop" ];
-
-    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
-    src = fetchFromGitHub {
-      owner = "SLNOS";
-      repo = "tor-browser";
-      # branch "tor-browser-45.8.0esr-6.5-2-slnos"
-      rev = "e4140ea01b9906934f0347e95f860cec207ea824";
-      sha256 = "0a1qk3a9a3xxrl56bp4zbknbchv5x17k1w5kgcf4j3vklcv6av60";
-    };
-  } // commonAttrs) {
-    stdenv = overrideCC stdenv gcc5;
-    ffmpegSupport = false;
-    gssSupport = false;
-  };
-
-  tor-browser-7-0 = common (rec {
-    pname = "tor-browser";
-    version = "7.0.1";
-    isTorBrowserLike = true;
+  tor-browser-7-5 = (tbcommon rec {
+    ffversion = "52.9.0esr";
+    tbversion = "7.5.6";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.5.0esr-7.0-1-slnos";
-      rev   = "830ff8d622ef20345d83f386174f790b0fc2440d";
-      sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
+      # branch "tor-browser-52.9.0esr-7.5-2-slnos"
+      rev   = "95bb92d552876a1f4260edf68fda5faa3eb36ad8";
+      sha256 = "1ykn3yg4s36g2cpzxbz7s995c33ij8kgyvghx38z4i8siaqxdddy";
+    };
+  }).override {
+    gtk3Support = false;
+  };
+
+  tor-browser-8-5 = tbcommon rec {
+    ffversion = "60.8.0esr";
+    tbversion = "8.5.4";
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      # branch "tor-browser-60.8.0esr-8.5-1-slnos"
+      rev   = "9ec7e4832a68ba3a77f5e8e21dc930a25757f55d";
+      sha256 = "10x9h2nm1p8cs0qnd8yjp7ly5raxagqyfjn4sj2y3i86ya5zygb9";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
-  } // commonAttrs) {};
+    patches = [
+      missing-documentation-patch
+    ];
+  };
 
-  tor-browser = tor-browser-7-0;
+  tor-browser = tor-browser-8-5;
 
 })

@@ -148,7 +148,7 @@ in
         UseSTARTTLS=${yesNo cfg.useSTARTTLS}
         #Debug=YES
         ${optionalString (cfg.authUser != "")       "AuthUser=${cfg.authUser}"}
-        ${optionalString (!isNull cfg.authPassFile) "AuthPassFile=${cfg.authPassFile}"}
+        ${optionalString (cfg.authPassFile != null) "AuthPassFile=${cfg.authPassFile}"}
       '';
 
     environment.systemPackages = [pkgs.ssmtp];

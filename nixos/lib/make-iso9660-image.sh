@@ -47,7 +47,8 @@ if test -n "$bootable"; then
 
     isoBootFlags="-eltorito-boot ${bootImage}
                   -eltorito-catalog .boot.cat
-                  -no-emul-boot -boot-load-size 4 -boot-info-table"
+                  -no-emul-boot -boot-load-size 4 -boot-info-table
+                  --sort-weight 1 /isolinux" # Make sure isolinux is near the beginning of the ISO
 fi
 
 if test -n "$usbBootable"; then
@@ -72,16 +73,15 @@ done
 
 
 # Add the closures of the top-level store objects.
-storePaths=$(perl $pathsFromGraph closure-*)
-for i in $storePaths; do
+for i in $(< $closureInfo/store-paths); do
     addPath "${i:1}" "$i"
 done
 
 
 # Also include a manifest of the closures in a format suitable for
 # nix-store --load-db.
-if [ -n "$object" ]; then
-    printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
+if [[ ${#objects[*]} != 0 ]]; then
+    cp $closureInfo/registration nix-path-registration
     addPath "nix-path-registration" "nix-path-registration"
 fi
 
@@ -113,7 +113,7 @@ xorriso="xorriso
  -r
  -path-list pathlist
  --sort-weight 0 /
- --sort-weight 1 /isolinux" # Make sure isolinux is near the beginning of the ISO
+"
 
 $xorriso -output $out/iso/$isoName
 

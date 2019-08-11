@@ -2,19 +2,29 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
+, isPy3k
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "backports.functools_lru_cache";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31f235852f88edc1558d428d890663c49eb4514ffec9f3650e7f3c9e4a12e36f";
+    sha256 = "9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a";
   };
 
   buildInputs = [ setuptools_scm ];
-  doCheck = false; # No proper test
+
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    pytest
+  '';
+
+  # Test fail on Python 2
+  doCheck = isPy3k;
 
   meta = {
     description = "Backport of functools.lru_cache";

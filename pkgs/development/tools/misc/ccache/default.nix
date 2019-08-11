@@ -1,18 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, runCommand, zlib, makeWrapper }:
+{ stdenv, fetchurl, perl, zlib, makeWrapper }:
 
 let ccache = stdenv.mkDerivation rec {
   name = "ccache-${version}";
-  version = "3.3.4";
+  version = "3.4.1";
 
   src = fetchurl {
-    sha256 = "0ks0vk408mdppfbk8v38p46fqx3p30r9a9cwiia43373i7rmpw94";
+    sha256 = "1pppi4jbkkj641cdynmc35jaj40jjicw7gj75ran5qs5886jcblc";
     url = "mirror://samba/ccache/${name}.tar.xz";
   };
 
+  nativeBuildInputs = [ perl ];
+
   buildInputs = [ zlib ];
 
+  outputs = [ "out" "man" ];
+
   # non to be fail on filesystems with unconventional blocksizes (zfs on Hydra?)
-  patches = [ ./skip-fs-dependent-test.patch ];
+  patches = [
+    ./fix-debug-prefix-map-suite.patch
+    ./skip-fs-dependent-test.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makefile.in --replace 'objs) $(extra_libs)' 'objs)'
@@ -20,12 +27,10 @@ let ccache = stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  passthru = let
-      unwrappedCC = stdenv.cc.cc;
-    in {
+  passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = extraConfig: stdenv.mkDerivation rec {
+    links = {unwrappedCC, extraConfig}: stdenv.mkDerivation rec {
       name = "ccache-links";
       passthru = {
         isClang = unwrappedCC.isClang or false;

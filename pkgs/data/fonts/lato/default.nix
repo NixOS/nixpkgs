@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "lato-2.0";
@@ -12,7 +12,7 @@ fetchzip {
 
   sha256 = "1amwn6vcaggxrd2s4zw21s2pr47zmzdf2xfy4x9lxa2cd9bkhvg5";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://www.latofonts.com/;
 
     description = ''

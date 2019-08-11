@@ -5,7 +5,7 @@ with lib;
 let
 
   inherit (config.boot) kernelPatches;
-
+  inherit (config.boot.kernel) features randstructSeed;
   inherit (config.boot.kernelPackages) kernel;
 
   kernelModulesConf = pkgs.writeText "nixos.conf"
@@ -21,11 +21,26 @@ in
 
   options = {
 
+    boot.kernel.features = mkOption {
+      default = {};
+      example = literalExample "{ debug = true; }";
+      internal = true;
+      description = ''
+        This option allows to enable or disable certain kernel features.
+        It's not API, because it's about kernel feature sets, that
+        make sense for specific use cases. Mostly along with programs,
+        which would have separate nixos options.
+        `grep features pkgs/os-specific/linux/kernel/common-config.nix`
+      '';
+    };
+
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override {
+          inherit randstructSeed;
           kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
+          features = lib.recursiveUpdate super.kernel.features features;
         };
       });
       # We don't want to evaluate all of linuxPackages for the manual
@@ -53,6 +68,19 @@ in
       description = "A list of additional patches to apply to the kernel.";
     };
 
+    boot.kernel.randstructSeed = mkOption {
+      type = types.str;
+      default = "";
+      example = "my secret seed";
+      description = ''
+        Provides a custom seed for the <varname>RANDSTRUCT</varname> security
+        option of the Linux kernel. Note that <varname>RANDSTRUCT</varname> is
+        only enabled in NixOS hardened kernels. Using a custom seed requires
+        building the kernel and dependent packages locally, since this
+        customization happens at build time.
+      '';
+    };
+
     boot.kernelParams = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -63,8 +91,8 @@ in
       type = types.int;
       default = 4;
       description = ''
-        The kernel console log level.  Log messages with a priority
-        numerically less than this will not appear on the console.
+        The kernel console <literal>loglevel</literal>. All Kernel Messages with a log level smaller
+        than this setting will be printed to the console.
       '';
     };
 
@@ -168,9 +196,9 @@ in
     # (so you don't need to reboot to have changes take effect).
     boot.kernelParams =
       [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
-      optionals config.boot.vesa [ "vga=0x317" ];
+      optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
 
-    boot.kernel.sysctl."kernel.printk" = config.boot.consoleLogLevel;
+    boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
     boot.kernelModules = [ "loop" "atkbd" ];
 
@@ -206,12 +234,14 @@ in
         "xhci_hcd"
         "xhci_pci"
         "usbhid"
-        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat" "hid_logitech_hidpp"
+        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
+        "hid_logitech_hidpp" "hid_logitech_dj"
 
-        # Misc. keyboard stuff.
+      ] ++ optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
+        # Misc. x86 keyboard stuff.
         "pcips2" "atkbd" "i8042"
 
-        # Needed by the stage 2 init script.
+        # x86 RTC needed by the stage 2 init script.
         "rtc_cmos"
       ];
 
@@ -282,7 +312,7 @@ in
       # !!! Should this really be needed?
       (isYes "MODULES")
       (isYes "BINFMT_ELF")
-    ];
+    ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
 
     # nixpkgs kernels are assumed to have all required features
     assertions = if config.boot.kernelPackages.kernel ? features then [] else

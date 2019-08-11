@@ -1,15 +1,15 @@
-{ stdenv, fetchurl
+{ config, stdenv, fetchurl
 , libX11, wxGTK
 , libiconv, fontconfig, freetype
-, mesa
+, libGLU_combined
 , libass, fftw, ffms
 , ffmpeg, pkgconfig, zlib # Undocumented (?) dependencies
 , icu, boost, intltool # New dependencies
 , spellcheckSupport ? true, hunspell ? null
 , automationSupport ? true, lua ? null
 , openalSupport ? false, openal ? null
-, alsaSupport ? true, alsaLib ? null
-, pulseaudioSupport ? true, libpulseaudio ? null
+, alsaSupport ? stdenv.isLinux, alsaLib ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , portaudioSupport ? false, portaudio ? null }:
 
 assert spellcheckSupport -> (hunspell != null);
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   postPatch = "sed '1i#include <unicode/unistr.h>' -i src/utils.cpp";
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig intltool libX11 wxGTK fontconfig freetype mesa
+  [ pkgconfig intltool libX11 wxGTK fontconfig freetype libGLU_combined
     libass fftw ffms ffmpeg zlib icu boost boost.out libiconv
   ]
     ++ optional spellcheckSupport hunspell
@@ -47,6 +47,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   hardeningDisable = [ "bindnow" "relro" ];
+
+  # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
+  CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
+
+  # this is fixed upstream though not yet in an officially released version,
+  # should be fine remove on next release (if one ever happens)
+  NIX_LDFLAGS = [
+    "-lpthread"
+  ];
 
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 
@@ -64,6 +73,6 @@ stdenv.mkDerivation rec {
               # but they are linked against GPL'd softwares
               # - so the resulting program will be GPL
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

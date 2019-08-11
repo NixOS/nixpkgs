@@ -8,7 +8,7 @@
 import ./make-test.nix ({ pkgs, ... }:
   let
 
-    ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ip4).address;
+    ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ipv4.addresses).address;
 
     ospfConf = ''
       interface eth2
@@ -30,14 +30,14 @@ import ./make-test.nix ({ pkgs, ... }:
       nodes = {
 
         client =
-          { config, pkgs, nodes, ... }:
+          { nodes, ... }:
           {
             virtualisation.vlans = [ 1 ];
             networking.defaultGateway = ifAddr nodes.router1 "eth1";
           };
 
         router1 =
-          { config, pkgs, nodes, ... }:
+          { ... }:
           {
             virtualisation.vlans = [ 1 2 ];
             boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
@@ -49,7 +49,7 @@ import ./make-test.nix ({ pkgs, ... }:
           };
 
         router2 =
-          { config, pkgs, nodes, ... }:
+          { ... }:
           {
             virtualisation.vlans = [ 3 2 ];
             boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
@@ -61,19 +61,18 @@ import ./make-test.nix ({ pkgs, ... }:
           };
 
         server =
-          { config, pkgs, nodes, ... }:
+          { nodes, ... }:
           {
             virtualisation.vlans = [ 3 ];
             networking.defaultGateway = ifAddr nodes.router2 "eth1";
             networking.firewall.allowedTCPPorts = [ 80 ];
-            networking.firewall.allowPing = true;
             services.httpd.enable = true;
             services.httpd.adminAddr = "foo@example.com";
           };
       };
 
       testScript =
-        { nodes, ... }:
+        { ... }:
         ''
           startAll;
 

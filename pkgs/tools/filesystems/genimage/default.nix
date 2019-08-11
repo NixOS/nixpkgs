@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, libconfuse }:
+{ stdenv, fetchurl, pkgconfig, libconfuse, gettext }:
 
 stdenv.mkDerivation rec {
   name = "genimage-${version}";
   version = "9";
 
   src = fetchurl {
-    url = "http://public.pengutronix.de/software/genimage/genimage-${version}.tar.xz";
+    url = "https://public.pengutronix.de/software/genimage/genimage-${version}.tar.xz";
     sha256 = "0y4h8x8lqxam8m90rdfq8cg5137kvilxr3d1qzddpx7nxpvmmwv9";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libconfuse ];
+  buildInputs = [ libconfuse gettext ];
 
   postInstall = ''
     # As there is no manpage or built-in --help, add the README file for

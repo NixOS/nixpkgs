@@ -5,10 +5,11 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchurl {
-    url = "http://github.com/gnosek/fcgiwrap/archive/${version}.tar.gz";
+    url = "https://github.com/gnosek/fcgiwrap/archive/${version}.tar.gz";
     sha256 = "07y6s4mm86cv7p1ljz94sxnqa89y9amn3vzwsnbq5hrl4vdy0zac";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
   configureFlags = [ "--with-systemd" "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

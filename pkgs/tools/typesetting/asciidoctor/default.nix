@@ -1,17 +1,40 @@
-{ stdenv, lib, bundlerEnv, ruby, curl }:
+{ lib, bundlerApp, makeWrapper,
+  # Optional dependencies, can be null
+  epubcheck, kindlegen,
+  bundlerUpdateScript
+}:
 
-bundlerEnv {
-  pname = "asciidoctor";
+let
+  app = bundlerApp {
+    pname = "asciidoctor";
+    gemdir = ./.;
 
-  inherit ruby;
+    exes = [
+      "asciidoctor"
+      "asciidoctor-pdf"
+      "asciidoctor-safe"
+      "asciidoctor-epub3"
+    ];
 
-  gemdir = ./.;
+    buildInputs = [ makeWrapper ];
 
-  meta = with lib; {
-    description = "A faster Asciidoc processor written in Ruby";
-    homepage = http://asciidoctor.org/;
-    license = licenses.mit;
-    maintainers = with maintainers; [ gpyh ];
-    platforms = platforms.unix;
+    postBuild = ''
+        wrapProgram "$out/bin/asciidoctor-epub3" \
+          ${lib.optionalString (epubcheck != null) "--set EPUBCHECK ${epubcheck}/bin/epubcheck"} \
+          ${lib.optionalString (kindlegen != null) "--set KINDLEGEN ${kindlegen}/bin/kindlegen"}
+      '';
+
+    passthru = {
+      updateScript = bundlerUpdateScript "asciidoctor";
+    };
+
+    meta = with lib; {
+      description = "A faster Asciidoc processor written in Ruby";
+      homepage = https://asciidoctor.org/;
+      license = licenses.mit;
+      maintainers = with maintainers; [ gpyh nicknovitski ];
+      platforms = platforms.unix;
+    };
   };
-}
+in
+  app

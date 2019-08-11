@@ -19,11 +19,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libass-${version}";
-  version = "0.13.7";
+  version = "0.14.0";
 
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${version}/${name}.tar.xz";
-    sha256 = "17byv926w1mxn56n896sxvdq4m0yv1l7qbm688h6zr3nzgsyarbh";
+    sha256 = "18iqznl4mabhj9ywfsz4kwvbsplcv1jjxq50nxssvbj8my1267w8";
   };
 
   configureFlags = [

@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, libcanberra_gtk3, libgtop, gnome2, gnome3, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, libcanberra-gtk3, libgtop, libstartup_notification, gnome3, gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "marco-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "2";
+  version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "173g9mrnkcgjc6a1maln13iqdl0cqcnca8ydr8767xrn9dlkx9f5";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0sc7x14229yj22ka1vlzbaqndwcgh6idypjmm9rydkj4n968jwry";
   };
 
   nativeBuildInputs = [
@@ -20,13 +18,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    libcanberra_gtk3
+    libcanberra-gtk3
     libgtop
-    gnome2.startup_notification
-    gnome3.gtk
+    libstartup_notification
+    gtk3
     gnome3.zenity
   ];
-  
+
   meta = with stdenv.lib; {
     description = "MATE default window manager";
     homepage = https://github.com/mate-desktop/marco;

@@ -1,22 +1,24 @@
 { fetchurl
 , stdenv
+, substituteAll
 , aspellWithDicts
-, at_spi2_core ? null
+, at-spi2-core ? null
 , atspiSupport ? true
 , bash
 , glib
 , glibcLocales
 , gnome3
-, gobjectIntrospection
-, gsettings_desktop_schemas
+, gobject-introspection
+, gsettings-desktop-schemas
 , gtk3
 , hunspell
 , hunspellDicts
 , hunspellWithDicts
 , intltool
 , isocodes
-, libcanberra_gtk3
-, libudev
+, libcanberra-gtk3
+, mousetweaks
+, udev
 , libxkbcommon
 , pkgconfig
 , procps
@@ -38,6 +40,10 @@ in python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit mousetweaks;
+    })
     # Allow loading hunspell dictionaries installed in NixOS system path
     ./hunspell-use-xdg-datadirs.patch
   ];
@@ -74,20 +80,22 @@ in python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     bash
     gnome3.dconf
-    gsettings_desktop_schemas
+    gsettings-desktop-schemas
     gtk3
     hunspell
     isocodes
-    libcanberra_gtk3
-    libudev
+    libcanberra-gtk3
+    mousetweaks
+    udev
     libxkbcommon
     wrapGAppsHook
     xorg.libXtst
     xorg.libxkbfile
-  ] ++ stdenv.lib.optional atspiSupport at_spi2_core;
+  ] ++ stdenv.lib.optional atspiSupport at-spi2-core;
 
   nativeBuildInputs = [
     glibcLocales
+    gobject-introspection # populate GI_TYPELIB_PATH
     intltool
     pkgconfig
   ];

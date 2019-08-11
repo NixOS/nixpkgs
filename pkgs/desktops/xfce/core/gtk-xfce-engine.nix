@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk, withGtk3 ? false, gtk3 }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk2, withGtk3 ? false, gtk3 ? null }:
+
+assert withGtk3 -> (gtk3 != null);
 
 stdenv.mkDerivation rec {
   p_name  = "gtk-xfce-engine";
@@ -12,12 +14,15 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gtk ] ++ stdenv.lib.optional withGtk3 gtk3;
-  
+  buildInputs = [ intltool gtk2 ] ++ stdenv.lib.optional withGtk3 gtk3;
+
+  # `glib-mkenums' is unhappy that some source files are not valid UTF-8
+  postPatch = ''find . -type f -name '*.[ch]' -exec sed -r -i 's/\xD6/O/g' {} +'';
+
   configureFlags = stdenv.lib.optional withGtk3 "--enable-gtk3";
 
   meta = {
-    homepage = http://www.xfce.org/;
+    homepage = https://www.xfce.org/;
     description = "GTK+ theme engine for Xfce";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

@@ -5,7 +5,7 @@ let
   fetchDebianPatch = { name, debname, sha256 }:
     fetchpatch {
       inherit sha256 name;
-      url = "https://anonscm.debian.org/cgit/pkg-multimedia/audiofile.git/plain/debian/patches/${debname}?h=debian/0.3.6-4";
+      url = "https://salsa.debian.org/multimedia-team/audiofile/raw/debian/0.3.6-4/debian/patches/${debname}";
     };
 
 in
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ];
 
   src = fetchurl {
-    url = "http://audiofile.68k.org/${name}.tar.gz";
+    url = "https://audiofile.68k.org/${name}.tar.gz";
     sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
   };
 

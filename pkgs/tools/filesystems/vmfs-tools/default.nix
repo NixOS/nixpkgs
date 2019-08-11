@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig
-, asciidoc, docbook_xml_xslt, fuse, libuuid, libxslt }:
+, asciidoc, docbook_xsl, fuse, libuuid, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "vmfs-tools";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "14y412ww5hxk336ils62s3fwykfh6mx1j0iiaa5cwc615pi6qvi4";
   };
 
-  nativeBuildInputs = [ asciidoc docbook_xml_xslt fuse libuuid libxslt pkgconfig ];
+  nativeBuildInputs = [ asciidoc docbook_xsl fuse libuuid libxslt pkgconfig ];
 
   enableParallelBuilding = true;
 
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "FUSE-based VMFS (vmware) mounting tools";
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

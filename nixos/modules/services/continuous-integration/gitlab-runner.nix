@@ -8,6 +8,7 @@ let
     if (cfg.configFile == null) then
       (pkgs.runCommand "config.toml" {
         buildInputs = [ pkgs.remarshal ];
+        preferLocalBuild = true;
       } ''
         remarshal -if json -of toml \
           < ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
@@ -134,7 +135,7 @@ in
     # Make the gitlab-runner command availabe so users can query the runner
     environment.systemPackages = [ cfg.package ];
 
-    users.extraUsers.gitlab-runner = {
+    users.users.gitlab-runner = {
       group = "gitlab-runner";
       extraGroups = optional hasDocker "docker";
       uid = config.ids.uids.gitlab-runner;
@@ -142,6 +143,6 @@ in
       createHome = true;
     };
 
-    users.extraGroups.gitlab-runner.gid = config.ids.gids.gitlab-runner;
+    users.groups.gitlab-runner.gid = config.ids.gids.gitlab-runner;
   };
 }

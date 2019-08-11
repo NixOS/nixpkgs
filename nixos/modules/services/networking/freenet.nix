@@ -50,7 +50,7 @@ in
       serviceConfig.Nice = cfg.nice;
     };
 
-    users.extraUsers.freenet = {
+    users.users.freenet = {
       group = "freenet";
       description = "Freenet daemon user";
       home = varDir;
@@ -58,7 +58,7 @@ in
       uid = config.ids.uids.freenet;
     };
 
-    users.extraGroups.freenet.gid = config.ids.gids.freenet;
+    users.groups.freenet.gid = config.ids.gids.freenet;
   };
 
 }

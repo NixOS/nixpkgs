@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, perl, perlPackages, lib, runCommand, postfix }:
+{ stdenv, fetchurl, perlPackages, lib, runCommand, postfix }:
 
 let
-    mk-perl-flags = inputs: lib.concatStringsSep " " (map (dep: "-I ${dep}/lib/perl5/site_perl") inputs);
+    mk-perl-flags = inputs: lib.concatStringsSep " " (map (dep: "-I ${dep}/${perlPackages.perl.libPrefix}") inputs);
     postgrey-flags = mk-perl-flags (with perlPackages; [
       NetServer BerkeleyDB DigestSHA1 NetAddrIP IOMultiplex
     ]);
     policy-test-flags = mk-perl-flags (with perlPackages; [
       ParseSyslog
     ]);
-    version = "1.36";
+    version = "1.37";
     name = "postgrey-${version}";
 in runCommand name {
   src = fetchurl {
-    url = "http://postgrey.schweikert.ch/pub/${name}.tar.gz";
-    sha256 = "09jzb246ki988389r9gryigriv9sravk40q75fih5n0q4p2ghax2";
+    url = "https://postgrey.schweikert.ch/pub/${name}.tar.gz";
+    sha256 = "1xx51xih4711vrvc6d57il9ccallbljj5zhgqdb07jzmz11rakgz";
   };
   meta = with stdenv.lib; {
     description = "A postfix policy server to provide greylisting";
@@ -26,9 +26,9 @@ in runCommand name {
     cd $out
     tar -xzf $src --strip-components=1
     mv postgrey policy-test bin
-    sed -i -e "s,#!/usr/bin/perl -T,#!${perl}/bin/perl -T ${postgrey-flags}," \
+    sed -i -e "s,#!/usr/bin/perl -T,#!${perlPackages.perl}/bin/perl -T ${postgrey-flags}," \
            -e "s#/etc/postfix#$out#" \
         bin/postgrey
-    sed -i -e "s,#!/usr/bin/perl,#!${perl}/bin/perl ${policy-test-flags}," \
+    sed -i -e "s,#!/usr/bin/perl,#!${perlPackages.perl}/bin/perl ${policy-test-flags}," \
         bin/policy-test
 ''

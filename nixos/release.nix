@@ -1,10 +1,12 @@
-{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
+with import ../lib;
+
+{ nixpkgs ? { outPath = cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
+, configuration ? {}
 }:
 
 with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
-with import ../lib;
 
 let
 
@@ -12,45 +14,52 @@ let
   versionSuffix =
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  importTest = fn: args: system: import fn ({
-    inherit system;
-  } // args);
-
-  callTestOnTheseSystems = systems: fn: args: forTheseSystems systems (system: hydraJob (importTest fn args system));
-  callTest = callTestOnTheseSystems supportedSystems;
-
-  callSubTests = fn: args: let
-    discover = attrs: let
-      subTests = filterAttrs (const (hasAttr "test")) attrs;
-    in mapAttrs (const (t: hydraJob t.test)) subTests;
-
-    discoverForSystem = system: mapAttrs (_: test: {
-      ${system} = test;
-    }) (discover (importTest fn args system));
-
-  # If the test is only for a particular system, use only the specified
-  # system instead of generating attributes for all available systems.
-  in if args ? system then discover (import fn args)
-     else foldAttrs mergeAttrs {} (map discoverForSystem supportedSystems);
+  # Run the tests for each platform.  You can run a test by doing
+  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
+  # ‘nix-build tests/login.nix -A result’.
+  allTestsForSystem = system:
+    import ./tests/all-tests.nix {
+      inherit system;
+      pkgs = import nixpkgs { inherit system; };
+      callTest = t: {
+        ${system} = hydraJob t.test;
+      };
+    };
+  allTests =
+    foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
 
   pkgs = import nixpkgs { system = "x86_64-linux"; };
 
 
   versionModule =
-    { system.nixosVersionSuffix = versionSuffix;
-      system.nixosRevision = nixpkgs.rev or nixpkgs.shortRev;
+    { system.nixos.versionSuffix = versionSuffix;
+      system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
     };
 
+  makeModules = module: rest: [ configuration versionModule module rest ];
 
   makeIso =
-    { module, type, maintainers ? ["eelco"], system }:
+    { module, type, system, ... }:
 
     with import nixpkgs { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
-      modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
+      modules = makeModules module {
+        isoImage.isoBaseName = "nixos-${type}";
+      };
     }).config.system.build.isoImage);
+
+
+  makeSdImage =
+    { module, system, ... }:
+
+    with import nixpkgs { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = makeModules module {};
+    }).config.system.build.sdImage);
 
 
   makeSystemTarball =
@@ -62,7 +71,7 @@ let
 
       config = (import lib/eval-config.nix {
         inherit system;
-        modules = [ module versionModule ];
+        modules = makeModules module {};
       }).config;
 
       tarball = config.system.build.tarball;
@@ -70,7 +79,7 @@ let
     in
       tarball //
         { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.platform.name}";
+            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.platform.name}";
             maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit config;
@@ -82,18 +91,21 @@ let
 
   buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
-    modules = [ module versionModule ] ++ singleton
-      ({ config, lib, ... }:
+    modules = makeModules module
+      ({ ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
       });
   }).config));
 
-  makeNetboot = config:
+  makeNetboot = { module, system, ... }:
     let
-      configEvaled = import lib/eval-config.nix config;
+      configEvaled = import lib/eval-config.nix {
+        inherit system;
+        modules = makeModules module {};
+      };
       build = configEvaled.config.system.build;
-      kernelTarget = configEvaled.pkgs.stdenv.platform.kernelTarget;
+      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
     in
       pkgs.symlinkJoin {
         name = "netboot";
@@ -104,33 +116,31 @@ let
         ];
         postBuild = ''
           mkdir -p $out/nix-support
-          echo "file ${kernelTarget} $out/${kernelTarget}" >> $out/nix-support/hydra-build-products
-          echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
-          echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
+          echo "file ${kernelTarget} ${build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
+          echo "file initrd ${build.netbootRamdisk}/initrd" >> $out/nix-support/hydra-build-products
+          echo "file ipxe ${build.netbootIpxeScript}/netboot.ipxe" >> $out/nix-support/hydra-build-products
         '';
         preferLocalBuild = true;
       };
-
 
 in rec {
 
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
-  manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
-  manualEpub = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualEpub));
-  manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
-  options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
+  manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
+  manual = manualHTML; # TODO(@oxij): remove eventually
+  manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
+  manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
+  manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);
+  options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
-  initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
+  initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
-  netboot = forTheseSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+  netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+    module = ./modules/installer/netboot/netboot-minimal.nix;
     inherit system;
-    modules = [
-      ./modules/installer/netboot/netboot-minimal.nix
-      versionModule
-    ];
   });
 
   iso_minimal = forAllSystems (system: makeIso {
@@ -139,7 +149,7 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = forTheseSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_graphical = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
     type = "graphical";
     inherit system;
@@ -147,15 +157,31 @@ in rec {
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_minimal_new_kernel = forTheseSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
   });
 
+  sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        armv6l-linux = ./modules/installer/cd-dvd/sd-image-raspberrypi.nix;
+        armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
+        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+      }.${system};
+    inherit system;
+  });
+
+  sd_image_new_kernel = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64-new-kernel.nix;
+      }.${system};
+    type = "minimal-new-kernel";
+    inherit system;
+  });
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = forTheseSystems [ "x86_64-linux" ] (system:
+  ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
     with import nixpkgs { inherit system; };
 
@@ -174,9 +200,10 @@ in rec {
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
     { toplevel = (import lib/eval-config.nix {
         inherit system;
-        modules = singleton ({ config, pkgs, ... }:
+        modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
+            system.stateVersion = mkDefault "18.03";
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;
@@ -217,166 +244,34 @@ in rec {
     };
   */
 
-
-  # Run the tests for each platform.  You can run a test by doing
-  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
-  # ‘nix-build tests/login.nix -A result’.
-  tests.atd = callTest tests/atd.nix {};
-  tests.acme = callTest tests/acme.nix {};
-  tests.avahi = callTest tests/avahi.nix {};
-  tests.beegfs = callTest tests/beegfs.nix {};
-  tests.bittorrent = callTest tests/bittorrent.nix {};
-  tests.blivet = callTest tests/blivet.nix {};
-  tests.boot = callSubTests tests/boot.nix {};
-  tests.boot-stage1 = callTest tests/boot-stage1.nix {};
-  tests.cadvisor = callTestOnTheseSystems ["x86_64-linux"] tests/cadvisor.nix {};
-  tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
-  tests.cjdns = callTest tests/cjdns.nix {};
-  tests.cloud-init = callTest tests/cloud-init.nix {};
-  tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
-  tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
-  tests.containers-bridge = callTest tests/containers-bridge.nix {};
-  tests.containers-imperative = callTest tests/containers-imperative.nix {};
-  tests.containers-extra_veth = callTest tests/containers-extra_veth.nix {};
-  tests.containers-physical_interfaces = callTest tests/containers-physical_interfaces.nix {};
-  tests.containers-restart_networking = callTest tests/containers-restart_networking.nix {};
-  tests.containers-tmpfs = callTest tests/containers-tmpfs.nix {};
-  tests.containers-hosts = callTest tests/containers-hosts.nix {};
-  tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
-  tests.couchdb = callTest tests/couchdb.nix {};
-  tests.docker = callTestOnTheseSystems ["x86_64-linux"] tests/docker.nix {};
-  tests.docker-edge = callTestOnTheseSystems ["x86_64-linux"] tests/docker-edge.nix {};
-  tests.dovecot = callTest tests/dovecot.nix {};
-  tests.dnscrypt-proxy = callTestOnTheseSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
-  tests.ecryptfs = callTest tests/ecryptfs.nix {};
-  tests.etcd = callTestOnTheseSystems ["x86_64-linux"] tests/etcd.nix {};
-  tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
-  tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
-  tests.elk = callSubTests tests/elk.nix { system = "x86_64-linux"; };
-  tests.env = callTest tests/env.nix {};
-  tests.ferm = callTest tests/ferm.nix {};
-  tests.firefox = callTest tests/firefox.nix {};
-  tests.firewall = callTest tests/firewall.nix {};
-  tests.fleet = callTestOnTheseSystems ["x86_64-linux"] tests/fleet.nix {};
-  #tests.gitlab = callTest tests/gitlab.nix {};
-  tests.gitolite = callTest tests/gitolite.nix {};
-  tests.gocd-agent = callTest tests/gocd-agent.nix {};
-  tests.gocd-server = callTest tests/gocd-server.nix {};
-  tests.gnome3 = callTest tests/gnome3.nix {};
-  tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
-  tests.grafana = callTest tests/grafana.nix {};
-  tests.graphite = callTest tests/graphite.nix {};
-  tests.hardened = callTest tests/hardened.nix { };
-  tests.hibernate = callTest tests/hibernate.nix {};
-  tests.hound = callTest tests/hound.nix {};
-  tests.i3wm = callTest tests/i3wm.nix {};
-  tests.initrd-network-ssh = callTest tests/initrd-network-ssh {};
-  tests.installer = callSubTests tests/installer.nix {};
-  tests.influxdb = callTest tests/influxdb.nix {};
-  tests.ipv6 = callTest tests/ipv6.nix {};
-  tests.jenkins = callTest tests/jenkins.nix {};
-  tests.plasma5 = callTest tests/plasma5.nix {};
-  tests.keymap = callSubTests tests/keymap.nix {};
-  tests.initrdNetwork = callTest tests/initrd-network.nix {};
-  tests.kafka_0_9 = callTest tests/kafka_0_9.nix {};
-  tests.kafka_0_10 = callTest tests/kafka_0_10.nix {};
-  tests.kafka_0_11 = callTest tests/kafka_0_11.nix {};
-  tests.kafka_1_0 = callTest tests/kafka_1_0.nix {};
-  tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
-  tests.kernel-latest = callTest tests/kernel-latest.nix {};
-  tests.kernel-lts = callTest tests/kernel-lts.nix {};
-  tests.kubernetes = hydraJob (import tests/kubernetes/default.nix { system = "x86_64-linux"; });
-  tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
-  tests.ldap = callTest tests/ldap.nix {};
-  #tests.lightdm = callTest tests/lightdm.nix {};
-  tests.login = callTest tests/login.nix {};
-  #tests.logstash = callTest tests/logstash.nix {};
-  tests.mathics = callTest tests/mathics.nix {};
-  tests.mesos = callTest tests/mesos.nix {};
-  tests.misc = callTest tests/misc.nix {};
-  tests.mongodb = callTest tests/mongodb.nix {};
-  tests.mumble = callTest tests/mumble.nix {};
-  tests.munin = callTest tests/munin.nix {};
-  tests.mutableUsers = callTest tests/mutable-users.nix {};
-  tests.mysql = callTest tests/mysql.nix {};
-  tests.mysqlBackup = callTest tests/mysql-backup.nix {};
-  tests.mysqlReplication = callTest tests/mysql-replication.nix {};
-  tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
-  tests.nat.firewall-conntrack = callTest tests/nat.nix { withFirewall = true; withConntrackHelpers = true; };
-  tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
-  tests.networking.networkd = callSubTests tests/networking.nix { networkd = true; };
-  tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };
-  # TODO: put in networking.nix after the test becomes more complete
-  tests.networkingProxy = callTest tests/networking-proxy.nix {};
-  tests.nfs3 = callTest tests/nfs.nix { version = 3; };
-  tests.nfs4 = callTest tests/nfs.nix { version = 4; };
-  tests.nginx = callTest tests/nginx.nix { };
-  tests.nghttpx = callTest tests/nghttpx.nix { };
-  tests.leaps = callTest tests/leaps.nix { };
-  tests.nsd = callTest tests/nsd.nix {};
-  tests.openssh = callTest tests/openssh.nix {};
-  tests.owncloud = callTest tests/owncloud.nix {};
-  tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
-  #tests.panamax = callTestOnTheseSystems ["x86_64-linux"] tests/panamax.nix {};
-  tests.peerflix = callTest tests/peerflix.nix {};
-  tests.php-pcre = callTest tests/php-pcre.nix {};
-  tests.postgresql = callSubTests tests/postgresql.nix {};
-  tests.pgmanage = callTest tests/pgmanage.nix {};
-  tests.postgis = callTest tests/postgis.nix {};
-  #tests.pgjwt = callTest tests/pgjwt.nix {};
-  tests.printing = callTest tests/printing.nix {};
-  tests.prometheus = callTest tests/prometheus.nix {};
-  tests.proxy = callTest tests/proxy.nix {};
-  tests.pumpio = callTest tests/pump.io.nix {};
-  # tests.quagga = callTest tests/quagga.nix {};
-  tests.quake3 = callTest tests/quake3.nix {};
-  tests.radicale = callTest tests/radicale.nix {};
-  tests.runInMachine = callTest tests/run-in-machine.nix {};
-  tests.samba = callTest tests/samba.nix {};
-  tests.sddm = callSubTests tests/sddm.nix {};
-  tests.simple = callTest tests/simple.nix {};
-  tests.slim = callTest tests/slim.nix {};
-  tests.smokeping = callTest tests/smokeping.nix {};
-  tests.snapper = callTest tests/snapper.nix {};
-  tests.statsd = callTest tests/statsd.nix {};
-  tests.sudo = callTest tests/sudo.nix {};
-  tests.switchTest = callTest tests/switch-test.nix {};
-  tests.taskserver = callTest tests/taskserver.nix {};
-  tests.tomcat = callTest tests/tomcat.nix {};
-  tests.udisks2 = callTest tests/udisks2.nix {};
-  tests.vault = callTest tests/vault.nix {};
-  tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
-  tests.wordpress = callTest tests/wordpress.nix {};
-  tests.xfce = callTest tests/xfce.nix {};
-  tests.xmonad = callTest tests/xmonad.nix {};
-  tests.zookeeper = callTest tests/zookeeper.nix {};
+  tests = allTests;
 
   /* Build a bunch of typical closures so that Hydra can keep track of
      the evolution of closure sizes. */
 
   closures = {
 
-    smallContainer = makeClosure ({ pkgs, ... }:
+    smallContainer = makeClosure ({ ... }:
       { boot.isContainer = true;
         services.openssh.enable = true;
       });
 
-    tinyContainer = makeClosure ({ pkgs, ... }:
+    tinyContainer = makeClosure ({ ... }:
       { boot.isContainer = true;
         imports = [ modules/profiles/minimal.nix ];
       });
 
-    ec2 = makeClosure ({ pkgs, ... }:
+    ec2 = makeClosure ({ ... }:
       { imports = [ modules/virtualisation/amazon-image.nix ];
       });
 
-    kde = makeClosure ({ pkgs, ... }:
+    kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
       });
 
-    xfce = makeClosure ({ pkgs, ... }:
+    xfce = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.xfce.enable = true;
       });
@@ -386,7 +281,7 @@ in rec {
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
         services.postgresql.enable = true;
-        services.postgresql.package = pkgs.postgresql93;
+        services.postgresql.package = pkgs.postgresql;
         environment.systemPackages = [ pkgs.php ];
       });
   };

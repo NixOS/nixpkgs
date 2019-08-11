@@ -1,10 +1,20 @@
 { stdenv, fetchurl, libxml2, libxslt, itstool, gnome3, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "yelp-tools-${version}";
+  version = "3.32.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/yelp-tools/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1yg8f5g5wadhmy4yfd9yjhvd8vll4gq4l86ibp0b42qbxnsmcf0q";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "yelp-tools"; attrPath = "gnome3.yelp-tools"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libxml2 libxslt itstool gnome3.yelp_xsl ];
+  buildInputs = [ libxml2 libxslt itstool gnome3.yelp-xsl ];
 
   doCheck = true;
 

@@ -1,4 +1,4 @@
-{ lib, haskellLib, fetchpatch, makeWrapper, haskellPackages
+{ lib, haskellLib, makeWrapper, haskellPackages
 , mueval
 , withDjinn ? true
 , aspell ? null
@@ -7,15 +7,13 @@
 , configuration ? "[]"
 }:
 
-# FIXME: fix hoogle search
-
 let allPkgs = pkgs: mueval.defaultPkgs pkgs ++ [ pkgs.lambdabot-trusted ] ++ packages pkgs;
     mueval' = mueval.override {
       inherit haskellPackages;
       packages = allPkgs;
     };
     bins = lib.makeBinPath ([ mueval'
-                              (haskellPackages.ghcWithPackages allPkgs)
+                              (haskellPackages.ghcWithHoogle allPkgs)
                               haskellPackages.unlambda
                               haskellPackages.brainfuck
                             ]

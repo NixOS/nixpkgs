@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, encfs
-, glib , gnome3, gtk3, libgnome_keyring, vala, wrapGAppsHook, xorg
+, glib , gnome3, gtk3, libgnome-keyring, vala, wrapGAppsHook, xorg, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ autoconf automake intltool libtool vala glib encfs
-    gtk3 libgnome_keyring gnome3.libgee xorg.libSM xorg.libICE
-    wrapGAppsHook ];
+    gtk3 libgnome-keyring gnome3.libgee xorg.libSM xorg.libICE
+    wrapGAppsHook gobject-introspection  ];
 
   patches = [ ./makefile-mkdir.patch ];
 

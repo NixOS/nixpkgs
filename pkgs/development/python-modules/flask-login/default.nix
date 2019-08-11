@@ -1,19 +1,16 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonAtLeast
-, flask, nose, mock, blinker}:
+{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast
+, flask, blinker, nose, mock, semantic-version }:
 
 buildPythonPackage rec {
   pname = "Flask-Login";
-  name = "${pname}-${version}";
-  version = "0.4.0";
+  version = "0.4.1";
 
-  src = fetchFromGitHub {
-    owner = "maxcountryman";
-    repo = "flask-login";
-    rev = version;
-    sha256 = "0sjbmk8m4mmd9g99n6c6lx9nv2jwwqp6qsqhl945w2m0f1sknwdh";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1v2j8zd558xfmgn3rfbw0xz4vizjcnk8kqw52q4f4d9ygfnc25f8";
   };
 
-  buildInputs = [ nose mock ];
+  checkInputs = [ nose mock semantic-version ];
   propagatedBuildInputs = [ flask blinker ];
 
   checkPhase = "nosetests -d";

@@ -54,14 +54,14 @@ in
       };
     };
 
-    users.extraUsers = {
+    users.users = {
       cfdyndns = {
         group = "cfdyndns";
         uid = config.ids.uids.cfdyndns;
       };
     };
 
-    users.extraGroups = {
+    users.groups = {
       cfdyndns = {
         gid = config.ids.gids.cfdyndns;
       };

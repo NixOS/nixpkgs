@@ -1,14 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
-, intltool, itstool, libcanberra_gtk3, libxml2, dconf }:
+{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook
+, itstool, libcanberra-gtk3, libxml2
+, meson, ninja, python3, vala, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "iagno-${version}";
+  version = "3.32.0";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg
-                  dconf libxml2 libcanberra_gtk3 wrapGAppsHook itstool intltool ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1rcqb4gpam16xw87n4q2akkrg94ksrn16ry21pr6bsd7qs7hw17d";
+  };
+
+  nativeBuildInputs = [
+    meson ninja python3 vala desktop-file-utils
+    pkgconfig wrapGAppsHook itstool libxml2
+  ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk-pixbuf librsvg libcanberra-gtk3 ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "iagno";
+      attrPath = "gnome3.iagno";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Iagno;

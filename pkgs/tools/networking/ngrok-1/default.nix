@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgconfig, buildGoPackage, go-bindata, fetchFromGitHub }:
+{ buildGoPackage, go-bindata, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "ngrok-${version}";
@@ -28,4 +28,8 @@ buildGoPackage rec {
   '';
 
   buildFlags = [ "-tags release" ];
+
+  meta = {
+    homepage = https://ngrok.com/;
+  };
 }

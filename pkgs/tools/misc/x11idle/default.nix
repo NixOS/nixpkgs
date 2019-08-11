@@ -1,4 +1,4 @@
-{ stdenv, xlibs, fetchgit, libXScrnSaver, libX11 }:
+{ stdenv, fetchgit, libXScrnSaver, libX11 }:
 
 stdenv.mkDerivation {
   name = "x11idle-unstable-2017-07-01";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libXScrnSaver libX11 ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin

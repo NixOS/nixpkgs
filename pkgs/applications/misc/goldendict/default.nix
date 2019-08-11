@@ -1,27 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, libXtst, libvorbis, hunspell
-, libao, ffmpeg, libeb, lzo, xz, libtiff
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig, libXtst, libvorbis, hunspell
+, libao, ffmpeg, libeb, lzo, xz, libtiff, opencc
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake }:
-stdenv.mkDerivation rec {
+mkDerivation rec {
 
-  name = "goldendict-1.5.0.rc2";
-  src = fetchurl {
-    url = "https://github.com/goldendict/goldendict/archive/1.5.0-RC2.tar.gz";
-    sha256 = "1pizz39l61rbps0wby75fkvzyrah805257j33siqybwhsfiy1kmw";
+  name = "goldendict-2019-08-01";
+  src = fetchFromGitHub {
+    owner = "goldendict";
+    repo = "goldendict";
+    rev = "0f951b06a55f3a201891cf645a556e773bda5f52";
+    sha256 = "1d1hn95vhvsmbq9q96l5adn90g0hg25dl01knb4y4v6v9x4yrl2x";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
     qtbase qtsvg qtwebkit qtx11extras qttools
-    libXtst libvorbis hunspell libao ffmpeg libeb lzo xz libtiff
+    libXtst libvorbis hunspell libao ffmpeg libeb lzo xz libtiff opencc
   ];
 
-  qmakeFlags = [ "CONFIG+=zim_support" ];
+  qmakeFlags = [
+    "goldendict.pro"
+    "CONFIG+=zim_support"
+    "CONFIG+=chinese_conversion_support"
+  ];
 
-  meta = {
+  meta = with lib; {
     homepage = http://goldendict.org/;
     description = "A feature-rich dictionary lookup program";
-
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.astsmtl ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ gebner astsmtl ];
+    license = licenses.gpl3Plus;
   };
 }

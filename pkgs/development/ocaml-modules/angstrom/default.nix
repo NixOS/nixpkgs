@@ -1,37 +1,26 @@
-{ stdenv, fetchFromGitHub, ocaml, ocamlbuild, cstruct, result, findlib }:
+{ stdenv, fetchFromGitHub, buildDunePackage, alcotest, result, bigstringaf }:
 
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.03"
-  then {
-    version = "0.5.1";
-    sha256 = "0rm79xyszy9aqvflcc13y9xiya82z31fzmr3b3hx91pmqviymhgc";
-  } else {
-    version = "0.4.0";
-    sha256 = "019s3jwhnswa914bgj1fa6q67k0bl2ahqdaqfnavcbyii8763kh2";
-  };
-in
+buildDunePackage rec {
+  pname = "angstrom";
+  version = "0.10.0";
 
-stdenv.mkDerivation rec {
-  inherit (param) version;
-  name = "ocaml-angstrom-${version}";
+  minimumOCamlVersion = "4.03";
 
   src = fetchFromGitHub {
     owner  = "inhabitedtype";
-    repo   = "angstrom";
-    rev    = "${version}";
-    inherit (param) sha256;
+    repo   = pname;
+    rev    = version;
+    sha256 = "0lh6024yf9ds0nh9i93r9m6p5psi8nvrqxl5x7jwl13zb0r9xfpw";
   };
 
-  createFindlibDestdir = true;
-
-  buildInputs = [ ocaml findlib ocamlbuild ];
-  propagatedBuildInputs = [ result cstruct ];
+  buildInputs = [ alcotest ];
+  propagatedBuildInputs = [ bigstringaf result ];
+  doCheck = true;
 
   meta = {
     homepage = https://github.com/inhabitedtype/angstrom;
     description = "OCaml parser combinators built for speed and memory efficiency";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
-    inherit (ocaml.meta) platforms;
   };
 }

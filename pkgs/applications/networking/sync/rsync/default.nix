@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, fetchpatch, perl, libiconv, zlib, popt
-, enableACLs ? true, acl ? null
+{ stdenv, fetchurl, perl, libiconv, zlib, popt
+, enableACLs ? !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD), acl ? null
 , enableCopyDevicesPatch ? false
 }:
 
 assert enableACLs -> acl != null;
 
 let
-  base = import ./base.nix { inherit stdenv fetchurl fetchpatch; };
+  base = import ./base.nix { inherit stdenv fetchurl; };
 in
 stdenv.mkDerivation rec {
   name = "rsync-${base.version}";
 
   mainSrc = base.src;
 
-  patchesSrc = base.patches;
+  patchesSrc = base.upstreamPatchTarball;
 
   srcs = [mainSrc] ++ stdenv.lib.optional enableCopyDevicesPatch patchesSrc;
   patches = stdenv.lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";

@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "dtools-${version}";
-  version = "2.078.0";
+  version = "2.085.1";
 
   srcs = [
     (fetchFromGitHub {
       owner = "dlang";
       repo = "dmd";
       rev = "v${version}";
-      sha256 = "1ia4swyq0xqppnpmcalh2yxywdk2gv3kvni2abx1mq6wwqgmwlcr";
+      sha256 = "0ccidfcawrcwdpfjwjiln5xwr4ffp8i2hwx52p8zn3xmc5yxm660";
       name = "dmd";
     })
     (fetchFromGitHub {
       owner = "dlang";
       repo = "tools";
       rev = "v${version}";
-      sha256 = "1cydhn8g0h9i9mygzi80fb5fz3z1f6m8b9gypdvmyhkkzg63kf12";
+      sha256 = "1x85w4k2zqgv2bjbvhschxdc6kq8ygp89h499cy8rfqm6q23g0ws";
       name = "dtools";
     })
   ];
@@ -26,25 +26,15 @@ stdenv.mkDerivation rec {
   postUnpack = ''
       mv dmd dtools
       cd dtools
-  '';
 
-  postPatch = ''
-      substituteInPlace posix.mak \
-          --replace "../dmd/generated/\$(OS)/release/\$(MODEL)/dmd" ${dmd.out}/bin/dmd
-
-      substituteInPlace posix.mak \
-          --replace gcc $CC
-
-      # To fix rdmd test with newer phobos
-      substituteInPlace rdmd.d \
-          --replace " std.stdiobase," ""
+      substituteInPlace posix.mak --replace "\$(DMD) \$(DFLAGS) -unittest -main -run rdmd.d" ""
   '';
 
   nativeBuildInputs = [ dmd ];
   buildInputs = [ curl ];
 
   makeCmd = ''
-    make -f posix.mak DMD=${dmd.out}/bin/dmd DMD_DIR=dmd
+    make -f posix.mak DMD_DIR=dmd DMD=${dmd.out}/bin/dmd CC=${stdenv.cc}/bin/cc
   '';
 
   buildPhase = ''

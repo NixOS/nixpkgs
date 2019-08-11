@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "valum-${version}";
-  version = "0.3.14";
+  version = "0.3.15";
 
   src = fetchFromGitHub {
     owner = "valum-framework";
     repo = "valum";
     rev = "v${version}";
-    sha256 = "1w1mipczcfmrrxg369wvrj3wvf76rqn8rrkxbq88aial1bi23kd3";
+    sha256 = "1wk23aq5lxsqns58s4g9jrwx6wrk7k9hq9rg8jcs42rxn2pckaxw";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];

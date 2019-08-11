@@ -6,8 +6,8 @@ rec {
   */
   callPackageWith = autoArgs: fn: args:
     let
-      f = if builtins.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
+      f = if pkgs.lib.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (stdenv.lib.functionArgs f) autoArgs;
     in f (auto // args);
 
   callPackage = callPackageWith pkgs;
@@ -49,7 +49,6 @@ rec {
   */
   callElixir = drv: args:
     let
-      inherit (stdenv.lib) versionAtLeast;
       builder = callPackage ../interpreters/elixir/generic-builder.nix args;
     in
       callPackage drv {
@@ -71,7 +70,6 @@ rec {
   */
   callLFE = drv: args:
     let
-      inherit (stdenv.lib) versionAtLeast;
       builder = callPackage ../interpreters/lfe/generic-builder.nix args;
     in
       callPackage drv {

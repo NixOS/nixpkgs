@@ -1,23 +1,35 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, asciidoc, docbook_xsl, libxslt
+, Security
+, withPCRE2 ? true, pcre2 ? null
+}:
 
-with rustPlatform;
-
-buildRustPackage rec {
-  name = "ripgrep-${version}";
-  version = "0.7.1";
+rustPlatform.buildRustPackage rec {
+  pname = "ripgrep";
+  version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = "ripgrep";
-    rev = "${version}";
-    sha256 = "0z3f83vhy464k93bc55i9lr6z41163q96if938p9ndhx2q3a20ql";
+    repo = pname;
+    rev = version;
+    sha256 = "1iga3320mgi7m853la55xip514a3chqsdi1a1rwv25lr9b1p7vd3";
   };
 
-  cargoSha256 = "1d6s01gmyfzb0vdf7flq6nvlapwcgbj0mzcprzyg4nj5gjkvznrn";
+  cargoSha256 = "11477l4l1y55klw5dp2kbsnv989vdz1547ml346hcfbkzv7m450v";
+
+  cargoBuildFlags = stdenv.lib.optional withPCRE2 "--features pcre2";
+
+  nativeBuildInputs = [ asciidoc docbook_xsl libxslt ];
+  buildInputs = (stdenv.lib.optional withPCRE2 pcre2)
+    ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   preFixup = ''
     mkdir -p "$out/man/man1"
-    cp "$src/doc/rg.1" "$out/man/man1"
+    cp target/release/build/ripgrep-*/out/rg.1 "$out/man/man1/"
+
+    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
+    cp target/release/build/ripgrep-*/out/rg.bash "$out/share/bash-completion/completions/"
+    cp target/release/build/ripgrep-*/out/rg.fish "$out/share/fish/vendor_completions.d/"
+    cp "$src/complete/_rg" "$out/share/zsh/site-functions/"
   '';
 
   meta = with stdenv.lib; {

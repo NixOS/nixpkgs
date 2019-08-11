@@ -7,21 +7,23 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes =
     { client =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
         with pkgs.lib;
         {
           networking = {
-            interfaces.eth1.ip6 = mkOverride 0 [ { address = "fd00::2"; prefixLength = 64; } ];
-            interfaces.eth1.ip4 = mkOverride 0 [ { address = "192.168.1.2"; prefixLength = 24; } ];
+            dhcpcd.enable = false;
+            interfaces.eth1.ipv6.addresses = mkOverride 0 [ { address = "fd00::2"; prefixLength = 64; } ];
+            interfaces.eth1.ipv4.addresses = mkOverride 0 [ { address = "192.168.1.2"; prefixLength = 24; } ];
           };
       };
       server =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
         with pkgs.lib;
         {
           networking = {
-            interfaces.eth1.ip6 = mkOverride 0 [ { address = "fd00::1"; prefixLength = 64; } ];
-            interfaces.eth1.ip4 = mkOverride 0 [ { address = "192.168.1.1"; prefixLength = 24; } ];
+            dhcpcd.enable = false;
+            interfaces.eth1.ipv6.addresses = mkOverride 0 [ { address = "fd00::1"; prefixLength = 64; } ];
+            interfaces.eth1.ipv4.addresses = mkOverride 0 [ { address = "192.168.1.1"; prefixLength = 24; } ];
           };
 
           services = {
@@ -51,7 +53,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     ''
       startAll;
 
-      $client->waitForUnit("network.target");
+      $client->waitForUnit("network-online.target");
       $server->waitForUnit("ferm.service");
       $server->waitForUnit("nginx.service");
       $server->waitUntilSucceeds("ss -ntl | grep -q 80");

@@ -1,22 +1,23 @@
 {
   mkDerivation, lib, fetchurl,
   extra-cmake-modules,
-  qtbase, kconfig, kcoreaddons, kwidgetsaddons, kguiaddons
+  qtbase, kconfig, kcoreaddons, kwidgetsaddons, kguiaddons,
+  qttools
 }:
 
 mkDerivation rec {
   pname = "kproperty";
-  version = "3.0.2";
+  version = "3.2.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
-    sha256 = "1hzkvdap7dzpnxlp4rfg5f24fhqjpqm2hlvv88gj4c0scbp73ynm";
+    sha256 = "1yldfsdamk4dag8dyryjn5n9j2pzi42s79kkafymfnbifhnhrbv7";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
-  buildInputs = [ kconfig kcoreaddons kwidgetsaddons kguiaddons ];
+  buildInputs = [ kconfig kcoreaddons kwidgetsaddons kguiaddons qttools ];
 
   propagatedBuildInputs = [ qtbase ];
 

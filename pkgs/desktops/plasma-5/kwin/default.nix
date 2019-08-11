@@ -11,7 +11,7 @@
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework,
+  plasma-framework, qtsensors, libcap, libdrm
 }:
 
 mkDerivation {
@@ -21,12 +21,13 @@ mkDerivation {
     epoxy libICE libSM libinput libxkbcommon udev wayland xcb-util-cursor
     xwayland
 
-    qtdeclarative qtmultimedia qtscript qtx11extras
+    qtdeclarative qtmultimedia qtscript qtx11extras qtsensors
 
     breeze-qt5 kactivities kcmutils kcompletion kconfig kconfigwidgets
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
+    libcap libdrm
   ];
   outputs = [ "bin" "dev" "out" ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);

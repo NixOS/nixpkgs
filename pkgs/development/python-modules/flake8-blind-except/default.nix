@@ -1,11 +1,10 @@
-{ lib, fetchurl, buildPythonPackage }:
+{ lib, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "flake8-blind-except";
-  name = "${pname}-${version}";
   version = "0.1.1";
-  src = fetchurl {
-    url = "mirror://pypi/f/flake8-blind-except/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "16g58mkr3fcn2vlfhp3rlahj93qswc7jd5qrqp748mc26dk3b8xc";
   };
   meta = {

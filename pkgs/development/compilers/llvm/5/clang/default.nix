@@ -1,15 +1,17 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, release_version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
-  self = stdenv.mkDerivation {
+  self = stdenv.mkDerivation ({
     name = "clang-${version}";
 
+    src = fetch "cfe" "0018520c4qxf5hgjdqgpz2dgl3faf4gsz87fdlb8zdmx99rfk77s";
+
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "1zyh4dggxd55lnfg73c8fybnkssqcaa6bq2h4bzimnnj1jdnqpqk"}
+      unpackFile $src
       mv cfe-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
@@ -19,7 +21,7 @@ let
     nativeBuildInputs = [ cmake python ]
       ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-    buildInputs = [ libedit libxml2 llvm ]
+    buildInputs = [ libxml2 llvm ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
@@ -30,16 +32,9 @@ let
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ]
-    # Maybe with compiler-rt this won't be needed?
-    ++ stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}"
-    ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include";
+    ];
 
     patches = [ ./purity.patch ];
-
-    postBuild = stdenv.lib.optionalString enableManpages ''
-      cmake --build . --target docs-clang-man
-    '';
 
     postPatch = ''
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
@@ -48,20 +43,24 @@ let
 
       # Patch for standalone doc building
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
+    '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
 
-    outputs = [ "out" "lib" "python" ]
-      ++ stdenv.lib.optional enableManpages "man";
+    outputs = [ "out" "lib" "python" ];
 
     # Clang expects to find LLVMgold in its own prefix
-    # Clang expects to find sanitizer libraries in its own prefix
     postInstall = ''
-      ln -sv ${llvm}/lib/LLVMgold.so $out/lib
-      ln -sv ${llvm}/lib/clang/${release_version}/lib $out/lib/clang/${release_version}/
+      if [ -e ${llvm}/lib/LLVMgold.so ]; then
+        ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      fi
+
       ln -sv $out/bin/clang $out/bin/cpp
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
+      substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
+          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang."
 
       mkdir -p $python/bin $python/share/clang/
       mv $out/bin/{git-clang-format,scan-view} $python/bin
@@ -70,13 +69,6 @@ let
       fi
       mv $out/share/clang/*.py $python/share/clang
       rm $out/bin/c-index-test
-    ''
-    + stdenv.lib.optionalString enableManpages ''
-      # Manually install clang manpage
-      cp docs/man/*.1 $out/share/man/man1/
-
-      # Move it and other man pages to 'man' output
-      moveToOutput "share/man" "$man"
     '';
 
     enableParallelBuilding = true;
@@ -94,5 +86,23 @@ let
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };
-  };
+  } // stdenv.lib.optionalAttrs enableManpages {
+    name = "clang-manpages-${version}";
+
+    buildPhase = ''
+      make docs-clang-man
+    '';
+
+    installPhase = ''
+      mkdir -p $out/share/man/man1
+      # Manually install clang manpage
+      cp docs/man/*.1 $out/share/man/man1/
+    '';
+
+    outputs = [ "out" ];
+
+    doCheck = false;
+
+    meta.description = "man page for Clang ${version}";
+  });
 in self

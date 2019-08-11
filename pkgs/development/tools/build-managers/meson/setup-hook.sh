@@ -6,11 +6,26 @@ mesonConfigurePhase() {
     fi
 
     # Build release by default.
-    mesonFlags="--buildtype=${mesonBuildType:-release} $mesonFlags"
+    if [ -n "@isCross@" ]; then
+      crossMesonFlags="--cross-file=@crossFile@/cross-file.conf"
+    fi
+
+    # See multiple-outputs.sh and meson’s coredata.py
+    mesonFlags="\
+        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
+        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
+        --includedir=${!outputInclude}/include \
+        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
+        --localedir=${!outputLib}/share/locale \
+        -Dauto_features=${mesonAutoFeatures:-enabled} \
+        -Dwrap_mode=${mesonWrapMode:-nodownload} \
+        $mesonFlags"
+
+    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-plain} $mesonFlags"
 
     echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
 
-    meson build $mesonFlags "${mesonFlagsArray[@]}"
+    CC=@cc@/bin/cc CXX=@cc@/bin/c++ meson build $mesonFlags "${mesonFlagsArray[@]}"
     cd build
 
     if ! [[ -v enableParallelBuilding ]]; then
@@ -24,16 +39,4 @@ mesonConfigurePhase() {
 if [ -z "$dontUseMesonConfigure" -a -z "$configurePhase" ]; then
     setOutputFlags=
     configurePhase=mesonConfigurePhase
-fi
-
-mesonCheckPhase() {
-    runHook preCheck
-
-    meson test
-
-    runHook postCheck
-}
-
-if [ -z "$dontUseMesonCheck" -a -z "$checkPhase" ]; then
-    checkPhase=mesonCheckPhase
 fi

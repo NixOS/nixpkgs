@@ -1,16 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, dbus_glib, libxklavier, libcanberra_gtk3, libnotify, nss, polkit, gnome3, mate, wrapGAppsHook
-, pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio
-}:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, dbus-glib, libxklavier,
+  libcanberra-gtk3, libnotify, nss, polkit, gnome3, gtk3, mate,
+  pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
+  wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-settings-daemon-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "2";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0v2kdzfmfqq0avlrxnxysmkawy83g7sanmyhivisi5vg4rzsr0a4";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0yr5v6b9hdk20j29smbw1k4fkyg82i5vlflmgly0vi5whgc74gym";
   };
 
   nativeBuildInputs = [
@@ -20,13 +19,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    dbus_glib
+    dbus-glib
     libxklavier
-    libcanberra_gtk3
+    libcanberra-gtk3
     libnotify
     nss
     polkit
-    gnome3.gtk
+    gtk3
     gnome3.dconf
     mate.mate-desktop
     mate.libmatekbd
@@ -34,6 +33,8 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = stdenv.lib.optional pulseaudioSupport "--enable-pulse";
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = with stdenv.lib; {
     description = "MATE settings daemon";

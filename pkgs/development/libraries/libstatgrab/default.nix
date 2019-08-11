@@ -2,11 +2,11 @@
 , IOKit ? null }:
 
 stdenv.mkDerivation rec {
-  name = "libstatgrab-0.91";
+  name = "libstatgrab-0.92";
 
   src = fetchurl {
-    url = "http://ftp.i-scream.org/pub/i-scream/libstatgrab/${name}.tar.gz";
-    sha256 = "1azinx2yzs442ycwq6p15skl3mscmqj7fd5hq7fckhjp92735s83";
+    url = "https://ftp.i-scream.org/pub/i-scream/libstatgrab/${name}.tar.gz";
+    sha256 = "15m1sl990l85ijf8pnc6hdfha6fqyiq74mijrzm3xz4zzxm91wav";
   };
 
   buildInputs = [] ++ stdenv.lib.optional stdenv.isDarwin IOKit;
@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     description = "A library that provides cross platforms access to statistics about the running system";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

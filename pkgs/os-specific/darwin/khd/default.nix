@@ -1,15 +1,23 @@
-{ stdenv, fetchFromGitHub, Carbon, Cocoa }:
+{ stdenv, fetchFromGitHub, fetchpatch, Carbon, Cocoa }:
 
 stdenv.mkDerivation rec {
   name = "khd-${version}";
-  version = "2.1.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = "khd";
     rev = "v${version}";
-    sha256 = "1ijfrlnwdf8hk259j3jfxj6zizvqzj57458rflza626z5dnhmbpr";
+    sha256 = "0nzfhknv1s71870w2dk9dy56a3g5zsbjphmfrz0vsvi438g099r4";
   };
+
+  patches = [
+    # Fixes build issues, remove with >3.0.0
+    (fetchpatch {
+      url = https://github.com/koekeishiya/khd/commit/4765ae0b4c7d4ca56319dc92ff54393cd9e03fbc.patch;
+      sha256 = "0kvf5hxi5bf6pf125qib7wn7hys0ag66zzpp4srj1qa87lxyf7np";
+    })
+  ];
 
   buildInputs = [ Carbon Cocoa ];
 

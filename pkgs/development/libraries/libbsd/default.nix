@@ -2,18 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "libbsd-${version}";
-  version = "0.8.6";
+  version = "0.9.1";
 
   src = fetchurl {
-    url = "http://libbsd.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "11wnkzims5grprvhb1ssmq9pc2lcgh2r2rk8gwgz36ply6fvyzs6";
+    url = "https://libbsd.freedesktop.org/releases/${name}.tar.xz";
+    sha256 = "1957w2wi7iqar978qlfsm220dwywnrh5m58nrnn9zmi74ds3bn2n";
   };
 
   # darwin changes configure.ac which means we need to regenerate
   # the configure scripts
   nativeBuildInputs = [ autoreconfHook ];
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin.patch ];
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+    # Suitable for all but limited to musl to avoid rebuild
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./musl.patch;
 
   meta = with stdenv.lib; {
     description = "Common functions found on BSD systems";

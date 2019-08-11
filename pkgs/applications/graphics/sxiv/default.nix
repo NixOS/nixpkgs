@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, libX11, imlib2, giflib, libexif, conf ? null }:
+{ stdenv, fetchFromGitHub, libXft, imlib2, giflib, libexif, conf ? null }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "sxiv-${version}";
-  version = "1.3.2";
+  pname = "sxiv";
+  version = "25";
 
   src = fetchFromGitHub {
     owner = "muennich";
-    repo = "sxiv";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1f4gz1qjhb44bbb3q5fqk439zyipkwnr19zhg89yq2pgmzzzqr2h";
+    sha256 = "13s1lfar142hq1j7xld0ri616p4bqs57b17yr4d0b9a9w7liz4hp";
   };
 
   postUnpack = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configFile = optionalString (conf!=null) (builtins.toFile "config.def.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
 
-  buildInputs = [ libX11 imlib2 giflib libexif ];
+  buildInputs = [ libXft imlib2 giflib libexif ];
 
   postInstall = ''
     mkdir -p $out/share/applications/

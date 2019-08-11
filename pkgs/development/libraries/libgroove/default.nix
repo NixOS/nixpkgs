@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1la9d9kig50mc74bxvhx6hzqv0nrci9aqdm4k2j4q0s1nlfgxipd";
   };
 
+  patches = [ ./no-warnings-as-errors.patch ];
+
   buildInputs = [ cmake libav SDL2 chromaprint libebur128 ];
 
   meta = with stdenv.lib; {
@@ -18,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/andrewrk/libgroove;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.andrewrk ];
+    maintainers = with maintainers; [ andrewrk ma27 ];
   };
 }

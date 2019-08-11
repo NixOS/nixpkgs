@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     description = "Secure PIN handling using NSS crypto";
     license = licenses.mpl11;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

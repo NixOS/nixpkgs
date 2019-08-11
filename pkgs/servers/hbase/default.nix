@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, makeWrapper }:
 stdenv.mkDerivation rec {
   name = "hbase-${version}";
   version = "0.98.24";

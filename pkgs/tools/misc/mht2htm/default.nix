@@ -39,5 +39,6 @@ in stdenv.mkDerivation rec {
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.all;
+    broken = true; # 2018-04-11
   };
 }

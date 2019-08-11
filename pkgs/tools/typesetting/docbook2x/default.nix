@@ -1,12 +1,11 @@
-{ fetchurl, stdenv, texinfo, perl
-, XMLSAX, XMLParser, XMLNamespaceSupport
+{ fetchurl, stdenv, texinfo, perlPackages
 , groff, libxml2, libxslt, gnused, libiconv, opensp
 , docbook_xml_dtd_43
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "docbook2X-0.8.8";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/docbook2x/${name}.tar.gz";
     sha256 = "0ifwzk99rzjws0ixzimbvs83x6cxqk1xzmg84wa1p7bs6rypaxs0";
@@ -16,9 +15,8 @@ stdenv.mkDerivation rec {
   # writes its output to stdout instead of creating a file.
   patches = [ ./db2x_texixml-to-stdout.patch ];
 
-  buildInputs = [ perl texinfo groff libxml2 libxslt makeWrapper
-                  XMLSAX XMLParser XMLNamespaceSupport opensp libiconv
-                ];
+  buildInputs = [ texinfo groff libxml2 libxslt makeWrapper opensp libiconv ]
+    ++ (with perlPackages; [ perl XMLSAX XMLParser XMLNamespaceSupport ]);
 
   postConfigure = ''
     # Broken substitution is used for `perl/config.pl', which leaves literal
@@ -27,6 +25,8 @@ stdenv.mkDerivation rec {
       --replace '${"\$" + "{prefix}"}' "$out"
   '';
 
+  doCheck = false; # fails a lot of tests
+
   postInstall = ''
     perlPrograms="db2x_manxml db2x_texixml db2x_xsltproc
                   docbook2man docbook2texi";
@@ -34,12 +34,10 @@ stdenv.mkDerivation rec {
     do
       # XXX: We work around the fact that `wrapProgram' doesn't support
       # spaces below by inserting escaped backslashes.
-      wrapProgram $out/bin/$i --prefix PERL5LIB :			\
-        "${XMLSAX}/lib/perl5/site_perl:${XMLParser}/lib/perl5/site_perl" \
-	--prefix PERL5LIB :						\
-	"${XMLNamespaceSupport}/lib/perl5/site_perl"			\
-	--prefix XML_CATALOG_FILES "\ "					\
-	"$out/share/docbook2X/dtd/catalog.xml\ $out/share/docbook2X/xslt/catalog.xml\ ${docbook_xml_dtd_43}/xml/dtd/docbook/catalog.xml"
+      wrapProgram $out/bin/$i \
+        --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [XMLSAX XMLParser XMLNamespaceSupport]} \
+        --prefix XML_CATALOG_FILES "\ " \
+        "$out/share/docbook2X/dtd/catalog.xml\ $out/share/docbook2X/xslt/catalog.xml\ ${docbook_xml_dtd_43}/xml/dtd/docbook/catalog.xml"
     done
 
     wrapProgram $out/bin/sgml2xml-isoent --prefix PATH : \

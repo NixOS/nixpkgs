@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, elk6Version, buildGoPackage, libpcap }:
+{ stdenv, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, systemd }:
 
 let beat = package : extraArgs : buildGoPackage (rec {
       name = "${package}-${version}";
@@ -8,7 +8,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
         owner = "elastic";
         repo = "beats";
         rev = "v${version}";
-        sha256 = "05ay6hdc1jgi6b00bd998zc39ca8jhnk7i6m3mw70s0baqv1scik";
+        sha256 = "0if08dxibdnqpsxs8f6hvw147j0j8bavhcm11scn28j9id65absq";
       };
 
       goPackagePath = "github.com/elastic/beats";
@@ -23,10 +23,10 @@ let beat = package : extraArgs : buildGoPackage (rec {
       };
     } // extraArgs);
 in {
-  filebeat   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
-  heartbeat  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
-  metricbeat = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
-  packetbeat = beat "packetbeat" {
+  filebeat6   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
+  heartbeat6  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
+  metricbeat6 = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
+  packetbeat6 = beat "packetbeat" {
     buildInputs = [ libpcap ];
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
     meta.longDescription = ''
@@ -37,6 +37,16 @@ in {
       analytics features. The Packetbeat shippers sniff the traffic between
       your application processes, parse on the fly protocols like HTTP, MySQL,
       PostgreSQL, Redis or Thrift and correlate the messages into transactions.
+    '';
+  };
+  journalbeat6  = beat "journalbeat" {
+    meta.description = ''
+      Journalbeat is an open source data collector to read and forward
+      journal entries from Linuxes with systemd.
+    '';
+    buildInputs = [ systemd.dev ];
+    postFixup = let libPath = stdenv.lib.makeLibraryPath [ systemd.lib ]; in ''
+      patchelf --set-rpath ${libPath} "$bin/bin/journalbeat"
     '';
   };
 }

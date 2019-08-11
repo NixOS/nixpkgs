@@ -7,13 +7,13 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-classic-" + version;
-  version = "1.3.6";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "bitcoinclassic";
     repo = "bitcoinclassic";
     rev = "v${version}";
-    sha256 = "129gkg035gv7zmc463jl2spvdh0fl4q8v4jdaslfnp34hbwi1p07";
+    sha256 = "06ij9v7zbdnhxq9429nnxiw655cp8idldj18l7fmj94gqx07n5vh";
   };
 
   patches = [ ./fix-bitcoin-qt-build.patch ];
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt5" ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Peer-to-peer electronic cash system (Classic client)";
@@ -46,6 +48,7 @@ stdenv.mkDerivation rec {
     homepage = https://bitcoinclassic.com/;
     maintainers = with maintainers; [ jefdaj ];
     license = licenses.mit;
+    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

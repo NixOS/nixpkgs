@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, six, cffi, nose }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "cld2-cffi";
   version = "0.1.4";
 
@@ -14,7 +13,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   # gcc doesn't approve of this code, so disable -Werror
-  NIX_CFLAGS_COMPILE = "-w";
+  NIX_CFLAGS_COMPILE = [ "-w" ] ++ stdenv.lib.optional stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   checkPhase = "nosetests -v";
 

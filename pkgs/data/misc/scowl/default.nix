@@ -1,27 +1,35 @@
-{stdenv, fetchFromGitHub, unzip, zip, perl, aspell, dos2unix}:
+{ stdenv, fetchFromGitHub, unzip, zip, libiconv, perl, aspell, dos2unix
+, singleWordlist ? null
+}:
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "scowl";
-  version = "2017.08.24";
+  version = "2018.04.16";
 
   src = fetchFromGitHub {
     owner = "en-wl";
     repo = "wordlist";
     rev = "rel-${version}";
-    sha256 = "16mgk6scbw8i38g63kh60bsnzgzfs8gvvz2n5jh4x5didbwly8nz";
+    sha256 = "0p0hgg5y88bb802z210cdk1c4fjwlpxxkci6yph3fk7g6s9xc73g";
   };
 
-  buildInputs = [];
-  nativeBuildInputs = [unzip zip perl aspell dos2unix];
+  postPatch = ''
+    substituteInPlace scowl/src/Makefile \
+        --replace g++ c++
+  '';
 
-  NIX_CFLAGS_COMPILE = " -Wno-narrowing ";
+  nativeBuildInputs = [ unzip zip perl aspell dos2unix ];
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
+
+  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   preConfigure = ''
     patchShebangs .
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}$PWD/varcon"
   '';
 
-  postBuild = ''
+  postBuild = stdenv.lib.optionalString (singleWordlist == null) ''
     (
     cd scowl/speller
     make aspell
@@ -31,11 +39,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  installPhase = ''
+  installPhase = if singleWordlist == null then ''
     eval "$preInstall"
 
-    mkdir -p "$out/share/scowl" 
-    mkdir -p "$out/lib" "$out/share/hunspell" "$out/share/myspell" 
+    mkdir -p "$out/share/scowl"
+    mkdir -p "$out/lib" "$out/share/hunspell" "$out/share/myspell"
     mkdir -p "$out/share/dict"
 
     cp -r scowl/speller/aspell "$out/lib/aspell"
@@ -73,7 +81,7 @@ stdenv.mkDerivation rec {
         fi
 
         echo $region $regcode $regcode_sz
-        for s in 10 20 30 35 40 50 55 60 70 80 90; do
+        for s in 10 20 30 35 40 50 55 60 70 80 90 95; do
           ./mk-list $regcode $s > "$out/share/dict/w$region.$s"
           ./mk-list --variants=1 $regcode_var $s > "$out/share/dict/w$region.variants.$s"
           ./mk-list --variants=2 $regcode_var $s > "$out/share/dict/w$region.acceptable.$s"
@@ -88,6 +96,10 @@ stdenv.mkDerivation rec {
     )
 
     eval "$postInstall"
+  '' else ''
+    mkdir -p "$out/share/dict"
+    cd scowl
+    ./mk-list ${singleWordlist} > "$out/share/dict/words.txt"
   '';
 
   meta = {

@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
+{ stdenv, fetchFromGitHub, pkgconfig, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
 
 let
   xorgxrdp = stdenv.mkDerivation rec {
     name = "xorgxrdp-${version}";
-    version = "0.2.3";
+    version = "0.2.9";
 
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      sha256 = "0l1b38j3q9mxyb8ffpdplbqs6rnabj92i8wngrwlkhfh2c88szn1";
+      sha256 = "1bhp5x47hajhinvglmc4vxxnpjvfjm6369njb3ghqfr7c5xypvzr";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf automake which libtool nasm ];
@@ -34,15 +34,15 @@ let
   };
 
   xrdp = stdenv.mkDerivation rec {
-    version = "0.9.3";
+    version = "0.9.9";
     name = "xrdp-${version}";
 
     src = fetchFromGitHub {
       owner = "volth";
       repo = "xrdp";
-      rev = "refs/heads/runtime-cfg-path-${version}";  # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be patched already
+      rev = "refs/tags/runtime-cfg-path-${version}";  # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be patched already
       fetchSubmodules = true;
-      sha256 = "0xqyg3m688fj442zgg9fqmbz7nnzvqpd7a9ki2cwh1hyibacpmz7";
+      sha256 = "0ynj6pml4f38y8571ryhifza57wfqg4frdrjcwzw3fmryiznfm1z";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf automake which libtool nasm ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, zlib, libpng, bzip2, libusb1, openssl }:
+{ stdenv, fetchgit, cmake, zlib, libpng, bzip2, libusb, openssl }:
 
 stdenv.mkDerivation {
   name = "xpwn-0.5.8git";
@@ -18,11 +18,7 @@ stdenv.mkDerivation {
     sed -i -e '/install/d' CMakeLists.txt
   '';
 
-  buildInputs = [ cmake zlib libpng bzip2 libusb1 openssl ];
-
-  cmakeFlags = [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET="
-  ];
+  buildInputs = [ cmake zlib libpng bzip2 libusb openssl ];
 
   meta = with stdenv.lib; {
     homepage    = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";

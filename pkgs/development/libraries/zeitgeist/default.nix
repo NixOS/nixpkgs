@@ -1,46 +1,49 @@
-{ stdenv, fetchgit, pkgconfig, glib, sqlite, gnome3, vala_0_38
-, intltool, libtool, dbus_libs, telepathy_glib
-, gtk3, json_glib, librdf_raptor2, dbus_glib
+{ stdenv, fetchFromGitLab, pkgconfig, glib, sqlite, gobject-introspection, vala
+, autoconf, automake, libtool, gettext, dbus, telepathy-glib
+, gtk3, json-glib, librdf_raptor2, dbus-glib
 , pythonSupport ? true, python2Packages
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0";
-  name = "zeitgeist-${version}";
+  pname = "zeitgeist";
+  version = "1.0.2";
 
-  src = fetchgit {
-    url = "git://anongit.freedesktop.org/git/zeitgeist/zeitgeist";
+  outputs = [ "out" "lib" "dev" "man" ] ++ stdenv.lib.optional pythonSupport "py";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0vw6m0azycqabbz8f0fd8xsh5kf6j3ig4wpqlhw6sklvf44ii5b8";
+    sha256 = "0ig3d3j1n0ghaxsgfww6g2hhcdwx8cljwwfmp9jk1nrvkxd6rnmv";
   };
 
-  configureScript = "./autogen.sh";
+  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
-  configureFlags = [ "--with-session-bus-services-dir=$(out)/share/dbus-1/services" ];
+  configureFlags = [ "--with-session-bus-services-dir=${placeholder ''out''}/share/dbus-1/services" ];
 
-  nativeBuildInputs = [ pkgconfig gnome3.gnome_common intltool libtool vala_0_38 ];
-  buildInputs = [ glib sqlite dbus_libs telepathy_glib dbus_glib
-                  gtk3 json_glib librdf_raptor2 python2Packages.rdflib ];
+  nativeBuildInputs = [
+    autoconf automake libtool pkgconfig gettext gobject-introspection vala python2Packages.python
+  ];
+  buildInputs = [
+    glib sqlite dbus telepathy-glib dbus-glib
+    gtk3 json-glib librdf_raptor2 python2Packages.rdflib
+  ];
 
-  prePatch = "patchShebangs .";
-
-  patches = [ ./dbus_glib.patch ];
-
-  patchFlags = [ "-p0" ];
+  postPatch = ''
+    patchShebangs data/ontology2code
+  '';
 
   enableParallelBuilding = true;
 
-  postFixup = ''
-  '' + stdenv.lib.optionalString pythonSupport ''
+  postFixup = stdenv.lib.optionalString pythonSupport ''
     moveToOutput lib/${python2Packages.python.libPrefix} "$py"
   '';
 
-  outputs = [ "out" ] ++ stdenv.lib.optional pythonSupport "py";
-
   meta = with stdenv.lib; {
     description = "A service which logs the users's activities and events";
-    homepage = https://launchpad.net/zeitgeist;
-    maintainers = with maintainers; [ lethalman ];
+    homepage = https://zeitgeist.freedesktop.org/;
+    maintainers = with maintainers; [ lethalman worldofpeace ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

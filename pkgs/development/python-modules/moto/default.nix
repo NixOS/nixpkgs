@@ -1,42 +1,78 @@
-{ stdenv, buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
-, requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker
-, six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml }:
+{ lib, buildPythonPackage, fetchPypi, isPy27
+, aws-xray-sdk
+, backports_tempfile
+, boto
+, boto3
+, botocore
+, cfn-lint
+, docker
+, flask
+, freezegun
+, jinja2
+, jsondiff
+, mock
+, nose
+, pyaml
+, python-jose
+, pytz
+, requests
+, responses
+, six
+, sshpubkeys
+, sure
+, werkzeug
+, xmltodict
+}:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.1.25";
+  version = "1.3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d427d6e1a81e926c2b6a071453807b05f4736d65068493e1f3055ac7ee24ea21";
+    sha256 = "0vlq015irqqwdknk1an7qqkg1zjk18c7jd89r7zbxxfwy3bgzwwj";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "jsondiff==1.1.2" "jsondiff~=1.1"
+    sed -i '/datetime/d' setup.py # should be taken care of by std library
+  '';
 
   propagatedBuildInputs = [
     aws-xray-sdk
     boto
     boto3
-    dateutil
-    flask
-    httpretty
+    botocore
+    cfn-lint
+    docker
+    flask # required for server
     jinja2
-    pytz
-    werkzeug
-    requests
-    six
-    xmltodict
+    jsondiff
     mock
     pyaml
-    backports_tempfile
-    cookies
-    jsondiff
-    botocore
-    docker
-  ];
+    python-jose
+    pytz
+    six
+    requests
+    responses
+    sshpubkeys
+    werkzeug
+    xmltodict
+  ] ++ lib.optionals isPy27 [ backports_tempfile ];
 
-  checkInputs = [ boto3 nose sure freezegun ];
+  checkInputs = [ boto3 freezegun nose sure ];
 
-  checkPhase = "nosetests";
+  checkPhase = ''nosetests -v ./tests/ \
+                  -e test_invoke_function_from_sns \
+                  -e test_invoke_requestresponse_function \
+                  -e test_context_manager \
+                  -e test_decorator_start_and_stop'';
 
-  # TODO: make this true; I think lots of the tests want network access but we can probably run the others
-  doCheck = false;
+  meta = with lib; {
+    description = "Allows your tests to easily mock out AWS Services";
+    homepage = https://github.com/spulec/moto;
+    license = licenses.asl20;
+    maintainers = [ ];
+  };
 }

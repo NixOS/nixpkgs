@@ -1,36 +1,59 @@
-{ stdenv, intltool, fetchurl, pkgconfig, gtk3
-, glib, desktop_file_utils, bash, appdata-tools
-, wrapGAppsHook, gnome3, itstool, libxml2
-, callPackage, unzip, gobjectIntrospection }:
+{ stdenv, intltool, fetchFromGitLab, pkgconfig, gtk3, adwaita-icon-theme
+, glib, desktop-file-utils, gtk-doc, autoconf, automake, libtool
+, wrapGAppsHook, gnome3, itstool, libxml2, yelp-tools
+, docbook_xsl, docbook_xml_dtd_412, gsettings-desktop-schemas
+, callPackage, unzip, gobject-introspection }:
 
-# TODO: icons and theme still does not work
-# use packaged gnome3.adwaita-icon-theme
+let
+  unicode-data = callPackage ./unicode-data.nix {};
+in stdenv.mkDerivation rec {
+  pname = "gucharmap";
+  version = "12.0.1";
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  outputs = [ "out" "lib" "dev" "devdoc" ];
+
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = version;
+    sha256 = "0si3ymyfzc5v7ly0dmcs3qgw2wp8cyasycq5hmcr8frl09lr6gkw";
+  };
+
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook unzip intltool itstool
+    autoconf automake libtool gtk-doc docbook_xsl docbook_xml_dtd_412
+    yelp-tools libxml2 desktop-file-utils gobject-introspection
+  ];
+
+  buildInputs = [ gtk3 glib gsettings-desktop-schemas adwaita-icon-theme ];
+
+  configureFlags = [
+    "--with-unicode-data=${unicode-data}"
+    "--enable-gtk-doc"
+  ];
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  postPatch = ''
+    patchShebangs gucharmap/gen-guch-unicode-tables.pl
+  '';
 
-  preConfigure = "patchShebangs gucharmap/gen-guch-unicode-tables.pl";
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
-  nativeBuildInputs = [
-    pkgconfig wrapGAppsHook unzip intltool itstool appdata-tools
-    gnome3.yelp_tools libxml2 desktop_file_utils gobjectIntrospection
-  ];
-
-  buildInputs = [ gtk3 glib gnome3.gsettings_desktop_schemas ];
-
-  unicode-data = callPackage ./unicode-data.nix {};
-
-  configureFlags = "--with-unicode-data=${unicode-data}";
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Gucharmap;
     description = "GNOME Character Map, based on the Unicode Character Database";
-    maintainers = gnome3.maintainers;
+    homepage = https://wiki.gnome.org/Apps/Gucharmap;
     license = licenses.gpl3;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
-, libdrm, libva
+{ stdenv, fetchFromGitHub, pkgconfig
+, libdrm, libva, libX11, libXext, libXfixes, wayland, meson, ninja
 }:
 
 stdenv.mkDerivation rec {
@@ -10,12 +10,18 @@ stdenv.mkDerivation rec {
     owner  = "01org";
     repo   = "libva-utils";
     rev    = version;
-    sha256 = "02n51cvp8bzzjk4fargwvgh7z71y8spg24hqgaawbp3p3ahh7xxi";
+    sha256 = "1yk9bg1wg4nqva3l01s6bghcvc3hb02gp62p1sy5qk0r9mn5kpik";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
 
-  buildInputs = [ libdrm libva ];
+  buildInputs = [ libdrm libva libX11 libXext libXfixes wayland ];
+
+  mesonFlags = [
+    "-Ddrm=true"
+    "-Dx11=true"
+    "-Dwayland=true"
+  ];
 
   enableParallelBuilding = true;
 
@@ -23,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "VAAPI tools: Video Acceleration API";
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

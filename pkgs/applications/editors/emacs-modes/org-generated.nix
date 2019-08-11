@@ -1,10 +1,13 @@
-{ callPackage }: {
-    org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+{ callPackage }:
+  {
+    org = callPackage ({ elpaBuild, fetchurl, lib }:
+      elpaBuild {
         pname = "org";
-        version = "20180115";
+        ename = "org";
+        version = "20190527";
         src = fetchurl {
-          url = "https://orgmode.org/elpa/org-20180115.tar";
-          sha256 = "1zc75kxbx9bk1xag46s027a290fnva1id8vv92lz9i5nkqnrm430";
+          url = "http://orgmode.org/elpa/org-20190527.tar";
+          sha256 = "1fc2nyylzpikjikyb24xq2mcilridcahmjwmg0s426dqrgqpm9ij";
         };
         packageRequires = [];
         meta = {
@@ -12,12 +15,14 @@
           license = lib.licenses.free;
         };
       }) {};
-    org-plus-contrib = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+    org-plus-contrib = callPackage ({ elpaBuild, fetchurl, lib }:
+      elpaBuild {
         pname = "org-plus-contrib";
-        version = "20180115";
+        ename = "org-plus-contrib";
+        version = "20190527";
         src = fetchurl {
-          url = "https://orgmode.org/elpa/org-plus-contrib-20180115.tar";
-          sha256 = "1gm6b0hpa4y83bxsbps39b1xvq99m1dh9nbvn9r4spw4rxhhfppy";
+          url = "http://orgmode.org/elpa/org-plus-contrib-20190527.tar";
+          sha256 = "16kf47ij25fijf6pbfxzq9xzildj1asdzhnkf5zv5pn4312pvgnq";
         };
         packageRequires = [];
         meta = {

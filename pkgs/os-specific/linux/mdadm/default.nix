@@ -1,21 +1,16 @@
-{ stdenv
-, fetchurl, groff
-, buildPlatform, hostPlatform
-}:
-
-assert stdenv.isLinux;
+{ stdenv, fetchurl, groff, system-sendmail }:
 
 stdenv.mkDerivation rec {
-  name = "mdadm-3.3.4";
+  name = "mdadm-4.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.xz";
-    sha256 = "0s6a4bq7v7zxiqzv6wn06fv9f6g502dp047lj471jwxq0r9z9rca";
+    sha256 = "0jjgjgqijpdp7ijh8slzzjjw690kydb1jjadf0x5ilq85628hxmb";
   };
 
   # This is to avoid self-references, which causes the initrd to explode
   # in size and in turn prevents mdraid systems from booting.
-  allowedReferences = [ stdenv.cc.libc.out ];
+  allowedReferences = [ stdenv.cc.libc.out system-sendmail ];
 
   patches = [ ./no-self-references.patch ];
 
@@ -23,24 +18,23 @@ stdenv.mkDerivation rec {
     "NIXOS=1" "INSTALL=install" "INSTALL_BINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man" "RUN_DIR=/dev/.mdadm"
     "STRIP="
-  ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
   nativeBuildInputs = [ groff ];
 
-  # Attempt removing if building with gcc5 when updating
-  NIX_CFLAGS_COMPILE = "-std=gnu89";
-
   preConfigure = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \
         -e 's@ -Werror @ @' \
-        -e 's@/usr/sbin/sendmail@/run/wrappers/bin/sendmail@' -i Makefile
+        -e 's@/usr/sbin/sendmail@${system-sendmail}@' -i Makefile
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Programs for managing RAID arrays under Linux";
     homepage = http://neil.brown.name/blog/mdadm;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ekleog ];
+    platforms = platforms.linux;
   };
 }

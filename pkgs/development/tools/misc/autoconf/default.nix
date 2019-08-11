@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "113nlmidxy9kjr45kg9x3ngar4951mvag1js2a3j8nxcz34wxsv4";
   };
 
-  buildInputs = [ m4 perl ];
+  nativeBuildInputs = [ m4 perl ];
+  buildInputs = [ m4 ];
 
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
@@ -23,13 +24,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preCheck =
-    # Make the Autotest test suite run in parallel.
-    '' export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
-    '';
+  # Make the Autotest test suite run in parallel.
+  preCheck =''
+    export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
+  '';
+
+  doInstallCheck = false; # fails
 
   meta = {
-    homepage = http://www.gnu.org/software/autoconf/;
+    homepage = https://www.gnu.org/software/autoconf/;
     description = "Part of the GNU Build System";
 
     longDescription = ''

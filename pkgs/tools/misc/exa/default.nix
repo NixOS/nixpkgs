@@ -1,22 +1,41 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib }:
+{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib
+, darwin, libiconv
+}:
 
 with rustPlatform;
 
 buildRustPackage rec {
   name = "exa-${version}";
-  version = "0.8.0";
+  version = "0.9.0";
 
-  cargoSha256 = "08zzn3a32xfjkmpawcjppn1mr26ws3iv40cckiz8ldz4qc8y9gdh";
+  cargoSha256 = "1hgjp23rjd90wyf0nq6d5akjxdfjlaps54dv23zgwjvkhw24fidf";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "exa";
     rev = "v${version}";
-    sha256 = "0jy11a3xfnfnmyw1kjmv4ffavhijs8c940kw24vafklnacx5n88m";
+    sha256 = "14qlm9zb9v22hxbbi833xaq2b7qsxnmh15s317200vz5f1305hhw";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv darwin.apple_sdk.frameworks.Security ]
+  ;
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    cp contrib/man/exa.1 $out/share/man/man1/
+
+    mkdir -p $out/share/bash-completion/completions
+    cp contrib/completions.bash $out/share/bash-completion/completions/exa
+
+    mkdir -p $out/share/fish/vendor_completions.d
+    cp contrib/completions.fish $out/share/fish/vendor_completions.d/exa.fish
+
+    mkdir -p $out/share/zsh/site-functions
+    cp contrib/completions.zsh $out/share/zsh/site-functions/_exa
+  '';
 
   # Some tests fail, but Travis ensures a proper build
   doCheck = false;
@@ -33,6 +52,6 @@ buildRustPackage rec {
     '';
     homepage = https://the.exa.website;
     license = licenses.mit;
-    maintainers = [ maintainers.ehegnes ];
+    maintainers = with maintainers; [ ehegnes lilyball ];
   };
 }

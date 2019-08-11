@@ -1,4 +1,4 @@
-{ lib, buildRubyGem, makeWrapper, ruby }:
+{ lib, buildRubyGem, ruby }:
 
 # Cannot use bundleEnv because bundleEnv create stub with
 # BUNDLE_FROZEN='1' environment variable set, which broke everything
@@ -8,8 +8,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "0.10.0";
-  source.sha256 = "199pq15qknpcafw8ryb9kk1jsrwnncg6k5l9d4n0nmms4knxlqlf";
+  version = "1.1.0";
+  source.sha256 = "9f4a4fd0242c82844f9af109d2c03b6870060d7e30603e6d9bd017aee5380ec0";
 
   erubis = buildRubyGem rec {
     inherit ruby;
@@ -23,8 +23,8 @@ buildRubyGem rec {
     inherit ruby;
     name = "ruby${ruby.version}-${gemName}-${version}";
     gemName = "thor";
-    version = "0.19.1";
-    source.sha256 = "08p5gx18yrbnwc6xc0mxvsfaxzgy2y9i78xq7ds0qmdm67q39y4z";
+    version = "0.20.0";
+    source.sha256 = "0nmqpyj642sk4g16nkbq6pj856adpv91lp4krwhqkh2iw63aszdl";
   };
 
   xdg = buildRubyGem rec {

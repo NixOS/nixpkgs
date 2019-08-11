@@ -1,8 +1,8 @@
 { stdenv, fetchurl
 , # required for both
-  unzip, libjpeg, zlib, libvorbis, curl, patchelf
+  unzip, libjpeg, zlib, libvorbis, curl
 , # glx
-  libX11, mesa, libXpm, libXext, libXxf86vm, alsaLib
+  libX11, libGLU_combined, libXpm, libXext, libXxf86vm, alsaLib
 , # sdl
   SDL2
 }:
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   name = "xonotic-0.8.2";
 
   src = fetchurl {
-    url = "http://dl.xonotic.org/${name}.zip";
+    url = "https://dl.xonotic.org/${name}.zip";
     sha256 = "1mcs6l4clvn7ibfq3q69k2p0z6ww75rxvnngamdq5ic6yhq74bx2";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # required for both
     unzip libjpeg
     # glx
-    libX11 mesa libXpm libXext libXxf86vm alsaLib
+    libX11 libGLU_combined libXpm libXext libXxf86vm alsaLib
     # sdl
     SDL2
     zlib libvorbis curl

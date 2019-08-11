@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, coreutils, binutils-unwrapped }:
+{ stdenv, fetchFromGitHub, makeWrapper, coreutils, binutils-unwrapped }:
 
 stdenv.mkDerivation rec {
   name = "spectre-meltdown-checker-${version}";
-  version = "0.31";
+  version = "0.42";
 
   src = fetchFromGitHub {
     owner = "speed47";
     repo = "spectre-meltdown-checker";
     rev = "v${version}";
-    sha256 = "14g5q2prd5w2zhwi7sr9pnalakd87zkvxk0vrzw4cv3x71d44nk2";
+    sha256 = "0pppf844i7b72hqnmfvq72w5y7b6dxd16y29l6j84maf22zxbjni";
   };
 
   prePatch = ''
@@ -19,16 +19,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = with stdenv.lib; ''
-    install -Dt $out/lib spectre-meltdown-checker.sh
-    makeWrapper $out/lib/spectre-meltdown-checker.sh $out/bin/spectre-meltdown-checker \
+    runHook preInstall
+
+    install -Dm755 spectre-meltdown-checker.sh $out/bin/spectre-meltdown-checker
+    wrapProgram $out/bin/spectre-meltdown-checker \
       --prefix PATH : ${makeBinPath [ binutils-unwrapped ]}
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "Spectre & Meltdown vulnerability/mitigation checker for Linux";
     homepage = https://github.com/speed47/spectre-meltdown-checker;
     license = licenses.gpl3;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }

@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0k6y0r9kv5qiglnr2j4a0yvfynjkvm0pyv8ly28j0pr3w6rbxrh3";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
 	  homepage = http://cis.poly.edu/zdelta;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.zlib;
   };
 }

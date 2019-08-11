@@ -3,275 +3,275 @@
 
 {
   qt3d = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qt3d-opensource-src-5.9.3.tar.xz";
-      sha256 = "0gr7wvd3p8i2frj9nkfxffxapwqx6i4wh171ymvcsg2qy0r534lp";
-      name = "qt3d-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qt3d-opensource-src-5.9.7.tar.xz";
+      sha256 = "0skdp72jlfy97cw9lpa3l2ivs6f5x9w53978sf2xbkl9k1ai268l";
+      name = "qt3d-opensource-src-5.9.7.tar.xz";
     };
   };
   qtactiveqt = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtactiveqt-opensource-src-5.9.3.tar.xz";
-      sha256 = "16aka3y7a6mhs0yfm7vbq8v5gbh2ifmk4v2hl04iacindq9f5v2r";
-      name = "qtactiveqt-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtactiveqt-opensource-src-5.9.7.tar.xz";
+      sha256 = "01yp0railyc80ldvpiy36lpsdk26rs8vfp78xca9jy1glm4cmaik";
+      name = "qtactiveqt-opensource-src-5.9.7.tar.xz";
     };
   };
   qtandroidextras = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtandroidextras-opensource-src-5.9.3.tar.xz";
-      sha256 = "0f653qmzvr3rjjgipjbcxvp5wq9fbaz1b4bvj7g868s2d9gpqp9n";
-      name = "qtandroidextras-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtandroidextras-opensource-src-5.9.7.tar.xz";
+      sha256 = "1bl05hr0zm23z7qig3kxhzyvm440wfrjfgsxvpmlvk9pbb8h2q63";
+      name = "qtandroidextras-opensource-src-5.9.7.tar.xz";
     };
   };
   qtbase = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtbase-opensource-src-5.9.3.tar.xz";
-      sha256 = "10lrkarvs7dpx9rlj7sjcc0pzi42098x8nqnhmydr4bnbq048z4y";
-      name = "qtbase-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtbase-opensource-src-5.9.7.tar.xz";
+      sha256 = "004gs95ig51jv2wz64kwzl4rvqqzs4rln3kqmzjs3sh6y1s9bp9n";
+      name = "qtbase-opensource-src-5.9.7.tar.xz";
     };
   };
   qtcanvas3d = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtcanvas3d-opensource-src-5.9.3.tar.xz";
-      sha256 = "1g0a606fgal4x17ly0qrj05pb0k8riwh7nj4g3jip05g8iwb2f2y";
-      name = "qtcanvas3d-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtcanvas3d-opensource-src-5.9.7.tar.xz";
+      sha256 = "131zwqddjns7cpkdbr33jahqgvnw6f8gdcr1b2hmadi0p2shrcwq";
+      name = "qtcanvas3d-opensource-src-5.9.7.tar.xz";
     };
   };
   qtcharts = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtcharts-opensource-src-5.9.3.tar.xz";
-      sha256 = "1sb99ncmh84bz0xzq55chgic7jk61awnfvi7ld4gq5ap3nl865zc";
-      name = "qtcharts-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtcharts-opensource-src-5.9.7.tar.xz";
+      sha256 = "1rkj4lkpgdqk4ygxivkj7gc8mlccb5sgi9mfr0xwvq5j85r3dk8n";
+      name = "qtcharts-opensource-src-5.9.7.tar.xz";
     };
   };
   qtconnectivity = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtconnectivity-opensource-src-5.9.3.tar.xz";
-      sha256 = "0j86rspn4xgwq1ddc1mpq1kq0ib2c0ag6rsn9ly2xs4iimp1x2g2";
-      name = "qtconnectivity-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtconnectivity-opensource-src-5.9.7.tar.xz";
+      sha256 = "0f7g2lfnfgsjka7y5hdf0lbzpfxlxh8bfhdxix44cwlmwzjizy3l";
+      name = "qtconnectivity-opensource-src-5.9.7.tar.xz";
     };
   };
   qtdatavis3d = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtdatavis3d-opensource-src-5.9.3.tar.xz";
-      sha256 = "0s636ix44akrjx47gv9qj2ac02q8clnwj3acfr28p6pagm46k7vh";
-      name = "qtdatavis3d-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtdatavis3d-opensource-src-5.9.7.tar.xz";
+      sha256 = "08anm8byxcym7h1n49j3cbxkh3kh3xjlxd3b8vi8fxyqqhvll4lv";
+      name = "qtdatavis3d-opensource-src-5.9.7.tar.xz";
     };
   };
   qtdeclarative = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtdeclarative-opensource-src-5.9.3.tar.xz";
-      sha256 = "01wlk17zf47yzx7cc3cp617gj70yadllj2rsfk78879c0v96cpsh";
-      name = "qtdeclarative-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtdeclarative-opensource-src-5.9.7.tar.xz";
+      sha256 = "0p26c96fb33khbf7ws91ha73n72lwmn714v8spg0bla9m1jkfhk8";
+      name = "qtdeclarative-opensource-src-5.9.7.tar.xz";
     };
   };
   qtdoc = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtdoc-opensource-src-5.9.3.tar.xz";
-      sha256 = "0aki592arm3r08y9cq8863jp9zzkvgx7sc48426n30m6q9valsg5";
-      name = "qtdoc-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtdoc-opensource-src-5.9.7.tar.xz";
+      sha256 = "1vs6dy0mdcn65fhpl8nib0pjw9bliqkjnaahqm833ayvxr15vzyj";
+      name = "qtdoc-opensource-src-5.9.7.tar.xz";
     };
   };
   qtgamepad = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtgamepad-opensource-src-5.9.3.tar.xz";
-      sha256 = "14vari5cq10a0z02559l2m1v78g7ygnyqf1ilkmy2f0kr36wm7y6";
-      name = "qtgamepad-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtgamepad-opensource-src-5.9.7.tar.xz";
+      sha256 = "0242683h9jz6b0n11s4m4ii2691dbws0gkj45n6sx6z513blfx9f";
+      name = "qtgamepad-opensource-src-5.9.7.tar.xz";
     };
   };
   qtgraphicaleffects = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtgraphicaleffects-opensource-src-5.9.3.tar.xz";
-      sha256 = "1nghl39sqsjamjn6pfmxmgga6z9vwzv2zbgc92amrfxxr2dh42vr";
-      name = "qtgraphicaleffects-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtgraphicaleffects-opensource-src-5.9.7.tar.xz";
+      sha256 = "1yhxa3i3jvfnc9l6a3q3pyk7y702a3pp87ypshb63607xvrxrv2d";
+      name = "qtgraphicaleffects-opensource-src-5.9.7.tar.xz";
     };
   };
   qtimageformats = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtimageformats-opensource-src-5.9.3.tar.xz";
-      sha256 = "1p95wzm46j49c5br45g0pmlz3n3fl93j1ipzmnpmq9y2pbfhkcyl";
-      name = "qtimageformats-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtimageformats-opensource-src-5.9.7.tar.xz";
+      sha256 = "1an0k3rzxjc4x4rscnibdk36zff6g1n41lh5dasys4jc05k3w1b2";
+      name = "qtimageformats-opensource-src-5.9.7.tar.xz";
     };
   };
   qtlocation = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtlocation-opensource-src-5.9.3.tar.xz";
-      sha256 = "1qacqz6l7zljqszblhgzg5y1v4mgki59k45ag7yc2iw7vrf45zc0";
-      name = "qtlocation-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtlocation-opensource-src-5.9.7.tar.xz";
+      sha256 = "0lp6zn630px1lj7623shq47dlv02nr0aj7iqscrk0yzhygbv7dc2";
+      name = "qtlocation-opensource-src-5.9.7.tar.xz";
     };
   };
   qtmacextras = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtmacextras-opensource-src-5.9.3.tar.xz";
-      sha256 = "0piv3q49vhpjxafdicizcw13am49h0ybfhb37vai0x1wbrlvhdiy";
-      name = "qtmacextras-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtmacextras-opensource-src-5.9.7.tar.xz";
+      sha256 = "0b0znccbach41la226cmps9aaigpz8mj940xj890arjf8hn4jd97";
+      name = "qtmacextras-opensource-src-5.9.7.tar.xz";
     };
   };
   qtmultimedia = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtmultimedia-opensource-src-5.9.3.tar.xz";
-      sha256 = "19iqh8xpspzlmpzh05bx5rchlslbfy2pp00xv52496yf9b95i5g7";
-      name = "qtmultimedia-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtmultimedia-opensource-src-5.9.7.tar.xz";
+      sha256 = "060gic3gl27r7k4vw4n550384b4wadqfn3biajbq6lbyj3zhgxxx";
+      name = "qtmultimedia-opensource-src-5.9.7.tar.xz";
     };
   };
   qtnetworkauth = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtnetworkauth-opensource-src-5.9.3.tar.xz";
-      sha256 = "0fdz5q47xbiij3mi5lzhvxpq4jp9fm929v9kyvcyadz86mp3f8nz";
-      name = "qtnetworkauth-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtnetworkauth-opensource-src-5.9.7.tar.xz";
+      sha256 = "14n8wzsyq7bw67r1k442widfvszawgi5sh0b10h2jcrp5aikqr0p";
+      name = "qtnetworkauth-opensource-src-5.9.7.tar.xz";
     };
   };
   qtpurchasing = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtpurchasing-opensource-src-5.9.3.tar.xz";
-      sha256 = "00yfdd00frgf7fs9s0vyn1c6c4abxgld5rfgkzms3y6n6lcphs0j";
-      name = "qtpurchasing-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtpurchasing-opensource-src-5.9.7.tar.xz";
+      sha256 = "1qvxsi0ar04qy0zajbhvwj5blldhfq2mn3laq15g0xxy1xh4m46i";
+      name = "qtpurchasing-opensource-src-5.9.7.tar.xz";
     };
   };
   qtquickcontrols = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtquickcontrols-opensource-src-5.9.3.tar.xz";
-      sha256 = "09p2q3max4xrlw5svbhn11y9cgrvcjsj88xw4c0kq91cgnyyw3ih";
-      name = "qtquickcontrols-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtquickcontrols-opensource-src-5.9.7.tar.xz";
+      sha256 = "1jkz2b2wzxzmskvwwb4afqxz0yp0siaf3yhj2i01y865sp6q1wz0";
+      name = "qtquickcontrols-opensource-src-5.9.7.tar.xz";
     };
   };
   qtquickcontrols2 = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtquickcontrols2-opensource-src-5.9.3.tar.xz";
-      sha256 = "0hq888qq8q7dglpyzif64pplqjxfrqjpkvbcx0ycq35darls5ai1";
-      name = "qtquickcontrols2-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtquickcontrols2-opensource-src-5.9.7.tar.xz";
+      sha256 = "0w9rq77a8vc9avhbwbx7swg7zw7jn21wd7si59822rw9ln1p6zb0";
+      name = "qtquickcontrols2-opensource-src-5.9.7.tar.xz";
     };
   };
   qtremoteobjects = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtremoteobjects-opensource-src-5.9.3.tar.xz";
-      sha256 = "0z6qd381r6a7gdrsknlkkbhq9mmdqi040kfrvgm6mfa69336f4dk";
-      name = "qtremoteobjects-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtremoteobjects-opensource-src-5.9.7.tar.xz";
+      sha256 = "1ninscf4jkframv585zzi76fml1lyz0mhb091r2r54lrf66wl3lw";
+      name = "qtremoteobjects-opensource-src-5.9.7.tar.xz";
     };
   };
   qtscript = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtscript-opensource-src-5.9.3.tar.xz";
-      sha256 = "0rjm6nph1nssfpknp4i682bvk7363y4a2f74060vcm7ib2pzl2xq";
-      name = "qtscript-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtscript-opensource-src-5.9.7.tar.xz";
+      sha256 = "0mv33a1mjaahq7ixfasvjasc881bprfbkjhx8pn3z5f0l8213m67";
+      name = "qtscript-opensource-src-5.9.7.tar.xz";
     };
   };
   qtscxml = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtscxml-opensource-src-5.9.3.tar.xz";
-      sha256 = "06x8hs3p7bfgnl6b2fjld4s41acw1rbnxbcgkprgw2fxxnl1zxfq";
-      name = "qtscxml-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtscxml-opensource-src-5.9.7.tar.xz";
+      sha256 = "0xz2q2bl1n43gxx00nrzyc0bsnq4wch0k2rkj3prc9gsgmpq0bih";
+      name = "qtscxml-opensource-src-5.9.7.tar.xz";
     };
   };
   qtsensors = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtsensors-opensource-src-5.9.3.tar.xz";
-      sha256 = "1hfsih5iy4fi6mnpw2shf1lzx9hxcdc1arspad1mark17l5s4pmr";
-      name = "qtsensors-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtsensors-opensource-src-5.9.7.tar.xz";
+      sha256 = "0pfh4lr9zxsh9winzx1lmcgl2hgp9lr45smcvslr4an93z6mbf8r";
+      name = "qtsensors-opensource-src-5.9.7.tar.xz";
     };
   };
   qtserialbus = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtserialbus-opensource-src-5.9.3.tar.xz";
-      sha256 = "0f39qh05mp54frpn5sy9k5vfw5zb2gg72qaqz81mwlck2xg78qpg";
-      name = "qtserialbus-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtserialbus-opensource-src-5.9.7.tar.xz";
+      sha256 = "0n6z56axm0gbrxmnwbz8fv40ar9mw1rlfvmpqvpg5xb9031qil1b";
+      name = "qtserialbus-opensource-src-5.9.7.tar.xz";
     };
   };
   qtserialport = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtserialport-opensource-src-5.9.3.tar.xz";
-      sha256 = "1pxb679cx77vk39ik7j0k91a57wqa63d4g4riw3r2gpcay8kxpac";
-      name = "qtserialport-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtserialport-opensource-src-5.9.7.tar.xz";
+      sha256 = "05qy4m1p5j5bh6af7d97iblsmgy9kppm5wif3bl63p6yghn319sh";
+      name = "qtserialport-opensource-src-5.9.7.tar.xz";
     };
   };
   qtspeech = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtspeech-opensource-src-5.9.3.tar.xz";
-      sha256 = "1c4rpf3by620fx8lrvmc38r60cikqczqh2rfcm7ixz3x8cj60lh1";
-      name = "qtspeech-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtspeech-opensource-src-5.9.7.tar.xz";
+      sha256 = "0nnbqnh18vw26vphancs38vjr816xha8m6wl389kjqi01kjrcz70";
+      name = "qtspeech-opensource-src-5.9.7.tar.xz";
     };
   };
   qtsvg = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtsvg-opensource-src-5.9.3.tar.xz";
-      sha256 = "1wjx9ymk2h19l9kk76jh87bnhhj955f9a93akvwwzfwg1jk2hrnz";
-      name = "qtsvg-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtsvg-opensource-src-5.9.7.tar.xz";
+      sha256 = "0r2mqy6lb2ypmilf83zyp73v5d9ars314jfm6f0fv5if8yw253v2";
+      name = "qtsvg-opensource-src-5.9.7.tar.xz";
     };
   };
   qttools = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qttools-opensource-src-5.9.3.tar.xz";
-      sha256 = "1zw4j8ymwcpn7dx1dlbxpmx5lfp26rag7pysap1xry9m7vg3hb24";
-      name = "qttools-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qttools-opensource-src-5.9.7.tar.xz";
+      sha256 = "18b7jg25434p80yr929nfihk0i124bxpd2dv9mqdcicnv5q0ybnn";
+      name = "qttools-opensource-src-5.9.7.tar.xz";
     };
   };
   qttranslations = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qttranslations-opensource-src-5.9.3.tar.xz";
-      sha256 = "1ncvj1qlcgrm0zqdlq2bkb0hc8dyisz8m7bszxyx4kyxg7n5gb20";
-      name = "qttranslations-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qttranslations-opensource-src-5.9.7.tar.xz";
+      sha256 = "051a3igp1qnd7d7bg2dvjaqwh6f67fvkn19jdfjzrdis7kcsfvdk";
+      name = "qttranslations-opensource-src-5.9.7.tar.xz";
     };
   };
   qtvirtualkeyboard = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtvirtualkeyboard-opensource-src-5.9.3.tar.xz";
-      sha256 = "1zrj4pjy98dskzycjswbkm4m2j6k1j4150h0w7vdrw1681s3ycdr";
-      name = "qtvirtualkeyboard-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtvirtualkeyboard-opensource-src-5.9.7.tar.xz";
+      sha256 = "1qcj6ncg53rv4pg4ijdq7vbkzgzfr9bn40aif7g4dndykj0zwla7";
+      name = "qtvirtualkeyboard-opensource-src-5.9.7.tar.xz";
     };
   };
   qtwayland = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtwayland-opensource-src-5.9.3.tar.xz";
-      sha256 = "0vazcmpqdka3llmyg7m99lw0ngrydmw74p9nd04544xdn128r3ih";
-      name = "qtwayland-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtwayland-opensource-src-5.9.7.tar.xz";
+      sha256 = "0y6ky1ipg42gq390ibgr4nns9i4j648yb7bkmx6b7lhsi7mvnp2n";
+      name = "qtwayland-opensource-src-5.9.7.tar.xz";
     };
   };
   qtwebchannel = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtwebchannel-opensource-src-5.9.3.tar.xz";
-      sha256 = "0n438mk01sh2bbqakc1m3s65qqmi75m4n4hymad8wcgijfr9a9v3";
-      name = "qtwebchannel-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtwebchannel-opensource-src-5.9.7.tar.xz";
+      sha256 = "189qkfxixddfblwkaf46yrqjp91vhmw90gpafjryqfmd2141r8qj";
+      name = "qtwebchannel-opensource-src-5.9.7.tar.xz";
     };
   };
   qtwebengine = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtwebengine-opensource-src-5.9.3.tar.xz";
-      sha256 = "0dqxawc9vfffz6ygdn5mdpl79rrqfx18jy2d1w81q9w7zm113bj5";
-      name = "qtwebengine-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtwebengine-opensource-src-5.9.7.tar.xz";
+      sha256 = "0kzpgks5h19rm7gbhr688lr5f5d9ykf062kj91q7wf6fk7qd72v2";
+      name = "qtwebengine-opensource-src-5.9.7.tar.xz";
     };
   };
   qtwebkit = {
@@ -291,43 +291,43 @@
     };
   };
   qtwebsockets = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtwebsockets-opensource-src-5.9.3.tar.xz";
-      sha256 = "1phic630ah85ajxp6iqrw9bpg0y8s88y45ygkc1wcasmbgzrs1nf";
-      name = "qtwebsockets-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtwebsockets-opensource-src-5.9.7.tar.xz";
+      sha256 = "1qqvd6qf7m2xq71mdaidwabj5c03cbbi1hwc7p95fvbnz9crz79x";
+      name = "qtwebsockets-opensource-src-5.9.7.tar.xz";
     };
   };
   qtwebview = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtwebview-opensource-src-5.9.3.tar.xz";
-      sha256 = "1i99fy86gydpfsfc4my5d9vxjywfrzbqxk66cb3yf2ac57j66mpf";
-      name = "qtwebview-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtwebview-opensource-src-5.9.7.tar.xz";
+      sha256 = "1zwqkmzik4f83hdffmw0hz90mzga34hkyz7d0skfbdp25y278r12";
+      name = "qtwebview-opensource-src-5.9.7.tar.xz";
     };
   };
   qtwinextras = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtwinextras-opensource-src-5.9.3.tar.xz";
-      sha256 = "1lj4qa51ymhpvk0bdp6xf6b3n1k39kihns5lvp6xq1w2mljn6phl";
-      name = "qtwinextras-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtwinextras-opensource-src-5.9.7.tar.xz";
+      sha256 = "1a57v7krglfdi4gizm402jn9pg7fqpcma7xk6sm68zg1siv11a6x";
+      name = "qtwinextras-opensource-src-5.9.7.tar.xz";
     };
   };
   qtx11extras = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtx11extras-opensource-src-5.9.3.tar.xz";
-      sha256 = "1gpjgca4xvyy0r743kh2ys128r14fh6j8bdphnmmi5v2pf6bzq74";
-      name = "qtx11extras-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtx11extras-opensource-src-5.9.7.tar.xz";
+      sha256 = "02jdiw94dasnkszi5w1pysfgz8xrr71pzah37nbnqg0knn4dzich";
+      name = "qtx11extras-opensource-src-5.9.7.tar.xz";
     };
   };
   qtxmlpatterns = {
-    version = "5.9.3";
+    version = "5.9.7";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.9/5.9.3/submodules/qtxmlpatterns-opensource-src-5.9.3.tar.xz";
-      sha256 = "1fphhqr3v3vzjp2vbv16bc1vs879wn7aqlabgcpkhqx92ak6d76g";
-      name = "qtxmlpatterns-opensource-src-5.9.3.tar.xz";
+      url = "${mirror}/official_releases/qt/5.9/5.9.7/submodules/qtxmlpatterns-opensource-src-5.9.7.tar.xz";
+      sha256 = "0j0rxkpyww5cgcjhy0332jsyka1d811wf6zmr16d5fdkbryp7d65";
+      name = "qtxmlpatterns-opensource-src-5.9.7.tar.xz";
     };
   };
 }

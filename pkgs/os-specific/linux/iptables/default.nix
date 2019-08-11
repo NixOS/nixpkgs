@@ -1,36 +1,38 @@
-{ stdenv, fetchurl, bison, flex, pkgconfig
-, libnetfilter_conntrack, libnftnl, libmnl }:
+{ stdenv, fetchurl, bison, flex, pkgconfig, pruneLibtoolFiles
+, libnetfilter_conntrack, libnftnl, libmnl, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "iptables-${version}";
-  version = "1.6.1";
+  pname = "iptables";
+  version = "1.8.3";
 
   src = fetchurl {
-    url = "http://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
-    sha256 = "1x8c9y340x79djsq54bc1674ryv59jfphrk4f88i7qbvbnyxghhg";
+    url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.bz2";
+    sha256 = "106xkkg5crsscjlinxvqvprva23fwwqfgrzl8m2nn841841sqg52";
   };
 
-  nativeBuildInputs = [ bison flex pkgconfig ];
+  nativeBuildInputs = [ bison flex pkgconfig pruneLibtoolFiles ];
 
-  buildInputs = [ libnetfilter_conntrack libnftnl libmnl ];
+  buildInputs = [ libnetfilter_conntrack libnftnl libmnl libpcap ];
 
   preConfigure = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lmnl -lnftnl"
   '';
 
-  configureFlags = ''
-    --enable-devel
-    --enable-shared
-  '';
+  configureFlags = [
+    "--enable-devel"
+    "--enable-shared"
+    "--enable-bpf-compiler"
+  ];
 
   outputs = [ "out" "dev" ];
 
   meta = with stdenv.lib; {
     description = "A program to configure the Linux IP packet filtering ruleset";
-    homepage = http://www.netfilter.org/projects/iptables/index.html;
+    homepage = https://www.netfilter.org/projects/iptables/index.html;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
-    downloadPage = "http://www.netfilter.org/projects/iptables/files/";
+    license = licenses.gpl2;
+    downloadPage = "https://www.netfilter.org/projects/iptables/files/";
     updateWalker = true;
     inherit version;
   };

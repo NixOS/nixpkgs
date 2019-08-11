@@ -1,43 +1,37 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, wrapGAppsHook
-, cairo, gdk_pixbuf, colord, glib, gtk, gusb, packagekit, libwebp
-, libxml2, sane-backends, vala, gnome3, gobjectIntrospection }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, python3, wrapGAppsHook
+, cairo, gdk-pixbuf, colord, glib, gtk3, gusb, packagekit, libwebp
+, libxml2, sane-backends, vala, gnome3, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "simple-scan-${version}";
+  version = "3.32.2.1";
 
-  buildInputs = [ cairo gdk_pixbuf colord glib gnome3.defaultIconTheme gusb
-                gtk libwebp packagekit sane-backends vala ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/simple-scan/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0xqb642bsd2hddsm4bd199vyq8jcipdlxm0br3mjlc5vjcxgkxyp";
+  };
+
+  buildInputs = [
+    cairo gdk-pixbuf colord glib gnome3.adwaita-icon-theme gusb
+    gtk3 libwebp packagekit sane-backends vala
+  ];
   nativeBuildInputs = [
-    meson ninja gettext itstool pkgconfig wrapGAppsHook libxml2
+    meson ninja gettext itstool pkgconfig python3 wrapGAppsHook libxml2
     # For setup hook
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   postPatch = ''
     patchShebangs data/meson_compile_gschema.py
-
-    sed -i -e 's#Icon=scanner#Icon=simple-scan#g' ./data/simple-scan.desktop.in
   '';
-
-  postInstall = ''
-    mkdir -p $out/share/icons
-    mv $out/share/simple-scan/icons/* $out/share/icons/
-    (
-    cd ${gnome3.defaultIconTheme}/share/icons/Adwaita
-    for f in `find . | grep 'scanner\.'`
-    do
-      local outFile="`echo "$out/share/icons/hicolor/$f" | sed \
-        -e 's#/devices/#/apps/#g' \
-        -e 's#scanner\.#simple-scan\.#g'`"
-      mkdir -p "`realpath -m "$outFile/.."`"
-      cp "$f" "$outFile"
-    done
-    )
-  '';
-
-  enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "simple-scan";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Simple scanning utility";
@@ -49,8 +43,9 @@ stdenv.mkDerivation rec {
       XSANE uses. This means that all existing scanners will work and the
       interface is well tested.
     '';
-    homepage = https://launchpad.net/simple-scan;
+    homepage = https://gitlab.gnome.org/GNOME/simple-scan;
     license = licenses.gpl3Plus;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

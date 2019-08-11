@@ -7,12 +7,12 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "calamares";
-  version = "3.1.10";
+  version = "3.2.8";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "12phmirx0fgvykvkl8frv5agxqi7n04sxf5bpwjwq12mydq2x7kc";
+    sha256 = "1ymyl12fzxc5jjfbw4pfmgzp036w0dai76f7anilw2bnwfzq5g62";
   };
 
   buildInputs = [
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   cmakeFlags = [
-    "-DPYTHON_LIBRARY=${python}/lib/libpython${python.majorVersion}m.so"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
+    "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
+    "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
     "-DCMAKE_VERBOSE_MAKEFILE=True"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_PYTHONQT:BOOL=ON"

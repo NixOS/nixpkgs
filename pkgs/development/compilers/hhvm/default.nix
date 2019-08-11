@@ -53,14 +53,16 @@ stdenv.mkDerivation rec {
       hphp/runtime/ext/std/*.cpp \
       hphp/runtime/ext_zend_compat/php-src/main/*.cpp \
       hphp/runtime/ext_zend_compat/php-src/main/*.h
+    sed '1i#include <functional>' -i third-party/mcrouter/src/mcrouter/lib/cycles/Cycles.h
     patchShebangs .
   '';
 
   meta = {
     description = "High-performance JIT compiler for PHP/Hack";
-    homepage    = "http://hhvm.com";
+    homepage    = "https://hhvm.com";
     license     = "PHP/Zend";
     platforms   = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    broken = true; # Since 2018-04-21, see https://hydra.nixos.org/build/73059373
   };
 }

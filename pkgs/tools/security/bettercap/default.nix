@@ -1,16 +1,24 @@
-{ lib, bundlerEnv, ruby, libpcap}:
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, libpcap, libnfnetlink, libnetfilter_queue, libusb1 }:
 
-bundlerEnv rec {
-  name = "bettercap-${version}";
+buildGoPackage rec {
+  pname = "bettercap";
+  version = "2.24";
 
-  version = (import gemset).bettercap.version;
-  inherit ruby;
-  gemdir = ./.;
-  gemset = ./gemset.nix;
+  goPackagePath = "github.com/bettercap/bettercap";
 
-  buildInputs = [ libpcap ruby ];
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1f8bzxbcyf0bpyqj6hz4l8dp5xknnb537xy9y5skcznp03i44h55";
+  };
 
-  meta = with lib; {
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpcap libnfnetlink libnetfilter_queue libusb1 ];
+
+  goDeps = ./deps.nix;
+
+  meta = with stdenv.lib; {
     description = "A man in the middle tool";
     longDescription = ''
       BetterCAP is a powerful, flexible and portable tool created to perform various types of MITM attacks against a network, manipulate HTTP, HTTPS and TCP traffic in realtime, sniff for credentials and much more.

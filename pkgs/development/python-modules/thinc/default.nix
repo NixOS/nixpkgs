@@ -1,85 +1,86 @@
 { stdenv
-, pkgs
+, lib
 , buildPythonPackage
 , fetchPypi
-, fetchFromGitHub
+, pythonOlder
 , pytest
 , cython
 , cymem
+, darwin
+, msgpack-numpy
+, msgpack-python
 , preshed
 , numpy
-, python
 , murmurhash
+, pathlib
 , hypothesis
 , tqdm
 , cytoolz
 , plac
 , six
 , mock
-, termcolor
 , wrapt
 , dill
+, blis
+, srsly
+, wasabi
 }:
 
-let
-  enableDebugging = true;
-
-  pathlibLocked = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pathlib";
-    version = "1.0.1";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "17zajiw4mjbkkv6ahp3xf025qglkj0805m9s41c45zryzj6p2h39";
-    };
-
-    doCheck = false; # fails to import support from test
-  };
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "thinc";
-  version = "6.5.1";
-  name = pname + "-" + version;
+  version = "7.0.8";
 
-  src = fetchFromGitHub {
-    owner = "explosion";
-    repo = "thinc";
-    rev = "v${version}";
-    sha256 = "008kmjsvanh6qgnpvsn3qacfcyprxirxbw4yfd8flyg7mxw793ws";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "191admjvhqsbxpqn73q42i0i8kvlblj0k6p0z9p7n3pcxzl75nsw";
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Accelerate CoreFoundation CoreGraphics CoreVideo
+  ]);
 
   propagatedBuildInputs = [
+   blis
    cython
    cymem
+   msgpack-numpy
+   msgpack-python
    preshed
    numpy
    murmurhash
-   pytest
-   hypothesis
    tqdm
    cytoolz
    plac
    six
-   mock
-   termcolor
+   srsly
    wrapt
    dill
-   pathlibLocked
+   wasabi
+  ] ++ lib.optional (pythonOlder "3.4") pathlib;
+
+
+  checkInputs = [
+    hypothesis
+    mock
+    pytest
   ];
 
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6"
+  '';
+
+  # Cannot find cython modules.
   doCheck = false;
 
-  # fails to import some modules
-  # checkPhase = ''
-  #   ${python.interpreter} -m pytest thinc/tests
-  #   # cd thinc/tests
-  #   # ${python.interpreter} -m unittest discover -p "*test*"
-  # '';
+  checkPhase = ''
+    pytest thinc/tests
+  '';
 
   meta = with stdenv.lib; {
     description = "Practical Machine Learning for NLP in Python";
     homepage = https://github.com/explosion/thinc;
     license = licenses.mit;
-    maintainers = with maintainers; [ sdll ];
+    maintainers = with maintainers; [ aborsu danieldk sdll ];
     };
 }

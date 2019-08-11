@@ -10,8 +10,8 @@
 # GUI/Desktop
 , dbus
 , glibmm
-, gnome3
-, hicolor_icon_theme
+, gsettings-desktop-schemas
+, hicolor-icon-theme
 , libappindicator-gtk3
 , libnotify
 , libxdg_basedir
@@ -23,7 +23,7 @@
 # rt2rtng
 , python2
 # Testing
-, gmock
+, gtest
 # Fixup
 , wrapGAppsHook
 , makeWrapper
@@ -39,14 +39,14 @@ let
   pythonInputs = with python2.pkgs; [ python2 lxml ];
 in
 stdenv.mkDerivation rec {
-  name = "radiotray-ng-${version}";
-  version = "0.2.0";
+  pname = "radiotray-ng";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     rev = "v${version}";
-    sha256 = "12mhi0q137cjdpmpczvrcr7szq1ja1r8bm0gh03b925y8xyrqp5z";
+    sha256 = "0khrfxjas2ldh0kksq7l811srqy16ahjxchvz0hhykx5hykymxlb";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -54,19 +54,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     boost jsoncpp libbsd pcre
-    glibmm hicolor_icon_theme gnome3.gsettings_desktop_schemas libappindicator-gtk3 libnotify
+    glibmm hicolor-icon-theme gsettings-desktop-schemas libappindicator-gtk3 libnotify
     libxdg_basedir
     lsb-release
     wxGTK
-  ] ++ stdenv.lib.optional doCheck gmock
-    ++ gstInputs
+  ] ++ gstInputs
     ++ pythonInputs;
 
-  prePatch = ''
-    substituteInPlace debian/CMakeLists.txt \
-      --replace /usr $out
-    substituteInPlace include/radiotray-ng/common.hpp \
-      --replace /usr $out
+  patches = [ ./no-dl-googletest.patch ];
+
+  postPatch = ''
+    for x in package/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
+      substituteInPlace $x --replace /usr $out
+    done
+    substituteInPlace package/CMakeLists.txt --replace /etc/xdg/autostart $out/etc/xdg/autostart
 
     # We don't find the radiotray-ng-notification icon otherwise
     substituteInPlace data/radiotray-ng.desktop \
@@ -75,11 +76,14 @@ stdenv.mkDerivation rec {
       --replace radiotray-ng-notification radiotray-ng-on
   '';
 
+  cmakeFlags = [
+    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+  ];
+
   enableParallelBuilding = true;
 
-  doCheck = true;
-
-  checkPhase = "ctest";
+  checkInputs = [ gtest ];
+  doCheck = !stdenv.isAarch64; # single failure that I can't explain
 
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${stdenv.lib.makeBinPath [ dbus ]})

@@ -1,24 +1,24 @@
 {
   stdenv, fetchFromGitHub, cmake, extra-cmake-modules,
-  zlib, boost162, libunwind, elfutils, sparsehash,
-  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons,
+  zlib, boost, libunwind, elfutils, sparsehash,
+  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
 }:
 
 stdenv.mkDerivation rec {
   name = "heaptrack-${version}";
-  version = "2017-10-30";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "heaptrack";
-    rev = "2bf49bc4fed144e004a9cabd40580a0f0889758f";
-    sha256 = "0sqxk5cc8r2vsj5k2dj9jkd1f2x2yj3mxgsp65g7ls01bgga0i4d";
+    rev = "v${version}";
+    sha256 = "0vgwldl5n41r4y3pv8w29gmyln0k2w6m59zrfw9psm4hkxvivzlx";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
-    zlib boost162 libunwind elfutils sparsehash
-    qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons
+    zlib boost libunwind elfutils sparsehash
+    qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
   ];
 
   meta = with stdenv.lib; {

@@ -1,35 +1,33 @@
-{ stdenv, fetchurl, kernel, coreutils, pciutils, gettext }:
+{ stdenv, buildPackages, kernel, pciutils, gettext }:
 
 stdenv.mkDerivation {
-  name = "cpupower-${kernel.version}";
+  pname = "cpupower";
+  inherit (kernel) version src;
 
-  src = kernel.src;
+  nativeBuildInputs = [ gettext ];
+  buildInputs = [ pciutils ];
 
-  buildInputs = [ coreutils pciutils gettext ];
-
-  configurePhase = ''
+  postPatch = ''
     cd tools/power/cpupower
-    sed -i 's,/bin/true,${coreutils}/bin/true,' Makefile
-    sed -i 's,/bin/pwd,${coreutils}/bin/pwd,' Makefile
-    sed -i 's,/usr/bin/install,${coreutils}/bin/install,' Makefile
+    sed -i 's,/bin/true,${buildPackages.coreutils}/bin/true,' Makefile
+    sed -i 's,/bin/pwd,${buildPackages.coreutils}/bin/pwd,' Makefile
+    sed -i 's,/usr/bin/install,${buildPackages.coreutils}/bin/install,' Makefile
   '';
 
-  buildPhase = ''
-    make
-  '';
+  makeFlags = [ "CROSS=${stdenv.cc.targetPrefix}" ];
 
-  installPhase = ''
-    make \
-      bindir="$out/bin" \
-      sbindir="$out/sbin" \
-      mandir="$out/share/man" \
-      includedir="$out/include" \
-      libdir="$out/lib" \
-      localedir="$out/share/locale" \
-      docdir="$out/share/doc/cpupower" \
-      confdir="$out/etc" \
-      install install-man
-  '';
+  installFlags = stdenv.lib.mapAttrsToList
+    (n: v: "${n}dir=${placeholder "out"}/${v}") {
+    bin = "bin";
+    sbin = "sbin";
+    man = "share/man";
+    include = "include";
+    lib = "lib";
+    locale = "share/locale";
+    doc = "share/doc/cpupower";
+    conf = "etc";
+    bash_completion_ = "share/bash-completion/completions";
+  };
 
   enableParallelBuilding = true;
 

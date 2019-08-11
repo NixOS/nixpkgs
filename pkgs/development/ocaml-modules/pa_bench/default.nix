@@ -2,13 +2,13 @@
 
 buildOcaml rec {
   name = "pa_bench";
-  version = "112.06.00";
+  version = "113.00.00";
 
   minimumSupportedOcamlVersion = "4.00";
 
   src = fetchurl {
     url = "https://github.com/janestreet/pa_bench/archive/${version}.tar.gz";
-    sha256 = "e3401e37f1d3d4acb957fd46a192d0ffcefeb0bedee63bbeb26969af1d540870";
+    sha256 = "1cd6291gdnk6h8ziclg6x3if8z5xy67nfz9gx8sx4k2cwv0j29k5";
   };
 
   buildInputs = [ pa_ounit ];

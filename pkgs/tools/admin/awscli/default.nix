@@ -1,48 +1,49 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, botocore
-, bcdoc
-, s3transfer
-, six
-, colorama
-, docutils
-, rsa
-, pyyaml
+{ lib
+, python
 , groff
 , less
+, fetchpatch
 }:
 
 let
-  colorama_3_7 = colorama.overrideAttrs (old: rec {
-    name = "${pname}-${version}";
-    pname = "colorama";
-    version = "0.3.7";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0avqkn6362v7k2kg3afb35g4sfdvixjgy890clip4q174p9whhz0";
+  py = python.override {
+    packageOverrides = self: super: {
+      rsa = super.rsa.overridePythonAttrs (oldAttrs: rec {
+        version = "3.4.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "25df4e10c263fb88b5ace923dd84bf9aa7f5019687b5e55382ffcdb8bede9db5";
+        };
+      });
+      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.9";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1";
+        };
+      });
+      pyyaml = super.pyyaml_3;
     };
-  });
+  };
 
-in buildPythonPackage rec {
+in py.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.14.22";
-  namePrefix = "";
+  version = "1.16.170"; # N.B: if you change this, change botocore to a matching version too
 
-  src = fetchPypi {
+  src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "13pivyyivwb3xy0l45083gcman2b0xiv00fl9ww0m8jccgxsdzd0";
+    sha256 = "12kh62imdfy8whvqzdrmdq4zw70gj1g3smqldf4lqpjfzss7cy92";
   };
 
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with py.pkgs; [
     botocore
     bcdoc
     s3transfer
     six
-    colorama_3_7
+    colorama
     docutils
     rsa
     pyyaml
@@ -58,10 +59,10 @@ in buildPythonPackage rec {
     rm $out/bin/aws.cmd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://aws.amazon.com/cli/;
     description = "Unified tool to manage your AWS services";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ muflax ];
   };
 }

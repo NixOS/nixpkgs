@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types;
+  inherit (lib) mkOption mkIf types;
 
   cfg = config.programs.tmux;
 
@@ -61,7 +61,12 @@ in {
   options = {
     programs.tmux = {
 
-      enable = mkEnableOption "<command>tmux</command> - a <command>screen</command> replacement.";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whenever to configure <command>tmux</command> system-wide.";
+        relatedPackages = [ "tmux" ];
+      };
 
       aggressiveResize = mkOption {
         default = false;
@@ -172,7 +177,7 @@ in {
       systemPackages = [ pkgs.tmux ];
 
       variables = {
-        TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}'';
+        TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/$(id -u)"}'';
       };
     };
   };

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "libnacl";
   version = "1.6.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "saltstack";
@@ -12,11 +11,12 @@ buildPythonPackage rec {
     sha256 = "05iamhbsqm8binqhc2zchfqdkajlx2icf8xl5vkd5fbrhw6yylad";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ libsodium ];
 
-  postPatch = ''
-    substituteInPlace "./libnacl/__init__.py" --replace "ctypes.cdll.LoadLibrary('libsodium.so')" "ctypes.cdll.LoadLibrary('${libsodium}/lib/libsodium.so')"
+  postPatch =
+    let soext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
+    substituteInPlace "./libnacl/__init__.py" --replace "ctypes.cdll.LoadLibrary('libsodium${soext}')" "ctypes.cdll.LoadLibrary('${libsodium}/lib/libsodium${soext}')"
   '';
 
   checkPhase = ''
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Python bindings for libsodium based on ctypes";
     homepage = https://pypi.python.org/pypi/libnacl;
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

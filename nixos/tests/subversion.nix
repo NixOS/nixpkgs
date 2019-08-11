@@ -34,12 +34,12 @@ in
 {
   name = "subversion";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   nodes =
     { webserver =
-        { config, pkgs, ... }:
+        { ... }:
 
         {
           services.httpd.enable = true;
@@ -55,7 +55,7 @@ in
         };
 
       client =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
 
         {
           environment.systemPackages = [ pkgs.subversion ];

@@ -7,12 +7,13 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
       virtualisation.vlans = [];
 
+      networking.useDHCP = false;
       networking.bridges = {
         br0 = {
           interfaces = [];
@@ -21,11 +22,11 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
       networking.interfaces = {
         br0 = {
-          ip4 = [{ address = "192.168.0.1"; prefixLength = 24; }];
-          ip6 = [{ address = "fc00::1"; prefixLength = 7; }];
+          ipv4.addresses = [{ address = "192.168.0.1"; prefixLength = 24; }];
+          ipv6.addresses = [{ address = "fc00::1"; prefixLength = 7; }];
         };
         br1 = {
-          ip4 = [{ address = "192.168.1.1"; prefixLength = 24; }];
+          ipv4.addresses = [{ address = "192.168.1.1"; prefixLength = 24; }];
         };
       };
 
@@ -43,7 +44,6 @@ import ./make-test.nix ({ pkgs, ...} : {
           config =
             {
               networking.firewall.allowedTCPPorts = [ 80 ];
-              networking.firewall.allowPing = true;
             };
         };
 

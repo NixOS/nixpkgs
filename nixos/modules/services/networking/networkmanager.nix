@@ -1,25 +1,23 @@
 { config, lib, pkgs, ... }:
 
-with pkgs;
 with lib;
 
 let
   cfg = config.networking.networkmanager;
 
+  dynamicHostsEnabled =
+    cfg.dynamicHosts.enable && cfg.dynamicHosts.hostsDirs != {};
+
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
-  dns =
-    if cfg.useDnsmasq then "dnsmasq"
-    else if config.services.resolved.enable then "systemd-resolved"
-    else if config.services.unbound.enable then "unbound"
-    else "default";
-
-  configFile = writeText "NetworkManager.conf" ''
+  configFile = pkgs.writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
     dhcp=${cfg.dhcp}
-    dns=${dns}
+    dns=${cfg.dns}
+    # If resolvconf is disabled that means that resolv.conf is managed by some other module.
+    rc-manager=${if config.networking.resolvconf.enable then "resolvconf" else "unmanaged"}
 
     [keyfile]
     ${optionalString (cfg.unmanaged != [])
@@ -37,6 +35,8 @@ let
 
     [device]
     wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
+
+    ${cfg.extraConfig}
   '';
 
   /*
@@ -65,19 +65,19 @@ let
     });
   '';
 
-  ns = xs: writeText "nameservers" (
+  ns = xs: pkgs.writeText "nameservers" (
     concatStrings (map (s: "nameserver ${s}\n") xs)
   );
 
-  overrideNameserversScript = writeScript "02overridedns" ''
+  overrideNameserversScript = pkgs.writeScript "02overridedns" ''
     #!/bin/sh
-    tmp=`${coreutils}/bin/mktemp`
-    ${gnused}/bin/sed '/nameserver /d' /etc/resolv.conf > $tmp
-    ${gnugrep}/bin/grep 'nameserver ' /etc/resolv.conf | \
-      ${gnugrep}/bin/grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
-    ${optionalString (cfg.appendNameservers != []) "${coreutils}/bin/cat $tmp $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf"}
-    ${optionalString (cfg.insertNameservers != []) "${coreutils}/bin/cat $tmp ${ns cfg.insertNameservers} $tmp.ns > /etc/resolv.conf"}
-    ${coreutils}/bin/rm -f $tmp $tmp.ns
+    PATH=${with pkgs; makeBinPath [ gnused gnugrep coreutils ]}
+    tmp=$(mktemp)
+    sed '/nameserver /d' /etc/resolv.conf > $tmp
+    grep 'nameserver ' /etc/resolv.conf | \
+      grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
+    cat $tmp ${ns cfg.insertNameservers} $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf
+    rm -f $tmp $tmp.ns
   '';
 
   dispatcherTypesSubdirMap = {
@@ -91,11 +91,29 @@ let
     default = "preserve";
     example = "00:11:22:33:44:55";
     description = ''
-      "XX:XX:XX:XX:XX:XX": MAC address of the interface.
-      <literal>permanent</literal>: use the permanent MAC address of the device.
-      <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
-      <literal>random</literal>: generate a randomized value upon each connect.
-      <literal>stable</literal>: generate a stable, hashed MAC address.
+      Set the MAC address of the interface.
+      <variablelist>
+        <varlistentry>
+          <term>"XX:XX:XX:XX:XX:XX"</term>
+          <listitem><para>MAC address of the interface</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"permanent"</literal></term>
+          <listitem><para>Use the permanent MAC address of the device</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"preserve"</literal></term>
+          <listitem><para>Don’t change the MAC address of the device upon activation</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"random"</literal></term>
+          <listitem><para>Generate a randomized value upon each connect</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"stable"</literal></term>
+          <listitem><para>Generate a stable, hashed MAC address</para></listitem>
+        </varlistentry>
+      </variablelist>
     '';
   };
 
@@ -119,24 +137,50 @@ in {
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Configuration appended to the generated NetworkManager.conf.
+          Refer to
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
+          </link>
+          or
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
+        '';
+      };
+
       unmanaged = mkOption {
         type = types.listOf types.string;
         default = [];
         description = ''
           List of interfaces that will not be managed by NetworkManager.
-          Interface name can be specified here, but if you need more fidelity
-          see "Device List Format" in NetworkManager.conf man page.
+          Interface name can be specified here, but if you need more fidelity,
+          refer to
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec
+          </link>
+          or the "Device List Format" Appendix of
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>.
         '';
       };
 
       # Ugly hack for using the correct gnome3 packageSet
       basePackages = mkOption {
         type = types.attrsOf types.package;
-        default = { inherit networkmanager modemmanager wpa_supplicant
-                            networkmanager_openvpn networkmanager_vpnc
-                            networkmanager_openconnect networkmanager_fortisslvpn
-                            networkmanager_pptp networkmanager_l2tp
-                            networkmanager_iodine; };
+        default = { inherit (pkgs)
+                            networkmanager modemmanager wpa_supplicant crda
+                            networkmanager-openvpn networkmanager-vpnc
+                            networkmanager-openconnect networkmanager-fortisslvpn
+                            networkmanager-l2tp networkmanager-iodine; };
         internal = true;
       };
 
@@ -206,14 +250,22 @@ in {
         };
       };
 
-      useDnsmasq = mkOption {
-        type = types.bool;
-        default = false;
+      dns = mkOption {
+        type = types.enum [ "default" "dnsmasq" "unbound" "systemd-resolved" "none" ];
+        default = "default";
         description = ''
-          Enable NetworkManager's dnsmasq integration. NetworkManager will run
-          dnsmasq as a local caching nameserver, using a "split DNS"
-          configuration if you are connected to a VPN, and then update
-          resolv.conf to point to the local nameserver.
+          Set the DNS (<literal>resolv.conf</literal>) processing mode.
+          </para>
+          <para>
+          A description of these modes can be found in the main section of
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
+          </link>
+          or in
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>.
         '';
       };
 
@@ -223,7 +275,7 @@ in {
             source = mkOption {
               type = types.path;
               description = ''
-                A script.
+                Path to the hook script.
               '';
             };
 
@@ -231,12 +283,28 @@ in {
               type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
               description = ''
-                Dispatcher hook type. Only basic hooks are currently available.
+                Dispatcher hook type. Look up the hooks described at
+                <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.html">https://developer.gnome.org/NetworkManager/stable/NetworkManager.html</link>
+                and choose the type depending on the output folder.
+                You should then filter the event type (e.g., "up"/"down") from within your script.
               '';
             };
           };
         });
         default = [];
+        example = literalExample ''
+        [ {
+              source = pkgs.writeText "upHook" '''
+
+                if [ "$2" != "up" ]; then
+                    logger "exit: event $2 != up"
+                fi
+
+                # coreutils and iproute are in PATH too
+                logger "Device $DEVICE_IFACE coming up"
+            ''';
+            type = "basic";
+        } ]'';
         description = ''
           A list of scripts which will be executed in response to  network  events.
         '';
@@ -254,6 +322,52 @@ in {
           so you don't need to to that yourself.
         '';
       };
+
+      dynamicHosts = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enabling this option requires the
+            <option>networking.networkmanager.dns</option> option to be
+            set to <literal>dnsmasq</literal>. If enabled, the directories
+            defined by the
+            <option>networking.networkmanager.dynamicHosts.hostsDirs</option>
+            option will be set up when the service starts. The dnsmasq instance
+            managed by NetworkManager will then watch those directories for
+            hosts files (see the <literal>--hostsdir</literal> option of
+            dnsmasq). This way a non-privileged user can add or override DNS
+            entries on the local system (depending on what hosts directories
+            that are configured)..
+          '';
+        };
+        hostsDirs = mkOption {
+          type = with types; attrsOf (submodule {
+            options = {
+              user = mkOption {
+                type = types.str;
+                default = "root";
+                description = ''
+                  The user that will own the hosts directory.
+                '';
+              };
+              group = mkOption {
+                type = types.str;
+                default = "root";
+                description = ''
+                  The group that will own the hosts directory.
+                '';
+              };
+            };
+          });
+          default = {};
+          description = ''
+            Defines a set of directories (relative to
+            <literal>/run/NetworkManager/hostdirs</literal>) that dnsmasq will
+            watch for hosts files.
+          '';
+        };
+      };
     };
   };
 
@@ -262,53 +376,63 @@ in {
 
   config = mkIf cfg.enable {
 
-    assertions = [{
-      assertion = config.networking.wireless.enable == false;
-      message = "You can not use networking.networkmanager with networking.wireless";
-    }];
-
-    boot.kernelModules = [ "ppp_mppe" ]; # Needed for most (all?) PPTP VPN connections.
+    assertions = [
+      { assertion = config.networking.wireless.enable == false;
+        message = "You can not use networking.networkmanager with networking.wireless";
+      }
+      { assertion = !dynamicHostsEnabled || (dynamicHostsEnabled && cfg.dns == "dnsmasq");
+        message = ''
+          To use networking.networkmanager.dynamicHosts you also need to set
+          networking.networkmanager.dns = "dnsmasq"
+        '';
+      }
+    ];
 
     environment.etc = with cfg.basePackages; [
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
       }
-      { source = "${networkmanager_openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name";
+      { source = "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
         target = "NetworkManager/VPN/nm-openvpn-service.name";
       }
-      { source = "${networkmanager_vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name";
+      { source = "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
         target = "NetworkManager/VPN/nm-vpnc-service.name";
       }
-      { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
+      { source = "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
-      { source = "${networkmanager_fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
+      { source = "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
         target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
       }
-      { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
-        target = "NetworkManager/VPN/nm-pptp-service.name";
-      }
-      { source = "${networkmanager_l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
+      { source = "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";
       }
-      { source = "${networkmanager_strongswan}/etc/NetworkManager/VPN/nm-strongswan-service.name";
-        target = "NetworkManager/VPN/nm-strongswan-service.name";
-      }
-      { source = "${networkmanager_iodine}/etc/NetworkManager/VPN/nm-iodine-service.name";
+      { source = "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
         target = "NetworkManager/VPN/nm-iodine-service.name";
       }
-    ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
+    ] ++ optional (cfg.appendNameservers != [] || cfg.insertNameservers != [])
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
       ++ lib.imap1 (i: s: {
         inherit (s) source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
-      }) cfg.dispatcherScripts;
+        mode = "0544";
+      }) cfg.dispatcherScripts
+      ++ optional dynamicHostsEnabled
+           { target = "NetworkManager/dnsmasq.d/dyndns.conf";
+             text = concatMapStrings (n: ''
+               hostsdir=/run/NetworkManager/hostsdirs/${n}
+             '') (attrNames cfg.dynamicHosts.hostsDirs);
+           }
+      ++ optional cfg.enableStrongSwan
+           { source = "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
+             target = "NetworkManager/VPN/nm-strongswan-service.name";
+           };
 
     environment.systemPackages = cfg.packages;
 
-    users.extraGroups = [{
+    users.groups = [{
       name = "networkmanager";
       gid = config.ids.gids.networkmanager;
     }
@@ -316,7 +440,7 @@ in {
       name = "nm-openvpn";
       gid = config.ids.gids.nm-openvpn;
     }];
-    users.extraUsers = [{
+    users.users = [{
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
       extraGroups = [ "networkmanager" ];
@@ -329,21 +453,49 @@ in {
 
     systemd.packages = cfg.packages;
 
-    systemd.services."network-manager" = {
+    systemd.services."NetworkManager" = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
 
       preStart = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
+        mkdir -m 700 -p /etc/ipsec.d
         mkdir -m 755 -p ${stateDirs}
       '';
+    };
+
+    systemd.services.NetworkManager-wait-online = {
+      wantedBy = [ "network-online.target" ];
+    };
+
+    systemd.services.nm-setup-hostsdirs = mkIf dynamicHostsEnabled {
+      wantedBy = [ "NetworkManager.service" ];
+      before = [ "NetworkManager.service" ];
+      partOf = [ "NetworkManager.service" ];
+      script = concatStrings (mapAttrsToList (n: d: ''
+        mkdir -p "/run/NetworkManager/hostsdirs/${n}"
+        chown "${d.user}:${d.group}" "/run/NetworkManager/hostsdirs/${n}"
+        chmod 0775 "/run/NetworkManager/hostsdirs/${n}"
+      '') cfg.dynamicHosts.hostsDirs);
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+    };
+
+    systemd.services."NetworkManager-dispatcher" = {
+      wantedBy = [ "network.target" ];
+      restartTriggers = [ configFile ];
+
+      # useful binaries for user-specified hooks
+      path = [ pkgs.iproute pkgs.utillinux pkgs.coreutils ];
     };
 
     # Turn off NixOS' network management
     networking = {
       useDHCP = false;
       # use mkDefault to trigger the assertion about the conflict above
-      wireless.enable = lib.mkDefault false;
+      wireless.enable = mkDefault false;
     };
 
     security.polkit.extraConfig = polkitConf;

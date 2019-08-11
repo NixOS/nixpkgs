@@ -1,5 +1,5 @@
 { mkDerivation, lib
-, extra-cmake-modules, kdoctools, makeWrapper, shared_mime_info
+, extra-cmake-modules, kdoctools, makeWrapper, shared-mime-info
 , qtwebkit
 , libkcddb, karchive, kcmutils, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
 , flac, lame, libmad, libmpcdec, libvorbis
@@ -16,7 +16,7 @@ mkDerivation {
     platforms = platforms.linux;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
-  propagatedBuildInputs = [
+  buildInputs = [
     # qt
     qtwebkit
     # kde
@@ -28,15 +28,21 @@ mkDerivation {
     # cd/dvd
     cdparanoia libdvdcss libdvdread
     # others
-    ffmpeg libmusicbrainz3 shared_mime_info
+    ffmpeg libmusicbrainz3 shared-mime-info
   ];
   propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
   postFixup =
-    let k3bPath = lib.makeBinPath [
-          cdrdao cdrtools dvdplusrwtools libburn normalize sox transcode
-          vcdimager
-        ];
+    let
+      binPath = lib.makeBinPath [
+        cdrdao cdrtools dvdplusrwtools libburn normalize sox transcode
+        vcdimager flac
+      ];
+      libraryPath = lib.makeLibraryPath [
+        cdparanoia
+      ];
     in ''
-      wrapProgram "$out/bin/k3b" --prefix PATH : "${k3bPath}"
+      wrapProgram "$out/bin/k3b"     \
+        --prefix PATH : "${binPath}" \
+        --prefix LD_LIBRARY_PATH : ${libraryPath}
     '';
 }

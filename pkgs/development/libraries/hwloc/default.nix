@@ -1,22 +1,27 @@
 { stdenv, fetchurl, pkgconfig, expat, ncurses, pciutils, numactl
-, cairo, libX11
-, x11Support ? (!stdenv.isCygwin)
+, x11Support ? false, libX11 ? null, cairo ? null
 }:
+
+assert x11Support -> libX11 != null && cairo != null;
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "hwloc-1.11.8";
+let
+  version = "2.0.4";
+  versmm = versions.major version + "." + versions.minor version;
+  name = "hwloc-${version}";
+
+in stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v1.11/downloads/${name}.tar.bz2";
-    sha256 = "0karxv4r1r8sa7ki5aamlxdvyvz0bvzq4gdhq0yi5nc4a0k11vzc";
+    url = "https://www.open-mpi.org/software/hwloc/v${versmm}/downloads/${name}.tar.bz2";
+    sha256 = "1aa7s208gdijk19vvzzahyl8pglk1va3yd6kdbpfa5pz5ms0ag35";
   };
-
-  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--localstatedir=/var"
+    "--enable-netloc"
   ];
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
@@ -73,10 +78,10 @@ stdenv.mkDerivation rec {
        more.
     '';
 
-    # http://www.open-mpi.org/projects/hwloc/license.php
+    # https://www.open-mpi.org/projects/hwloc/license.php
     license = licenses.bsd3;
-    homepage = http://www.open-mpi.org/projects/hwloc/;
-    maintainers = [ ];
+    homepage = https://www.open-mpi.org/projects/hwloc/;
+    maintainers = with maintainers; [ fpletz markuskowa ];
     platforms = platforms.all;
   };
 }

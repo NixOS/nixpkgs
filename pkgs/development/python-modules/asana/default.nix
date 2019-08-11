@@ -1,37 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi,
-  pytest, requests, requests_oauthlib, six
+{ buildPythonPackage, pythonAtLeast, pytest, requests, requests_oauthlib, six
+, fetchFromGitHub, responses, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.6.5";
-  name = "${pname}-${version}";
+  version = "0.8.2";
 
-  meta = {
-    description = "Python client library for Asana";
-    homepage = https://github.com/asana/python-asana;
-    license = lib.licenses.mit;
+  # upstream reportedly doesn't support 3.7 yet, blocked on
+  # https://bugs.python.org/issue34226
+  disabled = pythonAtLeast "3.7";
+
+  src = fetchFromGitHub {
+    owner = "asana";
+    repo = "python-asana";
+    rev = "v${version}";
+    sha256 = "113zwnrpim1pdw8dzid2wpp5gzr2zk26jjl4wrwhgj0xk1cw94yi";
   };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "eab8d24c2a4670b541b75da2f4bf5b995fe71559c1338da53ce9039f7b19c9a0";
-  };
-
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest responses ];
   propagatedBuildInputs = [ requests requests_oauthlib six ];
 
-  patchPhase = ''
-    echo > requirements.txt
-    sed -i "s/requests~=2.9.1/requests >=2.9.1/" setup.py
-    sed -i "s/requests_oauthlib~=0.6.1/requests_oauthlib >=0.6.1/" setup.py
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "requests_oauthlib >= 0.8.0, == 0.8.*" "requests_oauthlib>=0.8.0<2.0"
   '';
-
-  # ERROR: file not found: tests
-  doCheck = false; 
 
   checkPhase = ''
     py.test tests
   '';
 
+  meta = with stdenv.lib; {
+    description = "Python client library for Asana";
+    homepage = https://github.com/asana/python-asana;
+    license = licenses.mit;
+  };
 }

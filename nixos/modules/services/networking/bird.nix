@@ -7,21 +7,18 @@ let
     let
       cfg = config.services.${variant};
       pkg = pkgs.${variant};
+      birdBin = if variant == "bird6" then "bird6" else "bird";
       birdc = if variant == "bird6" then "birdc6" else "birdc";
-      configFile = pkgs.stdenv.mkDerivation {
-        name = "${variant}.conf";
-        text = cfg.config;
-        preferLocalBuild = true;
-        buildCommand = ''
-          echo -n "$text" > $out
-          ${pkg}/bin/${variant} -d -p -c $out
-        '';
-      };
+      descr =
+        { bird = "1.9.x with IPv4 suport";
+          bird6 = "1.9.x with IPv6 suport";
+          bird2 = "2.x";
+        }.${variant};
     in {
       ###### interface
       options = {
         services.${variant} = {
-          enable = mkEnableOption "BIRD Internet Routing Daemon";
+          enable = mkEnableOption "BIRD Internet Routing Daemon (${descr})";
           config = mkOption {
             type = types.lines;
             description = ''
@@ -35,13 +32,24 @@ let
       ###### implementation
       config = mkIf cfg.enable {
         environment.systemPackages = [ pkg ];
+
+        environment.etc."bird/${variant}.conf".source = pkgs.writeTextFile {
+          name = "${variant}.conf";
+          text = cfg.config;
+          checkPhase = ''
+            ${pkg}/bin/${birdBin} -d -p -c $out
+          '';
+        };
+
         systemd.services.${variant} = {
-          description = "BIRD Internet Routing Daemon";
+          description = "BIRD Internet Routing Daemon (${descr})";
           wantedBy = [ "multi-user.target" ];
+          reloadIfChanged = true;
+          restartTriggers = [ config.environment.etc."bird/${variant}.conf".source ];
           serviceConfig = {
             Type = "forking";
             Restart = "on-failure";
-            ExecStart = "${pkg}/bin/${variant} -c ${configFile} -u ${variant} -g ${variant}";
+            ExecStart = "${pkg}/bin/${birdBin} -c /etc/bird/${variant}.conf -u ${variant} -g ${variant}";
             ExecReload = "${pkg}/bin/${birdc} configure";
             ExecStop = "${pkg}/bin/${birdc} down";
             CapabilityBoundingSet = [ "CAP_CHOWN" "CAP_FOWNER" "CAP_DAC_OVERRIDE" "CAP_SETUID" "CAP_SETGID"
@@ -54,16 +62,17 @@ let
           };
         };
         users = {
-          extraUsers.${variant} = {
+          users.${variant} = {
             description = "BIRD Internet Routing Daemon user";
-            group = "${variant}";
+            group = variant;
           };
-          extraGroups.${variant} = {};
+          groups.${variant} = {};
         };
       };
     };
 
-  inherit (config.services) bird bird6;
-in {
-  imports = [(generic "bird") (generic "bird6")];
+in
+
+{
+  imports = map generic [ "bird" "bird6" "bird2" ];
 }

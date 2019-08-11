@@ -1,13 +1,12 @@
-{ stdenv, fetchgit, iasl, flex, bison }:
+{ stdenv, fetchurl, iasl, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "cbfstool-${version}";
-  version = "4.5";
+  version = "4.9";
 
-  src = fetchgit {
-    url = "http://review.coreboot.org/p/coreboot";
-    rev = "refs/tags/${version}";
-    sha256 = "0sc2h440x4sfp1lqnmh3xfgymf7j0rqfx00v6jqf0svfbp8a6cq5";
+  src = fetchurl {
+    url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
+    sha256 = "0xkai65d3z9fivwscbkm7ndcw2p9g794xz8fwdv979w77n5qsdij";
   };
 
   nativeBuildInputs = [ flex bison ];

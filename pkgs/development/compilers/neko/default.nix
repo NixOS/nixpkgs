@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "2.2.0";
 
   src = fetchurl {
-    url = "http://nekovm.org/media/neko-${version}-src.tar.gz";
+    url = "https://nekovm.org/media/neko-${version}-src.tar.gz";
     sha256 = "1qv47zaa0vzhjlq5wb71627n7dbsxpc1gqpg0hsngjxnbnh1q46g";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high-level dynamically typed programming language";
-    homepage = http://nekovm.org;
+    homepage = https://nekovm.org;
     license = licenses.lgpl21;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.linux ++ platforms.darwin;

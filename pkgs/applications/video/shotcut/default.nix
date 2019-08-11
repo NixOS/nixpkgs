@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, pkgconfig, qtbase
-, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquickcontrols
-, qtgraphicaleffects, libmlt
-, qmake, makeWrapper }:
+{ stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, mkDerivation
+, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
+, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools }:
 
-stdenv.mkDerivation rec {
+assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
+assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
+
+mkDerivation rec {
   name = "shotcut-${version}";
-  version = "17.11";
+  version = "19.07.15";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1bw2cjpzycddxi9b21haiaslv0ikia85wwgkfm2xl2m15w5j8510";
+    sha256 = "0drl0x8x45kysalzx1pbg0gkvlxaykg9zka1fdkrl4iqfs4s7vv2";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
     SDL2 frei0r gettext mlt libmlt
     qtbase qtmultimedia qtwebkit qtx11extras qtwebsockets qtquickcontrols
@@ -23,6 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-I${libmlt}/include/mlt++ -I${libmlt}/include/mlt";
+  qmakeFlags = [ "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease" "SHOTCUT_VERSION=${version}" ];
 
   prePatch = ''
     sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
@@ -31,10 +34,15 @@ stdenv.mkDerivation rec {
     sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
   '';
 
+  qtWrapperArgs = [
+    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2 ]}"
+    "--prefix PATH : ${mlt}/bin"
+    ];
+
   postInstall = ''
     mkdir -p $out/share/shotcut
     cp -r src/qml $out/share/shotcut/
-    wrapProgram $out/bin/shotcut --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL2 ]} --prefix PATH : ${mlt}/bin
   '';
 
   meta = with stdenv.lib; {
@@ -50,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://shotcut.org;
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu woffs ];
     platforms = platforms.linux;
   };
 }

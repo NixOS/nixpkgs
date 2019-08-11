@@ -1,6 +1,6 @@
 {
   mkDerivation, lib, fetchurl,
-  extra-cmake-modules, shared_mime_info,
+  extra-cmake-modules, shared-mime-info,
   qtsvg, qtxmlpatterns, karchive, kconfig, kcoreaddons, kparts, kio, ki18n,
   kdiagram, kgraphviewer
 }:
@@ -14,7 +14,7 @@ mkDerivation rec {
     sha256 = "0v8z6r9gngzckvqyxjm9kp7hilwfqibyk2f9vag9l98ar0iwr97q";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules shared_mime_info ];
+  nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
 
   buildInputs = [
     qtsvg qtxmlpatterns karchive kconfig kcoreaddons kparts kio ki18n

@@ -20,14 +20,14 @@ assert enableEjabberdDump -> ejabberd != null;
 assert enableMongoDatabase -> (mongodb != null && mongodb-tools != null);
 
 stdenv.mkDerivation {
-  name = "dysnomia-0.7.1";
+  name = "dysnomia-0.8";
   src = fetchurl {
-    url = https://github.com/svanderburg/dysnomia/files/1576949/dysnomia-0.7.1.tar.gz;
-    sha256 = "0fyyn6654p10mrm2rlgv017d74wjb8z9h2xzv8gwdly34kifj9dh";
+    url = https://github.com/svanderburg/dysnomia/files/1756700/dysnomia-0.8.tar.gz;
+    sha256 = "0pc4zwmmlsz02a6a4srpwdwhqrfvn3wkn22sz3fg7lwxbdbd5k0z";
   };
 
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";
-  
+
   configureFlags = [
      (if enableApacheWebApplication then "--with-apache" else "--without-apache")
      (if enableAxis2WebService then "--with-axis2" else "--without-axis2")
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
      (if enableMongoDatabase then "--with-mongodb" else "--without-mongodb")
      "--with-job-template=${jobTemplate}"
    ];
-  
+
   buildInputs = [ getopt ]
     ++ stdenv.lib.optional enableEjabberdDump ejabberd
     ++ stdenv.lib.optional enableMySQLDatabase mysql.out

@@ -25,12 +25,12 @@ in
       { name = "2bwm";
         start =
           ''
-            ${pkgs."2bwm"}/bin/2bwm &
+            ${pkgs._2bwm}/bin/2bwm &
             waitPID=$!
           '';
       };
 
-    environment.systemPackages = [ pkgs."2bwm" ];
+    environment.systemPackages = [ pkgs._2bwm ];
 
   };
 

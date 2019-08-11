@@ -1,44 +1,52 @@
-{ stdenv, python27Packages, gdb, pkgs }:
-let
-  deps = import ./requirements.nix { inherit pkgs; };
-in
-python27Packages.buildPythonApplication rec {
-    name = "${pname}-${version}";
-    pname = "gdbgui";
-    version = "0.10.1.0";
+{ stdenv
+, buildPythonApplication
+, fetchPypi
+, gdb
+, flask
+, flask-socketio
+, flask-compress
+, pygdbmi
+, pygments
+, gevent
+, }:
 
-    buildInputs = [ gdb ];
-    propagatedBuildInputs = builtins.attrValues deps.packages;
+buildPythonApplication rec {
+  pname = "gdbgui";
+  version = "0.13.1.1";
 
-    src = python27Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "1585vjbrc8r0a7069aism66c0kkj91yklpdblb9c34570zbpabvs";
-    };
+  buildInputs = [ gdb ];
+  propagatedBuildInputs = [
+    flask
+    flask-socketio
+    flask-compress
+    pygdbmi
+    pygments
+    gevent
+  ];
 
-    postPatch = ''
-      echo ${version} > gdbgui/VERSION.txt
-    '';
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1ypxgkxwb443ndyrmsa7zx2hn0d9b3s7n2w49ngfghd3l8k0yvi2";
+  };
 
-    postInstall = ''
-      wrapProgram $out/bin/gdbgui \
-                  --prefix PATH : ${stdenv.lib.makeBinPath [ gdb ]}
-    '';
+  postPatch = ''
+    echo ${version} > gdbgui/VERSION.txt
+    # remove upper version bound
+    sed -ie 's!, <.*"!"!' setup.py
+  '';
 
-    # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-    preCheck = stdenv.lib.optionalString stdenv.isLinux ''
-      export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols \
-             LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/gdbgui \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ gdb ]}
+  '';
 
-    postCheck = stdenv.lib.optionalString stdenv.isLinux ''
-      unset NIX_REDIRECTS LD_PRELOAD
-    '';
+  # tests do not work without stdout/stdin
+  doCheck = false;
 
-    meta = with stdenv.lib; {
-      description = "A browser-based frontend for GDB";
-      license = licenses.gpl3;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ yrashk ];
-    };
-
-  }
+  meta = with stdenv.lib; {
+    description = "A browser-based frontend for GDB";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ yrashk ];
+  };
+}

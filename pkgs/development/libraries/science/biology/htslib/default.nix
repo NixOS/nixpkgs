@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "htslib";
-  version = "1.6";
+  version = "1.9";
 
   src = fetchurl {
     url = "https://github.com/samtools/htslib/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "1jsca3hg4rbr6iqq6imkj4lsvgl8g9768bcmny3hlff2w25vx24m";
+    sha256 = "16ljv43sc3fxmv63w7b2ff8m1s7h89xhazwmbm1bicz8axq8fjz0";
   };
 
   # perl is only used during the check phase.
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib bzip2 lzma curl ];
 
-  configureFlags = "--enable-libcurl"; # optional but strongly recommended
+  configureFlags = [ "--enable-libcurl" ]; # optional but strongly recommended
 
   installFlags = "prefix=$(out)";
 

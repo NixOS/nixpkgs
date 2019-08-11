@@ -1,18 +1,17 @@
-{ stdenv, lib, bundlerEnv, ruby, perl, autoconf }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerEnv {
-  name = "redis-dump-0.3.5";
-
-  inherit ruby;
+bundlerApp {
+  pname = "redis-dump";
   gemdir = ./.;
+  exes = [ "redis-dump" ];
 
-  buildInputs = [ perl autoconf ];
+  passthru.updateScript = bundlerUpdateScript "redis-dump";
 
   meta = with lib; {
     description = "Backup and restore your Redis data to and from JSON";
     homepage    = http://delanotes.com/redis-dump/;
     license     = licenses.mit;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline manveru nicknovitski ];
     platforms   = platforms.unix;
   };
 }

@@ -69,7 +69,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        User = config.users.extraUsers.osrm.name;
+        User = config.users.users.osrm.name;
         ExecStart = ''
           ${pkgs.osrm-backend}/bin/osrm-routed \
             --ip ${cfg.address} \

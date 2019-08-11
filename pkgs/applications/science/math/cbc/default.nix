@@ -1,14 +1,15 @@
 { lib, stdenv, fetchurl, zlib, bzip2 }:
 
-stdenv.mkDerivation {
-  name = "cbc-2.9.5";
+stdenv.mkDerivation rec {
+  pname = "cbc";
+  version = "2.10.2";
 
   src = fetchurl {
-    url = "http://www.coin-or.org/download/source/Cbc/Cbc-2.9.5.tgz";
-    sha256 = "0kmsg9qpajh5jhnql04m6akpdjzlppxfz99q320vw5bkzgl3i18w";
+    url = "https://www.coin-or.org/download/source/Cbc/Cbc-${version}.tgz";
+    sha256 = "0frbxkh6nbh46kaxsx5bmzridgip3v7aq75l8yak5npiiq4jlwv3";
   };
 
-  configureFlags = "-C";
+  configureFlags = [ "-C" ];
 
   enableParallelBuilding = true;
 
@@ -23,6 +24,7 @@ stdenv.mkDerivation {
     license = lib.licenses.epl10;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    broken = stdenv.isAarch64; # Missing <immintrin.h> after 2.10.0
     description = "A mixed integer programming solver";
   };
 }

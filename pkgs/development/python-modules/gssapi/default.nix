@@ -1,14 +1,30 @@
-{ stdenv, pkgs, lib, buildPythonPackage, fetchPypi, six, enum34, decorator,
-nose, shouldbe, gss, krb5Full, which, darwin }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, enum34
+, decorator
+, nose
+, krb5Full
+, darwin
+, isPy27
+, parameterized
+, shouldbe
+, cython
+, python
+, k5test
+}:
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.3.0";
-  name = "${pname}-${version}";
+  version = "1.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "765205082a9490c8e8be88ac16a6249d124396a671665edeec9927a7f244d712";
+  src = fetchFromGitHub {
+    owner = "pythongssapi";
+    repo = "python-${pname}";
+    rev = "v${version}";
+    sha256 = "1chmxhjbs39paaxlfsdrr13v4zvv94ijvhxasdphxlxkqlycbm4a";
   };
 
   # It's used to locate headers
@@ -17,16 +33,36 @@ buildPythonPackage rec {
       --replace "get_output('krb5-config gssapi --prefix')" "'${lib.getDev krb5Full}'"
   '';
 
-  LD_LIBRARY_PATH = "${pkgs.krb5Full}/lib";
+  nativeBuildInputs = [
+    cython
+    krb5Full
+  ];
 
-  buildInputs = [ krb5Full which nose shouldbe ]
-  ++ ( if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.GSS ] else [ gss ] );
+  propagatedBuildInputs =  [
+    decorator
+    six
+  ] ++ lib.optional isPy27 enum34;
 
-  propagatedBuildInputs =  [ decorator enum34 six ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.GSS
+  ];
 
-  doCheck = false; # No such file or directory: '/usr/sbin/kadmin.local'
+  checkInputs = [
+    k5test
+    nose
+    parameterized
+    shouldbe
+    six
+  ];
 
-  meta = with stdenv.lib; {
+  doCheck = !stdenv.isDarwin; # many failures on darwin
+
+  checkPhase = ''
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
+    ${python.interpreter} setup.py nosetests
+  '';
+
+  meta = with lib; {
     homepage = https://pypi.python.org/pypi/gssapi;
     description = "Python GSSAPI Wrapper";
     license = licenses.mit;

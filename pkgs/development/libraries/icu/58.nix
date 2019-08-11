@@ -1,4 +1,4 @@
-args @ { stdenv, fetchurl, fetchpatch, fixDarwinDylibNames }:
+fetchurl:
 let
   keywordFix = fetchurl {
     url = "http://bugs.icu-project.org/trac/changeset/39484?format=diff";
@@ -11,4 +11,4 @@ import ./base.nix {
   sha256 = "036shcb3f8bm1lynhlsb4kpjm9s9c2vdiir01vg216rs2l8482ib";
   patches = [ keywordFix ];
   patchFlags = "-p4";
-} args
+}

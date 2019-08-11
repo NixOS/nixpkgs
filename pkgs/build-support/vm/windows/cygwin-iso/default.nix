@@ -17,11 +17,10 @@ let
   };
 
   cygwinCross = (import ../../../../.. {
-    inherit (stdenv) system;
+    localSystem = stdenv.hostPlatform;
     crossSystem = {
       libc = "msvcrt";
       platform = {};
-      openssl.system = "mingw64";
       inherit arch;
       config = "${arch}-w64-mingw32";
     };

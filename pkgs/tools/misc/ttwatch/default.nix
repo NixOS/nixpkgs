@@ -1,18 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake, perl, openssl, curl, libusb1 }:
+{ stdenv, fetchFromGitHub, cmake, perl, openssl, curl, libusb1
+, enableUnsafe ? false }:
 
 stdenv.mkDerivation rec {
   name = "ttwatch-${version}";
-  version = "2017-12-31";
+  version = "2018-12-04";
 
   src = fetchFromGitHub {
     owner = "ryanbinns";
     repo = "ttwatch";
-    rev = "a261851d91e3304a47a04995758f6940747bc54a";
-    sha256 = "0llcai1yxikh8nvzry71rr1zz365rg0k0lwp24np5w74kzza3kwx";
+    rev = "eeb4e19bf7ca7ca2cee7f5fbeb483b27198d86a1";
+    sha256 = "18384apdkq35120cgmda686d293354aibwcq2hwhvvjmnq49fnzr";
   };
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ openssl curl libusb1 ];
+
+  cmakeFlags = stdenv.lib.optional enableUnsafe [ "-Dunsafe=on" ];
 
   preFixup = ''
     chmod +x $out/bin/ttbin2mysports

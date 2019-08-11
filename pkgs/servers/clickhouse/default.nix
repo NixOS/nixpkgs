@@ -1,33 +1,47 @@
-{ stdenv, fetchFromGitHub, cmake, libtool, boost, double-conversion, gperftools
-, icu, mysql, lz4, openssl, poco, re2, rdkafka, readline, sparsehash, unixODBC
-, zookeeper_mt, zstd }:
+{ stdenv, fetchFromGitHub, cmake, libtool
+, boost, capnproto, cctz, clang-unwrapped, double-conversion, gperftools, icu
+, libcpuid, libxml2, lld, llvm, lz4 , mysql, openssl, poco, re2, rdkafka
+, readline, sparsehash, unixODBC, zstd, ninja, jemalloc, brotli, protobuf, xxHash
+}:
 
 stdenv.mkDerivation rec {
   name = "clickhouse-${version}";
-
-  version = "1.1.54310";
+  version = "19.13.1.11";
 
   src = fetchFromGitHub {
-    owner = "yandex";
-    repo = "ClickHouse";
-    rev = "v${version}-stable";
-    sha256 = "167pihqak8ip7bmlyrbzl9x3mpn381j8v7pl7nhrl9bfnzgrq69v";
+    owner  = "yandex";
+    repo   = "ClickHouse";
+    rev    = "v${version}-stable";
+    sha256 = "1j9jhgl2z84id5z6rbvyal7aha5v3m8pd393cmcsf1bf0fiz8qmc";
   };
 
-  patches = [ ./termcap.patch ];
-
-  nativeBuildInputs = [ cmake libtool ];
-
+  nativeBuildInputs = [ cmake libtool ninja ];
   buildInputs = [
-    boost double-conversion gperftools icu mysql.connector-c lz4 openssl poco
-    re2 rdkafka readline sparsehash unixODBC zookeeper_mt zstd
+    boost capnproto cctz clang-unwrapped double-conversion gperftools icu
+    libcpuid libxml2 lld llvm lz4 mysql.connector-c openssl poco re2 rdkafka
+    readline sparsehash unixODBC zstd jemalloc brotli protobuf xxHash
   ];
 
-  cmakeFlags = [ "-DENABLE_TESTS=OFF" "-DUNBUNDLED=ON" "-DUSE_STATIC_LIBRARIES=OFF" ];
+  cmakeFlags = [
+    "-DENABLE_TESTS=OFF"
+    "-DUNBUNDLED=ON"
+    "-DUSE_STATIC_LIBRARIES=OFF"
+  ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-function" ];
+  postPatch = ''
+    patchShebangs dbms/programs/clang/copy_headers.sh
+  '';
 
-  enableParallelBuilding = true;
+  postInstall = ''
+    rm -rf $out/share/clickhouse-test
+
+    sed -i -e '\!<log>/var/log/clickhouse-server/clickhouse-server\.log</log>!d' \
+      $out/etc/clickhouse-server/config.xml
+    substituteInPlace $out/etc/clickhouse-server/config.xml \
+      --replace "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
+  '';
+
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = https://clickhouse.yandex/;

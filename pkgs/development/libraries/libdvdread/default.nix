@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libdvdread-${version}";
-  version = "5.0.3";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "http://get.videolan.org/libdvdread/${version}/${name}.tar.bz2";
-    sha256 = "0ayqiq0psq18rcp6f5pz82sxsq66v0kwv0y55dbrcg68plnxy71j";
+    sha256 = "1gfmh8ii3s2fw1c8vn57piwxc0smd3va4h7xgp9s8g48cc04zki8";
   };
 
   buildInputs = [libdvdcss];

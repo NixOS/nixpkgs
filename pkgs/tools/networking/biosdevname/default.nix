@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "biosdevname-${version}";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "dell";
     repo = "biosdevname";
     rev = "v${version}";
-    sha256 = "183k6f9nayhai27y6nizf0sp9bj1kabykj66hcwdzllhrrh505sd";
+    sha256 = "19wbb79x9h79k55sgd4dylvdbhhrvfaiaknbw9s1wvfmirkxa1dz";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

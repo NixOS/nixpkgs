@@ -12,20 +12,16 @@
 , gunicorn
 , jinja2
 , virtualenv
+, mock
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pecan";
-  version = "1.2.1";
-
-  patches = [
-    ./python36_test_fix.patch
-  ];
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ikc32rd2hr8j2jxc0mllvdjvxydx3fwfp3z8sdxmkzdkixlb5cd";
+    sha256 = "b5461add4e3f35a7ee377b3d7f72ff13e93f40f3823b3208ab978b29bde936ff";
   };
 
   propagatedBuildInputs = [ singledispatch logutils ];
@@ -33,8 +29,10 @@ buildPythonPackage rec {
     webtest Mako genshi Kajiki sqlalchemy gunicorn jinja2 virtualenv
   ];
 
+  checkInputs = [ mock ];
+
   meta = with stdenv.lib; {
     description = "Pecan";
-    homepage = "http://github.com/pecan/pecan";
+    homepage = "https://github.com/pecan/pecan";
   };
 }

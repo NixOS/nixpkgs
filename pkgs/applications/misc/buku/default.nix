@@ -1,23 +1,24 @@
 { stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "3.4";
-  name = "buku-${version}";
+  version = "4.2.2";
+  pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "0v0wvsxw78g6yl606if25k1adghr5764chwy1kl7dsxvchqwvmg0";
+    sha256 = "1wy5i1av1s98yr56ybiq66kv0vg48zci3fp91zfgj04nh2966w1w";
   };
 
-  nativeBuildInputs = [
+  checkInputs = [
     pytestcov
-    pytest-catchlog
     hypothesis
     pytest
     pylint
     flake8
+    pyyaml
+    mypy_extensions
   ];
 
   propagatedBuildInputs = [
@@ -25,7 +26,24 @@ with python3.pkgs; buildPythonApplication rec {
     beautifulsoup4
     requests
     urllib3
+    flask
+    flask-api
+    flask-bootstrap
+    flask-paginate
+    flask_wtf
+    arrow
+    werkzeug
+    click
+    html5lib
+    vcrpy
   ];
+
+  postPatch = ''
+    # Jailbreak problematic dependencies
+    sed -i \
+      -e "s,'PyYAML.*','PyYAML',g" \
+      setup.py
+  '';
 
   preCheck = ''
     # Fixes two tests for wrong encoding
@@ -33,10 +51,12 @@ with python3.pkgs; buildPythonApplication rec {
 
     # Disables a test which requires internet
     substituteInPlace tests/test_bukuDb.py \
-      --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')"
+      --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
+      --replace "self.assertEqual(shorturl, 'http://tny.im/yt')" "" \
+      --replace "self.assertEqual(url, 'https://www.google.com')" ""
   '';
 
-  installPhase = ''
+  postInstall = ''
     make install PREFIX=$out
 
     mkdir -p $out/share/zsh/site-functions $out/share/bash-completion/completions $out/share/fish/vendor_completions.d

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "2.0";
@@ -16,7 +16,7 @@ in fetchzip rec {
 
   sha256 = "1my1symb7k80ys33iphsxvmf6432wx6vjdnxhzhkgrang1rhx1h8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/akryukov/theano;
     description = "An old-style font designed from historic samples";
     maintainers = with maintainers; [ raskin rycee ];

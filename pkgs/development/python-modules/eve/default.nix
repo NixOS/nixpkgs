@@ -1,28 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, flask, jinja2, itsdangerous, events
-, markupsafe, pymongo, flask-pymongo, werkzeug, simplejson, cerberus }:
+{ stdenv, buildPythonPackage, fetchPypi, flask, events
+, pymongo, simplejson, cerberus, werkzeug }:
 
 buildPythonPackage rec {
   pname = "Eve";
-  version = "0.7.5";
-  name  = "${pname}-${version}";
+  version = "0.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd4ffbc4725220ffdc8e32f8566c8870efaecdc238d0f96b18e1e83227eca55d";
+    sha256 = "18shfaxa1vqshnyiqx3jqsri2wxz9ibip3mdxaz8pljmk734r4b1";
   };
-
-  patches = [
-    ./setup.patch
-  ];
 
   propagatedBuildInputs = [
     cerberus
     events
-    flask-pymongo
     flask
-    itsdangerous
-    jinja2
-    markupsafe
     pymongo
     simplejson
     werkzeug
@@ -32,8 +23,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "http://python-eve.org/";
+    homepage = "https://python-eve.org/";
     description = "Open source Python REST API framework designed for human beings";
     license = licenses.bsd3;
+    maintainers = [ maintainers.marsam ];
   };
 }

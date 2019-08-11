@@ -45,6 +45,21 @@ runTests {
     expected = true;
   };
 
+  testBitAnd = {
+    expr = (bitAnd 3 10);
+    expected = 2;
+  };
+
+  testBitOr = {
+    expr = (bitOr 3 10);
+    expected = 11;
+  };
+
+  testBitXor = {
+    expr = (bitXor 3 10);
+    expected = 9;
+  };
+
 # STRINGS
 
   testConcatMapStrings = {
@@ -93,10 +108,11 @@ runTests {
             "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
       in {
         storePath = isStorePath goodPath;
+        storePathDerivation = isStorePath (import ../.. {}).hello;
         storePathAppendix = isStorePath
           "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
-        asPath = isStorePath (builtins.toPath goodPath);
+        asPath = isStorePath (/. + goodPath);
         otherPath = isStorePath "/something/else";
         otherVals = {
           attrset = isStorePath {};
@@ -106,6 +122,7 @@ runTests {
       };
     expected = {
       storePath = true;
+      storePathDerivation = true;
       storePathAppendix = false;
       nonAbsolute = false;
       asPath = true;
@@ -196,6 +213,44 @@ runTests {
   };
 
 
+# ATTRSETS
+
+  # code from the example
+  testRecursiveUpdateUntil = {
+    expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
+      # first attribute set
+      foo.bar = 1;
+      foo.baz = 2;
+      bar = 3;
+    } {
+      #second attribute set
+      foo.bar = 1;
+      foo.quz = 2;
+      baz = 4;
+    };
+    expected = {
+      foo.bar = 1; # 'foo.*' from the second set
+      foo.quz = 2; #
+      bar = 3;     # 'bar' from the first set
+      baz = 4;     # 'baz' from the second set
+    };
+  };
+
+  testOverrideExistingEmpty = {
+    expr = overrideExisting {} { a = 1; };
+    expected = {};
+  };
+
+  testOverrideExistingDisjoint = {
+    expr = overrideExisting { b = 2; } { a = 1; };
+    expected = { b = 2; };
+  };
+
+  testOverrideExistingOverride = {
+    expr = overrideExisting { a = 3; b = 2; } { a = 1; };
+    expected = { a = 1; b = 2; };
+  };
+
 # GENERATORS
 # these tests assume attributes are converted to lists
 # in alphabetical order
@@ -203,6 +258,29 @@ runTests {
   testMkKeyValueDefault = {
     expr = generators.mkKeyValueDefault {} ":" "f:oo" "bar";
     expected = ''f\:oo:bar'';
+  };
+
+  testMkValueString = {
+    expr = let
+      vals = {
+        int = 42;
+        string = ''fo"o'';
+        bool = true;
+        bool2 = false;
+        null = null;
+        # float = 42.23; # floats are strange
+      };
+      in mapAttrs
+        (const (generators.mkValueStringDefault {}))
+        vals;
+    expected = {
+      int = "42";
+      string = ''fo"o'';
+      bool = "true";
+      bool2 = "false";
+      null = "null";
+      # float = "42.23" true false [ "bar" ] ]'';
+    };
   };
 
   testToKeyValue = {
@@ -247,6 +325,8 @@ runTests {
       "section 1" = {
         attribute1 = 5;
         x = "Me-se JarJar Binx";
+        # booleans are converted verbatim by default
+        boolean = false;
       };
       "foo[]" = {
         "he\\h=he" = "this is okay";
@@ -258,6 +338,7 @@ runTests {
 
       [section 1]
       attribute1=5
+      boolean=false
       x=Me-se JarJar Binx
     '';
   };
@@ -288,8 +369,10 @@ runTests {
   testToPretty = {
     expr = mapAttrs (const (generators.toPretty {})) rec {
       int = 42;
+      float = 0.1337;
       bool = true;
-      string = "fnord";
+      string = ''fno"rd'';
+      path = /. + "/foo";
       null_ = null;
       function = x: x;
       functionArgs = { arg ? 4, foo }: arg;
@@ -299,14 +382,16 @@ runTests {
     };
     expected = rec {
       int = "42";
+      float = "~0.133700";
       bool = "true";
-      string = "\"fnord\"";
+      string = ''"fno\"rd"'';
+      path = "/foo";
       null_ = "null";
       function = "<λ>";
       functionArgs = "<λ:{(arg),foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
       attrs = "{ \"foo\" = null; \"foo bar\" = \"baz\"; }";
-      drv = "<δ>";
+      drv = "<δ:test>";
     };
   };
 
@@ -314,48 +399,6 @@ runTests {
     expr = generators.toPretty { allowPrettyValues = true; }
              { __pretty = v: "«" + v + "»"; val = "foo"; };
     expected  = "«foo»";
-  };
-
-
-# MISC
-
-  testOverridableDelayableArgsTest = {
-    expr =
-      let res1 = defaultOverridableDelayableArgs id {};
-          res2 = defaultOverridableDelayableArgs id { a = 7; };
-          res3 = let x = defaultOverridableDelayableArgs id { a = 7; };
-                 in (x.merge) { b = 10; };
-          res4 = let x = defaultOverridableDelayableArgs id { a = 7; };
-                in (x.merge) ( x: { b = 10; });
-          res5 = let x = defaultOverridableDelayableArgs id { a = 7; };
-                in (x.merge) ( x: { a = builtins.add x.a 3; });
-          res6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = builtins.add; }; };
-                     y = x.merge {};
-                in (y.merge) { a = 10; };
-
-          resRem7 = res6.replace (a: removeAttrs a ["a"]);
-
-          resReplace6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = builtins.add; }; };
-                            x2 = x.merge { a = 20; }; # now we have 27
-                        in (x2.replace) { a = 10; }; # and override the value by 10
-
-          # fixed tests (delayed args): (when using them add some comments, please)
-          resFixed1 =
-                let x = defaultOverridableDelayableArgs id ( x: { a = 7; c = x.fixed.b; });
-                    y = x.merge (x: { name = "name-${builtins.toString x.fixed.c}"; });
-                in (y.merge) { b = 10; };
-          strip = attrs: removeAttrs attrs ["merge" "replace"];
-      in all id
-        [ ((strip res1) == { })
-          ((strip res2) == { a = 7; })
-          ((strip res3) == { a = 7; b = 10; })
-          ((strip res4) == { a = 7; b = 10; })
-          ((strip res5) == { a = 10; })
-          ((strip res6) == { a = 17; })
-          ((strip resRem7) == {})
-          ((strip resFixed1) == { a = 7; b = 10; c =10; name = "name-10"; })
-        ];
-    expected = true;
   };
 
 }

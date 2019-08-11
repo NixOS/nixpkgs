@@ -1,41 +1,48 @@
-{ stdenv, fetchFromGitHub
-, gcc5, eject, cudatoolkit
-}:
+{ stdenv, fetchFromGitHub, which, cudatoolkit, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
-  name = "cudatoolkit-${cudatoolkit.majorVersion}-nccl-${version}";
-  version = "1.3.4-1";
+  name = "nccl-${version}-cuda-${cudatoolkit.majorVersion}";
+  version = "2.4.8-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
     rev = "v${version}";
-    sha256 = "0fvnrfn572lc6i2a3xyhbifm53ivcrr46z6cqr3b0bwb1iq79m7q";
+    sha256 = "05m66y64rgsdyybvjybhy6clikwv438b1m484ikai78fb2b7mvyq";
   };
 
-  nativeBuildInputs = [
-    gcc5
-    eject
-  ];
+  outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [
-    cudatoolkit
-  ];
+  nativeBuildInputs = [ which addOpenGLRunpath ];
+
+  buildInputs = [ cudatoolkit ];
+
+  preConfigure = ''
+    patchShebangs src/collectives/device/gen_rules.sh
+  '';
 
   makeFlags = [
-    "PREFIX=$(out)"
     "CUDA_HOME=${cudatoolkit}"
-    "CUDA_LIB=${cudatoolkit.lib}/lib"
+    "PREFIX=$(out)"
   ];
 
+  postFixup = ''
+    moveToOutput lib/libnccl_static.a $dev
+
+    # Set RUNPATH so that libnvidia-ml in /run/opengl-driver(-32)/lib can be found.
+    # See the explanation in addOpenGLRunpath.
+    addOpenGLRunpath $out/lib/lib*.so
+  '';
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-unused-function" ];
+
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
-    description = ''
-      NVIDIA Collective Communications Library.
-      Multi-GPU and multi-node collective communication primitives.
-    '';
+    description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = https://developer.nvidia.com/nccl;
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ hyphon81 ];
+    maintainers = with maintainers; [ mdaiter orivej ];
   };
 }

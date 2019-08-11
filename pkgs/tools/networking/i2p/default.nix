@@ -1,11 +1,11 @@
-{ stdenv, procps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
+{ stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 let wrapper = stdenv.mkDerivation rec {
   name = "wrapper-${version}";
-  version = "3.5.32";
+  version = "3.5.35";
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "1v388p5jjbpwybw0zjv5glzny17fwdwppaci2lqcsnm6qw0667f1";
+    sha256 = "0mjyw9ays9v6lnj21pmfd3qdvd9b6rwxfmw3pg6z0kyf2jadixw2";
   };
   buildInputs = [ jdk ];
   buildPhase = ''
@@ -27,10 +27,10 @@ let wrapper = stdenv.mkDerivation rec {
 in
 
 stdenv.mkDerivation rec {
-  name = "i2p-0.9.32";
+  name = "i2p-0.9.41";
   src = fetchurl {
     url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
-    sha256 = "1c82yckwzp51wqrr8qhww3sifm1a9nzrymsf9qv99ngsxq4n5l6i";
+    sha256 = "0adrj56i3pcc9ainj22akjrrvy73carz5jk29qa1h2b9q03di73b";
   };
   buildInputs = [ jdk ant gettext which ];
   patches = [ ./i2p.patch ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       -e "s#uname#${coreutils}/bin/uname#" \
       -e "s#which#${which}/bin/which#" \
       -e "s#%gettext%#${gettext}/bin/gettext#" \
-      -e "s#/usr/ucb/ps#${procps}/bin/ps#" \
+      -e "s#/usr/ucb/ps#${ps}/bin/ps#" \
       -e "s#/usr/bin/tr#${coreutils}/bin/tr#" \
       -e "s#%INSTALL_PATH#$out#" \
       -e 's#%USER_HOME#$HOME#' \

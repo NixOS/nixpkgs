@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "git-radar-${version}";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "michaeldfallen";
     repo = "git-radar";
     rev = "v${version}";
-    sha256 = "1915aqx8bfc4xmvhx2gfxv72p969a6rn436kii9w4yi38hibmqv9";
+    sha256 = "0c3zp8s4w7m4s71qgwk1jyfc8yzw34f2hi43x1w437ypgabwg81j";
   };
 
   dontBuild = true;

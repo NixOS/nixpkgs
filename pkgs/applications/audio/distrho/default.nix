@@ -1,36 +1,43 @@
-{ stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, libjack2
-, libxslt, lv2, pkgconfig, premake3, xorg, ladspa-sdk }:
+{ stdenv, fetchFromGitHub, alsaLib, fftwSinglePrec, freetype, libjack2
+, pkgconfig, ladspa-sdk, premake3
+, libX11, libXcomposite, libXcursor, libXext, libXinerama, libXrender
+}:
 
-stdenv.mkDerivation rec {
-  name = "distrho-ports-unstable-2017-10-10";
+let
+  premakeos = if stdenv.hostPlatform.isDarwin then "osx"
+              else if stdenv.hostPlatform.isWindows then "mingw"
+              else "linux";
+in stdenv.mkDerivation rec {
+  name = "distrho-ports-${version}";
+  version = "2018-04-16";
 
-  src = fetchgit {
-    url = "https://github.com/DISTRHO/DISTRHO-Ports.git";
-    rev = "e11e2b204c14b8e370a0bf5beafa5f162fedb8e9";
-    sha256 = "1nd542iian9kr2ldaf7fkkgf900ryzqigks999d1jhms6p0amvfv";
+  src = fetchFromGitHub {
+    owner = "DISTRHO";
+    repo = "DISTRHO-Ports";
+    rev = version;
+    sha256 = "0l4zwl4mli8jzch32a1fh7c88r9q17xnkxsdw17ds5hadnxlk12v";
   };
+
+  configurePhase = ''
+    runHook preConfigure
+
+    sh ./scripts/premake-update.sh ${premakeos}
+
+    runHook postConfigure
+  '';
 
   patchPhase = ''
     sed -e "s#@./scripts#sh scripts#" -i Makefile
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig premake3 ];
   buildInputs = [
-    alsaLib fftwSinglePrec freetype libjack2 premake3
-    xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
-    xorg.libXinerama xorg.libXrender ladspa-sdk
+    alsaLib fftwSinglePrec freetype libjack2
+    libX11 libXcomposite libXcursor libXext
+    libXinerama libXrender ladspa-sdk
   ];
 
-  buildPhase = ''
-    sh ./scripts/premake-update.sh linux
-    make lv2
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/lib/lv2
-    cp -a bin/lv2/* $out/lib/lv2/
-  '';
+  makeFlags = "PREFIX=$(out)";
 
   meta = with stdenv.lib; {
     homepage = http://distrho.sourceforge.net;
@@ -44,7 +51,8 @@ stdenv.mkDerivation rec {
       TAL-Filter-2 TAL-NoiseMaker TAL-Reverb TAL-Reverb-2 TAL-Reverb-3
       TAL-Vocoder-2 TheFunction ThePilgrim Vex Wolpertinger
     '';
+    license = with licenses; [ gpl2 gpl3 gpl2Plus lgpl3 mit ];
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -20,12 +20,11 @@
 
 buildPythonPackage rec {
   pname = "APScheduler";
-  version = "3.5.0";
-  name = "${pname}-${version}";
+  version = "3.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ce44d5132b7951f4614067c88ca34cfee1ff97f6f0892581d79b636d83eab89";
+    sha256 = "1c56066rx09xk1zbd156whsynlakxazqq64i509id17015wzp6jj";
   };
 
   buildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, llvmPackages, pkgconfig, mpd_clientlib, openssl }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, mpd_clientlib, openssl }:
 
 stdenv.mkDerivation rec {
   name = "ympd-${version}";
@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake mpd_clientlib openssl ];
 
   meta = {
-    homepage = http://www.ympd.org;
+    homepage = https://www.ympd.org;
     description = "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
     maintainers = [ stdenv.lib.maintainers.siddharthist ];
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, gmp, gnum4
+{ stdenv, buildPackages, gmp, gnum4
 
 # Version specific args
 , version, src
@@ -12,14 +12,15 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  buildInputs = [ gnum4 ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
-  doCheck = (stdenv.system != "i686-cygwin" && !stdenv.isDarwin);
+  doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
 
   enableParallelBuilding = true;
 
-  patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
+  patches = stdenv.lib.optional (stdenv.hostPlatform.system == "i686-cygwin")
               ./cygwin.patch;
 
   meta = with stdenv.lib; {
@@ -52,7 +53,6 @@ stdenv.mkDerivation (rec {
 
      homepage = http://www.lysator.liu.se/~nisse/nettle/;
 
-     maintainers = with maintainers; [ wkennington ];
      platforms = platforms.all;
   };
 }

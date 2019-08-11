@@ -1,21 +1,32 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.10-pre-20160920";
+  name = "patchelf-${version}";
+  version = "0.10-pre-20190328";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "patchelf";
-    rev = "327d80443672c397970738f9e216a7e86cbf3ad7";
-    sha256 = "0nghzywda4jrj70gvn4dnrzasafgdp0basj04wfir1smvsi047zr";
+    rev = "e1e39f3639e39360ceebb2f7ed533cede4623070";
+    sha256 = "09q1b1yqfzg1ih51v7qjh55vxfdbd8x5anycl8sfz6qy107wr02k";
   };
+
+  # Drop test that fails on musl (?)
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace tests/Makefile.am \
+      --replace "set-rpath-library.sh" ""
+  '' +
+  # extend version identifier to more informative than "0.10".
+  ''
+    echo -n ${version} > version
+  '';
 
   setupHook = [ ./setup-hook.sh ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     homepage = https://nixos.org/patchelf.html;

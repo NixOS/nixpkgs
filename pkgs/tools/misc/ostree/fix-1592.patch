@@ -1,0 +1,97 @@
+diff -aur --no-dereference a/tests/pull-test.sh b/tests/pull-test.sh
+--- a/tests/pull-test.sh	1970-01-01 01:00:01.000000000 +0100
++++ b/tests/pull-test.sh	2018-09-16 23:55:44.214593856 +0200
+@@ -275,7 +275,7 @@
+ if ${CMD_PREFIX} ostree --repo=mirrorrepo-local pull-local otherrepo 2>err.txt; then
+     fatal "pull with mixed refs succeeded?"
+ fi
+-assert_file_has_content err.txt "error: Invalid ref name origin:main"
++assert_file_has_content err.txt "Invalid ref name origin:main"
+ ${CMD_PREFIX} ostree --repo=mirrorrepo-local pull-local otherrepo localbranch
+ ${CMD_PREFIX} ostree --repo=mirrorrepo-local rev-parse localbranch
+ ${CMD_PREFIX} ostree --repo=mirrorrepo-local fsck
+@@ -286,7 +286,7 @@
+     fatal "pulled nonexistent branch"
+ fi
+ # So true
+-assert_file_has_content_literal err.txt "error: Refspec 'nosuchbranch' not found"
++assert_file_has_content_literal err.txt "Refspec 'nosuchbranch' not found"
+ echo "ok pull-local nonexistent branch"
+ 
+ cd ${test_tmpdir}
+@@ -587,5 +587,5 @@
+ if ${CMD_PREFIX} ostree --repo=repo pull origin main 2>err.txt; then
+     fatal "pull of invalid ref succeeded"
+ fi
+-assert_file_has_content_literal err.txt 'error: Fetching checksum for ref ((empty), main): Invalid rev lots of html here  lots of html here  lots of html here  lots of'
++assert_file_has_content_literal err.txt 'Fetching checksum for ref ((empty), main): Invalid rev lots of html here  lots of html here  lots of html here  lots of'
+ echo "ok pull got HTML for a ref"
+diff -aur --no-dereference a/tests/test-fsck-collections.sh b/tests/test-fsck-collections.sh
+--- a/tests/test-fsck-collections.sh	1970-01-01 01:00:01.000000000 +0100
++++ b/tests/test-fsck-collections.sh	2018-09-17 02:22:48.922502037 +0200
+@@ -100,7 +100,7 @@
+ if ${CMD_PREFIX} ostree fsck --repo=repo --verify-bindings > fsck 2> fsck-error; then
+     assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
+ fi
+-assert_file_has_content fsck-error "Commit has no requested ref ‘new-ref’ in ref binding metadata (‘ref1’)"
++assert_file_has_content fsck-error "Commit has no requested ref .new-ref. in ref binding metadata (.ref1.)"
+ assert_file_has_content fsck "^Validating refs...$"
+ 
+ echo "ok 3 fsck detects missing ref bindings"
+@@ -113,7 +113,7 @@
+ if ${CMD_PREFIX} ostree fsck --repo=repo --verify-bindings > fsck 2> fsck-error; then
+     assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
+ fi
+-assert_file_has_content fsck-error "Commit has no requested ref ‘new-ref’ in ref binding metadata (‘ref1’)"
++assert_file_has_content fsck-error "Commit has no requested ref .new-ref. in ref binding metadata (.ref1.)"
+ assert_file_has_content fsck "^Validating refs...$"
+ assert_file_has_content fsck "^Validating refs in collections...$"
+ 
+@@ -127,7 +127,7 @@
+ if ${CMD_PREFIX} ostree fsck --repo=repo --verify-bindings > fsck 2> fsck-error; then
+     assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
+ fi
+-assert_file_has_content fsck-error "Commit has collection ID ‘org.example.Collection’ in collection binding metadata, while the remote it came from has collection ID ‘org.example.Collection2’"
++assert_file_has_content fsck-error "Commit has collection ID .org.example.Collection. in collection binding metadata, while the remote it came from has collection ID .org.example.Collection2."
+ assert_file_has_content fsck "^Validating refs...$"
+ assert_file_has_content fsck "^Validating refs in collections...$"
+ 
+@@ -147,7 +147,7 @@
+ if ${CMD_PREFIX} ostree fsck --repo=repo --verify-back-refs > fsck 2> fsck-error; then
+     assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
+ fi
+-assert_file_has_content fsck-error "Collection–ref (org.example.Collection, ref1) in bindings for commit .* does not exist"
++assert_file_has_content fsck-error 'Collection.ref (org.example.Collection, ref1) in bindings for commit .* does not exist'
+ assert_file_has_content fsck "^Validating refs...$"
+ assert_file_has_content fsck "^Validating refs in collections...$"
+ 
+@@ -186,7 +186,7 @@
+ if ${CMD_PREFIX} ostree fsck --repo=repo --verify-bindings > fsck 2> fsck-error; then
+     assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
+ fi
+-assert_file_has_content fsck-error "Commit has no requested ref ‘new-ref’ in ref binding metadata (‘ref3’, ‘ref4’)"
++assert_file_has_content fsck-error "Commit has no requested ref .new-ref. in ref binding metadata (.ref3., .ref4.)"
+ assert_file_has_content fsck "^Validating refs...$"
+ 
+ echo "ok 9 fsck detects missing ref bindings"
+@@ -205,7 +205,7 @@
+ if ${CMD_PREFIX} ostree fsck --repo=repo --verify-back-refs > fsck 2> fsck-error; then
+     assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
+ fi
+-assert_file_has_content fsck-error "Ref ‘ref3’ in bindings for commit .* does not exist"
++assert_file_has_content fsck-error 'Ref .ref3. in bindings for commit .* does not exist'
+ assert_file_has_content fsck "^Validating refs...$"
+ 
+ echo "ok 11 fsck ignores unreferenced ref bindings"
+diff -aur --no-dereference a/tests/test-remote-add.sh b/tests/test-remote-add.sh
+--- a/tests/test-remote-add.sh	1970-01-01 01:00:01.000000000 +0100
++++ b/tests/test-remote-add.sh	2018-09-17 00:14:16.486788225 +0200
+@@ -83,7 +83,7 @@
+ if $OSTREE remote delete nosuchremote 2>err.txt; then
+     assert_not_reached "Deleting remote unexpectedly succeeded"
+ fi
+-assert_file_has_content err.txt "error: "
++assert_file_has_content err.txt "not found"
+ 
+ $OSTREE remote delete --if-exists nosuchremote
+ echo "ok"

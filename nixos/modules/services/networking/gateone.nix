@@ -23,12 +23,12 @@ config = mkIf cfg.enable {
   environment.systemPackages = with pkgs.pythonPackages; [
     gateone pkgs.openssh pkgs.procps pkgs.coreutils pkgs.cacert];
 
-  users.extraUsers.gateone = {
+  users.users.gateone = {
     description = "GateOne privilege separation user";
     uid = config.ids.uids.gateone;
     home = cfg.settingsDir;
   };
-  users.extraGroups.gateone.gid = config.ids.gids.gateone;
+  users.groups.gateone.gid = config.ids.gids.gateone;
 
   systemd.services.gateone = with pkgs; {
     description = "GateOne web-based terminal";

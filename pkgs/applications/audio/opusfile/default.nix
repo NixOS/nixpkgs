@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, openssl, libogg, libopus }:
 
 stdenv.mkDerivation rec {
-  name = "opusfile-0.8";
+  name = "opusfile-0.11";
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/opus/${name}.tar.gz";
-    sha256 = "192mp2jgn5s9815h31ybzsfipmbppmdhwx1dymrk26xarz9iw8rc";
+    sha256 = "1gq3aszzl5glgbajw5p1f5a1kdyf23w5vjdmwwrk246syin9pkkl";
   };
 
   nativeBuildInputs = [ pkgconfig ];

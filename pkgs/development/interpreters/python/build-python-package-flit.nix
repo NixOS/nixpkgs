@@ -7,10 +7,10 @@
 { ... } @ attrs:
 
 attrs // {
-  buildInputs = [ flit ];
+  nativeBuildInputs = [ flit ];
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
-    flit wheel
+    flit build --format wheel
     runHook postBuild
   '';
 

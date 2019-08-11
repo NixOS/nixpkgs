@@ -3,11 +3,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "xvidcore-${version}";
-  version = "1.3.4";
-  
+  version = "1.3.5";
+
   src = fetchurl {
     url = "http://downloads.xvid.org/downloads/${name}.tar.bz2";
-    sha256 = "1xwbmp9wqshc0ckm970zdpi0yvgqxlqg0s8bkz98mnr8p2067bsz";
+    sha256 = "1d0hy1w9sn6491a3vhyf3vmhq4xkn6yd4ralx1191s6qz5wz483w";
   };
 
   preConfigure = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   postInstall = optionalString (!stdenv.isDarwin) ''
     rm $out/lib/*.a
   '';
-  
+
   meta = {
     description = "MPEG-4 video codec for PC";
     homepage    = https://www.xvid.com/;

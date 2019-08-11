@@ -43,7 +43,16 @@ in
       type = with types; listOf str;
       default = [ "::1" "127.0.0.1" ];
       description = ''
-        What addresses the server should listen on.
+        What addresses the server should listen on. (UDP+TCP 53)
+      '';
+    };
+    listenTLS = mkOption {
+      type = with types; listOf str;
+      default = [];
+      example = [ "198.51.100.1:853" "[2001:db8::1]:853" "853" ];
+      description = ''
+        Addresses on which kresd should provide DNS over TLS (see RFC 7858).
+        For detailed syntax see ListenStream in man systemd.socket.
       '';
     };
     # TODO: perhaps options for more common stuff like cache size or forwarding
@@ -53,13 +62,13 @@ in
   config = mkIf cfg.enable {
     environment.etc."kresd.conf".source = configFile; # not required
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "kresd";
         uid = config.ids.uids.kresd;
         group = "kresd";
         description = "Knot-resolver daemon user";
       };
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "kresd";
         gid = config.ids.gids.kresd;
       };
@@ -71,8 +80,23 @@ in
         # Syntax depends on being IPv6 or IPv4.
         (iface: if elem ":" (stringToCharacters iface) then "[${iface}]:53" else "${iface}:53")
         cfg.interfaces;
-      socketConfig.ListenDatagram = listenStreams;
-      socketConfig.FreeBind = true;
+      socketConfig = {
+        ListenDatagram = listenStreams;
+        FreeBind = true;
+        FileDescriptorName = "dns";
+      };
+    };
+
+    systemd.sockets.kresd-tls = mkIf (cfg.listenTLS != []) rec {
+      wantedBy = [ "sockets.target" ];
+      before = wantedBy;
+      partOf = [ "kresd.socket" ];
+      listenStreams = cfg.listenTLS;
+      socketConfig = {
+        FileDescriptorName = "tls";
+        FreeBind = true;
+        Service = "kresd.service";
+      };
     };
 
     systemd.sockets.kresd-control = rec {
@@ -97,11 +121,13 @@ in
         Type = "notify";
         WorkingDirectory = cfg.cacheDir;
         Restart = "on-failure";
+        Sockets = [ "kresd.socket" "kresd-control.socket" ]
+          ++ optional (cfg.listenTLS != []) "kresd-tls.socket";
       };
 
+      # Trust anchor goes from dns-root-data by default.
       script = ''
-        exec '${package}/bin/kresd' --config '${configFile}' \
-          -k '${pkgs.dns-root-data}/root.key'
+        exec '${package}/bin/kresd' --config '${configFile}' --forks=1
       '';
 
       requires = [ "kresd.socket" ];

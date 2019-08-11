@@ -1,13 +1,13 @@
 # Test for NixOS' container support.
 
 import ./make-test.nix ({ pkgs, ...} : {
-  name = "containers-bridge";
+  name = "containers-tmpfs";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ckampka ];
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;

@@ -1,75 +1,61 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, makeWrapper, symlinkJoin, writeShellScriptBin, callPackage, defaultCrateOverrides
-, wayland, wlc, dbus_libs, dbus_glib, cairo, libxkbcommon, pam, python3Packages, lemonbar
+{ stdenv, fetchurl, makeWrapper, symlinkJoin, writeShellScriptBin, callPackage, defaultCrateOverrides
+, wayland, cairo, libxkbcommon, pam, python3Packages, lemonbar, gdk-pixbuf
 }:
 
 let
+  wlc = callPackage ./wlc.nix {};
+
   # refer to
   # https://github.com/way-cooler/way-cooler.github.io/blob/master/way-cooler-release-i3-default.sh
   # for version numbers
+  cratesIO = callPackage ./crates-io.nix {};
+
   fakegit = writeShellScriptBin "git" ''
     echo ""
   '';
-  way-cooler = ((callPackage ./way-cooler.nix {}).way_cooler_0_6_2.override {
+  # https://nest.pijul.com/pmeunier/carnix/discussions/22
+  version = "0.8.1";
+  deps = (callPackage ./way-cooler.nix {}).deps;
+  way_cooler_ = f: cratesIO.crates.way_cooler."${version}" deps {
+    features = cratesIO.features_.way_cooler."${version}" deps {
+      "way_cooler"."${version}" = f;
+    };
+  };
+  way-cooler = ((way_cooler_ { builtin-lua = true; }).override {
     crateOverrides = defaultCrateOverrides // {
 
-    way-cooler = attrs: { buildInputs = [ wlc cairo libxkbcommon fakegit ]; };
-    dbus = attrs: { buildInputs = [ pkgconfig dbus_libs ]; };
-    gobject-sys = attrs: { buildInputs = [ dbus_glib ]; };
-    cairo-rs = attrs: { buildInputs = [ cairo ]; };
+    way-cooler = attrs: { buildInputs = [ wlc cairo libxkbcommon fakegit gdk-pixbuf wayland ]; };
   };}).overrideAttrs (oldAttrs: rec {
-    nativeBuildInputs = [ makeWrapper ];
-
     postBuild = ''
       mkdir -p $out/etc
       cp -r config $out/etc/way-cooler
     '';
-    # prior v0.7 https://github.com/way-cooler/way-cooler/issues/395
-    postFixup = ''
-      makeWrapper $out/bin/way_cooler $out/bin/way-cooler \
-        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ wayland ]}"
-    '';
   });
-  wc-bg = ((callPackage ./wc-bg.nix {}).way_cooler_bg_0_2_1.override {
-    crateOverrides = defaultCrateOverrides // {
 
-    dbus = attrs: { buildInputs = [ pkgconfig dbus_libs ]; };
-  };}).overrideAttrs (oldAttrs: rec {
-    postFixup = ''
-      cd $out/bin
-      mv way_cooler_bg way-cooler-bg
-    '';
-  });
-  wc-grab = ((callPackage ./wc-grab.nix {}).wc_grab_0_2_0.override {
-    crateOverrides = defaultCrateOverrides // {
-
-    wc-grab = attrs: {
-      src = fetchFromGitHub {
-        owner = "way-cooler";
-        repo = "way-cooler-grab";
-        rev = "v0.2.0";
-        sha256 = "1pc8rhvzdi6bi8g5w03i0ygbcpks9051c3d3yc290rgmmmmkmnwq";
-      };
-    };
-
-    dbus = attrs: { buildInputs = [ pkgconfig dbus_libs ]; };
-  };}).overrideAttrs (oldAttrs: rec {
-    postFixup = ''
-      cd $out/bin
-      mv wc_grab wc-grab
-    '';
-  });
-  wc-lock = ((callPackage ./wc-lock.nix {}).wc_lock_0_1_0.override {
-    crateOverrides = defaultCrateOverrides // { wc-lock = attrs: {
-
-    buildInputs = [ pam ];
-  };};}).overrideAttrs (oldAttrs: rec {
+  wc-bg = ((callPackage ./wc-bg.nix {}).wc_bg {}).overrideAttrs (oldAttrs: rec {
     nativeBuildInputs = [ makeWrapper ];
 
     postFixup = ''
-      makeWrapper $out/bin/wc_lock $out/bin/wc-lock \
-        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libxkbcommon ]}"
+      makeWrapper $out/bin/wc-bg $out/bin/wc-bg \
+        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ wayland ]}"
     '';
   });
+
+  wc-grab = (callPackage ./wc-grab.nix {}).wc_grab {};
+
+  wc-lock = (((callPackage ./wc-lock.nix {}).wc_lock {}).override {
+    crateOverrides = defaultCrateOverrides // {
+
+    wc-lock = attrs: { buildInputs = [ pam ]; };
+  };}).overrideAttrs (oldAttrs: rec {
+    nativeBuildInputs = [ makeWrapper ];
+
+    postFixup = ''
+      makeWrapper $out/bin/wc-lock $out/bin/wc-lock \
+        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libxkbcommon wayland ]}"
+    '';
+  });
+
   # https://github.com/way-cooler/way-cooler/issues/446
   wc-bar-bare = stdenv.mkDerivation {
     name = "wc-bar-bare-2017-12-05";
@@ -102,7 +88,7 @@ let
     ${wc-bar-bare}/bin/bar.py $SELECTED $BACKGROUND $SELECTED_OTHER_WORKSPACE 2> /tmp/bar_debug.txt | ${lemonbar}/bin/lemonbar -B $BACKGROUND -F "#FFF" -n "lemonbar" -p -d
   '';
 in symlinkJoin rec {
-  version = "0.6.2";
+  inherit version;
   name = "way-cooler-with-extensions-${version}";
   paths = [ way-cooler wc-bg wc-grab wc-lock wc-bar ];
 
@@ -122,5 +108,6 @@ in symlinkJoin rec {
     license = with licenses; [ mit ];
     maintainers = [ maintainers.miltador ];
     platforms = platforms.all;
+    broken = true;
   };
 }

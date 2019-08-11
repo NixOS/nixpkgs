@@ -6,7 +6,7 @@ let
   cfg = config.services.factorio;
   factorio = pkgs.factorio-headless;
   name = "Factorio";
-  stateDir = cfg.stateDir;
+  stateDir = "/var/lib/${cfg.stateDirName}";
   mkSavePath = name: "${stateDir}/saves/${name}.zip";
   configFile = pkgs.writeText "factorio.conf" ''
     use-system-read-write-data-directories=true
@@ -80,11 +80,11 @@ in
           customizations.
         '';
       };
-      stateDir = mkOption {
-        type = types.path;
-        default = "/var/lib/factorio";
+      stateDirName = mkOption {
+        type = types.string;
+        default = "factorio";
         description = ''
-          The server's data directory.
+          Name of the directory under /var/lib holding the server's data.
 
           The configuration and map will be stored here.
         '';
@@ -176,20 +176,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    users = {
-      users.factorio = {
-        uid             = config.ids.uids.factorio;
-        description     = "Factorio server user";
-        group           = "factorio";
-        home            = stateDir;
-        createHome      = true;
-      };
-
-      groups.factorio = {
-        gid = config.ids.gids.factorio;
-      };
-    };
-
     systemd.services.factorio = {
       description   = "Factorio headless server";
       wantedBy      = [ "multi-user.target" ];
@@ -205,12 +191,10 @@ in
       ];
 
       serviceConfig = {
-        User = "factorio";
-        Group = "factorio";
         Restart = "always";
         KillSignal = "SIGINT";
-        WorkingDirectory = stateDir;
-        PrivateTmp = true;
+        DynamicUser = true;
+        StateDirectory = cfg.stateDirName;
         UMask = "0007";
         ExecStart = toString [
           "${factorio}/bin/factorio"
@@ -220,6 +204,20 @@ in
           "--server-settings=${serverSettingsFile}"
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
         ];
+
+        # Sandboxing
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictRealtime = true;
+        RestrictNamespaces = true;
+        MemoryDenyWriteExecute = true;
       };
     };
 

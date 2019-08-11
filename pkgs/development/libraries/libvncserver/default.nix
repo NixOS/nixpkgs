@@ -1,4 +1,4 @@
-{stdenv, fetchurl,
+{stdenv, fetchurl, fetchpatch,
  libtool, libjpeg, openssl, zlib, libgcrypt, autoreconfHook, pkgconfig, libpng,
  systemd
 }:
@@ -18,6 +18,13 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  patches = [
+    # CVE-2018-7225. Remove with the next release
+    (fetchpatch {
+      url = https://salsa.debian.org/debian/libvncserver/raw/master/debian/patches/CVE-2018-7225.patch;
+      sha256 = "1hj1lzxsrdmzzl061vg0ncdpvfmvvkrpk8q12mp70qvszcqa7ja3";
+    })
+  ];
   preConfigure = ''
     sed -e 's@/usr/include/linux@${stdenv.cc.libc}/include/linux@g' -i configure
   '';

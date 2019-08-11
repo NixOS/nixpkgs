@@ -3,9 +3,9 @@
 let
   options = rec {
     x86_64-darwin = rec {
-      version = "1.1.8";
+      version = "1.2.11";
       system = "x86-64-darwin";
-      sha256 = "006pr88053wclvbjfjdypnbiw8wymbzdzi7a6kbkpdfn4zf5943j";
+      sha256 = "0lh4gpvi8hl6g6b9321g5pwh8sk3218i7h4lx7p3vd9z0cf3lz85";
     };
     x86_64-linux = rec {
       version = "1.3.16";
@@ -39,9 +39,9 @@ let
       sha256 = "05c12fmac4ha72k1ckl6i780rckd7jh4g5s5hiic7fjxnf1kx8d0";
     };
   };
-  cfg = options.${stdenv.system};
+  cfg = options.${stdenv.hostPlatform.system};
 in
-assert builtins.hasAttr stdenv.system options;
+assert builtins.hasAttr stdenv.hostPlatform.system options;
 stdenv.mkDerivation rec {
   name    = "sbcl-bootstrap-${version}";
   version = cfg.version;
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       --add-flags "--core $out/share/sbcl/sbcl.core"
   '';
 
-  postFixup = stdenv.lib.optionalString (!stdenv.isArm && stdenv.isLinux) ''
+  postFixup = stdenv.lib.optionalString (!stdenv.isAarch32 && stdenv.isLinux) ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/share/sbcl/sbcl
   '';
 

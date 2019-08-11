@@ -5,13 +5,12 @@
 
 buildPythonPackage rec {
   pname = "zodbpickle";
-  version = "0.7.0";
-  name = "${pname}-${version}";
+  version = "1.0.4";
   disabled = isPyPy; # https://github.com/zopefoundation/zodbpickle/issues/10
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95a247fb17bce980af8d548af70ac5bd1bad22773f242eb8efa24428efa909a8";
+    sha256 = "0n4hng2zil1j8sbz0b83pxx8ndlh34h2mnmli3bqjmnrbry5zlr5";
   };
 
   # fails..

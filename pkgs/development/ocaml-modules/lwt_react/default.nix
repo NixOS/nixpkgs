@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
 	meta = {
 		description = "Helpers for using React with Lwt";
-		inherit (lwt.meta) homepage license maintainers platforms;
+		inherit (lwt.meta) homepage license maintainers;
+    inherit (ocaml.meta) platforms;
 	};
 }

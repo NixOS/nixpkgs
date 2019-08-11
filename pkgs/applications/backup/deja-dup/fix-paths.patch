@@ -1,12 +1,11 @@
-diff --git a/deja-dup/nautilus/meson.build b/deja-dup/nautilus/meson.build
-index 04b136f3..ed8f7cba 100644
---- a/deja-dup/nautilus/meson.build
-+++ b/deja-dup/nautilus/meson.build
-@@ -31,6 +31,6 @@ shared_module('deja-dup', ['NautilusExtension.c'],
-     link_with: [dirhandling],
-     dependencies: [nautilus_dep],
-     install: true,
--    install_dir: nautilus_dep.get_pkgconfig_variable('extensiondir'))
-+    install_dir: join_paths(get_option('libdir'), 'nautilus', 'extensions-3.0'))
+--- a/libdeja/tools/duplicity/DuplicityInstance.vala
++++ b/libdeja/tools/duplicity/DuplicityInstance.vala
+@@ -159,7 +159,7 @@
+     // We already are pretty sure we don't have other duplicities in our
+     // archive directories, because we use our own and we ensure we only have
+     // one deja-dup running at a time via DBus.
+-    Posix.system("/bin/rm -f " + Shell.quote(cache_dir) + "/*/lockfile.lock");
++    Posix.system("@coreutils@/bin/rm -f " + Shell.quote(cache_dir) + "/*/lockfile.lock");
  
- endif
+     Process.spawn_async_with_pipes(null, real_argv, real_envp,
+                         SpawnFlags.SEARCH_PATH |

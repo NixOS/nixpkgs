@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "kea";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${name}.tar.gz";
-    sha256 = "0afiab6c8cw0w3m0l4hrc4g8bs9y3z59fdr16xnba01nn52mkl92";
+    sha256 = "1v5a3prgrplw6dp9124f9gpy0kz0jrjwhnvzrw3zcynad2mlzkpd";
   };
 
   patches = [ ./dont-create-var.patch ];
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--with-dhcp-pgsql=${postgresql}/bin/pg_config"
-    "--with-dhcp-mysql=${mysql.connector-c}/bin/mysql_config"
+    "--with-pgsql=${postgresql}/bin/pg_config"
+    "--with-mysql=${mysql.connector-c}/bin/mysql_config"
   ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

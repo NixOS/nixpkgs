@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "drive-${version}";
@@ -20,6 +20,6 @@ buildGoPackage rec {
     homepage = https://github.com/odeke-em/drive;
     description = "Google Drive client for the commandline";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

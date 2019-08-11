@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libHX-3.21";
+  name = "libHX-3.22";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libhx/libHX/3.21/${name}.tar.xz";
-    sha256 = "0wcr6kbhsw6v4js7q4p7fhli37c39dv1rryjf768rkwshl2z8f6v";
+    url = "mirror://sourceforge/libhx/libHX/3.22/${name}.tar.xz";
+    sha256 = "18w39j528lyg2026dr11f2xxxphy91cg870nx182wbd8cjlqf86c";
   };
 
   patches = [];
@@ -16,14 +16,15 @@ stdenv.mkDerivation rec {
     sh autogen.sh
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://libhx.sourceforge.net/;
     longDescription = ''
       libHX is a C library (with some C++ bindings available) that provides data structures
       and functions commonly needed, such as maps, deques, linked lists, string formatting
       and autoresizing, option and config file parsing, type checking casts and more.
       '';
-    maintainers = [ stdenv.lib.maintainers.tstrobel ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.tstrobel ];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl3 lgpl21Plus wtfpl ];
   };
 }

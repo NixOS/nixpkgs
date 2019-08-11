@@ -1,10 +1,9 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, makeWrapper
 , pkgconfig
 , wrapGAppsHook
-, gsettings_desktop_schemas
+, gsettings-desktop-schemas
 
 , qtbase
 , qttools
@@ -18,23 +17,25 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.6.1";
+  name = "nomacs-${version}";
+  version = "3.12";
+
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "0yli05hhmd57v3mynq78nmr15rbpm0vadv273pavmcnayv86yl44";
+    sha256 = "12582i5v85da7vwjxj8grj99hxg34ij5cn3b1578wspdfw1xfy1i";
   };
 
-  name = "nomacs-${version}";
+  patches = [
+    ./nomacs-iostream.patch
+  ];
 
   enableParallelBuilding = true;
 
   setSourceRoot = ''
     sourceRoot=$(echo */ImageLounge)
   '';
-
-  patches = [./fix-appdata-install.patch];
 
   nativeBuildInputs = [cmake
                        pkgconfig
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
                  libraw
                  libtiff
                  quazip
-                 gsettings_desktop_schemas];
+                 gsettings-desktop-schemas];
 
   cmakeFlags = ["-DENABLE_OPENCV=ON"
                 "-DENABLE_RAW=ON"

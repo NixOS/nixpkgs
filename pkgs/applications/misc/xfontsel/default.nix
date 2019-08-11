@@ -4,11 +4,11 @@
 
 {stdenv, fetchurl, makeWrapper, libX11, pkgconfig, libXaw}:
 stdenv.mkDerivation rec {
-  name = "xfontsel-1.0.5";
+  name = "xfontsel-1.0.6";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/${name}.tar.bz2";
-    sha256 = "1grir464hy52a71r3mpm9mzvkf7nwr3vk0b1vc27pd3gp588a38p";
+    sha256 = "0700lf6hx7dg88wq1yll7zjvf9gbwh06xff20yffkxb289y0pai5";
   };
 
   nativeBuildInputs = [ pkgconfig ];

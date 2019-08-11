@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, makeWrapper, perl, mesa, xorg,
+{ stdenv, fetchurl, makeWrapper, perl, libGLU_combined, xorg,
   version? "2.8", # What version
   samples? false # Should samples be installed
 }:
 
 let
 
-  bits = if stdenv.system == "x86_64-linux" then "64"
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "64"
          else "32";
 
-  arch = if stdenv.system == "x86_64-linux" then "x86_64"
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64"
          else "x86";
 
   src_info = {
@@ -26,7 +26,7 @@ let
     };
 
     "2.8" = {
-      url = "http://developer.amd.com/wordpress/media/2012/11/AMD-APP-SDK-v2.8-lnx${bits}.tgz";
+      url = "https://developer.amd.com/wordpress/media/2012/11/AMD-APP-SDK-v2.8-lnx${bits}.tgz";
       x86 = "99610737f21b2f035e0eac4c9e776446cc4378a614c7667de03a82904ab2d356";
       x86_64 = "d9c120367225bb1cd21abbcf77cb0a69cfb4bb6932d0572990104c566aab9681";
 
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   patches = stdenv.lib.attrByPath [version "patches"] [] src_info;
 
   patchFlags = "-p0";
-  buildInputs = [ makeWrapper perl mesa xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
+  buildInputs = [ makeWrapper perl libGLU_combined xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
   propagatedBuildInputs = [ stdenv.cc ];
   NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";
   doCheck = false;
@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "AMD Accelerated Parallel Processing (APP) SDK, with OpenCL 1.2 support";
-    homepage = http://developer.amd.com/amd-accelerated-parallel-processing-app-sdk/;
+    homepage = https://developer.amd.com/amd-accelerated-parallel-processing-app-sdk/;
     license = licenses.amd;
     maintainers = [ maintainers.offline ];
     platforms = [ "i686-linux" "x86_64-linux" ];

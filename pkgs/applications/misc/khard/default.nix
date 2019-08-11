@@ -1,26 +1,47 @@
-{ stdenv, fetchurl, fetchFromGitHub, glibcLocales, python3Packages }:
+{ stdenv, fetchurl, glibcLocales, python3 }:
 
-python3Packages.buildPythonApplication rec {
-  version = "0.11.4";
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+
+      # https://github.com/pimutils/khal/issues/780
+      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.6.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
+        };
+      });
+
+    };
+  };
+
+in with python.pkgs; buildPythonApplication rec {
+  version = "0.14.0";
   name = "khard-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/scheibler/khard/archive/v${version}.tar.gz";
-    sha256 = "1hngg3z5cdjny7wdf2mf9wv35ffx7ivpq6mx7kgqf40fr5905l0r";
+    sha256 = "0m1pc67jz663yfc0xzfpknymn8jj2bpfxaph3pl0mjd3h1zjfyaq";
   };
 
   # setup.py reads the UTF-8 encoded readme.
   LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     atomicwrites
     configobj
     vobject
-    argparse
-    pyyaml
+    ruamel_yaml
+    ruamel_base
+    unidecode
   ];
+
+  postInstall = ''
+    install -D misc/zsh/_khard $out/share/zsh/site-functions/_khard
+  '';
 
   # Fails; but there are no tests anyway.
   doCheck = false;

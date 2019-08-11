@@ -2,25 +2,32 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
-, pytestrunner
 , pytest
+, pytest-flake8
 , glibcLocales
+, packaging
+, isPy27
+, backports_os
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "path.py";
-  version = "10.5";
-  name = pname + "-" + version;
+  version = "11.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "63a7af08676668fd51750f111affbd38c1a13c61aba15c6665b16681771c79a8";
+    sha256 = "de7cd643affbc23e56533a6e8d551ecdee4983501a08c24e4e71565202d8cdaa";
   };
 
-  checkInputs = [ pytest pytestrunner ];
-  buildInputs = [setuptools_scm glibcLocales ];
+  checkInputs = [ pytest pytest-flake8 glibcLocales packaging ];
+  buildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [
+    importlib-metadata
+  ] ++ lib.optional isPy27 backports_os
+  ;
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = {
     description = "A module wrapper for os.path";
@@ -29,6 +36,7 @@ buildPythonPackage rec {
   };
 
   checkPhase = ''
-    py.test test_path.py
+    # ignore performance test which may fail when the system is under load
+    py.test -v -k 'not TestPerformance'
   '';
 }

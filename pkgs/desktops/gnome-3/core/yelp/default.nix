@@ -1,21 +1,30 @@
-{ stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
-, file, librsvg, gnome3, gdk_pixbuf, sqlite, groff
-, bash, makeWrapper, itstool, libxml2, libxslt, icu, gst_all_1
+{ stdenv, gettext, fetchurl, webkitgtk, pkgconfig, gtk3, glib
+, gnome3, sqlite
+, itstool, libxml2, libxslt, gst_all_1
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "yelp-${version}";
+  version = "3.32.2";
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/yelp/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0yrl96icmmrxvg7sxl519gzg9qb368cmzgrr9ddh181ignkxzx7f";
+  };
 
-  preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
+  nativeBuildInputs = [ pkgconfig gettext itstool wrapGAppsHook ];
+  buildInputs = [
+    gtk3 glib webkitgtk sqlite
+    libxml2 libxslt gnome3.yelp-xsl
+    gnome3.adwaita-icon-theme
+    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib webkitgtk intltool itstool sqlite
-                  libxml2 libxslt icu file makeWrapper gnome3.yelp_xsl
-                  librsvg gdk_pixbuf gnome3.defaultIconTheme groff
-                  gnome3.gsettings_desktop_schemas wrapGAppsHook
-                  gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "yelp";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Yelp;

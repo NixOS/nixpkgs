@@ -1,14 +1,13 @@
 { buildPythonPackage, fetchPypi, lib,
-  coverage, dicttoxml, flake8, pexpect, prettytable, requests_toolbelt
+  dicttoxml, pexpect, prettytable, requests_toolbelt
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "argcomplete";
-  version = "1.9.3";
+  version = "1.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d97b7f3cfaa4e494ad59ed6d04c938fc5ed69b590bd8f53274e258fb1119bd1b";
+    sha256 = "1hdysr9z28sgwv47mivf4iyr1sg19hgfz349dghgdlk3rkl6v0s5";
   };
 
   doCheck = false; # bash-completion test fails with "compgen: command not found".

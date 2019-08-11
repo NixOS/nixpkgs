@@ -1,21 +1,38 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy }:
+{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
 
-if isPyPy then throw "sip not supported for interpreter ${python.executable}" else buildPythonPackage rec {
-  pname = "sip";
-  version = "4.19.6";
-  name = "${pname}-${version}";
+buildPythonPackage rec {
+  pname = sip-module;
+  version = "4.19.18";
   format = "other";
 
+  disabled = isPyPy;
+
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/sip/${name}/${name}.tar.gz";
-    sha256 = "0nlj0zbvmzliyhhspqwf2bjvcnpq4agx4s47php7ishv32p2gnlx";
+    url = "https://www.riverbankcomputing.com/static/Downloads/sip/${version}/sip-${version}.tar.gz";
+    sha256 = "07kyd56xgbb40ljb022rq82shgxprlbl0z27mpf1b6zd00w8dgf0";
   };
 
   configurePhase = ''
     ${python.executable} ./configure.py \
-      -d $out/lib/${python.libPrefix}/site-packages \
+      --sip-module ${sip-module} \
+      -d $out/${python.sitePackages} \
       -b $out/bin -e $out/include
   '';
+
+  enableParallelBuilding = true;
+
+  installCheckPhase = let
+    modules = [
+      sip-module
+      "sipconfig"
+    ];
+    imports = lib.concatMapStrings (module: "import ${module};") modules;
+  in ''
+    echo "Checking whether modules can be imported..."
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH ${python.interpreter} -c "${imports}"
+  '';
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";

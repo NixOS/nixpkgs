@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "deis-${version}";
-  version = "1.13.3";
+  version = "1.13.4";
   rev = "v${version}";
 
   goPackagePath = "github.com/deis/deis";
@@ -18,7 +18,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "deis";
     repo = "deis";
-    sha256 = "15q44jyjms8fdmly0z4sn4ymf1dx6cmdavgixjixdj2wbjw0yi2p";
+    sha256 = "0hndzvlgpfm83c4i1c88byv8j9clagswa79nny8wrw33dx90dym1";
   };
 
   preBuild = ''
@@ -29,9 +29,8 @@ buildGoPackage rec {
     homepage = https://deis.io;
     description = "A command line utility used to interact with the Deis open source PaaS.";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [
-      jgeerds
     ];
   };
 }

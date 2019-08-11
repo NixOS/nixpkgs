@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "bash-supergenpass-unstable-${version}";
-  version = "2012-11-02";
+  version = "2018-04-18";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "lanzz";
     repo = "bash-supergenpass";
-    rev = "c84eaa22fb59ab6c390e7f2de7984513347e3a9a";
-    sha256 = "0d3l55kdrf6arb98vwwz9ww55ing5w323fg7546v56hlq3hs5qc9";
+    rev = "ece772b9ec095946ac4ea985cda5561b211e56f0";
+    sha256 = "1gkbrycyyl7y3klbfx7xjvvfw5df1h4fj6x1f73gglfy6nk8ffnd";
   };
 
   installPhase = ''

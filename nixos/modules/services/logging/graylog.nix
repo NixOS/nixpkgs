@@ -108,7 +108,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         description = "Any other configuration options you might want to add";
       };
@@ -127,12 +127,16 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = mkIf (cfg.user == "graylog") {
+    users.users = mkIf (cfg.user == "graylog") {
       graylog = {
         uid = config.ids.uids.graylog;
         description = "Graylog server daemon user";
       };
     };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.messageJournalDir}' - ${cfg.user} - - -"
+    ];
 
     systemd.services.graylog = with pkgs; {
       description = "Graylog Server";
@@ -141,12 +145,13 @@ in
         JAVA_HOME = jre;
         GRAYLOG_CONF = "${confFile}";
       };
-      path = [ pkgs.openjdk8 pkgs.which pkgs.procps ];
+      path = [ pkgs.jre_headless pkgs.which pkgs.procps ];
       preStart = ''
-        mkdir -p /var/lib/graylog -m 755
-
         rm -rf /var/lib/graylog/plugins || true
         mkdir -p /var/lib/graylog/plugins -m 755
+
+        mkdir -p "$(dirname ${cfg.nodeIdFile})"
+        chown -R ${cfg.user} "$(dirname ${cfg.nodeIdFile})"
 
         for declarativeplugin in `ls ${glPlugins}/bin/`; do
           ln -sf ${glPlugins}/bin/$declarativeplugin /var/lib/graylog/plugins/$declarativeplugin
@@ -154,14 +159,10 @@ in
         for includedplugin in `ls ${cfg.package}/plugin/`; do
           ln -s ${cfg.package}/plugin/$includedplugin /var/lib/graylog/plugins/$includedplugin || true
         done
-        chown -R ${cfg.user} /var/lib/graylog
-
-        mkdir -p ${cfg.messageJournalDir} -m 755
-        chown -R ${cfg.user} ${cfg.messageJournalDir}
       '';
       serviceConfig = {
         User="${cfg.user}";
-        PermissionsStartOnly=true;
+        StateDirectory = "graylog";
         ExecStart = "${cfg.package}/bin/graylogctl run";
       };
     };

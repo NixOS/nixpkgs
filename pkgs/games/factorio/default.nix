@@ -1,9 +1,10 @@
-{ stdenv, callPackage, fetchurl, makeWrapper
-, alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, mesa_noglu
+{ stdenv, fetchurl, makeWrapper
+, alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , factorio-utils
 , releaseType
 , mods ? []
-, username ? "" , password ? ""
+, username ? "", token ? "" # get/reset token at https://factorio.com/profile
+, experimental ? false # true means to always use the latest branch
 }:
 
 assert releaseType == "alpha"
@@ -12,40 +13,103 @@ assert releaseType == "alpha"
 
 let
 
-  # NB If you nix-prefetch-url any of these, be sure to add a --name arg,
-  #    where the ultimate "_" (before the version) is changed to a "-".
+  helpMsg = ''
+
+    ===FETCH FAILED===
+    Please ensure you have set the username and token with config.nix, or
+    /etc/nix/nixpkgs-config.nix if on NixOS.
+
+    Your token can be seen at https://factorio.com/profile (after logging in). It is
+    not as sensitive as your password, but should still be safeguarded. There is a
+    link on that page to revoke/invalidate the token, if you believe it has been
+    leaked or wish to take precautions.
+
+    Example:
+    {
+      packageOverrides = pkgs: {
+        factorio = pkgs.factorio.override {
+          username = "FactorioPlayer1654";
+          token = "d5ad5a8971267c895c0da598688761";
+        };
+      };
+    }
+
+    Alternatively, instead of providing the username+token, you may manually
+    download the release through https://factorio.com/download , then add it to
+    the store using e.g.:
+
+      releaseType=alpha
+      version=0.16.51
+      nix-prefetch-url file://$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
+
+    Note the ultimate "_" is replaced with "-" in the --name arg!
+  '';
+
+  branch = if experimental then "experimental" else "stable";
+
+  # NB `experimental` directs us to take the latest build, regardless of its branch;
+  # hence the (stable, experimental) pairs may sometimes refer to the same distributable.
   binDists = {
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
-      alpha    = bdist { sha256 = "1i25q8x80qdpmf00lvml67gyklrfvmr4gfyakrx954bq8giiy4ll"; fetcher = authenticatedFetch; };
-      headless = bdist { sha256 = "0v5sypz1q6x6hi6k5cyi06f9ld0cky80l0z64psd3v2ax9hyyh8h"; };
-      demo     = bdist { sha256 = "0aca8gks7wl7yi821bcca16c94zcc41agin5j0vfz500i0sngzzw"; version = "0.15.36"; };
-    };
-    i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
-      alpha    = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; nameMut = asGz; };
-      headless = bdist { };
-      demo     = bdist { };
-    };
-  };
-  actual = binDists.${stdenv.system}.${releaseType} or (throw "Factorio: unsupported platform");
-
-  bdistForArch = arch: { sha256 ? null
-                       , version ? "0.15.40"
-                       , fetcher ? fetchurl
-                       , nameMut ? x: x
-                       }:
-    if sha256 == null then
-      throw "Factorio ${releaseType}-${arch.inTar} binaries are not (and were never?) available to download"
-    else {
-      inherit version arch;
-      src = fetcher {
-        inherit sha256;
-        url = "https://www.factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
-        name = nameMut "factorio_${releaseType}_${arch.inTar}-${version}.tar.xz";
+      alpha = {
+        stable        = bdist { sha256 = "0b4hbpdcrh5hgip9q5dkmw22p66lcdhnr0kmb0w5dw6yi7fnxxh0"; version = "0.16.51"; withAuth = true; };
+        experimental  = bdist { sha256 = "1q66chnxsdlaz1bj3al62iikyxvknj1vkwh5bcc46favy4wpqpzz"; version = "0.17.52"; withAuth = true; };
+      };
+      headless = {
+        stable        = bdist { sha256 = "0zrnpg2js0ysvx9y50h3gajldk16mv02dvrwnkazh5kzr1d9zc3c"; version = "0.16.51"; };
+        experimental  = bdist { sha256 = "03nv0qagv5pmqqbisf0hq6cb5rg2ih37lzkvcxihnnw72r78li94"; version = "0.17.52"; };
+      };
+      demo = {
+        stable        = bdist { sha256 = "0zf61z8937yd8pyrjrqdjgd0rjl7snwrm3xw86vv7s7p835san6a"; version = "0.16.51"; };
       };
     };
-  authenticatedFetch = callPackage ./fetch.nix { inherit username password; };
-  asGz = builtins.replaceStrings [".xz"] [".gz"];
+    i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
+      alpha = {
+        stable        = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; withAuth = true; nameMut = asGz; };
+      };
+    };
+  };
 
+  actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio ${releaseType}-${branch} binaries for ${stdenv.hostPlatform.system} are not available for download.");
+
+  bdistForArch = arch: { version
+                       , sha256
+                       , withAuth ? false
+                       , nameMut ? x: x
+                       }:
+    let
+      url = "https://factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
+      name = nameMut "factorio_${releaseType}_${arch.inTar}-${version}.tar.xz";
+    in {
+      inherit version arch;
+      src =
+        if withAuth then
+          (stdenv.lib.overrideDerivation
+            (fetchurl {
+              inherit name url sha256;
+              curlOpts = [
+                "--get"
+                "--data-urlencode" "username@username"
+                "--data-urlencode" "token@token"
+              ];
+            })
+            (_: { # This preHook hides the credentials from /proc
+                  preHook = ''
+                    echo -n "${username}" >username
+                    echo -n "${token}"    >token
+                  '';
+                  failureHook = ''
+                    cat <<EOF
+                    ${helpMsg}
+                    EOF
+                  '';
+            })
+          )
+        else
+          fetchurl { inherit name url sha256; };
+    };
+
+  asGz = builtins.replaceStrings [".xz"] [".gz"];
 
   configBaseCfg = ''
     use-system-read-write-data-directories=false
@@ -120,7 +184,7 @@ let
         libXinerama
         libXrandr
         libXi
-        mesa_noglu
+        libGL
       ];
 
       installPhase = base.installPhase + ''

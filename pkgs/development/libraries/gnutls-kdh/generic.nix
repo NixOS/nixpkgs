@@ -1,6 +1,7 @@
-{ lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, unbound, libiconv
-, tpmSupport ? true, trousers, nettools, bash, gperftools, gperf, gettext, automake
+{ config, lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+, perl, gmp, autogen, libidn, p11-kit, unbound, libiconv
+, guileBindings ? config.gnutls.guile or false, guile
+, tpmSupport ? true, trousers, nettools, gperftools, gperf, gettext, automake
 , yacc, texinfo
 
 # Version dependent args
@@ -47,12 +48,12 @@ stdenv.mkDerivation {
     [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
 
   # Build of the Guile bindings is not parallel-safe.  See
-  # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
+  # <https://github.com/arpa2/gnutls-kdh/commit/330995a920037b6030ec0282b51dde3f8b493cad>
   # for the actual fix.  Also an apparent race in the generation of
   # systemkey-args.h.
   enableParallelBuilding = false;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11-kit zlib gmp
   autogen gperftools gperf gettext automake yacc texinfo ]
     ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
@@ -84,7 +85,7 @@ stdenv.mkDerivation {
        layer. It adds TLS-KDH ciphers: Kerberos + Diffie-Hellman.
     '';
 
-    homepage = http://www.gnu.org/software/gnutls://github.com/arpa2/gnutls-kdh;
+    homepage = https://github.com/arpa2/gnutls-kdh;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;

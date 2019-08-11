@@ -1,18 +1,21 @@
 { stdenv, fetchurl, readline, gettext, ncurses }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "gnu-apl-${version}";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchurl {
     url = "mirror://gnu/apl/apl-${version}.tar.gz";
-    sha256 = "07xq8ddlmz8psvsmwr23gar108ri0lwmw0n6kpxcv8ypas1f5xlg";
+    sha256 = "1jxvv2h3y1am1fw6r5sn3say1n0dj8shmscbybl0qhqdia2lqkql";
   };
 
   buildInputs = [ readline gettext ncurses ];
 
-  patchPhase = optionalString stdenv.isDarwin ''
+  # Needed with GCC 7
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=int-in-bool-context"
+    + stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=null-dereference";
+
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
   '';
 
@@ -21,9 +24,9 @@ stdenv.mkDerivation rec {
     find $out/share/doc/support-files -name 'Makefile*' -delete
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Free interpreter for the APL programming language";
-    homepage    = http://www.gnu.org/software/apl/;
+    homepage    = https://www.gnu.org/software/apl/;
     license     = licenses.gpl3Plus;
     maintainers = [ maintainers.kovirobi ];
     platforms   = with platforms; linux ++ darwin;

@@ -1,19 +1,16 @@
 { mkDerivation
 , lib
 , extra-cmake-modules
+, breeze-icons
+, breeze-qt5
 , kdoctools
-, kactivities
 , kconfig
 , kcrash
 , kguiaddons
 , kiconthemes
 , ki18n
 , kinit
-, kio
-, kio-extras
-, kwindowsystem
 , kdbusaddons
-, plasma-framework
 , knotifications
 , knewstuff
 , karchive
@@ -21,27 +18,30 @@
 , kplotting
 , ktextwidgets
 , mlt
-, shared_mime_info
+, shared-mime-info
 , libv4l
 , kfilemetadata
-, ffmpeg
+, ffmpeg-full
+, frei0r
 , phonon-backend-gstreamer
 , qtdeclarative
 , qtquickcontrols
 , qtscript
 , qtwebkit
+, rttr
+, kpurpose
+, kdeclarative
 }:
 
 mkDerivation {
   name = "kdenlive";
-  patches = [
-    ./kdenlive-cmake-concurrent-module.patch
-  ];
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
   ];
   buildInputs = [
+    breeze-icons
+    breeze-qt5
     kconfig
     kcrash
     kdbusaddons
@@ -62,9 +62,13 @@ mkDerivation {
     qtquickcontrols
     qtscript
     qtwebkit
-    shared_mime_info
+    shared-mime-info
     libv4l
-    ffmpeg
+    ffmpeg-full
+    frei0r
+    rttr
+    kpurpose
+    kdeclarative
   ];
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.

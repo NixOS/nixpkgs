@@ -1,25 +1,46 @@
-{ stdenv, intltool, fetchurl, enchant, isocodes
-, pkgconfig, gtk3, glib
-, bash, wrapGAppsHook, itstool, libsoup, libxml2
-, gnome3, librsvg, gdk_pixbuf, file, gspell }:
+{ stdenv, meson, fetchurl, python3
+, pkgconfig, gtk3, glib, adwaita-icon-theme
+, libpeas, gtksourceview4, gsettings-desktop-schemas
+, wrapGAppsHook, ninja, libsoup, libxml2
+, gnome3, gspell, perl, itstool, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gedit-${version}";
+  version = "3.32.2";
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1q2rk7fym542c7k3bn2wlnzgy384gxacbifsjny0spbg95gfybvl";
+  };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook meson ninja libxml2
+    python3 perl itstool desktop-file-utils
+  ];
 
-  buildInputs = [ gtk3 glib intltool itstool enchant isocodes
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg libsoup
-                  gnome3.libpeas gnome3.gtksourceview libxml2
-                  gnome3.gsettings_desktop_schemas gnome3.dconf file gspell ];
+  buildInputs = [
+    gtk3 glib
+    adwaita-icon-theme libsoup
+    libpeas gtksourceview4
+    gsettings-desktop-schemas gspell
+  ];
 
-  enableParallelBuilding = true;
-
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gnome3.libpeas gnome3.gtksourceview ]}")
+  postPatch = ''
+    chmod +x build-aux/meson/post_install.py
+    chmod +x plugins/externaltools/scripts/gedit-tool-merge.pl
+    patchShebangs build-aux/meson/post_install.py
+    patchShebangs plugins/externaltools/scripts/gedit-tool-merge.pl
   '';
+
+  # Reliably fails to generate gedit-file-browser-enum-types.h in time
+  enableParallelBuilding = false;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gedit";
+      attrPath = "gnome3.gedit";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Gedit;

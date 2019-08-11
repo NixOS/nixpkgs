@@ -1,96 +1,68 @@
-{ stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python
-, expat, libraw1394, libconfig, libavc1394, libiec61883, libxmlxx, glibmm
-
-# Optional dependencies
-, libjack2 ? null, dbus ? null, dbus_cplusplus ? null, alsaLib ? null
-, pyqt4 ? null, dbus-python ? null, xdg_utils ? null
-
-# Other Flags
-, prefix ? ""
+{ stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python3
+, libraw1394, libconfig, libavc1394, libiec61883, libxmlxx3
+, glibmm
+, dbus, dbus_cplusplus
 }:
 
 let
-
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
-
-  libOnly = prefix == "lib";
-
-  optLibjack2 = shouldUsePkg libjack2;
-  optDbus = shouldUsePkg dbus;
-  optDbus_cplusplus = shouldUsePkg dbus_cplusplus;
-  optAlsaLib = shouldUsePkg alsaLib;
-  optPyqt4 = shouldUsePkg pyqt4;
-  optPythonDBus = shouldUsePkg dbus-python;
-  optXdg_utils = shouldUsePkg xdg_utils;
-in
-stdenv.mkDerivation rec {
-  name = "${prefix}ffado-${version}";
-  version = "2.3.0";
+  inherit (python3.pkgs) pyqt5 dbus-python;
+  python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
+in stdenv.mkDerivation rec {
+  pname = "ffado";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    sha256 = "122z8gya60nyg47i738z2yr4qcjyk2xix4kwhf5ybkmp23kcgqqq";
+    sha256 = "0byr3kv58d1ryy60vr69fd868zlfkvl2gq9hl94dqdn485l9pq9y";
   };
 
-  nativeBuildInputs = [ scons pkgconfig which makeWrapper python ];
+  patches = [
+    # fix installing metainfo file
+    ./fix-build.patch
+  ];
+
+  outputs = [ "out" "bin" "dev" ];
+
+  nativeBuildInputs = [ scons pkgconfig which makeWrapper python pyqt5 ];
+
+  prefixKey = "PREFIX=";
+  sconsFlags = [
+    "DEBUG=False"
+    "ENABLE_ALL=True"
+    "BUILD_TESTS=False"
+    "WILL_DEAL_WITH_XDG_MYSELF=True"
+    "BUILD_MIXER=True"
+    "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
+    "PYPKGDIR=${placeholder "out"}/${python3.sitePackages}"
+    "BINDIR=${placeholder "bin"}/bin"
+    "INCLUDEDIR=${placeholder "dev"}/include"
+    "PYTHON_INTERPRETER=${python.interpreter}"
+  ];
 
   buildInputs = [
-    expat libraw1394 libconfig libavc1394 libiec61883
-  ] ++ stdenv.lib.optionals (!libOnly) [
-    optLibjack2 optDbus optDbus_cplusplus optAlsaLib optPyqt4
-    optXdg_utils libxmlxx glibmm
+    libraw1394
+    libconfig
+    libavc1394
+    libiec61883
+    dbus
+    dbus_cplusplus
+    libxmlxx3
+    python
+    glibmm
   ];
 
-  patches = [
-    ./gcc6.patch
-    ./glibc226.patch
-  ];
+  enableParallelBuilding = true;
 
-  postPatch = ''
-    # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch
-    # Let's just skip this and tell it which to build
-    sed '/def is_userspace_32bit(cpuinfo):/a\
-        return ${if stdenv.is64bit then "False" else "True"}' -i SConstruct
-
-    # Lots of code is missing random headers to exist
-    sed -i '1i #include <memory>' \
-      src/ffadodevice.h src/bebob/bebob_dl_mgr.cpp tests/scan-devreg.cpp
-    sed -i -e '1i #include <stdlib.h>' \
-      -e '1i #include "version.h"' \
-      src/libutil/serialize_expat.cpp
-  '';
-
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libxml++-2.6)"
-  '';
-
-  # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR
-  buildPhase = ''
-    export PYDIR=$out/lib/${python.libPrefix}/site-packages
-
-    scons PYPKGDIR=$PYDIR DEBUG=False \
-      ENABLE_ALL=True \
-      SERIALIZE_USE_EXPAT=True \
-  '';
-
-  installPhase = if libOnly then ''
-    scons PREFIX=$TMPDIR UDEVDIR=$TMPDIR \
-      LIBDIR=$out/lib INCLUDEDIR=$out/include install
-  '' else ''
-    scons PREFIX=$out PYPKGDIR=$PYDIR UDEVDIR=$out/lib/udev/rules.d install
-  '' + stdenv.lib.optionalString (optPyqt4 != null && optPythonDBus != null) ''
-    wrapProgram $out/bin/ffado-mixer --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
-
-    wrapProgram $out/bin/ffado-diag --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:$out/share/libffado/python:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
+  postInstall = ''
+    # prevent build tools from leaking into closure
+    echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
   '';
 
   meta = with stdenv.lib; {
     homepage = http://www.ffado.org;
     description = "FireWire audio drivers";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ goibhniu wkennington ];
+    maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;
   };
 }

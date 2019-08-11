@@ -5,10 +5,10 @@
 
 stdenv.mkDerivation rec {
   name = "encfs-${version}";
-  version = "1.9.2";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
-    sha256 = "0isx7n4r8znk02464s0wvlzk6ry5mlnq3kgnd0rapnhjwdvwqr5y";
+    sha256 = "099rjb02knr6yz7przlnyj62ic0ag5ncs7vvcc36ikyqrmpqsdch";
     rev = "v${version}";
     repo = "encfs";
     owner = "vgough";

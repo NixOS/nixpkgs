@@ -1,37 +1,49 @@
-{ fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, clutter, sqlite
-, clutter_gtk, libsoup, gobjectIntrospection /*, libmemphis */ }:
+{ fetchurl, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkgconfig, glib, gtk3, cairo, sqlite, gnome3
+, clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
 
 stdenv.mkDerivation rec {
-  major = "0.12";
-  version = "${major}.16";
-  name = "libchamplain-${version}";
+  pname = "libchamplain";
+  version = "0.12.19";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libchamplain/${major}/${name}.tar.xz";
-    sha256 = "13chvc2n074i0jw5jlb8i7cysda4yqx58ca6y3mrlrl9g37k2zja";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "191aid1qsfkab5whbzj2r3g63dpdgrwp5141mfywvqyvdhr2x11n";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gobjectIntrospection ];
+  outputs = [ "out" "dev" "devdoc" ];
 
-  propagatedBuildInputs = [ glib gtk3 cairo clutter_gtk sqlite libsoup ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+
+  buildInputs = [ sqlite libsoup ];
+
+  propagatedBuildInputs = [ glib gtk3 cairo clutter-gtk ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dvapi=true"
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
-    inherit version;
-    homepage = http://projects.gnome.org/libchamplain/;
+    homepage = https://wiki.gnome.org/Projects/libchamplain;
     license = licenses.lgpl2Plus;
 
     description = "C library providing a ClutterActor to display maps";
 
-    longDescription =
-      '' libchamplain is a C library providing a ClutterActor to display
-         maps.  It also provides a Gtk+ widget to display maps in Gtk+
-         applications.  Python and Perl bindings are also available.  It
-         supports numerous free map sources such as OpenStreetMap,
-         OpenCycleMap, OpenAerialMap, and Maps for free.
-      '';
+    longDescription = ''
+      libchamplain is a C library providing a ClutterActor to display
+       maps.  It also provides a Gtk+ widget to display maps in Gtk+
+       applications.  Python and Perl bindings are also available.  It
+       supports numerous free map sources such as OpenStreetMap,
+       OpenCycleMap, OpenAerialMap, and Maps for free.
+    '';
 
-     maintainers = [ ];
-     platforms = platforms.gnu;  # arbitrary choice
+     maintainers = gnome3.maintainers;
+     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

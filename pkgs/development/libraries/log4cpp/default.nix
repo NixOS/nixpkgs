@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "log4cpp-1.1.1";
+  name = "log4cpp-1.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/log4cpp/${name}.tar.gz";
-    sha256 = "1l5yz5rfzzv6g3ynrj14mxfsk08cp5h1ssr7d74hjs0accrg7arm";
+    sha256 = "07gmr3jyaf2239n9sp6h7hwdz1pv7b7aka8n06gmr2fnlmaymfrc";
   };
 
   enableParallelBuilding = true;

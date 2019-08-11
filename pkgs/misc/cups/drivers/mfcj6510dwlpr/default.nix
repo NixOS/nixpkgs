@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, patchelf, utillinux, xxd
+{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, utillinux, xxd, runtimeShell
 , ghostscript, a2ps }:
 
 # Why:
@@ -24,17 +24,17 @@ stdenv.mkDerivation rec {
   version = "3.0.0-1";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf006614/mfcj6510dwlpr-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf006614/mfcj6510dwlpr-${version}.i386.deb";
     sha256 = "1ccvx393pqavsgzd8igrzlin5jrsf01d3acyvwqd1d0yz5jgqy6d";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups ghostscript dpkg a2ps ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   brprintconf_mfcj6510dw_script = ''
-    #!/bin/sh
+    #!${runtimeShell}
     cd $(mktemp -d)
     ln -s @out@/usr/bin/brprintconf_mfcj6510dw_patched brprintconf_mfcj6510dw_patched
     ln -s @out@/opt/brother/Printers/mfcj6510dw/inf/brmfcj6510dwfunc brmfcj6510dwfunc

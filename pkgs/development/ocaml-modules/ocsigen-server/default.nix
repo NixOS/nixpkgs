@@ -1,27 +1,37 @@
-{ stdenv, fetchurl, ocaml, findlib, which, react, ssl,
-lwt, ocamlnet, ocaml_pcre, cryptokit, tyxml, ipaddr, zlib,
-libev, openssl, ocaml_sqlite3, tree, uutf, makeWrapper, camlp4
-, camlzip, pgocaml
+{ stdenv, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
+, lwt_log, ocamlnet, ocaml_pcre, cryptokit, tyxml, xml-light, ipaddr
+, pgocaml, camlzip, ocaml_sqlite3
+, makeWrapper
 }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "ocsigenserver is not available for OCaml ${ocaml.version}"
+else
+
 let mkpath = p: n:
-  let v = stdenv.lib.getVersion ocaml; in
-  "${p}/lib/ocaml/${v}/site-lib/${n}";
+  "${p}/lib/ocaml/${ocaml.version}/site-lib/${n}";
 in
 
-stdenv.mkDerivation {
-  name = "ocsigenserver-2.8";
+stdenv.mkDerivation rec {
+  version = "2.11.0";
+  name = "ocsigenserver-${version}";
 
-  src = fetchurl {
-    url = https://github.com/ocsigen/ocsigenserver/archive/2.8.tar.gz;
-    sha256 = "1v44qv2ixd7i1qinyhlzzqiffawsdl7xhhh6ysd7lf93kh46d5sy";
+  src = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = "ocsigenserver";
+    rev = version;
+    sha256 = "0y1ngki7w9s10ip7nj9qb7254bd5sp01xxz16sxyj7l7qz603hy2";
   };
 
-  buildInputs = [ocaml which findlib react ssl lwt
-  ocamlnet ocaml_pcre cryptokit tyxml ipaddr zlib libev openssl
-  ocaml_sqlite3 tree uutf makeWrapper camlp4 pgocaml camlzip ];
+  buildInputs = [ which makeWrapper ocaml findlib
+    lwt_react pgocaml camlzip ocaml_sqlite3
+  ];
 
-  configureFlags = "--root $(out) --prefix /";
+  propagatedBuildInputs = [ cryptokit ipaddr lwt_log lwt_ssl ocamlnet
+    ocaml_pcre tyxml xml-light
+  ];
+
+  configureFlags = [ "--root $(out)" "--prefix /" ];
 
   dontAddPrefix = true;
 
@@ -31,7 +41,7 @@ stdenv.mkDerivation {
   ''
   rm -rf $out/var/run
   wrapProgram $out/bin/ocsigenserver \
-    --prefix CAML_LD_LIBRARY_PATH : "${mkpath ssl "ssl"}:${mkpath lwt "lwt"}:${mkpath ocamlnet "netsys"}:${mkpath ocamlnet "netstring"}:${mkpath ocaml_pcre "pcre"}:${mkpath cryptokit "cryptokit"}:${mkpath ocaml_sqlite3 "sqlite3"}"
+    --prefix CAML_LD_LIBRARY_PATH : "${mkpath ssl "ssl"}:${mkpath ocamlnet "netsys"}:${mkpath ocamlnet "netstring"}:${mkpath ocaml_pcre "pcre"}:${mkpath cryptokit "cryptokit"}:${mkpath ocaml_sqlite3 "sqlite3"}"
   '';
 
   dontPatchShebangs = true;

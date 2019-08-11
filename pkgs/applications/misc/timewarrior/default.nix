@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, cmake, libuuid, gnutls }:
+{ stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   name = "timewarrior-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
     url = "https://taskwarrior.org/download/timew-${version}.tar.gz";
-    sha256 = "0jnwj8lflr6nlch2j2hkmgpdqq3zbdd2sfpi5iwiabljk25v9iq9";
+    sha256 = "1jfcfzdwk5qqhxznj1bgy0sx3lnp3z5lqr9kch9a7iazwmi9lz8z";
   };
 
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "A command-line time tracker";
-    homepage = https://tasktools.org/projects/timewarrior.html;
+    homepage = https://taskwarrior.org/docs/timewarrior;
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
 

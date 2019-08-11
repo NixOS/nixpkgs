@@ -49,7 +49,7 @@ let
     postInstall = "$out/bin/twistd --help > /dev/null";
 
     meta = with stdenv.lib; {
-      homepage = http://twistedmatrix.com/;
+      homepage = https://twistedmatrix.com/;
       description = "Twisted, an event-driven networking engine written in Python";
       longDescription = ''
         Twisted is an event-driven networking engine written in Python
@@ -95,5 +95,6 @@ in stdenv.mkDerivation rec {
       license = licenses.bsd3;
       platforms = platforms.linux;
       maintainers = with maintainers; [ tomberek ];
+      broken = true; # 2018-09-12, failed on hydra since 2017-12-11
     };
 }

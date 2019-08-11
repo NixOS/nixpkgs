@@ -1,50 +1,48 @@
-{ pkgs, makeScope, libsForQt5, fetchFromGitHub }:
+{ pkgs, makeScope, libsForQt5 }:
 
 let
   packages = self: with self; {
 
     # For compiling information, see:
-    # - https://github.com/lxde/lxqt/wiki/Building-from-source
+    # - https://github.com/lxqt/lxqt/wiki/Building-from-source
 
     ### BASE
-    libqtxdg = callPackage ./base/libqtxdg { };
-    lxqt-build-tools = callPackage ./base/lxqt-build-tools { };
-    libsysstat = callPackage ./base/libsysstat { };
-    liblxqt = callPackage ./base/liblxqt { };
+    libqtxdg = callPackage ./libqtxdg { };
+    lxqt-build-tools = callPackage ./lxqt-build-tools { };
+    libsysstat = callPackage ./libsysstat { };
+    liblxqt = callPackage ./liblxqt { };
 
     ### CORE 1
-    libfm-qt = callPackage ./core/libfm-qt { };
-    lxqt-about = callPackage ./core/lxqt-about { };
-    lxqt-admin = callPackage ./core/lxqt-admin { };
-    lxqt-config = callPackage ./core/lxqt-config { };
-    lxqt-globalkeys = callPackage ./core/lxqt-globalkeys { };
-    lxqt-l10n = callPackage ./core/lxqt-l10n { };
-    lxqt-notificationd = callPackage ./core/lxqt-notificationd { };
-    lxqt-openssh-askpass = callPackage ./core/lxqt-openssh-askpass { };
-    lxqt-policykit = callPackage ./core/lxqt-policykit { };
-    lxqt-powermanagement = callPackage ./core/lxqt-powermanagement { };
-    lxqt-qtplugin = callPackage ./core/lxqt-qtplugin { };
-    lxqt-session = callPackage ./core/lxqt-session { };
-    lxqt-sudo = callPackage ./core/lxqt-sudo { };
-    lxqt-themes = callPackage ./core/lxqt-themes { };
-    pavucontrol-qt = libsForQt5.callPackage ./core/pavucontrol-qt { };
-    qtermwidget = callPackage ./core/qtermwidget { };
-    # for now keep version 0.7.1 because virt-manager-qt currently does not compile with qtermwidget-0.8.0
-    qtermwidget_0_7_1 = callPackage ./core/qtermwidget/0.7.1.nix { };
+    libfm-qt = callPackage ./libfm-qt { };
+    lxqt-about = callPackage ./lxqt-about { };
+    lxqt-admin = callPackage ./lxqt-admin { };
+    lxqt-config = callPackage ./lxqt-config { };
+    lxqt-globalkeys = callPackage ./lxqt-globalkeys { };
+    lxqt-notificationd = callPackage ./lxqt-notificationd { };
+    lxqt-openssh-askpass = callPackage ./lxqt-openssh-askpass { };
+    lxqt-policykit = callPackage ./lxqt-policykit { };
+    lxqt-powermanagement = callPackage ./lxqt-powermanagement { };
+    lxqt-qtplugin = callPackage ./lxqt-qtplugin { };
+    lxqt-session = callPackage ./lxqt-session { };
+    lxqt-sudo = callPackage ./lxqt-sudo { };
+    lxqt-themes = callPackage ./lxqt-themes { };
+    pavucontrol-qt = libsForQt5.callPackage ./pavucontrol-qt { };
+    qtermwidget = callPackage ./qtermwidget { };
 
     ### CORE 2
-    lxqt-panel = callPackage ./core/lxqt-panel { };
-    lxqt-runner = callPackage ./core/lxqt-runner { };
-    pcmanfm-qt = callPackage ./core/pcmanfm-qt { };
+    lxqt-panel = callPackage ./lxqt-panel { };
+    lxqt-runner = callPackage ./lxqt-runner { };
+    pcmanfm-qt = callPackage ./pcmanfm-qt { };
 
     ### OPTIONAL
-    qterminal = callPackage ./optional/qterminal { };
-    compton-conf = pkgs.qt5.callPackage ./optional/compton-conf { };
-    obconf-qt = callPackage ./optional/obconf-qt { };
-    lximage-qt = callPackage ./optional/lximage-qt { };
-    qps = callPackage ./optional/qps { };
-    screengrab = callPackage ./optional/screengrab { };
-    qlipper = callPackage ./optional/qlipper { };
+    qterminal = callPackage ./qterminal { };
+    compton-conf = pkgs.qt5.callPackage ./compton-conf { };
+    obconf-qt = callPackage ./obconf-qt { };
+    lximage-qt = callPackage ./lximage-qt { };
+    qps = callPackage ./qps { };
+    screengrab = callPackage ./screengrab { };
+    qlipper = callPackage ./qlipper { };
+    lxqt-archiver = callPackage ./lxqt-archiver { };
 
     preRequisitePackages = [
       pkgs.gvfs # virtual file systems support for PCManFM-QT
@@ -70,7 +68,6 @@ let
       lxqt-admin
       lxqt-config
       lxqt-globalkeys
-      lxqt-l10n
       lxqt-notificationd
       lxqt-openssh-askpass
       lxqt-policykit
@@ -93,6 +90,7 @@ let
       compton-conf
       obconf-qt
       lximage-qt
+      lxqt-archiver
 
       ### QtDesktop project
       qps

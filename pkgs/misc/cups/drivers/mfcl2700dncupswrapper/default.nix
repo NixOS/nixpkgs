@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "mfcl2700dncupswrapper-${meta.version}";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf102086/${name}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf102086/${name}.i386.deb";
     sha256 = "07w48mah0xbv4h8vsh1qd5cd4b463bx8y6gc5x9pfgsxsy6h6da1";
   };
 

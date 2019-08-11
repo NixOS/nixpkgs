@@ -1,9 +1,16 @@
-{ system, minimal ? false, config ? {} }:
-
-let pkgs = import ../.. { inherit system config; }; in
+{ system
+, # Use a minimal kernel?
+  minimal ? false
+, # Ignored
+  config ? null
+  # Nixpkgs, for qemu, lib and more
+, pkgs
+, # NixOS configuration to add to the VMs
+  extraConfigurations ? []
+}:
 
 with pkgs.lib;
-with import ../lib/qemu-flags.nix;
+with import ../lib/qemu-flags.nix { inherit pkgs; };
 
 rec {
 
@@ -25,13 +32,14 @@ rec {
 
     import ./eval-config.nix {
       inherit system;
-      modules = configurations ++
+      modules = configurations ++ extraConfigurations;
+      baseModules =  (import ../modules/module-list.nix) ++
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
-          { key = "no-manual"; services.nixosManual.enable = false; }
+          { key = "no-manual"; documentation.nixos.enable = false; }
           { key = "qemu"; system.build.qemu = qemu; }
+          { key = "nodes"; _module.args.nodes = nodes; }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
-      extraArgs = { inherit nodes; };
     };
 
 
@@ -47,11 +55,11 @@ rec {
       machinesNumbered = zipLists machines (range 1 254);
 
       nodes_ = flip map machinesNumbered (m: nameValuePair m.fst
-        [ ( { config, pkgs, nodes, ... }:
+        [ ( { config, nodes, ... }:
             let
               interfacesNumbered = zipLists config.virtualisation.vlans (range 1 255);
               interfaces = flip map interfacesNumbered ({ fst, snd }:
-                nameValuePair "eth${toString snd}" { ip4 =
+                nameValuePair "eth${toString snd}" { ipv4.addresses =
                   [ { address = "192.168.${toString fst}.${toString m.snd}";
                       prefixLength = 24;
                   } ];
@@ -59,12 +67,12 @@ rec {
             in
             { key = "ip-address";
               config =
-                { networking.hostName = m.fst;
+                { networking.hostName = mkDefault m.fst;
 
                   networking.interfaces = listToAttrs interfaces;
 
                   networking.primaryIPAddress =
-                    optionalString (interfaces != []) (head (head interfaces).value.ip4).address;
+                    optionalString (interfaces != []) (head (head interfaces).value.ipv4.addresses).address;
 
                   # Put the IP addresses of all VMs in this machine's
                   # /etc/hosts file.  If a machine has multiple
@@ -75,6 +83,8 @@ rec {
                     (m': let config = (getAttr m' nodes).config; in
                       optionalString (config.networking.primaryIPAddress != "")
                         ("${config.networking.primaryIPAddress} " +
+                         optionalString (config.networking.domain != null)
+                           "${config.networking.hostName}.${config.networking.domain} " +
                          "${config.networking.hostName}\n"));
 
                   virtualisation.qemu.options =

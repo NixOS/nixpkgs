@@ -10,9 +10,6 @@ let
     inherit (cfg) openclSupport cudaSupport;
   };
 
-  xmrConfArg = optionalString (cfg.configText != "") ("-c " +
-    pkgs.writeText "xmr-stak-config.txt" cfg.configText);
-
 in
 
 {
@@ -29,22 +26,34 @@ in
         description = "List of parameters to pass to xmr-stak.";
       };
 
-      configText = mkOption {
-        type = types.lines;
-        default = "";
-        example = ''
-          "currency" : "monero",
-          "pool_list" :
-            [ { "pool_address" : "pool.supportxmr.com:5555",
-                "wallet_address" : "<long-hash>",
-                "pool_password" : "minername",
-                "pool_weight" : 1,
-              },
-            ],
+      configFiles = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        example = literalExample ''
+          {
+            "config.txt" = '''
+              "verbose_level" : 4,
+              "h_print_time" : 60,
+              "tls_secure_algo" : true,
+            ''';
+            "pools.txt" = '''
+              "currency" : "monero7",
+              "pool_list" :
+              [ { "pool_address" : "pool.supportxmr.com:443",
+                  "wallet_address" : "my-wallet-address",
+                  "rig_id" : "",
+                  "pool_password" : "nixos",
+                  "use_nicehash" : false,
+                  "use_tls" : true,
+                  "tls_fingerprint" : "",
+                  "pool_weight" : 23
+                },
+              ],
+            ''';
+          }
         '';
         description = ''
-          Verbatim xmr-stak config.txt. If empty, the <literal>-c</literal>
-          parameter will not be added to the xmr-stak command.
+          Content of config files like config.txt, pools.txt or cpu.txt.
         '';
       };
     };
@@ -58,10 +67,13 @@ in
       environment = mkIf cfg.cudaSupport {
         LD_LIBRARY_PATH = "${pkgs.linuxPackages_latest.nvidia_x11}/lib";
       };
-      script = ''
-        exec ${pkg}/bin/xmr-stak ${xmrConfArg} ${concatStringsSep " " cfg.extraArgs}
-      '';
+
+      preStart = concatStrings (flip mapAttrsToList cfg.configFiles (fn: content: ''
+        ln -sf '${pkgs.writeText "xmr-stak-${fn}" content}' '${fn}'
+      ''));
+
       serviceConfig = let rootRequired = cfg.openclSupport || cfg.cudaSupport; in {
+        ExecStart = "${pkg}/bin/xmr-stak ${concatStringsSep " " cfg.extraArgs}";
         # xmr-stak generates cpu and/or gpu configuration files
         WorkingDirectory = "/tmp";
         PrivateTmp = true;
@@ -70,4 +82,12 @@ in
       };
     };
   };
+
+  imports = [
+    (mkRemovedOptionModule ["services" "xmr-stak" "configText"] ''
+      This option was removed in favour of `services.xmr-stak.configFiles`
+      because the new config file `pools.txt` was introduced. You are
+      now able to define all other config files like cpu.txt or amd.txt.
+    '')
+  ];
 }

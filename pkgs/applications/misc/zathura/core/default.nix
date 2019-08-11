@@ -1,56 +1,53 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig
-, gtk, girara, ncurses, gettext, docutils
-, file, sqlite, glib, texlive
-, synctexSupport ? true
+{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig
+, appstream-glib, desktop-file-utils, python3
+, gtk, girara, gettext, libxml2, check
+, sqlite, glib, texlive, libintl, libseccomp
+, file, librsvg
+, gtk-mac-integration
 }:
-
-assert synctexSupport -> texlive != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name    = "zathura-core-${version}";
-  version = "0.3.8";
+  name = "zathura-core-${version}";
+  version = "0.4.3";
 
   src = fetchurl {
-    url    = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha256 = "0dz5pky3vmf3s2cp2rv1c099gb1s49p9xlgm3ghyy4pzyxc8bgs6";
+    url = "https://pwmt.org/projects/zathura/download/zathura-${version}.tar.xz";
+    sha256 = "0hgx5x09i6d0z45llzdmh4l348fxh1y102sb1w76f2fp4r21j4ky";
   };
 
-  icon = ./icon.xpm;
+  outputs = [ "bin" "man" "dev" "out" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    file gtk girara
-    gettext makeWrapper sqlite glib
-  ] ++ optional synctexSupport texlive.bin.core;
-
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
-  makeFlags = [
-    "PREFIX=$(out)"
-    "RSTTOMAN=${docutils}/bin/rst2man.py"
-    "VERBOSE=1"
-    "TPUT=${ncurses.out}/bin/tput"
-    (optionalString synctexSupport "WITH_SYNCTEX=1")
+  # Flag list:
+  # https://github.com/pwmt/zathura/blob/master/meson_options.txt
+  mesonFlags = [
+    "-Dsqlite=enabled"
+    "-Dmagic=enabled"
+    # "-Dseccomp=enabled"
+    "-Dmanpages=enabled"
+    "-Dconvert-icon=enabled"
+    "-Dsynctex=enabled"
   ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/zathura" \
-      --prefix PATH ":" "${makeBinPath [ file ]}" \
-      --prefix XDG_CONFIG_DIRS ":" "$out/etc"
+  nativeBuildInputs = [
+    meson ninja pkgconfig desktop-file-utils python3.pkgs.sphinx
+    gettext wrapGAppsHook libxml2 check
+  ] ++ optional stdenv.isLinux appstream-glib;
 
-    install -Dm644 $icon $out/share/pixmaps/pwmt.xpm
-    mkdir -pv $out/etc
-    echo "set window-icon $out/share/pixmaps/pwmt.xpm" > $out/etc/zathurarc
-    echo "Icon=pwmt" >> $out/share/applications/zathura.desktop
-  '';
+  buildInputs = [
+    gtk girara libintl sqlite glib file librsvg
+    texlive.bin.core
+  ] ++ optional stdenv.isLinux libseccomp
+    ++ optional stdenv.isDarwin gtk-mac-integration;
+
+  doCheck = true;
 
   meta = {
-    homepage    = http://pwmt.org/projects/zathura/;
+    homepage = https://pwmt.org/projects/zathura/;
     description = "A core component for zathura PDF viewer";
-    license     = licenses.zlib;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ garbas ];
+    license = licenses.zlib;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }

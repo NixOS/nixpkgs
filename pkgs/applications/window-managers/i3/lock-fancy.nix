@@ -3,37 +3,38 @@
 }:
 
 stdenv.mkDerivation rec {
-  rev = "546ce2e71bd2339f2134904c7d22062e86105b46";
-  name = "i3lock-fancy-unstable-2016-10-13_rev${builtins.substring 0 7 rev}";
+  rev = "7accfb2aa2f918d1a3ab975b860df1693d20a81a";
+  name = "i3lock-fancy-unstable-2018-11-25_rev${builtins.substring 0 7 rev}";
   src = fetchFromGitHub {
     owner = "meskarune";
     repo = "i3lock-fancy";
     inherit rev;
-    sha256 = "1pbxydwdfd7jlw3b8cnlwlrkqlyh5jyanfhjybndqmacd3y8vplb";
+    sha256 = "00lqsvz1knb8iqy8lnkn3sf4c2c4nzb0smky63qf48m8za5aw9b1";
   };
   patchPhase = ''
-    sed -i -e "s|(mktemp)|(${coreutils}/bin/mktemp)|" lock
-    sed -i -e "s|'rm -f |'${coreutils}/bin/rm -f |" lock
-    sed -i -e "s|scrot -z |${scrot}/bin/scrot -z |" lock
-    sed -i -e "s|convert |${imagemagick.out}/bin/convert |" lock
-    sed -i -e "s|awk -F|${gawk}/bin/awk -F|" lock
-    sed -i -e "s| awk | ${gawk}/bin/awk |" lock
-    sed -i -e "s|i3lock -n |${i3lock-color}/bin/i3lock-color -n |" lock
-    sed -i -e 's|ICON="$SCRIPTPATH/icons/lockdark.png"|ICON="'$out'/share/i3lock-fancy/icons/lockdark.png"|' lock
-    sed -i -e 's|ICON="$SCRIPTPATH/icons/lock.png"|ICON="'$out'/share/i3lock-fancy/icons/lock.png"|' lock
-    sed -i -e "s|getopt |${getopt}/bin/getopt |" lock
-    sed -i -e "s|fc-match |${fontconfig.bin}/bin/fc-match |" lock
-    sed -i -e "s|SHOT=(import -window root)|SHOT=(${scrot}/bin/scrot -z)|" lock
+    sed -i -e "s|(mktemp)|(${coreutils}/bin/mktemp)|" i3lock-fancy
+    sed -i -e "s|'rm -f |'${coreutils}/bin/rm -f |" i3lock-fancy
+    sed -i -e "s|scrot -z |${scrot}/bin/scrot -z |" i3lock-fancy
+    sed -i -e "s|convert |${imagemagick.out}/bin/convert |" i3lock-fancy
+    sed -i -e "s|awk -F|${gawk}/bin/awk -F|" i3lock-fancy
+    sed -i -e "s| awk | ${gawk}/bin/awk |" i3lock-fancy
+    sed -i -e "s|i3lock -i |${i3lock-color}/bin/i3lock-color -i |" i3lock-fancy
+    sed -i -e 's|icon="/usr/share/i3lock-fancy/icons/lockdark.png"|icon="'$out'/share/i3lock-fancy/icons/lockdark.png"|' i3lock-fancy
+    sed -i -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|' i3lock-fancy
+    sed -i -e "s|getopt |${getopt}/bin/getopt |" i3lock-fancy
+    sed -i -e "s|fc-match |${fontconfig.bin}/bin/fc-match |" i3lock-fancy
+    sed -i -e "s|shot=(import -window root)|shot=(${scrot}/bin/scrot -z)|" i3lock-fancy
+    rm Makefile
   '';
   installPhase = ''
     mkdir -p $out/bin $out/share/i3lock-fancy/icons
-    cp lock $out/bin/i3lock-fancy
+    cp i3lock-fancy $out/bin/i3lock-fancy
     cp icons/lock*.png $out/share/i3lock-fancy/icons
   '';
   meta = with stdenv.lib; {
     description = "i3lock is a bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text.";
     homepage = https://github.com/meskarune/i3lock-fancy;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

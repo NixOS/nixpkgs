@@ -6,7 +6,7 @@
 , cdrtools, dvdauthor, dvdplusrwtools
 , dvdisasterSupport ? true, dvdisaster ? null
 , thumbnailSupport ? true, libgnomeui ? null
-, udevSupport ? true, libudev ? null
+, udevSupport ? true, udev ? null
 , dbusSupport ? true, dbus ? null
 , makeWrapper }:
 
@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
 
   name = "dvdstyler-${version}";
   srcName = "DVDStyler-${version}";
-  version = "3.0.3";
+  version = "3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/dvdstyler/dvdstyler/${version}/${srcName}.tar.bz2";
-    sha256 = "1j432kszmwmsd3nz398h5514dbm5vsrn4rr3iil72ckjj1h3i00q";
+    sha256 = "1rz69vrfqz9sma9cm1mnvkd11zq3is53lc3m3hcphr02vs69s53m";
   };
 
-  nativeBuildInputs = 
+  nativeBuildInputs =
   [ pkgconfig ];
 
   packagesToBinPath =
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     docbook5 zip makeWrapper ]
   ++ packagesToBinPath
   ++ optionals dvdisasterSupport [ dvdisaster ]
-  ++ optionals udevSupport [ libudev ]
+  ++ optionals udevSupport [ udev ]
   ++ optionals dbusSupport [ dbus ]
   ++ optionals thumbnailSupport [ libgnomeui ];
 

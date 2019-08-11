@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
+{ mkDerivation, lib, fetchurl, qtbase, qttools, qmake }:
 
-let inherit (stdenv.lib) getDev; in
+let inherit (lib) getDev; in
 
-stdenv.mkDerivation rec {
-  name = "qt5ct-${version}";
-  version = "0.34";
+mkDerivation rec {
+  pname = "qt5ct";
+  version = "0.39";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qt5ct/${name}.tar.bz2";
-    sha256 = "0aqbilz7acx077zg5rwf2909xabw16047yjdn9nx2gmhp31y00pl";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "069y6c17gfics8rz3rdsn2x2hb39m4qka08ygwpxa8gqppffqs9p";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt5 Configuration Tool";
     homepage = https://www.opendesktop.org/content/show.php?content=168066;
     platforms = platforms.linux;

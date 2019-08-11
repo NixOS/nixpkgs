@@ -1,21 +1,40 @@
- { stdenv, pythonPackages, glibcLocales, nginx }:
+ { stdenv, python3Packages, nginx }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "devpi-server";
-  version = "4.3.1";
+  version = "4.9.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0x6ks2sbpknznxaqlh0gf5hcvhkmgixixq2zs91wgfqxk4vi4s6n";
+    sha256 = "0cx0nv1qqv8lg6p1v8dv5val0dxnc3229c15imibl9wrhrffjbg9";
   };
 
-  propagatedBuildInputs = with pythonPackages;
-    [ devpi-common execnet itsdangerous pluggy waitress pyramid passlib ];
-  checkInputs = with pythonPackages; [ nginx webtest pytest beautifulsoup4 pytest-timeout pytest-catchlog mock pyyaml ];
+  propagatedBuildInputs = with python3Packages; [
+    appdirs
+    devpi-common
+    execnet
+    itsdangerous
+    passlib
+    pluggy
+    pyramid
+    strictyaml
+    waitress
+  ];
+
+  checkInputs = with python3Packages; [
+    beautifulsoup4
+    mock
+    nginx
+    pytest
+    pytest-flakes
+    pytestpep8
+    webtest
+  ];
+
+  # test_genconfig.py needs devpi-server on PATH
   checkPhase = ''
-    cd test_devpi_server/
-    PATH=$PATH:$out/bin pytest --slow -rfsxX
+    PATH=$PATH:$out/bin pytest ./test_devpi_server --slow -rfsxX
   '';
 
   meta = with stdenv.lib;{

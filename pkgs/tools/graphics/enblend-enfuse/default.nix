@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, boost, freeglut, glew, gsl, lcms2, libpng, libtiff, mesa, vigra
+, boost, freeglut, glew, gsl, lcms2, libpng, libtiff, libGLU_combined, vigra
 , help2man, pkgconfig, perl, texlive }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0j5x011ilalb47ssah50ag0a4phgh1b0wdgxdbbp1gcyjcjf60w7";
   };
 
-  buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff mesa vigra ];
+  buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libGLU_combined vigra ];
 
   nativeBuildInputs = [ help2man perl pkgconfig texlive.combined.scheme-small ];
 

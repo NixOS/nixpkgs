@@ -35,10 +35,9 @@ in {
   config = mkIf cfg.enable {
     boot.kernelModules = [ "dummy" ];
 
-    networking.interfaces.dummy0 = {
-      ipAddress = "169.254.169.254";
-      prefixLength = 32;
-    };
+    networking.interfaces.dummy0.ipv4.addresses = [
+      { address = "169.254.169.254"; prefixLength = 32; }
+    ];
 
     systemd.services.hologram-agent = {
       description = "Provide EC2 instance credentials to machines outside of EC2";
@@ -46,7 +45,7 @@ in {
       wantedBy    = [ "multi-user.target" ];
       requires    = [ "network-link-dummy0.service" "network-addresses-dummy0.service" ]; 
       preStart = ''
-        /run/current-system/sw/bin/rm -fv /var/run/hologram.sock
+        /run/current-system/sw/bin/rm -fv /run/hologram.sock
       '';
       serviceConfig = {
         ExecStart = "${pkgs.hologram.bin}/bin/hologram-agent -debug -conf ${cfgFile} -port ${cfg.httpPort}";

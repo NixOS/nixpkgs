@@ -19,7 +19,7 @@ let
     "/var/lib/ipfs/.ipfs";
 
   # Wrapping the ipfs binary with the environment variable IPFS_PATH set to dataDir because we can't set it in the user environment
-  wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; } ''
+  wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; preferLocalBuild = true; } ''
     mkdir -p "$out/bin"
     makeWrapper "${ipfs}/bin/ipfs" "$out/bin/ipfs" \
       --set IPFS_PATH ${cfg.dataDir} \
@@ -74,7 +74,7 @@ in {
 
     services.ipfs = {
 
-      enable = mkEnableOption "Interplanetary File System";
+      enable = mkEnableOption "Interplanetary File System (WARNING: may cause severe network degredation)";
 
       user = mkOption {
         type = types.str;
@@ -186,6 +186,14 @@ in {
         default = [];
       };
 
+      localDiscovery = mkOption {
+        type = types.bool;
+        description = ''Whether to enable local discovery for the ipfs daemon.
+          This will allow ipfs to scan ports on your local network. Some hosting services will ban you if you do this.
+        '';
+        default = true;
+      };
+
       serviceFdlimit = mkOption {
         type = types.nullOr types.int;
         default = null;
@@ -204,7 +212,7 @@ in {
       user_allow_other
     ''; };
 
-    users.extraUsers = mkIf (cfg.user == "ipfs") {
+    users.users = mkIf (cfg.user == "ipfs") {
       ipfs = {
         group = cfg.group;
         home = cfg.dataDir;
@@ -214,9 +222,16 @@ in {
       };
     };
 
-    users.extraGroups = mkIf (cfg.group == "ipfs") {
+    users.groups = mkIf (cfg.group == "ipfs") {
       ipfs.gid = config.ids.gids.ipfs;
     };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+    ] ++ optionals cfg.autoMount [
+      "d '${cfg.ipfsMountDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.ipnsMountDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.ipfs-init = recursiveUpdate commonEnv {
       description = "IPFS Initializer";
@@ -224,22 +239,21 @@ in {
       after = [ "local-fs.target" ];
       before = [ "ipfs.service" "ipfs-offline.service" "ipfs-norouting.service" ];
 
-      preStart = ''
-        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
-      '' + optionalString cfg.autoMount ''
-        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipfsMountDir}
-        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipnsMountDir}
-      '';
       script = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
-          ipfs init ${optionalString cfg.emptyRepo "-e"}
+          ipfs init ${optionalString cfg.emptyRepo "-e"} \
+            ${optionalString (! cfg.localDiscovery) "--profile=server"}
+        else
+          ${if cfg.localDiscovery
+            then "ipfs config profile apply local-discovery"
+            else "ipfs config profile apply server"
+          }
         fi
       '';
 
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        PermissionsStartOnly = true;
       };
     };
 

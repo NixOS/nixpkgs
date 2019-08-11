@@ -1,20 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, six
 , zope_testing
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "plone.testing";
-  version = "5.1.1";
+  version = "7.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2ca558a910b93355b760535b233518be3a06c58e46160487bf802b6f7cb1e511";
+    sha256 = "98a6e9ce8df1fdd33876e2d8c3ca3d8291612c20bd7e0811dac83b6ce10e984b";
   };
 
-  propagatedBuildInputs = [ setuptools zope_testing ];
+  propagatedBuildInputs = [ six setuptools zope_testing ];
 
   # Huge amount of testing dependencies (including Zope2)
   doCheck = false;

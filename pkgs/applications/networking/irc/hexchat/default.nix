@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, gtk2, lua, perl, python2
-, libtool, pciutils, dbus_glib, libcanberra_gtk2, libproxy
-, libsexy, enchant, libnotify, openssl, intltool
-, desktop_file_utils, hicolor_icon_theme
+, libtool, pciutils, dbus-glib, libcanberra-gtk2, libproxy
+, libsexy, enchant1, libnotify, openssl, intltool
+, desktop-file-utils, hicolor-icon-theme
 , autoconf, automake, autoconf-archive
 }:
 
@@ -22,15 +22,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk2 lua perl python2 pciutils dbus_glib libcanberra_gtk2 libproxy
-    libsexy libnotify openssl desktop_file_utils hicolor_icon_theme
+    gtk2 lua perl python2 pciutils dbus-glib libcanberra-gtk2 libproxy
+    libsexy libnotify openssl desktop-file-utils hicolor-icon-theme
   ];
 
   enableParallelBuilding = true;
 
   #hexchat and heachat-text loads enchant spell checking library at run time and so it needs to have route to the path
   patchPhase = ''
-    sed -i "s,libenchant.so.1,${enchant}/lib/libenchant.so.1,g" src/fe-gtk/sexy-spell-entry.c
+    sed -i "s,libenchant.so.1,${enchant1}/lib/libenchant.so.1,g" src/fe-gtk/sexy-spell-entry.c
   '';
 
   preConfigure = ''
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = https://hexchat.github.io/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo jgeerds ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

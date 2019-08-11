@@ -1,33 +1,56 @@
-{ stdenv, intltool, fetchurl, exempi, libxml2
+{ stdenv, gettext, fetchurl, libxml2, libgdata
 , pkgconfig, gtk3, glib, tracker, tracker-miners
-, makeWrapper, itstool, gegl, babl, lcms2
-, desktop_file_utils, gmp, libmediaart, wrapGAppsHook
-, gnome3, librsvg, gdk_pixbuf, libexif, gexiv2, geocode_glib
-, dleyna-renderer }:
+, itstool, gegl, babl, libdazzle, gfbgraph, grilo-plugins
+, grilo, gnome-online-accounts
+, desktop-file-utils, wrapGAppsHook
+, gnome3, gdk-pixbuf, gexiv2, geocode-glib
+, dleyna-renderer, dbus, meson, ninja, python3, gsettings-desktop-schemas }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "gnome-photos";
+  version = "3.32.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "160vqmcqvyzby27wd2lzwzgbfl6jxxk7phhnqh9498r3clr73haj";
+  };
 
   # doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  nativeBuildInputs = [
+    pkgconfig gettext itstool meson ninja libxml2
+    desktop-file-utils wrapGAppsHook python3
+  ];
+  buildInputs = [
+    gtk3 glib gegl babl libgdata libdazzle
+    gsettings-desktop-schemas
+    gdk-pixbuf gnome3.adwaita-icon-theme
+    gfbgraph grilo-plugins grilo
+    gnome-online-accounts tracker
+    gexiv2 geocode-glib dleyna-renderer
+    tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
+    dbus
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib intltool itstool gegl babl gnome3.libgdata
-                  gnome3.gsettings_desktop_schemas makeWrapper gmp libmediaart
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg exempi
-                  gnome3.gfbgraph gnome3.grilo-plugins gnome3.grilo
-                  gnome3.gnome_online_accounts gnome3.gnome_desktop
-                  lcms2 libexif tracker tracker-miners libxml2 desktop_file_utils
-                  wrapGAppsHook gexiv2 geocode_glib dleyna-renderer ];
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
-  enableParallelBuilding = true;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Photos;
-    description = "Photos is an application to access, organize and share your photos with GNOME 3";
+    description = "Access, organize and share your photos";
     maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

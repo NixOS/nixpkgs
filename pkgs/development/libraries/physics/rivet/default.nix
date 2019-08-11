@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fastjet, ghostscript, gsl, hepmc, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
+{ stdenv, fetchurl, fastjet, ghostscript, gsl, hepmc2, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "rivet-${version}";
-  version = "2.6.0";
+  version = "2.7.2";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "1mvsa3v8d1pl2fj1dcdf8sikzm1yb2jcl0q34fyfsjw2cisxpv5f";
+    url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
+    sha256 = "1bxcb99a3l5d2gl93zgfzgw6v95kx1ss5045mkz3ciyw8w5nmb9l";
   };
 
   patches = [
@@ -17,19 +17,25 @@ stdenv.mkDerivation rec {
     scheme-basic
     collection-pstricks
     collection-fontsrecommended
+    l3kernel
+    l3packages
     mathastext
     pgf
     relsize
     sfmath
+    siunitx
     xcolor
     xkeyval
+    xstring
     ;};
-  buildInputs = [ hepmc imagemagick python2 latex makeWrapper ];
+  buildInputs = [ hepmc2 imagemagick python2 latex makeWrapper ];
   propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
 
   preConfigure = ''
+    substituteInPlace analyses/Makefile.in \
+      --replace "!(tmp)" ""
     substituteInPlace bin/rivet-buildplugin.in \
-      --replace '"which"' '"${which}/bin/which"' \
+      --replace 'which' '"${which}/bin/which"' \
       --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
       --replace 'mycxxflags="' "mycxxflags=\"-std=c++11 $NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
   '';
@@ -52,7 +58,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-fastjet=${fastjet}"
-    "--with-hepmc=${hepmc}"
+    "--with-hepmc=${hepmc2}"
     "--with-yoda=${yoda}"
   ];
 

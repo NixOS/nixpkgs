@@ -13,7 +13,7 @@ let
   
   nodePackages = import ./nodepkgs.nix {
     inherit pkgs;
-    inherit (stdenv) system;
+    inherit (stdenv.hostPlatform) system;
   };
 
 in stdenv.mkDerivation rec {

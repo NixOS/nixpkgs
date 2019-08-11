@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, xorg, pixman, pkgconfig, AppKit, Xplugin }:
+{ stdenv, fetchurl, xorg, pixman, pkgconfig, AppKit, Foundation, Xplugin }:
 
 let version = "1.3.1";
 in stdenv.mkDerivation {
@@ -14,18 +14,16 @@ in stdenv.mkDerivation {
   buildInputs = [
     xorg.libXinerama
     xorg.libAppleWM
-    xorg.applewmproto
+    xorg.xorgproto
     xorg.libXrandr
     xorg.libXext
     pixman
     pkgconfig
-    AppKit Xplugin
+    AppKit Xplugin Foundation
   ];
-  NIX_CFLAGS_COMPILE = "-F/System/Library/Frameworks -I/usr/include";
-  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
-    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
-  meta = with lib; {
+  meta = with stdenv.lib; {
     license = licenses.apsl20;
     platforms = platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

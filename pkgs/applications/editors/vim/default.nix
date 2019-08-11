@@ -7,7 +7,6 @@
   }
 # apple frameworks
 , Carbon, Cocoa
-, buildPlatform, hostPlatform
 }:
 
 let
@@ -20,15 +19,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext pkgconfig ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optionals hostPlatform.isDarwin [ Carbon Cocoa ];
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
   configureFlags = [
     "--enable-multibyte"
     "--enable-nls"
-  ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "vim_cv_toupper_broken=no"
     "--with-tlib=ncurses"
     "vim_cv_terminfo=yes"
+    "vim_cv_tgetent=zero" # it does on native anyway
     "vim_cv_tty_group=tty"
     "vim_cv_tty_mode=0660"
     "vim_cv_getcwd_broken=no"

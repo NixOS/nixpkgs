@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runCommand, vscode, unzip }:
+{ stdenv, lib, fetchurl, vscode, unzip }:
 
 let
   extendedPkgVersion = lib.getVersion vscode;
@@ -33,11 +33,17 @@ let
     inherit vscodeExtUniqueId;
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
+    installPrefix = "share/${extendedPkgName}/extensions/${vscodeExtUniqueId}";
+
     buildInputs = [ unzip ] ++ buildInputs;
 
     installPhase = ''
-      mkdir -p "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}"
-      find . -mindepth 1 -maxdepth 1 | xargs mv -t "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}/"
+      runHook preInstall
+
+      mkdir -p "$out/$installPrefix"
+      find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/$installPrefix/"
+
+      runHook postInstall
     '';
 
   });
@@ -65,10 +71,10 @@ let
     "sha256"
   ];
 
-  mktplcExtRefToExtDrv = ext: 
-    buildVscodeMarketplaceExtension ((removeAttrs ext mktplcRefAttrList) // { 
-      mktplcRef = ext; 
-    }); 
+  mktplcExtRefToExtDrv = ext:
+    buildVscodeMarketplaceExtension ((removeAttrs ext mktplcRefAttrList) // {
+      mktplcRef = ext;
+    });
 
   extensionFromVscodeMarketplace = mktplcExtRefToExtDrv;
   extensionsFromVscodeMarketplace = mktplcExtRefList:
@@ -77,7 +83,7 @@ let
 in
 
 {
-  inherit fetchVsixFromVscodeMarketplace buildVscodeExtension 
+  inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
           buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
           extensionsFromVscodeMarketplace;
 }

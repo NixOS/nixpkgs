@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline python mpi iv ];
 
   src = fetchurl {
-    url = "http://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
+    url = "https://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
     sha256 = "0f26v3qvzblcdjg7isq0m9j2q8q7x3vhmkfllv8lsr3gyj44lljf";
   };
 
@@ -33,6 +33,12 @@ stdenv.mkDerivation rec {
       --replace 'float abs(float arg);' "" \
       --replace 'short abs(short arg);' "" \
       --replace 'long abs(long arg);' ""
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # we are darwin, but we don't have all the quirks the source wants to compensate for
+    substituteInPlace src/nrnpython/setup.py.in --replace 'readline="edit"' 'readline="readline"'
+    for f in src/nrnpython/*.[ch] ; do
+      substituteInPlace $f --replace "<Python/Python.h>" "<Python.h>"
+    done
   '';
 
   enableParallelBuilding = true;
@@ -74,7 +80,8 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
     homepage    = http://www.neuron.yale.edu/neuron;
     maintainers = [ maintainers.adev ];
-    platforms   = platforms.all;
+    # source claims it's only tested for x86 and powerpc
+    platforms   = platforms.x86_64 ++ platforms.i686;
   };
 }
 

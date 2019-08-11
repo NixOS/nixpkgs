@@ -31,8 +31,11 @@ in buildPythonPackage rec {
   checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ numpy multipledispatch dateutil ];
 
+  # Disable several tests
+  # https://github.com/blaze/datashape/issues/232
   checkPhase = ''
-    py.test datashape/tests
+    pytest --ignore datashape/tests/test_str.py \
+           --ignore datashape/tests/test_user.py
   '';
 
   meta = {

@@ -1,17 +1,17 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "shfmt-${version}";
-  version = "1.1.0";
-  rev = "v${version}";
+  version = "2.6.4";
 
-  goPackagePath = "github.com/mvdan/sh";
+  goPackagePath = "mvdan.cc/sh";
+  subPackages = ["cmd/shfmt"];
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
-    inherit rev;
-    sha256 = "0h1qy27z6j1cgkk3hkvl7w3wjqc5flgn92r3j6frn8k2wzwj7zhz";
+    rev = "v${version}";
+    sha256 = "1jifac0fi0sz6wzdgvk6s9xwpkdng2hj63ldbaral8n2j9km17hh";
   };
 
   meta = with stdenv.lib; {
@@ -21,5 +21,6 @@ buildGoPackage rec {
       shfmt formats shell programs. It can use tabs or any number of spaces to indent.
       You can feed it standard input, any number of files or any number of directories to recurse into.
     '';
+    license = licenses.bsd3;
   };
 }

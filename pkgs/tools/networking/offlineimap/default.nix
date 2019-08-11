@@ -1,27 +1,29 @@
-{ stdenv, fetchFromGitHub, pythonPackages,
-  asciidoc, libxml2, libxslt, docbook_xml_xslt }:
+{ stdenv, fetchFromGitHub, python2Packages,
+  asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "7.1.4";
-  name = "offlineimap-${version}";
-  namePrefix = "";
+python2Packages.buildPythonApplication rec {
+  version = "7.2.4";
+  pname = "offlineimap";
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap";
     rev = "v${version}";
-    sha256 = "04y2bsgmxykkhcjh3540y2a43xrwfkzd7wks1wvl6av0vjaqa5gm";
+    sha256 = "0h5q5nk2p2vx86w6rrbs7v70h81dpqqr68x6l3klzl3m0yj9agb1";
   };
 
   postPatch = ''
     # Skip xmllint to stop failures due to no network access
     sed -i docs/Makefile -e "s|a2x -v -d |a2x -L -v -d |"
+
+    # Provide CA certificates (Used when "sslcacertfile = OS-DEFAULT" is configured")
+    sed -i offlineimap/utils/distro.py -e '/def get_os_sslcertfile():/a\ \ \ \ return "${cacert}/etc/ssl/certs/ca-bundle.crt"'
   '';
 
   doCheck = false;
 
-  nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xml_xslt ];
-  propagatedBuildInputs = [ pythonPackages.six pythonPackages.kerberos ];
+  nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xsl ];
+  propagatedBuildInputs = with python2Packages; [ six kerberos ];
 
   postInstall = ''
     make -C docs man
@@ -33,6 +35,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = http://offlineimap.org;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    maintainers = [];
   };
 }

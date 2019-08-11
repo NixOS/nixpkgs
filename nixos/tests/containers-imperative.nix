@@ -3,27 +3,49 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "containers-imperative";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco chaoflow kampfschlaefer ];
+    maintainers = [ aristid aszlig eelco kampfschlaefer ];
   };
 
   machine =
     { config, pkgs, lib, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+
+      # XXX: Sandbox setup fails while trying to hardlink files from the host's
+      #      store file system into the prepared chroot directory.
+      nix.useSandbox = false;
+      nix.binaryCaches = []; # don't try to access cache.nixos.org
+
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 768;
+      virtualisation.memorySize = 1024;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
       virtualisation.pathsInNixDB = let
         emptyContainer = import ../lib/eval-config.nix {
-          inherit (config.nixpkgs) system;
+          inherit (config.nixpkgs.localSystem) system;
           modules = lib.singleton {
-            containers.foo.config = {};
+            containers.foo.config = {
+              system.stateVersion = "18.03";
+            };
           };
         };
-      in [ pkgs.stdenv emptyContainer.config.containers.foo.path ];
+      in with pkgs; [
+        stdenv stdenvNoCC emptyContainer.config.containers.foo.path
+        libxslt desktop-file-utils texinfo docbook5 libxml2
+        docbook_xsl_ns xorg.lndir documentation-highlighter
+      ];
     };
 
-  testScript =
+  testScript = let
+    tmpfilesContainerConfig = pkgs.writeText "container-config-tmpfiles" ''
+      {
+        systemd.tmpfiles.rules = [ "d /foo - - - - -" ];
+        systemd.services.foo = {
+          serviceConfig.Type = "oneshot";
+          script = "ls -al /foo";
+          wantedBy = [ "multi-user.target" ];
+        };
+      }
+    ''; in
     ''
       # Make sure we have a NixOS tree (required by ‘nixos-container create’).
       $machine->succeed("PAGER=cat nix-env -qa -A nixos.hello >&2");
@@ -74,9 +96,21 @@ import ./make-test.nix ({ pkgs, ...} : {
       # Execute commands via the root shell.
       $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;
 
+      # Execute a nix command via the root shell. (regression test for #40355)
+      $machine->succeed("nixos-container run $id1 -- nix-instantiate -E 'derivation { name = \"empty\"; builder = \"false\"; system = \"false\"; }'");
+
       # Stop and start (regression test for #4989)
       $machine->succeed("nixos-container stop $id1");
       $machine->succeed("nixos-container start $id1");
+
+      # Ensure tmpfiles are present
+      $machine->log("creating container tmpfiles");
+      $machine->succeed("nixos-container create tmpfiles --config-file ${tmpfilesContainerConfig}");
+      $machine->log("created, starting…");
+      $machine->succeed("nixos-container start tmpfiles");
+      $machine->log("done starting, investigating…");
+      $machine->succeed("echo \$(nixos-container run tmpfiles -- systemctl is-active foo.service) | grep -q active;");
+      $machine->succeed("nixos-container destroy tmpfiles");
 
       # Execute commands via the root shell.
       $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/ or die;

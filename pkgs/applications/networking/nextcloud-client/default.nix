@@ -1,51 +1,50 @@
 { stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, withGnomeKeyring ? false, makeWrapper, libgnome_keyring }:
+, inotify-tools, wrapQtAppsHook, openssl_1_1, pcre, qtwebengine, libsecret
+, libcloudproviders
+}:
 
 stdenv.mkDerivation rec {
   name = "nextcloud-client-${version}";
-  version = "2.3.2";
+  version = "2.5.2";
 
   src = fetchgit {
-    url = "git://github.com/nextcloud/client_theming.git";
-    rev = "1ee750d1aeaaefc899629e85c311594603e9ac1b";
-    sha256 = "0dxyng8a7cg78z8yngiqypsb44lf5c6vkabvkfch0cl0cqmarc1a";
+    url = "git://github.com/nextcloud/desktop.git";
+    rev = "refs/tags/v${version}";
+    sha256 = "1brpxdgyy742dqw6cyyv2257d6ihwiqhbzfk2hb8zjgbi6p9lhsr";
     fetchSubmodules = true;
   };
 
-  patches = [ ./find-sql.patch ];
-  patchFlags = "-d client -p1";
+  nativeBuildInputs = [ pkgconfig cmake wrapQtAppsHook ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
-
-  buildInputs = [ qtbase qtwebkit qtkeychain qttools sqlite ]
-    ++ stdenv.lib.optional stdenv.isLinux inotify-tools
-    ++ stdenv.lib.optional withGnomeKeyring makeWrapper;
+  buildInputs = [ qtbase qtwebkit qtkeychain qttools qtwebengine sqlite openssl_1_1.out pcre inotify-tools libcloudproviders ];
 
   enableParallelBuilding = true;
 
-  dontUseCmakeBuildDir = true;
-
-  cmakeDir = "client";
+  NIX_LDFLAGS = "${openssl_1_1.out}/lib/libssl.so ${openssl_1_1.out}/lib/libcrypto.so";
 
   cmakeFlags = [
     "-UCMAKE_INSTALL_LIBDIR"
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DOEM_THEME_DIR=${src}/nextcloudtheme"
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    "-DOPENSSL_LIBRARIES=${openssl_1_1.out}/lib"
+    "-DOPENSSL_INCLUDE_DIR=${openssl_1_1.dev}/include"
     "-DINOTIFY_LIBRARY=${inotify-tools}/lib/libinotifytools.so"
     "-DINOTIFY_INCLUDE_DIR=${inotify-tools}/include"
   ];
 
-  postInstall = stdenv.lib.optionalString (withGnomeKeyring) ''
-    wrapProgram "$out/bin/nextcloud" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libgnome_keyring ]}
+  qtWrapperArgs = [
+    ''--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libsecret ]}''
+  ];
+
+  postInstall = ''
+    sed -i 's/\(Icon.*\)=nextcloud/\1=Nextcloud/g' \
+    $out/share/applications/nextcloud.desktop
   '';
 
   meta = with stdenv.lib; {
     description = "Nextcloud themed desktop client";
     homepage = https://nextcloud.com;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ caugner ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ caugner ma27 ];
+    platforms = platforms.linux;
   };
 }

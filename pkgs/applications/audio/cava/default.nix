@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   name = "cava-${version}";
-  version = "0.4.2";
+  version = "0.6.1";
 
   buildInputs = [
     alsaLib
@@ -16,14 +16,16 @@ stdenv.mkDerivation rec {
     owner = "karlstav";
     repo = "cava";
     rev = version;
-    sha256 = "1c5gl8ghmd89f6097rjd2dzrgh1z4i4v9m4vn5wkpnnm68b96yyc";
+    sha256 = "1kvhqgijs29909w3sq9m0bslx2zxxn4b3i07kdz4hb0dqkppxpjy";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
   postConfigure = ''
-    substituteInPlace Makefile \
+    substituteInPlace Makefile.am \
       --replace "-L/usr/local/lib -Wl,-rpath /usr/local/lib" ""
+    substituteInPlace configure.ac \
+      --replace "/usr/share/consolefonts" "$out/share/consolefonts"
   '';
 
   meta = with stdenv.lib; {

@@ -11,14 +11,17 @@ let
 
   udev = config.systemd.package;
 
-  kernelPackages = config.boot.kernelPackages;
-  modulesTree = config.system.modulesTree;
+  kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+
+  modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
+  firmware = config.hardware.firmware;
 
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = modulesTree;
+    firmware = firmware;
     allowMissing = true;
   };
 
@@ -28,6 +31,56 @@ let
   # mounting `/`, like `/` on a loopback).
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
+  # A utility for enumerating the shared-library dependencies of a program
+  findLibs = pkgs.buildPackages.writeShellScriptBin "find-libs" ''
+    set -euo pipefail
+
+    declare -A seen
+    declare -a left
+
+    patchelf="${pkgs.buildPackages.patchelf}/bin/patchelf"
+
+    function add_needed {
+      rpath="$($patchelf --print-rpath $1)"
+      dir="$(dirname $1)"
+      for lib in $($patchelf --print-needed $1); do
+        left+=("$lib" "$rpath" "$dir")
+      done
+    }
+
+    add_needed $1
+
+    while [ ''${#left[@]} -ne 0 ]; do
+      next=''${left[0]}
+      rpath=''${left[1]}
+      ORIGIN=''${left[2]}
+      left=("''${left[@]:3}")
+      if [ -z ''${seen[$next]+x} ]; then
+        seen[$next]=1
+
+        # Ignore the dynamic linker which for some reason appears as a DT_NEEDED of glibc but isn't in glibc's RPATH.
+        case "$next" in
+          ld*.so.?) continue;;
+        esac
+
+        IFS=: read -ra paths <<< $rpath
+        res=
+        for path in "''${paths[@]}"; do
+          path=$(eval "echo $path")
+          if [ -f "$path/$next" ]; then
+              res="$path/$next"
+              echo "$res"
+              add_needed "$res"
+              break
+          fi
+        done
+        if [ -z "$res" ]; then
+          echo "Couldn't satisfy dependency $next" >&2
+          exit 1
+        fi
+      fi
+    done
+  '';
 
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
   # etc.  We don't want to bring in all of those packages, so we just
@@ -35,7 +88,7 @@ let
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
   extraUtils = pkgs.runCommandCC "extra-utils"
-    { buildInputs = [pkgs.nukeReferences];
+    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -76,8 +129,8 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
-      # Copy resize2fs if needed.
-      ${optionalString (any (fs: fs.autoResize) fileSystems) ''
+      # Copy resize2fs if any ext* filesystems are to be resized
+      ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
@@ -96,14 +149,12 @@ let
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
+      cp -pv ${pkgs.stdenv.cc.libc.out}/lib/ld*.so.? $out/lib
 
       # Copy all of the needed libraries
       find $out/bin $out/lib -type f | while read BIN; do
         echo "Copying libs for executable $BIN"
-        LDD="$(ldd $BIN)" || continue
-        LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
-        for LIB in $LIBS; do
+        for LIB in $(${findLibs}/bin/find-libs $BIN); do
           TGT="$out/lib/$(basename $LIB)"
           if [ ! -f "$TGT" ]; then
             SRC="$(readlink -e $LIB)"
@@ -114,7 +165,7 @@ let
 
       # Strip binaries further than normal.
       chmod -R u+w $out
-      stripDirs "lib bin" "-s"
+      stripDirs "$STRIP" "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
@@ -130,6 +181,7 @@ let
         fi
       done
 
+      if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
@@ -142,12 +194,14 @@ let
       $out/bin/mdadm --version
 
       ${config.boot.initrd.extraUtilsCommandsTest}
+      fi
     ''; # */
 
 
-  udevRules = pkgs.runCommand "udev-rules"
-    { allowedReferences = [ extraUtils ]; }
-    ''
+  udevRules = pkgs.runCommand "udev-rules" {
+      allowedReferences = [ extraUtils ];
+      preferLocalBuild = true;
+    } ''
       mkdir -p $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
@@ -197,6 +251,14 @@ let
 
     isExecutable = true;
 
+    postInstall = ''
+      echo checking syntax
+      # check both with bash
+      ${pkgs.buildPackages.bash}/bin/sh -n $target
+      # and with ash shell, just in case
+      ${pkgs.buildPackages.busybox}/bin/ash -n $target
+    '';
+
     inherit udevRules extraUtils modulesClosure;
 
     inherit (config.boot) resumeDevice;
@@ -230,6 +292,7 @@ let
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
   initialRamdisk = pkgs.makeInitrd {
+    name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor prepend;
 
     contents =
@@ -239,11 +302,12 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu"
-            { src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf"; }
-            ''
+        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
+              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+              preferLocalBuild = true;
+            } ''
               target=$out
-              ${pkgs.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
             '';
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
@@ -466,16 +530,18 @@ in
       };
 
     fileSystems = mkOption {
-      options.neededForBoot = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          If set, this file system will be mounted in the initial
-          ramdisk.  By default, this applies to the root file system
-          and to the file system containing
-          <filename>/nix/store</filename>.
-        '';
-      };
+      type = with lib.types; loaOf (submodule {
+        options.neededForBoot = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If set, this file system will be mounted in the initial
+            ramdisk.  By default, this applies to the root file system
+            and to the file system containing
+            <filename>/nix/store</filename>.
+          '';
+        };
+      });
     };
 
   };

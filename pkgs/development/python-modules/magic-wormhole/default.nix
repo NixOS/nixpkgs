@@ -1,54 +1,57 @@
-{ lib
+{ stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
+, spake2
+, pynacl
+, six
+, attrs
+, twisted
+, autobahn
+, automat
+, hkdf
+, tqdm
+, click
+, humanize
+, txtorcon
 , nettools
 , glibcLocales
-, autobahn
-, cffi
-, click
-, hkdf
-, pynacl
-, spake2
-, tqdm
-, python
 , mock
-, ipaddress
-, humanize
-, pyopenssl
-, service-identity
-, txtorcon
+, magic-wormhole-transit-relay
+, magic-wormhole-mailbox-server
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.10.3";
-  name = "${pname}-${version}";
+  version = "0.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "48465d58f9c0d729dc586627cf280830e7ed59f9e7999946ae1d763c6b8db999";
+    sha256 = "01fr4bi6kc6fz9n3c4qq892inrc3nf6p2djy65yvm7xkvdxncydf";
   };
 
-  checkInputs = [ mock ];
-  buildInputs = [ nettools glibcLocales ];
-  propagatedBuildInputs = [ autobahn cffi click hkdf pynacl spake2 tqdm ipaddress humanize pyopenssl service-identity txtorcon ];
+  buildInputs = [ glibcLocales ];
+  propagatedBuildInputs = [ spake2 pynacl six attrs twisted autobahn automat hkdf tqdm click humanize txtorcon ];
+  checkInputs = [ mock magic-wormhole-transit-relay magic-wormhole-mailbox-server ];
 
   postPatch = ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
-    sed -i -e "s|if (os.path.dirname(os.path.abspath(wormhole))|if not os.path.abspath(wormhole).startswith('/nix/store') and (os.path.dirname(os.path.abspath(wormhole))|" src/wormhole/test/test_cli.py
-  '' + lib.optionalString (pythonAtLeast "3.3") ''
-    sed -i -e 's|"ipaddress",||' setup.py
   '';
 
-  checkPhase = ''
-    export PATH="$PATH:$out/bin"
+  postInstall = ''
+    install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
+  '';
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
     export LANG="en_US.UTF-8"
     export LC_ALL="en_US.UTF-8"
-    ${python.interpreter} -m wormhole.test.run_trial wormhole
+    substituteInPlace src/wormhole/test/test_cli.py \
+      --replace 'getProcessOutputAndValue("locale", ["-a"])' 'getProcessOutputAndValue("locale", ["-a"], env=os.environ)' \
+      --replace 'if (os.path.dirname(os.path.abspath(wormhole))' 'if not os.path.abspath(wormhole).startswith("/nix/store") and (os.path.dirname(os.path.abspath(wormhole))' \
+      --replace 'locale_env = dict(LC_ALL=locale, LANG=locale)' 'locale_env = dict(LC_ALL=locale, LANG=locale, LOCALE_ARCHIVE=os.getenv("LOCALE_ARCHIVE"))'
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Securely transfer data between computers";
     homepage = https://github.com/warner/magic-wormhole;
     license = licenses.mit;

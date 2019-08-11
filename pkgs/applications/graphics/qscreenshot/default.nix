@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dos2unix, which, qt }:
+{ stdenv, fetchurl, dos2unix, which, qt, Carbon }:
 
 stdenv.mkDerivation rec {
   name = "qscreenshot-1.0";
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1spj5fg2l8p5bk81xsv6hqn1kcrdiy54w19jsfb7g5i94vcb1pcx";
   };
 
-  buildInputs = [ dos2unix which qt ];
+  buildInputs = [ dos2unix which qt ]
+    ++ stdenv.lib.optional stdenv.isDarwin Carbon;
 
   # Remove carriage returns that cause /bin/sh to abort
   preConfigure = ''

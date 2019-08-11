@@ -1,0 +1,24 @@
+diff --git a/lib/synapse-plugins/calculator-plugin.vala b/lib/synapse-plugins/calculator-plugin.vala
+index 1b5fa06..076c0c7 100644
+--- a/lib/synapse-plugins/calculator-plugin.vala
++++ b/lib/synapse-plugins/calculator-plugin.vala
+@@ -51,9 +51,7 @@ namespace Synapse {
+                                                                     _("Calculator"),
+                                                                     _("Calculate basic expressions."),
+                                                                     "accessories-calculator",
+-                                                                    register_plugin,
+-                                                                    Environment.find_program_in_path ("bc") != null,
+-                                                                    _("bc is not installed"));
++                                                                    register_plugin);
+         }
+ 
+         static construct {
+@@ -90,7 +88,7 @@ namespace Synapse {
+             if (matched) {
+                 Pid pid;
+                 int read_fd, write_fd;
+-                string[] argv = {"bc", "-l"};
++                string[] argv = {"@exec@", "-l"};
+                 string? solution = null;
+ 
+                 try {

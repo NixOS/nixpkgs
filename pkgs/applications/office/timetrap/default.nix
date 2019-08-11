@@ -1,14 +1,17 @@
-{ stdenv, lib, bundlerEnv, ruby }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerEnv {
-  name = "timetrap-1.10.0";
-
-  inherit ruby;
+bundlerApp {
+  pname = "timetrap";
   gemdir = ./.;
+  exes = [ "t" "timetrap" ];
 
-  meta = {
+  passthru.updateScript = bundlerUpdateScript "timetrap";
+
+  meta = with lib; {
     description = "A simple command line time tracker written in ruby";
-    homepage = https://github.com/samg/timetrap;
-    license = lib.licenses.mit;
+    homepage    = https://github.com/samg/timetrap;
+    license     = licenses.mit;
+    maintainers = with maintainers; [ jerith666 manveru nicknovitski ];
+    platforms   = platforms.unix;
   };
 }

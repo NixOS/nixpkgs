@@ -1,31 +1,32 @@
-{ stdenv, lib, go_1_8, fetchzip, git }:
+{ buildGo110Package, fetchzip, lib }:
 
-stdenv.mkDerivation rec {
+buildGo110Package rec {
   name = "perkeep-${version}";
-  version = "20170505";
+  version = "0.10.1";
 
   src = fetchzip {
-    url = "https://perkeep.org/dl/monthly/camlistore-${version}-src.zip";
-    sha256 = "1vliyvkyzmhdi6knbh8rdsswmz3h0rpxdpq037jwbdbkjccxjdwa";
+    url = "https://perkeep.org/dl/perkeep-${version}-src.zip";
+    sha256 = "0rqibc6w4m1r50i2pjcgz1k9dxh18v7jwj4s29y470bc526wv422";
   };
 
-  buildInputs = [ git go_1_8 ];
+  goPackagePath = "perkeep.org";
 
-  goPackagePath = "";
   buildPhase = ''
+    cd "$NIX_BUILD_TOP/go/src/$goPackagePath"
     go run make.go
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bin/* $out/bin
+  # devcam is only useful when developing perkeep, we should not install it as
+  # part of this derivation.
+  postInstall = ''
+    rm -f $out/bin/devcam
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
     homepage = https://perkeep.org;
     license = licenses.asl20;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ cstrahan kalbasit ];
     platforms = platforms.unix;
   };
 }

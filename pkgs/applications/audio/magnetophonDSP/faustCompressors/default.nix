@@ -19,11 +19,9 @@ stdenv.mkDerivation rec {
       faust2jaqt -time -double -t 99999 $f
     done
 
-    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "compressors.lib"
-
     for f in *.dsp;
     do
-      echo "compiling plugin from" $f
+      echo "Compiling plugin from" $f
       faust2lv2  -time -double -gui -t 99999 $f
     done
   '';

@@ -1,28 +1,20 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, glibcLocales }:
 
-let
-  pythonPackages = python3Packages;
-in pythonPackages.buildPythonApplication rec {
-  name = "asciinema-${version}";
-  version = "1.4.0";
-
-  buildInputs = with pythonPackages; [ nose ];
-  propagatedBuildInputs = with pythonPackages; [ requests ];
+python3Packages.buildPythonApplication rec {
+  pname = "asciinema";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
     rev = "v${version}";
-    sha256 = "1m2gjqxb5gqyz19lvp7jmwp7cxjc6nb0b2rrlsg3z2bl6vmi1xn2";
+    sha256 = "1a2pysxnp6icyd08mgf66xr6f6j0irnfxdpf3fmzcz31ix7l9kc4";
   };
 
-  patchPhase = ''
-    # disable one test which is failing with -> OSError: out of pty devices
-    rm tests/pty_recorder_test.py
-  '';
+  checkInputs = [ glibcLocales python3Packages.nose ];
 
   checkPhase = ''
-    nosetests
+    LC_ALL=en_US.UTF-8 nosetests
   '';
 
   meta = {

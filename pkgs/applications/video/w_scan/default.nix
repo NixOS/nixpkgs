@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "w_scan-${version}";
-  version = "20161022";
+  version = "20170107";
 
   src = fetchurl {
     url = "http://wirbel.htpc-forum.de/w_scan/${name}.tar.bz2";
-    sha256 = "0y8dq2sm13xn2r2lrqf5pdhr9xcnbxbg1aw3iq1szds2idzsyxr0";
+    sha256 = "1zkgnj2sfvckix360wwk1v5s43g69snm45m0drnzyv7hgf5g7q1q";
   };
 
   meta = {

@@ -1,44 +1,56 @@
-{ stdenv, fetchurl, fetchFromGitHub, buildGoPackage }:
+{ stdenv, fetchurl, fetchFromGitHub, buildGoPackage, buildEnv }:
 
-buildGoPackage rec {
-  name = "mattermost-${version}";
-  version = "4.4.1";
+let
+  version = "5.9.0";
 
-  src = fetchFromGitHub {
-    owner = "mattermost";
-    repo = "mattermost-server";
-    rev = "v${version}";
-    sha256 = "0imda96wgr2nkkxs2jfcqszx1fqgmbbrh7zqmgjh6ks3an1v4m3c";
+  mattermost-server = buildGoPackage rec {
+    name = "mattermost-server-${version}";
+
+    src = fetchFromGitHub {
+      owner = "mattermost";
+      repo = "mattermost-server";
+      rev = "v${version}";
+      sha256 = "08h7n9smv6f1njazn4pl6pwkfmqxn93rzg69h6asicp9c4vad3m2";
+    };
+
+    goPackagePath = "github.com/mattermost/mattermost-server";
+
+    buildFlagsArray = ''
+      -ldflags=
+        -X ${goPackagePath}/model.BuildNumber=nixpkgs-${version}
+    '';
+
   };
 
-  webApp = fetchurl {
-    url = "https://releases.mattermost.com/${version}/mattermost-team-${version}-linux-amd64.tar.gz";
-    sha256 = "1gnzv9xkqawi36z7v9xsy1gk16x71qf0kn8r059qvyarjlyp7888";
+  mattermost-webapp = stdenv.mkDerivation {
+    name = "mattermost-webapp-${version}";
+
+    src = fetchurl {
+      url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
+      sha256 = "19ys5mwmw99fbj44gd00vrl2qj09lrwvj1ihic0fsn6nd3hnx3mw";
+    };
+
+    installPhase = ''
+      mkdir -p $out
+      tar --strip 1 --directory $out -xf $src \
+        mattermost/client \
+        mattermost/i18n \
+        mattermost/fonts \
+        mattermost/templates \
+        mattermost/config
+    '';
   };
 
-  goPackagePath = "github.com/mattermost/mattermost-server";
+in
+  buildEnv {
+    name = "mattermost-${version}";
+    paths = [ mattermost-server mattermost-webapp ];
 
-  buildPhase = ''
-    runHook preBuild
-    cd go/src/${goPackagePath}/cmd/platform
-    go install
-    runHook postBuild
-  '';
-
-  preInstall = ''
-    mkdir -p $bin
-    tar --strip 1 -C $bin -xf $webApp
-  '';
-
-  postInstall = ''
-    ln -s $bin/bin/platform $bin/bin/mattermost-platform
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Open-Source, self-hosted Slack-alternative";
-    homepage = https://www.mattermost.org;
-    license = with licenses; [ agpl3 asl20 ];
-    maintainers = with maintainers; [ fpletz ryantm ];
-    platforms = platforms.unix;
-  };
-}
+    meta = with stdenv.lib; {
+      description = "Open-source, self-hosted Slack-alternative";
+      homepage = https://www.mattermost.org;
+      license = with licenses; [ agpl3 asl20 ];
+      maintainers = with maintainers; [ fpletz ryantm ];
+      platforms = platforms.unix;
+    };
+  }

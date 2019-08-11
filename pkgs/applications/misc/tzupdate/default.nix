@@ -4,13 +4,12 @@ let
   inherit (python.pkgs) buildPythonApplication fetchPypi requests;
 in
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "tzupdate";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wj2r1wirnn5kllaasdldimvp3cc3w7w890iqrjksz5wwjbnj8pk";
+    sha256 = "13np40h64bgkcj10qw6f4nb51p47bb20fd6pzxq8xbr645a4d34m";
   };
 
   propagatedBuildInputs = [ requests ];

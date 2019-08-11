@@ -1,16 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, libxslt, packagekit, polkit
-, fontconfig, libcanberra_gtk3, systemd, libnotify, wrapGAppsHook, dbus_glib, dbus_libs, desktop_file_utils }:
+{ stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, packagekit, polkit
+, gtk3, systemd, wrapGAppsHook, desktop-file-utils, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-packagekit-${version}";
+  version = "3.32.0";
 
-  NIX_CFLAGS_COMPILE = "-I${dbus_glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-packagekit/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "08rhsisdvx7pnx3rrg5v7c09jbw4grglkdj979gwl4a31j24zjsd";
+  };
 
-  nativeBuildInputs = [ pkgconfig meson ninja gettext wrapGAppsHook desktop_file_utils ];
-  buildInputs = [ libxslt gnome3.gtk packagekit fontconfig systemd polkit
-                  libcanberra_gtk3 libnotify dbus_glib dbus_libs ];
+  nativeBuildInputs = [
+    pkgconfig meson ninja gettext wrapGAppsHook desktop-file-utils
+    hicolor-icon-theme # for setup-hook
+  ];
 
-  prePatch = "patchShebangs meson_post_install.sh";
+  buildInputs = [ gtk3 packagekit systemd polkit ];
+
+  postPatch = ''
+    patchShebangs meson_post_install.sh
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-packagekit";
+      attrPath = "gnome3.gnome-packagekit";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://www.freedesktop.org/software/PackageKit/;

@@ -1,21 +1,24 @@
-{ stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
-, jre, binaryen, enableWasm ? true
+{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
+, jre, binaryen, enableWasm ? true ,  cmake
 }:
 
 let
-  rev = "1.37.16";
+  rev = emscriptenVersion;
   appdir = "share/emscripten";
+  binaryenVersioned = binaryen.override { emscriptenRev = rev; };
 in
 
 stdenv.mkDerivation {
   name = "emscripten-${rev}";
 
   src = fetchFromGitHub {
-    owner = "kripken";
+    owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "1qyhjx5zza01vnwmj6qzxbkagxknn4kzb6gw12fqw5q8pa8fy4zy";
+    sha256 = "1j3f0hpy05qskaiyv75l7wv4n0nzxhrh9b296zchx3f6f9h2rghq";
     inherit rev;
   };
+
+  buildInputs = [ nodejs cmake python ];
 
   buildCommand = ''
     mkdir -p $out/${appdir}
@@ -38,13 +41,27 @@ stdenv.mkDerivation {
     echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
     echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> $out/${appdir}/config
     echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
+    # to make the test(s) below work
+    echo "SPIDERMONKEY_ENGINE = []" >> $out/${appdir}/config
   ''
   + stdenv.lib.optionalString enableWasm ''
-    echo "BINARYEN_ROOT = '${binaryen}'" >> $out/share/emscripten/config
+    echo "BINARYEN_ROOT = '${binaryenVersioned}'" >> $out/share/emscripten/config
+  ''
+  +
+  ''
+    echo "--------------- running test -----------------"
+    # quick hack to get the test working
+    HOME=$TMPDIR
+    cp $out/${appdir}/config $HOME/.emscripten
+    export PATH=$PATH:$out/bin
+
+    #export EMCC_DEBUG=2  
+    ${python}/bin/python $src/tests/runner.py test_hello_world
+    echo "--------------- /running test -----------------"
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kripken/emscripten;
+    homepage = https://github.com/emscripten-core/emscripten;
     description = "An LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
     maintainers = with maintainers; [ qknight matthewbauer ];

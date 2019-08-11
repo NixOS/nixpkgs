@@ -1,23 +1,18 @@
-{ stdenv, fetchPypi, buildPythonPackage, ed25519, ecdsa
-, semver, keepkey, trezor, mnemonic, ledgerblue, unidecode, mock, pytest
-}:
+{ stdenv, fetchPypi, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
+  unidecode, mock, pytest , backports-shutil-which, ConfigArgParse,
+  python-daemon, pymsgbox }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "libagent";
-  version = "0.9.5";
+  version = "0.13.1";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "982b81c19dc9ee1158dc32fedbe1c36aff2b6872fa0dd42173b639b965ccfb2e";
+    sha256 = "b9afa0851f668612702fcd648cee47af4dc7cfe4f86d4c4a84b1a6b4a4960b41";
   };
 
-  buildInputs = [
-    ed25519 ecdsa semver keepkey
-    trezor mnemonic ledgerblue
-  ];
-
-  propagatedBuildInputs = [ unidecode ];
+  propagatedBuildInputs = [ unidecode backports-shutil-which ConfigArgParse
+    python-daemon pymsgbox ecdsa ed25519 mnemonic semver ];
 
   checkInputs = [ mock pytest ];
 

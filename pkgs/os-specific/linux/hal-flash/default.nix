@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoconf, automake, dbus, glib, libtool, pkgconfig, udisks2 }:
 
 stdenv.mkDerivation {
-  name = "hal-flash-0.3.0";
+  name = "hal-flash-0.3.3";
 
   src = fetchurl {
-    url = "https://github.com/cshorler/hal-flash/archive/v0.3.0.tar.gz";
-    sha256 = "163pqy39cca8cnf8rm8zr63ndsnr7rki9pf9j7dl9gyxmi7sx88s";
+    url = "https://github.com/cshorler/hal-flash/archive/v0.3.3.tar.gz";
+    sha256 = "0dw9bx190mrh0dycw4rfvfmwwvh2sgypffr99nfnr36b38jrd6y6";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -1,7 +1,9 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
-with import ../lib/qemu-flags.nix;
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -32,7 +34,7 @@ in makeTest {
     maintainers = [ lewo ];
   };
   machine =
-    { config, pkgs, ... }:
+    { ... }:
     {
       virtualisation.qemu.options = [ "-cdrom" "${metadataDrive}/metadata.iso" ];
       services.cloud-init.enable = true;

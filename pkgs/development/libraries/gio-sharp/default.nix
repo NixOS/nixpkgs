@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GIO API bindings";
+    homepage = https://github.com/mono/gio-sharp;
+    license = licenses.mit;
     platforms = platforms.linux;
   };
 }

@@ -8,13 +8,13 @@
 , vmTools
 , gawk
 , utillinux
-, e2fsprogs
-, squashfsTools }:
+, runtimeShell
+, e2fsprogs }:
 
 rec {
   shellScript = name: text:
     writeScript name ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       set -e
       ${text}
     '';
@@ -37,8 +37,7 @@ rec {
     contents ? [],
     diskSize ? 1024,
     runScript ? "#!${stdenv.shell}\nexec /bin/sh",
-    runAsRoot ? null,
-    extraSpace ? 0
+    runAsRoot ? null
   }:
     let layer = mkLayer {
           inherit name;
@@ -75,7 +74,10 @@ rec {
             mkdir -p bin nix/store
             for f in $(cat $layerClosure) ; do
               cp -ar $f ./$f
-              for f in $f/bin/* ; do
+            done
+
+            for c in ${toString contents} ; do
+              for f in $c/bin/* ; do
                 if [ ! -e bin/$(basename $f) ] ; then
                   ln -s $f bin/
                 fi
@@ -85,18 +87,14 @@ rec {
             # Create runScript
             ln -s ${runScriptFile} singularity
 
-            # Size calculation
-            cd ..
-            umount disk
-            size=$(resize2fs -P /dev/${vmTools.hd} | awk '{print $NF}')
-            mount /dev/${vmTools.hd} disk
-            cd disk
+            # Fill out .singularity.d
+            mkdir -p .singularity.d/env
+            touch .singularity.d/env/94-appsbase.sh
 
-            export PATH=$PATH:${e2fsprogs}/bin/
-            echo creating
-            singularity image.create -s $((1 + size * 4 / 1024 + ${toString extraSpace})) $out
-            echo importing
-            tar -c . | singularity image.import $out
+            cd ..
+            mkdir -p /var/singularity/mnt/{container,final,overlay,session,source}
+            echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
+            singularity build $out ./disk
           '');
 
     in result;

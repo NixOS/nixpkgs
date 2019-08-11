@@ -1,10 +1,10 @@
-{ stdenv, lib, libpcap, buildGoPackage, fetchFromGitHub }:
+{ lib, libpcap, buildGoPackage, fetchFromGitHub }:
 
 with lib;
 
 buildGoPackage rec {
   name = "etcd-${version}";
-  version = "3.1.6"; # After updating check that nixos tests pass
+  version = "3.3.13"; # After updating check that nixos tests pass
   rev = "v${version}";
 
   goPackagePath = "github.com/coreos/etcd";
@@ -13,15 +13,12 @@ buildGoPackage rec {
     inherit rev;
     owner = "coreos";
     repo = "etcd";
-    sha256 = "1qgi6zxnijzr644w2da2gbn3gw2qwk6a3z3qmdln0r2rjnm70sx0";
+    sha256 = "1kac4qfr83f2hdz35403f1ald05wc85vvhw79vxb431n61jvyaqy";
   };
 
   subPackages = [
     "cmd/etcd"
     "cmd/etcdctl"
-    "cmd/tools/benchmark"
-    "cmd/tools/etcd-dump-db"
-    "cmd/tools/etcd-dump-logs"
   ];
 
   buildInputs = [ libpcap ];

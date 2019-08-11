@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   # The link returns directly the script. No need for unpacking
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     install -D -m755 $src $out/bin/checkbashisms

@@ -1,23 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, glib, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, glib, libintl }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "desktop-file-utils-0.23";
+  pname = "desktop-file-utils";
+  version = "0.24";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/desktop-file-utils/releases/${name}.tar.xz";
-    sha256 = "119kj2w0rrxkhg4f9cf5waa55jz1hj8933vh47vcjipcplql02bc";
+    url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
+    sha256 = "1nc3bwjdrpcrkbdmzvhckq0yngbcxspwj2n1r7jr3gmx1jk5vpm1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libintlOrEmpty ];
+  buildInputs = [ glib libintl ];
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-lintl";
+  setupHook = ./setup-hook.sh;
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/desktop-file-utils;
     description = "Command line utilities for working with .desktop files";
     platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.gpl2;
   };
 }

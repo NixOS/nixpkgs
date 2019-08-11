@@ -1,0 +1,24 @@
+{ stdenv, fetchFromGitHub, python3, imagemagick }:
+
+with python3.pkgs;
+
+buildPythonApplication rec {
+  name = "noteshrink-${version}";
+  version = "0.1.1";
+
+  src = fetchFromGitHub {
+    owner  = "mzucker";
+    repo   = "noteshrink";
+    rev    = version;
+    sha256 = "0xhrvg3d8ffnbbizsrfppcd2y98znvkgxjdmvbvin458m2rwccka";
+  };
+
+  propagatedBuildInputs = [ numpy scipy imagemagick pillow ];
+
+  meta = with stdenv.lib; {
+    description = "Convert scans of handwritten notes to beautiful, compact PDFs";
+    homepage    = https://mzucker.github.io/2016/09/20/noteshrink.html;
+    license     = licenses.mit;
+    maintainers = with maintainers; [ rnhmjoj ];
+  };
+}

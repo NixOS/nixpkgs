@@ -1,17 +1,23 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest }:
+, pytest, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "apipkg";
-  version = "1.4";
-  name = "${pname}-${version}";
+  version = "1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2e38399dbe842891fe85392601aab8f40a8f4cc5a9053c326de35a1cc0297ac6";
+    sha256 = "37228cda29411948b422fae072f57e31d3396d2ee1c9783775980ee9c9990af6";
   };
 
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [ setuptools_scm ];
+  checkInputs = [ pytest ];
+
+  # Fix pytest 4 support. See: https://github.com/pytest-dev/apipkg/issues/14
+  postPatch = ''
+    substituteInPlace "test_apipkg.py" \
+      --replace "py.test.ensuretemp('test_apipkg')" "py.path.local('test_apipkg')"
+  '';
 
   checkPhase = ''
     py.test
@@ -19,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Namespace control and lazy-import mechanism";
-    homepage = https://bitbucket.org/hpk42/apipkg;
+    homepage = "https://github.com/pytest-dev/apipkg";
     license = licenses.mit;
   };
 }

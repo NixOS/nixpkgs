@@ -1,36 +1,28 @@
-{ stdenv, python, fetchPypi, fetchurl, makeWrapper, unzip }:
+{ stdenv, python, fetchPypi, makeWrapper, unzip }:
 
 let
   wheel_source = fetchPypi {
     pname = "wheel";
-    version = "0.30.0";
+    version = "0.33.4";
     format = "wheel";
-    sha256 = "e721e53864f084f956f40f96124a74da0631ac13fbbd1ba99e8e2b5e9cafdf64";
+    sha256 = "5e79117472686ac0c4aef5bad5172ea73a1c2d1646b808c35926bd26bdfb0c08";
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "38.4.0";
+    version = "41.0.1";
     format = "wheel";
-    sha256 = "155c2ec9fdcc00c3973d966b416e1cf3a1e7ce75f4c09fb760b23f94b935926e";
-  };
-
-  # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
-  # https://github.com/NixOS/nixpkgs/issues/26392
-  # https://github.com/pypa/setuptools/issues/885
-  pkg_resources = fetchurl {
-    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py";
-    sha256 = "1wdnq3mammk75mifkdmmjx7yhnpydvnvi804na8ym4mj934l2jkv";
+    sha256 = "c7769ce668c7a333d84e17fe8b524b1c45e7ee9f7908ad0a73e1eda7e6a5aebf";
   };
 
 in stdenv.mkDerivation rec {
   pname = "pip";
-  version = "9.0.1";
+  version = "19.1.1";
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
-    sha256 = "690b762c0a8460c303c089d5d0be034fb15a5ea2b75bdf565f40421f542fefb0";
+    sha256 = "993134f0475471b91452ca029d4390dc8f298ac63a712814f101cd1b6db46676";
   };
 
   unpackPhase = ''
@@ -38,21 +30,20 @@ in stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} $src
     unzip -d $out/${python.sitePackages} ${setuptools_source}
     unzip -d $out/${python.sitePackages} ${wheel_source}
-    # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
-    cp ${pkg_resources} $out/${python.sitePackages}/pip/_vendor/pkg_resources/__init__.py
   '';
 
   patchPhase = ''
     mkdir -p $out/bin
   '';
 
-  buildInputs = [ python makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ python ];
 
   installPhase = ''
 
     # install pip binary
     echo '#!${python.interpreter}' > $out/bin/pip
-    echo 'import sys;from pip import main' >> $out/bin/pip
+    echo 'import sys;from pip._internal import main' >> $out/bin/pip
     echo 'sys.exit(main())' >> $out/bin/pip
     chmod +x $out/bin/pip
 

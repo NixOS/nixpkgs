@@ -56,7 +56,7 @@
       sha256 = "1fzspdiwhjabwz1yxb3gzj7giz9jbc1xxm65i93rvhzcp537cs42";
     };
 
-    unpackPhase = ":";
+    dontUnpack = true;
 
     installPhase = ''
       install -m 444 -D $src "$out/$extid.xpi"

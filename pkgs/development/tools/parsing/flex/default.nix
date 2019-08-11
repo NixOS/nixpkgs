@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, m4
+{ stdenv, buildPackages, fetchurl, bison, m4
 , fetchpatch, autoreconfHook, help2man
 }:
 
@@ -19,32 +19,35 @@ stdenv.mkDerivation rec {
         + "/tools/flex/patches/200-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch";
     sha256 = "1aarhcmz7mfrgh15pkj6f7ikxa2m0mllw1i1vscsf1kw5d05lw6f";
   })];
+
+  postPatch = ''
+    patchShebangs tests
+  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace Makefile.in --replace "tests" " "
+
+    substituteInPlace doc/Makefile.am --replace 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '
+  '';
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoreconfHook help2man ];
-
   buildInputs = [ bison ];
-
   propagatedBuildInputs = [ m4 ];
+
+  preConfigure = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   postConfigure = stdenv.lib.optionalString (stdenv.isDarwin || stdenv.isCygwin) ''
     sed -i Makefile -e 's/-no-undefined//;'
   '';
 
-  crossAttrs = {
+  dontDisableStatic = stdenv.buildPlatform != stdenv.hostPlatform;
 
-    # disable tests which can't run on build machine
-    postPatch = ''
-      substituteInPlace Makefile.in --replace "tests" " ";
-    '';
-
-    preConfigure = ''
-      export ac_cv_func_malloc_0_nonnull=yes
-      export ac_cv_func_realloc_0_nonnull=yes
-    '';
-  };
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/westes/flex;
     description = "A fast lexical analyser generator";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd2;
+    platforms = platforms.unix;
   };
 }

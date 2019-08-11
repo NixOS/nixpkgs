@@ -1,33 +1,30 @@
-{ stdenv, fetchFromGitHub, file, curl, pkgconfig, python, openssl, cmake, zlib
-, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2, darwin
-, version, srcSha, cargoSha256
-, patches ? [] }:
-
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation;
-in
+{ stdenv, file, curl, pkgconfig, python, openssl, cmake, zlib
+, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
+, CoreFoundation, Security
+}:
 
 rustPlatform.buildRustPackage rec {
-  name = "cargo-${version}";
-  inherit version;
+  name = "cargo-${rustc.version}";
+  inherit (rustc) version src;
 
-  src = fetchFromGitHub {
-    owner  = "rust-lang";
-    repo   = "cargo";
-    rev    = version;
-    sha256 = srcSha;
-  };
-
-  inherit cargoSha256;
-  inherit patches;
+  # the rust source tarball already has all the dependencies vendored, no need to fetch them again
+  cargoVendorDir = "vendor";
+  preBuild = "pushd src/tools/cargo";
+  postBuild = "popd";
 
   passthru.rustc = rustc;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cacert file curl python openssl cmake zlib makeWrapper libgit2 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv ];
+  # changes hash of vendor directory otherwise
+  dontUpdateAutotoolsGnuConfigScripts = true;
 
-  LIBGIT2_SYS_USE_PKG_CONFIG=1;
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
+  buildInputs = [ cacert file curl python openssl zlib libgit2 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
+
+  LIBGIT2_SYS_USE_PKG_CONFIG = 1;
+
+  # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
+  RUSTC_BOOTSTRAP = 1;
 
   # FIXME: Use impure version of CoreFoundation because of missing symbols.
   # CFURLSetResourcePropertyForKey is defined in the headers but there's no
@@ -61,6 +58,6 @@ rustPlatform.buildRustPackage rec {
     description = "Downloads your Rust project's dependencies and builds your project";
     maintainers = with maintainers; [ wizeman retrry ];
     license = [ licenses.mit licenses.asl20 ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
   };
 }

@@ -15,6 +15,11 @@ fixCmakeFiles() {
 cmakeConfigurePhase() {
     runHook preConfigure
 
+    export CTEST_OUTPUT_ON_FAILURE=1
+    if [ -n "${enableParallelChecking-1}" ]; then
+        export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
+    fi
+
     if [ -z "$dontFixCmake" ]; then
         fixCmakeFiles .
     fi
@@ -22,19 +27,38 @@ cmakeConfigurePhase() {
     if [ -z "$dontUseCmakeBuildDir" ]; then
         mkdir -p build
         cd build
-        cmakeDir=..
+        cmakeDir=${cmakeDir:-..}
     fi
 
     if [ -z "$dontAddPrefix" ]; then
         cmakeFlags="-DCMAKE_INSTALL_PREFIX=$prefix $cmakeFlags"
     fi
 
-    if [ -n "$crossConfig" ]; then
-        # By now it supports linux builds only. We should set the proper
-        # CMAKE_SYSTEM_NAME otherwise.
-        # http://www.cmake.org/Wiki/CMake_Cross_Compiling
-        cmakeFlags="-DCMAKE_CXX_COMPILER=$crossConfig-g++ -DCMAKE_C_COMPILER=$crossConfig-gcc $cmakeFlags"
-    fi
+    # We should set the proper `CMAKE_SYSTEM_NAME`.
+    # http://www.cmake.org/Wiki/CMake_Cross_Compiling
+    #
+    # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
+    # strip. Otherwise they are taken to be relative to the source root of the
+    # package being built.
+    cmakeFlags="-DCMAKE_CXX_COMPILER=$CXX $cmakeFlags"
+    cmakeFlags="-DCMAKE_C_COMPILER=$CC $cmakeFlags"
+    cmakeFlags="-DCMAKE_AR=$(command -v $AR) $cmakeFlags"
+    cmakeFlags="-DCMAKE_RANLIB=$(command -v $RANLIB) $cmakeFlags"
+    cmakeFlags="-DCMAKE_STRIP=$(command -v $STRIP) $cmakeFlags"
+
+    # on macOS we want to prefer Unix-style headers to Frameworks
+    # because we usually do not package the framework
+    cmakeFlags="-DCMAKE_FIND_FRAMEWORK=last $cmakeFlags"
+
+    # we never want to use the global macOS SDK
+    cmakeFlags="-DCMAKE_OSX_SYSROOT= $cmakeFlags"
+
+    # disable OSX deployment target
+    # we don't want our binaries to have a "minimum" OSX version
+    cmakeFlags="-DCMAKE_OSX_DEPLOYMENT_TARGET= $cmakeFlags"
+
+    # correctly detect our clang compiler
+    cmakeFlags="-DCMAKE_POLICY_DEFAULT_CMP0025=NEW $cmakeFlags"
 
     # This installs shared libraries with a fully-specified install
     # name. By default, cmake installs shared libraries with just the
@@ -44,12 +68,36 @@ cmakeConfigurePhase() {
     # executable. This flag makes the shared library accessible from its
     # nix/store directory.
     cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=${!outputLib}/lib $cmakeFlags"
+
+    # This ensures correct paths with multiple output derivations
+    # It requires the project to use variables from GNUInstallDirs module
+    # https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html
+    cmakeFlags="-DCMAKE_INSTALL_BINDIR=${!outputBin}/bin $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_SBINDIR=${!outputBin}/sbin $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_INCLUDEDIR=${!outputInclude}/include $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_OLDINCLUDEDIR=${!outputInclude}/include $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_MANDIR=${!outputMan}/share/man $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_INFODIR=${!outputInfo}/share/info $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_DOCDIR=${!outputDoc}/share/doc/${shareDocName} $cmakeFlags"
     cmakeFlags="-DCMAKE_INSTALL_LIBDIR=${!outputLib}/lib $cmakeFlags"
-    cmakeFlags="-DCMAKE_INSTALL_INCLUDEDIR=${!outputDev}/include $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_LIBEXECDIR=${!outputLib}/libexec $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_LOCALEDIR=${!outputLib}/share/locale $cmakeFlags"
+
+    # Don’t build tests when doCheck = false
+    if [ -z "$doCheck" ]; then
+        cmakeFlags="-DBUILD_TESTING=OFF $cmakeFlags"
+    fi
 
     # Avoid cmake resetting the rpath of binaries, on make install
     # And build always Release, to ensure optimisation flags
     cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
+
+    # Disable user package registry to avoid potential side effects
+    # and unecessary attempts to access non-existent home folder
+    # https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#disabling-the-package-registry
+    cmakeFlags="-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON $cmakeFlags"
+    cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON $cmakeFlags"
+    cmakeFlags="-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON $cmakeFlags"
 
     if [ "$buildPhase" = ninjaBuildPhase ]; then
         cmakeFlags="-GNinja $cmakeFlags"

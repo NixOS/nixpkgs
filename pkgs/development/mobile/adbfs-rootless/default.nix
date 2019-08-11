@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # very ugly way of replacing the adb calls
-    sed -e 's|"adb |"${stdenv.lib.getBin adb}/bin/adb |g' \
+    sed -e 's|"adb |"${adb}/bin/adb |g' \
         -i adbfs.cpp
   '';
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Mount Android phones on Linux with adb, no root required";
     inherit (src.meta) homepage;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ profpatsch ];
+    maintainers = with maintainers; [ Profpatsch ];
     platforms = platforms.linux;
   };
 }

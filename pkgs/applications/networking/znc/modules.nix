@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, znc }:
+{ stdenv, fetchFromGitHub, znc }:
 
 let
   zncDerivation = a@{
@@ -9,11 +9,33 @@ let
     inherit buildPhase;
     inherit installPhase;
 
+    buildInputs = znc.buildInputs;
+
     meta = a.meta // { platforms = stdenv.lib.platforms.unix; };
     passthru.module_name = module_name;
   });
 
 in rec {
+
+  backlog = zncDerivation rec {
+    name = "znc-backlog-${version}";
+    version = "git-2017-06-13";
+    module_name = "backlog";
+
+    src = fetchFromGitHub {
+      owner = "FruitieX";
+      repo = "znc-backlog";
+      rev = "42e8f439808882d2dae60f2a161eabead14e4b0d";
+      sha256 = "1k7ifpqqzzf2j7w795q4mx1nvmics2higzjqr3mid3lp43sqg5s6";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Request backlog for IRC channels.";
+      homepage = https://github.com/fruitiex/znc-backlog/;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ infinisil ];
+    };
+  };
 
   clientbuffer = zncDerivation rec {
     name = "znc-clientbuffer-${version}";
@@ -35,6 +57,26 @@ in rec {
     };
   };
 
+  clientaway = zncDerivation rec {
+    name = "znc-clientaway-${version}";
+    version = "git-2017-04-28";
+    module_name = "clientaway";
+
+    src = fetchFromGitHub {
+      owner = "kylef";
+      repo = "znc-contrib";
+      rev = "f6724a4a3b16b050088adde0cbeed74f189e5044";
+      sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
+    };
+
+    meta = with stdenv.lib; {
+      description = "ZNC clientaway module";
+      homepage = https://github.com/kylef/znc-contrib;
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ kiwi ];
+    };
+  };
+
   fish = zncDerivation rec {
     name = "znc-fish-${version}";
     version = "git-2014-10-10";
@@ -52,6 +94,46 @@ in rec {
       description = "ZNC FiSH module";
       homepage = https://github.com/dctrwatson/znc-fish;
       maintainers = [ stdenv.lib.maintainers.offline ];
+    };
+  };
+
+  ignore = zncDerivation rec {
+    name = "znc-ignore-${version}";
+    version = "git-2017-04-28";
+    module_name = "ignore";
+
+    src = fetchFromGitHub {
+      owner = "kylef";
+      repo = "znc-contrib";
+      rev = "f6724a4a3b16b050088adde0cbeed74f189e5044";
+      sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
+    };
+
+    meta = with stdenv.lib; {
+      description = "ZNC ignore module";
+      homepage = https://github.com/kylef/znc-contrib;
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ kiwi ];
+    };
+  };
+
+  palaver = zncDerivation rec {
+    name = "znc-palaver-${version}";
+    version = "2018-09-18";
+    module_name = "palaver";
+
+    src = fetchFromGitHub {
+      owner = "cocodelabs";
+      repo = "znc-palaver";
+      rev = "c70e8112686f917d39197d582db36c3ea37a4cb6";
+      sha256 = "1gjr8yqgpkpcc18rf0zfgil3rcd1ihqk0q9f8rwbfvs5381h3c58";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Palaver ZNC module";
+      homepage = "https://github.com/cocodelabs/znc-palaver";
+      license = licenses.mit;
+      maintainers = with maintainers; [ kiwi ];
     };
   };
 

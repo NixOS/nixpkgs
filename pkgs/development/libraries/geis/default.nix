@@ -1,14 +1,20 @@
 { stdenv, fetchurl
 , pkgconfig
-, python3
-, dbus_libs
+, python3Packages
+, wrapGAppsHook
+, atk
+, dbus
 , evemu
 , frame
+, gdk-pixbuf
+, gobject-introspection
 , grail
+, gtk3
 , libX11
 , libXext
 , libXi
 , libXtst
+, pango
 , xorgserver
 }:
 
@@ -23,10 +29,27 @@ stdenv.mkDerivation rec {
     sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-format -Wno-misleading-indentation -Wno-error";
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=misleading-indentation" "-Wno-error=pointer-compare" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python3 dbus_libs evemu frame grail libX11 libXext libXi libXtst xorgserver ];
+  hardeningDisable = [ "format" ];
+
+  pythonPath = with python3Packages;
+    [ pygobject3  ];
+
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook python3Packages.wrapPython];
+  buildInputs = [ atk dbus evemu frame gdk-pixbuf gobject-introspection grail
+    gtk3 libX11 libXext libXi libXtst pango python3Packages.python xorgserver
+  ];
+
+  patchPhase = ''
+    substituteInPlace python/geis/geis_v2.py --replace \
+      "ctypes.util.find_library(\"geis\")" "'$out/lib/libgeis.so'"
+  '';
+
+  preFixup = ''
+    buildPythonPath "$out $pythonPath"
+    gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
+  '';
 
   meta = {
     description = "A library for input gesture recognition";

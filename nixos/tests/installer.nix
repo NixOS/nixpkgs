@@ -1,7 +1,9 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
-with import ../lib/qemu-flags.nix;
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -44,7 +46,7 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
-        users.extraUsers.alice = {
+        users.users.alice = {
           isNormalUser = true;
           home = "/home/alice";
           description = "Alice Foobar";
@@ -52,12 +54,11 @@ let
 
         hardware.enableAllFirmware = lib.mkForce false;
 
+        services.udisks2.enable = lib.mkDefault false;
+
         ${replaceChars ["\n"] ["\n  "] extraConfig}
       }
     '';
-
-
-  channelContents = [ pkgs.rlwrap ];
 
 
   # The test script boots a NixOS VM, installs NixOS on an empty hard
@@ -66,17 +67,26 @@ let
   # partitions and filesystems.
   testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
                   , grubIdentifier, preBootCommands, extraConfig
+                  , testCloneConfig
                   }:
     let
       iface = if grubVersion == 1 then "ide" else "virtio";
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+
+      # FIXME don't duplicate the -enable-kvm etc. flags here yet again!
       qemuFlags =
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
-        (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
+        (optionalString (system == "x86_64-linux") "-cpu kvm64 ") +
+        (optionalString (system == "aarch64-linux") "-enable-kvm -machine virt,gic-version=host -cpu host ");
+
       hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''
-        + optionalString isEfi ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '';
-    in
-    ''
+        + optionalString isEfi (if pkgs.stdenv.isAarch64
+            then ''bios => "${pkgs.OVMF.fd}/FV/QEMU_EFI.fd", ''
+            else ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '');
+    in if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
+      throw "Non-EFI boot methods are only supported on i686 / x86_64"
+    else ''
+
       $machine->start;
 
       # Make sure that we get a login prompt etc.
@@ -146,7 +156,7 @@ let
       # Check that the daemon works, and that non-root users can run builds (this will build a new profile generation through the daemon)
       $machine->succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2");
 
-      # We need to a writable nix-store on next boot.
+      # We need a writable Nix store on next boot.
       $machine->copyFileFromHost(
           "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix");
@@ -177,6 +187,43 @@ let
       ${preBootCommands}
       $machine->waitForUnit("network.target");
       $machine->shutdown;
+
+      # Tests for validating clone configuration entries in grub menu
+      ${optionalString testCloneConfig ''
+        # Reboot Machine
+        $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}", name => "clone-default-config" });
+        ${preBootCommands}
+        $machine->waitForUnit("multi-user.target");
+
+        # Booted configuration name should be Home
+        # This is not the name that shows in the grub menu.
+        # The default configuration is always shown as "Default"
+        $machine->succeed("cat /run/booted-system/configuration-name >&2");
+        $machine->succeed("cat /run/booted-system/configuration-name | grep Home");
+
+        # We should find **not** a file named /etc/gitconfig
+        $machine->fail("test -e /etc/gitconfig");
+
+        # Set grub to boot the second configuration
+        $machine->succeed("grub-reboot 1");
+
+        $machine->shutdown;
+
+        # Reboot Machine
+        $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}", name => "clone-alternate-config" });
+        ${preBootCommands}
+
+        $machine->waitForUnit("multi-user.target");
+        # Booted configuration name should be Work
+        $machine->succeed("cat /run/booted-system/configuration-name >&2");
+        $machine->succeed("cat /run/booted-system/configuration-name | grep Work");
+
+        # We should find a file named /etc/gitconfig
+        $machine->succeed("test -e /etc/gitconfig");
+
+        $machine->shutdown;
+      ''}
+
     '';
 
 
@@ -186,20 +233,20 @@ let
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
+    , testCloneConfig ? false
     }:
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
       meta = with pkgs.stdenv.lib.maintainers; {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
-        maintainers = [ wkennington ] ++ (meta.maintainers or []);
+        maintainers = (meta.maintainers or []);
       };
       nodes = {
 
-        # The configuration of the machine used to run "nixos-install". It
-        # also has a web server that simulates cache.nixos.org.
+        # The configuration of the machine used to run "nixos-install".
         machine =
-          { config, lib, pkgs, ... }:
+          { pkgs, ... }:
 
           { imports =
               [ ../modules/profiles/installation-device.nix
@@ -209,7 +256,6 @@ let
 
             virtualisation.diskSize = 8 * 1024;
             virtualisation.memorySize = 1024;
-            virtualisation.writableStore = true;
 
             # Use a small /dev/vdb as the root disk for the
             # installer. This ensures the target disk (/dev/vda) is
@@ -230,13 +276,17 @@ let
               [ sudo
                 libxml2.bin
                 libxslt.bin
+                desktop-file-utils
                 docbook5
-                docbook5_xsl
+                docbook_xsl_ns
                 unionfs-fuse
                 ntp
-                nixos-artwork.wallpapers.gnome-dark
+                nixos-artwork.wallpapers.simple-dark-gray-bottom
                 perlPackages.XMLLibXML
                 perlPackages.ListCompare
+                shared-mime-info
+                texinfo
+                xorg.lndir
 
                 # add curl so that rather than seeing the test attempt to download
                 # curl's tarball, we see what it's trying to download
@@ -245,73 +295,82 @@ let
               ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
               ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
 
+            services.udisks2.enable = mkDefault false;
+
             nix.binaryCaches = mkForce [ ];
+            nix.extraOptions =
+              ''
+                hashed-mirrors =
+                connect-timeout = 1
+              '';
           };
 
       };
 
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands
-                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig;
+                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
+                testCloneConfig;
       };
     };
 
-
-in {
-
-  # !!! `parted mkpart' seems to silently create overlapping partitions.
-
+    makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name
+      { createPartitions = ''
+          $machine->succeed(
+            "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+            . " mkpart primary ext2 1M 50MB" # /boot
+            . " mkpart primary linux-swap 50M 1024M"
+            . " mkpart primary 1024M -1s", # LUKS
+            "udevadm settle",
+            "mkswap /dev/vda2 -L swap",
+            "swapon -L swap",
+            "modprobe dm_mod dm_crypt",
+            "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
+            "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
+            "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
+            "mount LABEL=nixos /mnt",
+            "mkfs.ext3 -L boot /dev/vda1",
+            "mkdir -p /mnt/boot",
+            "mount LABEL=boot /mnt/boot",
+          );
+        '';
+        extraConfig = ''
+          boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+        '';
+        enableOCR = true;
+        preBootCommands = ''
+          $machine->start;
+          $machine->waitForText(qr/Passphrase for/);
+          $machine->sendChars("supersecret\n");
+        '';
+      };
 
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
-  simple = makeInstallerTest "simple"
-    { createPartitions =
-        ''
-          $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary linux-swap 1M 1024M",
-              "parted --script /dev/vda -- mkpart primary ext2 1024M -1s",
-              "udevadm settle",
-              "mkswap /dev/vda1 -L swap",
-              "swapon -L swap",
-              "mkfs.ext3 -L nixos /dev/vda2",
-              "mount LABEL=nixos /mnt",
-          );
-        '';
-    };
+  simple-test-config = { createPartitions =
+       ''
+         $machine->succeed(
+             "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+             . " mkpart primary linux-swap 1M 1024M"
+             . " mkpart primary ext2 1024M -1s",
+             "udevadm settle",
+             "mkswap /dev/vda1 -L swap",
+             "swapon -L swap",
+             "mkfs.ext3 -L nixos /dev/vda2",
+             "mount LABEL=nixos /mnt",
+         );
+       '';
+   };
 
-  # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
-  simpleUefiSystemdBoot = makeInstallerTest "simpleUefiSystemdBoot"
+  simple-uefi-grub-config =
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel gpt",
-              "parted --script /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
-              "parted --script /dev/vda -- set 1 boot on",
-              "parted --script /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
-              "parted --script /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
-              "udevadm settle",
-              "mkswap /dev/vda2 -L swap",
-              "swapon -L swap",
-              "mkfs.ext3 -L nixos /dev/vda3",
-              "mount LABEL=nixos /mnt",
-              "mkfs.vfat -n BOOT /dev/vda1",
-              "mkdir -p /mnt/boot",
-              "mount LABEL=BOOT /mnt/boot",
-          );
-        '';
-        bootLoader = "systemd-boot";
-    };
-
-  simpleUefiGrub = makeInstallerTest "simpleUefiGrub"
-    { createPartitions =
-        ''
-          $machine->succeed(
-              "parted --script /dev/vda mklabel gpt",
-              "parted --script /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
-              "parted --script /dev/vda -- set 1 boot on",
-              "parted --script /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
-              "parted --script /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
+              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+              . " mkpart ESP fat32 1M 50MiB" # /boot
+              . " set 1 boot on"
+              . " mkpart primary linux-swap 50MiB 1024MiB"
+              . " mkpart primary ext2 1024MiB -1MiB", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -326,15 +385,76 @@ in {
         grubUseEfi = true;
     };
 
+  clone-test-extraconfig = { extraConfig =
+         ''
+         environment.systemPackages = [ pkgs.grub2 ];
+         boot.loader.grub.configurationName = "Home";
+         nesting.clone = [
+         {
+           boot.loader.grub.configurationName = lib.mkForce "Work";
+
+           environment.etc = {
+             "gitconfig".text = "
+               [core]
+                 gitproxy = none for work.com
+                 ";
+           };
+         }
+         ];
+         '';
+       testCloneConfig = true;
+  };
+
+
+in {
+
+  # !!! `parted mkpart' seems to silently create overlapping partitions.
+
+
+  # The (almost) simplest partitioning scheme: a swap partition and
+  # one big filesystem partition.
+  simple = makeInstallerTest "simple" simple-test-config;
+
+  # Test cloned configurations with the simple grub configuration
+  simpleClone = makeInstallerTest "simpleClone" (simple-test-config // clone-test-extraconfig);
+
+  # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
+  simpleUefiSystemdBoot = makeInstallerTest "simpleUefiSystemdBoot"
+    { createPartitions =
+        ''
+          $machine->succeed(
+              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+              . " mkpart ESP fat32 1M 50MiB" # /boot
+              . " set 1 boot on"
+              . " mkpart primary linux-swap 50MiB 1024MiB"
+              . " mkpart primary ext2 1024MiB -1MiB", # /
+              "udevadm settle",
+              "mkswap /dev/vda2 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda3",
+              "mount LABEL=nixos /mnt",
+              "mkfs.vfat -n BOOT /dev/vda1",
+              "mkdir -p /mnt/boot",
+              "mount LABEL=BOOT /mnt/boot",
+          );
+        '';
+        bootLoader = "systemd-boot";
+    };
+
+  simpleUefiGrub = makeInstallerTest "simpleUefiGrub" simple-uefi-grub-config;
+
+  # Test cloned configurations with the uefi grub configuration
+  simpleUefiGrubClone = makeInstallerTest "simpleUefiGrubClone" (simple-uefi-grub-config // clone-test-extraconfig);
+
   # Same as the previous, but now with a separate /boot partition.
   separateBoot = makeInstallerTest "separateBoot"
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-              "parted --script /dev/vda -- mkpart primary linux-swap 50MB 1024M",
-              "parted --script /dev/vda -- mkpart primary ext2 1024M -1s", # /
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+              . " mkpart primary ext2 1M 50MB" # /boot
+              . " mkpart primary linux-swap 50MB 1024M"
+              . " mkpart primary ext2 1024M -1s", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -352,10 +472,10 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-              "parted --script /dev/vda -- mkpart primary linux-swap 50MB 1024M",
-              "parted --script /dev/vda -- mkpart primary ext2 1024M -1s", # /
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+              . " mkpart primary ext2 1M 50MB" # /boot
+              . " mkpart primary linux-swap 50MB 1024M"
+              . " mkpart primary ext2 1024M -1s", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -388,9 +508,9 @@ in {
       createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary linux-swap 1M 1024M",
-              "parted --script /dev/vda -- mkpart primary 1024M -1s",
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+              . " mkpart primary linux-swap 1M 1024M"
+              . " mkpart primary 1024M -1s",
               "udevadm settle",
 
               "mkswap /dev/vda1 -L swap",
@@ -411,11 +531,11 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda mklabel msdos",
-              "parted --script /dev/vda -- mkpart primary 1M 2048M", # PV1
-              "parted --script /dev/vda -- set 1 lvm on",
-              "parted --script /dev/vda -- mkpart primary 2048M -1s", # PV2
-              "parted --script /dev/vda -- set 2 lvm on",
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+              . " mkpart primary 1M 2048M" # PV1
+              . " set 1 lvm on"
+              . " mkpart primary 2048M -1s" # PV2
+              . " set 2 lvm on",
               "udevadm settle",
               "pvcreate /dev/vda1 /dev/vda2",
               "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
@@ -429,49 +549,26 @@ in {
         '';
     };
 
-  # Boot off an encrypted root partition
-  luksroot = makeInstallerTest "luksroot"
-    { createPartitions = ''
-        $machine->succeed(
-          "parted --script /dev/vda mklabel msdos",
-          "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-          "parted --script /dev/vda -- mkpart primary linux-swap 50M 1024M",
-          "parted --script /dev/vda -- mkpart primary 1024M -1s", # LUKS
-          "udevadm settle",
-          "mkswap /dev/vda2 -L swap",
-          "swapon -L swap",
-          "modprobe dm_mod dm_crypt",
-          "echo -n supersecret | cryptsetup luksFormat -q /dev/vda3 -",
-          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
-          "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
-          "mount LABEL=nixos /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
-          "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
-        );
-      '';
-      extraConfig = ''
-        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-      '';
-      enableOCR = true;
-      preBootCommands = ''
-        $machine->start;
-        $machine->waitForText(qr/Enter passphrase/);
-        $machine->sendChars("supersecret\n");
-      '';
-    };
+  # Boot off an encrypted root partition with the default LUKS header format
+  luksroot = makeLuksRootTest "luksroot-format1" "";
+
+  # Boot off an encrypted root partition with LUKS1 format
+  luksroot-format1 = makeLuksRootTest "luksroot-format1" "--type=LUKS1";
+
+  # Boot off an encrypted root partition with LUKS2 format
+  luksroot-format2 = makeLuksRootTest "luksroot-format2" "--type=LUKS2";
 
   # Test whether opening encrypted filesystem with keyfile
   # Checks for regression of missing cryptsetup, when no luks device without
   # keyfile is configured
-  filesystemEncryptedWithKeyfile = makeInstallerTest "filesystemEncryptedWithKeyfile"
+  encryptedFSWithKeyfile = makeInstallerTest "encryptedFSWithKeyfile"
     { createPartitions = ''
        $machine->succeed(
-          "parted --script /dev/vda mklabel msdos",
-          "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-          "parted --script /dev/vda -- mkpart primary linux-swap 50M 1024M",
-          "parted --script /dev/vda -- mkpart primary 1024M 1280M", # LUKS with keyfile
-          "parted --script /dev/vda -- mkpart primary 1280M -1s",
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          . " mkpart primary ext2 1M 50MB" # /boot
+          . " mkpart primary linux-swap 50M 1024M"
+          . " mkpart primary 1024M 1280M" # LUKS with keyfile
+          . " mkpart primary 1280M -1s",
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
@@ -506,7 +603,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda --"
+              "flock /dev/vda parted --script /dev/vda --"
               . " mklabel msdos"
               . " mkpart primary ext2 1M 100MB" # /boot
               . " mkpart extended 100M -1s"
@@ -517,8 +614,10 @@ in {
               "udevadm settle",
               "ls -l /dev/vda* >&2",
               "cat /proc/partitions >&2",
+              "udevadm control --stop-exec-queue",
               "mdadm --create --force /dev/md0 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda5 /dev/vda6",
               "mdadm --create --force /dev/md1 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda7 /dev/vda8",
+              "udevadm control --start-exec-queue",
               "udevadm settle",
               "mkswap -f /dev/md1 -L swap",
               "swapon -L swap",
@@ -541,14 +640,15 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/sda mklabel msdos",
-              "parted --script /dev/sda -- mkpart primary linux-swap 1M 1024M",
-              "parted --script /dev/sda -- mkpart primary ext2 1024M -1s",
+              "flock /dev/sda parted --script /dev/sda -- mklabel msdos"
+              . " mkpart primary linux-swap 1M 1024M"
+              . " mkpart primary ext2 1024M -1s",
               "udevadm settle",
               "mkswap /dev/sda1 -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/sda2",
               "mount LABEL=nixos /mnt",
+              "mkdir -p /mnt/tmp",
           );
         '';
       grubVersion = 1;

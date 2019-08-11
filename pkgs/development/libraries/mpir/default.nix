@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, m4, which, yasm }:
+{ stdenv, fetchurl, m4, which, yasm }:
 
 stdenv.mkDerivation rec {
   name = "mpir-${version}";
@@ -11,12 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1fvmhrqdjs925hzr2i8bszm50h00gwsh17p2kn2pi51zrxck9xjj";
   };
 
+  configureFlags = [ "--enable-cxx" ];
+
   meta = {
     inherit version;
     description = ''A highly optimised library for bignum arithmetic forked from GMP'';
     license = stdenv.lib.licenses.lgpl3Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     downloadPage = "http://mpir.org/downloads.html";
     homepage = http://mpir.org/;
     updateWalker = true;

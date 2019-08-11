@@ -1,62 +1,36 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
-, glib, gnome2, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
-, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
-, pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
+{ branch ? "stable", pkgs }:
 
-stdenv.mkDerivation rec {
-
+let
+  inherit (pkgs) callPackage fetchurl;
+in {
+  stable = callPackage ./base.nix {
     pname = "discord";
-    version = "0.0.4";
-    name = "${pname}-${version}";
-
+    binaryName = "Discord";
+    desktopName = "Discord";
+    version = "0.0.9";
     src = fetchurl {
-        url = "https://cdn.discordapp.com/apps/linux/${version}/${pname}-${version}.tar.gz";
-        sha256 = "1alw9rkv1vv0s1w33hd9ab1cgj7iqd7ad9kvn1d55gyki28f8qlb";
+      url = "https://dl.discordapp.net/apps/linux/0.0.9/discord-0.0.9.tar.gz";
+      sha256 = "1i0f8id10rh2fx381hx151qckvvh8hbznfsfav8w0dfbd1bransf";
     };
-
-    nativeBuildInputs = [ makeWrapper ];
-
-    libPath = stdenv.lib.makeLibraryPath [
-        libcxx systemd libpulseaudio
-        stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
-        gdk_pixbuf glib gnome2.GConf gtk2 libnotify libX11 libXcomposite
-        libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-        libXtst nspr nss libxcb pango systemd libXScrnSaver
-     ];
-
-    installPhase = ''
-        mkdir -p $out/{bin,opt/discord,share/pixmaps}
-        mv * $out/opt/discord
-
-        patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-                 $out/opt/discord/Discord
-
-        paxmark m $out/opt/discord/Discord
-
-        wrapProgram $out/opt/discord/Discord --prefix LD_LIBRARY_PATH : ${libPath}
-
-        ln -s $out/opt/discord/Discord $out/bin/
-        ln -s $out/opt/discord/discord.png $out/share/pixmaps
-
-        ln -s "${desktopItem}/share/applications" $out/share/
-        '';
-
-    desktopItem = makeDesktopItem {
-      name = pname;
-      exec = "Discord";
-      icon = pname;
-      desktopName = "Discord";
-      genericName = meta.description;
-      categories = "Network;InstantMessaging;";
+  };
+  ptb = callPackage ./base.nix {
+    pname = "discord-ptb";
+    binaryName = "DiscordPTB";
+    desktopName = "Discord PTB";
+    version = "0.0.15";
+    src = fetchurl {
+      url = "https://dl-ptb.discordapp.net/apps/linux/0.0.15/discord-ptb-0.0.15.tar.gz";
+      sha256 = "0znqb0a3yglgx7a9ypkb81jcm8kqgc6559zi7vfqn02zh15gqv6a";
     };
-
-    meta = with stdenv.lib; {
-        description = "All-in-one voice and text chat for gamers that’s free, secure, and works on both your desktop and phone";
-        homepage = https://discordapp.com/;
-        downloadPage = "https://github.com/crmarsh/discord-linux-bugs";
-        license = licenses.unfree;
-        maintainers = [ maintainers.ldesgoui maintainers.MP2E ];
-        platforms = [ "x86_64-linux" ];
+  };
+  canary = callPackage ./base.nix {
+    pname = "discord-canary";
+    binaryName = "DiscordCanary";
+    desktopName = "Discord Canary";
+    version = "0.0.91";
+    src = fetchurl {
+      url = "https://dl-canary.discordapp.net/apps/linux/0.0.91/discord-canary-0.0.91.tar.gz";
+      sha256 = "0sw5m4z5k29rzqrsxbvjqd8fxjwd9jn7nbq65nyg7f0d790rhpy8";
     };
-}
+  };
+}.${branch}

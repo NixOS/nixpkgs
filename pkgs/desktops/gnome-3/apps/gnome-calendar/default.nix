@@ -1,21 +1,34 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook
-, gettext, libxml2, gnome3, gtk, evolution_data_server, libsoup
-, glib, gnome_online_accounts, gsettings_desktop_schemas }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib, python3
+, gettext, libxml2, gnome3, gtk3, evolution-data-server, libsoup
+, glib, gnome-online-accounts, gsettings-desktop-schemas }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "gnome-calendar";
+  version = "3.32.2";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "07p73cvzj8idr80npja5yiv9pjfyi6qqfhaz5jwcgqspqbnhnl7k";
+  };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
+
+  nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook python3 ];
   buildInputs = [
-    gtk evolution_data_server libsoup glib gnome_online_accounts
-    gsettings_desktop_schemas gnome3.defaultIconTheme
+    gtk3 evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
+    gsettings-desktop-schemas gnome3.adwaita-icon-theme
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
+    chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
+    patchShebangs build-aux/meson/meson_post_install.py
   '';
 
   meta = with stdenv.lib; {

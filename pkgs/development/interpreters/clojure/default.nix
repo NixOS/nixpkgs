@@ -1,25 +1,30 @@
-{ stdenv, fetchurl, jdk, makeWrapper }:
+{ stdenv, fetchurl, jdk11, rlwrap, makeWrapper }:
 
-let version = "1.9.0.273"; in
-
-stdenv.mkDerivation {
-  name = "clojure-${version}";
+stdenv.mkDerivation rec {
+  pname = "clojure";
+  version = "1.10.1.466";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "0xmrq3xvr002jgq8m1j0y5ld0rcr49608g3gqxgyxzjqswacglb4";
+    sha256 = "1rh4isdac7l8k8p45cqim8lfccjzxw7z173xqnpgk3z307jj4n90";
   };
 
-  buildInputs = [ jdk makeWrapper ];
+  buildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    pwd
-    ls -la
-    mkdir -p $out/libexec $out/bin
-    cp -f deps.edn example-deps.edn $out
-    cp -f clojure-tools-${version}.jar $out/libexec
-    sed -i -e "s@PREFIX@$out@g" clojure
-    cp -f clj clojure $out/bin
+  outputs = [ "out" "prefix" ];
+
+  installPhase = let
+    binPath = stdenv.lib.makeBinPath [ rlwrap jdk11 ];
+  in ''
+    mkdir -p $prefix/libexec
+    cp clojure-tools-${version}.jar $prefix/libexec
+    cp example-deps.edn $prefix
+
+    substituteInPlace clojure --replace PREFIX $prefix
+
+    install -Dt $out/bin clj clojure
+    wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
+    wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
   '';
 
   meta = with stdenv.lib; {
@@ -45,7 +50,7 @@ stdenv.mkDerivation {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ jlesquembre ];
     platforms = platforms.unix;
   };
 }

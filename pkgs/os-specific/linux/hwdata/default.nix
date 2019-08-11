@@ -1,17 +1,25 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "hwdata-${version}";
-  version = "0.300";
+  version = "0.316";
 
-  src = fetchurl {
-    url = "http://pkgs.fedoraproject.org/repo/pkgs/hwdata/v0.300.tar.gz/sha512/34294fcf65c3cb17c19d625732d1656ec1992dde254a68ee35681ad2f310bc05028a85889efa2c1d1e8a2d10885ccc00185475a00f6f2fb82d07e2349e604a51/v0.300.tar.gz";
-    sha256 = "03xlj05qyixhnsybq1qnr7j5q2nvirs4jxpgg4sbw8swsqj3dgqi";
+  src = fetchFromGitHub {
+    owner = "vcrhonek";
+    repo = "hwdata";
+    rev = "v${version}";
+    sha256 = "0k3fypykbq9943cnxlmmpk0xp9nhhf46pfdhkgm99iaa27b8s1gb";
   };
 
   preConfigure = "patchShebangs ./configure";
 
-  configureFlags = "--datadir=$(prefix)/data";
+  configureFlags = [ "--datadir=${placeholder "out"}/share" ];
+
+  doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
+
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "0g2w4jr4p1hykracp2za7jb0rcr51kks1m43pzcaf7g99x8669ww";
 
   meta = {
     homepage = https://github.com/vcrhonek/hwdata;

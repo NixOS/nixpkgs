@@ -1,12 +1,12 @@
 { stdenv, fetchurl, coq }:
 
 stdenv.mkDerivation rec {
-  version = "20171206";
+  version = "20181116";
   name = "coq${coq.coq-version}-tlc-${version}";
 
   src = fetchurl {
     url = "http://tlc.gforge.inria.fr/releases/tlc-${version}.tar.gz";
-    sha256 = "1wc44qb5zmarafp56gdrbka8gllipqna9cj0a6d99jzb361xg4mf";
+    sha256 = "0iv6f6zmrv2lhq3xq57ipmw856ahsql754776ymv5wjm88ld63nm";
   };
 
   buildInputs = [ coq ];

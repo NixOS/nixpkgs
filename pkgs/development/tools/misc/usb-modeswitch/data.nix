@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "usb-modeswitch-data-${version}";
-  version = "20170205";
+  version = "20170806";
 
   src = fetchurl {
     url    = "http://www.draisberghof.de/usb_modeswitch/${name}.tar.bz2";
-    sha256 = "1l9q4xk02zd0l50bqhyk906wbcs26ji7259q0f7qv3cj52fzvp72";
+    sha256 = "0b1wari3aza6qjggqd0hk2zsh93k1q8scgmwh6f8wr0flpr3whff";
   };
 
   inherit (usb-modeswitch) makeFlags;

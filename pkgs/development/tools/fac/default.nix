@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "fac-${version}";
-  version = "1.0.1";
+  version = "2.0.0";
 
   goPackagePath = "github.com/mkchoi212/fac";
 
@@ -10,14 +10,19 @@ buildGoPackage rec {
     owner = "mkchoi212";
     repo = "fac";
     rev = "v${version}";
-    sha256 = "1j5kip3l3p9qlly03pih905sdz3ncvpj7135jpnfhckbk1s5x9dc";
+    sha256 = "054bbiw0slz9szy3ap2sh5dy97w3g7ms27rd3ww3i1zdhvnggwpc";
   };
+
+  goDeps = ./deps.nix;
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $bin/bin/fac \
       --prefix PATH : ${git}/bin
+
+    # Install man page, not installed by default
+    install -D go/src/${goPackagePath}/assets/doc/fac.1 $out/share/man/man1/fac.1
   '';
 
   meta = with stdenv.lib; {

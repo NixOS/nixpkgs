@@ -2,8 +2,8 @@
   mkDerivation, lib, fetchurl, fetchpatch,
   gettext, pkgconfig,
   qtbase,
-  alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk_pixbuf, lame, libbs2b,
-  libcddb, libcdio082, libcue, libjack2, libmad, libmms, libmodplug,
+  alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk-pixbuf, lame, libbs2b,
+  libcddb, libcdio, libcue, libjack2, libmad, libmms, libmodplug,
   libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
   libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
   wavpack
@@ -45,8 +45,8 @@ mkDerivation {
     qtbase
 
     # Plugin dependencies
-    alsaLib curl faad2 ffmpeg flac fluidsynth gdk_pixbuf lame libbs2b libcddb
-    libcdio082 libcue libjack2 libmad libmms libmodplug libmowgli
+    alsaLib curl faad2 ffmpeg flac fluidsynth gdk-pixbuf lame libbs2b libcddb
+    libcdio libcue libjack2 libmad libmms libmodplug libmowgli
     libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
     libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
   ];
@@ -81,7 +81,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Audio player";
-    homepage = http://audacious-media-player.org/;
+    homepage = https://audacious-media-player.org/;
     maintainers = with maintainers; [ ttuegel ];
     platforms = with platforms; linux;
     license = with licenses; [

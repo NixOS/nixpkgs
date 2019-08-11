@@ -31,16 +31,13 @@ in
 stdenv.mkDerivation rec {
   name = "teamspeak-client-${version}";
 
-  version = "3.1.7";
+  version = "3.3.0";
 
   src = fetchurl {
-    urls = [
-      "http://dl.4players.de/ts/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
-      "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
-    ];
+    url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
     sha256 = if stdenv.is64bit
-                then "1ww20805b7iphkh1ra3py6f7l7s321cg70sfl9iw69n05l3313fn"
-                else "0yvhmbhliraakn9k4bij6rnai7hn50g4z6mfjsyliizf6437x4nr";
+                then "13286dbjp4qiyfv8my1hfpwzns4szdsnqa11j8ygsh5ikgjk338a"
+                else "04lwclq7nvw73v5fmn9795j5wi54syglc77ldl41caiqqhdqf1i5";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -61,6 +58,7 @@ stdenv.mkDerivation rec {
     ''
       mv ts3client_linux_${arch} ts3client
       echo "patching ts3client..."
+      patchelf --replace-needed libquazip.so ${quazip}/lib/libquazip5.so ts3client
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
@@ -74,6 +72,7 @@ stdenv.mkDerivation rec {
       rm *.so.* *.so
       rm QtWebEngineProcess
       rm qt.conf
+      rm -r platforms # contains libqxcb.so
 
       # Install files.
       mkdir -p $out/lib/teamspeak
@@ -91,7 +90,7 @@ stdenv.mkDerivation rec {
 
       wrapProgram $out/bin/ts3client \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-        --set QT_PLUGIN_PATH "$out/lib/teamspeak/platforms" \
+        --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}" \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
 
@@ -107,7 +106,7 @@ stdenv.mkDerivation rec {
       free = false;
     };
     maintainers = [ stdenv.lib.maintainers.lhvwb ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
 

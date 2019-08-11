@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
-, thin-provisioning-tools, enable_dmeventd ? false }:
+{ stdenv, fetchgit, fetchpatch, pkgconfig, systemd, udev, utillinux, libuuid
+, thin-provisioning-tools, libaio
+, enable_dmeventd ? false }:
 
 let
-  version = "2.02.176";
+  version = "2.03.01";
 in
 
 stdenv.mkDerivation {
   name = "lvm2-${version}";
 
-  src = fetchurl {
-    url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
-    sha256 = "0wx4rvy4frdmb66znh2xms2j2n06sm361ki6l5ks4y1ciii87kny";
+  src = fetchgit {
+    url = "git://sourceware.org/git/lvm2.git";
+    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    sha256 = "0jlaswf1srdxiqpgpp97j950ddjds8z0kr4pbwmal2za2blrgvbl";
   };
 
   configureFlags = [
@@ -27,7 +29,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libudev libuuid thin-provisioning-tools ];
+  buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
 
   preConfigure =
     ''
@@ -38,9 +40,29 @@ stdenv.mkDerivation {
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
     '';
 
-  enableParallelBuilding = true;
+  # gcc: error: ../../device_mapper/libdevice-mapper.a: No such file or directory
+  enableParallelBuilding = false;
 
   #patches = [ ./purity.patch ];
+  patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      name = "fix-stdio-usage.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/lvm2/fix-stdio-usage.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
+      sha256 = "0m6wr6qrvxqi2d2h054cnv974jq1v65lqxy05g1znz946ga73k3p";
+    })
+    (fetchpatch {
+      name = "mallinfo.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/lvm2/mallinfo.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
+      sha256 = "0g6wlqi215i5s30bnbkn8w7axrs27y3bnygbpbnf64wwx7rxxlj0";
+    })
+    (fetchpatch {
+      name = "mlockall-default-config.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/lvm2/mlockall-default-config.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
+      sha256 = "1ivbj3sphgf8n1ykfiv5rbw7s8dgnj5jcr9jl2v8cwf28lkacw5l";
+    })
+  ];
+
+  doCheck = false; # requires root
 
   # To prevent make install from failing.
   preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
@@ -59,11 +81,12 @@ stdenv.mkDerivation {
       cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://sourceware.org/lvm2/;
     description = "Tools to support Logical Volume Management (LVM) on Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 bsd2 lgpl21 ];
+    maintainers = with maintainers; [raskin];
     inherit version;
     downloadPage = "ftp://sources.redhat.com/pub/lvm2/";
   };

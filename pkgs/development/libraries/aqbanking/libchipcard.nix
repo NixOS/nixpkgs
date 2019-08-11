@@ -1,11 +1,12 @@
 { stdenv, fetchurl, pkgconfig, gwenhywfar, pcsclite, zlib }:
 
-stdenv.mkDerivation rec {
+let
+  inherit ((import ./sources.nix).libchipcard) sha256 releaseId version;
+in stdenv.mkDerivation rec {
   name = "libchipcard-${version}";
-  version = "5.0.4";
+  inherit version;
 
   src = let
-    inherit ((import ./sources.nix).libchipcard) sha256 releaseId;
     qstring = "package=02&release=${releaseId}&file=01";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {

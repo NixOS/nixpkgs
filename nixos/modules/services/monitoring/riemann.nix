@@ -17,9 +17,9 @@ let
 
   launcher = writeScriptBin "riemann" ''
     #!/bin/sh
-    exec ${jdk}/bin/java ${concatStringsSep "\n" cfg.extraJavaOpts} \
+    exec ${jdk}/bin/java ${concatStringsSep " " cfg.extraJavaOpts} \
       -cp ${classpath} \
-      riemann.bin ${writeText "riemann-config.clj" riemannConfig}
+      riemann.bin ${cfg.configFile}
   '';
 
 in {
@@ -37,7 +37,8 @@ in {
       config = mkOption {
         type = types.lines;
         description = ''
-          Contents of the Riemann configuration file.
+          Contents of the Riemann configuration file. For more complicated
+          config you should use configFile.
         '';
       };
       configFiles = mkOption {
@@ -47,7 +48,15 @@ in {
           Extra files containing Riemann configuration. These files will be
           loaded at runtime by Riemann (with Clojure's
           <literal>load-file</literal> function) at the end of the
-          configuration.
+          configuration if you use the config option, this is ignored if you
+          use configFile.
+        '';
+      };
+      configFile = mkOption {
+        type = types.str;
+        description = ''
+          A Riemann config file. Any files in the same directory as this file
+          will be added to the classpath by Riemann.
         '';
       };
       extraClasspathEntries = mkOption {
@@ -69,13 +78,17 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraGroups.riemann.gid = config.ids.gids.riemann;
+    users.groups.riemann.gid = config.ids.gids.riemann;
 
-    users.extraUsers.riemann = {
+    users.users.riemann = {
       description = "riemann daemon user";
       uid = config.ids.uids.riemann;
       group = "riemann";
     };
+
+    services.riemann.configFile = mkDefault (
+      writeText "riemann-config.clj" riemannConfig
+    );
 
     systemd.services.riemann = {
       wantedBy = [ "multi-user.target" ];
@@ -84,6 +97,7 @@ in {
         User = "riemann";
         ExecStart = "${launcher}/bin/riemann";
       };
+      serviceConfig.LimitNOFILE = 65536;
     };
 
   };

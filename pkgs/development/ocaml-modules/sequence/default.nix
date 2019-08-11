@@ -1,27 +1,22 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, ounit }:
+{ stdenv, fetchFromGitHub, buildDunePackage, qtest, result }:
 
-let version = "0.10"; in
+buildDunePackage rec {
+  pname = "sequence";
+  version = "1.1";
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-sequence-${version}";
+  minimumOCamlVersion = "4.02";
 
   src = fetchFromGitHub {
     owner = "c-cube";
-    repo = "sequence";
+    repo = pname;
     rev = version;
-    sha256 = "0pl8pv758wn8bm555i8f0fvfn2pw88w1bmzjrzrv01092d85wx1g";
+    sha256 = "08j37nldw47syq3yw4mzhhvya43knl0d7biddp0q9hwbaxhzgi44";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild qtest ounit ];
-
-  configureFlags = [
-    "--enable-tests"
-  ];
+  buildInputs = [ qtest ];
+  propagatedBuildInputs = [ result ];
 
   doCheck = true;
-  checkTarget = "test";
-
-  createFindlibDestdir = true;
 
   meta = {
     homepage = https://github.com/c-cube/sequence;
@@ -33,6 +28,5 @@ stdenv.mkDerivation {
       sequence is iterated/folded on.
     '';
     license = stdenv.lib.licenses.bsd2;
-    platforms = ocaml.meta.platforms or [];
   };
 }

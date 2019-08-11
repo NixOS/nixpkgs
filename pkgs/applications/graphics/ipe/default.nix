@@ -1,33 +1,23 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
-, libjpeg, qtbase
+, libjpeg, libpng, qtbase
 }:
 
 stdenv.mkDerivation rec {
-  name = "ipe-7.2.7";
+  name = "ipe-7.2.12";
 
   src = fetchurl {
     url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${name}-src.tar.gz";
-    sha256 = "08lzqhagvr8l69hxghyw9akf5dixbily7hj2gxhzzrp334k3yvfn";
+    sha256 = "1qw1cmwzi3wxk4x916i9y4prhi9brnwl14i9a1cbw23x1sr7i6kw";
   };
 
-  # changes taken from Gentoo portage
-  preConfigure = ''
-    cd src
-    sed -i \
-      -e 's/fpic/fPIC/' \
-      -e 's/moc-qt4/moc/' \
-      config.mak || die
-    sed -i -e 's/install -s/install/' common.mak || die
-  '';
+  sourceRoot = "${name}/src";
 
-  NIX_CFLAGS_COMPILE = [ "-std=c++11" ]; # build with Qt 5.7
-
-  IPEPREFIX="$$out";
+  IPEPREFIX="${placeholder "out"}";
   URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 
   buildInputs = [
-    libjpeg zlib qtbase freetype cairo lua5 texlive ghostscript
+    libjpeg libpng zlib qtbase freetype cairo lua5 texlive ghostscript
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
@@ -38,7 +28,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  patches = [ ./xlocale.patch ];
+  enableParallelBuilding = true;
 
   #TODO: make .desktop entry
 

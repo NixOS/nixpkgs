@@ -1,18 +1,19 @@
-{ stdenv, fetchgit, cmake, SDL2, qtbase, boost, curl, gtest }:
+{ stdenv, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
 
 stdenv.mkDerivation rec { 
-  name = "citra-2017-07-26";
+  name = "citra-${version}";
+  version = "2019-05-25";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/citra-emu/citra";
-    rev = "a724fb365787718f9e44adedc14e59d0854905a6";
-    sha256 = "0lkrwhxvq85c0smix27xvj8m463bxa67qhy8m8r43g39n0h8d5sf";
+    rev = "186ffc235f744dad315a603a98cce4597ef0f65f";
+    sha256 = "0w24an80yjmkfcxjzdvsbpahx46bmd90liq5m6qva5pgnpmxx7pn";
   };
 
+  enableParallelBuilding = true;
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 qtbase boost curl gtest ];
-  cmakeFlags = [ "-DUSE_SYSTEM_CURL=ON" "-DUSE_SYSTEM_GTEST=ON" ];
+  buildInputs = [ SDL2 qtbase qtmultimedia boost ];
 
   preConfigure = ''
     # Trick configure system.
@@ -21,13 +22,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
-    homepage = https://citra-emu.org/;
-    description = "An open-source emulator for the Nintendo 3DS capable of playing many of your favorite games.";
-    platforms = platforms.linux;
+    homepage = "https://citra-emu.org";
+    description = "An open-source emulator for the Nintendo 3DS";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
   };
 }

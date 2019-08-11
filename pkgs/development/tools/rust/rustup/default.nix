@@ -1,25 +1,25 @@
 { stdenv, lib, runCommand, patchelf
 , fetchFromGitHub, rustPlatform
-, pkgconfig, curl, Security }:
+, pkgconfig, curl, Security, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rustup-${version}";
-  version = "2017-10-29";
-
-  cargoSha256 = "1xwxv8y9xjgdmm92ldrn9m9fml2zb5h7qqm7dhw63j6psb3ajqrw";
+  pname = "rustup";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
-    owner = "rust-lang-nursery";
+    owner = "rust-lang";
     repo = "rustup.rs";
-    rev = "13c8092507bf646f3ef6a621fe2c5a68212e800f";
-    sha256 = "1qd01rjk9qpfzgqs35f5nxrcf00kmf76zwmgj3yzdig9zymjwndg";
+    rev = version;
+    sha256 = "062l893i9czm1lm0x3arj3vfnjg3fg8q8xvq3y4adakmk6yrcc4x";
   };
+
+  cargoSha256 = "1zwlr0zxc97m6xr28ryq5hkrvcns6qg68h7w09sga23xinm3fr11";
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
     curl
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
@@ -32,26 +32,40 @@ rustPlatform.buildRustPackage rec {
     '')
   ];
 
+  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+
   postInstall = ''
     pushd $out/bin
     mv rustup-init rustup
-    for link in cargo rustc rustdoc rust-gdb rust-lldb; do
+    binlinks=(
+      cargo rustc rustdoc rust-gdb rust-lldb rls rustfmt cargo-fmt
+      cargo-clippy clippy-driver cargo-miri
+    )
+    for link in ''${binlinks[@]}; do
       ln -s rustup $link
     done
     popd
 
     # tries to create .rustup
     export HOME=$(mktemp -d)
-    mkdir -p "$out/share/"{bash-completion/completions,fish/completions,zsh/site-functions}
-    $out/bin/rustup completions bash > "$out/share/bash-completion/completions/rustup"
-    $out/bin/rustup completions fish > "$out/share/fish/completions/rustup.fish"
-    $out/bin/rustup completions zsh >  "$out/share/zsh/site-functions/_rustup"
+    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
+
+    # generate completion scripts for rustup
+    $out/bin/rustup completions bash rustup > "$out/share/bash-completion/completions/rustup"
+    $out/bin/rustup completions fish rustup > "$out/share/fish/vendor_completions.d/rustup.fish"
+    $out/bin/rustup completions zsh rustup >  "$out/share/zsh/site-functions/_rustup"
+
+    # generate completion scripts for cargo
+    # Note: fish completion script is not supported.
+    $out/bin/rustup completions bash cargo > "$out/share/bash-completion/completions/cargo"
+    $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
   '';
 
   meta = with stdenv.lib; {
     description = "The Rust toolchain installer";
     homepage = https://www.rustup.rs/;
-    license = licenses.mit;
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.mic92 ];
+    platforms = platforms.all;
   };
 }

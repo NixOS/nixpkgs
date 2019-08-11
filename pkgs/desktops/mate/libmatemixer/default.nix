@@ -1,18 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib
+{ config, stdenv, fetchurl, pkgconfig, intltool, glib
 , alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio
+, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
 , ossSupport ? false
  }:
 
 stdenv.mkDerivation rec {
   name = "libmatemixer-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "0";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "09vyxnlnalws318gsafdfi5c6jwpp92pbafn1ddlqqds23ihk4mr";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1v0gpr55gj4mj8hzxbhgzrmhaxvs2inxhsmirvjw39sc7iplvrh9";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

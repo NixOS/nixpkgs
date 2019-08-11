@@ -7,7 +7,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5 xorg;
+  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
 
 in
 
@@ -19,6 +19,13 @@ in
         type = types.bool;
         default = false;
         description = "Enable the Plasma 5 (KDE 5) desktop environment.";
+      };
+
+      phononBackend = mkOption {
+        type = types.enum [ "gstreamer" "vlc" ];
+        default = "gstreamer";
+        example = "vlc";
+        description = "Phonon audio backend to install.";
       };
 
       enableQt4Support = mkOption {
@@ -36,7 +43,7 @@ in
 
 
   config = mkMerge [
-    (mkIf (xcfg.enable && cfg.enable) {
+    (mkIf cfg.enable {
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
         bgSupport = true;
@@ -47,13 +54,29 @@ in
             ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
           ''}
 
+          if [ -f "$HOME/.config/kdeglobals" ]
+          then
+              # Remove extraneous font style names.
+              # See also: https://phabricator.kde.org/D9070
+              ${getBin pkgs.gnused}/bin/sed -i "$HOME/.config/kdeglobals" \
+                  -e '/^fixed=/ s/,Regular$//' \
+                  -e '/^font=/ s/,Regular$//' \
+                  -e '/^menuFont=/ s/,Regular$//' \
+                  -e '/^smallestReadableFont=/ s/,Regular$//' \
+                  -e '/^toolBarFont=/ s/,Regular$//'
+          fi
+
           exec "${getBin plasma5.plasma-workspace}/bin/startkde"
         '';
       };
 
       security.wrappers = {
-        kcheckpass.source = "${lib.getBin plasma5.plasma-workspace}/lib/libexec/kcheckpass";
-        "start_kdeinit".source = "${lib.getBin pkgs.kinit}/lib/libexec/kf5/start_kdeinit";
+        kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/libexec/kcheckpass";
+        "start_kdeinit".source = "${lib.getBin pkgs.kinit}/libexec/kf5/start_kdeinit";
+        kwin_wayland = {
+          source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
+          capabilities = "cap_sys_nice+ep";
+        };
       };
 
       environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
@@ -65,6 +88,7 @@ in
           kconfig
           kconfigwidgets
           kcoreaddons
+          kdoctools
           kdbusaddons
           kdeclarative
           kded
@@ -138,37 +162,41 @@ in
           print-manager
 
           breeze-icons
-          pkgs.hicolor_icon_theme
+          pkgs.hicolor-icon-theme
 
           kde-gtk-config breeze-gtk
 
           qtvirtualkeyboard
 
-          libsForQt56.phonon-backend-gstreamer
-          libsForQt5.phonon-backend-gstreamer
+          xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ]
 
-        ++ lib.optionals cfg.enableQt4Support [ pkgs.phonon-backend-gstreamer ]
+        # Phonon audio backend
+        ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
+        ++ lib.optional (cfg.phononBackend == "gstreamer" && cfg.enableQt4Support) pkgs.phonon-backend-gstreamer
+        ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
+        ++ lib.optional (cfg.phononBackend == "vlc" && cfg.enableQt4Support) pkgs.phonon-backend-vlc
 
         # Optional hardware support features
-        ++ lib.optional config.hardware.bluetooth.enable bluedevil
+        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
 
-      environment.pathsToLink = [ "/share" ];
+      environment.pathsToLink = [
+        # FIXME: modules should link subdirs of `/share` rather than relying on this
+        "/share"
+      ];
 
       environment.etc = singleton {
         source = xcfg.xkbDir;
         target = "X11/xkb";
       };
 
-      environment.variables = {
-        # Enable GTK applications to load SVG icons
-        GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-      };
+      # Enable GTK applications to load SVG icons
+      services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {
@@ -205,6 +233,33 @@ in
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
 
+      xdg.portal.enable = true;
+      xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
+
+      # Update the start menu for each user that is currently logged in
+      system.userActivationScripts.plasmaSetup = ''
+        # The KDE icon cache is supposed to update itself
+        # automatically, but it uses the timestamp on the icon
+        # theme directory as a trigger.  Since in Nix the
+        # timestamp is always the same, this doesn't work.  So as
+        # a workaround, nuke the icon cache on login.  This isn't
+        # perfect, since it may require logging out after
+        # installing new applications to update the cache.
+        # See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
+        rm -fv $HOME/.cache/icon-cache.kcache
+
+        # xdg-desktop-settings generates this empty file but
+        # it makes kbuildsyscoca5 fail silently. To fix this
+        # remove that menu if it exists.
+        rm -fv $HOME/.config/menus/applications-merged/xdg-desktop-menu-dummy.menu
+
+        # Remove the kbuildsyscoca5 cache. It will be regenerated
+        # immediately after. This is necessary for kbuildsyscoca5 to
+        # recognize that software that has been removed.
+        rm -fv $HOME/.cache/ksycoca*
+
+        ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
+      '';
     })
   ];
 

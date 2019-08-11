@@ -1,9 +1,8 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, dnspython, idna, ipaddress }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, dnspython, idna, ipaddress }:
 
 buildPythonPackage rec {
   pname = "email_validator";
   version = "1.0.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

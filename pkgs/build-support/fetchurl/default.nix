@@ -1,4 +1,4 @@
-{ stdenvNoCC, curl }: # Note that `curl' may be `null', in case of the native stdenvNoCC.
+{ lib, stdenvNoCC, curl }: # Note that `curl' may be `null', in case of the native stdenvNoCC.
 
 let
 
@@ -20,7 +20,7 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
-  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars ++ [
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
     # This variable allows the user to pass additional options to curl
     "NIX_CURL_FLAGS"
 
@@ -49,8 +49,11 @@ in
   # first element of `urls').
   name ? ""
 
-  # Different ways of specifying the hash.
-, outputHash ? ""
+, # SRI hash.
+  hash ? ""
+
+, # Legacy ways of specifying the hash.
+  outputHash ? ""
 , outputHashAlgo ? ""
 , md5 ? ""
 , sha1 ? ""
@@ -87,24 +90,32 @@ in
 
   # Passthru information, if any.
 , passthru ? {}
+  # Doing the download on a remote machine just duplicates network
+  # traffic, so don't do that by default
+, preferLocalBuild ? true
 }:
 
-assert builtins.isList urls;
-assert (urls == []) != (url == "");
 assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
 
-
 let
+  urls_ =
+    if urls != [] && url == "" then
+      (if lib.isList urls then urls
+       else throw "`urls` is not a list")
+    else if urls == [] && url != "" then [url]
+    else throw "fetchurl requires either `url` or `urls` to be set";
 
-  hasHash = showURLs || (outputHash != "" && outputHashAlgo != "")
-    || sha1 != "" || sha256 != "" || sha512 != "";
-  urls_ = if urls != [] then urls else [url];
-
+  hash_ =
+    if hash != "" then { outputHashAlgo = null; outputHash = hash; }
+    else if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
+    else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
+    else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
+    else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
+    else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
+    else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
 in
 
-if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
-else if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenvNoCC.lib.concatStringsSep ", " urls_}"
-else stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name
@@ -121,10 +132,7 @@ else stdenvNoCC.mkDerivation {
   preferHashedMirrors = true;
 
   # New-style output content requirements.
-  outputHashAlgo = if outputHashAlgo != "" then outputHashAlgo else
-      if sha512 != "" then "sha512" else if sha256 != "" then "sha256" else "sha1";
-  outputHash = if outputHash != "" then outputHash else
-      if sha512 != "" then sha512 else if sha256 != "" then sha256 else sha1;
+  inherit (hash_) outputHashAlgo outputHash;
 
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
@@ -132,9 +140,9 @@ else stdenvNoCC.mkDerivation {
 
   impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
 
-  # Doing the download on a remote machine just duplicates network
-  # traffic, so don't do that.
-  preferLocalBuild = true;
+  nixpkgsVersion = lib.trivial.release;
+
+  inherit preferLocalBuild;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}

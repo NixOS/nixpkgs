@@ -1,18 +1,17 @@
-{ stdenv, fetchurl, python, buildPythonPackage
-, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc }:
+{ stdenv, fetchPypi, python, buildPythonPackage
+, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
 
 buildPythonPackage rec {
-  version = "3.4.2";
+  version = "3.5.2";
   pname = "tables";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/t/tables/${name}.tar.gz";
-    sha256 = "fdbbea4edb6bad0ac0e53fc7bc6970e78e12eef4944aa4146bcdcb573201676c";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1hikrki0hx94ass31pn0jyz9iy0zhnkjacfk86m21cxsc8if685j";
   };
 
   buildInputs = [ hdf5 cython bzip2 lzo c-blosc ];
-  propagatedBuildInputs = [ numpy numexpr six ];
+  propagatedBuildInputs = [ numpy numexpr six mock ];
 
   # The setup script complains about missing run-paths, but they are
   # actually set.
@@ -31,7 +30,7 @@ buildPythonPackage rec {
   # github issue:
   #     https://github.com/PyTables/PyTables/issues/269
   checkPhase = ''
-    ${python}/bin/${python.executable} <<EOF
+    ${python.interpreter} <<EOF
     import sysconfig
     import sys
     import os

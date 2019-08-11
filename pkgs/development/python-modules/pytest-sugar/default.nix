@@ -1,20 +1,30 @@
-{ stdenv, buildPythonPackage, fetchPypi, termcolor, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, termcolor
+, pytest
+, packaging
+}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pytest-sugar";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11lni9kn0r1y896xg20qjv4yjcyr56h0hx9dprdgjnam4dqcl6lg";
+    sha256 = "fcd87a74b2bce5386d244b49ad60549bfbc4602527797fac167da147983f58ab";
   };
 
-  propagatedBuildInputs = [ termcolor pytest ];
+  propagatedBuildInputs = [
+    termcolor
+    pytest
+    packaging
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A plugin that changes the default look and feel of py.test";
     homepage = https://github.com/Frozenball/pytest-sugar;
     license = licenses.bsd3;
+    maintainers = [ maintainers.costrouc ];
   };
 }

@@ -1,13 +1,18 @@
-# Test ensures buildbot master comes up correctly and workers can connect
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-import ./make-test.nix ({ pkgs, ... } : {
+with import ../lib/testing.nix { inherit system pkgs; };
+
+# Test ensures buildbot master comes up correctly and workers can connect
+makeTest {
   name = "buildbot";
 
   nodes = {
-    bbmaster = { config, pkgs, ... }: {
+    bbmaster = { pkgs, ... }: {
       services.buildbot-master = {
         enable = true;
-        package = pkgs.buildbot-full;
 
         # NOTE: use fake repo due to no internet in hydra ci
         factorySteps = [
@@ -19,18 +24,18 @@ import ./make-test.nix ({ pkgs, ... } : {
         ];
       };
       networking.firewall.allowedTCPPorts = [ 8010 8011 9989 ];
-      environment.systemPackages = with pkgs; [ git buildbot-full ];
+      environment.systemPackages = with pkgs; [ git python3Packages.buildbot-full ];
     };
 
-    bbworker = { config, pkgs, ... }: {
+    bbworker = { pkgs, ... }: {
       services.buildbot-worker = {
         enable = true;
         masterUrl = "bbmaster:9989";
       };
-      environment.systemPackages = with pkgs; [ git buildbot-worker ];
+      environment.systemPackages = with pkgs; [ git python3Packages.buildbot-worker ];
     };
 
-    gitrepo = { config, pkgs, ... }: {
+    gitrepo = { pkgs, ... }: {
       services.openssh.enable = true;
       networking.firewall.allowedTCPPorts = [ 22 9418 ];
       environment.systemPackages = with pkgs; [ git ];
@@ -93,19 +98,16 @@ import ./make-test.nix ({ pkgs, ... } : {
 
 
     # Test buildbot daemon mode
-    # NOTE: daemon mode tests disabled due to broken PYTHONPATH child inheritence
-    #
-    #$bbmaster->execute("buildbot create-master /tmp");
-    #$bbmaster->execute("mv -fv /tmp/master.cfg.sample /tmp/master.cfg");
-    #$bbmaster->execute("sed -i 's/8010/8011/' /tmp/master.cfg");
-    #$bbmaster->execute("buildbot start /tmp");
-    #$bbworker->execute("nc -z bbmaster 8011");
-    #$bbworker->waitUntilSucceeds("curl -s --head http://bbmaster:8011") =~ /200 OK/;
-    #$bbmaster->execute("buildbot stop /tmp");
-    #$bbworker->fail("nc -z bbmaster 8011");
+    $bbmaster->execute("buildbot create-master /tmp");
+    $bbmaster->execute("mv -fv /tmp/master.cfg.sample /tmp/master.cfg");
+    $bbmaster->execute("sed -i 's/8010/8011/' /tmp/master.cfg");
+    $bbmaster->execute("buildbot start /tmp");
+    $bbworker->execute("nc -z bbmaster 8011");
+    $bbworker->waitUntilSucceeds("curl -s --head http://bbmaster:8011") =~ /200 OK/;
+    $bbmaster->execute("buildbot stop /tmp");
+    $bbworker->fail("nc -z bbmaster 8011");
 
   '';
 
   meta.maintainers = with pkgs.stdenv.lib.maintainers; [ nand0p ];
-
-})
+}

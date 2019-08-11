@@ -1,33 +1,42 @@
-{ stdenv, intltool, fetchurl, pkgconfig, gtkmm3, libxml2
-, bash, gtk3, glib, wrapGAppsHook
-, itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
+{ stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2, polkit
+, bash, gtk3, glib, wrapGAppsHook, meson, ninja, python3
+, gsettings-desktop-schemas, itstool, gnome3, librsvg, gdk-pixbuf, libgtop, systemd }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-system-monitor-${version}";
+  version = "3.32.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-system-monitor/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1wd43qdgjav6xamq5z5cy8fri5zr01jga3plc9w95gcia0rk3ha8";
+  };
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  nativeBuildInputs = [
+    pkgconfig gettext itstool wrapGAppsHook meson ninja python3
+    polkit # for ITS file
+  ];
+  buildInputs = [
+    bash gtk3 glib libxml2 gtkmm3 libgtop gdk-pixbuf gnome3.adwaita-icon-theme librsvg
+    gsettings-desktop-schemas systemd
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bash gtk3 glib intltool itstool libxml2
-                  gtkmm3 libgtop wrapGAppsHook
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  gnome3.gsettings_desktop_schemas systemd ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome_themes_standard}/share"
-    )
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
   '';
 
-  # fails to build without --enable-static
-  configureFlags = ["--enable-systemd" "--enable-static"];
-
-  enableParallelBuilding = true;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-system-monitor";
+      attrPath = "gnome3.gnome-system-monitor";
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://help.gnome.org/users/gnome-system-monitor/3.12/;
+    homepage = https://wiki.gnome.org/Apps/SystemMonitor;
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

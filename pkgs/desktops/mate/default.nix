@@ -1,4 +1,4 @@
-{ pkgs, newScope }:
+{ newScope }:
 
 let
   callPackage = newScope self;
@@ -9,6 +9,7 @@ let
     caja = callPackage ./caja { };
     caja-dropbox = callPackage ./caja-dropbox { };
     caja-extensions = callPackage ./caja-extensions { };
+    caja-with-extensions = callPackage ./caja-with-extensions { };
     engrampa = callPackage ./engrampa { };
     eom = callPackage ./eom { };
     libmatekbd = callPackage ./libmatekbd { };
@@ -72,7 +73,6 @@ let
       mate-applets
       mate-backgrounds
       mate-calc
-      mate-icon-theme-faenza
       mate-indicator-applet
       mate-media
       mate-netbook
@@ -82,12 +82,12 @@ let
       mate-system-monitor
       mate-terminal
       mate-user-guide
-      #mate-user-share
+      # mate-user-share
       mate-utils
       mozo
       pluma
     ];
-  
+
   };
 
 in self

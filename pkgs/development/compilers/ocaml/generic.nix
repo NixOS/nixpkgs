@@ -7,15 +7,15 @@ let
   real_url = if url == null then
     "http://caml.inria.fr/pub/distrib/ocaml-${versionNoPatch}/ocaml-${version}.tar.xz"
   else url;
-  safeX11 = stdenv: !(stdenv.isArm || stdenv.isMips);
+  safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips);
 in
 
 { stdenv, fetchurl, ncurses, buildEnv
-, libX11, xproto, useX11 ? safeX11 stdenv
+, libX11, xorgproto, useX11 ? safeX11 stdenv
 , flambdaSupport ? false
 }:
 
-assert useX11 -> !stdenv.isArm && !stdenv.isMips;
+assert useX11 -> !stdenv.isAarch32 && !stdenv.isMips;
 assert flambdaSupport -> stdenv.lib.versionAtLeast version "4.03";
 
 let
@@ -24,11 +24,13 @@ let
    name = "ocaml${optionalString flambdaSupport "+flambda"}-${version}";
 in
 
-stdenv.mkDerivation (args // rec {
-
-  x11env = buildEnv { name = "x11env"; paths = [libX11 xproto]; };
+let
+  x11env = buildEnv { name = "x11env"; paths = [libX11 xorgproto]; };
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
+in
+
+stdenv.mkDerivation (args // rec {
 
   inherit name;
   inherit version;
@@ -39,13 +41,16 @@ stdenv.mkDerivation (args // rec {
   };
 
   prefixKey = "-prefix ";
-  configureFlags = optionals useX11 [ "-x11lib" x11lib
-                                      "-x11include" x11inc ]
+  configureFlags = optionals useX11 (
+    if stdenv.lib.versionAtLeast version "4.08"
+    then [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}"]
+    else [ "-x11lib" x11lib "-x11include" x11inc ])
   ++ optional flambdaSupport "-flambda"
   ;
 
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ libX11 xproto ];
+  buildInputs = optional (!stdenv.lib.versionAtLeast version "4.07") ncurses
+    ++ optionals useX11 [ libX11 xorgproto ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)
@@ -89,6 +94,7 @@ stdenv.mkDerivation (args // rec {
       '';
 
     platforms = with platforms; linux ++ darwin;
+    broken = stdenv.isAarch64 && !stdenv.lib.versionAtLeast version "4.06";
   };
 
 })

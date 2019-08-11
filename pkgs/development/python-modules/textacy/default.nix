@@ -4,7 +4,6 @@
 , fetchPypi
 , cachetools
 , cld2-cffi
-, cython
 , cytoolz
 , ftfy
 , ijson
@@ -23,16 +22,13 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "textacy";
-  version = "0.5.0";
+  version = "0.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6fc4603fd52c386081b063ef7aa15ca77e5e937a3064b197359659fccfdeb406";
+    sha256 = "50402545ac92b1a931c2365e341cb35c4ebe5575525f1dcc5265901ff3895a5f";
   };
-
-  disabled = isPy27; # 2.7 requires backports.csv
 
   propagatedBuildInputs = [
     cachetools
@@ -54,6 +50,11 @@ buildPythonPackage rec {
     unidecode
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'ftfy>=4.2.0,<5.0.0'," "'ftfy>=5.0.0',"
+  '';
+
   doCheck = false;  # tests want to download data files
 
   meta = with stdenv.lib; {
@@ -61,5 +62,8 @@ buildPythonPackage rec {
     homepage = "http://textacy.readthedocs.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvl ];
+    # ftfy and jellyfish no longer support python2
+    # latest scikitlearn not supported for this: https://github.com/chartbeat-labs/textacy/issues/260
+    broken = true;
   };
 }

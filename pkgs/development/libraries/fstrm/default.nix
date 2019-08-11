@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "fstrm-${version}";
-  version = "0.3.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "farsightsec";
     repo = "fstrm";
     rev = "v${version}";
-    sha256 = "135m0d4z1wbiaazs3bh6z53a35mgs33gvfki8pl4xfaw9cfcfpd2";
+    sha256 = "1vm880h6vpnxqh7v0x17yfim6f2fbxwkm03ms58s2h9akmph9xm5";
   };
 
   outputs = [ "bin" "out" "dev" ];

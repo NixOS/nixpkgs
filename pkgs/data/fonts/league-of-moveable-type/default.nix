@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.ofl;
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ bergey profpatsch ];
+    maintainers = with stdenv.lib.maintainers; [ bergey Profpatsch ];
   };
 }

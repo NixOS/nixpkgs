@@ -1,23 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, google_auth, protobuf, googleapis_common_protos, requests, grpcio, setuptools, mock, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
+, google_auth, protobuf, googleapis_common_protos, requests, grpcio, futures, mock, pytest }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "0.1.3";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03bc4b1ab69c0e113af07e706edee50f583abe8219fe1e1d529dee191cb8e0bf";
+    sha256 = "85693e163a1a6faea69a74f8feaf35d54dfa2559fbdbbe389c93ffb3bb4c9a79";
   };
 
-  propagatedBuildInputs = [ google_auth protobuf googleapis_common_protos requests grpcio ];
-  checkInputs = [ setuptools mock pytest ];
+  propagatedBuildInputs = [
+    googleapis_common_protos protobuf
+    google_auth requests grpcio
+  ] ++ lib.optional (pythonOlder "3.2") futures;
+  checkInputs = [ mock pytest ];
 
   checkPhase = ''
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This library is not meant to stand-alone. Instead it defines common helpers used by all Google API clients.";
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;

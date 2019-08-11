@@ -1,5 +1,3 @@
-#!/bin/sh
-
 ## build described at http://wiki.winehq.org/Wine64
 
 source $stdenv/setup
@@ -26,7 +24,7 @@ buildPhase
 # checkPhase
 
 eval "$preInstall"
-cd $TMP/wine64 && make install
 cd $TMP/wine-wow && make install
+cd $TMP/wine64 && make install
 eval "$postInstall"
 fixupPhase

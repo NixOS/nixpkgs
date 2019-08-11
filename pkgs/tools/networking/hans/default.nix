@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       the situation that your Internet access is firewalled, but pings are
       allowed.
     '';
-    homepage = http://code.gerade.org/hans/;
+    homepage = https://code.gerade.org/hans/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

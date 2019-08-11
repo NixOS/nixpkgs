@@ -1,0 +1,29 @@
+--- a/configure
++++ b/configure
+@@ -7461,7 +7461,7 @@ $as_echo "final adjustments for cygwin host" >&6; }
+     CONFIG_QTPIPES="yes"
+     CONFIG_CXXFLAGS="-I${prefix}/include"
+     CONFIG_BSHARED=""
+-    CONFIG_BFLAGS="-framework Cocoa -framework IOKit"
++    CONFIG_BFLAGS="-framework Cocoa -framework IOKit -framework CoreFoundation"
+     CONFIG_BPATH=""
+     CONFIG_SO="dylib"
+     CONFIG_LIB_PATH="DYLD_LIBRARY_PATH"
+@@ -8281,6 +8281,7 @@ _ASEOF
+   if $QMAKE ${additional_qmake_flags} ; then :; else
+     as_fn_error $? "Calling $QMAKE failed." "$LINENO" 5
+   fi
++  echo "QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.10" >> $pro_file
+   # Try to compile a simple Qt app.
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we can build a simple Qt app" >&5
+ $as_echo_n "checking whether we can build a simple Qt app... " >&6; }
+--- a/src/Plugins/Unix/unix_sys_utils.cpp
++++ b/src/Plugins/Unix/unix_sys_utils.cpp
+@@ -17,6 +17,7 @@
+ #include <spawn.h>
+ #include <unistd.h>
+ #include <sys/wait.h>
++#include <pthread.h>
+ 
+ // for thread safe strings
+ #include <string>

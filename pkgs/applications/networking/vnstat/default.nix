@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, gd, ncurses }:
+{ stdenv, fetchurl, pkgconfig, gd, ncurses, sqlite, check }:
 
 stdenv.mkDerivation rec {
-  name = "vnstat-${version}";
-  version = "1.17";
+  pname = "vnstat";
+  version = "2.3";
 
   src = fetchurl {
-    sha256 = "0wbrmb4zapblb3b61180ryqy6i0c7gcacqz0y3r1x7nafqswbr0q";
-    url = "http://humdi.net/vnstat/${name}.tar.gz";
+    sha256 = "138s79dqxrm59xc2s2xch16qkzzjks580sac4ppq8jy5lxrzj2i8";
+    url = "https://humdi.net/${pname}/${pname}-${version}.tar.gz";
   };
-
-  buildInputs = [ gd ncurses ];
 
   postPatch = ''
     substituteInPlace src/cfg.c --replace /usr/local $out
   '';
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gd ncurses sqlite ];
+
+  checkInputs = [ check ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Console-based network statistics utility for Linux";
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
       This means that vnStat won't actually be sniffing any traffic and also
       ensures light use of system resources.
     '';
-    homepage = http://humdi.net/vnstat/;
+    homepage = https://humdi.net/vnstat/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

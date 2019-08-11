@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
       faust2jaqt -time -vec -double -t 99999 $f
     done
 
-    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "CompBus.lib"
-
     for f in *.dsp;
     do
       faust2lv2  -time -vec -double -gui -t 99999 $f

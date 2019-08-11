@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gmpxx, perl, gnum4 }:
+{ fetchurl, fetchpatch, stdenv, gmpxx, perl, gnum4 }:
 
 let version = "1.2"; in
 
@@ -9,6 +9,12 @@ stdenv.mkDerivation rec {
     url = "http://bugseng.com/products/ppl/download/ftp/releases/${version}/ppl-${version}.tar.bz2";
     sha256 = "1wgxcbgmijgk11df43aiqfzv31r3bkxmgb4yl68g21194q60nird";
   };
+
+  patches = [(fetchpatch {
+    name = "ppl.patch";
+    url = "http://www.cs.unipr.it/git/gitweb.cgi?p=ppl/ppl.git;a=patch;h=c39f6a07b51f89e365b05ba4147aa2aa448febd7";
+    sha256 = "1zj90hm25pkgvk4jlkfzh18ak9b98217gbidl3731fdccbw6hr87";
+  })];
 
   nativeBuildInputs = [ perl gnum4 ];
   propagatedBuildInputs = [ gmpxx ];

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, xorg, gtk, libxfce4util, xfconf
-, libglade, libstartup_notification, hicolor_icon_theme
+, libglade, libstartup_notification, hicolor-icon-theme
 , withGtk3 ? false, gtk3
 }:
 let
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ gtk libxfce4util xfconf libglade
-      libstartup_notification hicolor_icon_theme
+      libstartup_notification hicolor-icon-theme
     ] ++ optional withGtk3 gtk3;
 
   propagatedBuildInputs = [ xorg.libICE xorg.libSM ];
@@ -33,10 +33,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.xfce.org/;
+    homepage = https://www.xfce.org/;
     description = "Basic GUI library for Xfce";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };
 }
-

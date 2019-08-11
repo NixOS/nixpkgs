@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       guile-gnome a comprehensive environment for developing modern
       applications.
     '';
-    homepage = "http://www.gnu.org/software/guile-gnome/";
+    homepage = "https://www.gnu.org/software/guile-gnome/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ vyp ];
     platforms = platforms.linux;

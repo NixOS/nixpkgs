@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gnome3, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "engrampa-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "3";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1ms6kz8k86hsj9zk5w3087l749022y0j5ba2s9hz8ah6gfx0mvn5";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "06z38vfs15f5crrrgvcsqfb557fhpq1mqkj5fd9wb0hvi77hasrk";
   };
 
   nativeBuildInputs = [
@@ -20,9 +18,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    gnome3.gtk
+    gtk3
     mate.caja
-    hicolor_icon_theme
+    hicolor-icon-theme
     mate.mate-desktop
   ];
 
@@ -30,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Archive Manager for MATE";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

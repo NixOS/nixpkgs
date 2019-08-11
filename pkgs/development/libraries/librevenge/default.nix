@@ -21,11 +21,10 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
 
-  # Clang generates warnings in Boost's header files
+  # Clang and gcc-7 generate warnings, and
   # -Werror causes these warnings to be interpreted as errors
   # Simplest solution: disable -Werror
-  configureFlags = if stdenv.cc.isClang
-    then [ "--disable-werror" ] else null;
+  configureFlags = [ "--disable-werror" ];
 
   # Fix an issue with boost 1.59
   # This is fixed upstream so please remove this when updating

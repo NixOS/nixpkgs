@@ -1,12 +1,15 @@
 { stdenv, fetchurl, makeWrapper, jre
-, version ? "1.3" }:
+, version ? "1.6" }:
 
 let
   versionMap = {
-    "1.3" = {
-      flinkVersion = "1.3.2";
-      scalaVersion = "2.11";
-      sha256 = "0mf4qz0963bflzidgslvwpdlvj9za9sj20dfybplw9lhd4sf52rp";
+    "1.5" = {
+      flinkVersion = "1.5.5";
+      sha256 = "18wqcqi3gyqd40nspih99gq7ylfs20b35f4dcrspffagwkfp2l4z";
+    };
+    "1.6" = {
+      flinkVersion = "1.8.1";
+      sha256 = "1ynxlkdxvrgww9hh7rlkhybrp5vl2slj3pqg2qzc8khpcgqx1h2g";
     };
   };
 in
@@ -17,7 +20,7 @@ stdenv.mkDerivation rec {
   name = "flink-${flinkVersion}";
 
   src = fetchurl {
-    url = "mirror://apache/flink/${name}/${name}-bin-hadoop27-scala_${scalaVersion}.tgz";
+    url = "mirror://apache/flink/${name}/${name}-bin-scala_2.11.tgz";
     inherit sha256;
   };
 

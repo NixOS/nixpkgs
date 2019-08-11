@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "redir-${version}";
-  version = "3.1";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "redir";
     rev = "v${version}";
-    sha256 = "1m05dchi15bzz9zfdb7jg59624sx4khp5zq0wf4pzr31s64f69cx";
+    sha256 = "13n401i3q0xwpfgr21y47kgihi057wbh59xlsna8b8zpm973qny1";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -1,44 +1,47 @@
-{ stdenv, fetchurl, pkgconfig, which
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
-, guiSupport ? true, dbus_libs ? null # GUI (disable to run headless)
+, guiSupport ? true, dbus ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
 }:
 
-assert guiSupport -> (dbus_libs != null);
-with stdenv.lib;
+assert guiSupport -> (dbus != null);
+with lib;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "4.0.3";
+  version = "4.1.7";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "1lkbrvpzdfbqwilj09a9vraai7pz6dh999w4vl51mj1adm7bh0ws";
+  src = fetchFromGitHub {
+    owner = "qbittorrent";
+    repo = "qbittorrent";
+    rev = "release-${version}";
+    sha256 = "1z4k64h3ik1a7ir4v9g3ar1wq8zfh4r2pq43hr2wvlamm2111gdv";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  # NOTE: 2018-05-31: CMake is working but it is not officially supported
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
-    ++ optional guiSupport dbus_libs;
+    ++ optional guiSupport dbus; # D(esktop)-Bus depends on GUI support
 
   # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
   QMAKE_LRELEASE = "lrelease";
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}"
-    (if guiSupport then "" else "--disable-gui")
-    (if webuiSupport then "" else "--disable-webui")
-  ] ++ optional debugSupport "--enable-debug";
+    "--with-boost=${boost.dev}" ]
+    ++ optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
+    ++ optional (!webuiSupport) "--disable-webui"
+    ++ optional debugSupport "--enable-debug";
 
   enableParallelBuilding = true;
 
   meta = {
-    description = "Free Software alternative to µtorrent";
+    description = "Featureful free software BitTorrent client";
     homepage    = https://www.qbittorrent.org/;
     license     = licenses.gpl2;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ Anton-Latukha ];
   };
 }

@@ -6,7 +6,7 @@
 with lib;
 let
   mergeHook = pkgs.writeScript "rdnssd-merge-hook" ''
-    #! ${pkgs.stdenv.shell} -e
+    #! ${pkgs.runtimeShell} -e
     ${pkgs.openresolv}/bin/resolvconf -u
   '';
 in
@@ -34,6 +34,11 @@ in
   ###### implementation
 
   config = mkIf config.services.rdnssd.enable {
+
+    assertions = [{
+      assertion = config.networking.resolvconf.enable;
+      message = "rdnssd needs resolvconf to work (probably something sets up a static resolv.conf)";
+    }];
 
     systemd.services.rdnssd = {
       description = "RDNSS daemon";
@@ -64,7 +69,7 @@ in
       };
     };
 
-    users.extraUsers.rdnssd = {
+    users.users.rdnssd = {
       description = "RDNSSD Daemon User";
       uid = config.ids.uids.rdnssd;
     };

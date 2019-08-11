@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, doxygen, qt48Full, libharu
+{ stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
 , pango, fcgi, firebird, mysql, postgresql, graphicsmagick, glew, openssl
 , pcre
 }:
@@ -10,7 +10,7 @@ let
       name = "wt-${version}";
 
       src = fetchFromGitHub {
-        owner = "kdeforche";
+        owner = "emweb";
         repo = "wt";
         rev = version;
         inherit sha256;
@@ -20,7 +20,7 @@ let
 
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        cmake boost165 doxygen qt48Full libharu
+        cmake boost doxygen qt48Full libharu
         pango fcgi firebird mysql.connector-c postgresql graphicsmagick glew
         openssl pcre
       ];
@@ -34,7 +34,7 @@ let
       ];
 
       meta = with stdenv.lib; {
-        homepage = https://www.webtoolkit.eu/wt;
+        homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
         platforms = platforms.linux;
         license = licenses.gpl2;
@@ -43,14 +43,12 @@ let
     };
 in {
   wt3 = generic {
-    # with the next version update the version pinning of boost should be omitted
-    version = "3.3.9";
-    sha256 = "1mkflhvzzzxkc5yzvr6nk34j0ldpwxjxb6n7xml59h3j3px3ixjm";
+    version = "3.4.0";
+    sha256 = "0y0b2h9jf5cg1gdh48dj32pj5nsvipab1cgygncxf98c46ikhysg";
   };
 
   wt4 = generic {
-    # with the next version update the version pinning of boost should be omitted
-    version = "4.0.2";
-    sha256 = "0r729gjd1sy0pcmir2r7ga33mp5cr5b4gvf44852q65hw2577w1x";
+    version = "4.1.0";
+    sha256 = "1a9nl5gs8m8pssf2l3z6kbl2rc9fw5ad7lfslw5yr3gzi0zqn05x";
   };
 }

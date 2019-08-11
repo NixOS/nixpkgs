@@ -1,13 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk, wrapGAppsHook
-, webkitgtk, json_glib, rest, libsecret, dbus_glib, gnome_common, gtk_doc
-, telepathy_glib, intltool, dbus_libs, icu, glib_networking
-, libsoup, docbook_xsl_ns, docbook_xsl, gnome3, gcr, kerberos
+{ stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk3, wrapGAppsHook
+, webkitgtk, json-glib, librest, libsecret, gtk-doc, gobject-introspection
+, gettext, icu, glib-networking, hicolor-icon-theme
+, libsoup, docbook_xsl, docbook_xml_dtd_412, gnome3, gcr, kerberos
 }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "gnome-online-accounts";
+  version = "3.32.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-  NIX_CFLAGS_COMPILE = "-I${dbus_glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1anlx0rb2hafg9929pgfms25mdz23sd0vdva06h6zlf8f5byc68w";
+  };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
 
@@ -17,18 +23,27 @@ stdenv.mkDerivation rec {
     "--enable-lastfm"
     "--enable-todoist"
     "--enable-gtk-doc"
+    "--enable-documentation"
   ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig vala gnome_common intltool wrapGAppsHook
-    libxslt docbook_xsl_ns docbook_xsl gtk_doc
+    pkgconfig gobject-introspection vala gettext wrapGAppsHook
+    libxslt docbook_xsl docbook_xml_dtd_412 gtk-doc
+    hicolor-icon-theme # for setup-hook
   ];
   buildInputs = [
-    glib gtk webkitgtk json_glib rest libsecret dbus_glib telepathy_glib glib_networking icu libsoup
+    glib gtk3 webkitgtk json-glib librest libsecret glib-networking icu libsoup
     gcr kerberos
   ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

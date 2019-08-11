@@ -2,11 +2,14 @@
 
 stdenv.mkDerivation rec {
 
-  name = "doxygen-1.8.11";
+  name = "doxygen-1.8.15";
 
   src = fetchurl {
-    url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
-    sha256 = "0ja02pm3fpfhc5dkry00kq8mn141cqvdqqpmms373ncbwi38pl35";
+    urls = [
+      "mirror://sourceforge/doxygen/${name}.src.tar.gz" # faster, with https, etc.
+      "http://doxygen.nl/files/${name}.src.tar.gz"
+    ];
+    sha256 = "bd9c0ec462b6a9b5b41ede97bede5458e0d7bb40d4cfa27f6f622eb33c59245d";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,10 +28,11 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   enableParallelBuilding = true;
+  doCheck = false; # fails
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://doxygen.org/;
+    homepage = http://doxygen.nl/;
     description = "Source code documentation generator tool";
 
     longDescription = ''

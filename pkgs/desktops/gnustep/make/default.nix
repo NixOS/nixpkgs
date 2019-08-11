@@ -1,7 +1,7 @@
 { stdenv, fetchurl, clang, which, libobjc }:
 
 let
-  version = "2.6.8";
+  version = "2.7.0";
 in
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${version}.tar.gz";
-    sha256 = "0r00439f7vrggdwv60n8p626gnyymhq968i5x9ad2i4v6g8x4gk0";
+    sha256 = "1khiygfkz0zhh9b5nybn40g0xnnjxchk24n49hff1bwanszir84h";
   };
 
   configureFlags = [

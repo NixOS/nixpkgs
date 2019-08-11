@@ -2,12 +2,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.2";
+  version = "0.9.3";
   name = "meterbridge-${version}";
 
   src = fetchurl {
     url = "http://plugin.org.uk/meterbridge/${name}.tar.gz";
-    sha256 = "0jb6g3kbfyr5yf8mvblnciva2bmc01ijpr51m21r27rqmgi8gj5k";
+    sha256 = "0s7n3czfpil94vsd7iblv4xrck9c7zvsz4r3yfbkqcv85pjz1viz";
   };
 
   patches = [ ./buf_rect.patch ./fix_build_with_gcc-5.patch];

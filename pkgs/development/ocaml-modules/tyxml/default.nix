@@ -1,36 +1,20 @@
-{ stdenv, fetchzip, fetchpatch, ocaml, findlib, ocamlbuild, ocaml_oasis, camlp4, uutf, markup, ppx_tools, re
-}:
+{ lib, buildDunePackage, fetchurl, re, uutf }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.02";
-
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "tyxml";
-  version = "4.0.1";
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "4.3.0";
 
-  src = fetchzip {
-    url = "http://github.com/ocsigen/tyxml/archive/${version}.tar.gz";
-    sha256 = "1mwkjvl78gvw7pvql5qp64cfjjca6aqsb04999qkllifyicaaq8y";
+  src = fetchurl {
+    url = "https://github.com/ocsigen/tyxml/releases/download/${version}/tyxml-${version}.tbz";
+    sha256 = "1hxzppfvsdls2y8qiwvz31hmffzh2hgglf01am1vzf2f31mxf6vf";
   };
 
-  patches = [ (fetchpatch {
-    url = https://github.com/dbuenzli/tyxml/commit/a2bf5ccc0b6e684e7b81274ff19df8d72e2def8d.diff;
-    sha256 = "11sidgiwz3zqw815vlslbfzb456z0lndkh425mlmvnmck4d2v2i3";
-  })];
+  propagatedBuildInputs = [ uutf re ];
 
-  buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
-
-  propagatedBuildInputs = [uutf re ppx_tools markup];
-
-  createFindlibDestdir = true;
-
-  configureFlags = "--enable-syntax";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://ocsigen.org/tyxml/;
     description = "A library that makes it almost impossible for your OCaml programs to generate wrong XML output, using static typing";
     license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
       gal_bolle vbgl
       ];

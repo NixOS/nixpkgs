@@ -1,19 +1,18 @@
 { stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "faulthandler";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "acc10e10909f0f956ba1b42b6c450ea0bdaaa27b3942899f65931396cfcdd36a";
+    sha256 = "83301ffab03c86b291677b64b5cec7026f412cbda5ebd27e4cb3338452c40021";
   };
 
   meta = {
     description = "Dump the Python traceback";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ sauyon ];
-    homepage = http://faulthandler.readthedocs.io/;
+    homepage = https://faulthandler.readthedocs.io/;
   };
 }

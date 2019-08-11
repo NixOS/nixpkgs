@@ -1,22 +1,27 @@
-{ stdenv, fetchgit, coreutils, cctools, ncurses, libiconv, libX11 }:
+{ stdenv, fetchFromGitHub
+, coreutils, cctools
+, ncurses, libiconv, libX11, libuuid
+}:
 
 stdenv.mkDerivation rec {
   name    = "chez-scheme-${version}";
-  version = "9.5-${dver}";
-  dver    = "20171109";
+  version = "9.5.2";
 
-  src = fetchgit {
-    url    = "https://github.com/cisco/chezscheme.git";
-    rev    = "bc117fd4d567a6863689fec6814882a0f04e577a";
-    sha256 = "1adzw7bgdz0p4xmccc6awdkb7bp6xba9mnlsh3r3zvblqfci8i70";
+  src = fetchFromGitHub {
+    owner  = "cisco";
+    repo   = "ChezScheme";
+    rev    = "refs/tags/v${version}";
+    sha256 = "1gsjmsvsj31q5l9bjvm869y7bakrvl41yq94vyqdx8zwcr1bmpjf";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ coreutils ] ++ stdenv.lib.optional stdenv.isDarwin cctools;
+  buildInputs = [ ncurses libiconv libX11 libuuid ];
 
-  buildInputs = [ ncurses libiconv libX11 ];
+  enableParallelBuilding = true;
 
-  /* We patch out a very annoying 'feature' in ./configure, which
+  /*
+  ** We patch out a very annoying 'feature' in ./configure, which
   ** tries to use 'git' to update submodules.
   **
   ** We have to also fix a few occurrences to tools with absolute
@@ -38,21 +43,32 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/libtool" libtool
   '';
 
-  /* Don't use configureFlags, since that just implicitly appends
+  /*
+  ** Don't use configureFlags, since that just implicitly appends
   ** everything onto a --prefix flag, which ./configure gets very angry
   ** about.
+  **
+  ** Also, carefully set a manual workarea argument, so that we
+  ** can later easily find the machine type that we built Chez
+  ** for.
   */
   configurePhase = ''
     ./configure --threads --installprefix=$out --installman=$out/share/man
   '';
 
-  enableParallelBuilding = true;
+  /*
+  ** Clean up some of the examples from the build output.
+  */
+  postInstall = ''
+    rm -rf $out/lib/csv${version}/examples
+  '';
 
   meta = {
-    description = "A powerful and incredibly fast R6RS Scheme compiler";
-    homepage    = "http://www.scheme.com";
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
+    description  = "A powerful and incredibly fast R6RS Scheme compiler";
+    homepage     = https://cisco.github.io/ChezScheme/;
+    license      = stdenv.lib.licenses.asl20;
+    maintainers  = with stdenv.lib.maintainers; [ thoughtpolice ];
+    platforms    = stdenv.lib.platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

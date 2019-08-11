@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
 
   name = "netsurf-${libname}-${version}";
   libname = "libparserutils";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "01gzlsabgl6x0icd8758d9jqs8rrf9574bdkjainn04w3fs3znf5";
+    sha256 = "1n2794y2l0c8nv8z2pxwfnbn882987ifmxjv60zdxkhcndhswarj";
   };
 
   buildInputs = [ buildsystem perl ];

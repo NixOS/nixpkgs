@@ -3,15 +3,14 @@
 buildPythonPackage rec {
 
   pname = "backports.csv";
-  version = "1.0.5";
-  name = "${pname}-${version}";
+  version = "1.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1imzbrradkfn8s2m1qcimyn74dn1mz2p3j381jljn166rf2i6hlc";
+    sha256 = "0vdx5jlhs91iizc8j8l8811nqprwvdx39pgkdc82w2qkfgzxyxqj";
   };
 
-  propogatedBuildInputs = [ future ];
+  propagatedBuildInputs = [ future ];
 
   meta = with stdenv.lib; {
     description = "Backport of Python 3 csv module";

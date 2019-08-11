@@ -20,17 +20,16 @@
 , speex
 , boost
 , opendht
-, libmsgpack
+, msgpack
 , gnutls
 , zlib
 , jsoncpp
-, xlibs
+, xorg
 , libargon2
 , cryptopp
 , openssl
 , perl
 , python3
-, bash
 , libupnp
 , speexdsp
 , fetchFromGitHub
@@ -77,7 +76,7 @@ let
       "${patchdir}/pjproject/add_dtls_transport.patch"
     ];
     CFLAGS = "-g -DPJ_ICE_MAX_CAND=256 -DPJ_ICE_MAX_CHECKS=150 -DPJ_ICE_COMP_BITS=2 -DPJ_ICE_MAX_STUN=3 -DPJSIP_MAX_PKT_LEN=8000";
-  }); 
+  });
 in
 stdenv.mkDerivation rec {
   name = "ring-daemon-${version}";
@@ -109,12 +108,12 @@ stdenv.mkDerivation rec {
     speex
     boost
     opendht
-    libmsgpack
+    msgpack
     gnutls
     zlib
     jsoncpp
     restbed
-    xlibs.libX11
+    xorg.libX11
     libargon2
     cryptopp
     openssl
@@ -145,5 +144,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch ];
     platforms = platforms.linux;
+    # pjsip' fails to compile with the supplied patch set, see: https://hydra.nixos.org/build/68667921/nixlog/4
+    broken = true;
   };
 }

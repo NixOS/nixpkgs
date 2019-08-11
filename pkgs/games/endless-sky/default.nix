@@ -22,17 +22,11 @@ stdenv.mkDerivation rec {
     SDL2 libpng libjpeg glew openal scons libmad
   ];
 
+  prefixKey = "PREFIX=";
+
   patches = [
     ./fixes.patch
   ];
-
-  buildPhase = ''
-    scons -j$NIX_BUILD_CORES PREFIX="$out"
-  '';
-
-  installPhase = ''
-    scons -j$NIX_BUILD_CORES install PREFIX="$out"
-  '';
 
   meta = with stdenv.lib; {
     description = "A sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
@@ -41,6 +35,6 @@ stdenv.mkDerivation rec {
       gpl3Plus cc-by-sa-30 cc-by-sa-40 publicDomain
     ];
     maintainers = with maintainers; [ lheckemann ];
-    platforms = with platforms; allBut darwin;
+    platforms = platforms.linux; # Maybe other non-darwin Unix
   };
 }

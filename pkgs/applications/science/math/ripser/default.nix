@@ -8,15 +8,16 @@
 
 with stdenv.lib;
 
-assert elem fileFormat ["lowerTriangularCsv" "upperTriangularCsv" "dipha"];
+assert assertOneOf "fileFormat" fileFormat
+  ["lowerTriangularCsv" "upperTriangularCsv" "dipha"];
 assert useGoogleHashmap -> sparsehash != null;
 
 let
   inherit (stdenv.lib) optional;
+  version = "1.0";
 in
 stdenv.mkDerivation {
-  name = "ripser";
-  version = "1.0";
+  name = "ripser-${version}";
 
   src = fetchFromGitHub {
     owner = "Ripser";

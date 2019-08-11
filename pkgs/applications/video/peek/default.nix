@@ -1,21 +1,37 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, libxml2, pkgconfig, txt2man, vala, wrapGAppsHook
-, gsettings_desktop_schemas, gtk3, keybinder3
+{ stdenv, fetchFromGitHub, cmake, gettext, libxml2, pkgconfig, txt2man, vala_0_40, wrapGAppsHook
+, gsettings-desktop-schemas, gtk3, keybinder3, ffmpeg
 }:
 
 stdenv.mkDerivation rec {
-  name = "peek-${version}";
-  version = "1.2.0";
+  pname = "peek";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "phw";
-    repo = "peek";
+    repo = pname;
     rev = version;
-    sha256 = "04sc6gfrqvnx288rmgsywpjx9l6jcfn2qdbwjcbdvx4wl3gna0qm";
+    sha256 = "1fnvlklmg6s5rs3ql74isa5fgdkqqrpsyf8k2spxj520239l4vgb";
   };
 
-  nativeBuildInputs = [ cmake gettext pkgconfig libxml2.bin txt2man vala wrapGAppsHook ];
+  preConfigure = ''
+    gappsWrapperArgs+=(--prefix PATH : ${stdenv.lib.makeBinPath [ ffmpeg ]})
+  '';
 
-  buildInputs = [ gsettings_desktop_schemas gtk3 keybinder3 ];
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkgconfig
+    libxml2.bin
+    txt2man
+    vala_0_40 # See https://github.com/NixOS/nixpkgs/issues/58433
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gsettings-desktop-schemas
+    gtk3
+    keybinder3
+  ];
 
   enableParallelBuilding = true;
 

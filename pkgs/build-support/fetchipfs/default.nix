@@ -14,6 +14,7 @@
 , meta           ? {}
 , port           ? "8080"
 , postFetch      ? ""
+, preferLocalBuild ? true
 }:
 
 assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
@@ -42,11 +43,10 @@ if (!hasHash) then throw "Specify sha for fetchipfs fixed-output derivation" els
           postFetch
           ipfs
           url
-          port;
+          port
+          meta;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
-  preferLocalBuild = true;
-
-  inherit meta;
+  inherit preferLocalBuild;
 }

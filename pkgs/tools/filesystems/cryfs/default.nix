@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "cryfs-${version}";
-  version = "0.9.7";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner  = "cryfs";
     repo   = "cryfs";
     rev    = "${version}";
-    sha256 = "1wsv4cyjkyg3cyr6vipw1mj41bln2m69123l3miav8r4mvmkfq8w";
+    sha256 = "04yqpad8x0hiiwpykcn3swi0py6sg9xid6g15ny2qs4j3llin5ry";
   };
 
   prePatch = ''
@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCRYFS_UPDATE_CHECKS=OFF"
     "-DBoost_USE_STATIC_LIBS=OFF" # this option is case sensitive
-    "-DBUILD_TESTING=ON"
   ];
 
   doCheck = true;

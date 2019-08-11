@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
-, procps, libcap_ng, openssl, python27, iproute , perl
+, procps, libcap_ng, openssl, python27 , perl
 , kernel ? null }:
 
 with stdenv.lib;
@@ -7,12 +7,12 @@ with stdenv.lib;
 let
   _kernel = kernel;
 in stdenv.mkDerivation rec {
-  version = "2.5.2";
+  version = "2.5.4";
   name = "openvswitch-${version}";
 
   src = fetchurl {
     url = "http://openvswitch.org/releases/${name}.tar.gz";
-    sha256 = "0ifx758zl97dpad9vpd5i5dqj6i03k632mvgxs82hqkcsb3r6y7q";
+    sha256 = "1lji87wg953lqcdf02f1zv2m54vhd2x9jd03bb91lnlb4qlhifiv";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;

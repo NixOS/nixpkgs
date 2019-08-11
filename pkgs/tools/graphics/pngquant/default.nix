@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, pkgconfig, libpng, zlib, lcms2 }:
+{ stdenv, fetchFromGitHub, pkgconfig, libpng, zlib, lcms2 }:
 
 stdenv.mkDerivation rec {
   name = "pngquant-${version}";
-  version = "2.9.1";
+  version = "2.12.1";
 
-  src = fetchgit {
-    url = "https://www.github.com/pornel/pngquant.git";
-    rev = "refs/tags/${version}";
-    sha256 = "0xhnrjsk55jy5q68f81y7l61c6x18i4fzkm3i4dgndrhri5g4n1q";
+  src = fetchFromGitHub {
+    owner = "pornel";
+    repo = "pngquant";
+    rev = version;
+    sha256 = "0jdvry3kvmmxcgwf5a3zbfz0idl6yl3700ag7pf8sk4lg4qp0llp";
     fetchSubmodules = true;
   };
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://pngquant.org/;
     description = "A tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl3;
     maintainers = [ maintainers.volth ];
   };
