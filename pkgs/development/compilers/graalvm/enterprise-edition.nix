@@ -1,4 +1,4 @@
-{ stdenv, requireFile, perl, unzip, glibc, zlib, gdk_pixbuf, xorg, glib, fontconfig, freetype, cairo, pango, gtk3, gtk2, ffmpeg, libGL, atk, alsaLib, libav_0_8, setJavaClassPath }:
+{ stdenv, requireFile, perl, unzip, glibc, zlib, gdk-pixbuf, xorg, glib, fontconfig, freetype, cairo, pango, gtk3, gtk2, ffmpeg, libGL, atk, alsaLib, libav_0_8, setJavaClassPath }:
 
 let
   graalvm8-ee = stdenv.mkDerivation rec {
@@ -68,14 +68,7 @@ let
 
     dontStrip = true;
 
-    # copy-paste openjdk's preFixup
     preFixup = ''
-      # Propagate the setJavaClassPath setup hook from the JRE so that
-      # any package that depends on the JRE has $CLASSPATH set up
-      # properly.
-      mkdir -p $out/nix-support
-      printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
-
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook
@@ -86,7 +79,7 @@ let
     postFixup = ''
       rpath="$out/jre/lib/amd64/jli:$out/jre/lib/amd64/server:$out/jre/lib/amd64:${
         stdenv.lib.strings.makeLibraryPath [ glibc xorg.libXxf86vm xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXrender
-                                             glib zlib alsaLib fontconfig freetype pango gtk3 gtk2 cairo gdk_pixbuf atk ffmpeg libGL ]}"
+                                             glib zlib alsaLib fontconfig freetype pango gtk3 gtk2 cairo gdk-pixbuf atk ffmpeg libGL ]}"
 
       for f in $(find $out -type f -perm -0100); do
         patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f" || true
@@ -98,7 +91,7 @@ let
       done
     '';
 
-    propagatedBuildInputs = [ zlib ]; # $out/bin/native-image needs zlib to build native executables
+    propagatedBuildInputs = [ setJavaClassPath zlib ]; # $out/bin/native-image needs zlib to build native executables
     
     doInstallCheck = true;
     installCheckPhase = ''
