@@ -16,17 +16,18 @@ preConfigure() {
 
     eval "$oldPreConfigure"
 
-    find . | while read fn; do
-        if test -f "$fn"; then
-            first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
-            if test "$first" = "#!"; then
-                echo "patching $fn..."
-                sed -i "$fn" -e "s|^#\!\(.*\bperl\b.*\)$|#\!\1$perlFlags|"
-            fi
+    find . -type f | while read fn; do
+        if [[ "$(dd if="$fn" count=2 bs=1 2> /dev/null)" == "#!" ]]; then
+            # on `fixupPhase`, `patchShebangsAuto` will replace $devperl/bin/perl with $hostperl/bin/perl
+            # for now, a perl working on build platform is required to run tests, etc
+            echo "patching shebang of $(pwd)/$fn:"
+            echo -n "- "; head -n1 "$fn"
+            sed -E "s|^#!.*\bperl\b.*$|#!$devperl/bin/perl$perlFlags|" -i "$fn"
+            echo -n "+ "; head -n1 "$fn"
         fi
     done
 
-    perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
+    perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$devperl/bin/perl FULLPERL=$fullperl/bin/perl
 }
 
 
