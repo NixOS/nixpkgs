@@ -33,7 +33,7 @@ preConfigure() {
         fi
     done
 
-    perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$devperl/bin/perl FULLPERL=$fullperl/bin/perl
+    perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$devperl/bin/perl FULLPERL=\"$fullperl/bin/perl\"
 }
 
 
