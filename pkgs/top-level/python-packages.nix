@@ -6134,6 +6134,8 @@ in {
     inherit (pkgs) udev libusb1;
   };
 
+  ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
+
   mnemonic = callPackage ../development/python-modules/mnemonic { };
 
   keepkey = callPackage ../development/python-modules/keepkey { };
