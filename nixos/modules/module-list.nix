@@ -519,7 +519,6 @@
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/sysstat.nix
-  ./services/monitoring/systemhealth.nix
   ./services/monitoring/teamviewer.nix
   ./services/monitoring/telegraf.nix
   ./services/monitoring/thanos.nix

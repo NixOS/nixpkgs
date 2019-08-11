@@ -263,6 +263,11 @@
        <literal>false</literal>.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The <option>services.systemhealth</option> module has been removed from nixpkgs due to lack of maintainer.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
