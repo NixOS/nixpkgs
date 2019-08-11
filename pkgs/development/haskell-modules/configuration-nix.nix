@@ -588,5 +588,6 @@ self: super: builtins.intersectAttrs super {
 
   # Tests require internet
   dhall_1_25_0 = dontCheck super.dhall_1_25_0;
+  http-download = dontCheck super.http-download;
 
 }
