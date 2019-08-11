@@ -14597,8 +14597,7 @@ in
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
     inherit (darwin) cctools developer_cmds;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-    boost = boost169;
-    stdenv = pkgs.clangStdenv;
+    boost = boost169; # Configure checks for specific version.
   };
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };

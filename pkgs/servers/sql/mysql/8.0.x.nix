@@ -1,58 +1,46 @@
-{ stdenv, fetchurl, cmake, bison
-, boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
-, pkgconfig
-, cctools, CoreServices, developer_cmds }:
-
-# Note: zlib is not required; MySQL can use an internal zlib.
+{ lib, stdenv, fetchurl, bison, cmake, pkgconfig
+, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib
+, numactl, perl, cctools, CoreServices, developer_cmds
+}:
 
 let
 self = stdenv.mkDerivation rec {
-  pname = "mysql";
-  version = "8.0.17";
+  name = "mysql-8.0.17";
 
   src = fetchurl {
-    url = "https://dev.mysql.com/get/Downloads/MySQL-8.0/${pname}-${version}.tar.gz";
+    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${name}.tar.gz";
     sha256 = "1mjrlxn8vigi69r0r674j2dibdnkaar01ji5965gsyx7k60z7qy6";
   };
 
   patches = [
-    ./8.0-gc-sections.patch
+    ./abi-check.patch
+    ./libutils.patch
   ];
 
-  preConfigure = stdenv.lib.optional stdenv.isDarwin ''
-    ln -s /bin/ps $TMPDIR/ps
-    export PATH=$PATH:$TMPDIR
-  '';
+  nativeBuildInputs = [ bison cmake pkgconfig ];
 
-  nativeBuildInputs = [ cmake bison ];
-
-  buildInputs = [ boost libedit libevent lz4 ncurses openssl pkgconfig protobuf readline zlib ]
-     ++ stdenv.lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
+  buildInputs = [
+    boost icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    numactl
+  ] ++ lib.optionals stdenv.isDarwin [
+    cctools CoreServices developer_cmds
+  ];
 
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DFORCE_UNSUPPORTED_COMPILER=1"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12" # For std::shared_timed_mutex.
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
-    "-DWITH_SSL=yes"
-    "-DWITH_EMBEDDED_SERVER=yes"
-    "-DWITH_UNIT_TESTS=no"
-    "-DWITH_EDITLINE=system"
-    "-DWITH_LIBEVENT=system"
-    "-DWITH_LZ4=system"
-    "-DWITH_PROTOBUF=system"
-    "-DWITH_ZLIB=system"
-    "-DWITH_ARCHIVE_STORAGE_ENGINE=yes"
-    "-DWITH_BLACKHOLE_STORAGE_ENGINE=yes"
-    "-DWITH_FEDERATED_STORAGE_ENGINE=yes"
-    "-DWITH_ROUTER=no" ## mysqlrouter is new addition in 8.0 source-tree, but it currently fails to build on Darwin (tested: macOS 10.12.6 + mysql 8.0.17)
-    "-DHAVE_IPV6=yes"
+    "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.
+    "-DWITH_ROUTER=OFF" # It may be packaged separately.
+    "-DWITH_SYSTEM_LIBS=ON"
+    "-DWITH_UNIT_TESTS=OFF"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DMYSQL_DATADIR=/var/lib/mysql"
     "-DINSTALL_INFODIR=share/mysql/docs"
     "-DINSTALL_MANDIR=share/man"
     "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
-    "-DINSTALL_SCRIPTDIR=bin"
     "-DINSTALL_INCLUDEDIR=include/mysql"
     "-DINSTALL_DOCREADMEDIR=share/mysql"
     "-DINSTALL_SUPPORTFILESDIR=share/mysql"
@@ -62,16 +50,10 @@ self = stdenv.mkDerivation rec {
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
-  CXXFLAGS = "-fpermissive -std=c++14";
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
-
-  prePatch = ''
-    sed -i -e "s|/usr/bin/libtool|libtool|" cmake/libutils.cmake
-  '';
   postInstall = ''
     moveToOutput "lib/*.a" $static
-    ln -s libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libmysqlclient_r${stdenv.hostPlatform.extensions.sharedLibrary}
-    find $out -type d -exec chmod 755 {} \;
+    so=${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln -s libmysqlclient$so $out/lib/libmysqlclient_r$so
   '';
 
   passthru = {
@@ -81,13 +63,11 @@ self = stdenv.mkDerivation rec {
     mysqlVersion = "8.0";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mysql.com/";
     description = "The world's most popular open source database";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;
-    license = with licenses; [
-      artistic1 bsd0 bsd2 bsd3 bsdOriginal
-      gpl2 lgpl2 lgpl21 mit publicDomain licenses.zlib
-    ];
   };
 }; in self
