@@ -435,6 +435,14 @@
      idiom or extract that anonymous mapping function to a named one. Both can still be used
      but <literal>lib.forEach</literal> is preferred over <literal>lib.flip map</literal>.
     </para>
+    <para>
+      The <literal>/etc/sysctl.d/nixos.conf</literal> file containing all the options set via
+      <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link> was moved to
+      <literal>/etc/sysctl.d/60-nixos.conf</literal>, as
+      <citerefentry><refentrytitle>sysctl.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+      recommends prefixing all filenames in <literal>/etc/sysctl.d</literal> with a
+      two-digit number and a dash to simplify the ordering of the files.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
