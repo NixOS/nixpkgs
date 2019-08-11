@@ -2,7 +2,7 @@
 , gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
 , gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3
 , bcrypt, gobject-introspection, gsettings-desktop-schemas
-, pango, gdk_pixbuf, atk }:
+, pango, gdk-pixbuf, atk }:
 
 buildPythonApplication rec {
   version = "0.9.4";
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     wrapGAppsHook
     # For setup hook populating GI_TYPELIB_PATH
     gobject-introspection
-    pango gdk_pixbuf atk libnotify
+    pango gdk-pixbuf atk libnotify
   ];
 
   buildInputs = [
