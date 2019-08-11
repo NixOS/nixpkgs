@@ -14324,6 +14324,10 @@ let
       sha256 = "be9fb8910b108e5d1a66f002b659ad22576e88d779b703dff9d15122c3f80834";
     };
     propagatedBuildInputs = [ MixinLinewise ];
+    # restore data files used in tests which are corrupted by patching shebangs
+    preCheck = ''
+      tar xf $src */xt --strip-components=1
+    '';
     meta = {
       description = "Read a POD document as a series of trivial events";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -16685,6 +16689,10 @@ let
       sha256 = "7853b44a9819eb3e6003260eedf904a1ad80035ea5254296ce014f96084b65d4";
     };
     propagatedBuildInputs = [ UNIVERSALrequire ];
+    # restore data files used in tests which are corrupted by patching shebangs
+    preCheck = ''
+      tar xf $src */t --strip-components=1
+    '';
     meta = {
       description = "Check whether Perl files compile correctly";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
