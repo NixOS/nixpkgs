@@ -15,8 +15,8 @@ EOL
 IFS=''
 while read line; do
   if echo $line | grep -q "Installing "; then
-    name=$(echo $line | sed -r 's/  Installing ([^ ]+) (.+)./\1/')
-    version=$(echo $line | sed -r 's/  Installing ([^ ]+) (.+)./\2/')
+    name=$(echo $line | sed -r 's/  Installing ([^ ]+) (.+)./\1/' | awk '{print $1}')
+    version=$(echo $line | sed -r 's/  Installing ([^ ]+) (.+)./\2/'| awk '{print $1}')
     sha256=$(nix-prefetch-url "$urlbase/$name/$version" 2>/dev/null)
     cat << EOL
 

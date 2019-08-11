@@ -62,9 +62,7 @@ in
 
   ms-vscode.cpptools = callPackage ./cpptools {};
 
-  ms-python.python = callPackage ./python {
-    extractNuGet = callPackage ./python/extract-nuget.nix { };
-  };
+  ms-python.python = callPackage ./python {};
 
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {
