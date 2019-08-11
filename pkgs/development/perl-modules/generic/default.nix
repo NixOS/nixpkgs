@@ -46,6 +46,9 @@ toPerlModule(stdenv.mkDerivation (
     builder = ./builder.sh;
     buildInputs = buildInputs ++ [ perl ];
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
+    
+    # environment variables passed to ./builder.sh
+    hostperl = perl;
     fullperl = buildPerl;
   }
 ))
