@@ -49,6 +49,7 @@ toPerlModule(stdenv.mkDerivation (
     
     # environment variables passed to ./builder.sh
     hostperl = perl;
+    devperl = perl.dev or perl;
     fullperl = buildPerl;
   }
 ))
