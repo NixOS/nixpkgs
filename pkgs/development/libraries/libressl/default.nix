@@ -25,7 +25,10 @@ let
 
     # Ensure that the output libraries do not require an executable stack.
     # Without this, libcrypto would be built with the executable stack flag set.
-    NIX_LDFLAGS = ["-z" "noexecstack"];
+    # For Clang, the flag is '--noexecstack', for GCC it is '-z noexecstack'.
+    NIX_LDFLAGS = if stdenv.isDarwin
+      then ["--noexecstack"]
+      else ["-z" "noexecstack"];
 
     enableParallelBuilding = true;
 
