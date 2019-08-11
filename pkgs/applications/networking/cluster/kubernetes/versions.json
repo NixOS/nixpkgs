@@ -1,0 +1,22 @@
+[
+  {
+    "version": "1.15.2",
+    "sha256": "05sixqs3wj10yzxhrh8qn7q6pabhvnkgdhwq8vvkd4h758pnr1hh"
+  },
+  {
+    "version": "1.14.5",
+    "sha256": "1a0ab7fm02yci6fd72z888c01695jsj2k5vxk4pywxrd8xhszvzy"
+  },
+  {
+    "version": "1.13.9",
+    "sha256": "0dnwxd38ixl5czv2g1qix3gfxmyh2ig0zbalgvc3lq9c57wd0yg8"
+  },
+  {
+    "version": "1.12.10",
+    "sha256": "18923qqblx0y3g6mk5lzkm2hbb3a09bxbnppabdb6svwqppazzjh"
+  },
+  {
+    "version": "1.11.10",
+    "sha256": "0gjh2sqdxm4yxcg22135368sk57dcdgcs5lfnhhv5g5ipsw0g9sc"
+  }
+]
