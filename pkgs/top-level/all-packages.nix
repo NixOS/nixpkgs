@@ -808,6 +808,8 @@ in
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
 
+  ec2-instance-connect-cli = python3Packages.callPackage ../tools/security/ec2-instance-connect-cli { };
+
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
   sedutil = callPackage ../tools/security/sedutil { };
