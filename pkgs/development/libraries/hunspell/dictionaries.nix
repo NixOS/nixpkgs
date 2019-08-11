@@ -310,6 +310,16 @@ in {
     };
   };
 
+  en-au = mkDictFromWordlist {
+    shortName = "en-au";
+    shortDescription = "English (Australia)";
+    dictFileName = "en_AU";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-2018.04.16.zip;
+      sha256 = "1kp06npl1kd05mm9r52cg2iwc13x02zwqgpibdw15b6x43agg6f5";
+    };
+  };
+
   en-gb-ise = mkDictFromWordlist {
     shortName = "en-gb-ise";
     shortDescription = "English (United Kingdom, 'ise' ending)";
