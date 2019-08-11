@@ -88,7 +88,7 @@ in
             event = "ac_adapter/*";
             action = ''
               vals=($1)  # space separated string to array of multiple values
-              case ''${vals[3]} in
+              case \'\'$\{vals[3]} in
                   00000000)
                       echo unplugged >> /tmp/acpi.log
                       ;;
