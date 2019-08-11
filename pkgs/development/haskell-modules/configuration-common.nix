@@ -167,9 +167,6 @@ self: super: {
 
   inline-java = addBuildDepend super.inline-java pkgs.jdk;
 
-  # https://github.com/mvoidex/hsdev/issues/11
-  hsdev = dontHaddock super.hsdev;
-
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
 
@@ -1098,11 +1095,6 @@ self: super: {
     postPatch = ''
       sed -i 's#haddock-api == 2\.21\.\*,#haddock-api == 2.22.*,#' hdocs.cabal
     '';
-  });
-
-  hsdev_0_3_3_2 = super.hsdev_0_3_3_2.overrideScope (self: super: {
-    haskell-names = self.haskell-names_0_9_6;
-    network = self.network_3_0_1_1;
   });
 
   # Break out of tasty >=0.10 && <1.2.
