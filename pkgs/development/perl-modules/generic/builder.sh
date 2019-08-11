@@ -4,7 +4,9 @@ PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"
 
 perlFlags=
 for i in $(IFS=:; echo $PERL5LIB); do
-    if [[ $perlFlags != *" -I$i"* ]]; then
+    # exclude paths pointing to perl derivation (like /nix/store/abcdfghijklmnpqrsvwxyz0123456789-perl-5.28.2/lib/perl5/site_perl)
+    # they are needless pointing to correct perl, and source of subtle bugs pointing to another perl
+    if [[ ! $i =~ /[0123456789abcdfghijklmnpqrsvwxyz]{32}-perl-[0-9.]+/lib/perl5/site_perl$ ]] && [[ $perlFlags != *" -I$i"* ]]; then
         perlFlags="$perlFlags -I$i"
     fi
 done
