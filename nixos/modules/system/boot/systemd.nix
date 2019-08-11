@@ -831,6 +831,10 @@ in
         [Sleep]
       '';
 
+      # install provided sysctl snippets
+      "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
+      "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
+
       "tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
       "tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
 
