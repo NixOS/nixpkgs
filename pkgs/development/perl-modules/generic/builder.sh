@@ -28,7 +28,7 @@ preConfigure() {
             # for now, a perl working on build platform is required to run tests, etc
             echo "patching shebang of $(pwd)/$fn:"
             echo -n "- "; head -n1 "$fn"
-            sed -E "s|^#!.*\bperl\b.*$|#!$devperl/bin/perl$perlFlags|" -i "$fn"
+            sed -E "s|^#!\s*(/usr/bin/env\s+)?\S*\bperl\b\S*(.*)$|#!$devperl/bin/perl\2$perlFlags|" -i "$fn"
             echo -n "+ "; head -n1 "$fn"
         fi
     done
