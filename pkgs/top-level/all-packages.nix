@@ -20746,8 +20746,6 @@ in
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
-  nylas-mail-bin = callPackage ../applications/networking/mailreaders/nylas-mail-bin { };
-
   thonny = callPackage ../applications/editors/thonny { };
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
