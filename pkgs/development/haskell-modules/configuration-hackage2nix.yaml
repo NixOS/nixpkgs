@@ -6236,7 +6236,6 @@ broken-packages:
   - http-conduit-browser
   - http-directory
   - http-dispatch
-  - http-download
   - http-enumerator
   - http-grammar
   - http-kinder
@@ -7791,7 +7790,6 @@ broken-packages:
   - pang-a-lambda
   - pangraph
   - panpipe
-  - pantry
   - pantry-tmp
   - papa-export
   - papa-implement
