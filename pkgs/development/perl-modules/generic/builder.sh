@@ -4,12 +4,18 @@ PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"
 
 perlFlags=
 for i in $(IFS=:; echo $PERL5LIB); do
-    # exclude paths pointing to perl derivation (like /nix/store/abcdfghijklmnpqrsvwxyz0123456789-perl-5.28.2/lib/perl5/site_perl)
-    # they are needless pointing to correct perl, and source of subtle bugs pointing to another perl
-    if [[ ! $i =~ /[0123456789abcdfghijklmnpqrsvwxyz]{32}-perl-[0-9.]+/lib/perl5/site_perl$ ]] && [[ $perlFlags != *" -I$i"* ]]; then
+    if [[ $i == "$hostperl/lib/perl5/site_perl" ]] || [[ $i == "$hostperl/lib/perl5/site_perl/"* ]]; then
+        # exclude paths pointing to perl derivation (like /nix/store/abcdfghijklmnpqrsvwxyz0123456789-perl-5.28.2-aarch64/lib/perl5/site_perl/5.28.2)
+        # they are needless when pointing to correct perl, and source of subtle bugs when pointing to wrong perl
+        true
+    elif [[ $i =~ /[0123456789abcdfghijklmnpqrsvwxyz]{32}-perl-[0-9.]+(-[^/]+)?/lib/perl5/site_perl($|/) ]]; then
+        echo -e "unexpected perl $i on PERL5LIB where\n hostperl=$hostperl\n devperl =$devperl\n fullperl=$fullperl"
+        exit 1
+    elif [[ $perlFlags != *" -I$i"* ]]; then
         perlFlags="$perlFlags -I$i"
     fi
 done
+
 
 oldPreConfigure="$preConfigure"
 preConfigure() {
