@@ -1276,4 +1276,7 @@ self: super: {
   # need newer version of ghc-libparser
   hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_0_20190723; };
 
+  # https://github.com/sol/hpack/issues/366
+  hpack = dontCheck super.hpack;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
