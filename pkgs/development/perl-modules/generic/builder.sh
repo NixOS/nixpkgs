@@ -4,7 +4,9 @@ PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"
 
 perlFlags=
 for i in $(IFS=:; echo $PERL5LIB); do
-    perlFlags="$perlFlags -I$i"
+    if [[ $perlFlags != *" -I$i"* ]]; then
+        perlFlags="$perlFlags -I$i"
+    fi
 done
 
 oldPreConfigure="$preConfigure"
