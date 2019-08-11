@@ -167,9 +167,6 @@ self: super: {
 
   inline-java = addBuildDepend super.inline-java pkgs.jdk;
 
-  # https://github.com/mvoidex/hsdev/issues/11
-  hsdev = dontHaddock super.hsdev;
-
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
 
@@ -857,7 +854,7 @@ self: super: {
   # Wrap the generated binaries to include their run-time dependencies in
   # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
   # in LTS-13.x.
-  cryptol = overrideCabal (super.cryptol.override { sbv = self.sbv_8_3; }) (drv: {
+  cryptol = overrideCabal super.cryptol (drv: {
     buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
     postInstall = drv.postInstall or "" + ''
       for b in $out/bin/cryptol $out/bin/cryptol-html; do
@@ -1035,8 +1032,6 @@ self: super: {
   # https://github.com/dmwit/encoding/pull/3
   encoding = appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch;
 
-  clock = dontCheck (appendPatch super.clock ./patches/clock-0.7.2.patch);
-
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
 
@@ -1094,21 +1089,12 @@ self: super: {
   # haskell-names-0.9.4: Break out of “tasty >=0.12 && <1.2”
   haskell-names = doJailbreak super.haskell-names;
 
-  haskell-names_0_9_6 = super.haskell-names_0_9_6.overrideScope (self: super: {
-    haskell-src-exts = self.haskell-src-exts_1_21_0;
-  });
-
   # hdocs-0.5.3.1: Break out of “haddock-api ==2.21.*”
   # cannot use doJailbreak due to https://github.com/peti/jailbreak-cabal/issues/7
   hdocs = overrideCabal super.hdocs (drv: {
     postPatch = ''
       sed -i 's#haddock-api == 2\.21\.\*,#haddock-api == 2.22.*,#' hdocs.cabal
     '';
-  });
-
-  hsdev_0_3_3_2 = super.hsdev_0_3_3_2.overrideScope (self: super: {
-    haskell-names = self.haskell-names_0_9_6;
-    network = self.network_3_0_1_1;
   });
 
   # Break out of tasty >=0.10 && <1.2.
@@ -1120,14 +1106,6 @@ self: super: {
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
   stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: {
-    ansi-terminal = self.ansi-terminal_0_9_1;
-    concurrent-output = self.concurrent-output_1_10_10; # needed for new ansi-terminal version
-    hi-file-parser = dontCheck (unmarkBroken super.hi-file-parser);  # Avoid depending on newer hspec versions.
-    http-download = dontCheck (unmarkBroken super.http-download);
-    pantry = dontCheck (unmarkBroken super.pantry);
-    rio = self.rio_0_1_11_0;
-    rio-prettyprint = unmarkBroken super.rio-prettyprint;
-    unliftio = self.unliftio_0_2_12;
   }));
 
   # musl fixes
@@ -1203,10 +1181,6 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
-  # The LTS-13.x versions doesn't suffice to build these packages.
-  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
-  hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
-
   # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
   these = doJailbreak super.these; # until these >= 0.7.6
@@ -1244,17 +1218,8 @@ self: super: {
     '';
   });
 
-  # Use latest pandoc despite what LTS says.
-  # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  cmark-gfm = self.cmark-gfm_0_2_0;
-  pandoc = dontCheck (doDistribute super.pandoc_2_7_3);  # test suite failure: https://github.com/jgm/pandoc/issues/5582
-  pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
-  skylighting = self.skylighting_0_8_2;
-  skylighting-core = self.skylighting-core_0_8_2;
-
-  # Current versions of tasty-hedgehog need hedgehog 1.x, which
-  # we don't have in LTS-13.x.
-  tasty-hedgehog = super.tasty-hedgehog.override { hedgehog = self.hedgehog_1_0; };
+  # test suite failure: https://github.com/jgm/pandoc/issues/5582
+  pandoc = dontCheck super.pandoc;
 
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
@@ -1275,10 +1240,10 @@ self: super: {
   yesod-markdown = doJailbreak super.yesod-markdown;
 
   # These packages needs network 3.x, which is not in LTS-13.x.
-  network-bsd = super.network-bsd.override { network = self.network_3_0_1_1; };
+  network-bsd_2_8_1_0 = super.network-bsd_2_8_1_0.override { network = self.network_3_0_1_1; };
   lambdabot-core = super.lambdabot-core.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
   lambdabot-reference-plugins = super.lambdabot-reference-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
-  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; socks = self.socks_0_6_0; connection = self.connection_0_3_0; haskell-src-exts = self.haskell-src-exts_1_21_0; });
+  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; });
 
   # Some tests depend on a postgresql instance
   # Haddock failure: https://github.com/haskell/haddock/issues/979
@@ -1308,10 +1273,10 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
-  # The old LTS-13.x version does not compile.
-  ip = self.ip_1_5_1;
+  # need newer version of ghc-libparser
+  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_0_20190723; };
 
-  # Needs deque >= 0.3, but latest version on stackage is 2.7
-  butcher = super.butcher.override { deque = self.deque_0_4_2_3; };
+  # https://github.com/sol/hpack/issues/366
+  hpack = dontCheck super.hpack;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
