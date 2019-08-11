@@ -17,7 +17,12 @@ let
 in
 
 {
-  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-init.nix ];
+  imports = [
+    ../profiles/headless.nix
+    ./amazon-init.nix
+    ./ec2-data.nix
+    ./ec2-instance-connect.nix
+  ];
 
   config = {
 
