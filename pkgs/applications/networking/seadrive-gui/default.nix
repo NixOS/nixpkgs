@@ -4,17 +4,14 @@
 , pkgconfig
 , stdenv
 # Package dependencies
-, jansson
 , libsearpc
 , libselinux
 , libsepol
 , libuuid
 , pcre
-, qtbase
 , qttools
 , qtwebengine
 , seadrive-daemon
-, sqlite
 }:
 
 stdenv.mkDerivation rec {
