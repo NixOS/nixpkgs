@@ -9,6 +9,8 @@ let
   timezone = types.nullOr (types.addCheck types.str nospace)
     // { description = "null or string without spaces"; };
 
+  lcfg = config.location;
+
 in
 
 {
@@ -37,11 +39,44 @@ in
       };
 
     };
+
+    location = {
+
+      latitude = mkOption {
+        type = types.float;
+        description = ''
+          Your current latitude, between
+          <literal>-90.0</literal> and <literal>90.0</literal>. Must be provided
+          along with longitude.
+        '';
+      };
+
+      longitude = mkOption {
+        type = types.float;
+        description = ''
+          Your current longitude, between
+          between <literal>-180.0</literal> and <literal>180.0</literal>. Must be
+          provided along with latitude.
+        '';
+      };
+
+      provider = mkOption {
+        type = types.enum [ "manual" "geoclue2" ];
+        default = "manual";
+        description = ''
+          The location provider to use for determining your location. If set to
+          <literal>manual</literal> you must also provide latitude/longitude.
+        '';
+      };
+
+    };
   };
 
   config = {
 
     environment.sessionVariables.TZDIR = "/etc/zoneinfo";
+
+    services.geoclue2.enable = mkIf (lcfg.provider == "geoclue2") true;
 
     # This way services are restarted when tzdata changes.
     systemd.globalEnvironment.TZDIR = tzdir;

@@ -12034,6 +12034,8 @@ in
 
   libmodplug = callPackage ../development/libraries/libmodplug {};
 
+  libmodule = callPackage ../development/libraries/libmodule { };
+
   libmpcdec = callPackage ../development/libraries/libmpcdec { };
 
   libmp3splt = callPackage ../development/libraries/libmp3splt { };
@@ -17448,6 +17450,10 @@ in
   clickshare-csc1 = callPackage ../applications/video/clickshare-csc1 { };
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
+
+  clight = callPackage ../applications/misc/clight { };
+
+  clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
   clipgrab = qt5.callPackage ../applications/video/clipgrab { };
 

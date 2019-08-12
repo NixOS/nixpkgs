@@ -20,6 +20,7 @@
   ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
+  ./config/locale.nix
   ./config/malloc.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
@@ -33,7 +34,6 @@
   ./config/system-environment.nix
   ./config/system-path.nix
   ./config/terminfo.nix
-  ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/vpnc.nix
@@ -820,6 +820,7 @@
   ./services/web-servers/varnish/default.nix
   ./services/web-servers/zope2.nix
   ./services/x11/extra-layouts.nix
+  ./services/x11/clight.nix
   ./services/x11/colord.nix
   ./services/x11/compton.nix
   ./services/x11/unclutter.nix
