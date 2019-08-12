@@ -22,7 +22,7 @@ in {
       type = types.bool;
       default = false;
       description = ''
-	Allow non-root users to specify the allow_other or allow_root mount
+        Allow non-root users to specify the allow_other or allow_root mount
         options, see mount.fuse3(8).
       '';
     };
