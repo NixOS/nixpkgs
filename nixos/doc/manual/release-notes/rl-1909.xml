@@ -242,6 +242,12 @@
        Only some exporters are affected by the latter, namely the exporters <literal>dovecot</literal>, <literal>node</literal>, <literal>postfix</literal> and <literal>varnish</literal>.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The <literal>ibus-qt</literal> package is not installed by default anymore when <xref linkend="opt-i18n.inputMethod.enabled" /> is set to <literal>ibus</literal>.
+       If IBus support in Qt 4.x applications is required, add the <literal>ibus-qt</literal> package to your <xref linkend="opt-environment.systemPackages" /> manually.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
