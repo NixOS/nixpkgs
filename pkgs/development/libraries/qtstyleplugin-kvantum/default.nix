@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem, libX11, libXext, qttools }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
+, libX11, libXext, qttools, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
@@ -11,8 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "0aqlv7mj7r9vjm6pvb8pv3cyx35lgz8rjjas3k8wfdr3sqyyy25g";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [ qtbase qtsvg qtx11extras kwindowsystem libX11 libXext  ];
+  nativeBuildInputs = [
+    qmake qttools wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase qtsvg qtx11extras kwindowsystem libX11 libXext
+  ];
 
   sourceRoot = "source/Kvantum";
 
