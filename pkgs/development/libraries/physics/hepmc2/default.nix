@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "hepmc-${version}";
-  version = "2.06.09";
+  version = "2.06.10";
 
   src = fetchurl {
-    url = "http://lcgapp.cern.ch/project/simu/HepMC/download/HepMC-${version}.tar.gz";
-    sha256 = "020sc7hzy7d6d1i6bs352hdzy5zy5zxkc33cw0jhh8s0jz5281y6";
+    url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC-${version}.tar.gz";
+    sha256 = "190i9jlnwz1xpc495y0xc70s4zdqb9s2zdq1zkjy2ivl7ygdvpjs";
   };
 
   patches = [ ./in_source.patch ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The HepMC package is an object oriented event record written in C++ for High Energy Physics Monte Carlo Generators";
     license     = stdenv.lib.licenses.gpl2;
-    homepage    = http://lcgapp.cern.ch/project/simu/HepMC/;
+    homepage    = http://hepmc.web.cern.ch/hepmc/;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };
