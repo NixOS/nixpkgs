@@ -1,12 +1,12 @@
 {
   busybox = import <nix/fetchurl.nix> {
-    url = http://tarballs.nixos.org/stdenv-linux/i686/4907fc9e8d0d82b28b3c56e3a478a2882f1d700f/busybox;
-    sha256 = "ef4c1be6c7ae57e4f654efd90ae2d2e204d6769364c46469fa9ff3761195cba1";
+    url = https://lblasc-nix-dev.s3-eu-west-1.amazonaws.com/bootstrap-tools-i686-gcc9/busybox;
+    sha256 = "03g3hz2ar6nz7chfwip72gvy4wd828ha9bdgg6mjs9llsc0d2izz";
     executable = true;
   };
 
   bootstrapTools = import <nix/fetchurl.nix> {
-    url = http://tarballs.nixos.org/stdenv-linux/i686/4907fc9e8d0d82b28b3c56e3a478a2882f1d700f/bootstrap-tools.tar.xz;
-    sha256 = "cf920d26d94335f5cb46e247455d0e5389765d16a2b8fc233b792a655b5b58aa";
+    url = https://lblasc-nix-dev.s3-eu-west-1.amazonaws.com/bootstrap-tools-i686-gcc9/bootstrap-tools.tar.xz;
+    sha256 = "1m142s2z7v3v6k0m3d91prp7i71hhy394jgnkd7y3z5sh15c8j28";
   };
 }
