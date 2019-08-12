@@ -1,12 +1,12 @@
 { stdenv, python3Packages }:
 with python3Packages; buildPythonApplication rec {
   pname = "pre-commit";
-  version = "1.17.0";
+  version = "1.18.1";
 
   src = fetchPypi {
     inherit version;
     pname = "pre_commit";
-    sha256 = "1qswk30w2cq8xvj16mhszsi3npp0z08s8lki1w67nif23c2kkk6c";
+    sha256 = "0d9ja186g41kw3gmhbi6xjvaslz6z4xis4qn1q6jabkka6jz4qhp";
   };
 
   propagatedBuildInputs = [
