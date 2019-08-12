@@ -100,7 +100,7 @@ let
     === details
 
     Type:: ${value.type}
-    ${ if pkgs.lib.hasAttr "default" value
+    ${ if lib.hasAttr "default" value
        then ''
         Default::
         +
@@ -114,7 +114,7 @@ let
        then "Read Only:: {blank}"
       else ""
     }
-    ${ if pkgs.lib.hasAttr "example" value
+    ${ if lib.hasAttr "example" value
        then ''
         Example::
         +
@@ -129,7 +129,7 @@ let
 in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = pkgs.lib.concatStringsSep "\n" (pkgs.lib.mapAttrsToList singleAsciiDoc optionsNix);
+  optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
