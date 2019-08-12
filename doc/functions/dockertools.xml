@@ -312,7 +312,10 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
       Maximum number of layers to create.
      </para>
      <para>
-      <emphasis>Default:</emphasis> <literal>24</literal>
+      <emphasis>Default:</emphasis> <literal>100</literal>
+     </para>
+     <para>
+      <emphasis>Maximum:</emphasis> <literal>125</literal>
      </para>
     </listitem>
    </varlistentry>
