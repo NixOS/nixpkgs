@@ -7,6 +7,7 @@
 , lib
 , mock
 , numpy
+, nodejs
 , pillow
 , pytest
 , python
@@ -14,6 +15,7 @@
 , pyyaml
 , selenium
 , six
+, substituteAll
 , tornado
 }:
 
@@ -25,6 +27,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0m27j29jpi977y95k272xc24qkl5bkniy046cil116hrbgnppng2";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./hardcode-nodejs-npmjs-paths.patch;
+      node_bin = "${nodejs}/bin/node";
+      npm_bin = "${nodejs}/bin/npm";
+    })
+  ];
 
   disabled = isPyPy;
 
