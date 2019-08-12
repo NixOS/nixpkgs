@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libX11, libuuid, xz, vtk }:
+{ stdenv, fetchurl, cmake, libX11, libuuid, xz, vtk, darwin }:
 
 stdenv.mkDerivation rec {
   name = "itk-5.0.0";
@@ -21,13 +21,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake xz ];
-  buildInputs = [ libX11 libuuid vtk ];
+  buildInputs = [ libX11 libuuid vtk ] ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
     homepage = http://www.itk.org/;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }
