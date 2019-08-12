@@ -113,6 +113,15 @@ mkDerivation {
 </programlisting>
  </para>
 
+ <note>
+  <para>
+    <literal>wrapQtAppsHook</literal> ignores files that are non-ELF executables.
+    This means that scripts won't be automatically wrapped so you'll need to manually
+    wrap them as previously mentioned. An example of when you'd always need to do this
+    is with Python applications that use PyQT.
+  </para>
+ </note>
+
  <para>
   Libraries are built with every available version of Qt. Use the <literal>meta.broken</literal>
   attribute to disable the package for unsupported Qt versions:

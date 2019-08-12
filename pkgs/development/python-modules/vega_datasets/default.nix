@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    py.test vega_datasets --doctest-modules
+    py.test vega_datasets --doctest-modules -k 'not column_names'
   '';
 
   meta = with lib; {

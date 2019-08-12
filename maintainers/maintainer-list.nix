@@ -1083,6 +1083,11 @@
     github = "codyopel";
     name = "Cody Opel";
   };
+  cohencyril = {
+    email = "cyril.cohen@inria.fr";
+    github = "CohenCyril";
+    name = "Cyril Cohen";
+  };
   colemickens = {
     email = "cole.mickens@gmail.com";
     github = "colemickens";
@@ -1513,6 +1518,11 @@
     github = "liclac";
     name = "embr";
   };
+  emily = {
+    email = "nixpkgs@emily.moe";
+    github = "emilazy";
+    name = "Emily";
+  };
   ederoyd46 = {
     email = "matt@ederoyd.co.uk";
     github = "ederoyd46";
@@ -1698,6 +1708,11 @@
       fingerprint = "67FE 98F2 8C44 CF22 1828  E12F D57E FA62 5C9A 925F";
     }];
   };
+  evanjs = {
+    email = "evanjsx@gmail.com";
+    github = "evanjs";
+    name = "Evan Stoll";
+  };
   evck = {
     email = "eric@evenchick.com";
     github = "ericevenchick";
@@ -1752,6 +1767,11 @@
     email = "fahree@gmail.com";
     github = "fare";
     name = "Francois-Rene Rideau";
+  };
+  farlion = {
+    email = "florian.peter@gmx.at";
+    github = "workflow";
+    name = "Florian Peter";
   };
   fdns = {
     email = "fdns02@gmail.com";
@@ -5603,6 +5623,11 @@
     email = "viric@viric.name";
     github = "viric";
     name = "Lluís Batlle i Rossell";
+  };
+  virusdave = {
+    email = "dave.nicponski@gmail.com";
+    github = "virusdave";
+    name = "Dave Nicponski";
   };
   vizanto = {
     email = "danny@prime.vc";

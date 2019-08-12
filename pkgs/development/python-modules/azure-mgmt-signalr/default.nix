@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-signalr";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "8a6266a59a5c69102e274806ccad3ac74b06fd2c226e16426bbe248fc2174903";
+    sha256 = "0k39hf6r2rfy2wyxd9czha2mwmcqf6sc1v69jyh6ml3slbliivlz";
   };
 
   propagatedBuildInputs = [

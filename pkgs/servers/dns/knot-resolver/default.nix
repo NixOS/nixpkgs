@@ -23,12 +23,15 @@ exportLuaPathsFor = luaPkgs: ''
 
 unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "2fe470f9bb1007667cdd448f758087244b7195a0234c2b100a9beeed0a2d3e68";
+    sha256 = "b37ff9ceefbaa4e4527d183fb1bbb63e641d34d9889ce92715128bc1423c7ef4";
   };
+
+  # https://gitlab.labs.nic.cz/knot/knot-resolver/issues/496
+  postPatch = "sed '/prefill.test.lua/d' -i modules/meson.build";
 
   outputs = [ "out" "dev" ];
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras }:
+{ stdenv, mkDerivation, fetchurl, pkgconfig, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "0.5.9";
   name = "qjackctl-${version}";
 

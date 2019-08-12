@@ -1,4 +1,4 @@
-{ stdenv
+{ mkDerivation
 , lib
 , fetchurl
 , extra-cmake-modules
@@ -18,7 +18,7 @@
 , kwayland
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kdeconnect";
   version = "1.3.4";
 

@@ -100,6 +100,11 @@ stdenv.mkDerivation rec {
       rev = "c11d9cfa23ff9f77681a8f12742f68143eed4504";
       sha256 = "0xzra7mbgqvahk9v45bjwir2mqz73hrhhy314jq5nxrb35ysdxyi";
     })
+
+    # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
+    # now set the cache dir to be withing the .sage directory. This is not
+    # strictly necessary, but keeps us from littering in the user's HOME.
+    ./patches/sympow-cache.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

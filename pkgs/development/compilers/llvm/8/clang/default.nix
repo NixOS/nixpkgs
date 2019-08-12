@@ -8,7 +8,7 @@ let
   self = stdenv.mkDerivation ({
     name = "clang-${version}";
 
-    src = fetch "cfe" "0svk1f70hvpwrjp6x5i9kqwrqwxnmcrw5s7f4cxyd100mdd12k08";
+    src = fetch "cfe" "0ihnbdl058gvl2wdy45p5am55bq8ifx8m9mhcsgj9ax8yxlzvvvh";
 
     unpackPhase = ''
       unpackFile $src

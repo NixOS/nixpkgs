@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.4.10";
   pname = "pysnmp";
+  version = "4.4.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bbcnn49krawq8pkhpzc427yxki0kxjndhhn61140j3wjbvavhah";
+    sha256 = "1v7vz045pami4nx5hfvk8drarcswjclb0pfmg932x95fddbdx2zy";
   };
 
   # NameError: name 'mibBuilder' is not defined
