@@ -21,8 +21,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   checkPhase = ''
-    mv coreschema coreschema.hidden
-    pytest tests
+    cd ./tests
+    pytest
   '';
 
   meta = with stdenv.lib; {

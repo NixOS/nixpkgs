@@ -2168,6 +2168,8 @@ in {
 
   urllib3 = callPackage ../development/python-modules/urllib3 {};
 
+  drf-yasg = callPackage ../development/python-modules/drf-yasg { };
+
   dropbox = callPackage ../development/python-modules/dropbox {};
 
   drms = callPackage ../development/python-modules/drms { };
