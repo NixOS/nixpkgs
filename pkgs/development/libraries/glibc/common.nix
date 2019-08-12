@@ -23,6 +23,7 @@
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 , bison
+, python3
 }:
 
 { name
@@ -34,9 +35,9 @@
 } @ args:
 
 let
-  version = "2.27";
+  version = "2.30";
   patchSuffix = "";
-  sha256 = "0wpwq7gsm7sd6ysidv0z575ckqdg13cr2njyfgrbgh4f65adwwji";
+  sha256 = "1bxqpg91d02qnaz837a5kamm0f43pr1il4r9pknygywsar713i72";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -162,7 +163,7 @@ stdenv.mkDerivation ({
   outputs = [ "out" "bin" "dev" "static" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [ bison python3 ];
   buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
