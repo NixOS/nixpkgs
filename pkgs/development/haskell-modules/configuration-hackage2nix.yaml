@@ -6577,7 +6577,6 @@ broken-packages:
   - join-api
   - joinlist
   - jonathanscard
-  - jose
   - jpeg
   - js-good-parts
   - jsaddle-hello
@@ -8764,7 +8763,6 @@ broken-packages:
   - servant-aeson-specs
   - servant-auth-cookie
   - servant-auth-hmac
-  - servant-auth-server
   - servant-auth-token
   - servant-auth-token-acid
   - servant-auth-token-api
@@ -9414,7 +9412,6 @@ broken-packages:
   - tasty-fail-fast
   - tasty-groundhog-converters
   - tasty-hedgehog-coverage
-  - tasty-hspec
   - tasty-integrate
   - tasty-jenkins-xml
   - tasty-laws
