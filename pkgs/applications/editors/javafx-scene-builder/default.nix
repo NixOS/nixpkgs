@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       SceneBuilder cannot be downloaded without license acception.
       1. Download a copy from https://www.oracle.com/technetwork/java/javase/downloads/javafxscenebuilder-1x-archive-2199384.html
       2. In a shell, execute:
-         nix-prefetch-url file:///path/to/Xcode_7.2.dmg
+         nix-prefetch-url file:///path/to/javafx_scenebuilder-2_0-linux-x64.tar.gz
      '';
   };
 
