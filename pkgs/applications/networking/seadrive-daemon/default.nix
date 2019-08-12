@@ -44,10 +44,11 @@ in stdenv.mkDerivation rec {
     mv * $out/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://www.seafile.com/en/home/";
     description = "Enables you to access files on the Seafile server without syncing to local disk. It works like a network drive";
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ justinlovinger ];
   };
 }

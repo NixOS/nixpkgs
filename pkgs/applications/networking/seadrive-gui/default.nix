@@ -50,10 +50,11 @@ stdenv.mkDerivation rec {
     makeWrapper ${seadrive-daemon}/bin/seadrive $out/bin/seadrive
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/haiwen/seadrive-gui;
     description = "GUI part of Seafile drive";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ justinlovinger ];
   };
 }

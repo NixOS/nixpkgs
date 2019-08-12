@@ -2631,6 +2631,11 @@
     github = "juliendehos";
     name = "Julien Dehos";
   };
+  justinlovinger = {
+    email = "git@justinlovinger.com";
+    github = "JustinLovinger";
+    name = "Justin Lovinger";
+  };
   justinwoo = {
     email = "moomoowoo@gmail.com";
     github = "justinwoo";
