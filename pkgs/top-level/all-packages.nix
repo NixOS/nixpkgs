@@ -803,6 +803,8 @@ in
 
   git-repo-updater = python3Packages.callPackage ../development/tools/git-repo-updater { };
 
+  git-revise = with python3Packages; toPythonApplication git-revise;
+
   git-town = callPackage ../tools/misc/git-town { };
 
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };

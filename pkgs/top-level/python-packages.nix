@@ -3138,6 +3138,8 @@ in {
 
   gipc = callPackage ../development/python-modules/gipc { };
 
+  git-revise = callPackage ../development/python-modules/git-revise { };
+
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
   glances = callPackage ../development/python-modules/glances { };
