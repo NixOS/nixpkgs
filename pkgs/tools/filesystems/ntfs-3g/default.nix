@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = stdenv.lib.optional crypto pkgconfig;
 
   src = fetchurl {
-    url = "http://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";
+    url = "https://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";
     sha256 = "1mb228p80hv97pgk3myyvgp975r9mxq56c6bdn1n24kngcfh4niy";
   };
 
