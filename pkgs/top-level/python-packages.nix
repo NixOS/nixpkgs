@@ -1800,6 +1800,8 @@ in {
 
   cookies = callPackage ../development/python-modules/cookies { };
 
+  coreapi = callPackage ../development/python-modules/coreapi { };
+
   coreschema = callPackage ../development/python-modules/coreschema { };
 
   coveralls = callPackage ../development/python-modules/coveralls { };
