@@ -1,24 +1,22 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper, varnish }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish }:
 
-buildGoPackage rec {
-  name = "prometheus_varnish_exporter-${version}";
-  version = "1.5";
-
-  goPackagePath = "github.com/jonnenauha/prometheus_varnish_exporter";
+buildGoModule rec {
+  pname = "prometheus_varnish_exporter";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "jonnenauha";
     repo = "prometheus_varnish_exporter";
     rev = version;
-    sha256 = "1040x7fk3s056yrn95siilhi8c9cci2mdncc1xfjf5xj87421qx8";
+    sha256 = "1lvs44936n3s9z6c5169jbvx390n5g0qk4pcrmnkndg796ixjshd";
   };
 
-  goDeps = ./varnish-exporter_deps.nix;
+  modSha256 = "0w1zg9jc2466srx9pdckw7rzn7ma4pbd0617b1h98v364wjzgj72";
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $bin/bin/prometheus_varnish_exporter \
+    wrapProgram $out/bin/prometheus_varnish_exporter \
       --prefix PATH : "${varnish}/bin"
   '';
 
