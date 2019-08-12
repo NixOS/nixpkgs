@@ -581,6 +581,8 @@ in {
 
   fsspec = callPackage ../development/python-modules/fsspec { };
 
+  furl = callPackage ../development/python-modules/furl { };
+
   fuse = callPackage ../development/python-modules/fuse-python {
     inherit (pkgs) fuse pkgconfig;
   };
