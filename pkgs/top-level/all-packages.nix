@@ -275,7 +275,7 @@ in
   # `fetchurl' downloads a file from the network.
   fetchurl = makeOverridable (import ../build-support/fetchurl) {
     inherit lib stdenvNoCC;
-    curl = buildPackages.curl.override rec {
+    curl = buildPackages.curl.override (old: rec {
       # break dependency cycles
       fetchurl = stdenv.fetchurlBoot;
       zlib = buildPackages.zlib.override { fetchurl = stdenv.fetchurlBoot; };
@@ -292,7 +292,12 @@ in
       };
       # On darwin, libkrb5 needs bootstrap_cmds which would require
       # converting many packages to fetchurl_boot to avoid evaluation cycles.
-      gssSupport = !stdenv.isDarwin && !stdenv.hostPlatform.isWindows;
+      # So turn gssSupport off there, and on Windows.
+      # On other platforms, keep the previous value.
+      gssSupport =
+        if stdenv.isDarwin || stdenv.hostPlatform.isWindows
+          then false
+          else old.gssSupport or true; # `? true` is the default
       libkrb5 = buildPackages.libkrb5.override {
         fetchurl = stdenv.fetchurlBoot;
         inherit pkgconfig perl openssl;
@@ -304,7 +309,7 @@ in
         c-ares = buildPackages.c-ares.override { fetchurl = stdenv.fetchurlBoot; };
         libev = buildPackages.libev.override { fetchurl = stdenv.fetchurlBoot; };
       };
-    };
+    });
   };
 
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
