@@ -3,10 +3,9 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "xfdesktop";
-  version = "4.14pre2";
-  rev = "xfce-4.14pre2";
+  version = "4.14.1";
 
-  sha256 = "14sfcxbwxhhwn9nmiap46nz6idvw5hwr8wyjqrhq4h79x78g18k4";
+  sha256 = "006w4xwmpwp34q2qkkixr3xz0vb0kny79pw64yj4304wsb5jr14g";
 
   nativeBuildInputs = [ wrapGAppsHook ]; # fix "No GSettings schemas are installed on the system"
 

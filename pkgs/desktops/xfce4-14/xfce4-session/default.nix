@@ -3,10 +3,9 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "xfce4-session";
-  version = "4.14pre2";
-  rev = "xfce-4.14pre2";
+  version = "4.14.0";
 
-  sha256 = "1asfy11rp6zmn70a3w5dqssxpxywhpm9ns7zyiaz6pnpcq075dr0";
+  sha256 = "0v0xzkdr5rgv6219c1dy96cghgw8bqnb313jccxihfgddf363104";
 
   buildInputs = [ exo dbus-glib dbus gtk3 libxfce4ui libxfce4util libwnck3 xfconf polkit iceauth ];
 
