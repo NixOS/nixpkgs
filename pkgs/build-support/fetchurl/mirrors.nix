@@ -169,6 +169,20 @@ rec {
     http://backpan.perl.org/  # for old releases
   ];
 
+  # CentOS.
+  centos = [
+    http://mirror.centos.org/centos/
+    # For old releases
+    http://vault.centos.org/
+    https://archive.kernel.org/centos-vault/
+    http://ftp.jaist.ac.jp/pub/Linux/CentOS-vault/
+    http://mirrors.aliyun.com/centos-vault/
+    https://mirror.chpc.utah.edu/pub/vault.centos.org/
+    https://mirror.its.sfu.ca/mirror/CentOS-vault/
+    https://mirror.math.princeton.edu/pub/centos-vault/
+    https://mirrors.tripadvisor.com/centos-vault/
+  ];
+
   # Debian.
   debian = [
     http://httpredir.debian.org/debian/
