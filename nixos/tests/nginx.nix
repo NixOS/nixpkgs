@@ -33,6 +33,10 @@ import ./make-test.nix ({ pkgs, ... }: {
         '';
       };
       services.nginx.virtualHosts.localhost = {
+        locations."~ ^/i/(.+)$".alias = "${pkgs.runCommand "testdir" {} ''
+          mkdir "$out"
+          echo test > "$out/hello.html"
+        ''}/$1";
         root = pkgs.runCommand "testdir" {} ''
           mkdir "$out"
           echo hello world > "$out/index.html"
@@ -74,6 +78,10 @@ import ./make-test.nix ({ pkgs, ... }: {
 
     $webserver->waitForUnit("nginx");
     $webserver->waitForOpenPort("80");
+
+    subtest "check serving regex captured alias paths", sub {
+      $webserver->succeed('curl -v -f http://localhost/i/hello.html');
+    };
 
     subtest "check ETag if serving Nix store paths", sub {
       my $oldEtag = checkEtag;
