@@ -1,5 +1,6 @@
 { cmake
 , fetchFromGitHub
+, makeWrapper
 , pkgconfig
 , stdenv
 # Package dependencies
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
     pkgconfig
   ];
   buildInputs = [
@@ -46,6 +48,10 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+
+  postInstall = ''
+    makeWrapper ${seadrive-daemon}/bin/seadrive $out/bin/seadrive
+  '';
 
   meta = {
     homepage = https://github.com/haiwen/seadrive-gui;
