@@ -4,7 +4,7 @@
 , tag ? "-kf5" # tag added to the package name
 , static ? false # link statically
 
-, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
+, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf, wrapQtAppsHook
 , qtbase, qtscript
 , phonon, libdbusmenu, qca-qt5
 
@@ -56,6 +56,7 @@ in with stdenv; mkDerivation rec {
       knotifications knotifyconfig ktextwidgets kwidgetsaddons
       kxmlgui
     ];
+  nativeBuildInputs = lib.optional buildClient [ wrapQtAppsHook ];
 
   cmakeFlags = [
     "-DEMBED_DATA=OFF"
