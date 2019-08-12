@@ -316,6 +316,19 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
      </para>
     </listitem>
    </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>extraCommands</varname> <emphasis>optional</emphasis>
+    </term>
+    <listitem>
+     <para>
+       Commands to run while building the final layer, without access
+       to most of the layer contents. Changes to this layer are "on top"
+       of all the other layers, so can create additional directories
+       and files.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
 
   <section xml:id="dockerTools-buildLayeredImage-arg-contents">
