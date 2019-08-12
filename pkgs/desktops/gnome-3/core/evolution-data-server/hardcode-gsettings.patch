@@ -377,7 +377,7 @@ index 883379a60..989353494 100644
 +	{
 +		GSettingsSchemaSource *schema_source;
 +		GSettingsSchema *schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@ESD_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@GDS_GSETTINGS_PATH@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
