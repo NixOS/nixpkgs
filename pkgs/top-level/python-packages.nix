@@ -2404,6 +2404,8 @@ in {
 
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
+  itypes = callPackage ../development/python-modules/itypes { };
+
   iniparse = callPackage ../development/python-modules/iniparse { };
 
   i3-py = callPackage ../development/python-modules/i3-py { };
