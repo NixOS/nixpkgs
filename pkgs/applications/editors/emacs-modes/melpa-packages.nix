@@ -50,6 +50,15 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # part of a larger package
         caml = dontConfigure super.caml;
 
+        cmake-mode = super.cmake-mode.overrideAttrs (attrs: {
+          buildInputs = (attrs.buildInputs or []) ++ [
+            external.openssl
+          ];
+          nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [
+            external.pkgconfig
+          ];
+        });
+
         # Expects bash to be at /bin/bash
         company-rtags = markBroken super.company-rtags;
 
