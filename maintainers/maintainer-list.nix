@@ -1518,6 +1518,11 @@
     github = "liclac";
     name = "embr";
   };
+  emily = {
+    email = "nixpkgs@emily.moe";
+    github = "emilazy";
+    name = "Emily";
+  };
   ederoyd46 = {
     email = "matt@ederoyd.co.uk";
     github = "ederoyd46";
