@@ -1160,6 +1160,8 @@ in {
 
   statistics = callPackage ../development/python-modules/statistics { };
 
+  stm32loader = callPackage ../development/python-modules/stm32loader { };
+
   stumpy = callPackage ../development/python-modules/stumpy { };
 
   sumo = callPackage ../development/python-modules/sumo { };

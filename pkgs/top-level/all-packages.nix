@@ -6104,6 +6104,8 @@ in
 
   stdman = callPackage ../data/documentation/stdman { };
 
+  stm32loader = with python3Packages; toPythonApplication stm32loader;
+
   storebrowse = callPackage ../tools/system/storebrowse { };
 
   stubby = callPackage ../tools/networking/stubby { };
