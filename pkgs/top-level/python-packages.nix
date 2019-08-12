@@ -1495,6 +1495,8 @@ in {
 
   boltztrap2 = callPackage ../development/python-modules/boltztrap2 { };
 
+  boolean-py = callPackage ../development/python-modules/boolean-py { };
+
   bumps = callPackage ../development/python-modules/bumps {};
 
   cached-property = callPackage ../development/python-modules/cached-property { };
@@ -2449,6 +2451,8 @@ in {
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
 
   libthumbor = callPackage ../development/python-modules/libthumbor { };
+
+  license-expression = callPackage ../development/python-modules/license-expression { };
 
   lightblue = callPackage ../development/python-modules/lightblue { };
 
