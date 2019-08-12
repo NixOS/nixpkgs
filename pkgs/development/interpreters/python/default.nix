@@ -143,26 +143,26 @@ in {
     # Not included at top-level
     self = pythonInterpreters.pypy27_prebuilt;
     sourceVersion = {
-      major = "6";
-      minor = "0";
-      patch = "0";
+      major = "7";
+      minor = "1";
+      patch = "1";
     };
-    sha256 = "0rxgnp3fm18b87ln8bbjr13g2fsf4ka4abkaim6m03y9lwmr9gvc"; # linux64
+    sha256 = "0rlx4x9xy9h989w6sy4h7lknm00956r30c5gjxwsvf8fhvq9xc3k"; # linux64
     pythonVersion = "2.7";
     inherit passthruFun;
     ncurses = ncurses5;
   };
 
-  pypy35_prebuilt = callPackage ./pypy/prebuilt.nix {
-  # Not included at top-level
-    self = pythonInterpreters.pypy35_prebuilt;
+  pypy36_prebuilt = callPackage ./pypy/prebuilt.nix {
+    # Not included at top-level
+    self = pythonInterpreters.pypy36_prebuilt;
     sourceVersion = {
-      major = "6";
-      minor = "0";
-      patch = "0";
+      major = "7";
+      minor = "1";
+      patch = "1";
     };
-    sha256 = "0j3h08s7wpglghasmym3baycpif5jshvmk9rpav4pwwy5clzmzsc"; # linux64
-    pythonVersion = "3.5";
+    sha256 = "1c1xx6dm1n4xvh1vd3rcvyyixm5jm9rvzisji1a5bc9l38xzc540"; # linux64
+    pythonVersion = "3.6";
     inherit passthruFun;
     ncurses = ncurses5;
   };

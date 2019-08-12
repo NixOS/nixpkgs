@@ -56,7 +56,7 @@ in with passthru; stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url= "https://bitbucket.org/pypy/pypy/downloads/pypy${majorVersion}-v${version}-linux64.tar.bz2";
+    url = "https://bitbucket.org/pypy/pypy/downloads/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
     inherit sha256;
   };
 
