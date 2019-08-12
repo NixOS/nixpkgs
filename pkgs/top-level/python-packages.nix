@@ -758,6 +758,8 @@ in {
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
 
+  orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
+
   ortools = (toPythonModule (pkgs.or-tools.override {
     inherit (self) python;
     pythonProtobuf = self.protobuf;
