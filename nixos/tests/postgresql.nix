@@ -78,10 +78,10 @@ in
         maintainers = [ danbst ];
       };
 
-      machine = { config, ...}:
+      machine = { config, lib, ...}:
         {
           services.postgresql.enable = true;
-          services.postgresql.package = pkgs.postgresql_11;
+          services.postgresql.package = pkgs.postgresql_10;
           services.postgresql.dataDir = dataDir;
 
           users.users.admin.isNormalUser = true;
@@ -89,7 +89,13 @@ in
 
           nesting.clone = [
             {
-              services.postgresql.groupAccess = true;
+              systemd.services.postgresql.preStart = lib.mkAfter ''
+                chmod 0700 ${dataDir}
+              '';
+              systemd.services.postgresql.postStart = lib.mkAfter ''
+                chmod -R 750 ${dataDir}
+                ${pkgs.acl}/bin/setfacl -d -m g::r-x ${dataDir}
+              '';
             }
           ];
         };
@@ -105,6 +111,9 @@ in
 
       $machine->succeed("${c1}/bin/switch-to-configuration test >&2");
       $machine->succeed("journalctl -u postgresql | grep -q -i stopped"); # was restarted
+      $machine->succeed("systemctl restart postgresql"); # but we have to be sure
+                                                         # manual restart works too
+      $machine->waitForUnit("postgresql");
       $machine->succeed("echo select 1 | sudo -u postgres psql"); # works after restart
       $machine->succeed("sudo -u admin ls ${dataDir}");
 
