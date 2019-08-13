@@ -88,8 +88,49 @@ let
   # Convert the list of options into an XML file.
   optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
 
+  optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
+
+  # TODO: declarations: link to github
+  singleAsciiDoc = name: value: ''
+    == ${name}
+
+    ${value.description}
+
+    [discrete]
+    === details
+
+    Type:: ${value.type}
+    ${ if lib.hasAttr "default" value
+       then ''
+        Default::
+        +
+        ----
+        ${builtins.toJSON value.default}
+        ----
+      ''
+      else "No Default:: {blank}"
+    }
+    ${ if value.readOnly
+       then "Read Only:: {blank}"
+      else ""
+    }
+    ${ if lib.hasAttr "example" value
+       then ''
+        Example::
+        +
+        ----
+        ${builtins.toJSON value.example}
+        ----
+      ''
+      else "No Example:: {blank}"
+    }
+  '';
+
 in rec {
-  # The NixOS options in JSON format.
+  inherit optionsNix;
+
+  optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);
+
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
     }
@@ -98,9 +139,7 @@ in rec {
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
-      cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON
-        (builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList))))
-      } $dst/options.json
+      cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix))} $dst/options.json
 
       mkdir -p $out/nix-support
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
