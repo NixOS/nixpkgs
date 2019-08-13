@@ -100,7 +100,7 @@ let
         # Only display the log on error since it will contain a few normally
         # irrelevant messages.
         if ! $out/bin/nvim \
-          -u ${vimUtils.vimrcFile (configure // { customRC = ""; })} \
+          -u ${vimUtils.vimrcFile (configure // { customRC = ""; beforePlugins = ''filetype indent plugin on | syn on''; })} \
           -i NONE -n \
           -E -V1rplugins.log -s \
           +UpdateRemotePlugins +quit! > outfile 2>&1; then
