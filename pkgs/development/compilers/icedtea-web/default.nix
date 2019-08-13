@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, gtk2, xulrunner, zip, pkgconfig, perl, npapi_sdk, bash, bc, git }:
+{ stdenv, fetchurl, jdk, glib, xulrunner, zip, pkgconfig, perl, npapi_sdk, bash, bc, git }:
 let
 
 cveFixes = fetchurl {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig bc perl ];
-  buildInputs = [ gtk2 xulrunner zip npapi_sdk ];
+  buildInputs = [ glib xulrunner zip npapi_sdk ];
 
   postPatch = ''
     # The patch includes binary blobs for tests so we must use `git apply`
