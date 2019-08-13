@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, kdepimTeam,
+  mkDerivation, lib, kdepimTeam, fetchpatch,
   extra-cmake-modules, kdoctools,
   akonadi-search, kbookmarks, kcalutils, kcmutils, kcompletion, kconfig,
   kconfigwidgets, kcoreaddons, kdelibs4support, kdepim-apps-libs, libkdepim,
@@ -26,5 +26,13 @@ mkDerivation {
     libksieve mailcommon messagelib pim-sieve-editor qtscript qtwebengine
   ];
   propagatedUserEnvPkgs = [ kdepim-runtime kwallet ];
-  patches = [ ./kmail.patch ];
+  patches = [
+    ./kmail.patch
+
+    # This patch should be backported in 19.04.4 KDE applications
+    (fetchpatch {
+      url = "https://cgit.kde.org/kmail.git/patch/?id=28a8cf907b3cd903aef0b963314df219afc6b66a";
+      sha256 = "1gr94zmxnyhhyqjhcmm8aykvmf15pmn751cvdh4ll59rzbra8h0n";
+    })
+  ];
 }
