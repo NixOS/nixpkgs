@@ -16066,6 +16066,8 @@ in
 
   ofp = callPackage ../os-specific/linux/ofp { };
 
+  ofono = callPackage ../tools/networking/ofono { };
+
   openpam = callPackage ../development/libraries/openpam { };
 
   openbsm = callPackage ../development/libraries/openbsm { };
