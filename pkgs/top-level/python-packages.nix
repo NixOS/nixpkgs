@@ -2891,6 +2891,8 @@ in {
 
   dj-search-url = callPackage ../development/python-modules/dj-search-url { };
 
+  dj-static = callPackage ../development/python-modules/dj-static { };
+
   djmail = callPackage ../development/python-modules/djmail { };
 
   pillowfight = callPackage ../development/python-modules/pillowfight { };
@@ -4828,6 +4830,8 @@ in {
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
+
+  static3 = callPackage ../development/python-modules/static3 { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
