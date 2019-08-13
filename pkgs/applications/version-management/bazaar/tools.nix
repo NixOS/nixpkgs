@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  name = "bzr-tools-${version}";
+  pname = "bzr-tools";
   version = "2.6.0";
 
   src = fetchurl {

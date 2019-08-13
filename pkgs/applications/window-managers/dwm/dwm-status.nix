@@ -8,7 +8,7 @@ let
 in
 
 rustPlatform.buildRustPackage rec {
-  name = "dwm-status-${version}";
+  pname = "dwm-status";
   version = "1.6.2";
 
   src = fetchFromGitHub {

@@ -3,7 +3,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "nix-index-${version}";
+  pname = "nix-index";
   version = "0.1.2";
 
   src = fetchFromGitHub {

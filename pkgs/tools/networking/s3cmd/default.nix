@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  name = "s3cmd-${version}";
+  pname = "s3cmd";
   version = "2.0.2";
   
   src = fetchFromGitHub {

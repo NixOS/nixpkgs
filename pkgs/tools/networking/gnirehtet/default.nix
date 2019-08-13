@@ -15,7 +15,8 @@ apk = stdenv.mkDerivation {
 };
 in
 rustPlatform.buildRustPackage {
-  name = "gnirehtet-${version}";
+  pname = "gnirehtet";
+  inherit version;
 
   src = fetchFromGitHub {
       owner = "Genymobile";

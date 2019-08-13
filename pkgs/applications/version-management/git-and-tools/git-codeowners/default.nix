@@ -1,6 +1,6 @@
 { lib, rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage rec {
-  name = "git-codeowners-${version}";
+  pname = "git-codeowners";
   version = "0.1.2";
 
   src = fetchFromGitHub {

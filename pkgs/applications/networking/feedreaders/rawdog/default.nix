@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  name = "rawdog-${version}";
+  pname = "rawdog";
   version = "2.23";
 
   src = fetchurl {
-    url = "https://offog.org/files/${name}.tar.gz";
+    url = "https://offog.org/files/${pname}-${version}.tar.gz";
     sha256 = "18nyg19mwxyqdnykplkqmzb4n27vvrhvp639zai8f81gg9vdbsjp";
   };
 
