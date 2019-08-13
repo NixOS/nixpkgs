@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.xz";
     sha256 = "1n5zq4872sakvz9c7ncsdcfp0z8rsybsxvbmhkpbd19ii0pacfxy";
   };
+  patches = [ ./libopts-r13y.patch ];
 
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
@@ -19,7 +20,13 @@ stdenv.mkDerivation rec {
     guile libxml2
   ];
 
-  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = [
+    # For build reproducibility: autogen's ./configure measures how long it
+    # takes to run some part of the configure script, and uses that as a
+    # timeout for command execution within its final binary. Hardcode it to 10s
+    # instead.
+    "--enable-timeout=10"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--with-libxml2=${libxml2.dev}"
     "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
     # the configure check for regcomp wants to run a host program

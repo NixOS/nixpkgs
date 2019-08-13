@@ -1,0 +1,13 @@
+--- a/pkg/libopts/mklibsrc.sh     2019-08-13 06:43:38.670875866 +0200
++++ b/pkg/libopts/mklibsrc.sh     2019-08-13 06:42:08.046283976 +0200
+@@ -113,7 +113,8 @@
+ cd ..
+ echo ! cd `pwd`
+ echo ! tar cvf ${tag}.${sfx} ${tag}
+-tar cvf - ${tag} | $gz > ${top_builddir}/autoopts/${tag}.${sfx}
++tar --sort=name --mtime=0 cvf - ${tag} \
++  | $gz > ${top_builddir}/autoopts/${tag}.${sfx}
+ rm -rf ${tag}
+ 
+ ## Local Variables:
+
