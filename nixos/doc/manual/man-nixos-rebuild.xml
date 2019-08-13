@@ -130,7 +130,8 @@
    NixOS module, you must run <command>nixos-rebuild</command> to make the
    changes take effect. It builds the new system in
    <filename>/nix/store</filename>, runs its activation script, and stop and
-   (re)starts any system services if needed.
+   (re)starts any system services if needed. Please note that user services need
+   to be started manually as they aren't detected by the activation script at the moment.
   </para>
   <para>
    This command has one required argument, which specifies the desired
