@@ -1,7 +1,6 @@
-{stdenv, fetchurl, autoreconfHook, boost, gtkmm2,
-pkg-config, libtool, udev, libjpeg, file, texlive,
-libusb, libtiff, imagemagick, sane-backends, tesseract,
-}:
+{ stdenv, fetchurl, autoreconfHook, boost, gtkmm2
+, pkg-config, libtool, udev, libjpeg, file, texlive
+, libusb, libtiff, imagemagick, sane-backends, tesseract }:
 
 /*
 Alternatively, this package could use the "community source" at 
@@ -24,6 +23,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     libtool
   ];
+
   buildInputs = [
     boost
     libusb
@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "sane-utsushi backend for some epson scanners.";
+    description = "SANE utsushi backend for some Epson scanners";
     longDescription = ''
-        Imagescanv3 (aka utsushi) scanner driver.
-        Non free plugins are not included so no network support.
-        To use the sane backend, in /etc/nixos/configuration.nix:
+        ImageScanV3 (aka utsushi) scanner driver.
+        Non-free plugins are not included so no network support.
+        To use the SANE backend, in /etc/nixos/configuration.nix:
 
         hardware.sane = {
           enable = true;
