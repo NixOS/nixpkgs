@@ -14790,6 +14790,12 @@ in
     boost = boost159;
   };
 
+  mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
+    inherit (darwin) cctools developer_cmds;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    boost = boost169; # Configure checks for specific version.
+  };
+
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
   mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
