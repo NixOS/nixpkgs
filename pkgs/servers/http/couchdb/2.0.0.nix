@@ -1,9 +1,10 @@
 { stdenv, fetchurl, erlang, icu, openssl, spidermonkey
-, coreutils, bash, makeWrapper }:
+, coreutils, bash, makeWrapper, python3 }:
 
 stdenv.mkDerivation rec {
   name = "couchdb-${version}";
   version = "2.3.1";
+
 
   # when updating this, please consider bumping the OTP version
   # in all-packages.nix
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ erlang icu openssl spidermonkey ];
+  buildInputs = [ erlang icu openssl spidermonkey (python3.withPackages(ps: with ps; [ requests ]))];
 
   patches = [ ./jsapi.patch ];
   postPatch = ''
