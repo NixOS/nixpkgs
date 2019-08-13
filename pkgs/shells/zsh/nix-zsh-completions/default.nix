@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "nix-zsh-completions-${version}";
+  pname = "nix-zsh-completions";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "spwhitt";

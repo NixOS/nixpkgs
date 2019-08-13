@@ -3,7 +3,8 @@
 let
   generic = { version, sha256, prePatch }:
     stdenv.mkDerivation rec {
-      name = "haxe-${version}";
+      pname = "haxe";
+      inherit version;
 
       buildInputs = [ocaml zlib pcre neko camlp4];
 

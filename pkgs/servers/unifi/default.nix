@@ -3,7 +3,8 @@
 let
   generic = { version, sha256, suffix ? "" }:
   stdenv.mkDerivation rec {
-    name = "unifi-controller-${version}";
+    pname = "unifi-controller";
+    inherit version;
 
     src = fetchurl {
       url = "https://dl.ubnt.com/unifi/${version}${suffix}/unifi_sysvinit_all.deb";

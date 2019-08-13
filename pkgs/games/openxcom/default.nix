@@ -3,7 +3,8 @@
 
 let version = "1.0.0.2018.10.08"; in
 stdenv.mkDerivation {
-  name = "openxcom-${version}";
+  pname = "openxcom";
+  inherit version;
   src = fetchFromGitHub {
     owner = "SupSuper";
     repo = "OpenXcom";

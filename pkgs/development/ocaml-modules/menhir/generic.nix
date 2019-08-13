@@ -1,7 +1,8 @@
 { version, src, stdenv, ocaml, findlib, ocamlbuild, ... }:
 
 stdenv.mkDerivation {
-  name = "menhir-${version}";
+  pname = "menhir";
+  inherit version;
 
   inherit src;
 

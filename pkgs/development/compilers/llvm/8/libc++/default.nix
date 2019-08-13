@@ -2,7 +2,8 @@
 , enableShared ? true }:
 
 stdenv.mkDerivation rec {
-  name = "libc++-${version}";
+  pname = "libc++";
+  inherit version;
 
   src = fetch "libcxx" "0y4vc9z36c1zlq15cnibdzxnc1xi5glbc6klnm8a41q3db4541kz";
 

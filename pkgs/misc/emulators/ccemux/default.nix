@@ -34,7 +34,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ccemux-${version}";
+  pname = "ccemux";
+  inherit version;
 
   src = jar;
   dontUnpack = true;

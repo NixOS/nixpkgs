@@ -4,7 +4,8 @@ let
   version = "2.1.0";
 in
 stdenv.mkDerivation rec {
-  name = "uthash-${version}";
+  pname = "uthash";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/troydhanson/uthash/archive/v${version}.tar.gz";

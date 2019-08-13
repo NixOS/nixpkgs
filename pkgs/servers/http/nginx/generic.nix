@@ -21,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nginx-${version}";
+  pname = "nginx";
+  inherit version;
 
   src = fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";

@@ -31,7 +31,8 @@ let
   };
 
 in mkDerivation {
-  name = "zoom-us-${version}";
+  pname = "zoom-us";
+  inherit version;
 
   src = srcs.${stdenv.hostPlatform.system};
 

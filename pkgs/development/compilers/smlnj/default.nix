@@ -29,7 +29,8 @@ let
     { url = "${baseurl}/asdl.tgz";                sha256 = "1pi3m21jllyd2h0zpz4bajskfv58g6pjhpprqiwgmikn6w1pryp8"; }
   ];
 in stdenv.mkDerivation {
-  name = "smlnj-${version}";
+  pname = "smlnj";
+  inherit version;
 
   inherit sources;
 

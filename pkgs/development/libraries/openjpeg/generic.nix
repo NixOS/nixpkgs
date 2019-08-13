@@ -24,7 +24,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openjpeg-${version}";
+  pname = "openjpeg";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "uclouvain";

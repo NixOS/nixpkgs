@@ -11,7 +11,8 @@ let
   boostPython = boost.override { enablePython = true; inherit python; };
 
 in stdenv.mkDerivation {
-  name = "libtorrent-rasterbar-${version}";
+  pname = "libtorrent-rasterbar";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "arvidn";

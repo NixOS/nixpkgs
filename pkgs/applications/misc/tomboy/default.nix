@@ -8,7 +8,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "tomboy-${version}";
+  pname = "tomboy";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/tomboy-notes/tomboy/releases/download/${version}/tomboy-${version}.tar.xz";

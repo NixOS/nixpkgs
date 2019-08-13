@@ -2,7 +2,8 @@
 
 let version = "0.4"; in
 stdenv.mkDerivation {
-  name = "gcolor2-${version}";
+  pname = "gcolor2";
+  inherit version;
   arch = if stdenv.hostPlatform.system == "x86_64-linux" then "amd64" else "386";
 
   src = fetchurl {

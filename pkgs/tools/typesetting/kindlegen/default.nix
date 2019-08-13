@@ -23,7 +23,8 @@ let
   }."${stdenv.hostPlatform.system}" or (throw "system #{stdenv.hostPlatform.system.} is not supported");
 
 in stdenv.mkDerivation rec {
-  name = "kindlegen-${version}";
+  pname = "kindlegen";
+  inherit version;
 
   src = fetchurl {
     inherit url;

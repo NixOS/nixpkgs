@@ -8,7 +8,8 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "inav-${version}";
+  pname = "inav";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "iNavFlight";

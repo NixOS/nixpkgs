@@ -4,7 +4,8 @@ let
   version = "1.1.1-git1-20180828";
 in
 stdenv.mkDerivation {
-  name = "sayonara-player-${version}";
+  pname = "sayonara-player";
+  inherit version;
 
   src = fetchurl {
     url = "https://sayonara-player.com/sw/sayonara-player-${version}.tar.gz";

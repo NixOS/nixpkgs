@@ -4,7 +4,8 @@ let
   version = "2.0-82-gfe30ef7";
 in
 stdenv.mkDerivation {
-  name = "markdown-mode-${version}";
+  pname = "markdown-mode";
+  inherit version;
 
   src = fetchFromGitHub {
     owner  = "defunkt";

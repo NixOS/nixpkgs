@@ -9,7 +9,8 @@ let
   version = "2019.1.1";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
-    name = "flightgear-base-${version}";
+    pname = "flightgear-base";
+    inherit version;
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
