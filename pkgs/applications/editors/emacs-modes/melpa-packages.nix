@@ -224,6 +224,24 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         tawny-mode = markBroken super.tawny-mode;
 
+        # Telega has a server portion for it's network protocol
+        telega = super.telega.overrideAttrs(old: {
+
+          buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+
+          postBuild = ''
+            cd source/server
+            make
+            cd -
+          '';
+
+          postInstall = ''
+            mkdir -p $out/bin
+            install -m755 -Dt $out/bin ./source/server/telega-server
+          '';
+
+        });
+
         # upstream issue: missing file header
         textmate = markBroken super.textmate;
 
