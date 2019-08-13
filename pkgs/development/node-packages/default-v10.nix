@@ -7,6 +7,13 @@ let
   };
 in
 nodePackages // {
+  beakerbrowser = nodePackages."beakerbrowser-git+https://github.com/beakerbrowser/beaker.git#0.8.8".override {
+    version = "0.8.8";
+    postInstall = ''
+      npm run rebuild #see https://github.com/electron/electron/issues/5851
+    '';
+  };
+
   bower2nix = nodePackages.bower2nix.override {
     buildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
