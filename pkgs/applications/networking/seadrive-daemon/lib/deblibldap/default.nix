@@ -9,6 +9,7 @@
 }:
 
 let
+  # nixpkgs does not have libsasl2.so.2
   deblibsasl = callPackage ../deblibsasl {};
 in stdenv.mkDerivation rec {
   version = "2.4.2";

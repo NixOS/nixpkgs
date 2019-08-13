@@ -10,12 +10,15 @@
 , libssh2
 , libpsl
 , nghttp2
-, openssl-chacha
 , rtmpdump
 }:
 
 let
+  # deblibcurl "no version information available" warnings with nixpkgs openldap
+  # although it does initially run, the warnings could indicate more subtle errors
   deblibldap = callPackage ../deblibldap {};
+  # deblibcurl "no version information available" warnings with nixpkgs openssl-chacha
+  # although it does initially run, the warnings could indicate more subtle errors
   deblibssl = callPackage ../deblibssl {};
 in stdenv.mkDerivation rec {
   version = "7.52.1";
@@ -40,7 +43,6 @@ in stdenv.mkDerivation rec {
     libpsl
     libssh2
     nghttp2
-    #openssl-chacha
     rtmpdump
   ];
 

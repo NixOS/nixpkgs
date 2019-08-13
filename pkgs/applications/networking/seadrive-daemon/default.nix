@@ -17,7 +17,7 @@ let
   # "libcurl failed to GET ... SSL peer certificate or SSH remote key was not OK."
   # with nixpkgs curl
   deblibcurl = callPackage ./lib/deblibcurl {};
-  # seadrive-daemon specifically looks for libevent-2.0 and fails with libevent-2.1
+  # seadrive-daemon specifically looks for libevent-2.0 and fails to build with libevent-2.1
   libevent_2_0 = callPackage ./lib/libevent_2_0 {};
 in stdenv.mkDerivation rec {
   version = "1.0.6";
