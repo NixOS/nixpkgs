@@ -21,7 +21,7 @@ import ./make-test.nix ({ pkgs, lib, ...} : with lib; {
         enable = true;
         recommendedProxySettings = true;
         virtualHosts = {
-          "localhost" = {
+          localhost = {
             locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
           };
         };

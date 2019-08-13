@@ -10,7 +10,7 @@ let
   group = {
     nginx = config.services.nginx.group;
     none  = user;
-  }."${cfg.webserver}";
+  }.${cfg.webserver};
 
   useNginx = cfg.webserver == "nginx";
 
@@ -223,7 +223,7 @@ in {
       nginx = lib.mkIf useNginx {
         enable = true;
         virtualHosts = {
-          "${cfg.hostname}" = {
+          ${cfg.hostname} = {
             default = true;
             root = "${pkg}/share/zoneminder/www";
             listen = [ { addr = "0.0.0.0"; inherit (cfg) port; } ];
@@ -357,11 +357,11 @@ in {
       };
     };
 
-    users.groups."${user}" = {
+    users.groups.${user} = {
       gid = config.ids.gids.zoneminder;
     };
 
-    users.users."${user}" = {
+    users.users.${user} = {
       uid = config.ids.uids.zoneminder;
       group = user;
       inherit home;

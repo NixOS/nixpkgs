@@ -171,13 +171,13 @@ in
 
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
-        "services".source = pkgs.iana-etc + "/etc/services";
+        services.source = pkgs.iana-etc + "/etc/services";
 
         # /etc/protocols: IP protocol numbers.
-        "protocols".source  = pkgs.iana-etc + "/etc/protocols";
+        protocols.source  = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        "hosts".text = let
+        hosts.text = let
           oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip};
           allToString = set: concatMapStringsSep "\n" (oneToString set) (attrNames set);
         in ''
@@ -190,7 +190,7 @@ in
 
       } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
         # /etc/rpc: RPC program numbers.
-        "rpc".source = pkgs.glibc.out + "/etc/rpc";
+        rpc.source = pkgs.glibc.out + "/etc/rpc";
       };
 
       networking.proxy.envVars =

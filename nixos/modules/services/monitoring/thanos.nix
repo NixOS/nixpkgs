@@ -70,14 +70,14 @@ let
   } ''json2yaml -i $json -o $out'';
 
   thanos = cmd: "${cfg.package}/bin/thanos ${cmd}" +
-    (let args = cfg."${cmd}".arguments;
+    (let args = cfg.${cmd}.arguments;
      in optionalString (length args != 0) (" \\\n  " +
          concatStringsSep " \\\n  " args));
 
   argumentsOf = cmd: concatLists (collect isList
-    (flip mapParamsRecursive params."${cmd}" (path: param:
+    (flip mapParamsRecursive params.${cmd} (path: param:
       let opt = concatStringsSep "." path;
-          v = getAttrFromPath path cfg."${cmd}";
+          v = getAttrFromPath path cfg.${cmd};
       in param.toArgs opt v)));
 
   mkArgumentsOption = cmd: mkOption {
@@ -95,7 +95,7 @@ let
   };
 
   mapParamsRecursive =
-    let noParam = attr: !(attr ? "toArgs" && attr ? "option");
+    let noParam = attr: !(attr ? toArgs && attr ? option);
     in mapAttrsRecursiveCond noParam;
 
   paramsToOptions = mapParamsRecursive (_path: param: param.option);
@@ -607,7 +607,7 @@ let
   assertRelativeStateDir = cmd: {
     assertions = [
       {
-        assertion = !hasPrefix "/" cfg."${cmd}".stateDir;
+        assertion = !hasPrefix "/" cfg.${cmd}.stateDir;
         message =
           "The option services.thanos.${cmd}.stateDir should not be an absolute directory." +
           " It should be a directory relative to /var/lib.";

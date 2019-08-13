@@ -42,7 +42,7 @@ rec {
     { server =
         { pkgs, ... }:
 
-        { systemd.services."quake3-server" =
+        { systemd.services.quake3-server =
             { wantedBy = [ "multi-user.target" ];
               script =
                 "${pkgs.quake3demo}/bin/quake3-server +set g_gametype 0 " +

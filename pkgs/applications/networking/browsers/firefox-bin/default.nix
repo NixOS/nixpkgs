@@ -58,8 +58,8 @@ let
   inherit (generated) version sources;
 
   mozillaPlatforms = {
-    "i686-linux" = "linux-i686";
-    "x86_64-linux" = "linux-x86_64";
+    i686-linux = "linux-i686";
+    x86_64-linux = "linux-x86_64";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};

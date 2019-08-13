@@ -16,9 +16,9 @@ let
   # https://nest.pijul.com/pmeunier/carnix/discussions/22
   version = "0.8.1";
   deps = (callPackage ./way-cooler.nix {}).deps;
-  way_cooler_ = f: cratesIO.crates.way_cooler."${version}" deps {
-    features = cratesIO.features_.way_cooler."${version}" deps {
-      "way_cooler"."${version}" = f;
+  way_cooler_ = f: cratesIO.crates.way_cooler.${version} deps {
+    features = cratesIO.features_.way_cooler.${version} deps {
+      way_cooler.${version} = f;
     };
   };
   way-cooler = ((way_cooler_ { builtin-lua = true; }).override {

@@ -7,7 +7,7 @@ let
 
   programs =
     (lib.mapAttrsToList
-      (n: v: (if v ? "program" then v else v // {program=n;}))
+      (n: v: (if v ? program then v else v // {program=n;}))
       wrappers);
 
   securityWrapper = pkgs.stdenv.mkDerivation {
@@ -74,15 +74,15 @@ let
 
   mkWrappedPrograms =
     builtins.map
-      (s: if (s ? "capabilities")
+      (s: if (s ? capabilities)
           then mkSetcapProgram
                  ({ owner = "root";
                     group = "root";
                   } // s)
           else if
-             (s ? "setuid" && s.setuid) ||
-             (s ? "setgid" && s.setgid) ||
-             (s ? "permissions")
+             (s ? setuid && s.setuid) ||
+             (s ? setgid && s.setgid) ||
+             (s ? permissions)
           then mkSetuidProgram s
           else mkSetuidProgram
                  ({ owner  = "root";

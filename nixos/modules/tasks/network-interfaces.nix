@@ -799,19 +799,19 @@ in
     networking.wlanInterfaces = mkOption {
       default = { };
       example = literalExample {
-        "wlan-station0" = {
+        wlan-station0 = {
             device = "wlp6s0";
         };
-        "wlan-adhoc0" = {
+        wlan-adhoc0 = {
             type = "ibss";
             device = "wlp6s0";
             mac = "02:00:00:00:00:01";
         };
-        "wlan-p2p0" = {
+        wlan-p2p0 = {
             device = "wlp6s0";
             mac = "02:00:00:00:00:02";
         };
-        "wlan-ap0" = {
+        wlan-ap0 = {
             device = "wlp6s0";
             mac = "02:00:00:00:00:03";
         };
@@ -994,7 +994,7 @@ in
         domainname "${cfg.domain}"
       '';
 
-    environment.etc."hostid" = mkIf (cfg.hostId != null)
+    environment.etc.hostid = mkIf (cfg.hostId != null)
       { source = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
           hi="${cfg.hostId}"
           ${if pkgs.stdenv.isBigEndian then ''
@@ -1007,7 +1007,7 @@ in
 
     # static hostname configuration needed for hostnamectl and the
     # org.freedesktop.hostname1 dbus service (both provided by systemd)
-    environment.etc."hostname" = mkIf (cfg.hostName != "")
+    environment.etc.hostname = mkIf (cfg.hostName != "")
       {
         text = cfg.hostName + "\n";
       };
@@ -1027,7 +1027,7 @@ in
 
     # The network-interfaces target is kept for backwards compatibility.
     # New modules must NOT use it.
-    systemd.targets."network-interfaces" =
+    systemd.targets.network-interfaces =
       { description = "All Network Interfaces (deprecated)";
         wantedBy = [ "network.target" ];
         before = [ "network.target" ];
@@ -1162,13 +1162,13 @@ in
           in
           flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (device:
             let
-              interfaces = wlanListDeviceFirst device wlanDeviceInterfaces."${device}";
+              interfaces = wlanListDeviceFirst device wlanDeviceInterfaces.${device};
               curInterface = elemAt interfaces 0;
               newInterfaces = drop 1 interfaces;
             in ''
             # It is important to have that rule first as overwriting the NAME attribute also prevents the
             # next rules from matching.
-            ${flip (concatMapStringsSep "\n") (wlanListDeviceFirst device wlanDeviceInterfaces."${device}") (interface:
+            ${flip (concatMapStringsSep "\n") (wlanListDeviceFirst device wlanDeviceInterfaces.${device}) (interface:
             ''ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", ENV{INTERFACE}=="${interface._iName}", ${systemdAttrs interface._iName}, RUN+="${newInterfaceScript device interface}"'')}
 
             # Add the required, new WLAN interfaces to the default WLAN interface with the

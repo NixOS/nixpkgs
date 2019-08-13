@@ -202,14 +202,14 @@ in
     ];
 
     # restart geoclue service when the configuration changes
-    systemd.services."geoclue".restartTriggers = [
+    systemd.services.geoclue.restartTriggers = [
       config.environment.etc."geoclue/geoclue.conf".source
     ];
 
     # this needs to run as a user service, since it's associated with the
     # user who is making the requests
     systemd.user.services = mkIf cfg.enableDemoAgent {
-      "geoclue-agent" = {
+      geoclue-agent = {
         description = "Geoclue agent";
         script = "${package}/libexec/geoclue-2.0/demos/agent";
         # this should really be `partOf = [ "geoclue.service" ]`, but
@@ -219,12 +219,12 @@ in
       };
     };
 
-    services.geoclue2.appConfig."epiphany" = {
+    services.geoclue2.appConfig.epiphany = {
       isAllowed = true;
       isSystem = false;
     };
 
-    services.geoclue2.appConfig."firefox" = {
+    services.geoclue2.appConfig.firefox = {
       isAllowed = true;
       isSystem = false;
     };

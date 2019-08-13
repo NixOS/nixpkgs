@@ -324,10 +324,10 @@ in
       # Remove all name-value pairs with null values from the attribute set to avoid making empty sections in the ceph.conf
       globalConfig = mapAttrs' (name: value: nameValuePair (translateOption name) value) (filterAttrs (name: value: value != null) globalAndMgrConfig);
       totalConfig = {
-          "global" = globalConfig;
-        } // optionalAttrs (cfg.mon.enable && cfg.mon.extraConfig != {}) { "mon" = cfg.mon.extraConfig; }
-          // optionalAttrs (cfg.mds.enable && cfg.mds.extraConfig != {}) { "mds" = cfg.mds.extraConfig; }
-          // optionalAttrs (cfg.osd.enable && cfg.osd.extraConfig != {}) { "osd" = cfg.osd.extraConfig; }
+          global = globalConfig;
+        } // optionalAttrs (cfg.mon.enable && cfg.mon.extraConfig != {}) { mon = cfg.mon.extraConfig; }
+          // optionalAttrs (cfg.mds.enable && cfg.mds.extraConfig != {}) { mds = cfg.mds.extraConfig; }
+          // optionalAttrs (cfg.osd.enable && cfg.osd.extraConfig != {}) { osd = cfg.osd.extraConfig; }
           // optionalAttrs (cfg.client.enable && cfg.client.extraConfig != {})  cfg.client.extraConfig;
       in
         generators.toINI {} totalConfig;
@@ -355,7 +355,7 @@ in
 
     systemd.targets = let
       targets = [
-        { "ceph" = { description = "Ceph target allowing to start/stop all ceph service instances at once"; }; }
+        { ceph = { description = "Ceph target allowing to start/stop all ceph service instances at once"; }; }
       ] ++ optional cfg.mon.enable (generateTargetFile "mon")
         ++ optional cfg.mds.enable (generateTargetFile "mds")
         ++ optional cfg.osd.enable (generateTargetFile "osd")

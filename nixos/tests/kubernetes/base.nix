@@ -71,7 +71,7 @@ let
                 443 # kubernetes apiserver
               ];
             })
-            (optionalAttrs (machine ? "extraConfiguration") (machine.extraConfiguration { inherit config pkgs lib nodes; }))
+            (optionalAttrs (machine ? extraConfiguration) (machine.extraConfiguration { inherit config pkgs lib nodes; }))
             (optionalAttrs (extraConfiguration != null) (extraConfiguration { inherit config pkgs lib nodes; }))
           ]
       ) machines;

@@ -88,7 +88,7 @@ let
           (import ./patchsets.nix {
             inherit patchSet useRailsExpress ops;
             patchLevel = ver.patchLevel;
-          })."${ver.majMinTiny}";
+          }).${ver.majMinTiny};
 
         postUnpack = ''
           cp -r ${rubygems} $sourceRoot/rubygems

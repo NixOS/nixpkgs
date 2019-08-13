@@ -172,7 +172,7 @@ let self = rec {
     };
 
     mkController = controller: {
-        "${controller}" = mkKodiPlugin rec {
+        ${controller} = mkKodiPlugin rec {
           plugin = pname + "-" + controller;
           namespace = "game.controller." + controller;
           sourceDir = "addons/" + namespace;

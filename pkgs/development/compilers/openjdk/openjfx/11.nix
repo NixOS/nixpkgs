@@ -59,8 +59,8 @@ let
     outputHashMode = "recursive";
     # Downloaded AWT jars differ by platform.
     outputHash = {
-      "i686-linux" = "0mjlyf6jvbis7nrm5d394sjv4hjw6k3753hr1nwdxk8skwc3ry08";
-      "x86_64-linux" = "0d4msxswdav1xsfkpr0qd3xgqkcbxzf47v1zdy5jmg5w4bs6a78a";
+      i686-linux = "0mjlyf6jvbis7nrm5d394sjv4hjw6k3753hr1nwdxk8skwc3ry08";
+      x86_64-linux = "0d4msxswdav1xsfkpr0qd3xgqkcbxzf47v1zdy5jmg5w4bs6a78a";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 

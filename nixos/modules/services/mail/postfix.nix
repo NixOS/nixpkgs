@@ -877,22 +877,22 @@ in
     }
 
     (mkIf haveAliases {
-      services.postfix.aliasFiles."aliases" = aliasesFile;
+      services.postfix.aliasFiles.aliases = aliasesFile;
     })
     (mkIf haveTransport {
-      services.postfix.mapFiles."transport" = transportFile;
+      services.postfix.mapFiles.transport = transportFile;
     })
     (mkIf haveVirtual {
-      services.postfix.mapFiles."virtual" = virtualFile;
+      services.postfix.mapFiles.virtual = virtualFile;
     })
     (mkIf haveLocalRecipients {
-      services.postfix.mapFiles."local_recipients" = localRecipientMapFile;
+      services.postfix.mapFiles.local_recipients = localRecipientMapFile;
     })
     (mkIf cfg.enableHeaderChecks {
-      services.postfix.mapFiles."header_checks" = headerChecksFile;
+      services.postfix.mapFiles.header_checks = headerChecksFile;
     })
     (mkIf (cfg.dnsBlacklists != []) {
-      services.postfix.mapFiles."client_access" = checkClientAccessFile;
+      services.postfix.mapFiles.client_access = checkClientAccessFile;
     })
   ]);
 }

@@ -30,13 +30,13 @@ let
   };
 
   hplipPlatforms = {
-    "i686-linux"   = "x86_32";
-    "x86_64-linux" = "x86_64";
-    "armv6l-linux" = "arm32";
-    "armv7l-linux" = "arm32";
+    i686-linux   = "x86_32";
+    x86_64-linux = "x86_64";
+    armv6l-linux = "arm32";
+    armv7l-linux = "arm32";
   };
 
-  hplipArch = hplipPlatforms."${stdenv.hostPlatform.system}"
+  hplipArch = hplipPlatforms.${stdenv.hostPlatform.system}
     or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
   pluginArches = [ "x86_32" "x86_64" "arm32" ];

@@ -5,7 +5,7 @@ let
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
-      "${blasImplementation}" = {
+      ${blasImplementation} = {
         include_dirs = "${blas}/include";
         library_dirs = "${blas}/lib";
       } // lib.optionalAttrs (blasImplementation == "mkl") {

@@ -101,10 +101,10 @@ in {
     phpOptions = mkOption {
       type = types.attrsOf types.str;
       default = {
-        "short_open_tag" = "Off";
-        "expose_php" = "Off";
-        "error_reporting" = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
-        "display_errors" = "stderr";
+        short_open_tag = "Off";
+        expose_php = "Off";
+        error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
+        display_errors = "stderr";
         "opcache.enable_cli" = "1";
         "opcache.interned_strings_buffer" = "8";
         "opcache.max_accelerated_files" = "10000";
@@ -112,7 +112,7 @@ in {
         "opcache.revalidate_freq" = "1";
         "opcache.fast_shutdown" = "1";
         "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
-        "catch_workers_output" = "yes";
+        catch_workers_output = "yes";
       };
       description = ''
         Options for PHP's php.ini file for nextcloud.
@@ -288,7 +288,7 @@ in {
       ];
     }
 
-    { systemd.timers."nextcloud-cron" = {
+    { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         timerConfig.OnBootSec = "5m";
         timerConfig.OnUnitActiveSec = "15m";
@@ -296,7 +296,7 @@ in {
       };
 
       systemd.services = {
-        "nextcloud-setup" = let
+        nextcloud-setup = let
           c = cfg.config;
           writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
@@ -396,13 +396,13 @@ in {
           '';
           serviceConfig.Type = "oneshot";
         };
-        "nextcloud-cron" = {
+        nextcloud-cron = {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
           serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${pkgs.nextcloud}/cron.php";
         };
-        "nextcloud-update-plugins" = mkIf cfg.autoUpdateApps.enable {
+        nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           serviceConfig.Type = "oneshot";
           serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
           startAt = cfg.autoUpdateApps.startAt;
@@ -445,7 +445,7 @@ in {
       services.nginx = {
         enable = true;
         virtualHosts = {
-          "${cfg.hostName}" = {
+          ${cfg.hostName} = {
             root = pkgs.nextcloud;
             locations = {
               "= /robots.txt" = {
