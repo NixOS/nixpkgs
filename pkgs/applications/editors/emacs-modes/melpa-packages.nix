@@ -259,55 +259,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         window-numbering = markBroken super.window-numbering;
 
-        vterm = let
-          emacsSources = pkgs.stdenv.mkDerivation {
-            name = self.emacs.name + "-sources";
-            src = self.emacs.src;
-
-            dontConfigure = true;
-            dontBuild = true;
-            doCheck = false;
-            fixupPhase = ":";
-
-            installPhase = ''
-              mkdir -p $out
-              cp -a * $out
-            '';
-
-          };
-
-          libvterm = pkgs.libvterm-neovim.overrideAttrs(old: rec {
-            pname = "libvterm-neovim";
-            version = "2019-04-27";
-            name = pname + "-" + version;
-            src = pkgs.fetchFromGitHub {
-              owner = "neovim";
-              repo = "libvterm";
-              rev = "89675ffdda615ffc3f29d1c47a933f4f44183364";
-              sha256 = "0l9ixbj516vl41v78fi302ws655xawl7s94gmx1kb3fmfgamqisy";
-            };
-          });
-
-        in pkgs.stdenv.mkDerivation rec {
-          inherit (super.vterm) name version src;
-
-          nativeBuildInputs = [ pkgs.cmake ];
-          buildInputs = [ self.emacs libvterm ];
-
-          cmakeFlags = [
-            "-DEMACS_SOURCE=${emacsSources}"
-            "-DUSE_SYSTEM_LIBVTERM=True"
-          ];
-
-          installPhase = ''
-            install -d $out/share/emacs/site-lisp
-            install ../*.el $out/share/emacs/site-lisp
-            install ../*.so $out/share/emacs/site-lisp
-          '';
-        };
-        # Legacy alias
-        emacs-libvterm = shared.vterm;
-
         zmq = super.zmq.overrideAttrs(old: {
           stripDebugList = [ "share" ];
           preBuild = ''
@@ -469,6 +420,55 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
+
+        vterm = let
+          emacsSources = pkgs.stdenv.mkDerivation {
+            name = self.emacs.name + "-sources";
+            src = self.emacs.src;
+
+            dontConfigure = true;
+            dontBuild = true;
+            doCheck = false;
+            fixupPhase = ":";
+
+            installPhase = ''
+              mkdir -p $out
+              cp -a * $out
+            '';
+
+          };
+
+          libvterm = pkgs.libvterm-neovim.overrideAttrs(old: rec {
+            pname = "libvterm-neovim";
+            version = "2019-04-27";
+            name = pname + "-" + version;
+            src = pkgs.fetchFromGitHub {
+              owner = "neovim";
+              repo = "libvterm";
+              rev = "89675ffdda615ffc3f29d1c47a933f4f44183364";
+              sha256 = "0l9ixbj516vl41v78fi302ws655xawl7s94gmx1kb3fmfgamqisy";
+            };
+          });
+
+        in pkgs.stdenv.mkDerivation rec {
+          inherit (super.vterm) name version src;
+
+          nativeBuildInputs = [ pkgs.cmake ];
+          buildInputs = [ self.emacs libvterm ];
+
+          cmakeFlags = [
+            "-DEMACS_SOURCE=${emacsSources}"
+            "-DUSE_SYSTEM_LIBVTERM=True"
+          ];
+
+          installPhase = ''
+            install -d $out/share/emacs/site-lisp
+            install ../*.el $out/share/emacs/site-lisp
+            install ../*.so $out/share/emacs/site-lisp
+          '';
+        };
+        # Legacy alias
+        emacs-libvterm = unstable.vterm;
 
         w3m = super.w3m.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
