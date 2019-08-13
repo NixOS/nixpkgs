@@ -85,6 +85,15 @@
     github = "baldo";
     name = "Andreas Baldeau";
   };
+  abbe = {
+    email = "ashish.is@lostca.se";
+    github = "wahjava";
+    name = "Ashish SHUKLA";
+    keys = [{
+      longkeyid = "rsa4096/0xC746CFA9E74FA4B0";
+      fingerprint = "F682 CDCC 39DC 0FEA E116  20B6 C746 CFA9 E74F A4B0";
+    }];
+  };
   abbradar = {
     email = "ab@fmap.me";
     github = "abbradar";

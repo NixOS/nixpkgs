@@ -8264,6 +8264,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
+  sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
+
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
 
