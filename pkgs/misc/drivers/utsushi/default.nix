@@ -10,7 +10,7 @@ scanner models. Those are not (yet ?) packaged here.
 */
 
 stdenv.mkDerivation rec {
-  pname = "imagescanv3";
+  pname = "utsushi";
   version = "3.57.0";
 
   src = fetchurl {
