@@ -7,6 +7,7 @@
 # Package dependencies
 , fuse
 , libsearpc
+, openssl
 , sqlite
 }:
 
@@ -16,7 +17,6 @@ let
   # "libcurl failed to GET ... SSL peer certificate or SSH remote key was not OK."
   # with nixpkgs curl
   deblibcurl = callPackage ./lib/deblibcurl {};
-  deblibssl = callPackage ./lib/deblibssl {};
   # seadrive-daemon specifically looks for libevent-2.0 and fails with libevent-2.1
   libevent_2_0 = callPackage ./lib/libevent_2_0 {};
 in stdenv.mkDerivation rec {
@@ -36,10 +36,10 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     deblibcurl
-    deblibssl
     fuse
     libevent_2_0
     libsearpc
+    openssl
     sqlite
   ];
 
