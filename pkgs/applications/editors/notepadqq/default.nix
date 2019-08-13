@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, qtbase, qtsvg, qttools, qtwebkit}:
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig, which, qtbase, qtsvg, qttools, qtwebkit }:
 
-let
+mkDerivation rec {
+  pname = "notepadqq";
   version = "1.4.8";
-in stdenv.mkDerivation {
-  name = "notepadqq-${version}";
   src = fetchFromGitHub {
     owner = "notepadqq";
     repo = "notepadqq";
@@ -24,13 +23,19 @@ in stdenv.mkDerivation {
     export LRELEASE="lrelease"
   '';
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    wrapQtApp $out/bin/notepadqq
+  '';
+
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = https://notepadqq.com/;
     description = "Notepad++-like editor for the Linux desktop";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ rszibele ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.rszibele ];
   };
 }
