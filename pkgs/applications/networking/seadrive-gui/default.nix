@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   # seadrive-daemon implements the actual file syncing,
   # while seadrive-gui is a gui to call and monitor seadrive-daemon
   postInstall = ''
-    makeWrapper ${seadrive-daemon}/bin/seadrive $out/bin/seadrive
+    wrapProgram $out/bin/seadrive-gui --prefix PATH : ${stdenv.lib.makeBinPath [ seadrive-daemon ]}
   '';
 
   meta = with stdenv.lib; {
