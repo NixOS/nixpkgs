@@ -42,10 +42,6 @@ stdenv.mkDerivation rec {
     qtwebengine
   ];
 
-  # seadrive-gui defaults to Debug build type
-  # https://github.com/haiwen/seadrive-gui/blob/v1.0.7/CMakeLists.txt#L13
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   # seadrive-gui calls seadrive-daemon/bin/seadrive at runtime
   # seadrive-daemon implements the actual file syncing,
   # while seadrive-gui is a gui to call and monitor seadrive-daemon
