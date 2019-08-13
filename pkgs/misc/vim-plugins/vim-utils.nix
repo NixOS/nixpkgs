@@ -190,7 +190,6 @@ let
     plug ? null,
     customRC ? "",
     beforePlugins ? "",
-    afterPlugins ? "",
   }:
 
     let
@@ -351,8 +350,6 @@ let
   ${vundleImpl}
   ${neobundleImpl}
   ${nativeImpl}
-
-  ${afterPlugins}
 
   filetype indent plugin on | syn on
 
