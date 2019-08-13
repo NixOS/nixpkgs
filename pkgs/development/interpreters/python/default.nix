@@ -115,25 +115,25 @@ in {
     self = pypy27;
     sourceVersion = {
       major = "7";
-      minor = "0";
-      patch = "0";
+      minor = "1";
+      patch = "1";
     };
-    sha256 = "1m6ja79sbkl38p1hs7c0n4kq5xzn01wp7wl5456hsw9q6cwg6894";
+    sha256 = "0yq6ln1ic476sasp8zs4mg5i9524l1p96qwanp486rr1yza1grlg";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = true; };
     python = python27;
     inherit passthruFun;
   };
 
-  pypy35 = callPackage ./pypy {
-    self = pypy35;
+  pypy36 = callPackage ./pypy {
+    self = pypy36;
     sourceVersion = {
       major = "7";
-      minor = "0";
-      patch = "0";
+      minor = "1";
+      patch = "1";
     };
-    sha256 = "0hbv9ziv8n9lqnr6cndrw70p6g40c00w1ds7lmzgrr153myxkp7w";
-    pythonVersion = "3.5";
+    sha256 = "1hqvnran7d2dzj5555n7q680dyzhmbklz04pvkxgb5j604v7kkx1";
+    pythonVersion = "3.6";
     db = db.override { dbmSupport = true; };
     python = python27;
     inherit passthruFun;
