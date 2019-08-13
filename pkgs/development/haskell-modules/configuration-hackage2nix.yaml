@@ -4100,7 +4100,6 @@ broken-packages:
   - Dao
   - dao
   - dapi
-  - darcs
   - darcs-benchmark
   - darcs-beta
   - darcs-buildpackage
@@ -5248,7 +5247,6 @@ broken-packages:
   - graphql
   - graphql-api
   - graphtype
-  - graphviz
   - graql
   - grasp
   - gray-code
