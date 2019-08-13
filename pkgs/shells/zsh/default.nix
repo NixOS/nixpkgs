@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, ncurses, pcre }:
+{ stdenv, fetchurl, ncurses, pcre
+, buildPackages }:
 
 let
   version = "5.7.1";
@@ -61,7 +62,11 @@ else
   fi
 fi
 EOF
-    $out/bin/zsh -c "zcompile $out/etc/zprofile"
+    ${if (stdenv.hostPlatform != stdenv.buildPlatform) then ''
+      ${buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
+    '' else ''
+      $out/bin/zsh -c "zcompile $out/etc/zprofile"
+    ''}
     mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
