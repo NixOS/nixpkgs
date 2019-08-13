@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
-    "--disable-static"
     "--disable-openssl"
     "--without-cython"
   ];
