@@ -9684,9 +9684,9 @@ in
     gconf = pkgs.gnome2.GConf;
   };
 
-  noweb = noweb_icon;
-  noweb_awk = noweb_icon.override { icon-lang = null; };
-  noweb_icon = callPackage ../development/tools/literate-programming/noweb { };
+  # NOTE: Override and set icon-lang = null to use Awk instead of Icon.
+  noweb = callPackage ../development/tools/literate-programming/noweb { };
+
   nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-small; };
 
   nrfutil = callPackage ../development/tools/misc/nrfutil { };
