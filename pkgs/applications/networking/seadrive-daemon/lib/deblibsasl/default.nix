@@ -9,7 +9,6 @@
 stdenv.mkDerivation rec {
   version = "2.1.27";
   pname = "deblibsasl";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://ftp.us.debian.org/debian/pool/main/c/cyrus-sasl2/libsasl2-2_2.1.27~101-g0780600+dfsg-3_amd64.deb";

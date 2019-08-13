@@ -13,7 +13,6 @@ let
 in stdenv.mkDerivation rec {
   version = "2.4.2";
   pname = "deblibldap";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://ftp.us.debian.org/debian/pool/main/o/openldap/libldap-2.4-2_2.4.44+dfsg-5+deb9u2_amd64.deb";

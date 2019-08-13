@@ -20,7 +20,6 @@ let
 in stdenv.mkDerivation rec {
   version = "7.52.1";
   pname = "deblibcurl";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://ftp.us.debian.org/debian/pool/main/c/curl/libcurl3_7.52.1-5+deb9u9_amd64.deb";

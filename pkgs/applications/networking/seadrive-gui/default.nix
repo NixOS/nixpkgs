@@ -17,7 +17,6 @@
 stdenv.mkDerivation rec {
   pname = "seadrive-gui";
   version = "1.0.7";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "haiwen";

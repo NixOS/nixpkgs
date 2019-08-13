@@ -17,7 +17,6 @@ let
 in stdenv.mkDerivation rec {
   version = "1.0.6";
   pname = "seadrive-daemon";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://deb.seadrive.org/stretch/pool/main/s/${pname}/${pname}_${version}_amd64.deb";

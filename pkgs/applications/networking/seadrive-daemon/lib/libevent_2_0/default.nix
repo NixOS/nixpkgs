@@ -1,8 +1,8 @@
 { stdenv, fetchurl, openssl, findutils }:
 
-let version = "2.0.22"; in
-stdenv.mkDerivation {
-  name = "libevent-${version}";
+stdenv.mkDerivation rec {
+  version = "2.0.22";
+  pname = "libevent";
 
   src = fetchurl {
     url = "https://github.com/libevent/libevent/releases/download/release-${version}-stable/libevent-${version}-stable.tar.gz";
