@@ -4705,6 +4705,11 @@ in {
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
 
+  sequoia = disabledIf (isPyPy || !isPy3k) (toPythonModule (pkgs.sequoia.override {
+    pythonPackages = self;
+    pythonSupport = true;
+  }));
+
   safe = callPackage ../development/python-modules/safe { };
 
   sampledata = callPackage ../development/python-modules/sampledata { };
