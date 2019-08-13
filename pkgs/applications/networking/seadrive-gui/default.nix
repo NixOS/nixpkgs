@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     pcre
     qttools
     qtwebengine
-    seadrive-daemon
   ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
