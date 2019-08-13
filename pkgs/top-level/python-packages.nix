@@ -986,6 +986,8 @@ in {
     inherit (pkgs) cmake qt5 llvmPackages;
   });
 
+  simplefix = callPackage ../development/python-modules/simplefix { };
+
   pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
     inherit (pkgs) cmake qt5;
   });
