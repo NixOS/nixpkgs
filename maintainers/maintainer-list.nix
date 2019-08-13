@@ -3947,6 +3947,10 @@
     github = "orivej";
     name = "Orivej Desh";
   };
+  ornxka = {
+    email = "ornx@protonmail.com";
+    name = "ornxka";
+  };
   osener = {
     email = "ozan@ozansener.com";
     github = "osener";
