@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, gtk2, xulrunner, zip, pkgconfig, npapi_sdk, bash, bc }:
+{ stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, glib, xulrunner, zip, pkgconfig, npapi_sdk, bash, bc }:
 
 stdenv.mkDerivation rec {
   name = "icedtea-web-${version}";
@@ -13,10 +13,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig bc ];
-  buildInputs = [ cargo rustc gtk2 xulrunner zip npapi_sdk ];
+  buildInputs = [ cargo rustc glib xulrunner zip npapi_sdk ];
 
   preConfigure = ''
-    #patchShebangs javac.in
     configureFlagsArray+=("BIN_BASH=${bash}/bin/bash")
   '';
 
