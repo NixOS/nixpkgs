@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xlibsWrapper, ncurses }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
 
   pname = "metaocaml";
   version = "3.09-alpha-30";

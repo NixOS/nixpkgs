@@ -2,7 +2,7 @@
 , eigen, opencv, ceres-solver, cgal, boost, vcg
 , gmp, mpfr, glog, gflags, libjpeg_turbo }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "openmvs-unstable-2018-05-26";
 
   src = fetchFromGitHub {

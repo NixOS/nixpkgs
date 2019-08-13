@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''mssql'';
   version = ''cl-20180228-git'';
 

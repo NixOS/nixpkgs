@@ -15,7 +15,7 @@ let
 
   description = "Desktop sharing application, providing remote support and online meetings";
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "anydesk";
     exec = "@out@/bin/anydesk";
     icon = "anydesk";

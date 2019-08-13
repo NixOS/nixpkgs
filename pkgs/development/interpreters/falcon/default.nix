@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, zlib, sqlite }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "falcon";
   version = "2013-09-19";
 

@@ -1,6 +1,6 @@
 { stdenv, buildOcaml, fetchzip, libffi, pkgconfig, ncurses, integers }:
 
-buildOcaml rec {
+buildOcaml {
   name = "ctypes";
   version = "0.13.1";
 

@@ -6,7 +6,7 @@
 , makeWrapper
 } :
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fusee-launcher";
   version = "unstable-2018-07-14";
 

@@ -7,7 +7,7 @@
 , qttranslations
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qgo";
   version = "unstable-2017-12-18";
 

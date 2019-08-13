@@ -6,7 +6,7 @@
 let
   version = "4.8.2";
 
-  libdc = stdenv.mkDerivation rec {
+  libdc = stdenv.mkDerivation {
     pname = "libdivecomputer-ssrf";
     inherit version;
 
@@ -66,7 +66,7 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "subsurface";
   inherit version;
 

@@ -73,7 +73,7 @@ let
       custom-version = if is-released then mathcomp-version else "custom";
 
       # the base set of attributes for mathcomp
-      attrs = rec {
+      attrs = {
         name = "coq${coq.coq-version}-${pkgname}-${custom-version}";
 
         # used in ssreflect
@@ -136,7 +136,7 @@ mathcompCorePkgs_1_9 = mathcompGen "1.9.0";
 mathcompCorePkgs     = recurseIntoAttrs
   (mapDerivationAttrset dontDistribute (mathcompGen default-mathcomp-version));
 
-in rec {
+in {
 # mathcompGenSingle: given a version of mathcomp
 # generates an attribute set {single = <drv>;} with the single mathcomp derivation
 inherit mathcompGenSingle;

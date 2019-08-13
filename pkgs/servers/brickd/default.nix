@@ -11,7 +11,7 @@ daemonlib = fetchgit {
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "brickd";
   inherit version;
 

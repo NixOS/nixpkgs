@@ -2,7 +2,7 @@
 , bridge-utils, iproute, lxc, openvswitch, docker, busybox, dhcpcd, dhcp
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pipework";
   version = "2017-08-22";
   src = fetchFromGitHub {

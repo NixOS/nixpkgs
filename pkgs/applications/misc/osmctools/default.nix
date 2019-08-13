@@ -16,7 +16,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "osmctools";
   version = "0.8.5plus1.4.0";
 

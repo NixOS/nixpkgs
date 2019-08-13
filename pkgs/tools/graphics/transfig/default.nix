@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib, libjpeg, libpng, imake, gccmakedep }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "transfig-3.2.4";
   src = fetchurl {
     url = ftp://ftp.tex.ac.uk/pub/archive/graphics/transfig/transfig.3.2.4.tar.gz;

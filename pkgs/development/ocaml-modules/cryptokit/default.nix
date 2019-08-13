@@ -17,7 +17,7 @@ let param =
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cryptokit";
   inherit (param) version;
 

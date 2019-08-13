@@ -6,7 +6,7 @@ import ../make-test.nix ({ lib, ... }:
     maintainers = [ willibutz ];
   };
 
-  nodes = with lib; rec {
+  nodes = with lib; {
     server =
       { config, ... }:
       {

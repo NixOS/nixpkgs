@@ -16,7 +16,7 @@ let
     "-t ${topic}"
   ];
 
-in rec {
+in {
   name = "mosquitto";
   meta = with pkgs.stdenv.lib; {
     maintainers = with maintainers; [ peterhoeg ];

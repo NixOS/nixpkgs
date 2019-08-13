@@ -2,7 +2,7 @@
 
 let version = "2.8"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ndpi";
   inherit version;
 

@@ -3,7 +3,7 @@
 , bc, coreutils, which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "faustlive";
   version = "2017-12-05";
   src = fetchFromGitHub {

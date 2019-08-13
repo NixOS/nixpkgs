@@ -1,6 +1,6 @@
 { mkXfceDerivation, exo, gtk3, libgudev, libxfce4ui, libxfce4util, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "thunar-volman";
   version = "0.9.5";

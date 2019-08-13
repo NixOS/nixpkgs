@@ -3,7 +3,7 @@
   perl, texinfo, help2man, gettext, ncurses
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dgsh-unstable";
   version = "2017-02-05";
 

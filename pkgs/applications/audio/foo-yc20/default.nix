@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub,  libjack2, gtk2, lv2, faust, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "git-2015-05-21";
   pname = "foo-yc20";
   src = fetchFromGitHub {

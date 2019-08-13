@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fluent-bit";
   version = "1.0.6";
 

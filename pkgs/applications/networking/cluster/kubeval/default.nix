@@ -4,7 +4,7 @@ let
 
   # Cache schema as a package so network calls are not
   # necessary at runtime, allowing use in package builds
-  schema = stdenv.mkDerivation rec {
+  schema = stdenv.mkDerivation {
     name = "kubeval-schema";
     src = fetchFromGitHub {
       owner = "garethr";

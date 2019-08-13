@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''swank'';
   version = ''slime-v2.24'';
 

@@ -1,7 +1,7 @@
 { fetchsvn, stdenv, emacs }:
 
 let revision = "17339"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "scala-mode-r${revision}";
 
   src = fetchsvn {

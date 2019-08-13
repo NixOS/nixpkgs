@@ -1,7 +1,7 @@
 { mkXfceDerivation, automakeAddFlags, exo, gtk3, glib, libexif
 , libxfce4ui, libxfce4util, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
   version = "0.10.0";

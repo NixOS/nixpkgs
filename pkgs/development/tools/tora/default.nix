@@ -2,7 +2,7 @@
 , boost, doxygen, openssl, mysql, postgresql, graphviz, loki
 , qscintilla, qtbase, qttools }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "tora";
   version = "3.2.176";
 

@@ -1,6 +1,6 @@
 {stdenv, fetchurl, boost-build, lua, boost}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "luabind-0.9.1";
 
   src = fetchurl {

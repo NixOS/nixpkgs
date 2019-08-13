@@ -13,7 +13,7 @@ let
     sha256 = "0i699axqfkxk9mgv1hlms5r44pf0s642yz75ajjjpwzhw4d5pnv4";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnu-config";
   version = "2019-04-15";
 

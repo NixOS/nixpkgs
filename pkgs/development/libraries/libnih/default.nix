@@ -2,7 +2,7 @@
 
 let version = "1.0.3"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libnih";
   inherit version;
 

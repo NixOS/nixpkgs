@@ -1,7 +1,7 @@
   { stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
   , lv2, pkgconfig, libGLU_combined }:
 
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
   version = "0.9.0";
   pname = "helm";
 

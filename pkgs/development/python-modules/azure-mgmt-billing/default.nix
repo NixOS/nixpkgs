@@ -8,7 +8,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "azure-mgmt-billing";
   version = "0.2.0"; #pypi's 0.2.0 doesn't build ootb
 

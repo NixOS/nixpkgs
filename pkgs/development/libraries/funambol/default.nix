@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib, curl, autoreconfHook, unzip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "funambol-client-cpp-9.0.0";
 
   src = fetchurl {

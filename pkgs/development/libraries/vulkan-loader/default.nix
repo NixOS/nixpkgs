@@ -6,7 +6,7 @@ let
 in
 
 assert version == vulkan-headers.version;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vulkan-loader";
   inherit version;
 

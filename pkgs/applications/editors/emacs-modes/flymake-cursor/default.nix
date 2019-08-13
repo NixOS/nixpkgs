@@ -1,6 +1,6 @@
 { stdenv, fetchurl, emacs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "flymake-cursor-0.1.5";
 
   src = fetchurl {

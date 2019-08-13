@@ -2,7 +2,7 @@
 
 let version = "0.9.5.1.1"; in
 
-python2Packages.buildPythonPackage rec {
+python2Packages.buildPythonPackage {
   name = "pyrex-${version}";
 
   src = fetchurl {

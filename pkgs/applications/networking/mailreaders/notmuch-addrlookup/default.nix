@@ -3,7 +3,7 @@
 let
   version = "9";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "notmuch-addrlookup";
   inherit version;
 

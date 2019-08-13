@@ -15,7 +15,7 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "242";
   pname = "systemd";
 

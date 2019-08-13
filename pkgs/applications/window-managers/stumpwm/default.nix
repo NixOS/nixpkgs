@@ -30,7 +30,7 @@ let
     };
   }.${version};
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "stumpwm-${versionSpec.name}";
 
   src = fetchgit {

@@ -2,7 +2,7 @@
 
 # !!! Duplication: this package is almost exactly the same as `bsd-fingerd'.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bsd-fingerd-0.17";
 
   src = fetchurl {

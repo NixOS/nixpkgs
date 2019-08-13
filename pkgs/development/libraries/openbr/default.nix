@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, opencv, qtbase, qtsvg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   version = "0.5";
   pname = "openbr";

@@ -2,7 +2,7 @@
 
 let
   version = "2.2.1";
-in fetchzip rec {
+in fetchzip {
   name = "iosevka-bin-${version}";
 
   url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-iosevka-${version}.zip";

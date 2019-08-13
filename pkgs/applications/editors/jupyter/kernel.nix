@@ -26,7 +26,7 @@ in
 
   # Definitions is an attribute set.
 
-  create = { definitions ?  default }: with lib; stdenv.mkDerivation rec {
+  create = { definitions ?  default }: with lib; stdenv.mkDerivation {
 
     name = "jupyter-kernels";
 

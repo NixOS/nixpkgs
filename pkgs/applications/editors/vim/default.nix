@@ -12,7 +12,7 @@
 let
   common = callPackage ./common.nix {};
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vim";
 
   inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;

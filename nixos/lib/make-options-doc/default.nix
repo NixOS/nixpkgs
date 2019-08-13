@@ -126,7 +126,7 @@ let
     }
   '';
 
-in rec {
+in {
   inherit optionsNix;
 
   optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);

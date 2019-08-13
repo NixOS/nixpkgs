@@ -2,7 +2,7 @@
 openimageio, libjpeg, libpng, libpthreadstubs, libX11
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "embree";
   version = "2.17.4";
 

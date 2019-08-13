@@ -1,6 +1,6 @@
 { stdenv, version, fetch, cmake, python, llvm, libcxxabi }:
 with stdenv.lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "compiler-rt";
   inherit version;
   src = fetch "compiler-rt" "1fcr3jn24yr8lh36nc0c4ikli4744i2q9m1ik67p1jymwwaixkgl";

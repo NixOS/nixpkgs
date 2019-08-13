@@ -1,6 +1,6 @@
 { stdenv, fetchgit, emacs, gh, pcache, logito }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gist-1.0";
 
   src = fetchgit {

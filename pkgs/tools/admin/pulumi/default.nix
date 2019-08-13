@@ -18,7 +18,7 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version;
   pname = "pulumi";
 

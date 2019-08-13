@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, dbus-glib, autoreconfHook, xorg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kbdd";
   version = "unstable-2017-01-29";
 

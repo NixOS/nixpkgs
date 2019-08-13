@@ -1,6 +1,6 @@
 {stdenv, fetchurl, ncurses}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "iptraf-3.0.1";
 
   src = fetchurl {

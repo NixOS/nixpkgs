@@ -1,7 +1,7 @@
 { mkXfceDerivation, automakeAddFlags, exo, gtk3, libnotify
 , libxfce4ui, libxfce4util, upower, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-power-manager";
   version = "1.6.5";

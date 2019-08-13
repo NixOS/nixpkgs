@@ -2,7 +2,7 @@
 
 let
   version = "3.003";
-in fetchzip rec {
+in fetchzip {
   name = "hack-font-${version}";
 
   url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";

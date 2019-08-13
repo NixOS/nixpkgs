@@ -6,7 +6,7 @@ let
 
   # The set of alternative malloc(3) providers.
   providers = {
-    graphene-hardened = rec {
+    graphene-hardened = {
       libPath = "${pkgs.graphene-hardened-malloc}/lib/libhardened_malloc.so";
       description = ''
         An allocator designed to mitigate memory corruption attacks, such as

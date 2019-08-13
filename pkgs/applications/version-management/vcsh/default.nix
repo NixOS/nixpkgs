@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, which, git, ronn, perlPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.20170915";       # date of commit we're pulling
   pname = "vcsh";
 

@@ -1,6 +1,6 @@
 { stdenv, afl}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = (builtins.parseDrvName afl.name).version;
   pname = "libdislocator";
 

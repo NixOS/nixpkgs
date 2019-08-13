@@ -3,7 +3,7 @@
 , CoreFoundation, Security
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   name = "cargo-${rustc.version}";
   inherit (rustc) version src;
 

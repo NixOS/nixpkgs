@@ -5,7 +5,7 @@
     rev = "f79a708978232a2b6b06c2e4173c5314559e0d3a";
     sha256 = "0h7xm4ck3p3380c6bqm5ixrkxwcx6z5vysqdwvfa7gcqx5d6x5zz";
   };
-in buildUBoot rec {
+in buildUBoot {
   version = "2017.09";
 
   src = fetchFromGitHub {

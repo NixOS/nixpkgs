@@ -4,7 +4,7 @@ let
 
   # Build Quake with coverage instrumentation.
   overrides = pkgs:
-    rec {
+    {
       quake3game = pkgs.quake3game.override (args: {
         stdenv = pkgs.stdenvAdapters.addCoverageInstrumentation args.stdenv;
       });

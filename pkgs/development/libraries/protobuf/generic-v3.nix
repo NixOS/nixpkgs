@@ -6,7 +6,7 @@
 }:
 
 let
-mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
+mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
   pname = "protobuf";
   inherit version;
 

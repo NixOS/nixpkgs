@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, dbus, json_c, ncurses, connman }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "connman-ncurses";
   version = "2015-07-21";
 

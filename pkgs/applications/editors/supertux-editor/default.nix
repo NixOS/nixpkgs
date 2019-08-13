@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, mono, gtk-sharp-2_0, pkgconfig, makeWrapper, gnome2, gtk2 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "git-2014-08-20";
   pname = "supertux-editor";
 

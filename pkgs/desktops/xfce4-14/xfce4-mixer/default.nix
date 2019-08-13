@@ -5,7 +5,7 @@ let
     minimalDeps = true;
   };
 in
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "xfce4-mixer";
   version = "4.11.0";

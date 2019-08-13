@@ -1,6 +1,6 @@
 { stdenv, fetchurl, tcl, tk, fetchpatch } :
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "8.4.3";
   pname = "tix";
   src = fetchurl {

@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, flex, bison, cmake, git, zlib}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   version = "2018-08-15";
   pname = "pbrt-v3";

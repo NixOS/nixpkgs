@@ -1,6 +1,6 @@
 { pkgs, mkDerivation }:
 
-mkDerivation rec {
+mkDerivation {
   baseName = "erlang";
   version = "16B02.basho10";
 

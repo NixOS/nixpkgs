@@ -1,6 +1,6 @@
 { lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "solargraph";
   exes = ["solargraph"  "solargraph-runtime"];
   gemdir = ./.;

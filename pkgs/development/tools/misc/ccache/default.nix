@@ -30,7 +30,7 @@ let ccache = stdenv.mkDerivation rec {
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = {unwrappedCC, extraConfig}: stdenv.mkDerivation rec {
+    links = {unwrappedCC, extraConfig}: stdenv.mkDerivation {
       name = "ccache-links";
       passthru = {
         isClang = unwrappedCC.isClang or false;

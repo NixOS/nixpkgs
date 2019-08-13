@@ -22,7 +22,7 @@ let
       sha256 = "07gyf319v6ama6n1aj96403as04bixi8mbisfy7f7va689zklflr";
     };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "saw-tools";
   version = "0.1.1-20150731";
 

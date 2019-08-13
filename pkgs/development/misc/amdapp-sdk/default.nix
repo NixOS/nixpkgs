@@ -35,7 +35,7 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "amdapp-sdk";
   inherit version;
 

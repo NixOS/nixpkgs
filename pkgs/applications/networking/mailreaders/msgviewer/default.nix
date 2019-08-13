@@ -5,7 +5,7 @@ let
   name = "msgviewer-${version}";
   uname = "MSGViewer-${version}";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {

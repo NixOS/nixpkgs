@@ -4,7 +4,7 @@
 
 let
   version = "3.10.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "liblouis";
   inherit version;
 

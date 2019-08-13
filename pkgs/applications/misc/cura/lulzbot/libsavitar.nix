@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchgit, cmake, sip }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "libsavitar-lulzbot";
   name = "libsavitar-lulzbot";
   version = "3.6.18";

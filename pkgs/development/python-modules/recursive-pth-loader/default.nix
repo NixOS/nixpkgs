@@ -1,6 +1,6 @@
 { stdenv, python }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "python-recursive-pth-loader";
   version = "1.0";
 

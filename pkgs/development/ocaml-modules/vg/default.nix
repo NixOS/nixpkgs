@@ -19,7 +19,7 @@ if !versionAtLeast ocaml.version "4.03"
 then throw "vg is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 

@@ -61,7 +61,7 @@ let
   # TODO: remove after there's support for setupPyDistFlags
   setuppy = ../../../development/interpreters/python/run_setup.py;
 
-  bazel-build = buildBazelPackage rec {
+  bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
 
     src = fetchFromGitHub {
@@ -300,7 +300,7 @@ let
     };
   };
 
-in buildPythonPackage rec {
+in buildPythonPackage {
   inherit version pname;
 
   src = bazel-build.python;

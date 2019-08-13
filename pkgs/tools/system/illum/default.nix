@@ -1,6 +1,6 @@
 { stdenv, fetchgit, pkgconfig, ninja, libevdev, libev }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.4";
   pname = "illum";
 

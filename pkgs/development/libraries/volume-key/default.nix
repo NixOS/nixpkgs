@@ -6,7 +6,7 @@
 
 let
   version = "0.3.11";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "volume_key";
   inherit version;
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, unzip, pkgconfig, glib, llvmPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "milu-nightly";
   version = "2016-05-09";
 

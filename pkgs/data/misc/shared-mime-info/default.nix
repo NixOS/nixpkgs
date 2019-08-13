@@ -2,7 +2,7 @@
 , libxml2, glib}:
 
 let version = "1.12"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "shared-mime-info";
   inherit version;
 

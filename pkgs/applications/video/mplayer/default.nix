@@ -88,7 +88,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "mplayer-1.3.0";
 
   src = fetchurl {

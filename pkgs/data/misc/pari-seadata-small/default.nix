@@ -2,7 +2,7 @@
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "20090618";
   pname = "pari-seadata-small";
 

@@ -27,7 +27,7 @@ in
 
 let suffix = if stdenv.is64bit then "64" else "32"; in
 
-rec {
+{
   # Build the latest VM
   spur = pharo-vm-build rec {
     name = "pharo-spur${suffix}";

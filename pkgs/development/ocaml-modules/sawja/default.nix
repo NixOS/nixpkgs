@@ -7,7 +7,7 @@ let
   version = "1.5.6";
   webpage = "http://sawja.inria.fr/";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 

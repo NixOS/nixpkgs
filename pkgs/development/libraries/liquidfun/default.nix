@@ -8,7 +8,7 @@ let
     hash="5011a000eacd6202a47317c489e44aa753a833fb562d970e7b8c0da9de01df86";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   src = requireFile {
     url = sourceInfo.url;
     sha256 = sourceInfo.hash;

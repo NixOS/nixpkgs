@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "i3blocks";
   version = "unstable-2019-02-07";
 

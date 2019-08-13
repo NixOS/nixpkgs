@@ -1,7 +1,7 @@
 { lib, mkXfceDerivation, gobject-introspection, gtk2, gtk3, libICE, libSM
 , libstartup_notification, libxfce4util, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
   version = "4.14.1";

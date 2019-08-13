@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''clsql-uffi'';
   version = ''clsql-20160208-git'';
 

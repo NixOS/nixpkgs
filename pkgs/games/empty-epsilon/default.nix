@@ -8,7 +8,7 @@ let
 
   version = "${major}.${minor}.${patch}";
 
-  serious-proton = stdenv.mkDerivation rec {
+  serious-proton = stdenv.mkDerivation {
     pname = "serious-proton";
     inherit version;
 
@@ -34,7 +34,7 @@ let
 in
 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "empty-epsilon";
   inherit version;
 

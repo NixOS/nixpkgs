@@ -5,7 +5,7 @@
 , requests
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "0.20.7";
   pname = "azure-servicemanagement-legacy";
 

@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/applications $desktopItem/share/applications/*
   '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "mlterm";
     exec = "mlterm %U";
     icon = "mlterm";

@@ -3,13 +3,13 @@
 
 let
   kdelibs = callPackage ./kdelibs.nix {};
-  sip4_19_3 = sip.overrideAttrs (oldAttrs: rec {
+  sip4_19_3 = sip.overrideAttrs (oldAttrs: {
     src = fetchurl {
       url = "mirror://sourceforge/pyqt/sip/sip-4.19.3/sip-4.19.3.tar.gz";
       sha256 = "0x2bghbprwl3az1ni3p87i0bq8r99694la93kg65vi0cz12gh3bl";
     };
   });
-  pyqt4_fixed = pyqt4.overrideAttrs (oldAttrs: rec {
+  pyqt4_fixed = pyqt4.overrideAttrs (oldAttrs: {
     propagatedBuildInputs = [ sip4_19_3 ];
   });
 in stdenv.mkDerivation rec {

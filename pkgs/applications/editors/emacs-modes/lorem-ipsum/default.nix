@@ -1,6 +1,6 @@
 { stdenv, fetchurl, emacs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "lorem-ipsum-0.1";
 
   src = fetchurl {

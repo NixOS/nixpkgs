@@ -5,7 +5,7 @@ let
     url = "https://xenbits.xen.org/xsa/xsa${name}.patch";
     inherit sha256;
   });
-in rec {
+in {
   # 4.5
   XSA_190 = (xsaPatch {
     name = "190-4.5";

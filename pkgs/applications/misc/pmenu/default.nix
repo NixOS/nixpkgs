@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitLab, python2Packages, gnome-menus }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pmenu";
   version = "2018-01-01";
 

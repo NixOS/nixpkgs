@@ -9,7 +9,7 @@ let
   withDoc = stdenv.cc.isGNU;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "fftw-${precision}-${version}";
 
   src = fetchurl {

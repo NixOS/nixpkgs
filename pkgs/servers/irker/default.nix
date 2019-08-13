@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, python, pkgconfig
 , xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_412 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "irker";
   version = "2017-02-12";
 

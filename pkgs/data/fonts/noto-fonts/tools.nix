@@ -1,6 +1,6 @@
 { fetchFromGitHub, pythonPackages, lib }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonPackage {
   version = "2017-09-25";
   pname = "nototools";
 

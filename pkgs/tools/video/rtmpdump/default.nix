@@ -9,7 +9,7 @@ assert gnutlsSupport -> gnutlsSupport != null && nettle != null && !opensslSuppo
 assert opensslSupport -> openssl != null && !gnutlsSupport;
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rtmpdump";
   version = "2015-12-30";
 

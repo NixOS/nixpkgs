@@ -7,7 +7,7 @@ let
   inherit (stdenv.lib) enableFeature optional;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "avxsynth";
   version = "2015-04-07";
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, imagemagick }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cuneiform";
   version = "1.1.0";
 

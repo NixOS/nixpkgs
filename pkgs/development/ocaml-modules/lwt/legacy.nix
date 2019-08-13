@@ -18,7 +18,7 @@ let sha256 = {
 
 let optionals = stdenv.lib.optionals (!stdenv.lib.versionAtLeast version "3"); in
 
-buildOcaml rec {
+buildOcaml {
   name = "lwt";
   inherit version;
 

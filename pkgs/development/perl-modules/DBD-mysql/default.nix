@@ -1,6 +1,6 @@
 { fetchurl, buildPerlPackage, DBI, DevelChecklib, mysql }:
 
-buildPerlPackage rec {
+buildPerlPackage {
   pname = "DBD-mysql";
   version = "4.050";
 

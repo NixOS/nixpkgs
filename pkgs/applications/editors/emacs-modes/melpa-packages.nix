@@ -458,7 +458,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             };
           });
 
-        in pkgs.stdenv.mkDerivation rec {
+        in pkgs.stdenv.mkDerivation {
           inherit (super.vterm) name version src;
 
           nativeBuildInputs = [ pkgs.cmake ];

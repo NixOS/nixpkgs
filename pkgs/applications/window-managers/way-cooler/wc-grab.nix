@@ -305,25 +305,25 @@ rec {
     inherit dependencies buildDependencies features;
   };
   adler32_1_0_0 = { features?(adler32_1_0_0_features {}) }: adler32_1_0_0_ {};
-  adler32_1_0_0_features = f: updateFeatures f (rec {
+  adler32_1_0_0_features = f: updateFeatures f ({
     adler32_1_0_0.default = (f.adler32_1_0_0.default or true);
   }) [];
   ansi_term_0_9_0 = { features?(ansi_term_0_9_0_features {}) }: ansi_term_0_9_0_ {};
-  ansi_term_0_9_0_features = f: updateFeatures f (rec {
+  ansi_term_0_9_0_features = f: updateFeatures f ({
     ansi_term_0_9_0.default = (f.ansi_term_0_9_0.default or true);
   }) [];
   atty_0_2_2 = { features?(atty_0_2_2_features {}) }: atty_0_2_2_ {
     dependencies = (if !(kernel == "windows") then mapFeatures features ([ libc_0_2_21 ]) else [])
       ++ (if kernel == "windows" then mapFeatures features ([ kernel32_sys_0_2_2 winapi_0_2_8 ]) else []);
   };
-  atty_0_2_2_features = f: updateFeatures f (rec {
+  atty_0_2_2_features = f: updateFeatures f ({
     atty_0_2_2.default = (f.atty_0_2_2.default or true);
     kernel32_sys_0_2_2.default = true;
     libc_0_2_21.default = true;
     winapi_0_2_8.default = true;
   }) [ libc_0_2_21_features kernel32_sys_0_2_2_features winapi_0_2_8_features ];
   bitflags_0_7_0 = { features?(bitflags_0_7_0_features {}) }: bitflags_0_7_0_ {};
-  bitflags_0_7_0_features = f: updateFeatures f (rec {
+  bitflags_0_7_0_features = f: updateFeatures f ({
     bitflags_0_7_0.default = (f.bitflags_0_7_0.default or true);
   }) [];
   bitflags_0_8_0 = { features?(bitflags_0_8_0_features {}) }: bitflags_0_8_0_ {
@@ -402,7 +402,7 @@ rec {
     vec_map_0_7_0.default = true;
   }) [ ansi_term_0_9_0_features atty_0_2_2_features bitflags_0_8_0_features strsim_0_6_0_features term_size_0_2_3_features unicode_segmentation_1_1_0_features unicode_width_0_1_4_features vec_map_0_7_0_features ];
   color_quant_1_0_0 = { features?(color_quant_1_0_0_features {}) }: color_quant_1_0_0_ {};
-  color_quant_1_0_0_features = f: updateFeatures f (rec {
+  color_quant_1_0_0_features = f: updateFeatures f ({
     color_quant_1_0_0.default = (f.color_quant_1_0_0.default or true);
   }) [];
   dbus_0_5_2 = { features?(dbus_0_5_2_features {}) }: dbus_0_5_2_ {
@@ -410,7 +410,7 @@ rec {
     buildDependencies = mapFeatures features ([ metadeps_1_1_1 ]);
     features = mkFeatures (features.dbus_0_5_2 or {});
   };
-  dbus_0_5_2_features = f: updateFeatures f (rec {
+  dbus_0_5_2_features = f: updateFeatures f ({
     dbus_0_5_2.default = (f.dbus_0_5_2.default or true);
     libc_0_2_21.default = true;
     metadeps_1_1_1.default = true;
@@ -418,7 +418,7 @@ rec {
   deflate_0_7_5 = { features?(deflate_0_7_5_features {}) }: deflate_0_7_5_ {
     dependencies = mapFeatures features ([ adler32_1_0_0 byteorder_1_0_0 ]);
   };
-  deflate_0_7_5_features = f: updateFeatures f (rec {
+  deflate_0_7_5_features = f: updateFeatures f ({
     adler32_1_0_0.default = true;
     byteorder_1_0_0.default = true;
     deflate_0_7_5.default = (f.deflate_0_7_5.default or true);
@@ -426,14 +426,14 @@ rec {
   deque_0_3_1 = { features?(deque_0_3_1_features {}) }: deque_0_3_1_ {
     dependencies = mapFeatures features ([ rand_0_3_15 ]);
   };
-  deque_0_3_1_features = f: updateFeatures f (rec {
+  deque_0_3_1_features = f: updateFeatures f ({
     deque_0_3_1.default = (f.deque_0_3_1.default or true);
     rand_0_3_15.default = true;
   }) [ rand_0_3_15_features ];
   enum_primitive_0_1_1 = { features?(enum_primitive_0_1_1_features {}) }: enum_primitive_0_1_1_ {
     dependencies = mapFeatures features ([ num_traits_0_1_37 ]);
   };
-  enum_primitive_0_1_1_features = f: updateFeatures f (rec {
+  enum_primitive_0_1_1_features = f: updateFeatures f ({
     enum_primitive_0_1_1.default = (f.enum_primitive_0_1_1.default or true);
     num_traits_0_1_37.default = (f.num_traits_0_1_37.default or false);
   }) [ num_traits_0_1_37_features ];
@@ -470,7 +470,7 @@ rec {
     lzw_0_10_0.default = true;
   }) [ color_quant_1_0_0_features lzw_0_10_0_features ];
   glob_0_2_11 = { features?(glob_0_2_11_features {}) }: glob_0_2_11_ {};
-  glob_0_2_11_features = f: updateFeatures f (rec {
+  glob_0_2_11_features = f: updateFeatures f ({
     glob_0_2_11.default = (f.glob_0_2_11.default or true);
   }) [];
   image_0_12_3 = { features?(image_0_12_3_features {}) }: image_0_12_3_ {
@@ -557,7 +557,7 @@ rec {
   inflate_0_1_1 = { features?(inflate_0_1_1_features {}) }: inflate_0_1_1_ {
     features = mkFeatures (features.inflate_0_1_1 or {});
   };
-  inflate_0_1_1_features = f: updateFeatures f (rec {
+  inflate_0_1_1_features = f: updateFeatures f ({
     inflate_0_1_1.default = (f.inflate_0_1_1.default or true);
   }) [];
   jpeg_decoder_0_1_11 = { features?(jpeg_decoder_0_1_11_features {}) }: jpeg_decoder_0_1_11_ {
@@ -578,7 +578,7 @@ rec {
     dependencies = mapFeatures features ([ winapi_0_2_8 ]);
     buildDependencies = mapFeatures features ([ winapi_build_0_1_1 ]);
   };
-  kernel32_sys_0_2_2_features = f: updateFeatures f (rec {
+  kernel32_sys_0_2_2_features = f: updateFeatures f ({
     kernel32_sys_0_2_2.default = (f.kernel32_sys_0_2_2.default or true);
     winapi_0_2_8.default = true;
     winapi_build_0_1_1.default = true;
@@ -606,7 +606,7 @@ rec {
   metadeps_1_1_1 = { features?(metadeps_1_1_1_features {}) }: metadeps_1_1_1_ {
     dependencies = mapFeatures features ([ error_chain_0_7_2 pkg_config_0_3_9 toml_0_2_1 ]);
   };
-  metadeps_1_1_1_features = f: updateFeatures f (rec {
+  metadeps_1_1_1_features = f: updateFeatures f ({
     error_chain_0_7_2.default = (f.error_chain_0_7_2.default or false);
     metadeps_1_1_1.default = (f.metadeps_1_1_1.default or true);
     pkg_config_0_3_9.default = true;
@@ -615,14 +615,14 @@ rec {
   num_integer_0_1_33 = { features?(num_integer_0_1_33_features {}) }: num_integer_0_1_33_ {
     dependencies = mapFeatures features ([ num_traits_0_1_37 ]);
   };
-  num_integer_0_1_33_features = f: updateFeatures f (rec {
+  num_integer_0_1_33_features = f: updateFeatures f ({
     num_integer_0_1_33.default = (f.num_integer_0_1_33.default or true);
     num_traits_0_1_37.default = true;
   }) [ num_traits_0_1_37_features ];
   num_iter_0_1_33 = { features?(num_iter_0_1_33_features {}) }: num_iter_0_1_33_ {
     dependencies = mapFeatures features ([ num_integer_0_1_33 num_traits_0_1_37 ]);
   };
-  num_iter_0_1_33_features = f: updateFeatures f (rec {
+  num_iter_0_1_33_features = f: updateFeatures f ({
     num_integer_0_1_33.default = true;
     num_iter_0_1_33.default = (f.num_iter_0_1_33.default or true);
     num_traits_0_1_37.default = true;
@@ -649,18 +649,18 @@ rec {
     num_traits_0_1_37.default = true;
   }) [ num_integer_0_1_33_features num_traits_0_1_37_features ];
   num_traits_0_1_37 = { features?(num_traits_0_1_37_features {}) }: num_traits_0_1_37_ {};
-  num_traits_0_1_37_features = f: updateFeatures f (rec {
+  num_traits_0_1_37_features = f: updateFeatures f ({
     num_traits_0_1_37.default = (f.num_traits_0_1_37.default or true);
   }) [];
   num_cpus_1_3_0 = { features?(num_cpus_1_3_0_features {}) }: num_cpus_1_3_0_ {
     dependencies = mapFeatures features ([ libc_0_2_21 ]);
   };
-  num_cpus_1_3_0_features = f: updateFeatures f (rec {
+  num_cpus_1_3_0_features = f: updateFeatures f ({
     libc_0_2_21.default = true;
     num_cpus_1_3_0.default = (f.num_cpus_1_3_0.default or true);
   }) [ libc_0_2_21_features ];
   pkg_config_0_3_9 = { features?(pkg_config_0_3_9_features {}) }: pkg_config_0_3_9_ {};
-  pkg_config_0_3_9_features = f: updateFeatures f (rec {
+  pkg_config_0_3_9_features = f: updateFeatures f ({
     pkg_config_0_3_9.default = (f.pkg_config_0_3_9.default or true);
   }) [];
   png_0_6_2 = { features?(png_0_6_2_features {}) }: png_0_6_2_ {
@@ -686,7 +686,7 @@ rec {
   rand_0_3_15 = { features?(rand_0_3_15_features {}) }: rand_0_3_15_ {
     dependencies = mapFeatures features ([ libc_0_2_21 ]);
   };
-  rand_0_3_15_features = f: updateFeatures f (rec {
+  rand_0_3_15_features = f: updateFeatures f ({
     libc_0_2_21.default = true;
     rand_0_3_15.default = (f.rand_0_3_15.default or true);
   }) [ libc_0_2_21_features ];
@@ -694,7 +694,7 @@ rec {
     dependencies = mapFeatures features ([ deque_0_3_1 libc_0_2_21 num_cpus_1_3_0 rand_0_3_15 ]);
     features = mkFeatures (features.rayon_0_6_0 or {});
   };
-  rayon_0_6_0_features = f: updateFeatures f (rec {
+  rayon_0_6_0_features = f: updateFeatures f ({
     deque_0_3_1.default = true;
     libc_0_2_21.default = true;
     num_cpus_1_3_0.default = true;
@@ -704,11 +704,11 @@ rec {
   scoped_threadpool_0_1_7 = { features?(scoped_threadpool_0_1_7_features {}) }: scoped_threadpool_0_1_7_ {
     features = mkFeatures (features.scoped_threadpool_0_1_7 or {});
   };
-  scoped_threadpool_0_1_7_features = f: updateFeatures f (rec {
+  scoped_threadpool_0_1_7_features = f: updateFeatures f ({
     scoped_threadpool_0_1_7.default = (f.scoped_threadpool_0_1_7.default or true);
   }) [];
   strsim_0_6_0 = { features?(strsim_0_6_0_features {}) }: strsim_0_6_0_ {};
-  strsim_0_6_0_features = f: updateFeatures f (rec {
+  strsim_0_6_0_features = f: updateFeatures f ({
     strsim_0_6_0.default = (f.strsim_0_6_0.default or true);
   }) [];
   term_size_0_2_3 = { features?(term_size_0_2_3_features {}) }: term_size_0_2_3_ {
@@ -750,13 +750,13 @@ rec {
   unicode_segmentation_1_1_0 = { features?(unicode_segmentation_1_1_0_features {}) }: unicode_segmentation_1_1_0_ {
     features = mkFeatures (features.unicode_segmentation_1_1_0 or {});
   };
-  unicode_segmentation_1_1_0_features = f: updateFeatures f (rec {
+  unicode_segmentation_1_1_0_features = f: updateFeatures f ({
     unicode_segmentation_1_1_0.default = (f.unicode_segmentation_1_1_0.default or true);
   }) [];
   unicode_width_0_1_4 = { features?(unicode_width_0_1_4_features {}) }: unicode_width_0_1_4_ {
     features = mkFeatures (features.unicode_width_0_1_4 or {});
   };
-  unicode_width_0_1_4_features = f: updateFeatures f (rec {
+  unicode_width_0_1_4_features = f: updateFeatures f ({
     unicode_width_0_1_4.default = (f.unicode_width_0_1_4.default or true);
   }) [];
   vec_map_0_7_0 = { features?(vec_map_0_7_0_features {}) }: vec_map_0_7_0_ {
@@ -777,18 +777,18 @@ rec {
   wc_grab_0_3_0 = { features?(wc_grab_0_3_0_features {}) }: wc_grab_0_3_0_ {
     dependencies = mapFeatures features ([ clap_2_22_0 dbus_0_5_2 image_0_12_3 ]);
   };
-  wc_grab_0_3_0_features = f: updateFeatures f (rec {
+  wc_grab_0_3_0_features = f: updateFeatures f ({
     clap_2_22_0.default = true;
     dbus_0_5_2.default = true;
     image_0_12_3.default = true;
     wc_grab_0_3_0.default = (f.wc_grab_0_3_0.default or true);
   }) [ clap_2_22_0_features dbus_0_5_2_features image_0_12_3_features ];
   winapi_0_2_8 = { features?(winapi_0_2_8_features {}) }: winapi_0_2_8_ {};
-  winapi_0_2_8_features = f: updateFeatures f (rec {
+  winapi_0_2_8_features = f: updateFeatures f ({
     winapi_0_2_8.default = (f.winapi_0_2_8.default or true);
   }) [];
   winapi_build_0_1_1 = { features?(winapi_build_0_1_1_features {}) }: winapi_build_0_1_1_ {};
-  winapi_build_0_1_1_features = f: updateFeatures f (rec {
+  winapi_build_0_1_1_features = f: updateFeatures f ({
     winapi_build_0_1_1.default = (f.winapi_build_0_1_1.default or true);
   }) [];
 }

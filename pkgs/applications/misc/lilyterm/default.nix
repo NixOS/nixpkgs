@@ -29,7 +29,7 @@ let
       };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lilyterm";
 
   inherit (stuff) src version;

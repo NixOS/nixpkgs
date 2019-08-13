@@ -60,7 +60,7 @@ let
       sha256 = "a1a3ca4381eb91f7b65afe7cb7df615cdcf67993fef4b486585f66b349993a10";
     };
   };
-  ucd = stdenv.mkDerivation rec {
+  ucd = stdenv.mkDerivation {
     name = "ucd-12.0.0";
     dontUnpack = true;
     installPhase = ''

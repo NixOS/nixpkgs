@@ -1,6 +1,6 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "netalyzr";
   version = "57861";
 

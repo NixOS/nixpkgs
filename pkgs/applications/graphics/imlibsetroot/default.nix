@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libX11, libXinerama, imlib2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "imlibsetroot";
   version = "1.2";
   src = fetchurl {

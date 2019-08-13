@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libpng }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pngtoico-1.0";
 
   src = fetchurl {

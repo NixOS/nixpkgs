@@ -1,7 +1,7 @@
 { lib, bundlerEnv, ruby, bundlerUpdateScript
 }:
 
-bundlerEnv rec {
+bundlerEnv {
   pname = "doing";
   version = (import ./gemset.nix).doing.version;
 

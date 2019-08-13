@@ -1,6 +1,6 @@
 { stdenv, buildPackages, fetchgit, fetchpatch, perl, buildLinux, ... } @ args:
 
-buildLinux (args // rec {
+buildLinux (args // {
   version = "5.1.2019.08.21";
   modDirVersion = "5.1.0";
 

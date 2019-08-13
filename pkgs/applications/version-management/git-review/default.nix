@@ -8,7 +8,7 @@ pythonPackages.buildPythonApplication rec {
   # upstream repository (and we are installing from tarball instead)
   PBR_VERSION = "${version}";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "openstack-infra";
     repo = pname;
     rev = version;

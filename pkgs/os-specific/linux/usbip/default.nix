@@ -1,6 +1,6 @@
 { stdenv, kernel, udev, autoconf, automake, libtool }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "usbip-${kernel.name}";
 
   src = kernel.src;

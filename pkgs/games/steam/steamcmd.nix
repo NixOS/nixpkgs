@@ -2,7 +2,7 @@
 , steamRoot ? "~/.local/share/Steam"
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "steamcmd";
   version = "20180104"; # According to steamcmd_linux.tar.gz mtime
 

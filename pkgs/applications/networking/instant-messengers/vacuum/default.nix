@@ -3,7 +3,7 @@
   , xorgproto, libX11, libXScrnSaver
   , xz, zlib
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vacuum-im";
   version = "1.3.0.20160104";
 

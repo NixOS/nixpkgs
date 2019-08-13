@@ -16,7 +16,7 @@
 , enableSharedLibraries ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "llvm";
   inherit version;
 

@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   xmlApis_1_3_03 = map (obj: fetchMaven {
     version = "1.3.03";
     artifactId = "xml-apis";

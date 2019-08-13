@@ -1,6 +1,6 @@
 { stdenv, collectd }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (collectd) meta version;
 
   pname = "collectd-data";

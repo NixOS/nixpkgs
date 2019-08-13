@@ -23,7 +23,7 @@ let
   version = "0.18.0";
   checksum = "1nlvw56viwgafma506slywfg54z6009jmzc9q6wljgr6mqfmmchd";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "znapzend";
   inherit version;
 

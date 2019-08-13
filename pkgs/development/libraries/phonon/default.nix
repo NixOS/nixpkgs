@@ -15,7 +15,7 @@ in
 assert withQt5 -> qtbase != null;
 assert withQt5 -> qttools != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "phonon-${if withQt5 then "qt5" else "qt4"}-${v}";
 
   meta = {

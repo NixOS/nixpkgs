@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "iannix";
   version = "2016-01-31";
   src = fetchFromGitHub {

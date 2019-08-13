@@ -3,7 +3,7 @@
  libpulseaudio, libxml2, libxslt, libGLU_combined, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "viber";
   version = "7.0.0.1035";
 

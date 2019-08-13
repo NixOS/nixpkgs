@@ -7,7 +7,7 @@ let
 
 in
 
-rec {
+{
 
   /* Get the major version string from a string.
 

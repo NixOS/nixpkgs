@@ -3,7 +3,7 @@
 let
   version = "2018-08-03";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "purple-matrix-unstable";
   inherit version;
 

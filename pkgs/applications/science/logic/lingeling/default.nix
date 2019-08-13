@@ -2,7 +2,7 @@
 , aiger
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lingeling";
   # This is the version used in satcomp2018, which was
   # relicensed, and also known as version 'bcj'

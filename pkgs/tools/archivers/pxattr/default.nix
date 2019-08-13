@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gcc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pxattr-2.1.0";
 
   src = fetchurl {

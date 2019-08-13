@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stabber-unstable";
   version = "2016-11-09";
 

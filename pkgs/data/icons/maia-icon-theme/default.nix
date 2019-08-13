@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitLab, cmake, extra-cmake-modules, gtk3, kdeFrameworks, hicolor-icon-theme }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "maia-icon-theme";
   version = "2018-02-24";
 

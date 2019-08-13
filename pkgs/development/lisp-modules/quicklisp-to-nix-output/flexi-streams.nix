@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''flexi-streams'';
   version = ''20190107-git'';
 

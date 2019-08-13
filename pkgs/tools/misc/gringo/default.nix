@@ -7,7 +7,7 @@ let
   version = "4.5.4";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gringo";
   inherit version;
 

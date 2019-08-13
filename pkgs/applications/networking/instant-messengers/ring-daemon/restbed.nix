@@ -6,7 +6,7 @@
 , patches
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "restbed";
   version = "2016-09-15";
 
