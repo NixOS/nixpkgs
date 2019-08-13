@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, config,
+  mkDerivation, lib, config, fetchpatch,
 
   extra-cmake-modules, kdoctools,
 
@@ -26,6 +26,14 @@ mkDerivation {
       [ gpl2 lgpl3 ] ++ lib.optional unfreeEnableUnrar unfree;
     maintainers = [ lib.maintainers.ttuegel ];
   };
+
+  patches = [
+    # This patch should be backported in 19.04.4 KDE applications
+    (fetchpatch {
+      url = "https://cgit.kde.org/ark.git/patch/?id=7065c5390c78c2b18807721490f19c62761220e5";
+      sha256 = "0sipw5z60gk6l025rk4xsbc10n3bvv9743f4cbvf6hyy4mbm4p1m";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
