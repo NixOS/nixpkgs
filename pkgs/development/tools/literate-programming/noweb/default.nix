@@ -23,6 +23,8 @@ let noweb = stdenv.mkDerivation rec {
   makeFlags = stdenv.lib.optionals (!isNull icon-lang) [
     "LIBSRC=icon"
     "ICONC=icont"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "CC=clang"
   ];
 
   installFlags = [
