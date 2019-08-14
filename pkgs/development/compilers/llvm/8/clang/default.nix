@@ -47,6 +47,8 @@ let
       # Backport for the `--unwindlib=[libgcc|compiler-rt]` flag, which is
       # needed for our bootstrapping to not interfere with C.
       ./unwindlib.patch
+      # https://reviews.llvm.org/D51899
+      ./compiler-rt-baremetal.patch
     ];
 
     postPatch = ''
