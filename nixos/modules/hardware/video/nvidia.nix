@@ -125,8 +125,7 @@ in
       }
 
       {
-        assertion = !syncCfg.enable ||
-          (pCfg.nvidiaBusId != "" && pCfg.intelBusId != "");
+        assertion = syncCfg.enable -> pCfg.nvidiaBusId != "" && pCfg.intelBusId != "";
         message = ''
           When NVIDIA Optimus via PRIME is enabled, the GPU bus IDs must configured.
         '';
@@ -145,9 +144,17 @@ in
     # - Configure the display manager to run specific `xrandr` commands which will
     #   configure/enable displays connected to the Intel GPU.
 
-    services.xserver.drivers = singleton {
+    services.xserver.drivers = optional syncCfg.enable {
+      name = "modesetting";
+      display = false;
+      deviceSection = ''
+        BusID "${pCfg.intelBusId}"
+        Option "AccelMethod" "none"
+      '';
+    } ++ singleton {
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
+      display = true;
       deviceSection = optionalString syncCfg.enable
         ''
           BusID "${pCfg.nvidiaBusId}"
@@ -160,19 +167,9 @@ in
         '';
     };
 
-    services.xserver.extraConfig = optionalString syncCfg.enable
-      ''
-        Section "Device"
-          Identifier "nvidia-optimus-intel"
-          Driver "modesetting"
-          BusID  "${pCfg.intelBusId}"
-          Option "AccelMethod" "none"
-        EndSection
-      '';
-    services.xserver.serverLayoutSection = optionalString syncCfg.enable
-      ''
-        Inactive "nvidia-optimus-intel"
-      '';
+    services.xserver.serverLayoutSection = optionalString syncCfg.enable ''
+      Inactive "Device-modesetting[0]"
+    '';
 
     services.xserver.displayManager.setupCommands = optionalString syncCfg.enable ''
       # Added by nvidia configuration module for Optimus/PRIME.
