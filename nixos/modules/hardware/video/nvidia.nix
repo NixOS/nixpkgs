@@ -39,8 +39,8 @@ in
 
 {
   options = {
-    hardware.nvidia.modesetting.enable = lib.mkOption {
-      type = lib.types.bool;
+    hardware.nvidia.modesetting.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Enable kernel modesetting when using the NVIDIA proprietary driver.
@@ -52,8 +52,8 @@ in
       '';
     };
 
-    hardware.nvidia.optimus_prime.enable = lib.mkOption {
-      type = lib.types.bool;
+    hardware.nvidia.optimus_prime.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Enable NVIDIA Optimus support using the NVIDIA proprietary driver via PRIME.
@@ -79,16 +79,16 @@ in
       '';
     };
 
-    hardware.nvidia.optimus_prime.allowExternalGpu = lib.mkOption {
-      type = lib.types.bool;
+    hardware.nvidia.optimus_prime.allowExternalGpu = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Configure X to allow external NVIDIA GPUs when using optimus.
       '';
     };
 
-    hardware.nvidia.optimus_prime.nvidiaBusId = lib.mkOption {
-      type = lib.types.str;
+    hardware.nvidia.optimus_prime.nvidiaBusId = mkOption {
+      type = types.str;
       default = "";
       example = "PCI:1:0:0";
       description = ''
@@ -97,8 +97,8 @@ in
       '';
     };
 
-    hardware.nvidia.optimus_prime.intelBusId = lib.mkOption {
-      type = lib.types.str;
+    hardware.nvidia.optimus_prime.intelBusId = mkOption {
+      type = types.str;
       default = "";
       example = "PCI:0:2:0";
       description = ''
@@ -179,7 +179,7 @@ in
     hardware.opengl.package32 = nvidia_libs32;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
-      ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
+      ++ filter (p: p != null) [ nvidia_x11.persistenced ];
 
     systemd.tmpfiles.rules = optional config.virtualisation.docker.enableNvidia
         "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
@@ -190,7 +190,7 @@ in
 
     # nvidia-uvm is required by CUDA applications.
     boot.kernelModules = [ "nvidia-uvm" ] ++
-      lib.optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
+      optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
 
     # If requested enable modesetting via kernel parameter.
     boot.kernelParams = optional cfg.modesetting.enable "nvidia-drm.modeset=1";
