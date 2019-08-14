@@ -1,45 +1,108 @@
-From f6a978f024d01202f954483423af1b2d5d5159a6 Mon Sep 17 00:00:00 2001
-From: Yegor Timoshenko <yegortimoshenko@riseup.net>
-Date: Fri, 28 Sep 2018 03:27:04 +0000
-Subject: [PATCH] If root is in Nix store, set ETag to its path hash
-
----
- src/http/ngx_http_core_module.c | 56 +++++++++++++++++++++++++++++----
- 1 file changed, 50 insertions(+), 6 deletions(-)
-
+diff --git a/src/http/modules/ngx_http_flv_module.c b/src/http/modules/ngx_http_flv_module.c
+index 7b72fae0..1ef95fe9 100644
+--- a/src/http/modules/ngx_http_flv_module.c
++++ b/src/http/modules/ngx_http_flv_module.c
+@@ -194,7 +194,7 @@ ngx_http_flv_handler(ngx_http_request_t *r)
+     r->headers_out.content_length_n = len;
+     r->headers_out.last_modified_time = of.mtime;
+ 
+-    if (ngx_http_set_etag(r) != NGX_OK) {
++    if (ngx_http_set_etag_p(r, &path) != NGX_OK) {
+         return NGX_HTTP_INTERNAL_SERVER_ERROR;
+     }
+ 
+diff --git a/src/http/modules/ngx_http_gzip_static_module.c b/src/http/modules/ngx_http_gzip_static_module.c
+index 7652a9af..b5d1721f 100644
+--- a/src/http/modules/ngx_http_gzip_static_module.c
++++ b/src/http/modules/ngx_http_gzip_static_module.c
+@@ -228,7 +228,7 @@ ngx_http_gzip_static_handler(ngx_http_request_t *r)
+     r->headers_out.content_length_n = of.size;
+     r->headers_out.last_modified_time = of.mtime;
+ 
+-    if (ngx_http_set_etag(r) != NGX_OK) {
++    if (ngx_http_set_etag_p(r, &path) != NGX_OK) {
+         return NGX_HTTP_INTERNAL_SERVER_ERROR;
+     }
+ 
+diff --git a/src/http/modules/ngx_http_mp4_module.c b/src/http/modules/ngx_http_mp4_module.c
+index 618bf787..6bcaa5b8 100644
+--- a/src/http/modules/ngx_http_mp4_module.c
++++ b/src/http/modules/ngx_http_mp4_module.c
+@@ -634,7 +634,7 @@ ngx_http_mp4_handler(ngx_http_request_t *r)
+     r->headers_out.status = NGX_HTTP_OK;
+     r->headers_out.last_modified_time = of.mtime;
+ 
+-    if (ngx_http_set_etag(r) != NGX_OK) {
++    if (ngx_http_set_etag_p(r, &path) != NGX_OK) {
+         return NGX_HTTP_INTERNAL_SERVER_ERROR;
+     }
+ 
+diff --git a/src/http/modules/ngx_http_static_module.c b/src/http/modules/ngx_http_static_module.c
+index 0e16c05a..0015f78c 100644
+--- a/src/http/modules/ngx_http_static_module.c
++++ b/src/http/modules/ngx_http_static_module.c
+@@ -218,7 +218,7 @@ ngx_http_static_handler(ngx_http_request_t *r)
+     r->headers_out.content_length_n = of.size;
+     r->headers_out.last_modified_time = of.mtime;
+ 
+-    if (ngx_http_set_etag(r) != NGX_OK) {
++    if (ngx_http_set_etag_p(r, &path) != NGX_OK) {
+         return NGX_HTTP_INTERNAL_SERVER_ERROR;
+     }
+ 
 diff --git a/src/http/ngx_http_core_module.c b/src/http/ngx_http_core_module.c
-index c57ec00c..b7992de2 100644
+index cb49ef74..3ef39380 100644
 --- a/src/http/ngx_http_core_module.c
 +++ b/src/http/ngx_http_core_module.c
-@@ -1583,6 +1583,7 @@ ngx_http_set_etag(ngx_http_request_t *r)
+@@ -1577,37 +1577,88 @@ ngx_http_set_exten(ngx_http_request_t *r)
+     return;
+ }
+ 
+-
+ ngx_int_t
+ ngx_http_set_etag(ngx_http_request_t *r)
++{
++    return ngx_http_set_etag_p(r, NULL);
++}
++
++ngx_int_t
++ngx_http_set_etag_p(ngx_http_request_t *r, ngx_str_t *path)
  {
      ngx_table_elt_t           *etag;
      ngx_http_core_loc_conf_t  *clcf;
-+    u_char                    *real, *ptr1, *ptr2;
++    u_char                    *real = NULL, *ptr1, *ptr2;
  
      clcf = ngx_http_get_module_loc_conf(r, ngx_http_core_module);
  
-@@ -1598,16 +1599,61 @@ ngx_http_set_etag(ngx_http_request_t *r)
+     if (!clcf->etag) {
+         return NGX_OK;
+     }
++    if (r->headers_out.last_modified_time == 1 && path != NULL) {
++        real = ngx_realpath(path->data, NULL);
++
++        if (real == NULL) {
++            return NGX_OK;
++        }
++    }
+ 
+     etag = ngx_list_push(&r->headers_out.headers);
+     if (etag == NULL) {
++        ngx_free(real);
+         return NGX_ERROR;
+     }
+ 
      etag->hash = 1;
      ngx_str_set(&etag->key, "ETag");
  
 -    etag->value.data = ngx_pnalloc(r->pool, NGX_OFF_T_LEN + NGX_TIME_T_LEN + 3);
 -    if (etag->value.data == NULL) {
-+    real = ngx_realpath(clcf->root.data, NULL);
+-        etag->hash = 0;
+-        return NGX_ERROR;
+-    }
++    #define NIX_STORE_DIR "/nix/store"
++    #define NIX_STORE_LEN 10
 +
-+    if (real == NULL) {
-         etag->hash = 0;
-         return NGX_ERROR;
-     }
- 
--    etag->value.len = ngx_sprintf(etag->value.data, "\"%xT-%xO\"",
--                                  r->headers_out.last_modified_time,
--                                  r->headers_out.content_length_n)
--                      - etag->value.data;
-+    #define NIX_STORE_DIR "@nixStoreDir@"
-+    #define NIX_STORE_LEN @nixStoreDirLen@
-+
-+    if (r->headers_out.last_modified_time == 1
++    if (real != NULL
 +        && !ngx_strncmp(real, NIX_STORE_DIR, NIX_STORE_LEN)
 +        && real[NIX_STORE_LEN] == '/'
 +        && real[NIX_STORE_LEN + 1] != '\0')
@@ -48,7 +111,11 @@ index c57ec00c..b7992de2 100644
 +        *ptr1 = '"';
 +
 +        ptr2 = (u_char *) ngx_strchr(ptr1, '-');
-+
+ 
+-    etag->value.len = ngx_sprintf(etag->value.data, "\"%xT-%xO\"",
+-                                  r->headers_out.last_modified_time,
+-                                  r->headers_out.content_length_n)
+-                      - etag->value.data;
 +        if (ptr2 == NULL) {
 +            ngx_free(real);
 +            etag->hash = 0;
@@ -72,8 +139,8 @@ index c57ec00c..b7992de2 100644
 +        etag->value.data = ngx_pnalloc(r->pool, NGX_OFF_T_LEN + NGX_TIME_T_LEN + 3);
 +
 +        if (etag->value.data == NULL) {
-+            ngx_free(real);
 +            etag->hash = 0;
++            if (real != NULL) ngx_free(real);
 +            return NGX_ERROR;
 +        }
 +
@@ -82,11 +149,19 @@ index c57ec00c..b7992de2 100644
 +                                      r->headers_out.content_length_n)
 +                          - etag->value.data;
 +    }
-+
-+    ngx_free(real);
++    if (real != NULL) ngx_free(real);
  
      r->headers_out.etag = etag;
  
--- 
-2.19.0
-
+diff --git a/src/http/ngx_http_core_module.h b/src/http/ngx_http_core_module.h
+index 85f6d66d..daeaa6d0 100644
+--- a/src/http/ngx_http_core_module.h
++++ b/src/http/ngx_http_core_module.h
+@@ -486,6 +486,7 @@ void *ngx_http_test_content_type(ngx_http_request_t *r, ngx_hash_t *types_hash);
+ ngx_int_t ngx_http_set_content_type(ngx_http_request_t *r);
+ void ngx_http_set_exten(ngx_http_request_t *r);
+ ngx_int_t ngx_http_set_etag(ngx_http_request_t *r);
++ngx_int_t ngx_http_set_etag_p(ngx_http_request_t *r, ngx_str_t *path);
+ void ngx_http_weak_etag(ngx_http_request_t *r);
+ ngx_int_t ngx_http_send_response(ngx_http_request_t *r, ngx_uint_t status,
+     ngx_str_t *ct, ngx_http_complex_value_t *cv);
