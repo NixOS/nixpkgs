@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://looking-glass.hostfission.com/;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pneumaticat ];
+    maintainers = [ maintainers.alexbakker ];
     platforms = [ "x86_64-linux" ];
   };
 }
