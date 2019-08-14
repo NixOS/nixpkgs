@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages }:
+{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages, windows }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
@@ -59,8 +59,8 @@ stdenv.mkDerivation (args // {
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = [ cargo rustc git cacert ] ++ nativeBuildInputs;
-  inherit buildInputs;
+  nativeBuildInputs = nativeBuildInputs ++ [ cacert git cargo rustc ];
+  buildInputs = buildInputs ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   patches = cargoPatches ++ patches;
 
