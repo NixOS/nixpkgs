@@ -34,10 +34,18 @@ let
   enabled = nvidia_x11 != null;
 
   cfg = config.hardware.nvidia;
-  optimusCfg = cfg.optimus_prime;
+  syncCfg = cfg.prime.sync;
 in
 
 {
+  imports =
+    [
+      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "enable" ] [ "hardware" "nvidia" "prime" "sync" "enable" ])
+      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "allowExternalGpu" ] [ "hardware" "nvidia" "prime" "sync" "allowExternalGpu" ])
+      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "nvidiaBusId" ] [ "hardware" "nvidia" "prime" "sync" "nvidiaBusId" ])
+      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "intelBusId" ] [ "hardware" "nvidia" "prime" "sync" "intelBusId" ])
+    ];
+
   options = {
     hardware.nvidia.modesetting.enable = mkOption {
       type = types.bool;
@@ -46,13 +54,13 @@ in
         Enable kernel modesetting when using the NVIDIA proprietary driver.
 
         Enabling this fixes screen tearing when using Optimus via PRIME (see
-        <option>hardware.nvidia.optimus_prime.enable</option>. This is not enabled
+        <option>hardware.nvidia.prime.sync.enable</option>. This is not enabled
         by default because it is not officially supported by NVIDIA and would not
         work with SLI.
       '';
     };
 
-    hardware.nvidia.optimus_prime.enable = mkOption {
+    hardware.nvidia.prime.sync.enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -66,8 +74,8 @@ in
         be the only driver there.
 
         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
-        specified (<option>hardware.nvidia.optimus_prime.nvidiaBusId</option> and
-        <option>hardware.nvidia.optimus_prime.intelBusId</option>).
+        specified (<option>hardware.nvidia.prime.sync.nvidiaBusId</option> and
+        <option>hardware.nvidia.prime.sync.intelBusId</option>).
 
         If you enable this, you may want to also enable kernel modesetting for the
         NVIDIA driver (<option>hardware.nvidia.modesetting.enable</option>) in order
@@ -79,7 +87,7 @@ in
       '';
     };
 
-    hardware.nvidia.optimus_prime.allowExternalGpu = mkOption {
+    hardware.nvidia.prime.sync.allowExternalGpu = mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -87,7 +95,7 @@ in
       '';
     };
 
-    hardware.nvidia.optimus_prime.nvidiaBusId = mkOption {
+    hardware.nvidia.prime.sync.nvidiaBusId = mkOption {
       type = types.str;
       default = "";
       example = "PCI:1:0:0";
@@ -97,7 +105,7 @@ in
       '';
     };
 
-    hardware.nvidia.optimus_prime.intelBusId = mkOption {
+    hardware.nvidia.prime.sync.intelBusId = mkOption {
       type = types.str;
       default = "";
       example = "PCI:0:2:0";
@@ -116,8 +124,8 @@ in
       }
 
       {
-        assertion = !optimusCfg.enable ||
-          (optimusCfg.nvidiaBusId != "" && optimusCfg.intelBusId != "");
+        assertion = !syncCfg.enable ||
+          (syncCfg.nvidiaBusId != "" && syncCfg.intelBusId != "");
         message = ''
           When NVIDIA Optimus via PRIME is enabled, the GPU bus IDs must configured.
         '';
@@ -139,33 +147,33 @@ in
     services.xserver.drivers = singleton {
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
-      deviceSection = optionalString optimusCfg.enable
+      deviceSection = optionalString syncCfg.enable
         ''
-          BusID "${optimusCfg.nvidiaBusId}"
-          ${optionalString optimusCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
+          BusID "${syncCfg.nvidiaBusId}"
+          ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
         '';
       screenSection =
         ''
           Option "RandRRotation" "on"
-          ${optionalString optimusCfg.enable "Option \"AllowEmptyInitialConfiguration\""}
+          ${optionalString syncCfg.enable "Option \"AllowEmptyInitialConfiguration\""}
         '';
     };
 
-    services.xserver.extraConfig = optionalString optimusCfg.enable
+    services.xserver.extraConfig = optionalString syncCfg.enable
       ''
         Section "Device"
           Identifier "nvidia-optimus-intel"
           Driver "modesetting"
-          BusID  "${optimusCfg.intelBusId}"
+          BusID  "${syncCfg.intelBusId}"
           Option "AccelMethod" "none"
         EndSection
       '';
-    services.xserver.serverLayoutSection = optionalString optimusCfg.enable
+    services.xserver.serverLayoutSection = optionalString syncCfg.enable
       ''
         Inactive "nvidia-optimus-intel"
       '';
 
-    services.xserver.displayManager.setupCommands = optionalString optimusCfg.enable ''
+    services.xserver.displayManager.setupCommands = optionalString syncCfg.enable ''
       # Added by nvidia configuration module for Optimus/PRIME.
       ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource modesetting NVIDIA-0
       ${pkgs.xorg.xrandr}/bin/xrandr --auto
