@@ -42,6 +42,12 @@
        set up binfmt interpreters for each of those listed systems.
      </para>
    </listitem>
+   <listitem>
+     <para>
+     The installer now uses a less privileged <literal>nixos</literal> user whereas before we logged in as root.
+     To gain root privileges use <literal>sudo -i</literal> without a password.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
