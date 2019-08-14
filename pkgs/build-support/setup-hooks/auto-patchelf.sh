@@ -98,27 +98,37 @@ findDependency() {
     return 1
 }
 
+patchElfInterpreter() {
+    local toPatch=$1
+    local paths=( \
+        "$NIX_CC/nix-support/dynamic-linker" \
+        "$NIX_CC/nix-support/dynamic-linker-m32" \
+    )
+
+    echo "searching an '$(getSoArch "$toPatch")' interpreter for $toPatch" >&2
+    for f in "${paths[@]}"; do
+        [ -f "$f" -a -r "$f" ] || continue
+        local interpreter=$(< "$f")
+
+        [ -n "$interpreter" -a -f "$interpreter" ] || continue
+        [ "$(getSoArch "$toPatch")" = $(getSoArch "$interpreter") ] || continue
+
+        echo "found an '$(getSoArch "$toPatch")' interpreter at '$interpreter'" >&2
+        patchelf --set-interpreter "$interpreter" "$toPatch"
+        return
+    done
+
+    echo "error: no interpreter found for arch $(getSoArch "$toPatch") needed by '$toPatch'" >&2
+    false
+}
+
 autoPatchelfFile() {
     local dep rpath="" toPatch="$1"
 
     if isExecutable "$toPatch"; then
         # Find a suitable interpreter
-        echo "searching an interpreter for $toPatch"
-        local interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
-        if [ "$(getSoArch "$toPatch")" != $(getSoArch "$interpreter") ]; then
-            # try to find another interpreter
-            local interpreter32="$(< "$NIX_CC/nix-support/dynamic-linker-m32")"
-            if [ -n "$interpreter32" ]
-            && [ "$(getSoArch "$toPatch")" = "$(getSoArch "$interpreter32")" ]; then
-                interpreter=${interpreter32}
-            else
-                echo "No interpreter found for arch $(getSoArch "$toPatch") needed by '$toPatch'" >&2
-                false
-            fi
-        fi
-        echo "found interpreter '$interpreter' for '$toPatch'" >&2
+        patchElfInterpreter "$toPatch"
 
-        patchelf --set-interpreter "$interpreter" "$toPatch"
         if [ -n "$runtimeDependencies" ]; then
             for dep in $runtimeDependencies; do
                 rpath="$rpath${rpath:+:}$dep/lib"
