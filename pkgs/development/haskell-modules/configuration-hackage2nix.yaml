@@ -9408,7 +9408,6 @@ broken-packages:
   - task-distribution
   - taskell
   - tasty-auto
-  - tasty-discover
   - tasty-fail-fast
   - tasty-groundhog-converters
   - tasty-hedgehog-coverage
