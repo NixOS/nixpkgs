@@ -76,7 +76,7 @@ stdenv.mkDerivation {
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
   patches = stdenv.lib.singleton (substituteAll {
-    src = ./nix-etag-1.15.4.patch;
+    src = ./nix-etag-1.x.patch;
     preInstall = ''
       export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
     '';
