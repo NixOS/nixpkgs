@@ -23930,7 +23930,7 @@ in
         in
           nixosTesting.makeTest calledTest;
 
-  nixosOptionsDoc = attrs: 
+  nixosOptionsDoc = attrs:
     (import ../../nixos/lib/make-options-doc/default.nix)
     ({ inherit pkgs lib; } // attrs);
 
