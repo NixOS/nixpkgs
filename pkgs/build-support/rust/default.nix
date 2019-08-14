@@ -79,6 +79,10 @@ in stdenv.mkDerivation (args // {
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
+
+    # https://github.com/NixOS/nixpkgs/issues/61618
+    export HOME=$(mktemp -d)
+
     mkdir -p .cargo
     cat >> .cargo/config <<'EOF'
     [target."${stdenv.buildPlatform.config}"]
