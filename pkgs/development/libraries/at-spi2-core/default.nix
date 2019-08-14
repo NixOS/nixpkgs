@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
 
+  # Provide dbus-daemon fallback when it is not already running when
+  # at-spi2-bus-launcher is executed. This allows us to avoid
+  # including the entire dbus closure in libraries linked with
+  # the at-spi2-core libraries.
+  mesonFlags = [ "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon" ];
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
