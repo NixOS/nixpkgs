@@ -50,6 +50,8 @@ in stdenv.mkDerivation {
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/third_party/asio-master/asio/include/asio/detail/config.hpp --replace ASIO_HAS_STD_EXPERIMENTAL_STRING_VIEW ASIO_HAS_STD_STRING_VIEW
 
+    substituteInPlace src/third_party/mozjs-45/extract/js/src/jsmath.cpp --replace 'defined(HAVE_SINCOS)' 0
+
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
