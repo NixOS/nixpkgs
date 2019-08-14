@@ -1,10 +1,12 @@
 { stdenv
+, lib
 , fetchgit
 , rustPlatform
 , openssl
 , pkgconfig
 , protobuf
 , rustup
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "13zcbhhdf4xakp37r920xzcb0prdk58jlph9f3hwlp8npmcws52p";
 
   nativeBuildInputs = [ pkgconfig protobuf rustup ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   PROTOC = "${protobuf}/bin/protoc";
 
