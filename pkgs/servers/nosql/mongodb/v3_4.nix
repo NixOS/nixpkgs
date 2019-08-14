@@ -1,7 +1,7 @@
-{ stdenv, callPackage, lib, sasl, boost, Security, CoreFoundation }:
+{ stdenv, callPackage, lib, sasl, boost, Security, CoreFoundation, cctools }:
 
 let
-  buildMongoDB = callPackage ./mongodb.nix { inherit sasl; inherit boost; inherit Security; inherit CoreFoundation; };
+  buildMongoDB = callPackage ./mongodb.nix { inherit sasl; inherit boost; inherit Security; inherit CoreFoundation; inherit cctools; };
 in
   buildMongoDB {
     version = "3.4.22";
