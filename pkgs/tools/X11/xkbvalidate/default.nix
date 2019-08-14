@@ -11,5 +11,5 @@ runCommandCC "xkbvalidate" {
 } ''
   mkdir -p "$out/bin"
   $CC -std=c11 -Wall -pedantic -lxkbcommon ${./xkbvalidate.c} \
-    -o "$out/bin/validate"
+    -o "$out/bin/xkbvalidate"
 ''
