@@ -9921,6 +9921,8 @@ in
 
   spoofer-gui = callPackage ../tools/networking/spoofer { withGUI = true; };
 
+  spooles = callPackage ../development/libraries/science/math/spooles {};
+
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
@@ -17390,6 +17392,8 @@ in
 
   calcurse = callPackage ../applications/misc/calcurse { };
 
+  calculix = callPackage ../applications/science/math/calculix {};
+
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
@@ -23932,7 +23936,7 @@ in
         in
           nixosTesting.makeTest calledTest;
 
-  nixosOptionsDoc = attrs: 
+  nixosOptionsDoc = attrs:
     (import ../../nixos/lib/make-options-doc/default.nix)
     ({ inherit pkgs lib; } // attrs);
 
