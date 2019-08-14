@@ -1,6 +1,6 @@
-{ lib, buildDunePackage, fetchurl, ocaml-migrate-parsetree }:
+{ lib, buildDunePackage, fetchurl, ocaml, ocaml-migrate-parsetree }:
 
-buildDunePackage rec {
+buildDunePackage (rec {
 	pname = "ppxfind";
 	version = "1.3";
 	src = fetchurl {
@@ -18,4 +18,8 @@ buildDunePackage rec {
 		license = lib.licenses.bsd3;
 		maintainers = [ lib.maintainers.vbgl ];
 	};
-}
+} // (
+if lib.versions.majorMinor ocaml.version == "4.04" then {
+  dontStrip = true;
+} else {}
+))
