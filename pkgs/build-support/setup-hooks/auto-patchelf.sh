@@ -101,8 +101,22 @@ findDependency() {
 autoPatchelfFile() {
     local dep rpath="" toPatch="$1"
 
-    local interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
     if isExecutable "$toPatch"; then
+        # Find a suitable interpreter
+        echo "searching an interpreted for $toPatch"
+        local interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
+        if [ "$(getSoArch "$toPatch")" != $(getSoArch "$interpreter") ]; then
+            # try to find another interpreter
+            local interpreter32="$(< "$NIX_CC/nix-support/dynamic-linker-m32")"
+            if [ -n $interpreter32 -a "$(getSoArch "$toPatch")" = $(getSoArch "$interpreter32") ]; then
+                interpreter=${interpreter32}
+            else
+                echo "No interpreter found for arch $(getSoArch "$toPatch") needed by '$dep'" >&2
+                false
+            fi
+        fi
+        echo "found interpreter '$interpreter' for '$toPatch'" >&2
+
         patchelf --set-interpreter "$interpreter" "$toPatch"
         if [ -n "$runtimeDependencies" ]; then
             for dep in $runtimeDependencies; do
