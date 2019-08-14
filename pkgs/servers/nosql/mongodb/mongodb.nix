@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy, zlib,
-  libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, libtool, curl
+  libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, libtool, curl, CoreFoundation
 }:
 
 # Note:
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
   buildInputs = [
     sasl boost gperftools pcre-cpp snappy
     zlib libyamlcpp sasl openssl.dev openssl.out libpcap python curl
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security libtool ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security libtool CoreFoundation ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
@@ -67,7 +67,7 @@ in stdenv.mkDerivation {
     "--release"
     "--ssl"
     #"--rocksdb" # Don't have this packaged yet
-    "--wiredtiger=${if stdenv.is64bit then "on" else "off"}"
+    "--wiredtiger=on"
     "--js-engine=mozjs"
     "--use-sasl-client"
     "--disable-warnings-as-errors"
@@ -79,6 +79,10 @@ in stdenv.mkDerivation {
     sconsFlags+=" CXX=$CXX"
   '' + optionalString stdenv.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
+  '' + optionalString stdenv.isDarwin ''
+    sconsFlags+=" CPPPATH=${openssl.dev}/include"
+  '' + optionalString stdenv.isDarwin ''
+    sconsFlags+=" LIBPATH=${openssl.out}/lib"
   '';
 
   preInstall = ''
