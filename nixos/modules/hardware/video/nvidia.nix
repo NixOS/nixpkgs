@@ -36,6 +36,8 @@ let
   cfg = config.hardware.nvidia;
   pCfg = cfg.prime;
   syncCfg = pCfg.sync;
+  offloadCfg = pCfg.offload;
+  primeEnabled = syncCfg.enable || offloadCfg.enable;
 in
 
 {
@@ -115,6 +117,18 @@ in
         Configure X to allow external NVIDIA GPUs when using optimus.
       '';
     };
+
+    hardware.nvidia.prime.offload.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable render offload support using the NVIDIA proprietary driver via PRIME.
+
+        If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
+        specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
+        <option>hardware.nvidia.prime.intelBusId</option>).
+      '';
+    };
   };
 
   config = mkIf enabled {
@@ -125,10 +139,18 @@ in
       }
 
       {
-        assertion = syncCfg.enable -> pCfg.nvidiaBusId != "" && pCfg.intelBusId != "";
+        assertion = primeEnabled -> pCfg.nvidiaBusId != "" && pCfg.intelBusId != "";
         message = ''
-          When NVIDIA Optimus via PRIME is enabled, the GPU bus IDs must configured.
+          When NVIDIA PRIME is enabled, the GPU bus IDs must configured.
         '';
+      }
+      {
+        assertion = offloadCfg.enable -> versionAtLeast nvidia_x11.version "435.21";
+        message = "NVIDIA PRIME render offload is currently only supported on versions >= 435.21.";
+      }
+      {
+        assertion = !(syncCfg.enable && offloadCfg.enable);
+        message = "Only one NVIDIA PRIME solution may be used at a time.";
       }
     ];
 
@@ -144,18 +166,20 @@ in
     # - Configure the display manager to run specific `xrandr` commands which will
     #   configure/enable displays connected to the Intel GPU.
 
-    services.xserver.drivers = optional syncCfg.enable {
+    services.xserver.useGlamor = mkDefault offloadCfg.enable;
+
+    services.xserver.drivers = optional primeEnabled {
       name = "modesetting";
-      display = false;
+      display = offloadCfg.enable;
       deviceSection = ''
         BusID "${pCfg.intelBusId}"
-        Option "AccelMethod" "none"
+        ${optionalString syncCfg.enable ''Option "AccelMethod" "none"''}
       '';
     } ++ singleton {
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
-      display = true;
-      deviceSection = optionalString syncCfg.enable
+      display = !offloadCfg.enable;
+      deviceSection = optionalString primeEnabled
         ''
           BusID "${pCfg.nvidiaBusId}"
           ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
@@ -169,6 +193,8 @@ in
 
     services.xserver.serverLayoutSection = optionalString syncCfg.enable ''
       Inactive "Device-modesetting[0]"
+    '' + optionalString offloadCfg.enable ''
+      Option "AllowNVIDIAGPUScreens"
     '';
 
     services.xserver.displayManager.setupCommands = optionalString syncCfg.enable ''
@@ -181,8 +207,10 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
-    hardware.opengl.package = nvidia_x11.out;
-    hardware.opengl.package32 = nvidia_libs32;
+    hardware.opengl.package = mkIf (!offloadCfg.enable) nvidia_x11.out;
+    hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_libs32;
+    hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
+    hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_libs32;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ filter (p: p != null) [ nvidia_x11.persistenced ];
@@ -199,7 +227,7 @@ in
       optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
 
     # If requested enable modesetting via kernel parameter.
-    boot.kernelParams = optional cfg.modesetting.enable "nvidia-drm.modeset=1";
+    boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1";
 
     # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
     services.udev.extraRules =
