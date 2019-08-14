@@ -10774,6 +10774,8 @@ in
 
   ghp-import = callPackage ../development/tools/ghp-import { };
 
+  ghcid = haskellPackages.ghcid.bin;
+
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/git2 {
