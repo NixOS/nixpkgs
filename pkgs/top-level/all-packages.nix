@@ -17390,6 +17390,8 @@ in
 
   calcurse = callPackage ../applications/misc/calcurse { };
 
+  calculix = callPackage ../applications/science/math/calculix {};
+
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
