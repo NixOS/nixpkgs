@@ -30,7 +30,7 @@ in
     nixpkgs.config.xorg.abiCompat = "1.19";
 
     services.xserver.drivers = singleton
-      { name = "amdgpu"; modules = [ package ]; };
+      { name = "amdgpu"; modules = [ package ]; display = true; };
 
     hardware.opengl.package = package;
     hardware.opengl.package32 = package32;
