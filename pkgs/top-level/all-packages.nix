@@ -23714,6 +23714,8 @@ in
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
+  utsushi = callPackage ../misc/drivers/utsushi { };
+
   idsk = callPackage ../tools/filesystems/idsk { };
 
   igraph = callPackage ../development/libraries/igraph { };
