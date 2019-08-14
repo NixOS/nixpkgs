@@ -426,4 +426,7 @@ in
     security.pam.services.cups = {};
 
   };
+
+  meta.maintainers = with lib.maintainers; [ matthewbauer ];
+
 }
