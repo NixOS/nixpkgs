@@ -103,15 +103,16 @@ autoPatchelfFile() {
 
     if isExecutable "$toPatch"; then
         # Find a suitable interpreter
-        echo "searching an interpreted for $toPatch"
+        echo "searching an interpreter for $toPatch"
         local interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
         if [ "$(getSoArch "$toPatch")" != $(getSoArch "$interpreter") ]; then
             # try to find another interpreter
             local interpreter32="$(< "$NIX_CC/nix-support/dynamic-linker-m32")"
-            if [ -n $interpreter32 -a "$(getSoArch "$toPatch")" = $(getSoArch "$interpreter32") ]; then
+            if [ -n "$interpreter32" ]
+            && [ "$(getSoArch "$toPatch")" = "$(getSoArch "$interpreter32")" ]; then
                 interpreter=${interpreter32}
             else
-                echo "No interpreter found for arch $(getSoArch "$toPatch") needed by '$dep'" >&2
+                echo "No interpreter found for arch $(getSoArch "$toPatch") needed by '$toPatch'" >&2
                 false
             fi
         fi
