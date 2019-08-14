@@ -519,6 +519,8 @@ in {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  emailthreads = callPackage ../development/python-modules/emailthreads { };
+
   email_validator = callPackage ../development/python-modules/email-validator { };
 
   ewmh = callPackage ../development/python-modules/ewmh { };
@@ -1014,6 +1016,8 @@ in {
 
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
+  pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
@@ -1271,6 +1275,8 @@ in {
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
+  aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
+
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
@@ -1342,7 +1348,11 @@ in {
 
   astor = callPackage ../development/python-modules/astor {};
 
+  asyncpg = callPackage ../development/python-modules/asyncpg { };
+
   asyncssh = callPackage ../development/python-modules/asyncssh { };
+
+  atpublic = callPackage ../development/python-modules/atpublic { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
@@ -2977,6 +2987,8 @@ in {
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
 
+  flake8-polyfill = callPackage ../development/python-modules/flake8-polyfill { };
+
   flaky = callPackage ../development/python-modules/flaky { };
 
   flask = callPackage ../development/python-modules/flask { };
@@ -4071,6 +4083,8 @@ in {
 
   pep8 = callPackage ../development/python-modules/pep8 { };
 
+  pep8-naming = callPackage ../development/python-modules/pep8-naming { };
+
   pep257 = callPackage ../development/python-modules/pep257 { };
 
   percol = callPackage ../development/python-modules/percol { };
@@ -4091,6 +4105,12 @@ in {
   pgsanity = callPackage ../development/python-modules/pgsanity { };
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
+
+  pgpy = callPackage ../development/python-modules/pgpy {
+    cryptography = self.cryptography.override {
+      openssl = pkgs.openssl_1_1;
+    };
+  };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
@@ -4837,6 +4857,8 @@ in {
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
+
+  sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
