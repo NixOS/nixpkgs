@@ -10,6 +10,6 @@ runCommandCC "xkbvalidate" {
   };
 } ''
   mkdir -p "$out/bin"
-  gcc -std=gnu11 -Wall -pedantic -lxkbcommon ${./xkbvalidate.c} \
+  $CC -std=gnu11 -Wall -pedantic -lxkbcommon ${./xkbvalidate.c} \
     -o "$out/bin/validate"
 ''
