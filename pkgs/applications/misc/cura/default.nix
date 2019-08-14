@@ -50,6 +50,7 @@ mkDerivation rec {
 
   postFixup = ''
     wrapPythonPrograms
+    wrapQtApp $out/bin/cura
   '';
 
   meta = with lib; {

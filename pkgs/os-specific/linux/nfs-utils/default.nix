@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3
+, python3, buildPackages
 }:
 
 let
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # put it in the "lib" output, and the headers in "dev"
   outputs = [ "out" "dev" "lib" "man" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig buildPackages.stdenv.cc ];
 
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2

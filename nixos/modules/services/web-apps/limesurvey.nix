@@ -14,7 +14,7 @@ let
 
   pkg = pkgs.limesurvey;
 
-  configType = with types; either (either (attrsOf configType) str) (either int bool) // {
+  configType = with types; oneOf [ (attrsOf configType) str int bool ] // {
     description = "limesurvey config type (str, int, bool or attribute set thereof)";
   };
 

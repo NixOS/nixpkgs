@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.redshift;
+  lcfg = config.location;
 
 in {
 
@@ -15,35 +16,6 @@ in {
       description = ''
         Enable Redshift to change your screen's colour temperature depending on
         the time of day.
-      '';
-    };
-
-    latitude = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = ''
-        Your current latitude, between
-        <literal>-90.0</literal> and <literal>90.0</literal>. Must be provided
-        along with longitude.
-      '';
-    };
-
-    longitude = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = ''
-        Your current longitude, between
-        between <literal>-180.0</literal> and <literal>180.0</literal>. Must be
-        provided along with latitude.
-      '';
-    };
-
-    provider = mkOption {
-      type = types.enum [ "manual" "geoclue2" ];
-      default = "manual";
-      description = ''
-        The location provider to use for determining your location. If set to
-        <literal>manual</literal> you must also provide latitude/longitude.
       '';
     };
 
@@ -106,33 +78,19 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = [ 
-      {
-        assertion = 
-          if cfg.provider == "manual"
-          then (cfg.latitude != null && cfg.longitude != null) 
-          else (cfg.latitude == null && cfg.longitude == null);
-        message = "Latitude and longitude must be provided together, and with provider set to null.";
-      }
-    ];
-
     # needed so that .desktop files are installed, which geoclue cares about
     environment.systemPackages = [ cfg.package ];
 
-    services.geoclue2 = mkIf (cfg.provider == "geoclue2") {
-      enable = true;
-      appConfig."redshift" = {
-        isAllowed = true;
-        isSystem = true;
-      };
+    services.geoclue2.appConfig."redshift" = {
+      isAllowed = true;
+      isSystem = true;
     };
 
-    systemd.user.services.redshift = 
+    systemd.user.services.redshift =
     let
-      providerString = 
-        if cfg.provider == "manual"
-        then "${cfg.latitude}:${cfg.longitude}"
-        else cfg.provider;
+      providerString = if lcfg.provider == "manual"
+        then "${toString lcfg.latitude}:${toString lcfg.longitude}"
+        else lcfg.provider;
     in
     {
       description = "Redshift colour temperature adjuster";

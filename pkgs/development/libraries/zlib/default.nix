@@ -1,5 +1,20 @@
 { stdenv
 , fetchurl
+# Regarding static/shared libaries, the current behaviour is:
+#
+# - static=true,  shared=true:  builds both and moves .a to the .static output;
+#                               in this case `pkg-config` auto detection will
+#                               not work if the .static output is given as
+#                               buildInputs to another package (#66461)
+# - static=true,  shared=false: builds .a only and leaves it in the main output
+# - static=false, shared=true:  builds shared only
+#
+# To get both `.a` and shared libraries in one output,
+# you currently have to use
+#   static=false, shared=true
+# and use
+#   .overrideAttrs (old: { dontDisableStatic = true; })
+# This is because by default, upstream zlib ./configure builds both.
 , static ? true
 , shared ? true
 }:
@@ -68,6 +83,8 @@ stdenv.mkDerivation (rec {
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "-f" "win32/Makefile.gcc"
   ] ++ stdenv.lib.optionals shared [
+    # Note that as of writing (zlib 1.2.11), this flag only has an effect
+    # for Windows as it is specific to `win32/Makefile.gcc`.
     "SHARED_MODE=1"
   ];
 

@@ -48,7 +48,7 @@ let
 
   runSh = writeScript "run.sh" ''
     #!${runtimeShell}
-    runtime_paths="${lib.concatStringsSep ":" ldPath}"
+    runtime_paths="/lib32:/lib64:${lib.concatStringsSep ":" ldPath}"
     if [ "$1" == "--print-steam-runtime-library-paths" ]; then
       echo "$runtime_paths"
       exit 0
@@ -83,6 +83,17 @@ in buildFHSUserEnv rec {
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
+    ## screeps dependencies
+    gnome3.gtk
+    dbus
+    zlib
+    glib
+    atk
+    cairo
+    freetype
+    gdk_pixbuf
+    pango
+    fontconfig
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {
       inherit runtimeOnly;
@@ -246,7 +257,7 @@ in buildFHSUserEnv rec {
         exit 1
       fi
       shift
-      ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}:$LD_LIBRARY_PATH"}
+      ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}:$LD_LIBRARY_PATH"}
       exec -- "$run" "$@"
     '';
   };

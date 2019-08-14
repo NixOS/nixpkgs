@@ -579,6 +579,8 @@ in {
 
   filemagic = callPackage ../development/python-modules/filemagic { };
 
+  fsspec = callPackage ../development/python-modules/fsspec { };
+
   fuse = callPackage ../development/python-modules/fuse-python {
     inherit (pkgs) fuse pkgconfig;
   };
@@ -984,6 +986,8 @@ in {
     inherit (pkgs) cmake qt5 llvmPackages;
   });
 
+  simplefix = callPackage ../development/python-modules/simplefix { };
+
   pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
     inherit (pkgs) cmake qt5;
   });
@@ -1157,6 +1161,8 @@ in {
   sslib = callPackage ../development/python-modules/sslib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
+
+  stm32loader = callPackage ../development/python-modules/stm32loader { };
 
   stumpy = callPackage ../development/python-modules/stumpy { };
 
@@ -1490,6 +1496,8 @@ in {
   });
 
   boltztrap2 = callPackage ../development/python-modules/boltztrap2 { };
+
+  boolean-py = callPackage ../development/python-modules/boolean-py { };
 
   bumps = callPackage ../development/python-modules/bumps {};
 
@@ -1924,12 +1932,6 @@ in {
   pytest = self.pytest_4;
 
   pytest_4 = callPackage ../development/python-modules/pytest {
-    # hypothesis tests require pytest that causes dependency cycle
-    hypothesis = self.hypothesis.override { doCheck = false; };
-  };
-
-  # Keep 3 because many test suites are not yet compatible with Pytest 4.
-  pytest_3 = callPackage ../development/python-modules/pytest/3.10.nix {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
@@ -2446,6 +2448,8 @@ in {
 
   libthumbor = callPackage ../development/python-modules/libthumbor { };
 
+  license-expression = callPackage ../development/python-modules/license-expression { };
+
   lightblue = callPackage ../development/python-modules/lightblue { };
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
@@ -2818,6 +2822,8 @@ in {
 
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
+  django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
+
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
   django-picklefield = callPackage ../development/python-modules/django-picklefield { };
@@ -3133,6 +3139,8 @@ in {
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
   gipc = callPackage ../development/python-modules/gipc { };
+
+  git-revise = callPackage ../development/python-modules/git-revise { };
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
@@ -4696,6 +4704,11 @@ in {
   s3transfer = callPackage ../development/python-modules/s3transfer { };
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
+
+  sequoia = disabledIf (isPyPy || !isPy3k) (toPythonModule (pkgs.sequoia.override {
+    pythonPackages = self;
+    pythonSupport = true;
+  }));
 
   safe = callPackage ../development/python-modules/safe { };
 

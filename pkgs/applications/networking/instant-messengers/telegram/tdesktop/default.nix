@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchsvn
+{ mkDerivation, lib, fetchFromGitHub, fetchsvn, fetchpatch
 , pkgconfig, pythonPackages, cmake, wrapGAppsHook, wrapQtAppsHook, gcc8
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
@@ -8,14 +8,14 @@ with lib;
 
 mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "1.7.14";
+  version = "1.8.0";
 
   # Telegram-Desktop with submodules
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "1bw804a9kffmn23wv0570wihbvfm7jy9cqmxlv196f4j7bw7zkv3";
+    sha256 = "09r62dra6gab8hiyzyysslgqkzswf8vwfkcixbcb0jk5la0m07yy";
     fetchSubmodules = true;
   };
 
@@ -23,8 +23,12 @@ mkDerivation rec {
   archPatches = fetchsvn {
     url = "svn://svn.archlinux.org/community/telegram-desktop/trunk";
     # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
-    rev = "487779";
-    sha256 = "0f09hvimb66xqksb2v0zc4ryshx7y7z0rafzjd99x37rpib9f3kq";
+    rev = "498563";
+    sha256 = "0g2y6impygqhfiqnyxc1ivxwl8j82q9qcnkqcjn6mwj3cisyxwnl";
+  };
+  privateHeadersPatch = fetchpatch {
+    url = "https://github.com/telegramdesktop/tdesktop/commit/b9d3ba621eb8af638af46c6b3cfd7a8330bf0dd5.patch";
+    sha256 = "1s5xvcp9dk0jfywssk8xfcsh7bk5xxif8xqnba0413lfx5rgvs5v";
   };
 
   patches = [
@@ -32,7 +36,6 @@ mkDerivation rec {
     "${archPatches}/no-gtk2.patch"
     # "${archPatches}/Use-system-wide-font.patch"
     "${archPatches}/tdesktop_lottie_animation_qtdebug.patch"
-    "${archPatches}/issue6219.patch"
   ];
 
   postPatch = ''
@@ -79,8 +82,11 @@ mkDerivation rec {
   CPPFLAGS = NIX_CFLAGS_COMPILE;
 
   preConfigure = ''
+    # Patches to revert:
     patch -R -Np1 -i "${archPatches}/demibold.patch"
+    patch -R -Np1 -i "${privateHeadersPatch}"
 
+    # Patches to apply:
     pushd "Telegram/ThirdParty/libtgvoip"
     patch -Np1 -i "${archPatches}/libtgvoip.patch"
     popd

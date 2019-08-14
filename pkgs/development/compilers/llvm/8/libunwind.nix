@@ -1,4 +1,4 @@
-{ stdenv, version, fetch, cmake, fetchpatch }:
+{ stdenv, version, fetch, cmake, fetchpatch, enableShared ? true }:
 
 stdenv.mkDerivation {
   name = "libunwind-${version}";
@@ -19,4 +19,6 @@ stdenv.mkDerivation {
   ];
 
   enableParallelBuilding = true;
+
+  cmakeFlags = stdenv.lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
 }

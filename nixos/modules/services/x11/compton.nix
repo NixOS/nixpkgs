@@ -215,7 +215,7 @@ in {
     };
 
     settings = let
-      configTypes = with types; either bool (either int (either float str));
+      configTypes = with types; oneOf [ bool int float str ];
       # types.loaOf converts lists to sets
       loaOf = t: with types; either (listOf t) (attrsOf t);
     in mkOption {
