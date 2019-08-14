@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, psmisc }:
 
 stdenv.mkDerivation rec {
   name = "tmpwatch-2.11";
@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     url = "https://fedorahosted.org/releases/t/m/tmpwatch/tmpwatch-2.11.tar.bz2";
     sha256 = "1m5859ngwx61l1i4s6fja2avf1hyv6w170by273w8nsin89825lk";
   };
+
+  configureFlags="--with-fuser=${psmisc}/bin/fuser";
 
   meta = with stdenv.lib; {
     homepage = https://fedorahosted.org/tmpwatch/;

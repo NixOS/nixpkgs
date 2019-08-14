@@ -146,6 +146,11 @@ stdenv.mkDerivation {
             sed -i mkspecs/common/linux.conf \
                 -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
                 -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
+          '' +
+        lib.optionalString (stdenv.hostPlatform.isx86_32 && stdenv.cc.isGNU)
+          ''
+            sed -i mkspecs/common/gcc-base-unix.conf \
+                -e "/^QMAKE_LFLAGS_SHLIB/ s/-shared/-shared -static-libgcc/"
           ''
     );
 

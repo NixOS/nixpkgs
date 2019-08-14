@@ -66,14 +66,6 @@
     email = "aaron@ajanse.me";
     github = "aaronjanse";
     name = "Aaron Janse";
-    keys = [
-      { longkeyid = "rsa2048/0x651BD4B37D75E234"; # Email only
-        fingerprint = "490F 5009 34E7 20BD 4C53  96C2 651B D4B3 7D75 E234";
-      }
-      { longkeyid = "rsa4096/0xBE6C92145BFF4A34"; # Git, etc
-        fingerprint = "CED9 6DF4 63D7 B86A 1C4B  1322 BE6C 9214 5BFF 4A34";
-      }
-    ];
   };
   aaronschif = {
     email = "aaronschif@gmail.com";
@@ -84,6 +76,15 @@
     email = "andreas@baldeau.net";
     github = "baldo";
     name = "Andreas Baldeau";
+  };
+  abbe = {
+    email = "ashish.is@lostca.se";
+    github = "wahjava";
+    name = "Ashish SHUKLA";
+    keys = [{
+      longkeyid = "rsa4096/0xC746CFA9E74FA4B0";
+      fingerprint = "F682 CDCC 39DC 0FEA E116  20B6 C746 CFA9 E74F A4B0";
+    }];
   };
   abbradar = {
     email = "ab@fmap.me";
@@ -1518,6 +1519,11 @@
     github = "liclac";
     name = "embr";
   };
+  emily = {
+    email = "nixpkgs@emily.moe";
+    github = "emilazy";
+    name = "Emily";
+  };
   ederoyd46 = {
     email = "matt@ederoyd.co.uk";
     github = "ederoyd46";
@@ -1762,6 +1768,11 @@
     email = "fahree@gmail.com";
     github = "fare";
     name = "Francois-Rene Rideau";
+  };
+  farlion = {
+    email = "florian.peter@gmx.at";
+    github = "workflow";
+    name = "Florian Peter";
   };
   fdns = {
     email = "fdns02@gmail.com";

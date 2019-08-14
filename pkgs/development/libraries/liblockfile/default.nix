@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   _name   = "liblockfile";
-  version = "1.14";
+  version = "1.15";
   name    = "${_name}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/libl/${_name}/${_name}_${version}.orig.tar.gz";
-    sha256 = "0q6hn78fnzr6lhisg85a948rmpsd9rx67skzx3vh9hnbx2ix8h5b";
+    sha256 = "04ml9isvdl72fbr1825x7jb680xp8aprdq4pag32ahyjqk909cmh";
   };
 
   preConfigure = ''

@@ -23,9 +23,8 @@ in
         XCURSOR_PATH = [ "$HOME/.icons" ];
       };
 
-    environment.profiles =
-      [ "$HOME/.nix-profile"
-        "/nix/var/nix/profiles/default"
+    environment.profiles = mkAfter
+      [ "/nix/var/nix/profiles/default"
         "/run/current-system/sw"
       ];
 

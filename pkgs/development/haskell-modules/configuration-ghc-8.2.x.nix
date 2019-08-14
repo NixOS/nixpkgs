@@ -39,9 +39,9 @@ self: super: {
 
   # These are now core libraries in GHC 8.4.x.
   mtl = self.mtl_2_2_2;
-  parsec = self.parsec_3_1_13_0;
+  parsec = self.parsec_3_1_14_0;
   stm = self.stm_2_5_0_0;
-  text = self.text_1_2_3_1;
+  text = self.text_1_2_4_0;
 
   # Build with the latest Cabal version, which works best albeit not perfectly.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_2_2_0_1; };
