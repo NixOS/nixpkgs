@@ -29,6 +29,11 @@ in
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ./dotnet
       patchelf --set-rpath "${rpath}" ./dotnet
       find -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
+
+      # apphost used by `dotnet tool install`
+      patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" sdk/*/AppHostTemplate/apphost
+      patchelf --set-rpath "${rpath}" sdk/*/AppHostTemplate/apphost
+
       echo -n "dotnet-sdk version: "
       ./dotnet --version
       runHook postBuild
