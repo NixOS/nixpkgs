@@ -9919,6 +9919,8 @@ in
 
   spoofer-gui = callPackage ../tools/networking/spoofer { withGUI = true; };
 
+  spooles = callPackage ../development/libraries/science/math/spooles {};
+
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
