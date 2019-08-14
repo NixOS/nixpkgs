@@ -6,8 +6,8 @@
 }:
 mkDerivation {
   pname = "super-user-spark";
-  version = "0.4.0.1";
-  sha256 = "0pxkvc1vjarh4p5rqnai6nlsqxv9as8jvqs2vpywl1525nsfyvy5";
+  version = "0.4.0.3";
+  sha256 = "0z2alc67p8nvvwaxxrgwhkwfki1iw7ycs3ay8kyfw0wh01d2cmgk";
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
@@ -24,6 +24,7 @@ mkDerivation {
   ];
   description = "Configure your dotfile deployment with a DSL";
   license = stdenv.lib.licenses.mit;
+  doCheck = false;
   jailbreak = true;
   homepage = https://github.com/NorfairKing/super-user-spark;
   maintainers = [ stdenv.lib.maintainers.badi ];
