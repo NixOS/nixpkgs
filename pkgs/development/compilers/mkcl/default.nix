@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, gmp, gcc }:
 
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "mkcl-${version}";
+  pname = "mkcl";
   version = "1.1.11";
 
   src = fetchFromGitHub {

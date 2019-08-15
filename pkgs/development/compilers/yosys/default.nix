@@ -7,7 +7,7 @@
 with builtins;
 
 stdenv.mkDerivation rec {
-  name = "yosys-${version}";
+  pname = "yosys";
   version = "2019.04.23";
 
   srcs = [

@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sdcc-${version}";
+  pname = "sdcc";
   version = "3.9.0";
 
   src = fetchurl {
