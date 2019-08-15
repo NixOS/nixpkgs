@@ -1,7 +1,7 @@
 {stdenv, fetchurl, fetchpatch, cmake, zlib, libxml2, eigen, python, cairo, pcre, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "openbabel-${version}";
+  pname = "openbabel";
   version = "2.4.1";
 
   src = fetchurl {

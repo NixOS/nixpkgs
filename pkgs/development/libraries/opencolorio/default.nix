@@ -3,7 +3,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "opencolorio-${version}";
+  pname = "opencolorio";
   version = "1.1.1";
 
   src = fetchFromGitHub {

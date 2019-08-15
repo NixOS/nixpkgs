@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "olm-${version}";
+  pname = "olm";
   version = "3.0.0";
 
   meta = {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "https://matrix.org/git/olm/snapshot/${name}.tar.gz";
+    url = "https://matrix.org/git/olm/snapshot/${pname}-${version}.tar.gz";
     sha256 = "1iivxjk458v9lhqgzp0c4k5azligsh9k3rk6irf9ssj29wzgjm2c";
   };
 

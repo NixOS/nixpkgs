@@ -9,7 +9,6 @@
 , withSage ? false # sage support
 }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "linbox";
   version = "1.6.3";
 
