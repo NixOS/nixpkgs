@@ -33,6 +33,21 @@
      PHP 7.1 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 19.09 release.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The binfmt module is now easier to use. Additional systems can
+       be added through <option>boot.binfmt.emulatedSystems</option>.
+       For instance, <literal>boot.binfmt.emulatedSystems = [
+       "wasm32-wasi" "x86_64-windows" "aarch64-linux" ];</literal> will
+       set up binfmt interpreters for each of those listed systems.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+     The installer now uses a less privileged <literal>nixos</literal> user whereas before we logged in as root.
+     To gain root privileges use <literal>sudo -i</literal> without a password.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -47,6 +62,13 @@
    The following new services were added since the last release:
   </para>
 
+  <itemizedlist>
+   <listitem>
+    <para>
+     <literal>./programs/dwm-status.nix</literal>
+    </para>
+   </listitem>
+  </itemizedlist>
  </section>
 
  <section xmlns="http://docbook.org/ns/docbook"
@@ -163,7 +185,8 @@
      Most of the httpd subservices packaged with NixOS have been replaced with
      full NixOS modules including LimeSurvey, WordPress, and Zabbix. These
      modules can be enabled using the <option>services.limesurvey.enable</option>,
-     <option>services.wordpress.enable</option>, and <option>services.zabbixWeb.enable</option> options.
+     <option>services.mediawiki.enable</option>, <option>services.wordpress.enable</option>,
+     and <option>services.zabbixWeb.enable</option> options.
     </para>
    </listitem>
    <listitem>
@@ -212,6 +235,33 @@
       Its metrics are differently structured and are incompatible to the old ones. For information about the metrics,
       have a look at the <link xlink:href="https://github.com/nginxinc/nginx-prometheus-exporter">official repo</link>.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Nodejs 8 is scheduled EOL under the lifetime of 19.09 and has been dropped.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       By default, prometheus exporters are now run with <literal>DynamicUser</literal> enabled.
+       Exporters that need a real user, now run under a seperate user and group which follow the pattern <literal>&lt;exporter-name&gt;-exporter</literal>, instead of the previous default <literal>nobody</literal> and <literal>nogroup</literal>.
+       Only some exporters are affected by the latter, namely the exporters <literal>dovecot</literal>, <literal>node</literal>, <literal>postfix</literal> and <literal>varnish</literal>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <literal>ibus-qt</literal> package is not installed by default anymore when <xref linkend="opt-i18n.inputMethod.enabled" /> is set to <literal>ibus</literal>.
+       If IBus support in Qt 4.x applications is required, add the <literal>ibus-qt</literal> package to your <xref linkend="opt-environment.systemPackages" /> manually.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The CUPS Printing service now uses socket-based activation by
+       default, only starting when needed. The previous behavior can
+       be restored by setting
+       <option>services.cups.startWhenNeeded</option> to
+       <literal>false</literal>.
+     </para>
    </listitem>
   </itemizedlist>
  </section>

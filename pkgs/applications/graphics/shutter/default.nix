@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg
+{ stdenv, fetchurl, perlPackages, makeWrapper, imagemagick, gdk-pixbuf, librsvg
 , hicolor-icon-theme, procps
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perlPackages.perl procps gdk_pixbuf librsvg ] ++ perlModules;
+  buildInputs = [ perlPackages.perl procps gdk-pixbuf librsvg ] ++ perlModules;
 
   installPhase = ''
     mkdir -p "$out"

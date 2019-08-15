@@ -1,7 +1,7 @@
 { abiCompat ? null,
   stdenv, makeWrapper, fetchurl, fetchpatch, buildPackages,
   automake, autoconf, gettext, libiconv, libtool, intltool,
-  freetype, tradcpp, fontconfig, meson, ninja,
+  freetype, tradcpp, fontconfig, meson, ninja, ed,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6,
@@ -422,6 +422,85 @@ self: super:
       mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
     '';
   });
+
+  # xkeyboardconfig variant extensible with custom layouts.
+  # See nixos/modules/services/x11/extra-layouts.nix
+  xkeyboardconfig_custom = { layouts ? { } }:
+  let
+    patchIn = name: layout:
+    with layout;
+    with lib;
+    ''
+        # install layout files
+        ${optionalString (compatFile   != null) "cp '${compatFile}'   'compat/${name}'"}
+        ${optionalString (geometryFile != null) "cp '${geometryFile}' 'geometry/${name}'"}
+        ${optionalString (keycodesFile != null) "cp '${keycodesFile}' 'keycodes/${name}'"}
+        ${optionalString (symbolsFile  != null) "cp '${symbolsFile}'  'symbols/${name}'"}
+        ${optionalString (typesFile    != null) "cp '${typesFile}'    'types/${name}'"}
+
+        # patch makefiles
+        for type in compat geometry keycodes symbols types; do
+          if ! test -f "$type/${name}"; then
+            continue
+          fi
+          test "$type" = geometry && type_name=geom || type_name=$type
+          ${ed}/bin/ed -v $type/Makefile.am <<EOF
+        /''${type_name}_DATA =
+        a
+        ${name} \\
+        .
+        w
+        EOF
+          ${ed}/bin/ed -v $type/Makefile.in <<EOF
+        /''${type_name}_DATA =
+        a
+        ${name} \\
+        .
+        w
+        EOF
+        done
+
+        # add model description
+        ${ed}/bin/ed -v rules/base.xml <<EOF
+        /<\/modelList>
+        -
+        a
+        <model>
+          <configItem>
+            <name>${name}</name>
+            <_description>${layout.description}</_description>
+            <vendor>${layout.description}</vendor>
+          </configItem>
+        </model>
+        .
+        w
+        EOF
+
+        # add layout description
+        ${ed}/bin/ed -v rules/base.xml <<EOF
+        /<\/layoutList>
+        -
+        a
+        <layout>
+          <configItem>
+            <name>${name}</name>
+            <_shortDescription>${name}</_shortDescription>
+            <_description>${layout.description}</_description>
+            <languageList>
+              ${concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
+            </languageList>
+          </configItem>
+          <variantList/>
+        </layout>
+        .
+        w
+        EOF
+    '';
+  in
+    self.xkeyboardconfig.overrideAttrs (old: {
+      buildInputs = old.buildInputs ++ [ automake ];
+      postPatch   = with lib; concatStrings (mapAttrsToList patchIn layouts);
+    });
 
   xload = super.xload.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ gettext ];

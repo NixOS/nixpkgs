@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, xorg, gdk_pixbuf, pulseaudio,
+{ stdenv, fetchFromGitHub, glib, xorg, gdk-pixbuf, pulseaudio,
   mobile-broadband-provider-info, deepin }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     xorg.libX11
-    gdk_pixbuf
+    gdk-pixbuf
     pulseaudio
     mobile-broadband-provider-info
   ];

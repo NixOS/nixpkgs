@@ -263,12 +263,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2019.1.4"; /* updated by script */
+    version = "2019.2.1"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "0zjcn71fgngkvsixgimzm5afwjbd8zf14zzm6barap4pwp5xx0hb"; /* updated by script */
+      sha256 = "0va5dcvjxq7mlkz0di5zl1ra5gv6cls3wy40fvkpm2vlirg0m31s"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -367,12 +367,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2019.1.2"; /* updated by script */
+    version = "2019.2"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "1zhci8nkywv66bwc6hbyh4h3x61qhv2fbmfb5gkw9znkk1qa0q6v"; /* updated by script */
+      sha256 = "1f4mdarmh7m9jq432d0s9jds9288g0zgpxnlpmx12i26vvq8kykd"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";

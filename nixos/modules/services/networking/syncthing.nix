@@ -372,16 +372,18 @@ in {
 
     systemd.packages = [ pkgs.syncthing ];
 
-    users = mkIf (cfg.systemService && cfg.user == defaultUser) {
-      users."${defaultUser}" =
+    users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
+      "${defaultUser}" =
         { group = cfg.group;
           home  = cfg.dataDir;
           createHome = true;
           uid = config.ids.uids.syncthing;
           description = "Syncthing daemon user";
         };
+    };
 
-      groups."${defaultUser}".gid =
+    users.groups = mkIf (cfg.systemService && cfg.group == defaultUser) {
+      "${defaultUser}".gid =
         config.ids.gids.syncthing;
     };
 

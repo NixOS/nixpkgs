@@ -1,7 +1,7 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2
 , desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
 , glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
-, librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk_pixbuf
+, librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk-pixbuf
 , substituteAll, bubblewrap, gst_all_1, gsettings-desktop-schemas
 }:
 
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Thumbnailers
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )

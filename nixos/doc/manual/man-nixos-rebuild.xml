@@ -90,6 +90,35 @@
    <arg>
     <option>--show-trace</option>
    </arg>
+   <arg>
+    <option>-I</option>
+    <replaceable>path</replaceable>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--verbose</option></arg>
+     <arg choice='plain'><option>-v</option></arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--max-jobs</option></arg>
+     <arg choice='plain'><option>-j</option></arg>
+    </group>
+    <replaceable>number</replaceable>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--keep-failed</option></arg>
+     <arg choice='plain'><option>-K</option></arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--keep-going</option></arg>
+     <arg choice='plain'><option>-k</option></arg>
+    </group>
+   </arg>
   </cmdsynopsis>
  </refsynopsisdiv>
  <refsection>
@@ -101,7 +130,8 @@
    NixOS module, you must run <command>nixos-rebuild</command> to make the
    changes take effect. It builds the new system in
    <filename>/nix/store</filename>, runs its activation script, and stop and
-   (re)starts any system services if needed.
+   (re)starts any system services if needed. Please note that user services need
+   to be started manually as they aren't detected by the activation script at the moment.
   </para>
   <para>
    This command has one required argument, which specifies the desired

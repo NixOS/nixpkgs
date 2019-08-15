@@ -1,12 +1,12 @@
 { theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
-cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk_pixbuf,
+cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk-pixbuf,
 libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
 at-spi2-atk, libuuid, nodePackages
 }:
 
 let
 
-  version = "4.0.0";
+  version = "4.0.1";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -21,7 +21,7 @@ let
     freetype
     glib
     gnome2.GConf
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     pango
     libnotify
@@ -51,7 +51,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "911a4c05fb4f85181df13f013e82440b0d171862c9cb137dc19b6381d47bd57e";
+        sha256 = "1g7c8jka750pblsfzjvfyf7sp1m409kybqagml9miif1v71scxv2";
       }
     else
       throw "Slack is not supported on ${stdenv.hostPlatform.system}";
@@ -113,6 +113,7 @@ in stdenv.mkDerivation {
     description = "Desktop client for Slack";
     homepage = https://slack.com;
     license = licenses.unfree;
+    maintainers = [ maintainers.mmahut ];
     platforms = [ "x86_64-linux" ];
   };
 }

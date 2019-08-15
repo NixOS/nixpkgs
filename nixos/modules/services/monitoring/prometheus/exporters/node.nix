@@ -27,6 +27,7 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = false;
       RuntimeDirectory = "prometheus-node-exporter";
       ExecStart = ''
         ${pkgs.prometheus-node-exporter}/bin/node_exporter \

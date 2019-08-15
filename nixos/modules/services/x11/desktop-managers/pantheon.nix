@@ -102,6 +102,10 @@ in
           # Makes qt applications look less alien
           export QT_QPA_PLATFORMTHEME=gtk3
           export QT_STYLE_OVERRIDE=adwaita
+
+          # Settings from elementary-default-settings
+          export GTK_CSD=1
+          export GTK_MODULES=$GTK_MODULES:pantheon-filechooser-module
       fi
     '';
 
@@ -147,7 +151,7 @@ in
 
     networking.networkmanager.enable = mkDefault true;
     networking.networkmanager.basePackages =
-      { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
+      { inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
         inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
                               networkmanager-openconnect networkmanager-fortisslvpn
                               networkmanager-iodine networkmanager-l2tp; };

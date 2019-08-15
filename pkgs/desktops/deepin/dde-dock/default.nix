@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
-  qtsvg, libsForQt5, polkit, gsettings-qt, dtkcore, dtkwidget,
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
+  qtsvg, polkit, gsettings-qt, dtkcore, dtkwidget,
   dde-qt-dbus-factory, dde-network-utils, dde-daemon,
   deepin-desktop-schemas, xorg, glib, wrapGAppsHook, deepin,
-  plugins ? [], symlinkJoin, makeWrapper }:
+  plugins ? [], symlinkJoin, makeWrapper, libdbusmenu }:
 
 let
-unwrapped = stdenv.mkDerivation rec {
+unwrapped = mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-dock";
   version = "4.10.3";
@@ -34,7 +34,7 @@ unwrapped = stdenv.mkDerivation rec {
     dtkwidget
     glib.bin
     gsettings-qt
-    libsForQt5.libdbusmenu
+    libdbusmenu
     polkit
     qtsvg
     qtx11extras

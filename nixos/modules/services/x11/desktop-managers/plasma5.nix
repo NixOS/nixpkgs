@@ -170,7 +170,7 @@ in
 
           xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ]
-        
+
         # Phonon audio backend
         ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
         ++ lib.optional (cfg.phononBackend == "gstreamer" && cfg.enableQt4Support) pkgs.phonon-backend-gstreamer
@@ -178,7 +178,7 @@ in
         ++ lib.optional (cfg.phononBackend == "vlc" && cfg.enableQt4Support) pkgs.phonon-backend-vlc
 
         # Optional hardware support features
-        ++ lib.optional config.hardware.bluetooth.enable bluedevil
+        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
@@ -233,6 +233,7 @@ in
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
 
+      xdg.portal.enable = true;
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
 
       # Update the start menu for each user that is currently logged in

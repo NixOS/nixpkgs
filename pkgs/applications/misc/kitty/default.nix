@@ -1,6 +1,6 @@
 { stdenv, substituteAll, fetchFromGitHub, python3Packages, glfw, libunistring,
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
-  libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
+  libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
   which, dbus,
   Cocoa,
@@ -9,6 +9,7 @@
   IOKit,
   Kernel,
   OpenGL,
+  libcanberra,
   libicns,
   libpng,
   librsvg,
@@ -20,18 +21,19 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.14.2";
+  version = "0.14.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "15iv3k7iryf10n8n67d37x24pzcarq97a3dr42lbld00k1lx19az";
+    sha256 = "0wi6b6b1nyp16rcpcghk6by62wy6qsamv1xdymyn0zbqgd8h9n6b";
   };
 
   buildInputs = [
-    ncurses harfbuzz
+    harfbuzz
+    ncurses
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     Cocoa
     CoreGraphics
@@ -43,7 +45,7 @@ buildPythonApplication rec {
     python3
     zlib
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    fontconfig glfw libunistring libX11
+    fontconfig glfw libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus
   ];
@@ -57,6 +59,8 @@ buildPythonApplication rec {
     optipng
   ];
 
+  propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;
+
   outputs = [ "out" "terminfo" ];
 
   patches = [
@@ -69,6 +73,10 @@ buildPythonApplication rec {
     ./no-werror.patch
     ./png2icns.patch
   ];
+
+  preConfigure  = stdenv.lib.optional (!stdenv.isDarwin) ''
+    substituteInPlace glfw/egl_context.c --replace "libEGL.so.1" "${stdenv.lib.getLib libGL}/lib/libEGL.so.1"
+  '';
 
   buildPhase = if stdenv.isDarwin then ''
     make app

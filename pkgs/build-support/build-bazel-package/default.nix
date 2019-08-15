@@ -1,6 +1,10 @@
-{ stdenv, bazel, cacert }:
+{ stdenv
+, bazel
+, cacert
+, lib
+}:
 
-args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
+args@{ name, bazelFlags ? [], bazelBuildFlags ? [], bazelFetchFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
 
 let
   fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" ];
@@ -8,11 +12,11 @@ let
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
 
 in stdenv.mkDerivation (fBuildAttrs // {
-  inherit name bazelFlags bazelTarget;
+  inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps";
-    inherit bazelFlags bazelTarget;
+    inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 
@@ -45,6 +49,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
         fetch \
         --loading_phase_threads=1 \
         $bazelFlags \
+        $bazelFetchFlags \
         $bazelTarget
 
       runHook postBuild
@@ -56,13 +61,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
-      rm -rf $bazelOut/external/{local_*,\@local_*}
+      rm -rf $bazelOut/external/{local_*,\@local_*.marker}
 
-      # Patching markers to make them deterministic
-      find $bazelOut/external -name '@*\.marker' -exec sed -i \
-        -e 's, -\?[0-9][0-9]*$, 1,' \
-        -e '/^ENV:TMP.*/d' \
-        '{}' \;
+      # Clear markers
+      find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
 
       # Remove all vcs files
       rm -rf $(find $bazelOut/external -type d -name .git)
@@ -109,6 +111,31 @@ in stdenv.mkDerivation (fBuildAttrs // {
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
+    '' + lib.optionalString stdenv.isDarwin ''
+    # Bazel sandboxes the execution of the tools it invokes, so even though we are
+    # calling the correct nix wrappers, the values of the environment variables
+    # the wrappers are expecting will not be set. So instead of relying on the
+    # wrappers picking them up, pass them in explicitly via `--copt`, `--linkopt`
+    # and related flags.
+    #
+    copts=()
+    host_copts=()
+    for flag in $NIX_CFLAGS_COMPILE; do
+      copts+=( "--copt=$flag" )
+      host_copts+=( "--host_copt=$flag" )
+    done
+    for flag in $NIX_CXXSTDLIB_COMPILE; do
+      copts+=( "--copt=$flag" )
+      host_copts+=( "--host_copt=$flag" )
+    done
+    linkopts=()
+    host_linkopts=()
+    for flag in $NIX_LD_FLAGS; do
+      linkopts+=( "--linkopt=$flag" )
+      host_linkopts+=( "--host_linkopt=$flag" )
+    done
+    '' + ''
+
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
     USER=homeless-shelter \
     bazel \
@@ -116,7 +143,14 @@ in stdenv.mkDerivation (fBuildAttrs // {
       --output_user_root="$bazelUserRoot" \
       build \
       -j $NIX_BUILD_CORES \
+      '' + lib.optionalString stdenv.isDarwin ''
+      "''${copts[@]}" \
+      "''${host_copts[@]}" \
+      "''${linkopts[@]}" \
+      "''${host_linkopts[@]}" \
+      '' + ''
       $bazelFlags \
+      $bazelBuildFlags \
       $bazelTarget
 
     runHook postBuild

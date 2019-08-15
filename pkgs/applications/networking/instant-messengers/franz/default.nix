@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, wrapGAppsHook, autoPatchelfHook, dpkg
-, xorg, atk, glib, pango, gdk_pixbuf, cairo, freetype, fontconfig, gtk3
+, xorg, atk, glib, pango, gdk-pixbuf, cairo, freetype, fontconfig, gtk3
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
 
 let
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
     libXrender libX11 libXtst libXScrnSaver
   ]) ++ [
-    gtk3 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
+    gtk3 atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
     gnome2.GConf nss nspr alsaLib cups expat stdenv.cc.cc
   ];
   runtimeDependencies = [ udev.lib libnotify ];

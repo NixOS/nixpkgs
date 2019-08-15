@@ -16,13 +16,13 @@
 , enableSharedLibraries ? true
 }:
 
-let
-  src = fetch "llvm" "1ybmnid4pw2hxn12ax5qa5kl1ldfns0njg8533y3mzslvd5cx0kf";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
+  src = fetch "llvm" "1ybmnid4pw2hxn12ax5qa5kl1ldfns0njg8533y3mzslvd5cx0kf";
+
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}.src llvm
     sourceRoot=$PWD/llvm
     unpackFile ${compiler-rt_src}
@@ -104,8 +104,6 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-
-  passthru.src = src;
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";

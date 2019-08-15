@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, scdoc
-, wayland, wayland-protocols, cairo, gdk_pixbuf
+, wayland, wayland-protocols, cairo, gdk-pixbuf
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
-  buildInputs = [ wayland wayland-protocols cairo gdk_pixbuf ];
+  buildInputs = [ wayland wayland-protocols cairo gdk-pixbuf ];
 
   mesonFlags = [
     "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"

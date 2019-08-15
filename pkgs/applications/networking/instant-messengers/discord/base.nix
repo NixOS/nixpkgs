@@ -1,7 +1,7 @@
 { pname, version, src, binaryName, desktopName
 , stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
 , alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk_pixbuf, glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
+, gdk-pixbuf, glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
 , pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   libPath = stdenv.lib.makeLibraryPath [
     libcxx systemd libpulseaudio
     stdenv.cc.cc alsaLib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
-    gdk_pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
+    gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
     libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
     libXtst nspr nss libxcb pango systemd libXScrnSaver
    ];

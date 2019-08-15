@@ -12,7 +12,7 @@
 , glib
 , gtk2
 , atk
-, gdk_pixbuf
+, gdk-pixbuf
 , cairo
 , pango
 , gnome3
@@ -100,14 +100,14 @@ let
         busybox
         file
         gtk2
-        gdk_pixbuf
+        gdk-pixbuf
       ];
 
       libPath = stdenv.lib.makeLibraryPath [
         glib
         gtk2
         atk
-        gdk_pixbuf
+        gdk-pixbuf
         cairo
         pango
         gnome3.dconf

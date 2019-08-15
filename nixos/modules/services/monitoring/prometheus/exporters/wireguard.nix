@@ -34,21 +34,28 @@ in {
         <literal>allowed_ip_1</literal> and so on.
       '';
     };
+
+    withRemoteIp = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether or not the remote IP of a WireGuard peer should be exposed via prometheus.
+      '';
+    };
   };
   serviceOpts = {
-    script = ''
-      ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
-        -p ${toString cfg.port} \
-        ${optionalString cfg.verbose "-v"} \
-        ${optionalString cfg.singleSubnetPerField "-s"} \
-        ${optionalString (cfg.wireguardConfig != null) "-n ${cfg.wireguardConfig}"}
-    '';
-
     path = [ pkgs.wireguard-tools ];
 
     serviceConfig = {
-      DynamicUser = true;
       AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+      ExecStart = ''
+        ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
+          -p ${toString cfg.port} \
+          ${optionalString cfg.verbose "-v"} \
+          ${optionalString cfg.singleSubnetPerField "-s"} \
+          ${optionalString cfg.withRemoteIp "-r"} \
+          ${optionalString (cfg.wireguardConfig != null) "-n ${cfg.wireguardConfig}"}
+      '';
     };
   };
 }

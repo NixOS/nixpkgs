@@ -76,5 +76,6 @@ buildBazelPackage rec {
     license = licenses.asl20;
     maintainers = [ maintainers.uri-canva ];
     platforms = platforms.darwin;
+    broken = true; # global variable '_layer' is referenced before assignment.
   };
 }

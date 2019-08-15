@@ -1,4 +1,4 @@
-{ mkXfceDerivation, docbook_xsl, exo, gdk_pixbuf, gtk3, libgudev ? null
+{ mkXfceDerivation, docbook_xsl, exo, gdk-pixbuf, gtk3, libgudev ? null
 , libnotify ? null, libX11, libxfce4ui, libxfce4util, libxslt, xfconf }:
 
 mkXfceDerivation rec {
@@ -19,7 +19,7 @@ mkXfceDerivation rec {
 
   buildInputs = [
     exo
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     libgudev
     libnotify

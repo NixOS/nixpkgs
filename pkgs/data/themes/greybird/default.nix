@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, which, sassc, glib, libxml2, gdk_pixbuf, librsvg, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, autoreconfHook, which, sassc, glib, libxml2, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "greybird";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     librsvg
   ];
 

@@ -1,4 +1,5 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, runCommand, runCommandCC, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub
+, runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
@@ -11,19 +12,21 @@
 , buildJdk, runJdk
 , buildJdkName
 , runtimeShell
-# Always assume all markers valid (don't redownload dependencies).
-# Also, don't clean up environment variables.
+# Downstream packages for tests
+, bazel-watcher
+# Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
+# Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
 , gcc-unwrapped
 , autoPatchelfHook
 }:
 
 let
-  version = "0.28.0";
+  version = "0.28.1";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "26ad8cdadd413b8432cf46d9fc3801e8db85d9922f85dd8a7f5a92fec876557f";
+    sha256 = "0503fax70w7h6v00mkrrrgf1m5n0vkjqs76lyg95alhzc4yldsic";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -221,10 +224,22 @@ stdenv.mkDerivation rec {
       pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; };
 
       bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+
       cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
       javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
       protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
       pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+
+      # downstream packages using buildBazelPackage
+      # fixed-output hashes of the fetch phase need to be spot-checked manually
+      downstream = recurseIntoAttrs ({
+        inherit bazel-watcher;
+      }
+          # dm-sonnet is only packaged for linux
+      // (lib.optionalAttrs stdenv.isLinux {
+          # TODO(timokau) dm-sonnet is broken currently
+          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
+      }));
     };
 
   # update the list of workspace dependencies

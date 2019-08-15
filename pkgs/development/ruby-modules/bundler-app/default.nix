@@ -41,6 +41,7 @@ let
 
     buildInputs = buildInputs ++ lib.optional (scripts != []) makeWrapper;
 
+    meta = { platforms = ruby.meta.platforms; } // meta;
     passthru = basicEnv.passthru // {
       inherit basicEnv;
       inherit (basicEnv) env;

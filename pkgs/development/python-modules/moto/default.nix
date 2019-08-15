@@ -70,7 +70,7 @@ buildPythonPackage rec {
                   -e test_decorator_start_and_stop'';
 
   meta = with lib; {
-    description = "This project extends the Application Insights API surface to support Python";
+    description = "Allows your tests to easily mock out AWS Services";
     homepage = https://github.com/spulec/moto;
     license = licenses.asl20;
     maintainers = [ ];

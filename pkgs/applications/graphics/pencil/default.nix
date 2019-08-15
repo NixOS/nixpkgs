@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lib, makeWrapper,
   # build dependencies
   alsaLib, atk, cairo, cups, dbus, expat, fontconfig,
-  freetype, gdk_pixbuf, glib, gnome2, nspr, nss, xorg,
+  freetype, gdk-pixbuf, glib, gnome2, nspr, nss, xorg,
   glibc, systemd
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       expat
       fontconfig
       freetype
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       gnome2.GConf
       gnome2.gtk

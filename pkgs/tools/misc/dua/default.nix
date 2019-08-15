@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dua";
-  version = "2.1.5";
+  version = "2.1.11";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "dua-cli";
     rev = "v${version}";
-    sha256 = "0xiprpk74l0q5w3j82lx1l3jy4mi015nvlixih9z1lam4qi1yq0p";
+    sha256 = "08zgi2yiynb20l1f9rhly4a7zgqnr7lq3cr5vkmh1jnfs6z27dv6";
   };
 
-  cargoSha256 = "1jg1ljm5h21shkyfrq0ivz9m0c25dxc0kd6cipf5i2dbnzcszmhh";
+  cargoSha256 = "0ca9gaih0b9qg7bdgyhvb9gr1mq23r62pi0845vwc216jfaag079";
 
   meta = with lib; {
     description = "A tool to conveniently learn about the disk usage of directories, fast!";

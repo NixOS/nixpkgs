@@ -1,6 +1,6 @@
 { buildPythonApplication, lib, fetchFromGitHub
 , wrapGAppsHook, gobject-introspection, gnome-desktop, libnotify, libgnome-keyring, pango
-, gdk_pixbuf, atk, webkitgtk, gst_all_1
+, gdk-pixbuf, atk, webkitgtk, gst_all_1
 , evdev, pyyaml, pygobject3, requests, pillow
 , xrandr, pciutils, psmisc, glxinfo, vulkan-tools, xboxdrv, pulseaudio, p7zip, xgamma
 , libstrangle, wine, fluidsynth, xorgserver
@@ -42,7 +42,7 @@ in buildPythonApplication rec {
 
   buildInputs = [
     wrapGAppsHook gobject-introspection gnome-desktop libnotify libgnome-keyring pango
-    gdk_pixbuf atk webkitgtk
+    gdk-pixbuf atk webkitgtk
   ] ++ gstDeps;
 
   makeWrapperArgs = [

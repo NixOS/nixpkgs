@@ -1,8 +1,9 @@
 { stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
 , libXfixes, atk, gtk3, libXrender, pango, gnome2, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
-, nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
+, nss, nspr, cups, fetchurl, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
+, e2fsprogs, krb5
 }:
 
 with stdenv.lib;
@@ -12,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "6.0.0";
+  version = "6.1.1";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "1ykjdnzl34pqr6dhfnswix44i412c7gcba1pk95a8670wmc29a1f";
+    sha256 = "1ks8dscidqzmxy650xda6gvqg04iwidanidlsmgsi8365iqxvb1k";
   };
 
   libPath = makeLibraryPath [
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     cups
     alsaLib
     expat
-    gdk_pixbuf
+    gdk-pixbuf
     dbus
     libXdamage
     libXrandr
@@ -55,6 +56,8 @@ stdenv.mkDerivation rec {
     openssl
     at-spi2-atk
     libuuid
+    e2fsprogs
+    krb5
   ];
 
   desktopItem = makeDesktopItem {

@@ -10,7 +10,7 @@
 , expat
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gnome2
 , gnome3
@@ -52,7 +52,7 @@ rpath = lib.makeLibraryPath [
   expat
   fontconfig
   freetype
-  gdk_pixbuf
+  gdk-pixbuf
   glib
   gnome2.GConf
   gtk3
@@ -82,11 +82,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "0.65.118";
+  version = "0.67.123";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "13bihzf4yfgn01nrw780swhmcdh8gq71jqilhbi04jn1h1pbm3wg";
+    sha256 = "00kpysk84xwmlwziq7pjizmi2ljgiq45l1x743qkfflxlh0pj21m";
   };
 
   dontConfigure = true;

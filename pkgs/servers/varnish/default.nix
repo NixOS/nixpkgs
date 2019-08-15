@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
-, python2, makeWrapper }:
+, python3, makeWrapper }:
 
 let
   common = { version, sha256, extraBuildInputs ? [] }:
@@ -13,8 +13,8 @@ let
 
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        pcre libxslt groff ncurses readline python2 libedit
-        python2.pkgs.docutils makeWrapper
+        pcre libxslt groff ncurses readline python3 libedit
+        python3.pkgs.docutils makeWrapper
       ] ++ extraBuildInputs;
 
       buildFlags = "localstatedir=/var/spool";
@@ -47,8 +47,8 @@ in
     sha256 = "1cqlj12m426c1lak1hr1fx5zcfsjjvka3hfirz47hvy1g2fjqidq";
   };
   varnish6 = common {
-    version = "6.1.1";
-    sha256 = "0gf9hzzrr1lndbbqi8cwlfasi7l517cy3nbgna88i78lm247rvp0";
-    extraBuildInputs = [ python2.pkgs.sphinx ];
+    version = "6.2.0";
+    sha256 = "0lwfk2gq99c653h5f51fs3j37r0gh2pf0p4w5z986nm2mi9z6yn3";
+    extraBuildInputs = [ python3.pkgs.sphinx ];
   };
 }

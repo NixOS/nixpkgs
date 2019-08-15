@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib, bzip2, cmake, gflags, lz4, snappy, zlib, zstd, enableLite ? false }:
+{ stdenv, fetchFromGitHub, lib, bzip2, cmake, lz4, snappy, zlib, zstd, enableLite ? false }:
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ bzip2 gflags lz4 snappy zlib zstd ];
+  buildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
   patches = [ ./0001-findzlib.patch ];
 
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "-DWITH_SNAPPY=1"
     "-DWITH_ZLIB=1"
     "-DWITH_ZSTD=1"
+    "-DWITH_GFLAGS=0"
     (lib.optional
         (stdenv.hostPlatform.system == "i686-linux"
          || stdenv.hostPlatform.system == "x86_64-linux")

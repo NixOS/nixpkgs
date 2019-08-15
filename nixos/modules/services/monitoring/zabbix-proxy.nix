@@ -23,6 +23,7 @@ let
     LogType = console
     ListenIP = ${cfg.listen.ip}
     ListenPort = ${toString cfg.listen.port}
+    Server = ${cfg.server}
     # TODO: set to cfg.database.socket if database type is pgsql?
     DBHost = ${optionalString (cfg.database.createLocally != true) cfg.database.host}
     ${optionalString (cfg.database.createLocally != true) "DBPort = ${cfg.database.port}"}
@@ -49,6 +50,13 @@ in
 
     services.zabbixProxy = {
       enable = mkEnableOption "the Zabbix Proxy";
+
+      server = mkOption {
+        type = types.str;
+        description = ''
+          The IP address or hostname of the Zabbix server to connect to.
+          '';
+        };
 
       package = mkOption {
         type = types.package;

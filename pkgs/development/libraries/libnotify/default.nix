@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, fetchpatch
-, glib, gdk_pixbuf, gobject-introspection, gnome3 }:
+, glib, gdk-pixbuf, gobject-introspection, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libnotify";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
-  buildInputs = [ glib gdk_pixbuf ];
+  buildInputs = [ glib gdk-pixbuf ];
 
   passthru = {
     updateScript = gnome3.updateScript {

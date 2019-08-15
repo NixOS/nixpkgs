@@ -7,16 +7,16 @@
 , pytest
 , glibc
 , gtk2-x11
-, gdk_pixbuf
+, gdk-pixbuf
 }:
 
 buildPythonPackage rec {
-  version = "1.3.2";
+  version = "1.4.1";
   pname = "pyglet";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b00570e7cdf6971af8953b6ece50d83d13272afa5d1f1197c58c0f478dd17743";
+    sha256 = "132p484g53b9p8g3q2bcnhzyg9x37hsm4rhpscl4llngjw5fbk22";
   };
 
   # find_library doesn't reliably work with nix (https://github.com/NixOS/nixpkgs/issues/7307).
@@ -42,7 +42,7 @@ buildPythonPackage rec {
             elif name == 'gdk-x11-2.0':
                 path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
             elif name == 'gdk_pixbuf-2.0':
-                path = '${gdk_pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
+                path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
             if path is not None:
                 return ctypes.cdll.LoadLibrary(path)
         raise Exception("Could not load library {}".format(names))

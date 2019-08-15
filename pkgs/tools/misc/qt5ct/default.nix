@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, qtbase, qttools, qmake }:
+{ mkDerivation, lib, fetchurl, qtbase, qttools, qmake }:
 
-let inherit (stdenv.lib) getDev; in
+let inherit (lib) getDev; in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qt5ct";
   version = "0.39";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt5 Configuration Tool";
     homepage = https://www.opendesktop.org/content/show.php?content=168066;
     platforms = platforms.linux;

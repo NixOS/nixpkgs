@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python, pkgs, pythonOlder, substituteAll
+{ lib, buildPythonPackage, fetchFromGitHub, python, pkgs, pythonOlder, substituteAll
 , aenum
 , cython
 , pytest
@@ -8,11 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "2.2.1";
+  version = "2.2.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0yigcxwmx5cczipf2mpmy2gq1dnl0635yjvjq86ay47j1j5fd2gc";
+  src = fetchFromGitHub {
+    owner = "pyproj4";
+    repo = "pyproj";
+    rev = "v${version}rel";
+    sha256 = "0mb0jczgqh3sma69k7237i38h09gxgmvmddls9hpw4f3131f5ax7";
   };
 
   # force pyproj to use ${pkgs.proj}

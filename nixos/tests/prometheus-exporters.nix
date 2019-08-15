@@ -188,6 +188,47 @@ let
       '';
     };
 
+    mail = {
+      exporterConfig = {
+        enable = true;
+        configuration = {
+          monitoringInterval = "2s";
+          mailCheckTimeout = "10s";
+          servers = [ {
+            name = "testserver";
+            server = "localhost";
+            port = 25;
+            from = "mail-exporter@localhost";
+            to = "mail-exporter@localhost";
+            detectionDir = "/var/spool/mail/mail-exporter/new";
+          } ];
+        };
+      };
+      metricProvider = {
+        services.postfix.enable = true;
+        systemd.services.prometheus-mail-exporter = {
+          after = [ "postfix.service" ];
+          requires = [ "postfix.service" ];
+          preStart = ''
+            mkdir -p 0600 mail-exporter/new
+          '';
+          serviceConfig = {
+            ProtectHome = true;
+            ReadOnlyPaths = "/";
+            ReadWritePaths = "/var/spool/mail";
+            WorkingDirectory = "/var/spool/mail";
+          };
+        };
+        users.users.mailexporter.isSystemUser = true;
+      };
+      exporterTest = ''
+        waitForUnit("postfix.service")
+        waitForUnit("prometheus-mail-exporter.service")
+        waitForOpenPort(9225)
+        waitUntilSucceeds("curl -sSf http://localhost:9225/metrics | grep -q 'mail_deliver_success{configname=\"testserver\"} 1'")
+      '';
+    };
+
     nginx = {
       exporterConfig = {
         enable = true;
@@ -229,6 +270,30 @@ let
         waitForUnit("prometheus-postfix-exporter.service");
         waitForOpenPort(9154);
         succeed("curl -sSf http://localhost:9154/metrics | grep -q 'postfix_smtpd_connects_total 0'");
+      '';
+    };
+
+    postgres = {
+      exporterConfig = {
+        enable = true;
+        runAsLocalSuperUser = true;
+      };
+      metricProvider = {
+        services.postgresql.enable = true;
+      };
+      exporterTest = ''
+        waitForUnit("prometheus-postgres-exporter.service");
+        waitForOpenPort(9187);
+        waitForUnit("postgresql.service");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_exporter_last_scrape_error 0'");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 1'");
+        systemctl("stop postgresql.service");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -qv 'pg_exporter_last_scrape_error 0'");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 0'");
+        systemctl("start postgresql.service");
+        waitForUnit("postgresql.service");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_exporter_last_scrape_error 0'");
+        succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 1'");
       '';
     };
 

@@ -22,18 +22,7 @@ let
           sha256 = "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1";
         };
       });
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "3.13";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
-        };
-        # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
-        patches = lib.singleton (fetchpatch {
-          url = "https://github.com/yaml/pyyaml/commit/c5b135fe39d41cffbdc006f28ccb2032df6005e0.patch";
-          sha256 = "0x1v45rkmj194c41d1nqi3ihj9z4rsy8zvpfcd8p960g1fia7fhn";
-        });
-      });
+      pyyaml = super.pyyaml_3;
     };
   };
 

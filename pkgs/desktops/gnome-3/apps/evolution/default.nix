@@ -27,7 +27,7 @@
 , sqlite
 , gnome3
 , librsvg
-, gdk_pixbuf
+, gdk-pixbuf
 , libsecret
 , nss
 , nspr
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     db
     evolution-data-server
     gcr
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     glib-networking
     gnome-desktop

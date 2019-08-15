@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig
-, xorg, gtk3, glib, pango, cairo, gdk_pixbuf, atk
+, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
 , wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
 , ffmpeg_4, x264, libvpx, libwebp, x265
 , libfakeXinerama
@@ -40,7 +40,7 @@ in buildPythonApplication rec {
     ] ++ [
     cython
 
-    pango cairo gdk_pixbuf atk.out gtk3 glib
+    pango cairo gdk-pixbuf atk.out gtk3 glib
 
     ffmpeg_4 libvpx x264 libwebp x265
 

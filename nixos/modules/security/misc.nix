@@ -54,6 +54,18 @@ with lib;
       '';
     };
 
+    security.forcePageTableIsolation = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to force-enable the Page Table Isolation (PTI) Linux kernel
+        feature even on CPU models that claim to be safe from Meltdown.
+
+        This hardening feature is most beneficial to systems that run untrusted
+        workloads that rely on address space isolation for security.
+      '';
+    };
+
     security.virtualisation.flushL1DataCache = mkOption {
       type = types.nullOr (types.enum [ "never" "cond" "always" ]);
       default = null;
@@ -112,6 +124,10 @@ with lib;
 
     (mkIf (!config.security.allowSimultaneousMultithreading) {
       boot.kernelParams = [ "nosmt" ];
+    })
+
+    (mkIf config.security.forcePageTableIsolation {
+      boot.kernelParams = [ "pti=on" ];
     })
 
     (mkIf (config.security.virtualisation.flushL1DataCache != null) {

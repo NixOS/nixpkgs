@@ -66,14 +66,6 @@
     email = "aaron@ajanse.me";
     github = "aaronjanse";
     name = "Aaron Janse";
-    keys = [
-      { longkeyid = "rsa2048/0x651BD4B37D75E234"; # Email only
-        fingerprint = "490F 5009 34E7 20BD 4C53  96C2 651B D4B3 7D75 E234";
-      }
-      { longkeyid = "rsa4096/0xBE6C92145BFF4A34"; # Git, etc
-        fingerprint = "CED9 6DF4 63D7 B86A 1C4B  1322 BE6C 9214 5BFF 4A34";
-      }
-    ];
   };
   aaronschif = {
     email = "aaronschif@gmail.com";
@@ -84,6 +76,15 @@
     email = "andreas@baldeau.net";
     github = "baldo";
     name = "Andreas Baldeau";
+  };
+  abbe = {
+    email = "ashish.is@lostca.se";
+    github = "wahjava";
+    name = "Ashish SHUKLA";
+    keys = [{
+      longkeyid = "rsa4096/0xC746CFA9E74FA4B0";
+      fingerprint = "F682 CDCC 39DC 0FEA E116  20B6 C746 CFA9 E74F A4B0";
+    }];
   };
   abbradar = {
     email = "ab@fmap.me";
@@ -392,6 +393,11 @@
     email = "aneeshusa@gmail.com";
     github = "aneeshusa";
     name = "Aneesh Agrawal";
+  };
+  angristan = {
+    email = "angristan@pm.me";
+    github = "angristan";
+    name = "Stanislas Lange";
   };
   ankhers = {
     email = "justin.k.wood@gmail.com";
@@ -1078,6 +1084,11 @@
     github = "codyopel";
     name = "Cody Opel";
   };
+  cohencyril = {
+    email = "cyril.cohen@inria.fr";
+    github = "CohenCyril";
+    name = "Cyril Cohen";
+  };
   colemickens = {
     email = "cole.mickens@gmail.com";
     github = "colemickens";
@@ -1508,6 +1519,11 @@
     github = "liclac";
     name = "embr";
   };
+  emily = {
+    email = "nixpkgs@emily.moe";
+    github = "emilazy";
+    name = "Emily";
+  };
   ederoyd46 = {
     email = "matt@ederoyd.co.uk";
     github = "ederoyd46";
@@ -1693,6 +1709,11 @@
       fingerprint = "67FE 98F2 8C44 CF22 1828  E12F D57E FA62 5C9A 925F";
     }];
   };
+  evanjs = {
+    email = "evanjsx@gmail.com";
+    github = "evanjs";
+    name = "Evan Stoll";
+  };
   evck = {
     email = "eric@evenchick.com";
     github = "ericevenchick";
@@ -1747,6 +1768,11 @@
     email = "fahree@gmail.com";
     github = "fare";
     name = "Francois-Rene Rideau";
+  };
+  farlion = {
+    email = "florian.peter@gmx.at";
+    github = "workflow";
+    name = "Florian Peter";
   };
   fdns = {
     email = "fdns02@gmail.com";
@@ -2155,6 +2181,11 @@
     email = "hlolli@gmail.com";
     github = "hlolli";
     name = "Hlodver Sigurdsson";
+  };
+  hugoreeves = {
+    email = "hugolreeves@gmail.com";
+    github = "hugoreeves";
+    name = "Hugo Reeves";
   };
   hodapp = {
     email = "hodapp87@gmail.com";
@@ -2600,6 +2631,11 @@
     email = "jraygauthier@gmail.com";
     github = "jraygauthier";
     name = "Raymond Gauthier";
+  };
+  jtobin = {
+    email = "jared@jtobin.io";
+    github = "jtobin";
+    name = "Jared Tobin";
   };
   jtojnar = {
     email = "jtojnar@gmail.com";
@@ -4204,9 +4240,13 @@
     name = "Ben Hamlin";
   };
   prusnak = {
-    email = "stick@gk2.sk";
+    email = "pavol@rusnak.io";
     github = "prusnak";
     name = "Pavol Rusnak";
+    keys = [{
+      longkeyid = "rsa4096/0x91F3B339B9A02A3D";
+      fingerprint = "86E6 792F C27B FD47 8860  C110 91F3 B339 B9A0 2A3D";
+    }];
   };
   pshendry = {
     email = "paul@pshendry.com";
@@ -4996,6 +5036,15 @@
     github = "sternenseemann";
     name = "Lukas Epple";
   };
+  steshaw = {
+    name = "Steven Shaw";
+    email = "steven@steshaw.org";
+    github = "steshaw";
+    keys = [{
+      longkeyid = "rsa4096/0x1D9A17DFD23DCB91";
+      fingerprint = "0AFE 77F7 474D 1596 EE55  7A29 1D9A 17DF D23D CB91";
+    }];
+  };
   stesie = {
     email = "stesie@brokenpipe.de";
     github = "stesie";
@@ -5571,6 +5620,11 @@
     github = "viric";
     name = "Lluís Batlle i Rossell";
   };
+  virusdave = {
+    email = "dave.nicponski@gmail.com";
+    github = "virusdave";
+    name = "Dave Nicponski";
+  };
   vizanto = {
     email = "danny@prime.vc";
     github = "vizanto";
@@ -5920,5 +5974,10 @@
     email = "mattmelling@fastmail.com";
     github = "mattmelling";
     name = "Matt Melling";
+  };
+  wd15 = {
+    email = "daniel.wheeler2@gmail.com";
+    github = "wd15";
+    name = "Daniel Wheeler";
   };
 }

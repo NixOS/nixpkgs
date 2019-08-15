@@ -1,22 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchgit }:
 
-let
-  rev = "5cdbb97898d727d2b35c25a3117e9a79e474d97b";
-  sha256 = "14qikp91l2aj8j9i0nh0nf9ibz65b8bpd3lbyarqshhrpvb5jp79";
-  version = "2019-06-04";
-in stdenv.mkDerivation {
-  inherit version;
+stdenv.mkDerivation rec {
+  rev = "e2a6a9cd9da70175881ab991220c86aa87179509";
+  version = "2019-07-26";
+  name = "slack-theme-black-${version}";
 
-  name = "slack-theme-black";
-  src = fetchurl {
-    url = "https://raw.githubusercontent.com/laCour/slack-night-mode/${rev}/css/raw/black.css";
-    inherit sha256;
+  src = fetchgit { inherit rev;
+    url = "https://github.com/laCour/slack-night-mode";
+    sha256 = "1jwxy63qzgvr83idsgcg7yhm9kn0ybfji1m964c5c6ypzcm7j10v";
   };
 
   dontUnpack = true;
 
   buildCommand = ''
     mkdir $out
-    cp $src $out/theme.css
+    cp $src/css/raw/black.css $out/theme.css
   '';
 }

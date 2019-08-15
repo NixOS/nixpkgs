@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoPatchelfHook, makeWrapper
 , alsaLib, xorg
-, gtk3, pango, gdk_pixbuf, cairo, glib, freetype
+, gtk3, pango, gdk-pixbuf, cairo, glib, freetype
 , libpulseaudio, xdg_utils
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXi
 
-    gdk_pixbuf
+    gdk-pixbuf
     pango
     cairo
     glib

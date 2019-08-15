@@ -1,4 +1,4 @@
-{ lib
+{ stdenv
 , buildPythonPackage
 , fetchPypi
 , param
@@ -35,10 +35,11 @@ buildPythonPackage rec {
     mkdir -p $HOME/.config/matplotlib
     echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
 
-    pytest colorcet
+    # disable matplotlib tests on darwin, because it requires a framework build of Python
+    pytest ${stdenv.lib.optionalString stdenv.isDarwin "--ignore=colorcet/tests/test_matplotlib.py"} colorcet
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Collection of perceptually uniform colormaps";
     homepage = https://colorcet.pyviz.org;
     license = licenses.cc-by-40;

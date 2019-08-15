@@ -25,18 +25,16 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.1.6";
+  version = "2.1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s0a0vir9lg5q8n832kkadbajb4i4zl20zmdg3g20qlp4mcbn25p";
+    sha256 = "1dja0crbai2n1l19m0hkv2fkj9r6zzy5ijd6dffp60v7lrch8lcw";
   };
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6" \
-      --replace "regex==" "regex>=" \
-      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.32.0"
+      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
   '';
 
   propagatedBuildInputs = [

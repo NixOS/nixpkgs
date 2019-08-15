@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
-, sassc, inkscape, libxml2, glib, gdk_pixbuf, librsvg, gtk-engine-murrine
+, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plata-theme";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "1rn51yj7f7bclvrwwqwid4z9cpap4yd0zw0xs08c36zcjmr28426";
+    sha256 = "1xb28s67lnsphj97r15jxlfgydyrxdby1d2z5y3g9wniw6z19i9n";
   };
 
   preferLocalBuild = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional telegramSupport zip;
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     librsvg
   ];
 

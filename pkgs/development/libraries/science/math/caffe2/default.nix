@@ -1,6 +1,6 @@
 { stdenv, lib, config, fetchFromGitHub
 , cmake
-, glog, google-gflags, gtest
+, glog, gflags, gtest
 , protobuf, snappy
 , python, future, six, python-protobuf, numpy, pydot
 , eigen
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" ];
   propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
-  buildInputs = [ glog google-gflags protobuf snappy eigen ]
+  buildInputs = [ glog gflags protobuf snappy eigen ]
     ++ lib.optional useCuda cudatoolkit
     ++ lib.optional useCudnn cudnn
     ++ lib.optional useOpenmp openmp

@@ -26,7 +26,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-fritzbox-exporter}/bin/exporter \
           -listen-address ${cfg.listenAddress}:${toString cfg.port} \

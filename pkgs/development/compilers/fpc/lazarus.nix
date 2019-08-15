@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, fpc, gtk2, glib, pango, atk, gdk_pixbuf
+, fpc, gtk2, glib, pango, atk, gdk-pixbuf
 , libXi, xorgproto, libX11, libXext
 }:
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fpc gtk2 glib libXi xorgproto
     libX11 libXext pango atk
-    stdenv.cc makeWrapper gdk_pixbuf
+    stdenv.cc makeWrapper gdk-pixbuf
   ];
 
   makeFlags = [
