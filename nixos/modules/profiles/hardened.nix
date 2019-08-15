@@ -44,6 +44,9 @@ with lib;
 
     # Disable legacy virtual syscalls
     "vsyscall=none"
+
+    # Enable page allocator randomization
+    "page_alloc.shuffle=1"
   ];
 
   boot.blacklistedKernelModules = [
