@@ -2,7 +2,6 @@
   deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-desktop-schemas";
   version = "3.13.6";
 
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "GSettings deepin desktop-wide schemas";

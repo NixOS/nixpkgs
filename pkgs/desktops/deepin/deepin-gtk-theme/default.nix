@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, gtk-engine-murrine, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-gtk-theme";
   version = "17.10.11";
 
@@ -16,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder ''out''}" ];
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin GTK Theme";

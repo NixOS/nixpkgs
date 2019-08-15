@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-sound-theme";
   version = "15.10.3";
 
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder ''out''}" ];
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin sound theme";
