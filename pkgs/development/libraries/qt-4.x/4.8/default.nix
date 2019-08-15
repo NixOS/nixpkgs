@@ -82,11 +82,13 @@ stdenv.mkDerivation rec {
           + "21b342d71c19e6d68b649947f913410fe6129ea4/debian/patches/kubuntu_39_fix_medium_font.diff";
         sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
       })
-      (fetchpatch {
-        name = "qt4-gcc6.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
-        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
-      })
+      # Patch is no longer available from here, so vendoring it for now.
+      #(fetchpatch {
+      #  name = "qt4-gcc6.patch";
+      #  url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
+      #  sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
+      #})
+      ./qt4-gcc6.patch
     ]
     ++ lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
