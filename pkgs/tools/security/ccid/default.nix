@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.4.30";
-  name = "ccid-${version}";
+  pname = "ccid";
 
   src = fetchurl {
-    url = "https://ccid.apdu.fr/files/${name}.tar.bz2";
+    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
     sha256 = "0z7zafdg75fr1adlv2x0zz34s07gljcjg2lsz76s1048w1xhh5xc";
   };
 
