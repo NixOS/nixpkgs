@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, flex, rdma-core }:
 
 stdenv.mkDerivation rec {
-  name = "opensm-${version}";
+  pname = "opensm";
   version = "3.3.22";
 
   src = fetchFromGitHub {

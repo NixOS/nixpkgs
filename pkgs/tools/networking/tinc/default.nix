@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.35";
-  name = "tinc-${version}";
+  pname = "tinc";
 
   src = fetchurl {
     url = "https://www.tinc-vpn.org/packages/tinc-${version}.tar.gz";
