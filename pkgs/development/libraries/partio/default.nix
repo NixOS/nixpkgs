@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec
 {
-  name = "partio-${version}";
+  pname = "partio";
   version = "2018-03-01";
 
   src = fetchFromGitHub {

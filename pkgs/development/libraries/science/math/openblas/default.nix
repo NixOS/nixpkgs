@@ -86,7 +86,7 @@ let
   mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 in
 stdenv.mkDerivation rec {
-  name = "openblas-${version}";
+  pname = "openblas";
   version = "0.3.6";
   src = fetchFromGitHub {
     owner = "xianyi";

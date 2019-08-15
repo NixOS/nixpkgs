@@ -61,7 +61,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "caffe2-${version}";
+  pname = "caffe2";
   version = "0.8.1";
   src = fetchFromGitHub {
     owner = "caffe2";

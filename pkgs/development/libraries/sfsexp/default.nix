@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "sfsexp-${version}";
+  pname = "sfsexp";
   version = "1.3";
 
   src = fetchurl {

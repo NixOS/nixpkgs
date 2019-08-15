@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   version = "1.23";
   pname = "lcalc";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     # original at http://oto.math.uwaterloo.ca/~mrubinst/L_function_public/CODE/L-${version}.tar.gz, no longer available

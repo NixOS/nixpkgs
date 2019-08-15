@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook, boost, fcgi, openssl, opensaml-cpp, log4shib, pkgconfig, xercesc, xml-security-c, xml-tooling-c }:
 
 stdenv.mkDerivation rec {
-  name = "shibboleth-sp-${version}";
+  pname = "shibboleth-sp";
   version = "2.6.1";
 
   src = fetchgit {
