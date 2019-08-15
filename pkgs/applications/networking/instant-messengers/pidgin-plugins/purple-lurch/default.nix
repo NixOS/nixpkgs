@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pidgin, minixml, libxml2, sqlite, libgcrypt }:
 
 stdenv.mkDerivation rec {
-  name = "purple-lurch-${version}";
+  pname = "purple-lurch";
   version = "0.6.7";
 
   src = fetchFromGitHub {

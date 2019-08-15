@@ -1,7 +1,7 @@
 { stdenv, fetchhg, pidgin, glib, json-glib, protobuf, protobufc }:
 
 stdenv.mkDerivation rec {
-  name = "purple-hangouts-hg-${version}";
+  pname = "purple-hangouts-hg";
   version = "2018-12-02";
 
   src = fetchhg {

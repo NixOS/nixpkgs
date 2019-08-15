@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, makeWrapper, jre_headless }:
 
 stdenv.mkDerivation rec {
-  name = "signal-cli-${version}";
+  pname = "signal-cli";
   version = "0.6.2";
 
   # Building from source would be preferred, but is much more involved.

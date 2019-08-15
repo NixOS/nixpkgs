@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "psi-plus-${version}";
+  pname = "psi-plus";
   version = "1.4.504";
 
   src = fetchFromGitHub {

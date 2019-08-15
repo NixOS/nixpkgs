@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.1";
-  name = "irssi-${version}";
+  pname = "irssi";
 
   src = fetchurl {
-    url = "https://github.com/irssi/irssi/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/irssi/irssi/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "01lay6bxgsk2vzkiknw12zr8gvgnvk9xwg992496knsgakr0x2zx";
   };
 

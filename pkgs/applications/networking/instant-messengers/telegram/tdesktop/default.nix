@@ -7,7 +7,7 @@
 with lib;
 
 mkDerivation rec {
-  name = "telegram-desktop-${version}";
+  pname = "telegram-desktop";
   version = "1.8.0";
 
   # Telegram-Desktop with submodules
