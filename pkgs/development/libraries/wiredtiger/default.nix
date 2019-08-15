@@ -25,7 +25,7 @@ let
   optLeveldb = shouldUsePkg leveldb;
 in
 stdenv.mkDerivation rec {
-  name = "wiredtiger-${version}";
+  pname = "wiredtiger";
   version = "2.6.1";
 
   src = fetchFromGitHub {

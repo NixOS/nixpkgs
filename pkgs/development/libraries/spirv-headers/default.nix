@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
-  name = "spirv-headers-${version}";
+  pname = "spirv-headers";
   version = "2019.1"; # spirv-tools version whose DEPS file calls for this commit
 
   src = fetchFromGitHub {

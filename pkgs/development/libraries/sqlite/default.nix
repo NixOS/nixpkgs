@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sqlite-${version}";
+  pname = "sqlite";
   version = "3.28.0";
 
   # NB! Make sure to update analyzer.nix src (in the same directory).

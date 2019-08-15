@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xalanc, xercesc, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "xml-security-c-${version}";
+  pname = "xml-security-c";
   version = "1.7.3";
 
   src = fetchurl {
-    url = "https://www.apache.org/dist/santuario/c-library/${name}.tar.gz";
+    url = "https://www.apache.org/dist/santuario/c-library/${pname}-${version}.tar.gz";
     sha256 = "e5226e7319d44f6fd9147a13fb853f5c711b9e75bf60ec273a0ef8a190592583";
   };
 

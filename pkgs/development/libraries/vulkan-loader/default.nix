@@ -7,7 +7,7 @@ in
 
 assert version == vulkan-headers.version;
 stdenv.mkDerivation rec {
-  name = "vulkan-loader-${version}";
+  pname = "vulkan-loader";
   inherit version;
 
   src = fetchFromGitHub {
