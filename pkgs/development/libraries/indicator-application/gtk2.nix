@@ -6,7 +6,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "indicator-application-gtk2-${version}";
+  pname = "indicator-application-gtk2";
   version = "12.10.0.1";
 
   src = fetchurl {

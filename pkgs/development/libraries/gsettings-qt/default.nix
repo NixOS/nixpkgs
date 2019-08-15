@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gsettings-qt-${version}";
+  pname = "gsettings-qt";
   version = "0.1.20170824";
 
   src = fetchbzr {
