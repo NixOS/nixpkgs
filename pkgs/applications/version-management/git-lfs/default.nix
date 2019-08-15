@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "git-lfs-${version}";
+  pname = "git-lfs";
   version = "2.7.2";
 
   goPackagePath = "github.com/git-lfs/git-lfs";

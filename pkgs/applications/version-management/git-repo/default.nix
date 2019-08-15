@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "git-repo-${version}";
+  pname = "git-repo";
   version = "1.13.4";
 
   src = fetchFromGitHub {

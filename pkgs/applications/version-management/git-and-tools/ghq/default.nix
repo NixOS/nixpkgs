@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "ghq-${version}";
+  pname = "ghq";
   version = "0.10.2";
 
   goPackagePath = "github.com/motemen/ghq";

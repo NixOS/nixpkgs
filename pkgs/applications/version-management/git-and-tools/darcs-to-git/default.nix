@@ -1,7 +1,7 @@
 { stdenv, fetchgit, ruby, gnugrep, diffutils, git, darcs }:
 
 stdenv.mkDerivation rec {
-  name = "darcs-to-git-${version}";
+  pname = "darcs-to-git";
   version = "2015-06-04";
 
   src = fetchgit {

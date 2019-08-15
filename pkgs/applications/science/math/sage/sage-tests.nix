@@ -25,7 +25,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = src.version;
-  name = "sage-tests-${version}";
+  pname = "sage-tests";
   inherit src;
 
   buildInputs = [

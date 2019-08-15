@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ghostscript }:
 
 stdenv.mkDerivation rec {
-  name = "hmetis-${version}";
+  pname = "hmetis";
   version = "1.5";
 
   src = fetchurl {

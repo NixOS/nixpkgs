@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "9.3.0";
-  name = "gitlab-shell-${version}";
+  pname = "gitlab-shell";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
