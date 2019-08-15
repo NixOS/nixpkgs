@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "1.0.0-alpha.42";
-  name = "terminus-${version}";
+  pname = "terminus";
   src = fetchurl {
     url = "https://github.com/Eugeny/terminus/releases/download/v${version}/terminus_${version}_amd64.deb";
     sha256 = "1r5n75n71zwahg4rxlnf9qzrb0651gxv0987m6bykqmfpnw91nmb";

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, txt2tags, python2Packages }:
 
 stdenv.mkDerivation rec {
-  name = "xdgmenumaker-${version}";
+  pname = "xdgmenumaker";
   version = "1.5";
 
   src = fetchFromGitHub {

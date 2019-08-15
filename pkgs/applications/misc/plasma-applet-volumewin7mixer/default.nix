@@ -1,7 +1,7 @@
 { stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, plasma-pa, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "plasma-applet-volumewin7mixer-${version}";
+  pname = "plasma-applet-volumewin7mixer";
   version = "24";
 
   src = fetchFromGitHub {

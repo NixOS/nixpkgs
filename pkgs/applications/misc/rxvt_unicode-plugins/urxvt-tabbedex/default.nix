@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "urxvt-tabbedex-${version}";
+  pname = "urxvt-tabbedex";
   version = "19.21";
 
   src = fetchFromGitHub {

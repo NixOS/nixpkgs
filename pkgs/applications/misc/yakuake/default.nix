@@ -21,10 +21,9 @@
 mkDerivation rec {
   pname = "yakuake";
   version = "3.0.5";
-  name = "${pname}-${version}";
 
     src = fetchurl {
-      url = "http://download.kde.org/stable/${pname}/${version}/src/${name}.tar.xz";
+      url = "http://download.kde.org/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
       sha256 = "021a9mnghffv2mrdl987mn7wbg8bk6bnf6xz8kn2nwsqxp9kpqh8";
     };
 
