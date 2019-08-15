@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-contrast"
     "--enable-dst-correction"
-    "--enable-extras"
   ] ++ stdenv.lib.optional withGimpPlugin "--with-gimp";
 
   postInstall = stdenv.lib.optionalString withGimpPlugin ''
