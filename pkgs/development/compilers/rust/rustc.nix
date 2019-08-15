@@ -17,11 +17,11 @@ let
   llvmShared = llvm_7.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.36.0";
+  version = "1.37.0";
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "06xv2p6zq03lidr0yaf029ii8wnjjqa894nkmrm6s0rx47by9i04";
+    sha256 = "1hrqprybhkhs6d9b5pjskfnc5z9v2l2gync7nb39qjb5s0h703hj";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -37,7 +37,6 @@ in stdenv.mkDerivation rec {
   # Running `strip -S` when cross compiling can harm the cross rlibs.
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
-
 
   NIX_LDFLAGS =
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
