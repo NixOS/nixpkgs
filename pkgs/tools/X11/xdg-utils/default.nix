@@ -16,11 +16,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "xdg-utils-${version}";
+  pname = "xdg-utils";
   version = "1.1.3";
 
   src = fetchurl {
-    url = "https://portland.freedesktop.org/download/${name}.tar.gz";
+    url = "https://portland.freedesktop.org/download/${pname}-${version}.tar.gz";
     sha256 = "1nai806smz3zcb2l5iny4x7li0fak0rzmjg6vlyhdqm8z25b166p";
   };
 

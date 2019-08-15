@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "git-2018-06-03";
-  name = "run-scaled-${version}";
+  pname = "run-scaled";
 
   src = fetchFromGitHub {
     owner  = "kaueraal";

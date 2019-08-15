@@ -1,7 +1,7 @@
 { stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages, runtimeShell } :
 
 stdenv.mkDerivation rec {
-  name = "pyIRCt-${version}";
+  pname = "pyIRCt";
   version = "0.4";
 
   src = fetchurl {
@@ -19,18 +19,18 @@ stdenv.mkDerivation rec {
   # phaseNames = ["deploy" (a.makeManyWrappers "$out/share/${name}/irc.py" a.pythonWrapperArguments)];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/${name}
+    mkdir -p $out/bin $out/share/${pname}-${version}
     sed -e 's@/usr/bin/@${python}/bin/@' -i irc.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.pyIRCt.xml"]' -i config.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.python-irc-transport.xml"]' -i config.py
     sed -e '/configFiles/iimport os' -i config.py
-    cp * $out/share/${name}
+    cp * $out/share/${pname}-${version}
     cat > $out/bin/pyIRCt <<EOF
       #!${runtimeShell}
-      cd $out/share/${name}
+      cd $out/share/${pname}-${version}
       ./irc.py \"$@\"
     EOF
-    chmod a+rx  $out/bin/pyIRCt $out/share/${name}/irc.py
+    chmod a+rx  $out/bin/pyIRCt $out/share/${pname}-${version}/irc.py
     wrapPythonPrograms
   '';
 

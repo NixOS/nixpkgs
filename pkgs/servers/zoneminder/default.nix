@@ -77,7 +77,7 @@ let
   perlBin = "${perl}/bin/perl";
 
 in stdenv.mkDerivation rec {
-  name = "zoneminder-${version}";
+  pname = "zoneminder";
   version = "1.32.3";
 
   src = fetchFromGitHub {
