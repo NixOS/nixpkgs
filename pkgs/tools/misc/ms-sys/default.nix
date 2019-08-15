@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "ms-sys-${version}";
+  pname = "ms-sys";
   version = "2.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ms-sys/${name}.tar.gz";
+    url = "mirror://sourceforge/ms-sys/${pname}-${version}.tar.gz";
     sha256 = "06xqpm2s9cg8fj7a1822wmh3p4arii0sifssazg1gr6i7xg7kbjz";
   };
 

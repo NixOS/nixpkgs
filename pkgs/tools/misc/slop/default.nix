@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "slop-${version}";
+  pname = "slop";
   version = "7.4";
 
   src = fetchFromGitHub {

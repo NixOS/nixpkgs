@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "vfdecrypt-${version}";
+  pname = "vfdecrypt";
   version = "unstable-2010-08-13";
 
   src = fetchFromGitHub {
