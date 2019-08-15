@@ -8,7 +8,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "dashpay-${version}";
+  pname = "dashpay";
   version = "0.12.2.3";
 
   src = fetchFromGitHub {

@@ -16,7 +16,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "particl-core-${version}";
+  pname = "particl-core";
   version = "0.17.1.2";
 
   src = fetchurl {

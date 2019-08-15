@@ -1,7 +1,7 @@
 { stdenv, lib, go, buildGoPackage, dep, fetchgit, git, cacert }:
 
 buildGoPackage rec {
-  name = "dcrwallet-${version}";
+  pname = "dcrwallet";
   version = "1.1.2";
   rev = "refs/tags/v${version}";
   goPackagePath = "github.com/decred/dcrwallet";
