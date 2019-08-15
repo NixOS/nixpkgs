@@ -1,7 +1,7 @@
 { stdenv, fetchzip, rpmextract, ncurses5, numactl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "intel-ocl-${version}";
+  pname = "intel-ocl";
   version = "5.0-63503";
 
   src = fetchzip {

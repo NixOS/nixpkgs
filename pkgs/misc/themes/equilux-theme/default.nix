@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gnome3, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
 
 stdenv.mkDerivation rec {
-  name = "equilux-theme-${version}";
+  pname = "equilux-theme";
   version = "20181029";
 
   src = fetchFromGitHub {
