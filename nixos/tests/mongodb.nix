@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ...} : let
     print(db.greetings.findOne().greeting);
   '';
 
-  runTest = mdbPackage: {...}: {
+  mongodbNode = mdbPackage: {...}: {
     services = {
       mongodb.enable = true;
       mongodb.package = mdbPackage;
@@ -24,6 +24,12 @@ import ./make-test-python.nix ({ pkgs, ...} : let
     };
   };
 
+  runTest = node: ''
+         ${node}->start;
+         ${node}->waitForUnit("mongodb.service");
+         ${node}->succeed("mongo -u nixtest -p nixtest nixtest ${testQuery}") =~ /hello/ or die;
+         ${node}->shutdown;
+  '';
 
 
 in {
@@ -33,25 +39,12 @@ in {
   };
 
   nodes = {
-    v3_4 = runTest pkgs.mongodb-3_4;
-    v3_6 = runTest pkgs.mongodb-3_6;
-    v4_0 = runTest pkgs.mongodb-4_0;
+    v3_4 = mongodbNode pkgs.mongodb-3_4;
+    v3_6 = mongodbNode pkgs.mongodb-3_6;
+    v4_0 = mongodbNode pkgs.mongodb-4_0;
   };
 
-  testScript = ''
-         $v3_4->start;
-         $v3_4->waitForUnit("mongodb.service");
-         $v3_4->succeed("mongo -u nixtest -p nixtest nixtest ${testQuery}") =~ /hello/ or die;
-         $v3_4->shutdown;
-
-         $v3_6->start;
-         $v3_6->waitForUnit("mongodb.service");
-         $v3_6->succeed("mongo -u nixtest -p nixtest nixtest ${testQuery}") =~ /hello/ or die;
-         $v3_6->shutdown;
-
-         $v4_0->start;
-         $v4_0->waitForUnit("mongodb.service");
-         $v4_0->succeed("mongo -u nixtest -p nixtest nixtest ${testQuery}") =~ /hello/ or die;
-         $v4_0->shutdown;
-  '';
+  testScript = runTest "$v3_4" +
+    runTest "$v3_6" +
+    runTest "$v4_0";
 })
