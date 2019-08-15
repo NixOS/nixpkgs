@@ -12,11 +12,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sile-${version}";
+  pname = "sile";
   version = "0.9.5.1";
 
   src = fetchurl {
-    url = "https://github.com/simoncozens/sile/releases/download/v${version}/${name}.tar.bz2";
+    url = "https://github.com/simoncozens/sile/releases/download/v${version}/${pname}-${version}.tar.bz2";
     sha256 = "0fh0jbpsyqyq0hzq4midn7yw2z11hqdgqb9mmgz766cp152wrkb0";
   };
 

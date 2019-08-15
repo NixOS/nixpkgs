@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, flex, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "miller-${version}";
+  pname = "miller";
 
   version = "5.4.0";
 
