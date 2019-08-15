@@ -17,7 +17,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nomacs-${version}";
+  pname = "nomacs";
   version = "3.12";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name    = "exercism-${version}";
+  pname = "exercism";
   version = "3.0.11";
 
   goPackagePath = "github.com/exercism/cli";

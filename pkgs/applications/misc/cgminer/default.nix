@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.7.2";
-  name = "cgminer-${version}";
+  pname = "cgminer";
 
   src = fetchgit {
     url = "https://github.com/ckolivas/cgminer.git";
