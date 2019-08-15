@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libtool, perl }:
 
 stdenv.mkDerivation rec {
-  name = "ace-${version}";
+  pname = "ace";
   version = "6.5.5";
 
   src = fetchurl {

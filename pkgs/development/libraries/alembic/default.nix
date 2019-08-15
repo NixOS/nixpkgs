@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec
 {
-  name = "alembic-${version}";
+  pname = "alembic";
   version = "1.7.11";
 
   src = fetchFromGitHub {
