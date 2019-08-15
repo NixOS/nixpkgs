@@ -1,6 +1,6 @@
-{ zlib, gcc, stdenv, fetchFromGitHub }:
+{ zlib, gcc, stdenv, fetchFromGitHub, overrideCC }:
 
-stdenv.mkDerivation rec {
+(overrideCC stdenv gcc).mkDerivation rec {
   pname = "ls4";
 
   version = "unstable-2019-07-31";
