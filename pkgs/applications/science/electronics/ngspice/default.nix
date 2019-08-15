@@ -2,7 +2,7 @@
 , readline, libX11, libICE, libXaw, libXmu, libXext, libXt, fftw }:
 
 stdenv.mkDerivation rec {
-  name = "ngspice-${version}";
+  pname = "ngspice";
   version = "30";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "workcraft-${version}";
+  pname = "workcraft";
   version = "3.1.9";
 
   src = fetchurl {
