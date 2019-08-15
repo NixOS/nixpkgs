@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   rev = if emscriptenRev == null
         then "version_${version}"
         else emscriptenRev;
-  name = "binaryen-${version}";
+  pname = "binaryen";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";

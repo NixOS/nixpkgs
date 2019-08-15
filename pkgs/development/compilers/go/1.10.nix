@@ -23,7 +23,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "go-${version}";
+  pname = "go";
   version = "1.10.8";
 
   src = fetchFromGitHub {

@@ -16,7 +16,7 @@ let
     }:
 
     stdenv.mkDerivation rec {
-      name = "cudatoolkit-${version}";
+      pname = "cudatoolkit";
       inherit version runPatches;
 
       dontPatchELF = true;

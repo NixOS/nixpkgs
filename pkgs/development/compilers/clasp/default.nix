@@ -56,7 +56,6 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "clasp";
   version = "0.8.99.20181128";
 
