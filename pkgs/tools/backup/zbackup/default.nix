@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, zlib, openssl, protobuf, protobufc, lzo, libunwind } :
 stdenv.mkDerivation rec {
-  name = "zbackup-${version}";
+  pname = "zbackup";
   version = "1.4.4";
   src = fetchurl {
     url = "https://github.com/zbackup/zbackup/archive/1.4.4.tar.gz";

@@ -2,11 +2,11 @@
 , utillinux, asciidoc, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "btrbk-${version}";
+  pname = "btrbk";
   version = "0.28.0";
 
   src = fetchurl {
-    url = "https://digint.ch/download/btrbk/releases/${name}.tar.xz";
+    url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
     sha256 = "1bqgcbkdd5s3l3ba1ifa9l523r8cr5y3arjdy9f6rmm840kn7xzf";
   };
 

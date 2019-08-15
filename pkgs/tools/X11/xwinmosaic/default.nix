@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.4.2";
-  name = "xwinmosaic-${version}";
+  pname = "xwinmosaic";
 
   src = fetchgit {
     url = "https://github.com/soulthreads/xwinmosaic/";
