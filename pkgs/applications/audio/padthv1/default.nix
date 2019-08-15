@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5, fftw }:
 
 stdenv.mkDerivation rec {
-  name = "padthv1-${version}";
+  pname = "padthv1";
   version = "0.9.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/padthv1/${name}.tar.gz";
+    url = "mirror://sourceforge/padthv1/${pname}-${version}.tar.gz";
     sha256 = "1k4p2ir12qjcs62knvw2s6qyvb46203yx22fnwp341cjk171cxji";
   };
 

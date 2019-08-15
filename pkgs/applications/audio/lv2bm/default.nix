@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, glib, lilv, lv2, pkgconfig, serd, sord, sratom }:
 
 stdenv.mkDerivation rec {
-  name = "lv2bm-${version}";
+  pname = "lv2bm";
   version = "git-2015-11-29";
 
   src = fetchFromGitHub {
