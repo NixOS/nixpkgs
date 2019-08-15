@@ -16,9 +16,18 @@ stdenv.mkDerivation rec {
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
   postPatch = ''
-    substituteInPlace src/man_db.conf.in \
-      --replace "/usr/local/share" "/run/current-system/sw/share" \
-      --replace "/usr/share" "/run/current-system/sw/share"
+    # Remove all mandatory manpaths. Nixpkgs makes no requirements on
+    # these directories existing.
+    sed -i 's/^MANDATORY_MANPATH/# &/' src/man_db.conf.in
+
+    # Add Nixpkgs and NixOS-related manpaths
+    echo "MANPATH_MAP	/run/current-system/sw/bin		/run/current-system/sw/share/man" >> src/man_db.conf.in
+    echo "MANPATH_MAP	/run/wrappers/bin			/run/current-system/sw/share/man" >> src/man_db.conf.in
+    echo "MANPATH_MAP	/nix/var/nix/profiles/default/bin	/nix/var/nix/profiles/default/share/man" >> src/man_db.conf.in
+
+    # Add mandb locations for the above
+    echo "MANDB_MAP	/run/current-system/sw/share/man	/var/cache/man/nixos" >> src/man_db.conf.in
+    echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
   '';
 
   configureFlags = [
