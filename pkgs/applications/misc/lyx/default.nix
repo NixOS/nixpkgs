@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   version = "2.3.0";
-  name = "lyx-${version}";
+  pname = "lyx";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${name}.tar.xz";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
     sha256 = "0axri2h8xkna4mkfchfyyysbjl7s486vx80p5hzj9zgsvdm5a3ri";
   };
 
