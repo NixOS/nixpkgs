@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "minio-client-${version}";
+  pname = "minio-client";
 
   version = "2019-01-30T19-57-22Z";
 

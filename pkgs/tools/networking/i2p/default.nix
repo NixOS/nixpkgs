@@ -1,7 +1,7 @@
 { stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 let wrapper = stdenv.mkDerivation rec {
-  name = "wrapper-${version}";
+  pname = "wrapper";
   version = "3.5.35";
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";

@@ -2,12 +2,11 @@
 , boost, python3, postgresql, mysql, gmp, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "kea";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/${pname}/${version}/${name}.tar.gz";
+    url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
     sha256 = "1v5a3prgrplw6dp9124f9gpy0kz0jrjwhnvzrw3zcynad2mlzkpd";
   };
 
