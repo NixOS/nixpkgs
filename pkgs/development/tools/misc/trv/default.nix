@@ -6,7 +6,7 @@
 assert stdenv.lib.versionOlder "4.02" ocaml.version;
 
 stdenv.mkDerivation rec {
-  name = "trv-${version}";
+  pname = "trv";
   version = "0.1.3";
 
   src = fetchFromGitHub {
