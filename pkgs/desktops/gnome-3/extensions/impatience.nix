@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, glib }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-impatience-${version}";
+  pname = "gnome-shell-impatience";
   version = "0.4.5";
 
   src = fetchFromGitHub {

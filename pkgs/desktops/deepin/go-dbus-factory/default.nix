@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "go-dbus-factory";
   version = "0.9.0";
 
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's:/share/gocode:/share/go:' Makefile
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "GoLang DBus factory for the Deepin Desktop Environment";

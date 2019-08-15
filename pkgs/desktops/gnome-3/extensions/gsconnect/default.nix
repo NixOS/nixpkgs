@@ -3,7 +3,7 @@
 , glib, gtk3, at-spi2-core, upower, openssh, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-gsconnect-${version}";
+  pname = "gnome-shell-gsconnect";
   version = "23";
 
   src = fetchFromGitHub {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgnome_shell_libdir=${gnome3.gnome-shell}/lib"
-    "-Dgsettings_schemadir=${placeholder "out"}/share/gsettings-schemas/${name}/glib-2.0/schemas"
+    "-Dgsettings_schemadir=${placeholder "out"}/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas"
     "-Dchrome_nmhdir=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
     "-Dchromium_nmhdir=${placeholder "out"}/etc/chromium/native-messaging-hosts"
     "-Dopenssl_path=${openssl}/bin/openssl"

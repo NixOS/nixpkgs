@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-timepp-${version}";
+  pname = "gnome-shell-extension-timepp";
   version = "unstable-2019-03-30";
 
   src = fetchFromGitHub {
