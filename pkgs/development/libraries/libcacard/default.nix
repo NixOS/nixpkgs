@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, nss }:
 
 stdenv.mkDerivation rec {
-  name = "libcacard-${version}";
+  pname = "libcacard";
   version = "2.6.1";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/libcacard/${name}.tar.xz";
+    url = "https://www.spice-space.org/download/libcacard/${pname}-${version}.tar.xz";
     sha256 = "1w6y0kiakhg7dgyf8yqpm4jj6jiv17zhy9lp3d7z32q1pniccxk2";
   };
 
