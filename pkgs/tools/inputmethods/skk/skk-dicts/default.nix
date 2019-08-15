@@ -28,7 +28,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "skk-dicts-unstable-${version}";
+  pname = "skk-dicts-unstable";
   version = "2017-10-26";
   srcs = [ small medium large edict assoc ];
   nativeBuildInputs = [ skktools ];
