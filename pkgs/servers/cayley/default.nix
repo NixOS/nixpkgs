@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "cayley-${version}";
+  pname = "cayley";
   version = "0.6.1";
 
   goPackagePath = "github.com/cayleygraph/cayley";

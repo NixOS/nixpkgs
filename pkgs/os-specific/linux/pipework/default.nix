@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pipework-${version}";
+  pname = "pipework";
   version = "2017-08-22";
   src = fetchFromGitHub {
     owner = "jpetazzo";

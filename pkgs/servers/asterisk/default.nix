@@ -8,7 +8,7 @@
 let
   common = {version, sha256, externals}: stdenv.mkDerivation rec {
     inherit version;
-    name = "asterisk-${version}";
+    pname = "asterisk";
 
     buildInputs = [ jansson libedit libxml2 libxslt ncurses openssl sqlite
                     dmidecode libuuid newt
