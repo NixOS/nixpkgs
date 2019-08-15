@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   version = "0.151.u0-1";
-  name    = "sdlmame-${version}";
+  pname = "sdlmame";
 
   src = if stdenv.hostPlatform.system == "x86_64-linux"
     then fetchurl {
-      url    = "http://seblu.net/a/archive/packages/s/sdlmame/${name}-x86_64.pkg.tar.xz";
+      url    = "http://seblu.net/a/archive/packages/s/sdlmame/${pname}-${version}-x86_64.pkg.tar.xz";
       sha256 = "1j9vjxhrhsskrlk5wr7al4wk2hh3983kcva42mqal09bmc8qg3m9";
     }
     else fetchurl {
-      url    = "http://seblu.net/a/archive/packages/s/sdlmame/${name}-i686.pkg.tar.xz";
+      url    = "http://seblu.net/a/archive/packages/s/sdlmame/${pname}-${version}-i686.pkg.tar.xz";
       sha256 = "1i38j9ml66pyxzm0zzf1fv4lb40f6w47cdgaw846q91pzakkkqn7";
     };
 

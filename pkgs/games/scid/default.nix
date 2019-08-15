@@ -1,7 +1,7 @@
 { stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "scid-${version}";
+  pname = "scid";
   version = "4.3";
 
   src = fetchurl {

@@ -2,7 +2,7 @@
 , boost, lua5_1, luafilesystem, luazip, lrexlib-pcre, luasql-sqlite3, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "mudlet-${version}";
+  pname = "mudlet";
   version = "3.0.0-delta";
 
   src = fetchurl {
