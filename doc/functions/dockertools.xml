@@ -312,7 +312,23 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
       Maximum number of layers to create.
      </para>
      <para>
-      <emphasis>Default:</emphasis> <literal>24</literal>
+      <emphasis>Default:</emphasis> <literal>100</literal>
+     </para>
+     <para>
+      <emphasis>Maximum:</emphasis> <literal>125</literal>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>extraCommands</varname> <emphasis>optional</emphasis>
+    </term>
+    <listitem>
+     <para>
+       Shell commands to run while building the final layer, without access
+       to most of the layer contents. Changes to this layer are "on top"
+       of all the other layers, so can create additional directories
+       and files.
      </para>
     </listitem>
    </varlistentry>
