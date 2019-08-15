@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ifdtool-${version}";
+  pname = "ifdtool";
   version = "4.9";
 
   src = fetchurl {

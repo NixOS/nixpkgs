@@ -1,7 +1,7 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "docui-${version}";
+  pname = "docui";
   version = "1.0.3";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.0.2";
-  name = "graylog-${version}";
+  pname = "graylog";
 
   src = fetchurl {
     url = "https://packages.graylog2.org/releases/graylog/graylog-${version}.tgz";
