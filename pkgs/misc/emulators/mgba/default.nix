@@ -14,7 +14,7 @@ let
     startupNotify = "false";
   };
 in stdenv.mkDerivation rec {
-  name = "mgba-${version}";
+  pname = "mgba";
   version = "0.7.2";
 
   src = fetchFromGitHub {

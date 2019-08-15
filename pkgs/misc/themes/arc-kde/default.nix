@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "arc-kde-theme-${version}";
+  pname = "arc-kde-theme";
   version = "2017-11-09";
 
   src = fetchFromGitHub {
