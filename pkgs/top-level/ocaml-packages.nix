@@ -128,6 +128,8 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    charInfo_width = callPackage ../development/ocaml-modules/charInfo_width { };
+
     checkseum = callPackage ../development/ocaml-modules/checkseum { };
 
     cil = callPackage ../development/ocaml-modules/cil { };
