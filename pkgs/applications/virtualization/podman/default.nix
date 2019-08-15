@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "podman-${version}";
+  pname = "podman";
   version = "1.4.4";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication rec {
   version = "1.1.1";
-  name = "streamlink-${version}";
+  pname = "streamlink";
 
   src = fetchFromGitHub {
     owner = "streamlink";

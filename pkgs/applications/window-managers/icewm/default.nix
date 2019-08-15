@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "icewm-${version}";
+  pname = "icewm";
   version = "1.4.2";
 
   buildInputs =
