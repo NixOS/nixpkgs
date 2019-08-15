@@ -275,6 +275,9 @@ with lib;
           throw "services.redshift.longitude is set to null, you can remove this"
           else builtins.fromJSON value))
 
+    # Fontconfig
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
+
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]

@@ -94,11 +94,6 @@ let
     ln -s ${subpixelConf} $support_folder/10-subpixel.conf
     ln -s ${subpixelConf} $latest_folder/10-subpixel.conf
 
-    ${optionalString (cfg.dpi != 0) ''
-    ln -s ${dpiConf} $support_folder/11-dpi.conf
-    ln -s ${dpiConf} $latest_folder/11-dpi.conf
-    ''}
-
     ${optionalString (!cfg.includeUserConf) ''
     rm $support_folder/50-user.conf
     rm $latest_folder/50-user.conf
@@ -179,20 +174,6 @@ let
         </edit>
         <edit mode="append" name="lcdfilter">
           <const>lcd${cfg.subpixel.lcdfilter}</const>
-        </edit>
-      </match>
-
-    </fontconfig>
-  '';
-
-  dpiConf = pkgs.writeText "fc-11-dpi.conf" ''
-    <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-    <fontconfig>
-
-      <match target="pattern">
-        <edit name="dpi" mode="assign">
-          <double>${toString cfg.dpi}</double>
         </edit>
       </match>
 
