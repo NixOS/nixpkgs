@@ -4,7 +4,7 @@
   qtbase, qttools, glm }:
 
 stdenv.mkDerivation rec {
-  name = "solarus-quest-editor-${version}";
+  pname = "solarus-quest-editor";
   version = "1.6.0";
     
   src = fetchFromGitLab {

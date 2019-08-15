@@ -1,7 +1,7 @@
 { stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, groff }:
 
 stdenv.mkDerivation rec {
-  name = "ronn-${version}";
+  pname = "ronn";
   version = env.gems.ronn.version;
 
   env = bundlerEnv rec {

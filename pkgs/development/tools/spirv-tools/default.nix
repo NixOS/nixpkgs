@@ -6,7 +6,7 @@ in
 
 assert version == spirv-headers.version;
 stdenv.mkDerivation rec {
-  name = "spirv-tools-${version}";
+  pname = "spirv-tools";
   inherit version;
 
   src = fetchFromGitHub {

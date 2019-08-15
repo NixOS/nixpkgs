@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "skaffold-${version}";
+  pname = "skaffold";
   version = "0.30.0";
   # rev is the 0.30.0 commit, mainly for skaffold version command output
   rev = "fe31429012110e6fd70f97971288bd266ba95bed";

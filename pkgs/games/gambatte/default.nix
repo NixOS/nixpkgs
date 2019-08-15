@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, scons, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "gambatte-${version}";
+  pname = "gambatte";
   version = "2016-05-03";
 
   src = fetchFromGitHub {

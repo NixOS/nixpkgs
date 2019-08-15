@@ -3,7 +3,7 @@
 }:
 stdenv.mkDerivation rec {
   version = "0.96";
-  name = "gcompris-${version}";
+  pname = "gcompris";
 
   src = fetchurl {
     url = "http://gcompris.net/download/qt/src/gcompris-qt-${version}.tar.xz";

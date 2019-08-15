@@ -2,7 +2,7 @@
 , openal, curl }:
 
 stdenv.mkDerivation rec {
-  name = "dhewm3-${version}";
+  pname = "dhewm3";
   version = "1.5.0";
 
   src = fetchFromGitHub {

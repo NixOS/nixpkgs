@@ -4,7 +4,6 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "vcstool";
   version = "0.1.36";
 
