@@ -2,7 +2,7 @@
 , lua52Packages, libXft, ncurses, ninja, readline, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "wordgrinder-${version}";
+  pname = "wordgrinder";
   version = "0.7.2";
 
   src = fetchFromGitHub {
