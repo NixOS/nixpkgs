@@ -14,6 +14,6 @@ mkDerivation rec {
   ];
 
   prePatch = ''
-    substituteInPlace configure.in --replace '`sw_vers -productVersion`' '10.10'
+    substituteInPlace configure.in --replace '`sw_vers -productVersion`' "''${MACOSX_DEPLOYMENT_TARGET:-10.12}"
   '';
 }
