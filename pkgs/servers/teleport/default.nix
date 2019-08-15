@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, zip, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "teleport-${version}";
+  pname = "teleport";
   version = "4.0.2";
 
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.

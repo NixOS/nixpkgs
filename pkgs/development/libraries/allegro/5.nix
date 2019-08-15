@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "allegro-${version}";
+  pname = "allegro";
   version = "5.2.4.0";
 
   src = fetchFromGitHub {

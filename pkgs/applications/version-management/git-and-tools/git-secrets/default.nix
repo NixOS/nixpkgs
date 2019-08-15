@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, git, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "git-secrets-${version}";
+  pname = "git-secrets";
   version = "1.3.0";
 
   src = fetchFromGitHub {

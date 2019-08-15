@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "basex-${version}";
+  pname = "basex";
   version = "8.6.6";
 
   src = fetchurl {

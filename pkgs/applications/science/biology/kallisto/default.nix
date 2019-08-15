@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, hdf5, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "kallisto-${version}";
+  pname = "kallisto";
   version = "0.43.1";
 
   src = fetchFromGitHub {

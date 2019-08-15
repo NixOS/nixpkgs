@@ -10,7 +10,7 @@ assert portaudioSupport -> portaudio != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "fmit-${version}";
+  pname = "fmit";
   version = "1.1.14";
 
   src = fetchFromGitHub {

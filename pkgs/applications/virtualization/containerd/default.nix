@@ -3,7 +3,7 @@
 with lib;
 
 buildGoPackage rec {
-  name = "containerd-${version}";
+  pname = "containerd";
   version = "1.2.6";
 
   src = fetchFromGitHub {

@@ -7,7 +7,7 @@
 with (import ./srcs.nix { inherit fetchurl; });
 
 stdenv.mkDerivation rec {
-  name = "openafs-${version}";
+  pname = "openafs";
   inherit version srcs;
 
   nativeBuildInputs = [ autoconf automake flex yacc perl which libxslt ];

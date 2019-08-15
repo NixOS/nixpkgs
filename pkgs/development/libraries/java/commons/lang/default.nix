@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.9";
-  name    = "commons-lang-${version}";
+  pname = "commons-lang";
 
   src = fetchurl {
     url    = "mirror://apache/commons/lang/binaries/commons-lang3-${version}-bin.tar.gz";

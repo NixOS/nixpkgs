@@ -3,7 +3,7 @@
 let dialect = with stdenv.lib; last (splitString "-" stdenv.hostPlatform.system); in
 
 stdenv.mkDerivation rec {
-  name = "lsof-${version}";
+  pname = "lsof";
   version = "4.91";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

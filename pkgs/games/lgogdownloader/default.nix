@@ -2,7 +2,7 @@
 , htmlcxx, rhash, tinyxml-2, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "lgogdownloader-${version}";
+  pname = "lgogdownloader";
   version = "3.5";
 
   src = fetchFromGitHub {

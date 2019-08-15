@@ -1,7 +1,7 @@
 { stdenv, autoreconfHook, fetchurl, dbus-glib, gtk2, pkgconfig, wordnet }:
 
 stdenv.mkDerivation rec {
-  name = "artha-${version}";
+  pname = "artha";
   version = "1.0.3";
 
   src = fetchurl {

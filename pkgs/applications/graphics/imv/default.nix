@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "imv-${version}";
+  pname = "imv";
   version = "3.1.2";
 
   src = fetchFromGitHub {

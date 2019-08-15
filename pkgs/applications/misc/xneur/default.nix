@@ -2,7 +2,7 @@
 , xosd, libnotify, enchant, wrapGAppsHook, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
-   name = "xneur-${version}";
+   pname = "xneur";
    version = "0.20.0";
 
   src = fetchurl {

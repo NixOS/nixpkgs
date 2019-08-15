@@ -37,18 +37,18 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "mattermost-desktop-${version}";
+    pname = "mattermost-desktop";
     version = "4.2.0";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-x64.tar.gz";
+          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
           sha256 = "0hka94gwpscjn61032c0grpjv5gjb0j8rkx6pgwci617n29xkyf6";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-ia32.tar.gz";
+          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
           sha256 = "1nx2sgbnr60h6kn56wv54m7cvyx27d64bfprpb94hqd5c2z21x80";
         }
       else

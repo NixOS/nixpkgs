@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name    = "grc-${version}";
+  pname = "grc";
   version = "1.11.3";
 
   src = fetchFromGitHub {

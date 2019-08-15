@@ -1,7 +1,7 @@
 { stdenv, rpmextract, ncurses5, patchelf, requireFile, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "megacli-${version}";
+  pname = "megacli";
   version = "8.07.14";
 
   src =

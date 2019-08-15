@@ -1,7 +1,7 @@
 { stdenv, fetchgit, perl }:
 
 stdenv.mkDerivation rec {
-  name = "multimarkdown-${version}";
+  pname = "multimarkdown";
   version = "4.7.1";
 
   src = fetchgit {

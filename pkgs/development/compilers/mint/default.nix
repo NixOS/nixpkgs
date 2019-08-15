@@ -34,7 +34,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "0.5.0";
-  name = "mint-${version}";
+  pname = "mint";
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";

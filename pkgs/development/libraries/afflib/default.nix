@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.7.18";
-  name = "afflib-${version}";
+  pname = "afflib";
 
   src = fetchFromGitHub {
     owner = "sshock";

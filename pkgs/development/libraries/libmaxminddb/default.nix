@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libmaxminddb-${version}";
+  pname = "libmaxminddb";
   version = "1.3.2";
 
   src = fetchurl {
-    url = meta.homepage + "/releases/download/${version}/${name}.tar.gz";
+    url = meta.homepage + "/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "1w60yq26x3yr3abxk7fwqqaggw8dc98595jdliaa3kyqdfm83y76";
   };
 

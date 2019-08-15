@@ -51,7 +51,7 @@ let
   inherit (stdenv.lib) optional optionals;
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-${version}";
+  pname = "gst-plugins-bad";
   version = "1.16.0";
 
   meta = with stdenv.lib; {
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
+    url = "${meta.homepage}/src/gst-plugins-bad/${pname}-${version}.tar.xz";
     sha256 = "019b0yqjrcg6jmfd4cc336h1bz5p4wxl58yz1c4sdb96avirs4r2";
   };
 

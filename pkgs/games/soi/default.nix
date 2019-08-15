@@ -2,12 +2,12 @@
 , boost, eigen2, lua, luabind, libGLU_combined, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "soi-${version}";
+  pname = "soi";
   version = "0.1.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/soi/Spheres%20of%20Influence-${version}-Source.tar.bz2";
-    name = "${name}.tar.bz2";
+    name = "${pname}-${version}.tar.bz2";
     sha256 = "03c3wnvhd42qh8mi68lybf8nv6wzlm1nx16d6pdcn2jzgx1j2lzd";
   };
 

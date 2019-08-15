@@ -13,7 +13,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "1.16.0";
-  name = "netdata-${version}";
+  pname = "netdata";
 
   src = fetchurl {
     url = "https://github.com/netdata/netdata/releases/download/v${version}/netdata-v${version}.tar.gz";

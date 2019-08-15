@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.2.2";
-  name = "vampire-${version}";
+  pname = "vampire";
 
   src = fetchFromGitHub {
     owner = "vprover";

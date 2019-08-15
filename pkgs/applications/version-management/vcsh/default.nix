@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.20170915";       # date of commit we're pulling
-  name = "vcsh-${version}";
+  pname = "vcsh";
 
   src = fetchFromGitHub {
     owner = "RichiH";

@@ -4,7 +4,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "1.06";
-  name = "ndjbdns-${version}";
+  pname = "ndjbdns";
 
   src = fetchFromGitHub {
     owner = "pjps";

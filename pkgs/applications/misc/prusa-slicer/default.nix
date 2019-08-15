@@ -8,7 +8,7 @@ let
                  else "2.4";
 in
 stdenv.mkDerivation rec {
-  name = "prusa-slicer-${version}";
+  pname = "prusa-slicer";
   version = "2.0.0";
 
   enableParallelBuilding = true;

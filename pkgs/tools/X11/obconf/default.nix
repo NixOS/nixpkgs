@@ -2,7 +2,7 @@
   imlib2, libstartup_notification, makeWrapper, libSM }:
 
 stdenv.mkDerivation rec {
-  name = "obconf-${version}";
+  pname = "obconf";
   version = "2.0.4";
 
   src = fetchurl {

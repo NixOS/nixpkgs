@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ruby, opencl-headers, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
-  name = "ocl-icd-${version}";
+  pname = "ocl-icd";
   version = "2.2.10";
 
   src = fetchurl {
-    url = "https://forge.imag.fr/frs/download.php/810/${name}.tar.gz";
+    url = "https://forge.imag.fr/frs/download.php/810/${pname}-${version}.tar.gz";
     sha256 = "0f14gpa13sdm0kzqv5yycp4pschbmi6n5fj7wl4ilspzsrqcgqr2";
   };
 

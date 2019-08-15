@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "statsd_exporter-${version}";
+  pname = "statsd_exporter";
   version = "0.9.0";
   rev = version;
 

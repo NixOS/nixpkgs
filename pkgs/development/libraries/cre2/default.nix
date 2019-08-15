@@ -2,7 +2,7 @@
   libtool, pkgconfig, re2, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "cre2-${version}";
+  pname = "cre2";
   version = "0.3.0";
     
   src = fetchFromGitHub {

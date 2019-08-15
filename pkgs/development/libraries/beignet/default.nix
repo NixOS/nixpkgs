@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "beignet-${version}";
+  pname = "beignet";
   version = "unstable-2018.08.20";
 
   src = fetchFromGitHub {
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.utests = stdenv.mkDerivation rec {
-    name = "beignet-utests-${version}";
+    pname = "beignet-utests";
     inherit version src;
 
     preConfigure = ''

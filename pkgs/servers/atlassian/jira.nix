@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "atlassian-jira-${version}";
+  pname = "atlassian-jira";
   version = "8.3.0";
 
   src = fetchurl {

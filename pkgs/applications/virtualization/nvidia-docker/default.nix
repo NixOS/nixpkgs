@@ -25,7 +25,7 @@ with lib; let
   };
 
   nvidia-container-runtime-hook = buildGoPackage rec {
-    name = "nvidia-container-runtime-hook-${version}";
+    pname = "nvidia-container-runtime-hook";
     version = "1.4.0";
 
     goPackagePath = "nvidia-container-runtime-hook";
@@ -46,7 +46,7 @@ with lib; let
   });
 
 in stdenv.mkDerivation rec {
-  name = "nvidia-docker-${version}";
+  pname = "nvidia-docker";
   version = "2.0.3";
 
   src = fetchFromGitHub {

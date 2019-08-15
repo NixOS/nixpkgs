@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "1.0.0-beta1";
-  name = "hedgewars-${version}";
+  pname = "hedgewars";
   src = fetchhg {
     url = "https://hg.hedgewars.org/hedgewars/";
     rev = "7ab5cf405686";

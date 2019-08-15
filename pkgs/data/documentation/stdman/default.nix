@@ -1,7 +1,7 @@
 { stdenv, curl, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "stdman-${version}";
+  pname = "stdman";
   version = "2018.03.11";
 
   src = fetchFromGitHub {

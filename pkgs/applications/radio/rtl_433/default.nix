@@ -5,7 +5,7 @@
 stdenv.mkDerivation rec {
 
   version = "18.12";
-  name = "rtl_433-${version}";
+  pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";

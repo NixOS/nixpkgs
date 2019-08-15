@@ -2,7 +2,7 @@
   which }:
 
 stdenv.mkDerivation rec {
-  name = "libbap-${version}";
+  pname = "libbap";
   version = "master-2019-04-05";
 
   src = fetchFromGitHub {

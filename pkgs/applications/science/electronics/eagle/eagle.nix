@@ -12,7 +12,7 @@ let
     ];
   in
   stdenv.mkDerivation rec {
-    name = "eagle-${version}";
+    pname = "eagle";
     version = "9.4.2";
 
     src = fetchurl {

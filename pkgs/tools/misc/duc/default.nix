@@ -7,7 +7,7 @@
 assert enableCairo -> cairo != null && pango != null;
 
 stdenv.mkDerivation rec {
-  name = "duc-${version}";
+  pname = "duc";
   version = "1.4.4";
 
   src = fetchFromGitHub {

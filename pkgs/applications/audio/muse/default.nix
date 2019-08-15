@@ -17,7 +17,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "muse-sequencer-${version}";
+  pname = "muse-sequencer";
   version = "3.1pre1";
 
   meta = with stdenv.lib; {

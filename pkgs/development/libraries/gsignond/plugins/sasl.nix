@@ -2,7 +2,7 @@
 , gtk-doc, docbook_xml_dtd_43, docbook_xml_dtd_45, docbook_xsl, glibcLocales, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "gsignond-plugin-sasl-${version}";
+  pname = "gsignond-plugin-sasl";
   version = "2018-10-15";
 
   src = fetchFromGitLab {

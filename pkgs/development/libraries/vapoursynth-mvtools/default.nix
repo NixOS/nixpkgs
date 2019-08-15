@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vapoursynth-mvtools-${version}";
+  pname = "vapoursynth-mvtools";
   version = "21";
 
   src = fetchFromGitHub {

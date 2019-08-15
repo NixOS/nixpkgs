@@ -2,11 +2,11 @@
 , kerberos, keyutils, pam, talloc }:
 
 stdenv.mkDerivation rec {
-  name = "cifs-utils-${version}";
+  pname = "cifs-utils";
   version = "6.9";
 
   src = fetchurl {
-    url = "mirror://samba/pub/linux-cifs/cifs-utils/${name}.tar.bz2";
+    url = "mirror://samba/pub/linux-cifs/cifs-utils/${pname}-${version}.tar.bz2";
     sha256 = "175cp509wn1zv8p8mv37hkf6sxiskrsxdnq22mhlsg61jazz3n0q";
   };
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoconf, automake, libsndfile, libtool, pkgconfig, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "libgig-${version}";
+  pname = "libgig";
   version = "4.1.0";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${name}.tar.bz2";
+    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
     sha256 = "02xx6bqxzgkvrawwnzrnxx1ypk244q4kpwfd58266f9ji8kq18h6";
   };
 

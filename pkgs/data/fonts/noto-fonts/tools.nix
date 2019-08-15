@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonPackage rec {
   version = "2017-09-25";
-  name = "nototools-${version}";
+  pname = "nototools";
 
   src = fetchFromGitHub {
     owner = "googlei18n";

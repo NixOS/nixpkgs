@@ -1,7 +1,7 @@
 { lib, systemd, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "journalbeat-${version}";
+  pname = "journalbeat";
   version = "5.6.8";
 
   src = fetchFromGitHub {

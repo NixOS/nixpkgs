@@ -1,7 +1,7 @@
 { fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jdk11, libXxf86vm }:
 
 stdenv.mkDerivation rec {
-  name = "josm-${version}";
+  pname = "josm";
   version = "15238";
 
   src = fetchurl {

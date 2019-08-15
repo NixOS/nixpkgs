@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, makeWrapper, libbsd, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "csmith-${version}";
+  pname = "csmith";
   version = "2.3.0";
 
   src = fetchurl {
-    url = "https://embed.cs.utah.edu/csmith/${name}.tar.gz";
+    url = "https://embed.cs.utah.edu/csmith/${pname}-${version}.tar.gz";
     sha256 = "1mb5zgixsyf86slggs756k8a5ddmj980md3ic9sa1y75xl5cqizj";
   };
 
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \
-      --replace '$CSMITH_HOME/runtime' $out/include/${name} \
-      --replace ' ''${CSMITH_HOME}/runtime' " $out/include/${name}" \
+      --replace '$CSMITH_HOME/runtime' $out/include/${pname}-${version} \
+      --replace ' ''${CSMITH_HOME}/runtime' " $out/include/${pname}-${version}" \
       --replace '$CSMITH_HOME/src/csmith' $out/bin/csmith
 
     substituteInPlace $out/bin/launchn.pl \

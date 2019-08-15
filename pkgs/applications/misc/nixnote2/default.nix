@@ -2,7 +2,7 @@
 , qtbase, qtwebkit, poppler, qmake, hunspell, html-tidy}:
 
 mkDerivation rec {
-  name = "nixnote2-${version}";
+  pname = "nixnote2";
   version = "2.0.2";
 
   src = fetchFromGitHub {

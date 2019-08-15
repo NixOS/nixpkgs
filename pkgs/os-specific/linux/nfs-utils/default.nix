@@ -8,11 +8,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-${version}";
+  pname = "nfs-utils";
   version = "2.3.4";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${name}.tar.xz";
+    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
     sha256 = "1kcn11glc3rma1gvykbk1s542mgz36ipi7yqxlk9jyh8hsiqncpq";
   };
 

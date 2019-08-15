@@ -1,11 +1,11 @@
 { stdenv, fetchurl, intltool, libxml2, pkgconfig, gnome3, libchamplain, gdl, shared-mime-info, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "gpx-viewer-${version}";
+  pname = "gpx-viewer";
   version = "0.4.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/gpx-viewer/trunk/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/gpx-viewer/trunk/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "956acfaf870ac436300cd9953dece630df7fd7dff8e4ae2577a6002884466f80";
   };
 

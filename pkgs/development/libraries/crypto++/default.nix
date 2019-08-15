@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "crypto++-${version}";
+  pname = "crypto++";
   majorVersion = "5.6";
   version = "${majorVersion}.5";
 

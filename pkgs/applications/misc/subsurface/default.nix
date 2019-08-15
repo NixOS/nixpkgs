@@ -30,7 +30,7 @@ let
   };
 
   googlemaps = stdenv.mkDerivation rec {
-    name = "googlemaps-${version}";
+    pname = "googlemaps";
 
     version = "2017-12-18";
 

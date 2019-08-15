@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, Cocoa }:
 
 buildGoPackage rec {
-  name = "noti-${version}";
+  pname = "noti";
   version = "3.1.0";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, fltk, which, libjpeg }:
 
 stdenv.mkDerivation rec {
-  name = "fltrator-${version}";
+  pname = "fltrator";
   version = "2.3";
 
   src = fetchurl {

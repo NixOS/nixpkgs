@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgo-${version}";
+  pname = "qgo";
   version = "unstable-2017-12-18";
 
   meta = with stdenv.lib; {

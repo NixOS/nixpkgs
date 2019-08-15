@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "bibtool-${version}";
+  pname = "bibtool";
   version = "2.67";
 
   src = fetchurl {

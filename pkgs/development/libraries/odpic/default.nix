@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fixDarwinDylibNames, oracle-instantclient, libaio }:
 
 stdenv.mkDerivation rec {
-  name = "odpic-${version}";
+  pname = "odpic";
   version = "3.1.0";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "e17gtk-${version}";
+  pname = "e17gtk";
   version = "3.22.2";
 
   src = fetchFromGitHub {

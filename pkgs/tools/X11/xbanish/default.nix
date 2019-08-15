@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   version = "1.6";
   pname = "xbanish";
-  name = "${pname}-${version}";
 
   buildInputs = [
     libX11 libXi libXt libXfixes libXext

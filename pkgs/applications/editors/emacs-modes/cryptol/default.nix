@@ -1,7 +1,7 @@
 { stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation rec {
-  name    = "cryptol-mode-${version}";
+  pname = "cryptol-mode";
   version = "0.1.0";
 
   src = fetchurl {

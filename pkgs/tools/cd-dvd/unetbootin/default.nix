@@ -2,7 +2,7 @@
 , p7zip, mtools, syslinux }:
 
 stdenv.mkDerivation rec {
-  name = "unetbootin-${version}";
+  pname = "unetbootin";
   version = "661";
 
   src = fetchFromGitHub {

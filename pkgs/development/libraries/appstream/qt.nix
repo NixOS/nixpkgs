@@ -3,7 +3,7 @@
 # TODO: look into using the libraries from the regular appstream derivation as we keep duplicates here
 
 stdenv.mkDerivation rec {
-  name = "appstream-qt-${version}";
+  pname = "appstream-qt";
   inherit (appstream) version src prePatch;
 
   buildInputs = appstream.buildInputs ++ [ appstream qtbase ];

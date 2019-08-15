@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
-  name = "libsoundio-${version}";
+  pname = "libsoundio";
 
   src = fetchFromGitHub {
     owner = "andrewrk";

@@ -2,7 +2,7 @@
   libtool, freeimage, mesa }:
 stdenv.mkDerivation rec {
   version = "v1.0.2";
-  name = "gamecube-tools-${version}";
+  pname = "gamecube-tools";
 
   nativeBuildInputs = [ which autoconf automake libtool ];
   buildInputs = [ freeimage mesa ];

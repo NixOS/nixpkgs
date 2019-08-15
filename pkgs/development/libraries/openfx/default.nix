@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec
 {
-  name = "openfx-${version}";
+  pname = "openfx";
   version = "1.4";
 
   src = fetchFromGitHub {

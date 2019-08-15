@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.0";
-  name = "qjson-${version}";
+  pname = "qjson";
 
   src = fetchFromGitHub {
     owner = "flavio";

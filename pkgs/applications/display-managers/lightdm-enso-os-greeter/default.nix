@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.2.1";
-  name = "lightdm-enso-os-greeter-${version}";
+  pname = "lightdm-enso-os-greeter";
 
   src = fetchgit {
     url = https://github.com/nick92/Enso-OS;

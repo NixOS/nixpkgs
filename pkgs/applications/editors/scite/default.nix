@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "scite-${version}";
+  pname = "scite";
   version = "4.0.5";
 
   src = fetchurl {

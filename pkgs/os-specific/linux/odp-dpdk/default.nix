@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "odp-dpdk-${version}";
+  pname = "odp-dpdk";
   version = "1.19.0.0_DPDK_17.11";
 
   src = fetchurl {
-    url = "https://git.linaro.org/lng/odp-dpdk.git/snapshot/${name}.tar.gz";
+    url = "https://git.linaro.org/lng/odp-dpdk.git/snapshot/${pname}-${version}.tar.gz";
     sha256 = "05bwjaxl9hqc6fbkp95nniq11g3kvzmlxw0bq55i7p2v35nv38px";
   };
 

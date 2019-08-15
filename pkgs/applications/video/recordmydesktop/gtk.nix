@@ -5,7 +5,7 @@ let
   binPath = lib.makeBinPath [ recordmydesktop jack2 xwininfo ];
 
 in stdenv.mkDerivation rec {
-  name = "gtk-recordmydesktop-${version}";
+  pname = "gtk-recordmydesktop";
   version = "0.3.8-svn${recordmydesktop.rev}";
 
   src = fetchsvn {

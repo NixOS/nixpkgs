@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, pkgconfig, qt, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "qca-${version}";
+  pname = "qca";
   version = "2.1.3";
 
   src = fetchurl {

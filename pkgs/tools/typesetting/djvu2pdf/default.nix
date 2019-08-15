@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.2";
-  name = "djvu2pdf-${version}";
+  pname = "djvu2pdf";
 
   src = fetchurl {
     url = "http://0x2a.at/site/projects/djvu2pdf/djvu2pdf-${version}.tar.gz";

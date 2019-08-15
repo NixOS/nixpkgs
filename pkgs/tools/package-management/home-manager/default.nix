@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "home-manager-${version}";
+  pname = "home-manager";
   version = "2019-06-25";
 
   src = fetchFromGitHub {

@@ -2,11 +2,11 @@
 , libsamplerate, libsndfile, liblo, libjack2, boost }:
 
 stdenv.mkDerivation rec {
-  name = "klick-${version}";
+  pname = "klick";
   version = "0.12.2";
 
   src = fetchurl {
-    url = "http://das.nasophon.de/download/${name}.tar.gz";
+    url = "http://das.nasophon.de/download/${pname}-${version}.tar.gz";
     sha256 = "1289533c0849b1b66463bf27f7ce5f71736b655cfb7672ef884c7e6eb957ac42";
   };
 

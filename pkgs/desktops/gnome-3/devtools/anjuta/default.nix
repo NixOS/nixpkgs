@@ -3,11 +3,11 @@
   itstool, python3, ncurses, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "anjuta-${version}";
+  pname = "anjuta";
   version = "3.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/anjuta/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/anjuta/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0ya7ajai9rx9g597sr5wawr6l5pb2s34bbjdsbnx0lkrhnjv11xh";
   };
 

@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "noice-${version}";
+  pname = "noice";
   version = "0.6";
 
   src = fetchgit {

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bspwm-${version}";
+  pname = "bspwm";
   version = "0.9.8";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, libsixel }:
 
 stdenv.mkDerivation rec {
-  name    = "SDL_sixel-${version}";
+  pname = "SDL_sixel";
   version = "1.2-nightly";
 
   src = fetchFromGitHub {

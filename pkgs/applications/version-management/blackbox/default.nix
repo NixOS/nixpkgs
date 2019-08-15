@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   version = "1.20170611";
   pname   = "blackbox";
-  name    = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner  = "stackexchange";

@@ -24,7 +24,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "monero-gui-${version}";
+  pname = "monero-gui";
   version = "0.14.1.2";
 
   src = fetchFromGitHub {

@@ -3,7 +3,7 @@
 , nodePackages, emscripten, opencv, statik }:
 
 buildGoPackage rec {
-  name = "meguca-unstable-${version}";
+  pname = "meguca-unstable";
   version = "2019-03-12";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;

@@ -26,13 +26,13 @@ let
 
 in stdenv.mkDerivation rec {
   version = "1.4.1";
-  name = "mesos-${version}";
+  pname = "mesos";
 
   enableParallelBuilding = true;
   dontDisableStatic = true;
 
   src = fetchurl {
-    url = "mirror://apache/mesos/${version}/${name}.tar.gz";
+    url = "mirror://apache/mesos/${version}/${pname}-${version}.tar.gz";
     sha256 = "1c7l0rim9ija913gpppz2mcms08ywyqhlzbbspqsi7wwfdd7jwsr";
   };
 

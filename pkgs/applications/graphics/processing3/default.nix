@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.4";
-  name = "processing3-${version}";
+  pname = "processing3";
 
   src = fetchFromGitHub {
     owner = "processing";
@@ -39,16 +39,16 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    cp -dpR build/linux/work $out/${name}
+    cp -dpR build/linux/work $out/${pname}-${version}
 
-    rmdir $out/${name}/java
-    ln -s ${jdk} $out/${name}/java
+    rmdir $out/${pname}-${version}/java
+    ln -s ${jdk} $out/${pname}-${version}/java
 
-    makeWrapper $out/${name}/processing      $out/bin/processing \
+    makeWrapper $out/${pname}-${version}/processing      $out/bin/processing \
         --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
         --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
         --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
-    makeWrapper $out/${name}/processing-java $out/bin/processing-java \
+    makeWrapper $out/${pname}-${version}/processing-java $out/bin/processing-java \
         --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
         --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
         --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib

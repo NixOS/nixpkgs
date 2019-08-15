@@ -10,7 +10,7 @@ let
     ([ coreutils ncurses gnused gnugrep ] ++ stdenv.lib.optional (jdk != null) jdk);
 in
 stdenv.mkDerivation rec {
-  name = "grails-${version}";
+  pname = "grails";
   version = "4.0.0";
 
   src = fetchurl {

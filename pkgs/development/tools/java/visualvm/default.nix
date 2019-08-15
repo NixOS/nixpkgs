@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.4.3";
-  name = "visualvm-${version}";
+  pname = "visualvm";
 
   src = fetchzip {
     url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""]  version}.zip";

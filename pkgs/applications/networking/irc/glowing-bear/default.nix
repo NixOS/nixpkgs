@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "glowing-bear-${version}";
+  pname = "glowing-bear";
   version = "0.7.1";
 
   src = fetchFromGitHub {

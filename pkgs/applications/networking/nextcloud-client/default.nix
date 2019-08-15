@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nextcloud-client-${version}";
+  pname = "nextcloud-client";
   version = "2.5.2";
 
   src = fetchgit {

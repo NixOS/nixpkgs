@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.12.4";
-  name = "hexchat-${version}";
+  pname = "hexchat";
 
   src = fetchFromGitHub {
     owner = "hexchat";

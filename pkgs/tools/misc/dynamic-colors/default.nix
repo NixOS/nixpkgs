@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "dynamic-colors-${version}";
+  pname = "dynamic-colors";
   version = "0.2.2.1";
 
   src = fetchFromGitHub {

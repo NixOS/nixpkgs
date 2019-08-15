@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "inxi-${version}";
+  pname = "inxi";
   version = "3.0.35-1";
 
   src = fetchFromGitHub {

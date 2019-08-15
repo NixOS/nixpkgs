@@ -2,7 +2,7 @@
 , wayland, wayland-protocols }:
 
 stdenv.mkDerivation rec {
-  name = "wl-clipboard-${version}";
+  pname = "wl-clipboard";
   version = "1.0.0";
 
   src = fetchFromGitHub {

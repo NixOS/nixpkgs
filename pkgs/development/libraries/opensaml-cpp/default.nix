@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook, boost, openssl, log4shib, xercesc, xml-security-c, xml-tooling-c, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "opensaml-cpp-${version}";
+  pname = "opensaml-cpp";
   version = "2.6.1";
 
   src = fetchgit {

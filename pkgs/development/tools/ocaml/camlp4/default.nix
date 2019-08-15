@@ -26,7 +26,7 @@ let param = {
 in
 
 stdenv.mkDerivation rec {
-  name = "camlp4-${version}";
+  pname = "camlp4";
   inherit (param) version;
 
   src = fetchzip {

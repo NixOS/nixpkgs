@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, lightdm, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "lightdm-mini-greeter-${version}";
+  pname = "lightdm-mini-greeter";
   version = "0.3.4";
 
   src = fetchFromGitHub {

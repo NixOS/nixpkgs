@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, json-glib, libfm-qt, qtbase, qttools, qtx11extras }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lxqt-archiver";
   version = "0.0.96";
 

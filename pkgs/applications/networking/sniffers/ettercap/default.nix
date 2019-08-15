@@ -3,7 +3,7 @@
 , fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "ettercap-${version}";
+  pname = "ettercap";
   version = "0.8.2";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, mfcj6510dwlpr, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "mfcj6510dw-cupswrapper-${version}";
+  pname = "mfcj6510dw-cupswrapper";
   version = "3.0.0-1";
 
   src = fetchurl {

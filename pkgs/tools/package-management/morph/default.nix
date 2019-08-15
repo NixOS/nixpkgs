@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub, go-bindata, lib }:
 
 buildGoPackage rec {
-  name = "morph-${version}";
+  pname = "morph";
   version = "1.2.0";
 
   src = fetchFromGitHub {

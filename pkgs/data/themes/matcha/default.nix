@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "matcha-${version}";
+  pname = "matcha";
   version = "2019-06-22";
 
   src = fetchFromGitHub {

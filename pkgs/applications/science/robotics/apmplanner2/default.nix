@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "apmplanner2-${version}";
+  pname = "apmplanner2";
   # TODO revert Qt511 to Qt5 in pkgs/top-level/all-packages.nix on next release
   version = "2.0.27-rc1";
   src = fetchFromGitHub {

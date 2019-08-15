@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "viber-${version}";
+  pname = "viber";
   version = "7.0.0.1035";
 
   src = fetchurl {

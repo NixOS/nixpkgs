@@ -3,7 +3,7 @@
 
   stdenv.mkDerivation rec {
   version = "0.9.0";
-  name = "helm-${version}";
+  pname = "helm";
 
   src = fetchFromGitHub {
     owner = "mtytel";

@@ -6,7 +6,7 @@
 , gst-plugins-good, libsigcxx }:
 
 stdenv.mkDerivation rec {
-  name = "workrave-${version}";
+  pname = "workrave";
   version = "1.10.31";
 
   src = let

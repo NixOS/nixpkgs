@@ -1,7 +1,7 @@
 { stdenv, lib, zookeeper, zookeeper_mt, fuse, autoreconfHook, log4cxx, boost }:
 
 stdenv.mkDerivation rec {
-  name = "zkfuse-${version}";
+  pname = "zkfuse";
   inherit (zookeeper) version src;
 
   sourceRoot = "${zookeeper.name}/src/contrib/zkfuse";

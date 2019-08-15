@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "edward";
   version = "1.3.5";
-  name  = "${pname}-${version}";
 
   disabled = !(isPy27 || pythonAtLeast "3.4");
 

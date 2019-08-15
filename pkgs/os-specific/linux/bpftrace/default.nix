@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bpftrace-${version}";
+  pname = "bpftrace";
   version = "0.9.1";
 
   src = fetchFromGitHub {

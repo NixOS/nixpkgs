@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "povray-${version}";
+  pname = "povray";
   version = "3.7.0.8";
 
   src = fetchFromGitHub {

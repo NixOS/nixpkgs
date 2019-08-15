@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, fastjet, gsl, hepmc2, lhapdf, rivet, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "thepeg-${version}";
+  pname = "thepeg";
   version = "2.1.5";
 
   src = fetchurl {

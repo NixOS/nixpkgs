@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "zinnia-${version}";
+  pname = "zinnia";
   version = "2016-08-28";
 
   src = fetchFromGitHub {

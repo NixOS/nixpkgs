@@ -1,7 +1,6 @@
 {stdenv, fetchFromGitHub, zlib, libpng, libxml2, libjpeg }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "flam3";
   version = "3.1.1-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "e0801543538451234d7a8a240ba3b417cbda5b21";

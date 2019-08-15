@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.1";
-  name = "gtk2fontsel-${version}";
+  pname = "gtk2fontsel";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtk2fontsel/${name}.tar.gz";
+    url = "mirror://sourceforge/gtk2fontsel/${pname}-${version}.tar.gz";
     sha256 = "0s2sj19n8ys92q9832hkn36ld91bb4qavicc6nygkry6qdpkkmjw";
   };
 

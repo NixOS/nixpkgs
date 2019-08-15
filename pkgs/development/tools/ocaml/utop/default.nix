@@ -8,7 +8,7 @@ else
 
 stdenv.mkDerivation rec {
   version = "2.3.0";
-  name = "utop-${version}";
+  pname = "utop";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";

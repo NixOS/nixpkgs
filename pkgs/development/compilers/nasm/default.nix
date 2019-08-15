@@ -1,12 +1,12 @@
 { stdenv, fetchFromRepoOrCz, autoreconfHook, perl, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  name = "nasm-${version}";
+  pname = "nasm";
   version = "2.14.02";
 
   src = fetchFromRepoOrCz {
     repo = "nasm";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "15z6ybnzlsrqs2964h6czqhpmr7vc3ln4y4h0z9vrznk4mqcwbsa";
   };
 

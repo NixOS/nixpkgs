@@ -2,7 +2,7 @@
 , enableUnsafe ? false }:
 
 stdenv.mkDerivation rec {
-  name = "ttwatch-${version}";
+  pname = "ttwatch";
   version = "2018-12-04";
 
   src = fetchFromGitHub {

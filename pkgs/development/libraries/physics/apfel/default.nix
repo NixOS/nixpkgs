@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gfortran, lhapdf, python2 }:
 
 stdenv.mkDerivation rec {
-  name = "apfel-${version}";
+  pname = "apfel";
   version = "3.0.4";
 
   src = fetchFromGitHub {

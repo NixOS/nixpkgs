@@ -17,7 +17,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "gn-${version}";
+  pname = "gn";
   version = "20190403";
 
   src = fetchgit {

@@ -20,11 +20,11 @@ let
     icuEnabled = atLeast "10";
 
   in stdenv.mkDerivation rec {
-    name = "postgresql-${version}";
+    pname = "postgresql";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
+      url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
 

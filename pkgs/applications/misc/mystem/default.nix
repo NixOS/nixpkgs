@@ -1,11 +1,11 @@
 {stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mystem-${version}";
+  pname = "mystem";
   version = "3.1";
 
   src = fetchurl {
-    url = "http://download.cdn.yandex.net/mystem/${name}-linux-64bit.tar.gz";
+    url = "http://download.cdn.yandex.net/mystem/${pname}-${version}-linux-64bit.tar.gz";
     sha256 = "0q3vxvyj5bqllqnlivy5llss39z7j0bgpn6kv8mrc54vjdhppx10";
   };
 

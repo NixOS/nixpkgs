@@ -1,7 +1,7 @@
 { stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "tzdata-${version}";
+  pname = "tzdata";
   version = "2019a";
 
   srcs =

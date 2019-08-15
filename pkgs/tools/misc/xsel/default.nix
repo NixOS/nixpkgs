@@ -1,7 +1,7 @@
 {stdenv, lib, fetchFromGitHub, libX11, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "xsel-unstable-${version}";
+  pname = "xsel-unstable";
 
   version = "2018-01-10";
 

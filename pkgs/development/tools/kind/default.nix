@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "kind-${version}";
+  pname = "kind";
   version = "0.3.0";
 
   src = fetchFromGitHub {

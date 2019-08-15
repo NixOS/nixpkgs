@@ -28,11 +28,11 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "openttd-${version}";
+  pname = "openttd";
   version = "1.9.2";
 
   src = fetchurl {
-    url = "https://proxy.binaries.openttd.org/openttd-releases/${version}/${name}-source.tar.xz";
+    url = "https://proxy.binaries.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
     sha256 = "0jjnnzp1a2l8j1cla28pr460lx6cg4ql3acqfxhxv8a5a4jqrzzr";
   };
 

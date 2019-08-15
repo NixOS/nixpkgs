@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "spass-${version}";
+  pname = "spass";
   version = "${baseVersion}.${minorVersion}";
 
   src = fetchurl {

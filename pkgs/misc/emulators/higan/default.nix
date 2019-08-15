@@ -10,7 +10,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "higan-${version}";
+  pname = "higan";
   version = "106";
   sourceName = "higan_v${version}-source";
 

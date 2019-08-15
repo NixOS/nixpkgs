@@ -11,7 +11,7 @@ assert stdenv.isDarwin -> IOKit != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name    = "monero-${version}";
+  pname = "monero";
   version = "0.14.1.0";
 
   src = fetchgit {

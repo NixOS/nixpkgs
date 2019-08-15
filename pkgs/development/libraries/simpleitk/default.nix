@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname    = "simpleitk";
   version = "1.2.0";
-  name  = "${pname}-${version}";
 
   src = fetchurl {
     url    = "https://sourceforge.net/projects/${pname}/files/SimpleITK/${version}/Source/SimpleITK-${version}.tar.gz";

@@ -4,7 +4,7 @@ let
   inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify;
 
 in buildPythonApplication rec {
-  name = "git-cola-${version}";
+  pname = "git-cola";
   version = "3.4";
 
   src = fetchFromGitHub {
