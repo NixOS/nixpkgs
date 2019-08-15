@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages }:
+{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages, windows }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
@@ -41,18 +41,26 @@ let
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
+  hostConfig = stdenv.hostPlatform.config;
+
+  rustHostConfig = {
+    "x86_64-pc-mingw32" = "x86_64-pc-windows-gnu";
+  }."${hostConfig}" or hostConfig;
+
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${stdenv.hostPlatform.config}/${buildType}";
-in stdenv.mkDerivation (args // {
+  releaseDir = "target/${rustHostConfig}/${buildType}";
+in
+
+stdenv.mkDerivation (args // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = [ cargo rustc git cacert ] ++ nativeBuildInputs;
-  inherit buildInputs;
+  nativeBuildInputs = nativeBuildInputs ++ [ cacert git cargo rustc ];
+  buildInputs = buildInputs ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   patches = cargoPatches ++ patches;
 
@@ -84,7 +92,7 @@ in stdenv.mkDerivation (args // {
     [target."${stdenv.buildPlatform.config}"]
     "linker" = "${ccForBuild}"
     ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${stdenv.hostPlatform.config}"]
+    [target."${rustHostConfig}"]
     "linker" = "${ccForHost}"
     ''}
     EOF
@@ -104,7 +112,7 @@ in stdenv.mkDerivation (args // {
       "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
       cargo build \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
-        --target ${stdenv.hostPlatform.config} \
+        --target ${rustHostConfig} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
