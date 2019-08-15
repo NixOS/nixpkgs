@@ -32,8 +32,13 @@ stdenv.mkDerivation rec {
     ${git}/bin/git apply --verbose --exclude=ChangeLog ${cveFixes}
   '';
 
+  postInstall = ''
+    mv $out/bin/itweb-settings{.sh,}
+    mv $out/bin/javaws{.sh,}
+    mv $out/bin/policyeditor{.sh,}
+  '';
+
   preConfigure = ''
-    #patchShebangs javac.in
     configureFlagsArray+=("BIN_BASH=${bash}/bin/bash")
   '';
 
