@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "marathonctl-unstable-${version}";
+  pname = "marathonctl-unstable";
   version = "2017-03-06";
 
   goPackagePath = "github.com/shoenig/marathonctl";

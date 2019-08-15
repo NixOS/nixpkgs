@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
   
 buildGoPackage rec {
-  name = "govc-${version}";
+  pname = "govc";
   version = "0.20.0";
 
   goPackagePath = "github.com/vmware/govmomi";
