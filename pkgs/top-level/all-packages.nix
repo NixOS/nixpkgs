@@ -560,6 +560,8 @@ in
 
   antora = callPackage ../development/tools/documentation/antora {};
 
+  apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
+
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };
