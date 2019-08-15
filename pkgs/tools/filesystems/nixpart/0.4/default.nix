@@ -54,7 +54,7 @@ let
   };
 
 in buildPythonApplication rec {
-  name = "nixpart-${version}";
+  pname = "nixpart";
   version = "0.4.1";
 
   src = fetchurl {

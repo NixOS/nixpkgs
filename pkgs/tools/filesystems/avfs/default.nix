@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, fuse, xz }:
 
 stdenv.mkDerivation rec {
-  name = "avfs-${version}";
+  pname = "avfs";
   version = "1.1.0";
   src = fetchurl {
-    url = "mirror://sourceforge/avf/${version}/${name}.tar.bz2";
+    url = "mirror://sourceforge/avf/${version}/${pname}-${version}.tar.bz2";
     sha256 = "19rk2c0xd3mi66kr88ykrcn81fv09c09md0gf6mnm9z1bd7p7wx7";
   };
 

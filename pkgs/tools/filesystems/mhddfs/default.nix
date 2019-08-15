@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fuse, pkgconfig, attr, uthash }:
 
 stdenv.mkDerivation rec {
-  name = "mhddfs-${version}";
+  pname = "mhddfs";
   version = "0.1.39";
 
   src = fetchurl {

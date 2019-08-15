@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.1";
-  name = "lepton-${version}";
+  pname = "lepton";
 
   src = fetchFromGitHub {
     repo = "lepton";

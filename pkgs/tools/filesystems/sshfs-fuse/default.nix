@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.5.2";
-  name = "sshfs-fuse-${version}";
+  pname = "sshfs-fuse";
 
   src = fetchFromGitHub {
     owner = "libfuse";
