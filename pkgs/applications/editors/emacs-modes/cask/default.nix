@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.8.4";
-  name = "cask-${version}";
+  pname = "cask";
 
   src = fetchFromGitHub {
     owner = "cask";

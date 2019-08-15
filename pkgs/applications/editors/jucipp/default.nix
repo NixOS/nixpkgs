@@ -6,7 +6,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "juicipp-${version}";
+  pname = "juicipp";
   version = "1.2.3";
 
   meta = {
