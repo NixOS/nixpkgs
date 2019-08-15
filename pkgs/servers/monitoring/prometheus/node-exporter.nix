@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "node_exporter-${version}";
+  pname = "node_exporter";
   version = "0.17.0";
   rev = "v${version}";
 
