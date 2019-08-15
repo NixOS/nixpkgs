@@ -4,9 +4,10 @@
 , withGUI ? true
   , qtbase ? null
   , qtmultimedia ? null
+  , wrapQtAppsHook ? null
 }:
 
-assert withGUI -> qtbase != null && qtmultimedia != null;
+assert withGUI -> qtbase != null && qtmultimedia != null && wrapQtAppsHook != null;
 
 with stdenv.lib;
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     expat file xdg_utils boost libebml zlib fmt
     libmatroska libogg libvorbis flac cmark
   ] ++ optional  stdenv.isDarwin libiconv
-    ++ optionals withGUI [ qtbase qtmultimedia ];
+    ++ optionals withGUI [ qtbase qtmultimedia wrapQtAppsHook ];
 
   preConfigure = "./autogen.sh; patchShebangs .";
   buildPhase   = "drake -j $NIX_BUILD_CORES";
@@ -48,6 +49,11 @@ stdenv.mkDerivation rec {
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"
     (enableFeature withGUI "qt")
   ];
+
+  dontWrapQtApps = true;
+  postFixup = optionalString withGUI ''
+    wrapQtApp $out/bin/mkvtoolnix-gui
+  '';
 
   meta = with stdenv.lib; {
     description = "Cross-platform tools for Matroska";
