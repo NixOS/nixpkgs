@@ -25,6 +25,10 @@ stdenv.mkDerivation ( rec {
     substituteInPlace packages/process/_test.pony \
         --replace '=/bin' "${coreutils}/bin"
 
+    # Disabling the stdlib tests
+    substituteInPlace Makefile-ponyc \
+        --replace 'test-ci: all check-version test-core test-stdlib-debug test-stdlib' 'test-ci: all check-version test-core'
+
     # Remove impure system refs
     substituteInPlace src/libponyc/pkg/package.c \
         --replace "/usr/local/lib" "" \
