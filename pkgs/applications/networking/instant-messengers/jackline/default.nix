@@ -4,7 +4,7 @@ assert stdenv.lib.versionAtLeast ocamlPackages.ocaml.version "4.02.2";
 
 stdenv.mkDerivation rec {
   version = "2018-05-11";
-  name = "jackline-${version}";
+  pname = "jackline";
 
   src = fetchFromGitHub {
     owner  = "hannesm";

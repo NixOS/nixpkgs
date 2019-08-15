@@ -9,7 +9,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "zathura-core-${version}";
+  pname = "zathura-core";
   version = "0.4.3";
 
   src = fetchurl {

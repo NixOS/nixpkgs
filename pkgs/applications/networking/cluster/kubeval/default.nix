@@ -22,7 +22,7 @@ let
 in
 
 buildGoPackage rec {
-  name = "kubeval-${version}";
+  pname = "kubeval";
   version = "0.7.3";
 
   goPackagePath = "github.com/garethr/kubeval";
