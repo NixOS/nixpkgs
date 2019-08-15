@@ -264,7 +264,7 @@ let
             optionalString (interfaceCfg.allowedIPsAsRoutes != false)
               (concatMapStringsSep "\n"
                 (allowedIP:
-                  "ip route replace ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table}"
+                  "ip route add ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table} metric 10000"
                 ) peer.allowedIPs);
         in ''
           ${wg_setup}
