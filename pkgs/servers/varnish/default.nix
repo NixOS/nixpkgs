@@ -11,6 +11,8 @@ let
         inherit sha256;
       };
 
+      passthru.python = python;
+
       nativeBuildInputs = with python.pkgs; [ pkgconfig docutils ] ++ extraNativeBuildInputs;
       buildInputs = [
         pcre libxslt groff ncurses readline libedit makeWrapper python
