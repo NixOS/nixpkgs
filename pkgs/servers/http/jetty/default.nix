@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "jetty-${version}";
+  pname = "jetty";
   version = "9.4.16.v20190411";
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/${version}/jetty-distribution-${version}.tar.gz";

@@ -2,11 +2,11 @@
 , sphinx, which, file, pkgconfig, getopt }:
 
 stdenv.mkDerivation rec {
-  name = "couchdb-${version}";
+  pname = "couchdb";
   version = "1.7.1";
 
   src = fetchurl {
-    url = "mirror://apache/couchdb/source/${version}/apache-${name}.tar.gz";
+    url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
     sha256 = "1b9cbdrmh1i71mrwvhm17v4cf7lckpil1vvq7lpmxyn6zfk0l84i";
   };
 

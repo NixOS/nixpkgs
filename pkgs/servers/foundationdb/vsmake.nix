@@ -46,7 +46,7 @@ let
 
     , patches ? []
     }: stdenv.mkDerivation rec {
-        name = "foundationdb-${version}";
+        pname = "foundationdb";
         inherit version;
 
         src = fetchFromGitHub {

@@ -6,7 +6,7 @@
 with builtins;
 
 stdenv.mkDerivation rec {
-  name = "h2o-${version}";
+  pname = "h2o";
   version = "2.2.5";
 
   src = fetchFromGitHub {
