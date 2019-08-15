@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "coursier-${version}";
+  pname = "coursier";
   version = "1.1.0-M14-6";
 
   src = fetchurl {

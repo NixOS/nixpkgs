@@ -21,7 +21,6 @@ assert wxGTK.unicode;
 buildPythonPackage rec {
   pname = "wxPython";
   version = "3.0.2.0";
-  name = pname + "-" + version;
 
   disabled = isPy3k || isPyPy;
   doCheck = false;

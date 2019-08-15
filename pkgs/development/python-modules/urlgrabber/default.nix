@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "urlgrabber";
   version = "3.10.2";
-  name  = "${pname}-${version}";
 
   disabled = isPy3k;
 

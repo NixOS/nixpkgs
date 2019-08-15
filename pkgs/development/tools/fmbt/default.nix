@@ -5,7 +5,7 @@
 }:
 stdenv.mkDerivation rec {
   version = "0.39";
-  name = "fMBT-${version}";
+  pname = "fMBT";
 
   src = fetchFromGitHub {
     owner = "intel";
