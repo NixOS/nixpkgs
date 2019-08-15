@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.7.5";
-  name    = "piqi-ocaml-${version}";
+  pname = "piqi-ocaml";
 
   src = fetchurl {
     url = "https://github.com/alavrik/piqi-ocaml/archive/v${version}.tar.gz";

@@ -14,7 +14,7 @@ let param =
 in
 
 stdenv.mkDerivation rec {
-  name = "lablgtk-${version}";
+  pname = "lablgtk";
   inherit (param) version;
 
   src = fetchurl {

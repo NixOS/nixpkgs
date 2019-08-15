@@ -7,9 +7,9 @@
 
 stdenv.mkDerivation rec {
   version = "4.14.38";
-  name = "kdelibs-${version}";
+  pname = "kdelibs";
   src = fetchurl {
-    url = "mirror://kde/stable/applications/17.08.3/src/${name}.tar.xz";
+    url = "mirror://kde/stable/applications/17.08.3/src/${pname}-${version}.tar.xz";
     sha256 = "1zn3yb09sd22bm54is0rn98amj0398zybl550dp406419sil7z9p";
   };
 

@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "mps-youtube-${version}";
+  pname = "mps-youtube";
   version = "0.2.7.1";
   disabled = (!isPy3k);
 

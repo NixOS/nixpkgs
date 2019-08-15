@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "PyGithub";
   version = "1.36";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "PyGithub";
