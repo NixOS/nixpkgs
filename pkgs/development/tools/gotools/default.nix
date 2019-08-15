@@ -1,7 +1,7 @@
 { stdenv, go, buildGoModule, fetchgit }:
 
 buildGoModule rec {
-  name = "gotools-unstable-${version}";
+  pname = "gotools-unstable";
   version = "2019-07-06";
   rev = "72ffa07ba3db8d09f5215feec0f89464f3028f8e";
 

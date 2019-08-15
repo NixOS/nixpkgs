@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "glslviewer-${version}";
+  pname = "glslviewer";
   version = "2019-04-22";
 
   src = fetchFromGitHub {
