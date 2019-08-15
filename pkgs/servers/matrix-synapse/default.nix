@@ -23,11 +23,11 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pr17n52vdq490q6c282nqnn51j5k0lf7mzaazpxjy4q86pxdfy5";
+    sha256 = "1fclardg0mmx8d8kg4f988zf6sw9p07ac79m19j87ivi8fa08abz";
   };
 
   patches = [
@@ -65,6 +65,7 @@ in buildPythonApplication rec {
     pysaml2
     pyyaml
     requests
+    sdnotify
     signedjson
     sortedcontainers
     treq
