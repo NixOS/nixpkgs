@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.22.0";
-  name = "grpc-${version}";
+  pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";

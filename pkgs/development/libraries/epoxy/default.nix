@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "epoxy-${version}";
+  pname = "epoxy";
   version = "1.5.3";
 
   src = fetchFromGitHub {

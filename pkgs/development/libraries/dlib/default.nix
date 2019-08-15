@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   version = "19.16";
-  name = "dlib-${version}";
+  pname = "dlib";
 
   src = fetchFromGitHub {
     owner = "davisking";
