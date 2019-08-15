@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       mkdir dependencies/common/dictionaries
       for dict in ${builtins.concatStringsSep " " hunspellDictionaries}; do
         for i in "$dict/share/hunspell/"*; do
-          ln -sv $i dependencies/common/dictionaries/
+          ln -svf $i dependencies/common/dictionaries/
         done
       done
 
