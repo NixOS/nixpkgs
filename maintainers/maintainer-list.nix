@@ -1484,6 +1484,11 @@
     github = "eadwu";
     name = "Edmund Wu";
   };
+  ealasu = {
+    email = "emanuel.alasu@gmail.com";
+    github = "ealasu";
+    name = "Emanuel Alasu";
+  };
   eamsden = {
     email = "edward@blackriversoft.com";
     github = "eamsden";
