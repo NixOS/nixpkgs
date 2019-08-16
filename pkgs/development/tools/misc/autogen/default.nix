@@ -1,4 +1,5 @@
-{ stdenv, buildPackages, fetchurl, which, pkgconfig, perl, guile, libxml2 }:
+{ stdenv, buildPackages, fetchurl, which, pkgconfig, perl, guile, libxml2
+, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   name = "autogen-${version}";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
-  nativeBuildInputs = [ which pkgconfig perl ]
+  nativeBuildInputs = [ which pkgconfig perl removeReferencesTo ]
     # autogen needs a build autogen when cross-compiling
     ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       buildPackages.buildPackages.autogen buildPackages.texinfo ];
@@ -43,7 +44,10 @@ stdenv.mkDerivation rec {
       sed -e "s|$dev/include|/no-such-autogen-include-path|" -i $f
       sed -e "s|$bin/bin|/no-such-autogen-bin-path|" -i $f
       sed -e "s|$lib/lib|/no-such-autogen-lib-path|" -i $f
+      sed -e "s|$out|/no-such-autogen-lib-path|" -i $f
     done
+
+    remove-references-to -t $out $lib/lib/lib*
   '';
 
   #doCheck = true; # 2 tests fail because of missing /dev/tty
