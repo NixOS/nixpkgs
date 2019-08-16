@@ -60,7 +60,7 @@ let
         inherit mkDerivation;
 
         # Team of maintainers assigned to the KDE PIM suite
-        kdepimTeam = with lib.maintainers; [ ttuegel vandenoever ];
+        kdepimTeam = with lib.maintainers; [ ttuegel vandenoever nyanloutre ];
       };
     in {
       akonadi = callPackage ./akonadi {};
