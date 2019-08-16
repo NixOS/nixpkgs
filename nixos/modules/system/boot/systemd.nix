@@ -76,6 +76,10 @@ let
       "systemd-journald-dev-log.socket"
       "syslog.socket"
 
+      # Coredumps.
+      "systemd-coredump.socket"
+      "systemd-coredump@.service"
+
       # SysV init compatibility.
       "systemd-initctl.socket"
       "systemd-initctl.service"
@@ -540,6 +544,16 @@ in
       '';
     };
 
+    systemd.coredump.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "Storage=journal";
+      description = ''
+        Extra config options for systemd-coredump. See coredump.conf(5) man page
+        for available options.
+      '';
+    };
+
     systemd.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -795,6 +809,7 @@ in
           DefaultMemoryAccounting=yes
           DefaultTasksAccounting=yes
         ''}
+        DefaultLimitCORE=infinity
         ${config.systemd.extraConfig}
       '';
 
@@ -817,6 +832,12 @@ in
         ''}
         ${config.services.journald.extraConfig}
       '';
+
+      "systemd/coredump.conf".text =
+        ''
+          [Coredump]
+          ${config.systemd.coredump.extraConfig}
+        '';
 
       "systemd/logind.conf".text = ''
         [Login]

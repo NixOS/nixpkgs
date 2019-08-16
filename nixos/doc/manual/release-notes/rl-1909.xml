@@ -468,6 +468,16 @@
      (which will place the parameters in <literal>/etc/sysctl.d/60-nixos.conf</literal>).
      </para>
    </listitem>
+   <listitem>
+    <para>
+      Coredumps are now acquired by <literal>systemd-coredump</literal> by default.
+      <literal>systemd-coredump</literal> behaviour can still be modified via
+      <option>systemd.coredump.extraConfig</option>.
+      To stick to the old behaviour (having the kernel dump to a file called <literal>core</literal>
+      in the working directory), without piping it through <literal>systemd-coredump</literal>, set
+      <option>boot.kernel.sysctl."kernel.core_pattern"</option> to <literal>"core"</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
