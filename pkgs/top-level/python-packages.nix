@@ -477,6 +477,8 @@ in {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  cnvkit = callPackage ../development/python-modules/cnvkit { };
+
   cozy = callPackage ../development/python-modules/cozy { };
 
   codespell = callPackage ../development/python-modules/codespell { };
@@ -880,6 +882,8 @@ in {
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
   pyfakefs = callPackage ../development/python-modules/pyfakefs {};
+
+  pyfaidx = callPackage ../development/python-modules/pyfaidx { };
 
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
