@@ -13,16 +13,16 @@ let
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
     url = "https://salsa.debian.org/ssh-team/openssh/raw/"
-      + "d80ebbf028196b2478beebf5a290b97f35e1eed9"
+      + "f5e0907876b1168f8d77fb4a8b96fc62965dd6f4"
       + "/debian/patches/gssapi.patch";
-    sha256 = "14j9cabb3gkhkjc641zbiv29mbvsmgsvis3fbj8ywsd21zc7m2wv";
+    sha256 = "1cnqlkrxzq7f2yy1iw9x0cp1w8g1skdc7q8r5x7s7chg3i0x5w92";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "openssh";
-  version = if hpnSupport then "7.8p1" else "7.9p1";
+  version = if hpnSupport then "7.8p1" else "8.0p1";
 
   src = if hpnSupport then
       fetchurl {
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
       }
     else
       fetchurl {
-        url = "mirror://openbsd/OpenSSH/portable/${pname}-${version}.tar.gz";
-        sha256 = "1b8sy6v0b8v4ggmknwcqx3y1rjcpsll0f1f8f4vyv11x4ni3njvb";
+        url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
+        sha256 = "0s7xh4s0qcipnjh9ls5blxcpvhyd116z9dxn3q1yi64lwrwki55x";
       };
 
   patches =
@@ -42,17 +42,16 @@ stdenv.mkDerivation rec {
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
 
+      ./ssh-keysign.patch
+    ]
       # CVE-2018-20685, can probably be dropped with next version bump
       # See https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt
       # for details
-      (fetchpatch {
+    ++ optional hpnSupport (fetchpatch {
         name = "CVE-2018-20685.patch";
         url = https://github.com/openssh/openssh-portable/commit/6010c0303a422a9c5fa8860c061bf7105eb7f8b2.patch;
         sha256 = "0q27i9ymr97yb628y44qi4m11hk5qikb1ji1vhvax8hp18lwskds";
       })
-
-      ./ssh-keysign.patch
-    ]
     ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 
   postPatch =
