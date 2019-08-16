@@ -9780,7 +9780,7 @@ in
 
   pprof = callPackage ../development/tools/profiling/pprof { };
 
-  pyprof2calltree = pythonPackages.callPackage ../development/tools/profiling/pyprof2calltree { };
+  pyprof2calltree = with python3Packages; toPythonApplication pyprof2calltree;
 
   prelink = callPackage ../development/tools/misc/prelink { };
 
