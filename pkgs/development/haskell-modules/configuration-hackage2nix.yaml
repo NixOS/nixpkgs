@@ -3254,6 +3254,7 @@ broken-packages:
   - Bang
   - bank-holiday-usa
   - banwords
+  - barbly
   - barchart
   - barcodes-code128
   - barecheck
@@ -4944,6 +4945,7 @@ broken-packages:
   - functional-arrow
   - functor
   - functor-combinators
+  - functor-products
   - functorm
   - funflow
   - funflow-nix
@@ -7609,6 +7611,7 @@ broken-packages:
   - Nomyx-Web
   - non-empty-zipper
   - NonEmpty
+  - nonempty-lift
   - NonEmptyList
   - normalization-insensitive
   - NoSlow
@@ -8528,6 +8531,7 @@ broken-packages:
   - rfc-servant
   - rg
   - rhythm-game-tutorial
+  - rib
   - RichConditional
   - ridley
   - ridley-extras
@@ -9101,6 +9105,7 @@ broken-packages:
   - sparrow
   - sparse
   - sparse-lin-alg
+  - sparse-tensor
   - sparsebit
   - sparsecheck
   - sparser
@@ -9389,6 +9394,7 @@ broken-packages:
   - taglib-api
   - tagsoup-ht
   - tagsoup-megaparsec
+  - tagsoup-navigate
   - tagsoup-parsec
   - tagsoup-selection
   - tai64
@@ -10285,6 +10291,7 @@ broken-packages:
   - yate
   - yavie
   - yaya
+  - yaya-hedgehog
   - yaya-unsafe
   - ycextra
   - yeller
