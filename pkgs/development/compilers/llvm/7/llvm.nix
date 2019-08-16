@@ -30,7 +30,7 @@ let
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 
 in stdenv.mkDerivation ({
-  name = "llvm-${version}";
+  pname = "llvm";
   inherit version;
 
   src = fetch "llvm" "0r1p5didv4rkgxyvbkyz671xddg6i3dxvbpsi1xxipkla0l9pk0v";
