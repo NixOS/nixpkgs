@@ -28,8 +28,86 @@ in
 
   ###### interface
 
-  options = {
+  options = let
+    databaseOpts = {
+      options = {
+        name = mkOption {
+          type = types.str;
+          description = ''
+            The name of the database to ensure.
+          '';
+          example = "gitlab";
+        };
+        owner = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = ''
+            The name of the database owner.
 
+            The user will be created if it doesn't already
+            exist. The owner of an existing database will be
+            changed if it's changed here, and all objects in the
+            database owned by the previous owner will be
+            reassigned to the new one.
+
+            See
+            <link xlink:href="https://www.postgresql.org/docs/current/manage-ag-createdb.html">Creating a Database</link>,
+            <link xlink:href="https://www.postgresql.org/docs/current/sql-reassign-owned.html">REASSIGN OWNED</link>
+            and
+            <link xlink:href="https://www.postgresql.org/docs/current/sql-alterdatabase.html">ALTER DATABASE</link>
+            for more details.
+          '';
+        };
+        extensions = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            Extensions to add to the database.
+
+            Extensions will be added to existing databases, but
+            not removed if they're removed from the list.
+
+            See
+            <link xlink:href="https://www.postgresql.org/docs/current/sql-createextension.html">
+            CREATE EXTENSION</link> for more details.
+          '';
+          example = [ "pg_trgm" "hstore" ];
+        };
+      };
+    };
+    userOpts = {
+      options = {
+        name = mkOption {
+          type = types.str;
+          description = ''
+            Name of the user to ensure.
+          '';
+        };
+        ensurePermissions = mkOption {
+          type = types.attrsOf types.str;
+          default = {};
+          description = ''
+            Permissions to ensure for the user, specified as an attribute set.
+            The attribute names specify the database and tables to grant the permissions for.
+            The attribute values specify the permissions to grant. You may specify one or
+            multiple comma-separated SQL privileges here.
+
+            For more information on how to specify the target
+            and on which privileges exist, see the
+            <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
+            The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
+          '';
+          example = literalExample ''
+            {
+            "DATABASE nextcloud" = "ALL PRIVILEGES";
+            "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
+            }
+          '';
+        };
+      };
+    };
+  in
+  {
     services.postgresql = {
 
       enable = mkOption {
@@ -97,13 +175,23 @@ in
       };
 
       ensureDatabases = mkOption {
-        type = types.listOf types.str;
+        type = with types;
+          listOf (coercedTo str
+                            (name: { inherit name; })
+                            (submodule databaseOpts));
         default = [];
         description = ''
-          Ensures that the specified databases exist.
-          This option will never delete existing databases, especially not when the value of this
-          option is changed. This means that databases created once through this option or
-          otherwise have to be removed manually.
+          Ensure the existence of the listed databases with their
+          respective owner and extensions.
+
+          This option will never delete existing databases; if the
+          name of a database is changed here, a new database with that
+          name will be created and the old one will remain. Databases
+          created once through this option or otherwise have to be
+          removed manually.
+
+          Extensions will be added to existing databases, but not
+          removed if they're removed from the list.
         '';
         example = [
           "gitea"
@@ -112,37 +200,7 @@ in
       };
 
       ensureUsers = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = ''
-                Name of the user to ensure.
-              '';
-            };
-            ensurePermissions = mkOption {
-              type = types.attrsOf types.str;
-              default = {};
-              description = ''
-                Permissions to ensure for the user, specified as an attribute set.
-                The attribute names specify the database and tables to grant the permissions for.
-                The attribute values specify the permissions to grant. You may specify one or
-                multiple comma-separated SQL privileges here.
-
-                For more information on how to specify the target
-                and on which privileges exist, see the
-                <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
-              '';
-              example = literalExample ''
-                {
-                  "DATABASE nextcloud" = "ALL PRIVILEGES";
-                  "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
-                }
-              '';
-            };
-          };
-        });
+        type = with types; listOf (submodule userOpts);
         default = [];
         description = ''
           Ensures that the specified users exist and have at least the ensured permissions.
@@ -333,18 +391,35 @@ in
               ''}
               rm -f "${cfg.dataDir}/.first_startup"
             fi
-          '' + optionalString (cfg.ensureDatabases != []) ''
-            ${concatMapStrings (database: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-            '') cfg.ensureDatabases}
-          '' + ''
-            ${concatMapStrings (user: ''
-              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc "CREATE USER ${user.name}"
+          ''
+          + concatMapStrings (user: ''
+              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user}'" | grep -q 1 || $PSQL -tAc "CREATE USER ${user}"
+            '') (unique (concatMap (a: if a ? owner then if a.owner != null then [a.owner] else [] else [a.name]) (cfg.ensureUsers ++ cfg.ensureDatabases)))
+          + concatMapStrings (db: ''
+              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database.name}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database.name}" ${optionalString (database.owner != null) ''OWNER "${database.owner}"''}'
+              ${optionalString (database.owner != null) ''
+                  current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${database.name}'")
+                  if [[ "$current_owner" != "${database.owner}" ]]; then
+                      $PSQL -tAc 'ALTER DATABASE "${database.name}" OWNER TO "${database.owner}"'
+                      if [[ -e "${cfg.dataDir}/.reassigning_${database.name}" ]]; then
+                          echo "Reassigning ownership of ${database.name} to ${database.owner} failed on last boot. Failing..."
+                          exit 1
+                      fi
+                      touch "${cfg.dataDir}/.reassigning_${database.name}"
+                      $PSQL "${database.name}" -tAc "REASSIGN OWNED BY \"$current_owner\" TO \"${database.owner}\""
+                      rm "${cfg.dataDir}/.reassigning_${database.name}"
+                  fi
+                ''}
+            ''
+            + concatMapStrings (extension: ''
+                $PSQL '${database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS ${extension}"
+              '') database.extensions
+            ) cfg.ensureDatabases
+          + concatMapStrings (user: ''
               ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
                 $PSQL -tAc 'GRANT ${permission} ON ${database} TO ${user.name}'
               '') user.ensurePermissions)}
-            '') cfg.ensureUsers}
-          '';
+            '') cfg.ensureUsers;
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
       };

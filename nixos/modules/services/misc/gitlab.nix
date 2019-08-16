@@ -602,28 +602,12 @@ in {
     # We use postgres as the main data store.
     services.postgresql = optionalAttrs databaseActuallyCreateLocally {
       enable = true;
-      ensureUsers = singleton { name = cfg.databaseUsername; };
+      ensureDatabases = singleton {
+        name = cfg.databaseName;
+        owner = cfg.databaseUsername;
+        extensions = [ "pg_trgm" ];
+      };
     };
-    # The postgresql module doesn't currently support concepts like
-    # objects owners and extensions; for now we tack on what's needed
-    # here.
-    systemd.services.postgresql.postStart = mkAfter (optionalString databaseActuallyCreateLocally ''
-      set -eu
-
-      $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
-      current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.databaseName}'")
-      if [[ "$current_owner" != "${cfg.databaseUsername}" ]]; then
-          $PSQL -tAc 'ALTER DATABASE "${cfg.databaseName}" OWNER TO "${cfg.databaseUsername}"'
-          if [[ -e "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}" ]]; then
-              echo "Reassigning ownership of database ${cfg.databaseName} to user ${cfg.databaseUsername} failed on last boot. Failing..."
-              exit 1
-          fi
-          touch "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
-          $PSQL "${cfg.databaseName}" -tAc "REASSIGN OWNED BY \"$current_owner\" TO \"${cfg.databaseUsername}\""
-          rm "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
-      fi
-      $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
-    '');
 
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault true;
