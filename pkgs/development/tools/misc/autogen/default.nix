@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     remove-references-to -t $out $lib/lib/lib*
   '';
 
-  #doCheck = true; # 2 tests fail because of missing /dev/tty
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Automated text and program generation tool";
