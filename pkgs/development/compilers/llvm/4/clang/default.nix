@@ -6,7 +6,7 @@
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
   self = stdenv.mkDerivation ({
-    name = "clang-${version}";
+    pname = "clang";
     inherit version;
 
     src = fetch "cfe" "16vnv3msnvx33dydd17k2cq0icndi1a06bg5vcxkrhjjb1rqlwv1";
