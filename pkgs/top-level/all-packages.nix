@@ -25142,6 +25142,8 @@ in
 
   tup = callPackage ../development/tools/build-managers/tup { };
 
+  tusk = callPackage ../applications/office/tusk { };
+
   trufflehog = callPackage ../tools/security/trufflehog { };
 
   tvbrowser-bin = callPackage ../applications/misc/tvbrowser/bin.nix { };
