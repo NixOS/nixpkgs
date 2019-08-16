@@ -99,6 +99,7 @@
 , "parcel-bundler"
 , "peerflix"
 , "peerflix-server"
+, "postmark-cli"
 , "pnpm"
 , "prettier"
 , "pulp"
