@@ -169,6 +169,10 @@ in
 
   demoit = callPackage ../servers/demoit { };
 
+  deviceTree = callPackage ../os-specific/linux/device-tree {};
+
+  device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
+
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
