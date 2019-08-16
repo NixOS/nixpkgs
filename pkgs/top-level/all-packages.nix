@@ -24235,6 +24235,8 @@ in
 
   jx = callPackage ../applications/networking/cluster/jx {};
 
+  prow = callPackage ../applications/networking/cluster/prow {};
+
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_11
     terraform_0_11-full
