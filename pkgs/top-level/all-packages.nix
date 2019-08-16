@@ -8243,7 +8243,7 @@ in
   rls = callPackage ../development/tools/rust/rls {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rustfmt = callPackage ../development/tools/rust/rustfmt { };
+  rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
