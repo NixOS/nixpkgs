@@ -17,11 +17,11 @@ let
   llvmShared = llvm_7.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.36.0";
+  version = "1.37.0";
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "06xv2p6zq03lidr0yaf029ii8wnjjqa894nkmrm6s0rx47by9i04";
+    sha256 = "1hrqprybhkhs6d9b5pjskfnc5z9v2l2gync7nb39qjb5s0h703hj";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -47,6 +47,10 @@ in stdenv.mkDerivation rec {
 
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
+
+  # Use a local CARGO_HOME otherwise cargo tries to write to
+  # /homeless-shelter/.cargo which it's not allowed to.
+  CARGO_HOME = ".cargo";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
