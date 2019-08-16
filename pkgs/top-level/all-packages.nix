@@ -16904,6 +16904,8 @@ in
 
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
+  starship = callPackage ../tools/misc/starship { };
+
   stix-otf = callPackage ../data/fonts/stix-otf { };
 
   stix-two = callPackage ../data/fonts/stix-two { };
