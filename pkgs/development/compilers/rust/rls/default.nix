@@ -4,17 +4,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rls";
-  # with rust 1.x you can only build rls version 1.x.y
-  version = "1.36.0";
+  inherit (rustPlatform.rust.rustc) src version;
 
-  src = fetchFromGitHub {
-    owner = "rust-lang";
-    repo = pname;
-    rev = version;
-    sha256 = "1mclv0admxv48pndyqghxc4nf1amhbd700cgrzjshf9jrnffxmrn";
-  };
+  # changes hash of vendor directory otherwise
+  dontUpdateAutotoolsGnuConfigScripts = true;
 
-  cargoSha256 = "1yli9540510xmzqnzfi3p6rh23bjqsviflqw95a0fawf2rnj8sin";
+  cargoVendorDir = "vendor";
+  preBuild = ''
+    pushd src/tools/rls
+    # client tests are flaky
+    rm tests/client.rs
+  '';
 
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP=1;
@@ -27,10 +27,8 @@ rustPlatform.buildRustPackage rec {
     ++ (stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
 
   doCheck = true;
-  preCheck = ''
-    # client tests are flaky
-    rm tests/client.rs
-  '';
+
+  preInstall = "popd";
 
   doInstallCheck = true;
   installCheckPhase = ''
