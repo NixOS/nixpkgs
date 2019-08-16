@@ -918,6 +918,8 @@ in {
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
+  pykalman = callPackage ../development/python-modules/pykalman { };
+
   pykde4 = callPackage ../development/python-modules/pykde4 {
     inherit (self) pyqt4;
     callPackage = pkgs.callPackage;
