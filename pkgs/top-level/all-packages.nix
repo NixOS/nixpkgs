@@ -19141,6 +19141,8 @@ in
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
+  kubeless = callPackage ../applications/networking/cluster/kubeless { };
+
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
