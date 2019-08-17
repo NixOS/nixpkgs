@@ -10067,6 +10067,8 @@ in
 
   travis = callPackage ../development/tools/misc/travis { };
 
+  tree-sitter = callPackage ../development/tools/parsing/tree-sitter { };
+
   trellis = callPackage ../development/tools/trellis { };
 
   ttyd = callPackage ../servers/ttyd { };
