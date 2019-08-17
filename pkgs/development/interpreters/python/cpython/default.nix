@@ -134,6 +134,7 @@ in with passthru; stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (openssl != null) [
     "--with-openssl=${openssl.dev}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
@@ -241,9 +242,9 @@ in with passthru; stdenv.mkDerivation {
 
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
-  disallowedReferences = [
-    openssl.dev
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  disallowedReferences =
+    stdenv.lib.optionals (openssl != null) [ openssl.dev ]
+    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
     pythonForBuild buildPackages.bash
