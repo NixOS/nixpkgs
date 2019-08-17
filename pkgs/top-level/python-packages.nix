@@ -4763,10 +4763,10 @@ in {
   scipy = let
     scipy_ = callPackage ../development/python-modules/scipy { };
     scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: rec {
-      version = "1.2.1";
+      version = "1.2.2";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "0g5a03jkjiqlh6h9yz508p5c9ni43735m01fivjvn6dlpjxd31g0";
+        sha256 = "a4331e0b8dab1ff75d2c67b5158a8bb9a83c799d7140094dda936d876c7cfbb1";
       };
     });
   in if pythonOlder "3.5" then scipy_1_2 else scipy_;
