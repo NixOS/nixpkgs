@@ -1,5 +1,13 @@
-{ mkXfceDerivation, gdk-pixbuf ? null, ffmpegthumbnailer ? null, libgsf ? null
-, poppler ? null }:
+{ mkXfceDerivation
+, ffmpegthumbnailer
+, gdk-pixbuf
+, glib
+, freetype
+, libgsf
+, poppler
+, libjpeg
+, gst_all_1
+}:
 
 # TODO: add libopenraw
 
@@ -10,5 +18,13 @@ mkXfceDerivation rec {
 
   sha256 = "14ql3fcxyz81qr9s0vcwh6j2ks5fl8jf9scwnkilv5jy0ii9l0ry";
 
-  buildInputs = [ gdk-pixbuf ffmpegthumbnailer libgsf poppler ];
+  buildInputs = [
+    ffmpegthumbnailer
+    freetype
+    gdk-pixbuf
+    glib
+    gst_all_1.gst-plugins-base
+    libgsf
+    poppler # technically the glib binding
+  ];
 }
