@@ -191,6 +191,6 @@ buildPythonApplication rec {
       license = licenses.agpl3Plus;
       broken = stdenv.hostPlatform.isAarch64;
       platforms = platforms.mesaPlatforms;
-      maintainers = with maintainers; [ the-kenny Profpatsch enzime ];
+      maintainers = with maintainers; [ oxij the-kenny Profpatsch enzime ];
     };
 }
