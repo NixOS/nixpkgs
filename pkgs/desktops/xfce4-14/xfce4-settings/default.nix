@@ -1,6 +1,6 @@
 { mkXfceDerivation, automakeAddFlags, exo, garcon, gtk3, glib
-, libnotify ? null, libxfce4ui, libxfce4util, libxklavier ? null
-, upower ? null, xfconf, xf86inputlibinput ? null }:
+, libnotify, libxfce4ui, libxfce4util, libxklavier
+, upower, xfconf, xf86inputlibinput }:
 
 mkXfceDerivation rec {
   category = "xfce";

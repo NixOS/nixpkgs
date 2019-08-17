@@ -1,7 +1,7 @@
 { mkXfceDerivation, dbus, dbus-glib
-, gst-plugins-bad ? null, gst-plugins-base, gst-plugins-good
-, gst-plugins-ugly ? null, gtk3, libnotify, libxfce4ui, libxfce4util
-, taglib ? null, xfconf }:
+, gst-plugins-bad, gst-plugins-base, gst-plugins-good
+, gst-plugins-ugly, gtk3, libnotify, libxfce4ui, libxfce4util
+, taglib, xfconf }:
 
 # Doesn't seem to find H.264 codec even though built with gst-plugins-bad.
 

@@ -1,5 +1,5 @@
-{ mkXfceDerivation, docbook_xsl, exo, gdk-pixbuf, gtk3, libgudev ? null
-, libnotify ? null, libX11, libxfce4ui, libxfce4util, libxslt, xfconf, gobject-introspection, gvfs }:
+{ mkXfceDerivation, docbook_xsl, exo, gdk-pixbuf, gtk3, libgudev
+, libnotify, libX11, libxfce4ui, libxfce4util, libxslt, xfconf, gobject-introspection, gvfs }:
 
 mkXfceDerivation rec {
   category = "xfce";

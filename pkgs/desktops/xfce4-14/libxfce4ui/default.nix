@@ -1,5 +1,5 @@
 { lib, mkXfceDerivation, gobject-introspection, gtk2, gtk3, libICE, libSM
-, libstartup_notification ? null, libxfce4util, xfconf }:
+, libstartup_notification, libxfce4util, xfconf }:
 
 mkXfceDerivation rec {
   category = "xfce";
