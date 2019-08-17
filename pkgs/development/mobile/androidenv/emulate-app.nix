@@ -1,4 +1,4 @@
-{ composeAndroidPackages, stdenv }:
+{ composeAndroidPackages, stdenv, lib }:
 { name, app ? null
 , platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default"
 , enableGPU ? false, extraAVDFiles ? []
@@ -74,12 +74,12 @@ stdenv.mkDerivation {
         # Create a virtual android device
         yes "" | ${sdk}/libexec/android-sdk/tools/android create avd -n device -t 1 --abi ${systemImageType}/${abiVersion} $NIX_ANDROID_AVD_FLAGS
 
-        ${stdenv.lib.optionalString enableGPU ''
+        ${lib.optionalString enableGPU ''
           # Enable GPU acceleration
           echo "hw.gpu.enabled=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
         ''}
 
-        ${stdenv.lib.concatMapStrings (extraAVDFile: ''
+        ${lib.concatMapStrings (extraAVDFile: ''
           ln -sf ${extraAVDFile} $ANDROID_SDK_HOME/.android/avd/device.avd
         '') extraAVDFiles}
     fi
@@ -110,7 +110,7 @@ stdenv.mkDerivation {
 
     echo "ready" >&2
 
-    ${stdenv.lib.optionalString (app != null) ''
+    ${lib.optionalString (app != null) ''
       # Install the App through the debugger, if it has not been installed yet
 
       if [ -z "${package}" ] || [ "$(${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell pm list packages | grep package:${package})" = "" ]
@@ -126,7 +126,7 @@ stdenv.mkDerivation {
       fi
 
       # Start the application
-      ${stdenv.lib.optionalString (package != null && activity != null) ''
+      ${lib.optionalString (package != null && activity != null) ''
           ${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/${activity}
       ''}
     ''}
