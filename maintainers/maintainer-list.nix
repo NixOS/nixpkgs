@@ -7,6 +7,7 @@
 
       # Optional
       github = "GithubUsername";
+      githubId = your-github-id;
       keys = [{
         longkeyid = "rsa2048/0x0123456789ABCDEF";
         fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
@@ -19,6 +20,7 @@
   - `name` is your, preferably real, name,
   - `email` is your maintainer email address, and
   - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
+  - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
   - `keys` is a list of your PGP/GPG key IDs and fingerprints.
 
   `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
