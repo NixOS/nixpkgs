@@ -3,7 +3,7 @@
 import ./make-test.nix ({pkgs, ... }: {
   name = "printing";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ domenkozar eelco ];
+    maintainers = [ domenkozar eelco matthewbauer ];
   };
 
   nodes = {
@@ -34,10 +34,6 @@ import ./make-test.nix ({pkgs, ... }: {
     ''
       startAll;
 
-      # Make sure that cups is up on both sides.
-      $server->waitForUnit("cups.service");
-      $client->waitForUnit("cups.service");
-      $client->sleep(10); # wait until cups is fully initialized
       $client->succeed("lpstat -r") =~ /scheduler is running/ or die;
       # check local encrypted connections work without error
       $client->succeed("lpstat -E -r") =~ /scheduler is running/ or die;

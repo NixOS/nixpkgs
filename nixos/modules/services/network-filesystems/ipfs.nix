@@ -208,9 +208,9 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ wrapped ];
-    environment.etc."fuse.conf" = mkIf cfg.autoMount { text = ''
-      user_allow_other
-    ''; };
+    programs.fuse = mkIf cfg.autoMount {
+      userAllowOther = true;
+    };
 
     users.users = mkIf (cfg.user == "ipfs") {
       ipfs = {

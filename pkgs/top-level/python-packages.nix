@@ -477,6 +477,8 @@ in {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  cnvkit = callPackage ../development/python-modules/cnvkit { };
+
   cozy = callPackage ../development/python-modules/cozy { };
 
   codespell = callPackage ../development/python-modules/codespell { };
@@ -518,6 +520,8 @@ in {
   dominate = callPackage ../development/python-modules/dominate { };
 
   emcee = callPackage ../development/python-modules/emcee { };
+
+  emailthreads = callPackage ../development/python-modules/emailthreads { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
 
@@ -879,6 +883,8 @@ in {
 
   pyfakefs = callPackage ../development/python-modules/pyfakefs {};
 
+  pyfaidx = callPackage ../development/python-modules/pyfaidx { };
+
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
   pyftdi = callPackage ../development/python-modules/pyftdi { };
@@ -1013,6 +1019,8 @@ in {
   pytest-flask = callPackage ../development/python-modules/pytest-flask { };
 
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
+
+  pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
@@ -1271,6 +1279,8 @@ in {
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
+  aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
+
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
@@ -1342,7 +1352,11 @@ in {
 
   astor = callPackage ../development/python-modules/astor {};
 
+  asyncpg = callPackage ../development/python-modules/asyncpg { };
+
   asyncssh = callPackage ../development/python-modules/asyncssh { };
+
+  atpublic = callPackage ../development/python-modules/atpublic { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
@@ -2426,6 +2440,8 @@ in {
 
   jsmin = callPackage ../development/python-modules/jsmin { };
 
+  jsonmerge = callPackage ../development/python-modules/jsonmerge { };
+
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
   jsonpickle = callPackage ../development/python-modules/jsonpickle { };
@@ -2806,6 +2822,8 @@ in {
 
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
 
+  django-csp = callPackage ../development/python-modules/django-csp { };
+
   django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
   django_environ = callPackage ../development/python-modules/django_environ { };
@@ -2976,6 +2994,8 @@ in {
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
+
+  flake8-polyfill = callPackage ../development/python-modules/flake8-polyfill { };
 
   flaky = callPackage ../development/python-modules/flaky { };
 
@@ -4071,6 +4091,8 @@ in {
 
   pep8 = callPackage ../development/python-modules/pep8 { };
 
+  pep8-naming = callPackage ../development/python-modules/pep8-naming { };
+
   pep257 = callPackage ../development/python-modules/pep257 { };
 
   percol = callPackage ../development/python-modules/percol { };
@@ -4091,6 +4113,12 @@ in {
   pgsanity = callPackage ../development/python-modules/pgsanity { };
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
+
+  pgpy = callPackage ../development/python-modules/pgpy {
+    cryptography = self.cryptography.override {
+      openssl = pkgs.openssl_1_1;
+    };
+  };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
@@ -4838,6 +4866,8 @@ in {
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
+  sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
@@ -4980,8 +5010,6 @@ in {
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
-
-  wikipedia = callPackage ../development/python-modules/wikipedia { };
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 

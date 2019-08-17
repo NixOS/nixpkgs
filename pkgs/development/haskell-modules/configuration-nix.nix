@@ -95,6 +95,7 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
   cachix = enableSeparateBinOutput super.cachix;
+  ghcid = enableSeparateBinOutput super.ghcid;
 
   hzk = overrideCabal super.hzk (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";

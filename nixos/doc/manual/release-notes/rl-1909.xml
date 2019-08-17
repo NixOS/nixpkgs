@@ -42,6 +42,12 @@
        set up binfmt interpreters for each of those listed systems.
      </para>
    </listitem>
+   <listitem>
+     <para>
+     The installer now uses a less privileged <literal>nixos</literal> user whereas before we logged in as root.
+     To gain root privileges use <literal>sudo -i</literal> without a password.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -246,6 +252,15 @@
      <para>
        The <literal>ibus-qt</literal> package is not installed by default anymore when <xref linkend="opt-i18n.inputMethod.enabled" /> is set to <literal>ibus</literal>.
        If IBus support in Qt 4.x applications is required, add the <literal>ibus-qt</literal> package to your <xref linkend="opt-environment.systemPackages" /> manually.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The CUPS Printing service now uses socket-based activation by
+       default, only starting when needed. The previous behavior can
+       be restored by setting
+       <option>services.cups.startWhenNeeded</option> to
+       <literal>false</literal>.
      </para>
    </listitem>
   </itemizedlist>
