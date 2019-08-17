@@ -37,6 +37,9 @@ Update: The 48.ucode causes the Killer wifi card to crash. The iwlfwifi-cc-a0-46
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_5_1;
 ```
+Disable the `canTouchEfiVariables` after a boot or two to prevent NVRAM wearout.
+
+
 === After installation ===
 
 * ''Add systemd-boot to UEFI boot list.'' The (uneditable anyways) settings mapping drive UUIDs to HD* work fine.
