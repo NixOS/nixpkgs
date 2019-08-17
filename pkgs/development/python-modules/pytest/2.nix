@@ -3,7 +3,7 @@
 , atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
 }:
 buildPythonPackage rec {
-  version = "5.1.0";
+  version = "4.6.5";
   pname = "pytest";
 
   preCheck = ''
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3805d095f1ea279b9870c3eeae5dddf8a81b10952c8835cd628cf1875b0ef031";
+    sha256 = "8fc39199bdda3d9d025d3b1f4eb99a192c20828030ea7c9a0d2840721de7d347";
   };
 
   checkInputs = [ hypothesis mock ];
@@ -23,10 +23,9 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
-  # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
   checkPhase = ''
     runHook preCheck
-    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
+    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths"
     runHook postCheck
   '';
 
