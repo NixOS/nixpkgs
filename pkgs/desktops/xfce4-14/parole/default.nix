@@ -1,4 +1,4 @@
-{ mkXfceDerivation, makeWrapper, wrapGAppsHook, dbus, dbus-glib
+{ mkXfceDerivation, dbus, dbus-glib
 , gst-plugins-bad ? null, gst-plugins-base, gst-plugins-good
 , gst-plugins-ugly ? null, gtk3, libnotify, libxfce4ui, libxfce4util
 , taglib ? null, xfconf }:
@@ -16,8 +16,6 @@ mkXfceDerivation rec {
     substituteInPlace src/plugins/mpris2/Makefile.am \
       --replace GST_BASE_CFLAGS GST_VIDEO_CFLAGS
   '';
-
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
 
   buildInputs = [
     dbus

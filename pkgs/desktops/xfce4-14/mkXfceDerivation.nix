@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools, hicolor-icon-theme }:
+{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools, hicolor-icon-theme, wrapGAppsHook }:
 
 { category, pname, version, rev ? "${pname}-${version}", sha256, ... } @ args:
 
@@ -15,7 +15,7 @@ let
   template = rec {
     name = "${pname}-${version}";
 
-    nativeBuildInputs = [ pkgconfig xfce4-dev-tools ];
+    nativeBuildInputs = [ pkgconfig xfce4-dev-tools wrapGAppsHook ];
     buildInputs = [ hicolor-icon-theme ];
     configureFlags = [ "--enable-maintainer-mode" ];
 
