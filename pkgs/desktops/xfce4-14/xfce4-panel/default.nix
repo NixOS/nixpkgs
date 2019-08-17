@@ -17,8 +17,7 @@ mkXfceDerivation rec {
       substituteInPlace $f --replace gettext ${gettext}/bin/gettext
     done
     substituteInPlace plugins/clock/clock.c \
-       --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
-       --replace "if (!g_file_test (filename, G_FILE_TEST_IS_SYMLINK))" ""
+       --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   configureFlags = [ "--enable-gtk3" ];
