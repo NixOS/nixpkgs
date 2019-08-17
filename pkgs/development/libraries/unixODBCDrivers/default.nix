@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, mariadb, sqlite, zlib, libxml2, dpkg, lib, kerberos, curl, libuuid, autoPatchelfHook }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, libmysqlclient, sqlite, zlib, libxml2, dpkg, lib, kerberos, curl, libuuid, autoPatchelfHook }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -37,10 +37,10 @@
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mariadb.connector-c ];
+    buildInputs = [ unixODBC libmysqlclient ];
 
     cmakeFlags = [
-      "-DMARIADB_INCLUDE_DIR=${mariadb.connector-c}/include/mariadb"
+      "-DMARIADB_INCLUDE_DIR=${libmysqlclient}/include/mariadb"
     ];
 
     passthru = {

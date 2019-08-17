@@ -1961,7 +1961,7 @@ in
     libkrb5 = null;
     systemd = null;
     jemalloc = null;
-    mysql = null;
+    libmysqlclient = null;
     postgresql = null;
     libdbi = null;
     net_snmp = null;
@@ -11703,7 +11703,7 @@ in
   libdbi = callPackage ../development/libraries/libdbi { };
 
   libdbiDriversBase = libdbiDrivers.override {
-    mysql = null;
+    libmysqlclient = null;
     sqlite = null;
   };
 
@@ -13128,7 +13128,7 @@ in
     cups = if stdenv.isLinux then cups else null;
 
     # XXX: mariadb doesn't built on fbsd as of nov 2015
-    mysql = if (!stdenv.isFreeBSD) then mysql else null;
+    libmysqlclient = if (!stdenv.isFreeBSD) then libmysqlclient else null;
 
     inherit (pkgs.darwin) libobjc;
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
@@ -14886,6 +14886,7 @@ in
 
   rpcbind = callPackage ../servers/rpcbind { };
 
+  libmysqlclient = mariadb-connector-c;
   mariadb-connector-c = mariadb-connector-c_2_3;
   mariadb-connector-c_2_3 = callPackage ../servers/sql/mariadb/connector-c/2_3.nix { };
 
@@ -24129,7 +24130,7 @@ in
   mnemonicode = callPackage ../misc/mnemonicode { };
 
   mysql-workbench = callPackage ../applications/misc/mysql-workbench (let mysql = mysql57; in {
-    gdal = gdal.override {mysql = mysql // {lib = {dev = mysql;};};};
+    gdal = gdal.override {libmysqlclient = mysql // {lib = {dev = mysql;};};};
     mysql = mysql;
     pcre = pcre-cpp;
   });

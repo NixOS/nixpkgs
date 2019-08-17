@@ -22,7 +22,7 @@
 , libtool
 , lm_sensors
 , lvm2
-, mysql
+, libmysqlclient
 , numactl
 , postgresql
 , protobufc
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     libxml2 postgresql protobufc rrdtool
     varnish yajl jdk libtool python hiredis libmicrohttpd
     riemann_c_client mosquitto rdkafka mongoc
-  ] ++ stdenv.lib.optionals (mysql != null) [ mysql.connector-c
+  ] ++ stdenv.lib.optionals (libmysqlclient != null) [ libmysqlclient
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     iptables libatasmart libcredis libmodbus libsigrok
     lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ocamlPackages, libGLU_combined, freeglut
-, mysql, mpfr, gmp, libtiff, libjpeg, libpng, giflib
+, libmysqlclient, mpfr, gmp, libtiff, libjpeg, libpng, giflib
 }:
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
-  buildInputs = [ freeglut libGLU_combined mysql.connector-c mpfr gmp
+  buildInputs = [ freeglut libGLU_combined libmysqlclient mpfr gmp
     libtiff libjpeg libpng giflib ]
   ++ (with ocamlPackages; [
     ocaml findlib ocaml_mysql lablgl camlimages_4_0 mlgmpidl
