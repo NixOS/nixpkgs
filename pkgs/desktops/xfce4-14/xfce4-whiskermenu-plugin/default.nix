@@ -1,4 +1,4 @@
-{ mkXfceDerivation, dbus-glib, gtk3, cmake, exo, garcon, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
+{ mkXfceDerivation, gtk3, glib, cmake, exo, garcon, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
 
 mkXfceDerivation rec {
   category = "panel-plugins";
@@ -9,7 +9,7 @@ mkXfceDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ dbus-glib exo garcon gtk3 libxfce4ui libxfce4util xfce4-panel xfconf ];
+  buildInputs = [ exo garcon gtk3 glib libxfce4ui libxfce4util xfce4-panel xfconf ];
 
   postInstall = ''
     substituteInPlace $out/bin/xfce4-popup-whiskermenu \
