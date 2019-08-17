@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, buildGoPackage, ruby, bundlerEnv, pkgconfig, libgit2 }:
+{ stdenv, fetchFromGitLab, buildGoPackage, ruby, bundlerEnv, pkgconfig, libgit2_0_27 }:
 
 let
   rubyEnv = bundlerEnv rec {
@@ -34,7 +34,7 @@ in buildGoPackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2 ];
+  buildInputs = [ rubyEnv.wrappedRuby libgit2_0_27 ];
   goDeps = ./deps.nix;
   preBuild = "rm -r go/src/gitlab.com/gitlab-org/labkit/vendor";
 
