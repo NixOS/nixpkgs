@@ -1,24 +1,21 @@
 { composeAndroidPackages, stdenv }:
 { name, app ? null
-, platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default", useGoogleAPIs ? false
+, platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default"
 , enableGPU ? false, extraAVDFiles ? []
 , package ? null, activity ? null
-, avdHomeDir ? null
-}@args:
+, avdHomeDir ? null, sdkExtraArgs ? {}
+}:
 
 let
-  androidSdkArgNames = builtins.attrNames (builtins.functionArgs composeAndroidPackages);
-
-  # Extract the parameters meant for the Android SDK
-  androidParams = {
+  sdkArgs = {
     platformVersions = [ platformVersion ];
     includeEmulator = true;
     includeSystemImages = true;
     systemImageTypes = [ systemImageType ];
     abiVersions = [ abiVersion ];
-  };
+  } // sdkExtraArgs;
 
-  androidsdkComposition = (composeAndroidPackages androidParams).androidsdk;
+  androidsdkComposition = (composeAndroidPackages sdkArgs).androidsdk;
 in
 stdenv.mkDerivation {
   inherit name;
