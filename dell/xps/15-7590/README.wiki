@@ -17,7 +17,7 @@ Not much tweaking of NixOS itself was needed. But we currently cannot automate t
 
 These settings are needed both for booting the final install, and installer itself. Therefore, they must be done first.
 
-* ''Disable Secure Boot (but keep UEFI Boot).'' Thakfully doing so is as easy as changing any other simple setting.
+* ''Disable Secure Boot (but keep UEFI Boot).'' Thankfully doing so is as easy as changing any other simple setting.
 
 * ''Disable Intel hardware RAID and use AHCI instead.'' Intel doesn't seem to provide a working linux driver for this.  (If you just have SSD it's pointless and just slows things down needlessly anyways.)
 
