@@ -1,7 +1,7 @@
 { stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, libelf, utillinux, ... } @ args:
 
 buildLinux (args // rec {
-  version = "4.14.133-165";
+  version = "4.14.133-166";
 
   # modDirVersion needs to be x.y.z.
   modDirVersion = "4.14.133";
