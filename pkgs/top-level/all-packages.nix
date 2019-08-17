@@ -14889,6 +14889,7 @@ in
   libmysqlclient = mariadb-connector-c;
   mariadb-connector-c = mariadb-connector-c_2_3;
   mariadb-connector-c_2_3 = callPackage ../servers/sql/mariadb/connector-c/2_3.nix { };
+  mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
 
   mariadb = callPackage ../servers/sql/mariadb {
     asio = asio_1_10;
