@@ -7,7 +7,7 @@ mkXfceDerivation rec {
 
   sha256 = "0vq16bzmnykiikg4dhiaj0qbyj76nkdd54j6k6n568h3dc9ix6q4";
 
-  buildInputs = [ gobject-introspection ];
+  nativeBuildInputs = [ gobject-introspection ];
 
   meta = with lib; {
     description = "Extension library for Xfce";
