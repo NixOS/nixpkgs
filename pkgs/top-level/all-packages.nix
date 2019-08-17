@@ -2473,6 +2473,8 @@ in
 
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket rec { };
 
+  curlie = callPackage ../tools/networking/curlie { };
+
   cunit = callPackage ../tools/misc/cunit { };
   bcunit = callPackage ../tools/misc/bcunit { };
 
