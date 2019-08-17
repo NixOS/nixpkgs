@@ -20114,11 +20114,7 @@ in
 
   qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat {};
 
-  qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
-    inherit (darwin.stubs) rez setfile;
-    python = python3;
-  };
+  qemu = callPackage ../applications/virtualization/qemu { };
 
   qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
       withGrass = false;

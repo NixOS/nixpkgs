@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
+{ stdenv, fetchurl, fetchpatch, python3, zlib, pkgconfig, glib
 , ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
 , attr, libcap, libcap_ng
-, CoreServices, Cocoa, Hypervisor, rez, setfile
+, darwin
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
@@ -28,6 +28,9 @@
 
 with stdenv.lib;
 let
+  inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
+  inherit (darwin.stubs) rez setfile;
+
   audio = optionalString (hasSuffix "linux" stdenv.hostPlatform.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
@@ -35,7 +38,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
+  version = "4.1.0";
   name = "qemu-"
     + stdenv.lib.optionalString xenSupport "xen-"
     + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
@@ -44,13 +47,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "085g6f75si8hbn94mnnjn1r7ysixn5bqj4bhqwvadj00fhzp2zvd";
+    sha256 = "1bpl6hwiw1jdxk4xmqp10qgki0dji0l2rzr10dyhyk8d85vxxw29";
   };
 
-  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ];
+  nativeBuildInputs = [ python3 python3.pkgs.sphinx pkgconfig flex bison makeWrapper ];
   buildInputs =
     [ zlib glib ncurses perl pixman
-      vde2 texinfo makeWrapper lzo snappy
+      vde2 texinfo lzo snappy
       gnutls nettle curl
     ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
@@ -78,11 +81,6 @@ stdenv.mkDerivation rec {
     ./no-etc-install.patch
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
-    (fetchpatch {
-      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=d52680fc932efb8a2f334cc6993e705ed1e31e99";
-      name = "CVE-2019-12155.patch";
-      sha256 = "0h2q71mcz3gvlrbfkqcgla74jdg73hvzcrwr4max2ckpxx8x9207";
-    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
