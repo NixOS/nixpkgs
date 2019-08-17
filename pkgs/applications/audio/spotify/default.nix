@@ -60,7 +60,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "spotify-${version}";
+  pname = "spotify";
+  inherit version;
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last

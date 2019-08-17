@@ -2,7 +2,8 @@
 let
 version = "2.3";
 apk = stdenv.mkDerivation {
-  name = "gnirehtet.apk-${version}";
+  pname = "gnirehtet.apk";
+  inherit version;
   src = fetchzip {
     url = "https://github.com/Genymobile/gnirehtet/releases/download/v${version}/gnirehtet-rust-linux64-v${version}.zip";
     sha256 = "08pgmpbz82cd8ndr2syiv25l5xk1gvh9gzji4pgva5gw269bjmpz";

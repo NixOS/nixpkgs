@@ -5,7 +5,8 @@
 let
   version = "1.6";
 in mkDerivation rec {
-  name = "qdirstat-${version}";
+  pname = "qdirstat";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "shundhammer";

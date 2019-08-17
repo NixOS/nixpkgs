@@ -6,7 +6,8 @@
 let 
   version = "0.0.3";
 in stdenv.mkDerivation {
-  name = "shallot-${version}";
+  pname = "shallot";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "katmagic";

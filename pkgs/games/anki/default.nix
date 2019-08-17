@@ -37,7 +37,8 @@ let
     sha256-manual = "12j4x1bh8x6yinym4d1ard32vfl22iq2wz1lfwz6s3ljhggkc52h";
 
     manual = stdenv.mkDerivation {
-      name = "anki-manual-${version}";
+      pname = "anki-manual";
+      inherit version;
       src = fetchFromGitHub {
         owner = "dae";
         repo = "ankidocs";
@@ -68,11 +69,12 @@ let
 
 in
 buildPythonApplication rec {
-    name = "anki-${version}";
+    pname = "anki";
+    inherit version;
 
     src = fetchurl {
       urls = [
-        "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
+        "https://apps.ankiweb.net/downloads/current/${pname}-${version}-source.tgz"
         # "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"

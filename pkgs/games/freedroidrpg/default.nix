@@ -3,7 +3,8 @@
 let
   version = "0.16.1";
 in stdenv.mkDerivation rec {
-  name = "freedroidrpg-${version}";
+  pname = "freedroidrpg";
+  inherit version;
 
   src = fetchurl {
     url = "ftp://ftp.osuosl.org/pub/freedroid/freedroidRPG-${stdenv.lib.versions.majorMinor version}/freedroidRPG-${version}.tar.gz";

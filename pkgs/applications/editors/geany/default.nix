@@ -7,10 +7,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "geany-${version}";
+  pname = "geany";
+  inherit version;
 
   src = fetchurl {
-    url = "https://download.geany.org/${name}.tar.bz2";
+    url = "https://download.geany.org/${pname}-${version}.tar.bz2";
     sha256 = "179xfnvhcxsv54v2mlrhykqv2j7klniln5sffvqqpjmdvwyivvim";
   };
 

@@ -7,7 +7,8 @@ let
   version = "0.18.1";
 
 in mkDerivation rec {
-  name = "sddm-${version}";
+  pname = "sddm";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "sddm";

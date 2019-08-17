@@ -60,7 +60,8 @@ let
 
   };
 in stdenv.mkDerivation rec {
-  name = "libreoffice-${version}";
+  pname = "libreoffice";
+  inherit version;
 
   inherit (primary-src) src;
 

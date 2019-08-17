@@ -3,7 +3,8 @@
 let version = "1.9.0";
 
 in stdenv.mkDerivation {
-  name = "emacs-s-${version}";
+  pname = "emacs-s";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/magnars/s.el/archive/${version}.tar.gz";

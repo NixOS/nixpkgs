@@ -3,7 +3,8 @@
 let version = "2.0.2";
 
 in stdenv.mkDerivation {
-  name = "writegood-mode-${version}";
+  pname = "writegood-mode";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/bnbeckwith/writegood-mode/archive/v${version}.tar.gz";
     sha256 = "1ilbqj24vzpfh9n1wph7idj0914ga290jkpv9kr1pff3a0v5hf6k";

@@ -28,7 +28,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "git-${version}";
+  pname = "git";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";

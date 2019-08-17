@@ -7,7 +7,8 @@ let
   version = "4.8.2";
 
   libdc = stdenv.mkDerivation rec {
-    name = "libdivecomputer-ssrf-${version}";
+    pname = "libdivecomputer-ssrf";
+    inherit version;
 
     src = fetchurl {
       url = "https://subsurface-divelog.org/downloads/libdivecomputer-subsurface-branch-${version}.tgz";
@@ -66,7 +67,8 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "subsurface-${version}";
+  pname = "subsurface";
+  inherit version;
 
   src = fetchurl {
     url = "https://subsurface-divelog.org/downloads/Subsurface-${version}.tgz";

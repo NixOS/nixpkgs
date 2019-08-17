@@ -3,7 +3,8 @@
 let version = "1.3.13";
 
 in stdenv.mkDerivation {
-  name = "emacs-rainbow-delimiters-${version}";
+  pname = "emacs-rainbow-delimiters";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/jlr/rainbow-delimiters/archive/${version}.tar.gz";

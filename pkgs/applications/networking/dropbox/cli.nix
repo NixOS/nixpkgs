@@ -15,7 +15,8 @@ let
   dropboxd = "${dropbox}/bin/dropbox";
 in
 stdenv.mkDerivation {
-  name = "dropbox-cli-${version}";
+  pname = "dropbox-cli";
+  inherit version;
 
   outputs = [ "out" "nautilusExtension" ];
 

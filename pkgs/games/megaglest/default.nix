@@ -17,7 +17,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "megaglest-${version}";
+  pname = "megaglest";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "MegaGlest";

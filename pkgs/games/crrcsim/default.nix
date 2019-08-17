@@ -3,10 +3,11 @@ let
   version = "0.9.13";
 in
 stdenv.mkDerivation rec {
-  name = "crrcsim-${version}";
+  pname = "crrcsim";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/crrcsim/${name}.tar.gz";
+    url = "mirror://sourceforge/crrcsim/${pname}-${version}.tar.gz";
     sha256 = "abe59b35ebb4322f3c48e6aca57dbf27074282d4928d66c0caa40d7a97391698";
   };
 

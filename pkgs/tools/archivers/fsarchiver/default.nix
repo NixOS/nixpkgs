@@ -6,7 +6,8 @@ let
   version = "0.8.5";
 
 in stdenv.mkDerivation {
-  name = "fsarchiver-${version}";
+  pname = "fsarchiver";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "fdupoux";

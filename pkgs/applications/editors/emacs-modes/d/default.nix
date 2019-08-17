@@ -4,7 +4,8 @@
 let version = "20150111";
 
 in stdenv.mkDerivation {
-  name = "emacs-d-${version}";
+  pname = "emacs-d";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/Emacs-D-Mode-Maintainers/Emacs-D-Mode/archive/53efec4d83c7cee8227597f010fe7fc400ff05f1.tar.gz";

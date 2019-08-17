@@ -8,10 +8,11 @@ with stdenv.lib;
 
 let
   common = { version, sha256, patches ? [], withDocs ? false }: stdenv.mkDerivation rec {
-    name = "openssl-${version}";
+    pname = "openssl";
+    inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${name}.tar.gz";
+      url = "https://www.openssl.org/source/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 

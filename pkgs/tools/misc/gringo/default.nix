@@ -8,7 +8,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gringo-${version}";
+  pname = "gringo";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/gringo/${version}/gringo-${version}-source.tar.gz";

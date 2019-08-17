@@ -4,11 +4,12 @@ let
   llvm     = callPackage ./llvm.nix { };
 in
 stdenv.mkDerivation rec {
-  name = "mono-${version}";
+  pname = "mono";
+  inherit version;
 
   src = fetchurl {
     inherit sha256;
-    url = "https://download.mono-project.com/sources/mono/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/mono/${pname}-${version}.tar.bz2";
   };
 
   buildInputs =
