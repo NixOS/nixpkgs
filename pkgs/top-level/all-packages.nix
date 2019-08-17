@@ -13893,7 +13893,9 @@ in
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
-  unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers {});
+  unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers {
+    libmysqlclient = libmysqlclient_2_3;
+  });
 
   ustr = callPackage ../development/libraries/ustr { };
 
@@ -14886,8 +14888,10 @@ in
 
   rpcbind = callPackage ../servers/rpcbind { };
 
-  libmysqlclient = mariadb-connector-c;
-  mariadb-connector-c = mariadb-connector-c_2_3;
+  libmysqlclient = libmysqlclient_3_1;
+  libmysqlclient_2_3 = mariadb-connector-c_2_3;
+  libmysqlclient_3_1 = mariadb-connector-c_3_1;
+  mariadb-connector-c = mariadb-connector-c_3_1;
   mariadb-connector-c_2_3 = callPackage ../servers/sql/mariadb/connector-c/2_3.nix { };
   mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
 
