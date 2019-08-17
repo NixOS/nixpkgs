@@ -2542,6 +2542,11 @@
     name = "Sven Slootweg";
     github = "joepie91";
   };
+  joesalisbury = {
+    email = "salisbury.joseph@gmail.com";
+    github = "JosephSalisbury";
+    name = "Joe Salisbury";
+  };
   johanot = {
     email = "write@ownrisk.dk";
     github = "johanot";
