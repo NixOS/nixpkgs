@@ -12,6 +12,10 @@ mkXfceDerivation rec {
   buildInputs =  [ gtk2 gtk3 libstartup_notification xfconf ];
   propagatedBuildInputs = [ libxfce4util libICE libSM ];
 
+  configureFlags = [
+    "--with-vendor-info='NixOS'"
+  ];
+
   meta = with lib; {
     description = "Widgets library for Xfce";
     license = licenses.lgpl2Plus;
