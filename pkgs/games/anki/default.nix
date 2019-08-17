@@ -92,6 +92,7 @@ buildPythonApplication rec {
 
     checkInputs = [ pytest glibcLocales nose ];
 
+    nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
     buildInputs = [ lame mplayer libpulseaudio  ];
 
     makeWrapperArgs = [
@@ -131,6 +132,8 @@ buildPythonApplication rec {
       env HOME=$TMP pytest --ignore tests/test_sync.py
     '';
 
+    dontWrapQtApps = true;
+
     installPhase = ''
       pp=$out/lib/${python.libPrefix}/site-packages
 
@@ -158,6 +161,9 @@ buildPythonApplication rec {
       cp -rv anki aqt web $pp/
 
       wrapPythonPrograms
+      for program in $out/bin/*; do
+        wrapQtApp "$program"
+      done
 
       # copy the manual into $doc
       cp -r ${manual}/share/doc/anki/html $doc/share/doc/anki
@@ -167,7 +173,7 @@ buildPythonApplication rec {
       inherit manual;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://apps.ankiweb.net/";
       description = "Spaced repetition flashcard program";
       longDescription = ''
