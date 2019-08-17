@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     sha256 = "19x000m3jwnkqgi6ic81lkzyjvvxcfacw2j0vcfcaknvvagzhyhb";
   };
 
-  hunspellDictionaries = with stdenv.lib; filter isDerivation (attrValues hunspellDicts);
+  hunspellDictionaries = with stdenv.lib; filter isDerivation (unique (attrValues hunspellDicts));
 
   mathJaxSrc = fetchurl {
     url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;

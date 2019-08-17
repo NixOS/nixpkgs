@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline ];
   nativeBuildInputs = [ autoreconfHook ];
 
+  patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];
+
   postPatch = ''
     patchShebangs tests
   '';

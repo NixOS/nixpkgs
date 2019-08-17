@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace 'all: check_include' 'all:' \
       --replace '-install_name ''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' \
       --replace '-install_name ''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}'
   '';
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "T=$(out)"
-    "INCDIR=${lib.getDev stdenv.cc.libc}/include"
+    "INCDIR="
     "BINDIR=/bin"
     "LIBDIR=/lib"
     "CALC_SHAREDIR=/share/calc"

@@ -73,6 +73,23 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           propagatedUserEnvPkgs = old.propagatedUserEnvPkgs ++ [ external.elpy ];
         });
 
+        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs(old: {
+          buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            cd source/sqlite
+            make
+            cd -
+          '';
+
+          postInstall = ''
+            install -m=755 -D source/sqlite/emacsql-sqlite \
+              $out/share/emacs/site-lisp/elpa/emacsql-sqlite-${old.version}/sqlite/emacsql-sqlite
+          '';
+
+          stripDebugList = [ "share" ];
+        });
+
         evil-magit = super.evil-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =

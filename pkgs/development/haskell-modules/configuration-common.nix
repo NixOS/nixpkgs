@@ -214,15 +214,19 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # Needs older version of QuickCheck.
+  these_0_7_6 = doJailbreak super.these_0_7_6;
+
   # dontCheck: Can be removed once https://github.com/haskell-nix/hnix/commit/471712f is in (5.2 probably)
   #   This is due to GenList having been removed from generic-random in 1.2.0.0
   # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
   #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
+  # Does not support recent versions of "these".
+  # https://github.com/haskell-nix/hnix/issues/514
   hnix =
     generateOptparseApplicativeCompletion "hnix" (
-    dontCheck (doJailbreak (overrideCabal super.hnix (old: {
-      testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
-  }))));
+      dontCheck (doJailbreak (super.hnix.override { these = self.these_0_7_6; }))
+    );
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -1224,14 +1228,14 @@ self: super: {
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
     (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-      version = "20190625-git";
+      version = "20190814-git";
       src = pkgs.fetchFromGitHub {
         owner = "haskell-CI";
         repo = "haskell-ci";
-        rev = "260f967c6973dfb22ecc8061a1811a2ea4b79e01";
-        sha256 = "1mvn6pqa6wfcm4jxhlhm4l54pwrlgnz7vdrmkwabliwz4q0bzgqk";
+        rev = "70918d80b6fd43aca7e4d00ba0d2ea116b666556";
+        sha256 = "0bzp959qy74zmqq75f60rcixpjbvvyrb5a8zp2nyql3nm9vxzy5k";
       };
-  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck exceptions temporary]));
+  }) (with self; [temporary lattices Cabal_3_0_0_0]));
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;

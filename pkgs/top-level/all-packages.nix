@@ -169,6 +169,10 @@ in
 
   demoit = callPackage ../servers/demoit { };
 
+  deviceTree = callPackage ../os-specific/linux/device-tree {};
+
+  device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
+
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
@@ -560,6 +564,8 @@ in
 
   antora = callPackage ../development/tools/documentation/antora {};
 
+  apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
+
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };
@@ -759,6 +765,8 @@ in
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
   crumbs = callPackage ../applications/misc/crumbs { };
+
+  crc32c = callPackage ../development/libraries/crc32c { };
 
   cue = callPackage ../development/tools/cue { };
 
@@ -3453,6 +3461,8 @@ in
 
   google-music-scripts = callPackage ../tools/audio/google-music-scripts { };
 
+  google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
+
   gopro = callPackage ../tools/video/gopro { };
 
   gource = callPackage ../applications/version-management/gource { };
@@ -6146,6 +6156,8 @@ in
 
   srcml = callPackage ../applications/version-management/srcml { };
 
+  sourcehut = callPackage ../applications/version-management/sourcehut { };
+
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
   sshfs = sshfs-fuse; # added 2017-08-14
 
@@ -6379,6 +6391,8 @@ in
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
   tinyemu = callPackage ../applications/virtualization/tinyemu { };
+
+  tinyprog = callPackage ../development/tools/misc/tinyprog { };
 
   tinyproxy = callPackage ../tools/networking/tinyproxy {};
 
@@ -9919,6 +9933,8 @@ in
 
   spoofer-gui = callPackage ../tools/networking/spoofer { withGUI = true; };
 
+  spooles = callPackage ../development/libraries/science/math/spooles {};
+
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
@@ -10763,6 +10779,8 @@ in
   givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix {};
 
   ghp-import = callPackage ../development/tools/ghp-import { };
+
+  ghcid = haskellPackages.ghcid.bin;
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
@@ -17388,6 +17406,8 @@ in
 
   calcurse = callPackage ../applications/misc/calcurse { };
 
+  calculix = callPackage ../applications/science/math/calculix {};
+
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
@@ -23924,7 +23944,7 @@ in
         in
           nixosTesting.makeTest calledTest;
 
-  nixosOptionsDoc = attrs: 
+  nixosOptionsDoc = attrs:
     (import ../../nixos/lib/make-options-doc/default.nix)
     ({ inherit pkgs lib; } // attrs);
 
@@ -24214,6 +24234,8 @@ in
   sqsh = callPackage ../development/tools/sqsh { };
 
   jx = callPackage ../applications/networking/cluster/jx {};
+
+  prow = callPackage ../applications/networking/cluster/prow {};
 
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_11
