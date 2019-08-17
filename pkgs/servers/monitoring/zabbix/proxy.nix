@@ -63,7 +63,10 @@ in
         mkdir -p $out/share/zabbix/database/
       '' + optionalString sqliteSupport ''
         mkdir -p $out/share/zabbix/database/sqlite3
-        cp -prvd database/sqlite3/*.sql $out/share/zabbix/database/sqlite3/
+        cp -prvd database/sqlite3/schema.sql $out/share/zabbix/database/sqlite3/
+      '' + optionalString mysqlSupport ''
+        mkdir -p $out/share/zabbix/database/mysql
+        cp -prvd database/mysql/schema.sql $out/share/zabbix/database/mysql/
       '' + optionalString postgresqlSupport ''
         mkdir -p $out/share/zabbix/database/postgresql
         cp -prvd database/postgresql/schema.sql $out/share/zabbix/database/postgresql/
