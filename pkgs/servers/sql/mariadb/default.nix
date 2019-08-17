@@ -18,7 +18,6 @@ mytopEnv = perl.withPackages (p: with p; [ DataDumper DBDmysql DBI TermReadKey ]
 mariadb = server // {
   inherit client; # MariaDB Client
   server = server; # MariaDB Server
-  inherit connector-c; # libmysqlclient.so
   inherit galera;
 };
 
@@ -216,47 +215,6 @@ server = stdenv.mkDerivation (common // {
 
   CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
 });
-
-connector-c = stdenv.mkDerivation rec {
-  pname = "mariadb-connector-c";
-  version = "2.3.7";
-
-  src = fetchurl {
-    url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//nyc2.mirrors.digitalocean.com/mariadb/";
-    sha256 = "13izi35vvxhiwl2dsnqrz75ciisy2s2k30giv7hrm01qlwnmiycl";
-    name   = "mariadb-connector-c-${version}-src.tar.gz";
-  };
-
-  # outputs = [ "dev" "out" ]; FIXME: cmake variables don't allow that < 3.0
-  cmakeFlags = [
-    "-DWITH_EXTERNAL_ZLIB=ON"
-    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
-  ];
-
-  # The cmake setup-hook uses $out/lib by default, this is not the case here.
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
-  '';
-
-  nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ openssl zlib ];
-  buildInputs = [ libiconv ];
-
-  enableParallelBuilding = true;
-
-  postFixup = ''
-    ln -sv mariadb_config $out/bin/mysql_config
-    ln -sv mariadb $out/lib/mysql
-    ln -sv mariadb $out/include/mysql
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Client library that can be used to connect to MySQL or MariaDB";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ globin ];
-    platforms = platforms.all;
-  };
-};
 
 galera = stdenv.mkDerivation rec {
   pname = "mariadb-galera";
