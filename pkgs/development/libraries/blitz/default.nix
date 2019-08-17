@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-shared"
-      "--disable-static"
       "--enable-fortran"
       "--enable-optimize"
       "--with-pic=yes"

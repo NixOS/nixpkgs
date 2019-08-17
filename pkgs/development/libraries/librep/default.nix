@@ -19,10 +19,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline texinfo ];
   propagatedBuildInputs = [ gdbm gmp libffi ];
 
-  configureFlags = [
-    "--disable-static"
-  ];
-
   setupHook = ./setup-hook.sh;
 
   meta = {

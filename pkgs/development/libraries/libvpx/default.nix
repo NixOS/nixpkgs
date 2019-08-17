@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     (if isDarwin || isCygwin then
        "--enable-static --disable-shared"
      else
-       "--disable-static --enable-shared")
+       "--enable-shared")
     (enableFeature smallSupport "small")
     (enableFeature postprocVisualizerSupport "postproc-visualizer")
     (enableFeature unitTestsSupport "unit-tests")

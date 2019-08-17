@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     "--with-openssl"
     "--with-xerces"
     "--with-xalan"
-    "--disable-static"
   ];
 
   nativeBuildInputs = [ pkgconfig ];

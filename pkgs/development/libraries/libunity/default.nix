@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-static"
     "--with-pygi-overrides-dir=${placeholder ''py''}/${python3.sitePackages}/gi/overrides"
   ];
 
