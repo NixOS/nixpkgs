@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "18.2.9";
+  version = "19.1.1";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    sha256 = "0d08awb2s3w1w8n8048abw2x4wnqhfx96sls9kdsnxj0xrszgz67";
+    sha256 = "0i0dvyy9d63f4hk8czlyk83ai0ywhqp7wbdkq3s87l7irwgs42jy";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
