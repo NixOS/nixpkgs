@@ -59,7 +59,7 @@ in
 
       version = mkOption {
         default = 2;
-        type = types.enum [ 0 1 2 3 ];
+        type = types.enum [ 0 1 2 3 4 ];
         description = ''
         '';
       };
@@ -97,8 +97,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = singleton {
-      assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version == 3;
-      message = "Only Raspberry Pi 3 supports aarch64.";
+      assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version >= 3;
+      message = "Only Raspberry Pi >= 3 supports aarch64.";
     };
 
     system.build.installBootLoader = builder;

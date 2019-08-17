@@ -180,6 +180,11 @@ in rec {
     inherit system;
   });
 
+  sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = ./modules/installer/cd-dvd/sd-image-raspberrypi4.nix;
+    inherit system;
+  });
+
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
