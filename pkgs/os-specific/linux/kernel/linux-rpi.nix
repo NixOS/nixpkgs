@@ -1,35 +1,46 @@
-{ stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, ... } @ args:
+{ stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
-  modDirVersion = "4.14.98";
-  tag = "1.20190215";
+  modDirVersion = "4.19.66";
 in
-lib.overrideDerivation (buildLinux (args // rec {
-  version = "${modDirVersion}-${tag}";
+lib.overrideDerivation (buildLinux (args // {
+  version = "${modDirVersion}-20190817";
   inherit modDirVersion;
-
+  # It seems like the sed below should fix this, and does something similar for
+  # -v7. I can't figure out why it doesn't. This works, though.
+  #modDirVersion = version + lib.optionalString
+  #  (stdenv.hostPlatform.system == "aarch64-linux") "-v8";
   src = fetchFromGitHub {
-    owner = "raspberrypi";
+    owner = "yaroslavros";
     repo = "linux";
-    rev = "raspberrypi-kernel_${tag}-1";
-    sha256 = "1gc4x7p82m2v1jhahhyl7qfdkflj71ly6p0fpc1vf9sk13hbwgj2";
+    rev = "5adf84b5522b0cf14f6d1832379105c4482cad7d";
+    sha256 = "0phv96krc8l1wd1lb5qkfq8bmmy7baypxlqsb9slqwm00b6s2lrr";
   };
 
   defconfig = {
-    "armv6l-linux" = "bcmrpi_defconfig";
-    "armv7l-linux" = "bcm2709_defconfig";
-    "aarch64-linux" = "bcmrpi3_defconfig";
-  }.${stdenv.hostPlatform.system} or (throw "linux_rpi not supported on '${stdenv.hostPlatform.system}'");
+    "0" = "bcmrpi_defconfig";
+    "1" = "bcmrpi_defconfig";
+    "2" = "bcm2709_defconfig";
+    "3" = "bcmrpi3_defconfig";
+    "4" = "bcm2711_defconfig";
+  }.${toString rpiVersion};
 
   features = {
     efiBootStub = false;
   } // (args.features or {});
 
-  extraMeta.hydraPlatforms = [ "aarch64-linux" ];
-} // (args.argsOverride or {}))) (oldAttrs: {
+  extraMeta = if (rpiVersion < 3) then {
+    platforms = with lib.platforms; [ arm ];
+    hydraPlatforms = [];
+  } else {
+    platforms = with lib.platforms; [ arm aarch64 ];
+    hydraPlatforms = [ "aarch64-linux" ];
+  };
+})) (oldAttrs: {
   postConfigure = ''
     # The v7 defconfig has this set to '-v7' which screws up our modDirVersion.
     sed -i $buildRoot/.config -e 's/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=""/'
+    sed -i $buildRoot/include/config/auto.conf -e 's/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=""/'
   '';
 
   # Make copies of the DTBs named after the upstream names so that U-Boot finds them.
@@ -56,5 +67,6 @@ lib.overrideDerivation (buildLinux (args // rec {
     copyDTB bcm2710-rpi-3-b.dtb bcm2837-rpi-3-b.dtb
     copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-b-plus.dtb
     copyDTB bcm2710-rpi-cm3.dtb bcm2837-rpi-cm3.dtb
+    copyDTB bcm2711-rpi-4-b.dtb bcm2838-rpi-4-b.dtb
   '';
 })
