@@ -45,6 +45,8 @@ in python2Packages.buildPythonApplication rec {
       $out/bin/thg version
     '';
 
+    passthru.mercurial = mercurial;
+
     meta = {
       description = "Qt based graphical tool for working with Mercurial";
       homepage = https://tortoisehg.bitbucket.io/;
