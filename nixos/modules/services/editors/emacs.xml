@@ -552,7 +552,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     <xref linkend="opt-environment.systemPackages"/>
     (<link
       linkend="sec-declarative-package-mgmt">NixOS</link>), or run
-    <literal>nix-env -i pkgs.docbook5</literal>
+    <literal>nix-env -f '&lt;nixpkgs&gt;' -iA docbook5</literal>
     (<link linkend="sec-ad-hoc-packages">Nix</link>).
    </para>
 

@@ -3,6 +3,12 @@
 , gtk3, gsettings-desktop-schemas, gnome-desktop, libxmlb, gnome-online-accounts, hicolor-icon-theme
 , json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils }:
 
+let
+
+  withFwupd = stdenv.isx86_64 || stdenv.isi686;
+
+in
+
 stdenv.mkDerivation rec {
   name = "gnome-software-${version}";
   version = "3.32.4";
@@ -29,13 +35,16 @@ stdenv.mkDerivation rec {
     gtk3 glib packagekit appstream-glib libsoup
     gsettings-desktop-schemas gnome-desktop
     gspell json-glib libsecret ostree
-    polkit flatpak fwupd
-    libxmlb gnome-online-accounts
+    polkit flatpak libxmlb gnome-online-accounts
+  ] ++ stdenv.lib.optionals withFwupd [
+    fwupd
   ];
 
   mesonFlags = [
     "-Dubuntu_reviews=false"
     "-Dgudev=false"
+  ] ++ stdenv.lib.optionals (!withFwupd) [
+    "-Dfwupd=false"
   ];
 
   passthru = {

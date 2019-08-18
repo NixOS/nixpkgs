@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkgconfig, perl, mkDerivation
 , libjpeg, udev
 , withUtils ? true
 , withGUI ? true, alsaLib, libX11, qtbase, libGLU
@@ -6,7 +6,7 @@
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "v4l-utils-${version}";
   version = "1.16.6";
 

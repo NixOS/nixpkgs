@@ -1,10 +1,13 @@
-{ stdenv, substituteAll, fetchFromGitHub, file-roller, gnome-bluetooth }:
+{ stdenv
+, substituteAll
+, fetchFromGitHub
+, file-roller
+, gnome-bluetooth
+}:
 
 stdenv.mkDerivation rec {
   pname = "extra-elementary-contracts";
   version = "2018-08-21";
-
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "worldofpeace";
@@ -22,6 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   dontBuild = true;
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/share/contractor

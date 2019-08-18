@@ -34,6 +34,14 @@ in {
         <literal>allowed_ip_1</literal> and so on.
       '';
     };
+
+    withRemoteIp = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether or not the remote IP of a WireGuard peer should be exposed via prometheus.
+      '';
+    };
   };
   serviceOpts = {
     path = [ pkgs.wireguard-tools ];
@@ -45,6 +53,7 @@ in {
           -p ${toString cfg.port} \
           ${optionalString cfg.verbose "-v"} \
           ${optionalString cfg.singleSubnetPerField "-s"} \
+          ${optionalString cfg.withRemoteIp "-r"} \
           ${optionalString (cfg.wireguardConfig != null) "-n ${cfg.wireguardConfig}"}
       '';
     };

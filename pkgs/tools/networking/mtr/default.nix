@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ libcap ncurses ] ++ stdenv.lib.optional withGtk gtk2;
+  buildInputs = [ ncurses ]
+    ++ stdenv.lib.optional withGtk gtk2
+    ++ stdenv.lib.optional stdenv.isLinux libcap;
 
   enableParallelBuilding = true;
 

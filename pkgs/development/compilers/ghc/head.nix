@@ -120,7 +120,7 @@ stdenv.mkDerivation (rec {
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     # and more generally have a faster linker.
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld.gold"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isLinux ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"

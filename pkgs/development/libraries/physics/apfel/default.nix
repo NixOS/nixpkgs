@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "apfel-${version}";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "scarrazza";
     repo = "apfel";
     rev = version;
-    sha256 = "13dvcc5ba6djflrcy5zf5ikaw8s78zd8ac6ickc0hxhbmx1gjb4j";
+    sha256 = "13n5ygbqvskg3qq5n4sff1nbii0li0zf1vqissai7x0hynxgy7p6";
   };
 
   buildInputs = [ gfortran lhapdf python2 ];

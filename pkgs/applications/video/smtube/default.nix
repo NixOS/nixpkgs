@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, qmake, qtscript, qtwebkit }:
+{ lib, mkDerivation, fetchurl, qmake, qtscript, qtwebkit }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "19.6.0";
   name = "smtube-${version}";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtscript qtwebkit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Play and download Youtube videos";
     homepage = http://smplayer.sourceforge.net/smtube.php;
     license = licenses.gpl2Plus;

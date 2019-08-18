@@ -9,7 +9,7 @@ let
     sha256 = "1fkawx4ymaacah2wpv2w7rxmv1mx08mg4x4r4fxh41jz1njjb8sz";
   };
 
-  mercurial = 
+  mercurial =
     if args.mercurial.meta.version == tortoisehgSrc.meta.version
       then args.mercurial
       else args.mercurial.override {

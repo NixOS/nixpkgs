@@ -30,7 +30,7 @@ in {
       };
 
       config = mkOption {
-        type = with types; attrsOf (either str (either int bool));
+        type = with types; attrsOf (oneOf [ str int bool ]);
         default = {};
         description = ''
           The configuration to give rss2email.

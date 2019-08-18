@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 mono gtk-sharp-2_0 ]
   ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui ]);
 
+  patches = [ ./fix-mono-path.patch ];
+
   preConfigure = ''
     ./bootstrap-${lib.versions.majorMinor version}
   '';

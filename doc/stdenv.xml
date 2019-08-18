@@ -1601,6 +1601,16 @@ installTargets = "install-bin install-doc";</programlisting>
     <title>Variables controlling the fixup phase</title>
     <varlistentry>
      <term>
+      <varname>dontFixup</varname>
+     </term>
+     <listitem>
+      <para>
+        Set to true to skip the fixup phase.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <varname>dontStrip</varname>
      </term>
      <listitem>

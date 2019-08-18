@@ -68,8 +68,9 @@ in rec {
         nixos.tests.chromium.x86_64-linux or []
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
-        (except ["aarch64-linux"] nixos.tests.gnome3)
-        (except ["aarch64-linux"] nixos.tests.pantheon)
+        (all nixos.tests.gnome3-xorg)
+        (all nixos.tests.gnome3)
+        (all nixos.tests.pantheon)
         nixos.tests.installer.zfsroot.x86_64-linux or [] # ZFS is 64bit only
         (except ["aarch64-linux"] nixos.tests.installer.lvm)
         (except ["aarch64-linux"] nixos.tests.installer.luksroot)
@@ -103,7 +104,7 @@ in rec {
         #(all nixos.tests.keymap.neo)
         #(all nixos.tests.keymap.qwertz)
         (all nixos.tests.plasma5)
-        #(all nixos.tests.lightdm)
+        (all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
         (all nixos.tests.mutableUsers)

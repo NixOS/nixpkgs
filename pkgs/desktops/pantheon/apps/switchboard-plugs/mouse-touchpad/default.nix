@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala
-, libgee, granite, gtk3, switchboard, elementary-settings-daemon }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, switchboard
+, elementary-settings-daemon
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
@@ -17,7 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/Views/General.vala --subst-var-by GSD_GSETTINGS ${elementary-settings-daemon}/share/gsettings-schemas/${elementary-settings-daemon.name}/glib-2.0/schemas
+    substituteInPlace src/Views/General.vala \
+      --subst-var-by GSD_GSETTINGS ${elementary-settings-daemon}/share/gsettings-schemas/${elementary-settings-daemon.name}/glib-2.0/schemas
   '';
 
   passthru = {

@@ -64,6 +64,7 @@
         rustPlatform = bootRustPlatform;
         inherit CoreFoundation Security;
       };
+      clippy = self.callPackage ./clippy.nix { inherit Security; };
     });
   };
 }
