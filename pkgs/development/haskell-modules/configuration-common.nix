@@ -150,7 +150,26 @@ self: super: {
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    else (overrideCabal super.hakyll (_: {
+      # This postPatch adds two missing files, that are present in the official
+      # sources but got not included in the hackage tarball.  It can be
+      # removed, when https://github.com/jaspervdj/hakyll/pull/732
+      # makes it into a release.
+      postPatch = let
+        embed = pkgs.fetchurl {
+          url = "https://github.com/jaspervdj/hakyll/raw/4819618ef24c44748bbeecb4a92fa4e2369f04f9/tests/data/embed.html";
+          sha256 = "14gj42za0caxfa8ncw6zvglqdwvf33551493c8hpj0ha11s2c1yb";
+        };
+        tomorrow = pkgs.fetchurl {
+          url = "https://github.com/jaspervdj/hakyll/raw/4819618ef24c44748bbeecb4a92fa4e2369f04f9/tests/data/posts/2019/05/10/tomorrow.md";
+          sha256 = "1zbx5qk8hbya9alcswkr67wyf73drls1qs3mqsnafcmihc99ppxw";
+        };
+      in ''
+        ln -s ${embed} tests/data/embed.html
+        mkdir -p tests/data/posts/2019/05/10
+        ln -s ${tomorrow} tests/data/posts/2019/05/10/tomorrow.md
+      '';
+    }));
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
