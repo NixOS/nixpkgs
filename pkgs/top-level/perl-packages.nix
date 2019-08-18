@@ -6,7 +6,7 @@
    be almost as much code as the function itself. */
 
 {config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides,
-  buildPerl}:
+  buildPerl, shortenPerlShebang}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
 assert stdenv.lib.versionAtLeast perl.version "5.28.2";
@@ -89,22 +89,29 @@ let
   ack = buildPerlPackage {
     pname = "ack";
     version = "3.0.2";
+
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.0.2.tar.gz;
       sha256 = "0a4mriclnmwvm8rn9crkfr00qjy6ffgf0b0bg0qz46drpnyv7d33";
     };
+
     outputs = ["out" "man"];
-    # use gnused so that the preCheck command passes
-    buildInputs = stdenv.lib.optional stdenv.isDarwin gnused;
+
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileNext ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/ack
+    '';
+
+    # tests fails on nixos and hydra because of different purity issues
+    doCheck = false;
+
     meta = with stdenv.lib; {
       description = "A grep-like tool tailored to working with large trees of source code";
       homepage    = https://beyondgrep.com;
       license     = licenses.artistic2;
       maintainers = with maintainers; [ lovek323 ];
     };
-    # tests fails on nixos and hydra because of different purity issues
-    doCheck = false;
   };
 
   AlgorithmAnnotate = buildPerlPackage {
