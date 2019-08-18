@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, qmake, qttools, qtsvg }:
+{ stdenv, fetchurl, qmake, qttools, qtsvg, mkDerivation }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "cutemaze-${version}";
   version = "1.2.5";
 
