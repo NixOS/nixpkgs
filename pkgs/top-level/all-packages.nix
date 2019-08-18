@@ -18430,8 +18430,10 @@ in
 
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
     jdk = jetbrains.jdk;
+    jdk8 = jetbrains.jdk8;
   }) // {
     jdk = callPackage ../development/compilers/jetbrains-jdk {  };
+    jdk8 = callPackage ../development/compilers/jetbrains-jdk/8.nix { };
   });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
