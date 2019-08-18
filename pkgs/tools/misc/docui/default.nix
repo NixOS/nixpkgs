@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = https://github.com/skanehira/docui;
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ aethelz ];
   };
 }
