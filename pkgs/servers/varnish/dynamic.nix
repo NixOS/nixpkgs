@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, python, docutils }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, docutils }:
 
 stdenv.mkDerivation rec {
   version = "0.3";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "12a42lbv0vf6fn3qnvngw893kmbd006f8pgab4ir7irc8855xjgf";
   };
 
-  nativeBuildInputs = [ pkgconfig docutils autoreconfHook ];
-  buildInputs = [ varnish python ];
+  nativeBuildInputs = [ pkgconfig docutils autoreconfHook varnish.python ];
+  buildInputs = [ varnish ];
   postPatch = ''
     substituteInPlace Makefile.am --replace "''${LIBVARNISHAPI_DATAROOTDIR}/aclocal" "${varnish.dev}/share/aclocal"
   '';
