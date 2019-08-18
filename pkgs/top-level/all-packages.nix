@@ -18741,6 +18741,15 @@ in
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
+  pinboard-notes-backup = haskell.lib.overrideCabal
+    (haskell.lib.generateOptparseApplicativeCompletion "pnbackup"
+      haskellPackages.pinboard-notes-backup)
+    (drv: {
+      postInstall = ''
+        install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
+      '' + (drv.postInstall or "");
+    });
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
   slack-theme-black = callPackage ../applications/networking/instant-messengers/slack/dark-theme.nix { };
   slack-dark = pkgs.slack.override { theme = slack-theme-black; };
