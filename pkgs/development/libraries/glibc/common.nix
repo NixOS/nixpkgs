@@ -22,6 +22,7 @@
 , fetchurl, fetchpatch
 , linuxHeaders ? null
 , gd ? null, libpng ? null
+, libidn2
 , bison
 , python3
 }:
@@ -132,6 +133,15 @@ stdenv.mkDerivation ({
       # nscd needs libgcc, and we don't want it dynamically linked
       # because we don't want it to depend on bootstrap-tools libs.
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+
+      # Ensure that libidn2 is found.
+      patch -p 1 <<EOF
+      --- a/inet/idna.c
+      +++ b/inet/idna.c
+      @@ -25,1 +25,1 @@
+      -#define LIBIDN2_SONAME "libidn2.so.0"
+      +#define LIBIDN2_SONAME "${lib.getLib libidn2}/lib/libidn2.so.0"
+      EOF
     '';
 
   configureFlags =
