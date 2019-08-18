@@ -1,5 +1,5 @@
 { stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk3, libXrender, pango, gnome2, gnome3, cairo, freetype, fontconfig
+, libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     libXfixes
     libXrender
     gtk3
-    gnome2.GConf
     libgnome-keyring
     openssl
     at-spi2-atk
