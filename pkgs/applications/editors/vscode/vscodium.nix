@@ -11,13 +11,13 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    "x86_64-linux" = "1ay4zvkbln2wf2j1d71mn13b6p2fqvzgz45mzrgaqwsszhbg4xzp";
-    "x86_64-darwin" = "17r9krb1qd92ybx078hkw9zlyym6kbnmbl91vjdilsq77bkf9jmw";
+    "x86_64-linux" = "0j6188gm66bwffyg0vn3ak8242vs2vb2cw92b9wfkiml6sfg555n";
+    "x86_64-darwin" = "0iblg0hn6jdds7d2hzp0icb5yh6hhw3fd5g4iim64ibi7lpwj2cj";
   }.${system};
 in
   callPackage ./generic.nix rec {
 
-    version = "1.36.1";
+    version = "1.37.1";
     pname = "vscodium";
 
     executableName = "codium";
