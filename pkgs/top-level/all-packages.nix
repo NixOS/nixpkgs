@@ -25186,6 +25186,8 @@ in
     pcre = pcre-cpp;
   });
 
+  r128gain = callPackage ../applications/audio/r128gain { };
+
   redis-desktop-manager = libsForQt5.callPackage ../applications/misc/redis-desktop-manager { };
 
   robin-map = callPackage ../development/libraries/robin-map { };
