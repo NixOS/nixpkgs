@@ -21,6 +21,7 @@
 , sha256
 , passthruFun
 , bash
+, stripConfig ? false
 , stripIdlelib ? false
 , stripTests ? false
 }:
@@ -224,6 +225,8 @@ in with passthru; stdenv.mkDerivation {
     find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out '{}' +
     find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out '{}' +
 
+    '' + optionalString stripConfig ''
+    rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
     # Strip IDLE (and turtledemo, which uses it)
     rm -R $out/bin/idle* $out/lib/python*/{idlelib,turtledemo}
