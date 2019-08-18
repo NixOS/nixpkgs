@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cgdb-${version}";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchurl {
     url = "https://cgdb.me/files/${name}.tar.gz";
-    sha256 = "08slzg3702v5nivjhdx2bciqxc5vqcn8pc4i4lsgkcwdcrj94ymz";
+    sha256 = "1671gpz5gx5j0zga8xy2x7h33vqh3nij93lbb6dbb366ivjknwmv";
   };
 
   buildInputs = [ ncurses readline flex texinfo ];
