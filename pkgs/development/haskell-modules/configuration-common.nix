@@ -149,11 +149,11 @@ self: super: {
     else super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-  hakyll = if pkgs.stdenv.isDarwin
+  hakyll = doJailbreak (if pkgs.stdenv.isDarwin
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    else super.hakyll);
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
