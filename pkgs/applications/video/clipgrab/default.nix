@@ -1,9 +1,9 @@
 { stdenv, fetchurl, makeDesktopItem, ffmpeg
-, qmake, qttools
+, qmake, qttools, mkDerivation
 , qtbase, qtdeclarative, qtlocation, qtquickcontrols2, qtwebchannel, qtwebengine
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "clipgrab-${version}";
   version = "3.8.4";
 
