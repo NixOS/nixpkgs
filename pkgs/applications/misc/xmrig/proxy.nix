@@ -17,10 +17,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuv libmicrohttpd libuuid openssl ];
 
   postPatch = ''
-    # Set default donation level to 0%. Can be increased at runtime via --donate-level option.
-    substituteInPlace src/donate.h \
-      --replace "kDefaultDonateLevel = 2;" "kDefaultDonateLevel = ${toString donateLevel};"
-
     # Link dynamically against libuuid instead of statically
     substituteInPlace CMakeLists.txt --replace uuid.a uuid
   '';
