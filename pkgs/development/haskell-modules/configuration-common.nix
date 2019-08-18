@@ -710,15 +710,9 @@ self: super: {
     '';
   });
 
-  # A simple MonadFail patch would do too, but not doing the tests is easier
-  megaparsec_6_5_0 = dontCheck super.megaparsec_6_5_0;
-
   # The standard libraries are compiled separately
   idris = generateOptparseApplicativeCompletion "idris" (
-    doJailbreak (dontCheck (super.idris.override {
-      # Needed for versions <= 1.3.1 https://github.com/idris-lang/Idris-dev/pull/4610
-      megaparsec = self.megaparsec_6_5_0;
-    }))
+    doJailbreak (dontCheck super.idris)
   );
 
   # https://github.com/bos/math-functions/issues/25
