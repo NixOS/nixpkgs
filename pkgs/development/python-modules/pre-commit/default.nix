@@ -1,5 +1,18 @@
-{ stdenv, python3Packages }:
-with python3Packages; buildPythonApplication rec {
+{ lib, fetchPypi, buildPythonApplication, pythonOlder
+, aspy-yaml
+, cached-property
+, cfgv
+, futures
+, identify
+, importlib-metadata
+, importlib-resources
+, nodeenv
+, six
+, toml
+, virtualenv
+}:
+
+buildPythonApplication rec {
   pname = "pre-commit";
   version = "1.18.1";
 
@@ -19,13 +32,13 @@ with python3Packages; buildPythonApplication rec {
     toml
     virtualenv
     importlib-metadata
-  ] ++ stdenv.lib.optional (pythonOlder "3.7") importlib-resources
-    ++ stdenv.lib.optional (pythonOlder "3.2") futures;
+  ] ++ lib.optional (pythonOlder "3.7") importlib-resources
+    ++ lib.optional (pythonOlder "3.2") futures;
 
-  # Tests fail due to a missing windll dependency
+  # slow and impure
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A framework for managing and maintaining multi-language pre-commit hooks";
     homepage = https://pre-commit.com/;
     license = licenses.mit;

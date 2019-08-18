@@ -1,6 +1,6 @@
-{ lib, buildPythonApplication, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "pyprof2calltree";
   version = "1.4.4";
 

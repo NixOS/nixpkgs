@@ -145,7 +145,7 @@ let
 
   lab = callPackage ./lab { };
 
-  pre-commit = callPackage ./pre-commit { };
+  pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 

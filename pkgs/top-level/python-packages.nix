@@ -643,6 +643,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  hocr-tools = callPackage ../development/python-modules/hocr-tools { };
+
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
@@ -672,6 +674,8 @@ in {
   jira = callPackage ../development/python-modules/jira { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
+
+  kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
     mpi = pkgs.openmpi;
@@ -1915,6 +1919,8 @@ in {
 
   pkginfo = callPackage ../development/python-modules/pkginfo { };
 
+  pre-commit = callPackage ../development/python-modules/pre-commit { };
+
   pretend = callPackage ../development/python-modules/pretend { };
 
   detox = callPackage ../development/python-modules/detox { };
@@ -1958,6 +1964,8 @@ in {
       # hypothesis tests require pytest that causes dependency cycle
       hypothesis = self.hypothesis.override { doCheck = false; };
     };
+
+  pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
@@ -2145,6 +2153,8 @@ in {
   deform = callPackage ../development/python-modules/deform { };
 
   demjson = callPackage ../development/python-modules/demjson { };
+
+  deprecated = callPackage ../development/python-modules/deprecated { };
 
   deprecation = callPackage ../development/python-modules/deprecation { };
 
@@ -4153,6 +4163,8 @@ in {
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
 
+  pikepdf = callPackage ../development/python-modules/pikepdf { };
+
   kmapper = callPackage ../development/python-modules/kmapper { };
 
   kmsxx = (callPackage ../development/libraries/kmsxx {
@@ -5093,6 +5105,8 @@ in {
 
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
 
+  ruffus = callPackage ../development/python-modules/ruffus { };
+
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
@@ -5339,6 +5353,8 @@ in {
   unidiff = callPackage ../development/python-modules/unidiff { };
 
   units = callPackage ../development/python-modules/units { };
+
+  unittest-data-provider = callPackage ../development/python-modules/unittest-data-provider { };
 
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
@@ -5676,6 +5692,8 @@ in {
   pyregion = callPackage ../development/python-modules/pyregion {};
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
+
+  python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   pluggy = callPackage ../development/python-modules/pluggy {};
 
@@ -6176,6 +6194,8 @@ in {
   wget = callPackage ../development/python-modules/wget { };
 
   runway-python = callPackage ../development/python-modules/runway-python { };
+
+  pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
 });
 
 in fix' (extends overrides packages)

@@ -335,7 +335,7 @@
      If you’re using the graphical ISO image, other editors may be available
      (such as <command>vim</command>). If you have network access, you can also
      install other editors — for instance, you can install Emacs by running
-     <literal>nix-env -i emacs</literal>.
+     <literal>nix-env -f '&lt;nixpkgs&gt;' -iA emacs</literal>.
     </para>
     <variablelist>
      <varlistentry>
@@ -467,10 +467,10 @@ Retype new UNIX password: ***</screen>
     <para>
      You may also want to install some software. For instance,
 <screen>
-<prompt>$ </prompt>nix-env -qa \*</screen>
+<prompt>$ </prompt>nix-env -qaP \*</screen>
      shows what packages are available, and
 <screen>
-<prompt>$ </prompt>nix-env -i w3m</screen>
+<prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -iA w3m</screen>
      install the <literal>w3m</literal> browser.
     </para>
    </listitem>

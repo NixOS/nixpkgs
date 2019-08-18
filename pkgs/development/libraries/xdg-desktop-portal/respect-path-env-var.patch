@@ -1,10 +1,12 @@
---- a/src/xdg-desktop-portal.c
-+++ b/src/xdg-desktop-portal.c
-@@ -177,38 +177,50 @@
- static void
- load_installed_portals (void)
+diff --git a/src/portal-impl.c b/src/portal-impl.c
+index 4fd48ff..346da7c 100644
+--- a/src/portal-impl.c
++++ b/src/portal-impl.c
+@@ -116,38 +116,50 @@ sort_impl_by_name (gconstpointer a,
+ void
+ load_installed_portals (gboolean opt_verbose)
  {
--  const char *portal_dir = PKGDATADIR "/portals";
+-  const char *portal_dir = DATADIR "/xdg-desktop-portal/portals";
 -  g_autoptr(GFile) dir = g_file_new_for_path (portal_dir);
 -  g_autoptr(GFileEnumerator) enumerator = NULL;
  
@@ -14,7 +16,7 @@
 +  const char *portal_dir = g_getenv ("XDG_DESKTOP_PORTAL_PATH");
 +
 +  if (portal_dir == NULL)
-+    portal_dir = PKGDATADIR "/portals";
++    portal_dir = DATADIR "/portals";
  
 -  if (enumerator == NULL)
 -    return;
@@ -56,7 +58,7 @@
 -      path = g_file_get_path (child);
 +          name = g_file_info_get_name (info);
  
--      if (!register_portal (path, &error))
+-      if (!register_portal (path, opt_verbose, &error))
 -        {
 -          g_warning ("Error loading %s: %s", path, error->message);
 -          continue;
@@ -66,7 +68,7 @@
 +          child = g_file_enumerator_get_child (enumerator, info);
 +          path = g_file_get_path (child);
 +
-+          if (!register_portal (path, &error))
++          if (!register_portal (path, opt_verbose, &error))
 +            {
 +              g_warning ("Error loading %s: %s", path, error->message);
 +              continue;
