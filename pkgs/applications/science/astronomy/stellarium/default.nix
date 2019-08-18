@@ -5,7 +5,7 @@
 }:
 
 mkDerivation rec {
-  name = "stellarium-${version}";
+  pname = "stellarium";
   version = "0.19.1";
 
   src = fetchFromGitHub {

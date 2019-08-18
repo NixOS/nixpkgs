@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "neofetch-${version}";
+  pname = "neofetch";
   version = "6.0.0";
   src = fetchFromGitHub {
     owner = "dylanaraps";

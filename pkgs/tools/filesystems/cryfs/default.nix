@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cryfs-${version}";
+  pname = "cryfs";
   version = "0.9.10";
 
   src = fetchFromGitHub {

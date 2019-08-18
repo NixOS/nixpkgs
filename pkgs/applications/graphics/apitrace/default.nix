@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase, qtwebkit }:
 
 stdenv.mkDerivation rec {
-  name = "apitrace-${version}";
+  pname = "apitrace";
   version = "7.1-572-g${builtins.substring 0 8 src.rev}";
 
   src = fetchFromGitHub {

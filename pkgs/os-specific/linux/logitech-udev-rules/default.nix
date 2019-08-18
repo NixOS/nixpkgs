@@ -4,7 +4,7 @@
 # up-to-date so we simply use that instead of having to maintain our own rules
 
 stdenv.mkDerivation rec {
-  name = "logitech-udev-rules-${version}";
+  pname = "logitech-udev-rules";
   inherit (solaar) version;
 
   buildCommand = ''

@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.12.5";
-  name = "wkhtmltopdf-${version}";
+  pname = "wkhtmltopdf";
 
   src = fetchFromGitHub {
     owner  = "wkhtmltopdf";

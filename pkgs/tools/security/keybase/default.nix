@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "keybase-${version}";
+  pname = "keybase";
   version = "4.1.0";
 
   goPackagePath = "github.com/keybase/client";

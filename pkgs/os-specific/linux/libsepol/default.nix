@@ -1,7 +1,7 @@
 { stdenv, fetchurl, flex }:
 
 stdenv.mkDerivation rec {
-  name = "libsepol-${version}";
+  pname = "libsepol";
   version = "2.7";
   se_release = "20170804";
   se_url = "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases";

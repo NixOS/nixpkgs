@@ -43,7 +43,7 @@ let
 in
 assert builtins.hasAttr stdenv.hostPlatform.system options;
 stdenv.mkDerivation rec {
-  name    = "sbcl-bootstrap-${version}";
+  pname = "sbcl-bootstrap";
   version = cfg.version;
 
   src = fetchurl {

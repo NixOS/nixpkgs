@@ -3,7 +3,8 @@
 let version = "0.3.0"; in
 
 stdenv.mkDerivation rec {
-  name = "haka-${version}";
+  pname = "haka";
+  inherit version;
 
   src = fetchurl {
     name = "haka_${version}_source.tar.gz";

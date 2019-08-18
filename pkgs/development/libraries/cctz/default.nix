@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "cctz-${version}";
+  pname = "cctz";
   version = "2.3";
 
   src = fetchFromGitHub {

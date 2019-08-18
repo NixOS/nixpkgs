@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   version = src.version;
-  name = "sagedoc-${version}";
+  pname = "sagedoc";
   src = sage-with-env.env.lib.src;
 
 

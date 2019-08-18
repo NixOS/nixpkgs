@@ -20,7 +20,7 @@ let
 
 in stdenv.mkDerivation rec {
   inherit version;
-  name = "pulumi-${version}";
+  pname = "pulumi";
 
   src = fetchurl pulumiArchPackage.${stdenv.hostPlatform.system};
 

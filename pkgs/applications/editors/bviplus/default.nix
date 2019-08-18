@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "bviplus-${version}";
+  pname = "bviplus";
   version = "0.9.4";
 
   src = fetchurl {

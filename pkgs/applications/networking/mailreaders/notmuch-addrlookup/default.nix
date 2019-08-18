@@ -4,7 +4,8 @@ let
   version = "9";
 in
 stdenv.mkDerivation rec {
-  name = "notmuch-addrlookup-${version}";
+  pname = "notmuch-addrlookup";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "aperezdc";

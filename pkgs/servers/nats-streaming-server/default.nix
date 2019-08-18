@@ -3,7 +3,7 @@
 with lib;
 
 buildGoPackage rec {
-  name = "nats-streaming-server-${version}";
+  pname = "nats-streaming-server";
   version = "0.11.2";
   rev = "v${version}";
 

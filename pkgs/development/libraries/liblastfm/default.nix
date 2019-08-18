@@ -4,12 +4,13 @@
 let version = "1.1.0"; in
 
 stdenv.mkDerivation rec {
-  name = "liblastfm-${version}";
+  pname = "liblastfm";
+  inherit version;
 
   # Upstream does not package git tags as tarballs. Get tarball from github.
   src = fetchurl {
     url = "https://github.com/lastfm/liblastfm/tarball/${version}";
-    name = "${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
     sha256 = "1j34xc30vg7sfszm2jx9mlz9hy7p1l929fka9wnfcpbib8gfi43x";
   };
 

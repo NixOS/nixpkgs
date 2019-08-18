@@ -13,7 +13,8 @@
 let version = "unstable-2019-02-13";
 
 in stdenv.mkDerivation {
-  name = "planner-${version}";
+  pname = "planner";
+  inherit version;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

@@ -1,7 +1,7 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "iamy-${version}";
+  pname = "iamy";
   version = "2.3.2";
 
   goPackagePath = "github.com/99designs/iamy";

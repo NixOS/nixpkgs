@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication rec {
 
-  name = "togglesg-download-git-${version}";
+  pname = "togglesg-download-git";
   version = "2017-12-07";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, pcre, zlib, lzma}:
 
 stdenv.mkDerivation rec {
-  name = "silver-searcher-${version}";
+  pname = "silver-searcher";
   version = "2.2.0";
 
   src = fetchFromGitHub {

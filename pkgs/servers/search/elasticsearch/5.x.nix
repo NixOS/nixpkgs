@@ -5,10 +5,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = elk5Version;
-  name = "elasticsearch-${version}";
+  pname = "elasticsearch";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}.tar.gz";
     sha256 = "0zy7awb2cm2fk3c7zc7v8b8pl0jw49awqwpa1jvilmvx6dcml0vb";
   };
 

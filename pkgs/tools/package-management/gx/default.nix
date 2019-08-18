@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "gx-${version}";
+  pname = "gx";
   version = "0.14.1";
   rev = "refs/tags/v${version}";
 

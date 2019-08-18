@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "reftools-unstable-${version}";
+  pname = "reftools-unstable";
   version = "2018-09-14";
   rev = "654d0ba4f96d62286ca33cd46f7674b84f76d399";
 

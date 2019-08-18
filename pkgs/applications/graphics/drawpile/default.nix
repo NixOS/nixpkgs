@@ -58,7 +58,7 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "drawpile-${version}";
+  pname = "drawpile";
   version = "2.1.11";
 
   src = fetchurl {

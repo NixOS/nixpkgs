@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "lmdb-${version}";
+  pname = "lmdb";
   version = "0.9.24";
 
   src = fetchFromGitHub {

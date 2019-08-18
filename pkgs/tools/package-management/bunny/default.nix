@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab }:
 
 stdenv.mkDerivation rec {
-  name = "bunny-${version}";
+  pname = "bunny";
   version = "1.3";
 
   src = fetchFromGitLab {

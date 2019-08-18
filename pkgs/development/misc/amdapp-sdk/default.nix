@@ -36,7 +36,8 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "amdapp-sdk-${version}";
+  pname = "amdapp-sdk";
+  inherit version;
 
   src = fetchurl {
     url = stdenv.lib.getAttrFromPath [version "url"] src_info;

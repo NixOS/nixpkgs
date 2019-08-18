@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "system-config-printer-${version}";
+  pname = "system-config-printer";
   version = "1.5.11";
 
   src = fetchurl {
-    url = "https://github.com/zdohnal/system-config-printer/releases/download/${version}/${name}.tar.xz";
+    url = "https://github.com/zdohnal/system-config-printer/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "1lq0q51bhanirpjjvvh4xiafi8hgpk8r32h0dj6dn3f32z8pib9q";
   };
 

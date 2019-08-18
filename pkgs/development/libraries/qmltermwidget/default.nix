@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2018-11-24";
-  name = "qmltermwidget-unstable-${version}";
+  pname = "qmltermwidget-unstable";
 
   src = fetchFromGitHub {
     repo = "qmltermwidget";

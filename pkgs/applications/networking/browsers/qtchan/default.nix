@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, qt, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "qtchan-${version}";
+  pname = "qtchan";
   version = "0.100";
 
   src = fetchFromGitHub {

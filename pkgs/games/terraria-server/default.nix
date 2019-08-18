@@ -1,7 +1,7 @@
 { stdenv, lib, file, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name    = "terraria-server-${version}";
+  pname = "terraria-server";
   version = "1.3.5.3";
   urlVersion = lib.replaceChars ["."] [""] version;
 

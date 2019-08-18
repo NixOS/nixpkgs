@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "numactl-${version}";
+  pname = "numactl";
   version = "2.0.12";
 
   src = fetchFromGitHub {

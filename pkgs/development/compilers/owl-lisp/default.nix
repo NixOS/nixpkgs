@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, coreutils, which }:
 
 stdenv.mkDerivation rec {
-  name    = "owl-lisp-${version}";
+  pname = "owl-lisp";
   version = "0.1.16";
 
   src = fetchFromGitHub {

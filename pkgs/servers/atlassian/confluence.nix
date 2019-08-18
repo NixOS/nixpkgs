@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "atlassian-confluence-${version}";
+  pname = "atlassian-confluence";
   version = "6.15.6";
 
   src = fetchurl {
-    url = "https://product-downloads.atlassian.com/software/confluence/downloads/${name}.tar.gz";
+    url = "https://product-downloads.atlassian.com/software/confluence/downloads/${pname}-${version}.tar.gz";
     sha256 = "0bb404d5i8jdry1jw8qdrcpgp9lvdkyxry58331pwpw16mlh0r2m";
   };
 

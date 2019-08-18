@@ -2,7 +2,6 @@
 
 buildGoPackage rec {
   pname = "docker-machine-kvm2";
-  name = "${pname}-${version}";
   version = minikube.version;
 
   goPackagePath = "k8s.io/minikube";

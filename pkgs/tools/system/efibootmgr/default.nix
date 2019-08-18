@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, efivar, popt }:
 
 stdenv.mkDerivation rec {
-  name = "efibootmgr-${version}";
+  pname = "efibootmgr";
   version = "17";
 
   nativeBuildInputs = [ pkgconfig ];

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "xrectsel-${version}";
+  pname = "xrectsel";
   version = "0.3.2";
 
   src = fetchFromGitHub {

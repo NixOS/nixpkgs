@@ -4,7 +4,8 @@
 , sourceSha ? "1jw8bj3lcqngr0mqwvz1gf47qjxbwiyda7x4sm96a6ckga7pcwyb"
 }:
 stdenv.mkDerivation {
-  name = "otter-browser-${version}";
+  pname = "otter-browser";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "OtterBrowser";

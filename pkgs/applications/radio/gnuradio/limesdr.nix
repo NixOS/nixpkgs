@@ -8,7 +8,8 @@ let
   version = "2.0.0";
 
 in stdenv.mkDerivation rec {
-  name = "gr-limesdr-${version}";
+  pname = "gr-limesdr";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "myriadrf";

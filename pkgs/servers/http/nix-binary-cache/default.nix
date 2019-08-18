@@ -3,7 +3,7 @@
 , lighttpd, iproute }:
 stdenv.mkDerivation rec {
   version = "2014-06-29-1";
-  name = "nix-binary-cache-${version}";
+  pname = "nix-binary-cache";
 
   phases = ["installPhase"];
 

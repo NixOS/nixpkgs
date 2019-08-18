@@ -15,7 +15,8 @@ let
   goPackagePath = "github.com/containers/buildah";
 
 in buildGoPackage rec {
-  name = "buildah-${version}";
+  pname = "buildah";
+  inherit version;
   inherit src;
 
   outputs = [ "bin" "man" "out" ];

@@ -7,7 +7,8 @@ let version = if stdenv.lib.versionAtLeast ocaml.version "4.02"
 in
 
 stdenv.mkDerivation {
-  name = "js_of_ocaml-${version}";
+  pname = "js_of_ocaml";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/ocsigen/js_of_ocaml/archive/${version}.tar.gz";
     sha256 = {

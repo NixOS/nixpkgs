@@ -5,13 +5,13 @@
 , python3 }:
 
 stdenv.mkDerivation rec {
-  name = "gtk-vnc-${version}";
+  pname = "gtk-vnc";
   version = "0.9.0";
 
   outputs = [ "out" "bin" "man" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk-vnc/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gtk-vnc/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1dya1wc9vis8h0fv625pii1n70cckf1xjg1m2hndz989d118i6is";
   };
 

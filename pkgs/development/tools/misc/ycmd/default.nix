@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ycmd-${version}";
+  pname = "ycmd";
   version = "2018-09-20";
 
   src = fetchgit {

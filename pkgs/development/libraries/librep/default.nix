@@ -6,7 +6,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "librep-${version}";
+  pname = "librep";
   version = "0.92.7";
   sourceName = "librep_${version}";
 

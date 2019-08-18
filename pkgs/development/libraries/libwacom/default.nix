@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, glib, pkgconfig, udev, libgudev }:
 
 stdenv.mkDerivation rec {
-  name = "libwacom-${version}";
+  pname = "libwacom";
   version = "0.33";
 
   src = fetchFromGitHub {

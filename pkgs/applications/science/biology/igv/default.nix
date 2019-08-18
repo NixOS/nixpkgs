@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, jre }:
 
 stdenv.mkDerivation rec {
-  name = "igv-${version}";
+  pname = "igv";
   version = "2.4.19";
 
   src = fetchurl {

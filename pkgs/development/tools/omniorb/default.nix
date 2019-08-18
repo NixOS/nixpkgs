@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python2 }:
 stdenv.mkDerivation rec {
 
-  name = "omniorb-${version}";
+  pname = "omniorb";
 
   version = "4.2.3";
 

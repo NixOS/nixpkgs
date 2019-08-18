@@ -32,7 +32,8 @@ let
     cs_sha256
   }:
     stdenv.mkDerivation rec {
-      name = "radare2-${version}";
+      pname = "radare2";
+      inherit version;
 
       src = fetchFromGitHub {
         owner = "radare";

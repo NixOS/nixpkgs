@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "heme-${version}";
+  pname = "heme";
   version = "0.4.2";
   src = fetchurl {
     url = "mirror://sourceforge/project/heme/heme/heme-${version}/heme-${version}.tar.gz";

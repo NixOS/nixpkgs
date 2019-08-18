@@ -40,11 +40,12 @@ assert zfsSupport -> zfs != null;
 assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
-  name = "grub-${version}";
+  pname = "grub";
+  inherit version;
 
   src = fetchgit {
     url = "git://git.savannah.gnu.org/grub.git";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0xkcfxs0hbzvi33kg4abkayl8b7gym9sv8ljbwlh2kpz8i4kmnk0";
   };
 

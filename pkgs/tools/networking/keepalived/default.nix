@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libnfnetlink, libnl, net_snmp, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "keepalived-${version}";
+  pname = "keepalived";
   version = "1.4.2";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 
 let
   daemons = stdenv.mkDerivation rec {
-    name = "hyperv-daemons-bin-${version}";
+    pname = "hyperv-daemons-bin";
     inherit (kernel) src version;
 
     nativeBuildInputs = [ makeWrapper ];
@@ -55,7 +55,7 @@ let
     '';
 
 in stdenv.mkDerivation rec {
-  name    = "hyperv-daemons-${version}";
+  pname = "hyperv-daemons";
 
   inherit (kernel) version;
 

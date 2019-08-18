@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "enlightenment-${version}";
+  pname = "enlightenment";
   version = "0.22.4";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
+    url = "http://download.enlightenment.org/rel/apps/enlightenment/${pname}-${version}.tar.xz";
     sha256 = "0ygy891rrw5c7lhk539nhif77j88phvz2h0fhx172iaridy9kx2r";
   };
 

@@ -2,7 +2,7 @@
 , cmake, llvmPackages, rapidjson, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name    = "ccls-${version}";
+  pname = "ccls";
   version = "0.20190314.1";
 
   src = fetchFromGitHub {

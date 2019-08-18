@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lib, qt4, openssl, autoconf, automake, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "yate-${version}";
+  pname = "yate";
   version = "6.0.0-1";
 
   src = fetchurl {
-    url = "http://voip.null.ro/tarballs/yate${lib.versions.major version}/${name}.tar.gz";
+    url = "http://voip.null.ro/tarballs/yate${lib.versions.major version}/${pname}-${version}.tar.gz";
     sha256 = "05qqdhi3rp5660gq1484jkmxkm9vq81j0yr765h0gf0xclan1dqa";
   };
 

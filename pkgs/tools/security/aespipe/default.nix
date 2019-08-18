@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "aespipe-${version}";
+  pname = "aespipe";
   version = "2.4e";
 
   src = fetchurl {

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pandoc, man }:
 stdenv.mkDerivation rec {
-  name = "git-ftp-${version}";
+  pname = "git-ftp";
   version = "1.5.2";
   src = fetchFromGitHub {
     owner = "git-ftp";

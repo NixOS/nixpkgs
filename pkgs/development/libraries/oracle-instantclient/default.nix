@@ -37,7 +37,7 @@ let
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
 in stdenv.mkDerivation rec {
   inherit version srcs;
-  name = "oracle-instantclient-${version}";
+  pname = "oracle-instantclient";
 
   buildInputs = [ stdenv.cc.cc.lib ]
     ++ optionals (stdenv.isLinux) [ libaio ]
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
   unpackCmd = "unzip $curSrc";
 
   installPhase = ''
-    mkdir -p "$out/"{bin,include,lib,"share/java","share/${name}/demo/"}
+    mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"}
     install -Dm755 {sqlplus,adrci,genezi} $out/bin
     ${optionalString stdenv.isDarwin ''
       for exe in "$out/bin/"* ; do
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     install -Dm644 *${extLib}* $out/lib
     install -Dm644 *.jar $out/share/java
     install -Dm644 sdk/include/* $out/include
-    install -Dm644 sdk/demo/* $out/share/${name}/demo
+    install -Dm644 sdk/demo/* $out/share/${pname}-${version}/demo
 
     # PECL::oci8 will not build without this
     # this symlink only exists in dist zipfiles for some platforms

@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cht.sh-${version}";
+  pname = "cht.sh";
   version = "unstable-2019-08-06";
 
   nativeBuildInputs = [ makeWrapper ];

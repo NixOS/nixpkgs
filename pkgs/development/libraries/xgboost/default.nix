@@ -7,7 +7,7 @@
 assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
-  name = "xgboost-${version}";
+  pname = "xgboost";
   version = "0.90";
 
   # needs submodules

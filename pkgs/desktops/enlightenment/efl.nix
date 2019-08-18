@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "efl-${version}";
+  pname = "efl";
   version = "1.22.2";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
+    url = "http://download.enlightenment.org/rel/libs/efl/${pname}-${version}.tar.xz";
     sha256 = "1l0wdgzxqm2y919277b1p9d37xzg808zwxxaw0nn44arh8gqk68n";
   };
 

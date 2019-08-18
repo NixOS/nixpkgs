@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "swaylock-${version}";
+  pname = "swaylock";
   version = "1.4";
 
   src = fetchFromGitHub {

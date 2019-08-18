@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
   version = "7.64.0";
 
-  name = "libgnurl-${version}";
+  pname = "libgnurl";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnurl-${version}.tar.gz";

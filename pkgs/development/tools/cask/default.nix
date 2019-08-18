@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python, emacsPackagesNg }:
 
 stdenv.mkDerivation rec {
-  name = "cask-${version}";
+  pname = "cask";
   version = "0.8.4";
 
   src = fetchurl {

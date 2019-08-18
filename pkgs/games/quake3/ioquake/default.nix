@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ioquake3-git-${version}";
+  pname = "ioquake3-git";
   version = "2019-05-29";
 
   src = fetchFromGitHub {

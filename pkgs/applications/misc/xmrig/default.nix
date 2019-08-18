@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xmrig-${version}";
+  pname = "xmrig";
   version = "2.14.4";
 
   src = fetchFromGitHub {

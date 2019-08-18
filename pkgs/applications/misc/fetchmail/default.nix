@@ -4,7 +4,8 @@ let
   version = "6.3.26";
 in
 stdenv.mkDerivation {
-  name="fetchmail-${version}";
+  pname = "fetchmail";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/fetchmail.berlios/fetchmail-${version}.tar.bz2";

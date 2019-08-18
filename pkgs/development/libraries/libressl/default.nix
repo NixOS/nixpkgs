@@ -3,11 +3,11 @@
 let
 
   generic = { version, sha256 }: stdenv.mkDerivation rec {
-    name = "libressl-${version}";
+    pname = "libressl";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://openbsd/LibreSSL/${name}.tar.gz";
+      url = "mirror://openbsd/LibreSSL/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 

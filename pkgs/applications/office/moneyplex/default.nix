@@ -19,7 +19,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "moneyplex-${version}";
+  pname = "moneyplex";
   version = "16.0.22424";
 
   src = fetchurl (if stdenv.hostPlatform.system == "i686-linux" then src_i686

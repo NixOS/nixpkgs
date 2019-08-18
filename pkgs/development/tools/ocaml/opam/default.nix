@@ -60,7 +60,7 @@ let
     };
   };
 in stdenv.mkDerivation rec {
-  name = "opam-${version}";
+  pname = "opam";
   version = "2.0.5";
 
   buildInputs = [ unzip curl ncurses ocaml makeWrapper getconf ] ++ lib.optional stdenv.isLinux bubblewrap;

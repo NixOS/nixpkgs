@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.1-b3";
-  name = "siesta-${version}";
+  pname = "siesta";
 
   src = fetchurl {
     url = "https://launchpad.net/siesta/4.1/4.1-b3/+download/siesta-4.1-b3.tar.gz";

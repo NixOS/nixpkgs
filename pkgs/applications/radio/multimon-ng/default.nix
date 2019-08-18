@@ -3,7 +3,8 @@ let
   version = "1.1.8";
 in
 stdenv.mkDerivation {
-  name = "multimon-ng-${version}";
+  pname = "multimon-ng";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "EliasOenal";

@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "snabb-${version}";
+  pname = "snabb";
   version = "2018.01.2";
 
   src = fetchFromGitHub {

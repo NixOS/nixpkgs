@@ -3,7 +3,6 @@
   qt5dxcb-plugin, qtstyleplugins, dtkcore, dtkwidget, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "qt5integration";
   version = "0.3.12";
 
@@ -41,7 +40,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugins for DDE";

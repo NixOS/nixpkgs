@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub, automake, autoconf, libtool, autoreconfHook, gmpxx }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "givaro";
   version = "4.1.1";
   src = fetchFromGitHub {

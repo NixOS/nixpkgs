@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   version = "0.5.1";
-  name = "grobi-${version}";
+  pname = "grobi";
 
   goPackagePath = "github.com/fd0/grobi";
 

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aria2-${version}";
+  pname = "aria2";
   version = "1.34.0";
 
   src = fetchFromGitHub {

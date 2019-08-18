@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, jq, libxml2, go-dbus-generator, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dbus-factory";
   version = "3.1.17";
 
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's:/share/gocode:/share/go:' Makefile
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Generates static DBus bindings for Golang and QML at build-time";

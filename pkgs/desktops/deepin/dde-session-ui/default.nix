@@ -6,7 +6,6 @@
   xkeyboard_config, xorg, xrandr, wrapGAppsHook }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-session-ui";
   version = "4.9.12";
 
@@ -115,7 +114,7 @@ mkDerivation rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin desktop-environment - Session UI module";

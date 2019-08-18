@@ -1,7 +1,7 @@
 { fetchurl, stdenv, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "nmon-${version}";
+  pname = "nmon";
   version = "16k";
 
   src = fetchurl {

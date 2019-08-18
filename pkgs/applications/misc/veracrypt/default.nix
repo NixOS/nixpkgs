@@ -4,7 +4,6 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "veracrypt";
-  name = "${pname}-${version}";
   version = "1.23";
 
   src = fetchurl {

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.1.24";
-  name = "libpaper-${version}";
+  pname = "libpaper";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/libp/libpaper/libpaper_${version}.tar.gz";

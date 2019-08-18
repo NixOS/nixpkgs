@@ -1,7 +1,7 @@
 { lib, buildPythonApplication, fetchFromGitHub, python, pyyaml, fonttools, fontforge }:
 
 buildPythonApplication rec {
-  name = "scfbuild-${version}";
+  pname = "scfbuild";
   version = "1.0.3";
 
   src = fetchFromGitHub {

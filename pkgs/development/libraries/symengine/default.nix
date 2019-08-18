@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "symengine-${version}";
+  pname = "symengine";
   version = "0.4.1";
 
   src = fetchFromGitHub {

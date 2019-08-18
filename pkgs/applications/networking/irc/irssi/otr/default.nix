@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "irssi-otr-${version}";
+  pname = "irssi-otr";
   version = "1.0.2";
 
   src = fetchFromGitHub {

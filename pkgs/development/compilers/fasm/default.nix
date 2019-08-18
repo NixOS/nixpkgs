@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   inherit (fasm-bin) version src meta;
 
-  name = "fasm-${version}";
+  pname = "fasm";
 
   nativeBuildInputs = [ fasm-bin ];
 

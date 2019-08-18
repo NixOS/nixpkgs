@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.5";
-  name = "liblaxjson-${version}";
+  pname = "liblaxjson";
 
   src = fetchFromGitHub {
     owner = "andrewrk";

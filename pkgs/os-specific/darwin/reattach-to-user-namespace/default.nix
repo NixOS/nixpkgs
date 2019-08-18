@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "reattach-to-user-namespace-${version}";
+  pname = "reattach-to-user-namespace";
   version = "2.7";
 
   src = fetchurl {

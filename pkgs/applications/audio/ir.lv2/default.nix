@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fftw, gtk2, lv2, libsamplerate, libsndfile, pkgconfig, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  name = "ir.lv2-${version}";
+  pname = "ir.lv2";
   version = "1.2.4";
 
   src = fetchFromGitHub {

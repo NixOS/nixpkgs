@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, zlib, python, bzip2, lzma}:
 
 stdenv.mkDerivation rec {
-  name = "bedtools-${version}";
+  pname = "bedtools";
   version = "2.28.0";
 
   src = fetchFromGitHub {

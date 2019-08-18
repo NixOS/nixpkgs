@@ -4,7 +4,7 @@
 , pythonProtobuf }:
 
 stdenv.mkDerivation rec {
-  name = "or-tools-${version}";
+  pname = "or-tools";
   version = "v7.0";
 
   src = fetchFromGitHub {

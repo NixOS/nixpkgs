@@ -3,7 +3,7 @@
   qtmultimedia, qtserialport, qttools, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "wsjtx-${version}";
+  pname = "wsjtx";
   version = "2.1.0";
 
   # This is a "superbuild" tarball containing both wsjtx and a hamlib fork

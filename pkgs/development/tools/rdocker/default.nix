@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, openssh }:
 
 stdenv.mkDerivation rec {
-  name = "rdocker-${version}";
+  pname = "rdocker";
   version = "unstable-2018-07-17";
 
   src = fetchFromGitHub {

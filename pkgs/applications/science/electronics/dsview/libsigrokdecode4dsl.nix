@@ -5,7 +5,7 @@ glib, check, python3, dsview
 stdenv.mkDerivation rec {
   inherit (dsview) version src;
 
-  name = "libsigrokdecode4dsl-${version}";
+  pname = "libsigrokdecode4dsl";
 
   postUnpack = ''
     export sourceRoot=$sourceRoot/libsigrokdecode4DSL

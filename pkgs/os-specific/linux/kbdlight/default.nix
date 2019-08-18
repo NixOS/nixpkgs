@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "kbdlight-${version}";
+  pname = "kbdlight";
   version = "1.3";
 
   src = fetchFromGitHub {

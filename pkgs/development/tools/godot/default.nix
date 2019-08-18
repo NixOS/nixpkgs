@@ -9,7 +9,7 @@ let
     pulseaudio = false;
   };
 in stdenv.mkDerivation rec {
-  name    = "godot-${version}";
+  pname = "godot";
   version = "3.1.1";
 
   src = fetchFromGitHub {

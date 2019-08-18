@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "k2pdfopt-${version}";
+  pname = "k2pdfopt";
   version = "2.51a";
 
   src = (fetchzip {

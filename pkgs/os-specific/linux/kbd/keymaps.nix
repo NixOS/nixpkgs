@@ -2,7 +2,7 @@
 
 {
   dvp = stdenv.mkDerivation rec {
-    name = "dvp-${version}";
+    pname = "dvp";
     version = "1.2.1";
 
     src = fetchurl {
@@ -19,7 +19,7 @@
   };
 
   neo = stdenv.mkDerivation rec {
-    name = "neo-${version}";
+    pname = "neo";
     version = "2476";
 
     src = fetchurl {

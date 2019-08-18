@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, poppler }:
 
 stdenv.mkDerivation rec {
-  name = "epdfview-${version}";
+  pname = "epdfview";
   version = "0.1.8";
 
   src = fetchurl {

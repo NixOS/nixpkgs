@@ -1,10 +1,10 @@
 { stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkgconfig
 , xorg }:
 stdenv.mkDerivation rec {
-  name = "eq10q-${version}";
+  pname = "eq10q";
   version = "2.2";
   src = fetchurl {
-    url = "mirror://sourceforge/project/eq10q/${name}.tar.gz";
+    url = "mirror://sourceforge/project/eq10q/${pname}-${version}.tar.gz";
     sha256 = "16mhcav8gwkp29k9ki4dlkajlcgh1i2wvldabxb046d37dq4qzrk";
   };
 

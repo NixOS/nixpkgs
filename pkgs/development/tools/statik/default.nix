@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "statik-unstable-${version}";
+  pname = "statik-unstable";
   version = "2018-11-28";
   goPackagePath = "github.com/rakyll/statik";
   goDeps = ./deps.nix;

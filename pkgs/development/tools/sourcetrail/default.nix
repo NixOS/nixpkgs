@@ -2,7 +2,7 @@
 , zlib, expat, dbus, openssl, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "sourcetrail-${version}";
+  pname = "sourcetrail";
   version = "2019.2.39";
 
   src = fetchurl {

@@ -4,7 +4,8 @@
 
 let
   generic = version: sha256: prefix: library: stdenv.mkDerivation rec {
-    name = "quaternion-${version}";
+    pname = "quaternion";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "QMatrixClient";

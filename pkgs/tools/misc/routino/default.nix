@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "routino-${version}";
+  pname = "routino";
   version = "3.2";
 
   src = fetchurl {
-    url = "https://routino.org/download/${name}.tgz";
+    url = "https://routino.org/download/${pname}-${version}.tgz";
     sha256 = "0lkmpi8gn7qf40cx93jcp7nxa9dfwi1d6rjrhcqbdymszzm33972";
   };
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libdivecomputer-${version}";
+  pname = "libdivecomputer";
   version = "0.6.0";
 
   src = fetchurl {
-    url = "https://www.libdivecomputer.org/releases/${name}.tar.gz";
+    url = "https://www.libdivecomputer.org/releases/${pname}-${version}.tar.gz";
     sha256 = "0nm1mcscpxb9dv4p0lidd6rf5xg4vmcbigj6zqxvgn7pwnvpbzm0";
   };
 

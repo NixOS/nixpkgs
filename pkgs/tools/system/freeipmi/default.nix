@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.6.3";
-  name = "freeipmi-${version}";
+  pname = "freeipmi";
 
   src = fetchurl {
-    url = "mirror://gnu/freeipmi/${name}.tar.gz";
+    url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
     sha256 = "1sg12ycig2g5yv9l3vx25wsjmz7ybnrsvji0vs51yjmclwsygm5a";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "geekbench-${version}";
+  pname = "geekbench";
   version = "4.4.0";
 
   src = fetchurl {

@@ -35,7 +35,7 @@ let
     };
   };
 in mkDerivation rec {
-  name = "plex-media-player-${version}";
+  pname = "plex-media-player";
   version = "2.36.0.988";
   vsnHash = "0150ae52";
 

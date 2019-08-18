@@ -9,7 +9,7 @@ in
 stdenv.mkDerivation rec {
   srcVersion = "jul19a";
   version = "20190701_a";
-  name = "gildas-${version}";
+  pname = "gildas";
 
   src = fetchurl {
     # For each new release, the upstream developers of Gildas move the

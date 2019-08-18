@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   version = "2.1.5";
-  name = "gtkpod-${version}";
+  pname = "gtkpod";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkpod/${name}.tar.gz";
+    url = "mirror://sourceforge/gtkpod/${pname}-${version}.tar.gz";
     sha256 = "0xisrpx069f7bjkyc8vqxb4k0480jmx1wscqxr6cpq1qj6pchzd5";
   };
 

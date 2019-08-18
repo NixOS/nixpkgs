@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, yosys, bash, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "symbiyosys-${version}";
+  pname = "symbiyosys";
   version = "2019.04.18";
 
   src = fetchFromGitHub {

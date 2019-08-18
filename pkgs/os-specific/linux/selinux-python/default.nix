@@ -7,7 +7,7 @@ with stdenv.lib;
 with python3.pkgs;
 
 stdenv.mkDerivation rec {
-  name = "selinux-python-${version}";
+  pname = "selinux-python";
   version = "2.7";
   se_release = "20170804";
   se_url = "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases";

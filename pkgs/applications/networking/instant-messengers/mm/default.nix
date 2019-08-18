@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitLab }:
 
 buildGoPackage rec {
-  name = "mm-${version}";
+  pname = "mm";
   version = "2016.11.04";
 
   goPackagePath = "gitlab.com/meutraa/mm";

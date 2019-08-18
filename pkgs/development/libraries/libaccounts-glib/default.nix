@@ -2,7 +2,7 @@
 , libxml2, libxslt, pkgconfig, sqlite, docbook_xsl, docbook_xml_dtd_43, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "libaccounts-glib-${version}";
+  pname = "libaccounts-glib";
   version = "1.24";
 
   outputs = [ "out" "dev" "devdoc" "py" ];

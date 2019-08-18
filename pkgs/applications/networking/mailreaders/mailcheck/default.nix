@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mailcheck-${version}";
+  pname = "mailcheck";
   version = "1.91.2";
 
   patches = [ ./mailcheck-Makefile.patch ];

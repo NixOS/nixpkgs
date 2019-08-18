@@ -7,7 +7,8 @@ let
   fftwAll = symlinkJoin { name ="ftw-dev-out"; paths = [ fftw.dev fftw.out ]; };
 
 in stdenv.mkDerivation {
-  name = "octopus-${version}";
+  pname = "octopus";
+  inherit version;
 
   src = fetchurl {
     url = "http://www.tddft.org/programs/octopus/down.php?file=${version}/octopus-${version}.tar.gz";

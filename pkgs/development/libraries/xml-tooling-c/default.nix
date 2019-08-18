@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook, boost, curl, openssl, log4shib, xercesc, xml-security-c }:
 
 stdenv.mkDerivation rec {
-  name = "xml-tooling-c-${version}";
+  pname = "xml-tooling-c";
   version = "1.6.3";
 
   src = fetchgit {

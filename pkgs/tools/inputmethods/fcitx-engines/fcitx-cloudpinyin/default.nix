@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pkgconfig, fcitx, gettext, curl }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-cloudpinyin-${version}";
+  pname = "fcitx-cloudpinyin";
   version = "0.3.6";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-cloudpinyin/${name}.tar.xz";
+    url = "http://download.fcitx-im.org/fcitx-cloudpinyin/${pname}-${version}.tar.xz";
     sha256 = "1f3ryx817bxb8g942l50ng4xg0gp50rb7pv2p6zf98r2z804dcvf";
   };
 

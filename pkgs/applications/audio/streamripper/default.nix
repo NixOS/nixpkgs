@@ -1,11 +1,11 @@
 { stdenv, fetchurl , glib, pkgconfig, libogg, libvorbis, libmad }:
 
 stdenv.mkDerivation rec {
-  name = "streamripper-${version}";
+  pname = "streamripper";
   version = "1.64.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/streamripper/${name}.tar.gz";
+    url = "mirror://sourceforge/streamripper/${pname}-${version}.tar.gz";
     sha256 = "0hnyv3206r0rfprn3k7k6a0j959kagsfyrmyjm3gsf3vkhp5zmy1";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "mcelog-${version}";
+  pname = "mcelog";
   version = "162";
 
   src = fetchFromGitHub {

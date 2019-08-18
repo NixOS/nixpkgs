@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "phwmon-${version}";
+  pname = "phwmon";
   version = "2017-04-10";
 
   src = fetchFromGitLab {

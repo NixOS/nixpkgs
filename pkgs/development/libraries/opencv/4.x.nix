@@ -153,7 +153,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "opencv-${version}";
+  pname = "opencv";
   inherit version src;
 
   postUnpack = lib.optionalString buildContrib ''

@@ -9,7 +9,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cups-${version}";
+  pname = "cups";
 
   # After 2.2.6, CUPS requires headers only available in macOS 10.12+
   version = if stdenv.isDarwin then "2.2.6" else "2.2.11";

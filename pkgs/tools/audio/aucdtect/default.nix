@@ -3,7 +3,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "aucdtext-${version}";
+  pname = "aucdtext";
   version = "0.8-2";
 
   src = fetchurl {

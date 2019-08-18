@@ -3,7 +3,8 @@ let
   version = "2.3.1";
 in
 stdenv.mkDerivation {
-  name = "minizinc-ide-${version}";
+  pname = "minizinc-ide";
+  inherit version;
 
   nativeBuildInputs = [ qmake makeWrapper ];
   buildInputs = [ qtbase qtwebengine qtwebkit ];

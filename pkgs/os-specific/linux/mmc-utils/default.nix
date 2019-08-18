@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "mmc-utils-${version}";
+  pname = "mmc-utils";
   version = "2018-03-27";
 
   src = fetchgit {

@@ -1,13 +1,12 @@
 { stdenv, fetchurl, glibc }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "vpcs";
   version = "0.8";
 
   src = fetchurl {
-    name = "${name}.tar.bz2";
-    url = "mirror://sourceforge/project/${pname}/${version}/${name}-src.tbz";
+    name = "${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/${pname}/${version}/${pname}-${version}-src.tbz";
     sha256 = "14y9nflcyq486vvw0na0fkfmg5dac004qb332v4m5a0vaz8059nw";
   };
 

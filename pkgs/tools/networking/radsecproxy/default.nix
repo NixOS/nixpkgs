@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "radsecproxy-${version}";
+  pname = "radsecproxy";
   version = "1.6.9";
 
   src = fetchurl {

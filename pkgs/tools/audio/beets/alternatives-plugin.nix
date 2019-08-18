@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, beets, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "beets-alternatives-${version}";
+  pname = "beets-alternatives";
   version = "0.9.0";
 
   src = fetchFromGitHub {

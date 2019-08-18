@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.19";
-  name = "links2-${version}";
+  pname = "links2";
 
   src = fetchurl {
     url = "${meta.homepage}/download/links-${version}.tar.bz2";

@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libsemanage-${version}";
+  pname = "libsemanage";
   version = "2.7";
   inherit (libsepol) se_release se_url;
 

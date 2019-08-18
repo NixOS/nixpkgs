@@ -1,7 +1,7 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
-  name = "golangci-lint-${version}";
+  pname = "golangci-lint";
   version = "1.17.1";
   goPackagePath = "github.com/golangci/golangci-lint";
 

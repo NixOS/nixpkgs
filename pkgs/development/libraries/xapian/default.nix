@@ -3,7 +3,8 @@
 
 let
   generic = version: sha256: stdenv.mkDerivation rec {
-    name = "xapian-${version}";
+    pname = "xapian";
+    inherit version;
     passthru = { inherit version; };
 
     src = fetchurl {

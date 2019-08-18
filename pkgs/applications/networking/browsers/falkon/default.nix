@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "falkon-${version}";
+  pname = "falkon";
   version = "3.1.0";
 
   src = fetchFromGitHub {

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.1";
-  name = "htpdate-${version}";
+  pname = "htpdate";
 
   src = fetchurl {
-    url = "http://www.vervest.org/htp/archive/c/${name}.tar.xz";
+    url = "http://www.vervest.org/htp/archive/c/${pname}-${version}.tar.xz";
     sha256 = "1gqw3lg4wwkn8snf4pf21s3qidhb4h791f2ci7i7i0d6kd86jv0q";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-icon-hider-${version}";
+  pname = "gnome-shell-extension-icon-hider";
   version = "23";
 
   src = fetchFromGitHub {
