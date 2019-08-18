@@ -1,6 +1,8 @@
+diff --git a/tests/libtest.sh b/tests/libtest.sh
+index 46bcefb3..0134425e 100644
 --- a/tests/libtest.sh
 +++ b/tests/libtest.sh
-@@ -328,7 +328,7 @@
+@@ -352,7 +352,7 @@ if [ -z "${FLATPAK_BWRAP:-}" ]; then
      # running installed-tests: assume we know what we're doing
      _flatpak_bwrap_works=true
  elif ! "$FLATPAK_BWRAP" --unshare-ipc --unshare-net --unshare-pid \
@@ -9,7 +11,7 @@
      _flatpak_bwrap_works=false
  else
      _flatpak_bwrap_works=true
-@@ -309,12 +309,12 @@
+@@ -426,12 +426,12 @@ dbus-daemon --fork --config-file=session.conf --print-address=3 --print-pid=4 \
  export DBUS_SESSION_BUS_ADDRESS="$(cat dbus-session-bus-address)"
  DBUS_SESSION_BUS_PID="$(cat dbus-session-bus-pid)"
  
@@ -24,9 +26,11 @@
      gpg-connect-agent --homedir "${FL_GPG_HOMEDIR}" killagent /bye || true
      fusermount -u $XDG_RUNTIME_DIR/doc || :
      if test -n "${TEST_SKIP_CLEANUP:-}"; then
+diff --git a/tests/make-test-app.sh b/tests/make-test-app.sh
+index 0a0a28f1..16fd51fe 100755
 --- a/tests/make-test-app.sh
 +++ b/tests/make-test-app.sh
-@@ -114,13 +114,13 @@ msgid "Hello world"
+@@ -129,13 +129,13 @@ msgid "Hello world"
  msgstr "Hallo Welt"
  EOF
  mkdir -p ${DIR}/files/de/share/de/LC_MESSAGES
@@ -42,9 +46,11 @@
  
  flatpak build-finish ${DIR}
  mkdir -p repos
+diff --git a/tests/make-test-runtime.sh b/tests/make-test-runtime.sh
+index 57899b75..9236996f 100755
 --- a/tests/make-test-runtime.sh
 +++ b/tests/make-test-runtime.sh
-@@ -26,6 +26,7 @@
+@@ -28,6 +28,7 @@ EOF
  PATH="$PATH:/usr/sbin:/sbin"
  
  # Add bash and dependencies
@@ -52,7 +58,7 @@
  mkdir -p ${DIR}/usr/bin
  mkdir -p ${DIR}/usr/lib
  ln -s ../lib ${DIR}/usr/lib64
-@@ -35,48 +36,27 @@
+@@ -37,48 +38,23 @@ if test -f /sbin/ldconfig.real; then
  else
      cp `which ldconfig` ${DIR}/usr/bin
  fi
@@ -105,21 +111,20 @@
 -# We copy the C.UTF8 locale and call it en_US. Its a bit of a lie, but
 -# the real en_US locale is often not available, because its in the
 -# local archive.
+-mkdir -p ${DIR}/usr/lib/locale/
+-cp -r /usr/lib/locale/C.* ${DIR}/usr/lib/locale/en_US
 +mv ${DIR}/nix/store ${DIR}/usr/store # files outside /usr are not permitted, we will have to replace /nix/store with /usr/store
 +chmod -R u+w ${DIR} # nix store has read-only directories which would cause problems during clean-up, files need to be writable for sed
 +find ${DIR} -type f -print0 | xargs -0 sed -i 's~/nix/store/~/usr/store/~g' # replace hardcoded paths
 +find ${DIR} -type l | xargs -I '{}' sh -c 'tg="$(readlink "$1")"; newtg="${tg#/nix/store/}"; if [ "$tg" != "$newtg" ]; then ln -fs "/usr/store/$newtg" "$1"; fi' -- '{}' # replace symlink targets
-+
-+# We copy the whole locale archive because we do not have C.UTF8 locale
- mkdir -p ${DIR}/usr/lib/locale/
--cp -r /usr/lib/locale/C.* ${DIR}/usr/lib/locale/en_US
-+cp @glibcLocales@/lib/locale/locale-archive ${DIR}/usr/lib/locale/locale-archive
  
  if [ x$COLLECTION_ID != x ]; then
      collection_args=--collection-id=${COLLECTION_ID}
+diff --git a/tests/testlibrary.c b/tests/testlibrary.c
+index f2773dc8..3af9026f 100644
 --- a/tests/testlibrary.c
 +++ b/tests/testlibrary.c
-@@ -584,7 +584,7 @@
+@@ -1053,7 +1053,7 @@ check_bwrap_support (void)
      {
        gint exit_code = 0;
        char *argv[] = { (char *) bwrap, "--unshare-ipc", "--unshare-net",
@@ -128,6 +133,8 @@
        g_autofree char *argv_str = g_strjoinv (" ", argv);
        g_test_message ("Spawning %s", argv_str);
        g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL, &exit_code, &error);
+diff --git a/triggers/gtk-icon-cache.trigger b/triggers/gtk-icon-cache.trigger
+index 711cfab2..10c220ec 100755
 --- a/triggers/gtk-icon-cache.trigger
 +++ b/triggers/gtk-icon-cache.trigger
 @@ -1,7 +1,7 @@
