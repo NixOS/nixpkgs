@@ -226,6 +226,7 @@ in
         ccWrapperStdenv
         gcc-unwrapped coreutils gnugrep
         perl gnum4 bison;
+      dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; } );
       # This also contains the full, dynamically linked, final Glibc.
       binutils = prevStage.binutils.override {
         # Rewrap the binutils with the new glibc, so both the next
