@@ -150,6 +150,7 @@ in
   mediawiki = handleTest ./mediawiki.nix {};
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
+  metabase = handleTest ./metabase.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   misc = handleTest ./misc.nix {};
