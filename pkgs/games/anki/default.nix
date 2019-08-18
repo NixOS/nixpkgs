@@ -95,10 +95,6 @@ buildPythonApplication rec {
     nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
     buildInputs = [ lame mplayer libpulseaudio  ];
 
-    makeWrapperArgs = [
-        ''--prefix PATH ':' "${lame}/bin:${mplayer}/bin"''
-    ];
-
     patches = [
       # Disable updated version check.
       ./no-version-check.patch
@@ -132,8 +128,6 @@ buildPythonApplication rec {
       env HOME=$TMP pytest --ignore tests/test_sync.py
     '';
 
-    dontWrapQtApps = true;
-
     installPhase = ''
       pp=$out/lib/${python.libPrefix}/site-packages
 
@@ -160,14 +154,17 @@ buildPythonApplication rec {
       cp -rv locale $out/share/
       cp -rv anki aqt web $pp/
 
-      wrapPythonPrograms
-      for program in $out/bin/*; do
-        wrapQtApp "$program"
-      done
-
       # copy the manual into $doc
       cp -r ${manual}/share/doc/anki/html $doc/share/doc/anki
     '';
+
+    dontWrapQtApps = true;
+    makeWrapperArgs = [
+        ''--prefix PATH ':' "${lame}/bin:${mplayer}/bin"''
+        "\${qtWrapperArgs[@]}"
+    ];
+
+    # now wrapPythonPrograms from postFixup will add both python and qt env variables
 
     passthru = {
       inherit manual;
