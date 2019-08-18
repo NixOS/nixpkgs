@@ -24,6 +24,7 @@
 , stripConfig ? false
 , stripIdlelib ? false
 , stripTests ? false
+, stripTkinter ? false
 , rebuildBytecode ? true
 , stripBytecode ? false
 }:
@@ -232,6 +233,8 @@ in with passthru; stdenv.mkDerivation {
     '' + optionalString stripIdlelib ''
     # Strip IDLE (and turtledemo, which uses it)
     rm -R $out/bin/idle* $out/lib/python*/{idlelib,turtledemo}
+    '' + optionalString stripTkinter ''
+    rm -R $out/lib/python*/tkinter
     '' + optionalString stripTests ''
     # Strip tests
     rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
