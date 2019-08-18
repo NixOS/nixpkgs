@@ -106,6 +106,6 @@ stdenv.mkDerivation rec {
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ xnwdd ];
+    maintainers = with maintainers; [ xnwdd evanjs ];
   };
 }
