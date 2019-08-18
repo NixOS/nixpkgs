@@ -673,8 +673,6 @@ in
       script = ''
         if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
           ${pkgs.systemd}/bin/systemctl reload nginx.service
-        else
-          true
         fi
       '';
       serviceConfig.RemainAfterExit = true;
