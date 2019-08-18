@@ -1704,6 +1704,8 @@ in
 
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
+  hocr-tools = with python3Packages; toPythonApplication hocr-tools;
+
   home-manager = callPackage ../tools/package-management/home-manager {};
 
   hostsblock = callPackage ../tools/misc/hostsblock { };
@@ -1827,6 +1829,8 @@ in
   nx-libs = callPackage ../tools/X11/nx-libs { };
 
   nyx = callPackage ../tools/networking/nyx { };
+
+  ocrmypdf = callPackage ../tools/text/ocrmypdf { };
 
   onboard = callPackage ../applications/misc/onboard { };
 

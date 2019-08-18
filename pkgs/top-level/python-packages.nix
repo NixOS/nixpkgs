@@ -643,6 +643,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  hocr-tools = callPackage ../development/python-modules/hocr-tools { };
+
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
@@ -1951,6 +1953,8 @@ in {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
+
+  pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
@@ -4143,6 +4147,8 @@ in {
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
 
+  pikepdf = callPackage ../development/python-modules/pikepdf { };
+
   kmapper = callPackage ../development/python-modules/kmapper { };
 
   kmsxx = (callPackage ../development/libraries/kmsxx {
@@ -5083,6 +5089,8 @@ in {
 
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
 
+  ruffus = callPackage ../development/python-modules/ruffus { };
+
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
@@ -5668,6 +5676,8 @@ in {
   pyregion = callPackage ../development/python-modules/pyregion {};
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
+
+  python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   pluggy = callPackage ../development/python-modules/pluggy {};
 
