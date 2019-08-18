@@ -6,6 +6,7 @@
 , libjpeg
 , libvisual
 , tremor # provides 'virbisidec'
+, libGL
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412
 , enableX11 ? stdenv.isLinux, libXv
 , enableWayland ? stdenv.isLinux, wayland
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
   ;
 
-  buildInputs = [ orc libtheora libintl libopus isocodes libjpeg tremor ]
+  buildInputs = [ orc libtheora libintl libopus isocodes libjpeg tremor libGL ]
     ++ lib.optional (!stdenv.isDarwin) libvisual
     ++ lib.optional enableAlsa alsaLib
     ++ lib.optionals enableX11 [ libXv pango ]
