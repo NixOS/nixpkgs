@@ -3218,6 +3218,11 @@
     githubId = 6282557;
     name = "Kiloreux Emperex";
   };
+  kim0 = {
+    email = "email.ahmedkamal@googlemail.com";
+    github = "kim0";
+    name = "Ahmed Kamal";
+  };
   kimburgess = {
     email = "kim@acaprojects.com";
     github = "kimburgess";
