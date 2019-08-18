@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = https://gitlab.gnome.org/GNOME/at-spi2-core;
     license = licenses.lgpl2Plus; # NOTE: 2018-06-06: Please check the license when upstream sorts-out licensing: https://gitlab.gnome.org/GNOME/at-spi2-core/issues/2
-    maintainers = with maintainers; [ jtojnar gnome3.maintainers ];
+    maintainers = gnome3.maintainers;
     platforms = platforms.unix;
   };
 }
