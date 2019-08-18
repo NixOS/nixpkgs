@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, makeWrapper, chromaprint
+{ stdenv, mkDerivation, fetchFromGitHub, chromaprint
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
 , libGLU, libxcb, lilv, lv2, opusfile
@@ -8,16 +8,14 @@
 
 mkDerivation rec {
   name = "mixxx-${version}";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = "release-${version}";
-    sha256 = "1q6c2wfpprsx7s7nz1w0mhm2yhikj54jxcv61kwylxx3n5k2na9r";
+    sha256 = "0dmkvcsgq7abxqd4wms8c4w0mr5c53z7n5r8jgzp4swz9nmfjpfg";
   };
-
-  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout libsndfile
@@ -34,10 +32,9 @@ mkDerivation rec {
     "opus=1"
   ];
 
-  fixupPhase = ''
-    wrapProgram $out/bin/mixxx \
-      --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
-  '';
+  qtWrapperArgs = [
+    "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://mixxx.org;

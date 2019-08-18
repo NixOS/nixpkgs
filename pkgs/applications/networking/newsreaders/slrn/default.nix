@@ -1,14 +1,13 @@
 { stdenv, fetchurl
 , slang, ncurses, openssl }:
 
-let version = "1.0.2"; in
-
-stdenv.mkDerivation {
-  name = "slrn-${version}";
+stdenv.mkDerivation rec {
+  pname = "slrn";
+  version = "1.0.3a";
 
   src = fetchurl {
-    url = "http://www.jedsoft.org/releases/slrn/slrn-${version}.tar.gz";
-    sha256 = "1gn6m2zha2nnnrh9lz3m3nrqk6fgfij1wc53pg25j7sdgvlziv12";
+    url = "http://www.jedsoft.org/releases/slrn/slrn-${version}.tar.bz2";
+    sha256 = "1b1d9iikr60w0vq86y9a0l4gjl0jxhdznlrdp3r405i097as9a1v";
   };
 
   preConfigure = ''

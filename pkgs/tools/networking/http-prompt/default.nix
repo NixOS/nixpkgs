@@ -30,6 +30,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/eliangcs/http-prompt;
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.linux; # can only test on linux
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

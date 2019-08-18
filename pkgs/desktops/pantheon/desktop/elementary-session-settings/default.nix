@@ -1,4 +1,18 @@
-{ stdenv, fetchFromGitHub, substituteAll, writeScript, pantheon, gnome-keyring, gnome-session, wingpanel, orca, at-spi2-core, elementary-default-settings, writeShellScriptBin, elementary-settings-daemon, runtimeShell }:
+{ stdenv
+, fetchFromGitHub
+, substituteAll
+, writeScript
+, pantheon
+, gnome-keyring
+, gnome-session
+, wingpanel
+, orca
+, at-spi2-core
+, elementary-default-settings
+, writeShellScriptBin
+, elementary-settings-daemon
+, runtimeShell
+}:
 
 let
 
@@ -7,7 +21,7 @@ let
   #
 
   #
-  # Upstream relies on /etc/skel to initiate a new users home directory with planks dockitems.
+  # Upstream relies on /etc/skel to initiate a new users home directory with plank's dockitems.
   #
   # That is not possible within nixos, but we can achieve this easily with a simple script that copies
   # them. We then use a xdg autostart and initalize it during the "EarlyInitialization" phase of a gnome session
@@ -44,26 +58,27 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "session-settings";
+  pname = "elementary-session-settings";
   version = "5.0.3";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "session-settings";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "1vrjm7bklkfv0dyafm312v4hxzy6lb7p1ny4ijkn48kr719gc71k";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
   dontBuild = true;
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/share/applications

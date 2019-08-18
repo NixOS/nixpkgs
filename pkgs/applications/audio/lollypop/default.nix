@@ -15,13 +15,12 @@
 , gobject-introspection
 , wrapGAppsHook
 , lastFMSupport ? true
-, wikipediaSupport ? true
-, youtubeSupport ? true, youtube-dl
+, youtubeSupport ? true
 }:
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.1.4.2";
+  version = "1.1.4.14";
 
   format = "other";
   doCheck = false;
@@ -30,7 +29,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "0rn3q7xslqq5hw4wb739ywg5dr99xpkbmyw80y84rsg0wfrwbjlc";
+    sha256 = "004cwbnxss6vmdsc6i0y83h3xbc2bzc0ra4z99pkizkky2mz6swj";
   };
 
   nativeBuildInputs = [
@@ -64,7 +63,6 @@ python3.pkgs.buildPythonApplication rec  {
     pygobject3
   ]
   ++ lib.optional lastFMSupport pylast
-  ++ lib.optional wikipediaSupport wikipedia
   ++ lib.optional youtubeSupport youtube-dl
   ;
 

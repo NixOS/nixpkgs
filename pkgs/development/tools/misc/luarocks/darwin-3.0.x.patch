@@ -10,7 +10,7 @@ index f93e67a..2eb2db9 100644
 +      defaults.variables.STAT = "stat"
        defaults.variables.STATFLAG = "-f '%A'"
 -      local version = util.popen_read("sw_vers -productVersion")
-+      local version = "10.10"
++      local version = os.getenv("MACOSX_DEPLOYMENT_TARGET") or "10.12"
        version = tonumber(version and version:match("^[^.]+%.([^.]+)")) or 3
        if version >= 10 then
           version = 8

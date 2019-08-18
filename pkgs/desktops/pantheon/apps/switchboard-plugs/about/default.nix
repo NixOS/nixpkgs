@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitHub, pantheon, substituteAll, meson, ninja
-, pkgconfig, vala, libgee, granite, gtk3, switchboard, pciutils }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, substituteAll
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, switchboard
+, pciutils
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";

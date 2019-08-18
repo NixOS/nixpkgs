@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_PYTHON=OFF"
-    # GNUInstallDirs
-    "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin"
   ];
 
   makeFlags = [

@@ -34,6 +34,12 @@
     </arg>
      <replaceable>shell-command</replaceable>
    </arg>
+
+   <arg>
+    <arg choice='plain'>
+     <option>--silent</option>
+    </arg>
+   </arg>
     
    <arg>
     <arg choice='plain'>
@@ -97,6 +103,16 @@
     <listitem>
      <para>
       The bash command to execute.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--silent</option>
+    </term>
+    <listitem>
+     <para>
+       Suppresses all output from the activation script of the target system.
      </para>
     </listitem>
    </varlistentry>

@@ -44,6 +44,9 @@ with lib;
 
     # Disable legacy virtual syscalls
     "vsyscall=none"
+
+    # Enable page allocator randomization
+    "page_alloc.shuffle=1"
   ];
 
   boot.blacklistedKernelModules = [
@@ -121,4 +124,7 @@ with lib;
   # Ignore outgoing ICMP redirects (this is ipv4 only)
   boot.kernel.sysctl."net.ipv4.conf.all.send_redirects" = mkDefault false;
   boot.kernel.sysctl."net.ipv4.conf.default.send_redirects" = mkDefault false;
+
+  # Restrict userfaultfd syscalls to processes with the SYS_PTRACE capability
+  boot.kernel.sysctl."vm.unprivileged_userfaultfd" = mkDefault false;
 }

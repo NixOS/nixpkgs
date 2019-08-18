@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "inxi-${version}";
-  version = "3.0.35-1";
+  version = "3.0.36-1";
 
   src = fetchFromGitHub {
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "1rvidz2b9zp3ikkcjf8zr5r8r9mxnw3zgly2pvlim11kkp76zdl9";
+    sha256 = "04134l323vwd0g2bffj11rnpw2jgs9la6aqrmv8vh7w9mq5nd57y";
   };
 
   buildInputs = [ perl ];

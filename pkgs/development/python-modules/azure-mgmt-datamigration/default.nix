@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datamigration";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "49e6e68093e2d647c1c54a4027dee5b1d57f7e7c21480ae386c55cb3d5fa14bc";
+    sha256 = "0bixyya9afas0sv2wji7ivfi64z4dvv8p1gjnppibi5zas1mb4zw";
   };
 
   propagatedBuildInputs = [

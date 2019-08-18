@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   rev = "e2a6a9cd9da70175881ab991220c86aa87179509";
-  version = "2019-07-25";
+  version = "2019-07-26";
   name = "slack-theme-black-${version}";
 
   src = fetchgit { inherit rev;

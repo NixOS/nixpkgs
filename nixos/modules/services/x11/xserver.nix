@@ -714,7 +714,7 @@ in
       nativeBuildInputs = [ pkgs.xkbvalidate ];
       preferLocalBuild = true;
     } ''
-      validate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
+      xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
     '');
 
