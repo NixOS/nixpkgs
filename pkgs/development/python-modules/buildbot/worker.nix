@@ -22,7 +22,7 @@ buildPythonPackage (rec {
   meta = with lib; {
     homepage = http://buildbot.net/;
     description = "Buildbot Worker Daemon";
-    maintainers = with maintainers; [ nand0p ryansydnor ];
+    maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
     license = licenses.gpl2;
   };
 })
