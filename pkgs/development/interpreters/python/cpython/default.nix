@@ -24,6 +24,7 @@
 , stripConfig ? false
 , stripIdlelib ? false
 , stripTests ? false
+, rebuildBytecode ? true
 }:
 
 assert x11Support -> tcl != null
@@ -236,6 +237,7 @@ in with passthru; stdenv.mkDerivation {
     '' + ''
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+    '' + optionalString rebuildBytecode ''
 
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails
