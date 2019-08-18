@@ -70,7 +70,7 @@ let
   startScript = cfg:
     ''
       mkdir -p -m 0755 "$root/etc" "$root/var/lib"
-      mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/containers
+      mkdir -p -m 0700 "$root/var/lib/private" "$root/root"
       if ! [ -e "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
       fi
@@ -138,7 +138,7 @@ let
         --bind-ro=/nix/var/nix/daemon-socket \
         --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
         --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
-        --link-journal=try-guest \
+        ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
         --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
         --setenv HOST_BRIDGE="$HOST_BRIDGE" \
         --setenv HOST_ADDRESS="$HOST_ADDRESS" \
@@ -147,6 +147,7 @@ let
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
         --setenv HOST_PORT="$HOST_PORT" \
         --setenv PATH="$PATH" \
+        ${optionalString cfg.ephemeral "--ephemeral"} \
         ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
           ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
         } \
@@ -246,6 +247,8 @@ let
     EnvironmentFile = "-/etc/containers/%i.conf";
 
     Type = "notify";
+
+    RuntimeDirectory = [ "containers" ] ++ lib.optional cfg.ephemeral "containers/%i";
 
     # Note that on reboot, systemd-nspawn returns 133, so this
     # unit will be restarted. On poweroff, it returns 0, so the
@@ -419,6 +422,7 @@ let
     {
       extraVeths = {};
       additionalCapabilities = [];
+      ephemeral = false;
       allowedDevices = [];
       hostAddress = null;
       hostAddress6 = null;
@@ -511,6 +515,26 @@ in
                 information.
               '';
             };
+
+            ephemeral = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Runs container in ephemeral mode with the empty root filesystem at boot.
+                This way container will be bootstrapped from scratch on each boot
+                and will be cleaned up on shutdown leaving no traces behind.
+                Useful for completely stateless, reproducible containers.
+
+                Note that this option might require to do some adjustments to the container configuration,
+                e.g. you might want to set
+                <varname>systemd.network.networks.$interface.dhcpConfig.ClientIdentifier</varname> to "mac"
+                if you use <varname>macvlans</varname> option.
+                This way dhcp client identifier will be stable between the container restarts.
+
+                Note that the container journal will not be linked to the host if this option is enabled.
+              '';
+            };
+
             enableTun = mkOption {
               type = types.bool;
               default = false;
@@ -659,12 +683,7 @@ in
     unit = {
       description = "Container '%i'";
 
-      unitConfig.RequiresMountsFor = [ "/var/lib/containers/%i" ];
-
       path = [ pkgs.iproute ];
-
-      environment.INSTANCE = "%i";
-      environment.root = "/var/lib/containers/%i";
 
       preStart = preStartScript dummyConfig;
 
@@ -708,6 +727,9 @@ in
             script = startScript containerConfig;
             postStart = postStartScript containerConfig;
             serviceConfig = serviceDirectives containerConfig;
+            unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "/var/lib/containers/%i";
+            environment.root = if containerConfig.ephemeral then "/run/containers/%i" else "/var/lib/containers/%i";
+            environment.INSTANCE = "%i";
           } // (
           if containerConfig.autoStart then
             {

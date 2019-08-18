@@ -47,6 +47,7 @@ in
   codimd = handleTest ./codimd.nix {};
   colord = handleTest ./colord.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
+  containers-ephemeral = handleTest ./containers-ephemeral.nix {};
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
   containers-hosts = handleTest ./containers-hosts.nix {};
   containers-imperative = handleTest ./containers-imperative.nix {};
