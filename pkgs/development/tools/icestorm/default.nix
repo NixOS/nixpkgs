@@ -9,12 +9,12 @@
 , usePyPy ? stdenv.isx86_64 /* pypy3 seems broken on i686 */
 }:
 
-let
-  pythonPkg = if usePyPy then pypy3 else python3;
-  pythonInterp = pythonPkg.interpreter;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "icestorm";
   version = "2019.08.08";
+
+  pythonPkg = if usePyPy then pypy3 else python3;
+  pythonInterp = pythonPkg.interpreter;
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
