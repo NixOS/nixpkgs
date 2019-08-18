@@ -424,6 +424,18 @@
      installer after creating <literal>/var/lib/nextcloud</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     There exists now <literal>lib.forEach</literal>, which is like <literal>map</literal>, but with
+     arguments flipped. When mapping function body spans many lines (or has nested
+     <literal>map</literal>s), it is often hard to follow which list is modified.
+    </para>
+    <para>
+     Previous solution to this problem was either to use <literal>lib.flip map</literal>
+     idiom or extract that anonymous mapping function to a named one. Both can still be used
+     but <literal>lib.forEach</literal> is preferred over <literal>lib.flip map</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
