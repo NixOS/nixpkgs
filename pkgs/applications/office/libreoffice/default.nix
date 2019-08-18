@@ -48,14 +48,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "180d4rrzb3lq7g2w7x512fn8chfkjg4ld20ikrj6hkg11kj4hbmy";
+      sha256 = "1l5v9bb7n9s6i24q4mdyqyp5v4f8iy0a9dmpgw649vngj1zxdxfh";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "06fgd5jkqqbvskyj1ywmsmb4crsj064s8r45nrv0r8j6ydn0hi1l";
+      sha256 = "0h4jvdbvxvgy7w2bzf4k4knqbshlr4v2ic2jsaygy52530z9xifz";
     };
 
   };
@@ -144,6 +144,8 @@ in stdenv.mkDerivation rec {
       sed -e '/CPPUNIT_ASSERT_EQUAL(11148L, pOleObj->GetLogicRect().getWidth());/d ' -i sc/qa/unit/subsequent_filters-test.cxx
       # tilde expansion in path processing checks the existence of $HOME
       sed -e 's@OString sSysPath("~/tmp");@& return ; @' -i sal/qa/osl/file/osl_File.cxx
+      # fails on systems using ZFS, see https://github.com/NixOS/nixpkgs/issues/19071
+      sed -e '/CPPUNIT_TEST(getSystemPathFromFileURL_005);/d' -i './sal/qa/osl/file/osl_File.cxx'
       # rendering-dependent: on my computer the test table actually doesn't fit…
       # interesting fact: test disabled on macOS by upstream
       sed -re '/DECLARE_WW8EXPORT_TEST[(]testTableKeep, "tdf91083.odt"[)]/,+5d' -i ./sw/qa/extras/ww8export/ww8export.cxx
