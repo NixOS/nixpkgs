@@ -6938,7 +6938,7 @@ in
 
   wireguard-go = callPackage ../tools/networking/wireguard-go { };
 
-  wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf { };
+  wkhtmltopdf = libsForQt5.callPackage ../tools/graphics/wkhtmltopdf { };
 
   wml = callPackage ../development/web/wml { };
 
