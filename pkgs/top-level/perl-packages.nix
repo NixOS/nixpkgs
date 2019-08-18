@@ -19294,12 +19294,16 @@ let
       sha256 = "15xyrwv08fw8jmpydwzks26ipxnzliwddgyjcfqiaj0p7lwlhmx1";
     };
 
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       LWP
       LWPProtocolHttps
       DataDump
       JSON
     ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/youtube-viewer
+    '';
 
     meta = {
       description = "A lightweight application for searching and streaming videos from YouTube";
