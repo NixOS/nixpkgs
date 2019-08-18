@@ -2113,6 +2113,17 @@ let
     };
   };
 
+  readline-vim = buildVimPluginFrom2Nix {
+    pname = "readline-vim";
+    version = "2019-06-10";
+    src = fetchFromGitHub {
+    owner = "ryvnf";
+    repo = "readline.vim";
+    rev = "a7c754acaf0aec922d4a6bde908a636578ef82cc";
+    sha256 = "16fawg7fnlipn1f41cn1qc83dhr63qhr1bwn3qmr8sy7rbk5lihr";
+    };
+  };
+
   riv-vim = buildVimPluginFrom2Nix {
     pname = "riv-vim";
     version = "2019-02-18";
