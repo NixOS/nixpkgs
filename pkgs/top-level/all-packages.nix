@@ -14909,6 +14909,7 @@ in
   ;
   postgresql = postgresql_9_6.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
+  postgresql11Packages = recurseIntoAttrs postgresql_11.pkgs;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
