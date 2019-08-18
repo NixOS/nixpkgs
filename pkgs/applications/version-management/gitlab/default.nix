@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
     # Work around unpacking deb containing binary with suid bit
     tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
     tar -xf gitlab-deb-data.tar
+    rm gitlab-deb-data.tar
 
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt # only directory in data.tar.gz
