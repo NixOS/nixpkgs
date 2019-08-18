@@ -22,6 +22,7 @@
 , passthruFun
 , bash
 , stripIdlelib ? false
+, stripTests ? false
 }:
 
 assert x11Support -> tcl != null
@@ -226,6 +227,9 @@ in with passthru; stdenv.mkDerivation {
     '' + optionalString stripIdlelib ''
     # Strip IDLE (and turtledemo, which uses it)
     rm -R $out/bin/idle* $out/lib/python*/{idlelib,turtledemo}
+    '' + optionalString stripTests ''
+    # Strip tests
+    rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
     '' + ''
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
