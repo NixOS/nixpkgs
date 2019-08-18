@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "boehm-gc-${version}";
+  pname = "boehm-gc";
   version = "8.0.4";
 
   src = fetchurl {

@@ -5,7 +5,7 @@
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "libevent-${version}";
+  pname = "libevent";
   version = "2.1.10";
 
   src = fetchurl {

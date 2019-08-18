@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.92";
-  name = "dina-font-pcf-${version}";
+  pname = "dina-font-pcf";
 
   src = fetchurl {
     url = "http://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";

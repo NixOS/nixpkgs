@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2";
-  name = "light-${version}";
+  pname = "light";
   src = fetchFromGitHub {
     owner = "haikarainen";
     repo = "light";

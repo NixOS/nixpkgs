@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "goconvey-${version}";
+  pname = "goconvey";
   version = "1.6.3";
 
   goPackagePath = "github.com/smartystreets/goconvey";

@@ -11,7 +11,7 @@
 }:
 
 buildPythonApplication rec {
-  name = "google-compute-engine-${version}";
+  pname = "google-compute-engine";
   version = "20190124";
   namePrefix = "";
 

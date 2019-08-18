@@ -3,11 +3,11 @@
 , wrapGAppsHook, gnome3, harfbuzz }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-font-viewer-${version}";
+  pname = "gnome-font-viewer";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-font-viewer/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-font-viewer/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "10b150sa3971i5lfnk0jkkzlril97lz09sshwsbkabc8b7kv1qa3";
   };
 

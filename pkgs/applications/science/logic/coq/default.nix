@@ -39,7 +39,8 @@ let
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
 self = stdenv.mkDerivation {
-  name = "coq-${version}";
+  pname = "coq";
+  inherit version;
 
   passthru = {
     inherit coq-version;

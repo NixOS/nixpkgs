@@ -25,10 +25,10 @@ let
 
 in stdenv.mkDerivation rec {
   version = "19.05";
-  name = "ejabberd-${version}";
+  pname = "ejabberd";
 
   src = fetchurl {
-    url = "https://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
+    url = "https://www.process-one.net/downloads/ejabberd/${version}/${pname}-${version}.tgz";
     sha256 = "1lczck2760bcsl7vqc5xv4rizps0scdmss2zc4b1l59wzlmnfg7h";
   };
 
@@ -45,7 +45,8 @@ in stdenv.mkDerivation rec {
   LANG = "en_US.UTF-8";
 
   deps = stdenv.mkDerivation {
-    name = "ejabberd-deps-${version}";
+    pname = "ejabberd-deps";
+    inherit version;
 
     inherit src;
 

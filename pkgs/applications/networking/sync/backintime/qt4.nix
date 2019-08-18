@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   inherit (backintime-common) version src installFlags;
 
-  name = "backintime-qt4-${version}";
+  pname = "backintime-qt4";
 
   buildInputs = [ makeWrapper gettext python3 python3Packages.pyqt4 backintime-common python3 ];
 

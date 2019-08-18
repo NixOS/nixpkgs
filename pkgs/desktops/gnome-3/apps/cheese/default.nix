@@ -5,11 +5,11 @@
 , adwaita-icon-theme, librsvg, totem, gdk-pixbuf, gnome3, gnome-desktop, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "cheese-${version}";
+  pname = "cheese";
   version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1xlmsm4zsx05ahvpd4mgy1hfhxbag0r5i6p63bksjxdligdd36kv";
   };
 

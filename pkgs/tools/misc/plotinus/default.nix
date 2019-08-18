@@ -10,7 +10,7 @@
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "plotinus-${version}";
+  pname = "plotinus";
   version = "0.2.0";
 
   src = fetchFromGitHub {

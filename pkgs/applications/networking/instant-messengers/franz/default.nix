@@ -5,7 +5,8 @@
 let
   version = "5.2.0";
 in stdenv.mkDerivation rec {
-  name = "franz-${version}";
+  pname = "franz";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/meetfranz/franz/releases/download/v${version}/franz_${version}_amd64.deb";
     sha256 = "1wlfd1ja38vbjy8y5pg95cpvf5ixkkq53m7v3c24q473jax4ynvg";

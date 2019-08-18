@@ -13064,7 +13064,7 @@ in
       inherit stdenv fetchurl fetchFromGitHub makeSetupHook makeWrapper;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
-      harfbuzz = harfbuzzFull;
+      inherit harfbuzz;
       inherit libGL;
       inherit perl;
       inherit gtk3;
@@ -14293,8 +14293,8 @@ in
   perl530Packages = recurseIntoAttrs perl530.pkgs;
   perldevelPackages = perldevel.pkgs;
 
-  perl = perl528;
-  perlPackages = perl528Packages;
+  perl = perl530;
+  perlPackages = perl530Packages;
 
   ack = perlPackages.ack;
 
@@ -18998,7 +18998,7 @@ in
   inherit (kdeApplications)
     akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kcontacts kdenlive kdf kdialog
-    keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole
+    keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
@@ -19050,8 +19050,6 @@ in
     inherit (gnome2) libglade;
     ffmpeg = ffmpeg_2;
   };
-
-  kipi-plugins = libsForQt5.callPackage ../applications/graphics/kipi-plugins { };
 
   kitty = callPackage ../applications/misc/kitty {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
@@ -21590,10 +21588,6 @@ in
   yabar = callPackage ../applications/window-managers/yabar { };
 
   yabar-unstable = callPackage ../applications/window-managers/yabar/unstable.nix { };
-
-  yakuake = libsForQt5.callPackage ../applications/misc/yakuake {
-    inherit (kdeApplications) konsole;
-  };
 
   yarp = callPackage ../applications/science/robotics/yarp {};
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, acl, attr, zlib, libburn, libisofs }:
 
 stdenv.mkDerivation rec {
-  name = "libisoburn-${version}";
+  pname = "libisoburn";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "http://files.libburnia-project.org/releases/${name}.tar.gz";
+    url = "http://files.libburnia-project.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1r8xbhw21bmcp3jhfmvadivh0fa7f4k6larv8lvg4ka0kiigbhfs";
   };
 

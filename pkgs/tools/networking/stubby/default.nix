@@ -3,7 +3,6 @@
 
 stdenv.mkDerivation rec {
   pname = "stubby";
-  name = "${pname}-${version}";
   version = "0.2.6";
 
   src = fetchFromGitHub {

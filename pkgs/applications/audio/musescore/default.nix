@@ -5,7 +5,7 @@
 }:
 
 mkDerivation rec {
-  name = "musescore-${version}";
+  pname = "musescore";
   version = "3.0.5";
 
   src = fetchzip {

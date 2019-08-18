@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hjmd32pla27zf98ghzz6r5ml8ry86m9dsryv1z01kxv5l95b3m0";
   };
 
-  name = "XtreemFS-${version}";
+  pname = "XtreemFS";
   version = "1.5.1.81";
 
   buildInputs = [ which attr makeWrapper python ];

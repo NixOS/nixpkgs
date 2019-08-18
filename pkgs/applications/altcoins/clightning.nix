@@ -3,7 +3,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "clightning-${version}";
+  pname = "clightning";
   version = "0.7.1";
 
   src = fetchurl {

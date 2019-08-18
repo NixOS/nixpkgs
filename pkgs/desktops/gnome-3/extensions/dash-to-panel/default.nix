@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, glib, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-dash-to-panel-${version}";
+  pname = "gnome-shell-dash-to-panel";
   version = "19";
 
   src = fetchFromGitHub {

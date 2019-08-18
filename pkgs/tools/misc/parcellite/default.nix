@@ -3,7 +3,7 @@
 , which, wrapGAppsHook, xdotool }:
 
 stdenv.mkDerivation rec {
-  name = "parcellite-${version}";
+  pname = "parcellite";
   version = "1.2.1";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, google-fonts }:
 
 stdenv.mkDerivation rec {
-  name = "inconsolata-${version}";
+  pname = "inconsolata";
 
   inherit (google-fonts) src version;
 

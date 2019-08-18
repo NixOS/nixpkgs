@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, perl, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "ffcast-${version}";
+  pname = "ffcast";
   version = "2.5.0";
 
   src = fetchFromGitHub {

@@ -4,7 +4,7 @@
   qtbase, qttools }:
 
 stdenv.mkDerivation rec {
-  name = "solarus-${version}";
+  pname = "solarus";
   version = "1.6.0";
 
   src = fetchFromGitLab {

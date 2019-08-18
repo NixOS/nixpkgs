@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "go-ethereum-classic-${version}";
+  pname = "go-ethereum-classic";
   version = "4.0.0";
 
   goPackagePath = "github.com/ethereumproject/go-ethereum";

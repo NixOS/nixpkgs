@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libusb, libyubikey, json_c }:
 
 stdenv.mkDerivation rec {
-  name = "yubikey-personalization-${version}";
+  pname = "yubikey-personalization";
   version = "1.20.0";
 
   src = fetchurl {

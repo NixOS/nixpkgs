@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sbsigntool-${version}";
+  pname = "sbsigntool";
   version = "0.9.1";
 
   src = fetchgit {

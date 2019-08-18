@@ -6,7 +6,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "0.9.5_beta";
-  name = "srcml-${version}";
+  pname = "srcml";
 
   src = fetchurl {
     url = "http://www.sdml.cs.kent.edu/lmcrs/srcML-${version}-src.tar.gz";

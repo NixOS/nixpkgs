@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages }:
 
 stdenv.mkDerivation rec {
-  name = "facedetect-${version}";
+  pname = "facedetect";
   version = "0.1";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -v -m644 -D README.rst $out/share/doc/${name}/README.rst
+    install -v -m644 -D README.rst $out/share/doc/${pname}-${version}/README.rst
     install -v -m755 -D facedetect $out/bin/facedetect
     wrapPythonPrograms
   '';

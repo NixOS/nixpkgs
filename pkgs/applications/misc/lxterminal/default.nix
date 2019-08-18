@@ -5,7 +5,8 @@
 let version = "0.3.2"; in
 
 stdenv.mkDerivation rec {
-  name = "lxterminal-${version}";
+  pname = "lxterminal";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/lxde/lxterminal/archive/${version}.tar.gz";

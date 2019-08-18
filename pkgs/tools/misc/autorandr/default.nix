@@ -9,7 +9,8 @@ let
   version = "1.8.1";
 in
   stdenv.mkDerivation {
-    name = "autorandr-${version}";
+    pname = "autorandr";
+    inherit version;
 
     buildInputs = [ python ];
 

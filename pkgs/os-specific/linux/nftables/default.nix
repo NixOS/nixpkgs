@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.0";
-  name = "nftables-${version}";
+  pname = "nftables";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/nftables/files/${name}.tar.bz2";
+    url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.bz2";
     sha256 = "14bygs6vg2v448cw5r4pxqi8an29hw0m9vab8hpmgjmrzjsq30dd";
   };
 

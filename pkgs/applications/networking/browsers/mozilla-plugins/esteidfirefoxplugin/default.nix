@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.12.1.1142";
-  name = "esteidfirefoxplugin-${version}";
+  pname = "esteidfirefoxplugin";
 
   src = fetchurl {
     url = "https://installer.id.ee/media/ubuntu/pool/main/e/esteidfirefoxplugin/esteidfirefoxplugin_3.12.1.1142.orig.tar.xz";

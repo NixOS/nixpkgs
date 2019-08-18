@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   inherit version;
-  name = "vimpager-${version}";
+  pname = "vimpager";
 
   src = fetchFromGitHub {
     inherit sha256;

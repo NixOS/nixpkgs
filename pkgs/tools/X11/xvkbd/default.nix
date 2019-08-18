@@ -2,7 +2,7 @@
 , libXi, libXpm, xorgproto, gccmakedep, Xaw3d }:
 
 stdenv.mkDerivation rec {
-  name = "xvkbd-${version}";
+  pname = "xvkbd";
   version = "3.9";
   src = fetchurl {
     url = "http://t-sato.in.coocan.jp/xvkbd/xvkbd-3.9.tar.gz";

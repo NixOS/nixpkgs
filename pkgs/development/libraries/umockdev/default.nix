@@ -2,7 +2,7 @@
 , pkgconfig, glib, systemd, libgudev, vala }:
 
 stdenv.mkDerivation rec {
-  name = "umockdev-${version}";
+  pname = "umockdev";
   version = "0.12.1";
 
   outputs = [ "bin" "out" "dev" "doc" ];

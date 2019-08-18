@@ -10,7 +10,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "0.2.0";
-  name = "sailsd-${version}";
+  pname = "sailsd";
   src = fetchFromGitHub {
     owner = "sails-simulator";
     repo = "sailsd";

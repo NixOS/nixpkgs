@@ -19,7 +19,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnss-sdr-${version}";
+  pname = "gnss-sdr";
   version = "0.0.11";
 
   src = fetchFromGitHub {

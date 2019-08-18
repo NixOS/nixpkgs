@@ -2,7 +2,8 @@
 let
   version = "2018-12-06";
 in stdenv.mkDerivation rec {
-  name = "edid-decode-unstable-${version}";
+  pname = "edid-decode-unstable";
+  inherit version;
 
   src = fetchgit {
     url = "git://linuxtv.org/edid-decode.git";

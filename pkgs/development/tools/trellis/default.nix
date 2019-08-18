@@ -7,7 +7,7 @@ let
   boostWithPython3 = boost.override { python = python3; enablePython = true; };
 in
 stdenv.mkDerivation rec {
-  name = "trellis-${version}";
+  pname = "trellis";
   version = "2019.04.22";
 
   srcs = [

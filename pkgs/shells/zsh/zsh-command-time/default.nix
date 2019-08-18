@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   version = "2018-04-30";
-  name = "zsh-command-time-${version}";
+  pname = "zsh-command-time";
 
   src = fetchFromGitHub {
     owner = "popstas";

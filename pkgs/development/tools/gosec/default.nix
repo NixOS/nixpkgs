@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "gosec-${version}";
+  pname = "gosec";
   version = "1.2.0";
 
   goPackagePath = "github.com/securego/gosec";

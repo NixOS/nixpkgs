@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "restbed-${version}";
+  pname = "restbed";
   version = "2016-09-15";
 
   src = fetchFromGitHub {

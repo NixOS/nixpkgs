@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "geopandas";
   version = "0.5.1";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "geopandas";

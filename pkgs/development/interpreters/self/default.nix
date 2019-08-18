@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   #   $ Self -s myimage.snap
   #
   version = "4.5.0";
-  name = "self-${version}";
+  pname = "self";
 
   src = fetchgit {
     url    = "https://github.com/russellallen/self";

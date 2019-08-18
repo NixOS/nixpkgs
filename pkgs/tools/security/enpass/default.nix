@@ -42,7 +42,7 @@ let
   package = stdenv.mkDerivation rec {
 
     inherit (data) version;
-    name = "enpass-${version}";
+    pname = "enpass";
 
     src = fetchurl {
       inherit (data) sha256;

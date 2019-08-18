@@ -2,7 +2,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "teamviewer-${version}";
+  pname = "teamviewer";
   version = "14.4.2669";
 
   src = fetchurl {

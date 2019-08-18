@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   version = "0.5.3-2016-09-28";
-  name = "tempita-${version}";
+  pname = "tempita";
 
   src = fetchFromGitHub {
     owner = "gjhiggins";

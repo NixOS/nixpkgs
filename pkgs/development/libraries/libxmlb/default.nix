@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, libuuid, gobject-introspection, gtk-doc, shared-mime-info, python3, docbook_xsl, docbook_xml_dtd_43 }:
 
 stdenv.mkDerivation rec {
-  name = "libxmlb-${version}";
+  pname = "libxmlb";
   version = "0.1.10";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];

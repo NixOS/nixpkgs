@@ -14,10 +14,10 @@ assert withGmp -> gmp != null;
 
 stdenv.mkDerivation rec {
   version = "4.65";
-  name = "glpk-${version}";
+  pname = "glpk";
 
   src = fetchurl {
-    url = "mirror://gnu/glpk/${name}.tar.gz";
+    url = "mirror://gnu/glpk/${pname}-${version}.tar.gz";
     sha256 = "040sfaa9jclg2nqdh83w71sv9rc1sznpnfiripjdyr48cady50a2";
   };
 

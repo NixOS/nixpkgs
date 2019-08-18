@@ -37,7 +37,7 @@ let
     xorg.libXScrnSaver
   ];
 in stdenv.mkDerivation rec {
-  name = "react-native-debugger-${version}";
+  pname = "react-native-debugger";
   version = "0.9.10";
 
   src = fetchurl {

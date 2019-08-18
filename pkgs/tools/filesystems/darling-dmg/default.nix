@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, fuse, zlib, bzip2, openssl, libxml2, icu } :
 
 stdenv.mkDerivation rec {
-  name = "darling-dmg-${version}";
+  pname = "darling-dmg";
   version = "1.0.4";
 
   src = fetchFromGitHub {

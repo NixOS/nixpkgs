@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.2.1";
-  name = "glfw-${version}";
+  pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "9.600.5";
-  name = "armadillo-${version}";
+  pname = "armadillo";
 
   src = fetchurl {
     url = "mirror://sourceforge/arma/armadillo-${version}.tar.xz";

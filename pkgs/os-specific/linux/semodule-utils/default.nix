@@ -1,13 +1,13 @@
 { stdenv, fetchurl, libsepol }:
 
 stdenv.mkDerivation rec {
-  name = "semodule-utils-${version}";
+  pname = "semodule-utils";
   version = "2.7";
 
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
-    url = "${se_url}/${se_release}/${name}.tar.gz";
+    url = "${se_url}/${se_release}/${pname}-${version}.tar.gz";
     sha256 = "1fl60x4w8rn5bcwy68sy48aydwsn1a17d48slni4sfx4c8rqpjch";
   };
 

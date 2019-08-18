@@ -13,8 +13,6 @@
 }:
 
 buildPythonPackage rec {
-
-  name = "${pname}-${version}";
   pname = "Pyro4";
   version = "4.75";
 

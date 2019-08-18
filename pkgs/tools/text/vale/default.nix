@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "vale-${version}";
+  pname = "vale";
   version = "1.4.3";
 
   goPackagePath = "github.com/errata-ai/vale";

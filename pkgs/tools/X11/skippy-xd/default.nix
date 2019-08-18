@@ -9,7 +9,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "git-2015-03-01";
-  name = "skippy-xd-${version}";
+  pname = "skippy-xd";
   inherit buildInputs;
   src = fetchgit {
     url = "https://github.com/richardgv/skippy-xd/";

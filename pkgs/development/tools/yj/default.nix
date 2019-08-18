@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
 
 buildGoPackage rec {
-  name = "yj-${version}";
+  pname = "yj";
   version = "4.0.0";
   rev = "d9a48607cc5c812e8cf4abccc8ad26f37ab51558";
 

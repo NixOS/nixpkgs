@@ -2,7 +2,7 @@
 , darwin }:
 
 stdenv.mkDerivation rec {
-  name = "wxsqlite3-${version}";
+  pname = "wxsqlite3";
   version = "3.3.1";
 
   src = fetchFromGitHub {

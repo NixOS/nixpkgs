@@ -2,7 +2,6 @@
 , gmp, mpfr
 }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "fplll";
   version = "5.2.1";
   src = fetchFromGitHub {

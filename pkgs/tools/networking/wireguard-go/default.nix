@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchzip }:
 
 buildGoPackage rec {
-  name = "wireguard-go-${version}";
+  pname = "wireguard-go";
   version = "0.0.20190517";
 
   goPackagePath = "git.zx2c4.com/wireguard-go";

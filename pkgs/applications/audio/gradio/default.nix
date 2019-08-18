@@ -19,7 +19,8 @@ let
   version = "7.2";
 
 in stdenv.mkDerivation rec {
-  name = "gradio-${version}";
+  pname = "gradio";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "haecker-felix";

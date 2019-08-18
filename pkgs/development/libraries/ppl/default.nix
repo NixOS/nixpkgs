@@ -3,7 +3,8 @@
 let version = "1.2"; in
 
 stdenv.mkDerivation rec {
-  name = "ppl-${version}";
+  pname = "ppl";
+  inherit version;
 
   src = fetchurl {
     url = "http://bugseng.com/products/ppl/download/ftp/releases/${version}/ppl-${version}.tar.bz2";

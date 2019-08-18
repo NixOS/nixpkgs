@@ -2,7 +2,6 @@
 
 with python2Packages;
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   version = "0.3.1";
   pname = "nbstripout";
 

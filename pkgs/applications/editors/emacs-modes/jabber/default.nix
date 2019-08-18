@@ -2,9 +2,8 @@
 stdenv.mkDerivation rec {
   pname  = "emacs-jabber";
   version = "0.8.0";
-  name = "${pname}-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "75e3b7853de4783b8ab8270dcbe6a1e4f576224f77f7463116532e11c6498c26";
   };
   buildInputs = [ emacs ];

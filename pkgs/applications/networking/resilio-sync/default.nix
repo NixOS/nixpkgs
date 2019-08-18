@@ -8,7 +8,7 @@ let
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
 
 in stdenv.mkDerivation rec {
-  name = "resilio-sync-${version}";
+  pname = "resilio-sync";
   version = "2.6.3";
 
   src = fetchurl {

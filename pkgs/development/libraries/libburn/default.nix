@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libburn-${version}";
+  pname = "libburn";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "http://files.libburnia-project.org/releases/${name}.tar.gz";
+    url = "http://files.libburnia-project.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1gg2kgnqvaa2fwghai62prxz6slpak1f6bvgjh8m4dn16v114asq";
   };
 

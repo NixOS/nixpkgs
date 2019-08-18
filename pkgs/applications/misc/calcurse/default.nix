@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "calcurse-${version}";
+  pname = "calcurse";
   version = "4.5.0";
 
   src = fetchurl {
-    url = "https://calcurse.org/files/${name}.tar.gz";
+    url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
     sha256 = "1vjwcmp51h7dsvwn0qx93w9chp3wp970v7d9mjhk7jyamcbfywn3";
   };
 

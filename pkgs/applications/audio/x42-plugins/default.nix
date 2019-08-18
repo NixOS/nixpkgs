@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   version = "20190714";
-  name = "x42-plugins-${version}";
+  pname = "x42-plugins";
 
   src = fetchurl {
-    url = "https://gareus.org/misc/x42-plugins/${name}.tar.xz";
+    url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
     sha256 = "1mifmdy9pi1lg0h4nsvyjjnnni41vhgg34lks94mrx46wq90bgx4";
   };
 

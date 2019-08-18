@@ -1,11 +1,11 @@
 { stdenv, libX11, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "worker-${version}";
+  pname = "worker";
   version = "4.0.0";
 
   src = fetchurl {
-    url = "http://www.boomerangsworld.de/cms/worker/downloads/${name}.tar.gz";
+    url = "http://www.boomerangsworld.de/cms/worker/downloads/${pname}-${version}.tar.gz";
     sha256 = "0cs1sq7zpp787r1irhqk5pmxa26rjz55mbgda4823z9zkzwfxy19";
   };
 

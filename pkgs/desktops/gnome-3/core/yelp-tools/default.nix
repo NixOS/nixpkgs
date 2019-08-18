@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libxml2, libxslt, itstool, gnome3, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "yelp-tools-${version}";
+  pname = "yelp-tools";
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/yelp-tools/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/yelp-tools/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1yg8f5g5wadhmy4yfd9yjhvd8vll4gq4l86ibp0b42qbxnsmcf0q";
   };
 

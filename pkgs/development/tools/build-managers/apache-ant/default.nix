@@ -3,7 +3,8 @@
 let version = "1.10.2"; in
 
 stdenv.mkDerivation {
-  name = "ant-${version}";
+  pname = "ant";
+  inherit version;
 
   buildInputs = [ makeWrapper ];
 

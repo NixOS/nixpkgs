@@ -10,7 +10,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "rhino-${version}";
+  pname = "rhino";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://mozilla/js/rhino1_7R2.zip";

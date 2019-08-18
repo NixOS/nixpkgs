@@ -17,7 +17,6 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   pname = "osxfuse";
   inherit version;

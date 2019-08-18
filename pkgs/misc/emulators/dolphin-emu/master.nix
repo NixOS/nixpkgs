@@ -19,7 +19,7 @@ let
     startupNotify = "false";
   };
 in stdenv.mkDerivation rec {
-  name = "dolphin-emu-${version}";
+  pname = "dolphin-emu";
   version = "5.0-10751";
 
   src = fetchFromGitHub {

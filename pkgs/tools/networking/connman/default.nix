@@ -3,10 +3,10 @@
   wpa_supplicant, readline6, pptp, ppp }:
 
 stdenv.mkDerivation rec {
-  name = "connman-${version}";
+  pname = "connman";
   version = "1.37";
   src = fetchurl {
-    url = "mirror://kernel/linux/network/connman/${name}.tar.xz";
+    url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
     sha256 = "05kfjiqhqfmbbwc4snnyvi5hc4zxanac62f6gcwaf5mvn0z9pqkc";
   };
 

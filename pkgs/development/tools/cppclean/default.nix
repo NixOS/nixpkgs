@@ -3,7 +3,7 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "cppclean-unstable-${version}";
+  pname = "cppclean-unstable";
   version = "2018-05-12";
 
   src = fetchFromGitHub {

@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "maim-${version}";
+  pname = "maim";
   version = "5.5.3";
 
   src = fetchFromGitHub {

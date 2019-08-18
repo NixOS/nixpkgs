@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.3.6";
-  name = "adms-${version}";
+  pname = "adms";
 
   src = fetchFromGitHub {
     owner = "Qucs";

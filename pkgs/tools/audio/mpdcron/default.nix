@@ -8,7 +8,7 @@ let
   };
 in stdenv.mkDerivation rec {
   version = "20161228";
-  name    = "mpdcron-${version}";
+  pname = "mpdcron";
 
   src = fetchFromGitHub {
     owner = "alip";

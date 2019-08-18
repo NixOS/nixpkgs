@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "ltwheelconf";
   version = "0.2.7";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "thk";

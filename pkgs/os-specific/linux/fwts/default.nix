@@ -2,7 +2,7 @@
 , json_c, flex, bison, dtc, pciutils, dmidecode, iasl, libbsd }:
 
 stdenv.mkDerivation rec {
-  name = "fwts-${version}";
+  pname = "fwts";
   version = "19.07.00";
 
   src = fetchzip {

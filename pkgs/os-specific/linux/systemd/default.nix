@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   version = "242";
-  name = "systemd-${version}";
+  pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.

@@ -2,7 +2,7 @@
 fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "oysttyer-${version}";
+  pname = "oysttyer";
   version = "2.10.0";
 
   src = fetchFromGitHub {

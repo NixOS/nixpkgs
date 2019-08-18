@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.12-2";
-  name = "axoloti-${version}";
+  pname = "axoloti";
 
   src = fetchFromGitHub {
     owner = "axoloti";

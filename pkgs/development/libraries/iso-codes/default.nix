@@ -1,11 +1,11 @@
 {stdenv, fetchurl, gettext, python3}:
 
 stdenv.mkDerivation rec {
-  name = "iso-codes-${version}";
+  pname = "iso-codes";
   version = "3.79";
 
   src = fetchurl {
-    url = "https://salsa.debian.org/iso-codes-team/iso-codes/uploads/ef8de8bc12e0512d26ed73436a477871/${name}.tar.xz";
+    url = "https://salsa.debian.org/iso-codes-team/iso-codes/uploads/ef8de8bc12e0512d26ed73436a477871/${pname}-${version}.tar.xz";
     sha256 = "08i8hjy0qjlw9kd9i87jx967ihwh45l2xi55q1aa5265sind7byb";
   };
 

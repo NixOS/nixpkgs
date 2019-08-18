@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "avocode-${version}";
+  pname = "avocode";
   version = "3.9.0";
 
   src = fetchurl {

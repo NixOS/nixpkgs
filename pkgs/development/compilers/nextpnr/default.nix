@@ -26,7 +26,7 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  name = "nextpnr-${version}";
+  pname = "nextpnr";
   version = "2019.04.19";
 
   src = fetchFromGitHub {

@@ -6,7 +6,8 @@ let
   version = "13.14-169-g0d3569d";      # git describe --tags
 in
 stdenv.mkDerivation {
-  name = "haskell-mode-${version}";
+  pname = "haskell-mode";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "haskell";

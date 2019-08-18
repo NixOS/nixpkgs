@@ -4,7 +4,8 @@ let
   version = "20130503";
 in
 stdenv.mkDerivation rec {
-  name = "prelink-${version}";
+  pname = "prelink";
+  inherit version;
 
   buildInputs = [
     libelf stdenv.cc.libc (stdenv.lib.getOutput "static" stdenv.cc.libc)

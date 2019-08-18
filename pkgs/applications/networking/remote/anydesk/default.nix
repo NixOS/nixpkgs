@@ -26,11 +26,11 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "anydesk-${version}";
+  pname = "anydesk";
   version = "4.0.1";
 
   src = fetchurl {
-    url = "https://download.anydesk.com/linux/${name}-${arch}.tar.gz";
+    url = "https://download.anydesk.com/linux/${pname}-${version}-${arch}.tar.gz";
     inherit sha256;
   };
 

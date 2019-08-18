@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "nano-wallet-${version}";
+  pname = "nano-wallet";
   version = "18.0";
 
   src = fetchFromGitHub {

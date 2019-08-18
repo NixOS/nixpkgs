@@ -24,7 +24,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "megasync-${version}";
+  pname = "megasync";
   version = "4.1.1.0";
 
   src = fetchFromGitHub {

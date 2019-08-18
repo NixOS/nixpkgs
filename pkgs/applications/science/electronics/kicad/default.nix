@@ -26,7 +26,7 @@ let
   } // attrs);
 
 in stdenv.mkDerivation rec {
-  name = "kicad-${version}";
+  pname = "kicad";
   series = "5.0";
   version = "5.1.2";
 

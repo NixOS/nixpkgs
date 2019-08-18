@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "libunistring-${version}";
+  pname = "libunistring";
   version = "0.9.10";
 
   src = fetchurl {
-    url = "mirror://gnu/libunistring/${name}.tar.gz";
+    url = "mirror://gnu/libunistring/${pname}-${version}.tar.gz";
     sha256 = "02v17za10mxnj095x4pvm80jxyqwk93kailfc2j8xa1r6crmnbm8";
   };
 

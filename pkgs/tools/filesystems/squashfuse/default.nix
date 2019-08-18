@@ -7,7 +7,6 @@ stdenv.mkDerivation rec {
 
   pname = "squashfuse";
   version = "0.1.103";
-  name = "${pname}-${version}";
 
   meta = {
     description = "FUSE filesystem to mount squashfs archives";

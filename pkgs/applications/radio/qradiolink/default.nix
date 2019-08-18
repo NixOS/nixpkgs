@@ -8,7 +8,8 @@ let
   version = "0.5.0";
 
 in stdenv.mkDerivation {
-  name = "qradiolink-${version}";
+  pname = "qradiolink";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "kantooon";

@@ -14,10 +14,10 @@ let
     categories = "Application;Utility;";
   };
 in mkDerivation rec {
-  name = "golden-cheetah-${version}";
+  pname = "golden-cheetah";
   version = "3.4";
   src = fetchurl {
-    name = "${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
     url = "https://github.com/GoldenCheetah/GoldenCheetah/archive/V${version}.tar.gz";
     sha256 = "0fiz2pj155cd357kph50lc6rjyzwp045glfv4y68qls9j7m9ayaf";
   };

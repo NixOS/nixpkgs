@@ -36,7 +36,7 @@
 let
   optional = stdenv.lib.optional;
 in mkDerivation rec {
-  name = "obs-studio-${version}";
+  pname = "obs-studio";
   version = "23.2.1";
 
   src = fetchFromGitHub {

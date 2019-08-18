@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec
 {
-  name = "openexrid-unstable-${version}";
+  pname = "openexrid-unstable";
   version = "2017-09-17";
 
   src = fetchFromGitHub {

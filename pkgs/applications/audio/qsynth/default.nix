@@ -1,11 +1,11 @@
 { stdenv, fetchurl, alsaLib, fluidsynth, libjack2, qt5, autoconf, pkgconfig }:
 
 stdenv.mkDerivation  rec {
-  name = "qsynth-${version}";
+  pname = "qsynth";
   version = "0.5.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qsynth/${name}.tar.gz";
+    url = "mirror://sourceforge/qsynth/${pname}-${version}.tar.gz";
     sha256 = "18im4w8agj60nkppwbkxqnhpp13z5li3w30kklv4lgs20rvgbvl6";
   };
 

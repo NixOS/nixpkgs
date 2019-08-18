@@ -3,7 +3,8 @@ let
   version = "0.6.0";
 in
 stdenv.mkDerivation {
-  name = "oil-${version}";
+  pname = "oil";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";

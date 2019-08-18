@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "theme-obsidian2-${version}";
+  pname = "theme-obsidian2";
   version = "2.8";
 
   src = fetchFromGitHub {

@@ -65,11 +65,11 @@ assert openglSupport -> libGLU_combined != null;
 
 stdenv.mkDerivation rec {
 
-  name = "ffmpeg-${version}";
+  pname = "ffmpeg";
   inherit version;
 
   src = fetchurl {
-    url = "https://www.ffmpeg.org/releases/${name}.tar.bz2";
+    url = "https://www.ffmpeg.org/releases/${pname}-${version}.tar.bz2";
     inherit sha256;
   };
 

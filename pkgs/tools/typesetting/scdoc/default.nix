@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "scdoc-${version}";
+  pname = "scdoc";
   version = "1.9.6";
 
   src = fetchurl {

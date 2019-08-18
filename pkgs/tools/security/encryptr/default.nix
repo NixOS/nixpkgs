@@ -14,7 +14,7 @@ let
     else throw "Encryptr for ${stdenv.hostPlatform.system} not supported!";
 
 in stdenv.mkDerivation rec {
-  name = "encryptr-${version}";
+  pname = "encryptr";
   version = "2.0.0";
 
   src = fetchurl {

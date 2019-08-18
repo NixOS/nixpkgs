@@ -17,9 +17,9 @@ let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
   version = "1.10.5";
-  name = "hdf5-${version}";
+  pname = "hdf5";
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${pname}-${version}/src/${pname}-${version}.tar.bz2";
     sha256 = "0i3g6v521vigzbx8wpd32ibsiiw92r65ca3qdbn0d8fj8f4fmmk8";
   };
 

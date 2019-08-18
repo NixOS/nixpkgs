@@ -18,7 +18,7 @@ let
   };
 in buildGoPackage rec {
   version = "1.47.0";
-  name = "gitaly-${version}";
+  pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";

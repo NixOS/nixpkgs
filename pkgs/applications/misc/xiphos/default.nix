@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xiphos-${version}";
+  pname = "xiphos";
   version = "4.0.7";
 
   src = fetchFromGitHub {

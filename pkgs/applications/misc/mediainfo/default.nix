@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "19.04";
-  name = "mediainfo-${version}";
+  pname = "mediainfo";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
     sha256 = "11wag23gx7nprrm1qlgvbc83rs9zxdsshqrp98zwia80xh8c9bk5";

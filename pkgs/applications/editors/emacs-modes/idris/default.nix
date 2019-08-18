@@ -1,7 +1,6 @@
 { stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "idris-mode";
   version = "0.9.18";
 

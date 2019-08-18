@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.6";
-  name = "lambda-term-${version}";
+  pname = "lambda-term";
 
   src = fetchurl {
     url = https://github.com/diml/lambda-term/archive/1.6.tar.gz;

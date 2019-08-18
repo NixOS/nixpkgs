@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.0.1";
-  name = "ecdsatool-${version}";
+  pname = "ecdsatool";
 
   src = pkgs.fetchFromGitHub {
     owner = "kaniini";

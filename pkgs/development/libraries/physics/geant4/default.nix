@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation rec {
   version = "10.4.1";
-  name = "geant4-${version}";
+  pname = "geant4";
 
   src = fetchurl{
     url = "http://cern.ch/geant4-data/releases/geant4.10.04.p01.tar.gz";

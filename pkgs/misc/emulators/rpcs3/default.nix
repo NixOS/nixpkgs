@@ -10,7 +10,7 @@ let
   gitVersion = "8187-790962425"; # echo $(git rev-list HEAD --count)-$(git rev-parse --short HEAD)
 in
 stdenv.mkDerivation rec {
-  name = "rpcs3-${version}";
+  pname = "rpcs3";
   version = "${majorVersion}-${gitVersion}";
 
   src = fetchgit {

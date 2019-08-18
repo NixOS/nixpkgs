@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "theme-jade1-${version}";
+  pname = "theme-jade1";
   version = "3.3";
 
   src = fetchFromGitHub {

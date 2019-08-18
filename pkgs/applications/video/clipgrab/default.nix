@@ -4,13 +4,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "clipgrab-${version}";
+  pname = "clipgrab";
   version = "3.8.3";
 
   src = fetchurl {
     sha256 = "1v8vvlqgjqy3gyzwaz9iq0m4fwlkimy5gzg6z3bqwp61p9zzw0zf";
     # The .tar.bz2 "Download" link is a binary blob, the source is the .tar.gz!
-    url = "https://download.clipgrab.org/${name}.tar.gz";
+    url = "https://download.clipgrab.org/${pname}-${version}.tar.gz";
   };
 
   buildInputs = [ ffmpeg qtbase qtdeclarative qtlocation qtquickcontrols2 qtwebchannel qtwebengine ];

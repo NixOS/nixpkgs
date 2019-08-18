@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
-  name = "openfire-${version}";
+  pname = "openfire";
   version  = "3_6_3";
 
   src = fetchurl {

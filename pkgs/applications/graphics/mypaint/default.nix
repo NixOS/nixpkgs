@@ -4,7 +4,7 @@
 let
   inherit (python2Packages) python pycairo pygobject3 numpy;
 in stdenv.mkDerivation rec {
-  name = "mypaint-${version}";
+  pname = "mypaint";
   version = "1.2.1";
 
   src = fetchFromGitHub {

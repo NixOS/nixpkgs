@@ -64,7 +64,8 @@ let
       };
     in
       stdenv.mkDerivation rec {
-        name = "hadoop-${version}";
+        pname = "hadoop";
+        inherit version;
 
         src = binary-distributon;
 

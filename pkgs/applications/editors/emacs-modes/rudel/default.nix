@@ -5,7 +5,8 @@ let
 in
 stdenv.mkDerivation
 {
-  name = "rudel-${version}";
+  pname = "rudel";
+  inherit version;
   src = fetchurl
   {
     url = "mirror://sourceforge/rudel/rudel-${version}.tar.gz";

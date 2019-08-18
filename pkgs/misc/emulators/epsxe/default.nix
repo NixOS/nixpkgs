@@ -4,7 +4,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "epsxe-${version}";
+  pname = "epsxe";
   version = "2.0.5";
 
   src = let

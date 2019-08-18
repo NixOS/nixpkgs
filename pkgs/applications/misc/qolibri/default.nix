@@ -2,7 +2,7 @@
 , qtmultimedia, qttools, qtwebengine }:
 
 stdenv.mkDerivation rec {
-  name = "qolibri-${version}";
+  pname = "qolibri";
   version = "2018-11-14";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "cimg-${version}";
+  pname = "cimg";
   version = "2.6.7";
 
   src = fetchurl {

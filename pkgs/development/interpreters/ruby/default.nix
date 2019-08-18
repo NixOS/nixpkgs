@@ -46,7 +46,8 @@ let
       , libiconv, libobjc, libunwind, Foundation
       }:
       stdenv.mkDerivation rec {
-        name = "ruby-${version}";
+        pname = "ruby";
+        inherit version;
 
         src = if useRailsExpress then fetchFromGitHub {
           owner  = "ruby";

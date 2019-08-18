@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "nvme-cli-${version}";
+  pname = "nvme-cli";
   version = "1.8.1";
 
   src = fetchFromGitHub {

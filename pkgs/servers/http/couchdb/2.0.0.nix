@@ -2,13 +2,13 @@
 , coreutils, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "couchdb-${version}";
+  pname = "couchdb";
   version = "2.3.0";
 
   # when updating this, please consider bumping the OTP version
   # in all-packages.nix
   src = fetchurl {
-    url = "mirror://apache/couchdb/source/${version}/apache-${name}.tar.gz";
+    url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
     sha256 = "0lpk64n6fip85j1jz59kq20jdliwv6mh8j2h5zyxjn5i8b86hf0b";
   };
 

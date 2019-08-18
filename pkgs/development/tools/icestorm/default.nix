@@ -10,7 +10,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "icestorm-${version}";
+  pname = "icestorm";
   version = "2019.04.16";
 
   src = fetchFromGitHub {

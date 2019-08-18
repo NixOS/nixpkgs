@@ -3,11 +3,11 @@
 , meson, ninja, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "lightsoff-${version}";
+  pname = "lightsoff";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0vc3ibjs9ynnm0gxlhhin7jpnsx22vnn4ygaybxwmv9w2q49cs9f";
   };
 

@@ -4,7 +4,8 @@ let
   version = "0.8";
 in
 stdenv.mkDerivation rec {
-  name = "pidgin-xmpp-receipts-${version}";
+  pname = "pidgin-xmpp-receipts";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "noonien-d";

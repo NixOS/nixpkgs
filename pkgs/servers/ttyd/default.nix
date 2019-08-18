@@ -17,7 +17,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "ttyd-${version}";
+  pname = "ttyd";
   version = "1.4.2_pre${toString revCount}_${substring 0 8 src.rev}";
   inherit src;
 

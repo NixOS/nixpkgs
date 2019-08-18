@@ -2,7 +2,7 @@
 , glib, i2c-tools, udev, libgudev, libusb, libdrm, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "ddcutil-${version}";
+  pname = "ddcutil";
   version = "0.9.5";
 
   src = fetchFromGitHub {

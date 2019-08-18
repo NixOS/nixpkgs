@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libndctl-${version}";
+  pname = "libndctl";
   version = "65";
 
   src = fetchFromGitHub {

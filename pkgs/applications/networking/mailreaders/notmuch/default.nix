@@ -13,15 +13,15 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "0.28.4"; # not really, git
-  name = "notmuch-${version}";
+  pname = "notmuch";
 
   passthru = {
-    pythonSourceRoot = "${name}/bindings/python";
+    pythonSourceRoot = "${pname}-${version}/bindings/python";
     inherit version;
   };
 
   src = fetchurl {
-    url = "https://notmuchmail.org/releases/${name}.tar.gz";
+    url = "https://notmuchmail.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1jjnhs4xs4gksvg0a9qn68rxrj41im5bh58snka2pkj20nxwmcds";
   };
 

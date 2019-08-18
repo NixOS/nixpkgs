@@ -24,11 +24,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gnucash-${version}";
+  pname = "gnucash";
   version = "3.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
+    url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
     sha256 = "09azp17ghn7i8kwk0ci3gq0qkn5pvbknhf1cbk7v43mvc3g8djzi";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     rm $out/bin/gnucash-valgrind
 
     wrapProgram "$out/bin/gnucash" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${name}" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}" \
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
       --prefix PERL5LIB ":" "$PERL5LIB" \
       --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "vultr-${version}";
+  pname = "vultr";
   version = "1.15.0";
   goPackagePath = "github.com/JamesClonk/vultr";
 

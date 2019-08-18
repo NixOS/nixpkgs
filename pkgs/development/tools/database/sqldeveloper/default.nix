@@ -16,7 +16,7 @@ in
   stdenv.mkDerivation rec {
 
   inherit version;
-  name = "sqldeveloper-${version}";
+  pname = "sqldeveloper";
 
   src = requireFile rec {
     name = "sqldeveloper-${version}-no-jre.zip";

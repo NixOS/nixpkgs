@@ -18,7 +18,7 @@
 # rm gemset.nix Gemfile.lock; nix-shell -p bundler bundix --run 'bundle lock && bundix'
 
 stdenv.mkDerivation rec {
-  name = "mikutter-${version}";
+  pname = "mikutter";
   version = "3.8.7";
 
   src = fetchurl {

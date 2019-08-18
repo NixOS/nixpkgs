@@ -6,7 +6,7 @@
 with pythonPackages;
 
 stdenv.mkDerivation rec {
-  name = "renpy-${version}";
+  pname = "renpy";
   version = "7.3.2";
 
   meta = with stdenv.lib; {

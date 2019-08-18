@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "shncpd-${version}";
+  pname = "shncpd";
   version = "2016-06-22";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, ncurses, libcap_ng }:
 
 stdenv.mkDerivation rec {
-  name = "irqbalance-${version}";
+  pname = "irqbalance";
   version = "1.6.0";
 
   src = fetchFromGitHub {

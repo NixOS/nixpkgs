@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   version = "6.3.2";
-  name = "grafana-${version}";
+  pname = "grafana";
   goPackagePath = "github.com/grafana/grafana";
 
   excludedPackages = [ "release_publisher" ];

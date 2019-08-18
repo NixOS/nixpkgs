@@ -6,11 +6,11 @@
 , libogg, libvorbis, libcaca, csound, cunit } :
 
 stdenv.mkDerivation rec {
-  name = "liquidwar6-${version}";
+  pname = "liquidwar6";
   version = "0.6.3902";
 
   src = fetchurl {
-    url = "mirror://gnu/liquidwar6/${name}.tar.gz";
+    url = "mirror://gnu/liquidwar6/${pname}-${version}.tar.gz";
     sha256 = "1976nnl83d8wspjhb5d5ivdvdxgb8lp34wp54jal60z4zad581fn";
   };
 

@@ -4,7 +4,7 @@
 let
   inherit (gst_all_1) gstreamer gst-plugins-base;
 in stdenv.mkDerivation rec {
-  name = "gtkd-${version}";
+  pname = "gtkd";
   version = "3.8.5";
 
   src = fetchzip {

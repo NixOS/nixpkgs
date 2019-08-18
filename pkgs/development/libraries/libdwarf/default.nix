@@ -17,7 +17,8 @@ let
 
 in rec {
   libdwarf = stdenv.mkDerivation rec {
-    name = "libdwarf-${version}";
+    pname = "libdwarf";
+    inherit version;
 
     configureFlags = [ "--enable-shared" "--disable-nonshared" ];
 
@@ -37,7 +38,8 @@ in rec {
   };
 
   dwarfdump = stdenv.mkDerivation rec {
-    name = "dwarfdump-${version}";
+    pname = "dwarfdump";
+    inherit version;
 
     preConfigure = ''
       cd dwarfdump

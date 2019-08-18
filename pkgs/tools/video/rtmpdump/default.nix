@@ -10,7 +10,7 @@ assert opensslSupport -> openssl != null && !gnutlsSupport;
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "rtmpdump-${version}";
+  pname = "rtmpdump";
   version = "2015-12-30";
 
   src = fetchgit {

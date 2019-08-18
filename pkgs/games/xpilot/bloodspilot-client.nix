@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.5.0";
-  name = "bloodspilot-client-${version}";
+  pname = "bloodspilot-client";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/bloodspilot/client-sdl/v${version}/bloodspilot-client-sdl-${version}.tar.gz";

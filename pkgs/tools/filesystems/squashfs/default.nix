@@ -7,7 +7,7 @@
 assert lz4Support -> (lz4 != null);
 
 stdenv.mkDerivation rec {
-  name = "squashfs-${version}";
+  pname = "squashfs";
   version = "4.4dev_20180612";
 
   src = fetchFromGitHub {

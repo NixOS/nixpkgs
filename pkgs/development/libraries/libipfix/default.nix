@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libipfix-${version}";
+  pname = "libipfix";
   version = "110209";
   src = fetchurl {
     url = "mirror://sourceforge/libipfix/files/libipfix/libipfix_110209.tgz";

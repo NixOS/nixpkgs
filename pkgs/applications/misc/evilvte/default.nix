@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "evilvte-${version}";
+  pname = "evilvte";
   version = "0.5.2-20140827";
 
   src = fetchgit {

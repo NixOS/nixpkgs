@@ -45,7 +45,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "racket-${version}";
+  pname = "racket";
   version = "7.3"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       inherit sha256;
     }
   )) {
-    inherit name;
+    inherit ;name = "${pname}-${version}";
     sha256 = "0h6072njhb87rkz4arijvahxgjzn8r14s4wns0ijvxm89bg136yl";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, which, procps, kbd }:
 
 stdenv.mkDerivation rec {
-  name = "logkeys-${version}";
+  pname = "logkeys";
   version = "2018-01-22";
 
   src = fetchFromGitHub {

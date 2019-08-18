@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, popt, libuuid, liburcu, lttng-ust, kmod, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "lttng-tools-${version}";
+  pname = "lttng-tools";
   version = "2.10.7";
 
   src = fetchurl {
-    url = "https://lttng.org/files/lttng-tools/${name}.tar.bz2";
+    url = "https://lttng.org/files/lttng-tools/${pname}-${version}.tar.bz2";
     sha256 = "04hkga0hnyjmv42mxj3njaykqmq9x4abd5qfyds5r62x1khfnwgd";
   };
 

@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "looking-glass-client-${version}";
+  pname = "looking-glass-client";
   version = "a12";
 
   src = fetchFromGitHub {

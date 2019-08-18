@@ -5,7 +5,8 @@ let
   version = "2.5.1";
 in
 stdenv.mkDerivation {
-  name = "rebar-${version}";
+  pname = "rebar";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/rebar/rebar/archive/${version}.tar.gz";

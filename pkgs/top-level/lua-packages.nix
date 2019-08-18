@@ -132,7 +132,7 @@ with self; {
   };
 
   vicious = toLuaModule(stdenv.mkDerivation rec {
-    name = "vicious-${version}";
+    pname = "vicious";
     version = "2.3.1";
 
     src = fetchFromGitHub {

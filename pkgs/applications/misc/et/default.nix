@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, libnotify, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = "et-${version}";
+  pname = "et";
   version = "0.1.1";
 
   src = fetchFromGitHub {

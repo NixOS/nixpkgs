@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2016-09-30";
-  name = "xcwd-${version}";
+  pname = "xcwd";
 
   src = fetchFromGitHub {
     owner   = "schischi";

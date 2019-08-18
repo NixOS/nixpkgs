@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec { 
   version = "1.0";
-  name = "makerpm-${version}";
+  pname = "makerpm";
 
   installPhase = ''
     mkdir -p $out/bin

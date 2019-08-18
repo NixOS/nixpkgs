@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.19";
-  name = "arping-${version}";
+  pname = "arping";
 
   buildInputs = [ libnet libpcap ];
 

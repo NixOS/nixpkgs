@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, go, gox, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  name = "vault-${version}";
+  pname = "vault";
   version = "1.1.3";
 
   src = fetchFromGitHub {

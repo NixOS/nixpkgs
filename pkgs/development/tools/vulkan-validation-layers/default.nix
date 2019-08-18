@@ -2,7 +2,7 @@
 , vulkan-headers, vulkan-loader, glslang
 , pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
 stdenv.mkDerivation rec {
-  name = "vulkan-validation-layers-${version}";
+  pname = "vulkan-validation-layers";
   version = "1.1.106.0"; # WARNING: glslang overrides in all-packages.nix must be updated to match known-good.json!
 
   src = fetchFromGitHub {

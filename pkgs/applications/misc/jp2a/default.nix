@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.7";
-  name = "jp2a-${version}";
+  pname = "jp2a";
 
   src = fetchFromGitHub {
     owner = "cslarsen";

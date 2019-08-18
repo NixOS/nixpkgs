@@ -8,7 +8,7 @@ let optional = stdenv.lib.optional;
 in
 
 stdenv.mkDerivation rec {
-  name = "supercollider-${version}";
+  pname = "supercollider";
   version = "3.10.2";
 
 

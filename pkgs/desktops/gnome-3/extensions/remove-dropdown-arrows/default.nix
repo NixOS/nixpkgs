@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-remove-dropdown-arrows-${version}";
+  pname = "gnome-shell-extension-remove-dropdown-arrows";
   version = "11";
 
   src = fetchFromGitHub {
