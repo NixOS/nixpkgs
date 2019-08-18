@@ -384,6 +384,10 @@ in
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
 
+  shortenPerlShebang = makeSetupHook
+    { deps = [ dieHook ]; }
+    ../build-support/setup-hooks/shorten-perl-shebang.sh;
+
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
   srcOnly = args: callPackage ../build-support/src-only args;
