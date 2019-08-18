@@ -25,6 +25,7 @@
 , stripIdlelib ? false
 , stripTests ? false
 , rebuildBytecode ? true
+, stripBytecode ? false
 }:
 
 assert x11Support -> tcl != null
@@ -247,6 +248,8 @@ in with passthru; stdenv.mkDerivation {
     find $out -name "*.py" | ${pythonForBuildInterpreter}     -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+    '' + optionalString stripBytecode ''
+    find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
   '';
 
   preFixup = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
