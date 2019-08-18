@@ -1,18 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, buildbot, buildbot-pkg }:
+{ lib, buildPythonPackage, fetchPypi, buildbot, buildbot-pkg, mock }:
 
 {
   www = buildPythonPackage rec {
-    pname = "buildbot_www";
+    pname = "buildbot-www";
     inherit (buildbot-pkg) version;
 
-    # NOTE: wheel is used due to buildbot circular dependency
-    format = "wheel";
-
     src = fetchPypi {
-      inherit pname version format;
-      python = "py3";
-      sha256 = "01jx34in0kwhpi2p8p6wl1h40gv3rmfhwaxrvd9kfy4ymqh8b81z";
+      inherit pname version;
+      sha256 = "0g3m5z8yska245r1x9n85b4br8b63i4zca2qn3qspf62b1wzmxmd";
     };
+
+    buildInputs = [ buildbot buildbot-pkg mock ];
 
     meta = with lib; {
       homepage = http://buildbot.net/;
@@ -31,7 +29,7 @@
       sha256 = "0p7az9mb09c4bl0j37w28wflzygq9vy8rjbbnhlfbs6py6mjdagr";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    buildInputs = [ buildbot-pkg ];
     checkInputs = [ buildbot ];
 
     meta = with lib; {
@@ -51,7 +49,7 @@
       sha256 = "0ba0a7q7ii7sipvifxs9ldkcs4b975skndarmirbphc797993hj1";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    buildInputs = [ buildbot-pkg ];
     checkInputs = [ buildbot ];
 
     meta = with lib; {
@@ -71,7 +69,7 @@
       sha256 = "0dvchhjzmfbbrxqm8dlmwck22z99pgnflxk3cyn0wbb1qskhd9cv";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    buildInputs = [ buildbot-pkg ];
     checkInputs = [ buildbot ];
 
     meta = with lib; {
@@ -91,7 +89,7 @@
       sha256 = "0w9p3y89rqsmqiacwj2avir42r0xjr2yri14v3ay6yar5391r8wa";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    buildInputs = [ buildbot-pkg ];
     checkInputs = [ buildbot ];
 
     meta = with lib; {
