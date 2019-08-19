@@ -5,10 +5,12 @@
 
   defaultConfig = {
     global = {
-      module_path = "${pkgs.icingaweb2}/modules${optionalString (builtins.length config.modulePath > 0) ":${concatStringsSep ":" config.modulePath}"}";
+      module_path = "${pkgs.icingaweb2}/modules";
     };
   };
 in {
+  meta.maintainers = with maintainers; [ das_j ];
+
   options.services.icingaweb2 = with types; {
     enable = mkEnableOption "the icingaweb2 web interface";
 
