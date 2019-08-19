@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
   preBuild = "pushd src/tools/rustfmt";
-  postBuild = "popd";
+  preInstall = "popd";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
