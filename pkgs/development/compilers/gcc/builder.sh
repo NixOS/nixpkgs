@@ -1,5 +1,8 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
+
 source $stdenv/setup
 
+set -x
 
 oldOpts="$(shopt -po nounset)" || true
 set -euo pipefail
@@ -17,8 +20,8 @@ fi
 
 
 # GCC interprets empty paths as ".", which we don't want.
-if test -z "${CPATH-}"; then unset CPATH; fi
-if test -z "${LIBRARY_PATH-}"; then unset LIBRARY_PATH; fi
+if test -z "${CPATH-}"; then unset CPATH; else export CPATH; fi
+if test -z "${LIBRARY_PATH-}"; then unset LIBRARY_PATH; else export LIBRARY_PATH; fi
 echo "\$CPATH is \`${CPATH-}'"
 echo "\$LIBRARY_PATH is \`${LIBRARY_PATH-}'"
 
@@ -181,7 +184,7 @@ preConfigure() {
         mkdir -p ../mingw
         # --with-build-sysroot expects that:
         cp -R $libcCross/include ../mingw
-        configureFlags="$configureFlags --with-build-sysroot=`pwd`/.."
+        configureFlags+=("--with-build-sysroot=$(pwd)/..")
     fi
 
     # Eval the preConfigure script from nix expression.
