@@ -1709,6 +1709,8 @@ in {
 
   proboscis = callPackage ../development/python-modules/proboscis {};
 
+  poster3 = callPackage ../development/python-modules/poster3 { };
+
   py4j = callPackage ../development/python-modules/py4j { };
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
