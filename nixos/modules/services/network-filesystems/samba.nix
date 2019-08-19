@@ -63,6 +63,7 @@ let
       };
 
       restartTriggers = [ configFile ];
+      reloadIfChanged = cfg.reloadIfChanged;
     };
 
 in
@@ -198,6 +199,15 @@ in
               comment = "Public samba share.";
             };
           };
+      };
+
+      reloadIfChanged = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether samba's systemd units should be reloaded during a NixOS configuration switch if their definition has changed.
+          This prevents clients from being disconnected because samba is restarted during the configuration switch.
+        '';
       };
 
     };
