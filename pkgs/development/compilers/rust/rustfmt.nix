@@ -9,6 +9,9 @@ rustPlatform.buildRustPackage rec {
   preBuild = "pushd src/tools/rustfmt";
   preInstall = "popd";
 
+  # changes hash of vendor directory otherwise
+  dontUpdateAutotoolsGnuConfigScripts = true;
+
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   # As of 1.0.0 and rustc 1.30 rustfmt requires a nightly compiler
