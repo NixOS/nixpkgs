@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libraw-${version}";
-  version = "0.19.3";
+  version = "0.19.4";
 
   src = fetchurl {
     url = "https://www.libraw.org/data/LibRaw-${version}.tar.gz";
-    sha256 = "0xs1qb6pcvc4c43fy5xi3nkqxcif77gakkw99irf0fc5iccdd5px";
+    sha256 = "07wnzw9k3mwdq9dmpmg94al3ksc065kskfbxkknnmhvrsv2iri8k";
   };
 
   outputs = [ "out" "lib" "dev" "doc" ];
