@@ -103,8 +103,6 @@ in
 
     security.pam.services."mate-screensaver".unixAuth = true;
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
-
     environment.pathsToLink = [ "/share" ];
   };
 
