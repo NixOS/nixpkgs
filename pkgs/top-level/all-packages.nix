@@ -3054,6 +3054,8 @@ in
     stdenv = gccStdenv;
   };
 
+  flux = callPackage ../development/compilers/flux { };
+
   fierce = callPackage ../tools/security/fierce { };
 
   figlet = callPackage ../tools/misc/figlet { };
