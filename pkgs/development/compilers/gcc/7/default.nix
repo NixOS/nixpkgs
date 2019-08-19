@@ -335,21 +335,21 @@ stdenv.mkDerivation ({
   # compiler (after the specs for the cross-gcc are created). Having
   # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+  CPATH = toString (optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
     ++ optional (zlib != null) zlib
-  ));
+  )));
 
-  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
+  LIBRARY_PATH = toString (optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib)));
 
-  EXTRA_TARGET_FLAGS = optionals
+  EXTRA_TARGET_FLAGS = toString (optionals
     (targetPlatform != hostPlatform && libcCross != null)
     ([
       "-idirafter ${getDev libcCross}${libcCross.incdir or "/include"}"
     ] ++ optionals (! crossStageStatic) [
       "-B${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]);
+    ]));
 
-  EXTRA_TARGET_LDFLAGS = optionals
+  EXTRA_TARGET_LDFLAGS = toString (optionals
     (targetPlatform != hostPlatform && libcCross != null)
     ([
       "-Wl,-L${libcCross.out}${libcCross.libdir or "/lib"}"
@@ -358,7 +358,7 @@ stdenv.mkDerivation ({
       ] else [
         "-Wl,-rpath,${libcCross.out}${libcCross.libdir or "/lib"}"
         "-Wl,-rpath-link,${libcCross.out}${libcCross.libdir or "/lib"}"
-    ]));
+    ])));
 
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;
