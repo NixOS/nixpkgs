@@ -6,7 +6,7 @@
    be almost as much code as the function itself. */
 
 {config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides,
-  buildPerl}:
+  buildPerl, shortenPerlShebang}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
 assert stdenv.lib.versionAtLeast perl.version "5.28.2";
@@ -89,22 +89,29 @@ let
   ack = buildPerlPackage {
     pname = "ack";
     version = "3.0.2";
+
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.0.2.tar.gz;
       sha256 = "0a4mriclnmwvm8rn9crkfr00qjy6ffgf0b0bg0qz46drpnyv7d33";
     };
+
     outputs = ["out" "man"];
-    # use gnused so that the preCheck command passes
-    buildInputs = stdenv.lib.optional stdenv.isDarwin gnused;
+
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileNext ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/ack
+    '';
+
+    # tests fails on nixos and hydra because of different purity issues
+    doCheck = false;
+
     meta = with stdenv.lib; {
       description = "A grep-like tool tailored to working with large trees of source code";
       homepage    = https://beyondgrep.com;
       license     = licenses.artistic2;
       maintainers = with maintainers; [ lovek323 ];
     };
-    # tests fails on nixos and hydra because of different purity issues
-    doCheck = false;
   };
 
   AlgorithmAnnotate = buildPerlPackage {
@@ -8854,6 +8861,11 @@ let
       url = "https://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-11.50.tar.gz";
       sha256 = "0d8v48y94z8maxkmw1rv7v9m0jg2dc8xbp581njb6yhr7abwqdv3";
     };
+
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/exiftool
+    '';
 
     meta = with stdenv.lib; {
       description = "A tool to read, write and edit EXIF meta information";
@@ -19282,12 +19294,16 @@ let
       sha256 = "15xyrwv08fw8jmpydwzks26ipxnzliwddgyjcfqiaj0p7lwlhmx1";
     };
 
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       LWP
       LWPProtocolHttps
       DataDump
       JSON
     ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/youtube-viewer
+    '';
 
     meta = {
       description = "A lightweight application for searching and streaming videos from YouTube";
