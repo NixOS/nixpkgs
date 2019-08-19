@@ -129,6 +129,7 @@ let
       kmix = callPackage ./kmix.nix {};
       kmplot = callPackage ./kmplot.nix {};
       knotes = callPackage ./knotes.nix {};
+      kolf = callPackage ./kolf.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};
