@@ -5,7 +5,7 @@
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
-, python3, writeScript
+, python27, python3, writeScript
 # Apple dependencies
 , cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -328,10 +328,11 @@ stdenv.mkDerivation rec {
     '';
 
     genericPatches = ''
-      # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
+      # Substitute j2objc and objc wrapper's python shebang to plain python path.
       # See also `postFixup` where python is added to $out/nix-support
-      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt \
-          --replace "#!/usr/bin/env python" "#!${python3}/bin/python"
+      substituteInPlace tools/j2objc/j2objc_header_map.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
+      substituteInPlace tools/j2objc/j2objc_wrapper.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
+      substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|' \
@@ -343,6 +344,8 @@ stdenv.mkDerivation rec {
         # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
+          --replace "/usr/bin/env bash" ${customBash}/bin/bash \
+          --replace "/usr/bin/env python" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
       done
