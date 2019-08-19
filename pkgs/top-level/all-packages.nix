@@ -18947,8 +18947,6 @@ in
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
 
-  irssi_otr = callPackage ../applications/networking/irc/irssi/otr { };
-
   ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
   bip = callPackage ../applications/networking/irc/bip { };
