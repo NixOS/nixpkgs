@@ -6,6 +6,8 @@ deployAndroidPackage {
     lib.optional (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 pkgs_i686.glibc pkgs_i686.zlib pkgs_i686.ncurses5 ];
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''
+      rm -r $packageBaseDir/{i686,aarch64,mipsel,arm}-linux*
+
       addAutoPatchelfSearchPath $packageBaseDir/lib
       addAutoPatchelfSearchPath $packageBaseDir/lib64
       autoPatchelf --no-recurse $packageBaseDir/lib64
