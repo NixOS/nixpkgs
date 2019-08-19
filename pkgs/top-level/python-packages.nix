@@ -1701,6 +1701,11 @@ in {
 
   dugong = callPackage ../development/python-modules/dugong {};
 
+  easysnmp = callPackage ../development/python-modules/easysnmp {
+    openssl = pkgs.openssl;
+    net_snmp = pkgs.net_snmp;
+  };
+
   iowait = callPackage ../development/python-modules/iowait {};
 
   responses = callPackage ../development/python-modules/responses {};
