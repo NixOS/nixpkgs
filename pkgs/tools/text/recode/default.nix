@@ -1,26 +1,19 @@
-{ stdenv, fetchFromGitHub, python, perl, intltool, flex, autoreconfHook
-, texinfo, libiconv, libintl }:
+{ stdenv, fetchurl, python, perl, intltool, flex, texinfo, libiconv, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "recode";
   version = "3.7.2";
 
-  src = fetchFromGitHub {
-    owner = "rrthomas";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "06xdln5lc7ba7s7x911zbyncg8dp1ybn5pxzmkr95hf1bid23rdq";
-    fetchSubmodules = true;
+  # Use official tarball, avoid need to bootstrap/generate build system
+  src = fetchurl {
+    url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "1k1rjbcna6xn0nq8na9wi1d54q5671gc4s1ibkgayx95l47rsb4b";
   };
 
-  nativeBuildInputs = [ python perl intltool flex texinfo autoreconfHook libiconv ];
+  nativeBuildInputs = [ python python.pkgs.cython perl intltool flex texinfo libiconv ];
   buildInputs = [ libintl ];
 
-  #doCheck = false; # fails 10 out of 16 tests
-
-  #preCheck = ''
-  #  checkFlagsArray=(CPPFLAGS="-I../lib" LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
-  #'';
+  doCheck = true;
 
   meta = {
     homepage = https://github.com/rrthomas/recode;
