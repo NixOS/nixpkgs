@@ -1,7 +1,14 @@
 declare -a autoPatchelfLibs
+declare -a autoPatchelfLinkers
 
 gatherLibraries() {
     autoPatchelfLibs+=("$1/lib")
+    if [ -f "$1/nix-support/dynamic-linker" ]; then
+        autoPatchelfLinkers+=("$1/nix-support/dynamic-linker")
+    fi
+    if [ -f "$1/nix-support/dynamic-linker-m32" ]; then
+        autoPatchelfLinkers+=("$1/nix-support/dynamic-linker-m32")
+    fi
 }
 
 addEnvHooks "$targetOffset" gatherLibraries
@@ -100,9 +107,10 @@ findDependency() {
 
 patchElfInterpreter() {
     local toPatch=$1
-    local paths=( \
+    local linkers=( \
         "$NIX_CC/nix-support/dynamic-linker" \
         "$NIX_CC/nix-support/dynamic-linker-m32" \
+        "${autoPatchelfLinkers[@]}" \
     )
 
     echo "searching an '$(getSoArch "$toPatch")' interpreter for $toPatch" >&2
@@ -118,7 +126,7 @@ patchElfInterpreter() {
         return
     done
 
-    echo "error: no interpreter found for arch $(getSoArch "$toPatch") needed by '$toPatch'" >&2
+    echo "error: no '$(getSoArch "$toPatch")' interpreter found but one is required for '$toPatch'" >&2
     false
 }
 
