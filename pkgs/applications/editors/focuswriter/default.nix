@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, qmake, qttools, hunspell, qtbase, qtmultimedia }:
+{ stdenv, fetchurl, pkgconfig, qmake, qttools, hunspell, qtbase, qtmultimedia, mkDerivation }:
 
-stdenv.mkDerivation rec {
-  name = "focuswriter-${version}";
+mkDerivation rec {
+  pname = "focuswriter";
   version = "1.7.3";
 
   src = fetchurl {
