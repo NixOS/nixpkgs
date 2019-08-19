@@ -4832,7 +4832,6 @@ broken-packages:
   - fmark
   - FModExRaw
   - fn-extra
-  - focuslist
   - foldl-incremental
   - foldl-statistics
   - folds-common
@@ -9463,7 +9462,6 @@ broken-packages:
   - terminal-punch
   - terminal-text
   - termination-combinators
-  - termonad
   - termplot
   - terntup
   - terrahs
