@@ -45,8 +45,8 @@ _overrideFirst outputDevman "devman" "devdoc" "$outputMan"
 _overrideFirst outputInfo "info" "$outputBin"
 
 # Backwards compatibility to ensure $out etc. exist
-for output in "${!outputs[@]}"; do
-  eval "export ${output}"="${outputs[$output]}"
+for outputName in "${!outputs[@]}"; do
+  eval "export ${outputName}"="${outputs[$outputName]}"
 done
 
 # Add standard flags to put files into the desired outputs.
@@ -77,12 +77,12 @@ _multioutConfig() {
         "--docdir=${!outputDoc}/share/doc/${shareDocName}"
         "--libdir=${!outputLib}/lib" "--libexecdir=${!outputLib}/libexec"
         "--localedir=${!outputLib}/share/locale"
-        ${configureFlags[@]})
+        "${configureFlags[@]}")
 
     installFlags=(
         "pkgconfigdir=${!outputDev}/lib/pkgconfig"
         "m4datadir=${!outputDev}/share/aclocal" "aclocaldir=${!outputDev}/share/aclocal"
-        ${installFlags[@]})
+        "${installFlags[@]}")
 }
 
 
@@ -185,10 +185,9 @@ _multioutPropagateDev() {
     if [ -z "${propagatedBuildOutputs[@]+1}" ]; then
         local po_dirty="$outputBin $outputInclude $outputLib"
         set +o pipefail
-        # FIXME
-        propagatedBuildOutputs=$(echo "$po_dirty" \
+        propagatedBuildOutputs=($(echo "$po_dirty" \
             | tr -s ' ' '\n' | grep -v -F "$propagaterOutput" \
-            | sort -u | tr '\n' ' ')
+            | sort -u | tr '\n' ' '))
         set -o pipefail
     fi
 

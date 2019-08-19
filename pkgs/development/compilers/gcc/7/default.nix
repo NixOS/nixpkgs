@@ -235,11 +235,11 @@ stdenv.mkDerivation ({
   # compiler (after the specs for the cross-gcc are created). Having
   # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+  CPATH = toString (optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
     ++ optional (zlib != null) zlib
-  ));
+  )));
 
-  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
+  LIBRARY_PATH = toString (optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib)));
 
   inherit
     (import ../common/extra-target-flags.nix {

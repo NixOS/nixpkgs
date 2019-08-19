@@ -148,7 +148,7 @@ stdenv.mkDerivation ({
       "libc_cv_as_needed=no"
     ] ++ lib.optional withGd "--with-gd";
 
-  installFlags = [ "sysconfdir=$(out)/etc" ];
+  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
   outputs = [ "out" "bin" "dev" "static" ];
 
@@ -189,7 +189,7 @@ stdenv.mkDerivation ({
     configureScript="`pwd`/../$sourceRoot/configure"
 
     ${lib.optionalString (stdenv.cc.libc != null)
-      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"''
+      ''makeFlags+=("BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib")''
     }
 
 

@@ -36,26 +36,22 @@ let
       "HOSTCXX:=$(BUILD_CXX)"
     ];
 
-    # Skip clean on darwin, case-sensitivity issues.
-    buildPhase = lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
-      make mrproper $makeFlags
-    ''
     # For some reason, doing `make install_headers` twice, first without
     # INSTALL_HDR_PATH=$out then with, is neccessary to get this to work
     # for darwin cross. @Ericson2314 has no idea why.
-    + ''
-      make headers_install $makeFlags
+    buildFlags = [ "headers_install" ];
+    checkTarget = [ "headers_check" ];
+    installTargets = "headers_install";
+    installFlags = [ "INSTALL_HDR_PATH=${placeholder "out"}" ];
+
+    # Skip clean on darwin, case-sensitivity issues.
+    preBuild = lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
+      make mrproper "''${makeFlags[@]}"
     '';
 
-    checkPhase = ''
-      make headers_check $makeFlags
-    '';
-
-    installPhase = ''
-      make headers_install INSTALL_HDR_PATH=$out $makeFlags
-    ''
     # Some builds (e.g. KVM) want a kernel.release.
-    + '' mkdir -p $out/include/config
+    postInstall = ''
+      mkdir -p $out/include/config
       echo "${version}-default" > $out/include/config/kernel.release
     ''
     # These oddly named file records the `SHELL` passed, which causes bootstrap
