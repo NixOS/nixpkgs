@@ -323,6 +323,7 @@ roxma/nvim-yarp
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 Rykka/riv.vim
+ryvnf/readline.vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
 scrooloose/nerdcommenter

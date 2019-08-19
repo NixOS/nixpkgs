@@ -424,6 +424,67 @@
      installer after creating <literal>/var/lib/nextcloud</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     There exists now <literal>lib.forEach</literal>, which is like <literal>map</literal>, but with
+     arguments flipped. When mapping function body spans many lines (or has nested
+     <literal>map</literal>s), it is often hard to follow which list is modified.
+    </para>
+    <para>
+     Previous solution to this problem was either to use <literal>lib.flip map</literal>
+     idiom or extract that anonymous mapping function to a named one. Both can still be used
+     but <literal>lib.forEach</literal> is preferred over <literal>lib.flip map</literal>.
+    </para>
+    <para>
+      The <literal>/etc/sysctl.d/nixos.conf</literal> file containing all the options set via
+      <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link> was moved to
+      <literal>/etc/sysctl.d/60-nixos.conf</literal>, as
+      <citerefentry><refentrytitle>sysctl.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+      recommends prefixing all filenames in <literal>/etc/sysctl.d</literal> with a
+      two-digit number and a dash to simplify the ordering of the files.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      We now install the sysctl snippets shipped with systemd.
+    <itemizedlist>
+     <para>This enables:</para>
+     <listitem>
+      <para>Loose reverse path filtering</para>
+     </listitem>
+     <listitem>
+      <para>Source route filtering</para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal>fq_codel</literal> as a packet scheduler (this helps to fight bufferbloat)
+      </para>
+     </listitem>
+    </itemizedlist>
+
+     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>.
+     These sysctl snippets can be found in <literal>/etc/sysctl.d/50-*.conf</literal>,
+     and overridden via <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link>
+     (which will place the parameters in <literal>/etc/sysctl.d/60-nixos.conf</literal>).
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+      Coredumps are now acquired by <literal>systemd-coredump</literal> by default.
+      <literal>systemd-coredump</literal> behaviour can still be modified via
+      <option>systemd.coredump.extraConfig</option>.
+      To stick to the old behaviour (having the kernel dump to a file called <literal>core</literal>
+      in the working directory), without piping it through <literal>systemd-coredump</literal>, set
+      <option>boot.kernel.sysctl."kernel.core_pattern"</option> to <literal>"core"</literal>.
+    </para>
+   </listitem>
+  <listitem>
+   <para>
+    <literal>systemd.packages</literal> option now also supports generators and
+    shutdown scripts. Old <literal>systemd.generator-packages</literal> option has
+    been removed.
+   </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>

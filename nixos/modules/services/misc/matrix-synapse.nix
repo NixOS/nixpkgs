@@ -684,7 +684,7 @@ in {
         fi
       '';
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;

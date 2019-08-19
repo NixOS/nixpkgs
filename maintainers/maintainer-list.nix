@@ -296,6 +296,11 @@
     githubId = 17208985;
     name = "Alex Rice";
   };
+  alexbakker = {
+    email = "ab@alexbakker.me";
+    github = "alexbakker";
+    name = "Alexander Bakker";
+  };
   alexchapman = {
     email = "alex@farfromthere.net";
     github = "AJChapman";
@@ -3218,6 +3223,11 @@
     githubId = 6282557;
     name = "Kiloreux Emperex";
   };
+  kim0 = {
+    email = "email.ahmedkamal@googlemail.com";
+    github = "kim0";
+    name = "Ahmed Kamal";
+  };
   kimburgess = {
     email = "kim@acaprojects.com";
     github = "kimburgess";
@@ -5896,6 +5906,12 @@
     github = "stephenmw";
     githubId = 231788;
     name = "Stephen Weinberg";
+  };
+  sterfield = {
+    email = "sterfield@gmail.com";
+    github = "sterfield";
+    githubId = 5747061;
+    name = "Guillaume Loetscher";
   };
   sternenseemann = {
     email = "post@lukasepple.de";

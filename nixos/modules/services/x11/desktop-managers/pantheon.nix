@@ -146,6 +146,7 @@ in
       isSystem = true;
     };
 
+    programs.dconf.enable = true;
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
 
@@ -162,7 +163,6 @@ in
     environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
 
     environment.variables.GIO_EXTRA_MODULES = [
-      "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
       "${pkgs.gnome3.gvfs}/lib/gio/modules"
     ];
 
@@ -187,7 +187,6 @@ in
         glib-networking
         gnome-menus
         gnome3.adwaita-icon-theme
-        gnome3.dconf
         gtk3.out
         hicolor-icon-theme
         lightlocker

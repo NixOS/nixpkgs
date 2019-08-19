@@ -1,27 +1,29 @@
 { stdenv
+, lib
 , fetchgit
 , rustPlatform
 , openssl
 , pkgconfig
 , protobuf
 , rustup
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jormungandr";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchgit {
     url = "https://github.com/input-output-hk/${pname}";
     rev = "v${version}";
-    sha256 = "0ys8sw73c7binxnl79dqi7sxva62bgifbhgyzvvjvmjjdxgq4kfp";
+    sha256 = "0zlnl6a3i7x4basc4w31dwqbdign96kvd7j0vqk2v818ifjvpavd";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0fphjzz78ym15qbka01idnq6vkyf4asrnhrhvxngwc3bifmnj937";
+  cargoSha256 = "13zcbhhdf4xakp37r920xzcb0prdk58jlph9f3hwlp8npmcws52p";
 
   nativeBuildInputs = [ pkgconfig protobuf rustup ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   PROTOC = "${protobuf}/bin/protoc";
 
