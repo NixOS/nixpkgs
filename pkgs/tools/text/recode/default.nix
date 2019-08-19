@@ -1,8 +1,9 @@
 { stdenv, fetchFromGitHub, python, perl, intltool, flex, autoreconfHook
 , texinfo, libiconv, libintl }:
 
-stdenv.mkDerivation {
-  name = "recode-3.7-2fd838565";
+stdenv.mkDerivation rec {
+  pname = "recode";
+  version = "3.7-2fd838565";
 
   src = fetchFromGitHub {
     owner = "pinard";
