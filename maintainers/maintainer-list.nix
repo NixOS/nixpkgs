@@ -5907,6 +5907,12 @@
     githubId = 231788;
     name = "Stephen Weinberg";
   };
+  sterfield = {
+    email = "sterfield@gmail.com";
+    github = "sterfield";
+    githubId = 5747061;
+    name = "Guillaume Loetscher";
+  };
   sternenseemann = {
     email = "post@lukasepple.de";
     github = "sternenseemann";

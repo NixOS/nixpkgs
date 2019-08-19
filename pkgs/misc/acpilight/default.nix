@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/wavexx/acpilight";
     description = "ACPI backlight control";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ "smakarov" ];
+    maintainers = with maintainers; [ smakarov ];
     platforms = platforms.linux;
   };
 }
