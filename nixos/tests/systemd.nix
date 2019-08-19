@@ -83,5 +83,11 @@ import ./make-test.nix ({ pkgs, ... }: {
       $machine->waitForUnit('multi-user.target');
       $machine->succeed('test -e /tmp/shared/shutdown-test');
     };
+
+   # Test settings from /etc/sysctl.d/50-default.conf are applied
+   subtest "systemd sysctl settings are applied", sub {
+     $machine->waitForUnit('multi-user.target');
+     $machine->succeed('sysctl net.core.default_qdisc | grep -q "fq_codel"');
+   };
   '';
 })
