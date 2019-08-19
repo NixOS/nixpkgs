@@ -351,8 +351,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-autoar = callPackage ./misc/gnome-autoar { };
 
-  gnome-video-effects = callPackage ./misc/gnome-video-effects { };
-
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 } // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
@@ -392,6 +390,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       easytag meld orca rhythmbox shotwell gnome-usage
       clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus gdl;
   inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
+  inherit (pkgs) gnome-video-effects; # added 2019-08-19
+
   defaultIconTheme = adwaita-icon-theme;
   gtk = gtk3;
   gtkmm = gtkmm3;
