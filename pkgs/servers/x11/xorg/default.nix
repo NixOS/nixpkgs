@@ -1292,7 +1292,7 @@ lib.makeScope newScope (self: with self; {
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/app/setxkbmap-1.3.2.tar.bz2;
-      sha256 = "0rh1yrh5cw6w1lq8nv0x7pqlm3g2g3vr1njp98v9l9namg3gv8dz";
+      sha256 = "1xdrxs65v7d0rw1yaz0vsz55w4hxym99216p085ya9978j379wlg";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
