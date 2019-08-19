@@ -1,20 +1,38 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gnome3 }:
-let
+{ stdenv
+, fetchurl
+, pkgconfig
+, meson
+, ninja
+, gettext
+, gnome3
+}:
+
+stdenv.mkDerivation rec {
   pname = "gnome-video-effects";
-  version = "0.4.3";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "06c2f1kihyhawap1s3zg5w7q7fypsybkp7xry4hxkdz4mpsy0zjs";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1j6h98whgkcxrh30bwvnxvyqxrxchgpdgqhl0j71xz7x72dqxijd";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  patches = [
+    # Fix effectsdir in .pc file
+    # https://gitlab.gnome.org/GNOME/gnome-video-effects/commit/955404195ada606819974dd63c48956f25611e14
+    ./fix-pc-file.patch
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
+      versionPolicy = "none";
     };
   };
 
