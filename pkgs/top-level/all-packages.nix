@@ -15629,7 +15629,9 @@ in
 
   iputils = callPackage ../os-specific/linux/iputils { };
 
-  iptables = callPackage ../os-specific/linux/iptables { };
+  iptables = iptables-legacy;
+  iptables-legacy = callPackage ../os-specific/linux/iptables { };
+  iptables-compat = callPackage ../os-specific/linux/iptables { modeCompat = true; };
 
   iptstate = callPackage ../os-specific/linux/iptstate { } ;
 
