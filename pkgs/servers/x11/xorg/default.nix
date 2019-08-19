@@ -1288,11 +1288,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   setxkbmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
-    name = "setxkbmap-1.3.1";
+    name = "setxkbmap-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/setxkbmap-1.3.1.tar.bz2;
-      sha256 = "1qfk097vjysqb72pq89h0la3462kbb2dh1d11qzs2fr67ybb7pd9";
+      url = mirror://xorg/individual/app/setxkbmap-1.3.2.tar.bz2;
+      sha256 = "0rh1yrh5cw6w1lq8nv0x7pqlm3g2g3vr1njp98v9l9namg3gv8dz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
