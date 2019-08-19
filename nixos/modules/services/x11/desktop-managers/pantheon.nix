@@ -129,7 +129,7 @@ in
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
-    services.gnome3.gvfs.enable = true;
+    services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
     services.gsignond.enable = mkDefault true;
     services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];

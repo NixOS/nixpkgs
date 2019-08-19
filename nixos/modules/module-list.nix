@@ -285,6 +285,7 @@
   ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/gsignond.nix
+  ./services/desktops/gvfs.nix
   ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
@@ -297,7 +298,6 @@
   ./services/desktops/gnome3/gnome-settings-daemon.nix
   ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix
-  ./services/desktops/gnome3/gvfs.nix
   ./services/desktops/gnome3/rygel.nix
   ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix
