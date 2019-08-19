@@ -537,7 +537,7 @@ in
     };
 
     systemd.enableCgroupAccounting = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       description = ''
         Whether to enable cgroup accounting.
