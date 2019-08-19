@@ -1,13 +1,20 @@
-{ stdenv, fetchgit, fetchpatch, pkgconfig, systemd, udev, utillinux, libuuid
+{ stdenv
+, fetchgit
+, fetchpatch
+, pkgconfig
+, utillinux
+, libuuid
 , thin-provisioning-tools, libaio
-, enable_dmeventd ? false }:
+, enable_dmeventd ? false
+, udev ? null
+}:
 
 let
   version = "2.03.01";
 in
 
-stdenv.mkDerivation {
-  pname = "lvm2";
+{
+  pname = "lvm2" + stdenv.lib.optionalString enable_dmeventd "with-dmeventd";
   inherit version;
 
   src = fetchgit {
@@ -16,33 +23,32 @@ stdenv.mkDerivation {
     sha256 = "0jlaswf1srdxiqpgpp97j950ddjds8z0kr4pbwmal2za2blrgvbl";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
+
   configureFlags = [
     "--disable-readline"
-    "--enable-udev_rules"
-    "--enable-udev_sync"
     "--enable-pkgconfig"
     "--enable-cmdlib"
   ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd"
   ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
+  ] ++
+  stdenv.lib.optionals (udev != null) [
+    "--enable-udev_rules"
+    "--enable-udev_sync"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
+  preConfigure = ''
+    sed -i /DEFAULT_SYS_DIR/d Makefile.in
+    sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
+    substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
+      --replace /usr/bin/udevadm /run/current-system/systemd/bin/udevadm
 
-  preConfigure =
-    ''
-      sed -i /DEFAULT_SYS_DIR/d Makefile.in
-      sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
-    '' + stdenv.lib.optionalString (systemd != null) ''
-      substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/bin/udevadm ${systemd}/bin/udevadm
-    '';
-
-  # https://github.com/NixOS/nixpkgs/pull/52597
-  # gcc: error: ../../device_mapper/libdevice-mapper.a: No such file or directory
-  enableParallelBuilding = false;
+    substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
+    substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
+  '';
 
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -64,30 +70,25 @@ stdenv.mkDerivation {
 
   doCheck = false; # requires root
 
+  makeFlags = stdenv.lib.optionals (udev != null) [
+    "SYSTEMD_GENERATOR_DIR=$(out)/lib/systemd/system-generators"
+  ];
+
   # To prevent make install from failing.
   installFlags = [ "OWNER=" "GROUP=" "confdir=$(out)/etc" ];
 
   # Install systemd stuff.
-  #installTargets = "install install_systemd_generators install_systemd_units install_tmpfiles_configuration";
-
-  postInstall =
-    ''
-      substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
-        --replace $out/sbin/blkid ${utillinux}/sbin/blkid
-    '' + stdenv.lib.optionalString (systemd != null) ''
-      # Systemd stuff
-      mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
-      cp scripts/blk_availability_systemd_red_hat.service $out/etc/systemd/system
-      cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
-    '';
+  installTargets = [ "install" ] ++ stdenv.lib.optionals (udev != null) [
+    "install_systemd_generators"
+    "install_systemd_units"
+    "install_tmpfiles_configuration"
+  ];
 
   meta = with stdenv.lib; {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 bsd2 lgpl21 ];
-    maintainers = with maintainers; [raskin];
-    inherit version;
-    downloadPage = "ftp://sources.redhat.com/pub/lvm2/";
+    maintainers = with maintainers; [ raskin ];
   };
 }

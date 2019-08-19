@@ -16817,9 +16817,7 @@ in
 
   directvnc = callPackage ../os-specific/linux/directvnc { };
 
-  dmraid = callPackage ../os-specific/linux/dmraid {
-    lvm2 = lvm2.override {enable_dmeventd = true;};
-  };
+  dmraid = callPackage ../os-specific/linux/dmraid { };
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
