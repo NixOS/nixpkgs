@@ -436,6 +436,13 @@
      but <literal>lib.forEach</literal> is preferred over <literal>lib.flip map</literal>.
     </para>
    </listitem>
+  <listitem>
+   <para>
+    <literal>systemd.packages</literal> option now also supports generators and
+    shutdown scripts. Old <literal>systemd.generator-packages</literal> option has
+    been removed.
+   </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>
