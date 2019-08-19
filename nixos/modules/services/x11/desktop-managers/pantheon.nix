@@ -129,7 +129,7 @@ in
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
-    services.gnome3.gvfs.enable = true;
+    services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
     services.gsignond.enable = mkDefault true;
     services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];
@@ -161,10 +161,6 @@ in
     environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
     environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
-
-    environment.variables.GIO_EXTRA_MODULES = [
-      "${pkgs.gnome3.gvfs}/lib/gio/modules"
-    ];
 
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
