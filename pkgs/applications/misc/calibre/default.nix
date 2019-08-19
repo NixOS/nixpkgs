@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ podofo.dev ];
 
   calibreDesktopItem = makeDesktopItem {
-    name = "calibre";
+    name = "calibre-gui";
     desktopName = "calibre";
     exec = "@out@/bin/calibre --detach %F";
     genericName = "E-book library management";
