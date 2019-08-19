@@ -30,7 +30,7 @@ in
       ];
 
     # TODO: move most of these elsewhere
-    environment.profileRelativeEnvVars =
+    environment.profileRelativeSessionVariables =
       { PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
         KDEDIRS = [ "" ];
