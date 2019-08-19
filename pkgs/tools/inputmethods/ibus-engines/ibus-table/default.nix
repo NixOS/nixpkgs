@@ -4,7 +4,7 @@
 , ibus, python3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-table-${version}";
+  pname = "ibus-table";
   version = "1.9.21";
 
   src = fetchFromGitHub {
