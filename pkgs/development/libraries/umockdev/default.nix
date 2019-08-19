@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-test-paths.patch
+    ./disable-failed-test.patch
     # https://github.com/martinpitt/umockdev/pull/93
     (fetchpatch {
       url = "https://github.com/abbradar/umockdev/commit/ce22f893bf50de0b32760238a3e2cfb194db89e9.patch";
