@@ -162,10 +162,6 @@ in
 
     environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
 
-    environment.variables.GIO_EXTRA_MODULES = [
-      "${pkgs.gnome3.gvfs}/lib/gio/modules"
-    ];
-
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
       "/share"
