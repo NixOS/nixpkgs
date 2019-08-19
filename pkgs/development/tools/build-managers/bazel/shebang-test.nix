@@ -2,6 +2,7 @@
   bazel
 , bazelTest
 , distDir
+, extracted
 , runLocal
 , unzip
 }:
@@ -26,6 +27,7 @@ let
         { grep -Re '#!/usr/bin' $dir && FAIL=1; } || true
         { grep -Re '#![^[:space:]]*/bin/env python' $dir && FAIL=1; } || true
       }
+      BAZEL_EXTRACTED=${extracted bazel}/install
       check_shebangs $BAZEL_EXTRACTED
       while IFS= read -r -d "" zip; do
         unzipped="./$zip/UNPACKED"

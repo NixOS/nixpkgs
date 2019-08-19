@@ -208,7 +208,6 @@ stdenv.mkDerivation rec {
             # about why to create a subdir for the workspace.
             cp -r ${workspaceDir} wd && chmod u+w wd && cd wd
 
-            BAZEL_EXTRACTED=${be.install_dir}
             ${bazelScript}
 
             touch $out
@@ -224,7 +223,7 @@ stdenv.mkDerivation rec {
       };
 
     in {
-      shebang = callPackage ./shebang-test.nix { inherit runLocal bazelTest distDir; };
+      shebang = callPackage ./shebang-test.nix { inherit runLocal extracted bazelTest distDir; };
       bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; };
       cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
       java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
