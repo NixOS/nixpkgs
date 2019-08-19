@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "fnotifystat-${version}";
+  pname = "fnotifystat";
   version = "0.02.03";
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/fnotifystat/fnotifystat-${version}.tar.gz";
