@@ -4,6 +4,12 @@
 
 with lib;
 
+let
+
+  cfg = config.services.gvfs;
+
+in
+
 {
 
   # Added 2019-08-19
@@ -21,6 +27,13 @@ with lib;
 
       enable = mkEnableOption "GVfs, a userspace virtual filesystem";
 
+      # gvfs can be built with multiple configurations
+      package = mkOption {
+        type = types.package;
+        default = pkgs.gnome3.gvfs;
+        description = "Which GVfs package to use.";
+      };
+
     };
 
   };
@@ -28,13 +41,13 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gvfs.enable {
+  config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gvfs ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.gnome3.gvfs ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.gnome3.gvfs ];
+    systemd.packages = [ cfg.package ];
 
     services.udev.packages = [ pkgs.libmtp.bin ];
 
