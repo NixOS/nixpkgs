@@ -3,33 +3,27 @@
 
 stdenv.mkDerivation rec {
   pname = "recode";
-  version = "3.7-2fd838565";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
-    owner = "pinard";
-    repo = "Recode";
-    rev = "2fd8385658e5a08700e3b916053f6680ff85fdbd";
-    sha256 = "06vyjqaraamcc5vka66mlvxj27ihccqc74aymv2wn8nphr2rhh03";
+    owner = "rrthomas";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "06xdln5lc7ba7s7x911zbyncg8dp1ybn5pxzmkr95hf1bid23rdq";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ python perl intltool flex texinfo autoreconfHook libiconv ];
   buildInputs = [ libintl ];
 
-  preAutoreconf = ''
-    # fix build with new automake, https://bugs.gentoo.org/show_bug.cgi?id=419455
-    substituteInPlace Makefile.am --replace "ACLOCAL = ./aclocal.sh @ACLOCAL@" ""
-    sed -i '/^AM_C_PROTOTYPES/d' configure.ac
-    substituteInPlace src/Makefile.am --replace "ansi2knr" ""
-  '';
+  #doCheck = false; # fails 10 out of 16 tests
 
-  doCheck = false; # fails 10 out of 16 tests
-
-  preCheck = ''
-    checkFlagsArray=(CPPFLAGS="-I../lib" LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
-  '';
+  #preCheck = ''
+  #  checkFlagsArray=(CPPFLAGS="-I../lib" LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
+  #'';
 
   meta = {
-    homepage = https://www.gnu.org/software/recode/;
+    homepage = https://github.com/rrthomas/recode;
     description = "Converts files between various character sets and usages";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl2Plus;
