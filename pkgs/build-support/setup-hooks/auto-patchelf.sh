@@ -114,7 +114,7 @@ patchElfInterpreter() {
     )
 
     echo "searching an '$(getSoArch "$toPatch")' interpreter for $toPatch" >&2
-    for f in "${paths[@]}"; do
+    for f in "${linkers[@]}"; do
         [ -f "$f" -a -r "$f" ] || continue
         local interpreter=$(< "$f")
 
