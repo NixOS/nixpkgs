@@ -25,7 +25,7 @@ let
       check_shebangs() {
         local dir="$1"
         { grep -Re '#!/usr/bin' $dir && FAIL=1; } || true
-        { grep -Re '#![^[:space:]]*/bin/env python' $dir && FAIL=1; } || true
+        { grep -Re '#![^[:space:]]*/bin/env' $dir && FAIL=1; } || true
       }
       BAZEL_EXTRACTED=${extracted bazel}/install
       check_shebangs $BAZEL_EXTRACTED
