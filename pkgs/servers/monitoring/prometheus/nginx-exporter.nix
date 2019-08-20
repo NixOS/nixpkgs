@@ -23,7 +23,7 @@ buildGoPackage rec {
     description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz willibutz ];
+    maintainers = with maintainers; [ benley fpletz willibutz globin ];
     platforms = platforms.unix;
   };
 }

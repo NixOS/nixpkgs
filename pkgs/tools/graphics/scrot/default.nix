@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = http://linuxbrit.co.uk/scrot/;
     description = "A command-line screen capture utility";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ globin ];
     license = licenses.mit;
   };
 }
