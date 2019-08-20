@@ -37,7 +37,7 @@ mkDerivation rec {
     echo grepping for ${qtbase.out} as \$qtbase in install files inside the build directory
     grep -l -R ${qtbase.out}/lib/qt- | while read f; do
       substituteInPlace "$f" --replace ${qtbase.out} ${placeholder "out"}
-    done || :
+    done
   '';
 
   meta = with lib; {
