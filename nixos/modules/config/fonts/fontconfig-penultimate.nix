@@ -151,7 +151,7 @@ let
     </fontconfig>
   '';
 
-  rejectType1 = pkgs.writeText "fc-53-no-type1.conf" ''
+  rejectType1 = pkgs.writeText "fc-53-nixos-reject-type1.conf" ''
     <?xml version="1.0"?>
     <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
     <fontconfig>
@@ -169,7 +169,7 @@ let
   '';
 
   # The configuration to be included in /etc/font/
-  penultimateConf = pkgs.runCommand "font-penultimate-conf" {
+  penultimateConf = pkgs.runCommand "fontconfig-penultimate-conf" {
     preferLocalBuild = true;
   } ''
     support_folder=$out/etc/fonts/conf.d
@@ -231,8 +231,8 @@ let
     ln -s ${localConf}        $latest_folder/../local.conf
     ''}
 
-    ln -s ${defaultFontsConf} $support_folder/52-default-fonts.conf
-    ln -s ${defaultFontsConf} $latest_folder/52-default-fonts.conf
+    ln -s ${defaultFontsConf} $support_folder/52-nixos-default-fonts.conf
+    ln -s ${defaultFontsConf} $latest_folder/52-nixos-default-fonts.conf
 
     ${optionalString cfg.allowBitmaps ''
     rm $support_folder/53-no-bitmaps.conf
@@ -240,8 +240,8 @@ let
     ''}
 
     ${optionalString (!cfg.allowType1) ''
-    ln -s ${rejectType1} $support_folder/53-no-type1.conf
-    ln -s ${rejectType1} $latest_folder/53-no-type1.conf
+    ln -s ${rejectType1} $support_folder/53-nixos-reject-type1.conf
+    ln -s ${rejectType1} $latest_folder/53-nixos-reject-type1.conf
     ''}
   '';
 

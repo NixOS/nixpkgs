@@ -145,7 +145,7 @@ let
 
   # bitmap font options
   # priority 53
-  rejectBitmaps = pkgs.writeText "fc-53-nixos-bitmaps.conf" ''
+  rejectBitmaps = pkgs.writeText "fc-53-no-bitmaps.conf" ''
     <?xml version="1.0"?>
     <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
     <fontconfig>
@@ -243,9 +243,9 @@ let
     ln -s ${defaultFontsConf} $support_folder/52-nixos-default-fonts.conf
     ln -s ${defaultFontsConf} $latest_folder/52-nixos-default-fonts.conf
 
-    # 53-nixos-bitmaps.conf
-    ln -s ${rejectBitmaps} $support_folder/53-nixos-bitmaps.conf
-    ln -s ${rejectBitmaps} $latest_folder/53-nixos-bitmaps.conf
+    # 53-no-bitmaps.conf
+    ln -s ${rejectBitmaps} $support_folder/53-no-bitmaps.conf
+    ln -s ${rejectBitmaps} $latest_folder/53-no-bitmaps.conf
 
     ${optionalString (!cfg.allowType1) ''
     # 53-nixos-reject-type1.conf
