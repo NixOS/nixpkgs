@@ -33,6 +33,7 @@ mkDerivation rec {
   # This is kind of ugly, but it works and it'll probably be quicker than to
   # bother the author of this program as he's using arch Linux and he'll probably be surprised that we
   # modify the prefix of our packages and not using `make DESTDIR= install`.
+  # See https://github.com/Martchus/syncthingtray/issues/42
   preInstall = ''
     echo grepping for ${qtbase.out} as \$qtbase in install files inside the build directory
     grep -l -R ${qtbase.out}/lib/qt- | while read f; do
