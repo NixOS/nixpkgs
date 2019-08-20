@@ -1,38 +1,58 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, glib, gtk3, pango, wrapGAppsHook, python3
-, gobject-introspection, gjs, libunistring, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gettext
+, gnome3
+, glib
+, gtk3
+, pango
+, wrapGAppsHook
+, python3
+, gobject-introspection
+, gjs
+, libunistring
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, gnome-desktop
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-characters-${version}";
+  pname = "gnome-characters";
   version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-characters/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-characters/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1mpg125x9k879ryg8xgbm9w1amx6b3iq9sqv7xfii7kzaanjb4js";
   };
+
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
+  ];
+
+
+  buildInputs = [
+    adwaita-icon-theme
+    gjs
+    glib
+    gnome-desktop # for typelib
+    gsettings-desktop-schemas
+    gtk3
+    libunistring
+    pango
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
   '';
-
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = "gnome-characters";
-      attrPath = "gnome3.gnome-characters";
-    };
-  };
-
-  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 gobject-introspection ];
-  buildInputs = [
-    glib gtk3 gjs pango gsettings-desktop-schemas
-    adwaita-icon-theme libunistring
-    # typelib
-    gnome-desktop
-  ];
-
-  mesonFlags = [
-    "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
-  ];
 
   dontWrapGApps = true;
 
@@ -47,6 +67,13 @@ stdenv.mkDerivation rec {
       wrapProgram $file "''${gappsWrapperArgs[@]}"
     done
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Design/Apps/CharacterMap;
