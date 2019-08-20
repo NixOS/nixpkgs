@@ -17505,15 +17505,6 @@ in
 
   cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
-  cutegram =
-    let callpkg = libsForQt56.callPackage;
-    in callpkg ../applications/networking/instant-messengers/telegram/cutegram rec {
-      libqtelegram-aseman-edition = callpkg ../applications/networking/instant-messengers/telegram/libqtelegram-aseman-edition { };
-      telegram-qml = callpkg ../applications/networking/instant-messengers/telegram/telegram-qml {
-        inherit libqtelegram-aseman-edition;
-      };
-    };
-
   cvs = callPackage ../applications/version-management/cvs { };
 
   cvsps = callPackage ../applications/version-management/cvsps { };
