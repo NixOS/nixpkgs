@@ -10,7 +10,7 @@ version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.version | sed s/'"'
 major=${version:0:5}
 echo "NixOS version is $version ($major)"
 
-stateDir=/home/deploy/amis/ec2-image-$version
+stateDir=$HOME/amis/ec2-image-$version
 echo "keeping state in $stateDir"
 mkdir -p $stateDir
 
@@ -114,72 +114,50 @@ for type in $types; do
 
                         echo "Disk size is $vhdFileLogicalBytes bytes. Will be registered as $vhdFileLogicalGigaBytes GB."
 
+                        echo "importing $vhdFile to s3://$bucket/$bucketDir/ ..."
+                        filename=$(basename $vhdFile)
+                        keyExists=$(aws s3api list-objects --bucket "$bucket" --prefix "$bucketDir/$filename" | jq .)
+                        if [ -z "$keyExists" ];then
+                            aws s3 cp $vhdFile s3://$bucket/$bucketDir/$filename --acl public-read
+                        fi
+
                         taskId=$(cat $stateDir/$region.$type.task-id 2> /dev/null || true)
                         volId=$(cat $stateDir/$region.$type.vol-id 2> /dev/null || true)
                         snapId=$(cat $stateDir/$region.$type.snap-id 2> /dev/null || true)
 
                         # Import the VHD file.
                         if [ -z "$snapId" -a -z "$volId" -a -z "$taskId" ]; then
-                            echo "importing $vhdFile..."
-                            taskId=$(ec2-import-volume $vhdFile --no-upload -f vhd \
-                                -O "$AWS_ACCESS_KEY_ID" -W "$AWS_SECRET_ACCESS_KEY" \
-                                -o "$AWS_ACCESS_KEY_ID" -w "$AWS_SECRET_ACCESS_KEY" \
-                                --region "$region" -z "${region}a" \
-                                --bucket "$bucket" --prefix "$bucketDir/" \
-                                | tee /dev/stderr \
-                                | sed 's/.*\(import-vol-[0-9a-z]\+\).*/\1/ ; t ; d')
+                            echo "importing snapshot ..."
+                            cat <<EOF >containers.json
+{
+    "Description": "$description",
+    "Format": "vhd",
+    "Url": "https://$bucket.s3.amazonaws.com/$bucketDir/$filename"
+}
+EOF
+                            taskId=$(aws ec2 import-snapshot \
+                                --description "NixOS $system $version " \
+                                --disk-container file://containers.json \
+                                --region "$region" \
+                                | jq .ImportTaskId -r)
                             echo -n "$taskId" > $stateDir/$region.$type.task-id
-                        fi
-
-                        if [ -z "$snapId" -a -z "$volId" ]; then
-                            ec2-resume-import  $vhdFile -t "$taskId" --region "$region" \
-                                -O "$AWS_ACCESS_KEY_ID" -W "$AWS_SECRET_ACCESS_KEY" \
-                                -o "$AWS_ACCESS_KEY_ID" -w "$AWS_SECRET_ACCESS_KEY"
                         fi
 
                         # Wait for the volume creation to finish.
                         if [ -z "$snapId" -a -z "$volId" ]; then
-                            echo "waiting for import to finish..."
+                            echo "waiting for import snapshot to finish..."
                             while true; do
-                                volId=$(aws ec2 describe-conversion-tasks --conversion-task-ids "$taskId" --region "$region" | jq -r .ConversionTasks[0].ImportVolume.Volume.Id)
-                                if [ "$volId" != null ]; then break; fi
+                                snapDetail=$(aws ec2 describe-import-snapshot-tasks \
+                                    --import-task-ids "$taskId" \
+                                    --region "$region" \
+                                    | jq '.ImportSnapshotTasks|.[]|.SnapshotTaskDetail')
+                                snapId=$(echo $snapDetail | jq .SnapshotId)
+                                state=$(echo $snapDetail | jq -r .Status)
+                                if [ "$snapId" != null -a "$state" = "completed" ]; then break; fi
                                 sleep 10
                             done
 
-                            echo -n "$volId" > $stateDir/$region.$type.vol-id
-                        fi
-
-                        # Delete the import task.
-                        if [ -n "$volId" -a -n "$taskId" ]; then
-                            echo "removing import task..."
-                            ec2-delete-disk-image -t "$taskId" --region "$region" \
-                                -O "$AWS_ACCESS_KEY_ID" -W "$AWS_SECRET_ACCESS_KEY" \
-                                -o "$AWS_ACCESS_KEY_ID" -w "$AWS_SECRET_ACCESS_KEY" || true
-                            rm -f $stateDir/$region.$type.task-id
-                        fi
-
-                        # Create a snapshot.
-                        if [ -z "$snapId" ]; then
-                            echo "creating snapshot..."
-                            # FIXME: this can fail with InvalidVolume.NotFound. Eventual consistency yay.
-                            snapId=$(aws ec2 create-snapshot --volume-id "$volId" --region "$region" --description "$description" | jq -r .SnapshotId)
-                            if [ "$snapId" = null ]; then exit 1; fi
                             echo -n "$snapId" > $stateDir/$region.$type.snap-id
-                        fi
-
-                        # Wait for the snapshot to finish.
-                        echo "waiting for snapshot to finish..."
-                        while true; do
-                            status=$(aws ec2 describe-snapshots --snapshot-ids "$snapId" --region "$region" | jq -r .Snapshots[0].State)
-                            if [ "$status" = completed ]; then break; fi
-                            sleep 10
-                        done
-
-                        # Delete the volume.
-                        if [ -n "$volId" ]; then
-                            echo "deleting volume..."
-                            aws ec2 delete-volume --volume-id "$volId" --region "$region" || true
-                            rm -f $stateDir/$region.$type.vol-id
                         fi
 
                         blockDeviceMappings="DeviceName=/dev/sda1,Ebs={SnapshotId=$snapId,VolumeSize=$vhdFileLogicalGigaBytes,DeleteOnTermination=true,VolumeType=gp2}"
