@@ -24445,7 +24445,7 @@ in
     inherit pkgs;
   };
 
-  golden-cheetah = libsForQt56.callPackage ../applications/misc/golden-cheetah {};
+  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah {};
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 

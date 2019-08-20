@@ -1,5 +1,6 @@
-{ stdenv, fetchurl
-, qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools, qtconnectivity
+{ stdenv, fetchFromGitHub
+, qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools
+, qtconnectivity, qtcharts
 , yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper
 }:
 
@@ -16,25 +17,29 @@ let
 in stdenv.mkDerivation rec {
   name = "golden-cheetah-${version}";
   version = "3.5-DEV1903";
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/GoldenCheetah/GoldenCheetah/archive/v${version}.tar.gz";
-    sha256 = "1042q5yh6k4m9hiyapz10bmg5jwa6s1hy086mq0768wybiqzilb2";
+
+  src = fetchFromGitHub {
+    owner = "GoldenCheetah";
+    repo = "GoldenCheetah";
+    rev = "v${version}";
+    sha256 = "130b0hm04i0hf97rs1xrdfhbal5vjsknj3x4cdxjh7rgbg2p1sm3";
   };
+
   buildInputs = [
     qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools zlib
-    qtconnectivity
+    qtconnectivity qtcharts
   ];
   nativeBuildInputs = [ flex makeWrapper qmake yacc ];
-  NIX_LDFLAGS = [
-    "-lz"
-  ];
+
+  NIX_LDFLAGS = [ "-lz" ];
+
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
     echo 'QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease' >> src/gcconfig.pri
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
   '';
+
   installPhase = ''
     runHook preInstall
 
