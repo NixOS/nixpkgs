@@ -1,5 +1,5 @@
 { system ? builtins.currentSystem,
-  config ? {},
+  config ? { boot.kernelPackages = pkgs.linuxPackages_latest; },
   pkgs ? import ../.. { inherit system config; }
 }:
 
@@ -10,7 +10,7 @@ let
   makeTest = import ./make-test.nix;
 
   makeZfsTest = name:
-    { kernelPackage ? pkgs.linuxPackages_latest
+    { kernelPackage ? config.boot.kernelPackages
     , enableUnstable ? false
     , extraTest ? ""
     }:
