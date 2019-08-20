@@ -54,83 +54,6 @@ let
 
   localConf = pkgs.writeText "fc-local.conf" cfg.localConf;
 
-  # The configuration to be included in /etc/font/
-  penultimateConf = pkgs.runCommand "font-penultimate-conf" {
-    preferLocalBuild = true;
-    } ''
-    support_folder=$out/etc/fonts/conf.d
-    latest_folder=$out/etc/fonts/${latestVersion}/conf.d
-
-    mkdir -p $support_folder
-    mkdir -p $latest_folder
-
-    ln -s ${supportFontsConf} $support_folder/../fonts.conf
-    ln -s ${latestPkg.out}/etc/fonts/fonts.conf \
-          $latest_folder/../fonts.conf
-
-    # fontconfig-penultimate various configuration files
-    ln -s ${pkgs.fontconfig-penultimate}/etc/fonts/conf.d/*.conf \
-          $support_folder
-    ln -s ${pkgs.fontconfig-penultimate}/etc/fonts/conf.d/*.conf \
-          $latest_folder
-
-    ln -s ${cacheConfSupport} $support_folder/00-nixos-cache.conf
-    ln -s ${cacheConfLatest}  $latest_folder/00-nixos-cache.conf
-
-    rm $support_folder/10-antialias.conf $latest_folder/10-antialias.conf
-    ln -s ${antialiasConf} $support_folder/10-antialias.conf
-    ln -s ${antialiasConf} $latest_folder/10-antialias.conf
-
-    rm $support_folder/10-hinting.conf $latest_folder/10-hinting.conf
-    ln -s ${hintingConf} $support_folder/10-hinting.conf
-    ln -s ${hintingConf} $latest_folder/10-hinting.conf
-
-    ${optionalString cfg.useEmbeddedBitmaps ''
-    rm $support_folder/10-no-embedded-bitmaps.conf
-    rm $latest_folder/10-no-embedded-bitmaps.conf
-    ''}
-
-    rm $support_folder/10-subpixel.conf $latest_folder/10-subpixel.conf
-    ln -s ${subpixelConf} $support_folder/10-subpixel.conf
-    ln -s ${subpixelConf} $latest_folder/10-subpixel.conf
-
-    ${optionalString (cfg.dpi != 0) ''
-    ln -s ${dpiConf} $support_folder/11-dpi.conf
-    ln -s ${dpiConf} $latest_folder/11-dpi.conf
-    ''}
-
-    ${optionalString (!cfg.includeUserConf) ''
-    rm $support_folder/50-user.conf
-    rm $latest_folder/50-user.conf
-    ''}
-
-    # 51-local.conf
-    rm $latest_folder/51-local.conf
-    substitute \
-      ${pkgs.fontconfig-penultimate}/etc/fonts/conf.d/51-local.conf \
-      $latest_folder/51-local.conf \
-      --replace local.conf /etc/fonts/${latestVersion}/local.conf
-
-    # local.conf (indirect priority 51)
-    ${optionalString (cfg.localConf != "") ''
-    ln -s ${localConf}        $out/etc/fonts/local.conf
-    ln -s ${localConf}        $out/etc/fonts/${latestVersion}/local.conf
-    ''}
-
-    ln -s ${defaultFontsConf} $support_folder/52-default-fonts.conf
-    ln -s ${defaultFontsConf} $latest_folder/52-default-fonts.conf
-
-    ${optionalString cfg.allowBitmaps ''
-    rm $support_folder/53-no-bitmaps.conf
-    rm $latest_folder/53-no-bitmaps.conf
-    ''}
-
-    ${optionalString (!cfg.allowType1) ''
-    ln -s ${rejectType1} $support_folder/53-no-type1.conf
-    ln -s ${rejectType1} $latest_folder/53-no-type1.conf
-    ''}
-  '';
-
   hintingConf = pkgs.writeText "fc-10-hinting.conf" ''
     <?xml version='1.0'?>
     <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
@@ -243,6 +166,83 @@ let
     </selectfont>
 
     </fontconfig>
+  '';
+
+  # The configuration to be included in /etc/font/
+  penultimateConf = pkgs.runCommand "font-penultimate-conf" {
+    preferLocalBuild = true;
+    } ''
+    support_folder=$out/etc/fonts/conf.d
+    latest_folder=$out/etc/fonts/${latestVersion}/conf.d
+
+    mkdir -p $support_folder
+    mkdir -p $latest_folder
+
+    ln -s ${supportFontsConf} $support_folder/../fonts.conf
+    ln -s ${latestPkg.out}/etc/fonts/fonts.conf \
+          $latest_folder/../fonts.conf
+
+    # fontconfig-penultimate various configuration files
+    ln -s ${pkgs.fontconfig-penultimate}/etc/fonts/conf.d/*.conf \
+          $support_folder
+    ln -s ${pkgs.fontconfig-penultimate}/etc/fonts/conf.d/*.conf \
+          $latest_folder
+
+    ln -s ${cacheConfSupport} $support_folder/00-nixos-cache.conf
+    ln -s ${cacheConfLatest}  $latest_folder/00-nixos-cache.conf
+
+    rm $support_folder/10-antialias.conf $latest_folder/10-antialias.conf
+    ln -s ${antialiasConf} $support_folder/10-antialias.conf
+    ln -s ${antialiasConf} $latest_folder/10-antialias.conf
+
+    rm $support_folder/10-hinting.conf $latest_folder/10-hinting.conf
+    ln -s ${hintingConf} $support_folder/10-hinting.conf
+    ln -s ${hintingConf} $latest_folder/10-hinting.conf
+
+    ${optionalString cfg.useEmbeddedBitmaps ''
+    rm $support_folder/10-no-embedded-bitmaps.conf
+    rm $latest_folder/10-no-embedded-bitmaps.conf
+    ''}
+
+    rm $support_folder/10-subpixel.conf $latest_folder/10-subpixel.conf
+    ln -s ${subpixelConf} $support_folder/10-subpixel.conf
+    ln -s ${subpixelConf} $latest_folder/10-subpixel.conf
+
+    ${optionalString (cfg.dpi != 0) ''
+    ln -s ${dpiConf} $support_folder/11-dpi.conf
+    ln -s ${dpiConf} $latest_folder/11-dpi.conf
+    ''}
+
+    ${optionalString (!cfg.includeUserConf) ''
+    rm $support_folder/50-user.conf
+    rm $latest_folder/50-user.conf
+    ''}
+
+    # 51-local.conf
+    rm $latest_folder/51-local.conf
+    substitute \
+      ${pkgs.fontconfig-penultimate}/etc/fonts/conf.d/51-local.conf \
+      $latest_folder/51-local.conf \
+      --replace local.conf /etc/fonts/${latestVersion}/local.conf
+
+    # local.conf (indirect priority 51)
+    ${optionalString (cfg.localConf != "") ''
+    ln -s ${localConf}        $out/etc/fonts/local.conf
+    ln -s ${localConf}        $out/etc/fonts/${latestVersion}/local.conf
+    ''}
+
+    ln -s ${defaultFontsConf} $support_folder/52-default-fonts.conf
+    ln -s ${defaultFontsConf} $latest_folder/52-default-fonts.conf
+
+    ${optionalString cfg.allowBitmaps ''
+    rm $support_folder/53-no-bitmaps.conf
+    rm $latest_folder/53-no-bitmaps.conf
+    ''}
+
+    ${optionalString (!cfg.allowType1) ''
+    ln -s ${rejectType1} $support_folder/53-no-type1.conf
+    ln -s ${rejectType1} $latest_folder/53-no-type1.conf
+    ''}
   '';
 
 in
