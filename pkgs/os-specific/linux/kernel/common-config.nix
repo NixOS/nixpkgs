@@ -145,7 +145,7 @@ let
       NF_TABLES_IPV4              = whenAtLeast "4.17" yes;
       NF_TABLES_ARP               = whenAtLeast "4.17" yes;
       NF_TABLES_IPV6              = whenAtLeast "4.17" yes;
-      NF_TABLES_BRIDGE            = whenAtLeast "4.17" yes;
+      NF_TABLES_BRIDGE            = whenBetween "4.17" "5.3" yes;
     };
 
     wireless = {
@@ -631,8 +631,8 @@ let
       IDLE_PAGE_TRACKING  = yes;
       IRDA_ULTRA          = whenOlder "4.17" yes; # Ultra (connectionless) protocol
 
-      JOYSTICK_IFORCE_232 = option yes; # I-Force Serial joysticks and wheels
-      JOYSTICK_IFORCE_USB = option yes; # I-Force USB joysticks and wheels
+      JOYSTICK_IFORCE_232 = { optional = true; tristate = whenOlder "5.3" "y"; }; # I-Force Serial joysticks and wheels
+      JOYSTICK_IFORCE_USB = { optional = true; tristate = whenOlder "5.3" "y"; }; # I-Force USB joysticks and wheels
       JOYSTICK_XPAD_FF    = option yes; # X-Box gamepad rumble support
       JOYSTICK_XPAD_LEDS  = option yes; # LED Support for Xbox360 controller 'BigX' LED
 

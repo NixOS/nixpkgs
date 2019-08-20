@@ -15745,8 +15745,6 @@ in
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
-      kernelPatches.modinst_arg_list_too_long
-      kernelPatches.export_kernel_fpu_functions
     ];
   };
 

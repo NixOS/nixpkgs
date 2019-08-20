@@ -190,7 +190,6 @@ let
         # To save space, exclude a bunch of unneeded stuff when copying.
         (cd .. && rsync --archive --prune-empty-dirs \
             --exclude='/build/' \
-            --exclude='/Documentation/' \
             * $dev/lib/modules/${modDirVersion}/source/)
 
         cd $dev/lib/modules/${modDirVersion}/source
