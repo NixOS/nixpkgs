@@ -40,10 +40,14 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ../yosys-abc/Makefile \
-      --replace 'CC   := gcc' ""
+      --replace 'CC   := gcc' "" \
+      --replace 'CXX  := g++' ""
     substituteInPlace ./Makefile \
       --replace 'CXX = clang' "" \
-      --replace 'ABCMKARGS = CC="$(CXX)"' 'ABCMKARGS =' \
+      --replace 'LD = clang++' 'LD = $(CXX)' \
+      --replace 'CXX = gcc' "" \
+      --replace 'LD = gcc' 'LD = $(CXX)' \
+      --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
   '';
 
