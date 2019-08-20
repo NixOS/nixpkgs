@@ -25,8 +25,8 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools ];
 
-  cmakeFlags = lib.optionals (enablePlasmoidSupport == false) ["-DNO_PLASMOID=ON"]
-    ++ lib.optionals (enableKioPluginSupport == false) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
+  cmakeFlags = lib.optionals (!enablePlasmoidSupport) ["-DNO_PLASMOID=ON"]
+    ++ lib.optionals (!enableKioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
   ;
   # Without this hook, `make install` fails since it tries to write to ${qtbase.out}/lib/qt-<version>/...
