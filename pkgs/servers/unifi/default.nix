@@ -41,16 +41,16 @@ let
 
 in rec {
 
-  # https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
+  # https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions / https://community.ui.com/releases
 
   unifiLTS = generic {
     version = "5.6.42";
-    sha256  = "0wxkv774pw43c15jk0sg534l5za4j067nr85r5fw58iar3w2l84x";
+    sha256 = "0wxkv774pw43c15jk0sg534l5za4j067nr85r5fw58iar3w2l84x";
   };
 
   unifiStable = generic {
-    version = "5.10.25";
-    sha256  = "1v03r7qd09s6lz37wwlsrqiy1jcwxnvj1q87jwpmhdipjprcjfdx";
+    version = "5.10.26";
+    sha256 = "0rlppwxiijbzdy3v1khvzck9ypfjyznn2xak34pl0ypgw24jg637";
   };
 
   unifiTesting = generic {
