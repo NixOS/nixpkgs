@@ -35,7 +35,7 @@ let
       description = "Controller for Ubiquiti UniFi access points";
       license = licenses.unfree;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ erictapen ];
+      maintainers = with maintainers; [ erictapen globin ];
     };
   };
 

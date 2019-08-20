@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     description = "A Prometheus exporter for WireGuard, written in Rust.";
     license = licenses.mit;
     homepage = https://github.com/MindFlavor/prometheus_wireguard_exporter;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ma27 globin ];
   };
 }

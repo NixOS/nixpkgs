@@ -77,7 +77,7 @@ yarn2nix.mkYarnPackage rec {
     description = "Realtime collaborative markdown notes on all platforms";
     license = licenses.agpl3;
     homepage = "https://github.com/codimd/server";
-    maintainers = with maintainers; [ willibutz ma27 ];
+    maintainers = with maintainers; [ willibutz ma27 globin ];
     platforms = platforms.linux;
   };
 }

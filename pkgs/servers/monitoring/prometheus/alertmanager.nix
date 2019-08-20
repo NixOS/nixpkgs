@@ -33,7 +33,7 @@ buildGoPackage rec {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = https://github.com/prometheus/alertmanager;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz ];
+    maintainers = with maintainers; [ benley fpletz globin ];
     platforms = platforms.unix;
   };
 }

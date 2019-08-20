@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos fpletz ];
+    maintainers = with maintainers; [ primeos fpletz globin ];
   };
 }
 
