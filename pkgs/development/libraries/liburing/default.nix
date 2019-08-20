@@ -42,11 +42,14 @@ stdenv.mkDerivation rec {
     # Finally, this patch fixes the aarch64-linux support introduced by the
     # first patch, but which was _broken_ by the second patch, in a horrid
     # twist of fate: it neglected to change the names of the aarch64 barriers
-    # appropriately. (I assume the author did not attempt to compile for
-    # aarch64, hence this regression)
+    # appropriately.
     #
-    # Not yet upstream: TBD.
-    ./fix-aarch64-barrier-names.patch
+    # Already upstream: remove when moving to the next version
+    (fetchpatch {
+      url    = "http://git.kernel.dk/cgit/liburing/patch/?id=6e9dd0c8c50b5988a0c77532c9c2bd6afd4790d2";
+      sha256 = "11mqa1bp2pdfqh08gpcd98kg7lh3rrng41b4l1wvhxdbvg5rfw9c";
+    })
+
   ];
 
   separateDebugInfo = true;
