@@ -171,7 +171,7 @@ let
   # The configuration to be included in /etc/font/
   penultimateConf = pkgs.runCommand "font-penultimate-conf" {
     preferLocalBuild = true;
-    } ''
+  } ''
     support_folder=$out/etc/fonts/conf.d
     latest_folder=$out/etc/fonts/${latestVersion}/conf.d
 
