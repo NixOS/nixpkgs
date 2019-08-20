@@ -12,9 +12,9 @@ mkDerivation rec {
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
-    owner  = "Martchus";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "Martchus";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0ijwpwlwwbfh9fdfbwz6dgi6hpmaav2jm56mzxm6as50iwnb59fx";
   };
 
