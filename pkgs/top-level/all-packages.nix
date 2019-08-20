@@ -16682,6 +16682,8 @@ in
 
   jost = callPackage ../data/fonts/jost { };
 
+  joypixels = callPackage ../data/fonts/joypixels { };
+
   junicode = callPackage ../data/fonts/junicode { };
 
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
