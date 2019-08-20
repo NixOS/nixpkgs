@@ -19,8 +19,8 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase cpp-utilities qtutilities webviewProvider jsProvider ] 
-    ++ lib.optional enableKioPluginSupport kio
-    ++ lib.optional enablePlasmoidSupport [ extra-cmake-modules plasma-framework ]
+    ++ lib.optionals enableKioPluginSupport [ kio ]
+    ++ lib.optionals enablePlasmoidSupport [ extra-cmake-modules plasma-framework ]
   ;
 
   nativeBuildInputs = [ cmake qttools ];
