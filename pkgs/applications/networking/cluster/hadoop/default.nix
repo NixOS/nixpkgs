@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash, coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl }:
+{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
+, coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
+}:
 
 let
-  common = { version, sha256, dependencies-sha256, tomcat }:
+  common = { version, sha256, dependencies-sha256, tomcat, openssl ? openssl }:
     let
       # compile the hadoop tarball from sources, it requires some patches
       binary-distributon = stdenv.mkDerivation rec {
@@ -127,18 +129,21 @@ in {
     sha256 = "1ahv67f3lwak3kbjvnk1gncq56z6dksbajj872iqd0awdsj3p5rf";
     dependencies-sha256 = "1lsr9nvrynzspxqcamb10d596zlnmnfpxhkd884gdiva0frm0b1r";
     tomcat = tomcat_6_0_48;
+    openssl = openssl_1_0_2;
   };
   hadoop_2_8 = common {
     version = "2.8.4";
     sha256 = "16c3ljhrzibkjn3y1bmjxdgf0kn60l23ay5hqpp7vpbnqx52x68w";
     dependencies-sha256 = "1j4f461487fydgr5978nnm245ksv4xbvskfr8pbmfhcyss6b7w03";
     tomcat = tomcat_6_0_48;
+    openssl = openssl_1_0_2;
   };
   hadoop_2_9 = common {
     version = "2.9.1";
     sha256 = "0qgmpfbpv7f521fkjy5ldzdb4lwiblhs0hyl8qy041ws17y5x7d7";
     dependencies-sha256 = "1d5i8jj5y746rrqb9lscycnd7acmxlkz64ydsiyqsh5cdqgy2x7x";
     tomcat = tomcat_6_0_48;
+    openssl = openssl_1_0_2;
   };
   hadoop_3_0 = common {
     version = "3.0.3";
