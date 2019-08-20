@@ -2,17 +2,15 @@
 , boost, python3, eigen
 , icestorm, trellis
 
-# TODO(thoughtpolice) Currently the GUI build seems broken at runtime on my
-# laptop (and over a remote X server on my server...), so mark it broken for
-# now, with intent to fix later.
-, enableGui ? false
-, qtbase, wrapQtAppsHook
+, enableGui ? true
+, wrapQtAppsHook
+, qtbase
 }:
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
 in
-stdenv.mkDerivation rec {
+with stdenv; mkDerivation rec {
   pname = "nextpnr";
   version = "2019.08.21";
 
@@ -25,10 +23,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs
      = [ cmake ]
-    ++ (stdenv.lib.optional enableGui wrapQtAppsHook);
+    ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs
      = [ boostPython python3 eigen ]
-    ++ (stdenv.lib.optional enableGui qtbase);
+    ++ (lib.optional enableGui qtbase);
 
   enableParallelBuilding = true;
   cmakeFlags =
@@ -41,7 +39,7 @@ stdenv.mkDerivation rec {
       "-DSERIALIZE_CHIPDB=OFF"
       # use PyPy for icestorm if enabled
       "-DPYTHON_EXECUTABLE=${icestorm.pythonInterp}"
-    ] ++ (stdenv.lib.optional (!enableGui) "-DBUILD_GUI=OFF");
+    ] ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF");
 
   # Fix the version number. This is a bit stupid (and fragile) in practice
   # but works ok. We should probably make this overrideable upstream.
@@ -50,13 +48,18 @@ stdenv.mkDerivation rec {
       --replace 'git log -1 --format=%h' 'echo ${substring 0 11 src.rev}'
   '';
 
-  meta = with stdenv.lib; {
+
+  postFixup = lib.optionalString enableGui ''
+    wrapQtApp $out/bin/nextpnr-generic
+    wrapQtApp $out/bin/nextpnr-ice40
+    wrapQtApp $out/bin/nextpnr-ecp5
+  '';
+
+  meta = with lib; {
     description = "Place and route tool for FPGAs";
     homepage    = https://github.com/yosyshq/nextpnr;
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice emily ];
-
-    broken = enableGui;
   };
 }
