@@ -5210,6 +5210,8 @@ in
     stdenv = clangStdenv;
   };
 
+  out-of-tree = callPackage ../development/tools/out-of-tree { };
+
   oppai-ng = callPackage ../tools/misc/oppai-ng { };
 
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
