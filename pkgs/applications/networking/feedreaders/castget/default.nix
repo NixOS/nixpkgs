@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, glib, ronn, curl, id3lib, libxml2 }:
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, glib
+, ronn
+, curl
+, id3lib
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "castget";
