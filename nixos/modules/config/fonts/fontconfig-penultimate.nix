@@ -52,8 +52,11 @@ let
       </fontconfig>
     '';
 
+  # local configuration file
   localConf = pkgs.writeText "fc-local.conf" cfg.localConf;
 
+  # rendering settings configuration files
+  # priority 10
   hintingConf = pkgs.writeText "fc-10-hinting.conf" ''
     <?xml version='1.0'?>
     <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
@@ -122,6 +125,8 @@ let
     </fontconfig>
   '';
 
+  # default fonts configuration file
+  # priority 52
   defaultFontsConf =
     let genDefault = fonts: name:
       optionalString (fonts != []) ''
@@ -151,6 +156,8 @@ let
     </fontconfig>
   '';
 
+  # reject Type 1 fonts
+  # priority 53
   rejectType1 = pkgs.writeText "fc-53-nixos-reject-type1.conf" ''
     <?xml version="1.0"?>
     <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
@@ -178,6 +185,7 @@ let
     mkdir -p $support_folder
     mkdir -p $latest_folder
 
+    # fonts.conf
     ln -s ${supportFontsConf} $support_folder/../fonts.conf
     ln -s ${latestPkg.out}/etc/fonts/fonts.conf \
           $latest_folder/../fonts.conf
@@ -213,6 +221,7 @@ let
     ln -s ${dpiConf} $latest_folder/11-dpi.conf
     ''}
 
+    # 50-user.conf
     ${optionalString (!cfg.includeUserConf) ''
     rm $support_folder/50-user.conf
     rm $latest_folder/50-user.conf
@@ -231,15 +240,18 @@ let
     ln -s ${localConf}        $latest_folder/../local.conf
     ''}
 
+    # 52-nixos-default-fonts.conf
     ln -s ${defaultFontsConf} $support_folder/52-nixos-default-fonts.conf
     ln -s ${defaultFontsConf} $latest_folder/52-nixos-default-fonts.conf
 
+    # 53-no-bitmaps.conf
     ${optionalString cfg.allowBitmaps ''
     rm $support_folder/53-no-bitmaps.conf
     rm $latest_folder/53-no-bitmaps.conf
     ''}
 
     ${optionalString (!cfg.allowType1) ''
+    # 53-nixos-reject-type1.conf
     ln -s ${rejectType1} $support_folder/53-nixos-reject-type1.conf
     ln -s ${rejectType1} $latest_folder/53-nixos-reject-type1.conf
     ''}

@@ -109,7 +109,6 @@ let
   '';
 
   # local configuration file
-  # priority 51
   localConf = pkgs.writeText "fc-local.conf" cfg.localConf;
 
   # default fonts configuration file
