@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "rebulk";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "162rad86slg4gmzxy33pnyyzm4hhcszcpjpw1vk79f3gxzvy8j8x";
+    sha256 = "11164sy9vwphf7iw60n4hmns2q6anazrkhc15lwi6sb2qmkjc541";
   };
 
   # Some kind of trickery with imports that doesn't work.
