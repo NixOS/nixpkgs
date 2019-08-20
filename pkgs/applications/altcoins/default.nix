@@ -11,7 +11,7 @@ rec {
   bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { boost = boost165; withGui = true; };
   bitcoind-abc = callPackage ./bitcoin-abc.nix { boost = boost165; withGui = false; };
 
-  bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix {
+  bitcoin-unlimited  = libsForQt5.callPackage ./bitcoin-unlimited.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
     withGui = true;
   };
