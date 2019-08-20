@@ -19471,6 +19471,8 @@ in
 
   inherit (ocaml-ng.ocamlPackages_4_01_0) monotoneViz;
 
+  moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
+
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
   mop = callPackage ../applications/misc/mop { };
