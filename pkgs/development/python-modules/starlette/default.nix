@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , aiofiles
@@ -12,6 +13,7 @@
 , python
 , uvicorn
 , isPy27
+, darwin
 }:
 
 buildPythonPackage rec {
@@ -33,7 +35,7 @@ buildPythonPackage rec {
     requests
     ujson
     uvicorn
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
 
   checkPhase = ''
     ${python.interpreter} -c """
