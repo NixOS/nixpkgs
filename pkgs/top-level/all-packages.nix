@@ -4522,6 +4522,8 @@ in
 
   keepalived = callPackage ../tools/networking/keepalived { };
 
+  keeperrl = callPackage ../games/keeperrl { };
+
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
