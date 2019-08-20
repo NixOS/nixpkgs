@@ -1,11 +1,21 @@
-{ mkDerivation, stdenv, lib, fetchFromGitHub
-, qtbase, extra-cmake-modules, cpp-utilities, qtutilities
-, cmake, kio, plasma-framework, qttools
+{ mkDerivation
+, stdenv
+, lib
+, fetchFromGitHub
+, qtbase
+, extra-cmake-modules
+, cpp-utilities
+, qtutilities
+, cmake
+, kio
+, plasma-framework
+, qttools
 , webviewProvider ? null
 , jsProvider ? null
 , enableKioPluginSupport ? false
 , enablePlasmoidSupport  ? false
-, systemdSupport ? true }:
+, systemdSupport ? true
+}:
 
 mkDerivation rec {
   version = "0.9.1";
