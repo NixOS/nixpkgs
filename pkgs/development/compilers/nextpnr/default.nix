@@ -11,19 +11,6 @@
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
-
-  # This is a massive hack. For now, Trellis doesn't really support
-  # installation through an already-built package; you have to build it once to
-  # get the tools, then reuse the build directory to build nextpnr -- the
-  # 'install' phase doesn't install everything it needs.  This will be fixed in
-  # the future but for now we can do this horrific thing.
-  trellisRoot = trellis.overrideAttrs (_: {
-    installPhase = ''
-      mkdir -p $out
-      cp *.so ..
-      cd ../../.. && cp -R trellis database $out/
-    '';
-  });
 in
 stdenv.mkDerivation rec {
   pname = "nextpnr";
@@ -47,7 +34,8 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     [ "-DARCH=generic;ice40;ecp5"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
-      "-DTRELLIS_ROOT=${trellisRoot}/trellis"
+      "-DTRELLIS_ROOT=${trellis}/share/trellis"
+      "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
       "-DSERIALIZE_CHIPDB=OFF"
