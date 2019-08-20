@@ -36,6 +36,9 @@ with python3.pkgs; buildPythonApplication rec {
     # man page
     make -C doc man
     install -Dm755 doc/build/man/khal.1 -t $out/share/man/man1
+
+    # desktop
+    install -Dm755 misc/khal.desktop -t $out/share/applications
   '';
 
   doCheck = !stdenv.isAarch64;
