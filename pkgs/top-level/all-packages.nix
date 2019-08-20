@@ -24775,4 +24775,6 @@ in
   runwayml = callPackage ../applications/graphics/runwayml {};
 
   uhubctl = callPackage ../tools/misc/uhubctl {};
+
+  kodelife = callPackage ../applications/graphics/kodelife {};
 }
