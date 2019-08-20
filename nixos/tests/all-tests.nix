@@ -74,7 +74,7 @@ in
   #ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
   ecryptfs = handleTest ./ecryptfs.nix {};
-  ejabberd = handleTest ./ejabberd.nix {};
+  ejabberd = handleTest ./xmpp/ejabberd.nix {};
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
   env = handleTest ./env.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
@@ -221,7 +221,8 @@ in
   prometheus = handleTest ./prometheus.nix {};
   prometheus2 = handleTest ./prometheus-2.nix {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
-  prosody = handleTest ./prosody.nix {};
+  prosody = handleTest ./xmpp/prosody.nix {};
+  prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
   quagga = handleTest ./quagga.nix {};
   quake3 = handleTest ./quake3.nix {};
