@@ -151,6 +151,8 @@ in
 
   castxml = callPackage ../development/tools/castxml { };
 
+  clj-kondo = callPackage ../development/tools/clj-kondo { };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   conftest = callPackage ../development/tools/conftest {};
@@ -383,6 +385,10 @@ in
   closureInfo = callPackage ../build-support/closure-info.nix { };
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
+
+  shortenPerlShebang = makeSetupHook
+    { deps = [ dieHook ]; }
+    ../build-support/setup-hooks/shorten-perl-shebang.sh;
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
@@ -7935,6 +7941,8 @@ in
   jre_headless = jre8_headless;
 
   inherit (callPackages ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
+
+  graalvm8-ee = callPackages ../development/compilers/graalvm/enterprise-edition.nix { };
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
@@ -15708,7 +15716,7 @@ in
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    blcr = callPackage ../os-specific/linux/blcr { };
+    blcr = if stdenv.lib.versionOlder "3.18" kernel.version then callPackage ../os-specific/linux/blcr { } else null;
 
     chipsec = callPackage ../tools/security/chipsec {
       inherit kernel;
@@ -15729,7 +15737,7 @@ in
 
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
-    e1000e = callPackage ../os-specific/linux/e1000e {};
+    e1000e = if stdenv.lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
@@ -15797,7 +15805,8 @@ in
 
     phc-intel = callPackage ../os-specific/linux/phc-intel { };
 
-    prl-tools = callPackage ../os-specific/linux/prl-tools { };
+    # Disable for kernels 4.15 and above due to compatibility issues
+    prl-tools = if stdenv.lib.versionOlder kernel.version "4.15" then callPackage ../os-specific/linux/prl-tools { } else null;
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
@@ -19466,6 +19475,8 @@ in
   };
 
   inherit (ocaml-ng.ocamlPackages_4_01_0) monotoneViz;
+
+  moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 

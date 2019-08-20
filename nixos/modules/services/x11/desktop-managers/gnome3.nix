@@ -138,7 +138,7 @@ in {
     services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-terminal-server.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
-    services.gnome3.gvfs.enable = true;
+    services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
     services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
@@ -230,8 +230,6 @@ in {
     environment.variables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
 
     services.xserver.updateDbusEnvironment = true;
-
-    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
 
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
       ++ (pkgs.gnome3.removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [

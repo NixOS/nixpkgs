@@ -7,13 +7,13 @@
 
 let
   pname = "nautilus";
-  version = "3.32.1";
+  version = "3.32.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0vmrvimv4183l3ij4kv0ir2c9rfzk7gh3xc2pa4wkqq9kn7h6m7s";
+    sha256 = "1x9crzbj6rrrf8w5dkcx0c14j40byr4ijpzkwd5dcrbfvvdy1r01";
   };
 
   nativeBuildInputs = [
