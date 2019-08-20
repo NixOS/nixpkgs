@@ -23,15 +23,6 @@ rec {
   bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { boost = boost165; withGui = true; };
   bitcoind-classic = callPackage ./bitcoin-classic.nix { boost = boost165; withGui = false; };
 
-  bitcoin-xt  = callPackage ./bitcoin-xt.nix {
-    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
-    boost = boost165; withGui = true;
-  };
-  bitcoind-xt = callPackage ./bitcoin-xt.nix {
-    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
-    boost = boost165; withGui = false;
-  };
-
   btc1 = callPackage ./btc1.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit;
     boost = boost165;
