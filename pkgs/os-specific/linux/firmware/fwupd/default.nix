@@ -31,11 +31,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.2.10";
+  version = "1.2.8";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "0inngs7i48akm9c7fmdsf9zjif595rkaba69rl76jfwfv8r21vjb";
+    sha256 = "0qbvq52c0scn1h99i1rf2la6rrhckin6gb02k7l0v3g07mxs20wc";
   };
 
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
