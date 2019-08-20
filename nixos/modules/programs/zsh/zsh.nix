@@ -70,7 +70,7 @@ in
       promptInit = mkOption {
         default = ''
           if [ "$TERM" != dumb ]; then
-              autoload -U promptinit && promptinit && prompt walters
+              autoload -U promptinit && promptinit && prompt walters && setopt prompt_sp
           fi
         '';
         description = ''
