@@ -34,6 +34,20 @@ stdenv.mkDerivation rec {
     "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
   ];
 
+  dontWrapGApps = true;
+
+  # Fixes https://github.com/NixOS/nixpkgs/issues/31168
+  postFixup = ''
+    for file in $out/share/org.gnome.Characters/org.gnome.Characters \
+       $out/share/org.gnome.Characters/org.gnome.Characters.BackgroundService
+    do
+      sed -e $"2iimports.package._findEffectiveEntryPointName = () => \'$(basename $file)\' " \
+        -i $file
+
+      wrapProgram $file "''${gappsWrapperArgs[@]}"
+    done
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Design/Apps/CharacterMap;
     description = "Simple utility application to find and insert unusual characters";
