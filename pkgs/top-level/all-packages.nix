@@ -8182,17 +8182,15 @@ in
   };
 
   ocaml-ng = callPackage ./ocaml-packages.nix { };
-  ocaml = ocamlPackages.ocaml;
-
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
+  metaocamlPackages = recurseIntoAttrs ocaml-ng.metaocamlPackages;
+
+  ocaml     = ocamlPackages.ocaml;
+  metaocaml = metaocamlPackages.ocaml;
 
   ocamlformat = callPackage ../development/tools/ocaml/ocamlformat { };
 
   orc = callPackage ../development/compilers/orc { };
-
-  metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
-
-  ber_metaocaml = callPackage ../development/compilers/ocaml/ber-metaocaml.nix { };
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 

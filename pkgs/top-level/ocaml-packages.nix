@@ -1107,4 +1107,6 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_latest = ocamlPackages_4_08;
 
   ocamlPackages = ocamlPackages_4_06;
+
+  metaocamlPackages = mkOcamlPackages (callPackage ../development/compilers/ocaml/ber-metaocaml.nix { });
 }
