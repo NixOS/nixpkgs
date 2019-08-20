@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "cachy";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v6mjyhgx6j7ya20bk69cr3gdzdkdf6psay0h090rscclgji65dp";
+    sha256 = "1cb9naly8ampzlky7h74n5wj628l7jkpsh0c0jz0namlrvs82r8q";
   };
 
   propagatedBuildInputs = [
