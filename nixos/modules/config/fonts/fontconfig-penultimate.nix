@@ -227,8 +227,8 @@ let
 
     # local.conf (indirect priority 51)
     ${optionalString (cfg.localConf != "") ''
-    ln -s ${localConf}        $out/etc/fonts/local.conf
-    ln -s ${localConf}        $out/etc/fonts/${latestVersion}/local.conf
+    ln -s ${localConf}        $support_folder/../local.conf
+    ln -s ${localConf}        $latest_folder/../local.conf
     ''}
 
     ln -s ${defaultFontsConf} $support_folder/52-default-fonts.conf

@@ -194,63 +194,63 @@ let
   confPkg = pkgs.runCommand "fontconfig-conf" {
     preferLocalBuild = true;
   } ''
-    support_folder=$out/etc/fonts
-    latest_folder=$out/etc/fonts/${latestVersion}
+    support_folder=$out/etc/fonts/conf.d
+    latest_folder=$out/etc/fonts/${latestVersion}/conf.d
 
-    mkdir -p $support_folder/conf.d
-    mkdir -p $latest_folder/conf.d
+    mkdir -p $support_folder
+    mkdir -p $latest_folder
 
     # fonts.conf
-    ln -s ${supportFontsConf} $support_folder/fonts.conf
+    ln -s ${supportFontsConf} $support_folder/../fonts.conf
     ln -s ${latestPkg.out}/etc/fonts/fonts.conf \
-          $latest_folder/fonts.conf
+          $latest_folder/../fonts.conf
 
     # fontconfig default config files
     ln -s ${supportPkg.out}/etc/fonts/conf.d/*.conf \
-          $support_folder/conf.d/
+          $support_folder/
     ln -s ${latestPkg.out}/etc/fonts/conf.d/*.conf \
-          $latest_folder/conf.d/
+          $latest_folder/
 
     # update latest 51-local.conf path to look at the latest local.conf
-    rm    $latest_folder/conf.d/51-local.conf
+    rm    $latest_folder/51-local.conf
 
     substitute ${latestPkg.out}/etc/fonts/conf.d/51-local.conf \
-               $latest_folder/conf.d/51-local.conf \
+               $latest_folder/51-local.conf \
                --replace local.conf /etc/fonts/${latestVersion}/local.conf
 
     # 00-nixos-cache.conf
     ln -s ${cacheConfSupport} \
-          $support_folder/conf.d/00-nixos-cache.conf
-    ln -s ${cacheConfLatest}  $latest_folder/conf.d/00-nixos-cache.conf
+          $support_folder/00-nixos-cache.conf
+    ln -s ${cacheConfLatest}  $latest_folder/00-nixos-cache.conf
 
     # 10-nixos-rendering.conf
-    ln -s ${renderConf}       $support_folder/conf.d/10-nixos-rendering.conf
-    ln -s ${renderConf}       $latest_folder/conf.d/10-nixos-rendering.conf
+    ln -s ${renderConf}       $support_folder/10-nixos-rendering.conf
+    ln -s ${renderConf}       $latest_folder/10-nixos-rendering.conf
 
     # 50-user.conf
     ${optionalString (!cfg.includeUserConf) ''
-    rm $support_folder/conf.d/50-user.conf
-    rm $latest_folder/conf.d/50-user.conf
+    rm $support_folder/50-user.conf
+    rm $latest_folder/50-user.conf
     ''}
 
     # local.conf (indirect priority 51)
     ${optionalString (cfg.localConf != "") ''
-    ln -s ${localConf}        $support_folder/local.conf
-    ln -s ${localConf}        $latest_folder/local.conf
+    ln -s ${localConf}        $support_folder/../local.conf
+    ln -s ${localConf}        $latest_folder/../local.conf
     ''}
 
     # 52-nixos-default-fonts.conf
-    ln -s ${defaultFontsConf} $support_folder/conf.d/52-nixos-default-fonts.conf
-    ln -s ${defaultFontsConf} $latest_folder/conf.d/52-nixos-default-fonts.conf
+    ln -s ${defaultFontsConf} $support_folder/52-nixos-default-fonts.conf
+    ln -s ${defaultFontsConf} $latest_folder/52-nixos-default-fonts.conf
 
     # 53-nixos-bitmaps.conf
-    ln -s ${rejectBitmaps} $support_folder/conf.d/53-nixos-bitmaps.conf
-    ln -s ${rejectBitmaps} $latest_folder/conf.d/53-nixos-bitmaps.conf
+    ln -s ${rejectBitmaps} $support_folder/53-nixos-bitmaps.conf
+    ln -s ${rejectBitmaps} $latest_folder/53-nixos-bitmaps.conf
 
     ${optionalString (!cfg.allowType1) ''
     # 53-nixos-reject-type1.conf
-    ln -s ${rejectType1} $support_folder/conf.d/53-nixos-reject-type1.conf
-    ln -s ${rejectType1} $latest_folder/conf.d/53-nixos-reject-type1.conf
+    ln -s ${rejectType1} $support_folder/53-nixos-reject-type1.conf
+    ln -s ${rejectType1} $latest_folder/53-nixos-reject-type1.conf
     ''}
   '';
 
