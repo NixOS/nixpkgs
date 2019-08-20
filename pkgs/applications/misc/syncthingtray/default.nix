@@ -13,7 +13,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Martchus";
-    repo = pname;
+    repo = "syncthingtray";
     rev = "v${version}";
     sha256 = "0ijwpwlwwbfh9fdfbwz6dgi6hpmaav2jm56mzxm6as50iwnb59fx";
   };
