@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pfrjmsikv35cc0praxgim26zq4r7dfp1pkn6n9fz3fm73gxylyv";
   };
   # Otherwise, the autoreconfHook fails since Makefile.am requires it
-  prePatch = ''
+  preAutoreconf = ''
     touch NEWS
     touch README
     touch ChangeLog
