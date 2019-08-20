@@ -8175,11 +8175,7 @@ in
 
   neko = callPackage ../development/compilers/neko { };
 
-  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr {
-    # QT 5.12 has a weird regression involving the floorplanning window having
-    # a 'blank' or 'transparent' background, so fall back to 5.11 for now.
-    qtbase = qt511.qtbase;
-  };
+  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr { };
 
   nasm = callPackage ../development/compilers/nasm { };
 
