@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     install -DT {usr,$out}/lib/mozilla/native-messaging-hosts/fx_cast_bridge.json
 
     substituteInPlace $out/lib/mozilla/native-messaging-hosts/fx_cast_bridge.json \
-      --replace {opt/fx_cast,$out/bin}/fx_cast_bridge
+      --replace {/opt/fx_cast,$out/bin}/fx_cast_bridge
   '';
 
   # See now-cli/default.nix
