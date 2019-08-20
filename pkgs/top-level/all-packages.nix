@@ -19229,6 +19229,8 @@ in
 
   hashit = callPackage ../tools/misc/hashit { };
 
+  heimer = libsForQt5.callPackage ../applications/misc/heimer { };
+
   hello = callPackage ../applications/misc/hello { };
   hello-unfree = callPackage ../applications/misc/hello-unfree { };
 
