@@ -58,8 +58,6 @@ in stdenv.mkDerivation rec {
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/third_party/asio-master/asio/include/asio/detail/config.hpp --replace ASIO_HAS_STD_EXPERIMENTAL_STRING_VIEW ASIO_HAS_STD_STRING_VIEW
-
     substituteInPlace src/third_party/mozjs-45/extract/js/src/jsmath.cpp --replace 'defined(HAVE_SINCOS)' 0
 
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
