@@ -1570,6 +1570,8 @@ in {
 
   cram = callPackage ../development/python-modules/cram { };
 
+  crc16 = callPackage ../development/python-modules/crc16 { };
+
   csscompressor = callPackage ../development/python-modules/csscompressor {};
 
   csvs-to-sqlite = callPackage ../development/python-modules/csvs-to-sqlite { };
