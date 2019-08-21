@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     ${stdenv.lib.optionalString (stdenv.isLinux) ''
-      patchelf --set-rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
+      patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary})" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
     ''}
     ${stdenv.lib.optionalString (stdenv.isDarwin) ''
       install_name_tool -add_rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
