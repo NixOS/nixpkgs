@@ -24457,6 +24457,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  vcard = with python3Packages; toPythonApplication vcard;
+
   vice = callPackage ../misc/emulators/vice {
     giflib = giflib_4_1;
   };
