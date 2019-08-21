@@ -15074,6 +15074,8 @@ in
 
   sambaFull = samba4Full;
 
+  sampler = callPackage ../applications/misc/sampler { };
+
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
   shairport-sync = callPackage ../servers/shairport-sync { };
