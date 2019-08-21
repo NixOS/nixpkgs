@@ -4,14 +4,14 @@
   qtbase, qttools, glm }:
 
 stdenv.mkDerivation rec {
-  name = "solarus-quest-editor-${version}";
-  version = "1.6.0";
-    
+  pname = "solarus-quest-editor";
+  version = "1.6.2";
+
   src = fetchFromGitLab {
     owner = "solarus-games";
-    repo = "solarus-quest-editor";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1a7816kaljfh9ynzy9g36mqzzv2p800nnbrja73q6vjfrsv3vq4c";
+    sha256 = "0dq94iw9ldl4p83dqcwjs5ilpkvz5jgdk8rbls8pf8b7afpg36rz";
   };
   
   buildInputs = [ cmake luajit SDL2

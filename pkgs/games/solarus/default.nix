@@ -4,14 +4,14 @@
   qtbase, qttools }:
 
 stdenv.mkDerivation rec {
-  name = "solarus-${version}";
-  version = "1.6.0";
+  pname = "solarus";
+  version = "1.6.2";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
-    repo = "solarus";
-    rev = "v1.6.0";
-    sha256 = "0mlpa1ijaxy84f7xjgs2kjnpm035b8q9ckva6lg14q49gzy10fr2";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0d0xfjbmamz84aajxfc0fwrj8862xxbxz6n4xnc05r1m4g7gba77";
   };
 
   buildInputs = [ cmake luajit SDL2
