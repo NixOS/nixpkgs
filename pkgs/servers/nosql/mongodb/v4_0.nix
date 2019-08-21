@@ -14,5 +14,5 @@ in buildMongoDB {
   patches = [
     ./forget-build-dependencies.patch
     ./mozjs-45_fix-3-byte-opcode.patch
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ ./asio-no-experimental-string-view.patch ];
 }
