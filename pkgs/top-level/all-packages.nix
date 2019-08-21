@@ -7944,7 +7944,7 @@ in
 
   inherit (callPackages ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
 
-  graalvm8-ee = callPackages ../development/compilers/graalvm/enterprise-edition.nix { };
+  graalvm8-ee = callPackage ../development/compilers/graalvm/enterprise-edition.nix { };
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
