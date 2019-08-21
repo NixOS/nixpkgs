@@ -3754,6 +3754,16 @@
     githubId = 689294;
     name = "Daiderd Jordan";
   };
+  l0b0 = {
+    email = "victor.engmark@gmail.com";
+    github = "l0b0";
+    # gitlab = "victor-engmark";
+    name = "Victor Engmark";
+    keys = [{
+      longkeyid = "rsa4096/0xEC92D395260D3194";
+      fingerprint = "E5D2 3A00 D8C6 93B4 C2AC  D93C EC92 D395 260D 3194";
+    }];
+  };
   lo1tuma = {
     email = "schreck.mathias@gmail.com";
     github = "lo1tuma";
