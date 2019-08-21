@@ -1285,4 +1285,7 @@ self: super: {
   # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
   graphviz = dontCheck super.graphviz;
 
+  # https://github.com/elliottt/hsopenid/issues/15
+  openid = markBroken super.openid;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
