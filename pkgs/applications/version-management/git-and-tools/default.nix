@@ -121,6 +121,8 @@ let
 
   git-stree = callPackage ./git-stree { };
 
+  git-subrepo = callPackage ./git-subrepo { };
+
   git-sync = callPackage ./git-sync { };
 
   git-test = callPackage ./git-test { };
