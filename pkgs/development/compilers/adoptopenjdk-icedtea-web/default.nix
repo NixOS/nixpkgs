@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, glib, xulrunner, zip, pkgconfig, npapi_sdk, bash, bc }:
 
 stdenv.mkDerivation rec {
-  name = "icedtea-web-${version}";
+  pname = "adoptopenjdk-icedtea-web";
 
   version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "AdoptOpenJDK";
     repo = "IcedTea-Web";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0bm5k11i2vgb54ch1bawsmjbwnqnp04saadwm2f2mggmmdc6b1qq";
   };
 

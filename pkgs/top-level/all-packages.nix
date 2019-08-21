@@ -7275,6 +7275,10 @@ in
   adoptopenjdk-bin = adoptopenjdk-hotspot-bin-11;
   adoptopenjdk-jre-bin = adoptopenjdk-jre-hotspot-bin-11;
 
+  adoptopenjdk-icedtea-web = callPackage ../development/compilers/adoptopenjdk-icedtea-web {
+    jdk = jdk8;
+  };
+
   aldor = callPackage ../development/compilers/aldor { };
 
   aliceml = callPackage ../development/compilers/aliceml { };
@@ -7829,12 +7833,6 @@ in
   gprolog = callPackage ../development/compilers/gprolog { };
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
-
-  icedtea8_web = callPackage ../development/compilers/icedtea-web {
-    jdk = jdk8;
-  };
-
-  icedtea_web = icedtea8_web;
 
   idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
