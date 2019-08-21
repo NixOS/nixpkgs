@@ -9485,6 +9485,8 @@ in
 
   gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing {};
 
+  gnome-hexgl = callPackage ../games/gnome-hexgl {};
+
   gnome-usage = callPackage ../applications/misc/gnome-usage {};
 
   gnome-latex = callPackage ../applications/editors/gnome-latex/default.nix { };
