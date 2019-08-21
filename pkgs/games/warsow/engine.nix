@@ -48,5 +48,6 @@ in stdenv.mkDerivation (libs // rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ astsmtl abbradar ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64;
   };
 })
