@@ -339,6 +339,7 @@ sebastianmarkow/deoplete-rust
 sheerun/vim-polyglot
 Shougo/context_filetype.vim
 Shougo/denite.nvim
+Shougo/defx.nvim
 Shougo/deol.nvim
 Shougo/deoplete-lsp
 Shougo/deoplete.nvim

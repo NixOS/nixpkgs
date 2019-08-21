@@ -166,6 +166,10 @@ self: super: {
     '';
   });
 
+  defx-nvim = super.defx-nvim.overrideAttrs(old: {
+    dependencies = with super; [ nvim-yarp ];
+  });
+
   deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
     dependencies = with super; [ deoplete-nvim vim-fish ];
   });

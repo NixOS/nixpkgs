@@ -775,6 +775,17 @@ let
     };
   };
 
+  defx-nvim = buildVimPluginFrom2Nix {
+    pname = "defx-nvim";
+    version = "2019-08-19";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "defx.nvim";
+      rev = "dbd2dceea914ecaa71d24a1d6036f1981becdca5";
+      sha256 = "1gl18s39v7k1p6z7hchq1k16f6f1i2ccq76as562c0nvn68jdqi8";
+    };
+  };
+
   delimitMate = buildVimPluginFrom2Nix {
     pname = "delimitMate";
     version = "2017-06-19";
