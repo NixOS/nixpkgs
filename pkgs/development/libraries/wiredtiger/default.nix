@@ -69,6 +69,5 @@ stdenv.mkDerivation rec {
     description = "";
     license = licenses.gpl2;
     platforms = intersectLists platforms.unix platforms.x86_64;
-    broken = true; # Broken by f689a6d1c6796c4a4f116ffec6c4624379e04bc9.
   };
 }
