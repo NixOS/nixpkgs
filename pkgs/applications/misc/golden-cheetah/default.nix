@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools
 , qtconnectivity, qtcharts
 , yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper

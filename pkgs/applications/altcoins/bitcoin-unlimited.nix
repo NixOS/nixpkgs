@@ -1,12 +1,11 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
 , zlib, miniupnpc, utillinux, protobuf, qrencode, libevent, python3
-, withGui, wrapQtAppsHook, qtbase, qttools
+, withGui, wrapQtAppsHook ? null, qtbase ? null, qttools ? null
 , Foundation, ApplicationServices, AppKit }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-unlimited-" + version;
   version = "1.6.0.1";
 
