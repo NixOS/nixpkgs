@@ -8,7 +8,7 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.8.1";
+  version = "1.8.2";
   # Note: Due to our strong dependency on the Arch patches it's probably best
   # to also wait for the Arch update (especially if the patches don't apply).
 
@@ -17,7 +17,7 @@ mkDerivation rec {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "05k5k796z5x0dxgy7dicplx8a2jfjcy35d2h5cn4x4h2n00i5qgf";
+    sha256 = "0dls6s8721zjm8351fcgfbsifr9d7wsxbf5dra5cbk8r555ibf3j";
     fetchSubmodules = true;
   };
 
