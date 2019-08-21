@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "UNIX init scheme with service supervision";
     license = licenses.bsd3;
     homepage = http://smarden.org/runit;
-    maintainers = with maintainers; [ rickynils joachifm ];
+    maintainers = with maintainers; [ joachifm ];
     platforms = platforms.linux;
   };
 }

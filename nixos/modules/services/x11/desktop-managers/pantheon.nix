@@ -99,10 +99,6 @@ in
             fi
           '') cfg.sessionPath}
 
-          # Makes qt applications look less alien
-          export QT_QPA_PLATFORMTHEME=gtk3
-          export QT_STYLE_OVERRIDE=adwaita
-
           # Settings from elementary-default-settings
           export GTK_CSD=1
           export GTK_MODULES=$GTK_MODULES:pantheon-filechooser-module
@@ -149,6 +145,11 @@ in
     programs.dconf.enable = true;
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
+
+    # Harmonize Qt5 applications under Pantheon
+    qt5.enable = true;
+    qt5.platformTheme = "gnome";
+    qt5.style = "adwaita";
 
     networking.networkmanager.enable = mkDefault true;
     networking.networkmanager.basePackages =

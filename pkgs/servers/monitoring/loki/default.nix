@@ -26,7 +26,7 @@ buildGoPackage rec {
     description = "Like Prometheus, but for logs.";
     license = licenses.asl20;
     homepage = "https://grafana.com/loki";
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with maintainers; [ willibutz globin ];
     platforms = platforms.linux;
   };
 }

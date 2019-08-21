@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Converting Jupyter Notebooks";
     homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh globin ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }

@@ -149,6 +149,8 @@ in
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  castget = callPackage ../applications/networking/feedreaders/castget { };
+
   castxml = callPackage ../development/tools/castxml { };
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
@@ -5262,7 +5264,7 @@ in
 
   pacman = callPackage ../tools/package-management/pacman { };
 
-  padthv1 = callPackage ../applications/audio/padthv1 { };
+  padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
@@ -12817,7 +12819,8 @@ in
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_2_8
-    libressl_2_9;
+    libressl_2_9
+    libressl_3_0;
 
   libressl = libressl_2_9;
 
@@ -14508,6 +14511,7 @@ in
   prosody = callPackage ../servers/xmpp/prosody {
     # _compat can probably be removed on next minor version after 0.10.0
     lua5 = lua5_2_compat;
+    withExtraLibs = [ luaPackages.luadbi-sqlite3 ];
     inherit (lua52Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luadbi;
   };
 
@@ -16694,6 +16698,8 @@ in
   iwona = callPackage ../data/fonts/iwona { };
 
   jost = callPackage ../data/fonts/jost { };
+
+  joypixels = callPackage ../data/fonts/joypixels { };
 
   junicode = callPackage ../data/fonts/junicode { };
 
@@ -24767,4 +24773,8 @@ in
   zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
 
   runwayml = callPackage ../applications/graphics/runwayml {};
+
+  uhubctl = callPackage ../tools/misc/uhubctl {};
+
+  kodelife = callPackage ../applications/graphics/kodelife {};
 }

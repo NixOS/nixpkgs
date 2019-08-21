@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://flow.org/;
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainers = with maintainers; [ marsam puffnfresh globin ];
+    maintainers = with maintainers; [ marsam puffnfresh ];
   };
 }

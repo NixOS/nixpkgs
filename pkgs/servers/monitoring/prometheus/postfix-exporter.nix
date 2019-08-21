@@ -51,6 +51,6 @@ buildGoPackage rec {
     inherit (src.meta) homepage;
     description = "A Prometheus exporter for Postfix";
     license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with maintainers; [ willibutz globin ];
   };
 }
