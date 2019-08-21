@@ -13,7 +13,15 @@ let
 
     nativeBuildInputs = [ cmake ];
 
-    cmakeFlags = [ "-DENABLE_NC=ON" "-DBUILD_SHARED_LIBS=ON" ];
+    cmakeFlags = [
+      "-DENABLE_NC=ON"
+      "-DBUILD_SHARED_LIBS=ON"
+      # Ensure that the output libraries do not require an executable stack.
+      # Without this define, assembly files in libcrypto do not include a
+      # .note.GNU-stack section, and if that section is missing from any object,
+      # the linker will make the stack executable.
+      "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
+    ];
 
     # The autoconf build is broken as of 2.9.1, resulting in the following error:
     # libressl-2.9.1/tls/.libs/libtls.a', needed by 'handshake_table'.
