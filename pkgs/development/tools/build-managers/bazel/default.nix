@@ -329,7 +329,8 @@ stdenv.mkDerivation rec {
 
     genericPatches = ''
       # Substitute j2objc and objc wrapper's python shebang to plain python path.
-      # See also `postFixup` where python is added to $out/nix-support
+      # These scripts explicitly depend on Python 2.7, hence we use python27.
+      # See also `postFixup` where python27 is added to $out/nix-support
       substituteInPlace tools/j2objc/j2objc_header_map.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
       substituteInPlace tools/j2objc/j2objc_wrapper.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
       substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
@@ -342,6 +343,8 @@ stdenv.mkDerivation rec {
       grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
+        # We default to python3 where possible. See also `postFixup` where
+        # python3 is added to $out/nix-support
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
           --replace "/usr/bin/env bash" ${customBash}/bin/bash \
@@ -521,6 +524,10 @@ stdenv.mkDerivation rec {
     echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
+    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
+    # default to using python3. Therefore, both python27 and python3 are
+    # runtime dependencies.
+    echo "${python27}" >> $out/nix-support/depends
     echo "${python3}" >> $out/nix-support/depends
   '' + lib.optionalString stdenv.isDarwin ''
     echo "${cctools}" >> $out/nix-support/depends
