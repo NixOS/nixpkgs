@@ -20541,8 +20541,6 @@ in
     ncurses = ncurses5;
   };
 
-  ssvnc = callPackage ../applications/networking/remote/ssvnc { };
-
   stupidterm = callPackage ../applications/misc/stupidterm {
     gtk = gtk3;
   };
