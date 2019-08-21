@@ -146,6 +146,10 @@ in
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
 
+    # Shell integration for VTE terminals
+    programs.bash.vteIntegration = mkDefault true;
+    programs.zsh.vteIntegration = mkDefault true;
+
     # Harmonize Qt5 applications under Pantheon
     qt5.enable = true;
     qt5.platformTheme = "gnome";
