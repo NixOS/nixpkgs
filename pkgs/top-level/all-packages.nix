@@ -1690,6 +1690,8 @@ in
 
   gsctl = callPackage ../applications/misc/gsctl { };
 
+  gthree = callPackage ../development/libraries/gthree { };
+
   gti = callPackage ../tools/misc/gti { };
 
   hdate = callPackage ../applications/misc/hdate { };
