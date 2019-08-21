@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitLab, cmake, luajit,
+{ lib, mkDerivation, fetchFromGitLab, cmake, luajit,
   SDL2, SDL2_image, SDL2_ttf, physfs,
   openal, libmodplug, libvorbis,
   qtbase, qttools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "solarus";
   version = "1.6.2";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Zelda-like ARPG game engine";
     longDescription = ''
       Solarus is a game engine for Zelda-like ARPG games written in lua.
