@@ -1,14 +1,29 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools
+, ruby, tzdata, git, nettools, nixosTests
 , gitlabEnterprise ? false
 }:
 
 let
-  rubyEnv = bundlerEnv {
+  rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
     inherit ruby;
     gemdir = ./rubyEnv- + "${if gitlabEnterprise then "ee" else "ce"}";
-    groups = [ "default" "unicorn" "ed25519" "metrics" ];
+    gemset =
+      let x = import (gemdir + "/gemset.nix");
+      in x // {
+        # grpc expects the AR environment variable to contain `ar rpc`. See the
+        # discussion in nixpkgs #63056.
+        grpc = x.grpc // {
+          patches = [ ./fix-grpc-ar.patch ];
+          dontBuild = false;
+        };
+      };
+    groups = [
+      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test"
+    ];
+    # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
+    # `console` executable.
+    ignoreCollisions = true;
   };
 
   flavour = if gitlabEnterprise then "ee" else "ce";
@@ -61,6 +76,7 @@ stdenv.mkDerivation rec {
     # Work around unpacking deb containing binary with suid bit
     tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
     tar -xf gitlab-deb-data.tar
+    rm gitlab-deb-data.tar
 
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt # only directory in data.tar.gz
@@ -92,6 +108,9 @@ stdenv.mkDerivation rec {
     GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
     GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
     GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
+    tests = {
+      nixos-test-passes = nixosTests.gitlab;
+    };
   };
 
   meta = with lib; {
