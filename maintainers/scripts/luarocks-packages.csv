@@ -1,4 +1,5 @@
 # nix name, luarocks name, server, version,luaversion,maintainers
+alt-getopt,,,,,arobyn
 ansicolors,,,,,
 argparse,,,,,
 basexx,,,,,

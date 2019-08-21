@@ -10,6 +10,26 @@ self: super:
 with self;
 {
 
+alt-getopt = buildLuarocksPackage {
+  pname = "alt-getopt";
+  version = "0.8.0-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/alt-getopt-0.8.0-1.src.rock;
+    sha256 = "1mi97dqb97sf47vb6wrk12yf1yxcaz0asr9gbgwyngr5n1adh5i3";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/cheusov/lua-alt-getopt";
+    description = "Process application arguments the same way as getopt_long";
+    maintainers = with maintainers; [ arobyn ];
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 ansicolors = buildLuarocksPackage {
   pname = "ansicolors";
   version = "1.0.2-3";
