@@ -9,7 +9,7 @@ buildPerlPackage {
     sha256 = "b6db7f43c6252179274cfe99c1950b93e248f8f0fe35b07e50388c85d814d5f3";
   };
 
-  ORACLE_HOME = "${oracle-instantclient}/lib";
+  ORACLE_HOME = "${oracle-instantclient.lib}/lib";
 
   buildInputs = [ TestNoWarnings oracle-instantclient ] ;
   propagatedBuildInputs = [ DBI ];

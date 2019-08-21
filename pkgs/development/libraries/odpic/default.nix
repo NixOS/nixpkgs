@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isLinux [ libaio ];
 
   libPath = stdenv.lib.makeLibraryPath
-    [ oracle-instantclient ];
+    [ oracle-instantclient.lib ];
 
   dontPatchELF = true;
   makeFlags = [ "PREFIX=$(out)" "CC=cc" "LD=cc"];

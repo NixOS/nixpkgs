@@ -47,18 +47,15 @@ in stdenv.mkDerivation rec {
     ++ optional stdenv.isLinux autoPatchelfHook
     ++ optional stdenv.isDarwin fixDarwinDylibNames;
 
+  outputs = [ "out" "dev" "lib"];
+
   unpackCmd = "unzip $curSrc";
 
   installPhase = ''
-    mkdir -p "$out/"{bin,include,lib,"share/java","share/${name}/demo/"}
-    install -Dm755 {sqlplus,adrci,genezi} $out/bin
-    ${optionalString stdenv.isDarwin ''
-      for exe in "$out/bin/"* ; do
-        install_name_tool -add_rpath "$out/lib" "$exe"
-      done
-    ''}
-    ln -sfn $out/bin/sqlplus $out/bin/sqlplus64
-    install -Dm644 *${extLib}* $out/lib
+    mkdir -p "$out/"{bin,include,"share/java","share/${name}/demo/"} $lib/lib
+    install -Dm755 {adrci,genezi,uidrvci,sqlplus} $out/bin
+    install -Dm644 *${extLib}* $lib/lib
+
     install -Dm644 *.jar $out/share/java
     install -Dm644 sdk/include/* $out/include
     install -Dm644 sdk/demo/* $out/share/${name}/demo
@@ -67,6 +64,15 @@ in stdenv.mkDerivation rec {
     # this symlink only exists in dist zipfiles for some platforms
     ln -sfn $out/lib/libclntsh${extLib}.12.1 $out/lib/libclntsh${extLib}
   '';
+
+  postFixup = optionalString stdenv.isDarwin ''
+    for exe in "$out/bin/"* ; do
+      if [ ! -L "$exe" ]; then
+        install_name_tool -add_rpath "$lib/lib" "$exe"
+      fi
+    done
+  '';
+
 
   meta = with stdenv.lib; {
     description = "Oracle instant client libraries and sqlplus CLI";
