@@ -12615,6 +12615,8 @@ in
 
   muparser = callPackage ../development/libraries/muparser { };
 
+  mutest = callPackage ../development/libraries/mutest { };
+
   mygpoclient = pythonPackages.mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
