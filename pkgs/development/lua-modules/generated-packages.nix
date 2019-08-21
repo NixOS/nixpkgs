@@ -1210,6 +1210,26 @@ mpack = buildLuarocksPackage {
     };
   };
 };
+moonscript = buildLuarocksPackage {
+  pname = "moonscript";
+  version = "0.5.0-1";
+
+  src = fetchurl {
+    url    = https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/moonscript-0.5.0-1.src.rock;
+    sha256 = "09vv3ayzg94bjnzv5fw50r683ma0x3lb7sym297145zig9aqb9q9";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua lpeg alt-getopt luafilesystem ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://moonscript.org";
+    description = "A programmer friendly language that compiles to Lua";
+    maintainers = with maintainers; [ arobyn ];
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 nvim-client = buildLuarocksPackage {
   pname = "nvim-client";
   version = "0.2.0-1";
