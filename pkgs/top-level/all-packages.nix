@@ -24692,8 +24692,6 @@ in
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 
-  tw-rs = callPackage ../misc/tw-rs { };
-
   simplenote = callPackage ../applications/misc/simplenote { };
 
   hy = callPackage ../development/interpreters/hy {};
