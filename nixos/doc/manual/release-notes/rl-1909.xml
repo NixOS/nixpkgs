@@ -279,6 +279,11 @@
        The <option>services.mantisbt</option> module has been removed from nixpkgs due to lack of maintainer.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       Squid 3 has been removed and the <option>squid</option> derivation now refers to Squid 4.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

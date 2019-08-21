@@ -331,6 +331,7 @@ mapAliases ({
   spice_protocol = spice-protocol; # added 2018-02-25
   sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  squid4 = squid;  # added 2019-08-22
   sshfsFuse = sshfs-fuse; # added 2016-09
   suil-qt5 = suil; # added 2018-05-01
   surf-webkit2 = surf; # added 2017-04-02
