@@ -112,18 +112,13 @@ in stdenv.mkDerivation {
     ln -sfn $out/bin/sqlplus $out/bin/sqlplus64
   '';
 
-  postFixup = ''
-    # PECL::oci8 will not build without this
-    # this symlink only exists in dist zipfiles for some platforms
-    ln -sfn $out/lib/libclntsh${extLib}.12.1 $out/lib/libclntsh${extLib}
-  '' + optionalString stdenv.isDarwin ''
+  postFixup = optionalString stdenv.isDarwin ''
     for exe in "$out/bin/"* ; do
       if [ ! -L "$exe" ]; then
         install_name_tool -add_rpath "$lib/lib" "$exe"
       fi
     done
   '';
-
 
   meta = with stdenv.lib; {
     description = "Oracle instant client libraries and sqlplus CLI";
