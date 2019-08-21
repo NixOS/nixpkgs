@@ -38,6 +38,7 @@
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/vpnc.nix
+  ./config/vte.nix
   ./config/zram.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
@@ -116,6 +117,7 @@
   ./programs/fuse.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-documents.nix
+  ./programs/gnome-terminal.nix
   ./programs/gpaste.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
@@ -297,7 +299,6 @@
   ./services/desktops/gnome3/gnome-remote-desktop.nix
   ./services/desktops/gnome3/gnome-online-miners.nix
   ./services/desktops/gnome3/gnome-settings-daemon.nix
-  ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix
   ./services/desktops/gnome3/rygel.nix
   ./services/desktops/gnome3/seahorse.nix
