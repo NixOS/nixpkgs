@@ -1,5 +1,5 @@
-{ lib, fetchurl, buildDunePackage, ppx_sexp_conv, ounit
-, re, sexplib0, stringext
+{ lib, fetchurl, buildDunePackage, ounit
+, re, stringext
 }:
 
 buildDunePackage rec {
@@ -12,7 +12,7 @@ buildDunePackage rec {
   };
 
   buildInputs = [ ounit ];
-  propagatedBuildInputs = [ ppx_sexp_conv re sexplib0 stringext ];
+  propagatedBuildInputs = [ re stringext ];
   doCheck = true;
 
   meta = {

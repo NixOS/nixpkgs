@@ -768,6 +768,8 @@ let
       then callPackage ../development/ocaml-modules/uri { }
       else callPackage ../development/ocaml-modules/uri/legacy.nix { };
 
+    uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
+
     uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
       legacyVersion = true;
     };
