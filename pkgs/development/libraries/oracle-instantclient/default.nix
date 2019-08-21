@@ -103,7 +103,10 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
     install -Dm755 {adrci,genezi,uidrvci,sqlplus} $out/bin
-    install -Dm644 *${extLib}* $lib/lib
+
+    # cp to preserve symlinks
+    cp -P *${extLib}* $lib/lib
+
     install -Dm644 *.jar $out/share/java
     install -Dm644 sdk/include/* $out/include
     install -Dm644 sdk/demo/* $out/share/${pname}-${version}/demo
