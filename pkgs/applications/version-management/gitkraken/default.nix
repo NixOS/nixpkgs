@@ -1,8 +1,9 @@
 { stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk3, libXrender, pango, gnome2, gnome3, cairo, freetype, fontconfig
+, libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
+, e2fsprogs, krb5
 }:
 
 with stdenv.lib;
@@ -12,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "6.0.0";
+  version = "6.1.3";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "1ykjdnzl34pqr6dhfnswix44i412c7gcba1pk95a8670wmc29a1f";
+    sha256 = "1ciw9b5qjx2fm1v2n6v41b52qb5smfvgdb7pi5y99gkhx8w5ghqk";
   };
 
   libPath = makeLibraryPath [
@@ -50,11 +51,12 @@ stdenv.mkDerivation rec {
     libXfixes
     libXrender
     gtk3
-    gnome2.GConf
     libgnome-keyring
     openssl
     at-spi2-atk
     libuuid
+    e2fsprogs
+    krb5
   ];
 
   desktopItem = makeDesktopItem {
@@ -104,6 +106,6 @@ stdenv.mkDerivation rec {
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ xnwdd ];
+    maintainers = with maintainers; [ xnwdd evanjs ];
   };
 }

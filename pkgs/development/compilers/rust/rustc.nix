@@ -45,12 +45,6 @@ in stdenv.mkDerivation rec {
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib";
 
-  # Enable nightly features in stable compiles (used for
-  # bootstrapping, see https://github.com/rust-lang/rust/pull/37265).
-  # This loosens the hard restrictions on bootstrapping-compiler
-  # versions.
-  RUSTC_BOOTSTRAP = "1";
-
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
 
@@ -92,6 +86,8 @@ in stdenv.mkDerivation rec {
     "${setBuild}.llvm-config=${llvmSharedForBuild}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
+  ] ++ optional stdenv.isLinux [
+    "--enable-profiler" # build libprofiler_builtins
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.

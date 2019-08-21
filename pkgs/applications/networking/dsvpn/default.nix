@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dsvpn";
-  version = "0.1.0";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = pname;
     rev = version;
-    sha256 = "1g747197zpg83ba9l9vxg8m3jv13wcprhnyr8asdxq745kzmynsr";
+    sha256 = "1jl9b23s2glims09mb1sq01kaf10bfjsd3qsgk68mp5kvy9f3gj2";
   };
 
   installPhase = ''

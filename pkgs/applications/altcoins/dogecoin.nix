@@ -2,7 +2,7 @@
 , pkgconfig, autoreconfHook
 , db5, openssl, boost, zlib, miniupnpc, libevent
 , protobuf, utillinux, qt4, qrencode
-, withGui }:
+, withGui, libevent }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db5 openssl utillinux libevent
-                  protobuf boost zlib miniupnpc ]
+  buildInputs = [ openssl db5 openssl utillinux
+                  protobuf boost zlib miniupnpc libevent ]
                   ++ optionals withGui [ qt4 qrencode ];
 
   configureFlags = [ "--with-incompatible-bdb"

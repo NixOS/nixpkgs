@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem
 
 , alsaLib, at-spi2-atk, atk, cairo, cups, dbus, dpkg, expat, fontconfig
-, freetype, gdk_pixbuf, glib, gtk3, hunspell, libX11, libXScrnSaver
+, freetype, gdk-pixbuf, glib, gtk3, hunspell, libX11, libXScrnSaver
 , libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr
 , libXrender, libXtst, libnotify, libuuid, nspr, nss, pango, pciutils
 , pulseaudio, udev, xdg_utils, xorg
@@ -13,17 +13,19 @@ let
 
   inherit (stdenv.hostPlatform) system;
 
+  throwSystem = throw "Unsupported system: ${system}";
+
   pname = "wire-desktop";
 
   version = {
     "x86_64-linux" = "3.9.2895";
     "x86_64-darwin" = "3.9.2943";
-  }.${system} or "";
+  }.${system} or throwSystem;
 
   sha256 = {
     "x86_64-linux" = "0wrn95m64j4b7ym44h9zawq13kg4m12aixlyyzp56bfyczmjq4a5";
     "x86_64-darwin" = "1y1bzsjmjrj518q29xfx6gg1nhdbaz7y5hzaqrp241az6plp090k";
-  }.${system} or "";
+  }.${system} or throwSystem;
 
   meta = with stdenv.lib; {
     description = "A modern, secure messenger for everyone";
@@ -71,7 +73,7 @@ let
     nativeBuildInputs = [ dpkg ];
     rpath = stdenv.lib.makeLibraryPath [
       alsaLib at-spi2-atk atk cairo cups dbus expat fontconfig freetype
-      gdk_pixbuf glib gtk3 hunspell libX11 libXScrnSaver libXcomposite
+      gdk-pixbuf glib gtk3 hunspell libX11 libXScrnSaver libXcomposite
       libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
       libXtst libnotify libuuid nspr nss pango pciutils pulseaudio
       stdenv.cc.cc udev xdg_utils xorg.libxcb

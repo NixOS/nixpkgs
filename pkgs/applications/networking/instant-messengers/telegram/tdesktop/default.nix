@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchsvn
-, pkgconfig, pythonPackages, cmake, wrapGAppsHook, wrapQtAppsHook, gcc8
+{ mkDerivation, lib, fetchFromGitHub, fetchsvn, fetchpatch
+, pkgconfig, pythonPackages, cmake, wrapGAppsHook, wrapQtAppsHook, gcc9
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
@@ -7,15 +7,17 @@
 with lib;
 
 mkDerivation rec {
-  name = "telegram-desktop-${version}";
-  version = "1.7.14";
+  pname = "telegram-desktop";
+  version = "1.8.2";
+  # Note: Due to our strong dependency on the Arch patches it's probably best
+  # to also wait for the Arch update (especially if the patches don't apply).
 
   # Telegram-Desktop with submodules
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "1bw804a9kffmn23wv0570wihbvfm7jy9cqmxlv196f4j7bw7zkv3";
+    sha256 = "0dls6s8721zjm8351fcgfbsifr9d7wsxbf5dra5cbk8r555ibf3j";
     fetchSubmodules = true;
   };
 
@@ -23,16 +25,21 @@ mkDerivation rec {
   archPatches = fetchsvn {
     url = "svn://svn.archlinux.org/community/telegram-desktop/trunk";
     # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
-    rev = "487779";
-    sha256 = "0f09hvimb66xqksb2v0zc4ryshx7y7z0rafzjd99x37rpib9f3kq";
+    rev = "498563";
+    sha256 = "0g2y6impygqhfiqnyxc1ivxwl8j82q9qcnkqcjn6mwj3cisyxwnl";
+  };
+  privateHeadersPatch = fetchpatch {
+    url = "https://github.com/telegramdesktop/tdesktop/commit/b9d3ba621eb8af638af46c6b3cfd7a8330bf0dd5.patch";
+    sha256 = "1s5xvcp9dk0jfywssk8xfcsh7bk5xxif8xqnba0413lfx5rgvs5v";
   };
 
+  # Note: It would be best if someone could get as many patches upstream as
+  # possible (we currently depend a lot on custom patches...).
   patches = [
     "${archPatches}/tdesktop.patch"
     "${archPatches}/no-gtk2.patch"
     # "${archPatches}/Use-system-wide-font.patch"
     "${archPatches}/tdesktop_lottie_animation_qtdebug.patch"
-    "${archPatches}/issue6219.patch"
   ];
 
   postPatch = ''
@@ -42,11 +49,11 @@ mkDerivation rec {
       --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
 
-  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook wrapQtAppsHook gcc8 ];
-
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
   dontWrapQtApps = true;
+
+  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook wrapQtAppsHook gcc9 ];
 
   buildInputs = [
     qtbase qtimageformats gtk3 libappindicator-gtk3
@@ -79,8 +86,11 @@ mkDerivation rec {
   CPPFLAGS = NIX_CFLAGS_COMPILE;
 
   preConfigure = ''
+    # Patches to revert:
     patch -R -Np1 -i "${archPatches}/demibold.patch"
+    patch -R -Np1 -i "${privateHeadersPatch}"
 
+    # Patches to apply:
     pushd "Telegram/ThirdParty/libtgvoip"
     patch -Np1 -i "${archPatches}/libtgvoip.patch"
     popd
@@ -151,6 +161,10 @@ mkDerivation rec {
 
   meta = {
     description = "Telegram Desktop messaging app";
+    longDescription = ''
+      Desktop client for the Telegram messenger, based on the Telegram API and
+      the MTProto secure protocol.
+    '';
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = https://desktop.telegram.org/;

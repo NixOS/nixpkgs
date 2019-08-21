@@ -1,6 +1,19 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, python3, ninja
-, pkgconfig, vala, libgee, granite, gtk3, polkit, zeitgeist
-, switchboard, lightlocker }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, python3
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, polkit
+, zeitgeist
+, switchboard
+, lightlocker
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
@@ -46,8 +59,10 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
 
-    substituteInPlace src/Views/LockPanel.vala --subst-var-by LIGHTLOCKER_GSETTINGS_PATH ${lightlocker}/share/gsettings-schemas/${lightlocker.name}/glib-2.0/schemas
-    substituteInPlace src/Views/FirewallPanel.vala --subst-var-by SWITCHBOARD_SEC_PRIV_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
+    substituteInPlace src/Views/LockPanel.vala \
+      --subst-var-by LIGHTLOCKER_GSETTINGS_PATH ${lightlocker}/share/gsettings-schemas/${lightlocker.name}/glib-2.0/schemas
+    substituteInPlace src/Views/FirewallPanel.vala \
+      --subst-var-by SWITCHBOARD_SEC_PRIV_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
   '';
 
   meta = with stdenv.lib; {

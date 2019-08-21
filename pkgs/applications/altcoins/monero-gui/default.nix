@@ -25,13 +25,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.14.1.0";
+  version = "0.14.1.2";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "0ilx47771faygf97wilm64xnqxgxa3b43q0g9v014npk0qj8pc31";
+    sha256 = "1rm043r6y2mzy8pclnzbjjfxgps8pkfa2b92p66k8y8rdmgq6m1k";
   };
 
   nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./move-log-file.patch
-    ./move-translations-dir.patch
   ];
 
   postPatch = ''
@@ -83,10 +82,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
 
-    # install translations
-    mkdir -p $out/share/translations
-    cp translations/*.qm $out/share/translations/
-
     # install icons
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
@@ -97,10 +92,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Private, secure, untraceable currency";
-    homepage    = https://getmonero.org/;
-    license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ rnhmjoj ];
+    description  = "Private, secure, untraceable currency";
+    homepage     = https://getmonero.org/;
+    license      = licenses.bsd3;
+    platforms    = platforms.all;
+    badPlatforms = platforms.darwin;
+    maintainers  = with maintainers; [ rnhmjoj ];
   };
 }

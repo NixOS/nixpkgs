@@ -14,7 +14,7 @@ let
     comment = "Performance software for cyclists, runners and triathletes";
     categories = "Application;Utility;";
   };
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   name = "golden-cheetah-${version}";
   version = "3.5-DEV1903";
 
@@ -33,6 +33,8 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = [ "-lz" ];
 
+  qtWrapperArgs = [ "--set LD_LIBRARY_PATH ${zlib.out}/lib" ];
+
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
@@ -45,7 +47,6 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp src/GoldenCheetah $out/bin
-    wrapProgram $out/bin/GoldenCheetah --set LD_LIBRARY_PATH "${zlib.out}/lib"
     install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
     install -Dm644 src/Resources/images/gc.png $out/share/pixmaps/goldencheetah.png
 

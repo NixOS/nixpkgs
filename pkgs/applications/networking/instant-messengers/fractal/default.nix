@@ -19,7 +19,7 @@
 , sqlite
 , gst_all_1
 , cairo
-, gdk_pixbuf
+, gdk-pixbuf
 , gspell
 , wrapGAppsHook
 }:
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     cairo
     dbus
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gspell
     gst_all_1.gst-editing-services

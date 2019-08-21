@@ -34,7 +34,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-nginx-exporter}/bin/nginx-prometheus-exporter \
           --nginx.scrape-uri '${cfg.scrapeUri}' \

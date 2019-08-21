@@ -210,8 +210,12 @@
    </listitem>
    <listitem>
     <para>
-     Optionally commit the new package and open a pull request, or send a patch
-     to <literal>https://groups.google.com/forum/#!forum/nix-devel</literal>.
+     Optionally commit the new package and open a pull request <link
+     xlink:href="https://github.com/NixOS/nixpkgs/pulls">to nixpkgs</link>, or
+     use <link
+     xlink:href="https://discourse.nixos.org/t/about-the-patches-category/477">
+     the Patches category</link> on Discourse for sending a patch without a
+     GitHub account.
     </para>
    </listitem>
   </orderedlist>

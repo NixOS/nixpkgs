@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0e962052718068ad3b1d8bcc703794660858f58803c3798628817f492a8769c";
+    sha256 = "173nm29g85w8cac3fg40b27qaq26g41wgg6qn79ql1hq4w2n5sgh";
   };
 
   checkInputs = [ pytest nose ];

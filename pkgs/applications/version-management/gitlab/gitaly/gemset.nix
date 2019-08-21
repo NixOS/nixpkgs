@@ -227,10 +227,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0glqy22p0xfaa3kvvrba04pj1dva8wpzlvhka37cvlqq95djcy19";
+      sha256 = "11bkrf2z5ppp55cipawdpinrva42x12grp2gl1dp1jdb35crqick";
       type = "gem";
     };
-    version = "1.32.0";
+    version = "1.36.0";
   };
   github-linguist = {
     dependencies = ["charlock_holmes" "escape_utils" "mime-types" "rugged"];
@@ -680,12 +680,14 @@
     version = "4.3.0";
   };
   rouge = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1digsi2s8wyzx8vsqcxasw205lg6s7izx8jypl8rrpjwshmv83ql";
+      sha256 = "0yfhazlhjc4abgzhkgq8zqmdphvkh52211widkl4zhsbhqh8wg2q";
       type = "gem";
     };
-    version = "3.3.0";
+    version = "3.5.1";
   };
   rspec = {
     dependencies = ["rspec-core" "rspec-expectations" "rspec-mocks"];

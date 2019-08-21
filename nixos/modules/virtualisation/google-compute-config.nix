@@ -159,12 +159,6 @@ in
     # functionality/features (e.g. TCP Window scaling).
     "net.ipv4.tcp_syncookies" = mkDefault "1";
 
-    # ignores source-routed packets
-    "net.ipv4.conf.all.accept_source_route" = mkDefault "0";
-
-    # ignores source-routed packets
-    "net.ipv4.conf.default.accept_source_route" = mkDefault "0";
-
     # ignores ICMP redirects
     "net.ipv4.conf.all.accept_redirects" = mkDefault "0";
 
@@ -186,10 +180,10 @@ in
     # don't allow traffic between networks or act as a router
     "net.ipv4.conf.default.send_redirects" = mkDefault "0";
 
-    # reverse path filtering - IP spoofing protection
+    # strict reverse path filtering - IP spoofing protection
     "net.ipv4.conf.all.rp_filter" = mkDefault "1";
 
-    # reverse path filtering - IP spoofing protection
+    # strict path filtering - IP spoofing protection
     "net.ipv4.conf.default.rp_filter" = mkDefault "1";
 
     # ignores ICMP broadcasts to avoid participating in Smurf attacks

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.1.7'
+gem 'rails', '5.2.3'
 
 # Improves copy-on-write performance for MRI
 gem 'nakayoshi_fork', '~> 0.0.4'
@@ -11,7 +11,7 @@ gem 'responders', '~> 2.0'
 gem 'sprockets', '~> 3.7.0'
 
 # Default values for AR models
-gem 'gitlab-default_value_for', '~> 3.1.1', require: 'default_value_for'
+gem 'default_value_for', '~> 3.2.0'
 
 # Supported DBs
 gem 'mysql2', '~> 0.4.10', group: :mysql
@@ -84,6 +84,7 @@ gem 'rack-cors', '~> 1.0.0', require: 'rack/cors'
 gem 'graphql', '~> 1.8.0'
 gem 'graphiql-rails', '~> 1.4.10'
 gem 'apollo_upload_server', '~> 2.0.0.beta3'
+gem 'graphql-docs', '~> 1.6.0', group: [:development, :test]
 
 # Disable strong_params so that Mash does not respond to :permitted?
 gem 'hashie-forbidden_attributes'
@@ -99,7 +100,7 @@ gem 'carrierwave', '~> 1.3'
 gem 'mini_magick'
 
 # for backups
-gem 'fog-aws', '~> 3.3'
+gem 'fog-aws', '~> 3.5'
 # Locked until fog-google resolves https://github.com/fog/fog-google/issues/421.
 # Also see config/initializers/fog_core_patch.rb.
 gem 'fog-core', '= 2.1.0'
@@ -129,10 +130,10 @@ gem 'rdoc', '~> 6.0'
 gem 'org-ruby', '~> 0.9.12'
 gem 'creole', '~> 0.5.0'
 gem 'wikicloth', '0.8.1'
-gem 'asciidoctor', '~> 1.5.8'
+gem 'asciidoctor', '~> 2.0.10'
 gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
-gem 'asciidoctor-plantuml', '0.0.8'
-gem 'rouge', '~> 3.1'
+gem 'asciidoctor-plantuml', '0.0.9'
+gem 'rouge', '~> 3.5'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
 gem 'nokogiri', '~> 1.10.3'
@@ -211,7 +212,7 @@ gem 'discordrb-webhooks-blackst0ne', '~> 3.3', require: false
 # HipChat integration
 gem 'hipchat', '~> 1.5.0'
 
-# JIRA integration
+# Jira integration
 gem 'jira-ruby', '~> 1.4'
 
 # Flowdock integration
@@ -300,13 +301,16 @@ gem 'peek-pg', '~> 1.3.0', group: :postgres
 gem 'peek-rblineprof', '~> 0.2.0'
 gem 'peek-redis', '~> 1.2.0'
 
+# Memory benchmarks
+gem 'derailed_benchmarks', require: false
+
 # Metrics
 group :metrics do
   gem 'method_source', '~> 0.8', require: false
   gem 'influxdb', '~> 0.2', require: false
 
   # Prometheus
-  gem 'prometheus-client-mmap', '~> 0.9.4'
+  gem 'prometheus-client-mmap', '~> 0.9.8'
   gem 'raindrops', '~> 0.18'
 end
 
@@ -336,7 +340,7 @@ group :development, :test do
 
   gem 'database_cleaner', '~> 1.7.0'
   gem 'factory_bot_rails', '~> 4.8.2'
-  gem 'rspec-rails', '~> 3.7.0'
+  gem 'rspec-rails', '~> 3.8.0'
   gem 'rspec-retry', '~> 0.6.1'
   gem 'rspec_profiling', '~> 0.0.5'
   gem 'rspec-set', '~> 0.1.3'
@@ -365,6 +369,7 @@ group :development, :test do
   gem 'haml_lint', '~> 0.31.0', require: false
   gem 'simplecov', '~> 0.16.1', require: false
   gem 'bundler-audit', '~> 0.5.0', require: false
+  gem 'mdl', '~> 0.5.0', require: false
 
   gem 'benchmark-ips', '~> 2.3.0', require: false
 
@@ -374,7 +379,6 @@ group :development, :test do
   gem 'activerecord_sane_schema_dumper', '1.0'
 
   gem 'stackprof', '~> 0.2.10', require: false
-  gem 'derailed_benchmarks', require: false
 
   gem 'simple_po_parser', '~> 1.1.2', require: false
 
@@ -417,7 +421,7 @@ gem 'vmstat', '~> 2.3.0'
 gem 'sys-filesystem', '~> 1.1.6'
 
 # SSH host key support
-gem 'net-ssh', '~> 5.0'
+gem 'net-ssh', '~> 5.2'
 gem 'sshkey', '~> 2.0'
 
 # Required for ED25519 SSH host key support
@@ -427,7 +431,7 @@ group :ed25519 do
 end
 
 # Gitaly GRPC client
-gem 'gitaly-proto', '~> 1.32.0', require: 'gitaly'
+gem 'gitaly-proto', '~> 1.37.0', require: 'gitaly'
 
 gem 'grpc', '~> 1.19.0'
 

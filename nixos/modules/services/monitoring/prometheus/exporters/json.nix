@@ -24,7 +24,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-json-exporter}/bin/prometheus-json-exporter \
           --port ${toString cfg.port} \

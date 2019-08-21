@@ -21,6 +21,19 @@ rec {
   */
   singleton = x: [x];
 
+  /*  Apply the function to each element in the list. Same as `map`, but arguments
+      flipped.
+
+      Type: forEach :: [a] -> (a -> b) -> [b]
+
+      Example:
+        forEach [ 1 2 ] (x:
+          toString x
+        )
+        => [ "1" "2" ]
+  */
+  forEach = xs: f: map f xs;
+
   /* “right fold” a binary function `op` between successive elements of
      `list` with `nul' as the starting value, i.e.,
      `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))`.

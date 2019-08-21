@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = http://man-db.nongnu.org;
     description = "An implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -64,7 +64,6 @@ in
     '' else "";
   in {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-collectd-exporter}/bin/collectd_exporter \
           -log.format ${cfg.logFormat} \

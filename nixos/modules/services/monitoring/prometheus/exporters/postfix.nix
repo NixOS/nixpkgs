@@ -62,6 +62,7 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = false;
       ExecStart = ''
         ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

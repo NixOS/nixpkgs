@@ -3,11 +3,11 @@
 stdenvNoCC.mkDerivation rec {
   name = "fasm-bin-${version}";
 
-  version = "1.73.12";
+  version = "1.73.16";
 
   src = fetchurl {
     url = "https://flatassembler.net/fasm-${version}.tgz";
-    sha256 = "19x5244bcg97mnx871daksj98fg4zxc8jmihl0napcd77xmiga8s";
+    sha256 = "1jaqm7w458ny37fsw3fln17kw31rcsk8kyadci45qcbw6jspmn7k";
   };
 
   installPhase = ''

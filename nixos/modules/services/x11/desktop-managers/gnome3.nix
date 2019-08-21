@@ -15,12 +15,16 @@ let
     '';
   };
 
-  nixos-gsettings-desktop-schemas = pkgs.runCommand "nixos-gsettings-desktop-schemas" { preferLocalBuild = true; }
+  nixos-gsettings-desktop-schemas = let
+    defaultPackages = with pkgs; [ gsettings-desktop-schemas gnome3.gnome-shell ];
+  in
+  pkgs.runCommand "nixos-gsettings-desktop-schemas" { preferLocalBuild = true; }
     ''
      mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
-     cp -rf ${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
-     ${concatMapStrings (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n") cfg.extraGSettingsOverridePackages}
+     ${concatMapStrings
+        (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n")
+        (defaultPackages ++ cfg.extraGSettingsOverridePackages)}
 
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
@@ -29,6 +33,9 @@ let
 
        [org.gnome.desktop.screensaver]
        picture-uri='${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
+
+       [org.gnome.shell]
+       favorite-apps=[ 'org.gnome.Epiphany.desktop', 'evolution.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
 
        ${cfg.extraGSettingsOverrides}
      EOF
@@ -123,19 +130,15 @@ in {
     services.dleyna-renderer.enable = mkDefault true;
     services.dleyna-server.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
-    services.gnome3.evince.enable = mkDefault true;
     services.gnome3.evolution-data-server.enable = true;
-    services.gnome3.file-roller.enable = mkDefault true;
     services.gnome3.glib-networking.enable = true;
-    services.gnome3.gnome-disks.enable = mkDefault true;
-    services.gnome3.gnome-documents.enable = mkDefault true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-remote-desktop.enable = mkDefault true;
     services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-terminal-server.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
-    services.gnome3.gvfs.enable = true;
+    services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
     services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
@@ -156,6 +159,13 @@ in {
     systemd.packages = [ pkgs.gnome3.vino ];
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
+    # Enable default programs
+    programs.dconf.enable = true;
+    programs.evince.enable = mkDefault true;
+    programs.file-roller.enable = mkDefault true;
+    programs.gnome-disks.enable = mkDefault true;
+    programs.gnome-documents.enable = mkDefault true;
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
@@ -221,8 +231,6 @@ in {
 
     services.xserver.updateDbusEnvironment = true;
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
-                                                "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
       ++ (pkgs.gnome3.removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [
       pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/

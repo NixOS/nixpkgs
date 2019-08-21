@@ -47,6 +47,7 @@ in
   codimd = handleTest ./codimd.nix {};
   colord = handleTest ./colord.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
+  containers-ephemeral = handleTest ./containers-ephemeral.nix {};
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
   containers-hosts = handleTest ./containers-hosts.nix {};
   containers-imperative = handleTest ./containers-imperative.nix {};
@@ -56,7 +57,7 @@ in
   containers-physical_interfaces = handleTest ./containers-physical_interfaces.nix {};
   containers-restart_networking = handleTest ./containers-restart_networking.nix {};
   containers-tmpfs = handleTest ./containers-tmpfs.nix {};
-  #couchdb = handleTest ./couchdb.nix {}; # spidermonkey-1.8.5 is marked as broken
+  couchdb = handleTest ./couchdb.nix {};
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
   dnscrypt-proxy = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy.nix {};
@@ -73,7 +74,7 @@ in
   #ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
   ecryptfs = handleTest ./ecryptfs.nix {};
-  ejabberd = handleTest ./ejabberd.nix {};
+  ejabberd = handleTest ./xmpp/ejabberd.nix {};
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
   env = handleTest ./env.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
@@ -93,8 +94,9 @@ in
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
   gjs = handleTest ./gjs.nix {};
-  gnome3 = handleTestOn ["x86_64-linux"] ./gnome3.nix {}; # libsmbios is unsupported on aarch64
-  gnome3-gdm = handleTestOn ["x86_64-linux"] ./gnome3-gdm.nix {}; # libsmbios is unsupported on aarch64
+  glusterfs = handleTest ./glusterfs.nix {};
+  gnome3-xorg = handleTest ./gnome3-xorg.nix {};
+  gnome3 = handleTest ./gnome3.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
   google-oslogin = handleTest ./google-oslogin {};
@@ -114,6 +116,7 @@ in
   hound = handleTest ./hound.nix {};
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
+  icingaweb2 = handleTest ./icingaweb2.nix {};
   iftop = handleTest ./iftop.nix {};
   incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
@@ -139,7 +142,7 @@ in
   ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
   lidarr = handleTest ./lidarr.nix {};
-  #lightdm = handleTest ./lightdm.nix {};
+  lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   login = handleTest ./login.nix {};
   loki = handleTest ./loki.nix {};
@@ -150,6 +153,7 @@ in
   mediawiki = handleTest ./mediawiki.nix {};
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
+  metabase = handleTest ./metabase.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   misc = handleTest ./misc.nix {};
@@ -183,6 +187,7 @@ in
   nginx = handleTest ./nginx.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
+  nixos-generate-config = handleTest ./nixos-generate-config.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
   nzbget = handleTest ./nzbget.nix {};
@@ -209,13 +214,15 @@ in
   plotinus = handleTest ./plotinus.nix {};
   postgis = handleTest ./postgis.nix {};
   postgresql = handleTest ./postgresql.nix {};
+  postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
   powerdns = handleTest ./powerdns.nix {};
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   printing = handleTest ./printing.nix {};
   prometheus = handleTest ./prometheus.nix {};
   prometheus2 = handleTest ./prometheus-2.nix {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
-  prosody = handleTest ./prosody.nix {};
+  prosody = handleTest ./xmpp/prosody.nix {};
+  prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
   quagga = handleTest ./quagga.nix {};
   quake3 = handleTest ./quake3.nix {};

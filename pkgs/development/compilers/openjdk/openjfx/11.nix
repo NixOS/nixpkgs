@@ -7,7 +7,7 @@ let
   build = "1";
   repover = "${major}${update}+${build}";
   gradle_ = (gradleGen.override {
-    jdk = bootjdk;
+    java = bootjdk;
   }).gradle_4_10;
 
   makePackage = args: stdenv.mkDerivation ({
@@ -48,7 +48,7 @@ let
 
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
     installPhase = ''
-      find $GRADLE_USER_HOME -type f -regex '.*\.\(jar\|pom\)' \
+      find $GRADLE_USER_HOME -type f -regex '.*/modules.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
       rm -rf $out/tmp

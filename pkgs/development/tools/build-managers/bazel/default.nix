@@ -22,11 +22,11 @@
 }:
 
 let
-  version = "0.28.0";
+  version = "0.28.1";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "26ad8cdadd413b8432cf46d9fc3801e8db85d9922f85dd8a7f5a92fec876557f";
+    sha256 = "0503fax70w7h6v00mkrrrgf1m5n0vkjqs76lyg95alhzc4yldsic";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -323,7 +323,7 @@ stdenv.mkDerivation rec {
     genericPatches = ''
       # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
       # See also `postFixup` where python is added to $out/nix-support
-      patchShebangs src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt \
+      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt \
           --replace "#!/usr/bin/env python" "#!${python3}/bin/python"
 
       # md5sum is part of coreutils

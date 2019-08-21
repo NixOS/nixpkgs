@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.32.1";
+  version = "3.32.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "07y5ii5bn7fgdpr88307fwxiafm5fwdxmzwhi6h1y4z880nnzp7f";
+    sha256 = "0sg53zq81v28hdqiy5d048skwfgsa8ck0z7ywsagdh7iaqin68gq";
   };
 
   nativeBuildInputs = [

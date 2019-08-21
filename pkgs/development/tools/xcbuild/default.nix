@@ -36,10 +36,15 @@ in stdenv.mkDerivation rec {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
-  # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
   postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # Apple Open Sourced LZFSE, but not libcompression, and it isn't
+    # part of an impure framework we can add
+    substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
+      --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
   '';
 
   enableParallelBuilding = true;

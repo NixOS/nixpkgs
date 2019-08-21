@@ -29,6 +29,8 @@ buildPythonPackage rec {
     pytestcov
   ];
 
+  buildInputs = [ glibcLocales ];
+
   propagatedBuildInputs = [
     coverage
     ipykernel
@@ -38,6 +40,7 @@ buildPythonPackage rec {
     six
   ];
 
+  # ignore impure tests
   checkPhase = ''
     pytest tests --ignore tests/test_timeouts.py
   '';

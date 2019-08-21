@@ -65,7 +65,7 @@ in mkYarnPackage rec {
   # * category and StartupWMClass from the build.linux section of
   #   https://github.com/vector-im/riot-web/blob/develop/package.json
   desktopItem = makeDesktopItem {
-    inherit name;
+    name = "riot";
     exec = executableName;
     icon = "riot";
     desktopName = "Riot";

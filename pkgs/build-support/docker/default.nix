@@ -291,9 +291,10 @@ rec {
     # Files to add to the layer.
     closure,
     configJson,
-    # Docker has a 42-layer maximum, we pick 24 to ensure there is plenty
-    # of room for extension
-    maxLayers ? 24
+    # Docker has a 125-layer maximum, we pick 100 to ensure there is
+    # plenty of room for extension.
+    # https://github.com/moby/moby/blob/b3e9f7b13b0f0c414fa6253e1f17a86b2cff68b5/layer/layer_store.go#L23-L26
+    maxLayers ? 100
   }:
     let
       storePathToLayer = substituteAll

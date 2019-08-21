@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgs }:
+{ stdenv, fetchFromGitHub, rustPlatform, pkgs, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "thecoshman";
     repo = "http";
     rev = "v${version}";
-    sha256 = "0mb2wifz8pba03bdpiqadih33jimhg9crs4b72rcyfmj9l8fd1ba";
+    sha256 = "00w8sy0m92by6lby1zb8hh36dnsrvwyyl56p6p7a1mf3iiq84r1y";
   };
 
-  buildInputs = with pkgs; [ openssl pkgconfig ];
+  buildInputs = with pkgs; [ openssl pkgconfig ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   cargoBuildFlags = [ "--bin httplz" ];
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "0cy23smal6y5qj6a202zf7l76vwkpzvcjmlbq0ffyph3gq07ps7b";
+  cargoSha256 = "1axf15ma7fkbphjc6hjrbcj9rbd1x5i4kyz7fjrlqjgdsmvaqc93";
 
   meta = with stdenv.lib; {
     description = "A basic http server for hosting a folder fast and simply";
