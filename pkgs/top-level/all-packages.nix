@@ -1698,6 +1698,8 @@ in
 
   gsctl = callPackage ../applications/misc/gsctl { };
 
+  gthree = callPackage ../development/libraries/gthree { };
+
   gti = callPackage ../tools/misc/gti { };
 
   hdate = callPackage ../applications/misc/hdate { };
@@ -9493,6 +9495,8 @@ in
 
   gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing {};
 
+  gnome-hexgl = callPackage ../games/gnome-hexgl {};
+
   gnome-usage = callPackage ../applications/misc/gnome-usage {};
 
   gnome-latex = callPackage ../applications/editors/gnome-latex/default.nix { };
@@ -12626,6 +12630,8 @@ in
   mumlib = callPackage ../development/libraries/mumlib { };
 
   muparser = callPackage ../development/libraries/muparser { };
+
+  mutest = callPackage ../development/libraries/mutest { };
 
   mygpoclient = pythonPackages.mygpoclient;
 
