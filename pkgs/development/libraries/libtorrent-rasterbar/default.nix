@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, geoip, ncurses
+{ stdenv, lib, fetchFromGitHub, pkgconfig, autoreconfHook
+, zlib, boost, openssl, python, libiconv, geoip, ncurses
 }:
 
 let
-  version = "1.1.11";
+  version = "1.2.1";
   formattedVersion = lib.replaceChars ["."] ["_"] version;
 
   # Make sure we override python, so the correct version is chosen
@@ -11,19 +11,23 @@ let
   boostPython = boost.override { enablePython = true; inherit python; };
 
 in stdenv.mkDerivation {
-  name = "libtorrent-rasterbar-${version}";
+  pname = "libtorrent-rasterbar";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "libtorrent_${formattedVersion}";
-    sha256 = "0nwdsv6d2gkdsh7l5a46g6cqx27xwh3msify5paf02l1qzjy4s5l";
+    rev = "libtorrent-${formattedVersion}";
+    sha256 = "0sl7gq6a98w4ksq92w3ywkqachrpbwlbmhazgvlcncik7bq1gkjj";
   };
 
+  preAutoreconf = ''
+    install -Dm444 m4/config.rpath -t build-aux
+  '';
+
   enableParallelBuilding = true;
-  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ boostPython openssl zlib python libiconv geoip ncurses ];
-  preConfigure = "./autotool.sh";
 
   postInstall = ''
     moveToOutput "include" "$dev"
@@ -42,8 +46,8 @@ in stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
+    homepage = "https://libtorrent.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.unix;
