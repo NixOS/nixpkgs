@@ -3,8 +3,7 @@
 mkDerivation rec {
   pname = "grantlee";
   version = "5.1.0";
-  grantleeCompatVersion = "5.1";
-  grantleePluginPrefix = "lib/grantlee/${grantleeCompatVersion}";
+  grantleePluginPrefix = "lib/grantlee/${lib.versions.majorMinor version}";
 
   src = fetchurl {
     url = "https://github.com/steveire/grantlee/archive/v${version}.tar.gz";
