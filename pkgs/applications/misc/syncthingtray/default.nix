@@ -42,18 +42,9 @@ mkDerivation rec {
   cmakeFlags = lib.optionals (!enablePlasmoidSupport) ["-DNO_PLASMOID=ON"]
     ++ lib.optionals (!enableKioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
+    # See https://github.com/Martchus/syncthingtray/issues/42
+    ++ lib.optionals enablePlasmoidSupport ["-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"]
   ;
-  # Without this hook, `make install` fails since it tries to write to ${qtbase.out}/lib/qt-<version>/...
-  # This is kind of ugly, but it works and it'll probably be quicker than to
-  # bother the author of this program as he's using arch Linux and he'll probably be surprised that we
-  # modify the prefix of our packages and not using `make DESTDIR= install`.
-  # See https://github.com/Martchus/syncthingtray/issues/42
-  preInstall = ''
-    echo grepping for ${qtbase.out} as \$qtbase in install files inside the build directory
-    grep -l -R ${qtbase.out}/lib/qt- | while read f; do
-      substituteInPlace "$f" --replace ${qtbase.out} ${placeholder "out"}
-    done
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/Martchus/syncthingtray";
