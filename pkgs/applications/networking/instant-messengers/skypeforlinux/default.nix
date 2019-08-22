@@ -1,7 +1,7 @@
 { stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
 , gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
-, at-spi2-atk }:
+, at-spi2-atk, libuuid, at-spi2-core }:
 
 let
 
@@ -13,6 +13,7 @@ let
     alsaLib
     atk
     at-spi2-atk
+    at-spi2-core
     cairo
     cups
     curl
@@ -23,6 +24,7 @@ let
     glib
     glibc
     libsecret
+    libuuid
 
     gnome2.GConf
     gdk-pixbuf
