@@ -21,13 +21,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "dolphin-emu-${version}";
-  version = "5.0-10751";
+  version = "5.0-10879";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "64c0ff576c6d3ea2ee35e6b6d7ea8c814442d53f";
-    sha256 = "19351j3gys9kgxpdjv1dckaiv74dylcdh1kx0z9qz8llv9s1r0s3";
+    rev = "c7fc9126aaf447a014af4aed195b17aa593dd49b";
+    sha256 = "1pf4mxacxhrkvvh9j49ackm8hahl8x0ligmann1pafsb4lw0xbnj";
   };
 
   enableParallelBuilding = true;
