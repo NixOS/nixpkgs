@@ -39,9 +39,9 @@ in stdenv.mkDerivation rec {
     libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
     portaudio libusb libpng hidapi miniupnpc enet mbedtls soundtouch sfml
     qtbase
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     bluez udev libevdev alsaLib vulkan-loader
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     CoreBluetooth OpenGL ForceFeedback IOKit
   ];
 
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
     "-DDOLPHIN_WC_BRANCH=master"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
   ];
 
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
   # - Allow Dolphin to use nix-provided libraries instead of building them
   postPatch = ''
     sed -i -e 's,DISTRIBUTOR "None",DISTRIBUTOR "NixOS",g' CMakeLists.txt
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
     sed -i -e 's,if(LIBUSB_FOUND AND NOT APPLE),if(LIBUSB_FOUND),g' \
       CMakeLists.txt
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
     ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-master
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
