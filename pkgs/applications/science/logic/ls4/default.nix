@@ -8,15 +8,15 @@
   buildInputs = [ zlib gcc ];
 
   preBuild = ''
-  cd core
-  # These object files were committed into the git repo, perhaps accidentally
-  rm -f aiger.o
-  rm -f aiger.o_32
-  gcc -g -O3 -c aiger.c
+    cd core
+    # These object files were committed into the git repo, perhaps accidentally
+    rm -f aiger.o
+    rm -f aiger.o_32
+    gcc -g -O3 -c aiger.c
   '';
 
   installPhase = ''
-  install -D ls4 $out/bin/ls4
+    install -D ls4 $out/bin/ls4
   '';
 
   src = fetchFromGitHub {
