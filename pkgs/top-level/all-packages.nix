@@ -4498,6 +4498,8 @@ in
 
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
 
+  libspf2 = callPackage ../development/libraries/libspf2 { };
+
   libsrs2 = callPackage ../development/libraries/libsrs2 { };
 
   libtermkey = callPackage ../development/libraries/libtermkey { };
