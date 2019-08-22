@@ -49,20 +49,6 @@ mkDerivation rec {
     libXdamage
   ];
 
-  postPatch = ''
-    for dir in  autostart menu; do
-      substituteInPlace $dir/CMakeLists.txt \
-        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-    done
-    substituteInPlace panel/CMakeLists.txt \
-      --replace "DESTINATION \''${LXQT_ETC_XDG_DIR}" "DESTINATION etc/xdg"
-
-    for f in cmake/BuildPlugin.cmake panel/CMakeLists.txt; do
-      substituteInPlace $f \
-        --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-    done
-  '';
-
   meta = with lib; {
     description = "The LXQt desktop panel";
     homepage = https://github.com/lxqt/lxqt-panel;

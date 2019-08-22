@@ -30,18 +30,6 @@ mkDerivation rec {
     xdg-user-dirs
   ];
 
-  postPatch = ''
-    for dir in autostart config; do
-      substituteInPlace $dir/CMakeLists.txt \
-        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-    done
-
-    for f in lxqt-{config-session,leave,session}/CMakeLists.txt; do
-      substituteInPlace $f \
-        --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-    done
-  '';
-
   meta = with lib; {
     description = "An alternative session manager ported from the original razor-session";
     homepage = https://github.com/lxqt/lxqt-session;

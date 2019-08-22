@@ -27,15 +27,8 @@ mkDerivation rec {
     xorg.libXScrnSaver
   ];
 
-  cmakeFlags = [
-    "-DLXQT_ETC_XDG_DIR=/run/current-system/sw/etc/xdg"
-  ];
-
   postPatch = ''
-    sed -i 's|set(LXQT_SHARE_DIR .*)|set(LXQT_SHARE_DIR "/run/current-system/sw/share/lxqt")|' CMakeLists.txt
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
   '';
 
   meta = with lib; {

@@ -28,16 +28,6 @@ mkDerivation rec {
     libqtxdg
   ];
 
-  postPatch = ''
-    substituteInPlace autostart/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-
-    for f in {config,src}/CMakeLists.txt; do
-      substituteInPlace $f \
-        --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-    done
-  '';
-
   meta = with lib; {
     description = "Power management module for LXQt";
     homepage = https://github.com/lxqt/lxqt-powermanagement;

@@ -26,16 +26,6 @@ mkDerivation rec {
     libqtxdg
   ];
 
-  postPatch = ''
-    for dir in autostart xdg; do
-      substituteInPlace $dir/CMakeLists.txt \
-        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-    done
-
-    substituteInPlace config/CMakeLists.txt \
-      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-  '';
-
   meta = with lib; {
     description = "Daemon used to register global keyboard shortcuts";
     homepage = https://github.com/lxqt/lxqt-globalkeys;

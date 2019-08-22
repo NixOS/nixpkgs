@@ -32,14 +32,6 @@ mkDerivation rec {
     pcre
   ];
 
-  postPatch = ''
-    substituteInPlace autostart/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-  '';
-
   meta = with lib; {
     description = "Tool used to launch programs quickly by typing their names";
     homepage = https://github.com/lxqt/lxqt-runner;

@@ -28,13 +28,6 @@ mkDerivation rec {
     lxmenu-data
   ];
 
-  postPatch = ''
-    for dir in autostart config; do
-      substituteInPlace $dir/CMakeLists.txt \
-        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-    done
-  '';
-
   meta = with lib; {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
     homepage = https://github.com/lxqt/pcmanfm-qt;

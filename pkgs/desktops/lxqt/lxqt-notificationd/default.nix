@@ -16,16 +16,6 @@ mkDerivation rec {
     lxqt-build-tools
   ];
 
-  postPatch = ''
-    substituteInPlace autostart/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-
-    for f in {config,src}/CMakeLists.txt; do
-      substituteInPlace $f \
-        --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-    done
-  '';
-
   buildInputs = [
     qtbase
     qttools

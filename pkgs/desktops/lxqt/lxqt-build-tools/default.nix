@@ -11,11 +11,18 @@ mkDerivation rec {
     sha256 = "0i7m9s4g5rsw28vclc9nh0zcapx85cqfwxkx7rrw7wa12svy7pm2";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig setupHook ];
 
   buildInputs = [ qtbase glib pcre ];
 
-  preConfigure = ''cmakeFlags+=" -DLXQT_ETC_XDG_DIR=$out/etc/xdg"'';
+  setupHook = ./setup-hook.sh;
+
+  # We're dependent on this macro doing add_definitions in most places
+  # But we have the setup-hook to set the values.
+  postInstall = ''
+    rm $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
+    cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
+  '';
 
   meta = with lib; {
     description = "Various packaging tools and scripts for LXQt applications";

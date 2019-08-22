@@ -29,11 +29,6 @@ mkDerivation rec {
   postPatch = ''
     sed "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" \
       -i lxqt-admin-user/CMakeLists.txt
-
-    for f in lxqt-admin-{user,time}/CMakeLists.txt; do
-      substituteInPlace $f \
-        --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-    done
   '';
 
   meta = with lib; {

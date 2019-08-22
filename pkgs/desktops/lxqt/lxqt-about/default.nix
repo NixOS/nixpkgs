@@ -25,11 +25,6 @@ mkDerivation rec {
     libqtxdg
   ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-  '';
-
   meta = with lib; {
     description = "Dialogue window providing information about LXQt and the system it's running on";
     homepage = https://github.com/lxqt/lxqt-about;

@@ -27,11 +27,6 @@ mkDerivation rec {
     sudo
   ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-  '';
-
   meta = with lib; {
     description = "GUI frontend for sudo/su";
     homepage = https://github.com/lxqt/lxqt-sudo;
