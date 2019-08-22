@@ -1,8 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, requests, geojson }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, requests, geojson }:
 
 buildPythonPackage rec {
   pname = "pyowm";
   version = "2.10.0";
+
+  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
