@@ -1,4 +1,4 @@
-{ fetchurl, buildPerlPackage, DBI, TestNoWarnings, oracle-instantclient }:
+{ stdenv, fetchurl, buildPerlPackage, DBI, TestNoWarnings, oracle-instantclient }:
 
 buildPerlPackage {
   pname = "DBD-Oracle";
@@ -13,4 +13,8 @@ buildPerlPackage {
 
   buildInputs = [ TestNoWarnings oracle-instantclient ] ;
   propagatedBuildInputs = [ DBI ];
+
+  postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath "${oracle-instantclient.lib}/lib" blib/arch/auto/DBD/Oracle/Oracle.bundle
+  '';
 }
