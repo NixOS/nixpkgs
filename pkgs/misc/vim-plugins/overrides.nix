@@ -260,6 +260,18 @@ self: super: {
       };
     });
 
+  unisonSyntax = buildVimPluginFrom2Nix {
+    pname = "unison-syntax";
+    version = "2019-08-21";
+    src = fetchFromGitHub {
+      owner = "unisonweb";
+      repo = "unison";
+      rev = "08effd4535d2f388d9548ed238755bb38d48175b";
+      sha256 = "0kbx5h41hsqzmfq6kb2c3p3a59z0xjvwg6ixyv4gs0kwkj7bvdfj";
+    };
+    preInstall = "cd editor-support/vim";
+    meta.maintainers = with stdenv.lib.maintainers; [ virusdave ];
+  };
 
   vimshell-vim = super.vimshell-vim.overrideAttrs(old: {
     dependencies = with super; [ vimproc-vim ];
