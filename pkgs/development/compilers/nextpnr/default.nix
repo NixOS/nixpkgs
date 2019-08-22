@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nextpnr";
-  version = "2019.08.10";
+  version = "2019.08.21";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "nextpnr";
-    rev    = "3f26cf50767143e48d29ae691b2a0052c359eb15";
-    sha256 = "1gv84svw56ass9idbzh17h3yxkk9ydr40ijf9w72gf72rbixszdr";
+    rev    = "c192ba261d77ad7f0a744fb90b01e4a5b63938c4";
+    sha256 = "0g2ar1z89b31qw5vgqj2rrcv9rzncs94184dgcsrz19p866654mf";
   };
 
   nativeBuildInputs
@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
     description = "Place and route tool for FPGAs";
     homepage    = https://github.com/yosyshq/nextpnr;
     license     = licenses.isc;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice emily ];
 
     broken = enableGui;
   };
