@@ -137,6 +137,14 @@ in {
       '';
     };
 
+    luaConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        The content Lua configuration file for PowerDNS Recursor. See
+        <link xlink:href="https://doc.powerdns.com/recursor/lua-config/index.html"/>.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -154,6 +162,7 @@ in {
       export-etc-hosts = cfg.exportHosts;
       dnssec           = cfg.dnssecValidation;
       serve-rfc1918    = cfg.serveRFC1918;
+      lua-config-file  = pkgs.writeText "recursor.lua" cfg.luaConfig;
 
       log-timestamp  = false;
       disable-syslog = true;
