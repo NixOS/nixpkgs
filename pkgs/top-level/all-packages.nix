@@ -860,6 +860,8 @@ in
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
+  lesspass-cli = callPackage ../tools/security/lesspass-cli { };
+
   pacparser = callPackage ../tools/networking/pacparser { };
 
   pass = callPackage ../tools/security/pass { };

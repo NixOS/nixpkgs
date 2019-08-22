@@ -2749,6 +2749,11 @@
     githubId = 26877687;
     name = "Yurii Izorkin";
   };
+  jasoncarr = {
+    email = "jcarr250@gmail.com";
+    github = "jasoncarr0";
+    name = "Jason Carr";
+  };
   j-keck = {
     email = "jhyphenkeck@gmail.com";
     github = "j-keck";
