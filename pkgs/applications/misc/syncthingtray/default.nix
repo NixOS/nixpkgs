@@ -3,6 +3,8 @@
 , lib
 , fetchFromGitHub
 , qtbase
+, qtwebengine
+, qtdeclarative
 , extra-cmake-modules
 , cpp-utilities
 , qtutilities
@@ -10,8 +12,8 @@
 , kio
 , plasma-framework
 , qttools
-, webviewProvider ? null
-, jsProvider ? null
+, webviewSupport ? false
+, jsSupport ? false
 , enableKioPluginSupport ? false
 , enablePlasmoidSupport  ? false
 , systemdSupport ? true
@@ -28,7 +30,9 @@ mkDerivation rec {
     sha256 = "0ijwpwlwwbfh9fdfbwz6dgi6hpmaav2jm56mzxm6as50iwnb59fx";
   };
 
-  buildInputs = [ qtbase cpp-utilities qtutilities webviewProvider jsProvider ] 
+  buildInputs = [ qtbase cpp-utilities qtutilities ]
+    ++ lib.optionals webviewSupport [ qtwebengine ]
+    ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals enableKioPluginSupport [ kio ]
     ++ lib.optionals enablePlasmoidSupport [ extra-cmake-modules plasma-framework ]
   ;

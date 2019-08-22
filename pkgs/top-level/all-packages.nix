@@ -20751,10 +20751,8 @@ in
 
   syncthingtray-minimal = libsForQt5.callPackage ../applications/misc/syncthingtray { };
   syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray {
-    # Could be qt5.qtwebengine as well
-    webviewProvider = qt5.qtwebkit;
-    # Could be qt5.qtdeclarative as well
-    jsProvider = qt5.qtscript;
+    webviewSupport = true;
+    jsSupport = true;
     enableKioPluginSupport = true;
     enablePlasmoidSupport = true;
     systemdSupport = true;
