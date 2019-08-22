@@ -7,11 +7,11 @@
  <section xml:id="sec-installation-booting">
   <title>Booting the system</title>
 
-  <para>
-   NixOS can be installed on BIOS or UEFI systems. The procedure for a UEFI
-   installation is by and large the same as a BIOS installation. The
-   differences are mentioned in the steps that follow.
-  </para>
+  <para>NixOS can be installed on systems using UEFI or MBR bios. The procedure for a UEFI
+   installation is by and large the same as a MBR installation. The differences are mentioned in the
+   steps that follow. If you are installing in a virtual machine check which type of BIOS it is
+   being used to be able to decide whether you can do an UEFI or a MBR installation. VMWare for
+   example uses MBR by default.</para>
 
   <para>
    The installation media can be burned to a CD, or now more commonly, "burned"
@@ -208,41 +208,33 @@
   <section xml:id="sec-installation-partitioning-formatting">
    <title>Formatting</title>
 
-   <para>
-    Use the following commands:
-    <itemizedlist>
+   <para> Use the following commands for <emphasis role="bold">UEFI</emphasis> or <emphasis
+     role="bold">MBR</emphasis>: <itemizedlist>
      <listitem>
-      <para>
-       For initialising Ext4 partitions: <command>mkfs.ext4</command>. It is
-       recommended that you assign a unique symbolic label to the file system
-       using the option <option>-L <replaceable>label</replaceable></option>,
-       since this makes the file system configuration independent from device
-       changes. For example:
-<screen>
+      <para> For initialising Ext4 partitions: <command>mkfs.ext4</command>. It is recommended that
+       you assign a unique symbolic label to the file system using the option <option>-L
+         <replaceable>label</replaceable></option>, since this makes the file system configuration
+       independent from device changes. For example:
+       <screen>
 <prompt># </prompt>mkfs.ext4 -L nixos /dev/sda1</screen>
       </para>
      </listitem>
      <listitem>
-      <para>
-       For creating swap partitions: <command>mkswap</command>. Again it’s
-       recommended to assign a label to the swap partition: <option>-L
-       <replaceable>label</replaceable></option>. For example:
-<screen>
+      <para> For creating swap partitions: <command>mkswap</command>. Again it’s recommended to
+       assign a label to the swap partition: <option>-L <replaceable>label</replaceable></option>.
+       For example: <screen>
 <prompt># </prompt>mkswap -L swap /dev/sda2</screen>
       </para>
      </listitem>
      <listitem>
       <variablelist>
        <varlistentry>
-        <term>
-         UEFI systems
-        </term>
+        <term> for UEFI systems only</term>
         <listitem>
-         <para>
-          For creating boot partitions: <command>mkfs.fat</command>. Again
-          it’s recommended to assign a label to the boot partition:
-          <option>-n <replaceable>label</replaceable></option>. For example:
-<screen>
+         <para> For creating boot partitions: <command>mkfs.fat</command>. Again it’s recommended to
+          assign a label to the boot partition: <option>-n
+          <replaceable>label</replaceable></option>. For example:
+          <screen>
 <prompt># </prompt>mkfs.fat -F 32 -n boot /dev/sda3</screen>
          </para>
         </listitem>
@@ -250,16 +242,11 @@
       </variablelist>
      </listitem>
      <listitem>
-      <para>
-       For creating LVM volumes, the LVM commands, e.g.,
-       <command>pvcreate</command>, <command>vgcreate</command>, and
-       <command>lvcreate</command>.
-      </para>
+      <para> For creating LVM volumes, the LVM commands, e.g., <command>pvcreate</command>,
+        <command>vgcreate</command>, and <command>lvcreate</command>. </para>
      </listitem>
      <listitem>
-      <para>
-       For creating software RAID devices, use <command>mdadm</command>.
-      </para>
+      <para> For creating software RAID devices, use <command>mdadm</command>. </para>
      </listitem>
     </itemizedlist>
    </para>
@@ -281,9 +268,7 @@
    <listitem>
     <variablelist>
      <varlistentry>
-      <term>
-       UEFI systems
-      </term>
+      <term> for UEFI systems only</term>
       <listitem>
        <para>
         Mount the boot file system on <filename>/mnt/boot</filename>, e.g.
