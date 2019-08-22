@@ -1,10 +1,34 @@
-{ stdenv, gettext, fetchurl, libxml2, libgdata
-, pkgconfig, gtk3, glib, tracker, tracker-miners
-, itstool, gegl, babl, libdazzle, gfbgraph, grilo-plugins
-, grilo, gnome-online-accounts
-, desktop-file-utils, wrapGAppsHook
-, gnome3, gdk-pixbuf, gexiv2, geocode-glib
-, dleyna-renderer, dbus, meson, ninja, python3, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, babl
+, dbus
+, desktop-file-utils
+, dleyna-renderer
+, gdk-pixbuf
+, gegl
+, geocode-glib
+, gettext
+, gexiv2
+, gfbgraph
+, glib
+, gnome-online-accounts
+, gnome3
+, grilo
+, grilo-plugins
+, gsettings-desktop-schemas
+, gtk3
+, itstool
+, libdazzle
+, libgdata
+, libxml2
+, meson
+, ninja
+, pkgconfig
+, python3
+, tracker
+, tracker-miners
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
@@ -18,18 +42,37 @@ stdenv.mkDerivation rec {
   # doCheck = true;
 
   nativeBuildInputs = [
-    pkgconfig gettext itstool meson ninja libxml2
-    desktop-file-utils wrapGAppsHook python3
+    desktop-file-utils
+    gettext
+    itstool
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
   ];
+
   buildInputs = [
-    gtk3 glib gegl babl libgdata libdazzle
-    gsettings-desktop-schemas
-    gdk-pixbuf gnome3.adwaita-icon-theme
-    gfbgraph grilo-plugins grilo
-    gnome-online-accounts tracker
-    gexiv2 geocode-glib dleyna-renderer
-    tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
+    babl
     dbus
+    dleyna-renderer
+    gdk-pixbuf
+    gegl
+    geocode-glib
+    gexiv2
+    gfbgraph
+    glib
+    gnome-online-accounts
+    gnome3.adwaita-icon-theme
+    grilo
+    grilo-plugins
+    gsettings-desktop-schemas
+    gtk3
+    libdazzle
+    libgdata
+    tracker
+    tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
   ];
 
   postPatch = ''
@@ -45,10 +88,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Photos;
     description = "Access, organize and share your photos";
-    maintainers = gnome3.maintainers;
+    homepage = https://wiki.gnome.org/Apps/Photos;
     license = licenses.gpl3Plus;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }
