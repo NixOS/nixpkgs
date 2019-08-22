@@ -13071,20 +13071,6 @@ in
     developerBuild = true;
   });
 
-  qt56 = recurseIntoAttrs (makeOverridable
-    (import ../development/libraries/qt-5/5.6) {
-      inherit newScope;
-      inherit stdenv fetchurl fetchpatch makeSetupHook makeWrapper;
-      bison = bison2; # error: too few arguments to function 'int yylex(...
-      inherit cups;
-      harfbuzz = harfbuzzFull;
-      inherit libGL;
-      inherit perl;
-      inherit (gst_all_1) gstreamer gst-plugins-base;
-    });
-
-  libsForQt56 = lib.makeScope qt56.newScope mkLibsForQt5;
-
   qt59 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.9) {
       inherit newScope;
