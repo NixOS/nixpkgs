@@ -6,15 +6,13 @@
 , gnome3, gdk-pixbuf, gexiv2, geocode-glib
 , dleyna-renderer, dbus, meson, ninja, python3, gsettings-desktop-schemas }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "3.32.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "160vqmcqvyzby27wd2lzwzgbfl6jxxk7phhnqh9498r3clr73haj";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0nxa2jz1g73wypdsj19r4plf4hfkhs9mpl7gbhsiyqp1rkn84ahn";
   };
 
   # doCheck = true;
