@@ -2560,9 +2560,7 @@ in
 
   ddrutility = callPackage ../tools/system/ddrutility { };
 
-  deluge = callPackage ../applications/networking/p2p/deluge {
-    pythonPackages = python2Packages;
-  };
+  deluge = callPackage ../applications/networking/p2p/deluge { };
 
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
 

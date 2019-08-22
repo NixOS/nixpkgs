@@ -1,39 +1,47 @@
-{ stdenv, fetchurl, fetchpatch, intltool, libtorrentRasterbar, pythonPackages }:
+{ stdenv, lib, fetchgit, intltool, python3Packages
+, libtorrentRasterbar
+, withGui ? true, gobject-introspection ? null, gtk3 ? null
+, libappindicator-gtk3 ? null, librsvg ? null, libnotify ? null, wrapGAppsHook ? null
+}:
 
-pythonPackages.buildPythonPackage rec {
-  name = "deluge-${version}";
-  version = "1.3.15";
+python3Packages.buildPythonApplication rec {
+  pname = "deluge";
+  version = "2.0.3";
 
-  src = fetchurl {
-    url = "http://download.deluge-torrent.org/source/${name}.tar.bz2";
-    sha256 = "1467b9hmgw59gf398mhbf40ggaka948yz3afh6022v753c9j7y6w";
+  src = fetchgit {
+    url = "https://git.deluge-torrent.org/deluge/";
+    sha256 = "0zav045bp3z3hrp6jni6wr9ryihgf1ngvgrn9vgbbwrhgdf3d3yg";
+    rev = "deluge-${version}";
   };
 
-  patches = [
-    # Fix preferences when built against libtorrent >=0.16
-    (fetchpatch {
-      url = "https://git.deluge-torrent.org/deluge/patch/?id=38d7b7cdfde3c50d6263602ffb03af92fcbfa52e";
-      sha256 = "0la3i0lkj6yv4725h4kbd07mhfwcb34w7prjl9gxg12q7px6c31d";
-    })
-  ];
+  postPatch = ''
+    echo ${version} > RELEASE-VERSION
+  '';
 
-  propagatedBuildInputs = with pythonPackages; [
-    pyGtkGlade twisted Mako chardet pyxdg pyopenssl service-identity
-    libtorrentRasterbar.dev libtorrentRasterbar.python
-  ];
+  buildInputs = lib.optionals withGui [ gobject-introspection gtk3 libnotify librsvg ];
 
-  nativeBuildInputs = [ intltool ];
+  propagatedBuildInputs = with python3Packages; [
+    dbus-python geoip2 pillow rencode setproctitle six
+    twisted Mako chardet pyxdg pyopenssl service-identity
+    (libtorrentRasterbar.override { inherit (python3Packages) python; }).python
+  ] ++ lib.optionals withGui [ distro libappindicator-gtk3 pycairo pygobject3 ];
+
+  nativeBuildInputs = [ intltool ]
+    ++ lib.optional withGui wrapGAppsHook
+    ++ [ python3Packages.slimit ];
+
+  # there are tests but we don't have the prereqs in nixpkgs
+  doCheck = false;
 
   postInstall = ''
-     mkdir -p $out/share/applications
-     cp -R deluge/data/pixmaps $out/share/
-     cp -R deluge/data/icons $out/share/
-     cp deluge/data/share/applications/deluge.desktop $out/share/applications
+     install -Dm644 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
+     install -Dm444 -t $out/lib/systemd/user   packaging/systemd/*.service
+     cp -R deluge/ui/data/{icons,pixmaps} $out/share/
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://deluge-torrent.org;
     description = "Torrent client";
+    homepage = "https://deluge-torrent.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ domenkozar ebzzry ];
     platforms = platforms.all;
