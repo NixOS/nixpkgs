@@ -6073,7 +6073,10 @@ in {
 
   us = callPackage ../development/python-modules/us { };
 
-  wsproto = callPackage ../development/python-modules/wsproto { };
+  wsproto = if (pythonAtLeast "3.6") then
+      callPackage ../development/python-modules/wsproto { }
+    else
+      callPackage ../development/python-modules/wsproto/0.14.nix { };
 
   h11 = callPackage ../development/python-modules/h11 { };
 
