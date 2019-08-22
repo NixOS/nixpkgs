@@ -12,6 +12,7 @@
 , xorg
 , alsaLib
 , cairo
+, gtk3-x11
 , libuuid
 , autoreconfHook
 , gcc48

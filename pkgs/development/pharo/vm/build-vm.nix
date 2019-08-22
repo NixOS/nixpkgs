@@ -10,6 +10,7 @@
 , xorg
 , alsaLib
 , cairo
+, gtk3-x11
 , libuuid
 , autoreconfHook
 , gcc48
@@ -84,6 +85,7 @@ stdenv.mkDerivation rec {
   installPhase = let
     libs = [
       cairo
+      gtk3-x11
       libgit2
       libGLU_combined
       freetype
@@ -146,6 +148,7 @@ stdenv.mkDerivation rec {
     xorg.libSM
     alsaLib
     cairo
+    gtk3-x11
     pharo-share
     libuuid
   ];
