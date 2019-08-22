@@ -1,5 +1,5 @@
 { stdenv
-, fetchFromGitHub
+, fetchFromGitLab
 , python
 , wafHook
 
@@ -22,75 +22,89 @@
 , dia, tetex ? null, ghostscript ? null, texlive ? null
 
 # generates python bindings
-, generateBindings ? false, ncurses ? null
+, pythonSupport ? false, ncurses ? null
 
 # All modules can be enabled by choosing 'all_modules'.
 # we include here the DCE mandatory ones
 , modules ? [ "core" "network" "internet" "point-to-point" "fd-net-device" "netanim"]
-, gcc6
 , lib
 }:
 
 let
   pythonEnv = python.withPackages(ps:
     stdenv.lib.optional withManual ps.sphinx
-    ++ stdenv.lib.optionals generateBindings (with ps;[ pybindgen pygccxml ])
+    ++ stdenv.lib.optionals pythonSupport (with ps;[ pybindgen pygccxml ])
   );
 in
 stdenv.mkDerivation rec {
+  pname = "ns-3";
+  version = "30";
 
-  name = "ns-3.${version}";
-  version = "28";
-
-  # the all in one https://www.nsnam.org/release/ns-allinone-3.27.tar.bz2;
-  # fetches everything (netanim, etc), this package focuses on ns3-core
-  src = fetchFromGitHub {
-    owner  = "nsnam";
-    repo   = "ns-3-dev-git";
-    rev    = name;
-    sha256 = "17kzfjpgw2mvyx1c9bxccnvw67jpk09fxmcnlkqx9xisk10qnhng";
+  src = fetchFromGitLab {
+    owner = "nsnam";
+    repo   = "ns-3-dev";
+    rev    = "ns-3.${version}";
+    sha256 = "0smdi3gglmafpc7a20hj2lbmwks3d5fpsicpn39lmm3svazw0bvp";
   };
 
   nativeBuildInputs = [ wafHook ];
-  # ncurses is a hidden dependency of waf when checking python
-  buildInputs = lib.optionals generateBindings [ castxml ncurses ]
-    ++ stdenv.lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
-    ++ stdenv.lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
 
-  propagatedBuildInputs = [ gcc6 pythonEnv ];
+  outputs = [ "out" ] ++ lib.optional pythonSupport "py";
+
+  # ncurses is a hidden dependency of waf when checking python
+  buildInputs = lib.optionals pythonSupport [ castxml ncurses ]
+    ++ lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
+    ++ lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
+
+  propagatedBuildInputs = [ pythonEnv ];
 
   postPatch = ''
     patchShebangs doc/ns3_html_theme/get_version.sh
   '';
 
   wafConfigureFlags = with stdenv.lib; [
-      "--enable-modules=${stdenv.lib.concatStringsSep "," modules}"
+      "--enable-modules=${concatStringsSep "," modules}"
       "--with-python=${pythonEnv.interpreter}"
   ]
   ++ optional (build_profile != null) "--build-profile=${build_profile}"
-  ++ optional generateBindings [  ]
   ++ optional withExamples " --enable-examples "
   ++ optional doCheck " --enable-tests "
   ;
+
+  doCheck = true;
 
   buildTargets = "build"
     + lib.optionalString enableDoxygen " doxygen"
     + lib.optionalString withManual "sphinx";
 
-  doCheck = true;
+  # to prevent fatal error: 'backward_warning.h' file not found
+  CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
-  # we need to specify the proper interpreter else ns3 can check against a
-  # different version even though we
-  checkPhase =  ''
-    ${pythonEnv.interpreter} ./test.py
+  postBuild = with stdenv.lib; let flags = concatStringsSep ";" (
+      optional enableDoxygen "./waf doxygen"
+      ++ optional withManual "./waf sphinx"
+    );
+    in "${flags}"
+  ;
+
+  postInstall = ''
+    moveToOutput "${pythonEnv.libPrefix}" "$py"
   '';
 
-  hardeningDisable = [ "fortify" ];
+  # we need to specify the proper interpreter else ns3 can check against a
+  # different version
+  checkPhase =  ''
+    ${pythonEnv.interpreter} ./test.py --nowaf
+  '';
 
-  meta = {
-    homepage = http://www.nsnam.org;
-    license = stdenv.lib.licenses.gpl3;
+  # strictoverflow prevents clang from discovering pyembed when bindings
+  hardeningDisable = [ "fortify" "strictoverflow"];
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.nsnam.org";
+    license = licenses.gpl3;
     description = "A discrete time event network simulator";
-    platforms = with stdenv.lib.platforms; unix;
+    platforms = with platforms; unix;
+    maintainers = with maintainers; [ teto ];
   };
 }
