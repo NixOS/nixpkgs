@@ -10,6 +10,8 @@
   preBuild = ''
     cd core
     # These object files were committed into the git repo, perhaps accidentally
+    # They are also not built by the included Makefile, so we're manually 
+    # regenerating them here.
     rm -f aiger.o
     rm -f aiger.o_32
     gcc -g -O3 -c aiger.c
