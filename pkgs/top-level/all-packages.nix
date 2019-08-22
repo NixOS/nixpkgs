@@ -24454,6 +24454,8 @@ in
     inherit (gnome3) zenity;
   };
 
+  wishbone-tool = callPackage ../development/tools/misc/wishbone-tool { };
+
   with-shell = callPackage ../applications/misc/with-shell { };
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
