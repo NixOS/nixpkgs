@@ -569,9 +569,13 @@ in {
 
   favicon = callPackage ../development/python-modules/favicon {  };
 
+  fdint = callPackage ../development/python-modules/fdint { };
+
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
+
+  filemagic = callPackage ../development/python-modules/filemagic { };
 
   fints = callPackage ../development/python-modules/fints { };
 
@@ -579,9 +583,7 @@ in {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
-  fdint = callPackage ../development/python-modules/fdint { };
-
-  filemagic = callPackage ../development/python-modules/filemagic { };
+  foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
 
