@@ -12,6 +12,7 @@
 , pkgconfig
 , python3
 , shared-mime-info
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -66,6 +67,12 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru = {
+    tests = {
+      installed-tests = nixosTests.libxmlb;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A library to help create and query binary XML blobs";
