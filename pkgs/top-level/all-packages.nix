@@ -5240,6 +5240,8 @@ in
 
   ossec = callPackage ../tools/security/ossec {};
 
+  osslsigncode = callPackage ../development/tools/osslsigncode {};
+
   ostree = callPackage ../tools/misc/ostree { };
 
   otfcc = callPackage ../tools/misc/otfcc { };
