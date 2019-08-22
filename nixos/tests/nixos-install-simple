@@ -1,0 +1,19 @@
+#!/bin/sh -eux
+
+mkdir -p "$1"
+
+ROOT="$(readlink -f $1)"
+SYSTEM="$(readlink -f ${2:-./result})"
+
+# create root folders
+mkdir -p "$ROOT/etc" "$ROOT/boot"
+
+# install NixOS
+nix-env --store "$ROOT" \
+  --extra-substituters "auto?trusted=1" \
+  -p "$ROOT/nix/var/nix/profiles/system" --set "$SYSTEM"
+
+# activate NixOS
+touch "$ROOT/etc/NIXOS"
+nixos-enter --root "$ROOT" \
+  -- /run/current-system/bin/switch-to-configuration boot
