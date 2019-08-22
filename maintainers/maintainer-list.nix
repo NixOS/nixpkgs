@@ -582,6 +582,12 @@
     githubId = 816777;
     name = "Ashley Gillman";
   };
+  ashkitten = {
+    email = "ashlea@protonmail.com";
+    github = "ashkitten";
+    githubId = 9281956;
+    name = "ash lea";
+  };
   aske = {
     email = "aske@fmap.me";
     github = "aske";
