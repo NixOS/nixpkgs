@@ -20222,9 +20222,7 @@ in
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
 
-  qtchan = callPackage ../applications/networking/browsers/qtchan {
-    qt = qt5;
-  };
+  qtchan = libsForQt5.callPackage ../applications/networking/browsers/qtchan { };
 
   qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
