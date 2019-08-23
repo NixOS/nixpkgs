@@ -25245,6 +25245,10 @@ in
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
+  clonehero-unwrapped = pkgs.callPackage ../games/clonehero { };
+
+  clonehero = pkgs.callPackage ../games/clonehero/fhs-wrapper.nix { };
+
   crispyDoom = callPackage ../games/crispy-doom { };
 
   cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
