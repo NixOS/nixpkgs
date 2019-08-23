@@ -41,6 +41,21 @@ let
     rev = "c468634165ecace8281f487a8f0e301a6880473b";
     sha256 = "1kn4v96hjs2q4y0fqgj8k1xmbh5291s351r92x9w17j6g9wqj7li";
   };
+
+  styles = pkgs.stdenvNoCC.mkDerivation {
+    name = "nixpkgs-doc-styles";
+    src = ./styles;
+
+    buildInputs = with pkgs.nodePackages; [
+      less
+    ];
+
+    buildPhase = ''
+      lessc index.less $out
+    '';
+
+    dontInstall = true;
+  };
 in pkgs.runCommand "doc-support" {}
 ''
   mkdir result
@@ -63,7 +78,7 @@ in pkgs.runCommand "doc-support" {}
 
     echo -n "${version}" > ./version
 
-    ln -s ${./style.css} ./style.css
+    ln -s ${styles} ./style.css
   )
   mv result $out
 ''
