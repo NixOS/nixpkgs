@@ -82,6 +82,8 @@ highlightjs: doc-support/result
 	cp -r doc-support/result/highlightjs/mono-blue.css highlightjs/
 	cp -r doc-support/result/highlightjs/loader.js highlightjs/
 
+style.css: doc-support/result
+	cp doc-support/result/style.css style.css
 
 manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml functions/library/generated *.xml **/*.xml **/**/*.xml
 	xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml

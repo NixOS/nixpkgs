@@ -62,6 +62,8 @@ in pkgs.runCommand "doc-support" {}
     ln -s ${elasticlunr} ./elasticlunr
 
     echo -n "${version}" > ./version
+
+    ln -s ${./style.css} ./style.css
   )
   mv result $out
 ''
