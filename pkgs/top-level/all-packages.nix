@@ -18970,6 +18970,8 @@ in
 
   iptraf-ng = callPackage ../applications/networking/iptraf-ng { };
 
+  irccloud = callPackage ../applications/networking/irc/irccloud { };
+
   irssi = callPackage ../applications/networking/irc/irssi { };
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
