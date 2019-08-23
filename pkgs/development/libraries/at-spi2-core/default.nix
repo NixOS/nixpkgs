@@ -5,6 +5,8 @@
 , ninja
 , pkgconfig
 , gobject-introspection
+, gsettings-desktop-schemas
+, makeWrapper
 
 , dbus
 , glib
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ]
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection makeWrapper ]
     # Fixup rpaths because of meson, remove with meson-0.47
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = [ dbus glib libX11 libXtst libXi ];
@@ -45,6 +47,13 @@ stdenv.mkDerivation rec {
       packageName = pname;
     };
   };
+
+  postFixup = ''
+    # Cannot use wrapGAppsHook'due to a dependency cycle
+    wrapProgram $out/libexec/at-spi-bus-launcher \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules" \
+      --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
+  '';
 
   meta = with stdenv.lib; {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
