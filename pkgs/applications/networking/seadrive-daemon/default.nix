@@ -1,10 +1,11 @@
 { autoPatchelfHook
 , callPackage
-, dpkg
 , fetchurl
 , lib
+, rpmextract
 , stdenv
 # Package dependencies
+, curl
 , fuse
 , libsearpc
 , openssl
@@ -12,40 +13,39 @@
 }:
 
 let
-  # seadrive-daemon gives "no version information available" warnings
-  # and runtime errors like
-  # "libcurl failed to GET ... SSL peer certificate or SSH remote key was not OK."
-  # with nixpkgs curl
-  deblibcurl = callPackage ./lib/deblibcurl {};
   # seadrive-daemon specifically looks for libevent-2.0 and fails to build with libevent-2.1
   libevent_2_0 = callPackage ./lib/libevent_2_0 {};
 in stdenv.mkDerivation rec {
-  version = "1.0.6";
+  version = "1.0.7";
   pname = "seadrive-daemon";
 
   src = fetchurl {
-    url = "https://deb.seadrive.org/stretch/pool/main/s/${pname}/${pname}_${version}_amd64.deb";
-    sha256 = "0y1il9wx9bck6zp8pmjyjws4xvaj0bwlnw1prlgfwvjzv731i6rc";
+    url = "https://rpm.seadrive.org/centos7/${pname}_${version}_x86_64.rpm";
+    sha256 = "0c4am8jcjpgh47pag88bf01s77dfyfg3vssv33lm85d68a6mssl7";
   };
 
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
+  unpackCmd = "${rpmextract}/bin/rpmextract $src";
 
   nativeBuildInputs = [
     autoPatchelfHook
   ];
 
   buildInputs = [
-    deblibcurl
+    curl
     fuse
     libevent_2_0
     libsearpc
-    openssl
     sqlite
   ];
 
   installPhase = ''
     mkdir --parent $out
     mv * $out/
+
+    # seadrive-daemon looks for 'libssl.so.10' and 'libcrypto.so.10'
+    mkdir $out/lib
+    ln -s ${lib.getLib openssl}/lib/libssl.so.1.0.0 $out/lib/libssl.so.10
+    ln -s ${lib.getLib openssl}/lib/libcrypto.so.1.0.0 $out/lib/libcrypto.so.10
   '';
 
   meta = with stdenv.lib; {
