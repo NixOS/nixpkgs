@@ -1,16 +1,19 @@
-{ stdenv, lib, pkgs, python3 }:
+{ lib, fetchFromGitHub, python }:
 
-with python3.pkgs; buildPythonApplication rec {
+with python.pkgs; buildPythonApplication rec {
   pname = "stig";
-  version = "0.10.1a0";
+  version = "0.10.1a";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1xi87kmnyfvdwwx6g6hdgzb6c0jwl98fpvhrg62py80x3j5qlc4a";
+  src = fetchFromGitHub {
+    owner = "rndusr";
+    repo = "stig";
+    rev = "v${version}";
+    sha256 = "076rlial6h1nhwdxf1mx5nf2zld5ci43cadj9wf8xms7zn8s6c8v";
   };
-  postUnpack = ''
-    substituteInPlace stig-${version}/setup.py \
-    --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
   '';
 
   propagatedBuildInputs = [
@@ -24,14 +27,15 @@ with python3.pkgs; buildPythonApplication rec {
     maxminddb
     setproctitle
   ];
-  # Currently, tests fail with:
-  # ```
-  # TypeError: don't know how to make test from: <stig.client.geoip.GeoIP object at 0x7ffff6594290>
-  # ```
-  # checkInputs = [
-    # asynctest
-  # ];
-  doCheck = false;
+
+  checkInputs = [
+    asynctest
+    pytest
+  ];
+
+  checkPhase = ''
+    pytest --exitfirst tests
+  '';
 
   meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
@@ -40,4 +44,3 @@ with python3.pkgs; buildPythonApplication rec {
     maintainers = with maintainers; [ doronbehar ];
   };
 }
-
