@@ -49,6 +49,8 @@ rec {
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
 
+    isJavaScript = { cpu = cpuTypes.js; };
+    isGhcjs      = { kernel = kernels.ghcjs; };
     # Deprecated after 18.03
     isArm = isAarch32;
   };

@@ -119,7 +119,7 @@ rec {
     config = "aarch64-none-elf";
     libc = "newlib";
   };
-  
+
   aarch64be-embedded = {
     config = "aarch64_be-none-elf";
     libc = "newlib";
@@ -129,12 +129,12 @@ rec {
     config = "powerpc-none-eabi";
     libc = "newlib";
   };
-  
+
   ppcle-embedded = {
     config = "powerpcle-none-eabi";
     libc = "newlib";
   };
-  
+
   alpha-embedded = {
     config = "alpha-elf";
     libc = "newlib";
@@ -210,6 +210,12 @@ rec {
     # That's the triplet they use in the mingw-w64 docs.
     config = "x86_64-pc-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
+    platform = {};
+  };
+
+  # Ghcjs
+  ghcjs = {
+    config = "js-unknown-ghcjs";
     platform = {};
   };
 }
