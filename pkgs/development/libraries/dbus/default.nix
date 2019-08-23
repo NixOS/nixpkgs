@@ -44,6 +44,7 @@ self = stdenv.mkDerivation {
     configureFlags = [
       "--localstatedir=/var"
       "--sysconfdir=/etc"
+      "--runstatedir=/run"
       "--with-session-socket-dir=/tmp"
       "--with-system-pid-file=/run/dbus/pid"
       "--with-system-socket=/run/dbus/system_bus_socket"
