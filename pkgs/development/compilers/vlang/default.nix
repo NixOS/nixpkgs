@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, glfw, freetype, curl }:
+{ stdenv, fetchFromGitHub, glfw, freetype, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "vlang";
-  version = "0.1.16";
+  version = "0.1.18";
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = "${version}";
-    sha256 = "08zgwy9ac3wa5ixy8rdw6izpn1n1c3ydb9rl8z8graw0bgv719ma";
+    sha256 = "0js92v2r1h4vaaha3z1spgi7qynlmr9vls41gxp284w4yhnjzv15";
   };
 
   # V compiler source translated to C for bootstrap.
@@ -16,18 +16,17 @@ stdenv.mkDerivation rec {
     owner = "vlang";
     repo = "vc";
     rev = "${version}";
-    sha256 = "0k6c7v3r3cirypsqbaq10qlgg41v19rsnc1ygam4il2p8rsmfwz3";
+    sha256 = "0qx1drs1hr94w7vaaq5w8mkq7j1d3biffnmxkyz63yv8573k03bj";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ glfw freetype curl ];
+  buildInputs = [ glfw freetype openssl ];
 
   buildPhase = ''
     runHook preBuild
-    cc -std=gnu11 -w -o v $vc/v.c -lm
+    cc -std=gnu11 $CFLAGS -w -o v $vc/v.c -lm $LDFLAGS
     ./v -prod -o v compiler
-    # -fPIC -pie required for examples/hot_code_reloading
-    make CFLAGS+="-fPIC -pie" thirdparty
+    make thirdparty
     runHook postBuild
   '';
 
