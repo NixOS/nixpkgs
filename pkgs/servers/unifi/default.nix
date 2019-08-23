@@ -41,7 +41,8 @@ let
 
 in rec {
 
-  # https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions / https://community.ui.com/releases
+  # https://community.ui.com/releases / https://www.ui.com/download/unifi
+  # Outdated FAQ: https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
 
   unifiLTS = generic {
     version = "5.6.42";
@@ -49,10 +50,11 @@ in rec {
   };
 
   unifiStable = generic {
-    version = "5.10.26";
-    sha256 = "0rlppwxiijbzdy3v1khvzck9ypfjyznn2xak34pl0ypgw24jg637";
+    version = "5.11.39";
+    sha256 = "0v1gnvdazxa3bcbq8hl6796yw0mxzki2xn4s5im5k5ngmfmnswyj";
   };
 
+  # TODO: update as it is outdated
   unifiTesting = generic {
     version = "5.11.18";
     suffix = "-996baf2ca5";
