@@ -3315,6 +3315,8 @@ in
 
   gdmap = callPackage ../tools/system/gdmap { };
 
+  gelasio = callPackage ../data/fonts/gelasio { };
+
   gen-oath-safe = callPackage ../tools/security/gen-oath-safe { };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
