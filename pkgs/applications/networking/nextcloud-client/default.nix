@@ -1,20 +1,24 @@
-{ stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, wrapQtAppsHook, openssl, pcre, qtwebengine, libsecret
+{ lib, mkDerivation, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
+, inotify-tools, openssl, pcre, qtwebengine, libsecret
 , libcloudproviders
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "nextcloud-client-${version}";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchgit {
     url = "git://github.com/nextcloud/desktop.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1brpxdgyy742dqw6cyyv2257d6ihwiqhbzfk2hb8zjgbi6p9lhsr";
+    sha256 = "0fbw56bfbyk3cqv94iqfsxjf01dwy1ysjz89dri7qccs65rnjswj";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig cmake wrapQtAppsHook ];
+  patches = [
+    ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
+  ];
+
+  nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs = [ qtbase qtwebkit qtkeychain qttools qtwebengine sqlite openssl.out pcre inotify-tools libcloudproviders ];
 
@@ -32,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    ''--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libsecret ]}''
+    ''--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}''
   ];
 
   postInstall = ''
@@ -40,7 +44,7 @@ stdenv.mkDerivation rec {
     $out/share/applications/nextcloud.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Nextcloud themed desktop client";
     homepage = https://nextcloud.com;
     license = licenses.gpl2;

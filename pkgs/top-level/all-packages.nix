@@ -2669,7 +2669,7 @@ in
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
   dolphinEmu = callPackage ../misc/emulators/dolphin-emu { };
-  dolphinEmuMaster = callPackage ../misc/emulators/dolphin-emu/master.nix {
+  dolphinEmuMaster = qt5.callPackage ../misc/emulators/dolphin-emu/master.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
   };
 
@@ -5958,6 +5958,10 @@ in
 
   scdoc = callPackage ../tools/typesetting/scdoc { };
 
+  scream-receivers = callPackage ../misc/scream-receivers {
+    pulseSupport = config.pulseaudio or false;
+  };
+
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
   };
@@ -8203,11 +8207,7 @@ in
 
   neko = callPackage ../development/compilers/neko { };
 
-  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr {
-    # QT 5.12 has a weird regression involving the floorplanning window having
-    # a 'blank' or 'transparent' background, so fall back to 5.11 for now.
-    qtbase = qt511.qtbase;
-  };
+  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr { };
 
   nasm = callPackage ../development/compilers/nasm { };
 
@@ -16443,6 +16443,10 @@ in
     libgcrypt = null;
   };
 
+  usbguard-nox = usbguard.override {
+    withGui = false;
+  };
+
   usbutils = callPackage ../os-specific/linux/usbutils { };
 
   usermount = callPackage ../os-specific/linux/usermount { };
@@ -24085,6 +24089,8 @@ in
   nix-review = callPackage ../tools/package-management/nix-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
+
+  nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };

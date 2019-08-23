@@ -127,6 +127,7 @@ in
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
+  jormungandr = handleTest ./jormungandr.nix {};
   kafka = handleTest ./kafka.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-latest = handleTest ./kernel-latest.nix {};
@@ -141,6 +142,7 @@ in
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
+  libxmlb = handleTest ./libxmlb.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
