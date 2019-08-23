@@ -10954,6 +10954,8 @@ in
 
   grib-api = callPackage ../development/libraries/grib-api { };
 
+  grilo = callPackage ../development/libraries/grilo { };
+
   grpc = callPackage ../development/libraries/grpc { };
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };

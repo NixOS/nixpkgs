@@ -139,8 +139,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-user-share = callPackage ./core/gnome-user-share { };
 
-  grilo = callPackage ./core/grilo { };
-
   grilo-plugins = callPackage ./core/grilo-plugins { };
 
   gucharmap = callPackage ./core/gucharmap { };
@@ -389,7 +387,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus gdl;
   inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
   inherit (pkgs) gnome-video-effects; # added 2019-08-19
-  inherit (pkgs) gnome-online-accounts; # added 2019-08-23
+  inherit (pkgs) gnome-online-accounts grilo; # added 2019-08-23
 
   defaultIconTheme = adwaita-icon-theme;
   gtk = gtk3;
