@@ -3408,6 +3408,10 @@ in
 
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
+  gnome-photos = callPackage ../applications/graphics/gnome-photos {
+    gegl = gnome3.gegl_0_4;
+  };
+
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
