@@ -46,7 +46,7 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 	docbook-index \
 		./manual-full.xml \
 		./out/html/ \
-		./out/html/index.json
+		./out/html/index.js
 
 	mkdir -p out/html/highlightjs/
 	cp -r highlightjs out/html/

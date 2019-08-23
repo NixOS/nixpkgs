@@ -82,17 +82,11 @@ const SearchEngine = function() {
     initDOM();
 
     // Fetches the search index
-    fetch("index.json")
-        .then((response) => response.json())
-        .then((v) => {
-            self.index = elasticlunr.Index.load(v);
-            self.root.querySelector(".status").innerText = "Ready!";
-            self.root.classList.remove("is-loading");
 
-            // Ensures a query entered while loading is searched.
-            search(self.input.value);
-        })
-    ;
+    self.index = elasticlunr.Index.load(window.searchIndexData);
+    self.root.querySelector(".status").innerText = "Ready!";
+    self.root.classList.remove("is-loading");
+    search(self.input.value);
 }
 
 // lifted from rust-lang-nursery/mdBook 84d4063e4a60f0b0fc2058b9f100f91244d60f99
