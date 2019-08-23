@@ -69,7 +69,7 @@ let
 
   startScript = cfg:
     ''
-      mkdir -p -m 0755 "$root/etc" "$root/var/lib"
+      mkdir -p -m 0755 "$root/etc" "$root/var/lib" "$root/nix/var/nix"
       mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/containers
       if ! [ -e "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
@@ -139,6 +139,7 @@ let
         --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
         --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
         ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
+        ${optionalString (cfg.unprivileged) "-U"} \
         --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
         --setenv HOST_BRIDGE="$HOST_BRIDGE" \
         --setenv HOST_ADDRESS="$HOST_ADDRESS" \
@@ -428,6 +429,7 @@ let
       additionalCapabilities = [];
       ephemeral = false;
       timeoutStartSec = "15s";
+      unprivileged = false;
       allowedDevices = [];
       hostAddress = null;
       hostAddress6 = null;
@@ -518,6 +520,16 @@ in
                 Grant additional capabilities to the container.  See the
                 capabilities(7) and systemd-nspawn(1) man pages for more
                 information.
+              '';
+            };
+
+            unprivileged = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Run container in unprivileged mode using private users feature of <command>systemd-nspawn</command>.
+                This option is eqvivalent of adding -U parameter to <command>systemd-nspawn</command> command.
+                See <literal>systemd-nspawn(1)</literal> man page for more information.
               '';
             };
 

@@ -48,6 +48,7 @@ in
   colord = handleTest ./colord.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
   containers-ephemeral = handleTest ./containers-ephemeral.nix {};
+  containers-unprivileged = handleTest ./containers-unprivileged.nix {};
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
   containers-hosts = handleTest ./containers-hosts.nix {};
   containers-imperative = handleTest ./containers-imperative.nix {};
