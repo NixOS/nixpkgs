@@ -3,7 +3,7 @@
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
 , MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
-, jrePlugin, icedtea_web
+, jrePlugin, adoptopenjdk-icedtea-web
 , bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
@@ -54,7 +54,7 @@ let
           ++ lib.optional (cfg.enableDjvu or false) (djview4)
           ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
           ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
-          ++ lib.optional icedtea icedtea_web
+          ++ lib.optional icedtea adoptopenjdk-icedtea-web
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
