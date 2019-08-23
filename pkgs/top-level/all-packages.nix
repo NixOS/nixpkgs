@@ -2786,6 +2786,10 @@ in
   tsm-client = callPackage ../tools/backup/tsm-client { jdk8 = null; };
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { };
 
+  tracker = callPackage ../development/libraries/tracker { };
+
+  tracker-miners = callPackage ../development/libraries/tracker-miners { };
+
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
@@ -3413,6 +3417,10 @@ in
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
 
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
+
+  gnome-photos = callPackage ../applications/graphics/gnome-photos {
+    gegl = gnome3.gegl_0_4;
+  };
 
   gnokii = callPackage ../tools/misc/gnokii { };
 
@@ -9535,6 +9543,8 @@ in
 
   gnome-latex = callPackage ../applications/editors/gnome-latex/default.nix { };
 
+  gnome-online-accounts = callPackage ../development/libraries/gnome-online-accounts { };
+
   gnome-video-effects = callPackage ../development/libraries/gnome-video-effects { };
 
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
@@ -10985,6 +10995,10 @@ in
   grab-site = callPackage ../tools/backup/grab-site { };
 
   grib-api = callPackage ../development/libraries/grib-api { };
+
+  grilo = callPackage ../development/libraries/grilo { };
+
+  grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
 
   grpc = callPackage ../development/libraries/grpc { };
 
@@ -18665,7 +18679,7 @@ in
   celluloid = callPackage ../applications/video/celluloid { };
 
   gnome-recipes = callPackage ../applications/misc/gnome-recipes {
-    inherit (gnome3) gnome-online-accounts gnome-autoar;
+    inherit (gnome3) gnome-autoar;
   };
 
   gollum = callPackage ../applications/misc/gollum { };
