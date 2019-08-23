@@ -689,6 +689,8 @@ in
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
 
+  ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
+
   altermime = callPackage ../tools/networking/altermime {};
 
   alttab = callPackage ../tools/X11/alttab { };
