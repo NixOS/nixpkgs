@@ -1,4 +1,7 @@
-{ lib, fetchFromGitHub, python }:
+{ lib
+, fetchFromGitHub
+, python
+}:
 
 with python.pkgs; buildPythonApplication rec {
   pname = "stig";
