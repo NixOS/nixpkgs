@@ -10956,6 +10956,8 @@ in
 
   grilo = callPackage ../development/libraries/grilo { };
 
+  grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
+
   grpc = callPackage ../development/libraries/grpc { };
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
