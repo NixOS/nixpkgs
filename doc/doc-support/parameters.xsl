@@ -25,16 +25,16 @@
   http://www.sagehill.net/docbookxsl/TOCcontrol.html#SectionTocs
  -->
  <xsl:param name="generate.section.toc.level" select="1" />
- 
+
 <!-- <xsl:param name="qanda.in.toc" select="1" />-->
 <xsl:template name="make.toc">
   <xsl:param name="toc-context" select="."/>
   <xsl:param name="toc.title.p" select="true()"/>
   <xsl:param name="nodes" select="/NOT-AN-ELEMENT"/>
   <xsl:variable name="root-nodes" select="/"/>
-  
+
   <xsl:variable name="nodes.plus" select="$root-nodes | d:qandaset"/>
-  
+
   <xsl:variable name="toc.title">
    <xsl:if test="$toc.title.p">
     <xsl:choose>
@@ -57,7 +57,7 @@
     </xsl:choose>
    </xsl:if>
   </xsl:variable>
-  
+
   <xsl:choose>
    <xsl:when test="$manual.toc != ''">
     <xsl:variable name="id">
@@ -118,42 +118,42 @@
       </xsl:if>
      </xsl:otherwise>
     </xsl:choose>
-    
+
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
- 
- 
- 
+
+
+
  <xsl:template name="toc.contexutalization.classes">
   <xsl:param name="toc-context" />
-  <xsl:param name="initial" select="''" /> 
-  
+  <xsl:param name="initial" select="''" />
+
   <xsl:attribute name="class">
    <xsl:value-of select="$initial" />
    <xsl:if test=". = $toc-context"> current-page</xsl:if>
    <xsl:if test="./descendant-or-self::node() = $toc-context"> current-section</xsl:if>
   </xsl:attribute>
  </xsl:template>
- 
+
  <xsl:template name="toc.line">
   <xsl:param name="toc-context" select="."/>
   <xsl:param name="depth" select="1"/>
   <xsl:param name="depth.from.context" select="8"/>
-  
+
   <xsl:call-template name="toc.contexutalization.classes">
    <xsl:with-param name="toc-context" select="$toc-context" />
   </xsl:call-template>
-  
+
   <span>
-   
+
    <xsl:call-template name="toc.contexutalization.classes">
     <xsl:with-param name="toc-context" select="$toc-context" />
     <xsl:with-param name="initial">
      <xsl:value-of select="local-name(.)"/>
     </xsl:with-param>
    </xsl:call-template>
-   
+
    <!-- * if $autotoc.label.in.hyperlink is zero, then output the label -->
    <!-- * before the hyperlinked title (as the DSSSL stylesheet does) -->
    <xsl:if test="$autotoc.label.in.hyperlink = 0">
@@ -165,7 +165,7 @@
      <xsl:value-of select="$autotoc.label.separator"/>
     </xsl:if>
    </xsl:if>
-   
+
    <a>
     <xsl:attribute name="href">
      <xsl:call-template name="href.target">
@@ -173,7 +173,7 @@
       <xsl:with-param name="toc-context" select="$toc-context"/>
      </xsl:call-template>
     </xsl:attribute>
-    
+
     <!-- * if $autotoc.label.in.hyperlink is non-zero, then output the label -->
     <!-- * as part of the hyperlinked title -->
     <xsl:if test="not($autotoc.label.in.hyperlink = 0)">
@@ -185,10 +185,10 @@
       <xsl:value-of select="$autotoc.label.separator"/>
      </xsl:if>
     </xsl:if>
-    
+
     <xsl:apply-templates select="." mode="titleabbrev.markup"/>
    </a>
   </span>
  </xsl:template>
- 
+
 </xsl:stylesheet>
