@@ -16,7 +16,7 @@ index 1f35335..7f76951 100644
  
  macro(dbus_add_activation_service _sources)
 -    PKGCONFIG_GETVAR(dbus-1 session_bus_services_dir _install_dir)
-+    set(_install_dir "${CMAKE_INSTALL_PREFIX}/etc/dbus-1/service")
++    set(_install_dir "${CMAKE_INSTALL_DATADIR}/dbus-1/service")
      foreach (_i ${_sources})
          get_filename_component(_service_file ${_i} ABSOLUTE)
          string(REGEX REPLACE "\\.service.*$" ".service" _output_file ${_i})

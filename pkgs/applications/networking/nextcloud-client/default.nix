@@ -1,17 +1,17 @@
-{ lib, mkDerivation, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
 , inotify-tools, openssl, pcre, qtwebengine, libsecret
 , libcloudproviders
 }:
 
 mkDerivation rec {
-  name = "nextcloud-client-${version}";
+  pname = "nextcloud-client";
   version = "2.5.3";
 
-  src = fetchgit {
-    url = "git://github.com/nextcloud/desktop.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "0fbw56bfbyk3cqv94iqfsxjf01dwy1ysjz89dri7qccs65rnjswj";
-    fetchSubmodules = true;
+  src = fetchFromGitHub {
+    owner = "nextcloud";
+    repo = "desktop";
+    rev = "v${version}";
+    sha256 = "1pzlq507fasf2ljf37gkw00qrig4w2r712rsy05zfwlncgcn7fnw";
   };
 
   patches = [
@@ -20,29 +20,15 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ qtbase qtwebkit qtkeychain qttools qtwebengine sqlite openssl.out pcre inotify-tools libcloudproviders ];
-
-  enableParallelBuilding = true;
-
-  NIX_LDFLAGS = "${openssl.out}/lib/libssl.so ${openssl.out}/lib/libcrypto.so";
-
-  cmakeFlags = [
-    "-UCMAKE_INSTALL_LIBDIR"
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DOPENSSL_LIBRARIES=${openssl.out}/lib"
-    "-DOPENSSL_INCLUDE_DIR=${openssl.dev}/include"
-    "-DINOTIFY_LIBRARY=${inotify-tools}/lib/libinotifytools.so"
-    "-DINOTIFY_INCLUDE_DIR=${inotify-tools}/include"
-  ];
+  buildInputs = [ qtbase qtwebkit qtkeychain qttools qtwebengine sqlite openssl pcre inotify-tools libcloudproviders ];
 
   qtWrapperArgs = [
     ''--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}''
   ];
 
-  postInstall = ''
-    sed -i 's/\(Icon.*\)=nextcloud/\1=Nextcloud/g' \
-    $out/share/applications/nextcloud.desktop
-  '';
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
+  ];
 
   meta = with lib; {
     description = "Nextcloud themed desktop client";
