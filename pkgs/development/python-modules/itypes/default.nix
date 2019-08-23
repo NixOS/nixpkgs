@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Basic immutable container types for Python.";
+    description = "Basic immutable container types for Python";
     license = licenses.bsd3;
     homepage = "https://github.com/tomchristie/itypes";
   };
