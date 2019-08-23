@@ -1,6 +1,6 @@
 { stdenv, makeDesktopItem, fetchurl, unzip
 , gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, hicolor-icon-theme, libuuid
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, hicolor-icon-theme, libuuid, at-spi2-core
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   libPath = stdenv.lib.makeLibraryPath (with xorg; [
     stdenv.cc.cc.lib
+    at-spi2-core.out
     gdk-pixbuf
     glib
     gtk3
