@@ -5381,6 +5381,11 @@ in
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
+  
+  netcdffortran-mpi = appendToName "mpi" (netcdffortran.override {
+    hdf5 = hdf5-mpi;
+    netcdf= netcdf-mpi;
+  });
 
   nco = callPackage ../development/libraries/nco { };
 
