@@ -50,7 +50,6 @@ self = stdenv.mkDerivation {
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
       "--with-systemduserunitdir=$(out)/etc/systemd/user"
       "--enable-user-session"
-      "--datadir=/etc"
       "--libexecdir=$(out)/libexec"
     ] ++ lib.optional (!x11Support) "--without-x";
 
