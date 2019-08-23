@@ -139,6 +139,7 @@ let
         --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
         --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
         ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
+        ${optionalString (cfg.unprivileged) "-U"} \
         --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
         --setenv HOST_BRIDGE="$HOST_BRIDGE" \
         --setenv HOST_ADDRESS="$HOST_ADDRESS" \
@@ -238,8 +239,8 @@ let
     ExecReload = pkgs.writeScript "reload-container"
       ''
         #! ${pkgs.runtimeShell} -e
-        ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
-          bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
+        ${pkgs.systemd}/bin/machinectl shell "$INSTANCE" \
+          ''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test
       '';
 
     SyslogIdentifier = "container %i";
@@ -423,6 +424,7 @@ let
       extraVeths = {};
       additionalCapabilities = [];
       ephemeral = false;
+      unprivileged = false;
       allowedDevices = [];
       hostAddress = null;
       hostAddress6 = null;
@@ -513,6 +515,16 @@ in
                 Grant additional capabilities to the container.  See the
                 capabilities(7) and systemd-nspawn(1) man pages for more
                 information.
+              '';
+            };
+
+            unprivileged = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Run container in unprivileged mode using private users feature of <command>systemd-nspawn</command>.
+                This option is eqvivalent of adding -U parameter to <command>systemd-nspawn</command> command.
+                See <literal>systemd-nspawn(1)</literal> man page for more information.
               '';
             };
 
