@@ -5128,6 +5128,8 @@ in
 
   offlineimap = callPackage ../tools/networking/offlineimap { };
 
+  ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim/default.nix { };
+
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
   ola = callPackage ../applications/misc/ola { };
