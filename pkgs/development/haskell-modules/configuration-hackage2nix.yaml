@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 14.1
+  # LTS Haskell 14.2
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -143,7 +143,7 @@ default-package-overrides:
   - avwx ==0.3.0.2
   - aws-cloudfront-signed-cookies ==0.2.0.1
   - aws-lambda-haskell-runtime ==2.0.1
-  - backprop ==0.2.6.2
+  - backprop ==0.2.6.3
   - bank-holidays-england ==0.2.0.1
   - barbies ==1.1.3.0
   - barrier ==0.1.1
@@ -224,7 +224,7 @@ default-package-overrides:
   - boolean-like ==0.1.1.0
   - boolean-normal-forms ==0.0.1
   - boolsimplifier ==0.1.8
-  - boots ==0.0.3
+  - boots ==0.0.100
   - bordacount ==0.1.0.0
   - boring ==0.1.2
   - both ==0.1.1.0
@@ -309,7 +309,7 @@ default-package-overrides:
   - chimera ==0.2.0.0
   - choice ==0.2.2
   - chronologique ==0.3.1.1
-  - chronos ==1.0.6
+  - chronos ==1.0.7
   - chronos-bench ==0.2.0.2
   - chunked-data ==0.3.1
   - cipher-aes ==0.2.11
@@ -601,7 +601,7 @@ default-package-overrides:
   - ENIG ==0.0.1.0
   - entropy ==0.4.1.4
   - enummapset ==0.6.0.2
-  - enumset ==0.0.4.1
+  - enumset ==0.0.5
   - enum-subset-generate ==0.1.0.0
   - enum-text ==0.5.1.0
   - enum-text-rio ==1.2.0.0
@@ -646,7 +646,7 @@ default-package-overrides:
   - failable ==1.2.2.0
   - fakedata ==0.2.2
   - farmhash ==0.1.0.5
-  - fast-builder ==0.1.0.1
+  - fast-builder ==0.1.1.0
   - fast-digits ==0.2.1.0
   - fast-logger ==2.4.16
   - fast-math ==1.0.2
@@ -793,7 +793,7 @@ default-package-overrides:
   - gi-gtk-hs ==0.3.8.0
   - gi-gtksource ==3.0.22
   - gi-javascriptcore ==4.0.21
-  - ginger ==0.9.0.0
+  - ginger ==0.9.1.0
   - gingersnap ==0.3.1.0
   - gi-pango ==1.0.22
   - githash ==0.1.3.1
@@ -918,14 +918,14 @@ default-package-overrides:
   - hlibgit2 ==0.18.0.16
   - hlibsass ==0.1.8.0
   - hmatrix ==0.20.0.0
-  - hmatrix-backprop ==0.1.2.5
+  - hmatrix-backprop ==0.1.3.0
   - hmatrix-gsl ==0.19.0.1
   - hmatrix-gsl-stats ==0.4.1.8
   - hmatrix-morpheus ==0.1.1.2
-  - hmatrix-vector-sized ==0.1.1.3
+  - hmatrix-vector-sized ==0.1.2.0
   - hmm-lapack ==0.4
   - hmpfr ==0.4.4
-  - hoauth2 ==1.8.8
+  - hoauth2 ==1.8.9
   - Hoed ==0.5.1
   - hOpenPGP ==2.8
   - hopenpgp-tools ==0.21.3
@@ -1039,7 +1039,7 @@ default-package-overrides:
   - hw-hedgehog ==0.1.0.3
   - hw-hspec-hedgehog ==0.1.0.7
   - hw-int ==0.0.0.3
-  - hw-ip ==2.3.1.2
+  - hw-ip ==2.3.4.1
   - hw-json ==1.0.0.2
   - hw-json-simd ==0.1.0.2
   - hw-mquery ==0.2.0.1
@@ -1214,7 +1214,7 @@ default-package-overrides:
   - lens-regex-pcre ==0.3.1.0
   - lens-simple ==0.1.0.9
   - lens-typelevel ==0.1.1.0
-  - lenz ==0.3.0.0
+  - lenz ==0.3.1.0
   - leveldb-haskell ==0.6.5
   - libffi ==0.1
   - libgit ==0.3.1
@@ -1371,7 +1371,7 @@ default-package-overrides:
   - monoid-extras ==0.5
   - monoid-subclasses ==0.4.6.1
   - monoid-transformer ==0.0.4
-  - mono-traversable ==1.0.11.0
+  - mono-traversable ==1.0.12.0
   - mono-traversable-instances ==0.1.0.0
   - mono-traversable-keys ==0.1.0
   - more-containers ==0.2.1.2
@@ -1742,7 +1742,7 @@ default-package-overrides:
   - reflection ==2.1.4
   - RefSerialize ==0.4.0
   - regex ==1.0.2.0
-  - regex-applicative ==0.3.3
+  - regex-applicative ==0.3.3.1
   - regex-applicative-text ==0.1.0.1
   - regex-base ==0.93.2
   - regex-compat ==0.95.1
@@ -1808,9 +1808,9 @@ default-package-overrides:
   - safe-json ==0.1.0
   - safe-money ==0.9
   - SafeSemaphore ==0.10.1
-  - salak ==0.3.3.1
-  - salak-toml ==0.3.3
-  - salak-yaml ==0.3.3
+  - salak ==0.3.4.1
+  - salak-toml ==0.3.4.1
+  - salak-yaml ==0.3.4.1
   - saltine ==0.1.0.2
   - salve ==1.0.6
   - sample-frame ==0.0.3
@@ -2126,7 +2126,7 @@ default-package-overrides:
   - th-expand-syns ==0.4.4.0
   - th-extras ==0.0.0.4
   - th-lift ==0.8.0.1
-  - th-lift-instances ==0.1.13
+  - th-lift-instances ==0.1.14
   - th-nowq ==0.1.0.3
   - th-orphans ==0.13.7
   - th-printf ==0.6.0
@@ -2320,7 +2320,7 @@ default-package-overrides:
   - wai-cors ==0.2.7
   - wai-enforce-https ==0.0.1
   - wai-eventsource ==3.0.0
-  - wai-extra ==3.0.27
+  - wai-extra ==3.0.28
   - wai-handler-launch ==3.0.2.4
   - wai-logger ==2.3.5
   - wai-middleware-auth ==0.1.2.1
@@ -2428,7 +2428,7 @@ default-package-overrides:
   - yesod-auth-hashdb ==1.7.1.1
   - yesod-auth-oauth2 ==0.6.1.1
   - yesod-bin ==1.6.0.3
-  - yesod-core ==1.6.14
+  - yesod-core ==1.6.15
   - yesod-csp ==0.2.5.0
   - yesod-eventsource ==1.6.0
   - yesod-fb ==0.5.0
@@ -2442,7 +2442,7 @@ default-package-overrides:
   - yesod-recaptcha2 ==0.3.0
   - yesod-sitemap ==1.6.0
   - yesod-static ==1.6.0.1
-  - yesod-test ==1.6.6.1
+  - yesod-test ==1.6.6.2
   - yesod-text-markdown ==0.1.10
   - yesod-websockets ==0.3.0.2
   - yes-precure5-command ==5.5.3
