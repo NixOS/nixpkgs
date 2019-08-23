@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     # The (only) source file states:
     #   License: "Do what you feel is right, but don't be a jerk" public license.
 
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
   };
 }
 

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "shibboleth-sp-${version}";
-  version = "2.6.1";
+  version = "3.0.4.1";
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-sp.git";
     rev = version;
-    sha256 = "01q13p7gc0janjfml6zs46na8qnval8hc833fk2wrnmi4w9xw4fd";
+    sha256 = "1qb4dbz5gk10b9w1rf6f4vv7c2wb3a8bfzif6yiaq96ilqad7gdr";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

@@ -13,7 +13,7 @@ let
   };
 
   # Temporary check, for nixos to cope both with nixpkgs stdenv-updates and trunk
-  platform = pkgs.stdenv.platform;
+  inherit (pkgs.stdenv.hostPlatform) platform;
 
 in
 

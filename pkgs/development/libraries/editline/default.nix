@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "editline-${version}";
-  version = "1.15.3";
+  version = "1.16.1";
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "editline";
     rev = version;
-    sha256 = "0dm5fgq0acpprr938idwml64nclg9l6c6avirsd8r6f40qicbgma";
+    sha256 = "192valxbvkxh47dszrnahv7xiccarjw9y84g4zaw5y0lxfc54dir";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  dontDisableStatic = true;
+  outputs = [ "out" "dev" "man" "doc" ];
 
   meta = with stdenv.lib; {
     homepage = http://troglobit.com/editline.html;

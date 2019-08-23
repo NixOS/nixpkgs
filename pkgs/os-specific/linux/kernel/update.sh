@@ -48,15 +48,12 @@ ls $NIXPKGS/pkgs/os-specific/linux/kernel | while read FILE; do
   sed -i "s/sha256 = \".*\"/sha256 = \"$HASH\"/g" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
 
   # Rewrite the expression
-  sed -i -e '/version = /d' -e '/modDirVersion = /d' $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
-  if grep -q '^[0-9]\+.[0-9]\+$' <<< "$V"; then
-    sed -i "\#buildLinux (args // rec {#a \  modDirVersion = \"${V}.0\";" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
-  fi
+  sed -i -e '/version = /d' $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
   sed -i "\#buildLinux (args // rec {#a \  version = \"$V\";" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
 
   # Commit the changes
   git add -u $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
-  git commit -m "kernel: $OLDVER -> $V" >/dev/null 2>&1
+  git commit -m "linux: $OLDVER -> $V" >/dev/null 2>&1
 
   echo "Updated $OLDVER -> $V"
 done

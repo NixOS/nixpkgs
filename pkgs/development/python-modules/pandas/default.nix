@@ -16,9 +16,11 @@
 , lxml
 , html5lib
 , beautifulsoup4
+, hypothesis
 , openpyxl
 , tables
 , xlwt
+, runtimeShell
 , libcxx ? null
 }:
 
@@ -28,20 +30,18 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.23.1";
+  version = "0.25.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50b52af2af2e15f4aeb2fe196da073a8c131fa02e433e105d95ce40016df5690";
+    sha256 = "914341ad2d5b1ea522798efa4016430b66107d05781dbfe7cf05eba8f37df995";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  checkInputs = [ pytest glibcLocales moto hypothesis ];
 
-  checkInputs = [ pytest glibcLocales moto ];
-
-  buildInputs = [] ++ optional isDarwin libcxx;
+  nativeBuildInputs = [ cython ];
+  buildInputs = optional isDarwin libcxx;
   propagatedBuildInputs = [
-    cython
     dateutil
     scipy
     numexpr
@@ -80,10 +80,16 @@ in buildPythonPackage rec {
     "test_datetime_name_accessors"
     # Can't import from test folder
     "test_oo_optimizable"
+    # Disable IO related tests because IO data is no longer distributed
+    "io"
+    # KeyError Timestamp
+    "test_to_excel"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
   ]);
+
+  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
   checkPhase = ''
     runHook preCheck
@@ -92,12 +98,12 @@ in buildPythonPackage rec {
   #       Until then we disable the tests.
   + optionalString isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!/bin/sh" > pbcopy
-    echo "#!/bin/sh" > pbpaste
+    echo "#!${runtimeShell}" > pbcopy
+    echo "#!${runtimeShell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
-    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
+    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
     runHook postCheck
   '';
 

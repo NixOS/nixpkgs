@@ -23,5 +23,6 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
+    inherit (sqitchModule.meta) license;
   };
 }

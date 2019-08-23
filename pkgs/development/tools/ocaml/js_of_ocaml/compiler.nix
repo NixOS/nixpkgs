@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune
 , cmdliner, cppo, yojson
 }:
 
@@ -8,22 +8,22 @@ else
 
 stdenv.mkDerivation rec {
 	name = "js_of_ocaml-compiler-${version}";
-	version = "3.2.0";
+	version = "3.3.0";
 
 	src = fetchFromGitHub {
 		owner = "ocsigen";
 		repo = "js_of_ocaml";
 		rev = version;
-		sha256 = "0dxxdxgrbg9xvvi3i627krnk6rb1ja0ypp2diwdkpnmy45wak9lv";
+		sha256 = "0bg8x2s3f24c8ia2g293ikd5yg0yjw3hkdgdql59c8k2amqin8f8";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder cmdliner cppo ];
+	buildInputs = [ ocaml findlib dune cmdliner cppo ];
 
 	propagatedBuildInputs = [ yojson ];
 
-	buildPhase = "jbuilder build -p js_of_ocaml-compiler";
+	buildPhase = "dune build -p js_of_ocaml-compiler";
 
-	inherit (jbuilder) installPhase;
+	inherit (dune) installPhase;
 
 	meta = {
 		description = "Compiler from OCaml bytecode to Javascript";

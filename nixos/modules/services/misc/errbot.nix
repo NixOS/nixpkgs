@@ -81,7 +81,7 @@ in {
 
     systemd.services = mapAttrs' (name: instanceCfg: nameValuePair "errbot-${name}" (
     let
-      dataDir = if !isNull instanceCfg.dataDir then instanceCfg.dataDir else
+      dataDir = if instanceCfg.dataDir != null then instanceCfg.dataDir else
         "/var/lib/errbot/${name}";
     in {
       after = [ "network-online.target" ];

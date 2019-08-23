@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libX11, perl, libXtst, xextproto, libXi, libXinerama, libxkbcommon }:
+{ stdenv, fetchurl, pkgconfig, libX11, perl, libXtst, xorgproto, libXi, libXinerama, libxkbcommon }:
 
 stdenv.mkDerivation rec {
   name = "xdotool-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig perl ];
-  buildInputs = [ libX11 libXtst xextproto libXi libXinerama libxkbcommon ];
+  buildInputs = [ libX11 libXtst xorgproto libXi libXinerama libxkbcommon ];
 
   preBuild = ''
     mkdir -p $out/lib

@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, writeText, pkgs, pkgsi686Linux, system }:
+{ stdenv, buildEnv, writeText, pkgs, pkgsi686Linux }:
 
 { name, profile ? ""
 , targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
@@ -22,7 +22,7 @@
 # /lib will link to /lib32
 
 let
-  is64Bit = system == "x86_64-linux";
+  is64Bit = stdenv.hostPlatform.parsed.cpu.bits == 64;
   isMultiBuild  = multiPkgs != null && is64Bit;
   isTargetBuild = !isMultiBuild;
 
@@ -36,12 +36,14 @@ let
 
   # base packages of the chroot
   # these match the host's architecture, glibc_multi is used for multilib
-  # builds.
+  # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
+  # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
   basePkgs = with pkgs;
-    [ (if isMultiBuild then glibc_multi else glibc)
+    [ glibcLocales
+      (if isMultiBuild then glibc_multi else glibc)
       (toString gcc.cc.lib) bashInteractive coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
-      gnutar gzip bzip2 xz glibcLocales
+      gnutar gzip bzip2 xz
     ];
   baseMultiPkgs = with pkgsi686Linux;
     [ (toString gcc.cc.lib)
@@ -50,8 +52,8 @@ let
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
-    export LD_LIBRARY_PATH='/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32'
-    export PATH='/run/wrappers/bin:/usr/bin:/usr/sbin'
+    export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32:$LD_LIBRARY_PATH"
+    export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
     export TZDIR='/etc/zoneinfo'
 
     # Force compilers and other tools to look in default search paths
@@ -196,4 +198,5 @@ in stdenv.mkDerivation {
     ${if isMultiBuild then extraBuildCommandsMulti else ""}
   '';
   preferLocalBuild = true;
+  allowSubstitutes = false;
 }

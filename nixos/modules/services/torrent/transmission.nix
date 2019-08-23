@@ -142,6 +142,10 @@ in
           ${getLib pkgs.attr}/lib/libattr*.so*             mr,
           ${getLib pkgs.lz4}/lib/liblz4*.so*               mr,
           ${getLib pkgs.libkrb5}/lib/lib*.so*              mr,
+          ${getLib pkgs.keyutils}/lib/libkeyutils*.so*     mr,
+          ${getLib pkgs.utillinuxMinimal.out}/lib/libblkid.so.* mr,
+          ${getLib pkgs.utillinuxMinimal.out}/lib/libmount.so.* mr,
+          ${getLib pkgs.utillinuxMinimal.out}/lib/libuuid.so.* mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,

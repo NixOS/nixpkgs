@@ -39,12 +39,15 @@ stdenv.mkDerivation rec {
 
   #doCheck = false;
 
-  meta = {
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-deprecated-declarations"
+  ];
+
+  meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";
     homepage = http://www.k-3d.org/;
-    platforms = with stdenv.lib.platforms;
-      linux;
-    maintainers = with stdenv.lib.maintainers;
-      [raskin];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
   };
 }

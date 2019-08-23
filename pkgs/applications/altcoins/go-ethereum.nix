@@ -1,8 +1,9 @@
 { stdenv, buildGoPackage, fetchFromGitHub, libobjc, IOKit }:
 
 buildGoPackage rec {
-  name = "go-ethereum-${version}";
-  version = "1.8.11";
+  pname = "go-ethereum";
+  version = "1.9.2";
+
   goPackagePath = "github.com/ethereum/go-ethereum";
 
   # Fix for usb-related segmentation faults on darwin
@@ -14,15 +15,15 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     owner = "ethereum";
-    repo = "go-ethereum";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1b4za0hszb95jnj97g4xkrgcl0bydllznm0wj6rpi6cwmdr0h8na";
+    sha256 = "0lymwylh4j63fzj9jy7mcw676a2ksgpsj9mazif1r3d2q73h9m88";
   };
 
   meta = with stdenv.lib; {
-    homepage = https://ethereum.github.io/go-ethereum/;
+    homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3 gpl3 ];
-    maintainers = [ maintainers.adisbladis ];
+    maintainers = with maintainers; [ adisbladis asymmetric lionello xrelkd ];
   };
 }

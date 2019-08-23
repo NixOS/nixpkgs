@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
       other applications.  A wealth of frontend applications and libraries are
       available.
     '';
-    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
+    platforms = platforms.all;
   };
 }

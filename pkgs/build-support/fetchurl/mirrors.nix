@@ -10,26 +10,29 @@ rec {
 
   # SourceForge.
   sourceforge = [
-    http://downloads.sourceforge.net/
-    http://prdownloads.sourceforge.net/
-    http://heanet.dl.sourceforge.net/sourceforge/
-    http://surfnet.dl.sourceforge.net/sourceforge/
-    http://dfn.dl.sourceforge.net/sourceforge/
-    http://osdn.dl.sourceforge.net/sourceforge/
-    http://kent.dl.sourceforge.net/sourceforge/
+    https://downloads.sourceforge.net/
+    https://prdownloads.sourceforge.net/
+    https://heanet.dl.sourceforge.net/sourceforge/
+    https://surfnet.dl.sourceforge.net/sourceforge/
+    https://dfn.dl.sourceforge.net/sourceforge/
+    https://osdn.dl.sourceforge.net/sourceforge/
+    https://kent.dl.sourceforge.net/sourceforge/
   ];
 
-  # SourceForge.jp.
-  sourceforgejp = [
-    http://osdn.dl.sourceforge.jp/
-    http://jaist.dl.sourceforge.jp/
+  # OSDN (formerly SourceForge.jp).
+  osdn = [
+    https://osdn.dl.osdn.jp/
+    https://osdn.mirror.constant.com/
+    https://mirrors.gigenet.com/OSDN/
+    https://osdn.dl.sourceforge.jp/
+    https://jaist.dl.sourceforge.jp/
   ];
 
-  # GNU (http://www.gnu.org/prep/ftp.html).
+  # GNU (https://www.gnu.org/prep/ftp.html).
   gnu = [
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
     # mirror.
-    http://ftpmirror.gnu.org/
+    https://ftpmirror.gnu.org/
 
     http://ftp.nluug.nl/pub/gnu/
     http://mirrors.kernel.org/gnu/
@@ -44,6 +47,8 @@ rec {
 
   # GCC.
   gcc = [
+    https://bigsearcher.com/mirrors/gcc/
+    http://mirror.koddos.net/gcc/
     ftp://ftp.nluug.nl/mirror/languages/gcc/
     ftp://ftp.fu-berlin.de/unix/languages/gcc/
     ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/
@@ -70,13 +75,15 @@ rec {
     ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/
   ];
 
-  # Mirrors of ftp://ftp.kde.org/pub/kde/.
+  # Mirrors from https://download.kde.org/extra/download-mirrors.html
   kde = [
-    "http://download.kde.org/download.php?url="
-    http://ftp.gwdg.de/pub/x11/kde/
-    ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
+    "https://download.kde.org/download.php?url="
+    https://ftp.gwdg.de/pub/linux/kde/
+    https://mirrors.ocf.berkeley.edu/kde/
+    http://mirrors.mit.edu/kde/
+    https://mirrors.ustc.edu.cn/kde/
+    http://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
     ftp://ftp.kde.org/pub/kde/
-    ftp://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
   ];
 
   # Gentoo files.
@@ -157,13 +164,23 @@ rec {
 
   # CPAN mirrors.
   cpan = [
-    http://ftp.gwdg.de/pub/languages/perl/CPAN/
-    ftp://download.xs4all.nl/pub/mirror/CPAN/
-    http://ftp.tuwien.ac.at/pub/CPAN/
-    http://ftp.funet.fi/pub/CPAN/
     https://cpan.metacpan.org/
-    http://cpan.perl.org/
+    https://cpan.perl.org/
     http://backpan.perl.org/  # for old releases
+  ];
+
+  # CentOS.
+  centos = [
+    http://mirror.centos.org/centos/
+    # For old releases
+    http://vault.centos.org/
+    https://archive.kernel.org/centos-vault/
+    http://ftp.jaist.ac.jp/pub/Linux/CentOS-vault/
+    http://mirrors.aliyun.com/centos-vault/
+    https://mirror.chpc.utah.edu/pub/vault.centos.org/
+    https://mirror.its.sfu.ca/mirror/CentOS-vault/
+    https://mirror.math.princeton.edu/pub/centos-vault/
+    https://mirrors.tripadvisor.com/centos-vault/
   ];
 
   # Debian.
@@ -259,20 +276,20 @@ rec {
 
   # X.org.
   xorg = [
-    http://xorg.freedesktop.org/releases/
-    http://ftp.gwdg.de/pub/x11/x.org/pub/
-    http://ftp.x.org/pub/ # often incomplete (e.g. files missing from X.org 7.4)
+    https://xorg.freedesktop.org/releases/
+    https://ftp.x.org/archive/
   ];
 
   # Apache mirrors (see http://www.apache.org/mirrors/).
   apache = [
+    https://www-eu.apache.org/dist/
+    https://www-us.apache.org/dist/
     http://www.eu.apache.org/dist/
-    http://wwwftp.ciril.fr/pub/apache/
     ftp://ftp.fu-berlin.de/unix/www/apache/
     http://ftp.tudelft.nl/apache/
     http://mirror.cc.columbia.edu/pub/software/apache/
-    http://www.apache.org/dist/
-    http://archive.apache.org/dist/ # fallback for old releases
+    https://www.apache.org/dist/
+    https://archive.apache.org/dist/ # fallback for old releases
     ftp://ftp.funet.fi/pub/mirrors/apache.org/
     http://apache.cs.uu.nl/
     http://apache.cs.utah.edu/
@@ -309,6 +326,8 @@ rec {
   hackage = [
     http://hackage.haskell.org/package/
     http://hdiff.luite.com/packages/archive/package/
+    http://hackage.fpcomplete.com/package/
+    http://objects-us-east-1.dream.io/hackage-mirror/package/
   ];
 
   # Roy marples mirrors
@@ -380,7 +399,7 @@ rec {
   # Steam Runtime mirrors
   steamrt = [
     http://repo.steampowered.com/steamrt/
-    https://abbradar.net/steamrt/
+    https://public.abbradar.moe/steamrt/
   ];
 
   # Python PyPI mirrors
@@ -405,9 +424,10 @@ rec {
 
   # Alsa Project
   alsa = [
-     ftp://ftp.alsa-project.org/pub/
-     http://alsa.cybermirror.org/
-     http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/
-     http://alsa.mirror.fr/
+    https://www.alsa-project.org/files/pub/
+    ftp://ftp.alsa-project.org/pub/
+    http://alsa.cybermirror.org/
+    http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/
+    http://alsa.mirror.fr/
   ];
 }

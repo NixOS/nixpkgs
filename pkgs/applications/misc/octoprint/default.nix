@@ -1,120 +1,96 @@
-{ stdenv, fetchFromGitHub, python2 }:
+{ stdenv, lib, fetchFromGitHub, python2 }:
 
 let
-
-  pythonPackages = python2.pkgs.override {
-    overrides = self: super: with self; {
-      backports_ssl_match_hostname = super.backports_ssl_match_hostname.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.0.2";
+  mkOverride = attrname: version: sha256:
+    self: super: {
+      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+        inherit version;
         src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "07410e7fb09aab7bdaf5e618de66c3dac84e2e3d628352814dc4c37de321d6ae";
+          inherit version sha256;
         };
       });
-
-      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
-        version = "0.12.4";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "2ea22336f6d388b4b242bc3abf8a01244a8aa3e236e7407469ef78c16ba355dd";
-        };
-      });
-
-      tornado = buildPythonPackage rec {
-        pname = "tornado";
-        version = "4.0.2";
-
-        propagatedBuildInputs = [ backports_ssl_match_hostname certifi ];
-
-        src = fetchPypi {
-          inherit pname version;
-          sha256 = "1yhvn8i05lp3b1953majg48i8pqsyj45h34aiv59hrfvxcj5234h";
-        };
-      };
-
-      flask_login = buildPythonPackage rec {
-        pname = "Flask-Login";
-        version = "0.2.2";
-
-        src = fetchPypi {
-          inherit pname version;
-          sha256 = "09ygn0r3i3jz065a5psng6bhlsqm78msnly4z6x39bs48r5ww17p";
-        };
-
-        propagatedBuildInputs = [ flask ];
-        checkInputs = [ nose ];
-
-        # No tests included
-        doCheck = false;
-      };
-
-      jinja2 = buildPythonPackage rec {
-        pname = "Jinja2";
-        version = "2.8.1";
-
-        src = fetchPypi {
-          inherit pname version;
-          sha256 = "14aqmhkc9rw5w0v311jhixdm6ym8vsm29dhyxyrjfqxljwx1yd1m";
-        };
-
-        propagatedBuildInputs = [ markupsafe ];
-
-        # No tests included
-        doCheck = false;
-      };
     };
+
+  py = python2.override {
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
+      (mkOverride "flask"       "0.10.1" "0wrkavjdjndknhp8ya8j850jq7a1cli4g5a93mg8nh1xz2gq50sc")
+      (mkOverride "flask_login" "0.2.11" "1rg3rsjs1gwi2pw6vr9jmhaqm9b3vc9c4hfcsvp4y8agbh7g3mc3")
+      (mkOverride "tornado"     "4.5.3"  "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
+
+      # Octoprint holds back jinja2 to 2.8.1 due to breaking changes.
+      # This old version does not have updated test config for pytest 4,
+      # and pypi tarball doesn't contain tests dir anyways.
+      (pself: psuper: {
+        jinja2 = psuper.jinja2.overridePythonAttrs (oldAttrs: rec {
+          version = "2.8.1";
+          src = oldAttrs.src.override {
+            inherit version;
+            sha256 = "14aqmhkc9rw5w0v311jhixdm6ym8vsm29dhyxyrjfqxljwx1yd1m";
+          };
+          doCheck = false;
+        });
+      })
+    ]);
   };
 
-in pythonPackages.buildPythonApplication rec {
+  ignoreVersionConstraints = [
+    "Click"
+    "Flask-Assets"
+    "Flask-Babel"
+    "Flask-Principal"
+    "emoji"
+    "flask"
+    "future"
+    "futures"
+    "monotonic"
+    "markdown"
+    "pkginfo"
+    "psutil"
+    "pyserial"
+    "requests"
+    "rsa"
+    "sarge"
+    "scandir"
+    "semantic_version"
+    "watchdog"
+    "websocket-client"
+    "wrapt"
+    "sentry-sdk"
+  ];
+
+in py.pkgs.buildPythonApplication rec {
   pname = "OctoPrint";
-  version = "1.3.8";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
-    owner = "foosel";
-    repo = "OctoPrint";
-    rev = version;
-    sha256 = "00zd5yrlihwfd3ly0mxibr77ffa8r8vkm6jhml2ml43dqb99caa3";
+    owner  = "foosel";
+    repo   = "OctoPrint";
+    rev    = version;
+    sha256 = "1102ki1819wsmkfg4riz4i0hjlr3w6nsvk8wrzqq0lc0s5ycf4jx";
   };
 
-  # We need old Tornado
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with py.pkgs; [
     awesome-slugify flask_assets rsa requests pkginfo watchdog
     semantic-version flask_principal werkzeug flaskbabel tornado
     psutil pyserial flask_login netaddr markdown sockjs-tornado
     pylru pyyaml sarge feedparser netifaces click websocket_client
-    scandir chainmap future dateutil futures wrapt monotonic emoji
-    frozendict
-  ];
+    scandir chainmap future futures wrapt monotonic emoji
+    frozendict cachelib sentry-sdk typing
+  ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
 
-  checkInputs = with pythonPackages; [ nose mock ddt ];
+  checkInputs = with py.pkgs; [ nose mock ddt ];
 
-  # Jailbreak dependencies.
   postPatch = ''
-    sed -i \
-      -e 's,pkginfo>=[^"]*,pkginfo,g' \
-      -e 's,Flask-Principal>=[^"]*,Flask-Principal,g' \
-      -e 's,websocket-client>=[^"]*,websocket-client,g' \
-      -e 's,Click>=[^"]*,Click,g' \
-      -e 's,rsa>=[^"]*,rsa,g' \
-      -e 's,flask>=[^"]*,flask,g' \
-      -e 's,Flask-Babel>=[^"]*,Flask-Babel,g' \
-      -e 's,Flask-Assets>=[^"]*,Flask-Assets,g' \
-      -e 's,PyYAML>=[^"]*,PyYAML,g' \
-      -e 's,scandir>=[^"]*,scandir,g' \
-      -e 's,werkzeug>=[^"]*,werkzeug,g' \
-      -e 's,psutil==[^"]*,psutil,g' \
-      -e 's,requests>=[^"]*,requests,g' \
-      -e 's,future>=[^"]*,future,g' \
-      -e 's,pyserial>=[^"]*,pyserial,g' \
-      -e 's,semantic_version>=[^"]*,semantic_version,g' \
-      -e 's,wrapt>=[^"]*,wrapt,g' \
-      -e 's,python-dateutil>=[^"]*,python-dateutil,g' \
-      -e 's,emoji>=[^"]*,emoji,g' \
-      -e 's,futures>=[^"]*,futures,g' \
+    sed -r -i \
+      ${lib.concatStringsSep "\n" (map (e:
+        ''-e 's@${e}[<>=]+.*@${e}",@g' \''
+      ) ignoreVersionConstraints)}
       setup.py
   '';
 
-  checkPhase = "nosetests";
+  checkPhase = ''
+    HOME=$(mktemp -d) nosetests ${lib.optionalString stdenv.isDarwin "--exclude=test_set_external_modification"}
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://octoprint.org/;

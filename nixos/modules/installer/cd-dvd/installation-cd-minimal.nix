@@ -7,4 +7,6 @@
   imports =
     [ ./installation-cd-base.nix
     ];
+
+  fonts.fontconfig.enable = false;
 }

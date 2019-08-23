@@ -1,10 +1,13 @@
-version=1.7.1
-hashfile=tf${version}-hashes.nix
+#!/usr/bin/env bash
+
+version=1.14.0
+hashfile=binary-hashes.nix
 rm -f $hashfile
 echo "{" >> $hashfile
+echo "version = \"$version\";" >> $hashfile
 for sys in "linux" "mac"; do
     for tfpref in "cpu/tensorflow" "gpu/tensorflow_gpu"; do
-        for pykind in "py2-none-any" "py3-none-any" "cp27-none-linux_x86_64" "cp35-cp35m-linux_x86_64" "cp36-cp36m-linux_x86_64"; do
+        for pykind in "py2-none-any" "py3-none-any" "cp27-none-linux_x86_64" "cp35-cp35m-linux_x86_64" "cp36-cp36m-linux_x86_64" "cp37-cp37m-linux_x86_64"; do
             if [ $sys == "mac" ]; then
                [[ $pykind =~ py.* ]] && [[ $tfpref =~ cpu.* ]]
                result=$?
@@ -27,3 +30,4 @@ for sys in "linux" "mac"; do
         done
     done
 done
+echo "}" >> $hashfile

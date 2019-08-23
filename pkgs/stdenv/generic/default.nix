@@ -47,6 +47,7 @@ let
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
+      ../../build-support/setup-hooks/prune-libtool-files.sh
     ]
       # FIXME this on Darwin; see
       # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
@@ -87,7 +88,7 @@ let
       # there (yet?) so it goes here until then.
       preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
         export NIX_BUILD_DONT_SET_RPATH=1
-      '' + lib.optionalString hostPlatform.isDarwin ''
+      '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
       ''
@@ -121,12 +122,16 @@ let
 
       # Utility flags to test the type of platform.
       inherit (hostPlatform)
-        isDarwin isLinux isSunOS isHurd isCygwin isFreeBSD isOpenBSD
-        isi686 isx86_64 is64bit isAarch32 isAarch64 isMips isBigEndian;
-      isArm = builtins.trace "stdenv.isArm is deprecated after 18.03" hostPlatform.isArm;
+        isDarwin isLinux isSunOS isCygwin isFreeBSD isOpenBSD
+        isi686 isx86_32 isx86_64
+        is32bit is64bit
+        isAarch32 isAarch64 isMips isBigEndian;
+      isArm = lib.warn
+        "`stdenv.isArm` is deprecated after 18.03. Please use `stdenv.isAarch32` instead"
+        hostPlatform.isAarch32;
 
-      # Whether we should run paxctl to pax-mark binaries.
-      needsPax = isLinux;
+      # The derivation's `system` is `buildPlatform.system`.
+      inherit (buildPlatform) system;
 
       inherit (import ./make-derivation.nix {
         inherit lib config stdenv;
@@ -141,8 +146,6 @@ let
       inherit overrides;
 
       inherit cc;
-
-      isCross = targetPlatform != buildPlatform;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

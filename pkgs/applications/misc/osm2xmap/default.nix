@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "INSTALL_SHAREDIR=$(out)/share/"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
+
   installFlags = [ "DESTDIR=$(out)" ];
 
   buildInputs = [ libroxml proj libyamlcpp boost ];

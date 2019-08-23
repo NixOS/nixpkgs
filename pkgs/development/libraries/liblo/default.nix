@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "liblo-0.29";
+  name = "liblo-0.30";
 
   src = fetchurl {
-    url = "mirror://sourceforge/liblo/liblo/0.29/${name}.tar.gz";
-    sha256 = "0sn0ckc1d0845mhsaa62wf7f9v0c0ykiq796a30ja5096kib9qdc";
+    url = "mirror://sourceforge/liblo/liblo/0.30/${name}.tar.gz";
+    sha256 = "06wdjzxjdshr6hyl4c94yvg3jixiylap8yjs8brdfpm297gck9rh";
   };
 
   doCheck = false; # fails 1 out of 3 tests

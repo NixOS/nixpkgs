@@ -66,11 +66,11 @@ in {
       description = "Caddy web server";
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = mkIf (versionAtLeast config.system.nixos.stateVersion "17.09")
+      environment = mkIf (versionAtLeast config.system.stateVersion "17.09")
         { CADDYPATH = cfg.dataDir; };
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package.bin}/bin/caddy -root=/var/tmp -conf=${configFile} \
+          ${cfg.package}/bin/caddy -root=/var/tmp -conf=${configFile} \
             -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
         '';
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

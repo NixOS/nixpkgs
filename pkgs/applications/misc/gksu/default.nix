@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|/usr/bin/x-terminal-emulator|-l gnome-terminal|g' gksu.desktop
   '';
 
-  configureFlags = "--disable-nautilus-extension";
+  configureFlags = [ "--disable-nautilus-extension" ];
 
   meta = {
     description = "A graphical frontend for libgksu";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       programs that need to ask a user's password to run another program
       as another user.
     '';
-    homepage = http://www.nongnu.org/gksu/;
+    homepage = https://www.nongnu.org/gksu/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.romildo ];
     platforms = stdenv.lib.platforms.linux;

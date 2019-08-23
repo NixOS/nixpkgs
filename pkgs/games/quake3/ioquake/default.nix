@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, which, pkgconfig, SDL2, libGLU_combined, openalSoft
+{ stdenv, fetchFromGitHub, which, pkgconfig, SDL2, libGL, openalSoft
 , curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
 }:
 
 stdenv.mkDerivation rec {
   name = "ioquake3-git-${version}";
-  version = "2018-02-23";
+  version = "2019-05-29";
 
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "0d6edd227a13f1447938da1d1b020303c2545eb2";
-    sha256 = "1nsagyzrai8cxhabcv2my8bbwmwckvri288j6x4qi5bmp78xl4hx";
+    rev = "350b8f9c7c88c002dccea4f0350f1919b86d3b4e";
+    sha256 = "17qkqi22f2fyh6bnfcf1zz2lycgv08d6aw52sf0hqw7r3qq86d08";
   };
 
   nativeBuildInputs = [ which pkgconfig ];
   buildInputs = [
-    SDL2 libGLU_combined openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
+    SDL2 libGL openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
     freetype mumble
   ];
 
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eelco abbradar ];
+    maintainers = with maintainers; [ rvolosatovs eelco abbradar ];
   };
 }

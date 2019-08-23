@@ -1,17 +1,17 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem
-, atk, cairo, gdk_pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
-, lsb-release }:
+, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
+, lsb-release, freetype, fontconfig, pangox_compat, polkit, polkit_gnome }:
 
 let
   sha256 = {
-    "x86_64-linux" = "0g19sac4j3m1nf400vn6qcww7prqg2p4k4zsj74i109kk1396aa2";
-    "i686-linux"   = "1dd4ai2pclav9g872xil3x67bxy32gvz9pb3w76383pcsdh5zh45";
-  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+    "x86_64-linux" = "08kdxsg9npb1nmlr2jyq7p238735kqkp7c5xckxn6rc4cp12n2y2";
+    "i686-linux"   = "11r5d4234zbkkgyrd7q9x3w7s7lailnq7z4x8cnhpr8vipzrg7h2";
+  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   arch = {
     "x86_64-linux" = "amd64";
     "i686-linux"   = "i686";
-  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   description = "Desktop sharing application, providing remote support and online meetings";
 
@@ -27,7 +27,7 @@ let
 
 in stdenv.mkDerivation rec {
   name = "anydesk-${version}";
-  version = "2.9.4";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "https://download.anydesk.com/linux/${name}-${arch}.tar.gz";
@@ -35,11 +35,12 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    atk cairo gdk_pixbuf glib gtk2 stdenv.cc.cc pango
-    gnome2.gtkglext libGLU_combined
+    atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
+    gnome2.gtkglext libGLU_combined freetype fontconfig
+    pangox_compat polkit polkit_gnome
   ] ++ (with xorg; [
     libxcb libX11 libXdamage libXext libXfixes libXi libXmu
-    libXrandr libXtst
+    libXrandr libXtst libXt libICE libSM
   ]);
 
   nativeBuildInputs = [ makeWrapper ];
@@ -71,7 +72,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit description;
-    homepage = http://www.anydesk.com;
+    homepage = https://www.anydesk.com;
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ peterhoeg ];

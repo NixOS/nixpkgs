@@ -1,4 +1,4 @@
-{ stdenv }:
+{ stdenv, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "example-unfree-package-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cat > $out/bin/hello-unfree << EOF
-    #!/bin/sh
+    #!${runtimeShell}
     echo "Hello, you are running an unfree system!"
     EOF
     chmod +x $out/bin/hello-unfree

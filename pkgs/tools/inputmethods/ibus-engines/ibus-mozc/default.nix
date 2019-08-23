@@ -10,7 +10,7 @@ let
   };
 in clangStdenv.mkDerivation rec {
   name = "ibus-mozc-${version}";
-  version = "2.20.2673.102";
+  version = "2.23.2815.102";
 
   meta = with clangStdenv.lib; {
     isIbusEngine = true;
@@ -27,8 +27,8 @@ in clangStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "google";
     repo   = "mozc";
-    rev    = "280e38fe3d9db4df52f0713acf2ca65898cd697a";
-    sha256 = "0s599f817gjgqynm4n1yll1ipd25ai2c55y8k6wvhg9s7qaxnyhs";
+    rev    = "afb03ddfe72dde4cf2409863a3bfea160f7a66d8";
+    sha256 = "0w2dy2j9x5nc7x3g95j17r3m60vbfyn5j617h7js9xryv33yzpgx";
   };
 
   postUnpack = ''

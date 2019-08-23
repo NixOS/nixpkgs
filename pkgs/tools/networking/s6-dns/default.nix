@@ -1,27 +1,17 @@
-{ stdenv, fetchgit, skalibs }:
+{ skawarePackages }:
 
-let
+with skawarePackages;
 
-  version = "2.2.0.1";
+buildPackage {
+  pname = "s6-dns";
+  version = "2.3.0.2";
+  sha256 = "1y9bhvx8bqsb2xq5lmlfnc1hw2b3jyqg11i9r4lj0n6vvaqwh1j8";
 
-in stdenv.mkDerivation rec {
-
-  name = "s6-dns-${version}";
-
-  src = fetchgit {
-    url = "git://git.skarnet.org/s6-dns";
-    rev = "refs/tags/v${version}";
-    sha256 = "10qvkh608nsx8gqs3pj4pb8aivwpshbmjw2766grgmrb35d31brl";
-  };
+  description = "A suite of DNS client programs and libraries for Unix systems";
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
-  dontDisableStatic = true;
-
-  enableParallelBuilding = true;
-
   configureFlags = [
-    "--enable-absolute-paths"
     "--libdir=\${lib}/lib"
     "--libexecdir=\${lib}/libexec"
     "--dynlibdir=\${lib}/lib"
@@ -31,21 +21,15 @@ in stdenv.mkDerivation rec {
     "--with-include=${skalibs.dev}/include"
     "--with-lib=${skalibs.lib}/lib"
     "--with-dynlib=${skalibs.lib}/lib"
-  ]
-  ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
-  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+  ];
 
   postInstall = ''
-    mkdir -p $doc/share/doc/s6-dns/
+    # remove all s6-dns executables from build directory
+    rm $(find -type f -mindepth 1 -maxdepth 1 -executable)
+    rm libs6dns.*
+    rm libskadns.*
+
     mv doc $doc/share/doc/s6-dns/html
   '';
-
-  meta = {
-    homepage = http://www.skarnet.org/software/s6-dns/;
-    description = "A suite of DNS client programs and libraries for Unix systems";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney Profpatsch ];
-  };
 
 }

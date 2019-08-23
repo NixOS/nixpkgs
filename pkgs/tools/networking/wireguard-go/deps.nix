@@ -1,30 +1,57 @@
-# file generated from Gopkg.lock using dep2nix (https://github.com/nixcloud/dep2nix)
+# file generated from go.mod using vgo2nix (https://github.com/adisbladis/vgo2nix)
 [
   {
-    goPackagePath  = "golang.org/x/crypto";
+    goPackagePath = "github.com/Microsoft/go-winio";
+    fetch = {
+      type = "git";
+      url = "https://github.com/Microsoft/go-winio";
+      rev = "v0.4.12";
+      sha256 = "10v2f1xaw2cc97mjqnxzgs9ydpqv71f0ynp1spcywqw97la56zqw";
+    };
+  }
+  {
+    goPackagePath = "github.com/pkg/errors";
+    fetch = {
+      type = "git";
+      url = "https://github.com/pkg/errors";
+      rev = "v0.8.1";
+      sha256 = "0g5qcb4d4fd96midz0zdk8b9kz8xkzwfa8kr1cliqbg8sxsy5vd1";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/crypto";
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev =  "8ac0e0d97ce45cd83d1d7243c060cb8461dda5e9";
-      sha256 = "0vg0dfpv1wgj5imlakpma763yfd67aqbiy0fcklq3cw46qmfbzf1";
+      rev = "a29dc8fdc734";
+      sha256 = "07f0jj4haqs0ywc1akk1qjwn5msl2j0pry1rxjkkbfcq4r6ihc1p";
     };
   }
   {
-    goPackagePath  = "golang.org/x/net";
+    goPackagePath = "golang.org/x/net";
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev =  "1e491301e022f8f977054da4c2d852decd59571f";
-      sha256 = "1wc18flnz99bip2j1gpnvr3qdp1y7wgyvawlvvc8rmd6ggf5f2yq";
+      rev = "7f726cade0ab";
+      sha256 = "0zv5var5agbhd2mcn7lciwip0j49gxka73f0csvh3hvb1di068gn";
     };
   }
   {
-    goPackagePath  = "golang.org/x/sys";
+    goPackagePath = "golang.org/x/sys";
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev =  "9527bec2660bd847c050fda93a0f0c6dee0800bb";
-      sha256 = "02kd2lnw7dnyqs0vvcpzwkv5brpgkwagqly2xs7dwmsi1vvf400p";
+      rev = "a43fa875dd82";
+      sha256 = "0xvwwaqcj02a9n8izs4zrlg8vvz7wffli955i93nc34m1f0w8vyg";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/text";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/text";
+      rev = "v0.3.0";
+      sha256 = "0r6x6zjzhr8ksqlpiwm5gdd7s209kwk5p4lw54xjvz10cs3qlq19";
     };
   }
 ]

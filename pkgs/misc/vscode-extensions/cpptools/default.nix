@@ -1,4 +1,7 @@
-{ stdenv, fetchzip, vscode-utils, jq, mono46, clang-tools, writeScript
+{ stdenv, vscode-utils
+, fetchurl, unzip
+, mono, writeScript, runtimeShell
+, jq, clang-tools
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
@@ -30,36 +33,49 @@ assert gdbUseFixed -> null != gdb;
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
 
-  langComponentBinaries = stdenv.mkDerivation {
+  langComponentBinaries = stdenv.mkDerivation rec {
     name = "cpptools-language-component-binaries";
 
-    src = fetchzip {
-      url = https://download.visualstudio.microsoft.com/download/pr/11991016/8a81aa8f89aac452956b0e4c68e6620b/Bin_Linux.zip;
-      sha256 = "0ma59fxfldbgh6ijlvfbs3hnl4g0cnw5gs6286zdrp065n763sv4";
+    src = fetchurl {
+      # Follow https://go.microsoft.com/fwlink/?linkid=2037608
+      url = "https://download.visualstudio.microsoft.com/download/pr/fd05d7fd-b771-4746-9c54-b5b30afcd82e/1f443716d6156a265bf50cb6e53fa999/bin_linux.zip";
+      sha256 = "198xnq709clibjmd8rrv0haniy2m3qvhn89hg9hpj6lvg9lsr7a4";
     };
 
-    patchPhase = ''
-      elfInterpreter="${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2"
-      patchelf --set-interpreter "$elfInterpreter" ./Microsoft.VSCode.CPP.Extension.linux
-      patchelf --set-interpreter "$elfInterpreter" ./Microsoft.VSCode.CPP.IntelliSense.Msvc.linux
-      chmod a+x ./Microsoft.VSCode.CPP.Extension.linux ./Microsoft.VSCode.CPP.IntelliSense.Msvc.linux
+    sourceRoot = name;
+
+    nativeBuildInputs = [ unzip ];
+
+    unpackPhase = ''
+      runHook preUnpack
+      unzip -d $name $src || true
+      runHook postUnpack
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir -p "$out/bin"
-      find . -mindepth 1 -maxdepth 1 | xargs cp -a -t "$out/bin"
+      cp -a -t "$out/bin" ./bin/*
+      runHook postInstall
+    '';
+
+    postFixup = ''
+      elfInterpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
+      patchelf --set-interpreter "$elfInterpreter" $out/bin/Microsoft.VSCode.CPP.Extension.linux
+      patchelf --set-interpreter "$elfInterpreter" $out/bin/Microsoft.VSCode.CPP.IntelliSense.Msvc.linux
+      chmod a+x $out/bin/Microsoft.VSCode.CPP.Extension.linux $out/bin/Microsoft.VSCode.CPP.IntelliSense.Msvc.linux
     '';
   };
 
   openDebugAD7Script = writeScript "OpenDebugAD7" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     BIN_DIR="$(cd "$(dirname "$0")" && pwd -P)"
     ${if gdbUseFixed
         then ''
           export PATH=''${PATH}''${PATH:+:}${gdb}/bin
         ''
         else ""}
-    ${mono46}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
+    ${mono}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
   '';
 in
 
@@ -67,8 +83,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "0.17.6";
-    sha256 = "2625be8b922ffc199e1c776f784d39b6e004523212f7956c93ae40f9040ce6d5";
+    version = "0.24.1";
+    sha256 = "0gqplcppfg2lr6k198q9pw08n0cpc0wvc9w350m9ivv35hw0x5ra";
   };
 
   buildInputs = [
@@ -79,15 +95,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
     mv ./package.json ./package_ori.json
 
     # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
-    # 2. Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
+    # 2. Patch `package.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
     cat ./package_ori.json | \
-      jq --slurpfile actEvts ${./package-activation-events-0-16-1.json} '(.activationEvents) = $actEvts[0]' | \
+      jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
       jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
       ./package.json
-
-    # Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
-    substituteInPlace "./package.json" \
-      --replace "\"default\": \"/usr/bin/gdb\"" "\"default\": \"${gdbDefaultsTo}\""
 
     # Prevent download/install of extensions
     touch "./install.lock"

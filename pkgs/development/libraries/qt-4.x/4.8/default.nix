@@ -1,19 +1,20 @@
 { stdenv, lib, fetchurl, fetchpatch, substituteAll
 , libXrender, libXinerama, libXcursor, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, libGLSupported, libGLU, openssl, dbus, cups, pkgconfig
+, libmng, which, libGLU, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
-, flashplayerFix ? false, gdk_pixbuf
-, gtkStyle ? true, gtk2
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, flashplayerFix ? false, gdk-pixbuf
+, gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
 , developerBuild ? false
 , docs ? false
 , examples ? false
 , demos ? false
 # darwin support
-, cf-private, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
+, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
 }:
 
 let
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
       ./parallel-configure.patch
       ./clang-5-darwin.patch
       ./qt-4.8.7-unixmake-darwin.patch
+      ./kill-legacy-darwin-apis.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         cups = if cups != null then lib.getLib cups else null;
@@ -81,11 +83,14 @@ stdenv.mkDerivation rec {
           + "21b342d71c19e6d68b649947f913410fe6129ea4/debian/patches/kubuntu_39_fix_medium_font.diff";
         sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
       })
-      (fetchpatch {
-        name = "qt4-gcc6.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
-        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
-      })
+      # Patches are no longer available from here, so vendoring it for now.
+      #(fetchpatch {
+      #  name = "qt4-gcc6.patch";
+      #  url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
+      #  sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
+      #})
+      ./qt4-gcc6.patch
+      ./qt4-openssl-1.1.patch
     ]
     ++ lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
@@ -99,7 +104,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
         gtk = gtk2.out;
-        gdk_pixbuf = gdk_pixbuf.out;
       })
     ++ lib.optional stdenv.isAarch64 (fetchpatch {
         url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
@@ -139,37 +143,40 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
 
-  ${if stdenv.hostPlatform == stdenv.buildPlatform then null else "configurePlatforms"} = [];
+  configurePlatforms = [];
   configureFlags = let
+    mk = cond: name: "-${lib.optionalString (!cond) "no-"}${name}";
     platformFlag =
       if stdenv.hostPlatform != stdenv.buildPlatform
       then "-xplatform"
       else "-platform";
-    in (if stdenv.hostPlatform == stdenv.buildPlatform then ''
-      -v -no-separate-debug-info -release -fast -confirm-license -opensource
+  in (if stdenv.hostPlatform != stdenv.buildPlatform then [
+    # I've not tried any case other than i686-pc-mingw32.
+    # -nomake tools: it fails linking some asian language symbols
+    # -no-svg: it fails to build on mingw64
+    "-static" "-release" "-confirm-license" "-opensource"
+    "-no-opengl" "-no-phonon"
+    "-no-svg"
+    "-make" "qmake" "-make" "libs" "-nomake" "tools"
+  ] else [
+    "-v" "-no-separate-debug-info" "-release" "-fast" "-confirm-license" "-opensource"
 
-      -${if stdenv.isFreeBSD then "no-" else ""}opengl -xrender -xrandr -xinerama -xcursor -xinput -xfixes -fontconfig
-      -qdbus -${if cups == null then "no-" else ""}cups -glib -dbus-linked -openssl-linked
+    (mk (!stdenv.isFreeBSD) "opengl") "-xrender" "-xrandr" "-xinerama" "-xcursor" "-xinput" "-xfixes" "-fontconfig"
+    "-qdbus" (mk (cups != null) "cups") "-glib" "-dbus-linked" "-openssl-linked"
 
-      ${if mysql != null then "-plugin" else "-no"}-sql-mysql -system-sqlite
+    "-${if mysql != null then "plugin" else "no"}-sql-mysql" "-system-sqlite"
 
-      -exceptions -xmlpatterns
+    "-exceptions" "-xmlpatterns"
 
-      -make libs -make tools -make translations
-      -${if demos then "" else "no"}make demos
-      -${if examples then "" else "no"}make examples
-      -${if docs then "" else "no"}make docs
-
-      -no-phonon ${if buildWebkit then "" else "-no"}-webkit ${if buildMultimedia then "" else "-no"}-multimedia -audio-backend
-      ${if developerBuild then "-developer-build" else ""}
-    '' else ''
-      -static -release -confirm-license -opensource
-      -no-opengl -no-phonon
-      -no-svg
-      -make qmake -make libs -nomake tools
-      -nomake demos -nomake examples -nomake docs
-    '') + lib.optionalString stdenv.hostPlatform.isDarwin "${platformFlag} unsupported/macx-clang-libc++"
-        + lib.optionalString stdenv.hostPlatform.isMinGW  "${platformFlag} win32-g++-4.6";
+    "-make" "libs" "-make" "tools" "-make" "translations"
+    "-no-phonon" (mk buildWebkit "webkit") (mk buildMultimedia "multimedia") "-audio-backend"
+  ]) ++ [
+    "-${if demos then "" else "no"}make" "demos"
+    "-${if examples then "" else "no"}make" "examples"
+    "-${if docs then "" else "no"}make" "docs"
+  ] ++ lib.optional developerBuild "-developer-build"
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ platformFlag "unsupported/macx-clang-libc++" ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ platformFlag "win32-g++-4.6" ];
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
@@ -184,8 +191,8 @@ stdenv.mkDerivation rec {
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
     ++ lib.optionals (mysql != null) [ mysql.connector-c ]
-    ++ lib.optionals gtkStyle [ gtk2 gdk_pixbuf ]
-    ++ lib.optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
+    ++ lib.optionals gtkStyle [ gtk2 gdk-pixbuf ]
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
@@ -219,7 +226,7 @@ stdenv.mkDerivation rec {
     cp bin/qmake* $out/bin
   '';
 
-  dontStrip = if stdenv.hostPlatform == stdenv.buildPlatform then null else true;
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
     homepage    = http://qt-project.org/;
@@ -227,5 +234,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.lgpl21Plus; # or gpl3
     maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];
     platforms   = lib.platforms.unix;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

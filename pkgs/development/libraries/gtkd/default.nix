@@ -1,19 +1,21 @@
-{ stdenv, fetchzip, atk, cairo, dmd, gdk_pixbuf, gnome3, gst_all_1, librsvg
-, pango, pkgconfig, which }:
+{ stdenv, fetchzip, atk, cairo, dmd, gdk-pixbuf, gnome3, gst_all_1, librsvg
+, glib, gtk3, gtksourceview, libgda, libpeas, pango, pkgconfig, which, vte }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (gst_all_1) gstreamer gst-plugins-base;
+in stdenv.mkDerivation rec {
   name = "gtkd-${version}";
-  version = "3.8.3";
+  version = "3.8.5";
 
   src = fetchzip {
     url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "10jhwy1421bypq62ki1dzv8irvlgwr7s40z6l6vxallm4jkgk9gj";
+    sha256 = "12n2njsaplra7x15nqwrj2hrf8a27pfjj2mck4mkzxv03qk6mqky";
     stripRoot = false;
   };
 
   nativeBuildInputs = [ dmd pkgconfig which ];
   propagatedBuildInputs = [
-    atk cairo gdk_pixbuf glib gstreamer gst_plugins_base gtk3 gtksourceview
+    atk cairo gdk-pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview
     libgda libpeas librsvg pango vte
   ];
 
@@ -26,8 +28,8 @@ stdenv.mkDerivation rec {
       --replace libcairo.so.2 ${cairo}/lib/libcairo.so.2 \
       --replace libcairo.dylib ${cairo}/lib/libcairo.dylib
     substituteInPlace generated/gtkd/gdkpixbuf/c/functions.d \
-      --replace libgdk_pixbuf-2.0.so.0 ${gdk_pixbuf}/lib/libgdk_pixbuf-2.0.so.0 \
-      --replace libgdk_pixbuf-2.0.0.dylib ${gdk_pixbuf}/lib/libgdk_pixbuf-2.0.0.dylib
+      --replace libgdk_pixbuf-2.0.so.0 ${gdk-pixbuf}/lib/libgdk_pixbuf-2.0.so.0 \
+      --replace libgdk_pixbuf-2.0.0.dylib ${gdk-pixbuf}/lib/libgdk_pixbuf-2.0.0.dylib
     substituteInPlace generated/gtkd/atk/c/functions.d \
       --replace libatk-1.0.so.0 ${atk}/lib/libatk-1.0.so.0 \
       --replace libatk-1.0.0.dylib ${atk}/lib/libatk-1.0.0.dylib
@@ -37,8 +39,8 @@ stdenv.mkDerivation rec {
       --replace libpango-1.0.0.dylib ${pango.out}/lib/libpango-1.0.0.dylib \
       --replace libpangocairo-1.0.0.dylib ${pango.out}/lib/libpangocairo-1.0.0.dylib
     substituteInPlace generated/gtkd/gobject/c/functions.d \
-      --replace libgobject-2.0.so.0 ${glib}/lib/libgobject-2.0.so.0 \
-      --replace libgobject-2.0.0.dylib ${glib}/lib/libgobject-2.0.0.dylib
+      --replace libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
+      --replace libgobject-2.0.0.dylib ${glib.out}/lib/libgobject-2.0.0.dylib
     substituteInPlace generated/gtkd/rsvg/c/functions.d \
       --replace librsvg-2.so.2 ${librsvg}/lib/librsvg-2.so.2 \
       --replace librsvg-2.2.dylib ${librsvg}/lib/librsvg-2.2.dylib
@@ -57,21 +59,21 @@ stdenv.mkDerivation rec {
       --replace libvte-2.91.so.0 ${vte}/lib/libvte-2.91.so.0 \
       --replace libvte-2.91.0.dylib ${vte}/lib/libvte-2.91.0.dylib
     substituteInPlace generated/gstreamer/gstinterfaces/c/functions.d \
-      --replace libgstvideo-1.0.so.0 ${gst_plugins_base}/lib/libgstvideo-1.0.so.0 \
-      --replace libgstvideo-1.0.0.dylib ${gst_plugins_base}/lib/libgstvideo-1.0.0.dylib
+      --replace libgstvideo-1.0.so.0 ${gst-plugins-base}/lib/libgstvideo-1.0.so.0 \
+      --replace libgstvideo-1.0.0.dylib ${gst-plugins-base}/lib/libgstvideo-1.0.0.dylib
     substituteInPlace generated/sourceview/gsv/c/functions.d \
       --replace libgtksourceview-3.0.so.1 ${gtksourceview}/lib/libgtksourceview-3.0.so.1 \
       --replace libgtksourceview-3.0.1.dylib ${gtksourceview}/lib/libgtksourceview-3.0.1.dylib
     substituteInPlace generated/gtkd/glib/c/functions.d \
-      --replace libglib-2.0.so.0 ${glib}/lib/libglib-2.0.so.0 \
-      --replace libgmodule-2.0.so.0 ${glib}/lib/libgmodule-2.0.so.0 \
-      --replace libgobject-2.0.so.0 ${glib}/lib/libgobject-2.0.so.0 \
-      --replace libglib-2.0.0.dylib ${glib}/lib/libglib-2.0.0.dylib \
-      --replace libgmodule-2.0.0.dylib ${glib}/lib/libgmodule-2.0.0.dylib \
-      --replace libgobject-2.0.0.dylib ${glib}/lib/libgobject-2.0.0.dylib
+      --replace libglib-2.0.so.0 ${glib.out}/lib/libglib-2.0.so.0 \
+      --replace libgmodule-2.0.so.0 ${glib.out}/lib/libgmodule-2.0.so.0 \
+      --replace libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
+      --replace libglib-2.0.0.dylib ${glib.out}/lib/libglib-2.0.0.dylib \
+      --replace libgmodule-2.0.0.dylib ${glib.out}/lib/libgmodule-2.0.0.dylib \
+      --replace libgobject-2.0.0.dylib ${glib.out}/lib/libgobject-2.0.0.dylib
     substituteInPlace generated/gtkd/gio/c/functions.d \
-      --replace libgio-2.0.so.0 ${glib}/lib/libgio-2.0.so.0 \
-      --replace libgio-2.0.0.dylib ${glib}/lib/libgio-2.0.0.dylib
+      --replace libgio-2.0.so.0 ${glib.out}/lib/libgio-2.0.so.0 \
+      --replace libgio-2.0.0.dylib ${glib.out}/lib/libgio-2.0.0.dylib
     substituteInPlace generated/gstreamer/gstreamer/c/functions.d \
       --replace libgstreamer-1.0.so.0 ${gstreamer}/lib/libgstreamer-1.0.so.0 \
       --replace libgstreamer-1.0.0.dylib ${gstreamer}/lib/libgstreamer-1.0.0.dylib
@@ -83,15 +85,6 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags = "prefix=$(out)";
-
-  # Workaround for https://github.com/NixOS/nixpkgs/issues/40397
-  # Remove after update to binutils 2.31
-  dontStrip = true;
-
-  inherit atk cairo gdk_pixbuf librsvg pango;
-  inherit (gnome3) glib gtk3 gtksourceview libgda libpeas vte;
-  inherit (gst_all_1) gstreamer;
-  gst_plugins_base = gst_all_1.gst-plugins-base;
 
   meta = with stdenv.lib; {
     description = "D binding and OO wrapper for GTK+";

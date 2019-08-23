@@ -1,23 +1,18 @@
 { stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
-, xapian, glib, gmime, texinfo , emacs, guile
+, xapian, glib, gmime3, texinfo , emacs, guile
 , gtk3, webkitgtk24x-gtk3, libsoup, icu
 , withMug ? false }:
 
 stdenv.mkDerivation rec {
   name = "mu-${version}";
-  version = "1.0";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
-    rev    = "v${version}";
-    sha256 = "0y6azhcmqdx46a9gi7mn8v8p0mhfx2anjm5rj7i69kbr6j8imlbc";
+    rev    = version;
+    sha256 = "0yhjlj0z23jw3cf2wfnl98y8q6gikvmhkb8vdm87bd7jw0bdnrfz";
   };
-
-  # 0.9.18 and 1.0 have 2 failing tests but previously we had no tests
-  patches = [
-    ./failing_tests.patch
-  ];
 
   # test-utils coredumps so don't run those
   postPatch = ''
@@ -25,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    sqlite xapian glib gmime texinfo emacs guile libsoup icu
+    sqlite xapian glib gmime3 texinfo emacs guile libsoup icu
   ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x-gtk3 ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
@@ -54,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A collection of utilties for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
-    homepage = http://www.djcbsoftware.nl/code/mu/;
+    homepage = https://www.djcbsoftware.nl/code/mu/;
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ antono the-kenny peterhoeg ];
   };

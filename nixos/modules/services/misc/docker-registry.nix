@@ -5,6 +5,44 @@ with lib;
 let
   cfg = config.services.dockerRegistry;
 
+  blobCache = if cfg.enableRedisCache
+    then "redis"
+    else "inmemory";
+
+  registryConfig = {
+    version =  "0.1";
+    log.fields.service = "registry";
+    storage = {
+      cache.blobdescriptor = blobCache;
+      delete.enabled = cfg.enableDelete;
+    } // (if cfg.storagePath != null
+          then { filesystem.rootdirectory = cfg.storagePath; }
+          else {});
+    http = {
+      addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
+      headers.X-Content-Type-Options = ["nosniff"];
+    };
+    health.storagedriver = {
+      enabled = true;
+      interval = "10s";
+      threshold = 3;
+    };
+  };
+
+  registryConfig.redis = mkIf cfg.enableRedisCache {
+    addr = "${cfg.redisUrl}";
+    password = "${cfg.redisPassword}";
+    db = 0;
+    dialtimeout = "10ms";
+    readtimeout = "10ms";
+    writetimeout = "10ms";
+    pool = {
+      maxidle = 16;
+      maxactive = 64;
+      idletimeout = "300s";
+    };
+  };
+
   configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
 
 in {
@@ -24,9 +62,12 @@ in {
     };
 
     storagePath = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
       default = "/var/lib/docker-registry";
-      description = "Docker registry storage path.";
+      description = ''
+        Docker registry storage path for the filesystem storage backend. Set to
+        null to configure another backend via extraConfig.
+      '';
     };
 
     enableDelete = mkOption {
@@ -103,9 +144,12 @@ in {
       startAt = optional cfg.enableGarbageCollect cfg.garbageCollectDates;
     };
 
-    users.users.docker-registry = {
-      createHome = true;
-      home = cfg.storagePath;
-    };
+    users.users.docker-registry =
+      if cfg.storagePath != null
+      then {
+        createHome = true;
+        home = cfg.storagePath;
+      }
+      else {};
   };
 }

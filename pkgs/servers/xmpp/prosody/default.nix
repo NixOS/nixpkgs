@@ -12,35 +12,36 @@ assert withDBI -> luadbi != null;
 
 with stdenv.lib;
 
-let
-  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ]
-                ++ optional withLibevent luaevent
-                ++ optional withDBI luadbi
-                ++ withExtraLibs;
-  getPath     = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
-  getLuaPath  = lib : getPath lib "lua";
-  getLuaCPath = lib : getPath lib "so";
-  luaPath     = concatStringsSep ";" (map getLuaPath  libs);
-  luaCPath    = concatStringsSep ";" (map getLuaCPath libs);
-in
 
 stdenv.mkDerivation rec {
-  version = "0.10.2";
+  version = "0.11.2"; # also update communityModules
   name = "prosody-${version}";
 
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${name}.tar.gz";
-    sha256 = "13knr7izscw0zx648b9582dx11aap4cq9bzfiqh5ykd7wwsz1dbm";
+    sha256 = "0ca8ivqb4hxqka08pwnaqi1bqxrdl8zw47g6z7nw9q5r57fgc4c9";
   };
 
+  # A note to all those merging automated updates: Please also update this
+  # attribute as some modules might not be compatible with a newer prosody
+  # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "150a7bd59043";
-    sha256 = "0nfx3lngcy88nd81gb7v4kh3nz1bzsm67bxgpd2lprk54diqcrz1";
+    rev = "b54e98d5c4a1";
+    sha256 = "0bzn92j48krb2zhp9gn5bbn5sg0qv15j5lpxfszwqdln3lpmrvzg";
   };
 
-  buildInputs = [ lua5 makeWrapper libidn openssl ]
-    ++ optional withDBI luadbi;
+  buildInputs = [
+    lua5 makeWrapper libidn openssl
+  ]
+  # Lua libraries
+  ++ [
+    luasocket luasec luaexpat luafilesystem luabitop
+  ]
+  ++ optional withLibevent luaevent
+  ++ optional withDBI luadbi
+  ++ withExtraLibs;
+
 
   configureFlags = [
     "--ostype=linux"
@@ -53,12 +54,12 @@ stdenv.mkDerivation rec {
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (withCommunityModules ++ withOnlyInstalledCommunityModules)}
       wrapProgram $out/bin/prosody \
-        --set LUA_PATH '${luaPath};' \
-        --set LUA_CPATH '${luaCPath};'
+        --prefix LUA_PATH ';' "$NIX_LUA_PATH" \
+        --prefix LUA_CPATH ';' "$NIX_LUA_CPATH"
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --set LUA_PATH '${luaPath};' \
-        --set LUA_CPATH '${luaCPath};'
+        --prefix LUA_PATH ';' "$NIX_LUA_PATH" \
+        --prefix LUA_CPATH ';' "$NIX_LUA_CPATH"
     '';
 
   passthru.communityModules = withCommunityModules;

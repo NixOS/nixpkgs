@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ sqlite expat zlib proj geos libspatialite readosm ];
 
-  configureFlags = "--disable-freexl";
+  configureFlags = [ "--disable-freexl" ];
 
   enableParallelBuilding = true;
+
+  NIX_LDFLAGS = [ "-lsqlite3" ];
 
   meta = {
     description = "A complete sqlite3-compatible CLI front-end for libspatialite";

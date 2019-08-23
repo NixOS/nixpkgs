@@ -9,9 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1027cyfx5gsjkdkaf6c2wnjh68882grw8n672018cj3vs9lrhmix";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://freedesktop.org/wiki/Software/cppunit/;
     description = "C++ unit testing framework";
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = licenses.lgpl21;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

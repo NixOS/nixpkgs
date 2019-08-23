@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.8.0";
 
   src =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         name = "linux32-${version}.tar.gz";
         url = "https://clis.ng.bluemix.net/download/bluemix-cli/${version}/linux32";

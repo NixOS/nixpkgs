@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     cd ..
 
     mkdir -p $out/share/applications
+    sed 's/Exec=.*$/Exec=QGroundControl/g' --in-place deploy/qgroundcontrol.desktop
     cp -v deploy/qgroundcontrol.desktop $out/share/applications
 
     mkdir -p $out/bin

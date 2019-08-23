@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   name = "kgraphviewer-${version}";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/kgraphviewer/${version}/${name}.tar.xz";
-    sha256 = "1jc5zfgy4narwgn7rscfwz7l5pjy0jghal6yb3kd4sfadi78nhs9";
+    sha256 = "1h6pgg89gvxl8gw7wmkabyqqrzad5pxyv5lsmn1fl4ir8lcc5q2l";
   };
 
   buildInputs = [

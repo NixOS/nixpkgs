@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "drone.io-${version}";
-  version = "0.8.5-20180329-${stdenv.lib.strings.substring 0 7 revision}";
-  revision = "81103a98208b0bfc76be5b07194f359fbc80183b";
+  version = "0.8.6-20180727-${stdenv.lib.strings.substring 0 7 revision}";
+  revision = "c48150767c2700d35dcc29b110a81c8b5969175e";
   goPackagePath = "github.com/drone/drone";
 
   # These dependencies pulled (in `drone` buildprocess) via Makefile,
@@ -16,7 +16,7 @@ buildGoPackage rec {
     owner = "drone";
     repo = "drone";
     rev = revision;
-    sha256 = "1890bwhxr62adv261v4kn1azhq7qvcj2zpll68i9nsvjib8a52bq";
+    sha256 = "0miq2012nivvr1ysi3aa2xrr5ak3mf0l3drybyc83iycy0kp4bda";
   };
 
   meta = with stdenv.lib; {

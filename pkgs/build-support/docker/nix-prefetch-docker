@@ -1,0 +1,173 @@
+#! /usr/bin/env bash
+
+set -e -o pipefail
+
+os=
+arch=
+imageName=
+imageTag=
+imageDigest=
+finalImageName=
+finalImageTag=
+hashType=$NIX_HASH_ALGO
+hashFormat=$hashFormat
+format=nix
+
+usage(){
+    echo  >&2 "syntax: nix-prefetch-docker [options] [IMAGE_NAME [IMAGE_TAG|IMAGE_DIGEST]]
+
+Options:
+      --os os                   OS to fetch image for
+      --arch linux              Arch to fetch image for
+      --image-name name         Name of the image to fetch
+      --image-tag tag           Image tag
+      --image-digest digest     Image digest
+      --final-image-name name   Desired name of the image
+      --final-image-tag tag     Desired image tag
+      --json                    Output result in json format instead of nix
+      --quiet                   Only print the final result
+"
+    exit 1
+}
+
+get_image_digest(){
+    local imageName=$1
+    local imageTag=$2
+
+    if test -z "$imageTag"; then
+        imageTag="latest"
+    fi
+
+    skopeo inspect "docker://$imageName:$imageTag" | jq '.Digest' -r
+}
+
+get_name() {
+    local imageName=$1
+    local imageTag=$2
+
+    echo "docker-image-$(echo "$imageName:$imageTag" | tr '/:' '-').tar"
+}
+
+argi=0
+argfun=""
+for arg; do
+    if test -z "$argfun"; then
+        case $arg in
+            --os) argfun=set_os;;
+            --arch) argfun=set_arch;;
+            --image-name) argfun=set_imageName;;
+            --image-tag) argfun=set_imageTag;;
+            --image-digest) argfun=set_imageDigest;;
+            --final-image-name) argfun=set_finalImageName;;
+            --final-image-tag) argfun=set_finalImageTag;;
+            --quiet) QUIET=true;;
+            --json) format=json;;
+            --help) usage; exit;;
+            *)
+                : $((++argi))
+                case $argi in
+                    1) imageName=$arg;;
+                    2) [[ $arg == *"sha256"*  ]] && imageDigest=$arg || imageTag=$arg;;
+                    *) exit 1;;
+                esac
+                ;;
+        esac
+    else
+        case $argfun in
+            set_*)
+                var=${argfun#set_}
+                eval $var=$arg
+                ;;
+        esac
+        argfun=""
+    fi
+done
+
+if test -z "$imageName"; then
+    usage
+fi
+
+if test -z "$os"; then
+    os=linux
+fi
+
+if test -z "$arch"; then
+    arch=amd64
+fi
+
+if test -z "$hashType"; then
+    hashType=sha256
+fi
+
+if test -z "$hashFormat"; then
+    hashFormat=base32
+fi
+
+if test -z "$finalImageName"; then
+    finalImageName="$imageName"
+fi
+
+if test -z "$finalImageTag"; then
+    if test -z "$imageTag"; then
+        finalImageTag="latest"
+    else
+        finalImageTag="$imageTag"
+    fi
+fi
+
+if test -z "$imageDigest"; then
+    imageDigest=$(get_image_digest $imageName $imageTag)
+fi
+
+sourceUrl="docker://$imageName@$imageDigest"
+
+tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/skopeo-copy-tmp-XXXXXXXX")"
+trap "rm -rf \"$tmpPath\"" EXIT
+
+tmpFile="$tmpPath/$(get_name $finalImageName $finalImageTag)"
+
+if test -z "$QUIET"; then
+    skopeo --override-os ${os} --override-arch ${arch} copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag"
+else
+    skopeo --override-os ${os} --override-arch ${arch} copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" > /dev/null
+fi
+
+# Compute the hash.
+imageHash=$(nix-hash --flat --type $hashType --base32 "$tmpFile")
+
+# Add the downloaded file to Nix store.
+finalPath=$(nix-store --add-fixed "$hashType" "$tmpFile")
+
+if test -z "$QUIET"; then
+    echo "-> ImageName: $imageName"
+    echo "-> ImageDigest: $imageDigest"
+    echo "-> FinalImageName: $finalImageName"
+    echo "-> FinalImageTag: $finalImageTag"
+    echo "-> ImagePath: $finalPath"
+    echo "-> ImageHash: $imageHash"
+fi
+
+if [ "$format" == "nix" ]; then
+cat <<EOF
+{
+  imageName = "$imageName";
+  imageDigest = "$imageDigest";
+  sha256 = "$imageHash";
+  finalImageName = "$finalImageName";
+  finalImageTag = "$finalImageTag";
+}
+EOF
+
+else
+
+cat <<EOF
+{
+  "imageName": "$imageName",
+  "imageDigest": "$imageDigest",
+  "sha256": "$imageHash",
+  "finalImageName": "$finalImageName",
+  "finalImageTag": "$finalImageTag"
+}
+EOF
+
+fi

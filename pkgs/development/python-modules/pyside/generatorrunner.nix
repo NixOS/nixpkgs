@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     description = "Eases the development of binding generators for C++ and Qt-based libraries by providing a framework to help automating most of the process";
     license = stdenv.lib.licenses.gpl2;
     homepage = http://www.pyside.org/docs/generatorrunner/;
-    maintainers = [ stdenv.lib.maintainers.chaoflow ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

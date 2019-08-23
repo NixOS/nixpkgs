@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, acl, libcap }:
+{ stdenv, fetchurl, acl, libcap, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
   name = "cdrtools-${version}";
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-paths.patch ];
 
-  buildInputs = [ acl libcap ];
+  buildInputs = if stdenv.isDarwin then [ Carbon IOKit ] else [ acl libcap ];
 
   postPatch = ''
     sed "/\.mk3/d" -i libschily/Targets.man
     substituteInPlace man/Makefile --replace "man4" ""
   '';
 
-  configurePhase = "true";
+  dontConfigure = true;
 
   GMAKE_NOWARN = true;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/cdrtools/;
     description = "Highly portable CD/DVD/BluRay command line recording software";
     license = with licenses; [ gpl2 lgpl2 cddl ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     # Licensing issues: This package contains code licensed under CDDL, GPL2
     # and LGPL2. There is a debate regarding the legality of distributing this
     # package in binary form.

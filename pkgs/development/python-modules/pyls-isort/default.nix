@@ -21,8 +21,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = https://github.com/palantir/python-language-server;
-    description = "An implementation of the Language Server Protocol for Python";
+    homepage = https://github.com/paradoxxxzero/pyls-isort;
+    description = "Isort plugin for python-language-server";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let
-  version = "1.33";
+  version = "1.35";
 in
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.geany.org/${name}.tar.bz2";
-    sha256 = "66baaff43f12caebcf0efec9a5533044dc52837f799c73a1fd7312caa86099c2";
+    sha256 = "179xfnvhcxsv54v2mlrhykqv2j7klniln5sffvqqpjmdvwyivvim";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       - Plugin interface
     '';
     homepage = https://www.geany.org/;
-    license = "GPL";
-    maintainers = [];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ frlan ];
     platforms = platforms.all;
   };
 }

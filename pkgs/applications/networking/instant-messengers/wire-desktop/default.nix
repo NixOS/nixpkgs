@@ -1,62 +1,58 @@
-{ stdenv, lib, fetchurl, dpkg, makeDesktopItem, gnome2, gtk2, atk, cairo, pango, gdk_pixbuf, glib
-, freetype, fontconfig, dbus, libnotify, libX11, xorg, libXi, libXcursor, libXdamage
-, libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver
-, nss, nspr, alsaLib, cups, expat, udev, xdg_utils, hunspell
+{ stdenv, fetchurl, makeDesktopItem
+
+, alsaLib, at-spi2-atk, atk, cairo, cups, dbus, dpkg, expat, fontconfig
+, freetype, gdk-pixbuf, glib, gtk3, hunspell, libX11, libXScrnSaver
+, libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr
+, libXrender, libXtst, libnotify, libuuid, nspr, nss, pango, pciutils
+, pulseaudio, udev, xdg_utils, xorg
+
+, cpio, xar
 }:
+
 let
-  rpath = lib.makeLibraryPath [
-    alsaLib
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk_pixbuf
-    glib
-    gnome2.GConf
-    gtk2
-    pango
-    hunspell
-    libnotify
-    libX11
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXScrnSaver
-    libXtst
-    nspr
-    nss
-    stdenv.cc.cc
-    udev
-    xdg_utils
-    xorg.libxcb
-  ];
 
-  version = "3.2.2840";
+  inherit (stdenv.hostPlatform) system;
 
-  plat = {
-    "i686-linux" = "i386";
-    "x86_64-linux" = "amd64";
-  }.${stdenv.system};
+  throwSystem = throw "Unsupported system: ${system}";
+
+  pname = "wire-desktop";
+
+  version = {
+    "x86_64-linux" = "3.9.2895";
+    "x86_64-darwin" = "3.9.2943";
+  }.${system} or throwSystem;
 
   sha256 = {
-    "i686-linux" = "071ddh2d8wmiybwafwyb97962zj358l0fq7g2r44231653sgybvq";
-    "x86_64-linux" = "0qp9ms94smnm7k47b0n0jdzvnm1b7gj25hyinsfc6lghrb6jqw3r";
-  }.${stdenv.system};
+    "x86_64-linux" = "0wrn95m64j4b7ym44h9zawq13kg4m12aixlyyzp56bfyczmjq4a5";
+    "x86_64-darwin" = "1y1bzsjmjrj518q29xfx6gg1nhdbaz7y5hzaqrp241az6plp090k";
+  }.${system} or throwSystem;
 
-in
-  stdenv.mkDerivation rec {
-    name = "wire-desktop-${version}";
+  meta = with stdenv.lib; {
+    description = "A modern, secure messenger for everyone";
+    longDescription = ''
+      Wire Personal is a secure, privacy-friendly messenger. It combines useful
+      and fun features, audited security, and a beautiful, distinct user
+      interface.  It does not require a phone number to register and chat.
+
+        * End-to-end encrypted chats, calls, and files
+        * Crystal clear voice and video calling
+        * File and screen sharing
+        * Timed messages and chats
+        * Synced across your phone, desktop and tablet
+    '';
+    homepage = https://wire.com/;
+    downloadPage = https://wire.com/download/;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ toonn worldofpeace ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+  };
+
+  linux = stdenv.mkDerivation rec {
+    inherit pname version meta;
 
     src = fetchurl {
-      url = "https://wire-app.wire.com/linux/debian/pool/main/wire_${version}_${plat}.deb";
+      url = "https://wire-app.wire.com/linux/debian/pool/main/"
+        + "Wire-${version}_amd64.deb";
       inherit sha256;
     };
 
@@ -70,35 +66,69 @@ in
       categories = "Network;InstantMessaging;Chat;VideoConference";
     };
 
-    phases = [ "unpackPhase" "installPhase" ];
+    dontBuild = true;
+    dontPatchELF = true;
+    dontConfigure = true;
+
     nativeBuildInputs = [ dpkg ];
+    rpath = stdenv.lib.makeLibraryPath [
+      alsaLib at-spi2-atk atk cairo cups dbus expat fontconfig freetype
+      gdk-pixbuf glib gtk3 hunspell libX11 libXScrnSaver libXcomposite
+      libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
+      libXtst libnotify libuuid nspr nss pango pciutils pulseaudio
+      stdenv.cc.cc udev xdg_utils xorg.libxcb
+    ];
+
     unpackPhase = "dpkg-deb -x $src .";
+
     installPhase = ''
-      mkdir -p $out
-      cp -R opt $out
-      cp -R usr/share $out/share
+      mkdir -p "$out"
+      cp -R "opt" "$out"
+      cp -R "usr/share" "$out/share"
+      chmod -R g-w "$out"
 
-      chmod -R g-w $out
-
-      # Patch signal
+      # Patch wire-desktop
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-               --set-rpath "${rpath}:$out/opt/wire-desktop" \
-               "$out/opt/wire-desktop/wire-desktop"
+        --set-rpath "${rpath}:$out/opt/Wire" \
+        "$out/opt/Wire/wire-desktop"
 
       # Symlink to bin
-      mkdir -p $out/bin
-      ln -s "$out/opt/wire-desktop/wire-desktop" $out/bin/wire-desktop
+      mkdir -p "$out/bin"
+      ln -s "$out/opt/Wire/wire-desktop" "$out/bin/wire-desktop"
 
       # Desktop file
-      mkdir -p $out/share/applications
-      cp ${desktopItem}/share/applications/* $out/share/applications
+      mkdir -p "$out/share/applications"
+      cp "${desktopItem}/share/applications/"* "$out/share/applications"
+    '';
+  };
+
+  darwin = stdenv.mkDerivation rec {
+    inherit pname version meta;
+
+    src = fetchurl {
+      url = "https://github.com/wireapp/wire-desktop/releases/download/"
+        + "macos%2F${version}/Wire.pkg";
+      inherit sha256;
+    };
+
+    buildInputs = [ cpio xar ];
+
+    unpackPhase = ''
+      xar -xf $src
+      cd com.wearezeta.zclient.mac.pkg
     '';
 
-    meta = {
-      description = "A modern, secure messenger";
-      homepage    = https://wire.com/;
-      license     = lib.licenses.gpl3;
-      maintainers = with lib.maintainers; [ worldofpeace ];
-      platforms = [ "i686-linux" "x86_64-linux" ];
-    };
-  }
+
+    buildPhase = ''
+      cat Payload | gunzip -dc | cpio -i
+    '';
+
+    installPhase = ''
+      mkdir -p $out/Applications
+      cp -r Wire.app $out/Applications
+    '';
+  };
+
+in if stdenv.isDarwin
+  then darwin
+  else linux

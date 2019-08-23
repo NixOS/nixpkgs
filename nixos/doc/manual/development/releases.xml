@@ -62,15 +62,8 @@
     </listitem>
     <listitem>
      <para>
-      <link xlink:href="https://github.com/NixOS/nixpkgs/settings/branches">
-      Let a GitHub nixpkgs admin lock the branch on github for you. (so
-      developers can’t force push) </link>
-     </para>
-    </listitem>
-    <listitem>
-     <para>
       <link xlink:href="https://github.com/NixOS/nixpkgs/compare/bdf161ed8d21...6b63c4616790">
-      Bump the <literal>system.nixos.defaultChannel</literal> attribute in
+      Bump the <literal>system.defaultChannel</literal> attribute in
       <literal>nixos/modules/misc/version.nix</literal> </link>
      </para>
     </listitem>
@@ -103,6 +96,16 @@
      <para>
       Create two Hydra jobsets: release-17.09 and release-17.09-small with
       <literal>stableBranch</literal> set to false.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Remove attributes that we know we will not be able to support,
+      especially if there is a stable alternative. E.g. Check that our
+      Linux kernels'
+      <link xlink:href="https://www.kernel.org/category/releases.html">
+      projected end-of-life</link> are after our release projected
+      end-of-life
      </para>
     </listitem>
     <listitem>
@@ -180,6 +183,12 @@
     <listitem>
      <para>
       <literal>git tag -s -a -m &quot;Release 15.09&quot; 15.09</literal>
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Update "Chapter 4. Upgrading NixOS" section of the manual to match 
+      new stable release version.
      </para>
     </listitem>
     <listitem>

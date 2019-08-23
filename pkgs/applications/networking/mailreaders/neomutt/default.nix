@@ -1,20 +1,9 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mime-types }:
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell
+}:
 
-let
-  muttWrapper = writeScript "mutt" ''
-    #!${stdenv.shell} -eu
-
-    echo 'The neomutt project has renamed the main binary from `mutt` to `neomutt`.'
-    echo ""
-    echo 'This wrapper is provided for compatibility purposes only. You should start calling `neomutt` instead.'
-    echo ""
-    read -p 'Press any key to launch NeoMutt...' -n1 -s
-    exec neomutt "$@"
-  '';
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "20180716";
   name = "neomutt-${version}";
 
@@ -28,7 +17,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
-    mime-types
+    mailcap
   ];
 
   nativeBuildInputs = [
@@ -47,10 +36,11 @@ in stdenv.mkDerivation rec {
         --replace http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
     done
 
+
     # allow neomutt to map attachments to their proper mime.types if specified wrongly
     # and use a far more comprehensive list than the one shipped with neomutt
     substituteInPlace sendlib.c \
-      --replace /etc/mime.types ${mime-types}/etc/mime.types
+      --replace /etc/mime.types ${mailcap}/etc/mime.types
 
     # The string conversion tests all fail with the first version of neomutt
     # that has tests (20180223) as well as 20180716 so we disable them for now.
@@ -78,7 +68,6 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lidn";
 
   postInstall = ''
-    cp ${muttWrapper} $out/bin/mutt
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
   '';
 

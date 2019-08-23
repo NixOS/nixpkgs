@@ -1,27 +1,27 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "metabase-${version}";
-  version = "0.29.3";
+  pname = "metabase";
+  version = "0.32.10";
 
   src = fetchurl {
     url = "http://downloads.metabase.com/v${version}/metabase.jar";
-    sha256 = "18yvjxlgdbg7h7ipj1wlic5m0gv5s2943c72shs44jvic6g42pzv";
+    sha256 = "0dzwwwvsi9pr40xbqws02yzjgx89ygjiybjd0n73hj69v6j9f2rn";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     makeWrapper ${jre}/bin/java $out/bin/metabase --add-flags "-jar $src"
   '';
 
   meta = with stdenv.lib; {
-    description = "The easy, open source way for everyone in your company to ask questions and learn from data.";
-    homepage    = https://metabase.com;
+    description = "The easy, open source way for everyone in your company to ask questions and learn from data";
+    homepage    = "https://metabase.com";
     license     = licenses.agpl3;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ schneefux thoughtpolice ];
+    maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
   };
 }

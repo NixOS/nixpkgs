@@ -5,7 +5,7 @@ let
 
   pname = "gg";
   version = "0.9.1";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert versionAtLeast (getVersion ocaml) "4.01.0";
@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ocamlbuild opaline ];
 
   createFindlibDestdir = true;
-
-  unpackCmd = "tar xjf $src";
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
 

@@ -1,29 +1,20 @@
-{ stdenv, python3, libsForQt56, fetchFromGitHub, makeWrapper, makeDesktopItem }:
+{ stdenv, python3, fetchFromGitHub, makeWrapper, makeDesktopItem }:
 
-let
-  packageOverrides = self: super: {
-    pyqt56 = libsForQt56.callPackage ../../../development/python-modules/pyqt/5.x.nix {
-      pythonPackages = self;
-    };
-  };
-
-  pythonPackages = (python3.override { inherit packageOverrides; }).pkgs;
-in
 stdenv.mkDerivation rec {
   name = "leo-editor-${version}";
-  version = "5.6";
+  version = "5.7.3";
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
     rev = version;
-    sha256 = "1k6q3gvaf05bi0mzkmmb1p6wrgxwri7ivn38p6f0m0wfd3f70x2j";
+    sha256 = "0ri6l6cxwva450l05af5vs1lsgrz6ciwd02njdgphs9pm1vwxbl9";
   };
 
   dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper python3 ];
-  propagatedBuildInputs = with pythonPackages; [ pyqt56 docutils ];
+  propagatedBuildInputs = with python3.pkgs; [ pyqt5 docutils ];
 
   desktopItem = makeDesktopItem rec {
     name = "leo-editor";

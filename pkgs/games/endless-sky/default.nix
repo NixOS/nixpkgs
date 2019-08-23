@@ -22,17 +22,11 @@ stdenv.mkDerivation rec {
     SDL2 libpng libjpeg glew openal scons libmad
   ];
 
+  prefixKey = "PREFIX=";
+
   patches = [
     ./fixes.patch
   ];
-
-  buildPhase = ''
-    scons -j$NIX_BUILD_CORES PREFIX="$out"
-  '';
-
-  installPhase = ''
-    scons -j$NIX_BUILD_CORES install PREFIX="$out"
-  '';
 
   meta = with stdenv.lib; {
     description = "A sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";

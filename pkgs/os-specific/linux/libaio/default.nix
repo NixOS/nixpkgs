@@ -14,9 +14,19 @@ stdenv.mkDerivation rec {
     sha256 = "1kqpiswjn549s3w3m89bw5qkl7bw5pvq6gp5cdzd926ymlgivj5c";
   }) ];
 
+  postPatch = ''
+    patchShebangs harness
+
+    # Makefile is too optimistic, gcc is too smart
+    substituteInPlace harness/Makefile \
+      --replace "-Werror" ""
+  '';
+
   makeFlags = "prefix=$(out)";
 
   hardeningDisable = stdenv.lib.optional (stdenv.isi686) "stackprotector";
+
+  checkTarget = "partcheck"; # "check" needs root
 
   meta = {
     description = "Library for asynchronous I/O in Linux";

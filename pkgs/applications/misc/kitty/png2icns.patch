@@ -1,0 +1,21 @@
+diff -aru a/setup.py b/setup.py
+--- a/setup.py	2019-07-29 11:09:32.000000000 -0400
++++ b/setup.py	2019-07-29 11:11:37.000000000 -0400
+@@ -784,9 +784,15 @@
+ def create_macos_app_icon(where='Resources'):
+     logo_dir = os.path.abspath(os.path.join('logo', appname + '.iconset'))
+     subprocess.check_call([
+-        'iconutil', '-c', 'icns', logo_dir, '-o',
++        'png2icns',
+         os.path.join(where, os.path.basename(logo_dir).partition('.')[0] + '.icns')
+-    ])
++    ] + [os.path.join(logo_dir, logo) for logo in [
++        'icon_128x128.png',
++        'icon_16x16.png',
++        'icon_256x256.png',
++        'icon_32x32.png',
++        'icon_512x512.png',
++    ]])
+ 
+ 
+ def create_minimal_macos_bundle(args, where):

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = https://taskwarrior.org;
     license = licenses.mit;
-    maintainers = with maintainers; [ marcweber jgeerds ];
+    maintainers = with maintainers; [ marcweber ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

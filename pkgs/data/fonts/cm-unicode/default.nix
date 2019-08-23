@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "0.7.0";
@@ -9,15 +9,13 @@ in fetchzip rec {
 
   postFetch = ''
     tar -xJvf $downloadedFile --strip-components=1
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    cp -v *.otf $out/share/fonts/opentype/
-    cp -v README FontLog.txt $out/share/doc/${name}
+    install -m444 -Dt $out/share/fonts/opentype *.otf
+    install -m444 -Dt $out/share/doc/${name}    README FontLog.txt
   '';
 
   sha256 = "1rzz7yhqq3lljyqxbg46jfzfd09qgpgx865lijr4sgc94riy1ypn";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://canopus.iacp.dvo.ru/~panov/cm-unicode/;
     description = "Computer Modern Unicode fonts";
     maintainers = with maintainers; [ raskin rycee ];

@@ -16,13 +16,13 @@ let
       sendmail_path = /run/wrappers/bin/sendmail
     ''
 
-    (if isNull cfg.sslServerCert then ''
+    (if cfg.sslServerCert == null then ''
       ssl = no
       disable_plaintext_auth = no
     '' else ''
       ssl_cert = <${cfg.sslServerCert}
       ssl_key = <${cfg.sslServerKey}
-      ${optionalString (!(isNull cfg.sslCACert)) ("ssl_ca = <" + cfg.sslCACert)}
+      ${optionalString (cfg.sslCACert != null) ("ssl_ca = <" + cfg.sslCACert)}
       ssl_dh = <${config.security.dhparams.params.dovecot2.path}
       disable_plaintext_auth = yes
     '')
@@ -298,7 +298,7 @@ in
   config = mkIf cfg.enable {
     security.pam.services.dovecot2 = mkIf cfg.enablePAM {};
 
-    security.dhparams = mkIf (! isNull cfg.sslServerCert) {
+    security.dhparams = mkIf (cfg.sslServerCert != null) {
       enable = true;
       params.dovecot2 = {};
     };
@@ -311,7 +311,7 @@ in
       { name = "dovenull";
         uid = config.ids.uids.dovenull2;
         description = "Dovecot user for untrusted logins";
-        group = cfg.group;
+        group = "dovenull";
       }
     ] ++ optional (cfg.user == "dovecot2")
          { name = "dovecot2";
@@ -332,6 +332,10 @@ in
       }
     ++ optional (cfg.createMailUser && cfg.mailGroup != null)
       { name = cfg.mailGroup;
+      }
+    ++ singleton
+      { name = "dovenull";
+        gid = config.ids.gids.dovenull2;
       };
 
     environment.etc."dovecot/modules".source = modulesDir;
@@ -380,14 +384,14 @@ in
       { assertion = intersectLists cfg.protocols [ "pop3" "imap" ] != [];
         message = "dovecot needs at least one of the IMAP or POP3 listeners enabled";
       }
-      { assertion = isNull cfg.sslServerCert == isNull cfg.sslServerKey
-          && (!(isNull cfg.sslCACert) -> !(isNull cfg.sslServerCert || isNull cfg.sslServerKey));
+      { assertion = (cfg.sslServerCert == null) == (cfg.sslServerKey == null)
+          && (cfg.sslCACert != null -> !(cfg.sslServerCert == null || cfg.sslServerKey == null));
         message = "dovecot needs both sslServerCert and sslServerKey defined for working crypto";
       }
       { assertion = cfg.showPAMFailure -> cfg.enablePAM;
         message = "dovecot is configured with showPAMFailure while enablePAM is disabled";
       }
-      { assertion = (cfg.sieveScripts != {}) -> ((cfg.mailUser != null) && (cfg.mailGroup != null));
+      { assertion = cfg.sieveScripts != {} -> (cfg.mailUser != null && cfg.mailGroup != null);
         message = "dovecot requires mailUser and mailGroup to be set when sieveScripts is set";
       }
     ];

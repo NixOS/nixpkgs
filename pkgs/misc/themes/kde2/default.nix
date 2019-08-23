@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, mkDerivation
 , cmake, extra-cmake-modules
 , qtbase, kcoreaddons, kdecoration }:
 
 let
   version = "2017-03-15";
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   name = "kde2-decoration-${version}";
 
   src = fetchFromGitHub {
@@ -25,5 +25,6 @@ in stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.bsd2;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ gnidorah ];
   };
 }

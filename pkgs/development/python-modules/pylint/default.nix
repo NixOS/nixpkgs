@@ -1,29 +1,38 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, astroid, isort,
-  pytest, pytestrunner,  mccabe, configparser, backports_functools_lru_cache }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, astroid,
+  isort, mccabe, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "1.9.2";
+  version = "2.3.1";
+
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fff220bcb996b4f7e2b0f6812fd81507b72ca4d8c4d05daf2655c333800cb9b3";
+    sha256 = "1wgzq0da87m7708hrc9h4bc5m4z2p7379i4xyydszasmjns3sgkj";
   };
 
-  buildInputs = [ pytest pytestrunner mccabe configparser backports_functools_lru_cache ];
+  nativeBuildInputs = [ pytestrunner ];
 
-  propagatedBuildInputs = [ astroid configparser isort mccabe ];
+  checkInputs = [ pytest ];
 
-  postPatch = ''
-    # Remove broken darwin tests
-    sed -i -e '/test_parallel_execution/,+2d' pylint/test/test_self.py
-    sed -i -e '/test_py3k_jobs_option/,+4d' pylint/test/test_self.py
+  propagatedBuildInputs = [ astroid isort mccabe ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # Remove broken darwin test
     rm -vf pylint/test/test_functional.py
   '';
 
   checkPhase = ''
-    cd pylint/test
-    ${python.interpreter} -m unittest discover -p "*test*"
+    pytest pylint/test -k "not ${lib.concatStringsSep " and not " (
+      # Broken tests
+      [ "member_checks_py37" "iterable_context_py36" ] ++
+      # Disable broken darwin tests
+      lib.optionals stdenv.isDarwin [
+        "test_parallel_execution"
+        "test_py3k_jobs_option"
+      ]
+    )}"
   '';
 
   postInstall = ''
@@ -31,8 +40,8 @@ buildPythonPackage rec {
     cp "elisp/"*.el $out/share/emacs/site-lisp/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.logilab.org/project/pylint;
+  meta = with lib; {
+    homepage = https://github.com/PyCQA/pylint;
     description = "A bug and style checker for Python";
     platforms = platforms.all;
     license = licenses.gpl1Plus;

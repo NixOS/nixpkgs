@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "XStatic-Pygments";
-  version = "1.6.0.1";
+  version = "2.2.0.1";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0fjqgg433wfdnswn7fad1g6k2x6mf24wfnay2j82j0fwgkdxrr7m";
+    sha256 = "1rm073ag1hgwlazl52mng62wvnayz7ckr5ki341shvp9db1x2n51";
   };
 
   # no tests implemented

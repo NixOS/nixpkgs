@@ -27,11 +27,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libwebp-${version}";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchurl {
     url = "http://downloads.webmproject.org/releases/webp/${name}.tar.gz";
-    sha256 = "0nr2hd4iv61fphdbx49g96a56jkmdm9n2qss7jpkg1pii11rq9c4";
+    sha256 = "0kxk4sic34bln3k09mml7crvrmhj97swdk7b1ahbp5w6bj30f2p2";
   };
 
   configureFlags = [
@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     ++ optional jpegSupport libjpeg
     ++ optional tiffSupport libtiff
     ++ optional gifSupport giflib;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Tools and library for the WebP image format";

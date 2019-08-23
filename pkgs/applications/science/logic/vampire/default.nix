@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
     owner = "vprover";
     repo = "vampire";
     rev = version;
-    sha256 = "080zwgmyhn0b2c6hqlhcgaw7n3frz02sh894v5kk68kzxbqr29w2";
-    fetchSubmodules = true;
-    leaveDotGit = true;
+    sha256 = "03dqjxr3cwz4h6sn9074kc6b6wjz12kpsvsi0mq2w0j5l9f8d80y";
+    #fetchSubmodules = true;
+    #leaveDotGit = true;
   };
 
   nativeBuildInputs = [ git ];

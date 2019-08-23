@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper,
-  perl, GetoptTabular, MNI-Perllib,
+  perlPackages,
   libminc, octave, coreutils, minc_tools }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc ];
-  propagatedBuildInputs = [ perl GetoptTabular MNI-Perllib octave coreutils minc_tools ];
+  propagatedBuildInputs = (with perlPackages; [ perl GetoptTabular MNI-Perllib ]) ++ [ octave coreutils minc_tools ];
 
   postFixup = ''
     for p in $out/bin/*; do

@@ -20,7 +20,8 @@ buildPythonApplication rec {
     # https://github.com/blue-yonder/bonfire/pull/24
     substituteInPlace requirements.txt \
       --replace "arrow>=0.5.4,<0.8" "arrow>=0.5.4" \
-      --replace "keyring>=9,<10"    "keyring>=9"
+      --replace "keyring>=9,<10"    "keyring>=9" \
+      --replace "click>=3.3,<7"     "click>=3.3"
     # pip fails when encountering the git hash for the package version
     substituteInPlace setup.py \
       --replace "version=version," "version='${version}',"
@@ -30,6 +31,11 @@ buildPythonApplication rec {
   '';
 
   buildInputs = [ httpretty pytest pytestcov ];
+
+  preCheck = ''
+    # fix compatibility with pytest 4
+    substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
+  '';
 
   propagatedBuildInputs = [ arrow click keyring parsedatetime requests six termcolor ];
 

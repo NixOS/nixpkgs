@@ -1,17 +1,18 @@
-{ stdenv, buildGoPackage, fetchgit, pkgconfig, cmake, ffmpeg-full, ghostscript
-, graphicsmagick, quicktemplate, go-bindata, easyjson, nodePackages, emscripten }:
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, cmake, ffmpeg-full
+, ghostscript, graphicsmagick, quicktemplate, go-bindata, easyjson
+, nodePackages, emscripten, opencv, statik }:
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-07-01";
-  rev = "80db8298b6546c93944251c17fe03371e521671f";
+  version = "2019-03-12";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/bakape/meguca";
-    sha256 = "1yix0kxsjm9f3zw9jx2nb3pl8pbqjfhbvbrz42m1h20b1h02s5ml";
+  src = fetchFromGitHub {
+    owner = "bakape";
+    repo = "meguca";
+    rev = "21b08de09b38918061c5cd0bbd0dc9bcc1280525";
+    sha256 = "1nb3bf1bscbdma83sp9fbgvmxxlxh21j9h80wakfn85sndcrws5i";
     fetchSubmodules = true;
   };
 
@@ -19,20 +20,16 @@ buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs = [
-    ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson
-    emscripten
+    ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata
+    easyjson emscripten opencv statik
   ];
 
   buildPhase = ''
-    export HOME=$PWD
-    export GOPATH=$GOPATH:$HOME/go/src/github.com/bakape/meguca/go
-    cd $HOME/go/src/github.com/bakape/meguca
+    export HOME=`pwd`
+    cd go/src/github.com/bakape/meguca
     ln -sf ${nodePackages.meguca}/lib/node_modules/meguca/node_modules
     sed -i "/npm install --progress false --depth 0/d" Makefile
-    make generate_clean
-    go generate meguca/...
-    go build -v -p $NIX_BUILD_CORES meguca
-    make -j $NIX_BUILD_CORES client
+    make -j $NIX_BUILD_CORES generate all
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     make -j $NIX_BUILD_CORES wasm
   '';
@@ -49,5 +46,7 @@ buildGoPackage rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;
+    broken = true; # Broken on Hydra since 2019-04-18:
+    # https://hydra.nixos.org/build/98885902
   };
 }

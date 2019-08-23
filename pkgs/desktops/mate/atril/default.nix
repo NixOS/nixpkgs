@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "atril-${version}";
-  version = "1.20.0";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1639jxcdhcn5wvb4gj9xncdj5d5c3rnyydwwsgqj66cmfmb53l1n";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0i2wgsksgwhrmajj1lay3iym4dcyj8cdd813yh5mrfz4rkv49190";
   };
 
   nativeBuildInputs = [
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
+    glib
     itstool
     libsecret
     libxml2
@@ -25,12 +26,14 @@ stdenv.mkDerivation rec {
     mate.mate-desktop
     hicolor-icon-theme
   ];
-  
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
   makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
 
   meta = {
     description = "A simple multi-page document viewer for the MATE desktop";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
   };

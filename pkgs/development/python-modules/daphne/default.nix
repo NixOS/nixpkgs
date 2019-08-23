@@ -1,10 +1,10 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
+{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch
 , asgiref, autobahn, twisted, pytestrunner
 , hypothesis, pytest, pytest-asyncio
 }:
 buildPythonPackage rec {
   pname = "daphne";
-  version = "2.1.0";
+  version = "2.3.0";
 
   disabled = !isPy3k;
 
@@ -12,8 +12,16 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "1lbpn0l796ar77amqy8dap30zxmsn6as8y2lbmp4lk8m9awscwi8";
+    sha256 = "020afrvbnid13gkgjpqznl025zpynisa96kybmf8q7m3wp1iq1nl";
   };
+
+  patches = [
+    # Fix compatibility with Hypothesis 4. See: https://github.com/django/daphne/pull/261
+    (fetchpatch {
+      url = "https://github.com/django/daphne/commit/2df5096c5b63a791c209e12198ad89c998869efd.patch";
+      sha256 = "0046krzcn02mihqmsjd80kk5h5flv44nqxpapa17g6dvq3jnb97n";
+    })
+  ];
 
   nativeBuildInputs = [ pytestrunner ];
 
@@ -21,9 +29,10 @@ buildPythonPackage rec {
 
   checkInputs = [ hypothesis pytest pytest-asyncio ];
 
+  doCheck = !stdenv.isDarwin; # most tests fail on darwin
+
   checkPhase = ''
-    # Other tests fail, seems to be due to filesystem access
-    py.test -k "test_cli or test_utils"
+    py.test
   '';
 
   meta = with stdenv.lib; {

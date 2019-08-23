@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, which, autoconf, automake, flex, yacc
-, glibc, perl, kerberos, libxslt, docbook_xsl, docbook_xml_dtd_43
-, libtool_2, removeReferencesTo
+{ stdenv, buildPackages, fetchurl, which, autoconf, automake, flex
+, yacc , glibc, perl, kerberos, libxslt, docbook_xsl
+, docbook_xml_dtd_43 , libtool_2, removeReferencesTo
 , ncurses # Extra ncurses utilities. Only needed for debugging.
 , tsmbac ? null # Tivoli Storage Manager Backup Client from IBM
 }:
@@ -11,12 +11,13 @@ stdenv.mkDerivation rec {
   name = "openafs-${version}";
   inherit version srcs;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoconf automake flex libxslt libtool_2 perl
     removeReferencesTo which yacc ];
 
   buildInputs = [ kerberos ncurses ];
 
-  patches = [ ./bosserver.patch ] ++ stdenv.lib.optional (tsmbac != null) ./tsmbac.patch;
+  patches = [ ./bosserver.patch ./cross-build.patch ] ++ stdenv.lib.optional (tsmbac != null) ./tsmbac.patch;
 
   outputs = [ "out" "dev" "man" "doc" "server" ];
 
@@ -26,6 +27,9 @@ stdenv.mkDerivation rec {
 
   # Makefiles don't include install targets for all new shared libs, yet.
   dontDisableStatic = true;
+
+  # Fixes broken format string in 1.8.2
+  hardeningDisable=[ "format" ];
 
   preConfigure = ''
     patchShebangs .

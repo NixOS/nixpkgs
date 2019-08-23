@@ -13,4 +13,7 @@ in
   for i in $(ls "${libreoffice}/bin/"); do
     test "$i" = "soffice" || ln -s soffice "$out/bin/$(basename "$i")"
   done
-'') // { inherit libreoffice dbus; }
+'') // {
+  inherit libreoffice dbus;
+  meta = libreoffice.meta;
+}

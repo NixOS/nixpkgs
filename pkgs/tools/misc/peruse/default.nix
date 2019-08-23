@@ -6,7 +6,7 @@
 
 let
   pname = "peruse";
-  version = "1.2.20180219";
+  version = "1.2.20180816";
 
 in mkDerivation rec {
   name = "${pname}-${version}";
@@ -15,8 +15,8 @@ in mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = pname;
-    rev    = "4125d3149c45d196600258686610de701130113d";
-    sha256 = "1x8in7z17gzgiibshw7xfs6m6bhr3n5fys3nlpab77nm0dl3f4r5";
+    rev    = "f50027c6c9c680c4e2ce1dba4ec43364e661e7a3";
+    sha256 = "1217fa6w9ryh499agcc67mnp8k9dah4r0sw74qzsbk4p154jbgch";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];

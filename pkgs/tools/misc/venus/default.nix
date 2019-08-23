@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = http://intertwingly.net/code/venus/docs/index.html;
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    maintainers = [];
   };
 }

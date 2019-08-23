@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0c9li3iaslzzr3zig6m3zlmb4r8i0wfvkcrvdyiqxasb09mjkqh8";
   };
 
-  nativeBuildInputs = [ m4 ] ++ stdenv.lib.optional doCheck perl;
+  nativeBuildInputs = [ m4 ];
   propagatedBuildInputs = [ m4 ];
+  checkInputs = [ perl ];
 
   patches = lib.optional stdenv.isDarwin ./darwin-vasnprintf.patch;
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   # M4 = "${m4}/bin/m4";
 
   meta = {
-    homepage = http://www.gnu.org/software/bison/;
+    homepage = https://www.gnu.org/software/bison/;
     description = "Yacc-compatible parser generator";
     license = stdenv.lib.licenses.gpl3Plus;
 

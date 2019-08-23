@@ -1,0 +1,93 @@
+diff --git a/Makefile.am b/Makefile.am
+index f2087bb..7a70cfb 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -116,10 +116,10 @@ AM_CFLAGS = \
+ 	$(NULL)
+ 
+ sbin_PROGRAMS =
+-dist_cache_DATA = packaging/installer/.keep
+-dist_varlib_DATA = packaging/installer/.keep
+-dist_registry_DATA = packaging/installer/.keep
+-dist_log_DATA = packaging/installer/.keep
++dist_cache_DATA =
++dist_varlib_DATA =
++dist_registry_DATA =
++dist_log_DATA =
+ plugins_PROGRAMS =
+ 
+ LIBNETDATA_FILES = \
+diff --git a/collectors/charts.d.plugin/Makefile.am b/collectors/charts.d.plugin/Makefile.am
+index 2989b4b..64de7d6 100644
+--- a/collectors/charts.d.plugin/Makefile.am
++++ b/collectors/charts.d.plugin/Makefile.am
+@@ -32,7 +32,6 @@ dist_charts_DATA = \
+ 
+ userchartsconfigdir=$(configdir)/charts.d
+ dist_userchartsconfig_DATA = \
+-    .keep \
+     $(NULL)
+ 
+ chartsconfigdir=$(libconfigdir)/charts.d
+diff --git a/collectors/node.d.plugin/Makefile.am b/collectors/node.d.plugin/Makefile.am
+index 3b5a0a5..b7abe01 100644
+--- a/collectors/node.d.plugin/Makefile.am
++++ b/collectors/node.d.plugin/Makefile.am
+@@ -23,7 +23,6 @@ dist_noinst_DATA = \
+ 
+ usernodeconfigdir=$(configdir)/node.d
+ dist_usernodeconfig_DATA = \
+-    .keep \
+     $(NULL)
+ 
+ nodeconfigdir=$(libconfigdir)/node.d
+diff --git a/collectors/python.d.plugin/Makefile.am b/collectors/python.d.plugin/Makefile.am
+index 652a35d..cf4b2cc 100644
+--- a/collectors/python.d.plugin/Makefile.am
++++ b/collectors/python.d.plugin/Makefile.am
+@@ -29,7 +29,6 @@ dist_python_DATA = \
+ 
+ userpythonconfigdir=$(configdir)/python.d
+ dist_userpythonconfig_DATA = \
+-    .keep \
+     $(NULL)
+ 
+ pythonconfigdir=$(libconfigdir)/python.d
+diff --git a/collectors/statsd.plugin/Makefile.am b/collectors/statsd.plugin/Makefile.am
+index e63bf98..0f59782 100644
+--- a/collectors/statsd.plugin/Makefile.am
++++ b/collectors/statsd.plugin/Makefile.am
+@@ -14,6 +14,5 @@ dist_statsdconfig_DATA = \
+ 
+ userstatsdconfigdir=$(configdir)/statsd.d
+ dist_userstatsdconfig_DATA = \
+-    .keep \
+     $(NULL)
+ 
+diff --git a/health/Makefile.am b/health/Makefile.am
+index 62a4c6d..4d651df 100644
+--- a/health/Makefile.am
++++ b/health/Makefile.am
+@@ -16,7 +16,6 @@ dist_noinst_DATA = \
+ 
+ userhealthconfigdir=$(configdir)/health.d
+ dist_userhealthconfig_DATA = \
+-    .keep \
+     $(NULL)
+ 
+ healthconfigdir=$(libconfigdir)/health.d
+diff --git a/system/Makefile.am b/system/Makefile.am
+index b085dca..ccfa588 100644
+--- a/system/Makefile.am
++++ b/system/Makefile.am
+@@ -17,10 +17,6 @@ CLEANFILES = \
+ include $(top_srcdir)/build/subst.inc
+ SUFFIXES = .in
+ 
+-dist_config_SCRIPTS = \
+-    edit-config \
+-    $(NULL)
+-
+ nodist_noinst_DATA = \
+ 	netdata-openrc \
+ 	netdata.logrotate \

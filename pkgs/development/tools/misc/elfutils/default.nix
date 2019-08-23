@@ -3,14 +3,18 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   name = "elfutils-${version}";
-  version = "0.173";
+  version = "0.176";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${name}.tar.bz2";
-    sha256 = "1zq0l12k64hrbjmdjc4llrad96c25i427hpma1id9nk87w9qqvdp";
+    sha256 = "08qhrl4g6qqr4ga46jhh78y56a47p3msa5b2x1qhzbxhf71lfmzb";
   };
 
-  patches = ./debug-info-from-env.patch;
+  patches = [ ./debug-info-from-env.patch ];
+
+  postPatch = ''
+    patchShebangs tests
+  '';
 
   hardeningDisable = [ "format" ];
 
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
   #
   # I wrote this testing for the nanonote.
 
-  buildPhase = if stdenv.hostPlatform == stdenv.buildPlatform then null else ''
+  buildPhase = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     pushd libebl
     make
     popd
@@ -50,7 +54,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  installPhase = if stdenv.hostPlatform == stdenv.buildPlatform then null else ''
+  installPhase = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     pushd libelf
     make install
     popd
@@ -62,6 +66,9 @@ stdenv.mkDerivation rec {
     popd
     cp version.h $out/include
   '';
+
+  doCheck = false; # fails 3 out of 174 tests
+  doInstallCheck = false; # fails 70 out of 174 tests
 
   meta = {
     homepage = https://sourceware.org/elfutils/;

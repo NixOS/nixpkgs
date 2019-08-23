@@ -1,6 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
+let
+  # Type for a valid systemd unit option. Needed for correctly passing "timerConfig" to "systemd.timers"
+  unitOption = (import ../../system/boot/systemd-unit-options.nix { inherit config lib; }).unitOption;
+in
 {
   options.services.restic.backups = mkOption {
     description = ''
@@ -18,6 +23,7 @@ with lib;
 
         s3CredentialsFile = mkOption {
           type = with types; nullOr str;
+          default = null;
           description = ''
             file containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
             for an S3-hosted repository, in the format of an EnvironmentFile
@@ -46,7 +52,7 @@ with lib;
         };
 
         timerConfig = mkOption {
-          type = types.attrsOf types.str;
+          type = types.attrsOf unitOption;
           default = {
             OnCalendar = "daily";
           };

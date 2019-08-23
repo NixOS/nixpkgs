@@ -2,17 +2,17 @@
 
 buildPythonPackage rec {
   pname = "zc.buildout";
-  version = "2.2.5";
+  version = "2.13.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fb08f24f9e51e647e29d714f6e9ad51a4ea28673dddeed831315617bb5a805d0";
+    sha256 = "0a73s5q548l2vs2acqs3blkzd9sw6d7ci77fz1pc9156vn3dxm2x";
   };
 
   meta = with stdenv.lib; {
     homepage = http://www.buildout.org;
     description = "A software build and configuration system";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

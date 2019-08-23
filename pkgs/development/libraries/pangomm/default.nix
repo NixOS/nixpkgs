@@ -1,16 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm
+{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm, gnome3
 , ApplicationServices }:
 
-let
-  ver_maj = "2.40";
-  ver_min = "1";
-in
 stdenv.mkDerivation rec {
-  name = "pangomm-${ver_maj}.${ver_min}";
+  pname = "pangomm";
+  version= "2.42.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pangomm/${ver_maj}/${name}.tar.xz";
-    sha256 = "9762ee2a2d5781be6797448d4dd2383ce14907159b30bc12bf6b08e7227be3af";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0mmzxp3wniaafkxr30sb22mq9x44xckb5d60h1bl99lkzxks0vfa";
   };
 
   outputs = [ "out" "dev" ];
@@ -21,6 +18,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pango glibmm cairomm ];
 
   doCheck = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "C++ interface to the Pango text rendering library";

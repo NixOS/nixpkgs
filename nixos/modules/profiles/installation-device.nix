@@ -22,27 +22,45 @@ with lib;
   config = {
 
     # Enable in installer, even if the minimal profile disables it.
-    services.nixosManual.enable = mkForce true;
+    documentation.enable = mkForce true;
 
     # Show the manual.
+    documentation.nixos.enable = mkForce true;
     services.nixosManual.showManual = true;
 
     # Let the user play Rogue on TTY 8 during the installation.
     #services.rogue.enable = true;
 
     # Disable some other stuff we don't need.
-    security.sudo.enable = false;
+    services.udisks2.enable = mkDefault false;
+
+    # Use less privileged nixos user
+    users.users.nixos = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" "networkmanager" "video" ];
+      # Allow the graphical user to login without password
+      initialHashedPassword = "";
+    };
+
+    # Allow the user to log in as root without a password.
+    users.users.root.initialHashedPassword = "";
+
+    # Allow passwordless sudo from nixos user
+    security.sudo = {
+      enable = mkDefault true;
+      wheelNeedsPassword = mkForce false;
+    };
 
     # Automatically log in at the virtual consoles.
-    services.mingetty.autologinUser = "root";
+    services.mingetty.autologinUser = "nixos";
 
     # Some more help text.
     services.mingetty.helpLine =
       ''
 
-        The "root" account has an empty password.  ${
+        The "nixos" and "root" account have empty passwords.  ${
           optionalString config.services.xserver.enable
-            "Type `systemctl start display-manager' to\nstart the graphical user interface."}
+            "Type `sudo systemctl start display-manager' to\nstart the graphical user interface."}
       '';
 
     # Allow sshd to be started manually through "systemctl start sshd".
@@ -61,7 +79,7 @@ with lib;
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't
     # (yet) have swap set up.
-    environment.variables.GC_INITIAL_HEAP_SIZE = "100000";
+    environment.variables.GC_INITIAL_HEAP_SIZE = "1M";
 
     # Make the installer more likely to succeed in low memory
     # environments.  The kernel's overcommit heustistics bite us
@@ -84,7 +102,5 @@ with lib;
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
     networking.firewall.logRefusedConnections = mkDefault false;
-
-    environment.systemPackages = [ pkgs.vim ];
   };
 }

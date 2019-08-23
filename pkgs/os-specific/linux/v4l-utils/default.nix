@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkgconfig, perl, mkDerivation
 , libjpeg, udev
 , withUtils ? true
 , withGUI ? true, alsaLib, libX11, qtbase, libGLU
@@ -6,20 +6,20 @@
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "v4l-utils-${version}";
-  version = "1.14.2";
+  version = "1.16.6";
 
   src = fetchurl {
     url = "https://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
-    sha256 = "14h6d2p3n4jmxhd8i0p1m5dbwz5vnpb3z88xqd9ghg15n7265fg6";
+    sha256 = "1bkqlrizx0j2rd6ybam2x17bjrpwzl4v4szmnzm3cmixis3w3npr";
   };
 
   outputs = [ "out" "dev" ];
 
   configureFlags =
     if withUtils then [
-      "--with-udevdir=\${out}/lib/udev"
+      "--with-udevdir=${placeholder "out"}/lib/udev"
     ] else [
       "--disable-v4l-utils"
     ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = https://linuxtv.org/projects.php;
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ codyopel viric ];
+    maintainers = with maintainers; [ codyopel ];
     platforms = platforms.linux;
   };
 }

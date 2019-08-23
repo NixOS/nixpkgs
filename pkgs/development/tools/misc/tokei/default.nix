@@ -1,21 +1,25 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform, libiconv, darwin }:
 
 rustPlatform.buildRustPackage rec {
-  name = "tokei-${version}";
-  version = "7.0.3";
+  pname = "tokei";
+  version = "9.1.1";
 
   src = fetchFromGitHub {
-    owner = "Aaronepower";
-    repo = "tokei";
+    owner = "XAMPPRocky";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1n2ddwmyd414p6a98khq8y0bmljwcclw30wy5zy5b6z1l40yxcza";
+    sha256 = "0gz8m5j9p7hwylyl7cdxbli9rpy1p6lsrbym4zk647819pg4k1jp";
   };
 
-  cargoSha256 = "0ngqk8nnw00s25y91vgsl37j26xl2ws75l3lvklf9gbd4bi01crv";
+  cargoSha256 = "19h0ybi9qq5shvr7zix0gb24a29lqkvyfc5xbgps8wqgfrhx4nqa";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+    libiconv darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with stdenv.lib; {
-    description = "Count code, quickly";
-    homepage = https://github.com/Aaronepower/tokei;
+    description = "Program that displays statistics about your code";
+    homepage = https://github.com/XAMPPRocky/tokei;
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;

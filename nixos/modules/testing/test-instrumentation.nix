@@ -102,8 +102,12 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
         MaxLevelConsole=debug
       '';
 
-    # Don't clobber the console with duplicate systemd messages.
-    systemd.extraConfig = "ShowStatus=no";
+    systemd.extraConfig = ''
+      # Don't clobber the console with duplicate systemd messages.
+      ShowStatus=no
+      # Allow very slow start
+      DefaultTimeoutStartSec=300
+    '';
 
     boot.consoleLogLevel = 7;
 
@@ -125,9 +129,6 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     users.users.root.initialHashedPassword = mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
-
-    # set default stateVersion to avoid warnings during eval
-    system.nixos.stateVersion = mkDefault "18.03";
   };
 
 }

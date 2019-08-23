@@ -1,31 +1,31 @@
 { fetchurl, stdenv, gnome3 }:
 stdenv.mkDerivation rec {
   name = "unicode-data-${version}";
-  version = "11.0.0";
+  version = "12.0.0";
   srcs = [
     (fetchurl {
       url = "http://www.unicode.org/Public/${version}/ucd/Blocks.txt";
-      sha256 = "0lnh9iazikpr548bd7nkaq9r3vfljfvz0rg2462prac8qxk7ni8b";
+      sha256 = "041sk54v6rjzb23b9x7yjdwzdp2wc7gvfz7ybavgg4gbh51wm8x1";
     })
     (fetchurl {
       url = "http://www.unicode.org/Public/${version}/ucd/DerivedAge.txt";
-      sha256 = "0rlqqd0b1sqbzvrj29dwdizx8lyvrbfirsnn8za9lb53x5fml4gb";
+      sha256 = "04j92xp07v273z3pxkbfmi1svmw9kmnjl9nvz9fv0g5ybk9zk7r6";
     })
     (fetchurl {
       url = "http://www.unicode.org/Public/${version}/ucd/NamesList.txt";
-      sha256 = "0yr2h0nfqhirfi3bxl33z6cc94qqshlpgi06c25xh9754irqsgv8";
+      sha256 = "0vsq8gx7hws8mvxy3nlglpwxw7ky57q0fs09d7w9xgb2ylk7fz61";
     })
     (fetchurl {
       url = "http://www.unicode.org/Public/${version}/ucd/Scripts.txt";
-      sha256 = "1mbnvf97nwa3pvyzx9nd2wa94f8s0npg9740kic2p2ag7jmc1wz9";
+      sha256 = "18c63hx4y5yg408a8d0wx72d2hfnlz4l560y1fsf9lpzifxpqcmx";
     })
     (fetchurl {
       url = "http://www.unicode.org/Public/${version}/ucd/UnicodeData.txt";
-      sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
+      sha256 = "07d1kq190kgl92ispfx6zmdkvwvhjga0ishxsngzlw8j3kdkz4ap";
     })
     (fetchurl {
       url = "http://www.unicode.org/Public/${version}/ucd/Unihan.zip";
-      sha256 = "0cy8gxb17ksi5h4ysypk4c09z61am1svjrvg97hm5m5ccjfrs1vj";
+      sha256 = "1kfdhgg2gm52x3s07bijb5cxjy0jxwhd097k5lqhvzpznprm6ibf";
     })
   ];
   phases = "installPhase";

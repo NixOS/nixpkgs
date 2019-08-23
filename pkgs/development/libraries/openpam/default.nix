@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0pz8kf9mxj0k8yp8jgmhahddz58zv2b7gnyjwng75xgsx4i55xi2";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = https://www.openpam.org;
     description = "An open source PAM library that focuses on simplicity, correctness, and cleanliness";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ matthewbauer ];
+    license = licenses.bsd3;
   };
 }

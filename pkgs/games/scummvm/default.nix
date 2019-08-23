@@ -1,6 +1,5 @@
 { stdenv, fetchurl, nasm
 , alsaLib, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU_combined, SDL2, zlib
-, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
 
   # They use 'install -s', that calls the native strip instead of the cross
   postConfigure = ''
-    sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}" ports.mk
+    sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
   '';
 
   meta = with stdenv.lib; {

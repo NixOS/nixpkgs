@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/alanxz/rabbitmq-c;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

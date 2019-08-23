@@ -5,30 +5,32 @@
 , six
 , scipy
 , smart_open
+, scikitlearn, testfixtures, unittest2
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "3.4.0";
+  version = "3.8.0";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05844c82c7c176449218fd3fc31e55e5d8b3fae460f261b11231f4c8ef2ed5e0";
+    sha256 = "0rjpmxcd4hphq41y7frg6by6gwjjmrdbnim8jvx951ps5gzyfpgc";
   };
 
-  propagatedBuildInputs = [ smart_open numpy six scipy
-                            # scikitlearn testfixtures unittest2 # for tests
-                          ];
-  doCheck = false;
+  propagatedBuildInputs = [ smart_open numpy six scipy ];
+
+  checkInputs = [ scikitlearn testfixtures unittest2 ];
 
   # Two tests fail.
-
+  #
   # ERROR: testAddMorphemesToEmbeddings (gensim.test.test_varembed_wrapper.TestVarembed)
   # ImportError: Could not import morfessor.
   # This package is not in nix
-
+  #
   # ERROR: testWmdistance (gensim.test.test_fasttext_wrapper.TestFastText)
   # ImportError: Please install pyemd Python package to compute WMD.
   # This package is not in nix
+  doCheck = false;
 
   meta = {
     description = "Topic-modelling library";

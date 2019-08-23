@@ -75,8 +75,6 @@
 
     cube = callPackage ./cube.nix {};
 
-    curses = callPackage ./curses.nix {};
-
     data = callPackage ./data.nix {};
 
     derive = callPackage ./derive.nix {};
@@ -152,6 +150,8 @@
     posix = callPackage ./posix.nix {};
 
     protobuf = callPackage ./protobuf.nix {};
+
+    quantities = callPackage ./quantities.nix {};
 
     rationals = callPackage ./rationals.nix {};
 

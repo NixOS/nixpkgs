@@ -1,8 +1,7 @@
-{
-  stdenv
-, fetchurl
+{ stdenv
+, fetchFromGitHub
 , pciutils
-, confuse
+, libconfuse
 , alsaLib
 , audiofile
 , pkgconfig
@@ -15,10 +14,11 @@ stdenv.mkDerivation rec {
   version = "1.51lw";
   name = "${pkgname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/bytbox/${pkgname}/archive/v${version}.tar.gz";
-
-    sha256 = "11wi17bh2br1hp8gmq40b1hm5drm6h969505f7432zam3cm8mc8q";
+  src = fetchFromGitHub {
+    owner = "bytbox";
+    repo = pkgname;
+    rev = "v${version}";
+    sha256 = "18fvdwwhcl6s4bpf2f2i389s71c8k4g0yb81am9rdddqmzaw27iy";
   };
 
   postPatch = ''
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     substituteInPlace pommed/cd_eject.c --replace /usr/bin/eject ${eject}/bin/eject
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     pciutils
-    confuse
+    libconfuse
     alsaLib
     audiofile
-    pkgconfig
     zlib
     eject
   ];

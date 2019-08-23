@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.4.0";
+  version = "2.4.1";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = name;
-    sha256 = "1d5clkdgj0ip1j0k335pr4dabcnap6jr016q90i49p1jxixy96pb";
+    sha256 = "0i26yfn2vjgsg1kdvhhv55jwzds7ih7cnad1xqvilqm83zh47ksd";
   };
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkgconfig ];
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     make install-doc
+
+    substituteInPlace contrib/tig-completion.zsh \
+      --replace 'e=$(dirname ''${funcsourcetrace[1]%:*})/tig-completion.bash' "e=$out/etc/bash_completion.d/tig-completion.bash"
+
     install -D contrib/tig-completion.bash $out/etc/bash_completion.d/tig-completion.bash
     install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
     cp contrib/vim.tigrc $out/etc/
@@ -42,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://jonas.github.io/tig/;
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [ garbas bjornfor domenkozar qknight ];
+    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

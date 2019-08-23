@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "masscan-${version}";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner  = "robertdavidgraham";
     repo   = "masscan";
-    rev    = "39061a5e9ef158dde1e6618f6fbf379739934a73";
-    sha256 = "0mjvwh4i0ncsa3ywavw2s55v5bfv7pyga028c8m8xfash9764wwf";
+    rev    = "${version}";
+    sha256 = "0q0c7bsf0pbl8napry1qyg0gl4pd8wn872h4mz9b56dx4rx90vqg";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/etc/masscan
 
     cp data/exclude.conf $out/etc/masscan
-    cp -t $out/share/doc/masscan doc/algorithm.js doc/howto-afl.md doc/bot.hml
+    cp -t $out/share/doc/masscan doc/algorithm.js doc/howto-afl.md doc/bot.html
     cp doc/masscan.8 $out/share/man/man8/masscan.8
     cp LICENSE $out/share/licenses/masscan/LICENSE
 

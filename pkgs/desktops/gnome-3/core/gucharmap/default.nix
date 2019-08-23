@@ -1,32 +1,36 @@
-{ stdenv, intltool, fetchFromGitLab, pkgconfig, gtk3, defaultIconTheme
-, glib, desktop-file-utils, appdata-tools, gtk-doc, autoconf, automake, libtool
-, wrapGAppsHook, gnome3, itstool, libxml2
-, callPackage, unzip, gobjectIntrospection }:
+{ stdenv, intltool, fetchFromGitLab, pkgconfig, gtk3, adwaita-icon-theme
+, glib, desktop-file-utils, gtk-doc, autoconf, automake, libtool
+, wrapGAppsHook, gnome3, itstool, libxml2, yelp-tools
+, docbook_xsl, docbook_xml_dtd_412, gsettings-desktop-schemas
+, callPackage, unzip, gobject-introspection }:
 
 let
   unicode-data = callPackage ./unicode-data.nix {};
 in stdenv.mkDerivation rec {
-  name = "gucharmap-${version}";
-  version = "11.0.1";
+  pname = "gucharmap";
+  version = "12.0.1";
+
+  outputs = [ "out" "lib" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = "gucharmap";
+    repo = pname;
     rev = version;
-    sha256 = "13iw4fa6mv8vi8bkwk0bbhamnzbaih0c93p4rh07khq6mxa6hnpi";
+    sha256 = "0si3ymyfzc5v7ly0dmcs3qgw2wp8cyasycq5hmcr8frl09lr6gkw";
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook unzip intltool itstool appdata-tools
-    autoconf automake libtool gtk-doc
-    gnome3.yelp-tools libxml2 desktop-file-utils gobjectIntrospection
+    pkgconfig wrapGAppsHook unzip intltool itstool
+    autoconf automake libtool gtk-doc docbook_xsl docbook_xml_dtd_412
+    yelp-tools libxml2 desktop-file-utils gobject-introspection
   ];
 
-  buildInputs = [ gtk3 glib gnome3.gsettings-desktop-schemas defaultIconTheme ];
+  buildInputs = [ gtk3 glib gsettings-desktop-schemas adwaita-icon-theme ];
 
   configureFlags = [
     "--with-unicode-data=${unicode-data}"
+    "--enable-gtk-doc"
   ];
 
   doCheck = true;
@@ -41,7 +45,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gucharmap";
+      packageName = pname;
     };
   };
 

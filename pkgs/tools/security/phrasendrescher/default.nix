@@ -1,19 +1,26 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, openssl, libssh2, gpgme }:
 
 stdenv.mkDerivation rec {
-  name = "phrasendrescher-${version}";
-  version = "1.0";
+  pname = "phrasendrescher";
+  version = "1.2.2c";
 
   src = fetchurl {
-    url = "http://leidecker.info/projects/phrasendrescher/${name}.tar.gz";
-    sha256 = "1r0j7ms3i324p6if9cg8i0q900zqfjpvfr8pwj181x8ascysbbf2";
+    url = "http://leidecker.info/projects/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "18vg6h294219v14x5zqm8ddmq5amxlbz7pw81lcmpz8v678kwyph";
   };
 
-  buildInputs = [ openssl ];
+  postPatch = ''
+    substituteInPlace configure \
+      --replace 'SSL_LIB="ssl"' 'SSL_LIB="crypto"'
+  '';
+
+  buildInputs = [ openssl libssh2 gpgme ];
+
+  configureFlags = "--with-plugins";
 
   meta = with stdenv.lib; {
-    description = "Cracking tool that finds passphrases of SSH keys";
-    homepage = http://leidecker.info/projects/phrasendrescher.shtml;
+    description = "A modular and multi processing pass phrase cracking tool";
+    homepage = "http://leidecker.info/projects/phrasendrescher/index.shtml";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];

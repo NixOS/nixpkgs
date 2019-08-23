@@ -17,9 +17,6 @@ stdenv.mkDerivation rec {
     cp Products/Default/contacts $out/bin
   '';
 
-  ## FIXME: the framework setup hook isn't adding these correctly
-  NIX_LDFLAGS = " -F${Foundation}/Library/Frameworks/ -F${AddressBook}/Library/Frameworks/";
-
   meta = with stdenv.lib; {
     description = "Access contacts from the Mac address book from command-line";
     homepage    = http://www.gnufoo.org/contacts/contacts.html;

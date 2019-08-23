@@ -44,30 +44,30 @@ stdenv.mkDerivation rec {
 
   # - leapfetch=no disables going online at build time to fetch leap-seconds
   #   info. See <gpsd-src>/build.txt for more info.
-  buildPhase = ''
+  preBuild = ''
     patchShebangs .
     sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConstruct
-    scons \
-      -j $NIX_BUILD_CORES \
-      prefix="$out" \
-      leapfetch=no \
-      gpsd_user=${gpsdUser} \
-      gpsd_group=${gpsdGroup} \
-      systemd=yes \
-      udevdir="$out/lib/udev" \
-      python_libdir="$out/lib/${python2Packages.python.libPrefix}/site-packages"
+
+    sconsFlags+=" udevdir=$out/lib/udev"
+    sconsFlags+=" python_libdir=$out/lib/${python2Packages.python.libPrefix}/site-packages"
   '';
 
-  checkPhase = ''
+  sconsFlags = [
+    "leapfetch=no"
+    "gpsd_user=${gpsdUser}"
+    "gpsd_group=${gpsdGroup}"
+    "systemd=yes"
+  ];
+
+  preCheck = ''
     export LD_LIBRARY_PATH="$PWD"
-    scons check
   '';
 
   # TODO: the udev rules file and the hotplug script need fixes to work on NixOS
-  installPhase = ''
+  preInstall = ''
     mkdir -p "$out/lib/udev/rules.d"
-    scons install udev-install
   '';
+  installTargets = "install udev-install";
 
   postFixup = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"

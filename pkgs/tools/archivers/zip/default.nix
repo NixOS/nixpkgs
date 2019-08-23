@@ -27,10 +27,11 @@ stdenv.mkDerivation {
   buildInputs = stdenv.lib.optional enableNLS libnatspec
     ++ stdenv.lib.optional stdenv.isCygwin libiconv;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Compressor/archiver for creating and modifying zipfiles";
     homepage = http://www.info-zip.org;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.bsdOriginal;
+    platforms = platforms.all;
     maintainers = [ ];
   };
 }

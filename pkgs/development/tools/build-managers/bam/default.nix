@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, lua5, python }:
+{ stdenv, fetchFromGitHub, lua5_3, python }:
 
 stdenv.mkDerivation rec {
   name = "bam-${version}";
-  version = "0.4.0";
+  version = "0.5.1";
 
-  src = fetchurl {
-    url = "http://github.com/downloads/matricks/bam/${name}.tar.bz2";
-    sha256 = "0z90wvyd4nfl7mybdrv9dsd4caaikc6fxw801b72gqi1m9q0c0sn";
+  src = fetchFromGitHub {
+    owner = "matricks";
+    repo = "bam";
+    rev = "v${version}";
+    sha256 = "13br735ig7lygvzyfd15fc2rdygrqm503j6xj5xkrl1r7w2wipq6";
   };
 
-  buildInputs = [ lua5 python ];
+  buildInputs = [ lua5_3 python ];
 
   buildPhase = ''${stdenv.shell} make_unix.sh'';
 
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
       raskin
     ];
     platforms = platforms.linux;
-    license = licenses.free;
+    license = licenses.zlib;
     downloadPage = "http://matricks.github.com/bam/";
   };
 }

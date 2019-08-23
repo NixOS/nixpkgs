@@ -1,4 +1,8 @@
-{stdenv, buildOcaml, fetchurl, ounit}:
+{ stdenv, buildOcaml, ocaml, fetchurl, ounit }:
+
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "pa_ounit is not available for OCaml ${ocaml.version}"
+else
 
 buildOcaml rec {
   name = "pa_ounit";

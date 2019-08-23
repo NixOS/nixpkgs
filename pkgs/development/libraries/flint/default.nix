@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   # issues with ntl -- https://github.com/wbhart/flint2/issues/487
-  NIX_CFLAGS_COMPILE = [ "-std=c++11" ];
+  NIX_CXXSTDLIB_COMPILE = [ "-std=c++11" ];
 
   patches = [
     (fetchpatch {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = ''Fast Library for Number Theory'';
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     homepage = http://www.flintlib.org/;
     downloadPage = "http://www.flintlib.org/downloads.html";
     updateWalker = true;

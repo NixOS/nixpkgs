@@ -10,7 +10,13 @@ build-idris-package  {
 
   idrisDeps = [ effects ];
 
+  nativeBuildInputs = [ pkgs.pkgconfig ];
   extraBuildInputs = [ pkgs.glfw ];
+
+  postPatch = ''
+    substituteInPlace src/MakefileGlfw \
+      --replace glfw3 "glfw3 gl"
+  '';
 
   src = fetchFromGitHub {
     owner = "eckart";

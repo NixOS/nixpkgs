@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
     cp dhcpdump $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
-    homepage = https://packages.ubuntu.com/ru/lucid/dhcpdump;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://www.mavetju.org/unix/dhcpdump-man.php;
+    platforms = platforms.linux;
+    license = licenses.bsd2;
   };
 }

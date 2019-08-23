@@ -189,7 +189,7 @@ in {
 
       preStart =
         let replacePlugins =
-              if isNull cfg.plugins
+              if cfg.plugins == null
               then ""
               else
                 let pluginCmds = lib.attrsets.mapAttrsToList

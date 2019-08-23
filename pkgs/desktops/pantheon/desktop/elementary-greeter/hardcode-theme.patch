@@ -1,0 +1,15 @@
+diff --git a/src/PantheonGreeter.vala b/src/PantheonGreeter.vala
+index 11aa4c0..daf4a8a 100644
+--- a/src/PantheonGreeter.vala
++++ b/src/PantheonGreeter.vala
+@@ -474,6 +474,10 @@ public static int main (string [] args) {
+                                              Gdk.CursorType.LEFT_PTR);
+     Gdk.get_default_root_window ().set_cursor (cursor);
+ 
++    var settings = Gtk.Settings.get_default ();
++    settings.gtk_icon_theme_name = "elementary";
++    settings.gtk_theme_name = "elementary";
++
+     var icon_theme = Gtk.IconTheme.get_default ();
+     icon_theme.add_resource_path ("/io/elementary/greeter/icons");
+ 

@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://code.googlesource.com/gocloud";
-      rev = "e9284bade4f43071dac5ec56c73a03a3c9fa7772";
-      sha256 = "0qm0s97bj21m04a07yni09hdh0aycgmklm5mg6flx17lrp2av9j8";
+      rev = "dba8c2c195294739180b3e6865f8893eb808676e";
+      sha256 = "1l6aj26sd7byjcgi2b4k452fcg949v28lff2fkw5nq2qr2fjnqxy";
     };
   }
   {
@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "3a7846fea0afe8cc88deb31d8cfb1fa15a3615ef";
-      sha256 = "1dxvliqc79bl0waczzy8ajm7jpbnn2bszwfcd71zjjxph8jz75kg";
+      rev = "9b4f9f5ad5197c79fd623a3638e70d8b26cef344";
+      sha256 = "06hvxy113h76f31gv1mq6vdr6xja1zv0fdig686l2b4y2b6swych";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/oauth2";
-      rev = "cdc340f7c179dbbfa4afd43b7614e8fcadde4269";
-      sha256 = "182is558nfvk4x1cm8sqzaym8kfcaaxaga9ggqhvzqrs8mncbj22";
+      rev = "9dcd33a902f40452422c2367fefcb95b54f9f8f8";
+      sha256 = "15lfa780h2ff50qvcdl7sfs9f9j13fa5kfj6fb292rk3fwxhnx4i";
     };
   }
   {
@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://code.googlesource.com/google-api-go-client";
-      rev = "20530fd5d65ad2caee87891f9896d7547cb400c9";
-      sha256 = "06fsnml2kfzifxp2d5anb6vxjlgpkwl82xcddf0cg0v1bnx5mnrd";
+      rev = "39567f0042a03aeb2691599961ed4454e43d5063";
+      sha256 = "0c5gx156v1pk0gqvl9w43l06z0rh9g2sackpl9ghds0asnyqx04d";
     };
   }
 ]

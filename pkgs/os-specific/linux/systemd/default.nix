@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
@@ -8,18 +8,15 @@
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
 , getent
-, hostPlatform
 , buildPackages
+, perl
 , withSelinux ? false, libselinux
-, withLibseccomp ? libseccomp.meta.available, libseccomp
-, withKexectools ? kexectools.meta.available, kexectools
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-let
-  pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
-
-in stdenv.mkDerivation rec {
-  version = "238";
+stdenv.mkDerivation rec {
+  version = "242";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -27,8 +24,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "02042d012c4d6c0a2854d8436dd6636d4327774f";
-    sha256 = "0iv6fygzac0z6dagbmw1nf8dx7rrr6d9cxp0fr304rn3ir58g5f0";
+    rev = "5fb35fbc783516e2014115c3488134a2afb8494c";
+    sha256 = "0pyjvzzh8nnxv4z58n82lz1mjnzv44sylcjgkvw8sp35vx1ryxfh";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -39,6 +36,9 @@ in stdenv.mkDerivation rec {
       coreutils # meson calls date, stat etc.
       glibcLocales
       patchelf getent m4
+      perl # to patch the libsystemd.so and remove dependencies on aarch64
+
+      (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
     ];
   buildInputs =
     [ linuxHeaders libcap kmod xz pam acl
@@ -48,17 +48,24 @@ in stdenv.mkDerivation rec {
       stdenv.lib.optional withLibseccomp libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
-      # This is actually native, but we already pull it from buildPackages
-      pythonLxmlEnv
     ] ++ stdenv.lib.optional withSelinux libselinux;
 
   #dontAddPrefix = true;
 
   mesonFlags = [
+    "-Ddbuspolicydir=${placeholder "out"}/etc/dbus-1/system.d"
+    "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
+    "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
+    "-Drootprefix=${placeholder "out"}"
+    "-Drootlibdir=${placeholder "lib"}/lib"
+    "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
+    "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
-    # "-Dtests=" # TODO
+    # while we do not run tests we should also not build them. Removes about 600 targets
+    "-Dtests=false"
     "-Dlz4=true"
     "-Dhostnamed=true"
     "-Dnetworkd=true"
@@ -75,11 +82,12 @@ in stdenv.mkDerivation rec {
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
+    "-Db_pie=true"
     "-Dsystem-uid-max=499" #TODO: debug why awking around in /etc/login.defs doesn't work
     "-Dsystem-gid-max=499"
     # "-Dtime-epoch=1"
 
-    (if stdenv.isAarch32 || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+    (if !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"
@@ -96,40 +104,25 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-    mesonFlagsArray+=(-Ddbuspolicydir=$out/etc/dbus-1/system.d)
-    mesonFlagsArray+=(-Ddbussessionservicedir=$out/share/dbus-1/services)
-    mesonFlagsArray+=(-Ddbussystemservicedir=$out/share/dbus-1/system-services)
-    mesonFlagsArray+=(-Dpamconfdir=$out/etc/pam.d)
-    mesonFlagsArray+=(-Drootprefix=$out)
-    mesonFlagsArray+=(-Drootlibdir=$lib/lib)
-    mesonFlagsArray+=(-Dpkgconfiglibdir=$dev/lib/pkgconfig)
-    mesonFlagsArray+=(-Dpkgconfigdatadir=$dev/share/pkgconfig)
-
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
+    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
-        --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
-        --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
+        --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
+        --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
+        --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
+        --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
 
-    for i in tools/xml_helper.py tools/make-directive-index.py tools/make-man-index.py test/sys-script.py; do
-      substituteInPlace $i \
-        --replace "#!/usr/bin/env python" "#!${pythonLxmlEnv}/bin/python"
-    done
-
-    for i in src/basic/generate-gperfs.py src/resolve/generate-dns_type-gperf.py src/test/generate-sym-test.py ; do
-      substituteInPlace $i \
-        --replace "#!/usr/bin/env python" "#!${buildPackages.python3Packages.python}/bin/python"
+    for dir in tools src/resolve test src/test; do
+      patchShebangs $dir
     done
 
     substituteInPlace src/journal/catalog.c \
@@ -144,16 +137,6 @@ in stdenv.mkDerivation rec {
       --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
-
-  patches = [
-    # https://github.com/systemd/systemd/pull/8580
-    (fetchpatch {
-      url = https://github.com/systemd/systemd/pull/8580.patch;
-      sha256 = "1yp07hlpgqq0h2y0qc3kasswzkycz6p8d56d695ck1qa2f5bdfgn";
-    })
-  ];
-
-  hardeningDisable = [ "stackprotector" ];
 
   NIX_CFLAGS_COMPILE =
     [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
@@ -200,18 +183,44 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # On aarch64 we "leak" a reference to $out/lib/systemd/catalog in the lib
+  # output. The result of that is a dependency cycle between $out and $lib.
+  # Thus nix (rightfully) marks the build as failed. That reference originates
+  # from an array of strings (catalog_file_dirs) in systemd
+  # (src/src/journal/catalog.{c,h}).  The only consumer (as of v242) of the
+  # symbol is the main function of journalctl.  Still libsystemd.so contains
+  # the VALUE but not the symbol.  Systemd seems to be properly using function
+  # & data sections together with the linker flags to garbage collect unused
+  # sections (-Wl,--gc-sections).  For unknown reasons those flags do not
+  # eliminate the unused string constants, in this case on aarch64-linux. The
+  # hacky way is to just remove the reference after we finished compiling.
+  # Since it can not be used (there is no symbol to actually refer to it) there
+  # should not be any harm.  It is a bit odd and I really do not like starting
+  # these kind of hacks but there doesn't seem to be a straight forward way at
+  # this point in time.
+  # The reference will be replaced by the same reference the usual nukeRefs
+  # tooling uses.  The standard tooling can not / should not be uesd since it
+  # is a bit too excessive and could potentially do us some (more) harm.
+  postFixup = ''
+    nukedRef=$(echo $out | sed -e "s,$NIX_STORE/[^-]*-\(.*\),$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-\1,")
+    cat $lib/lib/libsystemd.so | perl -pe "s|$out/lib/systemd/catalog|$nukedRef/lib/systemd/catalog|" > $lib/lib/libsystemd.so.tmp
+    mv $lib/lib/libsystemd.so.tmp $(readlink -f $lib/lib/libsystemd.so)
+  '';
+
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
   # fine, of course.)  It should be increased whenever systemd changes
   # in a backwards-incompatible way.  If the interface version of two
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 2;
+  passthru.interfaceVersion = 3;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    priority = 10;
+    maintainers = [ maintainers.eelco ];
   };
 }

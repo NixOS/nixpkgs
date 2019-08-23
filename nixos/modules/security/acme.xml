@@ -3,23 +3,25 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="module-security-acme">
+ <title>SSL/TLS Certificates with ACME</title>
+ <para>
+  NixOS supports automatic domain validation &amp; certificate retrieval and
+  renewal using the ACME protocol. This is currently only implemented by and
+  for Let's Encrypt. The alternative ACME client <literal>simp_le</literal> is
+  used under the hood.
+ </para>
+ <section xml:id="module-security-acme-prerequisites">
+  <title>Prerequisites</title>
 
-<title>SSL/TLS Certificates with ACME</title>
+  <para>
+   You need to have a running HTTP server for verification. The server must
+   have a webroot defined that can serve
+   <filename>.well-known/acme-challenge</filename>. This directory must be
+   writeable by the user that will run the ACME client.
+  </para>
 
-<para>NixOS supports automatic domain validation &amp; certificate
-retrieval and renewal using the ACME protocol. This is currently only
-implemented by and for Let's Encrypt. The alternative ACME client
-<literal>simp_le</literal> is used under the hood.</para>
-
-<section><title>Prerequisites</title>
-
-<para>You need to have a running HTTP server for verification. The server must
-have a webroot defined that can serve
-<filename>.well-known/acme-challenge</filename>. This directory must be
-writeable by the user that will run the ACME client.</para>
-
-<para>For instance, this generic snippet could be used for Nginx:
-
+  <para>
+   For instance, this generic snippet could be used for Nginx:
 <programlisting>
 http {
   server {
@@ -37,43 +39,47 @@ http {
   }
 }
 </programlisting>
-</para>
+  </para>
+ </section>
+ <section xml:id="module-security-acme-configuring">
+  <title>Configuring</title>
 
-</section>
-
-<section><title>Configuring</title>
-
-<para>To enable ACME certificate retrieval &amp; renewal for a certificate for
-<literal>foo.example.com</literal>, add the following in your
-<filename>configuration.nix</filename>:
-
+  <para>
+   To enable ACME certificate retrieval &amp; renewal for a certificate for
+   <literal>foo.example.com</literal>, add the following in your
+   <filename>configuration.nix</filename>:
 <programlisting>
 <xref linkend="opt-security.acme.certs"/>."foo.example.com" = {
   <link linkend="opt-security.acme.certs._name_.webroot">webroot</link> = "/var/www/challenges";
   <link linkend="opt-security.acme.certs._name_.email">email</link> = "foo@example.com";
 };
 </programlisting>
-</para>
+  </para>
 
-<para>The private key <filename>key.pem</filename> and certificate
-<filename>fullchain.pem</filename> will be put into
-<filename>/var/lib/acme/foo.example.com</filename>. The target directory can
-be configured with the option <xref linkend="opt-security.acme.directory"/>.
-</para>
+  <para>
+   The private key <filename>key.pem</filename> and certificate
+   <filename>fullchain.pem</filename> will be put into
+   <filename>/var/lib/acme/foo.example.com</filename>. The target directory can
+   be configured with the option <xref linkend="opt-security.acme.directory"/>.
+  </para>
 
-<para>Refer to <xref linkend="ch-options" /> for all available configuration
-options for the <link linkend="opt-security.acme.certs">security.acme</link> module.</para>
+  <para>
+   Refer to <xref linkend="ch-options" /> for all available configuration
+   options for the <link linkend="opt-security.acme.certs">security.acme</link>
+   module.
+  </para>
+ </section>
+ <section xml:id="module-security-acme-nginx">
+  <title>Using ACME certificates in Nginx</title>
 
-</section>
-
-<section><title>Using ACME certificates in Nginx</title>
-<para>NixOS supports fetching ACME certificates for you by setting
-  <literal><link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;</literal> in a virtualHost config. We
-first create self-signed placeholder certificates in place of the
-real ACME certs. The placeholder certs are overwritten when the ACME
-certs arrive. For <literal>foo.example.com</literal> the config would
-look like.
-</para>
+  <para>
+   NixOS supports fetching ACME certificates for you by setting
+   <literal><link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link>
+   = true;</literal> in a virtualHost config. We first create self-signed
+   placeholder certificates in place of the real ACME certs. The placeholder
+   certs are overwritten when the ACME certs arrive. For
+   <literal>foo.example.com</literal> the config would look like.
+  </para>
 
 <programlisting>
 services.nginx = {
@@ -89,5 +95,5 @@ services.nginx = {
   };
 }
 </programlisting>
-</section>
+ </section>
 </chapter>

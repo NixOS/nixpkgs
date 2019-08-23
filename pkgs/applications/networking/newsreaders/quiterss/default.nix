@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, pkgconfig
+{ stdenv, fetchFromGitHub, qmake, pkgconfig, wrapQtAppsHook
 , qtbase, qttools, qtwebkit, sqlite
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xav9qr8n6310636nfbgx4iix65fs3ya5rz2isxsf38bkjm7r3pa";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
   buildInputs = [ qtbase qttools qtwebkit sqlite.dev ];
 
   meta = with stdenv.lib; {

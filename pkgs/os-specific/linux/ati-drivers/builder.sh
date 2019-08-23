@@ -263,7 +263,7 @@ if test -z "$libsOnly"; then
 
     cd programs/fglrx_gamma
     gcc -fPIC -I${libXxf86vm.dev}/include \
-      -I${xf86vidmodeproto}/include \
+      -I${xorgproto}/include \
       -I$out/X11R6/include \
       -L$out/lib \
       -Wall -lm -lfglrx_gamma -lX11 -lXext -o $out/bin/fglrx_xgamma fglrx_xgamma.c

@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
+{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
 , gstreamer, gst-plugins-base, GConf, libX11, cairo
-, withMesa ? true, libGLU ? null, libGL ? null
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l1w4i113csv3bd5r8ybyj0qpxdq83lj6jrc5p7cc10mkwyiagqz";
   };
 
-  buildInputs = [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst-plugins-base GConf libX11 cairo ]
+  buildInputs = [ gtk2 libXinerama libSM libXxf86vm xorgproto gstreamer gst-plugins-base GConf libX11 cairo ]
     ++ optional withMesa libGLU;
 
   nativeBuildInputs = [ pkgconfig ];

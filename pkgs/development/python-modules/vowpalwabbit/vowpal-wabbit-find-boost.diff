@@ -1,0 +1,34 @@
+--- vowpalwabbit-8.5.0.orig/setup.py	2018-09-03 20:32:39.000000000 +0200
++++ vowpalwabbit-8.5.0/setup.py	2018-09-03 20:34:09.000000000 +0200
+@@ -23,18 +23,11 @@
+ 
+ def find_boost():
+     """Find correct boost-python library information """
+-    if system == 'Linux':
++    if system == 'Linux' or system == 'Darwin':
+         # use version suffix if present
+-        boost_lib = 'boost_python-py{v[0]}{v[1]}'.format(v=sys.version_info)
+-        if sys.version_info.major == 3:
+-            for candidate in ['-py36', '-py35', '-py34', '3']:
+-                boost_lib = 'boost_python{}'.format(candidate)
+-                if find_library(boost_lib):
+-                    exit
++        boost_lib = 'boost_python{v[0]}{v[1]}'.format(v=sys.version_info)
+         if not find_library(boost_lib):
+             boost_lib = "boost_python"
+-    elif system == 'Darwin':
+-        boost_lib = 'boost_python-mt' if sys.version_info[0] == 2 else 'boost_python3-mt'
+     elif system == 'Cygwin':
+         boost_lib = 'boost_python-mt' if sys.version_info[0] == 2 else 'boost_python3-mt'
+     else:
+--- vowpalwabbit-8.5.0.orig/src/Makefile	2018-09-03 20:32:40.000000000 +0200
++++ vowpalwabbit-8.5.0/src/Makefile	2018-09-03 21:42:30.000000000 +0200
+@@ -37,7 +37,7 @@
+   NPROCS:=$(shell grep -c ^processor /proc/cpuinfo)
+ endif
+ ifeq ($(UNAME), Darwin)
+-  LIBS = -lboost_program_options-mt -lboost_serialization-mt -l pthread -l z
++  LIBS = -lboost_program_options -lboost_serialization -l pthread -l z
+   # On Macs, the location isn't always clear
+   #	brew uses /usr/local
+   #	but /opt/local seems to be preferred by some users

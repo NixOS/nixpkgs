@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, gd, libpng, libjpeg, freetype, zlib, libwebp }:
+{ stdenv, fetchurl, flex, bison, gd, libpng, libjpeg, freetype, zlib, libwebp, runtimeShell }:
 
 let
   version = "0.20";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
   preCheck = ''
-    sed -i -e "s|#!/bin/bash|#!${stdenv.shell}|" test/renderercheck.sh
+    sed -i -e "s|#!/bin/bash|#!${runtimeShell}|" test/renderercheck.sh
   '';
 
   meta = {

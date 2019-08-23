@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, imake, bison, flex_2_6_1, gccmakedep
-, xproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
+{ stdenv, fetchurl, imake, bison, flex, gccmakedep
+, xorgproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
 
 let
   pname = "nas";
@@ -12,16 +12,13 @@ in stdenv.mkDerivation {
     sha256 = "17dk0ckm6mp1ajc0cd6bwyi638ynw2f6bhbn7gynrs0wfmiyldng";
   };
 
-  nativeBuildInputs = [ imake bison flex_2_6_1 gccmakedep ];
+  nativeBuildInputs = [ imake bison flex gccmakedep ];
 
-  buildInputs = [ xproto libXau libXt libXext libXaw libXpm ];
+  buildInputs = [ xorgproto libXau libXt libXext libXaw libXpm ];
 
-  buildPhase = ''
-    xmkmf
-    make WORLDOPTS="" World
-  '';
+  buildFlags = [ "WORLDOPTS=" "World" ];
 
-  installFlags = "LDLIBS=-lfl DESTDIR=\${out}";
+  installFlags = [ "LDLIBS=-lfl" "DESTDIR=${placeholder "out"}" ];
 
   postInstall = ''
     mv $out/${xorgcffiles}/* $out

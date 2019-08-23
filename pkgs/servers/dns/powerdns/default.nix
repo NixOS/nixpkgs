@@ -1,26 +1,21 @@
 { stdenv, fetchurl, pkgconfig
-, boost, libyamlcpp, libsodium, sqlite, protobuf, botan2
+, boost, libyamlcpp, libsodium, sqlite, protobuf, botan2, libressl
 , mysql57, postgresql, lua, openldap, geoip, curl, opendbx, unixODBC
 }:
 
 stdenv.mkDerivation rec {
   name = "powerdns-${version}";
-  version = "4.1.3";
+  version = "4.1.13";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "1bh1qdgw415ax542123b6isri1jh4mbf2i9i1yffkfk0xmyv79cs";
+    sha256 = "09az5yp5d9wvzw8faifyzsljhmmc8ifm4j70m4n2sr83i9i9rsp7";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl opendbx unixODBC botan2
-  ];
-
-  patches = [
-    # checksum type not found, maybe a dependency is to old?
-    ./skip-sha384-test.patch
+    libyamlcpp libsodium curl opendbx unixODBC botan2 libressl
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -29,6 +24,7 @@ stdenv.mkDerivation rec {
       "--with-modules=bind gmysql geoip godbc gpgsql gsqlite3 ldap lua mydns opendbx pipe random remote"
       --with-sqlite3
       --with-socketdir=/var/lib/powerdns
+      --with-libcrypto=${libressl.dev}
       --enable-libsodium
       --enable-botan
       --enable-tools
@@ -39,13 +35,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  enableParallelBuilding = true;
   doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Authoritative DNS server";
     homepage = https://www.powerdns.com;
-    platforms = platforms.linux;
-    # cannot find postgresql libs on macos x
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     license = licenses.gpl2;
     maintainers = with maintainers; [ mic92 disassembler ];
   };

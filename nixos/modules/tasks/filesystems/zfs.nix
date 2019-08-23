@@ -1,8 +1,6 @@
 { config, lib, pkgs, utils, ... }:
 #
-# todo:
-#   - crontab for scrubs, etc
-#   - zfs tunables
+# TODO: zfs tunables
 
 with utils;
 with lib;
@@ -13,6 +11,7 @@ let
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
   cfgScrub = config.services.zfs.autoScrub;
+  cfgTrim = config.services.zfs.trim;
 
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
@@ -23,16 +22,10 @@ let
 
   kernel = config.boot.kernelPackages;
 
-  packages = if config.boot.zfs.enableLegacyCrypto then {
-    spl = kernel.splLegacyCrypto;
-    zfs = kernel.zfsLegacyCrypto;
-    zfsUser = pkgs.zfsLegacyCrypto;
-  } else if config.boot.zfs.enableUnstable then {
-    spl = kernel.splUnstable;
+  packages = if config.boot.zfs.enableUnstable then {
     zfs = kernel.zfsUnstable;
     zfsUser = pkgs.zfsUnstable;
   } else {
-    spl = kernel.spl;
     zfs = kernel.zfs;
     zfsUser = pkgs.zfs;
   };
@@ -78,7 +71,7 @@ let
   importLib = {zpoolCmd, awkCmd, cfgZfs}: ''
     poolReady() {
       pool="$1"
-      state="$("${zpoolCmd}" import | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
+      state="$("${zpoolCmd}" import 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
       if [[ "$state" = "ONLINE" ]]; then
         return 0
       else
@@ -114,27 +107,6 @@ in
           version will have already passed an extensive test suite, but it is
           more likely to hit an undiscovered bug compared to running a released
           version of ZFS on Linux.
-          '';
-      };
-
-      enableLegacyCrypto = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enabling this option will allow you to continue to use the old format for
-          encrypted datasets. With the inclusion of stability patches the format of
-          encrypted datasets has changed. They can still be accessed and mounted but
-          in read-only mode mounted. It is highly recommended to convert them to
-          the new format.
-
-          This option is only for convenience to people that cannot convert their
-          datasets to the new format yet and it will be removed in due time.
-
-          For migration strategies from old format to this new one, check the Wiki:
-          https://nixos.wiki/wiki/NixOS_on_ZFS#Encrypted_Dataset_Format_Change
-
-          See https://github.com/zfsonlinux/zfs/pull/6864 for more details about
-          the stability patches.
           '';
       };
 
@@ -206,10 +178,9 @@ in
 
       requestEncryptionCredentials = mkOption {
         type = types.bool;
-        default = config.boot.zfs.enableUnstable;
+        default = true;
         description = ''
           Request encryption keys or passwords for all encrypted datasets on import.
-          Dataset encryption is only supported in zfsUnstable at the moment.
           For root pools the encryption key can be supplied via both an
           interactive prompt (keylocation=prompt) and from a file
           (keylocation=file://). Note that for data pools the encryption key can
@@ -296,14 +267,26 @@ in
       };
     };
 
-    services.zfs.autoScrub = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
+    services.zfs.trim = {
+      enable = mkEnableOption "Enables periodic TRIM on all ZFS pools.";
+
+      interval = mkOption {
+        default = "weekly";
+        type = types.str;
+        example = "daily";
         description = ''
-          Enables periodic scrubbing of ZFS pools.
+          How often we run trim. For most desktop and server systems
+          a sufficient trimming frequency is once a week.
+
+          The format is described in
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
+    };
+
+    services.zfs.autoScrub = {
+      enable = mkEnableOption "Enables periodic scrubbing of ZFS pools.";
 
       interval = mkOption {
         default = "Sun, 02:00";
@@ -341,21 +324,17 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
-        {
-          assertion = cfgZfs.requestEncryptionCredentials -> cfgZfs.enableUnstable;
-          message = "This feature is only available for zfs unstable. Set the NixOS option boot.zfs.enableUnstable.";
-        }
       ];
 
       virtualisation.lxd.zfsSupport = true;
 
       boot = {
-        kernelModules = [ "spl" "zfs" ] ;
-        extraModulePackages = with packages; [ spl zfs ];
+        kernelModules = [ "zfs" ];
+        extraModulePackages = with packages; [ zfs ];
       };
 
       boot.initrd = mkIf inInitrd {
-        kernelModules = [ "spl" "zfs" ];
+        kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
         extraUtilsCommands =
           ''
             copy_bin_and_libs ${packages.zfsUser}/sbin/zfs
@@ -560,10 +539,23 @@ in
 
       systemd.timers.zfs-scrub = {
         wantedBy = [ "timers.target" ];
+        after = [ "multi-user.target" ]; # Apparently scrubbing before boot is complete hangs the system? #53583
         timerConfig = {
           OnCalendar = cfgScrub.interval;
           Persistent = "yes";
         };
+      };
+    })
+
+    (mkIf cfgTrim.enable {
+      systemd.services.zpool-trim = {
+        description = "ZFS pools trim";
+        after = [ "zfs-import.target" ];
+        path = [ packages.zfsUser ];
+        startAt = cfgTrim.interval;
+        script = ''
+          zpool list -H -o name | xargs -n1 zpool trim
+        '';
       };
     })
   ];

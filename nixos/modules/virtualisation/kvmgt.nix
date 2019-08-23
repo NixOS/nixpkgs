@@ -4,13 +4,16 @@ with lib;
 
 let
   cfg = config.virtualisation.kvmgt;
+
   kernelPackages = config.boot.kernelPackages;
+
   vgpuOptions = {
     uuid = mkOption {
       type = types.string;
       description = "UUID of VGPU device. You can generate one with <package>libossp_uuid</package>.";
     };
   };
+
 in {
   options = {
     virtualisation.kvmgt = {
@@ -45,7 +48,23 @@ in {
       assertion = versionAtLeast kernelPackages.kernel.version "4.16";
       message = "KVMGT is not properly supported for kernels older than 4.16";
     };
-    boot.kernelParams = [ "i915.enable_gvt=1" ];
+
+    boot.kernelModules = [ "kvmgt" ];
+
+    boot.extraModprobeConfig = ''
+      options i915 enable_gvt=1
+    '';
+
+    systemd.paths = mapAttrs' (name: value:
+      nameValuePair "kvmgt-${name}" {
+        description = "KVMGT VGPU ${name} path";
+        wantedBy = [ "multi-user.target" ];
+        pathConfig = {
+          PathExists = "/sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create";
+        };
+      }
+    ) cfg.vgpus;
+
     systemd.services = mapAttrs' (name: value:
       nameValuePair "kvmgt-${name}" {
         description = "KVMGT VGPU ${name}";
@@ -55,7 +74,6 @@ in {
           ExecStart = "${pkgs.runtimeShell} -c 'echo ${value.uuid} > /sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create'";
           ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${value.uuid}/remove'";
         };
-        wantedBy = [ "multi-user.target" ];
       }
     ) cfg.vgpus;
   };

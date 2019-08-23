@@ -1,31 +1,28 @@
 { stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
-  autogen, sqlite, gmp, zlib, fetchFromGitHub }:
+  autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "clightning-${version}";
-  version = "0.6";
+  version = "0.7.1";
 
-  src = fetchFromGitHub {
-    fetchSubmodules = true;
-    owner = "ElementsProject";
-    repo = "lightning";
-    rev = "v${version}";
-    sha256 = "1xbi8c7kn21wj255fxnb9s0sqnzbn3wsz4p96z084k8mw1nc71vn";
+  src = fetchurl {
+    url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
+    sha256 = "557be34410f27a8d55d9f31a40717a8f5e99829f2bd114c24e7ca1dd5f6b7d85";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ which sqlite gmp zlib autoconf libtool automake autogen python3 pkgconfig ];
+  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip ];
+  buildInputs = [ sqlite gmp zlib python3 ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
 
   configurePhase = ''
     ./configure --prefix=$out --disable-developer --disable-valgrind
   '';
 
   postPatch = ''
-    echo "" > tools/refresh-submodules.sh
     patchShebangs tools/generate-wire.py
   '';
 

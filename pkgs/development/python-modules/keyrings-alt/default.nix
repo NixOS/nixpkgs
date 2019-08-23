@@ -1,22 +1,25 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder, six
-, pytest, pytest-flake8, backports_unittest-mock, keyring, setuptools_scm
+, pytest, backports_unittest-mock, keyring, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "keyrings.alt";
-  version = "3.1";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nnva8g03dv6gdhjk1ihn2qw7g15232fyj8shipah9whgfv8d75m";
+    sha256 = "0lgp2d3hrpvbb2rfz18vrv5lrck72k3l2f2cpkbks2kigrfbgiqb";
   };
+
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "--flake8" ""
+  '';
 
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ six ];
 
-  # Fails with "ImportError: cannot import name mock"
-  #doCheck = false;
-  checkInputs = [ pytest pytest-flake8 keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
+  checkInputs = [ pytest keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
 
   checkPhase = ''
     py.test

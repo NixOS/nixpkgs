@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, buildGoPackage
-, makeWrapper, nix-prefetch-git }:
+, makeWrapper, nix-prefetch-scripts }:
 
 buildGoPackage rec {
-  name = "dep2nix-${version}";
-  version = "0.0.1";
+  pname = "dep2nix";
+  version = "unstable-2019-04-02";
 
   goPackagePath = "github.com/nixcloud/dep2nix";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
-    repo = "dep2nix";
-    rev = version;
-    sha256 = "05b06wgcy88fb5ccqwq3mfhrhcblr1akpxgsf44kgbdwf5nzz87g";
+    repo = pname;
+    rev = "830684f920333b8ff0946d6b807e8be642eec3ef";
+    sha256 = "17sjxhzhmz4893x3x054anp4xvqd1px15nv3fj2m7i6r0vbgpm0j";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   postFixup = ''
     wrapProgram $bin/bin/dep2nix \
-      --prefix PATH : ${nix-prefetch-git}/bin
+      --prefix PATH : ${nix-prefetch-scripts}/bin
   '';
 
   goDeps = ./deps.nix;

@@ -10,7 +10,7 @@ let
 
   toYesNo = b: if b then "yes" else "no";
 
-  gititShared = with cfg.haskellPackages; gitit + "/share/" + pkgs.stdenv.system + "-" + ghc.name + "/" + gitit.pname + "-" + gitit.version;
+  gititShared = with cfg.haskellPackages; gitit + "/share/" + pkgs.stdenv.hostPlatform.system + "-" + ghc.name + "/" + gitit.pname + "-" + gitit.version;
 
   gititWithPkgs = hsPkgs: extras: hsPkgs.ghcWithPackages (self: with self; [ gitit ] ++ (extras self));
 

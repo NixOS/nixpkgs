@@ -2,8 +2,6 @@
 , libcanberra-gtk3, intltool, dvdauthor, libburn, libisofs
 , vcdimager, wrapGAppsHook, hicolor-icon-theme }:
 
-# libdvdcss is "too old" (in fast "too new"), see https://bugs.launchpad.net/ubuntu/+source/brasero/+bug/611590
-
 let
   major = "3.12";
   minor = "2";
@@ -45,7 +43,7 @@ in stdenv.mkDerivation rec {
     description = "A Gnome CD/DVD Burner";
     homepage = https://wiki.gnome.org/Apps/Brasero;
     maintainers = [ maintainers.bdimcheff ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
-  version = "1.20.4";
+  version = "1.25.0";
 
   src = fetchurl {
     url = "https://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "0sjkmclcb1r77015wllsyz26272br3s17v6b1q2xwb2nm2gnwx9k";
+    sha256 = "1laiscq8yvynw862calkgbz9irrdkmd5l821q6a6wik1ifd186c1";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
@@ -24,8 +24,12 @@ in stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    # TODO(Profpatsch): mupdf support
     "--with-pdftops=pdftops"
     "--with-pdftops-path=${poppler_utils}/bin/pdftops"
+    "--with-gs-path=${ghostscript}/bin/gs"
+    "--with-pdftocairo-path=${poppler_utils}/bin/pdftocairo"
+    "--with-ippfind-path=${cups}/bin/ippfind"
     "--enable-imagefilters"
     "--with-rcdir=no"
     "--with-shell=${stdenv.shell}"

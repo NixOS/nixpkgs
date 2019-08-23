@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, yubikey-personalization, qtbase, qmake, libyubikey }:
+{ stdenv, fetchurl, mkDerivation, pkgconfig, yubikey-personalization, qtbase, qmake, libyubikey }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "yubikey-personalization-gui-3.1.25";
 
   src = fetchurl {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [ yubikey-personalization qtbase libyubikey ];
-  
+
   installPhase = ''
     mkdir -p $out/bin
     cp build/release/yubikey-personalization-gui $out/bin
@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     description = "A QT based cross-platform utility designed to facilitate reconfiguration of the Yubikey";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

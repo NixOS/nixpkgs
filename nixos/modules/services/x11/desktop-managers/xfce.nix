@@ -53,14 +53,11 @@ in
 
       # Supplies some abstract icons such as:
       # utilities-terminal, accessories-text-editor
-      gnome3.defaultIconTheme
+      gnome3.adwaita-icon-theme
 
       hicolor-icon-theme
       tango-icon-theme
       xfce4-icon-theme
-
-      desktop-file-utils
-      shared-mime-info
 
       # Needed by Xfce's xinitrc script
       # TODO: replace with command -v
@@ -69,7 +66,6 @@ in
       exo
       garcon
       gtk-xfce-engine
-      gvfs
       libxfce4ui
       tumbler
       xfconf
@@ -100,15 +96,10 @@ in
     environment.pathsToLink = [
       "/share/xfce4"
       "/share/themes"
-      "/share/mime"
-      "/share/desktop-directories"
       "/share/gtksourceview-2.0"
     ];
 
-    environment.variables = {
-      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-      GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
-    };
+    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     services.xserver.desktopManager.session = [{
       name = "xfce";
@@ -132,5 +123,7 @@ in
     # Enable helpful DBus services.
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
+    services.gvfs.enable = true;
+    services.gvfs.package = pkgs.xfce.gvfs;
   };
 }

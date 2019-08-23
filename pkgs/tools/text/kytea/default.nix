@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc-O3.patch ];
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+
   meta = with stdenv.lib; {
     homepage = http://www.phontron.com/kytea/;
     description = "General toolkit developed for analyzing text";
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
 
     maintainers = with maintainers; [ ericsagnes ndowens ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

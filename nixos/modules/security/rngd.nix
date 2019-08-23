@@ -2,25 +2,34 @@
 
 with lib;
 
+let
+  cfg = config.security.rngd;
+in
 {
   options = {
-    security.rngd.enable = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to enable the rng daemon, which adds entropy from
-        hardware sources of randomness to the kernel entropy pool when
-        available.
-      '';
+    security.rngd = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable the rng daemon, which adds entropy from
+          hardware sources of randomness to the kernel entropy pool when
+          available.
+        '';
+      };
+      debug = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable debug output (-d).";
+      };
     };
   };
 
-  config = mkIf config.security.rngd.enable {
+  config = mkIf cfg.enable {
     services.udev.extraRules = ''
       KERNEL=="random", TAG+="systemd"
       SUBSYSTEM=="cpu", ENV{MODALIAS}=="cpu:type:x86,*feature:*009E*", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
       KERNEL=="hw_random", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
-      ${if config.services.tcsd.enable then "" else ''KERNEL=="tpm0", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"''}
     '';
 
     systemd.services.rngd = {
@@ -30,8 +39,15 @@ with lib;
 
       description = "Hardware RNG Entropy Gatherer Daemon";
 
-      serviceConfig.ExecStart = "${pkgs.rng_tools}/sbin/rngd -f -v" +
-        (if config.services.tcsd.enable then " --no-tpm=1" else "");
+      serviceConfig = {
+        ExecStart = "${pkgs.rng-tools}/sbin/rngd -f"
+          + optionalString cfg.debug " -d";
+        NoNewPrivileges = true;
+        PrivateNetwork = true;
+        PrivateTmp = true;
+        ProtectSystem = "full";
+        ProtectHome = true;
+      };
     };
   };
 }

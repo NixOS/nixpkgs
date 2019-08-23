@@ -13,10 +13,6 @@ build-idris-package  {
     sha256 = "0cfp58lhm2g0g1vrpb0mh71qb44n2yvg5sil9ndyf2sqd5ria6yq";
   };
 
-  postUnpack = ''
-    rm source/test.ipkg
-  '';
-
   meta = {
     description = "A small bifunctor library for idris";
     homepage = https://github.com/japesinator/Idris-Bifunctors;

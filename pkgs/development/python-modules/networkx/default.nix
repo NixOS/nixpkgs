@@ -7,12 +7,13 @@
 
 buildPythonPackage rec {
   pname = "networkx";
-  version = "2.1";
+  # upgrade may break sage, please test the sage build or ping @timokau on upgrade
+  version = "2.2";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "64272ca418972b70a196cb15d9c85a5a6041f09a2f32e0d30c0255f25d458bb1";
+    sha256 = "12swxb15299v9vqjsq4z8rgh5sdhvpx497xwnhpnb0gynrx6zra5";
   };
 
   checkInputs = [ nose ];

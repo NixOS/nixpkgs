@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "1.7.3";
+  version = "1.7.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e32d30563b90c4f88ff042d4d891b5e8ed1f6cdca0adab95e9c2ce2603087436";
+    sha256 = "137vwb9544vjxkwnbr98x0f4p6ri5i678wxxxgbsx4kdyrs83a58";
   };
 
   # No tests included in archive
@@ -19,5 +19,6 @@ buildPythonPackage rec {
     description = "The core Python library for accessing Google APIs";
     homepage = https://github.com/google/google-api-python-client;
     license = licenses.asl20;
+    maintainers = with maintainers; [ primeos ];
   };
 }

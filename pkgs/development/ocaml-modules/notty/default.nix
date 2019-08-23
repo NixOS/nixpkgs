@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
     sha256 = "0wdfmgx1mz77s7m451vy8r9i4iqwn7s7b39kpbpckf3w9417riq0";
   };
 
-  unpackCmd = "tar -xjf $curSrc";
-
   buildInputs = [ ocaml findlib ocamlbuild topkg ocb-stubblr ];
   propagatedBuildInputs = [ result uucp uuseg uutf ] ++
                           optional withLwt lwt;

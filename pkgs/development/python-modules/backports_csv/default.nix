@@ -3,11 +3,11 @@
 buildPythonPackage rec {
 
   pname = "backports.csv";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bed884eeb967c8d6f517dfcf672914324180f1e9ceeb0376fde2c4c32fd7008d";
+    sha256 = "0vdx5jlhs91iizc8j8l8811nqprwvdx39pgkdc82w2qkfgzxyxqj";
   };
 
   propagatedBuildInputs = [ future ];

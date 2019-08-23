@@ -1,17 +1,28 @@
-{ stdenv, fetchurl, pkgconfig, libnfc }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, libnfc }:
 
 stdenv.mkDerivation rec {
-  name = "mfoc-${version}";
-  version = "0.10.6";
+  pname = "mfoc";
+  version = "0.10.7";
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/mfoc/${name}.tar.gz";
-    sha1 = "3adce3029dce9124ff3bc7d0fad86fa0c374a9e3";
+  src = fetchFromGitHub {
+    owner = "nfc-tools";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "0hbg1fn4000qdg1cfc7y8l0vh1mxlxcz7gapkcq54xp2l6kk1z65";
   };
 
-  patches = [./mf_mini.patch];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/nfc-tools/mfoc/commit/f13efb0a6deb1d97ba945d555a6a5d6be89b593f.patch";
+      sha256 = "109gqzp8rdsjvj0nra686vy0dpd2bl6q5v9m4v98cpxkbz496450";
+    })
+    (fetchpatch {
+      url = "https://github.com/nfc-tools/mfoc/commit/00eae36f891bc4580103e3b54f0bb5228af2cdef.patch";
+      sha256 = "1w56aj96g776f37j53jmf3hk21x4mqik3l2bmghrdp8drixc8bzk";
+    })
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libnfc ];
 
   meta = with stdenv.lib; {

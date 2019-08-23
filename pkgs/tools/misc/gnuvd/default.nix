@@ -8,9 +8,10 @@ stdenv.mkDerivation {
     sha256 = "0mpy76a0pxy62zjiihlzmvl4752hiwxhfs8rm1v5zgdr78acxyxz";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Command-line dutch dictionary application";
     homepage = http://www.djcbsoftware.nl/code/gnuvd/;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

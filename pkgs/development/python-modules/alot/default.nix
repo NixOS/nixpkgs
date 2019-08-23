@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "alot";
-  version = "0.7";
+  version = "0.8";
   outputs = [ "out" ] ++ lib.optional withManpage "man";
 
-  disabled = isPy3k;
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
     rev = "${version}";
-    sha256 = "1y932smng7qx7ybmqw4qh75b0lv9imfs5ak9fd0qhysij8kpmdhi";
+    sha256 = "1isn0p0i2a7dlbrdk5ib01xa1wgi6bi9ka4xl4vj8iw1q4i5fqv9";
   };
 
   nativeBuildInputs = lib.optional withManpage sphinx;
@@ -47,6 +47,8 @@ buildPythonPackage rec {
     mkdir -p $out/share/{applications,alot}
     cp -r extra/themes $out/share/alot
 
+    install -D extra/completion/alot-completion.zsh $out/share/zsh/site-functions/_alot
+
     sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
   '';
 
@@ -55,6 +57,6 @@ buildPythonPackage rec {
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python3 }:
 
 let
 
-  version = "2018.02.15";
+  major = "2019";
+  minor = "05";
+  patch = "21";
+
+  version = "${major}.${minor}.${patch}";
 
   serious-proton = stdenv.mkDerivation rec {
     name = "serious-proton-${version}";
@@ -12,7 +16,7 @@ let
       owner = "daid";
       repo = "SeriousProton";
       rev = "EE-${version}";
-      sha256 = "0b4n4pn7x3y63i9y15f8983zlpdvmx7151iph1lcc49j3hmpd0gy";
+      sha256 = "0q6in9rfs3b3qrfj2j6aj64z110k1yall4iqpp68rpp9r1dsh26p";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -38,21 +42,25 @@ stdenv.mkDerivation rec {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version}";
-    sha256 = "1by0wrw00frrlcs1kd003zkmfkwa1pnbnva2qn8km3xnl9chf11d";
+    sha256 = "0v2xz1wlji6m6311r3vpkdil3a7l1w5nsz5yqd1l8bimy11rdr55";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ serious-proton sfml glew libX11 python ];
+  buildInputs = [ serious-proton sfml glew libX11 python3 ];
 
   cmakeFlags = [
     "-DSERIOUS_PROTON_DIR=${serious-proton.src}"
+    "-DCPACK_PACKAGE_VERSION=${version}"
+    "-DCPACK_PACKAGE_VERSION_MAJOR=${major}"
+    "-DCPACK_PACKAGE_VERSION_MINOR=${minor}"
+    "-DCPACK_PACKAGE_VERSION_PATCH=${patch}"
   ];
 
   meta = with lib; {
     description = "Open source bridge simulator based on Artemis";
     homepage = https://daid.github.io/EmptyEpsilon/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz lheckemann ];
     platforms = platforms.linux;
   };
 }

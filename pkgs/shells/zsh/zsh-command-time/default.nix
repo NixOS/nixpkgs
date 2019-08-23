@@ -2,7 +2,8 @@
 
 # To make use of this plugin, need to add
 #   programs.zsh.interactiveShellInit = ''
-#     source ${pkgs.zsh-command-time}/share/zsh-command-time/command-time.plugin.zsh
+#     source ${pkgs.zsh-command-time}/share/zsh/plugins/command-time/command-time.plugin.zsh
+#     ZSH_COMMAND_TIME_COLOR="yellow"
 #     ZSH_COMMAND_TIME_MIN_SECONDS=3
 #     ZSH_COMMAND_TIME_ECHO=1
 #   '';
@@ -18,8 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "1bvyjgz6bhgg1nwr56r50p6fblgah6yiql55pgm5abnn2h876fjq";
   };
 
+  phases = [ "installPhase" ];
+
   installPhase = ''
-    install -D $src/command-time.plugin.zsh --target-directory=$out/share/zsh-command-time
+    install -Dm0444 $src/command-time.plugin.zsh --target-directory=$out/share/zsh/plugins/command-time
   '';
 
   meta = with stdenv.lib; {

@@ -1,36 +1,31 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python,
-  django, django_nose, six
+  django, six
 }:
 buildPythonPackage rec {
   pname = "django-compat";
-  version = "1.0.14";
+  version = "1.0.15";
 
   # the pypi packages don't include everything required for the tests
   src = fetchFromGitHub {
     owner = "arteria";
     repo = "django-compat";
     rev = "v${version}";
-    sha256 = "11g6ra6djkchqk44v8k7biaxd1v69qyyyask5l92vmrvb0qiwvm8";
+    sha256 = "1pr6v38ahrsvxlgmcx69s4b5q5082f44gzi4h3c32sccdc4pwqxp";
   };
 
   checkPhase = ''
     runHook preCheck
 
-    # we have to do a little bit of tinkering to convince the tests to run against the installed package, not the
-    # source directory
-    mkdir -p testbase/compat
-    pushd testbase
-    # note we're not copying the direct contents of compat/ (notably __init__.py) so python won't recognize this as a
-    # package, but the tests need to be in a specific path for the test templates to get picked up.
-    cp -r ../compat/tests compat/
-    cp ../runtests.py .
-    ${python.interpreter} runtests.py compat/tests
-    popd
+    # to convince the tests to run against the installed package, not the source directory, we extract the
+    # tests directory from it then dispose of the actual source
+    mv compat/tests .
+    rm -r compat
+    substituteInPlace runtests.py --replace compat.tests tests
+    ${python.interpreter} runtests.py
 
     runHook postCheck
   '';
 
-  checkInputs = [ django_nose ];
   propagatedBuildInputs = [ django six ];
 
   meta = with stdenv.lib; {

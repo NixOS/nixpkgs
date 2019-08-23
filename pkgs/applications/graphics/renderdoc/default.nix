@@ -1,29 +1,29 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
 , qtbase, qtx11extras, qtsvg, makeWrapper
 , vulkan-loader, xorg
-, python36, bison, pcre, automake, autoconf
+, python3, bison, pcre, automake, autoconf
 }:
 let
   custom_swig = fetchFromGitHub {
     owner = "baldurk";
     repo = "swig";
-    rev = "renderdoc-modified-5";
-    sha256 = "0ihrxbx56p5wn589fbbsns93fp91sypqdzfxdy7l7v9sf69a41mw";
+    rev = "renderdoc-modified-6";
+    sha256 = "00ykqlzx1k9iwqjlc54kfch7cnzsj53hxn7ql70dj3rxqzrnadc0";
   };
 in
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.4";
   name = "renderdoc-${version}";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "0l7pjxfrly4llryjnwk42dzx65n78wc98h56qm4yh04ja8fdbx2y";
+    sha256 = "1iann73r4yzkwnm13h4zqipqrp5i5cnkv27yyap0axz6h3npw94r";
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python36
+    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
   ];
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf ];

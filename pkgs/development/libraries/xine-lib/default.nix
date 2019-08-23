@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xorg, alsaLib, libGLU_combined, aalib
+{ stdenv, fetchurl, fetchpatch, pkgconfig, xorg, alsaLib, libGLU_combined, aalib
 , libvorbis, libtheora, speex, zlib, perl, ffmpeg
 , flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
 , libmpcdec
@@ -20,15 +20,24 @@ stdenv.mkDerivation rec {
     libcaca libpulseaudio libmng libcdio libv4l vcdimager libmpcdec
   ];
 
+  patches = [
+    (fetchpatch {
+      name = "0001-fix-XINE_PLUGIN_PATH-splitting.patch";
+      url = "https://sourceforge.net/p/xine/mailman/attachment/32394053-5e27-6558-f0c9-49e0da0bc3cc%40gmx.de/1/";
+      sha256 = "0nrsdn7myvjs8fl9rj6k4g1bnv0a84prsscg1q9n49gwn339v5rc";
+    })
+  ];
+
   NIX_LDFLAGS = "-lxcb-shm";
 
   propagatedBuildInputs = [zlib];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.xine-project.org/;
     description = "A high-performance, portable and reusable multimedia playback engine";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

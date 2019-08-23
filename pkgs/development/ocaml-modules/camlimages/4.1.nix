@@ -2,6 +2,10 @@
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.00";
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "camlimages-4.1.2 is not available for OCaml ${ocaml.version}"
+else
+
 let
   pname = "camlimages";
   version = "4.1.2";

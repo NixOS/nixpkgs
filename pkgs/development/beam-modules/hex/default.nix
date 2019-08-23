@@ -7,14 +7,14 @@ let
   };
 
   pkg = self: stdenv.mkDerivation rec {
-    name = "hex";
-    version = "v0.17.1";
+    pname = "hex";
+    version = "0.20.1";
 
     src = fetchFromGitHub {
         owner = "hexpm";
         repo = "hex";
-        rev = "${version}";
-        sha256 = "1s4asar1mcavzj3w37jcz243ka0z5jm0r42yws3h4aagawxxg02z";
+        rev = "v${version}";
+        sha256 = "0yxw7r31kk45b1nk48pajwwv9zl746kc9pwqfb73za8b1g8bgxd3";
     };
 
     setupHook = writeText "setupHook.sh" ''

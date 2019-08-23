@@ -1,20 +1,26 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, bison, flex, rdma-core }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, flex, rdma-core }:
 
 stdenv.mkDerivation rec {
   name = "opensm-${version}";
-  version = "3.3.20";
+  version = "3.3.22";
 
-  src = fetchgit {
-    url = git://git.openfabrics.org/~halr/opensm.git;
-    rev = name;
-    sha256 = "1hlrn5z32yd4w8bj4z6bsfv84pk178s4rnppbabyjqv1rg3c58wl";
+  src = fetchFromGitHub {
+    owner = "linux-rdma";
+    repo = "opensm";
+    rev = "${version}";
+    sha256 = "1nb6zl93ffbgb8z8728j0dxrmvk3pm0i6a1sn7mpn8ki1vkf2y0j";
   };
 
   nativeBuildInputs = [ autoconf automake libtool bison flex ];
 
   buildInputs = [ rdma-core ];
 
-  preConfigure = "bash ./autogen.sh";
+  preConfigure = ''
+    patchShebangs ./autogen.sh
+    ./autogen.sh
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Infiniband subnet manager";

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "mmc-utils-${version}";
-  version = "2015-11-18";
+  version = "2018-03-27";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git";
-    rev = "44f94b925894577f9ffcf2c418dd013a5e582648";
-    sha256 = "0hkdzc71pdnscbpdpgwljcchiyancarldjyd0w609sy18bky833x";
+    rev = "b4fe0c8c0e57a74c01755fa9362703b60d7ee49d";
+    sha256 = "01llwan5j40mv5p867f31lm87qh0hcyhy892say60y5pxc0mzpyn";
   };
 
   makeFlags = "CC=${stdenv.cc.targetPrefix}cc";

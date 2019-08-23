@@ -228,6 +228,7 @@ let
 
   createSSLOptsStr = o: ''
     ssl = {
+      cafile = "/etc/ssl/certs/ca-bundle.crt";
       key = "${o.key}";
       certificate = "${o.cert}";
       ${concatStringsSep "\n" (mapAttrsToList (name: value: "${name} = ${toLua value};") o.extraOptions)}
@@ -421,6 +422,13 @@ in
         description = "List of administrators of the current host";
       };
 
+      authentication = mkOption {
+        type = types.enum [ "internal_plain" "internal_hashed" "cyrus" "anonymous" ];
+        default = "internal_hashed";
+        example = "internal_plain";
+        description = "Authentication mechanism used for logins.";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -476,6 +484,7 @@ in
 
       s2s_secure_domains = ${toLua cfg.s2sSecureDomains}
 
+      authentication = ${toLua cfg.authentication}
 
       ${ cfg.extraConfig }
 
@@ -512,6 +521,7 @@ in
         RuntimeDirectory = [ "prosody" ];
         PIDFile = "/run/prosody/prosody.pid";
         ExecStart = "${cfg.package}/bin/prosodyctl start";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
 

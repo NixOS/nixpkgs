@@ -1,18 +1,15 @@
 { stdenv, buildPythonPackage, fetchurl, substituteAll,
-  pythonOlder,
   geos, gdal, pytz,
   withGdal ? false
 }:
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "1.11.13";
-
-  disabled = pythonOlder "2.7";
+  version = "1.11.23";
 
   src = fetchurl {
-    url = "http://www.djangoproject.com/m/releases/1.11/${pname}-${version}.tar.gz";
-    sha256 = "19d4c1rlbhmbvbxvskvqjb2aw4dnf2cqi1hhdh11ykdy1a7gxba6";
+    url = "https://www.djangoproject.com/m/releases/1.11/${pname}-${version}.tar.gz";
+    sha256 = "1qb9npkpvyafd1f4yjqyzhj78wp1ifg3awj41bd04v83idznv9jj";
   };
 
   patches = stdenv.lib.optionals withGdal [
@@ -34,8 +31,9 @@ buildPythonPackage rec {
   # too complicated to setup
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A high-level Python Web framework";
     homepage = https://www.djangoproject.com/;
+    license = licenses.bsd3;
   };
 }

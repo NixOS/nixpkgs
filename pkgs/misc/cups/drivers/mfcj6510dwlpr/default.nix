@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, utillinux, xxd
+{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, utillinux, xxd, runtimeShell
 , ghostscript, a2ps }:
 
 # Why:
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups ghostscript dpkg a2ps ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   brprintconf_mfcj6510dw_script = ''
-    #!/bin/sh
+    #!${runtimeShell}
     cd $(mktemp -d)
     ln -s @out@/usr/bin/brprintconf_mfcj6510dw_patched brprintconf_mfcj6510dw_patched
     ln -s @out@/opt/brother/Printers/mfcj6510dw/inf/brmfcj6510dwfunc brmfcj6510dwfunc

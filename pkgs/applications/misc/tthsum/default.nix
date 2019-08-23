@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     cp obj-unix/tthsum $out/bin
   '';
 
+  doCheck = !stdenv.isDarwin;
+
   meta = with stdenv.lib; {
     description = "An md5sum-alike program that works with Tiger/THEX hashes";
     longDescription = ''

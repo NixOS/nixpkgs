@@ -5,34 +5,44 @@ with lib;
 let
   cfg = config.services.prometheus.alertmanager;
   mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
-  alertmanagerYml =
-    if cfg.configText != null then
-      pkgs.writeText "alertmanager.yml" cfg.configText
-    else mkConfigFile;
+
+  checkedConfig = file: pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
+    ln -s ${file} $out
+    amtool check-config $out
+  '';
+
+  alertmanagerYml = let
+    yml = if cfg.configText != null then
+        pkgs.writeText "alertmanager.yml" cfg.configText
+        else mkConfigFile;
+    in checkedConfig yml;
+
+  cmdlineArgs = cfg.extraFlags ++ [
+    "--config.file ${alertmanagerYml}"
+    "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
+    "--log.level ${cfg.logLevel}"
+    ] ++ (optional (cfg.webExternalUrl != null)
+      "--web.external-url ${cfg.webExternalUrl}"
+    ) ++ (optional (cfg.logFormat != null)
+      "--log.format ${cfg.logFormat}"
+  );
 in {
   options = {
     services.prometheus.alertmanager = {
       enable = mkEnableOption "Prometheus Alertmanager";
 
-      user = mkOption {
-        type = types.str;
-        default = "nobody";
+      package = mkOption {
+        type = types.package;
+        default = pkgs.prometheus-alertmanager;
+        defaultText = "pkgs.alertmanager";
         description = ''
-          User name under which Alertmanager shall be run.
-        '';
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "nogroup";
-        description = ''
-          Group under which Alertmanager shall be run.
+          Package that should be used for alertmanager.
         '';
       };
 
       configuration = mkOption {
-        type = types.attrs;
-        default = {};
+        type = types.nullOr types.attrs;
+        default = null;
         description = ''
           Alertmanager configuration as nix attribute set.
         '';
@@ -80,7 +90,8 @@ in {
         type = types.str;
         default = "";
         description = ''
-          Address to listen on for the web interface and API.
+          Address to listen on for the web interface and API. Empty string will listen on all interfaces.
+          "localhost" will listen on 127.0.0.1 (but not ::1).
         '';
       };
 
@@ -99,33 +110,41 @@ in {
           Open port in firewall for incoming connections.
         '';
       };
-    };
-  };
 
-
-  config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
-
-    systemd.services.alertmanager = {
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
-      script = ''
-        ${pkgs.prometheus-alertmanager.bin}/bin/alertmanager \
-        --config.file ${alertmanagerYml} \
-        --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-        --log.level ${cfg.logLevel} \
-        ${optionalString (cfg.webExternalUrl != null) ''--web.external-url ${cfg.webExternalUrl} \''}
-        ${optionalString (cfg.logFormat != null) "--log.format ${cfg.logFormat}"}
-      '';
-
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        Restart  = "always";
-        PrivateTmp = true;
-        WorkingDirectory = "/tmp";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Extra commandline options when launching the Alertmanager.
+        '';
       };
     };
   };
+
+  config = mkMerge [
+    (mkIf cfg.enable {
+      assertions = singleton {
+        assertion = cfg.configuration != null || cfg.configText != null;
+        message = "Can not enable alertmanager without a configuration. "
+         + "Set either the `configuration` or `configText` attribute.";
+      };
+    })
+    (mkIf cfg.enable {
+      networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
+      systemd.services.alertmanager = {
+        wantedBy = [ "multi-user.target" ];
+        after    = [ "network.target" ];
+        serviceConfig = {
+          Restart  = "always";
+          DynamicUser = true;
+          WorkingDirectory = "/tmp";
+          ExecStart = "${cfg.package}/bin/alertmanager" +
+            optionalString (length cmdlineArgs != 0) (" \\\n  " +
+              concatStringsSep " \\\n  " cmdlineArgs);
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        };
+      };
+    })
+  ];
 }

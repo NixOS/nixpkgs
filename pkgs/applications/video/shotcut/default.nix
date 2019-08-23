@@ -1,24 +1,23 @@
-{ stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, pkgconfig, qtbase
-, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquickcontrols
-, qtgraphicaleffects, libmlt
-, qmake, makeWrapper, fetchpatch, qttools }:
+{ stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, mkDerivation
+, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
+, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools }:
 
 assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
 assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "shotcut-${version}";
-  version = "18.06.02";
+  version = "19.08.16";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1pqpgsb8ix1akq326chf46vvl5h02dwmdskskf2n6impygsy4x7v";
+    sha256 = "0alnnfgimfs8fjddkcfx4pzyijwz5dgnqic5qazaza6f4kf60801";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
     SDL2 frei0r gettext mlt libmlt
     qtbase qtmultimedia qtwebkit qtx11extras qtwebsockets qtquickcontrols
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-I${libmlt}/include/mlt++ -I${libmlt}/include/mlt";
-  qmakeFlags = [ "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease" ];
+  qmakeFlags = [ "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease" "SHOTCUT_VERSION=${version}" ];
 
   prePatch = ''
     sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
@@ -35,16 +34,15 @@ stdenv.mkDerivation rec {
     sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
   '';
 
-  patches = [ (fetchpatch {
-    url = https://github.com/mltframework/shotcut/commit/f304b7403cc7beb57b1610afd9c5c8173749e80b.patch;
-    name = "qt511.patch";
-    sha256 = "1ynvyjchcb33a33x4w1ddnah2gyzmnm125ailgg6xy60lqsnsmp9";
-    } ) ];
+  qtWrapperArgs = [
+    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2 ]}"
+    "--prefix PATH : ${mlt}/bin"
+    ];
 
   postInstall = ''
     mkdir -p $out/share/shotcut
     cp -r src/qml $out/share/shotcut/
-    wrapProgram $out/bin/shotcut --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL2 ]} --prefix PATH : ${mlt}/bin
   '';
 
   meta = with stdenv.lib; {

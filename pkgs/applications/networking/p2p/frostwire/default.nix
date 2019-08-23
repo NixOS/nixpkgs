@@ -75,7 +75,7 @@ in stdenv.mkDerivation {
     cp ${ { x86_64-darwin = "desktop/lib/native/*.dylib";
             x86_64-linux  = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
             i686-linux    = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
-          }.${stdenv.system} or (throw "unsupported system ${stdenv.system}")
+          }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
         } $out/lib
 
     cp -dpR ${desktopItem}/share $out
@@ -85,7 +85,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.frostwire.com/;
+    homepage = https://www.frostwire.com/;
     description = "BitTorrent Client and Cloud File Downloader";
     license = licenses.gpl2;
     maintainers = with maintainers; [ gavin ];

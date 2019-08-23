@@ -1,11 +1,12 @@
-{ stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, pkgconfig, cmake, qt5
-, bluez, ffmpeg, libao, libGLU_combined, pcre, gettext, libXrandr, libusb, lzo
-, libpthreadstubs, libXext, libXxf86vm, libXinerama, libSM, libXdmcp, readline
-, openal, udev, libevdev, portaudio, curl, alsaLib, miniupnpc, enet, mbedtls
-, soundtouch, sfml, vulkan-loader ? null, libpulseaudio ? null
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, pkgconfig, cmake
+, wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU_combined, pcre, gettext
+, libXrandr, libusb, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
+, libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsaLib
+, miniupnpc, enet, mbedtls, soundtouch, sfml
+, vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
-, CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
+, CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
 
 let
   desktopItem = makeDesktopItem {
@@ -20,41 +21,48 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "dolphin-emu-${version}";
-  version = "2018-07-02";
+  version = "5.0-10879";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "87c5d00e2085090e51c1d44e4fd271437123c722";
-    sha256 = "04f0my5k1vrj3pcg07m6wy4in4cs95db8367bp7zkraparmj1mjk";
+    rev = "c7fc9126aaf447a014af4aed195b17aa593dd49b";
+    sha256 = "1pf4mxacxhrkvvh9j49ackm8hahl8x0ligmann1pafsb4lw0xbnj";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig ]
-  ++ stdenv.lib.optionals stdenv.isLinux [ makeWrapper ];
+  ++ lib.optional stdenv.isLinux wrapQtAppsHook;
 
   buildInputs = [
     curl ffmpeg libao libGLU_combined pcre gettext libpthreadstubs libpulseaudio
     libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
     portaudio libusb libpng hidapi miniupnpc enet mbedtls soundtouch sfml
-    qt5.qtbase
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    qtbase
+  ] ++ lib.optionals stdenv.isLinux [
     bluez udev libevdev alsaLib vulkan-loader
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    CoreBluetooth cf-private OpenGL ForceFeedback IOKit
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreBluetooth OpenGL ForceFeedback IOKit
   ];
 
   cmakeFlags = [
     "-DUSE_SHARED_ENET=ON"
     "-DENABLE_LTO=ON"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DDOLPHIN_WC_REVISION=${src.rev}"
+    "-DDOLPHIN_WC_DESCRIBE=${version}"
+    "-DDOLPHIN_WC_BRANCH=master"
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
   ];
 
+  qtWrapperArgs = lib.optionals stdenv.isLinux [
+    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+  ];
+
   # - Allow Dolphin to use nix-provided libraries instead of building them
-  preConfigure = ''
+  postPatch = ''
     sed -i -e 's,DISTRIBUTOR "None",DISTRIBUTOR "NixOS",g' CMakeLists.txt
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
     sed -i -e 's,if(LIBUSB_FOUND AND NOT APPLE),if(LIBUSB_FOUND),g' \
       CMakeLists.txt
@@ -63,21 +71,17 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
     ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-master
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/dolphin-emu-nogui \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    wrapProgram $out/bin/dolphin-emu \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://dolphin-emu.org";
-    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ MP2E ];
+  meta = with lib; {
+    homepage = "https://dolphin-emu.org";
+    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ MP2E ashkitten ];
     branch = "master";
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.
+    broken = stdenv.isDarwin;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, dbus-glib,
   libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3,
-  desktop-file-utils, gnome3, mate, hicolor-icon-theme, wrapGAppsHook
+  desktop-file-utils, gnome3, gtk3, mate, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   name = "mate-control-center-${version}";
-  version = "1.20.3";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0wpi8b3zz10xd5i7ir7nd737a9vl4q17rc5nh8vfrqpyrcilqzkd";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0w9w3wkxksbhzyd96y1x6yxb0q5lkp16y8i42564b6njvwqch5a0";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     librsvg
     libappindicator-gtk3
-    gnome3.gtk
+    gtk3
     gnome3.dconf
     hicolor-icon-theme
     mate.mate-desktop
@@ -37,7 +37,21 @@ stdenv.mkDerivation rec {
     mate.mate-settings-daemon
   ];
 
-  configureFlags = "--disable-update-mimedb";
+  patches = [
+    # look up keyboard shortcuts in system data dirs
+    ./mate-control-center.keybindings-dir.patch
+  ];
+
+  configureFlags = [ "--disable-update-mimedb" ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # WM keyboard shortcuts
+      --prefix XDG_DATA_DIRS : "${mate.marco}/share"
+    )
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Utilities to configure the MATE desktop";

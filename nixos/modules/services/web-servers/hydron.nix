@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
-let cfg = config.services.hydron;
+let
+  cfg = config.services.hydron;
 in with lib; {
   options.services.hydron = {
     enable = mkEnableOption "hydron";
@@ -14,15 +15,47 @@ in with lib; {
 
     interval = mkOption {
       type = types.str;
-      default = "hourly";
+      default = "weekly";
       example = "06:00";
       description = ''
-        How often we run hydron import and possibly fetch tags. Runs by default every hour.
+        How often we run hydron import and possibly fetch tags. Runs by default every week.
 
         The format is described in
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
         <manvolnum>7</manvolnum></citerefentry>.
       '';
+    };
+
+    password = mkOption {
+      type = types.str;
+      default = "hydron";
+      example = "dumbpass";
+      description = "Password for the hydron database.";
+    };
+
+    passwordFile = mkOption {
+      type = types.path;
+      default = "/run/keys/hydron-password-file";
+      example = "/home/okina/hydron/keys/pass";
+      description = "Password file for the hydron database.";
+    };
+
+    postgresArgs = mkOption {
+      type = types.str;
+      description = "Postgresql connection arguments.";
+      example = ''
+        {
+          "driver": "postgres",
+          "connection": "user=hydron password=dumbpass dbname=hydron sslmode=disable"
+        }
+      '';
+    };
+
+    postgresArgsFile = mkOption {
+      type = types.path;
+      default = "/run/keys/hydron-postgres-args";
+      example = "/home/okina/hydron/keys/postgres";
+      description = "Postgresql connection arguments file.";
     };
 
     listenAddress = mkOption {
@@ -47,20 +80,40 @@ in with lib; {
   };
 
   config = mkIf cfg.enable {
+    services.hydron.passwordFile = mkDefault (pkgs.writeText "hydron-password-file" cfg.password);
+    services.hydron.postgresArgsFile = mkDefault (pkgs.writeText "hydron-postgres-args" cfg.postgresArgs);
+    services.hydron.postgresArgs = mkDefault ''
+      {
+        "driver": "postgres",
+        "connection": "user=hydron password=${cfg.password} host=/run/postgresql dbname=hydron sslmode=disable"
+      }
+    '';
+
+    services.postgresql = {
+      enable = true;
+      ensureDatabases = [ "hydron" ];
+      ensureUsers = [
+        { name = "hydron";
+          ensurePermissions = { "DATABASE hydron" = "ALL PRIVILEGES"; };
+        }
+      ];
+    };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0750 hydron hydron - -"
+      "d '${cfg.dataDir}/.hydron' - hydron hydron - -"
+      "d '${cfg.dataDir}/images' - hydron hydron - -"
+      "Z '${cfg.dataDir}' - hydron hydron - -"
+
+      "L+ '${cfg.dataDir}/.hydron/db_conf.json' - - - - ${cfg.postgresArgsFile}"
+    ];
+
     systemd.services.hydron = {
       description = "hydron";
-      after = [ "network.target" ];
+      after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        # Ensure folder exists and permissions are correct
-        mkdir -p ${escapeShellArg cfg.dataDir}/images
-        chmod 750 ${escapeShellArg cfg.dataDir}
-        chown -R hydron:hydron ${escapeShellArg cfg.dataDir}
-      '';
-
       serviceConfig = {
-        PermissionsStartOnly = true;
         User = "hydron";
         Group = "hydron";
         ExecStart = "${pkgs.hydron}/bin/hydron serve"
@@ -83,23 +136,30 @@ in with lib; {
 
     systemd.timers.hydron-fetch = {
       description = "Automatically import paths into hydron and possibly fetch tags";
-      after = [ "network.target" ];
+      after = [ "network.target" "hydron.service" ];
       wantedBy = [ "timers.target" ];
-      timerConfig.OnCalendar = cfg.interval;
+
+      timerConfig = {
+        Persistent = true;
+        OnCalendar = cfg.interval;
+      };
     };
 
     users = {
       groups.hydron.gid = config.ids.gids.hydron;
-      
+
       users.hydron = {
         description = "hydron server service user";
         home = cfg.dataDir;
-        createHome = true;
         group = "hydron";
         uid = config.ids.uids.hydron;
       };
     };
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "hydron" "baseDir" ] [ "services" "hydron" "dataDir" ])
+  ];
 
   meta.maintainers = with maintainers; [ chiiruno ];
 }

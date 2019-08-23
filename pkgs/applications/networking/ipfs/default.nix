@@ -1,25 +1,20 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchgx }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "ipfs-${version}";
-  version = "0.4.15";
+buildGoModule rec {
+  pname = "ipfs";
+  version = "0.4.21";
   rev = "v${version}";
 
   goPackagePath = "github.com/ipfs/go-ipfs";
-
-  extraSrcPaths = [
-    (fetchgx {
-      inherit name src;
-      sha256 = "0bysfh2hd040i8lnyzhy96frflls4kdnlw748cl51ngqg3rwbhgz";
-    })
-  ];
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "go-ipfs";
     inherit rev;
-    sha256 = "1ry4a4pq26dbwy2b9cwi3xjaiyq6sng9lxnb1n30zxhp4w7rla2h";
+    sha256 = "0jlj89vjy4nw3x3j45r16y8bph5ss5lp907pjgqvad0naxbf99b0";
   };
+
+  modSha256 = "0d9rq0hig9jwv9jfajfyj2111arikqzdnyhf5aqkwahcblpx54iy";
 
   meta = with stdenv.lib; {
     description = "A global, versioned, peer-to-peer filesystem";

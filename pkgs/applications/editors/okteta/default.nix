@@ -4,16 +4,16 @@
 
 stdenv.mkDerivation rec {
   name = "okteta-${version}";
-  version = "17.12.3";
+  version = "0.26.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/applications/${version}/src/${name}.tar.xz";
-    sha256 = "03wsv83l1cay2dpcsksad124wzan7kh8zxdw1h0yicn398kdbck4";
+    url = "mirror://kde/stable/okteta/${version}/src/${name}.tar.xz";
+    sha256 = "0k38hd9wq6jvzy0225y61rzr7lgwbac1haalhsrfpmyjy6d833dv";
   };
-  
+
   nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];
   buildInputs = [ shared-mime-info ];
-  
+
   propagatedBuildInputs = [
     kconfig
     kinit
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     karchive
     kcrash
   ];
-  
+
   meta = with stdenv.lib; {
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg bkchr ];

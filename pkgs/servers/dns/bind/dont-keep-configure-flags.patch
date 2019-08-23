@@ -1,8 +1,8 @@
 diff --git a/bin/named/include/named/globals.h b/bin/named/include/named/globals.h
-index 388dc97..3c6135c 100644
+index b8e356b..cbe6c94 100644
 --- a/bin/named/include/named/globals.h
 +++ b/bin/named/include/named/globals.h
-@@ -65,7 +65,9 @@ EXTERN const char *		named_g_version		INIT(VERSION);
+@@ -68,7 +68,9 @@ EXTERN const char *		named_g_version		INIT(VERSION);
  EXTERN const char *		named_g_product		INIT(PRODUCT);
  EXTERN const char *		named_g_description	INIT(DESCRIPTION);
  EXTERN const char *		named_g_srcid		INIT(SRCID);
@@ -13,21 +13,21 @@ index 388dc97..3c6135c 100644
  EXTERN in_port_t		named_g_port		INIT(0);
  EXTERN isc_dscp_t		named_g_dscp		INIT(-1);
 diff --git a/bin/named/main.c b/bin/named/main.c
-index 4fb0566..60d56cd 100644
+index 62d9ce3..342abdc 100644
 --- a/bin/named/main.c
 +++ b/bin/named/main.c
-@@ -672,8 +672,10 @@ parse_command_line(int argc, char *argv[]) {
- 			       (*named_g_description != '\0') ? " " : "",
- 			       named_g_description, named_g_srcid);
- 			printf("running on %s\n", named_os_uname());
-+			#if 0
- 			printf("built by %s with %s\n",
- 			       named_g_builder, named_g_configargs);
-+			#endif
+@@ -459,8 +459,10 @@ printversion(bool verbose) {
+ 	}
+ 
+ 	printf("running on %s\n", named_os_uname());
++#if 0
+ 	printf("built by %s with %s\n",
+ 	       named_g_builder, named_g_configargs);
++#endif
  #ifdef __clang__
- 			printf("compiled by CLANG %s\n", __VERSION__);
+ 	printf("compiled by CLANG %s\n", __VERSION__);
  #else
-@@ -1075,9 +1077,11 @@ setup(void) {
+@@ -1001,9 +1003,11 @@ setup(void) {
  		      NAMED_LOGMODULE_MAIN, ISC_LOG_NOTICE,
  		      "running on %s", named_os_uname());
  

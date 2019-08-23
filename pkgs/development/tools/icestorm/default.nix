@@ -1,25 +1,51 @@
-{ stdenv, fetchFromGitHub, python3, libftdi, pkgconfig }:
+{ stdenv, fetchFromGitHub
+, pkgconfig, libftdi
+, python3, pypy3
+
+# PyPy yields large improvements in build time and runtime performance,
+# and IceStorm isn't intended to be used as a library other than by the
+# nextpnr build process (which is also sped up by using PyPy), so we
+# use it by default. See 18839e1 for more details.
+, usePyPy ? stdenv.hostPlatform.system == "x86_64-linux"
+}:
 
 stdenv.mkDerivation rec {
-  name = "icestorm-${version}";
-  version = "2018.05.03";
+  pname = "icestorm";
+  version = "2019.08.15";
+
+  pythonPkg = if usePyPy then pypy3 else python3;
+  pythonInterp = pythonPkg.interpreter;
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "237280ce44f72c7b2e1ca671d5113dba34cc4fca";
-    sha256 = "0r9xh024snaf1g2r5k524yl6lvf5rkfhqwjzcixh1m12012i5hrh";
+    rev    = "95949315364f8d9b0c693386aefadf44b28e2cf6";
+    sha256 = "05q1vxlf9l5z9mam8jbv58jqj7nsd8v7ssy753sharpgzzgdc8a2";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python3 libftdi ];
+  buildInputs = [ pythonPkg libftdi ];
   makeFlags = [ "PREFIX=$(out)" ];
+
+  enableParallelBuilding = true;
 
   # fix icebox_vlog chipdb path. icestorm issue:
   #   https://github.com/cliffordwolf/icestorm/issues/125
+  #
+  # also, fix up the path to the chosen Python interpreter. for pypy-compatible
+  # platforms, it offers significant performance improvements.
   patchPhase = ''
     substituteInPlace ./icebox/icebox_vlog.py \
       --replace /usr/local/share "$out/share"
+
+    for x in icefuzz/Makefile icebox/Makefile icetime/Makefile; do
+      substituteInPlace "$x" --replace python3 "${pythonInterp}"
+    done
+
+    for x in $(find . -type f -iname '*.py'); do
+      substituteInPlace "$x" \
+        --replace '/usr/bin/env python3' '${pythonInterp}'
+    done
   '';
 
   meta = {
@@ -30,9 +56,9 @@ stdenv.mkDerivation rec {
       FPGAs and providing simple tools for analyzing and
       creating bitstream files.
     '';
-    homepage = http://www.clifford.at/icestorm/;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage    = http://www.clifford.at/icestorm/;
+    license     = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

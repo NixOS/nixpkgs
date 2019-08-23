@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "/bin/sh"
+    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "${stdenv.shell}"
     ./autogen.sh --prefix $out
   '';
 

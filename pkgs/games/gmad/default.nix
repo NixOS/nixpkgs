@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     else if stdenv.isDarwin then "gmad_osx"
     else "gmad";
 
-  configurePhase = "premake4 --bootil_lib=${bootil}/lib --bootil_inc=${bootil}/include gmake";
+  premakeFlags = "--bootil_lib=${bootil}/lib --bootil_inc=${bootil}/include";
 
   installPhase = ''
     mkdir -p $out/bin

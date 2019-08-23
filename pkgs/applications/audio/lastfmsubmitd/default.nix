@@ -1,4 +1,4 @@
-{ fetchurl, pythonPackages }:
+{ lib, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "lastfmsubmitd";
@@ -15,6 +15,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     homepage = https://www.red-bean.com/decklin/lastfmsubmitd/;
+    license = lib.licenses.mit;
     description = "An last.fm audio scrobbler and daemon";
   };
 }
