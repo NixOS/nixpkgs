@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
 
 stdenv.mkDerivation rec {
-  version = "1.23.0";
+  version = "1.23.0"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
   name = "grpc-${version}";
   src = fetchFromGitHub {
     owner = "grpc";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
-    maintainers = [ maintainers.lnl7 ];
+    maintainers = [ maintainers.lnl7 maintainers.marsam ];
     homepage = https://grpc.io/;
   };
 }
