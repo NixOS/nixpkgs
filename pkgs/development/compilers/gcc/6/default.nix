@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
@@ -58,6 +58,10 @@ let version = "6.5.0";
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
+      ++ optional (targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
+        url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch";
+        sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
+      })
       ;
 
     javaEcj = fetchurl {
