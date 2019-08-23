@@ -69,7 +69,7 @@ let majorVersion = "8";
 in
 
 stdenv.mkDerivation ({
-  name = "${crossNameAddon}${name}${if stripped then "" else "-debug"}-${version}";
+  pname = "${crossNameAddon}${name}${if stripped then "" else "-debug"}";
   inherit version;
 
   builder = ../builder.sh;
