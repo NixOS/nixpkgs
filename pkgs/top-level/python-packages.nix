@@ -4691,6 +4691,8 @@ in {
 
   robotframework = callPackage ../development/python-modules/robotframework { };
 
+  robotframework-databaselibrary = callPackage ../development/python-modules/robotframework-databaselibrary { };
+
   robotframework-requests = callPackage ../development/python-modules/robotframework-requests { };
 
   robotframework-ride = callPackage ../development/python-modules/robotframework-ride { };
