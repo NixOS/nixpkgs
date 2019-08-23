@@ -98,7 +98,7 @@
 , libXv ? null # Xlib support
 , libXext ? null # Xlib support
 , lzma ? null # xz-utils
-, nvenc ? !stdenv.isDarwin, nv-codec-headers ? null # NVIDIA NVENC support
+, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64, nv-codec-headers ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
@@ -164,6 +164,9 @@
  *   libvpx(stable 1.3.0) openal openjpeg pulseaudio rtmpdump samba vid-stab
  *   wavpack x265 xavs
  *
+ * Need fixes to support AArch64:
+ *   libmfx(intel-media-sdk) nvenc
+ *
  * Not supported:
  *   stagefright-h264(android only)
  *
@@ -176,7 +179,7 @@
  */
 
 let
-  inherit (stdenv) isCygwin isDarwin isFreeBSD isLinux;
+  inherit (stdenv) isCygwin isDarwin isFreeBSD isLinux isAarch64;
   inherit (stdenv.lib) optional optionals optionalString enableFeature;
 in
 
@@ -350,7 +353,7 @@ stdenv.mkDerivation rec {
     (enableFeature (if isLinux then libdc1394 != null && libraw1394 != null else false) "libdc1394")
     (enableFeature (libiconv != null) "iconv")
     #(enableFeature (if isLinux then libiec61883 != null && libavc1394 != null && libraw1394 != null else false) "libiec61883")
-    (enableFeature (if isLinux then libmfx != null else false) "libmfx")
+    (enableFeature (if isLinux && !isAarch64 then libmfx != null else false) "libmfx")
     (enableFeature (libmodplug != null) "libmodplug")
     (enableFeature (libmysofa != null) "libmysofa")
     #(enableFeature (libnut != null) "libnut")
@@ -423,7 +426,7 @@ stdenv.mkDerivation rec {
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
-    ++ optional (isLinux && libmfx != null) libmfx
+    ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
