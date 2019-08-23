@@ -12,10 +12,10 @@
 , kio
 , plasma-framework
 , qttools
-, webviewSupport ? false
-, jsSupport ? false
-, kioPluginSupport ? false
-, plasmoidSupport  ? false
+, webviewSupport ? true
+, jsSupport ? true
+, kioPluginSupport ? true
+, plasmoidSupport  ? true
 , systemdSupport ? true
 }:
 

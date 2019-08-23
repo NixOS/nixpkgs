@@ -20749,12 +20749,12 @@ in
 
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
-  syncthingtray-minimal = libsForQt5.callPackage ../applications/misc/syncthingtray { };
-  syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray {
-    webviewSupport = true;
-    jsSupport = true;
-    kioPluginSupport = true;
-    plasmoidSupport = true;
+  syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray { };
+  syncthingtray-minumal = libsForQt5.callPackage ../applications/misc/syncthingtray {
+    webviewSupport = false;
+    jsSupport = false;
+    kioPluginSupport = false;
+    plasmoidSupport = false;
     systemdSupport = true;
   };
 
