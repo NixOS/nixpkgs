@@ -1,49 +1,105 @@
-window.onload = function() {
-    surround = document.createElement("div");
-    surround.innerHTML = `
-    <div id='searchstatus'>LOADING...</div>
-    <form>
-      <input type='search' onkeyup='dosort(this.value);' />
-    </form>
-    <h2>search results for <tt id='searchterm'>(nothing)</tt></h2>
-    <div id='searchresult'></div>
-    <div class='navheader'>`;
-    document.getElementsByTagName("body")[0].prepend(surround);
+"use strict";
 
-fetch("index.json")
-    .then(response => response.json())
-    .then(v => window.index = elasticlunr.Index.load(v))
-    .then(v => document.getElementById("searchstatus").innerText = "Ready!")
-/*index = elasticlunr.Index.load(window.v)*/
+document.addEventListener("DOMContentLoaded", function(event) {
+    // Adds the search engine
+    new SearchEngine();
+});
 
-}
-
-function removeChildren(elem) {
-    while (elem.firstChild) {
-        elem.removeChild(elem.firstChild);
+const getDocumentationTitle = () => {
+    const $link = document.querySelector("head > link[rel=home]");
+    if (!$link) {
+        return "";
     }
-}
 
-function dosort(term) {
-    searchresults = document.getElementById("searchresult")
-    searchterm = document.getElementById("searchterm")
-    result = window.index.search(term);
-    removeChildren(searchresults);
-    for(var i = 0; i < result.length ; i++){
-        var resultElem = document.createElement('li');
-        resultElem.innerHTML = '<a href="' + result[i].ref + '">' + result[i].doc.title + '</a>' +
-            '<p>' + makeTeaser(result[i].doc.body, term.split(' ')) + '</p>';
+    return $link.title;
+};
 
-        searchresults.appendChild(resultElem);
+const SearchEngine = function() {
+    const self = this;
+
+    // http://elasticlunr.com/docs/configuration.js.html
+    const cfg = {
+        //fields: {title: {boost: 2}, body: {boost: 1}}
+    };
+    window.search = this;
+
+    const initDOM = function() {
+        const root = document.createElement("div");
+        root.id = "search-engine";
+        root.classList.add("is-loading");
+        self.root = root;
+
+        // Lazily builds a DOM.
+        root.innerHTML = `
+            <div class="status">(Fetching search index...)</div>
+            <input type="search" />
+            <div class="results"></div>
+        `;
+        document.getElementsByTagName("body")[0].prepend(root);
+
+        // Attaches to input events
+        const input = root.querySelector("input");
+        self.input = input;
+        input.placeholder = "Search the " + getDocumentationTitle() + "...";
+        input.addEventListener("keyup", (event) => search(event.target.value));
+    };
+
+    const search = function (term) {
+        const $results = self.root.querySelector(".results");
+        const results = self.index.search(term, cfg);
+
+        // Lazily empties search results
+        $results.innerHTML = "";
+        $results.classList.remove("is-empty");
+
+        if (term.trim() === "") {
+            return;
+        }
+
+        const resultsList = document.createElement("ul");
+        resultsList.append(...results.map((result) => {
+            const el = document.createElement("li");
+            const link = document.createElement("a");
+            link.href = result.ref;
+            link.innerText = result.doc.title
+            el.append(link);
+            const para = document.createElement("p");
+            para.innerHTML = makeTeaser(result.doc.body, term.split(" "))
+            el.append(para);
+
+            return el;
+        }));
+        $results.append(resultsList);
+
+        if (results.length === 0) {
+            $results.classList.add("is-empty");
+            $results.innerText = "Nothing could be found for “" + term + "”";
+        }
+
     }
-    searchterm.innerText = term;
+    self.search = search;
+
+    initDOM();
+
+    // Fetches the search index
+    fetch("index.json")
+        .then((response) => response.json())
+        .then((v) => {
+            self.index = elasticlunr.Index.load(v);
+            self.root.querySelector(".status").innerText = "Ready!";
+            self.root.classList.remove("is-loading");
+
+            // Ensures a query entered while loading is searched.
+            search(self.input.value);
+        })
+    ;
 }
 
 // lifted from rust-lang-nursery/mdBook 84d4063e4a60f0b0fc2058b9f100f91244d60f99
 // (MPL-2.0)
 function makeTeaser(body, searchterms) {
     //
-    results_options = {
+    const results_options = {
         teaser_word_count: 30,
     };
 
