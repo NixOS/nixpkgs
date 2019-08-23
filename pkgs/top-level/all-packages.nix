@@ -20753,8 +20753,8 @@ in
   syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray {
     webviewSupport = true;
     jsSupport = true;
-    enableKioPluginSupport = true;
-    enablePlasmoidSupport = true;
+    kioPluginSupport = true;
+    plasmoidSupport = true;
     systemdSupport = true;
   };
 

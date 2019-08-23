@@ -14,8 +14,8 @@
 , qttools
 , webviewSupport ? false
 , jsSupport ? false
-, enableKioPluginSupport ? false
-, enablePlasmoidSupport  ? false
+, kioPluginSupport ? false
+, plasmoidSupport  ? false
 , systemdSupport ? true
 }:
 
@@ -33,8 +33,8 @@ mkDerivation rec {
   buildInputs = [ qtbase cpp-utilities qtutilities ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
-    ++ lib.optionals enableKioPluginSupport [ kio ]
-    ++ lib.optionals enablePlasmoidSupport [ extra-cmake-modules plasma-framework ]
+    ++ lib.optionals kioPluginSupport [ kio ]
+    ++ lib.optionals plasmoidSupport [ extra-cmake-modules plasma-framework ]
   ;
 
   nativeBuildInputs = [ cmake qttools ];
@@ -42,8 +42,8 @@ mkDerivation rec {
   cmakeFlags = [
     # See https://github.com/Martchus/syncthingtray/issues/42
     "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"
-  ] ++ lib.optionals (!enablePlasmoidSupport) ["-DNO_PLASMOID=ON"]
-    ++ lib.optionals (!enableKioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
+  ] ++ lib.optionals (!plasmoidSupport) ["-DNO_PLASMOID=ON"]
+    ++ lib.optionals (!kioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
   ;
 
