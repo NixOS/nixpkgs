@@ -348,6 +348,12 @@
        What used to be called <literal>emacsPackagesNg</literal> is now simply called <literal>emacsPackages</literal>.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       <option>services.xserver.desktopManager.xterm</option> is now disabled by default.
+       It was not useful except for debugging purposes and was confusingly set as default in some circumstances.
+     </para>
+   </listitem>
 
   </itemizedlist>
  </section>
