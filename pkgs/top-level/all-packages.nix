@@ -16527,7 +16527,7 @@ in
 
   upower = callPackage ../os-specific/linux/upower { };
 
-  usbguard = libsForQt5.callPackage ../os-specific/linux/usbguard {
+  usbguard = callPackage ../os-specific/linux/usbguard {
     libgcrypt = null;
   };
 
