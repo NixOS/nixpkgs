@@ -1,6 +1,19 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, openssl, pcre, qtwebengine, libsecret
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, inotify-tools
 , libcloudproviders
+, libsecret
+, openssl
+, pcre
+, pkgconfig
+, qtbase
+, qtkeychain
+, qttools
+, qtwebengine
+, qtwebkit
+, sqlite
 }:
 
 mkDerivation rec {
@@ -18,12 +31,26 @@ mkDerivation rec {
     ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [
+    pkgconfig
+    cmake
+  ];
 
-  buildInputs = [ qtbase qtwebkit qtkeychain qttools qtwebengine sqlite openssl pcre inotify-tools libcloudproviders ];
+  buildInputs = [
+    inotify-tools
+    libcloudproviders
+    openssl
+    pcre
+    qtbase
+    qtkeychain
+    qttools
+    qtwebengine
+    qtwebkit
+    sqlite
+  ];
 
   qtWrapperArgs = [
-    ''--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}''
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
   ];
 
   cmakeFlags = [
