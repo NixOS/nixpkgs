@@ -2780,6 +2780,8 @@ in
 
   tracker = callPackage ../development/libraries/tracker { };
 
+  tracker-miners = callPackage ../development/libraries/tracker-miners { };
+
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
