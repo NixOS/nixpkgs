@@ -12,11 +12,26 @@ let
 
     userData=/etc/ec2-metadata/user-data
 
+    isScript() {
+        local fn="$1"
+        local fd
+        local magic
+        exec {fd}< "$fn"
+        read -r -n 2 -u "$fd" magic
+        exec {fd}<&-
+        if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
+    }
+
     if [ -s "$userData" ]; then
-      # If the user-data looks like it could be a nix expression,
-      # copy it over. Also, look for a magic three-hash comment and set
-      # that as the channel.
-      if sed '/^\(#\|SSH_HOST_.*\)/d' < "$userData" | grep -q '\S'; then
+      if isScript "$userData"; then
+        # If the user-data is a script, run it.
+        echo "user data is a script; running"
+        chmod a+x "$userData"
+        exec "$userData"
+      elif sed '/^\(#\|SSH_HOST_.*\)/d' < "$userData" | grep -q '\S'; then
+        # If the user-data looks like it could be a nix expression,
+        # copy it over. Also, look for a magic three-hash comment and set
+        # that as the channel.
         channels="$(grep '^###' "$userData" | sed 's|###\s*||')"
         printf "%s" "$channels" | while read channel; do
           echo "writing channel: $channel"
