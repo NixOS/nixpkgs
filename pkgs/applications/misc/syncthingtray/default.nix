@@ -39,11 +39,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools ];
 
-  cmakeFlags = lib.optionals (!enablePlasmoidSupport) ["-DNO_PLASMOID=ON"]
+  cmakeFlags = [
+    # See https://github.com/Martchus/syncthingtray/issues/42
+    "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"
+  ] ++ lib.optionals (!enablePlasmoidSupport) ["-DNO_PLASMOID=ON"]
     ++ lib.optionals (!enableKioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
-    # See https://github.com/Martchus/syncthingtray/issues/42
-    ++ lib.optionals enablePlasmoidSupport ["-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"]
   ;
 
   meta = with lib; {
