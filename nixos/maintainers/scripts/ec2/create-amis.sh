@@ -211,11 +211,11 @@ upload_image() {
         log "Registering snapshot $snapshot_id as AMI"
 
         local block_device_mappings=(
-            "DeviceName=/dev/sda1,Ebs={SnapshotId=$snapshot_id,VolumeSize=$image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp2}"
+            "DeviceName=/dev/xvda,Ebs={SnapshotId=$snapshot_id,VolumeSize=$image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp2}"
         )
 
         local extra_flags=(
-            --root-device-name /dev/sda1
+            --root-device-name /dev/xvda
             --sriov-net-support simple
             --ena-support
             --virtualization-type hvm
