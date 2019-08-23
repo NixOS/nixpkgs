@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests
+, ruby_2_6, tzdata, git, nettools, nixosTests
 , gitlabEnterprise ? false
 }:
 
 let
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    inherit ruby;
+    ruby = ruby_2_6;
     gemdir = ./rubyEnv- + "${if gitlabEnterprise then "ee" else "ce"}";
     gemset =
       let x = import (gemdir + "/gemset.nix");

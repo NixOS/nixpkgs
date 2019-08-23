@@ -1,4 +1,4 @@
-{ stdenv, ruby, bundler, fetchFromGitLab, go }:
+{ stdenv, ruby_2_6, bundler, fetchFromGitLab, go }:
 
 stdenv.mkDerivation rec {
   version = "9.3.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r000h4sgplx7giqvqs5iy0zh3drf6qa1iiq0mxlk3h9fshs1348";
   };
 
-  buildInputs = [ ruby bundler go ];
+  buildInputs = [ ruby_2_6 bundler go ];
 
   patches = [ ./remove-hardcoded-locations.patch ];
 

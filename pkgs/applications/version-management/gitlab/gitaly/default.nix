@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitLab, buildGoPackage, ruby, bundlerEnv, pkgconfig, libgit2 }:
+{ stdenv, fetchFromGitLab, buildGoPackage, ruby_2_6, bundlerEnv, pkgconfig, libgit2 }:
 
 let
   rubyEnv = bundlerEnv rec {
     name = "gitaly-env";
-    inherit ruby;
+    ruby = ruby_2_6;
     gemdir = ./.;
     gemset =
       let x = import (gemdir + "/gemset.nix");
@@ -17,14 +17,14 @@ let
       };
   };
 in buildGoPackage rec {
-  version = "1.53.2";
+  version = "1.59.0";
   name = "gitaly-${version}";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "0x4dhqaxx6n5jlcvf69rglxiz11037ghgcnskks6qnlcbkd85j3d";
+    sha256 = "0q2lhvb1qbl4iyvj6dvff8gcb5fjk0618h2fgizcyigwyj3nxkvc";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
