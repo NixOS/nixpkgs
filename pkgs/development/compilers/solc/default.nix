@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ ncurses python2 ];
 
   # Test fails on darwin for unclear reason
-  doCheck = stdenv.hostPlatform.isLinux;
+  doCheck = false;
 
   checkPhase = ''
     while IFS= read -r -d ''' dir
