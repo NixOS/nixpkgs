@@ -45,8 +45,7 @@ import ../make-test.nix ({ pkgs, ... }: {
               ip: "127.0.0.1"
               module: ejabberd_service
               access: local
-              shaper_rule: fast
-              ip: "127.0.0.1"
+              shaper: fast
 
           ## Disabling digest-md5 SASL authentication. digest-md5 requires plain-text
           ## password storage (see auth_password_format option).
@@ -181,7 +180,6 @@ import ../make-test.nix ({ pkgs, ... }: {
             mod_client_state: {}
             mod_configure: {} # requires mod_adhoc
             ## mod_delegation: {} # for xep0356
-            mod_echo: {}
             #mod_irc:
             #  host: "irc.@HOST@"
             #  default_encoding: "utf-8"
