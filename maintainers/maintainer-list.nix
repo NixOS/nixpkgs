@@ -335,6 +335,12 @@
     githubId = 2822871;
     name = "Alistair Bill";
   };
+  alkeryn = {
+    email = "plbraundev@gmail.com";
+    github = "Alkeryn";
+    githubId = 11599075;
+    name = "Pierre-Louis Braun";
+  };
   all = {
     email = "nix-commits@lists.science.uu.nl";
     name = "Nix Committers";
