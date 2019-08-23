@@ -24070,6 +24070,8 @@ in
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
+  nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
+
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
   nixos-grub2-theme = callPackage ../data/misc/nixos-artwork/grub2-theme.nix { };
