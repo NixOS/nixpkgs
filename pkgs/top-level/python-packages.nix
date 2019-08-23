@@ -390,6 +390,12 @@ in {
 
   fdint = callPackage ../development/python-modules/fdint { };
 
+  flufl_bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
+
+  flufl_i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
+
+  flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
+
   fuse = callPackage ../development/python-modules/fuse-python {
     inherit (pkgs) fuse pkgconfig;
   };
@@ -460,6 +466,10 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  lazr_config = callPackage ../development/python-modules/lazr/config.nix { };
+
+  lazr_delegates = callPackage ../development/python-modules/lazr/delegates.nix { };
+
   libmr = callPackage ../development/python-modules/libmr { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
@@ -473,6 +483,8 @@ in {
   logzero = callPackage ../development/python-modules/logzero { };
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
+
+  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman { });
 
   manhole = callPackage ../development/python-modules/manhole { };
 
