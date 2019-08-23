@@ -15476,6 +15476,8 @@ in
 
   gradm = callPackage ../os-specific/linux/gradm { };
 
+  inherit (nodePackages) gtop;
+
   hd-idle = callPackage ../os-specific/linux/hd-idle { };
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
