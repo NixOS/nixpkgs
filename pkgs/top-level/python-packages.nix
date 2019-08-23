@@ -583,6 +583,12 @@ in {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
+  flufl_bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
+
+  flufl_i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
+
+  flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
+
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
@@ -685,6 +691,10 @@ in {
 
   langdetect = callPackage ../development/python-modules/langdetect { };
 
+  lazr_config = callPackage ../development/python-modules/lazr/config.nix { };
+
+  lazr_delegates = callPackage ../development/python-modules/lazr/delegates.nix { };
+
   libmr = callPackage ../development/python-modules/libmr { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
@@ -700,6 +710,8 @@ in {
   macropy = callPackage ../development/python-modules/macropy { };
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
+
+  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman { });
 
   manhole = callPackage ../development/python-modules/manhole { };
 
