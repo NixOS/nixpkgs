@@ -65,6 +65,10 @@ let majorVersion = "7";
       })
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
+      ++ optional (targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
+        url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch";
+        sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
+      })
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
         url = "https://raw.githubusercontent.com/lhmouse/MINGW-packages/${import ../common/mfcgthreads-patches-repo.nix}/mingw-w64-gcc-git/9000-gcc-${majorVersion}-branch-Added-mcf-thread-model-support-from-mcfgthread.patch";
