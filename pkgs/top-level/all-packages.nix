@@ -10118,6 +10118,8 @@ in
     inherit (python3Packages) buildPythonApplication fetchPypi pyyaml xmltodict;
   };
 
+  yq-go = callPackage ../development/tools/yq-go { };
+
   winpdb = callPackage ../development/tools/winpdb { };
 
   grabserial = callPackage ../development/tools/grabserial { };
