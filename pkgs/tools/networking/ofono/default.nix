@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "1qzysmzpgbh6zc3x9xh931wxcazka9wwx727c2k66z9gal2n6n66";
   };
 
+  patches = [
+    ./0001-Search-connectors-in-OFONO_PLUGIN_PATH.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkgconfig
