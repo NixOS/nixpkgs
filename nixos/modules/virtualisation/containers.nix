@@ -70,7 +70,7 @@ let
   startScript = cfg:
     ''
       mkdir -p -m 0755 "$root/etc" "$root/var/lib"
-      mkdir -p -m 0700 "$root/var/lib/private" "$root/root"
+      mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/containers
       if ! [ -e "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
       fi
@@ -248,7 +248,7 @@ let
 
     Type = "notify";
 
-    RuntimeDirectory = [ "containers" ] ++ lib.optional cfg.ephemeral "containers/%i";
+    RuntimeDirectory = lib.optional cfg.ephemeral "containers/%i";
 
     # Note that on reboot, systemd-nspawn returns 133, so this
     # unit will be restarted. On poweroff, it returns 0, so the
@@ -683,7 +683,14 @@ in
     unit = {
       description = "Container '%i'";
 
+      unitConfig.RequiresMountsFor = "/var/lib/containers/%i";
+
       path = [ pkgs.iproute ];
+
+      environment = {
+        root = "/var/lib/containers/%i";
+        INSTANCE = "%i";
+      };
 
       preStart = preStartScript dummyConfig;
 
@@ -722,14 +729,13 @@ in
             }
           else {});
         in
-          unit // {
+          recursiveUpdate unit {
             preStart = preStartScript containerConfig;
             script = startScript containerConfig;
             postStart = postStartScript containerConfig;
             serviceConfig = serviceDirectives containerConfig;
             unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "/var/lib/containers/%i";
             environment.root = if containerConfig.ephemeral then "/run/containers/%i" else "/var/lib/containers/%i";
-            environment.INSTANCE = "%i";
           } // (
           if containerConfig.autoStart then
             {

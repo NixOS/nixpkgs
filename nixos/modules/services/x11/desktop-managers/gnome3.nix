@@ -136,7 +136,6 @@ in {
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-remote-desktop.enable = mkDefault true;
     services.gnome3.gnome-settings-daemon.enable = true;
-    services.gnome3.gnome-terminal-server.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
     services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
@@ -166,6 +165,7 @@ in {
     programs.file-roller.enable = mkDefault true;
     programs.gnome-disks.enable = mkDefault true;
     programs.gnome-documents.enable = mkDefault true;
+    programs.gnome-terminal.enable = mkDefault true;
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";

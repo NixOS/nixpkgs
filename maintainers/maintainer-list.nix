@@ -40,6 +40,12 @@
   See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
   */
 {
+  "00-matt" = {
+    name = "Matt Smith";
+    email = "matt@offtopica.uk";
+    github = "00-matt";
+    githubId = 48835712;
+  };
   "0x4A6F" = {
     email = "0x4A6F@shackspace.de";
     name = "Joachim Ernst";
@@ -2742,6 +2748,11 @@
     github = "izorkin";
     githubId = 26877687;
     name = "Yurii Izorkin";
+  };
+  jasoncarr = {
+    email = "jcarr250@gmail.com";
+    github = "jasoncarr0";
+    name = "Jason Carr";
   };
   j-keck = {
     email = "jhyphenkeck@gmail.com";

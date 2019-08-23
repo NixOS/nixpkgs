@@ -860,6 +860,8 @@ in
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
+  lesspass-cli = callPackage ../tools/security/lesspass-cli { };
+
   pacparser = callPackage ../tools/networking/pacparser { };
 
   pass = callPackage ../tools/security/pass { };
@@ -1699,6 +1701,8 @@ in
   gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
 
   gsctl = callPackage ../applications/misc/gsctl { };
+
+  gthree = callPackage ../development/libraries/gthree { };
 
   gti = callPackage ../tools/misc/gti { };
 
@@ -3483,6 +3487,8 @@ in
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
+  google-clasp = callPackage ../development/misc/google-clasp { };
+
   google-compute-engine = python2.pkgs.google-compute-engine;
 
   google-compute-engine-oslogin = callPackage ../tools/virtualization/google-compute-engine-oslogin { };
@@ -5250,6 +5256,8 @@ in
   osl = callPackage ../development/compilers/osl { };
 
   ossec = callPackage ../tools/security/ossec {};
+
+  osslsigncode = callPackage ../development/tools/osslsigncode {};
 
   ostree = callPackage ../tools/misc/ostree { };
 
@@ -8316,9 +8324,7 @@ in
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
-  rls = callPackage ../development/tools/rust/rls {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  inherit (rustPackages) rls;
   rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -8794,7 +8800,7 @@ in
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python {};
-  inherit (pythonInterpreters) python27 python35 python36 python37 python38 pypy27 pypy36;
+  inherit (pythonInterpreters) python27 python35 python36 python37 python38 python3Minimal pypy27 pypy36;
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
@@ -9522,6 +9528,8 @@ in
   gnome-doc-utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
 
   gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing {};
+
+  gnome-hexgl = callPackage ../games/gnome-hexgl {};
 
   gnome-usage = callPackage ../applications/misc/gnome-usage {};
 
@@ -12658,6 +12666,8 @@ in
   mumlib = callPackage ../development/libraries/mumlib { };
 
   muparser = callPackage ../development/libraries/muparser { };
+
+  mutest = callPackage ../development/libraries/mutest { };
 
   mygpoclient = pythonPackages.mygpoclient;
 
@@ -18648,7 +18658,7 @@ in
 
   gnomecast = callPackage ../applications/video/gnomecast { };
 
-  gnome-mpv = callPackage ../applications/video/gnome-mpv { };
+  celluloid = callPackage ../applications/video/celluloid { };
 
   gnome-recipes = callPackage ../applications/misc/gnome-recipes {
     inherit (gnome3) gnome-online-accounts gnome-autoar;
@@ -19161,6 +19171,8 @@ in
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
+
+  kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
@@ -24463,6 +24475,8 @@ in
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome3) zenity;
   };
+
+  wishbone-tool = callPackage ../development/tools/misc/wishbone-tool { };
 
   with-shell = callPackage ../applications/misc/with-shell { };
 

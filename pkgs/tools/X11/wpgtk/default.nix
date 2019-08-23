@@ -3,13 +3,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
-  version = "6.0.8";
+  version = "6.0.9";
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
     rev = version;
-    sha256 = "1c4iyy4db7zhbfnng8h1r7d2fmng4zspgl9zfr8vc86sk5wmfnjc";
+    sha256 = "0j2wci85918zsrrvd4qpcqv9bzhzj7qvjchvhvl11fn035jml5l0";
   };
 
   buildInputs = [

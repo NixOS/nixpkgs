@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "6.1.3";
+  version = "6.1.4";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "1ciw9b5qjx2fm1v2n6v41b52qb5smfvgdb7pi5y99gkhx8w5ghqk";
+    sha256 = "10m6pwdwdxj6x64bc7mrvlvwkgqrd5prh9xx7xhvbz55q6gx4vdr";
   };
 
   libPath = makeLibraryPath [
