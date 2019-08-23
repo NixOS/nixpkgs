@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit (gnome3) tracker;
+      inherit tracker;
     })
     # https://bugzilla.gnome.org/show_bug.cgi?id=795576
     (fetchurl {
