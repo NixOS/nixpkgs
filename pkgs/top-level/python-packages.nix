@@ -673,6 +673,8 @@ in {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  itypes = callPackage ../development/python-modules/itypes { };
+
   jira = callPackage ../development/python-modules/jira { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
