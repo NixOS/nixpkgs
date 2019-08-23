@@ -57,8 +57,6 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    #mv $out/sbin/* $out/bin/
-    #rmdir $out/sbin
     cp -v buildutils/pbs_mkdirs $out/bin/
     cp -v torque.setup $out/bin/
     chmod +x $out/bin/pbs_mkdirs $out/bin/torque.setup
