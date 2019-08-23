@@ -5937,6 +5937,10 @@ in
 
   scdoc = callPackage ../tools/typesetting/scdoc { };
 
+  scream-receivers = callPackage ../misc/scream-receivers {
+    pulseSupport = config.pulseaudio or false;
+  };
+
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
   };
