@@ -4315,7 +4315,7 @@ in {
     inherit (pkgs) graphviz;
   };
 
-  pydot_ng = callPackage ../development/python-modules/pydot_ng { };
+  pydot_ng = callPackage ../development/python-modules/pydot_ng { graphviz = pkgs.graphviz; };
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
