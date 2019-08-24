@@ -24,6 +24,7 @@
 , gnome-settings-daemon
 , gnome3
 , grilo
+, grilo-plugins
 , gsettings-desktop-schemas
 , gsound
 , gtk3
@@ -100,6 +101,7 @@ stdenv.mkDerivation rec {
     gnome-online-accounts
     gnome-settings-daemon
     grilo
+    grilo-plugins # for setting wallpaper from Flickr
     gsettings-desktop-schemas
     gsound
     gtk3
