@@ -2,15 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "glu";
-  version = "9.0.0";
+  version = "9.0.1";
 
   src = fetchurl {
-    url = "ftp://ftp.freedesktop.org/pub/mesa/glu/${pname}-${version}.tar.bz2";
-    sha256 = "04nzlil3a6fifcmb95iix3yl8mbxdl66b99s62yzq8m7g79x0yhz";
+    url = "ftp://ftp.freedesktop.org/pub/mesa/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1g2m634p73mixkzv1qz1d0flwm390ydi41bwmchiqvdssqnlqnpv";
   };
-  postPatch = ''
-    echo 'Cflags: -I''${includedir}' >> glu.pc.in
-  '';
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ libGL ]
