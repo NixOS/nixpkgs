@@ -215,6 +215,8 @@ let
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
+    domain-name = callPackage ../development/ocaml-modules/domain-name { };
+
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
     dune = callPackage ../development/tools/ocaml/dune { };
