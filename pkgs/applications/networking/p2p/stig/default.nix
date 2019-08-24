@@ -21,7 +21,7 @@ python.pkgs.buildPythonApplication rec {
       --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
   '';
 
-  with python3.pkgs; propagatedBuildInputs = [
+  with python3.pkgs; buildInputs = [
     urwid
     urwidtrees
     aiohttp
