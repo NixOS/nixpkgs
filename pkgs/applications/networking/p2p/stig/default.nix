@@ -39,7 +39,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   checkPhase = ''
-    pytest --exitfirst tests
+    pytest tests
   '';
 
   meta = with lib; {
