@@ -6266,6 +6266,8 @@ in
 
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
+  ssb-patchwork = callPackage ../applications/networking/ssb/patchwork { };
+
   ssdeep = callPackage ../tools/security/ssdeep { };
 
   ssh-ident = callPackage ../tools/networking/ssh-ident { };
@@ -13361,8 +13363,6 @@ in
   lv2Unstable = callPackage ../development/libraries/audio/lv2/unstable.nix { };
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
-
-  patchwork = callPackage ../applications/networking/ssb/patchwork { };
 
   qradiolink = callPackage ../applications/radio/qradiolink { };
 
