@@ -225,7 +225,7 @@ in
         ''
           maxstartdelay = ${toString cfg.maxStartDelay}
 
-          ${flip concatStringsSep (flip map (attrValues cfg.ups) (ups: ups.summary)) "
+          ${flip concatStringsSep (forEach (attrValues cfg.ups) (ups: ups.summary)) "
 
           "}
         '';

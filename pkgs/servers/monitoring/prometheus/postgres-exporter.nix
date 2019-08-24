@@ -19,6 +19,6 @@ buildGoPackage rec {
     inherit (src.meta) homepage;
     description = "A Prometheus exporter for PostgreSQL";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }

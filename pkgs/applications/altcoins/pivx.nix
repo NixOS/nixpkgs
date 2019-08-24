@@ -50,5 +50,12 @@ stdenv.mkDerivation rec {
     homepage = https://www.dash.org;
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.unix;
+
+    # upstream doesn't support newer openssl versions
+    # https://github.com/PIVX-Project/PIVX/issues/748
+    # "Your system is most probably using openssl 1.1 which is not the
+    # officialy supported version. Either use 1.0.1 or run again configure
+    # with the given option."
+    broken = true;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, perlPackages, texlive }:
+{ stdenv, perlPackages, shortenPerlShebang, texlive }:
 
 let
   biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
@@ -21,6 +21,11 @@ perlPackages.buildPerlModule {
     TestDifferences
     PerlIOutf8_strict
   ];
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/biber
+  '';
 
   meta = with stdenv.lib; {
     description = "Backend for BibLaTeX";

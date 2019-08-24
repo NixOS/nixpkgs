@@ -99,10 +99,6 @@ in
             fi
           '') cfg.sessionPath}
 
-          # Makes qt applications look less alien
-          export QT_QPA_PLATFORMTHEME=gtk3
-          export QT_STYLE_OVERRIDE=adwaita
-
           # Settings from elementary-default-settings
           export GTK_CSD=1
           export GTK_MODULES=$GTK_MODULES:pantheon-filechooser-module
@@ -129,7 +125,7 @@ in
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
-    services.gnome3.gvfs.enable = true;
+    services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
     services.gsignond.enable = mkDefault true;
     services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];
@@ -146,8 +142,18 @@ in
       isSystem = true;
     };
 
+    programs.dconf.enable = true;
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
+
+    # Shell integration for VTE terminals
+    programs.bash.vteIntegration = mkDefault true;
+    programs.zsh.vteIntegration = mkDefault true;
+
+    # Harmonize Qt5 applications under Pantheon
+    qt5.enable = true;
+    qt5.platformTheme = "gnome";
+    qt5.style = "adwaita";
 
     networking.networkmanager.enable = mkDefault true;
     networking.networkmanager.basePackages =
@@ -160,11 +166,6 @@ in
     environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
     environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
-
-    environment.variables.GIO_EXTRA_MODULES = [
-      "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
-      "${pkgs.gnome3.gvfs}/lib/gio/modules"
-    ];
 
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -187,7 +188,6 @@ in
         glib-networking
         gnome-menus
         gnome3.adwaita-icon-theme
-        gnome3.dconf
         gtk3.out
         hicolor-icon-theme
         lightlocker

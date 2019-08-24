@@ -569,9 +569,13 @@ in {
 
   favicon = callPackage ../development/python-modules/favicon {  };
 
+  fdint = callPackage ../development/python-modules/fdint { };
+
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
+
+  filemagic = callPackage ../development/python-modules/filemagic { };
 
   fints = callPackage ../development/python-modules/fints { };
 
@@ -579,9 +583,7 @@ in {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
-  fdint = callPackage ../development/python-modules/fdint { };
-
-  filemagic = callPackage ../development/python-modules/filemagic { };
+  foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
 
@@ -1575,6 +1577,8 @@ in {
   cornice = callPackage ../development/python-modules/cornice { };
 
   cram = callPackage ../development/python-modules/cram { };
+
+  crc16 = callPackage ../development/python-modules/crc16 { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
 
@@ -3537,6 +3541,8 @@ in {
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
 
+  python-unshare = callPackage ../development/python-modules/python-unshare { };
+
   fs = callPackage ../development/python-modules/fs { };
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
@@ -3759,7 +3765,7 @@ in {
 
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
-  mpv = callPackage ../development/python-modules/mpv { };
+  mpv = callPackage ../development/python-modules/mpv { mpv = pkgs.mpv; };
 
   mrbob = callPackage ../development/python-modules/mrbob {};
 
@@ -4138,11 +4144,7 @@ in {
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
-  pgpy = callPackage ../development/python-modules/pgpy {
-    cryptography = self.cryptography.override {
-      openssl = pkgs.openssl_1_1;
-    };
-  };
+  pgpy = callPackage ../development/python-modules/pgpy { };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
@@ -4323,7 +4325,7 @@ in {
     inherit (pkgs) graphviz;
   };
 
-  pydot_ng = callPackage ../development/python-modules/pydot_ng { };
+  pydot_ng = callPackage ../development/python-modules/pydot_ng { graphviz = pkgs.graphviz; };
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
@@ -5048,6 +5050,11 @@ in {
   wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
     inherit (pkgs) pkgconfig;
+  };
+
+  wxPython_4_0 = callPackage ../development/python-modules/wxPython/4.0.nix {
+    inherit (pkgs) pkgconfig;
+    wxGTK = pkgs.wxGTK30.override { withGtk2 = false; withWebKit = true; };
   };
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
@@ -6080,7 +6087,10 @@ in {
 
   us = callPackage ../development/python-modules/us { };
 
-  wsproto = callPackage ../development/python-modules/wsproto { };
+  wsproto = if (pythonAtLeast "3.6") then
+      callPackage ../development/python-modules/wsproto { }
+    else
+      callPackage ../development/python-modules/wsproto/0.14.nix { };
 
   h11 = callPackage ../development/python-modules/h11 { };
 

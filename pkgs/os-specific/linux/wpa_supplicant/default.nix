@@ -4,13 +4,12 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "2.8";
-
   pname = "wpa_supplicant";
+  version = "2.9";
 
   src = fetchurl {
     url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "15ixzm347n8w6gdvi3j3yks3i15qmp6by9ayvswm34d929m372d6";
+    sha256 = "05qzak1mssnxcgdrafifxh9w86a4ha69qabkg4bsigk499xyxggw";
   };
 
   # TODO: Patch epoll so that the dbus actually responds

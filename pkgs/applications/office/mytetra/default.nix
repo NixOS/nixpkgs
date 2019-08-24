@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
+{ stdenv, mkDerivation, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
 
 let
   version = "1.44.55";
-in stdenv.mkDerivation rec {
-  pname = "mytetra";
+in mkDerivation rec {
   inherit version;
+  pname = "mytetra";
   src = fetchurl {
     url = "https://github.com/xintrea/mytetra_dev/archive/v.${version}.tar.gz";
     sha256 = "13lmfvschm1xwr0ys2ykhs0bb83m2f39rk1jdd7zf8yxlqki4i6l";

@@ -1,34 +1,32 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, libevent
-, withGui
+, zlib, miniupnpc, utillinux, protobuf, qrencode, libevent, python3
+, withGui, wrapQtAppsHook ? null, qtbase ? null, qttools ? null
 , Foundation, ApplicationServices, AppKit }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-unlimited-" + version;
-  version = "1.0.3.0";
+  version = "1.6.0.1";
 
   src = fetchFromGitHub {
     owner = "bitcoinunlimited";
     repo = "bitcoinunlimited";
-    rev = "v${version}";
-    sha256 = "0l02a7h502msrp4c02wgm7f3159ap8l61k4890vas99gq7ywxkcx";
+    rev = "bucash${version}";
+    sha256 = "0f0mnal4jf8xdj7w5m4rdlcqkrkbpxi88c006m5k45lmjmj141zr";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook python3 ]
+    ++ optionals withGui [ wrapQtAppsHook qttools ];
   buildInputs = [ openssl db48 boost zlib
                   miniupnpc utillinux protobuf libevent ]
-                  ++ optionals withGui [ qt4 qrencode ]
+                  ++ optionals withGui [ qtbase qttools qrencode ]
                   ++ optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
 
-  patches = [
-    ./bitcoin-unlimited-const-comparators.patch
-  ];
-
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt4" ];
+                     ++ optionals withGui [ "--with-gui=qt5"
+                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+                                          ];
   enableParallelBuilding = true;
 
   meta = {

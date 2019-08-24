@@ -1,8 +1,5 @@
 { stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
 
-if stdenv.lib.versionOlder postgresql.version "10"
-then throw "pg_auto_failover not supported for PostgreSQL ${postgresql.version}"
-else
 stdenv.mkDerivation rec {
   pname = "pg_auto_failover";
   version = "1.0.3";
@@ -29,5 +26,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.marsam ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
+    broken = versionOlder postgresql.version "10";
   };
 }

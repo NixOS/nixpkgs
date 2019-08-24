@@ -19,6 +19,6 @@ buildGoPackage rec {
     inherit (src.meta) homepage;
     description = "Prometheus metrics exporter for Dovecot";
     license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with maintainers; [ willibutz globin ];
   };
 }

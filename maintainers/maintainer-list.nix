@@ -40,6 +40,12 @@
   See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
   */
 {
+  "00-matt" = {
+    name = "Matt Smith";
+    email = "matt@offtopica.uk";
+    github = "00-matt";
+    githubId = 48835712;
+  };
   "0x4A6F" = {
     email = "0x4A6F@shackspace.de";
     name = "Joachim Ernst";
@@ -295,6 +301,11 @@
     github = "alexarice";
     githubId = 17208985;
     name = "Alex Rice";
+  };
+  alexbakker = {
+    email = "ab@alexbakker.me";
+    github = "alexbakker";
+    name = "Alexander Bakker";
   };
   alexchapman = {
     email = "alex@farfromthere.net";
@@ -570,6 +581,12 @@
     github = "ashgillman";
     githubId = 816777;
     name = "Ashley Gillman";
+  };
+  ashkitten = {
+    email = "ashlea@protonmail.com";
+    github = "ashkitten";
+    githubId = 9281956;
+    name = "ash lea";
   };
   aske = {
     email = "aske@fmap.me";
@@ -2738,6 +2755,11 @@
     githubId = 26877687;
     name = "Yurii Izorkin";
   };
+  jasoncarr = {
+    email = "jcarr250@gmail.com";
+    github = "jasoncarr0";
+    name = "Jason Carr";
+  };
   j-keck = {
     email = "jhyphenkeck@gmail.com";
     github = "j-keck";
@@ -3218,6 +3240,11 @@
     githubId = 6282557;
     name = "Kiloreux Emperex";
   };
+  kim0 = {
+    email = "email.ahmedkamal@googlemail.com";
+    github = "kim0";
+    name = "Ahmed Kamal";
+  };
   kimburgess = {
     email = "kim@acaprojects.com";
     github = "kimburgess";
@@ -3235,6 +3262,11 @@
     github = "kirelagin";
     githubId = 451835;
     name = "Kirill Elagin";
+  };
+  kirikaza = {
+    email = "k@kirikaza.ru";
+    github = "kirikaza";
+    name = "Kirill Kazakov";
   };
   kisonecat = {
     email = "kisonecat@gmail.com";
@@ -5896,6 +5928,12 @@
     github = "stephenmw";
     githubId = 231788;
     name = "Stephen Weinberg";
+  };
+  sterfield = {
+    email = "sterfield@gmail.com";
+    github = "sterfield";
+    githubId = 5747061;
+    name = "Guillaume Loetscher";
   };
   sternenseemann = {
     email = "post@lukasepple.de";

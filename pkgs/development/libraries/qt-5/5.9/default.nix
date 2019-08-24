@@ -36,7 +36,11 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ];
+    qtbase = [
+      ./qtbase.patch
+      ./qtbase-fixguicmake.patch
+      ./qtbase-openssl_1_1.patch
+    ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];

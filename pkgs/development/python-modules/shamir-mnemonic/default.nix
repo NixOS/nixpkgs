@@ -13,10 +13,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click colorama ];
 
-  meta = {
+  meta = with lib; {
     description = "Reference implementation of SLIP-0039";
     homepage = "https://github.com/trezor/python-shamir-mnemonic";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ "1000101" ];
+    license = licenses.mit;
+    maintainers = [ maintainers."1000101" ];
   };
 }

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     desktopName = "XMind";
     comment = meta.description;
     categories = "Office;";
-    mimeType = "application/xmind;xscheme-handler/xmind";
+    mimeType = "application/xmind;x-scheme-handler/xmind";
   };
 
   installPhase = let

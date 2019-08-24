@@ -1,9 +1,10 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtk-vnc, gmp
-, libgcrypt, gnupg, cyrus_sasl, shared-mime-info, libvirt, yajl, xen
+, libgcrypt, gnupg, cyrus_sasl, shared-mime-info, libvirt, yajl
 , gsettings-desktop-schemas, wrapGAppsHook, libvirt-glib, libcap_ng, numactl
 , libapparmor, gst_all_1
 , spiceSupport ? true
 , spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
+, xenSupport ? false, xen ? null
 }:
 
 assert spiceSupport ->
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     glib libxml2 gtk3 gtk-vnc gmp libgcrypt gnupg cyrus_sasl shared-mime-info
     libvirt yajl gsettings-desktop-schemas libvirt-glib
     libcap_ng numactl libapparmor
-  ] ++ optionals stdenv.isx86_64 [
+  ] ++ optionals xenSupport [
     xen
   ] ++ optionals spiceSupport [
     spice-gtk spice-protocol libcap gdbm

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.scala-sbt.org/;
     license = licenses.bsd3;
     description = "A build tool for Scala, Java and more";
-    maintainers = with maintainers; [ nequissimus rickynils ];
+    maintainers = with maintainers; [ nequissimus ];
     platforms = platforms.unix;
   };
 }
