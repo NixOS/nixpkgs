@@ -2458,11 +2458,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xinput = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXi, libXinerama, libXrandr }: stdenv.mkDerivation {
-    name = "xinput-1.6.2";
+    name = "xinput-1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinput-1.6.2.tar.bz2;
-      sha256 = "1i75mviz9dyqyf7qigzmxq8vn31i86aybm662fzjz5c086dx551n";
+      url = mirror://xorg/individual/app/xinput-1.6.3.tar.bz2;
+      sha256 = "1vb6xdd1xmk5f7pwc5zcbxfray5sf1vbnscqwf2yl8lv7gfq38im";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
