@@ -3385,6 +3385,11 @@
     githubId = 10544;
     name = "Giuluo Eulisse";
   };
+  ktor = {
+    email = "kruszewsky@gmail.com";
+    github = "ktor";
+    name = "Pawel Kruszewski";
+  };
   ktosiek = {
     email = "tomasz.kontusz@gmail.com";
     github = "ktosiek";
