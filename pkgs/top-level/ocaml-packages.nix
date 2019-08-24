@@ -188,6 +188,8 @@ let
       lwt = ocaml_lwt;
     };
 
+    cstruct-sexp = callPackage ../development/ocaml-modules/cstruct/sexp.nix {};
+
     cstruct-unix = callPackage ../development/ocaml-modules/cstruct/unix.nix {};
 
     csv =
