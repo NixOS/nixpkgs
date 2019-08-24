@@ -140,7 +140,11 @@ _setup() {
 
   [[ $bees_uuid ]] || {
     # if bees_uuid is not in our .conf file, look it up with findmnt
-    read -r bees_uuid fstype < <(findmnt -n -o uuid,fstype "$bees_fsSpec") && [[ $fstype ]] || exit
+    for findmnt_mode in --kernel --mtab --fstab; do
+      read -r bees_uuid fstype < <(findmnt "$findmnt_mode" -n -o uuid,fstype "$bees_fsSpec") ||:
+      [[ $bees_uuid && $fstype ]] && break
+    done
+    [[ $bees_uuid ]] || die "Unable to identify a device matching $bees_fsSpec with findmnt"
     [[ $fstype = btrfs ]] || die "Device type is $fstype, not btrfs"
   }
 
