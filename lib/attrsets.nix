@@ -470,6 +470,28 @@ rec {
   getLib = getOutput "lib";
   getDev = getOutput "dev";
 
+  /* Returns the path to the binary in the package.
+     Useful for packages that only have one binary.
+
+     By default the package binary will be "$out/bin/$pname".
+     The default can be overridden by setting the `meta.binPath` attributte to
+     an absolute path within the package. Eg: "/bin/foo".
+
+     NOTE: this function is only building the path to the binary. The binary
+           is not guaranteed to exist.
+
+     Example:
+       binPath pkgs.bash
+       => "/nix/store/vwcxfvl2p0rnw2w6lqa2ax0wbcahlsss-bash-interactive-4.4-p23/bin/bash"
+  */
+  binPath = pkg:
+    let
+      out = getBin pkg;
+      pname = pkg.pname or ((builtins.parseDrvName pkg.name).name);
+      binPath = pkg.meta.binPath or "/bin/${pname}";
+    in
+      "${out}${binPath}";
+
   /* Pick the outputs of packages to place in buildInputs */
   chooseDevOutputs = drvs: builtins.map getDev drvs;
 

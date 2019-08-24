@@ -203,6 +203,9 @@ let
     isIbusEngine = bool;
     isGutenprint = bool;
     badPlatforms = platforms;
+    # Set binPath to define the main executable of the derivation. See
+    # lib.binPath .
+    binPath = str;
   };
 
   checkMetaAttr = k: v:
