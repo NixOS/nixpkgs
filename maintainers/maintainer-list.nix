@@ -3514,6 +3514,11 @@
     githubId = 307589;
     name = "Nathaniel Baxter";
   };
+  lightbulbjim = {
+    email = "chris@killred.net";
+    github = "lightbulbjim";
+    name = "Chris Rendle-Short";
+  };
   lightdiscord = {
     email = "root@arnaud.sh";
     github = "lightdiscord";
