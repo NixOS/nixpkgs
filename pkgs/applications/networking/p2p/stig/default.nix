@@ -16,6 +16,11 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "076rlial6h1nhwdxf1mx5nf2zld5ci43cadj9wf8xms7zn8s6c8v";
   };
 
+  # urwidtrees 1.0.3 is requested by the developer because 1.0.2 (which is packaged
+  # in nixpkgs) is not uploaded to pypi and 1.0.1 has a problematic `setup.py`.
+  # As long as we don't have any problems installing it, no special features / specific bugs
+  # were fixed in 1.0.3 that aren't available in 1.0.2 are used by stig.
+  # See https://github.com/rndusr/stig/issues/120
   postPatch = ''
     substituteInPlace setup.py \
       --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
