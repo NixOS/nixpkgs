@@ -21,7 +21,7 @@ python.pkgs.buildPythonApplication rec {
       --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
   '';
 
-  with python3.pkgs; buildInputs = [
+  buildInputs = with python.pkgs; [
     urwid
     urwidtrees
     aiohttp
@@ -33,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
     setproctitle
   ];
 
-  checkInputs = [
+  checkInputs = with python.pkgs; [
     asynctest
     pytest
   ];
