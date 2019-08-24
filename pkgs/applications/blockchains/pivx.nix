@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, pkgconfig, autoreconfHook
-, openssl, db48, boost, zlib, miniupnpc, gmp
+, openssl_1_0_2, db48, boost, zlib, miniupnpc, gmp
 , qrencode, glib, protobuf, yasm, libevent
 , utillinux, qtbase ? null, qttools ? null
 , enableUpnp ? false
@@ -10,17 +10,17 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "pivx-${version}";
-  version = "3.2.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "PIVX-Project";
     repo= "PIVX";
     rev = "v${version}";
-    sha256 = "16bj8cix4p63fwz3v5sxbwgy33g7dg4wwarr4aa25vli2ajqy65j";
+    sha256 = "19dxs2b5ms4f28n6wbazsr63cji0rc2airzqs61vljwgax1b371s";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ glib gmp openssl db48 yasm boost zlib libevent miniupnpc protobuf utillinux ]
+  buildInputs = [ glib gmp openssl_1_0_2 db48 yasm boost zlib libevent miniupnpc protobuf utillinux ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
@@ -50,12 +50,9 @@ stdenv.mkDerivation rec {
     homepage = https://www.dash.org;
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.unix;
-
+    # TODO
     # upstream doesn't support newer openssl versions
     # https://github.com/PIVX-Project/PIVX/issues/748
-    # "Your system is most probably using openssl 1.1 which is not the
-    # officialy supported version. Either use 1.0.1 or run again configure
-    # with the given option."
-    broken = true;
+    # openssl_1_0_2 should be replaced with opennsl ASAP
   };
 }
