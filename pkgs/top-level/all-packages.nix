@@ -8372,6 +8372,8 @@ in
     gputils = null;
   };
 
+  serialdv = callPackage ../development/libraries/serialdv {  };
+
   serpent = callPackage ../development/compilers/serpent { };
 
   shmig = callPackage ../development/tools/database/shmig { };
