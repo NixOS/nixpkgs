@@ -1924,6 +1924,8 @@ in
     conf = config.riot-web.conf or null;
   };
 
+  ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {};
+
   roundcube = callPackage ../servers/roundcube { };
 
   roundcubePlugins = dontRecurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
