@@ -15,15 +15,19 @@
 , libuv
 , libzen
 , lsb-release
+, mkDerivation
 , pkgconfig
-, qt5
+, qmake
+, qtbase
+, qtsvg
+, qttools
 , sqlite
 , swig
 , unzip
 , wget
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "megasync-${version}";
   version = "4.1.1.0";
 
@@ -41,8 +45,8 @@ stdenv.mkDerivation rec {
     doxygen
     lsb-release
     pkgconfig
-    qt5.qmake
-    qt5.qttools
+    qmake
+    qttools
     swig
   ];
   buildInputs = [
@@ -57,8 +61,8 @@ stdenv.mkDerivation rec {
     libtool
     libuv
     libzen
-    qt5.qtbase
-    qt5.qtsvg
+    qtbase
+    qtsvg
     sqlite
     unzip
     wget
