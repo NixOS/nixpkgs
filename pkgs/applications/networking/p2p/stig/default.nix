@@ -5,6 +5,8 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "stig";
+  # This project has a different concept for pre release / alpha,
+  # Read the project's README for details: https://github.com/rndusr/stig#stig
   version = "0.10.1a";
 
   src = fetchFromGitHub {
