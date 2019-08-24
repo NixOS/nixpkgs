@@ -19,7 +19,7 @@
 , wavpackSupport ? true, wavpack
 # Misc
 , withffmpeg4 ? false, ffmpeg_4
-, curlSupport ? true, curl
+, curlSupport ? false, curl
 , samplerateSupport ? true, libsamplerate
 , withDebug ? false
 }:
