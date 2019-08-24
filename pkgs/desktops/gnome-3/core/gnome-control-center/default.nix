@@ -56,6 +56,11 @@ stdenv.mkDerivation rec {
     "-Dgnome_session_libexecdir=${gnome-session}/libexec"
   ];
 
+  # Build with optimization
+  # Must be done manually for plain buildtype
+  # https://gitlab.gnome.org/GNOME/gnome-control-center/blob/3.32.2/meson.build#L67
+  NIX_CFLAGS_COMPILE = "-Wp,-D_FORTIFY_SOURCE=2";
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${sound-theme-freedesktop}/share"
