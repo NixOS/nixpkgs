@@ -1,0 +1,15 @@
+@import "colors";
+
+@aal-font-size: 17px;
+
+a {
+	color: @color-link;
+	text-decoration: none;
+	&:hover, &:active {
+		outline: 0;
+	}
+	&:focus, &:hover {
+		color: @color-link-active;
+		text-decoration: underline;
+	}
+}

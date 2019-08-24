@@ -1,3 +1,72 @@
-#searchresult em {
-    font-weight: bold;
+// ugh... I don't like removing the body's scrollbar as this also scrolls the
+// user up. Though this fixes the sure-to-be-annoying "double scrollbars" issue.
+body.with-search {
+    overflow-y: hidden;
+}
+
+#search-engine {
+    background: #fff;
+    padding: @gutter;
+    position: fixed;
+    top: @header-height;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+
+    // The global TOC is later in the DOM.
+    // This ensures the search is on top of the TOC.
+    z-index: 10;
+
+    // Text shown when there are no results.
+    .is-empty {
+        text-align: center;
+        font-style: italic;
+    }
+
+    // Results list
+    .results {
+        ul {
+            margin: 0;
+        }
+
+        & > li {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            padding-top: @gutter;
+            &:not(:first-child) {
+                border-top: 1px solid rgba(0, 0, 0, 0.6);
+                margin-top: @gutter;
+            }
+
+            a {
+                font-weight: bold;
+                display: block;
+            }
+        }
+        em {
+            @_overlap: 0.3rem;
+            font-style: italic;
+            background-color: lighten(#7EBAE4, 20%);
+            padding-left:  @_overlap;
+            padding-right: @_overlap;
+            margin-left:  -@_overlap;
+            margin-right: -@_overlap;
+        }
+    }
+
+    input {
+        display: block;
+        width: 100%;
+        padding-left:@gutter/2;
+        padding-right:@gutter/2;
+    }
+
+    &:not(.is-loading) .status {
+        display: none;
+    }
+    &.is-loading > * {
+        opacity: 0.5
+    }
 }

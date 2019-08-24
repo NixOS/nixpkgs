@@ -1,0 +1,30 @@
+// Quick notes about adding images:
+// This uses an external pipeline in default.nix to replace the @SVG_* tokens
+// with files from this directory with their name uppercased.
+
+#svg(@svg) {
+    // ugh, that's an ugly hack... but escape() apparently doesn't deal well with percent signs.
+    @_data: replace(escape(@svg), "%", "PERCENT");
+    background-image: replace(~"url('data:image/svg+xml;utf8,@{_data}')", "PERCENT", "%");
+}
+
+#svg-logo() {
+    // The NixOS logo, in white.
+    #svg(@SVG_LOGO);
+}
+
+#svg-search() {
+    // https://thenounproject.com/search/?q=15028&i=15028
+    // Public domain (CC0)
+    #svg(@SVG_SEARCH);
+}
+
+#svg-close() {
+    // Made by samueldr. Made available under the documentation and the repository license.
+    #svg(@SVG_CLOSE);
+}
+
+#svg-right-arrow() {
+    // Made by samueldr. Made available under the documentation and the repository license.
+    #svg(@SVG_RIGHT_ARROW);
+}

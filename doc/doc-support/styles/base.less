@@ -1,0 +1,56 @@
+@import "vendors/sdr-responsive/index";
+@import "vendors/normalize";
+@import "vendors/aardvarklegs/aal";
+
+@gutter: 1em;
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+	line-height: 1.7;
+	font-family: Helvetica, Arial, sans-serif;
+	padding: @gutter;
+}
+
+tt, code, kbd, samp, pre, span.command {
+	font-family: monospace;
+
+    // Without this slight adjustment, the monospaced text seems too smushed
+    // with the non-monospaced text.
+    padding-left: 0.4ex;
+    padding-right: 0.4ex;
+
+    // The monospace font often has a character height that's visually bigger 
+    // than the non-monospaced ones. This adjusts for that.
+    font-size: 0.9em;
+}
+
+span.command > strong {
+    font-weight: normal;
+}
+
+// Docbook peppers `<hr />` around. Let's skip them all.
+hr {
+	display: none;
+}
+
+// Less helper to remove the ability to select.
+// This is generally user-hostile, use sparingly.
+#no-select() {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}

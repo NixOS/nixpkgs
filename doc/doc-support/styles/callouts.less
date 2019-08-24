@@ -1,0 +1,80 @@
+
+// Good page to test:
+// → .../sec-pkgs-dockerTools.html
+
+@callout-size: 18px;
+
+// Styles for the callout list.
+.calloutlist {
+	padding-left: @gutter;
+	padding-right: @gutter;
+	table {
+		@_callout-col: 2 * @callout-size;
+		td {
+			border: 0;
+			vertical-align: middle;
+		}
+		// The callout circles.
+		td:first-child {
+			min-height: @_callout-col;
+			width: @_callout-col;
+			max-width: @_callout-col;
+			min-width: @_callout-col;
+			padding: 0;
+			position: relative;
+			& a {
+				text-align: center;
+				position: absolute;
+				display: block;
+				top: 50%;
+				left: 0;
+				right: 0;
+				margin: auto;
+				transform: translateY(-50%);
+			}
+		}
+		td:last-child {
+			& > :last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+.calloutlist table td img,
+.docbook .xref img[src^="images/callouts/"],
+.book .xref img[src^="images/callouts/"],
+.screen img,
+.programlisting img {
+    display: inline-block;
+    width: @callout-size;
+	height: @callout-size;
+	// This removes most of the weirdness from resizing the svg images.
+	border: 1px solid #000;
+	background: #000;
+	border-radius: 100%;
+}
+.docbook .xref img[src^="images/callouts/"],
+.book .xref img[src^="images/callouts/"] {
+	vertical-align: baseline;
+	position: relative;
+	top: 2px;
+}
+
+// Styles to fix the page horizontal scroll issues.
+
+// TODO : figure out a proper fix :/
+.calloutlist {
+	max-width: 100%; // FIXME
+	overflow: auto; // FIXME
+	//table {
+	//	td:last-child {
+	//		overflow: auto;
+	//		//@_padding: 1em;
+	//		//// This... is dirty.
+	//		//// This is because of a `pre` in the `td`. It breaks table width computation magic.
+	//		//max-width: calc(100vw - @_callout-col - @_padding - 2*@gutter);
+	//	}
+	//}
+}
+

@@ -1,0 +1,103 @@
+// Responsive helpers
+// ------------------
+//
+// *Samuel Dionne-Riel*
+//
+// Usage:
+//
+//   #screen-xs-max({
+//     // Rules here
+//   });
+// 
+// Description
+// ===========
+//
+// Those helpers come in thre kinds.
+// The -max, the -min and -only kinds.
+//
+// -max helpers applies the rules up until the asked width.
+// This means that #screen-sm-max applies to xs and sm
+//
+// -min helpers applies from asked width up until the max.
+// This means that #screen-md-min applies to md and lg.
+//
+// -only helpers applies only to that particular width.
+//
+// Known issue
+// ===========
+//
+// Because of the way less and css works, you have to add the
+// semicolon at the end of the rule, otherwise rules after it
+// at the same level will use the whole rule as a selector.
+//
+// Simplified example:
+//
+// div {
+//   #screen-sm-max({
+//     color:red;
+//   })
+//   span {
+//     background:lime;
+//   }
+// }
+//
+// Will get compiled to:
+// div #screen-sm-max({color:red;}) span {
+//   background: lime;
+// }
+//
+
+// 
+// Bootstrap-compatible defaults.
+//
+
+@screen-xs:                   480px;
+@screen-sm:                   768px;
+@screen-md:                   992px;
+@screen-lg:                   1200px;
+
+// These should be overriden via the cascade.
+@screen-xs-min:               @screen-xs;
+@screen-sm-min:               @screen-sm;
+@screen-md-min:               @screen-md;
+@screen-lg-min:               @screen-lg;
+@screen-xs-max:              (@screen-sm-min - 1);
+@screen-sm-max:              (@screen-md-min - 1);
+@screen-md-max:              (@screen-lg-min - 1);
+@screen-xxs-max:             (@screen-xs-min - 1);
+
+#screen-xxs-max(@rules) { @media screen and (max-width: (@screen-xxs-max)) { @rules(); } }
+#screen-xs-max(@rules)  { @media screen and (max-width: (@screen-xs-max)) { @rules(); } }
+#screen-sm-max(@rules)  { @media screen and (max-width: (@screen-sm-max)) { @rules(); } }
+#screen-md-max(@rules)  { @media screen and (max-width: (@screen-md-max)) { @rules(); } }
+#screen-lg-max(@rules)  { @rules();  }
+
+#screen-xs-min(@rules)  { @media screen and (min-width: @screen-xs-min)                                 { @rules(); } }
+#screen-sm-min(@rules)  { @media screen and (min-width: @screen-sm-min)                                 { @rules(); } }
+#screen-md-min(@rules)  { @media screen and (min-width: @screen-md-min)                                 { @rules(); } }
+#screen-lg-min(@rules)  { @media screen and (min-width: @screen-lg-min)                                 { @rules(); } }
+
+#screen-xxs-only(@rules){ @media screen and (max-width: @screen-xxs-max)                                { @rules(); } }
+#screen-xs-only(@rules) { @media screen and (min-width: @screen-xs-min) and (max-width: @screen-xs-max) { @rules(); } }
+#screen-sm-only(@rules) { @media screen and (min-width: @screen-sm-min) and (max-width: @screen-sm-max) { @rules(); } }
+#screen-md-only(@rules) { @media screen and (min-width: @screen-md-min) and (max-width: @screen-md-max) { @rules(); } }
+#screen-lg-only(@rules) { @media screen and (min-width: @screen-lg-min)                                 { @rules(); } }
+
+
+//
+// Specific values
+//
+
+// Up to and including value.
+#screen-lte(@val, @rules) {
+	@media screen and (max-width: @val) {
+		@rules();
+	}
+}
+
+// Of value and greater.
+#screen-gte(@val, @rules) {
+	@media screen and (min-width: @val) {
+		@rules();
+	}
+}

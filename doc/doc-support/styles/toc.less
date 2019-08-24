@@ -1,0 +1,24 @@
+// Hides part of the TOC not in scope for multi-page output.
+// This will be useful only when the global toc JS will not work.
+
+.section,
+.chapter {
+    // Hides sections not in scope
+    & > .toc ul.toc {
+        & li:not(.current-section) > ul,
+        & > li > ul > li:not(.current-section) {
+            display: none;
+        }
+    }
+
+    // Shows current page as bold
+    span.current-page {
+        font-weight: bold;
+    }
+}
+
+// Hides uselessly duplicated sub-toc.
+// Ideally it would not be in the output.
+body.with-javascript .chapter > .toc {
+    display: none;
+}

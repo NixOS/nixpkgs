@@ -1,0 +1,61 @@
+//
+// Global styles
+//
+
+// Code
+
+pre {
+	max-width: 100%;
+	overflow-y: auto;
+}
+
+code.literal, code.varname {
+	//background-color: #dcdcdc;
+}
+
+.screen,
+.programlisting {
+	//margin-left: -2.5em;
+	//border-radius: .5em;
+	padding-left: 1em;
+	padding-top: .5em;
+	padding-bottom: .5em;
+	padding-right: .5em;
+}
+
+// <nixpkgs-doc/chap-quick-start.html> for a good example
+// The `$` prompts are not selected, neither are they added to the clipboard on
+// copy, allowing easier copy/pasting.
+.prompt {
+	#no-select();
+}
+
+// Chapters
+
+.book > .chapter {
+	@size: 3em;
+	margin-top: @size;
+	margin-bottom: @size;
+	padding-bottom: @size;
+	padding-top: 0;
+	position: relative;
+	border-bottom: 2px solid @color-blue-dark;
+}
+
+.chapter h1.title {
+	margin-bottom: 0;
+}
+
+//.chapter > .titlepage {
+//	background: #fff;
+//	position: sticky;
+//	top: 0;
+//}
+
+// Layout specifics
+
+.navfooter {
+    * {
+        border: 0;
+    }
+}

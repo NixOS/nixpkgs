@@ -1,0 +1,23 @@
+body {
+	&::after {
+		z-index: 10000;
+		content: "??";
+		position: fixed;
+		top: 0;
+		left: 0;
+		display: block;
+		background: #000;
+		color: #fff;
+		padding: 0 0.2em;
+
+		#screen-xxs-only({ content: "xxs"; });
+		#screen-xs-only({  content:  "xs"; });
+		#screen-sm-only({  content:  "sm"; });
+		#screen-md-only({  content:  "md"; });
+		#screen-lg-only({  content:  "lg"; });
+	}
+}
+
+body > * {
+	outline: 1px solid red;
+}

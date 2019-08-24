@@ -48,9 +48,24 @@ let
 
     buildInputs = with pkgs.nodePackages; [
       less
+      svgo
     ];
 
     buildPhase = ''
+      # Skip the source svg files
+      rm *.src.svg
+
+      # Optimize svg files
+      for f in *.svg; do svgo $f; done
+
+      # Embed svg files in svg.less
+      for f in *.svg; do
+        token=''${f^^}
+        token=''${token//[^A-Z]/_}
+        token=SVG_''${token/%_SVG/}
+        substituteInPlace svg.less --replace "@$token" "'$(cat $f)'"
+      done
+
       lessc index.less $out
     '';
 

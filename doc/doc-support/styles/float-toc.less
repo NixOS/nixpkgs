@@ -1,0 +1,120 @@
+// Good defaults.
+@toc-side: left;
+@toc-size: 33; // Percent of the width of the screen. NO units.
+@toc-max-width: @toc-size/100 * @screen-lg;
+
+@__toc-vw: @toc-size * 1vw;
+
+// Enables only where it makes sense.
+#screen-sm-min({
+	// Floated TOC with scrollspy
+	#global_toc {
+		@_indent: @gutter/2;
+		@_color: #eee;
+		@_active: darken(@_color, 10%);
+		@_current: @color-blue-light;
+
+		position: fixed;
+		top: @header-height;
+		@{toc-side}: 0;
+		bottom: 0;
+		background: @_color;
+		overflow: auto;
+
+        .toc > p {
+            display: none;
+        }
+
+        span.current-page {
+            font-weight: bold;
+        }
+
+        li:not(.current-section) ul {
+            display: none;
+        }
+
+        ul, li {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+		a {
+			display: block;
+		}
+
+        // // Gumshoe-operated single-page doc TOC.
+		// dl > dd {
+		// 	display: none;
+		// 	&.is-open {
+		// 		display: block;
+		// 	}
+		// }
+
+        ul,
+		dl > dt {
+			margin-top: 0;
+			margin-bottom: 0;
+			a {
+				line-height: 2.5;
+			}
+		}
+		dl {
+			margin-left: -@gutter;
+			margin-right: -@gutter;
+		}
+		dl > dd {
+			padding-left: @gutter;
+			padding-right: @gutter;
+		}
+
+        // Links have padding
+        ul > li,
+		dl > dt {
+			a {
+				padding-left: @gutter;
+				padding-right: @gutter;
+			}
+		}
+
+        li.current-section,
+		dl > dd > dl {
+			border-left: @_indent solid @_active;
+		}
+        // This doesn't play well with single-sub-chapter categories.
+        // It looks weirdly broken while it isn't
+        // li .current-page {
+        //     border-left-color: @color-blue-light;
+        // }
+		.active {
+			background: @_active;
+		}
+	}
+
+	body.with-javascript {
+		padding-@{toc-side}: calc(@__toc-vw + @gutter * 1);
+	}
+
+	#global_toc {
+		width: @__toc-vw;
+	}
+
+	body.with-javascript {
+        //.book,
+        .section,
+        .chapter {
+            & > .toc {
+                display: none;
+            }
+        }
+	}
+});
+#screen-lg-min({
+	body.with-javascript {
+		padding-@{toc-side}: calc(@toc-max-width + @gutter * 1);
+		max-width: @screen-lg;
+	}
+	#global_toc {
+		width: @toc-max-width;
+	}
+});

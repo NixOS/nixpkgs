@@ -1,0 +1,175 @@
+@header-height: 3rem;
+
+html > body {
+    padding-top: @header-height + @gutter;
+}
+
+// Turns the navigation header into a header bar.
+.navheader {
+    @_action-size: @header-height - @gutter;
+    background: @color-blue-dark;
+    color: #fff;
+    box-shadow: 0px 3px rgba(100,100,100, 0.3);
+    padding: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    table, tr, td, th {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        width: auto;
+    }
+
+    &, tbody, tr {
+        display: flex;
+    }
+
+    table {
+        flex-grow: 1;
+    }
+
+    tr:first-child th {
+        padding-right: @gutter;
+        max-height: @header-height;
+        overflow: hidden;
+        text-align: left;
+    }
+
+    * {
+        display: inline-block;
+        vertical-align: middle;
+        align-items: center;
+    }
+
+    a, a:active, a:focus, a:visited {
+        color: inherit;
+    }
+
+    tr:first-child {
+        flex-grow: 1;
+    }
+
+    // prev/next links are unwieldy
+    tr:last-child {
+        // Hides &nbsp;
+        td[align] {
+            font-size: 0;
+        }
+        *[align=center] {
+            display: none;
+        }
+        td[align=left] a {
+            #svg-right-arrow();
+            transform: rotate(180deg);
+        }
+        td[align=right] a {
+            #svg-right-arrow();
+        }
+    }
+
+    td {
+        button {
+            color: inherit;
+            background: transparent;
+            border: 0;
+            padding: 0;
+            margin: 0;
+            font: inherit;
+        }
+        // Icon button type elements
+        a, button {
+            outline: 0;
+            &:active, &:focus {
+                outline: 1px solid rgba(255, 255, 255, 0.5);
+            }
+            text-align: center;
+            display: inline-block;
+            min-width: @_action-size;
+            padding-left: @gutter/2;
+            padding-right: @gutter/2;
+            height: @_action-size;
+            line-height: @_action-size;
+            &::before {
+                display: inline-block;
+                font-size: 1rem;
+                font-weight: bold;
+                padding-left: @gutter/2;
+                padding-right: @gutter/2;
+            }
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center center;
+        }
+    }
+
+
+    h1, h2, table {
+        font-size: inherit;
+        margin: 0;
+        line-height: @header-height;
+    }
+    h2 {
+        font-weight: normal;
+        font-style: italic;
+    }
+
+    height: @header-height;
+
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    // NixOS logo for the header
+    &::before {
+        content: "";
+        display: inline-block;
+        height: @header-height;
+        width: @header-height  * 0.6;
+        min-width: @header-height  * 0.6;
+        #svg-logo();
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+        margin-right: 1.2ex;
+    }
+
+    // Docbook is "messy" and adds a <hr /> to separate stuff. Hide them.
+    hr { display: none; }
+
+    // Our custom search button
+    .search-engine button {
+        overflow: hidden;
+        text-indent: -999px;
+        #svg-search();
+        .with-search & {
+            #svg-close();
+        }
+    }
+}
+
+// These styles make the anchor links behave as expected considering
+// there is an omnipresent header that breaks scrolling.
+#__fix_links()  {
+    //display: inline-block;
+    //top: -1.4 * @header-height;
+    //position: relative;
+    padding-top: 1.9 * @header-height;
+    margin-top: -1.9 * @header-height;
+    display: inline-block;
+}
+
+.book, .section, .chapter {
+    h1, h2, h3, h4, h5, h6 {
+        a:first-child {
+            #__fix_links();
+        }
+    }
+    .programlisting, .screen {
+        a {
+            #__fix_links();
+        }
+    }
+}
