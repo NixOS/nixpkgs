@@ -147,6 +147,13 @@ in
             . ${config.system.build.setEnvironment}
         fi
 
+        HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
+
+        # Tell zsh how to find installed completions
+        for p in ''${(z)NIX_PROFILES}; do
+            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
+        done
+
         ${cfge.shellInit}
 
         ${cfg.shellInit}
@@ -191,13 +198,6 @@ in
         SAVEHIST=${toString cfg.histSize}
         HISTSIZE=${toString cfg.histSize}
         HISTFILE=${cfg.histFile}
-
-        HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
-
-        # Tell zsh how to find installed completions
-        for p in ''${(z)NIX_PROFILES}; do
-            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
-        done
 
         ${optionalString cfg.enableGlobalCompInit "autoload -U compinit && compinit"}
 
