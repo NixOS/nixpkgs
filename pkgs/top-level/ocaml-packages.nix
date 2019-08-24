@@ -61,6 +61,8 @@ let
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
+    bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
+
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
 
     bistro = callPackage ../development/ocaml-modules/bistro { };
