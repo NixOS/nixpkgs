@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = with maintainers; [ tailhook globin ma27 ];
     platforms = platforms.all;
+    binPath = "/bin/rg";
   };
 }
