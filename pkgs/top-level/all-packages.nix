@@ -157,6 +157,8 @@ in
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  cm256cc = callPackage ../development/libraries/cm256cc {  };
+
   conftest = callPackage ../development/tools/conftest {};
 
   corgi = callPackage ../development/tools/corgi { };
