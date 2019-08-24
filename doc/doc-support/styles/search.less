@@ -28,27 +28,51 @@ body.with-search {
     .results {
         ul {
             margin: 0;
+            margin-left: -@gutter;
+            margin-right: -@gutter;
         }
 
-        & > li {
+        li {
+            position: relative;
             list-style-type: none;
             margin: 0;
             padding: 0;
-            padding-top: @gutter;
-            &:not(:first-child) {
-                border-top: 1px solid rgba(0, 0, 0, 0.6);
-                margin-top: @gutter;
+            padding-top:    @gutter;
+            padding-bottom: @gutter;
+            padding-left: @gutter;
+            padding-right: @gutter;
+            &:not(:last-child) {
+                &::after {
+                    content: "";
+                    display: block;
+                    border-top: 1px solid rgba(0, 0, 0, 0.6);
+                    position: absolute;
+                    bottom: 0;
+                    left: @gutter;
+                    right: @gutter;
+                }
+            }
+
+            &:hover {
+                cursor: pointer;
+                background-color: lighten(#7EBAE4, 22%);
             }
 
             a {
                 font-weight: bold;
                 display: block;
             }
+
+            // We know there's only one <p>, so it's safe to make
+            // this a larger selector.
+            p {
+                margin-bottom: 0;
+            }
         }
         em {
             @_overlap: 0.3rem;
             font-style: italic;
-            background-color: lighten(#7EBAE4, 20%);
+            background-color: lighten(#7EBAE4, 17%);
             padding-left:  @_overlap;
             padding-right: @_overlap;
             margin-left:  -@_overlap;

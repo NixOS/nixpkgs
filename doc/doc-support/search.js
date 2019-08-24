@@ -3,7 +3,21 @@
 document.addEventListener("DOMContentLoaded", function(event) {
     // Adds the search engine
     new SearchEngine();
+
+    // Enhance the navigation
+    enhanceNavigation();
 });
+
+const enhanceNavigation = function() {
+    // Adds a copy of the "up" link to the header
+    let up_td = document.querySelector(".navfooter tr:first-child [align=center]").cloneNode(true);
+    // If "Up" isn't there, use "Home"...
+    if (!up_td.querySelector("a")) {
+        up_td = document.querySelector(".navfooter tr:last-child [align=center]").cloneNode(true);
+    }
+    const next_td = document.querySelector(".navheader tr:last-child td[align=right]");
+    next_td.parentNode.insertBefore(up_td, next_td);
+}
 
 const getDocumentationTitle = () => {
     const $link = document.querySelector("head > link[rel=home]");

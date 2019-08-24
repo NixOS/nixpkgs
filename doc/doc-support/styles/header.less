@@ -12,7 +12,7 @@ html > body {
     box-shadow: 0px 3px rgba(100,100,100, 0.3);
     padding: 0;
     padding-left: 1rem;
-    padding-right: 1rem;
+    padding-right: 0.5rem;
 
     table, tr, td, th {
         border: 0;
@@ -56,12 +56,15 @@ html > body {
         td[align] {
             font-size: 0;
         }
-        *[align=center] {
+        th[align=center] {
             display: none;
         }
         td[align=left] a {
             #svg-right-arrow();
             transform: rotate(180deg);
+        }
+        td[align=center] a {
+            #svg-up-arrow();
         }
         td[align=right] a {
             #svg-right-arrow();
