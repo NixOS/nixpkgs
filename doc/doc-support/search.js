@@ -27,6 +27,7 @@ const SearchEngine = function() {
         const root = document.createElement("div");
         root.id = "search-engine";
         root.classList.add("is-loading");
+        root.style.display = "none";
         self.root = root;
 
         // Lazily builds a DOM.
@@ -42,7 +43,35 @@ const SearchEngine = function() {
         self.input = input;
         input.placeholder = "Search the " + getDocumentationTitle() + "...";
         input.addEventListener("keyup", (event) => search(event.target.value));
+
+        // Adds a search icon to the header
+        const icon = document.createElement("td");
+        icon.classList.add("search-engine");
+        icon.innerHTML = `
+            <button>Search</button>
+        `;
+        document.querySelector(".navheader tr:last-child").prepend(icon);
+        const button = icon.querySelector("button");
+        button.addEventListener("click", (event) => {
+            if (root.style.display === "none") {
+                show();
+            }
+            else {
+                hide();
+            }
+        });
     };
+
+    const show = function() {
+        document.body.classList.add("with-search");
+        self.root.style.display = "block";
+        self.input.focus();
+    }
+
+    const hide = function() {
+        document.body.classList.remove("with-search");
+        self.root.style.display = "none";
+    }
 
     const search = function (term) {
         const $results = self.root.querySelector(".results");
@@ -66,6 +95,16 @@ const SearchEngine = function() {
             const para = document.createElement("p");
             para.innerHTML = makeTeaser(result.doc.body, term.split(" "))
             el.append(para);
+
+            // Clicks the link from the result row.
+            // This way the clickable target is MUCH larger
+            el.addEventListener("click", (event) => {
+                link.click();
+                // We're following an anchor to the current page? close the search!
+                if (window.location.href.split("#")[0] === link.href.split("#")[0]) {
+                    hide();
+                }
+            });
 
             return el;
         }));
