@@ -61,12 +61,6 @@ in
       type = str;
     };
 
-    allowPrivileged = mkOption {
-      description = "Whether to allow Kubernetes containers to request privileged mode.";
-      default = false;
-      type = bool;
-    };
-
     clusterDns = mkOption {
       description = "Use alternative DNS.";
       default = "10.1.0.1";
@@ -262,7 +256,6 @@ in
           RestartSec = "1000ms";
           ExecStart = ''${top.package}/bin/kubelet \
             --address=${cfg.address} \
-            --allow-privileged=${boolToString cfg.allowPrivileged} \
             --authentication-token-webhook \
             --authentication-token-webhook-cache-ttl="10s" \
             --authorization-mode=Webhook \
