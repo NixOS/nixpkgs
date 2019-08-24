@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libcacard-${version}";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/libcacard/${name}.tar.xz";
-    sha256 = "1w6y0kiakhg7dgyf8yqpm4jj6jiv17zhy9lp3d7z32q1pniccxk2";
+    sha256 = "0vyvkk4b6xjwq1ccggql13c1x7g4y90clpkqw28257azgn2a1c8n";
   };
 
   nativeBuildInputs = [ pkgconfig ];
