@@ -51,5 +51,6 @@ in
       license = licenses.unfree;
       maintainers = with maintainers; [ eadwu synthetica ];
       platforms = [ "x86_64-linux" "x86_64-darwin" ];
+      binPath = "/bin/code";
     };
   }
