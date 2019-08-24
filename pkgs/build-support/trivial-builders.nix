@@ -84,6 +84,9 @@ rec {
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
         allowSubstitutes = false;
+        meta = {
+          binPath = destination;
+        };
       }
       ''
         n=$out${destination}
