@@ -169,23 +169,6 @@ in {
         };
       };
 
-      kubernetes-dashboard-cm = {
-        apiVersion = "v1";
-        kind = "ConfigMap";
-        metadata = {
-          labels = {
-            k8s-app = "kubernetes-dashboard";
-            # Allows editing resource and makes sure it is created first.
-            "addonmanager.kubernetes.io/mode" = "EnsureExists";
-          };
-          name = "kubernetes-dashboard-settings";
-          namespace = "kube-system";
-        };
-      };
-    };
-
-    services.kubernetes.addonManager.bootstrapAddons = mkMerge [{
-
       kubernetes-dashboard-sa = {
         apiVersion = "v1";
         kind = "ServiceAccount";
@@ -227,9 +210,20 @@ in {
         };
         type = "Opaque";
       };
-    }
-
-    (optionalAttrs cfg.rbac.enable
+      kubernetes-dashboard-cm = {
+        apiVersion = "v1";
+        kind = "ConfigMap";
+        metadata = {
+          labels = {
+            k8s-app = "kubernetes-dashboard";
+            # Allows editing resource and makes sure it is created first.
+            "addonmanager.kubernetes.io/mode" = "EnsureExists";
+          };
+          name = "kubernetes-dashboard-settings";
+          namespace = "kube-system";
+        };
+      };
+    } // (optionalAttrs cfg.rbac.enable
       (let
         subjects = [{
           kind = "ServiceAccount";
@@ -329,6 +323,6 @@ in {
             inherit subjects;
           };
         })
-    ))];
+    ));
   };
 }
