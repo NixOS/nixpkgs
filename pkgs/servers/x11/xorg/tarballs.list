@@ -27,9 +27,9 @@ mirror://xorg/individual/app/twm-1.0.10.tar.bz2
 mirror://xorg/individual/app/viewres-1.0.5.tar.bz2
 mirror://xorg/individual/app/x11perf-1.6.1.tar.bz2
 mirror://xorg/individual/app/xauth-1.1.tar.bz2
-mirror://xorg/individual/app/xbacklight-1.2.2.tar.bz2
+mirror://xorg/individual/app/xbacklight-1.2.3.tar.bz2
 mirror://xorg/individual/app/xcalc-1.1.0.tar.bz2
-mirror://xorg/individual/app/xclock-1.0.8.tar.bz2
+mirror://xorg/individual/app/xclock-1.0.9.tar.bz2
 mirror://xorg/individual/app/xcmsdb-1.0.5.tar.bz2
 mirror://xorg/individual/app/xcompmgr-1.1.8.tar.bz2
 mirror://xorg/individual/app/xconsole-1.0.7.tar.bz2
@@ -173,7 +173,7 @@ mirror://xorg/individual/lib/libAppleWM-1.4.1.tar.bz2
 mirror://xorg/individual/lib/libdmx-1.1.4.tar.bz2
 mirror://xorg/individual/lib/libfontenc-1.1.4.tar.bz2
 mirror://xorg/individual/lib/libFS-1.0.8.tar.bz2
-mirror://xorg/individual/lib/libICE-1.0.9.tar.bz2
+mirror://xorg/individual/lib/libICE-1.0.10.tar.bz2
 mirror://xorg/individual/lib/libpciaccess-0.16.tar.bz2
 mirror://xorg/individual/lib/libSM-1.2.3.tar.bz2
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
