@@ -3,7 +3,7 @@
 , python
 }:
 
-with python.pkgs; buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "stig";
   version = "0.10.1a";
 
@@ -19,7 +19,7 @@ with python.pkgs; buildPythonApplication rec {
       --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
   '';
 
-  propagatedBuildInputs = [
+  with python3.pkgs; propagatedBuildInputs = [
     urwid
     urwidtrees
     aiohttp
