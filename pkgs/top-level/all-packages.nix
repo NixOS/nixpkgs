@@ -6256,6 +6256,8 @@ in
 
   sunxi-tools = callPackage ../development/tools/sunxi-tools { };
 
+  sumorobot-manager = python3Packages.callPackage ../applications/science/robotics/sumorobot-manager { };
+
   super = callPackage ../tools/security/super { };
 
   supertux-editor = callPackage ../applications/editors/supertux-editor { };
