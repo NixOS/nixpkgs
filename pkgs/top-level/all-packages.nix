@@ -10796,10 +10796,6 @@ in
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
-  gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix {
-    gtk = res.gtk2;
-  };
-
   gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
     gtk = res.gtk2;
   };
