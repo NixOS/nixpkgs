@@ -31,11 +31,11 @@ in stdenv.mkDerivation rec {
     ++ optionals stdenv.cc.isClang [(
       # Fixes a compile error due an ambiguous reference to bind(2) in
       # nping/EchoServer.cc, which is otherwise resolved to std::bind.
-      # Also fixes a missing include.
       # https://github.com/nmap/nmap/pull/1363
       fetchpatch {
         url = "https://github.com/nmap/nmap/commit/5bbe66f1bd8cbd3718f5805139e2e8139e6849bb.diff";
-        sha256 = "088r8ylpc9hachsxs4r17cqfa1ncyspbjvkc573lill7rk1r9m0s";
+        includes = [ "nping/EchoServer.cc" ];
+        sha256 = "0xcph9mycy57yryjg253frxyz87c4135rrbndlqw1400c8jxq70c";
       }
     )];
 
