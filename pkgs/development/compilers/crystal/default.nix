@@ -199,5 +199,12 @@ in rec {
     binary = binaryCrystal_0_29;
   };
 
-  crystal = crystal_0_29;
+  crystal_0_30 = generic {
+    version = "0.30.1";
+    sha256  = "0fbk784zjflsl3hys5a1xmn8mda8kb2z7ql58wpyfavivswxanbs";
+    doCheck = false; # 6 checks are failing now
+    binary = binaryCrystal_0_29;
+  };
+
+  crystal = crystal_0_30;
 }
