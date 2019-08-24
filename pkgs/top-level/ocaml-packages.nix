@@ -273,6 +273,8 @@ let
 
     gen = callPackage ../development/ocaml-modules/gen { };
 
+    gmap = callPackage ../development/ocaml-modules/gmap { };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
