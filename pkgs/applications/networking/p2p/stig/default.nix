@@ -1,9 +1,9 @@
 { lib
 , fetchFromGitHub
-, python
+, python3
 }:
 
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
@@ -26,7 +26,7 @@ python.pkgs.buildPythonApplication rec {
       --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
   '';
 
-  buildInputs = with python.pkgs; [
+  buildInputs = with python3.pkgs; [
     urwid
     urwidtrees
     aiohttp
@@ -38,7 +38,7 @@ python.pkgs.buildPythonApplication rec {
     setproctitle
   ];
 
-  checkInputs = with python.pkgs; [
+  checkInputs = with python3.pkgs; [
     asynctest
     pytest
   ];

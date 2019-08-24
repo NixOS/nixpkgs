@@ -16951,7 +16951,7 @@ in
 
   starship = callPackage ../tools/misc/starship { };
 
-  stig = callPackage ../applications/networking/p2p/stig { python = python3; };
+  stig = callPackage ../applications/networking/p2p/stig { };
 
   stix-otf = callPackage ../data/fonts/stix-otf { };
 
