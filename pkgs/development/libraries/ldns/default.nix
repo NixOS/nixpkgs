@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.nlnetlabs.nl/projects/ldns/;
     platforms = platforms.unix;
     maintainers = with maintainers; [ dtzWill ];
+    binPath = "/bin/ldns";
   };
 }
