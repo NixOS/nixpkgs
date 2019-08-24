@@ -531,10 +531,6 @@ self: super: builtins.intersectAttrs super {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
 
-  # Doctests hang only when compiling with nix.
-  # https://github.com/cdepillabout/termonad/issues/15
-  termonad = dontCheck super.termonad;
-
   # Expects z3 to be on path so we replace it with a hard
   sbv = overrideCabal super.sbv (drv: {
     postPatch = ''

@@ -78,19 +78,16 @@ import ./make-test.nix ({ pkgs, ... }: {
       $machine->fail('dumpe2fs /dev/vdb | grep -q "^Last mount time: *n/a"');
     };
 
-    # Regression test for https://github.com/NixOS/nixpkgs/issues/35268
-    subtest "file system with x-initrd.mount is not unmounted", sub {
-      $machine->shutdown;
-      $machine->waitForUnit('multi-user.target');
-      # If the file system was unmounted during the shutdown the file system
-      # has a last mount time, because the file system wasn't checked.
-      $machine->fail('dumpe2fs /dev/vdb | grep -q "^Last mount time: *n/a"');
-    };
-
     subtest "systemd-shutdown works", sub {
       $machine->shutdown;
       $machine->waitForUnit('multi-user.target');
       $machine->succeed('test -e /tmp/shared/shutdown-test');
     };
+
+   # Test settings from /etc/sysctl.d/50-default.conf are applied
+   subtest "systemd sysctl settings are applied", sub {
+     $machine->waitForUnit('multi-user.target');
+     $machine->succeed('sysctl net.core.default_qdisc | grep -q "fq_codel"');
+   };
   '';
 })

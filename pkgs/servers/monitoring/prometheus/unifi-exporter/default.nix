@@ -18,7 +18,7 @@ buildGoPackage rec {
     description = "Prometheus exporter that exposes metrics from a Ubiquiti UniFi Controller and UniFi devices";
     homepage = https://github.com/mdlayher/unifi_exporter;
     license = licenses.mit;
-    maintainers = with maintainers; [ bachp ];
+    maintainers = with maintainers; [ bachp globin ];
     platforms = platforms.unix;
   };
 }

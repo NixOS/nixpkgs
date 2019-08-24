@@ -1,7 +1,11 @@
 { lib, callPackage, fetchurl, stdenv }:
 
 let
-  generic = args: callPackage (import ./generic.nix args) { };
+
+generic = args:
+if ((!lib.versionOlder args.version "391")
+    && stdenv.hostPlatform.system != "x86_64-linux") then null
+  else callPackage (import ./generic.nix args) { };
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
 

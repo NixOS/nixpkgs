@@ -136,9 +136,8 @@ in {
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-remote-desktop.enable = mkDefault true;
     services.gnome3.gnome-settings-daemon.enable = true;
-    services.gnome3.gnome-terminal-server.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
-    services.gnome3.gvfs.enable = true;
+    services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
     services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
@@ -161,10 +160,12 @@ in {
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
     # Enable default programs
+    programs.dconf.enable = true;
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
     programs.gnome-disks.enable = mkDefault true;
     programs.gnome-documents.enable = mkDefault true;
+    programs.gnome-terminal.enable = mkDefault true;
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
@@ -230,8 +231,6 @@ in {
 
     services.xserver.updateDbusEnvironment = true;
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
-                                                "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
       ++ (pkgs.gnome3.removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [
       pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/

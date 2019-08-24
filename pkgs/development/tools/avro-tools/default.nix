@@ -1,8 +1,8 @@
 { stdenv, fetchurl, makeWrapper, jre, lib }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.0";
   pname = "avro-tools";
+  version = "1.9.0";
 
   src = fetchurl {
     url =
@@ -19,11 +19,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/libexec/avro-tools
-    mv $src ${pname}-${version}.jar
-    cp ${pname}-${version}.jar $out/libexec/avro-tools
+    cp $src $out/libexec/avro-tools/${pname}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/avro-tools \
-    --add-flags "-jar $out/libexec/avro-tools/${pname}-${version}.jar"
+    --add-flags "-jar $out/libexec/avro-tools/${pname}.jar"
   '';
 
   meta = with stdenv.lib; {

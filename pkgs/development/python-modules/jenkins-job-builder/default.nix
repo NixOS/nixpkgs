@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "2.10.1";
+  version = "3.0.1";
   disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iynzxrjmdkrriw4pcf8as8afckvmq4jk457lxg52wh29l39wb30";
+    sha256 = "16x97pdr90x3xsc1xl66l7q77pgja5dzsk921by2h09k7dvxaqmh";
   };
 
   postPatch = ''

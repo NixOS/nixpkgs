@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
+{ stdenv, mkDerivation, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
 
 let
   version = "1.44.55";
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   pname = "mytetra";
   inherit version;
   src = fetchurl {

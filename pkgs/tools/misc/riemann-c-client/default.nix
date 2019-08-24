@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/algernon/riemann-c-client;
     description = "A C client library for the Riemann monitoring system";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rickynils pradeepchhetri ];
+    maintainers = with maintainers; [ pradeepchhetri ];
     platforms = platforms.linux;
   };
 }

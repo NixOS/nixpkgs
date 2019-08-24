@@ -17,7 +17,7 @@ let
   , withSystemd ? config.php.systemd or stdenv.isLinux
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
-  , mhashSupport ? config.php.mhash or true
+  , mhashSupport ? config.php.mhash or false
   , mysqlndSupport ? config.php.mysqlnd or true
   , mysqliSupport ? config.php.mysqli or true
   , pdo_mysqlSupport ? config.php.pdo_mysql or true

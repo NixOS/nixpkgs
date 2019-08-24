@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.darktable.org;
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ goibhniu rickynils flosse mrVanDalo ];
+    maintainers = with maintainers; [ goibhniu flosse mrVanDalo ];
   };
 }

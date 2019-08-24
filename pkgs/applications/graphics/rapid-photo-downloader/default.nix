@@ -6,11 +6,11 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.15";
+  version = "0.9.16";
 
   src = fetchurl {
     url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "14s8x2qp1li05pailflw1nprp79q0aa7lb92hnwa1air8756z7al";
+    sha256 = "0ij3li17jcqjx79ldv6zg2ckn8m2l9n4xvvq2x79y4q8yx9fqg85";
   };
 
   # Disable version check and fix install tests

@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/lxqt/qterminal;
     license = licenses.gpl2;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [ romildo globin ];
   };
 }

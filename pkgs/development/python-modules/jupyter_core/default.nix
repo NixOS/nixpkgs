@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Jupyter core package. A base package on which Jupyter projects rely";
     homepage = https://jupyter.org/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh globin ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

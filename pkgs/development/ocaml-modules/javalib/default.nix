@@ -1,24 +1,21 @@
-{ stdenv, fetchzip, which, ocaml, findlib, camlp4
-, camlzip, camomile, extlib
+{ stdenv, fetchzip, which, ocaml, findlib
+, camlzip, extlib
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4"
-then throw "javalib not supported for ocaml ${ocaml.version}"
+if !stdenv.lib.versionAtLeast ocaml.version "4.04"
+then throw "javalib is not available for OCaml ${ocaml.version}"
 else
 
-let
-  pname = "javalib";
-in
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "3.0";
+  name = "ocaml${ocaml.version}-javalib-${version}";
+  version = "3.1.1";
 
   src = fetchzip {
     url = "https://github.com/javalib-team/javalib/archive/v${version}.tar.gz";
-    sha256 = "02zgn1z1wj3rbg9xqmbagys91bnsy27iwrngkivzhlykyaw9vf6n";
+    sha256 = "1myrf7kw7pi04pmp0bi4747nj4h4vfxlla05sz2hp4w8k76iscld";
   };
 
-  buildInputs = [ which ocaml findlib camlp4 ];
+  buildInputs = [ which ocaml findlib ];
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 
@@ -29,13 +26,13 @@ stdenv.mkDerivation rec {
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
 
-  propagatedBuildInputs = [ camlzip camomile extlib ];
+  propagatedBuildInputs = [ camlzip extlib ];
 
   meta = with stdenv.lib; {
     description = "A library that parses Java .class files into OCaml data structures";
     homepage = https://javalib-team.github.io/javalib/;
     license = licenses.lgpl3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }
