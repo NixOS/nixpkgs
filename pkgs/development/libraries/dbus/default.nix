@@ -85,11 +85,6 @@ stdenv.mkDerivation rec {
     "datadir=${placeholder ''out''}/share"
   ];
 
-  postInstall = ''
-    mkdir -p "$out/share/xml/dbus"
-    cp doc/*.dtd "$out/share/xml/dbus"
-  '';
-
   # it's executed from $lib by absolute path
   postFixup = ''
     moveToOutput bin/dbus-launch "$lib"
