@@ -22,6 +22,22 @@ in {
           Enable Trezor bridge daemon, for use with Trezor hardware bitcoin wallets.
         '';
       };
+
+      emulator.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable Trezor emulator support.
+          '';
+       };
+
+      emulator.port = mkOption {
+        type = types.port;
+        default = 21324;
+        description = ''
+          Listening port for the Trezor emulator.
+          '';
+      };
     };
   };
   
@@ -50,7 +66,7 @@ in {
       path = [];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.trezord}/bin/trezord-go";
+        ExecStart = "${pkgs.trezord}/bin/trezord-go ${optionalString cfg.emulator.enable "-e ${builtins.toString cfg.emulator.port}"}";
         User = "trezord";
       };
     };

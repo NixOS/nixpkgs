@@ -94,6 +94,10 @@ in
       ];
 
     programs.dconf.enable = true;
+    # Shell integration for VTE terminals
+    programs.bash.vteIntegration = mkDefault true;
+    programs.zsh.vteIntegration = mkDefault true;
+
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;

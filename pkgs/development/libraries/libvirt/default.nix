@@ -129,6 +129,7 @@ in stdenv.mkDerivation rec {
     binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
   in ''
     substituteInPlace $out/libexec/libvirt-guests.sh \
+      --replace 'ON_BOOT=start'       'ON_BOOT=''${ON_BOOT:-start}' \
       --replace 'ON_SHUTDOWN=suspend' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
       --replace "$out/bin"            '${gettext}/bin' \
       --replace 'lock/subsys'         'lock' \

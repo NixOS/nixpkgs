@@ -8,14 +8,14 @@ with builtins;
 
 stdenv.mkDerivation rec {
   pname = "yosys";
-  version = "2019.08.13";
+  version = "2019.08.21";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "19d6b8846f55b4c7be705619f753bec86deadac8";
-      sha256 = "185sbkxajx3k9j03n0cxq2qvzwfwdbcxp19h8vnk7ghd5y9gp602";
+      rev    = "fe1b2337fd7950e1d563be5b8ccbaa81688261e4";
+      sha256 = "0z7sngc2z081yyhzh8c2kchg48sp2333hn1wa94q5vsgnyzlqrdw";
       name   = "yosys";
     })
 
@@ -40,10 +40,14 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ../yosys-abc/Makefile \
-      --replace 'CC   := gcc' ""
+      --replace 'CC   := gcc' "" \
+      --replace 'CXX  := g++' ""
     substituteInPlace ./Makefile \
       --replace 'CXX = clang' "" \
-      --replace 'ABCMKARGS = CC="$(CXX)"' 'ABCMKARGS =' \
+      --replace 'LD = clang++' 'LD = $(CXX)' \
+      --replace 'CXX = gcc' "" \
+      --replace 'LD = gcc' 'LD = $(CXX)' \
+      --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
   '';
 
@@ -71,7 +75,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = http://www.clifford.at/yosys/;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

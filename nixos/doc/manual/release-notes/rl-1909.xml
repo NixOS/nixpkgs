@@ -237,6 +237,12 @@
     </para>
    </listitem>
    <listitem>
+    <para>
+     The <literal>shibboleth-sp</literal> package has been updated to version 3.
+     It is largely backward compatible, for further information refer to the
+     <link xlink:href="https://wiki.shibboleth.net/confluence/display/SP3/ReleaseNotes">release notes</link>
+     and <link xlink:href="https://wiki.shibboleth.net/confluence/display/SP3/UpgradingFromV2">upgrade guide</link>.
+    </para>
      <para>
        Nodejs 8 is scheduled EOL under the lifetime of 19.09 and has been dropped.
      </para>
@@ -271,6 +277,11 @@
    <listitem>
      <para>
        The <option>services.mantisbt</option> module has been removed from nixpkgs due to lack of maintainer.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Squid 3 has been removed and the <option>squid</option> derivation now refers to Squid 4.
      </para>
    </listitem>
   </itemizedlist>

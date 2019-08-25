@@ -162,6 +162,10 @@ let
     ${cfg.appendConfig}
   '';
 
+  configPath = if cfg.enableReload
+    then "/etc/nginx/nginx.conf"
+    else configFile;
+
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
         onlySSL = vhost.onlySSL || vhost.enableSSL;
@@ -431,6 +435,16 @@ in
         ";
       };
 
+      enableReload = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Reload nginx when configuration file changes (instead of restart).
+          The configuration file is exposed at <filename>/etc/nginx/nginx.conf</filename>.
+          See also <literal>systemd.services.*.restartIfChanged</literal>.
+        '';
+      };
+
       stateDir = mkOption {
         default = "/var/spool/nginx";
         description = "
@@ -638,15 +652,30 @@ in
       preStart =
         ''
         ${cfg.preStart}
-        ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
+        ${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir} -t
         '';
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecStart = "${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
       };
+    };
+
+    environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
+      source = configFile;
+    };
+
+    systemd.services.nginx-config-reload = mkIf cfg.enableReload {
+      wantedBy = [ "nginx.service" ];
+      restartTriggers = [ configFile ];
+      script = ''
+        if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
+          ${pkgs.systemd}/bin/systemctl reload nginx.service
+        fi
+      '';
+      serviceConfig.RemainAfterExit = true;
     };
 
     security.acme.certs = filterAttrs (n: v: v != {}) (

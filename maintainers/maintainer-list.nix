@@ -40,6 +40,12 @@
   See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
   */
 {
+  "00-matt" = {
+    name = "Matt Smith";
+    email = "matt@offtopica.uk";
+    github = "00-matt";
+    githubId = 48835712;
+  };
   "0x4A6F" = {
     email = "0x4A6F@shackspace.de";
     name = "Joachim Ernst";
@@ -329,6 +335,12 @@
     githubId = 2822871;
     name = "Alistair Bill";
   };
+  alkeryn = {
+    email = "plbraundev@gmail.com";
+    github = "Alkeryn";
+    githubId = 11599075;
+    name = "Pierre-Louis Braun";
+  };
   all = {
     email = "nix-commits@lists.science.uu.nl";
     name = "Nix Committers";
@@ -575,6 +587,12 @@
     github = "ashgillman";
     githubId = 816777;
     name = "Ashley Gillman";
+  };
+  ashkitten = {
+    email = "ashlea@protonmail.com";
+    github = "ashkitten";
+    githubId = 9281956;
+    name = "ash lea";
   };
   aske = {
     email = "aske@fmap.me";
@@ -2743,6 +2761,11 @@
     githubId = 26877687;
     name = "Yurii Izorkin";
   };
+  jasoncarr = {
+    email = "jcarr250@gmail.com";
+    github = "jasoncarr0";
+    name = "Jason Carr";
+  };
   j-keck = {
     email = "jhyphenkeck@gmail.com";
     github = "j-keck";
@@ -3368,6 +3391,11 @@
     githubId = 10544;
     name = "Giuluo Eulisse";
   };
+  ktor = {
+    email = "kruszewsky@gmail.com";
+    github = "ktor";
+    name = "Pawel Kruszewski";
+  };
   ktosiek = {
     email = "tomasz.kontusz@gmail.com";
     github = "ktosiek";
@@ -3496,6 +3524,11 @@
     github = "nathanielbaxter";
     githubId = 307589;
     name = "Nathaniel Baxter";
+  };
+  lightbulbjim = {
+    email = "chris@killred.net";
+    github = "lightbulbjim";
+    name = "Chris Rendle-Short";
   };
   lightdiscord = {
     email = "root@arnaud.sh";

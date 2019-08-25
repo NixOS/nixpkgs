@@ -521,20 +521,19 @@ let
 
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       "${poolName}" = {
-        listen = "/var/run/phpfpm/${poolName}.sock";
-        extraConfig = ''
-          listen.owner = nginx
-          listen.group = nginx
-          listen.mode = 0600
-          user = ${cfg.user}
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 10
-          pm.min_spare_servers = 5
-          pm.max_spare_servers = 20
-          pm.max_requests = 500
-          catch_workers_output = 1
-        '';
+        inherit (cfg) user;
+        settings = mapAttrs (name: mkDefault) {
+          "listen.owner" = "nginx";
+          "listen.group" = "nginx";
+          "listen.mode" = "0600";
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 10;
+          "pm.min_spare_servers" = 5;
+          "pm.max_spare_servers" = 20;
+          "pm.max_requests" = 500;
+          "catch_workers_output" = 1;
+        };
       };
     };
 
@@ -552,7 +551,7 @@ let
           locations."~ \.php$" = {
             extraConfig = ''
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
-              fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.listen};
+              fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_index index.php;
             '';
           };

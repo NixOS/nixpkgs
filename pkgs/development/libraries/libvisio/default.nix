@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "libvisio-${version}";
-  version = "0.1.6";
+  version = "0.1.7";
 
   outputs = [ "out" "bin" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://dev-www.libreoffice.org/src/libvisio/${name}.tar.xz";
-    sha256 = "1yahpfl13qk6178irv8jn5ppxdn7isafqisyqsdw0lqxcz9h447y";
+    sha256 = "0k7adcbbf27l7n453cca1m6s9yj6qvb5j6bsg2db09ybf3w8vbwg";
   };
 
   nativeBuildInputs = [ pkgconfig cppunit doxygen ];

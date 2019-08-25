@@ -569,9 +569,13 @@ in {
 
   favicon = callPackage ../development/python-modules/favicon {  };
 
+  fdint = callPackage ../development/python-modules/fdint { };
+
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
+
+  filemagic = callPackage ../development/python-modules/filemagic { };
 
   fints = callPackage ../development/python-modules/fints { };
 
@@ -579,9 +583,7 @@ in {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
-  fdint = callPackage ../development/python-modules/fdint { };
-
-  filemagic = callPackage ../development/python-modules/filemagic { };
+  foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
 
@@ -1569,6 +1571,8 @@ in {
   cornice = callPackage ../development/python-modules/cornice { };
 
   cram = callPackage ../development/python-modules/cram { };
+
+  crc16 = callPackage ../development/python-modules/crc16 { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
 
@@ -4126,11 +4130,7 @@ in {
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
-  pgpy = callPackage ../development/python-modules/pgpy {
-    cryptography = self.cryptography.override {
-      openssl = pkgs.openssl_1_1;
-    };
-  };
+  pgpy = callPackage ../development/python-modules/pgpy { };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
@@ -4311,7 +4311,7 @@ in {
     inherit (pkgs) graphviz;
   };
 
-  pydot_ng = callPackage ../development/python-modules/pydot_ng { };
+  pydot_ng = callPackage ../development/python-modules/pydot_ng { graphviz = pkgs.graphviz; };
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
@@ -5050,6 +5050,8 @@ in {
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
   xarray = callPackage ../development/python-modules/xarray { };
+
+  xapian = callPackage ../development/python-modules/xapian { xapian = pkgs.xapian; };
 
   xlwt = callPackage ../development/python-modules/xlwt { };
 
@@ -6073,7 +6075,10 @@ in {
 
   us = callPackage ../development/python-modules/us { };
 
-  wsproto = callPackage ../development/python-modules/wsproto { };
+  wsproto = if (pythonAtLeast "3.6") then
+      callPackage ../development/python-modules/wsproto { }
+    else
+      callPackage ../development/python-modules/wsproto/0.14.nix { };
 
   h11 = callPackage ../development/python-modules/h11 { };
 

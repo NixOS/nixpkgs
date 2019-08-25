@@ -37,7 +37,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
     gnome-system-monitor simple-scan
     gnome-terminal gnome-user-docs evolution file-roller gedit
-    gnome-clocks gnome-music gnome-tweaks gnome-photos
+    gnome-clocks gnome-music gnome-tweaks pkgs.gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
@@ -113,8 +113,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   libgnome-keyring = callPackage ./core/libgnome-keyring { };
 
-  gnome-online-accounts = callPackage ./core/gnome-online-accounts { };
-
   gnome-online-miners = callPackage ./core/gnome-online-miners { };
 
   gnome-remote-desktop = callPackage ./core/gnome-remote-desktop { };
@@ -140,10 +138,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-user-docs = callPackage ./core/gnome-user-docs { };
 
   gnome-user-share = callPackage ./core/gnome-user-share { };
-
-  grilo = callPackage ./core/grilo { };
-
-  grilo-plugins = callPackage ./core/grilo-plugins { };
 
   gucharmap = callPackage ./core/gucharmap { };
 
@@ -196,10 +190,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   totem = callPackage ./core/totem { };
 
-  tracker = callPackage ./core/tracker { };
-
-  tracker-miners = callPackage ./core/tracker-miners { };
-
   vino = callPackage ./core/vino { };
 
   yelp = callPackage ./core/yelp { };
@@ -250,10 +240,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-nettool = callPackage ./apps/gnome-nettool { };
 
   gnome-notes = callPackage ./apps/gnome-notes { };
-
-  gnome-photos = callPackage ./apps/gnome-photos {
-    gegl = gegl_0_4;
-  };
 
   gnome-power-manager = callPackage ./apps/gnome-power-manager { };
 
@@ -391,6 +377,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 vte-ng gnome-menus gdl;
   inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
   inherit (pkgs) gnome-video-effects; # added 2019-08-19
+  inherit (pkgs) gnome-online-accounts grilo grilo-plugins tracker tracker-miners gnome-photos; # added 2019-08-23
 
   defaultIconTheme = adwaita-icon-theme;
   gtk = gtk3;

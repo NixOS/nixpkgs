@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = https://github.com/symbiflow/prjtrellis;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with maintainers; [ q3k thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ q3k thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

@@ -29,10 +29,10 @@ let
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
-       picture-uri='${pkgs.nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png'
+       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png'
 
        [org.gnome.desktop.screensaver]
-       picture-uri='${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
+       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
 
        [org.gnome.shell]
        favorite-apps=[ 'org.gnome.Epiphany.desktop', 'evolution.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
@@ -136,7 +136,6 @@ in {
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-remote-desktop.enable = mkDefault true;
     services.gnome3.gnome-settings-daemon.enable = true;
-    services.gnome3.gnome-terminal-server.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
     services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
@@ -166,6 +165,7 @@ in {
     programs.file-roller.enable = mkDefault true;
     programs.gnome-disks.enable = mkDefault true;
     programs.gnome-documents.enable = mkDefault true;
+    programs.gnome-terminal.enable = mkDefault true;
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";

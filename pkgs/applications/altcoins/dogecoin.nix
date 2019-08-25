@@ -1,8 +1,8 @@
 { stdenv , fetchFromGitHub
 , pkgconfig, autoreconfHook
-, db5, openssl, boost, zlib, miniupnpc
+, db5, openssl, boost, zlib, miniupnpc, libevent
 , protobuf, utillinux, qt4, qrencode
-, withGui, libevent }:
+, withGui }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {

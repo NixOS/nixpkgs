@@ -38,6 +38,7 @@
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/vpnc.nix
+  ./config/vte.nix
   ./config/zram.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
@@ -116,6 +117,7 @@
   ./programs/fuse.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-documents.nix
+  ./programs/gnome-terminal.nix
   ./programs/gpaste.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
@@ -297,7 +299,6 @@
   ./services/desktops/gnome3/gnome-remote-desktop.nix
   ./services/desktops/gnome3/gnome-online-miners.nix
   ./services/desktops/gnome3/gnome-settings-daemon.nix
-  ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix
   ./services/desktops/gnome3/rygel.nix
   ./services/desktops/gnome3/seahorse.nix
@@ -608,6 +609,7 @@
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/jormungandr.nix
   ./services/networking/iwd.nix
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
@@ -647,6 +649,7 @@
   ./services/networking/nullidentdmod.nix
   ./services/networking/nylon.nix
   ./services/networking/ocserv.nix
+  ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
   ./services/networking/openntpd.nix
