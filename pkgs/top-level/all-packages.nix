@@ -8282,6 +8282,12 @@ in
   inherit (rustPackages) cargo rustc rustPlatform;
   inherit (rust) makeRustPlatform;
 
+  rust_1_36 = callPackage ../development/compilers/rust-1_36 {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rustc_1_36 = rust_1_36.packages.stable.rustc;
+  cargo_1_36 = rust_1_36.packages.stable.cargo;
+
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
   buildRustCrateTests = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { }).tests;
