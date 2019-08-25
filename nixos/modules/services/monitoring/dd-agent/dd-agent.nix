@@ -75,41 +75,19 @@ let
   jmxConfig = pkgs.writeText "jmx.yaml" cfg.jmxConfig;
   processConfig = pkgs.writeText "process.yaml" cfg.processConfig;
 
-  etcfiles =
-    let
-      defaultConfd = import ./dd-agent-defaults.nix;
-    in (map (f: { source = "${pkgs.dd-agent}/agent/conf.d-system/${f}";
-                  target = "dd-agent/conf.d/${f}";
-                }) defaultConfd) ++ [
-      { source = ddConf;
-        target = "dd-agent/datadog.conf";
-      }
-      { source = diskConfig;
-        target = "dd-agent/conf.d/disk.yaml";
-      }
-      { source = networkConfig;
-        target = "dd-agent/conf.d/network.yaml";
-      } ] ++
-    (optional (cfg.postgresqlConfig != null)
-      { source = postgresqlConfig;
-        target = "dd-agent/conf.d/postgres.yaml";
-      }) ++
-    (optional (cfg.nginxConfig != null)
-      { source = nginxConfig;
-        target = "dd-agent/conf.d/nginx.yaml";
-      }) ++
-    (optional (cfg.mongoConfig != null)
-      { source = mongoConfig;
-        target = "dd-agent/conf.d/mongo.yaml";
-      }) ++
-    (optional (cfg.processConfig != null)
-      { source = processConfig;
-        target = "dd-agent/conf.d/process.yaml";
-      }) ++
-    (optional (cfg.jmxConfig != null)
-      { source = jmxConfig;
-        target = "dd-agent/conf.d/jmx.yaml";
-      });
+  etcfiles = {
+    "dd-agent/datadog.conf".source = ddConf;
+    "dd-agent/conf.d/disk.yaml".source = diskConfig;
+    "dd-agent/conf.d/network.yaml".source = networkConfig;
+    "dd-agent/conf.d/postgres.yaml".source = mkIf (cfg.postgresqlConfig != null) postgresqlConfig;
+    "dd-agent/conf.d/nginx.yaml".source = mkIf (cfg.nginxConfig != null) nginxConfig;
+    "dd-agent/conf.d/mongo.yaml".source = mkIf (cfg.mongoConfig != null) mongoConfig;
+    "dd-agent/conf.d/process.yaml".source = mkIf (cfg.processConfig != null) processConfig;
+    "dd-agent/conf.d/jmx.yaml".source = mkIf (cfg.jmxConfig != null) jmxConfig;
+  } // listToAttrs (map (f: nameValuePair
+  "dd-agent/conf.d/${f}"
+  { source = "${pkgs.dd-agent}/agent/conf.d-system/${f}"; })
+  (import ./dd-agent-defaults.nix));
 
 in {
   options.services.dd-agent = {
