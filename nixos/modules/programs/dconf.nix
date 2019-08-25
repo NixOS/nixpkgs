@@ -5,8 +5,7 @@ with lib;
 let
   cfg = config.programs.dconf;
 
-  mkDconfProfile = name: path:
-    { source = path; target = "dconf/profile/${name}"; };
+  mkDconfProfile = name: path: nameValuePair "dconf/profile/${name}" { source = path; };
 
 in
 {
@@ -29,8 +28,7 @@ in
   ###### implementation
 
   config = mkIf (cfg.profiles != {} || cfg.enable) {
-    environment.etc = optionals (cfg.profiles != {})
-      (mapAttrsToList mkDconfProfile cfg.profiles);
+    environment.etc = mapAttrs' mkDconfProfile cfg.profiles;
 
     services.dbus.packages = [ pkgs.gnome3.dconf ];
 
