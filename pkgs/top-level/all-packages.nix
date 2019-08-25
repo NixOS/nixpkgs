@@ -12541,6 +12541,8 @@ in
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
 
+  lightspark = callPackage ../misc/lightspark { };
+
   lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp { };
 
   linenoise = callPackage ../development/libraries/linenoise { };
