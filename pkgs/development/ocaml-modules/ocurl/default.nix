@@ -1,5 +1,9 @@
 { stdenv, pkgconfig, ocaml, findlib, fetchurl, curl, ncurses }:
 
+if stdenv.lib.versionOlder ocaml.version "4.02"
+then throw "ocurl is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   name = "ocurl-0.8.2";
   src = fetchurl {
