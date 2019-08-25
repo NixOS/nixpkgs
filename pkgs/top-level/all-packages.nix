@@ -2806,6 +2806,8 @@ in
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
+  wev = callPackage ../tools/misc/wev { };
+
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
   z-lua = callPackage ../tools/misc/z-lua { };
