@@ -1,21 +1,23 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
-, requests-toolbelt
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "pyfcm";
   version = "1.4.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cce6c999d8ffe39a44c42329f40c73306586102c6379fc726ea217070b72b967";
+  src = fetchFromGitHub {
+    owner = "olucurious";
+    repo = "pyfcm";
+    rev = "${version}";
+    sha256 = "0aj10yvjsc04j15zbn403i83j7ra5yg35pi3ywkyakk8n1s0s3qg";
   };
 
-  propagatedBuildInputs = [ requests-toolbelt ];
+  propagatedBuildInputs = [ requests ];
 
-  # Pypi does not provide test files
+  # pyfcm's unit testing suite requires network access
   doCheck = false;
 
   meta = with lib; {
