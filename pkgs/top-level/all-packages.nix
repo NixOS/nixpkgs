@@ -12571,8 +12571,6 @@ in
 
   luabind_luajit = luabind.override { lua = luajit; };
 
-  luaffi = callPackage ../development/libraries/luaffi { lua = lua5_1; };
-
   lzo = callPackage ../development/libraries/lzo { };
 
   mapnik = callPackage ../development/libraries/mapnik { };
