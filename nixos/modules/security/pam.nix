@@ -475,10 +475,9 @@ let
 
   motd = pkgs.writeText "motd" config.users.motd;
 
-  makePAMService = pamService:
-    { source = pkgs.writeText "${pamService.name}.pam" pamService.text;
-      target = "pam.d/${pamService.name}";
-    };
+  makePAMService = pamService: nameValuePair
+  "pam.d/${pamService.name}"
+  { source = pkgs.writeText "${pamService.name}.pam" pamService.text; };
 
 in
 
@@ -740,7 +739,7 @@ in
     };
 
     environment.etc =
-      mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
+      mapAttrs' (n: v: makePAMService v) config.security.pam.services;
 
     systemd.tmpfiles.rules = optionals
       (any (s: s.updateWtmp) (attrValues config.security.pam.services))
