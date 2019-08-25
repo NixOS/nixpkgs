@@ -103,7 +103,6 @@ in
         LockPersonality = true;
         RestrictRealtime = true;
         PrivateMounts = true;
-        PrivateUsers = true;
         MemoryDenyWriteExecute = true;
       };
     };
