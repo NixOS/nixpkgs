@@ -312,6 +312,7 @@ in rec {
     };
   };
 
+  en_AU = en-au;
   en-au = mkDictFromWordlist {
     shortName = "en-au";
     shortDescription = "English (Australia)";
@@ -321,7 +322,6 @@ in rec {
       sha256 = "1kp06npl1kd05mm9r52cg2iwc13x02zwqgpibdw15b6x43agg6f5";
     };
   };
-  en_AU = en-au;
 
   en_GB-ise = en-gb-ise;
   en-gb-ise = mkDictFromWordlist {
