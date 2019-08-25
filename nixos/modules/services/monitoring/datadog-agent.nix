@@ -22,10 +22,10 @@ let
   # Generate Datadog configuration files for each configured checks.
   # This works because check configurations have predictable paths,
   # and because JSON is a valid subset of YAML.
-  makeCheckConfigs = entries: mapAttrsToList (name: conf: {
-    source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);
-    target = "datadog-agent/conf.d/${name}.d/conf.yaml";
-  }) entries;
+  makeCheckConfigs = entries: mapAttrs' (name: conf: nameValuePair
+  "datadog-agent/conf.d/${name}.d/conf.yaml"
+  {source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);})
+  entries;
 
   defaultChecks = {
     disk = cfg.diskCheck;
@@ -34,10 +34,9 @@ let
 
   # Assemble all check configurations and the top-level agent
   # configuration.
-  etcfiles = with pkgs; with builtins; [{
-    source = writeText "datadog.yaml" (toJSON ddConf);
-    target = "datadog-agent/datadog.yaml";
-  }] ++ makeCheckConfigs (cfg.checks // defaultChecks);
+  etcfiles = with pkgs; with builtins; {
+    "datadog-agent/datadog.yaml".source = writeText "datadog.yaml" (toJSON ddConf);
+  } // (makeCheckConfigs (cfg.checks // defaultChecks));
 
   # Apply the configured extraIntegrations to the provided agent
   # package. See the documentation of `dd-agent/integrations-core.nix`
