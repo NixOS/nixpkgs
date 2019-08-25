@@ -14793,8 +14793,6 @@ in
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
 
-  rmilter = callPackage ../servers/mail/rmilter { };
-
   rspamd = callPackage ../servers/mail/rspamd { };
 
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix {
