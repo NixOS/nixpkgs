@@ -17,9 +17,7 @@
 , lsb-release
 , mkDerivation
 , pkgconfig
-, qmake
 , qtbase
-, qtsvg
 , qttools
 , sqlite
 , swig
@@ -29,13 +27,13 @@
 
 mkDerivation rec {
   name = "megasync-${version}";
-  version = "4.1.1.0";
+  version = "4.2.3.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "0lc228q3s9xp78dxjn22g6anqlsy1hi7a6yfs4q3l6gyfc3qcxl2";
+    sha256 = "0l4yfrxjb62vc9dnlzy8rjqi68ga1bys5x5rfzs40daw13yf1adv";
     fetchSubmodules = true;
   };
 
@@ -45,7 +43,6 @@ mkDerivation rec {
     doxygen
     lsb-release
     pkgconfig
-    qmake
     qttools
     swig
   ];
@@ -62,7 +59,6 @@ mkDerivation rec {
     libuv
     libzen
     qtbase
-    qtsvg
     sqlite
     unzip
     wget
