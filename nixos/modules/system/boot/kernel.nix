@@ -256,10 +256,7 @@ in
 
     # Create /etc/modules-load.d/nixos.conf, which is read by
     # systemd-modules-load.service to load required kernel modules.
-    environment.etc = singleton
-      { target = "modules-load.d/nixos.conf";
-        source = kernelModulesConf;
-      };
+    environment.etc."modules-load.d/nixos.conf".source = kernelModulesConf;
 
     systemd.services."systemd-modules-load" =
       { wantedBy = [ "multi-user.target" ];
