@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytz
+, pythonOlder
 , six
 }:
 
@@ -13,6 +14,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0zcn1b0lp9dg6xvz8p8v1hrrgqj71izqalqz2dp1nz5rbj3s34x2";
   };
+
+  disabled = pythonOlder "3.5";
 
   doCheck = false;
 
