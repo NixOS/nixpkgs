@@ -216,15 +216,15 @@ let
         };
 
         poolConfig = mkOption {
-          type = types.lines;
-          default = ''
-            pm = dynamic
-            pm.max_children = 32
-            pm.start_servers = 2
-            pm.min_spare_servers = 2
-            pm.max_spare_servers = 4
-            pm.max_requests = 500
-          '';
+          type = with types; attrsOf (oneOf [ str int bool ]);
+          default = {
+            "pm" = "dynamic";
+            "pm.max_children" = 32;
+            "pm.start_servers" = 2;
+            "pm.min_spare_servers" = 2;
+            "pm.max_spare_servers" = 4;
+            "pm.max_requests" = 500;
+          };
           description = ''
             Options for the WordPress PHP pool. See the documentation on <literal>php-fpm.conf</literal>
             for details on configuration directives.
@@ -280,15 +280,11 @@ in
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "wordpress-${hostName}" {
-        listen = "/run/phpfpm/wordpress-${hostName}.sock";
-        extraConfig = ''
-          listen.owner = ${config.services.httpd.user}
-          listen.group = ${config.services.httpd.group}
-          user = ${user}
-          group = ${group}
-
-          ${cfg.poolConfig}
-        '';
+        inherit user group;
+        settings = {
+          "listen.owner" = config.services.httpd.user;
+          "listen.group" = config.services.httpd.group;
+        } // cfg.poolConfig;
       }
     )) eachSite;
 
@@ -303,7 +299,7 @@ in
               <Directory "${pkg hostName cfg}/share/wordpress">
                 <FilesMatch "\.php$">
                   <If "-f %{REQUEST_FILENAME}">
-                    SetHandler "proxy:unix:/run/phpfpm/wordpress-${hostName}.sock|fcgi://localhost/"
+                    SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
                   </If>
                 </FilesMatch>
 

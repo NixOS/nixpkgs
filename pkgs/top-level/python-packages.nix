@@ -5065,6 +5065,8 @@ in {
 
   xarray = callPackage ../development/python-modules/xarray { };
 
+  xapian = callPackage ../development/python-modules/xapian { xapian = pkgs.xapian; };
+
   xlwt = callPackage ../development/python-modules/xlwt { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };

@@ -1,4 +1,19 @@
-{ stdenv, pkgconfig, python3, fetchhg, gtk3, glib, gdbm, gtkspell3, itstool, libappindicator-gtk3, perlPackages, glibcLocales, meson, ninja }:
+{ stdenv
+, pkgconfig
+, python3
+, fetchhg
+, gtk3
+, glib
+, gdbm
+, gtkspell3
+, ofono
+, itstool
+, libappindicator-gtk3
+, perlPackages
+, glibcLocales
+, meson
+, ninja
+}:
 
 stdenv.mkDerivation rec {
   pname = "modem-manager-gui";
@@ -10,14 +25,11 @@ stdenv.mkDerivation rec {
     sha256 = "11iibh36567814h2bz41sa1072b86p1l13xyj670pwkh9k8kw8fd";
   };
 
-  LC_ALL = "en_US.utf-8";
-
   nativeBuildInputs = [
     pkgconfig
     python3
     perlPackages.Po4a
     itstool
-    glibcLocales
     meson
     ninja
   ];
@@ -27,6 +39,7 @@ stdenv.mkDerivation rec {
     glib
     gdbm
     gtkspell3
+    ofono
     libappindicator-gtk3
   ];
 

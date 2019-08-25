@@ -225,22 +225,24 @@ in {
       serviceConfig.UMask = "0007";
     };
 
-    services.phpfpm.poolConfigs = let
+    services.phpfpm.pools = let
       # workaround for when both are null and need to generate a string,
       # which is illegal, but as assertions apparently are being triggered *after* config generation,
       # we have to avoid already throwing errors at this previous stage.
       socketOwner = if (cfg.nginx != null) then config.services.nginx.user
       else if (cfg.webServerUser != null) then cfg.webServerUser else "";
     in {
-      ${pool} = ''
-        listen = "${phpSocket}"
-        listen.owner = ${socketOwner}
-        listen.group = root
-        listen.mode = 0600
-        user = ${user}
-        env[PIWIK_USER_PATH] = ${dataDir}
-        ${cfg.phpfpmProcessManagerConfig}
-      '';
+      ${pool} = {
+        listen = phpSocket;
+        extraConfig = ''
+          listen.owner = ${socketOwner}
+          listen.group = root
+          listen.mode = 0600
+          user = ${user}
+          env[PIWIK_USER_PATH] = ${dataDir}
+          ${cfg.phpfpmProcessManagerConfig}
+        '';
+      };
     };
 
 

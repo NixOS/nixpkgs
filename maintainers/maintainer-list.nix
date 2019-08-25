@@ -335,6 +335,12 @@
     githubId = 2822871;
     name = "Alistair Bill";
   };
+  alkeryn = {
+    email = "plbraundev@gmail.com";
+    github = "Alkeryn";
+    githubId = 11599075;
+    name = "Pierre-Louis Braun";
+  };
   all = {
     email = "nix-commits@lists.science.uu.nl";
     name = "Nix Committers";
@@ -3385,6 +3391,11 @@
     githubId = 10544;
     name = "Giuluo Eulisse";
   };
+  ktor = {
+    email = "kruszewsky@gmail.com";
+    github = "ktor";
+    name = "Pawel Kruszewski";
+  };
   ktosiek = {
     email = "tomasz.kontusz@gmail.com";
     github = "ktosiek";
@@ -3513,6 +3524,11 @@
     github = "nathanielbaxter";
     githubId = 307589;
     name = "Nathaniel Baxter";
+  };
+  lightbulbjim = {
+    email = "chris@killred.net";
+    github = "lightbulbjim";
+    name = "Chris Rendle-Short";
   };
   lightdiscord = {
     email = "root@arnaud.sh";

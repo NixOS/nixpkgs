@@ -157,6 +157,8 @@ in
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  cm256cc = callPackage ../development/libraries/cm256cc {  };
+
   conftest = callPackage ../development/tools/conftest {};
 
   corgi = callPackage ../development/tools/corgi { };
@@ -1784,7 +1786,7 @@ in
 
   massren = callPackage ../tools/misc/massren { };
 
-  megasync = callPackage ../applications/misc/megasync { };
+  megasync = libsForQt5.callPackage ../applications/misc/megasync { };
 
   meritous = callPackage ../games/meritous { };
 
@@ -4516,6 +4518,8 @@ in
 
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
 
+  libspf2 = callPackage ../development/libraries/libspf2 { };
+
   libsrs2 = callPackage ../development/libraries/libsrs2 { };
 
   libtermkey = callPackage ../development/libraries/libtermkey { };
@@ -5147,6 +5151,8 @@ in
   odyssey = callPackage ../tools/misc/odyssey { };
 
   offlineimap = callPackage ../tools/networking/offlineimap { };
+
+  ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim/default.nix { };
 
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
@@ -6253,6 +6259,8 @@ in
   sundtek = callPackage ../misc/drivers/sundtek { };
 
   sunxi-tools = callPackage ../development/tools/sunxi-tools { };
+
+  sumorobot-manager = python3Packages.callPackage ../applications/science/robotics/sumorobot-manager { };
 
   super = callPackage ../tools/security/super { };
 
@@ -8364,6 +8372,8 @@ in
     gputils = null;
   };
 
+  serialdv = callPackage ../development/libraries/serialdv {  };
+
   serpent = callPackage ../development/compilers/serpent { };
 
   shmig = callPackage ../development/tools/database/shmig { };
@@ -10064,6 +10074,8 @@ in
   todolist = callPackage ../applications/misc/todolist { };
 
   travis = callPackage ../development/tools/misc/travis { };
+
+  tree-sitter = callPackage ../development/tools/parsing/tree-sitter { };
 
   trellis = callPackage ../development/tools/trellis { };
 
@@ -12558,8 +12570,6 @@ in
   luabind = callPackage ../development/libraries/luabind { lua = lua5_1; };
 
   luabind_luajit = luabind.override { lua = luajit; };
-
-  luaffi = callPackage ../development/libraries/luaffi { lua = lua5_1; };
 
   lzo = callPackage ../development/libraries/lzo { };
 
@@ -19017,6 +19027,8 @@ in
 
   iptraf-ng = callPackage ../applications/networking/iptraf-ng { };
 
+  irccloud = callPackage ../applications/networking/irc/irccloud { };
+
   irssi = callPackage ../applications/networking/irc/irssi { };
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
@@ -24798,6 +24810,8 @@ in
   };
 
   tsung = callPackage ../applications/networking/tsung {};
+
+  bcompare = libsForQt5.callPackage ../applications/version-management/bcompare {};
 
   qmk_firmware = callPackage ../development/misc/qmk_firmware {
     avrgcc = pkgsCross.avr.buildPackages.gcc;
