@@ -21220,6 +21220,7 @@ in
     libva = null;
     libwebp = null;
     xwayland = null;
+    pipewire = null;
   };
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {};
