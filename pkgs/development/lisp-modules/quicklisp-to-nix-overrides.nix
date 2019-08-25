@@ -165,4 +165,11 @@ $out/lib/common-lisp/query-fs"
       meta.broken = true; # 2018-04-10
     };
   };
+  split-sequence = x: {
+    overrides = y: (x.overrides y) // {
+      preConfigure = ''
+        sed -i -e '/:components/i:serial t' split-sequence.asd
+      '';
+    };
+  };
 }
