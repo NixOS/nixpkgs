@@ -65,23 +65,17 @@ in
       lib.optional (types.shellPackage.check config.users.defaultUserShell)
         config.users.defaultUserShell;
 
-    environment.etc =
-      [ { # /etc/login.defs: global configuration for pwdutils.  You
-          # cannot login without it!
-          source = pkgs.writeText "login.defs" loginDefs;
-          target = "login.defs";
-        }
-
-        { # /etc/default/useradd: configuration for useradd.
-          source = pkgs.writeText "useradd"
-            ''
-              GROUP=100
-              HOME=/home
-              SHELL=${utils.toShellPath config.users.defaultUserShell}
-            '';
-          target = "default/useradd";
-        }
-      ];
+    environment.etc = {
+      # /etc/login.defs: global configuration for pwdutils.  You
+      # cannot login without it!
+      "login.defs".text = loginDefs;
+      # /etc/default/useradd: configuration for useradd.
+      "default/useradd".text = ''
+        GROUP=100
+        HOME=/home
+        SHELL=${utils.toShellPath config.users.defaultUserShell}
+      '';
+    };
 
     security.pam.services =
       { chsh = { rootOK = true; };
