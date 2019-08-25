@@ -388,47 +388,27 @@ in {
       }
     ];
 
-    environment.etc = with cfg.basePackages; [
-      { source = configFile;
-        target = "NetworkManager/NetworkManager.conf";
-      }
-      { source = "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
-        target = "NetworkManager/VPN/nm-openvpn-service.name";
-      }
-      { source = "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
-        target = "NetworkManager/VPN/nm-vpnc-service.name";
-      }
-      { source = "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
-        target = "NetworkManager/VPN/nm-openconnect-service.name";
-      }
-      { source = "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
-        target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
-      }
-      { source = "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
-        target = "NetworkManager/VPN/nm-l2tp-service.name";
-      }
-      { source = "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
-        target = "NetworkManager/VPN/nm-iodine-service.name";
-      }
-    ] ++ optional (cfg.appendNameservers != [] || cfg.insertNameservers != [])
-           { source = overrideNameserversScript;
-             target = "NetworkManager/dispatcher.d/02overridedns";
-           }
-      ++ lib.imap1 (i: s: {
-        inherit (s) source;
-        target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
-        mode = "0544";
-      }) cfg.dispatcherScripts
-      ++ optional dynamicHostsEnabled
-           { target = "NetworkManager/dnsmasq.d/dyndns.conf";
-             text = concatMapStrings (n: ''
-               hostsdir=/run/NetworkManager/hostsdirs/${n}
-             '') (attrNames cfg.dynamicHosts.hostsDirs);
-           }
-      ++ optional cfg.enableStrongSwan
-           { source = "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
-             target = "NetworkManager/VPN/nm-strongswan-service.name";
-           };
+    environment.etc = with cfg.basePackages; {
+      "NetworkManager/NetworkManager.conf".source = configFile;
+      "NetworkManager/VPN/nm-openvpn-service.name".source = "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
+      "NetworkManager/VPN/nm-vpnc-service.name".source = "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
+      "NetworkManager/VPN/nm-openconnect-service.name".source = "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
+      "NetworkManager/VPN/nm-fortisslvpn-service.name".source = "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
+      "NetworkManager/VPN/nm-l2tp-service.name".source = "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
+
+      "NetworkManager/VPN/nm-iodine-service.name".source = "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
+    } // optionalAttrs dynamicHostsEnabled {
+      "NetworkManager/dnsmasq.d/dyndns.conf".text = concatMapStrings (n: ''
+           hostsdir=/run/NetworkManager/hostsdirs/${n}
+        '') (attrNames cfg.dynamicHosts.hostsDirs);
+    } // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != []) {
+      "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
+    } // optionalAttrs cfg.enableStrongSwan {
+      "NetworkManager/VPN/nm-strongswan-service.name".source = mkIf cfg.enableStrongSwan "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
+    } // listToAttrs (imap1 (i: s: nameValuePair
+      "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}"
+      { inherit (s) source; mode = "0544"; }) cfg.dispatcherScripts);
+
 
     environment.systemPackages = cfg.packages;
 
