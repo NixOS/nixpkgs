@@ -1,6 +1,11 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function(event) {
+    const $body = document.body;
+
+    // Allows applying rules that would break usability without JS
+    $body.classList.add("with-javascript");
+
     // Adds the search engine
     new SearchEngine();
 
