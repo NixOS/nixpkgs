@@ -4032,6 +4032,8 @@ in
 
   isync = callPackage ../tools/networking/isync { };
 
+  ix = callPackage ../tools/misc/ix { };
+
   jaaa = callPackage ../applications/audio/jaaa { };
 
   jackett = callPackage ../servers/jackett { };
