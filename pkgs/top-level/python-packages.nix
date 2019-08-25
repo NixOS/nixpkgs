@@ -2453,6 +2453,8 @@ in {
 
   jsmin = callPackage ../development/python-modules/jsmin { };
 
+  json5 = callPackage ../development/python-modules/json5 { };
+
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
