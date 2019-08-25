@@ -48,10 +48,7 @@ in {
     services.fprot.updater.licenseKeyfile = mkDefault "${pkgs.fprot}/opt/f-prot/license.key";
 
     environment.systemPackages = [ pkgs.fprot ];
-    environment.etc = singleton {
-      source = "${pkgs.fprot}/opt/f-prot/f-prot.conf";
-      target = "f-prot.conf";
-    };
+    environment.etc."f-prot.conf".source = "${pkgs.fprot}/opt/f-prot/f-prot.conf";
 
     users.users = singleton
       { name = fprotUser;
