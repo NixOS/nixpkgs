@@ -3114,6 +3114,8 @@ in {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
+  jsonschema3 = callPackage ../development/python-modules/jsonschema3 { };
+
   vcversioner = callPackage ../development/python-modules/vcversioner { };
 
   falcon = callPackage ../development/python-modules/falcon { };
