@@ -47,10 +47,7 @@ let cfg = config.services.drbd; in
         options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
       '';
 
-    environment.etc = singleton
-      { source = pkgs.writeText "drbd.conf" cfg.config;
-        target = "drbd.conf";
-      };
+    environment.etc."drbd.conf".text = cfg.config;
 
     systemd.services.drbd = {
       after = [ "systemd-udev.settle.service" "network.target" ];
