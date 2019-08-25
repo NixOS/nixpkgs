@@ -7,26 +7,6 @@ let
 
   cfg = config.users.ldap;
 
-  # Careful: OpenLDAP seems to be very picky about the indentation of
-  # this file.  Directives HAVE to start in the first column!
-  ldapConfig = {
-    target = "ldap.conf";
-    source = writeText "ldap.conf" ''
-      uri ${config.users.ldap.server}
-      base ${config.users.ldap.base}
-      timelimit ${toString config.users.ldap.timeLimit}
-      bind_timelimit ${toString config.users.ldap.bind.timeLimit}
-      bind_policy ${config.users.ldap.bind.policy}
-      ${optionalString config.users.ldap.useTLS ''
-        ssl start_tls
-      ''}
-      ${optionalString (config.users.ldap.bind.distinguishedName != "") ''
-        binddn ${config.users.ldap.bind.distinguishedName}
-      ''}
-      ${optionalString (cfg.extraConfig != "") cfg.extraConfig }
-    '';
-  };
-
   nslcdConfig = writeText "nslcd.conf" ''
     uid nslcd
     gid nslcd
@@ -224,7 +204,22 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc = optional (!cfg.daemon.enable) ldapConfig;
+    # Careful: OpenLDAP seems to be very picky about the indentation of
+    # this file.  Directives HAVE to start in the first column!
+    environment.etc."ldap.conf".text = mkIf (!cfg.daemon.enable) ''
+      uri ${config.users.ldap.server}
+      base ${config.users.ldap.base}
+      timelimit ${toString config.users.ldap.timeLimit}
+      bind_timelimit ${toString config.users.ldap.bind.timeLimit}
+      bind_policy ${config.users.ldap.bind.policy}
+      ${optionalString config.users.ldap.useTLS ''
+        ssl start_tls
+      ''}
+      ${optionalString (config.users.ldap.bind.distinguishedName != "") ''
+        binddn ${config.users.ldap.bind.distinguishedName}
+      ''}
+      ${optionalString (cfg.extraConfig != "") cfg.extraConfig }
+    '';
 
     system.activationScripts = mkIf (!cfg.daemon.enable) {
       ldap = stringAfter [ "etc" "groups" "users" ] ''
