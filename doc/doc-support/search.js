@@ -18,7 +18,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     // Enhance the navigation
     enhanceNavigation();
+
+    makeGlobalTOC();
 });
+
+// Copies the docbook TOC.
+// The original one will be kept with all non-active nodes closed.
+// The one we copy is the global menu.
+const makeGlobalTOC = function () {
+    const $body = document.body;
+
+    const $candidates = [].concat(
+        Array.from($body.querySelectorAll(".section > .toc")),
+        Array.from($body.querySelectorAll(".chapter > .toc")),
+        Array.from($body.querySelectorAll(".book > .toc"))
+    )
+    if ($candidates.length > 0) {
+        const $global_toc = document.createElement("div");
+        $global_toc.id = "global_toc";
+
+        const $toc = $candidates[0].cloneNode(true);
+        $global_toc.appendChild($toc);
+        $body.append($global_toc);
+    }
+    else {
+        console.warn("Couln't find TOC");
+    }
+}
 
 const enhanceNavigation = function() {
     // Adds a copy of the "up" link to the header
