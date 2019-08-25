@@ -14677,8 +14677,6 @@ in
 
   labelImg = callPackage ../applications/science/machine-learning/labelimg { };
 
-  mailman = callPackage ../servers/mail/mailman { };
-
   mailman-rss = callPackage ../development/python-modules/mailman-rss { };
 
   mattermost = callPackage ../servers/mattermost { };
