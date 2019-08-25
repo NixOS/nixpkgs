@@ -20,7 +20,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nano";
-  version = "3.2";
+  version = "4.3";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
