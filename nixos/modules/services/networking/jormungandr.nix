@@ -13,7 +13,7 @@ let
   configSettings = {
     storage = dataDir;
     p2p = {
-      public_address = "/ip4/127.0.0.1/tcp/8606";
+      public_address = "/ip4/127.0.0.1/tcp/8299";
       messages = "high";
       blocks = "high";
     };
