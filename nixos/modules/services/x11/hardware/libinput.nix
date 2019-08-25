@@ -2,8 +2,9 @@
 
 with lib;
 
-let cfg = config.services.xserver.libinput;
-    xorgBool = v: if v then "on" else "off";
+let
+  cfg = config.services.xserver.libinput;
+  xorgBool = v: if v then "on" else "off";
 in {
 
   options = {
@@ -198,12 +199,7 @@ in {
 
     environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
 
-    environment.etc = [
-      (let cfgPath = "X11/xorg.conf.d/40-libinput.conf"; in {
-        source = pkgs.xorg.xf86inputlibinput.out + "/share/" + cfgPath;
-        target = cfgPath;
-      })
-    ];
+    environment.etc."X11/xorg.conf.d/40-libinput.conf".source = pkgs.xorg.xf86inputlibinput.out + "/share/X11/xorg.conf.d/40-libinput.conf";
 
     services.udev.packages = [ pkgs.libinput.out ];
 
