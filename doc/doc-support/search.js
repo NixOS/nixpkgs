@@ -6,6 +6,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // Allows applying rules that would break usability without JS
     $body.classList.add("with-javascript");
 
+    // Adds the expected viewport tag dynamically.
+    // This is because the current docbook output will not add one.
+    const metaTag = document.createElement("meta");
+    metaTag.name = "viewport";
+    metaTag.content = "width=device-width, initial-scale=1";
+    document.querySelector("head").appendChild(metaTag);
+
     // Adds the search engine
     new SearchEngine();
 
