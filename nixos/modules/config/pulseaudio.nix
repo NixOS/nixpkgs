@@ -215,10 +215,7 @@ in {
 
   config = mkMerge [
     {
-      environment.etc = singleton {
-        target = "pulse/client.conf";
-        source = clientConf;
-      };
+      environment.etc."pulse/client.conf".source = clientConf;
 
       hardware.pulseaudio.configFile = mkDefault "${getBin overriddenPackage}/etc/pulse/default.pa";
     }
@@ -228,19 +225,12 @@ in {
 
       sound.enable = true;
 
-      environment.etc = [
-        { target = "asound.conf";
-          source = alsaConf; }
-
-        { target = "pulse/daemon.conf";
-          source = writeText "daemon.conf" (lib.generators.toKeyValue {} cfg.daemon.config); }
-
-        { target = "openal/alsoft.conf";
-          source = writeText "alsoft.conf" "drivers=pulse"; }
-
-        { target = "libao.conf";
-          source = writeText "libao.conf" "default_driver=pulse"; }
-      ];
+      environment.etc = {
+        "asound.conf".source = alsaConf;
+        "pulse/daemon.conf".text = lib.generators.toKeyValue {} cfg.daemon.config;
+        "openal/alsoft.conf".text = "drivers=pulse";
+        "libao.conf".text = "default_driver=pulse";
+      };
 
       # Disable flat volumes to enable relative ones
       hardware.pulseaudio.daemon.config.flat-volumes = mkDefault "no";
@@ -275,10 +265,8 @@ in {
     })
 
     (mkIf nonSystemWide {
-      environment.etc = singleton {
-        target = "pulse/default.pa";
-        source = myConfigFile;
-      };
+      environment.etc."pulse/default.pa".source = myConfigFile;
+
       systemd.user = {
         services.pulseaudio = {
           restartIfChanged = true;
