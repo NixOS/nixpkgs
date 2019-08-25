@@ -214,40 +214,27 @@ in
       environment.NUT_STATEPATH = "/var/lib/nut/";
     };
 
-    environment.etc = [
-      { source = pkgs.writeText "nut.conf"
-        ''
-          MODE = ${cfg.mode}
-        '';
-        target = "nut/nut.conf";
-      }
-      { source = pkgs.writeText "ups.conf"
-        ''
-          maxstartdelay = ${toString cfg.maxStartDelay}
+    environment.etc = {
+      "nut/nut.conf".text = ''
+        MODE = ${cfg.mode}
+      '';
+      "nut/ups.conf".text = ''
+        maxstartdelay = ${toString cfg.maxStartDelay}
 
-          ${flip concatStringsSep (forEach (attrValues cfg.ups) (ups: ups.summary)) "
+        ${flip concatStringsSep (forEach (attrValues cfg.ups) (ups: ups.summary)) "
 
-          "}
-        '';
-        target = "nut/ups.conf";
-      }
-      { source = cfg.schedulerRules;
-        target = "nut/upssched.conf";
-      }
+        "}
+      '';
+      "nut/upssched.conf".source = cfg.schedulerRules;
+
       # These file are containing private informations and thus should not
       # be stored inside the Nix store.
       /*
-      { source = ;
-        target = "nut/upsd.conf";
-      }
-      { source = ;
-        target = "nut/upsd.users";
-      }
-      { source = ;
-        target = "nut/upsmon.conf;
-      }
+      "nut/upsd.conf".source = ;
+      "nut/upsd.users".source = ;
+      "nut/upsmon.conf".source = ;
       */
-    ];
+    };
 
     power.ups.schedulerRules = mkDefault "${pkgs.nut}/etc/upssched.conf.sample";
 
