@@ -152,11 +152,7 @@ in
 
     # This isn't needed, it's just so that the user can type "nagiostats
     # -c /etc/nagios.cfg".
-    environment.etc = [
-      { source = cfg.mainConfigFile;
-        target = "nagios.cfg";
-      }
-    ];
+    environment.etc."nagios.cfg".source = cfg.mainConfigFile;
 
     environment.systemPackages = [ pkgs.nagios ];
     systemd.services.nagios = {
