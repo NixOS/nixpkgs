@@ -454,6 +454,8 @@ in
 
   _0x0 = callPackage ../tools/misc/0x0 { };
 
+  _3llo = callPackage ../tools/misc/3llo { };
+
   _1password = callPackage ../applications/misc/1password { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
