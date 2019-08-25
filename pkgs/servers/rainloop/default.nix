@@ -2,7 +2,7 @@
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
       name = "rainloop-${edition}-${version}";
-      version = "1.12.1";
+      version = "1.13.0";
 
       buildInputs = [ unzip ];
 
@@ -35,7 +35,7 @@
   in {
     rainloop-community = common {
       edition = "community";
-      sha256 = "06w1vxqpcj2j8dzzjqh6azala8l46hzy85wcvqbjdlj5w789jzsx";
+      sha256 = "1skwq6bn98142xf8r77b818fy00nb4x0s1ii3mw5849ih94spx40";
     };
     rainloop-standard = common {
       edition = "";

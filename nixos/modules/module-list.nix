@@ -20,12 +20,14 @@
   ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
+  ./config/locale.nix
   ./config/malloc.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
+  ./config/qt5.nix
   ./config/resolvconf.nix
   ./config/shells-environment.nix
   ./config/swap.nix
@@ -33,10 +35,10 @@
   ./config/system-environment.nix
   ./config/system-path.nix
   ./config/terminfo.nix
-  ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/vpnc.nix
+  ./config/vte.nix
   ./config/zram.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
@@ -46,6 +48,7 @@
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/digitalbitbox.nix
+  ./hardware/device-tree.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
   ./hardware/ledger.nix
@@ -111,8 +114,10 @@
   ./programs/firejail.nix
   ./programs/fish.nix
   ./programs/freetds.nix
+  ./programs/fuse.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-documents.nix
+  ./programs/gnome-terminal.nix
   ./programs/gpaste.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
@@ -214,6 +219,7 @@
   ./services/backup/duplicity.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
+  ./services/backup/postgresql-wal-receiver.nix
   ./services/backup/restic.nix
   ./services/backup/restic-rest-server.nix
   ./services/backup/rsnapshot.nix
@@ -282,6 +288,7 @@
   ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/gsignond.nix
+  ./services/desktops/gvfs.nix
   ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
@@ -292,9 +299,7 @@
   ./services/desktops/gnome3/gnome-remote-desktop.nix
   ./services/desktops/gnome3/gnome-online-miners.nix
   ./services/desktops/gnome3/gnome-settings-daemon.nix
-  ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix
-  ./services/desktops/gnome3/gvfs.nix
   ./services/desktops/gnome3/rygel.nix
   ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix
@@ -433,13 +438,13 @@
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
-  ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
   ./services/misc/matrix-synapse.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/mesos-master.nix
   ./services/misc/mesos-slave.nix
+  ./services/misc/metabase.nix
   ./services/misc/mwlib.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
@@ -517,7 +522,6 @@
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/sysstat.nix
-  ./services/monitoring/systemhealth.nix
   ./services/monitoring/teamviewer.nix
   ./services/monitoring/telegraf.nix
   ./services/monitoring/thanos.nix
@@ -605,6 +609,7 @@
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/jormungandr.nix
   ./services/networking/iwd.nix
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
@@ -644,6 +649,7 @@
   ./services/networking/nullidentdmod.nix
   ./services/networking/nylon.nix
   ./services/networking/ocserv.nix
+  ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
   ./services/networking/openntpd.nix
@@ -819,6 +825,7 @@
   ./services/web-servers/varnish/default.nix
   ./services/web-servers/zope2.nix
   ./services/x11/extra-layouts.nix
+  ./services/x11/clight.nix
   ./services/x11/colord.nix
   ./services/x11/compton.nix
   ./services/x11/unclutter.nix
@@ -858,7 +865,6 @@
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
   ./system/boot/binfmt.nix
-  ./system/boot/coredump.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/grow-partition.nix
   ./system/boot/initrd-network.nix

@@ -336,7 +336,7 @@ let
           ++ optional enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
           ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
-      in concatMapStrings load allModules
+      in concatMapStrings load (unique allModules)
     }
 
     AddHandler type-map var

@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ libcap ncurses ] ++ stdenv.lib.optional withGtk gtk2;
+  buildInputs = [ ncurses ]
+    ++ stdenv.lib.optional withGtk gtk2
+    ++ stdenv.lib.optional stdenv.isLinux libcap;
 
   enableParallelBuilding = true;
 
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "A network diagnostics tool";
     homepage    = "https://www.bitwizard.nl/mtr/";
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ koral orivej raskin ];
+    maintainers = with maintainers; [ koral orivej raskin globin ];
     platforms   = platforms.unix;
   };
 }

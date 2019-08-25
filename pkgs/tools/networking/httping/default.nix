@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       latency of the webserver + network. It supports IPv6.
     '';
     license = licenses.agpl3;
-    maintainers = with maintainers; [ rickynils ];
+    maintainers = [];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

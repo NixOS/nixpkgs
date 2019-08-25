@@ -51,6 +51,10 @@ with lib;
     (mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ] "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "user" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a user setting.")
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "group" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a group setting.")
+    (mkRemovedOptionModule [ "services" "prometheus2" "alertmanagerURL" ] ''
+      Due to incompatibility, the alertmanagerURL option has been removed,
+      please use 'services.prometheus2.alertmanagers' instead.
+    '')
     (mkRenamedOptionModule [ "services" "tor" "relay" "portSpec" ] [ "services" "tor" "relay" "port" ])
     (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
     (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
@@ -174,6 +178,9 @@ with lib;
        The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
 
+    # phpfpm
+    (mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
+
     # zabbixServer
     (mkRenamedOptionModule [ "services" "zabbixServer" "dbServer" ] [ "services" "zabbixServer" "database" "host" ])
 
@@ -221,6 +228,8 @@ with lib;
     (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd")
     (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
     (mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
+    (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
+    (mkRemovedOptionModule [ "systemd" "coredump" "enable" ] "Enabled by default. Set boot.kernel.sysctl.\"kernel.core_pattern\" = \"core\"; to disable.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -257,7 +266,21 @@ with lib;
     (mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
     (mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
 
-  ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
+    # Redshift
+    (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
+      (config:
+        let value = getAttrFromPath [ "services" "redshift" "latitude" ] config;
+        in if value == null then
+          throw "services.redshift.latitude is set to null, you can remove this"
+          else builtins.fromJSON value))
+    (mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
+      (config:
+        let value = getAttrFromPath [ "services" "redshift" "longitude" ] config;
+        in if value == null then
+          throw "services.redshift.longitude is set to null, you can remove this"
+          else builtins.fromJSON value))
+
+  ] ++ (forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]
        (opt: mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''

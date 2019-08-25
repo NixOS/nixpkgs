@@ -95,6 +95,7 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
   cachix = enableSeparateBinOutput super.cachix;
+  ghcid = enableSeparateBinOutput super.ghcid;
 
   hzk = overrideCabal super.hzk (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
@@ -279,10 +280,7 @@ self: super: builtins.intersectAttrs super {
       let dontCheckDarwin = if pkgs.stdenv.isDarwin
                             then dontCheck
                             else pkgs.lib.id;
-      in dontCheckDarwin (super.llvm-hs.override {
-        llvm-config = pkgs.llvm_8;
-        llvm-hs-pure = super.llvm-hs-pure_8_0_0;
-      });
+      in dontCheckDarwin (super.llvm-hs.override { llvm-config = pkgs.llvm_8; });
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -506,6 +504,12 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
+  # Break infinite recursion cycle between QuickCheck and splitmix.
+  splitmix = dontCheck super.splitmix;
+
+  # Break infinite recursion cycle between tasty and clock.
+  clock = dontCheck super.clock;
+
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
 
@@ -526,10 +530,6 @@ self: super: builtins.intersectAttrs super {
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
-
-  # Doctests hang only when compiling with nix.
-  # https://github.com/cdepillabout/termonad/issues/15
-  termonad = dontCheck super.termonad;
 
   # Expects z3 to be on path so we replace it with a hard
   sbv = overrideCabal super.sbv (drv: {
@@ -585,5 +585,7 @@ self: super: builtins.intersectAttrs super {
 
   # Tests require internet
   dhall_1_25_0 = dontCheck super.dhall_1_25_0;
+  http-download = dontCheck super.http-download;
+  pantry = dontCheck super.pantry;
 
 }

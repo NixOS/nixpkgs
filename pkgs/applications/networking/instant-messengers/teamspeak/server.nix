@@ -4,16 +4,13 @@ let
   arch = if stdenv.is64bit then "amd64" else "x86";
 in stdenv.mkDerivation rec {
   pname = "teamspeak-server";
-  version = "3.8.0";
+  version = "3.9.1";
 
   src = fetchurl {
-    urls = [
-      "http://dl.4players.de/ts/releases/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2"
-      "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2"
-    ];
+    url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "1bzmqqqpwn6q2pvkrkkxq0ggs8crxbkwaxlggcdxjlyg95cyq8k1"
-      else "0p5rqwdsvbria5dzjjm5mj8vfy0zpfs669wpbwxd4g3n4vh03kyw";
+      then "0vzi0prnqhjxrwlghwgii0rsmml6aa3qk3yv227g9wz5m3b9f10a"
+      else "1nn0fh4s5rmnn27djbsk21jaah1kxyvap9qaf5p4r7cydwr1bzm6";
   };
 
   buildInputs = [ stdenv.cc.cc ];
@@ -28,7 +25,7 @@ in stdenv.mkDerivation rec {
     # Make symlinks to the binaries from bin.
     mkdir -p $out/bin/
     ln -s $out/lib/teamspeak/ts3server $out/bin/ts3server
-    ln -s $out/lib/teamspeak/tsdnsserver $out/bin/tsdnsserver
+    ln -s $out/lib/teamspeak/tsdns/tsdnsserver $out/bin/tsdnsserver
   '';
 
   meta = {

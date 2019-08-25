@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "cloudfoundry-cli-${version}";
-  version = "6.45.0";
+  version = "6.46.1";
 
   goPackagePath = "code.cloudfoundry.org/cli";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "1nq78670limq8lydysadk0kb1r88w55fr8cqxqxw0zy58vy1jzr4";
+    sha256 = "0dqrkimwhw016icgyf4cyipzy6vdz5jgickm33xxd9018dh3ibwq";
   };
 
   makeTarget = let hps = stdenv.hostPlatform.system; in

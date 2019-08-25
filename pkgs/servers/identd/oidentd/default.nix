@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "oidentd-${version}";
-  version = "2.3.2";
+  version = "2.4.0";
   nativeBuildInputs = [ bison flex ];
 
   src = fetchurl {
     url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/${name}.tar.gz";
-    sha256 = "10c5jkhirkvm1s4v3zdj4micfi6rkfjj32q4k7wjwh1fnzrwyb5n";
+    sha256 = "132bzlbjp437lrlxv5k9aqa1q9w5pghk02rnazg33cw6av00q2li";
   };
 
   meta = with stdenv.lib; {

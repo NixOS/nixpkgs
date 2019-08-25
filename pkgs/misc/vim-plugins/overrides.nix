@@ -33,6 +33,9 @@ self: super: {
     dependencies = with super; [ vim-addon-manager ];
   };
 
+  # Mainly used as a dependency for fzf-vim. Wraps the fzf program as a vim
+  # plugin, since part of the fzf vim plugin is included in the main fzf
+  # program.
   fzfWrapper = buildVimPluginFrom2Nix {
     pname = "fzf";
     version = fzf.version;
@@ -122,12 +125,12 @@ self: super: {
   # Only official releases contains the required index.js file
   coc-nvim = buildVimPluginFrom2Nix rec {
     pname = "coc-nvim";
-    version = "0.0.73";
+    version = "0.0.74";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
       rev = "v${version}";
-      sha256 = "1z7573rbh806nmkh75hr1kbhxr4jysv6k9x01fcyjfwricpa3cf7";
+      sha256 = "1s4nib2mnhagd0ymx254vf7l1iijwrh2xdqn3bdm4f1jnip81r10";
     };
   };
 
@@ -223,6 +226,10 @@ self: super: {
 
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
+  });
+
+  fzf-vim = super.fzf-vim.overrideAttrs(old: {
+    dependencies = [ self.fzfWrapper ];
   });
 
   sved = let

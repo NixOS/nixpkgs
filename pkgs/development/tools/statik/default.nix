@@ -1,16 +1,16 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "statik-unstable-${version}";
-  version = "2018-11-28";
+  pname = "statik";
+  version = "unstable-2019-07-31";
   goPackagePath = "github.com/rakyll/statik";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
     owner = "rakyll";
     repo = "statik";
-    rev = "79258177a57a85a8ab2eca7ce0936aad80307f4e";
-    sha256 = "14wqh38a7dhm2jgr1lsl2wdvjmkgdapzl2z4a1vl7ncv3x43gkg5";
+    rev = "925a23bda946b50bb0804894f340c5da2b95603b";
+    sha256 = "15wwgrprfq36pa13b9anp7097q1fqcad28hirvivybmc011p0fri";
   };
 
   enableParallelBuilding = true;

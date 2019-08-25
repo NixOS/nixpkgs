@@ -41,7 +41,7 @@ in
       };
 
       config = mkOption {
-        type = with types; attrsOf (either (either str (either int bool)) (listOf str));
+        type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
         default = {};
         description = ''
           automysqlbackup configuration. Refer to

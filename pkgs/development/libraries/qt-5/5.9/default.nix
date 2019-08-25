@@ -9,9 +9,8 @@ top-level attribute to `top-level/all-packages.nix`.
 1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
 2. From the top of the Nixpkgs tree, run
    `./maintainers/scripts/fetch-kde-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
-3. Update `qtCompatVersion` below if the minor version number changes.
-4. Check that the new packages build correctly.
-5. Commit the changes and open a pull request.
+3. Check that the new packages build correctly.
+4. Commit the changes and open a pull request.
 
 */
 
@@ -31,13 +30,17 @@ with stdenv.lib;
 
 let
 
-  qtCompatVersion = "5.9";
+  qtCompatVersion = srcs.qtbase.version;
 
   mirror = "http://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ];
+    qtbase = [
+      ./qtbase.patch
+      ./qtbase-fixguicmake.patch
+      ./qtbase-openssl_1_1.patch
+    ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];

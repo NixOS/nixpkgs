@@ -34,5 +34,8 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.viric ];
     platforms = platforms.linux;
+
+    # upstream doesn't support newer openssl versions, use 1.0.1 for testing
+    broken = true;
   };
 }

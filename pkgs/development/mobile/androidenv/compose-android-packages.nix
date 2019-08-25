@@ -21,7 +21,7 @@
 }:
 
 let
-  inherit (pkgs) stdenv fetchurl makeWrapper unzip;
+  inherit (pkgs) stdenv lib fetchurl makeWrapper unzip;
 
   # Determine the Android os identifier from Nix's system identifier
   os = if stdenv.system == "x86_64-linux" then "linux"
@@ -59,12 +59,12 @@ let
   };
 
   system-images-packages =
-    stdenv.lib.recursiveUpdate
+    lib.recursiveUpdate
       system-images-packages-android
-      (stdenv.lib.recursiveUpdate system-images-packages-android-tv
-        (stdenv.lib.recursiveUpdate system-images-packages-android-wear
-          (stdenv.lib.recursiveUpdate system-images-packages-android-wear-cn
-            (stdenv.lib.recursiveUpdate system-images-packages-google_apis system-images-packages-google_apis_playstore))));
+      (lib.recursiveUpdate system-images-packages-android-tv
+        (lib.recursiveUpdate system-images-packages-android-wear
+          (lib.recursiveUpdate system-images-packages-android-wear-cn
+            (lib.recursiveUpdate system-images-packages-google_apis system-images-packages-google_apis_playstore))));
 
   # Generated addons
   addons = import ./generated/addons.nix {
@@ -77,15 +77,13 @@ rec {
   };
 
   platform-tools = import ./platform-tools.nix {
-    inherit deployAndroidPackage os autoPatchelfHook pkgs;
-    inherit (stdenv) lib;
+    inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
     package = packages.platform-tools."${platformToolsVersion}";
   };
 
   build-tools = map (version:
     import ./build-tools.nix {
-      inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686;
-      inherit (stdenv) lib;
+      inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
       package = packages.build-tools."${version}";
     }
   ) buildToolsVersions;
@@ -96,8 +94,7 @@ rec {
   };
 
   emulator = import ./emulator.nix {
-    inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686;
-    inherit (stdenv) lib;
+    inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
     package = packages.emulator."${emulatorVersion}"."${os}";
   };
 
@@ -115,12 +112,18 @@ rec {
     }
   ) platformVersions;
 
-  system-images = stdenv.lib.flatten (map (apiVersion:
+  system-images = lib.flatten (map (apiVersion:
     map (type:
       map (abiVersion:
         deployAndroidPackage {
           inherit os;
           package = system-images-packages.${apiVersion}.${type}.${abiVersion};
+          # Patch 'google_apis' system images so they're recognized by the sdk.
+          # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
+          # of 'Tag/ABIs : google_apis*/*' and the emulator fails with an ABI-related error.
+          patchInstructions = lib.optionalString (lib.hasPrefix "google_apis" type) ''
+            sed -i '/^Addon.Vendor/d' source.properties
+          '';
         }
       ) abiVersions
     ) systemImageTypes
@@ -128,23 +131,20 @@ rec {
 
   lldb = map (version:
     import ./lldb.nix {
-      inherit deployAndroidPackage os autoPatchelfHook pkgs;
-      inherit (stdenv) lib;
+      inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
       package = packages.lldb."${version}";
     }
   ) lldbVersions;
 
   cmake = map (version:
     import ./cmake.nix {
-      inherit deployAndroidPackage os autoPatchelfHook pkgs;
-      inherit (stdenv) lib;
+      inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
       package = packages.cmake."${version}";
     }
   ) cmakeVersions;
 
   ndk-bundle = import ./ndk-bundle {
-    inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs platform-tools;
-    inherit (stdenv) lib;
+    inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs lib platform-tools;
     package = packages.ndk-bundle."${ndkVersion}";
   };
 
@@ -164,24 +164,24 @@ rec {
 
   # Function that automatically links all plugins for which multiple versions can coexist
   linkPlugins = {name, plugins}:
-    stdenv.lib.optionalString (plugins != []) ''
+    lib.optionalString (plugins != []) ''
       mkdir -p ${name}
-      ${stdenv.lib.concatMapStrings (plugin: ''
+      ${lib.concatMapStrings (plugin: ''
         ln -s ${plugin}/libexec/android-sdk/${name}/* ${name}
       '') plugins}
     '';
 
   # Function that automatically links a plugin for which only one version exists
   linkPlugin = {name, plugin, check ? true}:
-    stdenv.lib.optionalString check ''
+    lib.optionalString check ''
       ln -s ${plugin}/libexec/android-sdk/* ${name}
     '';
 
   # Links all plugins related to a requested platform
   linkPlatformPlugins = {name, plugins, check}:
-    stdenv.lib.optionalString check ''
+    lib.optionalString check ''
       mkdir -p ${name}
-      ${stdenv.lib.concatMapStrings (plugin: ''
+      ${lib.concatMapStrings (plugin: ''
         ln -s ${plugin}/libexec/android-sdk/${name}/* ${name}
       '') plugins}
     ''; # */
@@ -194,8 +194,7 @@ rec {
     https://developer.android.com/studio/terms
     by setting nixpkgs config option 'android_sdk.accept_license = true;'
   '' else import ./tools.nix {
-    inherit deployAndroidPackage requireFile packages toolsVersion autoPatchelfHook makeWrapper os pkgs pkgs_i686;
-    inherit (stdenv) lib;
+    inherit deployAndroidPackage requireFile packages toolsVersion autoPatchelfHook makeWrapper os pkgs pkgs_i686 lib;
 
     postInstall = ''
       # Symlink all requested plugins
@@ -210,9 +209,9 @@ rec {
       ${linkPlugins { name = "cmake"; plugins = cmake; }}
       ${linkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
 
-      ${stdenv.lib.optionalString includeSystemImages ''
+      ${lib.optionalString includeSystemImages ''
         mkdir -p system-images
-        ${stdenv.lib.concatMapStrings (system-image: ''
+        ${lib.concatMapStrings (system-image: ''
           apiVersion=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*))
           type=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*/*))
           mkdir -p system-images/$apiVersion/$type
@@ -224,7 +223,7 @@ rec {
       ${linkPlatformPlugins { name = "add-ons"; plugins = google-apis; check = useGoogleTVAddOns; }}
 
       # Link extras
-      ${stdenv.lib.concatMapStrings (identifier:
+      ${lib.concatMapStrings (identifier:
         let
           path = addons.extras."${identifier}".path;
           addon = deployAndroidPackage {

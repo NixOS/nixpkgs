@@ -1,18 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi, pycurl, isPy3k }:
+{ stdenv, buildPythonPackage, fetchPypi, pycurl, six }:
 
 buildPythonPackage rec {
   pname = "urlgrabber";
-  version = "3.10.2";
+  version = "4.0.0";
   name  = "${pname}-${version}";
-
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w1h7hlsq406bxfy2pn4i9bd003bwl0q9b7p03z3g6yl0d21ddq5";
+    sha256 = "0fazs574fgixd525cn2dh027f4qf0c0gbwcfyfkhc6fkblfa1ibr";
   };
 
-  propagatedBuildInputs = [ pycurl ];
+  propagatedBuildInputs = [ pycurl six ];
 
   meta = with stdenv.lib; {
     homepage = http://urlgrabber.baseurl.org;
@@ -21,4 +19,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ qknight ];
   };
 }
-

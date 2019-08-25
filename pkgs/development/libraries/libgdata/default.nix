@@ -10,6 +10,7 @@
 , glib
 , json-glib
 , gcr
+, gnome-online-accounts
 , gobject-introspection
 , liboauth
 , gnome3
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gnome3.gnome-online-accounts
+    gnome-online-accounts
     json-glib
   ];
 

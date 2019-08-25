@@ -71,6 +71,15 @@ in stdenv.mkDerivation (fBuildAttrs // {
       rm -rf $(find $bazelOut/external -type d -name .svn)
       rm -rf $(find $bazelOut/external -type d -name .hg)
 
+      # Removing top-level symlinks along with their markers.
+      # This is needed because they sometimes point to temporary paths (?).
+      # For example, in Tensorflow-gpu build:
+      # platforms -> NIX_BUILD_TOP/tmp/install/35282f5123611afa742331368e9ae529/_embedded_binaries/platforms
+      find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
+        name="$(basename "$symlink")"
+        rm "$symlink" "$bazelOut/external/@$name.marker"
+      done
+
       # Patching symlinks to remove build directory reference
       find $bazelOut/external -type l | while read symlink; do
         new_target="$(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,")"
