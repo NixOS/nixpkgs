@@ -71,6 +71,7 @@ let
     icu           = [ icu ];
     pcre          = [ pcre ];
     sqlite        = [ sqlite ];
+    syslog        = [ ];
     systemd       = [ systemd ];
     yajl          = [ yajl ];
     zeroconf      = [ avahi dbus ];
@@ -82,7 +83,7 @@ let
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
       platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smb" ]
-                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "systemd" ];
+                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "systemd" "syslog" ];
 
       knownFeatures = builtins.attrNames featureDependencies;
       platformFeatures = lib.subtractLists platformMask knownFeatures;
@@ -153,7 +154,7 @@ in
     "yajl" "sqlite"
     "soundcloud" "qobuz" "tidal"
   ] ++ lib.optionals stdenv.isLinux [
-    "alsa" "systemd"
+    "alsa" "systemd" "syslog"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "mad" "jack" "nfs"
   ]; };
