@@ -45,6 +45,7 @@
 , "git-standup"
 , "graphql-cli"
 , "grunt-cli"
+, "gtop"
 , "gulp"
 , "gulp-cli"
 , "html-minifier"
