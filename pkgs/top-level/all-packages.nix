@@ -16326,6 +16326,8 @@ in
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
+  sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {  };
+
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
   setools = callPackage ../os-specific/linux/setools { };
