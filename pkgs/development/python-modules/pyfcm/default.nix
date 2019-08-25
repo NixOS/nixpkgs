@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Python client for FCM - Firebase Cloud Messaging (Android, iOS and Web)";
     homepage = "https://github.com/olucurious/pyfcm";
     license = licenses.mit;
+    maintainers = with maintainers; [ ldelelis ];
   };
 }
