@@ -4121,8 +4121,11 @@ in
     let pythonPkgs = python3.pkgs.overrideScope' (self: super: {
       jsonschema = self.jsonschema3;
     }); in {
+      jupyterlab = pythonPkgs.callPackage ../applications/editors/jupyterlab {
+        inherit jupyterlab_server;
+      };
       jupyterlab_server = pythonPkgs.callPackage ../servers/jupyterlab { };
-    }) jupyterlab_server;
+    }) jupyterlab jupyterlab_server;
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
