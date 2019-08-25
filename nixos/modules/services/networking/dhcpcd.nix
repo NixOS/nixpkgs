@@ -185,11 +185,7 @@ in
 
     environment.systemPackages = [ dhcpcd ];
 
-    environment.etc =
-      [ { source = exitHook;
-          target = "dhcpcd.exit-hook";
-        }
-      ];
+    environment.etc."dhcpcd.exit-hook".source = exitHook;
 
     powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''
