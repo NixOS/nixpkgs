@@ -588,39 +588,25 @@ in
       })
     ];
 
-    environment.etc =
-      (optionals cfg.exportConfiguration
-        [ { source = "${configFile}";
-            target = "X11/xorg.conf";
-          }
-          # -xkbdir command line option does not seems to be passed to xkbcomp.
-          { source = "${cfg.xkbDir}";
-            target = "X11/xkb";
-          }
-        ])
+    environment.etc = {
       # localectl looks into 00-keyboard.conf
-      ++ [
-        {
-          text = ''
-            Section "InputClass"
-              Identifier "Keyboard catchall"
-              MatchIsKeyboard "on"
-              Option "XkbModel" "${cfg.xkbModel}"
-              Option "XkbLayout" "${cfg.layout}"
-              Option "XkbOptions" "${cfg.xkbOptions}"
-              Option "XkbVariant" "${cfg.xkbVariant}"
-            EndSection
-          '';
-          target = "X11/xorg.conf.d/00-keyboard.conf";
-        }
-      ]
+      "X11/xorg.conf.d/00-keyboard.conf".text = ''
+        Section "InputClass"
+        Identifier "Keyboard catchall"
+        MatchIsKeyboard "on"
+        Option "XkbModel" "${cfg.xkbModel}"
+        Option "XkbLayout" "${cfg.layout}"
+        Option "XkbOptions" "${cfg.xkbOptions}"
+        Option "XkbVariant" "${cfg.xkbVariant}"
+        EndSection
+      '';
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
-      ++ (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
-        [{
-          source = xorg.xf86inputevdev.out + "/share" + cfgPath;
-          target = cfgPath;
-        }]
-      );
+      "/X11/xorg.conf.d/10-evdev.conf".source = xorg.xf86inputevdev.out + "/share/X11/xorg.conf.d/10-evdev.conf";
+    } // optionalAttrs cfg.exportConfiguration {
+      "X11/xorg.conf".source = "${configFile}";
+      # -xkbdir command line option does not seems to be passed to xkbcomp.
+      "X11/xkb".source = "${cfg.xkbDir}";
+    };
 
     environment.systemPackages =
       [ xorg.xorgserver.out
