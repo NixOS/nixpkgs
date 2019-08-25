@@ -10,7 +10,7 @@
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
 , hunspell, libXdamage, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
-, autoconf213, which, gnused, cargo, rustc, llvmPackages
+, autoconf213, which, gnused, cargo, rustc, cargo_1_36, rustc_1_36, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
 
@@ -169,7 +169,9 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs =
-    [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
+    [ autoconf213 which gnused pkgconfig perl python2 ]
+    ++ (if (lib.versionAtLeast ffversion "67"/*somewhere betwween ESRs*/)
+          then [ cargo rustc ] else [ cargo_1_36 rustc_1_36 ])
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
     ++ lib.optional  (lib.versionAtLeast ffversion "61.0") [ python3 ]

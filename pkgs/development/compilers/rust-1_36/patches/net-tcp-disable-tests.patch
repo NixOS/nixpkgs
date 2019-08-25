@@ -1,0 +1,92 @@
+diff -ru rustc-1.36.0-src-orig/src/libstd/net/tcp.rs rustc-1.36.0-src/src/libstd/net/tcp.rs
+--- rustc-1.36.0-src-orig/src/libstd/net/tcp.rs	2019-07-03 10:00:00.000000000 +0200
++++ rustc-1.36.0-src/src/libstd/net/tcp.rs	2019-07-07 11:33:35.378130207 +0200
+@@ -973,6 +973,7 @@
+         }
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     fn listen_localhost() {
+         let socket_addr = next_test_ip4();
+@@ -1031,6 +1032,7 @@
+         })
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     fn read_eof() {
+         each_ip(&mut |addr| {
+@@ -1050,6 +1052,7 @@
+         })
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     fn write_close() {
+         each_ip(&mut |addr| {
+@@ -1076,6 +1079,7 @@
+         })
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     fn multiple_connect_serial() {
+         each_ip(&mut |addr| {
+@@ -1098,6 +1102,7 @@
+         })
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     fn multiple_connect_interleaved_greedy_schedule() {
+         const MAX: usize = 10;
+@@ -1134,6 +1139,7 @@
+     }
+ 
+     #[test]
++    #[cfg_attr(target_os = "macos", ignore)]
+     fn multiple_connect_interleaved_lazy_schedule() {
+         const MAX: usize = 10;
+         each_ip(&mut |addr| {
+@@ -1467,6 +1473,7 @@
+     }
+ 
+     #[test]
++    #[cfg_attr(target_os = "macos", ignore)]
+     fn clone_while_reading() {
+         each_ip(&mut |addr| {
+             let accept = t!(TcpListener::bind(&addr));
+@@ -1597,7 +1604,7 @@
+ 
+     // FIXME: re-enabled openbsd tests once their socket timeout code
+     //        no longer has rounding errors.
+-    #[cfg_attr(any(target_os = "netbsd", target_os = "openbsd"), ignore)]
++    #[cfg_attr(any(target_os = "netbsd", target_os = "openbsd", target_os = "macos"), ignore)]
+     #[cfg_attr(target_env = "sgx", ignore)] // FIXME: https://github.com/fortanix/rust-sgx/issues/31
+     #[test]
+     fn timeouts() {
+@@ -1643,6 +1650,7 @@
+         drop(listener);
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     #[cfg_attr(target_env = "sgx", ignore)] // FIXME: https://github.com/fortanix/rust-sgx/issues/31
+     fn test_read_with_timeout() {
+@@ -1687,6 +1695,7 @@
+         drop(listener);
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     #[cfg_attr(target_env = "sgx", ignore)]
+     fn nodelay() {
+@@ -1719,6 +1728,7 @@
+         assert_eq!(ttl, t!(stream.ttl()));
+     }
+ 
++    #[cfg_attr(target_os = "macos", ignore)]
+     #[test]
+     #[cfg_attr(target_env = "sgx", ignore)]
+     fn set_nonblocking() {
