@@ -59,15 +59,12 @@ in {
 
     environment.systemPackages = [ bluez-bluetooth pkgs.openobex pkgs.obexftp ];
 
-    environment.etc = singleton {
-      source = pkgs.writeText "main.conf" ''
-        [Policy]
-        AutoEnable=${lib.boolToString cfg.powerOnBoot}
+    environment.etc."bluetooth/main.conf".source = pkgs.writeText "main.conf" ''
+      [Policy]
+      AutoEnable=${lib.boolToString cfg.powerOnBoot}
 
-        ${cfg.extraConfig}
-      '';
-      target = "bluetooth/main.conf";
-    };
+      ${cfg.extraConfig}
+    '';
 
     services.udev.packages = [ bluez-bluetooth ];
     services.dbus.packages = [ bluez-bluetooth ];
