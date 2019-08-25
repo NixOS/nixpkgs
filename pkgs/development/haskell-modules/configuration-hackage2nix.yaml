@@ -4283,7 +4283,6 @@ broken-packages:
   - dgim
   - dgs
   - dhall-check
-  - dhall-json
   - dhall-lsp-server
   - dhall-nix
   - dhall-to-cabal
