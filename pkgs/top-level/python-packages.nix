@@ -2496,7 +2496,7 @@ in {
 
   jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
 
-  jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
+  jupyterlab_server = throw "pkgs.python3.pkgs.jupyterlab_server has moved to pkgs.jupyterlab_server";
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
 

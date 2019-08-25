@@ -4117,6 +4117,13 @@ in
 
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
 
+  inherit (
+    let pythonPkgs = python3.pkgs.overrideScope' (self: super: {
+      jsonschema = self.jsonschema3;
+    }); in {
+      jupyterlab_server = pythonPkgs.callPackage ../servers/jupyterlab { };
+    }) jupyterlab_server;
+
   jwhois = callPackage ../tools/networking/jwhois { };
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
