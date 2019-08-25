@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qtx11extras, qttools,
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qtx11extras, qttools,
   lxqt-build-tools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qps";
   version = "1.10.20";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtx11extras qttools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Qt process manager";
     homepage = https://github.com/lxqt/qps;
     license = licenses.gpl2;
