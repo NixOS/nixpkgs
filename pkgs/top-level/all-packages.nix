@@ -3513,7 +3513,7 @@ in
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos {
-    gegl = gnome3.gegl_0_4;
+    gegl = gegl_0_4;
   };
 
   gnokii = callPackage ../tools/misc/gnokii { };
@@ -11063,9 +11063,7 @@ in
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
-  gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
-    gtk = res.gtk2;
-  };
+  gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix { };
 
   geoclue2 = callPackage ../development/libraries/geoclue {};
 
