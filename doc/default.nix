@@ -11,6 +11,9 @@ in pkgs.stdenv.mkDerivation {
   src = ./.;
 
   postPatch = ''
+    # Ensures we don't have the developer's files in the input.
+    rm -rf ./out
+    rm -f ./doc-support/result
     ln -s ${doc-support} ./doc-support/result
   '';
 
