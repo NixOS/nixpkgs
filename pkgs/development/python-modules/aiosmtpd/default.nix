@@ -1,14 +1,17 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
+{ lib, isPy3k, fetchFromGitHub, buildPythonPackage
 , atpublic }:
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
-  version = "1.2";
+  version = "1.2.1";
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1xdfk741pjmz1cm8dsi4n5vq4517i175rm94696m3f7kcgk7xsmp";
+  # Release not published to Pypi
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = pname;
+    rev = version;
+    sha256 = "14c30dm6jzxiblnsah53fdv68vqhxwvb9x0aq9bc4vcdas747vr7";
   };
 
   propagatedBuildInputs = [
