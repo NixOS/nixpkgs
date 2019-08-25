@@ -124,7 +124,7 @@ in
     # Allow users to run 'spamc'.
 
     environment = {
-      etc = singleton { source = spamdEnv; target = "spamassassin"; };
+      etc."spamassassin".source = spamdEnv;
       systemPackages = [ pkgs.spamassassin ];
     };
 
