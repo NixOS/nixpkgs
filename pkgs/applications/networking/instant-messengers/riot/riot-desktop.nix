@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron, riot-web }:
+{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_5, riot-web }:
 
 # Note for maintainers:
 # Versions of `riot-web` and `riot-desktop` should be kept in sync.
@@ -7,12 +7,12 @@ with (import ./yarn2nix.nix { inherit pkgs; });
 
 let
   executableName = "riot-desktop";
-  version = "1.2.1";
+  version = "1.3.3";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "0l50swqzdzbzbnrlkvwi133d54jgj15cj3awmlc1qdhnfdc3wxbb";
+    sha256 = "1nzzxcz4r9932cha80q1bzn1425m67fsl89pn7n7ybrv6y0jnxpc";
   };
 
 in mkYarnPackage rec {
@@ -49,7 +49,7 @@ in mkYarnPackage rec {
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
-    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
+    makeWrapper '${electron_5}/bin/electron' "$out/bin/${executableName}" \
       --add-flags "$out/share/riot/electron"
   '';
 
@@ -65,7 +65,7 @@ in mkYarnPackage rec {
   # * category and StartupWMClass from the build.linux section of
   #   https://github.com/vector-im/riot-web/blob/develop/package.json
   desktopItem = makeDesktopItem {
-    inherit name;
+    name = "riot";
     exec = executableName;
     icon = "riot";
     desktopName = "Riot";
@@ -81,8 +81,7 @@ in mkYarnPackage rec {
     description = "A feature-rich client for Matrix.org";
     homepage = https://about.riot.im/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien ];
-    inherit (electron.meta) platforms;
+    maintainers = with maintainers; [ pacien worldofpeace ];
+    inherit (electron_5.meta) platforms;
   };
 }
-

@@ -1,5 +1,5 @@
 { stdenv, lib, buildEnv, substituteAll, runCommand
-, dwarf-fortress, dwarf-fortress-unfuck
+, dwarf-fortress
 , dwarf-therapist
 , enableDFHack ? false, dfhack
 , enableSoundSense ? false, soundSense, jdk

@@ -178,7 +178,7 @@ in {
       };
 
       additionalOptions = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         example =
         ''

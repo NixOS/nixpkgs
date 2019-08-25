@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGL, libdrm,
-  python27, wayland, udev, mesa_noglu, wafHook }:
+  python27, wayland, udev, mesa, wafHook }:
 
 stdenv.mkDerivation rec {
   name = "glmark2-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    libjpeg libpng xorg.libxcb libX11 libGL libdrm python27 wayland udev mesa_noglu
+    libjpeg libpng xorg.libxcb libX11 libGL libdrm python27 wayland udev mesa
   ];
 
   wafConfigureFlags = ["--with-flavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2"];

@@ -1,5 +1,5 @@
 { stdenv, fetchzip, fetchurl, fetchpatch, cmake, pkgconfig
-, zlib, libpng, openjpeg
+, zlib, libpng
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
 , enableMuPDF ? true, mupdf

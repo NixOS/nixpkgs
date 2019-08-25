@@ -101,6 +101,6 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = https://github.com/garbas/pypi2nix;
     description = "A tool that generates nix expressions for your python packages, so you don't have to.";
-    maintainers = with stdenv.lib.maintainers; [ garbas ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

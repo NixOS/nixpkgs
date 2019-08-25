@@ -7,8 +7,7 @@
   shared ? false
 }:
 let
-  usedLibExtension = if shared then ".so" else ".a";
-  inherit (stdenv.lib) optional optionals;
+  inherit (stdenv.lib) optional;
   version = "3.8.0";
 in
 

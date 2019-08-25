@@ -3,7 +3,6 @@
 , fetchPypi
 , ifaddr
 , typing
-, isPy27
 , pythonOlder
 , netifaces
 , six

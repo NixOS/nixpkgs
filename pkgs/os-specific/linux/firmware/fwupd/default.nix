@@ -1,10 +1,11 @@
 { stdenv, fetchurl, substituteAll, gtk-doc, pkgconfig, gobject-introspection, intltool
 , libgudev, polkit, libxmlb, gusb, sqlite, libarchive, glib-networking
-, libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
-, gnu-efi, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
+, libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, gnu-efi
+, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
 , ninja, gcab, gnutls, python3, wrapGAppsHook, json-glib, bash-completion
 , shared-mime-info, umockdev, vala, makeFontsConf, freefont_ttf
 , cairo, freetype, fontconfig, pango
+, bubblewrap, efibootmgr, flashrom, tpm2-tools
 }:
 
 # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
@@ -16,28 +17,39 @@ let
   fontsConf = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
+
+  isx86 = stdenv.isx86_64 || stdenv.isi686;
+
+  # Dell isn't supported on Aarch64
+  haveDell = isx86;
+
+  # only redfish for x86_64
+  haveRedfish = stdenv.isx86_64;
+
+  # Currently broken on Aarch64
+  haveFlashrom = isx86;
+
 in stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.2.3";
+  version = "1.2.8";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "11qpgincndahq96rbm2kgcy9kw5n9cmbbilsrqcqcyk7mvv464sl";
+    sha256 = "0qbvq52c0scn1h99i1rf2la6rrhckin6gb02k7l0v3g07mxs20wc";
   };
 
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
-    meson ninja gtk-doc pkgconfig gobject-introspection intltool glibcLocales shared-mime-info
+    meson ninja gtk-doc pkgconfig gobject-introspection intltool shared-mime-info
     valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook vala
   ];
-  buildInputs = [
-    polkit libxmlb gusb sqlite libarchive libsoup elfutils libsmbios gnu-efi libyaml
-    libgudev colord gpgme libuuid gnutls glib-networking efivar json-glib umockdev
-    bash-completion cairo freetype fontconfig pango
-  ];
 
-  LC_ALL = "en_US.UTF-8"; # For po/make-images
+  buildInputs = [
+    polkit libxmlb gusb sqlite libarchive libsoup elfutils gnu-efi libyaml
+    libgudev colord gpgme libuuid gnutls glib-networking json-glib umockdev
+    bash-completion cairo freetype fontconfig pango efivar
+  ] ++ stdenv.lib.optionals haveDell [ libsmbios ];
 
   patches = [
     ./fix-paths.patch
@@ -63,13 +75,24 @@ in stdenv.mkDerivation rec {
     substituteInPlace meson.build \
       --replace "plugin_dir = join_paths(libdir, 'fwupd-plugins-3')" \
                 "plugin_dir = join_paths('${placeholder "out"}', 'fwupd_plugins-3')"
+
+    substituteInPlace data/meson.build --replace \
+      "install_dir: systemd.get_pkgconfig_variable('systemdshutdowndir')" \
+      "install_dir: '${placeholder "out"}/lib/systemd/system-shutdown'"
   '';
 
   # /etc/os-release not available in sandbox
   # doCheck = true;
 
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  preFixup = let
+    binPath = [ efibootmgr bubblewrap tpm2-tools ] ++ stdenv.lib.optional haveFlashrom flashrom;
+  in
+  ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      # See programs reached with fu_common_find_program_in_path in source
+      --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
+    )
   '';
 
   mesonFlags = [
@@ -82,6 +105,13 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+  ] ++ stdenv.lib.optionals (!haveDell) [
+    "-Dplugin_dell=false"
+    "-Dplugin_synaptics=false"
+  ] ++ stdenv.lib.optionals (!haveRedfish) [
+    "-Dplugin_redfish=false"
+  ] ++ stdenv.lib.optionals (!haveFlashrom) [
+    "-Dplugin_flashrom=false"
   ];
 
   # TODO: We need to be able to override the directory flags from meson setup hook
@@ -114,10 +144,11 @@ in stdenv.mkDerivation rec {
   # /etc/fwupd/uefi.conf is created by the services.hardware.fwupd NixOS module
   passthru = {
     filesInstalledToEtc = [
-      "fwupd/remotes.d/fwupd.conf"
+      "fwupd/remotes.d/dell-esrt.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
+      "fwupd/remotes.d/vendor-directory.conf"
       "pki/fwupd/GPG-KEY-Hughski-Limited"
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"

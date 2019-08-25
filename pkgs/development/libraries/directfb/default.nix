@@ -1,31 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, perl, zlib, libjpeg, freetype, libpng, giflib
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, perl, pkgconfig, flux, zlib
+, libjpeg, freetype, libpng, giflib
 , enableX11 ? true, xorg
 , enableSDL ? true, SDL }:
 
-let s = 
-rec {
-   version = "1.7.7";
-   name="directfb-${version}";
-   sha256 = "18r7h0pwbyyk8z3pgdv77nmma8lvr1si9gl1ghxgxf1ivhwcd1dp";
-   url="http://directfb.org/downloads/Core/DirectFB-1.7/DirectFB-${version}.tar.gz";
-}
-; in
-stdenv.mkDerivation {
-  inherit (s) name;
-  src = fetchurl {
-    inherit (s) url sha256;
+stdenv.mkDerivation rec {
+  pname = "directfb";
+  version = "1.7.7";
+
+  src = fetchFromGitHub {
+    owner = "deniskropp";
+    repo = "DirectFB";
+    rev = "DIRECTFB_${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "0bs3yzb7hy3mgydrj8ycg7pllrd2b6j0gxj596inyr7ihssr3i0y";
   };
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook perl pkgconfig flux ];
 
   buildInputs = [ zlib libjpeg freetype giflib libpng ]
-    ++ stdenv.lib.optional enableSDL SDL
-    ++ stdenv.lib.optionals enableX11 (with xorg; [
+    ++ lib.optional enableSDL SDL
+    ++ lib.optionals enableX11 (with xorg; [
       xorgproto libX11 libXext
       libXrender
     ]);
 
-  NIX_LDFLAGS="-lgcc_s";
+  NIX_LDFLAGS = "-lgcc_s";
 
   configureFlags = [
     "--enable-sdl"
@@ -35,14 +33,11 @@ stdenv.mkDerivation {
     "--enable-fbdev"
     "--enable-mmx"
     "--enable-sse"
-    #"--enable-sysfs" # not recognized
     "--with-software"
     "--with-smooth-scaling"
-    ] ++ stdenv.lib.optionals enableX11 [
-      "--enable-x11"
-    ];
+  ] ++ lib.optional enableX11 "--enable-x11";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphics and input library designed with embedded systems in mind";
     longDescription = ''
       DirectFB is a thin library that provides hardware graphics acceleration,
@@ -54,7 +49,7 @@ stdenv.mkDerivation {
       power to embedded systems and sets a new standard for graphics under
       Linux.
     '';
-    homepage = http://directfb.org/;
+    homepage = "https://github.com/deniskropp/DirectFB";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

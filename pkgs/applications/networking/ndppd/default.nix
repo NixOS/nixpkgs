@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, gzip }:
+{ stdenv, fetchFromGitHub, gzip }:
 
 stdenv.mkDerivation rec {
   name = "ndppd-${version}";
@@ -24,12 +24,11 @@ stdenv.mkDerivation rec {
     cp ndppd.conf-dist $out/etc/ndppd.conf
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
     homepage = https://github.com/DanielAdolfsson/ndppd;
-    license = stdenv.lib.licenses.gpl3;
-
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.fadenb ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fadenb globin ];
   };
 }

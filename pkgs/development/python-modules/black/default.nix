@@ -15,6 +15,10 @@ buildPythonPackage rec {
 
   checkInputs =  [ pytest glibcLocales ];
 
+  # Necessary for the tests to pass on Darwin with sandbox enabled.
+  # Black starts a local server and needs to bind a local address.
+  __darwinAllowLocalNetworking = true;
+
   # Don't know why these tests fails
   checkPhase = ''
     LC_ALL="en_US.UTF-8" pytest \

@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, fetchpatch }:
+{ lib, python3Packages, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pgcli";

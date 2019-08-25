@@ -83,7 +83,6 @@ let
         inherit (self) themes;
 
         dwarf-fortress = dwarf-fortress;
-        dwarf-fortress-unfuck = dwarf-fortress-unfuck;
         twbt = twbt;
         dfhack = dfhack;
         dwarf-therapist = dwarf-therapist;

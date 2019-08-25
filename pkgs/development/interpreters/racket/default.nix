@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeFontsConf, makeWrapper
+{ stdenv, fetchurl, makeFontsConf
 , cacert
 , cairo, coreutils, fontconfig, freefont_ttf
 , glib, gmp

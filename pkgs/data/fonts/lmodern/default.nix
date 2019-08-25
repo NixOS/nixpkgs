@@ -1,4 +1,4 @@
-{ lib, fetchzip }:
+{ fetchzip }:
 
 fetchzip {
   name = "lmodern-2.004.5";

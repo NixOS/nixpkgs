@@ -25,5 +25,6 @@ buildPythonPackage rec {
     description = "Image augmentation for machine learning experiments";
     license = licenses.mit;
     maintainers = with maintainers; [ cmcdragonkai ];
+    broken = true; # opencv-python bindings aren't available yet, and look non-trivial
   };
 }

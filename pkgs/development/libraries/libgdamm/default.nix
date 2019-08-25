@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glibmm, libgda, libxml2, gnome3
-, mysqlSupport ? false, mysql ? null
-, postgresSupport ? false, postgresql ? null }:
+, mysqlSupport ? false
+, postgresSupport ? false }:
 
 let
   gda = libgda.override {

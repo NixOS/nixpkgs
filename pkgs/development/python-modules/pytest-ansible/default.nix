@@ -4,7 +4,6 @@
 , ansible
 , pytest
 , mock
-, isPy3k
 }:
 
 buildPythonPackage rec {

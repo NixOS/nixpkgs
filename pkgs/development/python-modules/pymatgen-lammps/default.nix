@@ -2,7 +2,6 @@
 , fetchurl
 , buildPythonPackage
 , pymatgen
-, lammps
 , pytestrunner
 , pytest
 , isPy3k

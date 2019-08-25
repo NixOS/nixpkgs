@@ -2,7 +2,7 @@
 , glib, gobject-introspection, libxml2, gtk3, gtk-vnc, freerdp, libvirt, spice-gtk, python3
 , spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
 , libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
-, mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
+, mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, libsecret
 , libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk, vte
 }:
 
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio ]}")
   '';
 
   mesonFlags = [

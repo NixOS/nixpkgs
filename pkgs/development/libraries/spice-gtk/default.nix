@@ -1,14 +1,12 @@
 { stdenv
 , fetchurl
 , pkgconfig
-, fetchpatch
 , meson
 , ninja
 , python3
 , spice-protocol
 , gettext
 , openssl
-, libpulseaudio
 , pixman
 , gobject-introspection
 , libjpeg_turbo
@@ -89,10 +87,13 @@ stdenv.mkDerivation rec {
     vala
   ];
 
+  propagatedBuildInputs = [
+    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+  ];
+
   buildInputs = [
     cyrus_sasl
     epoxy
-    gst_all_1.gst-plugins-base
     gtk3
     json-glib
     libcacard
@@ -111,7 +112,6 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   mesonFlags = [
-    "-Dauto_features=enabled"
     "-Dcelt051=disabled"
     "-Dpulse=disabled" # is deprecated upstream
   ];

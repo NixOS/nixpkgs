@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, lib, fetchurl, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig
 , libxslt, xz, elf-header }:
 
 let

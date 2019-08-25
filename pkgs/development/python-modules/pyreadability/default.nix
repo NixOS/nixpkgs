@@ -1,6 +1,5 @@
 { lib, fetchPypi, buildPythonPackage
 , requests, chardet, cssselect, lxml
-, pytest
 }:
 
 buildPythonPackage rec {

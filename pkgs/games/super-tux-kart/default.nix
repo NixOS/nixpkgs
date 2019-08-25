@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchsvn, fetchpatch, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
 , openal, freealut, libGLU_combined, libvorbis, libogg, gettext, curl, freetype
 , fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr, enet }:
 

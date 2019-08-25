@@ -118,7 +118,6 @@ in
     cfsslCertPathPrefix = "${config.services.cfssl.dataDir}/cfssl";
     cfsslCert = "${cfsslCertPathPrefix}.pem";
     cfsslKey = "${cfsslCertPathPrefix}-key.pem";
-    cfsslPort = toString config.services.cfssl.port;
 
     certmgrPaths = [
       top.caFile

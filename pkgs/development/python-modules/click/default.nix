@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, substituteAll, locale, pytest }:
+{ lib, buildPythonPackage, fetchPypi, locale, pytest }:
 
 buildPythonPackage rec {
   pname = "click";

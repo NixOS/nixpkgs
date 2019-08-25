@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, findutils, fixDarwinDylibNames
+{ stdenv, fetchurl, findutils, fixDarwinDylibNames
 , sslSupport? true, openssl
 }:
 

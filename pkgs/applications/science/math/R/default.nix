@@ -8,11 +8,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.6.0";
+  name = "R-3.6.1";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "02bmylmzrm9sdidirmwy233lghmd2346z725ca71ari68lzarz1n";
+    sha256 = "128kifbq0w25y8aq77w289ddax5i5w2djcfsqgffrb3i7syrxajv";
   };
 
   dontUseImakeConfigure = true;
@@ -27,10 +27,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-usr-local-search-paths.patch
-    (fetchpatch {
-      url = "https://github.com/wch/r-source/commit/aeb75e12863019be06fe6c762ab705bf5ed8b38c.patch";
-      sha256 = "03xv1g1yw1dbhx4paw6pn6hkawj8sny86km3748l1vnasbham82g";
-      })
   ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''

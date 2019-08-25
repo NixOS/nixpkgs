@@ -5,7 +5,6 @@
 , futures
 , pyopenssl
 , requests
-, pythonOlder
 , isPy3k
 }:
 

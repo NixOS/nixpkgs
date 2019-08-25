@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchurl, fetchpatch
+{ stdenv, fetchFromGitHub, fetchurl
 , ocaml, findlib, ocamlbuild, ocaml_oasis,
- bitstring, camlzip, cmdliner, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, frontc, ounit, ppx_jane, parsexp,
+ bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, frontc, ounit, ppx_jane, parsexp,
  utop,
  ppx_tools_versioned,
  which, makeWrapper, writeText

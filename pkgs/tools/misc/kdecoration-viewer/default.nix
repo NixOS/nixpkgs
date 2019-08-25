@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, mkDerivation
 , cmake, extra-cmake-modules, qtquickcontrols, kconfigwidgets, kdeclarative, kdecoration }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "kdecoration-viewer-2018-07-24";
 
   src = fetchFromGitHub {

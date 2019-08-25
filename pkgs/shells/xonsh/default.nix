@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.4";
+  version = "0.9.10";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
-    owner  = "scopatz";
+    owner  = "xonsh";
     repo   = "xonsh";
     rev    = "refs/tags/${version}";
-    sha256 = "1gxshi6k030a48bw4nr7rn9fh3cc0nmrkqjpxfrdxyq472d61477";
+    sha256 = "0dil7vannl8sblzz528503ich8m8g0ld0p496bgw6jjh0pzkdskc";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     description = "A Python-ish, BASHwards-compatible shell";
     homepage = http://xon.sh/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ spwhitt garbas vrthra ];
+    maintainers = with maintainers; [ spwhitt vrthra ];
     platforms = platforms.all;
   };
 

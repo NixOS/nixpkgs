@@ -17,4 +17,11 @@ stdenv.mkDerivation rec {
       attrPath = "gnome3.gnome-user-docs";
     };
   };
+
+  meta = {
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-user-docs";
+    description = "GNOME User Documentation";
+    license = stdenv.lib.licenses.cc-by-30;
+    maintainers = gnome3.maintainers;
+  };
 }

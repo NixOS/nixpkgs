@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub, makeDesktopItem, makeWrapper
+{ stdenv, lib, buildPythonApplication, fetchFromGitHub, makeWrapper
 , aria
 , libnotify
 , pulseaudio

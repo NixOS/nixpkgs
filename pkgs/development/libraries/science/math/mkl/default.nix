@@ -1,4 +1,4 @@
-{ stdenvNoCC, writeText, fetchurl, rpmextract, undmg, darwin }:
+{ stdenvNoCC, fetchurl, rpmextract, undmg, darwin }:
 /*
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.

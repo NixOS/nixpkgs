@@ -1,4 +1,4 @@
-{ lib, systemd, buildGoPackage, fetchFromGitHub, makeWrapper }:
+{ lib, systemd, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "journalbeat-${version}";

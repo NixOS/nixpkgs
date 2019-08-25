@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper
+{ stdenv, lib, fetchFromGitHub, makeWrapper
 , coq, ocamlPackages, coq2html
 , tools ? stdenv.cc
 }:
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./configure \
+      --replace '|8.9.0' '|8.9.0|8.9.1' \
       --replace '{toolprefix}gcc' '{toolprefix}cc'
   '';
 

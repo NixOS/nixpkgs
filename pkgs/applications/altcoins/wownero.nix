@@ -1,22 +1,20 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, git
 , boost, miniupnpc_2, openssl, unbound, cppzmq
 , zeromq, pcsclite, readline, libsodium, rapidjson
-, CoreData, IOKit, PCSC
 }:
-
-assert stdenv.isDarwin -> IOKit != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "wownero-${version}";
 
-  version = "0.5.0.2";
+  version = "0.6.1.2";
   src = fetchFromGitHub {
     owner = "wownero";
     repo = "wownero";
     rev    = "v${version}";
-    sha256 = "120cfkl2q8qgl3ajxfkkri9bxlnvmr1mhb1wvcigch1lqyflff1w";
+    sha256 = "03q3pviyhrldpa3f4ly4d97jr39hvrz37chl102bap0790d9lk09";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkgconfig git ];
@@ -24,14 +22,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost miniupnpc_2 openssl unbound rapidjson
     cppzmq zeromq pcsclite readline libsodium
-  ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
+  ];
 
   cmakeFlags = [
     "-DReadline_ROOT_DIR=${readline.dev}"
     "-DMANUAL_SUBMODULES=ON"
-  ] ++ optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
-
-  hardeningDisable = [ "fortify" ];
+  ];
 
   meta = {
     description = "Wownero is a fork of the cryptocurrency Monero with primary alterations";
@@ -44,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = http://wownero.org/;
     license     = licenses.bsd3;
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ fuwa ];
   };
 }

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pyasn1
-, isPyPy
 , pytest
 }:
 

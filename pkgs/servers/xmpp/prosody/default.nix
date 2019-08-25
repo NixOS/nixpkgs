@@ -12,17 +12,6 @@ assert withDBI -> luadbi != null;
 
 with stdenv.lib;
 
-let
-  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ]
-                ++ optional withLibevent luaevent
-                ++ optional withDBI luadbi
-                ++ withExtraLibs;
-  getPath     = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
-  getLuaPath  = lib : getPath lib "lua";
-  getLuaCPath = lib : getPath lib "so";
-  luaPath     = concatStringsSep ";" (map getLuaPath  libs);
-  luaCPath    = concatStringsSep ";" (map getLuaCPath libs);
-in
 
 stdenv.mkDerivation rec {
   version = "0.11.2"; # also update communityModules
@@ -42,8 +31,17 @@ stdenv.mkDerivation rec {
     sha256 = "0bzn92j48krb2zhp9gn5bbn5sg0qv15j5lpxfszwqdln3lpmrvzg";
   };
 
-  buildInputs = [ lua5 makeWrapper libidn openssl ]
-    ++ optional withDBI luadbi;
+  buildInputs = [
+    lua5 makeWrapper libidn openssl
+  ]
+  # Lua libraries
+  ++ [
+    luasocket luasec luaexpat luafilesystem luabitop
+  ]
+  ++ optional withLibevent luaevent
+  ++ optional withDBI luadbi
+  ++ withExtraLibs;
+
 
   configureFlags = [
     "--ostype=linux"
@@ -56,12 +54,12 @@ stdenv.mkDerivation rec {
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (withCommunityModules ++ withOnlyInstalledCommunityModules)}
       wrapProgram $out/bin/prosody \
-        --set LUA_PATH '${luaPath};' \
-        --set LUA_CPATH '${luaCPath};'
+        --prefix LUA_PATH ';' "$NIX_LUA_PATH" \
+        --prefix LUA_CPATH ';' "$NIX_LUA_CPATH"
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --set LUA_PATH '${luaPath};' \
-        --set LUA_CPATH '${luaCPath};'
+        --prefix LUA_PATH ';' "$NIX_LUA_PATH" \
+        --prefix LUA_CPATH ';' "$NIX_LUA_CPATH"
     '';
 
   passthru.communityModules = withCommunityModules;

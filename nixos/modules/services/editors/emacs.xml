@@ -95,7 +95,8 @@
     also available in Nixpkgs:
     <link xlink:href="https://www.gnu.org/software/zile/">Zile</link>,
     <link xlink:href="http://homepage.boetes.org/software/mg/">mg</link>,
-    <link xlink:href="http://yi-editor.github.io/">Yi</link>.
+    <link xlink:href="http://yi-editor.github.io/">Yi</link>,
+    <link xlink:href="https://joe-editor.sourceforge.io/">jmacs</link>.
    </para>
   </section>
 
@@ -238,8 +239,8 @@ in
    <para>
     You can check that it works by executing this in a terminal:
 <screen>
-$ nix-build emacs.nix
-$ ./result/bin/emacs -q
+<prompt>$ </prompt>nix-build emacs.nix
+<prompt>$ </prompt>./result/bin/emacs -q
 </screen>
     and then typing <literal>M-x package-initialize</literal>. Check that you
     can use all the packages you want in this Emacs instance. For example, try
@@ -403,9 +404,9 @@ in [...]
    <para>
     To start the daemon, execute the following:
 <screen>
-$ nixos-rebuild switch  # to activate the new configuration.nix
-$ systemctl --user daemon-reload        # to force systemd reload
-$ systemctl --user start emacs.service  # to start the Emacs daemon
+<prompt>$ </prompt>nixos-rebuild switch  # to activate the new configuration.nix
+<prompt>$ </prompt>systemctl --user daemon-reload        # to force systemd reload
+<prompt>$ </prompt>systemctl --user start emacs.service  # to start the Emacs daemon
 </screen>
     The server should now be ready to serve Emacs clients.
    </para>
@@ -551,7 +552,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     <xref linkend="opt-environment.systemPackages"/>
     (<link
       linkend="sec-declarative-package-mgmt">NixOS</link>), or run
-    <literal>nix-env -i pkgs.docbook5</literal>
+    <literal>nix-env -f '&lt;nixpkgs&gt;' -iA docbook5</literal>
     (<link linkend="sec-ad-hoc-packages">Nix</link>).
    </para>
 

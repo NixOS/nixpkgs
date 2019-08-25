@@ -15,7 +15,6 @@
 , six
 , tornado
 , pytest
-, pythonOlder
 , isPy27
 }:
 

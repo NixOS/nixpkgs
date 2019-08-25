@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, yasm, perl, cmake, pkgconfig, python3, writeText }:
+{ stdenv, fetchgit, yasm, perl, cmake, pkgconfig, python3 }:
 
 stdenv.mkDerivation rec {
   name = "libaom-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libjpeg, zlib, perl }:
+{ stdenv, fetchurl, libjpeg, zlib, perl }:
 
 let version = "8.4.2";
 in

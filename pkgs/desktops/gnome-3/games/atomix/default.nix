@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, python3
-, gettext, gnome3, glib, gtk3, libgnome-games-support, gdk_pixbuf }:
+, gettext, gnome3, glib, gtk3, libgnome-games-support, gdk-pixbuf }:
 
 let
   pname = "atomix";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 ];
-  buildInputs = [ glib gtk3 gdk_pixbuf libgnome-games-support gnome3.adwaita-icon-theme ];
+  buildInputs = [ glib gtk3 gdk-pixbuf libgnome-games-support gnome3.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py

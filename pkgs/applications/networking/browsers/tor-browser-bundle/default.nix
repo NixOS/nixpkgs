@@ -21,8 +21,6 @@
 , mediaSupport ? false
 , ffmpeg
 
-, gmp
-
 # Extensions, common
 , zip
 
@@ -79,7 +77,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ tor-browser-unwrapped tor ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   buildPhase = ":";
 

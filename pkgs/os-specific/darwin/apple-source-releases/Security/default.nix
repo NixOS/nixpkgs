@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, xcbuildHook, Foundation, xpc, darling, dtrace, xnu }:
+{ appleDerivation, xcbuildHook, xpc, dtrace, xnu }:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook dtrace ];

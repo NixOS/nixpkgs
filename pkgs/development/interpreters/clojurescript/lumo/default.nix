@@ -119,7 +119,6 @@ let # packageJSON=./package.json;
 
 
     cljdeps   = import ./deps.nix { inherit pkgs; };
-    cljpaths  = cljdeps.makePaths {};
     classp    = cljdeps.makeClasspaths {
                   extraClasspaths=["src/js" "src/cljs/bundled" "src/cljs/snapshot"];
                 };

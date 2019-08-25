@@ -118,15 +118,50 @@ in {
             more informations.
           '';
         };
+
+        user = mkOption {
+          type = types.str;
+          default = "deluge";
+          description = ''
+            User account under which deluge runs.
+          '';
+        };
+
+        group = mkOption {
+          type = types.str;
+          default = "deluge";
+          description = ''
+            Group under which deluge runs.
+          '';
+        };
+
+        extraPackages = mkOption {
+          type = types.listOf types.package;
+          default = [];
+          description = ''
+            Extra packages available at runtime to enable Deluge's plugins. For example,
+            extraction utilities are required for the built-in "Extractor" plugin.
+            This always contains unzip, gnutar, xz, p7zip and bzip2.
+          '';
+        };
       };
 
       deluge.web = {
         enable = mkEnableOption "Deluge Web daemon";
+
         port = mkOption {
-        type = types.port;
+          type = types.port;
           default = 8112;
           description = ''
             Deluge web UI port.
+          '';
+        };
+
+        openFirewall = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Open ports in the firewall for deluge web daemon
           '';
         };
       };
@@ -135,19 +170,22 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [ "d '${configDir}' 0770 deluge deluge" ]
+    # Provide a default set of `extraPackages`.
+    services.deluge.extraPackages = with pkgs; [ unzip gnutar xz p7zip bzip2 ];
+
+    systemd.tmpfiles.rules = [ "d '${configDir}' 0770 ${cfg.user} ${cfg.group}" ]
     ++ optional (cfg.config ? "download_location")
-      "d '${cfg.config.download_location}' 0770 deluge deluge"
+      "d '${cfg.config.download_location}' 0770 ${cfg.user} ${cfg.group}"
     ++ optional (cfg.config ? "torrentfiles_location")
-      "d '${cfg.config.torrentfiles_location}' 0770 deluge deluge"
+      "d '${cfg.config.torrentfiles_location}' 0770 ${cfg.user} ${cfg.group}"
     ++ optional (cfg.config ? "move_completed_path")
-      "d '${cfg.config.move_completed_path}' 0770 deluge deluge";
+      "d '${cfg.config.move_completed_path}' 0770 ${cfg.user} ${cfg.group}";
 
     systemd.services.deluged = {
       after = [ "network.target" ];
       description = "Deluge BitTorrent Daemon";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.deluge ];
+      path = [ pkgs.deluge ] ++ cfg.extraPackages;
       serviceConfig = {
         ExecStart = ''
           ${pkgs.deluge}/bin/deluged \
@@ -157,8 +195,8 @@ in {
         # To prevent "Quit & shutdown daemon" from working; we want systemd to
         # manage it!
         Restart = "on-success";
-        User = "deluge";
-        Group = "deluge";
+        User = cfg.user;
+        Group = cfg.group;
         UMask = "0002";
         LimitNOFILE = cfg.openFilesLimit;
       };
@@ -177,26 +215,37 @@ in {
             --config ${configDir} \
             --port ${toString cfg.web.port}
         '';
-        User = "deluge";
-        Group = "deluge";
+        User = cfg.user;
+        Group = cfg.group;
       };
     };
 
-    networking.firewall = mkIf (cfg.declarative && cfg.openFirewall && !(cfg.config.random_port or true)) {
-      allowedTCPPortRanges = singleton (listToRange (cfg.config.listen_ports or listenPortsDefault));
-      allowedUDPPortRanges = singleton (listToRange (cfg.config.listen_ports or listenPortsDefault));
-    };
+    networking.firewall = mkMerge [
+      (mkIf (cfg.declarative && cfg.openFirewall && !(cfg.config.random_port or true)) {
+        allowedTCPPortRanges = singleton (listToRange (cfg.config.listen_ports or listenPortsDefault));
+        allowedUDPPortRanges = singleton (listToRange (cfg.config.listen_ports or listenPortsDefault));
+      })
+      (mkIf (cfg.web.openFirewall) {
+        allowedTCPPorts = [ cfg.web.port ];
+      })
+    ];
 
     environment.systemPackages = [ pkgs.deluge ];
 
-    users.users.deluge = {
-      group = "deluge";
-      uid = config.ids.uids.deluge;
-      home = cfg.dataDir;
-      createHome = true;
-      description = "Deluge Daemon user";
+    users.users = mkIf (cfg.user == "deluge") {
+      deluge = {
+        group = cfg.group;
+        uid = config.ids.uids.deluge;
+        home = cfg.dataDir;
+        createHome = true;
+        description = "Deluge Daemon user";
+      };
     };
 
-    users.groups.deluge.gid = config.ids.gids.deluge;
+    users.groups = mkIf (cfg.group == "deluge") {
+      deluge = {
+        gid = config.ids.gids.deluge;
+      };
+    };
   };
 }

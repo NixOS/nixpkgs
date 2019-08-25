@@ -1,4 +1,4 @@
-{ buildOpenRAEngine, fetchFromGitHub, abbrevCommit, extraPostFetch }:
+{ buildOpenRAEngine, fetchFromGitHub, extraPostFetch }:
 
 let
   buildUpstreamOpenRAEngine = { version, rev, sha256 }: name: (buildOpenRAEngine {

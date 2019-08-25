@@ -1,21 +1,22 @@
+# NOTE: this file isn't entirely generated, while performing the bump
+# from 2019-02-24 to 2019-06-01, a lot of stuff broke during `vgo2nix` as the
+# tool is unable to parse `replace` statements atm.
+#
+# The following sources were altered manually:
+# * github.com/Rhymen/go-whatsapp -> github.com/tulir/go-whatsapp (at 36ed380bdc18)
+# * github.com/golang/protobuf: v1.2.0 -> v1.3.1
+# * maunium.net/go/mautrix: v0.1.0-alpha3 -> ca5d9535b6cc
+# * maunium.net/go/mautrix-appservice: v0.1.0-alpha3 -> 6e6c9bb47548
+
 # file generated from go.mod using vgo2nix (https://github.com/adisbladis/vgo2nix)
 [
-  {
-    goPackagePath = "github.com/Baozisoftware/qrcode-terminal-go";
-    fetch = {
-      type = "git";
-      url = "https://github.com/Baozisoftware/qrcode-terminal-go";
-      rev = "c0650d8dff0f";
-      sha256 = "166h9zy9y7ygayhybg7d080hpdcf1mvkf3rwnq5lqg8i3cg71s7b";
-    };
-  }
   {
     goPackagePath = "github.com/Rhymen/go-whatsapp";
     fetch = {
       type = "git";
-      url = "https://github.com/Rhymen/go-whatsapp";
-      rev = "c1173899de99";
-      sha256 = "1f46zpbfgv3k38lgdrcwqf4cm34dgqxlfs9qzg380in61460lcri";
+      url = "https://github.com/tulir/go-whatsapp";
+      rev = "36ed380bdc188e35fe804d6dd4809ee170136670";
+      sha256 = "1ida4j5hgqc5djwfsaqp8g6iynn150rwj42kqk9q2srwz5075n4p";
     };
   }
   {
@@ -32,8 +33,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/golang/protobuf";
-      rev = "v1.2.0";
-      sha256 = "0kf4b59rcbb1cchfny2dm9jyznp8ri2hsb14n8iak1q8986xa0ab";
+      rev = "v1.3.1";
+      sha256 = "15am4s4646qy6iv0g3kkqq52rzykqjhm4bf08dk0fy2r58knpsyl";
     };
   }
   {
@@ -41,8 +42,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/gorilla/mux";
-      rev = "v1.7.0";
-      sha256 = "09cn5v1gxrrrydzyllp1asbhgm5xsawb92as7cg9jqg6iyqajvlc";
+      rev = "v1.6.2";
+      sha256 = "0pvzm23hklxysspnz52mih6h1q74vfrdhjfm1l3sa9r8hhqmmld2";
     };
   }
   {
@@ -55,12 +56,21 @@
     };
   }
   {
+    goPackagePath = "github.com/lib/pq";
+    fetch = {
+      type = "git";
+      url = "https://github.com/lib/pq";
+      rev = "v1.1.1";
+      sha256 = "0g64wlg1l1ybq4x44idksl4pgm055s58jxc6r6x4qhqm5q76h0km";
+    };
+  }
+  {
     goPackagePath = "github.com/mattn/go-colorable";
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-colorable";
-      rev = "v0.1.1";
-      sha256 = "0l640974j804c1yyjfgyxqlsivz0yrzmbql4mhcw2azryigkp08p";
+      rev = "v0.0.9";
+      sha256 = "1nwjmsppsjicr7anq8na6md7b1z84l9ppnlr045hhxjvbkqwalvx";
     };
   }
   {
@@ -68,8 +78,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-isatty";
-      rev = "v0.0.5";
-      sha256 = "114d5xm8rfxplzd7nxz97gfngb4bhqy102szl084d1afcxsvm4aa";
+      rev = "v0.0.4";
+      sha256 = "0zs92j2cqaw9j8qx1sdxpv3ap0rgbs0vrvi72m40mg8aa36gd39w";
     };
   }
   {
@@ -82,7 +92,16 @@
     };
   }
   {
-    goPackagePath = "github.com/russross/blackfriday";
+    goPackagePath = "github.com/pkg/errors";
+    fetch = {
+      type = "git";
+      url = "https://github.com/pkg/errors";
+      rev = "v0.8.1";
+      sha256 = "0g5qcb4d4fd96midz0zdk8b9kz8xkzwfa8kr1cliqbg8sxsy5vd1";
+    };
+  }
+  {
+    goPackagePath = "gopkg.in/russross/blackfriday.v2";
     fetch = {
       type = "git";
       url = "https://github.com/russross/blackfriday";
@@ -113,8 +132,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "ffb98f73852f";
-      sha256 = "0hil543q2zq8wxsz6ljrfnrhhxg5j0mrjfwskf2x6q0ppqizsa4h";
+      rev = "b8fe1690c613";
+      sha256 = "1mbfpbrirsz8fsdkibm9l4sccpm774p9201mpmfh4hxshz3girq3";
     };
   }
   {
@@ -133,15 +152,6 @@
       url = "https://go.googlesource.com/sync";
       rev = "37e7f081c4d4";
       sha256 = "1bb0mw6ckb1k7z8v3iil2qlqwfj408fvvp8m1cik2b46p7snyjhm";
-    };
-  }
-  {
-    goPackagePath = "golang.org/x/sys";
-    fetch = {
-      type = "git";
-      url = "https://go.googlesource.com/sys";
-      rev = "cd391775e71e";
-      sha256 = "12wk5ylx0jjajipr68yn50wcd0c9shzhq9y4an40ldnv4bsdp2rj";
     };
   }
   {
@@ -185,8 +195,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/tulir/mautrix-go.git";
-      rev = "v0.1.0-alpha.3";
-      sha256 = "12nlyij57ss2a5d1f1k1vsmjjvxp1fannlrbnp2jsj6rrsq0d2wr";
+      rev = "ca5d9535b6ccee8fdf473f9cc935932ef3e53ae7";
+      sha256 = "1qrh77c8vh2k6ffwf0cymjmhcp7d0rdad1ixqx5r1xig27f7v0qg";
     };
   }
   {
@@ -194,8 +204,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/tulir/mautrix-appservice-go.git";
-      rev = "v0.1.0-alpha.3";
-      sha256 = "17y11wgqbrafbq6bnn4rp2lzd50fjz9d6f8j3382jsara7ps95vr";
+      rev = "6e6c9bb4754849443cb3c64d9510f8d2eb3e668d";
+      sha256 = "1zwsfvgxs2zbc6yvgnk16w2wkh891kihrzar3qzz9cvsgjznlyvy";
     };
   }
 ]

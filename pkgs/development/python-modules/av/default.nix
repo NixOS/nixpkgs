@@ -3,7 +3,6 @@
 , fetchPypi
 , numpy
 , ffmpeg_4
-, libav
 , pkgconfig
 }:
 

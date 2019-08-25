@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, pythonOlder, astroid,
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, astroid,
   isort, mccabe, pytest, pytestrunner }:
 
 buildPythonPackage rec {

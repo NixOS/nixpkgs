@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules, kdoctools,
   kcompletion, kconfig, kconfigwidgets, kcoreaddons, kcrash,
   kdbusaddons, kdnssd, kglobalaccel, kiconthemes, kitemmodels,

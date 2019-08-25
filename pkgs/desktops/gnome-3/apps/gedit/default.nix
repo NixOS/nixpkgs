@@ -32,10 +32,6 @@ stdenv.mkDerivation rec {
     patchShebangs plugins/externaltools/scripts/gedit-tool-merge.pl
   '';
 
-  mesonFlags = [
-    "--buildtype=plain" # don't require git
-  ];
-
   # Reliably fails to generate gedit-file-browser-enum-types.h in time
   enableParallelBuilding = false;
 

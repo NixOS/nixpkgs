@@ -1,4 +1,4 @@
-{ stdenv, runCommand, makeWrapper, fetchFromGitHub, bash, btrfs-progs, coreutils, pythonPackages, utillinux }:
+{ stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils, pythonPackages, utillinux }:
 
 let
 

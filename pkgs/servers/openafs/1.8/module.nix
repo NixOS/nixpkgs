@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, which, autoconf, automake, flex, yacc
+{ stdenv, fetchurl, which, autoconf, automake, flex, yacc
 , kernel, glibc, perl, libtool_2, kerberos }:
 
 with (import ./srcs.nix { inherit fetchurl; });

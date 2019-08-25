@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, glib,
   gtk3, libgtop, bamf, json-glib, libcanberra-gtk3, libxkbcommon,
   libstartup_notification, deepin-wallpapers, deepin-desktop-schemas,
-  deepin }:
+  deepin, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     libtool
     glib.dev
     gnome3.gnome-common
+    wrapGAppsHook
   ];
 
   buildInputs = [

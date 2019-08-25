@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gettext, gtk3, pythonPackages
-, gdk_pixbuf, libnotify, gst_all_1
+, gdk-pixbuf, libnotify, gst_all_1
 , libgnome-keyring3
 , wrapGAppsHook, gnome3
 # otherwise passwords are stored unencrypted
@@ -18,7 +18,7 @@ in pythonPackages.buildPythonApplication rec {
   };
 
   buildInputs = [
-    gtk3 gdk_pixbuf libnotify gst_all_1.gstreamer
+    gtk3 gdk-pixbuf libnotify gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gnome3.adwaita-icon-theme

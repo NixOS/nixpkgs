@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
+{ stdenv, fetchurl, pkgconfig, meson, ninja, libpthreadstubs, libpciaccess, valgrind-light }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.98";
+  pname = "libdrm";
+  version = "2.4.99";
 
   src = fetchurl {
-    url = "https://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "150qdzsm2nx6dfacc75rx53anzsc6m31nhxidf5xxax3mk6fvq4b";
+    url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "0pnsw4bmajzdbz8pk4wswdmw93shhympf2q9alhbnpfjgsf57gsd";
   };
 
   outputs = [ "out" "dev" "bin" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig meson ninja ];
   buildInputs = [ libpthreadstubs libpciaccess valgrind-light ];
-    # libdrm as of 2.4.70 does not actually do anything with udev.
 
   postPatch = ''
     for a in */*-symbol-check ; do
@@ -20,12 +20,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = [ "--enable-install-test-programs" ]
+  mesonFlags =
+    [ "-Dinstall-test-programs=true" ]
     ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
-      [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-C"
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-intel"
+      [ "-Dtegra=true" "-Detnaviv=true" ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-Dintel=false"
     ;
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = https://dri.freedesktop.org/libdrm/;

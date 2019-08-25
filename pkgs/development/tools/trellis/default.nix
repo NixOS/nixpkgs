@@ -7,22 +7,22 @@ let
   boostWithPython3 = boost.override { python = python3; enablePython = true; };
 in
 stdenv.mkDerivation rec {
-  name = "trellis-${version}";
-  version = "2019.04.22";
+  pname = "trellis";
+  version = "2019.08.09";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "symbiflow";
        repo   = "prjtrellis";
-       rev    = "5eb0ad870f30422b95d090ac9a476343809c62b9";
-       sha256 = "10jkjfhqdr2bff41mh3w8a7kszf2whqqgk5s1z5z07mlh6zfdjlg";
+       rev    = "a67379179985bb12a611c75d975548cdf6e7d12e";
+       sha256 = "0vqwfsblf7ylz0jnnf532kap5s1d1zcvbavxmb6a4v32b9xfdv35";
        name   = "trellis";
      })
     (fetchFromGitHub {
       owner  = "symbiflow";
       repo   = "prjtrellis-db";
-      rev    = "d0b219af41ae3da6150645fbc5cc5613b530603f";
-      sha256 = "1mnzvrqrcbfypvbagwyf6arv3kmj6q7n27gcmyk6ap2xnavkx4bq";
+      rev    = "b4d626b6402c131e9a035470ffe4cf33ccbe7986";
+      sha256 = "0k26lq6c049ja8hhqcljwjb1y5k4gcici23l2n86gyp83jr03ilx";
       name   = "database";
     })
   ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = https://github.com/symbiflow/prjtrellis;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with maintainers; [ q3k thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ q3k thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

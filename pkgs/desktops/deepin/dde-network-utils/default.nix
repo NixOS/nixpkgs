@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, substituteAll, qmake, pkgconfig, qttools,
+{ stdenv, mkDerivation, fetchFromGitHub, substituteAll, qmake, pkgconfig, qttools,
   dde-qt-dbus-factory, proxychains, which, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-network-utils";
   version = "0.1.4";

@@ -79,19 +79,13 @@ in
         and/or service failure.
         </para>
         </warning>
-
-        <note>
-        <para>
-        Changing this option does not affect the current session.
-        </para>
-        </note>
       '';
     };
   };
 
   config = mkIf (cfg.provider != "libc") {
-    environment.variables.LD_PRELOAD = providerLibPath;
-    systemd.extraConfig = "DefaultEnvironment=\"LD_PRELOAD=${providerLibPath}\"";
-    systemd.user.extraConfig = "DefaultEnvironment=\"LD_PRELOAD=${providerLibPath}\"";
+    environment.etc."ld-nix.so.preload".text = ''
+      ${providerLibPath}
+    '';
   };
 }

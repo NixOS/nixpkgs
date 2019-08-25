@@ -3,9 +3,10 @@
 , cargoSha256
 }:
 
-{ stdenv
+{ lib
 , fetchFromGitHub
-, rustPlatform 
+, rustPlatform
+
 , pkgconfig
 , openssl
 , systemd
@@ -14,7 +15,8 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "parity-${version}";
+  pname = "parity";
+  inherit version;
   inherit cargoSha256;
 
   src = fetchFromGitHub {
@@ -29,14 +31,16 @@ rustPlatform.buildRustPackage rec {
     systemd.lib systemd.dev openssl openssl.dev
   ];
 
+  cargoBuildFlags = [ "--features final" ];
+
   # test result: FAILED. 80 passed; 12 failed; 0 ignored; 0 measured; 0 filtered out
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, light, robust Ethereum implementation";
-    homepage = http://parity.io;
+    homepage = "http://parity.io";
     license = licenses.gpl3;
-    maintainers = [ maintainers.akru ];
+    maintainers = with maintainers; [ akru xrelkd ];
     platforms = platforms.linux;
   };
 }

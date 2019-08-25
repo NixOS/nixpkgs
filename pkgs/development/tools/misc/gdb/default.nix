@@ -1,7 +1,7 @@
 { stdenv
 
 # Build time
-, fetchurl, fetchpatch, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = with platforms; linux ++ cygwin ++ darwin;
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with maintainers; [ pierron globin ];
   };
 }

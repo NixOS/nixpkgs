@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchFromGitHub, fetchpatch }:
+{ stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
   version = "4.2.2";

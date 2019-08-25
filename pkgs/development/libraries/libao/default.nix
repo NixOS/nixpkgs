@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig, libpulseaudio, alsaLib, libcap
-, CoreAudio, CoreServices, AudioUnit, AudioToolbox
+, CoreAudio, CoreServices, AudioUnit
 , usePulseAudio }:
 
 stdenv.mkDerivation rec {

@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, stdenv, autoreconfHook
-, perl, bison2, flex, pkgconfig, glib, libxml2, libintl
+, perl, bison2, flex, pkgconfig, glib, libxml2, libintl, libunwind
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook flex perl pkgconfig libintl bison2 glib ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libunwind;
   propagatedBuildInputs = [ glib libxml2 ];
 
   patches = [

@@ -1,12 +1,9 @@
 { stdenv
-, fetchFromGitHub
 , fetchurl
 , python27Packages
-, substituteAll
 , gnome3
 , gobject-introspection
 , wrapGAppsHook
-, gtk3
 , webkitgtk
 , libnotify
 , keybinder3
@@ -60,7 +57,7 @@ python27Packages.buildPythonApplication rec  {
 
   checkInputs = with python27Packages; [
     mock
-    pytest_3
+    pytest
     pytest-mock
     pytestpep8
     xvfb_run

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    $out/bin/py.test -x testing/ -k "not test_raises_exception_looks_iterable"
+    $out/bin/py.test -x testing/ -k "not test_raises_exception_looks_iterable" --ignore testing/test_assertion.py --ignore testing/test_config.py
     runHook postCheck
   '';
 

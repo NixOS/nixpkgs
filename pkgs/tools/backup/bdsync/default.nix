@@ -1,35 +1,33 @@
-{ stdenv, fetchFromGitHub, openssl, coreutils, which }:
+{ stdenv, fetchFromGitHub
+, openssl
+, pandoc
+, which
+}:
 
 stdenv.mkDerivation rec {
-
-  name = "${pname}-${version}";
   pname = "bdsync";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "TargetHolding";
     repo = pname;
     rev = "v${version}";
-    sha256 = "144hlbk3k29l7sja6piwhd2jsnzzsak13fcjbahd6m8yimxyb2nf";
+    sha256 = "11grdyc6fgw93jvj965awsycqw5qbzsdys7n8farqnmya8qv8gac";
   };
+
+  nativeBuildInputs = [ pandoc which ];
+  buildInputs = [ openssl ];
 
   postPatch = ''
     patchShebangs ./tests.sh
     patchShebangs ./tests/
   '';
 
-  buildInputs = [ openssl coreutils which ];
-
   doCheck = true;
-  checkPhase = ''
-    make test
-  '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man1
-    cp bdsync $out/bin/
-    cp bdsync.1 $out/share/man/man1/
+    install -Dm755 bdsync -t $out/bin/
+    install -Dm644 bdsync.1 -t $out/share/man/man1/
   '';
 
   meta = with stdenv.lib; {
@@ -39,5 +37,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };
-
 }

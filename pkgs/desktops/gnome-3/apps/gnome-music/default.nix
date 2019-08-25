@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, gettext, fetchurl, gdk_pixbuf, tracker
+{ stdenv, meson, ninja, gettext, fetchurl, gdk-pixbuf, tracker
 , libxml2, python3, libnotify, wrapGAppsHook, libmediaart
 , gobject-introspection, gnome-online-accounts, grilo, grilo-plugins
 , pkgconfig, gtk3, glib, desktop-file-utils, appstream-glib
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
   buildInputs = with gst_all_1; [
     gtk3 glib libmediaart gnome-online-accounts gobject-introspection
-    gdk_pixbuf gnome3.adwaita-icon-theme python3
+    gdk-pixbuf gnome3.adwaita-icon-theme python3
     grilo grilo-plugins libnotify libdazzle libsoup
     gsettings-desktop-schemas tracker
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly

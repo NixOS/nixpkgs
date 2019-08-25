@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, autoreconfHook, zlib, cf-private, Cocoa }:
+{ stdenv, fetchhg, autoreconfHook, zlib, Cocoa }:
 
 stdenv.mkDerivation rec {
   name = "atomicparsley-${version}";
@@ -12,11 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ zlib ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [
-      Cocoa
-      # Needed for OBJC_CLASS_$_NSDictionary symbols.
-      cf-private
-    ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
 
   configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # AC_FUNC_MALLOC is broken on cross builds.

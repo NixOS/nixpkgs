@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, rustPlatform, libseccomp }:
+{ lib, fetchFromGitHub, rustPlatform, libseccomp }:
 
 rustPlatform.buildRustPackage rec {
   name = "railcar-${version}";

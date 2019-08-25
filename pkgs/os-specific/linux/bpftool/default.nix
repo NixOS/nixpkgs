@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv
 , libopcodes, libbfd, libelf
 , linuxPackages_latest
 }:

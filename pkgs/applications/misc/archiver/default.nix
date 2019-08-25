@@ -1,26 +1,24 @@
-{ buildGoPackage
+{ buildGoModule
 , fetchFromGitHub
 , lib
 }:
 
-buildGoPackage rec {
-  name = "archiver-${version}";
-  version = "3.0.0";
-
-  goPackagePath = "github.com/mholt/archiver";
+buildGoModule rec {
+  pname = "archiver";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "mholt";
-    repo = "archiver";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1wngv51333h907mp6nbzd9dq6r0x06mag2cij92912jcbzy0q8bk";
+    sha256 = "1kq2cyhbniwdabk426j493cs8d4nj35vmznm9031rrdd9ln5h9gl";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "13vwgqpw7ypq6mrvwmnl8n38x0h89ymryrrzkf7ya478fp00vclj";
 
   meta = with lib; {
-    description = "Easily create and extract .zip, .tar, .tar.gz, .tar.bz2, .tar.xz, .tar.lz4, .tar.sz, and .rar (extract-only) files with Go";
-    homepage = https://github.com/mholt/archiver;
+    description = "Easily create & extract archives, and compress & decompress files of various formats";
+    homepage = "https://github.com/mholt/archiver";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.all;

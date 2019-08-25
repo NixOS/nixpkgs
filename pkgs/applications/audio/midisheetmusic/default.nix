@@ -47,6 +47,7 @@ in stdenv.mkDerivation {
 
     makeWrapper ${mono}/bin/mono $out/bin/midisheetmusic.mono.exe \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ gtk2 cups ]} \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ timidity ]} \
       --add-flags $out/bin/.MidiSheetMusic.exe
   '';
 

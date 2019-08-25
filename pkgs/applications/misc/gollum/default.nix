@@ -1,4 +1,4 @@
-{ stdenv, bundlerEnv, ruby, makeWrapper
+{ stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript
 , git }:
 
 stdenv.mkDerivation rec {
@@ -23,11 +23,13 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${stdenv.lib.makeBinPath [ git ]}
   '';
 
+  passthru.updateScript = bundlerUpdateScript "gollum";
+
   meta = with stdenv.lib; {
     description = "A simple, Git-powered wiki";
     homepage = https://github.com/gollum/gollum;
     license = licenses.mit;
-    maintainers = with maintainers; [ jgillich primeos ];
+    maintainers = with maintainers; [ jgillich primeos nicknovitski ];
     platforms = platforms.unix;
   };
 }

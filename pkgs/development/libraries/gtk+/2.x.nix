@@ -1,5 +1,5 @@
 { config, stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
-, gdk_pixbuf, xlibsWrapper, gobject-introspection
+, gdk-pixbuf, xlibsWrapper, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups ? null
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = with xorg;
-    [ glib cairo pango gdk_pixbuf atk ]
+    [ glib cairo pango gdk-pixbuf atk ]
     ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
          libXrandr libXrender libXcomposite libXi libXcursor
        ]

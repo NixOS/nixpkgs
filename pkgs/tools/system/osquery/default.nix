@@ -1,10 +1,10 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, cmake, python
 , udev, audit, aws-sdk-cpp, cryptsetup, lvm2, libgcrypt, libarchive
 , libgpgerror, libuuid, iptables, dpkg, lzma, bzip2, rpm
-, beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, google-gflags
+, beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, gflags
 , thrift, boost, rocksdb_lite, glog, gbenchmark, snappy
 , openssl, file, doxygen
-, gtest, sqlite, fpm, zstd, rdkafka, rapidjson, fetchgit, fetchurl, libelfin
+, gtest, fpm, zstd, rdkafka, rapidjson, fetchgit, fetchurl, libelfin
 , smartmontools, which, git, cscope, ctags, ssdeep
 }:
 
@@ -53,7 +53,7 @@ let
 
     # filter out static linking configuration to avoid that the library will
     # be linked both statically and dynamically.
-    gflags = google-gflags.overrideAttrs (old: {
+    gflags = gflags.overrideAttrs (old: {
       cmakeFlags = stdenv.lib.filter (f: (builtins.match ".*STATIC.*" f) == null) old.cmakeFlags;
     });
   };
@@ -144,5 +144,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ma27 ];
+    broken = true;
   };
 }

@@ -3,7 +3,7 @@
 , libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
 , dbus, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
-, curl, libinput, systemd, mesa_noglu, writeText, gtk3
+, curl, libinput, systemd, mesa, writeText, gtk3
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gtk3 ];
 
-  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa_noglu
+  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.xorgproto
     xorg.libX11 udev systemd ];
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Enlightenment foundation libraries";
-    homepage = http://enlightenment.org/;
+    homepage = https://enlightenment.org/;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
     maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];

@@ -71,7 +71,7 @@ in {
     '';
     clusterName = mkOption {
       type = types.str;
-      default = "NixOS Test Cluster";
+      default = "Test Cluster";
       description = ''
         The name of the cluster.
         This setting prevents nodes in one logical cluster from joining

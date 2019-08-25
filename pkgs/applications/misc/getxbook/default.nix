@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   meta = with stdenv.lib; {
     description = "A collection of tools to download books from Google Books";
     homepage    = https://njw.me.uk/getxbook/;

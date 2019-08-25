@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
 , pkgs
 , python
 , pygobject3

@@ -1,4 +1,4 @@
-{ pkgs, newScope, stdenv, llvmPackages_6 }:
+{ pkgs, newScope, llvmPackages_6 }:
 
 let
   callPackage = newScope self;

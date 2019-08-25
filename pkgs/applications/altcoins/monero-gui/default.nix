@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, makeWrapper, makeDesktopItem
+, wrapQtAppsHook, makeDesktopItem
 , qtbase, qmake, qtmultimedia, qttools
 , qtgraphicaleffects, qtdeclarative
 , qtlocation, qtquickcontrols, qtquickcontrols2
@@ -25,16 +25,16 @@ in
 
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.14.0.0";
+  version = "0.14.1.2";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1l4kx2vidr7bpds43jdbwyaz0q1dy7sricpz061ff1fkappbxdh8";
+    sha256 = "1rm043r6y2mzy8pclnzbjjfxgps8pkfa2b92p66k8y8rdmgq6m1k";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [
     qtbase qtmultimedia qtgraphicaleffects
@@ -43,12 +43,11 @@ stdenv.mkDerivation rec {
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
     boost libunwind libsodium pcsclite zeromq
-    cppzmq makeWrapper hidapi
+    cppzmq hidapi
   ];
 
   patches = [
     ./move-log-file.patch
-    ./move-translations-dir.patch
   ];
 
   postPatch = ''
@@ -83,10 +82,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
 
-    # install translations
-    mkdir -p $out/share/translations
-    cp translations/*.qm $out/share/translations/
-
     # install icons
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
@@ -94,18 +89,14 @@ stdenv.mkDerivation rec {
       cp $src/images/appicons/$size.png \
          $out/share/icons/hicolor/$size/apps/monero.png
     done;
-
-    # wrap runtime dependencies
-    wrapProgram $out/bin/monero-wallet-gui \
-      --set QML2_IMPORT_PATH "${qml2ImportPath}" \
-      --set QT_PLUGIN_PATH "${qtbase.bin}/${qtbase.qtPluginPrefix}"
   '';
 
   meta = {
-    description = "Private, secure, untraceable currency";
-    homepage    = https://getmonero.org/;
-    license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ rnhmjoj ];
+    description  = "Private, secure, untraceable currency";
+    homepage     = https://getmonero.org/;
+    license      = licenses.bsd3;
+    platforms    = platforms.all;
+    badPlatforms = platforms.darwin;
+    maintainers  = with maintainers; [ rnhmjoj ];
   };
 }

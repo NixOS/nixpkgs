@@ -81,7 +81,7 @@ let
 
     ${optionalString (elem cfg.relay.role ["bridge" "private-bridge"]) ''
       BridgeRelay 1
-      ServerTransportPlugin ${concatStringsSep "," cfg.relay.bridgeTransports} exec ${obfs4}/bin/obfs4proxy managed
+      ServerTransportPlugin ${concatStringsSep "," cfg.relay.bridgeTransports} exec ${pkgs.obfs4}/bin/obfs4proxy managed
       ExtORPort auto
       ${optionalString (cfg.relay.role == "private-bridge") ''
         ExtraInfoStatistics 0

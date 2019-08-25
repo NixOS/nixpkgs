@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, git }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "libcsptr-${version}";

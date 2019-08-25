@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, intltool, file,
-  desktop-file-utils, enchant, gnome3, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
+  desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
   libsigcxx, libxmlxx, xdg_utils, isocodes, wrapGAppsHook
 }:
 

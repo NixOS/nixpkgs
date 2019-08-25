@@ -46,6 +46,8 @@ let
     # These tests, we disable always.
     "test_set_default_verify_paths"
     "test_fallback_default_verify_paths"
+    # https://github.com/pyca/pyopenssl/issues/768
+    "test_wantWriteError"
   ] ++ (
     optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests
   ) ++ (

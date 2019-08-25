@@ -1,23 +1,26 @@
 { stdenv, fetchFromGitHub
 , pkgconfig, libftdi
 , python3, pypy3
+
+# PyPy yields large improvements in build time and runtime performance,
+# and IceStorm isn't intended to be used as a library other than by the
+# nextpnr build process (which is also sped up by using PyPy), so we
+# use it by default. See 18839e1 for more details.
+, usePyPy ? stdenv.hostPlatform.system == "x86_64-linux"
 }:
 
-let
-  pypyCompatible = stdenv.isx86_64; /* pypy3 seems broken on i686 */
-  pythonPkg      = if pypyCompatible then pypy3 else python3;
-  pythonInterp   = pythonPkg.interpreter;
-in
-
 stdenv.mkDerivation rec {
-  name = "icestorm-${version}";
-  version = "2019.04.16";
+  pname = "icestorm";
+  version = "2019.08.15";
+
+  pythonPkg = if usePyPy then pypy3 else python3;
+  pythonInterp = pythonPkg.interpreter;
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "d9ea2e15fccebbbce59409b0ae7a1481d78aab86";
-    sha256 = "1qa37p7hm7c2ga26xcvsd8xkqrp4hm0w6yh7cvz2q988yjzal5ky";
+    rev    = "95949315364f8d9b0c693386aefadf44b28e2cf6";
+    sha256 = "05q1vxlf9l5z9mam8jbv58jqj7nsd8v7ssy753sharpgzzgdc8a2";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -55,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = http://www.clifford.at/icestorm/;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

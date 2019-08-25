@@ -77,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/image";
-      rev = "6d32002ffd7577f23673706728e1c510698cecb1";
-      sha256 = "03jzn07kfgdzzm4785xngcksv9ix6q1lf12b8j91flc0v7swsd1b";
+      rev = "7e034cad644213bc79b336b52fce73624259aeca";
+      sha256 = "04n4yi0p2yjv8sr9dmnzwc2k6hvzzvl6jdq2xd043kvjwzk583va";
     };
   }
   {
@@ -86,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "f4e77d36d62c17c2336347bb2670ddbd02d092b7";
-      sha256 = "0avjnglqqg9ya0cbhp23m4namykii219kxjywxn4cd7pfcc5arha";
+      rev = "3b0461eec859c4b73bb64fdc8285971fd33e3938";
+      sha256 = "0l00c8l0a8xnv6qdpwfzxxsr58jggacgzdrwiprrfx2xqm37b6d5";
     };
   }
   {

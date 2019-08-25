@@ -133,7 +133,9 @@ def get_generations(profile=None):
         universal_newlines=True)
     gen_lines = gen_list.split('\n')
     gen_lines.pop()
-    return [ (profile, int(line.split()[0])) for line in gen_lines ]
+
+    configurationLimit = @configurationLimit@
+    return [ (profile, int(line.split()[0])) for line in gen_lines ][-configurationLimit:]
 
 def remove_old_entries(gens):
     rex_profile = re.compile("^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")

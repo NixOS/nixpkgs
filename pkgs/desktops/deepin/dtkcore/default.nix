@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dtkcore";
-  version = "2.0.12.1";
+  version = "2.0.14";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1akfzkdhgsndm6rlr7snhpznxj0w351v6rr8vvnr6ka2dw75xsl4";
+    sha256 = "0yc6zx8rhzg9mj2brggcsr1jy1pzfvgqy1h305y2dwnx5haazd04";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
     sed -i tools/script/dtk-translate.py -e "s,#!env,#!/usr/bin/env,"
   '';
 
-  qmakeFlags = [ "MKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs" ];
+  qmakeFlags = [
+    "DTK_VERSION=${version}"
+    "MKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs"
+  ];
 
   postFixup = ''
     chmod +x $out/lib/dtk2/*.py

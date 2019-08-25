@@ -1,7 +1,6 @@
 { mkDerivation
 , lib
 , fetchurl
-, fetchpatch
 , extra-cmake-modules
 , kdoctools
 , kbookmarks

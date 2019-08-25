@@ -23,7 +23,7 @@ let
   common = import ./build-python-package-common.nix { inherit python; };
   mkPythonDerivation = import ./mk-python-derivation.nix {
     inherit lib config python wrapPython setuptools unzip ensureNewerSourcesForZipFilesHook;
-    inherit toPythonModule namePrefix writeScript update-python-libraries;
+    inherit toPythonModule namePrefix update-python-libraries;
   };
 in
 

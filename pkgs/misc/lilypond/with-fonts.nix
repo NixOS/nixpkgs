@@ -1,6 +1,5 @@
 { stdenv, lndir, symlinkJoin, makeWrapper
 , lilypond, openlilylib-fonts
-, fonts ? openlilylib-fonts.all
 }:
 
 stdenv.lib.appendToName "with-fonts" (symlinkJoin {

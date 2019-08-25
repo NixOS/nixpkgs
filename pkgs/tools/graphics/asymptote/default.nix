@@ -1,6 +1,6 @@
 {stdenv, fetchurl, fetchpatch
   , freeglut, ghostscriptX, imagemagick, fftw
-  , boehmgc, libGLU, libGL, mesa_noglu, ncurses, readline, gsl, libsigsegv
+  , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
   , python, zlib, perl, texLive, texinfo, xz
 , darwin
 }:
@@ -20,7 +20,7 @@ let
    boehmgc ncurses readline gsl libsigsegv
    python zlib perl texLive texinfo xz ]
    ++ stdenv.lib.optionals stdenv.isLinux
-     [ freeglut libGLU libGL mesa_noglu.osmesa ]
+     [ freeglut libGLU libGL mesa.osmesa ]
    ++ stdenv.lib.optionals stdenv.isDarwin
      (with darwin.apple_sdk.frameworks; [ OpenGL GLUT Cocoa ])
    ;

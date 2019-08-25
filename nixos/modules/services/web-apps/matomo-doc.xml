@@ -21,18 +21,18 @@
    passwordless database authentication via the UNIX_SOCKET authentication
    plugin with the following SQL commands:
 <programlisting>
-        # For MariaDB
-        INSTALL PLUGIN unix_socket SONAME 'auth_socket';
-        CREATE DATABASE matomo;
-        CREATE USER 'matomo'@'localhost' IDENTIFIED WITH unix_socket;
-        GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
+# For MariaDB
+INSTALL PLUGIN unix_socket SONAME 'auth_socket';
+CREATE DATABASE matomo;
+CREATE USER 'matomo'@'localhost' IDENTIFIED WITH unix_socket;
+GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
 
-        # For MySQL
-        INSTALL PLUGIN auth_socket SONAME 'auth_socket.so';
-        CREATE DATABASE matomo;
-        CREATE USER 'matomo'@'localhost' IDENTIFIED WITH auth_socket;
-        GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
-   </programlisting>
+# For MySQL
+INSTALL PLUGIN auth_socket SONAME 'auth_socket.so';
+CREATE DATABASE matomo;
+CREATE USER 'matomo'@'localhost' IDENTIFIED WITH auth_socket;
+GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
+</programlisting>
    Then fill in <literal>matomo</literal> as database user and database name,
    and leave the password field blank. This authentication works by allowing
    only the <literal>matomo</literal> unix user to authenticate as the

@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, qtmultimedia,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, qtmultimedia,
   qtsvg, qtx11extras, librsvg, libstartup_notification, gsettings-qt,
   dde-qt-dbus-factory, dtkcore, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dtkwidget";
-  version = "2.0.12.3";
+  version = "2.0.14";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0z71il09gj1frkxfw3av97szh17spr6ss1k07l0prk1s1wm7yyfr";
+    sha256 = "11ws0rl7rhlgwbqd4nqpqxhngf4lcyfrrdq33wzxwdlk33d69i1h";
   };
 
   nativeBuildInputs = [
@@ -31,12 +31,13 @@ stdenv.mkDerivation rec {
     dtkcore
   ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags \
-      INCLUDE_INSTALL_DIR=$out/include \
-      LIB_INSTALL_DIR=$out/lib \
-      QT_HOST_DATA=$out"
-  '';
+  outRef = placeholder "out";
+
+  qmakeFlags = [
+    "INCLUDE_INSTALL_DIR=${outRef}/include"
+    "LIB_INSTALL_DIR=${outRef}/lib"
+    "QT_HOST_DATA=${outRef}"
+  ];
 
   enableParallelBuilding = true;
 

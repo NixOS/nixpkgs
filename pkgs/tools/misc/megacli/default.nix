@@ -1,4 +1,4 @@
-{ stdenv, rpmextract, ncurses5, patchelf, makeWrapper, requireFile, unzip }:
+{ stdenv, rpmextract, ncurses5, patchelf, requireFile, unzip }:
 
 stdenv.mkDerivation rec {
   name = "megacli-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy37, fetchpatch, iana-etc, libredirect
+{ stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect
 , case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 

@@ -1,12 +1,10 @@
-{ lib
-, fetchFromGitHub
+{ fetchFromGitHub
 , stdenv
 , cmake
 , eigen
 , nlopt
 , ipopt
 , boost
-, writeText
 }:
 
 stdenv.mkDerivation rec {

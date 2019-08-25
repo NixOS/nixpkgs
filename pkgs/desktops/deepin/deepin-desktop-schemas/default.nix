@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-desktop-schemas";
-  version = "3.13.0";
+  version = "3.13.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0bamjcpmsl8xhw3ksgl11wv5xwcdhrkl1namikfzc4an03sk1rdq";
+    sha256 = "03jqb47kjyb9b43m2yincfjn2i43ma1pn1hddyicrrpg937caa81";
   };
 
   nativeBuildInputs = [

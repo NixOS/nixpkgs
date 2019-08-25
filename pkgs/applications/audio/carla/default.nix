@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg, fftw, jack2,
-  liblo, libpulseaudio, libsndfile, makeWrapper, pkgconfig, python3Packages,
+{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg, jack2,
+  liblo, libpulseaudio, libsndfile, pkgconfig, python3Packages,
   which, withFrontend ? true,
-  withQt ? true, qtbase ? null,
+  withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
   withGtk2 ? true, gtk2 ? null,
   withGtk3 ? true, gtk3 ? null }:
 
@@ -9,6 +9,7 @@ with stdenv.lib;
 
 assert withFrontend -> python3Packages ? pyqt5;
 assert withQt -> qtbase != null;
+assert withQt -> wrapQtAppsHook != null;
 assert withGtk2 -> gtk2 != null;
 assert withGtk3 -> gtk3 != null;
 
@@ -23,7 +24,9 @@ stdenv.mkDerivation rec {
     sha256 = "0fqgncqlr86n38yy7pa118mswfacmfczj7w9xx6c6k0jav3wk29k";
   };
 
-  nativeBuildInputs = [ python3Packages.wrapPython pkgconfig which ];
+  nativeBuildInputs = [
+    python3Packages.wrapPython pkgconfig which wrapQtAppsHook
+  ];
 
   pythonPath = with python3Packages; [
     rdflib pyliblo
@@ -38,6 +41,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+  dontWrapQtApps = true;
   postFixup = ''
     # Also sets program_PYTHONPATH and program_PATH variables
     wrapPythonPrograms
@@ -48,10 +52,9 @@ stdenv.mkDerivation rec {
     patchPythonScript "$out/share/carla/carla_settings.py"
 
     for program in $out/bin/*; do
-      wrapProgram "$program" \
+      wrapQtApp "$program" \
         --prefix PATH : "$program_PATH:${which}/bin" \
-        --set PYTHONNOUSERSITE true \
-        --prefix QT_PLUGIN_PATH : "${qtbase.bin}/${qtbase.qtPluginPrefix}"
+        --set PYTHONNOUSERSITE true
     done
   '';
 

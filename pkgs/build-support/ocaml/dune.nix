@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, dune, opaline }:
+{ stdenv, ocaml, findlib, dune, opaline }:
 
 { pname, version, buildInputs ? [], ... }@args:
 

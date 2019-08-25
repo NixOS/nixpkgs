@@ -1,4 +1,4 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
 bundlerEnv rec {
   pname = "rubocop";
@@ -7,11 +7,13 @@ bundlerEnv rec {
 
   gemdir = ./.;
 
+  passthru.updateScript = bundlerUpdateScript "rubocop";
+
   meta = with lib; {
     description = "Automatic Ruby code style checking tool";
     homepage = "https://docs.rubocop.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ leemachin ];
+    maintainers = with maintainers; [ marsam leemachin ];
     platforms = platforms.unix;
   };
 }

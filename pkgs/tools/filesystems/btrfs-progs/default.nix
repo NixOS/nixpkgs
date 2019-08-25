@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
+{ stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
 }:
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
-  version = "5.1";
+  version = "5.2.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0dgh56pamav8wb9nmabjwdlpcazvqc9pgzwablxn77mqh0qrhkaq";
+    sha256 = "0crjv3i20nyj2dagfw6q7byshscpn6j7wlqch3apkzzzk00lmb1n";
   };
 
   nativeBuildInputs = [

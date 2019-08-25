@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, imagemagickBig, pkgconfig, python2Packages, perl
-, libX11, libv4l, qt5, lzma, gtk2, xmlto, docbook_xsl, autoreconfHook, dbus
+, libX11, libv4l, qt5, gtk2, xmlto, docbook_xsl, autoreconfHook, dbus
 , enableVideo ? stdenv.isLinux, enableDbus ? stdenv.isLinux
 }:
 

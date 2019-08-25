@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf
+{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
 , librsvg, libcanberra-gtk3, libmanette
 , gettext, itstool, libxml2, clutter, clutter-gtk, wrapGAppsHook
 , meson, ninja, python3, vala, desktop-file-utils
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     libxml2 itstool gettext wrapGAppsHook
   ];
   buildInputs = [
-    gtk3 gdk_pixbuf librsvg libmanette
+    gtk3 gdk-pixbuf librsvg libmanette
     libcanberra-gtk3 clutter libxml2 clutter-gtk
   ];
 

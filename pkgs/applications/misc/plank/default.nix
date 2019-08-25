@@ -1,6 +1,6 @@
 { stdenv, fetchurl, vala, atk, cairo, glib, gnome3, gtk3, libwnck3
 , libX11, libXfixes, libXi, pango, intltool, pkgconfig, libxml2
-, bamf, gdk_pixbuf, libdbusmenu-gtk3, file, gnome-menus, libgee
+, bamf, gdk-pixbuf, libdbusmenu-gtk3, file, gnome-menus, libgee
 , wrapGAppsHook, autoreconfHook, pantheon }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     atk
     bamf
     cairo
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome-menus
     gnome3.dconf

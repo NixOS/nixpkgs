@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper
+{ stdenv, fetchurl, makeWrapper
 , perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
 
 perlPackages.buildPerlPackage rec {
-  name = "slimserver-${version}";
+  pname = "slimserver";
   version = "7.9.1";
 
   src = fetchurl {

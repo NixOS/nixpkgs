@@ -60,7 +60,6 @@ in rec {
   mkYarnModules = {
     name,
     pname,
-    version,
     packageJSON,
     yarnLock,
     yarnNix ? mkYarnNix yarnLock,
@@ -207,7 +206,7 @@ in rec {
         name = "${safeName}-modules-${version}";
         preBuild = yarnPreBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock yarnNix yarnFlags pkgConfig;
+        inherit packageJSON pname yarnLock yarnNix yarnFlags pkgConfig;
       };
       publishBinsFor_ = unlessNull publishBinsFor [pname];
       linkDirFunction = ''

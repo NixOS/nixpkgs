@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, jdk, w3m, makeWrapper }:
+{ stdenv, fetchurl, jdk, w3m, openssl, makeWrapper }:
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "picoLisp-${version}";
-  version = "18.12";
+  version = "19.6";
   src = fetchurl {
     url = "https://www.software-lab.de/${name}.tgz";
-    sha256 = "0hvgq2vc03bki528jqn95xmvv7mw8xx832spfczhxc16wwbrnrhk";
+    sha256 = "1ixxl6m5glhwqa4q3fb90pciv7jhhvn9pkh316d4wcv0m13l04gq";
   };
-  buildInputs = [makeWrapper] ++ optional stdenv.is64bit jdk;
+  buildInputs = [makeWrapper openssl] ++ optional stdenv.is64bit jdk;
   patchPhase = ''
     sed -i "s/which java/command -v java/g" mkAsm
 
@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
     ''}
   '';
   sourceRoot = ''picoLisp/src${optionalString stdenv.is64bit "64"}'';
+  postBuild = ''
+    cd ../src; make gate
+  '';
   installPhase = ''
     cd ..
 
@@ -30,6 +33,7 @@ stdenv.mkDerivation rec {
     cp -r . "$out/share/picolisp/build-dir"
     ln -s "$out/share/picolisp/build-dir" "$out/lib/picolisp"
     ln -s "$out/lib/picolisp/bin/picolisp" "$out/bin/picolisp"
+    ln -s "$out/lib/picolisp/bin/httpGate" "$out/bin/httpGate"
 
 
     makeWrapper $out/bin/picolisp $out/bin/pil \

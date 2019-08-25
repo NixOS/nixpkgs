@@ -23,12 +23,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.12.0";
+  version = "0.12.1";
   pname = "rl-coach";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kfm699rsy63726hpz3fyppl7zbl0fzf0vk2kkfgg718mcjxmdnh";
+    sha256 = "1zqlq61zxn732915nznj7pz8zh6kd6inl170fiavwhs32brmv84l";
   };
 
   propagatedBuildInputs = [

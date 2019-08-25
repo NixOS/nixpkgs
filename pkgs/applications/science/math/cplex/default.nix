@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
       fi
     done
   '';
+
+  passthru = {
+    libArch = "x86-64_linux";
+    libSuffix = "${version}0";
+  };
   
   meta = with stdenv.lib; {
     description = "Optimization solver for mathematical programming";

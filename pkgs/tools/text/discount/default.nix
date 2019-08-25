@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "2.2.6";

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.09.58";
+  version = "0.10.01";
 
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1rlll6wl0i0m21idfr3xr99pfgnb9wf9i35hsb0frmrpcvls06za";
+    sha256 = "0gcgm96prkzysszgq34cpx30y0bx9b5zll7943zwg3941fkg4x2a";
   };
 
   # All platforms inputs then Linux-only ones

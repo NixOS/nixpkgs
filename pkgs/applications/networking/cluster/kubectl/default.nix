@@ -1,4 +1,4 @@
-{ stdenv, lib, kubernetes }:
+{ stdenv, kubernetes }:
 
 stdenv.mkDerivation {
   name = "kubectl-${kubernetes.version}";

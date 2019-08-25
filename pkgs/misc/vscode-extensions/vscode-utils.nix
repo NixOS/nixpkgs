@@ -33,11 +33,17 @@ let
     inherit vscodeExtUniqueId;
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
+    installPrefix = "share/${extendedPkgName}/extensions/${vscodeExtUniqueId}";
+
     buildInputs = [ unzip ] ++ buildInputs;
 
     installPhase = ''
-      mkdir -p "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}"
-      find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}/"
+      runHook preInstall
+
+      mkdir -p "$out/$installPrefix"
+      find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/$installPrefix/"
+
+      runHook postInstall
     '';
 
   });

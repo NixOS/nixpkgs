@@ -1,59 +1,57 @@
-{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, runCommandCC, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub
+, runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
+, which, gawk, gnused, gnutar, gnugrep, gzip, findutils
+# updater
+, python3, writeScript
 # Apple dependencies
-, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
+, cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , buildJdkName
 , runtimeShell
-# Always assume all markers valid (don't redownload dependencies).
-# Also, don't clean up environment variables.
+# Downstream packages for tests
+, bazel-watcher
+# Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
+# Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
+, gcc-unwrapped
+, autoPatchelfHook
 }:
 
 let
-  srcDeps = [
-    # From: $REPO_ROOT/WORKSPACE
-    (fetchurl {
-      url = "https://github.com/google/desugar_jdk_libs/archive/915f566d1dc23bc5a8975320cd2ff71be108eb9c.zip";
-      sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
-    })
-    (fetchurl {
-        url = "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz";
-        sha256 = "4a1318fed4831697b83ce879b3ab70ae09592b167e5bda8edaff45132d1c3b3f";
-    })
-    (fetchurl {
-        url = "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/f83cb8dd6f5658bc574ccd873e25197055265d1c.tar.gz";
-        sha256 = "ba5d15ca230efca96320085d8e4d58da826d1f81b444ef8afccd8b23e0799b52";
-    })
-    (fetchurl {
-      url = "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz";
-      sha256 = "d868ce50d592ef4aad7dec4dd32ae68d2151261913450fac8390b3fd474bb898";
-    })
-     (fetchurl {
-         url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.2/java_tools_javac10_linux-v3.2.zip";
-         sha256 = "b93e7c556b01815afb6c248aa73f06b7ec912805bde8898eedac1e20d08f2e67";
-     })
-    (fetchurl {
-        url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.2/java_tools_javac10_darwin-v3.2.zip";
-        sha256 = "1437327179b4284f7082cee0bdc3328f040e62fc5cc59c32f6824b8c520e2b7b";
-    })
-    (fetchurl {
-        url = "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v1.0.zip";
-        sha256 = "cc470e529fafb6165b5be3929ff2d99b38429b386ac100878687416603a67889";
-    })
-    (fetchurl {
-        url = "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip";
-        sha256 = "9b72bb0aea72d7cbcfc82a01b1e25bf3d85f791e790ddec16c65e2d906382ee0";
-    })
-    (fetchurl {
-        url = "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.2.tar.gz";
-        sha256 = "04f85f2dd049e87805511e3babc5cea3f5e72332b1627e34f3a5461cc38e815f";
-    })
-  ];
+  version = "0.28.1";
+
+  src = fetchurl {
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+    sha256 = "0503fax70w7h6v00mkrrrgf1m5n0vkjqs76lyg95alhzc4yldsic";
+  };
+
+  # Update with `eval $(nix-build -A bazel.updater)`,
+  # then add new dependencies from the dict in ./src-deps.json as required.
+  srcDeps = lib.attrsets.attrValues srcDepsSet;
+  srcDepsSet =
+    let
+      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+      toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
+        urls = d.urls;
+        sha256 = d.sha256;
+        });
+        in builtins.listToAttrs (map toFetchurl [
+      srcs.desugar_jdk_libs
+      srcs.io_bazel_skydoc
+      srcs.bazel_skylib
+      srcs.io_bazel_rules_sass
+      srcs.platforms
+      (if stdenv.hostPlatform.isDarwin
+       then srcs.${"java_tools_javac11_darwin-v2.0.zip"}
+       else srcs.${"java_tools_javac11_linux-v2.0.zip"})
+      srcs.${"coverage_output_generator-v1.0.zip"}
+      srcs.build_bazel_rules_nodejs
+      srcs.${"android_tools_pkg-0.7.tar.gz"}
+      ]);
 
   distDir = runCommand "bazel-deps" {} ''
     mkdir -p $out
@@ -95,10 +93,35 @@ let
 
   platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
+  # This repository is fetched by bazel at runtime
+  # however it contains prebuilt java binaries, with wrong interpreter
+  # and libraries path.
+  # We prefetch it, patch it, and override it in a global bazelrc.
+  system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
+
+  remote_java_tools = stdenv.mkDerivation {
+    name = "remote_java_tools_${system}";
+
+    src = srcDepsSet."java_tools_javac11_${system}-v2.0.zip";
+
+    nativeBuildInputs = [ autoPatchelfHook unzip ];
+    buildInputs = [ gcc-unwrapped ];
+
+    sourceRoot = ".";
+
+    buildPhase = ''
+      mkdir $out;
+    '';
+
+    installPhase = ''
+      cp -Ra * $out/
+      touch $out/WORKSPACE
+    '';
+  };
+
 in
 stdenv.mkDerivation rec {
-
-  version = "0.26.1";
+  name = "bazel-${version}";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -108,6 +131,17 @@ stdenv.mkDerivation rec {
     inherit platforms;
   };
 
+  inherit src;
+  sourceRoot = ".";
+
+  patches = [
+    # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
+    # This is breaking the build of any C target. This patch removes the last
+    # argument if it's found to be an empty string.
+    ./trim-last-argument-to-gcc-if-empty.patch
+  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
+
+
   # Additional tests that check bazel’s functionality. Execute
   #
   #     nix-build . -A bazel.tests
@@ -115,10 +149,16 @@ stdenv.mkDerivation rec {
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests =
     let
-      runLocal = name: attrs: script: runCommandCC name ({
+      runLocal = name: attrs: script:
+      let
+        attrs' = removeAttrs attrs [ "buildInputs" ];
+        buildInputs = [ python3 ] ++ (attrs.buildInputs or []);
+      in
+      runCommandCC name ({
+        inherit buildInputs;
         preferLocalBuild = true;
         meta.platforms = platforms;
-      } // attrs) script;
+      } // attrs') script;
 
       # bazel wants to extract itself into $install_dir/install every time it runs,
       # so let’s do that only once.
@@ -138,10 +178,10 @@ stdenv.mkDerivation rec {
             cp -R ${install_dir} $out
           '';
 
-      bazelTest = { name, bazelScript, workspaceDir, bazelPkg }:
+      bazelTest = { name, bazelScript, workspaceDir, bazelPkg, buildInputs ? [] }:
         let
           be = extracted bazelPkg;
-        in runLocal name {} (
+        in runLocal name { inherit buildInputs; } (
           # skip extraction caching on Darwin, because nobody knows how Darwin works
           (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
             # set up home with pre-unpacked bazel
@@ -168,33 +208,54 @@ stdenv.mkDerivation rec {
           '');
 
       bazelWithNixHacks = bazel.override { enableNixHacks = true; };
-    in {
-      pythonBinPathWithoutNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
-      bashToolsWithoutNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
 
-      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      bazel-examples = fetchFromGitHub {
+        owner = "bazelbuild";
+        repo = "examples";
+        rev = "5d8c8961a2516ebf875787df35e98cadd08d43dc";
+        sha256 = "03c1bwlq5bs3hg96v4g4pg2vqwhqq6w538h66rcpw02f83yy7fs8";
+      };
+
+    in {
+      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
+      cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; };
+      java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; };
+      protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; };
+      pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; };
+
       bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+
+      cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
+      javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
+      protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+
+      # downstream packages using buildBazelPackage
+      # fixed-output hashes of the fetch phase need to be spot-checked manually
+      downstream = recurseIntoAttrs ({
+        inherit bazel-watcher;
+      }
+          # dm-sonnet is only packaged for linux
+      // (lib.optionalAttrs stdenv.isLinux {
+          # TODO(timokau) dm-sonnet is broken currently
+          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
+      }));
     };
 
-  name = "bazel-${version}";
-
-  src = fetchurl {
-    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/${name}-dist.zip";
-    sha256 = "000ny51hwnjyizm1md4w8q7m832jhf3c767pgbvg6nc7h67lzsf0";
-  };
+  # update the list of workspace dependencies
+  passthru.updater = writeScript "update-bazel-deps.sh" ''
+    #!${runtimeShell}
+    cat ${runCommand "bazel-deps.json" {} ''
+        ${unzip}/bin/unzip ${src} WORKSPACE
+        ${python3}/bin/python3 ${./update-srcDeps.py} ./WORKSPACE > $out
+    ''} > ${builtins.toString ./src-deps.json}
+  '';
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Bazel starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  sourceRoot = ".";
-
-  patches = [
-    ./python-stub-path-fix.patch
-  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
-
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
-
   customBash = writeCBin "bash" ''
     #include <stdio.h>
     #include <stdlib.h>
@@ -262,9 +323,8 @@ stdenv.mkDerivation rec {
     genericPatches = ''
       # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
       # See also `postFixup` where python is added to $out/nix-support
-      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
-          --replace "/usr/bin/env python" "${python}/bin/python" \
-          --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
+      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt \
+          --replace "#!/usr/bin/env python" "#!${python3}/bin/python"
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|' \
@@ -280,14 +340,24 @@ stdenv.mkDerivation rec {
           --replace /bin/true ${coreutils}/bin/true
       done
 
+      # bazel test runner include references to /bin/bash
+      substituteInPlace tools/build_rules/test_rules.bzl \
+        --replace /bin/bash ${customBash}/bin/bash
+
+      for i in $(find tools/cpp/ -type f)
+      do
+        substituteInPlace $i \
+          --replace /bin/bash ${customBash}/bin/bash
+      done
+
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
           --replace /bin/bash ${customBash}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
-      build --experimental_distdir=${distDir}
-      fetch --experimental_distdir=${distDir}
+      build --distdir=${distDir}
+      fetch --distdir=${distDir}
       build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
       build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
       build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
@@ -328,19 +398,26 @@ stdenv.mkDerivation rec {
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
 
       patchShebangs .
+
+      # bazel reads its system bazelrc in /etc
+      # override this path to a builtin one
+      substituteInPlace \
+        src/main/cpp/option_processor.cc \
+        --replace BAZEL_SYSTEM_BAZELRC_PATH "\"$out/etc/bazelrc\""
     '';
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
 
   buildInputs = [
     buildJdk
+    python3
   ];
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
     zip
-    python
+    python3
     unzip
     makeWrapper
     which
@@ -380,20 +457,24 @@ stdenv.mkDerivation rec {
 
     wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
 
+    # generates the system bazelrc
+    # warning: the name of the repository depends on the system, hence
+    # the reference to .name
+    mkdir $out/etc
+    echo "build --override_repository=${remote_java_tools.name}=${remote_java_tools}" > $out/etc/bazelrc
+
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv ./bazel_src/output/bazel-complete.bash $out/share/bash-completion/completions/bazel
     cp ./bazel_src/scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 
-  # Temporarily disabling for now. A new approach is needed for this derivation as Bazel
-  # accesses the internet during the tests which fails in a sandbox.
-  doInstallCheck = false;
+  doInstallCheck = true;
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 
     hello_test () {
-      $out/bin/bazel test \
+      $out/bin/bazel test --distdir=${distDir} \
         --test_output=errors \
         --java_toolchain='${javaToolchain}' \
         examples/cpp:hello-success_test \
@@ -429,7 +510,7 @@ stdenv.mkDerivation rec {
     echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
-    echo "${python}" >> $out/nix-support/depends
+    echo "${python3}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;

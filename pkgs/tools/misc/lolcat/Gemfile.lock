@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    lolcat (99.9.69)
+    lolcat (99.9.99)
       manpages (~> 0.6.1)
       optimist (~> 3.0.0)
       paint (~> 2.0.0)

@@ -1,21 +1,21 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bloat";
-  version = "0.7.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "169x90jrd2izj29xczja8pca984i6jgyx3ihfpd7cb1gw30rggbg";
+    sha256 = "1r8d3mqzaiasvhxmry8va55ggq817y82x8yb3vzih84lxq134y8n";
   };
 
-  cargoSha256 = "12cbc5bdzvcjh2d00d1ma91crbjwzas9rv8xxnnh850rjz8h684h";
+  cargoSha256 = "1ys3wd1k39vkll25c56sfv767rcd53yb46adwgzdkkyl2pjphf1r";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool and Cargo subcommand that helps you find out what takes most of the space in your executable";
-    homepage = https://github.com/RazrFalcon/cargo-bloat;
+    homepage = "https://github.com/RazrFalcon/cargo-bloat";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ xrelkd ];

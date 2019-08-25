@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, cups, libusb, libxml2, ghostscript, perl }:
+{ stdenv, fetchurl, cups, libusb, libxml2, perl }:
 
 let
 

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, glib, libdaemon
-, mpd_clientlib, curl, sqlite, ruby, bundlerEnv, libnotify, pandoc }:
+, mpd_clientlib, curl, sqlite, bundlerEnv, libnotify, pandoc }:
 
 let
   gemEnv = bundlerEnv {

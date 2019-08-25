@@ -1,6 +1,6 @@
 { stdenv
 , fetchgit, autoconf, automake, pkgconfig, help2man
-, utillinux, openssl, libuuid, gnu-efi, libbfd
+, openssl, libuuid, gnu-efi, libbfd
 }:
 
 stdenv.mkDerivation rec {

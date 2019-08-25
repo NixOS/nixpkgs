@@ -1,4 +1,4 @@
-{ stdenv, lib, meson, ninja, fetchurl, fetchFromGitHub
+{ stdenv, lib, meson, ninja, fetchFromGitHub
 , pkgconfig, zathura_core, cairo , gtk-mac-integration, girara, mupdf }:
 
 stdenv.mkDerivation rec {

@@ -8,8 +8,6 @@
 , nose
 , nose-exclude
 , coverage
-, certifi
-, urllib3
 , rednose
 , nose-randomly
 , six

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, intltool, fetchpatch
+{ stdenv, fetchurl, pkgconfig, gtk3, intltool
 , gnome3, enchant, isocodes, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {

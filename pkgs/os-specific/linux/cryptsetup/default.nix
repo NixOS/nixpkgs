@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lvm2, json_c
+{ stdenv, fetchurl, lvm2, json_c
 , openssl, libuuid, pkgconfig, popt
 , enablePython ? false, python2 ? null }:
 

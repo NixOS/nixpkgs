@@ -1,33 +1,28 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "eksctl";
-  version = "0.1.35";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
-    repo = "eksctl";
+    repo = pname;
     rev = version;
-    sha256 = "0b3s7vh85k68wawmsdp96q9l4yhikwhyjn1c7cwxys0aia4i8wkv";
+    sha256 = "0vyz02yli2lnzzzzy8dv9y5g69ljr671p1lgx84z8ys2ihwj3yc3";
   };
 
-  goPackagePath = "github.com/weaveworks/eksctl";
+  modSha256 = "17bb1k18x1xfq9bi9qbm8pln6h6pkhaqzy07qdvnhinmspll1695";
 
   subPackages = [ "cmd/eksctl" ];
 
-  buildFlags =
-  ''
-    -ldflags=-s
-    -ldflags=-w
-    -tags netgo
-    -tags release
-  '';
+  buildFlags = [ "-tags netgo" "-tags release" ];
 
   postInstall =
   ''
-    mkdir -p "$bin/share/"{bash-completion/completions,zsh/site-functions}
-    $bin/bin/eksctl completion bash > "$bin/share/bash-completion/completions/eksctl"
-    $bin/bin/eksctl completion zsh > "$bin/share/zsh/site-functions/_eksctl"
+    mkdir -p "$out/share/"{bash-completion/completions,zsh/site-functions}
+
+    $out/bin/eksctl completion bash > "$out/share/bash-completion/completions/eksctl"
+    $out/bin/eksctl completion zsh > "$out/share/zsh/site-functions/_eksctl"
   '';
 
   meta = with lib; {

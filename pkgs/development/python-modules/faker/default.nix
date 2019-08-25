@@ -46,6 +46,10 @@ buildPythonPackage rec {
     # see https://github.com/joke2k/faker/pull/911, fine since we pin correct
     # versions for python2
     substituteInPlace setup.py --replace "more-itertools<6.0.0" "more-itertools"
+
+    # https://github.com/joke2k/faker/issues/970
+    substituteInPlace setup.py --replace "random2==1.0.1" "random2>=1.0.1"
+    substituteInPlace setup.py --replace "freezegun==0.3.11" "freezegun>=0.3.11"
   '';
 
   meta = with lib; {

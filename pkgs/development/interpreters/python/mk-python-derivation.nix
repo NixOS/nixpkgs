@@ -10,7 +10,6 @@
 # Whether the derivation provides a Python module or not.
 , toPythonModule
 , namePrefix
-, writeScript
 , update-python-libraries
 }:
 

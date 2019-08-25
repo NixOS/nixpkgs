@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeWrapper
+{ stdenv, buildPythonPackage, fetchPypi
 , six, click, requests, pytz, tabulate, pythonOlder
 }:
 

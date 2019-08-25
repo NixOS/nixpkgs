@@ -1,10 +1,10 @@
 { stdenv, fetchurl, patchelf, coreutils, pcsclite
-, zlib, glib, gdk_pixbuf, gtk2, cairo, pango, libX11, atk, openssl
+, zlib, glib, gdk-pixbuf, gtk2, cairo, pango, libX11, atk, openssl
 , runtimeShell }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc zlib glib gdk_pixbuf gtk2 cairo pango libX11 atk openssl
+    stdenv.cc.cc zlib glib gdk-pixbuf gtk2 cairo pango libX11 atk openssl
   ];
 
   src_i686 = {

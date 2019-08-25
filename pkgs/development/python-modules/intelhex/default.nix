@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, fetchurl
 }:
 
 buildPythonPackage rec {

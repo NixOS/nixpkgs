@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, fetchFromGitLab, meson, ninja, gettext, cargo, rustc, python3, rustPlatform, pkgconfig, gnome3
+{ stdenv, fetchurl, fetchpatch, meson, ninja, gettext, cargo, rustc, python3, pkgconfig, gnome3
 , glib, libhandy, gtk3, dbus, openssl, sqlite, gst_all_1, wrapGAppsHook }:
 
 # TODO: build from git for easier updates

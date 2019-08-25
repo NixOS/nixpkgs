@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
 , accountsservice, libX11, gnome3, systemd, autoreconfHook
 , gtk3, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
-, librsvg, coreutils, xwayland, fetchpatch }:
+, librsvg, coreutils, xwayland }:
 
 stdenv.mkDerivation rec {
   name = "gdm-${version}";

@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, polkit-qt,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, polkit-qt,
   dtkcore, dtkwidget, dde-qt-dbus-factory, deepin }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dde-polkit-agent";
-  version = "0.2.6";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1ih78sxhnn6hbx9mzhalx95dk18f217mjbvymf8dky2vkmw8vnmx";
+    sha256 = "0syg121slpd6d9xpifgcf85lg9ca0k96cl1g3rjvsmczs2d2ffgf";
   };
 
   nativeBuildInputs = [
@@ -25,10 +25,6 @@ stdenv.mkDerivation rec {
     dtkcore
     dtkwidget
     polkit-qt
-  ];
-
-  patches = [
-    ./dde-polkit-agent.plugins-dir.patch
   ];
 
   postPatch = ''

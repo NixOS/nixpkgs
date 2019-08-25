@@ -1,5 +1,6 @@
-{stdenv, fetchFromGitHub, qtbase, mesa_glu}:
-stdenv.mkDerivation rec {
+{ stdenv, fetchFromGitHub, mkDerivation, qtbase, mesa_glu }:
+
+mkDerivation rec {
   name = "fstl-${version}";
   version = "0.9.3";
 

@@ -1,5 +1,5 @@
 { stdenvNoCC, lib, buildPackages
-, fetchurl, fetchpatch, perl
+, fetchurl, perl
 , elf-header
 }:
 

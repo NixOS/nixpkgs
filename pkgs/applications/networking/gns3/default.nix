@@ -1,8 +1,8 @@
-{ callPackage, stdenv }:
+{ callPackage }:
 
 let
   stableVersion = "2.1.21";
-  previewVersion = "2.2.0b2";
+  previewVersion = "2.2.0rc3";
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
         branch = if args.stable then "stable" else "preview";
@@ -18,7 +18,7 @@ in {
   };
   guiPreview = mkGui {
     stable = false;
-    sha256Hash = "0hb22z7vd69dq6nayyyndlyqsnxb3lzgw3ac6m3fnxkv18n1nm6v";
+    sha256Hash = "0lj2av2kbh1drr8jzd71j85xaiwp53q1g348lk2qqzr35yh16n99";
   };
 
   serverStable = mkServer {
@@ -27,6 +27,6 @@ in {
   };
   serverPreview = mkServer {
     stable = false;
-    sha256Hash = "1a6ki0asai9x8xm724kha9phr2z8vkqfjwv067p860dpv2d2crxc";
+    sha256Hash = "0a4gx0qhy50v7nivqn8c2kz07crgzg2105hzmwag8xw6bpqmgm1d";
   };
 }

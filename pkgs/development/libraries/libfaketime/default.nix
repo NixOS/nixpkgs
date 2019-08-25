@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, perl }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "libfaketime-${version}";

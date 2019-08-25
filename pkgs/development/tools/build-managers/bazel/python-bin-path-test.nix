@@ -1,4 +1,4 @@
-{ stdenv, lib, writeText, bazel, bazelTest, runLocal }:
+{ writeText, bazel, bazelTest, runLocal }:
 
 let
   WORKSPACE = writeText "WORKSPACE" ''
@@ -45,7 +45,6 @@ let
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
-          --host_javabase='@local_jdk//:jdk' \
           //python:bin
     '';
   };

@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, substituteAll
+{ stdenv, fetchurl
 , pkgconfig, autoreconfHook
 , gmp, python, iptables, ldns, unbound, openssl, pcsclite
 , openresolv
 , systemd, pam
 , curl
-, kmod
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
-, libpcap
 , darwin
 }:
 

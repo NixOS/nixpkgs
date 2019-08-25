@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pstoedit-3.73";
+  name = "pstoedit-3.74";
 
   src = fetchurl {
     url = "mirror://sourceforge/pstoedit/${name}.tar.gz";
-    sha256 = "147jkgvm9n6mbkl6ndqnm9x74x5y9agbxkfwj0jrw6yxyhxx2cdd";
+    sha256 = "034rcrsi69vyh01rcqh7jy3bw4la4m6jl4niav4c6wrs9bx44cim";
   };
 
   #

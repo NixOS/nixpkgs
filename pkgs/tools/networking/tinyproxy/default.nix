@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoreconfHook, asciidoc, libxml2,
+{ stdenv, fetchFromGitHub, autoreconfHook, asciidoc, libxml2,
   libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec{

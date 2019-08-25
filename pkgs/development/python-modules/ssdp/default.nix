@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pkgs
 , pbr
 , pytest
 }:

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gmp, mpfr, boost }:
 
 stdenv.mkDerivation {
-  name = "gappa-1.2";
+  name = "gappa-1.3.5";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/34787/gappa-1.2.0.tar.gz;
-    sha256 = "03hfzmaf5jm54sjpbks20q7qixpmagrfbnyyc276vgmiyslk4dkh";
+    url = https://gforge.inria.fr/frs/download.php/file/38044/gappa-1.3.5.tar.gz;
+    sha256 = "0q1wdiwqj6fsbifaayb1zkp20bz8a1my81sqjsail577jmzwi07w";
   };
 
   buildInputs = [ gmp mpfr boost.dev ];

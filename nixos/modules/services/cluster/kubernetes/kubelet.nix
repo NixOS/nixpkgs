@@ -28,13 +28,6 @@ let
 
   kubeconfig = top.lib.mkKubeConfig "kubelet" cfg.kubeconfig;
 
-  manifests = pkgs.buildEnv {
-    name = "kubernetes-manifests";
-    paths = mapAttrsToList (name: manifest:
-      pkgs.writeTextDir "${name}.json" (builtins.toJSON manifest)
-    ) cfg.manifests;
-  };
-
   manifestPath = "kubernetes/manifests";
 
   taintOptions = with lib.types; { name, ... }: {

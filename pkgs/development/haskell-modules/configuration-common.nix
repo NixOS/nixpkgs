@@ -72,7 +72,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0arripb1w3dcabjipdjrdq46q2z0l4b7jp0vl5iyhq7j0blg13xh";
+      sha256 = "1795sad0jr2da2pn28nbqsvpld6zw8gf9yscywixkbabf7ls66fn";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -149,31 +149,28 @@ self: super: {
     else super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-  hakyll = if pkgs.stdenv.isDarwin
+  hakyll = appendPatch
+    (if pkgs.stdenv.isDarwin
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    else super.hakyll)
+    (pkgs.fetchpatch {
+      url = https://github.com/jaspervdj/hakyll/commit/25a4460b75b3c9f3ce339b3311b084d92994f5f1.patch;
+      sha256 = "sha256-F59WHt52LOKGsGoaD3LAIZFEMe9s9WHfGxQgSh9Q8uQ=";
+    });
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
     else addExtraLibrary super.double-conversion pkgs.libcxx;
 
-  inline-c-cpp = if !pkgs.stdenv.isDarwin
-    then super.inline-c-cpp
-    else
-      let drv = addExtraLibrary (overrideCabal super.inline-c-cpp (drv: {
-          postPatch = ''
-            substituteInPlace inline-c-cpp.cabal --replace  stdc++ c++
-          '';
-        })) pkgs.libcxx;
-      in # https://github.com/fpco/inline-c/issues/75
-         dontCheck drv;
+  inline-c-cpp = overrideCabal super.inline-c-cpp (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace inline-c-cpp.cabal --replace "-optc-std=c++11" ""
+    '';
+  });
 
   inline-java = addBuildDepend super.inline-java pkgs.jdk;
-
-  # https://github.com/mvoidex/hsdev/issues/11
-  hsdev = dontHaddock super.hsdev;
 
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
@@ -222,15 +219,19 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # Needs older version of QuickCheck.
+  these_0_7_6 = doJailbreak super.these_0_7_6;
+
   # dontCheck: Can be removed once https://github.com/haskell-nix/hnix/commit/471712f is in (5.2 probably)
   #   This is due to GenList having been removed from generic-random in 1.2.0.0
   # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
   #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
+  # Does not support recent versions of "these".
+  # https://github.com/haskell-nix/hnix/issues/514
   hnix =
     generateOptparseApplicativeCompletion "hnix" (
-    dontCheck (doJailbreak (overrideCabal super.hnix (old: {
-      testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
-  }))));
+      dontCheck (doJailbreak (super.hnix.override { these = self.these_0_7_6; }))
+    );
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -386,6 +387,7 @@ self: super: {
   xsd = dontCheck super.xsd;
   snap-core = dontCheck super.snap-core;
   sourcemap = dontCheck super.sourcemap;
+  zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
 
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
@@ -713,15 +715,9 @@ self: super: {
     '';
   });
 
-  # A simple MonadFail patch would do too, but not doing the tests is easier
-  megaparsec_6_5_0 = dontCheck super.megaparsec_6_5_0;
-
   # The standard libraries are compiled separately
   idris = generateOptparseApplicativeCompletion "idris" (
-    doJailbreak (dontCheck (super.idris.override {
-      # Needed for versions <= 1.3.1 https://github.com/idris-lang/Idris-dev/pull/4610
-      megaparsec = self.megaparsec_6_5_0;
-    }))
+    doJailbreak (dontCheck super.idris)
   );
 
   # https://github.com/bos/math-functions/issues/25
@@ -861,7 +857,7 @@ self: super: {
   # Wrap the generated binaries to include their run-time dependencies in
   # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
   # in LTS-13.x.
-  cryptol = overrideCabal (super.cryptol.override { sbv = self.sbv_8_3; }) (drv: {
+  cryptol = overrideCabal super.cryptol (drv: {
     buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
     postInstall = drv.postInstall or "" + ''
       for b in $out/bin/cryptol $out/bin/cryptol-html; do
@@ -1039,8 +1035,6 @@ self: super: {
   # https://github.com/dmwit/encoding/pull/3
   encoding = appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch;
 
-  clock = dontCheck (appendPatch super.clock ./patches/clock-0.7.2.patch);
-
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
 
@@ -1088,9 +1082,23 @@ self: super: {
   # https://github.com/haskell-hvr/hgettext/issues/14
   hgettext = doJailbreak super.hgettext;
 
+  # haddock-api-2.22.0: Break out of “QuickCheck ==2.11.*, hspec >=2.4.4 && <2.6”
+  haddock-api = dontHaddock (doJailbreak (super.haddock-api));
+
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
+
+  # haskell-names-0.9.4: Break out of “tasty >=0.12 && <1.2”
+  haskell-names = doJailbreak super.haskell-names;
+
+  # hdocs-0.5.3.1: Break out of “haddock-api ==2.21.*”
+  # cannot use doJailbreak due to https://github.com/peti/jailbreak-cabal/issues/7
+  hdocs = overrideCabal super.hdocs (drv: {
+    postPatch = ''
+      sed -i 's#haddock-api == 2\.21\.\*,#haddock-api == 2.22.*,#' hdocs.cabal
+    '';
+  });
 
   # Break out of tasty >=0.10 && <1.2.
   aeson-compat = doJailbreak super.aeson-compat;
@@ -1101,12 +1109,6 @@ self: super: {
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
   stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: {
-    ansi-terminal = self.ansi-terminal_0_9_1;
-    concurrent-output = self.concurrent-output_1_10_10; # needed for new ansi-terminal version
-    rio = self.rio_0_1_9_2;
-    hi-file-parser = dontCheck super.hi-file-parser;    # Avoid depending on newer hspec versions.
-    http-download = dontCheck super.http-download;
-    pantry-tmp = dontCheck super.pantry-tmp;
   }));
 
   # musl fixes
@@ -1182,10 +1184,6 @@ self: super: {
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
-  # The LTS-13.x versions doesn't suffice to build these packages.
-  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
-  hoogle = super.hoogle.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_21_0; });
-
   # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
   these = doJailbreak super.these; # until these >= 0.7.6
@@ -1223,29 +1221,20 @@ self: super: {
     '';
   });
 
-  # Use latest pandoc despite what LTS says.
-  # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  cmark-gfm = self.cmark-gfm_0_2_0;
-  pandoc = dontCheck (doDistribute super.pandoc_2_7_3);  # test suite failure: https://github.com/jgm/pandoc/issues/5582
-  pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_2;
-  skylighting = self.skylighting_0_8_1_1;
-  skylighting-core = self.skylighting-core_0_8_1_1;
-
-  # Current versions of tasty-hedgehog need hedgehog 1.x, which
-  # we don't have in LTS-13.x.
-  tasty-hedgehog = super.tasty-hedgehog.override { hedgehog = self.hedgehog_1_0; };
+  # test suite failure: https://github.com/jgm/pandoc/issues/5582
+  pandoc = dontCheck super.pandoc;
 
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
     (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-      version = "20190307-git";
+      version = "20190814-git";
       src = pkgs.fetchFromGitHub {
         owner = "haskell-CI";
         repo = "haskell-ci";
-        rev = "2baceb59bc2f36e798ff9fb6e8865c449f01d3a2";
-        sha256 = "1wqhqajxni6h9rrj22xj6421d4m0gs8qk2glghpdp307ns5gr2j4";
+        rev = "70918d80b6fd43aca7e4d00ba0d2ea116b666556";
+        sha256 = "0bzp959qy74zmqq75f60rcixpjbvvyrb5a8zp2nyql3nm9vxzy5k";
       };
-  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]));
+  }) (with self; [temporary lattices Cabal_3_0_0_0]));
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
@@ -1254,10 +1243,10 @@ self: super: {
   yesod-markdown = doJailbreak super.yesod-markdown;
 
   # These packages needs network 3.x, which is not in LTS-13.x.
-  network-bsd = super.network-bsd.override { network = self.network_3_0_1_1; };
+  network-bsd_2_8_1_0 = super.network-bsd_2_8_1_0.override { network = self.network_3_0_1_1; };
   lambdabot-core = super.lambdabot-core.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
   lambdabot-reference-plugins = super.lambdabot-reference-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
-  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; socks = self.socks_0_6_0; connection = self.connection_0_3_0; haskell-src-exts = self.haskell-src-exts_1_21_0; });
+  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; });
 
   # Some tests depend on a postgresql instance
   # Haddock failure: https://github.com/haskell/haddock/issues/979
@@ -1274,8 +1263,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_24_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_24_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_25_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_25_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1287,7 +1276,16 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
-  # The old LTS-13.x version does not compile.
-  ip = self.ip_1_5_0;
+  # need newer version of ghc-libparser
+  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_0_20190723; };
+
+  # https://github.com/sol/hpack/issues/366
+  hpack = dontCheck super.hpack;
+
+  # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
+  graphviz = dontCheck super.graphviz;
+
+  # https://github.com/elliottt/hsopenid/issues/15
+  openid = markBroken super.openid;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

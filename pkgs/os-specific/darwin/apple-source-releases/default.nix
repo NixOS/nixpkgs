@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, fetchzip, pkgs }:
+{ stdenv, fetchurl, fetchzip, pkgs }:
 
 let
   # This attrset can in theory be computed automatically, but for that to work nicely we need

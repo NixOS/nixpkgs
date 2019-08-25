@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, makeWrapper
+, wrapQtAppsHook
 , pcsclite
 , pyotherside
 , pythonPackages
@@ -16,25 +16,18 @@
 , yubikey-personalization
 }:
 
-let
-  qmlPath = qmlLib: "${qmlLib}/${qtbase.qtQmlPrefix}";
+let inherit (stdenv) lib; in
 
-  inherit (stdenv) lib;
-
-  qml2ImportPath = lib.concatMapStringsSep ":" qmlPath [
-    qtbase.bin qtdeclarative.bin pyotherside qtquickcontrols qtquickcontrols2.bin qtgraphicaleffects
-  ];
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "yubikey-manager-qt";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0hcfl0mh4gqy9c8ghmi58asqr8v009n6li0mgcy3r8fyjr7qryvy";
+    sha256 = "087ms9i0n3rm8a0hvc4a2dk3rffbm6rmgz0m8gbjk6g37iml6nb7";
   };
 
-  nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython qmake ];
+  nativeBuildInputs = [ wrapQtAppsHook python3.pkgs.wrapPython qmake ];
 
   postPatch = ''
     substituteInPlace ykman-gui/deployment.pri --replace '/usr/bin' "$out/bin"
@@ -46,22 +39,20 @@ in stdenv.mkDerivation rec {
 
   pythonPath = [ yubikey-manager ];
 
+  dontWrapQtApps = true;
   postInstall = ''
     buildPythonPath "$pythonPath"
 
-    wrapProgram $out/bin/ykman-gui \
+    wrapQtApp $out/bin/ykman-gui \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" \
-      --prefix PYTHONPATH : "$program_PYTHONPATH" \
-      --set QML2_IMPORT_PATH "${qml2ImportPath}" \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms \
-      --prefix QT_PLUGIN_PATH : "${qtsvg.bin}/${qtbase.qtPluginPrefix}"
+      --prefix PYTHONPATH : "$program_PYTHONPATH"
 
-      mkdir -p $out/share/applications
-      cp resources/ykman-gui.desktop $out/share/applications/ykman-gui.desktop
-      mkdir -p $out/share/ykman-gui/icons
-      cp resources/icons/*.{icns,ico,png,xpm} $out/share/ykman-gui/icons
-      substituteInPlace $out/share/applications/ykman-gui.desktop \
-        --replace 'Exec=ykman-gui' "Exec=$out/bin/ykman-gui" \
+    mkdir -p $out/share/applications
+    cp resources/ykman-gui.desktop $out/share/applications/ykman-gui.desktop
+    mkdir -p $out/share/ykman-gui/icons
+    cp resources/icons/*.{icns,ico,png,xpm} $out/share/ykman-gui/icons
+    substituteInPlace $out/share/applications/ykman-gui.desktop \
+      --replace 'Exec=ykman-gui' "Exec=$out/bin/ykman-gui" \
   '';
 
   meta = with lib; {

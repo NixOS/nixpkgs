@@ -7,7 +7,6 @@
   deepin,
   deepin-gettext-tools,
   fontconfig,
-  glib,
   go,
   go-dbus-factory,
   go-gir-generator,
@@ -26,7 +25,7 @@
 buildGoPackage rec {
   name = "${pname}-${version}";
   pname = "dde-api";
-  version = "3.18.3";
+  version = "3.18.4.1";
 
   goPackagePath = "pkg.deepin.io/dde/api";
 
@@ -34,7 +33,7 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0sbzjpjy2d7j22v5sw3mf472lcnsy81n2rgly87k79r5gk9x89ar";
+    sha256 = "0bcjp5ijwa4wmx6p43lik6vjlb7d5rk7nf8xl495i3yk9x70wyfa";
   };
 
   goDeps = ./deps.nix;

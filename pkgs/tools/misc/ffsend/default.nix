@@ -16,24 +16,21 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.46";
+  version = "0.2.49";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "048kmhy8l2dy7v1b3vzlhcw5qhnz82y1wki6wpd2nz8siyd7dnpi";
+    sha256 = "08x0kakhn75yzajxpvpdp1ml9z77i2x2k02kqcx3ssr6mbc7xnpf";
   };
 
-  cargoSha256 = "09i44vpxbww972zyv393xxwk7wz26cnqzq4gi1mg4703h02jkpjk";
+  cargoSha256 = "1dmkij25gj0ya1i6h5l7pkjnqvj02zvsx15hddbjn1q06pihcsjm";
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ openssl ]
   ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
   ;
-
-  # Patch for v0.2.45 only
-  patches = [ ./Cargo.lock.patch ];
 
   preBuild = stdenv.lib.optionalString (x11Support && usesX11) (
     if preferXsel && xsel != null then ''

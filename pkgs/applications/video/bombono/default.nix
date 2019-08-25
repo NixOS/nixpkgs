@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wrapGAppsHook, gtk2, boost, gnome2, gtkmm2, scons,
+{ stdenv, fetchFromGitHub, wrapGAppsHook, gtk2, boost, gtkmm2, scons,
 mjpegtools, libdvdread, dvdauthor, gettext, dvdplusrwtools, libxmlxx, ffmpeg,
 enca, pkgconfig, fetchpatch }:
 

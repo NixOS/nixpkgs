@@ -28,7 +28,7 @@ let
     "-datadir=${cfg.dataDir}"
     "-pid=${pidFile}"
   ];
-  hexStr = types.strMatching "[0-9a-f]+";
+
   rpcUserOpts = { name, ... }: {
     options = {
       name = mkOption {
