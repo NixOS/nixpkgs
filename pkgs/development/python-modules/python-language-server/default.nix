@@ -21,13 +21,13 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.27.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "158wxj2w880jrab7mi4fb3xqnjhmfixqacxjp7whf7jy3zxqrq38";
+    sha256 = "0xa0zw7hlfqqa305ic4csgfmlbxhklb5xzx72mfkcz8gcc0f5qwd";
   };
 
   # The tests require all the providers, disable otherwise.
