@@ -103,13 +103,10 @@ in
 
     services.udev.packages = [ tlp ];
 
-    environment.etc = [{ source = confFile;
-                         target = "default/tlp";
-                       }
-                      ] ++ optional enableRDW {
-                        source = "${tlp}/etc/NetworkManager/dispatcher.d/99tlp-rdw-nm";
-                        target = "NetworkManager/dispatcher.d/99tlp-rdw-nm";
-                      };
+    environment.etc = {
+      "default/tlp".source = confFile;
+      "NetworkManager/dispatcher.d/99tlp-rdw-nm" = mkIf enableRDW "${tlp}/etc/NetworkManager/dispatcher.d/99tlp-rdw-nm";
+    };
 
     environment.systemPackages = [ tlp ];
 
