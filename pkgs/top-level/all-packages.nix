@@ -16149,6 +16149,8 @@ in
 
   goconvey = callPackage ../development/tools/goconvey { };
 
+  gofumpt = callPackage ../development/tools/gofumpt { };
+
   gotags = callPackage ../development/tools/gotags { };
 
   golint = callPackage ../development/tools/golint { };
