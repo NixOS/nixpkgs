@@ -142,6 +142,8 @@ in with passthru; stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (sqlite != null && isPy3k) [
+    "--enable-loadable-sqlite-extensions"
   ] ++ optionals (openssl != null) [
     "--with-openssl=${openssl.dev}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
