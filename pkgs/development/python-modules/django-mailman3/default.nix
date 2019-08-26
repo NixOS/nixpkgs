@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
-, django-allauth, mailmanclient
+, django-allauth, mailmanclient, django, mock
 }:
 
 buildPythonPackage rec {
@@ -14,8 +14,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     django-gravatar2 django_compressor django-allauth mailmanclient
   ];
+  checkInputs = [ django mock ];
 
-  doCheck = false;
+  checkPhase = ''
+    cd $NIX_BUILD_TOP/$sourceRoot
+    PYTHONPATH=.:$PYTHONPATH django-admin.py test --settings=django_mailman3.tests.settings_test
+  '';
 
   meta = with stdenv.lib; {
     description = "Django library for Mailman UIs";
