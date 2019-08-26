@@ -157,6 +157,12 @@ in
         #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
         # };
 
+        # With this option enabled, if you accidentally remove this file you can
+        # still recover it from
+        # - /run/current-system/configuration.nix (last one)
+        # - /nix/var/nix/profiles/system-*/configuration.nix (old versions)
+        system.copySystemConfiguration = true;
+
         # This value determines the NixOS release with which your system is to be
         # compatible, in order to avoid breaking some software such as database
         # servers. You should change this only after NixOS release notes say you
