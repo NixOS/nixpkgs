@@ -67,6 +67,14 @@ stdenv.mkDerivation rec {
     ${stdenv.lib.optionalString stdenv.isAarch64 ''
       rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
     ''}
+
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:`pwd`/lib
+      # Removing tests depending on charset conversion
+      substituteInPlace ../test/Makefile --replace "conversions.sh" ""
+      rm -f ../tests/bugfixes/redmine/test_issue_460.py
+      rm -f ../tests/bugfixes/redmine/test_issue_662.py
+     ''}
   '';
 
   postCheck = ''
