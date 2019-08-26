@@ -3,7 +3,7 @@
 #   wget https://raw.githubusercontent.com/mint-lang/mint/0.3.1/shard.lock
 #   nix-shell -p crystal libyaml --run 'crystal run crystal2nix.cr'
 #
-{stdenv, lib, fetchFromGitHub, crystal, zlib, openssl, duktape, which, libyaml }:
+{stdenv, lib, fetchFromGitHub, crystal, zlib, openssl_1_0_2, duktape, which, libyaml }:
 let
   crystalPackages = lib.mapAttrs (name: src:
     stdenv.mkDerivation {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vxbx38c390rd2ysvbwgh89v2232sh5rbsp3nk9wzb70jybpslvl";
   };
 
-  nativeBuildInputs = [ which crystal zlib openssl duktape libyaml ];
+  nativeBuildInputs = [ which crystal zlib openssl_1_0_2 duktape libyaml ];
 
   buildPhase = ''
     mkdir -p $out/bin tmp
