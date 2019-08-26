@@ -384,12 +384,13 @@ in the `~/.config/nixpkgs/overlays` directory.
 
 The latest version can be installed with the following command:
 
-    $ nix-env -Ai nixos.latest.rustChannels.stable.rust
+    $ nix-env -Ai nixpkgs.latest.rustChannels.stable.rust
 
 Or using the attribute with nix-shell:
 
-    $ nix-shell -p nixos.latest.rustChannels.stable.rust
+    $ nix-shell -p nixpkgs.latest.rustChannels.stable.rust
 
+Substitute the `nixpkgs` prefix with `nixos` on NixOS.
 To install the beta or nightly channel, "stable" should be substituted by
 "nightly" or "beta", or
 use the function provided by this overlay to pull a version based on a
