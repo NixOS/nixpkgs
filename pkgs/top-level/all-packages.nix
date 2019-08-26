@@ -17104,6 +17104,8 @@ in
     gtk = res.gtk2;
   };
 
+  theme-obsidian2 = callPackage ../data/themes/obsidian2 { };
+
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) {};
 
   theano = callPackage ../data/fonts/theano { };
@@ -22740,8 +22742,6 @@ in
   onestepback = callPackage ../misc/themes/onestepback { };
 
   theme-jade1 = callPackage ../misc/themes/jade1 { };
-
-  theme-obsidian2 = callPackage ../misc/themes/obsidian2 { };
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 
