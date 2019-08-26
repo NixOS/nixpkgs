@@ -7452,6 +7452,7 @@ in
     crystal_0_26
     crystal_0_27
     crystal_0_29
+    crystal_0_30
     crystal;
 
   icr = callPackage ../development/tools/icr {};
