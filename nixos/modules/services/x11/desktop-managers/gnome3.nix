@@ -37,7 +37,7 @@ let
        picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
 
        [org.gnome.shell]
-       favorite-apps=[ 'org.gnome.Epiphany.desktop', 'evolution.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
+       favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
 
        ${cfg.extraGSettingsOverrides}
      EOF
@@ -281,23 +281,43 @@ in
       ];
     })
 
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
-        baobab eog epiphany evince gucharmap nautilus totem yelp gnome-calculator
-        gnome-contacts gnome-font-viewer gnome-screenshot gnome-system-monitor simple-scan
-        gnome-terminal evolution file-roller gedit gnome-clocks gnome-music gnome-tweaks
-        pkgs.gnome-photos nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
-        gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool gnome-packagekit
-        gnome-software gnome-power-manager gnome-todo pkgs.gnome-usage
+        baobab
+        cheese
+        eog
+        epiphany
+        geary
+        gedit
+        gnome-calculator
+        gnome-calendar
+        gnome-characters
+        gnome-clocks
+        gnome-contacts
+        gnome-font-viewer
+        gnome-logs
+        gnome-maps
+        gnome-music
+        gnome-photos
+        gnome-screenshot
+        gnome-software
+        gnome-system-monitor
+        gnome-weather
+        nautilus
+        simple-scan
+        totem
+        yelp
+        # Unsure if sensible for NixOS
+        /* gnome-boxes */
       ] config.environment.gnome3.excludePackages);
 
       # Enable default programs
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
-      programs.gnome-documents.enable = mkDefault true;
       programs.gnome-terminal.enable = mkDefault true;
-      services.gnome3.seahorse.enable = mkDefault true;
+      programs.seahorse.enable = mkDefault true;
       services.gnome3.sushi.enable = mkDefault true;
 
       # Let nautilus find extensions
