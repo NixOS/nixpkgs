@@ -176,6 +176,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     gioModuleDir = "lib/gio/modules";
+    makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
     inherit flattenInclude;
     updateScript = gnome3.updateScript { packageName = "glib"; };
   };
