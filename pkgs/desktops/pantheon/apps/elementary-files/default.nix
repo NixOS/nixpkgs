@@ -10,6 +10,7 @@
 , desktop-file-utils
 , libcanberra
 , gtk3
+, glib
 , libgee
 , granite
 , libnotify
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
 
     substituteInPlace filechooser-module/FileChooserDialog.vala \
-      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
+      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   meta = with stdenv.lib; {
