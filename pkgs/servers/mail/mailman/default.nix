@@ -8,6 +8,8 @@ buildPythonPackage rec {
   pname = "mailman";
   version = "3.2.2";
 
+  patches = [ ./0001-Find-external-tools-via-PATH-rather-than-hard-coding.patch ];
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "09s9p5pb8gff6zblwidyq830yfgcvv50p5drdaxj1qpy8w46lvc6";
