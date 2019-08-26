@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dnm-path=${stdenv.cc.targetPrefix}nm"
     "-Dinstall-test-programs=true"
+    "-Domap=true"
   ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
     "-Dtegra=true"
     "-Detnaviv=true"
