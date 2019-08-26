@@ -14,6 +14,7 @@
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
 , buildType ? "release"
+, CARGO_HOME ? ".cargo"
 , meta ? {}
 
 , cargoVendorDir ? null
@@ -56,6 +57,10 @@ in
 
 stdenv.mkDerivation (args // {
   inherit cargoDeps;
+
+  # Use a local CARGO_HOME otherwise cargo tries to write to
+  # /homeless-shelter/.cargo which it's not allowed to.
+  inherit CARGO_HOME;
 
   patchRegistryDeps = ./patch-registry-deps;
 

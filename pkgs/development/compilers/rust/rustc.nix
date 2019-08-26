@@ -1,6 +1,6 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , fetchurl, file, python2, tzdata, ps
-, llvm_7, darwin, git, cmake, rustPlatform
+, llvm_7, llvmPackages_7, darwin, git, cmake, rustPlatform
 , which, libffi, gdb
 , withBundledLLVM ? false
 }:
@@ -15,6 +15,17 @@ let
 
   # For use at runtime
   llvmShared = llvm_7.override { enableSharedLibraries = true; };
+
+  compilerRtSrc = stdenv.mkDerivation {
+    name = "compiler-rt-src";
+    src = llvmPackages_7.compiler-rt.src;
+    phases = [ "unpackPhase" "installPhase" ];
+    installPhase = ''
+      mkdir $out
+      cp -r lib $out/
+      ls $out/lib/profile
+    '';
+  };
 in stdenv.mkDerivation rec {
   pname = "rustc";
   version = "1.37.0";
@@ -37,7 +48,6 @@ in stdenv.mkDerivation rec {
   # Running `strip -S` when cross compiling can harm the cross rlibs.
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
-
 
   NIX_LDFLAGS =
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
@@ -170,6 +180,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
+  RUST_COMPILER_RT_ROOT="${compilerRtSrc}";
 
   # Disable codegen units and hardening for the tests.
   preCheck = ''
