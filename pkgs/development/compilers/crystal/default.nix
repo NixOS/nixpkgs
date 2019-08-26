@@ -212,4 +212,6 @@ in rec {
   };
 
   crystal = crystal_0_30;
+
+  crystal2nix = callPackage ./crystal2nix.nix {};
 }

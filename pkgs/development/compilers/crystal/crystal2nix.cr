@@ -26,7 +26,7 @@ File.open "shards.nix", "w+" do |file|
 
     sha256 = ""
     args = ["--url", url, "--rev", rev]
-    Process.run("nix-prefetch-git", args: args) do |x|
+    Process.run("@nixPrefetchGit@", args: args) do |x|
       x.error.each_line { |e| puts e }
       sha256 = PrefetchJSON.from_json(x.output).sha256
     end
