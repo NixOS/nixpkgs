@@ -484,7 +484,9 @@ in {
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
-  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman { });
+  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
+
+  mailmanclient = callPackage ../development/python-modules/mailmanclient { };
 
   manhole = callPackage ../development/python-modules/manhole { };
 
@@ -576,6 +578,8 @@ in {
   plantuml = callPackage ../tools/misc/plantuml { };
 
   poetry = callPackage ../development/python-modules/poetry { };
+
+  postorius = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/postorius.nix { });
 
   pprintpp = callPackage ../development/python-modules/pprintpp { };
 
@@ -2363,6 +2367,8 @@ in {
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
+
+  django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
