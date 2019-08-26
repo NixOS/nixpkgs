@@ -640,12 +640,12 @@ in rec {
   uk_UA = uk-ua;
   uk-ua = mkDict rec {
     name = "hunspell-dict-uk-ua-${version}";
-    version = "4.2.5";
-    _version = "4-2.5";
+    version = "4.6.3";
+    _version = "4-6.3";
 
     src = fetchurl {
       url = "https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/${_version}/@@download/file/dict-uk_UA-${version}.oxt";
-      sha256 = "1s2i9cd569g97kafrswczvwmvg7m9aks8qsbxd1mi73zy2y1r7n4";
+      sha256 = "14rd07yx4fx2qxjr5xqc8qy151idd8k2hr5yi18d9r8gccnm9w50";
     };
 
     dictFileName = "uk_UA";
