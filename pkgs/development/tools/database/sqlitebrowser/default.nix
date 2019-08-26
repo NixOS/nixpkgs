@@ -27,6 +27,6 @@ mkDerivation rec {
     homepage = http://sqlitebrowser.org/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux; # can only test on linux
+    platforms = platforms.unix;
   };
 }
