@@ -6056,6 +6056,8 @@ in
 
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
+  go-shadowsocks2 = callPackage ../tools/networking/go-shadowsocks2 { };
+
   shabnam-fonts = callPackage ../data/fonts/shabnam-fonts { };
 
   shadowsocks-rust = callPackage ../tools/networking/shadowsocks-rust {
