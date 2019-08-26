@@ -133,20 +133,12 @@ in
   };
 
   config = mkMerge [
-    (mkIf cfg.enable {
+    (mkIf (cfg.enable || flashbackEnabled) {
       services.gnome3.core-os-services.enable = true;
       services.gnome3.core-shell.enable = true;
       services.gnome3.core-utilities.enable = mkDefault true;
 
-      services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ]
-      ++ map
-        (wm: pkgs.gnome3.gnome-flashback.mkSessionForWm {
-          inherit (wm) wmName wmLabel wmCommand;
-        }) (optional cfg.flashback.enableMetacity {
-              wmName = "metacity";
-              wmLabel = "Metacity";
-              wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
-            } ++ cfg.flashback.customSessions);
+      services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ];
 
       environment.extraInit = ''
         ${concatMapStrings (p: ''
@@ -170,6 +162,25 @@ in
 
        # If gnome3 is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
+    })
+
+    (mkIf flashbackEnabled {
+      services.xserver.displayManager.extraSessionFilePackages =  map
+        (wm: pkgs.gnome3.gnome-flashback.mkSessionForWm {
+          inherit (wm) wmName wmLabel wmCommand;
+        }) (optional cfg.flashback.enableMetacity {
+              wmName = "metacity";
+              wmLabel = "Metacity";
+              wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
+            } ++ cfg.flashback.customSessions);
+
+      security.pam.services.gnome-screensaver = {
+        enableGnomeKeyring = true;
+      };
+
+      services.dbus.packages = [
+        pkgs.gnome3.gnome-screensaver
+      ];
     })
 
     (mkIf serviceCfg.core-os-services.enable {
@@ -225,8 +236,7 @@ in
       services.telepathy.enable = mkDefault true;
       systemd.packages = [ pkgs.gnome3.vino ];
       services.dbus.packages =
-        optional config.services.printing.enable pkgs.system-config-printer ++
-        optional flashbackEnabled pkgs.gnome3.gnome-screensaver;
+        optional config.services.printing.enable pkgs.system-config-printer;
 
       services.geoclue2.enable = mkDefault true;
       services.geoclue2.enableDemoAgent = false; # GNOME has its own geoclue agent
@@ -269,10 +279,6 @@ in
         pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
         vino
       ];
-
-      security.pam.services.gnome-screensaver = mkIf flashbackEnabled {
-        enableGnomeKeyring = true;
-      };
     })
 
     (mkIf serviceCfg.core-utilities.enable {
