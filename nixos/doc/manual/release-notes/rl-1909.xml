@@ -284,6 +284,13 @@
        Squid 3 has been removed and the <option>squid</option> derivation now refers to Squid 4.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The <option>services.pdns-recursor.extraConfig</option> option has been replaced by
+       <option>services.pdns-recursor.settings</option>. The new option allows setting extra
+       configuration while being better type-checked and mergeable.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
