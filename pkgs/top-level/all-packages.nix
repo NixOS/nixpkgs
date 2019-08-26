@@ -10192,10 +10192,9 @@ in
 
   xpwn = callPackage ../development/mobile/xpwn {};
 
-  xxdiff = callPackage ../development/tools/misc/xxdiff {
-    bison = bison2;
-  };
-  xxdiff-tip = libsForQt5.callPackage ../development/tools/misc/xxdiff/tip.nix { };
+  xxdiff = libsForQt5.callPackage ../development/tools/misc/xxdiff { };
+
+  xxdiff-tip = xxdiff;
 
   yaml2json = callPackage ../development/tools/yaml2json { };
 
