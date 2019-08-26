@@ -5,6 +5,7 @@
 , ninja
 , python3
 , mutest
+, nixosTests
 , glib
 , gtk-doc
 , docbook_xsl
@@ -56,6 +57,12 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  passthru = {
+    tests = {
+      installedTests = nixosTests.graphene;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A thin layer of graphic data types";
