@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sway";
-  version = "1.1.1";
+  version = "1.2-rc2";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "0yhn9zdg9mzfhn97c440lk3pw6122nrhx0is5sqmvgr6p814f776";
+    sha256 = "0s1wh1ssigq327mh77n41lska65pslvlazgcy286awd81wgilw06";
   };
 
   patches = [
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage    = https://swaywm.org;
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ];
+    maintainers = with maintainers; [ primeos synthetica valebes ];
   };
 }
