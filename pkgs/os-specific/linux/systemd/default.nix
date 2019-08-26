@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
     "-Ddebug-shell=${bashInteractive}/bin/bash"
+    "-Dtpm=true"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
     "-Dlz4=true"
