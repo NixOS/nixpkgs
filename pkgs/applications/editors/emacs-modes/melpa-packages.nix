@@ -33,8 +33,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
     inherit (import ./libgenerated.nix lib self) melpaDerivation;
     super = lib.listToAttrs (map (melpaDerivation variant) (lib.importJSON archiveJson));
 
-    generic = import ./melpa-generic.nix;
-
     overrides = rec {
       shared = {
         # Expects bash to be at /bin/bash
