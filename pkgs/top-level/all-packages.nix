@@ -25475,6 +25475,8 @@ in
 
   kodelife = callPackage ../applications/graphics/kodelife {};
 
+  _3proxy = callPackage ../applications/networking/3proxy {};
+
   pigeon = callPackage ../development/tools/pigeon {};
 
   verifpal = callPackage ../tools/security/verifpal {};
