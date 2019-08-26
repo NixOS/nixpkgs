@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     urls = [
        "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.tgz"
        "http://botan.randombit.net/releases/Botan-${version}.tgz"
+       "https://github.com/randombit/botan/archive/${version}.tar.gz"
     ];
     inherit sha256;
   };
