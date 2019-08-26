@@ -118,7 +118,7 @@ let
       keras-applications
 
       # libs taken from system through the TF_SYS_LIBS mechanism
-      grpc
+      # grpc
       sqlite
       openssl
       jsoncpp
@@ -169,7 +169,8 @@ let
       "flatbuffers"
       "gast_archive"
       "gif_archive"
-      "grpc"
+      # Lots of errors, requires an older version
+      # "grpc"
       "hwloc"
       "icu"
       "jpeg"
@@ -245,8 +246,7 @@ let
     '';
 
     # FIXME: Tensorflow uses dlopen() for CUDA libraries.
-    # No idea why gpr isn't linked properly; perhaps Tensorflow expects a static library?
-    NIX_LDFLAGS = [ "-lgpr" ] ++ lib.optionals cudaSupport [ "-lcudart" "-lcublas" "-lcufft" "-lcurand" "-lcusolver" "-lcusparse" "-lcudnn" ];
+    NIX_LDFLAGS = lib.optionals cudaSupport [ "-lcudart" "-lcublas" "-lcufft" "-lcurand" "-lcusolver" "-lcusparse" "-lcudnn" ];
 
     hardeningDisable = [ "format" ];
 
@@ -261,15 +261,14 @@ let
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
 
     fetchAttrs = {
-      preInstall = ''
-        rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker,local_*,\@local_*}
-      '';
+      # So that checksums don't depend on these.
+      TF_SYSTEM_LIBS = null;
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "19ll3f1i5qzd7ngz3m2jbxzgcrdjx5sv6kv2j5mcb8g3xsws8j5x"
+        "196pm3ynfafqlcxah07hkvphf536hpix1ydgsynr1yg08aynlvvx"
       else
-        "0y9kw3k4yvrxwdy7zry7nip9mdiwyv35r6mx65g4w7qajiypfc7i";
+        "138r85n27ijzwxfwb5pcfyb79v14368jpckw0vmciz6pwf11bd9g";
     };
 
     buildAttrs = {
