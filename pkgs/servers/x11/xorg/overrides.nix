@@ -469,7 +469,7 @@ self: super:
           <configItem>
             <name>${name}</name>
             <description>${layout.description}</description>
-            <vendor>${layout.description}</vendor>
+            <vendor>Generic</vendor>
           </configItem>
         </model>
         .
