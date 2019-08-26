@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/themes
     cp -a Obsidian-2 $out/share/themes
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
