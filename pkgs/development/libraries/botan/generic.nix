@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python, bzip2, zlib, gmp, openssl, boost
+{ stdenv, fetchFromGitHub, python, bzip2, zlib, gmp, openssl, boost
 # Passed by version specific builders
-, baseVersion, revision, sha256
+, version, sha256
 , extraConfigureFlags ? ""
 , postPatch ? null
 , darwin
@@ -9,17 +9,15 @@
 
 stdenv.mkDerivation rec {
   pname = "botan";
-  version = "${baseVersion}.${revision}";
+  inherit version;
 
-  src = fetchurl {
-    name = "Botan-${version}.tgz";
-    urls = [
-       "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.tgz"
-       "http://botan.randombit.net/releases/Botan-${version}.tgz"
-       "https://github.com/randombit/botan/archive/${version}.tar.gz"
-    ];
+  src = fetchFromGitHub {
+    owner = "randombit";
+    repo = "botan";
+    rev = version;
     inherit sha256;
   };
+
   inherit postPatch;
 
   buildInputs = [ python bzip2 zlib gmp openssl boost ]
@@ -49,5 +47,4 @@ stdenv.mkDerivation rec {
     platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
     license = licenses.bsd2;
   };
-  passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";
 }
