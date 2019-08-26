@@ -4532,17 +4532,6 @@ let
     };
   };
 
-  DeviceSerialPort = buildPerlPackage {
-    pname = "Device-SerialPort";
-    version = "1.04";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/COOK/Device-SerialPort-1.04.tar.gz;
-      sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
-    };
-    meta = {
-    };
-  };
-
   DBDMock = buildPerlModule {
     pname = "DBD-Mock";
     version = "1.45";
