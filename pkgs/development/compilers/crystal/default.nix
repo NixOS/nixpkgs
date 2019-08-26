@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, makeWrapper
 , coreutils, git, gmp, nettools, openssl, readline, tzdata, libxml2, libyaml
-, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib }:
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib
+, callPackage }:
 
 # We need multiple binaries as a given binary isn't always able to build
 # (even slightly) older or newer versions.
@@ -37,7 +38,7 @@ let
   };
 
   generic = { version, sha256, binary, doCheck ? true }:
-  stdenv.mkDerivation rec {
+  let compiler = stdenv.mkDerivation rec {
     pname = "crystal";
     inherit doCheck version;
 
@@ -134,6 +135,10 @@ let
       export PATH=${lib.makeBinPath checkInputs}:$PATH
     '';
 
+    passthru.buildCrystalPackage = callPackage ./build-package.nix {
+      crystal = compiler;
+    };
+
     meta = with lib; {
       description = "A compiled language with Ruby like syntax and type inference";
       homepage = https://crystal-lang.org/;
@@ -141,7 +146,7 @@ let
       maintainers = with maintainers; [ manveru david50407 peterhoeg ];
       platforms = builtins.attrNames archs;
     };
-  };
+  }; in compiler;
 
 in rec {
   binaryCrystal_0_26 = genericBinary {
