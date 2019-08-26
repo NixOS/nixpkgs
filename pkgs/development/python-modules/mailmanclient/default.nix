@@ -10,4 +10,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six httplib2 ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.gnu.org/software/mailman/";
+    description = "REST client for driving Mailman 3";
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ peti globin ];
+  };
 }
