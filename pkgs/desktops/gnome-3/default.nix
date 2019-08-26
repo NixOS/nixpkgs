@@ -355,4 +355,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   rest = librest;
 
   pidgin-im-gnome-shell-extension = pkgs.gnomeExtensions.pidgin-im-integration; # added 2019-08-01
+
+  # added 2019-08-25
+  corePackages = throw "deprecated 2019-08-25: please use `services.gnome3.core-shell.enable`";
+  optionalPackages = throw "deprecated 2019-08-25: please use `services.gnome3.core-utilities.enable`";
+  gamesPackages = throw "deprecated 2019-08-25: please use `services.gnome3.games.enable`";
 })
