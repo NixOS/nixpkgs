@@ -5734,6 +5734,8 @@ in
 
   qview = libsForQt5.callPackage ../applications/graphics/qview {};
 
+  wayback_machine_downloader = callPackage ../applications/networking/wayback_machine_downloader { };
+
   wiggle = callPackage ../development/tools/wiggle { };
 
   radamsa = callPackage ../tools/security/radamsa { };
