@@ -53,7 +53,6 @@ let
     };
   };
 in {
-  arangodb_3_2 = common { version = "3.2.18";     sha256 = "05mfrx1g6dh1bzzqs23nvk0rg3v8y2dhdam4lym55pzlhqa7lf0x"; };
   arangodb_3_3 = common { version = "3.3.23.1";   sha256 = "0bnbiispids7jcgrgcmanf9jqgvk0vaflrvgalz587jwr2zf21k8"; };
   arangodb_3_4 = common { version = "3.4.7";      sha256 = "1wr2xvi5lnl6f2ryyxdwn4wnfiaz0rrf58ja1k19m7b6w3264iim"; };
   arangodb_3_5 = common { version = "3.5.0-rc.7"; sha256 = "1sdmbmyml9d3ia3706bv5901qqmh4sxk7js5b9hyfjqpcib10d1k"; };
