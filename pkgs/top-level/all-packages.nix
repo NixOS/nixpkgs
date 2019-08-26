@@ -3374,7 +3374,9 @@ in
 
   git-sizer = callPackage ../applications/version-management/git-sizer { };
 
-  git-up = callPackage ../applications/version-management/git-up { };
+  git-up = callPackage ../applications/version-management/git-up {
+    pythonPackages = python3Packages;
+  };
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
