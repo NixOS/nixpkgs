@@ -14,7 +14,10 @@ buildPythonPackage rec {
   buildInputs = [ beautifulsoup4 vcrpy mock ];
   propagatedBuildInputs = [ django-mailman3 ];
 
-  doCheck = false;
+  checkPhase = ''
+    cd $NIX_BUILD_TOP/$sourceRoot
+    PYTHONPATH=.:$PYTHONPATH python example_project/manage.py test --settings=test_settings postorius
+  '';
 
   meta = {
     homepage = https://www.gnu.org/software/mailman/;
