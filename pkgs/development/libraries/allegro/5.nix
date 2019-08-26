@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "allegro-${version}";
-  version = "5.2.4.0";
+  pname = "allegro";
+  version = "5.2.5.0";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "01y3hirn5b08f188nnhb2cbqj4vzysr7l2qpz2208srv8arzmj2d";
+    sha256 = "1jrnizpwznyxz2c7zb75lfy7l51ww5jlqfaahcrycfj1xay9mpqp";
   };
 
   buildInputs = [
@@ -26,14 +26,6 @@ stdenv.mkDerivation rec {
     libXi libXfixes
     enet libtheora freetype physfs libopus pkgconfig gtk2 pcre libXdmcp
     libpulseaudio libpthreadstubs
-  ];
-
-  patches = [
-   # fix compilation with mesa 18.2.5
-   (fetchpatch {
-     url = "https://github.com/liballeg/allegro5/commit/a40d30e21802ecf5c9382cf34af9b01bd3781e47.patch";
-     sha256 = "1f1xlj5y2vr6wzmcz04s8kxn8cfdwrg9kjlnvpz9dix1z3qjnd4m";
-   })
   ];
 
   postPatch = ''
