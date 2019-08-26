@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, substituteAll, udev
+{ stdenv, mkDerivation, fetchFromGitHub, substituteAll, udev
 , pkgconfig, qtbase, cmake, zlib, kmod }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "0.3.2";
   name = "ckb-next-${version}";
 

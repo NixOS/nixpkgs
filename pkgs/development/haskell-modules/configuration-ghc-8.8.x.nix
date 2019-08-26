@@ -41,30 +41,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Use the current git version of cabal-install.
-  cabal-install = overrideCabal (super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal-git; })) (drv: {
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell";
-      repo = "cabal";
-      rev = "e98f6c26fa301b49921c2df67934bf9b0a4f3386";
-      sha256 = "15nrkvckq2rw31z7grgbsg5f0gxfc09afsrqdfi4n471k630xd2i";
-    };
-    version = "20190510-git";
-    editedCabalFile = null;
-    postUnpack = "sourceRoot+=/cabal-install";
-    jailbreak = true;
-  });
-  Cabal-git = overrideCabal super.Cabal_2_4_1_0 (drv: {
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell";
-      repo = "cabal";
-      rev = "e98f6c26fa301b49921c2df67934bf9b0a4f3386";
-      sha256 = "15nrkvckq2rw31z7grgbsg5f0gxfc09afsrqdfi4n471k630xd2i";
-    };
-    version = "20190510-git";
-    editedCabalFile = null;
-    postUnpack = "sourceRoot+=/Cabal";
-  });
+  # Use the cabal-install 3.0.0.0 beta release.
+  cabal-install = self.cabal-install-3;
+  Cabal_3_0_0_0 = null;    # Our compiler has this already.
 
   # Ignore overly restrictive upper version bounds.
   async = doJailbreak super.async;

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       A featureful, flexible, scriptable, transaction-oriented SMTP test tool
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ rickynils ndowens ];
+    maintainers = with maintainers; [ ndowens ];
     platforms = platforms.all;
   };
 

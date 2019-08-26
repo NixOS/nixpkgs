@@ -20,6 +20,6 @@ buildGoPackage rec {
     inherit (src.meta) homepage;
     description = "Prometheus exporter for OpenVPN";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }

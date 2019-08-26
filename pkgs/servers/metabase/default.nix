@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://metabase.com";
     license     = licenses.agpl3;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ schneefux thoughtpolice ];
+    maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
   };
 }

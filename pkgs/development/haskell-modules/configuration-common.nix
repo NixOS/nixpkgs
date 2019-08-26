@@ -72,7 +72,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1pz12l0awshdq5xyac5awjd902sy9l65z6ihya4pzapik4gqfdcd";
+      sha256 = "1795sad0jr2da2pn28nbqsvpld6zw8gf9yscywixkbabf7ls66fn";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -149,11 +149,16 @@ self: super: {
     else super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-  hakyll = if pkgs.stdenv.isDarwin
+  hakyll = appendPatch
+    (if pkgs.stdenv.isDarwin
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    else super.hakyll)
+    (pkgs.fetchpatch {
+      url = https://github.com/jaspervdj/hakyll/commit/25a4460b75b3c9f3ce339b3311b084d92994f5f1.patch;
+      sha256 = "sha256-F59WHt52LOKGsGoaD3LAIZFEMe9s9WHfGxQgSh9Q8uQ=";
+    });
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
@@ -214,15 +219,19 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # Needs older version of QuickCheck.
+  these_0_7_6 = doJailbreak super.these_0_7_6;
+
   # dontCheck: Can be removed once https://github.com/haskell-nix/hnix/commit/471712f is in (5.2 probably)
   #   This is due to GenList having been removed from generic-random in 1.2.0.0
   # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
   #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
+  # Does not support recent versions of "these".
+  # https://github.com/haskell-nix/hnix/issues/514
   hnix =
     generateOptparseApplicativeCompletion "hnix" (
-    dontCheck (doJailbreak (overrideCabal super.hnix (old: {
-      testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
-  }))));
+      dontCheck (doJailbreak (super.hnix.override { these = self.these_0_7_6; }))
+    );
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -706,15 +715,9 @@ self: super: {
     '';
   });
 
-  # A simple MonadFail patch would do too, but not doing the tests is easier
-  megaparsec_6_5_0 = dontCheck super.megaparsec_6_5_0;
-
   # The standard libraries are compiled separately
   idris = generateOptparseApplicativeCompletion "idris" (
-    doJailbreak (dontCheck (super.idris.override {
-      # Needed for versions <= 1.3.1 https://github.com/idris-lang/Idris-dev/pull/4610
-      megaparsec = self.megaparsec_6_5_0;
-    }))
+    doJailbreak (dontCheck super.idris)
   );
 
   # https://github.com/bos/math-functions/issues/25
@@ -1224,14 +1227,14 @@ self: super: {
   # The latest release version is ancient. You really need this tool from git.
   haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
     (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
-      version = "20190625-git";
+      version = "20190814-git";
       src = pkgs.fetchFromGitHub {
         owner = "haskell-CI";
         repo = "haskell-ci";
-        rev = "260f967c6973dfb22ecc8061a1811a2ea4b79e01";
-        sha256 = "1mvn6pqa6wfcm4jxhlhm4l54pwrlgnz7vdrmkwabliwz4q0bzgqk";
+        rev = "70918d80b6fd43aca7e4d00ba0d2ea116b666556";
+        sha256 = "0bzp959qy74zmqq75f60rcixpjbvvyrb5a8zp2nyql3nm9vxzy5k";
       };
-  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck exceptions temporary]));
+  }) (with self; [temporary lattices Cabal_3_0_0_0]));
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
@@ -1278,5 +1281,11 @@ self: super: {
 
   # https://github.com/sol/hpack/issues/366
   hpack = dontCheck super.hpack;
+
+  # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
+  graphviz = dontCheck super.graphviz;
+
+  # https://github.com/elliottt/hsopenid/issues/15
+  openid = markBroken super.openid;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

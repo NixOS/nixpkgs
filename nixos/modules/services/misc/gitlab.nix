@@ -502,7 +502,7 @@ in {
       "d ${cfg.statePath} 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/builds 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/config 0750 ${cfg.user} ${cfg.group} -"
-      "d ${cfg.statePath}/config/initializers 0750 ${cfg.user} ${cfg.group} -"
+      "D ${cfg.statePath}/config/initializers 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/db 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/log 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/repositories 2770 ${cfg.user} ${cfg.group} -"
@@ -659,7 +659,7 @@ in {
         fi
 
         # We remove potentially broken links to old gitlab-shell versions
-        rm -f ${cfg.statePath}/repositories/**/*.git/hooks
+        rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
 
         ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${pkgs.git}/bin/git config --global core.autocrlf "input"
       '';

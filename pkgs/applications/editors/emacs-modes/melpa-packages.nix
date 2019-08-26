@@ -33,8 +33,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
     inherit (import ./libgenerated.nix lib self) melpaDerivation;
     super = lib.listToAttrs (map (melpaDerivation variant) (lib.importJSON archiveJson));
 
-    generic = import ./melpa-generic.nix;
-
     overrides = rec {
       shared = {
         # Expects bash to be at /bin/bash
@@ -71,6 +69,23 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         elpy = super.elpy.overrideAttrs(old: {
           propagatedUserEnvPkgs = old.propagatedUserEnvPkgs ++ [ external.elpy ];
+        });
+
+        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs(old: {
+          buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            cd source/sqlite
+            make
+            cd -
+          '';
+
+          postInstall = ''
+            install -m=755 -D source/sqlite/emacsql-sqlite \
+              $out/share/emacs/site-lisp/elpa/emacsql-sqlite-${old.version}/sqlite/emacsql-sqlite
+          '';
+
+          stripDebugList = [ "share" ];
         });
 
         evil-magit = super.evil-magit.overrideAttrs (attrs: {
@@ -114,20 +129,20 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         initsplit = markBroken super.initsplit;
 
-        irony = super.irony.overrideAttrs(old: {
+        irony = super.irony.overrideAttrs (old: {
+          cmakeFlags = old.cmakeFlags or [] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           preConfigure = ''
             cd server
           '';
           preBuild = ''
             make
+            install -D bin/irony-server $out/bin/irony-server
+            cd ..
           '';
-          postInstall = ''
-            mkdir -p $out
-            mv $out/share/emacs/site-lisp/elpa/*/server/bin $out
-            rm -rf $out/share/emacs/site-lisp/elpa/*/server
-          '';
-          preCheck = ''
+          checkPhase = ''
             cd source/server
+            make check
+            cd ../..
           '';
           dontUseCmakeBuildDir = true;
           doCheck = true;
@@ -224,6 +239,24 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         tawny-mode = markBroken super.tawny-mode;
 
+        # Telega has a server portion for it's network protocol
+        telega = super.telega.overrideAttrs(old: {
+
+          buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+
+          postBuild = ''
+            cd source/server
+            make
+            cd -
+          '';
+
+          postInstall = ''
+            mkdir -p $out/bin
+            install -m755 -Dt $out/bin ./source/server/telega-server
+          '';
+
+        });
+
         # upstream issue: missing file header
         textmate = markBroken super.textmate;
 
@@ -240,55 +273,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # upstream issue: missing file header
         window-numbering = markBroken super.window-numbering;
-
-        vterm = let
-          emacsSources = pkgs.stdenv.mkDerivation {
-            name = self.emacs.name + "-sources";
-            src = self.emacs.src;
-
-            dontConfigure = true;
-            dontBuild = true;
-            doCheck = false;
-            fixupPhase = ":";
-
-            installPhase = ''
-              mkdir -p $out
-              cp -a * $out
-            '';
-
-          };
-
-          libvterm = pkgs.libvterm-neovim.overrideAttrs(old: rec {
-            pname = "libvterm-neovim";
-            version = "2019-04-27";
-            name = pname + "-" + version;
-            src = pkgs.fetchFromGitHub {
-              owner = "neovim";
-              repo = "libvterm";
-              rev = "89675ffdda615ffc3f29d1c47a933f4f44183364";
-              sha256 = "0l9ixbj516vl41v78fi302ws655xawl7s94gmx1kb3fmfgamqisy";
-            };
-          });
-
-        in pkgs.stdenv.mkDerivation rec {
-          inherit (super.vterm) name version src;
-
-          nativeBuildInputs = [ pkgs.cmake ];
-          buildInputs = [ self.emacs libvterm ];
-
-          cmakeFlags = [
-            "-DEMACS_SOURCE=${emacsSources}"
-            "-DUSE_SYSTEM_LIBVTERM=True"
-          ];
-
-          installPhase = ''
-            install -d $out/share/emacs/site-lisp
-            install ../*.el $out/share/emacs/site-lisp
-            install ../*.so $out/share/emacs/site-lisp
-          '';
-        };
-        # Legacy alias
-        emacs-libvterm = shared.vterm;
 
         zmq = super.zmq.overrideAttrs(old: {
           stripDebugList = [ "share" ];
@@ -410,13 +394,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # Expects bash to be at /bin/bash
         helm-rtags = markBroken super.helm-rtags;
 
-        # Fails with "package does not untar cleanly into ..."
-        irony = shared.irony.overrideAttrs(old: {
-          meta = old.meta // {
-            broken = true;
-          };
-        });
-
         orgit =
           (super.orgit.overrideAttrs (attrs: {
             # searches for Git at build time
@@ -451,6 +428,55 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
+
+        vterm = let
+          emacsSources = pkgs.stdenv.mkDerivation {
+            name = self.emacs.name + "-sources";
+            src = self.emacs.src;
+
+            dontConfigure = true;
+            dontBuild = true;
+            doCheck = false;
+            fixupPhase = ":";
+
+            installPhase = ''
+              mkdir -p $out
+              cp -a * $out
+            '';
+
+          };
+
+          libvterm = pkgs.libvterm-neovim.overrideAttrs(old: rec {
+            pname = "libvterm-neovim";
+            version = "2019-04-27";
+            name = pname + "-" + version;
+            src = pkgs.fetchFromGitHub {
+              owner = "neovim";
+              repo = "libvterm";
+              rev = "89675ffdda615ffc3f29d1c47a933f4f44183364";
+              sha256 = "0l9ixbj516vl41v78fi302ws655xawl7s94gmx1kb3fmfgamqisy";
+            };
+          });
+
+        in pkgs.stdenv.mkDerivation rec {
+          inherit (super.vterm) name version src;
+
+          nativeBuildInputs = [ pkgs.cmake ];
+          buildInputs = [ self.emacs libvterm ];
+
+          cmakeFlags = [
+            "-DEMACS_SOURCE=${emacsSources}"
+            "-DUSE_SYSTEM_LIBVTERM=True"
+          ];
+
+          installPhase = ''
+            install -d $out/share/emacs/site-lisp
+            install ../*.el $out/share/emacs/site-lisp
+            install ../*.so $out/share/emacs/site-lisp
+          '';
+        };
+        # Legacy alias
+        emacs-libvterm = unstable.vterm;
 
         w3m = super.w3m.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {

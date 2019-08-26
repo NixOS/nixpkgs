@@ -3,6 +3,7 @@
 , enableMySQL ? false, mysql, zlib
 , enableAuthDovecot ? false, dovecot
 , enablePAM ? false, pam
+, enableSPF ? true, libspf2
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableLDAP openldap
     ++ stdenv.lib.optionals enableMySQL [ mysql.connector-c zlib ]
     ++ stdenv.lib.optional enableAuthDovecot dovecot
-    ++ stdenv.lib.optional enablePAM pam;
+    ++ stdenv.lib.optional enablePAM pam
+    ++ stdenv.lib.optional enableSPF libspf2;
 
   preBuild = ''
     sed '
@@ -63,6 +65,10 @@ stdenv.mkDerivation rec {
         s:^# \(SUPPORT_PAM\)=.*:\1=yes:
         s:^\(EXTRALIBS_EXIM\)=\(.*\):\1=\2 -lpam:
         s:^# \(EXTRALIBS_EXIM\)=.*:\1=-lpam:
+      ''}
+      ${stdenv.lib.optionalString enableSPF ''
+        s:^# \(SUPPORT_SPF\)=.*:\1=yes:
+        s:^# \(LDFLAGS += -lspf2\):\1:
       ''}
       #/^\s*#.*/d
       #/^\s*$/d

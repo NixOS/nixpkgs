@@ -95,6 +95,7 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
   cachix = enableSeparateBinOutput super.cachix;
+  ghcid = enableSeparateBinOutput super.ghcid;
 
   hzk = overrideCabal super.hzk (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
@@ -529,10 +530,6 @@ self: super: builtins.intersectAttrs super {
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
-
-  # Doctests hang only when compiling with nix.
-  # https://github.com/cdepillabout/termonad/issues/15
-  termonad = dontCheck super.termonad;
 
   # Expects z3 to be on path so we replace it with a hard
   sbv = overrideCabal super.sbv (drv: {

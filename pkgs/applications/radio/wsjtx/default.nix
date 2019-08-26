@@ -1,9 +1,9 @@
 { stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
   docbook_xsl, fftw, fftwFloat, gfortran, libtool, libusb1, qtbase,
-  qtmultimedia, qtserialport, qttools, texinfo }:
+  qtmultimedia, qtserialport, qttools, texinfo, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "wsjtx-${version}";
+  pname = "wsjtx";
   version = "2.1.0";
 
   # This is a "superbuild" tarball containing both wsjtx and a hamlib fork
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # Omitting pkgconfig because it causes issues locating the built hamlib
   nativeBuildInputs = [
     asciidoc asciidoctor autoconf automake cmake docbook_xsl gfortran libtool
-    qttools texinfo
+    qttools texinfo wrapQtAppsHook
   ];
   buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport ];
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       These modes were all designed for making reliable, confirmed ham radio
       contacts under extreme weak-signal conditions.
     '';
-    homepage = http://physics.princeton.edu/pulsar/k1jt/wsjtx.html;
+    homepage = "https://physics.princeton.edu/pulsar/k1jt/wsjtx.html";
     # Older licenses are for the statically-linked hamlib
     license = with licenses; [ gpl3Plus gpl2Plus lgpl21Plus ];
     platforms = platforms.linux;

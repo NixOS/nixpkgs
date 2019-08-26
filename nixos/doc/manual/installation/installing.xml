@@ -29,13 +29,14 @@
   </para>
 
   <para>
-   You are logged-in automatically as <literal>root</literal>. (The
-   <literal>root</literal> user account has an empty password.)
+   You are logged-in automatically as <literal>nixos</literal>.
+   The <literal>nixos</literal> user account has an empty password so you
+   can use <command>sudo</command> without a password.
   </para>
 
   <para>
    If you downloaded the graphical ISO image, you can run <command>systemctl
-   start display-manager</command> to start KDE. If you want to continue on the
+   start display-manager</command> to start the desktop environment. If you want to continue on the
    terminal, you can use <command>loadkeys</command> to switch to your
    preferred keyboard layout. (We even provide neo2 via <command>loadkeys de
    neo</command>!)
@@ -65,9 +66,9 @@
 
    <para>
     If you would like to continue the installation from a different machine you
-    need to activate the SSH daemon via <literal>systemctl start
-    sshd</literal>. In order to be able to login you also need to set a
-    password for <literal>root</literal> using <literal>passwd</literal>.
+    need to activate the SSH daemon via <command>systemctl start
+    sshd</command>. You then must set a password for either <literal>root</literal> or
+    <literal>nixos</literal> with <command>passwd></command> to be able to login.
    </para>
   </section>
  </section>
@@ -334,7 +335,7 @@
      If you’re using the graphical ISO image, other editors may be available
      (such as <command>vim</command>). If you have network access, you can also
      install other editors — for instance, you can install Emacs by running
-     <literal>nix-env -i emacs</literal>.
+     <literal>nix-env -f '&lt;nixpkgs&gt;' -iA emacs</literal>.
     </para>
     <variablelist>
      <varlistentry>
@@ -466,10 +467,10 @@ Retype new UNIX password: ***</screen>
     <para>
      You may also want to install some software. For instance,
 <screen>
-<prompt>$ </prompt>nix-env -qa \*</screen>
+<prompt>$ </prompt>nix-env -qaP \*</screen>
      shows what packages are available, and
 <screen>
-<prompt>$ </prompt>nix-env -i w3m</screen>
+<prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -iA w3m</screen>
      install the <literal>w3m</literal> browser.
     </para>
    </listitem>

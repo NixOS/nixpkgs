@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     repositories.git = git://git.tuxfamily.org/gitroot/chrony/chrony.git;
     license = licenses.gpl2;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
-    maintainers = with maintainers; [ rickynils fpletz ];
+    maintainers = with maintainers; [ fpletz ];
 
     longDescription = ''
       Chronyd is a daemon which runs in background on the system. It obtains

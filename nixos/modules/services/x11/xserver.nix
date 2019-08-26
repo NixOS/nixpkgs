@@ -78,7 +78,7 @@ let
   in imap1 mkHead cfg.xrandrHeads;
 
   xrandrDeviceSection = let
-    monitors = flip map xrandrHeads (h: ''
+    monitors = forEach xrandrHeads (h: ''
       Option "monitor-${h.config.output}" "${h.name}"
     '');
     # First option is indented through the space in the config but any
@@ -714,7 +714,7 @@ in
       nativeBuildInputs = [ pkgs.xkbvalidate ];
       preferLocalBuild = true;
     } ''
-      validate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
+      xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
     '');
 

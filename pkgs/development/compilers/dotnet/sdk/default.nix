@@ -12,14 +12,14 @@ let
   rpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc libunwind libuuid icu openssl zlib curl ];
 in
   stdenv.mkDerivation rec {
-    version = "2.2.300";
-    netCoreVersion = "2.2.5";
+    version = "2.2.401";
+    netCoreVersion = "2.2.6";
     pname = "dotnet-sdk";
 
     src = fetchurl {
       url = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-linux-x64.tar.gz";
       # use sha512 from the download page
-      sha512 = "1D660A323180DF3DA8C6E0EA3F439D6BBEC29670D498AC884F38BF3CDFFBB041C7AFFF66171CDFD24C82394B845B135B057404DEF1FCE9F206853726382BC42B";
+      sha512 = "05w3zk7bcd8sv3k4kplf20j906and2006g1fggq7y6kaxrlhdnpd6jhy6idm8v5bz48wfxga5b4yys9qx0fp3p8yl7wi67qljpzrq88";
     };
 
     sourceRoot = ".";

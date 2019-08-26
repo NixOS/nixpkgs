@@ -33,7 +33,7 @@
 }:
 
 let
-  v_base = "5.0.1";
+  v_base = "5.0.2";
   version = "${v_base}-RELEASE";
   version_friendly = "${v_base}";
 
@@ -51,7 +51,7 @@ let
     # For more inforation, see: https://github.com/apple/swift/pull/3594#issuecomment-234169759
     clang = fetch {
       repo = "swift-clang";
-      sha256 = "1ap26425zhn2sdw3m9snyrqhi4phv2fgblyv9wp8xppjlnjkax9k";
+      sha256 = "046p7f4044ls8hhgklsz32md5jvxkaaim1d75n0fmnwap6di3n1q";
     };
     llvm = fetch {
       repo = "swift-llvm";
@@ -83,16 +83,16 @@ let
     };
     foundation = fetch {
       repo = "swift-corelibs-foundation";
-      sha256 = "11w0iapccrk13hjbrwylq8g71znrncnc3mrm345gvnjfgz08ffaq";
+      sha256 = "1wys4xh7f6c7yjf210x41n2krmyi2qj1wpxbv0p48d230va1azj1";
     };
     libdispatch = fetch {
       repo = "swift-corelibs-libdispatch";
-      sha256 = "1mgzsq3nfzbkssfkswzvvjgsbv2fx36i1r83d4nzw3di8spxmg32";
+      sha256 = "0chnb0d4xjyn9wnc8bgimd5ji5igfyq891flgnqpfwr4y26496c1";
       fetchSubmodules = true;
     };
     swift = fetch {
       repo = "swift";
-      sha256 = "02bv47pd0k0xy4k7q6c3flwxwkm2palnzvpr4w3nmvqk0flrbsq6";
+      sha256 = "0fsq1y8dz4ssn90akvzj36cqyblalb09bjzy4ikqn67mb5x99wpb";
     };
   };
 
@@ -248,9 +248,6 @@ stdenv.mkDerivation rec {
     PREFIX=''${out/#\/}
     substituteInPlace swift-corelibs-xctest/build_script.py \
       --replace usr "$PREFIX"
-    substituteInPlace swiftpm/Utilities/bootstrap \
-      --replace \"usr\" \"$PREFIX\" \
-      --replace usr/lib "$PREFIX/lib"
   '';
 
   buildPhase = builder;

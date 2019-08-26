@@ -331,7 +331,7 @@ in
         };
 
         config = mkOption {
-          type = with types; attrsOf (either bool (either str (listOf str)));
+          type = with types; attrsOf (oneOf [ bool str (listOf str) ]);
           description = ''
             Addon to postfix configuration
           '';

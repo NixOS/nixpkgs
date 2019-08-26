@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   name = "mixxx-${version}";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = "release-${version}";
-    sha256 = "1q6c2wfpprsx7s7nz1w0mhm2yhikj54jxcv61kwylxx3n5k2na9r";
+    sha256 = "0dmkvcsgq7abxqd4wms8c4w0mr5c53z7n5r8jgzp4swz9nmfjpfg";
   };
 
   buildInputs = [

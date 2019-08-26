@@ -44,13 +44,13 @@ EOF
   *) to ignore the error and continue
 EOF
 
-    read reply
+    read -n 1 reply
 
     if [ -n "$allowShell" -a "$reply" = f ]; then
         exec setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console"
     elif [ -n "$allowShell" -a "$reply" = i ]; then
         echo "Starting interactive shell..."
-        setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
+        setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
     elif [ "$reply" = r ]; then
         echo "Rebooting..."
         reboot -f

@@ -163,9 +163,11 @@ in {
         enableShared = false;
         inherit libcxxabi;
       };
+      libunwind = super.llvmPackages_8.libraries.libunwind.override {
+        enableShared = false;
+      };
     };
   };
 
   python27 = super.python27.override { static = true; };
-
 }

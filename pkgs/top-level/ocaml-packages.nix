@@ -128,6 +128,8 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    charInfo_width = callPackage ../development/ocaml-modules/charInfo_width { };
+
     checkseum = callPackage ../development/ocaml-modules/checkseum { };
 
     cil = callPackage ../development/ocaml-modules/cil { };
@@ -450,6 +452,8 @@ let
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
+    mmap =  callPackage ../development/ocaml-modules/mmap { };
+
     mparser =  callPackage ../development/ocaml-modules/mparser { };
 
     mstruct =  callPackage ../development/ocaml-modules/mstruct { };
@@ -763,6 +767,8 @@ let
       if lib.versionAtLeast ocaml.version "4.3"
       then callPackage ../development/ocaml-modules/uri { }
       else callPackage ../development/ocaml-modules/uri/legacy.nix { };
+
+    uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
 
     uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
       legacyVersion = true;

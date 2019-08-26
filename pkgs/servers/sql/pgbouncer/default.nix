@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libevent }:
+{ stdenv, fetchurl, openssl, libevent, c-ares, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "pgbouncer-${version}";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1m8vsxyna5grs5p0vnxf3fxxnkk9aqjf3qmr2bbkpkhlzr11986q";
   };
 
-  buildInputs = [ libevent openssl ];
+  buildInputs = [ libevent openssl c-ares pkg-config ];
 
   meta = with stdenv.lib; {
     homepage = https://pgbouncer.github.io;
     description = "Lightweight connection pooler for PostgreSQL";
     license = licenses.isc;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
