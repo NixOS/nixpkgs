@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
+  doCheck = true;
+
   # Test setup found by inspecting ${src}/.travis/run.sh; problems without cmake.
   checkTarget = "tests";
 
