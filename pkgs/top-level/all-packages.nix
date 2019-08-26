@@ -6397,9 +6397,7 @@ in
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
-  tcpflow = callPackage ../tools/networking/tcpflow {
-    openssl = openssl_1_0_2;
-  };
+  tcpflow = callPackage ../tools/networking/tcpflow { };
 
   tcpkali = callPackage ../applications/networking/tcpkali { };
 
