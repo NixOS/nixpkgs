@@ -20206,6 +20206,8 @@ in
 
   celluloid = callPackage ../applications/video/celluloid { };
 
+  gnome-commander = callPackage ../applications/misc/gnome-commander { };
+
   gnome-recipes = callPackage ../applications/misc/gnome-recipes {
     inherit (gnome3) gnome-autoar;
   };

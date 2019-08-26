@@ -1,0 +1,26 @@
+diff --git a/plugins/fileroller/file-roller-plugin.cc b/plugins/fileroller/file-roller-plugin.cc
+index b6623c19..da628917 100644
+--- a/plugins/fileroller/file-roller-plugin.cc
++++ b/plugins/fileroller/file-roller-plugin.cc
+@@ -91,7 +91,7 @@ static GSettingsSchemaSource* GetGlobalSchemaSource()
+     GSettingsSchemaSource   *global_schema_source;
+     std::string              g_schema_path(PREFIX);
+ 
+-    g_schema_path.append("/share/glib-2.0/schemas");
++    g_schema_path.append("@schemadir@");
+ 
+     global_schema_source = g_settings_schema_source_get_default ();
+ 
+diff --git a/src/gnome-cmd-data.cc b/src/gnome-cmd-data.cc
+index af73f583..95b23916 100644
+--- a/src/gnome-cmd-data.cc
++++ b/src/gnome-cmd-data.cc
+@@ -65,7 +65,7 @@ GSettingsSchemaSource* GnomeCmdData::GetGlobalSchemaSource()
+     GSettingsSchemaSource   *global_schema_source;
+     std::string              g_schema_path(PREFIX);
+ 
+-    g_schema_path.append("/share/glib-2.0/schemas");
++    g_schema_path.append("@schemadir@");
+ 
+     global_schema_source = g_settings_schema_source_get_default ();
+ 
