@@ -4532,17 +4532,6 @@ let
     };
   };
 
-  DeviceSerialPort = buildPerlPackage {
-    pname = "Device-SerialPort";
-    version = "1.04";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/COOK/Device-SerialPort-1.04.tar.gz;
-      sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
-    };
-    meta = {
-    };
-  };
-
   DBDMock = buildPerlModule {
     pname = "DBD-Mock";
     version = "1.45";
@@ -15001,6 +14990,19 @@ let
       description = "Fast, compact, powerful binary deserialization";
       license = with stdenv.lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
+  DeviceSerialPort = buildPerlPackage rec {
+    pname = "Device-SerialPort";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/COOK/${pname}-${version}.tar.gz";
+      sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
+    };
+    meta = with stdenv.lib; {
+      description = "Linux/POSIX emulation of Win32::SerialPort functions.";
+      license = with licenses; [ artistic1 gpl1Plus ];
     };
   };
 

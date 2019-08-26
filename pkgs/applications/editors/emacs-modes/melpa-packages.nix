@@ -33,8 +33,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
     inherit (import ./libgenerated.nix lib self) melpaDerivation;
     super = lib.listToAttrs (map (melpaDerivation variant) (lib.importJSON archiveJson));
 
-    generic = import ./melpa-generic.nix;
-
     overrides = rec {
       shared = {
         # Expects bash to be at /bin/bash
@@ -131,20 +129,20 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         initsplit = markBroken super.initsplit;
 
-        irony = super.irony.overrideAttrs(old: {
+        irony = super.irony.overrideAttrs (old: {
+          cmakeFlags = old.cmakeFlags or [] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           preConfigure = ''
             cd server
           '';
           preBuild = ''
             make
+            install -D bin/irony-server $out/bin/irony-server
+            cd ..
           '';
-          postInstall = ''
-            mkdir -p $out
-            mv $out/share/emacs/site-lisp/elpa/*/server/bin $out
-            rm -rf $out/share/emacs/site-lisp/elpa/*/server
-          '';
-          preCheck = ''
+          checkPhase = ''
             cd source/server
+            make check
+            cd ../..
           '';
           dontUseCmakeBuildDir = true;
           doCheck = true;
@@ -395,13 +393,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # Expects bash to be at /bin/bash
         helm-rtags = markBroken super.helm-rtags;
-
-        # Fails with "package does not untar cleanly into ..."
-        irony = shared.irony.overrideAttrs(old: {
-          meta = old.meta // {
-            broken = true;
-          };
-        });
 
         orgit =
           (super.orgit.overrideAttrs (attrs: {

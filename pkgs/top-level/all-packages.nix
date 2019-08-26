@@ -454,6 +454,8 @@ in
 
   _0x0 = callPackage ../tools/misc/0x0 { };
 
+  _3llo = callPackage ../tools/misc/3llo { };
+
   _1password = callPackage ../applications/misc/1password { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
@@ -2804,6 +2806,8 @@ in
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
+  wev = callPackage ../tools/misc/wev { };
+
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
   z-lua = callPackage ../tools/misc/z-lua { };
@@ -4030,6 +4034,8 @@ in
 
   isync = callPackage ../tools/networking/isync { };
 
+  ix = callPackage ../tools/misc/ix { };
+
   jaaa = callPackage ../applications/audio/jaaa { };
 
   jackett = callPackage ../servers/jackett { };
@@ -5243,6 +5249,8 @@ in
     stdenv = clangStdenv;
   };
 
+  out-of-tree = callPackage ../development/tools/out-of-tree { };
+
   oppai-ng = callPackage ../tools/misc/oppai-ng { };
 
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
@@ -6271,6 +6279,8 @@ in
   svgbob = callPackage ../tools/graphics/svgbob { };
 
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
+
+  ssb-patchwork = callPackage ../applications/networking/ssb/patchwork { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
 
@@ -7442,6 +7452,7 @@ in
     crystal_0_26
     crystal_0_27
     crystal_0_29
+    crystal_0_30
     crystal;
 
   icr = callPackage ../development/tools/icr {};
@@ -10808,10 +10819,6 @@ in
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
-  gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix {
-    gtk = res.gtk2;
-  };
-
   gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
     gtk = res.gtk2;
   };
@@ -13370,8 +13377,6 @@ in
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
-  patchwork = callPackage ../applications/networking/ssb/patchwork { };
-
   qradiolink = callPackage ../applications/radio/qradiolink { };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
@@ -14673,8 +14678,6 @@ in
 
   labelImg = callPackage ../applications/science/machine-learning/labelimg { };
 
-  mailman = callPackage ../servers/mail/mailman { };
-
   mailman-rss = callPackage ../development/python-modules/mailman-rss { };
 
   mattermost = callPackage ../servers/mattermost { };
@@ -14792,8 +14795,6 @@ in
   postfix = callPackage ../servers/mail/postfix { };
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
-
-  rmilter = callPackage ../servers/mail/rmilter { };
 
   rspamd = callPackage ../servers/mail/rspamd { };
 
@@ -15528,6 +15529,8 @@ in
 
   gradm = callPackage ../os-specific/linux/gradm { };
 
+  inherit (nodePackages) gtop;
+
   hd-idle = callPackage ../os-specific/linux/hd-idle { };
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
@@ -16143,6 +16146,8 @@ in
 
   goconvey = callPackage ../development/tools/goconvey { };
 
+  gofumpt = callPackage ../development/tools/gofumpt { };
+
   gotags = callPackage ../development/tools/gotags { };
 
   golint = callPackage ../development/tools/golint { };
@@ -16327,6 +16332,8 @@ in
   schedtool = callPackage ../os-specific/linux/schedtool { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
+
+  sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {  };
 
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
@@ -17014,6 +17021,8 @@ in
 
   starship = callPackage ../tools/misc/starship { };
 
+  stig = callPackage ../applications/networking/p2p/stig { };
+
   stix-otf = callPackage ../data/fonts/stix-otf { };
 
   stix-two = callPackage ../data/fonts/stix-two { };
@@ -17094,6 +17103,8 @@ in
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
     gtk = res.gtk2;
   };
+
+  theme-obsidian2 = callPackage ../data/themes/obsidian2 { };
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) {};
 
@@ -22731,8 +22742,6 @@ in
   onestepback = callPackage ../misc/themes/onestepback { };
 
   theme-jade1 = callPackage ../misc/themes/jade1 { };
-
-  theme-obsidian2 = callPackage ../misc/themes/obsidian2 { };
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 

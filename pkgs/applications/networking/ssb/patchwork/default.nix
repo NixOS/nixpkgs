@@ -1,13 +1,13 @@
 { appimageTools, symlinkJoin, lib, fetchurl, makeDesktopItem }:
 
 let
-  pname = "patchwork";
-  version = "3.14.1";
+  pname = "ssb-patchwork";
+  version = "3.16.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/ssbc/patchwork/releases/download/v${version}/ssb-${pname}-${version}-x86_64.AppImage";
-    sha256 = "01vsldabv9nmbx8kzlgw275zykm72s1dxglnaq4jz5vbysbyn0qd";
+    url = "https://github.com/ssbc/patchwork/releases/download/v${version}/${pname}-${version}-x86_64.AppImage";
+    sha256 = "0hi9ysmwhiiww82a3mqdd2b1anj7qa41b46f6zb3q9d0b8nmvlz4";
   };
 
   binary = appimageTools.wrapType2 {
@@ -20,8 +20,8 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = "patchwork";
-    exec = "${binary}/bin/patchwork";
+    name = "ssb-patchwork";
+    exec = "${binary}/bin/ssb-patchwork";
     icon = "ssb-patchwork.png";
     comment = "Decentralized messaging and sharing app";
     desktopName = "Patchwork";

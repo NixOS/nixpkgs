@@ -506,6 +506,12 @@
     been removed.
    </para>
   </listitem>
+   <listitem>
+    <para>
+      The <literal>rmilter</literal> package was removed with associated module and options due deprecation by upstream developer.
+      Use <literal>rspamd</literal> in proxy mode instead.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
