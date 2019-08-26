@@ -585,6 +585,12 @@
       features.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     We no longer enable custom font rendering settings with <option>fonts.fontconfig.penultimate.enable</option> by default.
+     The defaults from fontconfig are sufficient.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
