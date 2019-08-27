@@ -376,6 +376,7 @@
   ./services/mail/mail.nix
   ./services/mail/mailcatcher.nix
   ./services/mail/mailhog.nix
+  ./services/mail/mailman.nix
   ./services/mail/mlmmj.nix
   ./services/mail/offlineimap.nix
   ./services/mail/opendkim.nix

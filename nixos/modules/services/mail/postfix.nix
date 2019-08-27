@@ -11,9 +11,10 @@ let
 
   haveAliases = cfg.postmasterAlias != "" || cfg.rootAlias != ""
                       || cfg.extraAliases != "";
-  haveTransport = cfg.transport != "";
+  haveTransport = cfg.transport != "" || config.services.mailman.enable;
   haveVirtual = cfg.virtual != "";
-  haveLocalRecipients = cfg.localRecipients != null;
+  haveLocalRecipients = cfg.localRecipients != null || config.services.mailman.enable;
+  haveRelayDomains = cfg.relayDomains != null || config.services.mailman.enable;
 
   clientAccess =
     optional (cfg.dnsBlacklistOverrides != "")
@@ -752,12 +753,12 @@ in
       // optionalAttrs (cfg.domain != "") { mydomain = cfg.domain; }
       // optionalAttrs (cfg.origin != "") { myorigin =  cfg.origin; }
       // optionalAttrs (cfg.destination != null) { mydestination = cfg.destination; }
-      // optionalAttrs (cfg.relayDomains != null) { relay_domains = cfg.relayDomains; }
+      // optionalAttrs haveRelayDomains { relay_domains = optionals (cfg.relayDomains != null) cfg.relayDomains ++ optional config.services.mailman.enable "hash:/var/lib/mailman/data/postfix_domains"; }
       // optionalAttrs (cfg.recipientDelimiter != "") { recipient_delimiter = cfg.recipientDelimiter; }
       // optionalAttrs haveAliases { alias_maps = [ "${cfg.aliasMapType}:/etc/postfix/aliases" ]; }
-      // optionalAttrs haveTransport { transport_maps = [ "hash:/etc/postfix/transport" ]; }
+      // optionalAttrs haveTransport { transport_maps = [ "hash:/etc/postfix/transport" ] ++ optional config.services.mailman.enable "hash:/var/lib/mailman/data/postfix_lmtp"; }
       // optionalAttrs haveVirtual { virtual_alias_maps = [ "${cfg.virtualMapType}:/etc/postfix/virtual" ]; }
-      // optionalAttrs haveLocalRecipients { local_recipient_maps = [ "hash:/etc/postfix/local_recipients" ] ++ optional haveAliases "$alias_maps"; }
+      // optionalAttrs haveLocalRecipients { local_recipient_maps = [ "hash:/etc/postfix/local_recipients" ] ++ optional haveAliases "$alias_maps" ++ optional config.services.mailman.enable "hash:/var/lib/mailman/data/postfix_lmtp"; }
       // optionalAttrs (cfg.dnsBlacklists != []) { smtpd_client_restrictions = clientRestrictions; }
       // optionalAttrs cfg.useSrs {
         sender_canonical_maps = [ "tcp:127.0.0.1:10001" ];
