@@ -4138,7 +4138,7 @@ in
   kalibrate-hackrf = callPackage ../applications/radio/kalibrate-hackrf { };
 
   wrapKakoune = callPackage ../applications/editors/kakoune/wrapper.nix { };
-  kakounePlugins = callPackage ../applications/editors/kakoune/plugins.nix { };
+  kakounePlugins = callPackage ../applications/editors/kakoune/plugins { };
   kakoune-unwrapped = callPackage ../applications/editors/kakoune { };
   kakoune = wrapKakoune kakoune-unwrapped { };
 

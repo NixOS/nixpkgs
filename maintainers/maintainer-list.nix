@@ -4578,6 +4578,12 @@
     githubId = 9939720;
     name = "Philippe Nguyen";
   };
+  nrdxp = {
+    email = "tim.deh@pm.me";
+    github = "nrdxp";
+    githubId = 34083928;
+    name = "Tim DeHerrera";
+  };
   nshalman = {
     email = "nahamu@gmail.com";
     github = "nshalman";
