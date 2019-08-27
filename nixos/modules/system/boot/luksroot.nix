@@ -598,8 +598,8 @@ in
 
                 publicKey = mkOption {
                   default = "";
-                  type = types.path;
-                  description = "Path to the Public Key.";
+                  type = types.listOf types.path;
+                  description = "List of paths to the Public Keys.";
                 };
               };
             });
@@ -756,11 +756,27 @@ in
         copy_bin_and_libs ${pkgs.gnupg}/libexec/scdaemon
 
         ${concatMapStringsSep "\n" (x:
+          let
+            cryptkey = pkgs.runCommand "cryptkey.gpg"
+              { files = lib.singleton x.gpgCard.encryptedPass;
+                preferLocalBuild = true;
+              }
+              ''
+                cat $files > $out
+              '';
+            pubkey = pkgs.runCommand "pubkey.asc" 
+              { files = x.gpgCard.publicKey;
+                preferLocalBuild = true;
+              }
+              ''
+                cat $files > $out
+              '';
+          in
           if x.gpgCard != null then
             ''
               mkdir -p $out/secrets/gpg-keys/${x.device}
-              cp -a ${x.gpgCard.encryptedPass} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
-              cp -a ${x.gpgCard.publicKey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
+              cp -a ${cryptkey} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
+              cp -a ${pubkey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
             ''
           else ""
           ) (attrValues luks.devices)
