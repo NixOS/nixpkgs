@@ -14949,7 +14949,7 @@ in
 
   seabios = callPackage ../applications/virtualization/seabios { };
 
-  cbfstool = callPackage ../applications/virtualization/cbfstool { };
+  cbfstool = callPackage ../tools/misc/cbfstool { };
 
   ifdtool = callPackage ../tools/misc/ifdtool { };
 
