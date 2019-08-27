@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ifdtool-${version}";
-  version = "4.9";
+  pname = "ifdtool";
+  version = "4.10";
 
   src = fetchurl {
     url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-    sha256 = "0xkai65d3z9fivwscbkm7ndcw2p9g794xz8fwdv979w77n5qsdij";
+    sha256 = "1jsiz17afi2lqg1jv6lsl8s05w7vr7iwgg86y2qp369hcz6kcwfa";
   };
 
   buildPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Extract and dump Intel Firmware Descriptor information";
-    homepage = https://www.coreboot.org;
+    homepage = "https://www.coreboot.org";
     license = licenses.gpl2;
     maintainers = [ maintainers.petabyteboy ];
     platforms = platforms.linux;
