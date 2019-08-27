@@ -5,7 +5,7 @@
 , withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
-, withGtk2 ? true
+, withGtk2 ? false
 , withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
 }:
