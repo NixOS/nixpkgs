@@ -176,7 +176,7 @@ in {
             # Use User-Private Group scheme to protect Matomo data, but allow administration / backup via 'matomo' group
             # Copy config folder
             chmod g+s "${dataDir}"
-            cp -r "${cfg.package}/config" "${dataDir}/"
+            cp -r "${cfg.package}/share/config" "${dataDir}/"
             chmod -R u+rwX,g+rwX,o-rwx "${dataDir}"
 
             # check whether user setup has already been done
