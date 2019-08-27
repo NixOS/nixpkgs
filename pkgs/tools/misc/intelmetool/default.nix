@@ -1,30 +1,28 @@
-{ stdenv, fetchgit, zlib, pciutils }:
+{ stdenv, fetchurl, zlib, pciutils }:
 
 stdenv.mkDerivation rec {
-  name = "intelmetool-${version}";
-  version = "4.8.1";
+  pname = "intelmetool";
+  version = "4.10";
 
-  src = fetchgit {
-    url = "https://review.coreboot.org/coreboot.git";
-    rev = version;
-    sha256 = "1gjisy9b7vgzjvy1fwaqhq3589yd59kkylv7apjmg5r2b3dv4zvr";
-    fetchSubmodules = false;
+  src = fetchurl {
+    url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
+    sha256 = "1jsiz17afi2lqg1jv6lsl8s05w7vr7iwgg86y2qp369hcz6kcwfa";
   };
 
   buildInputs = [ zlib pciutils ];
 
   buildPhase = ''
     make -C util/intelmetool
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp util/intelmetool/intelmetool $out/bin
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "Dump interesting things about Management Engine";
-    homepage = https://www.coreboot.org/Nvramtool;
+    homepage = "https://www.coreboot.org";
     license = licenses.gpl2;
     maintainers = [ maintainers.gnidorah ];
     platforms = platforms.linux;
