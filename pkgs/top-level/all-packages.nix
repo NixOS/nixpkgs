@@ -14725,6 +14725,8 @@ in
 
   mlmmj = callPackage ../servers/mail/mlmmj { };
 
+  moodle = callPackage ../servers/web-apps/moodle { };
+
   morty = callPackage ../servers/web-apps/morty { };
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
