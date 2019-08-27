@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchurl
 , python
-, jdk, jdk8, cmake, libxml2, zlib, python3, ncurses
+, jdk, cmake, libxml2, zlib, python3, ncurses
 }:
 
 with stdenv.lib;
@@ -138,6 +138,24 @@ let
       };
     });
 
+  buildMps = { name, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct rec {
+      inherit name version src wmClass jdk;
+      product = "MPS";
+      meta = with stdenv.lib; {
+        homepage = https://www.jetbrains.com/mps/;
+        inherit license description;
+        longDescription = ''
+          A metaprogramming system which uses projectional editing
+          which allows users to overcome the limits of language
+          parsers, and build DSL editors, such as ones with tables and
+          diagrams.
+        '';
+        maintainers = with maintainers; [ rasendubi ];
+        platforms = platforms.linux;
+      };
+    });
+
   buildPhpStorm = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
@@ -243,27 +261,6 @@ let
         rm -r jre64
       '';
     });
-
-  buildMps = { name, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct rec {
-      inherit name version src wmClass;
-      # MPS does not yet work with jbrsdk11 as of 2019.1.5 (it starts
-      # but is unable to generate any project)
-      jdk = jdk8;
-      product = "MPS";
-      meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/mps/;
-        inherit license description;
-        longDescription = ''
-          A metaprogramming system which uses projectional editing
-          which allows users to overcome the limits of language
-          parsers, and build DSL editors, such as ones with tables and
-          diagrams.
-        '';
-        maintainers = with maintainers; [ rasendubi ];
-        platforms = platforms.linux;
-      };
-    });
 in
 
 {
@@ -332,6 +329,19 @@ in
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
+  };
+
+  mps = buildMps rec {
+    name = "mps-${version}";
+    version = "2019.2";
+    description = "Create your own domain-specific language";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/mps/2019.2/MPS-${version}.tar.gz";
+      sha256 = "0rph3bibj74ddbyrn0az1npn4san4g1alci8nlq4gaqdlcz6zx22";
+    };
+    wmClass = "jetbrains-mps";
+    update-channel = "MPS RELEASE";
   };
 
   phpstorm = buildPhpStorm rec {
@@ -410,19 +420,6 @@ in
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";
-  };
-
-  mps = buildMps rec {
-    name = "mps-${version}";
-    version = "2019.1.5";
-    description = "Create your own domain-specific language";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/mps/2019.1/MPS-${version}.tar.gz";
-      sha256 = "0bq1gxciw9p9nd2h9vcill8rb6ghkjjj7b0dh812vx75rsfwsvl4";
-    };
-    wmClass = "jetbrains-mps";
-    update-channel = "MPS RELEASE";
   };
 
 }
