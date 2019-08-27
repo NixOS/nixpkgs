@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchbzr, python3, rtmpdump }:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps; [ pyqt5 ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ pyqt5_with_qtmultimedia ]);
 in mkDerivation {
   name = "qarte-4.6.0";
   src = fetchbzr {
