@@ -13,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "4.0.1";
+    version = "4.0.2";
     url = "https://dl.winehq.org/wine/source/4.0/wine-${version}.tar.xz";
-    sha256 = "0j29df0px6dzin4j0cbxgza4msvf9spmwranv25krq1g9kq959nk";
+    sha256 = "0x5x9pvhryzhq1m7i8gx5wwwj341zz05zymadlhfw5w45xlm0h4r";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
