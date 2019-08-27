@@ -500,6 +500,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
       };
     };
 
-  in super // overrides."${variant}");
+  in super // overrides.${variant});
 
 in generateMelpa { }

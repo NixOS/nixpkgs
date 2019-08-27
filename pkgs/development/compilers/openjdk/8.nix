@@ -15,9 +15,9 @@ let
    * The JRE libraries are in directories that depend on the CPU.
    */
   architecture = {
-    "i686-linux" = "i386";
-    "x86_64-linux" = "amd64";
-    "aarch64-linux" = "aarch64";
+    i686-linux = "i386";
+    x86_64-linux = "amd64";
+    aarch64-linux = "aarch64";
   }.${stdenv.system} or (throw "Unsupported platform");
 
   update = "222";

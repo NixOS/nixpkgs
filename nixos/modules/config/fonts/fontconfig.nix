@@ -50,8 +50,8 @@ let cfg = config.fonts.fontconfig;
                     then "fontconfig"
                     else "fontconfig_${version}";
         makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
-        cache     = makeCache pkgs."${fcPackage}";
-        cache32   = makeCache pkgs.pkgsi686Linux."${fcPackage}";
+        cache     = makeCache pkgs.${fcPackage};
+        cache32   = makeCache pkgs.pkgsi686Linux.${fcPackage};
       in
       pkgs.writeText "fc-00-nixos-cache.conf" ''
         <?xml version='1.0'?>

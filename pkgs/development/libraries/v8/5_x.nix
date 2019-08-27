@@ -17,7 +17,7 @@ let
   sharedFlag = if static then "static_library" else "shared_library";
 
   deps = {
-    "build" = fetchgit {
+    build = fetchgit {
       url = "${git_url}/chromium/src/build.git";
       rev = "2c67d4d74b6b3673228fab191918500a582ef3b0";
       sha256 = "0jc7hci5yh792pw0ahjfxrk5xzllnlrv9llmwlgcgn2x8x6bn34q";
@@ -32,7 +32,7 @@ let
       rev = "b5ecbb29a26532f72ef482569b223d5a51fd50bf";
       sha256 = "0ld47wdnk8grcba221z67l3pnphv9zwifk4y44f5b946w3iwmpns";
     };
-    "buildtools" = fetchgit {
+    buildtools = fetchgit {
       url = "${git_url}/chromium/buildtools.git";
       rev = "60f7f9a8b421ebf9a46041dfa2ff11c0fe59c582";
       sha256 = "0i10bw7yhslklqwcx5krs3k05sicb73cpwd0mkaz96yxsvmkvjq0";

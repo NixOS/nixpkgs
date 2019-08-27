@@ -180,10 +180,10 @@ stdenv.mkDerivation {
       else if targetPlatform.isx86_64  then "x86-64"
       else if targetPlatform.isx86_32  then "i386"
       else if targetPlatform.isMips    then {
-          "mips"     = "btsmipn32"; # n32 variant
-          "mipsel"   = "ltsmipn32"; # n32 variant
-          "mips64"   = "btsmip";
-          "mips64el" = "ltsmip";
+          mips     = "btsmipn32"; # n32 variant
+          mipsel   = "ltsmipn32"; # n32 variant
+          mips64   = "btsmip";
+          mips64el = "ltsmip";
         }.${targetPlatform.parsed.cpu.name}
       else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
       else if targetPlatform.isSparc then "sparc"

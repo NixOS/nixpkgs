@@ -64,7 +64,7 @@ with lib;
         serviceConfig.RemainAfterExit = true;
       };
 
-    systemd.services."print-host-key" =
+    systemd.services.print-host-key =
       { description = "Print SSH Host Key";
         wantedBy = [ "multi-user.target" ];
         after = [ "sshd.service" ];

@@ -135,7 +135,7 @@ in
 
     users.groups.${group} = { };
 
-    systemd.services."zabbix-agent" = {
+    systemd.services.zabbix-agent = {
       description = "Zabbix Agent";
 
       wantedBy = [ "multi-user.target" ];

@@ -99,7 +99,7 @@ in
 
     boot.kernelModules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
 
-    systemd.services."alsa-store" =
+    systemd.services.alsa-store =
       { description = "Store Sound Card State";
         wantedBy = [ "multi-user.target" ];
         unitConfig.RequiresMountsFor = "/var/lib/alsa";

@@ -68,7 +68,7 @@ in
     mkMerge [{
       environment.systemPackages = [ package ];
 
-      systemd.services."softether-init" = {
+      systemd.services.softether-init = {
         description = "SoftEther VPN services initial task";
         after = [ "keys.target" ];
         wants = [ "keys.target" ];

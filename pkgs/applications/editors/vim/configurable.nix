@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
   inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 
   src = builtins.getAttr source {
-    "default" = common.src; # latest release
+    default = common.src; # latest release
   };
 
   patches = [ ./cflags-prune.diff ] ++ stdenv.lib.optional ftNixSupport ./ft-nix-support.patch;

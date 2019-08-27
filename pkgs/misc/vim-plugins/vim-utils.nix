@@ -264,7 +264,7 @@ let
         ${lib.concatMapStrings (plugin: ''
           let g:nix_plugin_locations['${plugin.pname}'] = "${plugin.rtp}"
         '') plugins}
-        let g:nix_plugin_locations['vim-addon-manager'] = "${knownPlugins."vim-addon-manager".rtp}"
+        let g:nix_plugin_locations['vim-addon-manager'] = "${knownPlugins.vim-addon-manager.rtp}"
 
         let g:vim_addon_manager = {}
 
@@ -513,7 +513,7 @@ rec {
     name = "vim_with_custom_plugin";
     vimrcConfig.vam.knownPlugins =
       vimPlugins // ({
-        "vim-trailing-whitespace" = buildVimPluginFrom2Nix {
+        vim-trailing-whitespace = buildVimPluginFrom2Nix {
           name = "vim-trailing-whitespace";
           src = fetchFromGitHub {
             owner = "bronson";

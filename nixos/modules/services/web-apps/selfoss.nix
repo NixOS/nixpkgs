@@ -117,7 +117,7 @@ in
   config = mkIf cfg.enable {
 
     services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = ''
+      ${poolName} = ''
         listen = "${phpfpmSocketName}";
         listen.owner = nginx
         listen.group = nginx

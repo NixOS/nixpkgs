@@ -58,7 +58,7 @@ let
     };
   };
   cliOptions = concatStringsSep " " (mapAttrsToList (k: v: "--${k} ${v}") (filterAttrs (k: v: v != null && v != "") (cliOptionsCommon //
-               cliOptionsPerConfig."${cfg.configType}" //
+               cliOptionsPerConfig.${cfg.configType} //
                s3CommonOptions //
                optionalAttrs cfg.s3Backup { s3backup = "true"; } //
                optionalAttrs cfg.fileSystemBackup { filesystembackup = "true"; }

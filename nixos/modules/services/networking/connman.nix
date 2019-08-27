@@ -82,7 +82,7 @@ in {
 
     environment.systemPackages = [ connman ];
 
-    systemd.services."connman" = {
+    systemd.services.connman = {
       description = "Connection service";
       wantedBy = [ "multi-user.target" ];
       after = [ "syslog.target" ];
@@ -95,7 +95,7 @@ in {
       };
     };
 
-    systemd.services."connman-vpn" = mkIf cfg.enableVPN {
+    systemd.services.connman-vpn = mkIf cfg.enableVPN {
       description = "ConnMan VPN service";
       wantedBy = [ "multi-user.target" ];
       after = [ "syslog.target" ];
@@ -108,7 +108,7 @@ in {
       };
     };
 
-    systemd.services."net-connman-vpn" = mkIf cfg.enableVPN {
+    systemd.services.net-connman-vpn = mkIf cfg.enableVPN {
       description = "D-BUS Service";
       serviceConfig = {
         Name = "net.connman.vpn";

@@ -42,7 +42,7 @@ rec {
   # Default type functor
   defaultFunctor = name: {
     inherit name;
-    type    = types."${name}" or null;
+    type    = types.${name} or null;
     wrapped = null;
     payload = null;
     binOp   = a: b: null;

@@ -152,7 +152,7 @@ let
 
         '' + (builtins.getAttr reason remediation) attrs;
 
-      handler = if config ? "handleEvalIssue"
+      handler = if config ? handleEvalIssue
         then config.handleEvalIssue reason
         else throw;
     in handler msg;

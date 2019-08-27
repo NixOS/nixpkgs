@@ -61,7 +61,7 @@ in
         description = "Setup of xfs_quota projects. Make sure the filesystem is mounted with the pquota option.";
 
         example = {
-          "projname" = {
+          projname = {
             id = 50;
             path = "/xfsprojects/projname";
             sizeHardLimit = "50g";

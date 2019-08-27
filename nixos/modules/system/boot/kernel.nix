@@ -260,7 +260,7 @@ in
         source = kernelModulesConf;
       };
 
-    systemd.services."systemd-modules-load" =
+    systemd.services.systemd-modules-load =
       { wantedBy = [ "multi-user.target" ];
         restartTriggers = [ kernelModulesConf ];
         serviceConfig =

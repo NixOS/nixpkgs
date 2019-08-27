@@ -128,7 +128,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.users."${username}" = {
+    users.users.${username} = {
       home = dataDir;
       createHome = true;
       uid = config.ids.uids.pdns-recursor;

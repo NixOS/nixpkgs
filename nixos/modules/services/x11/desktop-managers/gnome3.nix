@@ -203,11 +203,11 @@ in {
     # GNOME should have its own geoclue agent
     services.geoclue2.enableDemoAgent = false;
 
-    services.geoclue2.appConfig."gnome-datetime-panel" = {
+    services.geoclue2.appConfig.gnome-datetime-panel = {
       isAllowed = true;
       isSystem = true;
     };
-    services.geoclue2.appConfig."gnome-color-panel" = {
+    services.geoclue2.appConfig.gnome-color-panel = {
       isAllowed = true;
       isSystem = true;
     };

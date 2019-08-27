@@ -16,9 +16,9 @@ lib.overrideDerivation (buildLinux (args // rec {
   };
 
   defconfig = {
-    "armv6l-linux" = "bcmrpi_defconfig";
-    "armv7l-linux" = "bcm2709_defconfig";
-    "aarch64-linux" = "bcmrpi3_defconfig";
+    armv6l-linux = "bcmrpi_defconfig";
+    armv7l-linux = "bcm2709_defconfig";
+    aarch64-linux = "bcmrpi3_defconfig";
   }.${stdenv.hostPlatform.system} or (throw "linux_rpi not supported on '${stdenv.hostPlatform.system}'");
 
   features = {

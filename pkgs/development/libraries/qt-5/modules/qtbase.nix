@@ -255,14 +255,14 @@ stdenv.mkDerivation {
       if (!stdenv.hostPlatform.isx86_64)
       then [ "-no-sse2" ]
       else lib.optionals (compareVersion "5.9.0" >= 0) {
-        "default"        = [ "-sse2" "-no-sse3" "-no-ssse3" "-no-sse4.1" "-no-sse4.2" "-no-avx" "-no-avx2" ];
-        "westmere"       = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2" "-no-avx" "-no-avx2" ];
-        "sandybridge"    = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
-        "ivybridge"      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
-        "haswell"        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-        "broadwell"      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-        "skylake"        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-        "skylake-avx512" = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        default        = [ "-sse2" "-no-sse3" "-no-ssse3" "-no-sse4.1" "-no-sse4.2" "-no-avx" "-no-avx2" ];
+        westmere       = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2" "-no-avx" "-no-avx2" ];
+        sandybridge    = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        ivybridge      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        haswell        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        broadwell      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        skylake        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        skylake-avx512 = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
       }.${stdenv.hostPlatform.platform.gcc.arch or "default"}
     )
     ++ [

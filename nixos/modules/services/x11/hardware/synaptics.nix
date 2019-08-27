@@ -167,7 +167,7 @@ in {
 
     services.xserver.modules = [ pkg.out ];
 
-    environment.etc."${etcFile}".source =
+    environment.etc.${etcFile}.source =
       "${pkg.out}/share/X11/xorg.conf.d/70-synaptics.conf";
 
     environment.systemPackages = [ pkg ];

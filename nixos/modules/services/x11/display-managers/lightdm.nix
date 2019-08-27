@@ -6,7 +6,7 @@ let
 
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
-  xEnv = config.systemd.services."display-manager".environment;
+  xEnv = config.systemd.services.display-manager.environment;
   cfg = dmcfg.lightdm;
 
   dmDefault = xcfg.desktopManager.default;

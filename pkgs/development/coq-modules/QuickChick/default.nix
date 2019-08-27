@@ -26,7 +26,7 @@ let params =
       sha256 = "1c34v1k37rk7v0xk2czv5n79mbjxjrm6nh3llg2mpfmdsqi68wf3";
     };
   };
-  param = params."${coq.coq-version}";
+  param = params.${coq.coq-version};
 in
 
 let recent = stdenv.lib.versionAtLeast coq.coq-version "8.8"; in

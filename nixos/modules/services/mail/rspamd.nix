@@ -387,7 +387,7 @@ in
       gid = config.ids.gids.rspamd;
     };
 
-    environment.etc."rspamd".source = rspamdDir;
+    environment.etc.rspamd.source = rspamdDir;
 
     systemd.services.rspamd = {
       description = "Rspamd Service";

@@ -378,8 +378,8 @@ in
         })
       );
 
-      systemd.targets."acme-selfsigned-certificates" = mkIf cfg.preliminarySelfsigned {};
-      systemd.targets."acme-certificates" = {};
+      systemd.targets.acme-selfsigned-certificates = mkIf cfg.preliminarySelfsigned {};
+      systemd.targets.acme-certificates = {};
     })
 
   ];

@@ -17,8 +17,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
-    rev = revs."${version}";
-    sha256 = hashes."${version}";
+    rev = revs.${version};
+    sha256 = hashes.${version};
   };
 
   buildInputs = [ sbcl
