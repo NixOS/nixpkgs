@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       gapplication = "${glib.bin}/bin/gapplication";
-      mutter_gsettings_path = "${glib.getSchemaPath gnome3.mutter}";
+      mutter_gsettings_path = glib.getSchemaPath gnome3.mutter;
     })
   ];
 

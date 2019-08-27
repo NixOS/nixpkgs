@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/gnome-shell/prefs.js \
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/libgpaste/settings/gpaste-settings.c \
-      --subst-var-by gschemasCompiled ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
   nativeBuildInputs = [
