@@ -138,6 +138,7 @@
   ./programs/qt5ct.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
+  ./programs/seahorse.nix
   ./programs/slock.nix
   ./programs/shadow.nix
   ./programs/shell.nix
@@ -301,7 +302,6 @@
   ./services/desktops/gnome3/gnome-settings-daemon.nix
   ./services/desktops/gnome3/gnome-user-share.nix
   ./services/desktops/gnome3/rygel.nix
-  ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix
   ./services/desktops/gnome3/tracker.nix
   ./services/desktops/gnome3/tracker-miners.nix
