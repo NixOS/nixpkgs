@@ -1,9 +1,11 @@
-{ stdenv, callPackage, lib, sasl, boost, Security, CoreFoundation, cctools }:
+{ stdenv, callPackage, lib, sasl, boost, openssl, Security, CoreFoundation, cctools }:
 
 let
   buildMongoDB = callPackage ./mongodb.nix {
     inherit sasl;
     inherit boost;
+    inherit openssl;
+
     inherit Security;
     inherit CoreFoundation;
     inherit cctools;
