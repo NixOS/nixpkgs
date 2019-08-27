@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
-, gmp, readline, file, numactl, xen, libapparmor
+, gmp, readline, file, numactl, xen, libapparmor, jansson
 , getopt, perlPackages, ocamlPackages
 , appliance ? null
 , javaSupport ? false, jdk ? null }:
@@ -11,16 +11,16 @@ assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
-  version = "1.38.6";
+  version = "1.40.2";
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/1.38-stable/libguestfs-${version}.tar.gz";
-    sha256 = "1v2mggx2jlaq4m3p5shc46gzf7vmaayha6r0nwdnyzd7x6q0is7p";
+    url = "http://libguestfs.org/download/1.40-stable/libguestfs-${version}.tar.gz";
+    sha256 = "ad6562c48c38e922a314cb45a90996843d81045595c4917f66b02a6c2dfe8058";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    makeWrapper autoreconfHook ncurses cpio gperf
+    makeWrapper autoreconfHook ncurses cpio gperf jansson
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex
     numactl xen libapparmor getopt perlPackages.ModuleBuild
