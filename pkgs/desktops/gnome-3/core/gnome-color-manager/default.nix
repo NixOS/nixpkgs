@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, desktop-file-utils, gnome3, glib, gtk3, libexif, libtiff, colord, colord-gtk, libcanberra-gtk3, lcms2, vte, exiv2 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, desktop-file-utils, gnome3, glib, gtk3, libexif, libtiff, colord, colord-gtk, libcanberra-gtk3, lcms2, vte, exiv2, hicolor-icon-theme }:
 
 let
   pname = "gnome-color-manager";
@@ -11,7 +11,12 @@ in stdenv.mkDerivation rec {
     sha256 = "1vpxa2zjz3lkq9ldjg0fl65db9s6b4kcs8nyaqfz3jygma7ifg3w";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool desktop-file-utils ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext itstool desktop-file-utils
+    # setup-hook
+    hicolor-icon-theme
+  ];
+
   buildInputs = [ glib gtk3 libexif libtiff colord colord-gtk libcanberra-gtk3 lcms2 vte exiv2 ];
 
   passthru = {
