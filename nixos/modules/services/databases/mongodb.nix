@@ -31,18 +31,14 @@ in
 
       enable = mkOption {
         default = false;
-        description = "
-          Whether to enable the MongoDB server.
-        ";
+        description = "Whether to enable the MongoDB server.";
       };
 
       package = mkOption {
         default = pkgs.mongodb;
         defaultText = "pkgs.mongodb";
         type = types.package;
-        description = "
-          Which MongoDB derivation to use.
-        ";
+        description = "Which MongoDB derivation to use.";
       };
 
       user = mkOption {

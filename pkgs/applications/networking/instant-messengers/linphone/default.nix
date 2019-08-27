@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     (python.withPackages (ps: [ ps.pystache ps.six ]))
   ];
 
-  NIX_CFLAGS_COMPILE = " -Wno-error -I${glib.dev}/include/glib-2.0
-    -I${glib.out}/lib/glib-2.0/include -I${gtk2.dev}/include/gtk-2.0/
-    -I${cairo.dev}/include/cairo -I${pango.dev}/include/pango-1.0
-    -I${gtk2}/lib/gtk-2.0/include
-    -DLIBLINPHONE_GIT_VERSION=\"v${version}\"
-    ";
+  NIX_CFLAGS_COMPILE = ''
+    -Wno-error -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include
+    -I${gtk2.dev}/include/gtk-2.0/ -I${cairo.dev}/include/cairo
+    -I${pango.dev}/include/pango-1.0 -I${gtk2}/lib/gtk-2.0/include
+    -DLIBLINPHONE_GIT_VERSION="v${version}"
+  '';
 
   postInstall = ''
     for i in $(cd $out/bin && ls); do

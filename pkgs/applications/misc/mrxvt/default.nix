@@ -29,10 +29,10 @@ stdenv.mkDerivation {
 
   meta = { 
     description = "Lightweight multitabbed feature-rich X11 terminal emulator";
-    longDescription = "
-    	Multitabbed lightweight terminal emulator based on rxvt. 
-	Supports transparency, backgroundimages, freetype fonts, ...
-    ";
+    longDescription = ''
+      Multitabbed lightweight terminal emulator based on rxvt. 
+      Supports transparency, backgroundimages, freetype fonts, ...
+    '';
     homepage = https://sourceforge.net/projects/materm;
     license = "GPL";
     platforms = stdenv.lib.platforms.linux;

@@ -98,7 +98,7 @@ let
   };
   test = runCommand "run-buildRustCrate-tests" {
     nativeBuildInputs = builtins.attrValues tests;
-  } "
+  } ''
     touch $out
-  ";
+  '';
 }

@@ -394,10 +394,10 @@ let
            boot.loader.grub.configurationName = lib.mkForce "Work";
 
            environment.etc = {
-             "gitconfig".text = "
+             "gitconfig".text = '''
                [core]
                  gitproxy = none for work.com
-                 ";
+                 ''';
            };
          }
          ];

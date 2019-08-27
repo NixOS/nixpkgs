@@ -78,16 +78,16 @@ stdenv.mkDerivation {
 
   patches = [ ./kino-1.3.4-v4l1.patch ./kino-1.3.4-libav-0.7.patch ./kino-1.3.4-libav-0.8.patch ]; #./kino-1.3.4-libavcodec-pkg-config.patch ];
 
-  postInstall = "
-    rpath=`patchelf --print-rpath \$out/bin/kino`;
-    for i in $\buildInputs; do
-      echo adding \$i/lib
-      rpath=\$rpath\${rpath:+:}\$i/lib
+  postInstall = ''
+    rpath=`patchelf --print-rpath $out/bin/kino`;
+    for i in $buildInputs; do
+      echo adding $i/lib
+      rpath=$rpath''${rpath:+:}$i/lib
     done
-    for i in \$out/bin/*; do
-      patchelf --set-rpath \"\$rpath\" \"\$i\"
+    for i in $out/bin/*; do
+      patchelf --set-rpath "$rpath" "$i"
     done
-  ";
+  '';
 
   meta = {
       description = "Non-linear DV editor for GNU/Linux";

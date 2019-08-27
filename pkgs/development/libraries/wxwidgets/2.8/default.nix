@@ -46,18 +46,18 @@ stdenv.mkDerivation rec {
   # Work around a bug in configure.
   NIX_CFLAGS_COMPILE = [ "-DHAVE_X11_XLIB_H=1" "-lX11" "-lcairo" "-Wno-narrowing" ];
 
-  preConfigure = "
+  preConfigure = ''
     substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
     substituteInPlace configure --replace 'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
     substituteInPlace configure --replace /usr /no-such-path
-  ";
+  '';
 
   postBuild = "(cd contrib/src && make)";
 
-  postInstall = "
+  postInstall = ''
     (cd contrib/src && make install)
     (cd $out/include && ln -s wx-*/* .)
-  ";
+  '';
 
   passthru = {
     inherit compat24 compat26 unicode;

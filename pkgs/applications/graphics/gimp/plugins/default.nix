@@ -169,9 +169,9 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
 
     buildInputs = with pkgs; [ lensfun exiv2 ];
 
-    installPhase = "
+    installPhase = ''
       installPlugins gimp-lensfun
-    ";
+    '';
 
     meta = {
       description = "GIMP plugin to correct lens distortion using the lensfun library and database";

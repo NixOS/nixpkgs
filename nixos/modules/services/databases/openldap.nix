@@ -41,9 +41,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "
-          Whether to enable the ldap server.
-        ";
+        description = "Whether to enable the ldap server.";
       };
 
       user = mkOption {
@@ -147,9 +145,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "
-          slapd.conf configuration
-        ";
+        description = "slapd.conf configuration";
         example = literalExample ''
             '''
             include ${pkgs.openldap.out}/etc/schema/core.schema

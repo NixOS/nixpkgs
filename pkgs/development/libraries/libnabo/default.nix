@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = "
+  cmakeFlags = ''
     -DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3
-  ";
+  '';
 
   doCheck = true;
   checkTarget = "test";

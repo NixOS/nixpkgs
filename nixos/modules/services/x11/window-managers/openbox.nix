@@ -14,9 +14,9 @@ in
     services.xserver.windowManager = {
       session = [{
         name = "openbox";
-        start = "
+        start = ''
           ${pkgs.openbox}/bin/openbox-session
-        ";
+        '';
       }];
     };
     environment.systemPackages = [ pkgs.openbox ];

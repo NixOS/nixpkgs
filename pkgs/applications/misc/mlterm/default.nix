@@ -39,15 +39,15 @@ stdenv.mkDerivation rec {
       --replace "-m 2755 -g utmp" " " \
       --replace "-m 4755 -o root" " "
   '';
-  NIX_LDFLAGS = "
+  NIX_LDFLAGS = ''
     -L${stdenv.cc.cc.lib}/lib
     -lX11 -lgdk_pixbuf-2.0 -lcairo -lfontconfig -lfreetype -lXft
     -lvte-2.91 -lgtk-3 -lharfbuzz -lfribidi -lm17n
-  " + stdenv.lib.optionalString (openssl != null) "
+  '' + stdenv.lib.optionalString (openssl != null) ''
     -lcrypto
-  " + stdenv.lib.optionalString (libssh2 != null) "
+  '' + stdenv.lib.optionalString (libssh2 != null) ''
     -lssh2
-  ";
+  '';
 
   configureFlags = [
     "--with-x=yes"

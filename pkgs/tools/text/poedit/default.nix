@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gettext ];
   
-  preConfigure = "
+  preConfigure = ''
     patchShebangs bootstrap
     ./bootstrap
-  ";
+  '';
 
   configureFlags = [
     "--without-cld2"

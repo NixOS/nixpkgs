@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       install_name_tool -id $out/lib/$file $file
     done
   '') + # XXX consider removing above after transition to cmake in the next release
-  "
+  ''
     mkdir -p $out/{bin,lib,include}
 
     cp -r include $out
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cp out-static/lib* $out/lib
 
     cp out-static/leveldbutil $out/bin
-  ";
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/google/leveldb;

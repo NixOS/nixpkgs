@@ -81,9 +81,9 @@ edk2 = stdenv.mkDerivation {
         . ${edk2}/edksetup.sh BaseTools
       '';
 
-      buildPhase = "
+      buildPhase = ''
         build
-      ";
+      '';
 
       installPhase = "mv -v Build/*/* $out";
     } // (removeAttrs attrs [ "buildInputs" ] );

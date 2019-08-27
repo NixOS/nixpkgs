@@ -38,17 +38,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "
-          Whether to enable the MySQL server.
-        ";
+        description = "Whether to enable the MySQL server.";
       };
 
       package = mkOption {
         type = types.package;
         example = literalExample "pkgs.mysql";
-        description = "
-          Which MySQL derivation to use. MariaDB packages are supported too.
-        ";
+        description = "Which MySQL derivation to use. MariaDB packages are supported too.";
       };
 
       bind = mkOption {

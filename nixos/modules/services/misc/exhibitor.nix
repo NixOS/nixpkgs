@@ -70,9 +70,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "
-          Whether to enable the exhibitor server.
-        ";
+        description = "Whether to enable the exhibitor server.";
       };
       # See https://github.com/soabase/exhibitor/wiki/Running-Exhibitor for what these mean
       # General options for any type of config

@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://www.kernel.org/pub/linux/utils/kernel/pcmcia/;
-    longDescription = "
+    longDescription = ''
       PCMCIAutils contains the initialization tools necessary to allow
       the PCMCIA subsystem to behave (almost) as every other
       hotpluggable bus system.
-    ";
+    '';
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

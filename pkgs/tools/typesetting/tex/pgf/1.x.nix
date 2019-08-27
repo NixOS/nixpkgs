@@ -10,10 +10,10 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  installPhase = "
+  installPhase = ''
     mkdir -p $out/share/texmf-nix
     cp -prd * $out/share/texmf-nix
-  ";
+  '';
 
   meta = with stdenv.lib; {
     branch = "1";

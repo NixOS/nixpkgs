@@ -5,12 +5,12 @@ stdenv.mkDerivation {
 
   phases = "unpackPhase installPhase";
 
-  installPhase = "
+  installPhase = ''
     sed -i -e 's+/usr++' Makefile
-    sed -i -e 's+^\\(.*putenv(\"PATH=\\).*$+\\1${pciutils}/sbin\");+' i810switch.c
+    sed -i -e 's+^\(.*putenv("PATH=\).*$+\1${pciutils}/sbin");+' i810switch.c
     make clean
-    make install DESTDIR=\${out}
-  ";
+    make install DESTDIR=''${out}
+  '';
 
   src = fetchurl {
     url = http://www16.plala.or.jp/mano-a-mano/i810switch/i810switch-0.6.5.tar.gz;

@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ];
 
-  buildCommand = "
+  buildCommand = ''
     unzip $src -d $out
     mv $out/go-server-${version} $out/go-server
     mkdir -p $out/go-server/conf
-  ";
+  '';
 }

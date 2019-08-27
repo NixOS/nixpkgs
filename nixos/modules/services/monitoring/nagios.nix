@@ -76,65 +76,65 @@ in
     services.nagios = {
       enable = mkOption {
         default = false;
-        description = "
+        description = ''
           Whether to use <link
           xlink:href='http://www.nagios.org/'>Nagios</link> to monitor
           your system or network.
-        ";
+        '';
       };
 
       objectDefs = mkOption {
-        description = "
+        description = ''
           A list of Nagios object configuration files that must define
           the hosts, host groups, services and contacts for the
           network that you want Nagios to monitor.
-        ";
+        '';
       };
 
       plugins = mkOption {
         type = types.listOf types.package;
         default = [pkgs.nagiosPluginsOfficial pkgs.ssmtp];
         defaultText = "[pkgs.nagiosPluginsOfficial pkgs.ssmtp]";
-        description = "
+        description = ''
           Packages to be added to the Nagios <envar>PATH</envar>.
           Typically used to add plugins, but can be anything.
-        ";
+        '';
       };
 
       mainConfigFile = mkOption {
         type = types.package;
         default = nagiosCfgFile;
         defaultText = "nagiosCfgFile";
-        description = "
+        description = ''
           Derivation for the main configuration file of Nagios.
-        ";
+        '';
       };
 
       cgiConfigFile = mkOption {
         type = types.package;
         default = nagiosCGICfgFile;
         defaultText = "nagiosCGICfgFile";
-        description = "
+        description = ''
           Derivation for the configuration file of Nagios CGI scripts
           that can be used in web servers for running the Nagios web interface.
-        ";
+        '';
       };
 
       enableWebInterface = mkOption {
         default = false;
-        description = "
+        description = ''
           Whether to enable the Nagios web interface.  You should also
           enable Apache (<option>services.httpd.enable</option>).
-        ";
+        '';
       };
 
       urlPath = mkOption {
         default = "/nagios";
-        description = "
+        description = ''
           The URL path under which the Nagios web interface appears.
           That is, you can access the Nagios web interface through
           <literal>http://<replaceable>server</replaceable>/<replaceable>urlPath</replaceable></literal>.
-        ";
+        '';
       };
     };
   };
