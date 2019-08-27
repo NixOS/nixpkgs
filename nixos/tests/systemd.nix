@@ -89,5 +89,12 @@ import ./make-test.nix ({ pkgs, ... }: {
      $machine->waitForUnit('multi-user.target');
      $machine->succeed('sysctl net.core.default_qdisc | grep -q "fq_codel"');
    };
+
+   # Test cgroup accounting is enabled
+   subtest "systemd cgroup accounting is enabled", sub {
+     $machine->waitForUnit('multi-user.target');
+     $machine->succeed('systemctl show testservice1.service -p IOAccounting | grep -q "yes"');
+     $machine->succeed('systemctl status testservice1.service | grep -q "CPU:"');
+   };
   '';
 })
