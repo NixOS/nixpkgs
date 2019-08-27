@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clack-v1-compat'';
-  version = ''clack-20181018-git'';
+  version = ''clack-20190710-git'';
 
   description = '''';
 
   deps = [ args."alexandria" args."anaphora" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."chipz" args."chunga" args."circular-streams" args."cl_plus_ssl" args."cl-annot" args."cl-ansi-text" args."cl-base64" args."cl-colors" args."cl-cookie" args."cl-fad" args."cl-ppcre" args."cl-reexport" args."cl-syntax" args."cl-syntax-annot" args."cl-utilities" args."clack" args."clack-handler-hunchentoot" args."clack-socket" args."clack-test" args."dexador" args."fast-http" args."fast-io" args."flexi-streams" args."http-body" args."hunchentoot" args."ironclad" args."jonathan" args."lack" args."lack-component" args."lack-middleware-backtrace" args."lack-util" args."let-plus" args."local-time" args."marshal" args."md5" args."named-readtables" args."nibbles" args."proc-parse" args."prove" args."quri" args."rfc2388" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."trivial-types" args."uiop" args."usocket" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2018-10-18/clack-20181018-git.tgz'';
-    sha256 = ''1f16i1pdqkh56ahnhxni3182q089d7ya8gxv4vyczsjzw93yakcf'';
+    url = ''http://beta.quicklisp.org/archive/clack/2019-07-10/clack-20190710-git.tgz'';
+    sha256 = ''1642myknfaajcyqllnhn9s17yb6dbj1yh9wmg1kbplwq9c3yjs7k'';
   };
 
   packageName = "clack-v1-compat";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM clack-v1-compat DESCRIPTION NIL SHA256
-    1f16i1pdqkh56ahnhxni3182q089d7ya8gxv4vyczsjzw93yakcf URL
-    http://beta.quicklisp.org/archive/clack/2018-10-18/clack-20181018-git.tgz
-    MD5 16121d921667ee8d0d70324da7281849 NAME clack-v1-compat FILENAME
+    1642myknfaajcyqllnhn9s17yb6dbj1yh9wmg1kbplwq9c3yjs7k URL
+    http://beta.quicklisp.org/archive/clack/2019-07-10/clack-20190710-git.tgz
+    MD5 9d8869ca599652d68dd759c8a6adcd3d NAME clack-v1-compat FILENAME
     clack-v1-compat DEPS
     ((NAME alexandria FILENAME alexandria) (NAME anaphora FILENAME anaphora)
      (NAME babel FILENAME babel)
@@ -73,7 +73,7 @@ rec {
      rfc2388 smart-buffer split-sequence static-vectors trivial-backtrace
      trivial-features trivial-garbage trivial-gray-streams trivial-mimes
      trivial-types uiop usocket xsubseq)
-    VERSION clack-20181018-git SIBLINGS
+    VERSION clack-20190710-git SIBLINGS
     (clack-handler-fcgi clack-handler-hunchentoot clack-handler-toot
      clack-handler-wookie clack-socket clack-test clack t-clack-handler-fcgi
      t-clack-handler-hunchentoot t-clack-handler-toot t-clack-handler-wookie

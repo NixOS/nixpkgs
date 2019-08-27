@@ -583,6 +583,12 @@ in {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
+  flufl_bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
+
+  flufl_i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
+
+  flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
+
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
@@ -685,6 +691,10 @@ in {
 
   langdetect = callPackage ../development/python-modules/langdetect { };
 
+  lazr_config = callPackage ../development/python-modules/lazr/config.nix { };
+
+  lazr_delegates = callPackage ../development/python-modules/lazr/delegates.nix { };
+
   libmr = callPackage ../development/python-modules/libmr { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
@@ -700,6 +710,10 @@ in {
   macropy = callPackage ../development/python-modules/macropy { };
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
+
+  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
+
+  mailmanclient = callPackage ../development/python-modules/mailmanclient { };
 
   manhole = callPackage ../development/python-modules/manhole { };
 
@@ -808,6 +822,8 @@ in {
   pims = callPackage ../development/python-modules/pims { };
 
   poetry = callPackage ../development/python-modules/poetry { };
+
+  postorius = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/postorius.nix { });
 
   pplpy = callPackage ../development/python-modules/pplpy { };
 
@@ -2864,6 +2880,8 @@ in {
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
+
+  django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
@@ -5839,6 +5857,7 @@ in {
     cudatoolkit = pkgs.cudatoolkit_10;
     cudnn = pkgs.cudnn_cudatoolkit_10;
     nccl = pkgs.nccl_cudatoolkit_10;
+    openssl = pkgs.openssl_1_0_2;
   };
 
   tensorflow = if stdenv.isDarwin then self.tensorflow-bin else self.tensorflow-build;

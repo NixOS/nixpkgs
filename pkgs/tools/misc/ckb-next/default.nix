@@ -23,6 +23,10 @@ mkDerivation rec {
     cmake
   ];
 
+  cmakeFlags = [
+    "-DINSTALL_DIR_ANIMATIONS=libexec"
+  ];
+
   patches = [
     ./install-dirs.patch
     ./systemd-service.patch

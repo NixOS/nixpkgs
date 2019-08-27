@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which, enableParallelBuilding ? true }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which
+, enableParallelBuilding ? true
+, srcArchiveSuffix ? "tar.bz2"
+}:
 
 let
   llvm     = callPackage ./llvm.nix { };
@@ -9,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit sha256;
-    url = "https://download.mono-project.com/sources/mono/${pname}-${version}.tar.bz2";
+    url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
   };
 
   buildInputs =

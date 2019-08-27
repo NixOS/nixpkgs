@@ -387,7 +387,6 @@
   ./services/mail/spamassassin.nix
   ./services/mail/rspamd.nix
   ./services/mail/rss2email.nix
-  ./services/mail/rmilter.nix
   ./services/mail/roundcube.nix
   ./services/mail/nullmailer.nix
   ./services/misc/airsonic.nix
@@ -790,6 +789,7 @@
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix
   ./services/web-apps/miniflux.nix
+  ./services/web-apps/moodle.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
@@ -803,6 +803,7 @@
   ./services/web-apps/zabbix.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
+  ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/hitch/default.nix
   ./services/web-servers/hydron.nix

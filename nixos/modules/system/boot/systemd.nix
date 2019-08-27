@@ -537,7 +537,7 @@ in
     };
 
     systemd.enableCgroupAccounting = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       description = ''
         Whether to enable cgroup accounting.
@@ -804,10 +804,10 @@ in
         [Manager]
         ${optionalString config.systemd.enableCgroupAccounting ''
           DefaultCPUAccounting=yes
+          DefaultBlockIOAccounting=yes
           DefaultIOAccounting=yes
           DefaultBlockIOAccounting=yes
-          DefaultMemoryAccounting=yes
-          DefaultTasksAccounting=yes
+          DefaultIPAccounting=yes
         ''}
         DefaultLimitCORE=infinity
         ${config.systemd.extraConfig}

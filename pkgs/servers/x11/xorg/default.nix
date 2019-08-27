@@ -2159,11 +2159,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videosis = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-sis-0.10.9";
+    name = "xf86-video-sis-0.11.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-sis-0.10.9.tar.bz2;
-      sha256 = "03f1abjjf68y8y1iz768rn95va9d33wmbwfbsqrgl6k0gi0bf9jj";
+      url = mirror://xorg/individual/driver/xf86-video-sis-0.11.0.tar.bz2;
+      sha256 = "0srvrhydjnynfb7b1s145rgmsk4f71iz0ag4icpmb05944d90xr1";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

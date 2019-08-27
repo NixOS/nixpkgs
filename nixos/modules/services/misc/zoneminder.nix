@@ -200,7 +200,10 @@ in {
       "zoneminder/80-nixos.conf".source    = configFile;
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
+      cfg.port
+      6802 # zmtrigger
+    ];
 
     services = {
       fcgiwrap = lib.mkIf useNginx {

@@ -1724,6 +1724,16 @@
       fingerprint = "389A 78CB CD88 5E0C 4701  DEB9 FD42 C7D0 D414 94C8";
     }];
   };
+  dump_stack = {
+    email = "root@dumpstack.io";
+    github = "jollheef";
+    githubId = 1749762;
+    name = "Mikhail Klementev";
+    keys = [{
+      longkeyid = "rsa4096/0x1525585D1B43C62A";
+      fingerprint = "5DD7 C6F6 0630 F08E DAE7  4711 1525 585D 1B43 C62A";
+    }];
+  };
   dxf = {
     email = "dingxiangfei2009@gmail.com";
     github = "dingxiangfei2009";
@@ -2852,6 +2862,15 @@
     github = "jdagilliland";
     githubId = 1383440;
     name = "Jason Gilliland";
+  };
+  jdanek = {
+    email = "jdanek@redhat.com";
+    github = "jdanekrh";
+    keys = [{
+      longkeyid = "ed25519/0x69275CADF15D872E";
+      fingerprint = "D4A6 F051 AD58 2E7C BCED  5439 6927 5CAD F15D 872E";
+    }];
+    name = "Jiri Daněk";
   };
   jdehaas = {
     email = "qqlq@nullptr.club";
@@ -6548,6 +6567,12 @@
     github = "vaibhavsagar";
     githubId = 1525767;
     name = "Vaibhav Sagar";
+  };
+  valebes = {  
+    email = "valebes@gmail.com";
+    github = "valebes";
+    githubid = 10956211;
+    name = "Valerio Besozzi";
   };
   valeriangalliat = {
     email = "val@codejam.info";

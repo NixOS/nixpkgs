@@ -284,6 +284,13 @@
        Squid 3 has been removed and the <option>squid</option> derivation now refers to Squid 4.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The <option>services.pdns-recursor.extraConfig</option> option has been replaced by
+       <option>services.pdns-recursor.settings</option>. The new option allows setting extra
+       configuration while being better type-checked and mergeable.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -504,6 +511,20 @@
     <literal>systemd.packages</literal> option now also supports generators and
     shutdown scripts. Old <literal>systemd.generator-packages</literal> option has
     been removed.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The <literal>rmilter</literal> package was removed with associated module and options due deprecation by upstream developer.
+    Use <literal>rspamd</literal> in proxy mode instead.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+     systemd cgroup accounting via the
+     <link linkend="opt-systemd.enableCgroupAccounting">systemd.enableCgroupAccounting</link>
+     option is now enabled by default. It now also enables the more recent Block IO and IP accounting
+     features.
    </para>
   </listitem>
   </itemizedlist>
