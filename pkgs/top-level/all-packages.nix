@@ -20452,6 +20452,8 @@ in
 
   rpcs3 = libsForQt5.callPackage ../misc/emulators/rpcs3 { };
 
+  rsclock = callPackage ../applications/misc/rsclock { };
+
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
     boost = boost166;
     llvmPackages = llvmPackages_7;

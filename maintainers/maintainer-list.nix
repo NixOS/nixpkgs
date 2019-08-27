@@ -6568,6 +6568,12 @@
     githubId = 1525767;
     name = "Vaibhav Sagar";
   };
+  valebes = {  
+    email = "valebes@gmail.com";
+    github = "valebes";
+    githubid = 10956211;
+    name = "Valerio Besozzi";
+  };
   valeriangalliat = {
     email = "val@codejam.info";
     github = "valeriangalliat";
