@@ -47,43 +47,66 @@
 , typing
 , nose
 , isPy27
+, python
+, nixpkgs-pytools
 }:
 
 let # import error "from pendulum import Pendulum" due to 2.x
-    pendulum1 = pendulum.overrideAttrs (super: rec {
-      name = "pendulum-1.5.1";
+    pendulum_1_4_4 = pendulum.overrideAttrs (super: rec {
+      name = "pendulum-1.4.4";
 
       src = fetchPypi {
         pname = super.pname;
-        version = "1.5.1";
-        sha256 = "738878168eb26e5446da5d1f7b3312ae993a542061be8882099c00ef4866b1a2";
+        version = "1.4.4";
+        sha256 = "0p5c7klnfjw8f63x258rzbhnl1p0hn83lqdnhhblps950k5m47k0";
       };
+
+      postInstall = ''
+        ${nixpkgs-pytools}/bin/python-rewrite-imports --path $out/${python.sitePackages}/ \
+          --replace pendulum pendulum_1_4_4_040d1wbkcapkgb220yzk2dicnghhynj24m2xlbmqg6j54f007j94
+
+        # remove btye compiled files
+        find $out/${python.sitePackages} -type f -name '*.pyc' -delete
+
+        # rename dist
+        mv $out/${python.sitePackages}/pendulum-1.4.4.dist-info $out/${python.sitePackages}/pendulum_1_4_4_040d1wbkcapkgb220yzk2dicnghhynj24m2xlbmqg6j54f007j94-1.4.4.dist-info
+      '';
 
      propagatedBuildInputs = super.propagatedBuildInputs ++ [ tzlocal ];
     });
 
-   # 2.x has fstrings
-   flask-appbuilder1 = flask-appbuilder.overrideAttrs (super: rec {
-     name = "flask-appbuilder-1.13.0";
+    # 2.x has fstrings
+    flask-appbuilder_1_12_3 = flask-appbuilder.overrideAttrs (super: rec {
+      name = "flask-appbuilder-1.12.3";
 
-     src = fetchPypi {
-       pname = "Flask-AppBuilder";
-       version = "1.13.0";
-       sha256 = "1bjcnklpycw62a02kilkdc48vk67sykvlp8l1bvqszkjxvvfhgvg";
-     };
+      src = fetchPypi {
+        pname = "Flask-AppBuilder";
+        version = "1.12.3";
+        sha256 = "1mgz833sbgbw8v881v5wfr0vzkl4gl2m9i1zpl37d09ixxz0ljmw";
+      };
 
-     buildPhase = ''
-      substituteInPlace setup.py \
-        --replace "prison==0.1.0" "prison"
-     '' + super.buildPhase;
-   });
+      buildPhase = ''
+       substituteInPlace setup.py \
+         --replace "prison==0.1.0" "prison"
+      '' + super.buildPhase;
+
+      postInstall = ''
+        ${nixpkgs-pytools}/bin/python-rewrite-imports --path $out/${python.sitePackages}/ \
+          --replace flask_appbuilder flask_appbuilder_1_12_3_040d1wbkcapkgb220yzk2dicnghhynj24m2xlbmqg6j54f007j94
+
+        # remove btye compiled files
+        find $out/${python.sitePackages} -type f -name '*.pyc' -delete
+
+        # rename dist
+        mv $out/${python.sitePackages}/Flask_AppBuilder-1.12.3.dist-info $out/${python.sitePackages}/Flask_AppBuilder_1_12_3_040d1wbkcapkgb220yzk2dicnghhynj24m2xlbmqg6j54f007j94-1.12.3.dist-info
+      '';
+    });
 in
 buildPythonPackage rec {
   pname = "apache-airflow";
   version = "1.10.3";
 
-
-  src = fetchFromGitHub {
+  src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
     rev = version;
@@ -96,8 +119,9 @@ buildPythonPackage rec {
     croniter
     dill
     flask
-    flask-appbuilder1
     flask-admin
+    flask-appbuilder
+    flask-appbuilder_1_12_3
     flask-bcrypt
     flask-caching
     flask_login
@@ -114,7 +138,8 @@ buildPythonPackage rec {
     lxml
     markdown
     pandas
-    pendulum1
+    pendulum
+    pendulum_1_4_4
     psutil
     pygments
     python-daemon
@@ -138,6 +163,10 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+   ${nixpkgs-pytools}/bin/python-rewrite-imports --path $PWD \
+     --replace flask_appbuilder flask_appbuilder_1_12_3_040d1wbkcapkgb220yzk2dicnghhynj24m2xlbmqg6j54f007j94 \
+     --replace pendulum pendulum_1_4_4_040d1wbkcapkgb220yzk2dicnghhynj24m2xlbmqg6j54f007j94
+
    substituteInPlace setup.py \
      --replace "flask-caching>=1.3.3, <1.4.0" "flask-caching" \
      --replace "flask-appbuilder==1.12.3" "flask-appbuilder" \
