@@ -20384,7 +20384,7 @@ in
 
   sakura = callPackage ../applications/misc/sakura { };
 
-  sayonara = callPackage ../applications/audio/sayonara { };
+  sayonara = libsForQt5.callPackage ../applications/audio/sayonara { };
 
   sbagen = callPackage ../applications/misc/sbagen { };
 
