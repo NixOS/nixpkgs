@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheHttpd, python2 }:
+{ stdenv, fetchurl, apacheHttpd, python, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "mod_wsgi-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j8pqn0xhd502ardlmkqx8y85s1npmk9nifqps60wjh29nny03f2";
   };
 
-  buildInputs = [ apacheHttpd python2 ];
+  buildInputs = [ apacheHttpd python ncurses ];
 
   patchPhase = ''
     sed -r -i -e "s|^LIBEXECDIR=.*$|LIBEXECDIR=$out/modules|" \

@@ -14466,7 +14466,9 @@ in
 
     mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
-    mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
+    mod_wsgi  = self.mod_wsgi2;
+    mod_wsgi2 = callPackage ../servers/http/apache-modules/mod_wsgi { python = python2; ncurses = null; };
+    mod_wsgi3 = callPackage ../servers/http/apache-modules/mod_wsgi { python = python3; };
 
     php = pkgs.php.override { inherit apacheHttpd; };
 
