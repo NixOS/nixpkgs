@@ -7,8 +7,7 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "wayback_machine_downloader";
 
   meta = with lib; {
-    description =
-      "Download an entire website from the Internet Archive Wayback Machine.";
+    description = "Download websites from the Internet Archive Wayback Machine";
     homepage = "https://github.com/hartator/wayback-machine-downloader";
     license = licenses.mit;
     maintainers = [ maintainers.manveru ];
