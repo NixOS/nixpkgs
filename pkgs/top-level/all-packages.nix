@@ -5029,6 +5029,8 @@ in
 
   milu = callPackage ../applications/misc/milu { };
 
+  mkgmap = callPackage ../applications/misc/mkgmap { };
+
   mpack = callPackage ../tools/networking/mpack { };
 
   mtm = callPackage ../tools/misc/mtm { };
