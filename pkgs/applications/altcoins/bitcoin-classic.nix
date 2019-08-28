@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "06ij9v7zbdnhxq9429nnxiw655cp8idldj18l7fmj94gqx07n5vh";
   };
 
-  patches = [ ./fix-bitcoin-qt-build.patch ];
-
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib
                   miniupnpc utillinux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt5" ];
+                     ++ optionals withGui [ "--with-gui=qt5"
+                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+                                          ];
 
   enableParallelBuilding = true;
 

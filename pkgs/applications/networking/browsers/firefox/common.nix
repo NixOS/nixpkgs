@@ -314,6 +314,9 @@ stdenv.mkDerivation rec {
   ]
   ++ extraMakeFlags;
 
+  RUSTFLAGS = if (lib.versionAtLeast ffversion "67"/*somewhere betwween ESRs*/)
+    then null else "--cap-lints warn";
+
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above
 

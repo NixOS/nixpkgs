@@ -40,6 +40,12 @@
   See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
   */
 {
+  "00-matt" = {
+    name = "Matt Smith";
+    email = "matt@offtopica.uk";
+    github = "00-matt";
+    githubId = 48835712;
+  };
   "0x4A6F" = {
     email = "0x4A6F@shackspace.de";
     name = "Joachim Ernst";
@@ -296,6 +302,11 @@
     githubId = 17208985;
     name = "Alex Rice";
   };
+  alexbakker = {
+    email = "ab@alexbakker.me";
+    github = "alexbakker";
+    name = "Alexander Bakker";
+  };
   alexchapman = {
     email = "alex@farfromthere.net";
     github = "AJChapman";
@@ -323,6 +334,12 @@
     github = "alibabzo";
     githubId = 2822871;
     name = "Alistair Bill";
+  };
+  alkeryn = {
+    email = "plbraundev@gmail.com";
+    github = "Alkeryn";
+    githubId = 11599075;
+    name = "Pierre-Louis Braun";
   };
   all = {
     email = "nix-commits@lists.science.uu.nl";
@@ -570,6 +587,12 @@
     github = "ashgillman";
     githubId = 816777;
     name = "Ashley Gillman";
+  };
+  ashkitten = {
+    email = "ashlea@protonmail.com";
+    github = "ashkitten";
+    githubId = 9281956;
+    name = "ash lea";
   };
   aske = {
     email = "aske@fmap.me";
@@ -1701,6 +1724,16 @@
       fingerprint = "389A 78CB CD88 5E0C 4701  DEB9 FD42 C7D0 D414 94C8";
     }];
   };
+  dump_stack = {
+    email = "root@dumpstack.io";
+    github = "jollheef";
+    githubId = 1749762;
+    name = "Mikhail Klementev";
+    keys = [{
+      longkeyid = "rsa4096/0x1525585D1B43C62A";
+      fingerprint = "5DD7 C6F6 0630 F08E DAE7  4711 1525 585D 1B43 C62A";
+    }];
+  };
   dxf = {
     email = "dingxiangfei2009@gmail.com";
     github = "dingxiangfei2009";
@@ -2738,6 +2771,11 @@
     githubId = 26877687;
     name = "Yurii Izorkin";
   };
+  jasoncarr = {
+    email = "jcarr250@gmail.com";
+    github = "jasoncarr0";
+    name = "Jason Carr";
+  };
   j-keck = {
     email = "jhyphenkeck@gmail.com";
     github = "j-keck";
@@ -2824,6 +2862,15 @@
     github = "jdagilliland";
     githubId = 1383440;
     name = "Jason Gilliland";
+  };
+  jdanek = {
+    email = "jdanek@redhat.com";
+    github = "jdanekrh";
+    keys = [{
+      longkeyid = "ed25519/0x69275CADF15D872E";
+      fingerprint = "D4A6 F051 AD58 2E7C BCED  5439 6927 5CAD F15D 872E";
+    }];
+    name = "Jiri Daněk";
   };
   jdehaas = {
     email = "qqlq@nullptr.club";
@@ -3218,6 +3265,11 @@
     githubId = 6282557;
     name = "Kiloreux Emperex";
   };
+  kim0 = {
+    email = "email.ahmedkamal@googlemail.com";
+    github = "kim0";
+    name = "Ahmed Kamal";
+  };
   kimburgess = {
     email = "kim@acaprojects.com";
     github = "kimburgess";
@@ -3235,6 +3287,11 @@
     github = "kirelagin";
     githubId = 451835;
     name = "Kirill Elagin";
+  };
+  kirikaza = {
+    email = "k@kirikaza.ru";
+    github = "kirikaza";
+    name = "Kirill Kazakov";
   };
   kisonecat = {
     email = "kisonecat@gmail.com";
@@ -3352,6 +3409,11 @@
     github = "ktf";
     githubId = 10544;
     name = "Giuluo Eulisse";
+  };
+  ktor = {
+    email = "kruszewsky@gmail.com";
+    github = "ktor";
+    name = "Pawel Kruszewski";
   };
   ktosiek = {
     email = "tomasz.kontusz@gmail.com";
@@ -3481,6 +3543,11 @@
     github = "nathanielbaxter";
     githubId = 307589;
     name = "Nathaniel Baxter";
+  };
+  lightbulbjim = {
+    email = "chris@killred.net";
+    github = "lightbulbjim";
+    name = "Chris Rendle-Short";
   };
   lightdiscord = {
     email = "root@arnaud.sh";
@@ -5897,6 +5964,12 @@
     githubId = 231788;
     name = "Stephen Weinberg";
   };
+  sterfield = {
+    email = "sterfield@gmail.com";
+    github = "sterfield";
+    githubId = 5747061;
+    name = "Guillaume Loetscher";
+  };
   sternenseemann = {
     email = "post@lukasepple.de";
     github = "sternenseemann";
@@ -6494,6 +6567,12 @@
     github = "vaibhavsagar";
     githubId = 1525767;
     name = "Vaibhav Sagar";
+  };
+  valebes = {  
+    email = "valebes@gmail.com";
+    github = "valebes";
+    githubid = 10956211;
+    name = "Valerio Besozzi";
   };
   valeriangalliat = {
     email = "val@codejam.info";

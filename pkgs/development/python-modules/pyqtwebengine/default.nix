@@ -1,5 +1,6 @@
 { lib, fetchurl, pythonPackages, pkgconfig
 , qmake, qtbase, qtsvg, qtwebengine
+, wrapQtAppsHook
 }:
 
 let
@@ -77,8 +78,11 @@ in buildPythonPackage rec {
 
   doCheck = true;
 
-
   enableParallelBuilding = true;
+
+  passthru = {
+    inherit wrapQtAppsHook;
+  };
 
   meta = with lib; {
     description = "Python bindings for Qt5";

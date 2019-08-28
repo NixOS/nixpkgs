@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, mkDerivation
 , cmake, extra-cmake-modules
 , qtbase, kcoreaddons, kdecoration }:
 
 let
   version = "2017-03-15";
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   pname = "kde2-decoration";
   inherit version;
 

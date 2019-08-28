@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/NetworkManager;
     description = "NetworkManager control applet for GNOME";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom rickynils ];
+    maintainers = with maintainers; [ phreedom ];
     platforms = platforms.linux;
   };
 }

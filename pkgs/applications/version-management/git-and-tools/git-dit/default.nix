@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitHub
-, openssl
+, openssl_1_0_2
 , zlib
 , libssh
 , cmake
@@ -35,7 +35,7 @@ buildRustPackage rec {
   ];
 
   buildInputs = [
-    openssl
+    openssl_1_0_2
     libssh
     zlib
   ] ++ stdenv.lib.optionals (stdenv.isDarwin) [

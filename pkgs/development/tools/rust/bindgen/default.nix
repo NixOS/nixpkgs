@@ -5,6 +5,8 @@ rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
   version = "0.51.0";
 
+  RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
+
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = pname;

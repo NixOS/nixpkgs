@@ -7,7 +7,7 @@ let
   inherit (lib) concatStringsSep optionalString;
 
   cfg = config.services.hylafax;
-  mapModems = lib.flip map (lib.attrValues cfg.modems);
+  mapModems = lib.forEach (lib.attrValues cfg.modems);
 
   mkConfigFile = name: conf:
     # creates hylafax config file,

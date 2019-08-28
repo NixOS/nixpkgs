@@ -6,12 +6,12 @@
 # and IceStorm isn't intended to be used as a library other than by the
 # nextpnr build process (which is also sped up by using PyPy), so we
 # use it by default. See 18839e1 for more details.
-, usePyPy ? stdenv.isx86_64 /* pypy3 seems broken on i686 */
+, usePyPy ? stdenv.hostPlatform.system == "x86_64-linux"
 }:
 
 stdenv.mkDerivation rec {
   pname = "icestorm";
-  version = "2019.08.08";
+  version = "2019.08.15";
 
   pythonPkg = if usePyPy then pypy3 else python3;
   pythonInterp = pythonPkg.interpreter;
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "2ccae0d3864fd7268118287a85963c0116745cff";
-    sha256 = "1vlk5k7x6c1bjp19niyl0shljj8il94q2brjmda1rwhqxz81g9s7";
+    rev    = "95949315364f8d9b0c693386aefadf44b28e2cf6";
+    sha256 = "05q1vxlf9l5z9mam8jbv58jqj7nsd8v7ssy753sharpgzzgdc8a2";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = http://www.clifford.at/icestorm/;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

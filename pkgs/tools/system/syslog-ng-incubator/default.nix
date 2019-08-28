@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/balabit/syslog-ng-incubator;
     description = "A collection of tools and modules for syslog-ng";
     license = licenses.gpl2;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
     platforms = platforms.linux;
     broken = true; # 2018-05-12
   };

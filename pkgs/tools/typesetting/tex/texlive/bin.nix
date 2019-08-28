@@ -5,7 +5,7 @@
 , perl, perlPackages, pkgconfig, autoreconfHook
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , cairo, pixman, xorg, clisp, biber
-, makeWrapper
+, makeWrapper, shortenPerlShebang
 }:
 
 # Useful resource covering build options:
@@ -296,6 +296,7 @@ latexindent = perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
   propagatedBuildInputs = with perlPackages; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ];
 
   postPatch = ''
@@ -312,6 +313,8 @@ latexindent = perlPackages.buildPerlPackage rec {
     install -D ./scripts/latexindent/latexindent.pl "$out"/bin/latexindent
     mkdir -p "$out"/${perl.libPrefix}
     cp -r ./scripts/latexindent/LatexIndent "$out"/${perl.libPrefix}/
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang "$out"/bin/latexindent
   '';
 };
 

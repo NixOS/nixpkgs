@@ -45,7 +45,7 @@ runCommand "elementary-gsettings-desktop-schemas" {}
 
      cat - > $schema_dir/nixos-defaults.gschema.override <<- EOF
      [org.gnome.desktop.background]
-     picture-uri='${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png'
+     picture-uri='file://${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png'
      primary-color='#000000'
 
      ${extraGSettingsOverrides}

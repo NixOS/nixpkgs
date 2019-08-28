@@ -43,6 +43,11 @@ let
     sha256 = "0gaz93kb33qc0jx6iphvny0yrd17i8zhcl3a9ky5ylc2idz0wiwa";
   };
 
+  # Ported from
+  #"https://xenbits.xen.org/gitweb/?p=qemu-xen.git;a=patch;h=e014dbe74e0484188164c61ff6843f8a04a8cb9d";
+  #"https://xenbits.xen.org/gitweb/?p=qemu-xen.git;a=patch;h=0e3b891fefacc0e49f3c8ffa3a753b69eb7214d2";
+  qemuGlusterfs6Fix = ./qemu-gluster-6-compat.diff;
+
   qemuDeps = [
     udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
     alsaLib
@@ -50,11 +55,11 @@ let
 in
 
 callPackage (import ./generic.nix (rec {
-  version = "4.8.3";
+  version = "4.8.5";
 
   src = fetchurl {
     url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
-    sha256 = "0vhkpyy5x7kc36hnav95fn194ngsmc3m2xcc78vccs00gdf6m8q9";
+    sha256 = "04xcf01jad1lpqnmjblzhnjzp0bss9fjd9awgcycjx679arbaxqz";
   };
 
   # Sources needed to build tools and firmwares.
@@ -67,6 +72,7 @@ callPackage (import ./generic.nix (rec {
       };
       patches = [
         qemuMemfdBuildFix
+        qemuGlusterfs6Fix
       ];
       buildInputs = qemuDeps;
       meta.description = "Xen's fork of upstream Qemu";
@@ -155,13 +161,8 @@ callPackage (import ./generic.nix (rec {
     ++ optional (withInternalOVMF) "--enable-ovmf";
 
   patches = with xsa; flatten [
-    # XSA_231 to XSA-251 are fixed in 4.8.3 (verified with git log)
-    XSA_252_49
     # 253: 4.8 not affected
     # 254: no patch supplied by xen project (Meltdown/Spectre)
-    XSA_255_49_1
-    XSA_255_49_2
-    XSA_256_48
     xenlockprofpatch
     xenpmdpatch
   ];
@@ -176,10 +177,8 @@ callPackage (import ./generic.nix (rec {
       -i tools/libxl/libxl_device.c
   '';
 
-  passthru = {
-    qemu-system-i386 = if withInternalQemu
+  passthru.qemu-system-i386 = if withInternalQemu
       then "lib/xen/bin/qemu-system-i386"
       else throw "this xen has no qemu builtin";
-  };
 
 })) ({ ocamlPackages = ocaml-ng.ocamlPackages_4_05; } // args)

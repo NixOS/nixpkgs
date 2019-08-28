@@ -95,7 +95,7 @@ buildPythonApplication rec {
     '' else ''
     cp -r linux-package/{bin,share,lib} $out
     ''}
-    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ]}"
+    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
     runHook postInstall
 
     # ZSH completions need to be invoked with `source`:

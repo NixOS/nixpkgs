@@ -56,7 +56,7 @@ let
     init = let
       init = builtins.replaceStrings [ "\n" ] [ ";" ] (config.init or "");
 
-      mkScript = drv: lib.flip map drv.scripts (script: "/script load ${drv}/share/${script}");
+      mkScript = drv: lib.forEach drv.scripts (script: "/script load ${drv}/share/${script}");
 
       scripts = builtins.concatStringsSep ";" (lib.foldl (scripts: drv: scripts ++ mkScript drv)
         [ ] (config.scripts or []));

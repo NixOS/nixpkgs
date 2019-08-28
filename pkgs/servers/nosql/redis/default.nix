@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "An open source, advanced key-value store";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.berdario ];
+    maintainers = with maintainers; [ berdario globin ];
   };
 }

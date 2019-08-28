@@ -72,7 +72,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1pz12l0awshdq5xyac5awjd902sy9l65z6ihya4pzapik4gqfdcd";
+      sha256 = "1795sad0jr2da2pn28nbqsvpld6zw8gf9yscywixkbabf7ls66fn";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -149,11 +149,16 @@ self: super: {
     else super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-  hakyll = if pkgs.stdenv.isDarwin
+  hakyll = appendPatch
+    (if pkgs.stdenv.isDarwin
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    else super.hakyll)
+    (pkgs.fetchpatch {
+      url = https://github.com/jaspervdj/hakyll/commit/25a4460b75b3c9f3ce339b3311b084d92994f5f1.patch;
+      sha256 = "sha256-F59WHt52LOKGsGoaD3LAIZFEMe9s9WHfGxQgSh9Q8uQ=";
+    });
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
@@ -710,15 +715,9 @@ self: super: {
     '';
   });
 
-  # A simple MonadFail patch would do too, but not doing the tests is easier
-  megaparsec_6_5_0 = dontCheck super.megaparsec_6_5_0;
-
   # The standard libraries are compiled separately
   idris = generateOptparseApplicativeCompletion "idris" (
-    doJailbreak (dontCheck (super.idris.override {
-      # Needed for versions <= 1.3.1 https://github.com/idris-lang/Idris-dev/pull/4610
-      megaparsec = self.megaparsec_6_5_0;
-    }))
+    doJailbreak (dontCheck super.idris)
   );
 
   # https://github.com/bos/math-functions/issues/25
@@ -1285,5 +1284,8 @@ self: super: {
 
   # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
   graphviz = dontCheck super.graphviz;
+
+  # https://github.com/elliottt/hsopenid/issues/15
+  openid = markBroken super.openid;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

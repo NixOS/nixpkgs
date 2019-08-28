@@ -7,7 +7,7 @@ gem 'rugged', '~> 0.28'
 gem 'github-linguist', '~> 6.1', require: 'linguist'
 gem 'gitlab-markup', '~> 1.7.0'
 gem 'activesupport', '~> 5.1.7'
-gem 'gitaly-proto', '~> 1.32.0'
+gem 'gitaly-proto', '~> 1.36.0'
 gem 'rdoc', '~> 4.2'
 gem 'gitlab-gollum-lib', '~> 4.2.7.7', require: false
 gem 'gitlab-gollum-rugged_adapter', '~> 0.4.4.2', require: false

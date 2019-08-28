@@ -4,6 +4,8 @@
 , meson
 , ninja
 , python3
+, mutest
+, nixosTests
 , glib
 , gtk-doc
 , docbook_xsl
@@ -13,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "graphene";
-  version = "1.8.6";
+  version = "1.9.6";
 
   outputs = [ "out" "devdoc" "installedTests" ];
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "ebassi";
     repo = pname;
     rev = version;
-    sha256 = "1hdbdzcz86jrvsq5h954ph9q62m8jr2a5s5acklxhdkfqn5bkbv8";
+    sha256 = "0hb7s6g00l7zlf4hlfda55krn0pls9ajz0hcqrh8m656zr18ddwa";
   };
 
   patches = [
@@ -41,16 +43,26 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
+    gobject-introspection
     python3
   ];
 
   buildInputs = [
+    glib
     gobject-introspection
   ];
 
   checkInputs = [
-    glib
+    mutest
   ];
+
+  doCheck = true;
+
+  passthru = {
+    tests = {
+      installedTests = nixosTests.graphene;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A thin layer of graphic data types";

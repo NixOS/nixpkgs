@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     description = "Visualize logs and time-stamped data";
     homepage = http://www.elasticsearch.org/overview/kibana;
     license = if enableUnfree then licenses.elastic else licenses.asl20;
-    maintainers = with maintainers; [ offline rickynils basvandijk ];
+    maintainers = with maintainers; [ offline basvandijk ];
     platforms = with platforms; unix;
   };
 }

@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libvirt, glib, libxml2, intltool, libtool, yajl
 , nettle, libgcrypt, pythonPackages, gobject-introspection, libcap_ng, numactl
-, xen, libapparmor, vala
+, libapparmor, vala
+, xenSupport ? false, xen ? null
 }:
 
 let
@@ -19,7 +20,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
     python pygobject2 gobject-introspection libcap_ng numactl libapparmor
-  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
+  ] ++ stdenv.lib.optionals xenSupport [
     xen
   ];
 

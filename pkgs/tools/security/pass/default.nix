@@ -120,7 +120,7 @@ let
       description = "Stores, retrieves, generates, and synchronizes passwords securely";
       homepage    = https://www.passwordstore.org/;
       license     = licenses.gpl2Plus;
-      maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher ];
+      maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher globin ];
       platforms   = platforms.unix;
 
       longDescription = ''

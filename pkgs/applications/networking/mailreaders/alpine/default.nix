@@ -2,7 +2,6 @@
 , openldap
 }:
 
-# NOTE: Please check if any changes here are applicable to ../realpine/ as well
 stdenv.mkDerivation rec {
   pname = "alpine";
   version = "2.21";

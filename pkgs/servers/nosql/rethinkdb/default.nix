@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.agpl3;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice bluescreen303 ];
+    broken = true;  # broken with openssl 1.1
   };
 }

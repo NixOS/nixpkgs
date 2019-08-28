@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = https://rspamd.com;
     license = licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [ avnik fpletz ];
+    maintainers = with maintainers; [ avnik fpletz globin ];
     platforms = with platforms; linux;
   };
 }

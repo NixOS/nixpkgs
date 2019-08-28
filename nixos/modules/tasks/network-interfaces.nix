@@ -926,7 +926,7 @@ in
     warnings = concatMap (i: i.warnings) interfaces;
 
     assertions =
-      (flip map interfaces (i: {
+      (forEach interfaces (i: {
         # With the linux kernel, interface name length is limited by IFNAMSIZ
         # to 16 bytes, including the trailing null byte.
         # See include/linux/if.h in the kernel sources
@@ -934,12 +934,12 @@ in
         message = ''
           The name of networking.interfaces."${i.name}" is too long, it needs to be less than 16 characters.
         '';
-      })) ++ (flip map slaveIfs (i: {
+      })) ++ (forEach slaveIfs (i: {
         assertion = i.ipv4.addresses == [ ] && i.ipv6.addresses == [ ];
         message = ''
           The networking.interfaces."${i.name}" must not have any defined ips when it is a slave.
         '';
-      })) ++ (flip map interfaces (i: {
+      })) ++ (forEach interfaces (i: {
         assertion = i.preferTempAddress -> cfg.enableIPv6;
         message = ''
           Temporary addresses are only needed when IPv6 is enabled.
@@ -967,8 +967,8 @@ in
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
-        (i: flip map [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true)))
-      // listToAttrs (flip map (filter (i: i.preferTempAddress) interfaces)
+        (i: forEach [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true)))
+      // listToAttrs (forEach (filter (i: i.preferTempAddress) interfaces)
         (i: nameValuePair "net.ipv6.conf.${i.name}.use_tempaddr" 2));
 
     # Capabilities won't work unless we have at-least a 4.3 Linux
@@ -1050,7 +1050,7 @@ in
           ${cfg.localCommands}
         '';
       };
-    } // (listToAttrs (flip map interfaces (i:
+    } // (listToAttrs (forEach interfaces (i:
       let
         deviceDependency = if (config.boot.isContainer || i.name == "lo")
           then []

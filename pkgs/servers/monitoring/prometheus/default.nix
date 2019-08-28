@@ -37,7 +37,7 @@ in rec {
           description = "Service monitoring system and time series database";
           homepage = https://prometheus.io;
           license = licenses.asl20;
-          maintainers = with maintainers; [ benley fpletz ];
+          maintainers = with maintainers; [ benley fpletz globin ];
           platforms = platforms.unix;
         };
     } // attrs');
@@ -48,7 +48,7 @@ in rec {
   };
 
   prometheus_2 = buildPrometheus {
-    version = "2.11.1";
-    sha256 = "1d4kiv88v1p74cm1wg6wk1cs963xg2rlhkxw86slf9hmldlgww2l";
+    version = "2.12.0";
+    sha256 = "1ci9dc512c1hry1b8jqif0mrnks6w3yagwm3jf69ihcwilr2n7vs";
   };
 }

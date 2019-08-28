@@ -6,7 +6,7 @@
    be almost as much code as the function itself. */
 
 {config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides,
-  buildPerl}:
+  buildPerl, shortenPerlShebang}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
 assert stdenv.lib.versionAtLeast perl.version "5.28.2";
@@ -89,22 +89,29 @@ let
   ack = buildPerlPackage {
     pname = "ack";
     version = "3.0.2";
+
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.0.2.tar.gz;
       sha256 = "0a4mriclnmwvm8rn9crkfr00qjy6ffgf0b0bg0qz46drpnyv7d33";
     };
+
     outputs = ["out" "man"];
-    # use gnused so that the preCheck command passes
-    buildInputs = stdenv.lib.optional stdenv.isDarwin gnused;
+
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileNext ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/ack
+    '';
+
+    # tests fails on nixos and hydra because of different purity issues
+    doCheck = false;
+
     meta = with stdenv.lib; {
       description = "A grep-like tool tailored to working with large trees of source code";
       homepage    = https://beyondgrep.com;
       license     = licenses.artistic2;
       maintainers = with maintainers; [ lovek323 ];
     };
-    # tests fails on nixos and hydra because of different purity issues
-    doCheck = false;
   };
 
   AlgorithmAnnotate = buildPerlPackage {
@@ -727,6 +734,8 @@ let
     propagatedBuildInputs = [ pkgs.openssl IPCRun3 ];
     patchPhase = ''
       sed -i 's|my $openssl_bin = "openssl";|my $openssl_bin = "${pkgs.openssl}/bin/openssl";|' lib/Authen/ModAuthPubTkt.pm
+      # -dss1 doesn't exist for dgst in openssl 1.1, -sha1 can also handle DSA keys now
+      sed -i 's|-dss1|-sha1|' lib/Authen/ModAuthPubTkt.pm
     '';
     meta = {
       description = "Generate Tickets (Signed HTTP Cookies) for mod_auth_pubtkt protected websites";
@@ -3398,8 +3407,8 @@ let
       url = mirror://cpan/authors/id/T/TT/TTAR/Crypt-OpenSSL-AES-0.02.tar.gz;
       sha256 = "b66fab514edf97fc32f58da257582704a210c2b35e297d5c31b7fa2ffd08e908";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
     meta = with stdenv.lib; {
       description = "Perl wrapper around OpenSSL's AES library";
       license = with licenses; [ artistic1 gpl1Plus ];
@@ -3413,8 +3422,8 @@ let
       url = mirror://cpan/authors/id/K/KM/KMX/Crypt-OpenSSL-Bignum-0.09.tar.gz;
       sha256 = "1p22znbajq91lbk2k3yg12ig7hy5b4vy8igxwqkmbm4nhgxp4ki3";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
   };
 
   CryptOpenSSLGuess = buildPerlPackage {
@@ -3451,8 +3460,8 @@ let
       sha256 = "4173403ad4cf76732192099f833fbfbf3cd8104e0246b3844187ae384d2c5436";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
@@ -3481,7 +3490,7 @@ let
       url = mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.72.tar.gz;
       sha256 = "1s7zm6ph37kg8jzaxnhi4ff4snxl7mi5h14arxbri0kp6s0lzlzm";
     };
-    makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
+    makeMakerFlags = "--libpath=${pkgs.openssl_1_0_2.out}/lib --incpath=${pkgs.openssl_1_0_2.dev}/include";
     buildInputs = [ PathClass ];
     propagatedBuildInputs = [ LWPProtocolHttps ];
   };
@@ -4520,17 +4529,6 @@ let
     meta = {
       description = "Print out each line before it is executed (like sh -x)";
       license = stdenv.lib.licenses.publicDomain;
-    };
-  };
-
-  DeviceSerialPort = buildPerlPackage {
-    pname = "Device-SerialPort";
-    version = "1.04";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/COOK/Device-SerialPort-1.04.tar.gz;
-      sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
-    };
-    meta = {
     };
   };
 
@@ -8857,6 +8855,11 @@ let
       url = "https://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-11.50.tar.gz";
       sha256 = "0d8v48y94z8maxkmw1rv7v9m0jg2dc8xbp581njb6yhr7abwqdv3";
     };
+
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/exiftool
+    '';
 
     meta = with stdenv.lib; {
       description = "A tool to read, write and edit EXIF meta information";
@@ -14993,6 +14996,19 @@ let
     };
   };
 
+  DeviceSerialPort = buildPerlPackage rec {
+    pname = "Device-SerialPort";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/COOK/${pname}-${version}.tar.gz";
+      sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
+    };
+    meta = with stdenv.lib; {
+      description = "Linux/POSIX emulation of Win32::SerialPort functions.";
+      license = with licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ServerStarter = buildPerlModule {
     pname = "Server-Starter";
     version = "0.34";
@@ -19285,12 +19301,16 @@ let
       sha256 = "15xyrwv08fw8jmpydwzks26ipxnzliwddgyjcfqiaj0p7lwlhmx1";
     };
 
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       LWP
       LWPProtocolHttps
       DataDump
       JSON
     ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/youtube-viewer
+    '';
 
     meta = {
       description = "A lightweight application for searching and streaming videos from YouTube";
