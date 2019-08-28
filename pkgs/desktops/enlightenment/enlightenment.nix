@@ -1,7 +1,9 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
   xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
   luajit, bzip2, libpthreadstubs, gdbm, libcap, mesa,
-  xkeyboard_config, pcre
+  xkeyboard_config, pcre,
+
+  bluetoothSupport ? true, bluez5,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,8 +38,10 @@ stdenv.mkDerivation rec {
     pcre
     mesa
     xkeyboard_config
-  ] ++
-    stdenv.lib.optionals stdenv.isLinux [ libcap ];
+  ]
+  ++ stdenv.lib.optional stdenv.isLinux libcap
+  ++ stdenv.lib.optional bluetoothSupport bluez5
+  ;
 
   patches = [
     # Some programs installed by enlightenment (to set the cpu frequency,
