@@ -41,6 +41,11 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  cabal-install = super.cabal-install.override {
+    # resolv-0.1.1.3 requires base-4.13 (GHC-8.8.1).
+    resolv = self.resolv_0_1_1_2;
+  };
+
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
 
