@@ -59,7 +59,6 @@ self: super: {
   split = doJailbreak super.split;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
   test-framework = doJailbreak super.test-framework;
-  th-lift = self.th-lift_0_8_0_1;
 
   # These packages don't work and need patching and/or an update.
   primitive = overrideSrc (doJailbreak super.primitive) {
