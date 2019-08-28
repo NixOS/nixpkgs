@@ -723,6 +723,8 @@ in {
 
   maxminddb = callPackage ../development/python-modules/maxminddb { };
 
+  mini-amf = callPackage ../development/python-modules/mini-amf { };
+
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
