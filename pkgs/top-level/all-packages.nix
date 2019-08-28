@@ -2347,7 +2347,7 @@ in
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc rec {
+    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       python = python2;
       inherit (python2Packages) gyp;
       protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
@@ -2495,7 +2495,7 @@ in
 
   curl = callPackage ../tools/networking/curl { };
 
-  curl_unix_socket = callPackage ../tools/networking/curl-unix-socket rec { };
+  curl_unix_socket = callPackage ../tools/networking/curl-unix-socket { };
 
   curlie = callPackage ../tools/networking/curlie { };
 
@@ -3024,7 +3024,7 @@ in
 
     m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
 
-    mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc rec {
+    mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
       python = python2;
       inherit (python2Packages) gyp;
       protobuf = pkgs.protobuf3_6.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
@@ -4863,7 +4863,7 @@ in
 
   mt-st = callPackage ../tools/backup/mt-st {};
 
-  multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
+  multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
     libbtree = callPackage ../tools/text/multitran/libbtree { };
@@ -12531,7 +12531,7 @@ in
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
 
-  libyamlcpp_0_3 = pkgs.libyamlcpp.overrideAttrs (oldAttrs: rec {
+  libyamlcpp_0_3 = pkgs.libyamlcpp.overrideAttrs (oldAttrs: {
     src = pkgs.fetchurl {
       url = "https://github.com/jbeder/yaml-cpp/archive/release-0.3.0.tar.gz";
       sha256 = "12aszqw6svwlnb6nzhsbqhz3c7vnd5ahd0k6xlj05w8lm83hx3db";
@@ -17973,7 +17973,7 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   };
 
-  emacsPackagesFor = emacs: self: let callPackage = newScope self; in rec {
+  emacsPackagesFor = emacs: self: let callPackage = newScope self; in {
     inherit emacs;
 
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
@@ -19353,7 +19353,7 @@ in
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
-  linphone = callPackage ../applications/networking/instant-messengers/linphone rec {
+  linphone = callPackage ../applications/networking/instant-messengers/linphone {
     polarssl = mbedtls_1_3;
   };
 

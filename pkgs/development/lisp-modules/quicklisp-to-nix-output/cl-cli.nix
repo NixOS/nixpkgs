@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-cli'';
   version = ''20151218-git'';
 

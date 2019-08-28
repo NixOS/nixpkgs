@@ -14,7 +14,7 @@ let
   boost_python = boost.override { enablePython = true; inherit python; };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (geant4_nomt) version src;
   pname = "g4py";
 

@@ -1,6 +1,6 @@
 { stdenv, appleDerivation, xcbuildHook }:
 
-appleDerivation rec {
+appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
 
   # These PBXcp calls should be patched in xcbuild to allow them to

@@ -5,7 +5,7 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "syscall_limiter";
   version = "2017-01-23";
 

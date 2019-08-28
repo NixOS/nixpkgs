@@ -35,7 +35,7 @@
 , libXmu
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "10.4.1";
   pname = "geant4";
 

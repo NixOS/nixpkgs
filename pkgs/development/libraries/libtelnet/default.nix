@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libtelnet";
   version = "0.21+45f2d5c";
 

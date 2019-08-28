@@ -1,6 +1,6 @@
 { stdenv, lib, zookeeper, zookeeper_mt, fuse, autoreconfHook, log4cxx, boost }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zkfuse";
   inherit (zookeeper) version src;
 

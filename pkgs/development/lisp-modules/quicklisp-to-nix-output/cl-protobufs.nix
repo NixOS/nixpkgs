@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-protobufs'';
   version = ''20180328-git'';
 

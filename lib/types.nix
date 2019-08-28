@@ -107,7 +107,7 @@ rec {
       merge = mergeEqualOption;
     };
 
-    int = mkOptionType rec {
+    int = mkOptionType {
         name = "int";
         description = "signed integer";
         check = isInt;
@@ -136,7 +136,7 @@ rec {
         sign = bit: range: ign (0 - (range / 2)) (range / 2 - 1)
           "signedInt${toString bit}" "${toString bit} bit signed integer";
 
-      in rec {
+      in {
         /* An int with a fixed range.
         *
         * Example:
@@ -172,7 +172,7 @@ rec {
     # Alias of u16 for a port number
     port = ints.u16;
 
-    float = mkOptionType rec {
+    float = mkOptionType {
         name = "float";
         description = "floating point number";
         check = isFloat;

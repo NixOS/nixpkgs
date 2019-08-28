@@ -1,6 +1,6 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "echoip";
   version = "unstable-2018-11-20";
 

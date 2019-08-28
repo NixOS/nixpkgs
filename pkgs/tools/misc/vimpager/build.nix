@@ -6,7 +6,7 @@
 , sha256
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   pname = "vimpager";
 

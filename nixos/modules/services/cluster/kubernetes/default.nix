@@ -261,7 +261,7 @@ in {
         before = [ "kubernetes.target" ];
       };
 
-      systemd.services.kube-control-plane-online = rec {
+      systemd.services.kube-control-plane-online = {
         description = "Kubernetes control plane is online";
         wantedBy = [ "kube-control-plane-online.target" ];
         after = [ "kube-scheduler.service" "kube-controller-manager.service" ];

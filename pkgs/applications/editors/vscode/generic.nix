@@ -11,7 +11,7 @@
 let
   inherit (stdenv.hostPlatform) system;
 in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
 
     inherit pname version src sourceRoot;
 

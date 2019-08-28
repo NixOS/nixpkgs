@@ -4,7 +4,7 @@ let
   modDirVersion = "4.14.98";
   tag = "1.20190215";
 in
-lib.overrideDerivation (buildLinux (args // rec {
+lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
   inherit modDirVersion;
 

@@ -1,6 +1,6 @@
 { stdenv, fetchgit, emacs, org, xmlRpc, metaweblog }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "org2blog-0.8.1";
 
   src = fetchgit {

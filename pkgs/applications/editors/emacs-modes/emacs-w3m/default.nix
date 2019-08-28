@@ -1,7 +1,7 @@
 { fetchcvs, stdenv, emacs, w3m, imagemagick, texinfo, autoreconfHook }:
 
 let date = "2013-03-21"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "emacs-w3m-cvs${date}";
 
   # Get the source from CVS because the previous release (1.4.4) is old and

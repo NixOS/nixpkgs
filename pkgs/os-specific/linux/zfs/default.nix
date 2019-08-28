@@ -30,7 +30,7 @@ let
          Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
          ${stdenv.lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
        ''
-    else stdenv.mkDerivation rec {
+    else stdenv.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
       src = fetchFromGitHub {
@@ -163,7 +163,7 @@ in {
     ];
   };
 
-  zfsUnstable = common rec {
+  zfsUnstable = common {
     # comment/uncomment if breaking kernel versions are known
     # incompatibleKernelVersion = "4.19";
 

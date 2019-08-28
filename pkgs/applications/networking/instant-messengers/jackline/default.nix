@@ -2,7 +2,7 @@
 
 assert stdenv.lib.versionAtLeast ocamlPackages.ocaml.version "4.02.2";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2018-05-11";
   pname = "jackline";
 

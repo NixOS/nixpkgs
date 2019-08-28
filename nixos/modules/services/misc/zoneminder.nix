@@ -312,7 +312,7 @@ in {
     };
 
     systemd.services = {
-      zoneminder = with pkgs; rec {
+      zoneminder = with pkgs; {
         inherit (zoneminder.meta) description;
         documentation = [ "https://zoneminder.readthedocs.org/en/latest/" ];
         path = [

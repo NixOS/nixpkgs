@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, emacs, texinfo, texLive, perl, which, automake, enableDoc ? false }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   pname = "ProofGeneral-unstable";
   version = "2018-01-30";
 

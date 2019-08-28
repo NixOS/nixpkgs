@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libev, ocaml, findlib, ocamlbuild, lwt, react, zed, camlp4 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.6";
   pname = "lambda-term";
 

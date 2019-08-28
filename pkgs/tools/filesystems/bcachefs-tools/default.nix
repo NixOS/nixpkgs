@@ -1,7 +1,7 @@
 { stdenv, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
 , liburcu, zlib, libaio, zstd, lz4 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bcachefs-tools";
   version = "2019-08-21";
 

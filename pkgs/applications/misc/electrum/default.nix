@@ -40,7 +40,7 @@ let
   };
 in
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "electrum";
   inherit version;
 

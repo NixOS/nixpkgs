@@ -1,5 +1,5 @@
 { callPackage, pkgs }:
-rec {
+{
   #### CORE EFL
   efl = callPackage ./efl.nix {
     openjpeg = pkgs.openjpeg_1;

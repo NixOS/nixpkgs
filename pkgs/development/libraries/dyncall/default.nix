@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dyncall";
   version = "1.0";
 

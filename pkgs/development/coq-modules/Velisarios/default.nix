@@ -23,7 +23,7 @@ let params =
   param = params.${coq.coq-version};
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "coq${coq.coq-version}-Velisarios-${param.version}";
 
   src = fetchFromGitHub {

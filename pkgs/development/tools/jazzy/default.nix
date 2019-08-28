@@ -1,6 +1,6 @@
 { lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "jazzy";
   gemdir = ./.;
   exes = [ "jazzy" ];

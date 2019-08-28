@@ -1,6 +1,6 @@
 { stdenv, fetchgit, emacs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pcache-0.2.3";
 
   src = fetchgit {

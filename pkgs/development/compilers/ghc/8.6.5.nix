@@ -104,7 +104,7 @@ stdenv.mkDerivation (rec {
      name = "D5123.diff";
      sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
     })
-    (fetchpatch rec { # https://github.com/haskell/haddock/issues/900
+    (fetchpatch { # https://github.com/haskell/haddock/issues/900
      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/983.diff";
      name = "loadpluginsinmodules.diff";
      sha256 = "0bvvv0zsfq2581zsir97zfkggc1kkircbbajc2fz3b169ycpbha1";

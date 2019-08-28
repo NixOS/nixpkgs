@@ -25,14 +25,14 @@ let
     crateOverrides = defaultCrateOverrides // {
 
     way-cooler = attrs: { buildInputs = [ wlc cairo libxkbcommon fakegit gdk-pixbuf wayland ]; };
-  };}).overrideAttrs (oldAttrs: rec {
+  };}).overrideAttrs (oldAttrs: {
     postBuild = ''
       mkdir -p $out/etc
       cp -r config $out/etc/way-cooler
     '';
   });
 
-  wc-bg = ((callPackage ./wc-bg.nix {}).wc_bg {}).overrideAttrs (oldAttrs: rec {
+  wc-bg = ((callPackage ./wc-bg.nix {}).wc_bg {}).overrideAttrs (oldAttrs: {
     nativeBuildInputs = [ makeWrapper ];
 
     postFixup = ''
@@ -47,7 +47,7 @@ let
     crateOverrides = defaultCrateOverrides // {
 
     wc-lock = attrs: { buildInputs = [ pam ]; };
-  };}).overrideAttrs (oldAttrs: rec {
+  };}).overrideAttrs (oldAttrs: {
     nativeBuildInputs = [ makeWrapper ];
 
     postFixup = ''
@@ -87,7 +87,7 @@ let
     sleep 5
     ${wc-bar-bare}/bin/bar.py $SELECTED $BACKGROUND $SELECTED_OTHER_WORKSPACE 2> /tmp/bar_debug.txt | ${lemonbar}/bin/lemonbar -B $BACKGROUND -F "#FFF" -n "lemonbar" -p -d
   '';
-in symlinkJoin rec {
+in symlinkJoin {
   inherit version;
   name = "way-cooler-with-extensions-${version}";
   paths = [ way-cooler wc-bg wc-grab wc-lock wc-bar ];

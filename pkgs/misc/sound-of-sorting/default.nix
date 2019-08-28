@@ -1,7 +1,7 @@
 { stdenv, fetchgit
 , SDL2, wxGTK }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   pname = "sound-of-sorting";
   version = "unstable-2015-07-21";

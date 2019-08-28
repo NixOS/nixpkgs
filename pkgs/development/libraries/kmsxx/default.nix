@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libdrm, python }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kmsxx";
   version = "2018-10-23";
 

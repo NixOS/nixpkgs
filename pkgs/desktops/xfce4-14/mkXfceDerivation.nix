@@ -12,7 +12,7 @@ let
   concatAttrLists = attrsets:
     zipAttrsWithNames (filterAttrNames isList (head attrsets)) (_: concatLists) attrsets;
 
-  template = rec {
+  template = {
     name = "${pname}-${version}";
 
     nativeBuildInputs = [ pkgconfig xfce4-dev-tools wrapGAppsHook ];

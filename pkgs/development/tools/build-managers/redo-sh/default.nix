@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2.0.3";
   pname = "redo-sh";
 

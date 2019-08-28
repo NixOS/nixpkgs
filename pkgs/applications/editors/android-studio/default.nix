@@ -18,7 +18,7 @@ let
     build = "192.5807797";
     sha256Hash = "1l47miiyd8z7v0hbvda06953pp9ilyrsma83gxqx35ghnc0n7g81";
   };
-in rec {
+in {
   # Attributes are named by their corresponding release channels
 
   stable = mkStudio (stableVersion // {

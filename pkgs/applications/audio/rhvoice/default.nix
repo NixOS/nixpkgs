@@ -3,7 +3,7 @@
 
 let
   version = "unstable-2018-02-10";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "rhvoice";
   inherit version;
 

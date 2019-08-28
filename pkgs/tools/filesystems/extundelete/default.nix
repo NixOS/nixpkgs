@@ -1,6 +1,6 @@
 { stdenv, fetchurl, e2fsprogs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.2.4";
   pname = "extundelete";
 

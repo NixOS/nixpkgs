@@ -4,7 +4,7 @@
 , testscenarios
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   name = pkgs.subunit.name;
   src = pkgs.subunit.src;
 

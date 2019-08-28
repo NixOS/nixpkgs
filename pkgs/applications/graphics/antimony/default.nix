@@ -8,7 +8,7 @@ let
   gitBranch = "develop";
   gitTag    = "0.9.3";
 in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "antimony";
     version = "2018-10-20";
 

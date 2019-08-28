@@ -2,7 +2,7 @@
 , gfortran, mpi
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.10";
   pname = "DL_POLY_Classic";
 

@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''qmynd'';
   version = ''20180131-git'';
 

@@ -14,7 +14,7 @@ let
   }.${stdenv.hostPlatform.system};
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "standardnotes";
   inherit version;
 

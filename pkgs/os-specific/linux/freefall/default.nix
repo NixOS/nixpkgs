@@ -1,6 +1,6 @@
 { stdenv, kernel }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (kernel) version src;
 
   pname = "freefall";

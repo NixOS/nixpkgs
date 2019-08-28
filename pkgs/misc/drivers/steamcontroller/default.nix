@@ -4,7 +4,7 @@
 
 with python3Packages;
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "steamcontroller";
   version = "2017-08-11";
 

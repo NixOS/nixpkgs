@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.06";
   pname = "ndjbdns";
 

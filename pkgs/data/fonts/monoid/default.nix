@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python, fontforge }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "monoid";
   version = "2016-07-21";
 

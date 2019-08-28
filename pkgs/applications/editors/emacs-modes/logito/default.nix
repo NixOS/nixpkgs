@@ -1,6 +1,6 @@
 { stdenv, fetchgit, emacs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "logito-0.1";
 
   src = fetchgit {

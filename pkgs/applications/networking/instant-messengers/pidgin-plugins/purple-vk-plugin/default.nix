@@ -3,7 +3,7 @@
 let
   version = "40ddb6d";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "purple-vk-plugin";
   inherit version;
 

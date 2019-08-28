@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stb";
   version = "20180211";
 

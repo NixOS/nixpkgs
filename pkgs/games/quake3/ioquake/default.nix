@@ -2,7 +2,7 @@
 , curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ioquake3-git";
   version = "2019-05-29";
 

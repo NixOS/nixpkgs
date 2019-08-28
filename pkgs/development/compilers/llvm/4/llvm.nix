@@ -23,7 +23,7 @@ let
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   name = "llvm-${version}";
 
   src = fetch "llvm" "0l9bf7kdwhlj0kq1hawpyxhna1062z3h7qcz2y8nfl9dz2qksy6s";

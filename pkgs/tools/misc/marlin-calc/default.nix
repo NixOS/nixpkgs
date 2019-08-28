@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "marlin-calc";
   version = "2019-06-04";
 

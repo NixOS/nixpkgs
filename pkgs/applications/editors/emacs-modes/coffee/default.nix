@@ -1,6 +1,6 @@
 { stdenv, fetchgit, emacs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "coffee-mode-0.4.1";
 
   src = fetchgit {

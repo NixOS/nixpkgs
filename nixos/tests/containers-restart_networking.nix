@@ -1,7 +1,7 @@
 # Test for NixOS' container support.
 
 let
-  client_base = rec {
+  client_base = {
     networking.firewall.enable = false;
 
     containers.webserver = {

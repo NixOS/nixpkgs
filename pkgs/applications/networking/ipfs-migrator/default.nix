@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "ipfs-migrator";
   version = "7";
 

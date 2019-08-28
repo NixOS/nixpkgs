@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, jre }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "jdiskreport-1.4.1";
 
   builder = ./builder.sh;

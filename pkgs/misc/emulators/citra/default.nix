@@ -1,6 +1,6 @@
 { stdenv, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
 
-stdenv.mkDerivation rec { 
+stdenv.mkDerivation { 
   pname = "citra";
   version = "2019-05-25";
 

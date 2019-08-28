@@ -43,7 +43,7 @@ let
       sha256 = "c590ce55ae69ec74f46215cf16a156a02b23c5f3ecb22f23a3ad9ba3d91ddb6e";
     };
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "opam";
   version = "1.2.2";
 

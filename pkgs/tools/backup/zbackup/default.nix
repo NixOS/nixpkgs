@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, zlib, openssl, protobuf, protobufc, lzo, libunwind } :
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zbackup";
   version = "1.4.4";
   src = fetchurl {

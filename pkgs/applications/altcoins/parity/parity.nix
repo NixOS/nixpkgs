@@ -14,7 +14,7 @@
 , perl
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "parity";
   inherit version;
   inherit cargoSha256;

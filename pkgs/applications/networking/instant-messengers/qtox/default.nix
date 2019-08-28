@@ -10,7 +10,7 @@ let
   version = "1.16.3";
   rev = "v${version}";
 
-in mkDerivation rec {
+in mkDerivation {
   pname = "qtox";
   inherit version;
 

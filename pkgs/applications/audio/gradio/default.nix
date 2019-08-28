@@ -18,7 +18,7 @@
 let
   version = "7.2";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "gradio";
   inherit version;
 

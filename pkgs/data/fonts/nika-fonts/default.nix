@@ -3,7 +3,7 @@
 let
   pname = "nika-fonts";
   version = "1.0.0";
-in fetchFromGitHub rec {
+in fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "font-store";
   repo = "NikaFont";

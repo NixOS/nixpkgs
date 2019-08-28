@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''swap-bytes'';
   version = ''v1.1'';
 

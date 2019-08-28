@@ -316,7 +316,7 @@ let
           ++ (builtins.map (link packageName "opt") opt)
         );
         packDir = (packages:
-          stdenv.mkDerivation rec {
+          stdenv.mkDerivation {
             name = "vim-pack-dir";
             src = ./.;
             installPhase = lib.concatStringsSep

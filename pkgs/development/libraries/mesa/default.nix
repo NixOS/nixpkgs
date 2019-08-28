@@ -31,7 +31,7 @@ let
   branch  = head (splitString "." version);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mesa";
   inherit version;
 

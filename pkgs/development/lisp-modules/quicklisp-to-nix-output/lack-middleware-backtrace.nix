@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''lack-middleware-backtrace'';
   version = ''lack-20190521-git'';
 

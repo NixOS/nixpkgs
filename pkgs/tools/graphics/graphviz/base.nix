@@ -24,7 +24,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "graphviz";
   inherit version;
 

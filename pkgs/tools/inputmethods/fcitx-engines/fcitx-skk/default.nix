@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, fcitx, libskk, skk-dicts }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fcitx-skk";
   version = "0.1.4";
   src = fetchFromGitHub {

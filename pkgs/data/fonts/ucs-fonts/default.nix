@@ -1,6 +1,6 @@
 { stdenv, fetchurl, mkfontdir, mkfontscale }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ucs-fonts";
   version = "20090406";
 

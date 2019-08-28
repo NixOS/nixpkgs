@@ -1,6 +1,6 @@
 { stdenv, fetchgit, alsaLib, libopus, ortp, bctoolbox }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "trx-unstable";
   version = "2018-01-23";
 

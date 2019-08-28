@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sonic";
   version = "2016-03-01";
 

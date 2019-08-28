@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitLab, libX11, xorgproto }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "xmagnify-0.1.0";
 
   src = fetchFromGitLab {

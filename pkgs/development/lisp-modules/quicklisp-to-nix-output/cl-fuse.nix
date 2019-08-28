@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-fuse'';
   version = ''20190710-git'';
 

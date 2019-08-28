@@ -35,7 +35,7 @@ let
 
   withUdisks = (withTaglib && withDevices);
 
-in mkDerivation rec {
+in mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

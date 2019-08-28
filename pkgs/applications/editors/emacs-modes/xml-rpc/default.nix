@@ -1,6 +1,6 @@
 {stdenv, fetchurl, emacs}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "xml-rpc-1.6.8";
 
   src = fetchurl {

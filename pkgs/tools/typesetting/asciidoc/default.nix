@@ -111,7 +111,7 @@ let
   };
 
   # there are no archives or tags, using latest commit in master branch as per 2013-09-22
-  matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in fetchurl rec {
+  matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in fetchurl {
     name = "mplw-${commit}.tar.gz";
     url = "https://api.github.com/repos/lvv/mplw/tarball/${commit}";
     sha256 = "0yfhkm2dr8gnp0fcg25x89hwiymkri2m5cyqzmzragzwj0hbmcf1";

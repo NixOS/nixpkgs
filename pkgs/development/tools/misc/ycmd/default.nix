@@ -5,7 +5,7 @@
 , fixDarwinDylibNames, Cocoa ? null
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ycmd";
   version = "2018-09-20";
 

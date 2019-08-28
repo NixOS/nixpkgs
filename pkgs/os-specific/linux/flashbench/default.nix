@@ -1,6 +1,6 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "flashbench";
   version = "2012-06-06";
 

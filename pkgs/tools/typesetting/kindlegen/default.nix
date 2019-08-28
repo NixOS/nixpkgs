@@ -22,7 +22,7 @@ let
     i686-cygwin   = "http://kindlegen.s3.amazonaws.com/kindlegen_win32_v${fileVersion}.zip";
   }.${stdenv.hostPlatform.system} or (throw "system #{stdenv.hostPlatform.system.} is not supported");
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "kindlegen";
   inherit version;
 

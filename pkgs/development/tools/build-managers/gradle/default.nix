@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
 rec {
-  gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation rec {
+  gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation {
     inherit name src nativeVersion;
 
     dontBuild = true;

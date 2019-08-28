@@ -79,7 +79,7 @@ let
   ##
   ## START BOOTSTRAPPING
   ##
-  makeMinimal = mkDerivation rec {
+  makeMinimal = mkDerivation {
     path = "tools/make";
     sha256 = "1xbzfd4i7allrkk1if74a8ymgpizyj0gkvdigzzj37qar7la7nc1";
     version = "8.0";

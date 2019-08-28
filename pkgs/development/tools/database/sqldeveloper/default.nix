@@ -13,7 +13,7 @@ let
     categories = "Application;Development;";
   };
 in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
 
   inherit version;
   pname = "sqldeveloper";

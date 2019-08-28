@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoreconfHook, gmp, flex, bison }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "veriT";
   version = "2016";
 

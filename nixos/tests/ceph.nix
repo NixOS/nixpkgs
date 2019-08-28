@@ -1,4 +1,4 @@
-import ./make-test.nix ({pkgs, ...}: rec {
+import ./make-test.nix ({pkgs, ...}: {
   name = "All-in-one-basic-ceph-cluster";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ lejonet ];

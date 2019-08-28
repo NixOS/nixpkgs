@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgs, pythonPackages, wrapGAppsHook}:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication {
   pname = "pdf-quench";
   version = "1.0.5";
 

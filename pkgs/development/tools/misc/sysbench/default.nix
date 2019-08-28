@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, vim, mysql
 , libaio }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "sysbench-1.0.17";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

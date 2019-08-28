@@ -39,7 +39,7 @@ in
     };
   };
   hunchentoot = addNativeLibs [pkgs.openssl];
-  iolib = x: rec {
+  iolib = x: {
     propagatedBuildInputs = (x.propagatedBuildInputs or [])
      ++ (with pkgs; [libfixposix gcc])
      ;

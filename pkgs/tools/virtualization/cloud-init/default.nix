@@ -2,7 +2,7 @@
 
 let version = "0.7.9";
 
-in pythonPackages.buildPythonApplication rec {
+in pythonPackages.buildPythonApplication {
   pname = "cloud-init";
   inherit version;
   namePrefix = "";

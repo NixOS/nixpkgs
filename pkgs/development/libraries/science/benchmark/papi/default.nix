@@ -2,7 +2,7 @@
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "5.6.0";
   pname = "papi";
 

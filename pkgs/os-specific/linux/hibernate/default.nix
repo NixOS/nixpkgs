@@ -2,7 +2,7 @@
 
 let version = "2.0";
 in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "hibernate";
     inherit version;
     src = fetchurl {

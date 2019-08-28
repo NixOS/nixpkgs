@@ -14,7 +14,7 @@ apk = stdenv.mkDerivation {
   '';
 };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   name = "gnirehtet-${version}";
 
   src = fetchFromGitHub {

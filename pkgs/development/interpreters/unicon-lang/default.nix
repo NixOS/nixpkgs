@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, libX11, libXt }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "unicon-lang";
   version = "11.7";
   src = fetchurl {

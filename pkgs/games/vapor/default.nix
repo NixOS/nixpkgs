@@ -22,7 +22,7 @@ let
 
 in 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {

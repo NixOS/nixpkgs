@@ -2,7 +2,7 @@
 , autoreconfHook, pkgconfig
 , libsndfile }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   pname = "twolame";
   version = "2017-09-27";

@@ -16,7 +16,7 @@ let
   };
 
 in rec {
-  libdwarf = stdenv.mkDerivation rec {
+  libdwarf = stdenv.mkDerivation {
     pname = "libdwarf";
     inherit version;
 
@@ -37,7 +37,7 @@ in rec {
     inherit meta src;
   };
 
-  dwarfdump = stdenv.mkDerivation rec {
+  dwarfdump = stdenv.mkDerivation {
     pname = "dwarfdump";
     inherit version;
 

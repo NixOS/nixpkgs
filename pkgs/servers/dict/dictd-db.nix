@@ -7,7 +7,7 @@ let
    makeDictdDB src name "{.,bin}" locale;
 
  makeDictdDB = src: _name: _subdir: _locale:
-   stdenv.mkDerivation rec {
+   stdenv.mkDerivation {
      name = "dictd-db-${_name}";
      inherit src;
      locale = _locale;

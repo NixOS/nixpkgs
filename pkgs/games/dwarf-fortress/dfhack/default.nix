@@ -83,7 +83,7 @@ let
     fi
   '';
 
-  dfhack = stdenv.mkDerivation rec {
+  dfhack = stdenv.mkDerivation {
     pname = "dfhack-base";
     inherit version;
 

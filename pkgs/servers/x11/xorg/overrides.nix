@@ -340,7 +340,7 @@ self: super:
     installFlags = "sdkdir=\${out}/include/xorg";
   });
 
-  xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: rec {
+  xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
     installFlags = "sdkdir=\${dev}/include/xorg";
   });

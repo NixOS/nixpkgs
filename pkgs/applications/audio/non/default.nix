@@ -2,7 +2,7 @@
 , libsndfile, ladspaH, liblrdf, liblo, libsigcxx, wafHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "non";
   version = "2018-02-15";
   src = fetchFromGitHub {

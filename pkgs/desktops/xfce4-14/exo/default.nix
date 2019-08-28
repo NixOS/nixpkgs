@@ -1,7 +1,7 @@
 { mkXfceDerivation, docbook_xsl, glib, libxslt, perlPackages, gtk3
 , libxfce4ui, libxfce4util }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "exo";
   version = "0.12.8";

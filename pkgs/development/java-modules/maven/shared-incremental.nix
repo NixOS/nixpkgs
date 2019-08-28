@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenSharedIncremental_1_1 = map (obj: fetchMaven {
     version = "1.1";
     artifactId = "maven-shared-incremental";

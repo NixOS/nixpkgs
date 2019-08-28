@@ -1,6 +1,6 @@
 import ./make-test.nix ({ pkgs, lib, ...} :
 let
-  client_base = rec {
+  client_base = {
     
     containers.test1 = {
       autoStart = true;

@@ -1,6 +1,6 @@
 { stdenv, fetchgit, ocamlPackages, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "virt-top";
   version = "2017-11-18-unstable";
 

@@ -2,7 +2,7 @@
 
 let
   generic = { version, sha256, prePatch }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "haxe";
       inherit version;
 

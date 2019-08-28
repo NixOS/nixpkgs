@@ -8,7 +8,7 @@
 let
   pname = "libhandy";
   version = "0.0.10";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "devdoc" "glade" ];

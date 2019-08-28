@@ -11,7 +11,7 @@ let
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct rec {
+    lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "CLion";
       meta = with stdenv.lib; {
@@ -121,7 +121,7 @@ let
     });
 
   buildIdea = { name, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct rec {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "IDEA";
       meta = with stdenv.lib; {
@@ -156,7 +156,7 @@ let
     });
 
   buildPycharm = { name, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct rec {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "PyCharm";
       meta = with stdenv.lib; {
@@ -183,7 +183,7 @@ let
     };
 
   buildRider = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct rec {
+    lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Rider";
       meta = with stdenv.lib; {
@@ -209,7 +209,7 @@ let
     });
 
   buildRubyMine = { name, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct rec {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "RubyMine";
       meta = with stdenv.lib; {

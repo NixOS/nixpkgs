@@ -6,7 +6,7 @@
 let
   generic =
     { version, sha256 }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "wt";
       inherit version;
 

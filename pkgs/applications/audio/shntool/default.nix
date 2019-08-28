@@ -1,6 +1,6 @@
 { stdenv, fetchurl, flac }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.0.10";
   pname = "shntool";
 

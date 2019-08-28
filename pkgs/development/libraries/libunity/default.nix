@@ -12,7 +12,7 @@
 , autoreconfHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libunity";
   version = "unstable-2019-03-19";
 

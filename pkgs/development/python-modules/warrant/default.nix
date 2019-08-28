@@ -2,7 +2,7 @@
 , mock
 , boto3, envs, python-jose, requests }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "warrant";
   version = "0.6.1";
 

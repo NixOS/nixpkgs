@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libX11 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "runningx";
   version = "1.0";
   

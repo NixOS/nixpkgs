@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libnfc, openssl
 , libobjc ? null }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libfreefare";
   version = "0.4.0";
 

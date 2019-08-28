@@ -1,6 +1,6 @@
 {stdenv, fetchurl, emacs}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rect-mark-1.4";
 
   src = fetchurl {

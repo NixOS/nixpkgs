@@ -2,7 +2,7 @@
 
 let
   version = "1.3.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "libmypaint";
   inherit version;
 

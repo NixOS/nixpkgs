@@ -7,7 +7,7 @@
   krunner, kwallet
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "zanshin";
   version = "2019-07-28";
 

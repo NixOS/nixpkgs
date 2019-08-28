@@ -2,7 +2,7 @@
   libharu, opencv, vigra, postgresql, Cocoa,
   unixODBC , poppler, hdf4, hdf5, netcdf, sqlite, qhull, giflib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "saga";
   version = "7.3.0";
 

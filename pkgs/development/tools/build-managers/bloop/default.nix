@@ -49,7 +49,7 @@ let
     installPhase = ''cp $src $out'';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   buildInputs = [ makeWrapper ];

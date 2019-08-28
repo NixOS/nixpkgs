@@ -7,7 +7,7 @@ let
   inherit (lib) optionals;
 in
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "orage";
   version = "4.12.1";

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, wrapQtAppsHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nifskope";
   version = "2.0.dev7";
 

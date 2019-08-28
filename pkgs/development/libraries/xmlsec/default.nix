@@ -4,7 +4,7 @@
 let
   version = "1.2.28";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xmlsec";
   inherit version;
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper python3 ];
   propagatedBuildInputs = with python3.pkgs; [ pyqt5 docutils ];
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "leo-editor";
     exec = "leo %U";
     icon = "leoapp32";

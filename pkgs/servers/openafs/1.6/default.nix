@@ -6,7 +6,7 @@
 
 with (import ./srcs.nix { inherit fetchurl; });
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "openafs";
   inherit version srcs;
 

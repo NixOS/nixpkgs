@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''hu_dot_dwim_dot_stefil'';
   version = ''20170403-darcs'';
 

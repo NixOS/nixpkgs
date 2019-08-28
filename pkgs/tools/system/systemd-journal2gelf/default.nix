@@ -1,6 +1,6 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "SystemdJournal2Gelf-unstable";
   version = "20190702";
 

@@ -15,7 +15,7 @@ let
 
   isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
 
-  apcu = buildPecl rec {
+  apcu = buildPecl {
     version = "5.1.17";
     pname = "apcu";
 
@@ -29,7 +29,7 @@ let
     outputs = [ "out" "dev" ];
   };
 
-  apcu_bc = buildPecl rec {
+  apcu_bc = buildPecl {
     version = "1.0.5";
     pname = "apcu_bc";
 
@@ -38,7 +38,7 @@ let
     buildInputs = [ apcu (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
-  ast = buildPecl rec {
+  ast = buildPecl {
     version = "1.0.3";
     pname = "ast";
 
@@ -142,7 +142,7 @@ let
     ];
   };
 
-  event = buildPecl rec {
+  event = buildPecl {
     version = "2.5.3";
     pname = "event";
 
@@ -167,7 +167,7 @@ let
     };
   };
 
-  igbinary = buildPecl rec {
+  igbinary = buildPecl {
     version = "3.0.1";
     pname = "igbinary";
 
@@ -178,7 +178,7 @@ let
     outputs = [ "out" "dev" ];
   };
 
-  imagick = buildPecl rec {
+  imagick = buildPecl {
     version = "3.4.4";
     pname = "imagick";
 
@@ -189,7 +189,7 @@ let
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
-  mailparse = buildPecl rec {
+  mailparse = buildPecl {
     version = "3.0.3";
     pname = "mailparse";
 
@@ -232,7 +232,7 @@ let
     ] ++ lib.optional (pkgs.stdenv.isDarwin) pkgs.darwin.apple_sdk.frameworks.Security;
   };
 
-  oci8 = buildPecl rec {
+  oci8 = buildPecl {
     version = "2.2.0";
     pname = "oci8";
 
@@ -245,14 +245,14 @@ let
     '';
   };
 
-  pcs = buildPecl rec {
+  pcs = buildPecl {
     version = "1.3.3";
     pname = "pcs";
 
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
   };
 
-  pdo_sqlsrv = buildPecl rec {
+  pdo_sqlsrv = buildPecl {
     version = "5.6.1";
     pname = "pdo_sqlsrv";
 
@@ -427,7 +427,7 @@ let
 
   pinba = if isPhp73 then pinba73 else pinba7;
 
-  pinba7 = assert !isPhp73; buildPecl rec {
+  pinba7 = assert !isPhp73; buildPecl {
     version = "1.1.1";
     pname = "pinba";
 
@@ -448,7 +448,7 @@ let
     };
   };
 
-  pinba73 = assert isPhp73; buildPecl rec {
+  pinba73 = assert isPhp73; buildPecl {
     version = "1.1.2-dev";
     pname = "pinba";
 
@@ -469,7 +469,7 @@ let
     };
   };
 
-  protobuf = buildPecl rec {
+  protobuf = buildPecl {
     version = "3.9.0";
     pname = "protobuf";
 
@@ -529,7 +529,7 @@ let
     buildInputs = with pkgs; [ pcre.dev ];
   };
 
-  pthreads32-dev = assert (pkgs.config.php.zts or false); assert isPhp73; buildPecl rec {
+  pthreads32-dev = assert (pkgs.config.php.zts or false); assert isPhp73; buildPecl {
     version = "3.2.0-dev";
     pname = "pthreads";
 
@@ -543,14 +543,14 @@ let
     buildInputs = with pkgs; [ pcre2.dev ];
   };
 
-  redis = buildPecl rec {
+  redis = buildPecl {
     version = "5.0.2";
     pname = "redis";
 
     sha256 = "0b5pw17lzqknhijfymksvf8fm1zilppr97ypb31n599jw3mxf62f";
   };
 
-  sqlsrv = buildPecl rec {
+  sqlsrv = buildPecl {
     version = "5.6.1";
     pname = "sqlsrv";
 
@@ -559,7 +559,7 @@ let
     buildInputs = [ pkgs.unixODBC ];
   };
 
-  v8 = buildPecl rec {
+  v8 = buildPecl {
     version = "0.2.2";
     pname = "v8";
 
@@ -570,7 +570,7 @@ let
     meta.broken = true;
   };
 
-  v8js = assert !isPhp73; buildPecl rec {
+  v8js = assert !isPhp73; buildPecl {
     version = "2.1.0";
     pname = "v8js";
 
@@ -581,7 +581,7 @@ let
     meta.broken = true;
   };
 
-  xdebug = buildPecl rec {
+  xdebug = buildPecl {
     version = "2.7.1";
     pname = "xdebug";
 
@@ -591,7 +591,7 @@ let
     checkTarget = "test";
   };
 
-  yaml = buildPecl rec {
+  yaml = buildPecl {
     version = "2.0.4";
     pname = "yaml";
 
@@ -604,7 +604,7 @@ let
     nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
-  zmq = assert !isPhp73; buildPecl rec {
+  zmq = assert !isPhp73; buildPecl {
     version = "1.1.3";
     pname = "zmq";
 

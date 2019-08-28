@@ -1,6 +1,6 @@
 { stdenv, fetchgit, autoreconfHook, gawk, trousers, cryptsetup, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tpm-luks";
   version = "git-2015-07-11";
 

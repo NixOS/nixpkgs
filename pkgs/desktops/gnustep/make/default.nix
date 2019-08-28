@@ -4,7 +4,7 @@ let
   version = "2.7.0";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnustep-make";
   inherit version;
 

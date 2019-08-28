@@ -16,7 +16,7 @@
 , gitAndTools
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "muse-sequencer";
   version = "3.1pre1";
 
