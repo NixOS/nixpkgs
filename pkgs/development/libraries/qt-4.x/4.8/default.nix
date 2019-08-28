@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+    substituteInPlace src/3rdparty/javascriptcore/JavaScriptCore/jit/JITStubs.cpp \
+      --replace 'asm volatile' 'asm'
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
   '' + lib.optionalString stdenv.isDarwin ''
     # remove impure reference to /usr/lib/libstdc++.6.dylib
