@@ -112,7 +112,7 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/zlib-0.6.2.patch";
     sha256 = "13fy730z9ihyc9kw3qkh642mi0bdbd7bz01dksj1zz845pr9jjif";
   });
-  haskell-src-exts = appendPatch super.haskell-src-exts_1_21_0 (pkgs.fetchpatch {
+  haskell-src-exts = appendPatch super.haskell-src-exts (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/haskell-src-exts-1.21.0.patch";
     sha256 = "0alb28hcsp774c9s73dgrajcb44vgv1xqfg2n5a9y2bpyngqscs3";
   });
