@@ -17535,6 +17535,8 @@ in
 
   bviplus = callPackage ../applications/editors/bviplus { };
 
+  cage = callPackage ../applications/window-managers/cage { };
+
   calf = callPackage ../applications/audio/calf {
       inherit (gnome2) libglade;
       stdenv = gcc5Stdenv;
