@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ./koch boot  -d:release \
                  -d:useGnuReadline \
                  ${lib.optionals (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace"}
-    ./koch tools -d:release
+    ./koch toolsNoNimble -d:release
 
     runHook postBuild
   '';
@@ -98,7 +98,8 @@ stdenv.mkDerivation rec {
     mv $out/nim/bin/* $out/bin/ && rmdir $out/nim/bin
     mv $out/nim/*     $out/     && rmdir $out/nim
     wrapProgram $out/bin/nim \
-      --suffix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]} \
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ stdenv.cc.libc ]} \
 
     runHook postInstall
   '';
