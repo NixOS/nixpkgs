@@ -81,18 +81,6 @@ self: super: {
       sed -i -e 's/time < 1.9/time < 2/' tar.cabal
     '';
   });
-  resolv = overrideCabal (overrideSrc super.resolv {
-    version = "20180411-git";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell-hvr";
-      repo = "resolv";
-      rev = "a22f9dd900cb276b3dd70f4781fb436d617e2186";
-      sha256 = "1j2jyywmxjhyk46kxff625yvg5y37knv7q6y0qkwiqdwdsppccdk";
-    };
-  }) (drv: {
-    buildTools = with pkgs; [autoconf];
-    preConfigure = "autoreconf --install";
-  });
   dlist = appendPatch (doJailbreak super.dlist) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/dlist-0.8.0.6.patch";
     sha256 = "0lkhibfxfk6mi796mrjgmbb50hbyjgc7xdinci64dahj8325jlpc";
