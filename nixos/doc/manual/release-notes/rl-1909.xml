@@ -48,6 +48,15 @@
      To gain root privileges use <literal>sudo -i</literal> without a password.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      We've updated to Xfce 4.14, which brings a new module <option>services.xserver.desktopManager.xfce4-14</option>.
+      If you'd like to upgrade, please switch from the <option>services.xserver.desktopManager.xfce</option> module as it
+      will be deprecated in a future release. They're incompatibilities with the current Xfce module; it doesn't support
+      <option>thunarPlugins</option> and it isn't recommended to use <option>services.xserver.desktopManager.xfce</option>
+      and <option>services.xserver.desktopManager.xfce4-14</option> simultaneously or to downgrade from Xfce 4.14 after upgrading.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
