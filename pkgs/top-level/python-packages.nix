@@ -3383,6 +3383,8 @@ in {
 
   httpretty = callPackage ../development/python-modules/httpretty { };
 
+  iapws = callPackage ../development/python-modules/iapws { };
+
   icalendar = callPackage ../development/python-modules/icalendar { };
 
   ifaddr = callPackage ../development/python-modules/ifaddr { };
