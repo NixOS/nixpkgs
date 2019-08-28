@@ -49,6 +49,7 @@
 , efibootmgr
 , flashrom
 , tpm2-tools
+, nixosTests
 }:
 
 let
@@ -75,18 +76,20 @@ let
   # only redfish for x86_64
   haveRedfish = stdenv.isx86_64;
 
-  # Currently broken on Aarch64
-  haveFlashrom = isx86;
+  # # Currently broken on Aarch64
+  # haveFlashrom = isx86;
+  # Experimental in 1.2.10
+  haveFlashrom = false;
 
 in
 
 stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.2.8";
+  version = "1.2.10";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "0qbvq52c0scn1h99i1rf2la6rrhckin6gb02k7l0v3g07mxs20wc";
+    sha256 = "0inngs7i48akm9c7fmdsf9zjif595rkaba69rl76jfwfv8r21vjb";
   };
 
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
@@ -152,7 +155,12 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs \
+      libfwupd/generate-version-script.py \
+      meson_post_install.sh \
+      po/make-images \
+      po/make-images.sh \
+      po/test-deps
 
     # we cannot use placeholder in substituteAll
     # https://github.com/NixOS/nix/issues/1846
@@ -218,6 +226,10 @@ stdenv.mkDerivation rec {
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
+  # error: “PolicyKit files are missing”
+  # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
+  PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
+
   # TODO: wrapGAppsHook wraps efi capsule even though it is not elf
   dontWrapGApps = true;
   # so we need to wrap the executables manually
@@ -247,11 +259,15 @@ stdenv.mkDerivation rec {
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA.pem"
     ];
+
+    tests = {
+      installedTests = nixosTests.fwupd;
+    };
   };
 
   meta = with stdenv.lib; {
     homepage = https://fwupd.org/;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ jtojnar ];
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;
   };
