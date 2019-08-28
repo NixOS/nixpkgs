@@ -76,4 +76,7 @@ self: super: {
   aeson = addBuildDepend super.aeson self.contravariant;
   base-compat-batteries = addBuildDepend super.base-compat-batteries self.contravariant;
 
+  # Newer versions don't compile.
+  resolv = self.resolv_0_1_1_2;
+
 }

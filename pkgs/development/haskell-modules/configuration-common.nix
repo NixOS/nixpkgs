@@ -1005,6 +1005,7 @@ self: super: {
 
   # https://github.com/haskell-hvr/resolv/issues/1
   resolv = dontCheck super.resolv;
+  resolv_0_1_1_2 = dontCheck super.resolv_0_1_1_2;
 
   # spdx 0.2.2.0 needs older tasty
   # was fixed in spdx master (4288df6e4b7840eb94d825dcd446b42fef25ef56)

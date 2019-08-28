@@ -88,4 +88,7 @@ self: super: {
     version = "0.8.6.0-pre-release";
   };
 
+  # Newer versions don't compile.
+  resolv = self.resolv_0_1_1_2;
+
 }
