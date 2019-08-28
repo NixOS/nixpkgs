@@ -2975,7 +2975,7 @@ in
 
   exiftool = perlPackages.ImageExifTool;
 
-  exodus = callPackage ../applications/altcoins/exodus { };
+  exodus = callPackage ../applications/blockchains/exodus { };
 
   ext4magic = callPackage ../tools/filesystems/ext4magic { };
 
@@ -4480,7 +4480,7 @@ in
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
-  ledger-live-desktop = callPackage ../applications/altcoins/ledger-live-desktop { };
+  ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
 
   ledmon = callPackage ../tools/system/ledmon { };
 
@@ -4906,7 +4906,7 @@ in
 
   namazu = callPackage ../tools/text/namazu { };
 
-  nano-wallet = libsForQt5.callPackage ../applications/altcoins/nano-wallet { };
+  nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
   nasty = callPackage ../tools/security/nasty { };
 
@@ -6808,7 +6808,7 @@ in
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
-  wasabiwallet = callPackage ../applications/altcoins/wasabiwallet { };
+  wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
 
   watchexec = callPackage ../tools/misc/watchexec {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -17355,14 +17355,6 @@ in
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
-  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins { } );
-
-  bitcoin = altcoins.bitcoin;
-  clightning = altcoins.clightning;
-  lnd = altcoins.lnd;
-
-  cryptop = altcoins.cryptop;
-
   jnetmap = callPackage ../applications/networking/jnetmap {};
 
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
@@ -17374,19 +17366,6 @@ in
   libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix { };
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
 
-
-  go-ethereum = res.altcoins.go-ethereum;
-  ethabi = res.altcoins.ethabi;
-
-  parity = res.altcoins.parity;
-  parity-beta = res.altcoins.parity-beta;
-  parity-ui = res.altcoins.parity-ui;
-
-  polkadot = res.altcoins.polkadot;
-
-  stellar-core = res.altcoins.stellar-core;
-
-  particl-core = res.altcoins.particl-core;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -19109,7 +19088,7 @@ in
 
   josm = callPackage ../applications/misc/josm { };
 
-  jormungandr = callPackage ../applications/altcoins/jormungandr { };
+  jormungandr = callPackage ../applications/blockchains/jormungandr { };
 
   jbrout = callPackage ../applications/graphics/jbrout { };
 
@@ -19557,11 +19536,11 @@ in
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
-  monero = callPackage ../applications/altcoins/monero {
+  monero = callPackage ../applications/blockchains/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
   };
 
-  monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui {
+  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
     boost = boost16x;
   };
 
