@@ -93,9 +93,11 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/cabal-doctest-1.0.6.patch";
     sha256 = "0735mkxhv557pgnfvdjakkw9r85l5gy28grdwg929m26ghbf9s8j";
   });
-  regex-base = appendPatch super.regex-base (pkgs.fetchpatch {
+  regex-base = overrideCabal (appendPatch super.regex-base (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-base-0.93.2.patch";
     sha256 = "01d1plrdx6hcspwn2h6y9pyi5366qk926vb5cl5qcl6x4m23l6y1";
+  })) (drv: {
+    preConfigure = "sed -i -e 's/base >=4 && < 4.13,/base,/' regex-base.cabal";
   });
   regex-posix = appendPatch super.regex-posix (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-posix-0.95.2.patch";
