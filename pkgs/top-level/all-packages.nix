@@ -21792,6 +21792,94 @@ in
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
 
+  ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
+
+  aeon = callPackage ../applications/blockchains/aeon { };
+
+  bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
+  bitcoind = callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
+  clightning = callPackage ../applications/blockchains/clightning.nix { };
+
+  bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc.nix { boost = boost165; withGui = true; };
+  bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc.nix { boost = boost165; withGui = false; };
+
+  bitcoin-unlimited  = libsForQt5.callPackage ../applications/blockchains/bitcoin-unlimited.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    withGui = true;
+  };
+  bitcoind-unlimited = callPackage ../applications/blockchains/bitcoin-unlimited.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    withGui = false;
+  };
+
+  bitcoin-classic  = libsForQt5.callPackage ../applications/blockchains/bitcoin-classic.nix { boost = boost165; withGui = true; };
+  bitcoind-classic = callPackage ../applications/blockchains/bitcoin-classic.nix { boost = boost165; withGui = false; };
+
+  btc1 = callPackage ../applications/blockchains/btc1.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+    boost = boost165;
+  };
+  btc1d = btc1.override { withGui = false; };
+
+  cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
+
+  dashpay = callPackage ../applications/blockchains/dashpay.nix { };
+
+  dcrd = callPackage ../applications/blockchains/dcrd.nix { };
+  dcrwallet = callPackage ../applications/blockchains/dcrwallet.nix { };
+
+  dero = callPackage ../applications/blockchains/dero.nix { boost = boost165; };
+
+  dogecoin  = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = true; };
+  dogecoind = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = false; };
+
+
+  freicoin = callPackage ../applications/blockchains/freicoin.nix { boost = boost155; };
+  go-ethereum = callPackage ../applications/blockchains/go-ethereum.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
+  go-ethereum-classic = callPackage ../applications/blockchains/go-ethereum-classic {
+    buildGoPackage = buildGo110Package;
+  };
+
+  litecoin  = callPackage ../applications/blockchains/litecoin.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+  litecoind = litecoin.override { withGui = false; };
+
+  lnd = callPackage ../applications/blockchains/lnd.nix { };
+
+  masari = callPackage ../applications/blockchains/masari.nix { boost = boost165; };
+
+  mist = callPackage ../applications/blockchains/mist.nix { };
+
+  namecoin  = callPackage ../applications/blockchains/namecoin.nix  { withGui = true; };
+  namecoind = callPackage ../applications/blockchains/namecoin.nix { withGui = false; };
+
+  pivx = libsForQt59.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
+  pivxd = callPackage ../applications/blockchains/pivx.nix { withGui = false; };
+
+  ethabi = callPackage ../applications/blockchains/ethabi.nix { };
+
+  stellar-core = callPackage ../applications/blockchains/stellar-core.nix { };
+
+  sumokoin = callPackage ../applications/blockchains/sumokoin.nix { boost = boost165; };
+
+  wownero = callPackage ../applications/blockchains/wownero.nix {};
+
+  zcash = callPackage ../applications/blockchains/zcash {
+    withGui = false;
+  };
+
+  parity = callPackage ../applications/blockchains/parity { };
+  parity-beta = callPackage ../applications/blockchains/parity/beta.nix { };
+  parity-ui = callPackage ../applications/blockchains/parity-ui { };
+
+  polkadot = callPackage ../applications/blockchains/polkadot { };
+
+  particl-core = callPackage ../applications/blockchains/particl/particl-core.nix { miniupnpc = miniupnpc_2; };
+
   ### GAMES
 
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
