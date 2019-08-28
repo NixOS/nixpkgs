@@ -1,10 +1,11 @@
 { stdenv, fetchurl, pkgconfig, systemd ? null, libobjc, IOKit, withStatic ? false }:
 
 stdenv.mkDerivation (rec {
-  name = "libusb-1.0.22";
+  pname = "libusb";
+  version = "1.0.22";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libusb/${name}.tar.bz2";
+    url = "mirror://sourceforge/libusb/${pname}-${version}.tar.bz2";
     sha256 = "0mw1a5ss4alg37m6bd4k44v35xwrcwp5qm4s686q1nsgkbavkbkm";
   };
 
