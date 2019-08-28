@@ -41,10 +41,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Use the cabal-install 3.0.0.0 beta release.
-  cabal-install = self.cabal-install-3;
-  Cabal_3_0_0_0 = null;    # Our compiler has this already.
-
   # Ignore overly restrictive upper version bounds.
   async = doJailbreak super.async;
   ChasingBottoms = doJailbreak super.ChasingBottoms;

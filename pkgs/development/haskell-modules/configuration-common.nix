@@ -32,9 +32,6 @@ self: super: {
   # compiled on Linux. We provide the name to avoid evaluation errors.
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
-  # Use the latest version of the Cabal library.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_1_0; });
-
   # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
 
