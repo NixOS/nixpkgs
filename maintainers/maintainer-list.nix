@@ -5686,6 +5686,12 @@
     githubId = 918365;
     name = "Stefan Frijters";
   };
+  sgo = {
+    email = "stig@stig.io";
+    github = "stigtsp";
+    githubId = 75371;
+    name = "Stig Palmquist";
+  };
   sgraf = {
     email = "sgraf1337@gmail.com";
     github = "sgraf812";
