@@ -43,6 +43,7 @@ self: super: {
 
   # Ignore overly restrictive upper version bounds.
   async = doJailbreak super.async;
+  cabal-install = doJailbreak super.cabal-install;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
   Diff = dontCheck super.Diff;
