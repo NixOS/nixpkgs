@@ -137,7 +137,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-tdfa-1.2.3.1.patch";
     sha256 = "1lhas4s2ms666prb475gaw2bqw1v4y8cxi66sy20j727sx7ppjs7";
   });
-  unordered-containers = self.unordered-containers_0_2_10_0;
   attoparsec = appendPatch super.attoparsec (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/attoparsec-0.13.2.2.patch";
     sha256 = "13i1p5g0xzxnv966nlyb77mfmxvg9jzbym1d36h1ajn045yf4igl";
