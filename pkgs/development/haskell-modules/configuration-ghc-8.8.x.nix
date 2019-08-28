@@ -41,8 +41,7 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Use the cabal-install 3.0.0.0 beta release.
-  cabal-install = self.cabal-install-3;
+  cabal-install = doJailbreak super.cabal-install;  # cabal-install-3.0.0.0 has a build depend on base <=4.13 (GHC-8.8.1 has base-4.13)
   Cabal_3_0_0_0 = null;    # Our compiler has this already.
 
   # Ignore overly restrictive upper version bounds.
@@ -85,18 +84,6 @@ self: super: {
       sed -i -e 's/time < 1.9/time < 2/' tar.cabal
     '';
   });
-  resolv = overrideCabal (overrideSrc super.resolv {
-    version = "20180411-git";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell-hvr";
-      repo = "resolv";
-      rev = "a22f9dd900cb276b3dd70f4781fb436d617e2186";
-      sha256 = "1j2jyywmxjhyk46kxff625yvg5y37knv7q6y0qkwiqdwdsppccdk";
-    };
-  }) (drv: {
-    buildTools = with pkgs; [autoconf];
-    preConfigure = "autoreconf --install";
-  });
   dlist = appendPatch (doJailbreak super.dlist) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/dlist-0.8.0.6.patch";
     sha256 = "0lkhibfxfk6mi796mrjgmbb50hbyjgc7xdinci64dahj8325jlpc";
@@ -109,13 +96,21 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/cabal-doctest-1.0.6.patch";
     sha256 = "0735mkxhv557pgnfvdjakkw9r85l5gy28grdwg929m26ghbf9s8j";
   });
-  QuickCheck = appendPatch super.QuickCheck (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/QuickCheck-2.13.1.patch";
-    sha256 = "138yrp3x5cnvncimrnhnkawz6clyk7fj3sr3y93l5szfr11kcvbl";
-  });
-  regex-base = appendPatch super.regex-base (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-base-0.93.2.patch";
-    sha256 = "01d1plrdx6hcspwn2h6y9pyi5366qk926vb5cl5qcl6x4m23l6y1";
+  regex-base = overrideCabal super.regex-base (oldAttrs: {
+    # regex-base requires a patch to work with base-4.13 (GHC-8.8.1).
+    # The substituteInPlace line is similar to what jailbreak-cabal would do,
+    # but the buildDepends in regex-base.cabal are in a conditional, which
+    # jailbreak-cabal doesn't currently handle.  So it needs to manually
+    # overwritten.
+    postPatch = (oldAttrs.postPatch or "") + ''
+      substituteInPlace regex-base.cabal --replace 'base >=4 && < 4.13' 'base >=4'
+    '';
+    patches = (oldAttrs.patches or []) ++ [
+      (pkgs.fetchpatch {
+        url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-base-0.93.2.patch";
+        sha256 = "01d1plrdx6hcspwn2h6y9pyi5366qk926vb5cl5qcl6x4m23l6y1";
+      })
+    ];
   });
   regex-posix = appendPatch super.regex-posix (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-posix-0.95.2.patch";
@@ -136,10 +131,6 @@ self: super: {
   optparse-applicative = appendPatch (doJailbreak super.optparse-applicative) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/optparse-applicative-0.14.3.0.patch";
     sha256 = "068sjj98jqiq3h8h03mg4w2pa11q8lxkx2i4lmxivq77xyhlwq3y";
-  });
-  HTTP = appendPatch (doJailbreak super.HTTP) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/HTTP-4000.3.13.patch";
-    sha256 = "1fadi529x7dnmbfmls5969qfn9d4z954nc4lbqxmrwgirphkpmn4";
   });
   hackage-security = appendPatch (doJailbreak super.hackage-security) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hackage-security-0.5.3.0.patch";
