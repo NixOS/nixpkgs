@@ -3464,6 +3464,8 @@ broken-packages:
   - boombox
   - boomslang
   - boots-app
+  - boots-cloud
+  - boots-web
   - borel
   - boring-window-switcher
   - bot
@@ -3525,6 +3527,7 @@ broken-packages:
   - bv-sized
   - bytable
   - byteslice
+  - bytesmith
   - bytestring-builder-varword
   - bytestring-class
   - bytestring-csv
@@ -7617,6 +7620,7 @@ broken-packages:
   - notcpp
   - notmuch-haskell
   - notmuch-web
+  - now-haskell
   - np-linear
   - nptools
   - ntha
