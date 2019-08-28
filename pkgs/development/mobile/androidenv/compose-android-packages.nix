@@ -18,6 +18,7 @@
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
 , includeExtras ? []
+, licenses ? {}  # {<file-name>: <license-hash>}
 }:
 
 let
@@ -193,6 +194,8 @@ rec {
     You must accept the Android Software Development Kit License Agreement at
     https://developer.android.com/studio/terms
     by setting nixpkgs config option 'android_sdk.accept_license = true;'
+
+    Except that, you may need to provide accepted licenses to your android SDK composition.
   '' else import ./tools.nix {
     inherit deployAndroidPackage requireFile packages toolsVersion autoPatchelfHook makeWrapper os pkgs pkgs_i686;
     inherit (stdenv) lib;
@@ -254,6 +257,10 @@ rec {
       do
           ln -s $i $out/bin
       done
+
+      # create license files in top sdk path
+      mkdir $out/licenses
+      ${builtins.concatStringsSep "\n" (builtins.attrValues (builtins.mapAttrs (k: v: "echo -e '\n${v}' > $out/licenses/${k}") licenses))}
     '';
   };
 }

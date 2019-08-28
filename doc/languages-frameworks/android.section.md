@@ -85,6 +85,23 @@ For each requested system image we can specify the following options:
 * `abiVersions` specifies what kind of ABI version of each system image should
   be included. Defaults to: `armeabi-v7a`.
 
+* `licenses` specifies accepted licenses in a form of `<filename> = <license-hash>`.
+  
+  As of 2019, popular set is:
+  ```
+  {
+      android-googletv-license = "601085b94cd77f0b54ff86406957099ebe79c4d6";
+      android-sdk-license = "24333f8a63b6825ea9c5514f83c2829b004d1fee";
+      android-sdk-preview-license = "84831b9409646a918e30573bab4c9c91346d8abd";
+      google-gdk-license = "33b6a2b64607f11b759f320ef9dff4ae5c47d97a";
+      mips-android-sysimage-license = "e9acab5b5fbb560a72cfaecce8946896ff6aab9d";
+  }
+  ```
+
+  To accept other licenses, you may need to install SDK yourself, run
+  `sdkmanager --update`, accept licenses (if you wish) and then recover hashes
+  from `ANDROID_HOME/libexec/android-sdk/licenses` folder.
+
 Most of the function arguments have reasonable default settings.
 
 When building the above expression with:
