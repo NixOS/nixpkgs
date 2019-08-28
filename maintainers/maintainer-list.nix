@@ -6661,6 +6661,16 @@
     githubId = 5837359;
     name = "Adrian Pistol";
   };
+  vika_nezrimaya = {
+    email = "vika@fireburn.ru";
+    github = "kisik21";
+    githubId = 7953163;
+    name = "Vika Shleina";
+    keys = [{
+      longkeyid = "rsa4096/0x5402B9B5497BACDB";
+      fingerprint = "A03C D09C 36CF D9F6 1ADF  AF11 5402 B9B5 497B ACDB";
+    }];
+  };
   vinymeuh = {
     email = "vinymeuh@gmail.com";
     github = "vinymeuh";
