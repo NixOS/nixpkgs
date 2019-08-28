@@ -12,11 +12,11 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "meson";
-  version = "0.50.1";
+  version = "0.51.2";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "05k3wsxjcnnq7a8n5kzxh2cdh5jdkh13xagigz5axs48j36zfai4";
+    sha256 = "0cqhkjbab1mbvxmbjvyfrbjfkm7bh436svqpjapca36c2k9h1vwr";
   };
 
   postFixup = ''
