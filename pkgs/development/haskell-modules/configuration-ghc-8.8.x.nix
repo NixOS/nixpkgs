@@ -93,10 +93,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/cabal-doctest-1.0.6.patch";
     sha256 = "0735mkxhv557pgnfvdjakkw9r85l5gy28grdwg929m26ghbf9s8j";
   });
-  QuickCheck = appendPatch super.QuickCheck (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/QuickCheck-2.13.1.patch";
-    sha256 = "138yrp3x5cnvncimrnhnkawz6clyk7fj3sr3y93l5szfr11kcvbl";
-  });
   regex-base = appendPatch super.regex-base (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-base-0.93.2.patch";
     sha256 = "01d1plrdx6hcspwn2h6y9pyi5366qk926vb5cl5qcl6x4m23l6y1";
