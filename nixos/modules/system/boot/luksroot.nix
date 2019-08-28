@@ -756,31 +756,25 @@ in
         copy_bin_and_libs ${pkgs.gnupg}/libexec/scdaemon
 
         ${concatMapStringsSep "\n" (x:
-          let
-            cryptkey = pkgs.runCommand "cryptkey.gpg"
-              { files = lib.singleton x.gpgCard.encryptedPass;
-                preferLocalBuild = true;
-              }
-              ''
-                cat $files > $out
+          optionalString (x.gpgCard != null) (
+            let
+              gpg-keys = pkgs.runCommand "gpg-keys-${x.name}"
+                { cryptkey = lib.singleton x.gpgCard.encryptedPass;
+                  pubkey = x.gpgCard.publicKey;
+                  preferLocalBuild = true;
+                }
+                ''
+                  mkdir -p $out
+                  cat $cryptkey > $out/cryptkey.gpg
+                  cat $pubkey > $out/pubkey.asc
               '';
-            pubkey = pkgs.runCommand "pubkey.asc" 
-              { files = x.gpgCard.publicKey;
-                preferLocalBuild = true;
-              }
+            in
               ''
-                cat $files > $out
-              '';
-          in
-          if x.gpgCard != null then
-            ''
-              mkdir -p $out/secrets/gpg-keys/${x.device}
-              cp -a ${cryptkey} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
-              cp -a ${pubkey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
-            ''
-          else ""
-          ) (attrValues luks.devices)
-        }
+                mkdir -p $out/secrets/gpg-keys/${x.device}
+                cp -a ${gpg-keys}/* $out/secrets/gpg-keys/${x.device}
+              ''
+          )
+        ) (attrValues luks.devices)}
       ''}
     '';
 
