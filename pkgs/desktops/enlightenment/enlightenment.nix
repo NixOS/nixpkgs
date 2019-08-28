@@ -4,6 +4,7 @@
   xkeyboard_config, pcre,
 
   bluetoothSupport ? true, bluez5,
+  pulseSupport ? !stdenv.isDarwin, libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
   ]
   ++ stdenv.lib.optional stdenv.isLinux libcap
   ++ stdenv.lib.optional bluetoothSupport bluez5
+  ++ stdenv.lib.optional pulseSupport libpulseaudio
   ;
 
   patches = [
