@@ -291,6 +291,26 @@
        configuration while being better type-checked and mergeable.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     No service depends on <literal>keys.target</literal> anymore which is a systemd
+     target that indicates if all <link xlink:href="https://nixos.org/nixops/manual/#idm140737322342384">NixOps keys</link> were successfully uploaded.
+     Instead, <literal>&lt;key-name&gt;-key.service</literal> should be used to define
+     a dependency of a key in a service. The full issue behind the <literal>keys.target</literal>
+     dependency is described at <link xlink:href="https://github.com/NixOS/nixpkgs/issues/67265">NixOS/nixpkgs#67265</link>.
+    </para>
+    <para>
+     The following services are affected by this:
+     <itemizedlist>
+      <listitem><para><link linkend="opt-services.dovecot2.enable"><literal>services.dovecot2</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.nsd.enable"><literal>services.nsd</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.softether.enable"><literal>services.softether</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.strongswan.enable"><literal>services.strongswan</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.strongswan-swanctl.enable"><literal>services.strongswan-swanctl</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.httpd.enable"><literal>services.httpd</literal></link></para></listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
