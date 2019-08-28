@@ -1,18 +1,67 @@
-{ stdenv, fetchurl, substituteAll, gtk-doc, pkgconfig, gobject-introspection, intltool
-, libgudev, polkit, libxmlb, gusb, sqlite, libarchive, glib-networking
-, libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, gnu-efi
-, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
-, ninja, gcab, gnutls, python3, wrapGAppsHook, json-glib, bash-completion
-, shared-mime-info, umockdev, vala, makeFontsConf, freefont_ttf
-, cairo, freetype, fontconfig, pango
-, bubblewrap, efibootmgr, flashrom, tpm2-tools
-}:
-
 # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
 
+{ stdenv
+, fetchurl
+, substituteAll
+, gtk-doc
+, pkgconfig
+, gobject-introspection
+, intltool
+, libgudev
+, polkit
+, libxmlb
+, gusb
+, sqlite
+, libarchive
+, glib-networking
+, libsoup
+, help2man
+, gpgme
+, libxslt
+, elfutils
+, libsmbios
+, efivar
+, gnu-efi
+, libyaml
+, valgrind
+, meson
+, libuuid
+, colord
+, docbook_xml_dtd_43
+, docbook_xsl
+, ninja
+, gcab
+, gnutls
+, python3
+, wrapGAppsHook
+, json-glib
+, bash-completion
+, shared-mime-info
+, umockdev
+, vala
+, makeFontsConf
+, freefont_ttf
+, cairo
+, freetype
+, fontconfig
+, pango
+, bubblewrap
+, efibootmgr
+, flashrom
+, tpm2-tools
+}:
+
 let
-  python = python3.withPackages (p: with p; [ pygobject3 pycairo pillow ]);
-  installedTestsPython = python3.withPackages (p: with p; [ pygobject3 requests ]);
+  python = python3.withPackages (p: with p; [
+    pygobject3
+    pycairo
+    pillow
+  ]);
+
+  installedTestsPython = python3.withPackages (p: with p; [
+    pygobject3
+    requests
+  ]);
 
   fontsConf = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
@@ -29,7 +78,9 @@ let
   # Currently broken on Aarch64
   haveFlashrom = isx86;
 
-in stdenv.mkDerivation rec {
+in
+
+stdenv.mkDerivation rec {
   pname = "fwupd";
   version = "1.2.8";
 
@@ -41,15 +92,51 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
-    meson ninja gtk-doc pkgconfig gobject-introspection intltool shared-mime-info
-    valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook vala
+    meson
+    ninja
+    gtk-doc
+    pkgconfig
+    gobject-introspection
+    intltool
+    shared-mime-info
+    valgrind
+    gcab
+    docbook_xml_dtd_43
+    docbook_xsl
+    help2man
+    libxslt
+    python
+    wrapGAppsHook
+    vala
   ];
 
   buildInputs = [
-    polkit libxmlb gusb sqlite libarchive libsoup elfutils gnu-efi libyaml
-    libgudev colord gpgme libuuid gnutls glib-networking json-glib umockdev
-    bash-completion cairo freetype fontconfig pango efivar
-  ] ++ stdenv.lib.optionals haveDell [ libsmbios ];
+    polkit
+    libxmlb
+    gusb
+    sqlite
+    libarchive
+    libsoup
+    elfutils
+    gnu-efi
+    libyaml
+    libgudev
+    colord
+    gpgme
+    libuuid
+    gnutls
+    glib-networking
+    json-glib
+    umockdev
+    bash-completion
+    cairo
+    freetype
+    fontconfig
+    pango
+    efivar
+  ] ++ stdenv.lib.optionals haveDell [
+    libsmbios
+  ];
 
   patches = [
     ./fix-paths.patch
@@ -85,9 +172,12 @@ in stdenv.mkDerivation rec {
   # doCheck = true;
 
   preFixup = let
-    binPath = [ efibootmgr bubblewrap tpm2-tools ] ++ stdenv.lib.optional haveFlashrom flashrom;
-  in
-  ''
+    binPath = [
+      efibootmgr
+      bubblewrap
+      tpm2-tools
+    ] ++ stdenv.lib.optional haveFlashrom flashrom;
+  in ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
       # See programs reached with fu_common_find_program_in_path in source
