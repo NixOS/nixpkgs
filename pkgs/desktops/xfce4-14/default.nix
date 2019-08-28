@@ -58,8 +58,6 @@ makeScope newScope (self: with self; {
 
   xfce4-dict = callPackage ./xfce4-dict { };
 
-  xfce4-mixer = callPackage ./xfce4-mixer { };
-
   xfce4-netload-plugin = callPackage ./xfce4-netload-plugin { };
 
   xfce4-notifyd = callPackage ./xfce4-notifyd { };
@@ -112,4 +110,10 @@ makeScope newScope (self: with self; {
   xfce4-namebar-plugin = callPackage ../xfce/panel-plugins/xfce4-namebar-plugin.nix { };
 
   xfce4-windowck-plugin = callPackage ../xfce/panel-plugins/xfce4-windowck-plugin.nix { };
+
+
+  ## ALIASES
+
+  # added 2019-08-18
+  xfce4-mixer = throw "deprecated 2019-08-18: obsoleted by xfce4-pulseaudio-plugin";
 })
