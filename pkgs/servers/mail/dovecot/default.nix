@@ -55,6 +55,18 @@ stdenv.mkDerivation rec {
       sha256 = "1di6adkd8f6gjkpf8aiqxzwvscsq188qqah6b7r23q9j3zlv47mv";
     })
 
+    (fetchpatch {
+      name = "CVE-2019-11500-1.patch";
+      url = https://github.com/dovecot/core/commit/85fcb895ca7f0bcb8ee72047fe0e1e78532ff90b.patch;
+      sha256 = "0cn0sk5giaf2z26zp53cj9h0xcbj347ad6zgp2k377fphn9yjcc5";
+    })
+
+    (fetchpatch {
+      name = "CVE-2019-11500-2.patch";
+      url = https://github.com/dovecot/core/commit/f904cbdfec25582bc5e2a7435bf82ff769f2526a.patch;
+      sha256 = "1dcp8axbpcib837n2x54xxylyglbh2zh9bf0y3vpvmapya162s1a";
+    })
+
   ];
 
   configureFlags = [
