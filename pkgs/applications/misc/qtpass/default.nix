@@ -1,21 +1,21 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch
-, git, gnupg, pass, qtbase, qtsvg, qttools, qmake, makeWrapper
+{ stdenv, lib, mkDerivation, fetchFromGitHub, fetchpatch
+, git, gnupg, pass, qtbase, qtsvg, qttools, qmake
 }:
 
 mkDerivation rec {
   pname = "qtpass";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner  = "IJHack";
     repo   = "QtPass";
     rev    = "v${version}";
-    sha256 = "1vfhfyccrxq9snyvayqfzm5rqik8ny2gysyv7nipc91kvhq3bhky";
+    sha256 = "0v3ca4fdjk6l24vc9wlc0i7r6fdj85kjmnb7jvicd3f8xi9mvhnv";
   };
 
   buildInputs = [ git gnupg pass qtbase qtsvg qttools ];
 
-  nativeBuildInputs = [ makeWrapper qmake ];
+  nativeBuildInputs = [ qmake ];
 
   # Fix missing app icon on Wayland. Has been upstreamed and should be safe to
   # remove in versions > 1.3.0
@@ -29,9 +29,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   qtWrapperArgs = [
-    "--suffix PATH : ${git}/bin"
-    "--suffix PATH : ${gnupg}/bin"
-    "--suffix PATH : ${pass}/bin"
+    "--suffix PATH : ${lib.makeBinPath [ git gnupg pass ]}"
   ];
 
   postInstall = ''
