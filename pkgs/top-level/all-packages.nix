@@ -14480,6 +14480,8 @@ in
 
   archiveopteryx = callPackage ../servers/mail/archiveopteryx { };
 
+  ariang = callPackage ../servers/web-apps/ariang { };
+
   atlassian-confluence = callPackage ../servers/atlassian/confluence.nix { };
   atlassian-crowd = callPackage ../servers/atlassian/crowd.nix { };
   atlassian-jira = callPackage ../servers/atlassian/jira.nix { };
