@@ -24888,4 +24888,7 @@ in
   uhubctl = callPackage ../tools/misc/uhubctl {};
 
   kodelife = callPackage ../applications/graphics/kodelife {};
+
+  pigeon = callPackage ../development/tools/pigeon {};
+
 }
