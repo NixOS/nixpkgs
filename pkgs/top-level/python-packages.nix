@@ -4156,6 +4156,8 @@ in {
 
   fipy = callPackage ../development/python-modules/fipy { };
 
+  sfepy = callPackage ../development/python-modules/sfepy { };
+
   pelican = callPackage ../development/python-modules/pelican {
     inherit (pkgs) glibcLocales git;
   };
