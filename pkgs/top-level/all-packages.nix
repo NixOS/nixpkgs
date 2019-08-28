@@ -24891,4 +24891,6 @@ in
 
   pigeon = callPackage ../development/tools/pigeon {};
 
+  verifpal = callPackage ../tools/security/verifpal {};
+
 }
