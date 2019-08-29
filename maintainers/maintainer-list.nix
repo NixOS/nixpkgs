@@ -478,7 +478,7 @@
     name = "Stanislas Lange";
   };
   ankhers = {
-    email = "justin.k.wood@gmail.com";
+    email = "me@ankhers.dev";
     github = "ankhers";
     githubId = 750786;
     name = "Justin Wood";
