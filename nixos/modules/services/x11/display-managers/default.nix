@@ -71,13 +71,6 @@ let
         fi
       ''}
 
-      # Tell systemd about our $DISPLAY and $XAUTHORITY.
-      # This is needed by the ssh-agent unit.
-      #
-      # Also tell systemd about the dbus session bus address.
-      # This is required by user units using the session bus.
-      ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
-
       # Load X defaults. This should probably be safe on wayland too.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
       if test -e ~/.Xresources; then
@@ -103,6 +96,13 @@ let
       if test -f ~/.xprofile; then
           source ~/.xprofile
       fi
+
+      # Tell systemd about Xserver environment variables listed in displayManager.importedVariables.
+      # Make sure that cfg.displayManager.sessionCommands is executed before this.
+      ${optionalString (cfg.displayManager.importedVariables != []) (
+        "${config.systemd.package}/bin/systemctl --user import-environment "
+          + toString (unique cfg.displayManager.importedVariables)
+      )}
 
       # Start systemd user services for graphical sessions
       ${config.systemd.package}/bin/systemctl --user start graphical-session.target
@@ -196,7 +196,6 @@ let
         fi
       '') cfg.displayManager.extraSessionFilePackages}
 
-      
       ${concatMapStrings (pkg: ''
         if test -d ${pkg}/share/wayland-sessions; then
           mkdir -p "$out/share/wayland-sessions"
@@ -310,6 +309,16 @@ in
         };
       };
 
+      importedVariables = mkOption {
+        type = types.listOf (types.strMatching "[a-zA-Z_][a-zA-Z0-9_]*");
+        example = [ "SLIM_THEMESDIR" ];
+        visible = false;
+        description = ''
+          Environment variables to import into the user systemd
+          session. This will be available for use by graphical services.
+        '';
+      };
+
       job = {
 
         preStart = mkOption {
@@ -360,6 +369,15 @@ in
 
   config = {
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
+    services.xserver.displayManager.importedVariables = [
+      # This is required by user units using the session bus.
+      "DBUS_SESSION_BUS_ADDRESS"
+      # This is needed by the ssh-agent unit.
+      "DISPLAY"
+      "XAUTHORITY"
+      # This is required to run loginctl lock-session within user units.
+      "XDG_SESSION_ID"
+    ];
 
     systemd.user.targets.graphical-session = {
       unitConfig = {
