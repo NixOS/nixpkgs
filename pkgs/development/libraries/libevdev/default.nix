@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libevdev";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0sg3lbjn68qaq3yz2k735h29kaf3fmx7b5m1x7rm2fnhn7rf3nqi";
+    sha256 = "04a2klvii0in9ln8r85mk2cm73jq8ry2m3yzmf2z8xyjxzjcmlr0";
   };
 
   buildInputs = [ python ];
