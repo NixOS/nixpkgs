@@ -156,6 +156,8 @@ in {
       };
     };
 
+    systemd.enableCgroupAccounting = true;
+
     security.wrappers."apps.plugin" = {
       source = "${pkgs.netdata}/libexec/netdata/plugins.d/apps.plugin.org";
       capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
