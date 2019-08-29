@@ -158,4 +158,13 @@ self: super: {
     sha256 = "01b2gnsq0x4fd9na8zpk6pajym55mbz64hgzawlwxdw0y6681kr5";
   });
   foundation = dontCheck super.foundation;
+  memory = overrideCabal (appendPatch super.memory (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/memory-0.14.18.patch";
+    sha256 = "16ar8921s3bi31y1az9zgyg0iaxxc2wvvwqjnl11a17p03wi6b29";
+  })) (drv: {
+    editedCabalFile = null;
+    preConfigure = ''
+      cp -v ${pkgs.fetchurl {url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/memory-0.14.18.cabal"; sha256 = "1325wny0irnq51rz0f4xgkvm01p6n4z5jid2jgpkhjac8a2sdgwl";}} memory.cabal
+    '';
+  });
 }
