@@ -2975,8 +2975,6 @@ in
 
   exiftool = perlPackages.ImageExifTool;
 
-  exodus = callPackage ../applications/blockchains/exodus { };
-
   ext4magic = callPackage ../tools/filesystems/ext4magic { };
 
   extract_url = callPackage ../applications/misc/extract_url { };
@@ -4480,8 +4478,6 @@ in
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
-  ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
-
   ledmon = callPackage ../tools/system/ledmon { };
 
   leela = callPackage ../tools/graphics/leela { };
@@ -4905,8 +4901,6 @@ in
   nahid-fonts = callPackage ../data/fonts/nahid-fonts { };
 
   namazu = callPackage ../tools/text/namazu { };
-
-  nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
   nasty = callPackage ../tools/security/nasty { };
 
@@ -6807,8 +6801,6 @@ in
   wego = callPackage ../applications/misc/wego { };
 
   wal_e = callPackage ../tools/backup/wal-e { };
-
-  wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
 
   watchexec = callPackage ../tools/misc/watchexec {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -19088,8 +19080,6 @@ in
 
   josm = callPackage ../applications/misc/josm { };
 
-  jormungandr = callPackage ../applications/blockchains/jormungandr { };
-
   jbrout = callPackage ../applications/graphics/jbrout { };
 
   jwm = callPackage ../applications/window-managers/jwm { };
@@ -19535,14 +19525,6 @@ in
   moc = callPackage ../applications/audio/moc { };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
-
-  monero = callPackage ../applications/blockchains/monero {
-    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
-  };
-
-  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
-    boost = boost16x;
-  };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
     stdenvGcc6 = gcc6Stdenv;
@@ -21833,6 +21815,7 @@ in
   dogecoin  = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = true; };
   dogecoind = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = false; };
 
+  exodus = callPackage ../applications/blockchains/exodus { };
 
   freicoin = callPackage ../applications/blockchains/freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ../applications/blockchains/go-ethereum.nix {
@@ -21843,6 +21826,10 @@ in
     buildGoPackage = buildGo110Package;
   };
 
+  jormungandr = callPackage ../applications/blockchains/jormungandr { };
+
+  ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
+
   litecoin  = callPackage ../applications/blockchains/litecoin.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
@@ -21850,9 +21837,19 @@ in
 
   lnd = callPackage ../applications/blockchains/lnd.nix { };
 
+  monero = callPackage ../applications/blockchains/monero {
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
+  };
+
+  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
+    boost = boost16x;
+  };
+
   masari = callPackage ../applications/blockchains/masari.nix { boost = boost165; };
 
   mist = callPackage ../applications/blockchains/mist.nix { };
+
+  nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
   namecoin  = callPackage ../applications/blockchains/namecoin.nix  { withGui = true; };
   namecoind = callPackage ../applications/blockchains/namecoin.nix { withGui = false; };
@@ -21865,6 +21862,8 @@ in
   stellar-core = callPackage ../applications/blockchains/stellar-core.nix { };
 
   sumokoin = callPackage ../applications/blockchains/sumokoin.nix { boost = boost165; };
+
+  wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
 
   wownero = callPackage ../applications/blockchains/wownero.nix {};
 
