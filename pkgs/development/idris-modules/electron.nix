@@ -18,11 +18,6 @@ build-idris-package  {
     sha256 = "1rpa7yjvfpzl06h0qbk54jd2n52nmgpf7nq5aamcinqh7h5gbiwn";
   };
 
-  postUnpack = ''
-    rm source/example_main.ipkg
-    rm source/example_view.ipkg
-  '';
-
   meta = {
     description = "Electron bindings for Idris";
     homepage = https://github.com/jheiling/idris-electron;

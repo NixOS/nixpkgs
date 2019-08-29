@@ -4,7 +4,8 @@
   akonadi-import-wizard, akonadi-notes, calendarsupport, eventviews,
   incidenceeditor, kcalcore, kcalutils, kconfig, kdbusaddons, kdeclarative,
   kdepim-apps-libs, kholidays, ki18n, kmime, ktexteditor, ktnef, libgravatar,
-  libksieve, mailcommon, mailimporter, messagelib, poppler, prison
+  libksieve, mailcommon, mailimporter, messagelib, poppler, prison, kpkpass,
+  kitinerary
 }:
 
 mkDerivation {
@@ -18,6 +19,7 @@ mkDerivation {
     akonadi-import-wizard akonadi-notes calendarsupport eventviews
     incidenceeditor kcalcore kcalutils kconfig kdbusaddons kdeclarative
     kdepim-apps-libs kholidays ki18n kmime ktexteditor ktnef libgravatar
-    libksieve mailcommon mailimporter messagelib poppler prison
+    libksieve mailcommon mailimporter messagelib poppler prison kpkpass
+    kitinerary
   ];
 }

@@ -1,20 +1,20 @@
 { stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "geos-3.6.3";
+  name = "geos-3.7.2";
 
   src = fetchurl {
     url = "https://download.osgeo.org/geos/${name}.tar.bz2";
-    sha256 = "0jrypv61rbyp7vi9qpnnaiigjj8cgdqvyk8ymik8h1ppcw5am7mb";
+    sha256 = "01vpkncvq1i1191agq03yg1h7d0igj10gv5z2mqk24nnwrdycri1";
   };
 
   enableParallelBuilding = true;
 
   buildInputs = [ python ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
     homepage = http://geos.refractions.net/;
-    license = "GPL";
+    license = licenses.lgpl21;
   };
 }

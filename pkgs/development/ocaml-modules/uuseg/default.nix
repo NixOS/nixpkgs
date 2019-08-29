@@ -2,7 +2,7 @@
 
 let
   pname = "uuseg";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 stdenv.mkDerivation rec {
@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ocamlbuild cmdliner topkg uutf ];
   propagatedBuildInputs = [ uucp uchar ];
-
-  unpackCmd = "tar xjf $src";
 
   inherit (topkg) buildPhase installPhase;
 

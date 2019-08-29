@@ -6,18 +6,18 @@
 
 buildPythonPackage rec {
   pname = "requests_download";
-  version = "0.1.1";
+  version = "0.1.2";
 
   format = "wheel";
 
   #src = pkgs.fetchurl {
-  #  url = https://files.pythonhosted.org/packages/60/af/10f899f0574a81cbc511124c08d7c7dc46c20d4f956a6a3c793ad4330bb4/requests_download-0.1.1-py2.py3-none-any.whl;
-  #  sha256 = "07832a93314bcd619aaeb08611ae245728e66672efb930bc2a300a115a47dab7";
+  #  url = https://files.pythonhosted.org/packages/60/af/10f899f0574a81cbc511124c08d7c7dc46c20d4f956a6a3c793ad4330bb4/requests_download-0.1.2-py2.py3-none-any.whl;
+  #  sha256 = "1ballx1hljpdpyvqzqn79m0dc21z2smrnxk2ylb6dbpg5crrskcr";
   #};
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "07832a93314bcd619aaeb08611ae245728e66672efb930bc2a300a115a47dab7";
+    sha256 = "1ballx1hljpdpyvqzqn79m0dc21z2smrnxk2ylb6dbpg5crrskcr";
   };
 
   propagatedBuildInputs = [ requests ];

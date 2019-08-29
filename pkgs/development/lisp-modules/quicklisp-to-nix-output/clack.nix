@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clack'';
-  version = ''20180328-git'';
+  version = ''20190710-git'';
 
   description = ''Web application environment for Common Lisp'';
 
   deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."lack" args."lack-component" args."lack-middleware-backtrace" args."lack-util" args."nibbles" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2018-03-28/clack-20180328-git.tgz'';
-    sha256 = ''1appp17m7b5laxwgnidf9kral1476nl394mm10xzi1c0i18rssai'';
+    url = ''http://beta.quicklisp.org/archive/clack/2019-07-10/clack-20190710-git.tgz'';
+    sha256 = ''1642myknfaajcyqllnhn9s17yb6dbj1yh9wmg1kbplwq9c3yjs7k'';
   };
 
   packageName = "clack";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM clack DESCRIPTION Web application environment for Common Lisp SHA256
-    1appp17m7b5laxwgnidf9kral1476nl394mm10xzi1c0i18rssai URL
-    http://beta.quicklisp.org/archive/clack/2018-03-28/clack-20180328-git.tgz
-    MD5 5cf75a5d908efcd779438dc13f917d57 NAME clack FILENAME clack DEPS
+    1642myknfaajcyqllnhn9s17yb6dbj1yh9wmg1kbplwq9c3yjs7k URL
+    http://beta.quicklisp.org/archive/clack/2019-07-10/clack-20190710-git.tgz
+    MD5 9d8869ca599652d68dd759c8a6adcd3d NAME clack FILENAME clack DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME ironclad FILENAME ironclad) (NAME lack FILENAME lack)
@@ -31,7 +31,7 @@ rec {
     DEPENDENCIES
     (alexandria bordeaux-threads ironclad lack lack-component
      lack-middleware-backtrace lack-util nibbles uiop)
-    VERSION 20180328-git SIBLINGS
+    VERSION 20190710-git SIBLINGS
     (clack-handler-fcgi clack-handler-hunchentoot clack-handler-toot
      clack-handler-wookie clack-socket clack-test clack-v1-compat
      t-clack-handler-fcgi t-clack-handler-hunchentoot t-clack-handler-toot

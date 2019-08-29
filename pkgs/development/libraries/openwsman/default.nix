@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "openwsman-${version}";
-  version = "2.6.5";
+  version = "2.6.9";
 
   src = fetchFromGitHub {
     owner  = "Openwsman";
     repo   = "openwsman";
     rev    = "v${version}";
-    sha256 = "1r0zslgpcr4m20car4s3hsccy10xcb39qhpw3dhpjv42xsvvs5xv";
+    sha256 = "19s5h551ppxmi2kljf8z58jjc6yrpczbxdrl4hh2l4jxv7iphk5i";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_BUILD_RUBY_GEM=no"
+    "-DBUILD_PYTHON=no"
+    "-DBUILD_PYTHON3=yes"
   ];
 
   preConfigure = ''

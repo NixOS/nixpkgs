@@ -1,10 +1,10 @@
 { stdenv, autoreconfHook, pkgconfig, SDL2, SDL2_mixer, SDL2_net, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "crispy-doom-5.2";
+  name = "crispy-doom-5.6";
   src = fetchurl {
     url = "https://github.com/fabiangreffrath/crispy-doom/archive/${name}.tar.gz";
-    sha256 = "0arj2pn66ygzdlws80irdhald9sj0wr7cbckfs69z34ij21zzfgz";
+    sha256 = "1icz3ivd7v3mvwlslwwd7s3bpjzr54x4lslihyjg1ckq23sl830j";
   };
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ SDL2 SDL2_mixer SDL2_net ];

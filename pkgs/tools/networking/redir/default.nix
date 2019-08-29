@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "redir-${version}";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "redir";
     rev = "v${version}";
-    sha256 = "015vxpy6n7xflkq0lgls4f4vw7ynvv2635bwykzglin3v5ssrm2k";
+    sha256 = "13n401i3q0xwpfgr21y47kgihi057wbh59xlsna8b8zpm973qny1";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "A TCP port redirector for UNIX";
     homepage = https://github.com/troglobit/redir;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ globin ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

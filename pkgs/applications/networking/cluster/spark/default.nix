@@ -7,7 +7,7 @@
 let
   sha256 = {
     "1.6.3" = "142hw73wf20d846l83ydx0yg7qj5qxywm4h7qrhwnd7lsy2sbnjf";
-    "2.2.1" = "10nxsf9a6hj1263sxv0cbdqxdb8mb4cl6iqq32ljq9ydvk32s99c";
+    "2.4.3" = "1dvvr1q3dz961bl7qigxngrp4ssrbll3g1s6nkra6gyr83pis96c"; 
   }.${version};
 in
 

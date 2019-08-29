@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gradle-completion-${version}";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "gradle";
     repo = "gradle-completion";
     rev = "v${version}";
-    sha256 = "02vv360r78ckwc6r4xbhmy5dxz6l9ya4lq9c62zh12ciq94y9kgx";
+    sha256 = "15b0692i3h8h7b95465b2aw9qf5qjmjag5n62347l8yl7zbhv3l2";
   };
 
   # we just move two files into $out,

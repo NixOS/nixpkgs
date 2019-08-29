@@ -4,15 +4,15 @@
 let
   version = lib.concatStringsSep "." ([ majorVersion ]
     ++ lib.optional (patchVersion != "") patchVersion);
-  majorVersion = "2.32";
-  patchVersion = "1";
+  majorVersion = "2.33";
+  patchVersion = "2";
 
 in stdenv.mkDerivation rec {
   name = "util-linux-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
-    sha256 = "1ck7d8srw5szpjq7v0gpmjahnjs6wgqzm311ki4gazww6xx71rl6";
+    sha256 = "15yf2dh4jd1kg6066hydlgdhhs2j3na13qld8yx30qngqvmfh6v3";
   };
 
   patches = [
@@ -22,6 +22,8 @@ in stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   postPatch = ''
+    patchShebangs tests/run.sh
+
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "${shadow}/bin/login"
     substituteInPlace sys-utils/eject.c \
@@ -37,26 +39,30 @@ in stdenv.mkDerivation rec {
     "--enable-last"
     "--enable-mesg"
     "--disable-use-tty-group"
-    "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
+    "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
+    "--disable-su" # provided by shadow
     (lib.withFeature (ncurses != null) "ncursesw")
     (lib.withFeature (systemd != null) "systemd")
     (lib.withFeatureAs (systemd != null)
-       "systemdsystemunitdir" "$(bin)/lib/systemd/system/")
+       "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
   ;
 
-  makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
+  makeFlags = [
+    "usrbin_execdir=${placeholder "bin"}/bin"
+    "usrsbin_execdir=${placeholder "bin"}/sbin"
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs =
     [ zlib pam ]
     ++ lib.filter (p: p != null) [ ncurses systemd perl ];
 
-  postInstall = ''
-    rm "$bin/bin/su" # su should be supplied by the su package (shadow)
-  '' + lib.optionalString minimal ''
+  doCheck = false; # "For development purpose only. Don't execute on production system!"
+
+  postInstall = lib.optionalString minimal ''
     rm -rf $out/share/{locale,doc,bash-completion}
   '';
 

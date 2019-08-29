@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, efivar, popt }:
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, efivar, popt }:
 
 stdenv.mkDerivation rec {
   name = "efibootmgr-${version}";
@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1niicijxg59rsmiw3rsjwy4bvi1n42dynvm01lnp9haixdzdpq03";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "remove-extra-decl.patch";
+      url = "https://github.com/rhboot/efibootmgr/commit/99b578501643377e0b1994b2a068b790d189d5ad.patch";
+      sha256 = "1sbijvlpv4khkix3vix9mbhzffj8lp8zpnbxm9gnzjz8yssz9p5h";
+    })
+  ];
 
   makeFlags = [ "EFIDIR=nixos" ];
 

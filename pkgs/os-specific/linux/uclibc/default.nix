@@ -1,6 +1,5 @@
 { stdenv, buildPackages
 , fetchurl, linuxHeaders, libiconvReal
-, buildPlatform, hostPlatform
 , extraConfig ? ""
 }:
 
@@ -40,7 +39,7 @@ let
     UCLIBC_SUSV4_LEGACY y
     UCLIBC_HAS_THREADS_NATIVE y
     KERNEL_HEADERS "${linuxHeaders}/include"
-  '' + stdenv.lib.optionalString (stdenv.isAarch32 && buildPlatform != hostPlatform) ''
+  '' + stdenv.lib.optionalString (stdenv.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
     CONFIG_ARM_EABI y
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n
@@ -49,7 +48,7 @@ let
     UCLIBC_HAS_FPU n
   '';
 
-  version = "1.0.30";
+  version = "1.0.31";
 in
 
 stdenv.mkDerivation {
@@ -59,7 +58,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.bz2";
     # from "${url}.sha256";
-    sha256 = "3e0f057f24882823d697126015aa4d7d48fa2542be3939985cb3c26dcbcab5a8";
+    sha256 = "0ba9yh7ir1jamrgc9x9v7zw0sw144f78q4vidiz6ynpr4dwbd5qm";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -69,7 +68,7 @@ stdenv.mkDerivation {
     cat << EOF | parseconfig
     ${nixConfig}
     ${extraConfig}
-    ${hostPlatform.platform.uclibc.extraConfig or ""}
+    ${stdenv.hostPlatform.platform.uclibc.extraConfig or ""}
     EOF
     ( set +o pipefail; yes "" | make oldconfig )
   '';
@@ -82,7 +81,7 @@ stdenv.mkDerivation {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   makeFlags = [
-    "ARCH=${hostPlatform.parsed.cpu.name}"
+    "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
     "VERBOSE=1"
   ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS=${stdenv.cc.targetPrefix}"

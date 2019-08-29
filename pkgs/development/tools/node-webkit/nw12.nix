@@ -1,15 +1,15 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
 , xorg, alsaLib, dbus, glib, gtk2, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
+, gdk-pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify}:
 let
-  bits = if stdenv.system == "x86_64-linux" then "x64"
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
          else "ia32";
 
   nwEnv = buildEnv {
     name = "nwjs-env";
     paths = [
-      xorg.libX11 xorg.libXrender glib gtk2 atk pango cairo gdk_pixbuf
+      xorg.libX11 xorg.libXrender glib gtk2 atk pango cairo gdk-pixbuf
       freetype fontconfig xorg.libXcomposite alsaLib xorg.libXdamage
       xorg.libXext xorg.libXfixes nss nspr gconf expat dbus
       xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr libcap

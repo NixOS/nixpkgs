@@ -6,20 +6,21 @@
 , libtool
 , makeWrapper
 , texinfo
+, CoreServices
 }:
 
 stdenv.mkDerivation rec {
   name = "fswatch-${version}";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = version;
-    sha256 = "16f3g6s79gs1sp2ra3cka4c5mf5b557cx697bwcdfgj6r19ni5j7";
+    sha256 = "1d1fvm36qgh6a5j9v24wai61d297pvzxr14jngjlhh4i474ff21i";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
   buildInputs = [ gettext libtool makeWrapper texinfo ];
 
   meta = with stdenv.lib; {

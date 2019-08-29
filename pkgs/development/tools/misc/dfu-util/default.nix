@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       phones. With dfu-util you are able to download firmware to your device or
       upload firmware from it.
     '';
-    homepage = http://dfu-util.gnumonks.org/;
+    homepage = http://dfu-util.sourceforge.net;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.fpletz ];

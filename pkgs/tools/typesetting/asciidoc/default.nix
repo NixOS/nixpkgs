@@ -5,7 +5,7 @@
 , highlight ? null
 , pygments ? null
 , graphviz ? null
-, tetex ? null
+, texlive ? null
 , dblatexFull ? null
 , libxslt ? null
 , w3m ? null
@@ -47,7 +47,7 @@ assert enableStandardFeatures ->
   highlight != null &&
   pygments != null &&
   graphviz != null &&
-  tetex != null &&
+  texlive != null &&
   dblatexFull != null &&
   libxslt != null &&
   w3m != null &&
@@ -220,8 +220,8 @@ stdenv.mkDerivation rec {
         -e "s|fdp|${graphviz}/bin/fdp|g" \
         -i "filters/graphviz/graphviz2png.py"
 
-    sed -e "s|run('latex|run('${tetex}/bin/latex|g" \
-        -e "s|cmd = 'dvipng'|cmd = '${tetex}/bin/dvipng'|g" \
+    sed -e "s|run('latex|run('${texlive}/bin/latex|g" \
+        -e "s|cmd = 'dvipng'|cmd = '${texlive}/bin/dvipng'|g" \
         -i "filters/latex/latex2png.py"
 
     sed -e "s|run('abc2ly|run('${lilypond}/bin/abc2ly|g" \
@@ -238,7 +238,8 @@ stdenv.mkDerivation rec {
     # use it to work around an impurity in the tetex package; tetex tools
     # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
     # We can remove PATH= when those impurities are fixed.
-    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ tetex coreutils gnused ]}')|" \
+    # TODO: Is this still necessary when using texlive?
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ texlive coreutils gnused ]}')|" \
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \

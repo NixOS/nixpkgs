@@ -1,23 +1,22 @@
-{ stdenv, fetchFromGitHub, bash }:
+{ stdenv, fetchFromGitHub, libcap, acl }:
 
 stdenv.mkDerivation rec {
   name = "bfs-${version}";
-  version = "1.2.3";
+  version = "1.5";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "01vcqanj2sifa5i51wvrkxh55d6hrq6iq7zmnhv4ls221dqmbyyn";
+    sha256 = "0lyrxbmfr4ckz4hx5dgz8xbq479l5rlyrqf205v6c82cap4zyv4x";
   };
 
-  postPatch = ''
-    # Patch tests (both shebangs and usage in scripts)
-    for f in $(find -type f -name '*.sh'); do
-      substituteInPlace $f --replace "/bin/bash" "${bash}/bin/bash"
-    done
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libcap acl ];
+
+  # Disable LTO on darwin. See https://github.com/NixOS/nixpkgs/issues/19098
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "-flto -DNDEBUG" "-DNDEBUG"
   '';
-  doCheck = true;
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "release" ]; # "release" enables compiler optimizations
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/tavianator/bfs;
     license = licenses.bsd0;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ yesbox ];
   };
 }

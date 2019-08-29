@@ -2,14 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "medfile-${version}";
-  version = "3.3.1";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "http://files.salome-platform.org/Salome/other/med-${version}.tar.gz";
-    sha256 = "1215sal10xp6xirgggdszay2bmx0sxhn9pgh7x0wg2w32gw1wqyx";
+    sha256 = "017h9p0x533fm4gn6pwc8kmp72rvqmcn6vznx72nkkl2b05yjx54";
   };
 
-  buildInputs = [ cmake hdf5 ];
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ hdf5 ];
 
   checkPhase = "make test";
 

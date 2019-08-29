@@ -5,10 +5,10 @@ fzf, coreutils, libxml2, libxslt, jing, findutils, gnugrep, gnused,
 docbook5
 }:
 stdenv.mkDerivation rec {
-  name = "xmloscopy-${version}";
-  version = "0.1.2";
+  pname = "xmloscopy";
+  version = "0.1.3";
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
     dev_only_shellcheck
   ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "grahamc";
     repo = "xmloscopy";
     rev = "v${version}";
-    sha256 = "07fcnf1vv0x72lksl1v0frmlh73gca199ldqqbgdjpybjdffz456";
+    sha256 = "06y5bckrmnq7b5ny2hfvlmdws910jw3xbw5nzy3bcpqsccqnjxrc";
   };
 
   installPhase = ''
@@ -43,10 +43,11 @@ stdenv.mkDerivation rec {
       --set PATH "${spath}"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "wtf is my docbook broken?";
     homepage = https://github.com/grahamc/xmloscopy;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ grahamc ];
   };
 }

@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
-, gtk, gsettings-desktop-schemas, vte, intltool, which, libuuid, vala
-, desktop-file-utils, itstool, wrapGAppsHook }:
+, gtk3, gsettings-desktop-schemas, vte, intltool, which, libuuid, vala
+, desktop-file-utils, itstool, wrapGAppsHook, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "gnome-terminal-${version}";
-  version = "3.28.2";
+  version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-terminal/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0ybjansg6lr279191w8z8r45gy4rxwzw1ajm98cgkv0fk2jdr0x2";
+    url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0shhpnagasyp1kxgjczfrivcxbgrrl3y8lzvp1z101m67h4jp6km";
   };
 
   buildInputs = [
-    gtk gsettings-desktop-schemas vte libuuid dconf
+    gtk3 gsettings-desktop-schemas vte libuuid dconf
     # For extension
     nautilus
   ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig intltool itstool which libxml2
     vala desktop-file-utils wrapGAppsHook
+    hicolor-icon-theme # for setup-hook
   ];
 
   # Silly ./configure, it looks for dbus file from gnome-shell in the

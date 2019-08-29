@@ -7,6 +7,7 @@ build-idris-package  {
   name = "yampa";
   version = "2016-07-05";
 
+  ipkgName = "idris-yampa";
   idrisDeps = [ bifunctors ];
 
   src = fetchFromGitHub {

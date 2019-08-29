@@ -1,26 +1,30 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
-, sphinx
-, CommonMark_54
+, CommonMark
 , docutils
+, sphinx
 }:
 
 buildPythonPackage rec {
   pname = "recommonmark";
-  version = "0.4.0";
+  version = "0.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6e29c723abcf5533842376d87c4589e62923ecb6002a8e059eb608345ddaff9d";
+  # PyPI tarball is missing some test files: https://github.com/rtfd/recommonmark/pull/128
+  src = fetchFromGitHub {
+    owner = "rtfd";
+    repo = pname;
+    rev = version;
+    sha256 = "04bjqx2hczmg7rnj2rpsjk7h24diwk83s6fhgrxk00k40w2bpz5j";
   };
 
-  checkInputs = [ pytest sphinx ];
-  propagatedBuildInputs = [ CommonMark_54 docutils ];
+  checkInputs = [ pytest ];
+  propagatedBuildInputs = [ CommonMark docutils sphinx ];
 
-  # No tests in archive
-  doCheck = false;
+  checkPhase = ''
+    py.test
+  '';
 
   meta = {
     description = "A docutils-compatibility bridge to CommonMark";

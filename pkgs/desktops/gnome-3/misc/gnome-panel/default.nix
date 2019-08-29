@@ -1,16 +1,16 @@
 { stdenv
 , fetchurl
 , autoreconfHook
-, fetchpatch
 , dconf
 , evolution-data-server
 , gdm
 , gettext
 , glib
 , gnome-desktop
+, gnome-flashback
 , gnome-menus
 , gnome3
-, gtk
+, gtk3
 , itstool
 , libgweather
 , libsoup
@@ -23,7 +23,7 @@
 
 let
   pname = "gnome-panel";
-  version = "3.28.0";
+  version = "3.32.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -31,17 +31,25 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1004cp9cxqpic9lsraqn5c1739acn4sn4ql3c1fja99hv22h1ziv";
+    sha256 = "0a9zi1jb0b42zd6wx3251cnns9v1w0cbwasmrx9hsj1dsb9pjq3a";
   };
 
-  patches = [
-    # https://github.com/NixOS/nixpkgs/issues/36468
-    # https://gitlab.gnome.org/GNOME/gnome-panel/issues/6
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gnome-panel/commit/be26e170a10c297949a6d9f3cbc70b6caaf04b56.patch;
-      sha256 = "10gxl9fwbv5j0s1lz7gkz6wqpda5wfzs49r5khbk1h05lv0hk4l4";
-    })
-  ];
+  # make .desktop Exec absolute
+  postPatch = ''
+    patch -p0 <<END_PATCH
+    +++ gnome-panel/gnome-panel.desktop.in
+    @@ -7 +7 @@
+    -Exec=gnome-panel
+    +Exec=$out/bin/gnome-panel
+    END_PATCH
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome-menus}/share:${gnome-flashback}/share"
+      --prefix XDG_CONFIG_DIRS : "${gnome-menus}/etc/xdg:${gnome-flashback}/etc/xdg"
+    )
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -59,7 +67,7 @@ in stdenv.mkDerivation rec {
     glib
     gnome-desktop
     gnome-menus
-    gtk
+    gtk3
     libgweather
     libsoup
     libwnck3

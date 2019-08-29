@@ -22,5 +22,7 @@ stdenv.mkDerivation rec {
     description = "Samba mounted via FUSE";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    broken = true; # Needs vulnerable Samba, missing source link
+                   # 2018-08-21
   };
 }

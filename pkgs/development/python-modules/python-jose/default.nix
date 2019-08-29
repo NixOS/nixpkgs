@@ -1,29 +1,31 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
-, six, ecdsa, rsa, future, pytest, cryptography, pycryptodome
+, future, six, ecdsa, rsa
+, pycrypto, pytest, pytestcov, pytestrunner, cryptography
 }:
 
 buildPythonPackage rec {
   pname = "python-jose";
-  version = "3.0.0";
+  version = "3.0.1";
 
-  # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "mpdavis";
     repo = "python-jose";
     rev = version;
-    sha256 = "1dq8v87abqxv07wi403ywjk9jg1da125fviycqzki48cjxx0dhwj";
+    sha256 = "1ahq4m86z504bnlk9z473r7r3dprg5m39900rld797hbczdhqa4f";
   };
 
   checkInputs = [
+    pycrypto
     pytest
-    # optional dependencies, but needed in tests
-    cryptography pycryptodome
+    pytestcov
+    pytestrunner
+    cryptography # optional dependency, but needed in tests
   ];
   checkPhase = ''
     py.test
   '';
 
-  propagatedBuildInputs = [ six ecdsa rsa future ];
+  propagatedBuildInputs = [ future six ecdsa rsa ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mpdavis/python-jose;

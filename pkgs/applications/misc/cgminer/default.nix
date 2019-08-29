@@ -1,5 +1,5 @@
 { fetchgit, stdenv, pkgconfig, libtool, autoconf, automake
-, curl, ncurses, amdappsdk, amdadlsdk, xorg, jansson }:
+, curl, ncurses, ocl-icd, opencl-headers, xorg, jansson }:
 
 stdenv.mkDerivation rec {
   version = "3.7.2";
@@ -13,16 +13,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool curl ncurses amdappsdk amdadlsdk
+    autoconf automake libtool curl ncurses ocl-icd opencl-headers
     xorg.libX11 xorg.libXext xorg.libXinerama jansson
   ];
   configureScript = "./autogen.sh";
   configureFlags = [ "--enable-scrypt" "--enable-opencl" ];
   NIX_LDFLAGS = "-lgcc_s -lX11 -lXext -lXinerama";
-
-  preConfigure = ''
-    ln -s ${amdadlsdk}/include/* ADL_SDK/
-  '';
 
   postBuild = ''
     gcc api-example.c -o cgminer-api

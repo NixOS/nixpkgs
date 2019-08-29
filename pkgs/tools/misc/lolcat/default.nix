@@ -1,19 +1,16 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerEnv rec {
-  name = "${pname}-${version}";
+bundlerApp {
   pname = "lolcat";
-  version = (import ./gemset.nix).lolcat.version;
-
-  inherit ruby;
-
-  # expects Gemfile, Gemfile.lock and gemset.nix in the same directory
   gemdir = ./.;
+  exes = [ "lolcat" ];
+
+  passthru.updateScript = bundlerUpdateScript "lolcat";
 
   meta = with lib; {
     description = "A rainbow version of cat";
     homepage    = https://github.com/busyloop/lolcat;
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ StillerHarpo ];
+    maintainers = with maintainers; [ StillerHarpo manveru nicknovitski ];
   };
 }

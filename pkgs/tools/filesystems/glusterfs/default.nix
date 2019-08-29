@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fuse, bison, flex_2_5_35, openssl, python2, ncurses, readline,
+{stdenv, fetchurl, fuse, bison, flex_2_5_35, openssl, python3, ncurses, readline,
  autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2, acl, sqlite,
  liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, utillinux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
@@ -15,25 +15,26 @@ let
     #       The command
     #         find /nix/store/...-glusterfs-.../ -name '*.py' -executable
     #       can help with finding new Python scripts.
-    version = "3.12.12";
+    version = "6.5";
     name="${baseName}-${version}";
     url="https://github.com/gluster/glusterfs/archive/v${version}.tar.gz";
-    sha256 = "1q6rcf9y98w3kvgwdlbhl65phkdl0mfil6y7i3gnpf3d21gfb6nw";
+    sha256 = "17vdrw71ys1n5g9pdmzipmr706bslq0gbxxjhacxnrgsz8r4rl6a";
   };
+
   buildInputs = [
     fuse bison flex_2_5_35 openssl ncurses readline
     autoconf automake libtool pkgconfig zlib libaio libxml2
-    acl sqlite liburcu attr makeWrapper
-    (python2.withPackages (pkgs: [
+    acl sqlite liburcu attr makeWrapper utillinux
+    (python3.withPackages (pkgs: [
       pkgs.flask
       pkgs.prettytable
       pkgs.requests
       pkgs.pyxattr
     ]))
-    # NOTE: `python2` has to be *AFTER* the above `python2.withPackages`,
+    # NOTE: `python3` has to be *AFTER* the above `python3.withPackages`,
     #       to ensure that the packages are available but the `toPythonPath`
     #       shell function used in `postFixup` is also still available.
-    python2
+    python3
   ];
   # Some of the headers reference acl
   propagatedBuildInputs = [
@@ -65,17 +66,14 @@ rec {
   inherit (s) name version;
   inherit buildInputs propagatedBuildInputs;
 
+  patches = [
+    # Remove when https://bugzilla.redhat.com/show_bug.cgi?id=1489610 is fixed
+    ./glusterfs-fix-bug-1489610-glusterfind-var-data-under-prefix.patch
+  ];
+
   postPatch = ''
     sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
   '';
-
-  patches = [
-    ./glusterfs-use-PATH-instead-of-hardcodes.patch
-    ./glusterfs-python-remove-find_library.patch
-    # Remove when https://bugzilla.redhat.com/show_bug.cgi?id=1489610 is fixed
-    ./glusterfs-fix-bug-1489610-glusterfind-var-data-under-prefix.patch
-    ./glusterfs-glusterfind-log-remote-node_cmd-error.patch
-  ];
 
    # Note that the VERSION file is something that is present in release tarballs
    # but not in git tags (at least not as of writing in v3.10.1).
@@ -89,6 +87,7 @@ rec {
    preConfigure = ''
      echo "v${s.version}" > VERSION
     ./autogen.sh
+    export PYTHON=${python3}/bin/python
     '';
 
   configureFlags = [
@@ -175,19 +174,21 @@ rec {
     # on a real TTY for testing purposes.
     echo "" | (mkdir -p nix-test-dir-for-gfid_to_path && touch b && $out/libexec/glusterfs/gfind_missing_files/gfid_to_path.py nix-test-dir-for-gfid_to_path)
     $out/share/glusterfs/scripts/eventsdash.py --help
+
+    # this gets falsely loaded as module by glusterfind
+    rm -r $out/bin/conf.py
     '';
 
   src = fetchurl {
     inherit (s) url sha256;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit (s) version;
     description = "Distributed storage system";
-    maintainers = [
-      stdenv.lib.maintainers.raskin
-    ];
-    platforms = with stdenv.lib.platforms;
-      linux ++ freebsd;
+    homepage = https://www.gluster.org;
+    license = licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
+    maintainers = [ maintainers.raskin ];
+    platforms = with platforms; linux ++ freebsd;
   };
 }

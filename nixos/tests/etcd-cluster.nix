@@ -140,7 +140,7 @@ in {
     };
 
     subtest "should add another member", sub {
-      $node1->succeed("etcdctl member add node3 https://node3:2380");
+      $node1->waitUntilSucceeds("etcdctl member add node3 https://node3:2380");
       $node3->start();
       $node3->waitForUnit("etcd.service");
       $node3->waitUntilSucceeds("etcdctl member list | grep 'node3'");

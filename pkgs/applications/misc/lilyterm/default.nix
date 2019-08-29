@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, lib, fetchurl, fetchFromGitHub
 , pkgconfig
 , autoconf, automake, intltool, gettext
 , gtk, vte
 
-# "stable" or "git"
 , flavour ? "stable"
 }:
 
-assert flavour == "stable" || flavour == "git";
+assert lib.assertOneOf "flavour" flavour [ "stable"  "git" ];
 
 let
   stuff =

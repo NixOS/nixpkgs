@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils }:
+{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "zookeeper-${version}";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     done
 
     cat << EOF > $out/bin/zooInspector.sh
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $out/share/zooinspector
     exec ${jre}/bin/java -cp $classpath org.apache.zookeeper.inspector.ZooInspector
     EOF

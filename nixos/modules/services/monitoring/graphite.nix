@@ -9,21 +9,23 @@ let
   dataDir = cfg.dataDir;
   staticDir = cfg.dataDir + "/static";
 
-  graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings"
-    {inherit graphiteLocalSettings;} ''
+  graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings" {
+      inherit graphiteLocalSettings;
+      preferLocalBuild = true; 
+    } ''
     mkdir -p $out
     ln -s $graphiteLocalSettings $out/graphite_local_settings.py
   '';
 
   graphiteLocalSettings = pkgs.writeText "graphite_local_settings.py" (
     "STATIC_ROOT = '${staticDir}'\n" +
-    optionalString (! isNull config.time.timeZone) "TIME_ZONE = '${config.time.timeZone}'\n"
+    optionalString (config.time.timeZone != null) "TIME_ZONE = '${config.time.timeZone}'\n"
     + cfg.web.extraConfig
   );
 
   graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
     search_index: ${dataDir}/index
-    ${optionalString (!isNull config.time.timeZone) ''time_zone: ${config.time.timeZone}''}
+    ${optionalString (config.time.timeZone != null) ''time_zone: ${config.time.timeZone}''}
     ${optionalString (cfg.api.finders != []) ''finders:''}
     ${concatMapStringsSep "\n" (f: "  - " + f.moduleName) cfg.api.finders}
     ${optionalString (cfg.api.functions != []) ''functions:''}
@@ -121,7 +123,7 @@ in {
           graphite carbon.
 
           For more information visit
-          <link xlink:href="http://graphite-api.readthedocs.org/en/latest/"/>
+          <link xlink:href="https://graphite-api.readthedocs.org/en/latest/"/>
         '';
         default = false;
         type = types.bool;

@@ -4,6 +4,7 @@
 , fusePackages, utillinux, gettext
 , meson, ninja, pkgconfig
 , autoreconfHook
+, python3Packages, which
 }:
 
 let
@@ -27,7 +28,9 @@ in stdenv.mkDerivation rec {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
         sha256 = "1w4j6f1awjrycycpvmlv0x5v9gprllh4dnbjxl4dyl2jgbkaw6pa";
       })
-    ++ stdenv.lib.optional isFuse3 ./fuse3-install.patch;
+    ++ (if isFuse3
+      then [ ./fuse3-install.patch ./fuse3-Do-not-set-FUSERMOUNT_DIR.patch ]
+      else [ ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch ]);
 
   nativeBuildInputs = if isFuse3
     then [ meson ninja pkgconfig ]
@@ -35,7 +38,10 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
 
-  mesonFlags = stdenv.lib.optional isFuse3 "-Dudevrulesdir=etc/udev/rules.d";
+  mesonFlags = stdenv.lib.optionals isFuse3 [
+    "-Dudevrulesdir=/udev/rules.d"
+    "-Duseroot=false"
+  ];
 
   preConfigure = ''
     export MOUNT_FUSE_PATH=$out/sbin
@@ -57,6 +63,14 @@ in stdenv.mkDerivation rec {
       sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
       ./makeconf.sh
     '');
+
+  checkInputs = [ which ] ++ (with python3Packages; [ python pytest ]);
+
+  checkPhase = ''
+    python3 -m pytest test/
+  '';
+
+  doCheck = false; # v2: no tests, v3: all tests get skipped in a sandbox
 
   postFixup = "cd $out\n" + (if isFuse3 then ''
     install -D -m444 etc/fuse.conf $common/etc/fuse.conf

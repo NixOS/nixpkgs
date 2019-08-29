@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, hypothesis, mock
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
 , python-Levenshtein, pytest }:
 
 buildPythonPackage rec {
@@ -20,6 +20,13 @@ buildPythonPackage rec {
     py.test
   '';
 
+  patches = [
+    # Add Python 3.7 support. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/google/python-fire/commit/668007ae41391f5964870b4597e41493a936a11e.patch";
+      sha256 = "0rf7yzv9qx66zfmdggfz478z37fi4rwx4hlh3dk1065sx5rfksi0";
+    })
+  ];
 
   meta = with stdenv.lib; {
     description = "A library for automatically generating command line interfaces";

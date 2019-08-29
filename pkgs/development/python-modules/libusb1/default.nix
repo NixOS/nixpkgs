@@ -1,15 +1,15 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, libusb1 }:
+{ stdenv, buildPythonPackage, fetchPypi, libusb1, pytest }:
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "1.6.5";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4707f81e933a97fed1c5bf7d4957f07bae1139cb8084bdee1f50201a40e3fd7c";
+    sha256 = "adf64a4f3f5c94643a1286f8153bcf4bc787c348b38934aacd7fe17fbeebc571";
   };
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = ''
     substituteInPlace usb1/libusb1.py --replace \
       "ctypes.util.find_library(base_name)" \
       "'${libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}'"
@@ -17,8 +17,12 @@ buildPythonPackage rec {
 
   buildInputs = [ libusb1 ];
 
+  checkInputs = [ pytest ];
+
   checkPhase = ''
-    ${python.interpreter} -m usb1.testUSB1
+    # USBPollerThread is unreliable. Let's not test it.
+    # See: https://github.com/vpelletier/python-libusb1/issues/16
+    py.test -k 'not testUSBPollerThreadExit' usb1/testUSB1.py
   '';
 
   meta = with stdenv.lib; {

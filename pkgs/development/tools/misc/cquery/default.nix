@@ -1,12 +1,13 @@
 { fetchFromGitHub, makeWrapper
-, cmake, llvmPackages, ncurses }:
+, cmake, llvmPackages, ncurses
+, runtimeShell }:
 
 let
   src = fetchFromGitHub {
     owner = "cquery-project";
     repo = "cquery";
-    rev = "e17df5b41e5a687559a0b75dba9c0f1f399c4aea";
-    sha256 = "06z8bg73jppb4msiqvsjbpz6pawwny831k56w5kcxrjgp22v24s1";
+    rev = "a95a6503d68a85baa25465ce147b7fc20f4a552e";
+    sha256 = "0rxbdln7dqkdw4q8rhclssgwypq16g9flkwmaabsr8knckbszxrx";
     fetchSubmodules = true;
   };
 
@@ -15,7 +16,7 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "cquery-${version}";
-  version = "2018-08-08";
+  version = "2018-10-14";
 
   inherit src;
 
@@ -28,11 +29,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
   ];
 
-  shell = stdenv.shell;
+  shell = runtimeShell;
   postFixup = ''
     # We need to tell cquery where to find the standard library headers.
 
-    standard_library_includes="\\\"-isystem\\\", \\\"${if (stdenv.hostPlatform.libc == "glibc") then stdenv.cc.libc.dev else stdenv.cc.libc}/include\\\""
+    standard_library_includes="\\\"-isystem\\\", \\\"${stdenv.lib.getDev stdenv.cc.libc}/include\\\""
     standard_library_includes+=", \\\"-isystem\\\", \\\"${llvmPackages.libcxx}/include/c++/v1\\\""
     export standard_library_includes
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
-, texinfo, libX11, xproto, inputproto, libXi, gmp
-, libXext, xextproto, libXt, libXaw, libXmu } :
+, texinfo, libX11, xorgproto, libXi, gmp
+, libXext, libXt, libXaw, libXmu } :
 
 assert stdenv ? cc ;
 assert stdenv.cc.isGNU ;
@@ -21,10 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "00jbsn0qp8ki2w7dx8caha7g2hr9076xa6bg48j3qqqncff93zdh";
   })];
 
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=902475
+  postPatch = ''
+    substituteInPlace h/elf64_i386_reloc.h \
+      --replace 'case R_X86_64_PC32:' 'case R_X86_64_PC32: case R_X86_64_PLT32:'
+  '';
+
   buildInputs = [
     mpfr m4 binutils emacs gmp
-    libX11 xproto inputproto libXi
-    libXext xextproto libXt libXaw libXmu
+    libX11 xorgproto libXi
+    libXext libXt libXaw libXmu
     zlib which texinfo
   ];
 

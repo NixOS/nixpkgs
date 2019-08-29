@@ -154,7 +154,7 @@ in
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."
-        ${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl ${./setup-etc.pl} ${etc}/etc
+        ${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} ${./setup-etc.pl} ${etc}/etc
       '';
 
   };

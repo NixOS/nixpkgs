@@ -8,8 +8,6 @@ let
 
   httpd = mainCfg.package.out;
 
-  version24 = !versionOlder httpd.version "2.4";
-
   httpdConf = mainCfg.configFile;
 
   php = mainCfg.phpPackage.override { apacheHttpd = httpd.dev; /* otherwise it only gets .out */ };
@@ -23,10 +21,9 @@ let
     else [{ip = "*"; port = 80;}];
 
   getListen = cfg:
-    let list = (lib.optional (cfg.port != 0) {ip = "*"; port = cfg.port;}) ++ cfg.listen;
-    in if list == []
-        then defaultListen cfg
-        else list;
+    if cfg.listen == []
+      then defaultListen cfg
+      else cfg.listen;
 
   listenToString = l: "${l.ip}:${toString l.port}";
 
@@ -107,11 +104,10 @@ let
       "auth_basic" "auth_digest"
 
       # Authentication: is the user who he claims to be?
-      "authn_file" "authn_dbm" "authn_anon"
-      (if version24 then "authn_core" else "authn_alias")
+      "authn_file" "authn_dbm" "authn_anon" "authn_core"
 
       # Authorization: is the user allowed access?
-      "authz_user" "authz_groupfile" "authz_host"
+      "authz_user" "authz_groupfile" "authz_host" "authz_core"
 
       # Other modules.
       "ext_filter" "include" "log_config" "env" "mime_magic"
@@ -119,14 +115,9 @@ let
       "mime" "dav" "status" "autoindex" "asis" "info" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
-    ]
-    ++ optionals version24 [
+      "unixd" "cache" "cache_disk" "slotmem_shm" "socache_shmcb"
       "mpm_${mainCfg.multiProcessingModule}"
-      "authz_core"
-      "unixd"
-      "cache" "cache_disk"
-      "slotmem_shm"
-      "socache_shmcb"
+
       # For compatibility with old configurations, the new module mod_access_compat is provided.
       "access_compat"
     ]
@@ -135,23 +126,12 @@ let
     ++ extraApacheModules;
 
 
-  allDenied = if version24 then ''
-    Require all denied
-  '' else ''
-    Order deny,allow
-    Deny from all
-  '';
-
-  allGranted = if version24 then ''
-    Require all granted
-  '' else ''
-    Order allow,deny
-    Allow from all
-  '';
+  allDenied = "Require all denied";
+  allGranted = "Require all granted";
 
 
   loggingConf = (if mainCfg.logFormat != "none" then ''
-    ErrorLog ${mainCfg.logDir}/error_log
+    ErrorLog ${mainCfg.logDir}/error.log
 
     LogLevel notice
 
@@ -160,7 +140,7 @@ let
     LogFormat "%{Referer}i -> %U" referer
     LogFormat "%{User-agent}i" agent
 
-    CustomLog ${mainCfg.logDir}/access_log ${mainCfg.logFormat}
+    CustomLog ${mainCfg.logDir}/access.log ${mainCfg.logFormat}
   '' else ''
     ErrorLog /dev/null
   '');
@@ -180,15 +160,15 @@ let
 
 
   sslConf = ''
-    SSLSessionCache ${if version24 then "shmcb" else "shm"}:${mainCfg.stateDir}/ssl_scache(512000)
+    SSLSessionCache shmcb:${mainCfg.stateDir}/ssl_scache(512000)
 
-    ${if version24 then "Mutex" else "SSLMutex"} posixsem
+    Mutex posixsem
 
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
 
-    SSLProtocol All -SSLv2 -SSLv3
-    SSLCipherSuite HIGH:!aNULL:!MD5:!EXP
+    SSLProtocol ${mainCfg.sslProtocols}
+    SSLCipherSuite ${mainCfg.sslCiphers}
     SSLHonorCipherOrder on
   '';
 
@@ -217,7 +197,7 @@ let
     ) null ([ cfg ] ++ subservices);
 
     documentRoot = if maybeDocumentRoot != null then maybeDocumentRoot else
-      pkgs.runCommand "empty" {} "mkdir -p $out";
+      pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out";
 
     documentRootConf = ''
       DocumentRoot "${documentRoot}"
@@ -261,8 +241,8 @@ let
     '' else ""}
 
     ${if !isMainServer && mainCfg.logPerVirtualHost then ''
-      ErrorLog ${mainCfg.logDir}/error_log-${cfg.hostName}
-      CustomLog ${mainCfg.logDir}/access_log-${cfg.hostName} ${cfg.logFormat}
+      ErrorLog ${mainCfg.logDir}/error-${cfg.hostName}.log
+      CustomLog ${mainCfg.logDir}/access-${cfg.hostName}.log ${cfg.logFormat}
     '' else ""}
 
     ${optionalString (robotsTxt != "") ''
@@ -322,9 +302,7 @@ let
 
     ServerRoot ${httpd}
 
-    ${optionalString version24 ''
-      DefaultRuntimeDir ${mainCfg.stateDir}/runtime
-    ''}
+    DefaultRuntimeDir ${mainCfg.stateDir}/runtime
 
     PidFile ${mainCfg.stateDir}/httpd.pid
 
@@ -358,7 +336,7 @@ let
           ++ optional enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
           ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
-      in concatMapStrings load allModules
+      in concatMapStrings load (unique allModules)
     }
 
     AddHandler type-map var
@@ -375,6 +353,8 @@ let
     Include ${httpd}/conf/extra/httpd-autoindex.conf
     Include ${httpd}/conf/extra/httpd-multilang-errordoc.conf
     Include ${httpd}/conf/extra/httpd-languages.conf
+
+    TraceEnable off
 
     ${if enableSSL then sslConf else ""}
 
@@ -394,14 +374,6 @@ let
 
     # Generate directives for the main server.
     ${perServerConf true mainCfg}
-
-    # Always enable virtual hosts; it doesn't seem to hurt.
-    ${let
-        listen = concatMap getListen allHosts;
-        uniqueListen = uniqList {inputList = listen;};
-        directives = concatMapStrings (listen: "NameVirtualHost ${listenToString listen}\n") uniqueListen;
-      in optionalString (!version24) directives
-    }
 
     ${let
         makeVirtualHost = vhost: ''
@@ -424,6 +396,7 @@ let
   phpIni = pkgs.runCommand "php.ini"
     { options = concatStringsSep "\n"
         ([ mainCfg.phpOptions ] ++ (map (svc: svc.phpOptions) allSubservices));
+      preferLocalBuild = true;
     }
     ''
       cat ${php}/etc/php.ini > $out
@@ -495,8 +468,8 @@ in
         default = false;
         description = ''
           If enabled, each virtual host gets its own
-          <filename>access_log</filename> and
-          <filename>error_log</filename>, namely suffixed by the
+          <filename>access.log</filename> and
+          <filename>error.log</filename>, namely suffixed by the
           <option>hostName</option> of the virtual host.
         '';
       };
@@ -630,6 +603,19 @@ in
         description =
           "Maximum number of httpd requests answered per httpd child (prefork), 0 means unlimited";
       };
+
+      sslCiphers = mkOption {
+        type = types.str;
+        default = "HIGH:!aNULL:!MD5:!EXP";
+        description = "Cipher Suite available for negotiation in SSL proxy handshake.";
+      };
+
+      sslProtocols = mkOption {
+        type = types.str;
+        default = "All -SSLv2 -SSLv3 -TLSv1";
+        example = "All -SSLv2 -SSLv3";
+        description = "Allowed SSL/TLS protocol versions.";
+      };
     }
 
     # Include the options shared between the main server and virtual hosts.
@@ -651,7 +637,7 @@ in
                      message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
 
-    warnings = map (cfg: ''apache-httpd's port option is deprecated. Use listen = [{/*ip = "*"; */ port = ${toString cfg.port};}]; instead'' ) (lib.filter (cfg: cfg.port != 0) allHosts);
+    warnings = map (cfg: "apache-httpd's extraSubservices option is deprecated. Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.") (lib.filter (cfg: cfg.extraSubservices != []) allHosts);
 
     users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
@@ -671,7 +657,10 @@ in
       ''
         ; Needed for PHP's mail() function.
         sendmail_path = sendmail -t -i
-      '' + optionalString (!isNull config.time.timeZone) ''
+
+        ; Don't advertise PHP
+        expose_php = off
+      '' + optionalString (config.time.timeZone != null) ''
 
         ; Apparently PHP doesn't use $TZ.
         date.timezone = "${config.time.timeZone}"
@@ -681,15 +670,11 @@ in
       { description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];
-        wants = [ "keys.target" ];
-        after = [ "network.target" "fs.target" "postgresql.service" "keys.target" ];
+        after = [ "network.target" "fs.target" ];
 
         path =
           [ httpd pkgs.coreutils pkgs.gnugrep ]
-          ++ # Needed for PHP's mail() function.  !!! Probably the
-             # ssmtp module should export the path to sendmail in
-             # some way.
-             optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp
+          ++ optional enablePHP pkgs.system-sendmail # Needed for PHP's mail() function.
           ++ concatMap (svc: svc.extraServerPath) allSubservices;
 
         environment =
@@ -701,10 +686,10 @@ in
           ''
             mkdir -m 0750 -p ${mainCfg.stateDir}
             [ $(id -u) != 0 ] || chown root.${mainCfg.group} ${mainCfg.stateDir}
-            ${optionalString version24 ''
-              mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
-              [ $(id -u) != 0 ] || chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
-            ''}
+
+            mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
+            [ $(id -u) != 0 ] || chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
+
             mkdir -m 0700 -p ${mainCfg.logDir}
 
             # Get rid of old semaphores.  These tend to accumulate across

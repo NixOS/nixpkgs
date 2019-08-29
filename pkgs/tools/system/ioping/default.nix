@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ioping-${version}";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "koct9i";
     repo = "ioping";
     rev = "v${version}";
-    sha256 = "0yn7wgd6sd39zmr5l97zd6sq1ah7l49k1h7dhgx0nv96fa4r2y9h";
+    sha256 = "0cv2496jplka55yqdcf3ln78r8yggy4lgmgf06l6fbljjrdx7pgq";
   };
 
   makeFlags = "PREFIX=$(out)";

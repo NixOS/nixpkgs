@@ -1,6 +1,6 @@
-{ stdenv, autoreconfHook, fetchFromGitHub, pkgconfig
+{ config, stdenv, autoreconfHook, fetchFromGitHub, pkgconfig
 , alsaLib, libtool, icu
-, pulseaudioSupport ? true, libpulseaudio }:
+, pulseaudioSupport ? config.pulseaudio or false, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   name = "mimic-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wkpbwk88lsahzkc7pzbznmyy0lc02vsp0vkj8f1ags1gh0lc52j";
   };
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     autoreconfHook
     pkgconfig
   ];
@@ -21,15 +21,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsaLib
     libtool
-    icu 
+    icu
   ] ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   meta = {
     description = "Mycroft's TTS engine, based on CMU's Flite (Festival Lite)";
-    homepage = https://mimic.mycroft.ai/; 
+    homepage = https://mimic.mycroft.ai/;
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.noneucat ]; 
+    maintainers = [ stdenv.lib.maintainers.noneucat ];
   };
 }
-

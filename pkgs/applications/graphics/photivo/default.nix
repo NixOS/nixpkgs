@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-      platforms = platforms.linux;
-      maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+    broken = true; # exiv2 0.27.1 FTBFS
   };
 }

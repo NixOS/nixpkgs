@@ -78,7 +78,7 @@ Step 2: build kernel headers for the target architecture
 ---
 {stdenv, fetchurl}:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.buildPlatform.system == "i686-linux";
 
 stdenv.mkDerivation {
   name = "linux-headers-2.6.13.1-arm";

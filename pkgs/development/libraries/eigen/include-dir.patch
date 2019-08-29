@@ -1,0 +1,49 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(Eigen3)
+ 
+-cmake_minimum_required(VERSION 2.8.5)
++cmake_minimum_required(VERSION 3.7)
+ 
+ # guard against in-source builds
+ 
+@@ -408,13 +408,6 @@ install(FILES
+   DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+   )
+ 
+-if(EIGEN_BUILD_PKGCONFIG)
+-    configure_file(eigen3.pc.in eigen3.pc @ONLY)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eigen3.pc
+-        DESTINATION ${PKGCONFIG_INSTALL_DIR}
+-        )
+-endif()
+-
+ add_subdirectory(Eigen)
+ 
+ add_subdirectory(doc EXCLUDE_FROM_ALL)
+@@ -510,8 +503,15 @@ set ( EIGEN_VERSION_MAJOR  ${EIGEN_WORLD_VERSION} )
+ set ( EIGEN_VERSION_MINOR  ${EIGEN_MAJOR_VERSION} )
+ set ( EIGEN_VERSION_PATCH  ${EIGEN_MINOR_VERSION} )
+ set ( EIGEN_DEFINITIONS "")
+-set ( EIGEN_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}" )
+ set ( EIGEN_ROOT_DIR ${CMAKE_INSTALL_PREFIX} )
++GNUInstallDirs_get_absolute_install_dir(EIGEN_INCLUDE_DIR INCLUDE_INSTALL_DIR)
++
++if(EIGEN_BUILD_PKGCONFIG)
++    configure_file(eigen3.pc.in eigen3.pc @ONLY)
++    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eigen3.pc
++        DESTINATION ${PKGCONFIG_INSTALL_DIR}
++        )
++endif()
+ 
+ # Interface libraries require at least CMake 3.0
+ if (NOT CMAKE_VERSION VERSION_LESS 3.0)
+--- a/eigen3.pc.in
++++ b/eigen3.pc.in
+@@ -6,4 +6,4 @@ Description: A C++ template library for linear algebra: vectors, matrices, and r
+ Requires:
+ Version: @EIGEN_VERSION_NUMBER@
+ Libs:
+-Cflags: -I${prefix}/@INCLUDE_INSTALL_DIR@
++Cflags: -I@EIGEN_INCLUDE_DIR@

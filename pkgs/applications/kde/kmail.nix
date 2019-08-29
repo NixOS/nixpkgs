@@ -26,4 +26,5 @@ mkDerivation {
     libksieve mailcommon messagelib pim-sieve-editor qtscript qtwebengine
   ];
   propagatedUserEnvPkgs = [ kdepim-runtime kwallet ];
+  patches = [ ./kmail.patch ];
 }

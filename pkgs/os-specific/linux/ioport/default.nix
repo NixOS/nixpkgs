@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   buildInputs = [ perl ];
   meta = with stdenv.lib; {
     description = "Direct access to I/O ports from the command line";
-    homepage = http://people.redhat.com/rjones/ioport/;
+    homepage = https://people.redhat.com/rjones/ioport/;
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.cleverca22 ];

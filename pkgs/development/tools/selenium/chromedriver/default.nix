@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cairo, fontconfig, freetype, gdk_pixbuf, glib
+{ stdenv, fetchurl, cairo, fontconfig, freetype, gdk-pixbuf, glib
 , glibc, gtk2, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
 , libXi, libXrender, libXext
 }:
@@ -6,29 +6,29 @@ let
   allSpecs = {
     "x86_64-linux" = {
       system = "linux64";
-      sha256 = "07b39j1glr53yxbbkkkkx12h8r44fybqkn4fd7s2lr1ysyq5vn1a";
+      sha256 = "04wb6h57daxmnv3a3xrcsznawbx7r8wyi1vk1g26z2l2ppcnsbzv";
     };
 
     "x86_64-darwin" = {
       system = "mac64";
-      sha256 = "11hs4mmlvxjaanq41h0dljj4sff0lfwk31svvdmzfg91idlikpsz";
+      sha256 = "0f8j7m8ardaaw8pv02vxhwkqbcm34366bln0np0j0ig21d4fag09";
     };
   };
 
-  spec = allSpecs."${stdenv.system}"
-    or (throw "missing chromedriver binary for ${stdenv.system}");
+  spec = allSpecs."${stdenv.hostPlatform.system}"
+    or (throw "missing chromedriver binary for ${stdenv.hostPlatform.system}");
 
   libs = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc.lib
     cairo fontconfig freetype
-    gdk_pixbuf glib gtk2 gconf
+    gdk-pixbuf glib gtk2 gconf
     libX11 nspr nss pango libXrender
     gconf libXext libXi
   ];
 in
 stdenv.mkDerivation rec {
   name = "chromedriver-${version}";
-  version = "2.40";
+  version = "76.0.3809.68";
 
   src = fetchurl {
     url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";

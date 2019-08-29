@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk-doc, gobjectIntrospection, python2, gtk3, cairo, glib }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk-doc, gobject-introspection, python2, gtk3, cairo, glib }:
 
 let
   version = "2.0.4";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig gettext gtk-doc python2 ];
-  buildInputs = [ gtk3 cairo glib gobjectIntrospection ];
+  buildInputs = [ gtk3 cairo glib gobject-introspection ];
 
   configureFlags = [
     "--disable-python"

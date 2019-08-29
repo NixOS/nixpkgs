@@ -1,0 +1,23 @@
+--- a/utils/build-presets.ini	2019-04-11 15:19:57.845178834 +0200
++++ b/utils/build-presets.ini	2019-04-11 15:27:42.041297057 +0200
+@@ -716,8 +716,6 @@
+ llbuild
+ swiftpm
+ xctest
+-libicu
+-libcxx
+ 
+ dash-dash
+ 
+@@ -727,11 +725,9 @@
+ install-llbuild
+ install-swiftpm
+ install-xctest
+-install-libicu
+ install-prefix=%(install_prefix)s
+ swift-install-components=autolink-driver;compiler;clang-resource-dir-symlink;stdlib;swift-remote-mirror;sdk-overlay;license;sourcekit-inproc
+ llvm-install-components=llvm-cov;llvm-profdata;IndexStore;clang;clang-headers;compiler-rt
+-install-libcxx
+ build-swift-static-stdlib
+ build-swift-static-sdk-overlay
+ build-swift-stdlib-unittest-extra

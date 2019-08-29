@@ -1,6 +1,6 @@
 { stdenv, fetchgit, makeWrapper, pkgconfig,
-  gnome2, glib, pango, cairo, gdk_pixbuf, atk, freetype, xorg,
-  configH
+  gnome2, glib, pango, cairo, gdk-pixbuf, atk, freetype, xorg,
+  configH ? ""
 }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gnome2.vte glib pango gnome2.gtk cairo gdk_pixbuf atk freetype xorg.libX11
-    xorg.xproto xorg.kbproto xorg.libXext xorg.xextproto makeWrapper pkgconfig
+    gnome2.vte glib pango gnome2.gtk cairo gdk-pixbuf atk freetype xorg.libX11
+    xorg.xorgproto xorg.libXext makeWrapper pkgconfig
   ];
 
   buildPhase = ''

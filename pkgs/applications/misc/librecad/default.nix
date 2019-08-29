@@ -18,8 +18,11 @@ stdenv.mkDerivation rec {
   qmakeFlags = [ "MUPARSER_DIR=${muparser}" "BOOST_DIR=${boost.dev}" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share
-    cp -R unix/librecad $out/bin
+    install -m 555 -D unix/librecad $out/bin/librecad
+    install -m 444 -D desktop/librecad.desktop $out/share/applications/librecad.desktop
+    install -m 444 -D desktop/librecad.sharedmimeinfo $out/share/mime/packages/librecad.xml
+    install -m 444 -D desktop/graphics_icons_and_splash/Icon\ LibreCAD/Icon_Librecad.svg \
+      $out/share/icons/hicolor/scalable/apps/librecad.svg
     cp -R unix/resources $out/share/librecad
   '';
 

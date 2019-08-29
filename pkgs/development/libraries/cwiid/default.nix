@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
+  NIX_LDFLAGS = [
+    "-lbluetooth"
+  ];
+
   postInstall = ''
     # Some programs (for example, cabal-install) have problems with the double 0
     sed -i -e "s/0.6.00/0.6.0/" $out/lib/pkgconfig/cwiid.pc

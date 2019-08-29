@@ -1,47 +1,32 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk-doc, gobjectIntrospection, gnome3
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gnome3
 , glib, systemd, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse, utillinuxMinimal, libselinux
 , libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42, python3
 }:
 
-let
-  version = "2018.6";
-
-  libglnx-src = fetchFromGitHub {
-    owner = "GNOME";
-    repo = "libglnx";
-    rev = "e1a78cf2f5351d5394ccfb79f3f5a7b4917f73f3";
-    sha256 = "10kzyjbrmr98i65hlz8jc1v5bijyqwwfp6qqjbd5g3y0n520iaxc";
-  };
-
-  bsdiff-src = fetchFromGitHub {
-    owner = "mendsley";
-    repo = "bsdiff";
-    rev = "1edf9f656850c0c64dae260960fabd8249ea9c60";
-    sha256 = "1h71d2h2d3anp4msvpaff445rnzdxii3id2yglqk7af9i43kdsn1";
-  };
-in stdenv.mkDerivation {
-  name = "ostree-${version}";
+stdenv.mkDerivation rec {
+  pname = "ostree";
+  version = "2019.2";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
-  src = fetchFromGitHub {
-    rev = "v${version}";
-    owner = "ostreedev";
-    repo = "ostree";
-    sha256 = "0kk04pznk6m6fqdz609m2zcnkalcw9q8fsx8wm42k6dhf6cw7l3g";
+  src = fetchurl {
+    url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
+    sha256 = "0nbbrz3p4ms6vpl272q6fimqvizryw2a8mnfqcn69xf03sz5204y";
   };
 
   patches = [
+    # Workarounds for https://github.com/ostreedev/ostree/issues/1592
+    ./fix-1592.patch
+    # Disable test-gpg-verify-result.test,
+    # https://github.com/ostreedev/ostree/issues/1634
+    ./disable-test-gpg-verify-result.patch
     # Tests access the helper using relative path
     # https://github.com/ostreedev/ostree/issues/1593
-    (fetchpatch {
-      url = https://github.com/ostreedev/ostree/pull/1633.patch;
-      sha256 = "07xiw1dr7j4yw3w92qhw37f9crlglibflcqj2kf0v5gfrl9i6g4j";
-    })
+    ./01-Drop-ostree-trivial-httpd-CLI-move-to-tests-director.patch
   ];
 
   nativeBuildInputs = [
-    autoconf automake libtool pkgconfig gtk-doc gobjectIntrospection which yacc
+    autoconf automake libtool pkgconfig gtk-doc gobject-introspection which yacc
     libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
@@ -52,25 +37,21 @@ in stdenv.mkDerivation {
     (python3.withPackages (p: with p; [ pyyaml ])) gnome3.gjs # for tests
   ];
 
-  prePatch = ''
-    rmdir libglnx bsdiff
-    cp --no-preserve=mode -r ${libglnx-src} libglnx
-    cp --no-preserve=mode -r ${bsdiff-src} bsdiff
-  '';
-
   preConfigure = ''
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
+  enableParallelBuilding = true;
+
   configureFlags = [
-    "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
-    "--with-systemdsystemgeneratordir=$(out)/lib/systemd/system-generators"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"
   ];
 
   makeFlags = [
-    "installed_testdir=$(installedTests)/libexec/installed-tests/libostree"
-    "installed_test_metadir=$(installedTests)/share/installed-tests/libostree"
+    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
+    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
 
   meta = with stdenv.lib; {

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "jdupes-${version}";
-  version = "1.10.2";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "jbruchon";
     repo  = "jdupes";
     rev   = "v${version}";
-    sha256 = "0msp68h1gaipwpvdylpwd6w9al5gcmawj9cmvi7nw8ihh184g3m7";
+    sha256 = "1dzw1h9x9addkxf7r8lb8y09wmdkx8i61f5m96589r88jjk965xy";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
     # directories have such files and will be removed.
@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    install -Dm644 -t $out/share/doc/jdupes CHANGES LICENSE README
+  doCheck = false; # broken Makefile, the above also removes tests
 
+  postInstall = ''
+    install -Dm644 -t $out/share/doc/jdupes CHANGES LICENSE README.md
   '';
 
   meta = with stdenv.lib; {

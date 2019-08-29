@@ -10,7 +10,7 @@ let
 
   checkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name"
+      "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "OriginalName"
       "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port"
       "TCPSegmentationOffload" "TCP6SegmentationOffload" "GenericSegmentationOffload"
       "GenericReceiveOffload" "LargeReceiveOffload" "RxChannels" "TxChannels"
@@ -30,10 +30,14 @@ let
     (assertValueOneOf "UDPSegmentationOffload" boolValues)
     (assertValueOneOf "GenericReceiveOffload" boolValues)
     (assertValueOneOf "LargeReceiveOffload" boolValues)
-    (range "RxChannels" 1 4294967295)
-    (range "TxChannels" 1 4294967295)
-    (range "OtherChannels" 1 4294967295)
-    (range "CombinedChannels" 1 4294967295)
+    (assertInt "RxChannels")
+    (assertMinimum "RxChannels" 1)
+    (assertInt "TxChannels")
+    (assertMinimum "TxChannels" 1)
+    (assertInt "OtherChannels")
+    (assertMinimum "OtherChannels" 1)
+    (assertInt "CombinedChannels")
+    (assertMinimum "CombinedChannels" 1)
   ];
 
   checkNetdev = checkUnitConfig "Netdev" [
@@ -49,6 +53,27 @@ let
     ])
     (assertByteFormat "MTUBytes")
     (assertMacAddress "MACAddress")
+  ];
+
+  # NOTE The PrivateKey directive is missing on purpose here, please
+  # do not add it to this list. The nix store is world-readable let's
+  # refrain ourselves from providing a footgun.
+  checkWireGuard = checkUnitConfig "WireGuard" [
+    (assertOnlyFields [
+      "PrivateKeyFile" "ListenPort" "FwMark"
+    ])
+    (assertRange "FwMark" 1 4294967295)
+  ];
+
+  # NOTE The PresharedKey directive is missing on purpose here, please
+  # do not add it to this list. The nix store is world-readable,let's
+  # refrain ourselves from providing a footgun.
+  checkWireGuardPeer = checkUnitConfig "WireGuardPeer" [
+    (assertOnlyFields [
+      "PublicKey" "PresharedKeyFile" "AllowedIPs"
+      "Endpoint" "PersistentKeepalive"
+    ])
+    (assertRange "PersistentKeepalive" 1 65535)
   ];
 
   checkVlan = checkUnitConfig "VLAN" [
@@ -199,12 +224,11 @@ let
 
   checkRoute = checkUnitConfig "Route" [
     (assertOnlyFields [
-      "Gateway" "GatewayOnlink" "Destination" "Source" "Metric"
+      "Gateway" "GatewayOnLink" "Destination" "Source" "Metric"
       "IPv6Preference" "Scope" "PreferredSource" "Table" "Protocol" "Type"
       "InitialCongestionWindow" "InitialAdvertisedReceiveWindow" "QuickAck"
       "MTUBytes"
     ])
-    (assertHasField "Gateway")
   ];
 
   checkDhcp = checkUnitConfig "DHCP" [
@@ -226,7 +250,8 @@ let
     (assertValueOneOf "UseTimezone" boolValues)
     (assertValueOneOf "CriticalConnection" boolValues)
     (assertValueOneOf "RequestBroadcast" boolValues)
-    (assertRange "RouteTable" 0 4294967295)
+    (assertInt "RouteTable")
+    (assertMinimum "RouteTable" 0)
     (assertValueOneOf "RapidCommit" boolValues)
   ];
 
@@ -244,13 +269,14 @@ let
   # .network files have a [Link] section with different options than in .netlink files
   checkNetworkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "MACAddress" "MTUBytes" "ARP" "Unmanaged" "RequiredForOnline"
+      "MACAddress" "MTUBytes" "ARP" "Multicast" "Unmanaged" "RequiredForOnline"
     ])
     (assertMacAddress "MACAddress")
     (assertByteFormat "MTUBytes")
     (assertValueOneOf "ARP" boolValues)
+    (assertValueOneOf "Multicast" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
-    (assertValueOneOf "RquiredForOnline" boolValues)
+    (assertValueOneOf "RequiredForOnline" boolValues)
   ];
 
 
@@ -312,6 +338,46 @@ let
         <literal>[Netdev]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    wireguardConfig = mkOption {
+      default = {};
+      example = {
+        PrivateKeyFile = "/etc/wireguard/secret.key";
+        ListenPort = 51820;
+        FwMark = 42;
+      };
+      type = types.addCheck (types.attrsOf unitOption) checkWireGuard;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[WireGuard]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        Use <literal>PrivateKeyFile</literal> instead of
+        <literal>PrivateKey</literal>: the nix store is
+        world-readable.
+      '';
+    };
+
+    wireguardPeers = mkOption {
+      default = [];
+      example = [ { wireguardPeerConfig={
+        Endpoint = "192.168.1.1:51820";
+        PublicKey = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
+        PresharedKeyFile = "/etc/wireguard/psk.key";
+        AllowedIPs = [ "10.0.0.1/32" ];
+        PersistentKeepalive = 15;
+      };}];
+      type = with types; listOf (submodule wireguardPeerOptions);
+      description = ''
+        Each item in this array specifies an option in the
+        <literal>[WireGuardPeer]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        Use <literal>PresharedKeyFile</literal> instead of
+        <literal>PresharedKey</literal>: the nix store is
+        world-readable.
       '';
     };
 
@@ -444,6 +510,23 @@ let
       };
     };
   };
+
+  wireguardPeerOptions = {
+    options = {
+      wireguardPeerConfig = mkOption {
+        default = {};
+        example = { };
+        type = types.addCheck (types.attrsOf unitOption) checkWireGuardPeer;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[WireGuardPeer]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
 
   networkOptions = commonNetworkOptions // {
 
@@ -664,7 +747,7 @@ let
     };
   };
 
-  commonMatchText = def: ''
+  commonMatchText = def: optionalString (def.matchConfig != {}) ''
     [Match]
     ${attrsToSection def.matchConfig}
   '';
@@ -727,6 +810,16 @@ let
             ${attrsToSection def.bondConfig}
 
           ''}
+          ${optionalString (def.wireguardConfig != { }) ''
+            [WireGuard]
+            ${attrsToSection def.wireguardConfig}
+
+          ''}
+          ${flip concatMapStrings def.wireguardPeers (x: ''
+            [WireGuardPeer]
+            ${attrsToSection x.wireguardPeerConfig}
+
+          '')}
           ${def.extraConfig}
         '';
     };

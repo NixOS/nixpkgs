@@ -9,28 +9,22 @@ stdenv.mkDerivation rec {
     sha256 = "1k47gbgpp52049andr28y28nbwh9m36bbb0g8p0aka3pqlhjv72l";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ apr scons openssl aprutil zlib libiconv ]
+  nativeBuildInputs = [ pkgconfig scons ];
+  buildInputs = [ apr openssl aprutil zlib libiconv ]
     ++ stdenv.lib.optional (!stdenv.isCygwin) kerberos;
 
   patches = [ ./scons.patch ];
 
-  buildPhase = ''
-    scons \
-      -j $NIX_BUILD_CORES \
-      APR="$(echo ${apr.dev}/bin/*-config)" \
-      APU="$(echo ${aprutil.dev}/bin/*-config)" \
-      CC=$CC \
-      OPENSSL=${openssl} \
-      PREFIX="$out" \
-      ZLIB=${zlib} \
-      ${
-        if stdenv.isCygwin then "" else "GSSAPI=${kerberos.dev}"
-      }
-  '';
+  prefixKey = "PREFIX=";
 
-  installPhase = ''
-    scons install
+  preConfigure = ''
+    sconsFlags+=" APR=$(echo ${apr.dev}/bin/*-config)"
+    sconsFlags+=" APU=$(echo ${aprutil.dev}/bin/*-config)"
+    sconsFlags+=" CC=$CC"
+    sconsFlags+=" OPENSSL=${openssl}"
+    sconsFlags+=" ZLIB=${zlib}"
+  '' + stdenv.lib.optionalString (!stdenv.isCygwin) ''
+    sconsFlags+=" GSSAPI=${kerberos.dev}"
   '';
 
   enableParallelBuilding = true;

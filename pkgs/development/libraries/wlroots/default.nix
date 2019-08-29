@@ -1,39 +1,52 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig
 , wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa_noglu
+, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
+, libpng, ffmpeg_4, freerdp
 }:
 
-let pname = "wlroots";
-    version = "unstable-2018-03-16";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+stdenv.mkDerivation rec {
+  pname = "wlroots";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
-    rev = "9cc875429b40e2567b219f8e9ffd23316d136204";
-    sha256 = "1prhic3pyf9n65qfg5akzkc9qv2z3ab60dpcacr7wgr9nxrvnsdq";
+    rev = version;
+    sha256 = "0jzxa6psbc7ddxli7rbfqxmv1svxnis51l1vch4hb9fdixqm284a";
   };
 
-  # $out for the library and $bin for rootston
-  outputs = [ "out" "bin" ];
+  # $out for the library and $examples for the example programs (in examples):
+  outputs = [ "out" "examples" ];
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
 
   buildInputs = [
     wayland libGL wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa_noglu
+    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
+    libpng ffmpeg_4 freerdp
   ];
 
-  # Install rootston (the reference compositor) to $bin
+  mesonFlags = [
+    "-Dlibcap=enabled" "-Dlogind=enabled" "-Dxwayland=enabled" "-Dx11-backend=enabled"
+    "-Dxcb-icccm=enabled" "-Dxcb-errors=enabled"
+  ];
+
   postInstall = ''
-    mkdir -p $bin/bin
-    cp rootston/rootston $bin/bin/
-    mkdir $bin/lib
-    cp libwlroots* $bin/lib/
-    patchelf --set-rpath "$bin/lib:${stdenv.lib.makeLibraryPath buildInputs}" $bin/bin/rootston
-    mkdir $bin/etc
-    cp ../rootston/rootston.ini.example $bin/etc/rootston.ini
+    # Copy the library to $examples
+    mkdir -p $examples/lib
+    cp -P libwlroots* $examples/lib/
+  '';
+
+  postFixup = ''
+    # Install ALL example programs to $examples:
+    # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle
+    # screenshot output-layout multi-pointer rotation tablet touch pointer
+    # simple
+    mkdir -p $examples/bin
+    cd ./examples
+    for binary in $(find . -executable -type f -printf '%P\n' | grep -vE '\.so'); do
+      cp "$binary" "$examples/bin/wlroots-$binary"
+    done
   '';
 
   meta = with stdenv.lib; {
@@ -42,8 +55,5 @@ in stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];
-    # Marked as broken until the first official/stable release (upstream
-    # request). See #38344 for the public discussion.
-    broken = true;
   };
 }

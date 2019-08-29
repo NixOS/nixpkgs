@@ -3,16 +3,18 @@
 let
   # when upgrade znapzend, check versions of Perl libs here: https://github.com/oetiker/znapzend/blob/master/PERL_MODULES
   Mojolicious-6-46 = perlPackages.buildPerlPackage rec {
-    name = "Mojolicious-6.46";
+    pname = "Mojolicious";
+    version = "6.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/S/SR/SRI/${pname}-${version}.tar.gz";
       sha256 = "0i3axmx4506fx5gms148pj65x6ys7flaz1aqjd8hd9zfkd8pzdfr";
     };
   };
   MojoIOLoopForkCall-0-17 = perlPackages.buildPerlModule rec {
-    name = "Mojo-IOLoop-ForkCall-0.17";
+    pname = "Mojo-IOLoop-ForkCall";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JB/JBERGER/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/${pname}-${version}.tar.gz";
       sha256 = "090qxz1nbah2qxvfg4whl6yp6q03qkx7a42751iai521nk1yavc8";
     };
     propagatedBuildInputs = [ perlPackages.IOPipely Mojolicious-6-46 ];
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
     sha256 = checksum;
   };
 
-  buildInputs = [ wget perl perlPackages.TestHarness MojoIOLoopForkCall-0-17 perlPackages.TAPParserSourceHandlerpgTAP ];
+  buildInputs = [ wget perl MojoIOLoopForkCall-0-17 perlPackages.TAPParserSourceHandlerpgTAP ];
 
   nativeBuildInputs = [ autoconf automake ];
 
@@ -52,7 +54,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/bin/znapzend --replace "${perl}/bin/perl" \
       "${perl}/bin/perl \
-      -I${perlPackages.TestHarness}/${perl.libPrefix} \
       -I${Mojolicious-6-46}/${perl.libPrefix} \
       -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
       -I${MojoIOLoopForkCall-0-17}/${perl.libPrefix} \
@@ -60,7 +61,6 @@ stdenv.mkDerivation rec {
       "
     substituteInPlace $out/bin/znapzendzetup --replace "${perl}/bin/perl" \
       "${perl}/bin/perl \
-      -I${perlPackages.TestHarness}/${perl.libPrefix} \
       -I${Mojolicious-6-46}/${perl.libPrefix} \
       -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
       -I${MojoIOLoopForkCall-0-17}/${perl.libPrefix} \
@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
       "
     substituteInPlace $out/bin/znapzendztatz --replace "${perl}/bin/perl" \
       "${perl}/bin/perl \
-      -I${perlPackages.TestHarness}/${perl.libPrefix} \
       -I${Mojolicious-6-46}/${perl.libPrefix} \
       -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
       -I${MojoIOLoopForkCall-0-17}/${perl.libPrefix} \

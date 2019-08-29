@@ -44,7 +44,7 @@
       vsftpd = 7;
       ftp = 8;
       bitlbee = 9;
-      avahi = 10;
+      #avahi = 10; # removed 2019-05-22
       nagios = 11;
       atd = 12;
       postfix = 13;
@@ -53,7 +53,7 @@
       tomcat = 16;
       #audio = 17; # unused
       #floppy = 18; # unused
-      #uucp = 19; # unused
+      uucp = 19;
       #lp = 20; # unused
       #proc = 21; # unused
       pulseaudio = 22; # must match `pulseaudio' GID
@@ -101,7 +101,7 @@
       iodined = 66;
       #libvirtd = 67; # unused
       graphite = 68;
-      statsd = 69;
+      #statsd = 69; # removed 2018-11-14
       transmission = 70;
       postgres = 71;
       #vboxusers = 72; # unused
@@ -145,7 +145,7 @@
       #notbit = 111; # unused
       aerospike = 111;
       ngircd = 112;
-      btsync = 113;
+      #btsync = 113; # unused
       minecraft = 114;
       vault = 115;
       rippled = 116;
@@ -175,7 +175,7 @@
       dnsmasq = 141;
       uhub = 142;
       yandexdisk = 143;
-      #collectd = 144; #unused
+      mxisd = 144; # was once collectd
       consul = 145;
       mailpile = 146;
       redmine = 147;
@@ -251,7 +251,7 @@
       gale = 223;
       matrix-synapse = 224;
       rspamd = 225;
-      rmilter = 226;
+      # rmilter = 226; # unused, removed 2019-08-22
       cfdyndns = 227;
       gammu-smsd = 228;
       pdnsd = 229;
@@ -265,14 +265,14 @@
       syncthing = 237;
       caddy = 239;
       taskd = 240;
-      factorio = 241;
-      emby = 242;
+      # factorio = 241; # DynamicUser = true
+      # emby = 242; # unusued, removed 2019-05-01
       graylog = 243;
       sniproxy = 244;
       nzbget = 245;
       mosquitto = 246;
       toxvpn = 247;
-      squeezelite = 248;
+      # squeezelite = 248; # DynamicUser = true
       turnserver = 249;
       smokeping = 250;
       gocd-agent = 251;
@@ -289,8 +289,8 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
-      # keystone = 265; # unused, removed 2017-12-13
-      # glance = 266; # unused, removed 2017-12-13
+      sickbeard = 265;
+      headphones = 266;
       couchpotato = 267;
       gogs = 268;
       pdns-recursor = 269;
@@ -306,7 +306,7 @@
       rslsync = 279;
       minio = 280;
       kanboard = 281;
-      pykms = 282;
+      # pykms = 282; # DynamicUser = true
       kodi = 283;
       restya-board = 284;
       mighttpd2 = 285;
@@ -326,6 +326,21 @@
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;
+      # kvm = 302; # unused
+      # render = 303; # unused
+      zeronet = 304;
+      lirc = 305;
+      lidarr = 306;
+      slurm = 307;
+      kapacitor = 308;
+      solr = 309;
+      alerta = 310;
+      minetest = 311;
+      rss2email = 312;
+      cockroachdb = 313;
+      zoneminder = 314;
+      paperless = 315;
+      mailman = 316;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -344,7 +359,7 @@
       vsftpd = 7;
       ftp = 8;
       bitlbee = 9;
-      avahi = 10;
+      #avahi = 10; # removed 2019-05-22
       #nagios = 11; # unused
       atd = 12;
       postfix = 13;
@@ -380,7 +395,7 @@
       virtuoso = 44;
       #rtkit = 45; # unused
       dovecot2 = 46;
-      #dovenull = 47; # unused
+      dovenull2 = 47;
       prayer = 49;
       mpd = 50;
       clamav = 51;
@@ -401,7 +416,7 @@
       iodined = 66;
       libvirtd = 67;
       graphite = 68;
-      #statsd = 69; # unused
+      #statsd = 69; # removed 2018-11-14
       transmission = 70;
       postgres = 71;
       vboxusers = 72;
@@ -443,7 +458,7 @@
       #notbit = 111; # unused
       aerospike = 111;
       #ngircd = 112; # unused
-      btsync = 113;
+      #btsync = 113; # unused
       #minecraft = 114; # unused
       vault = 115;
       #ripped = 116; # unused
@@ -473,7 +488,7 @@
       #dnsmasq = 141; # unused
       uhub = 142;
       #yandexdisk = 143; # unused
-      #collectd = 144; # unused
+      mxisd = 144; # was once collectd
       #consul = 145; # unused
       mailpile = 146;
       redmine = 147;
@@ -502,7 +517,7 @@
       tss = 176;
       #memcached = 177; # unused, removed 2018-01-03
       #ntp = 179; # unused
-      #zabbix = 180; # unused
+      zabbix = 180;
       #redis = 181; # unused, removed 2018-01-03
       #unifi = 183; # unused
       #uptimed = 184; # unused
@@ -545,7 +560,7 @@
       gale = 223;
       matrix-synapse = 224;
       rspamd = 225;
-      rmilter = 226;
+      # rmilter = 226; # unused, removed 2019-08-22
       cfdyndns = 227;
       pdnsd = 229;
       octoprint = 230;
@@ -553,8 +568,8 @@
       syncthing = 237;
       caddy = 239;
       taskd = 240;
-      factorio = 241;
-      emby = 242;
+      # factorio = 241; # unused
+      # emby = 242; # unused, removed 2019-05-01
       sniproxy = 244;
       nzbget = 245;
       mosquitto = 246;
@@ -576,8 +591,8 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
-      # keystone = 265; # unused, removed 2017-12-13
-      # glance = 266; # unused, removed 2017-12-13
+      sickbeard = 265;
+      headphones = 266;
       couchpotato = 267;
       gogs = 268;
       kresd = 270;
@@ -592,7 +607,7 @@
       rslsync = 279;
       minio = 280;
       kanboard = 281;
-      pykms = 282;
+      # pykms = 282; # DynamicUser = true
       kodi = 283;
       restya-board = 284;
       mighttpd2 = 285;
@@ -612,6 +627,21 @@
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;
+      kvm = 302; # default udev rules from systemd requires these
+      render = 303; # default udev rules from systemd requires these
+      zeronet = 304;
+      lirc = 305;
+      lidarr = 306;
+      slurm = 307;
+      kapacitor = 308;
+      solr = 309;
+      alerta = 310;
+      minetest = 311;
+      rss2email = 312;
+      cockroachdb = 313;
+      zoneminder = 314;
+      paperless = 315;
+      mailman = 316;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

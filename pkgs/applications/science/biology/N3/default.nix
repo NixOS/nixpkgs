@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper,
-  perl, MNI-Perllib, GetoptTabular,
+  perlPackages,
   libminc, EBTKS }:
 
 stdenv.mkDerivation rec {
@@ -15,12 +15,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc EBTKS ];
-  propagatedBuildInputs = [ perl MNI-Perllib GetoptTabular ];
+  propagatedBuildInputs = with perlPackages; [ perl MNI-Perllib GetoptTabular ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DEBTKS_DIR=${EBTKS}/lib/" ];
-
-  checkPhase = "ctest --output-on-failure";
-  # don't run the tests as they fail at least due to missing program wrappers in this phase ...
 
   postFixup = ''
     for p in $out/bin/*; do

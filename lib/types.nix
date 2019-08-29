@@ -111,7 +111,7 @@ rec {
         name = "int";
         description = "signed integer";
         check = isInt;
-        merge = mergeOneOption;
+        merge = mergeEqualOption;
       };
 
     # Specialized subdomains of int
@@ -119,7 +119,9 @@ rec {
       let
         betweenDesc = lowest: highest:
           "${toString lowest} and ${toString highest} (both inclusive)";
-        between = lowest: highest: assert lowest <= highest;
+        between = lowest: highest:
+          assert lib.assertMsg (lowest <= highest)
+            "ints.between: lowest must be smaller than highest";
           addCheck int (x: x >= lowest && x <= highest) // {
             name = "intBetween";
             description = "integer between ${betweenDesc lowest highest}";
@@ -167,18 +169,21 @@ rec {
         # s32 = sign 32 4294967296;
       };
 
+    # Alias of u16 for a port number
+    port = ints.u16;
+
     float = mkOptionType rec {
         name = "float";
         description = "floating point number";
         check = isFloat;
-        merge = mergeOneOption;
+        merge = mergeEqualOption;
     };
 
     str = mkOptionType {
       name = "str";
       description = "string";
       check = isString;
-      merge = mergeOneOption;
+      merge = mergeEqualOption;
     };
 
     strMatching = pattern: mkOptionType {
@@ -192,7 +197,10 @@ rec {
     # separator between the values).
     separatedString = sep: mkOptionType rec {
       name = "separatedString";
-      description = "string";
+      description = if sep == ""
+        then "Concatenated string" # for types.string.
+        else "strings concatenated with ${builtins.toJSON sep}"
+      ;
       check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
       functor = (defaultFunctor name) // {
@@ -235,7 +243,7 @@ rec {
       name = "path";
       # Hacky: there is no ‘isPath’ primop.
       check = x: builtins.substring 0 1 (toString x) == "/";
-      merge = mergeOneOption;
+      merge = mergeEqualOption;
     };
 
     # drop this in the future:
@@ -276,8 +284,7 @@ rec {
             (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
           )
           # Push down position info.
-          (map (def: listToAttrs (mapAttrsToList (n: def':
-            { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs)));
+          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
@@ -408,7 +415,7 @@ rec {
         name = "enum";
         description = "one of ${concatMapStringsSep ", " show values}";
         check = flip elem values;
-        merge = mergeOneOption;
+        merge = mergeEqualOption;
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
       };
 
@@ -436,10 +443,19 @@ rec {
       functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
     };
 
+    # Any of the types in the given list
+    oneOf = ts:
+      let
+        head' = if ts == [] then throw "types.oneOf needs to get at least one type in its argument" else head ts;
+        tail' = tail ts;
+      in foldl' either head' tail';
+
     # Either value of type `finalType` or `coercedType`, the latter is
     # converted to `finalType` using `coerceFunc`.
     coercedTo = coercedType: coerceFunc: finalType:
-      assert coercedType.getSubModules == null;
+      assert lib.assertMsg (coercedType.getSubModules == null)
+        "coercedTo: coercedType must not have submodules (it’s a ${
+          coercedType.description})";
       mkOptionType rec {
         name = "coercedTo";
         description = "${finalType.description} or ${coercedType.description} convertible to it";
@@ -464,7 +480,6 @@ rec {
       name = builtins.trace "types.optionSet is deprecated; use types.submodule instead" "optionSet";
       description = "option set";
     };
-
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 

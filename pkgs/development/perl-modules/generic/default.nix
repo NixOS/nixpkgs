@@ -1,8 +1,15 @@
-{ lib, stdenv, perl }:
+{ lib, stdenv, perl, buildPerl, toPerlModule }:
 
-{ nativeBuildInputs ? [], name, ... } @ attrs:
+{ buildInputs ? [], nativeBuildInputs ? [], ... } @ attrs:
 
-stdenv.mkDerivation (
+assert attrs?pname -> attrs?version;
+assert attrs?pname -> !(attrs?name);
+
+(if attrs ? name then
+  lib.trivial.warn "builtPerlPackage: `name' (\"${attrs.name}\") is deprecated, use `pname' and `version' instead"
+ else
+  (x: x))
+toPerlModule(stdenv.mkDerivation (
   (
   lib.recursiveUpdate
   {
@@ -25,17 +32,20 @@ stdenv.mkDerivation (
 
     # current directory (".") is removed from @INC in Perl 5.26 but many old libs rely on it
     # https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
-    PERL_USE_UNSAFE_INC = lib.optionalString (lib.versionAtLeast (lib.getVersion perl) "5.26") "1";
+    PERL_USE_UNSAFE_INC = "1";
 
-    meta.homepage = "https://metacpan.org/release/${(builtins.parseDrvName name).name}";
+    meta.homepage = "https://metacpan.org/release/${attrs.pname or (builtins.parseDrvName attrs.name).name}"; # TODO: phase-out `attrs.name`
+    meta.platforms = perl.meta.platforms;
   }
   attrs
   )
   //
   {
-    name = "perl${lib.getVersion perl}-${name}";
+    pname = "perl${perl.version}-${attrs.pname or (builtins.parseDrvName attrs.name).name}"; # TODO: phase-out `attrs.name`
+    version = attrs.version or (builtins.parseDrvName attrs.name).version;                   # TODO: phase-out `attrs.name`
     builder = ./builder.sh;
+    buildInputs = buildInputs ++ [ perl ];
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
-    inherit perl;
+    fullperl = buildPerl;
   }
-)
+))

@@ -1,0 +1,36 @@
+From 626c385ba141c6abcff01bef4451fcad062d232c Mon Sep 17 00:00:00 2001
+From: Javier Candeira <javier@candeira.com>
+Date: Sat, 7 Apr 2018 20:21:45 +1000
+Subject: [PATCH] nixpckgs patches
+
+---
+ src/Makefile.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/Makefile.in b/src/Makefile.in
+index e75918f..e04703b 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -283,8 +283,8 @@ top_srcdir = @top_srcdir@
+ # these are the headers for your project
+ noinst_HEADERS = $(srcdir)/*.h
+ xmlcopyeditordir = ${prefix}/share/xmlcopyeditor
+-pixmapdir = /usr/share/pixmaps
+-applicationsdir = /usr/share/applications
++pixmapdir = ${prefix}/share/pixmaps
++applicationsdir = ${prefix}/share/applications
+ 
+ # the application source, library search path, and link libraries
+ xmlcopyeditor_SOURCES = aboutdialog.cpp associatedialog.cpp binaryfile.cpp \
+@@ -357,7 +357,7 @@ EXTRA_DIST = \
+ 	$(srcdir)/xmlcopyeditor.rc \
+ 	$(srcdir)/xmlschemaparser.cpp
+ 
+-AM_CPPFLAGS = -I/usr/include/libxml2 $(ENCHANT_CFLAGS) $(GTK_CFLAGS)
++AM_CPPFLAGS = -I$(CPLUS_INCLUDE_PATH) $(ENCHANT_CFLAGS) $(GTK_CFLAGS)
+ all: all-am
+ 
+ .SUFFIXES:
+-- 
+2.16.2
+

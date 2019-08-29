@@ -1,0 +1,97 @@
+From: Antonio Terceiro <terceiro@debian.org>
+Date: Wed, 27 May 2015 09:36:17 -0300
+Subject: Support system-installed plugins
+Source: https://salsa.debian.org/ruby-team/vagrant/blob/cb672c6dc0c63f6552c5ec4d6d7d22929d353503/debian/patches/0004-Support-system-installed-plugins.patch
+
+Plugins must be installed as regular Ruby libraries, and they must
+contain /usr/share/vagrant-plugins/plugins.d/$PLUGINNAME.json with the
+following content:
+
+{
+  "${PLUGINNAME}": {
+    "ruby_version":"$(ruby -e 'puts RUBY_VERSION')",
+    "vagrant_version":"$(cat /usr/share/vagrant/version.txt)",
+    "gem_version":"",
+    "require":"",
+    "sources":[]
+  }
+}
+---
+ lib/vagrant/plugin/manager.rb    |  4 ++--
+ lib/vagrant/plugin/state_file.rb | 22 +++++++++++++++++++++-
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/lib/vagrant/plugin/manager.rb b/lib/vagrant/plugin/manager.rb
+index 567347d..d9d76a0 100644
+--- a/lib/vagrant/plugin/manager.rb
++++ b/lib/vagrant/plugin/manager.rb
+@@ -18,7 +18,7 @@ module Vagrant
+ 
+       # Returns the path to the [StateFile] for system plugins.
+       def self.system_plugins_file
+-        dir = Vagrant.installer_embedded_dir
++        dir = '@system_plugin_dir@'
+         return nil if !dir
+         Pathname.new(dir).join("plugins.json")
+       end
+@@ -38,7 +38,7 @@ module Vagrant
+ 
+         system_path  = self.class.system_plugins_file
+         @system_file = nil
+-        @system_file = StateFile.new(system_path) if system_path && system_path.file?
++        @system_file = StateFile.new(system_path, true) if system_path && system_path.file?
+ 
+         @local_file = nil
+         @globalized = @localized = false
+diff --git a/lib/vagrant/plugin/state_file.rb b/lib/vagrant/plugin/state_file.rb
+index c6872d4..935d431 100644
+--- a/lib/vagrant/plugin/state_file.rb
++++ b/lib/vagrant/plugin/state_file.rb
+@@ -11,8 +11,9 @@ module Vagrant
+       # @return [Pathname] path to file
+       attr_reader :path
+ 
+-      def initialize(path)
++      def initialize(path, system = false)
+         @path = path
++        @system = system
+ 
+         @data = {}
+         if @path.exist?
+@@ -28,6 +29,21 @@ module Vagrant
+ 
+         @data["version"] ||= "1"
+         @data["installed"] ||= {}
++        load_extra_plugins
++      end
++
++      def load_extra_plugins
++        extra_plugins = Dir.glob(@path.dirname.join('plugins.d', '*.json'))
++        extra_plugins.each do |filename|
++          json = File.read(filename)
++          begin
++            plugin_data = JSON.parse(json)
++            @data["installed"].merge!(plugin_data)
++          rescue JSON::ParserError => e
++            raise Vagrant::Errors::PluginStateFileParseError,
++              path: filename, message: e.message
++          end
++        end
+       end
+ 
+       # Add a plugin that is installed to the state file.
+@@ -107,6 +123,14 @@ module Vagrant
+           f.close
+           FileUtils.mv(f.path, @path)
+         end
++      rescue Errno::EACCES
++        # Ignore permission denied against system-installed plugins; regular
++        # users are not supposed to write there.
++        raise unless @system
++      rescue Errno::EROFS
++        # Ignore read-only filesystem against system-installed plugins; regular
++        # users are not supposed to write there.
++        raise unless @system
+       end
+ 
+       protected

@@ -16,7 +16,7 @@ let
 
       super_only = ${builtins.toJSON cfg.superOnly}
 
-      ${optionalString (!isNull cfg.loginGroup) "login_group = ${cfg.loginGroup}"}
+      ${optionalString (cfg.loginGroup != null) "login_group = ${cfg.loginGroup}"}
 
       login_timeout = ${toString cfg.loginTimeout}
 
@@ -24,7 +24,7 @@ let
 
       sql_root = ${cfg.sqlRoot}
 
-      ${optionalString (!isNull cfg.tls) ''
+      ${optionalString (cfg.tls != null) ''
       tls_cert = ${cfg.tls.cert}
       tls_key = ${cfg.tls.key}
       ''}

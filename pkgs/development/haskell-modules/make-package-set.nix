@@ -38,15 +38,14 @@ let
   inherit (stdenv) buildPlatform hostPlatform;
 
   inherit (stdenv.lib) fix' extends makeOverridable;
-  inherit (haskellLib) overrideCabal getHaskellBuildInputs;
+  inherit (haskellLib) overrideCabal getBuildInputs;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
     nodejs = buildPackages.nodejs-slim;
-    inherit buildHaskellPackages;
-    inherit (self) ghc;
-    inherit (buildHaskellPackages) jailbreak-cabal;
-    hscolour = overrideCabal buildHaskellPackages.hscolour (drv: {
+    inherit (self) buildHaskellPackages ghc shellFor;
+    inherit (self.buildHaskellPackages) jailbreak-cabal;
+    hscolour = overrideCabal self.buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
       doHaddock = false;
       hyperlinkSource = false;      # Avoid depending on hscolour for this build.
@@ -119,13 +118,15 @@ let
     inherit packages;
   };
 
+  # Use cabal2nix to create a default.nix for the package sources found at 'src'.
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
-      sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
+      sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
     in pkgs.buildPackages.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
       nativeBuildInputs = [ pkgs.buildPackages.cabal2nix ];
       preferLocalBuild = true;
+      allowSubstitutes = false;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = pkgs.lib.optionalString (buildPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
@@ -174,37 +175,59 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
     inherit (haskellLib) packageSourceOverrides;
 
+    # callHackage :: Text -> Text -> AttrSet -> HaskellPackage
+    #
+    # e.g., while overriding a package set:
+    #    '... foo = self.callHackage "foo" "1.5.3" {}; ...'
     callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
 
+    # callHackageDirect :: Text -> Text -> AttrSet -> HaskellPackage
+    #
+    # This function does not depend on all-cabal-hashes and therefore will work
+    # for any version that has been released on hackage as opposed to only
+    # versions released before whatever version of all-cabal-hashes you happen
+    # to be currently using.
+    callHackageDirect = {pkg, ver, sha256}:
+      let pkgver = "${pkg}-${ver}";
+      in self.callCabal2nix pkg (pkgs.fetchzip {
+           url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
+           inherit sha256;
+         });
+
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nix = name: src: args: let
-      filter = path: type:
-                 pkgs.lib.hasSuffix "${name}.cabal" path ||
-                 baseNameOf path == "package.yaml";
-      expr = self.haskellSrc2nix {
-        inherit name;
-        src = if pkgs.lib.canCleanSource src
-                then pkgs.lib.cleanSourceWith { inherit src filter; }
-              else src;
-      };
-    in overrideCabal (callPackageKeepDeriver expr args) (orig: {
-         inherit src;
-       });
+    callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
+      let
+        filter = path: type:
+                   pkgs.lib.hasSuffix "${name}.cabal" path ||
+                   baseNameOf path == "package.yaml";
+        expr = self.haskellSrc2nix {
+          inherit name extraCabal2nixOptions;
+          src = if pkgs.lib.canCleanSource src
+                  then pkgs.lib.cleanSourceWith { inherit src filter; }
+                else src;
+        };
+      in overrideCabal (callPackageKeepDeriver expr args) (orig: {
+           inherit src;
+         });
+
+    callCabal2nix = name: src: args: self.callCabal2nixWithOptions name src "" args;
 
     # : { root : Path
+    #   , name : Defaulted String
     #   , source-overrides : Defaulted (Either Path VersionNumber)
     #   , overrides : Defaulted (HaskellPackageOverrideSet)
     #   , modifier : Defaulted
     #   , returnShellEnv : Defaulted
     #   } -> NixShellAwareDerivation
-    # Given a path to a haskell package directory whose cabal file is
-    # named the same as the directory name, an optional set of
-    # source overrides as appropriate for the 'packageSourceOverrides'
-    # function, an optional set of arbitrary overrides, and an optional
-    # haskell package modifier,  return a derivation appropriate
-    # for nix-build or nix-shell to build that package.
+    # Given a path to a haskell package directory, an optional package name
+    # which defaults to the base name of the path, an optional set of source
+    # overrides as appropriate for the 'packageSourceOverrides' function, an
+    # optional set of arbitrary overrides, and an optional haskell package
+    # modifier, return a derivation appropriate for nix-build or nix-shell to
+    # build that package.
     developPackage =
       { root
+      , name ? builtins.baseNameOf root
       , source-overrides ? {}
       , overrides ? self: super: {}
       , modifier ? drv: drv
@@ -214,7 +237,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
            (pkgs.lib.composeExtensions
               (self.packageSourceOverrides source-overrides)
               overrides))
-        .callCabal2nix (builtins.baseNameOf root) root {};
+        .callCabal2nix name root {};
       in if returnShellEnv then (modifier drv).env else modifier drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
@@ -257,20 +280,46 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     shellFor = { packages, withHoogle ? false, ... } @ args:
       let
         selected = packages self;
-        packageInputs = builtins.map getHaskellBuildInputs selected;
-        haskellInputs =
-          builtins.filter
-            (input: pkgs.lib.all (p: input.outPath != p.outPath) selected)
-            (pkgs.lib.concatMap (p: p.haskellBuildInputs) packageInputs);
+
+        packageInputs = map getBuildInputs selected;
+
+        name = if pkgs.lib.length selected == 1
+          then "ghc-shell-for-${(pkgs.lib.head selected).name}"
+          else "ghc-shell-for-packages";
+
+        # If `packages = [ a b ]` and `a` depends on `b`, don't build `b`,
+        # because cabal will end up ignoring that built version, assuming
+        # new-style commands.
+        haskellInputs = pkgs.lib.filter
+          (input: pkgs.lib.all (p: input.outPath != p.outPath) selected)
+          (pkgs.lib.concatMap (p: p.haskellBuildInputs) packageInputs);
         systemInputs = pkgs.lib.concatMap (p: p.systemBuildInputs) packageInputs;
+
         withPackages = if withHoogle then self.ghcWithHoogle else self.ghcWithPackages;
+        ghcEnv = withPackages (p: haskellInputs);
+        nativeBuildInputs = pkgs.lib.concatMap (p: p.nativeBuildInputs) selected;
+
+        ghcCommand' = if ghc.isGhcjs or false then "ghcjs" else "ghc";
+        ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
+        ghcCommandCaps= pkgs.lib.toUpper ghcCommand';
+
         mkDrvArgs = builtins.removeAttrs args ["packages" "withHoogle"];
       in pkgs.stdenv.mkDerivation (mkDrvArgs // {
-        name = "ghc-shell-for-packages";
-        nativeBuildInputs = [(withPackages (_: haskellInputs))] ++ mkDrvArgs.nativeBuildInputs or [];
+        name = mkDrvArgs.name or name;
+
         buildInputs = systemInputs ++ mkDrvArgs.buildInputs or [];
+        nativeBuildInputs = [ ghcEnv ] ++ nativeBuildInputs ++ mkDrvArgs.nativeBuildInputs or [];
         phases = ["installPhase"];
         installPhase = "echo $nativeBuildInputs $buildInputs > $out";
+        LANG = "en_US.UTF-8";
+        LOCALE_ARCHIVE = pkgs.lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
+        "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
+        # TODO: is this still valid?
+        "NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
+        "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
+          then "${ghcEnv}/lib/HaLVM-${ghc.version}"
+          else "${ghcEnv}/lib/${ghcCommand}-${ghc.version}";
       });
 
     ghc = ghc // {

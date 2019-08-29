@@ -1,24 +1,25 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, bash}:
+{ stdenv, fetchFromGitHub, buildGoPackage, bash }:
 
 buildGoPackage rec {
   name = "direnv-${version}";
-  version = "2.17.0";
+  version = "2.20.1";
   goPackagePath = "github.com/direnv/direnv";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "1dmanqpifx27cz41yc3ijpij0wrbgw9qny2d4n6jppfwf2qzyq4s";
+    sha256 = "0v8mqxb5g8z9kdnvbwfg39hlb9l3wpb8qwslwgln42k4bs8kg9hs";
   };
 
   postConfigure = ''
     cd $NIX_BUILD_TOP/go/src/$goPackagePath
   '';
 
-  buildPhase = ''
-    make BASH_PATH=${bash}/bin/bash
-  '';
+  # we have no bash at the moment for windows
+  makeFlags = stdenv.lib.optional (!stdenv.hostPlatform.isWindows) [
+    "BASH_PATH=${bash}/bin/bash"
+  ];
 
   installPhase = ''
     mkdir -p $out

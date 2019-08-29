@@ -7,12 +7,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.2.2";
+  version = "2.3.2";
   name = "audacity-${version}";
 
   src = fetchurl {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
-    sha256 = "18q7i77ynihx7xp45lz2lv0k0wrh6736pcrivlpwrxjgbvyqx7km";
+    sha256 = "0cf7fr1qhyyylj8g9ax1rq5sb887bcv5b8d7hwlcfwamzxqpliyc";
   };
 
   preConfigure = /* we prefer system-wide libs */ ''

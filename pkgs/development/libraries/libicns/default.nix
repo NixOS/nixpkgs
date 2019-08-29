@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng jasper ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Library for manipulation of the Mac OS icns resource format";
+    homepage = https://icns.sourceforge.io;
+    license = with licenses; [ gpl2 lgpl2 lgpl21 ];
+    platforms = platforms.unix;
   };
 }

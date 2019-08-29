@@ -1,20 +1,23 @@
 { stdenv, fetchurl, python2Packages, makeWrapper, unzip
 , guiSupport ? false, tk ? null
-, ApplicationServices }:
+, ApplicationServices
+, mercurialSrc ? fetchurl rec {
+    meta.name = "mercurial-${meta.version}";
+    meta.version = "4.9.1";
+    url = "https://mercurial-scm.org/release/${meta.name}.tar.gz";
+    sha256 = "0iybbkd9add066729zg01kwz5hhc1s6lhp9rrnsmzq6ihyxj3p8v";
+  }
+}:
 
 let
-  # if you bump version, update pkgs.tortoisehg too or ping maintainer
-  version = "4.6.2";
-  name = "mercurial-${version}";
   inherit (python2Packages) docutils hg-git dulwich python;
-in python2Packages.buildPythonApplication {
-  inherit name;
-  format = "other";
 
-  src = fetchurl {
-    url = "https://mercurial-scm.org/release/${name}.tar.gz";
-    sha256 = "1bv6wgcdx8glihjjfg22khhc52mclsn4kwfqvzbzlg0b42h4xl0w";
-  };
+in python2Packages.buildPythonApplication {
+
+  inherit (mercurialSrc.meta) name version;
+  src = mercurialSrc;
+
+  format = "other";
 
   inherit python; # pass it so that the same version can be used in hg2git
 
@@ -49,12 +52,13 @@ in python2Packages.buildPythonApplication {
       cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
       chmod u+x $out/share/cgi-bin/hgweb.cgi
 
-      # install bash completion
-      install -D -v contrib/bash_completion $out/share/bash-completion/completions/mercurial
+      # install bash/zsh completions
+      install -v -m644 -D contrib/bash_completion $out/share/bash-completion/completions/_hg
+      install -v -m644 -D contrib/zsh_completion $out/share/zsh/site-functions/_hg
     '';
 
   meta = {
-    inherit version;
+    inherit (mercurialSrc.meta) version;
     description = "A fast, lightweight SCM system for very large distributed projects";
     homepage = https://www.mercurial-scm.org;
     downloadPage = https://www.mercurial-scm.org/release/;

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, kernel }:
 
-let base = "batman-adv-2018.2"; in
+let base = "batman-adv-2019.2"; in
 
 stdenv.mkDerivation rec {
   name = "${base}-${kernel.version}";
 
   src = fetchurl {
     url = "http://downloads.open-mesh.org/batman/releases/${base}/${base}.tar.gz";
-    sha256 = "1jdqlbn8mp9rycbnkgjsb98pb2c7jzw9mm30d3iga69ycwk5dqyq";
+    sha256 = "1j5day3hia5nd21kb3msjblrybfr5sjnhrx7h5bb5ll8rykgdhvh";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

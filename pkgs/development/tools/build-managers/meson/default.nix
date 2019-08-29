@@ -1,12 +1,22 @@
-{ lib, python3Packages, stdenv, targetPlatform, writeTextDir, substituteAll }:
+{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
 
+let
+  # See https://mesonbuild.com/Reference-tables.html#cpu-families
+  cpuFamilies = {
+    "aarch64" = "aarch64";
+    "armv6l"  = "arm";
+    "armv7l"  = "arm";
+    "i686"    = "x86";
+    "x86_64"  = "x86_64";
+  };
+in
 python3Packages.buildPythonApplication rec {
-  version = "0.46.1";
   pname = "meson";
+  version = "0.50.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1jdxs2mkniy1hpdjc4b4jb95axsjp6j5fzphmm6d4gqmqyykjvqc";
+    sha256 = "05k3wsxjcnnq7a8n5kzxh2cdh5jdkh13xagigz5axs48j36zfai4";
   };
 
   postFixup = ''
@@ -16,6 +26,9 @@ python3Packages.buildPythonApplication rec {
       mv ".$i-wrapped" "$i"
     done
     popd
+
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
   '';
 
   patches = [
@@ -41,26 +54,35 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # We use custom Clang, which makes Meson think *not Apple*, while still
+    # relying on system linker. When it detects standard Clang, Meson will
+    # pass it `-Wl,-O1` flag but optimizations are not recognized by
+    # Mac linker.
+    # https://github.com/mesonbuild/meson/issues/4784
+    ./fix-objc-linking.patch
   ];
 
   setupHook = ./setup-hook.sh;
 
   crossFile = writeTextDir "cross-file.conf" ''
     [binaries]
-    c = '${stdenv.cc.targetPrefix}cc'
-    cpp = '${stdenv.cc.targetPrefix}c++'
-    ar = '${stdenv.cc.bintools.targetPrefix}ar'
-    strip = '${stdenv.cc.bintools.targetPrefix}strip'
+    c = '${targetPackages.stdenv.cc.targetPrefix}cc'
+    cpp = '${targetPackages.stdenv.cc.targetPrefix}c++'
+    ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
+    strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
     pkgconfig = 'pkg-config'
+    ld = '${targetPackages.stdenv.cc.targetPrefix}ld'
+    objcopy = '${targetPackages.stdenv.cc.targetPrefix}objcopy'
 
     [properties]
     needs_exe_wrapper = true
 
     [host_machine]
-    system = '${targetPlatform.parsed.kernel.name}'
-    cpu_family = '${targetPlatform.parsed.cpu.family}'
-    cpu = '${targetPlatform.parsed.cpu.name}'
-    endian = ${if targetPlatform.isLittleEndian then "'little'" else "'big'"}
+    system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
+    cpu_family = '${cpuFamilies.${targetPackages.stdenv.targetPlatform.parsed.cpu.name}}'
+    cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
+    endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
   '';
 
   # 0.45 update enabled tests but they are failing
@@ -70,7 +92,7 @@ python3Packages.buildPythonApplication rec {
 
   inherit (stdenv) cc;
 
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = stdenv.targetPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;

@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
 
     # I think this is a typo and should be CXX? Either way let's kill it
     sed -i '/XX=\/usr/d' makefile.macosx_llvm_64bits
+  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace makefile.machine \
+      --replace 'CC=gcc'  'CC=${stdenv.cc.targetPrefix}gcc' \
+      --replace 'CXX=g++' 'CXX=${stdenv.cc.targetPrefix}g++'
   '';
 
   preConfigure = ''
@@ -32,6 +36,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   setupHook = ./setup-hook.sh;
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = {
     homepage = http://p7zip.sourceforge.net/;

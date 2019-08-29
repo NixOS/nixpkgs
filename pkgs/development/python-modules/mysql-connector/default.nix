@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.12";
+  version = "8.0.17";
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "1i3148dka4zfqzz4n4n5k0qaqbc585bdpmjwgx5vp6iiv7pgvrxp";
+    sha256 = "1by0g7hrbmb1wj2wh3q9y92mjimck2izh1i4fm1xfbp278p2acbd";
   };
 
   propagatedBuildInputs = [ protobuf ];

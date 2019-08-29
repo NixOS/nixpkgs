@@ -1,27 +1,33 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
+, javaSupport ? (!stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64)
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.5.1";
+  name = "R-3.6.1";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0463bff5eea0f3d93fa071f79c18d0993878fd4f2e18ae6cf22c1639d11457ed";
+    sha256 = "128kifbq0w25y8aq77w289ddax5i5w2djcfsqgffrb3i7syrxajv";
   };
+
+  dontUseImakeConfigure = true;
 
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which jdk openblas curl
+    pkgconfig bison imake which openblas curl
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ]
+    ++ stdenv.lib.optional javaSupport jdk;
 
-  patches = [ ./no-usr-local-search-paths.patch ];
+  patches = [
+    ./no-usr-local-search-paths.patch
+  ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
@@ -47,7 +53,7 @@ stdenv.mkDerivation rec {
       CC=$(type -p cc)
       CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-      JAVA_HOME="${jdk}"
+      ${stdenv.lib.optionalString javaSupport "JAVA_HOME=\"${jdk}\""}
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
@@ -64,6 +70,11 @@ stdenv.mkDerivation rec {
   '';
 
   installTargets = [ "install" "install-info" "install-pdf" ];
+
+  # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
+  # but Nix cannot detect it as a run-time dependency because the installed file
+  # is compiled and compressed, which hides the store path.
+  postFixup = "echo ${which} > $out/nix-support/undetected-runtime-dependencies";
 
   doCheck = true;
   preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
@@ -99,6 +110,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     hydraPlatforms = platforms.linux;
 
-    maintainers = [ maintainers.peti ];
+    maintainers = with maintainers; [ peti timokau ];
   };
 }

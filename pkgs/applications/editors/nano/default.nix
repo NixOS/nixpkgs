@@ -14,17 +14,17 @@ let
   nixSyntaxHighlight = fetchFromGitHub {
     owner = "seitz";
     repo = "nanonix";
-    rev = "17e0de65e1cbba3d6baa82deaefa853b41f5c161";
-    sha256 = "1g51h65i31andfs2fbp1v3vih9405iknqn11fzywjxji00kjqv5s";
+    rev = "bf8d898efaa10dce3f7972ff765b58c353b4b4ab";
+    sha256 = "0773s5iz8aw9npgyasb0r2ybp6gvy2s9sq51az8w7h52bzn5blnn";
   };
 
 in stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.9.8";
+  version = "4.4";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "122lm0z97wk3mgnbn8m4d769d4j9rxyc9z7s89xd4gsdp8qsrpn2";
+    sha256 = "1iw2ypq34g1gfqyhgka2fz5yj5vrlz85q6zk7amgyj286ph25wia";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -49,7 +49,6 @@ in stdenv.mkDerivation rec {
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      jgeerds
       joachifm
     ];
     platforms = platforms.all;

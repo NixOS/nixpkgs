@@ -5,18 +5,18 @@
 with stdenv.lib;
 
 let
-  version = "0.1.31";
+  version = "0.1.37";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    owner = "projectatomic";
+    owner = "containers";
     repo = "skopeo";
-    sha256 = "02z46wxhms8yph03ksl7i4hbqy15v3y1r43js9dxn0a45vxkm7lb";
+    sha256 = "1ly5yq3aj4ciqn6hbhvxqp1im81pbas9smdhbbks7iwjvh944d62";
   };
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
 
-  goPackagePath = "github.com/projectatomic/skopeo";
+  goPackagePath = "github.com/containers/skopeo";
 
 in
 buildGoPackage rec {
@@ -32,8 +32,8 @@ buildGoPackage rec {
 
   buildFlagsArray = ''
     -ldflags=
-    -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}
-    -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/internal/tmpdir.unixTempDirForBigFiles=/tmp
+    -X github.com/containers/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}
+    -X github.com/containers/skopeo/vendor/github.com/containers/image/internal/tmpdir.unixTempDirForBigFiles=/tmp
   '';
 
   preBuild = ''
@@ -44,7 +44,7 @@ buildGoPackage rec {
   postBuild = ''
     # depends on buildGoPackage not changing …
     pushd ./go/src/${goPackagePath}
-    make install-docs MANINSTALLDIR="$man"
+    make install-docs MANINSTALLDIR="$man/share/man"
     popd
   '';
 

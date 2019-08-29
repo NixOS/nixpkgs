@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.3.11";
 
   src = fetchurl {
-    url = "http://www.pldaniels.com/${baseName}/${name}.tar.gz";
+    url = "https://pldaniels.com/${baseName}/${name}.tar.gz";
     sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
   };
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license.fullName = "alterMIME LICENSE";
-    downloadPage = "http://www.pldaniels.com/altermime/";
+    downloadPage = "https://pldaniels.com/altermime/";
   };
 }

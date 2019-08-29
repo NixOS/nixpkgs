@@ -1,9 +1,10 @@
 { stdenv, fetchurl, patchelf, coreutils, pcsclite
-, zlib, glib, gdk_pixbuf, gtk2, cairo, pango, libX11, atk, openssl }:
+, zlib, glib, gdk-pixbuf, gtk2, cairo, pango, libX11, atk, openssl
+, runtimeShell }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc zlib glib gdk_pixbuf gtk2 cairo pango libX11 atk openssl
+    stdenv.cc.cc zlib glib gdk-pixbuf gtk2 cairo pango libX11 atk openssl
   ];
 
   src_i686 = {
@@ -21,8 +22,8 @@ stdenv.mkDerivation rec {
   name = "moneyplex-${version}";
   version = "16.0.22424";
 
-  src = fetchurl (if stdenv.system == "i686-linux" then src_i686
-                  else if stdenv.system == "x86_64-linux" then src_x86_64
+  src = fetchurl (if stdenv.hostPlatform.system == "i686-linux" then src_i686
+                  else if stdenv.hostPlatform.system == "x86_64-linux" then src_x86_64
                   else throw "moneyplex requires i686-linux or x86_64-linux");
 
 
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     mkdir "$out/bin"
 
     cat > $out/bin/moneyplex <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     if [ -z "\$XDG_DATA_HOME" ]; then
         MDIR=\$HOME/.local/share/moneyplex

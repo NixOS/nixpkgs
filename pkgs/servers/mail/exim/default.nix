@@ -2,29 +2,33 @@
 , enableLDAP ? false, openldap
 , enableMySQL ? false, mysql, zlib
 , enableAuthDovecot ? false, dovecot
+, enablePAM ? false, pam
+, enableSPF ? true, libspf2
 }:
 
 stdenv.mkDerivation rec {
-  name = "exim-4.91";
+  name = "exim-4.92.1";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${name}.tar.xz";
-    sha256 = "066ip7a5lqfn9rcr14j4nm0kqysw6mzvbbb0ip50lmfm0fqsqmzc";
+    sha256 = "1d14vs6jdw2bm9m33w2szxpv8rppbk7hvszq9p0n9i3svmqshr1c";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ coreutils db openssl perl pcre ]
     ++ stdenv.lib.optional enableLDAP openldap
-    ++ stdenv.lib.optionals enableMySQL [ mysql zlib ]
-    ++ stdenv.lib.optional enableAuthDovecot dovecot;
+    ++ stdenv.lib.optionals enableMySQL [ mysql.connector-c zlib ]
+    ++ stdenv.lib.optional enableAuthDovecot dovecot
+    ++ stdenv.lib.optional enablePAM pam
+    ++ stdenv.lib.optional enableSPF libspf2;
 
   preBuild = ''
-    ${stdenv.lib.optionalString enableMySQL "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${mysql}/share/mysql/pkgconfig/"}
     sed '
       s:^\(BIN_DIRECTORY\)=.*:\1='"$out"'/bin:
       s:^\(CONFIGURE_FILE\)=.*:\1=/etc/exim.conf:
       s:^\(EXIM_USER\)=.*:\1=ref\:nobody:
       s:^\(SPOOL_DIRECTORY\)=.*:\1=/exim-homeless-shelter:
+      s:^# \(TRANSPORT_LMTP\)=.*:\1=yes:
       s:^# \(SUPPORT_MAILDIR\)=.*:\1=yes:
       s:^EXIM_MONITOR=.*$:# &:
       s:^\(FIXED_NEVER_USERS\)=root$:\1=0:
@@ -44,18 +48,27 @@ stdenv.mkDerivation rec {
       ${stdenv.lib.optionalString enableLDAP ''
         s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
         s:^# \(LOOKUP_LDAP=yes\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lldap:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lldap -llber:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap -llber:
       ''}
       ${stdenv.lib.optionalString enableMySQL ''
         s:^# \(LOOKUP_MYSQL=yes\)$:\1:
-        s:^# \(LOOKUP_MYSQL_PC=mariadb\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${mysql}/include/mysql/:
+        s:^# \(LOOKUP_MYSQL_PC=mysql.connector-c\)$:\1:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${mysql.connector-c}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${mysql.connector-c}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${mysql.connector-c}/include/mysql/:
       ''}
       ${stdenv.lib.optionalString enableAuthDovecot ''
         s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
+      ''}
+      ${stdenv.lib.optionalString enablePAM ''
+        s:^# \(SUPPORT_PAM\)=.*:\1=yes:
+        s:^\(EXTRALIBS_EXIM\)=\(.*\):\1=\2 -lpam:
+        s:^# \(EXTRALIBS_EXIM\)=.*:\1=-lpam:
+      ''}
+      ${stdenv.lib.optionalString enableSPF ''
+        s:^# \(SUPPORT_SPF\)=.*:\1=yes:
+        s:^# \(LDFLAGS += -lspf2\):\1:
       ''}
       #/^\s*#.*/d
       #/^\s*$/d

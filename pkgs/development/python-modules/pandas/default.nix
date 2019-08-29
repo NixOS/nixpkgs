@@ -16,9 +16,11 @@
 , lxml
 , html5lib
 , beautifulsoup4
+, hypothesis
 , openpyxl
 , tables
 , xlwt
+, runtimeShell
 , libcxx ? null
 }:
 
@@ -28,18 +30,18 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.23.3";
+  version = "0.25.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9cd3614b4e31a0889388ff1bd19ae857ad52658b33f776065793c293a29cf612";
+    sha256 = "914341ad2d5b1ea522798efa4016430b66107d05781dbfe7cf05eba8f37df995";
   };
 
-  checkInputs = [ pytest glibcLocales moto ];
+  checkInputs = [ pytest glibcLocales moto hypothesis ];
 
-  buildInputs = [] ++ optional isDarwin libcxx;
+  nativeBuildInputs = [ cython ];
+  buildInputs = optional isDarwin libcxx;
   propagatedBuildInputs = [
-    cython
     dateutil
     scipy
     numexpr
@@ -80,10 +82,14 @@ in buildPythonPackage rec {
     "test_oo_optimizable"
     # Disable IO related tests because IO data is no longer distributed
     "io"
+    # KeyError Timestamp
+    "test_to_excel"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
   ]);
+
+  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
   checkPhase = ''
     runHook preCheck
@@ -92,8 +98,8 @@ in buildPythonPackage rec {
   #       Until then we disable the tests.
   + optionalString isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!/bin/sh" > pbcopy
-    echo "#!/bin/sh" > pbpaste
+    echo "#!${runtimeShell}" > pbcopy
+    echo "#!${runtimeShell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''

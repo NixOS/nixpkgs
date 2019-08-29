@@ -1,16 +1,16 @@
 { lib, buildGoPackage, fetchFromGitLab, fetchurl }:
 
 let
-  version = "11.1.0";
+  version = "12.2.0";
   # Gitlab runner embeds some docker images these are prebuilt for arm and x86_64
   docker_x86_64 = fetchurl {
     url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/helper-images/prebuilt-x86_64.tar.xz";
-    sha256 = "0l7j69isnp6wlix3ysjxcr9dgcx5a0j9z2k0bsl714ff339js6j5";
+    sha256 = "0r0jy571dxcspsl0q31wyw4017rfq7i4rxsgf83jqdjqaigas8dk";
   };
 
   docker_arm = fetchurl {
     url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/helper-images/prebuilt-arm.tar.xz";
-    sha256 = "16x9wbyd90jgyn7x45j9cyrdfz4hg8qav132schqrrdfrgjyrb4x";
+    sha256 = "1pbzyfvfgwp9r67a148nr4gh2p9lrmnn4hxap37abb5q5209pjir";
   };
 in
 buildGoPackage rec {
@@ -29,7 +29,7 @@ buildGoPackage rec {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "0b632jnqbj74nx27nlpiia6nq8668gf41lcb4s24gw9jnfmrwhym";
+    sha256 = "0id0ivysn0396dwi357iig28d4xr2wd7q05r6ksgml8xyfijdgd3";
   };
 
   patches = [ ./fix-shell-path.patch ];
@@ -46,6 +46,6 @@ buildGoPackage rec {
     license = licenses.mit;
     homepage = https://about.gitlab.com/gitlab-ci/;
     platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ bachp zimbatm ];
+    maintainers = with maintainers; [ bachp zimbatm globin ];
   };
 }

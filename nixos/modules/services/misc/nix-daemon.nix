@@ -8,7 +8,9 @@ let
 
   nix = cfg.package.out;
 
-  isNix20 = versionAtLeast (getVersion nix) "2.0pre";
+  nixVersion = getVersion nix;
+
+  isNix20 = versionAtLeast nixVersion "2.0pre";
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
@@ -33,7 +35,7 @@ let
       sh = pkgs.runtimeShell;
       binshDeps = pkgs.writeReferencesToFile sh;
     in
-      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; } (''
+      pkgs.runCommand "nix.conf" { preferLocalBuild = true; extraOptions = cfg.extraOptions; } (''
         ${optionalString (!isNix20) ''
           extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
         ''}
@@ -60,13 +62,21 @@ let
         ${optionalString (isNix20 && !cfg.distributedBuilds) ''
           builders =
         ''}
+        system-features = ${toString cfg.systemFeatures}
+        ${optionalString (versionAtLeast nixVersion "2.3pre") ''
+          sandbox-fallback = false
+        ''}
         $extraOptions
         END
-      '' + optionalString cfg.checkConfig ''
-        echo "Checking that Nix can read nix.conf..."
-        ln -s $out ./nix.conf
-        NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
-      '');
+      '' + optionalString cfg.checkConfig (
+            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
+              echo "Ignore nix.checkConfig when cross-compiling"
+            '' else ''
+              echo "Checking that Nix can read nix.conf..."
+              ln -s $out ./nix.conf
+              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
+            '')
+      );
 
 in
 
@@ -113,11 +123,11 @@ in
 
       buildCores = mkOption {
         type = types.int;
-        default = 1;
+        default = 0;
         example = 64;
         description = ''
           This option defines the maximum number of concurrent tasks during
-          one build. It affects, e.g., -j option for make. The default is 1.
+          one build. It affects, e.g., -j option for make.
           The special value 0 means that the builder should use all
           available CPU cores in the system. Some builds may become
           non-deterministic with this option; use with care! Packages will
@@ -267,10 +277,12 @@ in
 
       binaryCaches = mkOption {
         type = types.listOf types.str;
-        default = [ https://cache.nixos.org/ ];
         description = ''
           List of binary cache URLs used to obtain pre-built binaries
           of Nix packages.
+
+          By default https://cache.nixos.org/ is added,
+          to override it use <literal>lib.mkForce []</literal>.
         '';
       };
 
@@ -345,7 +357,6 @@ in
         type = types.listOf types.str;
         default =
           [
-            "$HOME/.nix-defexpr/channels"
             "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
@@ -354,6 +365,14 @@ in
           The default Nix expression search path, used by the Nix
           evaluator to look up paths enclosed in angle brackets
           (e.g. <literal>&lt;nixpkgs&gt;</literal>).
+        '';
+      };
+
+      systemFeatures = mkOption {
+        type = types.listOf types.str;
+        example = [ "kvm" "big-parallel" "gccarch-skylake" ];
+        description = ''
+          The supported features of a machine
         '';
       };
 
@@ -374,6 +393,7 @@ in
   config = {
 
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+    nix.binaryCaches = [ "https://cache.nixos.org/" ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 
@@ -400,8 +420,8 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.utillinux ]
-          ++ optionals cfg.distributedBuilds [ config.programs.ssh.package pkgs.gzip ]
+      { path = [ nix pkgs.utillinux config.programs.ssh.package ]
+          ++ optionals cfg.distributedBuilds [ pkgs.gzip ]
           ++ optionals (!isNix20) [ pkgs.openssl.bin ];
 
         environment = cfg.envVars
@@ -436,7 +456,7 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars //
-      { NIX_PATH = concatStringsSep ":" cfg.nixPath;
+      { NIX_PATH = cfg.nixPath;
       };
 
     environment.extraInit = optionalString (!isNix20)
@@ -446,9 +466,13 @@ in
         if [ "$USER" != root -o ! -w /nix/var/nix/db ]; then
             export NIX_REMOTE=daemon
         fi
+      '' + ''
+        if [ -e "$HOME/.nix-defexpr/channels" ]; then
+          export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
+        fi
       '';
 
-    nix.nrBuildUsers = mkDefault (lib.max 32 cfg.maxJobs);
+    nix.nrBuildUsers = mkDefault (lib.max 32 (if cfg.maxJobs == "auto" then 0 else cfg.maxJobs));
 
     users.users = nixbldUsers;
 
@@ -470,6 +494,21 @@ in
           /nix/var/nix/profiles/per-user \
           /nix/var/nix/gcroots/tmp
       '';
+
+    nix.systemFeatures = mkDefault (
+      [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
+      optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
+        # a x86_64 builder can run code for `platform.gcc.arch` and minor architectures:
+        [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ {
+          "sandybridge"    = [ "gccarch-westmere" ];
+          "ivybridge"      = [ "gccarch-westmere" "gccarch-sandybridge" ];
+          "haswell"        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
+          "broadwell"      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
+          "skylake"        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
+          "skylake-avx512" = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
+        }.${pkgs.hostPlatform.platform.gcc.arch} or []
+      )
+    );
 
   };
 

@@ -1,27 +1,24 @@
-{ stdenv, fetchgit, autoreconfHook, readline, python3Packages }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, ell, coreutils, readline, python3Packages }:
 
-let
-  ell = fetchgit {
-     url = https://git.kernel.org/pub/scm/libs/ell/ell.git;
-     rev = "0.7";
-     sha256 = "095psnpfdy107z5qgi5zw0icqxa44dfx02lza3pd8j4ybj57n0l7";
-  };
-in stdenv.mkDerivation rec {
-  name = "iwd-${version}";
-  version = "0.4";
+stdenv.mkDerivation rec {
+  pname = "iwd";
+
+  version = "0.19";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "1hib256jm70k6jlx486jrcv0iip52divbzhvb0f455yh28qfk0hs";
+    sha256 = "0848r06bnx5k6wlmy425hljc3f03x9xx0r83vdvf630jryc9llmz";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    pkgconfig
     python3Packages.wrapPython
   ];
 
   buildInputs = [
+    ell
     readline
     python3Packages.python
   ];
@@ -31,16 +28,17 @@ in stdenv.mkDerivation rec {
     python3Packages.pygobject3
   ];
 
-  enableParallelBuilding = true;
-
   configureFlags = [
-    "--with-dbus-datadir=$(out)/etc/"
-    "--localstatedir=/var"
-    "--disable-systemd-service"
+    "--with-dbus-datadir=${placeholder "out"}/etc/"
+    "--with-dbus-busdir=${placeholder "out"}/share/dbus-1/system-services/"
+    "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
+    "--with-systemd-modloaddir=${placeholder "out"}/etc/modules-load.d/" # maybe
+    "--localstatedir=/var/"
+    "--enable-wired"
+    "--enable-external-ell"
   ];
 
   postUnpack = ''
-    ln -s ${ell} ell
     patchShebangs .
   '';
 
@@ -53,6 +51,13 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapPythonPrograms
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.ead.service \
+                      --replace /bin/false ${coreutils}/bin/false
+    substituteInPlace $out/share/dbus-1/system-services/net.connman.iwd.service \
+                      --replace /bin/false ${coreutils}/bin/false
   '';
 
   meta = with stdenv.lib; {

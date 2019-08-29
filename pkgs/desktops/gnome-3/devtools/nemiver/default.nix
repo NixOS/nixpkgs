@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gnome3, gtk3, libxml2, intltool, itstool, gdb,
-  boost, sqlite, libgtop, glibmm, gtkmm, vte, gtksourceview, gsettings-desktop-schemas,
+  boost, sqlite, libgtop, glibmm, gtkmm3, vte, gtksourceview, gsettings-desktop-schemas,
   gtksourceviewmm, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.9.6";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/nemiver/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/nemiver/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "85ab8cf6c4f83262f441cb0952a6147d075c3c53d0687389a3555e946b694ef2";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3 gdb boost sqlite libgtop
-    glibmm gtkmm vte gtksourceview gtksourceviewmm
+    glibmm gtkmm3 vte gtksourceview gtksourceviewmm
     gsettings-desktop-schemas
   ];
 
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = "nemiver";
       attrPath = "gnome3.nemiver";
+      versionPolicy = "none";
     };
   };
 

@@ -12,7 +12,8 @@ with stdenv.lib;
 assert guiSupport -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.0.30";
+  name = "gnupg-${version}";
+  version = "2.0.30";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";

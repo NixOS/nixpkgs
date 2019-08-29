@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xz, coreutils ? null }:
 
 stdenv.mkDerivation rec {
-  name = "diffutils-3.6";
+  name = "diffutils-3.7";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/${name}.tar.xz";
-    sha256 = "1mivg0fy3a6fcn535ln8nkgfj6vxh5hsxxs5h6692wxmsjyyh8fn";
+    sha256 = "09isrg0isjinv8c535nxsi1s86wfdfzml80dbw41dj9x3hiad9xk";
   };
 
   outputs = [ "out" "info" ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "gl_cv_func_getopt_gnu=yes";
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/diffutils/diffutils.html;
+    homepage = https://www.gnu.org/software/diffutils/diffutils.html;
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
     license = licenses.gpl3;
     platforms = platforms.unix;

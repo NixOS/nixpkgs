@@ -29,7 +29,7 @@ with lib; let
     options = {
       path = mkOption {
         type = path;
-        default = "/var/run/postgrey.sock";
+        default = "/run/postgrey.sock";
         description = "Path of the unix socket";
       };
 
@@ -53,7 +53,7 @@ in {
       socket = mkOption {
         type = socket;
         default = {
-          path = "/var/run/postgrey.sock";
+          path = "/run/postgrey.sock";
           mode = "0777";
         };
         example = {

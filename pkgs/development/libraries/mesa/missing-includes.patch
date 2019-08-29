@@ -32,16 +32,6 @@
  #include <unistd.h>
  #include <fcntl.h>
  #else
---- ./src/mesa/drivers/dri/i965/brw_bufmgr.h
-+++ ./src/mesa/drivers/dri/i965/brw_bufmgr.h
-@@ -37,6 +37,7 @@
- #include <stdbool.h>
- #include <stdint.h>
- #include <stdio.h>
-+#include <time.h>
- #include "util/u_atomic.h"
- #include "util/list.h"
-
 --- ./src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
 +++ ./src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
 @@ -28,6 +28,8 @@

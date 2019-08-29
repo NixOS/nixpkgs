@@ -11,10 +11,10 @@ stdenv.mkDerivation {
   preConfigure =
     ''
       substituteInPlace ./configure \
-        --replace "--static" "" 
+        --replace "--static" ""
     '';
 
-  buildInputs = [zlib libpng gd geoip db]; 
+  buildInputs = [zlib libpng gd geoip db];
 
   configureFlags = [
     "--enable-dns"
@@ -23,7 +23,10 @@ stdenv.mkDerivation {
     "--enable-shared"
   ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Web server log file analysis program";
+    homepage = http://www.webalizer.org;
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

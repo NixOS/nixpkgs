@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mzgd26dfv4vwbci8gq77ss9f0x26i9aqzq9b9vs9ndxhlnv0mxl";
+    sha256 = "1q28xl36difma1wq0acq111cqxjya32kn3lxp6fbidz3wg8jkmpq";
   };
 
   passthru = {
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
 
-  buildInputs = [ mpi openssh ];
+  nativeBuildInputs = [ mpi openssh ];
 
   meta = {
     description =

@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1855np7c4b0bqzhf1l1dyzxb90fpnvrirdisajhci5am6als31z9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf libpcap ncurses glib ];
+  nativeBuildInputs = [ pkgconfig autoconf ];
+  buildInputs = [ libpcap ncurses glib ];
 
   patches = [
     ./no-dns-resolution.patch

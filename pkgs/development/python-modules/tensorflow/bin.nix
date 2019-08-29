@@ -2,9 +2,11 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, isPy36, pythonOlder
+, isPy3k, pythonOlder
 , astor
 , gast
+, google-pasta
+, wrapt
 , numpy
 , six
 , termcolor
@@ -13,7 +15,7 @@
 , grpcio
 , mock
 , backports_weakref
-, enum34
+, tensorflow-estimator
 , tensorflow-tensorboard
 , cudaSupport ? false
 , cudatoolkit ? null
@@ -22,6 +24,8 @@
 , zlib
 , python
 , symlinkJoin
+, keras-applications
+, keras-preprocessing
 }:
 
 # We keep this binary build for two reasons:
@@ -31,29 +35,46 @@
 assert cudaSupport -> cudatoolkit != null
                    && cudnn != null
                    && nvidia_x11 != null;
+
+# unsupported combination
+assert ! (stdenv.isDarwin && cudaSupport);
+
 let
-  cudatoolkit_joined = symlinkJoin {
-    name = "unsplit_cudatoolkit";
-    paths = [ cudatoolkit.out
-              cudatoolkit.lib ];};
+  packages = import ./binary-hashes.nix;
+
+  variant = if cudaSupport then "-gpu" else "";
+  pname = "tensorflow${variant}";
 
 in buildPythonPackage rec {
-  pname = "tensorflow";
-  version = "1.9.0";
+  inherit pname;
+  inherit (packages) version;
   format = "wheel";
 
   src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) "${python.majorVersion}";
+    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) "${python.pythonVersion}";
     pyver = if stdenv.isDarwin then builtins.substring 0 1 pyVerNoDot else pyVerNoDot;
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyver}_${unit}";
-    dls = import ./tf1.9.0-hashes.nix;
-  in fetchurl dls.${key};
+  in fetchurl packages.${key};
 
-  propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-tensorboard ]
-                 ++ lib.optional (!isPy3k) mock
-                 ++ lib.optionals (pythonOlder "3.4") [ backports_weakref enum34 ];
+  propagatedBuildInputs = [
+    protobuf
+    numpy
+    termcolor
+    grpcio
+    six
+    astor
+    absl-py
+    gast
+    google-pasta
+    wrapt
+    tensorflow-estimator
+    tensorflow-tensorboard
+    keras-applications
+    keras-preprocessing
+  ] ++ lib.optional (!isPy3k) mock
+    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propageted input tensorflow-tensorboard which causes environment collisions.
@@ -63,18 +84,17 @@ in buildPythonPackage rec {
     rm $out/bin/tensorboard
   '';
 
-  installFlags = "--no-dependencies"; # tensorflow wants setuptools 39, can't allow that.
   # Note that we need to run *after* the fixup phase because the
   # libraries are loaded at runtime. If we run in preFixup then
   # patchelf --shrink-rpath will remove the cuda libraries.
   postFixup = let
     rpath = stdenv.lib.makeLibraryPath
-      ([ stdenv.cc.cc.lib zlib ] ++ lib.optionals cudaSupport [ cudatoolkit_joined cudnn nvidia_x11 ]);
+      ([ stdenv.cc.cc.lib zlib ] ++ lib.optionals cudaSupport [ cudatoolkit.out cudatoolkit.lib cudnn nvidia_x11 ]);
   in
-  lib.optionalString (stdenv.isLinux) ''
-    rrPath="$out/${python.sitePackages}/tensorflow/:${rpath}"
+  lib.optionalString stdenv.isLinux ''
+    rrPath="$out/${python.sitePackages}/tensorflow/:$out/${python.sitePackages}/tensorflow/contrib/tensor_forest/:${rpath}"
     internalLibPath="$out/${python.sitePackages}/tensorflow/python/_pywrap_tensorflow_internal.so"
-    find $out -name '*${stdenv.hostPlatform.extensions.sharedLibrary}' -exec patchelf --set-rpath "$rrPath" {} \;
+    find $out \( -name '*.so' -or -name '*.so.*' \) -exec patchelf --set-rpath "$rrPath" {} \;
   '';
 
 
@@ -83,7 +103,7 @@ in buildPythonPackage rec {
     homepage = http://tensorflow.org;
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar ];
-    platforms = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     # Python 2.7 build uses different string encoding.
     # See https://github.com/NixOS/nixpkgs/pull/37044#issuecomment-373452253
     broken = stdenv.isDarwin && !isPy3k;

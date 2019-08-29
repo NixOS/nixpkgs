@@ -1,0 +1,16 @@
+diff --git a/crypto/x509/by_file.c b/crypto/x509/by_file.c
+index e6d0e6e1a6..b89456fd87 100644
+--- a/crypto/x509/by_file.c
++++ b/crypto/x509/by_file.c
+@@ -97,7 +97,10 @@ static int by_file_ctrl(X509_LOOKUP *ctx, int cmd, const char *argp,
+     switch (cmd) {
+     case X509_L_FILE_LOAD:
+         if (argl == X509_FILETYPE_DEFAULT) {
+-            file = ossl_safe_getenv(X509_get_default_cert_file_env());
++            file = ossl_safe_getenv("NIX_SSL_CERT_FILE");
++
++            if (!file)
++                file = ossl_safe_getenv(X509_get_default_cert_file_env());
+ 
+             if (file)
+                 ok = (X509_load_cert_crl_file(ctx, file,

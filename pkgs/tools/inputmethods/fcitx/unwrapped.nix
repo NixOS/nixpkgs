@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, cmake, intltool, gettext
-, libxml2, enchant, isocodes, icu, libpthreadstubs
+, libxml2, enchant1, isocodes, icu, libpthreadstubs
 , pango, cairo, libxkbfile, libXau, libXdmcp, libxkbcommon
 , dbus, gtk2, gtk3, qt4, extra-cmake-modules
 , xkeyboard_config, pcre, libuuid
 , withPinyin ? true
-, fetchFromGitHub
+, fetchFromGitLab
 }:
 
 let
@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "fcitx-${version}";
-  version = "4.2.9.5";
+  version = "4.2.9.6";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "fcitx";
     repo = "fcitx";
     rev = version;
-    sha256 = "0rv69bacdvblka85dakz4ldpznrgwj59nqcccp5mkkn1rab4zh1r";
+    sha256 = "0j5vaf930lb21gx4h7z6mksh1fazqw32gajjjkyir94wbmml9n3s";
   };
 
   # put data at the correct locations else cmake tries to fetch them,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules intltool pkgconfig pcre ];
 
   buildInputs = [
-    xkeyboard_config enchant gettext isocodes icu libpthreadstubs libXau libXdmcp libxkbfile
+    xkeyboard_config enchant1 gettext isocodes icu libpthreadstubs libXau libXdmcp libxkbfile
     libxkbcommon libxml2 dbus cairo gtk2 gtk3 pango qt4 libuuid
   ];
 

@@ -46,6 +46,7 @@ let
         greeters-directory = ${cfg.greeter.package}
       ''}
       sessions-directory = ${dmcfg.session.desktops}/share/xsessions
+      ${cfg.extraConfig}
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
@@ -61,6 +62,12 @@ let
       ${optionalString hasDefaultUserSession ''
         user-session=${defaultSessionName}
       ''}
+      ${optionalString (dmcfg.setupCommands != "") ''
+        display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
+          #!${pkgs.bash}/bin/bash
+          ${dmcfg.setupCommands}
+        ''}
+      ''}
       ${cfg.extraSeatDefaults}
     '';
 
@@ -73,6 +80,8 @@ in
   imports = [
     ./lightdm-greeters/gtk.nix
     ./lightdm-greeters/mini.nix
+    ./lightdm-greeters/enso-os.nix
+    ./lightdm-greeters/pantheon.nix
   ];
 
   options = {
@@ -113,9 +122,18 @@ in
         };
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          user-authority-in-system-dir = true
+        '';
+        description = "Extra lines to append to LightDM section.";
+      };
+
       background = mkOption {
         type = types.str;
-        default = "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png";
+        default = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png";
         description = ''
           The background image or color to use.
         '';
@@ -171,6 +189,11 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
+      { assertion = xcfg.enable;
+        message = ''
+          LightDM requires services.xserver.enable to be true
+        '';
+      }
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
@@ -179,7 +202,7 @@ in
       { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
+          services.xserver.windowManager.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
         '';
       }
@@ -191,17 +214,11 @@ in
       }
     ];
 
-    services.xserver.displayManager.slim.enable = false;
-
-    services.xserver.displayManager.job = {
-      logToFile = true;
-
-      # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-      execCmd = ''
-        export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run
-      '';
-    };
+    # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
+    services.xserver.displayManager.job.execCmd = ''
+      export PATH=${lightdm}/sbin:$PATH
+      exec ${lightdm}/sbin/lightdm
+    '';
 
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
     environment.etc."lightdm/users.conf".source = usersConf;
@@ -248,11 +265,18 @@ in
     '';
 
     users.users.lightdm = {
-      createHome = true;
-      home = "/var/lib/lightdm-data";
+      home = "/var/lib/lightdm";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
     };
+
+    systemd.tmpfiles.rules = [
+      "d /run/lightdm 0711 lightdm lightdm 0"
+      "d /var/cache/lightdm 0711 root lightdm -"
+      "d /var/lib/lightdm 1770 lightdm lightdm -"
+      "d /var/lib/lightdm-data 1775 lightdm lightdm -"
+      "d /var/log/lightdm 0711 root lightdm -"
+    ];
 
     users.groups.lightdm.gid = config.ids.gids.lightdm;
     services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..

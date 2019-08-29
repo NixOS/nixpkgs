@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, fetchurl, fetchFromGitHub, bash, gnused, ncurses, xorg, rlwrap }:
+{ stdenv, substituteAll, fetchFromGitHub, gnused, ncurses, xorg, rlwrap }:
 
 stdenv.mkDerivation rec {
   pname = "stumpish";

@@ -1,40 +1,53 @@
 { stdenv, fetchFromGitHub
-, makeWrapper, makeDesktopItem
+, wrapQtAppsHook, makeDesktopItem
 , qtbase, qmake, qtmultimedia, qttools
 , qtgraphicaleffects, qtdeclarative
-, qtlocation, qtquickcontrols2, qtwebchannel
-, qtwebengine, qtx11extras, qtxmlpatterns
+, qtlocation, qtquickcontrols, qtquickcontrols2
+, qtwebchannel, qtwebengine, qtx11extras, qtxmlpatterns
 , monero, unbound, readline, boost, libunwind
-, pcsclite, zeromq, cppzmq, pkgconfig
+, libsodium, pcsclite, zeromq, cppzmq, pkgconfig
+, hidapi
 }:
 
 with stdenv.lib;
 
+let
+  qmlPath = qmlLib: "${qmlLib}/${qtbase.qtQmlPrefix}";
+
+  qml2ImportPath = concatMapStringsSep ":" qmlPath [
+    qtbase.bin qtmultimedia.bin qtgraphicaleffects
+    qtdeclarative.bin qtlocation.bin
+    qtquickcontrols qtquickcontrols2.bin
+    qtwebchannel.bin qtwebengine.bin qtxmlpatterns
+  ];
+
+in
+
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.12.0.0";
+  version = "0.14.1.2";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1mg5ival8a2wdp14yib4wzqax4xyvd40zjy9anhszljds1439jhl";
+    sha256 = "1rm043r6y2mzy8pclnzbjjfxgps8pkfa2b92p66k8y8rdmgq6m1k";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [
     qtbase qtmultimedia qtgraphicaleffects
-    qtdeclarative qtlocation qtquickcontrols2
+    qtdeclarative qtlocation
+    qtquickcontrols qtquickcontrols2
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
-    boost libunwind pcsclite zeromq cppzmq
-    makeWrapper
+    boost libunwind libsodium pcsclite zeromq
+    cppzmq hidapi
   ];
 
   patches = [
     ./move-log-file.patch
-    ./move-translations-dir.patch
   ];
 
   postPatch = ''
@@ -59,7 +72,7 @@ stdenv.mkDerivation rec {
     name = "monero-wallet-gui";
     exec = "monero-wallet-gui";
     icon = "monero";
-    desktopName = "Monero Wallet";
+    desktopName = "Monero";
     genericName = "Wallet";
     categories  = "Application;Network;Utility;";
   };
@@ -68,9 +81,6 @@ stdenv.mkDerivation rec {
     # install desktop entry
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
-
-    # install translations
-    cp -r release/bin/translations $out/share/
 
     # install icons
     for n in 16 24 32 48 64 96 128 256; do
@@ -82,10 +92,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Private, secure, untraceable currency";
-    homepage    = https://getmonero.org/;
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ rnhmjoj ];
+    description  = "Private, secure, untraceable currency";
+    homepage     = https://getmonero.org/;
+    license      = licenses.bsd3;
+    platforms    = platforms.all;
+    badPlatforms = platforms.darwin;
+    maintainers  = with maintainers; [ rnhmjoj ];
   };
 }

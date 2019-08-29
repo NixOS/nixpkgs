@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "okteta-${version}";
-  version = "0.25.2";
+  version = "0.26.2";
 
   src = fetchurl {
     url = "mirror://kde/stable/okteta/${version}/src/${name}.tar.xz";
-    sha256 = "00mw8gdqvn6vn6ir6kqnp7xi3lpn6iyp4f5aknxwq6mdcxgjmh1p";
+    sha256 = "0k38hd9wq6jvzy0225y61rzr7lgwbac1haalhsrfpmyjy6d833dv";
   };
 
   nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];

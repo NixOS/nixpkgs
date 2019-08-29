@@ -9,11 +9,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "lxc-${version}";
-  version = "3.0.1";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "1nyml98k28sc5sda0260cmby4irkpnhpwgmx4yhqy10wpr4nr625";
+    sha256 = "1m633j5k700nsc3smca7fxqfhxhypxbamh18x9z60zdilj33k42z";
   };
 
   nativeBuildInputs = [
@@ -67,6 +67,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapPythonPrograms
+
+    completions=(
+      lxc-attach lxc-cgroup lxc-console lxc-destroy lxc-device lxc-execute
+      lxc-freeze lxc-info lxc-monitor lxc-snapshot lxc-stop lxc-unfreeze
+    )
+    pushd $out/share/bash-completion/completions/
+      mv lxc lxc-start
+      for completion in ''${completions[@]}; do
+        ln -sfn lxc-start $completion
+      done
+    popd
   '';
 
   meta = {
@@ -83,6 +94,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington globin fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''lack'';
-  version = ''20180430-git'';
+  version = ''20190521-git'';
 
   description = ''A minimal Clack'';
 
-  deps = [ args."ironclad" args."lack-component" args."lack-util" args."nibbles" ];
+  deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."lack-component" args."lack-util" args."nibbles" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lack/2018-04-30/lack-20180430-git.tgz'';
-    sha256 = ''07f0nn1y8ghzg6s9rnmazaq3n7hr91mczdci5l3v4ncs79272h5v'';
+    url = ''http://beta.quicklisp.org/archive/lack/2019-05-21/lack-20190521-git.tgz'';
+    sha256 = ''0ng1k5jq7icfi8c8r3wqj3qrqkh2lyav5ab6mf3l5y4bfwbil593'';
   };
 
   packageName = "lack";
@@ -18,14 +18,17 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM lack DESCRIPTION A minimal Clack SHA256
-    07f0nn1y8ghzg6s9rnmazaq3n7hr91mczdci5l3v4ncs79272h5v URL
-    http://beta.quicklisp.org/archive/lack/2018-04-30/lack-20180430-git.tgz MD5
-    b9a0c08d54538679a8dd141022e8abb1 NAME lack FILENAME lack DEPS
-    ((NAME ironclad FILENAME ironclad)
+    0ng1k5jq7icfi8c8r3wqj3qrqkh2lyav5ab6mf3l5y4bfwbil593 URL
+    http://beta.quicklisp.org/archive/lack/2019-05-21/lack-20190521-git.tgz MD5
+    7d7321550f0795e998c7afe4498e7a40 NAME lack FILENAME lack DEPS
+    ((NAME alexandria FILENAME alexandria)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME ironclad FILENAME ironclad)
      (NAME lack-component FILENAME lack-component)
      (NAME lack-util FILENAME lack-util) (NAME nibbles FILENAME nibbles))
-    DEPENDENCIES (ironclad lack-component lack-util nibbles) VERSION
-    20180430-git SIBLINGS
+    DEPENDENCIES
+    (alexandria bordeaux-threads ironclad lack-component lack-util nibbles)
+    VERSION 20190521-git SIBLINGS
     (lack-component lack-middleware-accesslog lack-middleware-auth-basic
      lack-middleware-backtrace lack-middleware-csrf lack-middleware-mount
      lack-middleware-session lack-middleware-static lack-request lack-response

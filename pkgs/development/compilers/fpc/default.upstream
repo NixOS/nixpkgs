@@ -1,4 +1,4 @@
-url http://sourceforge.net/projects/freepascal/files/Source/
+url https://sourceforge.net/projects/freepascal/files/Source/
 SF_version_dir
 version_link 'fpcbuild-[0-9.]+[.]tar[.]gz/download$'
 SF_redirect

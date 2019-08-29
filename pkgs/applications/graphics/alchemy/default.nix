@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre}:
+{ stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "alchemy-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share
     cp -a . $out/share/alchemy
     cat >> $out/bin/alchemy << EOF
-    #!/bin/sh
+    #!${runtimeShell}
     cd $out/share/alchemy
     ${jre}/bin/java -jar Alchemy.jar "$@"
     EOF

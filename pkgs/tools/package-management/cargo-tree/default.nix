@@ -1,17 +1,17 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub, pkgconfig, cmake, curl, libiconv, darwin }:
 rustPlatform.buildRustPackage rec {
   name = "cargo-tree-${version}";
-  version = "0.19.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "sfackler";
     repo = "cargo-tree";
     rev = "v${version}";
 
-    sha256 = "16vsw392qs3ag2brvcan19km7ds0s9s7505p3hnfjvjrzgdliir3";
+    sha256 = "12z0sa7g79x46q2ybpy6i9rf1x4cnwajw8dsjzra2qhssyp8rp9c";
   };
 
-  cargoSha256 = "0g6afhqqdf76axbcs5wj9gydsabd3d5ja8qd8z8y6wbp7n0y4h6a";
+  cargoSha256 = "0ibmgyiqa53m9xfvl726w1sq37lbdp7vzyc76gwcp1zvzkcv2860";
 
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ curl ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];

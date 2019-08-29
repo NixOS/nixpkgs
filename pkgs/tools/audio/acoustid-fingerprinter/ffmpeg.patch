@@ -1,0 +1,26 @@
+diff --git a/decoder.h b/decoder.h
+index 028f58f..4428ac1 100644
+--- a/decoder.h
++++ b/decoder.h
+@@ -39,6 +39,8 @@ extern "C" {
+ #define AV_SAMPLE_FMT_S16 SAMPLE_FMT_S16
+ #endif
+ 
++#define AVCODEC_MAX_AUDIO_FRAME_SIZE 192000
++
+ class Decoder
+ {
+ public:
+diff --git a/ffmpeg/audioconvert.h b/ffmpeg/audioconvert.h
+index 2b28e2e..a699986 100644
+--- a/ffmpeg/audioconvert.h
++++ b/ffmpeg/audioconvert.h
+@@ -79,7 +79,7 @@ int avcodec_channel_layout_num_channels(int64_t channel_layout);
+  * @param fmt_name Format name, or NULL if unknown
+  * @return Channel layout mask
+  */
+-uint64_t avcodec_guess_channel_layout(int nb_channels, enum CodecID codec_id, const char *fmt_name);
++uint64_t avcodec_guess_channel_layout(int nb_channels, enum AVCodecID codec_id, const char *fmt_name);
+ 
+ struct AVAudioConvert;
+ typedef struct AVAudioConvert AVAudioConvert;

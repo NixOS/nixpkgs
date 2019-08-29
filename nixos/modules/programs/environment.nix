@@ -21,11 +21,11 @@ in
         PAGER = mkDefault "less -R";
         EDITOR = mkDefault "nano";
         XCURSOR_PATH = [ "$HOME/.icons" ];
+        XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
       };
 
-    environment.profiles =
-      [ "$HOME/.nix-profile"
-        "/nix/var/nix/profiles/default"
+    environment.profiles = mkAfter
+      [ "/nix/var/nix/profiles/default"
         "/run/current-system/sw"
       ];
 
@@ -40,7 +40,6 @@ in
         GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ];
         XDG_DATA_DIRS = [ "/share" ];
-        XCURSOR_PATH = [ "/share/icons" ];
         MOZ_PLUGIN_PATH = [ "/lib/mozilla/plugins" ];
         LIBEXEC_PATH = [ "/lib/libexec" ];
       };

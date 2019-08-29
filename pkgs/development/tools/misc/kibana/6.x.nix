@@ -2,41 +2,29 @@
 , enableUnfree ? true
 , stdenv
 , makeWrapper
-, fetchzip
 , fetchurl
-, nodejs
+, nodejs-10_x
 , coreutils
 , which
 }:
 
 with stdenv.lib;
 let
+  nodejs = nodejs-10_x;
   inherit (builtins) elemAt;
-  info = splitString "-" stdenv.system;
+  info = splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
   plat = elemAt info 1;
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "1kk97ggpzmblhqm6cfd2sv5940f58h323xcyg6rba1njj7lzanv0";
-      "x86_64-darwin" = "1xvwffk8d8br92h0laf4b1m76kvki6cj0pbgcvirfcj1r70vk6c3";
+      "x86_64-linux"  = "1i3zmzxihplwd8n994lfxhhgygdg3qxjqgrj1difa8w3vss0zbfn";
+      "x86_64-darwin" = "09a96ms9id77infxd9xxfs6r7j01mn0rz5yw3g9sl92j9ri7r52c";
     }
     else {
-      "x86_64-linux"  = "0m81ki1v61gpwb3s6zf84azqrirlm9pdfx65g3xmvdp3d3wii5ly";
-      "x86_64-darwin" = "0zh9p6vsq1d0gh6ks7z6bh8sbhn6rm4jshjcfp3c9k7n2qa8vv9b";
+      "x86_64-linux"  = "166rhxr0qlv1yarj2mg1c3b8mxvhl70jhz53azq7ic6laj55q7fk";
+      "x86_64-darwin" = "0ngngkbl036p2mzwhp8qafi3aqzk398a218w12srfqny5n630vdk";
     };
-
-  # For the correct phantomjs version see:
-  # https://github.com/elastic/kibana/blob/master/x-pack/plugins/reporting/server/browsers/phantom/paths.js
-  phantomjs = rec {
-    name = "phantomjs-${version}-linux-x86_64";
-    version = "2.1.1";
-    src = fetchzip {
-      inherit name;
-      url = "https://github.com/Medium/phantomjs/releases/download/v${version}/${name}.tar.bz2";
-      sha256 = "0g2dqjzr2daz6rkd6shj6rrlw55z4167vqh7bxadl8jl6jk7zbfv";
-    };
-  };
 
 in stdenv.mkDerivation rec {
   name = "kibana-${optionalString (!enableUnfree) "oss-"}${version}";
@@ -44,8 +32,15 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
-    sha256 = shas."${stdenv.system}" or (throw "Unknown architecture");
+    sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
   };
+
+  patches = [
+    # Kibana specifies it specifically needs nodejs 10.15.2 but nodejs in nixpkgs is at 10.15.3.
+    # The <nixpkgs/nixos/tests/elk.nix> test succeeds with this newer version so lets just
+    # disable the version check.
+    ./disable-nodejs-version-check.patch
+  ];
 
   buildInputs = [ makeWrapper ];
 
@@ -56,20 +51,13 @@ in stdenv.mkDerivation rec {
     makeWrapper $out/libexec/kibana/bin/kibana $out/bin/kibana \
       --prefix PATH : "${stdenv.lib.makeBinPath [ nodejs coreutils which ]}"
     sed -i 's@NODE=.*@NODE=${nodejs}/bin/node@' $out/libexec/kibana/bin/kibana
-  '' +
-  # phantomjs is needed in the unfree version. When phantomjs doesn't exist in
-  # $out/libexec/kibana/data kibana will try to download and unpack it during
-  # runtime which will fail because the nix store is read-only. So we make sure
-  # it already exist in the nix store.
-  optionalString enableUnfree ''
-    ln -s ${phantomjs.src} $out/libexec/kibana/data/${phantomjs.name}
   '';
 
   meta = {
     description = "Visualize logs and time-stamped data";
     homepage = http://www.elasticsearch.org/overview/kibana;
     license = if enableUnfree then licenses.elastic else licenses.asl20;
-    maintainers = with maintainers; [ offline rickynils basvandijk ];
+    maintainers = with maintainers; [ offline basvandijk ];
     platforms = with platforms; unix;
   };
 }

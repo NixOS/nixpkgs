@@ -4,6 +4,7 @@
 , ninja
 , pkgconfig
 , itstool
+, python3
 , libxml2
 , desktop-file-utils
 , wrapGAppsHook
@@ -23,12 +24,14 @@
 , libsndfile
 , libebur128
 , boost
+, dbus
 , fftwFloat
 , calf
 , zita-convolver
 , zam-plugins
 , rubberband
 , mda_lv2
+, lsp-plugins
 , hicolor-icon-theme
 }:
 
@@ -36,20 +39,21 @@ let
   lv2Plugins = [
     calf # limiter, compressor exciter, bass enhancer and others
     mda_lv2 # loudness
+    lsp-plugins # delay
   ];
   ladspaPlugins = [
     rubberband # pitch shifting
     zam-plugins # maximizer
   ];
 in stdenv.mkDerivation rec {
-  name = "pulseeffects-${version}";
-  version = "4.2.8";
+  pname = "pulseeffects";
+  version = "4.6.6";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "0ckl0640n6lhk0gcmnmwngajkf46rrd8bxfh7xy5sq6qmm01dhdd";
+    sha256 = "15w1kc1b0i8wrkrbfzrvcscanxvcsz336bfyi1awb1lbclvd3sf4";
   };
 
   nativeBuildInputs = [
@@ -58,6 +62,7 @@ in stdenv.mkDerivation rec {
     pkgconfig
     libxml2
     itstool
+    python3
     desktop-file-utils
     wrapGAppsHook
   ];
@@ -69,8 +74,8 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base # gst-fft
+    gst_all_1.gst-plugins-good # pulsesrc
     gst_all_1.gst-plugins-bad
     lilv lv2 serd sord sratom
     libbs2b
@@ -78,6 +83,7 @@ in stdenv.mkDerivation rec {
     libsamplerate
     libsndfile
     boost
+    dbus
     fftwFloat
     zita-convolver
     hicolor-icon-theme
@@ -89,8 +95,6 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    addToSearchPath GST_PLUGIN_SYSTEM_PATH_1_0 $out/lib/gstreamer-1.0
-
     gappsWrapperArgs+=(
       --set LV2_PATH "${stdenv.lib.makeSearchPath "lib/lv2" lv2Plugins}"
       --set LADSPA_PATH "${stdenv.lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
@@ -103,5 +107,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

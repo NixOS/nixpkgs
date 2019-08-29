@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "idris-hamt";
+  name = "hamt";
   version = "2016-11-15";
 
   idrisDeps = [ contrib effects ];

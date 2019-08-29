@@ -21,6 +21,6 @@ buildGoPackage rec {
     homepage    = https://github.com/technosophos/dashing;
     license     = licenses.mit;
     maintainers = [ ];
-    platforms   = platforms.linux;
+    platforms   = platforms.all;
   };
 }

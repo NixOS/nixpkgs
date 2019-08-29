@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libGL }:
+{ stdenv, fetchurl, pkgconfig, libGL, ApplicationServices }:
 
 stdenv.mkDerivation rec {
   name = "glu-${version}";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ libGL ];
+  propagatedBuildInputs = [ libGL ]
+    ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
 
   outputs = [ "out" "dev" ];
 
@@ -22,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://cgit.freedesktop.org/mesa/glu/;
     license = stdenv.lib.licenses.sgi-b-20;
     platforms = stdenv.lib.platforms.unix;
+    broken = stdenv.hostPlatform.isAndroid;
   };
 }

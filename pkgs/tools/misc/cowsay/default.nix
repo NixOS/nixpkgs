@@ -11,8 +11,18 @@ stdenv.mkDerivation rec{
 
   buildInputs = [ perl ];
 
+  postBuild = ''
+    substituteInPlace cowsay --replace "%BANGPERL%" "!${perl}/bin/perl" \
+      --replace "%PREFIX%" "$out"
+  '';
+
   installPhase = ''
-    bash ./install.sh $out
+    mkdir -p $out/{bin,man/man1,share/cows}
+    install -m755 cowsay $out/bin/cowsay
+    ln -s cowsay $out/bin/cowthink
+    install -m644 cowsay.1 $out/man/man1/cowsay.1
+    ln -s cowsay.1 $out/man/man1/cowthink.1
+    install -m644 cows/* -t $out/share/cows/
   '';
 
   meta = with stdenv.lib; {

@@ -2,11 +2,11 @@
 , geoip, gperftools, python, swig }:
 
 stdenv.mkDerivation rec {
-  name = "bro-2.5.4";
+  name = "bro-2.5.5";
 
   src = fetchurl {
     url = "https://www.bro.org/downloads/${name}.tar.gz";
-    sha256 = "07sz1i4ly30257677b8vfrbsvxhz2awijyzn5ihg4m567x1ymnl0";
+    sha256 = "1kvkiq8jjsqryry9jd4vw45pbfb46jly988mq62mv4sd1fqsxwhq";
   };
 
   nativeBuildInputs = [ cmake flex bison file ];

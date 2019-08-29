@@ -50,15 +50,6 @@ index f4e119d..d9775bd 100644
          return false;
        cur = cur.Append(kPepperFlashBaseDirectory);
        break;
-@@ -323,7 +316,7 @@ bool PathProvider(int key, base::FilePath* result) {
-     // We currently need a path here to look up whether the plugin is disabled
-     // and what its permissions are.
-     case chrome::FILE_NACL_PLUGIN:
--      if (!GetInternalPluginsDirectory(&cur))
-+      if (!GetInternalPluginsDirectory(&cur, "NACL"))
-         return false;
-       cur = cur.Append(kInternalNaClPluginFileName);
-       break;
 @@ -358,7 +351,7 @@ bool PathProvider(int key, base::FilePath* result) {
          cur = cur.DirName();
        }

@@ -1,4 +1,4 @@
-{ stdenv, callPackage, makeFontsConf, gnome2 }:
+{ callPackage, makeFontsConf, gnome2 }:
 
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
@@ -8,24 +8,17 @@ let
     inherit (gnome2) GConf gnome_vfs;
   };
   stableVersion = {
-    version = "3.1.4.0"; # "Android Studio 3.1.4"
-    build = "173.4907809";
-    sha256Hash = "0xx6yprylmcb32ipmwdcfkgddlm1nrxi1w68miclvgrbk015brf2";
+    version = "3.5.0.21"; # "Android Studio 3.5"
+    build = "191.5791312";
+    sha256Hash = "0vvk2vhklxg9wfi4lv4sahs5ahhb1mki1msy3yixmr56vipgv52p";
   };
-  betaVersion = {
-    version = "3.2.0.22"; # "Android Studio 3.2 Beta 5"
-    build = "181.4913314";
-    sha256Hash = "016nyn1pqviy089hg0dq7m4cqb39fdxdcy4zknkaq7dmgv1dj6x9";
-  };
+  betaVersion = stableVersion;
   latestVersion = { # canary & dev
-    version = "3.3.0.5"; # "Android Studio 3.3 Canary 6"
-    build = "182.4954005";
-    sha256Hash = "0b8ias75f3p5nrmgp7iqz4n4r4dbwhgagqmyc1fqfd36wbglyaf4";
+    version = "3.6.0.8"; # "Android Studio 3.6 Canary 8"
+    build = "192.5825043";
+    sha256Hash = "1nh8p880pz3x7hlwa3inkr9qkd95amkg0sv4f0m7bb70k9v5mnvv";
   };
 in rec {
-  # Old alias
-  preview = beta;
-
   # Attributes are named by their corresponding release channels
 
   stable = mkStudio (stableVersion // {
@@ -35,7 +28,7 @@ in rec {
 
   beta = mkStudio (betaVersion // {
     channel = "beta";
-    pname = "android-studio-preview";
+    pname = "android-studio-beta";
   });
 
   dev = mkStudio (latestVersion // {

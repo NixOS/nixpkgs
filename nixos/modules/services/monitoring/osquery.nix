@@ -78,7 +78,7 @@ in
         mkdir -p "$(dirname ${escapeShellArg cfg.databasePath})"
       '';
       serviceConfig = {
-        TimeoutStartSec = 0;
+        TimeoutStartSec = "infinity";
         ExecStart = "${pkgs.osquery}/bin/osqueryd --logger_path ${escapeShellArg cfg.loggerPath} --pidfile ${escapeShellArg cfg.pidfile} --database_path ${escapeShellArg cfg.databasePath}";
         KillMode = "process";
         KillSignal = "SIGTERM";

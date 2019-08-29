@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "bibtex2html-${version}";
-  version = "1.98";
+  version = "1.99";
 
   src = fetchurl {
-    url = https://www.lri.fr/~filliatr/ftp/bibtex2html/bibtex2html-1.98.tar.gz;
-    sha256 = "1mh6hxmc9qv05hgjc11m2zh5mk9mk0kaqp59pny18ypqgfws09g9";
+    url = https://www.lri.fr/~filliatr/ftp/bibtex2html/bibtex2html-1.99.tar.gz;
+    sha256 = "07gzrs4lfrkvbn48cgn2gn6c7cx3jsanakkrb2irj0gmjzfxl96j";
   };
 
   buildInputs = [ ocaml ];

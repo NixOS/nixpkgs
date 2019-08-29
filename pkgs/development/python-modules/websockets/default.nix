@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "6.0";
+  version = "7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f3b956d11c5b301206382726210dc1d3bee1a9ccf7aadf895aaf31f71c3716c";
+    sha256 = "17vwr6sa1y3lb24wzfyyc98c5v03di4j8f24qkqa9vsvaghc7qq8";
   };
 
   disabled = pythonOlder "3.3";

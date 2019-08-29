@@ -1,4 +1,4 @@
-{ stdenv, callPackage, defaultCrateOverrides, fetchFromGitHub, cmake, libssh2, libgit2, openssl, zlib }:
+{ stdenv, callPackage, defaultCrateOverrides, fetchFromGitHub, cmake, curl, libssh2, libgit2, openssl, zlib }:
 
 ((callPackage ./cargo-update.nix {}).cargo_update {}).override {
   crateOverrides = defaultCrateOverrides // {
@@ -13,7 +13,9 @@
         sha256 = "1bvrdgcw2akzd78wgvsisvghi8pvdk3szyg9s46qxv4km9sf88s7";
       };
 
-      buildInputs = [ cmake libssh2 libgit2 openssl zlib ];
+      nativeBuildInputs = [ cmake ];
+      buildInputs = [ libssh2 libgit2 openssl zlib ]
+        ++ stdenv.lib.optional stdenv.isDarwin curl;
 
       meta = with stdenv.lib; {
         description = "A cargo subcommand for checking and applying updates to installed executables";

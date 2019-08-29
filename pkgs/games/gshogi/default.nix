@@ -1,5 +1,5 @@
 { stdenv, buildPythonApplication, fetchFromGitHub
-, gtk3, gobjectIntrospection
+, gtk3, gobject-introspection
 , wrapGAppsHook, python3Packages }:
 
 buildPythonApplication rec {
@@ -17,7 +17,7 @@ buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   nativeBuildInputs = [ wrapGAppsHook ];

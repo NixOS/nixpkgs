@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "heptio-ark-${version}";
-  version = "0.9.0";
+  version = "0.10.0";
 
   goPackagePath = "github.com/heptio/ark";
 
@@ -10,10 +10,10 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "heptio";
     repo = "ark";
-    sha256 = "0b3jsgs35l8kk63pjnqn3911pyb397fyvsmd3jd8vzjawisgpdp7";
+    sha256 = "18h9hvp95va0hyl268gnzciwy1dqmc57bpifbj885870rdfp0ffv";
   };
 
-  postInstall = "rm $bin/bin/generate";
+  postInstall = "rm $bin/bin/issue-template-gen";
 
   meta = with stdenv.lib; {
     description = "A utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";

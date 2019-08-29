@@ -1,24 +1,31 @@
-{ stdenv, fetchurl, jdk }:
+{ stdenv, fetchurl, jdk, w3m, openssl, makeWrapper }:
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "picoLisp-${version}";
-  version = "16.12";
+  version = "19.6";
   src = fetchurl {
     url = "https://www.software-lab.de/${name}.tgz";
-    sha256 = "1k3x6mvk9b34iiyml142bzh3gf241f25ywjlaagbxzb9vklpws75";
+    sha256 = "1ixxl6m5glhwqa4q3fb90pciv7jhhvn9pkh316d4wcv0m13l04gq";
   };
-  buildInputs = optional stdenv.is64bit jdk;
-  patchPhase = optionalString stdenv.isAarch32 ''
-    sed -i s/-m32//g Makefile
-    cat >>Makefile <<EOF
-    ext.o: ext.c
-    	\$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
-    ht.o: ht.c
-    	\$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
-    EOF
+  buildInputs = [makeWrapper openssl] ++ optional stdenv.is64bit jdk;
+  patchPhase = ''
+    sed -i "s/which java/command -v java/g" mkAsm
+
+    ${optionalString stdenv.isAarch32 ''
+      sed -i s/-m32//g Makefile
+      cat >>Makefile <<EOF
+      ext.o: ext.c
+        \$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
+      ht.o: ht.c
+        \$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
+      EOF
+    ''}
   '';
   sourceRoot = ''picoLisp/src${optionalString stdenv.is64bit "64"}'';
+  postBuild = ''
+    cd ../src; make gate
+  '';
   installPhase = ''
     cd ..
 
@@ -26,12 +33,16 @@ stdenv.mkDerivation rec {
     cp -r . "$out/share/picolisp/build-dir"
     ln -s "$out/share/picolisp/build-dir" "$out/lib/picolisp"
     ln -s "$out/lib/picolisp/bin/picolisp" "$out/bin/picolisp"
+    ln -s "$out/lib/picolisp/bin/httpGate" "$out/bin/httpGate"
 
-    cat >"$out/bin/pil" <<EOF
-    #! /bin/sh
-    exec $out/bin/picolisp $out/lib/picolisp/lib.l @lib/misc.l @lib/btree.l @lib/db.l @lib/pilog.l
-    EOF
-    chmod +x "$out/bin/pil"
+
+    makeWrapper $out/bin/picolisp $out/bin/pil \
+      --prefix PATH : ${w3m}/bin \
+      --add-flags "$out/lib/picolisp/lib.l" \
+      --add-flags "@lib/misc.l" \
+      --add-flags "@lib/btree.l" \
+      --add-flags "@lib/db.l" \
+      --add-flags "@lib/pilog.l"
 
     mkdir -p "$out/share/emacs"
     ln -s "$out/lib/picolisp/lib/el" "$out/share/emacs/site-lisp"

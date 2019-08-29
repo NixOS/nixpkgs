@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AGL ];
 
   passthru = {
-    mozillaPlugin = "/lib/netscape/plugins";
+    mozillaPlugin = "/lib/mozilla/plugins";
   };
 
   meta = with stdenv.lib; {

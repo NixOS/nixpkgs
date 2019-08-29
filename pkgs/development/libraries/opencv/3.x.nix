@@ -1,20 +1,20 @@
 { lib, stdenv
-, fetchurl, fetchFromGitHub
+, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
-, glog, boost, google-gflags, protobuf
+, glog, boost, gflags, protobuf
 , config
 
 , enableJPEG      ? true, libjpeg
 , enablePNG       ? true, libpng
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
-, enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
+, enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
 , enableJPEG2K    ? true, jasper
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas
 , enableContrib   ? true
 
-, enableCuda      ? (config.cudaSupport or false), cudatoolkit
+, enableCuda      ? config.cudaSupport or false, cudatoolkit
 
 , enableUnfree    ? false
 , enableIpp       ? false
@@ -31,44 +31,46 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, QTKit, VideoDecodeAcceleration, bzip2
+, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
 }:
 
 let
-  version = "3.4.2";
+  version = "3.4.7";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0q752s1ir6iyqbp3pn425fi215fi7bzjl4aa3arvgh6sridda9lx";
+    sha256 = "0r5rrcnqx2lsnr1ja5ij2chb7yk9kkamr4p0ik52sqxydwkv3z50";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1fbgbf9xdby9a5yy6bmnkzchdsfii0jagfd373y015cjpr1mrlvz";
+    sha256 = "1ik6acsmgrx66awf19r2y3ijqvv9xg43gaphwszbiyi0jq3r43yw";
   };
 
   # Contrib must be built in order to enable Tesseract support:
   buildContrib = enableContrib || enableTesseract;
+
+  useSystemProtobuf = ! stdenv.isDarwin;
 
   # See opencv/3rdparty/ippicv/ippicv.cmake
   ippicv = {
     src = fetchFromGitHub {
       owner  = "opencv";
       repo   = "opencv_3rdparty";
-      rev    = "bdb7bb85f34a8cb0d35e40a81f58da431aa1557a";
-      sha256 = "1ys9mshfpm8iy8h4ml792gnqrq959dsrcv26axx14niivxyjbji8";
+      rev    = "32e315a5b106a7b89dbed51c28f8120a48b368b4";
+      sha256 = "19w9f0r16072s59diqxsr5q6nmwyz9gnxjs49nglzhd66p3ddbkp";
     } + "/ippicv";
-    files = let name = platform : "ippicv_2017u3_${platform}_general_20180518.tgz"; in
-      if stdenv.system == "x86_64-linux" then
-      { ${name "lnx_intel64"} = "b7cc351267db2d34b9efa1cd22ff0572"; }
-      else if stdenv.system == "i686-linux" then
-      { ${name "lnx_ia32"}    = "ea72de74dae3c604eb6348395366e78e"; }
-      else if stdenv.system == "x86_64-darwin" then
-      { ${name "mac_intel64"} = "3ae52b9be0fe73dd45bc5e9429cd3732"; }
+    files = let name = platform : "ippicv_2019_${platform}_general_20180723.tgz"; in
+      if stdenv.hostPlatform.system == "x86_64-linux" then
+      { ${name "lnx_intel64"} = "c0bd78adb4156bbf552c1dfe90599607"; }
+      else if stdenv.hostPlatform.system == "i686-linux" then
+      { ${name "lnx_ia32"}    = "4f38432c30bfd6423164b7a24bbc98a0"; }
+      else if stdenv.hostPlatform.system == "x86_64-darwin" then
+      { ${name "mac_intel64"} = "fe6b2bb75ae0e3f19ad3ae1a31dfa4a2"; }
       else
       throw "ICV is not available for this platform (or not yet supported by this package)";
     dst = ".cache/ippicv";
@@ -145,11 +147,6 @@ stdenv.mkDerivation rec {
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
 
-  # TODO: remove the following patch once commit
-  # https://github.com/opencv/opencv/commit/e2b5d112909b9dfd764f14833b82e38e4bc2f81f
-  # is released.
-  patches = [ ./fix-dnn.patch ];
-
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
   # Also, work around https://github.com/NixOS/nixpkgs/issues/26304 with
@@ -170,8 +167,14 @@ stdenv.mkDerivation rec {
       ${installExtraFiles face}
     '');
 
+  postConfigure = ''
+    [ -e modules/core/version_string.inc ]
+    echo '"(build info elided)"' > modules/core/version_string.inc
+  '';
+
   buildInputs =
-       [ zlib pcre hdf5 glog boost google-gflags protobuf ]
+       [ zlib pcre hdf5 glog boost gflags ]
+    ++ lib.optional useSystemProtobuf protobuf
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
@@ -197,7 +200,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
     ++ lib.optional enableCuda cudatoolkit
-    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit VideoDecodeAcceleration bzip2 ]
+    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -211,8 +214,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DWITH_OPENMP=ON"
-    "-DBUILD_PROTOBUF=OFF"
-    "-DPROTOBUF_UPDATE_FILES=ON"
+    "-DBUILD_PROTOBUF=${printEnabled (!useSystemProtobuf)}"
+    "-DPROTOBUF_UPDATE_FILES=${printEnabled useSystemProtobuf}"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=OFF"
     "-DBUILD_PERF_TESTS=OFF"
@@ -234,6 +237,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
+    "-DBUILD_opencv_videoio=OFF"
+  ] ++ lib.optionals enablePython [
+    "-DOPENCV_SKIP_PYTHON_LOADER=ON"
+  ] ++ lib.optional enableEigen [
+    # Autodetection broken by https://github.com/opencv/opencv/pull/13337
+    "-DEIGEN_INCLUDE_PATH=${eigen}/include/eigen3"
   ];
 
   enableParallelBuilding = true;
@@ -254,7 +263,8 @@ stdenv.mkDerivation rec {
   # ${exec_prefix}. This causes linker errors in downstream packages so we strip
   # of $out after the ${exec_prefix} prefix:
   postInstall = ''
-    sed -i "s|\''${exec_prefix}/$out|\''${exec_prefix}|" "$out/lib/pkgconfig/opencv.pc"
+    sed -i "s|{exec_prefix}/$out|{exec_prefix}|" \
+      "$out/lib/pkgconfig/opencv.pc"
   '';
 
   hardeningDisable = [ "bindnow" "relro" ];

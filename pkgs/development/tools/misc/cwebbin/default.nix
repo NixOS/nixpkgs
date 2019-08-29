@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     description = "Literate Programming in C/C++";
     platforms = with platforms; unix;
     maintainers = with maintainers; [ vrthra ];
+    license = licenses.abstyles;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, perl, python3, boost, valgrind
+{ stdenv, fetchFromGitLab, cmake, perl, python3, boost, valgrind
 # Optional requirements
 # Lua 5.3 needed and not available now
 #, luaSupport ? false, lua5
@@ -17,14 +17,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "simgrid-${version}";
-  version = "3.20";
+  pname = "simgrid";
+  version = "3.23";
 
-  src = fetchFromGitHub {
-    owner = "simgrid";
-    repo = "simgrid";
+  src = fetchFromGitLab {
+    domain = "framagit.org";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0xb20qhvsah2dz2hvn850i3w9a5ghsbcx8vka2ap6xsdkxf593gy";
+    sha256 = "068xg5ps4j4v2sqqyl4vf83nfazp54gsy84gvlw52h94c4mj4xmp";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
   # - lua53:  for enable_lua
   #
   # For more information see:
-  # http://simgrid.gforge.inria.fr/simgrid/latest/doc/install.html#install_cmake_list
+  # https://simgrid.org/doc/3.22/Installing_SimGrid.html#simgrid-compilation-options)
   cmakeFlags= ''
     -Denable_documentation=${optionOnOff buildDocumentation}
     -Denable_java=${optionOnOff buildJavaBindings}
@@ -84,12 +85,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-
-    ctest -j $NIX_BUILD_CORES --output-on-failure -E smpi-replay-multiple
-
-    runHook postCheck
+  # Prevent the execution of tests known to fail.
+  preCheck = ''
+    cat <<EOW >CTestCustom.cmake
+    SET(CTEST_CUSTOM_TESTS_IGNORE smpi-replay-multiple)
+    EOW
   '';
 
   enableParallelBuilding = true;
@@ -104,9 +104,9 @@ stdenv.mkDerivation rec {
       scheduling on distributed computing platforms ranging from simple
       network of workstations to Computational Grids.
     '';
-    homepage = http://simgrid.gforge.inria.fr/;
+    homepage = https://simgrid.org/;
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ mickours ];
-    platforms = platforms.x86_64;
+    maintainers = with maintainers; [ mickours mpoquet ];
+    platforms = ["x86_64-linux"];
   };
 }

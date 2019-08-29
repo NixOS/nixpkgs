@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ounit, pcre, uutf }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, pcre, uutf }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "jingoo is not available for OCaml ${ocaml.version}"

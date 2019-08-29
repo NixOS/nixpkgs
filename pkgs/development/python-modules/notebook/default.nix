@@ -25,11 +25,11 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.6.0";
+  version = "5.7.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e2c8e931cc19db4f8c63e6a396efbc13a228b2cb5b2919df011b946f28239a08";
+    sha256 = "573e0ae650c5d76b18b6e564ba6d21bf321d00847de1d215b418acb64f056eb8";
   };
 
   LC_ALL = "en_US.utf8";
@@ -66,8 +66,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh globin ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }

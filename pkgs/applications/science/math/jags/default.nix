@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
   buildInputs = [gfortran openblas];
   configureFlags = [ "--with-blas=-lopenblas" "--with-lapack=-lopenblas" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Just Another Gibbs Sampler";
-    license     = "GPL2";
-    homepage    = http://www-ice.iarc.fr/~martyn/software/jags/;
-    maintainers = [stdenv.lib.maintainers.andres];
-    platforms = stdenv.lib.platforms.unix;
+    license     = licenses.gpl2;
+    homepage    = http://mcmc-jags.sourceforge.net;
+    maintainers = [ maintainers.andres ];
+    platforms = platforms.unix;
   };
 }

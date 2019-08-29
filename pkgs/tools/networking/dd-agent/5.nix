@@ -1,30 +1,41 @@
-{ stdenv, fetchFromGitHub, pythonPackages
+{ stdenv, fetchFromGitHub, python
 , unzip, makeWrapper }:
 let
-  inherit (pythonPackages) python;
-  docker_1_10 = pythonPackages.buildPythonPackage rec {
-    name = "docker-${version}";
-    version = "1.10.6";
+  python' = python.override {
+    packageOverrides = self: super: {
+      docker = self.buildPythonPackage rec {
+        name = "docker-${version}";
+        version = "1.10.6";
 
-    src = fetchFromGitHub {
-      owner = "docker";
-      repo = "docker-py";
-      rev = version;
-      sha256 = "1awzpbrkh4fympqzddz5i3ml81b7f0i0nwkvbpmyxjjfqx6l0m4m";
+        src = fetchFromGitHub {
+          owner = "docker";
+          repo = "docker-py";
+          rev = version;
+          sha256 = "1awzpbrkh4fympqzddz5i3ml81b7f0i0nwkvbpmyxjjfqx6l0m4m";
+        };
+
+        propagatedBuildInputs = with self; [
+          six
+          requests
+          websocket_client
+          ipaddress
+          backports_ssl_match_hostname
+          docker_pycreds
+          uptime
+        ];
+
+        # due to flake8
+        doCheck = false;
+      };
+
+      pymongo = super.pymongo.overridePythonAttrs (oldAttrs: rec {
+        version = "2.9.5";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "912516ac6a355d7624374a38337b8587afe3eb535c0a5456b3bd12df637a6e70";
+        };
+      });
     };
-
-    propagatedBuildInputs = with pythonPackages; [
-      six
-      requests
-      websocket_client
-      ipaddress
-      backports_ssl_match_hostname
-      docker_pycreds
-      uptime
-    ];
-
-    # due to flake8
-    doCheck = false;
   };
 
 in stdenv.mkDerivation rec {
@@ -41,21 +52,21 @@ in stdenv.mkDerivation rec {
   patches = [ ./40103-iostat-fix.patch ];
 
   buildInputs = [
-    python
     unzip
     makeWrapper
-    pythonPackages.requests
-    pythonPackages.psycopg2
-    pythonPackages.psutil
-    pythonPackages.ntplib
-    pythonPackages.simplejson
-    pythonPackages.pyyaml
-    pythonPackages.pymongo_2_9_1
-    pythonPackages.python-etcd
-    pythonPackages.consul
-    docker_1_10
-  ];
-  propagatedBuildInputs = with pythonPackages; [ python tornado ];
+  ] ++ (with python'.pkgs; [
+    requests
+    psycopg2
+    psutil
+    ntplib
+    simplejson
+    pyyaml
+    pymongo
+    python-etcd
+    consul
+    docker
+  ]);
+  propagatedBuildInputs = with python'.pkgs; [ python tornado ];
 
   buildCommand = ''
     mkdir -p $out/bin

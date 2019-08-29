@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "thermald-${version}";
-  version = "1.7.2";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "1cs2pq8xvfnsvrhg2bxawk4kn3z1qmfrnpnhs178pvfbglzh15hc";
+    sha256 = "1ajhivl9jifcf12nbk281yayk7666v65m249aclyli0bz1kh8cfs";
   };
 
   nativeBuildInputs = [ pkgconfig ];

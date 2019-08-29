@@ -20,6 +20,7 @@ self: super: {
   ghc-boot = null;
   ghc-boot-th = null;
   ghc-compact = null;
+  ghc-heap = null;
   ghc-prim = null;
   ghci = null;
   haskeline = null;
@@ -38,14 +39,9 @@ self: super: {
 
   # These are now core libraries in GHC 8.4.x.
   mtl = self.mtl_2_2_2;
-  parsec = self.parsec_3_1_13_0;
-  stm = self.stm_2_4_5_0;
-  text = self.text_1_2_3_0;
-
-  # Make sure we can still build Cabal 1.x.
-  Cabal_1_24_2_0 = overrideCabal super.Cabal_1_24_2_0 (drv: {
-    prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";
-  });
+  parsec = self.parsec_3_1_14_0;
+  stm = self.stm_2_5_0_0;
+  text = self.text_1_2_4_0;
 
   # Build with the latest Cabal version, which works best albeit not perfectly.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_2_2_0_1; };
@@ -89,11 +85,10 @@ self: super: {
   cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
-  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   stack = super.stack.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
-  stylish-cabal = dontCheck (super.stylish-cabal.overrideScope (self: super: {
-    Cabal = self.Cabal_2_2_0_1;
-    haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
-  }));
+
+  # Older GHC versions need these additional dependencies.
+  ListLike = addBuildDepend super.ListLike self.semigroups;
+  base-compat-batteries = addBuildDepend super.base-compat-batteries self.contravariant;
 
 }

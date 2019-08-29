@@ -28,14 +28,29 @@ in {
       path = [ pkgs.coreutils ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      unitConfig.documentation = "man:vnstatd(1) man:vnstat(1) man:vnstat.conf(5)";
+      documentation = [
+        "man:vnstatd(1)"
+        "man:vnstat(1)"
+        "man:vnstat.conf(5)"
+      ];
       preStart = "chmod 755 /var/lib/vnstat";
       serviceConfig = {
         ExecStart = "${pkgs.vnstat}/bin/vnstatd -n";
         ExecReload = "${pkgs.procps}/bin/kill -HUP $MAINPID";
-        ProtectHome = true;
+
+        # Hardening (from upstream example service)
+        ProtectSystem = "strict";
+        StateDirectory = "vnstat";
         PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectKernelModules = true;
         PrivateTmp = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictNamespaces = true;
+
         User = "vnstatd";
       };
     };

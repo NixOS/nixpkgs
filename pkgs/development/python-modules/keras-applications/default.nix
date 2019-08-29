@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Keras_Applications";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c95300328630ae74fb0828b6fa38269a25c0228a02f1e5181753bfd48961f49";
+    sha256 = "1yk9brcvr96s1slpgj9vr6np7fk8limcrw9v2pjq72c6k0mpnq30";
   };
 
   # Cyclic dependency: keras-applications requires keras, which requires keras-applications

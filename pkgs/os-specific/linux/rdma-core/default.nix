@@ -1,9 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pandoc
-, ethtool, nettools, libnl, udev, python, perl
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, docutils
+, pandoc, ethtool, iproute, libnl, udev, python, perl
+, makeWrapper
 } :
 
 let
-  version = "19";
+  version = "25.0";
 
 in stdenv.mkDerivation {
   name = "rdma-core-${version}";
@@ -12,11 +13,11 @@ in stdenv.mkDerivation {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "0c01f9yn9sk7wslyrclsi2jvrn4d36bdw4qjbl0vmcv4858wf4bb";
+    sha256 = "1r1gfps1xckky06ib1rbf6lp58v2jqpy1ipkr45rf55gpaxf93cj";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig pandoc ];
-  buildInputs = [ libnl ethtool nettools udev python perl ];
+  nativeBuildInputs = [ cmake pkgconfig pandoc docutils makeWrapper ];
+  buildInputs = [ libnl ethtool iproute udev python perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
@@ -26,7 +27,24 @@ in stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace providers/rxe/rxe_cfg.in \
       --replace ethtool "${ethtool}/bin/ethtool" \
-      --replace ifconfig "${nettools}/bin/ifconfig"
+      --replace 'ip addr' "${iproute}/bin/ip addr" \
+      --replace 'ip link' "${iproute}/bin/ip link"
+
+    substituteInPlace srp_daemon/srp_daemon.sh.in \
+      --replace /bin/rm rm
+  '';
+
+  postInstall = ''
+    # cmake script is buggy, move file manually
+    mkdir -p $out/${perl.libPrefix}
+    mv $out/share/perl5/* $out/${perl.libPrefix}
+  '';
+
+  postFixup = ''
+    for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
+      echo "wrapping $pls"
+      wrapProgram $pls --prefix PERL5LIB : "$out/${perl.libPrefix}"
+    done
   '';
 
   meta = with stdenv.lib; {

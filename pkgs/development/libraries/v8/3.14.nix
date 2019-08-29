@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -vD out/Release/d8 "$out/bin/d8"
-    ${if stdenv.system == "x86_64-darwin" then ''
+    ${if stdenv.hostPlatform.system == "x86_64-darwin" then ''
     install -vD out/Release/lib.target/libv8.dylib "$out/lib/libv8.dylib"
     '' else ''
     install -vD out/Release/lib.target/libv8.so "$out/lib/libv8.so"

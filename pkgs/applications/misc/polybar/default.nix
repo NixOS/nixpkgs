@@ -1,4 +1,4 @@
-{ cairo, cmake, fetchgit, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
+{ cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
 , python2, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
 
@@ -25,16 +25,20 @@ assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
 assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
-    name = "polybar-${version}";
-    version = "3.2.1";
-    src = fetchgit {
-      url = "https://github.com/jaagr/polybar";
+    pname = "polybar";
+    version = "3.4.0";
+
+    src = fetchFromGitHub {
+      owner = "jaagr";
+      repo = pname;
       rev = version;
-      sha256 = "1z45swj2l0h8x8li7prl963cgl6zm3birsswpij8qwcmjaj5l8vz";
+      sha256 = "1g3zj0788cdlm8inpl19279bw8zjcy7dzj7q4f1l2d8c8g1jhv0m";
+      fetchSubmodules = true;
     };
 
     meta = with stdenv.lib; {
-      description = "A fast and easy-to-use tool for creatin status bars.";
+      homepage = "https://polybar.github.io/";
+      description = "A fast and easy-to-use tool for creating status bars";
       longDescription = ''
         Polybar aims to help users build beautiful and highly customizable
         status bars for their desktop environment, without the need of
@@ -64,10 +68,15 @@ stdenv.mkDerivation rec {
       (if i3Support || i3GapsSupport then makeWrapper else null)
     ];
 
-    fixupPhase = if (i3Support || i3GapsSupport) then ''
-    wrapProgram $out/bin/polybar \
-      --prefix PATH : "${if i3Support then i3 else i3-gaps}/bin"
-  '' else null;
+    postConfigure = ''
+      substituteInPlace generated-sources/settings.hpp \
+        --replace "${stdenv.cc}" "${stdenv.cc.name}"
+    '';
+
+    postInstall = if (i3Support || i3GapsSupport) then ''
+      wrapProgram $out/bin/polybar \
+        --prefix PATH : "${if i3Support then i3 else i3-gaps}/bin"
+    '' else "";
 
     nativeBuildInputs = [
       cmake pkgconfig

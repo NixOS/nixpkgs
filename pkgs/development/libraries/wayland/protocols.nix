@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "wayland-protocols-${version}";
-  version = "1.15";
+  version = "1.17";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1qlyf9cllr2p339xxplznh023qcwj5iisp02ikx7ps349dx75fys";
+    sha256 = "0bw1sqixqk2a7mqw630cs4dlgcp5yib90vyikzm3lr05jz7ij4yz";
   };
 
   nativeBuildInputs = [ pkgconfig ];

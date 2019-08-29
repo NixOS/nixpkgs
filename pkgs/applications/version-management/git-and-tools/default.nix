@@ -4,7 +4,6 @@
 args @ {config, lib, pkgs}: with args; with pkgs;
 let
   gitBase = callPackage ./git {
-    texinfo = texinfo5;
     svnSupport = false;         # for git-svn support
     guiSupport = false;         # requires tcl/tk
     sendEmailSupport = false;   # requires plenty of perl libraries
@@ -31,7 +30,15 @@ let
 
   git = appendToName "minimal" gitBase;
 
+  git-absorb = callPackage ./git-absorb {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  git-appraise = callPackage ./git-appraise {};
+
   git-fame = callPackage ./git-fame {};
+
+  gita = python3Packages.callPackage ./gita {};
 
   # The full-featured Git.
   gitFull = gitBase.override {
@@ -54,7 +61,18 @@ let
 
   git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
 
+  git-annex-remote-dbx = callPackage ./git-annex-remote-dbx {
+    inherit (python3Packages)
+    buildPythonApplication
+    fetchPypi
+    dropbox
+    annexremote
+    humanfriendly;
+  };
+
   git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
+
+  git-bug = callPackage ./git-bug { };
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
@@ -71,7 +89,13 @@ let
 
   git-extras = callPackage ./git-extras { };
 
+  git-gone = callPackage ./git-gone {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-hub = callPackage ./git-hub { };
+
+  git-ignore = callPackage ./git-ignore { };
 
   git-imerge = callPackage ./git-imerge { };
 
@@ -87,13 +111,21 @@ let
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
+  git-reparent = callPackage ./git-reparent { };
+
   git-secret = callPackage ./git-secret { };
 
   git-secrets = callPackage ./git-secrets { };
 
+  git-standup = callPackage ./git-standup { };
+
   git-stree = callPackage ./git-stree { };
 
+  git-subrepo = callPackage ./git-subrepo { };
+
   git-sync = callPackage ./git-sync { };
+
+  git-test = callPackage ./git-test { };
 
   git2cl = callPackage ./git2cl { };
 
@@ -103,6 +135,8 @@ let
 
   gitflow = callPackage ./gitflow { };
 
+  gitstatus = callPackage ./gitstatus { };
+
   grv = callPackage ./grv { };
 
   hub = callPackage ./hub {
@@ -111,7 +145,11 @@ let
 
   hubUnstable = throw "use gitAndTools.hub instead";
 
-  pre-commit = callPackage ./pre-commit { };
+  lab = callPackage ./lab { };
+
+  pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
+
+  pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 
   qgit = qt5.callPackage ./qgit { };
 

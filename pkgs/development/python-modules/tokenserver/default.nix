@@ -31,5 +31,6 @@ buildPythonPackage rec {
     description = "The Mozilla Token Server";
     homepage = https://github.com/mozilla-services/tokenserver;
     license = licenses.mpl20;
+    maintainers = with maintainers; [ nadrieril ];
   };
 }

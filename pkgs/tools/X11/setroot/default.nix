@@ -5,14 +5,14 @@
 assert enableXinerama -> libXinerama != null;
 
 stdenv.mkDerivation rec {
-  version = "2.0.1";
+  version = "2.0.2";
   name = "setroot-${version}";
 
   src = fetchFromGitHub {
     owner = "ttzhou";
     repo = "setroot";
     rev = "v${version}";
-    sha256 = "01krjfc3xpp0wbqz9nvf1n34gkpd41gysn289sj1wcjxia4n4gsi";
+    sha256 = "0w95828v0splk7bj5kfacp4pq6wxpyamvyjmahyvn5hc3ycq21mq";
   };
 
   buildInputs = [ libX11 imlib2 ]

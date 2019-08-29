@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "snes9x-gtk-${version}";
-  version = "1.56.2";
+  version = "1.57";
 
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
     rev = version;
-    sha256 = "0cbv95799gpagf6bxs1fmwmxvz5qs9g2rmmf5fsdd1cb4lryaijr";
+    sha256 = "1jcvj2l03b98iz6aq4x747vfz7i6h6j339z4brj4vz71s11vn31a";
   };
 
   enableParallelBuilding = true;

@@ -26,14 +26,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "openscenegraph-${version}";
-  version = "3.6.2";
+  pname = "openscenegraph";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
-    rev = "fb40a0d1db018ff39a08699a7f17f7eb6d949c36";
-    sha256 = "03jk6lclyd4biniaw04w7j0z1spkm69f1c19i37b8v9x3zv1p1id";
+    rev = "OpenSceneGraph-${version}";
+    sha256 = "0x8hdbzw0b71j91fzp9cwmy9a7ava8v8wwyj8nxijq942vdx1785";
   };
 
   nativeBuildInputs = [ pkgconfig cmake doxygen ];
@@ -64,14 +64,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withExamples [ fltk wxGTK ]
   ;
 
-  enableParallelBuilding = true;
-
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
   meta = with stdenv.lib; {
     description = "A 3D graphics toolkit";
     homepage = http://www.openscenegraph.org/;
-    maintainers = [ maintainers.raskin ];
+    maintainers = with maintainers; [ aanderse raskin ];
     platforms = platforms.linux;
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };

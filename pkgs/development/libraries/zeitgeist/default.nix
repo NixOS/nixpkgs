@@ -1,30 +1,38 @@
-{ stdenv, fetchgit, pkgconfig, glib, sqlite, vala_0_38
+{ stdenv, fetchFromGitLab, pkgconfig, glib, sqlite, gobject-introspection, vala
 , autoconf, automake, libtool, gettext, dbus, telepathy-glib
 , gtk3, json-glib, librdf_raptor2, dbus-glib
 , pythonSupport ? true, python2Packages
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.1";
-  name = "zeitgeist-${version}";
+  pname = "zeitgeist";
+  version = "1.0.2";
 
-  src = fetchgit {
-    url = "git://anongit.freedesktop.org/git/zeitgeist/zeitgeist";
+  outputs = [ "out" "lib" "dev" "man" ] ++ stdenv.lib.optional pythonSupport "py";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1lgqcqr5h9ba751b7ajp7h2w1bb5qza2w3k1f95j3ab15p7q0q44";
+    sha256 = "0ig3d3j1n0ghaxsgfww6g2hhcdwx8cljwwfmp9jk1nrvkxd6rnmv";
   };
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
-  configureFlags = [ "--with-session-bus-services-dir=$(out)/share/dbus-1/services" ];
+  configureFlags = [ "--with-session-bus-services-dir=${placeholder ''out''}/share/dbus-1/services" ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig gettext vala_0_38 python2Packages.python ];
+  nativeBuildInputs = [
+    autoconf automake libtool pkgconfig gettext gobject-introspection vala python2Packages.python
+  ];
   buildInputs = [
     glib sqlite dbus telepathy-glib dbus-glib
     gtk3 json-glib librdf_raptor2 python2Packages.rdflib
   ];
 
-  prePatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs data/ontology2code
+  '';
 
   enableParallelBuilding = true;
 
@@ -32,12 +40,10 @@ stdenv.mkDerivation rec {
     moveToOutput lib/${python2Packages.python.libPrefix} "$py"
   '';
 
-  outputs = [ "out" ] ++ stdenv.lib.optional pythonSupport "py";
-
   meta = with stdenv.lib; {
     description = "A service which logs the users's activities and events";
-    homepage = https://launchpad.net/zeitgeist;
-    maintainers = with maintainers; [ lethalman ];
+    homepage = https://zeitgeist.freedesktop.org/;
+    maintainers = with maintainers; [ lethalman worldofpeace ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

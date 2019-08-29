@@ -1,8 +1,4 @@
-{ lib, python
-, delugeSupport ? true, deluge ? null
-}:
-
-assert delugeSupport -> deluge != null;
+{ lib, python3 }:
 
 # Flexget have been a trouble maker in the past,
 # if you see flexget breaking when updating packages, don't worry.
@@ -10,22 +6,14 @@ assert delugeSupport -> deluge != null;
 # -- Mic92
 
 let
-  python' = python.override { inherit packageOverrides; };
+  python' = python3.override { inherit packageOverrides; };
 
   packageOverrides = self: super: {
-    sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
-      version = "1.1.10";
-      src = old.src.override {
-        inherit version;
-        sha256 = "1lvb14qclrx0qf6qqx8a8hkx5akk5lk3dvcqz8760v9hya52pnfv";
-      };
-    });
-
     guessit = super.guessit.overridePythonAttrs (old: rec {
-      version = "2.1.4";
+      version = "3.0.3";
       src = old.src.override {
         inherit version;
-        sha256 = "90e6f9fb49246ad27f34f8b9984357e22562ccc3059241cbc08b4fac1d401c56";
+        sha256 = "1q06b3k31bfb8cxjimpf1rkcrwnc596a9cppjw15minvdangl32r";
       };
     });
   };
@@ -36,41 +24,43 @@ with python'.pkgs;
 
 buildPythonApplication rec {
   pname = "FlexGet";
-  version = "2.14.9";
+  version = "2.21.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a8nxfr0rzwwd7b0nxr7zmw04ygbqvnzbi4w4nw2w8xiy46zid3q";
+    sha256 = "1skb73nsg5gqlqqcs64c9kiidd74p3gm0xx93jaky2gagn0jn7rv";
   };
 
   postPatch = ''
     # remove dependency constraints
     sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
+
+    # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
+    # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
+    substituteInPlace requirements.txt --replace "zxcvbn-python" "zxcvbn"
   '';
 
   # ~400 failures
   doCheck = false;
 
   propagatedBuildInputs = [
+    # See https://github.com/Flexget/Flexget/blob/master/requirements.in
     feedparser sqlalchemy pyyaml
-    chardet beautifulsoup4 html5lib
+    beautifulsoup4 html5lib
     PyRSS2Gen pynzb rpyc jinja2
-    jsonschema requests dateutil
-    pathpy guessit APScheduler
+    requests dateutil jsonschema
+    pathpy guessit rebulk APScheduler
     terminaltables colorclass
     cherrypy flask flask-restful
     flask-restplus flask-compress
-    flask_login flask-cors safe
-    pyparsing future zxcvbn-python
-    werkzeug tempora cheroot rebulk
-    portend transmissionrpc aniso8601
-    babelfish certifi click futures
-    idna itsdangerous markupsafe
-    plumbum pytz six tzlocal urllib3
-    webencodings werkzeug zxcvbn-python
-    backports_functools_lru_cache
-  ] ++ lib.optional (pythonOlder "3.4") pathlib
-    ++ lib.optional delugeSupport deluge;
+    flask_login flask-cors
+    pyparsing zxcvbn future
+    progressbar
+    # Optional requirements
+    deluge-client
+    # Plugins
+    transmissionrpc
+  ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   meta = with lib; {
     homepage    = https://flexget.com/;

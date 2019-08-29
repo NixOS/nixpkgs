@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "open-isns-${version}";
-  version = "0.98";
+  version = "0.99";
 
   src = fetchFromGitHub {
     owner = "gonzoleeman";
     repo = "open-isns";
     rev = "v${version}";
-    sha256 = "055gjwz5hxaj5jk23bf7dy9wbxk9m8cfgl1msbzjc60gr2mmcbdg";
+    sha256 = "0m294aiv80rkihacw5094093pc0kd5bkbxqgs6i32jsglxy33hvf";
   };
 
   propagatedBuildInputs = [ openssl ];

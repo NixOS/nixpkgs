@@ -1,16 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, pytest, case }:
+{ stdenv, buildPythonPackage, fetchPypi, isPyPy, pytest, case, psutil }:
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "3.5.0.4";
+  version = "3.6.0.0";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed65448da5877b5558f19d2f7f11f8355ea76b3e63e1c0a6059f47cfae5f1c84";
+    sha256 = "756bf323f250db8bf88462cd042c992ba60d8f5e07fc5636c24ba7d6f4261d84";
   };
 
-  buildInputs = [ pytest case ];
+  checkInputs = [ pytest case psutil ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/celery/billiard;

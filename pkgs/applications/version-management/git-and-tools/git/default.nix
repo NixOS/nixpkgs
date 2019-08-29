@@ -1,5 +1,5 @@
 { fetchurl, stdenv, buildPackages
-, curl, openssl, zlib, expat, perl, python, gettext, cpio
+, curl, openssl, zlib, expat, perlPackages, python, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
@@ -14,14 +14,17 @@
 , darwin
 , withLibsecret ? false
 , pkgconfig, glib, libsecret
+, gzip # needed at runtime by gitweb.cgi
 }:
 
 assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.18.0";
+  version = "2.22.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
+
+  gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
 
 stdenv.mkDerivation {
@@ -29,10 +32,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "14hfwfkrci829a9316hnvkglnqqw1p03cw9k56p4fcb078wbwh4b";
+    sha256 = "17zj6jwx3s6bybd290f1mj5iym1r64560rmnf0p63x4akxclp7hm";
   };
 
-  outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
+  outputs = [ "out" ];
 
   hardeningDisable = [ "format" ];
 
@@ -59,11 +62,11 @@ stdenv.mkDerivation {
         --subst-var-by gettext ${gettext}
   '';
 
-  nativeBuildInputs = [ gettext perl ]
+  nativeBuildInputs = [ gettext perlPackages.perl ]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
-    ++ stdenv.lib.optionals perlSupport [ perl ]
+    ++ stdenv.lib.optionals perlSupport [ perlPackages.perl ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
     ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ]
@@ -86,7 +89,7 @@ stdenv.mkDerivation {
     "prefix=\${out}"
     "SHELL_PATH=${stdenv.shell}"
   ]
-  ++ (if perlSupport then ["PERL_PATH=${perl}/bin/perl"] else ["NO_PERL=1"])
+  ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
   ++ (if pythonSupport then ["PYTHON_PATH=${python}/bin/python"] else ["NO_PYTHON=1"])
   ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
   ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc/"])
@@ -96,7 +99,9 @@ stdenv.mkDerivation {
 
   postBuild = ''
     make -C contrib/subtree
-  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + (stdenv.lib.optionalString perlSupport ''
+    make -C contrib/diff-highlight
+  '') + (stdenv.lib.optionalString stdenv.isDarwin ''
     make -C contrib/credential/osxkeychain
   '') + (stdenv.lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret
@@ -133,7 +138,6 @@ stdenv.mkDerivation {
       # Install contrib stuff.
       mkdir -p $out/share/git
       cp -a contrib $out/share/git/
-      ln -s "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/
       mkdir -p $out/share/emacs/site-lisp
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/etc/bash_completion.d
@@ -153,7 +157,7 @@ stdenv.mkDerivation {
             '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
             '${coreutils}/bin/wc', '${coreutils}/bin/tr'
-            ${stdenv.lib.optionalString perlSupport ", '${perl}/bin/perl'"}
+            ${stdenv.lib.optionalString perlSupport ", '${perlPackages.perl}/bin/perl'"}
           );
         }
         foreach $c (@a) {
@@ -163,58 +167,55 @@ stdenv.mkDerivation {
       EOS
       )"
       perl -0777 -i -pe "$SCRIPT" \
-        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,stash,submodule,subtree,web--browse}
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse}
 
 
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing
       ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
     '' + stdenv.lib.optionalString perlSupport ''
-      # put in separate package for simpler maintenance
-      mv $out/share/gitweb $gitweb/
-
       # wrap perl commands
-      gitperllib=$out/lib/perl5/site_perl
-      for i in ${builtins.toString perlLibs}; do
-        gitperllib=$gitperllib:$i/lib/perl5/site_perl
-      done
+      makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/git-credential-netrc \
+                  --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsimport \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-add--interactive \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-archimport \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-instaweb \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsexportcommit \
-                  --set GITPERLLIB "$gitperllib"
+                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
+
+      # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
+      # gitweb.cgi, need to patch so that it's found
+      sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
+          $out/share/gitweb/gitweb.cgi
+      # Give access to CGI.pm and friends (was removed from perl core in 5.22)
+      for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
+          sed -i -e "/use CGI /i use lib \"$p/${perlPackages.perl.libPrefix}\";" \
+              "$out/share/gitweb/gitweb.cgi"
+      done
     ''
 
-   + (if svnSupport then
-
-      ''# wrap git-svn
-        gitperllib=$out/lib/perl5/site_perl
-        for i in ${builtins.toString perlLibs} ${svn.out}; do
-          gitperllib=$gitperllib:$i/lib/perl5/site_perl
-        done
-        wrapProgram $out/libexec/git-core/git-svn     \
-                     --set GITPERLLIB "$gitperllib"   \
+   + (if svnSupport then ''
+        # wrap git-svn
+        wrapProgram $out/libexec/git-core/git-svn                                                                                \
+                     --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [svn.out])}" \
                      --prefix PATH : "${svn.out}/bin" ''
        else '' # replace git-svn by notification script
         notSupported $out/libexec/git-core/git-svn
-       '')
+     '')
 
-   + (if sendEmailSupport then
-      ''# wrap git-send-email
-        gitperllib=$out/lib/perl5/site_perl
-        for i in ${builtins.toString smtpPerlLibs}; do
-          gitperllib=$gitperllib:$i/lib/perl5/site_perl
-        done
+   + (if sendEmailSupport then ''
+        # wrap git-send-email
         wrapProgram $out/libexec/git-core/git-send-email \
-                     --set GITPERLLIB "$gitperllib" ''
-       else '' # replace git-send-email by notification script
+                     --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath smtpPerlLibs}"
+      '' else ''
+        # replace git-send-email by notification script
         notSupported $out/libexec/git-core/git-send-email
-       '')
+      '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
        make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-info \
@@ -236,9 +237,9 @@ stdenv.mkDerivation {
    + stdenv.lib.optionalString stdenv.isDarwin ''
     # enable git-credential-osxkeychain by default if darwin
     cat > $out/etc/gitconfig << EOF
-[credential]
-	helper = osxkeychain
-EOF
+    [credential]
+      helper = osxkeychain
+    EOF
   '';
 
 
@@ -283,7 +284,7 @@ EOF
 
     # XXX: I failed to understand why this one fails.
     # Could someone try to re-enable it on the next release ?
-    # Tested to fail: 2.18.0
+    # Tested to fail: 2.18.0 and 2.19.0
     disable_test t1700-split-index "null sha1"
 
     # Tested to fail: 2.18.0
@@ -292,6 +293,9 @@ EOF
 
     # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
+
+    # As of 2.19.0, t5562 refers to #!/usr/bin/perl
+    patchShebangs t/t5562/invoke-with-content-length.pl
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
@@ -299,6 +303,8 @@ EOF
     # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
   '';
+
+  stripDebugList = [ "lib" "libexec" "bin" "share/git/contrib/credential/libsecret" ];
 
 
   meta = {
@@ -312,6 +318,6 @@ EOF
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens ];
+    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens globin ];
   };
 }

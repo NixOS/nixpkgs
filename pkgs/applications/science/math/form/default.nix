@@ -1,13 +1,13 @@
 { stdenv, fetchurl, gmp, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "4.2.0";
+  version = "4.2.1";
   name = "form-${version}";
 
   # This tarball is released by author, it is not downloaded from tag, so can't use fetchFromGitHub
   src = fetchurl {
-    url = "https://github.com/vermaseren/form/releases/download/v4.2.0/form-4.2.0.tar.gz";
-    sha256 = "19528aphn4hvm151lyyhd7wz0bp2s3rla8jv6s7d8jwfp5ljzysm";
+    url = "https://github.com/vermaseren/form/releases/download/v4.2.1/form-4.2.1.tar.gz";
+    sha256 = "0a0smc10gm85vxd85942n5azy88w5qs5avbqrw0lw0yb9injswpj";
   };
 
   buildInputs = [ gmp zlib ];

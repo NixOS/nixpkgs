@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, ninja, zlib, expat, rpm, db }:
 
 stdenv.mkDerivation rec {
-  rev  = "0.6.35";
-  name = "libsolv-${rev}";
+  version  = "0.7.5";
+  name = "libsolv-${version}";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner  = "openSUSE";
     repo   = "libsolv";
-    sha256 = "0jx1bmwwhjwfidwa0hrarwpcrf4ic068kapd4vb9m5y7xd4l55nq";
+    rev    = version;
+    sha256 = "0khks19i01s9h297c7af4bpq448abs2pqw55scf56xfdvxpv23aw";
   };
 
   cmakeFlags = [

@@ -1,8 +1,4 @@
-{
-fetchFromGitHub, stdenv, lib,
-makeWrapper, pkgs,
-perl, perlPackages,
-gnome2 }:
+{ fetchFromGitHub, stdenv, lib, gettext, gtk2, makeWrapper, perlPackages, gnome2 }:
 
 let
   perlDeps = with perlPackages; [
@@ -24,7 +20,7 @@ let
   ];
   libs = [
     stdenv.cc.cc.lib
-    pkgs.gtk2
+    gtk2
   ];
 in
 stdenv.mkDerivation rec {
@@ -38,7 +34,7 @@ stdenv.mkDerivation rec {
     sha256 = "0x7hz8x8qyp3i1vb22zhcnvwxm3jhmmmlr22jqc5b09vpmbw1l45";
   };
 
-  nativeBuildInputs = [ perl pkgs.gettext makeWrapper ];
+  nativeBuildInputs = [ perlPackages.perl gettext makeWrapper ];
   buildInputs = perlDeps ++ [gnome2.libglade];
   propagatedBuildInputs = libs ++ perlDeps;
 
@@ -55,7 +51,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/yarssr \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath libs} \
-      --set PERL5LIB "${lib.makePerlPath perlDeps}"
+      --set PERL5LIB "${perlPackages.makePerlPath perlDeps}"
   '';
 
   meta = with stdenv.lib; {

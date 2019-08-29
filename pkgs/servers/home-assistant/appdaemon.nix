@@ -10,6 +10,9 @@ let
           inherit version;
           sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
         };
+        # TODO: remove after pinning aiohttp to a newer version
+        propagatedBuildInputs = with self; [ chardet multidict async-timeout yarl idna-ssl ];
+        doCheck = false;
       });
 
       yarl = super.yarl.overridePythonAttrs (oldAttrs: rec {
@@ -20,6 +23,14 @@ let
         };
       });
 
+      jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
+        version = "2.10.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013";
+        };
+      });
+
       aiohttp-jinja2 = super.aiohttp-jinja2.overridePythonAttrs (oldAttrs: rec {
         version = "0.15.0";
         src = oldAttrs.src.override {
@@ -27,22 +38,21 @@ let
           sha256 = "0f390693f46173d8ffb95669acbb0e2a3ec54ecce676703510ad47f1a6d9dc83";
         };
       });
-
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "3.0.1";
+  version = "3.0.5";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "ad16773da21e34e258970bf5740d1634a36c8202ac72c6925d960308ef1c58cf";
+    sha256 = "623897ce08dc2efe24d04380df36e4b7fb35c0e4007e882857d4047f0b60349d";
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp aiohttp-jinja2 astral bcrypt daemonize feedparser iso8601
-    jinja2 pyyaml requests sseclient voluptuous websocket_client yarl
+    daemonize astral requests sseclient websocket_client aiohttp yarl jinja2
+    aiohttp-jinja2 pyyaml voluptuous feedparser iso8601 bcrypt paho-mqtt
   ];
 
   # no tests implemented

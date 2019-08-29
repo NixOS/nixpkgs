@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, poppler_utils, pkgconfig, libpng
+{ stdenv, mkDerivation,  fetchurl, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
-, makeWrapper, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
-, xdg_utils, makeDesktopItem, wrapGAppsHook
+, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
+, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo, qt5
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.29.0";
+mkDerivation rec {
   name = "calibre-${version}";
+  version = "3.46.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1r29vi8j51r0nnzpjbg34ryvizzkn31sq1iz7z748wjfgr87wmyh";
+    sha256 = "1dlss01kaz2qlg9ji8c9dn9rd73mmpm5yjg50zp49cwx9y2vjiz9";
   };
 
   patches = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${python2Packages.pyqt5}/share/sip/PyQt5':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${python2Packages.pyqt5_with_qtwebkit}/share/sip/PyQt5':"  \
       setup/build_environment.py
 
     # Remove unneeded files and libs
@@ -35,15 +35,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
+  nativeBuildInputs = [ pkgconfig qmake removeReferencesTo wrapGAppsHook ];
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
-    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
+    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
   ] ++ (with python2Packages; [
-    apsw cssselect cssutils dateutil dnspython html5-parser lxml mechanize netifaces pillow
-    python pyqt5 sip
-    regex msgpack
+    apsw cssselect css-parser dateutil dnspython html5-parser lxml mechanize netifaces pillow
+    python pyqt5_with_qtwebkit sip
+    regex msgpack beautifulsoup4
     # the following are distributed with calibre, but we use upstream instead
     odfpy
   ]);
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
     export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo}/include/podofo
-    export PODOFO_LIB_DIR=${podofo}/lib
+    export PODOFO_INC_DIR=${podofo.dev}/include/podofo
+    export PODOFO_LIB_DIR=${podofo.lib}/lib
     export SIP_BIN=${python2Packages.sip}/bin/sip
     ${python2Packages.python.interpreter} setup.py install --prefix=$out
 
@@ -69,11 +69,6 @@ stdenv.mkDerivation rec {
 
     sed -i "s/env python[0-9.]*/python/" $PYFILES
     sed -i "2i import sys; sys.argv[0] = 'calibre'" $out/bin/calibre
-
-    for a in $out/bin/*; do
-      wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix PATH : ${poppler_utils.out}/bin
-    done
 
     # Replace @out@ by the output path.
     mkdir -p $out/share/applications/
@@ -87,6 +82,27 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  # Wrap manually
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+
+  # Remove some references to shrink the closure size. This reference (as of
+  # 2018-11-06) was a single string like the following:
+  #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
+  preFixup = ''
+    remove-references-to -t ${podofo.dev} $out/lib/calibre/calibre/plugins/podofo.so
+
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        ''${qtWrapperArgs[@]} \
+        ''${gappsWrapperArgs[@]} \
+        --prefix PYTHONPATH : $PYTHONPATH \
+        --prefix PATH : ${poppler_utils.out}/bin
+    done
+  '';
+
+  disallowedReferences = [ podofo.dev ];
 
   calibreDesktopItem = makeDesktopItem {
     name = "calibre";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome3, intltool, pkgconfig, texinfo, hicolor-icon-theme }:
+{ stdenv, fetchurl, gtk3, intltool, pkgconfig, texinfo, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "gxmessage-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gnome3.gtk texinfo hicolor-icon-theme ];
+  buildInputs = [ intltool gtk3 texinfo hicolor-icon-theme ];
 
   meta = {
     description = "A GTK enabled dropin replacement for xmessage";

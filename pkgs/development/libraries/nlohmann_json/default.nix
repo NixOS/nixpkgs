@@ -1,30 +1,26 @@
 { stdenv, fetchFromGitHub, cmake
-, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
-  name = "nlohmann_json-${version}";
-  version = "3.1.2";
+  pname = "nlohmann_json";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${version}";
-    sha256 = "1mpr781fb2dfbyscrr7nil75lkxsazg4wkm749168lcf2ksrrbfi";
+    sha256 = "1dgx3j9pb0f52dh73z8dpwdy79bra1qi5vpl66b9inq4gamf813z";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
-  checkTarget = "test";
 
   enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DBuildTests=${if doCheck then "ON" else "OFF"}"
-  ] ++ stdenv.lib.optionals (hostPlatform.libc == "msvcrt") [
-    "-DCMAKE_SYSTEM_NAME=Windows"
   ];
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = with stdenv.lib; {
     description = "Header only C++ library for the JSON file format";

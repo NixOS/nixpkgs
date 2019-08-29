@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     patchShebangs ./vers_string
     sed -i s,vers_string,./vers_string, Makefile*
+    substituteInPlace vers_string --replace "cvslib.pl" "./cvslib.pl"
   '';
 
   patches = [ ./crashes.patch ];

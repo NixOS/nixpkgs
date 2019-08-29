@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = requireFile {
     name = "Input-Font.zip";
-    url = "http://input.fontbureau.com/download/";
+    url = "https://input.fontbureau.com/download/";
     sha256 = "07fkyvbb12agkb2kpnq2j45nycgbjvb4n1s5hjyqsipdh2z9zihq";
   };
 

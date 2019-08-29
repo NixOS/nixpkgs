@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql55, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, curl, libuuid, autoPatchelfHook }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, mariadb, sqlite, zlib, libxml2, dpkg, lib, kerberos, curl, libuuid, autoPatchelfHook }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -67,7 +67,7 @@
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mysql55 ];
+    buildInputs = [ unixODBC mysql ];
 
     cmakeFlags = [ "-DWITH_UNIXODBC=1" ];
 
@@ -125,16 +125,16 @@
     version = "${versionMajor}.${versionMinor}.${versionAdditional}-1";
 
     versionMajor = "17";
-    versionMinor = "2";
-    versionAdditional = "0.1";
+    versionMinor = "4";
+    versionAdditional = "1.1";
 
     src = fetchurl {
       url = "https://packages.microsoft.com/debian/9/prod/pool/main/m/msodbcsql17/msodbcsql${versionMajor}_${version}_amd64.deb";
-      sha256 = "1966ymbbk0jsacqwzi3dmhxv2n8hfgnpjsx3hr3n7s9d88chgpx5";
+      sha256 = "0jb16irr7qlgd2zshg0vyia7zqipd0pcvwfcr6z807pss1mnzj8w";
     };
 
     nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ unixODBC dpkg openssl kerberos curl libuuid stdenv.cc.cc ];
+    buildInputs = [ unixODBC dpkg kerberos libuuid stdenv.cc.cc ];
 
     unpackPhase = "dpkg -x $src ./";
     buildPhase = "";
@@ -142,8 +142,6 @@
     installPhase = ''
       mkdir -p $out
       mkdir -p $out/lib
-      ln -s ${lib.getLib openssl}/lib/libssl.so.1.0.0 $out/lib/libssl.so.1.0.2
-      ln -s ${lib.getLib openssl}/lib/libcrypto.so.1.0.0 $out/lib/libcrypto.so.1.0.2
       cp -r opt/microsoft/msodbcsql${versionMajor}/lib64 opt/microsoft/msodbcsql${versionMajor}/share $out/
     '';
 

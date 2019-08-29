@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dpkg makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   libPath = stdenv.lib.makeLibraryPath [
       alsaLib

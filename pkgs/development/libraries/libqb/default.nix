@@ -15,6 +15,5 @@ stdenv.mkDerivation rec{
     description = "A library providing high performance logging, tracing, ipc, and poll";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

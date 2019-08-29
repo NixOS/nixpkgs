@@ -30,10 +30,7 @@ let
     enableParallelBuilding = true;
 
     doCheck = false; # hangs, tries to access the net?
-
-    # for some reason the tests are not running - it says "No tests found!!"
     checkInputs = [ check ];
-    checkPhase = "ctest";
 
     meta = with stdenv.lib; {
       description = "P2P FOSS instant messaging application aimed to replace Skype";
@@ -51,7 +48,7 @@ in rec {
   };
 
   libtoxcore_0_2 = generic {
-    version = "0.2.3";
-    sha256 = "1z8638cmxssc4jvbf64x549m84pz28729xbxc4c4ss1k792x30ya";
+    version = "0.2.10";
+    sha256 = "0r5j2s5n8ikayvr1zylvv3ai3smbhm2m0yhpa9lfcsxhvyn9phcn";
   };
 }

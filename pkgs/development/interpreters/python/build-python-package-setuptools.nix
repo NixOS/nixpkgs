@@ -2,13 +2,14 @@
 
 { lib
 , python
-, bootstrapped-pip
 }:
 
 {
-# passed to "python setup.py build_ext"
+# Global options passed to "python setup.py"
+  setupPyGlobalFlags ? []
+# Build options passed to "python setup.py build_ext"
 # https://github.com/pypa/pip/issues/881
-  setupPyBuildFlags ? []
+, setupPyBuildFlags ? []
 # Execute before shell hook
 , preShellHook ? ""
 # Execute after shell hook
@@ -20,19 +21,22 @@ let
   # pip does the same thing: https://github.com/pypa/pip/pull/3265
   setuppy = ./run_setup.py;
 
+  setupPyGlobalFlagsString = lib.concatStringsSep " " setupPyGlobalFlags;
+  setupPyBuildExtString = lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags));
+
 in attrs // {
   # we copy nix_run_setup over so it's executed relative to the root of the source
   # many project make that assumption
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
     cp ${setuppy} nix_run_setup
-    ${python.interpreter} nix_run_setup ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
+    ${python.pythonForBuild.interpreter} nix_run_setup ${setupPyGlobalFlagsString} ${setupPyBuildExtString} bdist_wheel
     runHook postBuild
   '';
 
   installCheckPhase = attrs.checkPhase or ''
     runHook preCheck
-    ${python.interpreter} nix_run_setup test
+    ${python.pythonForBuild.interpreter} nix_run_setup test
     runHook postCheck
   '';
 
@@ -47,9 +51,9 @@ in attrs // {
     if test -e setup.py; then
       tmp_path=$(mktemp -d)
       export PATH="$tmp_path/bin:$PATH"
-      export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
-      mkdir -p $tmp_path/${python.sitePackages}
-      ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path >&2
+      export PYTHONPATH="$tmp_path/${python.pythonForBuild.sitePackages}:$PYTHONPATH"
+      mkdir -p $tmp_path/${python.pythonForBuild.sitePackages}
+      ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path >&2
     fi
     ${postShellHook}
   '';

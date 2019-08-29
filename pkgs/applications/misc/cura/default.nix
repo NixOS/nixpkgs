@@ -1,30 +1,37 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2, curaengine }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
 
 mkDerivation rec {
-  name = "cura-${version}";
-  version = "3.4.1";
+  pname = "cura";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "03s9nf1aybbnbf1rzqja41m9g6991bbvrcly1lcrfqksianfn06w";
+    sha256 = "1qnai8vmgy5lx3lapw96j41i8mw9p6r99i3qzs709l9yzrix6l86";
   };
 
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
-    rev = "3.4.1";
-    sha256 = "1pw30clxqd7qgnidsyx6grizvlgfn8rhj6rd5ppkvv3rdjh0gj28";
+    rev = "4.2.0"; # TODO: change back to `version` after 4.2.1
+    sha256 = "17x43v0np58qbdfk3wz1k7i9pl0plndx9gmf7y0n23nl9f1qzb0m";
   };
 
-  buildInputs = [ qtbase qtquickcontrols2 ];
-  propagatedBuildInputs = with python3.pkgs; [ uranium zeroconf pyserial numpy-stl ];
+  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
+  propagatedBuildInputs = with python3.pkgs; [
+    libsavitar numpy-stl pyserial requests uranium zeroconf
+  ] ++ plugins;
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
   cmakeFlags = [
     "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
     "-DCURA_VERSION=${version}"
+  ];
+
+  makeWrapperArgs = [
+    # hacky workaround for https://github.com/NixOS/nixpkgs/issues/59901
+    "--set OMP_NUM_THREADS 1"
   ];
 
   postPatch = ''
@@ -35,17 +42,22 @@ mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/cura/resources/materials
     cp ${materials}/*.fdm_material $out/share/cura/resources/materials/
+    mkdir -p $out/lib/cura/plugins
+    for plugin in ${toString plugins}; do
+      ln -s $plugin/lib/cura/plugins/* $out/lib/cura/plugins
+    done
   '';
 
   postFixup = ''
     wrapPythonPrograms
+    wrapQtApp $out/bin/cura
   '';
 
   meta = with lib; {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
     homepage = https://github.com/Ultimaker/Cura;
-    license = licenses.agpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar gebner ];
   };
 }

@@ -1,5 +1,4 @@
 { stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
-, buildPlatform, hostPlatform
 }:
 
 with stdenv.lib;
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
     substituteInPlace config/Makefile.darwin --replace /usr/local "$out"
-    ${optionalString (hostPlatform != buildPlatform) ''
+    ${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "SYSTEM=${if hostPlatform.isMinGW then "mingw" else hostPlatform.parsed.kernel.name}"
+    "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
   ];
 
   enableParallelBuilding = true;

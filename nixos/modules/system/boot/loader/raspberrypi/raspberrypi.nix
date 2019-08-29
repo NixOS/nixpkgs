@@ -5,30 +5,21 @@ with lib;
 let
   cfg = config.boot.loader.raspberryPi;
 
-  builderGeneric = pkgs.substituteAll {
-    src = ./builder.sh;
-    isExecutable = true;
-    inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-    firmware = pkgs.raspberrypifw;
-    version = cfg.version;
-    inherit configTxt;
-  };
-
   inherit (pkgs.stdenv.hostPlatform) platform;
 
-  builderUboot = import ./builder_uboot.nix { inherit config; inherit pkgs; inherit configTxt; };
+  builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
+  builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
 
   builder = 
     if cfg.uboot.enable then
       "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
     else
-      builderGeneric;
+      "${builderGeneric} -c";
 
   blCfg = config.boot.loader;
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
-  isAarch64 = pkgs.stdenv.isAarch64;
+  isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
   optional = pkgs.stdenv.lib.optionalString;
 
   configTxt =
@@ -42,10 +33,13 @@ let
       avoid_warnings=1
     '' + optional isAarch64 ''
       # Boot in 64-bit mode.
-      arm_control=0x200
-    '' + optional cfg.uboot.enable ''
+      arm_64bit=1
+    '' + (if cfg.uboot.enable then ''
       kernel=u-boot-rpi.bin
-    '' + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
+    '' else ''
+      kernel=kernel.img
+      initramfs initrd followkernel
+    '') + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
 
 in
 
@@ -65,7 +59,7 @@ in
 
       version = mkOption {
         default = 2;
-        type = types.enum [ 1 2 3 ];
+        type = types.enum [ 0 1 2 3 ];
         description = ''
         '';
       };
@@ -103,7 +97,7 @@ in
 
   config = mkIf cfg.enable {
     assertions = singleton {
-      assertion = !pkgs.stdenv.isAarch64 || cfg.version == 3;
+      assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version == 3;
       message = "Only Raspberry Pi 3 supports aarch64.";
     };
 

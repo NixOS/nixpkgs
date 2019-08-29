@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "stem";
-  version = "1.6.0";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1va9p3ij7lxg6ixfsvaql06dn11l3fgpxmss1dhlvafm7sqizznp";
+    sha256 = "18lc95pmc7i089nlsb06dsxyjl5wbhxfqgdxbjcia35ndh8z7sn9";
   };
 
   postPatch = ''

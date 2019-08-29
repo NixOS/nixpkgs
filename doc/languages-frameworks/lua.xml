@@ -29,7 +29,7 @@ fileSystem = buildLuaPackage {
     maintainers = with maintainers; [ flosse ];
   };
 };
-  </programlisting>
+</programlisting>
  </para>
 
  <para>

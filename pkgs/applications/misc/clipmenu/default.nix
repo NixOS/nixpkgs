@@ -1,16 +1,16 @@
-{ clipnotify, makeWrapper, xsel, dmenu2, utillinux, gawk, stdenv, fetchFromGitHub, lib }:
+{ clipnotify, makeWrapper, xsel, dmenu, utillinux, gawk, stdenv, fetchFromGitHub, lib }:
 let
-  runtimePath = lib.makeBinPath [ clipnotify xsel dmenu2 utillinux gawk ];
+  runtimePath = lib.makeBinPath [ clipnotify xsel dmenu utillinux gawk ];
 in
 stdenv.mkDerivation rec {
   name = "clipmenu-${version}";
-  version = "5.4.0";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner  = "cdown";
     repo   = "clipmenu";
     rev    = version;
-    sha256 = "1qbpca0wny6i222vbikfl2znn3fynhbl4100qs8v4wn27ra5p0mi";
+    sha256 = "13hyarzazh6j33d808h3s5yk320wqzivc0ni9xm8kalvn4k3a0bq";
   };
 
   buildInputs = [ makeWrapper ];

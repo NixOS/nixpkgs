@@ -12,7 +12,7 @@ let
   url = "https://github.com/GaloisInc/saw-script/releases/download";
 
   saw-bin =
-    if stdenv.system == "i686-linux"
+    if stdenv.hostPlatform.system == "i686-linux"
     then fetchurl {
       url    = url + "/v0.1.1-dev/saw-0.1.1-dev-2015-07-31-CentOS6-32.tar.gz";
       sha256 = "126iag5nnvndi78c921z7vjrjfwcspn1hlxwwhzmqm4rvbhhr9v9";

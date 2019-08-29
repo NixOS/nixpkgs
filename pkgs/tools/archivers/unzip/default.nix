@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     ./CVE-2015-7697.diff
     ./CVE-2014-9913.patch
     ./CVE-2016-9844.patch
+    ./CVE-2018-18384.patch
     ./dont-hardcode-cc.patch
   ] ++ stdenv.lib.optional enableNLS
     (fetchurl {

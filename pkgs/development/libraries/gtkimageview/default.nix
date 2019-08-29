@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = http://trac.bjourne.webfactional.com/;
+    homepage = "https://wiki.gnome.org/Projects/GTK%2B/GtkImageView";
 
     description = "Image viewer widget for GTK+";
 

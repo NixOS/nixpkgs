@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, confuse, yajl, alsaLib, libpulseaudio, libnl, pkgconfig
+{ fetchurl, stdenv, libconfuse, yajl, alsaLib, libpulseaudio, libnl, pkgconfig
   }:
 
 stdenv.mkDerivation rec {
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ confuse yajl alsaLib libpulseaudio libnl ];
+  buildInputs = [ libconfuse yajl alsaLib libpulseaudio libnl ];
 
   makeFlags = [ "all" "PREFIX=$(out)" ];
 
   meta = {
     description = "A tiling window manager";
     homepage = https://i3wm.org;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    maintainers = [ ];
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
   };

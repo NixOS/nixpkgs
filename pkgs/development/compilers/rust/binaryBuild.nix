@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, bash, buildRustPackage, curl, darwin
+{ stdenv, makeWrapper, bash, curl, darwin
 , version
 , src
 , platform
@@ -18,8 +18,6 @@ let
 in
 
 rec {
-  inherit buildRustPackage;
-
   rustc = stdenv.mkDerivation rec {
     name = "rustc-${versionType}-${version}";
 
@@ -33,7 +31,8 @@ rec {
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    buildInputs = [ bash ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+    buildInputs = [ bash ]
+      ++ stdenv.lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -53,17 +52,6 @@ rec {
         patchelf \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/cargo"
-      ''}
-
-      ${optionalString (stdenv.isDarwin && bootstrapping) ''
-        install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$out/bin/rustc"
-        install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$out/bin/rustdoc"
-        install_name_tool -change /usr/lib/libiconv.2.dylib '${darwin.libiconv}/lib/libiconv.2.dylib' "$out/bin/cargo"
-        install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$out/bin/cargo"
-        install_name_tool -change /usr/lib/libcurl.4.dylib '${stdenv.lib.getLib curl}/lib/libcurl.4.dylib' "$out/bin/cargo"
-        for f in $out/lib/lib*.dylib; do
-          install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$f"
-        done
       ''}
 
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
@@ -87,7 +75,8 @@ rec {
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    buildInputs = [ makeWrapper bash ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+    buildInputs = [ makeWrapper bash ]
+      ++ stdenv.lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -102,12 +91,6 @@ rec {
         patchelf \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/cargo"
-      ''}
-
-      ${optionalString (stdenv.isDarwin && bootstrapping) ''
-        install_name_tool -change /usr/lib/libiconv.2.dylib '${darwin.libiconv}/lib/libiconv.2.dylib' "$out/bin/cargo"
-        install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$out/bin/cargo"
-        install_name_tool -change /usr/lib/libcurl.4.dylib '${stdenv.lib.getLib curl}/lib/libcurl.4.dylib' "$out/bin/cargo"
       ''}
 
       wrapProgram "$out/bin/cargo" \

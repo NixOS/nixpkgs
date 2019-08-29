@@ -28,7 +28,7 @@ let
   # Unpack the SLiM theme, or use the default.
   slimThemesDir =
     let
-      unpackedTheme = pkgs.runCommand "slim-theme" {}
+      unpackedTheme = pkgs.runCommand "slim-theme" { preferLocalBuild = true; }
         ''
           mkdir -p $out
           cd $out
@@ -49,7 +49,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = config.services.xserver.enable;
+        default = false;
         description = ''
           Whether to enable SLiM as the display manager.
         '';

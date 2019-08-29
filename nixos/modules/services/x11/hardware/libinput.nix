@@ -178,7 +178,7 @@ in {
       };
 
       additionalOptions = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         example =
         ''
@@ -205,7 +205,7 @@ in {
       })
     ];
 
-    services.udev.packages = [ pkgs.libinput ];
+    services.udev.packages = [ pkgs.libinput.out ];
 
     services.xserver.config =
       ''

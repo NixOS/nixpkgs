@@ -1,24 +1,30 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2, desktop-file-utils, wrapGAppsHook
-, gtk, gnome3, gnome-autoar, dbus-glib, shared-mime-info, libnotify, libexif
-, exempi, librsvg, tracker, tracker-miners, gnome-desktop, gexiv2, libselinux, gdk_pixbuf }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2
+, desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
+, glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
+, librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk-pixbuf
+, substituteAll, bubblewrap, gst_all_1, gsettings-desktop-schemas
+}:
 
 let
   pname = "nautilus";
-  version = "3.28.1";
+  version = "3.32.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "19dhpa2ylrg8d5274lahy7xqr2p9z3jnq1h4qmsh95czkpy7is4w";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1x9crzbj6rrrf8w5dkcx0c14j40byr4ijpzkwd5dcrbfvvdy1r01";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig libxml2 gettext wrapGAppsHook desktop-file-utils ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig libxml2 gettext python3 wrapGAppsHook
+    desktop-file-utils
+  ];
 
   buildInputs = [
-    dbus-glib shared-mime-info libexif gtk exempi libnotify libselinux
-    tracker tracker-miners gnome-desktop gexiv2
-    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
+    glib-networking shared-mime-info libexif gtk3 exempi libnotify libselinux
+    tracker tracker-miners gexiv2 libseccomp bubblewrap gst_all_1.gst-plugins-base
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
   ];
 
   propagatedBuildInputs = [ gnome-autoar ];
@@ -26,7 +32,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Thumbnailers
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
@@ -36,7 +42,16 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  patches = [ ./extension_dir.patch ];
+  patches = [
+    ./extension_dir.patch
+    # 3.30 now generates it's own thummbnails,
+    # and no longer depends on `gnome-desktop`
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      bubblewrap_bin = "${bubblewrap}/bin/bwrap";
+      inherit (builtins) storeDir;
+    })
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {

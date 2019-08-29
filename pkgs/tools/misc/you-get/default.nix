@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "you-get";
-  version = "0.4.1128";
+  version = "0.4.1328";
 
   # Tests aren't packaged, but they all hit the real network so
   # probably aren't suitable for a build environment anyway.
@@ -10,7 +10,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i0wspmgblxwvvbm3q8zz4l450fs3bccqxxfm0ysfgprgcy8fp3l";
+    sha256 = "1rbsf7dphvlzahrzgdj1bq62mqhp2fmr61lckcyzq6jdq3vsf0w8";
   };
 
   meta = with stdenv.lib; {

@@ -35,7 +35,7 @@ let
     sha256 = "11nwdb9y84cghcx319nsjjf9m035s4s1184zrhzpvaxq2wvqhbhx";
   };
 
-  # Put the download plugins in a fake Maven repository
+  # Put the downloaded plugins in a fake Maven repository
   fakeMavenRepo = stdenv.mkDerivation {
     name = "fake-maven-repo";
     buildCommand = ''

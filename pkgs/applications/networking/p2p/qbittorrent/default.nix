@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
@@ -6,26 +6,18 @@
 }:
 
 assert guiSupport -> (dbus != null);
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "4.1.2";
+  version = "4.1.7";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qbittorrent";
     rev = "release-${version}";
-    sha256 = "1756hr92rvh4xlf6bk2wl24ypczhwf1rv1pdq05flk118jciqb05";
+    sha256 = "1z4k64h3ik1a7ir4v9g3ar1wq8zfh4r2pq43hr2wvlamm2111gdv";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-desktop-file-regression.patch";
-      url = "https://github.com/qbittorrent/qBittorrent/commit/078325a3eb85c286b9a3454192ed2deadeda604c.patch";
-      sha256 = "1xhpd4ncy2m9zxsllizkry2013ij0ii9p8b8jbb35sazw5p50c96";
-    })
-  ];
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported
   nativeBuildInputs = [ pkgconfig ];

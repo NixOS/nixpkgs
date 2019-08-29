@@ -19,7 +19,10 @@ stdenv.mkDerivation rec {
         + "/tools/flex/patches/200-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch";
     sha256 = "1aarhcmz7mfrgh15pkj6f7ikxa2m0mllw1i1vscsf1kw5d05lw6f";
   })];
-  postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+
+  postPatch = ''
+    patchShebangs tests
+  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     substituteInPlace Makefile.in --replace "tests" " "
 
     substituteInPlace doc/Makefile.am --replace 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '

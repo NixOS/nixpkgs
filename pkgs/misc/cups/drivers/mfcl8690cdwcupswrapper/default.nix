@@ -3,11 +3,11 @@ mfcl8690cdwlpr, perl, stdenv}:
 
 stdenv.mkDerivation rec {
   name = "mfcl8690cdwcupswrapper-${version}";
-  version = "1.3.0-0";
+  version = "1.4.0-0";
 
   src = fetchurl {
     url = "http://download.brother.com/welcome/dlf103250/${name}.i386.deb";
-    sha256 = "16nnh3hd5yv0m4191wja9fvxxzngzfccfj2rfhcswbakajyk5ywn";
+    sha256 = "1bl9r8mmj4vnanwpfjqgq3c9lf2v46wp5k6r2n9iqprf7ldd1kb2";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];

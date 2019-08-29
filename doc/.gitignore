@@ -1,6 +1,8 @@
 *.chapter.xml
 *.section.xml
 .version
-out
-manual-full.xml
+functions/library/generated
+functions/library/locations.xml
 highlightjs
+manual-full.xml
+out

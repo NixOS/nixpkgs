@@ -4,17 +4,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "click-${version}";
-  version = "0.3.1";
-  rev = "b5dfb4a8f8344330a098cb61523695dfe0fd296a";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
+    rev = "v${version}";
     owner = "databricks";
     repo = "click";
-    sha256 = "0a2hq4hcxkkx7gs5dv7sr3j5jy2dby4r6y090z7zl2xy5wydr7bi";
-    inherit rev;
+    sha256 = "18mpzvvww2g6y2d3m8wcfajzdshagihn59k03xvcknd5d8zxagl3";
   };
 
-  cargoSha256 = "03vgbkv9xsnx44vivbbhjgxv9drp0yjnimgy6hwm32x74r00k3hj";
+  cargoSha256 = "0298x7wkr4j1l5flmv5vhl1ay8icvh4dlhsh4xi8fd3p8jl9jpqv";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, lib }:
+{ fetchzip, lib }:
 let
   fonts = {
     assamese        = { label = "Assamese";          version = "2.91.5"; sha256 = "06cw416kgw0m6883n5ixmpniinsd747rdmacf06z83w1hqwj2js6"; };
@@ -51,7 +51,6 @@ let
       # Set a non-zero priority to allow easy overriding of the
       # fontconfig configuration files.
       priority = 5;
-      platforms = stdenv.lib.platforms.unix;
     };
   };
 
