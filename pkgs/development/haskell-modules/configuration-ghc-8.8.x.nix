@@ -162,6 +162,7 @@ self: super: {
   chell = overrideCabal (doJailbreak super.chell) (_drv: {
     broken = false;
   });
+  th-expand-syns = doJailbreak super.th-expand-syns;
   system-fileio = doJailbreak super.system-fileio;
   yaml = self.yaml_0_11_1_2;
 }
