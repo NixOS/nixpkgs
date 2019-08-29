@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
                 "-DENABLE_RAW=ON"
                 "-DENABLE_TIFF=ON"
                 "-DENABLE_QUAZIP=ON"
+                "-DENABLE_TRANSLATIONS=ON"
                 "-DUSE_SYSTEM_QUAZIP=ON"];
 
   meta = with stdenv.lib; {
