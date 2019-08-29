@@ -32,10 +32,10 @@ let
     # when updating, also update rev-manual to a recent version of
     # https://github.com/dae/ankidocs
     # The manual is distributed independently of the software.
-    version = "2.1.14";
-    sha256-pkg = "0yw2lij8h6cbvyybsyypzw1l0r1si1gh82fzsyyzcyxd4h4m3f4l";
-    rev-manual = "04210375b949a6555095962bba547ae27b39fe77";
-    sha256-manual = "03kyjsz30ri0l6zq7x13xnq7naapm8vh9yybsm6f67hvd1k1ycrd";
+    version = "2.1.15";
+    sha256-pkg = "12dvyf3j9df4nrhhnqbzd9b21rpzkh4i6yhhangn2zf7ch0pclss";
+    rev-manual = "8f6387867ac37ef3fe9d0b986e70f898d1a49139";
+    sha256-manual = "0pm5slxn78r44ggvbksz7rv9hmlnsvn9z811r6f63dsc8vm6mfml";
 
     manual = stdenv.mkDerivation {
       name = "anki-manual-${version}";
