@@ -17137,6 +17137,8 @@ in
     inherit (nodePackages) svgo;
   };
 
+  twitter-color-emoji = callPackage ../data/fonts/twitter-color-emoji { };
+
   tzdata = callPackage ../data/misc/tzdata { };
 
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
