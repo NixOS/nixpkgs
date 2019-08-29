@@ -2570,6 +2570,8 @@ in {
   odfpy = callPackage ../development/python-modules/odfpy { };
 
   openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
+  openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
+
   oset = callPackage ../development/python-modules/oset { };
 
   pamela = callPackage ../development/python-modules/pamela { };

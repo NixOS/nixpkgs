@@ -19998,6 +19998,8 @@ in
 
   openmpt123 = callPackage ../applications/audio/openmpt123 { };
 
+  openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
+
   opusfile = callPackage ../applications/audio/opusfile { };
 
   opusTools = callPackage ../applications/audio/opus-tools { };
