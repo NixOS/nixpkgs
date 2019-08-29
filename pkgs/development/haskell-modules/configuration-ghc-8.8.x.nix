@@ -163,6 +163,16 @@ self: super: {
     broken = false;
   });
   th-expand-syns = doJailbreak super.th-expand-syns;
+  shelly = overrideCabal (appendPatch (doJailbreak super.shelly) (pkgs.fetchpatch {
+    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shelly-1.8.1.patch";
+    sha256 = "1kglbwrr4ra81v9x3bfsk5l6pyl0my2a1zkr3qjjx7acn0dfpgbc";
+  })) (drv: {
+    editedCabalFile = null;
+    preConfigure = ''
+      cp -v ${pkgs.fetchurl {url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shelly-1.8.1.cabal"; sha256 = "0crf0m077wky76f5nav2p9q4fa5q4yhv5l4bq9hd073dzdaywhz0";}} shelly.cabal
+      sed -i -e 's/< 1.9,/< 2,/' shelly.cabal # bump time version
+    '';
+  });
   system-fileio = doJailbreak super.system-fileio;
   yaml = self.yaml_0_11_1_2;
 }
