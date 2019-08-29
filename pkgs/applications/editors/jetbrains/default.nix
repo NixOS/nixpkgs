@@ -240,7 +240,7 @@ let
       patchPhase = (attrs.patchPhase or "") + optionalString (stdenv.isLinux) ''
         # Webstorm tries to use bundled jre if available.
         # Lets prevent this for the moment
-        rm -r jre64
+        rm -r jbr
       '';
     });
 in

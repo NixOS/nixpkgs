@@ -7,12 +7,12 @@
 
 let drv = stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
-  version = "164";
+  version = "451";
 
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchurl {
-      url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbrsdk-11_0_2-linux-x64-b${version}.tar.gz";
-      sha256 = "121yzgvkfx7lq0k9s8wjnhz09a564br5y7zlkxgh191sbm2i7zdi";
+      url = "https://bintray.com/jetbrains/intellij-jbr/download_file?file_path=jbrsdk-11_0_4-linux-x64-b${version}.tar.gz";
+      sha256 = "05khf817i8lywfdp68a6lniv8hgi20rmnxqp3963k6vw41ar9qba";
     }
   else
     throw "unsupported system: ${stdenv.hostPlatform.system}";
@@ -24,8 +24,7 @@ let drv = stdenv.mkDerivation rec {
   installPhase = ''
     cd ..
 
-    mv $sourceRoot $out
-    jrePath=$out/jre
+    mv $sourceRoot/jbrsdk $out
   '';
 
   postFixup = ''
