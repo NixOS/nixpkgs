@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [ volth marsam ];
     platforms = [ "x86_64-linux" ];
     license = licenses.postgresql;
   };
