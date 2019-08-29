@@ -51,6 +51,8 @@ let
       ./compiler-rt-baremetal.patch
     ];
 
+    setupHook = ../../clang-setup-hook.sh;
+
     postPatch = ''
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
              -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \

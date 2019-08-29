@@ -55,6 +55,8 @@ let
 
     outputs = [ "out" "lib" "python" ];
 
+    setupHook = ../../clang-setup-hook.sh;
+
     # Clang expects to find LLVMgold in its own prefix
     postInstall = ''
       if [ -e ${llvm}/lib/LLVMgold.so ]; then
