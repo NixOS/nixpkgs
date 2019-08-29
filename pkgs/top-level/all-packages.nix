@@ -11299,6 +11299,8 @@ in
 
   hydra = callPackage ../development/tools/misc/hydra { };
 
+  hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
+
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
   hyena = callPackage ../development/libraries/hyena { };
