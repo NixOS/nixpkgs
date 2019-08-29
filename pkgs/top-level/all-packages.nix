@@ -2975,8 +2975,6 @@ in
 
   exiftool = perlPackages.ImageExifTool;
 
-  exodus = callPackage ../applications/altcoins/exodus { };
-
   ext4magic = callPackage ../tools/filesystems/ext4magic { };
 
   extract_url = callPackage ../applications/misc/extract_url { };
@@ -4480,8 +4478,6 @@ in
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
-  ledger-live-desktop = callPackage ../applications/altcoins/ledger-live-desktop { };
-
   ledmon = callPackage ../tools/system/ledmon { };
 
   leela = callPackage ../tools/graphics/leela { };
@@ -4905,8 +4901,6 @@ in
   nahid-fonts = callPackage ../data/fonts/nahid-fonts { };
 
   namazu = callPackage ../tools/text/namazu { };
-
-  nano-wallet = libsForQt5.callPackage ../applications/altcoins/nano-wallet { };
 
   nasty = callPackage ../tools/security/nasty { };
 
@@ -6807,8 +6801,6 @@ in
   wego = callPackage ../applications/misc/wego { };
 
   wal_e = callPackage ../tools/backup/wal-e { };
-
-  wasabiwallet = callPackage ../applications/altcoins/wasabiwallet { };
 
   watchexec = callPackage ../tools/misc/watchexec {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -17358,14 +17350,6 @@ in
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
-  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins { } );
-
-  bitcoin = altcoins.bitcoin;
-  clightning = altcoins.clightning;
-  lnd = altcoins.lnd;
-
-  cryptop = altcoins.cryptop;
-
   jnetmap = callPackage ../applications/networking/jnetmap {};
 
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
@@ -17377,19 +17361,6 @@ in
   libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix { };
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
 
-
-  go-ethereum = res.altcoins.go-ethereum;
-  ethabi = res.altcoins.ethabi;
-
-  parity = res.altcoins.parity;
-  parity-beta = res.altcoins.parity-beta;
-  parity-ui = res.altcoins.parity-ui;
-
-  polkadot = res.altcoins.polkadot;
-
-  stellar-core = res.altcoins.stellar-core;
-
-  particl-core = res.altcoins.particl-core;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -19112,8 +19083,6 @@ in
 
   josm = callPackage ../applications/misc/josm { };
 
-  jormungandr = callPackage ../applications/altcoins/jormungandr { };
-
   jbrout = callPackage ../applications/graphics/jbrout { };
 
   jwm = callPackage ../applications/window-managers/jwm { };
@@ -19559,14 +19528,6 @@ in
   moc = callPackage ../applications/audio/moc { };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
-
-  monero = callPackage ../applications/altcoins/monero {
-    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
-  };
-
-  monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui {
-    boost = boost16x;
-  };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
     stdenvGcc6 = gcc6Stdenv;
@@ -21815,6 +21776,111 @@ in
   zscroll = callPackage ../applications/misc/zscroll {};
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
+
+  ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
+
+  aeon = callPackage ../applications/blockchains/aeon { };
+
+  bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
+  bitcoind = callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
+  clightning = callPackage ../applications/blockchains/clightning.nix { };
+
+  bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc.nix { boost = boost165; withGui = true; };
+  bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc.nix { boost = boost165; withGui = false; };
+
+  bitcoin-unlimited  = libsForQt5.callPackage ../applications/blockchains/bitcoin-unlimited.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    withGui = true;
+  };
+  bitcoind-unlimited = callPackage ../applications/blockchains/bitcoin-unlimited.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    withGui = false;
+  };
+
+  bitcoin-classic  = libsForQt5.callPackage ../applications/blockchains/bitcoin-classic.nix { boost = boost165; withGui = true; };
+  bitcoind-classic = callPackage ../applications/blockchains/bitcoin-classic.nix { boost = boost165; withGui = false; };
+
+  btc1 = callPackage ../applications/blockchains/btc1.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+    boost = boost165;
+  };
+  btc1d = btc1.override { withGui = false; };
+
+  cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
+
+  dashpay = callPackage ../applications/blockchains/dashpay.nix { };
+
+  dcrd = callPackage ../applications/blockchains/dcrd.nix { };
+  dcrwallet = callPackage ../applications/blockchains/dcrwallet.nix { };
+
+  dero = callPackage ../applications/blockchains/dero.nix { boost = boost165; };
+
+  dogecoin  = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = true; };
+  dogecoind = callPackage ../applications/blockchains/dogecoin.nix { boost = boost165; withGui = false; };
+
+  exodus = callPackage ../applications/blockchains/exodus { };
+
+  freicoin = callPackage ../applications/blockchains/freicoin.nix { boost = boost155; };
+  go-ethereum = callPackage ../applications/blockchains/go-ethereum.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
+  go-ethereum-classic = callPackage ../applications/blockchains/go-ethereum-classic {
+    buildGoPackage = buildGo110Package;
+  };
+
+  jormungandr = callPackage ../applications/blockchains/jormungandr { };
+
+  ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
+
+  litecoin  = callPackage ../applications/blockchains/litecoin.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+  litecoind = litecoin.override { withGui = false; };
+
+  lnd = callPackage ../applications/blockchains/lnd.nix { };
+
+  monero = callPackage ../applications/blockchains/monero {
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
+  };
+
+  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
+    boost = boost16x;
+  };
+
+  masari = callPackage ../applications/blockchains/masari.nix { boost = boost165; };
+
+  mist = callPackage ../applications/blockchains/mist.nix { };
+
+  nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
+
+  namecoin  = callPackage ../applications/blockchains/namecoin.nix  { withGui = true; };
+  namecoind = callPackage ../applications/blockchains/namecoin.nix { withGui = false; };
+
+  pivx = libsForQt59.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
+  pivxd = callPackage ../applications/blockchains/pivx.nix { withGui = false; };
+
+  ethabi = callPackage ../applications/blockchains/ethabi.nix { };
+
+  stellar-core = callPackage ../applications/blockchains/stellar-core.nix { };
+
+  sumokoin = callPackage ../applications/blockchains/sumokoin.nix { boost = boost165; };
+
+  wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
+
+  wownero = callPackage ../applications/blockchains/wownero.nix {};
+
+  zcash = callPackage ../applications/blockchains/zcash {
+    withGui = false;
+  };
+
+  parity = callPackage ../applications/blockchains/parity { };
+  parity-beta = callPackage ../applications/blockchains/parity/beta.nix { };
+  parity-ui = callPackage ../applications/blockchains/parity-ui { };
+
+  polkadot = callPackage ../applications/blockchains/polkadot { };
+
+  particl-core = callPackage ../applications/blockchains/particl/particl-core.nix { miniupnpc = miniupnpc_2; };
 
   ### GAMES
 
