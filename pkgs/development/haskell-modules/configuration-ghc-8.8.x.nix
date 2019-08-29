@@ -159,5 +159,8 @@ self: super: {
       cp -v ${pkgs.fetchurl {url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/memory-0.14.18.cabal"; sha256 = "1325wny0irnq51rz0f4xgkvm01p6n4z5jid2jgpkhjac8a2sdgwl";}} memory.cabal
     '';
   });
+  chell = overrideCabal (doJailbreak super.chell) (_drv: {
+    broken = false;
+  });
   yaml = self.yaml_0_11_1_2;
 }
