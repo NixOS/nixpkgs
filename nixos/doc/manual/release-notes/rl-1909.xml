@@ -318,7 +318,8 @@
       <listitem><para><link linkend="opt-services.strongswan-swanctl.enable"><literal>services.strongswan-swanctl</literal></link></para></listitem>
       <listitem><para><link linkend="opt-services.httpd.enable"><literal>services.httpd</literal></link></para></listitem>
      </itemizedlist>
-   </para>
+    </para>
+   </listitem>
    <listitem>
      <para>
        The <option>security.acme.directory</option> option has been replaced by a read-only <option>security.acme.certs.&lt;cert&gt;.directory</option> option for each certificate you define. This will be
