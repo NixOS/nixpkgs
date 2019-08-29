@@ -81,10 +81,6 @@ self: super: {
       sed -i -e 's/time < 1.9/time < 2/' tar.cabal
     '';
   });
-  dlist = appendPatch (doJailbreak super.dlist) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/dlist-0.8.0.6.patch";
-    sha256 = "0lkhibfxfk6mi796mrjgmbb50hbyjgc7xdinci64dahj8325jlpc";
-  });
   vector-th-unbox = appendPatch super.vector-th-unbox (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/vector-th-unbox-0.2.1.6.patch";
     sha256 = "0169yf9ms1g5mmkc5l6hpffzm34zdrqdng4df02nbdmfgba45h19";
