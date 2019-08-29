@@ -162,9 +162,9 @@ in
         description = ''
           Attribute set of certificates to get signed and renewed. Creates
           <literal>acme-''${cert}.{service,timer}</literal> systemd units for
-          each certificate defined here. Other services can then add
-          dependencies on the created service file to do something when a
-          certificate renews.
+          each certificate defined here. Other services can add dependencies
+          to those units if they rely on the certificates being present,
+          or trigger restarts of the service if certificates get renewed.
         '';
         example = literalExample ''
           {
