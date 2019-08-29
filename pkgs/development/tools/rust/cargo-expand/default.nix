@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ llvmPackages.libclang ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
-
   meta = with stdenv.lib; {
     description = "A utility and Cargo subcommand designed to let people expand macros in their Rust source code";
     homepage = "https://github.com/dtolnay/cargo-expand";
