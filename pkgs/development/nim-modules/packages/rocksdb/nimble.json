@@ -1,0 +1,23 @@
+{
+  "nimble": {
+    "name": "rocksdb",
+    "url": "https://github.com/status-im/nim-rocksdb",
+    "method": "git",
+    "tags": [
+      "library",
+      "wrapper",
+      "database"
+    ],
+    "description": "A wrapper for Facebook's RocksDB, an embeddable, persistent key-value store for fast storage",
+    "license": "Apache 2.0 or GPLv2",
+    "web": "https://github.com/status-im/nim-rocksdb",
+    "versions": []
+  },
+  "src": {
+    "url": "https://github.com/status-im/nim-rocksdb",
+    "rev": "08fec021c0f28f63d1221d40a655078b5b923d1b",
+    "date": "2019-08-24T05:01:23+02:00",
+    "sha256": "10d8yp6l6nl9jyiz2k0hz2w57y21xbw5mslsy9ynrszriyppmwq2",
+    "fetchSubmodules": false
+  }
+}

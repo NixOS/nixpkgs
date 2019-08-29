@@ -1,0 +1,13 @@
+diff --git a/src/python.nim b/src/python.nim
+index 25c7b84..bb1944b 100644
+--- a/src/python.nim
++++ b/src/python.nim
+@@ -65,7 +65,7 @@ when defined(windows):
+ elif defined(macosx):
+   const dllname = "libpython(2.7|2.6|2.5|2.4|2.3|2.2|2.1|2.0|1.6|1.5).dylib"
+ else: 
+-  const dllver = ".1"
++  const dllver = ""
+   const dllname = "libpython(2.7|2.6|2.5|2.4|2.3|2.2|2.1|2.0|1.6|1.5).so" & 
+                   dllver
+ 

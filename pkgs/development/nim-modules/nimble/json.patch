@@ -1,0 +1,156 @@
+diff --git a/src/nimble.nim b/src/nimble.nim
+index 1b01502..744da66 100644
+--- a/src/nimble.nim
++++ b/src/nimble.nim
+@@ -555,12 +555,22 @@ proc search(options: Options) =
+   if needsRefresh(options):
+     raise newException(NimbleError, "Please run nimble refresh.")
+   let pkgList = getPackageList(options)
+-  var found = false
++  var
++    found = false
++    jsonOutput: JsonNode
++  if options.jsonOutput:
++    jsonOutput = newJArray()
+   template onFound {.dirty.} =
+-    echoPackage(pkg)
+-    if options.queryVersions:
+-      echoPackageVersions(pkg)
+-    echo(" ")
++    if options.jsonOutput:
++      let info = pkg.json
++      if options.queryVersions:
++        info["versions"] = packageVersionsJson(pkg)
++      jsonOutput.add info
++    else:
++      echoPackage(pkg)
++      if options.queryVersions:
++        echoPackageVersions(pkg)
++      echo(" ")
+     found = true
+     break forPkg
+ 
+@@ -577,17 +587,35 @@ proc search(options: Options) =
+ 
+   if not found:
+     display("Error", "No package found.", Error, HighPriority)
++  elif options.jsonOutput:
++    echo jsonOutput
+ 
+-proc list(options: Options) =
+-  if needsRefresh(options):
+-    raise newException(NimbleError, "Please run nimble refresh.")
+-  let pkgList = getPackageList(options)
++proc echoList(pkgList: seq[Package], queryVersions: bool) =
+   for pkg in pkgList:
+     echoPackage(pkg)
+-    if options.queryVersions:
++    if queryVersions:
+       echoPackageVersions(pkg)
+     echo(" ")
+ 
++proc jsonList(pkgList: seq[Package], queryVersions: bool) =
++  echo "["
++  for i, pkg in pkgList:
++    let info = pkg.json
++    if queryVersions:
++      info["versions"] = packageVersionsJson(pkg)
++    echo info
++    if i != pkgList.high: echo ","
++  echo "]"
++
++proc list(options: Options) =
++  if needsRefresh(options):
++    raise newException(NimbleError, "Please run nimble refresh.")
++  let pkgList = getPackageList(options)
++  if options.jsonOutput:
++    jsonList(pkgList, options.queryVersions)
++  else:
++    echoList(pkgList, options.queryVersions)
++
+ proc listInstalled(options: Options) =
+   var h = initOrderedTable[string, seq[string]]()
+   let pkgs = getInstalledPkgsMin(options.getPkgsDir(), options)
+diff --git a/src/nimblepkg/download.nim b/src/nimblepkg/download.nim
+index f8954e9..bce7348 100644
+--- a/src/nimblepkg/download.nim
++++ b/src/nimblepkg/download.nim
+@@ -1,7 +1,7 @@
+ # Copyright (C) Dominik Picheta. All rights reserved.
+ # BSD License. Look at license.txt for more info.
+ 
+-import parseutils, os, osproc, strutils, tables, pegs, uri
++import parseutils, os, osproc, strutils, tables, pegs, uri, json
+ 
+ import packageinfo, packageparser, version, tools, common, options, cli
+ 
+@@ -282,3 +282,17 @@ proc echoPackageVersions*(pkg: Package) =
+   of DownloadMethod.hg:
+     echo("  versions:    (Remote tag retrieval not supported by " &
+         pkg.downloadMethod & ")")
++
++proc packageVersionsJson*(pkg: Package): JsonNode =
++  result = newJArray()
++  let downMethod = pkg.downloadMethod.getDownloadMethod()
++  try:
++    case downMethod
++    of DownloadMethod.git:
++        let versions = getTagsListRemote(pkg.url, downMethod).getVersionList()
++        for v in values(versions):
++          result.add %v
++    of DownloadMethod.hg:
++      discard
++  except:
++    discard
+diff --git a/src/nimblepkg/options.nim b/src/nimblepkg/options.nim
+index f49ed04..eaceee8 100644
+--- a/src/nimblepkg/options.nim
++++ b/src/nimblepkg/options.nim
+@@ -13,6 +13,7 @@ type
+     uninstallRevDeps*: bool
+     queryVersions*: bool
+     queryInstalled*: bool
++    jsonOutput*:bool
+     nimbleDir*: string
+     verbosity*: cli.Priority
+     action*: Action
+@@ -104,6 +105,8 @@ Options:
+   -v, --version                   Print version information.
+   -y, --accept                    Accept all interactive prompts.
+   -n, --reject                    Reject all interactive prompts.
++      --json                      Produce JSON formatted output when
++                                  searching or listing packages
+       --ver                       Query remote server for package version
+                                   information when searching or listing packages
+       --nimbleDir:dirname         Set the Nimble directory.
+@@ -297,6 +300,8 @@ proc parseFlag*(flag, val: string, result: var Options, kind = cmdLongOption) =
+         result.queryInstalled = true
+       of "ver":
+         result.queryVersions = true
++      of "json":
++        result.jsonOutput = true
+       else:
+         wasFlagHandled = false
+     of actionInstall:
+diff --git a/src/nimblepkg/packageinfo.nim b/src/nimblepkg/packageinfo.nim
+index c54b97d..ab02590 100644
+--- a/src/nimblepkg/packageinfo.nim
++++ b/src/nimblepkg/packageinfo.nim
+@@ -427,6 +427,17 @@ proc echoPackage*(pkg: Package) =
+     if pkg.web.len > 0:
+       echo("  website:     " & pkg.web)
+ 
++func json*(pkg: Package): JsonNode =
++  result = newJObject()
++  result["name"] = %pkg.name
++  result["url"] = %pkg.url
++  result["method"] = %pkg.downloadMethod
++  result["tags"] = %pkg.tags
++  result["description"] = %pkg.description
++  result["license"] = %pkg.license
++  if pkg.web.len > 0:
++    result["web"] = %pkg.web
++
+ proc getDownloadDirName*(pkg: Package, verRange: VersionRange): string =
+   result = pkg.name
+   let verSimple = getSimpleString(verRange)

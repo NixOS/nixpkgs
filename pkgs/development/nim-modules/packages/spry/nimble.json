@@ -1,0 +1,23 @@
+{
+  "nimble": {
+    "name": "spry",
+    "url": "https://github.com/gokr/spry",
+    "method": "git",
+    "tags": [
+      "language",
+      "library",
+      "scripting"
+    ],
+    "description": "A Smalltalk and Rebol inspired language implemented as an AST interpreter",
+    "license": "MIT",
+    "web": "https://github.com/gokr/spry",
+    "versions": []
+  },
+  "src": {
+    "url": "https://github.com/gokr/spry",
+    "rev": "46783b8f56a4fac2c41a05dfa5cce450ee453f15",
+    "date": "2019-08-27T10:00:26+02:00",
+    "sha256": "00sxckcnjqa7g7ywa1bcqi48h7fjyn2w8vwsvwclh9sp3fpy6jyi",
+    "fetchSubmodules": false
+  }
+}

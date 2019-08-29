@@ -1,0 +1,21 @@
+{
+  "nimble": {
+    "name": "python",
+    "url": "https://github.com/nim-lang/python",
+    "method": "git",
+    "tags": [
+      "wrapper"
+    ],
+    "description": "Wrapper to interface with Python interpreter",
+    "license": "MIT",
+    "web": "https://github.com/nim-lang/python",
+    "versions": []
+  },
+  "src": {
+    "url": "https://github.com/nim-lang/python",
+    "rev": "b7c3b2c447a69fdb0a974ba149062e52182fda08",
+    "date": "2017-10-22T12:06:16+01:00",
+    "sha256": "0lhinsva3l23l9fm1ysq4qach8rnckvan9kcqv6kdqyz9agjhpjs",
+    "fetchSubmodules": false
+  }
+}

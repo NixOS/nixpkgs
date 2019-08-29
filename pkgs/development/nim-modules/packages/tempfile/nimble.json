@@ -1,0 +1,34 @@
+{
+  "nimble": {
+    "name": "tempfile",
+    "url": "https://github.com/OpenSystemsLab/tempfile.nim",
+    "method": "git",
+    "tags": [
+      "temp",
+      "mktemp",
+      "make",
+      "mk",
+      "mkstemp",
+      "mkdtemp"
+    ],
+    "description": "Temporary files and directories",
+    "license": "MIT",
+    "web": "https://github.com/OpenSystemsLab/tempfile.nim",
+    "versions": [
+      "v0.1.2",
+      "0.1.7",
+      "v.0.1.3",
+      "v0.1.4",
+      "0.1.5",
+      "0.1.6",
+      "v0.1.1"
+    ]
+  },
+  "src": {
+    "url": "https://github.com/OpenSystemsLab/tempfile.nim",
+    "rev": "91d55977881ce311ac2d1d187833d0b06db16f6b",
+    "date": "2015-10-31T10:11:21+07:00",
+    "sha256": "00frgl1gx2qxj0ql9b3qr3sa7cvgv0q0mlr0zkqdp50hhq653d4v",
+    "fetchSubmodules": false
+  }
+}

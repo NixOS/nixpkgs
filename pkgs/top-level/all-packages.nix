@@ -8247,7 +8247,10 @@ in
   mozart = mozart-binary;
 
   nim = callPackage ../development/compilers/nim { };
+  nimPackages = callPackage ../development/nim-modules { };
   nimble = callPackage ../development/nim-modules/nimble { };
+  nix-generate-from-nimble = callPackage
+    ../development/nim-modules/nix-generate-from-nimble { };
 
   nrpl = callPackage ../development/tools/nrpl { };
 

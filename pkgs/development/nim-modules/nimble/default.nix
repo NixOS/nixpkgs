@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1l292d1z9a5wrc1i58znlpxbqvh69pr0qdv9zvhq29lr9vnkx1a2";
   };
 
+  patches = [ ./json.patch ];
+
   enableParallelBuilding = true;
 
   NIX_LDFLAGS = [ "-lcrypto" ];

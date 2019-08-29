@@ -1,0 +1,30 @@
+{
+  "nimble": {
+    "name": "stew",
+    "url": "https://github.com/status-im/nim-stew",
+    "method": "git",
+    "tags": [
+      "library",
+      "backports",
+      "shims",
+      "ranges",
+      "bitwise",
+      "bitops",
+      "endianness",
+      "bytes",
+      "blobs",
+      "pointer-arithmetic"
+    ],
+    "description": "stew is collection of utilities, std library extensions and budding libraries that are frequently used at Status, but are too small to deserve their own git repository.",
+    "license": "Apache License 2.0",
+    "web": "https://github.com/status-im/nim-stew",
+    "versions": []
+  },
+  "src": {
+    "url": "https://github.com/status-im/nim-stew",
+    "rev": "a81d1fac850119c2ede9f3997332fa9f0a2ad3d8",
+    "date": "2019-08-24T20:42:13+02:00",
+    "sha256": "1h5gajsb871lbjdz6iy75n6gkjcjaf0s4xvczgxqfwhx73mg1bp0",
+    "fetchSubmodules": false
+  }
+}

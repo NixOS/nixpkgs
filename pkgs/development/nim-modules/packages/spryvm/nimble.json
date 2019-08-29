@@ -1,0 +1,23 @@
+{
+  "nimble": {
+    "name": "spryvm",
+    "url": "https://github.com/gokr/spryvm",
+    "method": "git",
+    "tags": [
+      "interpreter",
+      "language",
+      "spry"
+    ],
+    "description": "Homoiconic dynamic language interpreter in Nim",
+    "license": "MIT",
+    "web": "https://github.com/gokr/spryvm",
+    "versions": []
+  },
+  "src": {
+    "url": "https://github.com/gokr/spryvm",
+    "rev": "432b48d4f55d2578ef6dd9f85387450c221bd9ac",
+    "date": "2019-08-14T23:41:35+02:00",
+    "sha256": "1awiv1ibiz66yx6gf6c323sss66vk5r1wlmc7d7b7zydp01idkd5",
+    "fetchSubmodules": false
+  }
+}
