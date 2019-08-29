@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     cargo
     rustc
     git
-    llvmPackages.libclang
     llvmPackages.clang
     ensureNewerSourcesForZipFilesHook
   ] ++
@@ -42,6 +41,7 @@ rustPlatform.buildRustPackage rec {
     sqlite
     nettle
     capnproto
+    llvmPackages.libclang
   ]
     ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]
@@ -54,8 +54,6 @@ rustPlatform.buildRustPackage rec {
   buildFlags = [
     "build-release"
   ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   postPatch = ''
     # otherwise, the check fails because we delete the `.git` in the unpack phase

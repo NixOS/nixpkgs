@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ python cmake clang ];
   buildInputs = [ llvmPackages.libclang ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
-
   meta = with lib; {
     description = "Standalone JIT-style runtime for WebAsssembly, using Cranelift";
     homepage = https://github.com/CraneStation/wasmtime;

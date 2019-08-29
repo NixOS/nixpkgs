@@ -20,10 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   propagatedBuildInputs = [ clang ]; # to populate NIX_CXXSTDLIB_COMPILE
 
-  configurePhase = ''
-    export LIBCLANG_PATH="${libclang}/lib"
-  '';
-
   postInstall = ''
     mv $out/bin/{bindgen,.bindgen-wrapped};
     substituteAll ${./wrapper.sh} $out/bin/bindgen

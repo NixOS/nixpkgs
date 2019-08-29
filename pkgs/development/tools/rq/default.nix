@@ -18,7 +18,6 @@ buildRustPackage rec {
   buildInputs = [ llvmPackages.clang-unwrapped v8 ];
 
   configurePhase = ''
-    export LIBCLANG_PATH="${llvmPackages.clang-unwrapped}/lib"
     export V8_SOURCE="${v8}"
   '';
 
