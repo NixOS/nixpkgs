@@ -15856,6 +15856,8 @@ in
     nvidia_x11_beta      = nvidiaPackages.beta;
     nvidia_x11           = nvidiaPackages.stable;
 
+    openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
+
     ply = callPackage ../os-specific/linux/ply { };
 
     r8168 = callPackage ../os-specific/linux/r8168 { };
