@@ -5397,6 +5397,12 @@
     githubId = 852967;
     name = "Russell O'Connor";
   };
+  roelvandijk = {
+    email = "roel@lambdacube.nl";
+    github = "roelvandijk";
+    githubId = 710906;
+    name = "Roel van Dijk";
+  };
   romildo = {
     email = "malaquias@gmail.com";
     github = "romildo";
