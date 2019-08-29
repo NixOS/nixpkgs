@@ -183,4 +183,5 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/asn1-encoding-0.9.5.patch";
     sha256 = "0a3159rnaw6shjzdm46799crd4pxh33s23qy51xa7z6nv5q8wsb5";
   });
+  tls = self.tls_1_5_1;
 }
