@@ -1,9 +1,8 @@
 { stdenv
+, mkDerivation
 , fetchFromGitHub
 , cmake
 , pkgconfig
-, wrapGAppsHook
-, gsettings-desktop-schemas
 
 , qtbase
 , qttools
@@ -38,8 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [cmake
-                       pkgconfig
-                       wrapGAppsHook];
+                       pkgconfig];
 
   buildInputs = [qtbase
                  qttools
@@ -48,8 +46,7 @@ stdenv.mkDerivation rec {
                  opencv
                  libraw
                  libtiff
-                 quazip
-                 gsettings-desktop-schemas];
+                 quazip];
 
   cmakeFlags = ["-DENABLE_OPENCV=ON"
                 "-DENABLE_RAW=ON"
