@@ -18,6 +18,7 @@
 , pytest
 , glibcLocales
 , nose
+, jsonschema
 , send2trash
 , CoreAudio
 # This little flag adds a huge number of dependencies, but we assume that
@@ -31,10 +32,10 @@ let
     # when updating, also update rev-manual to a recent version of
     # https://github.com/dae/ankidocs
     # The manual is distributed independently of the software.
-    version = "2.1.11";
-    sha256-pkg = "0rcjam7f017yg0fx5apdc309lsx59lfw33nikczz7hrw6gby6z3q";
-    rev-manual = "f933104fecd8a83c33494bdb2b59817a3318202f";
-    sha256-manual = "12j4x1bh8x6yinym4d1ard32vfl22iq2wz1lfwz6s3ljhggkc52h";
+    version = "2.1.14";
+    sha256-pkg = "0yw2lij8h6cbvyybsyypzw1l0r1si1gh82fzsyyzcyxd4h4m3f4l";
+    rev-manual = "04210375b949a6555095962bba547ae27b39fe77";
+    sha256-manual = "03kyjsz30ri0l6zq7x13xnq7naapm8vh9yybsm6f67hvd1k1ycrd";
 
     manual = stdenv.mkDerivation {
       name = "anki-manual-${version}";
@@ -84,7 +85,7 @@ buildPythonApplication rec {
 
     propagatedBuildInputs = [
       pyqtwebengine sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
-      markdown
+      markdown jsonschema
     ]
       ++ lib.optional plotsSupport matplotlib
       ++ lib.optional stdenv.isDarwin [ CoreAudio ]
