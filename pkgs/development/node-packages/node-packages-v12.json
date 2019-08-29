@@ -2,5 +2,6 @@
   "nijs"
 , "coffee-script"
 , "grunt-cli"
+, "makam"
 , "node2nix"
 ]
