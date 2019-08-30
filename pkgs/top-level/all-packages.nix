@@ -818,6 +818,8 @@ in
 
   ezstream = callPackage ../tools/audio/ezstream { };
 
+  libfx2 = with python3Packages; toPythonApplication fx2;
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
@@ -841,6 +843,8 @@ in
   gitless = callPackage ../applications/version-management/gitless { };
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
+
+  glasgow = with python3Packages; toPythonApplication glasgow;
 
   gucci = callPackage ../tools/text/gucci { };
 
