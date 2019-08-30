@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "httpie-1.0.2";
+  pname = "httpie";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "mirror://pypi/h/httpie/${name}.tar.gz";
