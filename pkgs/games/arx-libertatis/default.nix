@@ -2,7 +2,8 @@
 , openal, glm, freetype, libGLU, SDL2, epoxy
 , dejavu_fonts, inkscape, optipng, imagemagick
 , withCrashReporter ? !stdenv.isDarwin
-,   qt5  ? null
+,   qtbase ? null
+,   wrapQtAppsHook ? null
 ,   curl ? null
 ,   gdb  ? null
 }:
@@ -20,15 +21,14 @@ stdenv.mkDerivation rec {
     sha256 = "0qrygp09dqhpb5q6a1zl6l03qh9bi7xcahd8hy9177z1cix3k0kz";
   };
 
-
   nativeBuildInputs = [
     cmake inkscape imagemagick optipng
-  ];
+  ] ++ optionals withCrashReporter [ wrapQtAppsHook ];
 
   buildInputs = [
     zlib boost openal glm
     freetype libGLU SDL2 epoxy
-  ] ++ optionals withCrashReporter [ qt5.qtbase curl ]
+  ] ++ optionals withCrashReporter [ qtbase curl ]
     ++ optionals stdenv.isLinux    [ gdb ];
 
   cmakeFlags = [
@@ -38,11 +38,14 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  dontWrapQtApps = true;
 
   postInstall = ''
     ln -sf \
       ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
       $out/share/games/arx/misc/dejavusansmono.ttf
+  '' + optionalString withCrashReporter ''
+    wrapQtApp "$out/libexec/arxcrashreporter"
   '';
   
   meta = {
@@ -51,10 +54,10 @@ stdenv.mkDerivation rec {
       first-person role-playing game / dungeon crawler
       developed by Arkane Studios.
     '';
-    homepage = http://arx-libertatis.org/;
-    license = licenses.gpl3;
+    homepage    = http://arx-libertatis.org/;
+    license     = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.linux;
+    platforms   = platforms.linux;
   };
 
 }
