@@ -3388,7 +3388,6 @@ broken-packages:
   - birch-beer
   - bird
   - BirdPP
-  - bisc
   - bisect-binary
   - bit-array
   - bit-stream
