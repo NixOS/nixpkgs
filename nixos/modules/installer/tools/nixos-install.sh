@@ -141,13 +141,13 @@ fi
 # Ask the user to set a root password, but only if the passwd command
 # exists (i.e. when mutable user accounts are enabled).
 if [[ -z $noRootPasswd ]] && [ -t 0 ]; then
-    if nixos-enter --root "$mountPoint" -c 'test -e /nix/var/nix/profiles/system/sw/bin/passwd'; then
+    if nixos-enter --silent --root "$mountPoint" -c 'test -e /nix/var/nix/profiles/system/sw/bin/passwd'; then
         echo 'setting root password...'
 
         # Ask the password until it succeeds or MAX_PASSWD_ATTEMPTS is reached
         for ATTEMPT in $(seq 1 $MAX_PASSWD_ATTEMPTS); do
           set +e
-          nixos-enter --root "$mountPoint" -c '/nix/var/nix/profiles/system/sw/bin/passwd' && break
+          nixos-enter --silent --root "$mountPoint" -c '/nix/var/nix/profiles/system/sw/bin/passwd' && break
           set -e
           if [ "$ATTEMPT" -lt "$MAX_PASSWD_ATTEMPTS" ]; then
             echo "Wrong password - Attempt $(("$ATTEMPT" + 1)) of $MAX_PASSWD_ATTEMPTS."
