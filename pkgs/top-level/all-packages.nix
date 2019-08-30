@@ -8361,7 +8361,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
+  maturin = callPackage ../development/tools/rust/maturin { };
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
   inherit (rustPackages) rls;
   rustfmt = rustPackages.rustfmt;
