@@ -112,7 +112,6 @@ in {
         RuntimeDirectory = "mailman";
         PIDFile = "/run/mailman/master.pid";
       };
-
     };
 
   };
