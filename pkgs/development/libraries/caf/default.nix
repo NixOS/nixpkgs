@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
+  cmakeFlags = [
+    "-DCAF_NO_EXAMPLES:BOOL=TRUE"
+  ];
+
   meta = with stdenv.lib; {
     description = "An open source implementation of the actor model in C++";
     homepage = http://actor-framework.org/;
