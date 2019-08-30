@@ -6588,7 +6588,7 @@
     githubId = 1525767;
     name = "Vaibhav Sagar";
   };
-  valebes = {  
+  valebes = {
     email = "valebes@gmail.com";
     github = "valebes";
     githubid = 10956211;
