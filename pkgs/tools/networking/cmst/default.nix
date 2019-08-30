@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, qmake, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "cmst-${version}";
+  pname = "cmst";
   version = "2019.01.13";
 
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
-    rev = name;
+    rev = "cmst-${version}";
     sha256 = "13739f0ddld34dcqlfhylzn1zqz5a7jbp4a4id7gj7pcxjx1lafh";
   };
 
