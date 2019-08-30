@@ -11454,7 +11454,9 @@ in
     automake = automake111x;
   };
 
-  kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
+  kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client {
+    openssl = openssl_1_0_2;
+  };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
