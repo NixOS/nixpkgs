@@ -4,17 +4,19 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.7.1";
+  version = "0.7.2.1";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "557be34410f27a8d55d9f31a40717a8f5e99829f2bd114c24e7ca1dd5f6b7d85";
+    sha256 = "3be716948efc1208b5e6a41e3034e4e4eecc5abbdac769fd1d999a104ac3a2ec";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip ];
-  buildInputs = [ sqlite gmp zlib python3 ];
+  buildInputs =
+    let py3 = python3.withPackages (p: [ p.Mako ]);
+    in [ sqlite gmp zlib py3 ];
 
   makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
 
@@ -23,7 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    patchShebangs tools/generate-wire.py
+    patchShebangs \
+      tools/generate-wire.py \
+      tools/update-mocks.sh \
+      tools/mockup.sh
   '';
 
   doCheck = false;
