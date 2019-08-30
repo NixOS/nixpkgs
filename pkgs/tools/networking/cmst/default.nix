@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "cmst";
   version = "2019.01.13";
 
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "QT GUI for Connman with system tray icon";
     homepage = https://github.com/andrew-bibb/cmst;
-    maintainers = [ stdenv.lib.maintainers.matejc ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit;
+    maintainers = [ lib.maintainers.matejc ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }
