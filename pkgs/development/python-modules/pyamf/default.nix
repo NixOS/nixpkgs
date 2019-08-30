@@ -4,8 +4,8 @@ buildPythonPackage rec {
   pname = "PyAMF";
   version = "0.8.0";
 
-  # according to setup.py
-  disabled = isPy3k;
+  # doesn't support py2 according to setup.py, endian tests seem to fail on arm
+  disabled = isPy3k || stdenv.isAarch32 || stdenv.isAarch64;
 
   src = fetchPypi {
     inherit pname version;
