@@ -849,7 +849,10 @@ in {
 
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
-  pyamf = callPackage ../development/python-modules/pyamf { };
+  pyamf = if isPy27 then
+            callPackage ../development/python-modules/pyamf { }
+          else
+            callPackage ../development/python-modules/pyamf/py3amf.nix { };
 
   pyarrow = callPackage ../development/python-modules/pyarrow {
     inherit (pkgs) arrow-cpp cmake pkgconfig;
