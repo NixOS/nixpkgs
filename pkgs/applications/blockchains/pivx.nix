@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook
+{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook, wrapQtAppsHook ? null
 , openssl_1_0_2, db48, boost, zlib, miniupnpc, gmp
 , qrencode, glib, protobuf, yasm, libevent
 , utillinux, qtbase ? null, qttools ? null
@@ -10,16 +10,16 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "pivx-${version}";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "PIVX-Project";
     repo= "PIVX";
     rev = "v${version}";
-    sha256 = "19dxs2b5ms4f28n6wbazsr63cji0rc2airzqs61vljwgax1b371s";
+    sha256 = "1fqccdqhbwyvix0ihhbgg2w048i6bhfmazr36h2cn4j65n1fgmi2";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ] ++ optionals withGui [ wrapQtAppsHook ];
   buildInputs = [ glib gmp openssl_1_0_2 db48 yasm boost zlib libevent miniupnpc protobuf utillinux ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
                     ++ optional disableWallet "--disable-wallet"
                     ++ optional disableDaemon "--disable-daemon"
                     ++ optionals withGui [ "--with-gui=yes"
+                                           "--with-unsupported-ssl" # TODO remove this ASAP
                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                          ];
   
@@ -37,6 +38,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications $out/share/icons
     cp contrib/debian/pivx-qt.desktop $out/share/applications/
     cp share/pixmaps/*128.png $out/share/icons/
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/test_pivx
   '';
 
   meta = with stdenv.lib; {
