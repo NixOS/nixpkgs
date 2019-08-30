@@ -2,16 +2,20 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "targetcli";
-  version = "2.1.fb49";
+  version = "2.1.50";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
     rev = "v${version}";
-    sha256 = "093dmwc5g6yz4cdgpbfszmc97i7nd286w4x447dvg22hvwvjwqhh";
+    sha256 = "0xrvby63i39rvi778bnvnxacghaix63q72vzxdc3i87ji1ki58hc";
   };
 
   propagatedBuildInputs = with python.pkgs; [ configshell rtslib ];
+
+  postInstall = ''
+    install -D targetcli.8 -t $out/share/man/man8/
+  '';
 
   meta = with stdenv.lib; {
     description = "A command shell for managing the Linux LIO kernel target";
