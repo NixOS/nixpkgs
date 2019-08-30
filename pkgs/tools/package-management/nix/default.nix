@@ -181,12 +181,12 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.3${suffix}";
-    suffix = "pre6779_324a5dc9";
+    suffix = "pre6895_84de821";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "324a5dc92f8e50e6b637c5e67dea48c80be10837";
-      sha256 = "1g8gbam585q4kx8ilbx23ip64jw0r829i374qy0l8kvr8mhvj55r";
+      rev = "84de8210040580ce7189332b43038d52c56a9689";
+      sha256 = "062pdly0m2hk8ly8li5psvpbj1mi7m1a15k8wyzf79q7294l5li3";
     };
     fromGit = true;
 
@@ -195,12 +195,12 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.3${suffix}";
-    suffix = "pre20190712_aa82f8b";
+    suffix = "pre20190829_ebc4dae";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "aa82f8b2d2a2c42f0d713e8404b668cef1a4b108";
-      hash = "sha256-MRY2CCjnTPSWIv0/aguZcg5U+DA+ODLKl9vjB/qXFpU=";
+      rev = "ebc4dae51761cb54c1db28cf4d328d3f2f55b758";
+      hash = "sha256-yfp56L7lu0DIhskzxooF/26T9d4ufl5/k5LlXMI0PSM=";
     };
     fromGit = true;
 
