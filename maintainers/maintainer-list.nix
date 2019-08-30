@@ -4840,6 +4840,12 @@
     githubId = 69918;
     name = "Stefan Dorn";
   };
+  multun = {
+    email = "victor.collod@epita.fr";
+    github = "multun";
+    githubId = 5047140;
+    name = "Victor Collod";
+  };
   mvnetbiz = {
     email = "mvnetbiz@gmail.com";
     github = "mvnetbiz";
