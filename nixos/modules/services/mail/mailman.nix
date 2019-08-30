@@ -76,16 +76,7 @@ in {
       }
     ];
 
-    users.users = singleton {
-      name = "mailman";
-      group = "mailman";
-      uid = config.ids.uids.mailman;
-    };
-
-    users.groups = singleton {
-      name = "mailman";
-      gid = config.ids.gids.mailman;
-    };
+    users.users.mailman = { description = "GNU Mailman"; isSystemUser = true; };
 
     environment = {
       systemPackages = [ mailmanExe ];
@@ -105,10 +96,9 @@ in {
         ExecStart = "${mailmanExe}/bin/mailman start";
         ExecStop = "${mailmanExe}/bin/mailman stop";
         User = "mailman";
-        Group = "mailman";
         Type = "forking";
         StateDirectory = "mailman";
-        StateDirectoryMode = "0750";
+        StateDirectoryMode = "0700";
         RuntimeDirectory = "mailman";
         PIDFile = "/run/mailman/master.pid";
       };
