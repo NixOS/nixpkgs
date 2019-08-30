@@ -5340,10 +5340,16 @@
     name = "Richard Lupton";
   };
   rnhmjoj = {
-    email = "micheleguerinirocco@me.com";
+    email = "rnhmjoj@inventati.org";
     github = "rnhmjoj";
     githubId = 2817565;
     name = "Michele Guerini Rocco";
+    keys =
+    [
+      { longkeyid   = "ed25519/0xBFBAF4C975F76450";
+        fingerprint = "92B2 904F D293 C94D C4C9  3E6B BFBA F4C9 75F7 6450";
+      }
+    ];
   };
   rob = {
     email = "rob.vermaas@gmail.com";
