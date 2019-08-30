@@ -692,6 +692,16 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  b4dm4n = {
+    email = "fabianm88@gmail.com";
+    github = "B4dM4n";
+    githubId = 448169;
+    name = "Fabian Möller";
+    keys = [{
+      longkeyid = "rsa4096/0x754B5C0963C42C5";
+      fingerprint = "6309 E212 29D4 DA30 AF24  BDED 754B 5C09 63C4 2C50";
+    }];
+  };
   babariviere = {
     email = "babariviere@protonmail.com";
     github = "babariviere";
