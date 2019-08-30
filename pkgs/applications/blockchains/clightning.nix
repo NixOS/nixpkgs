@@ -1,20 +1,20 @@
-{ stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
+{ stdenv, python3, python3Packages, pkgconfig, which, libtool, autoconf, automake,
   autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "clightning-${version}";
-  version = "0.7.1";
+  version = "0.7.2.1";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "557be34410f27a8d55d9f31a40717a8f5e99829f2bd114c24e7ca1dd5f6b7d85";
+    sha256 = "3be716948efc1208b5e6a41e3034e4e4eecc5abbdac769fd1d999a104ac3a2ec";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip ];
-  buildInputs = [ sqlite gmp zlib python3 ];
+  buildInputs = [ sqlite gmp zlib python3 python3Packages.Mako ];
 
   makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
 
