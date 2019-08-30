@@ -1,8 +1,8 @@
 { pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
 
-  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
-  functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs; };
+  locationsXml = import ./doc-customisation/lib-function-locations.nix { inherit pkgs nixpkgs; };
+  functionDocs = import ./doc-customisation/lib-function-docs.nix { inherit locationsXml pkgs; };
 
   lib = pkgs.lib;
   doc-support = pkgs.nix-doc-tools {
@@ -23,8 +23,8 @@ in pkgs.stdenv.mkDerivation {
   postPatch = ''
     # Ensures we don't have the developer's files in the input.
     rm -rf ./out
-    rm -f ./doc-support/result
-    ln -s ${doc-support} ./doc-support/result
+    rm -f ./doc-support
+    ln -s ${doc-support} ./doc-support
   '';
 
   installPhase = ''
@@ -37,4 +37,8 @@ in pkgs.stdenv.mkDerivation {
     echo "doc manual $dest index.html" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
+
+  passthru = {
+    inherit doc-support;
+  };
 }
