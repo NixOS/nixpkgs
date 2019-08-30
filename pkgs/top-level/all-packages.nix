@@ -7371,6 +7371,9 @@ in
 
   colm = callPackage ../development/compilers/colm { };
 
+  colmap = callPackage ../applications/science/misc/colmap { };
+  colmapWithCuda = colmap.override { cudaSupport = true; };
+
   chickenPackages_4 = callPackage ../development/compilers/chicken/4 { };
   chickenPackages_5 = callPackage ../development/compilers/chicken/5 { };
   chickenPackages = chickenPackages_5;
