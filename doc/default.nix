@@ -1,7 +1,17 @@
 { pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
+
+  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
+  functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs; };
+
   lib = pkgs.lib;
-  doc-support = import ./doc-support { inherit pkgs nixpkgs; };
+  doc-support = pkgs.nix-doc-tools {
+    name = "nixpkgs-manual";
+    extra-paths = [
+      locationsXml
+      functionDocs
+    ];
+  };
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
