@@ -22154,6 +22154,8 @@ in
 
   gambatte = callPackage ../games/gambatte { };
 
+  gamemode = callPackage ../games/gamemode { };
+
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
   gargoyle = callPackage ../games/gargoyle {

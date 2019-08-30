@@ -1,0 +1,15 @@
+diff --git a/data/gamemoderun.in b/data/gamemoderun.in
+index 659e33e..3c7399c 100755
+--- a/data/gamemoderun.in
++++ b/data/gamemoderun.in
+@@ -5,6 +5,9 @@
+ # appropriate path depending on whether the app is 32- or 64-bit.
+ GAMEMODEAUTO="@GAMEMODE_PREFIX@/\$LIB/libgamemodeauto.so.0"
+ 
++GAMEMODE="@GAMEMODE_PREFIX@/\$LIB/"
++
+ LD_PRELOAD="${GAMEMODEAUTO}${LD_PRELOAD:+:$LD_PRELOAD}"
++LD_LIBRARY_PATH="${GAMEMODE}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+ 
+-exec $GAMEMODERUNEXEC env LD_PRELOAD="${LD_PRELOAD}" "$@"
++exec $GAMEMODERUNEXEC env LD_PRELOAD="${LD_PRELOAD}" LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" "$@"
