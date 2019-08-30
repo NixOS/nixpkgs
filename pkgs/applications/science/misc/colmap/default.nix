@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, ceres-solver, eigen,
-  freeimage, glog, libGLU, glew, qt5,
+{ mkDerivation, lib, fetchFromGitHub, cmake, boost, ceres-solver, eigen,
+  freeimage, glog, libGLU, glew, qtbase,
   cudaSupport ? false, cudatoolkit ? null }:
 
 assert !cudaSupport || cudatoolkit != null;
 
-let boost_static = boost.override {enableStatic = true; };
+let boost_static = boost.override { enableStatic = true; };
 in 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "3.5";
-  name = "colmap-" + version;
+  pname = "colmap";
   src = fetchFromGitHub {
      owner = "colmap";
      repo = "colmap";
@@ -17,14 +17,17 @@ stdenv.mkDerivation rec {
   };
   
   buildInputs = [ boost_static ceres-solver eigen freeimage
-                  glog libGLU glew
-		  qt5.qtbase ] ++
-		  lib.optionals cudaSupport [ cudatoolkit ];
+                  eigen freeimage glog libGLU glew qtbase ] ++
+		  lib.optional cudaSupport cudatoolkit;
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
-    description = "COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline with a graphical and command-line interface.";
+  meta = with lib; {
+    description = "COLMAP - Structure-From-Motion and Multi-View Stereo pipeline";
+    longDescription = ''
+       COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline
+       with a graphical and command-line interface.
+    '';
     homepage = https://colmap.github.io/index.html;
     license = licenses.bsd2;
     platforms = platforms.linux;
