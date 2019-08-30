@@ -391,6 +391,8 @@ in
 
   nix-gitignore = callPackage ../build-support/nix-gitignore { };
 
+  ociTools = callPackage ../build-support/oci-tools { };
+
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
   pruneLibtoolFiles = makeSetupHook { name = "prune-libtool-files"; }
