@@ -4,17 +4,17 @@
 let
   inherit (darwin.apple_sdk.frameworks) Security;
 in rustPlatform.buildRustPackage rec {
-  name = "pyo3-pack-${version}";
-  version = "0.6.1";
+  name = "maturin-${version}";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "PyO3";
-    repo = "pyo3-pack";
+    repo = "maturin";
     rev = "v${version}";
-    sha256 = "0zk0jhr7lnl9z6c8pbk7si3wa8b1kqzj3wrslc1n5fjla7xx8fzn";
+    sha256 = "1qscn8ycyg9ldkp1v5178mlw8r5ak2p12x52c0w4hgij7y1q5s39";
   };
 
-  cargoSha256 = "13gycipxc17baxg8nvjzkw96i1pxgncx7qjcrm9aab7p9vi2vrih";
+  cargoSha256 = "0fk9dgwkgkkmxxd8ydl0vp14jhzi65pkz36v5h3nkp4cb4n4cvdj";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -27,7 +27,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Build and publish crates with pyo3 bindings as python packages";
-    homepage = https://github.com/PyO3/pyo3-pack;
+    homepage = https://github.com/PyO3/maturin;
     license = licenses.mit;
     maintainers = [ maintainers.danieldk ];
     platforms = platforms.all;
