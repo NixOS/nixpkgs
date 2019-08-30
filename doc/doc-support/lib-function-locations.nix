@@ -72,9 +72,10 @@ let
       '')
       relativeLocs);
 
-in pkgs.writeText
-    "locations.xml"
-    ''
+in pkgs.writeTextFile {
+  name = "function-locations.xml";
+  destination = "/function-locations.xml";
+  text = ''
     <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          version="5">
@@ -82,4 +83,5 @@ in pkgs.writeText
          <para>This file is only for inclusion by other files.</para>
          ${xmlstrings}
     </section>
-    ''
+  '';
+}

@@ -10,12 +10,13 @@ with pkgs; stdenv.mkDerivation {
 
   buildInputs = [ nixdoc ];
   installPhase = ''
+    mkdir -p $out/function-docs
     function docgen {
-      nixdoc -c "$1" -d "$2" -f "../lib/$1.nix"  > "$out/$1.xml"
+      nixdoc -c "$1" -d "$2" -f "../lib/$1.nix"  > "$out/function-docs/$1.xml"
     }
 
     mkdir -p $out
-    ln -s ${locationsXml} $out/locations.xml
+    ln -s ${locationsXml}/function-locations.xml $out/function-docs/locations.xml
 
     docgen strings 'String manipulation functions'
     docgen trivial 'Miscellaneous functions'

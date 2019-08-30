@@ -89,16 +89,16 @@ manual-full.xml: ${MD_TARGETS} .version functions/library/locations.xml function
 	xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
 
 .version: doc-support/result
-	ln -rfs ./doc-support/result/version .version
+	ln -fs ./doc-support/result/version .version
 
 doc-support/result: doc-support/default.nix
 	(cd doc-support; nix-build)
 
 functions/library/locations.xml: doc-support/result
-	ln -rfs ./doc-support/result/function-locations.xml functions/library/locations.xml
+	ln -fs $(realpath ./doc-support/result/function-locations.xml) functions/library/locations.xml
 
 functions/library/generated: doc-support/result
-	ln -rfs ./doc-support/result/function-docs functions/library/generated
+	ln -fs $(realpath ./doc-support/result/function-docs) functions/library/generated
 
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \
