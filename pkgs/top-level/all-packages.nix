@@ -13706,6 +13706,8 @@ in
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
 
+  make_ext4fs = callPackage ../tools/filesystems/make_ext4fs {};
+
   mapnik = callPackage ../development/libraries/mapnik { };
 
   marisa = callPackage ../development/libraries/marisa {};
