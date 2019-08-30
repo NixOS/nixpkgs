@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "actor-framework";
@@ -13,11 +13,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  buildInputs = [ openssl ];
+
   meta = with stdenv.lib; {
     description = "An open source implementation of the actor model in C++";
     homepage = http://actor-framework.org/;
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bobakker ];
+    maintainers = with maintainers; [ bobakker tobim ];
   };
 }
