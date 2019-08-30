@@ -83,7 +83,7 @@ let
       ln -s ${chunk-xhtml-xsl} ./chunk-xhtml.xsl
       ln -s ${onepage-xhtml-xsl} ./onepage-xhtml.xsl
 
-      ln -s ${../../nixos/doc/xmlformat.conf} ./xmlformat.conf
+      ln -s ${./xmlformat.conf} ./xmlformat.conf
       ln -s ${documentation-highlighter} ./highlightjs
 
       ln -s ${./search.js} ./search.js
@@ -95,7 +95,11 @@ let
     )
     mv result $out
   '';
-in buildEnv {
-  name = "docs-tooling";
-  paths = [ standard-tools ];
+in
+{ name
+, extra-paths ? []
+}:
+buildEnv {
+  name = "docs-tooling-${name}";
+  paths = [ standard-tools ] ++ extra-paths;
 }
