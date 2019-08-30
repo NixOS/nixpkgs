@@ -55,6 +55,9 @@ in stdenv.mkDerivation rec {
     sed -e 's,''${CMAKE_INSTALL_LIBDIR},lib64,g' \
         -e 's,;lib64,lib,g' \
         -i cmake/ExternalProjectHelper.cmake
+
+    # Remove check_cxx_compiler_flag calls. they cause compilation failure when this package is used with pkgs.enableDebugging
+    sed -e 's,check_cxx_compiler_flag(-W,#check_cxx_compiler_flag(-W,g' -i cmake/GoogleCloudCppCommon.cmake
   '';
 
   preFixup = ''
