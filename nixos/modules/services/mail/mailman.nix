@@ -83,9 +83,14 @@ in {
       etc."mailman.cfg".text = mailmanCfg;
     };
 
-    services.postfix.config = {
-      # Mailman uses recipient delimiters, so we don't need special handling.
-      owner_request_special = "no";
+    services.postfix = {
+      relayDomains = [ "hash:/var/lib/mailman/data/postfix_domains" ];
+      config = {
+        transport_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
+        local_recipient_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
+        # Mailman uses recipient delimiters, so we don't need special handling.
+        owner_request_special = "no";
+      };
     };
 
     systemd.services.mailman = {
