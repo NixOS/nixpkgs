@@ -1,15 +1,15 @@
 {
   name = "nixpkgs";
 
-  epoch = 201906;
+  epoch = 201909;
 
   description = "A collection of packages for the Nix package manager";
 
-  outputs = inputs:
+  outputs = { self }:
     let
       pkgs = import ./. { system = "x86_64-linux"; };
       jobs = import ./pkgs/top-level/release.nix {
-        nixpkgs = inputs.self;
+        nixpkgs = self;
       };
     in
     {
@@ -26,7 +26,7 @@
       htmlDocs = {
         nixpkgsManual = jobs.manual;
         nixosManual = (import ./nixos/release-small.nix {
-          nixpkgs = inputs.self;
+          nixpkgs = self;
         }).nixos.manual.x86_64-linux;
       };
 
