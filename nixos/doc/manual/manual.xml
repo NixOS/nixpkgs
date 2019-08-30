@@ -5,7 +5,7 @@
       xml:id="book-nixos-manual">
  <info>
   <title>NixOS Manual</title>
-  <subtitle>Version <xi:include href="./generated/version" parse="text" />
+  <subtitle>Version <xi:include href="./doc-support/version" parse="text" />
   </subtitle>
  </info>
  <preface xml:id="preface">
@@ -32,7 +32,7 @@
  <xi:include href="development/development.xml" />
  <appendix xml:id="ch-options">
   <title>Configuration Options</title>
-  <xi:include href="./generated/options-db.xml"
+  <xi:include href="./doc-support/options-db.xml"
                 xpointer="configuration-variable-list" />
  </appendix>
  <xi:include href="release-notes/release-notes.xml" />
