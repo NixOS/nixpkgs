@@ -139,3 +139,9 @@
 
 # Bazel
 /pkgs/development/tools/build-managers/bazel @mboes @Profpatsch
+
+# NixOS modules for e-mail and dns services
+/nixos/modules/services/mail/mailman.nix    @peti
+/nixos/modules/services/mail/postfix.nix    @peti
+/nixos/modules/services/networking/bind.nix @peti
+/nixos/modules/services/mail/rspamd.nix     @peti
