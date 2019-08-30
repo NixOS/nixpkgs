@@ -4,8 +4,8 @@ pythonPackages.buildPythonApplication rec {
   pname = "httpie";
   version = "1.0.2";
 
-  src = fetchurl {
-    url = "mirror://pypi/h/httpie/${name}.tar.gz";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
     sha256 = "1ax22jh5lpjywpj7lsl072wdhr1pxiqzmxhyph5diwxxzs2nqrzw";
   };
 
