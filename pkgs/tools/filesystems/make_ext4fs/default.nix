@@ -10,6 +10,11 @@ stdenv.mkDerivation {
     sha256 = "03lqd5qy3nli9mmnlbgxwsplwz8v10cyjyzl1fxcfz8jvzr00c61";
   };
 
+  patches = [
+    ./0001-uuid-add-facilities-to-parse-and-print-UUIDs.patch
+    ./0002-make_ext4fs-allow-setting-a-specific-UUID.patch
+  ];
+
   buildInputs = [
     zlib
   ];
