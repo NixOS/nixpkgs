@@ -773,6 +773,8 @@ in {
 
   jira = callPackage ../development/python-modules/jira { };
 
+  junit-xml = callPackage ../development/python-modules/junit-xml { };
+
   junitparser = callPackage ../development/python-modules/junitparser { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
