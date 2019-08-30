@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
     "-DCAF_NO_EXAMPLES:BOOL=TRUE"
   ];
 
+  doCheck = true;
+  checkTarget = "test";
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+  '';
+
   meta = with stdenv.lib; {
     description = "An open source implementation of the actor model in C++";
     homepage = http://actor-framework.org/;
