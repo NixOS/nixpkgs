@@ -2663,6 +2663,8 @@ in
 
   docbook-index = callPackage ../tools/misc/docbook-index { };
 
+  nix-doc-tools = = callPackage ../tools/misc/nix-doc-tools { };
+
   docear = callPackage ../applications/office/docear { };
 
   dockbarx = callPackage ../applications/misc/dockbarx { };
