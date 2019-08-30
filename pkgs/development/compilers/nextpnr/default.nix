@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, cmake
 , boost, python3, eigen
 , icestorm, trellis
+, llvmPackages
 
 , enableGui ? true
 , wrapQtAppsHook
@@ -12,13 +13,13 @@ let
 in
 with stdenv; mkDerivation rec {
   pname = "nextpnr";
-  version = "2019.08.21";
+  version = "2019.08.31";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "nextpnr";
-    rev    = "c192ba261d77ad7f0a744fb90b01e4a5b63938c4";
-    sha256 = "0g2ar1z89b31qw5vgqj2rrcv9rzncs94184dgcsrz19p866654mf";
+    rev    = "c0b7379e8672b6263152d5e340e62f22179fdc8b";
+    sha256 = "174n962xiwyzy53cn192h9rq95h951k3xy6bs43p5ya592ai5mjh";
   };
 
   nativeBuildInputs
@@ -26,7 +27,8 @@ with stdenv; mkDerivation rec {
     ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs
      = [ boostPython python3 eigen ]
-    ++ (lib.optional enableGui qtbase);
+    ++ (lib.optional enableGui qtbase)
+    ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
   enableParallelBuilding = true;
   cmakeFlags =
