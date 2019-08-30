@@ -78,5 +78,6 @@ perlPackages.buildPerlPackage {
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;  # broken with openssl 1.1 (v2.x might fix this)
   };
 }

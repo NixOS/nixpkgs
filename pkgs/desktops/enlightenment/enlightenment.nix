@@ -1,16 +1,19 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
   xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
   luajit, bzip2, libpthreadstubs, gdbm, libcap, mesa,
-  xkeyboard_config, pcre
+  xkeyboard_config, pcre,
+
+  bluetoothSupport ? true, bluez5,
+  pulseSupport ? !stdenv.isDarwin, libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
-  name = "enlightenment-${version}";
-  version = "0.22.4";
+  pname = "enlightenment";
+  version = "0.23.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "0ygy891rrw5c7lhk539nhif77j88phvz2h0fhx172iaridy9kx2r";
+    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1y7x594gvyvl5zbb1rnf3clj2pm6j97n8wl5mp9x6xjmhx0d1idq";
   };
 
   nativeBuildInputs = [
@@ -36,8 +39,11 @@ stdenv.mkDerivation rec {
     pcre
     mesa
     xkeyboard_config
-  ] ++
-    stdenv.lib.optionals stdenv.isLinux [ libcap ];
+  ]
+  ++ stdenv.lib.optional stdenv.isLinux libcap
+  ++ stdenv.lib.optional bluetoothSupport bluez5
+  ++ stdenv.lib.optional pulseSupport libpulseaudio
+  ;
 
   patches = [
     # Some programs installed by enlightenment (to set the cpu frequency,

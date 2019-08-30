@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, lxqt-build-tools }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qtsvg, lxqt-build-tools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "libqtxdg";
   version = "3.3.1";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt implementation of freedesktop.org xdg specs";
     homepage = https://github.com/lxqt/libqtxdg;
     license = licenses.lgpl21;

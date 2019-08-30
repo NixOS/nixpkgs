@@ -344,8 +344,7 @@ in
     systemd.services.dovecot2 = {
       description = "Dovecot IMAP/POP3 server";
 
-      after = [ "keys.target" "network.target" ];
-      wants = [ "keys.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ cfg.configFile ];
 

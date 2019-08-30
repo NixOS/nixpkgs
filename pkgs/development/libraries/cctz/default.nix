@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, darwin }:
 
 stdenv.mkDerivation rec {
   name = "cctz-${version}";
@@ -13,7 +13,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation;
+
   installTargets = [ "install_hdrs" "install_shared_lib" ];
+
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libcctz.so $out/lib/libcctz.so
+  '';
 
   enableParallelBuilding = true;
 

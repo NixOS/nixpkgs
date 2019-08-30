@@ -10,6 +10,26 @@ self: super:
 with self;
 {
 
+alt-getopt = buildLuarocksPackage {
+  pname = "alt-getopt";
+  version = "0.8.0-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/alt-getopt-0.8.0-1.src.rock;
+    sha256 = "1mi97dqb97sf47vb6wrk12yf1yxcaz0asr9gbgwyngr5n1adh5i3";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/cheusov/lua-alt-getopt";
+    description = "Process application arguments the same way as getopt_long";
+    maintainers = with maintainers; [ arobyn ];
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 ansicolors = buildLuarocksPackage {
   pname = "ansicolors";
   version = "1.0.2-3";
@@ -389,6 +409,26 @@ lgi = buildLuarocksPackage {
     description = "Lua bindings to GObject libraries";
     license = {
       fullName = "MIT/X11";
+    };
+  };
+};
+ljsyscall = buildLuarocksPackage {
+  pname = "ljsyscall";
+  version = "0.12-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/ljsyscall-0.12-1.src.rock;
+    sha256 = "12gs81lnzpxi5d409lbrvjfflld5l2xsdkfhkz93xg7v65sfhh2j";
+  };
+  disabled = (lua.luaversion != "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.myriabit.com/ljsyscall/";
+    description = "LuaJIT Linux syscall FFI";
+    maintainers = with maintainers; [ lblasc ];
+    license = {
+      fullName = "MIT";
     };
   };
 };
@@ -1185,6 +1225,26 @@ mpack = buildLuarocksPackage {
   meta = with stdenv.lib; {
     homepage = "https://github.com/libmpack/libmpack-lua/releases/download/1.0.7/libmpack-lua-1.0.7.tar.gz";
     description = "Lua binding to libmpack";
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
+moonscript = buildLuarocksPackage {
+  pname = "moonscript";
+  version = "0.5.0-1";
+
+  src = fetchurl {
+    url    = https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/moonscript-0.5.0-1.src.rock;
+    sha256 = "09vv3ayzg94bjnzv5fw50r683ma0x3lb7sym297145zig9aqb9q9";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua lpeg alt-getopt luafilesystem ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://moonscript.org";
+    description = "A programmer friendly language that compiles to Lua";
+    maintainers = with maintainers; [ arobyn ];
     license = {
       fullName = "MIT";
     };

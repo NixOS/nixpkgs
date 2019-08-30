@@ -1,7 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtk-vnc, gmp
-, libgcrypt, gnupg, cyrus_sasl, shared-mime-info, libvirt, yajl, xen
-, gsettings-desktop-schemas, wrapGAppsHook, libvirt-glib, libcap_ng, numactl
-, libapparmor, gst_all_1
+{ stdenv, fetchurl, pkgconfig, intltool, shared-mime-info, wrapGAppsHook
+, glib, gsettings-desktop-schemas, gtk-vnc, gtk3, libvirt, libvirt-glib, libxml2, vte
 , spiceSupport ? true
 , spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
 }:
@@ -21,19 +19,18 @@ stdenv.mkDerivation rec {
     sha256 = "1vdnjmhrva7r1n9nv09j8gc12hy0j9j5l4rka4hh0jbsbpnmiwyw";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig intltool shared-mime-info wrapGAppsHook glib ];
   buildInputs = [
-    glib libxml2 gtk3 gtk-vnc gmp libgcrypt gnupg cyrus_sasl shared-mime-info
-    libvirt yajl gsettings-desktop-schemas libvirt-glib
-    libcap_ng numactl libapparmor
-  ] ++ optionals stdenv.isx86_64 [
-    xen
+    glib gsettings-desktop-schemas gtk-vnc gtk3 libvirt libvirt-glib libxml2 vte
   ] ++ optionals spiceSupport [
     spice-gtk spice-protocol libcap gdbm
   ];
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
+
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   meta = {
     description = "A viewer for remote virtual machines";

@@ -29,6 +29,6 @@ python2.pkgs.buildPythonApplication rec {
     longDescription = "It watches for new episodes of your favorite shows, and when they are posted it does its magic.";
     license     = licenses.gpl3;
     homepage    = https://sickrage.github.io;
-    maintainers = [ "sterfield@gmail.com" ];
+    maintainers = with maintainers; [ sterfield ];
   };
 }

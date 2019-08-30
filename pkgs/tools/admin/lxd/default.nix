@@ -51,7 +51,7 @@ buildGoPackage rec {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = https://linuxcontainers.org/lxd/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
   };
 }

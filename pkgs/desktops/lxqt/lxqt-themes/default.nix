@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-themes";
   version = "0.14.0";
 
@@ -16,14 +16,7 @@ stdenv.mkDerivation rec {
     lxqt-build-tools
   ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_GRAPHICS_DIR}" "DESTINATION \"share/lxqt/graphics"
-    substituteInPlace themes/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_SHARE_DIR}" "DESTINATION \"share/lxqt"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Themes, graphics and icons for LXQt";
     homepage = https://github.com/lxqt/lxqt-themes;
     license = licenses.lgpl21;

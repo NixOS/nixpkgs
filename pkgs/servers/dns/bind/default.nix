@@ -76,13 +76,13 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # requires root and the net
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.isc.org/downloads/bind/;
     description = "Domain name server";
-    license = stdenv.lib.licenses.mpl20;
+    license = licenses.mpl20;
 
-    maintainers = with stdenv.lib.maintainers; [peti];
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with maintainers; [ peti globin ];
+    platforms = platforms.unix;
 
     outputsToInstall = [ "out" "dnsutils" "host" ];
   };

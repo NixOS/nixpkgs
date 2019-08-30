@@ -54,11 +54,12 @@ let
   };
 
 in buildPythonApplication rec {
-  name = "nixpart-${version}";
+  pname = "nixpart";
   version = "0.4.1";
+  disabled = python.isPy3k;
 
   src = fetchurl {
-    url = "https://github.com/aszlig/nixpart/archive/v${version}.tar.gz";
+    url = "https://github.com/NixOS/nixpart/archive/v${version}.tar.gz";
     sha256 = "0avwd8p47xy9cydlbjxk8pj8q75zyl68gw2w6fnkk78dcb1a3swp";
   };
 
@@ -66,10 +67,11 @@ in buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "NixOS storage manager/partitioner";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.aszlig ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/NixOS/nixpart";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.aszlig ];
+    platforms = platforms.linux;
   };
 }

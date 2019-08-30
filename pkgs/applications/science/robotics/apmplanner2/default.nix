@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, qmake
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake
 , qtbase, qtscript, qtwebkit, qtserialport, qtsvg, qtdeclarative, qtquickcontrols2
 , alsaLib, libsndfile, flite, openssl, udev, SDL2
 }:
 
-stdenv.mkDerivation rec {
-  name = "apmplanner2-${version}";
-  # TODO revert Qt511 to Qt5 in pkgs/top-level/all-packages.nix on next release
+mkDerivation rec {
+  pname = "apmplanner2";
   version = "2.0.27-rc1";
+
   src = fetchFromGitHub {
     owner = "ArduPilot";
     repo = "apm_planner";
@@ -14,11 +14,19 @@ stdenv.mkDerivation rec {
     sha256 = "1k0786mjzi49nb6yw4chh9l4dmkf9gybpxg9zqkr5yg019nyzcvd";
   };
 
-  qtInputs = [
+  patches = [
+    # can be dropped after 2.0.27-rc1
+    (fetchpatch {
+      url = "https://github.com/ArduPilot/apm_planner/commit/299ff23b5e9910de04edfc06b6893bb06b47a57b.patch";
+      sha256 = "16rc81iwqp2i46g6bm9lbvcjfsk83999r9h8w1pz0mys7rsilvqy";
+    })
+  ];
+
+  buildInputs = [
+    alsaLib libsndfile flite openssl udev SDL2
     qtbase qtscript qtwebkit qtserialport qtsvg qtdeclarative qtquickcontrols2
   ];
 
-  buildInputs = [ alsaLib libsndfile flite openssl udev SDL2 ] ++ qtInputs;
   nativeBuildInputs = [ qmake ];
 
   qmakeFlags = [ "apm_planner.pro" ];
@@ -29,7 +37,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/apmplanner2.desktop \
                       --replace /usr $out
   '';
-  
+
   enableParallelBuilding = true;
 
   meta = {
@@ -39,7 +47,7 @@ stdenv.mkDerivation rec {
       Includes support for the APM and PX4 based controllers.
     '';
     homepage = http://ardupilot.org/planner2/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.wucke13 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ wucke13 ];
   };
 }

@@ -92,11 +92,8 @@ buildPythonApplication rec {
 
     checkInputs = [ pytest glibcLocales nose ];
 
+    nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
     buildInputs = [ lame mplayer libpulseaudio  ];
-
-    makeWrapperArgs = [
-        ''--prefix PATH ':' "${lame}/bin:${mplayer}/bin"''
-    ];
 
     patches = [
       # Disable updated version check.
@@ -157,17 +154,23 @@ buildPythonApplication rec {
       cp -rv locale $out/share/
       cp -rv anki aqt web $pp/
 
-      wrapPythonPrograms
-
       # copy the manual into $doc
       cp -r ${manual}/share/doc/anki/html $doc/share/doc/anki
     '';
+
+    dontWrapQtApps = true;
+    makeWrapperArgs = [
+        ''--prefix PATH ':' "${lame}/bin:${mplayer}/bin"''
+        "\${qtWrapperArgs[@]}"
+    ];
+
+    # now wrapPythonPrograms from postFixup will add both python and qt env variables
 
     passthru = {
       inherit manual;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://apps.ankiweb.net/";
       description = "Spaced repetition flashcard program";
       longDescription = ''
@@ -185,6 +188,6 @@ buildPythonApplication rec {
       license = licenses.agpl3Plus;
       broken = stdenv.hostPlatform.isAarch64;
       platforms = platforms.mesaPlatforms;
-      maintainers = with maintainers; [ the-kenny Profpatsch enzime ];
+      maintainers = with maintainers; [ oxij the-kenny Profpatsch enzime ];
     };
 }

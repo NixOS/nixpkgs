@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An I/O forwarding server that implements a variant of the 9P protocol";
-    maintainers = with maintainers; [ rnhmjoj rickynils ];
+    maintainers = with maintainers; [ rnhmjoj ];
     platforms   = platforms.linux;
     license     = licenses.gpl2Plus;
   };

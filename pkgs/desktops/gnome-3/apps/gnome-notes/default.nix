@@ -1,8 +1,8 @@
 { stdenv, meson, ninja, gettext, fetchurl, pkgconfig
 , wrapGAppsHook, itstool, desktop-file-utils, python3
-, glib, gtk3, evolution-data-server
+, glib, gtk3, evolution-data-server, gnome-online-accounts
 , libuuid, webkitgtk, zeitgeist
-, gnome3, libxml2, gsettings-desktop-schemas }:
+, gnome3, libxml2, gsettings-desktop-schemas, tracker }:
 
 let
   version = "3.32.2";
@@ -26,8 +26,8 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib gtk3 libuuid webkitgtk gnome3.tracker
-    gnome3.gnome-online-accounts zeitgeist
+    glib gtk3 libuuid webkitgtk tracker
+    gnome-online-accounts zeitgeist
     gsettings-desktop-schemas
     evolution-data-server
     gnome3.adwaita-icon-theme

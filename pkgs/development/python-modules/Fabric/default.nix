@@ -1,33 +1,29 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, invoke
-, paramiko
+{ lib, buildPythonPackage, fetchPypi
 , cryptography
-, pytest
+, invoke
 , mock
+, paramiko
+, pytest
 , pytest-relaxed
 }:
 
 buildPythonPackage rec {
   pname = "fabric";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "93684ceaac92e0b78faae551297e29c48370cede12ff0f853cdebf67d4b87068";
+    sha256 = "19nzdibjfndzcwvby20p59igqwyzw7skrb45v2mxqsjma5yjv114";
   };
 
   propagatedBuildInputs = [ invoke paramiko cryptography ];
   checkInputs = [ pytest mock pytest-relaxed ];
 
-  # ignore subprocess main errors (1) due to hardcoded /bin/bash
   checkPhase = ''
-    rm tests/main.py
     pytest tests
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "Pythonic remote execution";
     homepage    = https://www.fabfile.org/;
     license     = licenses.bsd2;

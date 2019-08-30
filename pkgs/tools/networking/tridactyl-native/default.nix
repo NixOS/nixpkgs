@@ -7,13 +7,13 @@ stdenv.mkDerivation rec {
   pname = "tridactyl-native";
   # this is actually the version of tridactyl itself; the native messenger will
   # probably not change with every tridactyl version
-  version = "1.16.2";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "tridactyl";
     repo = "tridactyl";
     rev = version;
-    sha256 = "07pipvxxa4bw11f0fxm8vjwd5ap7i82nsq93sw1kj353jn1mpwxw";
+    sha256 = "1cp2iaa9fhlxmbml41wnq984jp2r75n6w0qxz38rd24jxsj5vz06";
   };
   sourceRoot = "source/native";
 

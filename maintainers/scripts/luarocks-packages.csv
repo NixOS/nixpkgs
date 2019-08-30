@@ -1,4 +1,5 @@
 # nix name, luarocks name, server, version,luaversion,maintainers
+alt-getopt,,,,,arobyn
 ansicolors,,,,,
 argparse,,,,,
 basexx,,,,,
@@ -17,6 +18,7 @@ http,,,,,vcunat
 inspect,,,,,
 ldoc,,,,,
 lgi,,,,,
+ljsyscall,,,,lua5_1,lblasc
 lpeg,,,,,vyp
 lpeg_patterns,,,,,
 lpeglabel,,,,,
@@ -56,6 +58,7 @@ luv,,,,,
 markdown,,,,,
 mediator_lua,,,,,
 mpack,,,,,
+moonscript,,,,,arobyn
 nvim-client,,,,,
 penlight,,,,,
 rapidjson,,,,,

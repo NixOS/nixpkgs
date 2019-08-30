@@ -55,7 +55,9 @@ let
   mkMelpaStablePackages = melpaGeneric "stable";
   mkMelpaPackages = melpaGeneric "unstable";
 
-  mkOrgPackages = import ../applications/editors/emacs-modes/org-packages.nix { };
+  mkOrgPackages = import ../applications/editors/emacs-modes/org-packages.nix {
+    inherit lib;
+  };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
     inherit lib lndir makeWrapper stdenv runCommand;

@@ -2,19 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "xml-security-c-${version}";
-  version = "1.7.3";
+  version = "2.0.2";
 
   src = fetchurl {
     url = "https://www.apache.org/dist/santuario/c-library/${name}.tar.gz";
-    sha256 = "e5226e7319d44f6fd9147a13fb853f5c711b9e75bf60ec273a0ef8a190592583";
+    sha256 = "1prh5sxzipkqglpsh53iblbr7rxi54wbijxdjiahzjmrijqa40y3";
   };
-
-  patches = [ ./cxx11.patch ];
-
-  postPatch = ''
-    mkdir -p xsec/yes/lib
-    sed -i -e 's/-O2 -DNDEBUG/-DNDEBUG/g' configure
-  '';
 
   configureFlags = [
     "--with-openssl"

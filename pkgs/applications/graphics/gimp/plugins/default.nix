@@ -157,17 +157,17 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
   ufraw = pkgs.ufraw.gimpPlugin;
 
   gimplensfun = pluginDerivation rec {
-    version = "0.2.4";
+    version = "unstable-2018-10-21";
     name = "gimplensfun-${version}";
 
     src = fetchFromGitHub {
       owner = "seebk";
       repo = "GIMP-Lensfun";
-      rev = version;
-      sha256 = "0zlmp9v732qmzj083mnk5z421s57mnckmpjhiw890wmmwzj2lhxz";
+      rev = "1c5a5c1534b5faf098b7441f8840d22835592f17";
+      sha256 = "1jj3n7spkjc63aipwdqsvq9gi07w13bb1v8iqzvxwzld2kxa3c8w";
     };
 
-    buildInputs = with pkgs; [ lensfun exiv2 ];
+    buildInputs = with pkgs; [ lensfun gexiv2 ];
 
     installPhase = "
       installPlugins gimp-lensfun

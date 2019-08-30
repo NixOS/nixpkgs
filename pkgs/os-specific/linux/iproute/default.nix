@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ primeos eelco fpletz ];
+    maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }

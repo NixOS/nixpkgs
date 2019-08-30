@@ -82,11 +82,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "0.67.123";
+  version = "0.68.131";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "00kpysk84xwmlwziq7pjizmi2ljgiq45l1x743qkfflxlh0pj21m";
+    sha256 = "0syhwy1gxy82jbxbryi1n4zp1ya7wvm20g1vqvd2s7kqspprsi0l";
   };
 
   dontConfigure = true;
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
 
       # Fix paths
       substituteInPlace $out/share/applications/brave-browser.desktop \
-          --replace /usr/bin/brave-browser $out/bin/brave
+          --replace /usr/bin/brave-browser-stable $out/bin/brave
       substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
           --replace /opt/brave.com $out/opt/brave.com
       substituteInPlace $out/share/menu/brave-browser.menu \

@@ -96,12 +96,12 @@ in stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = http://www.postfix.org/;
     description = "A fast, easy to administer, and secure mail server";
-    license = with lib.licenses; [ ipl10 epl20 ];
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.rickynils ];
+    license = with licenses; [ ipl10 epl20 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rickynils globin ];
   };
 
 }
