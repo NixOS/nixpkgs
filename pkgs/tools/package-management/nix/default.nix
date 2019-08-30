@@ -64,7 +64,12 @@ common =
         # https://github.com/NixOS/nixpkgs/issues/45462
         if is20 then ''
           mkdir -p $out/lib
-          cp ${boost}/lib/libboost_context* $out/lib
+          cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
+          rm -f $out/lib/*.a
+          ${lib.optionalString stdenv.isLinux ''
+            chmod u+w $out/lib/*.so.*
+            patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+          ''}
         '' else ''
           configureFlagsArray+=(BDW_GC_LIBS="-lgc -lgccpp")
         '';
