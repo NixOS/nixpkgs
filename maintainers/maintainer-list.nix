@@ -4117,7 +4117,7 @@
   };
   mimadrid = {
     email = "mimadrid@ucm.es";
-    github = "mimadrid";
+    github = "mimame";
     githubId = 3269878;
     name = "Miguel Madrid";
   };
