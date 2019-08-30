@@ -564,27 +564,27 @@
       <option>boot.kernel.sysctl."kernel.core_pattern"</option> to <literal>"core"</literal>.
     </para>
    </listitem>
-  <listitem>
-   <para>
-    <literal>systemd.packages</literal> option now also supports generators and
-    shutdown scripts. Old <literal>systemd.generator-packages</literal> option has
-    been removed.
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    The <literal>rmilter</literal> package was removed with associated module and options due deprecation by upstream developer.
-    Use <literal>rspamd</literal> in proxy mode instead.
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-     systemd cgroup accounting via the
-     <link linkend="opt-systemd.enableCgroupAccounting">systemd.enableCgroupAccounting</link>
-     option is now enabled by default. It now also enables the more recent Block IO and IP accounting
-     features.
-   </para>
-  </listitem>
+   <listitem>
+    <para>
+     <literal>systemd.packages</literal> option now also supports generators and
+     shutdown scripts. Old <literal>systemd.generator-packages</literal> option has
+     been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>rmilter</literal> package was removed with associated module and options due deprecation by upstream developer.
+     Use <literal>rspamd</literal> in proxy mode instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      systemd cgroup accounting via the
+      <link linkend="opt-systemd.enableCgroupAccounting">systemd.enableCgroupAccounting</link>
+      option is now enabled by default. It now also enables the more recent Block IO and IP accounting
+      features.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
