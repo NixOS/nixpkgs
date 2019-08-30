@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "httpie";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "1ax22jh5lpjywpj7lsl072wdhr1pxiqzmxhyph5diwxxzs2nqrzw";
+    sha256 = "103fcigpxf4nqmrdqjnyz7d9n4n16906slwmmqqc0gkxv8hnw6vd";
   };
 
   propagatedBuildInputs = with pythonPackages; [ pygments requests ];
