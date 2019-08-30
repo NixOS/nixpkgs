@@ -5192,7 +5192,7 @@
   };
   razvan = {
     email = "razvan.panda@gmail.com";
-    github = "razvan-panda";
+    github = "razvan-flavius-panda";
     githubId = 1758708;
     name = "Răzvan Flavius Panda";
   };
