@@ -40,14 +40,6 @@ stdenv.mkDerivation rec {
     patchShebangs configure
     patchShebangs test/
 
-    for src in \
-      util/crypto.c \
-      notmuch-config.c
-    do
-      substituteInPlace "$src" \
-        --replace \"gpg\" \"${gnupg}/bin/gpg\"
-    done
-
     substituteInPlace lib/Makefile.local \
       --replace '-install_name $(libdir)' "-install_name $out/lib"
   '';
