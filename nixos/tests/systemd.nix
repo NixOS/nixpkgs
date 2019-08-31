@@ -86,17 +86,17 @@ import ./make-test.nix ({ pkgs, ... }: {
       $machine->succeed('test -e /tmp/shared/shutdown-test');
     };
 
-   # Test settings from /etc/sysctl.d/50-default.conf are applied
-   subtest "systemd sysctl settings are applied", sub {
-     $machine->waitForUnit('multi-user.target');
-     $machine->succeed('sysctl net.core.default_qdisc | grep -q "fq_codel"');
-   };
-
    # Test cgroup accounting is enabled
    subtest "systemd cgroup accounting is enabled", sub {
      $machine->waitForUnit('multi-user.target');
      $machine->succeed('systemctl show testservice1.service -p IOAccounting | grep -q "yes"');
      $machine->succeed('systemctl status testservice1.service | grep -q "CPU:"');
+   };
+  '' + pkgs.lib.optionalString pkgs.stdenv.isx86_64 ''
+   # Test settings from /etc/sysctl.d/50-default.conf are applied
+   subtest "systemd sysctl settings are applied", sub {
+     $machine->waitForUnit('multi-user.target');
+     $machine->succeed('sysctl net.core.default_qdisc | grep -q "fq_codel"');
    };
   '';
 })
