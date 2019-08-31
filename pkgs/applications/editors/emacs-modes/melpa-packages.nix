@@ -228,9 +228,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         });
 
-        # upstream issue: missing file header
-        textmate = markBroken super.textmate;
-
         # missing OCaml
         utop = markBroken super.utop;
 
@@ -338,6 +335,9 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # upstream issue: missing file header
         speech-tagger = markBroken super.speech-tagger;
+
+        # upstream issue: missing file header
+        textmate = markBroken super.textmate;
 
         # upstream issue: missing file header
         link = markBroken super.link;
