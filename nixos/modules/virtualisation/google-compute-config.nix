@@ -29,11 +29,15 @@ in
   # way to select them anyway.
   boot.loader.grub.configurationLimit = 0;
 
-  # Allow root logins only using the SSH key that the user specified
-  # at instance creation time.
+  # Allow root logins only using SSH keys
+  # and disable password authentication in general
   services.openssh.enable = true;
   services.openssh.permitRootLogin = "prohibit-password";
   services.openssh.passwordAuthentication = mkDefault false;
+
+  # enable OS Login. This also requires setting enable-oslogin=TRUE metadata on
+  # instance or project level
+  security.googleOsLogin.enable = true;
 
   # Use GCE udev rules for dynamic disk volumes
   services.udev.packages = [ gce ];
@@ -64,8 +68,6 @@ in
 
   # GC has 1460 MTU
   networking.interfaces.eth0.mtu = 1460;
-
-  security.googleOsLogin.enable = true;
 
   systemd.services.google-clock-skew-daemon = {
     description = "Google Compute Engine Clock Skew Daemon";
