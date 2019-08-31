@@ -114,9 +114,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           propagatedUserEnvPkgs = [ external.hindent ];
         });
 
-        # upstream issue: missing file header
-        initsplit = markBroken super.initsplit;
-
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
@@ -337,6 +334,8 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # upstream issue: missing dependency highlight
         floobits  = markBroken super.floobits;
+        # upstream issue: missing file header
+        initsplit = markBroken super.initsplit;
 
         # missing OCaml
         flycheck-ocaml = markBroken super.flycheck-ocaml;
