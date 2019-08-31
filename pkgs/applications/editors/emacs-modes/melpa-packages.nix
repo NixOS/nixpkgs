@@ -148,9 +148,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         ivy-rtags = markBroken super.ivy-rtags;
 
         # upstream issue: missing file header
-        jsfmt = markBroken super.jsfmt;
-
-        # upstream issue: missing file header
         maxframe = markBroken super.maxframe;
 
         magit = super.magit.overrideAttrs (attrs: {
@@ -339,6 +336,8 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # missing OCaml
         flycheck-ocaml = markBroken super.flycheck-ocaml;
+        # upstream issue: missing file header
+        jsfmt = markBroken super.jsfmt;
 
         # upstream issue: missing dependency
         fold-dwim-org = markBroken super.fold-dwim-org;
