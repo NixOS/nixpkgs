@@ -364,13 +364,13 @@ let
         sha512 = "hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==";
       };
     };
-    "nthen-0.1.10" = {
+    "nthen-0.1.8" = {
       name = "nthen";
       packageName = "nthen";
-      version = "0.1.10";
+      version = "0.1.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/nthen/-/nthen-0.1.10.tgz";
-        sha512 = "W5LOhoFlQZSVg9SnRUJHgm3lOiT3HV6xq+Qo0dGKju2FWsDrKPwcgbJ9o5CORGz7UKKVhPScY9wOJHUogVG2UA==";
+        url = "https://registry.npmjs.org/nthen/-/nthen-0.1.8.tgz";
+        sha512 = "Oh2CwIbhj+wUT94lQV7LKmmgw3UYAGGd8oLIqp6btQN3Bz3PuWp4BuvtUo35H3rqDknjPfKx5P6mt7v+aJNjcw==";
       };
     };
     "on-finished-2.3.0" = {
@@ -619,14 +619,14 @@ let
   };
 in
 {
-  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#2.25.0" = nodeEnv.buildNodePackage {
+  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#3.0.0" = nodeEnv.buildNodePackage {
     name = "cryptpad";
     packageName = "cryptpad";
-    version = "2.25.0";
+    version = "3.0.0";
     src = fetchgit {
       url = "https://github.com/xwiki-labs/cryptpad.git";
-      rev = "0b17df3302fc4a7683a8790f305c8a2c7b1b4fe8";
-      sha256 = "261531da1745f9ff930bce3729afba2b7a52ee02f51340426ecf6b19204a21b7";
+      rev = "166ab65cd47a64e020528089244ed5be34f6e3c8";
+      sha256 = "35a3b733b5c128b7c7e1c0e7473f4a6a446d663f4c787745b36b1071205c1fd7";
     };
     dependencies = [
       sources."accepts-1.3.7"
@@ -669,7 +669,7 @@ in
       sources."mime-types-2.1.24"
       sources."ms-2.0.0"
       sources."negotiator-0.6.2"
-      sources."nthen-0.1.10"
+      sources."nthen-0.1.8"
       sources."on-finished-2.3.0"
       sources."parseurl-1.3.3"
       sources."path-to-regexp-0.1.7"
