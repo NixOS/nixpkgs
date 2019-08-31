@@ -16,9 +16,10 @@ mkDerivation rec {
      sha256 = "1vnb62p0y2bnga173wmjs0lnyqdjikv0fkcxjzxm8187khk2lly8";
   };
   
-  buildInputs = [ boost_static ceres-solver eigen freeimage
-                  eigen freeimage glog libGLU glew qtbase ] ++
-		  lib.optional cudaSupport cudatoolkit;
+  buildInputs = [
+    boost_static ceres-solver eigen freeimage
+    eigen freeimage glog libGLU glew qtbase
+  ] ++ lib.optional cudaSupport cudatoolkit;
 
   nativeBuildInputs = [ cmake ];
 
