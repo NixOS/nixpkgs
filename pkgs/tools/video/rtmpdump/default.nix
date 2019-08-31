@@ -9,15 +9,15 @@ assert gnutlsSupport -> gnutlsSupport != null && nettle != null && !opensslSuppo
 assert opensslSupport -> openssl != null && !gnutlsSupport;
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rtmpdump";
-  version = "2015-12-30";
+  version = "2019-03-30";
 
   src = fetchgit {
-    url = git://git.ffmpeg.org/rtmpdump;
+    url = "git://git.ffmpeg.org/rtmpdump";
     # Currently the latest commit is used (a release has not been made since 2011, i.e. '2.4')
-    rev = "fa8646daeb19dfd12c181f7d19de708d623704c0";
-    sha256 = "17m9rmnnqyyzsnnxcdl8258hjmw16nxbj1n1lr7fj3kmcs189iig";
+    rev = "c5f04a58fc2aeea6296ca7c44ee4734c18401aa3";
+    sha256 = "07ias612jgmxpam9h418kvlag32da914jsnjsfyafklpnh8gdzjb";
   };
 
   patches = [
@@ -40,9 +40,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  separateDebugInfo = true;
+
   meta = {
     description = "Toolkit for RTMP streams";
-    homepage    = http://rtmpdump.mplayerhq.hu/;
+    homepage    = "http://rtmpdump.mplayerhq.hu/";
     license     = licenses.gpl2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
