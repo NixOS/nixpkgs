@@ -58,8 +58,23 @@ let
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
-  # TODO: remove after there's support for setupPyDistFlags
-  setuppy = ../../../development/interpreters/python/run_setup.py;
+  pythonEnv = python.withPackages (_:
+    [ # python deps needed during wheel build time
+      numpy
+      keras-preprocessing
+      protobuf
+      wrapt
+      gast
+      astor
+      absl-py
+      termcolor
+      keras-applications
+      setuptools
+      wheel
+  ] ++ lib.optionals (!isPy3k)
+  [ future
+    mock
+  ]);
 
   bazel-build = buildBazelPackage rec {
     name = "${pname}-${version}";
@@ -96,26 +111,14 @@ let
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
 
     nativeBuildInputs = [
-      swig which cython
+      swig which pythonEnv
     ];
 
     buildInputs = [
-      python
       jemalloc
       openmpi
       glibcLocales
       git
-
-      # python deps needed during wheel build time
-      numpy
-      keras-preprocessing
-      protobuf
-      wrapt
-      gast
-      astor
-      absl-py
-      termcolor
-      keras-applications
 
       # libs taken from system through the TF_SYS_LIBS mechanism
       # grpc
@@ -133,19 +136,11 @@ let
       giflib
       re2
       pkgs.lmdb
-
-      # for building the wheel
-      setuptools
-      wheel
-    ] ++ lib.optionals (!isPy3k) [
-      future
-      mock
     ] ++ lib.optionals cudaSupport [
       cudatoolkit
       cudnn
       nvidia_x11
     ];
-
 
     # arbitrarily set to the current latest bazel version, overly careful
     TF_IGNORE_MAX_BAZEL_VERSION = true;
@@ -194,8 +189,8 @@ let
 
     INCLUDEDIR = "${includes_joined}/include";
 
-    PYTHON_BIN_PATH = python.interpreter;
- 
+    PYTHON_BIN_PATH = pythonEnv.interpreter;
+
     TF_NEED_GCP = true;
     TF_NEED_HDFS = true;
     TF_ENABLE_XLA = tfFeature xlaSupport;
@@ -237,6 +232,9 @@ let
       export PYTHON_LIB_PATH="$NIX_BUILD_TOP/site-packages"
       export CC_OPT_FLAGS="${lib.concatStringsSep " " opt_flags}"
       mkdir -p "$PYTHON_LIB_PATH"
+
+      # To avoid mixing Python 2 and Python 3
+      unset PYTHONPATH
     '';
 
     configurePhase = ''
@@ -313,13 +311,7 @@ in buildPythonPackage rec {
     rm $out/bin/tensorboard
   '';
 
-  # TODO: remove after there's support for setupPyDistFlags
-  buildPhase = ''
-    runHook preBuild
-    cp ${setuppy} nix_run_setup
-    ${python.interpreter} nix_run_setup --project_name ${pname} bdist_wheel
-    runHook postBuild
-  '';
+  setupPyGlobalFlags = [ "--project_name ${pname}" ];
 
   # tensorflow/tools/pip_package/setup.py
   propagatedBuildInputs = [
