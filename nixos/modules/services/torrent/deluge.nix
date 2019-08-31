@@ -15,7 +15,21 @@ let
   configFile = pkgs.writeText "core.conf" (builtins.toJSON cfg.config);
   declarativeLockFile = "${configDir}/.declarative";
 
+  mkDelugeDir = dir: ''
+    mkdir -p '${dir}'
+    chmod 0770 '${dir}' || true
+    chown ${cfg.user}:${cfg.group} '${dir}' || true
+  '';
+
   preStart = if cfg.declarative then ''
+    mkdir -p '${configDir}'
+    chmod 0770 '${configDir}'
+    chown ${cfg.user}:${cfg.group} '${configDir}'
+
+    ${optionalString (cfg.config ? "download_location") (mkDelugeDir cfg.config.download_location)}
+    ${optionalString (cfg.config ? "torrentfiles_location") (mkDelugeDir cfg.config.torrentfiles_location)}
+    ${optionalString (cfg.config ? "move_completed_path") (mkDelugeDir cfg.config.move_completed_path)}
+
     if [ -e ${declarativeLockFile} ]; then
       # Was declarative before, no need to back up anything
       ln -sf ${configFile} ${configDir}/core.conf
@@ -172,14 +186,6 @@ in {
 
     # Provide a default set of `extraPackages`.
     services.deluge.extraPackages = with pkgs; [ unzip gnutar xz p7zip bzip2 ];
-
-    systemd.tmpfiles.rules = [ "d '${configDir}' 0770 ${cfg.user} ${cfg.group}" ]
-    ++ optional (cfg.config ? "download_location")
-      "d '${cfg.config.download_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? "torrentfiles_location")
-      "d '${cfg.config.torrentfiles_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? "move_completed_path")
-      "d '${cfg.config.move_completed_path}' 0770 ${cfg.user} ${cfg.group}";
 
     systemd.services.deluged = {
       after = [ "network.target" ];
