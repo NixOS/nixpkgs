@@ -65,7 +65,7 @@ let
       };
 
       acceptInterface = mkOption {
-        type = types.string;
+        type = types.str;
         default = "lo";
         description = ''
           Tell nylon which interface to listen for client requests on, default is "lo".
@@ -73,7 +73,7 @@ let
       };
 
       bindInterface = mkOption {
-        type = types.string;
+        type = types.str;
         default = "enp3s0f0";
         description = ''
           Tell nylon which interface to use as an uplink, default is "enp3s0f0".
@@ -89,7 +89,7 @@ let
       };
 
       allowedIPRanges = mkOption {
-        type = with types; listOf string;
+        type = with types; listOf str;
         default = [ "192.168.0.0/16" "127.0.0.1/8" "172.16.0.1/12" "10.0.0.0/8" ];
         description = ''
            Allowed client IP ranges are evaluated first, defaults to ARIN IPv4 private ranges:
@@ -98,7 +98,7 @@ let
       };
 
       deniedIPRanges = mkOption {
-        type = with types; listOf string;
+        type = with types; listOf str;
         default = [ "0.0.0.0/0" ];
         description = ''
           Denied client IP ranges, these gets evaluated after the allowed IP ranges, defaults to all IPv4 addresses:

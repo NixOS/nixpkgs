@@ -9,7 +9,7 @@ let
 
   vgpuOptions = {
     uuid = mkOption {
-      type = types.string;
+      type = types.str;
       description = "UUID of VGPU device. You can generate one with <package>libossp_uuid</package>.";
     };
   };
@@ -23,7 +23,7 @@ in {
       '';
       # multi GPU support is under the question
       device = mkOption {
-        type = types.string;
+        type = types.str;
         default = "0000:00:02.0";
         description = "PCI ID of graphics card. You can figure it with <command>ls /sys/class/mdev_bus</command>.";
       };

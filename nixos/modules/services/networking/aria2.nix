@@ -47,8 +47,8 @@ in
         '';
       };
       downloadDir = mkOption {
-        type = types.string;
-        default = "${downloadDir}";
+        type = types.path;
+        default = downloadDir;
         description = ''
           Directory to store downloaded files.
         '';
@@ -66,7 +66,7 @@ in
         description = "Specify a port number for JSON-RPC/XML-RPC server to listen to. Possible Values: 1024-65535";
       };
       rpcSecret = mkOption {
-        type = types.string;
+        type = types.str;
         default = "aria2rpc";
         description = ''
           Set RPC secret authorization token.
@@ -74,7 +74,7 @@ in
         '';
       };
       extraArguments = mkOption {
-        type = types.string;
+        type = types.separatedString " ";
         example = "--rpc-listen-all --remote-time=true";
         default = "";
         description = ''

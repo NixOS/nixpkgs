@@ -54,7 +54,7 @@ in
     };
 
     firmwarePartitionID = mkOption {
-      type = types.string;
+      type = types.str;
       default = "0x2178694e";
       description = ''
         Volume ID for the /boot/firmware partition on the SD card. This value
@@ -63,7 +63,7 @@ in
     };
 
     rootPartitionUUID = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
       description = ''
