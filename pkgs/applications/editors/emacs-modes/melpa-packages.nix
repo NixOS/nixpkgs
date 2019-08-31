@@ -233,9 +233,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
-        # upstream issue: missing file header
-        window-numbering = markBroken super.window-numbering;
-
         zmq = super.zmq.overrideAttrs(old: {
           stripDebugList = [ "share" ];
           preBuild = ''
@@ -336,22 +333,15 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         link = markBroken super.link;
 
-        # missing OCaml
-        merlin = markBroken super.merlin;
         # upstream issue: missing file header
         voca-builder = markBroken super.voca-builder;
 
         # upstream issue: missing file header
-        po-mode = markBroken super.po-mode;
+        window-numbering = markBroken super.window-numbering;
 
-        # upstream issue: truncated file
-        powershell = markBroken super.powershell;
       };
 
       unstable = shared // {
-        # upstream issue: mismatched filename
-        ack-menu = markBroken super.ack-menu;
-
         editorconfig = super.editorconfig.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ external.editorconfig-core-c ];
         });
