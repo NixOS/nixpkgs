@@ -36,8 +36,6 @@ self: let
     super = removeAttrs imported [ "dash" ];
 
     overrides = {
-      # upstream issue: missing footer
-      ebdb-i18n-chn = markBroken super.ebdb-i18n-chn;
       rcirc-menu = markBroken super.rcirc-menu; # Missing file header
       cl-lib = null; # builtin
       tle = null; # builtin
