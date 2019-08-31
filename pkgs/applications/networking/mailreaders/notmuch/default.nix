@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.28.4"; # not really, git
+  version = "0.29.1";
   pname = "notmuch";
 
   passthru = {
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "https://notmuchmail.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1jjnhs4xs4gksvg0a9qn68rxrj41im5bh58snka2pkj20nxwmcds";
+    url = "https://notmuchmail.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "0rg3rwghd3wivf3bmqcqpkkd5c779ld5hi363zjcw5fl6a7gqilq";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   in ''
     ln -s ${test-database} test/test-databases/database-v1.tar.xz
   '';
-  doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0");
+  doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");
   checkTarget = "test";
   checkInputs = [
     which dtach openssl bash
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = https://notmuchmail.org/;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ flokli the-kenny ];
+    maintainers = with maintainers; [ flokli puckipedia the-kenny ];
     platforms   = platforms.unix;
   };
 }
