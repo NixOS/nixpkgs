@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub
-, wrapQtAppsHook, makeDesktopItem
+{ mkDerivation, lib, makeDesktopItem, fetchFromGitHub
 , qtbase, qmake, qtmultimedia, qttools
 , qtgraphicaleffects, qtdeclarative
 , qtlocation, qtquickcontrols, qtquickcontrols2
@@ -9,22 +8,10 @@
 , hidapi
 }:
 
-with stdenv.lib;
+with lib;
 
-let
-  qmlPath = qmlLib: "${qmlLib}/${qtbase.qtQmlPrefix}";
-
-  qml2ImportPath = concatMapStringsSep ":" qmlPath [
-    qtbase.bin qtmultimedia.bin qtgraphicaleffects
-    qtdeclarative.bin qtlocation.bin
-    qtquickcontrols qtquickcontrols2.bin
-    qtwebchannel.bin qtwebengine.bin qtxmlpatterns
-  ];
-
-in
-
-stdenv.mkDerivation rec {
-  name = "monero-gui-${version}";
+mkDerivation rec {
+  pname = "monero-gui";
   version = "0.14.1.2";
 
   src = fetchFromGitHub {
@@ -34,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rm043r6y2mzy8pclnzbjjfxgps8pkfa2b92p66k8y8rdmgq6m1k";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ qmake pkgconfig ];
 
   buildInputs = [
     qtbase qtmultimedia qtgraphicaleffects
@@ -46,9 +33,7 @@ stdenv.mkDerivation rec {
     cppzmq hidapi
   ];
 
-  patches = [
-    ./move-log-file.patch
-  ];
+  patches = [ ./move-log-file.patch ];
 
   postPatch = ''
     echo '
