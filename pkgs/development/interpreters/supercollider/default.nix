@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, alsaLib
+{ stdenv, mkDerivation, fetchurl, cmake, pkgconfig, alsaLib
 , libjack2, libsndfile, fftw, curl, gcc
 , libXt, qtbase, qttools, qtwebengine
 , readline, qtwebsockets, useSCEL ? false, emacs
@@ -7,7 +7,7 @@
 let optional = stdenv.lib.optional;
 in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "supercollider-${version}";
   version = "3.10.2";
 
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" ];
 
-  cmakeFlags = ''
-    -DSC_WII=OFF
-    -DSC_EL=${if useSCEL then "ON" else "OFF"}
-  '';
+  cmakeFlags = [
+    "-DSC_WII=OFF"
+    "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
+  ];
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
