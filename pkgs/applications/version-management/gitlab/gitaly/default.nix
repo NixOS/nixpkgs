@@ -54,7 +54,7 @@ in buildGoPackage rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.gitlab.com/;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ roblabla globin fpletz ];
     license = licenses.mit;
   };
