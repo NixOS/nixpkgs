@@ -154,6 +154,8 @@ let
       '';
 
       configurePhase = ''
+        # attept to fix python2 failing with "EOFError: EOF read where object expected" on multi-core builders
+        export PYTHONDONTWRITEBYTECODE=true
         ( cd src
           gn gen ${lib.escapeShellArg "--args=${gnToString gnFlags}"} out/Release
         )
