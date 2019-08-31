@@ -278,7 +278,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # part of a larger package
         # upstream issue: missing package version
-        cmake-mode = markBroken (dontConfigure super.cmake-mode);
+        cmake-mode = dontConfigure super.cmake-mode;
 
         # upstream issue: missing file header
         connection = markBroken super.connection;
