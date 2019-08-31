@@ -6,10 +6,10 @@
 
 {
 # Global options passed to "python setup.py"
-  setupPyGlobalFlags ? []
+  globalFlags ? []
 # Build options passed to "python setup.py build_ext"
 # https://github.com/pypa/pip/issues/881
-, setupPyBuildFlags ? []
+, buildFlags ? []
 # Execute before shell hook
 , preShellHook ? ""
 # Execute after shell hook
@@ -21,8 +21,8 @@ let
   # pip does the same thing: https://github.com/pypa/pip/pull/3265
   setuppy = ./run_setup.py;
 
-  setupPyGlobalFlagsString = lib.concatStringsSep " " setupPyGlobalFlags;
-  setupPyBuildExtString = lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags));
+  globalFlagsString = lib.concatStringsSep " " globalFlags;
+  buildFlagsString = lib.optionalString (buildFlags != []) ("build_ext " + (lib.concatStringsSep " " buildFlags));
 
 in attrs // {
   # we copy nix_run_setup over so it's executed relative to the root of the source
@@ -30,7 +30,7 @@ in attrs // {
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
     cp ${setuppy} nix_run_setup
-    ${python.pythonForBuild.interpreter} nix_run_setup ${setupPyGlobalFlagsString} ${setupPyBuildExtString} bdist_wheel
+    ${python.pythonForBuild.interpreter} nix_run_setup ${globalFlagsString} ${buildFlagsString} bdist_wheel
     runHook postBuild
   '';
 
