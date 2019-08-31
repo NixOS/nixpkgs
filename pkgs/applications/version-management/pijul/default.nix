@@ -1,11 +1,11 @@
 { stdenv, fetchurl, rustPlatform, darwin, openssl, libsodium, nettle, clang, libclang, pkgconfig }:
 
 rustPlatform.buildRustPackage rec {
-  name = "pijul-${version}";
+  pname = "pijul";
   version = "0.12.0";
 
   src = fetchurl {
-    url = "https://pijul.org/releases/${name}.tar.gz";
+    url = "https://pijul.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1rm787kkh3ya8ix0rjvj7sbrg9armm0rnpkga6gjmsbg5bx20y4q";
   };
 

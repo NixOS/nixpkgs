@@ -5,7 +5,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "exa-${version}";
+  pname = "exa";
   version = "0.9.0";
 
   cargoSha256 = "1hgjp23rjd90wyf0nq6d5akjxdfjlaps54dv23zgwjvkhw24fidf";

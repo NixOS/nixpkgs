@@ -5,11 +5,11 @@
 , rsync, makeWrapper }:
 
 python2Packages.buildPythonApplication rec {
-  name = "duplicity-${version}";
+  pname = "duplicity";
   version = "0.7.19";
 
   src = fetchurl {
-    url = "https://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${name}.tar.gz";
+    url = "https://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "0ag9dknslxlasslwfjhqgcqbkb1mvzzx93ry7lch2lfzcdd91am6";
   };
   patches = [

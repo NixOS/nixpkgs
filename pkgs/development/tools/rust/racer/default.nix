@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "racer-${version}";
+  pname = "racer";
   version = "2.1.22";
 
   src = fetchFromGitHub {

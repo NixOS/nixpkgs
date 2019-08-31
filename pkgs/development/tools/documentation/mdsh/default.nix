@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "mdsh-${version}";
+  pname = "mdsh";
   version = "0.1.4";
 
   src = fetchFromGitHub {
