@@ -9666,7 +9666,7 @@ in
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_6;
+    llvmPackages = llvmPackages_8;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
