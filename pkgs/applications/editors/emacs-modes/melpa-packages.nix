@@ -289,8 +289,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # missing git
         egg = markBroken super.egg;
 
-        # upstream issue: doesn't build
-        eterm-256color = markBroken super.eterm-256color;
         # upstream issue: missing file header
         elmine = markBroken super.elmine;
 
@@ -314,6 +312,8 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         maxframe = markBroken super.maxframe;
 
+        # upstream issue: doesn't build
+        eterm-256color = markBroken super.eterm-256color;
 
         # Expects bash to be at /bin/bash
         helm-rtags = markBroken super.helm-rtags;
