@@ -292,8 +292,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         elmine = markBroken super.elmine;
 
-        # upstream issue: missing dependency highlight
-        evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
         # upstream issue: missing file header
         ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
 
