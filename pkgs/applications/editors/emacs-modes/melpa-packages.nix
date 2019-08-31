@@ -234,9 +234,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         });
 
         # upstream issue: missing file header
-        voca-builder = markBroken super.voca-builder;
-
-        # upstream issue: missing file header
         window-numbering = markBroken super.window-numbering;
 
         zmq = super.zmq.overrideAttrs(old: {
@@ -341,6 +338,8 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # missing OCaml
         merlin = markBroken super.merlin;
+        # upstream issue: missing file header
+        voca-builder = markBroken super.voca-builder;
 
         # upstream issue: missing file header
         po-mode = markBroken super.po-mode;
