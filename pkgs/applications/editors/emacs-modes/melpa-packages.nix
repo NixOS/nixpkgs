@@ -367,9 +367,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           HOME = "/tmp";
         });
 
-        # upstream issue: mismatched filename
-        processing-snippets = markBroken super.processing-snippets;
-
         racer = super.racer.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace racer.el \
