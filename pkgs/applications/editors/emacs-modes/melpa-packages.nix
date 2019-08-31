@@ -42,9 +42,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           inherit (self.melpaPackages) powerline;
         };
 
-        # upstream issue: missing file header
-        bufshow = markBroken super.bufshow;
-
         # part of a larger package
         caml = dontConfigure super.caml;
 
@@ -317,6 +314,10 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
       };
 
       stable = shared // {
+
+        # upstream issue: missing file header
+        bufshow = markBroken super.bufshow;
+
         # part of a larger package
         # upstream issue: missing package version
         cmake-mode = markBroken (dontConfigure super.cmake-mode);
