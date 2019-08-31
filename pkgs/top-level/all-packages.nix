@@ -21333,6 +21333,8 @@ in
 
   x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
 
+  x2goserver = callPackage ../applications/networking/remote/x2goserver { };
+
   x2vnc = callPackage ../tools/X11/x2vnc { };
 
   x32edit = callPackage ../applications/audio/midas/x32edit.nix {};
