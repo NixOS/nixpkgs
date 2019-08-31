@@ -17970,9 +17970,6 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   };
 
-  emacs25Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs25 pkgs.emacs25Packages);
-  emacs26Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs26 pkgs.emacs26Packages);
-
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv pkgs;
     inherit fetchFromGitHub fetchurl;
