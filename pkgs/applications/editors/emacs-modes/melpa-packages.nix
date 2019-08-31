@@ -352,9 +352,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
-        # upstream issue: mismatched filename
-        helm-lobsters = markBroken super.helm-lobsters;
-
         # Expects bash to be at /bin/bash
         helm-rtags = markBroken super.helm-rtags;
 
