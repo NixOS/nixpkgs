@@ -73,7 +73,7 @@ in
     description = "Google Compute Engine Instance Setup";
     after = [ "network-online.target" "network.target" "rsyslog.service" ];
     before = [ "sshd.service" ];
-    path = with pkgs; [ ethtool openssh ];
+    path = with pkgs; [ coreutils ethtool openssh ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_instance_setup";
       StandardOutput="journal+console";
