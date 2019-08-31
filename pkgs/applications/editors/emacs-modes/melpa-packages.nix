@@ -374,9 +374,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           '';
         });
 
-        # upstream issue: missing file footer
-        seoul256-theme = markBroken super.seoul256-theme;
-
         spaceline = super.spaceline.override {
           inherit (self.melpaPackages) powerline;
         };
