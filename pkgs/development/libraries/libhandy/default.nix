@@ -5,11 +5,9 @@
 , hicolor-icon-theme
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "0.0.10";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "0.0.11";
 
   outputs = [ "out" "dev" "devdoc" "glade" ];
   outputBin = "dev";
@@ -19,7 +17,7 @@ in stdenv.mkDerivation {
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1702hbdqhfpgw0c4vj2ag08vgl83byiryrbngbq11b9azmj3jhzs";
+    sha256 = "0622zp5wrvn5bvgardijxd11y76g1i54fs32y03dw9nrar7i6vb0";
   };
 
   nativeBuildInputs = [

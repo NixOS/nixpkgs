@@ -14,9 +14,9 @@ let
   };
   betaVersion = stableVersion;
   latestVersion = { # canary & dev
-    version = "3.6.0.7"; # "Android Studio 3.6 Canary 7"
-    build = "192.5807797";
-    sha256Hash = "1l47miiyd8z7v0hbvda06953pp9ilyrsma83gxqx35ghnc0n7g81";
+    version = "3.6.0.9"; # "Android Studio 3.6 Canary 9"
+    build = "192.5830636";
+    sha256Hash = "0c9zmxf2scsf9pygcbabzngl7cdyjgpir5pggjaj535ni0nsrr7p";
   };
 in {
   # Attributes are named by their corresponding release channels

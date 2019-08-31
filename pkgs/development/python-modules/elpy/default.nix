@@ -1,32 +1,43 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , rope
 , flake8
 , autopep8
 , jedi
 , importmagic
-, isPy27
+, black
+, mock
+, nose
+, yapf
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "elpy";
-  version = "1.28.0";
+  version = "1.29.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0lx6bf6ajx6wmnns03gva5sh1mmmxahjaqrn735cgwn6j4ikyqfs";
+  src = fetchFromGitHub {
+    owner = "jorgenschaefer";
+    repo = pname;
+    rev = version;
+    sha256 = "19sd5p03rkp5yibq1ilwisq8jlma02ks2kdc3swy6r27n4hy90xf";
   };
 
-  propagatedBuildInputs = [ flake8 autopep8 jedi importmagic ]
-    ++ stdenv.lib.optionals isPy27 [ rope ];
+  propagatedBuildInputs = [ flake8 autopep8 jedi importmagic rope yapf ]
+    ++ stdenv.lib.optionals isPy3k [ black ];
 
-  doCheck = false; # there are no tests
+  checkInputs = [ mock nose ];
+
+  checkPhase = ''
+    HOME=$(mktemp -d) nosetests -e "test_should_complete_top_level_modules_for_import"
+  '';
 
   meta = with stdenv.lib; {
     description = "Backend for the elpy Emacs mode";
     homepage = "https://github.com/jorgenschaefer/elpy";
     license = licenses.gpl3;
+    maintainers = [ maintainers.costrouc ];
   };
 
 }

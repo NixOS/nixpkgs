@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rage";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/rage/${pname}-${version}.tar.xz";
-    sha256 = "0gfzdd4jg78bkmj61yg49w7bzspl5m1nh6agqgs8k7qrq9q26xqy";
+    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "04fdk23bbgvni212zrfy4ndg7vmshbsjgicrhckdvhay87pk9i75";
   };
 
   nativeBuildInputs = [

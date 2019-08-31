@@ -11,6 +11,8 @@ pythonPackages.buildPythonApplication rec {
 
     doCheck = false;
 
+    nativeBuildInputs = [ gettext ];
+
     buildInputs = [ stdenv libX11 gettext ];
 
     patchPhase = ''
