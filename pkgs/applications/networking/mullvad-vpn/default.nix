@@ -1,6 +1,6 @@
 { stdenv, makeWrapper, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk_pixbuf, glib, gnome2, pango, nspr, nss, gtk3
+, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
 , xorg, autoPatchelfHook, systemd, libnotify
 }:
 
@@ -13,7 +13,7 @@ let deps = [
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     pango
@@ -40,11 +40,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2019.5";
+  version = "2019.7";
 
   src = fetchurl {
     url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "542a93521906cd5e97075c9f3e9088c19562b127556a3de151e25bc66b11fe0b";
+    sha256 = "1hjndcdkin98l6jv39r98zfw33qg0gnvlv8q80qsj5x36a19d4v9";
   };
 
   nativeBuildInputs = [

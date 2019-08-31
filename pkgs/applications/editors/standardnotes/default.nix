@@ -1,7 +1,7 @@
 { stdenv, appimage-run, fetchurl, runtimeShell }:
 
 let
-  version = "3.0.6";
+  version = "3.0.15";
 
   plat = {
     "i386-linux" = "i386";
@@ -9,8 +9,8 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i386-linux" = "0czhlbacjks9x8y2w46nzlvk595psqhqw0vl0bvsq7sz768dk0ni";
-    "x86_64-linux" = "0haji9h8rrm9yvqdv6i2y6xdd0yhsssjjj83hmf6cb868lwyigsf";
+    "i386-linux" = "0v2nsis6vb1lnhmjd28vrfxqwwpycv02j0nvjlfzcgj4b3400j7a";
+    "x86_64-linux" = "130n586cw0836zsbwqcz3pp3h0d4ny74ngqs4k4cvfb92556r7xh";
   }.${stdenv.hostPlatform.system};
 in
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ appimage-run ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/{bin,share}

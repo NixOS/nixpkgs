@@ -8,7 +8,9 @@ let
 
   nix = cfg.package.out;
 
-  isNix20 = versionAtLeast (getVersion nix) "2.0pre";
+  nixVersion = getVersion nix;
+
+  isNix20 = versionAtLeast nixVersion "2.0pre";
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
@@ -61,6 +63,9 @@ let
           builders =
         ''}
         system-features = ${toString cfg.systemFeatures}
+        ${optionalString (versionAtLeast nixVersion "2.3pre") ''
+          sandbox-fallback = false
+        ''}
         $extraOptions
         END
       '' + optionalString cfg.checkConfig (
@@ -467,7 +472,7 @@ in
         fi
       '';
 
-    nix.nrBuildUsers = mkDefault (lib.max 32 cfg.maxJobs);
+    nix.nrBuildUsers = mkDefault (lib.max 32 (if cfg.maxJobs == "auto" then 0 else cfg.maxJobs));
 
     users.users = nixbldUsers;
 

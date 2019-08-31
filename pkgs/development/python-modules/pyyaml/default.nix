@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "PyYAML";
-  version = "5.1";
+  version = "5.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95";
+    sha256 = "b4bb4d3f5e232425e25dda21c070ce05168a786ac9eda43768ab7f3ac2770955";
   };
 
   # force regeneration using Cython

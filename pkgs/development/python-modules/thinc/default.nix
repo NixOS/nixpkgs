@@ -28,11 +28,11 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.0.4";
+  version = "7.0.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14v8ygjrkj63dwd4pi490ld6i2d8n8wzcf15hnacjjfwij93pa1q";
+    sha256 = "191admjvhqsbxpqn73q42i0i8kvlblj0k6p0z9p7n3pcxzl75nsw";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -81,6 +81,6 @@ buildPythonPackage rec {
     description = "Practical Machine Learning for NLP in Python";
     homepage = https://github.com/explosion/thinc;
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu sdll ];
+    maintainers = with maintainers; [ aborsu danieldk sdll ];
     };
 }

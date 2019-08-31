@@ -17,7 +17,7 @@
    exporter</link>, it provides hardware and OS metrics from the host it's
    running on. The exporter could be configured as follows:
 <programlisting>
-  services.promtheus.exporters.node = {
+  services.prometheus.exporters.node = {
     enable = true;
     enabledCollectors = [
       "logind"
@@ -113,7 +113,7 @@
      specific options and configuration:
 <programlisting>
 # nixpgs/nixos/modules/services/prometheus/exporters/postfix.nix
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -159,8 +159,10 @@ in
   # `serviceOpts.script` and `serviceOpts.serviceConfig.ExecStart`
   # has to be specified here. This will be merged with the default
   # service confiuration.
+  # Note that by default 'DynamicUser' is 'true'.
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = false;
       ExecStart = ''
         ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
@@ -184,4 +186,42 @@ in
    </listitem>
   </itemizedlist>
  </section>
+ <section xml:id="module-services-prometheus-exporters-update-exporter-module">
+  <title>Updating an exporter module</title>
+   <para>
+     Should an exporter option change at some point, it is possible to add
+     information about the change to the exporter definition similar to
+     <literal>nixpkgs/nixos/modules/rename.nix</literal>:
+<programlisting>
+{ config, lib, pkgs, options }:
+
+with lib;
+
+let
+  cfg = config.services.prometheus.exporters.nginx;
+in
+{
+  port = 9113;
+  extraOpts = {
+    # additional module options
+    # ...
+  };
+  serviceOpts = {
+    # service configuration
+    # ...
+  };
+  imports = [
+    # 'services.prometheus.exporters.nginx.telemetryEndpoint' -> 'services.prometheus.exporters.nginx.telemetryPath'
+    (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
+
+    # removed option 'services.prometheus.exporters.nginx.insecure'
+    (mkRemovedOptionModule [ "insecure" ] ''
+      This option was replaced by 'prometheus.exporters.nginx.sslVerify' which defaults to true.
+    '')
+    ({ options.warnings = options.warnings; })
+  ];
+}
+</programlisting>
+    </para>
+  </section>
 </chapter>

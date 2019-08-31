@@ -1,7 +1,8 @@
 { stdenv, fetchurl, buildPerlPackage, perl, DBI, sqlite }:
 
-buildPerlPackage rec {
-  name = "DBD-SQLite-1.62";
+buildPerlPackage {
+  pname = "DBD-SQLite";
+  version = "1.62";
 
   src = fetchurl {
     url = mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.62.tar.gz;

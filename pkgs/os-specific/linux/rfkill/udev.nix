@@ -34,7 +34,7 @@ let
 in stdenv.mkDerivation {
   name = "rfkill-udev";
 
-  unpackPhase = "true";
+  dontUnpack = true;
   dontBuild = true;
 
   installPhase = ''

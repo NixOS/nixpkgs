@@ -6,7 +6,7 @@
          answer some of the frequently asked questions
          related to Nixpkgs use.
 
-  Some useful information related to package use 
+  Some useful information related to package use
   can be found in <link linkend="chap-package-notes">package-specific development notes</link>.
 
  </para>
@@ -196,7 +196,7 @@ overrides = self: super: rec {
   haskell-mode = self.melpaPackages.haskell-mode;
   ...
 };
-((emacsPackagesNgGen emacs).overrideScope' overrides).emacsWithPackages (p: with p; [
+((emacsPackagesGen emacs).overrideScope' overrides).emacsWithPackages (p: with p; [
   # here both these package will use haskell-mode of our own choice
   ghc-mod
   dante
@@ -409,11 +409,19 @@ overrides = self: super: rec {
  </section>
 
  <section xml:id="sec-citrix">
-  <title>Citrix Receiver</title>
+  <title>Citrix Receiver &amp; Citrix Workspace App</title>
 
   <para>
-   The <link xlink:href="https://www.citrix.com/products/receiver/">Citrix
-   Receiver</link> is a remote desktop viewer which provides access to
+   <note>
+    <para>
+     Please note that the <literal>citrix_receiver</literal> package has been deprecated since its
+     development was <link xlink:href="https://docs.citrix.com/en-us/citrix-workspace-app.html">discontinued by upstream</link>
+     and will be replaced by <link xlink:href="https://www.citrix.com/products/workspace-app/">the citrix workspace app</link>.
+    </para>
+   </note>
+   <link xlink:href="https://www.citrix.com/products/receiver/">Citrix Receiver</link> and
+   <link xlink:href="https://www.citrix.com/products/workspace-app/">Citrix Workspace App</link>
+   are a remote desktop viewers which provide access to
    <link xlink:href="https://www.citrix.com/products/xenapp-xendesktop/">XenDesktop</link>
    installations.
   </para>
@@ -423,30 +431,35 @@ overrides = self: super: rec {
 
    <para>
     The tarball archive needs to be downloaded manually as the license
-    agreements of the vendor need to be accepted first. This is available at
-    the
-    <link xlink:href="https://www.citrix.com/downloads/citrix-receiver/">download
-    page at citrix.com</link>. Then run <literal>nix-prefetch-url
-    file://$PWD/linuxx64-$version.tar.gz</literal>. With the archive available
+    agreements of the vendor for
+    <link xlink:href="https://www.citrix.com/downloads/citrix-receiver/">Citrix Receiver</link>
+    or <link xlink:href="https://www.citrix.de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html">Citrix Workspace</link>
+    need to be accepted first.
+    Then run <command>nix-prefetch-url file://$PWD/linuxx64-$version.tar.gz</command>.
+    With the archive available
     in the store the package can be built and installed with Nix.
    </para>
 
-   <para>
-    <emphasis>Note: it's recommended to install <literal>Citrix
-    Receiver</literal> using <literal>nix-env -i</literal> or globally to
-    ensure that the <literal>.desktop</literal> files are installed properly
-    into <literal>$XDG_CONFIG_DIRS</literal>. Otherwise it won't be possible to
-    open <literal>.ica</literal> files automatically from the browser to start
-    a Citrix connection.</emphasis>
-   </para>
+   <warning>
+    <title>Caution with <command>nix-shell</command> installs</title>
+    <para>
+     It's recommended to install <literal>Citrix Receiver</literal>
+     and/or <literal>Citrix Workspace</literal> using
+     <literal>nix-env -i</literal> or globally to
+     ensure that the <literal>.desktop</literal> files are installed properly
+     into <literal>$XDG_CONFIG_DIRS</literal>. Otherwise it won't be possible to
+     open <literal>.ica</literal> files automatically from the browser to start
+     a Citrix connection.
+    </para>
+   </warning>
   </section>
 
   <section xml:id="sec-citrix-custom-certs">
    <title>Custom certificates</title>
 
    <para>
-    The <literal>Citrix Receiver</literal> in <literal>nixpkgs</literal> trusts
-    several certificates
+    The <literal>Citrix Receiver</literal> and <literal>Citrix Workspace App</literal>
+    in <literal>nixpkgs</literal> trust several certificates
     <link xlink:href="https://curl.haxx.se/docs/caextract.html">from the
     Mozilla database</link> by default. However several companies using Citrix
     might require their own corporate certificate. On distros with imperative
@@ -459,7 +472,7 @@ overrides = self: super: rec {
 <programlisting>
 <![CDATA[with import <nixpkgs> { config.allowUnfree = true; };
 let extraCerts = [ ./custom-cert-1.pem ./custom-cert-2.pem /* ... */ ]; in
-citrix_receiver.override {
+citrix_workspace.override { # the same applies for `citrix_receiver` if used.
   inherit extraCerts;
 }]]>
 </programlisting>

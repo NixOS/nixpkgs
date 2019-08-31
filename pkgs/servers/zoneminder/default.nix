@@ -89,6 +89,8 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./default-to-http-1dot1.patch
+    # Explicitly link with dynamic linking library to fix build
+    ./link-with-libdl.patch
   ];
 
   postPatch = ''
@@ -144,7 +146,7 @@ in stdenv.mkDerivation rec {
     # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap
     # run-time dependencies not checked at build-time
-    ClassStdFast DataDump JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
+    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];

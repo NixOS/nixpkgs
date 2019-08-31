@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = stdenv.lib.licenses.mit;
     inherit version;
+    maintainers = [ maintainers.globin ];
   };
 }

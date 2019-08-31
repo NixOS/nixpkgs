@@ -2,12 +2,12 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
-    jaro_winkler (1.5.2)
+    jaro_winkler (1.5.3)
     parallel (1.17.0)
     parser (2.6.3.0)
       ast (~> 2.4.0)
     rainbow (3.0.0)
-    rubocop (0.71.0)
+    rubocop (0.74.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.6)

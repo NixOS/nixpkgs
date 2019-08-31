@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "graphicsmagick-imagemagick-compat-${version}";
   inherit (graphicsmagick) version;
 
-  unpackPhase = "true";
+  dontUnpack = true;
   buildPhase = "true";
 
   utils = [

@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 

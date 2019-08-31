@@ -79,12 +79,8 @@ let
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg2.rules))
     ]);
     scrape_configs = filterValidPrometheus cfg2.scrapeConfigs;
-    alerting = optionalAttrs (cfg2.alertmanagerURL != []) {
-      alertmanagers = [{
-        static_configs = [{
-          targets = cfg2.alertmanagerURL;
-        }];
-      }];
+    alerting = {
+      inherit (cfg2) alertmanagers;
     };
   };
 
@@ -738,11 +734,23 @@ in {
         '';
       };
 
-      alertmanagerURL = mkOption {
-        type = types.listOf types.str;
+      alertmanagers = mkOption {
+        type = types.listOf types.attrs;
+        example = literalExample ''
+          [ {
+            scheme = "https";
+            path_prefix = "/alertmanager";
+            static_configs = [ {
+              targets = [
+                "prometheus.domain.tld"
+              ];
+            } ];
+          } ]
+        '';
         default = [];
         description = ''
-          List of Alertmanager URLs to send notifications to.
+          A list of alertmanagers to send alerts to.
+          See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config">the official documentation</link> for more information.
         '';
       };
 

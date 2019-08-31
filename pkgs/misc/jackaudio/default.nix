@@ -3,7 +3,7 @@
 , bash, libsamplerate, libsndfile, readline, eigen, celt
 , wafHook
 # Darwin Dependencies
-, aften, AudioUnit, CoreAudio, cf-private, libobjc, Accelerate
+, aften, AudioUnit, CoreAudio, libobjc, Accelerate
 
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsaLib ? null
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ] ++ optionals stdenv.isDarwin [
-    aften AudioUnit CoreAudio Accelerate cf-private libobjc
+    aften AudioUnit CoreAudio Accelerate libobjc
   ];
 
   prePatch = ''

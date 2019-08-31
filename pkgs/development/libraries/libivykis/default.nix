@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       notification facilities
     '';
     license = licenses.zlib;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

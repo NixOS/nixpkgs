@@ -1,21 +1,43 @@
-{ stdenv, fetchurl, vala, atk, cairo, glib, gnome3, gtk3, libwnck3
-, libX11, libXfixes, libXi, pango, intltool, pkgconfig, libxml2
-, bamf, gdk_pixbuf, libdbusmenu-gtk3, file, gnome-menus, libgee
-, wrapGAppsHook, autoreconfHook, pantheon }:
+{ stdenv
+, fetchurl
+, vala
+, atk
+, cairo
+, glib
+, gnome3
+, gtk3
+, libwnck3
+, libX11
+, libXfixes
+, libXi
+, pango
+, gettext
+, pkgconfig
+, libxml2
+, bamf
+, gdk-pixbuf
+, libdbusmenu-gtk3
+, file
+, gnome-menus
+, libgee
+, wrapGAppsHook
+, autoreconfHook
+, pantheon
+}:
 
 stdenv.mkDerivation rec {
   pname = "plank";
-  version = "0.11.4";
+  version = "0.11.89";
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/1.0/${version}/+download/${pname}-${version}.tar.xz";
-    sha256 = "1f41i45xpqhjxql9nl4a1sz30s0j46aqdhbwbvgrawz6himcvdc8";
+    sha256 = "17cxlmy7n13jp1v8i4abxyx9hylzb39andhz3mk41ggzmrpa8qm6";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    gettext
     gnome3.gnome-common
-    intltool
     libxml2 # xmllint
     pkgconfig
     vala
@@ -26,7 +48,7 @@ stdenv.mkDerivation rec {
     atk
     bamf
     cairo
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome-menus
     gnome3.dconf
@@ -47,7 +69,9 @@ stdenv.mkDerivation rec {
   ];
 
   # Make plank's application launcher hidden in Pantheon
-  patches = [ ./hide-in-pantheon.patch ];
+  patches = [
+    ./hide-in-pantheon.patch
+  ];
 
   postPatch = ''
     substituteInPlace ./configure \
@@ -56,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Elegant, simple, clean dock";
-    homepage = https://launchpad.net/plank;
+    homepage = "https://launchpad.net/plank";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;

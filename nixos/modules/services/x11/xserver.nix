@@ -14,6 +14,9 @@ let
     # Alias so people can keep using "virtualbox" instead of "vboxvideo".
     virtualbox = { modules = [ xorg.xf86videovboxvideo ]; driverName = "vboxvideo"; };
 
+    # Alias so that "radeon" uses the xf86-video-ati driver.
+    radeon = { modules = [ xorg.xf86videoati ]; driverName = "ati"; };
+
     # modesetting does not have a xf86videomodesetting package as it is included in xorgserver
     modesetting = {};
   };
@@ -75,7 +78,7 @@ let
   in imap1 mkHead cfg.xrandrHeads;
 
   xrandrDeviceSection = let
-    monitors = flip map xrandrHeads (h: ''
+    monitors = forEach xrandrHeads (h: ''
       Option "monitor-${h.config.output}" "${h.name}"
     '');
     # First option is indented through the space in the config but any
@@ -241,7 +244,7 @@ in
       videoDrivers = mkOption {
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "ati" "cirrus" "vesa" "vmware" "modesetting" ];
+        default = [ "radeon" "cirrus" "vesa" "vmware" "modesetting" ];
         example = [
           "ati_unfree" "amdgpu" "amdgpu-pro"
           "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
@@ -662,10 +665,9 @@ in
         restartIfChanged = false;
 
         environment =
-          {
-            LD_LIBRARY_PATH = concatStringsSep ":" ([ "/run/opengl-driver/lib" ]
-              ++ concatLists (catAttrs "libPath" cfg.drivers));
-          } // cfg.displayManager.job.environment;
+          optionalAttrs config.hardware.opengl.setLdLibraryPath
+            { LD_LIBRARY_PATH = pkgs.addOpenGLRunpath.driverLink; }
+          // cfg.displayManager.job.environment;
 
         preStart =
           ''
@@ -712,7 +714,7 @@ in
       nativeBuildInputs = [ pkgs.xkbvalidate ];
       preferLocalBuild = true;
     } ''
-      validate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
+      xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
     '');
 

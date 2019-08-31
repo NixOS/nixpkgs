@@ -160,7 +160,7 @@ in {
 
     systemd.tmpfiles.rules = [
       "d '${dirOf cfg.uriFile}' - ${cfg.user} ${cfg.group} - -"
-      "d '${dirOf cfg.logFile}' - ${cfg.user} ${cfg.group} - -"
+      "f '${cfg.logFile}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.databaseDir}' -  ${cfg.user} ${cfg.group} - -"
       "d '${cfg.viewIndexDir}' -  ${cfg.user} ${cfg.group} - -"
     ];
@@ -169,11 +169,9 @@ in {
       description = "CouchDB Server";
       wantedBy = [ "multi-user.target" ];
 
-      preStart =
-        ''
+      preStart = ''
         touch ${cfg.configFile}
-        touch -a ${cfg.logFile}
-        '';
+      '';
 
       environment = mkIf useVersion2 {
         # we are actually specifying 4 configuration files:

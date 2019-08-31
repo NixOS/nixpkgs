@@ -1,8 +1,13 @@
 { lib
 , fetchFromGitHub
+, buildBazelPackage
 , buildPythonPackage
 , python
+, setuptools
+, wheel
 , tensorflow
+, six
+, numpy
 , decorator
 , cloudpickle
 , hypothesis
@@ -12,19 +17,62 @@
 , pytest
 }:
 
-buildPythonPackage rec {
-  pname = "tensorflow-probability";
+let
   version = "0.7";
+  pname = "tensorflow_probability";
 
-  src = fetchFromGitHub {
-    owner = "tensorflow";
-    repo = "probability";
-    rev = "v${version}";
-    sha256 = "0sy9gmjcvmwciamqvd7kd9qw2wd7ksklk80815fsn7sj0wiqxjyd";
+  # first build all binaries and generate setup.py using bazel
+  bazel-wheel = buildBazelPackage {
+    name = "${pname}-${version}-py2.py3-none-any.whl";
+
+    src = fetchFromGitHub {
+      owner = "tensorflow";
+      repo = "probability";
+      rev = "v${version}";
+      sha256 = "0sy9gmjcvmwciamqvd7kd9qw2wd7ksklk80815fsn7sj0wiqxjyd";
+    };
+
+    nativeBuildInputs = [
+      # needed to create the output wheel in installPhase
+      python
+      setuptools
+      wheel
+    ];
+
+    bazelTarget = ":pip_pkg";
+
+    fetchAttrs = {
+      sha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+    };
+
+    buildAttrs = {
+      preBuild = ''
+        patchShebangs .
+      '';
+
+      installPhase = ''
+        # work around timestamp issues
+        # https://github.com/NixOS/nixpkgs/issues/270#issuecomment-467583872
+        export SOURCE_DATE_EPOCH=315532800
+
+        # First build, then move. Otherwise pip_pkg would create the dir $out
+        # and then put the wheel in that directory. However we want $out to
+        # point directly to the wheel file.
+        ./bazel-bin/pip_pkg . --release
+        mv *.whl "$out"
+      '';
+    };
   };
+in buildPythonPackage rec {
+  inherit version pname;
+  format = "wheel";
+
+  src = bazel-wheel;
 
   propagatedBuildInputs = [
     tensorflow
+    six
+    numpy
     decorator
     cloudpickle
   ];

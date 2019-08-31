@@ -9,7 +9,7 @@
 , expat
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , graphite2
@@ -74,7 +74,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
-  version = "32.0.0.207";
+  version = "32.0.0.238";
 
   src = fetchurl {
     url =
@@ -85,14 +85,14 @@ stdenv.mkDerivation rec {
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "0v5dlqaapr29qyb2pm57yafnmxdxin7shn1xqsx2sc9xwmvmaw7v"
+          "1f5i64nzkvxy20vi7kldaamwp6pi2zgmjiw061cgqrwf7hj45wkg"
         else
-          "0ygxcvn6srjg9clayfri86c64inwidp9qk25hbsbyr8m8gghpwqb"
+          "09jvxqp83hpk89ak8flq14s3s3nhy3ary91jc6k47v325axh1cl9"
       else
         if arch == "x86_64" then
-          "1y1c65vfsvapqsl2q6vm75m5jyksjwnfs6f6ijcpg0dmf5f4fypy"
+          "05gvssjdz43pvgivdngrf8qr5b30p45hr2sr97cyl6b87581qw9s"
         else
-          "1h9samf24l0ix6188p940h7l989nwkzlrvv7qdxczj3p62zzvqfy";
+          "06l7zhgh5rfxxw46b500zdgcqsk2h7kivng5b0b74s3vy7f0g270";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk_pixbuf glib
+      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk-pixbuf glib
       glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
       libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng

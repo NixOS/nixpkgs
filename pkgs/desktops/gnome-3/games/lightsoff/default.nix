@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, vala, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
+{ stdenv, fetchurl, vala, pkgconfig, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook
 , gettext, itstool, clutter, clutter-gtk, libxml2, appstream-glib
 , meson, ninja, python3 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2
     meson ninja python3
   ];
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg clutter clutter-gtk ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk-pixbuf librsvg clutter clutter-gtk ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

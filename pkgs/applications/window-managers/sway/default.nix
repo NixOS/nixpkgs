@@ -2,19 +2,19 @@
 , meson, ninja
 , pkgconfig, scdoc
 , wayland, libxkbcommon, pcre, json_c, dbus, libevdev
-, pango, cairo, libinput, libcap, pam, gdk_pixbuf
+, pango, cairo, libinput, libcap, pam, gdk-pixbuf
 , wlroots, wayland-protocols, swaybg
 }:
 
 stdenv.mkDerivation rec {
   pname = "sway";
-  version = "1.1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "0yhn9zdg9mzfhn97c440lk3pw6122nrhx0is5sqmvgr6p814f776";
+    sha256 = "0vch2zm5afc76ia78p3vg71zr2fyda67l9hd2h0x1jq3mnvfbxnd";
   };
 
   patches = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland libxkbcommon pcre json_c dbus libevdev
-    pango cairo libinput libcap pam gdk_pixbuf
+    pango cairo libinput libcap pam gdk-pixbuf
     wlroots wayland-protocols
   ];
 
@@ -39,10 +39,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/sway --prefix PATH : "${swaybg}/bin"
-  '';
-
-  postPatch = ''
-    sed -i "s/version: '1.0'/version: '${version}'/" meson.build
   '';
 
   meta = with stdenv.lib; {

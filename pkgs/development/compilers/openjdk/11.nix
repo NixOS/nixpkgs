@@ -4,6 +4,7 @@
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
+, enableJavaFX ? true, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
@@ -43,6 +44,7 @@ let
       ./fix-java-home-jdk10.patch
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
+      ./increase-javadoc-heap.patch
     ] ++ lib.optionals (!minimal && enableGnome2) [
       ./swing-use-gtk-jdk10.patch
     ];
@@ -68,6 +70,7 @@ let
     ''
     + lib.optionalString (architecture == "amd64") " \"--with-jvm-features=zgc\""
     + lib.optionalString minimal " \"--enable-headless-only\""
+    + lib.optionalString (!minimal && enableJavaFX) " \"--with-import-modules=${openjfx}\""
     + ");"
     # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
     # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716

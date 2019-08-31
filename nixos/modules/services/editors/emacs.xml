@@ -9,6 +9,7 @@
       Damien Cassou @DamienCassou
       Thomas Tuegel @ttuegel
       Rodney Lorrimar @rvl
+      Adam Hoese @adisbladis
   -->
  <para>
   <link xlink:href="https://www.gnu.org/software/emacs/">Emacs</link> is an
@@ -95,7 +96,8 @@
     also available in Nixpkgs:
     <link xlink:href="https://www.gnu.org/software/zile/">Zile</link>,
     <link xlink:href="http://homepage.boetes.org/software/mg/">mg</link>,
-    <link xlink:href="http://yi-editor.github.io/">Yi</link>.
+    <link xlink:href="http://yi-editor.github.io/">Yi</link>,
+    <link xlink:href="https://joe-editor.sourceforge.io/">jmacs</link>.
    </para>
   </section>
 
@@ -129,15 +131,6 @@
     Emacs packages through nixpkgs.
    </para>
 
-   <note>
-    <para>
-     This documentation describes the new Emacs packages framework in NixOS
-     16.03 (<varname>emacsPackagesNg</varname>) which should not be confused
-     with the previous and deprecated framework
-     (<varname>emacs24Packages</varname>).
-    </para>
-   </note>
-
    <para>
     The first step to declare the list of packages you want in your Emacs
     installation is to create a dedicated derivation. This can be done in a
@@ -163,7 +156,7 @@ $ ./result/bin/emacs
 
 let
   myEmacs = pkgs.emacs; <co xml:id="ex-emacsNix-2" />
-  emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages; <co xml:id="ex-emacsNix-3" />
+  emacsWithPackages = (pkgs.emacsPackagesGen myEmacs).emacsWithPackages; <co xml:id="ex-emacsNix-3" />
 in
   emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [ <co xml:id="ex-emacsNix-4" />
     magit          # ; Integrate git &lt;C-x g&gt;
@@ -261,10 +254,10 @@ in
     <example xml:id="module-services-emacs-querying-packages">
      <title>Querying Emacs packages</title>
 <programlisting><![CDATA[
-nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.elpaPackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.melpaPackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.melpaStablePackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.orgPackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackages.elpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackages.melpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackages.melpaStablePackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackages.orgPackages
 ]]></programlisting>
     </example>
    </para>
@@ -551,7 +544,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     <xref linkend="opt-environment.systemPackages"/>
     (<link
       linkend="sec-declarative-package-mgmt">NixOS</link>), or run
-    <literal>nix-env -i pkgs.docbook5</literal>
+    <literal>nix-env -f '&lt;nixpkgs&gt;' -iA docbook5</literal>
     (<link linkend="sec-ad-hoc-packages">Nix</link>).
    </para>
 

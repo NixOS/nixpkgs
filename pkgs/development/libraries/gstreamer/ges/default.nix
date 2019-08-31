@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gst-plugins-base libxml2 ];
 
+  mesonFlags = [
+    "-Dgtk_doc=disabled"
+  ];
+
   patches = [
     ./fix_pkgconfig_includedir.patch
   ];

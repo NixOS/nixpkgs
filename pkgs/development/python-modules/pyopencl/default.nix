@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2018.2.5";
+  version = "2019.1";
 
   checkInputs = [ pytest ];
   buildInputs = [ opencl-headers ocl-icd pybind11 ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qgi6diw9m7yldmql9kh08792053ib6zkplh8v2mqv6waaflmrnn";
+    sha256 = "04ahndgc5aqm3pqix2j4vzn9n3k762ylf3yq55jdbxm5cicz9nx0";
   };
 
   # py.test is not needed during runtime, so remove it from `install_requires`

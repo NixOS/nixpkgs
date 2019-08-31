@@ -56,8 +56,9 @@ let
             */
             elm-test = patchBinwrap [elmi-to-json] elmNodePackages.elm-test;
             elm-verify-examples = patchBinwrap [elmi-to-json] elmNodePackages.elm-verify-examples;
+            # elm-analyse@0.16.4 build is not working
             elm-analyse = elmNodePackages."elm-analyse-0.16.3";
-            inherit (elmNodePackages) elm-doc-preview elm-upgrade;
+            inherit (elmNodePackages) elm-doc-preview elm-live elm-upgrade elm-xref;
           };
       in elmPkgs // {
         inherit elmPkgs;

@@ -447,6 +447,7 @@ let
     mnormt = [ pkgs.libiconv ];
     phangorn = [ pkgs.libiconv ];
     quadprog = [ pkgs.libiconv ];
+    sundialr = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
@@ -535,7 +536,6 @@ let
     "gWidgetstcltk"
     "HH"
     "HiveR"
-    "HomoPolymer"
     "ic50"
     "iDynoR"
     "in2extRemes"
@@ -562,7 +562,6 @@ let
     "MplusAutomation"
     "mpmcorrelogram"
     "mritc"
-    "MTurkR"
     "multgee"
     "multibiplotGUI"
     "nodiv"

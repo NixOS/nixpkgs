@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+{ stdenv, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python3Packages, libspatialindex, libspatialite, postgresql
-, txt2tags, openssl, libzip, hdf5, netcdf
+, txt2tags, openssl, libzip, hdf5, netcdf, exiv2
 , qtbase, qtwebkit, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport, qtxmlpatterns
 , withGrass ? true, grass
 }:
@@ -10,12 +10,15 @@ let
     [ qscintilla-qt5 gdal jinja2 numpy psycopg2
       chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip owslib six ];
 in stdenv.mkDerivation rec {
-  version = "3.4.8";
-  name = "qgis-unwrapped-${version}";
+  version = "3.8.0";
+  pname = "qgis";
+  name = "${pname}-unwrapped-${version}";
 
-  src = fetchurl {
-    url = "http://qgis.org/downloads/qgis-${version}.tar.bz2";
-    sha256 = "13dy9y7ipv25x3k31njhjljdav36xay6s82g6ywaqf1xxh3s567w";
+  src = fetchFromGitHub {
+    owner = "qgis";
+    repo = "QGIS";
+    rev = "final-${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "11jqj6lavpw9piv0rm8vvbgd99zhcxl6yfjg699wlrjlyf71xac5";
   };
 
   passthru = {
@@ -23,7 +26,7 @@ in stdenv.mkDerivation rec {
     inherit python3Packages;
   };
 
-  buildInputs = [ openssl proj geos xlibsWrapper sqlite gsl qwt
+  buildInputs = [ openssl proj geos xlibsWrapper sqlite gsl qwt exiv2
     fcgi libspatialindex libspatialite postgresql txt2tags libzip hdf5 netcdf
     qtbase qtwebkit qtsensors qca-qt5 qtkeychain qscintilla qtserialport qtxmlpatterns] ++
     (stdenv.lib.optional withGrass grass) ++ pythonBuildInputs;
@@ -36,7 +39,7 @@ in stdenv.mkDerivation rec {
   # build to use PYQT5_SIP_DIR consistently.
   postPatch = ''
      substituteInPlace cmake/FindPyQt5.py \
-       --replace 'pyqtcfg.pyqt_sip_dir' '"${python3Packages.pyqt5}/share/sip/PyQt5"'
+       --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${python3Packages.pyqt5}/share/sip/PyQt5"'
    '';
 
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF"

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "multipath-tools-${version}";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://git.opensvc.com/gitweb.cgi?p=multipath-tools/.git;a=snapshot;h=refs/tags/${version};sf=tgz";
-    sha256 = "0669zl4dpai63dl04lf8vpwnpsff6qf19fifxfc4frawnh699k95";
+    sha256 = "0x6cjlb9mjrmpaqk5v6v47qz6n9zyqmw13i7pq5x6ppwyqdxhn5s";
   };
 
   postPatch = ''

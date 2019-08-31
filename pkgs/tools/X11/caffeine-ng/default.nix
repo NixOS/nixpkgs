@@ -1,4 +1,4 @@
-{ gdk_pixbuf, glib, gobject-introspection, gtk3, lib, libnotify,
+{ gdk-pixbuf, glib, gobject-introspection, gtk3, lib, libnotify,
   pythonPackages, wrapGAppsHook
 }:
 
@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook glib ];
-  buildInputs = [ gdk_pixbuf gobject-introspection libnotify gtk3 ];
+  buildInputs = [ gdk-pixbuf gobject-introspection libnotify gtk3 ];
   pythonPath = with pythonPackages; [
     dbus-python docopt ewmh pygobject3 pyxdg
     setproctitle setuptools setuptools_scm wheel

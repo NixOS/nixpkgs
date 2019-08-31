@@ -39,10 +39,10 @@ let
   };
 
   ast = buildPecl rec {
-    version = "1.0.1";
+    version = "1.0.3";
     pname = "ast";
 
-    sha256 = "0ja74k2lmxwhhvp9y9kc7khijd7s2dqma5x8ghbhx9ajkn0wg8iq";
+    sha256 = "1sk9bkyw3ck9jgvlazxx8zl2nv6lc0gq66v1rfcby9v0zyydb7xr";
   };
 
   box = mkDerivation rec {
@@ -73,15 +73,15 @@ let
   };
 
   composer = mkDerivation rec {
-    version = "1.8.6";
+    version = "1.9.0";
     pname = "composer";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "0hnm7njab9nsifpb1qbwx54yfpsi00g8mzny11s13ibjvd9rnvxn";
+      sha256 = "0x88bin1c749ajymz2cqjx8660a3wxvndpv4xr6w3pib16fzdpy9";
     };
 
-    unpackPhase = ":";
+    dontUnpack = true;
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -143,10 +143,10 @@ let
   };
 
   event = buildPecl rec {
-    version = "2.5.2";
+    version = "2.5.3";
     pname = "event";
 
-    sha256 = "0b9zbwyyfcrzs1gcpqn2dkjq6jliw89g2m981f8ildbp84snkpcf";
+    sha256 = "12liry5ldvgwp1v1a6zgfq8w6iyyxmsdj4c71bp157nnf58cb8hb";
 
     configureFlags = [
       "--with-event-libevent-dir=${pkgs.libevent.dev}"
@@ -189,11 +189,11 @@ let
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
-  mailparse = assert !isPhp73; buildPecl rec {
-    version = "3.0.2";
+  mailparse = buildPecl rec {
+    version = "3.0.3";
     pname = "mailparse";
 
-    sha256 = "0fw447ralqihsjnn0fm2hkaj8343cvb90v0d1wfclgz49256y6nq";
+    sha256 = "00nk14jbdbln93mx3ag691avc11ff94hkadrcv5pn51c6ihsxbmz";
   };
 
   memcached = buildPecl rec {
@@ -215,14 +215,34 @@ let
     buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
+  mongodb = buildPecl {
+    pname = "mongodb";
+    version = "1.5.5";
+
+    sha256 = "0gpywk3wkimjrva1p95a7abvl3s8yccalf6yimn3nbkpvn2kknm6";
+
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [
+      cyrus_sasl
+      icu
+      openssl
+      snappy
+      zlib
+      (if isPhp73 then pcre2 else pcre)
+    ] ++ lib.optional (pkgs.stdenv.isDarwin) pkgs.darwin.apple_sdk.frameworks.Security;
+  };
+
   oci8 = buildPecl rec {
     version = "2.2.0";
     pname = "oci8";
 
     sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
-
     buildInputs = [ pkgs.oracle-instantclient ];
-    configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
+    configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
+
+    postPatch = ''
+      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+    '';
   };
 
   pcs = buildPecl rec {
@@ -372,12 +392,12 @@ let
   };
 
   phpstan = mkDerivation rec {
-    version = "0.11.8";
+    version = "0.11.15";
     pname = "phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "0xdf0kq5jpbqs6dwyv2fggd3cxjjq16xk5nxz1hgh5d58x5yh14n";
+      sha256 = "1fa3bq5k548jpyph2rxkgnarblyy5f1m55awjcps8mjqbw9r6439";
     };
 
     phases = [ "installPhase" ];
@@ -450,10 +470,10 @@ let
   };
 
   protobuf = buildPecl rec {
-    version = "3.8.0";
+    version = "3.9.0";
     pname = "protobuf";
 
-    sha256 = "09zs7w9iv6432i0js44ihxymbd4pcxlprlzqkcjsxjpbprs4qpv2";
+    sha256 = "1pyfxrfdbzzg5al4byyazdrvy7yad13zwq7papbb2d8gkvc3f3kh";
 
     buildInputs = with pkgs; [ (if isPhp73 then pcre2 else pcre) ];
 
@@ -493,20 +513,41 @@ let
     };
   };
 
-  pthreads = assert (pkgs.config.php.zts or false); buildPecl rec {
-    version = "3.1.5";
+  pthreads = if isPhp73 then pthreads32-dev else pthreads32;
+
+  pthreads32 = assert (pkgs.config.php.zts or false); assert !isPhp73; buildPecl rec {
+    version = "3.2.0";
     pname = "pthreads";
 
-    sha256 = "1ziap0py3zrc7qj9lw4nzq6wx1viyj8v9y1babchizzan014x6p5";
+    src = pkgs.fetchFromGitHub {
+      owner = "krakjoe";
+      repo = "pthreads";
+      rev = "v${version}";
+      sha256 = "17hypm75d4w7lvz96jb7s0s87018yzmmap0l125d5fd7abnhzfvv";
+    };
 
-    meta.broken = true;
+    buildInputs = with pkgs; [ pcre.dev ];
+  };
+
+  pthreads32-dev = assert (pkgs.config.php.zts or false); assert isPhp73; buildPecl rec {
+    version = "3.2.0-dev";
+    pname = "pthreads";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "krakjoe";
+      repo = "pthreads";
+      rev = "4d1c2483ceb459ea4284db4eb06646d5715e7154";
+      sha256 = "07kdxypy0bgggrfav2h1ccbv67lllbvpa3s3zsaqci0gq4fyi830";
+    };
+
+    buildInputs = with pkgs; [ pcre2.dev ];
   };
 
   redis = buildPecl rec {
-    version = "4.3.0";
+    version = "5.0.2";
     pname = "redis";
 
-    sha256 = "18hvll173mlp6dk6xvgajkjf4min8f5gn809nr1ahq4r6kn4rw60";
+    sha256 = "0b5pw17lzqknhijfymksvf8fm1zilppr97ypb31n599jw3mxf62f";
   };
 
   sqlsrv = buildPecl rec {

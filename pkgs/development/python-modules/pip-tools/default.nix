@@ -1,14 +1,13 @@
-{ stdenv, fetchurl, buildPythonPackage, pip, pytest, click, six, first
+{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six, first
 , setuptools_scm, git, glibcLocales, mock }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "3.3.2";
-  name = pname + "-" + version;
+  version = "3.8.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pip-tools/${name}.tar.gz";
-    sha256 = "100496b15463155f4da3df04c2ca0068677e1ee74d346ebade2d85eef4de8cda";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1vwh3hx4jrzf51yj9h31nk9ji53lqaq63mlqd7n84hcmfwy3rwz4";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -17,13 +16,22 @@ buildPythonPackage rec {
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [
     # Depend on network tests:
+    "test_allow_unsafe_option" #paramaterized, but all fail
+    "test_annotate_option" #paramaterized, but all fail
     "test_editable_package_vcs"
-    "test_generate_hashes_all_platforms"
-    "test_generate_hashes_without_interfering_with_each_other"
-    "test_realistic_complex_sub_dependencies"
-    "test_generate_hashes_with_editable"
+    "test_editable_top_level_deps_preserved" # can't figure out how to select only one parameter to ignore
+    "test_filter_pip_markers"
     "test_filter_pip_markes"
+    "test_generate_hashes_all_platforms"
+    "test_generate_hashes_verbose"
+    "test_generate_hashes_with_editable"
+    "test_generate_hashes_with_url"
+    "test_generate_hashes_without_interfering_with_each_other"
     "test_get_hashes_local_repository_cache_miss"
+    "test_realistic_complex_sub_dependencies"
+    "test_stdin"
+    "test_upgrade_packages_option"
+    "test_url_package"
     # Expect specific version of "six":
     "test_editable_package"
     "test_input_file_without_extension"

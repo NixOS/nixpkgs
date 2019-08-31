@@ -1,10 +1,10 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2
-, libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap, libGL
-, libpng, glib, lvm2, libXrandr, libXinerama, libopus
-, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
+{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
+, libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
+, qttools, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, nettools, dbus
 , makeself, perl
-, javaBindings ? false, jdk ? null
+, javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
 , extensionPack ? null, fakeroot ? null
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
@@ -33,7 +33,11 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ];
+  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ]
+    ++ optional (!headless) wrapQtAppsHook;
+
+  # Wrap manually because we just need to wrap one executable
+  dontWrapQtApps = true;
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
@@ -43,7 +47,7 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr libGL ]
-    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
+    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
@@ -53,7 +57,7 @@ in stdenv.mkDerivation {
         -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
         ${optionalString (!headless) ''
-        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qt5.qtbase}/bin"@' \
+        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
         ''} -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
@@ -105,9 +109,9 @@ in stdenv.mkDerivation {
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
     ${optionalString (!headless) ''
-    PATH_QT5_X11_EXTRAS_LIB        := ${getLib qt5.qtx11extras}/lib
-    PATH_QT5_X11_EXTRAS_INC        := ${getDev qt5.qtx11extras}/include
-    TOOL_QT5_LRC                   := ${getDev qt5.qttools}/bin/lrelease
+    PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib
+    PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
+    TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
     ''}
     LOCAL_CONFIG
 
@@ -175,6 +179,10 @@ in stdenv.mkDerivation {
     ''}
 
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+  '';
+
+  preFixup = optionalString (!headless) ''
+    wrapQtApp $out/bin/VirtualBox
   '';
 
   passthru = {

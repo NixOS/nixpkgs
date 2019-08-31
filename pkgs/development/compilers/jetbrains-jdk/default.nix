@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, file, glib, libxml2, libav_0_8, ffmpeg, libxslt
 , libGL , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
-, gdk_pixbuf, atk, zlib }:
+, gdk-pixbuf, atk, zlib }:
 
 # TODO: Investigate building from source instead of patching binaries.
 # TODO: Binary patching for not just x86_64-linux but also x86_64-darwin i686-linux
@@ -38,7 +38,7 @@ let drv = stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath ([
     stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
-    alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk zlib
+    alsaLib fontconfig freetype pango gtk2 cairo gdk-pixbuf atk zlib
     (placeholder "out")
   ] ++ (with xorg; [
     libX11 libXext libXtst libXi libXp libXt libXrender libXxf86vm

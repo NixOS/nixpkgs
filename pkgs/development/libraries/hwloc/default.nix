@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v${versmm}/downloads/${name}.tar.bz2";
+    url = "https://www.open-mpi.org/software/hwloc/v${versmm}/downloads/${name}.tar.bz2";
     sha256 = "1aa7s208gdijk19vvzzahyl8pglk1va3yd6kdbpfa5pz5ms0ag35";
   };
 
@@ -78,7 +78,7 @@ in stdenv.mkDerivation {
        more.
     '';
 
-    # http://www.open-mpi.org/projects/hwloc/license.php
+    # https://www.open-mpi.org/projects/hwloc/license.php
     license = licenses.bsd3;
     homepage = https://www.open-mpi.org/projects/hwloc/;
     maintainers = with maintainers; [ fpletz markuskowa ];

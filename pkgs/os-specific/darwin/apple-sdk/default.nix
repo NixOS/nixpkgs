@@ -156,7 +156,7 @@ in rec {
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit pkgs.darwin.CF CoreGraphics CoreServices CoreText
+        OpenGL ApplicationServices Carbon IOKit CoreGraphics CoreServices CoreText
       ];
 
       installPhase = ''
@@ -185,6 +185,10 @@ in rec {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/PrivateFrameworks/"
       ];
+    });
+
+    CoreFoundation = stdenv.lib.overrideDerivation super.CoreFoundation (drv: {
+      setupHook = ./cf-setup-hook.sh;
     });
 
     CoreMedia = stdenv.lib.overrideDerivation super.CoreMedia (drv: {
@@ -222,7 +226,7 @@ in rec {
 
   bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;
-    inherit (pkgs.darwin) CF cf-private libobjc;
+    inherit (pkgs.darwin) libobjc;
   });
 
   frameworks = bareFrameworks // overrides bareFrameworks;

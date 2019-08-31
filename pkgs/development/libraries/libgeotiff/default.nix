@@ -1,18 +1,27 @@
-{ stdenv, fetchurl, libtiff, libjpeg, proj, zlib}:
+{ stdenv, fetchFromGitHub, libtiff, libjpeg, proj, zlib, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.3";
+  version = "1.5.1";
   name = "libgeotiff-${version}";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/geotiff/libgeotiff/${name}.tar.gz";
-    sha256 = "0rbjqixi4c8yz19larlzq6jda0px2gpmpp9c52cyhplbjsdhsldq";
+  src = fetchFromGitHub {
+    owner = "OSGeo";
+    repo = "libgeotiff";
+    rev = version;
+    sha256 = "081ag23pn2n5y4fkb2rnh4hmcnq92siqiqv0s20jmx0j3s2nvfxy";
   };
+
+  outputs = [ "out" "dev" ];
+
+  sourceRoot = "source/libgeotiff";
 
   configureFlags = [
     "--with-jpeg=${libjpeg.dev}"
     "--with-zlib=${zlib.dev}"
   ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [ libtiff proj ];
 
   hardeningDisable = [ "format" ];

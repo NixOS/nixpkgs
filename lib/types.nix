@@ -111,7 +111,7 @@ rec {
         name = "int";
         description = "signed integer";
         check = isInt;
-        merge = mergeOneOption;
+        merge = mergeEqualOption;
       };
 
     # Specialized subdomains of int
@@ -176,14 +176,14 @@ rec {
         name = "float";
         description = "floating point number";
         check = isFloat;
-        merge = mergeOneOption;
+        merge = mergeEqualOption;
     };
 
     str = mkOptionType {
       name = "str";
       description = "string";
       check = isString;
-      merge = mergeOneOption;
+      merge = mergeEqualOption;
     };
 
     strMatching = pattern: mkOptionType {
@@ -243,7 +243,7 @@ rec {
       name = "path";
       # Hacky: there is no ‘isPath’ primop.
       check = x: builtins.substring 0 1 (toString x) == "/";
-      merge = mergeOneOption;
+      merge = mergeEqualOption;
     };
 
     # drop this in the future:
@@ -415,7 +415,7 @@ rec {
         name = "enum";
         description = "one of ${concatMapStringsSep ", " show values}";
         check = flip elem values;
-        merge = mergeOneOption;
+        merge = mergeEqualOption;
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
       };
 
@@ -442,6 +442,13 @@ rec {
            else null;
       functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
     };
+
+    # Any of the types in the given list
+    oneOf = ts:
+      let
+        head' = if ts == [] then throw "types.oneOf needs to get at least one type in its argument" else head ts;
+        tail' = tail ts;
+      in foldl' either head' tail';
 
     # Either value of type `finalType` or `coercedType`, the latter is
     # converted to `finalType` using `coerceFunc`.

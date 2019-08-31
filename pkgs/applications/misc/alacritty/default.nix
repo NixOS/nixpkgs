@@ -24,9 +24,7 @@
   wayland,
 
   # Darwin Frameworks
-  cf-private,
   AppKit,
-  CoreFoundation,
   CoreGraphics,
   CoreServices,
   CoreText,
@@ -74,11 +72,7 @@ in buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-    ++ lib.optionals stdenv.isDarwin [
-      AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL
-      # Needed for CFURLResourceIsReachable symbols.
-      cf-private
-    ];
+    ++ lib.optionals stdenv.isDarwin [ AppKit CoreGraphics CoreServices CoreText Foundation OpenGL ];
 
   outputs = [ "out" "terminfo" ];
 
@@ -120,6 +114,6 @@ in buildRustPackage rec {
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ mic92 ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 }

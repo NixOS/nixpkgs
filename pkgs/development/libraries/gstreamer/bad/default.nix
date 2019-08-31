@@ -2,6 +2,7 @@
 , config
 , pkgconfig, python3, gst-plugins-base, orc
 , gobject-introspection
+, enableZbar ? true
 , faacSupport ? false, faac ? null
 , faad2, libass, libkate, libmms, librdf, ladspaH
 , libnice, webrtc-audio-processing, lilv, lv2, serd, sord, sratom
@@ -136,13 +137,13 @@ stdenv.mkDerivation rec {
     soundtouch
     spandsp
     srtp
-    zbar
     fluidsynth libvdpau
     libwebp xvidcore gnutls libGLU_combined
     libgme openssl x265 libxml2
     libintl
     srt
   ]
+    ++ optional enableZbar zbar
     ++ optional faacSupport faac
     ++ optional stdenv.isLinux wayland
     # wildmidi requires apple's OpenAL
@@ -158,6 +159,7 @@ stdenv.mkDerivation rec {
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
 
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
+    "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
     "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing
     "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pyodbc";
-  version = "4.0.26";
+  version = "4.0.27";
   disabled = isPyPy;  # use pypypdbc instead
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qrxnf7ji5hml7z4y669k4wmk3iz2pcsr05bnn1n912asash09z5";
+    sha256 = "1kd2i7hc1330cli72vawzby17c3039cqn1aba4i0zrjnpghjhmib";
   };
 
   buildInputs = [ unixODBC ];

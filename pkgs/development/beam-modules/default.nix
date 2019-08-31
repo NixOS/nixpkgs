@@ -41,7 +41,12 @@ let
         buildMix = callPackage ./build-mix.nix {};
 
         # BEAM-based languages.
-        elixir = elixir_1_7;
+        elixir = elixir_1_9;
+
+        elixir_1_9 = lib.callElixir ../interpreters/elixir/1.9.nix {
+          inherit rebar erlang;
+          debugInfo = true;
+        };
 
         elixir_1_8 = lib.callElixir ../interpreters/elixir/1.8.nix {
           inherit rebar erlang;
@@ -59,11 +64,6 @@ let
         };
 
         elixir_1_5 = lib.callElixir ../interpreters/elixir/1.5.nix {
-          inherit rebar erlang;
-          debugInfo = true;
-        };
-
-        elixir_1_4 = lib.callElixir ../interpreters/elixir/1.4.nix {
           inherit rebar erlang;
           debugInfo = true;
         };

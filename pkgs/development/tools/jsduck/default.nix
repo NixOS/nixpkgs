@@ -1,9 +1,9 @@
-{ stdenv, lib, bundlerEnv, makeWrapper, }:
+{ stdenv, lib, bundlerEnv, makeWrapper, bundlerUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "jsduck";
   name = "${pname}-${version}";
-  version = "5.3.4";
+  version = (import ./gemset.nix).jsduck.version;
 
   env = bundlerEnv {
     name = "${pname}";
@@ -21,11 +21,13 @@ stdenv.mkDerivation rec {
     makeWrapper ${env}/bin/jsduck $out/bin/jsduck
   '';
 
+  passthru.updateScript = bundlerUpdateScript "jsduck";
+
   meta = with lib; {
     description = "Simple JavaScript Duckumentation generator.";
     homepage    = https://github.com/senchalabs/jsduck;
     license     = with licenses; gpl3;
-    maintainers = with stdenv.lib.maintainers; [ periklis ];
+    maintainers = with maintainers; [ periklis nicknovitski ];
     platforms   = platforms.unix;
   };
 }

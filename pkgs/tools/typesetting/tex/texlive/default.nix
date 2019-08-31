@@ -170,7 +170,7 @@ in
             platforms = lib.platforms.all;
             hydraPlatforms = lib.optionals
               (lib.elem pname ["scheme-small" "scheme-basic"]) platforms;
-            maintainers = with lib.maintainers;  [ vcunat veprbl ];
+            maintainers = with lib.maintainers;  [ veprbl ];
           }
           (combine {
             ${pname} = attrs;

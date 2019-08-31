@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   name = "coq${coq.coq-version}-math-classes-${version}";
-  version = "8.8.1";
+  version = "8.9.1";
 
   src = fetchFromGitHub {
     owner = "coq-community";
     repo = "math-classes";
     rev = version;
-    sha256 = "05vlrrwnlfhd7l3xwn4zwpnkwvziw84zpd9775c6ffb83z48ri1r";
+    sha256 = "1lw89js07m1wcaycpnyd85sf0snil2rrsfmry9lna2x66ah1mzn5";
   };
 
   buildInputs = [ coq bignums ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" "8.9" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" "8.9" "8.10" ];
   };
 
 }

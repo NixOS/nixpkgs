@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gdk_pixbuf, gobject-introspection, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gdk-pixbuf, gobject-introspection, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libmediaart";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gtk-doc docbook_xsl docbook_xml_dtd_412 gobject-introspection ];
-  buildInputs = [ glib gdk_pixbuf ];
+  buildInputs = [ glib gdk-pixbuf ];
 
   # FIXME: Turn on again when https://github.com/NixOS/nixpkgs/issues/53701
   # is fixed on master.

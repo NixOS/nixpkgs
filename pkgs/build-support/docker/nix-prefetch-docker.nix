@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     install -vD ${./nix-prefetch-docker} $out/bin/$name;

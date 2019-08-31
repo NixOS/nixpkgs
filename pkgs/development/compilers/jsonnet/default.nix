@@ -15,12 +15,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "jsonnet"
+    "jsonnetfmt"
     "libjsonnet.so"
   ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/include
     cp jsonnet $out/bin/
+    cp jsonnetfmt $out/bin/
     cp libjsonnet*.so $out/lib/
     cp -a include/*.h $out/include/
   '';

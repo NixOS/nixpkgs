@@ -16,6 +16,30 @@ in
         defaultText = "pkgs.lidarr";
         description = "The Lidarr package to use";
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for Lidarr
+        '';
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "lidarr";
+        description = ''
+          User account under which Lidarr runs.
+        '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "lidarr";
+        description = ''
+          Group under which Lidarr runs.
+        '';
+      };
     };
   };
 
@@ -27,8 +51,8 @@ in
 
       serviceConfig = {
         Type = "simple";
-        User = "lidarr";
-        Group = "lidarr";
+        User = cfg.user;
+        Group = cfg.group;
         ExecStart = "${cfg.package}/bin/Lidarr";
         Restart = "on-failure";
 
@@ -37,12 +61,22 @@ in
       };
     };
 
-    users.users.lidarr = {
-      uid = config.ids.uids.lidarr;
-      home = "/var/lib/lidarr";
-      group = "lidarr";
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 8686 ];
     };
 
-    users.groups.lidarr.gid = config.ids.gids.lidarr;
+    users.users = mkIf (cfg.user == "lidarr") {
+      lidarr = {
+        group = cfg.group;
+        home = "/var/lib/lidarr";
+        uid = config.ids.uids.lidarr;
+      };
+    };
+
+    users.groups = mkIf (cfg.group == "lidarr") {
+      lidarr = {
+        gid = config.ids.gids.lidarr;
+      };
+    };
   };
 }

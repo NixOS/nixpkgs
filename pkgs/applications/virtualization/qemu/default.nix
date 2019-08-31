@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python2, zlib, pkgconfig, glib
+{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
 , ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     sha256 = "085g6f75si8hbn94mnnjn1r7ysixn5bqj4bhqwvadj00fhzp2zvd";
   };
 
-  nativeBuildInputs = [ python2 pkgconfig flex bison ];
+  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ];
   buildInputs =
     [ zlib glib ncurses perl pixman
       vde2 texinfo makeWrapper lzo snappy
@@ -112,6 +112,7 @@ stdenv.mkDerivation rec {
     [ "--audio-drv-list=${audio}"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
+      "--enable-docs"
     ]
     # disable sysctl check on darwin.
     ++ optional stdenv.isDarwin "--cpu=x86_64"

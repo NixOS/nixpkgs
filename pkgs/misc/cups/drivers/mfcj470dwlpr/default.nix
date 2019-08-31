@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups ghostscript dpkg a2ps ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out

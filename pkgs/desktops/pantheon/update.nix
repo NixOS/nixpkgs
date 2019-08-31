@@ -1,5 +1,21 @@
-{ runCommand, nix, bash, git, jq, nix-prefetch-scripts, coreutils, common-updater-scripts, gnugrep, gnused, curl }:
-{ repoName, attrPath ? repoName, versionPolicy ? "release" }:
+{ runCommand
+, nix
+, bash
+, git
+, jq
+, nix-prefetch-scripts
+, coreutils
+, common-updater-scripts
+, gnugrep
+, gnused
+, curl
+}:
+
+{ repoName
+, attrPath ? repoName
+, versionPolicy ? "release"
+}:
+
 let
   script = ./update.sh;
 
@@ -13,6 +29,8 @@ let
     chmod +x $out
   '';
 
-  versionFlag = { "release" = "-r"; "master" = "-m"; }.${versionPolicy};
+  throwFlag = throw "${versionPolicy} is not a valid versionPolicy - Options are either 'release' or 'master' (defaults to release).";
+
+  versionFlag = { "release" = "-r"; "master" = "-m"; }.${versionPolicy} or throwFlag;
 
 in [ updateScript versionFlag repoName attrPath ]

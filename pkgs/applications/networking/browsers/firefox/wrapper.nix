@@ -3,10 +3,9 @@
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
 , MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
-, jrePlugin, icedtea_web
+, jrePlugin, adoptopenjdk-icedtea-web
 , bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
-, esteidfirefoxplugin
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
 , tridactyl-native
 , udev
@@ -28,12 +27,12 @@ let
     , extraPlugins ? []
     , extraNativeMessagingHosts ? []
     , gdkWayland ? false
+    , cfg ? config.${browserName} or {}
     }:
 
     assert gdkWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
-      cfg = config.${browserName} or {};
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
@@ -55,13 +54,12 @@ let
           ++ lib.optional (cfg.enableDjvu or false) (djview4)
           ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
           ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
-          ++ lib.optional icedtea icedtea_web
+          ++ lib.optional icedtea adoptopenjdk-icedtea-web
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
           ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
-          ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
           ++ extraPlugins
         );
       nativeMessagingHosts =

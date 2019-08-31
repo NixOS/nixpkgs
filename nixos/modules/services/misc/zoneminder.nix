@@ -2,6 +2,7 @@
 
 let
   cfg = config.services.zoneminder;
+  fpm = config.services.phpfpm.pools.zoneminder;
   pkg = pkgs.zoneminder;
 
   dirName = pkg.dirName;
@@ -18,8 +19,6 @@ let
   home = if useCustomDir then cfg.storageDir else defaultDir;
 
   useCustomDir = cfg.storageDir != null;
-
-  socket = "/run/phpfpm-zoneminder/zoneminder.sock";
 
   zms = "/cgi-bin/zms";
 
@@ -201,7 +200,10 @@ in {
       "zoneminder/80-nixos.conf".source    = configFile;
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
+      cfg.port
+      6802 # zmtrigger
+    ];
 
     services = {
       fcgiwrap = lib.mkIf useNginx {
@@ -262,7 +264,7 @@ in {
                   fastcgi_pass ${fcgi.socketType}:${fcgi.socketAddress};
                 }
 
-                location /cache {
+                location /cache/ {
                   alias /var/cache/${dirName};
                 }
 
@@ -274,7 +276,7 @@ in {
                   fastcgi_param SCRIPT_FILENAME $request_filename;
                   fastcgi_param HTTP_PROXY "";
 
-                  fastcgi_pass unix:${socket};
+                  fastcgi_pass unix:${fpm.socket};
                 }
               }
             '';
@@ -284,30 +286,27 @@ in {
 
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
-          socketName = "zoneminder";
-          phpPackage = pkgs.php;
-          user = "${user}";
-          group = "${group}";
+          inherit user group;
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
 
             ${lib.concatStringsSep "\n" (map (e:
             "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
           '';
-          extraConfig = ''
-            listen.owner = ${user}
-            listen.group = ${group}
-            listen.mode = 0660
+          settings = lib.mapAttrs (name: lib.mkDefault) {
+            "listen.owner" = user;
+            "listen.group" = group;
+            "listen.mode" = "0660";
 
-            pm = dynamic
-            pm.start_servers = 1
-            pm.min_spare_servers = 1
-            pm.max_spare_servers = 2
-            pm.max_requests = 500
-            pm.max_children = 5
-            pm.status_path = /$pool-status
-            ping.path = /$pool-ping
-          '';
+            "pm" = "dynamic";
+            "pm.start_servers" = 1;
+            "pm.min_spare_servers" = 1;
+            "pm.max_spare_servers" = 2;
+            "pm.max_requests" = 500;
+            "pm.max_children" = 5;
+            "pm.status_path" = "/$pool-status";
+            "ping.path" = "/$pool-ping";
+          };
         };
       };
     };

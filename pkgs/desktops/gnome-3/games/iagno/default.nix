@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
+{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook
 , itstool, libcanberra-gtk3, libxml2
 , meson, ninja, python3, vala, desktop-file-utils
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     meson ninja python3 vala desktop-file-utils
     pkgconfig wrapGAppsHook itstool libxml2
   ];
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg libcanberra-gtk3 ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk-pixbuf librsvg libcanberra-gtk3 ];
 
   enableParallelBuilding = true;
 

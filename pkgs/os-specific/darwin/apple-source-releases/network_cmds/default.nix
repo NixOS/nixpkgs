@@ -1,9 +1,9 @@
 { stdenv, appleDerivation, xcbuildHook
-, openssl, Librpcsvc, xnu, libpcap, developer_cmds }:
+, openssl_1_0_2, Librpcsvc, xnu, libpcap, developer_cmds }:
 
 appleDerivation rec {
   nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ openssl xnu Librpcsvc libpcap developer_cmds ];
+  buildInputs = [ openssl_1_0_2 xnu Librpcsvc libpcap developer_cmds ];
 
   NIX_CFLAGS_COMPILE = " -I./unbound -I${xnu}/Library/Frameworks/System.framework/Headers/";
 

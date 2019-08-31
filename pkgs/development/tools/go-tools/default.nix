@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "go-tools";
-  version = "2019.2";
+  version = "2019.2.2";
 
   goPackagePath = "honnef.co/go/tools";
   excludedPackages = ''\(simple\|ssa\|ssa/ssautil\|lint\|staticcheck\|stylecheck\|unused\)/testdata'';
@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "dominikh";
     repo = "go-tools";
     rev = version;
-    sha256 = "0gxvrxahfgrx630fq4j629jl177qqw1kyip805k4lw607ph8m7h6";
+    sha256 = "1vndpwg797z2gw9h9378iq99aqy7nalqx82lgvcsaqnkypdmppnd";
   };
 
   modSha256 = "0ysaq94m7pkziliz4z4dl8ad84mbn17m2hqxvs9wbw4iwhkpi7gz";

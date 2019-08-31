@@ -786,7 +786,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
         set, the default value is used, which is <literal>$prePhases
         unpackPhase patchPhase $preConfigurePhases configurePhase
         $preBuildPhases buildPhase checkPhase $preInstallPhases installPhase
-        fixupPhase $preDistPhases distPhase $postPhases</literal>.
+        fixupPhase installCheckPhase $preDistPhases distPhase $postPhases</literal>.
        </para>
        <para>
         Usually, if you just want to add a few phases, it’s more convenient
@@ -989,6 +989,16 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
     </varlistentry>
     <varlistentry>
      <term>
+      <varname>dontUnpack</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the unpack phase.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <varname>dontMakeSourcesWritable</varname>
      </term>
      <listitem>
@@ -1106,6 +1116,16 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       <para>
        A list of strings passed as additional arguments to the configure
        script.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>dontConfigure</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the configure phase.
       </para>
      </listitem>
     </varlistentry>
@@ -1579,6 +1599,16 @@ installTargets = "install-bin install-doc";</programlisting>
 
    <variablelist>
     <title>Variables controlling the fixup phase</title>
+    <varlistentry>
+     <term>
+      <varname>dontFixup</varname>
+     </term>
+     <listitem>
+      <para>
+        Set to true to skip the fixup phase.
+      </para>
+     </listitem>
+    </varlistentry>
     <varlistentry>
      <term>
       <varname>dontStrip</varname>

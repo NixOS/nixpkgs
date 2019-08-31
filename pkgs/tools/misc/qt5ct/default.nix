@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, qtbase, qttools, qmake }:
+{ mkDerivation, lib, fetchurl, qtbase, qttools, qmake }:
 
-let inherit (stdenv.lib) getDev; in
+let inherit (lib) getDev; in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qt5ct";
   version = "0.39";
 
@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
+  # Wayland needs to know the desktop file name in order to show the app name and icon.
+  # Patch has been upstreamed and can be removed in the future.
+  # See: https://sourceforge.net/p/qt5ct/code/549/
+  patches = [ ./wayland.patch ];
+
   qmakeFlags = [
     "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
   ];
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt5 Configuration Tool";
     homepage = https://www.opendesktop.org/content/show.php?content=168066;
     platforms = platforms.linux;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "calcurse-${version}";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "https://calcurse.org/files/${name}.tar.gz";
-    sha256 = "0vw2xi6a2lrhrb8n55zq9lv4mzxhby4xdf3hmi1vlfpyrpdwkjzd";
+    sha256 = "1vjwcmp51h7dsvwn0qx93w9chp3wp970v7d9mjhk7jyamcbfywn3";
   };
 
   buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];

@@ -2,7 +2,7 @@
 , pkgconfig, gtk3, glib, tracker, tracker-miners
 , itstool, libxslt, webkitgtk, libgdata
 , gnome-desktop, libzapojit, libgepub
-, gnome3, gdk_pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
+, gnome3, gdk-pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
 , gobject-introspection, inkscape, poppler_utils
 , desktop-file-utils, wrapGAppsHook, python3, gsettings-desktop-schemas }:
 
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgetting-started=true"
-    "--buildtype=plain"
   ];
 
   nativeBuildInputs = [
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 glib gsettings-desktop-schemas
-    gdk_pixbuf gnome3.adwaita-icon-theme evince
+    gdk-pixbuf gnome3.adwaita-icon-theme evince
     libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub

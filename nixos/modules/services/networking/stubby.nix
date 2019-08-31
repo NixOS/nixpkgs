@@ -168,7 +168,7 @@ in
         default = defaultUpstream;
         type = types.lines;
         description = ''
-          Add additional upstreams. See <citerefentry><refentrytitle>stubby
+          Replace default upstreams. See <citerefentry><refentrytitle>stubby
           </refentrytitle><manvolnum>1</manvolnum></citerefentry> for an
           example of the entry formatting. In Strict mode, at least one of the
           following settings must be supplied for each nameserver:

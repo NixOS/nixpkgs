@@ -17,7 +17,7 @@ let
   , withSystemd ? config.php.systemd or stdenv.isLinux
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
-  , mhashSupport ? config.php.mhash or true
+  , mhashSupport ? config.php.mhash or false
   , mysqlndSupport ? config.php.mysqlnd or true
   , mysqliSupport ? config.php.mysqli or true
   , pdo_mysqlSupport ? config.php.pdo_mysql or true
@@ -253,25 +253,17 @@ let
     };
 
 in {
-  php71 = generic {
-    version = "7.1.30";
-    sha256 = "1czcf5qwk727sdzx5n4wvsxvl50jx6d5x8ws1dqx46fa9xvm0j36";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
-  };
-
   php72 = generic {
-    version = "7.2.19";
-    sha256 = "16d0j0d4563bcrxlw5yysldscxpgyp917hmc4m4ys1zyfprv3l7b";
+    version = "7.2.21";
+    sha256 = "1vqldc2namfblwyv87fgpfffkjpzawfpcp48f40nfdl3pshq6c9l";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.6";
-    sha256 = "0xvgdxmhk0hsx8gh3ircm2s7pf59gm8i9a73204mr0sl05qchnhy";
+    version = "7.3.8";
+    sha256 = "1xbndimrfamf97m3vln842g9w1ikq071gjfkk15ai7sx2wqccrnm";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;

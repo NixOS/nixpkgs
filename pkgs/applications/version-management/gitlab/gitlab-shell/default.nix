@@ -1,14 +1,14 @@
 { stdenv, ruby, bundler, fetchFromGitLab, go }:
 
 stdenv.mkDerivation rec {
-  version = "9.0.0";
+  version = "9.3.0";
   name = "gitlab-shell-${version}";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "0437pigcgd5qi9ars8br1l058h2mijyv02axlr8wdb1vjsss857g";
+    sha256 = "1r000h4sgplx7giqvqs5iy0zh3drf6qa1iiq0mxlk3h9fshs1348";
   };
 
   buildInputs = [ ruby bundler go ];

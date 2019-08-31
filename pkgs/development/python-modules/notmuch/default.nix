@@ -22,7 +22,7 @@ buildPythonPackage rec {
     description = "A Python wrapper around notmuch";
     homepage = https://notmuchmail.org/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 
 }

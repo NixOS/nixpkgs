@@ -1,27 +1,41 @@
 { stdenv, fetchFromGitHub, python3, pass }:
 
 stdenv.mkDerivation rec {
-  name = "passff-host-${version}";
+  pname = "passff-host";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "passff";
-    repo = "passff-host";
+    repo = pname;
     rev = version;
     sha256 = "0ydfwvhgnw5c3ydx2gn5d7ys9g7cxlck57vfddpv6ix890v21451";
   };
 
   buildInputs = [ python3 ];
+  makeFlags = [ "VERSION=${version}" ];
 
   patchPhase = ''
     sed -i 's#COMMAND = "pass"#COMMAND = "${pass}/bin/pass"#' src/passff.py
   '';
 
   installPhase = ''
-    install -D bin/testing/passff.py $out/share/passff-host/passff.py
-    cp bin/testing/passff.json $out/share/passff-host/passff.json
-    substituteInPlace $out/share/passff-host/passff.json \
+    substituteInPlace bin/${version}/passff.json \
       --replace PLACEHOLDER $out/share/passff-host/passff.py
+
+    install -Dt $out/share/passff-host \
+      bin/${version}/passff.{py,json}
+
+    nativeMessagingPaths=(
+      /lib/mozilla/native-messaging-hosts
+      /etc/opt/chrome/native-messaging-hosts
+      /etc/chromium/native-messaging-hosts
+      /etc/vivaldi/native-messaging-hosts
+    )
+
+    for manifestDir in "''${nativeMessagingPaths[@]}"; do
+      install -d $out$manifestDir
+      ln -s $out/share/passff-host/passff.json $out$manifestDir/
+    done
   '';
 
   meta = with stdenv.lib; {

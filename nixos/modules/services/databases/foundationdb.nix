@@ -363,7 +363,7 @@ in
       "d /etc/foundationdb 0755 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.logDir}' 0770 ${cfg.user} ${cfg.group} - -"
-      "F '${cfg.pidFile}' - ${cfg.user} ${cfg.group} - -"
+      "F '${cfg.pidfile}' - ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.foundationdb = {

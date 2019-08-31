@@ -70,12 +70,12 @@ ccWrapper_addCVars () {
     local role_post role_pre
     getHostRoleEnvHook
 
-    if [[ -d "$1/include" ]]; then
-        export NIX_${role_pre}CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
+    if [ -d "$1/include" ]; then
+        export NIX_${role_pre}CFLAGS_COMPILE+=" -isystem $1/include"
     fi
 
-    if [[ -d "$1/Library/Frameworks" ]]; then
-        export NIX_${role_pre}CFLAGS_COMPILE+=" -F$1/Library/Frameworks"
+    if [ -d "$1/Library/Frameworks" ]; then
+        export NIX_${role_pre}CFLAGS_COMPILE+=" -iframework $1/Library/Frameworks"
     fi
 }
 

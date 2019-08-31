@@ -36,7 +36,7 @@ let
 
       # Uid/gid that the daemon runs under.
       nagios_user=nagios
-      nagios_group=nogroup
+      nagios_group=nagios
 
       # Misc. options.
       illegal_macro_output_chars=`~$&|'"<>
@@ -58,9 +58,7 @@ let
 
       <Directory "${pkgs.nagios}/sbin">
         Options ExecCGI
-        AllowOverride None
-        Order allow,deny
-        Allow from all
+        Require all granted
         SetEnv NAGIOS_CGI_CONFIG ${cfg.cgiConfigFile}
       </Directory>
 
@@ -68,9 +66,7 @@ let
 
       <Directory "${pkgs.nagios}/share">
         Options None
-        AllowOverride None
-        Order allow,deny
-        Allow from all
+        Require all granted
       </Directory>
     '';
 
@@ -149,8 +145,10 @@ in
       description = "Nagios user ";
       uid         = config.ids.uids.nagios;
       home        = nagiosState;
-      createHome  = true;
+      group       = "nagios";
     };
+
+    users.groups.nagios = { };
 
     # This isn't needed, it's just so that the user can type "nagiostats
     # -c /etc/nagios.cfg".
@@ -169,15 +167,12 @@ in
 
       serviceConfig = {
         User = "nagios";
+        Group = "nagios";
         Restart = "always";
         RestartSec = 2;
-        PermissionsStartOnly = true;
+        LogsDirectory = "nagios";
+        StateDirectory = "nagios";
       };
-
-      preStart = ''
-        mkdir -m 0755 -p ${nagiosState} ${nagiosLogDir}
-        chown nagios ${nagiosState} ${nagiosLogDir}
-      '';
 
       script = ''
         for i in ${toString cfg.plugins}; do

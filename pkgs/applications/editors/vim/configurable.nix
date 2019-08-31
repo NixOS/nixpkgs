@@ -10,7 +10,7 @@
 , runtimeShell
 
 # apple frameworks
-, CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
+, CoreServices, CoreData, Cocoa, Foundation, libobjc
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
@@ -132,7 +132,7 @@ in stdenv.mkDerivation rec {
     libXmu glib libICE ]
     ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2-x11
     ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3-x11
-    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc cf-private ]
+    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
     ++ stdenv.lib.optional luaSupport lua
     ++ stdenv.lib.optional pythonSupport python
     ++ stdenv.lib.optional tclSupport tcl

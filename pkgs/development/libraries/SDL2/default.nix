@@ -14,7 +14,7 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, audiofile, cf-private, libiconv
+, audiofile, libiconv
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -58,11 +58,7 @@ stdenv.mkDerivation rec {
     ++ dlopenBuildInputs
     ++ optional  ibusSupport ibus
     ++ optional  fcitxSupport fcitx
-    ++ optionals stdenv.isDarwin [
-      AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL
-      # Needed for NSDefaultRunLoopMode symbols.
-      cf-private
-    ];
+    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;
 

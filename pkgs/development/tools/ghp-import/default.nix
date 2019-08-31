@@ -23,6 +23,6 @@ buildPythonApplication rec {
     description = "Copy your docs directly to the gh-pages branch";
     homepage = "https://github.com/davisp/ghp-import";
     license = "Tumbolia Public License";
-    maintainers = with lib.maintainers; [ garbas ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

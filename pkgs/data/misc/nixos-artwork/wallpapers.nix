@@ -6,7 +6,7 @@ let
     stdenv.mkDerivation {
       inherit name src;
 
-      unpackPhase = "true";
+      dontUnpack = true;
 
       installPhase = ''
         mkdir -p $out/share/artwork/gnome

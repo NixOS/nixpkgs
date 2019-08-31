@@ -7,14 +7,13 @@
 , cython
 , joblib
 , llvmPackages
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
   version = "0.21.2";
   # UnboundLocalError: local variable 'message' referenced before assignment
-  disabled = stdenv.isi686 || (pythonOlder "3.5");  # https://github.com/scikit-learn/scikit-learn/issues/5534
+  disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;

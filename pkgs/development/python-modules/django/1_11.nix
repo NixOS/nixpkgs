@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "1.11.21";
+  version = "1.11.23";
 
   src = fetchurl {
     url = "https://www.djangoproject.com/m/releases/1.11/${pname}-${version}.tar.gz";
-    sha256 = "0adhcw8sx2mgwk9y2j760y96pqbip1ni3sf2v2ls5zxc9x93wwms";
+    sha256 = "1qb9npkpvyafd1f4yjqyzhj78wp1ifg3awj41bd04v83idznv9jj";
   };
 
   patches = stdenv.lib.optionals withGdal [

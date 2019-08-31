@@ -10,19 +10,9 @@ let
   mysqlTest = package: makeTest {
     machine =
       { config, pkgs, ... }:
-      { services.mysql.enable = true;
-        services.mysql.package = pkgs.mariadb;
-        services.mysql.ensureDatabases = [ "redmine" ];
-        services.mysql.ensureUsers = [
-          { name = "redmine";
-            ensurePermissions = { "redmine.*" = "ALL PRIVILEGES"; };
-          }
-        ];
-
-        services.redmine.enable = true;
+      { services.redmine.enable = true;
         services.redmine.package = package;
         services.redmine.database.type = "mysql2";
-        services.redmine.database.socket = "/run/mysqld/mysqld.sock";
         services.redmine.plugins = {
           redmine_env_auth = pkgs.fetchurl {
             url = https://github.com/Intera/redmine_env_auth/archive/0.7.zip;
@@ -48,19 +38,9 @@ let
   pgsqlTest = package: makeTest {
     machine =
       { config, pkgs, ... }:
-      { services.postgresql.enable = true;
-        services.postgresql.ensureDatabases = [ "redmine" ];
-        services.postgresql.ensureUsers = [
-          { name = "redmine";
-            ensurePermissions = { "DATABASE redmine" = "ALL PRIVILEGES"; };
-          }
-        ];
-
-        services.redmine.enable = true;
+      { services.redmine.enable = true;
         services.redmine.package = package;
         services.redmine.database.type = "postgresql";
-        services.redmine.database.host = "";
-        services.redmine.database.port = 5432;
         services.redmine.plugins = {
           redmine_env_auth = pkgs.fetchurl {
             url = https://github.com/Intera/redmine_env_auth/archive/0.7.zip;

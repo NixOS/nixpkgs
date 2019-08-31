@@ -103,7 +103,7 @@ stdenv.mkDerivation {
 
   propagatedUserEnvPkgs = [ gconf ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out

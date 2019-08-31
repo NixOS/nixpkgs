@@ -13,7 +13,7 @@
 , libmemcached, cyrus_sasl
 , libmicrohttpd
 , libmodbus
-, libnotify, gdk_pixbuf
+, libnotify, gdk-pixbuf
 , liboping
 , libpcap
 , libsigrok
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
     curl libdbi libgcrypt libmemcached
-    cyrus_sasl libnotify gdk_pixbuf liboping libpcap libvirt
+    cyrus_sasl libnotify gdk-pixbuf liboping libpcap libvirt
     libxml2 postgresql protobufc rrdtool
     varnish yajl jdk libtool python hiredis libmicrohttpd
     riemann_c_client mosquitto rdkafka mongoc

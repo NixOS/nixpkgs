@@ -107,8 +107,8 @@
 # Eclipse
 /pkgs/applications/editors/eclipse @rycee
 
-# https://github.com/NixOS/nixpkgs/issues/31401
-/lib/licenses.nix @ghost
+# Licenses
+/lib/licenses.nix @alyssais
 
 # Qt / KDE
 /pkgs/applications/kde @ttuegel
@@ -139,3 +139,14 @@
 
 # Bazel
 /pkgs/development/tools/build-managers/bazel @mboes @Profpatsch
+
+# NixOS modules for e-mail and dns services
+/nixos/modules/services/mail/mailman.nix    @peti
+/nixos/modules/services/mail/postfix.nix    @peti
+/nixos/modules/services/networking/bind.nix @peti
+/nixos/modules/services/mail/rspamd.nix     @peti
+
+# Emacs
+/pkgs/applications/editors/emacs-modes @adisbladis
+/pkgs/applications/editors/emacs       @adisbladis
+/pkgs/top-level/emacs-packages.nix     @adisbladis

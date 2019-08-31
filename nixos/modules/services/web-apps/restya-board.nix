@@ -9,11 +9,11 @@ with lib;
 
 let
   cfg = config.services.restya-board;
+  fpm = config.services.phpfpm.pools.${poolName};
 
   runDir = "/run/restya-board";
 
   poolName = "restya-board";
-  phpfpmSocketName = "/run/phpfpm-${poolName}/${poolName}.sock";
 
 in
 
@@ -180,10 +180,7 @@ in
 
     services.phpfpm.pools = {
       "${poolName}" = {
-        socketName = "${poolName}";
-        phpPackage = pkgs.php;
-        user = "${cfg.user}";
-        group = "${cfg.group}";
+        inherit (cfg) user group;
         phpOptions = ''
           date.timezone = "CET"
 
@@ -194,18 +191,18 @@ in
             auth_password = ${cfg.email.password}
           ''}
         '';
-        extraConfig = ''
-          listen.owner = ${config.services.nginx.user}
-          listen.group = ${config.services.nginx.group}
-          listen.mode = 0600
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 10
-          pm.min_spare_servers = 5
-          pm.max_spare_servers = 20
-          pm.max_requests = 500
-          catch_workers_output = 1
-        '';
+        settings = mapAttrs (name: mkDefault) {
+          "listen.owner" = "nginx";
+          "listen.group" = "nginx";
+          "listen.mode" = "0600";
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 10;
+          "pm.min_spare_servers" = 5;
+          "pm.max_spare_servers" = 20;
+          "pm.max_requests" = 500;
+          "catch_workers_output" = 1;
+        };
       };
     };
 
@@ -242,7 +239,7 @@ in
         tryFiles = "$uri =404";
         extraConfig = ''
           include ${pkgs.nginx}/conf/fastcgi_params;
-          fastcgi_pass    unix:${phpfpmSocketName};
+          fastcgi_pass    unix:${fpm.socket};
           fastcgi_index   index.php;
           fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
           fastcgi_param   PHP_VALUE "upload_max_filesize=9G \n post_max_size=9G \n max_execution_time=200 \n max_input_time=200 \n memory_limit=256M";
@@ -366,9 +363,6 @@ in
       home = runDir;
       group  = "restya-board";
     };
-    users.users.nginx = {
-      extraGroups = [ "restya-board" ];
-     };
     users.groups.restya-board = {};
 
     services.postgresql.enable = mkIf (cfg.database.host == null) true;

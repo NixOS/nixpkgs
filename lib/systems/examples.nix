@@ -97,6 +97,18 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  riscv64-embedded = {
+    config = "riscv64-none-elf";
+    libc = "newlib";
+    platform = platforms.riscv-multiplatform "64";
+  };
+
+  riscv32-embedded = {
+    config = "riscv32-none-elf";
+    libc = "newlib";
+    platform = platforms.riscv-multiplatform "32";
+  };
+
   msp430 = {
     config = "msp430-elf";
     libc = "newlib";

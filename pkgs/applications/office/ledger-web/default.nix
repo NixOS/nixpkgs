@@ -1,4 +1,4 @@
-{ lib, bundlerApp
+{ lib, bundlerApp, bundlerUpdateScript
 , withPostgresql ? true, postgresql
 , withSqlite ? false, sqlite
 }:
@@ -11,11 +11,13 @@ bundlerApp rec {
   buildInputs =    lib.optional withPostgresql postgresql
                 ++ lib.optional withSqlite sqlite;
 
+  passthru.updateScript = bundlerUpdateScript "ledger-web";
+
   meta = with lib; {
     description = "A web frontend to the Ledger CLI tool";
     homepage = https://github.com/peterkeen/ledger-web;
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg manveru ];
+    maintainers = with maintainers; [ peterhoeg manveru nicknovitski ];
     platforms = platforms.linux;
   };
 }

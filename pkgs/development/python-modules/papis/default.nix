@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Powerful command-line document and bibliography manager";
-    homepage = http://papis.readthedocs.io/en/latest/;
+    homepage = https://papis.readthedocs.io/en/latest/;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ nico202 teto ];
   };

@@ -36,6 +36,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/afewmail/afew;
     description = "An initial tagging script for notmuch mail";
     license = licenses.isc;
-    maintainers = with maintainers; [ garbas andir flokli ];
+    maintainers = with maintainers; [ andir flokli ];
   };
 }
