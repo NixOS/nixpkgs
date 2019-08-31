@@ -69,86 +69,79 @@ in
   # GC has 1460 MTU
   networking.interfaces.eth0.mtu = 1460;
 
-  systemd.services.google-clock-skew-daemon = {
-    description = "Google Compute Engine Clock Skew Daemon";
-    after = [
-      "network.target"
-      "google-instance-setup.service"
-      "google-network-setup.service"
-    ];
-    requires = ["network.target"];
-    wantedBy = ["multi-user.target"];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${gce}/bin/google_clock_skew_daemon --debug";
-    };
-  };
-
   systemd.services.google-instance-setup = {
     description = "Google Compute Engine Instance Setup";
-    after = ["local-fs.target" "network-online.target" "network.target" "rsyslog.service"];
-    before = ["sshd.service"];
-    wants = ["local-fs.target" "network-online.target" "network.target"];
-    wantedBy = [ "sshd.service" "multi-user.target" ];
+    after = [ "network-online.target" "network.target" "rsyslog.service" ];
+    before = [ "sshd.service" ];
     path = with pkgs; [ ethtool openssh ];
     serviceConfig = {
-      ExecStart = "${gce}/bin/google_instance_setup --debug";
+      ExecStart = "${gce}/bin/google_instance_setup";
+      StandardOutput="journal+console";
       Type = "oneshot";
     };
+    wantedBy = [ "sshd.service" "multi-user.target" ];
   };
 
   systemd.services.google-network-daemon = {
     description = "Google Compute Engine Network Daemon";
-    after = ["local-fs.target" "network-online.target" "network.target" "rsyslog.service" "google-instance-setup.service"];
-    wants = ["local-fs.target" "network-online.target" "network.target"];
-    requires = ["network.target"];
-    partOf = ["network.target"];
-    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" "network.target" "google-instance-setup.service" ];
     path = with pkgs; [ iproute ];
     serviceConfig = {
-      ExecStart = "${gce}/bin/google_network_daemon --debug";
+      ExecStart = "${gce}/bin/google_network_daemon";
+      StandardOutput="journal+console";
+      Type="simple";
     };
+    wantedBy = [ "multi-user.target" ];
   };
+
+  systemd.services.google-clock-skew-daemon = {
+    description = "Google Compute Engine Clock Skew Daemon";
+    after = [ "network.target" "google-instance-setup.service" "google-network-daemon.service" ];
+    serviceConfig = {
+      ExecStart = "${gce}/bin/google_clock_skew_daemon";
+      StandardOutput="journal+console";
+      Type = "simple";
+    };
+    wantedBy = ["multi-user.target"];
+  };
+
 
   systemd.services.google-shutdown-scripts = {
     description = "Google Compute Engine Shutdown Scripts";
     after = [
-      "local-fs.target"
       "network-online.target"
       "network.target"
       "rsyslog.service"
-      "systemd-resolved.service"
       "google-instance-setup.service"
       "google-network-daemon.service"
     ];
-    wants = [ "local-fs.target" "network-online.target" "network.target"];
-    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       ExecStart = "${pkgs.coreutils}/bin/true";
-      ExecStop = "${gce}/bin/google_metadata_script_runner --debug --script-type shutdown";
-      Type = "oneshot";
+      ExecStop = "${gce}/bin/google_metadata_script_runner --script-type shutdown";
       RemainAfterExit = true;
-      TimeoutStopSec = "infinity";
+      StandardOutput="journal+console";
+      TimeoutStopSec = "0";
+      Type = "oneshot";
     };
+    wantedBy = [ "multi-user.target" ];
   };
 
   systemd.services.google-startup-scripts = {
     description = "Google Compute Engine Startup Scripts";
     after = [
-      "local-fs.target"
       "network-online.target"
       "network.target"
       "rsyslog.service"
       "google-instance-setup.service"
       "google-network-daemon.service"
     ];
-    wants = ["local-fs.target" "network-online.target" "network.target"];
-    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${gce}/bin/google_metadata_script_runner --debug --script-type startup";
+      ExecStart = "${gce}/bin/google_metadata_script_runner --script-type startup";
       KillMode = "process";
+      StandardOutput = "journal+console";
       Type = "oneshot";
     };
+    wantedBy = [ "multi-user.target" ];
   };
 
 
