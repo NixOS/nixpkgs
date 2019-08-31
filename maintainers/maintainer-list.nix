@@ -5757,4 +5757,9 @@
     github = "turboMaCk";
     name = "Marek Fajkus";
   };
+  rakesh4g = {
+    email = "rakeshgupta4u@gmail.com";
+    github = "Rakesh4G";
+    name = "Rakesh Gupta";
+  };
 }
