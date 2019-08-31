@@ -27,7 +27,9 @@ in {
 
     settings =
       let jsonType = with lib.types; nullOr (oneOf
-        [ bool str int (listOf jsonType) (attrsOf jsonType) ] );
+        [ bool str int (listOf jsonType) (attrsOf jsonType) ] ) // {
+          description = "JSON (null, bool, string, int, list of JSON or attrs of JSON)";
+        };
       in lib.mkOption {
         type = jsonType;
         default = {};
