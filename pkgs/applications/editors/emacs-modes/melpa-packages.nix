@@ -289,9 +289,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # missing git
         egg = markBroken super.egg;
 
-        # upstream issue: missing dependency redshank
-        emr = markBroken super.emr;
-
         # upstream issue: doesn't build
         eterm-256color = markBroken super.eterm-256color;
         # upstream issue: missing file header
