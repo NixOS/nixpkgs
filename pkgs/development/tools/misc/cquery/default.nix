@@ -15,7 +15,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name    = "cquery-${version}";
+  pname = "cquery";
   version = "2018-10-14";
 
   inherit src;

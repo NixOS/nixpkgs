@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "2018-08-21";
-  name = "qesteidutil-${version}";
+  pname = "qesteidutil";
 
   src = fetchFromGitHub {
     owner = "open-eid";

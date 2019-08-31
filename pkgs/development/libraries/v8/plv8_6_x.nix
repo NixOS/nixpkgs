@@ -111,7 +111,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "v8-${version}";
+  pname = "v8";
   version = "6.4.388.40";
 
   inherit doCheck;

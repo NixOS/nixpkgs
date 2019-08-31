@@ -14,7 +14,8 @@ let
 
   ## stap binaries
   stapBuild = stdenv.mkDerivation {
-    name = "systemtap-${version}";
+    pname = "systemtap";
+    inherit version;
     src = fetchgit { inherit url rev sha256; };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];

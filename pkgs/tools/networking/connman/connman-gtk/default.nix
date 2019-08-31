@@ -2,7 +2,7 @@
 gtk3, connman, openconnect, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "connman-gtk-${version}";
+  pname = "connman-gtk";
   version = "1.1.1";
 
   src = fetchFromGitHub {

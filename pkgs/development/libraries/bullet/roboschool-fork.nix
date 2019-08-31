@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bullet-${version}";
+  pname = "bullet";
   version = "2019-03-27";
 
   src = fetchFromGitHub {

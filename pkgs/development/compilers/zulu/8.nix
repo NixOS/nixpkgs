@@ -26,7 +26,7 @@ let
 in stdenv.mkDerivation rec {
   inherit version openjdk platform hash extension;
 
-  name = "zulu-${version}";
+  pname = "zulu";
 
   src = fetchurl {
     url = "https://cdn.azul.com/zulu/bin/zulu${version}-jdk${openjdk}-${platform}_x64.${extension}";

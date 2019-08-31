@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "yamdi-${version}";
+  pname = "yamdi";
   version = "1.9";
 
   # Source repo is also available here:

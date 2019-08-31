@@ -13,7 +13,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "refind-${version}";
+  pname = "refind";
   version = "0.11.4";
   srcName = "refind-src-${version}";
 

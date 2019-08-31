@@ -3,7 +3,7 @@
 , xorgserver, dbus, python2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "bamf-${version}";
+  pname = "bamf";
   version = "0.5.4";
 
   outputs = [ "out" "dev" "devdoc" ];

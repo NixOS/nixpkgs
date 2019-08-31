@@ -31,7 +31,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "keepassxc-${version}";
+  pname = "keepassxc";
   version = "2.4.3";
 
   src = fetchFromGitHub {

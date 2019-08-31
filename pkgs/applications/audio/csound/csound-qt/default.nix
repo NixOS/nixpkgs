@@ -3,7 +3,7 @@
   qtwebengine, qtxmlpatterns, rtmidi, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "csound-qt-${version}";
+  pname = "csound-qt";
   version = "0.9.6-beta3";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, lib, coreutils, gnused, gawk, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "rsbep-${version}";
+  pname = "rsbep";
   version = "0.1.0";
 
   src = fetchurl {

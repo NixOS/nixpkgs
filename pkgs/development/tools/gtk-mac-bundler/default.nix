@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gtk-mac-bundler-${version}";
+  pname = "gtk-mac-bundler";
   version = "0.7.4";
 
   src = fetchFromGitHub {

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.10";
-  name = "urjtag-${version}";
+  pname = "urjtag";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/urjtag/svn/trunk/urjtag";

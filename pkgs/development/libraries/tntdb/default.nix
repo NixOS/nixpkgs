@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cxxtools, postgresql, mysql, sqlite, zlib, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "tntdb-${version}";
+  pname = "tntdb";
   version = "1.3";
 
   src = fetchurl {
-    url = "http://www.tntnet.org/download/${name}.tar.gz";
+    url = "http://www.tntnet.org/download/${pname}-${version}.tar.gz";
     sha256 = "0js79dbvkic30bzw1pf26m64vs2ssw2sbj55w1dc0sy69dlv4fh9";
   };
 

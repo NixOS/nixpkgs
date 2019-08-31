@@ -77,10 +77,9 @@ in
 stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
-  name = "${pname}-${version}";
 
   src = fetchzip {
-    url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
+    url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = src_sha256;
   };
   prePatch = ''

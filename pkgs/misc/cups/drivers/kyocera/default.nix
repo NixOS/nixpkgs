@@ -10,7 +10,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "cups-kyocera-${version}";
+  pname = "cups-kyocera";
   version = "1.1203";
 
   dontPatchELF = true;

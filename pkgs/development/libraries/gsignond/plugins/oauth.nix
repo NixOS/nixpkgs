@@ -3,7 +3,7 @@
 , docbook_xsl, glibcLocales, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "gsignond-plugin-oauth-${version}";
+  pname = "gsignond-plugin-oauth";
   version = "2018-10-15";
 
   src = fetchFromGitLab {

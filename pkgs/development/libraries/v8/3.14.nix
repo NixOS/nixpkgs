@@ -12,7 +12,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "v8-${version}";
+  pname = "v8";
   inherit version;
 
   src = fetchFromGitHub {

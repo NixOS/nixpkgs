@@ -17,7 +17,7 @@ assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
   version = "2.4.39";
-  name = "apache-httpd-${version}";
+  pname = "apache-httpd";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";

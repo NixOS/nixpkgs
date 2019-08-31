@@ -7,7 +7,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "geolite-legacy-${version}";
+  pname = "geolite-legacy";
   version = "2017-12-02";
 
   srcGeoIP = fetchDB

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.8";
-  name = "linuxstopmotion-${version}";
+  pname = "linuxstopmotion";
   
   src = fetchgit {
     url = "git://git.code.sf.net/p/linuxstopmotion/code";

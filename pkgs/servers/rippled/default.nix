@@ -100,7 +100,7 @@ let
     fetchSubmodules = false;
   };
 in stdenv.mkDerivation rec {
-  name = "rippled-${version}";
+  pname = "rippled";
   version = "1.2.1";
 
   src = fetchFromGitHub {

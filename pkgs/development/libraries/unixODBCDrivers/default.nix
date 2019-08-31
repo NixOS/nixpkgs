@@ -4,11 +4,11 @@
 
 {
   psql = stdenv.mkDerivation rec {
-    name = "psqlodbc-${version}";
+    pname = "psqlodbc";
     version = "10.01.0000";
 
     src = fetchurl {
-      url = "http://ftp.postgresql.org/pub/odbc/versions/src/${name}.tar.gz";
+      url = "http://ftp.postgresql.org/pub/odbc/versions/src/${pname}-${version}.tar.gz";
       sha256 = "1cyams7157f3gry86x64xrplqi2vyqrq3rqka59gv4lb4rpl7jl7";
     };
 
@@ -28,11 +28,11 @@
   };
 
   mariadb = stdenv.mkDerivation rec {
-    name = "mariadb-connector-odbc-${version}";
+    pname = "mariadb-connector-odbc";
     version = "2.0.10";
 
     src = fetchurl {
-      url = "https://downloads.mariadb.org/interstitial/connector-odbc-${version}/src/${name}-ga-src.tar.gz";
+      url = "https://downloads.mariadb.org/interstitial/connector-odbc-${version}/src/${pname}-${version}-ga-src.tar.gz";
       sha256 = "0b6ximy0dg0xhqbrm1l7pn8hjapgpmddi67kh54h6i9cq9hqfdvz";
     };
 
@@ -57,12 +57,12 @@
   };
 
   mysql = stdenv.mkDerivation rec {
-    name = "mysql-connector-odbc-${version}";
+    pname = "mysql-connector-odbc";
     majorVersion = "5.3";
     version = "${majorVersion}.6";
 
     src = fetchurl {
-      url = "https://dev.mysql.com/get/Downloads/Connector-ODBC/${majorVersion}/${name}-src.tar.gz";
+      url = "https://dev.mysql.com/get/Downloads/Connector-ODBC/${majorVersion}/${pname}-${version}-src.tar.gz";
       sha256 = "1smi4z49i4zm7cmykjkwlxxzqvn7myngsw5bc35z6gqxmi8c55xr";
     };
 
@@ -86,7 +86,7 @@
   };
 
   sqlite = stdenv.mkDerivation rec {
-    name = "sqlite-connector-odbc-${version}";
+    pname = "sqlite-connector-odbc";
     version = "0.9993";
  
     src = fetchurl {
@@ -121,7 +121,7 @@
   };
 
   msodbcsql17 = stdenv.mkDerivation rec {
-    name = "msodbcsql17-${version}";
+    pname = "msodbcsql17";
     version = "${versionMajor}.${versionMinor}.${versionAdditional}-1";
 
     versionMajor = "17";

@@ -124,7 +124,7 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "retdec-${version}";
+  pname = "retdec";
 
   # If you update this you will also need to adjust the versions of the updated dependencies. You can do this by first just updating retdec
   # itself and trying to build it. The build should fail and tell you which dependencies you have to upgrade to which versions.

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, protozero, expat, zlib, bzip2, boost }:
 
 stdenv.mkDerivation rec {
-  name = "libosmium-${version}";
+  pname = "libosmium";
   version = "2.15.2";
 
   src = fetchFromGitHub {

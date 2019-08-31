@@ -10,7 +10,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "nailgun-${version}";
+  pname = "nailgun";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "facebook";

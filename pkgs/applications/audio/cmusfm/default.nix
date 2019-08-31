@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2018-10-11";
-  name = "cmusfm-unstable-${version}";
+  pname = "cmusfm-unstable";
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "cmusfm";

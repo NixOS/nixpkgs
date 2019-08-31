@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = (builtins.parseDrvName afl.name).version;
-  name = "libdislocator-${version}";
+  pname = "libdislocator";
 
   src = afl.src;
   sourceRoot = "${afl.name}/libdislocator";

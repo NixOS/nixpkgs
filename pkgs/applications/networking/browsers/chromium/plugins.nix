@@ -99,7 +99,7 @@ let
   };
 
   flash = stdenv.mkDerivation rec {
-    name = "flashplayer-ppapi-${version}";
+    pname = "flashplayer-ppapi";
     version = "32.0.0.238";
 
     src = fetchzip {

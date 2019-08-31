@@ -2,7 +2,7 @@
 , bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "coprthr-${version}";
+  pname = "coprthr";
   version = "1.6";
 
   src = fetchurl {

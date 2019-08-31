@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libpcap, tcpdump }:
 
 stdenv.mkDerivation rec {
-  name = "tcpreplay-${version}";
+  pname = "tcpreplay";
   version = "4.3.2";
 
   src = fetchurl {

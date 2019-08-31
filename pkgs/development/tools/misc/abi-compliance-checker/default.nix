@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ctags, perl, binutils, abi-dumper }:
 
 stdenv.mkDerivation rec {
-  name = "abi-compliance-checker-${version}";
+  pname = "abi-compliance-checker";
   version = "2.3";
 
   src = fetchFromGitHub {

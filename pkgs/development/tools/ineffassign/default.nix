@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "ineffassign-unstable-${version}";
+  pname = "ineffassign-unstable";
   version = "2018-09-09";
 	rev = "1003c8bd00dc2869cb5ca5282e6ce33834fed514";
 

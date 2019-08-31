@@ -5,7 +5,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = pname + "-" + version;
   pname   = "ecryptfs-helper";
   version = "20160722";
 

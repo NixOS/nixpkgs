@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "kid3-${version}";
+  pname = "kid3";
   version = "3.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/kid3/kid3/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/kid3/kid3/${version}/${pname}-${version}.tar.gz";
     sha256 = "0xkrsjrbr3z8cn8hjf623l28r3b755gr11i0clv8d8i3s10vhbd8";
   };
 

@@ -13,7 +13,7 @@
 , libiconv
 }:
 stdenv.mkDerivation rec {
-  name = "postgis-${version}";
+  pname = "postgis";
   version = "2.5.2";
 
   outputs = [ "out" "doc" ];

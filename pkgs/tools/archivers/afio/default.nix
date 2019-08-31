@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "2.5.2";
-  name = "afio-${version}";
+  pname = "afio";
 
   src = fetchurl {
-    url = "http://members.chello.nl/~k.holtman/${name}.tgz";
+    url = "http://members.chello.nl/~k.holtman/${pname}-${version}.tgz";
     sha256 = "1fa29wlqv76hzf8bxp1qpza1r23pm2f3m7rcf0jpwm6z150s2k66";
   };
 

@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation rec {
   version = "3.12.2";
-  name = "dxflib-${version}";
+  pname = "dxflib";
   src = fetchurl {
-    url = "http://www.qcad.org/archives/dxflib/${name}.src.tar.gz";
+    url = "http://www.qcad.org/archives/dxflib/${pname}-${version}.src.tar.gz";
     sha256 = "20ad9991eec6b0f7a3cc7c500c044481a32110cdc01b65efa7b20d5ff9caefa9";
   };
 

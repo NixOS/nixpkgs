@@ -3,7 +3,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "rep-gtk-${version}";
+  pname = "rep-gtk";
   version = "0.90.8.3";
   sourceName = "rep-gtk_${version}";
 

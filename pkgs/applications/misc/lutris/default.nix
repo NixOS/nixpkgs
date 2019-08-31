@@ -30,7 +30,7 @@ let
   ];
 
 in buildPythonApplication rec {
-  name = "lutris-original-${version}";
+  pname = "lutris-original";
   version = "0.5.2.1";
 
   src = fetchFromGitHub {

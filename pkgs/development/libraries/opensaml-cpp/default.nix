@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensaml-cpp-${version}";
+  pname = "opensaml-cpp";
   version = "3.0.1";
 
   src = fetchgit {

@@ -6,7 +6,8 @@ let
   generic = { version, sha256, ...}@attrs:
     let attrs' = builtins.removeAttrs attrs ["version" "sha256"] ; in
       buildGoPackage {
-        name = "kops-${version}";
+        pname = "kops";
+        inherit version;
 
         inherit goPackagePath;
 

@@ -3,7 +3,7 @@
 , procps, utilmacros, gtk-doc, openssl, peg }:
 
 stdenv.mkDerivation rec {
-  name = "intel-gpu-tools-${version}";
+  pname = "intel-gpu-tools";
   version = "1.23";
 
   src = fetchurl {

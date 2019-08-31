@@ -8,7 +8,7 @@
 
 let
   imagej150 = stdenv.mkDerivation rec {
-    name = "imagej-${version}";
+    pname = "imagej";
     version = "150";
 
     src = fetchurl {

@@ -23,7 +23,8 @@ let
     '';
   };
 in stdenv.mkDerivation rec {
-  name = "awesomebump-${version}";
+  pname = "awesomebump";
+  inherit version;
 
   inherit src;
 

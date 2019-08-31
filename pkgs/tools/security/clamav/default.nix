@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "clamav-${version}";
+  pname = "clamav";
   version = "0.101.4";
 
   src = fetchurl {
-    url = "https://www.clamav.net/downloads/production/${name}.tar.gz";
+    url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
     sha256 = "1kdw0b49hbvja6xn589v4f0q334wav16pmi1hibql5cxj7q99w0b";
   };
 

@@ -4,7 +4,8 @@ let
   version = "5.9.0";
 
   mattermost-server = buildGoPackage rec {
-    name = "mattermost-server-${version}";
+    pname = "mattermost-server";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "mattermost";
@@ -23,7 +24,8 @@ let
   };
 
   mattermost-webapp = stdenv.mkDerivation {
-    name = "mattermost-webapp-${version}";
+    pname = "mattermost-webapp";
+    inherit version;
 
     src = fetchurl {
       url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";

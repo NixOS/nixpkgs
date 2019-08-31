@@ -8,7 +8,7 @@ assert mpi != null;
 let
   pythonPackages = python3Packages;
 in mkDerivation rec {
-  name = "freecad-${version}";
+  pname = "freecad";
   version = "0.18.3";
 
   src = fetchurl {

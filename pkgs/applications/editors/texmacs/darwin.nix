@@ -15,7 +15,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "TeXmacs-${version}";
+  pname = "TeXmacs";
+  inherit version;
 
   src= fetchurl {
     url = "http://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";

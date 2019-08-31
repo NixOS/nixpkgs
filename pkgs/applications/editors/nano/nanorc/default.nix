@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "nanorc-${version}";
+  pname = "nanorc";
   version = "2018-09-05";
 
   src = fetchFromGitHub {

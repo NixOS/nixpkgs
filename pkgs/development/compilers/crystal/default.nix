@@ -24,7 +24,8 @@ let
 
   genericBinary = { version, sha256s, rel ? 1 }:
   stdenv.mkDerivation rec {
-    name = "crystal-binary-${version}";
+    pname = "crystal-binary";
+    inherit version;
 
     src = fetchurl {
       url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "reaper-${version}";
+  pname = "reaper";
   version = "5.981";
 
   src = fetchurl {

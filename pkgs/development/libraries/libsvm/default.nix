@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "libsvm-${version}";
+  pname = "libsvm";
   version = "3.23";
 
   src = fetchurl {

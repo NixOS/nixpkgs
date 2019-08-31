@@ -1,7 +1,7 @@
 { stdenv, fetchurl, google-fonts, migu, fontforge, which }:
 
 stdenv.mkDerivation rec {
-  name = "ricty-${version}";
+  pname = "ricty";
   version = "4.1.1";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python, pkgconfig, imagemagick, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "blockhash-${version}";
+  pname = "blockhash";
   version = "0.3.1";
 
   src = fetchFromGitHub {

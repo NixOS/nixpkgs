@@ -2,7 +2,7 @@
  gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation  rec {
-  name = "clipster-${version}";
+  pname = "clipster";
   version = "2.0.2";
 
   src = fetchFromGitHub {

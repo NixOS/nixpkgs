@@ -8,7 +8,7 @@
 , enableSystemd ? stdenv.isLinux, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "packagekit-${version}";
+  pname = "packagekit";
   version = "1.1.12";
 
   outputs = [ "out" "dev" ];

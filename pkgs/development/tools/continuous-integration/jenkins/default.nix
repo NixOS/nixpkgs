@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "jenkins-${version}";
+  pname = "jenkins";
   version = "2.176.3";
 
   src = fetchurl {

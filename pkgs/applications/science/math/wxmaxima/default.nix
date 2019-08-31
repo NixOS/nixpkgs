@@ -3,7 +3,7 @@
 , maxima, wxGTK, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "wxmaxima-${version}";
+  pname = "wxmaxima";
   version = "19.03.0";
 
   src = fetchFromGitHub {

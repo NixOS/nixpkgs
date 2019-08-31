@@ -11,10 +11,11 @@
 
 let version = "3.3.2";
 in stdenv.mkDerivation rec {
-  name = "roxterm-${version}";
+  pname = "roxterm";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/roxterm/${name}.tar.xz";
+    url = "mirror://sourceforge/roxterm/${pname}-${version}.tar.xz";
     sha256 = "0vjh7k4jm4bd01j88w9bmvq27zqsajjzy131fpi81zkii5lisl1k";
   };
 

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libgumath-${version}";
+  pname = "libgumath";
   version = "unstable-2018-11-27";
 
   src = fetchFromGitHub {

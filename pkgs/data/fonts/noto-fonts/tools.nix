@@ -1,8 +1,8 @@
 { fetchFromGitHub, pythonPackages, lib }:
 
 pythonPackages.buildPythonPackage rec {
+  pname = "nototools";
   version = "unstable-2019-03-20";
-  name = "nototools-${version}";
 
   src = fetchFromGitHub {
     owner = "googlefonts";

@@ -2,7 +2,7 @@
 , perl, procps, gnugrep, gawk, findutils, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "keychain-${version}";
+  pname = "keychain";
   version = "2.8.5";
 
   src = fetchFromGitHub {

@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "swaybg-${version}";
+  pname = "swaybg";
   version = "1.0";
 
   src = fetchFromGitHub {

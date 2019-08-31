@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
-  name = "minio-exporter-${version}";
+  pname = "minio-exporter";
   version = "0.2.0";
   rev = "v${version}";
 

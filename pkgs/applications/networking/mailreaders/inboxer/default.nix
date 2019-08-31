@@ -3,7 +3,7 @@
 , fontconfig, dbus, nss, nspr, gtk2-x11, alsaLib, cups, libpulseaudio, udev }:
 
 stdenv.mkDerivation rec {
-  name = "inboxer-${version}";
+  pname = "inboxer";
   version = "1.2.1";
 
   meta = with stdenv.lib; {

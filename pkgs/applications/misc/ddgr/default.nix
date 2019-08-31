@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.6";
-  name = "ddgr-${version}";
+  pname = "ddgr";
 
   src = fetchFromGitHub {
     owner = "jarun";

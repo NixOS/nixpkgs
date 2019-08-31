@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vis-${version}";
+  pname = "vis";
   version  = "0.5";
 
   src = fetchFromGitHub {

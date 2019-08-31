@@ -121,7 +121,8 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "bazel-${version}";
+  pname = "bazel";
+  inherit version;
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";

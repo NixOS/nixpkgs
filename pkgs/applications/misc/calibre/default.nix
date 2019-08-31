@@ -5,11 +5,11 @@
 }:
 
 mkDerivation rec {
-  name = "calibre-${version}";
+  pname = "calibre";
   version = "3.46.0";
 
   src = fetchurl {
-    url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
+    url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
     sha256 = "1dlss01kaz2qlg9ji8c9dn9rd73mmpm5yjg50zp49cwx9y2vjiz9";
   };
 

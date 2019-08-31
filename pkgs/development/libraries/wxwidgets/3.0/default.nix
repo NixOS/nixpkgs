@@ -18,7 +18,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "3.0.4";
-  name = "wxwidgets-${version}";
+  pname = "wxwidgets";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";

@@ -3,7 +3,8 @@
 
 let
   generic = version: sha256: prefix: stdenv.mkDerivation rec {
-    name = "libqmatrixclient-${version}";
+    pname = "libqmatrixclient";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "QMatrixClient";

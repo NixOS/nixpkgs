@@ -3,7 +3,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "jwasm-${version}";
+  pname = "jwasm";
   version = "git-2017-11-22";
 
   src = fetchFromGitHub {

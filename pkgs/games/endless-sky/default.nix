@@ -7,7 +7,8 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "endless-sky-${version}";
+  pname = "endless-sky";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "endless-sky";

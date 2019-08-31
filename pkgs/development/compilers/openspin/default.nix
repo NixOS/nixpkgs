@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "openspin-${version}";
+  pname = "openspin";
   version = "unstable-2018-10-02";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "dgraph-${version}";
+  pname = "dgraph";
   version = "0.8.2";
 
   goPackagePath = "github.com/dgraph-io/dgraph";

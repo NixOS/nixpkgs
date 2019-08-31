@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, zlib, rdkafka, yajl }:
 
 stdenv.mkDerivation rec {
-  name = "kafkacat-${version}";
+  pname = "kafkacat";
 
   version = "1.4.0";
 

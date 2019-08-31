@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "brightnessctl-${version}";
+  pname = "brightnessctl";
   version = "0.4";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libfaketime-${version}";
+  pname = "libfaketime";
   version = "0.9.7";
 
   src = fetchurl {

@@ -36,7 +36,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "fcitx-${version}";
+  pname = "fcitx";
   version = "4.2.9.6";
 
   src = fetchFromGitLab {

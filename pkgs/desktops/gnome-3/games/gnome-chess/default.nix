@@ -2,11 +2,11 @@
 , gettext, itstool, libxml2, python3, gnome3, glib, gtk3, librsvg }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-chess-${version}";
+  pname = "gnome-chess";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-chess/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-chess/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0hzb6s4wmfy1fysagc5hmn1ijvrwyd2cg7iz41mpn7gfdjyak639";
   };
 

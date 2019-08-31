@@ -1,11 +1,10 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   version = "0.99";
   pname = "barcode";
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${name}.tar.xz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1indapql5fjz0bysyc88cmc54y8phqrbi7c76p71fgjp45jcyzp8";
   };
 

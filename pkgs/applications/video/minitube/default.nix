@@ -6,7 +6,7 @@
 , withAPIKey ? "AIzaSyBtFgbln3bu1swQC-naMxMtKh384D3xJZE" }:
 
 stdenv.mkDerivation rec {
-  name = "minitube-${version}";
+  pname = "minitube";
   version = "2.9";
 
   src = fetchFromGitHub {

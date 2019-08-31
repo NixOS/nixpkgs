@@ -2,7 +2,6 @@
   dtkcore, dtkwidget, dde-qt-dbus-factory, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-polkit-agent";
   version = "0.2.10";
 
@@ -39,7 +38,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "PolicyKit agent for Deepin Desktop Environment";

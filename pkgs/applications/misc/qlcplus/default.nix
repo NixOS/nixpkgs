@@ -4,7 +4,7 @@
 }:
 
 mkDerivation rec {
-  name = "qlcplus-${version}";
+  pname = "qlcplus";
   version = "4.12.1";
 
   src = fetchFromGitHub {

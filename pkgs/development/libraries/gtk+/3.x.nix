@@ -77,6 +77,13 @@ stdenv.mkDerivation rec {
     "-Dtests=false"
   ];
 
+  # These are the defines that'd you'd get with --enable-debug=minimum (default).
+  # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
+  NIX_CFLAGS_COMPILE = [
+    "-DG_ENABLE_DEBUG"
+    "-DG_DISABLE_CAST_CHECKS"
+  ];
+
   postPatch = ''
     files=(
       build-aux/meson/post-install.py

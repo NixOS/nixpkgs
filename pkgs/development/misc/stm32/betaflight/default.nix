@@ -15,7 +15,8 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "betaflight-${version}";
+  pname = "betaflight";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "betaflight";

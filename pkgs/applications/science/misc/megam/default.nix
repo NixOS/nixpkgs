@@ -2,7 +2,8 @@
 
 let version = "0.92"; in
 stdenv.mkDerivation rec {
-  name = "megam-${version}";
+  pname = "megam";
+  inherit version;
 
   src = fetchurl {
     url = "http://hal3.name/megam/megam_src.tgz";

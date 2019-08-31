@@ -6,7 +6,8 @@ let
   version = "11.33.3";
 in stdenv.mkDerivation rec {
 
-  name = "monetdb-${version}";
+  pname = "monetdb";
+  inherit version;
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";

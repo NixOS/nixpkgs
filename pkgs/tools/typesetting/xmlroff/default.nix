@@ -2,7 +2,7 @@
 , glib, pango, pangoxsl, gtk2, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "xmlroff-${version}";
+  pname = "xmlroff";
   version = "0.6.2";
 
   src = fetchurl {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "docs" ""
   '';
 
-  sourceRoot = "${name}/xmlroff/";
+  sourceRoot = "${pname}-${version}/xmlroff/";
 
   patches = [./xmlroff.patch];
 

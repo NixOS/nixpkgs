@@ -60,6 +60,8 @@ rec {
       # are very hard to track down. For details, see
       # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
     '';
+
+    setupHooks = ./setup-hook.sh;
   };
 
   cargo = stdenv.mkDerivation rec {

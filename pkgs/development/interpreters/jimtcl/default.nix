@@ -4,7 +4,7 @@ let
   makeSDLFlags = map (p: "-I${stdenv.lib.getDev p}/include/SDL");
 
 in stdenv.mkDerivation rec {
-  name = "jimtcl-${version}";
+  pname = "jimtcl";
   version = "0.78";
 
   src = fetchFromGitHub {

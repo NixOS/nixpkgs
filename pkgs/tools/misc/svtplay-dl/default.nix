@@ -4,7 +4,7 @@
 let
   inherit (python3Packages) python nose pycrypto pyyaml requests mock;
 in stdenv.mkDerivation rec {
-  name = "svtplay-dl-${version}";
+  pname = "svtplay-dl";
   version = "2.2";
 
   src = fetchFromGitHub {

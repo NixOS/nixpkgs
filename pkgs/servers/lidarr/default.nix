@@ -1,7 +1,7 @@
 { stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "lidarr-${version}";
+  pname = "lidarr";
   version = "0.6.2.883";
 
   src = fetchurl {

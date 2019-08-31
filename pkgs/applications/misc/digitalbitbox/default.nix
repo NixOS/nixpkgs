@@ -47,7 +47,7 @@ let
   copyUdevRuleToOutput = name: rule:
     "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
 in stdenv.mkDerivation rec {
-  name = "digitalbitbox-${version}";
+  pname = "digitalbitbox";
   version = "2.2.2";
 
   src = fetchFromGitHub {

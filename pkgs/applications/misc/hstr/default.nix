@@ -2,7 +2,7 @@
 , autoreconfHook, pkgconfig, gettext }:
 
 stdenv.mkDerivation rec {
-  name    = "hstr-${version}";
+  pname = "hstr";
   version = "2.0";
 
   src = fetchFromGitHub {

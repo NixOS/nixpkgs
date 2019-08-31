@@ -1,9 +1,9 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2
+, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
 }:
 buildPythonPackage rec {
-  version = "3.10.1";
+  version = "4.6.5";
   pname = "pytest";
 
   preCheck = ''
@@ -13,18 +13,19 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e246cf173c01169b9617fc07264b7b1316e78d7a650055235d6d897bc80d9660";
+    sha256 = "8fc39199bdda3d9d025d3b1f4eb99a192c20828030ea7c9a0d2840721de7d347";
   };
 
   checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites]
+  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
     ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
     ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
+  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
   checkPhase = ''
     runHook preCheck
-    $out/bin/py.test -x testing/ -k "not test_raises_exception_looks_iterable" --ignore testing/test_assertion.py --ignore testing/test_config.py
+    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths"
     runHook postCheck
   '';
 

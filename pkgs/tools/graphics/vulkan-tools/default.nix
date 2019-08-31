@@ -2,8 +2,8 @@
   glslang, pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
 
 stdenv.mkDerivation rec {
-  name = "vulkan-tools-${version}";
-  version = "1.1.114.0";
+  pname = "vulkan-tools";
+  version = "1.1.106.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     rev = "version-0.7.0";
     sha256 = "1pwnmlq2pgkkln9sgz4wlb9dqlqw83bkf105qljnlvggc21zm3pv";
   };
-  name = "gup-${version}";
+  pname = "gup";
   buildInputs = lib.remove null [ python which pychecker ];
   SKIP_PYCHECKER = pychecker == null;
   buildPhase = "make python";

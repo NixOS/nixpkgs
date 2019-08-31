@@ -3,7 +3,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "gcc-arm-embedded-${version}";
+  pname = "gcc-arm-embedded";
   version = "8-2019-q3-update";
   subdir = "8-2019q3/RC1.1";
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "remotebox-${version}";
+  pname = "remotebox";
   version = "2.6";
 
   src = fetchurl {

@@ -3,7 +3,7 @@
 # at runtime, need jdk
 
 stdenv.mkDerivation rec {
-  name = "groovy-${version}";
+  pname = "groovy";
   version = "2.5.8";
 
   src = fetchurl {

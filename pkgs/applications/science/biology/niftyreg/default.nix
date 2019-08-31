@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname   = "niftyreg";
   version = "1.3.9";
-  name    = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/nifty_reg-${version}/nifty_reg-${version}.tar.gz";

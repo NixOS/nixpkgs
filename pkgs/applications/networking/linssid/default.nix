@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qtbase, qtsvg, qmake, pkgconfig, boost, wirelesstools, iw, qwt, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "linssid-${version}";
+  pname = "linssid";
   version = "2.7";
 
   src = fetchurl {

@@ -5,7 +5,7 @@
 }:
 
 mkDerivation rec {
-  name = "teamviewer-${version}";
+  pname = "teamviewer";
   version = "14.5.1691";
 
   src = fetchurl {

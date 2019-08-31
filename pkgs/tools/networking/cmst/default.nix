@@ -7,7 +7,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
-    rev = "cmst-${version}";
+    rev = "${pname}-${version}";
     sha256 = "13739f0ddld34dcqlfhylzn1zqz5a7jbp4a4id7gj7pcxjx1lafh";
   };
 

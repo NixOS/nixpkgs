@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "fpp-${version}";
+  pname = "fpp";
   version = "0.8.2";
 
   src = fetchFromGitHub {

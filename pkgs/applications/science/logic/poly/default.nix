@@ -1,7 +1,6 @@
 {stdenv, fetchFromGitHub, gmp, cmake, python}:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "libpoly";
   version = "0.1.7";
 

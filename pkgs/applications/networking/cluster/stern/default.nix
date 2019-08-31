@@ -3,7 +3,7 @@
 let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform; in
 
 buildGoPackage rec {
-  name = "stern-${version}";
+  pname = "stern";
   version = "1.11.0";
 
   goPackagePath = "github.com/wercker/stern";

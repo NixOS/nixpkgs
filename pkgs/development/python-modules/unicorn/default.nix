@@ -1,7 +1,6 @@
 { stdenv, buildPackages, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name  = "${pname}-${version}";
   pname = "unicorn";
   version = "1.0.1";
 

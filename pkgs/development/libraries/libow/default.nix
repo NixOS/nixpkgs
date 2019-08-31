@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.2p1";
-  name = "libow-${version}";
+  pname = "libow";
 
   src = fetchFromGitHub {
     owner = "owfs";

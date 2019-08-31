@@ -1,11 +1,11 @@
 { mkDerivation, lib, fetchurl, fetchpatch, cmake, qtscript, qtwebengine, gdal, proj, routino, quazip }:
 
 mkDerivation rec {
-  name = "qmapshack-${version}";
+  pname = "qmapshack";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "https://bitbucket.org/maproom/qmapshack/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/maproom/qmapshack/downloads/${pname}-${version}.tar.gz";
     sha256 = "15x1b2q0hr1vx006f9hjc4cvfjvxvfdwybw32qvczdyc3crq0mc9";
   };
 

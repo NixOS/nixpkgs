@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.10.0";
-  name = "yara-${version}";
+  pname = "yara";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";

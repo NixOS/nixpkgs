@@ -21,7 +21,7 @@ let
     };
 
   in stdenv.mkDerivation rec {
-      name = "charles-${version}";
+      pname = "charles";
       inherit version;
 
       src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "doctl-${version}";
+  pname = "doctl";
   version = "${major}.${minor}.${patch}";
   major = "1";
   minor = "18";

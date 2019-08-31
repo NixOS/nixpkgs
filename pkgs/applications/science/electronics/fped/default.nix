@@ -5,7 +5,7 @@
 
 with lib;
 stdenv.mkDerivation rec {
-  name = "fped-${version}";
+  pname = "fped";
   version = "unstable-2017-05-11";
 
   src = fetchgit {

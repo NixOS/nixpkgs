@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "ffmpeg-sixel-${version}";
+  pname = "ffmpeg-sixel";
   version = "nightly-2.3.x";
 
   src = fetchFromGitHub {

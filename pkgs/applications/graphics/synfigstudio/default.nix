@@ -22,7 +22,8 @@ let
   };
 
   synfig = stdenv.mkDerivation rec {
-    name = "synfig-${version}";
+    pname = "synfig";
+    inherit version;
 
     src = fetchFromGitHub {
        repo   = "synfig";
@@ -47,7 +48,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "synfigstudio-${version}";
+  pname = "synfigstudio";
+  inherit version;
 
   src = fetchFromGitHub {
      repo   = "synfig";

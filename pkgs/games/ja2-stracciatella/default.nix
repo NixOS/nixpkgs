@@ -27,7 +27,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "ja2-stracciatella-${version}";
+  pname = "ja2-stracciatella";
   inherit src;
   inherit version;
 

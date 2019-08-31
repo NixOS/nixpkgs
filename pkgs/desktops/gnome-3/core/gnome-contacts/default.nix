@@ -7,10 +7,11 @@
 let
   version = "3.32.1";
 in stdenv.mkDerivation rec {
-  name = "gnome-contacts-${version}";
+  pname = "gnome-contacts";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "17g1gh8yj58cfpdx69h2szivlbjgvv982kmhnkkh0i5bwj0zs2yy";
   };
 

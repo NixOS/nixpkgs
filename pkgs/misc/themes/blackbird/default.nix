@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "Blackbird";
   version = "2017-12-13";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     repo = "${pname}";

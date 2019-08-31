@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libdrm, libva }:
 
 stdenv.mkDerivation rec {
-  name = "cmrt-${version}";
+  pname = "cmrt";
   version = "1.0.6";
 
   src = fetchurl {

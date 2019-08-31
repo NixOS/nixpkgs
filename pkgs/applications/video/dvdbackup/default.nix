@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.4.2";
-  name = "dvdbackup-${version}";
+  pname = "dvdbackup";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dvdbackup/${name}.tar.xz";
+    url = "mirror://sourceforge/dvdbackup/${pname}-${version}.tar.xz";
     sha256 = "1rl3h7waqja8blmbpmwy01q9fgr5r0c32b8dy3pbf59bp3xmd37g";
   };
 

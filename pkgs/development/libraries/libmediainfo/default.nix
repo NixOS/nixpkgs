@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "19.07";
-  name = "libmediainfo-${version}";
+  pname = "libmediainfo";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
     sha256 = "0k3d7mha1lay2s09crc9z9zr970l617lb0c3b35wl44flkqf7jss";

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, dpkg, busybox, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "molly-guard-${version}";
+  pname = "molly-guard";
   version = "0.6.3";
 
   src = fetchurl {

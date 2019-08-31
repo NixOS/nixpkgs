@@ -16,10 +16,10 @@ let
   });
 in stdenv.mkDerivation rec {
   version = "4.14.3";
-  name = "pykde4-${version}";
+  pname = "pykde4";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${version}/src/${name}-${version}.tar.xz";
+    url = "mirror://kde/stable/${version}/src/${pname}-${version}-${version}.tar.xz";
     sha256 = "1z40gnkyjlv6ds3cmpzvv99394rhmydr6rxx7qj33m83xnsxgfbz";
   };
 

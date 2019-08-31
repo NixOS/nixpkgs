@@ -1,7 +1,7 @@
 { stdenv, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "alertmanager-${version}";
+  pname = "alertmanager";
   version = "0.18.0";
   rev = "v${version}";
 

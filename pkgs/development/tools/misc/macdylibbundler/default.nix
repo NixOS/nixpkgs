@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "macdylibbundler-${version}";
+  pname = "macdylibbundler";
   version = "20180825";
 
   src = fetchFromGitHub {

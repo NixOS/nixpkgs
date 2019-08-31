@@ -7,7 +7,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "snipes-${version}";
+  pname = "snipes";
   version = "20180930";
 
   src = fetchFromGitHub {

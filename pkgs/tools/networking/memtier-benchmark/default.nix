@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "memtier-benchmark-${version}";
+  pname = "memtier-benchmark";
   version = "1.2.17";
 
   src = fetchFromGitHub {

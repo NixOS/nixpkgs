@@ -5,7 +5,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "driftnet-${version}";
+  pname = "driftnet";
   version = "1.1.5";
 
   nativeBuildInputs = [ pkgconfig ];

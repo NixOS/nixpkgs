@@ -1,6 +1,5 @@
 {stdenv, fetchurl, automake, autoconf, libtool, autoreconfHook, gmpxx}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "givaro";
   version = "3.8.0";
   src = fetchurl {

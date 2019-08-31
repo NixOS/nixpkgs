@@ -48,11 +48,11 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "
 in
 
 stdenv.mkDerivation rec {
-  name = "uwsgi-${version}";
+  pname = "uwsgi";
   version = "2.0.18";
 
   src = fetchurl {
-    url = "https://projects.unbit.it/downloads/${name}.tar.gz";
+    url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
     sha256 = "10zmk4npknigmbqcq1wmhd461dk93159px172112vyq0i19sqwj9";
   };
 

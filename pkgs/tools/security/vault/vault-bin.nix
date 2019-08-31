@@ -29,7 +29,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "vault-bin-${version}";
+  pname = "vault-bin";
+  inherit version;
 
   src = sources."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 

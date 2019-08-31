@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv, cmake, openssl, zlib, libuv }:
 
 stdenv.mkDerivation rec {
-  name = "libwebsockets-${version}";
+  pname = "libwebsockets";
   version = "3.2.0";
 
   src = fetchFromGitHub {

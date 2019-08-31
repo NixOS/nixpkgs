@@ -8,7 +8,6 @@
 stdenv.mkDerivation rec {
   pname = "plan9port";
   version = "2019-02-25";
-  name = "${pname}-${version}";
 
   src =  fetchFromGitHub {
     owner = "9fans";

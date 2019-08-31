@@ -7,7 +7,7 @@ assert pandocSupport -> pandoc != null;
 
 stdenv.mkDerivation rec {
 
-  name = "memo-${version}";
+  pname = "memo";
 
   version = "0.8";
 

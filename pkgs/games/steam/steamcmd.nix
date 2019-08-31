@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "steamcmd-${version}";
+  pname = "steamcmd";
   version = "20180104"; # According to steamcmd_linux.tar.gz mtime
 
   src = fetchurl {

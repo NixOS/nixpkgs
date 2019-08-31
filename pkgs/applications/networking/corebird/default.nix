@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.7.4";
-  name = "corebird-${version}";
+  pname = "corebird";
 
   src = fetchFromGitHub {
     owner = "baedert";

@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.10";
-  name = "glyr-${version}";
+  pname = "glyr";
 
   src = fetchFromGitHub {
     owner = "sahib";

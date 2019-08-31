@@ -2,7 +2,7 @@
 
 with python3Packages;
 buildPythonApplication rec {
-  name = "wakatime-${version}";
+  pname = "wakatime";
   version = "10.8.0";
 
   src = fetchFromGitHub {

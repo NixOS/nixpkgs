@@ -2,7 +2,8 @@
 
 let version = "0.3.6"; in
 stdenv.mkDerivation rec {
-  name = "zfstools-${version}";
+  pname = "zfstools";
+  inherit version;
 
   src = fetchFromGitHub {
     sha256 = "16lvw3xbmxp2pr8nixqn7lf4504zaaxvbbdnjkv4dggwd4lsdjyg";

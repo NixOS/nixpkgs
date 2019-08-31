@@ -3,7 +3,7 @@
 , pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "git-bz-${version}";
+  pname = "git-bz";
   version = "3.2015-09-08";
 
   src = fetchgit {

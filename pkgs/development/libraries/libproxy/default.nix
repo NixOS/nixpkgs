@@ -3,7 +3,7 @@
 , SystemConfiguration, CoreFoundation, JavaScriptCore }:
 
 stdenv.mkDerivation rec {
-  name = "libproxy-${version}";
+  pname = "libproxy";
   version = "0.4.15";
 
   src = fetchFromGitHub {

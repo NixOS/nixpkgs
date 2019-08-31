@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "nginx_exporter-${version}";
+  pname = "nginx_exporter";
   version = "0.4.2";
 
   goPackagePath = "github.com/nginxinc/nginx-prometheus-exporter";

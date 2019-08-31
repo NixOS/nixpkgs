@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "OpenOrienteering-Mapper-${version}";
+  pname = "OpenOrienteering-Mapper";
   version = "0.8.4";
 
   buildInputs = [ gdal qtbase qttools qtlocation qtimageformats
