@@ -21152,6 +21152,8 @@ in
 
   way-cooler = callPackage ../applications/window-managers/way-cooler {};
 
+  waypipe = callPackage ../applications/networking/remote/waypipe { };
+
   wayv = callPackage ../tools/X11/wayv {};
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
