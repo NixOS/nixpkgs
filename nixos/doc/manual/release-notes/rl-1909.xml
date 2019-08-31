@@ -600,6 +600,26 @@
       removed from nixpkgs due to lack of maintainer.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Using <option>fonts.enableDefaultFonts</option> adds a default emoji font <literal>noto-fonts-emoji</literal>.
+     <itemizedlist>
+      <para>Users of the following options will have this enabled by default:</para>
+      <listitem>
+       <para><option>services.xserver.enable</option></para>
+      </listitem>
+      <listitem>
+       <para><option>programs.sway.enable</option></para>
+      </listitem>
+      <listitem>
+       <para><option>programs.way-cooler.enable</option></para>
+      </listitem>
+      <listitem>
+       <para><option>services.xrdp.enable</option></para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
