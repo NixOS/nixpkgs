@@ -1622,6 +1622,8 @@ in
     bison = bison2;
   };
 
+  filebot = callPackage ../applications/video/filebot {};
+
   fileshelter = callPackage ../servers/web-apps/fileshelter { };
 
   firecracker = callPackage ../applications/virtualization/firecracker { };
