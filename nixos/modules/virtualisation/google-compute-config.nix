@@ -21,7 +21,7 @@ in
   boot.initrd.kernelModules = [ "virtio_scsi" ];
   boot.kernelModules = [ "virtio_pci" "virtio_net" ];
 
-  # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
+  # Generate a GRUB menu.
   boot.loader.grub.device = "/dev/sda";
   boot.loader.timeout = 0;
 
