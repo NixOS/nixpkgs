@@ -61,9 +61,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           inherit (self.melpaPackages) easy-kill;
         };
 
-        # upstream issue: missing file header
-        elmine = markBroken super.elmine;
-
         elpy = super.elpy.overrideAttrs(old: {
           propagatedUserEnvPkgs = old.propagatedUserEnvPkgs ++ [ external.elpy ];
         });
@@ -336,6 +333,8 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # upstream issue: doesn't build
         eterm-256color = markBroken super.eterm-256color;
+        # upstream issue: missing file header
+        elmine = markBroken super.elmine;
 
         # upstream issue: missing dependency highlight
         evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
