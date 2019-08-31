@@ -210,9 +210,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
         });
 
-        # upstream issue: missing file header
-        tawny-mode = markBroken super.tawny-mode;
-
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs(old: {
 
