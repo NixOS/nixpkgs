@@ -38,7 +38,6 @@ self: let
     overrides = {
       # upstream issue: missing footer
       ebdb-i18n-chn = markBroken super.ebdb-i18n-chn;
-      iterators = markBroken super.iterators; # requires emacs-25
       rcirc-menu = markBroken super.rcirc-menu; # Missing file header
       cl-lib = null; # builtin
       tle = null; # builtin
