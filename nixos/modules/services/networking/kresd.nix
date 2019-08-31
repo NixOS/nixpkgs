@@ -55,6 +55,16 @@ in
         For detailed syntax see ListenStream in man systemd.socket.
       '';
     };
+    listenDoH = mkOption {
+      type = with types; listOf str;
+      default = [];
+      example = [ "198.51.100.1:444353" "[2001:db8::1]:44353" "44353" ];
+      description = ''
+        Addresses on which kresd should provide DNS over HTTP (see RFC 8484).
+        For detailed syntax see ListenStream in man systemd.socket.
+      '';
+    };
+
     # TODO: perhaps options for more common stuff like cache size or forwarding
   };
 
@@ -99,6 +109,18 @@ in
       };
     };
 
+    systemd.sockets.kresd-doh = mkIf (cfg.listenDoH != []) rec {
+      wantedBy = [ "sockets.target" ];
+      before = wantedBy;
+      partOf = [ "kresd.socket" ];
+      listenStreams = cfg.listenDoH;
+      socketConfig = {
+        FileDescriptorName = "doh";
+        FreeBind = true;
+        Service = "kresd.service";
+      };
+    };
+
     systemd.sockets.kresd-control = rec {
       wantedBy = [ "sockets.target" ];
       before = wantedBy;
@@ -122,7 +144,8 @@ in
         WorkingDirectory = cfg.cacheDir;
         Restart = "on-failure";
         Sockets = [ "kresd.socket" "kresd-control.socket" ]
-          ++ optional (cfg.listenTLS != []) "kresd-tls.socket";
+          ++ optional (cfg.listenTLS != []) "kresd-tls.socket"
+          ++ optional (cfg.listenDoH != []) "kresd-doh.socket";
       };
 
       # Trust anchor goes from dns-root-data by default.
