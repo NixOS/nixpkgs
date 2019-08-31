@@ -228,9 +228,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         });
 
-        # missing OCaml
-        utop = markBroken super.utop;
-
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
