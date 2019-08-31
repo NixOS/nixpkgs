@@ -10669,6 +10669,9 @@ let
       url    = "http://dcssrv1.oit.uci.edu/indiv/ehood/release/MHonArc/tar/MHonArc-2.6.19.tar.gz";
       sha256 = "0ll3v93yji334zqp6xfzfxc0127pmjcznmai1l5q6dzawrs2igzq";
     };
+
+    patches = [ ../development/perl-modules/mhonarc.patch ];
+
     outputs = [ "out" "dev" ]; # no "devdoc"
 
     installTargets = "install";
