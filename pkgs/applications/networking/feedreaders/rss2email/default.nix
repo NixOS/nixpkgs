@@ -4,15 +4,13 @@ with pythonPackages;
 
 buildPythonApplication rec {
   pname = "rss2email";
-  version = "3.9"; # TODO: on next bump, the manpage will be updated.
-  # Update nixos/modules/services/mail/rss2email.nix to point to it instead of
-  # to the online r2e.1
+  version = "3.10";
 
   propagatedBuildInputs = [ feedparser beautifulsoup4 html2text ];
 
   src = fetchurl {
     url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
-    sha256 = "02wj9zhmc2ym8ba1i0z9pm1c622z2fj7fxwagnxbvpr1402ahmr5";
+    sha256 = "1yjgbgpq9jjmpywwk6n4lzb2k7mqgdgfgm4jckv4zy0fn595pih1";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -30,14 +28,12 @@ buildPythonApplication rec {
 
     # copy documentation
     mkdir -p $doc/share/doc/rss2email
-    cp AUTHORS COPYING CHANGELOG README $doc/share/doc/rss2email/
+    cp AUTHORS COPYING CHANGELOG README.rst $doc/share/doc/rss2email/
   '';
 
-  # The tests currently fail, see
-  # https://github.com/rss2email/rss2email/issues/14
-  # postCheck = ''
-  #   env PYTHONPATH=.:$PYTHONPATH python ./test/test.py
-  # '';
+  postCheck = ''
+    env PATH=$out/bin:$PATH python ./test/test.py
+  '';
 
   meta = with lib; {
     description = "A tool that converts RSS/Atom newsfeeds to email.";
