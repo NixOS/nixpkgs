@@ -95,9 +95,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # Expects bash to be at /bin/bash
         flycheck-rtags = markBroken super.flycheck-rtags;
 
-        # build timeout
-        graphene = markBroken super.graphene;
-
         pdf-tools = super.pdf-tools.overrideAttrs(old: {
           nativeBuildInputs = [ external.pkgconfig ];
           buildInputs = with external; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
@@ -348,8 +345,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing dependency
         fold-dwim-org = markBroken super.fold-dwim-org;
 
-        # build timeout
-        graphene = markBroken super.graphene;
 
         # Expects bash to be at /bin/bash
         helm-rtags = markBroken super.helm-rtags;
