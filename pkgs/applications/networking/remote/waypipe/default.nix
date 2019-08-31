@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
-    repo = pname;
+    repo = "waypipe";
     rev = "v${version}";
     sha256 = "13kp5snkksli0sj5ldkgybcs1s865f0qdak2w8796xvy8dg9jda8";
   };
