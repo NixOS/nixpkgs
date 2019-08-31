@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "SSH access and repository management app for GitLab";
     homepage = http://www.gitlab.com/;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin ];
     license = licenses.mit;
   };
