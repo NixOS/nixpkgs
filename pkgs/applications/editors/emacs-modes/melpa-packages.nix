@@ -206,9 +206,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
 
-        # missing OCaml
-        ocp-indent = markBroken super.ocp-indent;
-
         # upstream issue: missing file header
         qiita = markBroken super.qiita;
 
