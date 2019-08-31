@@ -1822,6 +1822,12 @@
     githubId = 18535642;
     name = "Emily";
   };
+  endocrimes = {
+    email = "dani@builds.terrible.systems";
+    github = "endocrimes";
+    githubId = 1330683;
+    name = "Danielle Lancashire";
+  };
   ederoyd46 = {
     email = "matt@ederoyd.co.uk";
     github = "ederoyd46";
