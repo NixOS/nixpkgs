@@ -214,8 +214,6 @@
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
   ./services/backup/duplicati.nix
-  ./services/backup/crashplan.nix
-  ./services/backup/crashplan-small-business.nix
   ./services/backup/duplicity.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
