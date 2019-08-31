@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
 
     substituteInPlace lib/Makefile.local \
       --replace '-install_name $(libdir)' "-install_name $out/lib"
+
+    substituteInPlace emacs/notmuch-emacs-mua \
+      --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
+      --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
   '';
 
   configureFlags = [ "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions" ];
