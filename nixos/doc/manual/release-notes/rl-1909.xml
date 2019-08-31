@@ -547,8 +547,8 @@
       </para>
      </listitem>
     </itemizedlist>
-
-     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>.
+     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>,
+     and restricts the SysRq key combinations to the sync command only.
      These sysctl snippets can be found in <literal>/etc/sysctl.d/50-*.conf</literal>,
      and overridden via <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link>
      (which will place the parameters in <literal>/etc/sysctl.d/60-nixos.conf</literal>).
