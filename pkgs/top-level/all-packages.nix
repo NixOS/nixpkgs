@@ -24103,6 +24103,8 @@ in
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 
+  nixos-generators = callPackage ../tools/nix/nixos-generators { };
+
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };
