@@ -323,16 +323,14 @@ rec {
         else
           mergeDefinitions loc opt.type defs';
 
-      # Check whether the option is defined, and apply the ‘apply’
-      # function to the merged value.  This allows options to yield a
-      # value computed from the definitions.
-      value =
-        if !res.isDefined then
-          throw "The option `${showOption loc}' is used but not defined."
-        else if opt ? apply then
-          opt.apply res.mergedValue
-        else
-          res.mergedValue;
+
+      # The value with a check that it is defined
+      valueDefined = if res.isDefined then res.mergedValue else
+        throw "The option `${showOption loc}' is used but not defined.";
+
+      # Apply the 'apply' function to the merged value. This allows options to
+      # yield a value computed from the definitions
+      value = if opt ? apply then opt.apply valueDefined else valueDefined;
 
     in opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;

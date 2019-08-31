@@ -15,6 +15,11 @@ mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
+  # Wayland needs to know the desktop file name in order to show the app name and icon.
+  # Patch has been upstreamed and can be removed in the future.
+  # See: https://sourceforge.net/p/qt5ct/code/549/
+  patches = [ ./wayland.patch ];
+
   qmakeFlags = [
     "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
   ];

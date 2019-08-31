@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsClock";
-  version = "0.1.0";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "valebes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fpidswkgpf9yr4vxqn38livz6r3z5i0lhg7ngj9f1ki4yqxn9zh";
+    sha256 = "1i93qkz6d8sbk78i4rvx099hnn4lklp4cjvanpm9ssv8na4rqvh2";
   };
    
-  cargoSha256 = "1m0lm8xh1qp0cbx870xy2m0bv047mb00vcwzq7r5gxqx8n61qm4n";
+  cargoSha256 = "0zg5q2p9snpfyxl0gx87ix1f46afrfm5jq0m6c7s8qw2x9hpvxzr";
 
   meta = with stdenv.lib; {
     description = "A simple terminal clock written in Rust";

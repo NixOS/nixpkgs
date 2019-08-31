@@ -2,7 +2,7 @@
   stdenv, fetchurl,
   automoc4, cmake_2_8, libxslt, perl, pkgconfig, shared-mime-info,
   attica, docbook_xml_dtd_42, docbook_xsl, giflib,
-  libdbusmenu_qt, libjpeg, phonon, qt4
+  libdbusmenu_qt, libjpeg, phonon, qt4, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     automoc4 cmake_2_8 libxslt perl pkgconfig shared-mime-info
   ];
   buildInputs = [
-    attica giflib libdbusmenu_qt libjpeg
+    attica giflib libdbusmenu_qt libjpeg openssl
   ];
   propagatedBuildInputs = [ qt4 phonon ];
 

@@ -269,7 +269,7 @@ in
         penultimate = {
           enable = mkOption {
             type = types.bool;
-            default = true;
+            default = false;
             description = ''
               Enable fontconfig-penultimate settings to supplement the
               NixOS defaults by providing per-font rendering defaults and

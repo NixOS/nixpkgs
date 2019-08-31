@@ -151,8 +151,7 @@ in
       description = "strongSwan IPSec Service";
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ kmod iproute iptables utillinux ]; # XXX Linux
-      wants = [ "keys.target" ];
-      after = [ "network-online.target" "keys.target" ];
+      after = [ "network-online.target" ];
       environment = {
         STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins; };
       };

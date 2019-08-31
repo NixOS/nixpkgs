@@ -1,8 +1,10 @@
-{ pyqt4,
-  stdenv, callPackage, fetchurl, cmake, automoc4, sip }:
+{ pyqt4, openssl_1_0_2
+, stdenv, callPackage, fetchurl, cmake, automoc4, sip }:
 
 let
-  kdelibs = callPackage ./kdelibs.nix {};
+  kdelibs = callPackage ./kdelibs.nix {
+    openssl = openssl_1_0_2;
+  };
   sip4_19_3 = sip.overrideAttrs (oldAttrs: rec {
     src = fetchurl {
       url = "mirror://sourceforge/pyqt/sip/sip-4.19.3/sip-4.19.3.tar.gz";

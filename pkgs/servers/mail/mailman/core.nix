@@ -1,14 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi, alembic, aiosmtpd, dnspython
 , flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
 , requests, zope_configuration, click, falcon, importlib-resources
-, zope_component
+, zope_component, lynx, postfix
 }:
 
 buildPythonPackage rec {
   pname = "mailman";
   version = "3.2.2";
-
-  patches = [ ./0001-Find-external-tools-via-PATH-rather-than-hard-coding.patch ];
 
   src = fetchPypi {
     inherit pname version;
@@ -20,6 +18,13 @@ buildPythonPackage rec {
     importlib-resources lazr_config passlib requests zope_configuration
     zope_component
   ];
+
+  patchPhase = ''
+    substituteInPlace src/mailman/config/postfix.cfg \
+      --replace /usr/sbin/postmap ${postfix}/bin/postmap
+    substituteInPlace src/mailman/config/schema.cfg \
+      --replace /usr/bin/lynx ${lynx}/bin/lynx
+  '';
 
   # Mailman assumes that those scripts in $out/bin are Python scripts. Wrapping
   # them in shell code breaks this assumption. The proper way to use mailman is

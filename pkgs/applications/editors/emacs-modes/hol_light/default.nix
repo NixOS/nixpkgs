@@ -22,5 +22,8 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.gpl2Plus;
     platforms   = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+
+    # Fails trying to fetch dependencies in build
+    # broken = true;
   };
 }

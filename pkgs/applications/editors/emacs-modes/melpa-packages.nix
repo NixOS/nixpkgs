@@ -6,8 +6,8 @@ To update the list of packages from MELPA,
 
 1. Run ./update-melpa
 2. Check for evaluation errors:
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackagesNg.melpaStablePackages
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackagesNg.melpaPackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaStablePackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaPackages
 3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
 */
@@ -131,6 +131,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
+          NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
             cd server
           '';
@@ -143,6 +144,9 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             cd source/server
             make check
             cd ../..
+          '';
+          preFixup = ''
+            rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
           doCheck = true;

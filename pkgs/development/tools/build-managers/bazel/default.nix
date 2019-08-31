@@ -512,6 +512,8 @@ stdenv.mkDerivation rec {
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
     echo "${python3}" >> $out/nix-support/depends
+  '' + lib.optionalString stdenv.isDarwin ''
+    echo "${cctools}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;
