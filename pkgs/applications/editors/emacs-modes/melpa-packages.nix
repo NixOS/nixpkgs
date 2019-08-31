@@ -206,9 +206,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
 
-        # upstream issue: missing file header
-        speech-tagger = markBroken super.speech-tagger;
-
         shm = super.shm.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
         });
@@ -341,6 +338,9 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # upstream issue: missing file header
         qiita = markBroken super.qiita;
+
+        # upstream issue: missing file header
+        speech-tagger = markBroken super.speech-tagger;
 
         # upstream issue: missing file header
         link = markBroken super.link;
