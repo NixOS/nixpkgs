@@ -717,6 +717,8 @@ in {
 
   mailmanclient = callPackage ../development/python-modules/mailmanclient { };
 
+  mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
+
   manhole = callPackage ../development/python-modules/manhole { };
 
   markerlib = callPackage ../development/python-modules/markerlib { };

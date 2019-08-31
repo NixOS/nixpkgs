@@ -152,12 +152,14 @@
   ./programs/tmux.nix
   ./programs/tsm-client.nix
   ./programs/udevil.nix
+  ./programs/usbtop.nix
   ./programs/venus.nix
   ./programs/vim.nix
   ./programs/wavemon.nix
   ./programs/way-cooler.nix
   ./programs/waybar.nix
   ./programs/wireshark.nix
+  ./programs/x2goserver.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
