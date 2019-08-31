@@ -73,7 +73,14 @@ let
     ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
       ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng";
 
-    makeFlags = [ "MANDIR=$(man)/share/man" ];
+    makeFlags = [
+      "MANDIR=$(man)/share/man"
+      # This avoids conflicts between man pages of openssl subcommands (for
+      # example 'ts' and 'err') man pages and their equivalent top-level
+      # command in other packages (respectively man-pages and moreutils).
+      # This is done in ubuntu and archlinux, and possiibly many other distros.
+      "MANSUFFIX=ssl"
+    ];
 
     enableParallelBuilding = true;
 
@@ -114,7 +121,6 @@ let
       license = licenses.openssl;
       platforms = platforms.all;
       maintainers = [ maintainers.peti ];
-      priority = 10; # resolves collision with ‘man-pages’
     };
   };
 
