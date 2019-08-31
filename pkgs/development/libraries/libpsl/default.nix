@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-static"
 #    "--enable-gtk-doc"
     "--enable-man"
     "--enable-valgrind-tests"

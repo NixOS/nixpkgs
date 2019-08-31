@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-x"
-    "--disable-static"
     "--enable-shape"
     "--enable-sm"
     "--enable-startup-notification"

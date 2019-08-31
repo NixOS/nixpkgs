@@ -89,7 +89,6 @@ stdenv.mkDerivation rec {
       "--enable-version3"
     # Build flags
       "--enable-shared"
-      "--disable-static"
       (ifMinVer "0.6" "--enable-pic")
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"

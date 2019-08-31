@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-library"
     "--enable-fuse"
-    "--disable-static"
   ];
 
   meta = {

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   outputBin = "dev"; # fftw-wisdom
 
   configureFlags =
-    [ "--enable-shared" "--disable-static"
+    [ "--enable-shared"
       "--enable-threads"
     ]
     ++ optional (precision != "double") "--enable-${precision}"
