@@ -301,8 +301,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         jsfmt = markBroken super.jsfmt;
 
-        # upstream issue: missing dependency
-        fold-dwim-org = markBroken super.fold-dwim-org;
         # upstream issue: missing file header
         maxframe = markBroken super.maxframe;
 
