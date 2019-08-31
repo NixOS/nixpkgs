@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, writeText, openjdk11_headless, openjdk12, gradleGen
+{ stdenv, lib, fetchurl, writeText, openjdk11_headless, gradleGen
 , pkgconfig, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib
 , ffmpeg, python, ruby }:
 
@@ -99,7 +99,7 @@ in makePackage {
 
   meta = with stdenv.lib; {
     homepage = http://openjdk.java.net/projects/openjfx/;
-    license = openjdk12.meta.license;
+    license = licenses.gpl2;
     description = "The next-generation Java client toolkit.";
     maintainers = with maintainers; [ abbradar ];
     platforms = [ "i686-linux" "x86_64-linux" ];
