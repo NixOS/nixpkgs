@@ -248,6 +248,11 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
 
+          postPatch = ''
+            substituteInPlace telega-server.el \
+              --replace "telega-directory exec-path" "\"$out/bin\" exec-path"
+          '';
+
           postBuild = ''
             cd source/server
             make
