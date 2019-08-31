@@ -207,9 +207,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         notmuch = dontConfigure super.notmuch;
 
         # upstream issue: missing file header
-        qiita = markBroken super.qiita;
-
-        # upstream issue: missing file header
         speech-tagger = markBroken super.speech-tagger;
 
         shm = super.shm.overrideAttrs (attrs: {
@@ -341,6 +338,9 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # Expects bash to be at /bin/bash
         helm-rtags = markBroken super.helm-rtags;
+
+        # upstream issue: missing file header
+        qiita = markBroken super.qiita;
 
         # upstream issue: missing file header
         link = markBroken super.link;
