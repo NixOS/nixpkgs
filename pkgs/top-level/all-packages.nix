@@ -2832,6 +2832,8 @@ in
 
   wev = callPackage ../tools/misc/wev { };
 
+  wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
+
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
   z-lua = callPackage ../tools/misc/z-lua { };
