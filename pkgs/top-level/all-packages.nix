@@ -22650,6 +22650,7 @@ in
     timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
+    wsmatrix = callPackage ../desktops/gnome-3/extensions/wsmatrix.nix { };
   };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
