@@ -91,6 +91,7 @@ in python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
     xorg.libXtst
     xorg.libxkbfile
+    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ stdenv.lib.optional atspiSupport at-spi2-core;
 
   nativeBuildInputs = [
