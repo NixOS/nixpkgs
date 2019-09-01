@@ -259,7 +259,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.mediatomb = {
       description = "MediaTomb media Server";
-      after = [ "local-fs.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.mediatomb ];
       serviceConfig.ExecStart = "${pkgs.mediatomb}/bin/mediatomb -p ${toString cfg.port} ${if cfg.interface!="" then "-e ${cfg.interface}" else ""} ${if cfg.customCfg then "" else "-c ${mtConf}"} -m ${cfg.dataDir}";
