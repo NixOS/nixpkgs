@@ -223,6 +223,20 @@ in
         description = "Content of additional InputClass sections of the X server configuration file.";
       };
 
+      outputClassSections = mkOption {
+        type = types.listOf types.lines;
+        default = [];
+        example = literalExample ''
+          [ '''
+              Identifier  "Enable TearFree for amdgpu outputs"
+              MatchDriver "amdgpu"
+              Option      "TearFree" "true"
+            '''
+          ]
+        '';
+        description = "Content of additional OutputClass sections of the X server configuration file.";
+      };
+
       modules = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -742,6 +756,12 @@ in
         EndSection
         '')}
 
+        # Additional "OutputClass" sections
+        ${flip concatMapStrings cfg.outputClassSections (outputClassSection: ''
+        Section "OutputClass"
+          ${outputClassSection}
+        EndSection
+        '')}
 
         Section "ServerLayout"
           Identifier "Layout[all]"
