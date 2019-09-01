@@ -18,6 +18,8 @@ pythonPackages.buildPythonApplication rec {
     setproctitle setuptools setuptools_scm wheel
   ];
 
+  doCheck = false; # There are no tests.
+
   postBuild = ''
     mkdir -p $out/share
     cp -r share $out/
