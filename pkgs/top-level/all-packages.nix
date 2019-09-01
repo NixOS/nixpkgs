@@ -11354,8 +11354,6 @@ in
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
-  ccnx = callPackage ../development/libraries/ccnx { };
-
   # Named data networking (NDN) libraries and tooling.
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
   nfd = callPackage ../servers/named-data/nfd { };
