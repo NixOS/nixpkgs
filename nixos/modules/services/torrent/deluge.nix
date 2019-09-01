@@ -173,7 +173,11 @@ in {
     # Provide a default set of `extraPackages`.
     services.deluge.extraPackages = with pkgs; [ unzip gnutar xz p7zip bzip2 ];
 
-    systemd.tmpfiles.rules = [ "d '${configDir}' 0770 ${cfg.user} ${cfg.group}" ]
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group}"
+      "d '${cfg.dataDir}/.config' 0770 ${cfg.user} ${cfg.group}"
+      "d '${cfg.dataDir}/.config/deluge' 0770 ${cfg.user} ${cfg.group}"
+    ]
     ++ optional (cfg.config ? "download_location")
       "d '${cfg.config.download_location}' 0770 ${cfg.user} ${cfg.group}"
     ++ optional (cfg.config ? "torrentfiles_location")
@@ -237,7 +241,6 @@ in {
         group = cfg.group;
         uid = config.ids.uids.deluge;
         home = cfg.dataDir;
-        createHome = true;
         description = "Deluge Daemon user";
       };
     };
