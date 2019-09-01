@@ -2,7 +2,6 @@
 
 buildGoPackage rec {
   pname = "minio-client";
-
   version = "2019-01-30T19-57-22Z";
 
   src = fetchFromGitHub {
@@ -14,9 +13,9 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/minio/mc";
 
-  buildFlagsArray = [''-ldflags=
-    -X github.com/minio/mc/cmd.Version=${version}
-  ''];
+  preBuild = ''
+    buildFlagsArray+=("-ldflags=-X github.com/minio/mc/cmd.Version=${version}")
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/minio/mc;
