@@ -45,6 +45,8 @@ in {
     $machine->succeed("machinectl start ${containerName}");
     $machine->waitUntilSucceeds("systemctl -M ${containerName} is-active default.target");
     $machine->succeed("ping -n -c 1 ${containerName}");
+    $machine->succeed("test `stat ${containerRoot}/var/empty -c %u%g` != 00");
+
     $machine->succeed("machinectl stop ${containerName}");
   '';
 })
