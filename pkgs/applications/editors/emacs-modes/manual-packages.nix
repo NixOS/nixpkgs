@@ -149,7 +149,6 @@
   colorThemeSolarized = callPackage ./color-theme-solarized {
     colorTheme = self.color-theme;
   };
-  cua = callPackage ./cua { };
   emacsClangCompleteAsync = callPackage ./emacs-clang-complete-async { };
   emacsSessionManagement = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
