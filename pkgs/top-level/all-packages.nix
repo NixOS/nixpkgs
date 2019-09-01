@@ -23641,9 +23641,6 @@ in
 
   cups-zj-58 =  callPackage ../misc/cups/drivers/zj-58 { };
 
-  crashplan = callPackage ../applications/backup/crashplan { };
-  crashplansb = callPackage ../applications/backup/crashplan/crashplan-small-business.nix { gconf = gnome2.GConf; };
-
   colort = callPackage ../applications/misc/colort { };
 
   terminal-parrot = callPackage ../applications/misc/terminal-parrot { };

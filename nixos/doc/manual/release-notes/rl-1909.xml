@@ -591,6 +591,15 @@
      The defaults from fontconfig are sufficient.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>crashplan</literal> package and the
+      <literal>crashplan</literal> service have been removed from nixpkgs due to
+      crashplan shutting down the service, while the <literal>crashplansb</literal>
+      package and <literal>crashplan-small-business</literal> service have been
+      removed from nixpkgs due to lack of maintainer.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
