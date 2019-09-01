@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1c3h9il3y0swvcdrrqgh5r7di522i1cc8zk1kfmx97chy8bhsqvg";
 
+  buildInputs = lib.optional stdenv.isDarwin CoreServices;
+
   # `test with_cargo` tries to call cargo-watch as a cargo subcommand
   # (calling cargo-watch with command `cargo watch`)
   checkPhase = "PATH=target/debug:$PATH cargo test";
@@ -21,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     description = "A Cargo subcommand for watching over Cargo project's source";
     homepage = https://github.com/passcod/cargo-watch;
     license = licenses.cc0;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ xrelkd ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ xrelkd ivan ];
   };
 }
