@@ -176,6 +176,8 @@ in
 
     hardware.opengl.package = nvidia_x11.out;
     hardware.opengl.package32 = nvidia_libs32;
+    # Needed for libcuda.so, which is CUDA driver.
+    hardware.opengl.setLdLibraryPath = true;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
