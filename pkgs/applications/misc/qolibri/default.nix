@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation {
   pname = "qolibri";
-  version = "2018-11-14";
+  version = "2019-07-22";
 
   src = fetchFromGitHub {
     owner = "ludios";
     repo = "qolibri";
-    rev = "133a1c33e74d931ad54407f70d84a0016d96981f";
-    sha256 = "16ifix0q8ww4l3xflgxr9j81c0lzlnkjr8fj961x3nxz7288pdg2";
+    rev = "b58f9838d39300cba444eba725a369181c5d746b";
+    sha256 = "0kcc6dvbcmq9y7hk8mp23pydiaqz6f0clg64d1f2y04ppphmah42";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
