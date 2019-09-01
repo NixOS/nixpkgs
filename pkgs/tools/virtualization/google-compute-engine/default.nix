@@ -46,6 +46,10 @@ buildPythonApplication rec {
     mkdir -p $out/lib/udev/rules.d
     cp -r google_config/udev/*.rules $out/lib/udev/rules.d
 
+    # sysctl snippets will be used by google-compute-config.nix
+    mkdir -p $out/sysctl.d
+    cp google_config/sysctl/*.conf $out/sysctl.d
+
     patchShebangs $out/bin/*
   '';
 
