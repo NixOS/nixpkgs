@@ -57,6 +57,64 @@
       and <option>services.xserver.desktopManager.xfce4-14</option> simultaneously or to downgrade from Xfce 4.14 after upgrading.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The GNOME 3 desktop manager module sports an interface to enable/disable core services, applications, and optional GNOME packages
+      like games.
+      <itemizedlist>
+      <para>This can be achieved with the following options which the desktop manager default enables, excluding <literal>games</literal>.</para>
+      <listitem><para><link linkend="opt-services.gnome3.core-os-services.enable"><literal>services.gnome3.core-os-services.enable</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.gnome3.core-shell.enable"><literal>services.gnome3.core-shell.enable</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.gnome3.core-utilities.enable"><literal>services.gnome3.core-utilities.enable</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.gnome3.games.enable"><literal>services.gnome3.games.enable</literal></link></para></listitem>
+      </itemizedlist>
+      With these options we hope to give users finer grained control over their systems. Prior to this change you'd either have to manually
+      disable options or use <option>environment.gnome3.excludePackages</option> which only excluded the optional applications.
+      <option>environment.gnome3.excludePackages</option> is now unguarded, it can exclude any package installed with <option>environment.systemPackages</option>
+      in the GNOME 3 module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Orthogonal to the previous changes to the GNOME 3 desktop manager module, we've updated all default services and applications
+     to match as close as possible to a default reference GNOME 3 experience.
+    </para>
+
+    <bridgehead>The following changes were enacted in <option>services.gnome3.core-utilities.enable</option></bridgehead>
+
+    <itemizedlist>
+     <title>Applications removed from defaults:</title>
+     <listitem><para><literal>accerciser</literal></para></listitem>
+     <listitem><para><literal>dconf-editor</literal></para></listitem>
+     <listitem><para><literal>evolution</literal></para></listitem>
+     <listitem><para><literal>gnome-documents</literal></para></listitem>
+     <listitem><para><literal>gnome-nettool</literal></para></listitem>
+     <listitem><para><literal>gnome-power-manager</literal></para></listitem>
+     <listitem><para><literal>gnome-todo</literal></para></listitem>
+     <listitem><para><literal>gnome-tweaks</literal></para></listitem>
+     <listitem><para><literal>gnome-usage</literal></para></listitem>
+     <listitem><para><literal>gucharmap</literal></para></listitem>
+     <listitem><para><literal>nautilus-sendto</literal></para></listitem>
+     <listitem><para><literal>vinagre</literal></para></listitem>
+    </itemizedlist>
+    <itemizedlist>
+     <title>Applications added to defaults:</title>
+     <listitem><para><literal>cheese</literal></para></listitem>
+     <listitem><para><literal>geary</literal></para></listitem>
+    </itemizedlist>
+
+    <bridgehead>The following changes were enacted in <option>services.gnome3.core-shell.enable</option></bridgehead>
+
+    <itemizedlist>
+     <title>Applications added to defaults:</title>
+     <listitem><para><literal>gnome-color-manager</literal></para></listitem>
+     <listitem><para><literal>orca</literal></para></listitem>
+    </itemizedlist>
+    <itemizedlist>
+     <title>Services enabled:</title>
+     <listitem><para><option>services.avahi.enable</option></para></listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
  </section>
 
