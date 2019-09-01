@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = http://sdcc.sourceforge.net/;
     license = with licenses; if (gputils == null) then gpl2 else unfreeRedistributable;
     maintainers = with maintainers; [ bjornfor yorickvp ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
