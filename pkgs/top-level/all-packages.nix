@@ -4938,7 +4938,9 @@ in
 
   nestopia = callPackage ../misc/emulators/nestopia { };
 
-  netatalk = callPackage ../tools/filesystems/netatalk { };
+  netatalk = callPackage ../tools/filesystems/netatalk {
+    openssl = openssl_1_0_2;
+  };
 
   netcdf = callPackage ../development/libraries/netcdf { };
 
