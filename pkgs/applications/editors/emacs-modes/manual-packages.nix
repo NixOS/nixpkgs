@@ -130,8 +130,6 @@
 
   railgun = callPackage ./railgun { };
 
-  gn = callPackage ./gn { };
-
   structured-haskell-mode = self.shm;
 
   thingatpt-plus = callPackage ./thingatpt-plus { };
@@ -145,11 +143,9 @@
   # From old emacsPackages (pre emacsPackagesNg)
   cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
-  coffee = callPackage ./coffee { };
   colorThemeSolarized = callPackage ./color-theme-solarized {
     colorTheme = self.color-theme;
   };
-  emacsClangCompleteAsync = callPackage ./emacs-clang-complete-async { };
   emacsSessionManagement = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
   hol_light_mode = callPackage ./hol_light { };
