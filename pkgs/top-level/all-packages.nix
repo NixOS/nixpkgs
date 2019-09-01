@@ -20519,6 +20519,8 @@ in
 
   plex-media-player = libsForQt59.callPackage ../applications/video/plex-media-player { };
 
+  plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
+
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
