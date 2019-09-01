@@ -123,6 +123,7 @@ let
       IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
       NET_CLS_BPF                 = whenAtLeast "4.4" module;
       NET_ACT_BPF                 = whenAtLeast "4.4" module;
+      NET_SCHED                   = yes;
       L2TP_V3                     = yes;
       L2TP_IP                     = module;
       L2TP_ETH                    = module;
