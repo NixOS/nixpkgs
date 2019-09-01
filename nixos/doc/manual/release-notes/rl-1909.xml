@@ -628,6 +628,14 @@
      </itemizedlist>
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The <literal>altcoins</literal> categorization of packages has
+       been removed. You now access these packages at the top level,
+       ie. <literal>nix-shell -p dogecoin</literal> instead of
+       <literal>nix-shell -p altcoins.dogecoin</literal>, etc.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
