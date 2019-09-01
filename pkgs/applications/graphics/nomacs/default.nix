@@ -15,7 +15,7 @@
 , quazip
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "nomacs";
   version = "3.12";
 
