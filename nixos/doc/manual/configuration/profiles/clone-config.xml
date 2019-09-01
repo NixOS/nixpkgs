@@ -16,6 +16,6 @@
   On images where the installation media also becomes an installation target,
   copying over <literal>configuration.nix</literal> should be disabled by
   setting <literal>installer.cloneConfig</literal> to <literal>false</literal>.
-  This is already done in <literal>sd-image.nix</literal>.
+  For example, this is done in <literal>sd-image-aarch64.nix</literal>.
  </para>
 </section>
