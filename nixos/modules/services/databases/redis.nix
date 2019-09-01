@@ -40,7 +40,12 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the Redis server.";
+        description = ''
+          Whether to enable the Redis server. Note that the NixOS module for
+          Redis disables kernel support for Transparent Huge Pages (THP),
+          because this features causes major performance problems for Redis,
+          e.g. (https://redis.io/topics/latency).
+        '';
       };
 
       package = mkOption {
@@ -223,6 +228,16 @@ in
       };
 
     environment.systemPackages = [ cfg.package ];
+
+    systemd.services.disable-transparent-huge-pages = {
+      enable = config.services.redis.enable;
+      description = "Disable Transparent Huge Pages (required by Redis)";
+      after = [ "sysinit.target" "local-fs.target" ];
+      before = [ "redis.service" ];
+      wantedBy = [ "redis.service" ];
+      script = "echo never >/sys/kernel/mm/transparent_hugepage/enabled";
+      serviceConfig.Type = "oneshot";
+    };
 
     systemd.services.redis =
       { description = "Redis Server";
