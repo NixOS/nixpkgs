@@ -1,7 +1,8 @@
 [
   "@angular/cli"
 , "@antora/cli"
-, "@antora/site-generator-default" 
+, "@antora/site-generator-default"
+, "@elm-tooling/elm-language-server"
 , "@vue/cli"
 , "@webassemblyjs/cli"
 , "@webassemblyjs/repl"
