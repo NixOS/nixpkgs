@@ -12,4 +12,8 @@
     ../../../../common/pc/laptop/acpi_call.nix
     ../../../../common/pc/laptop/cpu-throttling-bug.nix
   ];
+
+  # New ThinkPads have a different TrackPoint manufacturer/name.
+  # See also https://certification.ubuntu.com/catalog/component/input/5313/input%3ATPPS/2ElanTrackPoint/
+  hardware.trackpoint.device = "TPPS/2 Elan TrackPoint";
 }
