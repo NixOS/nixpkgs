@@ -256,7 +256,7 @@ with lib;
 
     # binfmt
     (mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
-    
+
     # ACME
     (mkRemovedOptionModule [ "security" "acme" "directory"] "ACME Directory is now hardcoded to /var/lib/acme and its permisisons are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
     (mkRemovedOptionModule [ "security" "acme" "preDelay"] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
@@ -284,6 +284,13 @@ with lib;
         in if value == null then
           throw "services.redshift.longitude is set to null, you can remove this"
           else builtins.fromJSON value))
+
+    # Redis
+    (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
+    (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
+    (mkRemovedOptionModule [ "services" "redis" "dbFilename" ] "The redis module now uses /var/lib/redis/dump.rdb as database dump location.")
+    (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
+    (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
 
   ] ++ (forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"

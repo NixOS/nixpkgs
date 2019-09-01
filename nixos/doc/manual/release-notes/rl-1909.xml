@@ -599,6 +599,14 @@
       package and <literal>crashplan-small-business</literal> service have been
       removed from nixpkgs due to lack of maintainer.
     </para>
+    <para>
+      The <link linkend="opt-services.redis.enable">redis module</link> was hardcoded to use the <literal>redis</literal> user,
+      <filename class="directory">/run/redis</filename> as runtime directory and
+      <filename class="directory">/var/lib/redis</filename> as state directory.
+      Note that the NixOS module for Redis now disables kernel support for Transparent Huge Pages (THP),
+      because this features causes major performance problems for Redis,
+      e.g. (https://redis.io/topics/latency).
+    </para>
    </listitem>
    <listitem>
     <para>
