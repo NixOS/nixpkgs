@@ -8774,7 +8774,6 @@ broken-packages:
   - servant-auth-token-leveldb
   - servant-auth-token-persistent
   - servant-auth-token-rocksdb
-  - servant-checked-exceptions
   - servant-cli
   - servant-client-namedargs
   - servant-csharp
