@@ -34,13 +34,20 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
     super = lib.listToAttrs (map (melpaDerivation variant) (lib.importJSON archiveJson));
 
     overrides = rec {
-      shared = {
+      shared = rec {
         # Expects bash to be at /bin/bash
         ac-rtags = markBroken super.ac-rtags;
 
         airline-themes = super.airline-themes.override {
           inherit (self.melpaPackages) powerline;
         };
+
+        auto-complete-clang-async = super.auto-complete-clang-async.overrideAttrs(old: {
+          buildInputs = old.buildInputs ++ [ external.llvmPackages.llvm ];
+          CFLAGS = "-I${external.llvmPackages.clang}/include";
+          LDFLAGS = "-L${external.llvmPackages.clang}/lib";
+        });
+        emacsClangCompleteAsync = auto-complete-clang-async;
 
         # part of a larger package
         caml = dontConfigure super.caml;
