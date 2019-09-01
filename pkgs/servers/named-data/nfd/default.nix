@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, doxygen, boost, pkgconfig, python, pythonPackages,
+{ stdenv, fetchFromGitHub, wafHook, doxygen, boost, pkgconfig, python, pythonPackages,
   libpcap, openssl, ndn-cxx }:
 let
-  version = "0.5.1";
+  version = "0.6.6";
 in
 stdenv.mkDerivation {
   name = "nfd-${version}";
@@ -9,24 +9,16 @@ stdenv.mkDerivation {
     owner = "named-data";
     repo = "NFD";
     rev = "NFD-${version}";
-    sha256 = "1qd02xr7iic0d9mca1m2ps1cxb7z3hj7llmyvxx0fc1jl8djvy9z";
+    sha256 = "0y86x9h6wk2n9cfxgnmm0h89kjdv01i7pbf189354yc2ylndmbgh";
   };
-  buildInputs = [ libpcap doxygen boost pkgconfig python pythonPackages.sphinx
+  buildInputs = [ wafHook
+                  libpcap doxygen boost pkgconfig python pythonPackages.sphinx
                   openssl ndn-cxx ];
-  preConfigure = ''
-    patchShebangs waf
-    ./waf configure \
-      --boost-includes="${boost.dev}/include" \
-      --boost-libs="${boost.out}/lib" \
-      --without-websocket \
-      --prefix="$out"
-  '';
-  buildPhase = ''
-    ./waf
-  '';
-  installPhase = ''
-    ./waf install
-  '';
+  wafConfigureFlags = [
+     "--boost-includes=${boost.dev}/include"
+     "--boost-libs=${boost.out}/lib"
+     "--without-websocket"
+  ];
   # Even though there are binaries, they don't get put in "bin" by default, so
   # this ordering seems to be a better one. ~ C.
   outputs = [ "out" "dev" ];

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, openssl, doxygen
 , boost, sqlite, pkgconfig, python, pythonPackages, wafHook }:
 let
-  version = "0.6.3";
+  version = "0.6.6";
 in
 stdenv.mkDerivation {
   pname = "ndn-cxx";
@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
-    rev = "a3bf4319ed483a4a6fe2c96b79ec4491d7217f00";
-    sha256 = "076jhrjigisqz5n8dgxwd5fhimg69zhm834m7w9yvf9afgzrr50h";
+    rev = "ndn-cxx-${version}";
+    sha256 = "06q4bsl63bn5h9csdyz883qpak67511w5d7xl3z5364pmjfwvji2";
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];
@@ -19,9 +19,12 @@ stdenv.mkDerivation {
     "--with-openssl=${openssl.dev}"
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
+    # Building the tests is disabled by default, since we don't run the tests
+    # later and building them adds ~14min to build time. ~ C.
+    # "--with-tests"
   ];
 
-  # To do battle with the tests, add --with-tests to the configure above. ~ C.
+  # Upstream's tests don't all pass!
   doCheck = false;
   checkPhase = ''
     LD_LIBRARY_PATH=build/ build/unit-tests
