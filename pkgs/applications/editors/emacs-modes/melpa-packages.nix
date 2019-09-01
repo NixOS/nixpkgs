@@ -189,13 +189,13 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
-      kubernetes = super.kubernetes.overrideAttrs (attrs: {
-        # searches for Git at build time
-        nativeBuildInputs =
-          (attrs.nativeBuildInputs or []) ++ [ external.git ];
-      });
+        kubernetes = super.kubernetes.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
 
-      # upstream issue: missing file header
+        # upstream issue: missing file header
         mhc = super.mhc.override {
           inherit (self.melpaPackages) calfw;
         };
@@ -212,7 +212,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs(old: {
-
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
 
           postBuild = ''
@@ -225,7 +224,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             mkdir -p $out/bin
             install -m755 -Dt $out/bin ./source/server/telega-server
           '';
-
         });
 
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
