@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "cayley";
-  version = "0.6.1";
+  version = "0.7.5";
 
   goPackagePath = "github.com/cayleygraph/cayley";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "cayleygraph";
     repo = "cayley";
     rev = "v${version}";
-    sha256 = "1r0kw3y32bqm7g37svzrch2qj9n45p93xmsrf7dj1cg4wwkb65ry";
+    sha256 = "1zfxa9z6spi6xw028mvbc7c3g517gn82g77ywr6picl47fr2blnd";
   };
 
   goDeps = ./deps.nix;
