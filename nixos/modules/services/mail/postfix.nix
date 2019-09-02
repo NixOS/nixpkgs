@@ -509,7 +509,7 @@ in
       };
 
       localRecipients = mkOption {
-        type = with types; nullOr (listOf string);
+        type = with types; nullOr (listOf str);
         default = null;
         description = ''
           List of accepted local users. Specify a bare username, an
@@ -530,7 +530,7 @@ in
 
       dnsBlacklists = mkOption {
         default = [];
-        type = with types; listOf string;
+        type = with types; listOf str;
         description = "dns blacklist servers to use with smtpd_client_restrictions";
       };
 

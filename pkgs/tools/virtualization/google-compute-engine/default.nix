@@ -22,13 +22,16 @@ buildPythonApplication rec {
     sha256 = "08cy0jd463kng6hwbd3nfldsp4dpd2lknlvdm88cq795wy0kh4wp";
   };
 
+  buildInputs = [ bash ];
+  propagatedBuildInputs = [ boto setuptools distro ];
+
+
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
-        --replace /bin/systemctl "${systemd}/bin/systemctl" \
+        --replace /bin/systemctl "/run/current-system/sw/bin/systemctl" \
         --replace /bin/bash "${bashInteractive}/bin/bash" \
         --replace /sbin/hwclock "${utillinux}/bin/hwclock"
-
       # SELinux tool ???  /sbin/restorecon
     done
 
@@ -42,9 +45,13 @@ buildPythonApplication rec {
     # allows to install the package in `services.udev.packages` in NixOS
     mkdir -p $out/lib/udev/rules.d
     cp -r google_config/udev/*.rules $out/lib/udev/rules.d
-  '';
 
-  propagatedBuildInputs = [ boto setuptools distro ];
+    # sysctl snippets will be used by google-compute-config.nix
+    mkdir -p $out/sysctl.d
+    cp google_config/sysctl/*.conf $out/sysctl.d
+
+    patchShebangs $out/bin/*
+  '';
 
   doCheck = false;
 

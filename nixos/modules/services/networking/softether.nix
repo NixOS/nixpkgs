@@ -50,7 +50,7 @@ in
       };
 
       dataDir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/lib/softether";
         description = ''
           Data directory for SoftEther VPN.

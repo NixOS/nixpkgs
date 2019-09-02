@@ -155,7 +155,7 @@ in
 
       config = mkOption {
         default = "FQDN=1";
-        type = types.string;
+        type = types.lines;
         description = ''
           Config options that you would like in logcheck.conf.
         '';

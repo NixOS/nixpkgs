@@ -236,4 +236,9 @@ rec {
     useLLVM = true;
   };
 
+  # Ghcjs
+  ghcjs = {
+    config = "js-unknown-ghcjs";
+    platform = {};
+  };
 }

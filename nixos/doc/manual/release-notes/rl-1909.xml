@@ -57,6 +57,64 @@
       and <option>services.xserver.desktopManager.xfce4-14</option> simultaneously or to downgrade from Xfce 4.14 after upgrading.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The GNOME 3 desktop manager module sports an interface to enable/disable core services, applications, and optional GNOME packages
+      like games.
+      <itemizedlist>
+      <para>This can be achieved with the following options which the desktop manager default enables, excluding <literal>games</literal>.</para>
+      <listitem><para><link linkend="opt-services.gnome3.core-os-services.enable"><literal>services.gnome3.core-os-services.enable</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.gnome3.core-shell.enable"><literal>services.gnome3.core-shell.enable</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.gnome3.core-utilities.enable"><literal>services.gnome3.core-utilities.enable</literal></link></para></listitem>
+      <listitem><para><link linkend="opt-services.gnome3.games.enable"><literal>services.gnome3.games.enable</literal></link></para></listitem>
+      </itemizedlist>
+      With these options we hope to give users finer grained control over their systems. Prior to this change you'd either have to manually
+      disable options or use <option>environment.gnome3.excludePackages</option> which only excluded the optional applications.
+      <option>environment.gnome3.excludePackages</option> is now unguarded, it can exclude any package installed with <option>environment.systemPackages</option>
+      in the GNOME 3 module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Orthogonal to the previous changes to the GNOME 3 desktop manager module, we've updated all default services and applications
+     to match as close as possible to a default reference GNOME 3 experience.
+    </para>
+
+    <bridgehead>The following changes were enacted in <option>services.gnome3.core-utilities.enable</option></bridgehead>
+
+    <itemizedlist>
+     <title>Applications removed from defaults:</title>
+     <listitem><para><literal>accerciser</literal></para></listitem>
+     <listitem><para><literal>dconf-editor</literal></para></listitem>
+     <listitem><para><literal>evolution</literal></para></listitem>
+     <listitem><para><literal>gnome-documents</literal></para></listitem>
+     <listitem><para><literal>gnome-nettool</literal></para></listitem>
+     <listitem><para><literal>gnome-power-manager</literal></para></listitem>
+     <listitem><para><literal>gnome-todo</literal></para></listitem>
+     <listitem><para><literal>gnome-tweaks</literal></para></listitem>
+     <listitem><para><literal>gnome-usage</literal></para></listitem>
+     <listitem><para><literal>gucharmap</literal></para></listitem>
+     <listitem><para><literal>nautilus-sendto</literal></para></listitem>
+     <listitem><para><literal>vinagre</literal></para></listitem>
+    </itemizedlist>
+    <itemizedlist>
+     <title>Applications added to defaults:</title>
+     <listitem><para><literal>cheese</literal></para></listitem>
+     <listitem><para><literal>geary</literal></para></listitem>
+    </itemizedlist>
+
+    <bridgehead>The following changes were enacted in <option>services.gnome3.core-shell.enable</option></bridgehead>
+
+    <itemizedlist>
+     <title>Applications added to defaults:</title>
+     <listitem><para><literal>gnome-color-manager</literal></para></listitem>
+     <listitem><para><literal>orca</literal></para></listitem>
+    </itemizedlist>
+    <itemizedlist>
+     <title>Services enabled:</title>
+     <listitem><para><option>services.avahi.enable</option></para></listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -348,6 +406,12 @@
        What used to be called <literal>emacsPackagesNg</literal> is now simply called <literal>emacsPackages</literal>.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       <option>services.xserver.desktopManager.xterm</option> is now disabled by default.
+       It was not useful except for debugging purposes and was confusingly set as default in some circumstances.
+     </para>
+   </listitem>
 
   </itemizedlist>
  </section>
@@ -547,8 +611,8 @@
       </para>
      </listitem>
     </itemizedlist>
-
-     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>.
+     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>,
+     and restricts the SysRq key combinations to the sync command only.
      These sysctl snippets can be found in <literal>/etc/sysctl.d/50-*.conf</literal>,
      and overridden via <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link>
      (which will place the parameters in <literal>/etc/sysctl.d/60-nixos.conf</literal>).
@@ -590,6 +654,51 @@
      We no longer enable custom font rendering settings with <option>fonts.fontconfig.penultimate.enable</option> by default.
      The defaults from fontconfig are sufficient.
     </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>crashplan</literal> package and the
+      <literal>crashplan</literal> service have been removed from nixpkgs due to
+      crashplan shutting down the service, while the <literal>crashplansb</literal>
+      package and <literal>crashplan-small-business</literal> service have been
+      removed from nixpkgs due to lack of maintainer.
+    </para>
+    <para>
+      The <link linkend="opt-services.redis.enable">redis module</link> was hardcoded to use the <literal>redis</literal> user,
+      <filename class="directory">/run/redis</filename> as runtime directory and
+      <filename class="directory">/var/lib/redis</filename> as state directory.
+      Note that the NixOS module for Redis now disables kernel support for Transparent Huge Pages (THP),
+      because this features causes major performance problems for Redis,
+      e.g. (https://redis.io/topics/latency).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Using <option>fonts.enableDefaultFonts</option> adds a default emoji font <literal>noto-fonts-emoji</literal>.
+     <itemizedlist>
+      <para>Users of the following options will have this enabled by default:</para>
+      <listitem>
+       <para><option>services.xserver.enable</option></para>
+      </listitem>
+      <listitem>
+       <para><option>programs.sway.enable</option></para>
+      </listitem>
+      <listitem>
+       <para><option>programs.way-cooler.enable</option></para>
+      </listitem>
+      <listitem>
+       <para><option>services.xrdp.enable</option></para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <literal>altcoins</literal> categorization of packages has
+       been removed. You now access these packages at the top level,
+       ie. <literal>nix-shell -p dogecoin</literal> instead of
+       <literal>nix-shell -p altcoins.dogecoin</literal>, etc.
+     </para>
    </listitem>
   </itemizedlist>
  </section>

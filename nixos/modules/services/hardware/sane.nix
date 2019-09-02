@@ -76,7 +76,7 @@ in
     };
 
     hardware.sane.configDir = mkOption {
-      type = types.string;
+      type = types.str;
       internal = true;
       description = "The value of SANE_CONFIG_DIR.";
     };

@@ -64,7 +64,7 @@ in
         };
 
         volumeStep = mkOption {
-          type = types.string;
+          type = types.str;
           default = "1";
           example = "1%";
           description = ''

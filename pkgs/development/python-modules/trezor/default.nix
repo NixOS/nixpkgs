@@ -26,9 +26,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic ];
 
-  # build requires UTF-8 locale
-  LANG = "en_US.UTF-8";
-
   checkInputs = [
     pytest
   ];
@@ -36,7 +33,7 @@ buildPythonPackage rec {
   # disable test_tx_api.py as it requires being online
   checkPhase = ''
     runHook preCheck
-    ${python.interpreter} -m pytest --pyarg trezorlib.tests.unit_tests --ignore trezorlib/tests/unit_tests/test_tx_api.py
+    ${python.interpreter} -m pytest --pyargs trezorlib.tests.unit_tests --ignore trezorlib/tests/unit_tests/test_tx_api.py
     runHook postCheck
   '';
 

@@ -114,7 +114,7 @@ in
 
         };
         name = mkOption {
-          type = types.string;
+          type = types.str;
           description = ''
             The name of a .desktop file in the directory specified
             in the 'package' option.

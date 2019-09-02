@@ -1239,7 +1239,9 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
-  uvloop = callPackage ../development/python-modules/uvloop { };
+  uvloop = callPackage ../development/python-modules/uvloop {
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
+  };
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
@@ -2059,6 +2061,8 @@ in {
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
+  pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
+
   pytest-repeat = callPackage ../development/python-modules/pytest-repeat { };
 
   pytestrunner = callPackage ../development/python-modules/pytestrunner { };
@@ -2338,15 +2342,13 @@ in {
 
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
 
+  fx2 = callPackage ../development/python-modules/fx2 { };
+
   gateone = callPackage ../development/python-modules/gateone { };
 
-  # TODO: Remove after 19.03 is branched off:
-  gcutil = throw ''
-    pythonPackages.gcutil is deprecated and can be replaced with "gcloud
-    compute" from the package google-cloud-sdk.
-  '';
-
   GeoIP = callPackage ../development/python-modules/GeoIP { };
+
+  glasgow = callPackage ../development/python-modules/glasgow { };
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
@@ -2577,6 +2579,10 @@ in {
   netdisco = callPackage ../development/python-modules/netdisco { };
 
   Nikola = callPackage ../development/python-modules/Nikola { };
+
+  nmigen = callPackage ../development/python-modules/nmigen { };
+
+  nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 

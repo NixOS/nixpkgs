@@ -47,7 +47,7 @@ rec {
 
 
   /* `makeOverridable` takes a function from attribute set to attribute set and
-     injects `override` attibute which can be used to override arguments of
+     injects `override` attribute which can be used to override arguments of
      the function.
 
        nix-repl> x = {a, b}: { result = a + b; }

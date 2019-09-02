@@ -5095,6 +5095,12 @@
     githubId = 9568176;
     name = "Piotr Halama";
   };
+  puckipedia = {
+    email = "puck@puckipedia.com";
+    github = "puckipedia";
+    githubId = 488734;
+    name = "Puck Meerburg";
+  };
   puffnfresh = {
     email = "brian@brianmckenna.org";
     github = "puffnfresh";

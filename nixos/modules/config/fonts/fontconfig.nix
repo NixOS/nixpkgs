@@ -116,7 +116,7 @@ let
   defaultFontsConf =
     let genDefault = fonts: name:
       optionalString (fonts != []) ''
-        <alias>
+        <alias binding="same">
           <family>${name}</family>
           <prefer>
           ${concatStringsSep ""
@@ -138,6 +138,8 @@ let
       ${genDefault cfg.defaultFonts.serif     "serif"}
 
       ${genDefault cfg.defaultFonts.monospace "monospace"}
+
+      ${genDefault cfg.defaultFonts.emoji "emoji"}
 
     </fontconfig>
   '';
@@ -342,6 +344,21 @@ in
             description = ''
               System-wide default serif font(s). Multiple fonts may be listed
               in case multiple languages must be supported.
+            '';
+          };
+
+          emoji = mkOption {
+            type = types.listOf types.str;
+            default = ["Noto Color Emoji"];
+            description = ''
+              System-wide default emoji font(s). Multiple fonts may be listed
+              in case a font does not support all emoji.
+
+              Note that fontconfig matches color emoji fonts preferentially,
+              so if you want to use a black and white font while having
+              a color font installed (eg. Noto Color Emoji installed alongside
+              Noto Emoji), fontconfig will still choose the color font even
+              when it is later in the list.
             '';
           };
         };

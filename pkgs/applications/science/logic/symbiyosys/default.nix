@@ -26,6 +26,8 @@ stdenv.mkDerivation {
     substituteInPlace $out/bin/sby \
       --replace "##yosys-sys-path##" \
                 "sys.path += [p + \"/share/yosys/python3/\" for p in [\"$out\", \"${yosys}\"]]"
+    substituteInPlace $out/share/yosys/python3/sby_core.py \
+      --replace '"/usr/bin/env", "bash"' '"${bash}/bin/bash"'
   '';
   meta = {
     description = "Tooling for Yosys-based verification flows";

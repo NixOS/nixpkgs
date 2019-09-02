@@ -473,7 +473,7 @@ in
       };
 
       clientMaxBodySize = mkOption {
-        type = types.string;
+        type = types.str;
         default = "10m";
         description = "Set nginx global client_max_body_size.";
       };
