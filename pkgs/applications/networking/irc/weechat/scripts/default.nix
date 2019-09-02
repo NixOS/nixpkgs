@@ -3,6 +3,8 @@
 {
   autojoin = callPackage ./autojoin { };
 
+  text-item = callPackage ./text-item { };
+
   wee-slack = callPackage ./wee-slack { };
 
   weechat-autosort = callPackage ./weechat-autosort { };
