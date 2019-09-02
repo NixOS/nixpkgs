@@ -1,6 +1,8 @@
 { callPackage, luaPackages, python3Packages }:
 
 {
+  autojoin = callPackage ./autojoin { };
+
   wee-slack = callPackage ./wee-slack { };
 
   weechat-autosort = callPackage ./weechat-autosort { };
