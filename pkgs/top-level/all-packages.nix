@@ -11637,6 +11637,8 @@ in
     automake = automake111x;
   };
 
+  kf5gpgmepp = libsForQt5.callPackage ../development/libraries/kf5gpgmepp { };
+
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client {
     openssl = openssl_1_0_2;
   };
