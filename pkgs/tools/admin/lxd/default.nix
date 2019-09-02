@@ -5,25 +5,27 @@
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
+, raft
+, libco
 }:
 
 buildGoPackage rec {
   pname = "lxd";
-  version = "3.13";
+  version = "3.17";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1kasnzd8hw9biyx8avbjmpfax1pdbp9g543g8hs6xpksmk93hl82";
+    sha256 = "1vr9ywg29nasfqrgszl11044dwmx15d8wlg4iyp5h7xri6sar14l";
   };
 
   preBuild = ''
     # unpack vendor
     pushd go/src/github.com/lxc/lxd
-    rm dist/src/github.com/lxc/lxd
-    cp -r dist/src/* ../../..
-    rm -r dist
+    rm _dist/src/github.com/lxc/lxd
+    cp -r _dist/src/* ../../..
+    rm -r _dist
     popd
   '';
 
@@ -45,7 +47,7 @@ buildGoPackage rec {
   '';
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ lxc acl libcap dqlite sqlite-replication ];
+  buildInputs = [ lxc acl libcap dqlite sqlite-replication raft libco ];
 
   meta = with stdenv.lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
