@@ -308,7 +308,7 @@ let
     RcppGSL = [ pkgs.gsl_1 ];
     RcppZiggurat = [ pkgs.gsl_1 ];
     reprex = [ pkgs.which ];
-    rgdal = [ pkgs.proj pkgs.gdal ];
+    rgdal = [ pkgs.proj.dev pkgs.gdal ];
     rgeos = [ pkgs.geos ];
     rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
     rgl = [ pkgs.libGLU_combined pkgs.xlibsWrapper ];
@@ -420,7 +420,7 @@ let
     odbc = [ pkgs.pkgconfig ];
     openssl = [ pkgs.pkgconfig ];
     pdftools = [ pkgs.pkgconfig ];
-    sf = [ pkgs.pkgconfig ];
+    sf = [ pkgs.pkgconfig pkgs.sqlite.dev pkgs.proj.dev ];
     showtext = [ pkgs.pkgconfig ];
     spate = [ pkgs.pkgconfig ];
     stringi = [ pkgs.pkgconfig ];
