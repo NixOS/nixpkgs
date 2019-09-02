@@ -57,7 +57,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Network-related giomodules for glib";
-    license = licenses.lgpl2Plus;
+    homepage = https://gitlab.gnome.org/GNOME/glib-networking;
+    license = licenses.lgpl21Plus;
+    maintainers = gnome3.maintainers;
     platforms = platforms.unix;
   };
 }
