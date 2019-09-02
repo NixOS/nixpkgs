@@ -36,9 +36,6 @@ let
         qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
       ];
 
-    doConfigure = false;
-    doBuild = false;
-
     installPhase = ''
       # Extract eagle tarball
       mkdir "$out"

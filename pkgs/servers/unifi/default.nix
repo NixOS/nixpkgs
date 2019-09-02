@@ -19,8 +19,6 @@ let
       runHook postUnpack
     '';
 
-    doConfigure = false;
-
     installPhase = ''
       runHook preInstall
 
