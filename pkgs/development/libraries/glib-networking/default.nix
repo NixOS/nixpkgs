@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
     sha256 = "1mfw44qpmwvz6yzj8c6spx6z357wrmkk15byrkc5byagd82860fm";
   };
 
-  outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
-
   PKG_CONFIG_GIO_2_0_GIOMODULEDIR = "${placeholder "out"}/lib/gio/modules";
 
   postPatch = ''
@@ -39,7 +37,7 @@ stdenv.mkDerivation rec {
     python3 # for install_script
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     glib
     gnutls
     p11-kit
