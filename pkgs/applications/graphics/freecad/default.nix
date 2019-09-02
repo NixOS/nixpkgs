@@ -1,7 +1,7 @@
-{ stdenv, mkDerivation, fetchurl, cmake, ninja, coin3d, xercesc, ode, eigen, qt5, opencascade-occt, gts
-, hdf5, vtk, medfile, zlib, python3Packages, swig, gfortran, libXmu
-, soqt, libf2c, libGLU, makeWrapper, pkgconfig
-, mpi ? null }:
+{ stdenv, mkDerivation, fetchurl, fetchpatch, cmake, ninja, coin3d, xercesc, ode
+, eigen, qtbase, qttools, qtwebkit, opencascade-occt, gts, hdf5, vtk, medfile
+, zlib, python3Packages, swig, gfortran, libXmu, soqt, libf2c, libGLU
+, makeWrapper, pkgconfig, mpi ? null }:
 
 assert mpi != null;
 
@@ -19,12 +19,19 @@ in mkDerivation rec {
   nativeBuildInputs = [ cmake ninja pkgconfig pythonPackages.pyside2-tools ];
   buildInputs = [ cmake coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
-    libGLU libXmu
-  ] ++ (with qt5; [
-    qtbase qttools qtwebkit
-  ]) ++ (with pythonPackages; [
+    libGLU libXmu qtbase qttools qtwebkit
+  ] ++ (with pythonPackages; [
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
   ]);
+
+  # Fix missing app icon on Wayland. Has been upstreamed and should be safe to
+  # remove in versions >= 0.19
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/FreeCAD/FreeCAD/commit/c4d2a358ca125d51d059dfd72dcbfba326196dfc.patch";
+      sha256 = "0yqc9zrxgi2c2xcidm8wh7a9yznkphqvjqm9742qm5fl20p8gl4h";
+    })
+  ];
 
   cmakeFlags = [
     "-DBUILD_QT5=ON"
