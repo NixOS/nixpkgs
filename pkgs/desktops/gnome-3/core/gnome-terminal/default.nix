@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
 , gtk3, gsettings-desktop-schemas, vte, intltool, which, libuuid, vala
-, desktop-file-utils, itstool, wrapGAppsHook, hicolor-icon-theme }:
+, desktop-file-utils, itstool, wrapGAppsHook, hicolor-icon-theme, glib, pcre2 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.32.2";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0shhpnagasyp1kxgjczfrivcxbgrrl3y8lzvp1z101m67h4jp6km";
+    sha256 = "0wcavripfsr691qkcjb71vccffz0wx2q5qh4clwnk1hi8j1hz9l5";
   };
 
   buildInputs = [
@@ -19,9 +19,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig intltool itstool which libxml2
-    vala desktop-file-utils wrapGAppsHook
+    vala desktop-file-utils wrapGAppsHook pcre2
     hicolor-icon-theme # for setup-hook
   ];
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   # Silly ./configure, it looks for dbus file from gnome-shell in the
   # installation tree of the package it is configuring.
