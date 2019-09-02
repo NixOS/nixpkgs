@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "3.32.0";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12ypdz9i24hwbl1d1wnnxb8zlvfa4f49n9ac5cl9d6h8qp4b0gb4";
+    sha256 = "0pnh0nj4kk8n48kgj77bb5r4z5jnb7kxnvpnddk6b9n96g0qwklv";
   };
 
   # Only needed to make it build
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-plymouth=yes"
     "--enable-gdm-xsession"
-    "--with-initial-vt=7"
+    # "--with-initial-vt=7"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
   ];
