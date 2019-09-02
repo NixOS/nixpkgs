@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     sha256 = "1p6a3qmrh8bjzds6x7rg9da0ir44gg804jzkf634h39wsa4vdmpm";
   };
 
-
   nativeBuildInputs = [
     pkgconfig
   ];
@@ -41,7 +40,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # https://github.com/AbiWord/enchant/issues/219
+  doCheck = true;
+
+  configureFlags = [
+    "--enable-relocatable" # needed for tests
+  ];
 
   meta = with stdenv.lib; {
     description = "Generic spell checking library";
