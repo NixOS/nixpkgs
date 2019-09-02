@@ -1,4 +1,12 @@
-{ stdenv, fetchurl, aspell, pkgconfig, glib, hunspell, hspell, unittest-cpp }:
+{ stdenv
+, fetchurl
+, aspell
+, pkgconfig
+, glib
+, hunspell
+, hspell
+, unittest-cpp
+}:
 
 stdenv.mkDerivation rec {
   pname = "enchant";
@@ -11,10 +19,25 @@ stdenv.mkDerivation rec {
     sha256 = "1p6a3qmrh8bjzds6x7rg9da0ir44gg804jzkf634h39wsa4vdmpm";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib hunspell ];
-  checkInputs = [ unittest-cpp ];
-  propagatedBuildInputs = [ hspell aspell ]; # libtool puts it to la file
+
+  nativeBuildInputs = [
+    pkgconfig
+  ];
+
+  buildInputs = [
+    glib
+    hunspell
+  ];
+
+  checkInputs = [
+    unittest-cpp
+  ];
+
+  # libtool puts these to .la files
+  propagatedBuildInputs = [
+    hspell
+    aspell
+  ];
 
   enableParallelBuilding = true;
 
