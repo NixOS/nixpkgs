@@ -12,7 +12,7 @@ rec {
     isx86_32       = { cpu = { family = "x86"; bits = 32; }; };
     isx86_64       = { cpu = { family = "x86"; bits = 64; }; };
     isPowerPC      = { cpu = cpuTypes.powerpc; };
-    isPower = { cpu = { family = "power"; }; };
+    isPower        = { cpu = { family = "power"; }; };
     isx86          = { cpu = { family = "x86"; }; };
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
@@ -21,7 +21,7 @@ rec {
     isSparc        = { cpu = { family = "sparc"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
     isAvr          = { cpu = { family = "avr"; }; };
-    isJavaScript = { cpu = cpuTypes.js; };
+    isJavaScript   = { cpu = cpuTypes.js; };
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };
@@ -42,7 +42,7 @@ rec {
     isWindows      = { kernel = kernels.windows; };
     isCygwin       = { kernel = kernels.windows; abi = abis.cygnus; };
     isMinGW        = { kernel = kernels.windows; abi = abis.gnu; };
-    isGhcjs      = { kernel = kernels.ghcjs; };
+    isGhcjs        = { kernel = kernels.ghcjs; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
