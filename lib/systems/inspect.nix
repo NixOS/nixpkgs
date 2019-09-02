@@ -21,6 +21,7 @@ rec {
     isSparc        = { cpu = { family = "sparc"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
     isAvr          = { cpu = { family = "avr"; }; };
+    isJavaScript = { cpu = cpuTypes.js; };
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };
@@ -41,6 +42,7 @@ rec {
     isWindows      = { kernel = kernels.windows; };
     isCygwin       = { kernel = kernels.windows; abi = abis.cygnus; };
     isMinGW        = { kernel = kernels.windows; abi = abis.gnu; };
+    isGhcjs      = { kernel = kernels.ghcjs; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
@@ -49,8 +51,6 @@ rec {
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
 
-    isJavaScript = { cpu = cpuTypes.js; };
-    isGhcjs      = { kernel = kernels.ghcjs; };
     # Deprecated after 18.03
     isArm = isAarch32;
   };
