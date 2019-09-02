@@ -47,11 +47,6 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ];
 
-  mesonFlags = [
-    # Default auto detection doesn't work
-    "-Dgnutls=enabled"
-  ];
-
   doCheck = false; # tests need to access the certificates (among other things)
 
   passthru = {
