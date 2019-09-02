@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
+, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf, jansson
 , fetchFromGitHub
 , systemd ? null
 , withX ? !stdenv.isDarwin
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emacs-mirror";
     repo = "emacs";
-    rev = "dfb0ba79b5f41ca6fed25a03d2a5cd6996ec4753";
-    sha256 = "0cr8mlcxyib4rd8xj65hb1wxwlmppgg4823z7h3dbbxi273gz5b0";
+    rev = "dd162a3f2264940e3e329d0bfb195f56d00ed08f";
+    sha256 = "17gc4cfyazag2p601l3pkxad5153rwf5503y07x2l48ndc784mx9";
   };
 
   enableParallelBuilding = true;
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
+    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext jansson ]
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
