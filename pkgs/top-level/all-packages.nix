@@ -13702,6 +13702,7 @@ in
   });
   libco = callPackage ../development/libraries/libco { };
 
+  raft = callPackage ../development/libraries/raft { };
 
   dqlite = callPackage ../development/libraries/dqlite { };
 
