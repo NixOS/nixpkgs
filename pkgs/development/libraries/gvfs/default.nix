@@ -25,6 +25,7 @@
 , gnomeSupport ? false
 , gnome3
 , gcr
+, gnome-online-accounts
 , wrapGAppsHook
 , libimobiledevice
 , libbluray
@@ -85,15 +86,15 @@ stdenv.mkDerivation rec {
     libcdio-paranoia
     libnfs
     openssh
-    # ToDo: a ligther version of libsoup to have FTP/HTTP support?
-  ] ++ stdenv.lib.optionals gnomeSupport (with gnome3; [
-    libsoup
+    # TODO: a ligther version of libsoup to have FTP/HTTP support?
+  ] ++ stdenv.lib.optionals gnomeSupport [
+    gnome3.libsoup
     gcr
-    glib-networking # TLS support
+    gnome3.glib-networking # TLS support
     gnome-online-accounts
     libsecret
     libgdata
-  ]);
+  ];
 
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
