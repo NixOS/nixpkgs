@@ -25,6 +25,7 @@
 , gnomeSupport ? false
 , gnome3
 , gcr
+, glib-networking
 , gnome-online-accounts
 , wrapGAppsHook
 , libimobiledevice
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals gnomeSupport [
     gnome3.libsoup
     gcr
-    gnome3.glib-networking # TLS support
+    glib-networking # TLS support
     gnome-online-accounts
     libsecret
     libgdata
