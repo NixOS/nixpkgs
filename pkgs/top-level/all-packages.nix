@@ -8265,7 +8265,9 @@ in
 
   neko = callPackage ../development/compilers/neko { };
 
-  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr { };
+  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   nasm = callPackage ../development/compilers/nasm { };
 
