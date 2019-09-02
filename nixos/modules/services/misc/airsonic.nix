@@ -105,7 +105,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.airsonic = {
       description = "Airsonic Media Server";
-      after = [ "local-fs.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''

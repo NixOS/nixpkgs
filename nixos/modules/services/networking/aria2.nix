@@ -109,7 +109,7 @@ in
 
     systemd.services.aria2 = {
       description = "aria2 Service";
-      after = [ "local-fs.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         if [[ ! -e "${sessionFile}" ]]

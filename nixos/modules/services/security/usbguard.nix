@@ -195,7 +195,7 @@ in {
       description = "USBGuard daemon";
 
       wantedBy = [ "basic.target" ];
-      wants = [ "systemd-udevd.service" "local-fs.target" ];
+      wants = [ "systemd-udevd.service" ];
 
       # make sure an empty rule file and required directories exist
       preStart = ''

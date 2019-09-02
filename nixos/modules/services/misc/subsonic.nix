@@ -105,7 +105,7 @@ let cfg = config.services.subsonic; in {
   config = mkIf cfg.enable {
     systemd.services.subsonic = {
       description = "Personal media streamer";
-      after = [ "local-fs.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
         ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
