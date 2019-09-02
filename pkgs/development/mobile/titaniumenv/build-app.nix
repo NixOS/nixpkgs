@@ -40,8 +40,7 @@ in
 stdenv.mkDerivation ({
   name = stdenv.lib.replaceChars [" "] [""] name;
 
-  buildInputs = [ nodejs titanium alloy python which file jdk ]
-    ++ stdenv.lib.optional (target == "iphone") xcodewrapper;
+  buildInputs = [ nodejs titanium alloy python which file jdk ];
 
   buildPhase = ''
     ${preBuild}
@@ -91,6 +90,10 @@ stdenv.mkDerivation ({
       ''}
     ''
     else if target == "iphone" then ''
+      # Be sure that the Xcode wrapper has priority over everything else.
+      # When using buildInputs this does not seem to be the case.
+      export PATH=${xcodewrapper}/bin:$PATH
+
       # Configure the path to Xcode
       titanium --config-file $TMPDIR/config.json --no-colors config paths.xcode ${xcodeBaseDir}
 
@@ -173,7 +176,7 @@ stdenv.mkDerivation ({
         echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
 
         ${stdenv.lib.optionalString enableWirelessDistribution ''
-          appname="$(basename "$out/*.ipa" .ipa)"
+          appname="$(basename $out/*.ipa .ipa)"
           bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
           version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
 

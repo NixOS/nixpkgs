@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus; # and a special license for art data
     # https://sourceforge.net/p/privateer/code/HEAD/tree/privgold/trunk/data/art-license.txt
 
-    maintainers = with maintainers; [ chaoflow ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux ++ darwin;
     hydraPlatforms = [];
     broken = true; # it won't build

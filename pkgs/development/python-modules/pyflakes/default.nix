@@ -2,17 +2,14 @@
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9a7662ec724d0120012f6e29d6248ae3727d821bba522a0e6b356eff19126a49";
+    sha256 = "5e8c00e30c464c99e0b501dc160b13a14af7f27d4dffb529c556e30a159e231d";
   };
 
-  buildInputs = [ unittest2 ];
-
-  # https://github.com/PyCQA/pyflakes/issues/386
-  doCheck = false;
+  checkInputs = [ unittest2 ];
 
   meta = with stdenv.lib; {
     homepage = https://launchpad.net/pyflakes;

@@ -2,8 +2,8 @@
 , makeWrapper, makeDesktopItem
 , qtbase, qmake, qtmultimedia, qttools
 , qtgraphicaleffects, qtdeclarative
-, qtlocation, qtquickcontrols2, qtwebchannel
-, qtwebengine, qtx11extras, qtxmlpatterns
+, qtlocation, qtquickcontrols, qtquickcontrols2
+, qtwebchannel, qtwebengine, qtx11extras, qtxmlpatterns
 , monero, unbound, readline, boost, libunwind
 , libsodium, pcsclite, zeromq, cppzmq, pkgconfig
 , hidapi
@@ -11,22 +11,35 @@
 
 with stdenv.lib;
 
+let
+  qmlPath = qmlLib: "${qmlLib}/${qtbase.qtQmlPrefix}";
+
+  qml2ImportPath = concatMapStringsSep ":" qmlPath [
+    qtbase.bin qtmultimedia.bin qtgraphicaleffects
+    qtdeclarative.bin qtlocation.bin
+    qtquickcontrols qtquickcontrols2.bin
+    qtwebchannel.bin qtwebengine.bin qtxmlpatterns
+  ];
+
+in
+
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.13.0.4";
+  version = "0.14.0.0";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "142yj5s15bhm300dislq3x5inw1f37shnrd5vyj78jjcvry3wymw";
+    sha256 = "1l4kx2vidr7bpds43jdbwyaz0q1dy7sricpz061ff1fkappbxdh8";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
 
   buildInputs = [
     qtbase qtmultimedia qtgraphicaleffects
-    qtdeclarative qtlocation qtquickcontrols2
+    qtdeclarative qtlocation
+    qtquickcontrols qtquickcontrols2
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
     boost libunwind libsodium pcsclite zeromq
@@ -81,6 +94,11 @@ stdenv.mkDerivation rec {
       cp $src/images/appicons/$size.png \
          $out/share/icons/hicolor/$size/apps/monero.png
     done;
+
+    # wrap runtime dependencies
+    wrapProgram $out/bin/monero-wallet-gui \
+      --set QML2_IMPORT_PATH "${qml2ImportPath}" \
+      --set QT_PLUGIN_PATH "${qtbase.bin}/${qtbase.qtPluginPrefix}"
   '';
 
   meta = {

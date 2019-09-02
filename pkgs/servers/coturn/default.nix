@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "coturn-${version}";
-  version = "4.5.1.0";
+  version = "4.5.1.1";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     rev = "${version}";
-    sha256 = "16fp9vppdz825949vpqi82iwscc2k4gajw1kl2p9pf3d3mv1flsk";
+    sha256 = "12x604lgva1d3g4wvl3f66rdj6lkjk5cqr0l3xas33xgzgm13pwr";
   };
 
   buildInputs = [ openssl libevent ];

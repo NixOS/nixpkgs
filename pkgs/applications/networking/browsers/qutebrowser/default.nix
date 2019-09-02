@@ -21,12 +21,12 @@ let
 
 in python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.5.2";
+  version = "1.6.2";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0ki19mynq91aih3kxhipnay3jmn56s7p6rilws0gq0k98li6a4my";
+    sha256 = "1yzwrpqpghlpy2d7pbjgcb73dbngw835l4xbimz5aa90mvqkbwg1";
   };
 
   # Needs tox
@@ -53,7 +53,13 @@ in python3Packages.buildPythonApplication rec {
     pyreadability pykeepass stem
   ];
 
+  patches = [
+    ./fix-restart.patch
+  ];
+
   postPatch = ''
+    substituteInPlace qutebrowser/app.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+
     sed -i "s,/usr/share/,$out/share/,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py

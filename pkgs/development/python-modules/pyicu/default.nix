@@ -4,7 +4,7 @@
 , pytest
 , six
 , fetchpatch
-, pkgs
+, icu
 }:
 
 buildPythonPackage rec {
@@ -18,19 +18,22 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = https://sources.debian.org/data/main/p/pyicu/2.0.3-1/debian/patches/icu_test.patch;
+      url = "https://salsa.debian.org/python-team/modules/pyicu/raw/debian/2.2-2/"
+            + "debian/patches/icu_test.patch";
       sha256 = "1iavdkyqixm9i753svl17barla93b7jzgkw09dn3hnggamx7zwx9";
     })
   ];
 
-  buildInputs = [ pkgs.icu pytest ];
+  nativeBuildInputs = [ icu ]; # for icu-config
+  buildInputs = [ icu ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
     homepage = https://pypi.python.org/pypi/PyICU/;
     description = "Python extension wrapping the ICU C++ API";
     license = licenses.mit;
-    platforms = platforms.linux; # Maybe other non-darwin Unix
+    platforms = platforms.unix;
     maintainers = [ maintainers.rycee ];
   };
 

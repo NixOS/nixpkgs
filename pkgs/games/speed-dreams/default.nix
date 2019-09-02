@@ -1,6 +1,6 @@
 { fetchurl, stdenv, libGLU_combined, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, openscenegraph, expat,
-libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkgconfig, libvorbis}:
+libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkgconfig, libvorbis, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "2.2.1-r6404";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir "$out/bin"
     for i in "$out"/games/*; do
-      echo '#!${stdenv.shell}' >> "$out/bin/$(basename "$i")"
+      echo '#!${runtimeShell}' >> "$out/bin/$(basename "$i")"
       echo "$i"' "$@"' >> "$out/bin/$(basename "$i")"
       chmod a+x "$out/bin/$(basename "$i")"
     done

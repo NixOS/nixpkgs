@@ -19,9 +19,10 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-  # Remember to change the extpackRev and version in extpack.nix as well.
-  main = "1m48ywa913g6zgqslvrihxs2fbr4gmljypbdpjma2hck6isyi02m";
-  version = "5.2.22";
+  # Remember to change the extpackRev and version in extpack.nix and
+  # guest-additions/default.nix as well.
+  main = "0jmrbyhs92lyarpvylxqn2ajxdg9b290w5nd4g0i4h83d28bwbw0";
+  version = "5.2.28";
 in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 

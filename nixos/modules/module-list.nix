@@ -35,6 +35,7 @@
   ./config/users-groups.nix
   ./config/vpnc.nix
   ./config/zram.nix
+  ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/bladeRF.nix
   ./hardware/brightnessctl.nix
@@ -44,8 +45,10 @@
   ./hardware/digitalbitbox.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
+  ./hardware/ledger.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
+  ./hardware/network/intel-2200bg.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
@@ -128,7 +131,6 @@
   ./programs/sysdig.nix
   ./programs/systemtap.nix
   ./programs/sway.nix
-  ./programs/sway-beta.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/udevil.nix
@@ -170,6 +172,7 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
+  ./security/systemd-confinement.nix
   ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
@@ -183,6 +186,7 @@
   ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
+  ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
   ./services/backup/duplicati.nix
@@ -196,9 +200,17 @@
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
   ./services/cluster/hadoop/default.nix
+  ./services/cluster/kubernetes/addons/dns.nix
+  ./services/cluster/kubernetes/addons/dashboard.nix
+  ./services/cluster/kubernetes/addon-manager.nix
+  ./services/cluster/kubernetes/apiserver.nix
+  ./services/cluster/kubernetes/controller-manager.nix
   ./services/cluster/kubernetes/default.nix
-  ./services/cluster/kubernetes/dns.nix
-  ./services/cluster/kubernetes/dashboard.nix
+  ./services/cluster/kubernetes/flannel.nix
+  ./services/cluster/kubernetes/kubelet.nix
+  ./services/cluster/kubernetes/pki.nix
+  ./services/cluster/kubernetes/proxy.nix
+  ./services/cluster/kubernetes/scheduler.nix
   ./services/computing/boinc/client.nix
   ./services/computing/torque/server.nix
   ./services/computing/torque/mom.nix
@@ -284,6 +296,7 @@
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/bluetooth.nix
+  ./services/hardware/bolt.nix
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
   ./services/hardware/fwupd.nix
@@ -327,6 +340,7 @@
   ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
   ./services/mail/clamsmtp.nix
+  ./services/mail/davmail.nix
   ./services/mail/dkimproxy-out.nix
   ./services/mail/dovecot.nix
   ./services/mail/dspam.nix
@@ -352,6 +366,7 @@
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
+  ./services/misc/beanstalkd.nix
   ./services/misc/bees.nix
   ./services/misc/bepasty.nix
   ./services/misc/canto-daemon.nix
@@ -467,6 +482,7 @@
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/exporters.nix
+  ./services/monitoring/prometheus/pushgateway.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -562,6 +578,7 @@
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
   ./services/networking/kippo.nix
+  ./services/networking/knot.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix

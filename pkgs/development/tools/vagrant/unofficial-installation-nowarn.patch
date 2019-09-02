@@ -1,8 +1,8 @@
-diff --git i/bin/vagrant w/bin/vagrant
-index 19df75033..682fae226 100755
---- i/bin/vagrant
-+++ w/bin/vagrant
-@@ -128,11 +128,6 @@ begin
+diff --git a/bin/vagrant b/bin/vagrant
+index 0e6abdc..cb36e9c 100755
+--- a/bin/vagrant
++++ b/bin/vagrant
+@@ -155,11 +155,6 @@ begin
      end
    end
  
@@ -11,6 +11,6 @@ index 19df75033..682fae226 100755
 -    env.ui.warn(I18n.t("vagrant.general.not_in_installer") + "\n", prefix: false)
 -  end
 -
-   begin
-     # Execute the CLI interface, and exit with the proper error code
-     exit_status = env.cli(argv)
+   # Acceptable experimental flag values include:
+   #
+   # Unset  - Disables experimental features

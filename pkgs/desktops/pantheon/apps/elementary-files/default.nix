@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "files";
-  version = "4.1.5";
+  version = "4.1.9";
 
   name = "elementary-${pname}-${version}";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0z0pisg7py2k6i31v18z5fgpj8x64m1s5clfq4vbbjrcjwx6dcx5";
+    sha256 = "12p1li9a7kqdlgkq20svaly5kr661ww93qngaiic6zv1bdw2bpmv";
   };
 
   passthru = {
@@ -59,11 +59,6 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
 
     substituteInPlace filechooser-module/FileChooserDialog.vala --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
-  '';
-
-  # xdg.mime will create this
-  postInstall = ''
-    rm $out/share/applications/mimeinfo.cache
   '';
 
   meta = with stdenv.lib; {

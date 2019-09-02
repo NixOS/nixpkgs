@@ -1,23 +1,23 @@
-{ stdenv, fetchpatch, python3Packages, acl, libb2, lz4, zstd, openssl, openssh }:
+{ stdenv, fetchpatch, python3, acl, libb2, lz4, zstd, openssl, openssh }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.9";
+  version = "1.1.10";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "7d0ff84e64c4be35c43ae2c047bb521a94f15b278c2fe63b43950c4836b42575";
+    sha256 = "1pp70p4n5kamvcbl4d8021ggrxhyykmg9isjg4yd3wags8b19d7g";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
     # For building documentation:
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    libb2 lz4 zstd openssl python3Packages.setuptools_scm
+    libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
-  propagatedBuildInputs = with python3Packages; [
-    cython msgpack-python
+  propagatedBuildInputs = with python3.pkgs; [
+    cython
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''
@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
   '';
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python3.pkgs; [
     pytest
   ];
 

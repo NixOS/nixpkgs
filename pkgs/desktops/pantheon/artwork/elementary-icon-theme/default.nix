@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "icons";
-  version = "5.0.3";
+  version = "5.0.4";
 
   name = "elementary-icon-theme-${version}";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0wpv7yirf44bfqfmyshzfw9605j1idm7c9jqg68k3nmymmd6iqzf";
+    sha256 = "0ha7biqvmkv68x1gi9bfcn5z0ld067pa5czx0pyf053pa86lg3hx";
   };
 
   passthru = {

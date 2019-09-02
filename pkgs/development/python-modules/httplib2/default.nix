@@ -2,12 +2,15 @@
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.11.3";
+  version = "0.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pyb0hmc0j0kcy27yiw38gq9pk7f1fkny5k1vd13cdz6l3csw7g7";
+    sha256 = "4ba6b8fd77d0038769bf3c33c9a96a6f752bc4cdf739701fdcaf210121f399d4";
   };
+
+  # Needs setting up
+  doCheck = false;
 
   meta = with lib; {
     homepage = http://code.google.com/p/httplib2;

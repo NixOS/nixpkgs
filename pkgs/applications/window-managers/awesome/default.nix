@@ -5,7 +5,11 @@
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 , libxkbcommon, xcbutilxrm, hicolor-icon-theme
 , asciidoctor
+, gtk3Support ? false, gtk3 ? null
 }:
+
+# needed for beautiful.gtk to work
+assert gtk3Support -> gtk3 != null;
 
 with luaPackages; stdenv.mkDerivation rec {
   name = "awesome-${version}";
@@ -36,23 +40,27 @@ with luaPackages; stdenv.mkDerivation rec {
                   xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
-                  xcbutilxrm ];
+                  xcbutilxrm ]
+                  ++ stdenv.lib.optional gtk3Support gtk3;
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
   cmakeFlags = "-DOVERRIDE_VERSION=${version}";
 
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
+  # LUA_CPATH and LUA_PATH are used only for *building*, see the --search flags
+  # below for how awesome finds the libraries it needs at runtime.
   LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
-  LUA_PATH  = "?.lua;${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
+  LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;;";
 
   postInstall = ''
-    wrapProgram $out/bin/awesome \
+    # Don't use wrapProgram or the wrapper will duplicate the --search
+    # arguments every restart
+    mv "$out/bin/awesome" "$out/bin/.awesome-wrapped"
+    makeWrapper "$out/bin/.awesome-wrapped" "$out/bin/awesome" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
       --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LUA_PATH ';'  "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua" \
-      --prefix LUA_CPATH ';' "${lgi}/lib/lua/${lua.luaversion}/?.so"
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
 
     wrapProgram $out/bin/awesome-client \
       --prefix PATH : "${which}/bin"

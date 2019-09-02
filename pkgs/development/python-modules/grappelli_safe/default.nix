@@ -28,7 +28,7 @@ buildPythonPackage rec {
     downloadPage = http://pypi.python.org/pypi/grappelli_safe/;
     license = licenses.free;
     maintainers = with maintainers; [ prikhi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

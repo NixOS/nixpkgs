@@ -39,6 +39,7 @@ let
 
   phpIni = pool: pkgs.runCommand "php.ini" {
     inherit (pool) phpPackage phpOptions;
+    preferLocalBuild = true;
     nixDefaults = ''
       sendmail_path = "/run/wrappers/bin/sendmail -t -i"
     '';

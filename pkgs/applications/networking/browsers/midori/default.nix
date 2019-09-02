@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ninja, pkgconfig, intltool, vala, wrapGAppsHook, gcr
+{ stdenv, fetchurl, cmake, ninja, pkgconfig, intltool, vala, wrapGAppsHook, gcr, libpeas
 , gtk3, webkitgtk, sqlite, gsettings-desktop-schemas, libsoup, glib-networking, gnome3
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3 webkitgtk sqlite gsettings-desktop-schemas gcr
-    (libsoup.override { gnomeSupport = true; }) gnome3.libpeas
+    (libsoup.override { gnomeSupport = true; }) libpeas
     glib-networking
   ];
 

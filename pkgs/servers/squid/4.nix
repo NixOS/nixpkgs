@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, openldap, pam, db, cyrus_sasl, libcap
-, expat, libxml2, openssl }:
+, expat, libxml2, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "squid-4.4";
@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     url = "http://www.squid-cache.org/Versions/v4/${name}.tar.xz";
     sha256 = "10pfx44mps5ng1806rqdwx8jv8b2n25kjvx37dcd4x2mgzdfc1a9";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "4.x-CVE-2019-13345.patch";
+      url = "https://github.com/squid-cache/squid/commit/be1dc8614e7514103ba84d4067ed6fd15ab8f82e.patch";
+      sha256 = "0vqbnkib695xk5cvldrh993k8387rpghxw3x94la8mq3w7lga9m3";
+    })
+  ];
 
   buildInputs = [
     perl openldap db cyrus_sasl expat libxml2 openssl

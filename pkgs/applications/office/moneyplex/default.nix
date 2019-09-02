@@ -1,5 +1,6 @@
 { stdenv, fetchurl, patchelf, coreutils, pcsclite
-, zlib, glib, gdk_pixbuf, gtk2, cairo, pango, libX11, atk, openssl }:
+, zlib, glib, gdk_pixbuf, gtk2, cairo, pango, libX11, atk, openssl
+, runtimeShell }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     mkdir "$out/bin"
 
     cat > $out/bin/moneyplex <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     if [ -z "\$XDG_DATA_HOME" ]; then
         MDIR=\$HOME/.local/share/moneyplex

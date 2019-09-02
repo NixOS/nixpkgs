@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper
-, openal, fluidsynth, soundfont-fluid, libGL, SDL2
+, openal, fluidsynth_1, soundfont-fluid, libGL, SDL2
 , bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    SDL2 libGL openal fluidsynth bzip2 zlib libjpeg libsndfile mpg123
+    SDL2 libGL openal fluidsynth_1 bzip2 zlib libjpeg libsndfile mpg123
     game-music-emu
   ];
 

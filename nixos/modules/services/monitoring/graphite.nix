@@ -9,8 +9,10 @@ let
   dataDir = cfg.dataDir;
   staticDir = cfg.dataDir + "/static";
 
-  graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings"
-    {inherit graphiteLocalSettings;} ''
+  graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings" {
+      inherit graphiteLocalSettings;
+      preferLocalBuild = true; 
+    } ''
     mkdir -p $out
     ln -s $graphiteLocalSettings $out/graphite_local_settings.py
   '';

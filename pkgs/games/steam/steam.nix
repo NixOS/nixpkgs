@@ -1,4 +1,4 @@
-{stdenv, fetchurl, traceDeps ? false}:
+{stdenv, fetchurl, runtimeShell, traceDeps ? false}:
 
 let
   traceLog = "/tmp/steam-trace-dependencies.log";
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     rm $out/bin/steamdeps
     ${stdenv.lib.optionalString traceDeps ''
       cat > $out/bin/steamdeps <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       echo \$1 >> ${traceLog}
       cat \$1 >> ${traceLog}
       echo >> ${traceLog}

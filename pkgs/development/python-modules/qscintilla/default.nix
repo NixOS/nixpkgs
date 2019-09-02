@@ -17,7 +17,9 @@ disabledIf (isPy3k || isPyPy)
 
     src = pkgs.qscintilla.src;
 
-    buildInputs = [ pkgs.xorg.lndir pyqt4.qt pyqt4 ];
+    nativeBuildInputs = [ pkgs.xorg.lndir ];
+
+    buildInputs = [ pyqt4.qt pyqt4 ];
 
     preConfigure = ''
       mkdir -p $out

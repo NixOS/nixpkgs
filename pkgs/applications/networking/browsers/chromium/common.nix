@@ -11,7 +11,7 @@
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk2, gtk3, dbus-glib
+, glib, gtk3, dbus-glib
 , glibc
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
@@ -65,7 +65,8 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng"
+    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
@@ -104,7 +105,7 @@ let
        else result;
 
   base = rec {
-    name = "${packageName}-${version}";
+    name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -120,7 +121,7 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 gtk3 dbus-glib
+      glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU_combined
       pciutils protobuf speechd libXdamage at-spi2-core
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
@@ -132,6 +133,8 @@ let
     patches = optional enableWideVine ./patches/widevine.patch ++ [
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
+      ./patches/jumbo-sorted.patch
+      ./patches/no-build-timestamps.patch
 
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
@@ -242,7 +245,7 @@ let
       treat_warnings_as_errors = false;
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
-      remove_webcore_debug_symbols = true;
+      blink_symbol_level = 0;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 

@@ -34,6 +34,14 @@ stdenv.mkDerivation rec {
     sha256 = "1szj9ia1snbfqzfcsk6hx1j7jhbqsy0f9k5d7x9xiy8w5lfblwym";
   };
 
+  patches = [
+    (fetchurl {
+      url = "https://github.com/curl/curl/commit/5fc28510a4664f4.patch";
+      name = "CVE-2019-5435.patch";
+      sha256 = "00w12yhq8q260n91i1xrynz3vn4w3lypgl19cm893s35pbvg7y17";
+    })
+  ];
+
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
 

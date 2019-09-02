@@ -1,21 +1,27 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
+, funcsigs
 }:
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.8.1";
+  version = "0.9";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "afcf31443a478c32bbac4b00337ee9026a13d0e2ac83d30c79151462513bb0d4";
+    inherit version;
+    pname = "Pint";
+    sha256 = "32d8a9a9d63f4f81194c0014b3b742679dce81a26d45127d9810a68a561fe4e2";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = lib.optional isPy27 funcsigs;
+
+  meta = with lib; {
     description = "Physical quantities module";
     license = licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint/";
+    maintainers = [ maintainers.costrouc ];
   };
 
 }

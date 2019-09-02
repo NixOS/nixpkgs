@@ -1,29 +1,37 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pythonOlder
 , wrapt
+, typing
 , pyserial
 , nose
 , mock
+, hypothesis
+, future
 , pytest
 , pytest-timeout }:
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "3.0.0";
+  version = "3.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0d2ddb3b663af51b11a4c7fb7a577c63302a831986239f82bb6af65efc065b07";
+  # PyPI tarball is missing some tests and is missing __init__.py in test
+  # directory causing the tests to fail. See:
+  # https://github.com/hardbyte/python-can/issues/518
+  src = fetchFromGitHub {
+    repo = pname;
+    owner = "hardbyte";
+    rev = "v${version}";
+    sha256 = "01lfsh7drm4qvv909x9i0vnhskdh27mcb5xa86sv9m3zfpq8cjis";
   };
 
-  propagatedBuildInputs = [ wrapt pyserial ];
-  checkInputs = [ nose mock pytest pytest-timeout ];
+  propagatedBuildInputs = [ wrapt pyserial ] ++ lib.optional (pythonOlder "3.5") typing;
+  checkInputs = [ nose mock pytest pytest-timeout hypothesis future ];
 
+  # Add the scripts to PATH
   checkPhase = ''
-    pytest -k "not test_writer_and_reader \
-           and not test_reader \
-           and not test_socketcan_on_ci_server"
+    PATH=$out/bin:$PATH pytest -c /dev/null
   '';
 
   meta = with lib; {

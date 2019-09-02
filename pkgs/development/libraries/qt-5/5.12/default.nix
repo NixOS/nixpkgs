@@ -60,8 +60,16 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = [ ./qtwebengine-no-build-skip.patch ];
-    qtwebkit = [ ./qtwebkit.patch ];
+    qtwebengine = [
+      ./qtwebengine-no-build-skip.patch
+      ./qtwebengine-CVE-2019-5786.patch
+    ]
+      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
+    qtwebkit = [ ./qtwebkit.patch ]
+      ++ optionals stdenv.isDarwin [
+        ./qtwebkit-darwin-no-readline.patch
+        ./qtwebkit-darwin-no-qos-classes.patch
+      ];
   };
 
   mkDerivation =

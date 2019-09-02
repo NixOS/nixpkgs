@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "tomcat";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   nodes = {

@@ -17,6 +17,7 @@ tlp = pkgs.tlp.override {
 confFile = pkgs.runCommand "tlp"
   { config = cfg.extraConfig;
     passAsFile = [ "config" ];
+    preferLocalBuild = true;
   }
   ''
     cat ${tlp}/etc/default/tlp > $out

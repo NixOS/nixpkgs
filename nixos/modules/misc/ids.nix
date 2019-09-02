@@ -272,7 +272,7 @@
       nzbget = 245;
       mosquitto = 246;
       toxvpn = 247;
-      squeezelite = 248;
+      # squeezelite = 248; # DynamicUser = true
       turnserver = 249;
       smokeping = 250;
       gocd-agent = 251;

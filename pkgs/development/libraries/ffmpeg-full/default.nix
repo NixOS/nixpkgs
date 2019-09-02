@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -97,7 +97,7 @@
 , libXv ? null # Xlib support
 , libXext ? null # Xlib support
 , lzma ? null # xz-utils
-, nvenc ? false, nvidia-video-sdk ? null, nv-codec-headers ? null # NVIDIA NVENC support
+, nvenc ? false, nv-codec-headers ? null # NVIDIA NVENC support
 , callPackage # needed for NVENC to access external ffmpeg nvidia headers
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
@@ -227,16 +227,20 @@ assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
 assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
-assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "4.1";
+  version = "4.1.4";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "150rrm549fy1x71c9whmyi5knyd9sliwvmcsm438bdgg4v8c93m3";
+    sha256 = "1qd7a10gs12ifcp31gramcgqjl77swskjfp7cijibgyg5yl4kw7i";
   };
+  patches = [(fetchpatch { # remove on update
+    name = "fix-hardcoded-tables.diff";
+    url = "http://git.ffmpeg.org/gitweb/ffmpeg.git/commitdiff_plain/c8232e50074f";
+    sha256 = "0jlksks4fjajby8fjk7rfp414gxfdgd6q9khq26i52xvf4kg2dw6";
+  })];
 
   prePatch = ''
     patchShebangs .
@@ -416,13 +420,13 @@ stdenv.mkDerivation rec {
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
-    ++ optionals nvenc [ nvidia-video-sdk nv-codec-headers ]
+    ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
-                                   libiconv ];
+                                   libiconv cf-private /* For _OBJC_EHTYPE_$_NSException */ ];
 
-  # Build qt-faststart executable
-  buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';
+  buildFlags = [ "all" ]
+    ++ optional qtFaststartProgram "tools/qt-faststart"; # Build qt-faststart executable
 
   # Hacky framework patching technique borrowed from the phantomjs2 package
   postInstall = optionalString qtFaststartProgram ''

@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "vivaldi-ffmpeg-codecs";
-  version = "72.0.3626.96";
+  version = "72.0.3626.122";
 
   src = fetchurl {
     url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
-    sha512 = "2hawkyydcd0b6ipfigkf5n6c1ha1vknaqd4mgw381pi0ayq8skxbjazqabfcg9gcj84cnksi8j4dylfcrbgrmlnmc479fix0m0xx7cl";
+    sha512 = "1477g5dgi4m0zbiqwm9w6jqkmjfmgjlbl3qs9ljldx8bif8my1jbz4hzws954aqxyxdbf5rjpvmrrqqppk5347prvsyl37rbsndaaqf";
   };
 
   buildInputs = [ ];

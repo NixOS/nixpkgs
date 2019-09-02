@@ -17,6 +17,8 @@
   libXrandr,
   libGL,
   xclip,
+  wayland,
+  libxkbcommon,
   # Darwin Frameworks
   cf-private,
   AppKit,
@@ -40,6 +42,9 @@ let
     libXrandr
     libGL
     libXi
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland
+    libxkbcommon
   ];
 in buildRustPackage rec {
   name = "alacritty-${version}";
@@ -113,6 +118,6 @@ in buildRustPackage rec {
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ mic92 ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 }

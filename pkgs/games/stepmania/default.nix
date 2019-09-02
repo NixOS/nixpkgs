@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake, nasm
+{ clangStdenv, lib, fetchFromGitHub, cmake, nasm
 , gtk2, glib, ffmpeg, alsaLib, libmad, libogg, libvorbis
 , glew, libpulseaudio, udev
 }:
 
-stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   name = "stepmania-${version}";
   version = "5.0.12";
 

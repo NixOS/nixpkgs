@@ -1,17 +1,15 @@
 { stdenv, fetchFromGitHub, makeWrapper, lib
 , dnsutils, coreutils, openssl, nettools, utillinux, procps }:
 
-let
-  version = "2.9.5-7";
-
-in stdenv.mkDerivation rec {
-  name = "testssl.sh-${version}";
+stdenv.mkDerivation rec {
+  pname = "testssl.sh";
+  version = "2.9.5-8";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = "testssl.sh";
     rev = "v${version}";
-    sha256 = "02xp0yi53xf6jw6v633zs2ws2iyyvq3mlkimg0cv3zvj7nw9x5wr";
+    sha256 = "1fpakzm2gsv8yva58s23lhlgxkkvi3pixil2mjrlkmr0qk66rc32";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,12 +29,10 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -Dt $out/bin testssl.sh
-
-    wrapProgram $out/bin/testssl.sh                                            \
-      --prefix PATH ':' ${lib.makeBinPath buildInputs}
-
+    install -D testssl.sh $out/bin/testssl.sh
     cp -r etc $out
+
+    wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
   '';
 
   meta = with stdenv.lib; {

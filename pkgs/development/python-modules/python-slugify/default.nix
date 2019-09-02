@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
     pname = "python-slugify";
-    version = "1.2.6";
+    version = "2.0.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245";
+      sha256 = "d3e034397236020498e677a35e5c05dcc6ba1624b608b9ef7e5fe3090ccbd5a8";
     };
     doCheck = !isPy3k;
     # (only) on python3 unittest loader (loadTestsFromModule) fails

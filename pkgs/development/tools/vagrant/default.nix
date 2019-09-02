@@ -1,11 +1,12 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, libguestfs, qemu, writeText, withLibvirt ? true}:
+{ stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
+, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux }:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.0";
+  version = "2.2.5";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "1wa8l3j6hpy0m0snz7wvfcf0wsjikp22c2z29crpk10f7xl7c56b";
+  sha256 = "0a228f5185b24b72efcc5a3924f86fa9fabab6f7562c3c63c1d9d239aa72a7b1";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";

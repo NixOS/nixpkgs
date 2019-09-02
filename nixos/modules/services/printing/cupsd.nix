@@ -11,8 +11,9 @@ let
   avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
 
-  additionalBackends = pkgs.runCommand "additional-cups-backends" { }
-    ''
+  additionalBackends = pkgs.runCommand "additional-cups-backends" {
+      preferLocalBuild = true;
+    } ''
       mkdir -p $out
       if [ ! -e ${cups.out}/lib/cups/backend/smb ]; then
         mkdir -p $out/lib/cups/backend
@@ -59,6 +60,8 @@ let
 
     TempDir ${cfg.tempDir}
 
+    SetEnv PATH /var/lib/cups/path/lib/cups/filter:/var/lib/cups/path/bin
+
     # User and group used to run external programs, including
     # those that actually send the job to the printer.  Note that
     # Udev sets the group of printer devices to `lp', so we want
@@ -74,8 +77,6 @@ let
       Listen ${addr}
     '') cfg.listenAddresses}
     Listen /var/run/cups/cups.sock
-
-    SetEnv PATH /var/lib/cups/path/lib/cups/filter:/var/lib/cups/path/bin
 
     DefaultShared ${if cfg.defaultShared then "Yes" else "No"}
 

@@ -50,7 +50,7 @@ buildPythonPackage rec {
     description = "Powerful interactive network packet manipulation program";
     homepage = https://scapy.net/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos bjornfor ];
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
-, gtk, gsettings-desktop-schemas, vte, intltool, which, libuuid, vala
+, gtk3, gsettings-desktop-schemas, vte, intltool, which, libuuid, vala
 , desktop-file-utils, itstool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gtk gsettings-desktop-schemas vte libuuid dconf
+    gtk3 gsettings-desktop-schemas vte libuuid dconf
     # For extension
     nautilus
   ];

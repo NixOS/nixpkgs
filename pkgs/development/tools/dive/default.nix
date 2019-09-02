@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "dive";
-  version = "0.5.0";
+  version = "0.6.0";
 
   goPackagePath = "github.com/wagoodman/dive";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "wagoodman";
     repo = "dive";
     rev = "v${version}";
-    sha256 = "159m36p7b0ygdp42qdmmz02rhrkymh8m6yl21m1ixd4c2pjkjhns";
+    sha256 = "05n19a5q1yi8r6r72z634z93lz2i347zccs9qm7gx5h86nh147zd";
   };
 
   goDeps = ./deps.nix;
@@ -21,6 +21,6 @@ buildGoPackage rec {
     description = "A tool for exploring each layer in a docker image";
     homepage = https://github.com/wagoodman/dive;
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam spacekookie ];
   };
 }

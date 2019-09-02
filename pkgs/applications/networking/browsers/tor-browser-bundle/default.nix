@@ -340,9 +340,7 @@ stdenv.mkDerivation rec {
       `tor-browser-bundle` needs for the bundling using a much simpler patch. See the
       longDescription and expression of the `firefoxPackages.tor-browser` package for more info.
     '';
-    homepage = https://torproject.org/;
-    license = licenses.free;
-    platforms = [ "x86_64-linux" ];
+    inherit (tor-browser-unwrapped.meta) homepage platforms license;
     hydraPlatforms = [ ];
     maintainers = with maintainers; [ joachifm ];
   };

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, cmake, llvmPackages, rapidjson }:
+, cmake, llvmPackages, rapidjson, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name    = "ccls-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSYSTEM_CLANG=ON" ];
 
-  shell = stdenv.shell;
+  shell = runtimeShell;
   postFixup = ''
     # We need to tell ccls where to find the standard library headers.
 

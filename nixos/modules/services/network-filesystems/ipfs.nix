@@ -19,7 +19,7 @@ let
     "/var/lib/ipfs/.ipfs";
 
   # Wrapping the ipfs binary with the environment variable IPFS_PATH set to dataDir because we can't set it in the user environment
-  wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; } ''
+  wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; preferLocalBuild = true; } ''
     mkdir -p "$out/bin"
     makeWrapper "${ipfs}/bin/ipfs" "$out/bin/ipfs" \
       --set IPFS_PATH ${cfg.dataDir} \

@@ -62,5 +62,7 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
+
+    priority = 10;
   };
 }

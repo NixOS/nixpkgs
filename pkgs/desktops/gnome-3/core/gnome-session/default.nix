@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk, gsettings-desktop-schemas
+{ fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk3, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
 , libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib gtk libICE gnome-desktop json-glib xorg.xtrans gnome3.defaultIconTheme
+    glib gtk3 libICE gnome-desktop json-glib xorg.xtrans gnome3.adwaita-icon-theme
     gnome3.gnome-settings-daemon gsettings-desktop-schemas systemd epoxy
   ];
 

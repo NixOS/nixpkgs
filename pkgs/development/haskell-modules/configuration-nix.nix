@@ -94,6 +94,8 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
+  cachix = enableSeparateBinOutput super.cachix;
+
   hzk = overrideCabal super.hzk (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
     configureFlags =  "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper";
@@ -286,7 +288,7 @@ self: super: builtins.intersectAttrs super {
   # Tries to run GUI in tests
   leksah = dontCheck (overrideCabal super.leksah (drv: {
     executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
-      gnome3.defaultIconTheme # Fix error: Icon 'window-close' not present in theme ...
+      gnome3.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
       wrapGAppsHook           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
       gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ]);
@@ -486,6 +488,13 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
+
+  # https://github.com/haskell-servant/servant/pull/1128
+  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.15" then
+    appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch
+  else
+    super.servant-client-core;
+
 
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"

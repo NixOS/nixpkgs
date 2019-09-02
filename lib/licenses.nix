@@ -561,6 +561,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "OpenSSL License";
   };
 
+  osl2 = spdx {
+    spdxId = "OSL-2.0";
+    fullName = "Open Software License 2.0";
+  };
+
   osl21 = spdx {
     spdxId = "OSL-2.1";
     fullName = "Open Software License 2.1";

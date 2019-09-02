@@ -27,6 +27,6 @@ perlPackages.buildPerlPackage rec {
     '';
     homepage = http://www.gson.org/egypt/;
     license = with licenses; [ artistic1 gpl1Plus ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

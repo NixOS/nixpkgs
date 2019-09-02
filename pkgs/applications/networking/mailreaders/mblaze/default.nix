@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "mblaze-${version}";
-  version = "0.4";
+  version = "0.5";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
@@ -10,10 +10,14 @@ stdenv.mkDerivation rec {
     owner = "chneukirchen";
     repo = "mblaze";
     rev = "v${version}";
-    sha256 = "15ac213a17mxni3bqvzxhiln65s4almrlmv72bbcgi7cymb303rp";
+    sha256 = "0fyvydafpz7vmwgn7hc4drm9sb7367smrd07wfyizpas0gmxw2j8";
   };
 
   makeFlags = "PREFIX=$(out)";
+
+  postInstall = ''
+    install -Dm644 -t $out/share/zsh/site-functions contrib/_mblaze
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/chneukirchen/mblaze;

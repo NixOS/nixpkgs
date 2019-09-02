@@ -30,6 +30,16 @@ import ./make-test.nix ({ pkgs, ...} : {
     ''
       $machine->waitForUnit("multi-user.target");
 
+      subtest "apparmor-loaded", sub {
+          $machine->succeed("systemctl status apparmor.service");
+      };
+
+      # AppArmor securityfs
+      subtest "apparmor-securityfs", sub {
+          $machine->succeed("mountpoint -q /sys/kernel/security");
+          $machine->succeed("cat /sys/kernel/security/apparmor/profiles");
+      };
+
       # Test loading out-of-tree modules
       subtest "extra-module-packages", sub {
           $machine->succeed("grep -Fq wireguard /proc/modules");

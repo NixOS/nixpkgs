@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeDesktopItem, unzip, writeText
-, scummvm }:
+, scummvm, runtimeShell }:
 
 let
   desktopItem = name: short: long: description: makeDesktopItem {
@@ -13,7 +13,7 @@ let
   };
 
   run = name: short: code: writeText "${short}.sh" ''
-    #!${stdenv.shell} -eu
+    #!${runtimeShell} -eu
 
     exec ${scummvm}/bin/scummvm \
       --path=@out@/share/${name} \

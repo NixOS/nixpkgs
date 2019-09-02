@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     gtk3
     glib
     upower
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   meta = with stdenv.lib; {

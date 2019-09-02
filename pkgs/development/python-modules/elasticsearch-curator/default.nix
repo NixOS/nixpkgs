@@ -62,5 +62,8 @@ buildPythonPackage rec {
       * Perform various actions on the items which remain in the actionable list.
     '';
     maintainers = with maintainers; [ basvandijk ];
+
+    # https://github.com/elastic/curator/pull/1280
+    broken = versionAtLeast click.version "7.0";
   };
 }

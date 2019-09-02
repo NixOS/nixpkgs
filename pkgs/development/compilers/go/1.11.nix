@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
+{ stdenv, fetchurl, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
-, mailcap
+, mailcap, runtimeShell
 , buildPackages, targetPackages }:
 
 let
@@ -28,14 +28,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "go-${version}";
-  version = "1.11.5";
+  pname = "go";
+  version = "1.11.12";
 
-  src = fetchFromGitHub {
-    owner = "golang";
-    repo = "go";
-    rev = "go${version}";
-    sha256 = "0d45057rc0bngq0nja847cagxji42qmlywr68f0dkg51im8nyr9y";
+  src = fetchurl {
+    url = "https://dl.google.com/go/go${version}.src.tar.gz";
+    sha256 = "09k9zmq7hhgg0bf1y7rwa0kn7q1vkkr94cmg2iv9lq3najh5nykd";
   };
 
   # perl is used for testing go vet
@@ -55,7 +53,7 @@ stdenv.mkDerivation rec {
     # This source produces shell script at run time,
     # and thus it is not corrected by patchShebangs.
     substituteInPlace misc/cgo/testcarchive/carchive_test.go \
-      --replace '#!/usr/bin/env bash' '#!${stdenv.shell}'
+      --replace '#!/usr/bin/env bash' '#!${runtimeShell}'
 
     # Patch the mimetype database location which is missing on NixOS.
     substituteInPlace src/mime/type_unix.go \
@@ -100,7 +98,7 @@ stdenv.mkDerivation rec {
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isAarch32 ''
-    echo '#!${stdenv.shell}' > misc/cgo/testplugin/test.bash
+    echo '#!${runtimeShell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
@@ -125,7 +123,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.11.patch
-    ./ssl-cert-file-1.9.patch
+    ./ssl-cert-file-1.12.1.patch
     ./remove-test-pie.patch
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch

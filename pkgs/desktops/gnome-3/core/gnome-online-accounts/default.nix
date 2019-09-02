@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk, wrapGAppsHook
-, webkitgtk, json-glib, rest, libsecret, gtk-doc, gobject-introspection
+{ stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk3, wrapGAppsHook
+, webkitgtk, json-glib, librest, libsecret, gtk-doc, gobject-introspection
 , gettext, icu, glib-networking
 , libsoup, docbook_xsl, docbook_xml_dtd_412, gnome3, gcr, kerberos
 }:
 
 let
   pname = "gnome-online-accounts";
-  version = "3.30.1";
+  version = "3.30.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0havx26cfy0ln17jzmzbrrx35afknv2s9mdy34j0p7wmbqr8m5ky";
+    sha256 = "1p1gdgryziklrgngn6m13xnvfx4gb01h723nndfi9944r24fbiq5";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     libxslt docbook_xsl docbook_xml_dtd_412 gtk-doc
   ];
   buildInputs = [
-    glib gtk webkitgtk json-glib rest libsecret glib-networking icu libsoup
+    glib gtk3 webkitgtk json-glib librest libsecret glib-networking icu libsoup
     gcr kerberos
   ];
 

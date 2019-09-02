@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "aspy.yaml";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ajb97kn044ximkzq2090h4yblrhw77540pwiw345cp7mwzy4xqa";
+    sha256 = "5eaaacd0886e8b581f0e4ff383fb6504720bb2b3c7be17307724246261a41adf";
   };
 
   propagatedBuildInputs = [ pyyaml ];

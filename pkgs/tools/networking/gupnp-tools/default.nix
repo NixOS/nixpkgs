@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook ];
-  buildInputs = [ gupnp libuuid gssdp gtk3 gupnp-av gtksourceview4 gnome3.defaultIconTheme ];
+  buildInputs = [ gupnp libuuid gssdp gtk3 gupnp-av gtksourceview4 gnome3.adwaita-icon-theme ];
 
   passthru = {
     updateScript = gnome3.updateScript {

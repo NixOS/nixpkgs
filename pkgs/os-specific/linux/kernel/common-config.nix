@@ -240,7 +240,7 @@ let
       FANOTIFY        = yes;
       TMPFS           = yes;
       TMPFS_POSIX_ACL = yes;
-      FS_ENCRYPTION   = { optional = true; tristate = whenAtLeast "4.9" "m"; };
+      FS_ENCRYPTION   = if (versionAtLeast version "5.1") then yes else whenAtLeast "4.9" (option module);
 
       EXT2_FS_XATTR     = yes;
       EXT2_FS_POSIX_ACL = yes;
@@ -426,6 +426,12 @@ let
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
 
+      # VirtualBox guest drivers in the kernel conflict with the ones in the
+      # official additions package and prevent the vboxsf module from loading,
+      # so disable them for now.
+      VBOXGUEST = option no;
+      DRM_VBOXVIDEO = option no;
+
     } // optionalAttrs (stdenv.isx86_64 || stdenv.isi686) ({
       XEN = option yes;
 
@@ -592,6 +598,8 @@ let
 
       BLK_DEV_INTEGRITY       = yes;
 
+      BLK_SED_OPAL = whenAtLeast "4.14" yes;
+
       BSD_PROCESS_ACCT_V3 = yes;
 
       BT_HCIUART_BCSP = option yes;
@@ -633,6 +641,8 @@ let
 
       MLX4_EN_VXLAN = whenOlder "4.8" yes;
       MLX5_CORE_EN       = option yes;
+
+      PSI = whenAtLeast "4.20" yes;
 
       MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
@@ -689,6 +699,9 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      PREEMPT = no;
+      PREEMPT_VOLUNTARY = yes;
     };
   };
 in

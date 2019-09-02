@@ -15,11 +15,11 @@ let
   pkgList = rec {
     all = lib.filter pkgFilter (combinePkgs pkgSet);
     splitBin = builtins.partition (p: p.tlType == "bin") all;
-    bin = mkUniquePkgs splitBin.right
+    bin = mkUniqueOutPaths splitBin.right
       ++ lib.optional
           (lib.any (p: p.tlType == "run" && p.pname == "pdfcrop") splitBin.wrong)
           (lib.getBin ghostscript);
-    nonbin = mkUniquePkgs splitBin.wrong;
+    nonbin = mkUniqueOutPaths splitBin.wrong;
 
     # extra interpreters needed for shebangs, based on 2015 schemes "medium" and "tetex"
     # (omitted tk needed in pname == "epspdf", bin/epspdftk)
@@ -31,9 +31,16 @@ let
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
-  mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
-    # here we deal with those dummy packages needed for hyphenation filtering
-    (map (p: if lib.isDerivation p then p.outPath else "") pkgs);
+  # TODO: replace by buitin once it exists
+  fastUnique = comparator: list: with lib;
+    let un_adj = l: if length l < 2 then l
+      else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
+    in un_adj (lib.sort comparator list);
+
+  uniqueStrings = fastUnique (a: b: a < b);
+
+  mkUniqueOutPaths = pkgs: uniqueStrings
+    (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
 in buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}";
@@ -125,10 +132,15 @@ in buildEnv {
     # updmap.cfg seems like not needing changes
 
     # now filter hyphenation patterns, in a hacky way ATM
-  (let script =
-    writeText "hyphens.sed" (
-      lib.concatMapStrings (pkg: "/^\% from ${pkg.pname}/,/^\%/p;\n") pkgList.splitBin.wrong
-      + "1,/^\% from/p;" );
+  (let
+    pnames = uniqueStrings (map (p: p.pname) pkgList.splitBin.wrong);
+    script =
+      writeText "hyphens.sed" (
+        # pick up the header
+        "1,/^\% from/p;"
+        # pick up all sections matching packages that we combine
+        + lib.concatMapStrings (pname: "/^\% from ${pname}:$/,/^\%/p;\n") pnames
+      );
   in ''
     (
       cd ./share/texmf/tex/generic/config/

@@ -82,6 +82,8 @@ let
 
   git-hub = callPackage ./git-hub { };
 
+  git-ignore = callPackage ./git-ignore { };
+
   git-imerge = callPackage ./git-imerge { };
 
   git-octopus = callPackage ./git-octopus { };

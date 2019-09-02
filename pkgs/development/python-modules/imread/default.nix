@@ -24,7 +24,7 @@ buildPythonPackage rec {
     homepage = https://imread.readthedocs.io/en/latest/;
     maintainers = with maintainers; [ luispedro ];
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

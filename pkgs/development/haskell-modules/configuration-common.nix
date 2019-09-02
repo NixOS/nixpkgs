@@ -85,7 +85,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "06385r9rlncrrmzdfl8q600bw6plbvkmkwgl3llg595xrm711a97";
+      sha256 = "1v2v6cwy957y5rgclb66ia7bl5j5mx291s3lh2swa39q3420m6v0";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -143,6 +143,7 @@ self: super: {
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
+  classy-prelude-yesod = dontHaddock super.classy-prelude-yesod; # https://github.com/haskell/haddock/issues/979
 
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
@@ -165,8 +166,10 @@ self: super: {
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    # https://github.com/jaspervdj/hakyll/issues/491
-    else dontCheck super.hakyll;
+    else appendPatch super.hakyll (pkgs.fetchpatch {
+      url = "https://github.com/jaspervdj/hakyll/pull/691/commits/a44ad37cd15310812e78f7dab58d6d460451f20c.patch";
+      sha256 = "13xpznm19rjp51ds165ll9ahyps1r4131c77b8r7gpjd6i505832";
+    });
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
@@ -953,17 +956,13 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # hledger needs a newer megaparsec version than we have in LTS 12.x.
-  hledger-lib = super.hledger-lib.overrideScope (self: super: {
-    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
-    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
-    # megaparsec = self.megaparsec_7_0_4;
-  });
-
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal super.hledger (drv: {
     postInstall = ''
+      # Don't install files that don't belong into this package to avoid
+      # conflicts when hledger and hledger-ui end up in the same profile.
+      rm embeddedfiles/hledger-{api,ui,web}.*
       for i in $(seq 1 9); do
         for j in embeddedfiles/*.$i; do
           mkdir -p $out/share/man/man$i
@@ -974,7 +973,7 @@ self: super: {
       cp -v embeddedfiles/*.info* $out/share/info/
     '';
   });
-  hledger-ui = (overrideCabal super.hledger-ui (drv: {
+  hledger-ui = overrideCabal super.hledger-ui (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
         for j in *.$i; do
@@ -985,11 +984,6 @@ self: super: {
       mkdir -p $out/share/info
       cp -v *.info* $out/share/info/
     '';
-  })).overrideScope (self: super: {
-    # cassava-megaparsec = self.cassava-megaparsec_2_0_0;
-    # config-ini = self.config-ini_0_2_4_0;
-    # hspec-megaparsec = self.hspec-megaparsec_2_0_0;
-    # megaparsec = self.megaparsec_7_0_4;
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
@@ -1084,6 +1078,9 @@ self: super: {
   cborg = doJailbreak super.cborg;
   serialise = doJailbreak (dontCheck super.serialise);
 
+  # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
+  netrc = doJailbreak super.netrc;
+
   # https://github.com/phadej/tree-diff/issues/19
   tree-diff = doJailbreak super.tree-diff;
 
@@ -1160,7 +1157,13 @@ self: super: {
 
   xmonad-extras = doJailbreak super.xmonad-extras;
 
-  arbtt = doJailbreak super.arbtt;
+  arbtt = overrideCabal super.arbtt (drv: {
+    # See this for context:
+    # https://github.com/NixOS/nixpkgs/commit/7c04e3eb7571ad8ce31a15a22beb11bfe921a387
+    preCheck = ''
+      for n in $PWD/dist/build/*; do PATH+=":$n"; done
+    '';
+  });
 
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
@@ -1174,9 +1177,6 @@ self: super: {
   #   testToolDepends = old.testToolDepends or [] ++ [ pkgs.nix ];
   # });
   libnix = dontCheck super.libnix;
-
-  # https://github.com/jmillikin/chell/issues/1
-  chell = super.chell.override { patience = self.patience_0_1_1; };
 
   # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
   xmobar = dontCheck super.xmobar;
@@ -1225,10 +1225,33 @@ self: super: {
 
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  pandoc = doDistribute (dontCheck super.pandoc_2_6);
-  pandoc-citeproc = self.pandoc-citeproc_0_16_1;
+  pandoc = doDistribute super.pandoc_2_7_1;
+  pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_1_3;
 
   # https://github.com/qfpl/tasty-hedgehog/issues/24
   tasty-hedgehog = dontCheck super.tasty-hedgehog;
+
+  # The latest release version is ancient. You really need this tool from git.
+  haskell-ci = generateOptparseApplicativeCompletion "haskell-ci"
+    (addBuildDepend (overrideSrc (dontCheck super.haskell-ci) {
+      version = "20190307-git";
+      src = pkgs.fetchFromGitHub {
+        owner = "haskell-CI";
+        repo = "haskell-ci";
+        rev = "2baceb59bc2f36e798ff9fb6e8865c449f01d3a2";
+        sha256 = "1wqhqajxni6h9rrj22xj6421d4m0gs8qk2glghpdp307ns5gr2j4";
+      };
+  }) (with self; [base-compat generic-lens microlens optparse-applicative ShellCheck]));
+
+  # Fix build with attr-2.4.48 (see #53716)
+  xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
+
+  # Break out of pandoc >=2.0 && <2.7 (https://github.com/pbrisbin/yesod-markdown/pull/65)
+  yesod-markdown = doJailbreak super.yesod-markdown;
+
+  # Some tests depend on a postgresql instance
+  # Haddock failure: https://github.com/haskell/haddock/issues/979
+  esqueleto = dontHaddock (dontCheck super.esqueleto);
+
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

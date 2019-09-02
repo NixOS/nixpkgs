@@ -67,6 +67,7 @@ let
   trivialBuilders = self: super:
     import ../build-support/trivial-builders.nix {
       inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.xorg) lndir;
+      inherit (self) runtimeShell;
     };
 
   stdenvBootstappingAndPlatforms = self: super: {
@@ -134,7 +135,9 @@ let
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported.
     pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
-      inherit overlays config;
+      overlays = [ (self': super': {
+        pkgsMusl = super';
+      })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
@@ -151,7 +154,9 @@ let
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
-      inherit overlays config;
+      overlays = [ (self': super': {
+        pkgsi686Linux = super';
+      })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
@@ -177,6 +182,9 @@ let
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
     pkgsStatic = nixpkgsFun ({
+      overlays = [ (self': super': {
+        pkgsStatic = super';
+      })] ++ overlays;
       crossOverlays = [ (import ./static.nix) ];
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {

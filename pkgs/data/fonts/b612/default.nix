@@ -1,14 +1,14 @@
 { stdenv, fetchzip, lib }:
 
 let
-  version = "1.003";
+  version = "1.008";
   pname = "b612";
 in
 
 fetchzip rec {
   name = "${pname}-font-${version}";
-  url = "http://git.polarsys.org/c/${pname}/${pname}.git/snapshot/${pname}-bd14fde2544566e620eab106eb8d6f2b7fb1347e.zip";
-  sha256 = "07gadk9b975k69pgw9gj54qx8d5xvxphid7wrmv4cna52jyy4464";
+  url = "https://github.com/polarsys/b612/archive/${version}.zip";
+  sha256 = "0r3lana1q9w3siv8czb3p9rrb5d9svp628yfbvvmnj7qvjrmfsiq";
   postFetch = ''
     mkdir -p $out/share/fonts/truetype/${pname}
     unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/${pname}

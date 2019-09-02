@@ -79,20 +79,6 @@ let
         sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
       })
 
-      # "`type_getattro()` calls `tp_descr_get(self, obj, type)` without actually owning a reference to "self".
-      # In very rare cases, this can cause a segmentation fault if "self" is deleted by the descriptor."
-      # https://github.com/python/cpython/pull/6118
-      (fetchpatch {
-        name = "type_getattro.patch";
-        url = "file://${./type_getattro.patch}";
-        sha256 = "11v9yx20hs3jmw0wggzvmw39qs4mxay4kb8iq2qjydwy9ya61nrd";
-      })
-
-      (fetchpatch {
-        name = "CVE-2018-1000802.patch";
-        url = "https://github.com/python/cpython/pull/8985.patch";
-        sha256 = "1c8nq2c9sjqa8ipl62hiandg6a7lzrwwfhi3ky6jd3pxgyalrh97";
-      })
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [

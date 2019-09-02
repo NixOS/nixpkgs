@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, intltool, itstool, libxslt
+{ stdenv, fetchurl, substituteAll, intltool, itstool, libxslt, gexiv2, tracker
 , meson, ninja, pkgconfig, vala, wrapGAppsHook, bzip2, dbus, evolution-data-server
 , exempi, flac, giflib, glib, gnome3, gst_all_1, icu, json-glib, libcue, libexif
 , libgrss, libgsf, libiptcdata, libjpeg, libpng, libseccomp, libsoup, libtiff, libuuid
@@ -35,9 +35,9 @@ in stdenv.mkDerivation rec {
     flac
     giflib
     glib
-    gnome3.gexiv2
+    gexiv2
     totem-pl-parser
-    gnome3.tracker
+    tracker
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     icu

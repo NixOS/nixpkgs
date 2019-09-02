@@ -71,7 +71,7 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     processedAttrs = [
       "src" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
       "buildDependencies" "dependencies" "features"
-      "crateName" "version" "build" "authors" "colors"
+      "crateName" "version" "build" "authors" "colors" "edition"
     ];
     extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
     buildInputs_ = buildInputs;
@@ -129,6 +129,7 @@ stdenv.mkDerivation (rec {
     build = crate.build or "";
     workspace_member = crate.workspace_member or ".";
     crateVersion = crate.version;
+    crateDescription = crate.description or "";
     crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [];
     crateType =
       if lib.attrByPath ["procMacro"] false crate then ["proc-macro"] else
@@ -136,13 +137,15 @@ stdenv.mkDerivation (rec {
         (crate.type or ["lib"]);
     colors = lib.attrByPath [ "colors" ] "always" crate;
     extraLinkFlags = builtins.concatStringsSep " " (crate.extraLinkFlags or []);
+    edition = crate.edition or null;
+    extraRustcOpts = (if crate ? extraRustcOpts then crate.extraRustcOpts else []) ++ extraRustcOpts_ ++ (lib.optional (edition != null) "--edition ${edition}");
+
     configurePhase = configureCrate {
-      inherit crateName buildDependencies completeDeps completeBuildDeps
+      inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
               crateFeatures libName build workspace_member release libPath crateVersion
-              extraLinkFlags
+              extraLinkFlags extraRustcOpts
               crateAuthors verbose colors target_os;
     };
-    extraRustcOpts = (if crate ? extraRustcOpts then crate.extraRustcOpts else []) ++ extraRustcOpts_;
     buildPhase = buildCrate {
       inherit crateName dependencies
               crateFeatures libName release libPath crateType

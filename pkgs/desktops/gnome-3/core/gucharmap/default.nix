@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchFromGitLab, fetchpatch, pkgconfig, gtk3, defaultIconTheme
+{ stdenv, intltool, fetchFromGitLab, fetchpatch, pkgconfig, gtk3, adwaita-icon-theme
 , glib, desktop-file-utils, gtk-doc, autoconf, automake, libtool
 , wrapGAppsHook, gnome3, itstool, libxml2, yelp-tools
 , docbook_xsl, docbook_xml_dtd_412, gsettings-desktop-schemas
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     yelp-tools libxml2 desktop-file-utils gobject-introspection
   ];
 
-  buildInputs = [ gtk3 glib gsettings-desktop-schemas defaultIconTheme ];
+  buildInputs = [ gtk3 glib gsettings-desktop-schemas adwaita-icon-theme ];
 
   configureFlags = [
     "--with-unicode-data=${unicode-data}"

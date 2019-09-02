@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, jshon, electron, hyper-haskell-server, extra-packages ? [] }:
+{ stdenv, fetchFromGitHub, jshon, electron
+, runtimeShell, hyper-haskell-server, extra-packages ? [] }:
 
 let
   binPath = stdenv.lib.makeBinPath ([ hyper-haskell-server ] ++ extra-packages);
@@ -34,7 +35,7 @@ in stdenv.mkDerivation rec {
 
     # install electron wrapper script
     cat > $out/bin/hyper-haskell <<EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     export PATH="${binPath}:\$PATH"
     exec ${electron}/bin/electron $out/app "\$@"
     EOF

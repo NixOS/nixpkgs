@@ -3,21 +3,21 @@
 with stdenv.lib;
 with pythonPackages;
 
-let
-  version = "1.7.0";
-in buildPythonApplication rec {
-  inherit version;
+buildPythonApplication rec {
   pname = "pantsbuild.pants";
-  name  = "${pname}-${version}";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1d7ff1383287c8e72f2c9855cfef982d362274a64e2707a93c070f988ba80a37";
   };
 
+  # No tests
+  doCheck = false;
+
   prePatch = ''
     sed -E -i "s/'([[:alnum:].-]+)[=><][[:digit:]=><.,]*'/'\\1'/g" setup.py
-    substituteInPlace setup.py --replace "requests[security]<2.19,>=2.5.0" "requests[security]<2.20,>=2.5.0"
+    substituteInPlace setup.py --replace "requests[security]<2.19,>=2.5.0" "requests[security]<2.22,>=2.5.0"
   '';
 
   # Unnecessary, and causes some really weird behavior around .class files, which
@@ -36,6 +36,6 @@ in buildPythonApplication rec {
     homepage    = "https://www.pantsbuild.org/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.unix;
+    broken = true;
   };
 }

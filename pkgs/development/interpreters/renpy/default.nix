@@ -7,7 +7,7 @@ with pythonPackages;
 
 stdenv.mkDerivation rec {
   name = "renpy-${version}";
-  version = "7.1.3";
+  version = "7.2.0";
 
   meta = with stdenv.lib; {
     description = "Ren'Py Visual Novel Engine";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.renpy.org/dl/${version}/renpy-${version}-source.tar.bz2";
-    sha256 = "0z6s1vzjb5jh0i79pv5kgynfrzqj1a1f3afrpmp2aaqbrljkidbn";
+    sha256 = "1pnzxmh37zzldvlyklk2wgc8xbh3hm3wwmbl70zdphybjrxvc7i5";
   };
 
   patches = [

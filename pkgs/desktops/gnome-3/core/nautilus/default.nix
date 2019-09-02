@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2
-, desktop-file-utils, python3, wrapGAppsHook , gtk, gnome3, gnome-autoar
+, desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
 , glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
 , librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk_pixbuf
 , substituteAll, bubblewrap
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib-networking shared-mime-info libexif gtk exempi libnotify libselinux
+    glib-networking shared-mime-info libexif gtk3 exempi libnotify libselinux
     tracker tracker-miners gexiv2 libseccomp bubblewrap
     gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
   ];

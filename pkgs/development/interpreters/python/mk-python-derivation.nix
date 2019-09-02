@@ -33,6 +33,9 @@
 # DEPRECATED: use propagatedBuildInputs
 , pythonPath ? []
 
+# Enabled to detect some (native)BuildInputs mistakes
+, strictDeps ? true
+
 # used to disable derivation, useful for specific python versions
 , disabled ? false
 
@@ -86,6 +89,10 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
 
   # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
+
+  inherit strictDeps;
+
+  LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
 
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;

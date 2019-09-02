@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.1.3";
+  version = "1.2.4";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "man" "doc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "12xqhszx50pmw2nx7n1pym7n47z95ddwwkyx35bfgmxsd9hjpmh2";
+    sha256 = "1qf3ys84fzv11z6f6li59rxjdjbyrv7cyi9539k73r9i9pckjr8v";
   };
 
   patches = [
@@ -25,9 +25,14 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       p11 = p11-kit;
     })
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      inherit (builtins) storeDir;
+    })
     # patch taken from gtk_doc
     ./respect-xml-catalog-files-var.patch
     ./use-flatpak-from-path.patch
+    ./unset-env-vars.patch
   ];
 
   nativeBuildInputs = [

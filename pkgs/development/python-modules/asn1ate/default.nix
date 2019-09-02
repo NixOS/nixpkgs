@@ -16,7 +16,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python library for translating ASN.1 into other forms";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ leenaars ];
   };
 }

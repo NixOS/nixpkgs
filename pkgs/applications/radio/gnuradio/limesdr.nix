@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, gnuradio
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
 , pythonSupport ? true, python, swig, limesuite
 } :
 
@@ -19,6 +19,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    pkgconfig
   ] ++ stdenv.lib.optionals pythonSupport [ swig ];
 
   buildInputs = [

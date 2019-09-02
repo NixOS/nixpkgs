@@ -2,14 +2,14 @@
   asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
 
 python2Packages.buildPythonApplication rec {
-  version = "7.2.2";
+  version = "7.2.3";
   pname = "offlineimap";
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap";
     rev = "v${version}";
-    sha256 = "11nj7y9fa7v6vcxk3wr8smfgm3mxxnmq3l8q69rrjxlfzcv7dl8m";
+    sha256 = "18sdnhjldn8zs03bgqy1qa3ikmlfvyxcvwp3nbnv1a74biccqbpa";
   };
 
   postPatch = ''

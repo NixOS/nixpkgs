@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = https://notmuchmail.org/;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ chaoflow flokli garbas the-kenny ];
+    maintainers = with maintainers; [ flokli garbas the-kenny ];
     platforms   = platforms.unix;
   };
 }

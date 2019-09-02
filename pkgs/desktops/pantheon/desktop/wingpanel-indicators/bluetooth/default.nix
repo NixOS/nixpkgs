@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-bluetooth";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1gx0xglp6b3znxl4d2vpzhfkxz5z8q04hh7z2mrihj1in155bn44";
+    sha256 = "04ggakf7qp4q0kah5xksbwjn78wpdrp9kdgkj6ibzsb97ngn70g9";
   };
 
   passthru = {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py

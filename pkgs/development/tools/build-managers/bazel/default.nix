@@ -6,6 +6,7 @@
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , buildJdkName
+, runtimeShell
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
@@ -281,7 +282,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p tools
     cat > tools/bazel <<"EOF"
-    #!${stdenv.shell} -e
+    #!${runtimeShell} -e
     exit 1
     EOF
     chmod +x tools/bazel
@@ -290,7 +291,7 @@ stdenv.mkDerivation rec {
     ! hello_test
 
     cat > tools/bazel <<"EOF"
-    #!${stdenv.shell} -e
+    #!${runtimeShell} -e
     exec "$BAZEL_REAL" "$@"
     EOF
 

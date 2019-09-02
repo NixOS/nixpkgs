@@ -23,7 +23,8 @@
   writeScript,
   writeText,
   closureInfo,
-  substituteAll
+  substituteAll,
+  runtimeShell
 }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
@@ -119,7 +120,7 @@ rec {
     export PATH=${shadow}/bin:$PATH
     mkdir -p /etc/pam.d
     if [[ ! -f /etc/passwd ]]; then
-      echo "root:x:0:0::/root:${stdenv.shell}" > /etc/passwd
+      echo "root:x:0:0::/root:${runtimeShell}" > /etc/passwd
       echo "root:!x:::::::" > /etc/shadow
     fi
     if [[ ! -f /etc/group ]]; then
@@ -198,7 +199,7 @@ rec {
       # Unpack all of the parent layers into the image.
       lowerdir=""
       extractionID=0
-      for layerTar in $(cat layer-list); do
+      for layerTar in $(tac layer-list); do
         echo "Unpacking layer $layerTar"
         extractionID=$((extractionID + 1))
 
@@ -209,7 +210,7 @@ rec {
         find image/$extractionID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
 
         # Get the next lower directory and continue the loop.
-        lowerdir=$lowerdir''${lowerdir:+:}image/$extractionID/layer
+        lowerdir=image/$extractionID/layer''${lowerdir:+:}$lowerdir
       done
 
       mkdir work
@@ -261,7 +262,7 @@ rec {
   # things like `ls` or `echo` will be missing.
   shellScript = name: text:
     writeScript name ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       set -e
       export PATH=${coreutils}/bin:/bin
       ${text}
@@ -282,7 +283,8 @@ rec {
   }:
     let
       storePathToLayer = substituteAll
-      { inherit (stdenv) shell;
+      { shell = runtimeShell;
+        isExecutable = true;
         src = ./store-path-to-layer.sh;
       };
     in
@@ -341,7 +343,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
+      tar --transform='s|^\./||' -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
@@ -577,9 +579,9 @@ rec {
           layerID=$(sha256sum "$layer/json" | cut -d ' ' -f 1)
           ln -s "$layer" "./image/$layerID"
 
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$layerID/layer.tar\"] + .")
-          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"$(jq -r .created ${configJson})\"}] + .")
-          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= . + [\"$layerID/layer.tar\"]")
+          imageJson=$(echo "$imageJson" | jq ".history |= . + [{\"created\": \"$(jq -r .created ${configJson})\"}]")
+          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= . + [\"sha256:$layerChecksum\"]")
         done
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
         echo "$imageJson" > "image/$imageJsonChecksum.json"
@@ -771,23 +773,24 @@ rec {
         # Use the temp folder we've been working on to create a new image.
         mv temp image/$layerID
 
-        # Add the new layer ID to the beginning of the layer list
+        # Add the new layer ID to the end of the layer list
         (
+          cat layer-list
           # originally this used `sed -i "1i$layerID" layer-list`, but
           # would fail if layer-list was completely empty.
           echo "$layerID/layer.tar"
-          cat layer-list
         ) | ${pkgs.moreutils}/bin/sponge layer-list
 
         # Create image json and image manifest
         imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
 
-        for layerTar in $(tac ./layer-list); do
+        for layerTar in $(cat ./layer-list); do
           layerChecksum=$(sha256sum image/$layerTar | cut -d ' ' -f1)
-          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"$(jq -r .created ${baseJson})\"}] + .")
-          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$layerTar\"] + .")
+          imageJson=$(echo "$imageJson" | jq ".history |= . + [{\"created\": \"$(jq -r .created ${baseJson})\"}]")
+          # diff_ids order is from the bottom-most to top-most layer
+          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= . + [\"sha256:$layerChecksum\"]")
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= . + [\"$layerTar\"]")
         done
 
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)

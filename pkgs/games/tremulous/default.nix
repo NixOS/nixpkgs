@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libGLU_combined, libX11, SDL, openal }:
+{ stdenv, fetchurl, unzip, libGLU_combined, libX11, SDL, openal, runtimeShell }:
 stdenv.mkDerivation rec {
   name = "tremulous-${version}";
   version = "1.1.0";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     for b in tremulous tremded
     do
         cat << EOF > $out/bin/$b
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $out/opt/tremulous
     exec ./$b.$arch "\$@"
     EOF

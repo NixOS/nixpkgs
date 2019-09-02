@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 desktop-file-utils python3 wrapGAppsHook ];
   buildInputs = [
-    gtk3 glib libcanberra-gtk3 gnome3.defaultIconTheme
+    gtk3 glib libcanberra-gtk3 gnome3.adwaita-icon-theme
     gnome3.gsettings-desktop-schemas
   ];
 

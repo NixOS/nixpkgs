@@ -1,7 +1,6 @@
 { abiCompat ? null,
   stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
-
-  automake, autoconf, libiconv, libtool, intltool, mtdev, libevdev, libinput,
+  automake, autoconf, gettext, libiconv, libtool, intltool, mtdev, libevdev, libinput,
   freetype, tradcpp, fontconfig, meson, ninja,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
@@ -40,6 +39,10 @@ self: super:
 
   encodings = super.encodings.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ self.mkfontscale ];
+  });
+
+  editres = super.editres.overrideAttrs (attrs: {
+    hardeningDisable = [ "format" ];
   });
 
   fontbhttf = super.fontbhttf.overrideAttrs (attrs: {
@@ -285,6 +288,10 @@ self: super:
     meta = attrs.meta // { platforms = stdenv.lib.platforms.linux; };
   });
 
+  oclock = super.oclock.overrideAttrs (attrs: {
+    buildInputs = attrs.buildInputs ++ [ self.libxkbfile ];
+  });
+
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -432,6 +439,10 @@ self: super:
       ln -s share "$out/etc"
       mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
     '';
+  });
+
+  xload = super.xload.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ gettext ];
   });
 
   xlsfonts = super.xlsfonts.overrideAttrs (attrs: {

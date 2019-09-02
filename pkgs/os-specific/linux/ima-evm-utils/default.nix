@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ openssl attr keyutils asciidoc libxslt ];
 
+  patches = [ ./xattr.patch ];
+
   buildPhase = "make prefix=$out MANPAGE_DOCBOOK_XSL=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   meta = {

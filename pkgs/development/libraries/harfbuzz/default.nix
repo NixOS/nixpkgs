@@ -23,6 +23,10 @@ stdenv.mkDerivation {
   postPatch = ''
     patchShebangs src/gen-def.py
     patchShebangs test
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # ApplicationServices.framework headers have cast-align warnings.
+    substituteInPlace src/hb.hh \
+      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
   '';
 
   outputs = [ "out" "dev" ];

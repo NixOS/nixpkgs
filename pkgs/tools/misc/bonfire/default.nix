@@ -30,7 +30,7 @@ buildPythonApplication rec {
       --replace "data_files = *.rst, *.txt" ""
   '';
 
-  buildInputs = [ httpretty pytest pytestcov ];
+  buildInputs = [ httpretty pytest_3 pytestcov ];
 
   propagatedBuildInputs = [ arrow click keyring parsedatetime requests six termcolor ];
 

@@ -17,6 +17,7 @@
 , gcc48
 , fetchFromGitHub
 , makeWrapper
+, runtimeShell
 } @args:
 
 let
@@ -62,4 +63,3 @@ rec {
   };
 
 }
-

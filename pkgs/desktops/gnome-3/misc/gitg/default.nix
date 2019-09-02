@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchpatch, vala, intltool, pkgconfig, gtk3, glib
 , json-glib, wrapGAppsHook, libpeas, bash, gobject-introspection
+, libsoup, gtksourceview, gsettings-desktop-schemas, adwaita-icon-theme
 , gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, libsecret
 , meson, ninja, python3
  }:
@@ -35,9 +36,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [
-    gtk3 glib json-glib libgee libpeas gnome3.libsoup
-    libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings-desktop-schemas
-    libsecret gobject-introspection gnome3.adwaita-icon-theme
+    gtk3 glib json-glib libgee libpeas libsoup
+    libgit2-glib gtkspell3 gtksourceview gsettings-desktop-schemas
+    libsecret gobject-introspection adwaita-icon-theme
   ];
 
   nativeBuildInputs = [ meson ninja python3 vala wrapGAppsHook intltool pkgconfig ];
