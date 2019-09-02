@@ -194,6 +194,7 @@ in
         gtk3.out
         hicolor-icon-theme
         lightlocker
+        onboard
         plank
         qgnomeplatform
         shared-mime-info
