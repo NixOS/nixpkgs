@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "10swd3x576pinx33iwsbd4h15fbh2snmfxzcmab4c56nb08qlbrs";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "py2" "py3" ];
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
@@ -22,13 +22,11 @@ stdenv.mkDerivation rec {
             then [ SystemConfiguration CoreFoundation JavaScriptCore ]
             else [ spidermonkey_38 dbus networkmanager ]);
 
-  preConfigure = ''
-    cmakeFlagsArray+=(
-      "-DWITH_MOZJS=ON"
-      "-DPYTHON2_SITEPKG_DIR=$out/${python2.sitePackages}"
-      "-DPYTHON3_SITEPKG_DIR=$out/${python3.sitePackages}"
-    )
-  '';
+  cmakeFlags = [
+    "-DWITH_MOZJS=ON"
+    "-DPYTHON2_SITEPKG_DIR=${placeholder "py2"}/${python2.sitePackages}"
+    "-DPYTHON3_SITEPKG_DIR=${placeholder "py3"}/${python3.sitePackages}"
+  ];
 
   patches = stdenv.lib.optional stdenv.isDarwin
     (fetchpatch {
