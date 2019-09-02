@@ -111,7 +111,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gucharmap = callPackage ./core/gucharmap { };
 
-  gvfs = pkgs.gvfs.override { gnome = gnome3; gnomeSupport = true; };
+  gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
   eog = callPackage ./core/eog { };
 

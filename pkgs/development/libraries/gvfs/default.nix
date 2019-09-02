@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, dbus
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, dbus
 , glib, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
-, gnomeSupport ? false, gnome, gcr, wrapGAppsHook
+, gnomeSupport ? false, gnome3, gcr, wrapGAppsHook
 , libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
 , libsecret, libgdata, python3
 }:
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     samba libmtp libcap polkit libimobiledevice libbluray
     libcdio-paranoia libnfs openssh
     # ToDo: a ligther version of libsoup to have FTP/HTTP support?
-  ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
+  ] ++ stdenv.lib.optionals gnomeSupport (with gnome3; [
     libsoup gcr
     glib-networking # TLS support
     gnome-online-accounts libsecret libgdata
