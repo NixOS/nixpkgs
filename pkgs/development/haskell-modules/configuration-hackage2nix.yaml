@@ -3592,8 +3592,6 @@ broken-packages:
   - cabin
   - cabocha
   - cached
-  - cachix
-  - cachix-api
   - cacophony
   - caffegraph
   - cairo-core
