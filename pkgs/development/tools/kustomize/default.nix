@@ -1,27 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchgit, git }:
 
 buildGoModule rec {
   pname = "kustomize";
   version = "3.1.0";
-  # rev is the 3.1.0 commit, mainly for kustomize version command output
-  rev = "95f3303493fdea243ae83b767978092396169baf";
 
   goPackagePath = "sigs.k8s.io/kustomize";
   subPackages = [ "cmd/kustomize" ];
 
-  buildFlagsArray = let t = "${goPackagePath}/v3/pkg/commands/misc"; in ''
-    -ldflags=
-      -s -X ${t}.kustomizeVersion=${version}
-         -X ${t}.gitCommit=${rev}
-         -X ${t}.buildDate=unknown
+  src = fetchgit {
+    url = "https://github.com/kubernetes-sigs/${pname}";
+    rev = "v${version}";
+    sha256 = "0z9qg9c1s9g7hjb6gd0ci1mr3rmk3462b7w7dgnyf5fvmhav80d1";
+    leaveDotGit = true;
+  };
+
+  preBuild = let t = "${goPackagePath}/v3/pkg/commands/misc"; in ''
+    export GIT_REVISION=$(git -C $src rev-parse HEAD)
+    export buildFlagsArray+=(
+      "-ldflags=
+        -s -X ${t}.kustomizeVersion=${version}
+           -X ${t}.gitCommit=$GIT_REVISION
+           -X ${t}.buildDate=1970-01-01T00:00:00Z")
   '';
 
-  src = fetchFromGitHub {
-    sha256 = "0kigcirkjvnj3xi1p28p9yp3s0lff24q5qcvf8ahjwvpbwka14sh";
-    rev = "v${version}";
-    repo = pname;
-    owner = "kubernetes-sigs";
-  };
+  buildInputs = [ git ];
 
   modSha256 = "0w8sp73pmj2wqrg7x7z8diglyfq6c6gn9mmck0k1gk90nv7s8rf1";
 
