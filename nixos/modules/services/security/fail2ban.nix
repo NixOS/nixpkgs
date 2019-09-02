@@ -6,15 +6,32 @@ let
 
   cfg = config.services.fail2ban;
 
-  fail2banConf = pkgs.writeText "fail2ban.conf" cfg.daemonConfig;
+  fail2banConf = pkgs.writeText "fail2ban.local" cfg.daemonConfig;
 
-  jailConf = pkgs.writeText "jail.conf"
-    (concatStringsSep "\n" (attrValues (flip mapAttrs cfg.jails (name: def:
+  jailConf = pkgs.writeText "jail.local" ''
+    [INCLUDES]
+
+    before = paths-nixos.conf
+
+    ${concatStringsSep "\n" (attrValues (flip mapAttrs cfg.jails (name: def:
       optionalString (def != "")
         ''
           [${name}]
           ${def}
-        ''))));
+        '')))}
+  '';
+
+  pathsConf = pkgs.writeText "paths-nixos.conf" ''
+    # NixOS
+
+    [INCLUDES]
+
+    before = paths-common.conf
+
+    after  = paths-overrides.local
+
+    [DEFAULT]
+  '';
 
 in
 
@@ -31,21 +48,26 @@ in
         description = "Whether to enable the fail2ban service.";
       };
 
+      package = mkOption {
+        default = pkgs.fail2ban;
+        type = types.package;
+        example = "pkgs.fail2ban_0_11";
+        description = "The fail2ban package to use for running the fail2ban service.";
+      };
+
       daemonConfig = mkOption {
-        default =
-          ''
-            [Definition]
-            loglevel  = INFO
-            logtarget = SYSLOG
-            socket    = /run/fail2ban/fail2ban.sock
-            pidfile   = /run/fail2ban/fail2ban.pid
-          '';
+        default = ''
+          [Definition]
+          logtarget = SYSLOG
+          socket    = /run/fail2ban/fail2ban.sock
+          pidfile   = /run/fail2ban/fail2ban.pid
+          dbfile    = /var/lib/fail2ban/fail2ban.sqlite3
+        '';
         type = types.lines;
-        description =
-          ''
-            The contents of Fail2ban's main configuration file.  It's
-            generally not necessary to change it.
-          '';
+        description = ''
+          The contents of Fail2ban's main configuration file.  It's
+          generally not necessary to change it.
+       '';
       };
 
       jails = mkOption {
@@ -65,17 +87,16 @@ in
           }
         '';
         type = types.attrsOf types.lines;
-        description =
-          ''
-            The configuration of each Fail2ban “jail”.  A jail
-            consists of an action (such as blocking a port using
-            <command>iptables</command>) that is triggered when a
-            filter applied to a log file triggers more than a certain
-            number of times in a certain time period.  Actions are
-            defined in <filename>/etc/fail2ban/action.d</filename>,
-            while filters are defined in
-            <filename>/etc/fail2ban/filter.d</filename>.
-          '';
+        description = ''
+          The configuration of each Fail2ban “jail”.  A jail
+          consists of an action (such as blocking a port using
+          <command>iptables</command>) that is triggered when a
+          filter applied to a log file triggers more than a certain
+          number of times in a certain time period.  Actions are
+          defined in <filename>/etc/fail2ban/action.d</filename>,
+          while filters are defined in
+          <filename>/etc/fail2ban/filter.d</filename>.
+        '';
       };
 
     };
@@ -87,66 +108,65 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.fail2ban ];
+    environment.systemPackages = [ cfg.package ];
 
-    environment.etc."fail2ban/fail2ban.conf".source = fail2banConf;
-    environment.etc."fail2ban/jail.conf".source = jailConf;
-    environment.etc."fail2ban/action.d".source = "${pkgs.fail2ban}/etc/fail2ban/action.d/*.conf";
-    environment.etc."fail2ban/filter.d".source = "${pkgs.fail2ban}/etc/fail2ban/filter.d/*.conf";
+    environment.etc = {
+      "fail2ban/fail2ban.local".source = fail2banConf;
+      "fail2ban/jail.local".source = jailConf;
+      "fail2ban/fail2ban.conf".source = "${cfg.package}/etc/fail2ban/fail2ban.conf";
+      "fail2ban/jail.conf".source = "${cfg.package}/etc/fail2ban/jail.conf";
+      "fail2ban/paths-common.conf".source = "${cfg.package}/etc/fail2ban/paths-common.conf";
+      "fail2ban/paths-nixos.conf".source = pathsConf;
+      "fail2ban/action.d".source = "${cfg.package}/etc/fail2ban/action.d/*.conf";
+      "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
+    };
 
-    systemd.services.fail2ban =
-      { description = "Fail2ban Intrusion Prevention System";
+    systemd.services.fail2ban = {
+      description = "Fail2ban Intrusion Prevention System";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        partOf = optional config.networking.firewall.enable "firewall.service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      partOf = optional config.networking.firewall.enable "firewall.service";
 
-        restartTriggers = [ fail2banConf jailConf ];
-        path = [ pkgs.fail2ban pkgs.iptables pkgs.iproute ];
+      restartTriggers = [ fail2banConf jailConf pathsConf ];
+      reloadIfChanged = true;
 
-        preStart =
-          ''
-            mkdir -p /var/lib/fail2ban
-          '';
+      path = [ cfg.package pkgs.iptables pkgs.iproute ];
 
-        unitConfig.Documentation = "man:fail2ban(1)";
+      preStart = ''
+        mkdir -p /var/lib/fail2ban
+      '';
 
-        serviceConfig =
-          { Type = "forking";
-            ExecStart = "${pkgs.fail2ban}/bin/fail2ban-client -x start";
-            ExecStop = "${pkgs.fail2ban}/bin/fail2ban-client stop";
-            ExecReload = "${pkgs.fail2ban}/bin/fail2ban-client reload";
-            PIDFile = "/run/fail2ban/fail2ban.pid";
-            Restart = "always";
+      unitConfig.Documentation = "man:fail2ban(1)";
 
-            ReadOnlyDirectories = "/";
-            ReadWriteDirectories = "/run/fail2ban /var/tmp /var/lib";
-            PrivateTmp = "true";
-            RuntimeDirectory = "fail2ban";
-            CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_NET_ADMIN CAP_NET_RAW";
-          };
+      serviceConfig = {
+        Type = "forking";
+        ExecStart = "${cfg.package}/bin/fail2ban-server -xf start";
+        ExecStop = "${cfg.package}/bin/fail2ban-server stop";
+        ExecReload = "${cfg.package}/bin/fail2ban-server reload";
+        PIDFile = "/run/fail2ban/fail2ban.pid";
+        Restart = "always";
+
+        ReadOnlyDirectories = "/";
+        ReadWriteDirectories = "/run/fail2ban /var/tmp /var/lib";
+        PrivateTmp = "true";
+        RuntimeDirectory = "fail2ban";
+        CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_NET_ADMIN CAP_NET_RAW";
       };
+    };
 
     # Add some reasonable default jails.  The special "DEFAULT" jail
     # sets default values for all other jails.
-    services.fail2ban.jails.DEFAULT =
-      ''
-        ignoreip = 127.0.0.1/8
-        bantime  = 600
-        findtime = 600
-        maxretry = 3
-        backend  = systemd
-        enabled  = true
-       '';
-
+    services.fail2ban.jails.DEFAULT = ''
+      # Miscellaneous options
+      ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"}
+      maxretry    = 3
+      backend     = systemd
+    '';
     # Block SSH if there are too many failing connection attempts.
-    services.fail2ban.jails.ssh-iptables =
-      ''
-        filter   = sshd
-        action   = iptables-multiport[name=SSH, port="${concatMapStringsSep "," (p: toString p) config.services.openssh.ports}", protocol=tcp]
-        maxretry = 5
-      '';
-
+    services.fail2ban.jails.sshd = mkDefault ''
+      enabled = true
+      port    = ${concatMapStringsSep "," (p: toString p) config.services.openssh.ports}
+    '';
   };
-
 }
