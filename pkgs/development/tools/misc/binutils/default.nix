@@ -22,7 +22,7 @@ let
                   "${stdenv.targetPlatform.config}-";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = targetPrefix + basename;
 
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
@@ -152,4 +152,7 @@ stdenv.mkDerivation {
        collision due to the ld/as wrappers/symlinks in the latter. */
     priority = 10;
   };
-}
+} // lib.optionalAttrs (stdenv.targetPlatform != stdenv.hostPlatform && stdenv.buildPlatform.isDarwin) {
+  # See https://sourceware.org/bugzilla/show_bug.cgi?id=23424
+  CXXFLAGS = "-std=c++11 -Wno-c++11-narrowing";
+})
