@@ -8,6 +8,9 @@
 , networkmanager
 , spidermonkey_38
 , pcre
+, gsettings-desktop-schemas
+, glib
+, makeWrapper
 , python2
 , python3
 , SystemConfiguration
@@ -31,6 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     cmake
+    makeWrapper
   ];
 
   buildInputs = [
@@ -43,6 +47,7 @@ stdenv.mkDerivation rec {
     CoreFoundation
     JavaScriptCore
   ] else [
+    glib
     spidermonkey_38
     dbus
     networkmanager
@@ -60,6 +65,11 @@ stdenv.mkDerivation rec {
       sha256 = "0axfvb6j7gcys6fkwi9dkn006imhvm3kqr83gpwban8419n0q5v1";
     })
   ];
+
+  postFixup = ''
+    # config_gnome3 uses the helper to find GNOME proxy settings
+    wrapProgram $out/libexec/pxgsettings --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+  '';
 
   doCheck = false; # fails 1 out of 10 tests
 
