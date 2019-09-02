@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "10swd3x576pinx33iwsbd4h15fbh2snmfxzcmab4c56nb08qlbrs";
   };
 
-  outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
