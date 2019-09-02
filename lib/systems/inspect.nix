@@ -12,7 +12,7 @@ rec {
     isx86_32       = { cpu = { family = "x86"; bits = 32; }; };
     isx86_64       = { cpu = { family = "x86"; bits = 64; }; };
     isPowerPC      = { cpu = cpuTypes.powerpc; };
-    isPower = { cpu = { family = "power"; }; };
+    isPower        = { cpu = { family = "power"; }; };
     isx86          = { cpu = { family = "x86"; }; };
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
@@ -23,6 +23,7 @@ rec {
     isMsp430       = { cpu = { family = "msp430"; }; };
     isAvr          = { cpu = { family = "avr"; }; };
     isAlpha        = { cpu = { family = "alpha"; }; };
+    isJavaScript   = { cpu = cpuTypes.js; };
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };
@@ -45,6 +46,7 @@ rec {
     isMinGW        = { kernel = kernels.windows; abi = abis.gnu; };
     isWasi         = { kernel = kernels.wasi; };
     isNone         = { kernel = kernels.none; };
+    isGhcjs        = { kernel = kernels.ghcjs; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
@@ -53,8 +55,6 @@ rec {
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
 
-    isJavaScript = { cpu = cpuTypes.js; };
-    isGhcjs      = { kernel = kernels.ghcjs; };
     # Deprecated after 18.03
     isArm = isAarch32;
   };
