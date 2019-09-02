@@ -1218,4 +1218,6 @@ self: super: {
   # https://github.com/elliottt/hsopenid/issues/15
   openid = markBroken super.openid;
 
-} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
+  tensorflow-proto = super.tensorflow-proto.override { inherit (pkgs) protobuf; };
+  tensorflow = super.tensorflow.override { libtensorflow = pkgs.libtensorflow-bin; };
+}

@@ -5,6 +5,7 @@
 , overrides ? (self: super: {})
 , initialPackages ? import ./initial-packages.nix
 , nonHackagePackages ? import ./non-hackage-packages.nix
+, packagesTensorflow ? import ./tensorflow-packages.nix
 , configurationCommon ? import ./configuration-common.nix
 , configurationNix ? import ./configuration-nix.nix
 }:
@@ -21,6 +22,7 @@ let
 
   commonConfiguration = configurationCommon { inherit pkgs haskellLib; };
   nixConfiguration = configurationNix { inherit pkgs haskellLib; };
+  tensorflowPackages = packagesTensorflow { inherit (pkgs) fetchFromGitHub; };
 
   extensible-self = makeExtensible
     (extends overrides
@@ -28,8 +30,9 @@ let
         (extends compilerConfig
           (extends commonConfiguration
             (extends nixConfiguration
-              (extends nonHackagePackages
-                haskellPackages))))));
+              (extends tensorflowPackages
+                (extends nonHackagePackages
+                  haskellPackages)))))));
 
 in
 
