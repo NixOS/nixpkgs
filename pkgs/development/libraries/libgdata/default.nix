@@ -3,6 +3,7 @@
 , pkgconfig
 , meson
 , ninja
+, nixosTests
 , vala
 , gettext
 , libxml2
@@ -70,6 +71,10 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       versionPolicy = "none"; # Stable version has not been updated for a long time.
+    };
+
+    tests = {
+      installedTests = nixosTests.libgdata;
     };
   };
 
