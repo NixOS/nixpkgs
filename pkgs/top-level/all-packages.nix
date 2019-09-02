@@ -13700,6 +13700,8 @@ in
       echo -n "8250984a368079bb1838d48d99f8c1a6282e00bc" > manifest.uuid
     '';
   });
+  libco = callPackage ../development/libraries/libco { };
+
 
   dqlite = callPackage ../development/libraries/dqlite { };
 
