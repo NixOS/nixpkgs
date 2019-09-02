@@ -13,6 +13,7 @@ runCommand "fc-cache"
   }
   ''
     export FONTCONFIG_FILE=$(pwd)/fonts.conf
+    export PATH=$PATH:${fontconfig}/bin
 
     cat > fonts.conf << EOF
     <?xml version='1.0'?>
