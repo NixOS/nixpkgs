@@ -3,9 +3,11 @@
 , substituteAll
 , meson
 , ninja
+, nixosTests
 , pkgconfig
 , glib
 , gettext
+, makeWrapper
 , python3
 , gnutls
 , p11-kit
@@ -18,6 +20,8 @@ stdenv.mkDerivation rec {
   pname = "glib-networking";
   version = "2.60.3";
 
+  outputs = [ "out" "installedTests" ];
+
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1mfw44qpmwvz6yzj8c6spx6z357wrmkk15byrkc5byagd82860fm";
@@ -28,6 +32,8 @@ stdenv.mkDerivation rec {
       src = ./hardcode-gsettings.patch;
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
     })
+
+    ./installed-tests-path.patch
   ];
 
   postPatch = ''
@@ -40,6 +46,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     gettext
+    makeWrapper
     python3 # for install_script
   ];
 
@@ -53,9 +60,26 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tests need to access the certificates (among other things)
 
+  mesonFlags = [
+    "-Dinstalled_tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ];
+
+  postFixup = ''
+    find "$installedTests/libexec" "$out/libexec" -type f -executable -print0 \
+      | while IFS= read -r -d "" file; do
+      echo "Wrapping program '$file'"
+      wrapProgram "$file" --prefix GIO_EXTRA_MODULES : "$out/lib/gio/modules"
+    done
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
+    };
+
+    tests = {
+      installedTests = nixosTests.glib-networking;
     };
   };
 
