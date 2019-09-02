@@ -92,7 +92,7 @@ let
           rm "$out/lib/"*.a
       fi
 
-    '' +
+    '' + stdenv.lib.optionalString (!stdenv.targetPlatform.isWindows)
     ''
       mkdir -p $bin
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
