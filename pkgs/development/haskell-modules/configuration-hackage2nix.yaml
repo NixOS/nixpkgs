@@ -4547,7 +4547,6 @@ broken-packages:
   - Empty
   - empty-monad
   - enchant
-  - encoding
   - encoding-io
   - engine-io-growler
   - engine-io-snap
@@ -4619,7 +4618,6 @@ broken-packages:
   - euler-tour-tree
   - euphoria
   - eurofxref
-  - Euterpea
   - eve
   - eve-cli
   - event
@@ -10204,7 +10202,6 @@ broken-packages:
   - xkcd
   - xleb
   - xlsior
-  - xlsx
   - xlsx-tabular
   - xlsx-templater
   - xml-catalog
