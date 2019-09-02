@@ -13,13 +13,12 @@ let
 in
 
 mkDerivation rec {
-  name = "${pname}-${main}_${sub}";
-  main = "3.3.0";
-  sub  = "beta1";
+  inherit pname;
+  version  = "3.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/releases/${main}/${name}.tar.xz";
-    sha256 = "1jnc334ps88v14cbkp499kk7ini7mbrs1xsz7d04y0w238q407zn";
+    url = "mirror://sourceforge/${pname}/releases/${version}/${pname}-${version}_src.tar.xz";
+    sha256 = "1s0n67rh32g0bgq72p4qzkcqjlw58gc70r4r6gl9k90pil9chj6c";
   };
 
   buildInputs = [
