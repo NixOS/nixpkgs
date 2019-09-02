@@ -700,6 +700,7 @@
   ./services/networking/supybot.nix
   ./services/networking/syncthing.nix
   ./services/networking/syncthing-relay.nix
+  ./services/networking/syncplay.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
