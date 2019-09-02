@@ -6,6 +6,7 @@
 , enableGui ? true
 , wrapQtAppsHook
 , qtbase
+, OpenGL ? null
 }:
 
 let
@@ -41,7 +42,10 @@ with stdenv; mkDerivation rec {
       "-DSERIALIZE_CHIPDB=OFF"
       # use PyPy for icestorm if enabled
       "-DPYTHON_EXECUTABLE=${icestorm.pythonInterp}"
-    ] ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF");
+    ]
+    ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF")
+    ++ (lib.optional (enableGui && stdenv.isDarwin)
+        "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
   # Fix the version number. This is a bit stupid (and fragile) in practice
   # but works ok. We should probably make this overrideable upstream.
@@ -61,7 +65,7 @@ with stdenv; mkDerivation rec {
     description = "Place and route tool for FPGAs";
     homepage    = https://github.com/yosyshq/nextpnr;
     license     = licenses.isc;
-    platforms   = platforms.linux;
+    platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice emily ];
   };
 }
