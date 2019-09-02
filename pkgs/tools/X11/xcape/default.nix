@@ -1,30 +1,29 @@
 { stdenv, fetchFromGitHub, pkgconfig, libX11, libXtst, xorgproto,
 libXi }:
 
-let
-  baseName = "xcape";
-  version = "1.2";
-in
-
 stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
+  pname = "xcape";
+  version = "unstable-20180301";
 
   src = fetchFromGitHub {
     owner = "alols";
-    repo = baseName;
-    rev = "v${version}";
-    sha256 = "09a05cxgrip6nqy1qmwblamp2bhknqnqmxn7i2a1rgxa0nba95dm";
+    repo = pname;
+    rev = "a34d6bae27bbd55506852f5ed3c27045a3c0bd9e";
+    sha256 = "04grs4w9kpfzz25mqw82zdiy51g0w355gpn5b170p7ha5972ykc8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ libX11 libXtst xorgproto libXi ];
 
-  makeFlags = [ "PREFIX=$(out)" "MANDIR=/share/man/man1" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "MANDIR=/share/man/man1"
+  ];
 
-  postInstall = "install -D --target-directory $out/share/doc README.md";
+  postInstall = "install -Dm444 --target-directory $out/share/doc README.md";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Utility to configure modifier keys to act as other keys";
     longDescription = ''
       xcape allows you to use a modifier key as another key when
@@ -35,8 +34,8 @@ stdenv.mkDerivation rec {
       released on its own.
     '';
     homepage = https://github.com/alols/xcape;
-    license = stdenv.lib.licenses.gpl3 ;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.raskin ];
+    license = licenses.gpl3 ;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
 }

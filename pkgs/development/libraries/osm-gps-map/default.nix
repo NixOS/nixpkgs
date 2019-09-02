@@ -1,7 +1,7 @@
-{ cairo, fetchzip, glib, gnome3, gobject-introspection, pkgconfig, stdenv }:
+{ cairo, fetchzip, glib, gnome3, gtk3, gobject-introspection, pkgconfig, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "osm-gps-map-${version}";
+  pname = "osm-gps-map";
   version = "1.1.0";
 
   src = fetchzip {
@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo glib gobject-introspection
-  ] ++ (with gnome3; [
-    gnome-common gtk libsoup
-  ]);
+    gnome3.gnome-common gtk3 gnome3.libsoup
+  ];
 
   meta = with stdenv.lib; {
     description = "Gtk+ widget for displaying OpenStreetMap tiles";

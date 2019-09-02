@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.2";
-  name = "python-qt-${version}";
+  pname = "python-qt";
 
   src = fetchurl {
     url="mirror://sourceforge/pythonqt/PythonQt${version}.zip";
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include/PythonQt
     cp -r ./lib $out
     cp -r ./src/* $out/include/PythonQt
-    cp extensions/PythonQt_QtAll/PythonQt_QtAll.h $out/include/PythonQt
-    cp extensions/PythonQt_QtAll/PythonQt_QtAll.cpp $out/include/PythonQt
+    cp -r ./build $out/include/PythonQt
+    cp -r ./extensions $out/include/PythonQt
   '';
 
   meta = with stdenv.lib; {

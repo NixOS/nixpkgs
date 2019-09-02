@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "surf-${version}";
+  pname = "surf";
   version = "2.0";
 
   src = fetchurl {

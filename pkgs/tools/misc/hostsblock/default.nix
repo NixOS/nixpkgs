@@ -20,7 +20,7 @@
 ] }:
 
 stdenv.mkDerivation rec {
-  name = "hostsblock-${version}";
+  pname = "hostsblock";
   version = "20161213";
 
   src = fetchFromGitHub {

@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation (rec {
 
-  name = "unison-${version}";
+  pname = "unison";
   version = "2.51.2";
   src = fetchFromGitHub {
     owner = "bcpierce00";
@@ -20,8 +20,10 @@ stdenv.mkDerivation (rec {
   echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> src/fsmonitor/linux/Makefile
   '';
 
-  makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else "")
-    + (if ! ocaml.nativeCompilers then " NATIVE=false" else "");
+  makeFlags = [
+    "INSTALLDIR=$(out)/bin/"
+    "UISTYLE=${if enableX11 then "gtk2" else "text"}"
+  ] ++ stdenv.lib.optional (!ocaml.nativeCompilers) "NATIVE=false";
 
   preInstall = "mkdir -p $out/bin";
 

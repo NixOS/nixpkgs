@@ -4,14 +4,14 @@
 , pname ? "ADLplug" }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "v1.0.0-beta.5";
+  inherit pname;
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "jpcima";
     repo = "ADLplug";
-    rev = version;
-    sha256 = "1f8v61nv33xwpzmmk38dkr3fvm2j2xf0a74agxnl9p1yvy3a9w3s";
+    rev = "v${version}";
+    sha256 = "0n9srdlgl1j528ap5xmllrqs1w6ibc5yf9sphvl1q9kjnizxrs2c";
     fetchSubmodules = true;
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = with stdenv.lib; {
-    description = "Synthesizer plugin for ADLMIDI and OPNMIDI (VST/LV2)";
+    description = "OPL3 and OPN2 FM Chip Synthesizer";
     homepage = src.meta.homepage;
     license = licenses.boost;
     platforms = platforms.linux;

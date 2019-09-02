@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, cmake, libGLU_combined, libX11, libXv, libjpeg_turbo, fltk }:
+{ stdenv, fetchurl, cmake, libGL, libGLU, libX11, libXv, libXtst, libjpeg_turbo, fltk }:
 
 stdenv.mkDerivation rec {
-  name = "virtualgl-lib-${version}";
-  version = "2.5.2";
+  pname = "virtualgl-lib";
+  version = "2.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/virtualgl/VirtualGL-${version}.tar.gz";
-    sha256 = "0f1jp7r4vajiksbiq08hkxd5bjj0jxlw7dy5750s52djg1v3hhsg";
+    sha256 = "0ngqwsm9bml6lis0igq3bn92amh04rccd6jhjibj3418hrbzipvr";
   };
 
   cmakeFlags = [ "-DVGL_SYSTEMFLTK=1" "-DTJPEG_LIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so" ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libjpeg_turbo libGLU_combined fltk libX11 libXv ];
+  buildInputs = [ libjpeg_turbo libGL libGLU fltk libX11 libXv libXtst ];
 
   enableParallelBuilding = true;
 

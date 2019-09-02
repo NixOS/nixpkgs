@@ -25,10 +25,19 @@
       "powerpc64le-linux" = import ./bootstrap-files/ppc64le-musl.nix;
     };
   };
+
+  # Try to find an architecture compatible with our current system. We
+  # just try every bootstrap we’ve got and test to see if it is
+  # compatible with or current architecture.
+  getCompatibleTools = lib.foldl (v: system:
+    if v != null then v
+    else if localSystem.isCompatible (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
+    else null) null (lib.attrNames archLookupTable);
+
   archLookupTable = table.${localSystem.libc}
     or (abort "unsupported libc for the pure Linux stdenv");
-  files = archLookupTable.${localSystem.system}
-    or (abort "unsupported platform for the pure Linux stdenv");
+  files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
+    else (abort "unsupported platform for the pure Linux stdenv"));
   in files
 }:
 
@@ -87,7 +96,7 @@ let
           inherit system;
         };
 
-        cc = if isNull prevStage.gcc-unwrapped
+        cc = if prevStage.gcc-unwrapped == null
              then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           name = "${name}-gcc-wrapper";

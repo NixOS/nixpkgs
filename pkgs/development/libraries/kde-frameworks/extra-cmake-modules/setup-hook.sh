@@ -1,16 +1,16 @@
-_ecmEnvHook() {
+ecmEnvHook() {
     addToSearchPath XDG_DATA_DIRS "$1/share"
     addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
 }
-addEnvHooks "$targetOffset" _ecmEnvHook
+addEnvHooks "$targetOffset" ecmEnvHook
 
-_ecmPreConfigureHook() {
+ecmPostHook() {
     # Because we need to use absolute paths here, we must set *all* the paths.
     cmakeFlags+=" -DKDE_INSTALL_EXECROOTDIR=${!outputBin}"
     cmakeFlags+=" -DKDE_INSTALL_BINDIR=${!outputBin}/bin"
     cmakeFlags+=" -DKDE_INSTALL_SBINDIR=${!outputBin}/sbin"
     cmakeFlags+=" -DKDE_INSTALL_LIBDIR=${!outputLib}/lib"
-    cmakeFlags+=" -DKDE_INSTALL_LIBEXECDIR=${!outputLib}/lib/libexec"
+    cmakeFlags+=" -DKDE_INSTALL_LIBEXECDIR=${!outputLib}/libexec"
     cmakeFlags+=" -DKDE_INSTALL_CMAKEPACKAGEDIR=${!outputDev}/lib/cmake"
     cmakeFlags+=" -DKDE_INSTALL_INCLUDEDIR=${!outputInclude}/include"
     cmakeFlags+=" -DKDE_INSTALL_LOCALSTATEDIR=/var"
@@ -51,4 +51,58 @@ _ecmPreConfigureHook() {
         cmakeFlags+=" -DKDE_INSTALL_QMLDIR=${!outputBin}/$qtQmlPrefix"
     fi
 }
-preConfigureHooks+=(_ecmPreConfigureHook)
+postHooks+=(ecmPostHook)
+
+xdgDataSubdirs=(
+    "doc" "config.kcfg" "kconf_update" "kservices5" "kservicetypes5" \
+    "kxmlgui5" "knotifications5" "icons" "locale" "sounds" "templates" \
+    "wallpapers" "applications" "desktop-directories" "mime" "appdata" "dbus-1" \
+)
+
+
+ecmHostPathSeen=( )
+
+ecmUnseenHostPath() {
+    for pkg in "${ecmHostPathSeen[@]}"
+    do
+        if [ "${pkg:?}" == "$1" ]
+        then
+            return 1
+        fi
+    done
+
+    ecmHostPathSeen+=("$1")
+    return 0
+}
+
+ecmHostPathHook() {
+    ecmUnseenHostPath "$1" || return 0
+
+    local xdgConfigDir="$1/etc/xdg"
+    if [ -d "$xdgConfigDir" ]
+    then
+        qtWrapperArgs+=(--prefix XDG_CONFIG_DIRS : "$xdgConfigDir")
+    fi
+
+    for xdgDataSubdir in "${xdgDataSubdirs[@]}"
+    do
+        if [ -d "$1/share/$xdgDataSubdir" ]
+        then
+            qtWrapperArgs+=(--prefix XDG_DATA_DIRS : "$1/share")
+            break
+        fi
+    done
+
+    local manDir="$1/man"
+    if [ -d "$manDir" ]
+    then
+        qtWrapperArgs+=(--prefix MANPATH : "$manDir")
+    fi
+
+    local infoDir="$1/info"
+    if [ -d "$infoDir" ]
+    then
+        qtWrapperArgs+=(--prefix INFOPATH : "$infoDir")
+    fi
+}
+addEnvHooks "$hostOffset" ecmHostPathHook

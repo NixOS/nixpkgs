@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "bash-completion-${version}";
+  pname = "bash-completion";
   version = "2.8";
 
   src = fetchurl {
-    url = "https://github.com/scop/bash-completion/releases/download/${version}/${name}.tar.xz";
+    url = "https://github.com/scop/bash-completion/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "0kgmflrr1ga9wfk770vmakna3nj46ylb5ky9ipd0v2k9ymq5a7y0";
   };
 

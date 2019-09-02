@@ -60,8 +60,22 @@ rec {
           "--enable-static"
           "--disable-shared"
         ];
+        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
+      });
+      static = true;
+    };
+
+
+  /* Modify a stdenv so that all buildInputs are implicitly propagated to
+     consuming derivations
+  */
+  propagateBuildInputs = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ (args.buildInputs or []);
+        buildInputs = [];
       });
     };
+
 
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.
@@ -128,7 +142,7 @@ rec {
      with the following function:
 
      isFree = license: with builtins;
-       if isNull license then true
+       if license == null then true
        else if isList license then lib.all isFree license
        else license != "non-free" && license != "unfree";
 

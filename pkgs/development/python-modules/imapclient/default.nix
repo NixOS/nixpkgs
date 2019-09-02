@@ -12,7 +12,7 @@ buildPythonPackage rec {
   disabled = isPy34 || isPy35;
 
   src = fetchurl {
-    url = "http://freshfoo.com/projects/IMAPClient/${pname}-${version}.tar.gz";
+    url = "https://freshfoo.com/projects/IMAPClient/${pname}-${version}.tar.gz";
     sha256 = "0v7kd1crdbff0rmh4ddm5qszkis6hpk9084qh94al8h7g4y9l3is";
   };
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://imapclient.freshfoo.com/;
+    homepage = https://imapclient.readthedocs.io/en/2.1.0/;
     description = "Easy-to-use, Pythonic and complete IMAP client library";
     license = licenses.bsd3;
   };

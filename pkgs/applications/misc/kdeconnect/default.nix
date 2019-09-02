@@ -1,4 +1,4 @@
-{ stdenv
+{ mkDerivation
 , lib
 , fetchurl
 , extra-cmake-modules
@@ -18,14 +18,13 @@
 , kwayland
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kdeconnect";
-  version = "1.3.3";
-  name = "${pname}-${version}";
+  version = "1.3.5";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-kde-${version}.tar.xz";
-    sha256 = "1vac0mw1myrswr61adv7lgif0c4wzw5wnsj0sqxj6msp4l4pfgsg";
+    url = "mirror://kde/stable/${pname}/${version}/${pname}-kde-${version}.tar.xz";
+    sha256 = "02lr3xx5s2mgddac4n3lkgr7ppf1z5m6ajs90rjix0vs8a271kp5";
   };
 
   buildInputs = [
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
   postInstall = ''
-    wrapProgram $out/lib/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
+    wrapProgram $out/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
   '';
 
   enableParallelBuilding = true;

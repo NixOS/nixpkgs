@@ -15,10 +15,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1ajymn59fr9117dkwf5xl8vmr737h6xmrcf1033zjlj2l5qkxn4a";
+      sha256 = "0kdf0ck4rzxpd006y09rfwppdrqb3sxww4gzfpv2053yq4mkimbn";
       type = "gem";
     };
-    version = "1.0.2";
+    version = "1.1.0";
   };
   one_gadget = {
     dependencies = ["elftools"];
@@ -26,9 +26,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0wacvysd7ddnbx2jl1vhzbkb28y974riyns7bpx889518zaa09z0";
+      sha256 = "07s2nigjw1yik895gliz3a7ps0m9j5nccq82zwdd30sv740jmf5b";
       type = "gem";
     };
-    version = "1.6.2";
+    version = "1.7.2";
   };
 }

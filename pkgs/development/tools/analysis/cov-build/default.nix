@@ -7,7 +7,7 @@ let
   '';
 in
 stdenv.mkDerivation rec {
-  name    = "cov-build-${version}";
+  pname = "cov-build";
   version = "7.0.2";
 
   src =

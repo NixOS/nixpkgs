@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "gradm-${version}";
+  pname = "gradm";
   version = "3.1-201608131257";
 
   src  = fetchurl {
-    url    = "http://grsecurity.net/stable/${name}.tar.gz";
+    url    = "http://grsecurity.net/stable/${pname}-${version}.tar.gz";
     sha256 = "0y5565rhil5ciprwz7nx4s4ah7dsxx7zrkg42dbq0mcg8m316xrb";
   };
 

@@ -1,10 +1,10 @@
 { stdenv, fetchgit, pkgconfig
 , dbus, pcre, epoxy, libXdmcp, at-spi2-core, libxklavier, libxkbcommon, libpthreadstubs
-, gtk3, vala, cmake, libgee, libX11, lightdm, gdk_pixbuf, clutter-gtk }:
+, gtk3, vala, cmake, libgee, libX11, lightdm, gdk-pixbuf, clutter-gtk }:
 
 stdenv.mkDerivation rec {
   version = "0.2.1";
-  name = "lightdm-enso-os-greeter-${version}";
+  pname = "lightdm-enso-os-greeter";
 
   src = fetchgit {
     url = https://github.com/nick92/Enso-OS;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libX11
     lightdm
     libXdmcp
-    gdk_pixbuf
+    gdk-pixbuf
     clutter-gtk
     libxklavier
     at-spi2-core

@@ -6,11 +6,12 @@ let
 
   generic = { version, sha256, enableIPv6 ? false }:
     stdenv.mkDerivation rec {
-      name = "bird-${version}";
+      pname = "bird";
+      inherit version;
 
       src = fetchurl {
         inherit sha256;
-        url = "ftp://bird.network.cz/pub/bird/${name}.tar.gz";
+        url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
       };
 
       nativeBuildInputs = [ flex bison ];
@@ -37,7 +38,7 @@ let
         description = "BIRD Internet Routing Daemon";
         homepage = http://bird.network.cz;
         license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ fpletz ];
+        maintainers = with maintainers; [ fpletz globin ];
         platforms = platforms.linux;
       };
     };
@@ -46,18 +47,18 @@ in
 
 {
   bird = generic {
-    version = "1.6.3";
-    sha256 = "0z3yrxqb0p7f8b7r2gk4mvrwfzk45zx7yr9aifbvba1vgksiri9r";
+    version = "1.6.6";
+    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
   };
 
   bird6 = generic {
-    version = "1.6.3";
-    sha256 = "0z3yrxqb0p7f8b7r2gk4mvrwfzk45zx7yr9aifbvba1vgksiri9r";
+    version = "1.6.6";
+    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
     enableIPv6 = true;
   };
 
   bird2 = generic {
-    version = "2.0.2";
-    sha256 = "03s8hcl761y3489j1krarm3r3iy5qid26508i91yvy38ypb92pq3";
+    version = "2.0.5";
+    sha256 = "1lr963ywy0mkrhgs5969wc354lizddsagrlbf8x84yb5s9pp6jsf";
   };
 }

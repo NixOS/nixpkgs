@@ -2,11 +2,11 @@
 , libGLU_combined, boost, glm, freetype }:
 
 stdenv.mkDerivation rec {
-  name = "logstalgia-${version}";
+  pname = "logstalgia";
   version = "1.1.2";
 
   src = fetchurl {
-    url = "https://github.com/acaudwell/Logstalgia/releases/download/${name}/${name}.tar.gz";
+    url = "https://github.com/acaudwell/Logstalgia/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "1agwjlwzp1c86hqb1p7rmzqzhd3wpnyh8whsfq4sbx01wj0l0gzd";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
                   glm freetype ];
 
   meta = with stdenv.lib; {
-    homepage = http://logstalgia.io/;
+    homepage = https://logstalgia.io/;
     description = "Website traffic visualization tool";
     license = licenses.gpl3Plus;
 

@@ -7,16 +7,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "feb19b";
-  version = "20190201_b";
-  name = "gildas-${version}";
+  srcVersion = "jul19a";
+  version = "20190701_a";
+  pname = "gildas";
 
   src = fetchurl {
     # For each new release, the upstream developers of Gildas move the
     # source code of the previous release to a different directory
-    urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.gz"
-      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.gz" ];
-    sha256 = "5b6da12ac869176d7a9a3d6a6620db1dbaa44a4785e2dd59dd1a8c38ea9cab87";
+    urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
+      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
+    sha256 = "97eaa0d0a0f53f0616462642a9bfaddb0305a8a0948e60531d8a524a13a370b6";
   };
 
   enableParallelBuilding = true;

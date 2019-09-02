@@ -61,7 +61,7 @@ unwrapped = stdenv.mkDerivation rec {
 
 in if plugins == [] then unwrapped
     else import ./wrapper.nix {
-      inherit stdenv makeWrapper symlinkJoin gsignondPlugins plugins;
+      inherit makeWrapper symlinkJoin plugins;
       gsignond = unwrapped;
     }
 

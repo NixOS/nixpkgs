@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools
-, seafile-shared, ccnet, makeWrapper
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools
+, seafile-shared, ccnet
 , withShibboleth ? true, qtwebengine }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "6.2.11";
-  name = "seafile-client-${version}";
+  pname = "seafile-client";
 
   src = fetchFromGitHub {
     owner = "haiwen";
@@ -15,17 +15,16 @@ stdenv.mkDerivation rec {
     sha256 = "1b8jqmr2qd3bpb3sr4p5w2a76x5zlknkj922sxrvw1rdwqhkb2pj";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
+  nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ qtbase qttools seafile-shared ]
     ++ optional withShibboleth qtwebengine;
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ]
     ++ optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
-  postInstall = ''
-    wrapProgram $out/bin/seafile-applet \
-      --suffix PATH : ${stdenv.lib.makeBinPath [ ccnet seafile-shared ]}
-  '';
+  qtWrapperArgs = [
+    "--suffix PATH : ${stdenv.lib.makeBinPath [ ccnet seafile-shared ]}"
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/haiwen/seafile-client;

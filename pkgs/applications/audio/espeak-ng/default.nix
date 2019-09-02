@@ -4,7 +4,7 @@
 , sonicSupport ? true, sonic }:
 
 stdenv.mkDerivation rec {
-  name = "espeak-ng-${version}";
+  pname = "espeak-ng";
   version = "1.49.2";
 
   src = fetchFromGitHub {

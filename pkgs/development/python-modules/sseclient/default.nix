@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "sseclient";
-  version = "0.0.22";
+  version = "0.0.24";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf1eab60b09edbaa51e42f65a18b715367d55cfdf57c1f162886bac97bb5c6fb";
+    sha256 = "1b4c5119b9381cb6ddaf3236f3f7e1437a14e488d1ed61336873a839788481b0";
   };
 
   propagatedBuildInputs = [ requests six ];

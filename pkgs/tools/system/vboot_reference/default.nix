@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "20180311";
   checkout = "4c84e077858c809ee80a9a6f9b38185cf7dcded7";
 
-  name = "vboot_reference-${version}";
+  pname = "vboot_reference";
 
   src = fetchgit {
     url = https://chromium.googlesource.com/chromiumos/platform/vboot_reference;

@@ -24,7 +24,7 @@ let
       EOF
       chmod 755 $out/${name}
     '';
-  in pkgs.runCommand "buildkite-agent-hooks" {} ''
+  in pkgs.runCommand "buildkite-agent-hooks" { preferLocalBuild = true; } ''
     mkdir $out
     ${concatStringsSep "\n" (mapAttrsToList mkHookEntry (filterAttrs (n: v: v != null) cfg.hooks))}
   '';
@@ -236,7 +236,7 @@ in
       };
 
     assertions = [
-      { assertion = cfg.hooksPath == hooksDir || all isNull (attrValues cfg.hooks);
+      { assertion = cfg.hooksPath == hooksDir || all (v: v == null) (attrValues cfg.hooks);
         message = ''
           Options `services.buildkite-agent.hooksPath' and
           `services.buildkite-agent.hooks.<name>' are mutually exclusive.

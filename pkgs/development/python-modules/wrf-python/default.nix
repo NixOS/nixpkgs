@@ -1,4 +1,4 @@
-{lib, fetchFromGitHub, python, pythonOlder, buildPythonPackage, gfortran, mock, xarray, wrapt, numpy, netcdf4}:
+{lib, fetchFromGitHub, pythonOlder, buildPythonPackage, gfortran, mock, xarray, wrapt, numpy, netcdf4}:
 
 buildPythonPackage rec {
   pname = "wrf-python";
@@ -16,13 +16,14 @@ buildPythonPackage rec {
     numpy
     xarray
   ];
-  buildInputs = [
+
+  nativeBuildInputs = [
     gfortran
-  ] ++ lib.optional (pythonOlder "3.3") mock;
-  
+  ];
+
   checkInputs = [
     netcdf4
-  ];
+  ] ++ lib.optional (pythonOlder "3.3") mock;
 
   doCheck = true;
   checkPhase = ''

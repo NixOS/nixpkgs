@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.14.0";
+  version = "1.17.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x9ansmhqvc3rj0nbhpl0jdqr5pk6qdxf7i6r4gr0hzqr50vdaf0";
+    sha256 = "04xarlbh59f9ah53jxrcpqpzladyfxaw6cb2g8clw9aid0qzi9kh";
   };
 
   checkInputs = [ nose ];

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   buildInputs = [ pillow nose_progressive nose mock blessings ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/matthewwithanm/pilkit/;
+    homepage = https://github.com/matthewwithanm/pilkit/;
     description = "A collection of utilities and processors for the Python Imaging Libary";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];

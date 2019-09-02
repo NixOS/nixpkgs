@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit, python3Packages, docutils, help2man
 , acl, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg1, gnutar
+, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
 , gzip, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
 , squashfsTools, tcpdump, unoconv, unzip, xxd, xz
 , enableBloat ? false
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
       dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
       libarchive libcaca lz4 pgpdump progressbar33 sng sqlite squashfsTools unzip xxd xz
     ] ++ lib.optionals enableBloat [
-      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg1 gnumeric imagemagick
+      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg gnumeric imagemagick
       llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
       python3Packages.guestfs
     ];

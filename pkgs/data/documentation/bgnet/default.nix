@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, python, zip, fop }:
 
 stdenv.mkDerivation rec {
-  name = "bgnet-${version}";
+  pname = "bgnet";
   version = "3.0.21";
 
   src = fetchurl {

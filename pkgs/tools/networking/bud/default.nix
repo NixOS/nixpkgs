@@ -1,7 +1,7 @@
 { stdenv, lib, fetchgit, python, gyp, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "bud-${version}";
+  pname = "bud";
 
   version = "0.34.1";
 

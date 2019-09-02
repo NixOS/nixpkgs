@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper
+{ stdenv, fetchurl, makeWrapper
 , perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
 
 perlPackages.buildPerlPackage rec {
-  name = "slimserver-${version}";
+  pname = "slimserver";
   version = "7.9.1";
 
   src = fetchurl {
@@ -99,6 +99,6 @@ perlPackages.buildPerlPackage rec {
     # https://github.com/Logitech/slimserver/blob/public/7.9/License.txt
     license = licenses.unfree;
     maintainers = [ maintainers.phile314 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

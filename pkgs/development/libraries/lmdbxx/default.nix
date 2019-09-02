@@ -3,7 +3,7 @@
 , lmdb }:
 
 stdenv.mkDerivation rec {
-  name = "lmdbxx-${version}";
+  pname = "lmdbxx";
   version = "0.9.14.0";
 
   src = fetchFromGitHub {

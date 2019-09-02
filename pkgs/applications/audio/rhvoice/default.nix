@@ -4,7 +4,8 @@
 let
   version = "unstable-2018-02-10";
 in stdenv.mkDerivation rec {
-  name = "rhvoice-${version}";
+  pname = "rhvoice";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Olga-Yakovleva";

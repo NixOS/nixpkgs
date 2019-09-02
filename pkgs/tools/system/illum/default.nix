@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.4";
-  name = "illum-${version}";
+  pname = "illum";
 
   src = fetchgit {
     url = "https://github.com/jmesmon/illum.git";

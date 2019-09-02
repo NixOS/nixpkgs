@@ -3,7 +3,7 @@
 # Derivation patches HandBrake to use Nix closure dependencies.
 #
 
-{ stdenv, lib, fetchurl, callPackage,
+{ stdenv, lib, fetchurl,
   # Main build tools
   python2, pkgconfig, autoconf, automake, cmake, nasm, libtool, m4,
   # Processing, video codecs, containers
@@ -11,7 +11,7 @@
   # Codecs, audio
   libopus, lame, libvorbis, a52dec, speex, libsamplerate,
   # Text processing
-  libiconv, fribidi, fontconfig, freetype, libass, jansson, libxml2,
+  libiconv, fribidi, fontconfig, freetype, libass, jansson, libxml2, harfbuzz,
   # Optical media
   libdvdread, libdvdnav, libdvdcss, libbluray,
   useGtk ? true, wrapGAppsHook ? null,
@@ -29,12 +29,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.0";
-  name = "handbrake-${version}";
+  pname = "handbrake";
+  version = "1.2.2";
 
   src = fetchurl {
     url = ''https://download2.handbrake.fr/${version}/HandBrake-${version}-source.tar.bz2'';
-    sha256 = "03clkknaq3mz84p85cvr21gsy9b8vv2g4vvyfz44hz8la253jfqi";
+    sha256 = "0k2yaqy7zi06k8mkp9az2mn9dlgj3a1339vacakfh2nn2zsics6z";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ffmpeg-full libogg libtheora x264 x265 libvpx
     libopus lame libvorbis a52dec speex libsamplerate
-    libiconv fribidi fontconfig freetype libass jansson libxml2
+    libiconv fribidi fontconfig freetype libass jansson libxml2 harfbuzz
     libdvdread libdvdnav libdvdcss libbluray
   ] ++ lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify

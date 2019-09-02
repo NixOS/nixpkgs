@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   pname = "clair";
-  version = "2.0.7";
+  version = "2.0.8";
 
   goPackagePath = "github.com/coreos/clair";
 
   src = fetchFromGitHub {
     owner = "coreos";
-    repo = "clair";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0n4pxdw71hd1rxzgf422fvycpjkrxxnvcidys0hpjy7gs88zjz5x";
+    sha256 = "1gwn533fdz8daz1db7w7g7mhls7d5a4vndn47blkpbx2yxdwdh62";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,8 +22,8 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Vulnerability Static Analysis for Containers";
-    homepage = https://github.com/coreos/clair;
+    homepage = "https://github.com/coreos/clair";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

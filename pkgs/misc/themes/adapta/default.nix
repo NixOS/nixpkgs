@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, parallel, sassc, inkscape, libxml2, glib, gdk_pixbuf, librsvg, gtk-engine-murrine, gnome3 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, parallel, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "adapta-gtk-theme-${version}";
+  pname = "adapta-gtk-theme";
   version = "3.95.0.11";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     librsvg
   ];
 

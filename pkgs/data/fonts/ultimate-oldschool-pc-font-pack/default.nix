@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "1.0";
@@ -13,10 +13,9 @@ fetchzip rec {
     unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Ultimate Oldschool PC Font Pack (TTF Fonts)";
     homepage = "http://int10h.org/oldschool-pc-fonts/";
-    platforms = platforms.unix;
     license = licenses.cc-by-sa-40;
     maintainers = [ maintainers.endgame ];
   };

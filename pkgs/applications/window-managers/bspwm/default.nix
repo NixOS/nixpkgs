@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bspwm-${version}";
-  version = "0.9.6";
+  pname = "bspwm";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner  = "baskerville";
     repo   = "bspwm";
     rev    = version;
-    sha256 = "1ywjhqxvggfdfd3cfki0vvlsli8lhqlziwfrj5vd57c6yisc2fyy";
+    sha256 = "1i7crmljk1vra1r6alxvj6lqqailjjcv0llyg7a0gm23rbv4a42g";
   };
 
   buildInputs = [ libxcb libXinerama xcbutil xcbutilkeysyms xcbutilwm ];

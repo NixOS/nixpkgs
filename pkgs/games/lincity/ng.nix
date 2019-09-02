@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "lincity-ng-${version}";
+  pname = "lincity-ng";
   version = "2.9beta.20170715";
 
   src = fetchFromGitHub {

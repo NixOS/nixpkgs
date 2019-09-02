@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -68,8 +68,8 @@ in
   serviceOpts = {
     path = [ pkgs.varnish ];
     serviceConfig = {
-      DynamicUser = true;
       RestartSec = mkDefault 1;
+      DynamicUser = false;
       ExecStart = ''
         ${pkgs.prometheus-varnish-exporter}/bin/prometheus_varnish_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

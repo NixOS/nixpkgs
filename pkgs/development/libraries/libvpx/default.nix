@@ -55,7 +55,7 @@ assert vp9HighbitdepthSupport -> (vp9DecoderSupport || vp9EncoderSupport);
 assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
-  name = "libvpx-${version}";
+  pname = "libvpx";
   version = "1.7.0";
 
   src = fetchFromGitHub {

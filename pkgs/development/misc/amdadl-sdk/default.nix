@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "6.0";
-  name = "amdadl-sdk-${version}";
+  pname = "amdadl-sdk";
 
   src = requireFile {
     name = "ADL_SDK_6.0.zip";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "API to access display driver functionality for ATI graphics cards";
-    homepage = http://developer.amd.com/tools/graphics-development/display-library-adl-sdk/;
+    homepage = https://developer.amd.com/tools/graphics-development/display-library-adl-sdk/;
     license = licenses.unfree;
     maintainers = [ maintainers.offline ];
     platforms = stdenv.lib.platforms.linux;

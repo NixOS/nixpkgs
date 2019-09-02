@@ -4,7 +4,8 @@ let
   version = "54b2992";
 in
 stdenv.mkDerivation rec {
-  name = "pidgin-mra-${version}";
+  pname = "pidgin-mra";
+  inherit version;
 
   src = fetchgit {
     url = "https://github.com/dreadatour/pidgin-mra";

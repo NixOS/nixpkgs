@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, git, nettools, perl }:
 
 stdenv.mkDerivation rec {
-  name = "gitolite-${version}";
+  pname = "gitolite";
   version = "3.6.11";
 
   src = fetchFromGitHub {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Finely-grained git repository hosting";
-    homepage    = http://gitolite.com/gitolite/index.html;
+    homepage    = https://gitolite.com/gitolite/index.html;
     license     = licenses.gpl2;
     platforms   = platforms.unix;
     maintainers = [ maintainers.thoughtpolice maintainers.lassulus maintainers.tomberek ];

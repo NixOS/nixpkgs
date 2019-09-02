@@ -10,7 +10,7 @@ let
   libPath = lib.makeLibraryPath [ stdenv.cc.cc utillinux libusb1 evdi ];
 
 in stdenv.mkDerivation rec {
-  name = "displaylink-${version}";
+  pname = "displaylink";
   version = "4.4.24";
 
   src = requireFile rec {
@@ -69,6 +69,6 @@ in stdenv.mkDerivation rec {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     platforms = [ "x86_64-linux" "i686-linux" ];
     license = licenses.unfree;
-    homepage = http://www.displaylink.com/;
+    homepage = https://www.displaylink.com/;
   };
 }

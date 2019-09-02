@@ -1,7 +1,7 @@
 { stdenv, cmake, llvmPackages, irony }:
 
 stdenv.mkDerivation rec {
-  name = "irony-server-${version}";
+  pname = "irony-server";
   inherit (irony) version;
 
   nativeBuildInputs = [ cmake ];

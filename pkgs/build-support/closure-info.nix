@@ -4,7 +4,7 @@
 # "nix-store --load-db" and "nix-store --register-validity
 # --hash-given".
 
-{ stdenv, coreutils, jq, buildPackages }:
+{ stdenv, buildPackages }:
 
 { rootPaths }:
 
@@ -16,6 +16,8 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
 
   exportReferencesGraph.closure = rootPaths;
+
+  preferLocalBuild = true;
 
   PATH = "${buildPackages.coreutils}/bin:${buildPackages.jq}/bin";
 

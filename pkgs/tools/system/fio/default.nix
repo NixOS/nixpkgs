@@ -3,14 +3,14 @@
 , withGnuplot ? false, gnuplot ? null }:
 
 stdenv.mkDerivation rec {
-  name = "fio-${version}";
-  version = "3.12";
+  pname = "fio";
+  version = "3.15";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "18awz03mdzdbja1n9nm6jyvv7ic2dabh6c7ip5vwpam8c6mj4yjq";
+    sha256 = "0wzy5byc2qx5mbnwkcyjkrzc662n4wkrzpcg4h611q4ix494zka9";
   };
 
   buildInputs = [ python zlib ]

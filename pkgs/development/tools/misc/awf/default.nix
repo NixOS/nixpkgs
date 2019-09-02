@@ -2,7 +2,7 @@
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "awf-${version}";
+  pname = "awf";
   version = "1.4.0";
 
   src = fetchFromGitHub {

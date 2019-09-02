@@ -10,11 +10,13 @@ in
 {
   stumpwm = x:{
     overrides = y: (x.overrides y) // {
+      linkedSystems = [];
       preConfigure = ''
         export configureFlags="$configureFlags --with-$NIX_LISP=common-lisp.sh";
       '';
       postInstall = ''
-        export NIX_LISP_PRELAUNCH_HOOK="nix_lisp_build_system stumpwm '(function stumpwm:stumpwm)'"
+        export NIX_LISP_PRELAUNCH_HOOK="nix_lisp_build_system stumpwm \
+                '(function stumpwm:stumpwm)' '$linkedSystems'"
         "$out/bin/stumpwm-lisp-launcher.sh"
 
         cp "$out/lib/common-lisp/stumpwm/stumpwm" "$out/bin"
@@ -161,6 +163,13 @@ $out/lib/common-lisp/query-fs"
   postmodern = x: {
     overrides = y : (x.overrides y) // {
       meta.broken = true; # 2018-04-10
+    };
+  };
+  split-sequence = x: {
+    overrides = y: (x.overrides y) // {
+      preConfigure = ''
+        sed -i -e '/:components/i:serial t' split-sequence.asd
+      '';
     };
   };
 }

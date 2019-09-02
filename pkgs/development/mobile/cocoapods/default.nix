@@ -1,9 +1,16 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp, ruby
+, beta ? false }:
 
-bundlerEnv rec {
+bundlerApp rec {
   inherit ruby;
   pname = "cocoapods";
-  gemdir = ./.;
+  gemfile = if beta then ./Gemfile-beta else ./Gemfile;
+  lockfile = if beta then ./Gemfile-beta.lock else ./Gemfile.lock;
+  gemset = if beta then ./gemset-beta.nix else ./gemset.nix;
+  exes = [ "pod" ];
+
+  # toString prevents the update script from being copied into the nix store
+  passthru.updateScript = toString ./update;
 
   meta = with lib; {
     description     = "CocoaPods manages dependencies for your Xcode projects.";
@@ -12,6 +19,7 @@ bundlerEnv rec {
     platforms       = platforms.darwin;
     maintainers     = with maintainers; [
       peterromfeldhk
+      lilyball
     ];
   };
 }

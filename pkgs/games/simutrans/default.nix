@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
-, buildEnv, config
+, buildEnv, config, runtimeShell
 }:
 
 let
@@ -70,7 +70,7 @@ let
   }:
     stdenv.mkDerivation {
       name = "simutrans-${pakName}";
-      unpackPhase = "true";
+      dontUnpack = true;
       preferLocalBuild = true;
       installPhase = let src = fetchurl { inherit url sha256; };
       in ''
@@ -95,7 +95,7 @@ let
     postBuild = ''
       rm "$out/bin" && mkdir "$out/bin"
       cat > "$out/bin/simutrans" <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd "$out"/share/simutrans
       exec "${binaries}/bin/simutrans" -use_workdir "\''${extraFlagsArray[@]}" "\$@"
       EOF
@@ -107,7 +107,8 @@ let
   };
 
   binaries = stdenv.mkDerivation rec {
-    name = "simutrans-${version}";
+    pname = "simutrans";
+    inherit version;
 
     src = binary_src;
 
@@ -167,4 +168,3 @@ let
   };
 
 in result
-

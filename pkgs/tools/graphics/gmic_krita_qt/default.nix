@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, ninja, pkgconfig
+{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
 , opencv, openexr, graphicsmagick, fftw, zlib, libjpeg, libtiff, libpng
 , curl, krita, qtbase, qttools
 , fetchgit }:
@@ -7,7 +7,8 @@ let
   version = "2.3.6";
 
 in stdenv.mkDerivation rec {
-  name = "gmic_krita_qt-${version}";
+  pname = "gmic_krita_qt";
+  inherit version;
 
   gmic-community = fetchFromGitHub {
     owner = "dtschump";

@@ -27,7 +27,8 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "beegfs-${version}";
+  pname = "beegfs";
+  inherit version;
 
   src = fetchurl {
     url = "https://git.beegfs.com/pub/v7/repository/archive.tar.bz2?ref=${version}";
@@ -159,5 +160,8 @@ in stdenv.mkDerivation rec {
       free = false;
     };
     maintainers = with maintainers; [ markuskowa ];
+    # 2019-08-09
+    # fails to build and had stability issues earlier
+    broken = true;
   };
 }

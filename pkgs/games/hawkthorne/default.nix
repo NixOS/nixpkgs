@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.12.1";
-  name = "hawkthorne-${version}";
+  pname = "hawkthorne";
 
   src = fetchgit {
     url = "https://github.com/hawkthorne/hawkthorne-journey.git";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       to bring to life the video game used to determine the winner of Pierce
       Hawthorne's inheritance.
     '';
-    homepage = http://www.reddit.com/r/hawkthorne;
+    homepage = https://www.reddit.com/r/hawkthorne;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ campadrenalin ];
     broken = true;

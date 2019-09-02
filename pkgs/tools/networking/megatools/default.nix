@@ -2,7 +2,7 @@
 , asciidoc, libxml2, docbook_xsl, docbook_xml_dtd_45, libxslt, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "megatools-${version}";
+  pname = "megatools";
   version = "1.10.2";
 
   src = fetchFromGitHub {

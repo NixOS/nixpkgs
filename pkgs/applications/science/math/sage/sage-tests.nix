@@ -25,7 +25,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = src.version;
-  name = "sage-tests-${version}";
+  pname = "sage-tests";
   inherit src;
 
   buildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sage-with-env
   ];
 
-  unpackPhase = "#do nothing";
+  dontUnpack = true;
   configurePhase = "#do nothing";
   buildPhase = "#do nothing";
 
@@ -50,6 +50,10 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     export HOME="$TMPDIR/sage-home"
     mkdir -p "$HOME"
+
+    # avoid running out of memory with many threads in subprocesses, see
+    # https://github.com/NixOS/nixpkgs/pull/65802
+    export GLIBC_TUNABLES=glibc.malloc.arena_max=4
 
     echo "Running sage tests with arguments ${timeSpecifier} ${patienceSpecifier} ${testArgs}"
     "sage" -t --nthreads "$NIX_BUILD_CORES" --optional=sage ${timeSpecifier} ${patienceSpecifier} ${testArgs}

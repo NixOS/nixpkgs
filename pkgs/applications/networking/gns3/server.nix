@@ -1,9 +1,9 @@
 { stable, branch, version, sha256Hash }:
 
-{ stdenv, python36, fetchFromGitHub }:
+{ stdenv, python3, fetchFromGitHub }:
 
 let
-  python = if stable then python36.override {
+  python = if stable then python3.override {
     packageOverrides = self: super: {
       async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.1";
@@ -22,16 +22,16 @@ let
         doCheck = false;
       });
       aiohttp-cors = super.aiohttp-cors.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.3";
+        version = "0.6.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
+          sha256 = "1r0mb4dw0dc1lpi54dk5vxqs06nyhvagp76lyrvk7rd94z5mjkd4";
         };
         propagatedBuildInputs = with self; [ aiohttp ]
           ++ stdenv.lib.optional (pythonOlder "3.5") typing;
       });
     };
-  } else python36;
+  } else python3;
 
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
@@ -44,11 +44,16 @@ in python.pkgs.buildPythonPackage {
     sha256 = sha256Hash;
   };
 
+  postPatch = ''
+    # Only 2.x is problematic:
+    sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
+  '';
+
   propagatedBuildInputs = with python.pkgs; [
     aiohttp-cors yarl aiohttp multidict
-    jinja2 psutil zipstream raven jsonschema typing
+    jinja2 psutil zipstream raven jsonschema
     (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
-  ] ++ stdenv.lib.optional (!stable) python.pkgs.distro;
+  ] ++ stdenv.lib.optional (!stable) [ distro async_generator aiofiles ];
 
   # Requires network access
   doCheck = false;

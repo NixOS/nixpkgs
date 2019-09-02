@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-dbi'';
-  version = ''20190107-git'';
+  version = ''20190521-git'';
 
   description = '''';
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-annot" args."cl-syntax" args."cl-syntax-annot" args."closer-mop" args."dbi" args."named-readtables" args."split-sequence" args."trivial-types" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2019-01-07/cl-dbi-20190107-git.tgz'';
-    sha256 = ''02w729jfkbd8443ia07ixr53b4asxx2gcllr84hvlibafawkkdh2'';
+    url = ''http://beta.quicklisp.org/archive/cl-dbi/2019-05-21/cl-dbi-20190521-git.tgz'';
+    sha256 = ''1q0hhgxnd91v020zh9ivlmzhzz5ald6q1bm5i5cawzh0xfyfhhvg'';
   };
 
   packageName = "cl-dbi";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-dbi DESCRIPTION NIL SHA256
-    02w729jfkbd8443ia07ixr53b4asxx2gcllr84hvlibafawkkdh2 URL
-    http://beta.quicklisp.org/archive/cl-dbi/2019-01-07/cl-dbi-20190107-git.tgz
-    MD5 349829f5d0bf363b828827ad6728c54e NAME cl-dbi FILENAME cl-dbi DEPS
+    1q0hhgxnd91v020zh9ivlmzhzz5ald6q1bm5i5cawzh0xfyfhhvg URL
+    http://beta.quicklisp.org/archive/cl-dbi/2019-05-21/cl-dbi-20190521-git.tgz
+    MD5 ba77d3a955991b406f56cc1a09e71dc2 NAME cl-dbi FILENAME cl-dbi DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cl-annot FILENAME cl-annot) (NAME cl-syntax FILENAME cl-syntax)
@@ -32,5 +32,5 @@ rec {
     DEPENDENCIES
     (alexandria bordeaux-threads cl-annot cl-syntax cl-syntax-annot closer-mop
      dbi named-readtables split-sequence trivial-types)
-    VERSION 20190107-git SIBLINGS
+    VERSION 20190521-git SIBLINGS
     (dbd-mysql dbd-postgres dbd-sqlite3 dbi-test dbi) PARASITES NIL) */

@@ -13,6 +13,7 @@ buildPythonPackage rec {
   # Wrong encoding
   postPatch = ''
     rm tests/test_reading.py
+    substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
   '';
   checkPhase =  ''
     # FIXME: test_minimize_dfa fails on python 3.6
@@ -25,6 +26,5 @@ checking library.";
     homepage    = https://bitbucket.org/mchaput/whoosh;
     license     = licenses.bsd2;
     maintainers = with maintainers; [ nand0p ];
-    platforms   = platforms.all;
   };
 }

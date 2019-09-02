@@ -1,34 +1,37 @@
-{ stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib
+{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, zlib
 , Security, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
-  name    = "bat-${version}";
-  version = "0.10.0";
+  pname   = "bat";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
-    repo   = "bat";
+    repo   = pname;
     rev    = "v${version}";
-    sha256 = "1q22lbyrwh58vhznpjpkiaa8v4qv6a3a8lrxzaypd8wg78p9dca6";
+    sha256 = "07qxghplqq8km4kp9zas2acw302a77y72x3ix1272kb1zxhw4as6";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0npj2rf4vr45gq3qwqq6kqnv9dh58v5lpx0gsmy2qrq44dxb75rq";
+  cargoSha256 = "0j9wxv21a91yfvbbvgn5ms5zi1aipj1k2g42mfdvvw2vsdzqagxz";
 
-  nativeBuildInputs = [ cmake pkgconfig zlib ];
+  nativeBuildInputs = [ pkgconfig llvmPackages.libclang zlib ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
 
+  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+
   postInstall = ''
     install -m 444 -Dt $out/share/man/man1 doc/bat.1
+    install -m 444 -Dt $out/share/fish/vendor_completions.d assets/completions/bat.fish
   '';
 
   meta = with stdenv.lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage    = https://github.com/sharkdp/bat;
     license     = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ dywedir lilyball ];
+    platforms   = platforms.all;
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "raspberrypi-tools-${version}";
+  pname = "raspberrypi-tools";
   version = "2018-10-03";
 
   src = fetchFromGitHub {

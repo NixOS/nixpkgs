@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml }:
 
 stdenv.mkDerivation rec {
-  name = "bibtex2html-${version}";
+  pname = "bibtex2html";
   version = "1.99";
 
   src = fetchurl {

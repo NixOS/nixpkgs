@@ -7,7 +7,7 @@ let
   inherit (lib) concatStringsSep optionalString;
 
   cfg = config.services.hylafax;
-  mapModems = lib.flip map (lib.attrValues cfg.modems);
+  mapModems = lib.forEach (lib.attrValues cfg.modems);
 
   mkConfigFile = name: conf:
     # creates hylafax config file,
@@ -41,7 +41,7 @@ let
           "$out/config.${name}"
       '';
     in
-      pkgs.runCommand "hylafax-config-modems" {}
+      pkgs.runCommand "hylafax-config-modems" { preferLocalBuild = true; }
       ''mkdir --parents "$out/" ${concatStringsSep "\n" (mapModems mkLine)}'';
 
   setupSpoolScript = pkgs.substituteAll {

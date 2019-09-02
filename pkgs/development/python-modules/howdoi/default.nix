@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, six, requests-cache, pygments, pyquery }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, six
+, requests-cache
+, pygments
+, pyquery
+}:
 
 buildPythonPackage rec {
   pname = "howdoi";
@@ -12,9 +18,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six requests-cache pygments pyquery ];
 
-  meta = with stdenv.lib; {
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  meta = with lib; {
     description = "Instant coding answers via the command line";
     homepage = https://pypi.python.org/pypi/howdoi;
     license = licenses.mit;
+    maintainers = [ maintainers.costrouc ];
   };
 }

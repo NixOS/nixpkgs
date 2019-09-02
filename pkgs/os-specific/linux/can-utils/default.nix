@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "can-utils-${version}";
+  pname = "can-utils";
   # There are no releases (source archives or git tags), so use the date of the
   # latest commit in git master as version number.
   version = "20170830";

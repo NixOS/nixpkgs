@@ -32,12 +32,27 @@ let
     "test_set_notBefore"
   ];
 
+  # these tests are extremely tightly wed to the exact output of the openssl cli tool,
+  # including exact punctuation.
+  failingOpenSSL_1_1Tests = [
+    "test_dump_certificate"
+    "test_dump_privatekey_text"
+    "test_dump_certificate_request"
+    "test_export_text"
+  ];
+
   disabledTests = [
     # https://github.com/pyca/pyopenssl/issues/692
     # These tests, we disable always.
     "test_set_default_verify_paths"
     "test_fallback_default_verify_paths"
-  ] ++ (optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests);
+    # https://github.com/pyca/pyopenssl/issues/768
+    "test_wantWriteError"
+  ] ++ (
+    optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests
+  ) ++ (
+    optionals (versionAtLeast (getVersion openssl.name) "1.1") failingOpenSSL_1_1Tests
+  );
 
   # Compose the final string expression, including the "-k" and the single quotes.
   testExpression = optionalString (disabledTests != [])
@@ -48,11 +63,11 @@ in
 
 buildPythonPackage rec {
   pname = "pyOpenSSL";
-  version = "18.0.0";
+  version = "19.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580";
+    sha256 = "aeca66338f6de19d1aa46ed634c3b9ae519a64b458f8468aec688e7e3c20f200";
   };
 
   outputs = [ "out" "dev" ];

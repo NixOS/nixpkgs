@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake libxml2 libxslt pysideApiextractor pysideGeneratorrunner python sphinx qt4 ];
+  nativeBuildInputs = [ cmake libxml2 libxslt pysideApiextractor pysideGeneratorrunner python sphinx qt4 ];
 
   preConfigure = ''
     echo "preConfigure: Fixing shiboken_generator install target."
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
     license = lib.licenses.gpl2;
     homepage = http://www.pyside.org/docs/shiboken/;
-    maintainers = [ lib.maintainers.chaoflow ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

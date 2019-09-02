@@ -3,7 +3,8 @@
 let
   version = "5.0.4";
 in stdenv.mkDerivation {
-  name = "mingw-w64-${version}";
+  pname = "mingw-w64";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/mingw-w64/mingw-w64-v${version}.tar.bz2";

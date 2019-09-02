@@ -2,18 +2,20 @@
 , topkg, result, lwt, cmdliner, fmt }:
 let
   pname = "logs";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "logs is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1khbn7jqpid83zn8rvyh1x1sirls7zc878zj4fz985m5xlsfy853";
+    sha256 = "1lkhr7i44xw4kpfbhgj3rbqy3dv5bfm4kyrbl8a9rfafddcxlwss";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg fmt cmdliner lwt ];

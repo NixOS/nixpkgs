@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "xkcdpass";
-  version = "1.16.5";
+  version = "1.17.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "62961d24466964f4770bdbdbcca9ebdb148d0bdb48a8329c7bf41e9317dbb9d4";
+    sha256 = "95cf3fd41130606ba64ec7edb9efac7c5d61efe21abab51a2c21ccbbebc48bb6";
   };
 
   # No tests included

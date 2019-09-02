@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, cmake, writeText, python3
 , vulkan-headers, vulkan-loader, glslang
-, pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
+, pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland, spirv-headers }:
 
 stdenv.mkDerivation rec {
-  name = "vulkan-validation-layers-${version}";
-  version = "1.1.85.0";
+  pname = "vulkan-validation-layers";
+  version = "1.1.114.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "sdk-${version}";
-    sha256 = "1y5ny587h62139fxnz760hsyv1dmw29m1a9vq096sn8qafh3jzbz";
+    sha256 = "0f8dlrjw1nz2adhzi4sbvljys4h0dyiwafdihsdyrg3xncgffks4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake python3 vulkan-headers vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
+  nativeBuildInputs = [ pkgconfig cmake python3  ];
+  buildInputs = [ vulkan-headers vulkan-loader libxcb libXrandr wayland ];
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DGLSLANG_INSTALL_DIR=${glslang}" ];

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, readline, gettext, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "gnu-apl-${version}";
-  version = "1.7";
+  pname = "gnu-apl";
+  version = "1.8";
 
   src = fetchurl {
     url = "mirror://gnu/apl/apl-${version}.tar.gz";
-    sha256 = "07xq8ddlmz8psvsmwr23gar108ri0lwmw0n6kpxcv8ypas1f5xlg";
+    sha256 = "1jxvv2h3y1am1fw6r5sn3say1n0dj8shmscbybl0qhqdia2lqkql";
   };
 
   buildInputs = [ readline gettext ncurses ];

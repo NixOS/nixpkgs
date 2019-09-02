@@ -22,10 +22,8 @@ in
 
     buildInputs = [ erlang rebar makeWrapper ];
 
-    LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
-      "${pkgs.glibcLocales}/lib/locale/locale-archive";
-    LANG = "en_US.UTF-8";
-    LC_TYPE = "en_US.UTF-8";
+    LANG = "C.UTF-8";
+    LC_TYPE = "C.UTF-8";
 
     setupHook = ./setup-hook.sh;
 

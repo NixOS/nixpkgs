@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "3.19.1";
+  version = "3.22.1";
 
   src = fetchurl {
     url = "https://github.com/balabit/${pname}/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0y2ixmbl4af4yf0a56pmg1c00nh0yvlfwr9ck9nhxbdysylk3yaw";
+    sha256 = "1j3l9pn3lf9w87vvwbnxk098gprbqzmfpfw1rch46mgsfqvl8mh6";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.balabit.com/network-security/syslog-ng/;
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ rickynils  fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
   };
 }

@@ -2,7 +2,7 @@
 , libobjc ? null }:
 
 stdenv.mkDerivation rec {
-  name = "libfreefare-${version}";
+  pname = "libfreefare";
   version = "0.4.0";
 
   src = fetchurl {

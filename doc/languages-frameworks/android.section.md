@@ -185,10 +185,9 @@ with import <nixpkgs> {};
 
 androidenv.emulateApp {
   name = "emulate-MyAndroidApp";
-  platformVersion = "24";
-  abiVersion = "armeabi-v7a"; # mips, x86 or x86_64
-  systemImageType = "default";
-  useGoogleAPIs = false;
+  platformVersion = "28";
+  abiVersion = "x86_64"; # armeabi-v7a, mips, x86
+  systemImageType = "google_apis_playstore";
 }
 ```
 
@@ -201,7 +200,7 @@ with import <nixpkgs> {};
 androidenv.emulateApp {
   name = "emulate-MyAndroidApp";
   platformVersion = "24";
-  abiVersion = "armeabi-v7a"; # mips, x86 or x86_64
+  abiVersion = "armeabi-v7a"; # mips, x86, x86_64
   systemImageType = "default";
   useGoogleAPIs = false;
   app = ./MyApp.apk;

@@ -11,9 +11,21 @@ stdenv.mkDerivation rec {
   patches = [
     ./whois-Update-Canadian-TLD-server.patch
     ./service-name.patch
+    # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
+    ./inetutils-1_9-PATH_PROCNET_DEV.patch
   ];
 
-  buildInputs = [ ncurses /* for `talk' */ perl /* for `whois' */ help2man ];
+  nativeBuildInputs = [ help2man perl /* for `whois' */ ];
+  buildInputs = [ ncurses /* for `talk' */ ];
+
+  # Don't use help2man if cross-compiling
+  # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html
+  # https://git.congatec.com/yocto/meta-openembedded/blob/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3/meta-networking/recipes-connectivity/inetutils/inetutils_1.9.1.bb#L44
+  preConfigure = let
+    isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  in lib.optionalString isCross ''
+    export HELP2MAN=true
+  '';
 
   configureFlags = [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd

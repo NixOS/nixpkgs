@@ -1,16 +1,29 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, python3, ninja
-, pkgconfig, vala, libgee, granite, gtk3, polkit, zeitgeist
-, switchboard, lightlocker, pantheon-agent-geoclue2, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, python3
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, polkit
+, zeitgeist
+, switchboard
+, lightlocker
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0f1idh36hlgmdva5jn0xnj2b6gbic0asnj3b7j283gyziibm3pxa";
+    sha256 = "0k2bq7l0m7qfpy1mkb3qvsinqd8n4lp0vwz3x64wlgfn2qipm1fn";
   };
 
   passthru = {
@@ -20,7 +33,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -37,7 +49,7 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
 
   patches = [
     ./hardcode-gsettings.patch
@@ -47,8 +59,10 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
 
-    substituteInPlace src/Views/LockPanel.vala --subst-var-by LIGHTLOCKER_GSETTINGS_PATH ${lightlocker}/share/gsettings-schemas/${lightlocker.name}/glib-2.0/schemas
-    substituteInPlace src/Views/FirewallPanel.vala --subst-var-by SWITCHBOARD_SEC_PRIV_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
+    substituteInPlace src/Views/LockPanel.vala \
+      --subst-var-by LIGHTLOCKER_GSETTINGS_PATH ${lightlocker}/share/gsettings-schemas/${lightlocker.name}/glib-2.0/schemas
+    substituteInPlace src/Views/FirewallPanel.vala \
+      --subst-var-by SWITCHBOARD_SEC_PRIV_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
   '';
 
   meta = with stdenv.lib; {

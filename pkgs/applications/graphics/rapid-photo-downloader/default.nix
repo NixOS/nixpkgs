@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, python3Packages
+{ stdenv, mkDerivationWith, fetchurl, python3Packages
 , file, intltool, gobject-introspection, libgudev
-, udisks, glib, gnome3, gst_all_1, libnotify
-, exiv2, exiftool, qt5, gdk_pixbuf
+, udisks, gexiv2, gst_all_1, libnotify
+, exiftool, gdk-pixbuf, libmediainfo, vmtouch
 }:
 
-python3Packages.buildPythonApplication rec {
+mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.13";
+  version = "0.9.16";
 
   src = fetchurl {
     url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "1517w18sxil1gwd78jjbbixcd1b0sp05imnnd5h5lr8wl3f0szj0";
+    sha256 = "0ij3li17jcqjx79ldv6zg2ckn8m2l9n4xvvq2x79y4q8yx9fqg85";
   };
 
   # Disable version check and fix install tests
@@ -19,24 +19,34 @@ python3Packages.buildPythonApplication rec {
       --replace "disable_version_check = False" "disable_version_check = True"
     substituteInPlace raphodo/rescan.py \
       --replace "from preferences" "from raphodo.preferences"
-    substituteInPlace raphodo/copyfiles.py \
-      --replace "import problemnotification" "import raphodo.problemnotification"
   '';
 
-  nativeBuildInputs = [ file intltool gobject-introspection ];
+  nativeBuildInputs = [
+    file
+    intltool
+  ];
 
+  # Package has no generally usable unit tests.
+  # The included doctests expect specific, hardcoded hardware to be present.
+  doCheck = false;
+
+  # NOTE: Without gobject-introspection in buildInputs, launching fails with
+  #       "Namespace [Notify / GExiv2 / GUdev] not available"
   buildInputs = [
-    libgudev
-    udisks
-    glib
-    gnome3.gexiv2
+    gdk-pixbuf
+    gexiv2
+    gobject-introspection
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
+    gst_all_1.gstreamer.dev
+    libgudev
     libnotify
-    exiv2
-    exiftool
-    qt5.qtimageformats
-    gdk_pixbuf
-  ] ++ (with python3Packages; [
+    udisks
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
     pyqt5
     pygobject3
     gphoto2
@@ -54,11 +64,16 @@ python3Packages.buildPythonApplication rec {
     requests
     colorlog
     pyprind
-  ]);
+    tenacity
+  ];
 
   makeWrapperArgs = [
     "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
     "--set PYTHONPATH \"$PYTHONPATH\""
+    "--prefix PATH : ${stdenv.lib.makeBinPath [ exiftool vmtouch ]}"
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libmediainfo ]}"
+    "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : \"$GST_PLUGIN_SYSTEM_PATH_1_0\""
+    "\${qtWrapperArgs[@]}"
   ];
 
   meta = with stdenv.lib; {

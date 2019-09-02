@@ -4,12 +4,35 @@
 # /usr/bin/env gets special treatment so that ".../bin/env python" is
 # rewritten to /nix/store/<hash>/bin/python.  Interpreters that are
 # already in the store are left untouched.
+# A script file must be marked as executable, otherwise it will not be
+# considered.
 
-fixupOutputHooks+=('if [ -z "$dontPatchShebangs" -a -e "$prefix" ]; then patchShebangs "$prefix"; fi')
+fixupOutputHooks+=(patchShebangsAuto)
+
+# Run patch shebangs on a directory or file.
+# Can take multiple paths as arguments.
+# patchShebangs [--build | --host] PATH...
+
+# Flags:
+# --build : Lookup commands available at build-time
+# --host  : Lookup commands available at runtime
+
+# Example use cases,
+# $ patchShebangs --host /nix/store/...-hello-1.0/bin
+# $ patchShebangs --build configure
 
 patchShebangs() {
-    local dir="$1"
-    header "patching script interpreter paths in $dir"
+    local pathName
+
+    if [ "$1" = "--host" ]; then
+        pathName=HOST_PATH
+        shift
+    elif [ "$1" = "--build" ]; then
+        pathName=PATH
+        shift
+    fi
+
+    echo "patching script interpreter paths in $@"
     local f
     local oldPath
     local newPath
@@ -18,7 +41,10 @@ patchShebangs() {
     local oldInterpreterLine
     local newInterpreterLine
 
-    [ -e "$dir" ] || return 0
+    if [ $# -eq 0 ]; then
+        echo "No arguments supplied to patchShebangs" >0
+        return 0
+    fi
 
     local f
     while IFS= read -r -d $'\0' f; do
@@ -27,22 +53,33 @@ patchShebangs() {
         oldInterpreterLine=$(head -1 "$f" | tail -c+3)
         read -r oldPath arg0 args <<< "$oldInterpreterLine"
 
+        if [ -z "$pathName" ]; then
+            if [ -n "$strictDeps" ] && [[ "$f" = "$NIX_STORE"* ]]; then
+                pathName=HOST_PATH
+            else
+                pathName=PATH
+            fi
+        fi
+
         if $(echo "$oldPath" | grep -q "/bin/env$"); then
             # Check for unsupported 'env' functionality:
             # - options: something starting with a '-'
             # - environment variables: foo=bar
             if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
-                echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
+                echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >0
                 exit 1
             fi
-            newPath="$(command -v "$arg0" || true)"
+
+            newPath="$(PATH="${!pathName}" command -v "$arg0" || true)"
         else
             if [ "$oldPath" = "" ]; then
                 # If no interpreter is specified linux will use /bin/sh. Set
                 # oldpath="/bin/sh" so that we get /nix/store/.../sh.
                 oldPath="/bin/sh"
             fi
-            newPath="$(command -v "$(basename "$oldPath")" || true)"
+
+            newPath="$(PATH="${!pathName}" command -v "$(basename "$oldPath")" || true)"
+
             args="$arg0 $args"
         fi
 
@@ -55,13 +92,28 @@ patchShebangs() {
                 # escape the escape chars so that sed doesn't interpret them
                 escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
                 # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
-                touch -r "$f" "$f.timestamp"
+                timestamp=$(mktemp)
+                touch -r "$f" "$timestamp"
                 sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
-                touch -r "$f.timestamp" "$f"
-                rm "$f.timestamp"
+                touch -r "$timestamp" "$f"
+                rm "$timestamp"
             fi
         fi
-    done < <(find "$dir" -type f -perm -0100 -print0)
+    done < <(find "$@" -type f -perm -0100 -print0)
 
     stopNest
+}
+
+patchShebangsAuto () {
+    if [ -z "$dontPatchShebangs" -a -e "$prefix" ]; then
+
+        # Dev output will end up being run on the build platform. An
+        # example case of this is sdl2-config. Otherwise, we can just
+        # use the runtime path (--host).
+        if [ "$output" != out ] && [ "$output" = "$outputDev" ]; then
+            patchShebangs --build "$prefix"
+        else
+            patchShebangs --host "$prefix"
+        fi
+    fi
 }

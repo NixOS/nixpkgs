@@ -6,7 +6,7 @@
   };
 
   weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
-    inherit (luaPackages) cjson;
+    inherit (luaPackages) cjson luaffi;
   };
 
   wee-slack = callPackage ./wee-slack {

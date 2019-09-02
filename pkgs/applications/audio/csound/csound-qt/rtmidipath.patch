@@ -13,5 +13,5 @@ index e5e0c896..9a9fa513 100644
 +    SOURCES += "$${RTMIDI_DIR}/RtMidi.cpp"
 +    INCLUDEPATH += $${RTMIDI_DIR}
  }
-
+ 
  perfThread_build {

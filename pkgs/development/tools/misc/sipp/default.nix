@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   version = "3.5.1";
 
-  name = "sipp-${version}";
+  pname = "sipp";
 
   src = fetchFromGitHub {
     owner = "SIPp";

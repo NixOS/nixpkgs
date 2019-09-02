@@ -7,7 +7,7 @@
 # - https://github.com/markuspf/gap/issues/2
 # - https://trac.sagemath.org/ticket/22626
 stdenv.mkDerivation rec {
-  name = "libgap-${version}";
+  pname = "libgap";
   # Has to be the same version as "gap"
   version = "4.8.6";
   src = fetchurl {

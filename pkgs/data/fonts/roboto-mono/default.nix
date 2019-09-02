@@ -5,7 +5,7 @@ let
   commit = "883939708704a19a295e0652036369d22469e8dc";
 in
 stdenv.mkDerivation rec {
-  name = "roboto-mono-${version}";
+  pname = "roboto-mono";
   version = "2016-01-11";
 
   srcs = [

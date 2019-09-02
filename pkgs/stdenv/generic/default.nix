@@ -88,7 +88,7 @@ let
       # there (yet?) so it goes here until then.
       preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
         export NIX_BUILD_DONT_SET_RPATH=1
-      '' + lib.optionalString hostPlatform.isDarwin ''
+      '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
       ''

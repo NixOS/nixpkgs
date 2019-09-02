@@ -1,7 +1,7 @@
 {stdenv, makeWrapper, python, toposort, rpm}:
 
 stdenv.mkDerivation rec {
-  name = "nix-template-rpm-${version}";
+  pname = "nix-template-rpm";
   version = "0.1";
 
   buildInputs = [ makeWrapper python toposort rpm ];

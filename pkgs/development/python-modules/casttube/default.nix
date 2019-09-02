@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Interact with the Youtube Chromecast api";
-    homepage = http://github.com/ur1katz/casttube;
+    homepage = https://github.com/ur1katz/casttube;
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
   };

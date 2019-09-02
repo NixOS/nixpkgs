@@ -24,14 +24,6 @@ with lib;
     '';
   };
 
-  port = mkOption {
-    type = types.int;
-    default = 0;
-    description = ''
-      Port for the server. Option will be removed, use <option>listen</option> instead.
-  '';
-  };
-
   listen = mkOption {
      type = types.listOf (types.submodule (
           {
@@ -41,7 +33,7 @@ with lib;
                 description = "port to listen on";
               };
               ip = mkOption {
-                type = types.string;
+                type = types.str;
                 default = "*";
                 description = "Ip to listen on. 0.0.0.0 for ipv4 only, * for all.";
               };

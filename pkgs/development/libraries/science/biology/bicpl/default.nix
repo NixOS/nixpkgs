@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libminc netpbm ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib" "-DBUILD_TESTING=FALSE" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib" ];
 
   doCheck = false;
   # internal_volume_io.h: No such file or directory

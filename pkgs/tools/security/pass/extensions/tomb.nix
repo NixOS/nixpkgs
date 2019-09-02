@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, tomb }:
 
 stdenv.mkDerivation rec {
-  name = "pass-tomb-${version}";
+  pname = "pass-tomb";
   version = "1.1";
 
   src = fetchFromGitHub {

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "neko-${version}";
+  pname = "neko";
   version = "2.2.0";
 
   src = fetchurl {

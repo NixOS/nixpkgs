@@ -7,12 +7,11 @@
 
 mkDerivation rec {
   pname = "kproperty";
-  version = "3.1.0";
-  name = "${pname}-${version}";
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
-    sha256 = "18qlwp7ajpx16bd0lfzqfx8y9cbrs8k4nax3cr30wj5sd3l8xpky";
+    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
+    sha256 = "1yldfsdamk4dag8dyryjn5n9j2pzi42s79kkafymfnbifhnhrbv7";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

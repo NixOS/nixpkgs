@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "svox-${version}";
+  pname = "svox";
   version = "2017-07-18";
 
   src = fetchgit {

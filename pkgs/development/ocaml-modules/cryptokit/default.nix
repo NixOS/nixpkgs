@@ -18,7 +18,7 @@ let param =
 in
 
 stdenv.mkDerivation rec {
-  name = "cryptokit-${version}";
+  pname = "cryptokit";
   inherit (param) version;
 
   src = fetchurl {

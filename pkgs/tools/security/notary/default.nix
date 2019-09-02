@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage, libtool }:
 
 buildGoPackage rec {
-  name = "notary-${version}";
+  pname = "notary";
   version = "0.6.1";
   gitcommit = "d6e1431f";
 
@@ -30,7 +30,7 @@ buildGoPackage rec {
     runHook postInstall
   '';
 
-  doCheck = true;
+  #doCheck = true; # broken by tzdata: 2018g -> 2019a
   checkPhase = ''
     make test PKGS=github.com/theupdateframework/notary/cmd/notary
   '';

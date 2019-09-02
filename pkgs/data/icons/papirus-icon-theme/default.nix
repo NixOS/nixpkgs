@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "papirus-icon-theme-${version}";
-  version = "20190203";
+  pname = "papirus-icon-theme";
+  version = "20190802";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
-    repo = "papirus-icon-theme";
+    repo = pname;
     rev = version;
-    sha256 = "02vx8sqpd3rpcypjd99rqkci0fj1bcjznn46p660vpdddpadxya4";
+    sha256 = "1i6nh1vy2cjqh4fw1mzq5v4ah613ghf018g8w0npxhj9qi3pyjm5";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     description = "Papirus icon theme";
     homepage = https://github.com/PapirusDevelopmentTeam/papirus-icon-theme;
     license = licenses.lgpl3;
-    platforms = platforms.all;
+    # darwin gives hash mismatch in source, probably because of file names differing only in case
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
   };
 }

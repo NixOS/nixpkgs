@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "autospotting-${version}";
+  pname = "autospotting";
   version = "unstable-2018-11-17";
   goPackagePath = "github.com/AutoSpotting/AutoSpotting";
 
@@ -24,7 +24,7 @@ buildGoPackage rec {
     description = "Automatically convert your existing AutoScaling groups to up to 90% cheaper spot instances with minimal configuration changes";
     license = licenses.free;
     maintainers = [ maintainers.costrouc ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

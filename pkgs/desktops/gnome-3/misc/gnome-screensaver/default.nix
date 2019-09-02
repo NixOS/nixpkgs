@@ -1,14 +1,12 @@
 { stdenv
 , fetchgit
-, fetchurl
 , autoreconfHook
 , dbus-glib
 , glib
 , gnome-common
 , gnome-desktop
 , gnome3
-, gtk
-, gsettings-desktop-schemas
+, gtk3
 , pkgconfig
 , intltool
 , pam
@@ -66,7 +64,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk
+    gtk3
     gnome-desktop
     dbus-glib
     pam

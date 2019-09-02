@@ -1,14 +1,14 @@
 { stdenv, i3lock, imagemagick, scrot, playerctl, fetchFromGitLab }:
 
 stdenv.mkDerivation rec {
-  name = "i3lock-pixeled-${version}";
-  version = "1.2.0";
+  pname = "i3lock-pixeled";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     owner = "Ma27";
     repo = "i3lock-pixeled";
     rev = version;
-    sha256 = "0pysx9sv4i3nnjvpqkrxkxaqja2a2dw5f2r1bzjcgg3c3c5qv74b";
+    sha256 = "1l9yjf9say0mcqnnjkyj4z3f6y83bnx4jsycd1h10p3m8afbh8my";
   };
 
   propagatedBuildInputs = [

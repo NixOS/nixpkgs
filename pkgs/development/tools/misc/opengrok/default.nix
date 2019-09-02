@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, jre, ctags, makeWrapper, coreutils, git }:
+{ stdenv, fetchurl, jre, ctags, makeWrapper, coreutils, git, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "opengrok-${version}";
+  pname = "opengrok";
   version = "1.0";
 
   # binary distribution
   src = fetchurl {
-    url = "https://github.com/oracle/opengrok/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/oracle/opengrok/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "0h4rwfh8m41b7ij931gcbmkihri25m48373qf6ig0714s66xwc4i";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -a * $out/
     substituteInPlace $out/bin/OpenGrok --replace "/bin/uname" "${coreutils}/bin/uname"
-    substituteInPlace $out/bin/Messages --replace "#!/bin/ksh" "#!${stdenv.shell}"
+    substituteInPlace $out/bin/Messages --replace "#!/bin/ksh" "#!${runtimeShell}"
     wrapProgram $out/bin/OpenGrok \
       --prefix PATH : "${stdenv.lib.makeBinPath [ ctags git ]}" \
       --set JAVA_HOME "${jre}" \

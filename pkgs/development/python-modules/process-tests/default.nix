@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "process-tests";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f43f3540edd333bdc5d8741218e173b1dfdbce5b0a40066d75248911e5340a06";
+    sha256 = "7ae24a680cc7c44e7687e3723e6e64597a28223ad664989999efe10dd38c2431";
   };
 
   # No tests

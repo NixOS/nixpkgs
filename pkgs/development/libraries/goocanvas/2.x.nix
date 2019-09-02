@@ -3,12 +3,13 @@
 let
   version = "2.0.4";
 in stdenv.mkDerivation rec {
-  name = "goocanvas-${version}";
+  pname = "goocanvas";
+  inherit version;
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goocanvas/2.0/${name}.tar.xz";
+    url = "mirror://gnome/sources/goocanvas/2.0/${pname}-${version}.tar.xz";
     sha256 = "141fm7mbqib0011zmkv3g8vxcjwa7hypmq71ahdyhnj2sjvy4a67";
   };
 

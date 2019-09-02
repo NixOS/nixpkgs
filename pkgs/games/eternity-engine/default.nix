@@ -1,7 +1,7 @@
 { stdenv, cmake, libGL, SDL, SDL_mixer, SDL_net, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "eternity-engine-${version}";
+  pname = "eternity-engine";
   version = "3.42.02";
   src = fetchFromGitHub {
     owner = "team-eternity";

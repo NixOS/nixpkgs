@@ -3,21 +3,20 @@
 
 buildPythonPackage rec {
   pname = "acoustics";
-  version = "0.2.0.post1";
+  version = "0.2.1";
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ numpy scipy matplotlib pandas tabulate ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "738218db41ff1b1f932eabb700e400d84141af6f29392aab5f7be1b19758f806";
+    sha256 = "d7cec62d3e7a7eb26026f2aacc726fb1dd0b044574cbdee83da654b847543c20";
   };
 
-  # Tests look in wrong place for test data
-  doCheck = false;
-
   checkPhase = ''
-    py.test tests
+    pushd tests
+    py.test ./.
+    popd
   '';
 
   disabled = pythonOlder "3.6";

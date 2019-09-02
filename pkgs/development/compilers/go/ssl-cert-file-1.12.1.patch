@@ -1,0 +1,59 @@
+diff -Naur a/src/crypto/x509/root_cgo_darwin.go b/src/crypto/x509/root_cgo_darwin.go
+--- a/src/crypto/x509/root_cgo_darwin.go	2019-03-15 11:33:55.920232337 -0700
++++ b/src/crypto/x509/root_cgo_darwin.go	2019-03-15 11:34:53.323180897 -0700
+@@ -270,11 +270,20 @@
+ import "C"
+ import (
+	"errors"
++	"io/ioutil"
++	"os"
+	"unsafe"
+ )
+
+ func loadSystemRoots() (*CertPool, error) {
+	roots := NewCertPool()
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
++		data, err := ioutil.ReadFile(file)
++		if err == nil {
++			roots.AppendCertsFromPEM(data)
++			return roots, nil
++		}
++	}
+
+	var data C.CFDataRef = 0
+	var untrustedData C.CFDataRef = 0
+diff -Naur a/src/crypto/x509/root_darwin.go b/src/crypto/x509/root_darwin.go
+--- a/src/crypto/x509/root_darwin.go	2019-03-15 11:33:55.920232337 -0700
++++ b/src/crypto/x509/root_darwin.go	2019-03-15 11:36:21.205123541 -0700
+@@ -92,6 +92,14 @@
+		verifyCh    = make(chan rootCandidate)
+	)
+
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
++		data, err := ioutil.ReadFile(file)
++		if err == nil {
++			roots.AppendCertsFromPEM(data)
++			return roots, nil
++		}
++	}
++
+	// Using 4 goroutines to pipe into verify-cert seems to be
+	// about the best we can do. The verify-cert binary seems to
+	// just RPC to another server with coarse locking anyway, so
+diff -Naur a/src/crypto/x509/root_unix.go b/src/crypto/x509/root_unix.go
+--- a/src/crypto/x509/root_unix.go	2019-03-15 11:33:55.920232337 -0700
++++ b/src/crypto/x509/root_unix.go	2019-03-15 11:37:15.737326340 -0700
+@@ -38,6 +38,13 @@
+
+ func loadSystemRoots() (*CertPool, error) {
+	roots := NewCertPool()
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
++		data, err := ioutil.ReadFile(file)
++		if err == nil {
++			roots.AppendCertsFromPEM(data)
++			return roots, nil
++		}
++	}
+
+	files := certFiles
+	if f := os.Getenv(certFileEnv); f != "" {

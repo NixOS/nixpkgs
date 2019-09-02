@@ -23,7 +23,6 @@ stdenv.mkDerivation {
     "-DBUILD_BIOMESH3D=1"
     "-DWITH_TETGEN=1"
     "-DBUILD_TYPE=Release"
-    "-DBUILD_TESTING=0"
     "-DWITH_WXWIDGETS=ON"
     "-DITK_DIR=${itk}/lib/InsightToolkit"
     "-DGDCM_LIBRARY=${itk}/lib/libitkgdcm.a"

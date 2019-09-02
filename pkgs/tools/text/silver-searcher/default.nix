@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, pcre, zlib, lzma}:
 
 stdenv.mkDerivation rec {
-  name = "silver-searcher-${version}";
+  pname = "silver-searcher";
   version = "2.2.0";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/ggreer/the_silver_searcher/;
     description = "A code-searching tool similar to ack, but faster";
-    maintainers = with maintainers; [ madjar jgeerds ];
+    maintainers = with maintainers; [ madjar ];
     platforms = platforms.all;
     license = licenses.asl20;
   };

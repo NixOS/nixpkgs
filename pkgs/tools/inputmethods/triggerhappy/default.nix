@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, perl, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "triggerhappy-${version}";
+  pname = "triggerhappy";
   version = "0.5.0";
 
   src = fetchFromGitHub {

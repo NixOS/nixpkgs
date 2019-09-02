@@ -8,13 +8,17 @@ let
 
   efi = config.boot.loader.efi;
 
-  realGrub = if cfg.version == 1 then pkgs.grub
-    else if cfg.zfsSupport then pkgs.grub2.override { zfsSupport = true; }
+  grubPkgs =
+    # Package set of targeted architecture
+    if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
+
+  realGrub = if cfg.version == 1 then grubPkgs.grub
+    else if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
     else if cfg.trustedBoot.enable
          then if cfg.trustedBoot.isHPLaptop
-              then pkgs.trustedGrub-for-HP
-              else pkgs.trustedGrub
-         else pkgs.grub2;
+              then grubPkgs.trustedGrub-for-HP
+              else grubPkgs.trustedGrub
+         else grubPkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -57,15 +61,11 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraEntriesBeforeNixOS extraPrepareConfig extraInitrd configurationLimit copyKernels
-        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
-      path = (makeBinPath ([
-        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
-        pkgs.utillinux ]
-        ++ (optional (cfg.efiSupport && (cfg.version == 2)) pkgs.efibootmgr)
-        ++ (optionals cfg.useOSProber [pkgs.busybox pkgs.os-prober])
-      )) + ":" + (makeSearchPathOutput "bin" "sbin" [
-        pkgs.mdadm pkgs.utillinux
-      ]);
+        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios;
+      path = with pkgs; makeBinPath (
+        [ coreutils gnused gnugrep findutils diffutils btrfs-progs utillinux mdadm ]
+        ++ optional (cfg.efiSupport && (cfg.version == 2)) efibootmgr
+        ++ optionals cfg.useOSProber [ busybox os-prober ]);
       font = if cfg.font == null then ""
         else (if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
@@ -333,7 +333,7 @@ in
       };
 
       backgroundColor = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         example = "#7EBAE4";
         default = null;
         description = ''
@@ -360,6 +360,7 @@ in
       font = mkOption {
         type = types.nullOr types.path;
         default = "${realGrub}/share/grub/unicode.pf2";
+        defaultText = ''"''${pkgs.grub2}/share/grub/unicode.pf2"'';
         description = ''
           Path to a TrueType, OpenType, or pf2 font to be used by Grub.
         '';
@@ -390,6 +391,24 @@ in
         type = types.str;
         description = ''
           The gfxmode to pass to GRUB when loading a graphical boot interface under BIOS.
+        '';
+      };
+
+      gfxpayloadEfi = mkOption {
+        default = "keep";
+        example = "text";
+        type = types.str;
+        description = ''
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under EFI.
+        '';
+      };
+
+      gfxpayloadBios = mkOption {
+        default = "text";
+        example = "keep";
+        type = types.str;
+        description = ''
+          The gfxpayload to pass to GRUB when loading a graphical boot interface under BIOS.
         '';
       };
 
@@ -512,6 +531,15 @@ in
         '';
       };
 
+      forcei686 = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to force the use of a ia32 boot loader on x64 systems. Required
+          to install and run NixOS on 64bit x86 systems with 32bit (U)EFI.
+        '';
+      };
+
       trustedBoot = {
 
         enable = mkOption {
@@ -526,7 +554,7 @@ in
         systemHasTPM = mkOption {
           default = "";
           example = "YES_TPM_is_activated";
-          type = types.string;
+          type = types.str;
           description = ''
             Assertion that the target system has an activated TPM. It is a safety
             check before allowing the activation of 'trustedBoot.enable'. TrustedBoot
@@ -656,7 +684,7 @@ in
           assertion = if args.efiSysMountPoint == null then true else hasPrefix "/" args.efiSysMountPoint;
           message = "EFI paths must be absolute, not ${args.efiSysMountPoint}";
         }
-      ] ++ flip map args.devices (device: {
+      ] ++ forEach args.devices (device: {
         assertion = device == "nodev" || hasPrefix "/" device;
         message = "GRUB devices must be absolute paths, not ${device} in ${args.path}";
       }));

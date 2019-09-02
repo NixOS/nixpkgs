@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
-, python3Packages, gnome3, gtk3, gobject-introspection}:
+{ stdenv, fetchFromGitHub, pkgconfig, gettext, intltool, wrapGAppsHook
+, python3Packages, gnome3, gtk3, gsettings-desktop-schemas, gobject-introspection }:
 
 let
   inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2;
@@ -16,11 +16,11 @@ in buildPythonApplication rec {
 
   disabled = !isPy3k;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [
     intltool wrapGAppsHook
-    gnome3.defaultIconTheme
-    gnome3.gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
   ];
 
   postPatch = ''

@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, doxygen, graphviz, makeWrapper
+{ stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
 , boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
 , libjpeg, libGLU_combined, glew, libxslt
 }:
 
 stdenv.mkDerivation rec {
   version = "0.4.8";
-  name = "freeorion-${version}";
+  pname = "freeorion";
 
   src = fetchFromGitHub {
     owner  = "freeorion";

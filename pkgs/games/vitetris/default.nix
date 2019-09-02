@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation rec {
-  name = "vitetris-${version}";
-  version = "0.57.2";
+  pname = "vitetris";
+  version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "vicgeralds";
     repo = "vitetris";
     rev = "v${version}";
-    sha256 = "0px0h4zrpzr6xd1vz7w9gr6rh0z74y66jfzschkcvj84plld10k6";
+    sha256 = "1fvw9yqg1q25x6dlfi4bl3hrrcdgl6wwq29j89aycxwdfxrxs09w";
   };
 
   hardeningDisable = [ "format" ];

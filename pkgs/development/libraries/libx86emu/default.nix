@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libx86emu-${version}";
-  version = "2.1";
+  pname = "libx86emu";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "wfeldt";
     repo = "libx86emu";
     rev = version;
-    sha256 = "16k16xcw2w2c69sn04jfdy9fd7cxs463d2rwb948xchyvfla958j";
+    sha256 = "158mrg9xb0sb4l3s60084j6i7nr90smpsks9f02gbssk495h2k8l";
   };
 
   nativeBuildInputs = [ perl ];

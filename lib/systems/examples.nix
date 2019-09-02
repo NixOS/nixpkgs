@@ -44,14 +44,6 @@ rec {
     platform = platforms.aarch64-multiplatform;
   };
 
-  armv5te-android-prebuilt = rec {
-    config = "armv5tel-unknown-linux-androideabi";
-    sdkVer = "21";
-    ndkVer = "18b";
-    platform = platforms.armv5te-android;
-    useAndroidPrebuilt = true;
-  };
-
   armv7a-android-prebuilt = rec {
     config = "armv7a-unknown-linux-androideabi";
     sdkVer = "24";
@@ -96,11 +88,31 @@ rec {
     config = "aarch64-unknown-linux-musl";
   };
 
+  gnu64 = { config = "x86_64-unknown-linux-gnu"; };
+  gnu32  = { config = "i686-unknown-linux-gnu"; };
+
   musl64 = { config = "x86_64-unknown-linux-musl"; };
   musl32  = { config = "i686-unknown-linux-musl"; };
 
   riscv64 = riscv "64";
   riscv32 = riscv "32";
+
+  riscv64-embedded = {
+    config = "riscv64-none-elf";
+    libc = "newlib";
+    platform = platforms.riscv-multiplatform "64";
+  };
+
+  riscv32-embedded = {
+    config = "riscv32-none-elf";
+    libc = "newlib";
+    platform = platforms.riscv-multiplatform "32";
+  };
+
+  msp430 = {
+    config = "msp430-elf";
+    libc = "newlib";
+  };
 
   avr = {
     config = "avr";
@@ -132,11 +144,6 @@ rec {
 
   ppcle-embedded = {
     config = "powerpcle-none-eabi";
-    libc = "newlib";
-  };
-
-  alpha-embedded = {
-    config = "alpha-elf";
     libc = "newlib";
   };
 
@@ -211,6 +218,22 @@ rec {
     config = "x86_64-pc-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
+  };
+
+  # BSDs
+
+  amd64-netbsd = {
+    config = "x86_64-unknown-netbsd";
+    libc = "nblibc";
+  };
+
+  #
+  # WASM
+  #
+
+  wasi32 = {
+    config = "wasm32-unknown-wasi";
+    useLLVM = true;
   };
 
   # Ghcjs

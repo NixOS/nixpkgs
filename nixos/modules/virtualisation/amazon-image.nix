@@ -31,13 +31,13 @@ in
 
     fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
       autoResize = true;
     };
 
-    boot.extraModulePackages =
-      [ config.boot.kernelPackages.ixgbevf
-        config.boot.kernelPackages.ena
-      ];
+    boot.extraModulePackages = [
+      config.boot.kernelPackages.ena
+    ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];

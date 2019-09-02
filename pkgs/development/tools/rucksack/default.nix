@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.1.0";
-  name = "rucksack-${version}";
+  pname = "rucksack";
 
   src = fetchFromGitHub {
     owner = "andrewrk";

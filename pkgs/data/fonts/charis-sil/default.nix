@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   version = "5.000";
@@ -16,7 +16,7 @@ in
 
     sha256 = "1a220s8n0flvcdkazqf5g10v6r55s2an308slvvarynpj6l7x27n";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = https://software.sil.org/charis;
       description = "A family of highly readable fonts for broad multilingual use";
       longDescription = ''

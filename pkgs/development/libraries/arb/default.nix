@@ -1,6 +1,5 @@
-{stdenv, fetchFromGitHub, fetchpatch, mpir, gmp, mpfr, flint}:
+{stdenv, fetchFromGitHub, mpir, gmp, mpfr, flint}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "arb";
   version = "2.16.0";
   src = fetchFromGitHub {

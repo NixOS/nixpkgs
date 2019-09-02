@@ -1,16 +1,16 @@
 { stdenv, fetchurl, makeWrapper, glib-networking, gtk2, libsoup, libX11, perl,
-  pkgconfig, webkit, gsettings-desktop-schemas }:
+  pkgconfig, webkitgtk, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
-  name = "vimprobable2-${version}";
+  pname = "vimprobable2";
   src = fetchurl {
     url = "mirror://sourceforge/vimprobable/vimprobable2_${version}.tar.bz2";
     sha256 = "13jdximksh9r3cgd2f8vms0pbsn3x0gxvyqdqiw16xp5fmdx5kzr";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl webkit gsettings-desktop-schemas ];
+  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl webkitgtk gsettings-desktop-schemas ];
 
   hardeningDisable = [ "format" ];
 

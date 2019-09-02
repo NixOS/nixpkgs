@@ -1,23 +1,23 @@
 { stdenv, fetchurl, makeWrapper, opencl-headers, ocl-icd, xxHash }:
 
 stdenv.mkDerivation rec {
-  name    = "hashcat-${version}";
-  version = "5.0.0";
+  pname   = "hashcat";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "13xh1lmzdppvx8wr8blqhdr8vpa24j099kz2xzb9pcnqy26dk4kh";
+    sha256 = "0f73y4cg8c7a6q7x34qvpfi4g3lw6j9bnn0a13g43aqyiskflfr8";
   };
-  patches = [ ./use-installed-xxhash.patch ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ opencl-headers xxHash ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "OPENCL_HEADERS_KHRONOS=${opencl-headers}/include"
     "COMPTIME=1337"
     "VERSION_TAG=${version}"
+    "USE_SYSTEM_OPENCL=1"
+    "USE_SYSTEM_XXHASH=1"
   ];
 
   postFixup = ''

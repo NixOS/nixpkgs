@@ -3,11 +3,11 @@
 , libnetfilter_cthelper, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "conntrack-tools-${version}";
+  pname = "conntrack-tools";
   version = "1.4.5";
 
   src = fetchurl {
-    url = "https://www.netfilter.org/projects/conntrack-tools/files/${name}.tar.bz2";
+    url = "https://www.netfilter.org/projects/conntrack-tools/files/${pname}-${version}.tar.bz2";
     sha256 = "0qm4m78hr6a4fbmnkw5nyjm1pzzhydzx0nz7f96iv1c4fsfdkiin";
   };
 

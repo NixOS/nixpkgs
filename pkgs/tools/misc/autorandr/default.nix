@@ -6,10 +6,11 @@
 
 let
   python = python3Packages.python;
-  version = "1.7";
+  version = "1.8.1";
 in
   stdenv.mkDerivation {
-    name = "autorandr-${version}";
+    pname = "autorandr";
+    inherit version;
 
     buildInputs = [ python ];
 
@@ -24,7 +25,7 @@ in
       runHook preInstall
       make install TARGETS='autorandr' PREFIX=$out
 
-      make install TARGETS='bash_completion' DESTDIR=$out
+      make install TARGETS='bash_completion' DESTDIR=$out/share/bash-completion/completions
 
       make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
 
@@ -48,14 +49,14 @@ in
       owner = "phillipberndt";
       repo = "autorandr";
       rev = "${version}";
-      sha256 = "0wpiimc5xai813h7gywwp20svkn35pkw99bnjflmpwz7x8fn8dfz";
+      sha256 = "1bp1cqkrpg77rjyh4lq1agc719fmxn92jkiicf6nbhfl8kf3l3vy";
     };
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = https://github.com/phillipberndt/autorandr/;
-      description = "Auto-detect the connect display hardware and load the appropiate X11 setup using xrandr";
-      license = stdenv.lib.licenses.gpl3Plus;
-      maintainers = [ stdenv.lib.maintainers.coroa ];
-      platforms = stdenv.lib.platforms.unix;
+      description = "Automatically select a display configuration based on connected devices";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ coroa globin ];
+      platforms = platforms.unix;
     };
   }

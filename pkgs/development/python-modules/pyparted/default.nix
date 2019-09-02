@@ -1,13 +1,12 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
 , isPyPy
 , pkgs
 , python
 }:
 
 buildPythonPackage rec {
-  name = "pyparted-${version}";
+  pname = "pyparted";
   version = "3.10.7";
   disabled = isPyPy;
 

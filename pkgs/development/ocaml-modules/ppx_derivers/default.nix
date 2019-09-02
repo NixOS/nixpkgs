@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
 	pname = "ppx_derivers";
-	version = "1.2";
+	version = "1.2.1";
 
   minimumOCamlVersion = "4.02";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
 		owner = "diml";
 		repo = pname;
 		rev = version;
-		sha256 = "0bnhihl1w31as5w2czly1v3d6pbir9inmgsjg2cj6aaj9v1dzd85";
+		sha256 = "0yqvqw58hbx1a61wcpbnl9j30n495k23qmyy2xwczqs63mn2nkpn";
 	};
 
 	meta = {

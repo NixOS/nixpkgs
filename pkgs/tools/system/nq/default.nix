@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "nq-${version}";
+  pname = "nq";
   version = "0.3.1";
   src = fetchFromGitHub {
     owner = "chneukirchen";

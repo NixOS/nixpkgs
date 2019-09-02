@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       summary of the build status, after reading the manual.
     '';
 
-    homepage = http://josefsson.org/autobuild/;
+    homepage = https://josefsson.org/autobuild/;
     license = stdenv.lib.licenses.gpl2Plus;
   };
 }

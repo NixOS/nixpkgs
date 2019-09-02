@@ -1,7 +1,7 @@
 { stdenv, lib, autoconf213, fetchurl, fetchpatch, pkgconfig, nspr, perl, python2, zip }:
 
 stdenv.mkDerivation rec {
-  name = "spidermonkey-${version}";
+  pname = "spidermonkey";
   version = "1.8.5";
 
   src = fetchurl {

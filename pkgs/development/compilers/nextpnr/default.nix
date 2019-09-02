@@ -1,52 +1,47 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper
-, boost, python3
+{ stdenv, fetchFromGitHub, cmake
+, boost, python3, eigen
 , icestorm, trellis
+, llvmPackages
 
-# TODO(thoughtpolice) Currently the GUI build seems broken at runtime on my
-# laptop (and over a remote X server on my server...), so mark it broken for
-# now, with intent to fix later.
-, enableGui ? false
+, enableGui ? true
+, wrapQtAppsHook
 , qtbase
 }:
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
-
-  # This is a massive hack. For now, Trellis doesn't really support
-  # installation through an already-built package; you have to build it once to
-  # get the tools, then reuse the build directory to build nextpnr -- the
-  # 'install' phase doesn't install everything it needs.  This will be fixed in
-  # the future but for now we can do this horrific thing.
-  trellisRoot = trellis.overrideAttrs (_: {
-    installPhase = ''
-      mkdir -p $out
-      cp *.so ..
-      cd ../../.. && cp -R trellis database $out/
-    '';
-  });
 in
-stdenv.mkDerivation rec {
-  name = "nextpnr-${version}";
-  version = "2019.01.08";
+with stdenv; mkDerivation rec {
+  pname = "nextpnr";
+  version = "2019.08.31";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "nextpnr";
-    rev    = "c1d15c749c2aa105ee7b38ebe1b60a27e3743e8c";
-    sha256 = "082ac03s6164s7dwz1l9phshl8m1lizn45jykabrhks5jcccchbh";
+    rev    = "c0b7379e8672b6263152d5e340e62f22179fdc8b";
+    sha256 = "174n962xiwyzy53cn192h9rq95h951k3xy6bs43p5ya592ai5mjh";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs
+     = [ cmake ]
+    ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs
-     = [ boostPython python3 ]
-    ++ (stdenv.lib.optional enableGui qtbase);
+     = [ boostPython python3 eigen ]
+    ++ (lib.optional enableGui qtbase)
+    ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
   enableParallelBuilding = true;
   cmakeFlags =
     [ "-DARCH=generic;ice40;ecp5"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
-      "-DTRELLIS_ROOT=${trellisRoot}/trellis"
-    ] ++ (stdenv.lib.optional (!enableGui) "-DBUILD_GUI=OFF");
+      "-DTRELLIS_ROOT=${trellis}/share/trellis"
+      "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
+      "-DUSE_OPENMP=ON"
+      # warning: high RAM usage
+      "-DSERIALIZE_CHIPDB=OFF"
+      # use PyPy for icestorm if enabled
+      "-DPYTHON_EXECUTABLE=${icestorm.pythonInterp}"
+    ] ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF");
 
   # Fix the version number. This is a bit stupid (and fragile) in practice
   # but works ok. We should probably make this overrideable upstream.
@@ -55,20 +50,18 @@ stdenv.mkDerivation rec {
       --replace 'git log -1 --format=%h' 'echo ${substring 0 11 src.rev}'
   '';
 
-  postInstall = stdenv.lib.optionalString enableGui ''
-    for x in generic ice40 ecp5; do
-      wrapProgram $out/bin/nextpnr-$x \
-        --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtbase.qtCompatVersion}/plugins
-    done
+
+  postFixup = lib.optionalString enableGui ''
+    wrapQtApp $out/bin/nextpnr-generic
+    wrapQtApp $out/bin/nextpnr-ice40
+    wrapQtApp $out/bin/nextpnr-ecp5
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Place and route tool for FPGAs";
     homepage    = https://github.com/yosyshq/nextpnr;
     license     = licenses.isc;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
-
-    broken = enableGui;
+    maintainers = with maintainers; [ thoughtpolice emily ];
   };
 }

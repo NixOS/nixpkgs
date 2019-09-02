@@ -1,5 +1,4 @@
 { androidenv, buildPackages, pkgs, targetPackages
-, includeSources ? true, licenseAccepted ? false
 }:
 
 rec {
@@ -21,7 +20,7 @@ rec {
       inherit (buildPackages)
         makeWrapper;
       inherit (pkgs)
-        lib stdenv
+        stdenv
         runCommand wrapBintoolsWith wrapCCWith;
       # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
       # but for splicing messing up on infinite recursion for the variants we

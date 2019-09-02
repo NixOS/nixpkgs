@@ -5,7 +5,7 @@
 }:
 
 mkDerivation rec {
-  name = "virt-manager-qt-${version}";
+  pname = "virt-manager-qt";
   version = "0.70.91";
 
   src = fetchFromGitHub {

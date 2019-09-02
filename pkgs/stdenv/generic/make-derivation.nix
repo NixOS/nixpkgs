@@ -1,6 +1,13 @@
 { lib, config, stdenv }:
 
-rec {
+let
+  checkMeta = import ./check-meta.nix {
+    inherit lib config;
+    # Nix itself uses the `system` field of a derivation to decide where
+    # to build it. This is a bit confusing for cross compilation.
+    inherit (stdenv) hostPlatform;
+  };
+in rec {
   # `mkDerivation` wraps the builtin `derivation` function to
   # produce derivations that use this stdenv and its shell.
   #
@@ -70,6 +77,7 @@ rec {
           else builtins.unsafeGetAttrPos "name" attrs)
     , separateDebugInfo ? false
     , outputs ? [ "out" ]
+    , __darwinAllowLocalNetworking ? false
     , __impureHostDeps ? []
     , __propagatedImpureHostDeps ? []
     , sandboxProfile ? ""
@@ -77,6 +85,8 @@ rec {
 
     , hardeningEnable ? []
     , hardeningDisable ? []
+
+    , patches ? []
 
     , ... } @ attrs:
 
@@ -86,10 +96,9 @@ rec {
       doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
       doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
 
-      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
       outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
-      fixedOutputDrv = attrs ? outputHash;
       noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                       ++ depsHostHost ++ depsHostHostPropagated
                                       ++ buildInputs ++ propagatedBuildInputs
@@ -175,6 +184,7 @@ rec {
         (removeAttrs attrs
           ["meta" "passthru" "pos"
            "checkInputs" "installCheckInputs"
+           "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
         // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
@@ -226,6 +236,8 @@ rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+          inherit patches;
+
           inherit doCheck doInstallCheck;
 
           inherit outputs;
@@ -234,7 +246,7 @@ rec {
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
              else if cmakeFlags == null      then []
              else                                     cmakeFlags)
-          ++ lib.optional (stdenv.hostPlatform.uname.system != null) "-DCMAKE_SYSTEM_NAME=${stdenv.hostPlatform.uname.system}"
+          ++ [ "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" [ stdenv.hostPlatform.uname.system ]}" ]
           ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
           ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.release}"
           ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
@@ -244,7 +256,10 @@ rec {
           enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
+        } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? platform.gcc.arch) {
+          requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
+          inherit __darwinAllowLocalNetworking;
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
           let profiles = [ stdenv.extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
@@ -260,12 +275,7 @@ rec {
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         };
 
-      validity = import ./check-meta.nix {
-        inherit lib config meta;
-        # Nix itself uses the `system` field of a derivation to decide where
-        # to build it. This is a bit confusing for cross compilation.
-        inherit (stdenv) hostPlatform;
-      } attrs;
+      validity = checkMeta { inherit meta attrs; };
 
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not

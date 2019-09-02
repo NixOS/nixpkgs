@@ -5,7 +5,7 @@ with lib;
 let
 
   inherit (config.boot) kernelPatches;
-  inherit (config.boot.kernel) features;
+  inherit (config.boot.kernel) features randstructSeed;
   inherit (config.boot.kernelPackages) kernel;
 
   kernelModulesConf = pkgs.writeText "nixos.conf"
@@ -36,8 +36,10 @@ in
 
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
+      type = types.unspecified // { merge = mergeEqualOption; };
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override {
+          inherit randstructSeed;
           kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
           features = lib.recursiveUpdate super.kernel.features features;
         };
@@ -65,6 +67,19 @@ in
       default = [];
       example = literalExample "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
       description = "A list of additional patches to apply to the kernel.";
+    };
+
+    boot.kernel.randstructSeed = mkOption {
+      type = types.str;
+      default = "";
+      example = "my secret seed";
+      description = ''
+        Provides a custom seed for the <varname>RANDSTRUCT</varname> security
+        option of the Linux kernel. Note that <varname>RANDSTRUCT</varname> is
+        only enabled in NixOS hardened kernels. Using a custom seed requires
+        building the kernel and dependent packages locally, since this
+        customization happens at build time.
+      '';
     };
 
     boot.kernelParams = mkOption {
@@ -182,7 +197,7 @@ in
     # (so you don't need to reboot to have changes take effect).
     boot.kernelParams =
       [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
-      optionals config.boot.vesa [ "vga=0x317" ];
+      optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
 
     boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
@@ -298,7 +313,7 @@ in
       # !!! Should this really be needed?
       (isYes "MODULES")
       (isYes "BINFMT_ELF")
-    ];
+    ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
 
     # nixpkgs kernels are assumed to have all required features
     assertions = if config.boot.kernelPackages.kernel ? features then [] else

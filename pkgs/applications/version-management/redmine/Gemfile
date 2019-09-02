@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem "bundler", ">= 1.5.0", "< 2.0.0"
 
-gem "rails", "4.2.11"
+gem "rails", "4.2.11.1"
 gem "addressable", "2.4.0" if RUBY_VERSION < "2.0"
 if RUBY_VERSION < "2.1"
   gem "public_suffix", (RUBY_VERSION < "2.0" ? "~> 1.4" : "~> 2.0.5")
@@ -21,6 +21,7 @@ gem "mail", "~> 2.6.4"
 gem "nokogiri", (RUBY_VERSION >= "2.1" ? "~> 1.8.1" : "~> 1.6.8")
 gem "i18n", "~> 0.7.0"
 gem "ffi", "1.9.14", :platforms => :mingw if RUBY_VERSION < "2.0"
+gem "xpath", "< 3.2.0" if RUBY_VERSION < "2.3"
 
 # Request at least rails-html-sanitizer 1.0.3 because of security advisories
 gem "rails-html-sanitizer", ">= 1.0.3"
@@ -43,7 +44,7 @@ end
 platforms :mri, :mingw, :x64_mingw do
   # Optional gem for exporting the gantt to a PNG file, not supported with jruby
   group :rmagick do
-    gem "rmagick", ">= 2.14.0"
+    gem "rmagick", "~> 2.16.0"
   end
 
   # Optional Markdown support, not for JRuby

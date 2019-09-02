@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "sphinx-testing";
-  version = "0.8.1";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cbgkp770d7k85nmqkz50wk09xjwcmqw7sb2z17086n7vc1hy2rf";
+    sha256 = "ef661775b5722d7b00f67fc229104317d35637a4fb4434bf2c005afdf1da4d09";
   };
 
   checkInputs = [ mock ];

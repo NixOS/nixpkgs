@@ -47,6 +47,8 @@ let
     ${cfg.levels}
   '';
 
+  thinkfan = pkgs.thinkfan.override { smartSupport = cfg.smartSupport; };
+
 in {
 
   options = {
@@ -58,6 +60,15 @@ in {
         default = false;
         description = ''
           Whether to enable thinkfan, fan controller for IBM/Lenovo ThinkPads.
+        '';
+      };
+
+      smartSupport = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to build thinkfan with SMART support to read temperatures 
+          directly from hard disks.
         '';
       };
 
@@ -77,7 +88,7 @@ in {
               Which may be provided by any hwmon drivers (keyword
               hwmon)
 
-            S.M.A.R.T. (since 0.9 and requires the USE_ATASMART compilation flag)
+            S.M.A.R.T. (requires smartSupport to be enabled)
               Which reads the temperature directly from the hard
               disk using libatasmart (keyword atasmart)
 
@@ -125,18 +136,17 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.thinkfan ];
+    environment.systemPackages = [ thinkfan ];
 
     systemd.services.thinkfan = {
       description = "Thinkfan";
       after = [ "basic.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.thinkfan ];
-      serviceConfig.ExecStart = "${pkgs.thinkfan}/bin/thinkfan -n -c ${configFile}";
+      path = [ thinkfan ];
+      serviceConfig.ExecStart = "${thinkfan}/bin/thinkfan -n -c ${configFile}";
     };
 
     boot.extraModprobeConfig = "options thinkpad_acpi experimental=1 fan_control=1";
 
   };
-
 }

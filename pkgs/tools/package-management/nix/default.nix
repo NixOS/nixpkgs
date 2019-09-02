@@ -3,14 +3,15 @@
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , boehmgc
+, stdenv, llvmPackages_6
 }:
 
 let
 
 common =
-  { lib, stdenv, fetchurl, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
+  { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline
-  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
+  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns, jq
   , busybox-sandbox-shell
   , storeDir
   , stateDir
@@ -36,7 +37,7 @@ common =
       nativeBuildInputs =
         [ pkgconfig ]
         ++ lib.optionals (!is20) [ curl perl ]
-        ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns ];
+        ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq ];
 
       buildInputs = [ curl openssl sqlite xz bzip2 ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
@@ -63,7 +64,12 @@ common =
         # https://github.com/NixOS/nixpkgs/issues/45462
         if is20 then ''
           mkdir -p $out/lib
-          cp ${boost}/lib/libboost_context* $out/lib
+          cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
+          rm -f $out/lib/*.a
+          ${lib.optionalString stdenv.isLinux ''
+            chmod u+w $out/lib/*.so.*
+            patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+          ''}
         '' else ''
           configureFlagsArray+=(BDW_GC_LIBS="-lgc -lgccpp")
         '';
@@ -123,7 +129,8 @@ common =
         inherit fromGit;
 
         perl-bindings = if includesPerl then nix else stdenv.mkDerivation {
-          name = "nix-perl-${version}";
+          pname = "nix-perl";
+          inherit version;
 
           inherit src;
 
@@ -166,24 +173,40 @@ in rec {
     inherit storeDir stateDir confDir boehmgc;
   };
 
-  nixStable = callPackage common rec {
-    name = "nix-2.2";
+  nixStable = callPackage common (rec {
+    name = "nix-2.2.2";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "63238d00d290b8a93925891fc9164439d3941e2ccc569bf7f7ca32f53c3ec0c7";
+      sha256 = "f80a1b4f9837a8d33209f0b7769d5038335459ff4303eccf3e9217a9eca8594c";
     };
 
     inherit storeDir stateDir confDir boehmgc;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.cc.isClang {
+    stdenv = llvmPackages_6.stdenv;
+  });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.2${suffix}";
-    suffix = "pre6600_85488a93";
+    name = "nix-2.3${suffix}";
+    suffix = "pre6895_84de821";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "85488a93ec3b07210339f2b05aa93e970f9ac3be";
-      sha256 = "1n5dp7p2lzpnj7f834d25k020v16gnnsm56jz46y87v2x7b69ccm";
+      rev = "84de8210040580ce7189332b43038d52c56a9689";
+      sha256 = "062pdly0m2hk8ly8li5psvpbj1mi7m1a15k8wyzf79q7294l5li3";
+    };
+    fromGit = true;
+
+    inherit storeDir stateDir confDir boehmgc;
+  });
+
+  nixFlakes = lib.lowPrio (callPackage common rec {
+    name = "nix-2.3${suffix}";
+    suffix = "pre20190830_04np4n6";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "aa82f8b2d2a2c42f0d713e8404b668cef1a4b108";
+      hash = "sha256-09ZHwpxf9pRDacCSGTHYx+fnKYgxKx8G37Jqb4wl1xI=";
     };
     fromGit = true;
 

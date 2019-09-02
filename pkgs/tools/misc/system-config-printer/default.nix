@@ -1,17 +1,17 @@
 { stdenv, fetchurl, udev, intltool, pkgconfig, glib, xmlto, wrapGAppsHook
 , docbook_xml_dtd_412, docbook_xsl
-, libxml2, desktop-file-utils, libusb1, cups, gdk_pixbuf, pango, atk, libnotify
+, libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
 , gobject-introspection, libsecret
 , cups-filters
 , pythonPackages
 }:
 
 stdenv.mkDerivation rec {
-  name = "system-config-printer-${version}";
+  pname = "system-config-printer";
   version = "1.5.11";
 
   src = fetchurl {
-    url = "https://github.com/zdohnal/system-config-printer/releases/download/${version}/${name}.tar.xz";
+    url = "https://github.com/zdohnal/system-config-printer/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "1lq0q51bhanirpjjvvh4xiafi8hgpk8r32h0dj6dn3f32z8pib9q";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib udev libusb1 cups
     pythonPackages.python
-    libnotify gobject-introspection gdk_pixbuf pango atk
+    libnotify gobject-introspection gdk-pixbuf pango atk
     libsecret
   ];
 

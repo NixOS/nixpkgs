@@ -49,11 +49,9 @@ mapAliases ({
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
-  buildbot = pythonPackages.buildbot; # added 2018-10-11
-  buildbot-full = pythonPackages.buildbot-full; # added 2018-10-11
-  buildbot-pkg = pythonPackages.buildbot-pkg; # added 2018-10-11
-  buildbot-ui = pythonPackages.buildbot-ui; # added 2018-10-11
-  buildbot-worker = pythonPackages.buildbot-worker; # added 2018-10-11
+  bittorrentSync = throw "bittorrentSync has been deprecated by resilio-sync."; # added 2019-06-03
+  bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
+  bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
@@ -64,8 +62,10 @@ mapAliases ({
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
   conkerorWrapper = conkeror; # added 2015-01
+  compton-git = compton; # added 2019-05-20
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
+  cpp-gsl = microsoft_gsl; # added 2019-05-24
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
   cv = progress; # added 2015-09-06
@@ -87,9 +87,12 @@ mapAliases ({
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
-  emacsMelpa = emacs25PackagesNg; # for backward compatibility
+  emacsMelpa = emacs25Packages; # for backward compatibility
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
-  emacsPackagesNgGen = emacsPackagesNgFor; # added 2018-08-18
+  emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
+  emacsPackagesNgFor = emacsPackagesFor; # added 2019-08-07
+  emacsPackagesNg = emacsPackages; # added 2019-08-07
+  emby = throw "The Emby derivation has been removed, see jellyfin instead for a free software fork."; # added 2019-05-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
@@ -99,22 +102,32 @@ mapAliases ({
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
   flameGraph = flamegraph; # added 2018-04-25
-  font-awesome-ttf = font-awesome_4; # 2018-02-25
+  font-awesome-ttf = font-awesome; # 2018-02-25
+  font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
   gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
   gdb-multitarget = gdb; # added 2017-11-13
+  gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   glib_networking = glib-networking; # added 2018-02-25
+  gnome-mpv = celluloid; # added 2019-08-22
   gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
+  gnuradio-nacl = gr-nacl; # added 2019-05-27
+  gnuradio-gsm = gr-gsm; # added 2019-05-27
+  gnuradio-ais = gr-ais; # added 2019-05-27
+  gnuradio-limesdr = gr-limesdr; # added 2019-05-27
+  gnuradio-rds = gr-rds; # added 2019-05-27
+  gnuradio-osmosdr = gr-osmosdr; # added 2019-05-27
   gnustep-make = gnustep.make; # added 2016-7-6
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
   goimports = gotools; # added 2018-09-16
+  google-gflags = gflags; # added 2019-07-25
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
@@ -135,10 +148,14 @@ mapAliases ({
   gupnptools = gupnp-tools;  # added 2015-12-19
   gutenberg = zola;  # added 2018-11-17
   heimdalFull = heimdal; # added 2018-05-01
+  hepmc = hepmc2; # added 2019-08-05
   hicolor_icon_theme = hicolor-icon-theme; # added 2018-02-25
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08
+  icedtea8_web = adoptopenjdk-icedtea-web; # added 2019-08-21
+  icedtea_web = adoptopenjdk-icedtea-web; # added 2019-08-21
   idea = jetbrains; # added 2017-04-03
+  infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
   jbuilder = dune; # added 2018-09-09
   joseki = apache-jena-fuseki; # added 2016-02-28
@@ -166,6 +183,7 @@ mapAliases ({
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
+  libGL_driver = mesa.drivers;
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   liblapackWithoutAtlas = liblapack; # added 2018-11-05
@@ -184,6 +202,15 @@ mapAliases ({
   m3d-linux = m33-linux; # added 2016-08-13
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
+  mariadb-client = hiPrio mariadb.client; #added 2019.07.28
+  mysql-client = hiPrio mariadb.client;
+  memtest86 = memtest86plus; # added 2019-05-08
+  mesa_noglu = mesa; # added 2019-05-28
+  # NOTE: 2018-07-12: legacy alias:
+  # gcsecurity bussiness is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
+  # floating point textures patents are expired,
+  # so package reduced to alias
+  mesa_drivers = mesa.drivers;
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
@@ -210,6 +237,7 @@ mapAliases ({
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nologin = shadow; # added 2018-04-25
   nxproxy = nx-libs; # added 2019-02-15
+  nylas-mail-bin = throw "deprecated in 2019-09-11: abandoned by upstream";
   opencascade_oce = opencascade; # added 2018-04-25
   opencl-icd = ocl-icd; # added 2017-01-20
   openexr_ctl = ctl; # added 2018-04-25
@@ -234,6 +262,7 @@ mapAliases ({
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   piwik = matomo; # added 2018-01-16
   pltScheme = racket; # just to be sure
+  plexpy = tautulli; # plexpy got renamed to tautulli, added 2019-02-22
   pmtools = acpica-tools; # added 2018-11-01
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   postgresql94 = postgresql_9_4;
@@ -255,16 +284,20 @@ mapAliases ({
   pg_topn = postgresqlPackages.pg_topn;
   postgis = postgresqlPackages.postgis;
   # end
+  ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
+  processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
-  prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
+  pyo3-pack = maturin;
   pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qt_gstreamer = qt-gstreamer;  # added 2017-02
   qt_gstreamer1 = qt-gstreamer1;  # added 2017-02
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
+  qtpfsgui = throw "Is now luminanceHDR"; # added 2019-06-26
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
+  rhc = throw "deprecated in 2019-04-09: abandoned by upstream.";
   rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
   rssglx = rss-glx; #added 2015-03-25
@@ -292,6 +325,7 @@ mapAliases ({
   shared_mime_info = shared-mime-info; # added 2018-02-25
   skrooge2 = skrooge; # added 2017-02-18
   skype = skypeforlinux; # added 2017-07-27
+  slic3r-prusa3d = prusa-slicer; # added 2019-05-21
   slurm-llnl = slurm; # renamed July 2017
   slurm-llnl-full = slurm-full; # renamed July 2017
   slurm-full = slurm; # added 2018-05-1
@@ -303,6 +337,7 @@ mapAliases ({
   spice_protocol = spice-protocol; # added 2018-02-25
   sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  squid4 = squid;  # added 2019-08-22
   sshfsFuse = sshfs-fuse; # added 2016-09
   suil-qt5 = suil; # added 2018-05-01
   surf-webkit2 = surf; # added 2017-04-02
@@ -338,10 +373,12 @@ mapAliases ({
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
+  v4l_utils = v4l-utils; # added 2019-08-07
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  webkit = webkitgtk; # added 2019-03-05
   weechat-xmpp = weechatScripts.weechat-xmpp; # added 2018-09-06
   weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
   wineStaging = wine-staging; # added 2018-01-08
@@ -394,6 +431,10 @@ mapAliases ({
     gst-plugins-good = pkgs.gst-plugins-good;
     gst-plugins-ugly = pkgs.gst-plugins-ugly;
   };
+
+  # added 2019-08-01
+  mumble_git = pkgs.mumble_rc;
+  murmur_git = pkgs.murmur_rc;
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;

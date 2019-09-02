@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.3.0";
-  name = "uvcdynctrl-${version}";
+  pname = "uvcdynctrl";
 
   src = fetchFromGitHub {
     owner = "cshorler";

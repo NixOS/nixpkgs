@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage, go-bindata, go-bindata-assetfs }:
 
 buildGoPackage rec {
-  name = "drone.io-${version}";
+  pname = "drone.io";
   version = "0.8.6-20180727-${stdenv.lib.strings.substring 0 7 revision}";
   revision = "c48150767c2700d35dcc29b110a81c8b5969175e";
   goPackagePath = "github.com/drone/drone";

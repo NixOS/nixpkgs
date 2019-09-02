@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cairo, libjpeg, libXft, pkgconfig, python2, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "ntk-${version}";
+  pname = "ntk";
   version = "1.3.1000";
   src = fetchFromGitHub {
     owner = "original-male";

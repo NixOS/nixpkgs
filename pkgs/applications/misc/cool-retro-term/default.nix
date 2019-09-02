@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, qtbase, qtquick1, qmltermwidget
+{ stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
 , qtquickcontrols, qtgraphicaleffects, qmake }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "1.1.1";
-  name = "cool-retro-term-${version}";
+  pname = "cool-retro-term";
 
   src = fetchFromGitHub {
     owner = "Swordfish90";

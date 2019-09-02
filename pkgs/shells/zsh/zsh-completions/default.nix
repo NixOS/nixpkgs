@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
-  name = "zsh-completions-${version}";
+  pname = "zsh-completions";
   version = "0.30.0";
 
   src = fetchFromGitHub {

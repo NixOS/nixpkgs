@@ -2,7 +2,9 @@
 
 if theme == null then rofi-unwrapped else
 stdenv.mkDerivation {
-  name = "rofi-${rofi-unwrapped.version}";
+  pname = "rofi";
+  version = rofi-unwrapped.version;
+
   buildInputs = [ makeWrapper ];
   preferLocalBuild = true;
   passthru.unwrapped = rofi-unwrapped;

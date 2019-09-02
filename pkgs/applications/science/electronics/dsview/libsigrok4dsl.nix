@@ -6,7 +6,7 @@ systemd, alsaLib, dsview
 stdenv.mkDerivation rec {
   inherit (dsview) version src;
 
-  name = "libsigrok4dsl-${version}";
+  pname = "libsigrok4dsl";
 
   postUnpack = ''
     export sourceRoot=$sourceRoot/libsigrok4DSL
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A fork of the sigrok library for usage with DSView";
-    homepage = http://www.dreamsourcelab.com/;
+    homepage = https://www.dreamsourcelab.com/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bachp ];

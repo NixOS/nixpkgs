@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintl }:
+{ stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.2";
-  name = "irssi-${version}";
+  pname = "irssi";
+  version = "1.2.2";
 
   src = fetchurl {
-    url = "https://github.com/irssi/irssi/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0jbhd4aad3bn61svnb2rwa4dwj8qyrb2dmzribi2hfn1f719wzfv";
+    url = "https://github.com/irssi/irssi/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0g2nxazn4lszmd6mf1s36x5ablk4999g1qx7byrnvgnjsihjh62k";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses glib openssl perl libintl ];
+  buildInputs = [ ncurses glib openssl perl libintl libgcrypt libotr ];
 
   configureFlags = [
     "--with-proxy"
     "--with-bot"
     "--with-perl=yes"
+    "--with-otr=yes"
     "--enable-true-color"
   ];
 

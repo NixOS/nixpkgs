@@ -25,7 +25,7 @@ buildGoPackage rec {
       run jobs as if they were running on the hosted CirleCI application.
     '';
     maintainers = with maintainers; [ synthetica ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mit;
     homepage = https://circleci.com/;
   };

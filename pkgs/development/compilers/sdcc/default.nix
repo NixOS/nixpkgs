@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, bison, boost, flex, texinfo, gputils ? null
+{ stdenv, fetchurl, autoconf, bison, boost, flex, texinfo, zlib, gputils ? null
 , excludePorts ? [] }:
 
 with stdenv.lib;
@@ -9,15 +9,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sdcc-${version}";
-  version = "3.7.0";
+  pname = "sdcc";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${version}.tar.bz2";
-    sha256 = "13llvx0j3v5qa7qd4fh7nix4j3alpd3ccprxvx163c4q8q4lfkc5";
+    sha256 = "0dn0cy6whcrvbfh9x467jdi8dmzjrvixz2bz63pgxwzpz9rsxv4l";
   };
 
-  buildInputs = [ autoconf bison boost flex gputils texinfo ];
+  buildInputs = [ autoconf bison boost flex gputils texinfo zlib ];
 
   configureFlags = map (f: "--disable-${f}-port") excludedPorts;
 
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = http://sdcc.sourceforge.net/;
     license = with licenses; if (gputils == null) then gpl2 else unfreeRedistributable;
     maintainers = with maintainers; [ bjornfor yorickvp ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

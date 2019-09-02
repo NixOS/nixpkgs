@@ -1,6 +1,7 @@
-{ lib, python2Packages, libxslt, docbook_xsl_ns, openssh, cacert
+{ lib, python2Packages, libxslt, docbook_xsl_ns, openssh, cacert, nixopsAzurePackages ? []
 # version args
 , src, version
+, meta ? {}
 }:
 
 python2Packages.buildPythonApplication {
@@ -15,11 +16,6 @@ python2Packages.buildPythonApplication {
       boto3
       hetzner
       libcloud
-      azure-storage
-      azure-mgmt-compute
-      azure-mgmt-network
-      azure-mgmt-resource
-      azure-mgmt-storage
       adal
       # Go back to sqlite once Python 2.7.13 is released
       pysqlite
@@ -27,7 +23,7 @@ python2Packages.buildPythonApplication {
       digital-ocean
       libvirt
       typing
-    ];
+    ] ++ nixopsAzurePackages;
 
   checkPhase =
   # Ensure, that there are no (python) import errors
@@ -52,8 +48,8 @@ python2Packages.buildPythonApplication {
   meta = {
     homepage = https://github.com/NixOS/nixops;
     description = "NixOS cloud provisioning and deployment tool";
-    maintainers = with lib.maintainers; [ eelco rob domenkozar ];
+    maintainers = with lib.maintainers; [ aminechikhaoui eelco rob domenkozar ];
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl3;
-  };
+  } // meta;
 }

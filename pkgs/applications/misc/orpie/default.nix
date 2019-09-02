@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ocamlPackages, ncurses, gsl }:
 
 stdenv.mkDerivation rec {
-  name = "orpie-${version}";
+  pname = "orpie";
   version = "1.5.2";
 
   src = fetchurl {
-    url = "http://pessimization.com/software/orpie/${name}.tar.gz";
+    url = "http://pessimization.com/software/orpie/${pname}-${version}.tar.gz";
     sha256 = "0v9xgpcf186ni55rkmx008msyszw0ypd6rd98hgwpih8yv3pymfy";
   };
 

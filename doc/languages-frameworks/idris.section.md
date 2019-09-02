@@ -11,10 +11,21 @@ $ # On non-NixOS
 $ nix-env -i nixpkgs.idris
 ```
 
-This however only provides the `prelude` and `base` libraries. To install additional libraries:
+This however only provides the `prelude` and `base` libraries. To install idris with additional libraries, you can use the `idrisPackages.with-packages` function, e.g. in an overlay in `~/.config/nixpkgs/overlays/my-idris.nix`:
+
+```nix
+self: super: {
+  myIdris = with self.idrisPackages; with-packages [ contrib pruviloj ];
+}
+```
+
+And then:
 
 ```
-$ nix-env -iE 'pkgs: pkgs.idrisPackages.with-packages (with pkgs.idrisPackages; [ contrib pruviloj ])'
+$ # On NixOS
+$ nix-env -iA nixos.myIdris
+$ # On non-NixOS
+$ nix-env -iA nixpkgs.myIdris
 ```
 
 To see all available Idris packages:
@@ -113,3 +124,21 @@ in another file (say `default.nix`) to be able to build it with
 ```
 $ nix-build -A yaml
 ```
+
+## Passing options to `idris` commands
+
+The `build-idris-package` function provides also optional input values to set additional options for the used `idris` commands.
+
+Specifically, you can set `idrisBuildOptions`, `idrisTestOptions`, `idrisInstallOptions` and `idrisDocOptions` to provide additional options to the `idris` command respectively when building, testing, installing and generating docs for your package.
+
+For example you could set
+
+```
+build-idris-package {
+  idrisBuildOptions = [ "--log" "1" "--verbose" ]
+
+  ...
+}
+```
+
+to require verbose output during `idris` build phase.

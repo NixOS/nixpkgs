@@ -1,11 +1,10 @@
-{ stdenv, fetchFromGitHub, jdk, maven, writeText, makeWrapper, jre_headless, pcsclite }:
+{ stdenv, fetchFromGitHub, jdk, maven, makeWrapper, jre_headless, pcsclite }:
 
 # TODO: This is quite a bit of duplicated logic with gephi. Factor it out?
 stdenv.mkDerivation rec {
   pname = "global-platform-pro";
   version = "18.09.14";
   GPPRO_VERSION = "18.09.14-0-gb439b52"; # git describe --tags --always --long --dirty
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "martinpaljak";
@@ -15,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   deps = stdenv.mkDerivation {
-    name = "${name}-deps";
+    name = "${pname}-${version}-deps";
     inherit src;
     nativeBuildInputs = [ jdk maven ];
     installPhase = ''

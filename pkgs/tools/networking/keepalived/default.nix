@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libnfnetlink, libnl, net_snmp, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "keepalived-${version}";
+  pname = "keepalived";
   version = "1.4.2";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
  ];
 
   meta = with stdenv.lib; {
-    homepage = http://keepalived.org;
+    homepage = https://keepalived.org;
     description = "Routing software written in C";
     license = licenses.gpl2;
     platforms = platforms.linux;

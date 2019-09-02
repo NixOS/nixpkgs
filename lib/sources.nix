@@ -12,8 +12,8 @@ rec {
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
   cleanSourceFilter = name: type: let baseName = baseNameOf (toString name); in ! (
-    # Filter out Subversion and CVS directories.
-    (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
+    # Filter out version control software files/directories
+    (baseName == ".git" || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
     # Filter out editor backup / swap files.
     lib.hasSuffix "~" baseName ||
     builtins.match "^\\.sw[a-z]$" baseName != null ||
@@ -53,12 +53,16 @@ rec {
   # Filter sources by a list of regular expressions.
   #
   # E.g. `src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]`
-  sourceByRegex = src: regexes: cleanSourceWith {
-    filter = (path: type:
-      let relPath = lib.removePrefix (toString src + "/") (toString path);
-      in lib.any (re: builtins.match re relPath != null) regexes);
-    inherit src;
-  };
+  sourceByRegex = src: regexes:
+    let
+      isFiltered = src ? _isLibCleanSourceWith;
+      origSrc = if isFiltered then src.origSrc else src;
+    in lib.cleanSourceWith {
+      filter = (path: type:
+        let relPath = lib.removePrefix (toString origSrc + "/") (toString path);
+        in lib.any (re: builtins.match re relPath != null) regexes);
+      inherit src;
+    };
 
   # Get all files ending with the specified suffices from the given
   # directory or its descendants.  E.g. `sourceFilesBySuffices ./dir
@@ -83,7 +87,7 @@ rec {
                  # Sometimes git stores the commitId directly in the file but
                  # sometimes it stores something like: «ref: refs/heads/branch-name»
                  matchRef    = match "^ref: (.*)$" fileContent;
-             in if   isNull matchRef
+             in if   matchRef == null
                 then fileContent
                 else readCommitFromFile (lib.head matchRef) path
            # Sometimes, the file isn't there at all and has been packed away in the
@@ -92,7 +96,7 @@ rec {
            then
              let fileContent = readFile packedRefsName;
                  matchRef    = match (".*\n([^\n ]*) " + file + "\n.*") fileContent;
-             in if   isNull matchRef
+             in if   matchRef == null
                 then throw ("Could not find " + file + " in " + packedRefsName)
                 else lib.head matchRef
            else throw ("Not a .git directory: " + path);

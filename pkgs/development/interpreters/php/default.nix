@@ -1,9 +1,10 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
-{ lib, stdenv, fetchurl, flex, bison, autoconf
+{ lib, stdenv, fetchurl, autoconf, bison, libtool, pkgconfig, re2c
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+, openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2, libzip
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
+, libzip, valgrind
 }:
 
 with lib;
@@ -16,7 +17,7 @@ let
   , withSystemd ? config.php.systemd or stdenv.isLinux
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
-  , mhashSupport ? config.php.mhash or true
+  , mhashSupport ? config.php.mhash or false
   , mysqlndSupport ? config.php.mysqlnd or true
   , mysqliSupport ? config.php.mysqli or true
   , pdo_mysqlSupport ? config.php.pdo_mysql or true
@@ -47,17 +48,19 @@ let
   , ftpSupport ? config.php.ftp or true
   , fpmSupport ? config.php.fpm or true
   , gmpSupport ? config.php.gmp or true
-  , ztsSupport ? config.php.zts or false
+  , ztsSupport ? (config.php.zts or false) || (apxs2Support)
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
   , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
-  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.3")
+  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.2")
   , phpdbgSupport ? config.php.phpdbg or true
   , cgiSupport ? config.php.cgi or true
   , cliSupport ? config.php.cli or true
   , pharSupport ? config.php.phar or true
   , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
+  , cgotoSupport ? config.php.cgoto or false
+  , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
   }:
 
     let
@@ -71,8 +74,8 @@ let
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [ pkgconfig autoconf ];
-      buildInputs = [ flex bison ]
+      nativeBuildInputs = [ autoconf bison libtool pkgconfig re2c ];
+      buildInputs = [ ]
         ++ optional (versionOlder version "7.3") pcre
         ++ optional (versionAtLeast version "7.3") pcre2
         ++ optional withSystemd systemd
@@ -102,7 +105,8 @@ let
         ++ optional sodiumSupport libsodium
         ++ optional tidySupport html-tidy
         ++ optional argon2Support libargon2
-        ++ optional libzipSupport libzip;
+        ++ optional libzipSupport libzip
+        ++ optional valgrindSupport valgrind;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
 
@@ -183,7 +187,9 @@ let
       ++ optional (!cgiSupport) "--disable-cgi"
       ++ optional (!cliSupport) "--disable-cli"
       ++ optional (!pharSupport) "--disable-phar"
-      ++ optional xmlrpcSupport "--with-xmlrpc";
+      ++ optional xmlrpcSupport "--with-xmlrpc"
+      ++ optional cgotoSupport "--enable-re2c-cgoto"
+      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}";
 
       hardeningDisable = [ "bindnow" ];
 
@@ -221,13 +227,13 @@ let
       '';
 
       src = fetchurl {
-        url = "http://www.php.net/distributions/php-${version}.tar.bz2";
+        url = "https://www.php.net/distributions/php-${version}.tar.bz2";
         inherit sha256;
       };
 
       meta = with stdenv.lib; {
         description = "An HTML-embedded scripting language";
-        homepage = http://www.php.net/;
+        homepage = https://www.php.net/;
         license = licenses.php301;
         maintainers = with maintainers; [ globin etu ];
         platforms = platforms.all;
@@ -247,25 +253,17 @@ let
     };
 
 in {
-  php71 = generic {
-    version = "7.1.26";
-    sha256 = "1riaaizyl0jv9p6b8sm8xxj8iqz4p4dddwdag03n1r67dfl1qdav";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
-  };
-
   php72 = generic {
-    version = "7.2.15";
-    sha256 = "0m05dmad138qfxcb2z4czf9pfv1746g9yzlch48kjikajhb7cgn9";
+    version = "7.2.21";
+    sha256 = "1vqldc2namfblwyv87fgpfffkjpzawfpcp48f40nfdl3pshq6c9l";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.2";
-    sha256 = "1p8amf91i6lrrphd6ypfh3kic64bpqf04dxp7dj1xxnjrgd50vwl";
+    version = "7.3.8";
+    sha256 = "1xbndimrfamf97m3vln842g9w1ikq071gjfkk15ai7sx2wqccrnm";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;

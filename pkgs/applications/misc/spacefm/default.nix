@@ -3,7 +3,7 @@
 , jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks2 }:
 
 stdenv.mkDerivation rec {
-  name = "spacefm-${version}";
+  pname = "spacefm";
   version = "1.0.6";
 
   src = fetchFromGitHub {

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, intltool, file,
-  desktop-file-utils, enchant, gnome3, gst_all_1, hicolor-icon-theme,
+  desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
   libsigcxx, libxmlxx, xdg_utils, isocodes, wrapGAppsHook
 }:
 
@@ -8,7 +8,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "subtitleeditor-${version}";
+  pname = "subtitleeditor";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "kitone";
@@ -28,8 +29,8 @@ stdenv.mkDerivation rec {
   buildInputs =  [
     desktop-file-utils
     enchant
-    gnome3.gtk
-    gnome3.gtkmm
+    gtk3
+    gtkmm3
     gst_all_1.gstreamer
     gst_all_1.gstreamermm
     gst_all_1.gst-plugins-base

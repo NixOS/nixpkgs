@@ -25,7 +25,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "nixui-${version}";
+  pname = "nixui";
   inherit version src;
   installPhase = ''
     mkdir -p $out/bin

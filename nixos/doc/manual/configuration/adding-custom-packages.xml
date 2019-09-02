@@ -14,8 +14,8 @@
 xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs
   manual</link>. In short, you clone Nixpkgs:
 <screen>
-$ git clone https://github.com/NixOS/nixpkgs
-$ cd nixpkgs
+<prompt>$ </prompt>git clone https://github.com/NixOS/nixpkgs
+<prompt>$ </prompt>cd nixpkgs
 </screen>
   Then you write and test the package as described in the Nixpkgs manual.
   Finally, you add it to <literal>environment.systemPackages</literal>, e.g.
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
 </programlisting>
   This allows testing the package easily:
 <screen>
-$ nix-build my-hello.nix
-$ ./result/bin/hello
+<prompt>$ </prompt>nix-build my-hello.nix
+<prompt>$ </prompt>./result/bin/hello
 Hello, world!
 </screen>
  </para>

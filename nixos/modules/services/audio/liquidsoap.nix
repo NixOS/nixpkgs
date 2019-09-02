@@ -14,15 +14,10 @@ let
         description = "${name} liquidsoap stream";
         wantedBy = [ "multi-user.target" ];
         path = [ pkgs.wget ];
-        preStart =
-          ''
-            mkdir -p /var/log/liquidsoap
-            chown liquidsoap -R /var/log/liquidsoap
-          '';
         serviceConfig = {
-          PermissionsStartOnly="true";
           ExecStart = "${pkgs.liquidsoap}/bin/liquidsoap ${stream}";
           User = "liquidsoap";
+          LogsDirectory = "liquidsoap";
         };
       };
     };

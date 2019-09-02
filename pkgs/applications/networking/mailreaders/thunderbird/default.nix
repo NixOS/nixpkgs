@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, fetchpatch
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip
 , libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip
 , hunspell, libevent, libstartup_notification
 , icu, libpng, jemalloc
 , autoconf213, which, m4
-, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl, runtimeShell
 , cargo, rustc, llvmPackages
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
@@ -23,12 +23,12 @@ let
   wrapperTool = if enableGTK3 then wrapGAppsHook else makeWrapper;
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
-  name = "thunderbird-${version}";
-  version = "60.5.1";
+  pname = "thunderbird";
+  version = "60.8.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "1y8r96rzp1rv6ycn98l2c1bpa26gszhbijhrwk6llw8aq33xhx9dpqpbgfsnrsbn4a5ff14h8m9g82snqysrzb7ldd2i5lbas0pryys";
+    sha512 = "1cd1ps4r70bnxn9kydljsp776dazfzfsghc5zwp1xz6p3cwb9g0gybj677sac7y3ma2wsq1xbqk20q35n7gjz3k1zzhmpxyii558rdl";
   };
 
   # from firefox, but without sound libraries
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
       hunspell libevent libstartup_notification /* cairo */
       icu libpng jemalloc
     ]
-    ++ lib.optionals enableGTK3 [ gtk3 gnome3.defaultIconTheme ];
+    ++ lib.optionals enableGTK3 [ gtk3 gnome3.adwaita-icon-theme ];
 
   # from firefox + m4 + wrapperTool
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
@@ -50,6 +50,14 @@ in stdenv.mkDerivation rec {
   patches = [
     # Remove buildconfig.html to prevent a dependency on clang etc.
     ./no-buildconfig.patch
+
+    # Needed on older branches since rustc: 1.32.0 -> 1.33.0
+    (fetchurl {
+      name = "missing-documentation.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/deny_missing_docs.patch"
+          + "?h=firefox-esr&id=03bdd01f9cf";
+      sha256 = "1i33n3fgwc8d0v7j4qn7lbdax0an6swar12gay3q2nwrhg3ic4fb";
+    })
   ];
 
   configureFlags =
@@ -66,7 +74,7 @@ in stdenv.mkDerivation rec {
       "--with-system-libevent"
       "--with-system-png" # needs APNG support
       "--with-system-icu"
-      "--enable-rust-simd"
+      #"--enable-rust-simd" # not supported since rustc 1.32.0 -> 1.33.0; TODO: probably OK since 68.0.0
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
@@ -193,6 +201,6 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit stdenv writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
+    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl runtimeShell;
   };
 }

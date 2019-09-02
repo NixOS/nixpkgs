@@ -3,36 +3,34 @@
 , fetchPypi
 , python
 , azure-mgmt-common
+, isPy3k
 }:
 
 
 buildPythonPackage rec {
-  version = "0.20.1";
+  version = "2.2.0";
   pname = "azure-mgmt-resource";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0slh9qfm5nfacrdm3lid0sr8kwqzgxvrwf27laf9v38kylkfqvml";
+    sha256 = "173pxgly95dwblp4nj4l70zb0gasibgcjmcynxwa5282plynhgdw";
   };
 
-  preConfigure = ''
-    # Patch to make this package work on requests >= 2.11.x
-    # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-    sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/resource/resourcemanagement.py
-  '';
-
-  postInstall = ''
+  postInstall = if isPy3k then "" else ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
   '';
 
   propagatedBuildInputs = [ azure-mgmt-common ];
 
+  # has no tests
+  doCheck = false;
+
   meta = with pkgs.lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = "https://azure.microsoft.com/en-us/develop/python/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ olcai ];
+    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/resources?view=azure-python;
+    license = licenses.mit;
+    maintainers = with maintainers; [ olcai mwilsoninsight ];
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv, lib, gtest, fetchFromGitHub, cmake, boost, eigen, python, vtk, zlib }:
+{ stdenv, gtest, fetchFromGitHub, cmake, boost, eigen, python, vtk, zlib }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
-  name = "mirtk-${version}";
+  pname = "mirtk";
 
   src = fetchFromGitHub {
     owner = "BioMedIA";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  cmakeFlags = "-DWITH_VTK=ON -DBUILD_ALL_MODULES=ON -DBUILD_TESTING=ON";
+  cmakeFlags = "-DWITH_VTK=ON -DBUILD_ALL_MODULES=ON";
 
   doCheck = true;
 

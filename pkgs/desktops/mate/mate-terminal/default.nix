@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, gnome3, gtk3, vte, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-terminal-${version}";
-  version = "1.20.2";
+  pname = "mate-terminal";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0fqyi0az4ax1gyk5gymd7ssq2crdcd7slmqljc1b1pa283ql7p3q";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "08210ry5lrivsgzqpdaxrchhpj0n5s1q0x4pxmwdpnksjpcj11mn";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The MATE Terminal Emulator";
-    homepage = http://mate-desktop.org;
+    homepage = https://mate-desktop.org;
     license = licenses.gpl3;
     platforms = platforms.unix;
   };

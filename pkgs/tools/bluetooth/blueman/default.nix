@@ -8,11 +8,11 @@ let
   binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp ];
 
 in stdenv.mkDerivation rec {
-  name = "blueman-${version}";
+  pname = "blueman";
   version = "2.0.8";
 
   src = fetchurl {
-    url = "https://github.com/blueman-project/blueman/releases/download/${version}/${name}.tar.xz";
+    url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "0kkh6jppqcn3yf70vnny1l015kxrz3dxw4g774gl02lh9ixx1bq4";
   };
 

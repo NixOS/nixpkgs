@@ -8,8 +8,8 @@ let
   cfg = config.services.fwupd;
   originalEtc =
     let
-      mkEtcFile = n: nameValuePair n { source = "${pkgs.fwupd}/etc/${n}"; };
-    in listToAttrs (map mkEtcFile pkgs.fwupd.filesInstalledToEtc);
+      mkEtcFile = n: nameValuePair n { source = "${cfg.package}/etc/${n}"; };
+    in listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
   extraTrustedKeys =
     let
       mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
@@ -24,7 +24,7 @@ let
     "fwupd/remotes.d/fwupd-tests.conf" = {
       source = pkgs.runCommand "fwupd-tests-enabled.conf" {} ''
         sed "s,^Enabled=false,Enabled=true," \
-        "${pkgs.fwupd.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
+        "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
       '';
     };
   } else {};
@@ -43,7 +43,7 @@ in {
       };
 
       blacklistDevices = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
         description = ''
@@ -52,7 +52,7 @@ in {
       };
 
       blacklistPlugins = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [ "test" ];
         example = [ "udev" ];
         description = ''
@@ -77,13 +77,21 @@ in {
           <link xlink:href="https://github.com/hughsie/fwupd/blob/master/data/installed-tests/README.md">installed tests</link>.
         '';
       };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.fwupd;
+        description = ''
+          Which fwupd package to use.
+        '';
+      };
     };
   };
 
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.fwupd ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc = {
       "fwupd/daemon.conf" = {
@@ -102,11 +110,11 @@ in {
 
     } // originalEtc // extraTrustedKeys // testRemote;
 
-    services.dbus.packages = [ pkgs.fwupd ];
+    services.dbus.packages = [ cfg.package ];
 
-    services.udev.packages = [ pkgs.fwupd ];
+    services.udev.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.fwupd ];
+    systemd.packages = [ cfg.package ];
 
     systemd.tmpfiles.rules = [
       "d /var/lib/fwupd 0755 root root -"

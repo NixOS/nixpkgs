@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   version = elk5Version;
-  name = "logstash-${version}";
+  pname = "logstash";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
-    sha256 = "0qcq4c4nysdscbjrikhw653xwbi4dwscynjzyndsp8l21vl81x7p";
+    url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}.tar.gz";
+    sha256 = "0sax9p2bwjdrcvkm1mgvljdjn2qkyjd5i8rzajdn3n98gqin1la0";
   };
 
   dontBuild         = true;

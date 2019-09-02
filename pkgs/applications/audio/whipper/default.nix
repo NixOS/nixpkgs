@@ -44,7 +44,7 @@ python2.pkgs.buildPythonApplication rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/whipper-team/whipper;
     description = "A CD ripper aiming for accuracy over speed";
-    maintainers = with maintainers; [ rycee jgeerds ];
+    maintainers = with maintainers; [ rycee ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

@@ -47,8 +47,8 @@
     Short version:
    </para>
 <screen>
-$ curl https://nixos.org/nix/install | sh
-$ . $HOME/.nix-profile/etc/profile.d/nix.sh # …or open a fresh shell</screen>
+<prompt>$ </prompt>curl https://nixos.org/nix/install | sh
+<prompt>$ </prompt>. $HOME/.nix-profile/etc/profile.d/nix.sh # …or open a fresh shell</screen>
    <para>
     More details in the
     <link
@@ -65,14 +65,14 @@ $ . $HOME/.nix-profile/etc/profile.d/nix.sh # …or open a fresh shell</screen>
     the <literal>nixpkgs</literal> channel by default.
    </para>
 <screen>
-$ nix-channel --list
+<prompt>$ </prompt>nix-channel --list
 nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
    <para>
     As that channel gets released without running the NixOS tests, it will be
     safer to use the <literal>nixos-*</literal> channels instead:
    </para>
 <screen>
-$ nix-channel --add https://nixos.org/channels/nixos-<replaceable>version</replaceable> nixpkgs</screen>
+<prompt>$ </prompt>nix-channel --add https://nixos.org/channels/nixos-<replaceable>version</replaceable> nixpkgs</screen>
    <para>
     You may want to throw in a <literal>nix-channel --update</literal> for good
     measure.
@@ -89,7 +89,7 @@ $ nix-channel --add https://nixos.org/channels/nixos-<replaceable>version</repla
     NixOS partition. They are installed by default on NixOS, but you don't have
     NixOS yet..
    </para>
-<screen>$ nix-env -iE "_: with import &lt;nixpkgs/nixos&gt; { configuration = {}; }; with config.system.build; [ nixos-generate-config nixos-install nixos-enter manual.manpages ]"</screen>
+<screen><prompt>$ </prompt>nix-env -iE "_: with import &lt;nixpkgs/nixos&gt; { configuration = {}; }; with config.system.build; [ nixos-generate-config nixos-install nixos-enter manual.manpages ]"</screen>
   </listitem>
   <listitem>
    <note>
@@ -116,7 +116,7 @@ $ nix-channel --add https://nixos.org/channels/nixos-<replaceable>version</repla
    <para>
     Generate your NixOS configuration:
    </para>
-<screen>$ sudo `which nixos-generate-config` --root /mnt</screen>
+<screen><prompt>$ </prompt>sudo `which nixos-generate-config` --root /mnt</screen>
    <para>
     You'll probably want to edit the configuration files. Refer to the
     <literal>nixos-generate-config</literal> step in
@@ -148,8 +148,8 @@ $ nix-channel --add https://nixos.org/channels/nixos-<replaceable>version</repla
     distribution:
    </para>
 <screen>
-$ sudo groupadd -g 30000 nixbld
-$ sudo useradd -u 30000 -g nixbld -G nixbld nixbld</screen>
+<prompt>$ </prompt>sudo groupadd -g 30000 nixbld
+<prompt>$ </prompt>sudo useradd -u 30000 -g nixbld -G nixbld nixbld</screen>
   </listitem>
   <listitem>
    <para>
@@ -161,7 +161,7 @@ $ sudo useradd -u 30000 -g nixbld -G nixbld nixbld</screen>
      existing systems without the help of a rescue USB drive or similar.
     </para>
    </warning>
-<screen>$ sudo PATH="$PATH" NIX_PATH="$NIX_PATH" `which nixos-install` --root /mnt</screen>
+<screen><prompt>$ </prompt>sudo PATH="$PATH" NIX_PATH="$NIX_PATH" `which nixos-install` --root /mnt</screen>
    <para>
     Again, please refer to the <literal>nixos-install</literal> step in
     <xref linkend="sec-installation" /> for more information.
@@ -175,8 +175,8 @@ $ sudo useradd -u 30000 -g nixbld -G nixbld nixbld</screen>
     Optionally, you may want to clean up your non-NixOS distribution:
    </para>
 <screen>
-$ sudo userdel nixbld
-$ sudo groupdel nixbld</screen>
+<prompt>$ </prompt>sudo userdel nixbld
+<prompt>$ </prompt>sudo groupdel nixbld</screen>
    <para>
     If you do not wish to keep the Nix package manager installed either, run
     something like <literal>sudo rm -rv ~/.nix-* /nix</literal> and remove the
@@ -193,7 +193,7 @@ $ sudo groupdel nixbld</screen>
    <para>
     Generate your NixOS configuration:
    </para>
-<screen>$ sudo `which nixos-generate-config` --root /</screen>
+<screen><prompt>$ </prompt>sudo `which nixos-generate-config` --root /</screen>
    <para>
     Note that this will place the generated configuration files in
     <literal>/etc/nixos</literal>. You'll probably want to edit the
@@ -212,21 +212,21 @@ $ sudo groupdel nixbld</screen>
    </para>
 <programlisting>
 <link linkend="opt-users.users._name__.initialHashedPassword">users.users.root.initialHashedPassword</link> = "";
-              </programlisting>
+</programlisting>
   </listitem>
   <listitem>
    <para>
     Build the NixOS closure and install it in the <literal>system</literal>
     profile:
    </para>
-<screen>$ nix-env -p /nix/var/nix/profiles/system -f '&lt;nixpkgs/nixos&gt;' -I nixos-config=/etc/nixos/configuration.nix -iA system</screen>
+<screen><prompt>$ </prompt>nix-env -p /nix/var/nix/profiles/system -f '&lt;nixpkgs/nixos&gt;' -I nixos-config=/etc/nixos/configuration.nix -iA system</screen>
   </listitem>
   <listitem>
    <para>
     Change ownership of the <literal>/nix</literal> tree to root (since your
     Nix install was probably single user):
    </para>
-<screen>$ sudo chown -R 0.0 /nix</screen>
+<screen><prompt>$ </prompt>sudo chown -R 0.0 /nix</screen>
   </listitem>
   <listitem>
    <para>
@@ -284,16 +284,16 @@ $ sudo groupdel nixbld</screen>
     Let's create the files:
    </para>
 <screen>
-$ sudo touch /etc/NIXOS
-$ sudo touch /etc/NIXOS_LUSTRATE
-            </screen>
+<prompt>$ </prompt>sudo touch /etc/NIXOS
+<prompt>$ </prompt>sudo touch /etc/NIXOS_LUSTRATE
+</screen>
    <para>
     Let's also make sure the NixOS configuration files are kept once we reboot
     on NixOS:
    </para>
 <screen>
-$ echo etc/nixos | sudo tee -a /etc/NIXOS_LUSTRATE
-            </screen>
+<prompt>$ </prompt>echo etc/nixos | sudo tee -a /etc/NIXOS_LUSTRATE
+</screen>
   </listitem>
   <listitem>
    <para>
@@ -312,8 +312,9 @@ $ echo etc/nixos | sudo tee -a /etc/NIXOS_LUSTRATE
     </para>
    </warning>
 <screen>
-$ sudo mv -v /boot /boot.bak &amp;&amp;
-    sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot</screen>
+<prompt>$ </prompt>sudo mv -v /boot /boot.bak &amp;&amp;
+sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+</screen>
    <para>
     Cross your fingers, reboot, hopefully you should get a NixOS prompt!
    </para>

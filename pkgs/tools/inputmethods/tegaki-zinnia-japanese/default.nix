@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "tegaki-zinnia-japanese-${version}";
+  pname = "tegaki-zinnia-japanese";
   version = "0.3";
 
   src = fetchurl {

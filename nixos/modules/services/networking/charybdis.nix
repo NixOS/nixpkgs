@@ -21,14 +21,14 @@ in
       enable = mkEnableOption "Charybdis IRC daemon";
 
       config = mkOption {
-        type = types.string;
+        type = types.str;
         description = ''
           Charybdis IRC daemon configuration file.
         '';
       };
 
       statedir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/lib/charybdis";
         description = ''
           Location of the state directory of charybdis.
@@ -36,7 +36,7 @@ in
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "ircd";
         description = ''
           Charybdis IRC daemon user.
@@ -44,7 +44,7 @@ in
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "ircd";
         description = ''
           Charybdis IRC daemon group.
@@ -83,6 +83,10 @@ in
         gid = config.ids.gids.ircd;
       };
 
+      systemd.tmpfiles.rules = [
+        "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
+      ];
+
       systemd.services.charybdis = {
         description = "Charybdis IRC daemon";
         wantedBy = [ "multi-user.target" ];
@@ -93,16 +97,11 @@ in
           ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
           Group = cfg.group;
           User = cfg.user;
-          PermissionsStartOnly = true; # preStart needs to run with root permissions
         };
-        preStart = ''
-          ${coreutils}/bin/mkdir -p ${cfg.statedir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.statedir}
-        '';
       };
 
     }
-    
+
     (mkIf (cfg.motd != null) {
       environment.etc."charybdis/ircd.motd".text = cfg.motd;
     })

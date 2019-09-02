@@ -7,7 +7,6 @@ stdenv.mkDerivation rec {
 
   pname = "squashfuse";
   version = "0.1.103";
-  name = "${pname}-${version}";
 
   meta = {
     description = "FUSE filesystem to mount squashfs archives";
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "vasi";
     repo  = "${pname}";
     rev = "540204955134eee44201d50132a5f66a246bcfaf";
-    sha256 = "07jv4qjjz9ky3mw3p5prgs19g1bna9dcd7jjdz8083s1wyipdgcq";
+    sha256 = "062s77y32p80vc24a79z31g90b9wxzvws1xvicgx5fn1pd0xa0q6";
   };
 
   nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];

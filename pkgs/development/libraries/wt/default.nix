@@ -7,7 +7,8 @@ let
   generic =
     { version, sha256 }:
     stdenv.mkDerivation rec {
-      name = "wt-${version}";
+      pname = "wt";
+      inherit version;
 
       src = fetchFromGitHub {
         owner = "emweb";
@@ -34,7 +35,7 @@ let
       ];
 
       meta = with stdenv.lib; {
-        homepage = https://www.webtoolkit.eu/wt;
+        homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
         platforms = platforms.linux;
         license = licenses.gpl2;
@@ -43,12 +44,12 @@ let
     };
 in {
   wt3 = generic {
-    version = "3.3.11";
-    sha256 = "1s1bwg3s7brnspr9ya1vg5mr29dbvhf05s606fiv409b7ladqvxq";
+    version = "3.4.0";
+    sha256 = "0y0b2h9jf5cg1gdh48dj32pj5nsvipab1cgygncxf98c46ikhysg";
   };
 
   wt4 = generic {
-    version = "4.0.5";
-    sha256 = "1gn8f30mjmn9aaxdazk49wijz37nglfww15ydrjiyhl6v5xhsjdv";
+    version = "4.1.0";
+    sha256 = "1a9nl5gs8m8pssf2l3z6kbl2rc9fw5ad7lfslw5yr3gzi0zqn05x";
   };
 }

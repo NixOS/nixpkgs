@@ -11,9 +11,9 @@ let
   videoDrivers = config.services.xserver.videoDrivers;
 
   makePackage = p: pkgs.buildEnv {
-    name = "mesa-drivers+txc-${p.mesa_drivers.version}";
+    name = "mesa-drivers+txc-${p.mesa.version}";
     paths =
-      [ p.mesa_drivers
+      [ p.mesa.drivers
         (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
       ];
   };
@@ -118,6 +118,19 @@ in
           set. This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
         '';
       };
+
+      setLdLibraryPath = mkOption {
+        type = types.bool;
+        internal = true;
+        default = false;
+        description = ''
+          Whether the <literal>LD_LIBRARY_PATH</literal> environment variable
+          should be set to the locations of driver libraries. Drivers which
+          rely on overriding libraries should set this to true. Drivers which
+          support <literal>libglvnd</literal> and other dispatch libraries
+          instead of overriding libraries should not set this.
+        '';
+      };
     };
 
   };
@@ -145,11 +158,8 @@ in
       )
     ];
 
-    environment.sessionVariables.LD_LIBRARY_PATH =
-      [ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib";
-
-    environment.variables.XDG_DATA_DIRS =
-      [ "/run/opengl-driver/share" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/share";
+    environment.sessionVariables.LD_LIBRARY_PATH = mkIf cfg.setLdLibraryPath
+      ([ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib");
 
     hardware.opengl.package = mkDefault (makePackage pkgs);
     hardware.opengl.package32 = mkDefault (makePackage pkgs.pkgsi686Linux);

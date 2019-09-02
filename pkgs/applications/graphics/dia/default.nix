@@ -4,7 +4,7 @@ libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui, hicolor-icon-them
 gtk-mac-integration-gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "dia-${version}";
+  pname = "dia";
   version = "0.97.3.20170622";
 
   src = fetchgit {

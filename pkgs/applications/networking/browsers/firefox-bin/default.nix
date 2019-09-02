@@ -9,7 +9,7 @@
 , fontconfig
 , freetype
 , gconf
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , gtk2
@@ -31,7 +31,7 @@
 , libgnome
 , libgnomeui
 , libnotify
-, defaultIconTheme
+, gnome3
 , libGLU_combined
 , nspr
 , nss
@@ -49,6 +49,8 @@
 , gnugrep
 , gnupg
 , ffmpeg
+, runtimeShell
+, systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
 
 let
@@ -67,8 +69,6 @@ let
 
   sourceMatches = locale: source:
       (isPrefixOf source.locale locale) && source.arch == arch;
-
-  systemLocale = config.i18n.defaultLocale or "en-US";
 
   policies = {
     DisableAppUpdate = true;
@@ -104,7 +104,7 @@ stdenv.mkDerivation {
       fontconfig
       freetype
       gconf
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
       gtk2
@@ -141,7 +141,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 defaultIconTheme ];
+  buildInputs = [ wrapGAppsHook gtk3 gnome3.adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -191,7 +191,7 @@ stdenv.mkDerivation {
   # update with:
   # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
-    inherit stdenv name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
+    inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
         then "http://archive.mozilla.org/pub/devedition/releases/"
@@ -205,6 +205,6 @@ stdenv.mkDerivation {
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
     platforms = builtins.attrNames mozillaPlatforms;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ taku0 ];
   };
 }

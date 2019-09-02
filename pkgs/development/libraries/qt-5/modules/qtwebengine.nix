@@ -20,8 +20,6 @@
 
 with stdenv.lib;
 
-let qt56 = qtCompatVersion == "5.6"; in
-
 qtModule {
   name = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
@@ -32,6 +30,9 @@ qtModule {
   outputs = [ "bin" "dev" "out" ];
 
   enableParallelBuilding = true;
+
+  # Don’t use the gn setup hook
+  dontUseGnConfigure = true;
 
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
@@ -45,9 +46,9 @@ qtModule {
     # Patch Chromium build files
     + optionalString (lib.versionOlder qtCompatVersion "5.12") ''
       substituteInPlace ./src/3rdparty/chromium/build/common.gypi --replace /bin/echo ${coreutils}/bin/echo
-      substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/toolchain.gypi \
+      substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/toolchain.gypi \
         --replace /bin/echo ${coreutils}/bin/echo
-      substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/standalone.gypi \
+      substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/standalone.gypi \
         --replace /bin/echo ${coreutils}/bin/echo
     ''
     # Patch library paths in Qt sources
@@ -67,39 +68,19 @@ qtModule {
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
     + optionalString stdenv.isDarwin (''
-      # Remove annoying xcode check
-      substituteInPlace mkspecs/features/platform.prf \
-        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false \
-        --replace "/usr/bin/xcodebuild" "xcodebuild"
-
-      substituteInPlace src/3rdparty/chromium/build/mac_toolchain.py \
-        --replace "/usr/bin/xcode-select" "xcode-select"
-
       substituteInPlace src/core/config/mac_osx.pri \
-        --replace /usr ${stdenv.cc} \
-        --replace "isEmpty(QMAKE_MAC_SDK_VERSION)" false
-
+        --replace /usr ${stdenv.cc}
     ''
-    # TODO remove when new Apple SDK is in
-    + (if lib.versionOlder qtCompatVersion "5.11" then ''
-    substituteInPlace src/3rdparty/chromium/base/mac/foundation_util.mm \
-      --replace "NSArray<NSString*>*" "NSArray*"
-    substituteInPlace src/3rdparty/chromium/base/mac/sdk_forward_declarations.h \
-      --replace "NSDictionary<VNImageOption, id>*" "NSDictionary*" \
-      --replace "NSArray<VNRequest*>*" "NSArray*" \
-      --replace "typedef NSString* VNImageOption NS_STRING_ENUM" "typedef NSString* VNImageOption"
-    '' else ''
-    substituteInPlace src/3rdparty/chromium/third_party/webrtc/sdk/objc/Framework/Classes/Common/RTCFieldTrials.mm \
-      --replace "NSDictionary<NSString *, NSString *> *" "NSDictionary*"
-    substituteInPlace src/3rdparty/chromium/third_party/webrtc/sdk/objc/Framework/Headers/WebRTC/RTCFieldTrials.h \
-      --replace "NSDictionary<NSString *, NSString *> *" "NSDictionary*"
+    + (optionalString (lib.versionAtLeast qtCompatVersion "5.11") ''
+      substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
+        --replace '$sysroot/usr' "${darwin.xnu}"
     '')
     + ''
 
     cat <<EOF > src/3rdparty/chromium/build/mac/find_sdk.py
 #!/usr/bin/env python
 print("${darwin.apple_sdk.sdk}")
-print("10.10.0")
+print("10.12.0")
 EOF
 
     cat <<EOF > src/3rdparty/chromium/build/config/mac/sdk_info.py
@@ -114,9 +95,6 @@ print('sdk_platform_path=""')
 print('sdk_build="17B41"')
 EOF
 
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace '$sysroot/usr' "${darwin.xnu}"
-
     # Apple has some secret stuff they don't share with OpenBSM
     substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
       --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
@@ -126,7 +104,10 @@ EOF
     '');
 
   NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.isDarwin [
+  # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
+  # TODO: investigate and fix properly
+    lib.optionals (stdenv.hostPlatform.platform.gcc.arch or "" == "sandybridge") [ "-march=westmere" ] ++
+    lib.optionals stdenv.isDarwin [
       "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
       "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10"
 
@@ -217,14 +198,6 @@ EOF
     (runCommand "MacOS_SDK_sandbox.h" {} ''
       install -Dm444 "${lib.getDev darwin.apple_sdk.sdk}"/include/sandbox.h "$out"/include/sandbox.h
     '')
-
-    # For:
-    # _NSDefaultRunLoopMode
-    # _OBJC_CLASS_$_NSDate
-    # _OBJC_CLASS_$_NSDictionary
-    # _OBJC_CLASS_$_NSRunLoop
-    # _OBJC_CLASS_$_NSURL
-    darwin.cf-private
   ]);
 
   __impureHostDeps = optional stdenv.isDarwin "/usr/lib/libsandbox.1.dylib";
@@ -244,7 +217,6 @@ EOF
     description = "A web engine based on the Chromium web browser";
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
-    broken = qt56; # 2018-09-13, no successful build since 2018-04-25
   };
 
 }

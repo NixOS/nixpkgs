@@ -2,14 +2,14 @@ GEM
   remote: https://rubygems.org/
   specs:
     drydock (0.6.9)
-    redis (3.3.0)
-    redis-dump (0.3.5)
+    redis (4.1.0)
+    redis-dump (0.4.0)
       drydock (>= 0.6.9)
-      redis (>= 2.0)
+      redis (>= 4.0)
       uri-redis (>= 0.4.0)
       yajl-ruby (>= 0.1)
     uri-redis (0.4.2)
-    yajl-ruby (1.2.1)
+    yajl-ruby (1.4.1)
 
 PLATFORMS
   ruby
@@ -18,4 +18,4 @@ DEPENDENCIES
   redis-dump
 
 BUNDLED WITH
-   1.11.2
+   1.17.2

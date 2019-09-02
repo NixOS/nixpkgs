@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sfxr-qt-${version}";
+  pname = "sfxr-qt";
   version = "1.2.0";
   src = fetchFromGitHub {
     owner = "agateau";

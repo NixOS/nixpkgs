@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ flask six pytz aniso8601 pycrypto ];
 
   meta = with lib; {
-    homepage = "http://flask-restful.readthedocs.io/";
+    homepage = "https://flask-restful.readthedocs.io/";
     description = "REST API building blocks for Flask";
     license = licenses.bsd3;
   };

@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg }:
 stdenv.mkDerivation rec {
-  name = "x11docker-${version}";
-  version = "5.4.1";
+  pname = "x11docker";
+  version = "6.0.0";
   src = fetchFromGitHub {
     owner = "mviereck";
     repo = "x11docker";
     rev = "v${version}";
-    sha256 = "0fcdr8i3crf4cina41h030q2jf5zvafll97iff129dl3sb27jnvi";
+    sha256 = "1sfdxlh50hv8j3dj5bphihqdyf8s7ixm6ckrmvqgr2y3gak1y840";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ nx-libs xorg.xhost xorg.xinit ];

@@ -1,17 +1,35 @@
-{ stdenv, fetchurl, lib }:
+{ stdenv, fetchurl, lib, cmake }:
 
 let
 
   generic = { version, sha256 }: stdenv.mkDerivation rec {
-    name = "libressl-${version}";
+    pname = "libressl";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://openbsd/LibreSSL/${name}.tar.gz";
+      url = "mirror://openbsd/LibreSSL/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 
-    configureFlags = [ "--enable-nc" ];
+    nativeBuildInputs = [ cmake ];
+
+    cmakeFlags = [
+      "-DENABLE_NC=ON"
+      "-DBUILD_SHARED_LIBS=ON"
+      # Ensure that the output libraries do not require an executable stack.
+      # Without this define, assembly files in libcrypto do not include a
+      # .note.GNU-stack section, and if that section is missing from any object,
+      # the linker will make the stack executable.
+      "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
+    ];
+
+    # The autoconf build is broken as of 2.9.1, resulting in the following error:
+    # libressl-2.9.1/tls/.libs/libtls.a', needed by 'handshake_table'.
+    # Fortunately LibreSSL provides a CMake build as well, so opt for CMake by
+    # removing ./configure pre-config.
+    preConfigure = ''
+      rm configure
+    '';
 
     enableParallelBuilding = true;
 
@@ -19,6 +37,8 @@ let
 
     postFixup = ''
       moveToOutput "bin/nc" "$nc"
+      moveToOutput "bin/openssl" "$bin"
+      moveToOutput "bin/ocspcheck" "$bin"
       moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
     '';
 
@@ -27,18 +47,13 @@ let
     meta = with lib; {
       description = "Free TLS/SSL implementation";
       homepage    = "https://www.libressl.org";
-      license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc ];
+      license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc openssl ];
       platforms   = platforms.all;
-      maintainers = with maintainers; [ thoughtpolice fpletz globin ];
+      maintainers = with maintainers; [ thoughtpolice fpletz ];
     };
   };
 
 in {
-
-  libressl_2_7 = generic {
-    version = "2.7.5";
-    sha256 = "0h60bcx7k72171dwpx4vsbsrxxz9c18v75lh5fj600gghn6h7rdy";
-  };
 
   libressl_2_8 = generic {
     version = "2.8.3";
@@ -46,7 +61,12 @@ in {
   };
 
   libressl_2_9 = generic {
-    version = "2.9.0";
-    sha256 = "1x1wl6b449m6hfhyxxzxbf2v8yfb5q92q6d01hdg28xp1222jpzb";
+    version = "2.9.2";
+    sha256 = "1m6mz515dcbrbnyz8hrpdfjzdmj1c15vbgnqxdxb89g3z9kq3iy4";
+  };
+
+  libressl_3_0 = generic {
+    version = "3.0.0";
+    sha256 = "0xiwri6xcnl3wb5nbc4aw8pv32s3hp13r9v465yr8wykaw211n81";
   };
 }

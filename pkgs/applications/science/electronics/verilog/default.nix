@@ -1,29 +1,40 @@
-{ stdenv, fetchFromGitHub, autoconf, gperf, flex, bison }:
+{ stdenv, fetchFromGitHub, autoconf, gperf, flex, bison, readline, ncurses
+, bzip2, zlib
+}:
 
 stdenv.mkDerivation rec {
-  name = "iverilog-${version}";
-  version = "2018.12.15";
+  pname = "iverilog";
+  version = "unstable-2019-08-01";
 
   src = fetchFromGitHub {
-    owner = "steveicarus";
-    repo = "iverilog";
-    rev = "7cd078e7ab184069b3b458fe6df7e83962254816";
-    sha256 = "1zc7lsa77dbsxjfz7vdgclmg97r0kw08xss7yfs4vyv5v5gnn98d";
+    owner  = "steveicarus";
+    repo = pname;
+    rev    = "c383d2048c0bd15f5db083f14736400546fb6215";
+    sha256 = "1zs0gyhws0qa315magz3w5m45v97knczdgbf2zn4d7bdb7cv417c";
   };
 
-  patchPhase = ''
+  enableParallelBuilding = true;
+
+  prePatch = ''
+    substituteInPlace configure.in \
+      --replace "AC_CHECK_LIB(termcap, tputs)" "AC_CHECK_LIB(termcap, tputs)"
+  '';
+
+  preConfigure = ''
     chmod +x $PWD/autoconf.sh
     $PWD/autoconf.sh
   '';
 
-  buildInputs = [ autoconf gperf flex bison ];
+  nativeBuildInputs = [ autoconf gperf flex bison ];
 
-  meta = {
+  buildInputs = [ readline ncurses bzip2 zlib ];
+
+  meta = with stdenv.lib; {
     description = "Icarus Verilog compiler";
     repositories.git = https://github.com/steveicarus/iverilog.git;
-    homepage = http://www.icarus.com;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [winden];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://iverilog.icarus.com/";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ winden ];
+    platforms = platforms.linux;
   };
 }

@@ -17,7 +17,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  bindingCfg = { config, ... }: {
+  bindingCfg = { ... }: {
     options = {
 
       keys = mkOption {
@@ -54,6 +54,15 @@ in
         default = false;
         description = ''
           Whether to enable the <command>triggerhappy</command> hotkey daemon.
+        '';
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "nobody";
+        example = "root";
+        description = ''
+          User account under which <command>triggerhappy</command> runs.
         '';
       };
 
@@ -96,7 +105,7 @@ in
       after = [ "local-fs.target" ];
       description = "Global hotkey daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.triggerhappy}/bin/thd --user nobody --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
+        ExecStart = "${pkgs.triggerhappy}/bin/thd ${optionalString (cfg.user != "root") "--user ${cfg.user}"} --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
       };
     };
 

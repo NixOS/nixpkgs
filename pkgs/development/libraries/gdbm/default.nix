@@ -1,12 +1,14 @@
 { stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gdbm-1.18.1";
+  pname = "gdbm";
+  version = "1.18.1";
+
   # FIXME: remove on update to > 1.18.1
   NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-Wno-error=return-type" else null;
 
   src = fetchurl {
-    url = "mirror://gnu/gdbm/${name}.tar.gz";
+    url = "mirror://gnu/gdbm/${pname}-${version}.tar.gz";
     sha256 = "1p4ibds6z3ccy65lkmd6lm7js0kwifvl53r0fd759fjxgr917rl6";
   };
 
@@ -25,10 +27,12 @@ stdenv.mkDerivation rec {
       substituteInPlace tests/testsuite.at --replace \
         'm4_include([dbmfetch03.at])' ""
   '';
+
+  enableParallelBuilding = true;
   configureFlags = [ "--enable-libgdbm-compat" ];
 
+  # create symlinks for compatibility
   postInstall = ''
-    # create symlinks for compatibility
     install -dm755 $out/include/gdbm
     (
       cd $out/include/gdbm
@@ -40,26 +44,24 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNU dbm key/value database library";
+    longDescription = ''
+       GNU dbm (or GDBM, for short) is a library of database functions that
+       use extensible hashing and work similar to the standard UNIX dbm.
+       These routines are provided to a programmer needing to create and
+       manipulate a hashed database.
 
-    longDescription =
-      '' GNU dbm (or GDBM, for short) is a library of database functions that
-         use extensible hashing and work similar to the standard UNIX dbm.
-         These routines are provided to a programmer needing to create and
-         manipulate a hashed database.
+       The basic use of GDBM is to store key/data pairs in a data file.
+       Each key must be unique and each key is paired with only one data
+       item.
 
-         The basic use of GDBM is to store key/data pairs in a data file.
-         Each key must be unique and each key is paired with only one data
-         item.
+       The library provides primitives for storing key/data pairs,
+       searching and retrieving the data by its key and deleting a key
+       along with its data.  It also support sequential iteration over all
+       key/data pairs in a database.
 
-         The library provides primitives for storing key/data pairs,
-         searching and retrieving the data by its key and deleting a key
-         along with its data.  It also support sequential iteration over all
-         key/data pairs in a database.
-
-         For compatibility with programs using old UNIX dbm function, the
-         package also provides traditional dbm and ndbm interfaces.
+       For compatibility with programs using old UNIX dbm function, the
+       package also provides traditional dbm and ndbm interfaces.
       '';
-
     homepage = https://www.gnu.org/software/gdbm/;
     license = licenses.gpl3Plus;
     platforms = platforms.all;

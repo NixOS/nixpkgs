@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "casync-${version}";
+  pname = "casync";
   version = "2-152-ge4a3c5e";
 
   src = fetchFromGitHub {

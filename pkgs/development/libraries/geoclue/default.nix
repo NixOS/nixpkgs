@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
+{ stdenv, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk-pixbuf
 , modemmanager, avahi, glib-networking, python3, wrapGAppsHook, gobject-introspection, vala
 , withDemoAgent ? false
 }:
@@ -6,15 +6,15 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "geoclue-${version}";
-  version = "2.5.1";
+  pname = "geoclue";
+  version = "2.5.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "geoclue";
-    repo = "geoclue";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "0vww6irijw5ss7vawkdi5z5wdpcgw4iqljn5vs3vbd4y3d0lzrbs";
+    sha256 = "1wbpi74dw3p7izxwd57irz2i1g55r7wzl5h2yf0ns0hgq2njdfsg";
   };
 
   patches = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib json-glib libsoup avahi
   ] ++ optionals withDemoAgent [
-    libnotify gdk_pixbuf
+    libnotify gdk-pixbuf
   ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
   propagatedBuildInputs = [ glib glib-networking ];
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     "-Ddemo-agent=${if withDemoAgent then "true" else "false"}"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+    "-Ddbus-srv-user=geoclue"
   ] ++ optionals stdenv.isDarwin [
     "-D3g-source=false"
     "-Dcdma-source=false"
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";
     homepage = https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home;
-    maintainers = with maintainers; [ raskin garbas ];
+    maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl2;
   };

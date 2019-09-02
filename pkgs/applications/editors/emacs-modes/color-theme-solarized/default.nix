@@ -30,5 +30,8 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.samuelrivas ];
     license = licenses.mit;
     platforms = platforms.all;
+
+    # Fails with `solarized-definitions.el:786:1:Warning: the function `rotatef' is not known to`
+    broken = true;
   };
 }

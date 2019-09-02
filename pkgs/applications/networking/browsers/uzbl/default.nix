@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, python3, makeWrapper
-, webkit, glib-networking, gsettings-desktop-schemas, python2Packages
+, webkitgtk, glib-networking, gsettings-desktop-schemas, python2Packages
 }:
 # This package needs python3 during buildtime,
 # but Python 2 + packages during runtime.
 
 stdenv.mkDerivation rec {
-  name = "uzbl-${version}";
+  pname = "uzbl";
   version = "0.9.0";
 
   meta = with stdenv.lib; {
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig python3 makeWrapper ];
 
-  buildInputs = [ gsettings-desktop-schemas webkit ];
+  buildInputs = [ gsettings-desktop-schemas webkitgtk ];
   propagatedBuildInputs = with python2Packages; [ pygtk six ];
 }

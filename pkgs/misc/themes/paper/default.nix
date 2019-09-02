@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2016-08-16";
-  name = "paper-gtk-theme-${version}";
+  pname = "paper-gtk-theme";
 
   src = fetchFromGitHub {
     owner = "snwh";

@@ -39,7 +39,7 @@ let
   minor = "23";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-${version}";
+  pname = "mpd";
   version = "${major}${if minor == "" then "" else "." + minor}";
 
   src = fetchFromGitHub {

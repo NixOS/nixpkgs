@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "podiff-${version}";
+  pname = "podiff";
   version = "1.1";
 
   src = fetchurl {

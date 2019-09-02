@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "filetype";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "366c50d0211798e696626f125134163ac2fff25a70131eec80a1d1a6196c1027";
+    sha256 = "17a3b885f19034da29640b083d767e0f13c2dcb5dcc267945c8b6e5a5a9013c7";
   };
 
   checkPhase = ''

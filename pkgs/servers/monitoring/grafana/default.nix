@@ -1,20 +1,23 @@
 { lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomjs2 }:
 
 buildGoPackage rec {
-  version = "5.4.3";
-  name = "grafana-${version}";
+  pname = "grafana";
+  version = "6.3.4";
+
   goPackagePath = "github.com/grafana/grafana";
+
+  excludedPackages = [ "release_publisher" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "11fwb80a9qqlzmg11vw4llfa0mz80jkljg0gmp0sbv6c9jspqncv";
+    sha256 = "06xbz6y1vmj44ppm2gbb71qiv8myd5ysygi3s06d6dia07ngw3v2";
   };
 
   srcStatic = fetchurl {
-    url = "https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "141msgrxdn4nmwp6jhh3zg5zcbj82pxdr7ysc5v28rh9paj79yyd";
+    url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
+    sha256 = "0lhfy3crwis6464icxq0h3hgxvk2dgk6w7k6z2mmaxqm0j15scc8";
   };
 
   postPatch = ''
@@ -34,8 +37,8 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.asl20;
-    homepage = https://grafana.org/;
-    maintainers = with maintainers; [ offline fpletz willibutz ];
+    homepage = "https://grafana.com";
+    maintainers = with maintainers; [ offline fpletz willibutz globin ];
     platforms = platforms.linux;
   };
 }
