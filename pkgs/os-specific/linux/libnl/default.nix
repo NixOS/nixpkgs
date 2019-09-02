@@ -1,4 +1,4 @@
-{ stdenv, file, lib, fetchFromGitHub, fetchpatch, autoreconfHook, bison, flex, pkgconfig
+{ stdenv, file, lib, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform, swig ? null, python}:
 
 stdenv.mkDerivation rec {
@@ -13,12 +13,6 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional pythonSupport "py";
-
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/musl/48d2a28710ae40877fd3e178ead1fb1bb0baa62c/dev-libs/libnl/files/libnl-3.3.0_rc1-musl.patch";
-      sha256 = "0dd7xxikib201i99k2if066hh7gwf2i4ffckrjplq6lr206jn00r";
-    });
 
   enableParallelBuilding = true;
 
