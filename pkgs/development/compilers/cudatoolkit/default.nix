@@ -1,7 +1,6 @@
 { lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses5, expat, python27, zlib
 , gcc48, gcc49, gcc5, gcc6, gcc7
 , xorg, gtk2, gdk-pixbuf, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
-, addOpenGLRunpath
 }:
 
 let
@@ -40,7 +39,7 @@ let
 
       outputs = [ "out" "lib" "doc" ];
 
-      nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
+      nativeBuildInputs = [ perl makeWrapper ];
       buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
       runtimeDependencies = [
         ncurses5 expat python zlib glibc
@@ -146,15 +145,6 @@ let
           fi
           patchelf --set-rpath "$rpath2" --force-rpath $i
         done < <(find $out $lib $doc -type f -print0)
-      '';
-
-      # Set RPATH so that libcuda and other libraries in
-      # /run/opengl-driver(-32)/lib can be found. See the explanation in
-      # addOpenGLRunpath.  Don't try to figure out which libraries really need
-      # it, just patch all (but not the stubs libraries). Note that
-      # --force-rpath prevents changing RPATH (set above) to RUNPATH.
-      postFixup = ''
-        addOpenGLRunpath --force-rpath {$out,$lib}/lib/lib*.so
       '';
 
       # cuda-gdb doesn't run correctly when not using sandboxing, so

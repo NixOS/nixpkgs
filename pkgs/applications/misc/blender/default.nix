@@ -2,7 +2,7 @@
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, python3Packages
-, zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
+, zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h550jisdbis50hxwk5kxrvrk1a6sh2fsri3yyj66vhzbi87x7fd";
   };
 
-  nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
+  nativeBuildInputs = [ cmake ];
+
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       libXi libX11 libXext libXrender
@@ -74,15 +75,6 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/blender \
         --prefix PYTHONPATH : ${python3Packages.numpy}/${python.sitePackages}
     '';
-
-  # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be
-  # found. See the explanation in libglvnd.
-  postFixup = optionalString cudaSupport ''
-    for program in $out/bin/blender $out/bin/.blender-wrapped; do
-      isELF "$program" || continue
-      addOpenGLRunpath "$program"
-    done
-  '';
 
   meta = with stdenv.lib; {
     description = "3D Creation/Animation/Publishing System";
