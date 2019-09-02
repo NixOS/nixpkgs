@@ -1,25 +1,34 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libuv, sqlite-replication }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, libuv
+, sqlite-replication
+, raft
+, libco
+}:
 
-with stdenv.lib;
-
-stdenv.mkDerivation rec {
+let
   pname = "dqlite";
-  version = "0.2.6";
+  version = "1.0.0";
+
+in stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "CanonicalLtd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13l7na5858v2ah1vim6lafmzajgkymfi5rd6bk14cm4vcnxc40wb";
+    sha256 = "0670c1c84lcf5vl3h6mlff00fz2fnm766bzlk526sjjzysx3zjya";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ libuv sqlite-replication ];
+  buildInputs = [ libuv sqlite-replication raft libco ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Expose a SQLite database over the network and replicate it across a cluster of peers";
-    homepage = https://github.com/CanonicalLtd/dqlite/;
+    homepage = "https://github.com/CanonicalLtd/dqlite";
     license = licenses.asl20;
     maintainers = with maintainers; [ joko ];
     platforms = platforms.unix;
