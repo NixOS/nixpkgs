@@ -4,6 +4,25 @@ with lib;
 
 let
   cfg = config.hardware.deviceTree;
+  overlayType = types.submodule {
+    options = {
+      overlay = mkOption {
+        type = types.either (types.enum [ "-" ]) types.path;
+        description = "The overlay file to apply";
+        example = literalExample "[\"\${pkgs.deviceTree_rpi.overlays}/w1-gpio.dtbo\"]";
+      };
+      params = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "i2s=on" ];
+        description = "The parameters to the overlay file.";
+      };
+    };
+  };
+  builders = {
+    dtc = pkgs.deviceTree.applyOverlays;
+    dtmerge = pkgs.deviceTree.mergeOverlays;
+  };
 in {
   options = {
       hardware.deviceTree = {
@@ -29,12 +48,21 @@ in {
 
         overlays = mkOption {
           default = [];
-          example = literalExample
-            "[\"\${pkgs.deviceTree_rpi.overlays}/w1-gpio.dtbo\"]";
-          type = types.listOf types.path;
+          type = types.listOf overlayType;
           description = ''
-            A path containing device tree overlays (.dtbo) to be applied to all
-            base device-trees.
+            A path containing device tree overlays (.dtbo) and parameters to be
+            applied to all base device-trees.
+          '';
+        };
+
+        # see https://github.com/raspberrypi/linux/issues/3198
+        builder = mkOption {
+          default = "dtc";
+          type = types.enum [ "dtc" "dtmerge" ];
+          description = ''
+            Whether to use `dtc` or `dtmerge` to build the overlay. Use of
+            parameters and some Raspberry Pi overlays require `dtmerge`, but
+            this is only available for ARM.
           '';
         };
 
@@ -51,6 +79,10 @@ in {
 
   config = mkIf (cfg.enable) {
     hardware.deviceTree.package = if (cfg.overlays != [])
-      then pkgs.deviceTree.applyOverlays cfg.base cfg.overlays else cfg.base;
+      then (getAttr cfg.builder builders) cfg.base cfg.overlays else cfg.base;
+      assertions = [{
+        assertion = (cfg.builder == "dtc") -> (all (o: length o.params == 0) cfg.overlays);
+        message = "The `dtc` builder does not support overlay parameters";
+      }];
   };
 }
