@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "mautrix-unstable-${version}";
-  version = "2019-02-11";
+  version = "2019-07-04";
 
   goPackagePath = "maunium.net/go/mautrix-whatsapp";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = "mautrix-whatsapp";
-    rev = "f689297ba6704265a938951f307b365e829fcfa1";
-    sha256 = "1658bika9ylhm64k9lxavp43dxilygn6vx7yn6y1l10j8by2akxk";
+    rev = "29f5ae45c4b22f463003b23e355b951831f08b3e";
+    sha256 = "12209m3x01i7bnnkg57ag1ivsk6n6pqaqfin7y02irgi3i3rm31r";
   };
 
   goDeps = ./deps.nix;

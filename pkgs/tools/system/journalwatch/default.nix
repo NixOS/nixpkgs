@@ -20,14 +20,10 @@ buildPythonPackage rec {
 
 
   doCheck = true;
-
+  checkInputs = [ pytest ];
   checkPhase = ''
-    pytest test_journalwatch.py
-  '';
-
-  buildInputs = [
     pytest
-  ];
+  '';
 
   propagatedBuildInputs = [
     systemd

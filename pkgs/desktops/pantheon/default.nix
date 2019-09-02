@@ -62,6 +62,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
+  notes-up = pkgs.notes-up.override { withPantheon = true; };
+
   #### APPS
 
   elementary-calculator = callPackage ./apps/elementary-calculator { };
@@ -214,6 +216,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-gtk-theme = callPackage ./artwork/elementary-gtk-theme { };
 
   elementary-icon-theme = callPackage ./artwork/elementary-icon-theme { };
+
+  elementary-redacted-script = callPackage ./artwork/elementary-redacted-script { };
 
   elementary-sound-theme = callPackage ./artwork/elementary-sound-theme { };
 

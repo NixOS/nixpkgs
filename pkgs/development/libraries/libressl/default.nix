@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib }:
+{ stdenv, fetchurl, lib, cmake }:
 
 let
 
@@ -11,7 +11,17 @@ let
       inherit sha256;
     };
 
-    configureFlags = [ "--enable-nc" ];
+    nativeBuildInputs = [ cmake ];
+
+    cmakeFlags = [ "-DENABLE_NC=ON" "-DBUILD_SHARED_LIBS=ON" ];
+
+    # The autoconf build is broken as of 2.9.1, resulting in the following error:
+    # libressl-2.9.1/tls/.libs/libtls.a', needed by 'handshake_table'.
+    # Fortunately LibreSSL provides a CMake build as well, so opt for CMake by
+    # removing ./configure pre-config.
+    preConfigure = ''
+      rm configure
+    '';
 
     enableParallelBuilding = true;
 
@@ -19,6 +29,8 @@ let
 
     postFixup = ''
       moveToOutput "bin/nc" "$nc"
+      moveToOutput "bin/openssl" "$bin"
+      moveToOutput "bin/ocspcheck" "$bin"
       moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
     '';
 
@@ -35,18 +47,13 @@ let
 
 in {
 
-  libressl_2_7 = generic {
-    version = "2.7.5";
-    sha256 = "0h60bcx7k72171dwpx4vsbsrxxz9c18v75lh5fj600gghn6h7rdy";
-  };
-
   libressl_2_8 = generic {
     version = "2.8.3";
     sha256 = "0xw4z4z6m7lyf1r4m2w2w1k7as791c04ygnfk4d7d0ki0h9hnr4v";
   };
 
   libressl_2_9 = generic {
-    version = "2.9.0";
-    sha256 = "1x1wl6b449m6hfhyxxzxbf2v8yfb5q92q6d01hdg28xp1222jpzb";
+    version = "2.9.2";
+    sha256 = "1m6mz515dcbrbnyz8hrpdfjzdmj1c15vbgnqxdxb89g3z9kq3iy4";
   };
 }

@@ -6,7 +6,12 @@
 
 callPackage ./generic.nix (args // rec {
   version = "${branch}";
-  branch = "4.1";
-  sha256 = "19d16dhb4gx3akhbqd8844awx1axxli91bsjwsm4qp2a4i1zp15n";
+  branch = "4.1.4";
+  sha256 = "01w44ygm5bvc243hlhfnvb2lxfb0blz2cxnphxqgw30vj3c1prx7";
+  patches = [(fetchpatch { # remove on update
+    name = "fix-hardcoded-tables.diff";
+    url = "http://git.ffmpeg.org/gitweb/ffmpeg.git/commitdiff_plain/c8232e50074f";
+    sha256 = "0jlksks4fjajby8fjk7rfp414gxfdgd6q9khq26i52xvf4kg2dw6";
+  })];
   darwinFrameworks = [ Cocoa CoreMedia ];
 })

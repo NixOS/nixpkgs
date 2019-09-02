@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, spotify, xorg }:
+{ stdenv, fetchFromGitHub, spotify, xorg, runtimeShell }:
 stdenv.mkDerivation rec {
   name = "spotifywm-unstable-${version}";
   version = "2016-11-28";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ spotify ];
 
   installPhase = ''
-    echo "#!${stdenv.shell}" > spotifywm
+    echo "#!${runtimeShell}" > spotifywm
     echo "LD_PRELOAD="$out/lib/spotifywm.so" ${spotify}/bin/spotify \$*" >> spotifywm
     install -Dm644 spotifywm.so $out/lib/spotifywm.so
     install -Dm755 spotifywm $out/bin/spotifywm

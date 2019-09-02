@@ -172,6 +172,11 @@ in
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
 
+    systemd.tmpfiles.rules = optional config.virtualisation.docker.enableNvidia
+        "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
+      ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+        "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+
     boot.extraModulePackages = [ nvidia_x11.bin ];
 
     # nvidia-uvm is required by CUDA applications.

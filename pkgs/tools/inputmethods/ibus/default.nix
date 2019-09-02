@@ -2,7 +2,7 @@
 , vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobject-introspection, gtk2
 , gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePythonLibrary ? true
 , enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null
-, buildPackages }:
+, buildPackages, runtimeShell }:
 
 assert withWayland -> wayland != null && libxkbcommon != null;
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     substituteInPlace setup/ibus-setup.in --subst-var-by PYTHON ${python3Runtime.interpreter}
     substituteInPlace data/dconf/Makefile.am --replace "dconf update" true
     substituteInPlace configure.ac --replace '$python2dir/ibus' $out/${python3.sitePackages}/ibus
-    echo \#!${stdenv.shell} > data/dconf/make-dconf-override-db.sh
+    echo \#!${runtimeShell} > data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
   '';
 

@@ -48,7 +48,7 @@ in python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     gobject-introspection gtk3 librsvg gnome3.gnome-desktop gsound
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     gnome3.gsettings-desktop-schemas libnotify
     gst-transcoder
   ] ++ (with gst_all_1; [

@@ -40,7 +40,11 @@ stdenv.mkDerivation {
 
   installPhase =
   if stdenv.isDarwin then
-    (substituteAll { inherit (stdenv) shell; src = ./darwin.sh; })
+  (substituteAll {
+    inherit (stdenv) shell;
+    isExecutable = true;
+    src = ./darwin.sh;
+  })
   else jamenv + ''
     jam -j$NIX_BUILD_CORES install
     mkdir -p "$out/bin"

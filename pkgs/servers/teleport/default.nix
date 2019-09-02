@@ -36,6 +36,6 @@ buildGoPackage rec {
     homepage = "https://gravitational.com/teleport/";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.tomberek ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

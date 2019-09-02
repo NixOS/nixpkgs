@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ intltool wrapGAppsHook pkgconfig ];
 
   buildInputs = [
-    gnome3.defaultIconTheme gtk3 glib libXtst libnotify libsoup
+    gnome3.adwaita-icon-theme gtk3 glib libXtst libnotify libsoup
     libsecret gnutls libgcrypt avahi zlib libjpeg
     libXdamage libXfixes libXext networkmanager
   ] ++ optionals telepathySupport [ dbus-glib telepathy-glib ];

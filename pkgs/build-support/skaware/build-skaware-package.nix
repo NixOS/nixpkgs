@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeScript, file }:
+{ stdenv, callPackage, cleanPackaging, fetchurl, writeScript, file }:
 let lib = stdenv.lib;
 in {
   # : string
@@ -19,6 +19,10 @@ in {
   # mostly for moving and deleting files from the build directory
   # : lines
 , postInstall
+  # packages with setup hooks that should be run
+  # (see definition of `makeSetupHook`)
+  # : list drv
+, setupHooks ? []
   # : list Maintainer
 , maintainers ? []
 
@@ -50,25 +54,6 @@ let
     "README.*"
   ];
 
-  globWith = stdenv.lib.concatMapStringsSep "\n";
-  rmNoise = globWith (f:
-    ''rm -rf ${f}'') commonNoiseFiles;
-  mvMeta = globWith
-    (f: ''mv ${f} "$DOCDIR" 2>/dev/null || true'')
-    commonMetaFiles;
-
-  # Move & remove actions, taking the package doc directory
-  commonFileActions = writeScript "common-file-actions.sh" ''
-    #!${stdenv.shell}
-    set -e
-    DOCDIR="$1"
-    shopt -s globstar extglob nullglob
-    ${rmNoise}
-    mkdir -p "$DOCDIR"
-    ${mvMeta}
-  '';
-
-
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
@@ -81,6 +66,8 @@ in stdenv.mkDerivation {
 
   dontDisableStatic = true;
   enableParallelBuilding = true;
+
+  nativeBuildInputs = setupHooks;
 
   configureFlags = configureFlags ++ [
     "--enable-absolute-paths"
@@ -99,21 +86,16 @@ in stdenv.mkDerivation {
   # TODO(Profpatsch): ensure that there is always a $doc output!
   postInstall = ''
     echo "Cleaning & moving common files"
-    mkdir -p $doc/share/doc/${pname}
-    ${commonFileActions} $doc/share/doc/${pname}
+    ${cleanPackaging.commonFileActions {
+       noiseFiles = commonNoiseFiles;
+       docFiles = commonMetaFiles;
+     }} $doc/share/doc/${pname}
 
     ${postInstall}
   '';
 
   postFixup = ''
-    echo "Checking for remaining source files"
-    rem=$(find -mindepth 1 -xtype f -print0 \
-           | tee $TMP/remaining-files)
-    if [[ "$rem" != "" ]]; then
-      echo "ERROR: These files should be either moved or deleted:"
-      cat $TMP/remaining-files | xargs -0 ${file}/bin/file
-      exit 1
-    fi
+    ${cleanPackaging.checkForRemainingFiles}
   '';
 
   meta = {

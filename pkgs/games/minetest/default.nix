@@ -72,11 +72,9 @@ let
   };
 
   v5 = {
-    version = "git-5.0.0-dev-2019-01-08";
-    rev = "95d4ff6d1b62945decc85003a99588bb0539c45b";
-    sha256 = "1qn42d2lfgwadb26mix6c7j457zsl8cqqjfwhaa8y34hii1q44bw";
-    dataRev = "a2c9523bce5bcefdc930ff6f14d6d94f57473be9";
-    dataSha256 = "1p26zvnmq99cqlrby4294mp2fmp8iqdcjld0ph39x41ifc50lfdf";
+    version = "5.0.1";
+    sha256 = "11i8fqjpdggqfdlx440k5758zy0nbf9phxan9r63mavc7mph88ay";
+    dataSha256 = "1hw3n7qqpasq6bivxhq01kr0d58w0gp46s0baxixp1fakd79p8a7";
   };
 
 in {

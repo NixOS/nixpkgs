@@ -11,7 +11,7 @@
 , gnome-flashback
 , gnome-menus
 , gnome3
-, gtk
+, gtk3
 , itstool
 , libgweather
 , libsoup
@@ -77,7 +77,7 @@ in stdenv.mkDerivation rec {
     glib
     gnome-desktop
     gnome-menus
-    gtk
+    gtk3
     libgweather
     libsoup
     libwnck3

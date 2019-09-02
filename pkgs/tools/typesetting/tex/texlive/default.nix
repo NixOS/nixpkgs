@@ -24,7 +24,7 @@ let
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText
+    inherit bin combinePkgs buildEnv lib makeWrapper writeText
       stdenv python ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
@@ -108,23 +108,8 @@ let
       # Common packages should get served from the binary cache anyway.
       # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
       urlPrefixes = args.urlPrefixes or [
-        # A snapshot temporarily hosted by @xeji.
-        # TODO: remove when there is a reliable long-term solution
-        https://cat3.de/texlive-2018/tlnet/archive
-
-        # TODO: Add second, faster and more reliable snapshot mirror,
-        # maybe on one of our project's servers
-
-        # IPFS seeded by the mirror above - this may be quite slow
-        https://ipfs.io/ipfs/QmT4Z67wXin1Z9DhvqwSSkSZSuu8hT6LgDyMu6CBm9Tb7t/tlnet/archive
-
-        # The canonical source moves quickly and will be broken almost immediately
-        http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive
-
-        # Should be stable for historic, archived releases
-        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
-        # TODO: use this later when 2018 is archived
-
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
+        ftp://tug.org/texlive/historic/2018/tlnet-final/archive
       ];
 
       src = fetchurl { inherit urls sha512; };
@@ -171,12 +156,6 @@ let
   combinePkgs = pkgSet: lib.concatLists # uniqueness is handled in `combine`
     (lib.mapAttrsToList (_n: a: a.pkgs) pkgSet);
 
-  # TODO: replace by buitin once it exists
-  fastUnique = comparator: list: with lib;
-    let un_adj = l: if length l < 2 then l
-      else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
-    in un_adj (lib.sort comparator list);
-
 in
   tl // {
     inherit bin combine;
@@ -191,7 +170,7 @@ in
             platforms = lib.platforms.all;
             hydraPlatforms = lib.optionals
               (lib.elem pname ["scheme-small" "scheme-basic"]) platforms;
-            maintainers = [ lib.maintainers.vcunat ];
+            maintainers = with lib.maintainers;  [ vcunat veprbl ];
           }
           (combine {
             ${pname} = attrs;

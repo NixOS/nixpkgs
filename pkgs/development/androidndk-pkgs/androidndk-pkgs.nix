@@ -18,19 +18,28 @@ let
     "x86_64-unknown-linux-gnu" = {
       double = "linux-x86_64";
     };
-    "armv5tel-unknown-linux-androideabi" = {
-      arch = "arm";
-      triple = "arm-linux-androideabi";
-      gccVer = "4.8";
+    "i686-unknown-linux-android" = {
+      triple = "i686-linux-android";
+      arch = "x86";
+      toolchain = "x86";
+      gccVer = "4.9";
+    };
+    "x86_64-unknown-linux-android" = {
+      triple = "x86_64-linux-android";
+      arch = "x86_64";
+      toolchain = "x86_64";
+      gccVer = "4.9";
     };
     "armv7a-unknown-linux-androideabi" = {
       arch = "arm";
       triple = "arm-linux-androideabi";
+      toolchain = "arm-linux-androideabi";
       gccVer = "4.9";
     };
     "aarch64-unknown-linux-android" = {
       arch = "arm64";
       triple = "aarch64-linux-android";
+      toolchain = "aarch64-linux-android";
       gccVer = "4.9";
     };
   }.${config} or
@@ -38,49 +47,49 @@ let
 
   hostInfo = ndkInfoFun stdenv.hostPlatform;
   targetInfo = ndkInfoFun stdenv.targetPlatform;
+
+  prefix = stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
 in
 
 rec {
   # Misc tools
-  binaries = let
-      ndkBinDir =
-        "${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.triple}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}/bin";
-      ndkGCCLibDir =
-        "${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.triple}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}/lib/gcc/${targetInfo.triple}/4.9.x";
+  binaries = runCommand "ndk-gcc-binutils" {
+    isClang = true; # clang based cc, but bintools ld
+    nativeBuildInputs = [ makeWrapper ];
+    propgatedBuildInputs = [ androidndk ];
+  } ''
+    mkdir -p $out/bin
 
-    in runCommand "ndk-gcc-binutils" {
-      isGNU = true; # for cc-wrapper
-      nativeBuildInputs = [ makeWrapper ];
-      propgatedBuildInputs = [ androidndk ];
-    } ''
-      mkdir -p $out/bin
-      for prog in ${ndkBinDir}/${targetInfo.triple}-*; do
-        prog_suffix=$(basename $prog | sed 's/${targetInfo.triple}-//')
-        cat > $out/bin/${stdenv.targetPlatform.config}-$prog_suffix <<EOF
-      #! ${stdenv.shell} -e
-      $prog "\$@"
-      EOF
-        chmod +x $out/bin/${stdenv.targetPlatform.config}-$prog_suffix
-      done
+    # llvm toolchain
+    for prog in ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/bin/*; do
+      ln -s $prog $out/bin/$(basename $prog)
+      ln -s $prog $out/bin/${prefix}$(basename $prog)
+    done
 
-      ln -s $out/bin/${stdenv.targetPlatform.config}-ld $out/bin/ld
-      ln -s ${ndkGCCLibDir} $out/lib
-    '';
+    # bintools toolchain
+    for prog in ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}/bin/*; do
+      prog_suffix=$(basename $prog | sed 's/${targetInfo.triple}-//')
+      ln -s $prog $out/bin/${stdenv.targetPlatform.config}-$prog_suffix
+    done
+
+    # shitty googly wrappers
+    rm -f $out/bin/${stdenv.targetPlatform.config}-gcc $out/bin/${stdenv.targetPlatform.config}-g++
+  '';
 
   binutils = wrapBintoolsWith {
     bintools = binaries;
     libc = targetAndroidndkPkgs.libraries;
-    extraBuildCommands = ''
-      echo "--build-id" >> $out/nix-support/libc-ldflags
-    '';
   };
 
-  gcc = wrapCCWith {
+  clang = wrapCCWith {
     cc = binaries;
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''
       echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
+      echo "-target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
+      echo "-resource-dir=$(echo ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/lib*/clang/*)" >> $out/nix-support/cc-cflags
+      echo "--gcc-toolchain=${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}" >> $out/nix-support/cc-cflags
     ''
     + lib.optionalString stdenv.targetPlatform.isAarch32 (let
         p =  stdenv.targetPlatform.platform.gcc or {}
@@ -90,7 +99,6 @@ rec {
           (lib.optional (p ? cpu) "-mcpu=${p.cpu}")
           (lib.optional (p ? abi) "-mabi=${p.abi}")
           (lib.optional (p ? fpu) "-mfpu=${p.fpu}")
-          (lib.optional (p ? float) "-mfloat=${p.float}")
           (lib.optional (p ? float-abi) "-mfloat-abi=${p.float-abi}")
           (lib.optional (p ? mode) "-mmode=${p.mode}")
         ];
@@ -98,17 +106,10 @@ rec {
         sed -E -i \
           $out/bin/${stdenv.targetPlatform.config}-cc \
           $out/bin/${stdenv.targetPlatform.config}-c++ \
-          $out/bin/${stdenv.targetPlatform.config}-gcc \
-          $out/bin/${stdenv.targetPlatform.config}-g++ \
-          -e '130i    extraBefore+=(-Wl,--fix-cortex-a8)' \
-          -e 's|^(extraBefore=)\(\)$|\1(${builtins.toString flags})|'
-      '')
-      # GCC 4.9 is the first relase with "-fstack-protector"
-      + lib.optionalString (lib.versionOlder targetInfo.gccVer "4.9") ''
-        sed -E \
-        -i $out/nix-support/add-hardening.sh \
-        -e 's|(-fstack-protector)-strong|\1|g'
-      '';
+          $out/bin/${stdenv.targetPlatform.config}-clang \
+          $out/bin/${stdenv.targetPlatform.config}-clang++ \
+          -e 's|^(extraBefore=)\((.*)\)$|\1(\2 -Wl,--fix-cortex-a8 ${builtins.toString flags})|'
+      '');
   };
 
   # Bionic lib C and other libraries.
@@ -116,17 +117,11 @@ rec {
   # We use androidndk from the previous stage, else we waste time or get cycles
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
-  libraries =
-    let
-      includePath = "${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include";
-      asmIncludePath = "${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include/${targetInfo.triple}";
-      libPath = "${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/lib/";
-    in
-    runCommand "bionic-prebuilt" {} ''
-      mkdir -p $out
-      cp -r ${includePath} $out/include
-      chmod +w $out/include
-      cp -r ${asmIncludePath}/* $out/include
-      ln -s ${libPath} $out/lib
-    '';
+  libraries = runCommand "bionic-prebuilt" {} ''
+    mkdir -p $out
+    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include $out/include
+    chmod +w $out/include
+    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include/${targetInfo.triple}/* $out/include
+    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/lib $out/lib
+  '';
 }

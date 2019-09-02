@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-bluetooth";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "13jm2idjsgqkvdz1dxgl2wwx7bsqahppf6cnpl0pmz167wahg5zp";
+    sha256 = "0rp9wa0yilc3wgwnybc6cryxphja7imixn45zhj475a4nb3afd0q";
   };
 
   passthru = {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Bluetooth Plug";

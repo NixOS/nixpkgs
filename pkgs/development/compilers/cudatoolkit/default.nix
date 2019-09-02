@@ -1,6 +1,6 @@
-{ lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses, expat, python27, zlib
+{ lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses5, expat, python27, zlib
 , gcc48, gcc49, gcc5, gcc6, gcc7
-, xorg, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
+, xorg, gtk2, gdk_pixbuf, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 }:
 
 let
@@ -40,16 +40,14 @@ let
       outputs = [ "out" "lib" "doc" ];
 
       nativeBuildInputs = [ perl makeWrapper ];
-
+      buildInputs = [ gdk_pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
       runtimeDependencies = [
-        ncurses expat python zlib glibc
+        ncurses5 expat python zlib glibc
         xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
         gtk2 glib fontconfig freetype unixODBC alsaLib
       ];
 
       rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
-
-      phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
       unpackPhase = ''
         sh $src --keep --noexec
@@ -68,8 +66,10 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
         mkdir $out
         cd $(basename $src)
+        export PERL5LIB=.
         perl ./install-linux.pl --prefix="$out"
         cd ..
         for patch in $runPatches; do
@@ -84,7 +84,7 @@ let
         rm -rf $out/lib
 
         # Remove some cruft.
-        rm $out/bin/uninstall*
+        ${lib.optionalString (lib.versionAtLeast version "7.0") "rm $out/bin/uninstall*"}
 
         # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
         if [ -d "$out"/cuda-samples ]; then
@@ -119,6 +119,15 @@ let
       '' + lib.optionalString (lib.versionOlder version "8.0") ''
         # Hack to fix building against recent Glibc/GCC.
         echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
+      '' + ''
+        runHook postInstall
+      '';
+
+      postInstall = ''
+        for b in nvvp nsight; do
+          wrapProgram "$out/bin/$b" \
+            --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+        done
       '';
 
       preFixup = ''
@@ -138,6 +147,27 @@ let
         done < <(find $out $lib $doc -type f -print0)
       '';
 
+      # cuda-gdb doesn't run correctly when not using sandboxing, so
+      # temporarily disabling the install check.  This should be set to true
+      # when we figure out how to get `cuda-gdb --version` to run correctly
+      # when not using sandboxing.
+      doInstallCheck = false;
+      postInstallCheck = let
+      in ''
+        # Smoke test binaries
+        pushd $out/bin
+        for f in *; do
+          case $f in
+            crt)                           continue;;
+            nvcc.profile)                  continue;;
+            nsight_ee_plugins_manage.sh)   continue;;
+            uninstall_cuda_toolkit_6.5.pl) continue;;
+            computeprof|nvvp|nsight)       continue;; # GUIs don't feature "--version"
+            *)                             echo "Executing '$f --version':"; ./$f --version;;
+          esac
+        done
+        popd
+      '';
       passthru = {
         cc = gcc;
         majorVersion =
@@ -199,6 +229,24 @@ in rec {
     version = "9.0.176.1";
     url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run";
     sha256 = "0308rmmychxfa4inb1ird9bpgfppgr9yrfg1qp0val5azqik91ln";
+    runPatches = [
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/1/cuda_9.0.176.1_linux-run";
+        sha256 = "1vbqg97pq9z9c8nqvckiwmq3ljm88m7gaizikzxbvz01izh67gx4";
+      })
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/2/cuda_9.0.176.2_linux-run";
+        sha256 = "1sz5dijbx9yf7drfipdxav5a5g6sxy4w6vi9xav0lb6m2xnmyd7c";
+      })
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/3/cuda_9.0.176.3_linux-run";
+        sha256 = "1jm83bxpscpjhzs5q3qijdgjm0r8qrdlgkj7y08fq8c0v8q2r7j2";
+      })
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/4/cuda_9.0.176.4_linux-run";
+        sha256 = "0pymg3mymsa2n48y0njz3spzlkm15lvjzw8fms1q83zslz4x0lwk";
+      })
+    ];
     gcc = gcc6;
   };
 

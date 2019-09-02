@@ -10,7 +10,7 @@ let
 common =
   { lib, stdenv, fetchurl, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline
-  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
+  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns, jq
   , busybox-sandbox-shell
   , storeDir
   , stateDir
@@ -36,7 +36,7 @@ common =
       nativeBuildInputs =
         [ pkgconfig ]
         ++ lib.optionals (!is20) [ curl perl ]
-        ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns ];
+        ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq ];
 
       buildInputs = [ curl openssl sqlite xz bzip2 ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
@@ -167,23 +167,37 @@ in rec {
   };
 
   nixStable = callPackage common rec {
-    name = "nix-2.2";
+    name = "nix-2.2.2";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "63238d00d290b8a93925891fc9164439d3941e2ccc569bf7f7ca32f53c3ec0c7";
+      sha256 = "f80a1b4f9837a8d33209f0b7769d5038335459ff4303eccf3e9217a9eca8594c";
     };
 
     inherit storeDir stateDir confDir boehmgc;
   };
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.2${suffix}";
-    suffix = "pre6600_85488a93";
+    name = "nix-2.3${suffix}";
+    suffix = "pre6631_e58a7144";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "85488a93ec3b07210339f2b05aa93e970f9ac3be";
-      sha256 = "1n5dp7p2lzpnj7f834d25k020v16gnnsm56jz46y87v2x7b69ccm";
+      rev = "e58a71442ad4a538b48fc7a9938c3690628c4741";
+      sha256 = "1hbjhnvjbh8bi8cjjgyrj4z1gw03ws12m2wi5azzj3rmhnh4c802";
+    };
+    fromGit = true;
+
+    inherit storeDir stateDir confDir boehmgc;
+  });
+
+  nixFlakes = lib.lowPrio (callPackage common rec {
+    name = "nix-2.3${suffix}";
+    suffix = "pre20190712_aa82f8b";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "aa82f8b2d2a2c42f0d713e8404b668cef1a4b108";
+      sha256 = "158njzx0gqyvjz534f1y63w583kjk45nlgzx4abg8k775043c5ii";
     };
     fromGit = true;
 

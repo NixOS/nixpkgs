@@ -17,6 +17,6 @@ buildGoPackage rec {
     description = "Easy p2p file sending program";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.viric ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

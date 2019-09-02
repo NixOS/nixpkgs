@@ -1,5 +1,8 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, libpng, libjpeg
 , guiSupport ? false, libX11
+
+  # see http://dlib.net/compile.html
+, avxSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +19,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     rm -rf dlib/external
   '';
+
+  cmakeFlags = [ "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig ];

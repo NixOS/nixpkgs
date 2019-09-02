@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas
-    gdk_pixbuf gnome3.defaultIconTheme evince
+    gdk_pixbuf gnome3.adwaita-icon-theme evince
     libsoup webkitgtk gjs gobject-introspection
     tracker tracker-miners libgdata
     gnome-desktop libzapojit libgepub

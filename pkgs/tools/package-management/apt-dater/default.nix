@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "apt-dater-${version}";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "DE-IBH";
     repo = "apt-dater";
     rev = "v${version}";
-    sha256 = "1flr6cm72cywmwp5h7pbmmpq057xsi9shkczyplxqaqrb2gns5fl";
+    sha256 = "1r6gz9jkh1wxi11mcq5p9mqg0szclsaq8ic79vnfnbjdrmmdfi4y";
   };
 
   nativeBuildInputs = [

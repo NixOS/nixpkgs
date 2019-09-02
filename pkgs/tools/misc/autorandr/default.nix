@@ -24,7 +24,7 @@ in
       runHook preInstall
       make install TARGETS='autorandr' PREFIX=$out
 
-      make install TARGETS='bash_completion' DESTDIR=$out
+      make install TARGETS='bash_completion' DESTDIR=$out/share/bash-completion/completions
 
       make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
 

@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "178dmrp0mza5gqjiqgk6dqs0c10s0c517pk6k9pjbam86vf47a1p";
   };
 
-  propagatedBuildInputs = [ texinfo ];
+  nativeBuildInputs = [ texinfo ];
 
   # I couldn't figure out how to pass the proper parameter to disable pdf generation, so we
   # use sed to change the default

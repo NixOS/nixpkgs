@@ -1,5 +1,6 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
 , glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobject-introspection, flatpak, fwupd
+, gtk3, gsettings-desktop-schemas, gnome-desktop
 , json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.gtk glib packagekit appstream-glib libsoup
-    gnome3.gsettings-desktop-schemas gnome3.gnome-desktop
+    gtk3 glib packagekit appstream-glib libsoup
+    gsettings-desktop-schemas gnome-desktop
     gspell json-glib libsecret ostree
     polkit flatpak fwupd
   ];

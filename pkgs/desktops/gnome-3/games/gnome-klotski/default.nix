@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig vala wrapGAppsHook intltool itstool libxml2 appstream-glib desktop-file-utils ];
-  buildInputs = [ glib gtk3 librsvg libgee libgnome-games-support gnome3.defaultIconTheme ];
+  buildInputs = [ glib gtk3 librsvg libgee libgnome-games-support gnome3.adwaita-icon-theme ];
 
   passthru = {
     updateScript = gnome3.updateScript {

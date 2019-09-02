@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 libxml2 python3Packages.python python3Packages.pyatspi
     python3Packages.pygobject3 python3Packages.ipython
-    at-spi2-core dbus libwnck3 gnome3.defaultIconTheme
+    at-spi2-core dbus libwnck3 gnome3.adwaita-icon-theme
   ];
 
   wrapPrefixVariables = [ "PYTHONPATH" ];

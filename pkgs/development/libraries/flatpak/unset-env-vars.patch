@@ -1,0 +1,10 @@
+--- a/common/flatpak-run.c
++++ b/common/flatpak-run.c
+@@ -1192,6 +1192,7 @@ static const ExportData default_exports[] = {
+   {"PERLLIB", NULL},
+   {"PERL5LIB", NULL},
+   {"XCURSOR_PATH", NULL},
++  {"GDK_PIXBUF_MODULE_FILE", NULL},
+ };
+ 
+ static const ExportData no_ld_so_cache_exports[] = {

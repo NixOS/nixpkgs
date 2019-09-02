@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pgcli";
@@ -12,6 +12,16 @@ python3Packages.buildPythonApplication rec {
     inherit pname version;
     sha256 = "1p4j2dbcfxd3kz86qi519jkqjx1mg5wdgn1gxdjx3lk1vpsd7x04";
   };
+
+  patches = [
+    (fetchpatch {
+      # TODO: Remove with next pgcli release. Fixes TypeError in tests
+      # https://github.com/dbcli/pgcli/pull/1006
+      url = https://github.com/dbcli/pgcli/commit/351135b61ef9ad3184c49a406544708daf589fe3.patch;
+      sha256 = "08131y0lv1v760i0ypcx2hljx066ks93kp96xkv3bycxnavvcl53";
+      excludes = [ "changelog.rst" ];
+    })
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     cli-helpers click configobj humanize prompt_toolkit psycopg2

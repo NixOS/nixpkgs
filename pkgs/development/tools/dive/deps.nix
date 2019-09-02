@@ -709,4 +709,24 @@
       sha256 = "0rinkyx3r2bq45mgcasnn5jb07cwbv3p3s2wwcrzxsarsj6wa5lc";
     };
   }
+
+  {
+    goPackagePath = "github.com/logrusorgru/aurora";
+    fetch = {
+      type = "git";
+      url = "https://github.com/logrusorgru/aurora";
+      rev = "a7b3b318ed4e";
+      sha256 = "1dldc270z42zm2d377ks7sa5059janjcjhv3inza3rjvapknsrcb";
+    };
+  }
+
+  {
+    goPackagePath = "github.com/wagoodman/keybinding";
+    fetch = {
+      type = "git";
+      url = "https://github.com/wagoodman/keybinding";
+      rev = "6a824da6df05";
+      sha256 = "0f59idv5xia7w53363ym0qywvp0aas2kmk93rnndf2s7cs2f1d3l";
+    };
+  }
 ]

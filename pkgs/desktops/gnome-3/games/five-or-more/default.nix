@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool libxml2 python3 wrapGAppsHook ];
   buildInputs = [
-    gtk3 librsvg libgnome-games-support gnome3.defaultIconTheme
+    gtk3 librsvg libgnome-games-support gnome3.adwaita-icon-theme
   ];
 
   postPatch = ''

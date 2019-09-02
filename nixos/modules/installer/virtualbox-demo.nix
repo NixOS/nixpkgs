@@ -57,7 +57,5 @@ with lib;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
-
-  system.stateVersion = mkDefault "18.03";
   '';
 }

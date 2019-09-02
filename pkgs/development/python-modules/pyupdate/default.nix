@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pyupdate";
-  version = "0.2.16";
+  version = "0.2.29";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p4zpjvwy6h9kr0dp80z5k04s14r9f75jg9481gpx8ygxj0l29bi";
+    sha256 = "0096bde03f43b67c068914ebcb756265641a6d2a5888d4bc81636347c22bf0aa";
   };
 
   propagatedBuildInputs = [ requests ];

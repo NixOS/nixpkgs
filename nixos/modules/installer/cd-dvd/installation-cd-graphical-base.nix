@@ -31,6 +31,10 @@ with lib;
   # there is no power management backend such as upower).
   powerManagement.enable = true;
 
+  # Enable sound in graphical iso's.
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.systemWide = true; # Needed since we run plasma as root.
+
   environment.systemPackages = [
     # Include gparted for partitioning disks.
     pkgs.gparted

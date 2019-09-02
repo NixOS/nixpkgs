@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libXft, cairo, harfbuzz
-, libintl, gobject-introspection, darwin, fribidi, gnome3
+, libintl, gobject-introspection, darwin, fribidi, gnome3, fetchpatch
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
 }:
 
@@ -15,6 +15,14 @@ in stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "17bwb7dgbncrfsmchlib03k9n3xaalirb39g3yb43gg8cg6p8aqx";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/pango/commit/490f8979a260c16b1df055eab386345da18a2d54.patch";
+      name = "CVE-2019-1010238.patch";
+      sha256 = "1s0qclbaknkx3dkc3n6mlmx3fnhlr2pkncqjkywprpvahmmypr7k";
+    })
+  ];
 
   outputs = [ "bin" "dev" "out" "devdoc" ];
 

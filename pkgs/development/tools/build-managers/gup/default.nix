@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, nix-update-source, lib, python, which, pychecker ? null }:
+{ stdenv, fetchFromGitHub, nix-update-source, lib, python
+, which, runtimeShell, pychecker ? null }:
 stdenv.mkDerivation rec {
   version = "0.7.0";
   src = fetchFromGitHub {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     cp -r python/bin $out/bin
   '';
   passthru.updateScript = ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     set -e
     echo
     cd ${toString ./.}

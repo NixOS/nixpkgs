@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3 }:
+{ stdenv, fetchurl, python3, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin" "$out/${python3.sitePackages}/"
     cp "${src}" "$out/${python3.sitePackages}/mozlz4a.py"
 
-    echo "#!${stdenv.shell}" >> "$out/bin/mozlz4a"
+    echo "#!${runtimeShell}" >> "$out/bin/mozlz4a"
     echo "export PYTHONPATH='$PYTHONPATH'" >> "$out/bin/mozlz4a"
     echo "'${python3}/bin/python' '$out/${python3.sitePackages}/mozlz4a.py' \"\$@\"" >> "$out/bin/mozlz4a"
     chmod a+x "$out/bin/mozlz4a"

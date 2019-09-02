@@ -24,6 +24,11 @@ python3Packages.buildPythonApplication rec {
   pname = "cozy";
   version = "0.6.7";
 
+  # Temporary fix
+  # See https://github.com/NixOS/nixpkgs/issues/57029
+  # and https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
   src = fetchFromGitHub {
     owner = "geigi";
     repo = pname;
@@ -43,7 +48,7 @@ python3Packages.buildPythonApplication rec {
     gtk3
     cairo
     gettext
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-good

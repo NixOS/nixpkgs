@@ -8,16 +8,15 @@
 }:
 
 let
-  pname = "kdevelop";
-  version = "5.3.1";
   qtVersion = "5.${lib.versions.minor qtbase.version}";
 in
 mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "kdevelop";
+  version = "5.3.3";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "1098ra7qpal6578hsv20kvxc63v47sp85wjhqr5rgzr2fm7jf6fr";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "0778587qvi268ab2fgggfl40cv2swgr8q891q1paflp3m1xirpff";
   };
 
   nativeBuildInputs = [
@@ -76,7 +75,7 @@ mkDerivation rec {
         programing languages. It is based on KDevPlatform, KDE and Qt
         libraries and is under development since 1998.
       '';
-    homepage = https://www.kdevelop.org;
+    homepage = "https://www.kdevelop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
   };
 }

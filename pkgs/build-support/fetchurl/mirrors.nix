@@ -379,7 +379,7 @@ rec {
   # Steam Runtime mirrors
   steamrt = [
     http://repo.steampowered.com/steamrt/
-    https://abbradar.net/steamrt/
+    https://public.abbradar.moe/steamrt/
   ];
 
   # Python PyPI mirrors

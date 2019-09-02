@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
-, buildEnv, config
+, buildEnv, config, runtimeShell
 }:
 
 let
@@ -95,7 +95,7 @@ let
     postBuild = ''
       rm "$out/bin" && mkdir "$out/bin"
       cat > "$out/bin/simutrans" <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd "$out"/share/simutrans
       exec "${binaries}/bin/simutrans" -use_workdir "\''${extraFlagsArray[@]}" "\$@"
       EOF
@@ -167,4 +167,3 @@ let
   };
 
 in result
-

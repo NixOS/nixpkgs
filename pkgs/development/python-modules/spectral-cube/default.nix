@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.4.3";
+  version = "0.4.4";
 
   doCheck = false; # the tests requires several pytest plugins that are not in nixpkgs
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "057g3mzlg5cy4wg2hh3p6gssn93rs6i7pswzhldvcq4k8m8hsl3b";
+    sha256 = "9051ede204b1e25b6358b5e0e573b624ec0e208c24eb03a7ed4925b745c93b5e";
   };
 
   propagatedBuildInputs = [ astropy radio_beam pytest ];

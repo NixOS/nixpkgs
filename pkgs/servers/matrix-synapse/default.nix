@@ -1,8 +1,20 @@
-{ lib, stdenv, python3
-, enableSystemd ? true
+{ lib, stdenv, fetchFromGitHub, python3, openssl
+, enableSystemd ? stdenv.isLinux
 }:
 
-with python3.pkgs;
+with python3.pkgs.override {
+  overrides = self: super: {
+    service-identity = super.service-identity.overrideAttrs (oldAttrs: rec {
+      version = "18.1.0";
+      src = fetchFromGitHub {
+        owner = "pyca";
+        repo = "service_identity";
+        rev = version;
+        sha256 = "1aw475ksmd4vpl8cwfdcsw2v063nbhnnxpy633sb75iqp9aazhlx";
+      };
+    });
+  };
+};
 
 let
   matrix-synapse-ldap3 = buildPythonPackage rec {
@@ -23,12 +35,17 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "0.99.1.1";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ych13x3c2cam7af4q2ariwvzwvr65g3j2x8ajjn33ydwxxbqbg6";
+    sha256 = "0pr17n52vdq490q6c282nqnn51j5k0lf7mzaazpxjy4q86pxdfy5";
   };
+
+  patches = [
+    # adds an entry point for the service
+    ./homeserver-script.patch
+  ];
 
   propagatedBuildInputs = [
     bcrypt
@@ -67,16 +84,16 @@ in buildPythonApplication rec {
     unpaddedbase64
   ] ++ lib.optional enableSystemd systemd;
 
-  checkInputs = [ mock parameterized ];
+  checkInputs = [ mock parameterized openssl ];
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
 
   meta = with stdenv.lib; {
     homepage = https://matrix.org;
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog ];
+    maintainers = with maintainers; [ ralith roblabla ekleog pacien ];
   };
 }

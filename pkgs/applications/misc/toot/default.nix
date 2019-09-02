@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     description = "Mastodon CLI interface";
     homepage    = "https://github.com/ihabunek/toot";
     license     = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 
 }

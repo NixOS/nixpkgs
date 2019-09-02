@@ -1,6 +1,13 @@
 { lib, config, stdenv }:
 
-rec {
+let
+  checkMeta = import ./check-meta.nix {
+    inherit lib config;
+    # Nix itself uses the `system` field of a derivation to decide where
+    # to build it. This is a bit confusing for cross compilation.
+    inherit (stdenv) hostPlatform;
+  };
+in rec {
   # `mkDerivation` wraps the builtin `derivation` function to
   # produce derivations that use this stdenv and its shell.
   #
@@ -70,6 +77,7 @@ rec {
           else builtins.unsafeGetAttrPos "name" attrs)
     , separateDebugInfo ? false
     , outputs ? [ "out" ]
+    , __darwinAllowLocalNetworking ? false
     , __impureHostDeps ? []
     , __propagatedImpureHostDeps ? []
     , sandboxProfile ? ""
@@ -175,6 +183,7 @@ rec {
         (removeAttrs attrs
           ["meta" "passthru" "pos"
            "checkInputs" "installCheckInputs"
+           "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
         // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
@@ -245,6 +254,7 @@ rec {
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
+          inherit __darwinAllowLocalNetworking;
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
           let profiles = [ stdenv.extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
@@ -260,12 +270,7 @@ rec {
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         };
 
-      validity = import ./check-meta.nix {
-        inherit lib config meta;
-        # Nix itself uses the `system` field of a derivation to decide where
-        # to build it. This is a bit confusing for cross compilation.
-        inherit (stdenv) hostPlatform;
-      } attrs;
+      validity = checkMeta { inherit meta attrs; };
 
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not

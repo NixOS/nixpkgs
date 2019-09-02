@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee
     libgudev gnome3.gexiv2 gnome3.gsettings-desktop-schemas
     libraw json-glib glib gdk_pixbuf librsvg gnome3.rest
-    gcr gnome3.defaultIconTheme libgdata
+    gcr gnome3.adwaita-icon-theme libgdata
   ];
 
   postPatch = ''

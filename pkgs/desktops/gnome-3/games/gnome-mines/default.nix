@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   # gobject-introspection for finding vapi files
   nativeBuildInputs = [ meson ninja vala gobject-introspection pkgconfig gettext itstool python3 libxml2 wrapGAppsHook ];
-  buildInputs = [ gtk3 librsvg gnome3.defaultIconTheme libgnome-games-support libgee ];
+  buildInputs = [ gtk3 librsvg gnome3.adwaita-icon-theme libgnome-games-support libgee ];
 
   postPatch = ''
     chmod +x data/meson_compile_gschema.py # patchShebangs requires executable file

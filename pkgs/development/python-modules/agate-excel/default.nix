@@ -1,21 +1,28 @@
-{ stdenv, fetchPypi, buildPythonPackage, agate, openpyxl, xlrd }:
+{ lib, fetchPypi, fetchpatch, buildPythonPackage
+, agate, openpyxl, xlrd, nose
+}:
 
 buildPythonPackage rec {
-    pname = "agate-excel";
-    version = "0.2.2";
+  pname = "agate-excel";
+  version = "0.2.3";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "8923f71ee2b5b7b21e52fb314a769b28fb902f647534f5cbbb41991d8710f4c7";
-    };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "8f255ef2c87c436b7132049e1dd86c8e08bf82d8c773aea86f3069b461a17d52";
+  };
 
-    propagatedBuildInputs = [ agate openpyxl xlrd ];
+  propagatedBuildInputs = [ agate openpyxl xlrd ];
 
-    meta = with stdenv.lib; {
-      description = "Adds read support for excel files to agate";
-      homepage    = "https://github.com/wireservice/agate-excel";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
+  checkInputs = [ nose ];
 
+  checkPhase = ''
+    nosetests
+  '';
+
+  meta = with lib; {
+    description = "Adds read support for excel files to agate";
+    homepage    = https://github.com/wireservice/agate-excel;
+    license     = licenses.mit;
+    maintainers = with maintainers; [ vrthra ];
+  };
 }

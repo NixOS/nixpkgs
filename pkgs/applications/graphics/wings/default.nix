@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, erlang, cl, libGL, libGLU }:
+{ fetchurl, stdenv, erlang, cl, libGL, libGLU, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "wings-2.2.1";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp ebin/* $out/lib/${name}/ebin
     cp -R textures shaders plugins $out/lib/$name
     cat << EOF > $out/bin/wings
-    #!${stdenv.shell}
+    #!${runtimeShell}
     ${erlang}/bin/erl \
       -pa $out/lib/${name}/ebin -run wings_start start_halt "$@"
     EOF
@@ -43,4 +43,3 @@ stdenv.mkDerivation rec {
     platforms = with stdenv.lib.platforms; linux;
   };
 }
-

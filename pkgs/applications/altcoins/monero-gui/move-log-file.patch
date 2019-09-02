@@ -13,15 +13,17 @@ index 79223c0..e80b317 100644
      parser.addHelpOption();
      parser.process(app);
 diff --git a/Logger.cpp b/Logger.cpp
-index 660bafc..dae24d4 100644
+index 6b1daba..c357762 100644
 --- a/Logger.cpp
 +++ b/Logger.cpp
-@@ -15,7 +15,7 @@ static const QString default_name = "monero-wallet-gui.log";
- #elif defined(Q_OS_MAC)
-     static const QString osPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).at(0) + "/Library/Logs";
+@@ -28,8 +28,8 @@ static const QString defaultLogName = "monero-wallet-gui.log";
+     static const QString appFolder = "Library/Logs";
  #else // linux + bsd
+     //HomeLocation = "~"
 -    static const QString osPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).at(0);
+-    static const QString appFolder = ".bitmonero";
 +    static const QString osPath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).at(0);
++    static const QString appFolder = "bitmonero";
  #endif
- 
+
  

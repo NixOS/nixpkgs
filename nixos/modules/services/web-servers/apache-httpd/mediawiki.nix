@@ -116,9 +116,10 @@ let
       '';
   };
 
-  mediawikiScripts = pkgs.runCommand "mediawiki-${config.id}-scripts"
-    { buildInputs = [ pkgs.makeWrapper ]; }
-    ''
+  mediawikiScripts = pkgs.runCommand "mediawiki-${config.id}-scripts" {
+      buildInputs = [ pkgs.makeWrapper ];
+      preferLocalBuild = true;
+    } ''
       mkdir -p $out/bin
       for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
         makeWrapper ${php}/bin/php $out/bin/mediawiki-${config.id}-$(basename $i .php) \

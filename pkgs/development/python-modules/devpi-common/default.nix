@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, requests, py, pytest }:
+{ lib, buildPythonPackage, fetchPypi, requests, py, pytest, pytest-flakes }:
 
 buildPythonPackage rec {
   pname = "devpi-common";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ requests py ];
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest pytest-flakes ];
 
   checkPhase = ''
     py.test

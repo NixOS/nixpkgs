@@ -196,9 +196,10 @@ let
     ''; # */
 
 
-  udevRules = pkgs.runCommand "udev-rules"
-    { allowedReferences = [ extraUtils ]; }
-    ''
+  udevRules = pkgs.runCommand "udev-rules" {
+      allowedReferences = [ extraUtils ];
+      preferLocalBuild = true;
+    } ''
       mkdir -p $out
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
@@ -298,9 +299,10 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu"
-            { src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf"; }
-            ''
+        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
+              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+              preferLocalBuild = true;
+            } ''
               target=$out
               ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
             '';

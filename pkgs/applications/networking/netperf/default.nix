@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wfj9kkhar6jb5639f5wxpwsraxw4v9yzg71rsdidvj5fyncjjq2";
   };
 
-  buildInputs = [ libsmbios ];
+  buildInputs = stdenv.lib.optional (stdenv.hostPlatform.isx86) libsmbios;
   nativeBuildInputs = [ autoreconfHook ];
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4

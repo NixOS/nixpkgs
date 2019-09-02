@@ -48,6 +48,8 @@ rec {
     visible ? null,
     # Whether the option can be set only once
     readOnly ? null,
+    # Deprecated, used by types.optionSet.
+    options ? null
     } @ attrs:
     attrs // { _type = "option"; };
 

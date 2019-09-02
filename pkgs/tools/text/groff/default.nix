@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  patches = [ ./look-for-ar.patch ];
+  patches = [
+    ./look-for-ar.patch
+    ./mdate-determinism.patch
+  ];
 
   postPatch = stdenv.lib.optionalString (psutils != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \

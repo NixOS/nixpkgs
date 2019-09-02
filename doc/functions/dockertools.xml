@@ -47,7 +47,7 @@ buildImage {
 
   contents = pkgs.redis; <co xml:id='ex-dockerTools-buildImage-6' />
   runAsRoot = '' <co xml:id='ex-dockerTools-buildImage-runAsRoot' />
-    #!${stdenv.shell}
+    #!${pkgs.runtimeShell}
     mkdir -p /data
   '';
 
@@ -544,7 +544,7 @@ buildImage {
   name = "shadow-basic";
 
   runAsRoot = ''
-    #!${stdenv.shell}
+    #!${pkgs.runtimeShell}
     ${shadowSetup}
     groupadd -r redis
     useradd -r -g redis redis

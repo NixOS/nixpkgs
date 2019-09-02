@@ -1,7 +1,8 @@
-{ fetchurl, stdenv, pkgconfig, intltool, libxml2
+{ fetchurl, fetchpatch, stdenv, pkgconfig, intltool, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
-, librsvg, gobject-introspection, yelp-tools, gspell
+, librsvg, gobject-introspection, yelp-tools, gspell, adwaita-icon-theme, gsettings-desktop-schemas
+, libgxps
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
 , autoreconfHook, pruneLibtoolFiles
@@ -16,6 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "0k7jln6dpg4bpv61niicjzkzyq6fhb3yfld7pc8ck71c8pmvsnx9";
   };
 
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-11459.patch";
+      url = "https://gitlab.gnome.org/GNOME/evince/commit/3e38d5ad724a042eebadcba8c2d57b0f48b7a8c7.patch";
+      sha256 = "1ds6iwr2r9i86nwrly8cx7p1kbvf1gljjplcffa67znxqmwx4n74";
+    })
+  ];
+
   passthru = {
     updateScript = gnome3.updateScript { packageName = "evince"; };
   };
@@ -26,18 +36,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib gtk3 pango atk gdk_pixbuf libxml2
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
     poppler ghostscriptX djvulibre libspectre libarchive
-    libsecret librsvg gnome3.adwaita-icon-theme gspell
-  ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
+    libsecret librsvg adwaita-icon-theme gspell
+  ] ++ stdenv.lib.optional supportXPS libgxps;
 
   configureFlags = [
     "--disable-nautilus" # Do not build nautilus plugin
+    "--enable-ps"
     "--enable-introspection"
     (if supportXPS then "--enable-xps" else "--disable-xps")
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   preConfigure = stdenv.lib.optionalString (recentListSize != null) ''
     sed -i 's/\(gtk_recent_chooser_set_limit .*\)5)/\1${builtins.toString recentListSize})/' shell/ev-open-recent-action.c

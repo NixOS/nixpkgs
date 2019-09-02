@@ -1,6 +1,6 @@
 {buildVersion, x32sha256, x64sha256}:
 
-{ fetchurl, stdenv, glib, xorg, cairo, gtk2, gtk3, pango, makeWrapper, wrapGAppsHook, openssl, bzip2,
+{ fetchurl, stdenv, glib, xorg, cairo, gtk2, gtk3, pango, makeWrapper, wrapGAppsHook, openssl, bzip2, runtimeShell,
   pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
   gksuSupport ? false, gksu, unzip, zip, bash}:
 
@@ -115,7 +115,7 @@ in stdenv.mkDerivation (rec {
     mkdir -p $out/bin
 
     cat > $out/bin/subl <<-EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     exec $sublime/sublime_text "\$@"
     EOF
     chmod +x $out/bin/subl

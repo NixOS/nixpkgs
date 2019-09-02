@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gobject-introspection, python2
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
 , libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
-, gnome3, icu, libuuid, networkmanager, libsoup, json-glib }:
+, gnome3, icu, libuuid, networkmanager, libsoup, json-glib, substituteAll }:
 
 let
   pname = "tracker";
-  version = "2.1.6";
+  version = "2.1.8";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "143zapq50lggj3mpqg2y4rh1hgnkbn9vgvzpqxr7waiawsmx0awq";
+    sha256 = "0a2m0472k245k95w527d6cb4i0p8ns8z5vxh0mcx33wbh41k9jya";
   };
 
   nativeBuildInputs = [
@@ -29,31 +29,22 @@ in stdenv.mkDerivation rec {
   LC_ALL = "en_US.UTF-8";
 
   mesonFlags = [
-    "-Ddbus_services=share/dbus-1/services"
-    "-Dsystemd_user_services=lib/systemd/user"
+    "-Ddbus_services=${placeholder ''out''}/share/dbus-1/services"
+    "-Dsystemd_user_services=${placeholder ''out''}/lib/systemd/user"
     # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
     "-Dfunctional_tests=false"
   ];
 
   patches = [
-    # Always generate tracker-sparql.h in time
-    (fetchurl {
-      url = https://gitlab.gnome.org/GNOME/tracker/commit/3cbfaa5b374e615098e60eb4430f108b642ebe76.diff;
-      sha256 = "0smavzvsglpghggrcl8sjflki13nh7pr0jl2yv6ymbf5hr1c4dws";
+    (substituteAll {
+      src = ./fix-paths.patch;
+      gdbus = "${glib.bin}/bin/gdbus";
     })
   ];
 
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
     patchShebangs utils/data-generators/cc/generate
-
-    # make .desktop Exec absolute
-    patch -p0 <<END_PATCH
-    +++ src/tracker-store/tracker-store.desktop.in.in
-    @@ -4 +4 @@
-    -Exec=gdbus call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
-    +Exec=${glib.dev}/bin/gdbus call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
-    END_PATCH
   '';
 
   postInstall = ''

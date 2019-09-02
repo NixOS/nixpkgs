@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s7bdykc77slqix28cyaa6x8wvxrn8461mkdgxflvi2apwsl56aa";
   };
 
-  buildInputs = [ wxGTK maxima gnome3.defaultIconTheme ];
+  buildInputs = [ wxGTK maxima gnome3.adwaita-icon-theme ];
 
   nativeBuildInputs = [ wrapGAppsHook cmake gettext ];
 

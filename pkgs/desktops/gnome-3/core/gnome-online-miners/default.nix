@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, gnome3, libxml2
-, libsoup, json-glib, gmp, openssl, dleyna-server, wrapGAppsHook }:
+, libgdata, grilo, libzapojit, grilo-plugins, gnome-online-accounts, libmediaart
+, tracker, gfbgraph, librest, libsoup, json-glib, gmp, openssl, dleyna-server, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "gnome-online-miners-${version}";
@@ -10,18 +11,23 @@ stdenv.mkDerivation rec {
     sha256 = "0pjamwwzn5wqgihyss357dyl2q70r0bngnqmwsqawchx5f9aja9c";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-online-miners"; attrPath = "gnome3.gnome-online-miners"; };
-  };
-
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ glib gnome3.libgdata libxml2 libsoup gmp openssl
-                  gnome3.grilo gnome3.libzapojit gnome3.grilo-plugins
-                  gnome3.gnome-online-accounts gnome3.libmediaart
-                  gnome3.tracker gnome3.gfbgraph json-glib gnome3.rest
-                  dleyna-server ];
+  buildInputs = [
+    glib libgdata libxml2 libsoup gmp openssl
+    grilo libzapojit grilo-plugins
+    gnome-online-accounts libmediaart
+    tracker gfbgraph json-glib librest
+    dleyna-server
+  ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-online-miners";
+      attrPath = "gnome3.gnome-online-miners";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GnomeOnlineMiners;

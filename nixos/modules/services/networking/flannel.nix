@@ -161,7 +161,10 @@ in {
         FLANNELD_KUBECONFIG_FILE = cfg.kubeconfig;
         NODE_NAME = cfg.nodeName;
       };
-      preStart = mkIf (cfg.storageBackend == "etcd") ''
+      preStart = ''
+        mkdir -p /run/flannel
+        touch /run/flannel/docker
+      '' + optionalString (cfg.storageBackend == "etcd") ''
         echo "setting network configuration"
         until ${pkgs.etcdctl.bin}/bin/etcdctl set /coreos.com/network/config '${builtins.toJSON networkConfig}'
         do
@@ -169,13 +172,11 @@ in {
           sleep 1
         done
       '';
-      postStart = ''
-        while [ ! -f /run/flannel/subnet.env ]
-        do
-          sleep 1
-        done
-      '';
-      serviceConfig.ExecStart = "${cfg.package}/bin/flannel";
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/flannel";
+        Restart = "always";
+        RestartSec = "10s";
+      };
     };
 
     services.etcd.enable = mkDefault (cfg.storageBackend == "etcd" && cfg.etcd.endpoints == ["http://127.0.0.1:2379"]);

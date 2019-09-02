@@ -17,6 +17,7 @@
 
 let
   setuptools-specific = import ./build-python-package-setuptools.nix { inherit lib python; };
+  pyproject-specific = import ./build-python-package-pyproject.nix { inherit lib python; };
   flit-specific = import ./build-python-package-flit.nix { inherit python flit; };
   wheel-specific = import ./build-python-package-wheel.nix { };
   common = import ./build-python-package-common.nix { inherit python; };
@@ -37,7 +38,8 @@ format ? "setuptools"
 
 let
   formatspecific =
-    if format == "setuptools" then common (setuptools-specific attrs)
+    if format == "pyproject" then common (pyproject-specific attrs)
+    else if format == "setuptools" then common (setuptools-specific attrs)
     else if format == "flit" then common (flit-specific attrs)
     else if format == "wheel" then common (wheel-specific attrs)
     else if format == "other" then {}

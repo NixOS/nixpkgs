@@ -17,10 +17,10 @@ buildPythonApplication rec {
   disabled = ! pythonAtLeast "3.5";
 
   # Prevent setup.py from adding dependencies in run-time and insisting on specific package versions
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.py --replace "return requires" "return []"
-    '';
-  buildInputs = [ coverage pytest pytestcov ];
+  '';
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ ansicolor chardet pyyaml ] ;
 
   # The acceptance tests check for stdout and location of binary files, which fails in nix-build.

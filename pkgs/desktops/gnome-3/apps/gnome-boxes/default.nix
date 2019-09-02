@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     libvirt-glib glib gtk3 gtk-vnc freerdp libxml2
     libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
     tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
-    gnome3.defaultIconTheme librsvg acl libgudev libsecret
+    gnome3.adwaita-icon-theme librsvg acl libgudev libsecret
     libcap_ng numactl xen libapparmor
   ];
 

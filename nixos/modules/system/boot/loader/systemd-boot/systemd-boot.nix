@@ -22,9 +22,13 @@ let
 
     editor = if cfg.editor then "True" else "False";
 
+    configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
+
     inherit (cfg) consoleMode;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
+
+    memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
   };
 in {
 
@@ -52,6 +56,19 @@ in {
         gaining root access by passing init=/bin/sh as a kernel
         parameter. However, it is enabled by default for backwards
         compatibility.
+      '';
+    };
+
+    configurationLimit = mkOption {
+      default = null;
+      example = 120;
+      type = types.nullOr types.int;
+      description = ''
+        Maximum number of latest generations in the boot menu. 
+        Useful to prevent boot partition running out of disk space.
+
+        <literal>null</literal> means no limit i.e. all generations 
+        that were not garbage collected yet.
       '';
     };
 
@@ -85,6 +102,19 @@ in {
           </para></listitem>
         </itemizedlist>
       '';
+    };
+
+    memtest86 = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Make MemTest86 available from the systemd-boot menu. MemTest86 is a
+          program for testing memory.  MemTest86 is an unfree program, so
+          this requires <literal>allowUnfree</literal> to be set to
+          <literal>true</literal>.
+        '';
+      };
     };
   };
 
