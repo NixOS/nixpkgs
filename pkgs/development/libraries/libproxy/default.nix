@@ -1,6 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, zlib, fetchpatch
-, dbus, networkmanager, spidermonkey_38, pcre, python2, python3
-, SystemConfiguration, CoreFoundation, JavaScriptCore }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, zlib
+, fetchpatch
+, dbus
+, networkmanager
+, spidermonkey_38
+, pcre
+, python2
+, python3
+, SystemConfiguration
+, CoreFoundation
+, JavaScriptCore
+}:
 
 stdenv.mkDerivation rec {
   pname = "libproxy";
@@ -15,12 +28,25 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "py2" "py3" ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [
+    pkgconfig
+    cmake
+  ];
 
-  buildInputs = [ pcre python2 python3 zlib ]
-        ++ (if stdenv.hostPlatform.isDarwin
-            then [ SystemConfiguration CoreFoundation JavaScriptCore ]
-            else [ spidermonkey_38 dbus networkmanager ]);
+  buildInputs = [
+    pcre
+    python2
+    python3
+    zlib
+  ] ++ (if stdenv.hostPlatform.isDarwin then [
+    SystemConfiguration
+    CoreFoundation
+    JavaScriptCore
+  ] else [
+    spidermonkey_38
+    dbus
+    networkmanager
+  ]);
 
   cmakeFlags = [
     "-DWITH_MOZJS=ON"
@@ -28,11 +54,12 @@ stdenv.mkDerivation rec {
     "-DPYTHON3_SITEPKG_DIR=${placeholder "py3"}/${python3.sitePackages}"
   ];
 
-  patches = stdenv.lib.optional stdenv.isDarwin
+  patches = stdenv.lib.optionals stdenv.isDarwin [
     (fetchpatch {
       url = "https://github.com/libproxy/libproxy/commit/44158f03f8522116758d335688ed840dfcb50ac8.patch";
       sha256 = "0axfvb6j7gcys6fkwi9dkn006imhvm3kqr83gpwban8419n0q5v1";
-    });
+    })
+  ];
 
   doCheck = false; # fails 1 out of 10 tests
 
