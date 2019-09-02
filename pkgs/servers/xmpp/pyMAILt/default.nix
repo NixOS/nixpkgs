@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   pythonPath = [ xmpppy ];
   buildInputs = [ pythonPackages.wrapPython ];
 
-  /* doConfigure should be removed if not needed */
   installPhase = ''
     cd mail-transport
     mkdir -p $out/bin $out/share/${pname}-${version}
