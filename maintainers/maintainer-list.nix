@@ -4361,6 +4361,12 @@
     githubId = 39034;
     name = "Max Treskin";
   };
+  mtrsk = {
+    email = "marcos.schonfinkel@protonmail.com";
+    github = "mtrsk";
+    githubId = 16356569;
+    name = "Marcos Benevides";
+  };
   mudri = {
     email = "lamudri@gmail.com";
     github = "laMudri";

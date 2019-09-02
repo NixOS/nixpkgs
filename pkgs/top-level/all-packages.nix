@@ -1900,6 +1900,8 @@ in
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap {};
 
+  pastel = callPackage ../tools/misc/pastel {};
+
   procs = callPackage ../tools/admin/procs {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
