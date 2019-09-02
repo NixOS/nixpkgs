@@ -13,7 +13,7 @@ let
 in
 /*
 (echo {
-  for f in tensorflow{,-*}; do
+  for f in tensorflow{,-core-ops,-logging,-opgen,-ops,-proto,-records{,-conduit},-test}; do
     echo $f '= super.callPackage ('
     cabal2nix . --subpath $f
     echo ') {};'
@@ -156,95 +156,6 @@ echo }) | sed 's1src = ./.;1src = tensorflow-haskell-src;1' | nixfmt
       ];
       homepage = "https://github.com/tensorflow/haskell#readme";
       description = "TensorBoard related functionality";
-      license = stdenv.lib.licenses.asl20;
-    }) { };
-  tensorflow-mnist = super.callPackage ({ mkDerivation, base, binary, bytestring
-    , containers, filepath, HUnit, lens-family, proto-lens, split, stdenv
-    , tensorflow, tensorflow-core-ops, tensorflow-mnist-input-data
-    , tensorflow-ops, tensorflow-proto, test-framework, test-framework-hunit
-    , text, transformers, vector, zlib }:
-    mkDerivation {
-      pname = "tensorflow-mnist";
-      version = "0.1.0.0";
-      src = tensorflow-haskell-src;
-      postUnpack =
-        "sourceRoot+=/tensorflow-mnist; echo source root reset to $sourceRoot";
-      isLibrary = true;
-      isExecutable = true;
-      enableSeparateDataOutput = true;
-      libraryHaskellDepends = [
-        base
-        binary
-        bytestring
-        containers
-        filepath
-        lens-family
-        proto-lens
-        split
-        tensorflow
-        tensorflow-core-ops
-        tensorflow-proto
-        text
-        vector
-        zlib
-      ];
-      executableHaskellDepends = [
-        base
-        bytestring
-        filepath
-        lens-family
-        proto-lens
-        tensorflow
-        tensorflow-mnist-input-data
-        tensorflow-ops
-        tensorflow-proto
-        text
-        transformers
-        vector
-      ];
-      testHaskellDepends = [
-        base
-        bytestring
-        HUnit
-        lens-family
-        proto-lens
-        tensorflow
-        tensorflow-mnist-input-data
-        tensorflow-ops
-        tensorflow-proto
-        test-framework
-        test-framework-hunit
-        text
-        transformers
-        vector
-      ];
-      homepage = "https://github.com/tensorflow/haskell#readme";
-      description = "TensorFlow demo application for learning MNIST model";
-      license = stdenv.lib.licenses.asl20;
-    }) { };
-  tensorflow-mnist-input-data = super.callPackage ({ mkDerivation, base
-    , bytestring, Cabal, cryptonite, directory, filepath, HTTP, network-uri
-    , stdenv }:
-    mkDerivation {
-      pname = "tensorflow-mnist-input-data";
-      version = "0.1.0.0";
-      src = tensorflow-haskell-src;
-      postUnpack =
-        "sourceRoot+=/tensorflow-mnist-input-data; echo source root reset to $sourceRoot";
-      enableSeparateDataOutput = true;
-      setupHaskellDepends = [
-        base
-        bytestring
-        Cabal
-        cryptonite
-        directory
-        filepath
-        HTTP
-        network-uri
-      ];
-      libraryHaskellDepends = [ base ];
-      homepage = "https://github.com/tensorflow/haskell#readme";
-      description = "Downloader of input data for training MNIST";
       license = stdenv.lib.licenses.asl20;
     }) { };
   tensorflow-opgen = super.callPackage ({ mkDerivation, base, bytestring
