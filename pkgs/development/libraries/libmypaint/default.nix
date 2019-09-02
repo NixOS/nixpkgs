@@ -1,10 +1,18 @@
-{stdenv, autoconf, automake, fetchFromGitHub, fetchpatch, glib, intltool, json_c, libtool, pkgconfig}:
+{ stdenv
+, autoconf
+, automake
+, fetchFromGitHub
+, fetchpatch
+, glib
+, intltool
+, json_c
+, libtool
+, pkgconfig
+}:
 
-let
-  version = "1.3.0";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libmypaint";
-  inherit version;
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "mypaint";
@@ -21,11 +29,22 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake intltool libtool pkgconfig ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    intltool
+    libtool
+    pkgconfig
+  ];
 
-  buildInputs = [ glib ];
+  buildInputs = [
+    glib
+  ];
 
-  propagatedBuildInputs = [ json_c ]; # for libmypaint.pc
+  # for libmypaint.pc
+  propagatedBuildInputs = [
+    json_c
+  ];
 
   doCheck = true;
 
