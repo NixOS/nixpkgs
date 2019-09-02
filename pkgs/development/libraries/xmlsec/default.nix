@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libxml2, gnutls, libxslt, pkgconfig, libgcrypt, libtool
-, openssl, nss, makeWrapper }:
+, openssl, nss }:
 
 let
   version = "1.2.28";
@@ -13,9 +13,16 @@ stdenv.mkDerivation {
     sha256 = "1m12caglhyx08g8lh2sl3nkldlpryzdx2d572q73y3m33s0w9vhk";
   };
 
+  patches = [
+    ./lt_dladdsearchdir.patch
+  ];
+  postPatch = ''
+    substituteAllInPlace src/dl.c
+  '';
+
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss ];
 
@@ -32,10 +39,6 @@ stdenv.mkDerivation {
   postInstall = ''
     moveToOutput "bin/xmlsec1-config" "$dev"
     moveToOutput "lib/xmlsec1Conf.sh" "$dev"
-  '';
-
-  postFixup = ''
-    wrapProgram "$out/bin/xmlsec1" --prefix LD_LIBRARY_PATH ":" "$out/lib"
   '';
 
   meta = {
