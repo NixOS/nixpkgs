@@ -71,7 +71,16 @@ const SearchEngine = function() {
 
     // http://elasticlunr.com/docs/configuration.js.html
     const cfg = {
-        //fields: {title: {boost: 2}, body: {boost: 1}}
+        fields: {
+            title:{
+                //boost: 2
+                expand: true
+            },
+            body: {
+                //boost: 1
+                expand: true
+            }
+        }
     };
     window.search = this;
 
