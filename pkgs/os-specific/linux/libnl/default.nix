@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnl";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
     rev = "libnl${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1bqf1f5glwf285sa98k5pkj9gg79lliixk1jk85j63v5510fbagp";
+    sha256 = "1ak30jcx52gl5yz1691qq0b76ldbcp2z6vsvdr2mrrwqiplqbcs2";
   };
 
   outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional pythonSupport "py";
