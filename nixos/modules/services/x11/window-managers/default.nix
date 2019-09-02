@@ -19,6 +19,7 @@ in
     ./herbstluftwm.nix
     ./i3.nix
     ./jwm.nix
+    ./leftwm.nix
     ./metacity.nix
     ./mwm.nix
     ./openbox.nix

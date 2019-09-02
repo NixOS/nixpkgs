@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, python3 }:
+{ stdenv, fetchurl, python3, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "mozlz4a";
   version = "2018-08-23";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
@@ -10,13 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "1d1ai062kdms34bya9dlykkx011rj8d8nh5l7d76xj8k9kv4ssq6";
   };
 
-  unpackPhase = "true;";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin" "$out/${python3.sitePackages}/"
     cp "${src}" "$out/${python3.sitePackages}/mozlz4a.py"
 
-    echo "#!${stdenv.shell}" >> "$out/bin/mozlz4a"
+    echo "#!${runtimeShell}" >> "$out/bin/mozlz4a"
     echo "export PYTHONPATH='$PYTHONPATH'" >> "$out/bin/mozlz4a"
     echo "'${python3}/bin/python' '$out/${python3.sitePackages}/mozlz4a.py' \"\$@\"" >> "$out/bin/mozlz4a"
     chmod a+x "$out/bin/mozlz4a"

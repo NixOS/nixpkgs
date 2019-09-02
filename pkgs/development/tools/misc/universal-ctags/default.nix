@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "universal-ctags-${version}";
-  version = "2018-07-23";
+  pname = "universal-ctags";
+  version = "unstable-2019-07-30";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
-    rev = "3522685695ad3312cf4b19399e0c44f3395dd089";
-    sha256 = "1f67hy8c2yr9z4ydsqd7wg8iagzn01qjw2ccx6g8mngv3i3jz9mv";
+    rev = "920e7910146915e5cae367bc9f135ffd8b042042";
+    sha256 = "14n3ix77rkhq6vq6kspmgjrmm0kg0f8cxikyqdq281sbnfq8bajn";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];
@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--enable-tmpdir=/tmp" ];
+
+  postPatch = ''
+    # Remove source of non-determinism
+    substituteInPlace main/options.c \
+      --replace "printf (\"  Compiled: %s, %s\n\", __DATE__, __TIME__);" ""
+  '';
 
   postConfigure = ''
     sed -i 's|/usr/bin/env perl|${perl}/bin/perl|' misc/optlib2c

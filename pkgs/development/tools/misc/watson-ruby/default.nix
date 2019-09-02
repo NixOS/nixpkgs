@@ -1,8 +1,8 @@
-{ stdenv, bundlerEnv, ruby }:
+{ stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
 
 
 stdenv.mkDerivation rec {
-  name = "watson-ruby-${version}";
+  pname = "watson-ruby";
   version = (import ./gemset.nix).watson-ruby.version;
 
   env = bundlerEnv rec {
@@ -19,11 +19,13 @@ stdenv.mkDerivation rec {
     ln -s ${env}/bin/watson $out/bin/watson
   '';
 
+  passthru.updateScript = bundlerUpdateScript "watson-ruby";
+
   meta = with stdenv.lib; {
     description = "An inline issue manager";
     homepage    = http://goosecode.com/watson/;
     license     = with licenses; mit;
-    maintainers = with maintainers; [ robertodr ];
+    maintainers = with maintainers; [ robertodr nicknovitski ];
     platforms   = platforms.unix;
   };
 }

@@ -2,7 +2,7 @@
 , fetchgit
 }:
 stdenv.mkDerivation rec {
-  name = "argtable-${version}";
+  pname = "argtable";
   version = "3.0.1";
 
   src = fetchgit {

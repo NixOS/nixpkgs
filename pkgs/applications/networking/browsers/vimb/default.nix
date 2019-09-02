@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libsoup, webkit, gtk3, glib-networking
+{ stdenv, fetchFromGitHub, pkgconfig, libsoup, webkitgtk, gtk3, glib-networking
 , gsettings-desktop-schemas, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "vimb-${version}";
+  pname = "vimb";
   version = "3.3.0";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook pkgconfig ];
-  buildInputs = [ gtk3 libsoup webkit glib-networking gsettings-desktop-schemas ];
+  buildInputs = [ gtk3 libsoup webkitgtk glib-networking gsettings-desktop-schemas ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://fanglingsu.github.io/vimb/;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    maintainers = [];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

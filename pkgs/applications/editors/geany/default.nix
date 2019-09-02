@@ -3,15 +3,16 @@
 with stdenv.lib;
 
 let
-  version = "1.34.1";
+  version = "1.35";
 in
 
 stdenv.mkDerivation rec {
-  name = "geany-${version}";
+  pname = "geany";
+  inherit version;
 
   src = fetchurl {
-    url = "https://download.geany.org/${name}.tar.bz2";
-    sha256 = "e765efd89e759defe3fd797d8a2052afbb4b23522efbcc72e3a72b7f1093ec11";
+    url = "https://download.geany.org/${pname}-${version}.tar.bz2";
+    sha256 = "179xfnvhcxsv54v2mlrhykqv2j7klniln5sffvqqpjmdvwyivvim";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];

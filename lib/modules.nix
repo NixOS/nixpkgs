@@ -323,16 +323,14 @@ rec {
         else
           mergeDefinitions loc opt.type defs';
 
-      # Check whether the option is defined, and apply the ‘apply’
-      # function to the merged value.  This allows options to yield a
-      # value computed from the definitions.
-      value =
-        if !res.isDefined then
-          throw "The option `${showOption loc}' is used but not defined."
-        else if opt ? apply then
-          opt.apply res.mergedValue
-        else
-          res.mergedValue;
+
+      # The value with a check that it is defined
+      valueDefined = if res.isDefined then res.mergedValue else
+        throw "The option `${showOption loc}' is used but not defined.";
+
+      # Apply the 'apply' function to the merged value. This allows options to
+      # yield a value computed from the definitions
+      value = if opt ? apply then opt.apply valueDefined else valueDefined;
 
     in opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
@@ -476,8 +474,22 @@ rec {
      optionSet to options of type submodule.  FIXME: remove
      eventually. */
   fixupOptionType = loc: opt:
-    if opt.type.getSubModules or null == null
-      then opt // { type = opt.type or types.unspecified; }
+    let
+      options = opt.options or
+        (throw "Option `${showOption loc'}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
+      f = tp:
+        let optionSetIn = type: (tp.name == type) && (tp.functor.wrapped.name == "optionSet");
+        in
+        if tp.name == "option set" || tp.name == "submodule" then
+          throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
+        else if optionSetIn "attrsOf" then types.attrsOf (types.submodule options)
+        else if optionSetIn "loaOf"   then types.loaOf   (types.submodule options)
+        else if optionSetIn "listOf"  then types.listOf  (types.submodule options)
+        else if optionSetIn "nullOr"  then types.nullOr  (types.submodule options)
+        else tp;
+    in
+      if opt.type.getSubModules or null == null
+      then opt // { type = f (opt.type or types.unspecified); }
       else opt // { type = opt.type.substSubModules opt.options; options = []; };
 
 
@@ -596,6 +608,9 @@ rec {
 
      forwards any definitions of boot.copyKernels to
      boot.loader.grub.copyKernels while printing a warning.
+
+     This also copies over the priority from the aliased option to the
+     non-aliased option.
   */
   mkRenamedOptionModule = from: to: doRename {
     inherit from to;
@@ -690,16 +705,7 @@ rec {
     use = id;
   };
 
-  /* Like ‘mkAliasOptionModule’, but copy over the priority of the option as well. */
-  mkAliasOptionModuleWithPriority = from: to: doRename {
-    inherit from to;
-    visible = true;
-    warn = false;
-    use = id;
-    withPriority = true;
-  };
-
-  doRename = { from, to, visible, warn, use, withPriority ? false }:
+  doRename = { from, to, visible, warn, use, withPriority ? true }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;

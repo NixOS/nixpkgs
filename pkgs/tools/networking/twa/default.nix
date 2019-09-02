@@ -11,14 +11,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "twa-${version}";
-  version = "1.7.1";
+  pname = "twa";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "twa";
     rev = version;
-    sha256 = "10ayxaf8x9md3ijx2w7h1ysnk8ky20crg3kq6ishia6fgsl33g2p";
+    sha256 = "1xq35xyz5536nwrwmlp1wqa7q9jgh90ly7vdy3a5rvxnksx0b2l5";
   };
 
   dontBuild = true;

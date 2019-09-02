@@ -77,12 +77,15 @@ in buildPythonPackage rec {
   # https://github.com/intel/mkl-dnn/commit/8134d346cdb7fe1695a2aa55771071d455fae0bc
   NIX_CFLAGS_COMPILE = lib.optionals (numpy.blasImplementation == "mkl") [ "-Wno-error=array-bounds" ];
 
-  buildInputs = [
+  nativeBuildInputs = [
      cmake
-     numpy.blas
      utillinux
      which
-  ] ++ lib.optionals cudaSupport [ cudatoolkit_joined cudnn ]
+  ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
+
+  buildInputs = [
+     numpy.blas
+  ] ++ lib.optionals cudaSupport [ cudnn ]
     ++ lib.optionals stdenv.isLinux [ numactl ];
 
   propagatedBuildInputs = [

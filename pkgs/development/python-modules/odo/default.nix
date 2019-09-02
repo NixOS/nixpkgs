@@ -13,32 +13,46 @@
 
 buildPythonPackage rec {
   pname = "odo";
-  version= "0.5.1";
-
+  version= "unstable-2019-07-16";
 
   src = fetchFromGitHub {
     owner = "blaze";
     repo = pname;
-    rev = version;
-    sha256 = "142f4jvaqjn0dq6rvlk7d7mzcmc255a9z4nxc1b3a862hp4gvijs";
+    rev = "9fce6690b3666160681833540de6c55e922de5eb";
+    sha256 = "0givkd5agr05wrf72fbghdaav6gplx7c069ngs1ip385v72ifsl9";
   };
 
-  checkInputs = [ pytest dask ];
-  propagatedBuildInputs = [ datashape numpy pandas toolz multipledispatch networkx ];
+  checkInputs = [
+    pytest
+    dask
+  ];
 
-  # Disable failing tests
-  # https://github.com/blaze/odo/issues/609
-  checkPhase = ''
-    py.test -k "not test_numpy_asserts_type_after_dataframe" odo/tests
+  propagatedBuildInputs = [
+    datashape
+    numpy
+    pandas
+    toolz
+    multipledispatch
+    networkx
+  ];
+
+  postConfigure = ''
+    substituteInPlace setup.py \
+      --replace "versioneer.get_version()" "'0.5.1'"
   '';
 
-  meta = {
+  # disable 6/315 tests
+  checkPhase = ''
+    pytest odo -k "not test_insert_to_ooc \
+               and not test_datetime_index \
+               and not test_different_encoding \
+               and not test_numpy_asserts_type_after_dataframe"
+  '';
+
+  meta = with lib; {
     homepage = https://github.com/ContinuumIO/odo;
     description = "Data migration utilities";
-    license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ fridh ];
-    # incomaptible with Networkx 2
-    # see https://github.com/blaze/odo/pull/601
-    broken = true;
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ fridh costrouc ];
   };
 }

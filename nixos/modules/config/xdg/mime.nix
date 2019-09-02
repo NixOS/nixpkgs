@@ -24,7 +24,7 @@ with lib;
 
     environment.extraSetup = ''
       if [ -w $out/share/mime ] && [ -d $out/share/mime/packages ]; then
-          XDG_DATA_DIRS=$out/share ${pkgs.buildPackages.shared-mime-info}/bin/update-mime-database -V $out/share/mime > /dev/null
+          XDG_DATA_DIRS=$out/share PKGSYSTEM_ENABLE_FSYNC=0 ${pkgs.buildPackages.shared-mime-info}/bin/update-mime-database -V $out/share/mime > /dev/null
       fi
 
       if [ -w $out/share/applications ]; then

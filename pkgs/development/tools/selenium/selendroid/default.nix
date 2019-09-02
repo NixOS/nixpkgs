@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   inherit name;
   inherit version;
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [ jdk makeWrapper ];
 

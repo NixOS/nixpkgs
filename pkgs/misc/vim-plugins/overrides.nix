@@ -1,8 +1,8 @@
 { lib, stdenv
-, python, cmake, vim, ruby
-, which, fetchgit, fetchurl
+, python, cmake, meson, vim, ruby
+, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip
 , llvmPackages, rustPlatform
-, xkb-switch, fzf, skim
+, xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
 , ycmd, rake
 , gobject-introspection, glib, wrapGAppsHook
@@ -11,11 +11,17 @@
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 
+# coc-go dependency
+, go
+
 # vim-go denpencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
+
+# vCoolor dependency
+, gnome3
 }:
 
 self: super: {
@@ -27,6 +33,9 @@ self: super: {
     dependencies = with super; [ vim-addon-manager ];
   };
 
+  # Mainly used as a dependency for fzf-vim. Wraps the fzf program as a vim
+  # plugin, since part of the fzf vim plugin is included in the main fzf
+  # program.
   fzfWrapper = buildVimPluginFrom2Nix {
     pname = "fzf";
     version = fzf.version;
@@ -40,15 +49,16 @@ self: super: {
   };
 
   LanguageClient-neovim = let
+    version = "0.1.146";
     LanguageClient-neovim-src = fetchurl {
-      url = "https://github.com/autozimu/LanguageClient-neovim/archive/0.1.140.tar.gz";
-      sha256 = "0cixwm9wnn6vlam6mp57j436n92c4bvj5rs6j2qcv7qip8d2ggyw";
+      url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
+      sha256 = "1xm98pyzf2dlh04ijjf3nkh37lyqspbbjddkjny1g06xxb4kfxnk";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0f591zv4f7spks2hx22nkq78sj42259gi7flnnpr1nfs40d7n13n";
+      cargoSha256 = "0dixvmwq611wg2g3rp1n1gqali46904fnhb90gcpl9a1diqb34sh";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -59,10 +69,10 @@ self: super: {
     };
   in buildVimPluginFrom2Nix {
     pname = "LanguageClient-neovim";
-    version = "0.1.140";
+    inherit version;
     src = LanguageClient-neovim-src;
 
-    propogatedBuildInputs = [ LanguageClient-neovim-bin ];
+    propagatedBuildInputs = [ LanguageClient-neovim-bin ];
 
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
@@ -105,6 +115,25 @@ self: super: {
     '';
   });
 
+  coc-go = super.coc-go.overrideAttrs(old: {
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/coc-go/src/utils/tools.ts \
+        --replace 'const cmd = `GOPATH=''${gopath}; go ''${args}`' 'const cmd = `GOPATH=''${gopath}; ${go}/bin/go ''${args}`'
+    '';
+  });
+
+  # Only official releases contains the required index.js file
+  coc-nvim = buildVimPluginFrom2Nix rec {
+    pname = "coc-nvim";
+    version = "0.0.74";
+    src = fetchFromGitHub {
+      owner = "neoclide";
+      repo = "coc.nvim";
+      rev = "v${version}";
+      sha256 = "1s4nib2mnhagd0ymx254vf7l1iijwrh2xdqn3bdm4f1jnip81r10";
+    };
+  };
+
   command-t = super.command-t.overrideAttrs(old: {
     buildInputs = [ ruby rake ];
     buildPhase = ''
@@ -137,6 +166,10 @@ self: super: {
     '';
   });
 
+  deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
+    dependencies = with super; [ deoplete-nvim vim-fish ];
+  });
+
   deoplete-go = super.deoplete-go.overrideAttrs(old: {
     buildInputs = [ python3 ];
     buildPhase = ''
@@ -156,9 +189,31 @@ self: super: {
     dependencies = with super; [ super.self ];
   });
 
+  ghcid = super.ghcid.overrideAttrs(old: {
+    configurePhase = "cd plugins/nvim";
+  });
+
   gist-vim = super.gist-vim.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
+
+  gruvbox-community = buildVimPluginFrom2Nix {
+    pname = "gruvbox-community";
+    version = "2019-05-31";
+    src = fetchFromGitHub {
+      owner = "gruvbox-community";
+      repo = "gruvbox";
+      rev = "e122091dad968a5524f3e8136615a479c7b6f247";
+      sha256 = "1hncjyfi1gbw62b2pngy5qxyzibrhbyzgfmm9a58sdh1272l8ls8";
+    };
+    meta.maintainers = with stdenv.lib.maintainers; [ minijackson ];
+  };
+
+  meson = buildVimPluginFrom2Nix {
+    inherit (meson) pname version src;
+    preInstall = "cd data/syntax-highlighting/vim";
+    meta.maintainers = with stdenv.lib.maintainers; [ vcunat ];
+  };
 
   ncm2 = super.ncm2.overrideAttrs(old: {
     dependencies = with super; [ nvim-yarp ];
@@ -171,6 +226,10 @@ self: super: {
 
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
+  });
+
+  fzf-vim = super.fzf-vim.overrideAttrs(old: {
+    dependencies = [ self.fzfWrapper ];
   });
 
   sved = let
@@ -374,19 +433,19 @@ self: super: {
   youcompleteme = super.youcompleteme.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
-        --replace "'ycm_path_to_python_interpreter', '''" \
-        "'ycm_path_to_python_interpreter', '${python}/bin/python'"
+        --replace "'ycm_python_interpreter_path', '''" \
+        "'ycm_python_interpreter_path', '${python3}/bin/python'"
 
       rm -r third_party/ycmd
       ln -s ${ycmd}/lib/ycmd third_party
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A code-completion engine for Vim";
-      homepage = https://github.com/Valloric/YouCompleteMe;
-      license = stdenv.lib.licenses.gpl3;
-      maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
-      platforms = stdenv.lib.platforms.unix;
+      homepage = "https://github.com/Valloric/YouCompleteMe";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ marcweber jagajaga ];
+      platforms = platforms.unix;
     };
   });
 
@@ -399,4 +458,35 @@ self: super: {
     };
   });
 
+  vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
+    postPatch = old.postPatch or "" + ''
+      substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace \
+        'g:stylish_haskell_command = "stylish-haskell"' \
+        'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
+    '';
+  });
+
+  vCoolor-vim = super.vCoolor-vim.overrideAttrs(old: {
+    # on linux can use either Zenity or Yad.
+    propagatedBuildInputs = [ gnome3.zenity ];
+    meta = {
+      description = "Simple color selector/picker plugin";
+      license = stdenv.lib.licenses.publicDomain;
+    };
+  });
+
+  unicode-vim = let
+    unicode-data = fetchurl {
+      url = http://www.unicode.org/Public/UNIDATA/UnicodeData.txt;
+      sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
+    };
+  in super.unicode-vim.overrideAttrs(old: {
+
+      # redirect to /dev/null else changes terminal color
+      buildPhase = ''
+        cp "${unicode-data}" autoload/unicode/UnicodeData.txt
+        echo "Building unicode cache"
+        ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
+      '';
+  });
 }

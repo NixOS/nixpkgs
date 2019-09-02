@@ -1,7 +1,7 @@
 { stdenv, fetchgit, zlib, pciutils }:
 
 stdenv.mkDerivation rec {
-  name = "intelmetool-${version}";
+  pname = "intelmetool";
   version = "4.8.1";
 
   src = fetchgit {

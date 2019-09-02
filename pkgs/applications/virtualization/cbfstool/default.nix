@@ -1,7 +1,7 @@
 { stdenv, fetchurl, iasl, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "cbfstool-${version}";
+  pname = "cbfstool";
   version = "4.9";
 
   src = fetchurl {

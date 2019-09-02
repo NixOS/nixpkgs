@@ -4,7 +4,8 @@
 let
   generic = { version, sha256 }:
   stdenv.mkDerivation rec {
-    name = "libtoxcore-${version}";
+    pname = "libtoxcore";
+    inherit version;
 
     src = fetchFromGitHub {
       owner  = "TokTok";
@@ -48,7 +49,7 @@ in rec {
   };
 
   libtoxcore_0_2 = generic {
-    version = "0.2.9";
-    sha256 = "0aljr9hqybla6p61af6fdkv0x8gph7c2wacqqa9hq2z9w0p4fs5j";
+    version = "0.2.10";
+    sha256 = "0r5j2s5n8ikayvr1zylvv3ai3smbhm2m0yhpa9lfcsxhvyn9phcn";
   };
 }

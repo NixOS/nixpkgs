@@ -1,18 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "jsonpickle";
-  version = "1.0";
+  version = "1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d43ede55b3d9b5524a8e11566ea0b11c9c8109116ef6a509a1b619d2041e7397";
+    sha256 = "16xj4r31pnd90slax5mmd5wps5s73wp9mn6sy9nhkl5ih7bj5sfk";
   };
 
-  doCheck = false;
+  checkInputs = [ pytest ];
+
+  checkPhase = "pytest tests/jsonpickle_test.py";
 
   meta = {
     description = "Python library for serializing any arbitrary object graph into JSON";

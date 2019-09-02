@@ -1,28 +1,37 @@
-{ stdenv, fetchFromGitHub, pantheon, makeWrapper, lib, meson, ninja, desktop-file-utils, glib, coreutils, elementary-settings-daemon, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, desktop-file-utils
+, glib
+, coreutils
+, elementary-settings-daemon
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "dpms-helper";
+  pname = "elementary-dpms-helper";
   version = "1.0";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "dpms-helper";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "0svfp0qyb6nx4mjl3jx4aqmb4x24m25jpi75mdis3yfr3c1xz9nh";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    makeWrapper
     meson
     ninja
     wrapGAppsHook

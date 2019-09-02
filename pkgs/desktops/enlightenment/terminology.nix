@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, pcre, mesa_noglu, makeWrapper }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, pcre, mesa, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "terminology-${version}";
-  version = "1.3.2";
+  pname = "terminology";
+  version = "1.5.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.xz";
-    sha256 = "1kclxzadmk272s9spa7n704pcb1c611ixxrq88w5zk22va0i25xm";
+    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0v4amfg8ji0mb6j7kcxh3wz1xw5zyxg4rw6ylx17rfw2nc1yamfy";
   };
 
   nativeBuildInputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     efl
     pcre
-    mesa_noglu
+    mesa
   ];
 
   meta = {

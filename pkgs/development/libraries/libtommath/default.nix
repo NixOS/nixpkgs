@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libtommath-${version}";
+  pname = "libtommath";
   version = "1.1.0";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool ];
 
   postPatch = ''
-    substituteInPlace makefile.shared --replace "LT:=glibtool" "LT:=libtool"
+    substituteInPlace makefile.shared --replace glibtool libtool
     substituteInPlace makefile_include.mk --replace "shell arch" "shell uname -m"
   '';
 

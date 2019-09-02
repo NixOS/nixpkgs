@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, nettle, expat, libevent, dns-root-data }:
 
 stdenv.mkDerivation rec {
-  name = "unbound-${version}";
-  version = "1.8.3";
+  pname = "unbound";
+  version = "1.9.2";
 
   src = fetchurl {
-    url = "https://unbound.net/downloads/${name}.tar.gz";
-    sha256 = "1k6fljr7k721vg2ivn5dfr0hs1kn8p1sm003glgd9ypd261jns9b";
+    url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
+    sha256 = "15bbrczibap30db8a1pmqhvjbmkxms39hwiivby7f4j5rz2wwykg";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = https://www.unbound.net;
-    maintainers = with maintainers; [ ehmry fpletz ];
+    maintainers = with maintainers; [ ehmry fpletz globin ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

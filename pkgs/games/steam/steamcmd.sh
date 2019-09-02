@@ -3,6 +3,9 @@
 # Always run steamcmd in the user's Steam root.
 STEAMROOT=@steamRoot@
 
+# Add coreutils to PATH for mkdir, ln and cp used below
+PATH=$PATH${PATH:+:}@coreutils@/bin
+
 # Create a facsimile Steam root if it doesn't exist.
 if [ ! -e "$STEAMROOT" ]; then
   mkdir -p "$STEAMROOT"/{appcache,config,logs,Steamapps/common}

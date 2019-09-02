@@ -1,15 +1,13 @@
 { stdenv
 , buildPythonApplication
-, callPackage
 , lib
 , python
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , lame
 , mplayer
 , libpulseaudio
-, pyqt5
+, pyqtwebengine
 , decorator
 , beautifulsoup4
 , sqlalchemy
@@ -20,6 +18,7 @@
 , pytest
 , glibcLocales
 , nose
+, jsonschema
 , send2trash
 , CoreAudio
 # This little flag adds a huge number of dependencies, but we assume that
@@ -33,13 +32,14 @@ let
     # when updating, also update rev-manual to a recent version of
     # https://github.com/dae/ankidocs
     # The manual is distributed independently of the software.
-    version = "2.1.8";
-    sha256-pkg = "08wb9hwpmbq7636h7sinim33qygdwwlh3frqqh2gfgm49f46di2p";
-    rev-manual = "3a3d32dd9bfee6f5a7f5bdad2d70938874c881fa";
-    sha256-manual = "1kz9ywbb6f42krxg8c5cwpjsnzm863vnkkn07szb3m1j85c10gjy";
+    version = "2.1.15";
+    sha256-pkg = "12dvyf3j9df4nrhhnqbzd9b21rpzkh4i6yhhangn2zf7ch0pclss";
+    rev-manual = "8f6387867ac37ef3fe9d0b986e70f898d1a49139";
+    sha256-manual = "0pm5slxn78r44ggvbksz7rv9hmlnsvn9z811r6f63dsc8vm6mfml";
 
     manual = stdenv.mkDerivation {
-      name = "anki-manual-${version}";
+      pname = "anki-manual";
+      inherit version;
       src = fetchFromGitHub {
         owner = "dae";
         repo = "ankidocs";
@@ -70,11 +70,12 @@ let
 
 in
 buildPythonApplication rec {
-    name = "anki-${version}";
+    pname = "anki";
+    inherit version;
 
     src = fetchurl {
       urls = [
-        "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
+        "https://apps.ankiweb.net/downloads/current/${pname}-${version}-source.tgz"
         # "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
@@ -85,8 +86,8 @@ buildPythonApplication rec {
     outputs = [ "out" "doc" "man" ];
 
     propagatedBuildInputs = [
-      pyqt5 sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
-      markdown
+      pyqtwebengine sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
+      markdown jsonschema
     ]
       ++ lib.optional plotsSupport matplotlib
       ++ lib.optional stdenv.isDarwin [ CoreAudio ]
@@ -94,11 +95,8 @@ buildPythonApplication rec {
 
     checkInputs = [ pytest glibcLocales nose ];
 
+    nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
     buildInputs = [ lame mplayer libpulseaudio  ];
-
-    makeWrapperArgs = [
-        ''--prefix PATH ':' "${lame}/bin:${mplayer}/bin"''
-    ];
 
     patches = [
       # Disable updated version check.
@@ -159,17 +157,23 @@ buildPythonApplication rec {
       cp -rv locale $out/share/
       cp -rv anki aqt web $pp/
 
-      wrapPythonPrograms
-
       # copy the manual into $doc
       cp -r ${manual}/share/doc/anki/html $doc/share/doc/anki
     '';
+
+    dontWrapQtApps = true;
+    makeWrapperArgs = [
+        ''--prefix PATH ':' "${lame}/bin:${mplayer}/bin"''
+        "\${qtWrapperArgs[@]}"
+    ];
+
+    # now wrapPythonPrograms from postFixup will add both python and qt env variables
 
     passthru = {
       inherit manual;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://apps.ankiweb.net/";
       description = "Spaced repetition flashcard program";
       longDescription = ''
@@ -187,6 +191,6 @@ buildPythonApplication rec {
       license = licenses.agpl3Plus;
       broken = stdenv.hostPlatform.isAarch64;
       platforms = platforms.mesaPlatforms;
-      maintainers = with maintainers; [ the-kenny Profpatsch ];
+      maintainers = with maintainers; [ oxij the-kenny Profpatsch enzime ];
     };
 }

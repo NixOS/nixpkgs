@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, makeWrapper }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "nifskope-${version}";
+  pname = "nifskope";
   version = "2.0.dev7";
 
   src = fetchFromGitHub {
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ qtbase qttools libGLU.dev makeWrapper ];
-  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase qttools libGLU.dev ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   preConfigure = ''
     shopt -s globstar
@@ -33,9 +33,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Inspired by install/linux-install/nifskope.spec.in.
-  installPhase = let
-    qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
-  in ''
+  installPhase = ''
     runHook preInstall
 
     d=$out/share/nifskope
@@ -52,8 +50,6 @@ stdenv.mkDerivation rec {
       --replace 'Icon=nifskope' "Icon=$out/share/pixmaps/nifskope.png"
 
     find $out/share -type f -exec chmod -x {} \;
-
-    wrapProgram $out/bin/NifSkope --prefix QT_PLUGIN_PATH : "${qtbase}/lib/qt-${qtVersion}/plugins"
 
     runHook postInstall
   '';

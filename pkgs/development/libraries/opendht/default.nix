@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opendht-${version}";
+  pname = "opendht";
   version = "1.8.0";
 
   src = fetchFromGitHub {

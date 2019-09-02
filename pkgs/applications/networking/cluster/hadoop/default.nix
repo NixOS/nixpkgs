@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash, coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl }:
+{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
+, coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
+}:
 
 let
-  common = { version, sha256, dependencies-sha256, tomcat }:
+  common = { version, sha256, dependencies-sha256, tomcat, opensslPkg ? openssl }:
     let
       # compile the hadoop tarball from sources, it requires some patches
       binary-distributon = stdenv.mkDerivation rec {
@@ -19,7 +21,7 @@ let
         # perform fake build to make a fixed-output derivation of dependencies downloaded from maven central (~100Mb in ~3000 files)
         fetched-maven-deps = stdenv.mkDerivation {
           name = "hadoop-${version}-maven-deps";
-          inherit src postUnpack nativeBuildInputs buildInputs configurePhase;
+          inherit src postUnpack nativeBuildInputs buildInputs;
           buildPhase = ''
             while mvn package -Dmaven.repo.local=$out/.m2 ${mavenFlags} -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
               echo "timeout, restart maven to continue downloading"
@@ -33,7 +35,7 @@ let
         };
 
         nativeBuildInputs = [ maven cmake pkgconfig ];
-        buildInputs = [ fuse snappy zlib bzip2 openssl protobuf2_5 ];
+        buildInputs = [ fuse snappy zlib bzip2 opensslPkg protobuf2_5 ];
         # most of the hardcoded pathes are fixed in 2.9.x and 3.0.0, this list of patched files might be reduced when 2.7.x and 2.8.x will be deprecated
         postPatch = ''
           for file in hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/HardLink.java \
@@ -51,7 +53,7 @@ let
             fi
           done
         '';
-        configurePhase = "true"; # do not trigger cmake hook
+        dontConfigure = true; # do not trigger cmake hook
         mavenFlags = "-Drequire.snappy -Drequire.bzip2 -DskipTests -Pdist,native -e";
         buildPhase = ''
           # 'maven.repo.local' must be writable
@@ -64,7 +66,8 @@ let
       };
     in
       stdenv.mkDerivation rec {
-        name = "hadoop-${version}";
+        pname = "hadoop";
+        inherit version;
 
         src = binary-distributon;
 
@@ -84,7 +87,7 @@ let
               mv $n $out/bin.wrapped/
               makeWrapper $out/bin.wrapped/$(basename $n) $n \
                 --prefix PATH : "${stdenv.lib.makeBinPath [ which jre bash coreutils ]}" \
-                --prefix JAVA_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ openssl snappy zlib bzip2 ]}" \
+                --prefix JAVA_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ opensslPkg snappy zlib bzip2 ]}" \
                 --set JAVA_HOME "${jre}" \
                 --set HADOOP_PREFIX "$out"
             fi
@@ -127,18 +130,21 @@ in {
     sha256 = "1ahv67f3lwak3kbjvnk1gncq56z6dksbajj872iqd0awdsj3p5rf";
     dependencies-sha256 = "1lsr9nvrynzspxqcamb10d596zlnmnfpxhkd884gdiva0frm0b1r";
     tomcat = tomcat_6_0_48;
+    opensslPkg = openssl_1_0_2;
   };
   hadoop_2_8 = common {
     version = "2.8.4";
     sha256 = "16c3ljhrzibkjn3y1bmjxdgf0kn60l23ay5hqpp7vpbnqx52x68w";
     dependencies-sha256 = "1j4f461487fydgr5978nnm245ksv4xbvskfr8pbmfhcyss6b7w03";
     tomcat = tomcat_6_0_48;
+    opensslPkg = openssl_1_0_2;
   };
   hadoop_2_9 = common {
     version = "2.9.1";
     sha256 = "0qgmpfbpv7f521fkjy5ldzdb4lwiblhs0hyl8qy041ws17y5x7d7";
     dependencies-sha256 = "1d5i8jj5y746rrqb9lscycnd7acmxlkz64ydsiyqsh5cdqgy2x7x";
     tomcat = tomcat_6_0_48;
+    opensslPkg = openssl_1_0_2;
   };
   hadoop_3_0 = common {
     version = "3.0.3";

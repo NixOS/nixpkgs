@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ktorrent-${version}";
+  pname = "ktorrent";
   version = "${libktorrent.mainVersion}.0";
 
   src = fetchurl {
-    url    = "mirror://kde/stable/ktorrent/${libktorrent.mainVersion}/${name}.tar.xz";
+    url    = "mirror://kde/stable/ktorrent/${libktorrent.mainVersion}/${pname}-${version}.tar.xz";
     sha256 = "18w6qh09k84qpzaxxb76a4g59k4mx5wk897vqp1wwv80g0pqhmrw";
   };
 

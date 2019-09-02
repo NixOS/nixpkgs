@@ -1,18 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose }:
+{ stdenv, buildPythonPackage, fetchPypi, soupsieve, pytest, python }:
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.6.3";
+  version = "4.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "90f8e61121d6ae58362ce3bed8cd997efb00c914eae0ff3d363c32f9a9822d10";
+    sha256 = "945065979fb8529dd2f37dbb58f00b661bdbcbebf954f93b32fdf5263ef35348";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [ pytest ];
   checkPhase = ''
-    nosetests build
+    py.test $out/${python.sitePackages}/bs4/tests
   '';
+
+  propagatedBuildInputs = [ soupsieve ];
 
   meta = with stdenv.lib; {
     homepage = http://crummy.com/software/BeautifulSoup/bs4/;

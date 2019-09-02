@@ -1,7 +1,7 @@
 { fetchurl, stdenv, writeText, jdk, maven, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "soapui-${version}";
+  pname = "soapui";
   version = "5.5.0";
 
   src = fetchurl {

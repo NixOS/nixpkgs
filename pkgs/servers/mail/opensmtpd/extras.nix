@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensmtpd-extras-${version}";
+  pname = "opensmtpd-extras";
   version = "6.4.0";
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
+    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
     sha256 = "09k25l7zy5ch3fk6qphni2h0rxdp8wacmfag1whi608dgimrhrnb";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./fix-build.patch ]; # Cargo.lock is not up-to-date
 
-  cargoSha256 = "1jvk9n324p3x3j6q6x0p5diig3b5c683k74cfflff25i7gsmmvc7";
+  cargoSha256 = "073dnn80sl4adh7vi6q9sx2vkmy27gxy7ysxz17iz12p7pfcagm2";
 
   meta = with stdenv.lib; {
     description = "gc-sections for wasm";

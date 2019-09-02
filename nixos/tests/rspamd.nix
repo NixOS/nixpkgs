@@ -52,8 +52,18 @@ in
     machine = {
       services.rspamd = {
         enable = true;
-        bindSocket = [ "/run/rspamd.sock mode=0600 user=root group=root" ];
-        bindUISocket = [ "/run/rspamd-worker.sock mode=0666 user=root group=root" ];
+        workers.normal.bindSockets = [{
+          socket = "/run/rspamd.sock";
+          mode = "0600";
+          owner = "root";
+          group = "root";
+        }];
+        workers.controller.bindSockets = [{
+          socket = "/run/rspamd-worker.sock";
+          mode = "0666";
+          owner = "root";
+          group = "root";
+        }];
       };
     };
 
@@ -235,7 +245,7 @@ in
       services.rspamd = {
         enable = true;
         postfix.enable = true;
-        workers.rspamd_proxy.type = "proxy";
+        workers.rspamd_proxy.type = "rspamd_proxy";
       };
     };
     testScript = ''

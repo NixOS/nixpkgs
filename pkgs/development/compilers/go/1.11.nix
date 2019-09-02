@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
-, mailcap
-, buildPackages, targetPackages }:
+{ stdenv, fetchurl, tzdata, iana-etc, runCommand
+, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
+, mailcap, runtimeShell
+, buildPackages, pkgsTargetTarget
+}:
 
 let
 
@@ -28,14 +29,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "go-${version}";
-  version = "1.11.5";
+  pname = "go";
+  version = "1.11.13";
 
-  src = fetchFromGitHub {
-    owner = "golang";
-    repo = "go";
-    rev = "go${version}";
-    sha256 = "0d45057rc0bngq0nja847cagxji42qmlywr68f0dkg51im8nyr9y";
+  src = fetchurl {
+    url = "https://dl.google.com/go/go${version}.src.tar.gz";
+    sha256 = "0xj0pbviikdf8g0sfz5hwxf7hwz8b8g5akqnrvyclhgnsdghjcjh";
   };
 
   # perl is used for testing go vet
@@ -55,7 +54,7 @@ stdenv.mkDerivation rec {
     # This source produces shell script at run time,
     # and thus it is not corrected by patchShebangs.
     substituteInPlace misc/cgo/testcarchive/carchive_test.go \
-      --replace '#!/usr/bin/env bash' '#!${stdenv.shell}'
+      --replace '#!/usr/bin/env bash' '#!${runtimeShell}'
 
     # Patch the mimetype database location which is missing on NixOS.
     substituteInPlace src/mime/type_unix.go \
@@ -100,7 +99,7 @@ stdenv.mkDerivation rec {
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isAarch32 ''
-    echo '#!${stdenv.shell}' > misc/cgo/testplugin/test.bash
+    echo '#!${runtimeShell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
@@ -125,7 +124,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.11.patch
-    ./ssl-cert-file-1.9.patch
+    ./ssl-cert-file-1.12.1.patch
     ./remove-test-pie.patch
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
@@ -137,11 +136,6 @@ stdenv.mkDerivation rec {
     ./skip-test-extra-files-on-386.patch
   ];
 
-  postPatch = optionalString stdenv.isDarwin ''
-    echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
-    substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
-  '';
-
   GOOS = stdenv.targetPlatform.parsed.kernel.name;
   GOARCH = goarch stdenv.targetPlatform;
   # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
@@ -152,16 +146,12 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}cc"
+  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
     else
       null;
-  CXX_FOR_TARGET = if (stdenv.hostPlatform != stdenv.targetPlatform) then
-      "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++"
-    else if (stdenv.buildPlatform != stdenv.targetPlatform) then
-      "${stdenv.cc.targetPrefix}c++"
+  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++"
     else
       null;
 
@@ -193,7 +183,7 @@ stdenv.mkDerivation rec {
     (cd src && ./make.bash)
   '';
 
-  doCheck = stdenv.hostPlatform == stdenv.targetPlatform;
+  doCheck = stdenv.hostPlatform == stdenv.targetPlatform && !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -236,7 +226,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej velovix mic92 ];
+    maintainers = with maintainers; [ cstrahan orivej velovix mic92 rvolosatovs ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

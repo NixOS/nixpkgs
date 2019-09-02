@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A parser/generator of iCalendar files";
-    homepage = "http://icalendar.readthedocs.org/";
+    homepage = "https://icalendar.readthedocs.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ olcai ];
   };

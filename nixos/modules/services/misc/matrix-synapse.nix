@@ -30,7 +30,7 @@ ${optionalString (cfg.bind_host != null) ''
 bind_host: "${cfg.bind_host}"
 ''}
 server_name: "${cfg.server_name}"
-pid_file: "/var/run/matrix-synapse.pid"
+pid_file: "/run/matrix-synapse.pid"
 web_client: ${boolToString cfg.web_client}
 ${optionalString (cfg.public_baseurl != null) ''
 public_baseurl: "${cfg.public_baseurl}"
@@ -554,7 +554,10 @@ in {
       };
       trusted_third_party_id_servers = mkOption {
         type = types.listOf types.str;
-        default = ["matrix.org"];
+        default = [
+          "matrix.org"
+          "vector.im"
+        ];
         description = ''
           The list of identity servers trusted to verify third party identifiers by this server.
         '';
@@ -651,16 +654,12 @@ in {
 
     services.postgresql.enable = mkIf usePostgresql (mkDefault true);
 
-    systemd.services.matrix-synapse =
-    let
-      python = (pkgs.python3.withPackages (ps: with ps; [ (ps.toPythonModule cfg.package) ]));
-    in
-    {
+    systemd.services.matrix-synapse = {
       description = "Synapse Matrix homeserver";
       after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        ${python.interpreter} -m synapse.app.homeserver \
+        ${cfg.package}/bin/homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
@@ -685,13 +684,13 @@ in {
         fi
       '';
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
         PermissionsStartOnly = true;
         ExecStart = ''
-          ${python.interpreter} -m synapse.app.homeserver \
+          ${cfg.package}/bin/homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';

@@ -16,7 +16,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "lemon-${version}";
+  pname = "lemon";
   version = "1.69";
 
   phases = [ "buildPhase" "installPhase" ];

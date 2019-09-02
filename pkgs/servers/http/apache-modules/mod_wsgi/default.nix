@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, apacheHttpd, python2 }:
+{ stdenv, fetchurl, apacheHttpd, python, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "mod_wsgi-${version}";
-  version = "4.6.5";
+  pname = "mod_wsgi";
+  version = "4.6.7";
 
   src = fetchurl {
     url = "https://github.com/GrahamDumpleton/mod_wsgi/archive/${version}.tar.gz";
-    sha256 = "1q75ifadjd5frr5i2b9swbjiwfv4fr4ny8npsm09w6mjp7w0bgjw";
+    sha256 = "1j8pqn0xhd502ardlmkqx8y85s1npmk9nifqps60wjh29nny03f2";
   };
 
-  buildInputs = [ apacheHttpd python2 ];
+  buildInputs = [ apacheHttpd python ncurses ];
 
   patchPhase = ''
     sed -r -i -e "s|^LIBEXECDIR=.*$|LIBEXECDIR=$out/modules|" \

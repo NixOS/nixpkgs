@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, unzip, makeWrapper, setJavaClassPath
 , zulu, glib, libxml2, libav_0_8, ffmpeg, libxslt, libGL, alsaLib
-, fontconfig, freetype, gnome2, cairo, gdk_pixbuf, atk, xorg, zlib
+, fontconfig, freetype, gnome2, cairo, gdk-pixbuf, atk, xorg, zlib
 , swingSupport ? true }:
 
 let
@@ -17,7 +17,7 @@ let
   libraries = [
     stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
     xorg.libXxf86vm alsaLib fontconfig freetype gnome2.pango
-    gnome2.gtk cairo gdk_pixbuf atk zlib
+    gnome2.gtk cairo gdk-pixbuf atk zlib
   ] ++ (lib.optionals swingSupport (with xorg; [
     xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp
     xorg.libXt xorg.libXrender stdenv.cc.cc
@@ -26,7 +26,7 @@ let
 in stdenv.mkDerivation rec {
   inherit version openjdk platform hash extension;
 
-  name = "zulu-${version}";
+  pname = "zulu";
 
   src = fetchurl {
     url = "https://cdn.azul.com/zulu/bin/zulu${version}-jdk${openjdk}-${platform}_x64.${extension}";

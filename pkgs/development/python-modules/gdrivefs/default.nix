@@ -12,13 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.14.9";
+  version = "0.14.12";
   pname = "gdrivefs";
   disabled = isPy3k;
 
   src = fetchurl {
     url = "https://github.com/dsoprea/GDriveFS/archive/${version}.tar.gz";
-    sha256 = "1mc2r35nf5k8vzwdcdhi0l9rb97amqd5xb53lhydj8v8f4rndk7a";
+    sha256 = "0m45z77idy0bs5fqlz0y534fy28ikamrd321hmqsc3q7d39kqzv0";
   };
 
   buildInputs = [ gipc greenlet httplib2 six ];

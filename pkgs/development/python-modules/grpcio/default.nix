@@ -1,27 +1,30 @@
-{ stdenv, buildPythonPackage, fetchPypi, lib, darwin
-, six, protobuf, enum34, futures, isPy27, isPy34, pkgconfig }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, darwin
+, six, protobuf, enum34, futures, isPy27, pkgconfig
+, cython}:
 
-with stdenv.lib;
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.16.1";
+  version = "1.23.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0am76f8r4v5kcvbar593n2c1mp25cxi67cxigjhd0rnncmk4bgs1";
+  src = fetchFromGitHub {
+    owner = "grpc";
+    repo = "grpc";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "18hf794frncqvq3n4j5n8kip0gp6ch4pf5b3n6809q0c1paf6rp5";
   };
 
-  nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin darwin.cctools;
+  nativeBuildInputs = [ cython pkgconfig ]
+                    ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
 
   propagatedBuildInputs = [ six protobuf ]
-                        ++ lib.optionals (isPy27 || isPy34) [ enum34 ]
-                        ++ lib.optionals (isPy27) [ futures ];
+                        ++ stdenv.lib.optionals (isPy27) [ enum34 futures ];
 
-  preBuild = optionalString stdenv.isDarwin "unset AR";
+  preBuild = stdenv.lib.optionalString stdenv.isDarwin "unset AR";
 
   meta = with stdenv.lib; {
     description = "HTTP/2-based RPC framework";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
     maintainers = with maintainers; [ vanschelven ];
   };

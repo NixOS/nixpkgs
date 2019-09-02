@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.20170915";       # date of commit we're pulling
-  name = "vcsh-${version}";
+  pname = "vcsh";
 
   src = fetchFromGitHub {
     owner = "RichiH";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Version Control System for $HOME";
     homepage = https://github.com/RichiH/vcsh;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ garbas ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
     platforms = platforms.unix;
   };
 }

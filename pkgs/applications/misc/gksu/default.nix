@@ -5,10 +5,9 @@
 stdenv.mkDerivation rec {
   version = "2.0.2";
   pname = "gksu";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://people.debian.org/~kov/gksu/${name}.tar.gz";
+    url = "http://people.debian.org/~kov/gksu/${pname}-${version}.tar.gz";
     sha256 = "0npfanlh28daapkg25q4fncxd89rjhvid5fwzjaw324x0g53vpm1";
   };
 

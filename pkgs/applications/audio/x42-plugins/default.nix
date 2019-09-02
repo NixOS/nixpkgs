@@ -3,12 +3,12 @@
 , libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "20190105";
-  name = "x42-plugins-${version}";
+  version = "20190714";
+  pname = "x42-plugins";
 
   src = fetchurl {
-    url = "https://gareus.org/misc/x42-plugins/${name}.tar.xz";
-    sha256 = "1bb7k3ly4qa05zgkbpm7d3x9cjch1fklgh279m6hp0ac3hhncdxp";
+    url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
+    sha256 = "1mifmdy9pi1lg0h4nsvyjjnnni41vhgg34lks94mrx46wq90bgx4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     patchShebangs ./stepseq.lv2/gridgen.sh
+    patchShebangs ./matrixmixer.lv2/genttl.sh #TODO: remove at next update, see https://github.com/x42/matrixmixer.lv2/issues/2
+    patchShebangs ./matrixmixer.lv2/genhead.sh #TODO: remove at next update, see https://github.com/x42/matrixmixer.lv2/issues/2
     sed -i 's|/usr/include/zita-convolver.h|${zita-convolver}/include/zita-convolver.h|g' ./convoLV2/Makefile
   '';
 

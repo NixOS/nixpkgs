@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, fuse, zlib, bzip2, openssl, libxml2, icu } :
 
 stdenv.mkDerivation rec {
-  name = "darling-dmg-${version}";
+  pname = "darling-dmg";
   version = "1.0.4";
 
   src = fetchFromGitHub {
@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ cmake fuse openssl zlib bzip2 libxml2 icu ];
+
+  # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
+  CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
 
   meta = {
     homepage = http://www.darlinghq.org/;

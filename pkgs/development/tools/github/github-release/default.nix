@@ -1,26 +1,26 @@
-{ stdenv, fetchurl }:
+{ stdenv, system, fetchurl }:
 
 let
-  linuxPredicate = stdenv.hostPlatform.system == "x86_64-linux";
-  bsdPredicate = stdenv.hostPlatform.system == "x86_64-freebsd";
-  darwinPredicate = stdenv.hostPlatform.system == "x86_64-darwin";
+  linuxPredicate = system == "x86_64-linux";
+  bsdPredicate = system == "x86_64-freebsd";
+  darwinPredicate = system == "x86_64-darwin";
   metadata = assert linuxPredicate || bsdPredicate || darwinPredicate;
     if linuxPredicate then
       { arch = "linux-amd64";
-        sha256 = "0b3h0d0qsrjx99kcd2cf71xijh44wm5rpm2sr54snh3f7macj2p1";
+        sha256 = "0p0qj911nmmdj0r7wx3363gid8g4bm3my6mj3d6s4mwgh9lfisiz";
         archiveBinaryPath = "linux/amd64"; }
     else if bsdPredicate then
       { arch = "freebsd-amd64";
-        sha256 = "1yydm4ndkh80phiwk41kcf6pizvwrfhsfk3jwrrgr42wsnkkgj0q";
+        sha256 = "0g618y9n39j11l1cbhyhwlbl2gv5a2a122c1dps3m2wmv7yzq5hk";
         archiveBinaryPath = "freebsd/amd64"; }
     else
       { arch = "darwin-amd64";
-        sha256 = "1dj74cf1ahihia2dr9ii9ky0cpmywn42z2iq1vkbrrcggjvyrnlf";
+        sha256 = "0l623fgnsix0y3f960bwx3dgnrqaxs21w5652kvaaal7dhnlgmwj";
         archiveBinaryPath = "darwin/amd64"; };
 in stdenv.mkDerivation rec {
   shortname = "github-release";
   name = "${shortname}-${version}";
-  version = "0.6.2";
+  version = "0.7.2";
 
   src = fetchurl {
     url = "https://github.com/aktau/github-release/releases/download/v${version}/${metadata.arch}-${shortname}.tar.bz2";

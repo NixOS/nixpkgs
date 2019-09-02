@@ -9,10 +9,11 @@
 , fetchurl
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gnome2
 , gtk3
+, lib
 , libX11
 , libxcb
 , libXScrnSaver
@@ -34,14 +35,14 @@
 , stdenv
 , systemd
 , at-spi2-atk
+, at-spi2-core
 }:
 
 let
 
-  mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "56.0.3051.99";
+  mirror = "https://get.geo.opera.com/pub/opera/desktop";
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
 
     # These provide shared libraries loaded when starting. If one is missing,
     # an error is shown in stderr.
@@ -54,7 +55,7 @@ let
     expat.out
     fontconfig.lib
     freetype.out
-    gdk_pixbuf.out
+    gdk-pixbuf.out
     glib.out
     gnome2.GConf
     gtk3.out
@@ -86,15 +87,17 @@ let
     libpulseaudio.out
 
     at-spi2-atk
+    at-spi2-core
   ];
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
 
-  name = "opera-${version}";
+  pname = "opera";
+  version = "62.0.3331.43";
 
   src = fetchurl {
-    url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-    sha256 = "1mf4lpb66w63kafjni5caq9k3lmsqd85161q29z5lr1s2cx9qqm8";
+    url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
+    sha256 = "0zylg32zn6blkgy4bwmjzc26i712lwakahvrd24ncpfa8805f7x7";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -116,10 +119,10 @@ in stdenv.mkDerivation {
       done
   '';
 
-  meta = {
-    homepage = http://www.opera.com;
+  meta = with lib; {
+    homepage = "https://www.opera.com";
     description = "Web browser";
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
   };
 }

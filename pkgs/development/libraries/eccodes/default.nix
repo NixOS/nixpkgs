@@ -5,12 +5,12 @@
 , enableOpenMPThreads ? false}:
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "eccodes-${version}";
-  version = "2.10.0";
+  pname = "eccodes";
+  version = "2.12.5";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    sha256 = "1n429najxlq6y76wyx1mbw41b0l4prdhfmy4id9ni8zwm96cp8xy";
+    sha256 = "0576fccng4nvmq5gma1nb1v00if5cwl81w4nv5zkb80q5wicn50c";
   };
 
   postPatch = ''

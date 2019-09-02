@@ -7,7 +7,7 @@ let
 in
 rec {
 
-  inherit (builtins) head tail length isList elemAt concatLists filter elem genList;
+  inherit (builtins) head tail length isList elemAt concatLists filter elem genList map;
 
   /*  Create a list consisting of a single element.  `singleton x` is
       sometimes more convenient with respect to indentation than `[x]`
@@ -20,6 +20,19 @@ rec {
         => [ "foo" ]
   */
   singleton = x: [x];
+
+  /*  Apply the function to each element in the list. Same as `map`, but arguments
+      flipped.
+
+      Type: forEach :: [a] -> (a -> b) -> [b]
+
+      Example:
+        forEach [ 1 2 ] (x:
+          toString x
+        )
+        => [ "1" "2" ]
+  */
+  forEach = xs: f: map f xs;
 
   /* “right fold” a binary function `op` between successive elements of
      `list` with `nul' as the starting value, i.e.,
@@ -633,8 +646,7 @@ rec {
     else
       let
         x = head list;
-        xs = unique (drop 1 list);
-      in [x] ++ remove x xs;
+      in [x] ++ unique (remove x list);
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 

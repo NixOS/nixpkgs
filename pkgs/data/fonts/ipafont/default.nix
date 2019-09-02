@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "ipafont-003.03";
@@ -20,8 +20,7 @@ fetchzip {
       suitable for both display and printing.
     '';
     homepage = http://ipafont.ipa.go.jp/ipafont/;
-    license = stdenv.lib.licenses.ipa;
-    maintainers = [ stdenv.lib.maintainers.auntie ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.ipa;
+    maintainers = [ lib.maintainers.auntie ];
   };
 }

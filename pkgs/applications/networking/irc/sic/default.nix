@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "sic-${version}";
+  pname = "sic";
   version = "1.2";
 
   makeFlags = "PREFIX=$(out)";

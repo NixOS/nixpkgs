@@ -98,7 +98,7 @@ in
         type = types.path;
         default = "/var/log/stanchion";
         description = ''
-          Log directory for Stanchino.
+          Log directory for Stanchion.
         '';
       };
 
@@ -152,6 +152,11 @@ in
 
     users.groups.stanchion.gid = config.ids.gids.stanchion;
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.logDir}' - stanchion stanchion --"
+      "d '${cfg.dataDir}' 0700 stanchion stanchion --"
+    ];
+
     systemd.services.stanchion = {
       description = "Stanchion Server";
 
@@ -168,25 +173,12 @@ in
       environment.STANCHION_LOG_DIR = "${cfg.logDir}";
       environment.STANCHION_ETC_DIR = "/etc/stanchion";
 
-      preStart = ''
-        if ! test -e ${cfg.logDir}; then
-          mkdir -m 0755 -p ${cfg.logDir}
-          chown -R stanchion:stanchion ${cfg.logDir}
-        fi
-
-        if ! test -e ${cfg.dataDir}; then
-          mkdir -m 0700 -p ${cfg.dataDir}
-          chown -R stanchion:stanchion ${cfg.dataDir}
-        fi
-      '';
-
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/stanchion console";
         ExecStop = "${cfg.package}/bin/stanchion stop";
         StandardInput = "tty";
         User = "stanchion";
         Group = "stanchion";
-        PermissionsStartOnly = true;
         # Give Stanchion a decent amount of time to clean up.
         TimeoutStopSec = 120;
         LimitNOFILE = 65536;

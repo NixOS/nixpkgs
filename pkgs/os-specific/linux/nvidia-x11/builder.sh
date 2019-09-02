@@ -58,14 +58,16 @@ installPhase() {
         mkdir $i/lib/vdpau
         mv $i/lib/libvdpau* $i/lib/vdpau
 
-        # Install ICDs.
-        install -Dm644 nvidia.icd $i/etc/OpenCL/vendors/nvidia.icd
+        # Install ICDs, make absolute paths.
+        sed -E "s#(libnvidia-opencl)#$i/lib/\\1#" nvidia.icd > nvidia.icd.fixed
+        install -Dm644 nvidia.icd.fixed $i/etc/OpenCL/vendors/nvidia.icd
         if [ -e nvidia_icd.json.template ]; then
-            sed "s#__NV_VK_ICD__#libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
+            sed "s#__NV_VK_ICD__#$i/lib/libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
             install -Dm644 nvidia_icd.json $i/share/vulkan/icd.d/nvidia.json
         fi
         if [ "$useGLVND" = "1" ]; then
-            install -Dm644 10_nvidia.json $i/share/glvnd/egl_vendor.d/nvidia.json
+            sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
+            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
         fi
 
     done
@@ -74,7 +76,9 @@ installPhase() {
     if [ -n "$bin" ]; then
         # Install the X drivers.
         mkdir -p $bin/lib/xorg/modules
-        cp -p libnvidia-wfb.* $bin/lib/xorg/modules/
+        if [ -f libnvidia-wfb.so ]; then
+            cp -p libnvidia-wfb.* $bin/lib/xorg/modules/
+        fi
         mkdir -p $bin/lib/xorg/modules/drivers
         cp -p nvidia_drv.so $bin/lib/xorg/modules/drivers
         mkdir -p $bin/lib/xorg/modules/extensions
@@ -100,7 +104,11 @@ installPhase() {
     do
       # I'm lazy to differentiate needed libs per-library, as the closure is the same.
       # Unfortunately --shrink-rpath would strip too much.
-      patchelf --set-rpath "$out/lib:$libPath" "$libname"
+      if [[ -n $lib32 && $libname == "$lib32/lib/"* ]]; then
+        patchelf --set-rpath "$lib32/lib:$libPath32" "$libname"
+      else
+        patchelf --set-rpath "$out/lib:$libPath" "$libname"
+      fi
 
       libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
 
@@ -129,6 +137,8 @@ installPhase() {
         for i in nvidia-cuda-mps-control nvidia-cuda-mps-server nvidia-smi nvidia-debugdump; do
             if [ -e "$i" ]; then
                 install -Dm755 $i $bin/bin/$i
+                # unmodified binary backup for mounting in containers
+                install -Dm755 $i $bin/origBin/$i
                 patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                     --set-rpath $out/lib:$libPath $bin/bin/$i
             fi

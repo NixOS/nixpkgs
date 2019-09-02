@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication rec {
   version = "1.4";
-  name = "wikicurses-${version}";
+  pname = "wikicurses";
 
   src = fetchFromGitHub {
     owner = "ids1024";

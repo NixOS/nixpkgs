@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, gnome2, gtk2, atk, glib, pango, gdk_pixbuf, cairo
+{ stdenv, lib, fetchurl, dpkg, gnome2, gtk2, atk, glib, pango, gdk-pixbuf, cairo
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr
 , libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver
 , libxcb, makeWrapper, nodejs
@@ -6,14 +6,14 @@
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
+    stdenv.cc.cc gtk2 atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
     libXrender libX11 libXtst libXScrnSaver gnome2.GConf nss nspr alsaLib cups expat systemd libpulseaudio
   ];
 in
 stdenv.mkDerivation rec {
   version = "1.0.0-alpha.42";
-  name = "terminus-${version}";
+  pname = "terminus";
   src = fetchurl {
     url = "https://github.com/Eugeny/terminus/releases/download/v${version}/terminus_${version}_amd64.deb";
     sha256 = "1r5n75n71zwahg4rxlnf9qzrb0651gxv0987m6bykqmfpnw91nmb";

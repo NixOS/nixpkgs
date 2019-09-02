@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bison, flex, libsepol }:
 
 stdenv.mkDerivation rec {
-  name = "checkpolicy-${version}";
+  pname = "checkpolicy";
   version = "2.7";
   inherit (libsepol) se_release se_url;
 

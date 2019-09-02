@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "dnsmasq_exporter-${version}";
+  pname = "dnsmasq_exporter";
   version = "0.1.0";
 
   goPackagePath = "github.com/google/dnsmasq_exporter";
@@ -19,6 +19,6 @@ buildGoPackage rec {
     inherit (src.meta) homepage;
     description = "A dnsmasq exporter for Prometheus";
     license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with maintainers; [ willibutz globin ];
   };
 }

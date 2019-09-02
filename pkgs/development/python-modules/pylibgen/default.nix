@@ -1,28 +1,33 @@
-{ buildPythonPackage, python, lib, fetchPypi
-, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub
+, pythonOlder
 , requests
+, pytest
+, pre-commit
 }:
 
 buildPythonPackage rec {
   pname = "pylibgen";
-  version = "1.3.1";
+  version = "2.0.2";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1rviqi3rf62b43cabdy8c2cdznjv034mp0qrfrzvkih4jlkhyfrh";
+  src = fetchFromGitHub {
+    owner = "joshuarli";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1a9vhkgnkiwkicr2s287254mrkpnw9jq5r63q820dp3h74ba4kl1";
   };
-
-  disabled = !isPy3k;
 
   propagatedBuildInputs = [ requests ];
 
-  # It's not using unittest
-  checkPhase = "${python.interpreter} tests/test_pylibgen.py -c 'test_api_endpoints()'";
+  checkInputs = [ pytest pre-commit ];
 
-  meta = {
+  # literally every tests does a network call
+  doCheck = false;
+
+  meta = with lib; {
     description = "Python interface to Library Genesis";
     homepage = https://pypi.org/project/pylibgen/;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.nico202 ];
+    license = licenses.mit;
+    maintainers = [ maintainers.nico202 ];
   };
 }

@@ -16,12 +16,12 @@ assert !cpp || mpi == null;
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.4";
-  name = "hdf5-${version}";
+  version = "1.10.5";
+  pname = "hdf5";
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
-    sha256 = "1pr85fa1sh2ky6ai2hs3f21lp252grl2cq3wbyi4rh7dm83gyrqj";
- };
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${pname}-${version}/src/${pname}-${version}.tar.bz2";
+    sha256 = "0i3g6v521vigzbx8wpd32ibsiiw92r65ca3qdbn0d8fj8f4fmmk8";
+  };
 
   passthru = {
     mpiSupport = (mpi != null);
@@ -45,7 +45,9 @@ stdenv.mkDerivation rec {
     ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
     ++ optional enableShared "--enable-shared";
 
-  patches = [./bin-mv.patch];
+  patches = [
+    ./bin-mv.patch
+  ];
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +

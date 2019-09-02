@@ -111,7 +111,7 @@ rec {
         name = "int";
         description = "signed integer";
         check = isInt;
-        merge = mergeOneOption;
+        merge = mergeEqualOption;
       };
 
     # Specialized subdomains of int
@@ -176,14 +176,14 @@ rec {
         name = "float";
         description = "floating point number";
         check = isFloat;
-        merge = mergeOneOption;
+        merge = mergeEqualOption;
     };
 
     str = mkOptionType {
       name = "str";
       description = "string";
       check = isString;
-      merge = mergeOneOption;
+      merge = mergeEqualOption;
     };
 
     strMatching = pattern: mkOptionType {
@@ -217,7 +217,8 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
-    string = separatedString "";
+    string = warn "types.string is deprecated because it quietly concatenates strings"
+      (separatedString "");
 
     attrs = mkOptionType {
       name = "attrs";
@@ -243,7 +244,7 @@ rec {
       name = "path";
       # Hacky: there is no ‘isPath’ primop.
       check = x: builtins.substring 0 1 (toString x) == "/";
-      merge = mergeOneOption;
+      merge = mergeEqualOption;
     };
 
     # drop this in the future:
@@ -415,7 +416,7 @@ rec {
         name = "enum";
         description = "one of ${concatMapStringsSep ", " show values}";
         check = flip elem values;
-        merge = mergeOneOption;
+        merge = mergeEqualOption;
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
       };
 
@@ -443,6 +444,13 @@ rec {
       functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
     };
 
+    # Any of the types in the given list
+    oneOf = ts:
+      let
+        head' = if ts == [] then throw "types.oneOf needs to get at least one type in its argument" else head ts;
+        tail' = tail ts;
+      in foldl' either head' tail';
+
     # Either value of type `finalType` or `coercedType`, the latter is
     # converted to `finalType` using `coerceFunc`.
     coercedTo = coercedType: coerceFunc: finalType:
@@ -469,8 +477,10 @@ rec {
     # Obsolete alternative to configOf.  It takes its option
     # declarations from the ‘options’ attribute of containing option
     # declaration.
-    optionSet = builtins.throw "types.optionSet is deprecated; use types.submodule instead" "optionSet";
-
+    optionSet = mkOptionType {
+      name = builtins.trace "types.optionSet is deprecated; use types.submodule instead" "optionSet";
+      description = "option set";
+    };
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 

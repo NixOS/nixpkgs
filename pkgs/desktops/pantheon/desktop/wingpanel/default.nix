@@ -1,16 +1,30 @@
-{ stdenv, fetchFromGitHub, pantheon, wrapGAppsHook, pkgconfig, meson, ninja
-, vala, gala, gtk3, libgee, granite, gettext, glib-networking, mutter, json-glib
-, python3, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, wrapGAppsHook
+, pkgconfig
+, meson
+, ninja
+, vala
+, gala
+, gtk3
+, libgee
+, granite
+, gettext
+, mutter
+, json-glib
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.2.2";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1knkqh9q6yp7qf27zi6ki20fq4w0ia2hklvv84ivfmfa0irz0j6r";
+    sha256 = "15pl3km8jfmlgrrb2fcabdd0rkc849arz6sc3vz6azzpln7gxbq7";
   };
 
   passthru = {
@@ -21,8 +35,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gettext
-    glib-networking
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -40,7 +52,9 @@ stdenv.mkDerivation rec {
     mutter
   ];
 
-  patches = [ ./indicators.patch ];
+  patches = [
+    ./indicators.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

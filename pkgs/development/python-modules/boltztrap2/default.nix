@@ -14,16 +14,16 @@
 }:
 
 buildPythonPackage rec {
-  version = "18.9.1";
+  version = "19.7.3";
   pname = "BoltzTraP2";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b828ad2b3b3a40956ef866e462e4c82faf83be79348af3945d4e7cede8a53913";
+    sha256 = "1hambr925ml2v2zcxnmnpi39395gl2928yac4p2kghk9xicymraw";
   };
 
-  buildInputs = [ cython cmake ];
+  nativeBuildInputs = [ cmake cython ];
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ spglib numpy scipy matplotlib ase netcdf4 ];
 

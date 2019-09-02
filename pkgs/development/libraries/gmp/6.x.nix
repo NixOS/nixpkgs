@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, m4, cxx ? !stdenv.hostPlatform.useAndroidPrebuilt
+{ stdenv, fetchurl, m4
+, cxx ? !stdenv.hostPlatform.useAndroidPrebuilt && !stdenv.hostPlatform.isWasm
 , buildPackages
 , withStatic ? false }:
 
-let inherit (stdenv.lib) optional optionalString; in
+let inherit (stdenv.lib) optional; in
 
 let self = stdenv.mkDerivation rec {
   name = "gmp-6.1.2";

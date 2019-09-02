@@ -1,14 +1,15 @@
 { stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
-, sassc, inkscape, libxml2, gnome2, gdk_pixbuf, librsvg, gtk-engine-murrine
+, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
-, mateSupport ? true
 , openboxSupport ? true
 , xfceSupport ? true
+, mateSupport ? true, gtk3, marco
 , gtkNextSupport ? false
 , plankSupport ? false
-, telegramSupport ? false
+, steamSupport ? false
+, telegramSupport ? false, zip
 , tweetdeckSupport ? false
 , selectionColor ? null # Primary color for 'selected-items' (Default: #3F51B5 = Indigo500)
 , accentColor ? null # Secondary color for notifications and OSDs (Default: #7986CB = Indigo300)
@@ -17,14 +18,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "plata-theme-${version}";
-  version = "0.4.9";
+  pname = "plata-theme";
+  version = "0.8.9";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "0kj04nj265rgkbbhzhz9f7q6z5yr1dxmcrnq1b5ldha3xqrq2pv9";
+    sha256 = "0a2wczxxfd2nfr7biawbs3rwy2sivcl2sv43y2638gmfp0w6zh9r";
   };
 
   preferLocalBuild = true;
@@ -36,11 +37,13 @@ stdenv.mkDerivation rec {
     sassc
     inkscape
     libxml2
-    gnome2.glib.dev
-  ];
+    glib.dev
+  ]
+  ++ stdenv.lib.optionals mateSupport [ gtk3 marco ]
+  ++ stdenv.lib.optional telegramSupport zip;
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     librsvg
   ];
 
@@ -57,11 +60,12 @@ stdenv.mkDerivation rec {
       (enableFeature cinnamonSupport "cinnamon")
       (enableFeature gnomeFlashbackSupport "flashback")
       (enableFeature gnomeShellSupport "gnome")
-      (enableFeature mateSupport "mate")
       (enableFeature openboxSupport "openbox")
       (enableFeature xfceSupport "xfce")
+      (enableFeature mateSupport "mate")
       (enableFeature gtkNextSupport "gtk_next")
       (enableFeature plankSupport "plank")
+      (enableFeature steamSupport "airforsteam")
       (enableFeature telegramSupport "telegram")
       (enableFeature tweetdeckSupport "tweetdeck")
     ]
@@ -69,6 +73,13 @@ stdenv.mkDerivation rec {
     ++ (withOptional accentColor "accent_color")
     ++ (withOptional suggestionColor "suggestion_color")
     ++ (withOptional destructionColor "destruction_color");
+
+  postInstall = ''
+    for dest in $out/share/gtksourceview-{3.0,4}/styles; do
+      mkdir -p $dest
+      cp $out/share/themes/Plata-{Noir,Lumine}/gtksourceview/*.xml $dest
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "A Gtk+ theme based on Material Design Refresh";

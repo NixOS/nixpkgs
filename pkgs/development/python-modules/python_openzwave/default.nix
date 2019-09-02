@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "python_openzwave";
-  version = "0.4.18";
+  version = "0.4.19";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f7b6b4e34e2a64d0a0bd0556f5560ca6914ca72428c3fe5ac8c7f08b31335f3e";
+    sha256 = "6b40c7711383eeb3535cf5504f1cf47cc1ac7018eb820f299642a5a2795aef84";
     extension = "zip";
   };
 

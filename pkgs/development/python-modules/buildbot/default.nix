@@ -1,8 +1,9 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
-  txrequests, txgithub, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, glibcLocales }:
+  txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
+  isort, pylint, flake8, buildbot-worker, buildbot-pkg, parameterized,
+  git, glibcLocales }:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -24,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "1.8.1";
+    version = "2.4.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1zadmyrlk7p9h1akmbzwa7p90s7jwsxvdx4xn9i54dnda450m3a7";
+      sha256 = "141ad2g1j5y0n5cdnd18m55ss0gqjlz5ky85rb6qfn73dgw42vmz";
     };
 
     propagatedBuildInputs = [
@@ -36,7 +37,6 @@ let
       twisted
       jinja2
       zope_interface
-      future
       sqlalchemy
       sqlalchemy_migrate
       dateutil
@@ -63,6 +63,8 @@ let
       flake8
       buildbot-worker
       buildbot-pkg
+      parameterized
+      git
       glibcLocales
     ];
 
@@ -84,6 +86,8 @@ let
       export PATH="$out/bin:$PATH"
     '';
 
+    disabled = !isPy3k;
+
     passthru = {
       inherit withPlugins;
     };
@@ -91,7 +95,7 @@ let
     meta = with lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
-      maintainers = with maintainers; [ nand0p ryansydnor ];
+      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };
   };

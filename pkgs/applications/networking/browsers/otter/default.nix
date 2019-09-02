@@ -1,10 +1,11 @@
 { stdenv, cmake, fetchFromGitHub
-, qtbase, qtmultimedia, qtwebengine
+, qtbase, qtmultimedia, qtwebengine, qtxmlpatterns
 , version ? "1.0.01"
 , sourceSha ? "1jw8bj3lcqngr0mqwvz1gf47qjxbwiyda7x4sm96a6ckga7pcwyb"
 }:
 stdenv.mkDerivation {
-  name = "otter-browser-${version}";
+  pname = "otter-browser";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "OtterBrowser";
@@ -15,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ qtbase qtmultimedia qtwebengine ];
+  buildInputs = [ qtbase qtmultimedia qtwebengine qtxmlpatterns ];
 
   meta = with stdenv.lib; {
     homepage = https://otter-browser.org;

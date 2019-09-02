@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, enableShared ? true }:
+{ stdenv, fetchFromGitHub, cmake, enableShared ? true }:
 
 stdenv.mkDerivation rec {
   version = "5.3.0";
-  name = "fmt-${version}";
+  pname = "fmt";
 
   src = fetchFromGitHub {
     owner = "fmtlib";

@@ -1,10 +1,10 @@
 { stdenv, fetchgit, fetchurl, cmake, protobuf, libunwind, openssl, glog
-, google-gflags, gmock, gtest
+, gflags, gmock, gtest
 }:
 
 let
   protoTar = fetchurl {
-    url = "http://github.com/Seagate/kinetic-protocol/archive/3.0.0.tar.gz";
+    url = "https://github.com/Seagate/kinetic-protocol/archive/3.0.0.tar.gz";
     sha256 = "0406pp0sdf0rg6s5g18r2d8si2rin7p6qbzp7c6pma5hyzsygz48";
   };
 in
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake protobuf ];
-  buildInputs = [ libunwind glog google-gflags gmock gtest ];
+  buildInputs = [ libunwind glog gflags gmock gtest ];
 
   # The headers and library include from these and there is no provided pc file
   propagatedBuildInputs = [ protobuf openssl ];

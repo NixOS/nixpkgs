@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "nixpkgs";
-  version = "0.2.2";
+  version = "0.2.4";
   disabled = ! pythonAtLeast "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gsrd99kkv99jsrh3hckz7ns1zwndi9vvh4465v4gnpz723dd6fj";
+    sha256 = "0dlvq4bpamhlva86042wlc0xxfsxlpdgm2adfb1c6y3vjgbm0nvd";
   };
 
   buildInputs = [ pbr ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Allows to `from nixpkgs import` stuff in interactive Python sessions";
-    homepage = http://github.com/t184256/nixpkgs-python-importer;
+    homepage = https://github.com/t184256/nixpkgs-python-importer;
     license = licenses.mit;
     maintainers = with maintainers; [ t184256 ];
   };

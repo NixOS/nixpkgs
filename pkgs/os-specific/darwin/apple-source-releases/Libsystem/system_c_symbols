@@ -232,6 +232,8 @@ __os_assert_log_ctx
 __os_assumes_log
 __os_assumes_log_ctx
 __os_avoid_tail_call
+__os_crash
+__os_crash_callback
 __os_debug_log
 __os_debug_log_error_str
 __putenvp
@@ -263,6 +265,7 @@ __unsetenvp
 __utmpxname
 _a64l
 _abort
+_abort_report_np
 _abs
 _acl_add_flag_np
 _acl_add_perm
@@ -345,6 +348,7 @@ _backtrace
 _backtrace_symbols
 _backtrace_symbols_fd
 _basename
+_basename_r
 _bcmp
 _bcopy
 _brk
@@ -377,8 +381,12 @@ _chmodx_np
 _clearerr
 _clearerr_unlocked
 _clock
+_clock_getres
+_clock_gettime
+_clock_gettime_nsec_np
 _clock_port
 _clock_sem
+_clock_settime
 _closedir
 _compat_mode
 _confstr
@@ -411,6 +419,7 @@ _digittoint
 _digittoint_l
 _dirfd
 _dirname
+_dirname_r
 _div
 _dprintf
 _dprintf_l
@@ -771,8 +780,12 @@ _mergesort_b
 _mkdirx_np
 _mkdtemp
 _mkfifox_np
+_mkostemp
+_mkostemps
 _mkpath_np
+_mkpathat_np
 _mkstemp
+_mkstemp_dprotected_np
 _mkstemps
 _mktemp
 _mktime
@@ -805,6 +818,7 @@ _nice
 _nl_langinfo
 _nl_langinfo_l
 _nrand48
+_nvis
 _off32
 _off64
 _offtime
@@ -959,6 +973,7 @@ _sleep
 _sleep$NOCANCEL
 _snprintf
 _snprintf_l
+_snvis
 _sockatmark
 _sprintf
 _sprintf_l
@@ -988,6 +1003,7 @@ _strcoll_l
 _strcpy
 _strcspn
 _strdup
+_strenvisx
 _strerror
 _strerror_r
 _strfmon
@@ -1006,14 +1022,23 @@ _strncpy
 _strndup
 _strnlen
 _strnstr
+_strnunvis
+_strnunvisx
+_strnvis
+_strnvisx
 _strpbrk
 _strptime
 _strptime_l
 _strrchr
+_strsenvisx
 _strsep
 _strsignal
+_strsnvis
+_strsnvisx
 _strspn
 _strstr
+_strsvis
+_strsvisx
 _strtod
 _strtod_l
 _strtof
@@ -1046,6 +1071,7 @@ _strvisx
 _strxfrm
 _strxfrm_l
 _suboptarg
+_svis
 _swab
 _swprintf
 _swprintf_l
@@ -1087,6 +1113,7 @@ _timelocal
 _timeoff
 _times
 _timezone
+_timingsafe_bcmp
 _tmpfile
 _tmpnam
 _toascii

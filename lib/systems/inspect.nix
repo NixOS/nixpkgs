@@ -20,7 +20,9 @@ rec {
     isRiscV        = { cpu = { family = "riscv"; }; };
     isSparc        = { cpu = { family = "sparc"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
+    isMsp430       = { cpu = { family = "msp430"; }; };
     isAvr          = { cpu = { family = "avr"; }; };
+    isAlpha        = { cpu = { family = "alpha"; }; };
     isJavaScript   = { cpu = cpuTypes.js; };
 
     is32bit        = { cpu = { bits = 32; }; };
@@ -42,7 +44,9 @@ rec {
     isWindows      = { kernel = kernels.windows; };
     isCygwin       = { kernel = kernels.windows; abi = abis.cygnus; };
     isMinGW        = { kernel = kernels.windows; abi = abis.gnu; };
+    isWasi         = { kernel = kernels.wasi; };
     isGhcjs        = { kernel = kernels.ghcjs; };
+    isNone         = { kernel = kernels.none; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];

@@ -3,14 +3,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "dqlite-${version}";
-  version = "0.2.5";
+  pname = "dqlite";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "CanonicalLtd";
-    repo = "dqlite";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0pv7nf4siijlcy5asrl8j1ib3viifk65yzqzckarm2mcl16y7fc3";
+    sha256 = "13l7na5858v2ah1vim6lafmzajgkymfi5rd6bk14cm4vcnxc40wb";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

@@ -1,4 +1,5 @@
 { fetchgit
+, fetchFromGitHub
 , lib
 , pkgs
 , reattach-to-user-namespace
@@ -87,6 +88,15 @@ in rec {
       url = "https://github.com/tmux-plugins/tmux-cpu";
       rev = "12f7a74e25bf59701456e2c0d98b39bb19ec7039";
       sha256 = "0qxn8ngg297980lj6w8ih2m8m8bxxdbcz5hsjmlia92h5rdkm5kl";
+    };
+  };
+
+  ctrlw = mkDerivation {
+    pluginName = "ctrlw";
+    src = fetchgit {
+      url = "https://github.com/eraserhd/tmux-ctrlw";
+      rev = "2354b5d56828813d0f7a4b228ca74b6134c2695f";
+      sha256 = "00hy1axmki8h2285mivsj923z327xkq89wfl2x4dxc71xjhdl216";
     };
   };
 
@@ -215,6 +225,16 @@ in rec {
     };
   };
 
+  tmux-colors-solarized = mkDerivation {
+    pluginName = "tmuxcolors";
+    src = fetchFromGitHub {
+      owner = "seebi";
+      repo = "tmux-colors-solarized";
+      rev = "e5e7b4f1af37f8f3fc81ca17eadee5ae5d82cd09";
+      sha256 = "1l3i82abzi4b395cgdsjg7lcfaq15kyyhijwvrgchzxi95z3hl4x";
+    };
+  };
+
   urlview = mkDerivation {
     pluginName = "urlview";
     src = fetchgit {
@@ -226,6 +246,16 @@ in rec {
       sed -i -e '14,20{s|urlview|${pkgs.urlview}/bin/urlview|g}' $target/urlview.tmux
     '';
     dependencies = [ pkgs.urlview ];
+  };
+
+  vim-tmux-navigator = mkDerivation {
+    pluginName = "vim-tmux-navigator";
+    rtpFilePath = "vim-tmux-navigator.tmux";
+    src = fetchgit {
+      url = "https://github.com/christoomey/vim-tmux-navigator";
+      rev = "4e1a877f51a17a961b8c2a285ee80aebf05ccf42";
+      sha256 = "1b8sgbzl4pcpaabqk254n97mjz767ganrmqbsr6rqzz3j9a3s1fv";
+    };
   };
 
   yank = mkDerivation {

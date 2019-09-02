@@ -15,7 +15,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name    = "arcanist-${version}";
+  pname = "arcanist";
   version = "20180916";
 
   src = [ arcanist libphutil ];

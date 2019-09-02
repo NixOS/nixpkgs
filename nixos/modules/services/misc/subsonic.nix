@@ -17,7 +17,7 @@ let cfg = config.services.subsonic; in {
       };
 
       listenAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "0.0.0.0";
         description = ''
           The host name or IP address on which to bind Subsonic.

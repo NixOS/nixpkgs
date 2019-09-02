@@ -25,7 +25,7 @@ in
 
   };
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [
       e.efl e.enlightenment
@@ -34,14 +34,14 @@ in
       pkgs.gtk2 # To get GTK+'s themes.
       pkgs.tango-icon-theme
 
-      pkgs.gnome2.gnomeicontheme
+      pkgs.gnome2.gnome_icon_theme
       pkgs.xorg.xcursorthemes
     ];
 
-    environment.pathsToLink = [ 
-      "/etc/enlightenment" 
-      "/share/enlightenment" 
-      "/share/elementary" 
+    environment.pathsToLink = [
+      "/etc/enlightenment"
+      "/share/enlightenment"
+      "/share/elementary"
       "/share/locale"
     ];
 

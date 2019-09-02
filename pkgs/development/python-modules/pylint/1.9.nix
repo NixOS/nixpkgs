@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, astroid, six, isort,
+{ stdenv, lib, buildPythonPackage, fetchPypi, astroid, six, isort,
   mccabe, configparser, backports_functools_lru_cache, singledispatch,
   pytest, pytestrunner, pyenchant }:
 

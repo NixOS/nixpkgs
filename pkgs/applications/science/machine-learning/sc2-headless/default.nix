@@ -15,7 +15,7 @@ else assert licenseAccepted;
 let maps = callPackage ./maps.nix {};
 in stdenv.mkDerivation rec {
   version = "4.7.1";
-  name = "sc2-headless-${version}";
+  pname = "sc2-headless";
 
   src = fetchurl {
     url = "https://blzdistsc2-a.akamaihd.net/Linux/SC2.${version}.zip";
@@ -33,8 +33,9 @@ in stdenv.mkDerivation rec {
     cp -r . "$out"
     rm -r $out/Libs
 
-    cp -r "${maps.minigames}"/* "${maps.melee}"/* "${maps.ladder2017season1}"/* "${maps.ladder2017season2}"/* "${maps.ladder2017season3}"/* \
-      "${maps.ladder2017season4}"/*  "${maps.ladder2018season1}"/* "${maps.ladder2018season2}"/* "$out"/Maps/
+    cp -ur "${maps.minigames}"/* "${maps.melee}"/* "${maps.ladder2017season1}"/* "${maps.ladder2017season2}"/* "${maps.ladder2017season3}"/* \
+      "${maps.ladder2017season4}"/* "${maps.ladder2018season1}"/* "${maps.ladder2018season2}"/* \
+      "${maps.ladder2018season3}"/*  "${maps.ladder2018season4}"/* "${maps.ladder2019season1}"/* "$out"/Maps/
   '';
 
   preFixup = ''

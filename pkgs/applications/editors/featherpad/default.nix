@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, qt5, fetchFromGitHub }:
+{ stdenv, pkgconfig, qt5, fetchFromGitHub }:
 
 with qt5;
 
 stdenv.mkDerivation rec {
-  version = "0.9.2";
-  name = "featherpad-${version}";
+  version = "0.10.0";
+  pname = "featherpad";
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "FeatherPad";
     rev = "V${version}";
-    sha256 = "1kpv8x3m4hiz7q9k7qadgbrys5nyzm7v5mhjyk22hawnp98m9x4q";
+    sha256 = "1wrbs6kni9s3x39cckm9kzpglryxn5vyarilvh9pafbzpc6rc57p";
   };
   nativeBuildInputs = [ qmake pkgconfig qttools ];
   buildInputs = [ qtbase qtsvg qtx11extras ];

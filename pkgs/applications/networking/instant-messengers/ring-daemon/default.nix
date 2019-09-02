@@ -79,7 +79,7 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  name = "ring-daemon-${version}";
+  pname = "ring-daemon";
   version = "2017-07-11";
 
   inherit src;

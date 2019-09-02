@@ -2,7 +2,7 @@
 , go, pkgconfig, nodejs, nodePackages, pandoc, rrdtool }:
 
 stdenv.mkDerivation rec {
-  name = "facette-${version}";
+  pname = "facette";
   version = "0.4.1";
   src = fetchFromGitHub {
     owner = "facette";

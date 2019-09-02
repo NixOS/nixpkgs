@@ -1,15 +1,15 @@
 { stdenv, fetchurl, ostree, rpm, which, autoconf, automake, libtool, pkgconfig, cargo, rustc,
   gobject-introspection, gtk-doc, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gperf, cmake,
   libcap, glib, systemd, json-glib, libarchive, libsolv, librepo, polkit,
-  bubblewrap, pcre, check, python }:
+  bubblewrap, pcre, check, python, json_c, libmodulemd_1, utillinux, sqlite, cppunit }:
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2019.1";
+  version = "2019.5";
 
   src = fetchurl {
     url = "https://github.com/projectatomic/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "14qk8mq5yc67j3wl3fa9xnhh8ii8x5qdiavf7ybw7mp4ma4lwa8k";
+    sha256 = "0innbrjj086mslbf55bcvs9a3rv9hg1y2nhzxdjy3nhpqxqlzdnn";
   };
 
   patches = [
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     libcap ostree rpm glib systemd polkit bubblewrap
     json-glib libarchive libsolv librepo
     pcre check python
+     # libdnf
+    json_c libmodulemd_1 utillinux sqlite cppunit
   ];
 
   configureFlags = [

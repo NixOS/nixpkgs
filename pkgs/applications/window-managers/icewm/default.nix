@@ -1,18 +1,18 @@
 { stdenv, fetchurl, cmake, gettext
 , libjpeg, libtiff, libungif, libpng, imlib, expat
-, freetype, fontconfig, pkgconfig, gdk_pixbuf
+, freetype, fontconfig, pkgconfig, gdk-pixbuf
 , mkfontdir, libX11, libXft, libXext, libXinerama
 , libXrandr, libICE, libSM, libXpm, libXdmcp, libxcb
 , libpthreadstubs, pcre }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "icewm-${version}";
+  pname = "icewm";
   version = "1.4.2";
 
   buildInputs =
   [ cmake gettext libjpeg libtiff libungif libpng imlib expat
-    freetype fontconfig pkgconfig gdk_pixbuf mkfontdir libX11
+    freetype fontconfig pkgconfig gdk-pixbuf mkfontdir libX11
     libXft libXext libXinerama libXrandr libICE libSM libXpm
     libXdmcp libxcb libpthreadstubs pcre ];
 

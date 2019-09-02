@@ -8,12 +8,13 @@
 , vmTools
 , gawk
 , utillinux
+, runtimeShell
 , e2fsprogs }:
 
 rec {
   shellScript = name: text:
     writeScript name ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       set -e
       ${text}
     '';
@@ -36,8 +37,7 @@ rec {
     contents ? [],
     diskSize ? 1024,
     runScript ? "#!${stdenv.shell}\nexec /bin/sh",
-    runAsRoot ? null,
-    extraSpace ? 0
+    runAsRoot ? null
   }:
     let layer = mkLayer {
           inherit name;

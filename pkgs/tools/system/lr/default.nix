@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "lr-${version}";
-  version = "1.4";
+  pname = "lr";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "chneukirchen";
     repo = "lr";
     rev = "v${version}";
-    sha256 = "0lwnd5whq5f0czhqgaj4y6myzw4wssk6bji4z3dck95c8rpvg05a";
+    sha256 = "0mpaqn0zfhxdf9wzs1wgdd29bjcyl3rgfdlqbwhiwcy2h3vy2h8s";
   };
 
   makeFlags = "PREFIX=$(out)";
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "List files recursively";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.globin ];
+    maintainers = with maintainers; [ vika_nezrimaya ];
   };
 }

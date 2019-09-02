@@ -1,9 +1,9 @@
-{ stdenv, fetchurl,
+{ stdenv, fetchFromGitHub,
   fetchHex, erlang,
   tree, hexRegistrySnapshot }:
 
 let
-  version = "3.9.0";
+  version = "3.11.1";
 
   bootstrapper = ./rebar3-nix-bootstrap;
 
@@ -65,17 +65,19 @@ let
   parse_trans = fetchHex {
     pkg = "parse_trans";
     version = "3.3.0";
-    sha256 = "17ef63abde837ad30680ea7f857dd9e7ced9476cdd7b0394432af4bfc241b960";
+    sha256 = "0q5r871bzx1a8fa06yyxdi3xkkp7v5yqazzah03d6yl3vsmn7vqp";
   };
 
 in
-stdenv.mkDerivation {
-  name = "rebar3-${version}";
+stdenv.mkDerivation rec {
+  pname = "rebar3";
   inherit version erlang;
 
-  src = fetchurl {
-    url = "https://github.com/rebar/rebar3/archive/${version}.tar.gz";
-    sha256 = "14prx5bkyy9sisnp5rj2058xpylq80xygsj1hq8b7m0awvj3r9wy";
+  src = fetchFromGitHub {
+    owner = "erlang";
+    repo = pname;
+    rev = version;
+    sha256 = "124l1alf7wx4hqjpf63l0nx70q68lilmgh582c1d413fz5ip0byd";
   };
 
   inherit bootstrapper;
@@ -121,7 +123,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://github.com/rebar/rebar3;
-    description = "rebar 3 is an Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
+    description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
 
     longDescription = ''
       rebar is a self-contained Erlang script, so it's easy to distribute or

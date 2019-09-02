@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation (rec {
   version = "3.8";
-  name = "tet-${version}";
+  pname = "tet";
 
   src = fetchurl {
     url = http://tetworks.opengroup.org/downloads/38/software/Sources/3.8/tet3.8-src.tar.gz ;

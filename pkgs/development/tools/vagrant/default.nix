@@ -1,11 +1,12 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, libguestfs, qemu, writeText, withLibvirt ? true}:
+{ stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
+, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux }:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.0";
+  version = "2.2.5";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "1wa8l3j6hpy0m0snz7wvfcf0wsjikp22c2z29crpk10f7xl7c56b";
+  sha256 = "0a228f5185b24b72efcc5a3924f86fa9fabab6f7562c3c63c1d9d239aa72a7b1";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -67,6 +68,9 @@ in buildRubyGem rec {
 
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"
+
+    mkdir -p $out/share/bash-completion/completions/
+    cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
   '' +
   lib.optionalString withLibvirt ''
     substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
@@ -81,6 +85,13 @@ in buildRubyGem rec {
       echo 'Vagrant smoke check failed'
       return 1
     fi
+  '';
+
+  # `patchShebangsAuto` patches this one script which is intended to run
+  # on foreign systems.
+  postFixup = ''
+    sed -i -e '1c#!/bin/sh -' \
+      $out/lib/ruby/gems/*/gems/vagrant-*/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   passthru = {

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, automake, autoconf, pkgconfig, gettext, libtool, pandoc, which, attr, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "mergerfs-${version}";
-  version = "2.25.1";
+  pname = "mergerfs";
+  version = "2.28.1";
 
   src = fetchFromGitHub {
     owner = "trapexit";
-    repo = "mergerfs";
+    repo = pname;
     rev = version;
-    sha256 = "1xrd18spp3wj25dd8513bah856w44gw8hilk190v13g6yafx64n6";
+    sha256 = "18yc80ccpqf785gah5xw6jg5524wfra8bf3pcjr7idzdz4ca7nvf";
   };
 
   nativeBuildInputs = [
@@ -17,17 +17,20 @@ stdenv.mkDerivation rec {
   buildInputs = [ attr libiconv ];
 
   preConfigure = ''
-    cat > src/version.hpp <<EOF
-    #pragma once
-    static const char MERGERFS_VERSION[] = "${version}";
-    EOF
+    echo "${version}" > VERSION
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "XATTR_AVAILABLE=1" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" "XATTR_AVAILABLE=1" ];
+  enableParallelBuilding = true;
+
+  postFixup = ''
+    ln -srf $out/bin/mergerfs $out/bin/mount.fuse.mergerfs
+    ln -srf $out/bin/mergerfs $out/bin/mount.mergerfs
+  '';
 
   meta = {
     description = "A FUSE based union filesystem";
-    homepage = https://github.com/trapexit/mergerfs;
+    homepage = "https://github.com/trapexit/mergerfs";
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jfrankenau makefu ];

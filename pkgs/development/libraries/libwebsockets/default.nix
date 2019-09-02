@@ -1,14 +1,14 @@
 { fetchFromGitHub, stdenv, cmake, openssl, zlib, libuv }:
 
 stdenv.mkDerivation rec {
-  name = "libwebsockets-${version}";
-  version = "3.1.0";
+  pname = "libwebsockets";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
     rev = "v${version}";
-    sha256 = "1w1wz6snf3cmcpa3f4dci2nz9za2f5rrylxl109id7bcb36xhbdl";
+    sha256 = "0ac5755h3w1pl6cznqbvg63dwkqy544fqlhvqyp7s11hgs7jx6l8";
   };
 
   buildInputs = [ cmake openssl zlib libuv ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       use minimal CPU and memory resources, and provide fast
       throughput in both directions.
     '';
-    homepage = https://libwebsockets.org;
+    homepage = https://github.com/warmcat/libwebsockets;
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.all;
   };

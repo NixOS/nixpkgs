@@ -1,67 +1,69 @@
-{ stdenv, symlinkJoin, fetchurl, fetchFromGitHub, autoconf, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, which, zlib, zstd }:
+{ stdenv, fetchurl, fetchFromGitHub, fixDarwinDylibNames, autoconf, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, uriparser, which, zlib, zstd }:
 
 let
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "46ae2605c2de306f5740587107dcf333a527f2d1";
-    sha256 = "07ps745gas2zcfmg56m3vwl63yyzmalnxwb5dc40vd004cx5hdik";
+    rev = "a277dc4e55ded3e3ea27dab1e4faf98c112442df";
+    sha256 = "1yh5a8l4ship36hwmgmp2kl72s5ac9r8ly1qcs650xv2g9q7yhnq";
   };
 in
 
 stdenv.mkDerivation rec {
-  name = "arrow-cpp-${version}";
-  version = "0.12.0";
+  pname = "arrow-cpp";
+  version = "0.14.1";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "163s4i2cywq95jgrxbaq48qwmww0ibkq61k1aad4w9z9vpjfgnil";
+    sha256 = "0a0xrsbr7dd1yp34yw82jw7psfkfvm935jhd5mam32vrsjvdsj4r";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
+
+  ARROW_JEMALLOC_URL = fetchurl {
+    # From
+    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
+    # ./cpp/thirdparty/versions.txt
+    url = "https://github.com/jemalloc/jemalloc/releases/download/5.2.0/jemalloc-5.2.0.tar.bz2";
+    sha256 = "1d73a5c5qdrwck0fa5pxz0myizaf3s9alsvhiqwrjahdlr29zgkl";
+  };
 
   patches = [
     # patch to fix python-test
     ./darwin.patch
     ];
 
-  nativeBuildInputs = [ cmake autoconf /* for vendored jemalloc */ ];
-  buildInputs = [ boost double-conversion glog python.pkgs.python python.pkgs.numpy ];
+  nativeBuildInputs = [ cmake autoconf /* for vendored jemalloc */ ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = [
+    boost brotli double-conversion flatbuffers gflags glog gtest lz4 rapidjson
+    snappy thrift uriparser zlib zstd python.pkgs.python python.pkgs.numpy
+  ];
 
   preConfigure = ''
-    substituteInPlace cmake_modules/FindThrift.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
-    substituteInPlace cmake_modules/FindBrotli.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
-    substituteInPlace cmake_modules/FindGLOG.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
     substituteInPlace cmake_modules/FindLz4.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
-    substituteInPlace cmake_modules/FindSnappy.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
 
     patchShebangs build-support/
-  '';
 
-  BROTLI_HOME = symlinkJoin { name="brotli-wrap"; paths = [ brotli.lib brotli.dev ]; };
-  DOUBLE_CONVERSION_HOME = double-conversion;
-  FLATBUFFERS_HOME = flatbuffers;
-  GFLAGS_HOME = gflags;
-  GLOG_HOME = glog;
-  GTEST_HOME = symlinkJoin { name="gtest-wrap"; paths = [ gtest gtest.dev ]; };
-  LZ4_HOME = symlinkJoin { name="lz4-wrap"; paths = [ lz4 lz4.dev ]; };
-  RAPIDJSON_HOME = rapidjson;
-  SNAPPY_HOME = symlinkJoin { name="snappy-wrap"; paths = [ snappy snappy.dev ]; };
-  THRIFT_HOME = thrift;
-  ZLIB_HOME = symlinkJoin { name="zlib-wrap"; paths = [ zlib zlib.dev ]; };
-  ZSTD_HOME = zstd;
+    # Fix build for ARROW_USE_SIMD=OFF
+    # https://jira.apache.org/jira/browse/ARROW-5007
+    sed -i src/arrow/util/sse-util.h -e '1i#include "arrow/util/logging.h"'
+    sed -i src/arrow/util/neon-util.h -e '1i#include "arrow/util/logging.h"'
+  '';
 
   cmakeFlags = [
     "-DARROW_BUILD_TESTS=ON"
-    "-DARROW_PYTHON=ON"
+    "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
     "-DARROW_PARQUET=ON"
-  ];
+    "-DARROW_PYTHON=ON"
+    "-Duriparser_SOURCE=SYSTEM"
+  ] ++ stdenv.lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
   PARQUET_TEST_DATA = if doInstallCheck then "${parquet-testing}/data" else null;
   installCheckInputs = [ perl which ];
   installCheckPhase = (stdenv.lib.optionalString stdenv.isDarwin ''
-    for f in release/*-test; do
+    for f in release/*test; do
       install_name_tool -add_rpath "$out"/lib  "$f"
     done
   '') + ''

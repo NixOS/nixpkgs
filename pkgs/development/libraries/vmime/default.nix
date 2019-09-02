@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vmime-${version}";
+  pname = "vmime";
   version = "0.9.2";
   src = fetchFromGitHub {
     owner = "kisli";

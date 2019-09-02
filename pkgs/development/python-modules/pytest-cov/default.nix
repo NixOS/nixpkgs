@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, pytest_xdist, virtualenv, process-tests, coverage }:
+, pytest, coverage }:
 
 buildPythonPackage rec {
   pname = "pytest-cov";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0ab664b25c6aa9716cbf203b17ddb301932383046082c081b9848a0edf5add33";
   };
 
-  buildInputs = [ pytest pytest_xdist virtualenv process-tests ];
+  buildInputs = [ pytest ];
   propagatedBuildInputs = [ coverage ];
 
   # xdist related tests fail with the following error

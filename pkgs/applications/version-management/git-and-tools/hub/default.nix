@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, ronn, ruby, groff, Security, utillinux, git, glibcLocales }:
+{ stdenv, buildGoPackage, fetchFromGitHub, groff, Security, utillinux }:
 
 buildGoPackage rec {
   pname = "hub";
-  version = "2.9.0";
+  version = "2.12.3";
 
   goPackagePath = "github.com/github/hub";
 
@@ -13,12 +13,11 @@ buildGoPackage rec {
     owner = "github";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yxpr606xx23l8823hjqj16cvjjrwb28c7z08ml1pkfvaf7w4n81";
+    sha256 = "13l4nc3k6vl9x1x0153mwi351j3z266wx0fp7xw2851avrgkk9zg";
   };
 
-  nativeBuildInputs = [ groff ronn utillinux glibcLocales ];
-  buildInputs = [ ruby ] ++
-    stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ groff utillinux ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   postPatch = ''
     patchShebangs .
@@ -30,7 +29,8 @@ buildGoPackage rec {
     install -D etc/hub.bash_completion.sh "$bin/share/bash-completion/completions/hub"
     install -D etc/hub.fish_completion  "$bin/share/fish/vendor_completions.d/hub.fish"
 
-    PATH=$PATH:${git}/bin LC_ALL=en_US.utf-8 make man-pages
+    LC_ALL=C.UTF8 \
+    make man-pages
     cp -vr --parents share/man/man[1-9]/*.[1-9] $bin/
   '';
 
@@ -38,7 +38,7 @@ buildGoPackage rec {
     description = "Command-line wrapper for git that makes you better at GitHub";
     license = licenses.mit;
     homepage = https://hub.github.com/;
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ the-kenny globin ];
     platforms = with platforms; unix;
   };
 }

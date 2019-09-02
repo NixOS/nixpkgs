@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "timewarrior-${version}";
+  pname = "timewarrior";
   version = "1.1.1";
 
   enableParallelBuilding = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "A command-line time tracker";
     homepage = https://taskwarrior.org/docs/timewarrior;
     license = licenses.mit;
-    maintainers = with maintainers; [ mrVanDalo ];
+    maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

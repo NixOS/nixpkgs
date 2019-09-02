@@ -55,27 +55,27 @@ in {
     };
     ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
       bootPkgs = packages.ghc822Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      sphinx = buildPackages.python3Packages.sphinx_1_7_9;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
-    ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix {
+    ghc864 = callPackage ../development/compilers/ghc/8.6.4.nix {
       bootPkgs = packages.ghc822Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
-    ghc862 = callPackage ../development/compilers/ghc/8.6.2.nix {
+    ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
       bootPkgs = packages.ghc822Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
-    ghc863 = callPackage ../development/compilers/ghc/8.6.3.nix {
-      bootPkgs = packages.ghc822Binary;
+    ghc881 = callPackage ../development/compilers/ghc/8.8.1.nix {
+      bootPkgs = packages.ghc863Binary;
       inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_6;
-      llvmPackages = pkgs.llvmPackages_6;
+      buildLlvmPackages = buildPackages.llvmPackages_7;
+      llvmPackages = pkgs.llvmPackages_7;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc863Binary;
@@ -91,7 +91,7 @@ in {
       ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix {};
     };
     ghcjs86 = callPackage ../development/compilers/ghcjs-ng {
-      bootPkgs = packages.ghc863;
+      bootPkgs = packages.ghc864;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.6/git.json;
       stage0 = ../development/compilers/ghcjs-ng/8.6/stage0.nix;
       ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.6/dep-overrides.nix {};
@@ -136,20 +136,20 @@ in {
       ghc = bh.compiler.ghc844;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
-    ghc861 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc861;
-      ghc = bh.compiler.ghc861;
+    ghc864 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc864;
+      ghc = bh.compiler.ghc864;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
     };
-    ghc862 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc862;
-      ghc = bh.compiler.ghc862;
+    ghc865 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc865;
+      ghc = bh.compiler.ghc865;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
     };
-    ghc863 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc863;
-      ghc = bh.compiler.ghc863;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+    ghc881 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc881;
+      ghc = bh.compiler.ghc881;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;

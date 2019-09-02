@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgnomekbd";
-  version = "3.26.0";
+  version = "3.26.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ea3b418c57c30615f7ee5b6f718def7c9d09ce34637324361150744258968875";
+    sha256 = "0y962ykn3rr9gylj0pwpww7bi20lmhvsw6qvxs5bisbn2mih5jpp";
   };
 
   passthru = {

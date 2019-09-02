@@ -19,7 +19,7 @@ in
       };
 
       bindAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "0.0.0.0";
         description = ''
           IP address where nix-serve will bind its listening socket.
@@ -31,11 +31,20 @@ in
         default = null;
         description = ''
           The path to the file used for signing derivation data.
+          Generate with:
+
+          ```
+          nix-store --generate-binary-cache-key key-name secret-key-file public-key-file
+          ```
+
+          Make sure user `nix-serve` has read access to the private key file.
+
+          For more details see <citerefentry><refentrytitle>nix-store</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
         '';
       };
 
       extraParams = mkOption {
-        type = types.string;
+        type = types.separatedString " ";
         default = "";
         description = ''
           Extra command line parameters for nix-serve.

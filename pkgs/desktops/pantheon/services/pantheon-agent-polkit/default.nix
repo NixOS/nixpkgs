@@ -1,5 +1,15 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja
-, vala, gtk3, libgee, polkit, gobject-introspection, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, gtk3
+, libgee
+, polkit
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
@@ -19,7 +29,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig

@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.6.6";
-  name = "gummi-${version}";
+  pname = "gummi";
 
   src = pkgs.fetchFromGitHub {
     owner = "alexandervdm";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib gnome2.gtksourceview gnome2.pango gtk2-x11 gtkspell2 poppler
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   preConfigure = ''

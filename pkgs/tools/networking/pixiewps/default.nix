@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "pixiewps-${version}";
+  pname = "pixiewps";
   version = "1.2.2";
   src = fetchFromGitHub {
     owner = "wiire";

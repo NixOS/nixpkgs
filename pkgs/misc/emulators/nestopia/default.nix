@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, pkgconfig, SDL2, alsaLib, gtk3
 , makeWrapper, libGLU_combined, libarchive, libao, unzip, xdg_utils
-, epoxy, gdk_pixbuf, gnome3, wrapGAppsHook
+, epoxy, gdk-pixbuf, gnome3, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   version = "1.47";
-  name = "nestopia-${version}";
+  pname = "nestopia";
 
   src = fetchFromGitHub {
     owner = "rdanbrook";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     alsaLib
     epoxy
     gtk3
-    gdk_pixbuf
+    gdk-pixbuf
     libGLU_combined
     libarchive
     libao

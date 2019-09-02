@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "scrypt";
-  version = "0.8.6";
+  version = "0.8.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f8239b2d47fa1d40bc27efd231dc7083695d10c1c2ac51a99380360741e0362d";
+    sha256 = "1377b1adc98c4152694bf5d7e93b41a9d2e9060af69b747cfad8c93ac426f9ea";
   };
 
   buildInputs = [ openssl ];

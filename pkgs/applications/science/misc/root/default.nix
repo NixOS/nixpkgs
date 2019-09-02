@@ -1,9 +1,9 @@
 { stdenv, fetchurl, cmake, pcre, pkgconfig, python2
 , libX11, libXpm, libXft, libXext, libGLU_combined, zlib, libxml2, lz4, lzma, gsl, xxHash
-, Cocoa, OpenGL, cf-private, noSplash ? false }:
+, Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
-  name = "root-${version}";
+  pname = "root";
   version = "6.12.06";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake pcre python2 zlib libxml2 lz4 lzma gsl xxHash ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU_combined ]
-    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL cf-private ]
+    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
 
   patches = [

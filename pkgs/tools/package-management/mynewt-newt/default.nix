@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mynewt-newt-${version}";
+  pname = "mynewt-newt";
   version = "1.3.0";
 
   goPackagePath = "mynewt.apache.org/newt";
@@ -24,6 +24,6 @@ buildGoPackage rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ pjones ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

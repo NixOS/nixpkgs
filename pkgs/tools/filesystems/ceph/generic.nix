@@ -96,7 +96,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name="ceph-${version}";
+  pname = "ceph";
+  inherit version;
 
   inherit src;
 
@@ -167,6 +168,7 @@ stdenv.mkDerivation {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ adev ak ];
     platforms = platforms.unix;
+    broken = true;
   };
 
   passthru.version = version;

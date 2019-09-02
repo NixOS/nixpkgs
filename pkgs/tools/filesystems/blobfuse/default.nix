@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, curl, gnutls, libgcrypt, libuuid, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "blobfuse-${version}";
+  pname = "blobfuse";
   version = "1.0.2";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "6.30";
-  name = "clips-${version}";
+  pname = "clips";
   src = fetchurl {
     url = "mirror://sourceforge/clipsrules/CLIPS/6.30/clips_core_source_630.tar.Z";
     sha256 = "1r0m59l3mk9cwzq3nmyr5qxrlkzp3njls4hfv8ml85dmqh7n3ysy";

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, python, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "serd-${version}";
+  pname = "serd";
   version = "0.30.0";
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${name}.tar.bz2";
+    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
     sha256 = "1yyfyvc6kwagi5w43ljp1bbjdvdpmgpds74lmjxycm91bkx0xyvf";
   };
 

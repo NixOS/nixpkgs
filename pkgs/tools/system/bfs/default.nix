@@ -1,17 +1,22 @@
 { stdenv, fetchFromGitHub, libcap, acl }:
 
 stdenv.mkDerivation rec {
-  name = "bfs-${version}";
-  version = "1.3.2";
+  pname = "bfs";
+  version = "1.5";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "0cyylqmq31if93zz0l1fnm454dsmcx34j4c2r0xprcggihdxbwk5";
+    sha256 = "0lyrxbmfr4ckz4hx5dgz8xbq479l5rlyrqf205v6c82cap4zyv4x";
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ libcap acl ];
+
+  # Disable LTO on darwin. See https://github.com/NixOS/nixpkgs/issues/19098
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "-flto -DNDEBUG" "-DNDEBUG"
+  '';
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "release" ]; # "release" enables compiler optimizations

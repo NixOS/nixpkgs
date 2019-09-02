@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, libarcus, stb }:
+{ stdenv, fetchFromGitHub, cmake, libarcus, stb, protobuf }:
 
 stdenv.mkDerivation rec {
-  name = "curaengine-${version}";
-  version = "3.6.0";
+  pname = "curaengine";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "CuraEngine";
     rev = version;
-    sha256 = "1iwmblvs3qw57698i8bbazyxha18bj9irnkcscdb0596g8q93fcm";
+    sha256 = "13hbzsx4fwrbwviyhh8z04gs9b0m8fjl8a31ci7gr2dfdmgjs6pd";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libarcus stb ];
+  buildInputs = [ libarcus stb protobuf ];
 
   cmakeFlags = [ "-DCURA_ENGINE_VERSION=${version}" ];
 
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Ultimaker/CuraEngine;
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar gebner ];
   };
 }

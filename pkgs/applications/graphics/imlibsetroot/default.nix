@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libX11, libXinerama, imlib2 }:
 
 stdenv.mkDerivation rec {
-  name = "imlibsetroot-${version}";
+  pname = "imlibsetroot";
   version = "1.2";
   src = fetchurl {
     url = "https://robotmonkeys.net/wp-content/uploads/2010/03/imlibsetroot-12.tar.gz";

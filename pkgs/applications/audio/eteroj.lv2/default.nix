@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "eteroj.lv2";
   version = "0.4.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner  = "OpenMusicKontrollers";

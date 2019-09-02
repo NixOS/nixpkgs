@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name    = "treesheets-${version}";
-  version = "2018-08-18";
+  pname = "treesheets";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner  = "aardappel";
     repo   = "treesheets";
-    rev    = "3af41d99c8f9f32603a36ab64af3560b6d61dd73";
-    sha256 = "147y8ggh3clwjgsi15z8i4jnzlkh8p17mmlg532jym53zzbcva65";
+    rev    = "v${version}";
+    sha256 = "0krsj7i5yr76imf83krz2lmlmpbsvpwqg2d4r0jwxiydjfyj4qr4";
   };
 
   buildInputs = [ wxGTK makeWrapper ];

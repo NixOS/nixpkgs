@@ -1,15 +1,16 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
-, writeText, config, glib, gtk2, gtk3, lua, python, perl, tcl, ruby
+{ source ? "default", callPackage, stdenv, ncurses, pkgconfig, gettext
+, writeText, config, glib, gtk2-x11, gtk3-x11, lua, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 , vimPlugins
 , makeWrapper
 , wrapGAppsHook
+, runtimeShell
 
 # apple frameworks
-, CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
+, CoreServices, CoreData, Cocoa, Foundation, libobjc
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
@@ -67,7 +68,7 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "vim_configurable-${version}";
+  pname = "vim_configurable";
 
   inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 
@@ -129,9 +130,9 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
     libXmu glib libICE ]
-    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2
-    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3
-    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc cf-private ]
+    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2-x11
+    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3-x11
+    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
     ++ stdenv.lib.optional luaSupport lua
     ++ stdenv.lib.optional pythonSupport python
     ++ stdenv.lib.optional tclSupport tcl
@@ -157,22 +158,22 @@ in stdenv.mkDerivation rec {
 
     rewrap () {
       rm -f "$out/bin/$1"
-      echo -e '#!${stdenv.shell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
+      echo -e '#!${runtimeShell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
       chmod a+x "$out/bin/$1"
     }
 
-    rewrap ex -e	
-    rewrap view -R	
-    rewrap gvim -g	
-    rewrap gex -eg	
-    rewrap gview -Rg	
-    rewrap rvim -Z	
-    rewrap rview -RZ	
-    rewrap rgvim -gZ	
+    rewrap ex -e
+    rewrap view -R
+    rewrap gvim -g
+    rewrap gex -eg
+    rewrap gview -Rg
+    rewrap rvim -Z
+    rewrap rview -RZ
+    rewrap rgvim -gZ
     rewrap rgview -RgZ
     rewrap evim    -y
     rewrap eview   -yR
-    rewrap vimdiff -d	
+    rewrap vimdiff -d
     rewrap gvimdiff -gd
   '';
 

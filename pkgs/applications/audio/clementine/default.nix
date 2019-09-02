@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
-, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
+, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf
 , qca2, pkgconfig, sparsehash, config, makeWrapper, gst_plugins }:
 
@@ -49,7 +49,6 @@ let
     protobuf
     qca2
     qjson
-    qt4
     sqlite
     taglib
   ]
@@ -68,7 +67,8 @@ let
   '';
 
   free = stdenv.mkDerivation {
-    name = "clementine-free-${version}";
+    pname = "clementine-free";
+    inherit version;
     inherit src patches nativeBuildInputs postPatch;
 
     # gst_plugins needed for setup-hooks
@@ -96,7 +96,8 @@ let
 
   # Unfree Spotify blob for Clementine
   unfree = stdenv.mkDerivation {
-    name = "clementine-blob-${version}";
+    pname = "clementine-blob";
+    inherit version;
     # Use the same patches and sources as Clementine
     inherit src nativeBuildInputs postPatch;
 

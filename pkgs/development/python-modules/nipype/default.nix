@@ -16,6 +16,7 @@
 , packaging
 , prov
 , psutil
+, pybids
 , pydot
 , pytest
 , pytest_xdist
@@ -44,14 +45,12 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.1.7";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iyi5w2h42bpssqj52ixm2kxp56yxfxdacb6xv5r24yv3hmwd4yn";
+    sha256 = "09azgfmb0992c3xqmi7n93pz95i4v37vc9kqmjh8c9jjxjzszdd5";
   };
-
-  patches = [ ./move-uneeded-requires.patch ];
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
@@ -81,6 +80,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pybids
     codecov
     glibcLocales
     mock
@@ -91,15 +91,13 @@ buildPythonPackage rec {
     which
   ];
 
+  # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest -v --doctest-modules nipype
+    LC_ALL="en_US.UTF-8" pytest -v nipype -k 'not display'
   '';
 
-  # See: https://github.com/nipy/nipype/issues/2839
-  doCheck = false;
-
   meta = with stdenv.lib; {
-    homepage = http://nipy.org/nipype/;
+    homepage = https://nipy.org/nipype/;
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];

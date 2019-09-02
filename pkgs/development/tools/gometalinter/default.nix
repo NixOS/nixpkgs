@@ -39,7 +39,7 @@ let
   ];
 
 in buildGoPackage rec {
-  name = "gometalinter-${version}";
+  pname = "gometalinter";
   version = "3.0.0";
 
   goPackagePath = "github.com/alecthomas/gometalinter";

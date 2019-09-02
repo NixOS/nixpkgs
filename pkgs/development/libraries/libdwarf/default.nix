@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libelf }:
+{ stdenv, fetchurl, libelf, zlib }:
 
 let
   version = "20181024";
@@ -17,14 +17,15 @@ let
 
 in rec {
   libdwarf = stdenv.mkDerivation rec {
-    name = "libdwarf-${version}";
+    pname = "libdwarf";
+    inherit version;
 
     configureFlags = [ "--enable-shared" "--disable-nonshared" ];
 
     preConfigure = ''
       cd libdwarf
     '';
-    buildInputs = [ libelf ];
+    buildInputs = [ libelf zlib ];
 
     installPhase = ''
       mkdir -p $out/lib $out/include
@@ -37,7 +38,8 @@ in rec {
   };
 
   dwarfdump = stdenv.mkDerivation rec {
-    name = "dwarfdump-${version}";
+    pname = "dwarfdump";
+    inherit version;
 
     preConfigure = ''
       cd dwarfdump

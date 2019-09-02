@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "msgpuck-${version}";
+  pname = "msgpuck";
   version = "2.0";
 
   src = fetchFromGitHub {

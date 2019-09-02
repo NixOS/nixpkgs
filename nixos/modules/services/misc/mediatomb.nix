@@ -163,7 +163,7 @@ in {
       };
 
       serverName = mkOption {
-        type = types.string;
+        type = types.str;
         default = "mediatomb";
         description = ''
           How to identify the server on the network.

@@ -2,7 +2,8 @@
 
 let version = "1.12.0"; in
 stdenv.mkDerivation {
-  name = "yadm-${version}";
+  pname = "yadm";
+  inherit version;
 
   src = fetchFromGitHub {
     owner  = "TheLocehiliosan";

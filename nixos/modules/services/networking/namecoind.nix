@@ -1,3 +1,4 @@
+
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -43,7 +44,7 @@ in
 
     services.namecoind = {
 
-      enable = mkEnableOption "namecoind, Namecoin client.";
+      enable = mkEnableOption "namecoind, Namecoin client";
 
       wallet = mkOption {
         type = types.path;
@@ -174,7 +175,7 @@ in
       serviceConfig = {
         User  = "namecoin";
         Group = "namecoin";
-        ExecStart  = "${pkgs.altcoins.namecoind}/bin/namecoind -conf=${configFile} -datadir=${dataDir} -printtoconsole";
+        ExecStart  = "${pkgs.namecoind}/bin/namecoind -conf=${configFile} -datadir=${dataDir} -printtoconsole";
         ExecStop   = "${pkgs.coreutils}/bin/kill -KILL $MAINPID";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Nice = "10";

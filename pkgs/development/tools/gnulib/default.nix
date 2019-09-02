@@ -1,12 +1,13 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "gnulib-20180226";
+  pname = "gnulib";
+  version = "20190326";
 
   src = fetchgit {
-    url = "https://git.savannah.gnu.org/r/gnulib.git";
-    rev = "0bec5d56c6938c2f28417bb5fd1c4b05ea2e7d28";
-    sha256 = "0sifr3bkmhyr5s6ljgfyr0fw6w49ajf11rlp1r797f3r3r6j9w4k";
+    url = https://git.savannah.gnu.org/r/gnulib.git;
+    rev = "a18f7ce3c0aa760c33d46bbeb8e5b3a14cf24984";
+    sha256 = "04py5n3j17wyqv9wfsslcrxzapni9vmw6p5g0adzy2md3ygjw4x4";
   };
 
   dontFixup = true;

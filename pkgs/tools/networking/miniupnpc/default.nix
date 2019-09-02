@@ -3,10 +3,11 @@
 let
   generic = { version, sha256 }:
     stdenv.mkDerivation rec {
-      name = "miniupnpc-${version}";
+      pname = "miniupnpc";
+      inherit version;
       src = fetchurl {
-        name = "${name}.tar.gz";
-        url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
+        name = "${pname}-${version}.tar.gz";
+        url = "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
         inherit sha256;
       };
 
@@ -28,8 +29,8 @@ let
     };
 in {
   miniupnpc_2 = generic {
-    version = "2.1";
-    sha256 = "1ik440yspbp3clr4m01xsl9skwyrzcvzb5nbm3i0g9x53vhbb7z1";
+    version = "2.1.20190625";
+    sha256 = "1yqp0d8x5ldjfma5x2vhpg1aaafdg0470ismccixww3rzpbza8w7";
   };
   miniupnpc_1 = generic {
     version = "1.9.20160209";

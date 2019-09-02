@@ -1,50 +1,53 @@
-{ appleDerivation, cctools, zlib }:
+{ appleDerivation, xcbuildHook, CoreSymbolication
+, xnu, bison, flex, darling, stdenv, fixDarwinDylibNames }:
 
 appleDerivation {
-  buildInputs = [ cctools zlib ];
+  nativeBuildInputs = [ xcbuildHook flex bison fixDarwinDylibNames ];
+  buildInputs = [ CoreSymbolication darling xnu ];
+  NIX_CFLAGS_COMPILE = "-DCTF_OLD_VERSIONS -DPRIVATE -DYYDEBUG=1 -I${xnu}/Library/Frameworks/System.framework/Headers -Wno-error=implicit-function-declaration";
+  NIX_LDFLAGS = "-L./Products/Release";
+  xcbuildFlags = "-target dtrace_frameworks -target dtrace";
 
-  buildPhase = ''
-    export CFLAGS=" -I$PWD/head -I$PWD/sys -I$PWD/libelf -I$PWD/libdwarf"
+  doCheck = false;
+  checkPhase = "xcodebuild -target dtrace_tests";
 
-    pushd libelf
-    for f in *.c; do
-      if [ "$f" != "lintsup.c" ]; then # Apple doesn't use it, so I don't either
-        cc -D_INT64_TYPE -D_LONGLONG_TYPE -D_ILP32 $CFLAGS -c $f
-      fi
-    done
-    libtool -static -o libelf.a *.o
-    popd
-
-    pushd libdwarf
-    ./configure CFLAGS="$CFLAGS -Icmplrs"
-    make
-    popd
-
-    cp libelf/libelf.a     tools/ctfconvert
-    cp libdwarf/libdwarf.a tools/ctfconvert
-
-    pushd tools/ctfconvert
-    for f in ../../darwin_shim.c *.c; do
-      cc -DNDEBUG -DNS_BLOCK_ASSERTIONS $CFLAGS -c $f
-    done
-
-    export COMMON="alist.o ctf.o darwin_shim.o hash.o iidesc.o input.o list.o \
-      memory.o output.o stack.o strtab.o symbol.o tdata.o traverse.o util.o"
-
-    export CONVERT="ctfconvert.o dwarf.o merge.o st_bugs.o st_parse.o stabs.o"
-    export MERGE="barrier.o ctfmerge.o dwarf.o fifo.o merge.o st_bugs.o st_parse.o stabs.o utils.o"
-    export DUMP="dump.o fifo.o utils.o"
-
-    clang -o ctfconvert $CONVERT $COMMON -L. -lz -lelf -ldwarf
-    clang -o ctfmerge   $MERGE   $COMMON -L. -lz -lelf -ldwarf
-    clang -o ctfdump    $DUMP    $COMMON -L. -lz -lelf
-    popd
+  postPatch = ''
+    substituteInPlace dtrace.xcodeproj/project.pbxproj \
+      --replace "/usr/sbin" ""
+    substituteInPlace libdtrace/dt_open.c \
+      --replace /usr/bin/clang ${stdenv.cc.cc}/bin/clang \
+      --replace /usr/bin/ld ${stdenv.cc.bintools.bintools}/bin/ld \
+      --replace /usr/lib/dtrace/dt_cpp.h $out/include/dt_cpp.h \
+      --replace /usr/lib/dtrace $out/lib/dtrace
   '';
 
+  # hack to handle xcbuild's broken lex handling
+  preBuild = ''
+    pushd libdtrace
+    yacc -d dt_grammar.y
+    flex -l -d dt_lex.l
+    popd
+
+    substituteInPlace dtrace.xcodeproj/project.pbxproj \
+      --replace '6EBC9800099BFBBF0001019C /* dt_grammar.y */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.yacc; name = dt_grammar.y; path = libdtrace/dt_grammar.y; sourceTree = "<group>"; };' '6EBC9800099BFBBF0001019C /* y.tab.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = y.tab.c; path = libdtrace/y.tab.c; sourceTree = "<group>"; };' \
+      --replace '6EBC9808099BFBBF0001019C /* dt_lex.l */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.lex; name = dt_lex.l; path = libdtrace/dt_lex.l; sourceTree = "<group>"; };' '6EBC9808099BFBBF0001019C /* lex.yy.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lex.yy.c; path = libdtrace/lex.yy.c; sourceTree = "<group>"; };'
+  '';
+
+  # xcbuild doesn't support install
   installPhase = ''
-    mkdir -p $out/bin
-    cp tools/ctfconvert/ctfconvert $out/bin
-    cp tools/ctfconvert/ctfmerge   $out/bin
-    cp tools/ctfconvert/ctfdump    $out/bin
+    mkdir -p $out
+
+    cp -r Products/Release/usr/include $out/include
+    cp scripts/dt_cpp.h $out/include/dt_cpp.h
+
+    mkdir $out/lib
+    cp Products/Release/*.dylib $out/lib
+
+    mkdir $out/bin
+    cp Products/Release/dtrace $out/bin
+
+    mkdir -p $out/lib/dtrace
+
+    install_name_tool -change $PWD/Products/Release/libdtrace.dylib $out/lib/libdtrace.dylib $out/bin/dtrace
   '';
 }

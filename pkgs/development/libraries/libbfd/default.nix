@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libbfd-${version}";
+  pname = "libbfd";
   inherit (binutils-unwrapped) version src;
 
   outputs = [ "out" "dev" ];

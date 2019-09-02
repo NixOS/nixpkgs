@@ -12,6 +12,7 @@
 , libXinerama
 , libXrandr
 , libXrender
+, libGL
 , openal}:
 
 let
@@ -26,7 +27,8 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "unigine-valley-${version}";
+    pname = "unigine-valley";
+    inherit version;
 
     src = fetchurl {
       url = "http://assets.unigine.com/d/Unigine_Valley-${version}.run";
@@ -47,6 +49,7 @@ in
       libXinerama
       libXrandr
       libXrender
+      libGL
       openal
     ];
 

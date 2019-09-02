@@ -2,8 +2,8 @@
 
 let
   goPackagePath = "github.com/prometheus/prometheus";
-
-  generic = { version, sha256, ... }@attrs:
+in rec {
+  buildPrometheus = { version, sha256, doCheck ? true, ... }@attrs:
     let attrs' = builtins.removeAttrs attrs ["version" "sha256"]; in
       buildGoPackage ({
         name = "prometheus-${version}";
@@ -16,8 +16,6 @@ let
           repo = "prometheus";
           inherit sha256;
         };
-
-        doCheck = true;
 
         buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
           -ldflags=
@@ -39,18 +37,18 @@ let
           description = "Service monitoring system and time series database";
           homepage = https://prometheus.io;
           license = licenses.asl20;
-          maintainers = with maintainers; [ benley fpletz ];
+          maintainers = with maintainers; [ benley fpletz globin ];
           platforms = platforms.unix;
         };
     } // attrs');
-in rec {
-  prometheus_1 = generic {
+
+  prometheus_1 = buildPrometheus {
     version = "1.8.2";
     sha256 = "088flpg3qgnj9afl9vbaa19v2s1d21yxy38nrlv5m7cxwy2pi5pv";
   };
 
-  prometheus_2 = generic {
-    version = "2.6.0";
-    sha256 = "1d9zwzs280pw9zspqwp7xx3ji04lfg2v9l5qhrfy3y633ghcmpxz";
+  prometheus_2 = buildPrometheus {
+    version = "2.12.0";
+    sha256 = "1ci9dc512c1hry1b8jqif0mrnks6w3yagwm3jf69ihcwilr2n7vs";
   };
 }

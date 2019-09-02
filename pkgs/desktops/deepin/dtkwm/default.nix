@@ -1,16 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, dtkcore,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qtx11extras, dtkcore,
   deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dtkwm";
-  version = "2.0.9";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0vkx6vlz83pgawhdwqkwpq3dy8whxmjdzfpgrvm2m6jmspfk9bab";
+    sha256 = "10l89i84vsh5knq9wg2php7vfg5rj5c9hrrl9rjlcidn1rz8yx6f";
   };
 
   nativeBuildInputs = [
@@ -23,14 +22,15 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags \
-      QT_HOST_DATA=$out \
-      INCLUDE_INSTALL_DIR=$out/include \
-      LIB_INSTALL_DIR=$out/lib"
-  '';
+  outRef = placeholder "out";
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  qmakeFlags = [
+    "QT_HOST_DATA=${outRef}"
+    "INCLUDE_INSTALL_DIR=${outRef}/include"
+    "LIB_INSTALL_DIR=${outRef}/lib"
+  ];
+
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin graphical user interface library";

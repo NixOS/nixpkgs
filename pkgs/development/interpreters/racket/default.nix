@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, makeFontsConf, makeWrapper
+{ stdenv, fetchurl, makeFontsConf
+, cacert
 , cairo, coreutils, fontconfig, freefont_ttf
 , glib, gmp
 , gtk3
 , libedit, libffi
 , libiconv
+, libGL
+, libGLU
 , libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
@@ -27,6 +30,8 @@ let
     gtk3
     gsettings-desktop-schemas
     libedit
+    libGL
+    libGLU
     libjpeg
     libpng
     mpfr
@@ -40,8 +45,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "racket-${version}";
-  version = "7.2"; # always change at once with ./minimal.nix
+  pname = "racket";
+  version = "7.3"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl rec {
@@ -49,8 +54,8 @@ stdenv.mkDerivation rec {
       inherit sha256;
     }
   )) {
-    inherit name;
-    sha256 = "12cq0kiigmf9bxb4rcgxdhwc2fcdwvlyb1q3f8x4hswcpgq1ybg4";
+    inherit ;name = "${pname}-${version}";
+    sha256 = "0h6072njhb87rkz4arijvahxgjzn8r14s4wns0ijvxm89bg136yl";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -60,7 +65,7 @@ stdenv.mkDerivation rec {
     (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ cacert wrapGAppsHook ];
 
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];

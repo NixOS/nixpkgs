@@ -1,7 +1,8 @@
 { lib, stdenv, fetch, cmake, python, libcxxabi, fixDarwinDylibNames, version }:
 
 stdenv.mkDerivation rec {
-  name = "libc++-${version}";
+  pname = "libc++";
+  inherit version;
 
   src = fetch "libcxx" "0rzw4qvxp6qx4l4h9amrq02gp7hbg8lw4m0sy3k60f50234gnm3n";
 
@@ -37,11 +38,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   linkCxxAbi = stdenv.isLinux;
-
-  postInstall = ''
-    mv $out/lib/libc++.a $out/lib/libc++_static.a
-    cp ${./libc++.a} $out/lib/libc++.a
-  '';
 
   setupHooks = [
     ../../../../../build-support/setup-hooks/role.bash

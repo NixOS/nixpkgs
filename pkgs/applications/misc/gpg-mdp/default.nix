@@ -3,7 +3,8 @@
 let version = "0.7.4";
 in stdenv.mkDerivation {
   # mdp renamed to gpg-mdp because there is a mdp package already.
-  name = "gpg-mdp-${version}";
+  pname = "gpg-mdp";
+  inherit version;
   meta = {
     homepage = https://tamentis.com/projects/mdp/;
     license = [stdenv.lib.licenses.isc];

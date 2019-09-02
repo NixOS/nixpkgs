@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchurl, cmake
+, smartSupport ? false, libatasmart }:
 
 stdenv.mkDerivation rec {
-  name = "thinkfan-${version}";
+  pname = "thinkfan";
   version = "0.9.3";
 
   src = fetchurl {
@@ -10,6 +11,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = stdenv.lib.optional smartSupport libatasmart;
+
+  cmakeFlags = stdenv.lib.optional smartSupport "-DUSE_ATASMART=ON";
 
   installPhase = ''
     install -Dm755 {.,$out/bin}/thinkfan

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem, perlSupport ? true, libX11, libXt, libXft,
   ncurses, perl, fontconfig, freetype, pkgconfig, libXrender,
-  gdkPixbufSupport ? true, gdk_pixbuf, unicode3Support ? true }:
+  gdkPixbufSupport ? true, gdk-pixbuf, unicode3Support ? true }:
 
 let
   pname = "rxvt-unicode";
@@ -31,7 +31,7 @@ stdenv.mkDerivation (rec {
     [ libX11 libXt libXft ncurses /* required to build the terminfo file */
       fontconfig freetype pkgconfig libXrender ]
     ++ stdenv.lib.optional perlSupport perl
-    ++ stdenv.lib.optional gdkPixbufSupport gdk_pixbuf;
+    ++ stdenv.lib.optional gdkPixbufSupport gdk-pixbuf;
 
   outputs = [ "out" "terminfo" ];
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation (rec {
     inherit description;
     homepage = http://software.schmorp.de/pkg/rxvt-unicode.html;
     downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";
-    maintainers = [ ];
+    maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.unix;
     license = licenses.gpl3;
   };

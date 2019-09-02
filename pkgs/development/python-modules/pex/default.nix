@@ -1,20 +1,19 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "1.5.3";
+  version = "1.6.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0244c9e25172598fca73cb61e2a2f133503565c95d99210c3d5c0e85950c4bd";
+    sha256 = "1zibkc074dvk69bkiipfzn2l9glgzs26g16j2ny5lzq320wqszkj";
   };
 
-  prePatch = ''
-    substituteInPlace setup.py --replace 'SETUPTOOLS_REQUIREMENT,' '"setuptools"'
-  '';
+  nativeBuildInputs = [ setuptools ];
 
   # A few more dependencies I don't want to handle right now...
   doCheck = false;

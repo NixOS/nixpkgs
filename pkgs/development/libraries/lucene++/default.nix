@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, boost, gtest }:
 
 stdenv.mkDerivation rec {
-  name = "lucene++-${version}";
+  pname = "lucene++";
   version = "3.0.7";
 
   src = fetchurl {

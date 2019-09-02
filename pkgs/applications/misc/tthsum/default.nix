@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tthsum-${version}";
+  pname = "tthsum";
   version = "1.3.2";
 
   src = fetchurl {
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     cp share/tthsum.1.gz $out/share/man/man1
     cp obj-unix/tthsum $out/bin
   '';
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     description = "An md5sum-alike program that works with Tiger/THEX hashes";

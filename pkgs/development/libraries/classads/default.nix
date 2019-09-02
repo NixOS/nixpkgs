@@ -3,7 +3,8 @@
 let version = "1.0.10"; in
 
 stdenv.mkDerivation {
-  name = "classads-${version}";
+  pname = "classads";
+  inherit version;
 
   src = fetchurl {
     url = "ftp://ftp.cs.wisc.edu/condor/classad/c++/classads-${version}.tar.gz";

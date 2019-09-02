@@ -114,7 +114,7 @@ in
 
         };
         name = mkOption {
-          type = types.string;
+          type = types.str;
           description = ''
             The name of a .desktop file in the directory specified
             in the 'package' option.
@@ -189,6 +189,11 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
+      { assertion = xcfg.enable;
+        message = ''
+          LightDM requires services.xserver.enable to be true
+        '';
+      }
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set

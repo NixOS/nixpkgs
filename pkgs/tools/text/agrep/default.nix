@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "agrep-${version}";
+  pname = "agrep";
   version = "3.41.5";
 
   src = fetchFromGitHub {

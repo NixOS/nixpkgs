@@ -1,7 +1,7 @@
-{ stdenv, appimage-run, fetchurl }:
+{ stdenv, appimage-run, fetchurl, runtimeShell }:
 
 let
-  version = "2.3.12";
+  version = "3.0.15";
 
   plat = {
     "i386-linux" = "i386";
@@ -9,13 +9,14 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i386-linux" = "0q7izk20r14kxn3n4pn92jgnynfnlnylg55brz8n1lqxc0dc3v24";
-    "x86_64-linux" = "0myg4qv0vrwh8s9sckb12ld9f86ymx4yypvpy0w5qn1bxk5hbafc";
+    "i386-linux" = "0v2nsis6vb1lnhmjd28vrfxqwwpycv02j0nvjlfzcgj4b3400j7a";
+    "x86_64-linux" = "130n586cw0836zsbwqcz3pp3h0d4ny74ngqs4k4cvfb92556r7xh";
   }.${stdenv.hostPlatform.system};
 in
 
 stdenv.mkDerivation rec {
-  name = "standardnotes-${version}";
+  pname = "standardnotes";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-${plat}.AppImage";
@@ -24,12 +25,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ appimage-run ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/{bin,share}
     cp $src $out/share/standardNotes.AppImage
-    echo "#!${stdenv.shell}" > $out/bin/standardnotes
+    echo "#!${runtimeShell}" > $out/bin/standardnotes
     echo "${appimage-run}/bin/appimage-run $out/share/standardNotes.AppImage" >> $out/bin/standardnotes
     chmod +x $out/bin/standardnotes $out/share/standardNotes.AppImage
   '';

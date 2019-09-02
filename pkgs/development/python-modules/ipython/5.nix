@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 # Build dependencies
 , glibcLocales
 # Test dependencies
@@ -58,6 +57,6 @@ buildPythonPackage rec {
     description = "IPython: Productive Interactive Computing";
     homepage = http://ipython.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor jgeerds orivej lnl7 ];
+    maintainers = with lib.maintainers; [ bjornfor orivej lnl7 ];
   };
 }

@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "bosun-${version}";
+  pname = "bosun";
   version = "0.5.0";
 
   src = fetchFromGitHub {
@@ -19,6 +19,6 @@ buildGoPackage rec {
     license = licenses.mit;
     homepage = https://bosun.org;
     maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

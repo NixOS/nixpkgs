@@ -32,6 +32,11 @@ buildPythonApplication rec {
 
   buildInputs = [ httpretty pytest pytestcov ];
 
+  preCheck = ''
+    # fix compatibility with pytest 4
+    substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
+  '';
+
   propagatedBuildInputs = [ arrow click keyring parsedatetime requests six termcolor ];
 
   meta = with stdenv.lib; {

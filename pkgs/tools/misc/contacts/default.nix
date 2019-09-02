@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, xcbuildHook, cf-private, Foundation, AddressBook }:
+{ stdenv, fetchurl, xcbuildHook, Foundation, AddressBook }:
 
 stdenv.mkDerivation rec {
   version = "1.1a-3";
-  name = "contacts-${version}";
+  pname = "contacts";
 
   src = fetchurl {
     url = "https://github.com/dhess/contacts/archive/4092a3c6615d7a22852a3bafc44e4aeeb698aa8f.tar.gz";
@@ -10,12 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ xcbuildHook ];
-
-  buildInputs = [
-    Foundation AddressBook
-    # Needed for OBJC_CLASS_$_NSArray symbols.
-    cf-private
-  ];
+  buildInputs = [ Foundation AddressBook ];
 
   installPhase = ''
     mkdir -p $out/bin

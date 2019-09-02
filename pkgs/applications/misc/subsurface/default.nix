@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, makeWrapper, pkgconfig, qmake
+{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkgconfig, qmake
 , curl, grantlee, libgit2, libusb, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
 }:
@@ -7,7 +7,8 @@ let
   version = "4.8.2";
 
   libdc = stdenv.mkDerivation rec {
-    name = "libdivecomputer-ssrf-${version}";
+    pname = "libdivecomputer-ssrf";
+    inherit version;
 
     src = fetchurl {
       url = "https://subsurface-divelog.org/downloads/libdivecomputer-subsurface-branch-${version}.tgz";
@@ -30,7 +31,7 @@ let
   };
 
   googlemaps = stdenv.mkDerivation rec {
-    name = "googlemaps-${version}";
+    pname = "googlemaps";
 
     version = "2017-12-18";
 
@@ -66,7 +67,8 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "subsurface-${version}";
+  pname = "subsurface";
+  inherit version;
 
   src = fetchurl {
     url = "https://subsurface-divelog.org/downloads/Subsurface-${version}.tgz";
@@ -79,17 +81,12 @@ in stdenv.mkDerivation rec {
     qtbase qtconnectivity qtsvg qttools qtwebkit
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook pkgconfig ];
 
   cmakeFlags = [
     "-DLIBDC_FROM_PKGCONFIG=ON"
     "-DNO_PRINTING=OFF"
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/subsurface \
-      --prefix QT_PLUGIN_PATH : "${googlemaps}/${googlemaps.pluginsSubdir}"
-  '';
 
   enableParallelBuilding = true;
 

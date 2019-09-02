@@ -11,8 +11,8 @@ let
       sha256 = "0n75jq3xgq46hfmjkaaxz3gic77shs4fzajq40c8gk043i84xbdh";
     };
     "2" = {
-      fluidsynthVersion = "2.0.3";
-      sha256 = "00f6bhw4ddrinb5flvg5y53rcvnf4km23a6nbvnswmpq13568v78";
+      fluidsynthVersion = "2.0.5";
+      sha256 = "0rv0apxbj0cgm8f8sqf5xr6kdi4q58ph92ip6cg716ha0ca5lr8y";
     };
   };
 in
@@ -32,11 +32,11 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ glib libsndfile ]
-    ++ lib.optionals (!stdenv.isDarwin) [ alsaLib libpulseaudio libjack2 ]
+  buildInputs = [ glib libsndfile libpulseaudio libjack2 ]
+    ++ lib.optionals stdenv.isLinux [ alsaLib ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-Denable-framework=off";
+  cmakeFlags = [ "-Denable-framework=off" ];
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";

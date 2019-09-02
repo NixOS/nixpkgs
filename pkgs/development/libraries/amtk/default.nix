@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, gtk3
 , pkgconfig, gnome3, dbus, xvfb_run }:
 let
   version = "5.0.0";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    gnome3.gtk
+    gtk3
   ];
 
   doCheck = stdenv.isLinux;

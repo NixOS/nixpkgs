@@ -1,14 +1,14 @@
-{ stdenv, requireFile, SDL, libpulseaudio, alsaLib }:
+{ stdenv, requireFile, SDL, libpulseaudio, alsaLib, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "vessel-12082012";
 
-  goBuyItNow = '' 
+  goBuyItNow = ''
     We cannot download the full version automatically, as you require a license.
     Once you bought a license, you need to add your downloaded version to the nix store.
     You can do this by using "nix-prefetch-url file://\$PWD/${name}-bin" in the
     directory where you saved it.
-  ''; 
+  '';
 
   src = if (stdenv.isi686) then
     requireFile {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   phases = "installPhase";
   ld_preload = ./isatty.c;
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ] 
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ]
     + ":" + stdenv.lib.makeLibraryPath [ SDL libpulseaudio alsaLib ] ;
 
   installPhase = ''
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     # allow scripting of the mojoinstaller
     gcc -fPIC -shared -o isatty.so $ld_preload
 
-    echo @@@ 
+    echo @@@
     echo @@@ this next step appears to hang for a while
-    echo @@@ 
+    echo @@@
 
-    # if we call ld.so $(bin) we don't need to set the ELF interpreter, and save a patchelf step. 
+    # if we call ld.so $(bin) we don't need to set the ELF interpreter, and save a patchelf step.
     LD_PRELOAD=./isatty.so $(cat $NIX_CC/nix-support/dynamic-linker) $src << IM_A_BOT
     n
     $out/libexec/strangeloop/vessel/
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     rm $out/libexec/strangeloop/vessel/x86/libstdc++*
 
     # props to Ethan Lee (the Vessel porter) for understanding
-    # how $ORIGIN works in rpath. There is hope for humanity. 
+    # how $ORIGIN works in rpath. There is hope for humanity.
     patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath $libPath:$out/libexec/strangeloop/vessel/x86/ \
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     done
 
     cat > $out/bin/Vessel << EOW
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $out/libexec/strangeloop/vessel/
     exec ./x86/vessel.x86
     EOW

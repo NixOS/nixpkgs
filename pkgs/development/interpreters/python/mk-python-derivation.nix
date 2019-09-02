@@ -10,7 +10,6 @@
 # Whether the derivation provides a Python module or not.
 , toPythonModule
 , namePrefix
-, writeScript
 , update-python-libraries
 }:
 
@@ -33,6 +32,9 @@
 # DEPRECATED: use propagatedBuildInputs
 , pythonPath ? []
 
+# Enabled to detect some (native)BuildInputs mistakes
+, strictDeps ? true
+
 # used to disable derivation, useful for specific python versions
 , disabled ? false
 
@@ -45,6 +47,9 @@
 
 # Skip wrapping of python programs altogether
 , dontWrapPythonPrograms ? false
+
+# Skip setting the PYTHONNOUSERSITE environment variable in wrapped programs
+, permitUserSite ? false
 
 # Remove bytecode from bin folder.
 # When a Python script has the extension `.py`, bytecode is generated
@@ -86,6 +91,10 @@ let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attr
 
   # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
+
+  inherit strictDeps;
+
+  LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
 
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;

@@ -1,13 +1,13 @@
 { buildPythonPackage, python, tornado, pycrypto, pycurl, pytz
 , pillow, derpconf, python_magic, libthumbor, webcolors
 , piexif, futures, statsd, thumborPexif, fetchFromGitHub, isPy3k, lib
-, mock, raven, nose, yanc, remotecv, pyssim, cairosvg1, preggy, opencv3
-, pkgs, coreutils
+, mock, raven, nose, yanc, remotecv, pyssim, cairosvg, preggy, opencv3
+, pkgs, coreutils, substituteAll
 }:
 
 buildPythonPackage rec {
   pname = "thumbor";
-  version = "6.6.0";
+  version = "6.7.0";
 
   disabled = isPy3k; # see https://github.com/thumbor/thumbor/issues/1004
 
@@ -16,8 +16,18 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0m4q40fcha1aydyr1khjhnb08cdfma67yxgyhsvwar5a6sl0906i";
+    sha256 = "1qv02jz7ivn38dsywp7nxrlflly86x9pm2pk3yqi8m8myhc7lipg";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./0001-Don-t-use-which-implementation-to-find-required-exec.patch;
+      gifsicle = "${pkgs.gifsicle}/bin/gifsicle";
+      exiftool = "${pkgs.exiftool}/bin/exiftool";
+      jpegtran = "${pkgs.libjpeg}/bin/jpegtran";
+      ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace "setup.py" \
@@ -39,10 +49,10 @@ buildPythonPackage rec {
     mock
     yanc
     remotecv
-    cairosvg1
     raven
     pkgs.redis
     pkgs.glibcLocales
+    pkgs.gifsicle
   ];
 
   propagatedBuildInputs = [
@@ -58,10 +68,7 @@ buildPythonPackage rec {
     webcolors
     piexif
     statsd
-    pkgs.exiftool
-    pkgs.libjpeg
-    pkgs.ffmpeg
-    pkgs.gifsicle
+    cairosvg
   ] ++ lib.optionals (!isPy3k) [ futures thumborPexif ];
 
   # Remove the source tree before running nosetests because otherwise nosetests
@@ -71,7 +78,7 @@ buildPythonPackage rec {
     redis-server --port 6668 --requirepass hey_you &
     rm -r thumbor
     export LC_ALL="en_US.UTF-8"
-    nosetests -v --with-yanc -s tests/
+    nosetests -v --with-yanc -s tests/ -e test_redeye_applied
   '';
 
   meta = with lib; {

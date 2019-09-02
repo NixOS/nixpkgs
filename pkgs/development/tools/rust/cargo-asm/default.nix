@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "cargo-asm-${version}";
-  version = "0.1.16";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "gnzlbg";
     repo = "cargo-asm";
-    rev = "7d0ece74657edb002bd8530227b829b31fd19dcd";
-    sha256 = "0mzbh5zw5imlaagm5zjbjk9kqdnglm398rxkqisd22h6569ppqpc";
+    rev = "7f69a17e9c36dfe1f0d7080d7974c72ecc87a145";
+    sha256 = "0zn5p95hsmhvk2slc9hakrpvim6l4zbpgkks2x64ndwyfmzyykws";
   };
 
-  cargoSha256 = "1m2j6i8hc8isdlj77gv9m6sk6q0x3bvzpva2k16g27i1ngy1989b";
+  cargoSha256 = "1k9mc29y4487ssf5whvr8xig7j4jh0rpcrhclp6siw8xamygijdm";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

@@ -1,18 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper, kubernetes-helm, ... }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, kubernetes-helm, ... }:
 
-let version = "0.40.1"; in
+let version = "0.79.3"; in
 
-buildGoPackage {
-  name = "helmfile-${version}";
+buildGoModule {
+  pname = "helmfile";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "roboll";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "02ir10070rpayv9s53anldwjy5ggl268shgf085d188wl6vshaiv";
+    sha256 = "0wgfpidpqyvh41dnw351v91z4szi1s6lqak9li2pmddz1rdkx66v";
   };
 
   goPackagePath = "github.com/roboll/helmfile";
+
+  modSha256 = "1ksz1c4j7mhsbq6ifqab04588d48c9glyhr4d3d4jyvi19qhwx1d";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -22,16 +25,15 @@ buildGoPackage {
   '';
 
   postInstall = ''
-    wrapProgram $bin/bin/helmfile \
+    wrapProgram $out/bin/helmfile \
       --prefix PATH : ${lib.makeBinPath [ kubernetes-helm ]}
   '';
-
 
   meta = {
     description = "Deploy Kubernetes Helm charts";
     homepage = https://github.com/roboll/helmfile;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pneumaticat ];
+    maintainers = with lib.maintainers; [ pneumaticat yurrriq ];
     platforms = lib.platforms.unix;
   };
 }

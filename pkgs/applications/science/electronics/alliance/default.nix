@@ -1,14 +1,14 @@
 { stdenv, fetchurl
 , xorgproto, motif, libX11, libXt, libXpm, bison
-, flex, automake, autoconf, libtool
+, flex, automake, autoconf, libtool, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
-  name = "alliance-${version}";
+  pname = "alliance";
   version = "5.1.1";
 
   src = fetchurl {
-    url = "http://www-asim.lip6.fr/pub/alliance/distribution/5.0/${name}.tar.bz2";
+    url = "http://www-asim.lip6.fr/pub/alliance/distribution/5.0/${pname}-${version}.tar.bz2";
     sha256 = "046c9qwl1vbww0ljm4xyxf5jpz9nq62b2q0wdz9xjimgh4c207w1";
   };
 
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
   '';
 
   allianceInstaller = ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cp -v -r -n --no-preserve=mode  $out/etc/* /etc/ > /etc/alliance-install.log
   '';
 
   allianceUnInstaller = ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     awk '{print \$3}' /etc/alliance-install.log | xargs rm
     awk '{print \$3}' /etc/alliance-install.log | xargs rmdir
     rm /etc/alliance-install.log

@@ -30,9 +30,12 @@ rec {
   #     nix-repl> converge (x: x / 2) 16
   #     0
   converge = f: x:
-    if (f x) == x
-    then x
-    else converge f (f x);
+    let
+      x' = f x;
+    in
+      if x' == x
+      then x
+      else converge f x';
 
   # Modify the contents of an explicitly recursive attribute set in a way that
   # honors `self`-references. This is accomplished with a function

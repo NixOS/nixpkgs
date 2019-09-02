@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "widelands-${version}";
+  pname = "widelands";
   version = "19";
 
   meta = with stdenv.lib; {

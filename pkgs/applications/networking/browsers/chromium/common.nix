@@ -1,4 +1,4 @@
-{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
+{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -11,19 +11,21 @@
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk2, gtk3, dbus-glib
+, glib, gtk3, dbus-glib
 , glibc
-, libXScrnSaver, libXcursor, libXtst, libGLU_combined
+, libXScrnSaver, libXcursor, libXtst, libGLU_combined, libGL
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
 , jdk
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
+, libva ? null # useVaapi
 
 # package customization
 , enableNaCl ? false
 , enableWideVine ? false
+, useVaapi ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -65,7 +67,8 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng"
+    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
@@ -104,7 +107,7 @@ let
        else result;
 
   base = rec {
-    name = "${packageName}-${version}";
+    name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -120,18 +123,21 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 gtk3 dbus-glib
+      glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU_combined
       pciutils protobuf speechd libXdamage at-spi2-core
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
+      ++ optional useVaapi libva
       ++ optional pulseSupport libpulseaudio
       ++ optional (versionAtLeast version "72") jdk.jre;
 
     patches = optional enableWideVine ./patches/widevine.patch ++ [
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
+      ./patches/jumbo-sorted.patch
+      ./patches/no-build-timestamps.patch
 
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
@@ -141,6 +147,9 @@ let
       # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
       #
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
+    ] ++ optionals (useVaapi) [
+      # source: https://aur.archlinux.org/cgit/aur.git/plain/chromium-vaapi.patch?h=chromium-vaapi
+      ./patches/chromium-vaapi.patch
     ] ++ optionals (!stdenv.cc.isClang && (versionRange "71" "72")) [
       ( githubPatch "65be571f6ac2f7942b4df9e50b24da517f829eec" "1sqv0aba0mpdi4x4f21zdkxz2cf8ji55ffgbfcr88c5gcg0qn2jh" )
     ] ++ optional stdenv.isAarch64
@@ -242,7 +251,7 @@ let
       treat_warnings_as_errors = false;
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
-      remove_webcore_debug_symbols = true;
+      blink_symbol_level = 0;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
@@ -258,6 +267,8 @@ let
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
+    } // optionalAttrs useVaapi {
+      use_vaapi = true;
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
@@ -298,6 +309,13 @@ let
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
     in concatStringsSep "\n" commands;
+
+    postFixup = ''
+      # Make sure that libGLESv2 is found by dlopen (if using EGL).
+      chromiumBinary="$libExecPath/$packageName"
+      origRpath="$(patchelf --print-rpath "$chromiumBinary")"
+      patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
+    '';
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.

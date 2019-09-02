@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libevent, openssl}:
 
 stdenv.mkDerivation rec {
-  name = "libcouchbase-${version}";
-  version = "2.10.3";
+  pname = "libcouchbase";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     owner = "couchbase";
     repo = "libcouchbase";
     rev = version;
-    sha256 = "0a3fin5rcwa3xwd980mrzrkr7dpjdwbri81mqwxw1fkppjqw23z4";
+    sha256 = "1yfmcx65aqd5l87scha6kmm2s38n85ci3gg0h6qfs16s3jfi6bw7";
   };
 
   cmakeFlags = "-DLCB_NO_MOCK=ON";

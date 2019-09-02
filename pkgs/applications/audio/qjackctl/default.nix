@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras }:
+{ stdenv, mkDerivation, fetchurl, pkgconfig, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras }:
 
-stdenv.mkDerivation rec {
-  version = "0.5.5";
-  name = "qjackctl-${version}";
+mkDerivation rec {
+  version = "0.5.9";
+  pname = "qjackctl";
 
   # some dependencies such as killall have to be installed additionally
 
   src = fetchurl {
-    url = "mirror://sourceforge/qjackctl/${name}.tar.gz";
-    sha256 = "1rzzqa39a6llr52vjkjr0a86nc776kmr5xs52qqga8ms9697psz5";
+    url = "mirror://sourceforge/qjackctl/${pname}-${version}.tar.gz";
+    sha256 = "1saywsda9m124rmjp7i3n0llryaliabjxhqhvqr6dm983qy7pypk";
   };
 
   buildInputs = [

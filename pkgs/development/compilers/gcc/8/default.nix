@@ -37,7 +37,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "8.2.0";
+let version = "8.3.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -132,7 +132,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "10007smilswiiv2ymazr3b6x2i933c0ycxrr529zh4r6p823qv0r";
+    sha256 = "0b3xv411xhlnjmin2979nxcbnidgvzqdf4nbhix99x60dkzavfk4";
   };
 
   inherit patches;
@@ -322,6 +322,13 @@ stdenv.mkDerivation ({
 
   LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
 
+  EXTRA_TARGET_FLAGS = optionals
+    (targetPlatform != hostPlatform && libcCross != null)
+    ([
+      "-idirafter ${getDev libcCross}${libcCross.incdir or "/include"}"
+    ] ++ optionals (! crossStageStatic) [
+      "-B${libcCross.out}${libcCross.libdir or "/lib"}"
+    ]);
 
   EXTRA_TARGET_LDFLAGS = optionals
     (targetPlatform != hostPlatform && libcCross != null)

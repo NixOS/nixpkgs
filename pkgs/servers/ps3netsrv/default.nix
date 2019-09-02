@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "ps3netsrv-${version}";
+  pname = "ps3netsrv";
   version = "1.1.0";
 
   enableParallelBuilding = true;

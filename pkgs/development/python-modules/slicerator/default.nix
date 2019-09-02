@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/soft-matter/slicerator;
+    homepage = https://github.com/soft-matter/slicerator;
     description = "A lazy-loading, fancy-sliceable iterable";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];

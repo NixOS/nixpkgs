@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "exfat-${version}";
+  pname = "exfat";
   version = "1.3.0";
 
   src = fetchFromGitHub {

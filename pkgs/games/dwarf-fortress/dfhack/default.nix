@@ -54,9 +54,6 @@ let
 
   version = release.dfHackRelease;
 
-  warning = if release.prerelease then builtins.trace "[DFHack] Version ${version} is a prerelease. Careful!"
-                                  else null;
-
   # revision of library/xml submodule
   xmlRev = release.xmlRev;
 
@@ -87,7 +84,8 @@ let
   '';
 
   dfhack = stdenv.mkDerivation rec {
-    name = "dfhack-base-${version}";
+    pname = "dfhack-base";
+    inherit version;
 
     # Beware of submodules
     src = fetchFromGitHub {

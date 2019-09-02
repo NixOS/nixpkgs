@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.9.2";
-  name = "librepo-${version}";
+  pname = "librepo";
 
   src = fetchFromGitHub {
     owner  = "rpm-software-management";

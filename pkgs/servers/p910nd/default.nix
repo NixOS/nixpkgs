@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "p910nd-${version}";
+  pname = "p910nd";
   version = "0.97";
 
   src = fetchurl {
     sha256 = "0vy2qf386dif1nqznmy3j953mq7c4lk6j2hgyzkbmfi4msiq1jaa";
-    url = "mirror://sourceforge/p910nd/${name}.tar.bz2";
+    url = "mirror://sourceforge/p910nd/${pname}-${version}.tar.bz2";
   };
 
   postPatch = ''

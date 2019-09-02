@@ -1,17 +1,18 @@
 { stdenv, meson, ninja, gettext, fetchurl, pkgconfig
 , wrapGAppsHook, itstool, desktop-file-utils, python3
-, glib, gtk3, evolution-data-server
+, glib, gtk3, evolution-data-server, gnome-online-accounts
 , libuuid, webkitgtk, zeitgeist
-, gnome3, libxml2 }:
+, gnome3, libxml2, gsettings-desktop-schemas, tracker }:
 
 let
-  version = "3.30.3";
+  version = "3.32.2";
 in stdenv.mkDerivation rec {
-  name = "gnome-notes-${version}";
+  pname = "gnome-notes";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
-    sha256 = "1mkpi2i9nqpip5l15ihjcscyiri113s0705sjgh6b89164ahyn5k";
+    sha256 = "0chm2fks7cpx3mycxzddpj6v9by203c3m1y6zns5ra43bspwafy2";
   };
 
   doCheck = true;
@@ -26,11 +27,11 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib gtk3 libuuid webkitgtk gnome3.tracker
-    gnome3.gnome-online-accounts zeitgeist
-    gnome3.gsettings-desktop-schemas
+    glib gtk3 libuuid webkitgtk tracker
+    gnome-online-accounts zeitgeist
+    gsettings-desktop-schemas
     evolution-data-server
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
   mesonFlags = [

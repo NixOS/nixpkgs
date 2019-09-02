@@ -1,17 +1,18 @@
 { stdenv, fetchFromBitbucket, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  name = "pygmentex-${version}";
+  pname = "pygmentex";
   version = "0.8";
+  tlType = "run";
 
   src = fetchFromBitbucket {
     owner = "romildo";
-    repo = "pygmentex";
+    repo = pname;
     rev = version;
     sha256 = "07dnv7hgppy15bda2kcbrlvfqzl6lhza80klc7133dwg8q92hm6m";
   };
 
-  pythonPath = [ python2Packages.pygments python2Packages.chardet ];
+  pythonPath = with python2Packages; [ pygments chardet ];
 
   dontBuild = true;
 
@@ -20,6 +21,15 @@ python2Packages.buildPythonApplication rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -a pygmentex.py $out/bin
+
+    mkdir -p $out/scripts/pygmentex
+    ln -s $out/bin/pygmentex.py $out/scripts/pygmentex
+
+    mkdir -p $out/tex/latex/pygmentex
+    cp -a pygmentex.sty $out/tex/latex/pygmentex
+
+    mkdir -p $out/doc/latex/pygmentex
+    cp -a README demo.* blueshade.png Factorial.java $out/doc/latex/pygmentex
   '';
 
   meta = with stdenv.lib; {

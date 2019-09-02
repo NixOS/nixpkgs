@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "quilt-0.65";
+  name = "quilt-0.66";
 
   src = fetchurl {
     url = "mirror://savannah/quilt/${name}.tar.gz";
-    sha256 = "06b816m2gz9jfif7k9v2hrm7fz76zjg5pavf7hd3ifybwn4cgjzn";
+    sha256 = "01vfvk4pqigahx82fhaaffg921ivd3k7rylz1yfvy4zbdyd32jri";
   };
 
   buildInputs = [ makeWrapper perl bash diffutils patch findutils diffstat ];

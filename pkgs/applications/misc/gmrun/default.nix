@@ -5,10 +5,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gmrun-${version}";
+  pname = "gmrun";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/gmrun/${name}.tar.gz";
+    url = "mirror://sourceforge/gmrun/${pname}-${version}.tar.gz";
     sha256 = "180z6hbax1qypy5cyy2z6nn7fzxla4ib47ck8mqwr714ag77na8p";
   };
 
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = [
       ./gcc43.patch
+      ./find-config-file-in-system-etc-dir.patch
       ./gmrun-0.9.2-xdg.patch
     ];
 

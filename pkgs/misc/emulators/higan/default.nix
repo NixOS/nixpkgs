@@ -4,12 +4,13 @@
 , udev
 , libGLU_combined, SDL
 , libao, openal, libpulseaudio
-, gtk2, gtksourceview }:
+, gtk2, gtksourceview
+, runtimeShell }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "higan-${version}";
+  pname = "higan";
   version = "106";
   sourceName = "higan_v${version}-source";
 
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     # stuff needed by higan at runtime
 
     cat <<EOF > $out/bin/higan-init.sh
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     cp --recursive --update $out/share/higan/*.sys \$HOME/.local/share/higan/
 
@@ -69,8 +70,8 @@ stdenv.mkDerivation rec {
     longDescription = ''
       higan (formerly bsnes) is a multi-system game console emulator.
       It currently supports the following systems:
-        - Nintendo's Famicom, Super Famicom (with subsystems: 
-          Super Game Boy, BS-X Satellaview, Sufami Turbo); 
+        - Nintendo's Famicom, Super Famicom (with subsystems:
+          Super Game Boy, BS-X Satellaview, Sufami Turbo);
           Game Boy, Game Boy Color, Game Boy Advance;
         - Sega's Master System, Game Gear, Mega Drive;
         - NEC's PC Engine, SuperGrafx;

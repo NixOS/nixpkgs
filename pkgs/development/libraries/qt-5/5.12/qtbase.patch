@@ -1,8 +1,7 @@
-diff --git a/mkspecs/common/mac.conf b/mkspecs/common/mac.conf
-index 61bea952b2..9909dae726 100644
---- a/mkspecs/common/mac.conf
-+++ b/mkspecs/common/mac.conf
-@@ -23,7 +23,7 @@ QMAKE_INCDIR_OPENGL     = \
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/common/mac.conf qtbase-everywhere-src-5.12.3-b/mkspecs/common/mac.conf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/common/mac.conf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/common/mac.conf	2019-07-10 09:35:08.917628566 -0500
+@@ -24,7 +24,7 @@
  
  QMAKE_FIX_RPATH         = install_name_tool -id
  
@@ -11,11 +10,10 @@ index 61bea952b2..9909dae726 100644
  QMAKE_LFLAGS_GCSECTIONS = -Wl,-dead_strip
  
  QMAKE_LFLAGS_REL_RPATH  =
-diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
-index 2ed708e085..05e60ff45f 100644
---- a/mkspecs/features/create_cmake.prf
-+++ b/mkspecs/features/create_cmake.prf
-@@ -21,7 +21,7 @@ load(cmake_functions)
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/create_cmake.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/create_cmake.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/create_cmake.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/create_cmake.prf	2019-07-10 09:35:08.917628566 -0500
+@@ -21,7 +21,7 @@
  # at cmake time whether package has been found via a symlink, and correct
  # that to an absolute path. This is only done for installations to
  # the /usr or / prefix.
@@ -24,7 +22,7 @@ index 2ed708e085..05e60ff45f 100644
  contains(CMAKE_INSTALL_LIBS_DIR, ^(/usr)?/lib(64)?.*): CMAKE_USR_MOVE_WORKAROUND = $$CMAKE_INSTALL_LIBS_DIR
  
  CMAKE_OUT_DIR = $$MODULE_BASE_OUTDIR/lib/cmake
-@@ -51,45 +51,20 @@ split_incpath {
+@@ -51,45 +51,20 @@
          $$cmake_extra_source_includes.output
  }
  
@@ -81,7 +79,7 @@ index 2ed708e085..05e60ff45f 100644
  
  static|staticlib:CMAKE_STATIC_TYPE = true
  
-@@ -169,7 +144,7 @@ contains(CONFIG, plugin) {
+@@ -169,7 +144,7 @@
        cmake_target_file
  
      cmake_qt5_plugin_file.files = $$cmake_target_file.output
@@ -90,7 +88,7 @@ index 2ed708e085..05e60ff45f 100644
      INSTALLS += cmake_qt5_plugin_file
  
      return()
-@@ -316,7 +291,7 @@ exists($$cmake_macros_file.input) {
+@@ -318,7 +293,7 @@
      cmake_qt5_module_files.files += $$cmake_macros_file.output
  }
  
@@ -99,11 +97,10 @@ index 2ed708e085..05e60ff45f 100644
  
  # We are generating cmake files. Most developers of Qt are not aware of cmake,
  # so we require automatic tests to be available. The only module which should
-diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 3ed6dd5889..4c7c8da21a 100644
---- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-+++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -3,30 +3,6 @@ if (CMAKE_VERSION VERSION_LESS 3.1.0)
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in qtbase-everywhere-src-5.12.3-b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in	2019-07-10 09:35:08.917628566 -0500
+@@ -3,30 +3,6 @@
      message(FATAL_ERROR \"Qt 5 $${CMAKE_MODULE_NAME} module requires at least CMake version 3.1.0\")
  endif()
  
@@ -134,7 +131,7 @@ index 3ed6dd5889..4c7c8da21a 100644
  !!IF !equals(TEMPLATE, aux)
  # For backwards compatibility only. Use Qt5$${CMAKE_MODULE_NAME}_VERSION instead.
  set(Qt5$${CMAKE_MODULE_NAME}_VERSION_STRING "$$eval(QT.$${MODULE}.VERSION)")
-@@ -52,11 +28,7 @@ endmacro()
+@@ -52,11 +28,7 @@
  macro(_populate_$${CMAKE_MODULE_NAME}_target_properties Configuration LIB_LOCATION IMPLIB_LOCATION)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} APPEND PROPERTY IMPORTED_CONFIGURATIONS ${Configuration})
  
@@ -146,7 +143,7 @@ index 3ed6dd5889..4c7c8da21a 100644
      _qt5_$${CMAKE_MODULE_NAME}_check_file_exists(${imported_location})
      set_target_properties(Qt5::$${CMAKE_MODULE_NAME} PROPERTIES
          \"INTERFACE_LINK_LIBRARIES\" \"${_Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES}\"
-@@ -69,11 +41,7 @@ macro(_populate_$${CMAKE_MODULE_NAME}_target_properties Configuration LIB_LOCATI
+@@ -69,11 +41,7 @@
      )
  
  !!IF !isEmpty(CMAKE_WINDOWS_BUILD)
@@ -158,7 +155,7 @@ index 3ed6dd5889..4c7c8da21a 100644
      _qt5_$${CMAKE_MODULE_NAME}_check_file_exists(${imported_implib})
      if(NOT \"${IMPLIB_LOCATION}\" STREQUAL \"\")
          set_target_properties(Qt5::$${CMAKE_MODULE_NAME} PROPERTIES
-@@ -89,24 +57,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -89,24 +57,13 @@
  !!IF !no_module_headers
  !!IF !isEmpty(CMAKE_BUILD_IS_FRAMEWORK)
      set(_Qt5$${CMAKE_MODULE_NAME}_OWN_INCLUDE_DIRS
@@ -187,7 +184,7 @@ index 3ed6dd5889..4c7c8da21a 100644
      )
  !!ELSE
      set(Qt5$${CMAKE_MODULE_NAME}_PRIVATE_INCLUDE_DIRS \"\")
-@@ -122,7 +79,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -122,7 +79,6 @@
      set(Qt5$${CMAKE_MODULE_NAME}_PRIVATE_INCLUDE_DIRS \"\")
  !!ENDIF
  !!ENDIF
@@ -195,7 +192,7 @@ index 3ed6dd5889..4c7c8da21a 100644
  !!IF !isEmpty(CMAKE_ADD_SOURCE_INCLUDE_DIRS)
      include(\"${CMAKE_CURRENT_LIST_DIR}/ExtraSourceIncludes.cmake\" OPTIONAL)
  !!ENDIF
-@@ -272,25 +228,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -272,25 +228,13 @@
  !!IF !isEmpty(CMAKE_FIND_OTHER_LIBRARY_BUILD)
  !!IF isEmpty(CMAKE_DEBUG_TYPE)
  !!IF !isEmpty(CMAKE_STATIC_WINDOWS_BUILD)
@@ -221,7 +218,7 @@ index 3ed6dd5889..4c7c8da21a 100644
          _populate_$${CMAKE_MODULE_NAME}_target_properties(DEBUG \"$${CMAKE_LIB_FILE_LOCATION_DEBUG}\" \"$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" )
  !!ENDIF // CMAKE_STATIC_WINDOWS_BUILD
      endif()
-@@ -309,25 +253,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -309,25 +253,13 @@
  !!IF !isEmpty(CMAKE_FIND_OTHER_LIBRARY_BUILD)
  !!IF isEmpty(CMAKE_RELEASE_TYPE)
  !!IF !isEmpty(CMAKE_STATIC_WINDOWS_BUILD)
@@ -247,7 +244,7 @@ index 3ed6dd5889..4c7c8da21a 100644
          _populate_$${CMAKE_MODULE_NAME}_target_properties(RELEASE \"$${CMAKE_LIB_FILE_LOCATION_RELEASE}\" \"$${CMAKE_IMPLIB_FILE_LOCATION_RELEASE}\" )
  !!ENDIF // CMAKE_STATIC_WINDOWS_BUILD
      endif()
-@@ -346,11 +278,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -346,11 +278,7 @@
      macro(_populate_$${CMAKE_MODULE_NAME}_plugin_properties Plugin Configuration PLUGIN_LOCATION)
          set_property(TARGET Qt5::${Plugin} APPEND PROPERTY IMPORTED_CONFIGURATIONS ${Configuration})
  
@@ -259,19 +256,17 @@ index 3ed6dd5889..4c7c8da21a 100644
          _qt5_$${CMAKE_MODULE_NAME}_check_file_exists(${imported_location})
          set_target_properties(Qt5::${Plugin} PROPERTIES
              \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
-diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/default_post.prf
-index 99f68b78f5..dde69cb7c2 100644
---- a/mkspecs/features/mac/default_post.prf
-+++ b/mkspecs/features/mac/default_post.prf
-@@ -63,199 +63,3 @@ qt {
-         }
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/mac/default_post.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/mac/default_post.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/mac/default_post.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/mac/default_post.prf	2019-07-10 09:35:08.917628566 -0500
+@@ -64,202 +64,6 @@
      }
  }
--
+ 
 -# Add the same default rpaths as Xcode does for new projects.
 -# This is especially important for iOS/tvOS/watchOS where no other option is possible.
 -!no_default_rpath {
--    QMAKE_RPATHDIR += @executable_path/Frameworks
+-    QMAKE_RPATHDIR += @executable_path/../Frameworks
 -    equals(TEMPLATE, lib):!plugin:lib_bundle: QMAKE_RPATHDIR += @loader_path/Frameworks
 -}
 -
@@ -463,10 +458,13 @@ index 99f68b78f5..dde69cb7c2 100644
 -    xcode_product_bundle_target = ${PRODUCT_NAME:rfc1034identifier}
 -xcode_product_bundle_identifier_setting.value = "$${xcode_product_bundle_identifier_setting.value}.$${xcode_product_bundle_target}"
 -QMAKE_MAC_XCODE_SETTINGS += xcode_product_bundle_identifier_setting
-diff --git a/mkspecs/features/mac/default_pre.prf b/mkspecs/features/mac/default_pre.prf
-index e3534561a5..3b01424e67 100644
---- a/mkspecs/features/mac/default_pre.prf
-+++ b/mkspecs/features/mac/default_pre.prf
+-
+ !macx-xcode {
+     generate_xcode_project.commands = @$(QMAKE) -spec macx-xcode $(EXPORT__PRO_FILE_)
+     generate_xcode_project.target = xcodeproj
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/mac/default_pre.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/mac/default_pre.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/mac/default_pre.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/mac/default_pre.prf	2019-07-10 09:35:08.917628566 -0500
 @@ -1,60 +1,2 @@
  CONFIG = asset_catalogs rez $$CONFIG
  load(default_pre)
@@ -528,11 +526,10 @@ index e3534561a5..3b01424e67 100644
 -xcode_copy_phase_strip_setting.name = COPY_PHASE_STRIP
 -xcode_copy_phase_strip_setting.value = NO
 -QMAKE_MAC_XCODE_SETTINGS += xcode_copy_phase_strip_setting
-diff --git a/mkspecs/features/mac/sdk.prf b/mkspecs/features/mac/sdk.prf
-index 8360dd8b38..8b13789179 100644
---- a/mkspecs/features/mac/sdk.prf
-+++ b/mkspecs/features/mac/sdk.prf
-@@ -1,58 +1 @@
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/mac/sdk.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/mac/sdk.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/mac/sdk.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/mac/sdk.prf	2019-07-10 09:35:08.917628566 -0500
+@@ -1,54 +1 @@
  
 -isEmpty(QMAKE_MAC_SDK): \
 -    error("QMAKE_MAC_SDK must be set when using CONFIG += sdk.")
@@ -568,10 +565,6 @@ index 8360dd8b38..8b13789179 100644
 -QMAKE_MAC_SDK_PLATFORM_PATH = $$xcodeSDKInfo(PlatformPath)
 -QMAKE_MAC_SDK_VERSION = $$xcodeSDKInfo(SDKVersion)
 -
--sysrootified =
--for(val, QMAKE_INCDIR_OPENGL): sysrootified += $${QMAKE_MAC_SDK_PATH}$$val
--QMAKE_INCDIR_OPENGL = $$sysrootified
--
 -QMAKESPEC_NAME = $$basename(QMAKESPEC)
 -
 -# Resolve SDK version of various tools
@@ -591,37 +584,34 @@ index 8360dd8b38..8b13789179 100644
 -    $$tool = $$sysrooted $$member(value, 1, -1)
 -    cache($$tool_variable, set stash, $$tool)
 -}
-diff --git a/mkspecs/features/qml_module.prf b/mkspecs/features/qml_module.prf
-index 65212b2abf..accd4c07f0 100644
---- a/mkspecs/features/qml_module.prf
-+++ b/mkspecs/features/qml_module.prf
-@@ -52,7 +52,7 @@ qmldir.base = $$_PRO_FILE_PWD_
- # Tools need qmldir and plugins.qmltypes always installed on the file system
- qmldir.files = $$qmldir_file $$fq_aux_qml_files
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qml_module.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qml_module.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qml_module.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qml_module.prf	2019-07-10 09:35:08.917628566 -0500
+@@ -54,7 +54,7 @@
+ 
+ qmldir.files = $$qmldir_file
  install_qml_files: qmldir.files += $$fq_qml_files
--qmldir.path = $$instbase/$$TARGETPATH
+-qmldir.path = $$[QT_INSTALL_QML]/$$TARGETPATH
 +qmldir.path = $$NIX_OUTPUT_QML/$$TARGETPATH
  INSTALLS += qmldir
  
- !debug_and_release|!build_all|CONFIG(release, debug|release) {
-diff --git a/mkspecs/features/qml_plugin.prf b/mkspecs/features/qml_plugin.prf
-index cd6377dcc6..e98bf98151 100644
---- a/mkspecs/features/qml_plugin.prf
-+++ b/mkspecs/features/qml_plugin.prf
-@@ -56,7 +56,7 @@ qml1_target {
-     instbase = $$[QT_INSTALL_QML]
- }
+ qmlfiles.base = $$_PRO_FILE_PWD_
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qml_plugin.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qml_plugin.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qml_plugin.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qml_plugin.prf	2019-07-10 09:35:08.918628595 -0500
+@@ -50,7 +50,7 @@
  
--target.path = $$instbase/$$TARGETPATH
+ DESTDIR = $$MODULE_BASE_OUTDIR/qml/$$TARGETPATH
+ 
+-target.path = $$[QT_INSTALL_QML]/$$TARGETPATH
 +target.path = $$NIX_OUTPUT_QML/$$TARGETPATH
  INSTALLS += target
  
  # Some final setup
-diff --git a/mkspecs/features/qt_app.prf b/mkspecs/features/qt_app.prf
-index 8354f30eea..62028fef8e 100644
---- a/mkspecs/features/qt_app.prf
-+++ b/mkspecs/features/qt_app.prf
-@@ -30,7 +30,7 @@ host_build:force_bootstrap {
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_app.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_app.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_app.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_app.prf	2019-07-10 09:35:08.918628595 -0500
+@@ -30,7 +30,7 @@
      target.path = $$[QT_HOST_BINS]
  } else {
      !build_pass:qtConfig(debug_and_release): CONFIG += release
@@ -630,11 +620,10 @@ index 8354f30eea..62028fef8e 100644
      CONFIG += relative_qt_rpath  # Qt's tools and apps should be relocatable
  }
  INSTALLS += target
-diff --git a/mkspecs/features/qt_build_paths.prf b/mkspecs/features/qt_build_paths.prf
-index 3bb3823a8e..655b7b7db8 100644
---- a/mkspecs/features/qt_build_paths.prf
-+++ b/mkspecs/features/qt_build_paths.prf
-@@ -24,6 +24,6 @@ exists($$MODULE_BASE_INDIR/.git): \
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_build_paths.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_build_paths.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_build_paths.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_build_paths.prf	2019-07-10 09:35:08.918628595 -0500
+@@ -24,6 +24,6 @@
  !force_independent {
      # If the module is not built independently, everything ends up in qtbase.
      # This is the case in non-prefix builds, except for selected modules.
@@ -643,11 +632,10 @@ index 3bb3823a8e..655b7b7db8 100644
 +    MODULE_BASE_OUTDIR = $$NIX_OUTPUT_OUT
 +    MODULE_QMAKE_OUTDIR = $$NIX_OUTPUT_OUT
  }
-diff --git a/mkspecs/features/qt_common.prf b/mkspecs/features/qt_common.prf
-index 4ad9946ae0..6d66f29c26 100644
---- a/mkspecs/features/qt_common.prf
-+++ b/mkspecs/features/qt_common.prf
-@@ -34,8 +34,8 @@ contains(TEMPLATE, .*lib) {
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_common.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_common.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_common.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_common.prf	2019-07-10 09:35:08.918628595 -0500
+@@ -34,8 +34,8 @@
          qqt_libdir = \$\$\$\$[QT_HOST_LIBS]
          qt_libdir = $$[QT_HOST_LIBS]
      } else {
@@ -658,11 +646,10 @@ index 4ad9946ae0..6d66f29c26 100644
      }
      contains(QMAKE_DEFAULT_LIBDIRS, $$qt_libdir) {
          lib_replace.match = "[^ ']*$$rplbase/lib"
-diff --git a/mkspecs/features/qt_docs.prf b/mkspecs/features/qt_docs.prf
-index 3139c443c6..1b4f2fddd8 100644
---- a/mkspecs/features/qt_docs.prf
-+++ b/mkspecs/features/qt_docs.prf
-@@ -45,7 +45,7 @@ QMAKE_DOCS_OUTPUTDIR = $$QMAKE_DOCS_BASE_OUTDIR/$$QMAKE_DOCS_TARGETDIR
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_docs.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_docs.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_docs.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_docs.prf	2019-07-10 09:35:08.918628595 -0500
+@@ -45,7 +45,7 @@
  
  QDOC += -outputdir $$shell_quote($$QMAKE_DOCS_OUTPUTDIR)
  !build_online_docs: \
@@ -671,7 +658,7 @@ index 3139c443c6..1b4f2fddd8 100644
  PREP_DOC_INDEXES =
  DOC_INDEXES =
  !isEmpty(QTREPOS) {
-@@ -64,8 +64,8 @@ DOC_INDEXES =
+@@ -64,8 +64,8 @@
          DOC_INDEXES += -indexdir $$shell_quote($$qrep/doc)
  } else {
      prepare_docs: \
@@ -682,7 +669,7 @@ index 3139c443c6..1b4f2fddd8 100644
  }
  
  qtattributionsscanner.target = qtattributionsscanner
-@@ -88,12 +88,12 @@ prepare_docs {
+@@ -88,12 +88,12 @@
      qch_docs.commands = $$QHELPGENERATOR $$shell_quote($$QMAKE_DOCS_OUTPUTDIR/$${QMAKE_DOCS_TARGET}.qhp) -o $$shell_quote($$QMAKE_DOCS_BASE_OUTDIR/$${QMAKE_DOCS_TARGET}.qch)
  
      inst_html_docs.files = $$QMAKE_DOCS_OUTPUTDIR
@@ -697,11 +684,10 @@ index 3139c443c6..1b4f2fddd8 100644
      inst_qch_docs.CONFIG += no_check_exist no_default_install no_build
      INSTALLS += inst_qch_docs
  
-diff --git a/mkspecs/features/qt_example_installs.prf b/mkspecs/features/qt_example_installs.prf
-index 43b58817fe..e635b8f67a 100644
---- a/mkspecs/features/qt_example_installs.prf
-+++ b/mkspecs/features/qt_example_installs.prf
-@@ -88,7 +88,7 @@ sourcefiles += \
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_example_installs.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_example_installs.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_example_installs.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_example_installs.prf	2019-07-10 09:35:08.918628595 -0500
+@@ -88,7 +88,7 @@
      $$SOURCES $$HEADERS $$FORMS $$RESOURCES $$TRANSLATIONS \
      $$DBUS_ADAPTORS $$DBUS_INTERFACES
  addInstallFiles(sources.files, $$sourcefiles)
@@ -710,11 +696,10 @@ index 43b58817fe..e635b8f67a 100644
  INSTALLS += sources
  
  check_examples {
-diff --git a/mkspecs/features/qt_functions.prf b/mkspecs/features/qt_functions.prf
-index 1903e509c8..ae7b585989 100644
---- a/mkspecs/features/qt_functions.prf
-+++ b/mkspecs/features/qt_functions.prf
-@@ -69,7 +69,7 @@ defineTest(qtHaveModule) {
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_functions.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_functions.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_functions.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_functions.prf	2019-07-10 09:35:08.918628595 -0500
+@@ -69,7 +69,7 @@
  defineTest(qtPrepareTool) {
      cmd = $$eval(QT_TOOL.$${2}.binary)
      isEmpty(cmd) {
@@ -723,10 +708,9 @@ index 1903e509c8..ae7b585989 100644
          exists($${cmd}.pl) {
              $${1}_EXE = $${cmd}.pl
              cmd = perl -w $$system_path($${cmd}.pl)
-diff --git a/mkspecs/features/qt_installs.prf b/mkspecs/features/qt_installs.prf
-index 8f98987b99..21b3bb8b32 100644
---- a/mkspecs/features/qt_installs.prf
-+++ b/mkspecs/features/qt_installs.prf
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_installs.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_installs.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_installs.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_installs.prf	2019-07-10 09:35:08.918628595 -0500
 @@ -12,16 +12,10 @@
  #library
  !qt_no_install_library {
@@ -746,7 +730,7 @@ index 8f98987b99..21b3bb8b32 100644
      !static: target.CONFIG = no_dll
      INSTALLS += target
  }
-@@ -29,33 +23,33 @@
+@@ -29,35 +23,35 @@
  #headers
  qt_install_headers {
      gen_headers.files = $$SYNCQT.GENERATED_HEADER_FILES
@@ -762,6 +746,8 @@ index 8f98987b99..21b3bb8b32 100644
      private_headers.files = $$SYNCQT.PRIVATE_HEADER_FILES $$SYNCQT.INJECTED_PRIVATE_HEADER_FILES
 -    private_headers.path = $$[QT_INSTALL_HEADERS]/$$MODULE_INCNAME/$$VERSION/$$MODULE_INCNAME/private
 +    private_headers.path = $$NIX_OUTPUT_DEV/include/$$MODULE_INCNAME/$$VERSION/$$MODULE_INCNAME/private
+     generated_privates: \
+         private_headers.CONFIG += no_check_exist
      INSTALLS += private_headers
  
      qpa_headers.files = $$SYNCQT.QPA_HEADER_FILES
@@ -786,11 +772,10 @@ index 8f98987b99..21b3bb8b32 100644
          privpritarget.files = $$MODULE_PRIVATE_PRI
          INSTALLS += privpritarget
      }
-diff --git a/mkspecs/features/qt_plugin.prf b/mkspecs/features/qt_plugin.prf
-index 40528a65e2..903f795284 100644
---- a/mkspecs/features/qt_plugin.prf
-+++ b/mkspecs/features/qt_plugin.prf
-@@ -88,7 +88,7 @@ CONFIG(static, static|shared)|prefix_build {
+diff -aur qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_plugin.prf qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_plugin.prf
+--- qtbase-everywhere-src-5.12.3-a/mkspecs/features/qt_plugin.prf	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/mkspecs/features/qt_plugin.prf	2019-07-10 09:35:08.918628595 -0500
+@@ -88,7 +88,7 @@
      }
  }
  
@@ -799,84 +784,10 @@ index 40528a65e2..903f795284 100644
  INSTALLS += target
  
  TARGET = $$qt5LibraryTarget($$TARGET)
-diff --git a/src/corelib/Qt5CoreConfigExtras.cmake.in b/src/corelib/Qt5CoreConfigExtras.cmake.in
-index e0652fdcf9..450b2a2d28 100644
---- a/src/corelib/Qt5CoreConfigExtras.cmake.in
-+++ b/src/corelib/Qt5CoreConfigExtras.cmake.in
-@@ -3,7 +3,7 @@ if (NOT TARGET Qt5::qmake)
-     add_executable(Qt5::qmake IMPORTED)
- 
- !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
--    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
-+    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
- !!ELSE
-     set(imported_location \"$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
- !!ENDIF
-@@ -18,7 +18,7 @@ if (NOT TARGET Qt5::moc)
-     add_executable(Qt5::moc IMPORTED)
- 
- !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
--    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
-+    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
- !!ELSE
-     set(imported_location \"$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
- !!ENDIF
-@@ -35,7 +35,7 @@ if (NOT TARGET Qt5::rcc)
-     add_executable(Qt5::rcc IMPORTED)
- 
- !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
--    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
-+    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
- !!ELSE
-     set(imported_location \"$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
- !!ENDIF
-@@ -116,7 +116,7 @@ if (NOT TARGET Qt5::WinMain)
- !!IF !isEmpty(CMAKE_RELEASE_TYPE)
-     set_property(TARGET Qt5::WinMain APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
- !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
--    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_RELEASE}\")
-+    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_RELEASE}\")
- !!ELSE
-     set(imported_location \"$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_RELEASE}\")
- !!ENDIF
-@@ -130,7 +130,7 @@ if (NOT TARGET Qt5::WinMain)
-     set_property(TARGET Qt5::WinMain APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
- 
- !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
--    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
-+    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
- !!ELSE
-     set(imported_location \"$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
- !!ENDIF
-diff --git a/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in b/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
-index c357237d0e..6f0c75de3c 100644
---- a/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
-+++ b/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
-@@ -1,6 +1,6 @@
- 
- !!IF isEmpty(CMAKE_HOST_DATA_DIR_IS_ABSOLUTE)
--set(_qt5_corelib_extra_includes \"${_qt5Core_install_prefix}/$${CMAKE_HOST_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
-+set(_qt5_corelib_extra_includes \"$$NIX_OUTPUT_DEV/$${CMAKE_HOST_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
- !!ELSE
- set(_qt5_corelib_extra_includes \"$${CMAKE_HOST_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
- !!ENDIF
-diff --git a/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in b/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
-index 706304cf34..546420f6ad 100644
---- a/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
-+++ b/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
-@@ -1,6 +1,6 @@
- 
- !!IF isEmpty(CMAKE_INSTALL_DATA_DIR_IS_ABSOLUTE)
--set(_qt5_corelib_extra_includes \"${_qt5Core_install_prefix}/$${CMAKE_INSTALL_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
-+set(_qt5_corelib_extra_includes \"$$NIX_OUTPUT_DEV/$${CMAKE_INSTALL_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
- !!ELSE
- set(_qt5_corelib_extra_includes \"$${CMAKE_INSTALL_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
- !!ENDIF
-diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcoreapplication.cpp
-index 463e30e1c3..0e1ab669e4 100644
---- a/src/corelib/kernel/qcoreapplication.cpp
-+++ b/src/corelib/kernel/qcoreapplication.cpp
-@@ -2665,6 +2665,15 @@ QStringList QCoreApplication::libraryPaths()
+diff -aur qtbase-everywhere-src-5.12.3-a/src/corelib/kernel/qcoreapplication.cpp qtbase-everywhere-src-5.12.3-b/src/corelib/kernel/qcoreapplication.cpp
+--- qtbase-everywhere-src-5.12.3-a/src/corelib/kernel/qcoreapplication.cpp	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/corelib/kernel/qcoreapplication.cpp	2019-07-10 09:35:08.919628625 -0500
+@@ -2668,6 +2668,15 @@
          QStringList *app_libpaths = new QStringList;
          coreappdata()->app_libpaths.reset(app_libpaths);
  
@@ -889,14 +800,117 @@ index 463e30e1c3..0e1ab669e4 100644
 +            }
 +        }
 +
-         const QByteArray libPathEnv = qgetenv("QT_PLUGIN_PATH");
+         QString libPathEnv = qEnvironmentVariable("QT_PLUGIN_PATH");
          if (!libPathEnv.isEmpty()) {
-             QStringList paths = QFile::decodeName(libPathEnv).split(QDir::listSeparator(), QString::SkipEmptyParts);
-diff --git a/src/corelib/tools/qtimezoneprivate_tz.cpp b/src/corelib/tools/qtimezoneprivate_tz.cpp
-index bed62a02bd..73158993f7 100644
---- a/src/corelib/tools/qtimezoneprivate_tz.cpp
-+++ b/src/corelib/tools/qtimezoneprivate_tz.cpp
-@@ -70,7 +70,11 @@ typedef QHash<QByteArray, QTzTimeZone> QTzTimeZoneHash;
+             QStringList paths = libPathEnv.split(QDir::listSeparator(), QString::SkipEmptyParts);
+diff -aur qtbase-everywhere-src-5.12.3-a/src/corelib/kernel/qcore_mac_p.h qtbase-everywhere-src-5.12.3-b/src/corelib/kernel/qcore_mac_p.h
+--- qtbase-everywhere-src-5.12.3-a/src/corelib/kernel/qcore_mac_p.h	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/corelib/kernel/qcore_mac_p.h	2019-07-10 09:35:08.920628655 -0500
+@@ -212,7 +212,7 @@
+ 
+ // --------------------------------------------------------------------------
+ 
+-#if !defined(QT_BOOTSTRAPPED)
++#if 0
+ 
+ QT_END_NAMESPACE
+ #include <os/activity.h>
+@@ -290,7 +290,19 @@
+ 
+ #define QT_APPLE_SCOPED_LOG_ACTIVITY(...) QAppleLogActivity scopedLogActivity = QT_APPLE_LOG_ACTIVITY(__VA_ARGS__).enter();
+ 
+-#endif // !defined(QT_BOOTSTRAPPED)
++#else // !defined(QT_BOOTSTRAPPED)
++
++#define QT_APPLE_LOG_ACTIVITY_WITH_PARENT3(...)
++#define QT_APPLE_LOG_ACTIVITY_WITH_PARENT2(...)
++#define QT_APPLE_LOG_ACTIVITY_WITH_PARENT(...)
++
++#define QT_APPLE_LOG_ACTIVITY2(...)
++#define QT_APPLE_LOG_ACTIVITY1(...)
++#define QT_APPLE_LOG_ACTIVITY(...)
++
++#define QT_APPLE_SCOPED_LOG_ACTIVITY(...)
++
++#endif
+ 
+ // -------------------------------------------------------------------------
+ 
+Only in qtbase-everywhere-src-5.12.3-b/src/corelib/kernel: qcore_mac_p.h.orig
+diff -aur qtbase-everywhere-src-5.12.3-a/src/corelib/Qt5CoreConfigExtras.cmake.in qtbase-everywhere-src-5.12.3-b/src/corelib/Qt5CoreConfigExtras.cmake.in
+--- qtbase-everywhere-src-5.12.3-a/src/corelib/Qt5CoreConfigExtras.cmake.in	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/corelib/Qt5CoreConfigExtras.cmake.in	2019-07-10 09:35:08.918628595 -0500
+@@ -3,7 +3,7 @@
+     add_executable(Qt5::qmake IMPORTED)
+ 
+ !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
++    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
+ !!ENDIF
+@@ -18,7 +18,7 @@
+     add_executable(Qt5::moc IMPORTED)
+ 
+ !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
++    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
+ !!ENDIF
+@@ -35,7 +35,7 @@
+     add_executable(Qt5::rcc IMPORTED)
+ 
+ !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
++    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
+ !!ENDIF
+@@ -116,7 +116,7 @@
+ !!IF !isEmpty(CMAKE_RELEASE_TYPE)
+     set_property(TARGET Qt5::WinMain APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+ !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_RELEASE}\")
++    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_RELEASE}\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_RELEASE}\")
+ !!ENDIF
+@@ -130,7 +130,7 @@
+     set_property(TARGET Qt5::WinMain APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+ 
+ !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
++    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
+ !!ENDIF
+diff -aur qtbase-everywhere-src-5.12.3-a/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in qtbase-everywhere-src-5.12.3-b/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
+--- qtbase-everywhere-src-5.12.3-a/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in	2019-07-10 09:35:08.918628595 -0500
+@@ -1,6 +1,6 @@
+ 
+ !!IF isEmpty(CMAKE_HOST_DATA_DIR_IS_ABSOLUTE)
+-set(_qt5_corelib_extra_includes \"${_qt5Core_install_prefix}/$${CMAKE_HOST_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
++set(_qt5_corelib_extra_includes \"$$NIX_OUTPUT_DEV/$${CMAKE_HOST_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
+ !!ELSE
+ set(_qt5_corelib_extra_includes \"$${CMAKE_HOST_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
+ !!ENDIF
+diff -aur qtbase-everywhere-src-5.12.3-a/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in qtbase-everywhere-src-5.12.3-b/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
+--- qtbase-everywhere-src-5.12.3-a/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in	2019-07-10 09:35:08.918628595 -0500
+@@ -1,6 +1,6 @@
+ 
+ !!IF isEmpty(CMAKE_INSTALL_DATA_DIR_IS_ABSOLUTE)
+-set(_qt5_corelib_extra_includes \"${_qt5Core_install_prefix}/$${CMAKE_INSTALL_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
++set(_qt5_corelib_extra_includes \"$$NIX_OUTPUT_DEV/$${CMAKE_INSTALL_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
+ !!ELSE
+ set(_qt5_corelib_extra_includes \"$${CMAKE_INSTALL_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
+ !!ENDIF
+diff -aur qtbase-everywhere-src-5.12.3-a/src/corelib/tools/qtimezoneprivate_tz.cpp qtbase-everywhere-src-5.12.3-b/src/corelib/tools/qtimezoneprivate_tz.cpp
+--- qtbase-everywhere-src-5.12.3-a/src/corelib/tools/qtimezoneprivate_tz.cpp	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/corelib/tools/qtimezoneprivate_tz.cpp	2019-07-10 09:35:08.919628625 -0500
+@@ -70,7 +70,11 @@
  // Parse zone.tab table, assume lists all installed zones, if not will need to read directories
  static QTzTimeZoneHash loadTzTimeZones()
  {
@@ -909,7 +923,7 @@ index bed62a02bd..73158993f7 100644
      if (!QFile::exists(path))
          path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
  
-@@ -644,12 +648,16 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
+@@ -644,12 +648,16 @@
          if (!tzif.open(QIODevice::ReadOnly))
              return;
      } else {
@@ -931,10 +945,9 @@ index bed62a02bd..73158993f7 100644
          }
      }
  
-diff --git a/src/dbus/Qt5DBusConfigExtras.cmake.in b/src/dbus/Qt5DBusConfigExtras.cmake.in
-index 1d947159e2..b36865fc48 100644
---- a/src/dbus/Qt5DBusConfigExtras.cmake.in
-+++ b/src/dbus/Qt5DBusConfigExtras.cmake.in
+diff -aur qtbase-everywhere-src-5.12.3-a/src/dbus/Qt5DBusConfigExtras.cmake.in qtbase-everywhere-src-5.12.3-b/src/dbus/Qt5DBusConfigExtras.cmake.in
+--- qtbase-everywhere-src-5.12.3-a/src/dbus/Qt5DBusConfigExtras.cmake.in	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/dbus/Qt5DBusConfigExtras.cmake.in	2019-07-10 09:35:08.919628625 -0500
 @@ -2,11 +2,7 @@
  if (NOT TARGET Qt5::qdbuscpp2xml)
      add_executable(Qt5::qdbuscpp2xml IMPORTED)
@@ -948,7 +961,7 @@ index 1d947159e2..b36865fc48 100644
      _qt5_DBus_check_file_exists(${imported_location})
  
      set_target_properties(Qt5::qdbuscpp2xml PROPERTIES
-@@ -17,11 +13,7 @@ endif()
+@@ -17,11 +13,7 @@
  if (NOT TARGET Qt5::qdbusxml2cpp)
      add_executable(Qt5::qdbusxml2cpp IMPORTED)
  
@@ -961,10 +974,9 @@ index 1d947159e2..b36865fc48 100644
      _qt5_DBus_check_file_exists(${imported_location})
  
      set_target_properties(Qt5::qdbusxml2cpp PROPERTIES
-diff --git a/src/gui/Qt5GuiConfigExtras.cmake.in b/src/gui/Qt5GuiConfigExtras.cmake.in
-index 07869efd7d..fb4183bada 100644
---- a/src/gui/Qt5GuiConfigExtras.cmake.in
-+++ b/src/gui/Qt5GuiConfigExtras.cmake.in
+diff -aur qtbase-everywhere-src-5.12.3-a/src/gui/Qt5GuiConfigExtras.cmake.in qtbase-everywhere-src-5.12.3-b/src/gui/Qt5GuiConfigExtras.cmake.in
+--- qtbase-everywhere-src-5.12.3-a/src/gui/Qt5GuiConfigExtras.cmake.in	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/gui/Qt5GuiConfigExtras.cmake.in	2019-07-10 09:35:08.919628625 -0500
 @@ -2,7 +2,7 @@
  !!IF !isEmpty(CMAKE_ANGLE_EGL_DLL_RELEASE)
  
@@ -974,7 +986,7 @@ index 07869efd7d..fb4183bada 100644
  !!ELSE
  set(Qt5Gui_EGL_INCLUDE_DIRS \"$$CMAKE_INCLUDE_DIR/QtANGLE\")
  !!ENDIF
-@@ -17,13 +17,13 @@ macro(_populate_qt5gui_gl_target_properties TargetName Configuration LIB_LOCATIO
+@@ -17,13 +17,13 @@
      set_property(TARGET Qt5::${TargetName} APPEND PROPERTY IMPORTED_CONFIGURATIONS ${Configuration})
  
  !!IF isEmpty(CMAKE_DLL_DIR_IS_ABSOLUTE)
@@ -990,11 +1002,10 @@ index 07869efd7d..fb4183bada 100644
  !!ELSE
      set(imported_implib \"$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
  !!ENDIF
-diff --git a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
-index b5a0a5bbeb..6c20305f4d 100644
---- a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
-+++ b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
-@@ -265,12 +265,9 @@ void TableGenerator::initPossibleLocations()
+diff -aur qtbase-everywhere-src-5.12.3-a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp qtbase-everywhere-src-5.12.3-b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
+--- qtbase-everywhere-src-5.12.3-a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp	2019-07-10 09:35:08.919628625 -0500
+@@ -265,12 +265,9 @@
      m_possibleLocations.reserve(7);
      if (qEnvironmentVariableIsSet("QTCOMPOSE"))
          m_possibleLocations.append(QString::fromLocal8Bit(qgetenv("QTCOMPOSE")));
@@ -1008,11 +1019,10 @@ index b5a0a5bbeb..6c20305f4d 100644
  }
  
  QString TableGenerator::findComposeFile()
-diff --git a/src/plugins/platforms/xcb/qxcbcursor.cpp b/src/plugins/platforms/xcb/qxcbcursor.cpp
-index 57629ac03a..8a7f219a98 100644
---- a/src/plugins/platforms/xcb/qxcbcursor.cpp
-+++ b/src/plugins/platforms/xcb/qxcbcursor.cpp
-@@ -316,10 +316,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
+diff -aur qtbase-everywhere-src-5.12.3-a/src/plugins/platforms/xcb/qxcbcursor.cpp qtbase-everywhere-src-5.12.3-b/src/plugins/platforms/xcb/qxcbcursor.cpp
+--- qtbase-everywhere-src-5.12.3-a/src/plugins/platforms/xcb/qxcbcursor.cpp	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/plugins/platforms/xcb/qxcbcursor.cpp	2019-07-10 09:35:08.919628625 -0500
+@@ -317,10 +317,10 @@
  #if QT_CONFIG(xcb_xlib) && QT_CONFIG(library)
      static bool function_ptrs_not_initialized = true;
      if (function_ptrs_not_initialized) {
@@ -1025,10 +1035,10 @@ index 57629ac03a..8a7f219a98 100644
              xcursorFound = xcursorLib.load();
          }
          if (xcursorFound) {
-diff --git a/src/plugins/platformthemes/gtk3/main.cpp b/src/plugins/platformthemes/gtk3/main.cpp
-index fb1c425d8e..bb8bab9795 100644
---- a/src/plugins/platformthemes/gtk3/main.cpp
-+++ b/src/plugins/platformthemes/gtk3/main.cpp
+Only in qtbase-everywhere-src-5.12.3-b/src/plugins/platforms/xcb: qxcbcursor.cpp.orig
+diff -aur qtbase-everywhere-src-5.12.3-a/src/plugins/platformthemes/gtk3/main.cpp qtbase-everywhere-src-5.12.3-b/src/plugins/platformthemes/gtk3/main.cpp
+--- qtbase-everywhere-src-5.12.3-a/src/plugins/platformthemes/gtk3/main.cpp	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/plugins/platformthemes/gtk3/main.cpp	2019-07-10 09:35:08.919628625 -0500
 @@ -39,6 +39,7 @@
  
  #include <qpa/qplatformthemeplugin.h>
@@ -1037,7 +1047,7 @@ index fb1c425d8e..bb8bab9795 100644
  
  QT_BEGIN_NAMESPACE
  
-@@ -54,8 +55,22 @@ public:
+@@ -54,8 +55,22 @@
  QPlatformTheme *QGtk3ThemePlugin::create(const QString &key, const QStringList &params)
  {
      Q_UNUSED(params);
@@ -1061,10 +1071,21 @@ index fb1c425d8e..bb8bab9795 100644
  
      return 0;
  }
-diff --git a/src/testlib/qtestassert.h b/src/testlib/qtestassert.h
-index 6498ea84ef..d821ced7fc 100644
---- a/src/testlib/qtestassert.h
-+++ b/src/testlib/qtestassert.h
+diff -aur qtbase-everywhere-src-5.12.3-a/src/testlib/qappletestlogger.cpp qtbase-everywhere-src-5.12.3-b/src/testlib/qappletestlogger.cpp
+--- qtbase-everywhere-src-5.12.3-a/src/testlib/qappletestlogger.cpp	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/testlib/qappletestlogger.cpp	2019-07-10 09:35:08.920628655 -0500
+@@ -43,7 +43,7 @@
+ 
+ QT_BEGIN_NAMESPACE
+ 
+-#if defined(QT_USE_APPLE_UNIFIED_LOGGING)
++#if defined(QT_USE_APPLE_UNIFIED_LOGGING) && 0
+ 
+ using namespace QTestPrivate;
+ 
+diff -aur qtbase-everywhere-src-5.12.3-a/src/testlib/qtestassert.h qtbase-everywhere-src-5.12.3-b/src/testlib/qtestassert.h
+--- qtbase-everywhere-src-5.12.3-a/src/testlib/qtestassert.h	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/testlib/qtestassert.h	2019-07-10 09:35:08.919628625 -0500
 @@ -44,10 +44,13 @@
  
  QT_BEGIN_NAMESPACE
@@ -1081,11 +1102,10 @@ index 6498ea84ef..d821ced7fc 100644
  
  QT_END_NAMESPACE
  
-diff --git a/src/widgets/Qt5WidgetsConfigExtras.cmake.in b/src/widgets/Qt5WidgetsConfigExtras.cmake.in
-index 99d87e2e46..a4eab2aa72 100644
---- a/src/widgets/Qt5WidgetsConfigExtras.cmake.in
-+++ b/src/widgets/Qt5WidgetsConfigExtras.cmake.in
-@@ -3,7 +3,7 @@ if (NOT TARGET Qt5::uic)
+diff -aur qtbase-everywhere-src-5.12.3-a/src/widgets/Qt5WidgetsConfigExtras.cmake.in qtbase-everywhere-src-5.12.3-b/src/widgets/Qt5WidgetsConfigExtras.cmake.in
+--- qtbase-everywhere-src-5.12.3-a/src/widgets/Qt5WidgetsConfigExtras.cmake.in	2019-04-09 04:51:26.000000000 -0500
++++ qtbase-everywhere-src-5.12.3-b/src/widgets/Qt5WidgetsConfigExtras.cmake.in	2019-07-10 09:35:08.919628625 -0500
+@@ -3,7 +3,7 @@
      add_executable(Qt5::uic IMPORTED)
  
  !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
@@ -1094,3 +1114,33 @@ index 99d87e2e46..a4eab2aa72 100644
  !!ELSE
      set(imported_location \"$${CMAKE_BIN_DIR}uic$$CMAKE_BIN_SUFFIX\")
  !!ENDIF
+diff --git a/mkspecs/features/mac/sdk.mk b/mkspecs/features/mac/sdk.mk
+index c40f58c987..e69de29bb2 100644
+--- a/mkspecs/features/mac/sdk.mk
++++ b/mkspecs/features/mac/sdk.mk
+@@ -1,25 +0,0 @@
+-
+-ifeq ($(QT_MAC_SDK_NO_VERSION_CHECK),)
+-    CHECK_SDK_COMMAND = /usr/bin/xcrun --sdk $(EXPORT_QMAKE_MAC_SDK) -show-sdk-version 2>&1
+-    CURRENT_MAC_SDK_VERSION := $(shell DEVELOPER_DIR=$(EXPORT_QMAKE_XCODE_DEVELOPER_PATH) $(CHECK_SDK_COMMAND))
+-    ifneq ($(CURRENT_MAC_SDK_VERSION),$(EXPORT_QMAKE_MAC_SDK_VERSION))
+-        # We don't want to complain about out of date SDK unless the target needs to be remade.
+-        # This covers use-cases such as running 'make check' after moving the build to a
+-        # computer without Xcode or with a different Xcode version.
+-        TARGET_UP_TO_DATE := $(shell QT_MAC_SDK_NO_VERSION_CHECK=1 $(MAKE) --question $(QMAKE_TARGET) && echo 1 || echo 0)
+-        ifeq ($(TARGET_UP_TO_DATE),0)
+-            ifneq ($(findstring missing DEVELOPER_DIR path,$(CURRENT_MAC_SDK_VERSION)),)
+-                $(info The developer dir $(EXPORT_QMAKE_XCODE_DEVELOPER_PATH) is no longer valid.)
+-            else ifneq ($(findstring SDK "$(EXPORT_QMAKE_MAC_SDK)" cannot be located,$(CURRENT_MAC_SDK_VERSION)),)
+-                $(info The developer dir $(EXPORT_QMAKE_XCODE_DEVELOPER_PATH) no longer contains the $(EXPORT_QMAKE_MAC_SDK_VERSION) platform SDK.)
+-            else ifneq ($(CURRENT_MAC_SDK_VERSION),)
+-                $(info The platform SDK has been changed from version $(EXPORT_QMAKE_MAC_SDK_VERSION) to version $(CURRENT_MAC_SDK_VERSION).)
+-            else
+-                $(info Unknown error resolving current platform SDK version.)
+-            endif
+-            $(info This requires a fresh build. Please wipe the build directory completely,)
+-            $(info including any .qmake.stash and .qmake.cache files generated by qmake.)
+-            $(error ^)
+-        endif
+-    endif
+-endif

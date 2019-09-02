@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.unix;
     # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

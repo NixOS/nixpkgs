@@ -1,6 +1,6 @@
 { stdenv, python, fetchurl, openssl, boost, scons }:
 stdenv.mkDerivation rec {
-  name    = "swiften-${version}";
+  pname = "swiften";
   version = "4.0.2";
 
   nativeBuildInputs = [ scons];
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0w0aiszjd58ynxpacwcgf052zpmbpcym4dhci64vbfgch6wryz0w";
   };
 
+  patches = [ ./scons.patch ];
+
   sconsFlags = [
     "openssl=${openssl.dev}"
     "boost_includedir=${boost.dev}/include"
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
     installTargets="$out"
     installFlags+=" SWIFT_INSTALLDIR=$out"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "An XMPP library for C++, used by the Swift client";

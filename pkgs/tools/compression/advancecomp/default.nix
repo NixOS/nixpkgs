@@ -2,7 +2,7 @@
 , autoreconfHook, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "advancecomp-${version}";
+  pname = "advancecomp";
   version = "2.1";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = ''A set of tools to optimize deflate-compressed files'';
     license = licenses.gpl3 ;
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     homepage = https://github.com/amadvance/advancecomp;
 
   };

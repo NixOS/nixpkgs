@@ -1,50 +1,58 @@
-{ lib, fetchpatch, python3 }:
+{ lib, python3, mautrix-telegram }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.4.0.post1";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a51e55a7f362013ce1cce7d850c65dc8d4651dd05c63004429bc521b461d029";
+    sha256 = "fbed41838e1ef7e43f6e47ff38f9906cb311cfc5b3b6bc6f704babd7c83b193d";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/tulir/mautrix-telegram/commit/a258c59ca3558ad91b1fee190c624763ca835d2f.patch";
-      sha256 = "04z4plsmqmg38rsw9irp5xc9wdgjvg6xba69mixi5v82h9lg3zzp";
-    })
-
-    ./fix_patch_conflicts.patch
-
-    (fetchpatch {
-      url = "https://github.com/tulir/mautrix-telegram/commit/8021fcc24cbf8c88d9bcb2601333863c9615bd4f.patch";
-      sha256 = "0cdfv8ggnjdwdhls1lk6498b233lvnb6175xbxr206km5mxyvqyk";
-    })
-  ];
+  postPatch = ''
+    sed -i -e '/alembic>/d' setup.py
+  '';
 
   propagatedBuildInputs = [
+    Mako
     aiohttp
     mautrix-appservice
     sqlalchemy
-    alembic
     CommonMark
     ruamel_yaml
     future-fstrings
     python_magic
     telethon
     telethon-session-sqlalchemy
+    pillow
+    lxml
   ];
 
-  # No tests available
-  doCheck = false;
+  # `alembic` (a database migration tool) is only needed for the initial setup,
+  # and not needed during the actual runtime. However `alembic` requires `mautrix-telegram`
+  # in its environment to create a database schema from all models.
+  #
+  # Hence we need to patch away `alembic` from `mautrix-telegram` and create an `alembic`
+  # which has `mautrix-telegram` in its environment.
+  passthru.alembic = alembic.overrideAttrs (old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      mautrix-telegram
+    ];
+  });
+
+  checkInputs = [
+    pytest
+    pytestrunner
+    pytest-mock
+    pytest-asyncio
+  ];
 
   meta = with lib; {
     homepage = https://github.com/tulir/mautrix-telegram;
     description = "A Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ nyanloutre ];
+    maintainers = with maintainers; [ nyanloutre ma27 ];
   };
 }

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "smem-${version}";
+  pname = "smem";
   version = "1.5";
 
   src = fetchurl {

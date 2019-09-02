@@ -2,7 +2,7 @@
 , readline }:
 
 stdenv.mkDerivation rec {
-  name    = "mercury-${version}";
+  pname = "mercury";
   version = "14.01.1";
 
   src = fetchurl {
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "http://mercurylang.org";
     license     = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ ];
   };
 }

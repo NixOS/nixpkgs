@@ -1,9 +1,29 @@
 { lib, stdenv, echo_build_heading, noisily, makeDeps }:
-{ build, buildDependencies, colors, completeBuildDeps, completeDeps, crateAuthors, crateFeatures, crateName, crateVersion, extraLinkFlags, libName, libPath, release, target_os, verbose, workspace_member }:
+{ build
+, buildDependencies
+, colors
+, completeBuildDeps
+, completeDeps
+, crateAuthors
+, crateDescription
+, crateHomepage
+, crateFeatures
+, crateName
+, crateVersion
+, extraLinkFlags
+, extraRustcOpts
+, libName
+, libPath
+, release
+, target_os
+, verbose
+, workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
     versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
     version = lib.splitString "." (lib.head version_);
-    rustcOpts = (if release then "-C opt-level=3" else "-C debuginfo=2");
+    rustcOpts = lib.lists.foldl' (opts: opt: opts + " " + opt)
+        (if release then "-C opt-level=3" else "-C debuginfo=2")
+        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
     buildDeps = makeDeps buildDependencies;
     authors = lib.concatStringsSep ":" crateAuthors;
     optLevel = if release then 3 else 0;
@@ -51,6 +71,7 @@ in ''
   export CARGO_PKG_NAME=${crateName}
   export CARGO_PKG_VERSION=${crateVersion}
   export CARGO_PKG_AUTHORS="${authors}"
+  export CARGO_PKG_DESCRIPTION="${crateDescription}"
 
   export CARGO_CFG_TARGET_ARCH=${stdenv.hostPlatform.parsed.cpu.name}
   export CARGO_CFG_TARGET_OS=${target_os}
@@ -61,7 +82,7 @@ in ''
   export CARGO_CFG_TARGET_POINTER_WIDTH=${toString stdenv.hostPlatform.parsed.cpu.bits}
   export CARGO_CFG_TARGET_VENDOR=${stdenv.hostPlatform.parsed.vendor.name}
 
-  export CARGO_MANIFEST_DIR="."
+  export CARGO_MANIFEST_DIR=$(pwd)
   export DEBUG="${toString (!release)}"
   export OPT_LEVEL="${toString optLevel}"
   export TARGET="${stdenv.hostPlatform.config}"
@@ -71,12 +92,11 @@ in ''
   export CARGO_PKG_VERSION_MAJOR=${builtins.elemAt version 0}
   export CARGO_PKG_VERSION_MINOR=${builtins.elemAt version 1}
   export CARGO_PKG_VERSION_PATCH=${builtins.elemAt version 2}
+  export CARGO_PKG_VERSION_PRE="${versionPre}"
+  export CARGO_PKG_HOMEPAGE="${crateHomepage}"
   export NUM_JOBS=1
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
-  if [[ -n "${versionPre}" ]]; then
-    export CARGO_PKG_VERSION_PRE="${versionPre}"
-  fi
 
   BUILD=""
   if [[ ! -z "${build}" ]] ; then

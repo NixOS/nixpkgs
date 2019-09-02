@@ -5,7 +5,7 @@
 , asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
-, perlSupport ? true, perl, perlPackages
+, perlSupport ? true, perl
 , pythonSupport ? true, pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
@@ -27,12 +27,12 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.3";
-      name = "weechat-${version}";
+      version = "2.5";
+      pname = "weechat";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "0mi4pfnyny0vqc35r0scn6yy21y790a5iwq8ms7kch7b7z11jn9w";
+        sha256 = "14giv8j1phmpg3i9whx45nmskan501lwcq352ps9z52rkja2qxsc";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -76,7 +76,7 @@ let
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = stdenv.lib.licenses.gpl3;
-        maintainers = with stdenv.lib.maintainers; [ lovek323 garbas the-kenny lheckemann ma27 ];
+        maintainers = with stdenv.lib.maintainers; [ lovek323 the-kenny lheckemann ma27 ];
         platforms = stdenv.lib.platforms.unix;
       };
     }

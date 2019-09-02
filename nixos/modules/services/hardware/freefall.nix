@@ -28,7 +28,7 @@ in {
     };
 
     devices = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [ "/dev/sda" ];
       description = ''
         Device paths to all internal spinning hard drives.
