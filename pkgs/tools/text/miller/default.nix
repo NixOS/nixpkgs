@@ -1,15 +1,13 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, flex, libtool }:
+{ stdenv, fetchurl, autoreconfHook, flex, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "miller";
 
-  version = "5.4.0";
+  version = "5.5.0";
 
-  src = fetchFromGitHub {
-    owner = "johnkerl";
-    repo = "miller";
-    rev = "${version}";
-    sha256 = "0158by642frh9x6rrgqxwmk4766wb36kp0rrjg5swdbs9w3is3xg";
+  src = fetchurl {
+    url = "https://github.com/johnkerl/miller/releases/download/v${version}/mlr-${version}.tar.gz";
+    sha256 = "06pkmqfv325igpcyjcq6sqr1r6gab7a7qdfw6kw6a6kwksgk5f8d";
   };
 
   nativeBuildInputs = [ autoreconfHook flex libtool ];
