@@ -1,15 +1,24 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gettext, python3, gnutls, p11-kit, libproxy, gnome3
-, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, glib
+, gettext
+, python3
+, gnutls
+, p11-kit
+, libproxy
+, gnome3
+, gsettings-desktop-schemas
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "glib-networking";
   version = "2.60.3";
-in
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1mfw44qpmwvz6yzj8c6spx6z357wrmkk15byrkc5byagd82860fm";
   };
 
@@ -23,10 +32,20 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext
-    python3 # install_script
+    meson
+    ninja
+    pkgconfig
+    gettext
+    python3 # for install_script
   ];
-  propagatedBuildInputs = [ glib gnutls p11-kit libproxy gsettings-desktop-schemas ];
+
+  propagatedBuildInputs = [
+    glib
+    gnutls
+    p11-kit
+    libproxy
+    gsettings-desktop-schemas
+  ];
 
   mesonFlags = [
     # Default auto detection doesn't work
