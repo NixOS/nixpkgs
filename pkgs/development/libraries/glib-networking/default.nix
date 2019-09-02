@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, substituteAll
 , meson
 , ninja
 , pkgconfig
@@ -21,6 +22,13 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1mfw44qpmwvz6yzj8c6spx6z357wrmkk15byrkc5byagd82860fm";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
+    })
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
