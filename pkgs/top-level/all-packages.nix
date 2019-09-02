@@ -15253,8 +15253,7 @@ in
 
   inherit (callPackages ../servers/unifi { })
     unifiLTS
-    unifiStable
-    unifiTesting;
+    unifiStable;
   unifi = unifiStable;
 
   virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
