@@ -16,6 +16,25 @@ let
     paths = [ doclib.standard-tools ] ++ generated-files;
   };
 
+  tools.generate = writeShellScriptBin "docs-generate" ''
+    PATH=${lib.makeBinPath (doclib.toolbox.build ++ nativeBuildInputs)}
+
+    set -eux
+
+    scratch=$(mktemp -d -t tmp.XXXXXXXXXX)
+    function finish {
+      rm -rf "$scratch"
+    }
+    trap finish EXIT
+
+    rm -f ./generated
+    ln -s ${generated} ./generated
+
+    (
+      ${preBuild}
+    )
+  '';
+
   tools.build = writeShellScriptBin "docs-build" ''
     PATH=${lib.makeBinPath (doclib.toolbox.build ++ nativeBuildInputs)}
 
@@ -30,12 +49,9 @@ let
     input="${root-file-name}"
     output="$1"
 
-    rm -f ./generated
-    ln -s ${generated} ./generated
-
-    (
-      ${preBuild}
-    )
+    if [ ! -d ./generated ]; then
+      echo "Please run «docs-generate»"
+    fi
 
     xmllint --nonet \
       --xinclude \
@@ -51,6 +67,11 @@ let
       --output "$output/share/doc/${name}/html/" \
       ./generated/chunk-xhtml.xsl \
       ${combined-file-name}
+
+    docbook-index \
+      ./${combined-file-name} \
+      $output/share/doc/${name}/html/ \
+      $output/share/doc/${name}/html/index.js
 
     # Build the EPUB docs
     mkdir -p "$scratch/epub/OEBPS"
@@ -80,10 +101,10 @@ let
 in stdenvNoCC.mkDerivation {
   inherit name src;
 
-  buildInputs = [ tools.build ];
+  buildInputs = [ tools.generate tools.build ];
 
   buildPhase = ''
-    ls -la
+    docs-generate
     docs-build $out
   '';
 

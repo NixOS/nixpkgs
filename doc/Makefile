@@ -28,23 +28,6 @@ clean:
 validate: manual-full.xml doc-support
 	jing doc-support/docbook.rng manual-full.xml
 
-out/html/index.html: doc-support manual-full.xml style.css highlightjs
-	mkdir -p out/html
-	xsltproc \
-		--nonet --xinclude \
-		--output $@ \
-		doc-support/chunk-xhtml.xsl \
-		./manual-full.xml
-
-	# Assert that every generated HTML file has a ToC
-	for f in $$(find ./out/html -name '*.html'); do \
-		grep -q 'class="toc"' "$$f"; \
-	done
-
-	docbook-index \
-		./manual-full.xml \
-		./out/html/ \
-		./out/html/index.js
 
 doc-support: default.nix
 	nix-build -A doc-support --out-link ./doc-support
