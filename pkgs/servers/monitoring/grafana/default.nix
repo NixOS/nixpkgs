@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomjs2 }:
 
 buildGoPackage rec {
-  version = "6.3.4";
+  version = "6.3.5";
   name = "grafana-${version}";
   goPackagePath = "github.com/grafana/grafana";
 
