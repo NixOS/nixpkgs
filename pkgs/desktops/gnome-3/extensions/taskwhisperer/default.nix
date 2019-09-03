@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   uuid = "taskwhisperer-extension@infinicode.de";
 
   makeFlags = [
-    "INSTALLBASE=${placeholder ''out''}/share/gnome-shell/extensions"
+    "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions"
   ];
 
   patches = [

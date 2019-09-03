@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=false"
-    "-Dinstalled_test_bindir=${placeholder ''installedTests''}/libexec"
-    "-Dinstalled_test_datadir=${placeholder ''installedTests''}/share"
+    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
+    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
     "-Dinstalled_tests=true"
   ];
 

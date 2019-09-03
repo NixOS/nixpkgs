@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   # This uses '/bin/bash', '/usr/local' and 'lex' by default
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "LEX=flex"
     "RGBDEF=${netpbm}/share/netpbm/misc/rgb.txt"
   ];

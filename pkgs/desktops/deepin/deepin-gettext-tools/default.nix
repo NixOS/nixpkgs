@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     python3Packages.python
   ];
 
-  makeFlags = [ "PREFIX=${placeholder ''out''}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postPatch = ''
     sed -e 's/sudo cp/cp/' -i src/generate_mo.py
