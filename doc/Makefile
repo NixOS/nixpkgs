@@ -3,26 +3,6 @@ MD_TARGETS=$(addsuffix .xml, $(basename $(wildcard ./*.md ./**/*.md)))
 .PHONY: all
 all: ${MD_TARGETS}
 
-.PHONY: debug
-debug:
-	nix-shell --run "xmloscopy --docbook5 ./manual.xml ./manual-full.xml"
-
-.PHONY: format
-format: doc-support
-	find . -iname '*.xml' -type f | while read f; do \
-		echo $$f ;\
-		xmlformat --config-file "doc-support/xmlformat.conf" -i $$f ;\
-	done
-
-.PHONY: fix-misc-xml
-fix-misc-xml:
-	find . -iname '*.xml' -type f \
-		-exec ../nixos/doc/varlistentry-fixer.rb {} ';'
-
-.PHONY: validate
-validate: manual-full.xml doc-support
-	jing doc-support/docbook.rng manual-full.xml
-
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \
 		-f markdown+smart \
