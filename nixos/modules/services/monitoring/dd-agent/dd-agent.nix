@@ -145,47 +145,46 @@ in {
       description = "The hostname to show in the Datadog dashboard (optional)";
       default = null;
       example = "mymachine.mydomain";
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.str;
     };
 
     postgresqlConfig = mkOption {
       description = "Datadog PostgreSQL integration configuration";
       default = null;
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.lines;
     };
 
     nginxConfig = mkOption {
       description = "Datadog nginx integration configuration";
       default = null;
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.lines;
     };
 
     mongoConfig = mkOption {
       description = "MongoDB integration configuration";
       default = null;
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.lines;
     };
 
     jmxConfig = mkOption {
       description = "JMX integration configuration";
       default = null;
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.lines;
     };
 
     processConfig = mkOption {
       description = ''
         Process integration configuration
-
-        See http://docs.datadoghq.com/integrations/process/
+        See <link xlink:href="https://docs.datadoghq.com/integrations/process/"/>
       '';
       default = null;
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.lines;
     };
 
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs."dd-agent" pkgs.sysstat pkgs.procps ];
+    environment.systemPackages = [ pkgs.dd-agent pkgs.sysstat pkgs.procps ];
 
     users.users.datadog = {
       description = "Datadog Agent User";

@@ -1,6 +1,6 @@
 { mkXfceDerivation, gtk3, libxfce4ui, libxfce4util }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "garcon";
   version = "0.6.4";

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, libpthreadstubs, libpciaccess, valgrind-light }:
+{ stdenv, lib, fetchurl, pkgconfig, meson, ninja, libpthreadstubs, libpciaccess
+, withValgrind ? valgrind-light.meta.available, valgrind-light
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
@@ -12,7 +14,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "bin" ];
 
   nativeBuildInputs = [ pkgconfig meson ninja ];
-  buildInputs = [ libpthreadstubs libpciaccess valgrind-light ];
+  buildInputs = [ libpthreadstubs libpciaccess ]
+    ++ lib.optional withValgrind valgrind-light;
 
   patches = [ ./cross-build-nm-path.patch ];
 
@@ -22,14 +25,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  mesonFlags =
-    [
-      "-Dnm-path=${stdenv.cc.targetPrefix}nm"
-      "-Dinstall-test-programs=true" ]
-    ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
-      [ "-Dtegra=true" "-Detnaviv=true" ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-Dintel=false"
-    ;
+  mesonFlags = [
+    "-Dnm-path=${stdenv.cc.targetPrefix}nm"
+    "-Dinstall-test-programs=true"
+    "-Domap=true"
+  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
+    "-Dtegra=true"
+    "-Detnaviv=true"
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-Dintel=false";
 
   enableParallelBuilding = true;
 
@@ -37,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = https://dri.freedesktop.org/libdrm/;
     description = "Library for accessing the kernel's Direct Rendering Manager";
     license = "bsd";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

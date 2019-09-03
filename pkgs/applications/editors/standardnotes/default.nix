@@ -4,17 +4,17 @@ let
   version = "3.0.15";
 
   plat = {
-    "i386-linux" = "i386";
-    "x86_64-linux" = "x86_64";
+    i386-linux = "i386";
+    x86_64-linux = "x86_64";
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i386-linux" = "0v2nsis6vb1lnhmjd28vrfxqwwpycv02j0nvjlfzcgj4b3400j7a";
-    "x86_64-linux" = "130n586cw0836zsbwqcz3pp3h0d4ny74ngqs4k4cvfb92556r7xh";
+    i386-linux = "0v2nsis6vb1lnhmjd28vrfxqwwpycv02j0nvjlfzcgj4b3400j7a";
+    x86_64-linux = "130n586cw0836zsbwqcz3pp3h0d4ny74ngqs4k4cvfb92556r7xh";
   }.${stdenv.hostPlatform.system};
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "standardnotes";
   inherit version;
 

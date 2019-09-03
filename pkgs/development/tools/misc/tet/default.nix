@@ -1,6 +1,6 @@
 { fetchurl, stdenv }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   version = "3.8";
   pname = "tet";
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "universal-ctags";
   version = "unstable-2019-07-30";
 

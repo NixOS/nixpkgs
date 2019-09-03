@@ -1,6 +1,6 @@
 { stdenv, fetchurl, psmisc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "tmpwatch-2.11";
 
   src = fetchurl {

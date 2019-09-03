@@ -1,6 +1,6 @@
 { stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
 
-bundlerEnv rec {
+bundlerEnv {
   inherit ruby;
 
   pname = "git_fame";

@@ -5,7 +5,7 @@
 , qtbase
 }:
 with pythonPackages;
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "qscintilla";
   version = qscintilla.version;
   src = qscintilla.src;

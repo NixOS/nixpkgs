@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitLab, pkgconfig, meson, ninja, vala, glib, gsignond, json-glib, libsoup, gobject-introspection }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gsignond-plugin-lastfm";
   version = "2018-05-07";
 

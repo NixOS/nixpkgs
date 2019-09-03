@@ -18,7 +18,7 @@ let
   };
 in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
 
   name = "${pname}${if perlSupport then "-with-perl" else ""}${if unicode3Support then "-with-unicode3" else ""}-${version}";
 

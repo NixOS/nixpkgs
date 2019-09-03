@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rust-cbindgen-${version}";
+  pname = "rust-cbindgen";
   version = "0.9.0";
 
   src = fetchFromGitHub {

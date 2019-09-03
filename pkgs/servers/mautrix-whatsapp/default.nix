@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "mautrix-unstable";
   version = "2019-07-04";
 

@@ -16,7 +16,7 @@ let
     <?php
     // Zabbix GUI configuration file.
     global $DB;
-    $DB['TYPE'] = '${ { "mysql" = "MYSQL"; "pgsql" = "POSTGRESQL"; "oracle" = "ORACLE"; }.${cfg.database.type} }';
+    $DB['TYPE'] = '${ { mysql = "MYSQL"; pgsql = "POSTGRESQL"; oracle = "ORACLE"; }.${cfg.database.type} }';
     $DB['SERVER'] = '${cfg.database.host}';
     $DB['PORT'] = '${toString cfg.database.port}';
     $DB['DATABASE'] = '${cfg.database.name}';

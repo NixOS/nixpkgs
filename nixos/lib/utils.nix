@@ -1,6 +1,6 @@
 pkgs: with pkgs.lib;
 
-rec {
+{
 
   # Check whenever fileSystem is needed for boot
   fsNeededForBoot = fs: fs.neededForBoot

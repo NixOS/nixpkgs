@@ -115,7 +115,7 @@ in
         gid = config.ids.gids.git;
       };
 
-    systemd.services."git-daemon" = {
+    systemd.services.git-daemon = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${pkgs.git}/bin/git daemon --reuseaddr "

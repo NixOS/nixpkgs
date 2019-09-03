@@ -3,7 +3,7 @@
 let
   libPath = lib.makeLibraryPath [ stdenv.cc.cc libGLU glib gtk2 alsaLib libSM libX11 gdk-pixbuf pango libXinerama ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "kega-fusion";
   version = "3.63x";
 

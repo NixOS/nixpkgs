@@ -2,9 +2,9 @@
 
 let
   archids = {
-    "x86_64-linux" = { hostarch = "x86_64"; efiPlatform = "x64"; };
-    "i686-linux" = rec { hostarch = "ia32"; efiPlatform = hostarch; };
-    "aarch64-linux" = rec { hostarch = "aarch64"; efiPlatform = "aa64"; };
+    x86_64-linux = { hostarch = "x86_64"; efiPlatform = "x64"; };
+    i686-linux = rec { hostarch = "ia32"; efiPlatform = hostarch; };
+    aarch64-linux = { hostarch = "aarch64"; efiPlatform = "aa64"; };
   };
 
   inherit

@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
 , makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "clfswm";
 
   src = fetchgit {

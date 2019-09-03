@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perlPackages, mutt }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "grepm";
   version = "0.6";
 

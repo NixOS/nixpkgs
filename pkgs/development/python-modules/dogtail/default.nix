@@ -15,7 +15,7 @@
 # , fetchPypi
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dogtail";
   version = "0.9.10";
 

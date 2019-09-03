@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fuse, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sqlar";
   version = "2018-01-07";
 

@@ -7,7 +7,7 @@ let
   version = "0.54.0";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "subtitleeditor";
   inherit version;
 

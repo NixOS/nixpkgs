@@ -42,7 +42,7 @@ rec {
   # Default type functor
   defaultFunctor = name: {
     inherit name;
-    type    = types."${name}" or null;
+    type    = types.${name} or null;
     wrapped = null;
     payload = null;
     binOp   = a: b: null;
@@ -107,7 +107,7 @@ rec {
       merge = mergeEqualOption;
     };
 
-    int = mkOptionType rec {
+    int = mkOptionType {
         name = "int";
         description = "signed integer";
         check = isInt;
@@ -136,7 +136,7 @@ rec {
         sign = bit: range: ign (0 - (range / 2)) (range / 2 - 1)
           "signedInt${toString bit}" "${toString bit} bit signed integer";
 
-      in rec {
+      in {
         /* An int with a fixed range.
         *
         * Example:
@@ -172,7 +172,7 @@ rec {
     # Alias of u16 for a port number
     port = ints.u16;
 
-    float = mkOptionType rec {
+    float = mkOptionType {
         name = "float";
         description = "floating point number";
         check = isFloat;
@@ -217,7 +217,8 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
-    string = separatedString "";
+    string = warn "types.string is deprecated because it quietly concatenates strings"
+      (separatedString "");
 
     attrs = mkOptionType {
       name = "attrs";

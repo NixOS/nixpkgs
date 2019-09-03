@@ -28,7 +28,7 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "instead-" + version;
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { mkXfceDerivation, automakeAddFlags, dbus-glib, dbus, gtk3, libpulseaudio
 , libnotify, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-pulseaudio-plugin";
   version = "0.4.1";

@@ -1,6 +1,6 @@
 {fetchFromGitHub, libgit2, ...}:
 
-libgit2.overrideAttrs (oldAttrs: rec {
+libgit2.overrideAttrs (oldAttrs: {
   cmakeFlags = oldAttrs.cmakeFlags ++ [
     "-DUSE_BUNDLED_ZLIB=ON"
     "-DUSE_ICONV=OFF"

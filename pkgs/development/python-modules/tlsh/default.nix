@@ -4,7 +4,7 @@
 , cmake
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tlsh";
   version = "3.4.5";
 

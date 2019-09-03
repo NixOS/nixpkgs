@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cargo-release-${version}";
+  pname = "cargo-release";
   version = "0.10.5";
 
   src = fetchFromGitHub {

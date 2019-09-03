@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, mesa, libX11 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "soil";
 
   src = fetchurl {

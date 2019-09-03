@@ -82,7 +82,7 @@ wrapQtAppsHook() {
 
         find "$targetDir" -executable -print0 | while IFS= read -r -d '' file
         do
-            isELF "$file" || continue
+            isELFExec "$file" || continue
 
             if [ -f "$file" ]
             then

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, ffmpeg-full, graphicsmagick
 , quicktemplate, go-bindata, easyjson }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "hydron-unstable";
   version = "2019-02-17";
   goPackagePath = "github.com/bakape/hydron";

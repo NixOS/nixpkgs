@@ -3,7 +3,7 @@
 let
   pname = "behdad-fonts";
   version = "0.0.3";
-in fetchFromGitHub rec {
+in fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "font-store";
   repo = "BehdadFont";

@@ -38,7 +38,7 @@ let
     let
       inherit (args) name;
       sname = args.sname or name;
-      inherit (srcs."${sname}") src version;
+      inherit (srcs.${sname}) src version;
       mkDerivation =
         libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
     in
@@ -129,6 +129,7 @@ let
       kmix = callPackage ./kmix.nix {};
       kmplot = callPackage ./kmplot.nix {};
       knotes = callPackage ./knotes.nix {};
+      kolf = callPackage ./kolf.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};

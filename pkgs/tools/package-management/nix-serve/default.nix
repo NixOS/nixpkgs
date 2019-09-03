@@ -9,7 +9,7 @@ let
   sha256 = "1wm24p6pkxl1d7hrvf4ph6mwzawvqi22c60z9xzndn5xfyr4v0yr";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nix-serve-0.2-${substring 0 7 rev}";
 
   src = fetchFromGitHub {

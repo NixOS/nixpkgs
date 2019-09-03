@@ -1,6 +1,6 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "protoc-gen-doc-unstable";
   version = "2019-04-22";
 

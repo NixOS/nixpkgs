@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perlPackages, ncurses, lynx, makeWrapper }:
 
-perlPackages.buildPerlPackage rec {
+perlPackages.buildPerlPackage {
   pname = "wml";
   version = "2.0.11";
 

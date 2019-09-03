@@ -1,6 +1,6 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "opkg-utils-20141030";
 
   # No releases, only a git tree

@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , pytest, pytest-django, django }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "django-crispy-forms";
   version = "2019.04.21";
 

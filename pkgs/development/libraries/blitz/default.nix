@@ -22,7 +22,7 @@ let
   inherit (stdenv.lib) optional optionals;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "blitz++-0.10";
   src = fetchurl {
     url = mirror://sourceforge/blitz/blitz-0.10.tar.gz;
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-shared"
-      "--disable-static"
       "--enable-fortran"
       "--enable-optimize"
       "--with-pic=yes"

@@ -1,6 +1,6 @@
 { lib, rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage rec {
-  name = "cargo-license-${version}";
+  pname = "cargo-license";
   version = "0.2.0";
 
   src = fetchFromGitHub {

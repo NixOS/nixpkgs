@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   version = "0.2.10";
-  name = "sccache-${version}";
+  pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";

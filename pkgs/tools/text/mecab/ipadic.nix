@@ -1,6 +1,6 @@
 { stdenv, fetchurl, mecab-nodic }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mecab-ipadic";
   version = "2.7.0-20070801";
 

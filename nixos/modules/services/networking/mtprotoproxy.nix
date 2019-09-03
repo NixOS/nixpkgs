@@ -50,8 +50,8 @@ in
       users = mkOption {
         type = types.attrsOf types.str;
         example = {
-          "tg" = "00000000000000000000000000000000";
-          "tg2" = "0123456789abcdef0123456789abcdef";
+          tg = "00000000000000000000000000000000";
+          tg2 = "0123456789abcdef0123456789abcdef";
         };
         description = ''
           Allowed users and their secrets. A secret is a 32 characters long hex string.
@@ -80,7 +80,7 @@ in
         type = types.attrs;
         default = {};
         example = {
-          "STATS_PRINT_PERIOD" = 600;
+          STATS_PRINT_PERIOD = 600;
         };
         description = ''
           Extra configuration options for mtprotoproxy.

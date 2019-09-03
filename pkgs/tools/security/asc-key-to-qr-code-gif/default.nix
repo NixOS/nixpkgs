@@ -4,7 +4,7 @@
 
 assert testQR -> zbar != false;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "asc-key-to-qr-code-gif";
   version = "20180613";
 

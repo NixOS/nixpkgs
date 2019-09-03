@@ -2,7 +2,7 @@
 let
   commit = "412713a0fcedd520d208a7b783fea03d710bcc61";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "color-theme-solarized-1.0.0";
 
   src = fetchzip {

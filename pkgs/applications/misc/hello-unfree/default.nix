@@ -1,6 +1,6 @@
 { stdenv, runtimeShell }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "example-unfree-package";
   version = "1.0";
 

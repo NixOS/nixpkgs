@@ -106,11 +106,13 @@ rec {
 
     wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; };
     wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; };
-    
+
     alpha    = { bits = 64; significantByte = littleEndian; family = "alpha"; };
 
     msp430   = { bits = 16; significantByte = littleEndian; family = "msp430"; };
     avr      = { bits = 8; family = "avr"; };
+
+    js       = { bits = 32; significantByte = littleEndian; family = "js"; };
   };
 
   # Determine where two CPUs are compatible with each other. That is,
@@ -271,6 +273,7 @@ rec {
     solaris = { execFormat = elf;     families = { }; };
     wasi    = { execFormat = wasm;    families = { }; };
     windows = { execFormat = pe;      families = { }; };
+    ghcjs   = { execFormat = unknown; families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;
@@ -384,6 +387,8 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
         then { cpu = elemAt l 0; vendor = "unknown"; kernel = elemAt l 1; abi = elemAt l 2; }
+      else if (elemAt l 2 == "ghcjs")
+        then { cpu = elemAt l 0; vendor = "unknown"; kernel = elemAt l 2; }
       else throw "Target specification with 3 components is ambiguous";
     "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
   }.${toString (length l)}
@@ -403,7 +408,7 @@ rec {
     getKernel = name:  kernels.${name} or (throw "Unknown kernel: ${name}");
     getAbi    = name:     abis.${name} or (throw "Unknown ABI: ${name}");
 
-    parsed = rec {
+    parsed = {
       cpu = getCpu args.cpu;
       vendor =
         /**/ if args ? vendor    then getVendor args.vendor

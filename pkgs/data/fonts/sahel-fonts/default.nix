@@ -3,7 +3,7 @@
 let
   pname = "sahel-fonts";
   version = "1.0.0-alpha22";
-in fetchFromGitHub rec {
+in fetchFromGitHub {
   name = "${pname}-${version}";
 
   owner = "rastikerdar";

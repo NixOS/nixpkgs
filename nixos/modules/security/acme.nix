@@ -213,7 +213,7 @@ in
                     StateDirectoryMode = rights;
                     WorkingDirectory = "/var/lib/${lpath}";
                     ExecStart = "${pkgs.simp_le}/bin/simp_le ${escapeShellArgs cmdline}";
-                    ExecStopPost = 
+                    ExecStopPost =
                       let
                         script = pkgs.writeScript "acme-post-stop" ''
                           #!${pkgs.runtimeShell} -e
@@ -298,6 +298,9 @@ in
           };
         })
       );
+
+      systemd.targets.acme-selfsigned-certificates = mkIf cfg.preliminarySelfsigned {};
+      systemd.targets.acme-certificates = {};
     })
 
   ];

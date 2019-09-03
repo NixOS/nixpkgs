@@ -2,7 +2,7 @@
 
 let
   vasm =
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "vasm";
       version = "1.8c";
       src = fetchFromGitHub {
@@ -18,7 +18,7 @@ let
       '';
     };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "blastem";
   version = "0.5.1";
   src = fetchurl {

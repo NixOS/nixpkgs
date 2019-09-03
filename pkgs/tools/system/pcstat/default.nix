@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "pcstat-unstable";
   version = "2017-05-28";
 

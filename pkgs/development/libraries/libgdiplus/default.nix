@@ -2,7 +2,7 @@
 , libtiff, giflib, libjpeg, libpng
 , libXrender, libexif, autoreconfHook, fetchpatch }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libgdiplus-5.6.1";
 
   src = fetchFromGitHub {

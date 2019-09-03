@@ -6,7 +6,7 @@ with stdenv.lib;
 let
   version = "0.7.1";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dislocker";
   inherit version;
 

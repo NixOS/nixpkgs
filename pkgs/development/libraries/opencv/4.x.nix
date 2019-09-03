@@ -153,7 +153,7 @@ let
   printEnabled = enabled : if enabled then "ON" else "OFF";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "opencv";
   inherit version src;
 

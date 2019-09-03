@@ -181,6 +181,7 @@ in
     services.phpfpm.pools = {
       "${poolName}" = {
         inherit (cfg) user group;
+
         phpOptions = ''
           date.timezone = "CET"
 
@@ -207,7 +208,7 @@ in
     };
 
     services.nginx.enable = true;
-    services.nginx.virtualHosts."${cfg.virtualHost.serverName}" = {
+    services.nginx.virtualHosts.${cfg.virtualHost.serverName} = {
       listen = [ { addr = cfg.virtualHost.listenHost; port = cfg.virtualHost.listenPort; } ];
       serverName = cfg.virtualHost.serverName;
       root = runDir;

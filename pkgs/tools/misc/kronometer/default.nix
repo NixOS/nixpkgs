@@ -4,15 +4,12 @@
   kconfig, kcrash, kinit
 }:
 
-let
+mkDerivation rec {
   pname = "kronometer";
   version = "2.2.3";
-in
-mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
     sha256 = "05hs8729a3aqjpwmn2xdf2sriacrll4sj4ax3lm4s1ravj09n9bm";
   };
 
@@ -22,6 +19,6 @@ mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kconfig kcrash kinit ];
 }

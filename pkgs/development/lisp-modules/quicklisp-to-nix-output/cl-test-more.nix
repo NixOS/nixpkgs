@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-test-more'';
   version = ''prove-20171130-git'';
 

@@ -1,6 +1,6 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ps3netsrv";
   version = "1.1.0";
 

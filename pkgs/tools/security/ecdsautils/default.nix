@@ -1,6 +1,6 @@
 { stdenv, pkgs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.4.0";
   pname = "ecdsautils";
 

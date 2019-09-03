@@ -1,5 +1,5 @@
 { stdenv, fetchurl, xorg, pkgconfig, ncurses }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   pname = "xrestop";
   version = "0.4";

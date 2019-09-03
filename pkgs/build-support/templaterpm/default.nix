@@ -1,6 +1,6 @@
 {stdenv, makeWrapper, python, toposort, rpm}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nix-template-rpm";
   version = "0.1";
 

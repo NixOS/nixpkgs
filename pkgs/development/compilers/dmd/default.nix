@@ -13,7 +13,7 @@ let
   dmdConfFile = writeTextFile {
       name = "dmd.conf";
       text = (lib.generators.toINI {} {
-        "Environment" = {
+        Environment = {
           DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${stdenv.lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"}'';
         };
       });

@@ -2,7 +2,7 @@
 , gtkmm2, libjack2, pkgconfig, python2, wafHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "patchage";
   version = "1.0.1";
   src = fetchsvn {

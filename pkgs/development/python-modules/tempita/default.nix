@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, nose }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "0.5.3-2016-09-28";
   pname = "tempita";
 

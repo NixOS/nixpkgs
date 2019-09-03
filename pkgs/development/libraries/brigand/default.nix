@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "brigand";
   version = "1.3.0";
 

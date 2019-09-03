@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gettext }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "duff";
   # The last release (0.5.2) is more than 2 years old and lacks features like -D,
   # limiting its usefulness. Upstream appears comatose if not dead.

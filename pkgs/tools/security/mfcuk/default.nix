@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libnfc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mfcuk";
   version = "0.3.8";
 

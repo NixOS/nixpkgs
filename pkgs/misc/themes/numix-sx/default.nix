@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gtk-engine-murrine }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2017-04-24";
   pname = "numix-sx-gtk-theme";
 

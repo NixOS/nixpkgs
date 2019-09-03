@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-ppcre-template'';
   version = ''cl-unification-20190107-git'';
 

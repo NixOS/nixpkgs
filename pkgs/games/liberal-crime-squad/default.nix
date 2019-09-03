@@ -1,6 +1,6 @@
 { fetchFromGitHub, stdenv, autoreconfHook, libiconv, ncurses, SDL2, SDL2_mixer }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2016-07-06";
   pname = "liberal-crime-squad";
 

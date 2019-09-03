@@ -8,7 +8,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "azure-mgmt-commerce";
   version = "1.0.1";
 

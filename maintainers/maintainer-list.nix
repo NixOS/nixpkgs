@@ -2091,7 +2091,7 @@
     githubId = 2817965;
     name = "f--t";
   };
-  f-breidenstein = {
+  fleaz = {
     email = "mail@felixbreidenstein.de";
     github = "fleaz";
     githubId = 2489598;
@@ -5094,6 +5094,12 @@
     github = "ptrhlm";
     githubId = 9568176;
     name = "Piotr Halama";
+  };
+  puckipedia = {
+    email = "puck@puckipedia.com";
+    github = "puckipedia";
+    githubId = 488734;
+    name = "Puck Meerburg";
   };
   puffnfresh = {
     email = "brian@brianmckenna.org";

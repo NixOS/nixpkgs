@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cntr-${version}";
+  pname = "cntr";
   version = "1.2.0";
 
   src = fetchFromGitHub {

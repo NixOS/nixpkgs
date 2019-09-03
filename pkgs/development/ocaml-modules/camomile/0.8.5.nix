@@ -1,6 +1,6 @@
 {stdenv, fetchurl, fetchpatch, ocaml, findlib, camlp4}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "camomile";
   version = "0.8.5";
 

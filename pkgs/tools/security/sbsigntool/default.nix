@@ -3,7 +3,7 @@
 , openssl, libuuid, gnu-efi, libbfd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sbsigntool";
   version = "0.9.1";
 

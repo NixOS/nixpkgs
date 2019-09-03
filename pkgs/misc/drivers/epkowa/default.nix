@@ -243,7 +243,7 @@ stdenv.mkDerivation rec {
     ];
   patchFlags = "-p0";
 
-  configureFlags = [ "--disable-static" "--enable-dependency-reduction" "--disable-frontend"];
+  configureFlags = [ "--enable-dependency-reduction" "--disable-frontend"];
 
   postConfigure = ''
     echo '#define NIX_ESCI_PREFIX "'${fwdir}'"' >> config.h

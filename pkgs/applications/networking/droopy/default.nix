@@ -2,7 +2,7 @@
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "droopy";
   version = "20160830";
 

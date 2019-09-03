@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, directfb, zlib, libjpeg, xorgproto }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "directvnc";
   version = "0.7.7.2015-04-16";
 

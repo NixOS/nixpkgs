@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''static-vectors'';
   version = ''v1.8.3'';
 

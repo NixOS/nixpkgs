@@ -3,7 +3,7 @@ glib, libzip, libserialport, check, libusb, libftdi,
 systemd, alsaLib, dsview
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (dsview) version src;
 
   pname = "libsigrok4dsl";

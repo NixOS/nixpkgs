@@ -36,7 +36,7 @@ let lispPackages = rec {
     };
   };
 
-  quicklisp-to-nix-system-info = stdenv.mkDerivation rec {
+  quicklisp-to-nix-system-info = stdenv.mkDerivation {
     pname = "quicklisp-to-nix-system-info";
     version = "1.0.0";
     src = ./quicklisp-to-nix;
@@ -57,7 +57,7 @@ let lispPackages = rec {
     dontStrip = true;
   };
 
-  quicklisp-to-nix = stdenv.mkDerivation rec {
+  quicklisp-to-nix = stdenv.mkDerivation {
     pname = "quicklisp-to-nix";
     version = "1.0.0";
     src = ./quicklisp-to-nix;

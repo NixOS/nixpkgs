@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "parallel-rust-${version}";
+  pname = "parallel-rust";
   version = "0.11.3";
 
   src = fetchFromGitHub {

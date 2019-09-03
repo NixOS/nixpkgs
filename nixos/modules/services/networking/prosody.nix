@@ -297,7 +297,7 @@ in
       };
 
       dataDir = mkOption {
-        type = types.string;
+        type = types.path;
         description = "Directory where Prosody stores its data";
         default = "/var/lib/prosody";
       };

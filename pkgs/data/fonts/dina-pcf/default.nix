@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip, bdftopcf, mkfontdir, mkfontscale}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2.92";
   pname = "dina-font-pcf";
 

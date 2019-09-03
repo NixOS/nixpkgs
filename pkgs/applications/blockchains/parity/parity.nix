@@ -7,14 +7,13 @@
 , fetchFromGitHub
 , rustPlatform
 
-, pkgconfig
-, openssl
-, systemd
 , cmake
-, perl
+, openssl
+, pkgconfig
+, systemd
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "parity";
   inherit version;
   inherit cargoSha256;
@@ -26,10 +25,9 @@ rustPlatform.buildRustPackage rec {
     inherit sha256;
   };
 
-  buildInputs = [
-    pkgconfig cmake perl
-    systemd.lib systemd.dev openssl openssl.dev
-  ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [ openssl systemd ];
 
   cargoBuildFlags = [ "--features final" ];
 

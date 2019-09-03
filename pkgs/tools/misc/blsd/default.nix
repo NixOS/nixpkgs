@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, libgit2 }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "blsd";
   version = "2017-07-27";
 

@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (withCommunityModules ++ withOnlyInstalledCommunityModules)}
       wrapProgram $out/bin/prosody \
-        --prefix LUA_PATH ';' "$NIX_LUA_PATH" \
-        --prefix LUA_CPATH ';' "$NIX_LUA_CPATH"
+        --prefix LUA_PATH ';' "$LUA_PATH" \
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --prefix LUA_PATH ';' "$NIX_LUA_PATH" \
-        --prefix LUA_CPATH ';' "$NIX_LUA_CPATH"
+        --prefix LUA_PATH ';' "$LUA_PATH" \
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
     '';
 
   passthru.communityModules = withCommunityModules;

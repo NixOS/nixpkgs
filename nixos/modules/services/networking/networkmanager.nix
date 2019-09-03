@@ -81,9 +81,9 @@ let
   '';
 
   dispatcherTypesSubdirMap = {
-    "basic" = "";
-    "pre-up" = "pre-up.d/";
-    "pre-down" = "pre-down.d/";
+    basic = "";
+    pre-up = "pre-up.d/";
+    pre-down = "pre-down.d/";
   };
 
   macAddressOpt = mkOption {
@@ -156,7 +156,7 @@ in {
       };
 
       unmanaged = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = ''
           List of interfaces that will not be managed by NetworkManager.
@@ -453,7 +453,7 @@ in {
 
     systemd.packages = cfg.packages;
 
-    systemd.services."NetworkManager" = {
+    systemd.services.NetworkManager = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
 
@@ -483,7 +483,7 @@ in {
       };
     };
 
-    systemd.services."NetworkManager-dispatcher" = {
+    systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, openssh }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rdocker";
   version = "unstable-2018-07-17";
 

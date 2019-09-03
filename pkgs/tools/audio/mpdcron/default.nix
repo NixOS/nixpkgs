@@ -6,7 +6,7 @@ let
     name = "mpdcron-bundle";
     gemdir = ./.;
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   version = "20161228";
   pname = "mpdcron";
 

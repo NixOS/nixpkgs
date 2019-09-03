@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, bison, flex }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.0";
   pname = "packetdrill";
   src = fetchFromGitHub {

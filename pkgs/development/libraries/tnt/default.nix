@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tnt";
   version = "3.0.12";
   

@@ -4,7 +4,7 @@ let
 
   # Build Quake with coverage instrumentation.
   overrides = pkgs:
-    rec {
+    {
       quake3game = pkgs.quake3game.override (args: {
         stdenv = pkgs.stdenvAdapters.addCoverageInstrumentation args.stdenv;
       });
@@ -42,7 +42,7 @@ rec {
     { server =
         { pkgs, ... }:
 
-        { systemd.services."quake3-server" =
+        { systemd.services.quake3-server =
             { wantedBy = [ "multi-user.target" ];
               script =
                 "${pkgs.quake3demo}/bin/quake3-server +set g_gametype 0 " +

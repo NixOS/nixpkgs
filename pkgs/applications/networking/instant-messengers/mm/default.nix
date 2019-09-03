@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitLab }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "mm";
   version = "2016.11.04";
 

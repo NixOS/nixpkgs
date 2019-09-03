@@ -1,6 +1,6 @@
 { mkXfceDerivation, exo, gtk3, libsoup, libxfce4ui, libxfce4util, xfce4-panel, glib-networking }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screenshooter";
   version = "1.9.5";

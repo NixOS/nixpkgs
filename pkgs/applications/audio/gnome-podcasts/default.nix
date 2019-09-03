@@ -3,7 +3,7 @@
 
 # TODO: build from git for easier updates
 # rustPlatform.buildRustPackage rec {
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.4.6";
   pname = "gnome-podcasts";
 

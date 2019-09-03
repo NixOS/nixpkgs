@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, tcl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "eggdrop";
   version = "1.6.21-nix1";
 

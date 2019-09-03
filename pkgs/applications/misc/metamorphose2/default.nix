@@ -2,7 +2,7 @@
 , python27, python2Packages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "metamorphose2";
   version = "0.9.0beta";
 

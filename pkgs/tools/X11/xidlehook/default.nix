@@ -2,7 +2,7 @@
 , xlibsWrapper, xorg, libpulseaudio, pkgconfig, patchelf, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "xidlehook-${version}";
+  pname = "xidlehook";
   version = "0.7.0";
 
   doCheck = false;

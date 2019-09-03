@@ -1,7 +1,7 @@
 { stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb, libtool
 , withDebug ? false }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cnijfilter2";
 
   version = "5.30";

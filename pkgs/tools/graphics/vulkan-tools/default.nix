@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.1.106.0";
+  version = "1.1.114.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";

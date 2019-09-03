@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''lack-component'';
   version = ''lack-20190521-git'';
 

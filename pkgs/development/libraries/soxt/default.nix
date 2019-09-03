@@ -1,6 +1,6 @@
 { fetchhg, stdenv, cmake, coin3d, motif, xlibsWrapper, libXmu, libGLU_combined }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "soxt";
   version = "unstable-2019-06-14";
 

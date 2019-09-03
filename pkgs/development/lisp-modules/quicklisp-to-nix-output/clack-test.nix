@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''clack-test'';
   version = ''clack-20190710-git'';
 

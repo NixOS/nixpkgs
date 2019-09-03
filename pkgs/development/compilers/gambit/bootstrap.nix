@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoconf, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gambit-bootstrap";
   version = "4.9.3";
 

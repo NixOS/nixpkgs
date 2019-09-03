@@ -4,7 +4,7 @@ let
   modDirVersion = "4.14.98";
   tag = "1.20190215";
 in
-lib.overrideDerivation (buildLinux (args // rec {
+lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
   inherit modDirVersion;
 
@@ -16,9 +16,9 @@ lib.overrideDerivation (buildLinux (args // rec {
   };
 
   defconfig = {
-    "armv6l-linux" = "bcmrpi_defconfig";
-    "armv7l-linux" = "bcm2709_defconfig";
-    "aarch64-linux" = "bcmrpi3_defconfig";
+    armv6l-linux = "bcmrpi_defconfig";
+    armv7l-linux = "bcm2709_defconfig";
+    aarch64-linux = "bcmrpi3_defconfig";
   }.${stdenv.hostPlatform.system} or (throw "linux_rpi not supported on '${stdenv.hostPlatform.system}'");
 
   features = {

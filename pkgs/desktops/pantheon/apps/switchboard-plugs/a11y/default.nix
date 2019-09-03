@@ -1,4 +1,5 @@
 { stdenv
+, substituteAll
 , fetchFromGitHub
 , pantheon
 , meson
@@ -9,6 +10,7 @@
 , granite
 , gtk3
 , switchboard
+, onboard
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +23,13 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1wh46lrsliii5bbvfc4xnzgnii2v7sqxnbn43ylmyqppfv9mk1wd";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit onboard;
+    })
+  ];
 
   passthru = {
     updateScript = pantheon.updateScript {

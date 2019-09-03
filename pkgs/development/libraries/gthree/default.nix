@@ -15,7 +15,7 @@
 , json-glib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gthree";
   version = "unstable-2019-08-21";
 

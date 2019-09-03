@@ -11,7 +11,7 @@ let
 
   binPath = makeBinPath [ coreutils gnugrep gnused lm_sensors net_snmp procps ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "monitoring-plugins-${majorVersion}${minorVersion}";
 
   src = fetchFromGitHub {

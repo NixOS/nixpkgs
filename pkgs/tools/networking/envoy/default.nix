@@ -127,7 +127,7 @@ let
   # Generate the BUILD file.
   buildFile =
     let field = name: attrs:
-      if attrs ? "${name}" then "    ${name} = ${attrs.${name}},\n" else "";
+      if attrs ? ${name} then "    ${name} = ${attrs.${name}},\n" else "";
     in
     ''
     licenses(["notice"])  # Apache 2

@@ -1,6 +1,6 @@
 { fetchurl, fetchpatch, stdenv, autoconf, libpcap, ncurses, pkgconfig, glib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "jnettop-0.13.0";
 
   src = fetchurl {

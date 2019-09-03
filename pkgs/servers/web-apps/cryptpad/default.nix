@@ -15,7 +15,6 @@ let
   bowerPackages = buildBowerComponents {
     name = "${cryptpad.name}-bower-packages";
     # this list had to be tweaked by hand:
-    # * remove the # in the sortablejs dependency
     # * add the second bootstrap ~3.1.1 entry
     generated = ./bower-packages.nix;
     src = cryptpad.src;

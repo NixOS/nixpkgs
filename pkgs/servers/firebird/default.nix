@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--with-serivec-port=${builtins.toString port}"
       "--with-service-name=${serviceName}"
-      # "--disable-static"
       "--with-system-editline"
       "--with-fblog=/var/log/firebird"
       "--with-fbconf=/etc/firebird"

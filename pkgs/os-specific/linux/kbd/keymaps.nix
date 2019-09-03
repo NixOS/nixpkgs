@@ -18,7 +18,7 @@
     '';
   };
 
-  neo = stdenv.mkDerivation rec {
+  neo = stdenv.mkDerivation {
     pname = "neo";
     version = "2476";
 

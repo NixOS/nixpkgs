@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''list-of'';
   version = ''asdf-finalizers-20170403-git'';
 

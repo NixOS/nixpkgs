@@ -4,7 +4,7 @@
 let
   pname = "NetworkManager-iodine";
   version = "1.2.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {

@@ -8,13 +8,13 @@ with python3.pkgs;
 
 stdenv.mkDerivation rec {
   pname = "selinux-python";
-  version = "2.7";
-  se_release = "20170804";
-  se_url = "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases";
+  version = "2.9";
+
+  inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/selinux-python-${version}.tar.gz";
-    sha256 = "1va0y4b7cah7rprh04b3ylmwqgnivpkw5z2zw68nrafdbsbcn5s2";
+    sha256 = "1pjzsyay5535cxcjag7y7k193ajry0s0xc3dqv5905qd7cwval1n";
   };
 
   nativeBuildInputs = [ wrapPython ];
@@ -23,17 +23,19 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace sepolicy/Makefile --replace "echo --root" "echo --prefix"
+    substituteInPlace sepolgen/src/share/Makefile --replace "/var/lib/sepolgen" \
+                                                            "\$PREFIX/var/lib/sepolgen"
   '';
 
-  preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
-    makeFlagsArray+=("DESTDIR=$out")
-    makeFlagsArray+=("LOCALEDIR=$out/share/locale")
-    makeFlagsArray+=("LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a")
-    makeFlagsArray+=("BASHCOMPLETIONDIR=$out/share/bash-completion/completions")
-    makeFlagsArray+=("PYTHON=${python3}/bin/python")
-    makeFlagsArray+=("PYTHONLIBDIR=lib/${python3.libPrefix}/site-packages")
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "LOCALEDIR=$(out)/share/locale"
+    "BASHCOMPLETIONDIR=$(out)/share/bash-completion/completions"
+    "PYTHON=python"
+    "PYTHONLIBDIR=$(out)/${python.sitePackages}"
+    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+  ];
+
 
   postFixup = ''
     wrapPythonPrograms

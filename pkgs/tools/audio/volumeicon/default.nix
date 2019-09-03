@@ -1,6 +1,6 @@
 { pkgs, fetchurl, stdenv, gtk3, pkgconfig, intltool, alsaLib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "volumeicon";
   version = "0.5.1";
 

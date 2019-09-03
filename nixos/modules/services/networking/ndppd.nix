@@ -142,7 +142,7 @@ in {
         messages, and respond to them according to a set of rules.
       '';
       default = {};
-      example = { "eth0".rules."1111::/64" = {}; };
+      example = { eth0.rules."1111::/64" = {}; };
     };
   };
 
@@ -153,7 +153,7 @@ in {
     '' ];
 
     services.ndppd.proxies = mkIf (cfg.interface != null && cfg.network != null) {
-      "${cfg.interface}".rules."${cfg.network}" = {};
+      ${cfg.interface}.rules.${cfg.network} = {};
     };
 
     systemd.services.ndppd = {

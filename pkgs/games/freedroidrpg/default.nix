@@ -2,7 +2,7 @@
 
 let
   version = "0.16.1";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "freedroidrpg";
   inherit version;
 

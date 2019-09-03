@@ -1,6 +1,6 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, libxml2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "evtest-1.33";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

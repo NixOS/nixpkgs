@@ -126,7 +126,7 @@ let # packageJSON=./package.json;
 
     getJarPath = jarName: (lib.findFirst (p: p.name == jarName) null cljdeps.packages).path.jar;
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version;
   pname = "lumo";
 

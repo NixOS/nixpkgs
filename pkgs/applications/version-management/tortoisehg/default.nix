@@ -21,7 +21,7 @@ let
         };
       };
 
-in python2Packages.buildPythonApplication rec {
+in python2Packages.buildPythonApplication {
 
     inherit (tortoisehgSrc.meta) name version;
     src = tortoisehgSrc;

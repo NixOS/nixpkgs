@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, glib, procps, libxml2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dbus-map";
   version = "2015-05-28";
   src = fetchFromGitHub {

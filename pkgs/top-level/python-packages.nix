@@ -1239,7 +1239,9 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
-  uvloop = callPackage ../development/python-modules/uvloop { };
+  uvloop = callPackage ../development/python-modules/uvloop {
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
+  };
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
@@ -2059,6 +2061,8 @@ in {
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
+  pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
+
   pytest-repeat = callPackage ../development/python-modules/pytest-repeat { };
 
   pytestrunner = callPackage ../development/python-modules/pytestrunner { };
@@ -2338,15 +2342,13 @@ in {
 
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
 
+  fx2 = callPackage ../development/python-modules/fx2 { };
+
   gateone = callPackage ../development/python-modules/gateone { };
 
-  # TODO: Remove after 19.03 is branched off:
-  gcutil = throw ''
-    pythonPackages.gcutil is deprecated and can be replaced with "gcloud
-    compute" from the package google-cloud-sdk.
-  '';
-
   GeoIP = callPackage ../development/python-modules/GeoIP { };
+
+  glasgow = callPackage ../development/python-modules/glasgow { };
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
@@ -2578,6 +2580,10 @@ in {
 
   Nikola = callPackage ../development/python-modules/Nikola { };
 
+  nmigen = callPackage ../development/python-modules/nmigen { };
+
+  nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
+
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
@@ -2660,7 +2666,7 @@ in {
 
   pycares = callPackage ../development/python-modules/pycares { };
 
-  pycuda = callPackage ../development/python-modules/pycuda rec {
+  pycuda = callPackage ../development/python-modules/pycuda {
     cudatoolkit = pkgs.cudatoolkit_7_5;
     inherit (pkgs.stdenv) mkDerivation;
   };
@@ -3969,10 +3975,10 @@ in {
       blas = pkgs.openblasCompat;
     };
     numpy_2 = numpy_.overridePythonAttrs(oldAttrs: rec {
-      version = "1.16.4";
+      version = "1.16.5";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "1ivrwh66cmly7xh1dl7pybizfz5rcicn4kkkx5g29v4gll9bwhkj";
+        sha256 = "8bb452d94e964b312205b0de1238dd7209da452343653ab214b5d681780e7a0c";
       };
     });
   in if pythonOlder "3.5" then numpy_2 else numpy_;

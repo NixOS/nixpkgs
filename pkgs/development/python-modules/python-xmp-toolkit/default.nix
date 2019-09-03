@@ -7,7 +7,7 @@
 , stdenv
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-xmp-toolkit";
   version = "2.0.2";
 

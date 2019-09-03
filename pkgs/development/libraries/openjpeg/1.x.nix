@@ -1,6 +1,6 @@
 { callPackage, ... } @ args:
 
-callPackage ./generic.nix (args // rec {
+callPackage ./generic.nix (args // {
   version = "1.5.2";
   branch = "1.5";
   revision = "version.1.5.2";

@@ -4,7 +4,7 @@
 }:
 
 let srcs = import ./srcs.nix { inherit fetchurl; }; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libagar";
   inherit (srcs) version src;
 

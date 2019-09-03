@@ -63,7 +63,7 @@ let
     categories = "Development;Debugger;";
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit name version src;
 
   nativeBuildInputs = [ gradle_2_5 perl makeWrapper ];

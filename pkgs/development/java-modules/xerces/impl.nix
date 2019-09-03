@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   xercesImpl_2_8_0 = map (obj: fetchMaven {
     version = "2.8.0";
     artifactId = "xercesImpl";

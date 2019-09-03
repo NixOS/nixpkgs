@@ -1,6 +1,6 @@
 { stdenv, autoreconfHook, fetchurl, dbus-glib, gtk2, pkgconfig, wordnet }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "artha";
   version = "1.0.3";
 

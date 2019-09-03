@@ -469,7 +469,7 @@ in
                       map createSyncService allPools ++
                       map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
-      systemd.targets."zfs-import" =
+      systemd.targets.zfs-import =
         let
           services = map (pool: "zfs-import-${pool}.service") dataPools;
         in
@@ -479,7 +479,7 @@ in
             wantedBy = [ "zfs.target" ];
           };
 
-      systemd.targets."zfs".wantedBy = [ "multi-user.target" ];
+      systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })
 
     (mkIf enableAutoSnapshots {

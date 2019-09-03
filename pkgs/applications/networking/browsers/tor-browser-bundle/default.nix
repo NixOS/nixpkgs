@@ -71,7 +71,7 @@ let
     ffmpeg
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tor-browser-bundle";
   version = tor-browser-unwrapped.version;
 
