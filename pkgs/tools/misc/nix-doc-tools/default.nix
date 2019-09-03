@@ -6,7 +6,7 @@
   , root-file-name ? "manual.xml"
   , combined-file-name ? "manual-full.xml"
   , nativeBuildInputs ? []
-  , preBuild ? ""
+  , preBuild ? ":"
   , nix-shell ? false
 }:
 let
