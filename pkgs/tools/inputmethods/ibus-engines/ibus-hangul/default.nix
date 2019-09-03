@@ -1,7 +1,9 @@
 { stdenv
 , fetchurl
+, substituteAll
 , intltool
 , pkgconfig
+, wrapGAppsHook
 , gtk3
 , ibus
 , libhangul
@@ -17,20 +19,29 @@ stdenv.mkDerivation rec {
     sha256 = "0gha8dfdf54rx8fv3yfikbgdg6lqq6l883lhg7q68ybvkjx9bwbs";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      libhangul = "${libhangul}/lib/libhangul.so.1";
+    })
+  ];
+
   nativeBuildInputs = [
     intltool
     pkgconfig
     python3.pkgs.wrapPython
+    wrapGAppsHook
   ];
 
   buildInputs = [
     gtk3
     ibus
     libhangul
-    python3
+    (python3.withPackages (pypkgs: with pypkgs; [
+      pygobject3
+      (toPythonModule ibus)
+    ]))
   ];
-
-  postFixup = "wrapPythonPrograms";
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
