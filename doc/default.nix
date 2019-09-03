@@ -1,4 +1,8 @@
-{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
+{
+  pkgs ? (import ./.. { }),
+  nixpkgs ? { },
+  nix-shell ? false,
+}:
 let
 
   locationsXml = import ./doc-customisation/lib-function-locations.nix { inherit pkgs nixpkgs; };
@@ -14,10 +18,12 @@ in pkgs.nix-doc-tools
     locationsXml
     functionDocs
   ];
+  inherit nix-shell;
 
   nativeBuildInputs = with pkgs; [ pandoc findutils gnumake gnused ];
 
   preBuild = ''
+    rm -f ./functions/library/locations.xml ./functions/library/generated
     ln -fs $(realpath ./generated/function-locations.xml) ./functions/library/locations.xml
     ln -fs $(realpath ./generated/function-docs) ./functions/library/generated
 

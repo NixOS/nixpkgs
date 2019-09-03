@@ -7,6 +7,7 @@
   , combined-file-name ? "manual-full.xml"
   , nativeBuildInputs ? []
   , preBuild ? ""
+  , nix-shell ? false
 }:
 let
   doclib = callPackage ./lib.nix {};
@@ -15,6 +16,14 @@ let
     name = "docs-tooling-${name}";
     paths = [ doclib.standard-tools ] ++ generated-files;
   };
+
+  # a `docs-generate` command special for a nix-shell, since it
+  # uses `nix-build` instead of hard-coding a path.
+  tools.nix-shell-generate = writeShellScriptBin "docs-generate" ''
+    set -eux
+
+    nix-shell ${toString src} --run "docs-generate"
+  '';
 
   tools.generate = writeShellScriptBin "docs-generate" ''
     PATH=${lib.makeBinPath (doclib.toolbox.build ++ nativeBuildInputs)}
@@ -35,6 +44,40 @@ let
     )
   '';
 
+  tools.validate = writeShellScriptBin "docs-validate" ''
+    PATH=${lib.makeBinPath (doclib.toolbox.dev)}
+
+    set -eux
+
+    if [ ! -d ./generated ]; then
+      echo "Please run «docs-generate»"
+    fi
+
+    xmllint --nonet \
+      --xinclude \
+      --noxincludenode "${root-file-name}" \
+      --output "${combined-file-name}"
+
+     if jing ./generated/docbook.rng ${combined-file-name}; then
+       echo "OK!"
+     else
+       echo "Not OK. Try «docs-debug» if you need help."
+       exit 1
+     fi
+  '';
+
+  tools.debug = writeShellScriptBin "docs-debug" ''
+    PATH=${lib.makeBinPath (doclib.toolbox.dev)}
+
+    set -eux
+
+    if [ ! -d ./generated ]; then
+      echo "Please run «docs-generate»"
+    fi
+
+    xmloscopy --docbook5 ${root-file-name} ${combined-file-name}
+  '';
+
   tools.build = writeShellScriptBin "docs-build" ''
     PATH=${lib.makeBinPath (doclib.toolbox.build ++ nativeBuildInputs)}
 
@@ -51,6 +94,7 @@ let
 
     if [ ! -d ./generated ]; then
       echo "Please run «docs-generate»"
+      exit 1
     fi
 
     xmllint --nonet \
@@ -101,7 +145,11 @@ let
 in stdenvNoCC.mkDerivation {
   inherit name src;
 
-  buildInputs = [ tools.generate tools.build ];
+  buildInputs = [ tools.build ] ++ (if nix-shell then [
+    tools.nix-shell-generate tools.validate tools.debug
+  ] else [
+    tools.generate
+  ]) ;
 
   buildPhase = ''
     docs-generate

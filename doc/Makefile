@@ -19,18 +19,9 @@ fix-misc-xml:
 	find . -iname '*.xml' -type f \
 		-exec ../nixos/doc/varlistentry-fixer.rb {} ';'
 
-.PHONY: clean
-clean:
-	rm -f ${MD_TARGETS} doc-support .version manual-full.xml functions/library/locations.xml functions/library/generated
-	rm -rf ./out/ ./highlightjs
-
 .PHONY: validate
 validate: manual-full.xml doc-support
 	jing doc-support/docbook.rng manual-full.xml
-
-
-doc-support: default.nix
-	nix-build -A doc-support --out-link ./doc-support
 
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \
