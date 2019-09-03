@@ -10603,6 +10603,8 @@ in
 
   dhex = callPackage ../applications/editors/dhex { };
 
+  dnnl = callPackage ../development/libraries/dnnl { };
+
   double-conversion = callPackage ../development/libraries/double-conversion { };
 
   dclib = callPackage ../development/libraries/dclib { };
