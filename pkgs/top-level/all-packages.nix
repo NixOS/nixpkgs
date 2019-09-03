@@ -15881,6 +15881,8 @@ in
     nvidia_x11_beta      = nvidiaPackages.beta;
     nvidia_x11           = nvidiaPackages.stable;
 
+    openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
+
     ply = callPackage ../os-specific/linux/ply { };
 
     r8168 = callPackage ../os-specific/linux/r8168 { };
@@ -19874,6 +19876,8 @@ in
   vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
 
   openmpt123 = callPackage ../applications/audio/openmpt123 { };
+
+  openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
 
   opusfile = callPackage ../applications/audio/opusfile { };
 
