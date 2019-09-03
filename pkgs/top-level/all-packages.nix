@@ -3853,8 +3853,6 @@ in
 
   highlight = callPackage ../tools/text/highlight ({
     lua = lua5;
-  } // lib.optionalAttrs stdenv.isDarwin {
-    inherit (llvmPackages_38) stdenv;
   });
 
   holochain-go = callPackage ../servers/holochain-go { };
