@@ -44,7 +44,7 @@ in rec {
   inherit (optionsDoc) optionsJSON optionsXML optionsDocBook;
 
   manual = pkgs.nix-doc-tools {
-    name = "nixpkgs-manual";
+    name = "nixos-manual";
     src = sources;
     generated-files = [
       generatedSources
@@ -53,7 +53,7 @@ in rec {
 
   manualHTML = manual;
   manualHTMLShell = pkgs.nix-doc-tools {
-    name = "nixpkgs-manual";
+    name = "nixos-manual";
     src = ./.;
     generated-files = [
       generatedSources
