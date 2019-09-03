@@ -2,7 +2,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
  <info>
   <title>Nixpkgs Users and Contributors Guide</title>
-  <subtitle>Version <xi:include href=".version" parse="text" />
+  <subtitle>Version <xi:include href="generated/version" parse="text" />
   </subtitle>
  </info>
  <xi:include href="introduction.chapter.xml" />
