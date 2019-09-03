@@ -4,8 +4,9 @@ with stdenvNoCC.lib; {
   # Merge overlays with `fdtoverlay` from `dtc`
   applyOverlays = (base: overlays': stdenvNoCC.mkDerivation (let
     overlays = toList overlays';
+    # We don't support parameters, so filter all `-` overlays.
     overlayPaths = assert all (o: length o.params == 0) overlays;
-      map (o: o.overlay) overlays;
+      remove "-" (map (o: o.overlay) overlays);
   in {
     name = "device-tree-overlays";
     nativeBuildInputs = [ dtc findutils ];
