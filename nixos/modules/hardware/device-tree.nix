@@ -8,7 +8,10 @@ let
     options = {
       overlay = mkOption {
         type = types.either (types.enum [ "-" ]) types.path;
-        description = "The overlay file to apply";
+        description = ''
+          The overlay file to apply, or '-' to apply parameters to the current
+          device-tree.
+        '';
         example = literalExample "[\"\${pkgs.deviceTree_rpi.overlays}/w1-gpio.dtbo\"]";
       };
       params = mkOption {
