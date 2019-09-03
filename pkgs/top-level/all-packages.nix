@@ -7851,7 +7851,7 @@ in
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
-  "tacacs+" = callPackage ../servers/tacacs+ { };
+  tacacsplus = callPackage ../servers/tacacsplus { };
 
   tamarin-prover =
     (haskellPackages.callPackage ../applications/science/logic/tamarin-prover {
