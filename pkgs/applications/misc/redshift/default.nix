@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
-, gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
+, gtk3, python, pygobject3, hicolor-icon-theme, pyxdg, desktopFileHook
 
 , withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     wrapGAppsHook
     wrapPython
+    desktopFileHook
   ];
 
   configureFlags = [
@@ -63,15 +64,6 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap";
 
   postFixup = "wrapPythonPrograms";
-
-  # the geoclue agent may inspect these paths and expect them to be
-  # valid without having the correct $PATH set
-  postInstall = ''
-    substituteInPlace $out/share/applications/redshift.desktop \
-      --replace 'Exec=redshift' "Exec=$out/bin/redshift"
-    substituteInPlace $out/share/applications/redshift.desktop \
-      --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
-  '';
 
   enableParallelBuilding = true;
 

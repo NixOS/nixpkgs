@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , SDL2, SDL2_image
-, pkgconfig
+, pkgconfig, desktopFileHook
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2 SDL2_image
   ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig desktopFileHook ];
 
   patches = [
     (fetchpatch {
@@ -37,9 +37,7 @@ stdenv.mkDerivation rec {
     cp -R key $out/lib/klystrack
 
     install -DT icon/256x256.png $out/share/icons/hicolor/256x256/apps/klystrack.png
-    mkdir -p $out/share/applications
-    substitute linux/klystrack.desktop $out/share/applications/klystrack.desktop \
-      --replace "klystrack %f" "$out/bin/klystrack %f"
+    install -Dt $out/share/applications linux/klystrack.desktop
   '';
 
   meta = with stdenv.lib; {

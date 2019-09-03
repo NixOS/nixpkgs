@@ -1,4 +1,4 @@
-{ aspell, aspellDicts_de, aspellDicts_en, buildEnv, fetchurl, fortune, gnugrep, makeWrapper, stdenv, tk, tre }:
+{ aspell, aspellDicts_de, aspellDicts_en, buildEnv, desktopFileHook, fetchurl, fortune, gnugrep, makeWrapper, stdenv, tk, tre }:
 let
   aspellEnv = buildEnv {
     name = "env-ding-aspell";
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0chjqs3z9zs1w3l7b5lsaj682rgnkf9kibcbzhggqqcn1pbvl5sq";
   };
 
-  buildInputs = [ aspellEnv fortune gnugrep makeWrapper tk tre ];
+  nativeBuildInputs = [ makeWrapper desktopFileHook ];
+  buildInputs = [ aspellEnv fortune gnugrep tk tre ];
 
   patches = [ ./dict.patch ];
 
@@ -33,8 +34,6 @@ stdenv.mkDerivation rec {
     done
 
     sed -i "s@/usr/bin/fortune@fortune@g" ding
-
-    sed -i "s@/usr/bin/ding@$out/bin/ding@g" ding.desktop
 
     cp -v ding $out/bin/
     cp -v de-en.txt $out/share/dict/

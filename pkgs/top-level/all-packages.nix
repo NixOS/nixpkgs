@@ -143,6 +143,9 @@ in
     deps = [ innoextract file-rename ]; }
     ../build-support/setup-hooks/gog-unpack.sh;
 
+  desktopFileHook = makeSetupHook {}
+    ../build-support/setup-hooks/desktop-files.sh;
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };

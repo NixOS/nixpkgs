@@ -4,21 +4,18 @@
   ki18n, xcb-util-cursor,
   kconfig, kcoreaddons, kdbusaddons, kdeclarative, kio, kipi-plugins,
   knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi,
-  qtx11extras, knewstuff, qttools
+  qtx11extras, knewstuff, qttools,
+  desktopFileHook
 }:
 
 mkDerivation {
   name = "spectacle";
   meta = with lib; { maintainers = with maintainers; [ ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools desktopFileHook ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
     kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi qtx11extras xcb-util-cursor
-    knewstuff
+    knewstuff qttools
   ];
-  postPatch = ''
-    substituteInPlace desktop/org.kde.spectacle.desktop \
-      --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
-  '';
   propagatedUserEnvPkgs = [ kipi-plugins libkipi ];
 }
