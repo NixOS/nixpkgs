@@ -8,7 +8,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "avxsynth-${version}";
+  pname = "avxsynth";
   version = "2015-04-07";
 
   src = fetchFromGitHub {

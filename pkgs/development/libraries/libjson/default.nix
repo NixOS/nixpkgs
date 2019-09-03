@@ -2,7 +2,8 @@
 let
   version = "7.6.1";
 in stdenv.mkDerivation rec {
-  name = "libjson-${version}";
+  pname = "libjson";
+  inherit version;
   src = fetchurl {
     url = "mirror://sourceforge/libjson/libjson_${version}.zip";
     sha256 = "0xkk5qc7kjcdwz9l04kmiz1nhmi7iszl3k165phf53h3a4wpl9h7";

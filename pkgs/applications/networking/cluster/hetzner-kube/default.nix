@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "hetzner-kube-${version}";
+  pname = "hetzner-kube";
   version = "0.4.1";
 
   src = fetchFromGitHub {

@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mythtv-${version}";
+  pname = "mythtv";
   version = "29.1";
 
   src = fetchFromGitHub {

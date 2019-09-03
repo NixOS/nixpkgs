@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ stdenv, fetchurl, wrapQtAppsHook
 , freeglut, freealut, libGLU_combined, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
@@ -6,14 +6,15 @@
 }:
 
 let
-  version = "2018.3.1";
-  shortVersion = "2018.3";
+  version = "2019.1.1";
+  shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
-    name = "flightgear-base-${version}";
+    pname = "flightgear-base";
+    inherit version;
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "1h69ifj84l4k0f497ybk51xj3bprzw4xvwrwzzj708zhkjk78fmh";
+      sha256 = "14zm0hzshbca4ych72631hpc4pw2w24zib62ri3lwm8nz6j63qhf";
     };
 
     phases = [ "installPhase" ];
@@ -25,13 +26,13 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "flightgear-${version}";
+  pname = "flightgear";
    # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
   inherit version data;
 
   src = fetchurl {
-    url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
-    sha256 = "0h56npn00b6fd38cf5cha82nnglxmhd12b7h2rn3gjymwhviyjix";
+    url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
+    sha256 = "189wal08p9lrz757pmazxnf85sfymsqrm3nfvdad95pfp6bg7pyi";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -51,23 +52,22 @@ stdenv.mkDerivation rec {
     categories = "Game;Simulation";
   };
 
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [
-    makeWrapper
     freeglut freealut libGLU_combined libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xorgproto libXext libXi
-    libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr qtbase
+    libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
     glew qtdeclarative
   ];
 
   postInstall = ''
     mkdir -p "$out/share/applications/"
     cp "${desktopItem}"/share/applications/* "$out/share/applications/" #*/
-
-    for f in $out/bin/* #*/
-    do
-      wrapProgram $f --set FG_ROOT "${data}/share/FlightGear"
-    done
   '';
+
+  qtWrapperArgs = [
+    "--set FG_ROOT ${data}/share/FlightGear"
+  ];
 
   enableParallelBuilding = true;
 

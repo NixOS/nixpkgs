@@ -21,7 +21,7 @@ let
         useNetworkd = networkd;
         firewall.checkReversePath = true;
         firewall.allowedUDPPorts = [ 547 ];
-        interfaces = mkOverride 0 (listToAttrs (flip map vlanIfs (n:
+        interfaces = mkOverride 0 (listToAttrs (forEach vlanIfs (n:
           nameValuePair "eth${toString n}" {
             ipv4.addresses = [ { address = "192.168.${toString n}.1"; prefixLength = 24; } ];
             ipv6.addresses = [ { address = "fd00:1234:5678:${toString n}::1"; prefixLength = 64; } ];
@@ -510,7 +510,7 @@ let
           '';
         };
       };
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.clientWithPrivacy = { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -522,21 +522,39 @@ let
           };
         };
       };
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = true;
+          interfaces.eth1 = {
+            preferTempAddress = false;
+            ipv4.addresses = mkOverride 0 [ ];
+            ipv6.addresses = mkOverride 0 [ ];
+          };
+        };
+      };
       testScript = { ... }:
         ''
           startAll;
 
           $client->waitForUnit("network.target");
+          $clientWithPrivacy->waitForUnit("network.target");
           $router->waitForUnit("network-online.target");
 
           # Wait until we have an ip address
+          $clientWithPrivacy->waitUntilSucceeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'");
           $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'");
 
           # Test vlan 1
+          $clientWithPrivacy->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
           $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
 
           # Test address used is temporary
-          $client->waitUntilSucceeds("! ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
+          $clientWithPrivacy->waitUntilSucceeds("! ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
+
+          # Test address used is EUI-64
+          $client->waitUntilSucceeds("ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
         '';
     };
     routes = {

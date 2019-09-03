@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "prom2json-${version}";
+  pname = "prom2json";
   version = "0.1.0";
   rev = "${version}";
 

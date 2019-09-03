@@ -13,7 +13,6 @@
 assert withFlint -> flint != null;
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "eclib";
   version = "20190226"; # upgrade might break the sage interface
   # sage tests to run:

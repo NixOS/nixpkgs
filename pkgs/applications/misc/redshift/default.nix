@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "redshift-${version}";
+  pname = "redshift";
   version = "1.12";
 
   src = fetchFromGitHub {
@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = http://jonls.dk/redshift;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yegortimoshenko globin ];
   };
 }

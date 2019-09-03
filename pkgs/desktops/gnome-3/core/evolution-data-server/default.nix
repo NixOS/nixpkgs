@@ -2,17 +2,17 @@
 , intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr
 , p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre
 , vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib
-, glib, gtk3, gnome-online-accounts, libgweather, libgdata }:
+, glib, gtk3, gnome-online-accounts, libgweather, libgdata, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "evolution-data-server-${version}";
-  version = "3.32.3";
+  pname = "evolution-data-server";
+  version = "3.32.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1sx2ywvvwbmphrlqq62srd235ihsj8864d9g8kcbcxwrvn2z70b4";
+    url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0zsc9xwy6ixk3x0dx69ax5isrdw8qxjdxg2i5fr95s40nss7rxl3";
   };
 
   patches = [
@@ -20,8 +20,13 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
-    ./hardcode-gsettings.patch
   ];
+
+  prePatch = ''
+    substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch --subst-var-by ESD_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas \
+      --subst-var-by GDS_GSETTINGS_PATH "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}/glib-2.0/schemas"
+    patches="$patches $PWD/hardcode-gsettings.patch"
+  '';
 
   nativeBuildInputs = [
     cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobject-introspection vala
@@ -42,11 +47,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
-
-  postPatch = ''
-    substituteInPlace src/libedataserver/e-source-registry.c --subst-var-by ESD_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
-  '';
-
 
   passthru = {
     updateScript = gnome3.updateScript {

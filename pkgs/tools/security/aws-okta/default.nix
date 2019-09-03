@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub, libusb1, pkgconfig, stdenv }:
 
 buildGoPackage rec {
-  name = "aws-okta-${version}";
+  pname = "aws-okta";
   version = "0.20.1";
 
   goPackagePath = "github.com/segmentio/aws-okta";

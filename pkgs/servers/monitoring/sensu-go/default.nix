@@ -4,8 +4,8 @@ let
   generic = { subPackages, pname, postInstall ? "" }:
     buildGoPackage rec {
       inherit pname;
-      version = "5.10.0";
-      shortRev = "c7551ba"; # for internal version info
+      version = "5.11.0";
+      shortRev = "dd8f160"; # for internal version info
 
       goPackagePath = "github.com/sensu/sensu-go";
 
@@ -13,7 +13,7 @@ let
         owner = "sensu";
         repo = "sensu-go";
         rev = version;
-        sha256 = "1hma54mdh150d51rwz5csqbn0h24qk6hydjmib68j7zd7kp92yb5";
+        sha256 = "05dx0nxcjl6fy68br2a37j52iz71kvqnqp29swcif2nwvq7w8mxx";
       };
 
       inherit subPackages postInstall;
@@ -44,7 +44,14 @@ in
         "''${!outputBin}/share/zsh/site-functions"
 
       ''${!outputBin}/bin/sensuctl completion bash > ''${!outputBin}/share/bash-completion/completions/sensuctl
-      ''${!outputBin}/bin/sensuctl completion zsh > ''${!outputBin}/share/zsh/site-functions/_sensuctl
+
+      # https://github.com/sensu/sensu-go/issues/3132
+      (
+        echo "#compdef sensuctl"
+        ''${!outputBin}/bin/sensuctl completion zsh
+        echo '_complete sensuctl 2>/dev/null'
+      ) > ''${!outputBin}/share/zsh/site-functions/_sensuctl
+
     '';
   };
 

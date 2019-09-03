@@ -1,35 +1,22 @@
-{ stdenv, fetchFromGitHub, ocaml, ocamlbuild, findlib, topkg
-, ppx_tools, ppx_sexp_conv, cstruct, ppx_cstruct, sexplib, rresult, nocrypto
-, astring
+{ lib, fetchFromGitHub, buildDunePackage
+, cstruct, sexplib0, rresult, nocrypto, astring
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "otr is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-otr-${version}";
-  version = "0.3.4";
+buildDunePackage rec {
+  pname = "otr";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "ocaml-otr";
     rev    = "${version}";
-    sha256 = "0ixf0jvccmcbhk5mhzqakfzimvz200wkdkq3z2d0bdzyggslbdl4";
+    sha256 = "0iz6p85a0jxng9aq9blqsky173zaqfr6wlc5j48ad55lgwzlbih5";
   };
 
-  buildInputs = [ ocaml ocamlbuild findlib topkg ppx_tools ppx_sexp_conv ppx_cstruct ];
-  propagatedBuildInputs = [ cstruct sexplib rresult nocrypto astring ];
-
-  buildPhase = "${topkg.run} build --tests true";
-
-  inherit (topkg) installPhase;
+  propagatedBuildInputs = [ cstruct sexplib0 rresult nocrypto astring ];
 
   doCheck = true;
-  checkPhase = "${topkg.run} test";
-
-  meta = with stdenv.lib; {
-    inherit (ocaml.meta) platforms;
+  meta = with lib; {
     homepage = https://github.com/hannesm/ocaml-otr;
     description = "Off-the-record messaging protocol, purely in OCaml";
     license = licenses.bsd2;

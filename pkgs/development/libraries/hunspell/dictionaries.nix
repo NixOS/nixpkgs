@@ -286,10 +286,11 @@ let
       };
     };
 
-in {
+in rec {
 
   /* ENGLISH */
 
+  en_US = en-us;
   en-us = mkDictFromWordlist {
     shortName = "en-us";
     shortDescription = "English (United States)";
@@ -300,6 +301,7 @@ in {
     };
   };
 
+  en_CA = en-ca;
   en-ca = mkDictFromWordlist {
     shortName = "en-ca";
     shortDescription = "English (Canada)";
@@ -310,6 +312,18 @@ in {
     };
   };
 
+  en-au = mkDictFromWordlist {
+    shortName = "en-au";
+    shortDescription = "English (Australia)";
+    dictFileName = "en_AU";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-2018.04.16.zip;
+      sha256 = "1kp06npl1kd05mm9r52cg2iwc13x02zwqgpibdw15b6x43agg6f5";
+    };
+  };
+  en_AU = en-au;
+
+  en_GB-ise = en-gb-ise;
   en-gb-ise = mkDictFromWordlist {
     shortName = "en-gb-ise";
     shortDescription = "English (United Kingdom, 'ise' ending)";
@@ -320,6 +334,7 @@ in {
     };
   };
 
+  en_GB-ize = en-gb-ize;
   en-gb-ize = mkDictFromWordlist {
     shortName = "en-gb-ize";
     shortDescription = "English (United Kingdom, 'ize' ending)";
@@ -332,126 +347,147 @@ in {
 
   /* SPANISH */
 
+  es_ANY = es-any;
   es-any = mkDictFromRla {
     shortName = "es-any";
     shortDescription = "Spanish (any variant)";
     dictFileName = "es_ANY";
   };
 
+  es_AR = es-ar;
   es-ar = mkDictFromRla {
     shortName = "es-ar";
     shortDescription = "Spanish (Argentina)";
     dictFileName = "es_AR";
   };
 
+  es_BO = es-bo;
   es-bo = mkDictFromRla {
     shortName = "es-bo";
     shortDescription = "Spanish (Bolivia)";
     dictFileName = "es_BO";
   };
 
+  es_CL = es-cl;
   es-cl = mkDictFromRla {
     shortName = "es-cl";
     shortDescription = "Spanish (Chile)";
     dictFileName = "es_CL";
   };
 
+  es_CO = es-co;
   es-co = mkDictFromRla {
     shortName = "es-co";
     shortDescription = "Spanish (Colombia)";
     dictFileName = "es_CO";
   };
 
+  es_CR = es-cr;
   es-cr = mkDictFromRla {
     shortName = "es-cr";
     shortDescription = "Spanish (Costra Rica)";
     dictFileName = "es_CR";
   };
 
+  es_CU = es-cu;
   es-cu = mkDictFromRla {
     shortName = "es-cu";
     shortDescription = "Spanish (Cuba)";
     dictFileName = "es_CU";
   };
 
+  es_DO = es-do;
   es-do = mkDictFromRla {
     shortName = "es-do";
     shortDescription = "Spanish (Dominican Republic)";
     dictFileName = "es_DO";
   };
 
+  es_EC = es-ec;
   es-ec = mkDictFromRla {
     shortName = "es-ec";
     shortDescription = "Spanish (Ecuador)";
     dictFileName = "es_EC";
   };
 
+  es_ES = es-es;
   es-es = mkDictFromRla {
     shortName = "es-es";
     shortDescription = "Spanish (Spain)";
     dictFileName = "es_ES";
   };
 
+  es_GT = es-gt;
   es-gt = mkDictFromRla {
     shortName = "es-gt";
     shortDescription = "Spanish (Guatemala)";
     dictFileName = "es_GT";
   };
 
+  es_HN = es-hn;
   es-hn = mkDictFromRla {
     shortName = "es-hn";
     shortDescription = "Spanish (Honduras)";
     dictFileName = "es_HN";
   };
 
+  es_MX = es-mx;
   es-mx = mkDictFromRla {
     shortName = "es-mx";
     shortDescription = "Spanish (Mexico)";
     dictFileName = "es_MX";
   };
 
+  es_NI = es-ni;
   es-ni = mkDictFromRla {
     shortName = "es-ni";
     shortDescription = "Spanish (Nicaragua)";
     dictFileName = "es_NI";
   };
 
+  es_PA = es-pa;
   es-pa = mkDictFromRla {
     shortName = "es-pa";
     shortDescription = "Spanish (Panama)";
     dictFileName = "es_PA";
   };
 
+  es_PE = es-pe;
   es-pe = mkDictFromRla {
     shortName = "es-pe";
     shortDescription = "Spanish (Peru)";
     dictFileName = "es_PE";
   };
 
+  es_PR = es-pr;
   es-pr = mkDictFromRla {
     shortName = "es-pr";
     shortDescription = "Spanish (Puerto Rico)";
     dictFileName = "es_PR";
   };
 
+  es_PY = es-py;
   es-py = mkDictFromRla {
     shortName = "es-py";
     shortDescription = "Spanish (Paraguay)";
     dictFileName = "es_PY";
   };
 
+  es_SV = es-sv;
   es-sv = mkDictFromRla {
     shortName = "es-sv";
     shortDescription = "Spanish (El Salvador)";
     dictFileName = "es_SV";
   };
 
+  es_UY = es-uy;
   es-uy = mkDictFromRla {
     shortName = "es-uy";
     shortDescription = "Spanish (Uruguay)";
     dictFileName = "es_UY";
   };
 
+  es_VE = es-ve;
   es-ve = mkDictFromRla {
     shortName = "es-ve";
     shortDescription = "Spanish (Venezuela)";
@@ -505,6 +541,7 @@ in {
 
   /* ITALIAN */
 
+  it_IT = it-it;
   it-it =  mkDictFromLinguistico rec {
     shortName = "it-it";
     dictFileName = "it_IT";
@@ -517,6 +554,7 @@ in {
 
   /* BASQUE */
 
+  eu_ES = eu-es;
   eu-es = mkDictFromXuxen {
     shortName = "eu-es";
     dictFileName = "eu_ES";
@@ -549,6 +587,7 @@ in {
 
   /* HUNGARIAN */
 
+  hu_HU = hu-hu;
   hu-hu = mkDictFromLibreOffice {
     shortName = "hu-hu";
     dictFileName = "hu_HU";
@@ -557,7 +596,8 @@ in {
   };
 
   /* SWEDISH */
-  
+
+  sv_SE = sv-se;
   sv-se = mkDictFromDSSO rec {
     shortName = "sv-se";
     dictFileName = "sv_SE";
@@ -565,26 +605,30 @@ in {
   };
 
   # Finlandian Swedish (hello Linus Torvalds)
+  sv_FI = sv-fi;
   sv-fi = mkDictFromDSSO rec {
     shortName = "sv-fi";
     dictFileName = "sv_FI";
     shortDescription = "Swedish (Finland)";
   };
-  
+
   /* GERMAN */
 
+  de_DE = de-de;
   de-de = mkDictFromJ3e {
     shortName = "de-de";
     shortDescription = "German (Germany)";
     dictFileName = "de_DE";
   };
 
+  de_AT = de-at;
   de-at = mkDictFromJ3e {
     shortName = "de-at";
     shortDescription = "German (Austria)";
     dictFileName = "de_AT";
   };
 
+  de_CH = de-ch;
   de-ch = mkDictFromJ3e {
     shortName = "de-ch";
     shortDescription = "German (Switzerland)";
@@ -593,14 +637,15 @@ in {
 
   /* UKRAINIAN */
 
+  uk_UA = uk-ua;
   uk-ua = mkDict rec {
     name = "hunspell-dict-uk-ua-${version}";
-    version = "4.2.5";
-    _version = "4-2.5";
+    version = "4.6.3";
+    _version = "4-6.3";
 
     src = fetchurl {
       url = "https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/${_version}/@@download/file/dict-uk_UA-${version}.oxt";
-      sha256 = "1s2i9cd569g97kafrswczvwmvg7m9aks8qsbxd1mi73zy2y1r7n4";
+      sha256 = "14rd07yx4fx2qxjr5xqc8qy151idd8k2hr5yi18d9r8gccnm9w50";
     };
 
     dictFileName = "uk_UA";

@@ -12,7 +12,7 @@
 , glib
 , gtk2
 , atk
-, gdk_pixbuf
+, gdk-pixbuf
 , cairo
 , pango
 , gnome3
@@ -58,14 +58,14 @@ let
       versions = [ "13.8.0" "13.9.0" "13.9.1" ];
     in
       lib.listToAttrs
-        (lib.flip map versions
+        (lib.forEach versions
           (v: lib.nameValuePair v (throw "Unsupported citrix_receiver version: ${v}")));
   in
     deprecatedVersions // supportedVersions;
 
   citrixReceiverForVersion = { major, minor, patch, x86hash, x64hash, x86suffix, x64suffix, homepage }:
     stdenv.mkDerivation rec {
-      name     = "citrix-receiver-${version}";
+      pname = "citrix-receiver";
       version  = "${major}.${minor}.${patch}";
       inherit homepage;
 
@@ -100,14 +100,14 @@ let
         busybox
         file
         gtk2
-        gdk_pixbuf
+        gdk-pixbuf
       ];
 
       libPath = stdenv.lib.makeLibraryPath [
         glib
         gtk2
         atk
-        gdk_pixbuf
+        gdk-pixbuf
         cairo
         pango
         gnome3.dconf

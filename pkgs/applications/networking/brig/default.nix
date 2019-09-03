@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "brig-${version}";
+  pname = "brig";
   version = "0.4.1";
   rev = "v${version}";
 

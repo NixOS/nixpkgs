@@ -1,7 +1,7 @@
 { stdenv, python3, fetchFromGitHub, makeWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "leo-editor-${version}";
+  pname = "leo-editor";
   version = "5.7.3";
 
   src = fetchFromGitHub {

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.9.0.2019-04-27";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
-    rev = "d04d08cbd4d13c64b1e3b7a8d21c46acee3bc281";
-    sha256 = "0x23qv7kwsqy1yx25fn1z56fx8w865qarr5xdx8s22x42ym4zyha";
+    rev = "v${version}";
+    sha256 = "0i1k884ha08w7r5q5z012q2w7hs333b3c18hkbrhamknpvy6c2i0";
   };
 
-  cargoSha256 = "0vl2zn9n7ijmjxi2lyglnghvaw4qi2bah5i6km15schlsm8c641g";
+  cargoSha256 = "1w43k3ld9ra7blbn593mpi8qg5pgcglwqwddkrb55yxnpnkaxvzy";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     description = "Very resource-friendly and feature-rich replacement for i3status";
     homepage = https://github.com/greshake/i3status-rust;
     license = licenses.gpl3;
-    maintainers = [ maintainers.backuitist ];
+    maintainers = with maintainers; [ backuitist globin ];
     platforms = platforms.linux;
   };
 }

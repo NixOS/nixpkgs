@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pangolin-${version}";
+  pname = "pangolin";
 
   version = "2017-08-02";
 

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "openspades-${version}";
+  pname = "openspades";
   version = "0.1.3";
   devPakVersion = "33";
 

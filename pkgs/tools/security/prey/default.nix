@@ -13,7 +13,7 @@ let
     sha256 = "9cb1ad813d052a0a3e3bbdd329a8711ae3272e340379489511f7dd578d911e30";
   };
 in stdenv.mkDerivation rec {
-  name = "prey-bash-client-${version}";
+  pname = "prey-bash-client";
   version = "0.6.0";
 
   src = fetchurl {

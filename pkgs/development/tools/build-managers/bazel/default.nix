@@ -1,4 +1,5 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, runCommand, runCommandCC, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub
+, runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
@@ -11,19 +12,21 @@
 , buildJdk, runJdk
 , buildJdkName
 , runtimeShell
-# Always assume all markers valid (don't redownload dependencies).
-# Also, don't clean up environment variables.
+# Downstream packages for tests
+, bazel-watcher
+# Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
+# Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
 , gcc-unwrapped
 , autoPatchelfHook
 }:
 
 let
-  version = "0.27.0";
+  version = "0.28.1";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0yn662dzgfr8ls4avfl12k5sr4f210bab12wml18bh4sjlxhs263";
+    sha256 = "0503fax70w7h6v00mkrrrgf1m5n0vkjqs76lyg95alhzc4yldsic";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -33,7 +36,6 @@ let
     let
       srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
-        name = d.name;
         urls = d.urls;
         sha256 = d.sha256;
         });
@@ -42,12 +44,13 @@ let
       srcs.io_bazel_skydoc
       srcs.bazel_skylib
       srcs.io_bazel_rules_sass
+      srcs.platforms
       (if stdenv.hostPlatform.isDarwin
        then srcs.${"java_tools_javac11_darwin-v2.0.zip"}
        else srcs.${"java_tools_javac11_linux-v2.0.zip"})
       srcs.${"coverage_output_generator-v1.0.zip"}
       srcs.build_bazel_rules_nodejs
-      srcs.${"android_tools_pkg-0.4.tar.gz"}
+      srcs.${"android_tools_pkg-0.7.tar.gz"}
       ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -118,7 +121,8 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "bazel-${version}";
+  pname = "bazel";
+  inherit version;
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -136,8 +140,6 @@ stdenv.mkDerivation rec {
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
     ./trim-last-argument-to-gcc-if-empty.patch
-
-    ./python-stub-path-fix.patch
   ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
 
@@ -220,13 +222,25 @@ stdenv.mkDerivation rec {
       cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; };
       java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; };
       protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; };
-      pythonBinPath = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
+      pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; };
 
       bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+
       cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
       javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
       protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
-      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+
+      # downstream packages using buildBazelPackage
+      # fixed-output hashes of the fetch phase need to be spot-checked manually
+      downstream = recurseIntoAttrs ({
+        inherit bazel-watcher;
+      }
+          # dm-sonnet is only packaged for linux
+      // (lib.optionalAttrs stdenv.isLinux {
+          # TODO(timokau) dm-sonnet is broken currently
+          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
+      }));
     };
 
   # update the list of workspace dependencies
@@ -310,9 +324,8 @@ stdenv.mkDerivation rec {
     genericPatches = ''
       # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
       # See also `postFixup` where python is added to $out/nix-support
-      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
-          --replace "/usr/bin/env python" "${python3}/bin/python" \
-          --replace "NIX_STORE_PYTHON_PATH" "${python3}/bin/python" \
+      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt \
+          --replace "#!/usr/bin/env python" "#!${python3}/bin/python"
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|' \
@@ -332,6 +345,11 @@ stdenv.mkDerivation rec {
       substituteInPlace tools/build_rules/test_rules.bzl \
         --replace /bin/bash ${customBash}/bin/bash
 
+      for i in $(find tools/cpp/ -type f)
+      do
+        substituteInPlace $i \
+          --replace /bin/bash ${customBash}/bin/bash
+      done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
@@ -339,8 +357,8 @@ stdenv.mkDerivation rec {
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
-      build --experimental_distdir=${distDir}
-      fetch --experimental_distdir=${distDir}
+      build --distdir=${distDir}
+      fetch --distdir=${distDir}
       build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
       build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
       build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
@@ -456,24 +474,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 
-    tar xf ${srcDepsSet.io_bazel_skydoc} -C $TEST_TMPDIR
-    mv $(ls | grep skydoc-) io_bazel_skydoc
-
-    tar xf ${srcDepsSet.bazel_skylib} -C $TEST_TMPDIR
-    mv $(ls | grep bazel-skylib-) bazel_skylib
-
-    tar xf ${srcDepsSet.io_bazel_rules_sass} -C $TEST_TMPDIR
-    mv $(ls | grep rules_sass-) rules_sass
-
-    unzip ${srcDepsSet.build_bazel_rules_nodejs} -d $TEST_TMPDIR
-    mv rules_nodejs-0.16.2 build_bazel_rules_nodejs
-
     hello_test () {
-      $out/bin/bazel test \
-        --override_repository=io_bazel_skydoc=$TEST_TMPDIR/io_bazel_skydoc \
-        --override_repository=bazel_skylib=$TEST_TMPDIR/bazel_skylib \
-        --override_repository=io_bazel_rules_sass=$TEST_TMPDIR/rules_sass \
-        --override_repository=build_bazel_rules_nodejs=$TEST_TMPDIR/build_bazel_rules_nodejs \
+      $out/bin/bazel test --distdir=${distDir} \
         --test_output=errors \
         --java_toolchain='${javaToolchain}' \
         examples/cpp:hello-success_test \
@@ -510,6 +512,8 @@ stdenv.mkDerivation rec {
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
     echo "${python3}" >> $out/nix-support/depends
+  '' + lib.optionalString stdenv.isDarwin ''
+    echo "${cctools}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;

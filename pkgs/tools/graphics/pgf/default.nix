@@ -6,7 +6,8 @@ let
   version = "6.14.12";
 in
 stdenv.mkDerivation {
-  name = "pgf-${version}";
+  pname = "pgf";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/libpgf/pgf-console-src-${version}.tar.gz";

@@ -1,7 +1,7 @@
 { stdenv, substituteAll, buildEnv, fetchFromGitHub, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "wee-slack-${version}";
+  pname = "wee-slack";
   version = "2.3.0";
 
   src = fetchFromGitHub {

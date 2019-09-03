@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, boost, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "assimp-${version}";
+  pname = "assimp";
   version = "4.1.0";
 
   src = fetchFromGitHub{

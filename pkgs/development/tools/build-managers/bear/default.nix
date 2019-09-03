@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, python }:
 
 stdenv.mkDerivation rec {
-  name = "bear-${version}";
-  version = "2.4.0";
+  pname = "bear";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = "Bear";
     rev = version;
-    sha256 = "0r5mhacn8v4b2kjni91nxh3b6g86cbkrnlk4f6sj4mdrvx25dp39";
+    sha256 = "0fqhhavyz9ddjc3wgb2ng47bfgk1q4w5bwah74nsa02k8r22pbch";
   };
 
   nativeBuildInputs = [ cmake ];

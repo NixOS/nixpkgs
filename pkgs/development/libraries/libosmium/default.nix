@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, protozero, expat, zlib, bzip2, boost }:
 
 stdenv.mkDerivation rec {
-  name = "libosmium-${version}";
-  version = "2.15.1";
+  pname = "libosmium";
+  version = "2.15.2";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "libosmium";
     rev = "v${version}";
-    sha256 = "1v1m068lcjngxnwirpi0vqjhqnxn9gqvafjp3sy14vzmgl2sw2kr";
+    sha256 = "1fh8wl4grs1c0g9whx90kd4jva3k9b6zbb1cl3isay489gwndgss";
   };
 
   nativeBuildInputs = [ cmake ];

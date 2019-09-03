@@ -1,5 +1,5 @@
 { stdenv, fetchurl, docbook_xsl, dbus, dbus-glib, expat
-, gsettings-desktop-schemas, gdk_pixbuf, gtk3, hicolor-icon-theme
+, gsettings-desktop-schemas, gdk-pixbuf, gtk3, hicolor-icon-theme
 , imagemagick, itstool, librsvg, libtool, libxslt, makeWrapper
 , pkgconfig, python, pythonPackages, vte
 , wrapGAppsHook}:
@@ -11,10 +11,11 @@
 
 let version = "3.3.2";
 in stdenv.mkDerivation rec {
-  name = "roxterm-${version}";
+  pname = "roxterm";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/roxterm/${name}.tar.xz";
+    url = "mirror://sourceforge/roxterm/${pname}-${version}.tar.xz";
     sha256 = "0vjh7k4jm4bd01j88w9bmvq27zqsajjzy131fpi81zkii5lisl1k";
   };
 
@@ -23,7 +24,7 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ docbook_xsl expat imagemagick itstool librsvg libtool libxslt
       makeWrapper python pythonPackages.lockfile dbus dbus-glib
-      gdk_pixbuf gsettings-desktop-schemas gtk3
+      gdk-pixbuf gsettings-desktop-schemas gtk3
       hicolor-icon-theme vte ];
 
   NIX_CFLAGS_COMPILE = [ "-I${dbus-glib.dev}/include/dbus-1.0"

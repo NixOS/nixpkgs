@@ -3,9 +3,10 @@
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
   payloadVersion = "4.7.1";
+  python = pythonPackages.python;
 
 in buildGoPackage rec {
-  name = "datadog-agent-${version}";
+  pname = "datadog-agent";
   version = "6.11.2";
   owner   = "DataDog";
   repo    = "datadog-agent";
@@ -26,8 +27,6 @@ in buildGoPackage rec {
   goDeps = ./datadog-agent-deps.nix;
   goPackagePath = "github.com/${owner}/${repo}";
 
-  # Explicitly set this here to allow it to be overridden.
-  python = pythonPackages.python;
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ systemd ];

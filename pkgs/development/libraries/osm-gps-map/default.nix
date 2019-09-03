@@ -1,7 +1,7 @@
 { cairo, fetchzip, glib, gnome3, gtk3, gobject-introspection, pkgconfig, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "osm-gps-map-${version}";
+  pname = "osm-gps-map";
   version = "1.1.0";
 
   src = fetchzip {

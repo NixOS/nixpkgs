@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "powerdns-${version}";
-  version = "4.1.9";
+  pname = "powerdns";
+  version = "4.1.13";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "1dmx37xzg7qckq166jr7swcnw3m9wjh5169844ad59qhspfzflnk";
+    sha256 = "09az5yp5d9wvzw8faifyzsljhmmc8ifm4j70m4n2sr83i9i9rsp7";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -35,13 +35,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  enableParallelBuilding = true;
   doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Authoritative DNS server";
     homepage = https://www.powerdns.com;
-    platforms = platforms.linux;
-    # cannot find postgresql libs on macos x
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     license = licenses.gpl2;
     maintainers = with maintainers; [ mic92 disassembler ];
   };

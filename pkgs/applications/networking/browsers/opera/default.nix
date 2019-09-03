@@ -9,7 +9,7 @@
 , fetchurl
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gnome2
 , gtk3
@@ -55,7 +55,7 @@ let
     expat.out
     fontconfig.lib
     freetype.out
-    gdk_pixbuf.out
+    gdk-pixbuf.out
     glib.out
     gnome2.GConf
     gtk3.out

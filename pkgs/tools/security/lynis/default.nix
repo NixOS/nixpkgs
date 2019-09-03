@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "lynis";
   version = "2.7.5";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "CISOfy";

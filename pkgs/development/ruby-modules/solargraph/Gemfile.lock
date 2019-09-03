@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
-    backport (1.1.1)
+    backport (1.1.2)
     htmlentities (4.3.4)
     jaro_winkler (1.5.3)
     kramdown (1.17.0)
@@ -15,7 +15,7 @@ GEM
     rainbow (3.0.0)
     reverse_markdown (1.1.0)
       nokogiri
-    rubocop (0.72.0)
+    rubocop (0.74.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.6)
@@ -23,7 +23,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.10.1)
-    solargraph (0.34.2)
+    solargraph (0.35.2)
       backport (~> 1.1)
       bundler (>= 1.17.2)
       htmlentities (~> 4.3, >= 4.3.4)

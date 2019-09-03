@@ -13,7 +13,8 @@ let
   gwtVer = "2.8.1";
 in
 stdenv.mkDerivation rec {
-  name = "RStudio-${version}";
+  pname = "RStudio";
+  inherit version;
 
   nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     sha256 = "19x000m3jwnkqgi6ic81lkzyjvvxcfacw2j0vcfcaknvvagzhyhb";
   };
 
-  hunspellDictionaries = with stdenv.lib; filter isDerivation (attrValues hunspellDicts);
+  hunspellDictionaries = with stdenv.lib; filter isDerivation (unique (attrValues hunspellDicts));
 
   mathJaxSrc = fetchurl {
     url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=$NIX_QT5_TMP/bin/qmake" ];
 
   desktopItem = makeDesktopItem {
-    name = name;
+    name = "${pname}-${version}";
     exec = "rstudio %F";
     icon = "rstudio";
     desktopName = "RStudio";

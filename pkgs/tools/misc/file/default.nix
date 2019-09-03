@@ -1,13 +1,13 @@
 { stdenv, fetchurl, file, zlib, libgnurx }:
 
 stdenv.mkDerivation rec {
-  name = "file-${version}";
+  pname = "file";
   version = "5.37";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.astron.com/pub/file/${name}.tar.gz"
-      "https://distfiles.macports.org/file/${name}.tar.gz"
+      "ftp://ftp.astron.com/pub/file/${pname}-${version}.tar.gz"
+      "https://distfiles.macports.org/file/${pname}-${version}.tar.gz"
     ];
     sha256 = "0zz0p9bqnswfx0c16j8k62ivjq1m16x10xqv4hy9lcyxyxkkkhg9";
   };

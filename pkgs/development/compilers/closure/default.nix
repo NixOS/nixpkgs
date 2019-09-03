@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "closure-compiler-${version}";
+  pname = "closure-compiler";
   version = "20190215";
 
   src = fetchurl {

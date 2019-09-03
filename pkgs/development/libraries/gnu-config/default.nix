@@ -14,7 +14,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "gnu-config-${version}";
+  pname = "gnu-config";
   version = "2019-04-15";
 
   buildCommand = ''

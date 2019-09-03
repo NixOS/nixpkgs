@@ -30,7 +30,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "lilyterm-${version}";
+  pname = "lilyterm";
 
   inherit (stuff) src version;
 

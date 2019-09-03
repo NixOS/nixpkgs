@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, gdal, cmake, ninja, proj, clipper, zlib, qtbase, qttools
-  , qtlocation, qtsensors, doxygen, cups, makeWrapper, qtimageformats
+, qtlocation, qtsensors, doxygen, cups, wrapQtAppsHook, qtimageformats
 }:
 
 stdenv.mkDerivation rec {
-  name = "OpenOrienteering-Mapper-${version}";
+  pname = "OpenOrienteering-Mapper";
   version = "0.8.4";
 
   buildInputs = [ gdal qtbase qttools qtlocation qtimageformats
                   qtsensors clipper zlib proj doxygen cups];
 
-  nativeBuildInputs = [ cmake makeWrapper ninja ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ninja ];
 
   src = fetchFromGitHub {
     owner = "OpenOrienteering";
@@ -20,9 +20,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
-    # Required by the build to be specified
-    "-DPROJ4_ROOT=${proj}"
-
     # Building the manual and bundling licenses fails
     "-DLICENSING_PROVIDER:BOOL=OFF"
     "-DMapper_MANUAL_QTHELP:BOOL=OFF"
@@ -43,14 +40,14 @@ stdenv.mkDerivation rec {
     "-DMapper_PACKAGE_GDAL=0"
     ]);
 
+  # Needs to be available when proj_api.h gets evaluted by CPP
+  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
 
   postInstall =
     stdenv.lib.optionalString stdenv.isDarwin ''
     # Fixes "This application failed to start because it could not find or load the Qt
     # platform plugin "cocoa"."
-    wrapProgram $out/Mapper.app/Contents/MacOS/Mapper \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms \
-      --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtimageformats}/${qtbase.qtPluginPrefix}
+    wrapQtApp $out/Mapper.app/Contents/MacOS/Mapper
     mkdir -p $out/bin
     ln -s $out/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
     '';

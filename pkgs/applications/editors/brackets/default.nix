@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, gconf
+{ stdenv, fetchurl, gtk2, glib, gdk-pixbuf, alsaLib, nss, nspr, gconf
 , cups, libgcrypt_1_5, systemd, dbus, libXdamage, expat }:
 with stdenv.lib;
 
 let
   bracketsLibs = makeLibraryPath [
-    gtk2 glib gdk_pixbuf stdenv.cc.cc.lib alsaLib nss nspr gconf cups libgcrypt_1_5 dbus systemd libXdamage expat
+    gtk2 glib gdk-pixbuf stdenv.cc.cc.lib alsaLib nss nspr gconf cups libgcrypt_1_5 dbus systemd libXdamage expat
   ];
 in
 stdenv.mkDerivation rec {
-  name = "brackets-${version}";
+  pname = "brackets";
   version = "1.9";
 
   src = fetchurl {
     url = "https://github.com/adobe/brackets/releases/download/release-${version}/Brackets.Release.${version}.64-bit.deb";
     sha256 = "0c4l2rr0853xd21kw8hhxlmrx8mqwb7iqa2k24zvwyjp4nnwkgbp";
-    name = "${name}.deb";
+    name = "${pname}-${version}.deb";
   };
 
   phases = [ "installPhase" "fixupPhase" ];

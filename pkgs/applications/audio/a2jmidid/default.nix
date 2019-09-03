@@ -5,7 +5,7 @@
 let
   inherit (python2Packages) python dbus-python;
 in stdenv.mkDerivation rec {
-  name = "a2jmidid-${version}";
+  pname = "a2jmidid";
   version = "8";
 
   src = fetchurl {

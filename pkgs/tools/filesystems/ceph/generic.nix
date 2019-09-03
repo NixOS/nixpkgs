@@ -96,7 +96,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name="ceph-${version}";
+  pname = "ceph";
+  inherit version;
 
   inherit src;
 

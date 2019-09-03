@@ -1,10 +1,10 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, mkDerivation
 , qmake, qtbase, qtquickcontrols
 , python3, pyotherside
 , pcsclite, yubikey-personalization
 , yubikey-manager, makeWrapper }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "yubioath-desktop";
   version = "4.3.6";
 
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       cp resources/icons/*.{icns,ico,png,xpm} $out/share/yubioath/icons
       substituteInPlace $out/share/applications/yubioath-desktop.desktop \
         --replace 'Exec=yubioath-desktop' "Exec=$out/bin/yubioath-desktop" \
+        --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/yubioath.png"
   '';
 
   meta = with stdenv.lib; {

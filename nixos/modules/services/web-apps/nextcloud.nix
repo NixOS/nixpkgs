@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.nextcloud;
+  fpm = config.services.phpfpm.pools.nextcloud;
 
   phpPackage = pkgs.php73;
   phpPackages = pkgs.php73Packages;
@@ -297,8 +298,23 @@ in {
 
       systemd.services = {
         "nextcloud-setup" = let
+          c = cfg.config;
+          writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
+            ${optionalString (c.dbpassFile != null) ''
+              function nix_read_pwd() {
+                $file = "${c.dbpassFile}";
+                if (!file_exists($file)) {
+                  throw new \RuntimeException(sprintf(
+                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't exist!",
+                    $file
+                  ));
+                }
+
+                return trim(file_get_contents($file));
+              }
+            ''}
             $CONFIG = [
               'apps_paths' => [
                 [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
@@ -309,19 +325,27 @@ in {
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
               'log_level' => '${builtins.toString cfg.logLevel}',
-              ${optionalString (cfg.config.overwriteProtocol != null) "'overwriteprotocol' => '${cfg.config.overwriteProtocol}',"}
+              ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
+              ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
+              ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
+              ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
+              ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
+              ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
+              ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
+              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
+              'dbtype' => '${c.dbtype}',
+              'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
             ];
           '';
           occInstallCmd = let
-            c = cfg.config;
-            adminpass = if c.adminpassFile != null
-              then ''"$(<"${toString c.adminpassFile}")"''
-              else ''"${toString c.adminpass}"'';
             dbpass = if c.dbpassFile != null
               then ''"$(<"${toString c.dbpassFile}")"''
               else if c.dbpass != null
               then ''"${toString c.dbpass}"''
               else null;
+            adminpass = if c.adminpassFile != null
+              then ''"$(<"${toString c.adminpassFile}")"''
+              else ''"${toString c.adminpass}"'';
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--database" = ''"${c.dbtype}"'';
@@ -387,25 +411,20 @@ in {
       };
 
       services.phpfpm = {
-        pools.nextcloud = let
-          phpAdminValues = (toKeyValue
-            (foldr (a: b: a // b) {}
-              (mapAttrsToList (k: v: { "php_admin_value[${k}]" = v; })
-                phpOptions)));
-        in {
-          phpOptions = phpOptionsExtensions;
+        pools.nextcloud = {
+          user = "nextcloud";
+          group = "nginx";
+          phpOptions = phpOptionsExtensions + phpOptionsStr;
           phpPackage = phpPackage;
-          listen = "/run/phpfpm/nextcloud";
-          extraConfig = ''
-            listen.owner = nginx
-            listen.group = nginx
-            user = nextcloud
-            group = nginx
-            ${cfg.poolConfig}
-            env[NEXTCLOUD_CONFIG_DIR] = ${cfg.home}/config
-            env[PATH] = /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin
-            ${phpAdminValues}
-          '';
+          phpEnv = {
+            NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
+            PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
+          };
+          settings = mapAttrs (name: mkDefault) {
+            "listen.owner" = "nginx";
+            "listen.group" = "nginx";
+          };
+          extraConfig = cfg.poolConfig;
         };
       };
 
@@ -466,7 +485,7 @@ in {
                   fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
                   fastcgi_param modHeadersAvailable true;
                   fastcgi_param front_controller_active true;
-                  fastcgi_pass unix:/run/phpfpm/nextcloud;
+                  fastcgi_pass unix:${fpm.socket};
                   fastcgi_intercept_errors on;
                   fastcgi_request_buffering off;
                   fastcgi_read_timeout 120s;

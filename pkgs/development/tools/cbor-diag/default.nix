@@ -1,9 +1,8 @@
-{ lib, bundlerApp, ruby }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
 bundlerApp {
   pname = "cbor-diag";
 
-  inherit ruby;
   gemdir = ./.;
 
   exes = [
@@ -20,11 +19,13 @@ bundlerApp {
     "yaml2cbor.rb"
   ];
 
+  passthru.updateScript = bundlerUpdateScript "cbor-diag";
+
   meta = with lib; {
     description = "CBOR diagnostic utilities";
     homepage    = https://github.com/cabo/cbor-diag;
     license     = with licenses; asl20;
-    maintainers = with maintainers; [ fdns ];
+    maintainers = with maintainers; [ fdns nicknovitski ];
     platforms   = platforms.unix;
   };
 }

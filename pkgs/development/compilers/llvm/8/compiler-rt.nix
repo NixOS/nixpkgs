@@ -1,8 +1,8 @@
 { stdenv, version, fetch, cmake, python, llvm, libcxxabi }:
 stdenv.mkDerivation rec {
-  name = "compiler-rt-${version}";
+  pname = "compiler-rt";
   inherit version;
-  src = fetch "compiler-rt" "1c919wsm17xnv7lr8bhpq2wkq8113lzlw6hzhfr737j59x3wfddl";
+  src = fetch "compiler-rt" "0dqqf8f930l8gag4d9qjgn1n0pj0nbv2anviqqhdi1rkhas8z0hi";
 
   nativeBuildInputs = [ cmake python llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.parsed.kernel.name == "none") [
+    "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
+    "-DCOMPILER_RT_OS_DIR=baremetal"
   ];
 
   outputs = [ "out" "dev" ];

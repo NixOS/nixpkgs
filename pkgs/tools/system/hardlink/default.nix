@@ -2,7 +2,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "hardlink-${version}";
+  pname = "hardlink";
   version = "1.3-4";
 
   src = fetchurl {

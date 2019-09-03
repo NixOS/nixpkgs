@@ -1,4 +1,4 @@
-{ lib, fetchurl, python3Packages, qtbase, makeWrapper }:
+{ lib, fetchurl, python3Packages, qtbase, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     btchip
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
@@ -54,10 +54,6 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
-
-    # Please remove this when #44047 is fixed
-    wrapProgram $out/bin/electron-cash \
-      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
   '';
 
   doInstallCheck = true;

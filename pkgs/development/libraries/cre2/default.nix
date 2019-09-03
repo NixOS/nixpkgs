@@ -2,14 +2,14 @@
   libtool, pkgconfig, re2, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "cre2-${version}";
+  pname = "cre2";
   version = "0.3.0";
-    
+
   src = fetchFromGitHub {
     owner = "marcomaggi";
     repo = "cre2";
-    rev = version;
-    sha256 = "12yrdad87jjqrhbqm02hzsayan2402vf61a9x1b2iabv6d1c1bnj";
+    rev = "v${version}";
+    sha256 = "1h9jwn6z8kjf4agla85b5xf7gfkdwncp0mfd8zwk98jkm8y2qx9q";
   };
 
   nativeBuildInputs = [

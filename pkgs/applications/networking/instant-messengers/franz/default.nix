@@ -1,14 +1,15 @@
 { stdenv, fetchurl, makeWrapper, wrapGAppsHook, autoPatchelfHook, dpkg
-, xorg, atk, glib, pango, gdk_pixbuf, cairo, freetype, fontconfig, gtk3
+, xorg, atk, glib, pango, gdk-pixbuf, cairo, freetype, fontconfig, gtk3
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
 
 let
-  version = "5.1.0";
+  version = "5.2.0";
 in stdenv.mkDerivation rec {
-  name = "franz-${version}";
+  pname = "franz";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/meetfranz/franz/releases/download/v${version}/franz_${version}_amd64.deb";
-    sha256 = "a474d2e9c6fb99abfc4c7e9290a0e52eef62233fa25c962afdde75fe151277d0";
+    sha256 = "1wlfd1ja38vbjy8y5pg95cpvf5ixkkq53m7v3c24q473jax4ynvg";
   };
 
   # don't remove runtime deps
@@ -19,7 +20,7 @@ in stdenv.mkDerivation rec {
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
     libXrender libX11 libXtst libXScrnSaver
   ]) ++ [
-    gtk3 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
+    gtk3 atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
     gnome2.GConf nss nspr alsaLib cups expat stdenv.cc.cc
   ];
   runtimeDependencies = [ udev.lib libnotify ];

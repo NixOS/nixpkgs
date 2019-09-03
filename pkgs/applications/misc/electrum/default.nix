@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, python3, python3Packages, zbar, secp256k1
+{ stdenv, fetchurl, fetchFromGitHub, wrapQtAppsHook, python3, python3Packages, zbar, secp256k1
 , enableQt ? !stdenv.isDarwin
 
 
@@ -54,6 +54,8 @@ python3Packages.buildPythonApplication rec {
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
+  nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
+
   propagatedBuildInputs = with python3Packages; [
     aiorpcx
     aiohttp
@@ -102,6 +104,11 @@ python3Packages.buildPythonApplication rec {
                 "Exec=$out/bin/electrum %u" \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
                 "Exec=$out/bin/electrum --testnet %u"
+
+  '';
+
+  postFixup = stdenv.lib.optionalString enableQt ''
+    wrapQtApp $out/bin/electrum
   '';
 
   checkInputs = with python3Packages; [ pytest ];

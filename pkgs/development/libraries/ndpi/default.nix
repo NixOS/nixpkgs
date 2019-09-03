@@ -3,7 +3,8 @@
 let version = "2.8"; in
 
 stdenv.mkDerivation rec {
-  name = "ndpi-${version}";
+  pname = "ndpi";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ntop";

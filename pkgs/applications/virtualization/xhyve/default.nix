@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, Hypervisor, vmnet, xpc, libobjc, zlib }:
 
 stdenv.mkDerivation rec {
-  name    = "xhyve-${version}";
+  pname = "xhyve";
   version = "20190124";
 
   src = fetchurl {

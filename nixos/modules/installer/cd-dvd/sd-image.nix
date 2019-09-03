@@ -54,7 +54,7 @@ in
     };
 
     firmwarePartitionID = mkOption {
-      type = types.string;
+      type = types.str;
       default = "0x2178694e";
       description = ''
         Volume ID for the /boot/firmware partition on the SD card. This value
@@ -63,7 +63,7 @@ in
     };
 
     rootPartitionUUID = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
       description = ''
@@ -73,8 +73,8 @@ in
 
     firmwareSize = mkOption {
       type = types.int;
-      # As of 2019-05-31 the Raspberry pi firmware + u-bot takes ~13MiB
-      default = 20;
+      # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
+      default = 30;
       description = ''
         Size of the /boot/firmware partition, in megabytes.
       '';

@@ -3,34 +3,31 @@
 , chromaprint, docbook_xml_dtd_45, docbook_xsl, libxslt
 , id3lib, taglib, mp4v2, flac, libogg, libvorbis
 , zlib, readline , qtbase, qttools, qtmultimedia, qtquickcontrols
-, makeWrapper
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
 
-  name = "kid3-${version}";
+  pname = "kid3";
   version = "3.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/kid3/kid3/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/kid3/kid3/${version}/${pname}-${version}.tar.gz";
     sha256 = "0xkrsjrbr3z8cn8hjf623l28r3b755gr11i0clv8d8i3s10vhbd8";
   };
 
+  nativeBuildInputs = [ wrapQtAppsHook ];
   buildInputs = with stdenv.lib;
   [ pkgconfig cmake python ffmpeg phonon automoc4
     chromaprint docbook_xml_dtd_45 docbook_xsl libxslt
     id3lib taglib mp4v2 flac libogg libvorbis zlib readline
-    qtbase qttools qtmultimedia qtquickcontrols makeWrapper ];
+    qtbase qttools qtmultimedia qtquickcontrols ];
 
   cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
   NIX_LDFLAGS = "-lm -lpthread";
 
   preConfigure = ''
     export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/kid3-qt --prefix QT_PLUGIN_PATH : $out/lib/qt5/plugins
   '';
 
   enableParallelBuilding = true;

@@ -7,7 +7,7 @@
 , dbus
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , gtk3
@@ -33,14 +33,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "zotero-${version}";
-  version = "5.0.67";
-  
+  pname = "zotero";
+  version = "5.0.73";
+
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "1b06875qr8dy2lhf4h9z7gcc5pcqdyq92c11b3brsbgbq2n48g40";
+    sha256 = "0m2i3l0gy22h6c7rk39cd17vyksyz5l5py2fn9pza8lcbypkwf3l";
   };
-  
+
   buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme gnome3.dconf ];
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       dbus
       fontconfig
       freetype
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
       gtk3

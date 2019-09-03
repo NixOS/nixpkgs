@@ -1,10 +1,10 @@
 { stdenv, fetchurl, patchelf, coreutils, pcsclite
-, zlib, glib, gdk_pixbuf, gtk2, cairo, pango, libX11, atk, openssl
+, zlib, glib, gdk-pixbuf, gtk2, cairo, pango, libX11, atk, openssl
 , runtimeShell }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc zlib glib gdk_pixbuf gtk2 cairo pango libX11 atk openssl
+    stdenv.cc.cc zlib glib gdk-pixbuf gtk2 cairo pango libX11 atk openssl
   ];
 
   src_i686 = {
@@ -19,7 +19,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "moneyplex-${version}";
+  pname = "moneyplex";
   version = "16.0.22424";
 
   src = fetchurl (if stdenv.hostPlatform.system == "i686-linux" then src_i686

@@ -7,12 +7,20 @@
             "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip"
         ]
     },
-    "2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz": {
-        "name": "2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz",
-        "sha256": "4a1318fed4831697b83ce879b3ab70ae09592b167e5bda8edaff45132d1c3b3f",
+    "1ca560df1cf6e280f987af2f8d08a5edc7ac6b54.tar.gz": {
+        "name": "1ca560df1cf6e280f987af2f8d08a5edc7ac6b54.tar.gz",
+        "sha256": "3ca1b3d453a977aeda60dd335feb812771addfd0d0c61751b34b9681aa4d6534",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz",
-            "https://github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/1ca560df1cf6e280f987af2f8d08a5edc7ac6b54.tar.gz",
+            "https://github.com/bazelbuild/skydoc/archive/1ca560df1cf6e280f987af2f8d08a5edc7ac6b54.tar.gz"
+        ]
+    },
+    "441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip": {
+        "name": "441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip",
+        "sha256": "a07fe5e75964361885db725039c2ba673f0ee0313d971ae4f50c9b18cd28b0b5",
+        "urls": [
+            "https://mirror.bazel.build/github.com/bazelbuild/platforms/archive/441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip",
+            "https://github.com/bazelbuild/platforms/archive/441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip"
         ]
     },
     "8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz": {
@@ -23,11 +31,11 @@
             "https://github.com/bazelbuild/rules_sass/archive/8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz"
         ]
     },
-    "android_tools_pkg-0.4.tar.gz": {
-        "name": "android_tools_pkg-0.4.tar.gz",
-        "sha256": "331e7706f2bcae8a68057d8ddd3e3f1574bca26c67c65802fc4a8ac6164fa912",
+    "android_tools_pkg-0.7.tar.gz": {
+        "name": "android_tools_pkg-0.7.tar.gz",
+        "sha256": "a8e48f2fdee2c34b31f45bd47ce050a75ac774f19e0a1f6694fa49fc11d88718",
         "urls": [
-            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.4.tar.gz"
+            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.7.tar.gz"
         ]
     },
     "bazel_j2objc": {
@@ -41,11 +49,11 @@
     },
     "bazel_rbe_toolchains": {
         "name": "bazel_rbe_toolchains",
-        "sha256": "f575778fb1366718f5e1204200ecf35796c558998c15303945d351f0b42669e5",
-        "strip_prefix": "bazel_rbe_toolchains-f50471a57cd05a313a953fa54756db6e8fd93673",
+        "sha256": "e2b8644caa15235a488e831264e5dcb014e2cdf3b697319bc1e9d6b0fff0b4b9",
+        "strip_prefix": "bazel_rbe_toolchains-01529a65d21abdf71635ff0c2472043a567ecded",
         "urls": [
-            "https://mirror.bazel.build/github.com/buchgr/bazel_rbe_toolchains/archive/f50471a57cd05a313a953fa54756db6e8fd93673.tar.gz",
-            "https://github.com/buchgr/bazel_rbe_toolchains/archive/f50471a57cd05a313a953fa54756db6e8fd93673.tar.gz"
+            "https://mirror.bazel.build/github.com/buchgr/bazel_rbe_toolchains/archive/01529a65d21abdf71635ff0c2472043a567ecded.tar.gz",
+            "https://github.com/buchgr/bazel_rbe_toolchains/archive/01529a65d21abdf71635ff0c2472043a567ecded.tar.gz"
         ]
     },
     "bazel_skylib": {
@@ -127,11 +135,11 @@
     },
     "io_bazel_skydoc": {
         "name": "io_bazel_skydoc",
-        "sha256": "4a1318fed4831697b83ce879b3ab70ae09592b167e5bda8edaff45132d1c3b3f",
-        "strip_prefix": "skydoc-2d9566b21fbe405acf5f7bf77eda30df72a4744c",
+        "sha256": "3ca1b3d453a977aeda60dd335feb812771addfd0d0c61751b34b9681aa4d6534",
+        "strip_prefix": "skydoc-1ca560df1cf6e280f987af2f8d08a5edc7ac6b54",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz",
-            "https://github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/1ca560df1cf6e280f987af2f8d08a5edc7ac6b54.tar.gz",
+            "https://github.com/bazelbuild/skydoc/archive/1ca560df1cf6e280f987af2f8d08a5edc7ac6b54.tar.gz"
         ]
     },
     "java_tools_javac11_darwin-v2.0.zip": {
@@ -167,6 +175,13 @@
         "sha256": "128a63f39d3f828a761f6afcfe3c6115279336a72ea77f60d7b3acf1841c9acb",
         "urls": [
             "https://mirror.bazel.build/bazel_java_tools/jdk_langtools/langtools_jdk11.zip"
+        ]
+    },
+    "java_tools_langtools_javac12": {
+        "name": "java_tools_langtools_javac12",
+        "sha256": "99b107105165a91df82cd7cf82a8efb930d803fb7de1663cf7f780142104cd14",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/jdk_langtools/langtools_jdk12.zip"
         ]
     },
     "java_tools_langtools_javac9": {
@@ -235,11 +250,27 @@
         ]
     },
     "openjdk_linux_aarch64": {
+        "downloaded_file_path": "zulu-linux-aarch64.tar.gz",
         "name": "openjdk_linux_aarch64",
-        "sha256": "72e7843902b0395e2d30e1e9ad2a5f05f36a4bc62529828bcbc698d54aec6022",
+        "sha256": "23c37c0c3a8fdcbc68e96e70ff5c5c020c14db76deaae9b547849afda4586e5e",
         "urls": [
-            "https://mirror.bazel.build/openjdk.linaro.org/releases/jdk9-server-release-1708.tar.xz",
-            "http://openjdk.linaro.org/releases/jdk9-server-release-1708.tar.xz"
+            "https://mirror.bazel.build/openjdk/azul-zulu11.31.15-ca-jdk11.0.3/zulu11.31.15-ca-jdk11.0.3-linux_aarch64-allmodules-c82eb4878c7dc829455caeb915affe36c89df06f-1561630858.tar.gz"
+        ]
+    },
+    "openjdk_linux_aarch64_minimal": {
+        "downloaded_file_path": "zulu-linux-aarch64-minimal.tar.gz",
+        "name": "openjdk_linux_aarch64_minimal",
+        "sha256": "7af2583fe5ef0a781d4a9dca0c0160d42e7db1305ec1b66f98aa44c91cc875df",
+        "urls": [
+            "https://mirror.bazel.build/openjdk/azul-zulu11.31.15-ca-jdk11.0.3/zulu11.31.15-ca-jdk11.0.3-linux_aarch64-minimal-c82eb4878c7dc829455caeb915affe36c89df06f-1561630858.tar.gz"
+        ]
+    },
+    "openjdk_linux_aarch64_vanilla": {
+        "downloaded_file_path": "zulu-linux-aarch64-vanilla.tar.gz",
+        "name": "openjdk_linux_aarch64_vanilla",
+        "sha256": "3b0d91611b1bdc4d409afcf9eab4f0e7f4ae09f88fc01bd9f2b48954882ae69b",
+        "urls": [
+            "https://mirror.bazel.build/openjdk/azul-zulu11.31.15-ca-jdk11.0.3/zulu11.31.15-ca-jdk11.0.3-linux_aarch64.tar.gz"
         ]
     },
     "openjdk_linux_minimal": {
@@ -306,6 +337,15 @@
             "https://mirror.bazel.build/openjdk/azul-zulu11.29.3-ca-jdk11.0.2/zulu11.29.3-ca-jdk11.0.2-win_x64.zip"
         ]
     },
+    "platforms": {
+        "name": "platforms",
+        "sha256": "a07fe5e75964361885db725039c2ba673f0ee0313d971ae4f50c9b18cd28b0b5",
+        "strip_prefix": "platforms-441afe1bfdadd6236988e9cac159df6b5a9f5a98",
+        "urls": [
+            "https://mirror.bazel.build/github.com/bazelbuild/platforms/archive/441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip",
+            "https://github.com/bazelbuild/platforms/archive/441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip"
+        ]
+    },
     "zulu10.2+3-jdk10.0.1-linux_x64-allmodules.tar.gz": {
         "name": "zulu10.2+3-jdk10.0.1-linux_x64-allmodules.tar.gz",
         "sha256": "57fad3602e74c79587901d6966d3b54ef32cb811829a2552163185d5064fe9b5",
@@ -367,6 +407,13 @@
         "sha256": "e1f5b4ce1b9148140fae2fcfb8a96d1c9b7eac5b8df0e13fbcad9b8561284880",
         "urls": [
             "https://mirror.bazel.build/openjdk/azul-zulu11.29.3-ca-jdk11.0.2/zulu11.29.3-ca-jdk11.0.2-win_x64.zip"
+        ]
+    },
+    "zulu11.31.15-ca-jdk11.0.3-linux_aarch64.tar.gz": {
+        "name": "zulu11.31.15-ca-jdk11.0.3-linux_aarch64.tar.gz",
+        "sha256": "3b0d91611b1bdc4d409afcf9eab4f0e7f4ae09f88fc01bd9f2b48954882ae69b",
+        "urls": [
+            "https://mirror.bazel.build/openjdk/azul-zulu11.31.15-ca-jdk11.0.3/zulu11.31.15-ca-jdk11.0.3-linux_aarch64.tar.gz"
         ]
     },
     "zulu9.0.7.1-jdk9.0.7-linux_x64-allmodules.tar.gz": {

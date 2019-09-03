@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, boost, cmake, hwloc, gperftools, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
-  name = "hpx-${version}";
+  pname = "hpx";
   version = "1.3.0";
 
   src = fetchFromGitHub {

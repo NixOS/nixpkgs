@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.32.1";
+  version = "4.32.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a860bf2683fdbb4812fe539a6c22ea3f1777843ea985cb8c3807db448a0f7ab";
+    sha256 = "25d4c0ea02a305a688e7e9c2cdc8f862f989ef2a4701ab28ee963295f5b109ab";
   };
 
   buildInputs = [ nose coverage glibcLocales flake8 ];

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-anthy-${version}";
+  pname = "ibus-anthy";
   version = "1.5.11";
 
   meta = with stdenv.lib; {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "1zwgswpibh67sgbza8kvg03v06maxc08ihkgm5hmh333sjq9d5c0";
   };
 }

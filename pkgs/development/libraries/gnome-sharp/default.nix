@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-sharp-${version}";
+  pname = "gnome-sharp";
   version = "2.24.4";
 
   src = fetchFromGitHub {
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf automake libtool which ];
   buildInputs = [ gtk2 mono gtk-sharp-2_0 ]
   ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui ]);
+
+  patches = [ ./fix-mono-path.patch ];
 
   preConfigure = ''
     ./bootstrap-${lib.versions.majorMinor version}

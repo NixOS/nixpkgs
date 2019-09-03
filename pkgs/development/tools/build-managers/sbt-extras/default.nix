@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk }:
 
 let
-  rev = "a47a965e00ecd66793832e2a12a1972d25e6f734";
-  version = "2019-04-05";
+  rev = "53f1edc685d8f269ac551336809e34faf7cd29a6";
+  version = "2019-08-14";
 in
 stdenv.mkDerivation {
   name = "sbt-extras-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "1hrz7kg0k2iqq18bg6ll2bdj487p0987880dz0c0g35ah70ps2hj";
+    sha256 = "1fyfwcnr30c0rgq6xfd2is9a8j1hsrl2p0xqicwqi4bzijy4r6gw";
   };
 
   dontBuild = true;

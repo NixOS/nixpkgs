@@ -23,6 +23,7 @@ let
     LogType = console
     ListenIP = ${cfg.listen.ip}
     ListenPort = ${toString cfg.listen.port}
+    Server = ${cfg.server}
     # TODO: set to cfg.database.socket if database type is pgsql?
     DBHost = ${optionalString (cfg.database.createLocally != true) cfg.database.host}
     ${optionalString (cfg.database.createLocally != true) "DBPort = ${cfg.database.port}"}
@@ -49,6 +50,13 @@ in
 
     services.zabbixProxy = {
       enable = mkEnableOption "the Zabbix Proxy";
+
+      server = mkOption {
+        type = types.str;
+        description = ''
+          The IP address or hostname of the Zabbix server to connect to.
+          '';
+        };
 
       package = mkOption {
         type = types.package;
@@ -112,7 +120,8 @@ in
 
         name = mkOption {
           type = types.str;
-          default = "zabbix";
+          default = if cfg.database.type == "sqlite" then "${stateDir}/zabbix.db" else "zabbix";
+          defaultText = "zabbix";
           description = "Database name.";
         };
 
@@ -253,16 +262,16 @@ in
       preStart = optionalString pgsqlLocal ''
         if ! test -e "${stateDir}/db-created"; then
           cat ${cfg.package}/share/zabbix/database/postgresql/schema.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
-          cat ${cfg.package}/share/zabbix/database/postgresql/images.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
-          cat ${cfg.package}/share/zabbix/database/postgresql/data.sql | ${pgsql.package}/bin/psql ${cfg.database.name}
           touch "${stateDir}/db-created"
         fi
       '' + optionalString mysqlLocal ''
         if ! test -e "${stateDir}/db-created"; then
           cat ${cfg.package}/share/zabbix/database/mysql/schema.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
-          cat ${cfg.package}/share/zabbix/database/mysql/images.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
-          cat ${cfg.package}/share/zabbix/database/mysql/data.sql | ${mysql.package}/bin/mysql ${cfg.database.name}
           touch "${stateDir}/db-created"
+        fi
+      '' + optionalString (cfg.database.type == "sqlite") ''
+        if ! test -e "${cfg.database.name}"; then
+          ${pkgs.sqlite}/bin/sqlite3 "${cfg.database.name}" < ${cfg.package}/share/zabbix/database/sqlite3/schema.sql
         fi
       '' + optionalString (cfg.database.passwordFile != null) ''
         # create a copy of the supplied password file in a format zabbix can consume

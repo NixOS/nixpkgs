@@ -7,7 +7,8 @@
 
 let
 mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
-  name = "protobuf-${version}";
+  pname = "protobuf";
+  inherit version;
 
   # make sure you test also -A pythonPackages.protobuf
   src = fetchFromGitHub {

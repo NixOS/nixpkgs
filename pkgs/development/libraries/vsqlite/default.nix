@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "vsqlite-${version}";
+  pname = "vsqlite";
   version = "0.3.13";
 
   src = fetchurl {

@@ -21,7 +21,8 @@ let version = "3.4.10";
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
 
 in stdenv.mkDerivation rec {
-  name = "mongodb-${version}";
+  pname = "mongodb";
+  inherit version;
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
@@ -81,6 +82,8 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
+  '' + optionalString stdenv.isAarch64 ''
+    sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
   '';
 
   preInstall = ''

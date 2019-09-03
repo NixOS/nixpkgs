@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtsvg, qtdeclarative, qttools, full,
-  libsecret, libGL, libpulseaudio, glib, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtsvg, qtdeclarative, qttools, qtgraphicaleffects, qtquickcontrols2, full
+, libsecret, libGL, libpulseaudio, glib, wrapQtAppsHook, makeDesktopItem, mkDerivation }:
 
 let
-  version = "1.1.5-1";
+  version = "1.1.6-1";
 
   description = ''
     An application that runs on your computer in the background and seamlessly encrypts
@@ -20,15 +20,15 @@ let
     genericName = "ProtonMail Bridge for Linux";
     categories = "Utility;Security;Network;Email";
   };
-in stdenv.mkDerivation rec {
-  name = "protonmail-bridge-${version}";
+
+in mkDerivation rec {
+  pname = "protonmail-bridge";
+  inherit version;
 
   src = fetchurl {
     url = "https://protonmail.com/download/protonmail-bridge_${version}_amd64.deb";
-    sha256 = "1y5mphrs60zd6km9z64vskk70q9zzw4g6js7qvgl572wv81w2l75";
+    sha256 = "108dql9q5znsqjkrs41pc6psjbg5bz09rdmjl036xxbvsdvq4a8r";
   };
-
-  nativeBuildInputs = [ makeWrapper ];
 
   sourceRoot = ".";
 
@@ -51,6 +51,8 @@ in stdenv.mkDerivation rec {
     rpath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
       qtbase
+      qtquickcontrols2
+      qtgraphicaleffects
       qtmultimedia
       qtsvg
       qtdeclarative
@@ -60,19 +62,14 @@ in stdenv.mkDerivation rec {
       libpulseaudio
       glib
     ];
-
-    qtPath = prefix: "${full}/${prefix}";
   in ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${rpath}" \
       $out/lib/protonmail-bridge
-
-    wrapProgram $out/lib/protonmail-bridge \
-      --set QT_PLUGIN_PATH "${qtPath qtbase.qtPluginPrefix}" \
-      --set QML_IMPORT_PATH "${qtPath qtbase.qtQmlPrefix}" \
-      --set QML2_IMPORT_PATH "${qtPath qtbase.qtQmlPrefix}" \
   '';
+
+  buildInputs = [ qtbase qtquickcontrols2 qtmultimedia qtgraphicaleffects qtdeclarative ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.protonmail.com/bridge";

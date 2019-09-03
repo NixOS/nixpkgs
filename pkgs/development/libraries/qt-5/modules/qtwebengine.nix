@@ -20,8 +20,6 @@
 
 with stdenv.lib;
 
-let qt56 = qtCompatVersion == "5.6"; in
-
 qtModule {
   name = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
@@ -48,9 +46,9 @@ qtModule {
     # Patch Chromium build files
     + optionalString (lib.versionOlder qtCompatVersion "5.12") ''
       substituteInPlace ./src/3rdparty/chromium/build/common.gypi --replace /bin/echo ${coreutils}/bin/echo
-      substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/toolchain.gypi \
+      substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/toolchain.gypi \
         --replace /bin/echo ${coreutils}/bin/echo
-      substituteInPlace ./src/3rdparty/chromium/v8/${if qt56 then "build" else "gypfiles"}/standalone.gypi \
+      substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/standalone.gypi \
         --replace /bin/echo ${coreutils}/bin/echo
     ''
     # Patch library paths in Qt sources
@@ -200,14 +198,6 @@ EOF
     (runCommand "MacOS_SDK_sandbox.h" {} ''
       install -Dm444 "${lib.getDev darwin.apple_sdk.sdk}"/include/sandbox.h "$out"/include/sandbox.h
     '')
-
-    # For:
-    # _NSDefaultRunLoopMode
-    # _OBJC_CLASS_$_NSDate
-    # _OBJC_CLASS_$_NSDictionary
-    # _OBJC_CLASS_$_NSRunLoop
-    # _OBJC_CLASS_$_NSURL
-    darwin.cf-private
   ]);
 
   __impureHostDeps = optional stdenv.isDarwin "/usr/lib/libsandbox.1.dylib";
@@ -227,7 +217,6 @@ EOF
     description = "A web engine based on the Chromium web browser";
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
-    broken = qt56; # 2018-09-13, no successful build since 2018-04-25
   };
 
 }

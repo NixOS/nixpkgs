@@ -1,6 +1,8 @@
 { mkDerivation
 , lib
 , extra-cmake-modules
+, breeze-icons
+, breeze-qt5
 , kdoctools
 , kconfig
 , kcrash
@@ -19,7 +21,8 @@
 , shared-mime-info
 , libv4l
 , kfilemetadata
-, ffmpeg
+, ffmpeg-full
+, frei0r
 , phonon-backend-gstreamer
 , qtdeclarative
 , qtquickcontrols
@@ -37,6 +40,8 @@ mkDerivation {
     kdoctools
   ];
   buildInputs = [
+    breeze-icons
+    breeze-qt5
     kconfig
     kcrash
     kdbusaddons
@@ -59,7 +64,8 @@ mkDerivation {
     qtwebkit
     shared-mime-info
     libv4l
-    ffmpeg
+    ffmpeg-full
+    frei0r
     rttr
     kpurpose
     kdeclarative

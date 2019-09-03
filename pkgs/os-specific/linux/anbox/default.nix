@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=missing-field-initializers";
+
   patchPhase = ''
     patchShebangs scripts
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem
-, atk, cairo, gdk_pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
+, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
 , lsb-release, freetype, fontconfig, pangox_compat, polkit, polkit_gnome }:
 
 let
@@ -26,16 +26,16 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "anydesk-${version}";
+  pname = "anydesk";
   version = "4.0.1";
 
   src = fetchurl {
-    url = "https://download.anydesk.com/linux/${name}-${arch}.tar.gz";
+    url = "https://download.anydesk.com/linux/${pname}-${version}-${arch}.tar.gz";
     inherit sha256;
   };
 
   buildInputs = [
-    atk cairo gdk_pixbuf glib gtk2 stdenv.cc.cc pango
+    atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
     gnome2.gtkglext libGLU_combined freetype fontconfig
     pangox_compat polkit polkit_gnome
   ] ++ (with xorg; [

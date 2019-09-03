@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, dpkg, wrapGAppsHook
-, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
+, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
 , cups, expat, udev, libnotify, libuuid
@@ -31,7 +31,7 @@ let
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gtk3
@@ -56,12 +56,12 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "signal-desktop-${version}";
-  version = "1.25.3";
+  pname = "signal-desktop";
+  version = "1.26.2";
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0f7pip4d97xixwf667xpi50r0r65givvmry862zhp2cq24bs0693";
+    sha256 = "08qx7k82x6ybqi3lln6ixzmdz4sr8yz8vfx0y408b85wjfc7ncjk";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

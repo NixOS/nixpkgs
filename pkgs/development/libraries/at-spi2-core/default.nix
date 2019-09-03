@@ -17,12 +17,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "at-spi2-core";
   version = "2.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0lqd7gsl471v6538iighkvb21gjglcb9pklvas32rjpsxcvsjaiw";
   };
 
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = https://gitlab.gnome.org/GNOME/at-spi2-core;
     license = licenses.lgpl2Plus; # NOTE: 2018-06-06: Please check the license when upstream sorts-out licensing: https://gitlab.gnome.org/GNOME/at-spi2-core/issues/2
-    maintainers = with maintainers; [ jtojnar gnome3.maintainers ];
+    maintainers = gnome3.maintainers;
     platforms = platforms.unix;
   };
 }

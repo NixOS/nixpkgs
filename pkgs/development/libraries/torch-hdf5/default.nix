@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, torch, cmake, hdf5}:
 stdenv.mkDerivation rec {
-  name = "torch-hdf5-${version}";
+  pname = "torch-hdf5";
   version = "0.0pre2016-07-01";
   buildInputs = [cmake torch hdf5];
   src = fetchFromGitHub {

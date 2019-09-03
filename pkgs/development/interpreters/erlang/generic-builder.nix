@@ -18,7 +18,7 @@
 , enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
-, wxSupport ? !stdenv.isDarwin, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
+, wxSupport ? true, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""

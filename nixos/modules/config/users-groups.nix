@@ -181,7 +181,7 @@ let
       };
 
       hashedPassword = mkOption {
-        type = with types; uniq (nullOr str);
+        type = with types; nullOr str;
         default = null;
         description = ''
           Specifies the hashed password for the user.
@@ -191,7 +191,7 @@ let
       };
 
       password = mkOption {
-        type = with types; uniq (nullOr str);
+        type = with types; nullOr str;
         default = null;
         description = ''
           Specifies the (clear text) password for the user.
@@ -203,7 +203,7 @@ let
       };
 
       passwordFile = mkOption {
-        type = with types; uniq (nullOr string);
+        type = with types; nullOr str;
         default = null;
         description = ''
           The full path to a file that contains the user's password. The password
@@ -215,7 +215,7 @@ let
       };
 
       initialHashedPassword = mkOption {
-        type = with types; uniq (nullOr str);
+        type = with types; nullOr str;
         default = null;
         description = ''
           Specifies the initial hashed password for the user, i.e. the
@@ -230,7 +230,7 @@ let
       };
 
       initialPassword = mkOption {
-        type = with types; uniq (nullOr str);
+        type = with types; nullOr str;
         default = null;
         description = ''
           Specifies the initial password for the user, i.e. the
@@ -304,7 +304,7 @@ let
       };
 
       members = mkOption {
-        type = with types; listOf string;
+        type = with types; listOf str;
         default = [];
         description = ''
           The user names of the group members, added to the
@@ -564,7 +564,10 @@ in {
       };
     }) (filterAttrs (_: u: u.packages != []) cfg.users));
 
-    environment.profiles = [ "/etc/profiles/per-user/$USER" ];
+    environment.profiles = [
+      "$HOME/.nix-profile"
+      "/etc/profiles/per-user/$USER"
+    ];
 
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);

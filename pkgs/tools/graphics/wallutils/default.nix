@@ -3,7 +3,7 @@
 }:
 
 buildGoModule rec {
-  name = "wallutils-${version}";
+  pname = "wallutils";
   version = "5.8.1";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "trezord-go-${version}";
+  pname = "trezord-go";
   version = "2.0.27";
 
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
@@ -20,7 +20,7 @@ buildGoPackage rec {
     description = "TREZOR Communication Daemon aka TREZOR Bridge";
     homepage = "https://trezor.io";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ canndrew jb55 "1000101" prusnak mmahut ];
+    maintainers = with maintainers; [ canndrew jb55 prusnak mmahut maintainers."1000101" ];
     platforms = platforms.unix;
   };
 }

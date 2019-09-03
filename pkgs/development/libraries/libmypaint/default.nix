@@ -3,7 +3,8 @@
 let
   version = "1.3.0";
 in stdenv.mkDerivation rec {
-  name = "libmypaint-${version}";
+  pname = "libmypaint";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "mypaint";

@@ -1,7 +1,8 @@
 { lib, stdenv, fetch, cmake, python, libcxxabi, fixDarwinDylibNames, version }:
 
 stdenv.mkDerivation rec {
-  name = "libc++-${version}";
+  pname = "libc++";
+  inherit version;
 
   src = fetch "libcxx" "0rzw4qvxp6qx4l4h9amrq02gp7hbg8lw4m0sy3k60f50234gnm3n";
 

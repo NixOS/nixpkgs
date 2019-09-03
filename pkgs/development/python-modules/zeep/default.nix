@@ -18,7 +18,7 @@
 , freezegun
 , mock
 , pretend
-, pytest_3
+, pytest
 , pytestcov
 , requests-mock
 , aioresponses
@@ -54,12 +54,15 @@ buildPythonPackage rec {
     mock
     pretend
     pytestcov
-    pytest_3
+    pytest
     requests-mock
   ] ++ lib.optional isPy3k aioresponses;
 
   checkPhase = ''
     runHook preCheck
+    # fix compatibility with pytest 4
+    substituteInPlace tests/conftest.py \
+       --replace 'request.node.get_marker("requests")' 'request.node.get_closest_marker("requests")'
     # ignored tests requires xmlsec python module
     HOME=$(mktemp -d) pytest tests --ignore tests/test_wsse_signature.py
     runHook postCheck

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage }:
 
 stdenv.mkDerivation rec {
-  name = "policycoreutils-${version}";
+  pname = "policycoreutils";
   version = "2.7";
   inherit (libsepol) se_release se_url;
 

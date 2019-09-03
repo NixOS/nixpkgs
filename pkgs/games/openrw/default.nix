@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "2017-09-17";
-  name = "openrw-${version}";
+  pname = "openrw";
 
   src = fetchgit {
     url = "https://github.com/rwengine/openrw";

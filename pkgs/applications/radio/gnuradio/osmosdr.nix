@@ -13,7 +13,7 @@
 assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
-  name = "gr-osmosdr-${version}";
+  pname = "gr-osmosdr";
   version = "2018-08-15";
 
   src = fetchgit {

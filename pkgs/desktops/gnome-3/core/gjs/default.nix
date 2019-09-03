@@ -1,13 +1,13 @@
 { fetchurl, stdenv, pkgconfig, gnome3, gtk3, atk, gobject-introspection
-, spidermonkey_60, pango, readline, glib, libxml2, dbus, gdk_pixbuf
+, spidermonkey_60, pango, readline, glib, libxml2, dbus, gdk-pixbuf
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gjs-${version}";
+  pname = "gjs";
   version = "1.56.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1b5321krn89p3f7s2ik6gpfnc61apzljhlnbqky8c88f7n6832ac";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     moveToOutput "libexec/gjs/installed-tests" "$installedTests"
 
     wrapProgram "$installedTests/libexec/gjs/installed-tests/minijasmine" \
-      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gtk3 atk pango.out gdk_pixbuf ]}:$installedTests/libexec/gjs/installed-tests"
+      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gtk3 atk pango.out gdk-pixbuf ]}:$installedTests/libexec/gjs/installed-tests"
   '';
 
   meta = with stdenv.lib; {

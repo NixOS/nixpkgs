@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "libtcod-${version}";
+  pname = "libtcod";
   version = "1.5.1";
 
   src = fetchFromBitbucket {

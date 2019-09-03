@@ -112,8 +112,6 @@ in
     systemd.services.cloud-init-local =
       { description = "Initial cloud-init job (pre-networking)";
         wantedBy = [ "multi-user.target" ];
-        wants = [ "local-fs.target" ];
-        after = [ "local-fs.target" ];
         path = path;
         serviceConfig =
           { Type = "oneshot";
@@ -127,9 +125,9 @@ in
     systemd.services.cloud-init =
       { description = "Initial cloud-init job (metadata service crawler)";
         wantedBy = [ "multi-user.target" ];
-        wants = [ "local-fs.target" "network-online.target" "cloud-init-local.service"
+        wants = [ "network-online.target" "cloud-init-local.service"
                   "sshd.service" "sshd-keygen.service" ];
-        after = [ "local-fs.target" "network-online.target" "cloud-init-local.service" ];
+        after = [ "network-online.target" "cloud-init-local.service" ];
         before = [ "sshd.service" "sshd-keygen.service" ];
         requires = [ "network.target "];
         path = path;

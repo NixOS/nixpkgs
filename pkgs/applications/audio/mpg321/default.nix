@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpg321-${version}";
+  pname = "mpg321";
   version = "0.3.2";
 
   src = fetchurl {

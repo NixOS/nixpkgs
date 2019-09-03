@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "m-cli-${version}";
+  pname = "m-cli";
   version = "0.2.5";
 
   src = fetchFromGitHub {

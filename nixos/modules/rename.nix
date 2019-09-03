@@ -19,6 +19,7 @@ with lib;
         let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
         in if value != "" then [ value ] else []))
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
+    (mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
     (mkRenamedOptionModule [ "services" "i2pd" "extIp" ] [ "services" "i2pd" "address" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
@@ -50,6 +51,10 @@ with lib;
     (mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ] "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "user" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a user setting.")
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "group" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a group setting.")
+    (mkRemovedOptionModule [ "services" "prometheus2" "alertmanagerURL" ] ''
+      Due to incompatibility, the alertmanagerURL option has been removed,
+      please use 'services.prometheus2.alertmanagers' instead.
+    '')
     (mkRenamedOptionModule [ "services" "tor" "relay" "portSpec" ] [ "services" "tor" "relay" "port" ])
     (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
     (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
@@ -62,11 +67,13 @@ with lib;
     (mkRemovedOptionModule [ "security" "setuidOwners" ] "Use security.wrappers instead")
     (mkRemovedOptionModule [ "security" "setuidPrograms" ] "Use security.wrappers instead")
 
+    (mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+
     # PAM
     (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
 
-    (mkRemovedOptionModule [ "services" "rmilter" "bindInetSockets" ] "Use services.rmilter.bindSocket.* instead")
-    (mkRemovedOptionModule [ "services" "rmilter" "bindUnixSockets" ] "Use services.rmilter.bindSocket.* instead")
+    # rmilter/rspamd
+    (mkRemovedOptionModule [ "services" "rmilter" ] "Use services.rspamd.* instead to set up milter service")
 
     # Xsession script
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "logsXsession" ] [ "services" "xserver" "displayManager" "job" "logToFile" ])
@@ -171,6 +178,9 @@ with lib;
        The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
 
+    # phpfpm
+    (mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
+
     # zabbixServer
     (mkRenamedOptionModule [ "services" "zabbixServer" "dbServer" ] [ "services" "zabbixServer" "database" "host" ])
 
@@ -218,6 +228,8 @@ with lib;
     (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd")
     (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
     (mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
+    (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
+    (mkRemovedOptionModule [ "systemd" "coredump" "enable" ] "Enabled by default. Set boot.kernel.sysctl.\"kernel.core_pattern\" = \"core\"; to disable.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -245,10 +257,42 @@ with lib;
     # binfmt
     (mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
 
+    # ACME
+    (mkRemovedOptionModule [ "security" "acme" "directory"] "ACME Directory is now hardcoded to /var/lib/acme and its permisisons are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
+    (mkRemovedOptionModule [ "security" "acme" "preDelay"] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
+    (mkRemovedOptionModule [ "security" "acme" "activationDelay"] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
+
     # KSM
     (mkRenamedOptionModule [ "hardware" "enableKSM" ] [ "hardware" "ksm" "enable" ])
 
-  ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
+    # resolvconf
+    (mkRenamedOptionModule [ "networking" "dnsSingleRequest" ] [ "networking" "resolvconf" "dnsSingleRequest" ])
+    (mkRenamedOptionModule [ "networking" "dnsExtensionMechanism" ] [ "networking" "resolvconf" "dnsExtensionMechanism" ])
+    (mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
+    (mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
+
+    # Redshift
+    (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
+      (config:
+        let value = getAttrFromPath [ "services" "redshift" "latitude" ] config;
+        in if value == null then
+          throw "services.redshift.latitude is set to null, you can remove this"
+          else builtins.fromJSON value))
+    (mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
+      (config:
+        let value = getAttrFromPath [ "services" "redshift" "longitude" ] config;
+        in if value == null then
+          throw "services.redshift.longitude is set to null, you can remove this"
+          else builtins.fromJSON value))
+
+    # Redis
+    (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
+    (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
+    (mkRemovedOptionModule [ "services" "redis" "dbFilename" ] "The redis module now uses /var/lib/redis/dump.rdb as database dump location.")
+    (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
+    (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
+
+  ] ++ (forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]
        (opt: mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''

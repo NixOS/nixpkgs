@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.2.3";
-  name = "antigen-${version}";
+  pname = "antigen";
 
   src = fetchurl {
     url = "https://github.com/zsh-users/antigen/releases/download/v${version}/antigen.zsh";

@@ -1,6 +1,6 @@
 { stdenv, lib, config, fetchFromGitHub
 , cmake
-, glog, google-gflags, gtest
+, glog, gflags, gtest
 , protobuf, snappy
 , python, future, six, python-protobuf, numpy, pydot
 , eigen
@@ -61,7 +61,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "caffe2-${version}";
+  pname = "caffe2";
   version = "0.8.1";
   src = fetchFromGitHub {
     owner = "caffe2";
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" ];
   propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
-  buildInputs = [ glog google-gflags protobuf snappy eigen ]
+  buildInputs = [ glog gflags protobuf snappy eigen ]
     ++ lib.optional useCuda cudatoolkit
     ++ lib.optional useCudnn cudnn
     ++ lib.optional useOpenmp openmp

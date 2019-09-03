@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "lld-${version}";
+  pname = "lld";
+  inherit version;
 
   src = fetch "lld" "0rsqb7zcnij5r5ipfhr129j7skr5n9pyr388kjpqwh091952f3x1";
 

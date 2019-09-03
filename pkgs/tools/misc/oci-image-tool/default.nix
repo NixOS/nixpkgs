@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "oci-image-tool-${version}";
+  pname = "oci-image-tool";
   version = "1.0.0-rc1";
 
   goPackagePath = "github.com/opencontainers/image-tools";

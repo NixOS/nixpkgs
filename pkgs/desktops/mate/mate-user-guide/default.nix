@@ -1,12 +1,12 @@
 { stdenv, fetchurl, intltool, itstool, libxml2, yelp }:
 
 stdenv.mkDerivation rec {
-  name = "mate-user-guide-${version}";
-  version = "1.22.1";
+  pname = "mate-user-guide";
+  version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "02zlfdhrvamd299pbf5s19pr90y8yah84g12shwihlxff7d3hxvs";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "01kcszsjiriqp4hf1k4fhazi2yfqlkn415sfgx0jw0p821bzqf2h";
   };
 
   nativeBuildInputs = [ itstool intltool libxml2 ];

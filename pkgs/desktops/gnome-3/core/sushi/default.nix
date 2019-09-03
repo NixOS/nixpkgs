@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, meson, gettext, gobject-introspection, glib
 , clutter-gtk, clutter-gst, gnome3, gtksourceview, gjs
 , webkitgtk, libmusicbrainz5, icu, wrapGAppsHook, gst_all_1
-, gdk_pixbuf, librsvg, gtk3, harfbuzz, ninja }:
+, gdk-pixbuf, librsvg, gtk3, harfbuzz, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "sushi-${version}";
+  pname = "sushi";
   version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/sushi/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "02idvqjk76lii9xyg3b1yz4rw721709bdm5j8ikjym6amcghl0aj";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib gtk3 gnome3.evince icu harfbuzz
-    clutter-gtk clutter-gst gjs gtksourceview gdk_pixbuf
+    clutter-gtk clutter-gst gjs gtksourceview gdk-pixbuf
     librsvg libmusicbrainz5 webkitgtk
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];

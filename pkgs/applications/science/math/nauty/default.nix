@@ -3,7 +3,7 @@
 , fetchurl
 }:
 stdenv.mkDerivation rec {
-  name = "nauty-${version}";
+  pname = "nauty";
   version = "26r11";
   src = fetchurl {
     url = "http://pallini.di.uniroma1.it/nauty${version}.tar.gz";

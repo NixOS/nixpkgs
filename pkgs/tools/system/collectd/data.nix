@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   inherit (collectd) meta version;
 
-  name = "collectd-data-${version}";
+  pname = "collectd-data";
 
   phases = [ "installPhase" ];
 

@@ -3,7 +3,7 @@
 , libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
 , libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
 , libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt, gcr, caribou
-, accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet, libgnomekbd, gnome-desktop
+, accountsservice, gdk-pixbuf, gdm, upower, ibus, networkmanagerapplet, libgnomekbd, gnome-desktop
 , gsettings-desktop-schemas, gnome-keyring, glib, gjs, mutter, evolution-data-server, gtk3
 , sassc, systemd, gst_all_1, adwaita-icon-theme, gnome-bluetooth, gnome-clocks, gnome-settings-daemon }:
 
@@ -13,11 +13,11 @@ let
   pythonEnv = python3.withPackages ( ps: with ps; [ pygobject3 ] );
 
 in stdenv.mkDerivation rec {
-  name = "gnome-shell-${version}";
+  pname = "gnome-shell";
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0anlkdnqsp5fqvmg95rqjpp1ifcx5xzsvwcrdsvb1cqzbh6inmp5";
   };
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     systemd caribou
     gsettings-desktop-schemas gnome-keyring glib gcr json-glib accountsservice
-    libcroco libsecret libsoup polkit gdk_pixbuf librsvg
+    libcroco libsecret libsoup polkit gdk-pixbuf librsvg
     clutter networkmanager libstartup_notification telepathy-glib
     libXtst gjs mutter libpulseaudio evolution-data-server
     libical gtk3 gstreamer gdm libcanberra-gtk3 geoclue2

@@ -16,7 +16,7 @@ let
     sha256 = "0wasql7ph5g473zxhc2z47z3pjp42q0dsn4gpijwzbxawid71b4w";
   };
 in stdenv.mkDerivation rec {
-  name    = "xcbuild-${version}";
+  pname = "xcbuild";
 
   # Once a version is released that includes
   # https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,
@@ -36,10 +36,15 @@ in stdenv.mkDerivation rec {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
-  # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
   postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # Apple Open Sourced LZFSE, but not libcompression, and it isn't
+    # part of an impure framework we can add
+    substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
+      --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
   '';
 
   enableParallelBuilding = true;

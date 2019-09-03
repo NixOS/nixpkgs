@@ -4,7 +4,7 @@
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , gstreamer, gst-plugins-base, libxml2
-, glib, gtk3, pango, gdk_pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
+, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
 , nss, nspr
 , patchelf, makeWrapper
 , isSnapshot ? false
@@ -17,11 +17,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "2.6.1566.44-1";
+  version = "2.7.1628.30-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "0bqx78bikcgrpg7qg10jylxa582fcxiwah7g2151hadvy8xl15ab";
+    sha256 = "1lz8adwiwll8g246s5pa0ipfraph51s9f4lcfysdrp1s3s1qhw8x";
   };
 
   unpackPhase = ''
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk_pixbuf libexif ffmpeg systemd
+    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
     gstreamer libxml2 gst-plugins-base pango cairo gnome2.GConf
   ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
@@ -69,6 +69,8 @@ in stdenv.mkDerivation rec {
     cp -r usr/share/{applications,xfce4} "$out"/share
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace /usr/bin/${vivaldiName} "$out"/bin/vivaldi
+    substituteInPlace "$out"/share/applications/*.desktop \
+      --replace vivaldi-stable vivaldi
     local d
     for d in 16 22 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps

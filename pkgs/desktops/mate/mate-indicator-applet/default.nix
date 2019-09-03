@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, libindicator-gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-indicator-applet-${version}";
+  pname = "mate-indicator-applet";
   version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0zad81qvcin4m329hfxhv4a5j8gf4gj8944mvjrdgdh71bzan2x1";
   };
 

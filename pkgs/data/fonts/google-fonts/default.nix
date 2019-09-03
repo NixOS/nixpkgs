@@ -1,19 +1,15 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "google-fonts-${version}";
-  version = "2018-07-13";
+  pname = "google-fonts";
+  version = "2019-07-14";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "3ca591dae7372a26e254ec6d22e7b453813b9530";
-    sha256 = "01ak3dzw2kihwa0dy27x8vvpiscd66mnkf61vj1xn29m4g48y0lr";
+    rev = "f113126dc4b9b1473d9354a86129c9d7b837aa1a";
+    sha256 = "0safw5prpa63mqcyfw3gr3a535w4c9hg5ayw5pkppiwil7n3pyxs";
   };
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1pzm26794nwdbsvjnczpfchxiqa1n1zhp517g6g39wfm1nfszz83";
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
@@ -28,6 +24,13 @@ stdenv.mkDerivation rec {
       ofl/mrbedford \
       ofl/siamreap \
       ofl/terminaldosislight
+
+    # See comment above, the structure of these is a bit odd
+    # We keep the ofl/<font>/static/ variants
+    rm -rv ofl/comfortaa/*.ttf \
+      ofl/mavenpro/*.ttf \
+      ofl/muli/*.ttf \
+      ofl/oswald/*.ttf
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
       echo "error: duplicate font names"

@@ -1,11 +1,11 @@
 { stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "xmind-${version}";
+  pname = "xmind";
   version = "8-update8";
 
   src = fetchzip {
-    url = "https://xmind.net/xmind/downloads/${name}-linux.zip";
+    url = "https://xmind.net/xmind/downloads/${pname}-${version}-linux.zip";
     stripRoot = false;
     sha256 = "1p68z0b4brgiyybz190alqv716ncql49vsksm41y90mcjd8s4jhn";
   };
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     desktopName = "XMind";
     comment = meta.description;
     categories = "Office;";
-    mimeType = "application/xmind;xscheme-handler/xmind";
+    mimeType = "application/xmind;x-scheme-handler/xmind";
   };
 
   installPhase = let

@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aws-sdk-cpp-${version}";
+  pname = "aws-sdk-cpp";
   version = "1.7.90";
 
   src = fetchFromGitHub {

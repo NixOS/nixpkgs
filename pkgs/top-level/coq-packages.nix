@@ -16,6 +16,7 @@ let
       category-theory = callPackage ../development/coq-modules/category-theory { };
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
       CoLoR = callPackage ../development/coq-modules/CoLoR {};
+      coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-extensible-records = callPackage ../development/coq-modules/coq-extensible-records {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
@@ -126,7 +127,7 @@ in rec {
     version = "8.9.1";
   };
   coq_8_10 = callPackage ../applications/science/logic/coq {
-    version = "8.10+beta1";
+    version = "8.10+beta2";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
@@ -136,7 +137,7 @@ in rec {
   coqPackages_8_9 = mkCoqPackages coq_8_9;
   coqPackages_8_10 = mkCoqPackages coq_8_10;
   coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
-    coqPackages_8_8
+    coqPackages_8_9
   );
   coq = coqPackages.coq;
 

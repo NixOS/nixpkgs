@@ -25,7 +25,7 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "soulseekqt-${version}";
+  pname = "soulseekqt";
   inherit version;
   src = srcs."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 

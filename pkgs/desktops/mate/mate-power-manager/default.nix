@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, libnotify, libcanberra-gtk3, dbus-glib, upower, gnome3, gtk3, libtool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-power-manager-${version}";
+  pname = "mate-power-manager";
   version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "06vs2w44l1s25j0mifkid02yncw0nvdxw8r4pp2jm18kxan4frms";
   };
 

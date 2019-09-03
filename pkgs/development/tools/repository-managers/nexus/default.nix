@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "nexus-${version}";
+  pname = "nexus";
   version = "3.16.1-02";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nfcpsb7byykiwrdz01c99a6hr5ww2d4471spzpgs9i64kbjj7ln";
   };
 
-  sourceRoot = name;
+  sourceRoot = "${pname}-${version}";
 
   nativeBuildInputs = [ makeWrapper ];
 

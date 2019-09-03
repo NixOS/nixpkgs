@@ -8,8 +8,6 @@
 assert upnpSupport -> miniupnpc != null;
 
 stdenv.mkDerivation rec {
-
-  name = pname + "-" + version;
   pname = "i2pd";
   version = "2.26.0";
 

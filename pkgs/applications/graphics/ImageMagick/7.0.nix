@@ -13,14 +13,14 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.8-46";
-    sha256 = "1si3rv3b9jgjkwyny5ja76s8c0z9vyic28fm63j1jrqdd2jyq3pk";
+    version = "7.0.8-58";
+    sha256 = "0yfw32nydwy7ag7ina1zc6yssa146x4v35hjv6v59bci9mmj9fb1";
     patches = [];
   };
 in
 
 stdenv.mkDerivation rec {
-  name = "imagemagick-${version}";
+  pname = "imagemagick";
   inherit (cfg) version;
 
   src = fetchFromGitHub {

@@ -1,6 +1,10 @@
-{ stdenv, bazel, cacert, enableNixHacks ? true }:
+{ stdenv
+, bazel
+, cacert
+, lib
+}:
 
-args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
+args@{ name, bazelFlags ? [], bazelBuildFlags ? [], bazelFetchFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
 
 let
   fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" ];
@@ -8,11 +12,11 @@ let
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
 
 in stdenv.mkDerivation (fBuildAttrs // {
-  inherit name bazelFlags bazelTarget;
+  inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps";
-    inherit bazelFlags bazelTarget;
+    inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 
@@ -37,7 +41,16 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
       # https://github.com/bazelbuild/bazel/issues/6502
-      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 USER=homeless-shelter bazel --output_base="$bazelOut" --output_user_root="$bazelUserRoot" fetch --loading_phase_threads=1 $bazelFlags $bazelTarget
+      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
+      USER=homeless-shelter \
+      bazel \
+        --output_base="$bazelOut" \
+        --output_user_root="$bazelUserRoot" \
+        fetch \
+        --loading_phase_threads=1 \
+        $bazelFlags \
+        $bazelFetchFlags \
+        $bazelTarget
 
       runHook postBuild
     '';
@@ -48,18 +61,24 @@ in stdenv.mkDerivation (fBuildAttrs // {
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
-      rm -rf $bazelOut/external/{local_*,\@local_*}
+      rm -rf $bazelOut/external/{local_*,\@local_*.marker}
 
-      # Patching markers to make them deterministic
-      find $bazelOut/external -name '@*\.marker' -exec sed -i \
-        -e 's, -\?[0-9][0-9]*$, 1,' \
-        -e '/^ENV:TMP.*/d' \
-        '{}' \;
+      # Clear markers
+      find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
 
       # Remove all vcs files
       rm -rf $(find $bazelOut/external -type d -name .git)
       rm -rf $(find $bazelOut/external -type d -name .svn)
       rm -rf $(find $bazelOut/external -type d -name .hg)
+
+      # Removing top-level symlinks along with their markers.
+      # This is needed because they sometimes point to temporary paths (?).
+      # For example, in Tensorflow-gpu build:
+      # platforms -> NIX_BUILD_TOP/tmp/install/35282f5123611afa742331368e9ae529/_embedded_binaries/platforms
+      find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
+        name="$(basename "$symlink")"
+        rm "$symlink" "$bazelOut/external/@$name.marker"
+      done
 
       # Patching symlinks to remove build directory reference
       find $bazelOut/external -type l | while read symlink; do
@@ -74,12 +93,14 @@ in stdenv.mkDerivation (fBuildAttrs // {
     '';
 
     dontFixup = true;
+    allowedRequisites = [];
+
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash = fetchAttrs.sha256;
   });
 
-  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (if enableNixHacks then (bazel.override { enableNixHacks = true; }) else bazel) ];
+  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];
 
   preHook = fBuildAttrs.preHook or "" + ''
     export bazelOut="$NIX_BUILD_TOP/output"
@@ -99,6 +120,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
+    '' + lib.optionalString stdenv.isDarwin ''
     # Bazel sandboxes the execution of the tools it invokes, so even though we are
     # calling the correct nix wrappers, the values of the environment variables
     # the wrappers are expecting will not be set. So instead of relying on the
@@ -121,6 +143,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       linkopts+=( "--linkopt=$flag" )
       host_linkopts+=( "--host_linkopt=$flag" )
     done
+    '' + ''
 
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
     USER=homeless-shelter \
@@ -129,11 +152,14 @@ in stdenv.mkDerivation (fBuildAttrs // {
       --output_user_root="$bazelUserRoot" \
       build \
       -j $NIX_BUILD_CORES \
+      '' + lib.optionalString stdenv.isDarwin ''
       "''${copts[@]}" \
       "''${host_copts[@]}" \
       "''${linkopts[@]}" \
       "''${host_linkopts[@]}" \
+      '' + ''
       $bazelFlags \
+      $bazelBuildFlags \
       $bazelTarget
 
     runHook postBuild

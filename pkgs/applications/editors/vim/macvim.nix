@@ -25,15 +25,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "macvim-${version}";
+  pname = "macvim";
 
-  version = "8.1.1517";
+  version = "8.1.1722";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "snapshot-156";
-    sha256 = "17plmqcn49gqwr1km77mkxflrg0f4sn06r3n0fbxa8zcz9zmb1q2";
+    rev = "snapshot-157";
+    sha256 = "1gmgc4pwaqy78gj4p7iib94n7j52ir0aa03ks595h3vy1hkcwwky";
   };
 
   enableParallelBuilding = true;

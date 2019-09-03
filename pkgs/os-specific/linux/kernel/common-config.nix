@@ -123,6 +123,7 @@ let
       IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
       NET_CLS_BPF                 = whenAtLeast "4.4" module;
       NET_ACT_BPF                 = whenAtLeast "4.4" module;
+      NET_SCHED                   = yes;
       L2TP_V3                     = yes;
       L2TP_IP                     = module;
       L2TP_ETH                    = module;
@@ -699,11 +700,13 @@ let
       PREEMPT_VOLUNTARY = yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
-      # Enable memory hotplug support
-      # Allows you to dynamically add & remove memory to a VM client running NixOS without requiring a reboot
+      # Enable CPU/memory hotplug support
+      # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
+      ACPI_HOTPLUG_CPU = yes;
       ACPI_HOTPLUG_MEMORY = yes;
       MEMORY_HOTPLUG = yes;
       MEMORY_HOTREMOVE = yes;
+      HOTPLUG_CPU = yes;
       MIGRATION = yes;
       SPARSEMEM = yes;
 

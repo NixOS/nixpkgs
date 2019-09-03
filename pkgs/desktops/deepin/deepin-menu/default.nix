@@ -1,8 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, dtkcore, dtkwidget,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, dtkcore, dtkwidget,
   qt5integration, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "deepin-menu";
   version = "3.4.8";
 
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin menu service";

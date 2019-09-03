@@ -2,10 +2,9 @@
   gettext, at-spi2-core, dbus, epoxy, expect, gtk3, json-glib,
   libXdmcp, libgee, libpthreadstubs, librsvg, libsecret, libtasn1,
   libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux,
-  libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin }:
+  libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-terminal";
   version = "3.2.6";
 
@@ -24,6 +23,7 @@ stdenv.mkDerivation rec {
     gettext
     libselinux libsepol utillinux # required by gio
     deepin.setupHook
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     "-DVERSION=${version}"
   ];
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Default terminal emulator for Deepin";

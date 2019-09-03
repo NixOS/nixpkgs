@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, javac }:
 
 stdenv.mkDerivation rec {
-  name = "hdf-java-${version}";
+  pname = "hdf-java";
   version = "3.3.2";
 
   src = fetchurl {

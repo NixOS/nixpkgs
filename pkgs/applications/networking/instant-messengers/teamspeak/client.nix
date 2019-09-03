@@ -29,18 +29,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "teamspeak-client-${version}";
+  pname = "teamspeak-client";
 
-  version = "3.1.10";
+  version = "3.3.0";
 
   src = fetchurl {
-    urls = [
-      "http://dl.4players.de/ts/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
-      "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
-    ];
+    url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
     sha256 = if stdenv.is64bit
-                then "17gylj5pxba14c1c98b5rdyyb87c58z8l8yrd1iw5k293wf7iwv3"
-                else "1bkn3ykrc73wr02qaqwpr4garlqm3424y3dm2fjx6lqcfzm3ms2k";
+                then "13286dbjp4qiyfv8my1hfpwzns4szdsnqa11j8ygsh5ikgjk338a"
+                else "04lwclq7nvw73v5fmn9795j5wi54syglc77ldl41caiqqhdqf1i5";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -61,6 +58,7 @@ stdenv.mkDerivation rec {
     ''
       mv ts3client_linux_${arch} ts3client
       echo "patching ts3client..."
+      patchelf --replace-needed libquazip.so ${quazip}/lib/libquazip5.so ts3client
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \

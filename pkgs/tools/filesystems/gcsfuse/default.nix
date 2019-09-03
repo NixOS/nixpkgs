@@ -2,7 +2,7 @@
 { lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "gcsfuse-${version}";
+  pname = "gcsfuse";
   version = "0.23.0";
   rev = "v${version}";
 

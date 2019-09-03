@@ -6,7 +6,7 @@ let
   lib = stdenv.lib;
 in
 stdenv.mkDerivation rec {
-  name = "gnu-cobol-${version}";
+  pname = "gnu-cobol";
   inherit version;
 
   src = fetchurl {

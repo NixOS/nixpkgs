@@ -3,15 +3,13 @@
 , gtk, girara, gettext, libxml2, check
 , sqlite, glib, texlive, libintl, libseccomp
 , file, librsvg
-, gtk-mac-integration, synctexSupport ? true
+, gtk-mac-integration
 }:
-
-assert synctexSupport -> texlive != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "zathura-core-${version}";
+  pname = "zathura-core";
   version = "0.4.3";
 
   src = fetchurl {
@@ -29,7 +27,8 @@ stdenv.mkDerivation rec {
     # "-Dseccomp=enabled"
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
-  ] ++ optional synctexSupport "-Dsynctex=enabled";
+    "-Dsynctex=enabled"
+  ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig desktop-file-utils python3.pkgs.sphinx
@@ -38,8 +37,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk girara libintl sqlite glib file librsvg
-  ] ++ optional synctexSupport texlive.bin.core
-    ++ optional stdenv.isLinux libseccomp
+    texlive.bin.core
+  ] ++ optional stdenv.isLinux libseccomp
     ++ optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = true;
@@ -49,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "A core component for zathura PDF viewer";
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ globin ];
   };
 }

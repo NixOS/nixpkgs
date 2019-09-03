@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ola-${version}";
+  pname = "ola";
   version = "0.10.7";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper, nim, pcre, tinycc }:
 
 stdenv.mkDerivation rec {
-  name = "nrpl-${version}";
+  pname = "nrpl";
   version = "20150522";
 
   src = fetchFromGitHub {

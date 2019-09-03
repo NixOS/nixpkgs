@@ -1,24 +1,26 @@
-{ stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib
+{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, zlib
 , Security, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname   = "bat";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0yyvlplskjvxb2cspqsvfsnahd5m0s83psrp777ng0wc0kr1adbw";
+    sha256 = "07qxghplqq8km4kp9zas2acw302a77y72x3ix1272kb1zxhw4as6";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "078n31c0isvxvna0s1m12xv4bkh15rb2nixfyg4c501mlkalb517";
+  cargoSha256 = "0j9wxv21a91yfvbbvgn5ms5zi1aipj1k2g42mfdvvw2vsdzqagxz";
 
-  nativeBuildInputs = [ cmake pkgconfig zlib ];
+  nativeBuildInputs = [ pkgconfig llvmPackages.libclang zlib ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   postInstall = ''
     install -m 444 -Dt $out/share/man/man1 doc/bat.1

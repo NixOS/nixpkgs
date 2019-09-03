@@ -3,14 +3,14 @@
 assert stdenv.lib.versionAtLeast ocamlPackages.ocaml.version "4.02.2";
 
 stdenv.mkDerivation rec {
-  version = "2018-05-11";
-  name = "jackline-${version}";
+  pname = "jackline";
+  version = "2019-08-08";
 
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "jackline";
-    rev    = "bc36b1c8b80fee6baba4f91011cd01b82a06e8eb";
-    sha256 = "1xx2yx8a95m84sa1bkxi3rlx7pd39zkqwk3znj0zzz3cni6apfrz";
+    rev    = "b934594010a563ded9c0f436e3fab8f1cae29856";
+    sha256 = "076h03jd970xlii90ax6kvgyq67g81gs30yvdzps366n7zzy3yfc";
   };
 
   buildInputs = with ocamlPackages; [

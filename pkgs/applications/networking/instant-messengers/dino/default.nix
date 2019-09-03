@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobject-introspection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
+, gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
 , libgcrypt
@@ -15,13 +15,13 @@
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2019-03-07";
+  name = "dino-unstable-2019-08-27";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "cc7b0aa7bd5b6599159f654fdd8a2fd111e16a3e";
-    sha256 = "1cq62vif92fz38si2bl49qwy4ys9gxdrvzkv25av6c6nwmyih4gv";
+    rev = "ff6caf241c4d57d3ef124a8b7c3144a09f320ea0";
+    sha256 = "1gjxfnywlypi3slvxb91b2mycrsqjinmafnkkngahyikr7gmqgnf";
     fetchSubmodules = true;
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libgee
     gnome3.adwaita-icon-theme
     sqlite
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     libnotify
     gpgme

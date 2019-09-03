@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "7.0.1";
-  name = "clearlooks-phenix-${version}";
+  pname = "clearlooks-phenix";
 
   src = fetchurl {
     url = "https://github.com/jpfleury/clearlooks-phenix/archive/${version}.tar.gz";

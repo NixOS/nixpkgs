@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages }:
+{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages, windows }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
@@ -14,6 +14,7 @@
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
 , buildType ? "release"
+, meta ? {}
 
 , cargoVendorDir ? null
 , ... } @ args:
@@ -40,19 +41,26 @@ let
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
+  hostConfig = stdenv.hostPlatform.config;
+
+  rustHostConfig = {
+    "x86_64-pc-mingw32" = "x86_64-pc-windows-gnu";
+  }."${hostConfig}" or hostConfig;
+
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${stdenv.hostPlatform.config}/${buildType}";
+  releaseDir = "target/${rustHostConfig}/${buildType}";
+in
 
-in stdenv.mkDerivation (args // {
+stdenv.mkDerivation (args // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = [ cargo rustc git cacert ] ++ nativeBuildInputs;
-  inherit buildInputs;
+  nativeBuildInputs = nativeBuildInputs ++ [ cacert git cargo rustc ];
+  buildInputs = buildInputs ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   patches = cargoPatches ++ patches;
 
@@ -72,23 +80,21 @@ in stdenv.mkDerivation (args // {
     substitute $config .cargo/config \
       --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
-    unset cargoDepsCopy
+    cat >> .cargo/config <<'EOF'
+    [target."${stdenv.buildPlatform.config}"]
+    "linker" = "${ccForBuild}"
+    ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
+    [target."${rustHostConfig}"]
+    "linker" = "${ccForHost}"
+    ''}
+    EOF
 
+    unset cargoDepsCopy
     export RUST_LOG=${logLevel}
   '' + (args.postUnpack or "");
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
-    mkdir -p .cargo
-    cat >> .cargo/config <<'EOF'
-    [target."${stdenv.buildPlatform.config}"]
-    "linker" = "${ccForBuild}"
-    ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${stdenv.hostPlatform.config}"]
-    "linker" = "${ccForHost}"
-    ''}
-    EOF
-    cat .cargo/config
     runHook postConfigure
   '';
 
@@ -103,8 +109,8 @@ in stdenv.mkDerivation (args // {
       "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
       "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
       cargo build \
-        --${buildType} \
-        --target ${stdenv.hostPlatform.config} \
+        ${stdenv.lib.optionalString (buildType == "release") "--release"} \
+        --target ${rustHostConfig} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
@@ -147,4 +153,9 @@ in stdenv.mkDerivation (args // {
   '';
 
   passthru = { inherit cargoDeps; } // (args.passthru or {});
+
+  meta = {
+    # default to Rust's platforms
+    platforms = rustc.meta.platforms;
+  } // meta;
 })

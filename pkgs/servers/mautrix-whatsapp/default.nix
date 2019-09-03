@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mautrix-unstable-${version}";
+  pname = "mautrix-unstable";
   version = "2019-07-04";
 
   goPackagePath = "maunium.net/go/mautrix-whatsapp";

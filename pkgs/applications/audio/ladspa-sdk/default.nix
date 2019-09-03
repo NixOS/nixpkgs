@@ -1,16 +1,16 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "ladspa-sdk-${version}";
-  version = "1.13";
+  pname = "ladspa-sdk";
+  version = "1.15";
   src = fetchurl {
     url = "https://www.ladspa.org/download/ladspa_sdk_${version}.tgz";
-    sha256 = "0srh5n2l63354bc0srcrv58rzjkn4gv8qjqzg8dnq3rs4m7kzvdm";
+    sha256 = "1vgx54cgsnc3ncl9qbgjbmq12c444xjafjkgr348h36j16draaa2";
   };
 
   patchPhase = ''
     cd src
-    sed -i 's@/usr/@$(out)/@g'  makefile
-    sed -i 's@-mkdirhier@mkdir -p@g'  makefile
+    sed -i 's@/usr/@$(out)/@g'  Makefile
+    sed -i 's@-mkdirhier@mkdir -p@g'  Makefile
   '';
 
   meta = {

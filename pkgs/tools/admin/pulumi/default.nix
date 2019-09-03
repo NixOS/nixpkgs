@@ -4,23 +4,23 @@ with lib;
 
 let
 
-  version = "0.17.17";
+  version = "0.17.27";
 
   # switch the dropdown to “manual” on https://pulumi.io/quickstart/install.html # TODO: update script
   pulumiArchPackage = {
     "x86_64-linux" = {
       url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-linux-x64.tar.gz";
-      sha256 = "1h1z8bngix1gvma3hahfyprrx3af5yncgvrsvr1cdsaa79bzvc5c";
+      sha256 = "13ajgc8x5l3s93hmz6jg88if10bvd319jmkljy4n26zdp30vfqmw";
     };
     "x86_64-darwin" = {
       url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-darwin-x64.tar.gz";
-      sha256 = "0pipykwpqqnhqg28s27lnkbrm55rshf25ikil7ycwq05p9ynf5gq";
+      sha256 = "0chpbnz2s4icwgmfq6kl8blz5mg4lpdqg061w3nh0p04adpgrn48";
     };
   };
 
 in stdenv.mkDerivation rec {
   inherit version;
-  name = "pulumi-${version}";
+  pname = "pulumi";
 
   src = fetchurl pulumiArchPackage.${stdenv.hostPlatform.system};
 

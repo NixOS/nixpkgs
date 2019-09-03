@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "glogg-${version}";
+  pname = "glogg";
   version = "1.1.4";
 
   src = fetchurl {
-    url = "https://glogg.bonnefon.org/files/${name}.tar.gz";
+    url = "https://glogg.bonnefon.org/files/${pname}-${version}.tar.gz";
     sha256 = "0nwnfk9bcz2k7rf08w2cb6qipzdhwmxznik44jxmn9gwxdrdq78c";
   };
 

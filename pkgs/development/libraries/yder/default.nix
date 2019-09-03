@@ -4,28 +4,19 @@
 assert withSystemd -> systemd != null;
 stdenv.mkDerivation rec {
   pname = "yder";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "babelouest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j46v93vn130gjcr704rkdiibbk3ampzsqb6xdcrn4x115gwyf5i";
+    sha256 = "19ghiwpi972wjqvlgg576nk2nkf1ii5l1kvzb056496xfmlysrwa";
   };
 
   patches = [
     # We set CMAKE_INSTALL_LIBDIR to the absolute path in $out, so
     # prefix and exec_prefix cannot be $out, too
     ./fix-pkgconfig.patch
-
-    # - ORCANIA_LIBRARIES must be set before target_link_libraries is called
-    # - librt is not available, nor needed on Darwin
-    # - The test binary is not linked against all necessary libraries
-    # - Test for journald logging is not systemd specific and fails on darwin
-    # - If the working directory is different from the build directory, the
-    #   dynamic linker can't find libyder
-    # - Return correct error code from y_init_logs when journald is disabled
-    ./fix-darwin.patch
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -42,6 +33,7 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     export LD_LIBRARY_PATH="$(pwd):$LD_LIBRARY_PATH"
+    export DYLD_FALLBACK_LIBRARY_PATH="$(pwd):$DYLD_FALLBACK_LIBRARY_PATH"
   '';
 
   meta = with lib; {

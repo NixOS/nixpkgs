@@ -5,13 +5,13 @@
 with stdenv.lib;
 
 let
-  version = "0.1.36";
+  version = "0.1.37";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "0q0d6dzx9q57fim0drxs7l45500f3228wq50vzj232x5qx5h00sj";
+    sha256 = "1ly5yq3aj4ciqn6hbhvxqp1im81pbas9smdhbbks7iwjvh944d62";
   };
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
@@ -20,7 +20,8 @@ let
 
 in
 buildGoPackage rec {
-  name = "skopeo-${version}";
+  pname = "skopeo";
+  inherit version;
   inherit src goPackagePath;
 
   outputs = [ "bin" "man" "out" ];

@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -50,7 +50,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-minio-exporter}/bin/minio-exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

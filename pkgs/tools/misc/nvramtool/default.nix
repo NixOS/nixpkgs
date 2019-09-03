@@ -1,7 +1,7 @@
 { stdenv, fetchgit, iasl, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "nvramtool-${version}";
+  pname = "nvramtool";
   version = "4.8.1";
 
   src = fetchgit {

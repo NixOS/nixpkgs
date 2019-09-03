@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "bibutils-${version}";
+  pname = "bibutils";
   version = "6.7";
 
   src = fetchurl {

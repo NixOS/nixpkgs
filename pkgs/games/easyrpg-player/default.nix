@@ -4,14 +4,14 @@
 , mpg123 ? null, opusfile ? null, pcre, pixman, SDL2_mixer, speexdsp ? null, wildmidi ? null, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "easyrpg-player-${version}";
-  version = "0.6.0";
+  pname = "easyrpg-player";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "Player";
     rev = version;
-    sha256 = "0b0c4wwqldjf37sf7zldnbgvfmyqcvpjvhs949gb3r8i5cffzm58";
+    sha256 = "0w4a4jg3py0phsp99nl7abyd31salnc57w4l05a228imvyy0maia";
   };
 
   nativeBuildInputs = [ cmake doxygen pkgconfig ];

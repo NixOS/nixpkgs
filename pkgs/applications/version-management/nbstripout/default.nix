@@ -2,14 +2,14 @@
 
 with python2Packages;
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   version = "0.3.1";
   pname = "nbstripout";
 
   # Mercurial should be added as a build input but because it's a Python
   # application, it would mess up the Python environment. Thus, don't add it
   # here, instead add it to PATH when running unit tests
-  buildInputs = [ pytest pytest-flake8 pytest-cram git pytestrunner ];
+  checkInputs = [ pytest pytest-flake8 pytest-cram git ];
+  nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ ipython nbformat ];
 
   # PyPI source is currently missing tests. Thus, use GitHub instead.

@@ -1,5 +1,20 @@
-{ stdenv, fetchFromGitHub, pantheon, substituteAll, meson, ninja, pkgconfig
-, vala, libgee, granite, gtk3, libxml2, libgnomekbd, libxklavier, xorg, switchboard }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, substituteAll
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, libxml2
+, libgnomekbd
+, libxklavier
+, xorg
+, switchboard
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";

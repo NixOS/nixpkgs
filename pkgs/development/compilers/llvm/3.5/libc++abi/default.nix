@@ -8,7 +8,8 @@ let
     sha256 = "10idgcbs4pcx6mjsbq1vjm8hzqqdk2p7k86cw9f473jmfyfwgf5j";
   };
 in stdenv.mkDerivation {
-  name = "libc++abi-${version}";
+  pname = "libc++abi";
+  inherit version;
 
   src = fetchurl {
     url    = "http://llvm.org/releases/${version}/libcxxabi-${version}.src.tar.xz";

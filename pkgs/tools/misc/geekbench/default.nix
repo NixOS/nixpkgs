@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "geekbench-${version}";
-  version = "4.3.3";
+  pname = "geekbench";
+  version = "4.4.1";
 
   src = fetchurl {
     url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-    sha256 = "0bqa0k4cf4w8gjs49lnrvns11jv21kqcgdbqp2zhwqgmkx9gr8ny";
+    sha256 = "0s3v8frflqqifyzq84xi6322wg8c9f5wcaic9zlpdf6wylqsiali";
   };
 
   dontConfigure = true;

@@ -16,10 +16,11 @@ let
   version = "1.16.0";
   inherit (stdenv.lib) optional optionals;
 in stdenv.mkDerivation rec {
-  name = "cairo-${version}";
+  pname = "cairo";
+  inherit version;
 
   src = fetchurl {
-    url = "https://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${name}.tar.xz";
+    url = "https://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${pname}-${version}.tar.xz";
     sha256 = "0c930mk5xr2bshbdljv005j3j8zr47gqmkry3q6qgvqky6rjjysy";
   };
 

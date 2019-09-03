@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "zsh-autoenv-${version}";
+  pname = "zsh-autoenv";
   version = "2017-12-16";
 
   src = fetchFromGitHub {

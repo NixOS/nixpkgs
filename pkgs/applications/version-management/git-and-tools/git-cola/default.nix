@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, pythonPackages, gettext, git }:
+{ stdenv, fetchFromGitHub, pythonPackages, gettext, git, qt5 }:
 
 let
   inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify;
 
 in buildPythonApplication rec {
-  name = "git-cola-${version}";
+  pname = "git-cola";
   version = "3.4";
 
   src = fetchFromGitHub {
@@ -16,8 +16,15 @@ in buildPythonApplication rec {
 
   buildInputs = [ git gettext ];
   propagatedBuildInputs = [ pyqt5 sip pyinotify ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   doCheck = false;
+
+  postFixup = ''
+    wrapQtApp bin/git-cola
+    wrapQtApp bin/git-dag
+
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/git-cola/git-cola;

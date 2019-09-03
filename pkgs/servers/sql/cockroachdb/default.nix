@@ -12,7 +12,7 @@ let
 
 in
 buildGoPackage rec {
-  name = "cockroach-${version}";
+  pname = "cockroach";
   version = "19.1.1";
 
   goPackagePath = "github.com/cockroachdb/cockroach";

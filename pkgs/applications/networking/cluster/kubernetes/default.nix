@@ -14,7 +14,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "kubernetes-${version}";
+  pname = "kubernetes";
   version = "1.14.3";
 
   src = fetchFromGitHub {

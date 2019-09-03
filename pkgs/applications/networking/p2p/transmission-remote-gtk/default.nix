@@ -4,7 +4,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "transmission-remote-gtk-${version}";
+  pname = "transmission-remote-gtk";
   version = "1.4.1";
 
   src = fetchFromGitHub {

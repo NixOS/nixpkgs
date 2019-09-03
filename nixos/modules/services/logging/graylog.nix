@@ -150,6 +150,9 @@ in
         rm -rf /var/lib/graylog/plugins || true
         mkdir -p /var/lib/graylog/plugins -m 755
 
+        mkdir -p "$(dirname ${cfg.nodeIdFile})"
+        chown -R ${cfg.user} "$(dirname ${cfg.nodeIdFile})"
+
         for declarativeplugin in `ls ${glPlugins}/bin/`; do
           ln -sf ${glPlugins}/bin/$declarativeplugin /var/lib/graylog/plugins/$declarativeplugin
         done

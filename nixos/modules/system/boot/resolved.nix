@@ -3,6 +3,10 @@
 with lib;
 let
   cfg = config.services.resolved;
+
+  dnsmasqResolve = config.services.dnsmasq.enable &&
+                   config.services.dnsmasq.resolveLocalQueries;
+
 in
 {
 
@@ -126,6 +130,12 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      { assertion = !config.networking.useHostResolvConf;
+        message = "Using host resolv.conf is not supported with systemd-resolved";
+      }
+    ];
+
     systemd.additionalUpstreamSystemUnits = [
       "systemd-resolved.service"
     ];
@@ -135,21 +145,30 @@ in
       restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
     };
 
-    environment.etc."systemd/resolved.conf".text = ''
-      [Resolve]
-      ${optionalString (config.networking.nameservers != [])
-        "DNS=${concatStringsSep " " config.networking.nameservers}"}
-      ${optionalString (cfg.fallbackDns != [])
-        "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
-      ${optionalString (cfg.domains != [])
-        "Domains=${concatStringsSep " " cfg.domains}"}
-      LLMNR=${cfg.llmnr}
-      DNSSEC=${cfg.dnssec}
-      ${config.services.resolved.extraConfig}
-    '';
+    environment.etc = {
+      "systemd/resolved.conf".text = ''
+        [Resolve]
+        ${optionalString (config.networking.nameservers != [])
+          "DNS=${concatStringsSep " " config.networking.nameservers}"}
+        ${optionalString (cfg.fallbackDns != [])
+          "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
+        ${optionalString (cfg.domains != [])
+          "Domains=${concatStringsSep " " cfg.domains}"}
+        LLMNR=${cfg.llmnr}
+        DNSSEC=${cfg.dnssec}
+        ${config.services.resolved.extraConfig}
+      '';
+
+      # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
+      # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
+      "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
+    } // optionalAttrs dnsmasqResolve {
+      "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+    };
 
     # If networkmanager is enabled, ask it to interface with resolved.
     networking.networkmanager.dns = "systemd-resolved";
+
   };
 
 }

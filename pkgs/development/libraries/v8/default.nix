@@ -44,7 +44,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "v8-${version}";
+  pname = "v8";
   version = "7.4.255";
 
   doCheck = true;

@@ -5,7 +5,9 @@ let
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "logs is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";

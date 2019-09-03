@@ -17,7 +17,8 @@ let
   version = "1.0";
 in
 stdenv.mkDerivation {
-  name = "ripser-${version}";
+  pname = "ripser";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Ripser";

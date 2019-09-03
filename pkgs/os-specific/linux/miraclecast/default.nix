@@ -2,7 +2,7 @@
 , glib, readline, pcre, systemd, udev }:
 
 stdenv.mkDerivation rec {
-  name = "miraclecast-${version}";
+  pname = "miraclecast";
   version = "1.0-20190403";
 
   src = fetchFromGitHub {

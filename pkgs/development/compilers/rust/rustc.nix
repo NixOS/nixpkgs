@@ -1,6 +1,6 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , fetchurl, file, python2, tzdata, ps
-, llvm_7, darwin, git, cmake, rustPlatform
+, llvmPackages_7, darwin, git, cmake, rustPlatform
 , which, libffi, gdb
 , withBundledLLVM ? false
 }:
@@ -9,20 +9,30 @@ let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
-  llvmSharedForBuild = pkgsBuildBuild.llvm_7.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvm_7.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvm_7.override { enableSharedLibraries = true; };
+  llvmPackages = llvmPackages_7;
+
+  llvmSharedForBuild = pkgsBuildBuild.llvmPackages.llvm.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvmPackages.llvm.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvmPackages.llvm.override { enableSharedLibraries = true; };
 
   # For use at runtime
-  llvmShared = llvm_7.override { enableSharedLibraries = true; };
-in stdenv.mkDerivation rec {
+  llvmShared = llvmPackages.llvm.override { enableSharedLibraries = true; };
+in
+
+stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.35.0";
+  version = "1.37.0";
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "0bbizy6b7002v1rdhrxrf5gijclbyizdhkglhp81ib3bf5x66kas";
+    sha256 = "1hrqprybhkhs6d9b5pjskfnc5z9v2l2gync7nb39qjb5s0h703hj";
   };
+
+  # Provide the compiler-rt sources needed for profiling.
+  preConfigure = ''
+    mkdir src/llvm-project/compiler-rt
+    tar xf ${llvmPackages.compiler-rt.src} -C src/llvm-project/compiler-rt --strip-components=1
+  '';
 
   __darwinAllowLocalNetworking = true;
 
@@ -38,18 +48,11 @@ in stdenv.mkDerivation rec {
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
 
-
   NIX_LDFLAGS =
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
        optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib";
-
-  # Enable nightly features in stable compiles (used for
-  # bootstrapping, see https://github.com/rust-lang/rust/pull/37265).
-  # This loosens the hard restrictions on bootstrapping-compiler
-  # versions.
-  RUSTC_BOOTSTRAP = "1";
 
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
@@ -92,6 +95,8 @@ in stdenv.mkDerivation rec {
     "${setBuild}.llvm-config=${llvmSharedForBuild}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
+  ] ++ optional stdenv.isLinux [
+    "--enable-profiler" # build libprofiler_builtins
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
@@ -205,6 +210,8 @@ in stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
   # https://github.com/rust-lang/rust/issues/30181
   # enableParallelBuilding = false;
+
+  setupHooks = ./setup-hook.sh;
 
   requiredSystemFeatures = [ "big-parallel" ];
 

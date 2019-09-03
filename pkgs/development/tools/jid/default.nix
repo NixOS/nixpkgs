@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "jid-${version}";
+  pname = "jid";
   version = "0.7.2";
 
   goPackagePath = "github.com/simeji/jid";

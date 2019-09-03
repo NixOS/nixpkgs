@@ -140,7 +140,7 @@ in
     };
 
     logSize = mkOption {
-      type        = types.string;
+      type        = types.str;
       default     = "10MiB";
       description = ''
         Roll over to a new log file after the current log file
@@ -149,7 +149,7 @@ in
     };
 
     maxLogSize = mkOption {
-      type        = types.string;
+      type        = types.str;
       default     = "100MiB";
       description = ''
         Delete the oldest log file when the total size of all log
@@ -171,7 +171,7 @@ in
     };
 
     memory = mkOption {
-      type        = types.string;
+      type        = types.str;
       default     = "8GiB";
       description = ''
         Maximum memory used by the process. The default value is
@@ -193,7 +193,7 @@ in
     };
 
     storageMemory = mkOption {
-      type        = types.string;
+      type        = types.str;
       default     = "1GiB";
       description = ''
         Maximum memory used for data storage. The default value is

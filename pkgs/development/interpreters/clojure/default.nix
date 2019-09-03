@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.1.462";
+  version = "1.10.1.469";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "0mi7fzqvkg2ihigxkkamc742m1iba0yzy8ivciavzmpcnw128sc6";
+    sha256 = "0hpb6rixmgllss69vl9zlpb41svm4mx4xmfbq1q7y12jsxckzgpq";
   };
 
   buildInputs = [ makeWrapper ];

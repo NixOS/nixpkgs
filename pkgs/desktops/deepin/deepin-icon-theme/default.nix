@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, gtk3, xcursorgen, papirus-icon-theme, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-icon-theme";
   version = "15.12.71";
 
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
     cp -a ./Sea ./usr/share/icons/hicolor "$out"/share/icons/
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Icons for the Deepin Desktop Environment";

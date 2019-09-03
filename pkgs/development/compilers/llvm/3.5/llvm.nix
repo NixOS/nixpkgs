@@ -17,13 +17,14 @@
 , enableSharedLibraries ? !stdenv.isDarwin
 }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "llvm";
+  inherit version;
+
   src = fetch "llvm" "0xf5q17kkxsrm2gsi93h4pwlv663kji73r2g4asb97klsmb626a4";
-in stdenv.mkDerivation rec {
-  name = "llvm-${version}";
 
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}.src llvm
     sourceRoot=$PWD/llvm
     unpackFile ${compiler-rt_src}
@@ -84,8 +85,6 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-
-  passthru.src = src;
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";

@@ -6,7 +6,7 @@
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, flashplayerFix ? false, gdk_pixbuf
+, flashplayerFix ? false, gdk-pixbuf
 , gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
 , developerBuild ? false
@@ -14,7 +14,7 @@
 , examples ? false
 , demos ? false
 # darwin support
-, cf-private, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
+, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
 }:
 
 let
@@ -83,11 +83,14 @@ stdenv.mkDerivation rec {
           + "21b342d71c19e6d68b649947f913410fe6129ea4/debian/patches/kubuntu_39_fix_medium_font.diff";
         sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
       })
-      (fetchpatch {
-        name = "qt4-gcc6.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
-        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
-      })
+      # Patches are no longer available from here, so vendoring it for now.
+      #(fetchpatch {
+      #  name = "qt4-gcc6.patch";
+      #  url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
+      #  sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
+      #})
+      ./qt4-gcc6.patch
+      ./qt4-openssl-1.1.patch
     ]
     ++ lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
@@ -188,8 +191,8 @@ stdenv.mkDerivation rec {
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
     ++ lib.optionals (mysql != null) [ mysql.connector-c ]
-    ++ lib.optionals gtkStyle [ gtk2 gdk_pixbuf ]
-    ++ lib.optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
+    ++ lib.optionals gtkStyle [ gtk2 gdk-pixbuf ]
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
 

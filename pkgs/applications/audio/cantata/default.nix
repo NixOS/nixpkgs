@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, vlc
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig, vlc
 , qtbase, qtmultimedia, qtsvg, qttools
 
 # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -35,7 +35,7 @@ let
 
   withUdisks = (withTaglib && withDevices);
 
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -46,20 +46,20 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ vlc qtbase qtmultimedia qtsvg ]
-    ++ stdenv.lib.optionals withTaglib [ taglib taglib_extras ]
-    ++ stdenv.lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
-    ++ stdenv.lib.optional  withCdda cdparanoia
-    ++ stdenv.lib.optional  withCddb libcddb
-    ++ stdenv.lib.optional  withLame lame
-    ++ stdenv.lib.optional  withMtp libmtp
-    ++ stdenv.lib.optional  withMusicbrainz libmusicbrainz5
-    ++ stdenv.lib.optional  withUdisks udisks2;
+    ++ lib.optionals withTaglib [ taglib taglib_extras ]
+    ++ lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
+    ++ lib.optional  withCdda cdparanoia
+    ++ lib.optional  withCddb libcddb
+    ++ lib.optional  withLame lame
+    ++ lib.optional  withMtp libmtp
+    ++ lib.optional  withMusicbrainz libmusicbrainz5
+    ++ lib.optional  withUdisks udisks2;
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   enableParallelBuilding = true;
 
-  cmakeFlags = stdenv.lib.flatten [
+  cmakeFlags = lib.flatten [
     (fstats withTaglib        [ "TAGLIB" "TAGLIB_EXTRAS" ])
     (fstats withReplaygain    [ "FFMPEG" "MPG123" "SPEEXDSP" ])
     (fstat withCdda           "CDPARANOIA")
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
     "-DENABLE_HTTPS_SUPPORT=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = https://github.com/cdrummond/cantata;
     description = "A graphical client for MPD";
     license     = licenses.gpl3;

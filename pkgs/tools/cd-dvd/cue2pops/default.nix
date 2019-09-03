@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cue2pops-${version}";
+  pname = "cue2pops";
   version = "git-2018-01-04";
 
   src = fetchFromGitHub {

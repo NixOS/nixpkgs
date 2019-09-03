@@ -1,7 +1,6 @@
 { stdenv, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "s-tui";
   version = "0.8.3";
 

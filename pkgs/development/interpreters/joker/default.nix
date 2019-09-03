@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "joker-${version}";
-  version = "0.12.2";
+  pname = "joker";
+  version = "0.12.4";
 
   goPackagePath = "github.com/candid82/joker";
 
@@ -10,10 +10,12 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "candid82";
     repo = "joker";
-    sha256 = "0cqz8k53fzz3xqx9czk3hgq164dsbvnk51s0j29g1bmkbl51c2vm";
+    sha256 = "1swi991khmyhxn6w6xsdqp1wbyx3qmd9d7yhpwvqasyxp8gg3szm";
   };
 
   preBuild = "go generate ./...";
+
+  postBuild = "rm go/bin/sum256dir";
 
   dontInstallSrc = true;
 

@@ -21,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nginx-${version}";
+  pname = "nginx";
+  inherit version;
 
   src = fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
@@ -110,6 +111,6 @@ stdenv.mkDerivation {
     homepage    = http://nginx.org;
     license     = licenses.bsd2;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice raskin fpletz ];
+    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ];
   };
 }

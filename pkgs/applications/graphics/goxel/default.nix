@@ -2,14 +2,14 @@
 , glfw3, gtk3, libpng12 }:
 
 stdenv.mkDerivation rec {
-  name = "goxel-${version}";
-  version = "0.9.0";
+  pname = "goxel";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
     rev = "v${version}";
-    sha256 = "1vd1vw5pplm4ig9f5gwnbvndnag1h7j0jj0cnj78gpiv96qak2vw";
+    sha256 = "1mdw4bs7hvfn0yngd9ial5wzlfkcbhr3wzldb1w7s3s48agixkdr";
   };
 
   patches = [ ./disable-imgui_ini.patch ];

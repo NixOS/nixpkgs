@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, cf-private, AppKit, GSS, ImageIO, m17n_lib, libotf
+, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , systemd ? null
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
@@ -31,12 +31,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
-  version = "26.2";
+  version = "26.3";
   versionModifier = "";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "13n5m60i47k96mpv5pp6km2ph9rv2m5lmbpzj929v02vpsfyc70m";
+    sha256 = "119ldpk7sgn9jlpyngv5y4z3i7bb8q3xp4p0qqi7i5nq39syd42d";
   };
 
   enableParallelBuilding = true;
@@ -61,17 +61,14 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
-        imagemagick gconf ]
+        gconf ]
+    ++ lib.optionals (withX || withNS) [ imagemagick ]
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk ]
-    ++ lib.optionals withNS [
-      AppKit GSS ImageIO
-      # Needed for CFNotificationCenterAddObserver symbols.
-      cf-private
-    ];
+    ++ lib.optionals withNS [ AppKit GSS ImageIO ];
 
   hardeningDisable = [ "format" ];
 

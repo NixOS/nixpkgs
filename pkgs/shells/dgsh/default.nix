@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dgsh-unstable-${version}";
+  pname = "dgsh-unstable";
   version = "2017-02-05";
 
   src = fetchFromGitHub {

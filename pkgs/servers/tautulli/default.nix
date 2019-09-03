@@ -1,9 +1,8 @@
 {stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.32";
+  version = "2.1.33";
   pname = "Tautulli";
-  name = "${pname}-${version}";
 
   pythonPath = [ python.pkgs.setuptools ];
   buildInputs = [ python.pkgs.setuptools ];
@@ -13,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Tautulli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05z6l3qs2m72c1hcl3qd1lm17hsmyqk48f8dcsvrxa5hibmf84j4";
+    sha256 = "1yj4akp10fxqndsbb59rjdw9by6rhmz24syyq6d4x5bg72an9n80";
   };
 
   buildPhase = ":";

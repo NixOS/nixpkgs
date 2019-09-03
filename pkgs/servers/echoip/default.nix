@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "echoip-${version}";
+  pname = "echoip";
   version = "unstable-2018-11-20";
 
   goPackagePath = "github.com/mpolden/echoip";

@@ -2,7 +2,7 @@
 
 # Dynamic libraries
 , alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
-, gdk_pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
+, gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
 , libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
 , libxcb, libuuid, nspr, nss, pango
 
@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "10.8.0";
+  version = "11.1.4";
 
   src = fetchurl {
     url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/draw.io-x86_64-${version}.rpm";
-    sha256 = "0c5wymzhbp72x0yhvw7vb4akkdvj97npl9kglk79vqjbzfn5di9k";
+    sha256 = "0ca8wkkdr7kbb8il84nq05qgd5ykjq15fdv9432wr5p9xmqixz1q";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     cups
     dbus
     expat
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk3
     libX11
@@ -70,18 +70,18 @@ stdenv.mkDerivation rec {
 
     # Application icon
     mkdir -p $out/share/icons/hicolor
-    cp -r usr/share/icons/hicolor/0x0 $out/share/icons/hicolor/1024x1024
+    cp -r usr/share/icons/hicolor/* $out/share/icons/hicolor/
 
     # XDG desktop item
     cp -r usr/share/applications $out/share/applications
 
     # Symlink wrapper
     mkdir -p $out/bin
-    ln -s $out/share/draw.io/draw.io $out/bin/draw.io
+    ln -s $out/share/draw.io/drawio $out/bin/drawio
 
     # Update binary path
-    substituteInPlace $out/share/applications/draw.io.desktop \
-      --replace /opt/draw.io/draw.io $out/bin/draw.io
+    substituteInPlace $out/share/applications/drawio.desktop \
+      --replace /opt/draw.io/drawio $out/bin/drawio
   '';
 
   meta = with stdenv.lib; {

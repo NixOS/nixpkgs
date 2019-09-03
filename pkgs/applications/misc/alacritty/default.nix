@@ -24,9 +24,7 @@
   wayland,
 
   # Darwin Frameworks
-  cf-private,
   AppKit,
-  CoreFoundation,
   CoreGraphics,
   CoreServices,
   CoreText,
@@ -74,11 +72,7 @@ in buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-    ++ lib.optionals stdenv.isDarwin [
-      AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL
-      # Needed for CFURLResourceIsReachable symbols.
-      cf-private
-    ];
+    ++ lib.optionals stdenv.isDarwin [ AppKit CoreGraphics CoreServices CoreText Foundation OpenGL ];
 
   outputs = [ "out" "terminfo" ];
 

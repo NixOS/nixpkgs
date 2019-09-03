@@ -13,7 +13,7 @@
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
-, libXScrnSaver, libXcursor, libXtst, libGLU_combined
+, libXScrnSaver, libXcursor, libXtst, libGLU_combined, libGL
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
 , jdk
@@ -67,7 +67,8 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng"
+    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
@@ -308,6 +309,13 @@ let
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
     in concatStringsSep "\n" commands;
+
+    postFixup = ''
+      # Make sure that libGLESv2 is found by dlopen (if using EGL).
+      chromiumBinary="$libExecPath/$packageName"
+      origRpath="$(patchelf --print-rpath "$chromiumBinary")"
+      patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
+    '';
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.

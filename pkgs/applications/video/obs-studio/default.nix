@@ -1,4 +1,5 @@
 { config, stdenv
+, mkDerivation
 , fetchFromGitHub
 , cmake
 , fdk_aac
@@ -34,8 +35,8 @@
 
 let
   optional = stdenv.lib.optional;
-in stdenv.mkDerivation rec {
-  name = "obs-studio-${version}";
+in mkDerivation rec {
+  pname = "obs-studio";
   version = "23.2.1";
 
   src = fetchFromGitHub {

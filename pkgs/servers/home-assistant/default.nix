@@ -36,8 +36,6 @@ let
       "03f38115dccb266dd96538f94067442a877932c2322661bdc5bf2502c76658af")
     (mkOverride "python-slugify" "3.0.2"
       "57163ffb345c7e26063435a27add1feae67fa821f1ef4b2f292c25847575d758")
-    (mkOverride "pyyaml" "3.13"
-      "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf")
     (mkOverride "requests" "2.21.0"
       "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
     (mkOverride "ruamel_yaml" "0.15.94"
@@ -63,6 +61,10 @@ let
       };
     })
 
+    (self: super: {
+      pyyaml = super.pyyaml_3;
+    })
+
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
@@ -78,7 +80,7 @@ let
         };
       });
     };
-    
+
   py = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
@@ -142,6 +144,6 @@ in with py.pkgs; buildPythonApplication rec {
     homepage = https://home-assistant.io/;
     description = "Open-source home automation platform running on Python 3";
     license = licenses.asl20;
-    maintainers = with maintainers; [ f-breidenstein dotlambda ];
+    maintainers = with maintainers; [ f-breidenstein dotlambda globin ];
   };
 }

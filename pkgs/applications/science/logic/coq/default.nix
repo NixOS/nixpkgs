@@ -28,7 +28,7 @@ let
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
    "8.9.1" = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
-   "8.10+beta1" = "19wf39i0ap2vakglgdlqxpjd3l1h5w7dp460w8y7nc1y06b2153h";
+   "8.10+beta2" = "0jk7pwydhd17ab7ii69zvi4sgrr630q2lsxhckaj3sz55cpjlhal";
   }."${version}";
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
@@ -39,7 +39,8 @@ let
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
 self = stdenv.mkDerivation {
-  name = "coq-${version}";
+  pname = "coq";
+  inherit version;
 
   passthru = {
     inherit coq-version;

@@ -4,7 +4,7 @@
 , isIceCatLike ? false, icversion ? null
 , isTorBrowserLike ? false, tbversion ? null }:
 
-{ lib, stdenv, pkgconfig, pango, perl, python2, zip, libIDL
+{ lib, stdenv, pkgconfig, pango, perl, python2, python3, zip, libIDL
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
@@ -164,12 +164,15 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
     substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
+  '' + lib.optionalString (lib.versionAtLeast ffversion "68") ''
+    rm -rf obj-x86_64-pc-linux-gnu
   '';
 
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
+    ++ lib.optional  (lib.versionAtLeast ffversion "61.0") [ python3 ]
     ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ rust-cbindgen nodejs ]
     ++ lib.optionals (lib.versionAtLeast ffversion "67.0") [ llvmPackages.llvm ] # llvm-objdump is required in version >=67.0
     ++ extraNativeBuildInputs;
@@ -310,6 +313,9 @@ stdenv.mkDerivation rec {
     "BUILD_OFFICIAL=1"
   ]
   ++ extraMakeFlags;
+
+  RUSTFLAGS = if (lib.versionAtLeast ffversion "67"/*somewhere betwween ESRs*/)
+    then null else "--cap-lints warn";
 
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above

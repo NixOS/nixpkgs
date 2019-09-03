@@ -95,7 +95,7 @@ let
   luaEnv = lua.withPackages(ps: with ps; [ luasocket ]);
 
 in stdenv.mkDerivation rec {
-  name = "mpv-${version}";
+  pname = "mpv";
   version = "0.29.1";
 
   src = fetchFromGitHub {
@@ -218,7 +218,7 @@ in stdenv.mkDerivation rec {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = https://mpv.io;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz ];
+    maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz globin ];
     platforms = platforms.darwin ++ platforms.linux;
 
     longDescription = ''

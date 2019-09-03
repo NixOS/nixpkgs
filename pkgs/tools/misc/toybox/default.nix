@@ -6,7 +6,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "toybox";
   version = "0.8.1";
 

@@ -1,9 +1,9 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging
+, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
 }:
 buildPythonPackage rec {
-  version = "4.6.3";
+  version = "5.1.0";
   pname = "pytest";
 
   preCheck = ''
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4a784f1d4f2ef198fe9b7aef793e9fa1a3b2f84e822d9b3a64a181293a572d45";
+    sha256 = "3805d095f1ea279b9870c3eeae5dddf8a81b10952c8835cd628cf1875b0ef031";
   };
 
   checkInputs = [ hypothesis mock ];
@@ -22,9 +22,11 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
     ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
+  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
+  # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
   checkPhase = ''
     runHook preCheck
-    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths"
+    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
     runHook postCheck
   '';
 

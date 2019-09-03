@@ -25,7 +25,8 @@ let
   luaCPath = getPath "so";
 in
 stdenv.mkDerivation {
-  name = "lumail-${version}";
+  pname = "lumail";
+  inherit version;
 
   src = fetchurl {
     url = "https://lumail.org/download/lumail-${version}.tar.gz";

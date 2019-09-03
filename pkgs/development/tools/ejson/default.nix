@@ -7,7 +7,7 @@ let
     inherit ruby;
   };
 in buildGoPackage rec {
-  name = "ejson-${version}";
+  pname = "ejson";
   version = "1.2.1";
   rev = "v${version}";
 

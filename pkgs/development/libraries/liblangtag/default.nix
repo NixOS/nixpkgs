@@ -3,7 +3,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "liblangtag";
   version = "0.6.1";
 

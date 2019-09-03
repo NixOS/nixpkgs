@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/golang/protobuf";
-      rev = "b5d812f8a3706043e23a9cd5babf2e5423744d30";
-      sha256 = "15am4s4646qy6iv0g3kkqq52rzykqjhm4bf08dk0fy2r58knpsyl";
+      rev = "6c65a5562fc06764971b7c5d05c76c75e84bdbf7";
+      sha256 = "1k1wb4zr0qbwgpvz9q5ws9zhlal8hq7dmq62pwxxriksayl6hzym";
     };
   }
   {

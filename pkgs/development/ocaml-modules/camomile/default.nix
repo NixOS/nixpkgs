@@ -1,27 +1,19 @@
-{ stdenv, fetchFromGitHub, ocaml, dune, cppo, findlib }:
+{ stdenv, fetchFromGitHub, buildDunePackage, cppo }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "camomile";
-	version = "1.0.1";
+	version = "1.0.2";
 
 	src = fetchFromGitHub {
 		owner = "yoriyuki";
 		repo = pname;
 		rev = version;
-		sha256 = "1pfxr9kzkpd5bsdqrpxasfxkawwkg4cpx3m1h6203sxi7qv1z3fn";
+		sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
 	};
 
-	buildInputs = [ ocaml dune findlib cppo ];
+	buildInputs = [ cppo ];
 
 	configurePhase = "ocaml configure.ml --share $out/share/camomile";
-
-  # Use jbuilder executable because it breaks on dune>=1.10
-  # https://github.com/yoriyuki/Camomile/commit/505202b58e22628f80bbe15ee76b9470a5bd2f57#r33816944
-  buildPhase = ''
-    jbuilder build -p ${pname}
-  '';
-
-  inherit (dune) installPhase;
 
 	meta = {
 		inherit (src.meta) homepage;

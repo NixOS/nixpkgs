@@ -1,20 +1,30 @@
-{ stdenv, fetchFromGitLab, buildGoPackage, ruby, bundlerEnv }:
+{ stdenv, fetchFromGitLab, buildGoPackage, ruby, bundlerEnv, pkgconfig, libgit2 }:
 
 let
-  rubyEnv = bundlerEnv {
+  rubyEnv = bundlerEnv rec {
     name = "gitaly-env";
     inherit ruby;
     gemdir = ./.;
+    gemset =
+      let x = import (gemdir + "/gemset.nix");
+      in x // {
+        # grpc expects the AR environment variable to contain `ar rpc`. See the
+        # discussion in nixpkgs #63056.
+        grpc = x.grpc // {
+          patches = [ ../fix-grpc-ar.patch ];
+          dontBuild = false;
+        };
+      };
   };
 in buildGoPackage rec {
-  version = "1.34.3";
-  name = "gitaly-${version}";
+  version = "1.53.2";
+  pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "0lv3czkxcan2zv9asd79nn8z1bihyxszi1d5hazmb299v23cppzm";
+    sha256 = "0x4dhqaxx6n5jlcvf69rglxiz11037ghgcnskks6qnlcbkd85j3d";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
@@ -23,7 +33,10 @@ in buildGoPackage rec {
     inherit rubyEnv;
   };
 
-  buildInputs = [ rubyEnv.wrappedRuby ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ rubyEnv.wrappedRuby libgit2 ];
+  goDeps = ./deps.nix;
+  preBuild = "rm -r go/src/gitlab.com/gitlab-org/labkit/vendor";
 
   postInstall = ''
     mkdir -p $ruby
@@ -42,7 +55,7 @@ in buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = http://www.gitlab.com/;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ roblabla ];
+    maintainers = with maintainers; [ roblabla globin fpletz ];
     license = licenses.mit;
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "zpaq-${version}";
+  pname = "zpaq";
   version = "7.15";
 
   src = fetchFromGitHub {

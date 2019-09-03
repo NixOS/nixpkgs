@@ -1,16 +1,28 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, ninja, vala, gtk3, granite, wingpanel, accountsservice
-, libgee, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, accountsservice
+, libgee
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-session";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1x2p2sjal42bspmqcg9lzixv6rnihvgmwk92gfcccrmvk8j4bx6s";
+    sha256 = "0lqh9g6qq09m744gncspm79lbwx1vjl1d6j2szwcq9f0jdm01pm5";
   };
 
   passthru = {

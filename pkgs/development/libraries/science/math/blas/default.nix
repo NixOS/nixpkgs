@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gfortran }:
 
 stdenv.mkDerivation rec {
-  name = "blas-${version}";
+  pname = "blas";
   version = "3.8.0";
 
   src = fetchurl {
-    url = "http://www.netlib.org/blas/${name}.tgz";
+    url = "http://www.netlib.org/blas/${pname}-${version}.tgz";
     sha256 = "1s24iry5197pskml4iygasw196bdhplj0jmbsb9jhabcjqj2mpsm";
   };
 

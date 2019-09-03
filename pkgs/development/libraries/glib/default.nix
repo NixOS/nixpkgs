@@ -46,15 +46,16 @@ let
   '';
 
   binPrograms = optional (!stdenv.isDarwin) "gapplication" ++ [ "gdbus" "gio" "gsettings" ];
-  version = "2.60.3";
+  version = "2.60.6";
 in
 
 stdenv.mkDerivation rec {
-  name = "glib-${version}";
+  pname = "glib";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1fb0nx9fcmic8rsh0fbp79lqpasfjxljvnshbw2hsya51mb0vaq4";
+    url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0v7vpx2md1gn0wwiirn7g4bhf2csfvcr03y96q2zv97ain6sp3zz";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
@@ -81,9 +82,6 @@ stdenv.mkDerivation rec {
     utillinuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-    # Needed for CFURLCreateFromFSRef, etc. which have deen deprecated
-    # since 10.9 and are not part of swift-corelibs CoreFoundation.
-    darwin.cf-private
   ]);
 
   nativeBuildInputs = [
@@ -101,8 +99,12 @@ stdenv.mkDerivation rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  NIX_CFLAGS_COMPILE = (optional stdenv.isSunOS "-DBSD_COMP")
-    ++ [ "-Wno-error=nonnull" ];
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=nonnull"
+    # Default for release buildtype but passed manually because
+    # we're using plain
+    "-DG_DISABLE_CAST_CHECKS"
+  ];
 
   postPatch = ''
     # substitute fix-gio-launch-desktop-path.patch
@@ -138,7 +140,7 @@ stdenv.mkDerivation rec {
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
-    sed '1i#line 1 "${name}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
+    sed '1i#line 1 "${pname}-${version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
   '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
@@ -147,7 +149,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
   preCheck = optionalString doCheck ''
-    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs:$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"

@@ -1,6 +1,6 @@
 { stdenv, fetchzip, cmake, libX11, freetype, libjpeg, openal, flac, libvorbis
 , glew, libXrandr, libXrender, udev, xcbutilimage
-, cf-private, IOKit, Foundation, AppKit, OpenAL
+, IOKit, Foundation, AppKit, OpenAL
 }:
 
 let
@@ -8,7 +8,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sfml-${version}";
+  pname = "sfml";
+  inherit version;
 
   src = fetchzip {
     url = "https://github.com/SFML/SFML/archive/${version}.tar.gz";
@@ -19,10 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ freetype libjpeg openal flac libvorbis glew ]
     ++ stdenv.lib.optional stdenv.isLinux udev
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXrandr libXrender xcbutilimage ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL
-    # Needed for _NSDefaultRunLoopMode, _OBJC_CLASS_$_NSArray, _OBJC_CLASS_$_NSDate
-    cf-private
-    ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
 
   cmakeFlags = [ "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
                  "-DSFML_MISC_INSTALL_PREFIX=share/SFML"

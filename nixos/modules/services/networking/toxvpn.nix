@@ -8,7 +8,7 @@ with lib;
       enable = mkEnableOption "toxvpn running on startup";
 
       localip = mkOption {
-        type        = types.string;
+        type        = types.str;
         default     = "10.123.123.1";
         description = "your ip on the vpn";
       };
@@ -20,7 +20,7 @@ with lib;
       };
 
       auto_add_peers = mkOption {
-        type        = types.listOf types.string;
+        type        = types.listOf types.str;
         default     = [];
         example     = ''[ "toxid1" "toxid2" ]'';
         description = "peers to automacally connect to on startup";

@@ -1,12 +1,12 @@
 { stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
 # darwin only attributes
-, cf-private, derez, rez, setfile
+, derez, rez, setfile
 , AGL, Cocoa, Kernel
 }:
 
 stdenv.mkDerivation rec {
   version = "3.0.4";
-  name = "wxmac-${version}";
+  pname = "wxmac";
 
   src = fetchzip {
     url = "https://github.com/wxWidgets/wxWidgets/archive/v${version}.tar.gz";
@@ -16,14 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat libiconv libjpeg libpng libtiff zlib
     derez rez setfile
-    Cocoa Kernel
-
-    # Needed for CFURLGetFSRef, etc. which have deen deprecated
-    # since 10.9 and are not part of swift-corelibs CoreFoundation.
-    cf-private
+    AGL Cocoa Kernel
   ];
-
-  propagatedBuildInputs = [ AGL ];
 
   postPatch = ''
     substituteInPlace configure --replace "-framework System" -lSystem
@@ -71,6 +65,5 @@ stdenv.mkDerivation rec {
     homepage = https://www.wxwidgets.org/;
     description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
-    broken = true;
   };
 }

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "hub";
-  version = "2.12.2";
+  version = "2.12.3";
 
   goPackagePath = "github.com/github/hub";
 
@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner = "github";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sxfmjg26s86m5xa9nbj8287kg12kygxw6gggahal6v7zjhwcvaz";
+    sha256 = "13l4nc3k6vl9x1x0153mwi351j3z266wx0fp7xw2851avrgkk9zg";
   };
 
   nativeBuildInputs = [ groff utillinux ];
@@ -38,7 +38,7 @@ buildGoPackage rec {
     description = "Command-line wrapper for git that makes you better at GitHub";
     license = licenses.mit;
     homepage = https://hub.github.com/;
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ the-kenny globin ];
     platforms = with platforms; unix;
   };
 }

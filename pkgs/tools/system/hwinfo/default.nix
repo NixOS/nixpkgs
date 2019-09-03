@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, libx86emu, flex, perl, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "hwinfo-${version}";
-  version = "21.66";
+  pname = "hwinfo";
+  version = "21.67";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
     rev = "${version}";
-    sha256 = "1f841hzh9ik02690h9b1k3ysqv91avsb0zir2ykqz8qj39c5qsxz";
+    sha256 = "1fvlrqx1wgl79a9j3xhhhdihj4lkpbrchfsc27il0p52fynn4dji";
   };
 
   patchPhase = ''

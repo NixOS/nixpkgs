@@ -60,7 +60,7 @@ let
         inherit mkDerivation;
 
         # Team of maintainers assigned to the KDE PIM suite
-        kdepimTeam = with lib.maintainers; [ ttuegel vandenoever ];
+        kdepimTeam = with lib.maintainers; [ ttuegel vandenoever nyanloutre ];
       };
     in {
       akonadi = callPackage ./akonadi {};
@@ -116,6 +116,7 @@ let
       kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
       kimap = callPackage ./kimap.nix {};
+      kipi-plugins = callPackage ./kipi-plugins.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kldap = callPackage ./kldap.nix {};
@@ -171,6 +172,7 @@ let
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
+      yakuake = callPackage ./yakuake.nix {};
       # Okteta was removed from kde applications and will now be released independently
       # Lets keep an alias for compatibility reasons
       inherit okteta;

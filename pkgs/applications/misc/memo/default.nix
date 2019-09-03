@@ -7,15 +7,15 @@ assert pandocSupport -> pandoc != null;
 
 stdenv.mkDerivation rec {
 
-  name = "memo-${version}";
+  pname = "memo";
 
-  version = "0.6";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner  = "mrVanDalo";
     repo   = "memo";
     rev    = "${version}";
-    sha256 = "1cvjs36f6vxzfz5d63yhyw8j7gdw5hn6cfzccf7ag08lamjhfhbr";
+    sha256 = "0azx2bx6y7j0637fg3m8zigcw09zfm2mw9wjfg218sx88cm1wdkp";
   };
 
   installPhase = let
