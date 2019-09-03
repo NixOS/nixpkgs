@@ -21767,6 +21767,7 @@ in
   polkadot = callPackage ../applications/blockchains/polkadot { };
 
   particl-core = callPackage ../applications/blockchains/particl/particl-core.nix { miniupnpc = miniupnpc_2; };
+  particl-qt = libsForQt5.callPackage ../applications/blockchains/particl/particl-qt.nix { miniupnpc = miniupnpc_2; };
 
   ### GAMES
 
