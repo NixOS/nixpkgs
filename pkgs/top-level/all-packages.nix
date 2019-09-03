@@ -10470,6 +10470,8 @@ in
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
 
+  clipp  = callPackage ../development/libraries/clipp { };
+
   clipper = callPackage ../development/libraries/clipper { };
 
   cln = callPackage ../development/libraries/cln { };
