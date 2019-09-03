@@ -1,7 +1,7 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "terminal-parrot-${version}";
+  pname = "terminal-parrot";
   version = "1.1.1";
 
   src = fetchFromGitHub {

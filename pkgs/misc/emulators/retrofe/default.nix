@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "retrofe-${version}";
+  pname = "retrofe";
   version = "0.6.169";
 
   src = fetchhg {

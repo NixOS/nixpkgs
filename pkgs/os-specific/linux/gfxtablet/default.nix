@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.4";
-  name = "gfxtablet-uinput-driver-${version}";
+  pname = "gfxtablet-uinput-driver";
 
   buildInputs = [
     linuxHeaders

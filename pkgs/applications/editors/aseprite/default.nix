@@ -10,7 +10,7 @@ let
   skia = callPackage ./skia.nix {};
 in
 stdenv.mkDerivation rec {
-  name = "aseprite-${version}";
+  pname = "aseprite";
   version = if unfree then "1.2.11" else "1.1.7";
 
   src = fetchFromGitHub {

@@ -8,7 +8,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sfml-${version}";
+  pname = "sfml";
+  inherit version;
 
   src = fetchzip {
     url = "https://github.com/SFML/SFML/archive/${version}.tar.gz";

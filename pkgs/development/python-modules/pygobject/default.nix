@@ -4,10 +4,9 @@ buildPythonPackage rec {
   pname = "pygobject";
   version = "2.28.6";
   format = "other";
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pygobject/2.28/${name}.tar.xz";
+    url = "mirror://gnome/sources/pygobject/2.28/${pname}-${version}.tar.xz";
     sha256 = "1f5dfxjnil2glfwxnqr14d2cjfbkghsbsn8n04js2c2icr7iv2pv";
   };
 
@@ -31,7 +30,7 @@ buildPythonPackage rec {
   # used to select a specific version, in our setup it should have no
   # effect, but we leave it in case somebody expects and calls it.
   postInstall = ''
-    mv $out/lib/${python.libPrefix}/site-packages/{pygtk.pth,${name}.pth}
+    mv $out/lib/${python.libPrefix}/site-packages/{pygtk.pth,${pname}-${version}.pth}
 
     # Prevent wrapping of codegen files as these are meant to be
     # executed by the python program

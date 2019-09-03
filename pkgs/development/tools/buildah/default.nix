@@ -1,21 +1,22 @@
 { stdenv, buildGoPackage, fetchFromGitHub
 , gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux, libseccomp
-, go-md2man }:
+}:
 
 let
-  version = "1.9.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "containers";
     repo   = "buildah";
-    sha256 = "19yf93pq4vw24h76kl32c6ryvg5fp5mixakw9c6sqydf7m74z9i8";
+    sha256 = "0dki2v8j2jzbw49sdzcyjqbalbh70m0lgzrldgj6cc92mj896pxk";
   };
 
   goPackagePath = "github.com/containers/buildah";
 
 in buildGoPackage rec {
-  name = "buildah-${version}";
+  pname = "buildah";
+  inherit version;
   inherit src;
 
   outputs = [ "bin" "man" "out" ];
@@ -26,22 +27,18 @@ in buildGoPackage rec {
   # Optimizations break compilation of libseccomp c bindings
   hardeningDisable = [ "fortify" ];
 
-  nativeBuildInputs = [ pkgconfig go-md2man.bin ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs ostree libselinux libseccomp ];
 
-  # Copied from the skopeo package, doesn’t seem to make a difference?
-  # If something related to these libs failed, uncomment these lines.
-  /*preBuild = with lib; ''
-    export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev devicemapper}/include -I${getDev btrfs-progs}/include"
-    export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib devicemapper}/lib"
-  '';*/
+  buildPhase = ''
+    pushd go/src/${goPackagePath}
+    patchShebangs .
+    make GIT_COMMIT="unknown"
+    install -Dm755 buildah $bin/bin/buildah
+  '';
 
   postBuild = ''
-    # depends on buildGoPackage not changing …
-    pushd ./go/src/${goPackagePath}/docs
-    make docs
-    make install PREFIX="$man"
-    popd
+    make -C docs install PREFIX="$man"
   '';
 
   meta = {

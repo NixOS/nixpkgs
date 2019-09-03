@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "quiterss-${version}";
+  pname = "quiterss";
   version = "0.18.12";
 
   src = fetchFromGitHub {

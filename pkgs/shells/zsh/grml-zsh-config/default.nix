@@ -4,7 +4,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "grml-zsh-config-${version}";
+  pname = "grml-zsh-config";
   version = "0.16.0";
 
   src = fetchFromGitHub {

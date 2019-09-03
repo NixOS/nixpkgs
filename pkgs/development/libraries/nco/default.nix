@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.8.1";
-  name = "nco-${version}";
+  pname = "nco";
 
   buildInputs = [ netcdf netcdfcxx4 gsl udunits antlr which curl flex ];
 

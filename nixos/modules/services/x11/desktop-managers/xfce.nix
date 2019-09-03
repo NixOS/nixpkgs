@@ -66,7 +66,6 @@ in
       exo
       garcon
       gtk-xfce-engine
-      gvfs
       libxfce4ui
       tumbler
       xfconf
@@ -100,10 +99,6 @@ in
       "/share/gtksourceview-2.0"
     ];
 
-    environment.variables = {
-      GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
-    };
-
     services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     services.xserver.desktopManager.session = [{
@@ -128,5 +123,7 @@ in
     # Enable helpful DBus services.
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
+    services.gvfs.enable = true;
+    services.gvfs.package = pkgs.xfce.gvfs;
   };
 }

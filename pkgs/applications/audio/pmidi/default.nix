@@ -3,7 +3,8 @@
 , sourceSha256 ? "051mv6f13c8y13c1iv3279k1hhzpz4fm9sfczhgp9sim2bjdj055"
 }:
 stdenv.mkDerivation {
-  name = "pmidi-${version}";
+  pname = "pmidi";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/pmidi/${version}/pmidi-${version}.tar.gz";

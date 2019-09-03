@@ -3,7 +3,7 @@
 , nodePackages, emscripten, opencv, statik }:
 
 buildGoPackage rec {
-  name = "meguca-unstable-${version}";
+  pname = "meguca-unstable";
   version = "2019-03-12";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
@@ -46,5 +46,7 @@ buildGoPackage rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;
+    broken = true; # Broken on Hydra since 2019-04-18:
+    # https://hydra.nixos.org/build/98885902
   };
 }

@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ]
   ++ stdenv.lib.optional useSystemd [
-    "--with-systemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
-    "--with-systemdutildir=${placeholder ''out''}/lib/systemd"
-    "--with-udevrulesdir=${placeholder ''out''}/lib/udev/rules.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemdutildir=${placeholder "out"}/lib/systemd"
+    "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
   ]
   ;
 

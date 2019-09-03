@@ -1,7 +1,7 @@
 {stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ...}:
 
 stdenv.mkDerivation rec {
-  name = "diff-so-fancy-${version}";
+  pname = "diff-so-fancy";
   version = "1.2.6";
 
   src = fetchFromGitHub {
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
       diff-so-fancy builds on the good-lookin' output of git contrib's
       diff-highlight to upgrade your diffs' appearances.
     '';
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }

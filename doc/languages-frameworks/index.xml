@@ -32,4 +32,5 @@
  <xi:include href="titanium.section.xml" />
  <xi:include href="vim.section.xml" />
  <xi:include href="emscripten.section.xml" />
+ <xi:include href="crystal.section.xml" />
 </chapter>

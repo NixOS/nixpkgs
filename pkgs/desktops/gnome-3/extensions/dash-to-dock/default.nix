@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, glib, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-dash-to-dock-${version}";
+  pname = "gnome-shell-dash-to-dock";
   version = "66";
 
   src = fetchFromGitHub {

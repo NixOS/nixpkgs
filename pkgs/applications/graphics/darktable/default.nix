@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.6.2";
-  name = "darktable-${version}";
+  pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.darktable.org;
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ goibhniu rickynils flosse mrVanDalo ];
+    maintainers = with maintainers; [ goibhniu flosse mrVanDalo ];
   };
 }

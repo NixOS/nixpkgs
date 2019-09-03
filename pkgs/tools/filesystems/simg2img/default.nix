@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "simg2img-${version}";
+  pname = "simg2img";
   version = "1.1.3";
 
   src = fetchFromGitHub {

@@ -3,7 +3,8 @@
 let version = "1.0"; in
 
 stdenv.mkDerivation rec {
-  name = "libtxc_dxtn_s2tc-${version}";
+  pname = "libtxc_dxtn_s2tc";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/divVerent/s2tc/archive/v${version}.tar.gz";

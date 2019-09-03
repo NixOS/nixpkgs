@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, fuse, attr, asciidoc }:
 
 stdenv.mkDerivation rec {
-  name = "disorderfs-${version}";
+  pname = "disorderfs";
   version = "0.5.6";
 
   src = fetchurl {

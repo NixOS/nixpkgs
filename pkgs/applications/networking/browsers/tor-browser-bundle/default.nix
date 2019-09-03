@@ -72,7 +72,7 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  name = "tor-browser-bundle-${version}";
+  pname = "tor-browser-bundle";
   version = tor-browser-unwrapped.version;
 
   buildInputs = [ tor-browser-unwrapped tor ];

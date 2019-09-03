@@ -86,7 +86,7 @@ let
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];
               platforms = lib.platforms.linux;
-              maintainers = with lib.maintainers; [ ttuegel ];
+              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
               homepage = http://www.kde.org;
             } // (args.meta or {});
           in

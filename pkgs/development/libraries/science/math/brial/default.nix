@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.5";
-  name = "brial-${version}";
+  pname = "brial";
 
   src = fetchFromGitHub {
     owner = "BRiAl";

@@ -99,10 +99,6 @@ in
             fi
           '') cfg.sessionPath}
 
-          # Makes qt applications look less alien
-          export QT_QPA_PLATFORMTHEME=gtk3
-          export QT_STYLE_OVERRIDE=adwaita
-
           # Settings from elementary-default-settings
           export GTK_CSD=1
           export GTK_MODULES=$GTK_MODULES:pantheon-filechooser-module
@@ -129,7 +125,7 @@ in
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
     services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
-    services.gnome3.gvfs.enable = true;
+    services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
     services.gsignond.enable = mkDefault true;
     services.gsignond.plugins = with pkgs.gsignondPlugins; [ lastfm mail oauth ];
@@ -149,6 +145,18 @@ in
     programs.dconf.enable = true;
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
+    # Otherwise you can't store NetworkManager Secrets with
+    # "Store the password only for this user"
+    programs.nm-applet.enable = true;
+
+    # Shell integration for VTE terminals
+    programs.bash.vteIntegration = mkDefault true;
+    programs.zsh.vteIntegration = mkDefault true;
+
+    # Harmonize Qt5 applications under Pantheon
+    qt5.enable = true;
+    qt5.platformTheme = "gnome";
+    qt5.style = "adwaita";
 
     networking.networkmanager.enable = mkDefault true;
     networking.networkmanager.basePackages =
@@ -161,10 +169,6 @@ in
     environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
     environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
-
-    environment.variables.GIO_EXTRA_MODULES = [
-      "${pkgs.gnome3.gvfs}/lib/gio/modules"
-    ];
 
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -190,6 +194,7 @@ in
         gtk3.out
         hicolor-icon-theme
         lightlocker
+        onboard
         plank
         qgnomeplatform
         shared-mime-info

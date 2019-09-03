@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, ncurses, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "diskscan-${version}";
+  pname = "diskscan";
   version = "0.20";
 
   src = fetchFromGitHub {

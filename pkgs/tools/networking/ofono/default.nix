@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "1qzysmzpgbh6zc3x9xh931wxcazka9wwx727c2k66z9gal2n6n66";
   };
 
+  patches = [
+    ./0001-Search-connectors-in-OFONO_PLUGIN_PATH.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkgconfig
@@ -37,8 +41,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-dbusconfdir=${placeholder ''out''}/etc/dbus-1/system.d"
-    "--with-systemdunitdir=${placeholder ''out''}/lib/systemd/system"
+    "--with-dbusconfdir=${placeholder "out"}/share"
+    "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
     "--enable-external-ell"
   ];
 

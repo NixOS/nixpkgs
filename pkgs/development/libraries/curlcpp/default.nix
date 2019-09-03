@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, curl }: 
 
 stdenv.mkDerivation rec {
-  name = "curlcpp-${version}";
+  pname = "curlcpp";
   version = "1.1";
 
   src = fetchFromGitHub {

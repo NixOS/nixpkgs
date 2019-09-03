@@ -1,7 +1,7 @@
 { stdenv, fetchFromBitbucket, ocaml, zlib, db, perl, camlp4 }:
 
 stdenv.mkDerivation rec {
-  name = "sks-${version}";
+  pname = "sks";
   version = "1.1.6";
 
   src = fetchFromBitbucket {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos fpletz ];
+    maintainers = with maintainers; [ primeos fpletz globin ];
   };
 }
 

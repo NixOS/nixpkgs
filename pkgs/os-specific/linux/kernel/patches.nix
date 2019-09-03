@@ -62,4 +62,10 @@ rec {
     name = "export_kernel_fpu_functions";
     patch = ./export_kernel_fpu_functions.patch;
   };
+
+  # patches from https://lkml.org/lkml/2019/7/15/1748
+  mac_nvme_t2 = rec {
+    name = "mac_nvme_t2";
+    patch = ./mac-nvme-t2.patch;
+  };
 }

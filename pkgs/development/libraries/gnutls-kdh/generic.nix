@@ -15,7 +15,8 @@ let
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4";
 in
 stdenv.mkDerivation {
-  name = "gnutls-kdh-${version}";
+  pname = "gnutls-kdh";
+  inherit version;
 
   inherit src patches;
 

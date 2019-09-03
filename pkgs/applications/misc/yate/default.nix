@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, lib, qt4, openssl, autoconf, automake, pkgconfig }:
+{ stdenv, fetchurl, lib, qt4, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "yate-${version}";
-  version = "6.0.0-1";
+  pname = "yate";
+  version = "6.1.0-1";
 
   src = fetchurl {
-    url = "http://voip.null.ro/tarballs/yate${lib.versions.major version}/${name}.tar.gz";
-    sha256 = "05qqdhi3rp5660gq1484jkmxkm9vq81j0yr765h0gf0xclan1dqa";
+    url = "http://voip.null.ro/tarballs/yate${lib.versions.major version}/${pname}-${version}.tar.gz";
+    sha256 = "0xx3i997nsf2wzbv6m5n6adsym0qhgc6xg4rsv0fwqrgisf5327d";
   };
 
   # TODO zaptel ? postgres ?
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ qt4 openssl autoconf automake ];
+  buildInputs = [ qt4 openssl ];
 
   # /dev/null is used when linking which is a impure path for the wrapper
   preConfigure =

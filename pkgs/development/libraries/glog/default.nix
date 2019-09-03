@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, perl }:
 
 stdenv.mkDerivation rec {
-  name = "glog-${version}";
+  pname = "glog";
   version = "0.4.0";
 
   src = fetchFromGitHub {

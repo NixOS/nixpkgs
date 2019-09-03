@@ -5,7 +5,6 @@
 stdenv.mkDerivation rec {
   pname = "saga";
   version = "7.3.0";
-  name = "${pname}-${version}";
 
   # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
   # for why the have additional buildInputs on darwin

@@ -41,6 +41,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Needs Cabal 3.0.x.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_0_0_0; });
+
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
 
@@ -87,5 +90,8 @@ self: super: {
     };
     version = "0.8.6.0-pre-release";
   };
+
+  # Newer versions don't compile.
+  resolv = self.resolv_0_1_1_2;
 
 }

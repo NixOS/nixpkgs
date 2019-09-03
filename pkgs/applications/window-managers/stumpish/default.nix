@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "stumpish";
   version = "0.0.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "stumpwm";

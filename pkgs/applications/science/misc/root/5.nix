@@ -3,7 +3,7 @@
 , Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
-  name = "root-${version}";
+  pname = "root";
   version = "5.34.36";
 
   src = fetchurl {

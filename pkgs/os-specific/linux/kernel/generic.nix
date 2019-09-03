@@ -93,7 +93,8 @@ let
 
   configfile = stdenv.mkDerivation {
     inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
-    name = "linux-config-${version}";
+    pname = "linux-config";
+    inherit version;
 
     generateConfig = ./generate-config.pl;
 

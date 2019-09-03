@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.6.0";
-  name = "arduino-mk-${version}";
+  pname = "arduino-mk";
 
   src = fetchFromGitHub {
     owner  = "sudar";

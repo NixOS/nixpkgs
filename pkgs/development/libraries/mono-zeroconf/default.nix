@@ -1,7 +1,7 @@
 { stdenv, fetchurl, which, pkgconfig, mono }:
 
 stdenv.mkDerivation rec {
-  name = "mono-zeroconf-${version}";
+  pname = "mono-zeroconf";
   version = "0.9.0";
 
   src = fetchurl {

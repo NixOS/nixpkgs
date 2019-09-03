@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "log4shib-${version}";
+  pname = "log4shib";
   version = "1.0.9";
 
   src = fetchgit {

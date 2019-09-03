@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pam, libkrb5, cyrus_sasl, miniupnpc }:
 
 stdenv.mkDerivation rec {
-  name = "dante-${version}";
+  pname = "dante";
   version = "1.4.2";
 
   src = fetchurl {
-    url = "https://www.inet.no/dante/files/${name}.tar.gz";
+    url = "https://www.inet.no/dante/files/${pname}-${version}.tar.gz";
     sha256 = "1bfafnm445afrmyxvvcl8ckq0p59yzykmr3y8qvryzrscd85g8ms";
   };
 

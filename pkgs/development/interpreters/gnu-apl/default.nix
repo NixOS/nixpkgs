@@ -1,7 +1,7 @@
 { stdenv, fetchurl, readline, gettext, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "gnu-apl-${version}";
+  pname = "gnu-apl";
   version = "1.8";
 
   src = fetchurl {

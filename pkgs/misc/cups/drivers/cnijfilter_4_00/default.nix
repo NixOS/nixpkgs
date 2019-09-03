@@ -12,7 +12,7 @@ let arch =
     else throw "Unsupported system ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation rec {
-  name = "cnijfilter-${version}";
+  pname = "cnijfilter";
 
   /* important note about versions: cnijfilter packages seem to use
      versions in a non-standard way.  the version indicates which

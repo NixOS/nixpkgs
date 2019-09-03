@@ -4,7 +4,7 @@
 assert stdenv.lib.versionAtLeast kernel.version "3.10";
 
 stdenv.mkDerivation rec {
-  name = "wireguard-${version}";
+  pname = "wireguard";
   inherit (wireguard-tools) src version;
 
   preConfigure = ''

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "lzfse-${version}";
+  pname = "lzfse";
   version = "2017-03-08";
 
   src = fetchFromGitHub {

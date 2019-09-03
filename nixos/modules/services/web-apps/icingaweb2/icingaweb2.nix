@@ -1,14 +1,16 @@
 { config, lib, pkgs, ... }: with lib; let
   cfg = config.services.icingaweb2;
+  fpm = config.services.phpfpm.pools.${poolName};
   poolName = "icingaweb2";
-  phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
 
   defaultConfig = {
     global = {
-      module_path = "${pkgs.icingaweb2}/modules${optionalString (builtins.length config.modulePath > 0) ":${concatStringsSep ":" config.modulePath}"}";
+      module_path = "${pkgs.icingaweb2}/modules";
     };
   };
 in {
+  meta.maintainers = with maintainers; [ das_j ];
+
   options.services.icingaweb2 = with types; {
     enable = mkEnableOption "the icingaweb2 web interface";
 
@@ -162,26 +164,25 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = ''
-        listen = "${phpfpmSocketName}"
-        listen.owner = nginx
-        listen.group = nginx
-        listen.mode = 0600
-        user = icingaweb2
-        pm = dynamic
-        pm.max_children = 75
-        pm.start_servers = 2
-        pm.min_spare_servers = 2
-        pm.max_spare_servers = 10
-      '';
+    services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
+      "${poolName}" = {
+        user = "icingaweb2";
+        phpOptions = ''
+          extension = ${pkgs.phpPackages.imagick}/lib/php/extensions/imagick.so
+          date.timezone = "${cfg.timezone}"
+        '';
+        settings = mapAttrs (name: mkDefault) {
+          "listen.owner" = "nginx";
+          "listen.group" = "nginx";
+          "listen.mode" = "0600";
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 2;
+          "pm.min_spare_servers" = 2;
+          "pm.max_spare_servers" = 10;
+        };
+      };
     };
-
-    services.phpfpm.phpOptions = mkIf (cfg.pool == "${poolName}")
-      ''
-        extension = ${pkgs.phpPackages.imagick}/lib/php/extensions/imagick.so
-        date.timezone = "${cfg.timezone}"
-      '';
 
     systemd.services."phpfpm-${poolName}".serviceConfig.ReadWritePaths = [ "/etc/icingaweb2" ];
 
@@ -206,7 +207,7 @@ in {
             include ${config.services.nginx.package}/conf/fastcgi.conf;
             try_files $uri =404;
             fastcgi_split_path_info ^(.+\.php)(/.+)$;
-            fastcgi_pass unix:${phpfpmSocketName};
+            fastcgi_pass unix:${fpm.socket};
             fastcgi_param SCRIPT_FILENAME ${pkgs.icingaweb2}/public/index.php;
           '';
         };

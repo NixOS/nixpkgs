@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.2.6";
-  name = "cups-pk-helper-${version}";
+  pname = "cups-pk-helper";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-${version}.tar.xz";

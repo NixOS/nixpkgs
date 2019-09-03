@@ -1,4 +1,4 @@
-{ python37, openssl_1_1
+{ python37, openssl
 , callPackage }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
@@ -23,16 +23,6 @@ let
       todosrht = self.callPackage ./todo.nix { };
 
       scmsrht = self.callPackage ./scm.nix { };
-
-      # OVERRIDES
-
-      cryptography = super.cryptography.override {
-        openssl = openssl_1_1;
-      };
-
-      pyopenssl = super.pyopenssl.override {
-        openssl = openssl_1_1;
-      };
     };
   };
 in with python.pkgs; {

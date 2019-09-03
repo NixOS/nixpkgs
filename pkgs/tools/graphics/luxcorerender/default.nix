@@ -14,7 +14,7 @@ let boost_static = boost165.override {
     };
 
 in stdenv.mkDerivation rec {
-  name = "luxcorerender-${version}";
+  pname = "luxcorerender";
   version = "2.0";
 
   src = fetchFromGitHub {

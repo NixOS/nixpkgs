@@ -13,7 +13,7 @@ let libmagic = file;  # libmagic provided by file package ATM
 in
 
 stdenv.mkDerivation rec {
-  name = "rspamd-${version}";
+  pname = "rspamd";
   version = "1.9.4";
 
   src = fetchFromGitHub {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = https://rspamd.com;
     license = licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [ avnik fpletz ];
+    maintainers = with maintainers; [ avnik fpletz globin ];
     platforms = with platforms; linux;
   };
 }

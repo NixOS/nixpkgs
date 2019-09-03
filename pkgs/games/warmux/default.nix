@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "warmux-${version}";
+  pname = "warmux";
   version = "unstable-2017-10-20";
 
   src = fetchFromGitHub {

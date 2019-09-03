@@ -2,7 +2,7 @@
 , python3, tzdata, glib, libxml2, icu }:
 
 stdenv.mkDerivation rec {
-  name = "libical-${version}";
+  pname = "libical";
   version = "3.0.4";
 
   outputs = [ "out" "dev" ]; #"devdoc" ];

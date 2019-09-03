@@ -3,7 +3,8 @@
 let version = "2.0";
 in
   stdenv.mkDerivation rec {
-    name = "hibernate-${version}";
+    pname = "hibernate";
+    inherit version;
     src = fetchurl {
       url = "http://tuxonice.nigelcunningham.com.au/files/hibernate-script-${version}.tar.gz";
       sha256 = "0ib5bac3spbcwmhf8f9apjbll8x7fgqj4k1s5q3srijh793rfifh";

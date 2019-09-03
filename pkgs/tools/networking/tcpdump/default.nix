@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libpcap, perl }:
 
 stdenv.mkDerivation rec {
-  name = "tcpdump-${version}";
+  pname = "tcpdump";
   version = "4.9.2";
 
   # leaked embargoed security update
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Network sniffer";
     homepage = http://www.tcpdump.org/;
     license = "BSD-style";
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ globin ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -12,12 +12,12 @@ let
   });
 in mkDerivation rec {
   version = "0.45.0";
-  name = "openmw-${version}";
+  pname = "openmw";
 
   src = fetchFromGitHub {
     owner = "OpenMW";
     repo = "openmw";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1r87zrsnza2v9brksh809zzqj6zhk5xj15qs8iq11v1bscm2a2j4";
   };
 

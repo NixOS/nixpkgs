@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "sysdig-${version}";
+  pname = "sysdig";
   version = "0.26.2";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, python3, xxd, boost }:
 
 stdenv.mkDerivation rec {
-  name = "cryptominisat-${version}";
+  pname = "cryptominisat";
   version = "5.6.8";
 
   src = fetchFromGitHub {

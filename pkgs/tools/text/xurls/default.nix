@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   version = "2.0.0";
-  name = "xurls-${version}";
+  pname = "xurls";
 
   src = fetchFromGitHub {
     owner = "mvdan";

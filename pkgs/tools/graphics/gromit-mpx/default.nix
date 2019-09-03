@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gromit-mpx-${version}";
+  pname = "gromit-mpx";
   version = "1.3";
 
   src = fetchFromGitHub {

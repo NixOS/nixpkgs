@@ -11,7 +11,6 @@ stdenv.mkDerivation rec
 {
   pname = "eliom";
   version = "6.7.0";
-  name = "${pname}-${version}";
 
   src = fetchzip {
     url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";

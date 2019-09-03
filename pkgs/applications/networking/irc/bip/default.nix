@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, bison, flex, autoconf, automake, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "bip-${version}";
+  pname = "bip";
   version = "0.8.9";
 
   # fetch sources from debian, because the creator's website provides

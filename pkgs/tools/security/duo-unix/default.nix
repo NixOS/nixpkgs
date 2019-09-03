@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pam, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "duo-unix-${version}";
+  pname = "duo-unix";
   version = "1.11.2";
 
   src = fetchurl {

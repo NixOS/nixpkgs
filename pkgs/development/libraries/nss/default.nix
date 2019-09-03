@@ -9,11 +9,11 @@ let
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
-  name = "nss-${version}";
+  pname = "nss";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${name}.tar.gz";
+    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
     sha256 = "1y0jvva4s3j7cjz22kqw2lsml0an1295bgpc2raf7kc9r60cpr7w";
   };
 

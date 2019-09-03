@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname   = "pathspec";
   version = "0.5.9";
-  name    = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

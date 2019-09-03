@@ -1,5 +1,5 @@
 { stdenv, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl
-, darwin, makeWrapper, less, openssl, pam, lttng-ust }:
+, darwin, makeWrapper, less, openssl_1_0_2, pam, lttng-ust }:
 
 let platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
@@ -10,11 +10,11 @@ let platformString = if stdenv.isDarwin then "osx"
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
                      else throw "unsupported platform";
-                     libraries = [ libunwind libuuid icu curl openssl ] ++
+                     libraries = [ libunwind libuuid icu curl openssl_1_0_2 ] ++
                        (if stdenv.isLinux then [ pam lttng-ust ] else [ darwin.Libsystem ]);
 in
 stdenv.mkDerivation rec {
-  name = "powershell-${version}";
+  pname = "powershell";
   version = "6.2.2";
 
   src = fetchzip {

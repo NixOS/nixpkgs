@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libx86emu, flex, perl, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "hwinfo-${version}";
+  pname = "hwinfo";
   version = "21.67";
 
   src = fetchFromGitHub {

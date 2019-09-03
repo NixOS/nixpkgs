@@ -128,7 +128,7 @@ let # packageJSON=./package.json;
 
 in stdenv.mkDerivation rec {
   inherit version;
-  name = "lumo-${version}";
+  pname = "lumo";
 
   src = fetchurl {
     url    = "https://github.com/anmonteiro/lumo/archive/${version}.tar.gz";

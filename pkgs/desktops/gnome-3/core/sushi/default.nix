@@ -4,11 +4,11 @@
 , gdk-pixbuf, librsvg, gtk3, harfbuzz, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "sushi-${version}";
+  pname = "sushi";
   version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/sushi/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "02idvqjk76lii9xyg3b1yz4rw721709bdm5j8ikjym6amcghl0aj";
   };
 

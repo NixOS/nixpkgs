@@ -2,7 +2,6 @@
 
 with python3.pkgs;
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "cheat";
   version = "2.5.1";
 

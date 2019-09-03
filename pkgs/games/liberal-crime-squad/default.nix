@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2016-07-06";
-  name = "liberal-crime-squad-${version}";
+  pname = "liberal-crime-squad";
 
   src = fetchFromGitHub {
     owner = "Kamal-Sadek";

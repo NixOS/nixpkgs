@@ -4,7 +4,8 @@ let
   version = "40ddb6d";
 in
 stdenv.mkDerivation rec {
-  name = "purple-vk-plugin-${version}";
+  pname = "purple-vk-plugin";
+  inherit version;
 
   src = fetchhg {
     url = "https://bitbucket.org/olegoandreev/purple-vk-plugin";

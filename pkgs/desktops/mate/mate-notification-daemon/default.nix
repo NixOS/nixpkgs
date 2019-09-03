@@ -2,11 +2,11 @@
   libnotify, libwnck3, gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-notification-daemon-${version}";
+  pname = "mate-notification-daemon";
   version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "06z3xczhz5diy4kk7b8lrzljrnql6fz0n1jyy916cf8pnnanpg0j";
   };
 

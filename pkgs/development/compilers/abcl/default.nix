@@ -1,6 +1,5 @@
 {stdenv, fetchurl, ant, jre, jdk}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "abcl";
   version = "1.5.0";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)

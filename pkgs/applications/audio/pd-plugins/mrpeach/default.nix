@@ -1,7 +1,7 @@
 { stdenv, fetchurl, puredata }:
 
 stdenv.mkDerivation rec {
-  name = "mrpeach-${version}";
+  pname = "mrpeach";
   version = "1.1";
 
   # this was to only usable url I could find:

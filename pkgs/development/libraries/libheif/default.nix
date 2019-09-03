@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.4.0";
-  name = "libheif-${version}";
+  pname = "libheif";
 
   src = fetchFromGitHub {
     owner = "strukturag";

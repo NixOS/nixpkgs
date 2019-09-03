@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
   doCheck = false; # generates shebangs in check phase, too lazy to fix
 
   installFlags = [
-    "sysconfdir=${placeholder ''out''}/etc"
+    "sysconfdir=${placeholder "out"}/etc"
     "localstatedir=\${TMPDIR}"
-    "typelibdir=${placeholder ''out''}/lib/girepository-1.0"
+    "typelibdir=${placeholder "out"}/lib/girepository-1.0"
   ];
 
   meta = {

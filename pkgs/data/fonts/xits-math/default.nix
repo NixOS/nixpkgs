@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages, fontforge }:
 
 stdenv.mkDerivation rec {
-  name = "xits-math-${version}";
+  pname = "xits-math";
   version = "1.200";
 
   src = fetchFromGitHub {

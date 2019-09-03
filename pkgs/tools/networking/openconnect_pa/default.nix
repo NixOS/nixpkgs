@@ -4,7 +4,7 @@ assert (openssl != null) == (gnutls == null);
 
 stdenv.mkDerivation rec {
   version = "unstable-2018-10-08";
-  name = "openconnect_pa-${version}";
+  pname = "openconnect_pa";
   
   outputs = [ "out" "dev" ];
 

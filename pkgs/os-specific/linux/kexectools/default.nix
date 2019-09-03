@@ -1,13 +1,13 @@
 { stdenv, buildPackages, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "kexec-tools-${version}";
+  pname = "kexec-tools";
   version = "2.0.19";
 
   src = fetchurl {
     urls = [
-      "mirror://kernel/linux/utils/kernel/kexec/${name}.tar.xz"
-      "http://horms.net/projects/kexec/kexec-tools/${name}.tar.xz"
+      "mirror://kernel/linux/utils/kernel/kexec/${pname}-${version}.tar.xz"
+      "http://horms.net/projects/kexec/kexec-tools/${pname}-${version}.tar.xz"
     ];
     sha256 = "03jyi4c47ywclycf3a253xpqs7p6ys8inz9q66b8m3xc6nrh307d";
   };

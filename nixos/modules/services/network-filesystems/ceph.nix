@@ -9,7 +9,7 @@ let
   translateOption = replaceStrings upperChars (map (s: " ${s}") lowerChars);
   generateDaemonList = (daemonType: daemons: extraServiceConfig:
     mkMerge (
-      map (daemon: 
+      map (daemon:
         { "ceph-${daemonType}-${daemon}" = generateServiceFile daemonType daemon cfg.global.clusterName ceph extraServiceConfig; }
       ) daemons
     )
@@ -17,8 +17,8 @@ let
   generateServiceFile = (daemonType: daemonId: clusterName: ceph: extraServiceConfig: {
     enable = true;
     description = "Ceph ${builtins.replaceStrings lowerChars upperChars daemonType} daemon ${daemonId}";
-    after = [ "network-online.target" "local-fs.target" "time-sync.target" ] ++ optional (daemonType == "osd") "ceph-mon.target";
-    wants = [ "network-online.target" "local-fs.target" "time-sync.target" ];
+    after = [ "network-online.target" "time-sync.target" ] ++ optional (daemonType == "osd") "ceph-mon.target";
+    wants = [ "network-online.target" "time-sync.target" ];
     partOf = [ "ceph-${daemonType}.target" ];
     wantedBy = [ "ceph-${daemonType}.target" ];
 
@@ -41,7 +41,7 @@ let
         daemonPath="/var/lib/ceph/${if daemonType == "rgw" then "radosgw" else daemonType}/${clusterName}-${daemonId}"
         if [ ! -d ''$daemonPath ]; then
           mkdir -m 755 -p ''$daemonPath
-          chown -R ceph:ceph ''$daemonPath 
+          chown -R ceph:ceph ''$daemonPath
         fi
       '';
     } // optionalAttrs (daemonType == "osd") { path = [ pkgs.getopt ]; }
@@ -55,7 +55,7 @@ let
       };
     }
   );
-in 
+in
 {
   options.services.ceph = {
     # Ceph has a monolithic configuration file but different sections for
@@ -86,7 +86,7 @@ in
         type = with types; nullOr commas;
         default = null;
         example = ''
-          node0, node1, node2 
+          node0, node1, node2
         '';
         description = ''
           List of hosts that will be used as monitors at startup.
@@ -313,9 +313,9 @@ in
       }
     ];
 
-    warnings = optional (cfg.global.monInitialMembers == null) 
+    warnings = optional (cfg.global.monInitialMembers == null)
       ''Not setting up a list of members in monInitialMembers requires that you set the host variable for each mon daemon or else the cluster won't function'';
-    
+
     environment.etc."ceph/ceph.conf".text = let
       # Translate camelCaseOptions to the expected camel case option for ceph.conf
       translatedGlobalConfig = mapAttrs' (name: value: nameValuePair (translateOption name) value) cfg.global;
@@ -344,13 +344,13 @@ in
     };
 
     systemd.services = let
-      services = [] 
-        ++ optional cfg.mon.enable (generateDaemonList "mon" cfg.mon.daemons { RestartSec = "10"; }) 
+      services = []
+        ++ optional cfg.mon.enable (generateDaemonList "mon" cfg.mon.daemons { RestartSec = "10"; })
         ++ optional cfg.mds.enable (generateDaemonList "mds" cfg.mds.daemons { StartLimitBurst = "3"; })
         ++ optional cfg.osd.enable (generateDaemonList "osd" cfg.osd.daemons { StartLimitBurst = "30"; RestartSec = "20s"; })
         ++ optional cfg.rgw.enable (generateDaemonList "rgw" cfg.rgw.daemons { })
         ++ optional cfg.mgr.enable (generateDaemonList "mgr" cfg.mgr.daemons { StartLimitBurst = "3"; });
-      in 
+      in
         mkMerge services;
 
     systemd.targets = let

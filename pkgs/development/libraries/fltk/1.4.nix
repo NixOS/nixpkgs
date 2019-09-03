@@ -8,7 +8,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "fltk-${version}";
+  pname = "fltk";
+  inherit version;
 
   src = fetchurl {
     url = "http://fltk.org/pub/fltk/snapshots/fltk-${version}.tar.gz";

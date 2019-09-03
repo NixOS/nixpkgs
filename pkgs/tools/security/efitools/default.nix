@@ -1,7 +1,7 @@
 { stdenv, gnu-efi, openssl, sbsigntool, perl, perlPackages,
 help2man, fetchgit }:
 stdenv.mkDerivation rec {
-  name = "efitools-${version}";
+  pname = "efitools";
   version = "1.9.2";
 
   buildInputs = [

@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "20140914";
-  name = "m4ri-${version}";
+  pname = "m4ri";
 
   src = fetchFromBitbucket {
     owner = "malb";

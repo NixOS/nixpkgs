@@ -3,7 +3,8 @@
 let version = "0.1.10"; in
 
 stdenv.mkDerivation {
-  name = "obuild-${version}";
+  pname = "obuild";
+  inherit version;
 
   src = fetchzip {
     url = "https://github.com/ocaml-obuild/obuild/archive/obuild-v${version}.tar.gz";

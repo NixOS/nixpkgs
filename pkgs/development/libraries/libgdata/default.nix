@@ -10,6 +10,7 @@
 , glib
 , json-glib
 , gcr
+, gnome-online-accounts
 , gobject-introspection
 , liboauth
 , gnome3
@@ -70,14 +71,14 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gnome3.gnome-online-accounts
+    gnome-online-accounts
     json-glib
   ];
 
   mesonFlags = [
     "-Dgtk_doc=false"
-    "-Dinstalled_test_bindir=${placeholder ''installedTests''}/libexec"
-    "-Dinstalled_test_datadir=${placeholder ''installedTests''}/share"
+    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
+    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
     "-Dinstalled_tests=true"
   ];
 

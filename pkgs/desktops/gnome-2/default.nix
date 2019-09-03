@@ -37,7 +37,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome_python_desktop = callPackage ./bindings/gnome-python-desktop { };
 
-  gnome_vfs = callPackage ./platform/gnome-vfs { };
+  gnome_vfs = callPackage ./platform/gnome-vfs {
+    openssl = pkgs.openssl_1_0_2;
+  };
 
   libgnome = callPackage ./platform/libgnome { };
 
@@ -54,8 +56,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gtkglext = callPackage ./platform/gtkglext { };
 
 #### DESKTOP
-
-  gvfs = pkgs.gvfs.override { gnome = self; };
 
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
@@ -76,7 +76,10 @@ lib.makeScope pkgs.newScope (self: with self; {
     glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
 
     # Included for backwards compatibility
-    libsoup libwnck gtk-doc gnome-doc-utils rarian;
+    libsoup libwnck gtk-doc gnome-doc-utils rarian
+
+    gvfs # added 2019-09-03
+  ;
 
   gtk = pkgs.gtk2;
   gtkmm = pkgs.gtkmm2;

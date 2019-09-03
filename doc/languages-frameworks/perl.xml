@@ -75,7 +75,8 @@ foo = import ../path/to/foo.nix {
      It adds the contents of the <envar>PERL5LIB</envar> environment variable
      to <literal>#! .../bin/perl</literal> line of Perl scripts as
      <literal>-I<replaceable>dir</replaceable></literal> flags. This ensures
-     that a script can find its dependencies.
+     that a script can find its dependencies. (This can cause this shebang line
+     to become too long for Darwin to handle; see the note below.)
     </para>
    </listitem>
    <listitem>
@@ -135,6 +136,36 @@ ClassC3Componentised = buildPerlPackage rec {
   ];
 };
 </programlisting>
+ </para>
+
+ <para>
+  On Darwin, if a script has too many
+  <literal>-I<replaceable>dir</replaceable></literal> flags in its first line
+  (its “shebang line”), it will not run. This can be worked around by calling
+  the <literal>shortenPerlShebang</literal> function from the
+  <literal>postInstall</literal> phase:
+<programlisting>
+{ stdenv, buildPerlPackage, fetchurl, shortenPerlShebang }:
+
+ImageExifTool = buildPerlPackage {
+  pname = "Image-ExifTool";
+  version = "11.50";
+
+  src = fetchurl {
+    url = "https://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-11.50.tar.gz";
+    sha256 = "0d8v48y94z8maxkmw1rv7v9m0jg2dc8xbp581njb6yhr7abwqdv3";
+  };
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+  postInstall = stdenv.lib.optional stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/exiftool
+  '';
+};
+</programlisting>
+ This will remove the <literal>-I</literal> flags from the shebang line,
+ rewrite them in the <literal>use lib</literal> form, and put them on the next
+ line instead. This function can be given any number of Perl scripts as
+ arguments; it will modify them in-place.
  </para>
 
  <section xml:id="ssec-generation-from-CPAN">

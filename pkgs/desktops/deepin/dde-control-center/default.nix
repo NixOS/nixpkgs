@@ -7,7 +7,6 @@
 }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-control-center";
   version = "4.10.11";
 
@@ -100,7 +99,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Control panel of Deepin Desktop Environment";

@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "1.4";
-  name = "renderdoc-${version}";
+  pname = "renderdoc";
 
   src = fetchFromGitHub {
     owner = "baldurk";

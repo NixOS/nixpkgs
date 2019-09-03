@@ -83,7 +83,8 @@ let
     };
 
 in stdenv.mkDerivation {
-  name = "ultrastar-manager-${version}";
+  pname = "ultrastar-manager";
+  inherit version;
   src = patchedSrc;
 
   postPatch = ''

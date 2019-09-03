@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.93";
-  name = "toluapp-${version}";
+  pname = "toluapp";
 
   src = fetchFromGitHub {
     owner = "LuaDist";

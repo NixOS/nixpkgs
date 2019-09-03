@@ -4,7 +4,7 @@ let
   major = "2";
   minor = "22";
 in stdenv.mkDerivation rec {
-  name = "dirb-${version}";
+  pname = "dirb";
   version = "${major}.${minor}";
 
   src = fetchurl {

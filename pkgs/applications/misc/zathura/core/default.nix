@@ -9,7 +9,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "zathura-core-${version}";
+  pname = "zathura-core";
   version = "0.4.3";
 
   src = fetchurl {
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "A core component for zathura PDF viewer";
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ globin ];
   };
 }

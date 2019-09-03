@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-vaapi-${version}";
+  pname = "gst-vaapi";
   version = "1.16.0";
 
   src = fetchurl {

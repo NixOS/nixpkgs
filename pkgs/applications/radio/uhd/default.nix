@@ -21,7 +21,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "uhd-${version}";
+  pname = "uhd";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "EttusResearch";

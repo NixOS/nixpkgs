@@ -2,7 +2,7 @@
 , lrzsz, ncurses, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "minicom-${version}";
+  pname = "minicom";
   version = "2.7.1";
 
   # The repository isn't tagged properly, so we need to use commit refs

@@ -1,10 +1,10 @@
 { stdenv, fetchurl , alsaLib, }:
 
 stdenv.mkDerivation rec {
-  name = "zita-alsa-pcmi-${version}";
+  pname = "zita-alsa-pcmi";
   version = "0.3.2";
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
+    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "12d7vdg74yh21w69qi0wg57iz4876j94qbiq09bvscih6xz9y78s";
   };
 

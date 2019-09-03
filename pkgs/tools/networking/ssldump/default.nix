@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, openssl, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "ssldump-${version}";
+  pname = "ssldump";
   version = "0.9b3";
 
   src = fetchFromGitHub {

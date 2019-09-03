@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.0.719";
-  name = "darkstat-${version}";
+  pname = "darkstat";
 
   src = fetchurl {
-    url = "${meta.homepage}/${name}.tar.bz2";
+    url = "${meta.homepage}/${pname}-${version}.tar.bz2";
     sha256 = "1mzddlim6dhd7jhr4smh0n2fa511nvyjhlx76b03vx7phnar1bxf";
   };
 

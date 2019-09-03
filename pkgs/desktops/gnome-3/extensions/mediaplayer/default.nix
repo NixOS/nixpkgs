@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, glib, meson, gettext, ninja, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extensions-mediaplayer-${version}";
+  pname = "gnome-shell-extensions-mediaplayer";
   version = "unstable-2019-03-21";
 
   src = fetchFromGitHub {

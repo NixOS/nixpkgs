@@ -65,7 +65,7 @@ assert length renderers == 0 -> throw "at least one renderer must be enabled";
 
 
 stdenv.mkDerivation rec {
-  name = "gnash-${version}";
+  pname = "gnash";
   version = "0.8.11-2019-30-01";
 
   src = fetchgit {

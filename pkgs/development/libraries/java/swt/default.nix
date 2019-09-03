@@ -21,7 +21,7 @@ let
 in stdenv.mkDerivation rec {
   version = "4.5";
   fullVersion = "${version}-201506032000";
-  name = "swt-${version}";
+  pname = "swt";
 
   hardeningDisable = [ "format" ];
 
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   # releases of SWT.  So we just grab a binary release and extract
   # "src.zip" from that.
   src = fetchurl {
-    url = "http://archive.eclipse.org/eclipse/downloads/drops4/R-${fullVersion}/${name}-${metadata.platform}.zip";
+    url = "http://archive.eclipse.org/eclipse/downloads/drops4/R-${fullVersion}/${pname}-${version}-${metadata.platform}.zip";
     sha256 = metadata.sha256;
   };
 

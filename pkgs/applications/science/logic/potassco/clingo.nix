@@ -1,7 +1,6 @@
 { stdenv, fetchzip, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "clingo";
   version = "5.3.0";
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage, libtool }:
 
 buildGoPackage rec {
-  name = "notary-${version}";
+  pname = "notary";
   version = "0.6.1";
   gitcommit = "d6e1431f";
 

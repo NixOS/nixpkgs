@@ -1,7 +1,7 @@
 {stdenv, fetchurl, bison, flex}:
 
 stdenv.mkDerivation rec {
-  name = "iasl-${version}";
+  pname = "iasl";
   version = "20181213";
 
   src = fetchurl {

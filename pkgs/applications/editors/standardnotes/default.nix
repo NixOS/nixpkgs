@@ -15,7 +15,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "standardnotes-${version}";
+  pname = "standardnotes";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-${plat}.AppImage";

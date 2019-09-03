@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.2.3.alpha";
-  name = "byzanz-${version}";
+  pname = "byzanz";
 
   src = fetchgit {
     url = git://github.com/GNOME/byzanz;

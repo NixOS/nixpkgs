@@ -3,11 +3,11 @@
 , python3, ninja, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "four-in-a-row-${version}";
+  pname = "four-in-a-row";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0h4wmbkdp7x3gp9sbxmvla316m8n6iy4f5sq0ksldj0z7ghlx9zl";
   };
 

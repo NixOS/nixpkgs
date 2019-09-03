@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "scdoc-${version}";
-  version = "1.9.6";
+  pname = "scdoc";
+  version = "1.9.7";
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/scdoc/archive/${version}.tar.gz";
-    sha256 = "0a2rxn0pihknvyvfvzib42v9c7zfdg8pi95q40fywwjb9clz59c9";
+    sha256 = "0y9p03dzdaszx02jbkdf3vcs52fqml591cmic5jdch5yznrg03ky";
   };
 
   postPatch = ''

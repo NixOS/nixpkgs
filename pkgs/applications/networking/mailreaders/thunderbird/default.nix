@@ -23,7 +23,7 @@ let
   wrapperTool = if enableGTK3 then wrapGAppsHook else makeWrapper;
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
-  name = "thunderbird-${version}";
+  pname = "thunderbird";
   version = "60.8.0";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "cups-toshiba-estudio-${version}";
+  pname = "cups-toshiba-estudio";
   version = "7.89";
 
   src = fetchurl {

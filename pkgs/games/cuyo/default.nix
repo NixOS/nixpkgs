@@ -1,7 +1,7 @@
 { stdenv, fetchurl, SDL, SDL_mixer, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "cuyo-${version}";
+  pname = "cuyo";
   version = "2.1.0";
   
   src = fetchurl {

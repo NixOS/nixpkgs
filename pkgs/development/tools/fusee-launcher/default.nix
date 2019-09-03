@@ -7,7 +7,7 @@
 } :
 
 stdenv.mkDerivation rec {
-  name = "fusee-launcher-${version}";
+  pname = "fusee-launcher";
   version = "unstable-2018-07-14";
 
   src = fetchFromGitHub {

@@ -14,7 +14,6 @@ let libPath = lib.makeLibraryPath [
 in stdenv.mkDerivation rec {
   pname = "airtame";
   version = "3.3.0";
-  name = "${pname}-${version}";
   longName = "${pname}-application";
 
   src = fetchurl {

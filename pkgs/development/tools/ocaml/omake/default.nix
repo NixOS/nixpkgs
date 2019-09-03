@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "omake-${version}";
+  pname = "omake";
   version = "0.10.3";
 
   src = fetchurl {
-    url = "http://download.camlcity.org/download/${name}.tar.gz";
+    url = "http://download.camlcity.org/download/${pname}-${version}.tar.gz";
     sha256 = "07bdg1h5i7qnlv9xq81ad5hfypl10hxm771h4rjyl5cn8plhfcgz";
   };
 

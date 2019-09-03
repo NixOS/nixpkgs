@@ -5,11 +5,11 @@
 , gdk-pixbuf, gst_all_1, json-glib, libdazzle, libhandy }:
 
 stdenv.mkDerivation rec {
-  name = "epiphany-${version}";
+  pname = "epiphany";
   version = "3.32.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/epiphany/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/epiphany/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "15d9s295yr6m9pbwh344c4akm7rgn19y4g1xkyn7gbq1hdbjia69";
   };
 

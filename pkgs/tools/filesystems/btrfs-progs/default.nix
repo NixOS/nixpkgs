@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "btrfs-progs-${version}";
+  pname = "btrfs-progs";
   version = "5.2.1";
 
   src = fetchurl {

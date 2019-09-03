@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "libb2-${version}";
+  pname = "libb2";
   version = "0.98.1";
 
   src = fetchFromGitHub {

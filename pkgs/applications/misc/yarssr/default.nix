@@ -25,7 +25,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "git-2017-12-01";
-  name = "yarssr-${version}";
+  pname = "yarssr";
 
   src = fetchFromGitHub {
     owner = "JGRennison";

@@ -2,7 +2,7 @@
 , quicktemplate, go-bindata, easyjson }:
 
 buildGoPackage rec {
-  name = "hydron-unstable-${version}";
+  pname = "hydron-unstable";
   version = "2019-02-17";
   goPackagePath = "github.com/bakape/hydron";
   goDeps = ./deps.nix;

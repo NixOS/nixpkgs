@@ -21,7 +21,8 @@ let
 
 
 in stdenv.mkDerivation {
-  name = "tla-toolbox-${version}";
+  pname = "tla-toolbox";
+  inherit version;
   src = fetchzip {
     url = "https://tla.msr-inria.inria.fr/tlatoolbox/products/TLAToolbox-${version}-linux.gtk.${arch}.zip";
     sha256 = "1mgx4p5qykf9q0p4cp6kcpc7fx8g5f2w1g40kdgas24hqwrgs3cm";

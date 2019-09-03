@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dnsperf-${version}";
+  pname = "dnsperf";
   version = "2.3.1";
 
   # The same as the initial commit of the new GitHub repo (only readme changed).

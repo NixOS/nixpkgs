@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   # compilation error in 2.9.0 https://gitlab.com/stuko/ovito/issues/40
   # This is not the "released" 3.0.0 just a commit
   version = "3.0.0";
-  name = "ovito-${version}";
+  pname = "ovito";
 
   src = fetchgit {
     url = "https://gitlab.com/stuko/ovito";

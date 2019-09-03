@@ -28,7 +28,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "gephi-${version}";
+  pname = "gephi";
+  inherit version;
 
   inherit src;
 

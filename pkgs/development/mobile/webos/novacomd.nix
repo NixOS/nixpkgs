@@ -4,7 +4,7 @@ webos, cmake, pkgconfig,
 libusb }:
 
 stdenv.mkDerivation rec {
-  name = "novacomd-${version}";
+  pname = "novacomd";
   version = "127";
 
   src = fetchFromGitHub {

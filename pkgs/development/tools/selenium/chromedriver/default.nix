@@ -27,7 +27,7 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  name = "chromedriver-${version}";
+  pname = "chromedriver";
   version = "76.0.3809.68";
 
   src = fetchurl {

@@ -17,11 +17,11 @@ let
   configVersion = "2.11"; # bump whenever fontconfig breaks compatibility with older configurations
 in
 stdenv.mkDerivation rec {
-  name = "fontconfig-${version}";
+  pname = "fontconfig";
   version = "2.12.6";
 
   src = fetchurl {
-    url = "http://fontconfig.org/release/${name}.tar.bz2";
+    url = "http://fontconfig.org/release/${pname}-${version}.tar.bz2";
     sha256 = "05zh65zni11kgnhg726gjbrd55swspdvhqbcnj5a5xh8gn03036g";
   };
 

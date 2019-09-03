@@ -10,7 +10,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "arx-libertatis-${version}";
+  pname = "arx-libertatis";
   version = "2019-02-16";
 
   src = fetchFromGitHub {

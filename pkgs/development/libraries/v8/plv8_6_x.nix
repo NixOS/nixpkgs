@@ -1,6 +1,8 @@
 # NOTE: this expression is NOT exported from the top-level of all-packages.nix,
-# it is exclusively used by the 'plv8' PostgreSQL extension, which requires a
-# very exact version.
+# it is exclusively used by the 'plv8' PostgreSQL extension.
+# Since plv8 2.3.2, plv8 no longer requires this specific version, but as of
+# 2019-08-29, nixpkgs does not have v8 6.x, and v8_5 is bumped to 5.4.232, which
+# is a bit outdated.  plv8 3.x is planned to support v8 7.x
 
 { stdenv, lib, fetchgit, fetchFromGitHub, gn, ninja, python, glib, pkgconfig
 , doCheck ? false
@@ -109,7 +111,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "v8-${version}";
+  pname = "v8";
   version = "6.4.388.40";
 
   inherit doCheck;

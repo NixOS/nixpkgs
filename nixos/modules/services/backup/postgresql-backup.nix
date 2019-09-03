@@ -81,7 +81,7 @@ in {
       };
 
       pgdumpOptions = mkOption {
-        type = types.string;
+        type = types.separatedString " ";
         default = "-Cbo";
         description = ''
           Command line options for pg_dump. This options is not used

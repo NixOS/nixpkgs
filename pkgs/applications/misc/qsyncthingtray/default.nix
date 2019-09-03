@@ -7,7 +7,7 @@
 
 mkDerivation rec {
   version = "0.5.8";
-  name = "qsyncthingtray-${version}";
+  pname = "qsyncthingtray";
 
   src = fetchFromGitHub {
     owner  = "sieren";

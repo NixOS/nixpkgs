@@ -12,7 +12,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "2.1.2";
-  name = "hyper-${version}";
+  pname = "hyper";
   src = fetchurl {
     url = "https://github.com/zeit/hyper/releases/download/${version}/hyper_${version}_amd64.deb";
     sha256 = "1n4qlbk7q9zkhhg72mdks95g15xgyrc6ixf882ghvrqghd4zxplm";

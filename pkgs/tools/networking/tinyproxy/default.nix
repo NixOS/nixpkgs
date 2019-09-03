@@ -2,7 +2,7 @@
   libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec{
-  name = "tinyproxy-${version}";
+  pname = "tinyproxy";
   version = "1.10.0";
 
   src = fetchFromGitHub {

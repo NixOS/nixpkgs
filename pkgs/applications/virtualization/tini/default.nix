@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.18.0";
-  name = "tini-${version}";
+  pname = "tini";
 
   src = fetchFromGitHub {
     owner = "krallin";

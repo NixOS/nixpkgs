@@ -12,7 +12,8 @@ let
   ];
 in
 stdenv.mkDerivation {
-  name = "bashSnippets-${version}";
+  pname = "bashSnippets";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "alexanderepstein";

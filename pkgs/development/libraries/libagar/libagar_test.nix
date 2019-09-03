@@ -2,7 +2,7 @@
 
 let srcs = import ./srcs.nix { inherit fetchurl; }; in
 stdenv.mkDerivation rec {
-  name = "libagar-test-${version}";
+  pname = "libagar-test";
   inherit (srcs) version src;
 
   sourceRoot = "agar-1.5.0/tests";

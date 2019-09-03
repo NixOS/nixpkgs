@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "actor-framework-${version}";
+  pname = "actor-framework";
   version = "0.17.0";
 
   src = fetchFromGitHub {
