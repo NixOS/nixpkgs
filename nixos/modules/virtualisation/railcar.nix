@@ -22,36 +22,37 @@ let
             Type = containerConfig.runType;
           };
       };
-  mount = {
+  mount = with types; (submodule {
     options = {
       type = mkOption {
-        type = types.string;
+        type = string;
         default = "none";
         description = ''
-        The type of the filesystem to be mounted.
-        Linux: filesystem types supported by the kernel as listed in 
-        `/proc/filesystems` (e.g., "minix", "ext2", "ext3", "jfs", "xfs", 
-        "reiserfs", "msdos", "proc", "nfs", "iso9660"). For bind mounts 
-        (when options include either bind or rbind), the type is a dummy,
-        often "none" (not listed in /proc/filesystems).
-      '';
+          The type of the filesystem to be mounted.
+          Linux: filesystem types supported by the kernel as listed in 
+          `/proc/filesystems` (e.g., "minix", "ext2", "ext3", "jfs", "xfs", 
+          "reiserfs", "msdos", "proc", "nfs", "iso9660"). For bind mounts 
+          (when options include either bind or rbind), the type is a dummy,
+          often "none" (not listed in /proc/filesystems).
+        '';
       };
       source = mkOption {
-        type = types.string;
+        type = string;
         description = "Source for the in-container mount";
       };
       options = mkOption {
-        type = with types; loaOf (string);
+        type = loaOf (string);
         default = [ "bind" ];
         description = ''
-        Mount options of the filesystem to be used.
+          Mount options of the filesystem to be used.
         
-        Support optoions are listed in the mount(8) man page. Note that both
-        filesystem-independent and filesystem-specific options are listed.
-      '';
+          Support optoions are listed in the mount(8) man page. Note that 
+          both filesystem-independent and filesystem-specific options 
+          are listed.
+        '';
       };
     };
-  };
+  });
 in
 {
   options.services.railcar = {
@@ -68,7 +69,7 @@ in
           };
 
           mounts = mkOption {
-            type = with types; attrsOf (submodule (mount));
+            type = with types; attrsOf mount;
             default = {};
             description = ''
               A set of mounts inside the container.
