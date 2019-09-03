@@ -55,6 +55,13 @@ in
         description = "The fail2ban package to use for running the fail2ban service.";
       };
 
+      packageFirewall = mkOption {
+        default = pkgs.iptables;
+        type = types.package;
+        example = "pkgs.nftables";
+        description = "The firewall package used by fail2ban service.";
+      };
+
       daemonConfig = mkOption {
         default = ''
           [Definition]
@@ -103,7 +110,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -131,7 +137,7 @@ in
       restartTriggers = [ fail2banConf jailConf pathsConf ];
       reloadIfChanged = true;
 
-      path = [ cfg.package pkgs.iptables pkgs.iproute ];
+      path = [ cfg.package cfg.packageFirewall pkgs.iproute ];
 
       preStart = ''
         mkdir -p /var/lib/fail2ban
