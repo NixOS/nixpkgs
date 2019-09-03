@@ -39,29 +39,29 @@ rec {
 
 
 # end
-# docbook-index-0.1.3
+# docbook-index-0.1.4
 
-  crates.docbook_index."0.1.3" = deps: { features?(features_.docbook_index."0.1.3" deps {}) }: buildRustCrate {
+  crates.docbook_index."0.1.4" = deps: { features?(features_.docbook_index."0.1.4" deps {}) }: buildRustCrate {
     crateName = "docbook-index";
-    version = "0.1.3";
+    version = "0.1.4";
     authors = [ "Graham Christensen <graham@grahamc.com>" ];
     edition = "2018";
-    sha256 = "0smn9jcpyhnl35cxg0pc0i7y95bkrd396h0rz1zdjm1gcbghp0ss";
+    sha256 = "08brd0fyrasambp0aqrkl4i1lm2qj3ry822r960hkxk7vd5d5xji";
     dependencies = mapFeatures features ([
-      (crates."elasticlunr_rs"."${deps."docbook_index"."0.1.3"."elasticlunr_rs"}" deps)
-      (crates."glob"."${deps."docbook_index"."0.1.3"."glob"}" deps)
-      (crates."xml_rs"."${deps."docbook_index"."0.1.3"."xml_rs"}" deps)
+      (crates."elasticlunr_rs"."${deps."docbook_index"."0.1.4"."elasticlunr_rs"}" deps)
+      (crates."glob"."${deps."docbook_index"."0.1.4"."glob"}" deps)
+      (crates."xml_rs"."${deps."docbook_index"."0.1.4"."xml_rs"}" deps)
     ]);
   };
-  features_.docbook_index."0.1.3" = deps: f: updateFeatures f (rec {
-    docbook_index."0.1.3".default = (f.docbook_index."0.1.3".default or true);
-    elasticlunr_rs."${deps.docbook_index."0.1.3".elasticlunr_rs}".default = true;
-    glob."${deps.docbook_index."0.1.3".glob}".default = true;
-    xml_rs."${deps.docbook_index."0.1.3".xml_rs}".default = true;
+  features_.docbook_index."0.1.4" = deps: f: updateFeatures f (rec {
+    docbook_index."0.1.4".default = (f.docbook_index."0.1.4".default or true);
+    elasticlunr_rs."${deps.docbook_index."0.1.4".elasticlunr_rs}".default = true;
+    glob."${deps.docbook_index."0.1.4".glob}".default = true;
+    xml_rs."${deps.docbook_index."0.1.4".xml_rs}".default = true;
   }) [
-    (features_.elasticlunr_rs."${deps."docbook_index"."0.1.3"."elasticlunr_rs"}" deps)
-    (features_.glob."${deps."docbook_index"."0.1.3"."glob"}" deps)
-    (features_.xml_rs."${deps."docbook_index"."0.1.3"."xml_rs"}" deps)
+    (features_.elasticlunr_rs."${deps."docbook_index"."0.1.4"."elasticlunr_rs"}" deps)
+    (features_.glob."${deps."docbook_index"."0.1.4"."glob"}" deps)
+    (features_.xml_rs."${deps."docbook_index"."0.1.4"."xml_rs"}" deps)
   ];
 
 
