@@ -1225,11 +1225,15 @@
     githubId = 25088352;
     name = "Christian Kögler";
   };
-  ckampka = {
+  kampka = {
     email = "christian@kampka.net";
     github = "kampka";
     githubId = 422412;
     name = "Christian Kampka";
+    keys = [{
+      longkeyid = "ed25519/0x1CBE9645DD68E915";
+      fingerprint = "F7FA 0BD0 8775 337C F6AB  4A14 1CBE 9645 DD68 E915";
+    }];
   };
   ckauhaus = {
     email = "kc@flyingcircus.io";
