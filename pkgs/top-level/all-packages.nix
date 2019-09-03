@@ -20489,9 +20489,7 @@ in
 
   wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
 
-  sonic-pi = callPackage ../applications/audio/sonic-pi {
-    ruby = ruby_2_3;
-  };
+  sonic-pi = callPackage ../applications/audio/sonic-pi { };
 
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
