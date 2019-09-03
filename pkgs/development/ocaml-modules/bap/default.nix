@@ -6,6 +6,10 @@
  which, makeWrapper, writeText
 }:
 
+if stdenv.lib.versionAtLeast core_kernel.version "0.12"
+then throw "BAP needs core_kernel-0.11 (hence OCaml ≤ 4.06)"
+else
+
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-bap-${version}";
   version = "1.6.0";
