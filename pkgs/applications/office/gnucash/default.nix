@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, makeWrapper, cmake, gtest
+{ fetchurl, fetchpatch, stdenv, pkgconfig, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
 , webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
 , libdbiDrivers, guile, perl, perlPackages
@@ -40,6 +40,15 @@ stdenv.mkDerivation rec {
     libdbiDrivers guile
     perlWrapper perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
+
+  # Included in the maint branch, apparently required by newer CMake
+  patches = [
+    (fetchpatch {
+      name = "fix-cmake-failure.patch";
+      url = "https://github.com/Gnucash/gnucash/commit/ce6c3c22a15102341ca41ddba2a46ea7daf63f17.patch";
+      sha256 = "0h8h8klq5gpsnhw86yyzc2rx21kn5vn12mwiz9amn52s0zzp459b";
+    })
+  ];
 
   propagatedUserEnvPkgs = [ dconf ];
 
