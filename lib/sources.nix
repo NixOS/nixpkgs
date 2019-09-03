@@ -36,18 +36,47 @@ rec {
   # allowing you to chain multiple calls together without any
   # intermediate copies being put in the nix store.
   #
-  #     lib.cleanSourceWith f (lib.cleanSourceWith g ./.)     # Succeeds!
-  #     builtins.filterSource f (builtins.filterSource g ./.) # Fails!
-  cleanSourceWith = { filter, src }:
+  #     lib.cleanSourceWith {
+  #       filter = f;
+  #       src = lib.cleanSourceWith {
+  #         filter = g;
+  #         src = ./.;
+  #       };
+  #     }
+  #     # Succeeds!
+  #
+  #     builtins.filterSource f (builtins.filterSource g ./.)
+  #     # Fails!
+  #
+  # Parameters:
+  #
+  #   src:      A path or cleanSourceWith result to filter and/or rename.
+  #
+  #   filter:   A function (path -> type -> bool)
+  #             Optional with default value: constant true (include everything)
+  #             The function will be combined with the && operator such
+  #             that src.filter is called lazily.
+  #             For implementing a filter, see
+  #             https://nixos.org/nix/manual/#builtin-filterSource
+  #
+  #   name:     Optional name to use as part of the store path.
+  #             This defaults `src.name` or otherwise `baseNameOf src`.
+  #             We recommend setting `name` whenever `src` is syntactically `./.`.
+  #             Otherwise, you depend on `./.`'s name in the parent directory,
+  #             which can cause inconsistent names, defeating caching.
+  #
+  cleanSourceWith = { filter ? _path: _type: true, src, name ? null }:
     let
       isFiltered = src ? _isLibCleanSourceWith;
       origSrc = if isFiltered then src.origSrc else src;
       filter' = if isFiltered then name: type: filter name type && src.filter name type else filter;
+      name' = if name != null then name else if isFiltered then src.name else baseNameOf src;
     in {
       inherit origSrc;
       filter = filter';
-      outPath = builtins.filterSource filter' origSrc;
+      outPath = builtins.path { filter = filter'; path = origSrc; name = name'; };
       _isLibCleanSourceWith = true;
+      name = name';
     };
 
   # Filter sources by a list of regular expressions.
