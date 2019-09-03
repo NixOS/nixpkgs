@@ -59,6 +59,7 @@ let
       ./generated/epub.xsl \
       ${combined-file-name}
 
+    cp ./generated/web/style.css "$scratch/epub/OEBPS/style.css"
     cp ${doclib.epub-overrides} "$scratch/epub/OEBPS/override.css"
     mkdir -p "$scratch/epub/OEBPS/images/callouts/"
     cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg "$scratch/epub/OEBPS/images/callouts/"

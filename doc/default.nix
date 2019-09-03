@@ -15,9 +15,12 @@ in pkgs.nix-doc-tools
     functionDocs
   ];
 
-  nativeBuildInputs = [ pkgs.pandoc ];
+  nativeBuildInputs = with pkgs; [ pandoc findutils gnumake gnused ];
 
   preBuild = ''
     ln -fs $(realpath ./generated/function-locations.xml) ./functions/library/locations.xml
+    ln -fs $(realpath ./generated/function-docs) ./functions/library/generated
+
+    make
   '';
 }

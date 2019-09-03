@@ -96,6 +96,8 @@ rec {
       cp -r ${elasticlunr}/elasticlunr.min.js ./web/elasticlunr.min.js
       cp ${styles} ./web/style.css
       cp ${epub-overrides} ./web/overrides.css
+      mkdir -p ./web/images/callouts/
+      cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg ./web/images/callouts/
 
       chmod -R u+w ./web
     )
