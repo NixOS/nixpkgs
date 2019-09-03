@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl
 , ocaml, findlib, ocamlbuild, ocaml_oasis,
- bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, frontc, ounit, ppx_jane, parsexp,
- utop,
+ bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp,
+ utop, libxml2,
  ppx_tools_versioned,
  which, makeWrapper, writeText
 }:
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which makeWrapper ];
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
-                  llvm_38 ppx_tools_versioned
-                  utop ];
+                  llvm ppx_tools_versioned
+                  utop libxml2 ];
 
   propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_jane core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
                             piqi-ocaml uuidm frontc ounit ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   disableIda = "--disable-ida --disable-fsi-benchmark";
 
-  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm_38}/bin/llvm-config" ];
+  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm}/bin/llvm-config" ];
 
   BAPBUILDFLAGS = "-j $(NIX_BUILD_CORES)";
 
