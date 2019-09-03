@@ -391,7 +391,7 @@ let
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      llvm = pkgs.llvm_39;
+      llvm = pkgs.llvm_8;
     };
 
     logs = callPackage ../development/ocaml-modules/logs {
