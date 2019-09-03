@@ -3902,8 +3902,8 @@ in
   idevicerestore = callPackage ../tools/misc/idevicerestore { };
 
   inherit (callPackages ../tools/filesystems/irods rec {
-            stdenv = llvmPackages_38.libcxxStdenv;
-            libcxx = llvmPackages_38.libcxx;
+            stdenv = llvmPackages.libcxxStdenv;
+            libcxx = llvmPackages.libcxx;
             boost = boost160.override { inherit stdenv; };
             avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
           })
