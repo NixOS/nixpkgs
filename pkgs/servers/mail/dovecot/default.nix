@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.5.2";
+  name = "dovecot-2.3.7.2";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "1whvyg087sjhkd8r0xnk4ij105j135acnfxq6n58c6nqxwdf855s";
+    sha256 = "0q0jgcv3ni2znkgyhc966ffphj1wk73y76wssh0yciqafs2f0v36";
   };
 
   enableParallelBuilding = true;
@@ -43,18 +43,6 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.2.x-module_dir.patch
-
-    (fetchpatch {
-      name = "CVE-2019-11494.patch";
-      url = https://github.com/dovecot/core/commit/f79745dae4a9a5fca33320e03a4fc9064b88d01e.patch;
-      sha256 = "0qyhcw8xsnjhk7s29mhsqa46m28r2bcjz7bxbjr48d7wl9r3v3fm";
-    })
-    (fetchpatch {
-      name = "CVE-2019-11499.patch";
-      url = https://github.com/dovecot/core/commit/e9d60648abb9bbceff89882a5309cb9532e702e9.patch;
-      sha256 = "1di6adkd8f6gjkpf8aiqxzwvscsq188qqah6b7r23q9j3zlv47mv";
-    })
-
   ];
 
   configureFlags = [
