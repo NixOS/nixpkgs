@@ -303,8 +303,9 @@ mapAliases ({
   rssglx = rss-glx; #added 2015-03-25
   ruby_2_0_0 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_1_0 = throw "deprecated 2018-0213: use a newer version of ruby";
-  ruby_2_2_9 = throw "deprecated 2018-0213: use ruby_2_2 instead";
-  ruby_2_3_6 = throw "deprecated 2018-0213: use ruby_2_3 instead";
+  ruby_2_2_9 = throw "deprecated 2018-0213: use a newer version of ruby";
+  ruby_2_3_6 = throw "deprecated 2018-0213: use a newer version of ruby";
+  ruby_2_3 = throw "deprecated 2019-09-06: use a newer version of ruby";
   ruby_2_4_3 = throw "deprecated 2018-0213: use ruby_2_4 instead";
   ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
