@@ -1,7 +1,7 @@
 { lib, writeText, docbook_xsl_ns, fetchFromGitHub, stdenvNoCC
 , nodePackages, runCommand, docbook5, documentation-highlighter
 , libxml2, libxslt, zip, xmlformat, docbook-index, coreutils
-, jing, xmloscopy }:
+, jing, xmloscopy, findutils }:
 rec {
   version = lib.version;
 
@@ -107,6 +107,6 @@ rec {
 
   toolbox = rec {
     build = [ libxml2 libxslt zip xmlformat docbook-index coreutils ];
-    dev = build ++ [ jing xmloscopy ];
+    dev = build ++ [ jing xmloscopy findutils ];
   };
 }

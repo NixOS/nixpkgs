@@ -64,7 +64,17 @@ let
        echo "Not OK. Try «docs-debug» if you need help."
        exit 1
      fi
-  '';
+   '';
+
+   tools.format = writeShellScriptBin "docs-format" ''
+    PATH=${lib.makeBinPath (doclib.toolbox.dev)}
+
+    set -eux
+
+	  find ${toString src} '*.xml' -type f -print0  \
+      | xargs -0 -I{} -n1 \
+        xmlformat --config-file '${./xmlformat.conf}' -i {}
+   '';
 
   tools.debug = writeShellScriptBin "docs-debug" ''
     PATH=${lib.makeBinPath (doclib.toolbox.dev)}
@@ -146,7 +156,7 @@ in stdenvNoCC.mkDerivation {
   inherit name src;
 
   buildInputs = [ tools.build ] ++ (if nix-shell then [
-    tools.nix-shell-generate tools.validate tools.debug
+    tools.nix-shell-generate tools.validate tools.debug tools.format
   ] else [
     tools.generate
   ]) ;
