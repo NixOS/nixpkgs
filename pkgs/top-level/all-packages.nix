@@ -15046,6 +15046,7 @@ in
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = prometheus_1;
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
+  prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
   prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
