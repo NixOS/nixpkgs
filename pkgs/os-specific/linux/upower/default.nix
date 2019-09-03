@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "upower";
-  version = "0.99.10";
+  version = "0.99.11";
 
   src = fetchurl {
-    url = https://gitlab.freedesktop.org/upower/upower/uploads/c438511024b9bc5a904f8775cfc8e4c4/upower-0.99.10.tar.xz;
-    sha256 = "17d2bclv5fgma2y3g8bsn9pdvspn1zrzismzdnzfivc0f2wm28k4";
+    url = https://gitlab.freedesktop.org/upower/upower/uploads/93cfe7c8d66ed486001c4f3f55399b7a/upower-0.99.11.tar.xz;
+    sha256 = "1vxxvmz2cxb1qy6ibszaz5bskqdy9nd9fxspj9fv3gfmrjzzzdb4";
   };
 
   nativeBuildInputs = [
