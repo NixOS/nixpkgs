@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libcbor";
-  version = "2019-07-25";
+  version = "unstable-2019-07-25";
 
   src = fetchFromGitHub {
     owner = "PJK";
