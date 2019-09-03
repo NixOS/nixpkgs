@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
 Name: blas
 Version: ${version}
 Description: blas provided by the BLAS package.
-Cflags: -I$out/include
 Libs: -L$out/lib -lblas
 EOF
   '';
