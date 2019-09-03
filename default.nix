@@ -24,5 +24,29 @@ if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.
   ''
 
 else
+{
+  # See ./doc/patching-nixpkgs.xml for documentation
+  patches ? (_pkgs : [])
+, ...
+} @ argsWithPatches:
+let
+  unpatchedArgs = builtins.removeAttrs argsWithPatches [ "patches" ];
+  bootstrapArgs = unpatchedArgs // { overlays = []; crossOverlays = []; };
 
-  import ./pkgs/top-level/impure.nix
+  unpatchedPkgs = impure unpatchedArgs;
+  bootstrapPkgs = impure bootstrapArgs;
+  patchedPkgs = import patchedNixpkgsDir unpatchedArgs;
+
+  impure = import ./pkgs/top-level/impure.nix;
+
+  patchedNixpkgsDir = bootstrapPkgs.applyPatches {
+    name = "nixpkgs-patched";
+    src = ./.;
+    patches = patchList;
+  };
+
+  patchList = patches bootstrapPkgs;
+in
+if builtins.length patchList == 0
+then unpatchedPkgs
+else patchedPkgs
