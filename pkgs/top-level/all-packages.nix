@@ -11267,9 +11267,7 @@ in
 
   gumbo = callPackage ../development/libraries/gumbo { };
 
-  gvfs = callPackage ../development/libraries/gvfs {
-    gnome = res.gnome3;
-  };
+  gvfs = callPackage ../development/libraries/gvfs { };
 
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
 
