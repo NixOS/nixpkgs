@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A library full of GTK+ widgets for mobile phones";
+    description = "A library full of GTK widgets for mobile phones";
     homepage = https://source.puri.sm/Librem5/libhandy;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];

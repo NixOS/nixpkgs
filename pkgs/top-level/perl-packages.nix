@@ -7537,7 +7537,7 @@ let
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
     meta = {
-      description = "Perl interface to the 3.x series of the gtk+ toolkit";
+      description = "Perl interface to the 3.x series of the GTK toolkit";
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -19379,7 +19379,7 @@ let
     };
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
-    #   Error: Unable to initialize GTK+, is DISPLAY set properly?"
+    #   Error: Unable to initialize GTK, is DISPLAY set properly?"
     doCheck = false;
     buildInputs = [ ExtUtilsXSpp ];
   };
