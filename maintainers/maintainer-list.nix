@@ -3075,6 +3075,16 @@
     githubId = 8735102;
     name = "John Ramsden";
   };
+  jojosch = {
+    name = "Johannes Schleifenbaum";
+    email = "johannes@js-webcoding.de";
+    github = "jojosch";
+    githubId = 327488;
+    keys = [{
+      longkeyid = "ed25519/059093B1A278BCD0";
+      fingerprint = "7249 70E6 A661 D84E 8B47  678A 0590 93B1 A278 BCD0";
+    }];
+  };
   joko = {
     email = "ioannis.koutras@gmail.com";
     github = "jokogr";
