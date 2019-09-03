@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "2.5.2";
+  version = "2.5.3";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "0pnva72f2w4jcgnl1y7nw5rdly4ipx3hji4c9yc9s0hna1n2ijxn";
+    sha256 = "16jm9v9y25dhfwd4hvhnynj6k3ikjbr3z3dpn8py50gr82fjds3j";
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Geographic Objects for PostgreSQL";
     homepage = https://postgis.net/;
+    changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
     inherit (postgresql.meta) platforms;
