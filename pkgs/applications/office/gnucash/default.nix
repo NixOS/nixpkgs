@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
   # Should probably be removed next version bump
   CXXFLAGS = [ "-Wno-deprecated-declarations" ];
 
+  patches = [ ./cmake_check_symbol_exists.patch ];
+
   postPatch = ''
     patchShebangs .
   '';
