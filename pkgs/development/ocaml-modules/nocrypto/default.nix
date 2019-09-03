@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
 , cpuid, ocb-stubblr, sexplib
-, cstruct, zarith, ppx_sexp_conv
+, cstruct, zarith, ppx_sexp_conv, ppx_deriving
 , cstruct-lwt ? null
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ ocaml findlib ocamlbuild topkg cpuid ocb-stubblr ];
-  propagatedBuildInputs = [ cstruct ppx_sexp_conv sexplib zarith ] ++ optional withLwt cstruct-lwt;
+  propagatedBuildInputs = [ cstruct ppx_deriving ppx_sexp_conv sexplib zarith ] ++ optional withLwt cstruct-lwt;
 
   buildPhase = "${topkg.buildPhase} --with-lwt ${boolToString withLwt}";
   inherit (topkg) installPhase;
