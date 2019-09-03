@@ -58,7 +58,7 @@ in {
         # see https://github.com/raspberrypi/linux/issues/3198
         builder = mkOption {
           default = "dtc";
-          type = types.enum [ "dtc" "dtmerge" ];
+          type = types.enum (attrNames builders);
           description = ''
             Whether to use `dtc` or `dtmerge` to build the overlay. Use of
             parameters and some Raspberry Pi overlays require `dtmerge`, but
