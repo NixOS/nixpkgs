@@ -17388,6 +17388,8 @@ in
 
   avocode = callPackage ../applications/graphics/avocode {};
 
+  azpainter = callPackage ../applications/graphics/azpainter { };
+
   cadence =  libsForQt5.callPackage ../applications/audio/cadence { };
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
