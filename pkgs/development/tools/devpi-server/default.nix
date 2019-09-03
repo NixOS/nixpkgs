@@ -1,20 +1,21 @@
- { stdenv, python3Packages, nginx }:
+{ stdenv, python3Packages, nginx }:
 
 python3Packages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "devpi-server";
-  version = "4.9.0";
+  version = "5.1.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0cx0nv1qqv8lg6p1v8dv5val0dxnc3229c15imibl9wrhrffjbg9";
+    sha256 = "254fceee846532a5fec4e6bf52a59eb8f236efc657678a542b5200da4bb3abbc";
   };
 
   propagatedBuildInputs = with python3Packages; [
+    py
     appdirs
     devpi-common
     execnet
     itsdangerous
+    repoze_lru
     passlib
     pluggy
     pyramid
@@ -24,13 +25,12 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [
     beautifulsoup4
-    mock
     nginx
     pytest
-    pytest-flakes
+    pytest-flake8
     pytestpep8
     webtest
-  ];
+  ] ++ stdenv.lib.optionals isPy27 [ mock ];
 
   # test_genconfig.py needs devpi-server on PATH
   checkPhase = ''
