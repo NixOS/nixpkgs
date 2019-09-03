@@ -1,7 +1,7 @@
 { stdenv, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "pushgateway-${version}";
+  pname = "pushgateway";
   version = "0.8.0";
   rev = "v${version}";
 

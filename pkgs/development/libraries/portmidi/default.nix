@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, cmake, /*jdk,*/ alsaLib }:
 
 stdenv.mkDerivation rec {
-  name = "portmidi-${version}";
+  pname = "portmidi";
   version = "217";
 
   src = fetchurl {

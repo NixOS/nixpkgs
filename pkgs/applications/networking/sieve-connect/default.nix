@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "sieve-connect-${version}";
+  pname = "sieve-connect";
   version = "0.90";
 
   src = fetchFromGitHub {

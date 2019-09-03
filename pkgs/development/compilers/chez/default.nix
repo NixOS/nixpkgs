@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "chez-scheme-${version}";
+  pname = "chez-scheme";
   version = "9.5.2";
 
   src = fetchFromGitHub {

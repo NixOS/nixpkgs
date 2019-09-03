@@ -7,7 +7,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "tarsnap-${version}";
+  pname = "tarsnap";
   version = "1.0.39";
 
   src = fetchurl {

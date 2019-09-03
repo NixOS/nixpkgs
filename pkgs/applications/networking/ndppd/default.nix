@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gzip }:
 
 stdenv.mkDerivation rec {
-  name = "ndppd-${version}";
+  pname = "ndppd";
   version = "0.2.5";
 
   src = fetchFromGitHub {

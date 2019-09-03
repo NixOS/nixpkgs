@@ -1,7 +1,7 @@
 { stdenv, fetchgit, python3, platform-tools, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "adb-sync-${version}";
+  pname = "adb-sync";
   version = "2016-08-31";
 
   src = fetchgit {

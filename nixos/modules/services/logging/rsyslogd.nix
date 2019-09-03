@@ -46,7 +46,7 @@ in
       };
 
       defaultConfig = mkOption {
-        type = types.string;
+        type = types.lines;
         default = defaultConf;
         description = ''
           The default <filename>syslog.conf</filename> file configures a
@@ -56,7 +56,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.string;
+        type = types.lines;
         default = "";
         example = "news.* -/var/log/news";
         description = ''

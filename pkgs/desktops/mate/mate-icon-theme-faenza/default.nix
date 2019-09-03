@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "mate-icon-theme-faenza-${version}";
+  pname = "mate-icon-theme-faenza";
   version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "000vr9cnbl2qlysf2gyg1lsjirqdzmwrnh6d3hyrsfc0r2vh4wna";
   };
 

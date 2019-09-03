@@ -33,7 +33,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "zotero-${version}";
+  pname = "zotero";
   version = "5.0.73";
 
   src = fetchurl {

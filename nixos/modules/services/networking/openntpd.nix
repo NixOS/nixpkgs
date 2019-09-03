@@ -40,7 +40,7 @@ in
     };
 
     extraOptions = mkOption {
-      type = with types; string;
+      type = with types; separatedString " ";
       default = "";
       example = "-s";
       description = ''

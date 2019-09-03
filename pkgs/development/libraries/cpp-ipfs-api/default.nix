@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, curl, cmake, nlohmann_json }:
 
 stdenv.mkDerivation rec {
-  name = "cpp-ipfs-api-${version}";
+  pname = "cpp-ipfs-api";
   version = "2017-01-04";
 
   src = fetchFromGitHub {

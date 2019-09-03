@@ -1,11 +1,11 @@
 { stdenv, fetchurl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "polipo-${version}";
+  pname = "polipo";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "http://www.pps.univ-paris-diderot.fr/~jch/software/files/polipo/${name}.tar.gz";
+    url = "http://www.pps.univ-paris-diderot.fr/~jch/software/files/polipo/${pname}-${version}.tar.gz";
     sha256 = "05g09sg9qkkhnc2mxldm1w1xkxzs2ylybkjzs28w8ydbjc3pand2";
   };
 

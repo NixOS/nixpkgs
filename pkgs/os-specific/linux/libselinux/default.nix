@@ -8,7 +8,7 @@ assert enablePython -> swig != null && python != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libselinux-${version}";
+  pname = "libselinux";
   version = "2.8";
   inherit (libsepol) se_release se_url;
 

@@ -2,7 +2,7 @@
 , glfw3, gtk3, libpng12 }:
 
 stdenv.mkDerivation rec {
-  name = "goxel-${version}";
+  pname = "goxel";
   version = "0.10.0";
 
   src = fetchFromGitHub {

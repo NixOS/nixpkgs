@@ -14,7 +14,7 @@ let
     sha256 = "0mx9jvxpiva9v2ffaqlyny48iqr073h84yw8ln43z2avv11ipr7n";
   };
 in stdenv.mkDerivation rec {
-  name = "ibus-table-chinese-${version}";
+  pname = "ibus-table-chinese";
   version = "1.8.2";
 
   srcs = [ src cmakeFedoraSrc ];

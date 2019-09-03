@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "metamorphose2-${version}";
+  pname = "metamorphose2";
   version = "0.9.0beta";
 
   # exif-py vendored via submodule

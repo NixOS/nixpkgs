@@ -42,7 +42,7 @@ assert withRest -> curl != null && withJson;
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "freeradius-${version}";
+  pname = "freeradius";
   version = "3.0.19";
 
   src = fetchurl {

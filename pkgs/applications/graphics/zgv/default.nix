@@ -1,10 +1,10 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, SDL, SDL_image, libjpeg, libpng, libtiff }:
 
 stdenv.mkDerivation rec {
-  name = "zgv-${version}";
+  pname = "zgv";
   version = "5.9";
   src = fetchurl {
-    url = "https://www.svgalib.org/rus/zgv/${name}.tar.gz";
+    url = "https://www.svgalib.org/rus/zgv/${pname}-${version}.tar.gz";
     sha256 = "1fk4i9x0cpnpn3llam0zy2pkmhlr2hy3iaxhxg07v9sizd4dircj";
   };
 

@@ -13,7 +13,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "lsiutils-${version}";
+  pname = "lsiutils";
+  inherit version;
   
   srcs = [ src "Source/lsiutil.tar.gz" ];
 

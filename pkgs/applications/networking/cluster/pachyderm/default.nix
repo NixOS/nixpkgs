@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "pachyderm-${version}";
+  pname = "pachyderm";
   version = "1.8.5";
   rev = "v${version}";
 

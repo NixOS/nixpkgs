@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
 
   version = "0.5";
-  name = "openbr-${version}";
+  pname = "openbr";
 
   src = fetchFromGitHub {
     owner = "biometrics";

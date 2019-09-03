@@ -16,7 +16,8 @@ in
         fetchSubmodules = true;
       };
     in stdenv.mkDerivation rec {
-      name = "jogl-${version}";
+      pname = "jogl";
+      inherit version;
 
       src = fetchgit {
         url = git://jogamp.org/srv/scm/jogl.git;

@@ -1,7 +1,7 @@
 { stdenv, fetchFromBitbucket, ocaml, zlib, db, perl, camlp4 }:
 
 stdenv.mkDerivation rec {
-  name = "sks-${version}";
+  pname = "sks";
   version = "1.1.6";
 
   src = fetchFromBitbucket {

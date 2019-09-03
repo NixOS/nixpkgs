@@ -22,13 +22,13 @@ let
         sha1 = "9a5f699051b1e7073328f2a008968b64ea2955d2";
       };
     };
-    "async-limiter-1.0.0" = {
+    "async-limiter-1.0.1" = {
       name = "async-limiter";
       packageName = "async-limiter";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/async-limiter/-/async-limiter-1.0.0.tgz";
-        sha512 = "jp/uFnooOiO+L211eZOoSyzpOITMXx1rBITauYykG3BRYPu8h0UcxsPNB04RR5vo4Tyz3+ay17tR6JVf9qzYWg==";
+        url = "https://registry.npmjs.org/async-limiter/-/async-limiter-1.0.1.tgz";
+        sha512 = "csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==";
       };
     };
     "body-parser-1.18.3" = {
@@ -49,13 +49,13 @@ let
         sha1 = "d32815404d689699f85a4ea4fa8755dd13a96048";
       };
     };
-    "chainpad-server-3.0.2" = {
+    "chainpad-server-3.0.3" = {
       name = "chainpad-server";
       packageName = "chainpad-server";
-      version = "3.0.2";
+      version = "3.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-3.0.2.tgz";
-        sha512 = "c5aEljVAapDKKs0+Rt2jymKAszm8X4ZeLFNJj1yxflwBqoh0jr8OANYvbfjtNaYFe2Wdflp/1i4gibYX4IMc+g==";
+        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-3.0.3.tgz";
+        sha512 = "NRfV7FFBEYy4ZVX7h0P5znu55X8v5K4iGWeMGihkfWZLKu70GmCPUTwpBCP79dUvnCToKEa4/e8aoSPcvZC8pA==";
       };
     };
     "content-disposition-0.5.2" = {
@@ -220,13 +220,13 @@ let
         sha512 = "+CEb+GDCM7tkOS2wdMKTn9vU7DgnKUTuDlehkNJKNSovdCOVxs14OfKCk4cvSaR3za4gj+OBdl9opPN9xrJ0zA==";
       };
     };
-    "graceful-fs-4.1.15" = {
+    "graceful-fs-4.2.2" = {
       name = "graceful-fs";
       packageName = "graceful-fs";
-      version = "4.1.15";
+      version = "4.2.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.15.tgz";
-        sha512 = "6uHUhOPEBgQ24HM+r6b/QwWfZq+yiFcipKFrOFiBEnWdy5sdzYoi+pJeQaPI5qOLRFqWmAXUPQNsielzdLoecA==";
+        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.2.tgz";
+        sha512 = "IItsdsea19BoLC7ELy13q1iJFNmd7ofZH5+X/pJr90/nRoPEX0DJo1dHDbgtYWOhJhcCgMDTOw84RZ72q6lB+Q==";
       };
     };
     "http-errors-1.6.3" = {
@@ -382,15 +382,6 @@ let
         sha1 = "20f1336481b083cd75337992a16971aa2d906947";
       };
     };
-    "options-0.0.6" = {
-      name = "options";
-      packageName = "options";
-      version = "0.0.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/options/-/options-0.0.6.tgz";
-        sha1 = "ec22d312806bb53e731773e7cdaefcf1c643128f";
-      };
-    };
     "parseurl-1.3.3" = {
       name = "parseurl";
       packageName = "parseurl";
@@ -418,13 +409,13 @@ let
         sha512 = "t/7RxHXPH6cJtP0pRG6smSr9QJidhB+3kXu0KgXnbGYMgzEnUxRQ4/LDdfOwZEMyIh3/xHb8PX3t+lfL9z+YVQ==";
       };
     };
-    "pull-stream-3.6.12" = {
+    "pull-stream-3.6.14" = {
       name = "pull-stream";
       packageName = "pull-stream";
-      version = "3.6.12";
+      version = "3.6.14";
       src = fetchurl {
-        url = "https://registry.npmjs.org/pull-stream/-/pull-stream-3.6.12.tgz";
-        sha512 = "+LO1XIVyTMmeoH26UHznpgrgX2npTVYccTkMpgk/EyiQjFt1FmoNm+w+/zMLuz9U3bpvT5sSUicMKEe/2JjgEA==";
+        url = "https://registry.npmjs.org/pull-stream/-/pull-stream-3.6.14.tgz";
+        sha512 = "KIqdvpqHHaTUA2mCYcLG1ibEbu/LCKoJZsBWyv9lSYtPkJPBq8m3Hxa103xHi6D2thj5YXa0TqK3L3GUkwgnew==";
       };
     };
     "qs-6.5.2" = {
@@ -571,15 +562,6 @@ let
         sha512 = "TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==";
       };
     };
-    "ultron-1.0.2" = {
-      name = "ultron";
-      packageName = "ultron";
-      version = "1.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ultron/-/ultron-1.0.2.tgz";
-        sha1 = "ace116ab557cd197386a4e88f4685378c8b2e4fa";
-      };
-    };
     "ultron-1.1.1" = {
       name = "ultron";
       packageName = "ultron";
@@ -625,15 +607,6 @@ let
         sha1 = "2299f02c6ded30d4a5961b0b9f74524a18f634fc";
       };
     };
-    "ws-1.1.5" = {
-      name = "ws";
-      packageName = "ws";
-      version = "1.1.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ws/-/ws-1.1.5.tgz";
-        sha512 = "o3KqipXNUdS7wpQzBHSe180lBGO60SoK0yVo3CYJgb2MkobuWuBX6dhkYP5ORCLd55y+SaflMOV5fqAB53ux4w==";
-      };
-    };
     "ws-3.3.3" = {
       name = "ws";
       packageName = "ws";
@@ -646,26 +619,22 @@ let
   };
 in
 {
-  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#2.23.0" = nodeEnv.buildNodePackage {
+  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#3.0.0" = nodeEnv.buildNodePackage {
     name = "cryptpad";
     packageName = "cryptpad";
-    version = "2.23.0";
+    version = "3.0.0";
     src = fetchgit {
       url = "https://github.com/xwiki-labs/cryptpad.git";
-      rev = "980e3f964a5b8bcd7c33da92dbe005f42b20cb30";
-      sha256 = "a094708e4a275ee55ca3a59a2890f20f2f9f7dcfe50274b7e3ecd260502c583b";
+      rev = "166ab65cd47a64e020528089244ed5be34f6e3c8";
+      sha256 = "35a3b733b5c128b7c7e1c0e7473f4a6a446d663f4c787745b36b1071205c1fd7";
     };
     dependencies = [
       sources."accepts-1.3.7"
       sources."array-flatten-1.1.1"
-      sources."async-limiter-1.0.0"
+      sources."async-limiter-1.0.1"
       sources."body-parser-1.18.3"
       sources."bytes-3.0.0"
-      (sources."chainpad-server-3.0.2" // {
-        dependencies = [
-          sources."ws-3.3.3"
-        ];
-      })
+      sources."chainpad-server-3.0.3"
       sources."content-disposition-0.5.2"
       sources."content-type-1.0.4"
       sources."cookie-0.3.1"
@@ -684,7 +653,7 @@ in
       sources."fs-extra-7.0.1"
       sources."gar-1.0.4"
       sources."get-folder-size-2.0.1"
-      sources."graceful-fs-4.1.15"
+      sources."graceful-fs-4.2.2"
       sources."http-errors-1.6.3"
       sources."iconv-lite-0.4.23"
       sources."inherits-2.0.3"
@@ -702,11 +671,10 @@ in
       sources."negotiator-0.6.2"
       sources."nthen-0.1.8"
       sources."on-finished-2.3.0"
-      sources."options-0.0.6"
       sources."parseurl-1.3.3"
       sources."path-to-regexp-0.1.7"
       sources."proxy-addr-2.0.5"
-      sources."pull-stream-3.6.12"
+      sources."pull-stream-3.6.14"
       sources."qs-6.5.2"
       sources."range-parser-1.2.1"
       sources."raw-body-2.3.3"
@@ -728,11 +696,7 @@ in
       sources."unpipe-1.0.0"
       sources."utils-merge-1.0.1"
       sources."vary-1.1.2"
-      (sources."ws-1.1.5" // {
-        dependencies = [
-          sources."ultron-1.0.2"
-        ];
-      })
+      sources."ws-3.3.3"
     ];
     buildInputs = globalBuildInputs;
     meta = {

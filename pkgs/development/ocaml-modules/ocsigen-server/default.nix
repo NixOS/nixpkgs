@@ -14,7 +14,7 @@ in
 
 stdenv.mkDerivation rec {
   version = "2.11.0";
-  name = "ocsigenserver-${version}";
+  pname = "ocsigenserver";
 
   src = fetchFromGitHub {
     owner = "ocsigen";

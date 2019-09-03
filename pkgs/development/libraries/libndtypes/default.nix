@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libndtypes-${version}";
+  pname = "libndtypes";
   version = "unstable-2018-11-27";
 
   src = fetchFromGitHub {

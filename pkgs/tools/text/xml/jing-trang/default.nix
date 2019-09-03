@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, jre_headless, jdk, ant, saxon }:
 
 stdenv.mkDerivation rec {
-  name = "jing-trang-${version}";
+  pname = "jing-trang";
   version = "20151127";
 
   src = fetchFromGitHub {

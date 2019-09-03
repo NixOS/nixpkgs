@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "rabbitmq_exporter-${version}";
+  pname = "rabbitmq_exporter";
   version = "0.25.2";
 
   goPackagePath = "github.com/kbudde/rabbitmq_exporter";

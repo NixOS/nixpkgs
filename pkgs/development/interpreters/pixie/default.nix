@@ -30,7 +30,7 @@ let
   bin-path = stdenv.lib.concatStringsSep ":"
                (map (p: "${p}/bin") [ gcc ]);
   build = {flags, target}: stdenv.mkDerivation rec {
-    name = "pixie-${version}";
+    pname = "pixie";
     version = "0-r${commit-count}-${variant}";
     nativeBuildInputs = [ makeWrapper pkgconfig ];
     buildInputs = libs;

@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, libelf, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dynamips";
   version = "0.2.21";
 

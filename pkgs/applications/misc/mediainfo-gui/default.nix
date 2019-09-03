@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "19.07";
-  name = "mediainfo-gui-${version}";
+  pname = "mediainfo-gui";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
     sha256 = "0b2ypdlpj5v64ggqk628mgqraba27z725sa0zf0fa4agxhf9ka44";

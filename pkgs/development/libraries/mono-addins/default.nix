@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, mono4, gtk-sharp-2_0 }:
 
 stdenv.mkDerivation rec {
-  name = "mono-addins-${version}";
+  pname = "mono-addins";
   version = "1.3.3";
 
   src = fetchFromGitHub {

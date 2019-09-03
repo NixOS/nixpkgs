@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, python, qmake, ctags, gdb }:
 
 stdenv.mkDerivation rec {
-  name = "gede-${version}";
+  pname = "gede";
   version = "2.14.1";
 
   src = fetchurl {
-    url = "http://gede.acidron.com/uploads/source/${name}.tar.xz";
+    url = "http://gede.acidron.com/uploads/source/${pname}-${version}.tar.xz";
     sha256 = "1z7577zwz7h03d58as93hyx99isi3p4i3rhxr8l01zgi65mz0mr9";
   };
 

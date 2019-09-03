@@ -5,7 +5,8 @@ let
   version = "1.0.0.61";
 
 in stdenv.mkDerivation rec {
-  name = "steam-original-${version}";
+  pname = "steam-original";
+  inherit version;
 
   src = fetchurl {
     url = "http://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz";

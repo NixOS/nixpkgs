@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "git-remote-gcrypt-${version}";
+  pname = "git-remote-gcrypt";
   version = "1.2";
   rev = version;
 

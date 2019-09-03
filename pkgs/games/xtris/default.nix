@@ -1,6 +1,6 @@
 { stdenv, fetchzip, xorg }:
 stdenv.mkDerivation rec {
-  name = "xtris-${version}";
+  pname = "xtris";
   version = "1.15";
 
   src = fetchzip {

@@ -412,6 +412,26 @@ lgi = buildLuarocksPackage {
     };
   };
 };
+ljsyscall = buildLuarocksPackage {
+  pname = "ljsyscall";
+  version = "0.12-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/ljsyscall-0.12-1.src.rock;
+    sha256 = "12gs81lnzpxi5d409lbrvjfflld5l2xsdkfhkz93xg7v65sfhh2j";
+  };
+  disabled = (lua.luaversion != "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.myriabit.com/ljsyscall/";
+    description = "LuaJIT Linux syscall FFI";
+    maintainers = with maintainers; [ lblasc ];
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 lpeg = buildLuarocksPackage {
   pname = "lpeg";
   version = "1.0.2-1";

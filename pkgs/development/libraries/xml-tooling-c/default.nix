@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xml-tooling-c-${version}";
+  pname = "xml-tooling-c";
   version = "3.0.4";
 
   src = fetchgit {

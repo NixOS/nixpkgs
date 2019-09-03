@@ -6,7 +6,8 @@
 let
   version = "2.2.1";
 in stdenv.mkDerivation {
-  name = "gpredict-${version}";
+  pname = "gpredict";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/csete/gpredict/releases/download/v${version}/gpredict-${version}.tar.bz2";

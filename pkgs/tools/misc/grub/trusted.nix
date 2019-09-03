@@ -29,7 +29,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "trustedGRUB2-${version}";
+  pname = "trustedGRUB2";
+  inherit version;
 
   src = if for_HP_laptop
         then fetchgit {

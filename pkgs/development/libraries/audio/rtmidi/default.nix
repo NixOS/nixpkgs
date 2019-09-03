@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.0.0";
-  name = "rtmidi-${version}";
+  pname = "rtmidi";
 
   src = fetchFromGitHub {
     owner = "thestk";

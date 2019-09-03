@@ -5,7 +5,7 @@ let
   qscintillaLib = (qscintilla.override { withQt5 = true; });
 
 in mkDerivation rec {
-  name = "tora-${version}";
+  pname = "tora";
   version = "3.1";
 
   src = fetchFromGitHub {

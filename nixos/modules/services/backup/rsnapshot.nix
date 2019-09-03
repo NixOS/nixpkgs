@@ -2,7 +2,7 @@
 
 with lib;
 
-let 
+let
   cfg = config.services.rsnapshot;
   cfgfile = pkgs.writeText "rsnapshot.conf" ''
     config_version	1.2
@@ -52,7 +52,7 @@ in
       cronIntervals = mkOption {
         default = {};
         example = { hourly = "0 * * * *"; daily = "50 21 * * *"; };
-        type = types.attrsOf types.string;
+        type = types.attrsOf types.str;
         description = ''
           Periodicity at which intervals should be run by cron.
           Note that the intervals also have to exist in configuration

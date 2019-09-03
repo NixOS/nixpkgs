@@ -13,7 +13,7 @@ let
   configSettings = {
     storage = dataDir;
     p2p = {
-      public_address = "/ip4/127.0.0.1/tcp/8606";
+      public_address = "/ip4/127.0.0.1/tcp/8299";
       messages = "high";
       blocks = "high";
     };
@@ -54,7 +54,7 @@ in {
      };
 
       genesisBlockHash = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         example = "d70495af81ae8600aca3e642b2427327cb6001ec4d7a0037e96a00dabed163f9";
         description = ''

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "lingeling-${version}";
+  pname = "lingeling";
   # This is the version used in satcomp2018, which was
   # relicensed, and also known as version 'bcj'
   version = "pre1_03b4860d";

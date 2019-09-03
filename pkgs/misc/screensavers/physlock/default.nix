@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "11-dev";
-  name = "physlock-${version}";
+  pname = "physlock";
   src = fetchFromGitHub {
     owner = "muennich";
     repo = "physlock";

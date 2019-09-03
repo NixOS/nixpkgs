@@ -1,7 +1,7 @@
 { stdenv, autoconf, automake, fetchFromGitHub, libgcc, libjpeg_turbo,
   libpng, libtool, libxml2, pkgconfig, which, xorg }:
 stdenv.mkDerivation rec {
-  name = "nx-libs-${version}";
+  pname = "nx-libs";
   version = "3.5.99.21";
   src = fetchFromGitHub {
     owner = "ArcticaProject";

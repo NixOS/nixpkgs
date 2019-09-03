@@ -7,7 +7,8 @@ let
   version = "25.0";
 
 in stdenv.mkDerivation {
-  name = "rdma-core-${version}";
+  pname = "rdma-core";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "linux-rdma";

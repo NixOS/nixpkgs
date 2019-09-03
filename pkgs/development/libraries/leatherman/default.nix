@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, boost, cmake, curl, ruby }:
 
 stdenv.mkDerivation rec {
-  name = "leatherman-${version}";
+  pname = "leatherman";
   version = "1.7.1";
 
   src = fetchFromGitHub {

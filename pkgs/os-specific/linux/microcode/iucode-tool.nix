@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "iucode-tool-${version}";
+  pname = "iucode-tool";
   version = "2.3.1";
 
   src = fetchFromGitLab {

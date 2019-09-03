@@ -4,7 +4,7 @@
 # adding this to services.udev.packages on NixOS
 
 stdenv.mkDerivation rec {
-  name = "ltunify-${version}";
+  pname = "ltunify";
   version = "unstable-20180330";
 
   src = fetchFromGitHub {

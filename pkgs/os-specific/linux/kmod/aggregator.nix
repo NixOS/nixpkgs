@@ -1,4 +1,4 @@
-{ stdenv, kmod, modules, buildEnv, name ? "kernel-modules" }:
+{ stdenvNoCC, kmod, modules, buildEnv, name ? "kernel-modules" }:
 
 buildEnv {
   inherit name;
@@ -7,7 +7,7 @@ buildEnv {
 
   postBuild =
     ''
-      source ${stdenv}/setup
+      source ${stdenvNoCC}/setup
 
       if ! test -d "$out/lib/modules"; then
         echo "No modules found."

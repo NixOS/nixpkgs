@@ -13,7 +13,8 @@ let srcs = {
     version = "2.6.2";
 in
 stdenv.mkDerivation {
-  name = "fortune-mod-${version}";
+  pname = "fortune-mod";
+  inherit version;
 
   src = srcs.fortune;
 

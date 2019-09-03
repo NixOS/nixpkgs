@@ -4,11 +4,11 @@
 , gnome3, gdk-pixbuf, libxslt, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "glade-${version}";
+  pname = "glade";
   version = "3.22.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glade/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/glade/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "16p38xavpid51qfy0s26n0n21f9ws1w9k5s65bzh1w7ay8p9my6z";
   };
 

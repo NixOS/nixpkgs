@@ -2,7 +2,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "watson-ruby-${version}";
+  pname = "watson-ruby";
   version = (import ./gemset.nix).watson-ruby.version;
 
   env = bundlerEnv rec {

@@ -3,7 +3,8 @@
 let
   version = "1.9.0";
 in stdenv.mkDerivation rec {
-  name = "avro-c-${version}";
+  pname = "avro-c";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/c/avro-c-${version}.tar.gz";

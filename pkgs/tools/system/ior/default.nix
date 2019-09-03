@@ -6,7 +6,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ior-${version}";
+  pname = "ior";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/LLNL/ior/archive/${version}.tar.gz";

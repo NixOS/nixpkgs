@@ -2,7 +2,8 @@
 
 let version = "0.7.2"; in
 stdenv.mkDerivation {
-  name = "libdynd-${version}";
+  pname = "libdynd";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "libdynd";

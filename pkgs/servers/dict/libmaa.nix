@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
-  name = "libmaa-${version}";
+  pname = "libmaa";
 
   src = fetchurl {
     url = "mirror://sourceforge/dict/libmaa-${version}.tar.gz";

@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, cmake, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "somatic-sniper-${version}";
+  pname = "somatic-sniper";
   version = "1.0.5.0";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.8.1";
-  name = "ori-${version}";
+  pname = "ori";
 
   src = fetchurl {
     url = "https://bitbucket.org/orifs/ori/downloads/ori-0.8.1.tar.xz";

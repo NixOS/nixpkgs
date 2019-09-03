@@ -722,7 +722,6 @@ in
     systemd.services.tor-init =
       { description = "Tor Daemon Init";
         wantedBy = [ "tor.service" ];
-        after = [ "local-fs.target" ];
         script = ''
           install -m 0700 -o tor -g tor -d ${torDirectory} ${torDirectory}/onion
           install -m 0750 -o tor -g tor -d ${torRunDirectory}

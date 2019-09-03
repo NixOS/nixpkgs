@@ -13,7 +13,7 @@ let libmagic = file;  # libmagic provided by file package ATM
 in
 
 stdenv.mkDerivation rec {
-  name = "rspamd-${version}";
+  pname = "rspamd";
   version = "1.9.4";
 
   src = fetchFromGitHub {

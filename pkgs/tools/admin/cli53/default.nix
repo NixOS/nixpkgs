@@ -2,7 +2,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "cli53-${version}";
+  pname = "cli53";
   version = "0.8.12";
 
   goPackagePath = "github.com/barnybug/cli53";

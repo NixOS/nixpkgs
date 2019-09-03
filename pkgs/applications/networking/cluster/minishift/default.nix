@@ -11,7 +11,7 @@ let
   openshiftVersion = "v3.11.0";
 
 in buildGoPackage rec {
-  name = "minishift-${version}";
+  pname = "minishift";
   inherit version;
 
   src = fetchFromGitHub {

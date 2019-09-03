@@ -2,7 +2,7 @@
   python27, wayland, udev, mesa, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "glmark2-${version}";
+  pname = "glmark2";
   version = "2017-09-01";
 
   src = fetchFromGitHub {

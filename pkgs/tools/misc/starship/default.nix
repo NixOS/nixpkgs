@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     rev = "v${version}";
-    sha256 = "0zq99ll0vyafr2piffazprhvbs3sxb6863cp2qw596ilqg7ffi04";
+    sha256 = "0y6ixl3i1brak226hh02da1zzlcv41f0kb648dqii6dzyhrwhrld";
   };
 
   buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
   nativeBuildInputs = [ pkgconfig ];
 
-  cargoSha256 = "0qlgng5j6l1r9j5vn3wnq25qr6f4nh10x90awiqyzz8jypb0ng2c";
+  cargoSha256 = "1xk4ngxhgww921fk40d4ziprnzgp927lhdwwzcifcb0hdyl0854p";
   checkPhase = "cargo test -- --skip directory::home_directory --skip directory::directory_in_root";
 
   meta = with stdenv.lib; {

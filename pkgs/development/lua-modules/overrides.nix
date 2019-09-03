@@ -80,6 +80,25 @@ with super;
     */
   });
 
+  ljsyscall = super.ljsyscall.override(rec {
+    version = "unstable-20180515";
+    # package hasn't seen any release for a long time
+    src = pkgs.fetchFromGitHub {
+      owner = "justincormack";
+      repo = "ljsyscall";
+      rev = "e587f8c55aad3955dddab3a4fa6c1968037b5c6e";
+      sha256 = "06v52agqyziwnbp2my3r7liv245ddmb217zmyqakh0ldjdsr8lz4";
+    };
+    knownRockspec = "rockspec/ljsyscall-scm-1.rockspec";
+    # actually library works fine with lua 5.2
+    preConfigure = ''
+      sed -i 's/lua == 5.1/lua >= 5.1, < 5.3/' ${knownRockspec}
+    '';
+    disabled = luaOlder "5.1" || luaAtLeast "5.3";
+
+    propagatedBuildInputs = with pkgs.lib; optional (!isLuaJIT) luaffi;
+  });
+
   lgi = super.lgi.override({
     nativeBuildInputs = [
       pkgs.pkgconfig

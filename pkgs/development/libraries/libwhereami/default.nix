@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
 
 stdenv.mkDerivation rec {
-  name = "libwhereami-${version}";
+  pname = "libwhereami";
   version = "0.2.2";
 
   src = fetchFromGitHub {

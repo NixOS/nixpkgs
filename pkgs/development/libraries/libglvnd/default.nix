@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python2, pkgconfig, libX11, libXext, xorgproto, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
-  name = "libglvnd-${version}";
+  pname = "libglvnd";
   version = "1.0.0";
 
   src = fetchFromGitHub {

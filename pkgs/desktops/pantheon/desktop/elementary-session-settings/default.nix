@@ -7,6 +7,7 @@
 , gnome-session
 , wingpanel
 , orca
+, onboard
 , at-spi2-core
 , elementary-default-settings
 , writeShellScriptBin
@@ -85,9 +86,9 @@ stdenv.mkDerivation rec {
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
     mkdir -p $out/etc/xdg/autostart
-    cp -av ${gnome-keyring}/etc/xdg/autostart/* $out/etc/xdg/autostart
-    cp -av ${orca}/etc/xdg/autostart/* $out/etc/xdg/autostart
-    cp -av ${at-spi2-core}/etc/xdg/autostart/* $out/etc/xdg/autostart
+    for package in ${gnome-keyring} ${orca} ${onboard} ${at-spi2-core}; do
+      cp -av $package/etc/xdg/autostart/* $out/etc/xdg/autostart
+    done
 
     cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, python }:
 
 stdenv.mkDerivation rec {
-  name = "bear-${version}";
+  pname = "bear";
   version = "2.4.1";
 
   src = fetchFromGitHub {

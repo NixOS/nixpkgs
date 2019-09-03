@@ -7,7 +7,8 @@ let
 
 in
 buildGoPackage ({
-    name = "gh-ost-${version}";
+    pname = "gh-ost";
+    inherit version;
     inherit goPackagePath;
 
     src = fetchFromGitHub {

@@ -25,7 +25,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnuradio-${version}";
+  pname = "gnuradio";
   version = "3.7.13.4";
 
   src = fetchFromGitHub {

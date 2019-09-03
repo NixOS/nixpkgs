@@ -1,12 +1,11 @@
 { stdenv, fetchurl, zlib, bzip2, lzma, curl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "htslib";
   version = "1.9";
 
   src = fetchurl {
-    url = "https://github.com/samtools/htslib/releases/download/${version}/${name}.tar.bz2";
+    url = "https://github.com/samtools/htslib/releases/download/${version}/${pname}-${version}.tar.bz2";
     sha256 = "16ljv43sc3fxmv63w7b2ff8m1s7h89xhazwmbm1bicz8axq8fjz0";
   };
 

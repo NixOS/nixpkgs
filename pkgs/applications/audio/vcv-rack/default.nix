@@ -27,14 +27,14 @@ let
   };
 in
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "VCV-Rack-${version}";
-  version = "1.1.3";
+  pname = "VCV-Rack";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "16q3x0jpwkdwwvh7rn472w7nfjf81s10z9c7bx011kk7rgk88hh2";
+    sha256 = "04kg0nm7w19s2zfrsxjfl3bs4sy3bzf28kzl4hayzwv480667ybx";
     fetchSubmodules = true;
   };
 
@@ -78,7 +78,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
     # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or under a
     # no-derivatives clause
     license = with licenses; [ bsd3 cc-by-nc-40 unfreeRedistributable ];
-    maintainers = with maintainers; [ moredread ];
+    maintainers = with maintainers; [ moredread nathyong ];
     platforms = platforms.linux;
   };
 }

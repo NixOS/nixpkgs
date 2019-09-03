@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, guile, guile-lib, cairo, expat }:
 
 stdenv.mkDerivation rec {
-  name = "guile-cairo-${version}";
+  pname = "guile-cairo";
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://savannah/guile-cairo/${name}.tar.gz";
+    url = "mirror://savannah/guile-cairo/${pname}-${version}.tar.gz";
     sha256 = "0p6xrhf2k6n5dybn88050za7h90gnd7534n62l53vsca187pwgdf";
   };
 

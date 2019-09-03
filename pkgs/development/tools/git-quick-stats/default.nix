@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
-  name = "git-quick-stats-${version}";
+  pname = "git-quick-stats";
   version = "2.0.8";
   src = fetchFromGitHub {
     repo = "git-quick-stats";

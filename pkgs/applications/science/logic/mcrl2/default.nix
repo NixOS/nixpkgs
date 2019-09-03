@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   version = "201707";
   build_nr = "1";
-  name = "mcrl2-${version}";
+  pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";

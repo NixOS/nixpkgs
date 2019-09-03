@@ -22,7 +22,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "pfixtools-${version}";
+  pname = "pfixtools";
+  inherit version;
 
   src = pfixtoolsSrc;
 

@@ -3,11 +3,11 @@
 , libgee, meson, ninja, python3, desktop-file-utils , hicolor-icon-theme, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-robots-${version}";
+  pname = "gnome-robots";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-robots/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-robots/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1xp1sijl5k7wmnbb0hdgh4ajxgp74k7fcnmd5c6rw6lf51wpinyh";
   };
 

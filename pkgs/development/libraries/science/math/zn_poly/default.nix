@@ -10,7 +10,6 @@
 stdenv.mkDerivation rec {
   version = "0.9.1";
   pname = "zn_poly";
-  name = "${pname}-${version}";
 
   # sage has picked up the maintenance (bug fixes and building, not development)
   # from the original, now unmaintained project which can be found at

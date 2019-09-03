@@ -1,7 +1,7 @@
 { stdenv, fetchurl, which }:
 
 stdenv.mkDerivation rec {
-  name = "eprover-${version}";
+  pname = "eprover";
   version = "2.3";
 
   src = fetchurl {

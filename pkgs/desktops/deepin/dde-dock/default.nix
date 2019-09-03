@@ -6,7 +6,6 @@
 
 let
 unwrapped = mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-dock";
   version = "4.10.3";
 
@@ -69,7 +68,7 @@ unwrapped = mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Dock for Deepin Desktop Environment";

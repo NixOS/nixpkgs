@@ -1,6 +1,6 @@
 { stdenv, fetchurl, jre }:
 stdenv.mkDerivation rec {
-  name = "zxing-${version}";
+  pname = "zxing";
   version = "3.1.0";
   # Maven builds are hard to get right
   core_jar = fetchurl {

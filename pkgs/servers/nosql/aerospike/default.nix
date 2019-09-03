@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "aerospike-server-${version}";
+  pname = "aerospike-server";
   version = "4.2.0.4";
 
   src = fetchFromGitHub {

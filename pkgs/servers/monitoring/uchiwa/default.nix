@@ -11,7 +11,8 @@ let
   };
 
   backend = buildGoPackage {
-    name = "uchiwa-backend-${version}";
+    pname = "uchiwa-backend";
+    inherit version;
     goPackagePath = "github.com/${owner}/${repo}";
     inherit src;
     postInstall = ''
@@ -27,7 +28,8 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "uchiwa-${version}";
+  pname = "uchiwa";
+  inherit version;
 
   inherit src;
 

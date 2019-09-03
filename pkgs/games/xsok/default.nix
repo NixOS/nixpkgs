@@ -2,7 +2,6 @@
 , withNethackLevels ? true
 }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xsok";
   version = "1.02";
 

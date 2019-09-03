@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
 
 stdenv.mkDerivation rec {
-  name = "cpp-hocon-${version}";
+  pname = "cpp-hocon";
   version = "0.2.1";
 
   src = fetchFromGitHub {

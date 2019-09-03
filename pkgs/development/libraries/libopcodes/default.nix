@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libopcodes-${version}";
+  pname = "libopcodes";
   inherit (binutils-unwrapped) version src;
 
   outputs = [ "out" "dev" ];

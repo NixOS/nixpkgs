@@ -9,6 +9,7 @@
 , runtimeShell
 , writeScript
 , writeText
+, distDir
 }:
 
 let
@@ -44,6 +45,7 @@ let
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
+        --distdir=${distDir} \
           --host_javabase='@local_jdk//:jdk' \
           --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
           --javabase='@local_jdk//:jdk' \

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "8.1";
-  name = "minergate-${version}";
+  pname = "minergate";
   src = fetchurl {
     url = "https://minergate.com/download/ubuntu";
     sha256 = "1dbbbb8e0735cde239fca9e82c096dcc882f6cecda20bba7c14720a614c16e13";

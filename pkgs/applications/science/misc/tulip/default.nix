@@ -3,10 +3,11 @@
 
 let version = "5.2.1"; in
 stdenv.mkDerivation rec {
-  name = "tulip-${version}";
+  pname = "tulip";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/auber/${name}_src.tar.gz";
+    url = "mirror://sourceforge/auber/${pname}-${version}_src.tar.gz";
     sha256 = "0bqmqy6sri87a8xv5xf7ffaq5zin4hiaa13g0l64b84i7yckfwky";
   };
 

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.6.0";
-  name = "papi-${version}";
+  pname = "papi";
 
   src = fetchurl {
     url = "https://bitbucket.org/icl/papi/get/papi-5-6-0-t.tar.gz";

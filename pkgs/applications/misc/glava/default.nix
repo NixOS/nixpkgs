@@ -21,7 +21,7 @@ let
   '';
 in
   stdenv.mkDerivation rec {
-    name = "glava-${version}";
+    pname = "glava";
     version = "1.6.3";
 
     src = fetchFromGitHub {

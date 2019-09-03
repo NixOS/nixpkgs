@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timetable";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "080xgp917v6j40qxy0y1iycz01yylbcr8pahx6zd6mpi022ccfv0";
+    sha256 = "0s825al10s0hwfzl90bplwwasx89wx28n41sg2md71l9hfqy296q";
   };
 
   nativeBuildInputs = [

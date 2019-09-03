@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, yasm }:
 
 stdenv.mkDerivation rec {
-  name = "mac-${version}";
+  pname = "mac";
   version = "4.11-u4-b5-s7";
 
   src = fetchurl {

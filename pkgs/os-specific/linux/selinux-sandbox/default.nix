@@ -8,7 +8,7 @@ with stdenv.lib;
 with python3.pkgs;
 
 stdenv.mkDerivation rec {
-  name = "selinux-sandbox-${version}";
+  pname = "selinux-sandbox";
   version = "2.7";
   se_release = "20170804";
 

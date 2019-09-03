@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "graphene-hardened-malloc-${version}";
+  pname = "graphene-hardened-malloc";
   version = "2";
 
   src = fetchurl {

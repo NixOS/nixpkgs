@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.2.4";
-  name = "extundelete-${version}";
+  pname = "extundelete";
 
   src = fetchurl {
     url = "mirror://sourceforge/extundelete/extundelete-0.2.4.tar.bz2";

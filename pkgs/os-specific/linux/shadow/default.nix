@@ -18,7 +18,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "shadow-${version}";
+  pname = "shadow";
   version = "4.6";
 
   src = fetchFromGitHub {

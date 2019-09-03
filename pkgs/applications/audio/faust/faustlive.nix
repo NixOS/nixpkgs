@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "faustlive-${version}";
+  pname = "faustlive";
   version = "2017-12-05";
   src = fetchFromGitHub {
     owner = "grame-cncm";

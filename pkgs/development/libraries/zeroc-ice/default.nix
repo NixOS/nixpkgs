@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "zeroc-ice-${version}";
+  pname = "zeroc-ice";
   version = "3.6.3";
 
   src = fetchFromGitHub {

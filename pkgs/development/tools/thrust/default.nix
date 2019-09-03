@@ -14,7 +14,7 @@ let
     ];
   };
 in stdenv.mkDerivation rec {
-  name = "thrust-${version}";
+  pname = "thrust";
   version = "0.7.6";
 
   src = fetchurl {

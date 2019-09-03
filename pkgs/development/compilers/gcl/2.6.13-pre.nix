@@ -8,7 +8,7 @@ assert stdenv.cc ? libc ;
 assert stdenv.cc.libc != null ;
 
 stdenv.mkDerivation rec {
-  name = "gcl-${version}";
+  pname = "gcl";
   version = "2.6.13pre50";
 
   src = fetchgit {

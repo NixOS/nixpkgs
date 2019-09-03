@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "libre-caslon-${version}";
+  pname = "libre-caslon";
   version = "1.002";
 
   srcs = [
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
+    mkdir -p $out/share/doc/${pname}-${version}
     cp -v "libre-caslon-text-${version}-src/fonts/OTF/"*.otf $out/share/fonts/opentype/
     cp -v "libre-caslon-display-${version}-src/fonts/OTF/"*.otf $out/share/fonts/opentype/
-    cp -v libre-caslon-text-${version}-src/README.md libre-caslon-text-${version}-src/FONTLOG.txt $out/share/doc/${name}
+    cp -v libre-caslon-text-${version}-src/README.md libre-caslon-text-${version}-src/FONTLOG.txt $out/share/doc/${pname}-${version}
   '';
 
   outputHashAlgo = "sha256";

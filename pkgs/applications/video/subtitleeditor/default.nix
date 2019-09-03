@@ -8,7 +8,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "subtitleeditor-${version}";
+  pname = "subtitleeditor";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "kitone";

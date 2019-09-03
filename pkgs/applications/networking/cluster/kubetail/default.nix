@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, lib, ... }:
 
 stdenv.mkDerivation rec {
-  name = "kubetail-${version}";
+  pname = "kubetail";
   version = "1.6.9";
 
   src = fetchFromGitHub {

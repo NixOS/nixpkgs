@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "unrar-${version}";
+  pname = "unrar";
   version = "5.7.5";
 
   src = fetchurl {

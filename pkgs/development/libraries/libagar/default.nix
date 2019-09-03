@@ -5,7 +5,7 @@
 
 let srcs = import ./srcs.nix { inherit fetchurl; }; in
 stdenv.mkDerivation rec {
-  name = "libagar-${version}";
+  pname = "libagar";
   inherit (srcs) version src;
 
   preConfigure = ''

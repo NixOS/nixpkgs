@@ -7,11 +7,11 @@
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
 
 mkDerivation rec {
-  name = "v4l-utils-${version}";
+  pname = "v4l-utils";
   version = "1.16.6";
 
   src = fetchurl {
-    url = "https://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
+    url = "https://linuxtv.org/downloads/v4l-utils/${pname}-${version}.tar.bz2";
     sha256 = "1bkqlrizx0j2rd6ybam2x17bjrpwzl4v4szmnzm3cmixis3w3npr";
   };
 

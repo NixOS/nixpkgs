@@ -1,4 +1,4 @@
-{ writeText, bazel, runLocal, bazelTest }:
+{ writeText, bazel, runLocal, bazelTest, distDir }:
 
 # Tests that certain executables are available in bazel-executed bash shells.
 
@@ -35,7 +35,7 @@ let
     inherit workspaceDir;
 
     bazelScript = ''
-      ${bazel}/bin/bazel build :tool_usage
+      ${bazel}/bin/bazel build :tool_usage --distdir=${distDir}
       cp bazel-genfiles/output.txt $out
       echo "Testing content" && [ "$(cat $out | wc -l)" == "2" ] && echo "OK"
     '';

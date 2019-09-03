@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "mill-${version}";
+  pname = "mill";
   version = "0.5.0";
 
   src = fetchurl {

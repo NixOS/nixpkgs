@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   inherit version;
-  name = "cataract-${version}";
+  pname = "cataract";
 
   src = fetchgit {
     url = "git://git.bzatek.net/cataract";

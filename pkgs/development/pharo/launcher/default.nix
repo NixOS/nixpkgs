@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2017.02.28";
-  name = "pharo-launcher-${version}";
+  pname = "pharo-launcher";
   src = fetchurl {
     url = "http://files.pharo.org/platform/launcher/PharoLauncher-user-stable-${version}.zip";
     sha256 = "1hfwjyx0c47s6ivc1zr2sf5mk1xw2zspsv0ns8mj3kcaglzqwiq0";

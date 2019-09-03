@@ -2,11 +2,11 @@
 , gnome3, gnome-menus, substituteAll }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extensions-${version}";
+  pname = "gnome-shell-extensions";
   version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell-extensions/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-shell-extensions/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "07libf6z24n42hpdsq163w0j8xyrav0lxqrwxrvq5kbz8zxv5ch2";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     # Fixup adapted from export-zips.sh in the source.
 
     extensiondir=$out/share/gnome-shell/extensions
-    schemadir=$out/share/gsettings-schemas/${name}/glib-2.0/schemas/
+    schemadir=$out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas/
 
     glib-compile-schemas $schemadir
 

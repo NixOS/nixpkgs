@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.3.0";
-  name = "libgroove-${version}";
+  pname = "libgroove";
 
   src = fetchFromGitHub {
     owner = "andrewrk";

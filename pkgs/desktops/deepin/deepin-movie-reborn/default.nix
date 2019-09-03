@@ -3,7 +3,6 @@
   libdvdnav, libdvdread, xorg, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-movie-reborn";
   version = "3.2.24";
 
@@ -45,7 +44,7 @@ mkDerivation rec {
     sed -i src/libdmr/libdmr.pc.in -e "s,/usr,$out," -e 's,libdir=''${prefix}/,libdir=,'
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin movie player";

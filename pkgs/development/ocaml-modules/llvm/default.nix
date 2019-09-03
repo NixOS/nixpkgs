@@ -3,7 +3,8 @@
 let version = stdenv.lib.getVersion llvm; in
 
 stdenv.mkDerivation {
-  name = "ocaml-llvm-${version}";
+  pname = "ocaml-llvm";
+  inherit version;
 
   inherit (llvm) src;
 

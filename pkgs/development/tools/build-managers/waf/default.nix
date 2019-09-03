@@ -7,13 +7,13 @@ let
     optionalString (!isNull withTools) " --tools=\"${concatStringsSep "," withTools}\"";
 in
 stdenv.mkDerivation rec {
-  name = "waf-${version}";
+  pname = "waf";
   version = "2.0.15";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0i86dbn6l01n4h4rzyl4mvizqabbqn5w7fywh83z7fxpha13c3bz";
   };
 

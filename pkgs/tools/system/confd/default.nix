@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "confd-${version}";
+  pname = "confd";
   version = "0.9.0";
   rev = "v${version}";
 

@@ -73,7 +73,7 @@ let
       "";
 in
 stdenv.mkDerivation rec {
-  name = "flashplayer-${version}";
+  pname = "flashplayer";
   version = "32.0.0.238";
 
   src = fetchurl {

@@ -2,7 +2,8 @@
 
 let version = "3.1.0";
 in stdenv.mkDerivation {
-  name = "newlib-${version}";
+  pname = "newlib";
+  inherit version;
   src = fetchurl {
     url = "ftp://sourceware.org/pub/newlib/newlib-${version}.tar.gz";
     sha256 = "0ahh3n079zjp7d9wynggwrnrs27440aac04340chf1p9476a2kzv";

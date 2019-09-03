@@ -12,7 +12,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "liblapack-${version}";
+  pname = "liblapack";
+  inherit version;
   src = fetchurl {
     url = "http://www.netlib.org/lapack/lapack-${version}.tar.gz";
     sha256 = "1xmwi2mqmipvg950gb0rhgprcps8gy8sjm8ic9rgy2qjlv22rcny";

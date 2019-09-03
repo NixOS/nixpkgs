@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, python }:
 
 stdenv.mkDerivation rec {
-  name = "ssh-ident-${version}";
+  pname = "ssh-ident";
   version = "2016-04-21";
   src = fetchFromGitHub  {
     owner = "ccontavalli";

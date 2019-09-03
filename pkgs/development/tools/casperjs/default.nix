@@ -4,7 +4,8 @@ let version = "1.1.1";
 
 in stdenv.mkDerivation rec {
 
-  name = "casperjs-${version}";
+  pname = "casperjs";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "casperjs";

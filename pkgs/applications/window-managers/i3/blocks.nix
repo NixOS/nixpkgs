@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "i3blocks-${version}";
+  pname = "i3blocks";
   version = "unstable-2019-02-07";
 
   src = fetchFromGitHub {

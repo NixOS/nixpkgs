@@ -200,7 +200,7 @@ let fwdir = symlinkJoin {
 };
 in
 let iscan-data = stdenv.mkDerivation rec {
-  name = "iscan-data-${version}";
+  pname = "iscan-data";
   version = "1.39.0-1";
 
   src = fetchurl {
@@ -216,7 +216,7 @@ let iscan-data = stdenv.mkDerivation rec {
 };
 in
 stdenv.mkDerivation rec {
-  name = "iscan-${version}";
+  pname = "iscan";
   version = "2.30.3-1";
 
   src = fetchurl {

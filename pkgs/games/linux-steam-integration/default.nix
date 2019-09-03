@@ -5,7 +5,8 @@ let
   version = "0.7.3";
 
 in stdenv.mkDerivation rec {
-  name = "linux-steam-integration-${version}";
+  pname = "linux-steam-integration";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "clearlinux";

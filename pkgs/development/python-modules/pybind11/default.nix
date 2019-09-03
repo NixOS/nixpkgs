@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kz1z2cg3q901q9spkdhksmcfiskaghzmbb9ivr5mva856yvnak4";
+    sha256 = "0923ngd2cvck3lhl7584y08n36pm6zqihfm1s69sbdc11xg936hr";
   };
 
   patches = [

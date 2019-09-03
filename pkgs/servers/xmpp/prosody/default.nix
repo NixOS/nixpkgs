@@ -15,10 +15,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "0.11.2"; # also update communityModules
-  name = "prosody-${version}";
+  pname = "prosody";
 
   src = fetchurl {
-    url = "https://prosody.im/downloads/source/${name}.tar.gz";
+    url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
     sha256 = "0ca8ivqb4hxqka08pwnaqi1bqxrdl8zw47g6z7nw9q5r57fgc4c9";
   };
 

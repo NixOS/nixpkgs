@@ -23,7 +23,7 @@ let
   build = "f2";
 
 in stdenv.mkDerivation rec {
-  name = "unity-editor-${version}";
+  pname = "unity-editor";
   version = "${ver}x${build}";
 
   src = fetchurl {

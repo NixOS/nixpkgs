@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, libftdi1, libusb1, pkgconfig, hidapi }:
 
 stdenv.mkDerivation rec {
-  name = "openocd-${version}";
+  pname = "openocd";
   version = "0.10.0";
 
   src = fetchurl {

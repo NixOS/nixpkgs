@@ -77,7 +77,7 @@ let
   perlBin = "${perl}/bin/perl";
 
 in stdenv.mkDerivation rec {
-  name = "zoneminder-${version}";
+  pname = "zoneminder";
   version = "1.32.3";
 
   src = fetchFromGitHub {
@@ -146,7 +146,7 @@ in stdenv.mkDerivation rec {
     # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap
     # run-time dependencies not checked at build-time
-    ClassStdFast DataDump JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
+    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];

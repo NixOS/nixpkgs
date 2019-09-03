@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.2";
-  name = "libao-${version}";
+  pname = "libao";
 
   # the github mirror is more up to date than downloads.xiph.org
   src = fetchFromGitHub {

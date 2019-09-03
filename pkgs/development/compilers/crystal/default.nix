@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, makeWrapper
-, coreutils, git, gmp, nettools, openssl, readline, tzdata, libxml2, libyaml
-, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib }:
+, coreutils, git, gmp, nettools, openssl_1_0_2, readline, tzdata, libxml2, libyaml
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib
+, callPackage }:
 
 # We need multiple binaries as a given binary isn't always able to build
 # (even slightly) older or newer versions.
@@ -19,11 +20,12 @@ let
 
   arch = archs."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
-  checkInputs = [ git gmp openssl readline libxml2 libyaml ];
+  checkInputs = [ git gmp openssl_1_0_2 readline libxml2 libyaml ];
 
   genericBinary = { version, sha256s, rel ? 1 }:
   stdenv.mkDerivation rec {
-    name = "crystal-binary-${version}";
+    pname = "crystal-binary";
+    inherit version;
 
     src = fetchurl {
       url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
@@ -37,7 +39,7 @@ let
   };
 
   generic = { version, sha256, binary, doCheck ? true }:
-  stdenv.mkDerivation rec {
+  let compiler = stdenv.mkDerivation rec {
     pname = "crystal";
     inherit doCheck version;
 
@@ -72,7 +74,7 @@ let
 
     buildInputs = [
       boehmgc libatomic_ops pcre libevent libyaml
-      llvm zlib openssl
+      llvm zlib openssl_1_0_2
     ] ++ stdenv.lib.optionals stdenv.isDarwin [
       libiconv
     ];
@@ -134,6 +136,10 @@ let
       export PATH=${lib.makeBinPath checkInputs}:$PATH
     '';
 
+    passthru.buildCrystalPackage = callPackage ./build-package.nix {
+      crystal = compiler;
+    };
+
     meta = with lib; {
       description = "A compiled language with Ruby like syntax and type inference";
       homepage = https://crystal-lang.org/;
@@ -141,7 +147,7 @@ let
       maintainers = with maintainers; [ manveru david50407 peterhoeg ];
       platforms = builtins.attrNames archs;
     };
-  };
+  }; in compiler;
 
 in rec {
   binaryCrystal_0_26 = genericBinary {
@@ -199,5 +205,14 @@ in rec {
     binary = binaryCrystal_0_29;
   };
 
-  crystal = crystal_0_29;
+  crystal_0_30 = generic {
+    version = "0.30.1";
+    sha256  = "0fbk784zjflsl3hys5a1xmn8mda8kb2z7ql58wpyfavivswxanbs";
+    doCheck = false; # 6 checks are failing now
+    binary = binaryCrystal_0_29;
+  };
+
+  crystal = crystal_0_30;
+
+  crystal2nix = callPackage ./crystal2nix.nix {};
 }

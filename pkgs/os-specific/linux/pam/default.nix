@@ -1,7 +1,7 @@
 { stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4 }:
 
 stdenv.mkDerivation rec {
-  name = "linux-pam-${version}";
+  pname = "linux-pam";
   version = "1.3.1";
 
   src = fetchurl {

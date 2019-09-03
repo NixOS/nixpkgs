@@ -26,11 +26,11 @@ assert gpgmeSupport -> gpgme      != null && openssl != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "mutt-${version}";
+  pname = "mutt";
   version = "1.12.1";
 
   src = fetchurl {
-    url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
+    url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
     sha256 = "0311sip2q90aqaxn7h3cck1zl98b4vifqi8bp5fsizy4dr06bi81";
   };
 

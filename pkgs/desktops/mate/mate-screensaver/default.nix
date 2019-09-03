@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus-glib, libXScrnSaver, libnotify, pam, systemd, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-screensaver-${version}";
+  pname = "mate-screensaver";
   version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0c4qq5szsbfrz8hgkmlby2k7f1qs8kgqf2shd63z0pc8p6f47vvc";
   };
 

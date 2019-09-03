@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "udftools-${version}";
+  pname = "udftools";
   version = "2.0";
   src = fetchFromGitHub {
     owner = "pali";

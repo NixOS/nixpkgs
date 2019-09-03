@@ -56,7 +56,7 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "signal-desktop-${version}";
+  pname = "signal-desktop";
   version = "1.26.2";
 
   src = fetchurl {

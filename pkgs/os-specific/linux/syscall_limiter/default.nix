@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "syscall_limiter-${version}";
+  pname = "syscall_limiter";
   version = "2017-01-23";
 
   src = fetchFromGitHub {

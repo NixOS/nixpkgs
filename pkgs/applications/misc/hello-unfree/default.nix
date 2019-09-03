@@ -1,7 +1,7 @@
 { stdenv, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "example-unfree-package-${version}";
+  pname = "example-unfree-package";
   version = "1.0";
 
   phases = [ "installPhase" "fixupPhase" ];

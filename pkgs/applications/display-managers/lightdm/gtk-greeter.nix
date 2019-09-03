@@ -12,10 +12,11 @@ let
   version = "2.0.6";
 in
 stdenv.mkDerivation rec {
-  name = "lightdm-gtk-greeter-${version}";
+  pname = "lightdm-gtk-greeter";
+  inherit version;
 
   src = fetchurl {
-    url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.gz";
+    url = "${meta.homepage}/${ver_branch}/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "1pis5qyg95pg31dvnfqq34bzgj00hg4vs547r8h60lxjk81z8p15";
   };
 

@@ -20,7 +20,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "nwjs-${version}";
+  pname = "nwjs";
   version = "0.12.3";
 
   src = fetchurl {

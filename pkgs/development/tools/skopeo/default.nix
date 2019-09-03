@@ -20,7 +20,8 @@ let
 
 in
 buildGoPackage rec {
-  name = "skopeo-${version}";
+  pname = "skopeo";
+  inherit version;
   inherit src goPackagePath;
 
   outputs = [ "bin" "man" "out" ];

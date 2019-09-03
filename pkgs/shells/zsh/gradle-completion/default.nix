@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gradle-completion-${version}";
+  pname = "gradle-completion";
   version = "1.4.1";
 
   src = fetchFromGitHub {

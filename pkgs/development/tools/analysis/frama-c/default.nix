@@ -22,7 +22,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name    = "frama-c-${version}";
+  pname = "frama-c";
   version = "19.0";
   slang   = "Potassium";
 

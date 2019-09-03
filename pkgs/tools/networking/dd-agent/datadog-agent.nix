@@ -6,7 +6,7 @@ let
   python = pythonPackages.python;
 
 in buildGoPackage rec {
-  name = "datadog-agent-${version}";
+  pname = "datadog-agent";
   version = "6.11.2";
   owner   = "DataDog";
   repo    = "datadog-agent";

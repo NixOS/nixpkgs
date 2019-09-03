@@ -23,7 +23,7 @@ let
     };
 in
 stdenv.mkDerivation rec {
-  name    = "saw-tools-${version}";
+  pname = "saw-tools";
   version = "0.1.1-20150731";
 
   src = saw-bin;

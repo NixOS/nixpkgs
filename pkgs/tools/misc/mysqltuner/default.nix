@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mysqltuner-${version}";
+  pname = "mysqltuner";
   version = "1.7.13";
 
   src = fetchFromGitHub {

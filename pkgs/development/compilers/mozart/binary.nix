@@ -16,7 +16,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "mozart-binary-${version}";
+  pname = "mozart-binary";
+  inherit version;
 
   preferLocalBuild = true;
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, file, protobufc }:
 
 stdenv.mkDerivation rec {
-  name = "libivykis-${version}";
+  pname = "libivykis";
 
   version = "0.42.3";
 

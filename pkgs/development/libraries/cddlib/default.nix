@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cddlib-${version}";
+  pname = "cddlib";
   version = "0.94j";
   src = fetchFromGitHub {
     owner = "cddlib";

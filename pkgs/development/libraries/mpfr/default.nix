@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "4.0.2";
-  name = "mpfr-${version}";
+  pname = "mpfr";
 
   src = fetchurl {
     urls = [
       #"https://www.mpfr.org/${name}/${name}.tar.xz"
-      "mirror://gnu/mpfr/${name}.tar.xz"
+      "mirror://gnu/mpfr/${pname}-${version}.tar.xz"
     ];
     sha256 = "12m3amcavhpqygc499s3fzqlb8f2j2rr7fkqsm10xbjfc04fffqx";
   };

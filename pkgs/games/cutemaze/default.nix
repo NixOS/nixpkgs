@@ -1,11 +1,11 @@
 { stdenv, fetchurl, qmake, qttools, qtsvg, mkDerivation }:
 
 mkDerivation rec {
-  name = "cutemaze-${version}";
+  pname = "cutemaze";
   version = "1.2.5";
 
   src = fetchurl {
-    url = "https://gottcode.org/cutemaze/${name}-src.tar.bz2";
+    url = "https://gottcode.org/cutemaze/${pname}-${version}-src.tar.bz2";
     sha256 = "1xrjv3h1bpbji1dl9hkcvmp6qk4j618saffl41455vhrzn170lrj";
   };
 

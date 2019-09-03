@@ -8,7 +8,7 @@ in
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "musescore-darwin-${version}";
+  pname = "musescore-darwin";
   version = "${concatStringsSep "." versionComponents}";
 
   src = fetchurl {

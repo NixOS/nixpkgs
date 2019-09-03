@@ -4,7 +4,8 @@ let
   version = "0.6.3";
 in
 stdenv.mkDerivation {
-  name = "ndn-cxx-${version}";
+  pname = "ndn-cxx";
+  inherit version;
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";

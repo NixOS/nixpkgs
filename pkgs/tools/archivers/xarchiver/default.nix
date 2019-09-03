@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.5.4.14";
-  name = "xarchiver-${version}";
+  pname = "xarchiver";
 
   src = fetchFromGitHub {
     owner = "ib";

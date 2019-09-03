@@ -33,7 +33,7 @@
 
 let
   paperless = stdenv.mkDerivation rec {
-    name = "paperless-${version}";
+    pname = "paperless";
     version = "2.7.0";
 
     src = fetchFromGitHub {

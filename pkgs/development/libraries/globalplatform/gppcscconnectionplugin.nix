@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, globalplatform, openssl_1_0_2, pcsclite }:
 
 stdenv.mkDerivation rec {
-  name = "gppcscconnectionplugin-${version}";
+  pname = "gppcscconnectionplugin";
   version  = "1.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/globalplatform/${name}.tar.gz";
+    url = "mirror://sourceforge/globalplatform/${pname}-${version}.tar.gz";
     sha256 = "0d3vcrh9z55rbal0dchmj661pqqrav9c400bx1c46grcl1q022ad";
   };
 
