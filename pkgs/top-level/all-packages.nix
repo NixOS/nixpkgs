@@ -3125,9 +3125,7 @@ in
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
-  fcppt = callPackage ../development/libraries/fcppt {
-    stdenv = gcc8Stdenv;
-  };
+  fcppt = callPackage ../development/libraries/fcppt { };
 
   fcrackzip = callPackage ../tools/security/fcrackzip { };
 
@@ -3158,7 +3156,6 @@ in
   flatpak-builder = callPackage ../development/tools/flatpak-builder { };
 
   fltrdr = callPackage ../tools/misc/fltrdr {
-    stdenv = gcc8Stdenv;
     icu = icu63;
   };
 
@@ -7663,8 +7660,8 @@ in
   gerbil = callPackage ../development/compilers/gerbil { stdenv = gccStdenv; };
   gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { stdenv = gccStdenv; };
 
-  gccFun = callPackage ../development/compilers/gcc/8;
-  gcc = gcc8;
+  gccFun = callPackage ../development/compilers/gcc/9;
+  gcc = gcc9;
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
