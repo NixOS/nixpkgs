@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gfortran, hepmc2, fastjet, lhapdf, rivet, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "sherpa-${version}";
+  pname = "sherpa";
   version = "2.2.6";
 
   src = fetchurl {

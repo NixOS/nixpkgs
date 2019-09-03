@@ -3,7 +3,7 @@
 # Don't use this for anything important yet!
 
 buildGoPackage rec {
-  name = "fscrypt-${version}";
+  pname = "fscrypt";
   version = "0.2.4";
 
   goPackagePath = "github.com/google/fscrypt";

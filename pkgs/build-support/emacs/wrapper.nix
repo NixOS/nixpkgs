@@ -18,10 +18,10 @@ the correct version of Emacs.
 `emacsWithPackages` inherits the package set which contains it, so the
 correct way to override the provided package set is to override the
 set which contains `emacsWithPackages`. For example, to override
-`emacsPackagesNg.emacsWithPackages`,
+`emacsPackages.emacsWithPackages`,
 ```
 let customEmacsPackages =
-      emacsPackagesNg.overrideScope' (self: super: {
+      emacsPackages.overrideScope' (self: super: {
         # use a custom version of emacs
         emacs = ...;
         # use the unstable MELPA version of magit

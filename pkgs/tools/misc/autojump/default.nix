@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python, bash }:
 
 stdenv.mkDerivation rec {
-  name = "autojump-${version}";
+  pname = "autojump";
   version = "22.5.3";
 
   src = fetchFromGitHub {

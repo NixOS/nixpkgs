@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gopkgs-${version}";
+  pname = "gopkgs";
   version = "2.0.1";
 
   goPackagePath = "github.com/uudashr/gopkgs";

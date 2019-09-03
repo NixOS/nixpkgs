@@ -11,7 +11,8 @@ let
   rev = "v${version}";
 
 in mkDerivation rec {
-  name = "qtox-${version}";
+  pname = "qtox";
+  inherit version;
 
   src = fetchFromGitHub {
     owner  = "qTox";

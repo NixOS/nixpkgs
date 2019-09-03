@@ -645,6 +645,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  handout = callPackage ../development/python-modules/handout { };
+
   helper = callPackage ../development/python-modules/helper { };
 
   histbook = callPackage ../development/python-modules/histbook { };
@@ -711,7 +713,11 @@ in {
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
-  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman { });
+  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
+
+  mailmanclient = callPackage ../development/python-modules/mailmanclient { };
+
+  mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
 
   manhole = callPackage ../development/python-modules/manhole { };
 
@@ -821,6 +827,8 @@ in {
 
   poetry = callPackage ../development/python-modules/poetry { };
 
+  postorius = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/postorius.nix { });
+
   pplpy = callPackage ../development/python-modules/pplpy { };
 
   pprintpp = callPackage ../development/python-modules/pprintpp { };
@@ -856,6 +864,8 @@ in {
   };
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
+
+  pybids = callPackage ../development/python-modules/pybids { };
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
@@ -1229,7 +1239,9 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
-  uvloop = callPackage ../development/python-modules/uvloop { };
+  uvloop = callPackage ../development/python-modules/uvloop {
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
+  };
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
@@ -1402,6 +1414,8 @@ in {
     gui = false;
   };
 
+  delegator-py = callPackage ../development/python-modules/delegator-py { };
+
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
   arrow = callPackage ../development/python-modules/arrow { };
@@ -1497,6 +1511,8 @@ in {
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
   bidict = callPackage ../development/python-modules/bidict { };
+
+  bids-validator = callPackage ../development/python-modules/bids-validator { };
 
   binwalk = callPackage ../development/python-modules/binwalk { };
 
@@ -1965,12 +1981,15 @@ in {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
-  pytest = self.pytest_4;
-
-  pytest_4 = callPackage ../development/python-modules/pytest {
-    # hypothesis tests require pytest that causes dependency cycle
-    hypothesis = self.hypothesis.override { doCheck = false; };
-  };
+  pytest = if isPy3k then
+    callPackage ../development/python-modules/pytest {
+      # hypothesis tests require pytest that causes dependency cycle
+      hypothesis = self.hypothesis.override { doCheck = false; };
+    }
+  else callPackage ../development/python-modules/pytest/2.nix {
+      # hypothesis tests require pytest that causes dependency cycle
+      hypothesis = self.hypothesis.override { doCheck = false; };
+    };
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
@@ -2041,6 +2060,8 @@ in {
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
+
+  pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
 
   pytest-repeat = callPackage ../development/python-modules/pytest-repeat { };
 
@@ -2321,15 +2342,13 @@ in {
 
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
 
+  fx2 = callPackage ../development/python-modules/fx2 { };
+
   gateone = callPackage ../development/python-modules/gateone { };
 
-  # TODO: Remove after 19.03 is branched off:
-  gcutil = throw ''
-    pythonPackages.gcutil is deprecated and can be replaced with "gcloud
-    compute" from the package google-cloud-sdk.
-  '';
-
   GeoIP = callPackage ../development/python-modules/GeoIP { };
+
+  glasgow = callPackage ../development/python-modules/glasgow { };
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
@@ -2561,6 +2580,10 @@ in {
 
   Nikola = callPackage ../development/python-modules/Nikola { };
 
+  nmigen = callPackage ../development/python-modules/nmigen { };
+
+  nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
+
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
@@ -2716,6 +2739,16 @@ in {
 
   sunpy = callPackage ../development/python-modules/sunpy { };
 
+  hyperkitty = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/hyperkitty.nix { });
+
+  robot-detection = callPackage ../development/python-modules/robot-detection {};
+
+  cssmin = callPackage ../development/python-modules/cssmin {};
+
+  django-paintstore = callPackage ../development/python-modules/django-paintstore {};
+
+  django-q = callPackage ../development/python-modules/django-q {};
+
   hyperlink = callPackage ../development/python-modules/hyperlink {};
 
   zope_copy = callPackage ../development/python-modules/zope_copy {};
@@ -2867,6 +2900,8 @@ in {
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
+
+  django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
@@ -3925,6 +3960,8 @@ in {
 
   ntplib = callPackage ../development/python-modules/ntplib { };
 
+  num2words = callPackage ../development/python-modules/num2words { };
+
   numba = callPackage ../development/python-modules/numba { };
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
@@ -4103,7 +4140,10 @@ in {
 
   pathlib2 = callPackage ../development/python-modules/pathlib2 { };
 
-  pathpy = callPackage ../development/python-modules/path.py { };
+  pathpy = if isPy3k then
+    callPackage ../development/python-modules/path.py { }
+  else
+    callPackage ../development/python-modules/path.py/2.nix { };
 
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
 
@@ -4775,10 +4815,10 @@ in {
   scipy = let
     scipy_ = callPackage ../development/python-modules/scipy { };
     scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: rec {
-      version = "1.2.1";
+      version = "1.2.2";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "0g5a03jkjiqlh6h9yz508p5c9ni43735m01fivjvn6dlpjxd31g0";
+        sha256 = "a4331e0b8dab1ff75d2c67b5158a8bb9a83c799d7140094dda936d876c7cfbb1";
       };
     });
   in if pythonOlder "3.5" then scipy_1_2 else scipy_;
@@ -5837,6 +5877,7 @@ in {
     cudatoolkit = pkgs.cudatoolkit_10;
     cudnn = pkgs.cudnn_cudatoolkit_10;
     nccl = pkgs.nccl_cudatoolkit_10;
+    openssl = pkgs.openssl_1_0_2;
   };
 
   tensorflow = if stdenv.isDarwin then self.tensorflow-bin else self.tensorflow-build;

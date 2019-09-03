@@ -3,7 +3,8 @@ let
   version = "1.0.1";
 in
 stdenv.mkDerivation {
-  name = "guetzli-${version}";
+  pname = "guetzli";
+  inherit version;
   src = fetchFromGitHub {
     owner = "google";
     repo = "guetzli";

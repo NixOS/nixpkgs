@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pciutils }: with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gnu-efi-${version}";
+  pname = "gnu-efi";
   version = "3.0.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnu-efi/${name}.tar.bz2";
+    url = "mirror://sourceforge/gnu-efi/${pname}-${version}.tar.bz2";
     sha256 = "1w3p4aqlc5j93q44la7dc8cr3hky20zvsd0h0k2lyzhwmrzfl5b7";
   };
 

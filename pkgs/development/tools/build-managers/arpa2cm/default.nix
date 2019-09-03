@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "arpa2cm";
   version = "0.5";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     sha256 = "093h7njj8d8iiwnw5byfxkkzlbny60fwv1w57j8f1lsd4yn6rih4";

@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.32.0";
-  name = "gpaste-${version}";
+  pname = "gpaste";
 
   src = fetchurl {
     url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/gnome-shell/prefs.js \
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/libgpaste/settings/gpaste-settings.c \
-      --subst-var-by gschemasCompiled "${placeholder "out"}/share/gsettings-schemas/${name}/glib-2.0/schemas"
+      --subst-var-by gschemasCompiled "${placeholder "out"}/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas"
   '';
 
   nativeBuildInputs = [

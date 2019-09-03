@@ -217,7 +217,8 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
-    string = separatedString "";
+    string = warn "types.string is deprecated because it quietly concatenates strings"
+      (separatedString "");
 
     attrs = mkOptionType {
       name = "attrs";

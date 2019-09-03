@@ -4,7 +4,7 @@
 , withMug ? false }:
 
 stdenv.mkDerivation rec {
-  name = "mu-${version}";
+  pname = "mu";
   version = "1.2";
 
   src = fetchFromGitHub {

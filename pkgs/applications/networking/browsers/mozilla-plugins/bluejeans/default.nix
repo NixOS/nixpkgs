@@ -15,7 +15,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "bluejeans-${version}";
+  pname = "bluejeans";
 
   version = "2.180.71.8";
 

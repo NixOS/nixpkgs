@@ -670,8 +670,7 @@ in
       { description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];
-        wants = [ "keys.target" ];
-        after = [ "network.target" "fs.target" "keys.target" ];
+        after = [ "network.target" "fs.target" ];
 
         path =
           [ httpd pkgs.coreutils pkgs.gnugrep ]

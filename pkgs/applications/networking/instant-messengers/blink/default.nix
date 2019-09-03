@@ -2,7 +2,7 @@
 , gnutls, libvpx, makeDesktopItem }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "blink-${version}";
+  pname = "blink";
   version = "3.0.3";
 
   src = fetchdarcs {

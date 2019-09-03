@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, git, go }:
 
 stdenv.mkDerivation rec {
-  name = "gitlab-workhorse-${version}";
+  pname = "gitlab-workhorse";
 
   version = "8.7.0";
 

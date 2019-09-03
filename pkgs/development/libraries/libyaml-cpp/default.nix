@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "libyaml-cpp-${version}";
+  pname = "libyaml-cpp";
   version = "0.6.2";
 
   src = fetchFromGitHub {

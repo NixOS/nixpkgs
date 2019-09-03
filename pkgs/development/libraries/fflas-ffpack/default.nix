@@ -2,7 +2,6 @@
 , gmpxx
 }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "fflas-ffpack";
   version = "2.4.0";
 

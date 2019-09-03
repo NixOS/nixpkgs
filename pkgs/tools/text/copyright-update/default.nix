@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "copyright-update-${version}";
+  pname = "copyright-update";
   version = "2016.1018";
 
   src = fetchFromGitHub {
-    name = "${name}-src";
+    name = "${pname}-${version}-src";
     owner = "jaalto";
     repo = "project--copyright-update";
     rev = "release/${version}";

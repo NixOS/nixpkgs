@@ -259,7 +259,7 @@ in {
         '';
     };
     incrementalRepairOptions = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       example = [ "--partitioner-range" ];
       description = ''
@@ -267,7 +267,7 @@ in {
         '';
     };
     maxHeapSize = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       example = "4G";
       description = ''
@@ -287,7 +287,7 @@ in {
       '';
     };
     heapNewSize = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       example = "800M";
       description = ''
@@ -352,11 +352,11 @@ in {
       type = types.listOf (types.submodule {
         options = {
           username = mkOption {
-            type = types.string;
+            type = types.str;
             description = "Username for JMX";
           };
           password = mkOption {
-            type = types.string;
+            type = types.str;
             description = "Password for JMX";
           };
         };

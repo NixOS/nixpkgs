@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "rubiks";
   version = "20070912";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sageupstream/rubiks/rubiks-${version}.tar.bz2";

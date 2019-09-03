@@ -9,7 +9,7 @@ in
   port = 9100;
   extraOpts = {
     enabledCollectors = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       example = ''[ "systemd" ]'';
       description = ''

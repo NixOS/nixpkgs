@@ -15,10 +15,10 @@ let
 
 in stdenv.mkDerivation rec {
   version = "1.14.0";
-  name = "mupdf-${version}";
+  pname = "mupdf";
 
   src = fetchurl {
-    url = "https://mupdf.com/downloads/archive/${name}-source.tar.gz";
+    url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
     sha256 = "093p7lv6pgyymagn28n58fs0np928r0i5p2az9cc4gwccwx4hhy4";
   };
 

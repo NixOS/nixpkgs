@@ -1,8 +1,6 @@
 { buildGoPackage, fetchFromGitHub, stdenv, openssh, makeWrapper }:
 
 buildGoPackage rec {
-
-  name = "${pname}-${version}";
   pname = "diskrsync";
   version = "unstable-2018-02-03";
 

@@ -15,6 +15,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestrunner pytestcov pytest ];
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "pytest>=4.0.1,<5.0.0" "pytest"
+  '';
+
   meta = with lib; {
     description = "JSON Web Token implementation in Python";
     homepage = https://github.com/jpadilla/pyjwt;

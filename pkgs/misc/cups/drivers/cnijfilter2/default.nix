@@ -2,7 +2,7 @@
 , withDebug ? false }:
 
 stdenv.mkDerivation rec {
-  name = "cnijfilter2-${version}";
+  pname = "cnijfilter2";
 
   version = "5.30";
 

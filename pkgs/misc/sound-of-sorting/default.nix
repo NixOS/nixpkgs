@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "sound-of-sorting-${version}";
+  pname = "sound-of-sorting";
   version = "unstable-2015-07-21";
 
   src = fetchgit {

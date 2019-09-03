@@ -13,7 +13,7 @@
 assert gtk3Support -> gtk3 != null;
 
 with luaPackages; stdenv.mkDerivation rec {
-  name = "awesome-${version}";
+  pname = "awesome";
   version = "4.3";
 
   src = fetchFromGitHub {

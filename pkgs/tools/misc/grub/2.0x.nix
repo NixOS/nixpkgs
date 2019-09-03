@@ -31,7 +31,7 @@ let
   canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
   inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.04-rc1";
+  version = "2.04";
 
 in (
 
@@ -40,12 +40,13 @@ assert zfsSupport -> zfs != null;
 assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
-  name = "grub-${version}";
+  pname = "grub";
+  inherit version;
 
   src = fetchgit {
     url = "git://git.savannah.gnu.org/grub.git";
-    rev = name;
-    sha256 = "0xkcfxs0hbzvi33kg4abkayl8b7gym9sv8ljbwlh2kpz8i4kmnk0";
+    rev = "${pname}-${version}";
+    sha256 = "02gly3xw88pj4zzqjniv1fxa1ilknbq1mdk30bj6qy8n44g90i8w";
   };
 
   patches = [

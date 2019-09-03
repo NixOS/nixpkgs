@@ -4,7 +4,7 @@
 # Versions of `riot-web` and `riot-desktop` should be kept in sync.
 
 stdenv.mkDerivation rec {
-  name= "riot-web-${version}";
+  pname = "riot-web";
   version = "1.3.3";
 
   src = fetchurl {

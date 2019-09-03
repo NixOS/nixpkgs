@@ -1,7 +1,7 @@
 { stdenv, lib, fetchgit, cmake, llvmPackages, openssl, apple_sdk, emacs, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "rtags-${version}";
+  pname = "rtags";
   version = "2.16";
 
   nativeBuildInputs = [ cmake pkgconfig ];

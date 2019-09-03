@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, openssl, libevent }:
 
 stdenv.mkDerivation rec {
-  name = "coturn-${version}";
+  pname = "coturn";
   version = "4.5.1.1";
 
   src = fetchFromGitHub {

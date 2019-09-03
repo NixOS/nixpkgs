@@ -17,7 +17,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "CNTK-${version}";
+  pname = "CNTK";
   version = "2.7";
 
   # Submodules

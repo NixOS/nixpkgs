@@ -7,7 +7,7 @@
 assert useUnrar -> unrar != null;
 
 stdenv.mkDerivation rec {
-  name = "ahoviewer-${version}";
+  pname = "ahoviewer";
   version = "1.6.5";
 
   src = fetchFromGitHub {

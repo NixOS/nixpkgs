@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "6.34";
-  name = "profile-sync-daemon-${version}";
+  pname = "profile-sync-daemon";
 
   src = fetchurl {
     url = "https://github.com/graysky2/profile-sync-daemon/archive/v${version}.tar.gz";

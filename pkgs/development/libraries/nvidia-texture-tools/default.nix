@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "nvidia-texture-tools-${version}";
+  pname = "nvidia-texture-tools";
   version = "2.1.0";
 
   src = fetchFromGitHub {

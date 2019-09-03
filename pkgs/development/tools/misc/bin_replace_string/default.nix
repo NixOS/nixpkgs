@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libelf, txt2man }:
 
 stdenv.mkDerivation rec {
-  name = "bin_replace_string-${version}";
+  pname = "bin_replace_string";
   version = "0.2";
 
   src = fetchurl {

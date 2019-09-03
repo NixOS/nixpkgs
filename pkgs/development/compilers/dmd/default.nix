@@ -22,7 +22,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "dmd-${version}";
+  pname = "dmd";
   inherit version;
 
   enableParallelBuilding = true;

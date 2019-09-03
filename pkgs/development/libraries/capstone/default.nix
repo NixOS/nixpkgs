@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name    = "capstone-${version}";
+  pname = "capstone";
   version = "4.0.1";
 
   src = fetchurl {

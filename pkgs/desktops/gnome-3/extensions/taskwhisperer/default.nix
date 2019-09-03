@@ -1,7 +1,7 @@
 { stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-taskwhisperer-${version}";
+  pname = "gnome-shell-extension-taskwhisperer";
   version = "12";
 
   src = fetchFromGitHub {

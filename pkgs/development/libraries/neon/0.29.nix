@@ -15,10 +15,10 @@ in
 
 stdenv.mkDerivation rec {
   version = "0.29.6";
-  name = "neon-${version}";
+  pname = "neon";
 
   src = fetchurl {
-    url = "http://www.webdav.org/neon/${name}.tar.gz";
+    url = "http://www.webdav.org/neon/${pname}-${version}.tar.gz";
     sha256 = "0hzbjqdx1z8zw0vmbknf159wjsxbcq8ii0wgwkqhxj3dimr0nr4w";
   };
 

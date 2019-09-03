@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ofp-${version}";
+  pname = "ofp";
   version = "2.0.0";
 
   src = fetchFromGitHub {

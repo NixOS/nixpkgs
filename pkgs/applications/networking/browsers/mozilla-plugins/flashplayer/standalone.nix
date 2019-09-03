@@ -49,7 +49,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "flashplayer-standalone-${version}";
+  pname = "flashplayer-standalone";
   version = "32.0.0.238";
 
   src = fetchurl {

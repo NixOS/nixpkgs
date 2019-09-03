@@ -1,7 +1,7 @@
 { stdenv, lib, makeWrapper, fetchzip, jre }:
 
 stdenv.mkDerivation rec {
-  name = "bftools-${version}";
+  pname = "bftools";
   version = "5.9.2";
 
   src = fetchzip {

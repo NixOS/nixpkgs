@@ -45,12 +45,13 @@ let
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
   version = "1.0.8";
 in stdenv.mkDerivation rec {
-  name = "flatpak-builder-${version}";
+  pname = "flatpak-builder";
+  inherit version;
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${name}.tar.xz";
+    url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "0ns1vv2phhd3vsi2749cajwapapx7xa841kkvssixwgfa575d912";
   };
 

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-uniemoji-${version}";
+  pname = "ibus-uniemoji";
   version = "0.6.0";
 
   src = fetchFromGitHub {

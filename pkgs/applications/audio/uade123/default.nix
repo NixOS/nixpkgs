@@ -3,7 +3,8 @@
 let
   version = "2.13";
 in stdenv.mkDerivation rec {
-  name = "uade123-${version}";
+  pname = "uade123";
+  inherit version;
   src = fetchurl {
     url = "http://zakalwe.fi/uade/uade2/uade-${version}.tar.bz2";
     sha256 = "04nn5li7xy4g5ysyjjngmv5d3ibxppkbb86m10vrvadzxdd4w69v";

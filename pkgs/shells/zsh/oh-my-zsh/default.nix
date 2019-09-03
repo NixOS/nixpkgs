@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "2019-08-07";
-  name = "oh-my-zsh-${version}";
+  pname = "oh-my-zsh";
   rev = "40fafe0f59371d1a9d83b83c614acfd1d740aabb";
 
   src = fetchgit { inherit rev;

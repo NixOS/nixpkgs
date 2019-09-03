@@ -130,8 +130,6 @@
 
   railgun = callPackage ./railgun { };
 
-  gn = callPackage ./gn { };
-
   structured-haskell-mode = self.shm;
 
   thingatpt-plus = callPackage ./thingatpt-plus { };
@@ -141,5 +139,55 @@
   yaoddmuse = callPackage ./yaoddmuse { };
 
   zeitgeist = callPackage ./zeitgeist { };
+
+  # From old emacsPackages (pre emacsPackagesNg)
+  cedet = callPackage ./cedet { };
+  cedille = callPackage ./cedille { cedille = pkgs.cedille; };
+  colorThemeSolarized = callPackage ./color-theme-solarized {
+    colorTheme = self.color-theme;
+  };
+  emacsSessionManagement = callPackage ./session-management-for-emacs { };
+  hsc3-mode = callPackage ./hsc3 { };
+  hol_light_mode = callPackage ./hol_light { };
+  ido-ubiquitous = callPackage ./ido-ubiquitous { };
+  ocaml-mode = callPackage ./ocaml { };
+  prolog-mode = callPackage ./prolog { };
+  rectMark = callPackage ./rect-mark { };
+  sunriseCommander = callPackage ./sunrise-commander { };
+
+  # Legacy aliases, these try to mostly map to melpa stable because it's
+  # closer to the old outdated package infra.
+  #
+  # Ideally this should be dropped some time during/after 20.03
+  bbdb3 = self.melpaStablePackages.bbdb;
+  ocamlMode = self.ocaml-mode;
+  jade = self.jade-mode;
+  # scalaMode2 = null;  # No clear mapping as of now
+  flymakeCursor = self.melpaStablePackages.flymake-cursor;
+  cryptol = self.melpaStablePackages.cryptol-mode;
+  maudeMode = self.maude-mode;
+  phpMode = self.melpaStablePackages.php-mode;
+  idris = self.melpaStablePackages.idris-mode;
+  rainbowDelimiters = self.melpaStablePackages.rainbow-delimiters;
+  colorTheme = self.color-theme;
+  sbtMode = self.melpaStablePackages.sbt-mode;
+  markdownMode = self.melpaStablePackages.markdown-mode;
+  scalaMode1 = self.melpaStablePackages.scala-mode;
+  prologMode = self.prolog-mode;
+  hsc3Mode = self.hsc3-mode;
+  graphvizDot = self.melpaStablePackages.graphviz-dot-mode;
+  proofgeneral_HEAD = self.proof-general;
+  proofgeneral = self.melpaStablePackages.proof-general;
+  haskellMode = self.melpaStablePackages.haskell-mode;
+  writeGood = self.melpaStablePackages.writegood-mode;
+  erlangMode = self.melpaStablePackages.erlang;
+  d = self.melpaStablePackages.d-mode;
+  autoComplete = self.melpaStablePackages.auto-complete;
+  tuaregMode = self.melpaStablePackages.tuareg;
+  structuredHaskellMode = self.melpaStablePackages.shm;
+  xmlRpc = self.melpaStablePackages.xml-rpc;
+  emacsw3m = self.w3m;
+  loremIpsum = self.lorem-ipsum;
+  js2 = self.melpaStablePackages.js2-mode;
 
 }

@@ -7,7 +7,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "lvm2-${version}";
+  pname = "lvm2";
+  inherit version;
 
   src = fetchgit {
     url = "git://sourceware.org/git/lvm2.git";

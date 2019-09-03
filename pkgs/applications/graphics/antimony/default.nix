@@ -9,7 +9,7 @@ let
   gitTag    = "0.9.3";
 in
   stdenv.mkDerivation rec {
-    name    = "antimony-${version}";
+    pname = "antimony";
     version = "2018-10-20";
 
     src = fetchFromGitHub {

@@ -4,7 +4,8 @@ let
   version = "2.6.0";
 in
 stdenv.mkDerivation rec {
-  name = "ign-math2-${version}";
+  pname = "ign-math2";
+  inherit version;
 
   src = fetchurl {
     url = "http://gazebosim.org/distributions/ign-math/releases/ignition-math2-${version}.tar.bz2";

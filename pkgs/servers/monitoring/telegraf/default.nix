@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "telegraf-${version}";
+  pname = "telegraf";
   version = "1.10.2";
 
   goPackagePath = "github.com/influxdata/telegraf";

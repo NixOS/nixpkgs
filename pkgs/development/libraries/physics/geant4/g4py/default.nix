@@ -16,7 +16,7 @@ in
 
 stdenv.mkDerivation rec {
   inherit (geant4_nomt) version src;
-  name = "g4py-${version}";
+  pname = "g4py";
 
   sourceRoot = "geant4.10.04.p01/environments/g4py";
 

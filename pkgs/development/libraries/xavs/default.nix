@@ -1,7 +1,7 @@
 { stdenv, fetchsvn }:
 
 stdenv.mkDerivation rec {
-  name = "xavs-${version}";
+  pname = "xavs";
   version = "55";
 
   src = fetchsvn {

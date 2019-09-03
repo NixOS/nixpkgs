@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "spectrwm-${version}";
+  pname = "spectrwm";
   version = "2.7.2";
 
   src = fetchurl {

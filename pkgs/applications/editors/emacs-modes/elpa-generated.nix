@@ -621,21 +621,6 @@
           license = lib.licenses.free;
         };
       }) {};
-    counsel-ebdb = callPackage ({ ebdb, elpaBuild, fetchurl, ivy, lib }:
-      elpaBuild {
-        pname = "counsel-ebdb";
-        ename = "counsel-ebdb";
-        version = "1";
-        src = fetchurl {
-          url = "https://elpa.gnu.org/packages/counsel-ebdb-1.el";
-          sha256 = "0p919gq871rxlrn6lpjbwws7h6i2gc9vgcxzj8bzgz8xk5hq9mis";
-        };
-        packageRequires = [ ebdb ivy ];
-        meta = {
-          homepage = "https://elpa.gnu.org/packages/counsel-ebdb.html";
-          license = lib.licenses.free;
-        };
-      }) {};
     crisp = callPackage ({ elpaBuild, fetchurl, lib }:
       elpaBuild {
         pname = "crisp";
@@ -1252,10 +1237,10 @@
       elpaBuild {
         pname = "frog-menu";
         ename = "frog-menu";
-        version = "0.2.9";
+        version = "0.2.10";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/frog-menu-0.2.9.el";
-          sha256 = "1gjhypsafpqybcbwi49qi1g419hcq9qv4p940ybspydg9gqk3gmp";
+          url = "https://elpa.gnu.org/packages/frog-menu-0.2.10.el";
+          sha256 = "050qikvgh9v7kgvhznjsfrpyhs7iq1x63bryqdkrwlf668yhzi1m";
         };
         packageRequires = [ avy emacs posframe ];
         meta = {
@@ -1467,21 +1452,6 @@
         packageRequires = [];
         meta = {
           homepage = "https://elpa.gnu.org/packages/heap.html";
-          license = lib.licenses.free;
-        };
-      }) {};
-    helm-ebdb = callPackage ({ ebdb, elpaBuild, fetchurl, helm, lib }:
-      elpaBuild {
-        pname = "helm-ebdb";
-        ename = "helm-ebdb";
-        version = "1";
-        src = fetchurl {
-          url = "https://elpa.gnu.org/packages/helm-ebdb-1.el";
-          sha256 = "17gpna0hywxnhfwc9zsm2r35mskyfi416qqmmdba26r4zmpb9r63";
-        };
-        packageRequires = [ ebdb helm ];
-        meta = {
-          homepage = "https://elpa.gnu.org/packages/helm-ebdb.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -2415,10 +2385,10 @@
       elpaBuild {
         pname = "phps-mode";
         ename = "phps-mode";
-        version = "0.2.4";
+        version = "0.2.8";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/phps-mode-0.2.4.tar";
-          sha256 = "0n6gj22w0llns3kx5hd69imhlrnlxx74zvhz7qikfx60669c5n20";
+          url = "https://elpa.gnu.org/packages/phps-mode-0.2.8.tar";
+          sha256 = "16sdqh93d2i9dxjibbhx4afakn150qc6xy2ifd83kx85c67y95kl";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3181,10 +3151,10 @@
       elpaBuild {
         pname = "tramp";
         ename = "tramp";
-        version = "2.4.2.1";
+        version = "2.4.2.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/tramp-2.4.2.1.tar";
-          sha256 = "139y05b2m715zryxqw7k438cc137mziz2k5nbzrrahddfz0i3cf9";
+          url = "https://elpa.gnu.org/packages/tramp-2.4.2.2.tar";
+          sha256 = "0bjfnxxyn8xgw10ybnjrza2gfwqifa3q7rh0bp6pidlhg45718p8";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3575,10 +3545,10 @@
       elpaBuild {
         pname = "wisitoken-grammar-mode";
         ename = "wisitoken-grammar-mode";
-        version = "1.0.2";
+        version = "1.0.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/wisitoken-grammar-mode-1.0.2.tar";
-          sha256 = "09rpjl3z6xzap0lbrjs9hf2nspwc5avvx75ah3aimgvizrf2kyp0";
+          url = "https://elpa.gnu.org/packages/wisitoken-grammar-mode-1.0.3.tar";
+          sha256 = "1vljnhi35vix30xch9mziczg56ss1r615yn2pgdcw8wa8sm14crw";
         };
         packageRequires = [ emacs mmm-mode wisi ];
         meta = {

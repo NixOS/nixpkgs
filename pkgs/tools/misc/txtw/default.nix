@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.4";
-  name = "txtw-${version}";
+  pname = "txtw";
 
   src = fetchFromGitHub {
     owner = "baskerville";

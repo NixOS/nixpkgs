@@ -4,7 +4,6 @@
 pythonPackages.buildPythonPackage rec {
   pname = "vncdo";
   version = "0.11.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "sibson";

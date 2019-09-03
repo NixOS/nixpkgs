@@ -28,7 +28,7 @@ let
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
       version = "2.5";
-      name = "weechat-${version}";
+      pname = "weechat";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";

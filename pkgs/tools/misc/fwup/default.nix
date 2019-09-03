@@ -3,7 +3,7 @@
 , libarchive, darwin, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "fwup-${version}";
+  pname = "fwup";
   version = "1.3.1";
 
   src = fetchFromGitHub {

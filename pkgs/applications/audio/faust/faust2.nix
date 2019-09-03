@@ -35,7 +35,8 @@ let
 
   faust = stdenv.mkDerivation {
 
-    name = "faust-${version}";
+    pname = "faust";
+    inherit version;
 
     inherit src;
 

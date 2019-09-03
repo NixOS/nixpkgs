@@ -1,7 +1,7 @@
 { stdenv, fetchurl, mono, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "jackett-${version}";
+  pname = "jackett";
   version = "0.11.589";
 
   src = fetchurl {
@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/{bin,share/${name}}
-    cp -r * $out/share/${name}
+    mkdir -p $out/{bin,share/${pname}-${version}}
+    cp -r * $out/share/${pname}-${version}
 
     makeWrapper "${mono}/bin/mono" $out/bin/Jackett \
-      --add-flags "$out/share/${name}/JackettConsole.exe" \
+      --add-flags "$out/share/${pname}-${version}/JackettConsole.exe" \
       --prefix LD_LIBRARY_PATH ':' "${curl.out}/lib"
   '';
 

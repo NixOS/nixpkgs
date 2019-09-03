@@ -4,11 +4,11 @@
 , xorgserver, xvfb_run }:
 
 stdenv.mkDerivation rec {
-  name = "i3-${version}";
+  pname = "i3";
   version = "4.17";
 
   src = fetchurl {
-    url = "https://i3wm.org/downloads/${name}.tar.bz2";
+    url = "https://i3wm.org/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1z8qmkkq9dhqmqy8sjw3rnpnmnb8v7lr456bs0qzp23bgpj17gjf";
   };
 

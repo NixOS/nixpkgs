@@ -2879,6 +2879,18 @@ let
     };
   };
 
+  ConfigSimple = buildPerlPackage {
+    pname = "Config-Simple";
+    version = "4.59";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SH/SHERZODR/Config-Simple-4.59.tar.gz;
+      sha256 = "0m0hg29baarw5ds768q9r4rxb27im8kj4fazyf9gjqw4mmssjy6b";
+    };
+    meta = {
+      description = "Simple configuration file class";
+    };
+  };
+
   ConfigStd = buildPerlModule {
     pname = "Config-Std";
     version = "0.903";
@@ -6194,6 +6206,9 @@ let
       url = mirror://cpan/authors/id/E/ET/ETHER/FCGI-0.78.tar.gz;
       sha256 = "1cxavhzg4gyw4gl9kirpbdimjr8gk1rjc3pqs3xrnh1gjybld5xa";
     };
+    postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed -i '/use IO::File/d' Makefile.PL
+    '';
   };
 
   FCGIClient = buildPerlModule {

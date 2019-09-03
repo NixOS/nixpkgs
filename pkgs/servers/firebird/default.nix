@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.5.7.27050-0";
-  name = "firebird-${version}";
+  pname = "firebird";
 
   # enableParallelBuilding = false; build fails
 

@@ -22,7 +22,7 @@ let
     };
   };
 in stdenv.mkDerivation rec {
-  name = "boxfs-${version}";
+  pname = "boxfs";
   version = "2-20150109";
 
   src = srcs.boxfs2;

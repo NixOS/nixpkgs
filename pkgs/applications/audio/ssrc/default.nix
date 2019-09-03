@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "ssrc";
-  name = "${pname}-${version}";
   version = "1.33";
 
   src = fetchFromGitHub {

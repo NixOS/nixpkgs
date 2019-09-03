@@ -8,7 +8,6 @@
 }:
 
 buildPythonPackage rec {
-  name    = "${pname}-${version}";
   pname   = "libsoundtouch";
   version = "0.4.0";
 

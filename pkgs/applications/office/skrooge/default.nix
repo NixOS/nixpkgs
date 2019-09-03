@@ -6,11 +6,11 @@
 }:
 
 mkDerivation rec {
-  name = "skrooge-${version}";
+  pname = "skrooge";
   version = "2.20.0";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/skrooge/${name}.tar.xz";
+    url = "http://download.kde.org/stable/skrooge/${pname}-${version}.tar.xz";
     sha256 = "0rakfngp7j2x7h1isg6lbc5kva6k1kg99dz0zl43dc28s15can1w";
   };
 

@@ -2,10 +2,10 @@
 
 mkDerivation rec {
   version = "19.6.0";
-  name = "smtube-${version}";
+  pname = "smtube";
 
   src = fetchurl {
-    url = "mirror://sourceforge/smtube/SMTube/${version}/${name}.tar.bz2";
+    url = "mirror://sourceforge/smtube/SMTube/${version}/${pname}-${version}.tar.bz2";
     sha256 = "0d3hskd6ar51zq29xj899i8sii9g4cxq99gz2y1dhgsnqbn36hpm";
   };
 

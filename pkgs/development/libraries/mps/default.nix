@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "mps-${version}";
+  pname = "mps";
   version = "1.117.0";
 
   src = fetchurl {

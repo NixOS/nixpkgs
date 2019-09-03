@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.21";
-  name = "cliquer-${version}";
+  pname = "cliquer";
 
   # autotoolized version of the original cliquer
   src = fetchFromGitHub {

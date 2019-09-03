@@ -33,7 +33,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name     = "ccl-${version}";
+  pname = "ccl";
   version  = "1.11.5";
 
   src = fetchurl {

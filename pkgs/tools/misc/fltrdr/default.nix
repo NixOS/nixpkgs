@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fltrdr-${version}";
+  pname = "fltrdr";
   version = "0.3.1";
 
   src = fetchFromGitHub {

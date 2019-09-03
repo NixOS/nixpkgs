@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "scummvm-${version}";
+  pname = "scummvm";
   version = "2.0.0";
 
   src = fetchurl {
-    url = "http://scummvm.org/frs/scummvm/${version}/${name}.tar.xz";
+    url = "http://scummvm.org/frs/scummvm/${version}/${pname}-${version}.tar.xz";
     sha256 = "0q6aiw97wsrf8cjw9vjilzhqqsr2rw2lll99s8i5i9svan6l314p";
   };
 

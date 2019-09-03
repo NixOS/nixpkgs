@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation (rec {
 
-  name = "metaocaml-${version}";
+  pname = "metaocaml";
   version = "3.09-alpha-30";
 
   src = fetchurl {

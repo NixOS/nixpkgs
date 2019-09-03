@@ -129,13 +129,13 @@ in
       user = mkOption {
         default = "influxdb";
         description = "User account under which influxdb runs";
-        type = types.string;
+        type = types.str;
       };
 
       group = mkOption {
         default = "influxdb";
         description = "Group under which influxdb runs";
-        type = types.string;
+        type = types.str;
       };
 
       dataDir = mkOption {

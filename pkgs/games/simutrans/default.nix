@@ -107,7 +107,8 @@ let
   };
 
   binaries = stdenv.mkDerivation rec {
-    name = "simutrans-${version}";
+    pname = "simutrans";
+    inherit version;
 
     src = binary_src;
 

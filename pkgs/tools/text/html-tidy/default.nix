@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "html-tidy-${version}";
+  pname = "html-tidy";
   version = "5.6.0";
 
   src = fetchFromGitHub {

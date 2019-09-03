@@ -3,7 +3,7 @@
 , libXrender, fontconfig, libXext, libXft, libsodium, libopus }:
 
 stdenv.mkDerivation rec {
-  name = "utox-${version}";
+  pname = "utox";
 
   version = "0.17.0";
 

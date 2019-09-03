@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "moonlight-embedded-${version}";
+  pname = "moonlight-embedded";
   version = "2.4.10";
 
   src = fetchFromGitHub {

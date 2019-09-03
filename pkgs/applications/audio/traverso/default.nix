@@ -3,7 +3,7 @@
 , libsamplerate, libsndfile, libvorbis, portaudio, qtbase, wavpack
 }:
 stdenv.mkDerivation rec {
-  name = "traverso-${version}";
+  pname = "traverso";
   version = "0.49.6";
 
   src = fetchurl {

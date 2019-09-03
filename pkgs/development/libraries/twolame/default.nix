@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "twolame-${version}";
+  pname = "twolame";
   version = "2017-09-27";
 
   src = fetchFromGitHub {

@@ -3,11 +3,11 @@
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gjs-${version}";
+  pname = "gjs";
   version = "1.56.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1b5321krn89p3f7s2ik6gpfnc61apzljhlnbqky8c88f7n6832ac";
   };
 

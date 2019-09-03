@@ -65,7 +65,7 @@ let
 
   citrixReceiverForVersion = { major, minor, patch, x86hash, x64hash, x86suffix, x64suffix, homepage }:
     stdenv.mkDerivation rec {
-      name     = "citrix-receiver-${version}";
+      pname = "citrix-receiver";
       version  = "${major}.${minor}.${patch}";
       inherit homepage;
 

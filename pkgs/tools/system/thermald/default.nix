@@ -2,7 +2,7 @@
 , pkgconfig, dbus, dbus-glib, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "thermald-${version}";
+  pname = "thermald";
   version = "1.9";
 
   src = fetchFromGitHub {

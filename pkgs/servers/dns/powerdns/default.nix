@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "powerdns-${version}";
+  pname = "powerdns";
   version = "4.1.13";
 
   src = fetchurl {

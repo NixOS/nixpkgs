@@ -2,11 +2,11 @@
 , gtk3, systemd, wrapGAppsHook, desktop-file-utils, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-packagekit-${version}";
+  pname = "gnome-packagekit";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-packagekit/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-packagekit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "08rhsisdvx7pnx3rrg5v7c09jbw4grglkdj979gwl4a31j24zjsd";
   };
 

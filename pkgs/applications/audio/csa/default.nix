@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "csa-${version}";
+  pname = "csa";
   version = "0.5.100810";
 
   src = fetchurl {
-    url = "mirror://sourceforge/csa/${name}.tar.gz";
+    url = "mirror://sourceforge/csa/${pname}-${version}.tar.gz";
     sha256 = "1syg81dzdil0dyx1mlx1n7if3qsf2iz243p2zv34a1acfqm509r3";
   };
 

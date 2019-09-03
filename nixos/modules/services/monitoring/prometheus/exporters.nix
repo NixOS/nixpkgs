@@ -132,14 +132,10 @@ let
     in
     mkIf conf.enable {
       warnings = conf.warnings or [];
-      users.users = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
-        "${name}-exporter" = {
-          description = ''
-            Prometheus ${name} exporter service user
-          '';
-          isSystemUser = true;
-          inherit (conf) group;
-        };
+      users.users."${name}-exporter" = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
+        description = "Prometheus ${name} exporter service user";
+        isSystemUser = true;
+        inherit (conf) group;
       });
       users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
         "${name}-exporter" = {};

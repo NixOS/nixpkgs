@@ -5,7 +5,6 @@
 mkDerivation rec {
   pname = "compyte";
   version = "git-20150817";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "inducer";

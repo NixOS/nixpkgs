@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, perl, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
-  name = "ckbcomp-${version}";
+  pname = "ckbcomp";
   version = "1.193";
 
   src = fetchFromGitLab {

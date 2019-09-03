@@ -6,7 +6,7 @@
 # See `pkgs/applications/editors/eclipse/*.nix`
 
 stdenv.mkDerivation rec {
-  name = "dbeaver-ce-${version}";
+  pname = "dbeaver-ce";
   version = "6.1.4";
 
   desktopItem = makeDesktopItem {

@@ -24,7 +24,8 @@ let
   checksum = "1nlvw56viwgafma506slywfg54z6009jmzc9q6wljgr6mqfmmchd";
 in
 stdenv.mkDerivation rec {
-  name = "znapzend-${version}";
+  pname = "znapzend";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "oetiker";

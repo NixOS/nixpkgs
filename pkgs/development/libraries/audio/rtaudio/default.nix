@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.1.0";
-  name = "rtaudio-${version}";
+  pname = "rtaudio";
 
   src = fetchFromGitHub {
     owner = "thestk";

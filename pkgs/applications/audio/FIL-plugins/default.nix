@@ -2,10 +2,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "FIL-plugins-${version}";
+  pname = "FIL-plugins";
   version = "0.3.0";
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
+    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1scfv9j7jrp50r565haa4rvxn1vk2ss86xssl5qgcr8r45qz42qw";
   };
 

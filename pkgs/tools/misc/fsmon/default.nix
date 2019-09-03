@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "fsmon-${version}";
+  pname = "fsmon";
   version = "1.5";
 
   src = fetchFromGitHub {

@@ -3,7 +3,7 @@
 with pythonPackages;
 
 buildPythonApplication rec {
-  name = "couchpotato-${version}";
+  pname = "couchpotato";
   version = "3.0.1";
   disabled = isPy3k;
 

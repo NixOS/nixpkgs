@@ -1,7 +1,7 @@
 { libsmbios, stdenv, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "netperf-${version}";
+  pname = "netperf";
   version = "20180613";
 
   src = fetchFromGitHub {

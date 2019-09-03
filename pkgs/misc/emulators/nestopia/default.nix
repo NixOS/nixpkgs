@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.47";
-  name = "nestopia-${version}";
+  pname = "nestopia";
 
   src = fetchFromGitHub {
     owner = "rdanbrook";

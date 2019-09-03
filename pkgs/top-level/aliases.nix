@@ -87,9 +87,11 @@ mapAliases ({
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
-  emacsMelpa = emacs25PackagesNg; # for backward compatibility
+  emacsMelpa = emacs25Packages; # for backward compatibility
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
-  emacsPackagesNgGen = emacsPackagesNgFor; # added 2018-08-18
+  emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
+  emacsPackagesNgFor = emacsPackagesFor; # added 2019-08-07
+  emacsPackagesNg = emacsPackages; # added 2019-08-07
   emby = throw "The Emby derivation has been removed, see jellyfin instead for a free software fork."; # added 2019-05-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
@@ -285,6 +287,7 @@ mapAliases ({
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
+  pyo3-pack = maturin;
   pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qt_gstreamer = qt-gstreamer;  # added 2017-02

@@ -15,7 +15,7 @@ in
 
 stdenv.mkDerivation rec {
 
-  name = "EventStore-${version}";
+  pname = "EventStore";
   version = "5.0.2";
 
   src = fetchFromGitHub {

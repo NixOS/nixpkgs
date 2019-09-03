@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "structure-synth-${version}";
+  pname = "structure-synth";
   version = "v1.5";
 
   src = fetchurl {

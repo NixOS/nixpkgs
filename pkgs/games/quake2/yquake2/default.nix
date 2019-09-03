@@ -14,7 +14,7 @@ let
   wrapper = import ./wrapper.nix { inherit stdenv lib buildEnv makeWrapper yquake2; };
 
   yquake2 = stdenv.mkDerivation rec {
-    name = "yquake2-${version}";
+    pname = "yquake2";
     version = "7.30";
 
     src = fetchFromGitHub {

@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-	name = "js_of_ocaml-tyxml-${version}";
+	pname = "js_of_ocaml-tyxml";
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;
 

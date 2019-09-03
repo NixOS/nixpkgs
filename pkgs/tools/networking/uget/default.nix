@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "uget-${version}";
+  pname = "uget";
   version = "2.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/urlget/${name}.tar.gz";
+    url = "mirror://sourceforge/urlget/${pname}-${version}.tar.gz";
     sha256 = "1hmzk907blgzc1z6wv4zbzqrwad06zfm1rqc3svh5garxw8z7xsw";
   };
 

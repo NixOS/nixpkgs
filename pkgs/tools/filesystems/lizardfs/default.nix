@@ -28,7 +28,7 @@ let
     sha256 = "13730429gwlabi432ilpnja3sfvy0nn2719vnhhmii34xcdyc57q";
   };
 in stdenv.mkDerivation rec {
-  name = "lizardfs-${version}";
+  pname = "lizardfs";
   version = "3.12.0";
 
   src = fetchFromGitHub {

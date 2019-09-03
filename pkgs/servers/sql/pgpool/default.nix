@@ -3,11 +3,10 @@
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
   version = "4.0.6";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "http://www.pgpool.net/download.php?f=${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
+    url = "http://www.pgpool.net/download.php?f=${pname}-${version}.tar.gz";
     sha256 = "0blmbqczyrgzykby2z3xzmhzd8kgij9izxv50n5cjn5azf7dn8g5";
   };
 

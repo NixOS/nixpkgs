@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AdoptOpenJDK";
     repo = "IcedTea-Web";
-    rev = "${pname}-${version}";
+    rev = "icedtea-web-${version}";
     sha256 = "0bm5k11i2vgb54ch1bawsmjbwnqnp04saadwm2f2mggmmdc6b1qq";
   };
 

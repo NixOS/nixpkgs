@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   version = "1.0.0";
-  name = "envdir-${version}";
+  pname = "envdir";
 
   goPackagePath = "github.com/d10n/envdir";
 

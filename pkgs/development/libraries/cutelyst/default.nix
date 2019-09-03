@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cutelyst-${version}";
+  pname = "cutelyst";
   version = "2.8.0";
 
   src = fetchFromGitHub {

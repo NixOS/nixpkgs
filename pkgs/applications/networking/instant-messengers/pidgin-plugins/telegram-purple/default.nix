@@ -4,7 +4,8 @@ let
   version = "1.3.0";
 in
 stdenv.mkDerivation rec {
-  name = "telegram-purple-${version}";
+  pname = "telegram-purple";
+  inherit version;
 
   src = fetchgit {
     url = "https://github.com/majn/telegram-purple";

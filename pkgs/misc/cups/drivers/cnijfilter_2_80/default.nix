@@ -7,7 +7,7 @@
    file included in the tarball */
 
 stdenv.mkDerivation rec {
-  name = "cnijfilter-${version}";
+  pname = "cnijfilter";
 
   /* important note about versions: cnijfilter packages seem to use
      versions in a non-standard way.  the version indicates which

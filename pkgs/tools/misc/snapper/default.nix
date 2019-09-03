@@ -4,7 +4,7 @@
 , lvm2, pam, python, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "snapper-${version}";
+  pname = "snapper";
   version = "0.8.3";
 
   src = fetchFromGitHub {

@@ -83,6 +83,8 @@ in with passthru; stdenv.mkDerivation {
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
+  '' + optionalString (stdenv.isDarwin && x11Support) ''
+    substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
   '';
 
   patches = [

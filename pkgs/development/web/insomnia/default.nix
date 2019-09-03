@@ -17,7 +17,7 @@ let
     stdenv.cc.cc
   ];
 in stdenv.mkDerivation rec {
-  name = "insomnia-${version}";
+  pname = "insomnia";
   version = "6.5.3";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libusb, readline }:
 
 stdenv.mkDerivation rec {
-  name = "libnfc-${version}";
+  pname = "libnfc";
   version = "1.7.1";
 
   src = fetchurl {

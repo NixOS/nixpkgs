@@ -237,7 +237,7 @@ assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-full-${version}";
+  pname = "ffmpeg-full";
   version = "4.2";
 
   src = fetchurl {

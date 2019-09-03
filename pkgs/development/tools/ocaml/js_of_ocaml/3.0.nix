@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-	name = "js_of_ocaml-${version}"; 
+	pname = "js_of_ocaml"; 
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;
 

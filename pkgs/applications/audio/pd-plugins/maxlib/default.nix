@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, puredata }:
 
 stdenv.mkDerivation rec {
-  name = "maxlib-${version}";
+  pname = "maxlib";
   version = "1.5.7";
 
   src = fetchFromGitHub {

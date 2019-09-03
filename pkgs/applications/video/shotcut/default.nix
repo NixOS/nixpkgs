@@ -6,7 +6,7 @@ assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
 assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
 
 mkDerivation rec {
-  name = "shotcut-${version}";
+  pname = "shotcut";
   version = "19.08.16";
 
   src = fetchFromGitHub {

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "sipcalc-${version}";
+  pname = "sipcalc";
   version = "1.1.6";
 
   src = fetchurl {
-    url = "http://www.routemeister.net/projects/sipcalc/files/${name}.tar.gz";
+    url = "http://www.routemeister.net/projects/sipcalc/files/${pname}-${version}.tar.gz";
     sha256 = "cfd476c667f7a119e49eb5fe8adcfb9d2339bc2e0d4d01a1d64b7c229be56357";
   };
 

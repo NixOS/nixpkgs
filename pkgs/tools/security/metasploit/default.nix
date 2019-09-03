@@ -16,7 +16,7 @@ let
     gemdir = ./.;
   };
 in stdenv.mkDerivation rec {
-  name = "metasploit-framework-${version}";
+  pname = "metasploit-framework";
   version = "4.16.1";
 
   src = fetchFromGitHub {

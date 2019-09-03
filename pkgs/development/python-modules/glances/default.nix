@@ -8,15 +8,15 @@
 }:
 
 buildPythonPackage rec {
-  name = "glances-${version}";
-  version = "3.1.1";
+  pname = "glances";
+  version = "3.1.2";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "1x9gw7hzw3p8zki82wdf359yxj0ylfw2096a4y621kj0p4xqsr4q";
+    sha256 = "1z9sq0chhm8m4gq98yfknxj408cj017h7j375blngjk2zvhw39qd";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):

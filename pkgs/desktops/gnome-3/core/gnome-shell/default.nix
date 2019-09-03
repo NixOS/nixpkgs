@@ -13,11 +13,11 @@ let
   pythonEnv = python3.withPackages ( ps: with ps; [ pygobject3 ] );
 
 in stdenv.mkDerivation rec {
-  name = "gnome-shell-${version}";
+  pname = "gnome-shell";
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0anlkdnqsp5fqvmg95rqjpp1ifcx5xzsvwcrdsvb1cqzbh6inmp5";
   };
 

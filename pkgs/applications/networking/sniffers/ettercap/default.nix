@@ -3,7 +3,7 @@
 , pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "ettercap-${version}";
+  pname = "ettercap";
   version = "0.8.3";
 
   src = fetchFromGitHub {

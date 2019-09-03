@@ -214,7 +214,6 @@ in
         # Need to disable features to support TRAMP
         if [ "$TERM" = dumb ]; then
             unsetopt zle prompt_cr prompt_subst
-            unfunction precmd preexec
             unset RPS1 RPROMPT
             PS1='$ '
             PROMPT='$ '

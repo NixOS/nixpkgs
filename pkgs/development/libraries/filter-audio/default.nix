@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "filter-audio-${version}";
+  pname = "filter-audio";
   version = "0.0.1";
 
   src = fetchFromGitHub {
