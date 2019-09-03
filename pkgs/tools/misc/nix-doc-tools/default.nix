@@ -71,7 +71,7 @@ let
 
     set -eux
 
-	  find ${toString src} '*.xml' -type f -print0  \
+	  find "${toString src}" -name '*.xml' -type f -print0  \
       | xargs -0 -I{} -n1 \
         xmlformat --config-file '${./xmlformat.conf}' -i {}
    '';
