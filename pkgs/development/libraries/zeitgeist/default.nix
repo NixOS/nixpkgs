@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
-  configureFlags = [ "--with-session-bus-services-dir=${placeholder ''out''}/share/dbus-1/services" ];
+  configureFlags = [ "--with-session-bus-services-dir=${placeholder "out"}/share/dbus-1/services" ];
 
   nativeBuildInputs = [
     autoconf automake libtool pkgconfig gettext gobject-introspection vala python2Packages.python

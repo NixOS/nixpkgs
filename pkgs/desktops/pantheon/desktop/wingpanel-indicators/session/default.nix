@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   meta = with stdenv.lib; {
     description = "Session Indicator for Wingpanel";

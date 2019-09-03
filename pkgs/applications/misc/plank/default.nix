@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
 
   # fix paths
   makeFlags = [
-    "INTROSPECTION_GIRDIR=${placeholder ''out''}/share/gir-1.0/"
-    "INTROSPECTION_TYPELIBDIR=${placeholder ''out''}/lib/girepository-1.0"
+    "INTROSPECTION_GIRDIR=${placeholder "out"}/share/gir-1.0/"
+    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
   # Make plank's application launcher hidden in Pantheon

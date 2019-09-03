@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-    "-Dinstalled_test_datadir=${placeholder ''installedTests''}/share"
-    "-Dinstalled_test_bindir=${placeholder ''installedTests''}/libexec"
+    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
+    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
   ];
 
   nativeBuildInputs = [
