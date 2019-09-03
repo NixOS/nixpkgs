@@ -24391,6 +24391,12 @@ in
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
+  terranix = callPackage (super.fetchgit {
+    url = "https://github.com/mrVanDalo/terranix.git";
+    rev = "6097722f3a94972a92d810f3a707351cd425a4be";
+    sha256 = "1d8w82mvgflmscvq133pz9ynr79cgd5qjggng85byk8axj6fg6jw";
+  }) { };
+
   tilt = callPackage ../applications/networking/cluster/tilt {};
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
