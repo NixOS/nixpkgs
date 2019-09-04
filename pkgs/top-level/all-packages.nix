@@ -24139,6 +24139,8 @@ in
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
+  nixfmt = haskell.lib.justStaticExecutables haskellPackages.nixfmt;
+
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
