@@ -86,7 +86,6 @@ rec {
         # Transform ff into a functor while propagating its arguments
         lib.setFunctionArgs ff (lib.functionArgs ff) // {
           override = overrideArgs;
-          overrideDerivation = throw "overrideDerivation not yet supported for functors";
         }
       else ff;
 
