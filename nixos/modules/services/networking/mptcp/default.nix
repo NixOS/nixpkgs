@@ -17,8 +17,9 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.linux_mptcp;
+      defaultText = "pkgs.linux_mptcp";
       description = ''
-        Default mptcp kernel to use.
+        Default MPTCP kernel to use.
       '';
     };
 
