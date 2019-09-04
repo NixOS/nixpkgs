@@ -9,12 +9,12 @@ in
 
 mkDerivation rec {
   pname = "supercollider";
-  version = "3.10.2";
+  version = "3.10.3";
 
 
   src = fetchurl {
-    url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source-linux.tar.bz2";
-    sha256 = "0ynz1ydcpsd5h57h1n4a7avm6p1cif5a8rkmz4qpr46pr8z9p6iq";
+    url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
+    sha256 = "1wvsrr4qcqmpxpn57wwrnwbnf3pflr3n4wkj9j6b9cdisp34kv5d";
   };
 
   hardeningDisable = [ "stackprotector" ];
@@ -26,6 +26,8 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
+  enableParallelBuilding = true;
+
   buildInputs = [
     gcc libjack2 libsndfile fftw curl libXt qtbase qtwebengine qtwebsockets readline ]
       ++ optional (!stdenv.isDarwin) alsaLib
@@ -33,7 +35,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Programming language for real time audio synthesis";
-    homepage = http://supercollider.sourceforge.net/;
+    homepage = "https://supercollider.github.io";
     maintainers = with maintainers; [ mrmebelman ];
     license = licenses.gpl3;
     platforms = [ "x686-linux" "x86_64-linux" ];
