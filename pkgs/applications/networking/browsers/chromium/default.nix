@@ -10,6 +10,8 @@
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
+, pepperFlashVersion ? "32.0.0.238"
+, pepperFlashSHA ? "0jqx68lfqjpy6wbxdi0giclvh9mc9rha92hqdj1nx42v95k3gc65"
 , enableWideVine ? false
 , useVaapi ? false # test video on radeon, before enabling this
 , cupsSupport ? true
@@ -41,7 +43,7 @@ in let
     browser = callPackage ./browser.nix { inherit channel; };
 
     plugins = callPackage ./plugins.nix {
-      inherit enablePepperFlash enableWideVine;
+      inherit enablePepperFlash enableWideVine pepperFlashVersion;
     };
   };
 

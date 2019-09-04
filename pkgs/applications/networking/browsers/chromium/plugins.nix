@@ -6,6 +6,8 @@
 , fetchzip
 , patchelfUnstable
 , enablePepperFlash ? false
+, pepperFlashVersion ? "32.0.0.238"
+, pepperFlashSHA ? "0jqx68lfqjpy6wbxdi0giclvh9mc9rha92hqdj1nx42v95k3gc65"
 , enableWideVine ? false
 
 , upstream-info
@@ -100,11 +102,11 @@ let
 
   flash = stdenv.mkDerivation rec {
     pname = "flashplayer-ppapi";
-    version = "32.0.0.238";
+    version = pepperFlashVersion;
 
     src = fetchzip {
       url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/${version}/flash_player_ppapi_linux.x86_64.tar.gz";
-      sha256 = "0jqx68lfqjpy6wbxdi0giclvh9mc9rha92hqdj1nx42v95k3gc65";
+      sha256 = pepperFlashSHA;
       stripRoot = false;
     };
 
