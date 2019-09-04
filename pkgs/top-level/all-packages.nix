@@ -12718,7 +12718,7 @@ in
     withGUI = false;
   };
 
-  mlt = callPackage ../development/libraries/mlt {};
+  mlt = callPackage ../development/libraries/mlt { ffmpeg = ffmpeg_4; };
 
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
@@ -13301,7 +13301,7 @@ in
     kpmcore = callPackage ../development/libraries/kpmcore { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
-      ffmpeg = ffmpeg_2;
+      ffmpeg = ffmpeg_4;
     };
 
     openbr = callPackage ../development/libraries/openbr { };
