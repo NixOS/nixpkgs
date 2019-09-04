@@ -247,7 +247,7 @@ buildErlangMk {
       Small, fast, modular HTTP server written in Erlang
     '';
     license = stdenv.lib.licenses.isc;
-    homepage = https://github.com/ninenines/cowboy;
+    homepage = "https://github.com/ninenines/cowboy";
   };
 }
 </programlisting>
@@ -281,7 +281,7 @@ buildMix {
       A plug for Absinthe, an experimental GraphQL toolkit
     '';
     license = stdenv.lib.licenses.bsd3;
-    homepage = https://github.com/CargoSense/absinthe_plug;
+    homepage = "https://github.com/CargoSense/absinthe_plug";
   };
 }
 </programlisting>
@@ -308,7 +308,7 @@ buildHex {
       A plug for Absinthe, an experimental GraphQL toolkit
     '';
     license = stdenv.lib.licenses.bsd3;
-    homepage = https://github.com/CargoSense/absinthe_plug;
+    homepage = "https://github.com/CargoSense/absinthe_plug";
  };
 }
 </programlisting>

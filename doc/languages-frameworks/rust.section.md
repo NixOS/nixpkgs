@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
-    homepage = https://github.com/BurntSushi/ripgrep;
+    homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
     maintainers = [ maintainers.tailhook ];
     platforms = platforms.all;
