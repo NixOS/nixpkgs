@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "mbed-ls";
-  version = "1.6.2";
+  version = "1.7.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nyb3cw4851cs8201q2fkna0z565j7169vj7wm2c88c8fm6qd21i";
+    sha256 = "0nm4h0d4ijf0vzl10msqg0d3djirsys3j6fl3yda1n9fix3gyrbg";
   };
 
   checkInputs = [
