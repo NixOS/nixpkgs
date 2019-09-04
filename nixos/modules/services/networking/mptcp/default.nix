@@ -55,7 +55,9 @@ in
     }
 
     (mkIf (!config.networking.networkmanager.enable) {
-      warnings = [ "You have `networkmanager` disabled. Expect things to break." ];
+      warnings = [
+        "You have `networkmanager` disabled. MPTCP may not be able to use all interfaces."
+      ];
     })
 
     # if networkmanager is enabled, handle routing tables
