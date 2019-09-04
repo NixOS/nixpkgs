@@ -251,7 +251,7 @@ stdenv.mkDerivation rec {
     "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
-  ++ lib.optionals (lib.versionAtLeast ffversion "57") [
+  ++ lib.optionals (lib.versionAtLeast ffversion "57" && lib.versionOlder ffversion "69") [
     "--enable-webrender=build"
   ]
 
