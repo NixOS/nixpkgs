@@ -7817,6 +7817,7 @@ let
       url = mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.048.tar.gz;
       sha256 = "01dx5w6r4nl3rgnz7wvgvqfaa48xmzy90p95d5k6315q44610kx6";
     };
+    checkInputs = [ pkgs.cairo ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     meta = {
       description = "Dynamically create Perl language bindings";
