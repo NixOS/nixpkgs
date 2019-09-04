@@ -1,6 +1,6 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, libxml2 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "evtest";
   version = "1.34";
 

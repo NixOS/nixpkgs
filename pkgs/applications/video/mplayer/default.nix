@@ -89,7 +89,7 @@ let
 
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mplayer";
   version = "1.4";
 
