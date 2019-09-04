@@ -60,6 +60,7 @@ python3Packages.buildPythonApplication rec {
     # pass it `-Wl,-O1` flag but optimizations are not recognized by
     # Mac linker.
     # https://github.com/mesonbuild/meson/issues/4784
+    # Should be fixed in 0.52
     ./fix-objc-linking.patch
   ];
 
