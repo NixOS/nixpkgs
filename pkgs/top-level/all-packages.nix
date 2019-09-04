@@ -2821,6 +2821,8 @@ in
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
+  strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
+
   tealdeer = callPackage ../tools/misc/tealdeer { };
 
   teamocil = callPackage ../tools/misc/teamocil { };
