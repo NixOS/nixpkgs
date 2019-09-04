@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-httpd=${apacheHttpd.out}/bin/httpd"
     "--with-modules-path=${apacheHttpd.dev}/modules"
-    "--with-systemduserunitdir=${placeholder ''out''}/etc/systemd/user"
-    "--with-nautilusdir=${placeholder ''out''}/lib/nautilus/extensions-3.0"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+    "--with-nautilusdir=${placeholder "out"}/lib/nautilus/extensions-3.0"
   ];
 
   nativeBuildInputs = [

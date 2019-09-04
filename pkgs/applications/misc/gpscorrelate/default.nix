@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "prefix=${placeholder ''out''}"
+    "prefix=${placeholder "out"}"
     "GTK=3"
     "CC=cc"
     "CXX=c++"

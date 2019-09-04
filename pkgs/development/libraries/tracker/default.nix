@@ -30,8 +30,8 @@ in stdenv.mkDerivation rec {
   LC_ALL = "en_US.UTF-8";
 
   mesonFlags = [
-    "-Ddbus_services=${placeholder ''out''}/share/dbus-1/services"
-    "-Dsystemd_user_services=${placeholder ''out''}/lib/systemd/user"
+    "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
+    "-Dsystemd_user_services=${placeholder "out"}/lib/systemd/user"
     # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
     "-Dfunctional_tests=false"
     "-Ddocs=true"

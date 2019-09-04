@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 14.3
+  # LTS Haskell 14.4
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -176,7 +176,7 @@ default-package-overrides:
   - bencoding ==0.4.5.1
   - between ==0.11.0.0
   - bibtex ==0.1.0.6
-  - bifunctors ==5.5.4
+  - bifunctors ==5.5.5
   - bimap ==0.4.0
   - bimap-server ==0.1.0.1
   - binary-bits ==0.5
@@ -264,7 +264,7 @@ default-package-overrides:
   - c2hs ==0.28.6
   - Cabal ==2.4.1.0
   - cabal2spec ==2.2.2.1
-  - cabal-doctest ==1.0.6
+  - cabal-doctest ==1.0.7
   - cabal-file-th ==0.2.6
   - cache ==0.1.1.2
   - cacophony ==0.10.1
@@ -511,7 +511,7 @@ default-package-overrides:
   - dependent-sum-template ==0.0.0.6
   - deque ==0.4.2.3
   - deriveJsonNoPrefix ==0.1.0.1
-  - deriving-compat ==0.5.6
+  - deriving-compat ==0.5.7
   - derulo ==1.0.5
   - detour-via-sci ==1.0.0
   - dhall ==1.24.0
@@ -547,7 +547,7 @@ default-package-overrides:
   - dockerfile ==0.2.0
   - docopt ==0.7.0.5
   - doctemplates ==0.2.2.1
-  - doctest ==0.16.1
+  - doctest ==0.16.2
   - doctest-discover ==0.2.0.0
   - doctest-driver-gen ==0.3.0.1
   - doldol ==0.4.1.2
@@ -629,7 +629,7 @@ default-package-overrides:
   - exact-pi ==0.5.0.1
   - exceptional ==0.3.0.0
   - exception-mtl ==0.4.0.1
-  - exceptions ==0.10.2
+  - exceptions ==0.10.3
   - exception-transformers ==0.4.0.7
   - executable-hash ==0.2.0.4
   - executable-path ==0.0.3.1
@@ -709,7 +709,7 @@ default-package-overrides:
   - format-numbers ==0.1.0.0
   - formatting ==6.3.7
   - foundation ==0.0.24
-  - free ==5.1.1
+  - free ==5.1.2
   - freenect ==1.2.1
   - freer-simple ==1.2.1.0
   - freetype2 ==0.1.2
@@ -778,7 +778,7 @@ default-package-overrides:
   - ghc-prof ==1.4.1.5
   - ghc-syntax-highlighter ==0.0.4.0
   - ghc-tcplugins-extra ==0.3
-  - ghc-typelits-extra ==0.3
+  - ghc-typelits-extra ==0.3.1
   - ghc-typelits-knownnat ==0.6
   - ghc-typelits-natnormalise ==0.6.2
   - ghost-buster ==0.1.1.0
@@ -944,7 +944,7 @@ default-package-overrides:
   - hruby ==0.3.8
   - hsass ==0.8.0
   - hs-bibutils ==6.7.0.0
-  - hsc2hs ==0.68.4
+  - hsc2hs ==0.68.6
   - hschema ==0.0.1.1
   - hschema-aeson ==0.0.1.1
   - hschema-prettyprinter ==0.0.1.1
@@ -1037,7 +1037,7 @@ default-package-overrides:
   - hw-fingertree ==0.1.1.0
   - hw-fingertree-strict ==0.1.1.1
   - hw-hedgehog ==0.1.0.3
-  - hw-hspec-hedgehog ==0.1.0.7
+  - hw-hspec-hedgehog ==0.1.0.8
   - hw-int ==0.0.0.3
   - hw-ip ==2.3.4.1
   - hw-json ==1.0.0.2
@@ -1512,7 +1512,7 @@ default-package-overrides:
   - pandoc-markdown-ghci-filter ==0.1.0.0
   - pandoc-pyplot ==2.1.5.1
   - pandoc-types ==1.17.6
-  - pantry ==0.1.1.1
+  - pantry ==0.1.1.2
   - parallel ==3.2.2.0
   - parallel-io ==0.3.3
   - paripari ==0.6.0.0
@@ -1568,11 +1568,11 @@ default-package-overrides:
   - pg-harness-client ==0.6.0
   - pg-harness-server ==0.6.2
   - pgp-wordlist ==0.1.0.3
-  - pg-transact ==0.1.0.1
+  - pg-transact ==0.1.2.0
   - phantom-state ==0.2.1.2
   - pid1 ==0.1.2.0
   - pinboard ==0.10.1.4
-  - pipes ==4.3.11
+  - pipes ==4.3.12
   - pipes-aeson ==0.4.1.8
   - pipes-attoparsec ==0.5.1.5
   - pipes-binary ==0.4.2
@@ -1731,7 +1731,7 @@ default-package-overrides:
   - read-editor ==0.1.0.2
   - read-env-var ==1.0.0.0
   - reanimate ==0.1.5.0
-  - reanimate-svg ==0.9.0.0
+  - reanimate-svg ==0.9.0.1
   - rebase ==1.3.1.1
   - record-dot-preprocessor ==0.2
   - record-hasfield ==1.0
@@ -1740,7 +1740,7 @@ default-package-overrides:
   - reducers ==3.12.3
   - refact ==0.3.0.2
   - references ==0.3.3.1
-  - reflection ==2.1.4
+  - reflection ==2.1.5
   - RefSerialize ==0.4.0
   - regex ==1.0.2.0
   - regex-applicative ==0.3.3.1
@@ -1785,7 +1785,7 @@ default-package-overrides:
   - rhine ==0.5.1.0
   - rhine-gloss ==0.5.1.0
   - rigel-viz ==0.2.0.0
-  - rio ==0.1.11.0
+  - rio ==0.1.12.0
   - rio-orphans ==0.1.1.0
   - rio-prettyprint ==0.1.0.0
   - roc-id ==0.1.0.0
@@ -1809,9 +1809,9 @@ default-package-overrides:
   - safe-json ==0.1.0
   - safe-money ==0.9
   - SafeSemaphore ==0.10.1
-  - salak ==0.3.5.1
-  - salak-toml ==0.3.5.1
-  - salak-yaml ==0.3.5.1
+  - salak ==0.3.5.3
+  - salak-toml ==0.3.5.3
+  - salak-yaml ==0.3.5.3
   - saltine ==0.1.0.2
   - salve ==1.0.6
   - sample-frame ==0.0.3
@@ -1843,7 +1843,7 @@ default-package-overrides:
   - selective ==0.3
   - semialign ==1
   - semigroupoid-extras ==5
-  - semigroupoids ==5.3.2
+  - semigroupoids ==5.3.3
   - semigroups ==0.18.5
   - semirings ==0.4.2
   - semiring-simple ==1.0.0.1
@@ -1879,6 +1879,7 @@ default-package-overrides:
   - servant-mock ==0.8.5
   - servant-multipart ==0.11.4
   - servant-pipes ==0.15
+  - servant-rawm ==0.3.1.0
   - servant-ruby ==0.9.0.0
   - servant-server ==0.16.2
   - servant-static-th ==0.2.2.0
@@ -1929,7 +1930,7 @@ default-package-overrides:
   - simplistic-generics ==0.1.0.0
   - since ==0.0.0
   - singleton-bool ==0.1.5
-  - singleton-nats ==0.4.2
+  - singleton-nats ==0.4.3
   - singletons ==2.5.1
   - siphash ==1.0.3
   - size-based ==0.1.2.0
@@ -1958,7 +1959,6 @@ default-package-overrides:
   - sox ==0.2.3.1
   - soxlib ==0.0.3.1
   - sparse-linear-algebra ==0.3.1
-  - sparse-tensor ==0.2.1
   - spatial-math ==0.5.0.1
   - special-values ==0.1.0.0
   - speculate ==0.3.5
@@ -2059,14 +2059,14 @@ default-package-overrides:
   - tagstream-conduit ==0.5.5.3
   - tao ==1.0.0
   - tao-example ==1.0.0
-  - tar ==0.5.1.0
+  - tar ==0.5.1.1
   - tar-conduit ==0.3.2
   - tardis ==0.4.1.0
   - tasty ==1.2.3
   - tasty-ant-xml ==1.1.6
   - tasty-dejafu ==2.0.0.1
   - tasty-discover ==4.2.1
-  - tasty-expected-failure ==0.11.1.1
+  - tasty-expected-failure ==0.11.1.2
   - tasty-golden ==2.3.2
   - tasty-hedgehog ==1.0.0.1
   - tasty-hspec ==1.1.5.1
@@ -2125,7 +2125,7 @@ default-package-overrides:
   - th-data-compat ==0.0.2.7
   - th-desugar ==1.9
   - these ==1.0.1
-  - th-expand-syns ==0.4.4.0
+  - th-expand-syns ==0.4.5.0
   - th-extras ==0.0.0.4
   - th-lift ==0.8.0.1
   - th-lift-instances ==0.1.14
@@ -2194,7 +2194,7 @@ default-package-overrides:
   - trivial-constraint ==0.6.0.0
   - true-name ==0.1.0.3
   - tsv2csv ==0.1.0.2
-  - ttl-hashtables ==1.3.1.0
+  - ttl-hashtables ==1.3.1.1
   - ttrie ==0.1.2.1
   - tuple ==0.3.0.2
   - tuples-homogenous-h98 ==0.1.1.0
@@ -2420,17 +2420,17 @@ default-package-overrides:
   - xmonad-extras ==0.15.1
   - xss-sanitize ==0.3.6
   - xxhash-ffi ==0.2.0.0
-  - yaml ==0.11.1.1
+  - yaml ==0.11.1.2
   - yeshql ==4.1.0.1
   - yeshql-core ==4.1.0.2
   - yeshql-hdbc ==4.1.0.2
   - yesod ==1.6.0
   - yesod-alerts ==0.1.3.0
-  - yesod-auth ==1.6.7
+  - yesod-auth ==1.6.8
   - yesod-auth-hashdb ==1.7.1.1
-  - yesod-auth-oauth2 ==0.6.1.1
+  - yesod-auth-oauth2 ==0.6.1.2
   - yesod-bin ==1.6.0.3
-  - yesod-core ==1.6.15
+  - yesod-core ==1.6.16
   - yesod-csp ==0.2.5.0
   - yesod-eventsource ==1.6.0
   - yesod-fb ==0.5.0
@@ -2461,7 +2461,7 @@ default-package-overrides:
   - zip-archive ==0.4.1
   - zippers ==0.3
   - zip-stream ==0.2.0.1
-  - zlib ==0.6.2
+  - zlib ==0.6.2.1
   - zlib-bindings ==0.1.1.5
   - zlib-lens ==0.1.2.1
   - zot ==0.0.3
@@ -3388,7 +3388,6 @@ broken-packages:
   - birch-beer
   - bird
   - BirdPP
-  - bisc
   - bisect-binary
   - bit-array
   - bit-stream
@@ -3593,8 +3592,6 @@ broken-packages:
   - cabin
   - cabocha
   - cached
-  - cachix
-  - cachix-api
   - cacophony
   - caffegraph
   - cairo-core
@@ -4548,7 +4545,6 @@ broken-packages:
   - Empty
   - empty-monad
   - enchant
-  - encoding
   - encoding-io
   - engine-io-growler
   - engine-io-snap
@@ -4620,7 +4616,6 @@ broken-packages:
   - euler-tour-tree
   - euphoria
   - eurofxref
-  - Euterpea
   - eve
   - eve-cli
   - event
@@ -5378,7 +5373,6 @@ broken-packages:
   - hakyll-dir-list
   - hakyll-favicon
   - hakyll-filestore
-  - hakyll-images
   - hakyll-ogmarkup
   - hakyll-R
   - hakyll-sass
@@ -8776,7 +8770,6 @@ broken-packages:
   - servant-auth-token-leveldb
   - servant-auth-token-persistent
   - servant-auth-token-rocksdb
-  - servant-checked-exceptions
   - servant-cli
   - servant-client-namedargs
   - servant-csharp
@@ -8805,7 +8798,6 @@ broken-packages:
   - servant-pushbullet-client
   - servant-py
   - servant-quickcheck
-  - servant-rawm
   - servant-reason
   - servant-reflex
   - servant-router
@@ -10208,7 +10200,6 @@ broken-packages:
   - xkcd
   - xleb
   - xlsior
-  - xlsx
   - xlsx-tabular
   - xlsx-templater
   - xml-catalog

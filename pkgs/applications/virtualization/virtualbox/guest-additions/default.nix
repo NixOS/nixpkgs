@@ -56,8 +56,6 @@ stdenv.mkDerivation {
     }
   '';
 
-  doConfigure = false;
-
   buildPhase = ''
     # Build kernel modules.
     cd src

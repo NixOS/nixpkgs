@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  makeFlags = [ "PREFIX=${placeholder ''out''}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 

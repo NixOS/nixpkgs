@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = version;
-    sha256 = "0p8ky306dnm4alkncmsnd8r2awpsi37p0bzvkv313pgqw2hbwq9i";
+    rev = "74e3126b77eb5f27c0ae3f53b0aff2d2eebc15af"; # patches of tip from gnome-3-28 branch
+    sha256 = "0gw1n1w3i040w5mv30kkg7g8a59ymjlc5yaklip0ngg8xv76g0zi";
   };
 
   patches = [
