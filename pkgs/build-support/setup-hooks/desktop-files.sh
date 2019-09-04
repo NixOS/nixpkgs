@@ -46,7 +46,8 @@ patchDesktopFiles () {
                         fi;
                     done
                     if [[ -z $success ]]; then
-                        echo "Warning: $desktopFile has Exec=$execname which is not found in $dirs or is not executable.";
+                        echo "Error: $desktopFile has Exec=$execname which is not found in $dirs or is not executable.";
+                        exit 1;
                     fi;;
             esac
         done
