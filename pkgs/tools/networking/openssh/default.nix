@@ -110,5 +110,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ eelco aneeshusa ];
+    broken = hpnSupport;
   };
 }
