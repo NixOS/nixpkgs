@@ -3,13 +3,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "fflas-ffpack";
-  version = "2.4.0";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = "${pname}";
-    rev = "v${version}";
-    sha256 = "1q1ala88ysz14pb5cn2kskv829nc1qif7zfzjwzhd5nnzwyivmc4";
+    rev = "${version}";
+    sha256 = "1ynbjd72qrwp0b4kpn0p5d7gddpvj8dlb5fwdxajr5pvkvi3if74";
   };
 
   checkInputs = [
