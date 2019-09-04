@@ -82,11 +82,12 @@ rec {
         ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
           overrideResult (x: x.overrideAttrs fdrv);
       })
-      else if lib.isFunction ff then {
-        override = overrideArgs;
-        __functor = self: ff;
-        overrideDerivation = throw "overrideDerivation not yet supported for functors";
-      }
+      else if lib.isFunction ff then
+        # Transform ff into a functor while propagating its arguments
+        lib.setFunctionArgs ff (lib.functionArgs ff) // {
+          override = overrideArgs;
+          overrideDerivation = throw "overrideDerivation not yet supported for functors";
+        }
       else ff;
 
 
