@@ -71,13 +71,14 @@ rec {
 
       # Re-call the function but with different arguments
       overrideArgs = newArgs: makeOverridable f (overrideWith newArgs);
+      # Change the result of the function call by applying g to it
+      overrideResult = g: makeOverridable (args: g (f args)) origArgs;
     in
       if builtins.isAttrs ff then (ff // {
         override = overrideArgs;
-        overrideDerivation = fdrv:
-          makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
+        overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
         ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
-          makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
+          overrideResult (x: x.overrideAttrs fdrv);
       })
       else if lib.isFunction ff then {
         override = overrideArgs;
