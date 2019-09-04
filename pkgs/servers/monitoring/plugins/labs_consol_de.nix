@@ -5,18 +5,16 @@ let
   glplugin = fetchFromGitHub {
     owner = "lausser";
     repo   = "GLPlugin";
-    rev    = "e8e1a2907a54435c932b3e6c584ba1d679754849";
-    sha256 = "0wb55a9pmgbilfffx0wkiikg9830qd66j635ypczqp4basslpq5b";
+    rev    = "ef3107f01afe55fad5452e64ac5bbea00b18a8d5";
+    sha256 = "047fwrycsl2vmpi4wl46fs6f8y191d6qc9ms5rvmrj1dm2r828ws";
   };
 
   generic = { pname, version, sha256, description, buildInputs, ... }:
-  let
-    name' = "${stdenv.lib.replaceStrings [ "-" ] [ "_" ] pname}-${version}";
-  in stdenv.mkDerivation {
-    name = "${pname}-${version}";
+  stdenv.mkDerivation {
+    inherit pname version;
 
     src = fetchurl {
-      url = "https://labs.consol.de/assets/downloads/nagios/${name'}.tar.gz";
+      url = "https://labs.consol.de/assets/downloads/nagios/${pname}-${version}.tar.bz";
       inherit sha256;
     };
 
