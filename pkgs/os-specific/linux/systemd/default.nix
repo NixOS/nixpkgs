@@ -30,6 +30,14 @@ in stdenv.mkDerivation rec {
     sha256 = "0aczg25ih2gfjq810x8rw6rnpr6sw1lz6z0lvlyw2qphyih68b4x";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-15718.patch";
+      url = https://github.com/systemd/systemd/pull/13457/commits/35e528018f315798d3bffcb592b32a0d8f5162bd.patch;
+      sha256 = "0m0ypnnllx4r6a2qy1586as15i2qrzxwi1sqdp14rzdwajz1rvnv";
+    })
+  ];
+
   prePatch = let
       # Upstream's maintenance branches are still too intrusive:
       # https://github.com/systemd/systemd-stable/tree/v239-stable
