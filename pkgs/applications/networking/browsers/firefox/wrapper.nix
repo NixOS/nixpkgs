@@ -129,6 +129,8 @@ let
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set SNAP_NAME "firefox" \
+            --set MOZ_LEGACY_PROFILES 1 \
+            --set MOZ_ALLOW_DOWNGRADE 1 \
             ${lib.optionalString gdkWayland ''
               --set GDK_BACKEND "wayland" \
             ''}${lib.optionalString (browser ? gtk3)
