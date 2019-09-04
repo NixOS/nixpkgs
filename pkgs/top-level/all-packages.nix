@@ -15930,7 +15930,7 @@ in
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
-    phc-intel = callPackage ../os-specific/linux/phc-intel { };
+    phc-intel = if stdenv.lib.versionAtLeast kernel.version "4.10" then callPackage ../os-specific/linux/phc-intel { } else null;
 
     # Disable for kernels 4.15 and above due to compatibility issues
     prl-tools = if stdenv.lib.versionOlder kernel.version "4.15" then callPackage ../os-specific/linux/prl-tools { } else null;
