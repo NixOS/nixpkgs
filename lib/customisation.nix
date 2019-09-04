@@ -67,12 +67,14 @@ rec {
   makeOverridable = f: origArgs:
     let
       ff = f origArgs;
+      # Creates a functor with the same arguments as f
+      copyArgs = g: lib.setFunctionArgs g (lib.functionArgs f);
       overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
 
       # Re-call the function but with different arguments
-      overrideArgs = newArgs: makeOverridable f (overrideWith newArgs);
+      overrideArgs = copyArgs (newArgs: makeOverridable f (overrideWith newArgs));
       # Change the result of the function call by applying g to it
-      overrideResult = g: makeOverridable (args: g (f args)) origArgs;
+      overrideResult = g: makeOverridable (copyArgs (args: g (f args))) origArgs;
     in
       if builtins.isAttrs ff then (ff // {
         override = overrideArgs;
