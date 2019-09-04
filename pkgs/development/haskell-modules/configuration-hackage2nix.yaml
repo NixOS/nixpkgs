@@ -1281,7 +1281,6 @@ default-package-overrides:
   - massiv-test ==0.1.0
   - mathexpr ==0.3.0.0
   - math-functions ==0.3.1.0
-  - matplotlib ==0.7.4
   - matrices ==0.5.0
   - matrix ==0.3.6.1
   - matrix-market-attoparsec ==0.1.0.8
