@@ -53,8 +53,8 @@ let
 in {
   check-mssql-health = generic {
     pname       = "check_mssql_health";
-    version     = "2.6.4.14";
-    sha256      = "0w6gybrs7imx169l8740s0ax3adya867fw0abrampx59mnsj5pm1";
+    version     = "2.6.4.15";
+    sha256      = "12z0b3c2p18viy7s93r6bbl8fvgsqh80136d07118qhxshp1pwxg";
     description = "Check plugin for Microsoft SQL Server.";
     buildInputs = [ perlPackages.DBDsybase ];
   };
