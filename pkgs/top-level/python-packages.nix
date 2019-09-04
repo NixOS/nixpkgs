@@ -4431,6 +4431,8 @@ in {
 
   pyupdate = callPackage ../development/python-modules/pyupdate {};
 
+  pyvmomi = callPackage ../development/python-modules/pyvmomi { };
+
   pyx = callPackage ../development/python-modules/pyx { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
