@@ -61,8 +61,8 @@ in {
 
   check-nwc-health = generic {
     pname       = "check_nwc_health";
-    version     = "7.0.1.3";
-    sha256      = "0rgd6zgd7kplx3z72n8zbzwkh8vnd83361sk9ibh6ng78sds1sl5";
+    version     = "7.10.0.6";
+    sha256      = "092rhaqnk3403z0y60x38vgh65gcia3wrd6gp8mr7wszja38kxv2";
     description = "Check plugin for network equipment.";
     buildInputs = [ perlPackages.NetSNMP ];
   };
