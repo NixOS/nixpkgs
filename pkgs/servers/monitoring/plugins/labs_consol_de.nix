@@ -69,8 +69,8 @@ in {
 
   check-ups-health = generic {
     pname       = "check_ups_health";
-    version     = "2.8.2.2";
-    sha256      = "1gc2wjsymay2vk5ywc1jj9cvrbhs0fs851x8l4nc75df2g75v521";
+    version     = "2.8.3.3";
+    sha256      = "0qc2aglppwr9ms4p53kh9nr48625sqrbn46xs0k9rx5sv8hil9hm";
     description = "Check plugin for UPSs.";
     buildInputs = [ perlPackages.NetSNMP ];
   };
