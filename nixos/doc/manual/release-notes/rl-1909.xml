@@ -711,11 +711,13 @@
      </para>
    </listitem>
    <listitem>
-     Ceph has been upgraded to v14.2.1.
-     See the <link xlink:href="https://ceph.com/releases/v14-2-0-nautilus-released/">release notes</link> for details.
-     The mgr dashboard as well as osds backed by loop-devices is no longer explicitly supported by the package and module.
-     Note: There's been some issues with python-cherrypy, which is used by the dashboard
-     and prometheus mgr modules (and possibly others), hence 0000-dont-check-cherrypy-version.patch.
+     <para>
+       Ceph has been upgraded to v14.2.1.
+       See the <link xlink:href="https://ceph.com/releases/v14-2-0-nautilus-released/">release notes</link> for details.
+       The mgr dashboard as well as osds backed by loop-devices is no longer explicitly supported by the package and module.
+       Note: There's been some issues with python-cherrypy, which is used by the dashboard
+       and prometheus mgr modules (and possibly others), hence 0000-dont-check-cherrypy-version.patch.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
