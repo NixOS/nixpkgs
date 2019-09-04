@@ -1,4 +1,4 @@
-{ callPackage, luaPackages, pythonPackages }:
+{ callPackage, luaPackages }:
 
 {
   weechat-xmpp = callPackage ./weechat-xmpp {
@@ -9,13 +9,9 @@
     inherit (luaPackages) cjson luaffi;
   };
 
-  wee-slack = callPackage ./wee-slack {
-    inherit pythonPackages;
-  };
+  wee-slack = callPackage ./wee-slack { };
 
   weechat-autosort = callPackage ./weechat-autosort { };
 
-  weechat-otr = callPackage ./weechat-otr {
-    inherit pythonPackages;
-  };
+  weechat-otr = callPackage ./weechat-otr { };
 }
