@@ -66,9 +66,11 @@ rec {
   */
   makeOverridable = f: origArgs:
     let
-      ff = f origArgs;
+      result = f origArgs;
+
       # Creates a functor with the same arguments as f
       copyArgs = g: lib.setFunctionArgs g (lib.functionArgs f);
+      # Changes the original arguments with (potentially a function that returns) a set of new attributes
       overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
 
       # Re-call the function but with different arguments
@@ -76,18 +78,19 @@ rec {
       # Change the result of the function call by applying g to it
       overrideResult = g: makeOverridable (copyArgs (args: g (f args))) origArgs;
     in
-      if builtins.isAttrs ff then (ff // {
-        override = overrideArgs;
-        overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
-        ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
-          overrideResult (x: x.overrideAttrs fdrv);
-      })
-      else if lib.isFunction ff then
-        # Transform ff into a functor while propagating its arguments
-        lib.setFunctionArgs ff (lib.functionArgs ff) // {
+      if builtins.isAttrs result then
+        result // {
+          override = overrideArgs;
+          overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
+          ${if result ? overrideAttrs then "overrideAttrs" else null} = fdrv:
+            overrideResult (x: x.overrideAttrs fdrv);
+        }
+      else if lib.isFunction result then
+        # Transform the result into a functor while propagating its arguments
+        lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
         }
-      else ff;
+      else result;
 
 
   /* Call the package function in the file `fn' with the required
