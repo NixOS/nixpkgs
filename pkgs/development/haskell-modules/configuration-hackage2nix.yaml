@@ -7163,7 +7163,6 @@ broken-packages:
   - mathflow
   - mathgenealogy
   - mathlink
-  - matplotlib
   - matrix-as-xyz
   - matsuri
   - matterhorn
