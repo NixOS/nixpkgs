@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [ gdk-pixbuf gobject-introspection libnotify gtk3 ];
   pythonPath = with python3Packages; [
     dbus-python docopt ewmh pygobject3 pyxdg
-    setproctitle setuptools setuptools_scm wheel
+    setproctitle setuptools_scm
   ];
 
   doCheck = false; # There are no tests.
