@@ -4001,7 +4001,12 @@ in
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
-  ipfs = callPackage ../applications/networking/ipfs { };
+  ipfs = callPackage ../applications/networking/ipfs {
+    # Version 0.4.22 fails to build with go 1.13 due to version validation:
+    #    go: github.com/go-critic/go-critic@v0.0.0-20181204210945-ee9bf5809ead: invalid pseudo-version: does not match version-control timestamp (2019-02-10T22:04:43Z)
+    # This is fixed in master, but release containing the fix does not exist yet.
+    buildGoModule = buildGo112Module;
+  };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
