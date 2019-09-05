@@ -44,5 +44,6 @@ buildGoPackage rec {
     homepage = https://github.com/mongodb/mongo-tools;
     description = "Tools for the MongoDB";
     license = licenses.asl20;
+    broken = true;  # Does not build with go 1.12
   };
 }
