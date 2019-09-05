@@ -1275,11 +1275,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   sessreg = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "sessreg-1.1.1";
+    name = "sessreg-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/sessreg-1.1.1.tar.bz2;
-      sha256 = "1qd66mg2bnppqz4xgdjzif2488zl82vx2c26ld3nb8pnyginm9vq";
+      url = mirror://xorg/individual/app/sessreg-1.1.2.tar.bz2;
+      sha256 = "0crczl25zynkrslmm8sjaxszhrh4i33m7h5fg4wfdb3k8aarxjyz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
