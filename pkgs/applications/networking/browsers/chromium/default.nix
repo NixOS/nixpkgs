@@ -39,7 +39,7 @@ in let
               useVaapi;
     };
 
-    browser = callPackage ./browser.nix { inherit channel; };
+    browser = callPackage ./browser.nix { inherit channel enableWideVine; };
 
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash;

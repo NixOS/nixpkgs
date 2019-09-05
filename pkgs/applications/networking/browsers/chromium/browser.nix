@@ -1,4 +1,4 @@
-{ stdenv, mkChromiumDerivation, channel }:
+{ stdenv, mkChromiumDerivation, channel, enableWideVine }:
 
 with stdenv.lib;
 
@@ -62,7 +62,7 @@ mkChromiumDerivation (base: rec {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
     maintainers = with maintainers; [ bendlas ivan ];
-    license = licenses.bsd3;
+    license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
     timeout = 172800; # 48 hours
