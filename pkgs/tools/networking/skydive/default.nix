@@ -41,5 +41,6 @@ buildGoPackage rec {
     license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.lewo ];
+    broken = true;  # Does not build with supported go 1.12 or newer
   };
 }
