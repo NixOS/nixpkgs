@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, buildEnv, fetchgit, fetchFromGitHub, pythonPackages, gmp }:
+{ stdenv, substituteAll, buildEnv, fetchgit, fetchFromGitHub, python3Packages, gmp }:
 
 let
   # pure-python-otr (potr) requires an older version of pycrypto, which is
@@ -6,7 +6,7 @@ let
   # of pycrypto will be fetched from the Debian project.
   # https://security-tracker.debian.org/tracker/source-package/python-crypto
 
-  pycrypto = pythonPackages.buildPythonPackage rec {
+  pycrypto = python3Packages.buildPythonPackage rec {
     pname = "pycrypto";
     version = "2.6.1-10";
 
@@ -24,7 +24,7 @@ let
     '';
   };
 
-  potr = pythonPackages.potr.overridePythonAttrs (oldAttrs: {
+  potr = python3Packages.potr.overridePythonAttrs (oldAttrs: {
     propagatedBuildInputs = [ pycrypto ];
   });
 in stdenv.mkDerivation rec {
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
       env = "${buildEnv {
         name = "weechat-otr-env";
         paths = [ potr pycrypto ];
-      }}/${pythonPackages.python.sitePackages}";
+      }}/${python3Packages.python.sitePackages}";
     })
   ];
 

@@ -6,21 +6,21 @@
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
-, pythonSupport ? true, pythonPackages
+, pythonSupport ? true, python3Packages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
 }:
 
 let
-  inherit (pythonPackages) python;
+  inherit (python3Packages) python;
   plugins = [
     { name = "perl"; enabled = perlSupport; cmakeFlag = "ENABLE_PERL"; buildInputs = [ perl ]; }
     { name = "tcl"; enabled = tclSupport; cmakeFlag = "ENABLE_TCL"; buildInputs = [ tcl ]; }
     { name = "ruby"; enabled = rubySupport; cmakeFlag = "ENABLE_RUBY"; buildInputs = [ ruby ]; }
     { name = "guile"; enabled = guileSupport; cmakeFlag = "ENABLE_GUILE"; buildInputs = [ guile ]; }
     { name = "lua"; enabled = luaSupport; cmakeFlag = "ENABLE_LUA"; buildInputs = [ lua5 ]; }
-    { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON"; buildInputs = [ python ]; }
+    { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON3"; buildInputs = [ python ]; }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
