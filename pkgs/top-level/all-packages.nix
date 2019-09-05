@@ -16531,10 +16531,6 @@ in
     libgcrypt = null;
   };
 
-  usbguard-nox = usbguard.override {
-    withGui = false;
-  };
-
   usbtop = callPackage ../os-specific/linux/usbtop { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
