@@ -17,7 +17,7 @@
 
 buildGoPackage rec {
   project = "cri-o";
-  version = "1.15.0";
+  version = "1.15.1";
   name = "${project}-${version}${flavor}";
 
   goPackagePath = "github.com/${project}/${project}";
@@ -26,7 +26,7 @@ buildGoPackage rec {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "08m84rlar25w6dwv76rab4vdlavacn7kb5ravzqnb8ngx68csbp3";
+    sha256 = "0yjj03qwwb6g05pzavimgj14p6805m3w8qqpl4fp4fpmbrsx4sb0";
   };
 
   outputs = [ "bin" "out" ];
