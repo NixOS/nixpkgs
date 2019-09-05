@@ -21733,9 +21733,6 @@ in
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
-  go-ethereum-classic = callPackage ../applications/blockchains/go-ethereum-classic {
-    buildGoPackage = buildGo110Package;
-  };
 
   jormungandr = callPackage ../applications/blockchains/jormungandr { };
 
