@@ -21860,6 +21860,8 @@ in
     stdenv = overrideCC stdenv gcc49;
   };
 
+  bayescan = callPackage ../applications/science/biology/bayescan { };
+
   bedtools = callPackage ../applications/science/biology/bedtools { };
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
