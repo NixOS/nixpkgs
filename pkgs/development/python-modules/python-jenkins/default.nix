@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "python-jenkins";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h14hfcwichmppbgxf1k8njw29hchpav1kj574b4lly3j0n2vnag";
+    sha256 = "145w5vri4lygz0pqjclibdw9h72vp86332pszsd5fj7wvz0zf48b";
   };
 
   buildInputs = [ mock ];
