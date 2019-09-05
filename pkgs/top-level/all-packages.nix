@@ -7901,10 +7901,6 @@ in
       inherit (darwin.apple_sdk.frameworks) Security;
     };
 
-  go_1_11 = callPackage ../development/compilers/go/1.11.nix {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
-
   go_1_12 = callPackage ../development/compilers/go/1.12.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
@@ -14351,18 +14347,11 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo111Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_11;
-  };
   buildGo112Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_12;
   };
 
   buildGoPackage = buildGo112Package;
-
-  buildGo111Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_11;
-  };
 
   buildGo112Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_12;
