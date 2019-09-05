@@ -25,7 +25,7 @@ mkDerivation rec {
   ];
 
   qmakeFlags = [
-    "INSTALL_PATH=${placeholder ''out''}/${qtbase.qtPluginPrefix}/platforms"
+    "INSTALL_PATH=${placeholder "out"}/${qtbase.qtPluginPrefix}/platforms"
   ];
 
   enableParallelBuilding = true;

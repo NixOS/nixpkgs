@@ -58,7 +58,9 @@
   ./hardware/network/intel-2200bg.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
+  ./hardware/openrazer.nix
   ./hardware/pcmcia.nix
+  ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
   ./hardware/steam-hardware.nix
   ./hardware/usb-wwan.nix
@@ -281,6 +283,7 @@
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
+  ./services/desktops/blueman.nix
   ./services/desktops/deepin/deepin.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
@@ -698,6 +701,7 @@
   ./services/networking/supybot.nix
   ./services/networking/syncthing.nix
   ./services/networking/syncthing-relay.nix
+  ./services/networking/syncplay.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix

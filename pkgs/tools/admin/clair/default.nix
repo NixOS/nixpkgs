@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "clair";
-  version = "2.0.8";
+  version = "2.0.9";
 
   goPackagePath = "github.com/coreos/clair";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "coreos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gwn533fdz8daz1db7w7g7mhls7d5a4vndn47blkpbx2yxdwdh62";
+    sha256 = "1lcrqka4daqqjagx2mbfzg3z8wxg669mw1lb450nrlc33ji2iwdm";
   };
 
   nativeBuildInputs = [ makeWrapper ];

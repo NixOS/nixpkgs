@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
 
   # fix paths
   makeFlags = [
-    "INTROSPECTION_GIRDIR=${placeholder ''dev''}/share/gir-1.0/"
-    "INTROSPECTION_TYPELIBDIR=${placeholder ''out''}/lib/girepository-1.0"
+    "INTROSPECTION_GIRDIR=${placeholder "dev"}/share/gir-1.0/"
+    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
   preConfigure = ''

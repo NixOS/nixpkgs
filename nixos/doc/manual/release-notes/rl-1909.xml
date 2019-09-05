@@ -135,7 +135,17 @@
      <literal>./programs/dwm-status.nix</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The new <varname>hardware.printers</varname> module allows to declaratively configure CUPS printers
+     via the <varname>ensurePrinters</varname> and
+     <varname>ensureDefaultPrinter</varname> options.
+     <varname>ensurePrinters</varname> will never delete existing printers,
+     but will make sure that the given printers are configured as declared.
+    </para>
+   </listitem>
   </itemizedlist>
+
  </section>
 
  <section xmlns="http://docbook.org/ns/docbook"

@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-dbusconfdir=${placeholder ''out''}/share"
-    "--with-systemdunitdir=${placeholder ''out''}/lib/systemd/system"
+    "--with-dbusconfdir=${placeholder "out"}/share"
+    "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
     "--enable-external-ell"
   ];
 

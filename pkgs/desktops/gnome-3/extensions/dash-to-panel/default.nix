@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-dash-to-panel";
-  version = "19";
+  version = "23";
 
   src = fetchFromGitHub {
     owner = "home-sweet-gnome";
     repo = "dash-to-panel";
     rev = "v${version}";
-    sha256 = "0r26ph6zq87kvglydv00rf24mshz7l4r38zf9niyp3mxyzz6rwys";
+    sha256 = "12smkz3clcvgicr0pdc0fk6igf82nw4hzih1ywv9q43xkqh9w1i6";
   };
 
   buildInputs = [

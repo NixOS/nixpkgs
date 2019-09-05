@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
     xmpppy pythonIRClib
   ];
 
-  /* doConfigure should be removed if not needed */
   # phaseNames = ["deploy" (a.makeManyWrappers "$out/share/${name}/irc.py" a.pythonWrapperArguments)];
 
   installPhase = ''

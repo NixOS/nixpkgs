@@ -1,24 +1,50 @@
-{ stdenv, fetchurl, aspell, pkgconfig, glib, hunspell, hspell, unittest-cpp }:
+{ stdenv
+, fetchurl
+, aspell
+, pkgconfig
+, glib
+, hunspell
+, hspell
+, unittest-cpp
+}:
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.2.4";
+  version = "2.2.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "1p6a3qmrh8bjzds6x7rg9da0ir44gg804jzkf634h39wsa4vdmpm";
+    sha256 = "0r41qjz3104h5raiwlw5ywwybafbxdjz12j1bnq3kq60jlr6d2pf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib hunspell ];
-  checkInputs = [ unittest-cpp ];
-  propagatedBuildInputs = [ hspell aspell ]; # libtool puts it to la file
+  nativeBuildInputs = [
+    pkgconfig
+  ];
+
+  buildInputs = [
+    glib
+    hunspell
+  ];
+
+  checkInputs = [
+    unittest-cpp
+  ];
+
+  # libtool puts these to .la files
+  propagatedBuildInputs = [
+    hspell
+    aspell
+  ];
 
   enableParallelBuilding = true;
 
-  doCheck = false; # https://github.com/AbiWord/enchant/issues/219
+  doCheck = true;
+
+  configureFlags = [
+    "--enable-relocatable" # needed for tests
+  ];
 
   meta = with stdenv.lib; {
     description = "Generic spell checking library";

@@ -3,6 +3,7 @@
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
+, makeWrapper, buildRubyGem, defaultGemConfig
 } @ args:
 
 let
@@ -46,6 +47,7 @@ let
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
+      , makeWrapper, buildRubyGem, defaultGemConfig
       }:
       stdenv.mkDerivation rec {
         pname = "ruby";
@@ -193,6 +195,12 @@ let
             ruby = self;
           };
 
+          inherit (import ../../ruby-modules/with-packages {
+            inherit lib stdenv makeWrapper buildRubyGem buildEnv;
+            gemConfig = defaultGemConfig;
+            ruby = self;
+          }) withPackages gems;
+
           # deprecated 2016-09-21
           majorVersion = ver.major;
           minorVersion = ver.minor;
@@ -212,26 +220,26 @@ in {
   };
 
   ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "5" "";
+    version = rubyVersion "2" "4" "7" "";
     sha256 = {
-      src = "162izk7c72y73vmdgcbsh8kqihrbm65xvp53r1s139pzwqd78dv7";
-      git = "181za4h6bd2bkyzyknxc18i5gq0pnqag60ybc17p0ixw3q7pdj43";
+      src = "12cbyf7zai8mi3mxffm5ynq3mmkcbvs7kb1bbrs259m61irgqvnd";
+      git = "1dgch9xz4wdcncb6pf2dvijm10yk6mbw2wfdrj7d3wazrjzh305z";
     };
   };
 
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "5" "";
+    version = rubyVersion "2" "5" "6" "";
     sha256 = {
-      src = "0k2in88jymqh727s88yjsv7wrqs2hdj9h2w9zh2bmrj0ygylba98";
-      git = "0l7b7xv48gvvlqs27gghfi645qvc1nwiz8ym4j8w100rzzzfy6zz";
+      src = "19xy6rf138ys4qycv0ibsycqwbjmf1j6iv9plw9cs81hcxnd0zhx";
+      git = "067gyy7149m6vk9dfyx22mghm2gbgy7snfa7df4ddrvr1pqffqmz";
     };
   };
 
   ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "3" "";
+    version = rubyVersion "2" "6" "4" "";
     sha256 = {
-      src = "1yw23hmllxsc4b7zqndn5l4d9503gdik6rsf3lfdkf12bxwx6zsp";
-      git = "1h4k2kw0vr4jh2ra9l89i8lnddfh2qfw67y9cknjylf7kw2m1pmh";
+      src = "0dvrw4g2igvjclxk9bmb9pf6mzxwm22zqvqa0abkfnshfnxdihag";
+      git = "1h4z66amjykpzl6lxx6yad2yfpwnwix4sw19bd96jnwg248kviqf";
     };
   };
 }

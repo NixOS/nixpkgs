@@ -19,8 +19,6 @@ let
       runHook postUnpack
     '';
 
-    doConfigure = false;
-
     installPhase = ''
       runHook preInstall
 
@@ -53,12 +51,5 @@ in {
   unifiStable = generic {
     version = "5.11.39";
     sha256 = "0v1gnvdazxa3bcbq8hl6796yw0mxzki2xn4s5im5k5ngmfmnswyj";
-  };
-
-  # TODO: update as it is outdated
-  unifiTesting = generic {
-    version = "5.11.18";
-    suffix = "-996baf2ca5";
-    sha256 = "14yyfn39ix8bnn0cb6bn0ly6pqxg81lvy83y40bk0y8vxfg6maqc";
   };
 }

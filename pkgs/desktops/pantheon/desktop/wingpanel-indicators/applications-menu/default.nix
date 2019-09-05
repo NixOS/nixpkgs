@@ -70,11 +70,11 @@ stdenv.mkDerivation rec {
    ];
 
   mesonFlags = [
-    "--sysconfdir=${placeholder ''out''}/etc"
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   patches = [
     (substituteAll {

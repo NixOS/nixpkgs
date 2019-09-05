@@ -44,6 +44,15 @@ stdenv.mkDerivation rec {
     install ${dashD} -m755 libblas.so.${version} "$out/lib/libblas.so.${version}"
     ln -s libblas.so.${version} "$out/lib/libblas.so.3"
     ln -s libblas.so.${version} "$out/lib/libblas.so"
+    # Write pkgconfig alias.
+    # See also openblas/default.nix
+    mkdir $out/lib/pkgconfig
+    cat <<EOF > $out/lib/pkgconfig/blas.pc
+Name: blas
+Version: ${version}
+Description: blas provided by the BLAS package.
+Libs: -L$out/lib -lblas
+EOF
   '';
 
   preFixup = stdenv.lib.optionalString stdenv.isDarwin ''

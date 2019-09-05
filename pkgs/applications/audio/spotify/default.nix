@@ -78,8 +78,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ squashfsTools makeWrapper ];
 
-  doConfigure = false;
-  doBuild = false;
   dontStrip = true;
   dontPatchELF = true;
 

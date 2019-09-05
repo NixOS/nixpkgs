@@ -1,7 +1,7 @@
 { stdenv, fetchurl, tcp_wrappers, flex, bison, perl }:
 
 stdenv.mkDerivation rec {
-  pname = "tacacs+";
+  pname = "tacacsplus";
   version = "4.0.4.28";
 
   src = fetchurl {
