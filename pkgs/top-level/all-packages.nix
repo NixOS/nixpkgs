@@ -15087,9 +15087,7 @@ in
   prometheus-process-exporter = callPackage ../servers/monitoring/prometheus/process-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
-  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix {
-    buildGoPackage = buildGo110Package;
-  };
+  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-tor-exporter = callPackage ../servers/monitoring/prometheus/tor-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
