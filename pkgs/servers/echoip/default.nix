@@ -13,9 +13,11 @@ buildGoModule {
 
   modSha256 = "025p891klwpid5fw4z39fimgfkwgkcwqpn5276hflzdp1hfv35ly";
 
+  outputs = [ "out" "index" ];
+
   postInstall = ''
-    mkdir -p $out
-    cp $src/index.html $out/index.html
+    mkdir -p $index
+    cp $src/index.html $index/index.html
   '';
 
   meta = with lib; {
