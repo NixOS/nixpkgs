@@ -6535,9 +6535,7 @@ in
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
 
-  tmsu = callPackage ../tools/filesystems/tmsu {
-    go = go_1_10;
-  };
+  tmsu = callPackage ../tools/filesystems/tmsu { };
 
   toilet = callPackage ../tools/misc/toilet { };
 
