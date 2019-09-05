@@ -44,5 +44,6 @@ buildGoPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.unix;
+    broken = true;  # Does not build with go 1.12
   };
 }
