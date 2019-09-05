@@ -3,13 +3,13 @@
 }:
 
 let
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "containers";
     repo   = "buildah";
-    sha256 = "0dki2v8j2jzbw49sdzcyjqbalbh70m0lgzrldgj6cc92mj896pxk";
+    sha256 = "114dmjqacz5hairl1s8qhndzr52lcvh99g565cq5ydscblnzpw1b";
   };
 
   goPackagePath = "github.com/containers/buildah";
@@ -32,7 +32,6 @@ in buildGoPackage {
 
   buildPhase = ''
     pushd go/src/${goPackagePath}
-    patchShebangs .
     make GIT_COMMIT="unknown"
     install -Dm755 buildah $bin/bin/buildah
   '';
