@@ -54,6 +54,7 @@ luassert,,,,,
 luasystem,,,,,
 luautf8,,,,,pstn
 luazip,,,,,
+lua-yajl,,,,,pstn
 luuid,,,,,
 luv,,,,,
 markdown,,,,,
