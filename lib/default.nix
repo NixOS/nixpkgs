@@ -45,6 +45,7 @@ let
 
     # domain-specific
     fetchers = callLibs ./fetchers.nix;
+    help = callLibs ./help.nix;
 
     # Eval-time filesystem handling
     filesystem = callLibs ./filesystem.nix;
