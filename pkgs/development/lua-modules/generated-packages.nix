@@ -1145,6 +1145,26 @@ luazip = buildLuarocksPackage {
     };
   };
 };
+lua-yajl = buildLuarocksPackage {
+  pname = "lua-yajl";
+  version = "2.0-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/lua-yajl-2.0-1.src.rock;
+    sha256 = "0bsm519vs53rchcdf8g96ygzdx2bz6pa4vffqlvc7ap49bg5np4f";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://github.com/brimworks/lua-yajl";
+    description = "Integrate the yajl JSON library with Lua.";
+    maintainers = with maintainers; [ pstn ];
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 luuid = buildLuarocksPackage {
   pname = "luuid";
   version = "20120509-2";
