@@ -15053,9 +15053,7 @@ in
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
-  inherit (callPackage ../servers/monitoring/prometheus {
-    buildGoPackage = buildGo110Package;
-  }) prometheus_1;
+  inherit (callPackage ../servers/monitoring/prometheus { }) prometheus_1;
 
   inherit (callPackage ../servers/monitoring/prometheus { })
     prometheus_2;
