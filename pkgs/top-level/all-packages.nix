@@ -19383,6 +19383,8 @@ in
 
   mhwaveedit = callPackage ../applications/audio/mhwaveedit {};
 
+  michabo = libsForQt5.callPackage ../applications/misc/michabo { };
+
   mid2key = callPackage ../applications/audio/mid2key { };
 
   midori-unwrapped = callPackage ../applications/networking/browsers/midori { };
