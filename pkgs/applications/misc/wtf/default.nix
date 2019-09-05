@@ -1,6 +1,8 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, makeWrapper
+, ncurses
 }:
 
 buildGoModule rec {
@@ -18,6 +20,8 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   # As per https://github.com/wtfutil/wtf/issues/501, one of the
   # dependencies can't be fetched, so vendored dependencies should
   # be used instead
@@ -25,6 +29,10 @@ buildGoModule rec {
     runHook preBuild
     make build -mod=vendor
     runHook postBuild
+  '';
+
+  postInstall = ''
+    wrapProgram "$out/bin/wtf" --prefix PATH : "${ncurses.dev}/bin"
   '';
 
   meta = with lib; {
