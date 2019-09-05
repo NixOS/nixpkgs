@@ -59,7 +59,8 @@ in let
     unpackCmd = let
       chan = if upstream-info.channel == "dev"    then "chrome-unstable"
         else if upstream-info.channel == "stable" then "chrome"
-        else "chrome-${upstream-info.channel}";
+        else if upstream-info.channel == "beta" then "chrome-beta"
+        else throw "Unknown chromium channel.";
     in ''
       mkdir -p plugins
       ar p "$src" data.tar.xz | tar xJ -C plugins --strip-components=4 \
