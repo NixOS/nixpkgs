@@ -24881,4 +24881,6 @@ in
 
   verifpal = callPackage ../tools/security/verifpal {};
 
+  nix-store-gcs-proxy = callPackage ../tools/nix/nix-store-gcs-proxy {};
+
 }
