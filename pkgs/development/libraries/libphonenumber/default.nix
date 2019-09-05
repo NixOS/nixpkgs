@@ -4,7 +4,7 @@ let
   version = "8.10.17";
 in
 stdenv.mkDerivation {
-  name = "phonenumber-${version}";
+  pname = "phonenumber";
   inherit version;
 
   src = fetchFromGitHub {
