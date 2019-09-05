@@ -12,10 +12,13 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook glib ];
-  buildInputs = [ gdk-pixbuf gobject-introspection libnotify gtk3 ];
+  buildInputs = [ 
+    gdk-pixbuf gobject-introspection libnotify gtk3 
+    python3Packages.setuptools_scm
+  ];
   pythonPath = with python3Packages; [
     dbus-python docopt ewmh pygobject3 pyxdg
-    setproctitle setuptools_scm
+    setproctitle 
   ];
 
   doCheck = false; # There are no tests.
