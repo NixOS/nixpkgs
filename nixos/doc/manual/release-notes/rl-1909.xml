@@ -422,6 +422,12 @@
        It was not useful except for debugging purposes and was confusingly set as default in some circumstances.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     The WeeChat plugin <literal>pkgs.weechatScripts.weechat-xmpp</literal> has been removed as it doesn't receive
+     any updates from upstream and depends on outdated Python2-based modules.
+    </para>
+   </listitem>
 
   </itemizedlist>
  </section>
@@ -718,7 +724,14 @@
        Note: There's been some issues with python-cherrypy, which is used by the dashboard
        and prometheus mgr modules (and possibly others), hence 0000-dont-check-cherrypy-version.patch.
      </para>
-   </listitem>
+    </listitem>
+    <listitem>
+     <para>
+      <literal>pkgs.weechat</literal> is now compiled against <literal>pkgs.python3</literal>.
+      Weechat also recommends <link xlink:href="https://weechat.org/scripts/python3/">to use Python3
+      in their docs.</link>
+     </para>
+    </listitem>
   </itemizedlist>
  </section>
 </section>
