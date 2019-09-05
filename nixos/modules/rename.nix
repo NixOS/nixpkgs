@@ -137,6 +137,9 @@ with lib;
     # tarsnap
     (mkRemovedOptionModule [ "services" "tarsnap" "cachedir" ] "Use services.tarsnap.archives.<name>.cachedir")
 
+    # unifi
+    (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "To use external storage, configure unifi to use an external Mongo instance and configure that accordingly.")
+
     # alsa
     (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "sound" "mediaKeys" "enable" ])
 

@@ -1,14 +1,19 @@
 { config, lib, pkgs, utils, ... }:
+
 with lib;
+
 let
   cfg = config.services.unifi;
+
   stateDir = "/var/lib/unifi";
+
   cmd = ''
     @${cfg.jrePackage}/bin/java java \
         ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
         -jar ${stateDir}/lib/ace.jar
   '';
+
   mountPoints = [
     {
       what = "${cfg.unifiPackage}/dl";
@@ -22,18 +27,31 @@ let
       what = "${cfg.mongodbPackage}/bin";
       where = "${stateDir}/bin";
     }
-    {
-      what = "${cfg.dataDir}";
-      where = "${stateDir}/data";
-    }
   ];
   systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}.mount") mountPoints;
+
+  systemProperties = {
+    # device inform
+    "unifi.http.port" = cfg.httpPort;
+    # controller UI / API
+    "unifi.https.port" = cfg.httpsPort;
+    # STUN (UDP)
+    "unifi.stun.port" = cfg.stunPort;
+    # DB
+    "unifi.db.nojournal" = !cfg.database.journaling;
+    # HSTS
+    "unifi.https.hsts" = cfg.enableHsts;
+    "unifi.https.hsts.max_age" = 31536000;
+    "unifi.https.hsts.preload" = false;
+    "unifi.https.hsts.subdomain" = false;
+  } // cfg.systemProperties;
+
 in
 {
 
-  options = {
+  options.services.unifi = {
 
-    services.unifi.enable = mkOption {
+    enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -41,7 +59,7 @@ in
       '';
     };
 
-    services.unifi.jrePackage = mkOption {
+    jrePackage = mkOption {
       type = types.package;
       default = pkgs.jre8;
       defaultText = "pkgs.jre8";
@@ -50,7 +68,7 @@ in
       '';
     };
 
-    services.unifi.unifiPackage = mkOption {
+    unifiPackage = mkOption {
       type = types.package;
       default = pkgs.unifiLTS;
       defaultText = "pkgs.unifiLTS";
@@ -59,7 +77,7 @@ in
       '';
     };
 
-    services.unifi.mongodbPackage = mkOption {
+    mongodbPackage = mkOption {
       type = types.package;
       default = pkgs.mongodb;
       defaultText = "pkgs.mongodb";
@@ -68,17 +86,7 @@ in
       '';
     };
 
-    services.unifi.dataDir = mkOption {
-      type = types.str;
-      default = "${stateDir}/data";
-      description = ''
-        Where to store the database and other data.
-
-        This directory will be bind-mounted to ${stateDir}/data as part of the service startup.
-      '';
-    };
-
-    services.unifi.openPorts = mkOption {
+    openPorts = mkOption {
       type = types.bool;
       default = true;
       description = ''
@@ -90,7 +98,7 @@ in
       '';
     };
 
-    services.unifi.initialJavaHeapSize = mkOption {
+    initialJavaHeapSize = mkOption {
       type = types.nullOr types.int;
       default = null;
       example = 1024;
@@ -100,7 +108,7 @@ in
       '';
     };
 
-    services.unifi.maximumJavaHeapSize = mkOption {
+    maximumJavaHeapSize = mkOption {
       type = types.nullOr types.int;
       default = null;
       example = 4096;
@@ -110,27 +118,77 @@ in
       '';
     };
 
+    httpPort = mkOption {
+      type = types.port;
+      default = 8080;
+      description = ''
+        Port for AP inform
+      '';
+    };
+
+    httpsPort = mkOption {
+      type = types.port;
+      default = 8443;
+      description = ''
+        Port for HTTPS traffic to controller UI.
+      '';
+    };
+
+    stunPort = mkOption {
+      type = types.port;
+      default = 3478;
+      description = ''
+        Port for STUN traffic.
+      '';
+    };
+
+    enableHsts = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable HSTS.
+      '';
+    };
+
+    database.journaling = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Use database journaling. Disable this to use less disk space in exchange for a higher risk of file corruption.
+      '';
+    };
+
+    systemProperties = mkOption {
+      type = types.attrs;
+      default = {};
+      description = ''
+        Key-value pairs that will be written to system.properties
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
 
     users.users.unifi = {
-      uid = config.ids.uids.unifi;
       description = "UniFi controller daemon user";
-      home = "${stateDir}";
+      home = stateDir;
+      group = "unifi";
     };
+
+    users.groups.unifi = {};
 
     networking.firewall = mkIf cfg.openPorts {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
-        8080  # Port for UAP to inform controller.
-        8880  # Port for HTTP portal redirect, if guest portal is enabled.
-        8843  # Port for HTTPS portal redirect, ditto.
-        6789  # Port for UniFi mobile speed test.
+        cfg.httpPort  # Port for UAP to inform controller.
+        cfg.httpsPort # Port for controller UI/API.
+        8880          # Port for HTTP portal redirect, if guest portal is enabled.
+        8843          # Port for HTTPS portal redirect, ditto.
+        6789          # Port for UniFi mobile speed test.
       ];
       allowedUDPPorts = [
-        3478  # UDP port used for STUN.
-        10001 # UDP port used for device discovery.
+        cfg.stunPort  # UDP port used for STUN.
+        10001         # UDP port used for device discovery.
       ];
     };
 
@@ -140,50 +198,70 @@ in
     systemd.mounts = map ({ what, where }: {
         bindsTo = [ "unifi.service" ];
         partOf = [ "unifi.service" ];
-        unitConfig.RequiresMountsFor = stateDir;
         options = "bind";
-        what = what;
-        where = where;
+        inherit what where;
       }) mountPoints;
 
-    systemd.tmpfiles.rules = [
-      "e '${stateDir}' 0700 unifi - - -"
-      "d '${stateDir}/data' 0700 unifi - - -"
-    ];
+    systemd.services.unifi-setup = {
+      description = "UniFi controller daemon - setup";
+      wantedBy = [ "multi-user.target" ];
+      before = [ "unifi.service" ];
+
+      script = let
+        props = "${stateDir}/data/system.properties";
+
+        toStr = val: if builtins.isBool val
+          then lib.boolToString val
+          else toString val;
+      in ''
+        set -Euo pipefail
+
+        rm -f ${stateDir}/webapps/ROOT
+        ln -s ${cfg.unifiPackage}/webapps/ROOT ${stateDir}/webapps/ROOT
+
+        touch ${props}
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: ''
+          ${pkgs.crudini}/bin/crudini --set ${props} \
+            "" ${name} ${toStr value}
+        '') systemProperties)}
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = "unifi";
+        Group = "unifi";
+      };
+    };
 
     systemd.services.unifi = {
       description = "UniFi controller daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ] ++ systemdMountPoints;
+      requires = systemdMountPoints ++ [ "unifi-setup.service" ];
       partOf = systemdMountPoints;
       bindsTo = systemdMountPoints;
-      unitConfig.RequiresMountsFor = stateDir;
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
-
-      preStart = ''
-        # Create the volatile webapps
-        rm -rf "${stateDir}/webapps"
-        mkdir -p "${stateDir}/webapps"
-        ln -s "${cfg.unifiPackage}/webapps/ROOT" "${stateDir}/webapps/ROOT"
-      '';
-
-      postStop = ''
-        rm -rf "${stateDir}/webapps"
-      '';
 
       serviceConfig = {
         Type = "simple";
         ExecStart = "${(removeSuffix "\n" cmd)} start";
         ExecStop = "${(removeSuffix "\n" cmd)} stop";
-        Restart = "on-failure";
         User = "unifi";
-        UMask = "0077";
-        WorkingDirectory = "${stateDir}";
+        Group = "unifi";
+        LogsDirectory = "unifi";
+        Restart = "always";
+        WorkingDirectory = stateDir;
       };
     };
 
+    systemd.tmpfiles.rules = [
+      "d ${stateDir} 0700 unifi unifi - -"
+    ]
+    ++ (map (e: "d ${stateDir}/${e} 0700 unifi unifi - -")
+      [ "data" "logs" "run" "webapps" ])
+    ++ [ "Z ${stateDir} - unifi unifi - -" ];
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen ];
+  meta.maintainers = with lib.maintainers; [ erictapen peterhoeg ];
 }
