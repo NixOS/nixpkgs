@@ -5111,9 +5111,7 @@ in
 
   nnn = callPackage ../applications/misc/nnn { };
 
-  notary = callPackage ../tools/security/notary {
-    buildGoPackage = buildGo110Package;
-  };
+  notary = callPackage ../tools/security/notary { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
