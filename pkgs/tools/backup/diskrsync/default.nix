@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "diskrsync";
-  version = "unstable-2018-02-03";
+  version = "unstable-2019-01-02";
 
   src = fetchFromGitHub {
     owner = "dop251";
     repo = pname;
-    rev = "2f36bd6e5084ce16c12a2ee216ebb2939a7d5730";
-    sha256 = "1rpfk7ds4lpff30aq4d8rw7g9j4bl2hd1bvcwd1pfxalp222zkxn";
+    rev = "e8598ef71038527a8a77d1a6cf2a73cfd96d9139";
+    sha256 = "1dqpmc4hp81knhdk3mrmwdr66xiibsvj5lagbm5ciajg9by45mcs";
   };
 
   goPackagePath = "github.com/dop251/diskrsync";

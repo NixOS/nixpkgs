@@ -2624,9 +2624,7 @@ in
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
-  diskrsync = callPackage ../tools/backup/diskrsync {
-    buildGoPackage = buildGo110Package;
-  };
+  diskrsync = callPackage ../tools/backup/diskrsync { };
 
   djbdns = callPackage ../tools/networking/djbdns { };
 
