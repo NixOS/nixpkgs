@@ -31,6 +31,10 @@ stdenv.mkDerivation rec{
     sed -re 's%("[$]exe" --version .*)([|\\] *$)%\1 | sed -re "s@/nix/store/[a-z0-9]{32}-@@" \2%' \
       -i configure
 
+    # This next line disables a GCC optimization and can be removed once 2.19 is stable
+    # See https://sourceforge.net/p/testlilyissues/issues/4814/ for more details
+    export CFLAGS="$CFLAGS -fno-delete-null-pointer-checks"
+
     export HOME=$TMPDIR/home
   '';
 
