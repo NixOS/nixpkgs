@@ -96,6 +96,6 @@ stdenv.mkDerivation rec {
     description = "API Development Environment";
     license = licenses.postman;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ xurei ];
+    maintainers = with maintainers; [ xurei evanjs ];
   };
 }
