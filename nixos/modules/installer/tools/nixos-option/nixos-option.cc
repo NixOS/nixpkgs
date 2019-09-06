@@ -37,6 +37,7 @@ using nix::PathSet;
 using nix::Strings;
 using nix::Symbol;
 using nix::tAttrs;
+using nix::ThrownError;
 using nix::tLambda;
 using nix::tString;
 using nix::UsageError;
