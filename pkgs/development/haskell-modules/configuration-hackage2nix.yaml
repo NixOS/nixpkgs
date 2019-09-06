@@ -3097,6 +3097,7 @@ broken-packages:
   - arbor-monad-metric
   - arbor-monad-metric-datadog
   - arbor-postgres
+  - arbtt
   - archiver
   - archlinux
   - archlinux-web
@@ -3115,6 +3116,7 @@ broken-packages:
   - armor
   - arpa
   - arpack
+  - array-chunks
   - array-forth
   - array-primops
   - arraylist
@@ -3366,7 +3368,9 @@ broken-packages:
   - Biobase
   - BiobaseBlast
   - BiobaseDotP
+  - BiobaseENA
   - BiobaseEnsembl
+  - BiobaseFasta
   - BiobaseFR3D
   - BiobaseHTTP
   - BiobaseHTTPTools
@@ -3375,7 +3379,9 @@ broken-packages:
   - BiobaseNewick
   - BiobaseTrainingData
   - BiobaseTurner
+  - BiobaseTypes
   - BiobaseVienna
+  - BiobaseXNA
   - biocore
   - biofasta
   - biofastq
@@ -3592,6 +3598,7 @@ broken-packages:
   - cabin
   - cabocha
   - cached
+  - cachix
   - cacophony
   - caffegraph
   - cairo-core
@@ -3945,6 +3952,7 @@ broken-packages:
   - Conscript
   - consistent
   - const-math-ghc-plugin
+  - constr-eq
   - constrained-categories
   - constrained-category
   - constrained-dynamic
@@ -4087,6 +4095,7 @@ broken-packages:
   - ctpl
   - cube
   - cuboid
+  - cuckoo
   - cudd
   - currency-convert
   - curry-frontend
@@ -4485,6 +4494,7 @@ broken-packages:
   - DysFRP-Cairo
   - DysFRP-Craftwerk
   - dywapitchtrack
+  - dzen-dhall
   - dzen-utils
   - earclipper
   - ease
@@ -4530,6 +4540,7 @@ broken-packages:
   - ekg-rrd
   - elevator
   - elision
+  - elliptic-curve
   - elm-websocket
   - elsa
   - emacs-keys
@@ -4955,6 +4966,7 @@ broken-packages:
   - funpat
   - funsat
   - fusion
+  - futhark
   - futun
   - future
   - fuzzy-timings
@@ -5030,6 +5042,7 @@ broken-packages:
   - GenSmsPdu
   - gentlemark
   - GenussFold
+  - genvalidity-mergeless
   - geo-resolver
   - GeocoderOpenCage
   - geodetic
@@ -5361,6 +5374,7 @@ broken-packages:
   - hakismet
   - hakka
   - hako
+  - hakyll
   - hakyll-agda
   - hakyll-blaze-templates
   - hakyll-contrib
@@ -5373,6 +5387,7 @@ broken-packages:
   - hakyll-dir-list
   - hakyll-favicon
   - hakyll-filestore
+  - hakyll-images
   - hakyll-ogmarkup
   - hakyll-R
   - hakyll-sass
@@ -6293,6 +6308,7 @@ broken-packages:
   - hw-json-simple-cursor
   - hw-json-standard-cursor
   - hw-packed-vector
+  - hw-prim-bits
   - hw-rankselect
   - hw-rankselect-base
   - hw-simd
@@ -6347,6 +6363,7 @@ broken-packages:
   - hypher
   - hzulip
   - i18n
+  - I1M
   - i3blocks-hs-contrib
   - i3ipc
   - iap-verifier
@@ -6652,6 +6669,7 @@ broken-packages:
   - katydid
   - kawaii
   - kawhi
+  - kazura-queue
   - kd-tree
   - kdesrc-build-extra
   - keccak
@@ -6876,6 +6894,7 @@ broken-packages:
   - liblawless
   - liblinear-enumerator
   - libltdl
+  - libmodbus
   - libmolude
   - liboath-hs
   - liboleg
@@ -7417,6 +7436,7 @@ broken-packages:
   - multibase
   - multifocal
   - multihash
+  - multihash-cryptonite
   - multihash-serialise
   - multilinear
   - multilinear-io
@@ -7782,6 +7802,7 @@ broken-packages:
   - pandoc-japanese-filters
   - pandoc-lens
   - pandoc-markdown-ghci-filter
+  - pandoc-placetable
   - pandoc-plantuml-diagrams
   - pandoc-pyplot
   - pandoc-unlit
@@ -7999,6 +8020,7 @@ broken-packages:
   - plat
   - platinum-parsing
   - PlayingCards
+  - plex
   - plist-buddy
   - plocketed
   - plot
@@ -8068,6 +8090,7 @@ broken-packages:
   - postgresql-query
   - postgresql-simple-bind
   - postgresql-simple-named
+  - postgresql-simple-opts
   - postgresql-simple-queue
   - postgresql-simple-sop
   - postgresql-simple-typed
@@ -8671,6 +8694,7 @@ broken-packages:
   - scenegraph
   - schedevr
   - schedule-planner
+  - scheduler
   - schedyield
   - schematic
   - scholdoc
@@ -9799,6 +9823,7 @@ broken-packages:
   - unagi-streams
   - unamb-custom
   - unbound
+  - unbound-kind-generics
   - unbounded-delays-units
   - unboxed-containers
   - unbreak
@@ -10256,7 +10281,10 @@ broken-packages:
   - yahoo-web-search
   - yajl
   - yajl-enumerator
+  - yam
+  - yam-datasource
   - yam-job
+  - yam-redis
   - yam-servant
   - yam-transaction-odbc
   - yam-web
