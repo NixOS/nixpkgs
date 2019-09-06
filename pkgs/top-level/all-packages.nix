@@ -2895,9 +2895,6 @@ in
   elk6Version = "6.7.2";
   elk7Version = "7.0.1";
 
-  elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix {
-    utillinux = utillinuxMinimal;
-  };
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
     utillinux = utillinuxMinimal;
   };
@@ -2920,9 +2917,6 @@ in
       elasticsearch = elasticsearch-oss;
     }
   );
-  elasticsearch5Plugins = elasticsearchPlugins.override {
-    elasticsearch = elasticsearch5;
-  };
   elasticsearch6Plugins = elasticsearchPlugins.override {
     elasticsearch = elasticsearch6-oss;
   };
