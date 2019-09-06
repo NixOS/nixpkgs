@@ -4,5 +4,4 @@ stdenv.mkDerivation rec {
   src = ./.;
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ boost nix ];
-  enableParallelBuilding = true;
 }
