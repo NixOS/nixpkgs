@@ -7,7 +7,7 @@ with lib; let
   natural = with types; addCheck int (x: x >= 0);
   natural' = with types; addCheck int (x: x > 0);
 
-  socket = with types; addCheck (either (submodule unixSocket) (submodule inetSocket)) (x: x ? "path" || x ? "port");
+  socket = with types; addCheck (either (submodule unixSocket) (submodule inetSocket)) (x: x ? path || x ? port);
 
   inetSocket = with types; {
     options = {
@@ -151,7 +151,7 @@ in {
     };
 
     systemd.services.postgrey = let
-      bind-flag = if cfg.socket ? "path" then
+      bind-flag = if cfg.socket ? path then
         ''--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}''
       else
         ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${toString cfg.socket.port}'';

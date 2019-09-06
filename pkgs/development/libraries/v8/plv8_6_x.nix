@@ -26,12 +26,12 @@ let
       rev    = "0e9a47d74970bee1bbfc063c47215406f8918699";
       sha256 = "07rbzrlscp8adh4z86yl5jxdnvgkc3xs950xldpk318wf9i3bh6c";
     };
-    "build" = fetchgit {
+    build = fetchgit {
       url    = "${git_url}/chromium/src/build.git";
       rev    = "9338ce52d0b9bcef34c38285fbd5023b62739fac";
       sha256 = "1s2sa8dy3waidsirjylc82ggb18l1108bczjc8z0v4ywyj4k0cvh";
     };
-    "buildtools" = fetchgit {
+    buildtools = fetchgit {
       url    = "${git_url}/chromium/buildtools.git";
       rev    = "505de88083136eefd056e5ee4ca0f01fe9b33de8";
       sha256 = "0vj216nhb803bggsl0hnyagj8njrm96pn8sim6xcnqb7nhz1vabw";

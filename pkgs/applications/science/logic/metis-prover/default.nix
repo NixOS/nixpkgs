@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, perl, mlton }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "metis-prover";
   version = "2.3.20160713";
 

@@ -1,6 +1,6 @@
 { fetchFromGitHub, stdenv, readline, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "abc-verifier";
   version = "2018-07-08";
 

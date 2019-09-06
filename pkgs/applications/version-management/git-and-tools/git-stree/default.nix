@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "git-stree";
   version = "0.4.5";
 

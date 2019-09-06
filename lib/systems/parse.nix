@@ -408,7 +408,7 @@ rec {
     getKernel = name:  kernels.${name} or (throw "Unknown kernel: ${name}");
     getAbi    = name:     abis.${name} or (throw "Unknown ABI: ${name}");
 
-    parsed = rec {
+    parsed = {
       cpu = getCpu args.cpu;
       vendor =
         /**/ if args ? vendor    then getVendor args.vendor

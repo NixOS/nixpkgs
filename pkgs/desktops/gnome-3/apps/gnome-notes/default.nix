@@ -6,7 +6,7 @@
 
 let
   version = "3.32.2";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "gnome-notes";
   inherit version;
 

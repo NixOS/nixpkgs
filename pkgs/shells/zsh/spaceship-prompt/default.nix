@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation {
   pname = "spaceship-prompt";
   version = "3.7.1";
 

@@ -3,7 +3,7 @@
 
 let
   version = "0.4.1";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "openmpt123";
   inherit version;
 

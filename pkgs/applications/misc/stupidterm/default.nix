@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, vte, gtk }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stupidterm";
   version = "2019-03-26";
 

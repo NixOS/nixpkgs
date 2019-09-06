@@ -27,7 +27,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "skk-dicts-unstable";
   version = "2017-10-26";
   srcs = [ small medium large edict assoc ];

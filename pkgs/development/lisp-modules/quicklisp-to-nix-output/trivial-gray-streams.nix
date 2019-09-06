@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''trivial-gray-streams'';
   version = ''20181018-git'';
 

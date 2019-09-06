@@ -4,7 +4,7 @@ if stdenv.lib.versionAtLeast ocaml.version "4.06"
 then throw "cryptgps is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ocaml-cryptgps";
   version = "0.2.1";
 

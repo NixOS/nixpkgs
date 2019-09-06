@@ -72,7 +72,7 @@ let
           let
             inherit (args) name;
             sname = args.sname or name;
-            inherit (srcs."${sname}") src version;
+            inherit (srcs.${sname}) src version;
 
             outputs = args.outputs or [ "out" ];
             hasBin = lib.elem "bin" outputs;

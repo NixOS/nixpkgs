@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, stdenv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kwakd";
   version = "0.5";
 

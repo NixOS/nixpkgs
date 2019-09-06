@@ -3,7 +3,7 @@
 let
   version = "0.2.1";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libopusenc";
   inherit version;
 

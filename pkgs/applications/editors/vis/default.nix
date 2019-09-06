@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "vis";
     exec = "vis %U";
     type = "Application";

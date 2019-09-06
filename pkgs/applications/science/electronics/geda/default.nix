@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, guile, gtk2, flex, gawk, perl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "geda";
   version = "1.8.2-20130925";
 

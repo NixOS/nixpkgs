@@ -1,6 +1,6 @@
 { fetchurl, stdenv, dpkg, makeWrapper, fontconfig, freetype, openssl, xorg, xkeyboard_config }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "8.1";
   pname = "minergate";
   src = fetchurl {

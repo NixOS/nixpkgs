@@ -1,7 +1,7 @@
 { fetchgit, stdenv, pkgconfig, libnsl, libtirpc, autoreconfHook
 , useSystemd ? true, systemd }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rpcbind";
   version = "1.2.5";
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ocamlmod";
   version = "0.0.9";
 

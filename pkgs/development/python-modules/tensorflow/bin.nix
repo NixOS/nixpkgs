@@ -45,7 +45,7 @@ let
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
-in buildPythonPackage rec {
+in buildPythonPackage {
   inherit pname;
   inherit (packages) version;
   format = "wheel";

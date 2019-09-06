@@ -4,7 +4,7 @@
 , libndtypes
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libxnd";
   version = "unstable-2018-11-27";
 

@@ -51,9 +51,9 @@ let
 
   # convert platform to oracle architecture names
   arch = {
-    "x86_64-linux" = "linux.x64";
-    "x86_64-darwin" = "macos.x64";
-  }."${stdenv.hostPlatform.system}" or throwSystem;
+    x86_64-linux = "linux.x64";
+    x86_64-darwin = "macos.x64";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   # calculate the filename of a single zip file
   srcFilename = component: arch: version: rel:

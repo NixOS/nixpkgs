@@ -5,7 +5,7 @@
 let
   version = "4.2.8";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "tvheadend";
   inherit version;
 

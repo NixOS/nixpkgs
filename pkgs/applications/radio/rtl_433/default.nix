@@ -2,7 +2,7 @@
 , libusb1, rtl-sdr, soapysdr-with-plugins
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   version = "18.12";
   pname = "rtl_433";

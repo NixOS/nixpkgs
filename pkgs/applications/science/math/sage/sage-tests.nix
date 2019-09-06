@@ -23,7 +23,7 @@ let
   relpathToArg = relpath: lib.escapeShellArg "${src}/${relpath}"; # paths need to be absolute
   testFileList = lib.concatStringsSep " " (map relpathToArg files);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = src.version;
   pname = "sage-tests";
   inherit src;

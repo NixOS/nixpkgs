@@ -102,7 +102,7 @@ let
     '';
   };
 
-  darwin = stdenv.mkDerivation rec {
+  darwin = stdenv.mkDerivation {
     inherit pname version meta;
 
     src = fetchurl {

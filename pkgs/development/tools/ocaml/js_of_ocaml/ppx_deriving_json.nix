@@ -2,7 +2,7 @@
 , js_of_ocaml, ppx_deriving
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 	pname = "js_of_ocaml-ppx_deriving_json";
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;

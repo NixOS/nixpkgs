@@ -4,7 +4,7 @@
 
 let
   version = "11.33.3";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
 
   pname = "monetdb";
   inherit version;

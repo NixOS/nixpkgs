@@ -65,7 +65,7 @@ let
         installPhase = "mv hadoop-dist/target/hadoop-${version} $out";
       };
     in
-      stdenv.mkDerivation rec {
+      stdenv.mkDerivation {
         pname = "hadoop";
         inherit version;
 

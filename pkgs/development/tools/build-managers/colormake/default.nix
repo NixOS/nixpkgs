@@ -1,6 +1,6 @@
 {stdenv, fetchgit, perl}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "colormake";
   version = "2.1.0";
 

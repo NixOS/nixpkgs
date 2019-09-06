@@ -1,6 +1,6 @@
 { fetchurl, stdenv, dpkg, makeWrapper, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "8.2";
   pname = "minergate-cli";
   src = fetchurl {

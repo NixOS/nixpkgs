@@ -2,7 +2,7 @@
 , Cocoa,  OpenGL
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bullet";
   version = "2019-03-27";
 

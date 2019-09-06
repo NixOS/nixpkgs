@@ -1,6 +1,6 @@
 { stdenv, fetchFromBitbucket, cmake, SDL, libGLU_combined, upx, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   pname = "libtcod";
   version = "1.5.1";

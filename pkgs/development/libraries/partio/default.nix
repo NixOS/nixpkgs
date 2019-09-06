@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU_combined, zlib, swig, python, doxygen, xorg }:
 
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation {
   pname = "partio";
   version = "2018-03-01";
 

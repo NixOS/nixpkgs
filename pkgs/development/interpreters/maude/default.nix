@@ -13,7 +13,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "maude";
   inherit version;
 

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, python, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "scandir";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 ="1bkqwmf056pkchf05ywbnf659wqlp6lljcdb0y88wr9f0vv32ijd";
   };
 
-  checkPhase = "python test/run_tests.py";
+  checkPhase = "${python.interpreter} test/run_tests.py";
 
   meta = with lib; {
     description = "A better directory iterator and faster os.walk()";

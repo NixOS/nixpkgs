@@ -1,6 +1,6 @@
 { stdenv, fetchgit, wrapGAppsHook, which, gnome3, glib, intltool, pkgconfig, libtool, cairo, gtk3, gst_all_1, xorg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.2.3.alpha";
   pname = "byzanz";
 

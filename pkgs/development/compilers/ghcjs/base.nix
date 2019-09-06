@@ -61,7 +61,7 @@
 let
   inherit (bootPkgs) ghc;
 
-in mkDerivation (rec {
+in mkDerivation ({
   pname = "ghcjs";
   inherit version;
   src = ghcjsSrc;

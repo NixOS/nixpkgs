@@ -3,7 +3,7 @@
 , libiberty, libbfd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libopcodes";
   inherit (binutils-unwrapped) version src;
 

@@ -184,7 +184,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs."dd-agent" pkgs.sysstat pkgs.procps ];
+    environment.systemPackages = [ pkgs.dd-agent pkgs.sysstat pkgs.procps ];
 
     users.users.datadog = {
       description = "Datadog Agent User";

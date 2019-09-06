@@ -29,7 +29,7 @@ let
     fi
   '');
 
-in buildPythonApplication rec {
+in buildPythonApplication {
   pname = "pykms";
   version = "20180208";
 

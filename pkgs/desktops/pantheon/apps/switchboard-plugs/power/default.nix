@@ -11,6 +11,7 @@
 , elementary-settings-daemon
 , granite
 , gtk3
+, glib
 , dbus
 , polkit
 , switchboard
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
+    glib
     granite
     gtk3
     libgee
@@ -59,9 +61,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/MainView.vala \
-      --subst-var-by DPMS_HELPER_GSETTINGS_PATH ${elementary-dpms-helper}/share/gsettings-schemas/${elementary-dpms-helper.name}/glib-2.0/schemas
+      --subst-var-by DPMS_HELPER_GSETTINGS_PATH ${glib.getSchemaPath elementary-dpms-helper}
     substituteInPlace src/MainView.vala \
-      --subst-var-by GSD_GSETTINGS_PATH ${elementary-settings-daemon}/share/gsettings-schemas/${elementary-settings-daemon.name}/glib-2.0/schemas
+      --subst-var-by GSD_GSETTINGS_PATH ${glib.getSchemaPath elementary-settings-daemon}
   '';
 
   PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";

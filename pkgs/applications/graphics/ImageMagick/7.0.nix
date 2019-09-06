@@ -19,7 +19,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "imagemagick";
   inherit (cfg) version;
 

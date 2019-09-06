@@ -546,11 +546,11 @@ in {
     environment.systemPackages = systemShells;
 
     environment.etc = {
-      "subuid" = {
+      subuid = {
         text = subuidFile;
         mode = "0644";
       };
-      "subgid" = {
+      subgid = {
         text = subgidFile;
         mode = "0644";
       };

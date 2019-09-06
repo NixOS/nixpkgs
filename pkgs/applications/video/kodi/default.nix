@@ -143,7 +143,7 @@ let
     postPatch         = cmakeProtoPatch;
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
     name = "kodi-${lib.optionalString useWayland "wayland-"}${kodiVersion}";
 
     src = kodi_src;

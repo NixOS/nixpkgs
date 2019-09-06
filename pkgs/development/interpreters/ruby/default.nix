@@ -30,11 +30,13 @@ let
     baseruby = self.override {
       useRailsExpress = false;
       docSupport = false;
+      rubygemsSupport = false;
     };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
+      , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
@@ -90,10 +92,12 @@ let
           (import ./patchsets.nix {
             inherit patchSet useRailsExpress ops;
             patchLevel = ver.patchLevel;
-          })."${ver.majMinTiny}";
+          }).${ver.majMinTiny};
 
-        postUnpack = ''
-          cp -r ${rubygems} $sourceRoot/rubygems
+        postUnpack = opString rubygemsSupport ''
+          rm -rf $sourceRoot/{lib,test}/rubygems*
+          cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
+          cp -r ${rubygems}/test/rubygems $sourceRoot/test
         '';
 
         postPatch = if atLeast25 then ''
@@ -138,12 +142,6 @@ let
         installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
-          # Update rubygems
-          pushd rubygems
-          chmod +w bundler/bundler.gemspec
-          ${buildRuby} setup.rb --destdir $GEM_HOME
-          popd
-
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "wasm-gc-${version}";
+  pname = "wasm-gc";
   version = "0.1.6";
 
   src = fetchFromGitHub {

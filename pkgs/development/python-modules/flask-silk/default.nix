@@ -4,7 +4,7 @@
 , flask
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "Flask-Silk";
   version = "2018-06-28";
 

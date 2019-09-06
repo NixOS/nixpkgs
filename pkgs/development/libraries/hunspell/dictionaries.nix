@@ -6,7 +6,7 @@
 let
   mkDict =
   { name, readmeFile, dictFileName, ... }@args:
-  stdenv.mkDerivation (rec {
+  stdenv.mkDerivation ({
     inherit name;
     installPhase = ''
       # hunspell dicts
@@ -601,7 +601,7 @@ in rec {
   /* ITALIAN */
 
   it_IT = it-it;
-  it-it =  mkDictFromLinguistico rec {
+  it-it =  mkDictFromLinguistico {
     shortName = "it-it";
     dictFileName = "it_IT";
     shortDescription = "Hunspell dictionary for 'Italian (Italy)' from Linguistico";
@@ -657,7 +657,7 @@ in rec {
   /* SWEDISH */
 
   sv_SE = sv-se;
-  sv-se = mkDictFromDSSO rec {
+  sv-se = mkDictFromDSSO {
     shortName = "sv-se";
     dictFileName = "sv_SE";
     shortDescription = "Swedish (Sweden)";
@@ -665,7 +665,7 @@ in rec {
 
   # Finlandian Swedish (hello Linus Torvalds)
   sv_FI = sv-fi;
-  sv-fi = mkDictFromDSSO rec {
+  sv-fi = mkDictFromDSSO {
     shortName = "sv-fi";
     dictFileName = "sv_FI";
     shortDescription = "Swedish (Finland)";

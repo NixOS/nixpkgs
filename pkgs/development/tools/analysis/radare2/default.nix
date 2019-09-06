@@ -31,7 +31,7 @@ let
     cs_ver,
     cs_sha256
   }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "radare2";
       inherit version;
 

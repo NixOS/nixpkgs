@@ -2,7 +2,7 @@
 
 let version = "1.1.1";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
 
   pname = "casperjs";
   inherit version;

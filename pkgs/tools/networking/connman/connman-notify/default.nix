@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "connman-notify";
   version = "2014-06-23";
 

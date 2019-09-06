@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, gtkmm2, lv2, lvtk, pkgconfig }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fmsynth-unstable";
   version = "2015-02-07";
   src = fetchFromGitHub {

@@ -1,6 +1,6 @@
 { fetchgit, stdenv, ant, jdk }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hydra-ant-logger";
   version = "2010.2";
 

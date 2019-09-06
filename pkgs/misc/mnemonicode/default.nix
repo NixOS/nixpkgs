@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mnemonicode";
   version = "2015-11-30";
   src = fetchFromGitHub {

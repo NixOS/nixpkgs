@@ -1,6 +1,6 @@
 { stdenv, fetchgit, libgtop, xmessage, which, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "das_watchdog";
   version = "git-2015-09-12";
 

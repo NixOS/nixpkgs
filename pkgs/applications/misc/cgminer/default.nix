@@ -1,7 +1,7 @@
 { fetchgit, stdenv, pkgconfig, libtool, autoconf, automake
 , curl, ncurses, ocl-icd, opencl-headers, xorg, jansson }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.7.2";
   pname = "cgminer";
 

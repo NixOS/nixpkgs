@@ -954,7 +954,7 @@ in
       '';
     };
 
-    systemd.timers."nsd-dnssec" = mkIf dnssec {
+    systemd.timers.nsd-dnssec = mkIf dnssec {
       description = "Automatic DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];
@@ -965,7 +965,7 @@ in
       };
     };
 
-    systemd.services."nsd-dnssec" = mkIf dnssec {
+    systemd.services.nsd-dnssec = mkIf dnssec {
       description = "DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];

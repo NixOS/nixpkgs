@@ -3,7 +3,7 @@
 }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "openssl-chacha";
   version = "2016-08-22";
 

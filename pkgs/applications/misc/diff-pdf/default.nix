@@ -7,7 +7,7 @@ let
     else
       [ wxGTK ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "diff-pdf";
   version = "2017-12-30";
 

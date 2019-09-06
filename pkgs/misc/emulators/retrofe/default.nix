@@ -2,7 +2,7 @@
 , python, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib, runtimeShell
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "retrofe";
   version = "0.6.169";
 

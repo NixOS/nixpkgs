@@ -6,7 +6,7 @@
 , pkgs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "python-notify";
   version = "0.1.1";
 

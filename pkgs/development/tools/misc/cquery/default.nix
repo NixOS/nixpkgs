@@ -14,7 +14,7 @@ let
   stdenv = llvmPackages.stdenv;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cquery";
   version = "2018-10-14";
 

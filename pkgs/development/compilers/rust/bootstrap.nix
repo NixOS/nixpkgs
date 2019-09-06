@@ -32,7 +32,7 @@ let
 
   src = fetchurl {
      url = "https://static.rust-lang.org/dist/rust-${version}-${platform}.tar.gz";
-     sha256 = hashes."${platform}";
+     sha256 = hashes.${platform};
   };
 
 in callPackage ./binary.nix

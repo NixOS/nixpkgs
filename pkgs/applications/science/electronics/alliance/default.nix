@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--prefix=$(out)"
-    "--disable-static"
   ];
 
   preConfigure = ''

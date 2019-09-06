@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, runtimeShell }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "flockit";
   version = "2012-08-11";
 

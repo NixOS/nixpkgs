@@ -4,7 +4,7 @@
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "driftnet";
   version = "1.1.5";
 

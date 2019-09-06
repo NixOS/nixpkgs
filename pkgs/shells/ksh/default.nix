@@ -1,6 +1,6 @@
 { stdenv, meson, ninja, fetchFromGitHub, which, python, libiconv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ksh";
   version = "93v";
 

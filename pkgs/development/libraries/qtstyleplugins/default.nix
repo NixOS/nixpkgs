@@ -1,6 +1,6 @@
 { stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, gtk2 }:
 
-mkDerivation rec {
+mkDerivation {
   name = "qtstyleplugins-2017-03-11";
 
   src = fetchFromGitHub {

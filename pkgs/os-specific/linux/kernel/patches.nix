@@ -1,6 +1,6 @@
 { fetchpatch }:
 
-rec {
+{
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;
@@ -23,7 +23,7 @@ rec {
 
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
-  tag_hardened = rec {
+  tag_hardened = {
     name = "tag-hardened";
     patch = ./tag-hardened.patch;
   };
@@ -58,7 +58,7 @@ rec {
     };
   };
 
-  export_kernel_fpu_functions = rec {
+  export_kernel_fpu_functions = {
     name = "export_kernel_fpu_functions";
     patch = ./export_kernel_fpu_functions.patch;
   };

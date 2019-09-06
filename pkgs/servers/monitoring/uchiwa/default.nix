@@ -27,7 +27,7 @@ let
     inherit src;
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "uchiwa";
   inherit version;
 

@@ -15,7 +15,7 @@ let
     rev    = "c894b9e59f02203dbe4e2be657572cf88c4230c3";
     sha256 = "0wasql7ph5g473zxhc2z47z3pjp42q0dsn4gpijwzbxawid71b4w";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "xcbuild";
 
   # Once a version is released that includes

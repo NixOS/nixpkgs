@@ -9,7 +9,7 @@ let
     url="http://nspluginwrapper.org/download/nspluginwrapper-1.4.4.tar.gz";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (srcData) name version;
 
   src = fetchurl{

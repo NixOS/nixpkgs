@@ -1,6 +1,6 @@
 {stdenv, fetchurl, sconsPackages, boost, ladspaH, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.2-2";
   pname = "nova-filters";
 

@@ -11,7 +11,7 @@ let
   version = "3.8.0";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "liblapack";
   inherit version;
   src = fetchurl {

@@ -11,7 +11,7 @@ let
   arch = if stdenv.is64bit then "x64" else "ia32";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "v8";
   inherit version;
 

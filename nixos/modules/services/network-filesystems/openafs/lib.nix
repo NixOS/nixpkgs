@@ -3,7 +3,7 @@
 let
   inherit (lib) concatStringsSep mkOption types;
 
-in rec {
+in {
 
   mkCellServDB = cellName: db: ''
     >${cellName}

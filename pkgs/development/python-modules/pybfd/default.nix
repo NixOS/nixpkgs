@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPyPy, isPy3k, libbfd, libopcodes }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pybfd";
   version = "-0.1.1.2017-12-31";
 

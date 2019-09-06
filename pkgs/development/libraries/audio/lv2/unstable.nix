@@ -1,6 +1,6 @@
 { stdenv, fetchgit, gtk2, libsndfile, pkgconfig, python, wafHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lv2-unstable";
   version = "2017-07-08";
 

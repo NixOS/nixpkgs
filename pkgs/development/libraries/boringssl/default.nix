@@ -1,7 +1,7 @@
 { stdenv, fetchgit, cmake, perl, go }:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "boringssl";
   version = "2017-02-23";
 

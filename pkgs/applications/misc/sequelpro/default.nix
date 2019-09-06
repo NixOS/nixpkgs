@@ -1,6 +1,6 @@
 { stdenv, fetchurl, undmg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sequel-pro";
   version = "1.1.2";
 

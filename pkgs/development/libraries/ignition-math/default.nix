@@ -3,7 +3,7 @@
 let
   version = "2.6.0";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ign-math2";
   inherit version;
 

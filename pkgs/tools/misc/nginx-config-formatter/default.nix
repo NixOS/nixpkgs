@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python3 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2019-02-13";
   pname = "nginx-config-formatter";
 

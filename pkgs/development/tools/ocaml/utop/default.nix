@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
      # derivation of just runtime deps so env vars created by
      # setup-hooks can be saved for use at runtime
-     runtime = stdenv.mkDerivation rec {
+     runtime = stdenv.mkDerivation {
        pname = "utop-runtime-env";
        inherit version;
 

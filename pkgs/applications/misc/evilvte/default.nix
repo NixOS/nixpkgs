@@ -3,7 +3,7 @@
   configH ? ""
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "evilvte";
   version = "0.5.2-20140827";
 

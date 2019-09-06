@@ -133,7 +133,7 @@ in
 
     programs.zsh.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
-    environment.etc."zshenv".text =
+    environment.etc.zshenv.text =
       ''
         # /etc/zshenv: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for all shells.
@@ -157,7 +157,7 @@ in
         fi
       '';
 
-    environment.etc."zprofile".text =
+    environment.etc.zprofile.text =
       ''
         # /etc/zprofile: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for login shells.
@@ -176,7 +176,7 @@ in
         fi
       '';
 
-    environment.etc."zshrc".text =
+    environment.etc.zshrc.text =
       ''
         # /etc/zshrc: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for interactive shells.
@@ -225,7 +225,7 @@ in
         fi
       '';
 
-    environment.etc."zinputrc".source = ./zinputrc;
+    environment.etc.zinputrc.source = ./zinputrc;
 
     environment.systemPackages = [ pkgs.zsh ]
       ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;

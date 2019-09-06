@@ -1,7 +1,7 @@
 { buildPythonPackage, python, fetchurl, stdenv, pyside2,
   cmake, qt5, llvmPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "shiboken2";
 
   inherit (pyside2) version src;

@@ -24,7 +24,7 @@
 
 assert withGimpPlugin -> gimp != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ufraw";
   version = "unstable-2019-06-12";
 

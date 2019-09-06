@@ -43,7 +43,7 @@ in
   ###### interface
   options = {
 
-    services.hydra = rec {
+    services.hydra = {
 
       enable = mkOption {
         type = types.bool;

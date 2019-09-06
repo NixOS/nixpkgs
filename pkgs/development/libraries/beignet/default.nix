@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  passthru.utests = stdenv.mkDerivation rec {
+  passthru.utests = stdenv.mkDerivation {
     pname = "beignet-utests";
     inherit version src;
 

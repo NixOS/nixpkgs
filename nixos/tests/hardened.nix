@@ -28,7 +28,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript =
     let
-      hardened-malloc-tests = pkgs.stdenv.mkDerivation rec {
+      hardened-malloc-tests = pkgs.stdenv.mkDerivation {
         name = "hardened-malloc-tests-${pkgs.graphene-hardened-malloc.version}";
         src = pkgs.graphene-hardened-malloc.src;
         buildPhase = ''

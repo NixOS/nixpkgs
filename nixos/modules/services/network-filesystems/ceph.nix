@@ -355,10 +355,10 @@ in
       # Remove all name-value pairs with null values from the attribute set to avoid making empty sections in the ceph.conf
       globalSection' = filterAttrs (name: value: value != null) globalSection;
       totalConfig = {
-          "global" = globalSection';
-        } // optionalAttrs (cfg.mon.enable && cfg.mon.extraConfig != {}) { "mon" = cfg.mon.extraConfig; }
-          // optionalAttrs (cfg.mds.enable && cfg.mds.extraConfig != {}) { "mds" = cfg.mds.extraConfig; }
-          // optionalAttrs (cfg.osd.enable && cfg.osd.extraConfig != {}) { "osd" = cfg.osd.extraConfig; }
+          global = globalSection';
+        } // optionalAttrs (cfg.mon.enable && cfg.mon.extraConfig != {}) { mon = cfg.mon.extraConfig; }
+          // optionalAttrs (cfg.mds.enable && cfg.mds.extraConfig != {}) { mds = cfg.mds.extraConfig; }
+          // optionalAttrs (cfg.osd.enable && cfg.osd.extraConfig != {}) { osd = cfg.osd.extraConfig; }
           // optionalAttrs (cfg.client.enable && cfg.client.extraConfig != {})  cfg.client.extraConfig;
       in
         generators.toINI {} totalConfig;

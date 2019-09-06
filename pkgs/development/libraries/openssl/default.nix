@@ -44,10 +44,10 @@ let
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
     configureScript = {
-        "x86_64-darwin"  = "./Configure darwin64-x86_64-cc";
-        "x86_64-solaris" = "./Configure solaris64-x86_64-gcc";
-        "armv6l-linux" = "./Configure linux-armv4 -march=armv6";
-        "armv7l-linux" = "./Configure linux-armv4 -march=armv7-a";
+        x86_64-darwin  = "./Configure darwin64-x86_64-cc";
+        x86_64-solaris = "./Configure solaris64-x86_64-gcc";
+        armv6l-linux = "./Configure linux-armv4 -march=armv6";
+        armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
@@ -73,7 +73,14 @@ let
     ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
       ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng";
 
-    makeFlags = [ "MANDIR=$(man)/share/man" ];
+    makeFlags = [
+      "MANDIR=$(man)/share/man"
+      # This avoids conflicts between man pages of openssl subcommands (for
+      # example 'ts' and 'err') man pages and their equivalent top-level
+      # command in other packages (respectively man-pages and moreutils).
+      # This is done in ubuntu and archlinux, and possiibly many other distros.
+      "MANSUFFIX=ssl"
+    ];
 
     enableParallelBuilding = true;
 
@@ -114,7 +121,6 @@ let
       license = licenses.openssl;
       platforms = platforms.all;
       maintainers = [ maintainers.peti ];
-      priority = 10; # resolves collision with ‘man-pages’
     };
   };
 

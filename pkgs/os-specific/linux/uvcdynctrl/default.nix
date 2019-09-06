@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libxml2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.3.0";
   pname = "uvcdynctrl";
 

@@ -2,7 +2,7 @@
 
 let
   version = "1.3.41";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version;
   pname = "kotlin";
 

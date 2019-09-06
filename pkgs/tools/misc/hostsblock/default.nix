@@ -19,7 +19,7 @@
   ".bp.blogspot.com"
 ] }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hostsblock";
   version = "20161213";
 

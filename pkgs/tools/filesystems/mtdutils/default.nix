@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libuuid, lzo, zlib, acl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mtd-utils";
   version = "1.5.2";
 

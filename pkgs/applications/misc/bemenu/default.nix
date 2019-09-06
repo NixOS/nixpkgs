@@ -9,7 +9,7 @@ assert ncursesSupport -> ncurses != null;
 assert waylandSupport -> wayland != null;
 assert x11Support -> xlibs != null && xorg != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bemenu";
   version = "0.1.0";
 

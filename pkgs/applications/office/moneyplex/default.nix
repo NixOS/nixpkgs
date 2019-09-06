@@ -18,7 +18,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "moneyplex";
   version = "16.0.22424";
 

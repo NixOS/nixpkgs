@@ -13,7 +13,7 @@ let
     rev = "7d5297759aef4cd086bdfa30cf6d4b2ad9446992";
     sha256 = "0mx9jvxpiva9v2ffaqlyny48iqr073h84yw8ln43z2avv11ipr7n";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "ibus-table-chinese";
   version = "1.8.2";
 

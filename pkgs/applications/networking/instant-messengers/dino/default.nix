@@ -14,8 +14,8 @@
 , icu
  }:
 
-stdenv.mkDerivation rec {
-  name = "dino-unstable-2019-08-27";
+stdenv.mkDerivation {
+  name = "dino-unstable-2019-03-07";
 
   src = fetchFromGitHub {
     owner = "dino";

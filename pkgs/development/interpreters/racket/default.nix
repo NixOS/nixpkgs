@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   version = "7.3"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
-    fetchurl rec {
+    fetchurl {
       url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
       inherit sha256;
     }

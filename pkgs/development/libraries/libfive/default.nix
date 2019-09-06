@@ -2,7 +2,7 @@
 zlib, libpng, boost, qt5, guile
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libfive";
   version = "2018-07-01";
 

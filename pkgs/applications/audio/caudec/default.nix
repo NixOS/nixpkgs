@@ -4,7 +4,7 @@ let
   version = "1.7.5";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "caudec";
   inherit version;
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, imagemagick, libpng }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "optar";
   version = "20150210";
 

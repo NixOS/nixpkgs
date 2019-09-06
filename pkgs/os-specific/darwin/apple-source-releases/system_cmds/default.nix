@@ -1,7 +1,7 @@
 { stdenv, appleDerivation, lib
 , Librpcsvc, apple_sdk, pam, CF, openbsm }:
 
-appleDerivation rec {
+appleDerivation {
   # xcbuild fails with:
   # /nix/store/fc0rz62dh8vr648qi7hnqyik6zi5sqx8-xcbuild-wrapper/nix-support/setup-hook: line 1:  9083 Segmentation fault: 11  xcodebuild OTHER_CFLAGS="$NIX_CFLAGS_COMPILE" OTHER_CPLUSPLUSFLAGS="$NIX_CFLAGS_COMPILE" OTHER_LDFLAGS="$NIX_LDFLAGS" build
   # see issue facebook/xcbuild#188

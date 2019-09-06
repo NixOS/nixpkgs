@@ -2,7 +2,7 @@
 
 let
   generic = { version, sha256, suffix ? "" }:
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "unifi-controller";
     inherit version;
 
@@ -38,7 +38,7 @@ let
     };
   };
 
-in rec {
+in {
 
   # https://community.ui.com/releases / https://www.ui.com/download/unifi
   # Outdated FAQ: https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions

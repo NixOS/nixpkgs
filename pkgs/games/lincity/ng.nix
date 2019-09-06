@@ -3,7 +3,7 @@
 , SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, physfs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lincity-ng";
   version = "2.9beta.20170715";
 

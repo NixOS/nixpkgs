@@ -2,7 +2,7 @@
 
 let
   version = "1.44.55";
-in mkDerivation rec {
+in mkDerivation {
   pname = "mytetra";
   inherit version;
   src = fetchurl {

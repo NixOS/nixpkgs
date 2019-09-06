@@ -35,7 +35,7 @@ in {
           and find info about device via <command>cat /sys/bus/pci/devices/*/mdev_supported_types/i915-GVTg_V5_4/description</command>
         '';
         example = {
-          "i915-GVTg_V5_8" = {
+          i915-GVTg_V5_8 = {
             uuid = "a297db4a-f4c2-11e6-90f6-d3b88d6c9525";
           };
         };

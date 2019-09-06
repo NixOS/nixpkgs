@@ -21,7 +21,7 @@ let
 
   tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "wavebox";
   inherit version;
   src = fetchurl {

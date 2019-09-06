@@ -3,7 +3,7 @@
 let
   version = "2.1.0";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uthash";
   inherit version;
 

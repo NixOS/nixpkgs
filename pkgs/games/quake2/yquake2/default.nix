@@ -66,7 +66,7 @@ let
     };
   };
 
-in rec {
+in {
   inherit yquake2;
 
   yquake2-ctf = wrapper {

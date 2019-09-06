@@ -1,4 +1,4 @@
-rec {
+{
 
   # Content-addressable Nix mirrors.
   hashedMirrors = [

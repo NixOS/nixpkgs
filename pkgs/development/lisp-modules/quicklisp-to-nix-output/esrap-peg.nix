@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''esrap-peg'';
   version = ''20170403-git'';
 

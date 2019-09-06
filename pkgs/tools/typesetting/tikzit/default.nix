@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, qmake, qttools, qtbase, libsForQt5, flex, bison }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tikzit";
   version = "2.1.4";
 

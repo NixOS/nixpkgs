@@ -1,6 +1,6 @@
 { lib, rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage rec {
-  name = "cargo-graph-${version}";
+  pname = "cargo-graph";
   version = "0.2.0-d895af1";
 
   src = fetchFromGitHub {

@@ -160,14 +160,14 @@ in
                             (mapAttrsToList (k: _: k) do); "";
             # get those driverOptions that have been set
             filterSystemdOptions = filterAttrs (sysDOpt: kOpts:
-                                     any (kOpt: do ? "${kOpt}") kOpts.optNames);
+                                     any (kOpt: do ? ${kOpt}) kOpts.optNames);
             # build final set of systemd options to bond values
             buildOptionSet = mapAttrs (_: kOpts: with kOpts;
                                # we simply take the first set kernel bond option
                                # (one option has multiple names, which is silly)
-                               head (map (optN: valTransform (do."${optN}"))
+                               head (map (optN: valTransform (do.${optN}))
                                  # only map those that exist
-                                 (filter (o: do ? "${o}") optNames)));
+                                 (filter (o: do ? ${o}) optNames)));
             in seq assertNoUnknownOption
                    (buildOptionSet (filterSystemdOptions driverOptionMapping));
 

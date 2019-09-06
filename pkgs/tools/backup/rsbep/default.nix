@@ -1,6 +1,6 @@
 { stdenv, lib, coreutils, gnused, gawk, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rsbep";
   version = "0.1.0";
 

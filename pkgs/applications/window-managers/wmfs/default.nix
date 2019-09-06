@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, gnumake,
   libX11, libXinerama, libXrandr, libXpm, libXft, imlib2 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wmfs";
 
   version = "201902";

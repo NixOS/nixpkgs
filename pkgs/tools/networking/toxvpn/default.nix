@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "toxvpn-2018-04-17";
 
   src = fetchFromGitHub {

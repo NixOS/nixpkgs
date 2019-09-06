@@ -9,7 +9,7 @@ let
           SHA entropy pkgs.zlib sandi regex-tdfa
         ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.0.0-beta1";
   pname = "hedgewars";
   src = fetchhg {

@@ -4,7 +4,7 @@
 }:
 
 with lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fped";
   version = "unstable-2017-05-11";
 

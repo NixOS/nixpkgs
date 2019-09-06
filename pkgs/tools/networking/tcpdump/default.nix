@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libpcap, perl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tcpdump";
   version = "4.9.2";
 

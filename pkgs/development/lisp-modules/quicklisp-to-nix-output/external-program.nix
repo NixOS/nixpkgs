@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''external-program'';
   version = ''20190307-git'';
 

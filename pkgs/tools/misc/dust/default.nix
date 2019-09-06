@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "dust-${version}";
+  pname = "dust";
   version = "0.2.3";
 
   src = fetchFromGitHub {

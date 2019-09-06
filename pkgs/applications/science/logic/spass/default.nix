@@ -8,7 +8,7 @@ let
     + " dfg2ascii dfg2dfg tptp2dfg dimacs2dfg pgen rescmp";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spass";
   version = "${baseVersion}.${minorVersion}";
 

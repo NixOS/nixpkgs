@@ -13,7 +13,7 @@ let param =
   } else throw "lablgtk is not available for OCaml ${ocaml.version}";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lablgtk";
   inherit (param) version;
 

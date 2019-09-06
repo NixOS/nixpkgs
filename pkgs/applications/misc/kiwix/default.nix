@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-static"
     "--disable-staticbins"
   ];
 

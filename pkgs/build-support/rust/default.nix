@@ -44,8 +44,8 @@ let
   hostConfig = stdenv.hostPlatform.config;
 
   rustHostConfig = {
-    "x86_64-pc-mingw32" = "x86_64-pc-windows-gnu";
-  }."${hostConfig}" or hostConfig;
+    x86_64-pc-mingw32 = "x86_64-pc-windows-gnu";
+  }.${hostConfig} or hostConfig;
 
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";

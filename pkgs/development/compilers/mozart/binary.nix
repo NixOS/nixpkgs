@@ -8,7 +8,7 @@ let
   version = "2.0.0";
 
   binaries = {
-    "x86_64-linux" = fetchurl {
+    x86_64-linux = fetchurl {
       url = "mirror://sourceforge/project/mozart-oz/v${version}-alpha.0/mozart2-${version}-alpha.0+build.4105.5c06ced-x86_64-linux.tar.gz";
       sha256 = "0rsfrjimjxqbwprpzzlmydl3z3aiwg5qkb052jixdxjyad7gyh5z";
     };
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  src = binaries."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = binaries.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc

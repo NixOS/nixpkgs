@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libelf, txt2man }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bin_replace_string";
   version = "0.2";
 

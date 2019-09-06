@@ -3,7 +3,7 @@
 
 let
   generic = { version, sha256 }:
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "libtoxcore";
     inherit version;
 
@@ -42,7 +42,7 @@ let
     };
   };
 
-in rec {
+in {
   libtoxcore_0_1 = generic {
     version = "0.1.11";
     sha256 = "1fya5gfiwlpk6fxhalv95n945ymvp2iidiyksrjw1xw95fzsp1ij";

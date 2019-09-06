@@ -13,12 +13,12 @@
 
 let
   archs = {
-    "x86_64-linux"  = "linux-x86_64";
-    "i686-linux"    = "linux-i686";
-    "x86_64-darwin" = "darwin-x86_64";
+    x86_64-linux  = "linux-x86_64";
+    i686-linux    = "linux-i686";
+    x86_64-darwin = "darwin-x86_64";
   };
 
-  arch = archs."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
 
   checkInputs = [ git gmp openssl_1_0_2 readline libxml2 libyaml ];
 
@@ -29,7 +29,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
-      sha256 = sha256s."${stdenv.system}";
+      sha256 = sha256s.${stdenv.system};
     };
 
     buildCommand = ''
@@ -153,27 +153,27 @@ in rec {
   binaryCrystal_0_26 = genericBinary {
     version = "0.26.1";
     sha256s = {
-      "x86_64-linux"  = "1xban102yiiwmlklxvn3xp3q546bp8hlxxpakayajkhhnpl6yv45";
-      "i686-linux"    = "1igspf1lrv7wpmz0pfrkbx8m1ykvnv4zhic53cav4nicppm2v0ic";
-      "x86_64-darwin" = "1mri8bfrcldl69gczxpihxpv1shn4bijx28m3qby8vnk0ii63n9s";
+      x86_64-linux  = "1xban102yiiwmlklxvn3xp3q546bp8hlxxpakayajkhhnpl6yv45";
+      i686-linux    = "1igspf1lrv7wpmz0pfrkbx8m1ykvnv4zhic53cav4nicppm2v0ic";
+      x86_64-darwin = "1mri8bfrcldl69gczxpihxpv1shn4bijx28m3qby8vnk0ii63n9s";
     };
   };
 
   binaryCrystal_0_27 = genericBinary {
     version = "0.27.2";
     sha256s = {
-      "x86_64-linux"  = "05l5x7kx2acgnv42fj3rr17z73ix06zvi05h7d7vf3kw0izxrasm";
-      "i686-linux"    = "1iwizkvn6pglc0azkyfhlmk9ap793krdgcnbihd1kvrvs4cz0mm9";
-      "x86_64-darwin" = "14c69ac2dmfwmb5q56ps3xyxxb0mrbc91ahk9h07c8fiqfii3k9g";
+      x86_64-linux  = "05l5x7kx2acgnv42fj3rr17z73ix06zvi05h7d7vf3kw0izxrasm";
+      i686-linux    = "1iwizkvn6pglc0azkyfhlmk9ap793krdgcnbihd1kvrvs4cz0mm9";
+      x86_64-darwin = "14c69ac2dmfwmb5q56ps3xyxxb0mrbc91ahk9h07c8fiqfii3k9g";
     };
   };
 
   binaryCrystal_0_29 = genericBinary {
     version = "0.29.0";
     sha256s = {
-      "x86_64-linux"  = "1wrk29sfx35akg7hxwpdiikvl18wd40gq1kwirw7x522hnq7vlna";
-      "i686-linux"    = "1nx0piis2k3nn7kqiijqazzbvlaavhgvsln0l3dxmpfa4i4dz5h2";
-      "x86_64-darwin" = "1fd0fbyf05abivnp3igjlrm2axf65n2wdmg4aq6nqj60ipc01rvd";
+      x86_64-linux  = "1wrk29sfx35akg7hxwpdiikvl18wd40gq1kwirw7x522hnq7vlna";
+      i686-linux    = "1nx0piis2k3nn7kqiijqazzbvlaavhgvsln0l3dxmpfa4i4dz5h2";
+      x86_64-darwin = "1fd0fbyf05abivnp3igjlrm2axf65n2wdmg4aq6nqj60ipc01rvd";
     };
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig
 , glib, readline, pcre, systemd, udev }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "miraclecast";
   version = "1.0-20190403";
 

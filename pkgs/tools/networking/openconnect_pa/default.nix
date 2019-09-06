@@ -2,7 +2,7 @@
 
 assert (openssl != null) == (gnutls == null);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "unstable-2018-10-08";
   pname = "openconnect_pa";
   

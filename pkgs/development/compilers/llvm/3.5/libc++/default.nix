@@ -2,7 +2,7 @@
 
 let version = "3.5.2"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 

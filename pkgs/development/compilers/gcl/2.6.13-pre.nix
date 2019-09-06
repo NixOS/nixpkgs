@@ -7,7 +7,7 @@ assert stdenv.cc.isGNU ;
 assert stdenv.cc ? libc ;
 assert stdenv.cc.libc != null ;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gcl";
   version = "2.6.13pre50";
 

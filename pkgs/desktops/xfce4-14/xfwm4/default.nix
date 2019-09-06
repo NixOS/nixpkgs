@@ -2,7 +2,7 @@
 , libstartup_notification, libxfce4ui, libxfce4util, libwnck3
 , libXpresent, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfwm4";
   version = "4.14.0";

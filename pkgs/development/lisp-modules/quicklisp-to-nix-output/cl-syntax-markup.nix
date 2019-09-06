@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-syntax-markup'';
   version = ''cl-syntax-20150407-git'';
 

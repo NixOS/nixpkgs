@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, gmp, mpfr, python
 , gperftools, ninja, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lean2";
   version = "2017-07-22";
 

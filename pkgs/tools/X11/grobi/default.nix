@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 
-buildGoPackage rec {
+buildGoPackage {
   version = "0.5.1";
   pname = "grobi";
 

@@ -1,6 +1,6 @@
 { stdenv, fetchgit, unzip, pkgconfig, ncurses, libX11, libXft, cwebbin }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "edit-nightly";
   version = "20160425";
 

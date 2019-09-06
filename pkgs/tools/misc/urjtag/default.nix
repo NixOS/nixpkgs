@@ -7,7 +7,7 @@
 , jedecSupport ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.10";
   pname = "urjtag";
 

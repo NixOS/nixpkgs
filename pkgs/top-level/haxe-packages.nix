@@ -99,7 +99,7 @@ let
     hxnodejs_6 = let
       libname = "hxnodejs";
       version = "6.9.0";
-    in stdenv.mkDerivation rec {
+    in stdenv.mkDerivation {
       name = "${libname}-${version}";
       src = fetchFromGitHub {
         owner = "HaxeFoundation";

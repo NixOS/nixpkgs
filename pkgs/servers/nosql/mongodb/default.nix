@@ -20,7 +20,7 @@ let version = "3.4.10";
       "yaml"
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "mongodb";
   inherit version;
 

@@ -1,6 +1,6 @@
 { stdenv, kernel, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "can-isotp";
   version = "20180629";
 

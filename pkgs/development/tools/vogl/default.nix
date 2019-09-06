@@ -7,7 +7,7 @@
 , fetchpatch
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "vogl";
   version = "2016-05-13";
 

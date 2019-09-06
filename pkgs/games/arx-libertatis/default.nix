@@ -9,7 +9,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "arx-libertatis";
   version = "2019-02-16";
 

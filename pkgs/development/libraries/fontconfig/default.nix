@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
       src = ./config-compat.patch;
       inherit configVersion;
     })
+
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/67
+    ./fix-joypixels.patch
   ];
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config

@@ -76,7 +76,7 @@ let
   };
 
 # Lightworks expects some files in /usr/share/lightworks
-in buildFHSUserEnv rec {
+in buildFHSUserEnv {
   name = lightworks.name;
 
   targetPkgs = pkgs: [

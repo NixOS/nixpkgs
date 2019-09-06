@@ -1132,11 +1132,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libpciaccess = callPackage ({ stdenv, pkgconfig, fetchurl, zlib }: stdenv.mkDerivation {
-    name = "libpciaccess-0.14";
+    name = "libpciaccess-0.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libpciaccess-0.14.tar.bz2;
-      sha256 = "197jbcpvp4z4x6j705mq2y4fsnnypy6f85y8xalgwhgx5bhl7x9x";
+      url = mirror://xorg/individual/lib/libpciaccess-0.16.tar.bz2;
+      sha256 = "12glp4w1kgvmqn89lk19cgr6jccd3awxra4dxisp7pagi06rsk11";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

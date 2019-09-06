@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "check-uptime";
   version = "20161112";
 

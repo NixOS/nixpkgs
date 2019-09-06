@@ -21,7 +21,7 @@ let
     categories = "Utility;Security;Network;Email";
   };
 
-in mkDerivation rec {
+in mkDerivation {
   pname = "protonmail-bridge";
   inherit version;
 

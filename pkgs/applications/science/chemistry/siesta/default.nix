@@ -3,7 +3,7 @@
 , mpi ? null, scalapack
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "4.1-b3";
   pname = "siesta";
 

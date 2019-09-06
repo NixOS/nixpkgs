@@ -5,7 +5,7 @@
 let
   version = "2018-11-13";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "openzwave";
   inherit version;
 

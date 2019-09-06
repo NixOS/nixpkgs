@@ -38,7 +38,7 @@ let
   '';
 
   cub = {
-    src = fetchFromGitHub rec {
+    src = fetchFromGitHub {
       owner  = "NVlabs";
       repo   = "cub";
       rev    = "v1.7.4";

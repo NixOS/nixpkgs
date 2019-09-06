@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, rustPlatform, nix, boost, graphviz, darwin }:
 rustPlatform.buildRustPackage rec {
-  name = "nix-du-${version}";
+  pname = "nix-du";
   version = "0.3.0";
 
   src = fetchFromGitHub {

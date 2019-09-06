@@ -59,7 +59,7 @@
 
   font-lock-plus = callPackage ./font-lock-plus { };
 
-  ghc-mod = melpaBuild rec {
+  ghc-mod = melpaBuild {
     pname = "ghc";
     version = external.ghc-mod.version;
     src = external.ghc-mod.src;
@@ -75,7 +75,7 @@
     };
   };
 
-  haskell-unicode-input-method = melpaBuild rec {
+  haskell-unicode-input-method = melpaBuild {
     pname = "emacs-haskell-unicode-input-method";
     version = "20110905.2307";
     src = pkgs.fetchFromGitHub {
@@ -104,7 +104,7 @@
 
   icicles = callPackage ./icicles { };
 
-  rtags = melpaBuild rec {
+  rtags = melpaBuild {
     inherit (external.rtags) version src meta;
 
     pname = "rtags";

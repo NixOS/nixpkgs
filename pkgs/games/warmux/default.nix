@@ -4,7 +4,7 @@
 , gettext, intltool, libtool, perl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "warmux";
   version = "unstable-2017-10-20";
 

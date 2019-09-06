@@ -7,7 +7,7 @@
 , xsel
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cht.sh";
   version = "unstable-2019-08-06";
 

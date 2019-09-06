@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lua5 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.6.2";
   pname = "lua-filesystem";
   isLibrary = true;

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, openssl, coreutils, gnugrep }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bash-supergenpass-unstable";
   version = "2018-04-18";
 

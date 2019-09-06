@@ -1,6 +1,6 @@
 { stdenv, cmake, llvmPackages, irony }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "irony-server";
   inherit (irony) version;
 

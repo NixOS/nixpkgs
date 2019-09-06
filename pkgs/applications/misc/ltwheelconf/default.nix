@@ -1,6 +1,6 @@
 { stdenv, libusb1, pkgconfig, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ltwheelconf";
   version = "0.2.7";
 

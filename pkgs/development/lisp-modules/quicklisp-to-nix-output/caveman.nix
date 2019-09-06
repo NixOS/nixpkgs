@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''caveman'';
   version = ''20181210-git'';
 

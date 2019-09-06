@@ -14,7 +14,7 @@
 , libGLU_combined # Needed because help2man basically does a ./ssr-binaural  --help and ssr-binaural needs libGL
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "soundscape-renderer-unstable";
 
   version = "2016-11-03";

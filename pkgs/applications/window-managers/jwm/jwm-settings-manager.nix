@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jwm-settings-manager";
   version = "2018-10-19";
   

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname = "watson-ruby";
   version = (import ./gemset.nix).watson-ruby.version;
 
-  env = bundlerEnv rec {
+  env = bundlerEnv {
     name = "watson-ruby-gems-${version}";
     inherit ruby;
     # expects Gemfile, Gemfile.lock and gemset.nix in the same directory

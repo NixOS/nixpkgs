@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook, makeWrapper, pkgconfig
 , lrzsz, ncurses, libiconv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "minicom";
   version = "2.7.1";
 

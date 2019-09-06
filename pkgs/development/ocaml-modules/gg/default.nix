@@ -10,7 +10,7 @@ in
 
 assert versionAtLeast (getVersion ocaml) "4.01.0";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml-${pname}-${version}";
 

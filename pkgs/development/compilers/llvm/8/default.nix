@@ -145,7 +145,7 @@ let
       '' + mkExtraBuildCommands cc;
     };
 
-    lldClangNoCompilerRt = wrapCCWith rec {
+    lldClangNoCompilerRt = wrapCCWith {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = wrapBintoolsWith {

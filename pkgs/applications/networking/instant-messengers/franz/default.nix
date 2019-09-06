@@ -4,7 +4,7 @@
 
 let
   version = "5.2.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "franz";
   inherit version;
   src = fetchurl {

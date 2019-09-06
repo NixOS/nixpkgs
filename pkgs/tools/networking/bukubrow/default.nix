@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub, sqlite }:
 
 rustPlatform.buildRustPackage rec {
-  name = "bukubrow-${version}";
+  pname = "bukubrow";
   version = "2.4.0";
 
   src = fetchFromGitHub {

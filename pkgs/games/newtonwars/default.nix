@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, freeglut, libGLU_combined }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "newtonwars";
   version = "20150609";
 

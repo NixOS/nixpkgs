@@ -185,7 +185,7 @@ let
             };
           };
 
-    } // (mapTestOn ((packagePlatforms pkgs) // rec {
+    } // (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       idrisPackages = packagePlatforms pkgs.idrisPackages;

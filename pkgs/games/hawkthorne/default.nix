@@ -1,6 +1,6 @@
 { fetchgit, stdenv, love, curl, zip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.12.1";
   pname = "hawkthorne";
 

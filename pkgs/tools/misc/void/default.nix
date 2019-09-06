@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "void-${version}";
+  pname = "void";
   version = "1.1.5";
 
   src = fetchFromGitHub {

@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 let
-  font-awesome = { version, sha256, rev ? version}: fetchFromGitHub rec {
+  font-awesome = { version, sha256, rev ? version}: fetchFromGitHub {
     name = "font-awesome-${version}";
 
 

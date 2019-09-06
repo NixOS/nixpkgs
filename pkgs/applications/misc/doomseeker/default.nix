@@ -1,6 +1,6 @@
 { stdenv, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "doomseeker";
   version = "2018-03-05";
 

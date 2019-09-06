@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, fuse, pcre }: 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rewritefs";
   version = "2017-08-14";
 

@@ -2,7 +2,7 @@
 bison, flex, libGLU, pythonPackages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "seexpr";
   version = "2.11";
   src = fetchFromGitHub {

@@ -43,10 +43,11 @@ stdenv.mkDerivation rec {
     });
   outputs = [ "out" "dev" ];
 
-  # Set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # Set RUNPATH so that libGLX can find driver libraries in /run/opengl-driver(-32)/lib.
+  # Note that libEGL does not need it because it uses driver config files which should
+  # contain absolute paths to libraries.
   postFixup = ''
-    addOpenGLRunpath $out/lib/libGLX.so $out/lib/libEGL.so
+    addOpenGLRunpath $out/lib/libGLX.so
   '';
 
   passthru = { inherit (addOpenGLRunpath) driverLink; };

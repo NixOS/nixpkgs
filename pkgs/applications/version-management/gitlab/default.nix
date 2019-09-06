@@ -44,7 +44,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gitlab${if gitlabEnterprise then "-ee" else ""}-${version}";
 
   src = sources.gitlab;

@@ -12,7 +12,7 @@
 
 assert pythonSupport -> python != null && swig != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gr-osmosdr";
   version = "2018-08-15";
 

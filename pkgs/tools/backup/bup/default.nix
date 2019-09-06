@@ -9,7 +9,7 @@ let version = "0.29.2"; in
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bup";
   inherit version;
 

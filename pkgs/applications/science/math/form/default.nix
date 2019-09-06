@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gmp, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "4.2.1";
   pname = "form";
 

@@ -50,7 +50,7 @@ in {
         '';
       };
 
-      systemd.services."nextcloud-setup"= {
+      systemd.services.nextcloud-setup= {
         requires = ["mysql.service"];
         after = ["mysql.service"];
       };

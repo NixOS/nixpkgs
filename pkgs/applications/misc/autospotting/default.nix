@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "autospotting";
   version = "unstable-2018-11-17";
   goPackagePath = "github.com/AutoSpotting/AutoSpotting";

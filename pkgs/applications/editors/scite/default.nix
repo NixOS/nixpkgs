@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "scite";
   version = "4.0.5";
 

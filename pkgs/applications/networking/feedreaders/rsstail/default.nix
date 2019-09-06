@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cppcheck, libmrss }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rsstail";
   version = "2.1";
 

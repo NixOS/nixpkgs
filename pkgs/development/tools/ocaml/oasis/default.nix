@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.4.10";
   pname = "ocaml-oasis";
 

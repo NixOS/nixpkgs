@@ -26,7 +26,7 @@ let param =
   }
 ; in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
 
   name = "${pname}-${param.version}";
 

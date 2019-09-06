@@ -14,7 +14,7 @@ let
     sha256 = "0x0xxiar202ypbgxh19swzjil546bbp8li4k5yrpvab55y8ymkd4";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "arcanist";
   version = "20180916";
 

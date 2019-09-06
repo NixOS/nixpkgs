@@ -2,7 +2,7 @@
 
 let
   version = "52.9.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "spidermonkey";
   inherit version;
 

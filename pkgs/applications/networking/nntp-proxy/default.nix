@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libconfig, pkgconfig, libevent, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nntp-proxy";
   version = "2014-01-06";
 

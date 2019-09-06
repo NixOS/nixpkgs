@@ -2,7 +2,7 @@
 , libuuid, zlib }:
 
 let
-  generic = version: sha256: stdenv.mkDerivation rec {
+  generic = version: sha256: stdenv.mkDerivation {
     pname = "xapian";
     inherit version;
     passthru = { inherit version; };

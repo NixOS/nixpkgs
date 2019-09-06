@@ -3,7 +3,7 @@
 let
   version = "54b2992";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pidgin-mra";
   inherit version;
 

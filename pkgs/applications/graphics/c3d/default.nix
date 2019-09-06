@@ -1,6 +1,6 @@
 { stdenv, fetchgit, cmake, itk, Cocoa }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname   = "c3d";
   version = "2018-10-04";
 

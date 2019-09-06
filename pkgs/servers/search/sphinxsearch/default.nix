@@ -6,7 +6,7 @@
   }
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sphinxsearch";
   inherit version;
   src = mainSrc;

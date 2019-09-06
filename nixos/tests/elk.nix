@@ -178,7 +178,7 @@ let
     '';
   };
 in mapAttrs mkElkTest {
-  "ELK-6" =
+  ELK-6 =
     if enableUnfree
     then {
       elasticsearch = pkgs.elasticsearch6;
@@ -192,7 +192,7 @@ in mapAttrs mkElkTest {
       kibana        = pkgs.kibana6-oss;
       journalbeat   = pkgs.journalbeat6;
     };
-  "ELK-7" =
+  ELK-7 =
     if enableUnfree
     then {
       elasticsearch = pkgs.elasticsearch7;

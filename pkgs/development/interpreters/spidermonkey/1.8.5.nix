@@ -1,6 +1,6 @@
 { stdenv, lib, autoconf213, fetchurl, fetchpatch, pkgconfig, nspr, perl, python2, zip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spidermonkey";
   version = "1.8.5";
 

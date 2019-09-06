@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, unzip, pkgconfig, makeWrapper, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qnial";
   version = "6.3";
 

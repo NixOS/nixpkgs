@@ -4,7 +4,7 @@
 , Cocoa
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "glslviewer";
   version = "2019-04-22";
 

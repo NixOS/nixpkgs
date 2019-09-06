@@ -3,7 +3,7 @@
 , libiberty, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libbfd";
   inherit (binutils-unwrapped) version src;
 

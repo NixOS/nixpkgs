@@ -22,7 +22,7 @@ let
   ver = "2018.3.0";
   build = "f2";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "unity-editor";
   version = "${ver}x${build}";
 

@@ -9,7 +9,7 @@
 }:
 
 disabledIf (isPy3k || isPyPy)
-  (buildPythonPackage rec {
+  (buildPythonPackage {
     # TODO: Qt5 support
     pname = "qscintilla";
     version = pkgs.qscintilla.version;

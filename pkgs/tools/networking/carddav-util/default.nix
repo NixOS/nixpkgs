@@ -1,6 +1,6 @@
 { stdenv, fetchgit, python, pythonPackages, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "carddav-0.1-2014-02-26";
 

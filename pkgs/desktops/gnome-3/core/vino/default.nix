@@ -28,7 +28,7 @@
 , telepathy-glib ? null
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vino";
   version = "unstable-2019-07-08";
 

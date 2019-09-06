@@ -2,7 +2,7 @@
 let
   version = "1.99.19-beta";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-ocp-build-${version}";
 

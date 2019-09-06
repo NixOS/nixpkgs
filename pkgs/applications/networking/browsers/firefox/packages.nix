@@ -159,7 +159,7 @@ rec {
     };
   });
 
-in rec {
+in {
 
   icecat = iccommon rec {
     ffversion = "60.3.0";
@@ -249,7 +249,7 @@ in rec {
 
 in rec {
 
-  tor-browser-7-5 = (tbcommon rec {
+  tor-browser-7-5 = (tbcommon {
     ffversion = "52.9.0esr";
     tbversion = "7.5.6";
 
@@ -265,7 +265,7 @@ in rec {
     gtk3Support = false;
   };
 
-  tor-browser-8-5 = tbcommon rec {
+  tor-browser-8-5 = tbcommon {
     ffversion = "60.8.0esr";
     tbversion = "8.5.4";
 

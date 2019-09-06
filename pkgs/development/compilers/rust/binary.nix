@@ -18,7 +18,7 @@ let
 in
 
 rec {
-  rustc = stdenv.mkDerivation rec {
+  rustc = stdenv.mkDerivation {
     name = "rustc-${versionType}-${version}";
 
     inherit version;
@@ -64,7 +64,7 @@ rec {
     setupHooks = ./setup-hook.sh;
   };
 
-  cargo = stdenv.mkDerivation rec {
+  cargo = stdenv.mkDerivation {
     name = "cargo-${versionType}-${version}";
 
     inherit version;

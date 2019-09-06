@@ -8,7 +8,7 @@ let
   version = "0.10.2";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchFromBitbucket {
     owner = "rude";

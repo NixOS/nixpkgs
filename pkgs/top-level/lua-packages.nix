@@ -64,17 +64,18 @@ in
 with self; {
 
   getLuaPathList = majorVersion: [
-     "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
-    "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
+    "share/lua/${majorVersion}/?.lua"
+    "share/lua/${majorVersion}/?/init.lua"
   ];
   getLuaCPathList = majorVersion: [
-     "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
+    "lib/lua/${majorVersion}/?.so"
   ];
 
   # helper functions for dealing with LUA_PATH and LUA_CPATH
-  getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
-  getLuaPath    = lib : getPath lib "lua";
-  getLuaCPath   = lib : getPath lib "so";
+  getPath = drv: pathListForVersion:
+    lib.concatMapStringsSep ";" (path: "${drv}/${path}") (pathListForVersion lua.luaversion);
+  getLuaPath = drv: getPath drv getLuaPathList;
+  getLuaCPath = drv: getPath drv getLuaCPathList;
 
   #define build lua package function
   buildLuaPackage = callPackage ../development/lua-modules/generic {

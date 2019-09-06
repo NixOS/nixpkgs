@@ -8,7 +8,7 @@
 , pkgs
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pycurl2";
   version = "7.20.0";
   disabled = isPy3k;

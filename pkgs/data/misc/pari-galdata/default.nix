@@ -2,7 +2,7 @@
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "20080411";
   pname = "pari-galdata";
 

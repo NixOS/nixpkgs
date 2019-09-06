@@ -131,7 +131,7 @@ let
       extra_cmake_options="${stdenv.lib.concatStringsSep "," cmakeFlags}"'';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "swift-${version_friendly}";
 
   nativeBuildInputs = [

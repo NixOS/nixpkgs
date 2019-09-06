@@ -140,7 +140,7 @@ let
     RAILS_ENV = "production";
   };
 
-  gitlab-rake = pkgs.stdenv.mkDerivation rec {
+  gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
     buildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
@@ -155,7 +155,7 @@ let
      '';
   };
 
-  gitlab-rails = pkgs.stdenv.mkDerivation rec {
+  gitlab-rails = pkgs.stdenv.mkDerivation {
     name = "gitlab-rails";
     buildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;

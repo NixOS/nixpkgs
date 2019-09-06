@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, pcsclite , libusb }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.7.11";
   pname = "libacr38u";
 

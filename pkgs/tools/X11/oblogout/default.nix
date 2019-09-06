@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, intltool, file, pythonPackages, cairo }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication {
   pname = "oblogout-unstable";
   version = "2009-11-18";
 

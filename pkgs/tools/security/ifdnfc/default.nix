@@ -4,7 +4,7 @@
 , libnfc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ifdnfc";
   version = "2016-03-01";
 

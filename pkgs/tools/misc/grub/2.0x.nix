@@ -10,22 +10,22 @@
 with stdenv.lib;
 let
   pcSystems = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "i386";
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386";
   };
 
   efiSystemsBuild = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "x86_64";
-    "aarch64-linux".target = "aarch64";
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+    aarch64-linux.target = "aarch64";
   };
 
   # For aarch64, we need to use '--target=aarch64-efi' when building,
   # but '--target=arm64-efi' when installing. Insanity!
   efiSystemsInstall = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "x86_64";
-    "aarch64-linux".target = "arm64";
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+    aarch64-linux.target = "arm64";
   };
 
   canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);

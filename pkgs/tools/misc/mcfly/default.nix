@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  name = "mcfly-${version}";
+  pname = "mcfly";
   version = "v0.3.1";
   rev = "${version}";
 

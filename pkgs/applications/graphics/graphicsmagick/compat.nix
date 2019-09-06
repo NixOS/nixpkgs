@@ -1,6 +1,6 @@
 { stdenv, graphicsmagick }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "graphicsmagick-imagemagick-compat";
   inherit (graphicsmagick) version;
 

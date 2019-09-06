@@ -3,7 +3,7 @@
 , pkgs
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   name = "${pkgs.file.name}";
 
   src = pkgs.file.src;

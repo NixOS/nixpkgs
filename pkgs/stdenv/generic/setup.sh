@@ -212,6 +212,18 @@ isELF() {
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
 
+# Return success if the specified file is an ELF object
+# and its e_type is ET_EXEC (executable file)
+isELFExec() {
+    grep -ao -P '^\177ELF.{11}\x00\x02' "$1" >/dev/null
+}
+
+# Return success if the specified file is an ELF object
+# and its e_type is ET_DYN (shared object file)
+isELFDyn() {
+    grep -ao -P '^\177ELF.{11}\x00\x03' "$1" >/dev/null
+}
+
 # Return success if the specified file is a script (i.e. starts with
 # "#!").
 isScript() {

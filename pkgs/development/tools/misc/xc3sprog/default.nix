@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "787";
   pname = "xc3sprog";
 
-  src = fetchsvn rec {
+  src = fetchsvn {
     url = "https://svn.code.sf.net/p/xc3sprog/code/trunk";
     sha256 = "1rfhms3i7375kdlg0sdg5k52ix3xv5llj2dr30vamyg7pk74y8rx";
     rev = "${version}";

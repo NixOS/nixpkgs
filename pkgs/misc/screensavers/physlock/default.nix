@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pam, systemd }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "11-dev";
   pname = "physlock";
   src = fetchFromGitHub {

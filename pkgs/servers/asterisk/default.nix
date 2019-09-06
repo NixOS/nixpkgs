@@ -6,7 +6,7 @@
 }:
 
 let
-  common = {version, sha256, externals}: stdenv.mkDerivation rec {
+  common = {version, sha256, externals}: stdenv.mkDerivation {
     inherit version;
     pname = "asterisk";
 

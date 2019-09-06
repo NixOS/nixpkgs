@@ -2,7 +2,7 @@
 , pkgconfig, dbus, gdk-pixbuf, glib, libX11, gtk2, librsvg
 , dbus-glib, autoreconfHook, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "volnoti-unstable";
   version = "2013-09-23";
 

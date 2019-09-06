@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, gnused, bash, coreutils }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fish-foreign-env";
   version = "git-20170324";
 

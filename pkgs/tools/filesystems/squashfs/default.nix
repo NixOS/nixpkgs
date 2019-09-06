@@ -6,7 +6,7 @@
 
 assert lz4Support -> (lz4 != null);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "squashfs";
   version = "4.4dev_20180612";
 

@@ -7,7 +7,7 @@
 , enum34
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname   = "libsoundtouch";
   version = "0.4.0";
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, imake, libXt, libXaw, libXtst
 , libXi, libXpm, xorgproto, gccmakedep, Xaw3d }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xvkbd";
   version = "3.9";
   src = fetchurl {

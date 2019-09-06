@@ -3,7 +3,7 @@
 # ltunifi and solaar both provide udev rules but solaar's rules are more
 # up-to-date so we simply use that instead of having to maintain our own rules
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "logitech-udev-rules";
   inherit (solaar) version;
 

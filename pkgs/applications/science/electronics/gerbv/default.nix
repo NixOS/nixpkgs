@@ -1,6 +1,6 @@
 { stdenv, fetchgit, pkgconfig, gettext, libtool, automake, autoconf, cairo, gtk2, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gerbv";
   version = "2015-10-08";
 

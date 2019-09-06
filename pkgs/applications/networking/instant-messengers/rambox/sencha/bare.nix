@@ -14,7 +14,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
 
   pname = "sencha-bare";

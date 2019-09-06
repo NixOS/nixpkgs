@@ -26,7 +26,7 @@ let
     "upgrade/beegfs_mirror_md/build"
   ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "beegfs";
   inherit version;
 

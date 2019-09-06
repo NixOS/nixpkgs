@@ -5,7 +5,7 @@ with stdenv.lib;
 
 let
   version = "60.4.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "spidermonkey";
   inherit version;
 

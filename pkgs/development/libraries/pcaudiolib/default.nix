@@ -3,7 +3,7 @@
 , portaudio, alsaLib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pcaudiolib";
   version = "2016-07-19";
 

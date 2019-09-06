@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, Carbon }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qes";
   version = "0.0.2";
 

@@ -1,6 +1,6 @@
 { stdenv, haskellPackages, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nix-script";
   version = "2015-09-22";
 

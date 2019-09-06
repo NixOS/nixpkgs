@@ -12,7 +12,7 @@
 , useSystemd ? true, systemd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "upower";
   version = "0.99.10";
 

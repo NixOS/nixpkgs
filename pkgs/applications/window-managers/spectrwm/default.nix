@@ -12,7 +12,7 @@
 , stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spectrwm";
   version = "2.7.2";
 

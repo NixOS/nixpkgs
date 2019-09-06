@@ -1,6 +1,6 @@
 { stdenv, fetchgit, pythonPackages }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication {
 
   name = "grabserial-1.9.3";
   namePrefix = "";

@@ -11,7 +11,7 @@
 
 with pkgs;
 
-releaseTools.sourceTarball rec {
+releaseTools.sourceTarball {
   name = "nixpkgs-tarball";
   src = nixpkgs;
 

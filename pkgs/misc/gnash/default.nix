@@ -64,7 +64,7 @@ assert length toolkits  == 0 -> throw "at least one GUI toolkit must be enabled"
 assert length renderers == 0 -> throw "at least one renderer must be enabled";
 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnash";
   version = "0.8.11-2019-30-01";
 

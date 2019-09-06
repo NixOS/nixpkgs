@@ -15,7 +15,7 @@ assert withQt4 -> qt4 != null;
 assert !withQt4 -> qtbase != null;
 assert !withQt4 -> qtx11extras != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${if withQt4 then "qt4" else "qt5"}-${v}";
 
   meta = with stdenv.lib; {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, perl, openssl, curl, libusb1
 , enableUnsafe ? false }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ttwatch";
   version = "2018-12-04";
 

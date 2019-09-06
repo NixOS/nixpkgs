@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
@@ -15,7 +15,7 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "242";
   pname = "systemd";
 
@@ -27,6 +27,14 @@ stdenv.mkDerivation rec {
     rev = "5fb35fbc783516e2014115c3488134a2afb8494c";
     sha256 = "0pyjvzzh8nnxv4z58n82lz1mjnzv44sylcjgkvw8sp35vx1ryxfh";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-15718.patch";
+      url = https://github.com/systemd/systemd/pull/13457/commits/35e528018f315798d3bffcb592b32a0d8f5162bd.patch;
+      sha256 = "0m0ypnnllx4r6a2qy1586as15i2qrzxwi1sqdp14rzdwajz1rvnv";
+    })
+  ];
 
   outputs = [ "out" "lib" "man" "dev" ];
 

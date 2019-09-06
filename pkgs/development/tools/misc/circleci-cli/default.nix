@@ -5,7 +5,7 @@ let
   pname = "circleci-cli";
   version = "0.1.2569";
 in
-buildGoPackage rec {
+buildGoPackage {
   name = "${pname}-${version}";
   inherit version;
 

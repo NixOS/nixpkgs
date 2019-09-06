@@ -5,7 +5,7 @@
   , ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ign-transport";
   inherit version;
   inherit src;

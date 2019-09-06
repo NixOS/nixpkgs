@@ -14,7 +14,7 @@ rec {
     authors = [ "Remi Rampin <remirampin@gmail.com>" ];
     sha256 = "1974q3nysai026zhz24df506cxwi09jdzqksll4h7ibpb5n9g1d4";
   };
-  features_.adler32."1.0.2" = deps: f: updateFeatures f (rec {
+  features_.adler32."1.0.2" = deps: f: updateFeatures f ({
     adler32."1.0.2".default = (f.adler32."1.0.2".default or true);
   }) [];
 
@@ -35,7 +35,7 @@ rec {
       (crates."memchr"."${deps."aho_corasick"."0.5.3"."memchr"}" deps)
     ]);
   };
-  features_.aho_corasick."0.5.3" = deps: f: updateFeatures f (rec {
+  features_.aho_corasick."0.5.3" = deps: f: updateFeatures f ({
     aho_corasick."0.5.3".default = (f.aho_corasick."0.5.3".default or true);
     memchr."${deps.aho_corasick."0.5.3".memchr}".default = true;
   }) [
@@ -53,7 +53,7 @@ rec {
     authors = [ "ogham@bsago.me" "Ryan Scheel (Havvy) <ryan.havvy@gmail.com>" ];
     sha256 = "1vcd8m2hglrdi4zmqnkkz5zy3c73ifgii245k7vj6qr5dzpn9hij";
   };
-  features_.ansi_term."0.9.0" = deps: f: updateFeatures f (rec {
+  features_.ansi_term."0.9.0" = deps: f: updateFeatures f ({
     ansi_term."0.9.0".default = (f.ansi_term."0.9.0".default or true);
   }) [];
 
@@ -110,7 +110,7 @@ rec {
       (crates."winapi"."${deps."atty"."0.2.3"."winapi"}" deps)
     ]) else []);
   };
-  features_.atty."0.2.3" = deps: f: updateFeatures f (rec {
+  features_.atty."0.2.3" = deps: f: updateFeatures f ({
     atty."0.2.3".default = (f.atty."0.2.3".default or true);
     kernel32_sys."${deps.atty."0.2.3".kernel32_sys}".default = true;
     libc."${deps.atty."0.2.3".libc}".default = (f.libc."${deps.atty."0.2.3".libc}".default or false);
@@ -138,7 +138,7 @@ rec {
       (crates."safemem"."${deps."base64"."0.9.3"."safemem"}" deps)
     ]);
   };
-  features_.base64."0.9.3" = deps: f: updateFeatures f (rec {
+  features_.base64."0.9.3" = deps: f: updateFeatures f ({
     base64."0.9.3".default = (f.base64."0.9.3".default or true);
     byteorder."${deps.base64."0.9.3".byteorder}".default = true;
     safemem."${deps.base64."0.9.3".safemem}".default = true;
@@ -158,7 +158,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "1hr72xg5slm0z4pxs2hiy4wcyx3jva70h58b7mid8l0a4c8f7gn5";
   };
-  features_.bitflags."0.7.0" = deps: f: updateFeatures f (rec {
+  features_.bitflags."0.7.0" = deps: f: updateFeatures f ({
     bitflags."0.7.0".default = (f.bitflags."0.7.0".default or true);
   }) [];
 
@@ -196,7 +196,7 @@ rec {
     sha256 = "1g1wmz2001qmfrd37dnd5qiss5njrw26aywmg6yhkmkbyrhjxb08";
     features = mkFeatures (features."bitflags"."1.0.4" or {});
   };
-  features_.bitflags."1.0.4" = deps: f: updateFeatures f (rec {
+  features_.bitflags."1.0.4" = deps: f: updateFeatures f ({
     bitflags."1.0.4".default = (f.bitflags."1.0.4".default or true);
   }) [];
 
@@ -288,7 +288,7 @@ rec {
       (crates."time"."${deps."cargo_download"."0.1.2"."time"}" deps)
     ]);
   };
-  features_.cargo_download."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.cargo_download."0.1.2" = deps: f: updateFeatures f ({
     ansi_term."${deps.cargo_download."0.1.2".ansi_term}".default = true;
     cargo_download."0.1.2".default = (f.cargo_download."0.1.2".default or true);
     clap."${deps.cargo_download."0.1.2".clap}".default = true;
@@ -344,7 +344,7 @@ rec {
     authors = [ "Skyler Lipthay <skyler.lipthay@gmail.com>" ];
     sha256 = "06i1x3wqv30rkvlgj134qf9vzxhzz28bz41mm0rgki0i0f7gf96n";
   };
-  features_.case."0.1.0" = deps: f: updateFeatures f (rec {
+  features_.case."0.1.0" = deps: f: updateFeatures f ({
     case."0.1.0".default = (f.case."0.1.0".default or true);
   }) [];
 
@@ -383,7 +383,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "0x06hvrrqy96m97593823vvxcgvjaxckghwyy2jcyc8qc7c6cyhi";
   };
-  features_.cfg_if."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.cfg_if."0.1.2" = deps: f: updateFeatures f ({
     cfg_if."0.1.2".default = (f.cfg_if."0.1.2".default or true);
   }) [];
 
@@ -402,7 +402,7 @@ rec {
       (crates."time"."${deps."chrono"."0.2.25"."time"}" deps)
     ]);
   };
-  features_.chrono."0.2.25" = deps: f: updateFeatures f (rec {
+  features_.chrono."0.2.25" = deps: f: updateFeatures f ({
     chrono."0.2.25".default = (f.chrono."0.2.25".default or true);
     num."${deps.chrono."0.2.25".num}".default = (f.num."${deps.chrono."0.2.25".num}".default or false);
     time."${deps.chrono."0.2.25".time}".default = true;
@@ -542,7 +542,7 @@ rec {
       (crates."custom_derive"."${deps."conv"."0.3.3"."custom_derive"}" deps)
     ]);
   };
-  features_.conv."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.conv."0.3.3" = deps: f: updateFeatures f ({
     conv."0.3.3".default = (f.conv."0.3.3".default or true);
     custom_derive."${deps.conv."0.3.3".custom_derive}".default = true;
   }) [
@@ -610,7 +610,7 @@ rec {
     ]);
     features = mkFeatures (features."core_foundation_sys"."0.5.1" or {});
   };
-  features_.core_foundation_sys."0.5.1" = deps: f: updateFeatures f (rec {
+  features_.core_foundation_sys."0.5.1" = deps: f: updateFeatures f ({
     core_foundation_sys."0.5.1".default = (f.core_foundation_sys."0.5.1".default or true);
     libc."${deps.core_foundation_sys."0.5.1".libc}".default = true;
   }) [
@@ -628,7 +628,7 @@ rec {
     authors = [ "Sam Rijs <srijs@airpost.net>" "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "1rwvhb98w41mk5phr84mryally58f68h0v933772gdxqvqbcayqy";
   };
-  features_.crc32fast."1.1.1" = deps: f: updateFeatures f (rec {
+  features_.crc32fast."1.1.1" = deps: f: updateFeatures f ({
     crc32fast."1.1.1".default = (f.crc32fast."1.1.1".default or true);
   }) [];
 
@@ -644,7 +644,7 @@ rec {
     sha256 = "1k1a4q5gy7zakiw39hdzrblnw3kk4nsqmkdp1dpzh8h558140rhq";
     features = mkFeatures (features."crossbeam"."0.2.10" or {});
   };
-  features_.crossbeam."0.2.10" = deps: f: updateFeatures f (rec {
+  features_.crossbeam."0.2.10" = deps: f: updateFeatures f ({
     crossbeam."0.2.10".default = (f.crossbeam."0.2.10".default or true);
   }) [];
 
@@ -663,7 +663,7 @@ rec {
       (crates."crossbeam_utils"."${deps."crossbeam_deque"."0.6.2"."crossbeam_utils"}" deps)
     ]);
   };
-  features_.crossbeam_deque."0.6.2" = deps: f: updateFeatures f (rec {
+  features_.crossbeam_deque."0.6.2" = deps: f: updateFeatures f ({
     crossbeam_deque."0.6.2".default = (f.crossbeam_deque."0.6.2".default or true);
     crossbeam_epoch."${deps.crossbeam_deque."0.6.2".crossbeam_epoch}".default = true;
     crossbeam_utils."${deps.crossbeam_deque."0.6.2".crossbeam_utils}".default = true;
@@ -798,7 +798,7 @@ rec {
       (crates."syn"."${deps."derive_error"."0.0.3"."syn"}" deps)
     ]);
   };
-  features_.derive_error."0.0.3" = deps: f: updateFeatures f (rec {
+  features_.derive_error."0.0.3" = deps: f: updateFeatures f ({
     case."${deps.derive_error."0.0.3".case}".default = true;
     derive_error."0.0.3".default = (f.derive_error."0.0.3".default or true);
     quote."${deps.derive_error."0.0.3".quote}".default = true;
@@ -820,7 +820,7 @@ rec {
     authors = [ "David Tolnay <dtolnay@gmail.com>" ];
     sha256 = "1bxsh6fags7nr36vlz07ik2a1rzyipc8x1y30kjk832hf2pzadmw";
   };
-  features_.dtoa."0.4.2" = deps: f: updateFeatures f (rec {
+  features_.dtoa."0.4.2" = deps: f: updateFeatures f ({
     dtoa."0.4.2".default = (f.dtoa."0.4.2".default or true);
   }) [];
 
@@ -907,7 +907,7 @@ rec {
     authors = [ "Ben Wilber <benwilber@gmail.com>" ];
     sha256 = "1cw9p4vzbscvyrbzv7z68gv2cairrns2d4wcb4nkahkcjk25phip";
   };
-  features_.exitcode."1.1.2" = deps: f: updateFeatures f (rec {
+  features_.exitcode."1.1.2" = deps: f: updateFeatures f ({
     exitcode."1.1.2".default = (f.exitcode."1.1.2".default or true);
   }) [];
 
@@ -931,7 +931,7 @@ rec {
       (crates."libc"."${deps."filetime"."0.1.14"."libc"}" deps)
     ]) else []);
   };
-  features_.filetime."0.1.14" = deps: f: updateFeatures f (rec {
+  features_.filetime."0.1.14" = deps: f: updateFeatures f ({
     cfg_if."${deps.filetime."0.1.14".cfg_if}".default = true;
     filetime."0.1.14".default = (f.filetime."0.1.14".default or true);
     libc."${deps.filetime."0.1.14".libc}".default = true;
@@ -997,7 +997,7 @@ rec {
     sha256 = "128mlh23y3gg6ag5h8iiqlcbl59smisdzraqy88ldrf75kbw27ip";
     libPath = "lib.rs";
   };
-  features_.fnv."1.0.6" = deps: f: updateFeatures f (rec {
+  features_.fnv."1.0.6" = deps: f: updateFeatures f ({
     fnv."1.0.6".default = (f.fnv."1.0.6".default or true);
   }) [];
 
@@ -1015,7 +1015,7 @@ rec {
       (crates."foreign_types_shared"."${deps."foreign_types"."0.3.2"."foreign_types_shared"}" deps)
     ]);
   };
-  features_.foreign_types."0.3.2" = deps: f: updateFeatures f (rec {
+  features_.foreign_types."0.3.2" = deps: f: updateFeatures f ({
     foreign_types."0.3.2".default = (f.foreign_types."0.3.2".default or true);
     foreign_types_shared."${deps.foreign_types."0.3.2".foreign_types_shared}".default = true;
   }) [
@@ -1033,7 +1033,7 @@ rec {
     authors = [ "Steven Fackler <sfackler@gmail.com>" ];
     sha256 = "0b6cnvqbflws8dxywk4589vgbz80049lz4x1g9dfy4s1ppd3g4z5";
   };
-  features_.foreign_types_shared."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.foreign_types_shared."0.1.1" = deps: f: updateFeatures f ({
     foreign_types_shared."0.1.1".default = (f.foreign_types_shared."0.1.1".default or true);
   }) [];
 
@@ -1051,7 +1051,7 @@ rec {
       (crates."fuchsia_zircon_sys"."${deps."fuchsia_zircon"."0.2.1"."fuchsia_zircon_sys"}" deps)
     ]);
   };
-  features_.fuchsia_zircon."0.2.1" = deps: f: updateFeatures f (rec {
+  features_.fuchsia_zircon."0.2.1" = deps: f: updateFeatures f ({
     fuchsia_zircon."0.2.1".default = (f.fuchsia_zircon."0.2.1".default or true);
     fuchsia_zircon_sys."${deps.fuchsia_zircon."0.2.1".fuchsia_zircon_sys}".default = true;
   }) [
@@ -1073,7 +1073,7 @@ rec {
       (crates."fuchsia_zircon_sys"."${deps."fuchsia_zircon"."0.3.3"."fuchsia_zircon_sys"}" deps)
     ]);
   };
-  features_.fuchsia_zircon."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.fuchsia_zircon."0.3.3" = deps: f: updateFeatures f ({
     bitflags."${deps.fuchsia_zircon."0.3.3".bitflags}".default = true;
     fuchsia_zircon."0.3.3".default = (f.fuchsia_zircon."0.3.3".default or true);
     fuchsia_zircon_sys."${deps.fuchsia_zircon."0.3.3".fuchsia_zircon_sys}".default = true;
@@ -1096,7 +1096,7 @@ rec {
       (crates."bitflags"."${deps."fuchsia_zircon_sys"."0.2.0"."bitflags"}" deps)
     ]);
   };
-  features_.fuchsia_zircon_sys."0.2.0" = deps: f: updateFeatures f (rec {
+  features_.fuchsia_zircon_sys."0.2.0" = deps: f: updateFeatures f ({
     bitflags."${deps.fuchsia_zircon_sys."0.2.0".bitflags}".default = true;
     fuchsia_zircon_sys."0.2.0".default = (f.fuchsia_zircon_sys."0.2.0".default or true);
   }) [
@@ -1114,7 +1114,7 @@ rec {
     authors = [ "Raph Levien <raph@google.com>" ];
     sha256 = "08jp1zxrm9jbrr6l26bjal4dbm8bxfy57ickdgibsqxr1n9j3hf5";
   };
-  features_.fuchsia_zircon_sys."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.fuchsia_zircon_sys."0.3.3" = deps: f: updateFeatures f ({
     fuchsia_zircon_sys."0.3.3".default = (f.fuchsia_zircon_sys."0.3.3".default or true);
   }) [];
 
@@ -1206,7 +1206,7 @@ rec {
     ]);
     features = mkFeatures (features."h2"."0.1.13" or {});
   };
-  features_.h2."0.1.13" = deps: f: updateFeatures f (rec {
+  features_.h2."0.1.13" = deps: f: updateFeatures f ({
     byteorder."${deps.h2."0.1.13".byteorder}".default = true;
     bytes."${deps.h2."0.1.13".bytes}".default = true;
     fnv."${deps.h2."0.1.13".fnv}".default = true;
@@ -1247,7 +1247,7 @@ rec {
       (crates."itoa"."${deps."http"."0.1.14"."itoa"}" deps)
     ]);
   };
-  features_.http."0.1.14" = deps: f: updateFeatures f (rec {
+  features_.http."0.1.14" = deps: f: updateFeatures f ({
     bytes."${deps.http."0.1.14".bytes}".default = true;
     fnv."${deps.http."0.1.14".fnv}".default = true;
     http."0.1.14".default = (f.http."0.1.14".default or true);
@@ -1454,7 +1454,7 @@ rec {
       (crates."unicode_normalization"."${deps."idna"."0.1.4"."unicode_normalization"}" deps)
     ]);
   };
-  features_.idna."0.1.4" = deps: f: updateFeatures f (rec {
+  features_.idna."0.1.4" = deps: f: updateFeatures f ({
     idna."0.1.4".default = (f.idna."0.1.4".default or true);
     matches."${deps.idna."0.1.4".matches}".default = true;
     unicode_bidi."${deps.idna."0.1.4".unicode_bidi}".default = true;
@@ -1506,7 +1506,7 @@ rec {
       (crates."winapi"."${deps."iovec"."0.1.1"."winapi"}" deps)
     ]) else []);
   };
-  features_.iovec."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.iovec."0.1.1" = deps: f: updateFeatures f ({
     iovec."0.1.1".default = (f.iovec."0.1.1".default or true);
     libc."${deps.iovec."0.1.1".libc}".default = true;
     winapi."${deps.iovec."0.1.1".winapi}".default = true;
@@ -1533,7 +1533,7 @@ rec {
       (crates."winapi"."${deps."isatty"."0.1.5"."winapi"}" deps)
     ]) else []);
   };
-  features_.isatty."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.isatty."0.1.5" = deps: f: updateFeatures f ({
     isatty."0.1.5".default = (f.isatty."0.1.5".default or true);
     kernel32_sys."${deps.isatty."0.1.5".kernel32_sys}".default = true;
     libc."${deps.isatty."0.1.5".libc}".default = true;
@@ -1558,7 +1558,7 @@ rec {
       (crates."either"."${deps."itertools"."0.6.5"."either"}" deps)
     ]);
   };
-  features_.itertools."0.6.5" = deps: f: updateFeatures f (rec {
+  features_.itertools."0.6.5" = deps: f: updateFeatures f ({
     either."${deps.itertools."0.6.5".either}".default = (f.either."${deps.itertools."0.6.5".either}".default or false);
     itertools."0.6.5".default = (f.itertools."0.6.5".default or true);
   }) [
@@ -1577,7 +1577,7 @@ rec {
     sha256 = "1nfkzz6vrgj0d9l3yzjkkkqzdgs68y294fjdbl7jq118qi8xc9d9";
     features = mkFeatures (features."itoa"."0.3.4" or {});
   };
-  features_.itoa."0.3.4" = deps: f: updateFeatures f (rec {
+  features_.itoa."0.3.4" = deps: f: updateFeatures f ({
     itoa."0.3.4".default = (f.itoa."0.3.4".default or true);
   }) [];
 
@@ -1623,7 +1623,7 @@ rec {
       (crates."winapi_build"."${deps."kernel32_sys"."0.2.2"."winapi_build"}" deps)
     ]);
   };
-  features_.kernel32_sys."0.2.2" = deps: f: updateFeatures f (rec {
+  features_.kernel32_sys."0.2.2" = deps: f: updateFeatures f ({
     kernel32_sys."0.2.2".default = (f.kernel32_sys."0.2.2".default or true);
     winapi."${deps.kernel32_sys."0.2.2".winapi}".default = true;
     winapi_build."${deps.kernel32_sys."0.2.2".winapi_build}".default = true;
@@ -1765,7 +1765,7 @@ rec {
       (crates."crc32fast"."${deps."libflate"."0.1.19"."crc32fast"}" deps)
     ]);
   };
-  features_.libflate."0.1.19" = deps: f: updateFeatures f (rec {
+  features_.libflate."0.1.19" = deps: f: updateFeatures f ({
     adler32."${deps.libflate."0.1.19".adler32}".default = true;
     byteorder."${deps.libflate."0.1.19".byteorder}".default = true;
     crc32fast."${deps.libflate."0.1.19".crc32fast}".default = true;
@@ -1792,7 +1792,7 @@ rec {
       ++ (if features.lock_api."0.1.5".owning_ref or false then [ (crates.owning_ref."${deps."lock_api"."0.1.5".owning_ref}" deps) ] else []));
     features = mkFeatures (features."lock_api"."0.1.5" or {});
   };
-  features_.lock_api."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.lock_api."0.1.5" = deps: f: updateFeatures f ({
     lock_api."0.1.5".default = (f.lock_api."0.1.5".default or true);
     owning_ref."${deps.lock_api."0.1.5".owning_ref}".default = true;
     scopeguard."${deps.lock_api."0.1.5".scopeguard}".default = (f.scopeguard."${deps.lock_api."0.1.5".scopeguard}".default or false);
@@ -1838,7 +1838,7 @@ rec {
     ]);
     features = mkFeatures (features."log"."0.4.6" or {});
   };
-  features_.log."0.4.6" = deps: f: updateFeatures f (rec {
+  features_.log."0.4.6" = deps: f: updateFeatures f ({
     cfg_if."${deps.log."0.4.6".cfg_if}".default = true;
     log."0.4.6".default = (f.log."0.4.6".default or true);
   }) [
@@ -1856,7 +1856,7 @@ rec {
     authors = [ "bluss" ];
     sha256 = "1f8kf5v7xra8ssvh5c10qlacbk4l0z2817pkscflx5s5q6y7925h";
   };
-  features_.maplit."0.1.6" = deps: f: updateFeatures f (rec {
+  features_.maplit."0.1.6" = deps: f: updateFeatures f ({
     maplit."0.1.6".default = (f.maplit."0.1.6".default or true);
   }) [];
 
@@ -1872,7 +1872,7 @@ rec {
     sha256 = "1zlrqlbvzxdil8z8ial2ihvxjwvlvg3g8dr0lcdpsjclkclasjan";
     libPath = "lib.rs";
   };
-  features_.matches."0.1.6" = deps: f: updateFeatures f (rec {
+  features_.matches."0.1.6" = deps: f: updateFeatures f ({
     matches."0.1.6".default = (f.matches."0.1.6".default or true);
   }) [];
 
@@ -1890,7 +1890,7 @@ rec {
       (crates."libc"."${deps."memchr"."0.1.11"."libc"}" deps)
     ]);
   };
-  features_.memchr."0.1.11" = deps: f: updateFeatures f (rec {
+  features_.memchr."0.1.11" = deps: f: updateFeatures f ({
     libc."${deps.memchr."0.1.11".libc}".default = true;
     memchr."0.1.11".default = (f.memchr."0.1.11".default or true);
   }) [
@@ -1908,7 +1908,7 @@ rec {
     authors = [ "Gilad Naaman <gilad.naaman@gmail.com>" ];
     sha256 = "00vym01jk9slibq2nsiilgffp7n6k52a4q3n4dqp0xf5kzxvffcf";
   };
-  features_.memoffset."0.2.1" = deps: f: updateFeatures f (rec {
+  features_.memoffset."0.2.1" = deps: f: updateFeatures f ({
     memoffset."0.2.1".default = (f.memoffset."0.2.1".default or true);
   }) [];
 
@@ -1926,7 +1926,7 @@ rec {
       (crates."unicase"."${deps."mime"."0.3.12"."unicase"}" deps)
     ]);
   };
-  features_.mime."0.3.12" = deps: f: updateFeatures f (rec {
+  features_.mime."0.3.12" = deps: f: updateFeatures f ({
     mime."0.3.12".default = (f.mime."0.3.12".default or true);
     unicase."${deps.mime."0.3.12".unicase}".default = true;
   }) [
@@ -1955,7 +1955,7 @@ rec {
     ]);
     features = mkFeatures (features."mime_guess"."2.0.0-alpha.6" or {});
   };
-  features_.mime_guess."2.0.0-alpha.6" = deps: f: updateFeatures f (rec {
+  features_.mime_guess."2.0.0-alpha.6" = deps: f: updateFeatures f ({
     mime."${deps.mime_guess."2.0.0-alpha.6".mime}".default = true;
     mime_guess."2.0.0-alpha.6".default = (f.mime_guess."2.0.0-alpha.6".default or true);
     phf = fold recursiveUpdate {} [
@@ -1993,7 +1993,7 @@ rec {
       (crates."cc"."${deps."miniz_sys"."0.1.10"."cc"}" deps)
     ]);
   };
-  features_.miniz_sys."0.1.10" = deps: f: updateFeatures f (rec {
+  features_.miniz_sys."0.1.10" = deps: f: updateFeatures f ({
     cc."${deps.miniz_sys."0.1.10".cc}".default = true;
     libc."${deps.miniz_sys."0.1.10".libc}".default = true;
     miniz_sys."0.1.10".default = (f.miniz_sys."0.1.10".default or true);
@@ -2083,7 +2083,7 @@ rec {
       (crates."ws2_32_sys"."${deps."miow"."0.2.1"."ws2_32_sys"}" deps)
     ]);
   };
-  features_.miow."0.2.1" = deps: f: updateFeatures f (rec {
+  features_.miow."0.2.1" = deps: f: updateFeatures f ({
     kernel32_sys."${deps.miow."0.2.1".kernel32_sys}".default = true;
     miow."0.2.1".default = (f.miow."0.2.1".default or true);
     net2."${deps.miow."0.2.1".net2}".default = (f.net2."${deps.miow."0.2.1".net2}".default or false);
@@ -2126,7 +2126,7 @@ rec {
     ]) else []);
     features = mkFeatures (features."native_tls"."0.2.2" or {});
   };
-  features_.native_tls."0.2.2" = deps: f: updateFeatures f (rec {
+  features_.native_tls."0.2.2" = deps: f: updateFeatures f ({
     lazy_static."${deps.native_tls."0.2.2".lazy_static}".default = true;
     libc."${deps.native_tls."0.2.2".libc}".default = true;
     log."${deps.native_tls."0.2.2".log}".default = true;
@@ -2296,7 +2296,7 @@ rec {
       (crates."num_traits"."${deps."num_integer"."0.1.35"."num_traits"}" deps)
     ]);
   };
-  features_.num_integer."0.1.35" = deps: f: updateFeatures f (rec {
+  features_.num_integer."0.1.35" = deps: f: updateFeatures f ({
     num_integer."0.1.35".default = (f.num_integer."0.1.35".default or true);
     num_traits."${deps.num_integer."0.1.35".num_traits}".default = true;
   }) [
@@ -2318,7 +2318,7 @@ rec {
       (crates."num_traits"."${deps."num_iter"."0.1.34"."num_traits"}" deps)
     ]);
   };
-  features_.num_iter."0.1.34" = deps: f: updateFeatures f (rec {
+  features_.num_iter."0.1.34" = deps: f: updateFeatures f ({
     num_integer."${deps.num_iter."0.1.34".num_integer}".default = true;
     num_iter."0.1.34".default = (f.num_iter."0.1.34".default or true);
     num_traits."${deps.num_iter."0.1.34".num_traits}".default = true;
@@ -2338,7 +2338,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "1fr8ghp4i97q3agki54i0hpmqxv3s65i2mqd1pinc7w7arc3fplw";
   };
-  features_.num_traits."0.1.40" = deps: f: updateFeatures f (rec {
+  features_.num_traits."0.1.40" = deps: f: updateFeatures f ({
     num_traits."0.1.40".default = (f.num_traits."0.1.40".default or true);
   }) [];
 
@@ -2356,7 +2356,7 @@ rec {
       (crates."libc"."${deps."num_cpus"."1.8.0"."libc"}" deps)
     ]);
   };
-  features_.num_cpus."1.8.0" = deps: f: updateFeatures f (rec {
+  features_.num_cpus."1.8.0" = deps: f: updateFeatures f ({
     libc."${deps.num_cpus."1.8.0".libc}".default = true;
     num_cpus."1.8.0".default = (f.num_cpus."1.8.0".default or true);
   }) [
@@ -2417,7 +2417,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "1a89fznx26vvaxyrxdvgf6iwai5xvs6xjvpjin68fgvrslv6n15a";
   };
-  features_.openssl_probe."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.openssl_probe."0.1.2" = deps: f: updateFeatures f ({
     openssl_probe."0.1.2".default = (f.openssl_probe."0.1.2".default or true);
   }) [];
 
@@ -2475,7 +2475,7 @@ rec {
       (crates."stable_deref_trait"."${deps."owning_ref"."0.4.0"."stable_deref_trait"}" deps)
     ]);
   };
-  features_.owning_ref."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.owning_ref."0.4.0" = deps: f: updateFeatures f ({
     owning_ref."0.4.0".default = (f.owning_ref."0.4.0".default or true);
     stable_deref_trait."${deps.owning_ref."0.4.0".stable_deref_trait}".default = true;
   }) [
@@ -2609,7 +2609,7 @@ rec {
     sha256 = "04ahrp7aw4ip7fmadb0bknybmkfav0kk0gw4ps3ydq5w6hr0ib5i";
     libPath = "lib.rs";
   };
-  features_.percent_encoding."1.0.1" = deps: f: updateFeatures f (rec {
+  features_.percent_encoding."1.0.1" = deps: f: updateFeatures f ({
     percent_encoding."1.0.1".default = (f.percent_encoding."1.0.1".default or true);
   }) [];
 
@@ -2661,7 +2661,7 @@ rec {
       (crates."phf_shared"."${deps."phf_codegen"."0.7.21"."phf_shared"}" deps)
     ]);
   };
-  features_.phf_codegen."0.7.21" = deps: f: updateFeatures f (rec {
+  features_.phf_codegen."0.7.21" = deps: f: updateFeatures f ({
     phf_codegen."0.7.21".default = (f.phf_codegen."0.7.21".default or true);
     phf_generator."${deps.phf_codegen."0.7.21".phf_generator}".default = true;
     phf_shared."${deps.phf_codegen."0.7.21".phf_shared}".default = true;
@@ -2685,7 +2685,7 @@ rec {
       (crates."rand"."${deps."phf_generator"."0.7.21"."rand"}" deps)
     ]);
   };
-  features_.phf_generator."0.7.21" = deps: f: updateFeatures f (rec {
+  features_.phf_generator."0.7.21" = deps: f: updateFeatures f ({
     phf_generator."0.7.21".default = (f.phf_generator."0.7.21".default or true);
     phf_shared."${deps.phf_generator."0.7.21".phf_shared}".default = true;
     rand."${deps.phf_generator."0.7.21".rand}".default = true;
@@ -2711,7 +2711,7 @@ rec {
       ++ (if features.phf_shared."0.7.21".unicase or false then [ (crates.unicase."${deps."phf_shared"."0.7.21".unicase}" deps) ] else []));
     features = mkFeatures (features."phf_shared"."0.7.21" or {});
   };
-  features_.phf_shared."0.7.21" = deps: f: updateFeatures f (rec {
+  features_.phf_shared."0.7.21" = deps: f: updateFeatures f ({
     phf_shared."0.7.21".default = (f.phf_shared."0.7.21".default or true);
     siphasher."${deps.phf_shared."0.7.21".siphasher}".default = true;
     unicase."${deps.phf_shared."0.7.21".unicase}".default = true;
@@ -2731,7 +2731,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "06k8fxgrsrxj8mjpjcq1n7mn2p1shpxif4zg9y5h09c7vy20s146";
   };
-  features_.pkg_config."0.3.9" = deps: f: updateFeatures f (rec {
+  features_.pkg_config."0.3.9" = deps: f: updateFeatures f ({
     pkg_config."0.3.9".default = (f.pkg_config."0.3.9".default or true);
   }) [];
 
@@ -2746,7 +2746,7 @@ rec {
     authors = [ "David Tolnay <dtolnay@gmail.com>" ];
     sha256 = "09il61jv4kd1360spaj46qwyl21fv1qz18fsv2jra8wdnlgl5jsg";
   };
-  features_.quote."0.3.15" = deps: f: updateFeatures f (rec {
+  features_.quote."0.3.15" = deps: f: updateFeatures f ({
     quote."0.3.15".default = (f.quote."0.3.15".default or true);
   }) [];
 
@@ -3036,7 +3036,7 @@ rec {
       (crates."rustc_version"."${deps."rand_chacha"."0.1.0"."rustc_version"}" deps)
     ]);
   };
-  features_.rand_chacha."0.1.0" = deps: f: updateFeatures f (rec {
+  features_.rand_chacha."0.1.0" = deps: f: updateFeatures f ({
     rand_chacha."0.1.0".default = (f.rand_chacha."0.1.0".default or true);
     rand_core."${deps.rand_chacha."0.1.0".rand_core}".default = (f.rand_core."${deps.rand_chacha."0.1.0".rand_core}".default or false);
     rustc_version."${deps.rand_chacha."0.1.0".rustc_version}".default = true;
@@ -3131,7 +3131,7 @@ rec {
       (crates."rand_core"."${deps."rand_hc"."0.1.0"."rand_core"}" deps)
     ]);
   };
-  features_.rand_hc."0.1.0" = deps: f: updateFeatures f (rec {
+  features_.rand_hc."0.1.0" = deps: f: updateFeatures f ({
     rand_core."${deps.rand_hc."0.1.0".rand_core}".default = (f.rand_core."${deps.rand_hc."0.1.0".rand_core}".default or false);
     rand_hc."0.1.0".default = (f.rand_hc."0.1.0".default or true);
   }) [
@@ -3259,7 +3259,7 @@ rec {
     sha256 = "0kipd9qslzin4fgj4jrxv6yz5l3l71gnbd7fq1jhk2j7f2sq33j4";
     libName = "syscall";
   };
-  features_.redox_syscall."0.1.31" = deps: f: updateFeatures f (rec {
+  features_.redox_syscall."0.1.31" = deps: f: updateFeatures f ({
     redox_syscall."0.1.31".default = (f.redox_syscall."0.1.31".default or true);
   }) [];
 
@@ -3278,7 +3278,7 @@ rec {
       (crates."redox_syscall"."${deps."redox_termios"."0.1.1"."redox_syscall"}" deps)
     ]);
   };
-  features_.redox_termios."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.redox_termios."0.1.1" = deps: f: updateFeatures f ({
     redox_syscall."${deps.redox_termios."0.1.1".redox_syscall}".default = true;
     redox_termios."0.1.1".default = (f.redox_termios."0.1.1".default or true);
   }) [
@@ -3336,7 +3336,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "1mzhphkbwppwd1zam2jkgjk550cqgf6506i87bw2yzrvcsraiw7m";
   };
-  features_.regex_syntax."0.3.9" = deps: f: updateFeatures f (rec {
+  features_.regex_syntax."0.3.9" = deps: f: updateFeatures f ({
     regex_syntax."0.3.9".default = (f.regex_syntax."0.3.9".default or true);
   }) [];
 
@@ -3354,7 +3354,7 @@ rec {
       (crates."winapi"."${deps."remove_dir_all"."0.5.1"."winapi"}" deps)
     ]) else []);
   };
-  features_.remove_dir_all."0.5.1" = deps: f: updateFeatures f (rec {
+  features_.remove_dir_all."0.5.1" = deps: f: updateFeatures f ({
     remove_dir_all."0.5.1".default = (f.remove_dir_all."0.5.1".default or true);
     winapi = fold recursiveUpdate {} [
       { "${deps.remove_dir_all."0.5.1".winapi}"."errhandlingapi" = true; }
@@ -3479,7 +3479,7 @@ rec {
       (crates."semver"."${deps."rustc_version"."0.2.3"."semver"}" deps)
     ]);
   };
-  features_.rustc_version."0.2.3" = deps: f: updateFeatures f (rec {
+  features_.rustc_version."0.2.3" = deps: f: updateFeatures f ({
     rustc_version."0.2.3".default = (f.rustc_version."0.2.3".default or true);
     semver."${deps.rustc_version."0.2.3".semver}".default = true;
   }) [
@@ -3523,7 +3523,7 @@ rec {
       (crates."winapi"."${deps."schannel"."0.1.14"."winapi"}" deps)
     ]);
   };
-  features_.schannel."0.1.14" = deps: f: updateFeatures f (rec {
+  features_.schannel."0.1.14" = deps: f: updateFeatures f ({
     lazy_static."${deps.schannel."0.1.14".lazy_static}".default = true;
     schannel."0.1.14".default = (f.schannel."0.1.14".default or true);
     winapi = fold recursiveUpdate {} [
@@ -3706,7 +3706,7 @@ rec {
     authors = [ "Steve Klabnik <steve@steveklabnik.com>" ];
     sha256 = "1da66c8413yakx0y15k8c055yna5lyb6fr0fw9318kdwkrk5k12h";
   };
-  features_.semver_parser."0.7.0" = deps: f: updateFeatures f (rec {
+  features_.semver_parser."0.7.0" = deps: f: updateFeatures f ({
     semver_parser."0.7.0".default = (f.semver_parser."0.7.0".default or true);
   }) [];
 
@@ -3798,7 +3798,7 @@ rec {
       (crates."url"."${deps."serde_urlencoded"."0.5.1"."url"}" deps)
     ]);
   };
-  features_.serde_urlencoded."0.5.1" = deps: f: updateFeatures f (rec {
+  features_.serde_urlencoded."0.5.1" = deps: f: updateFeatures f ({
     dtoa."${deps.serde_urlencoded."0.5.1".dtoa}".default = true;
     itoa."${deps.serde_urlencoded."0.5.1".itoa}".default = true;
     serde."${deps.serde_urlencoded."0.5.1".serde}".default = true;
@@ -3824,7 +3824,7 @@ rec {
     dependencies = mapFeatures features ([
 ]);
   };
-  features_.siphasher."0.2.2" = deps: f: updateFeatures f (rec {
+  features_.siphasher."0.2.2" = deps: f: updateFeatures f ({
     siphasher."0.2.2".default = (f.siphasher."0.2.2".default or true);
   }) [];
 
@@ -3839,7 +3839,7 @@ rec {
     authors = [ "Carl Lerche <me@carllerche.com>" ];
     sha256 = "1qy2vkgwqgj5z4ygdkh040n9yh1vz80v5flxb1xrvw3i4wxs7yx0";
   };
-  features_.slab."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.slab."0.4.0" = deps: f: updateFeatures f ({
     slab."0.4.0".default = (f.slab."0.4.0".default or true);
   }) [];
 
@@ -3884,7 +3884,7 @@ rec {
       (crates."slog_term"."${deps."slog_envlogger"."0.5.0"."slog_term"}" deps)
     ]);
   };
-  features_.slog_envlogger."0.5.0" = deps: f: updateFeatures f (rec {
+  features_.slog_envlogger."0.5.0" = deps: f: updateFeatures f ({
     log."${deps.slog_envlogger."0.5.0".log}".default = true;
     regex."${deps.slog_envlogger."0.5.0".regex}".default = true;
     slog."${deps.slog_envlogger."0.5.0".slog}".default = true;
@@ -3915,7 +3915,7 @@ rec {
       (crates."thread_local"."${deps."slog_extra"."0.1.2"."thread_local"}" deps)
     ]);
   };
-  features_.slog_extra."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.slog_extra."0.1.2" = deps: f: updateFeatures f ({
     slog."${deps.slog_extra."0.1.2".slog}".default = true;
     slog_extra."0.1.2".default = (f.slog_extra."0.1.2".default or true);
     thread_local."${deps.slog_extra."0.1.2".thread_local}".default = true;
@@ -3943,7 +3943,7 @@ rec {
       (crates."slog_term"."${deps."slog_stdlog"."1.1.0"."slog_term"}" deps)
     ]);
   };
-  features_.slog_stdlog."1.1.0" = deps: f: updateFeatures f (rec {
+  features_.slog_stdlog."1.1.0" = deps: f: updateFeatures f ({
     crossbeam."${deps.slog_stdlog."1.1.0".crossbeam}".default = true;
     lazy_static."${deps.slog_stdlog."1.1.0".lazy_static}".default = true;
     log."${deps.slog_stdlog."1.1.0".log}".default = true;
@@ -3975,7 +3975,7 @@ rec {
       (crates."thread_local"."${deps."slog_stream"."1.2.1"."thread_local"}" deps)
     ]);
   };
-  features_.slog_stream."1.2.1" = deps: f: updateFeatures f (rec {
+  features_.slog_stream."1.2.1" = deps: f: updateFeatures f ({
     slog."${deps.slog_stream."1.2.1".slog}".default = true;
     slog_extra."${deps.slog_stream."1.2.1".slog_extra}".default = true;
     slog_stream."1.2.1".default = (f.slog_stream."1.2.1".default or true);
@@ -4005,7 +4005,7 @@ rec {
       (crates."thread_local"."${deps."slog_term"."1.5.0"."thread_local"}" deps)
     ]);
   };
-  features_.slog_term."1.5.0" = deps: f: updateFeatures f (rec {
+  features_.slog_term."1.5.0" = deps: f: updateFeatures f ({
     chrono."${deps.slog_term."1.5.0".chrono}".default = true;
     isatty."${deps.slog_term."1.5.0".isatty}".default = true;
     slog."${deps.slog_term."1.5.0".slog}".default = true;
@@ -4082,7 +4082,7 @@ rec {
     authors = [ "Carl Lerche <me@carllerche.com>" ];
     sha256 = "1120qvf02aydqj0k3kpr8d7zybq0y5arnmgmfsdw75r8qwz75wc6";
   };
-  features_.string."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.string."0.1.2" = deps: f: updateFeatures f ({
     string."0.1.2".default = (f.string."0.1.2".default or true);
   }) [];
 
@@ -4097,7 +4097,7 @@ rec {
     authors = [ "Danny Guo <dannyguo91@gmail.com>" ];
     sha256 = "1lz85l6y68hr62lv4baww29yy7g8pg20dlr0lbaswxmmcb0wl7gd";
   };
-  features_.strsim."0.6.0" = deps: f: updateFeatures f (rec {
+  features_.strsim."0.6.0" = deps: f: updateFeatures f ({
     strsim."0.6.0".default = (f.strsim."0.6.0".default or true);
   }) [];
 
@@ -4165,7 +4165,7 @@ rec {
       (crates."unicode_xid"."${deps."synom"."0.11.3"."unicode_xid"}" deps)
     ]);
   };
-  features_.synom."0.11.3" = deps: f: updateFeatures f (rec {
+  features_.synom."0.11.3" = deps: f: updateFeatures f ({
     synom."0.11.3".default = (f.synom."0.11.3".default or true);
     unicode_xid."${deps.synom."0.11.3".unicode_xid}".default = true;
   }) [
@@ -4233,7 +4233,7 @@ rec {
       (crates."winapi"."${deps."tempfile"."3.0.5"."winapi"}" deps)
     ]) else []);
   };
-  features_.tempfile."3.0.5" = deps: f: updateFeatures f (rec {
+  features_.tempfile."3.0.5" = deps: f: updateFeatures f ({
     cfg_if."${deps.tempfile."3.0.5".cfg_if}".default = true;
     libc."${deps.tempfile."3.0.5".libc}".default = true;
     rand."${deps.tempfile."3.0.5".rand}".default = true;
@@ -4273,7 +4273,7 @@ rec {
       (crates."redox_termios"."${deps."termion"."1.5.1"."redox_termios"}" deps)
     ]) else []);
   };
-  features_.termion."1.5.1" = deps: f: updateFeatures f (rec {
+  features_.termion."1.5.1" = deps: f: updateFeatures f ({
     libc."${deps.termion."1.5.1".libc}".default = true;
     redox_syscall."${deps.termion."1.5.1".redox_syscall}".default = true;
     redox_termios."${deps.termion."1.5.1".redox_termios}".default = true;
@@ -4298,7 +4298,7 @@ rec {
       (crates."unicode_width"."${deps."textwrap"."0.9.0"."unicode_width"}" deps)
     ]);
   };
-  features_.textwrap."0.9.0" = deps: f: updateFeatures f (rec {
+  features_.textwrap."0.9.0" = deps: f: updateFeatures f ({
     textwrap."0.9.0".default = (f.textwrap."0.9.0".default or true);
     unicode_width."${deps.textwrap."0.9.0".unicode_width}".default = true;
   }) [
@@ -4320,7 +4320,7 @@ rec {
       (crates."libc"."${deps."thread_id"."2.0.0"."libc"}" deps)
     ]);
   };
-  features_.thread_id."2.0.0" = deps: f: updateFeatures f (rec {
+  features_.thread_id."2.0.0" = deps: f: updateFeatures f ({
     kernel32_sys."${deps.thread_id."2.0.0".kernel32_sys}".default = true;
     libc."${deps.thread_id."2.0.0".libc}".default = true;
     thread_id."2.0.0".default = (f.thread_id."2.0.0".default or true);
@@ -4343,7 +4343,7 @@ rec {
       (crates."thread_id"."${deps."thread_local"."0.2.7"."thread_id"}" deps)
     ]);
   };
-  features_.thread_local."0.2.7" = deps: f: updateFeatures f (rec {
+  features_.thread_local."0.2.7" = deps: f: updateFeatures f ({
     thread_id."${deps.thread_local."0.2.7".thread_id}".default = true;
     thread_local."0.2.7".default = (f.thread_local."0.2.7".default or true);
   }) [
@@ -4365,7 +4365,7 @@ rec {
       (crates."unreachable"."${deps."thread_local"."0.3.4"."unreachable"}" deps)
     ]);
   };
-  features_.thread_local."0.3.4" = deps: f: updateFeatures f (rec {
+  features_.thread_local."0.3.4" = deps: f: updateFeatures f ({
     lazy_static."${deps.thread_local."0.3.4".lazy_static}".default = true;
     thread_local."0.3.4".default = (f.thread_local."0.3.4".default or true);
     unreachable."${deps.thread_local."0.3.4".unreachable}".default = true;
@@ -4395,7 +4395,7 @@ rec {
       (crates."winapi"."${deps."time"."0.1.38"."winapi"}" deps)
     ]) else []);
   };
-  features_.time."0.1.38" = deps: f: updateFeatures f (rec {
+  features_.time."0.1.38" = deps: f: updateFeatures f ({
     kernel32_sys."${deps.time."0.1.38".kernel32_sys}".default = true;
     libc."${deps.time."0.1.38".libc}".default = true;
     redox_syscall."${deps.time."0.1.38".redox_syscall}".default = true;
@@ -4431,7 +4431,7 @@ rec {
       (crates."tokio_udp"."${deps."tokio"."0.1.7"."tokio_udp"}" deps)
     ]);
   };
-  features_.tokio."0.1.7" = deps: f: updateFeatures f (rec {
+  features_.tokio."0.1.7" = deps: f: updateFeatures f ({
     futures."${deps.tokio."0.1.7".futures}".default = true;
     mio."${deps.tokio."0.1.7".mio}".default = true;
     tokio."0.1.7".default = (f.tokio."0.1.7".default or true);
@@ -4472,7 +4472,7 @@ rec {
       (crates."tokio_io"."${deps."tokio_codec"."0.1.1"."tokio_io"}" deps)
     ]);
   };
-  features_.tokio_codec."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.tokio_codec."0.1.1" = deps: f: updateFeatures f ({
     bytes."${deps.tokio_codec."0.1.1".bytes}".default = true;
     futures."${deps.tokio_codec."0.1.1".futures}".default = true;
     tokio_codec."0.1.1".default = (f.tokio_codec."0.1.1".default or true);
@@ -4497,7 +4497,7 @@ rec {
       (crates."futures"."${deps."tokio_executor"."0.1.5"."futures"}" deps)
     ]);
   };
-  features_.tokio_executor."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.tokio_executor."0.1.5" = deps: f: updateFeatures f ({
     futures."${deps.tokio_executor."0.1.5".futures}".default = true;
     tokio_executor."0.1.5".default = (f.tokio_executor."0.1.5".default or true);
   }) [
@@ -4520,7 +4520,7 @@ rec {
       (crates."tokio_threadpool"."${deps."tokio_fs"."0.1.4"."tokio_threadpool"}" deps)
     ]);
   };
-  features_.tokio_fs."0.1.4" = deps: f: updateFeatures f (rec {
+  features_.tokio_fs."0.1.4" = deps: f: updateFeatures f ({
     futures."${deps.tokio_fs."0.1.4".futures}".default = true;
     tokio_fs."0.1.4".default = (f.tokio_fs."0.1.4".default or true);
     tokio_io."${deps.tokio_fs."0.1.4".tokio_io}".default = true;
@@ -4547,7 +4547,7 @@ rec {
       (crates."log"."${deps."tokio_io"."0.1.10"."log"}" deps)
     ]);
   };
-  features_.tokio_io."0.1.10" = deps: f: updateFeatures f (rec {
+  features_.tokio_io."0.1.10" = deps: f: updateFeatures f ({
     bytes."${deps.tokio_io."0.1.10".bytes}".default = true;
     futures."${deps.tokio_io."0.1.10".futures}".default = true;
     log."${deps.tokio_io."0.1.10".log}".default = true;
@@ -4581,7 +4581,7 @@ rec {
       (crates."tokio_io"."${deps."tokio_reactor"."0.1.7"."tokio_io"}" deps)
     ]);
   };
-  features_.tokio_reactor."0.1.7" = deps: f: updateFeatures f (rec {
+  features_.tokio_reactor."0.1.7" = deps: f: updateFeatures f ({
     crossbeam_utils."${deps.tokio_reactor."0.1.7".crossbeam_utils}".default = true;
     futures."${deps.tokio_reactor."0.1.7".futures}".default = true;
     lazy_static."${deps.tokio_reactor."0.1.7".lazy_static}".default = true;
@@ -4625,7 +4625,7 @@ rec {
       (crates."tokio_reactor"."${deps."tokio_tcp"."0.1.2"."tokio_reactor"}" deps)
     ]);
   };
-  features_.tokio_tcp."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.tokio_tcp."0.1.2" = deps: f: updateFeatures f ({
     bytes."${deps.tokio_tcp."0.1.2".bytes}".default = true;
     futures."${deps.tokio_tcp."0.1.2".futures}".default = true;
     iovec."${deps.tokio_tcp."0.1.2".iovec}".default = true;
@@ -4662,7 +4662,7 @@ rec {
       (crates."tokio_executor"."${deps."tokio_threadpool"."0.1.9"."tokio_executor"}" deps)
     ]);
   };
-  features_.tokio_threadpool."0.1.9" = deps: f: updateFeatures f (rec {
+  features_.tokio_threadpool."0.1.9" = deps: f: updateFeatures f ({
     crossbeam_deque."${deps.tokio_threadpool."0.1.9".crossbeam_deque}".default = true;
     crossbeam_utils."${deps.tokio_threadpool."0.1.9".crossbeam_utils}".default = true;
     futures."${deps.tokio_threadpool."0.1.9".futures}".default = true;
@@ -4696,7 +4696,7 @@ rec {
       (crates."tokio_executor"."${deps."tokio_timer"."0.2.5"."tokio_executor"}" deps)
     ]);
   };
-  features_.tokio_timer."0.2.5" = deps: f: updateFeatures f (rec {
+  features_.tokio_timer."0.2.5" = deps: f: updateFeatures f ({
     futures."${deps.tokio_timer."0.2.5".futures}".default = true;
     tokio_executor."${deps.tokio_timer."0.2.5".tokio_executor}".default = true;
     tokio_timer."0.2.5".default = (f.tokio_timer."0.2.5".default or true);
@@ -4725,7 +4725,7 @@ rec {
       (crates."tokio_reactor"."${deps."tokio_udp"."0.1.3"."tokio_reactor"}" deps)
     ]);
   };
-  features_.tokio_udp."0.1.3" = deps: f: updateFeatures f (rec {
+  features_.tokio_udp."0.1.3" = deps: f: updateFeatures f ({
     bytes."${deps.tokio_udp."0.1.3".bytes}".default = true;
     futures."${deps.tokio_udp."0.1.3".futures}".default = true;
     log."${deps.tokio_udp."0.1.3".log}".default = true;
@@ -4755,7 +4755,7 @@ rec {
     authors = [ "Sean McArthur <sean@seanmonstar.com>" ];
     sha256 = "1k8xc0jpbrmzp0fwghdh6pwzjb9xx2p8yy0xxnnb8065smc5fsrv";
   };
-  features_.try_lock."0.2.2" = deps: f: updateFeatures f (rec {
+  features_.try_lock."0.2.2" = deps: f: updateFeatures f ({
     try_lock."0.2.2".default = (f.try_lock."0.2.2".default or true);
   }) [];
 
@@ -4812,7 +4812,7 @@ rec {
     ]);
     features = mkFeatures (features."unicase"."2.1.0" or {});
   };
-  features_.unicase."2.1.0" = deps: f: updateFeatures f (rec {
+  features_.unicase."2.1.0" = deps: f: updateFeatures f ({
     unicase."2.1.0".default = (f.unicase."2.1.0".default or true);
     version_check."${deps.unicase."2.1.0".version_check}".default = true;
   }) [
@@ -4867,7 +4867,7 @@ rec {
     authors = [ "kwantam <kwantam@gmail.com>" ];
     sha256 = "0hg29g86fca7b65mwk4sm5s838js6bqrl0gabadbazvbsgjam0j5";
   };
-  features_.unicode_normalization."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.unicode_normalization."0.1.5" = deps: f: updateFeatures f ({
     unicode_normalization."0.1.5".default = (f.unicode_normalization."0.1.5".default or true);
   }) [];
 
@@ -4883,7 +4883,7 @@ rec {
     sha256 = "1rp7a04icn9y5c0lm74nrd4py0rdl0af8bhdwq7g478n1xifpifl";
     features = mkFeatures (features."unicode_width"."0.1.4" or {});
   };
-  features_.unicode_width."0.1.4" = deps: f: updateFeatures f (rec {
+  features_.unicode_width."0.1.4" = deps: f: updateFeatures f ({
     unicode_width."0.1.4".default = (f.unicode_width."0.1.4".default or true);
   }) [];
 
@@ -4899,7 +4899,7 @@ rec {
     sha256 = "1dc8wkkcd3s6534s5aw4lbjn8m67flkkbnajp5bl8408wdg8rh9v";
     features = mkFeatures (features."unicode_xid"."0.0.4" or {});
   };
-  features_.unicode_xid."0.0.4" = deps: f: updateFeatures f (rec {
+  features_.unicode_xid."0.0.4" = deps: f: updateFeatures f ({
     unicode_xid."0.0.4".default = (f.unicode_xid."0.0.4".default or true);
   }) [];
 
@@ -4917,7 +4917,7 @@ rec {
       (crates."void"."${deps."unreachable"."1.0.0"."void"}" deps)
     ]);
   };
-  features_.unreachable."1.0.0" = deps: f: updateFeatures f (rec {
+  features_.unreachable."1.0.0" = deps: f: updateFeatures f ({
     unreachable."1.0.0".default = (f.unreachable."1.0.0".default or true);
     void."${deps.unreachable."1.0.0".void}".default = (f.void."${deps.unreachable."1.0.0".void}".default or false);
   }) [
@@ -4973,7 +4973,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1cj548a91a93j8375p78qikaiam548xh84cb0ck8y119adbmsvbp";
   };
-  features_.utf8_ranges."0.1.3" = deps: f: updateFeatures f (rec {
+  features_.utf8_ranges."0.1.3" = deps: f: updateFeatures f ({
     utf8_ranges."0.1.3".default = (f.utf8_ranges."0.1.3".default or true);
   }) [];
 
@@ -5040,7 +5040,7 @@ rec {
     authors = [ "Jim McGrath <jimmc2@gmail.com>" ];
     sha256 = "1fl5j0ksnwrnsrf1b1a9lqbjgnajdipq0030vsbhx81mb7d9478a";
   };
-  features_.vcpkg."0.2.2" = deps: f: updateFeatures f (rec {
+  features_.vcpkg."0.2.2" = deps: f: updateFeatures f ({
     vcpkg."0.2.2".default = (f.vcpkg."0.2.2".default or true);
   }) [];
 
@@ -5083,7 +5083,7 @@ rec {
     authors = [ "Sergio Benitez <sb@sergio.bz>" ];
     sha256 = "0z635wdclv9bvafj11fpgndn7y79ibpsnc364pm61i1m4wwg8msg";
   };
-  features_.version_check."0.1.3" = deps: f: updateFeatures f (rec {
+  features_.version_check."0.1.3" = deps: f: updateFeatures f ({
     version_check."0.1.3".default = (f.version_check."0.1.3".default or true);
   }) [];
 
@@ -5125,7 +5125,7 @@ rec {
       (crates."try_lock"."${deps."want"."0.0.6"."try_lock"}" deps)
     ]);
   };
-  features_.want."0.0.6" = deps: f: updateFeatures f (rec {
+  features_.want."0.0.6" = deps: f: updateFeatures f ({
     futures."${deps.want."0.0.6".futures}".default = true;
     log."${deps.want."0.0.6".log}".default = true;
     try_lock."${deps.want."0.0.6".try_lock}".default = true;
@@ -5147,7 +5147,7 @@ rec {
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "0a45b58ywf12vb7gvj6h3j264nydynmzyqz8d8rqxsj6icqv82as";
   };
-  features_.winapi."0.2.8" = deps: f: updateFeatures f (rec {
+  features_.winapi."0.2.8" = deps: f: updateFeatures f ({
     winapi."0.2.8".default = (f.winapi."0.2.8".default or true);
   }) [];
 
@@ -5170,7 +5170,7 @@ rec {
     ]) else []);
     features = mkFeatures (features."winapi"."0.3.6" or {});
   };
-  features_.winapi."0.3.6" = deps: f: updateFeatures f (rec {
+  features_.winapi."0.3.6" = deps: f: updateFeatures f ({
     winapi."0.3.6".default = (f.winapi."0.3.6".default or true);
     winapi_i686_pc_windows_gnu."${deps.winapi."0.3.6".winapi_i686_pc_windows_gnu}".default = true;
     winapi_x86_64_pc_windows_gnu."${deps.winapi."0.3.6".winapi_x86_64_pc_windows_gnu}".default = true;
@@ -5191,7 +5191,7 @@ rec {
     sha256 = "1lxlpi87rkhxcwp2ykf1ldw3p108hwm24nywf3jfrvmff4rjhqga";
     libName = "build";
   };
-  features_.winapi_build."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.winapi_build."0.1.1" = deps: f: updateFeatures f ({
     winapi_build."0.1.1".default = (f.winapi_build."0.1.1".default or true);
   }) [];
 
@@ -5207,7 +5207,7 @@ rec {
     sha256 = "05ihkij18r4gamjpxj4gra24514can762imjzlmak5wlzidplzrp";
     build = "build.rs";
   };
-  features_.winapi_i686_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.winapi_i686_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f ({
     winapi_i686_pc_windows_gnu."0.4.0".default = (f.winapi_i686_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
@@ -5223,7 +5223,7 @@ rec {
     sha256 = "0n1ylmlsb8yg1v583i4xy0qmqg42275flvbc51hdqjjfjcl9vlbj";
     build = "build.rs";
   };
-  features_.winapi_x86_64_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.winapi_x86_64_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f ({
     winapi_x86_64_pc_windows_gnu."0.4.0".default = (f.winapi_x86_64_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
@@ -5247,7 +5247,7 @@ rec {
       (crates."winapi_build"."${deps."ws2_32_sys"."0.2.1"."winapi_build"}" deps)
     ]);
   };
-  features_.ws2_32_sys."0.2.1" = deps: f: updateFeatures f (rec {
+  features_.ws2_32_sys."0.2.1" = deps: f: updateFeatures f ({
     winapi."${deps.ws2_32_sys."0.2.1".winapi}".default = true;
     winapi_build."${deps.ws2_32_sys."0.2.1".winapi_build}".default = true;
     ws2_32_sys."0.2.1".default = (f.ws2_32_sys."0.2.1".default or true);

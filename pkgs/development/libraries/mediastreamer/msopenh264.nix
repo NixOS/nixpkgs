@@ -2,7 +2,7 @@
 , fetchgit, cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mediastreamer-openh264";
   version = "0.0pre20160801";
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, bash, gnumake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "makefile2graph-2018-01-03";
 
   src = fetchFromGitHub {

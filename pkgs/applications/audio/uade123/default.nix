@@ -2,7 +2,7 @@
 
 let
   version = "2.13";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "uade123";
   inherit version;
   src = fetchurl {

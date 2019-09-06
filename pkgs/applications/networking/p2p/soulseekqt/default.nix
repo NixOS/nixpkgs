@@ -17,7 +17,7 @@ let
 
   mainbin = "SoulseekQt-" + (version) +"-"+ (if stdenv.is64bit then "64bit" else "32bit");
   srcs = {
-    "x86_64-linux" = fetchurl {
+    x86_64-linux = fetchurl {
       url = "https://www.dropbox.com/s/0vi87eef3ooh7iy/${mainbin}.tgz";
       sha256 = "0d1cayxr1a4j19bc5a3qp9pg22ggzmd55b6f5av3lc6lvwqqg4w6";
     };
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   pname = "soulseekqt";
   inherit version;
-  src = srcs."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   dontBuild = true;
 

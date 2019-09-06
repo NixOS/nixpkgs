@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''closure-common'';
   version = ''20181018-git'';
 

@@ -541,7 +541,7 @@ let
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
       virtualHosts = {
-        "${cfg.virtualHost}" = {
+        ${cfg.virtualHost} = {
           root = "${cfg.root}";
 
           locations."/" = {

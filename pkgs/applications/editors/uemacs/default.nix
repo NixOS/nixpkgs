@@ -1,6 +1,6 @@
 { stdenv, fetchgit, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uemacs";
   version = "2014-12-08";
 

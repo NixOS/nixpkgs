@@ -11,7 +11,7 @@ with lib;
 let
   cfg = config.services.kippo;
 in
-rec {
+{
   options = {
     services.kippo = {
       enable = mkOption {

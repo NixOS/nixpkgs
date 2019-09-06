@@ -1,6 +1,6 @@
 { stdenv, fetchgit, cmake, zlib, boost }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "avy";
   version = "2017.10.16";
 

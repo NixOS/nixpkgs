@@ -33,13 +33,13 @@ let
       "-DUSE_OPTIMIZE_FOR_ARCHITECTURE=OFF"
       # also avoid using builder's /proc/cpuinfo
     ] ++
-    { "westmere"       = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      "sandybridge"    = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      "ivybridge"      = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      "haswell"        = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      "broadwell"      = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      "skylake"        = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
-      "skylake-avx512" = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
+    { westmere       = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
+      sandybridge    = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
+      ivybridge      = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
+      haswell        = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
+      broadwell      = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
+      skylake        = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
+      skylake-avx512 = [ "-DHAVE_SSE42=ON" "-DASM_OPTIMIZATIONS=ON" ];
     }.${stdenv.hostPlatform.platform.gcc.arch or ""} or [ "-DHAVE_SSE42=OFF" "-DASM_OPTIMIZATIONS=OFF" ];
 
     enableParallelBuilding = true;

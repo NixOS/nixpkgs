@@ -74,7 +74,7 @@ in {
         spec = {
           replicas = 1;
           revisionHistoryLimit = 10;
-          selector.matchLabels."k8s-app" = "kubernetes-dashboard";
+          selector.matchLabels.k8s-app = "kubernetes-dashboard";
           template = {
             metadata = {
               labels = {

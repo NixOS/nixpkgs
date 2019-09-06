@@ -48,7 +48,7 @@
 , debug ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "flashplayer-standalone";
   version = "32.0.0.238";
 

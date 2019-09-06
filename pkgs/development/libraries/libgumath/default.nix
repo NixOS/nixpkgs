@@ -4,7 +4,7 @@
 , libxnd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libgumath";
   version = "unstable-2018-11-27";
 

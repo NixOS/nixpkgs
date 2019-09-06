@@ -2,7 +2,7 @@
   gtk-engine-murrine, gtk3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "solarc-gtk-theme";
   version = "1.0.2";
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, spidermonkey }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jsawk";
   version = "1.5-pre";
   src = fetchFromGitHub {

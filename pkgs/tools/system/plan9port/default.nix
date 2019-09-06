@@ -5,7 +5,7 @@
 , perl ? null  # For building web manuals
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "plan9port";
   version = "2019-02-25";
 

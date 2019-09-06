@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fuse, readline, libgcrypt, gmp }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "afpfs-ng";
   version = "0.8.2";
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, glib, pcre }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rdup";
   version = "1.1.15";
 

@@ -1,6 +1,6 @@
 { stdenv, xsel, curl, fetchFromGitLab, makeWrapper}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "0x0";
   version = "2018-06-24";
 

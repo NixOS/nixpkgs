@@ -6,7 +6,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "polkadot-${version}";
+  pname = "polkadot";
   version = "0.2.17";
 
   src = fetchFromGitHub {

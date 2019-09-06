@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gmp }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ssss-0.5";
 
   src = fetchurl {

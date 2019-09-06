@@ -1,6 +1,6 @@
 { stdenv, fetchgit , boost, libX11, libGLU_combined, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile, fftwFloat, libsamplerate }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zam-plugins";
   version = "3.11";
 

@@ -430,14 +430,14 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  Deedle = fetchNuGet rec {
+  Deedle = fetchNuGet {
     baseName = "Deedle";
     version = "1.2.5";
     sha256 = "0g19ll6bp97ixprcnpwwvshr1n9jxxf9xjhkxp0r63mg46z48jnw";
     outputFiles = [ "*" ];
   };
 
-  ExcelDna = buildDotnetPackage rec {
+  ExcelDna = buildDotnetPackage {
     baseName = "Excel-DNA";
     version = "0.32.0";
 
@@ -496,7 +496,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  ExtCore = buildDotnetPackage rec {
+  ExtCore = buildDotnetPackage {
     baseName = "ExtCore";
     version = "0.8.46";
 
@@ -564,7 +564,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  FSharpCompilerService = buildDotnetPackage rec {
+  FSharpCompilerService = buildDotnetPackage {
     baseName = "FSharp.Compiler.Service";
     version = "0.0.90";
 
@@ -667,7 +667,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   };
   # };
 
-  GitVersionTree = buildDotnetPackage rec {
+  GitVersionTree = buildDotnetPackage {
     baseName = "GitVersionTree";
     version = "2013-10-01";
 
@@ -927,7 +927,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  UnionArgParser = buildDotnetPackage rec {
+  UnionArgParser = buildDotnetPackage {
     baseName = "UnionArgParser";
     version = "0.8.7";
 

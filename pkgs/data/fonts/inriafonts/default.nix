@@ -3,7 +3,7 @@
 let
   pname = "inriafonts";
   version = "1.200";
-in fetchFromGitHub rec {
+in fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "BlackFoundry";
   repo = "InriaFonts";

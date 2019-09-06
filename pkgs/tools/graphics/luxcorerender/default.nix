@@ -13,7 +13,7 @@ let boost_static = boost165.override {
       enablePython = true;
     };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "luxcorerender";
   version = "2.0";
 

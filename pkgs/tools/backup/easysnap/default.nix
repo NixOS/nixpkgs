@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, zfs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "easysnap";
   version = "unstable-2019-02-17";
 

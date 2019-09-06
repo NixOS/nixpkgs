@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, writeText, openjdk, bootjdk, gradleGen, pkgconfig, perl, cmake, gperf
-, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib, ffmpeg, python, ruby }:
+{ stdenv, lib, fetchurl, writeText, openjdk11_headless, gradleGen
+, pkgconfig, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib
+, ffmpeg, python, ruby }:
 
 let
   major = "12";
@@ -7,14 +8,14 @@ let
   build = "14";
   repover = "${major}${update}+${build}";
   gradle_ = (gradleGen.override {
-    java = bootjdk;
+    java = openjdk11_headless;
   }).gradle_4_10;
 
   makePackage = args: stdenv.mkDerivation ({
-    version = "${major}${update}-${repover}";
+    version = "${major}${update}-${build}";
 
     src = fetchurl {
-      url = "http://hg.openjdk.java.net/openjfx/${major}-dev/rt/archive/${repover}.tar.gz";
+      url = "https://hg.openjdk.java.net/openjfx/${major}/rt/archive/${repover}.tar.gz";
       sha256 = "16jjfjkrg57wsj9mmm52i2kl3byz3ba1f9f8wwc8zwqm4cpjzliz";
     };
 
@@ -25,7 +26,7 @@ let
 
     config = writeText "gradle.properties" (''
       CONF = Release
-      JDK_HOME = ${bootjdk}/lib/openjdk
+      JDK_HOME = ${openjdk11_headless.home}
     '' + args.gradleProperties or "");
 
     buildPhase = ''
@@ -56,11 +57,11 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash =
-      # Downloaded AWT jars differ by platform.
-      if stdenv.system == "x86_64-linux" then "1z5qar5l28ja4pkf5l5m48xbv3x1yrnilsv9lpf2j3vkdk9h1nci"
-      else if stdenv.system == "i686-linux" then "0rbygvjc7w197fi5nxldqdrm6mpiyd3n45042g3gd4s5qk08spjd"
-      else throw "Unsupported platform";
+    # Downloaded AWT jars differ by platform.
+    outputHash = {
+      x86_64-linux = "1z5qar5l28ja4pkf5l5m48xbv3x1yrnilsv9lpf2j3vkdk9h1nci";
+      i686-linux = "0rbygvjc7w197fi5nxldqdrm6mpiyd3n45042g3gd4s5qk08spjd";
+    }.${stdenv.system} or (throw "Unsupported platform");
   };
 
 in makePackage {
@@ -87,24 +88,20 @@ in makePackage {
   postFixup = ''
     # Remove references to bootstrap.
     find "$out" -name \*.so | while read lib; do
-      new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${bootjdk}[^:]*,,')"
+      new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${openjdk11_headless}[^:]*,,')"
       patchelf --set-rpath "$new_refs" "$lib"
     done
-
-    # Test to make sure that we don't depend on the bootstrap
-    if grep -q -r '${bootjdk}' "$out"; then
-      echo "Extraneous references to ${bootjdk} detected" >&2
-      exit 1
-    fi
   '';
+
+  disallowedReferences = [ openjdk11_headless ];
 
   passthru.deps = deps;
 
   meta = with stdenv.lib; {
     homepage = http://openjdk.java.net/projects/openjfx/;
-    license = openjdk.meta.license;
+    license = licenses.gpl2;
     description = "The next-generation Java client toolkit.";
     maintainers = with maintainers; [ abbradar ];
-    platforms = openjdk.meta.platforms;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

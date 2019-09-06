@@ -30,7 +30,7 @@ let
   x11inc = x11env + "/include";
 in
 
-stdenv.mkDerivation (args // rec {
+stdenv.mkDerivation (args // {
 
   inherit name;
   inherit version;

@@ -23,9 +23,9 @@ let
   flags = "-r ${rulesDir} -c ${configFile} -L ${logFiles} -${levelFlag} -m ${cfg.mailTo}";
 
   levelFlag = getAttrFromPath [cfg.level]
-    { "paranoid"    = "p";
-      "server"      = "s";
-      "workstation" = "w";
+    { paranoid    = "p";
+      server      = "s";
+      workstation = "w";
     };
 
   cronJob = ''

@@ -3,7 +3,7 @@
 let
   version = "20130503";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "prelink";
   inherit version;
 

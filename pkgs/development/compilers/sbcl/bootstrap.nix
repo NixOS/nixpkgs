@@ -2,38 +2,38 @@
 
 let
   options = rec {
-    x86_64-darwin = rec {
+    x86_64-darwin = {
       version = "1.2.11";
       system = "x86-64-darwin";
       sha256 = "0lh4gpvi8hl6g6b9321g5pwh8sk3218i7h4lx7p3vd9z0cf3lz85";
     };
-    x86_64-linux = rec {
+    x86_64-linux = {
       version = "1.3.16";
       system = "x86-64-linux";
       sha256 = "0sq2dylwwyqfwkbdvcgqwz3vay9v895zpb0fyzsiwy31d1x9pr2s";
     };
-    i686-linux = rec {
+    i686-linux = {
       version = "1.2.7";
       system = "x86-linux";
       sha256 = "07f3bz4br280qvn85i088vpzj9wcz8wmwrf665ypqx181pz2ai3j";
     };
-    aarch64-linux = rec {
+    aarch64-linux = {
       version = "1.3.16";
       system = "arm64-linux";
       sha256 = "0q1brz9c49xgdljzfx8rpxxnlwhadxkcy5kg0mcd9wnxygind1cl";
     };
-    armv7l-linux = rec {
+    armv7l-linux = {
       version = "1.2.14";
       system = "armhf-linux";
       sha256 = "0sp5445rbvms6qvzhld0kwwvydw51vq5iaf4kdqsf2d9jvaz3yx5";
     };
     armv6l-linux = armv7l-linux;
-    x86_64-freebsd = rec {
+    x86_64-freebsd = {
       version = "1.2.7";
       system = "x86-64-freebsd";
       sha256 = "14k42xiqd2rrim4pd5k5pjcrpkac09qnpynha8j1v4jngrvmw7y6";
     };
-    x86_64-solaris = rec {
+    x86_64-solaris = {
       version = "1.2.7";
       system = "x86-64-solaris";
       sha256 = "05c12fmac4ha72k1ckl6i780rckd7jh4g5s5hiic7fjxnf1kx8d0";

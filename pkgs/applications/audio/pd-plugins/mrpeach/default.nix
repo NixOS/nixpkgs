@@ -1,6 +1,6 @@
 { stdenv, fetchurl, puredata }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mrpeach";
   version = "1.1";
 

@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''salza2'';
   version = ''2.0.9'';
 

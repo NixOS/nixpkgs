@@ -1,7 +1,7 @@
 { fetchurl, stdenv, ocaml, makeWrapper, ncurses }:
 
 let version = "0.92"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "megam";
   inherit version;
 

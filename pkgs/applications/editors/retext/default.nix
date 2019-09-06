@@ -8,7 +8,7 @@ let
   version = "7.0.4";
   python = let
     packageOverrides = self: super: {
-      markdown = super.markdown.overridePythonAttrs(old: rec {
+      markdown = super.markdown.overridePythonAttrs(old: {
         src =  super.fetchPypi {
           version = "3.0.1";
           pname = "Markdown";
@@ -16,7 +16,7 @@ let
         };
       });
 
-      chardet = super.chardet.overridePythonAttrs(old: rec {
+      chardet = super.chardet.overridePythonAttrs(old: {
         src =  super.fetchPypi {
           version = "2.3.0";
           pname = "chardet";

@@ -2,7 +2,7 @@
 
 let version = "0.3.0"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "haka";
   inherit version;
 

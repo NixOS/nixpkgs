@@ -46,7 +46,7 @@ let
     };
 in
 
-rec {
+{
   noto-fonts = mkNoto {
     name = "noto-fonts";
     weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";

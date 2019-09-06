@@ -22,7 +22,7 @@ let param = {
   "4.08" = {
      version = "4.08+1";
      sha256 = "0qplawvxwai25bi27niw2cgz2al01kcnkj8wxwhxslpi21z6pyx1"; };
-  }."${ocaml.meta.branch}";
+  }.${ocaml.meta.branch};
 in
 
 stdenv.mkDerivation rec {

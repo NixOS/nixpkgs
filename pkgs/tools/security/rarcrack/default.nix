@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, libxml2, file, p7zip, unrar, unzip}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rarcrack";
   version = "0.2";
 

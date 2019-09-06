@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "ronn";
   version = env.gems.ronn.version;
 
-  env = bundlerEnv rec {
+  env = bundlerEnv {
     name = "ronn-gems";
     gemdir = ./.;
   };

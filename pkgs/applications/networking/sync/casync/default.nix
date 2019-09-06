@@ -7,7 +7,7 @@
 , glibcLocales, rsync
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "casync";
   version = "2-152-ge4a3c5e";
 

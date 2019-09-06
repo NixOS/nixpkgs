@@ -16,7 +16,7 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gn";
   version = "20190403";
 

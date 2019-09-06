@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, udev }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "moltengamepad-git";
   version = "2016-05-04";
 

@@ -4,7 +4,7 @@
 , Security }:
 
 let
-  libc = if stdenv ? "cross" then libcCross else stdenv.cc.libc;
+  libc = if stdenv ? cross then libcCross else stdenv.cc.libc;
 in
 
 stdenv.mkDerivation rec {

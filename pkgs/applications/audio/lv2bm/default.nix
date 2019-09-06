@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, glib, lilv, lv2, pkgconfig, serd, sord, sratom }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lv2bm";
   version = "git-2015-11-29";
 

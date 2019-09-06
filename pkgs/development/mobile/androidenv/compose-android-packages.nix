@@ -101,14 +101,14 @@ rec {
   platforms = map (version:
     deployAndroidPackage {
       inherit os;
-      package = packages.platforms."${version}";
+      package = packages.platforms.${version};
     }
   ) platformVersions;
 
   sources = map (version:
     deployAndroidPackage {
       inherit os;
-      package = packages.sources."${version}";
+      package = packages.sources.${version};
     }
   ) platformVersions;
 
@@ -151,14 +151,14 @@ rec {
   google-apis = map (version:
     deployAndroidPackage {
       inherit os;
-      package = addons.addons."${version}".google_apis;
+      package = addons.addons.${version}.google_apis;
     }
   ) (builtins.filter (platformVersion: platformVersion < "26") platformVersions); # API level 26 and higher include Google APIs by default
 
   google-tv-addons = map (version:
     deployAndroidPackage {
       inherit os;
-      package = addons.addons."${version}".google_tv_addon;
+      package = addons.addons.${version}.google_tv_addon;
     }
   ) platformVersions;
 
@@ -225,10 +225,10 @@ rec {
       # Link extras
       ${lib.concatMapStrings (identifier:
         let
-          path = addons.extras."${identifier}".path;
+          path = addons.extras.${identifier}.path;
           addon = deployAndroidPackage {
             inherit os;
-            package = addons.extras."${identifier}";
+            package = addons.extras.${identifier};
           };
         in
         ''

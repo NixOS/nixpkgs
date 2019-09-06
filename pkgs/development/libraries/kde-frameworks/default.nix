@@ -64,7 +64,7 @@ let
           let
 
             inherit (args) name;
-            inherit (srcs."${name}") src version;
+            inherit (srcs.${name}) src version;
 
             outputs = args.outputs or [ "bin" "dev" "out" ];
             hasSeparateDev = lib.elem "dev" outputs;

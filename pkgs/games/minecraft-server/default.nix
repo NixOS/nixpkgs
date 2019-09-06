@@ -1,5 +1,5 @@
 { stdenv, fetchurl, jre }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "minecraft-server";
   version = "1.14.4";
 

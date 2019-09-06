@@ -7,7 +7,7 @@ let
   version = "2.5.1";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sfml";
   inherit version;
 

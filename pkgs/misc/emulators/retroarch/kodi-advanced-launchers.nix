@@ -17,7 +17,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kodi-retroarch-advanced-launchers";
   version = "0.2";
 

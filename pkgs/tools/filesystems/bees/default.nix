@@ -5,7 +5,7 @@ let
   version = "0.6.1";
   sha256 = "0h7idclmhyp14mq6786x7f2237vqpn70gyi88ik4g70xl84yfgyh";
 
-  bees = stdenv.mkDerivation rec {
+  bees = stdenv.mkDerivation {
     pname = "bees";
     inherit version;
 

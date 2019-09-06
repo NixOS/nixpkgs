@@ -277,7 +277,7 @@ in
     ];
     security.wrappers = {
       fping.source = "${pkgs.fping}/bin/fping";
-      "fping6".source = "${pkgs.fping}/bin/fping6";
+      fping6.source = "${pkgs.fping}/bin/fping6";
     };
     environment.systemPackages = [ pkgs.fping ];
     users.users = singleton {

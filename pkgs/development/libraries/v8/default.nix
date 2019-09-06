@@ -14,7 +14,7 @@ let
       rev    = "936ba8a963284a6b3737cf2f0474a7131073abee";
       sha256 = "14nr22fqdpxma1kzjflj6a865vr3hfnnm2gs4vcixyq4kmfzfcy2";
     };
-    "build" = fetchgit {
+    build = fetchgit {
       url    = "${git_url}/chromium/src/build.git";
       rev    = "325e95d6dae64f35b160b3dc7d73218cee5ec079";
       sha256 = "0dddyxa76p2xpjhmxif05v63i5ar6h5v684fdl667sg84f5bhhxf";

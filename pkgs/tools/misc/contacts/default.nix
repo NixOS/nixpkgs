@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xcbuildHook, Foundation, AddressBook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.1a-3";
   pname = "contacts";
 

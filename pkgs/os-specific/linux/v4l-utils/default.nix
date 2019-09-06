@@ -1,12 +1,16 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl, mkDerivation
+{ stdenv, lib, fetchurl, pkgconfig, perl
 , libjpeg, udev
 , withUtils ? true
-, withGUI ? true, alsaLib, libX11, qtbase, libGLU
+, withGUI ? true, alsaLib, libX11, qtbase, libGLU, wrapQtAppsHook
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
 
-mkDerivation rec {
+let
+  withQt = withUtils && withGUI;
+
+# we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
+in stdenv.mkDerivation rec {
   pname = "v4l-utils";
   version = "1.16.7";
 
@@ -29,13 +33,13 @@ mkDerivation rec {
     ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig perl ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [ udev ] ++ lib.optionals (withUtils && withGUI) [ alsaLib libX11 qtbase libGLU ];
+  buildInputs = [ udev ] ++ lib.optionals withQt [ alsaLib libX11 qtbase libGLU ];
 
   propagatedBuildInputs = [ libjpeg ];
 
-  NIX_CFLAGS_COMPILE = lib.optional (withUtils && withGUI) "-std=c++11";
+  NIX_CFLAGS_COMPILE = lib.optional withQt "-std=c++11";
 
   postPatch = ''
     patchShebangs .

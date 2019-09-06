@@ -6,7 +6,7 @@
 let
   version = "0.18.1";
 
-in mkDerivation rec {
+in mkDerivation {
   pname = "sddm";
   inherit version;
 

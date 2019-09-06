@@ -3,7 +3,7 @@
 , qtSupport ? true, qt4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.31";
   pname = "xautoclick";
   src = fetchurl {

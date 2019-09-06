@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub
 , pythonPackages
 }:
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonPackage {
   pname = "vncdo";
   version = "0.11.2";
 

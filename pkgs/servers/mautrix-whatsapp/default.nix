@@ -1,6 +1,6 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "mautrix-unstable";
   version = "2019-09-03";
 

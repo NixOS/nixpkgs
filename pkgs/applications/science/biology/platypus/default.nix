@@ -2,7 +2,7 @@
 
 let python = python27.withPackages (ps: with ps; [ cython ]);
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "platypus-unstable";
   version = "2018-07-22";
 

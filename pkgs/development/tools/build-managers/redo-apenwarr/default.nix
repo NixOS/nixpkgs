@@ -1,5 +1,5 @@
 {stdenv, fetchFromGitHub, python2, which}:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "redo-apenwarr";
 
   version = "unstable-2019-06-21";

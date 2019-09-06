@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, dbus, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "notify-desktop";
   version = "0.2.0";
 

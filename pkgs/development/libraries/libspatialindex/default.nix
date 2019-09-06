@@ -2,7 +2,7 @@
 
 let version = "1.8.5"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libspatialindex";
   inherit version;
 

@@ -46,12 +46,12 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       (if stdenv.hostPlatform.isDarwin
-       then srcs.${"java_tools_javac11_darwin-v4.0.zip"}
-       else srcs.${"java_tools_javac11_linux-v4.0.zip"})
-      srcs.${"coverage_output_generator-v1.0.zip"}
+       then srcs."java_tools_javac11_darwin-v4.0.zip"
+       else srcs."java_tools_javac11_linux-v4.0.zip")
+      srcs."coverage_output_generator-v1.0.zip"
       srcs.build_bazel_rules_nodejs
-      srcs.${"android_tools_pkg-0.8.tar.gz"}
-      srcs.${"0.27.1.tar.gz"}
+      srcs."android_tools_pkg-0.8.tar.gz"
+      srcs."0.27.1.tar.gz"
       srcs.rules_pkg
       srcs.rules_cc
       srcs.rules_java

@@ -6,7 +6,7 @@ let
   version = "0.9.8";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "endless-sky";
   inherit version;
 

@@ -19,7 +19,7 @@ let
   goPackagePath = "github.com/containers/skopeo";
 
 in
-buildGoPackage rec {
+buildGoPackage {
   pname = "skopeo";
   inherit version;
   inherit src goPackagePath;

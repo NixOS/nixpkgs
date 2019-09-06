@@ -7,7 +7,7 @@ let
 
 in
 
-lib.mapAttrs (n: v: v // { shortName = n; }) rec {
+lib.mapAttrs (n: v: v // { shortName = n; }) {
   /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.

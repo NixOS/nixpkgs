@@ -2,7 +2,7 @@
 , ocaml-migrate-parsetree, ppx_tools_versioned, uchar
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 	pname = "js_of_ocaml"; 
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;

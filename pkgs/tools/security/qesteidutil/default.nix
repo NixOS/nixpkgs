@@ -3,7 +3,7 @@
 , pkgconfig, pcsclite, hicolor-icon-theme 
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2018-08-21";
   pname = "qesteidutil";
 

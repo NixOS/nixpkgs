@@ -15,7 +15,7 @@ rec {
       , tiniRev, tiniSha256
     } :
   let
-    docker-runc = runc.overrideAttrs (oldAttrs: rec {
+    docker-runc = runc.overrideAttrs (oldAttrs: {
       name = "docker-runc-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -28,7 +28,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
+    docker-containerd = containerd.overrideAttrs (oldAttrs: {
       name = "docker-containerd-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -41,7 +41,7 @@ rec {
       hardeningDisable = [ "fortify" ];
     });
 
-    docker-tini = tini.overrideAttrs  (oldAttrs: rec {
+    docker-tini = tini.overrideAttrs  (oldAttrs: {
       name = "docker-init-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -60,7 +60,7 @@ rec {
       ];
     });
   in
-    stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) rec {
+    stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) {
 
     inherit docker-runc docker-containerd docker-proxy docker-tini;
 
@@ -70,7 +70,7 @@ rec {
       ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
       ++ optional (libseccomp != null) "seccomp";
 
-   }) // rec {
+   }) // {
     inherit version rev;
 
     name = "docker-${version}";

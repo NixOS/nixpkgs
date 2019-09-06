@@ -3,7 +3,7 @@
 let
   fixed_paths = ''LDFLAGS="-L${xercesc}/lib" CPPFLAGS="-I${xercesc}/include"'';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xsd";
   version = "4.0.0";
 

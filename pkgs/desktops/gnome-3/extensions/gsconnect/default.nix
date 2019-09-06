@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       gapplication = "${glib.bin}/bin/gapplication";
-      mutter_gsettings_path = "${gnome3.mutter}/share/gsettings-schemas/${gnome3.mutter.name}/glib-2.0/schemas";
+      mutter_gsettings_path = glib.getSchemaPath gnome3.mutter;
     })
   ];
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgnome_shell_libdir=${gnome3.gnome-shell}/lib"
-    "-Dgsettings_schemadir=${placeholder "out"}/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas"
+    "-Dgsettings_schemadir=${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}"
     "-Dchrome_nmhdir=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
     "-Dchromium_nmhdir=${placeholder "out"}/etc/chromium/native-messaging-hosts"
     "-Dopenssl_path=${openssl}/bin/openssl"

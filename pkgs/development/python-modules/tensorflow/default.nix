@@ -76,7 +76,7 @@ let
     mock
   ]);
 
-  bazel-build = buildBazelPackage rec {
+  bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
 
     src = fetchFromGitHub {
@@ -298,7 +298,7 @@ let
     };
   };
 
-in buildPythonPackage rec {
+in buildPythonPackage {
   inherit version pname;
 
   src = bazel-build.python;

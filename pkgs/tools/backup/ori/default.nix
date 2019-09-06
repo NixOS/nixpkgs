@@ -1,6 +1,6 @@
 { stdenv, fetchurl, boost, pkgconfig, scons, utillinux, fuse, libevent, openssl, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.8.1";
   pname = "ori";
 

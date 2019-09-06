@@ -5,7 +5,7 @@
 , ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tcl";
   inherit version;
 

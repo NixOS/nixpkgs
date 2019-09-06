@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libnetfilter_queue, libnfnetlink }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "freebind";
   version = "2017-12-27";
 

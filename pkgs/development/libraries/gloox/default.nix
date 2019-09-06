@@ -13,7 +13,7 @@ with stdenv.lib;
 let
   version = "1.0.22";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gloox";
   inherit version;
 

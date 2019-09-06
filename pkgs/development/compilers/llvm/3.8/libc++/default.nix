@@ -1,6 +1,6 @@
 { lib, stdenv, fetch, cmake, libcxxabi, fixDarwinDylibNames, version }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 

@@ -106,7 +106,7 @@ let
     passthru.binaries = binaries;
   };
 
-  binaries = stdenv.mkDerivation rec {
+  binaries = stdenv.mkDerivation {
     pname = "simutrans";
     inherit version;
 

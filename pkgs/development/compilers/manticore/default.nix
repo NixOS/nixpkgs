@@ -2,7 +2,7 @@
 
 let
   rev= "47273c463fc3c5d0a0ae655cf75a4700bdb020b4";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "manticore";
   version = "2018.09.29";
  

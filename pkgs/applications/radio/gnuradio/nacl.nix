@@ -5,7 +5,7 @@
 
 assert pythonSupport -> python != null && swig != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gr-nacl";
   version = "2017-04-10";
 

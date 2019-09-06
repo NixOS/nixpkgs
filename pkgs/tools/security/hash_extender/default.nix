@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hash_extender";
   version = "2017-04-10";
 
