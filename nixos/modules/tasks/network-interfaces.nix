@@ -1092,7 +1092,7 @@ in
         destination = "/etc/udev/rules.d/98-${name}";
         text = ''
           # enable and prefer IPv6 privacy addresses by default
-          ACTION=="add", SUBSYSTEM=="net", RUN+="echo 2 > /proc/sys/net/ipv6/conf/%k/use_tempaddr"
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.coreutils}/bin/echo 2 > /proc/sys/net/ipv6/conf/%k/use_tempaddr"
         '';
       })
       (pkgs.writeTextFile rec {
