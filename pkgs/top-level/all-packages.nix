@@ -15014,13 +15014,8 @@ in
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
-  inherit (callPackage ../servers/monitoring/prometheus { }) prometheus_1;
-
-  inherit (callPackage ../servers/monitoring/prometheus { })
-    prometheus_2;
-
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus = prometheus_1;
+  prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
   prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
