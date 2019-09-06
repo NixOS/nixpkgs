@@ -228,16 +228,29 @@ mkDerivation {
       <itemizedlist>
        <listitem xml:id="ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext">
         <para>
-         <link xlink:href="https://github.com/NixOS/nixpkgs/blob/65000c0ff8f31b982c59fd65ab5421251239df4c/pkgs/desktops/gnome-3/core/gnome-shell-extensions/default.nix#L21-L24">Replacing a <envar>GI_TYPELIB_PATH</envar> in GNOME Shell extension</link> – we are using <function>substituteAll</function> to include the path to a typelib into a patch.
+         <link xlink:href="https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/gnome-3/core/gnome-shell-extensions/default.nix#L21-L24">Replacing a <envar>GI_TYPELIB_PATH</envar> in GNOME Shell extension</link> – we are using <function>substituteAll</function> to include the path to a typelib into a patch.
         </para>
        </listitem>
-       <listitem xml:id="ssec-gnome-common-issues-unwrappable-package-gsettings-vala">
+       <listitem xml:id="ssec-gnome-common-issues-unwrappable-package-gsettings">
         <para>
-         <link xlink:href="https://github.com/NixOS/nixpkgs/blob/65000c0ff8f31b982c59fd65ab5421251239df4c/pkgs/desktops/pantheon/apps/elementary-files/default.nix#L78-L86">Hard-coding GSettings schema path in Vala plug-in (dynamically loaded library)</link> – here, <function>substituteAll</function> cannot be used since the schema comes from the same package preventing us from pass its path to the function, probably due to a <link xlink:href="https://github.com/NixOS/nix/issues/1846">Nix bug</link>.
+         The following examples are hardcoding GSettings schema paths. To get the schema paths we use the functions
+         <itemizedlist>
+          <listitem>
+           <para>
+            <function>glib.getSchemaPath</function> Takes a nix package attribute as an argument.
+           </para>
+          </listitem>
+          <listitem>
+           <para>
+            <function>glib.makeSchemaPath</function> Takes a package output like <literal>$out</literal> and a derivation name. You should use this if the schemas you need to hardcode are in the same derivation.
+           </para>
+          </listitem>
+         </itemizedlist>
         </para>
-       </listitem>
-       <listitem xml:id="ssec-gnome-common-issues-unwrappable-package-gsettings-c">
-        <para>
+        <para xml:id="ssec-gnome-common-issues-unwrappable-package-gsettings-vala">
+         <link xlink:href="https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/pantheon/apps/elementary-files/default.nix#L78-L86">Hard-coding GSettings schema path in Vala plug-in (dynamically loaded library)</link> – here, <function>substituteAll</function> cannot be used since the schema comes from the same package preventing us from pass its path to the function, probably due to a <link xlink:href="https://github.com/NixOS/nix/issues/1846">Nix bug</link>.
+        </para>
+        <para xml:id="ssec-gnome-common-issues-unwrappable-package-gsettings-c">
          <link xlink:href="https://github.com/NixOS/nixpkgs/blob/29c120c065d03b000224872251bed93932d42412/pkgs/development/libraries/glib-networking/default.nix#L31-L34">Hard-coding GSettings schema path in C library</link> – nothing special other than using <link xlink:href="https://github.com/NixOS/nixpkgs/pull/67957#issuecomment-527717467">Coccinelle patch</link> to generate the patch itself.
         </para>
        </listitem>
