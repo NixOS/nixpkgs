@@ -428,6 +428,16 @@
      any updates from upstream and depends on outdated Python2-based modules.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Old unsupported versions (<literal>logstash5</literal>,
+     <literal>kibana5</literal>,
+     <literal>filebeat5</literal>,
+     <literal>heartbeat5</literal>,
+     <literal>metricbeat5</literal>,
+     <literal>packetbeat5</literal>) of the ELK-stack and Elastic beats have been removed.
+    </para>
+   </listitem>
 
   </itemizedlist>
  </section>
