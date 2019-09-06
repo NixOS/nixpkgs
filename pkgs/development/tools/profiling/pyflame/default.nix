@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, coreutils, fetchFromGitHub, fetchpatch, pkgconfig
+{ stdenv, autoreconfHook, coreutils, fetchFromGitHub, fetchpatch, pkgconfig, procps
 # pyflame needs one python version per ABI
 # are currently supported
 # * 2.6 or 2.7 for 2.x ABI
@@ -67,11 +67,12 @@ stdenv.mkDerivation rec {
     full-ptrace-seize-errors
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig procps ];
   buildInputs = [ python37 python36 python2 python35 ];
 
   postPatch = ''
     patchShebangs .
+
     # some tests will fail in the sandbox
     substituteInPlace tests/test_end_to_end.py \
       --replace 'skipif(IS_DOCKER' 'skipif(True'
@@ -79,6 +80,32 @@ stdenv.mkDerivation rec {
     # don't use patchShebangs here to be explicit about the python version
     substituteInPlace utils/flame-chart-json \
       --replace '#!usr/bin/env python' '#!${python3.interpreter}'
+
+    # Many tests require the build machine to have kernel.yama.ptrace_scope = 0,
+    # but hardened machines have it set to 1. On build machines that cannot run
+    # these tests, skip them to avoid breaking the build.
+    if [[ $(sysctl -n kernel.yama.ptrace_scope || echo 0) != "0" ]]; then
+      for test in \
+        test_monitor \
+        test_non_gil \
+        test_threaded \
+        test_unthreaded \
+        test_legacy_pid_handling \
+        test_exclude_idle \
+        test_exit_early \
+        test_sample_not_python \
+        test_include_ts \
+        test_include_ts_exclude_idle \
+        test_thread_dump \
+        test_no_line_numbers \
+        test_utf8_output; do
+
+        substituteInPlace tests/test_end_to_end.py \
+          --replace "def $test(" "\
+@pytest.mark.skip('build machine had kernel.yama.ptrace_scope != 0')
+def $test("
+      done
+    fi
   '';
 
   postInstall = ''
@@ -94,7 +121,7 @@ stdenv.mkDerivation rec {
       PYMAJORVERSION=${lib.substring 0 1 python.version} \
         PATH=${lib.makeBinPath [ coreutils ]}\
         PYTHONPATH= \
-        ${python.pkgs.pytest}/bin/pytest tests/
+        ${python.pkgs.pytest}/bin/pytest -v tests/
       set +x
     '') (lib.filter (x: x != null) buildInputs);
 

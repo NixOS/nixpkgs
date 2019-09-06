@@ -210,8 +210,7 @@ in
       # Enable helpful DBus services.
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.dbus.packages =
-        mkIf config.services.printing.enable [ pkgs.system-config-printer ];
+      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
 
       # Extra UDEV rules used by Solid
       services.udev.packages = [

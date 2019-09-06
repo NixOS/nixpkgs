@@ -6194,6 +6194,8 @@ in {
     inherit python;
   })).python;
 
+  zeroc-ice = callPackage ../development/python-modules/zeroc-ice { };
+
   zm-py = callPackage ../development/python-modules/zm-py { };
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
