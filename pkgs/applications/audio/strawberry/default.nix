@@ -14,6 +14,7 @@
 , libpthreadstubs
 , libtasn1
 , libXdmcp
+, ninja
 , pcre
 , protobuf
 , sqlite
@@ -72,14 +73,19 @@ mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+    gst-plugins-ugly
   ])
   ++ lib.optional withVlc vlc;
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [ cmake ninja pkgconfig qttools ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_TAGLIB=ON"
   ];
+
+  postInstall = ''
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
 
   meta = with lib; {
     description = "Music player and music collection organizer";
