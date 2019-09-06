@@ -12,7 +12,11 @@ buildPythonPackage rec {
   # Circular dependency on pytest
   doCheck = false;
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
+
+  pythonImportsCheck = [
+    "py"
+  ];
 
   meta = with stdenv.lib; {
     description = "Library with cross-python path, ini-parsing, io, code, log facilities";

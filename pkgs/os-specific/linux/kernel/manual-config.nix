@@ -278,7 +278,8 @@ in
 assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
 assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
 stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
-  name = "linux-${version}";
+  pname = "linux";
+  inherit version;
 
   enableParallelBuilding = true;
 
