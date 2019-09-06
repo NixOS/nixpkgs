@@ -13,14 +13,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.6.0.1";
+  version = "28.7.0";
 
   src = fetchFromGitHub {
-    name   = "${pname}-${version}";
     owner  = "MoonchildProductions";
     repo   = "UXP";
     rev    = "PM${version}_Release";
-    sha256 = "1adgajy5vsghvjlv2nqyrbp6mnv3k6slqxxi8r949xlb5h6d210b";
+    sha256 = "0i6fy1mvjy6vpqnvhh516mxbv4d2z73yghk3frln4ql8zavba7qq";
   };
 
   desktopItem = makeDesktopItem {
@@ -91,8 +90,6 @@ in stdenv.mkDerivation rec {
     "
   '';
 
-  hardeningDisable = [ "format" ];
-
   buildPhase = ''
     $src/mach build
   '';
@@ -129,7 +126,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = "https://www.palemoon.org/";
     license     = licenses.mpl20;
-    maintainers = with maintainers; [ rnhmjoj AndersonTorres OPNA2608 ];
+    maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
     platforms   = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -89,14 +89,15 @@ let
     ps.six
   ]);
 
-  version = "14.2.1";
+  version = "14.2.3";
 in rec {
   ceph = stdenv.mkDerivation {
-    name="ceph-${version}";
+    pname = "ceph";
+    inherit version;
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "0qa9p8xp26d45h3jfj1rbwhmqv44f9n1mvccmpzaf2i05v42kmzb";
+      sha256 = "1pa8czb205pz4vjfh82gsgickj3cdjrx51mcx7acsyqgp3dfvl33";
     };
 
     patches = [
@@ -181,7 +182,7 @@ in rec {
         homepage = https://ceph.com/;
         description = "Tools needed to mount Ceph's RADOS Block Devices";
         license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
-        maintainers = with maintainers; [ adev ak krav ];
+        maintainers = with maintainers; [ adev ak johanot krav ];
         platforms = platforms.unix;
       };
     } ''
