@@ -1066,11 +1066,7 @@ in
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  inherit (callPackages ../misc/logging/beats/6.x.nix {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  })
+  inherit (callPackages ../misc/logging/beats/6.x.nix { })
     filebeat6
     heartbeat6
     metricbeat6
@@ -2873,7 +2869,7 @@ in
   evemu = callPackage ../tools/system/evemu { };
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
-  elk6Version = "6.7.2";
+  elk6Version = "6.8.3";
   elk7Version = "7.0.1";
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
