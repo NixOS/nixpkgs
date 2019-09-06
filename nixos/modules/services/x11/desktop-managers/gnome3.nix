@@ -227,6 +227,7 @@ in
 
     (mkIf serviceCfg.core-shell.enable {
       services.colord.enable = mkDefault true;
+      services.gnome3.chrome-gnome-shell.enable = mkDefault true;
       services.gnome3.glib-networking.enable = true;
       services.gnome3.gnome-remote-desktop.enable = mkDefault true;
       services.gnome3.gnome-settings-daemon.enable = true;
