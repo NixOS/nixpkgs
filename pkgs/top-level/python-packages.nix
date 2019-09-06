@@ -2250,8 +2250,6 @@ in {
     pythonPackages = self;
   });
 
-  EditorConfig = callPackage ../development/python-modules/editorconfig { };
-
   edward = callPackage ../development/python-modules/edward { };
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
