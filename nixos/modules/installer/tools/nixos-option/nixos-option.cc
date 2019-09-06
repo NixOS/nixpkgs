@@ -1,10 +1,12 @@
 #include <nix/config.h> // for nix/globals.hh's reference to SYSTEM
 
+#include <exception>               // for exception_ptr, current_exception
 #include <functional>              // for function
 #include <iostream>                // for operator<<, basic_ostream, ostrin...
 #include <iterator>                // for next
 #include <list>                    // for _List_iterator
 #include <memory>                  // for allocator, unique_ptr, make_unique
+#include <new>                     // for operator new
 #include <nix/args.hh>             // for argvToStrings, UsageError
 #include <nix/attr-path.hh>        // for findAlongAttrPath
 #include <nix/attr-set.hh>         // for Attr, Bindings, Bindings::iterator
@@ -166,19 +168,19 @@ std::string const appendPath(std::string const & prefix, std::string const & suf
 
 bool forbiddenRecursionName(std::string name) { return (!name.empty() && name[0] == '_') || name == "haskellPackages"; }
 
-void recurse(const std::function<bool(std::string const & path, std::variant<Value, Error>)> & f, Context * ctx,
+void recurse(const std::function<bool(std::string const & path, std::variant<Value, std::exception_ptr>)> & f, Context * ctx,
              Value v, std::string const & path)
 {
-    std::variant<Value, Error> evaluated;
+    std::variant<Value, std::exception_ptr> evaluated;
     try {
         evaluated = evaluateValue(ctx, &v);
-    } catch (Error & e) {
-        evaluated = e;
+    } catch (Error &) {
+        evaluated = std::current_exception();
     }
     if (!f(path, evaluated)) {
         return;
     }
-    if (std::holds_alternative<Error>(evaluated)) {
+    if (std::holds_alternative<std::exception_ptr>(evaluated)) {
         return;
     }
     Value const & evaluated_value = std::get<Value>(evaluated);
@@ -197,8 +199,8 @@ void recurse(const std::function<bool(std::string const & path, std::variant<Val
 void mapOptions(const std::function<void(std::string const & path)> & f, Context * ctx, Value root)
 {
     recurse(
-        [f, ctx](std::string const & path, std::variant<Value, Error> v) {
-            bool isOpt = std::holds_alternative<Error>(v) || isOption(ctx, std::get<Value>(v));
+        [f, ctx](std::string const & path, std::variant<Value, std::exception_ptr> v) {
+            bool isOpt = std::holds_alternative<std::exception_ptr>(v) || isOption(ctx, std::get<Value>(v));
             if (isOpt) {
                 f(path);
             }
@@ -228,19 +230,19 @@ void mapOptions(const std::function<void(std::string const & path)> & f, Context
 //   users.users.nixbld1 = ... .. ...
 //   ...
 //   users.users.systemd-timesync = ... .. ...
-void mapConfigValuesInOption(const std::function<void(std::string const & path, std::variant<Value, Error> v)> & f,
+void mapConfigValuesInOption(const std::function<void(std::string const & path, std::variant<Value, std::exception_ptr> v)> & f,
                              std::string const & path, Context * ctx)
 {
     Value * option;
     try {
         option = findAlongAttrPath(*ctx->state, path, *ctx->autoArgs, ctx->config_root);
-    } catch (Error & e) {
-        f(path, e);
+    } catch (Error &) {
+        f(path, std::current_exception());
         return;
     }
     recurse(
-        [f, ctx](std::string const & path, std::variant<Value, Error> v) {
-            bool leaf = std::holds_alternative<Error>(v) || std::get<Value>(v).type != tAttrs ||
+        [f, ctx](std::string const & path, std::variant<Value, std::exception_ptr> v) {
+            bool leaf = std::holds_alternative<std::exception_ptr>(v) || std::get<Value>(v).type != tAttrs ||
                         ctx->state->isDerivation(std::get<Value>(v));
             if (!leaf) {
                 return true; // Keep digging
@@ -273,7 +275,7 @@ Value parseAndEval(EvalState * state, std::string const & expression, std::strin
     return v;
 }
 
-void printValue(Context * ctx, Out & out, std::variant<Value, Error> maybe_value, std::string const & path);
+void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value, std::string const & path);
 
 void printList(Context * ctx, Out & out, Value & v)
 {
@@ -331,11 +333,11 @@ void printMultiLineString(Out & out, Value const & v)
     }
 }
 
-void printValue(Context * ctx, Out & out, std::variant<Value, Error> maybe_value, std::string const & path)
+void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value, std::string const & path)
 {
     try {
-        if (std::holds_alternative<Error>(maybe_value)) {
-            throw Error{std::get<Error>(maybe_value)};
+        if (std::holds_alternative<std::exception_ptr>(maybe_value)) {
+          std::rethrow_exception(std::get<std::exception_ptr>(maybe_value));
         }
         Value v = evaluateValue(ctx, &std::get<Value>(maybe_value));
         if (ctx->state->isDerivation(v)) {
@@ -366,7 +368,7 @@ void printValue(Context * ctx, Out & out, std::variant<Value, Error> maybe_value
     }
 }
 
-void printConfigValue(Context * ctx, Out & out, std::string const & path, std::variant<Value, Error> v)
+void printConfigValue(Context * ctx, Out & out, std::string const & path, std::variant<Value, std::exception_ptr> v)
 {
     out << path << " = ";
     printValue(ctx, out, std::move(v), path);
@@ -378,7 +380,7 @@ void printAll(Context * ctx, Out & out)
     mapOptions(
         [ctx, &out](std::string const & option_path) {
             mapConfigValuesInOption(
-                [ctx, &out](std::string const & config_path, std::variant<Value, Error> v) {
+                [ctx, &out](std::string const & config_path, std::variant<Value, std::exception_ptr> v) {
                     printConfigValue(ctx, out, config_path, v);
                 },
                 option_path, ctx);
