@@ -233,10 +233,9 @@ in
       services.gnome3.gnome-user-share.enable = mkDefault true;
       services.gnome3.rygel.enable = mkDefault true;
       services.gvfs.enable = true;
+      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
       systemd.packages = [ pkgs.gnome3.vino ];
-      services.dbus.packages =
-        optional config.services.printing.enable pkgs.system-config-printer;
 
       services.avahi.enable = mkDefault true;
 

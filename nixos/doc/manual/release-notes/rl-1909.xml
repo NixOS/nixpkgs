@@ -144,6 +144,32 @@
      but will make sure that the given printers are configured as declared.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     There is a new <xref linkend="opt-services.system-config-printer.enable"/> and <xref linkend="opt-programs.system-config-printer.enable"/> module
+     for the program of the same name. If you previously had <literal>system-config-printer</literal> enabled through some other
+     means you should migrate to using one of these modules.
+    </para>
+    <itemizedlist>
+     <para>If you're a user of the following desktopManager modules no action is needed:</para>
+     <listitem>
+      <para><option>services.xserver.desktopManager.plasma5</option></para>
+     </listitem>
+     <listitem>
+      <para><option>services.xserver.desktopManager.gnome3</option></para>
+     </listitem>
+     <listitem>
+      <para><option>services.xserver.desktopManager.pantheon</option></para>
+     </listitem>
+     <listitem>
+      <para><option>services.xserver.desktopManager.mate</option></para>
+      <para>
+       Note Mate uses <literal>programs.system-config-printer</literal> as it doesn't
+       use it as a service, but its graphical interface directly.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
 
  </section>
