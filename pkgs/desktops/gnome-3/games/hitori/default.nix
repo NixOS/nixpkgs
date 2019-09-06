@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Hitori;
-    description = "GTK+ application to generate and let you play games of Hitori";
+    description = "GTK application to generate and let you play games of Hitori";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;

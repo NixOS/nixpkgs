@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "Lightweight WebKitGTK+ web browser";
+    description = "Lightweight WebKitGTK web browser";
     homepage = https://www.midori-browser.org/;
     license = with licenses; [ lgpl21Plus ];
     platforms = with platforms; linux;

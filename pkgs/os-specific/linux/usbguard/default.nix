@@ -1,11 +1,8 @@
 {
   stdenv, fetchurl, lib,
-  pkgconfig, libxml2, libxslt,
-  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf, audit,
-  withGui ? true,
-  qtbase ? null,
-  qttools ? null,
-  qtsvg ? null,
+  pkgconfig, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl, asciidoc,
+  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf,
+  audit,
   libgcrypt ? null,
   libsodium ? null
 }:
@@ -15,20 +12,23 @@ with stdenv.lib;
 assert libgcrypt != null -> libsodium == null;
 
 stdenv.mkDerivation rec {
-  version = "0.7.4";
+  version = "0.7.5";
   pname = "usbguard";
 
   repo = "https://github.com/USBGuard/usbguard";
 
   src = fetchurl {
     url = "${repo}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1qkskd6q5cwlh2cpcsbzmmmgk6w63z0825wlb2sjwqq3kfgwjb3k";
+    sha256 = "0jj56sls13ryfgz6vajq8p4dm3grgb6rf2cmga6sckmzd4chk65b";
   };
 
   nativeBuildInputs = [
+    asciidoc
     pkgconfig
     libxslt # xsltproc
     libxml2 # xmllint
+    docbook_xml_dtd_45
+    docbook_xsl
   ];
 
   buildInputs = [
@@ -41,8 +41,7 @@ stdenv.mkDerivation rec {
     audit
   ]
   ++ (lib.optional (libgcrypt != null) libgcrypt)
-  ++ (lib.optional (libsodium != null) libsodium)
-  ++ (lib.optionals withGui [ qtbase qtsvg qttools ]);
+  ++ (lib.optional (libsodium != null) libsodium);
 
   configureFlags = [
     "--with-bundled-catch"
@@ -51,8 +50,7 @@ stdenv.mkDerivation rec {
     "--with-polkit"
   ]
   ++ (lib.optional (libgcrypt != null) "--with-crypto-library=gcrypt")
-  ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium")
-  ++ (lib.optional withGui "--with-gui-qt=qt5");
+  ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium");
 
   enableParallelBuilding = true;
 

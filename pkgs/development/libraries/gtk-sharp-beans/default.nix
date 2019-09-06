@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    description = "Binds some API from Gtk+ that isn't in Gtk# 2.12.x";
+    description = "Binds some API from GTK that isn't in GTK# 2.12.x";
     platforms = platforms.linux;
     license = licenses.lgpl21;
   };

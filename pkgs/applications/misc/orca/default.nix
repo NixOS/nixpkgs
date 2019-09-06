@@ -64,7 +64,7 @@ buildPythonApplication rec {
       access to the graphical desktop via speech and refreshable braille.
       It works with applications and toolkits that support the Assistive
       Technology Service Provider Interface (AT-SPI). That includes the GNOME
-      Gtk+ toolkit, the Java platform's Swing toolkit, LibreOffice, Gecko, and
+      GTK toolkit, the Java platform's Swing toolkit, LibreOffice, Gecko, and
       WebKitGtk. AT-SPI support for the KDE Qt toolkit is being pursued.
 
       Needs `services.gnome3.at-spi2-core.enable = true;` in `configuration.nix`.

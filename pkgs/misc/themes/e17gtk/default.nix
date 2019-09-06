@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An Enlightenment-like GTK+ theme with sharp corners";
+    description = "An Enlightenment-like GTK theme with sharp corners";
     homepage = https://github.com/tsujan/E17gtk;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;

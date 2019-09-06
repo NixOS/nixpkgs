@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "3.47.0";
+  version = "3.47.1";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0mjj47w9pa7ihycialijrfq2qk107dcxwcwriz3b2mg4lixlawy4";
+    sha256 = "17lz6rawlv268vv8i5kj59rswsipq3c14066adaz1paw54zr62dk";
   };
 
   patches = [
@@ -105,7 +105,7 @@ mkDerivation rec {
   disallowedReferences = [ podofo.dev ];
 
   calibreDesktopItem = makeDesktopItem {
-    name = "calibre";
+    name = "calibre-gui";
     desktopName = "calibre";
     exec = "@out@/bin/calibre --detach %F";
     genericName = "E-book library management";
@@ -151,7 +151,7 @@ mkDerivation rec {
   };
 
   ebookEditDesktopItem = makeDesktopItem {
-    name = "calibre-edit-ebook";
+    name = "calibre-edit-book";
     desktopName = "Edit E-book";
     genericName = "E-book Editor";
     comment = "Edit e-books";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pngquant";
-  version = "2.12.1";
+  version = "2.12.5";
 
   src = fetchFromGitHub {
     owner = "pornel";
     repo = "pngquant";
     rev = version;
-    sha256 = "0jdvry3kvmmxcgwf5a3zbfz0idl6yl3700ag7pf8sk4lg4qp0llp";
+    sha256 = "0sq398iv5cacblz6pb4j2hn16cnszsbkahikdpfq84rb9bj0ya40";
     fetchSubmodules = true;
   };
 

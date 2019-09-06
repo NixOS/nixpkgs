@@ -12,9 +12,9 @@ let
 
   # Only allow the demo data to be used (only if it's unfreeRedistributable).
   unfreePredicate = pkg: with pkgs.lib; let
-    allowDrvPredicates = [ "quake3-demo" "quake3-pointrelease" ];
+    allowPackageNames = [ "quake3-demodata" "quake3-pointrelease" ];
     allowLicenses = [ pkgs.lib.licenses.unfreeRedistributable ];
-  in any (flip hasPrefix pkg.name) allowDrvPredicates &&
+  in elem pkg.pname allowPackageNames &&
      elem (pkg.meta.license or null) allowLicenses;
 
 in
