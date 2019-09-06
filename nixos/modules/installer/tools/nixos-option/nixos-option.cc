@@ -352,7 +352,7 @@ void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr
             ctx->state->forceValueDeep(v);
             out << v;
         }
-    } catch (Error & e) {
+    } catch (ThrownError & e) {
         if (e.msg() == "The option `" + path + "' is used but not defined.") {
             // 93% of errors are this, and just letting this message through would be
             // misleading.  These values may or may not actually be "used" in the
@@ -365,6 +365,8 @@ void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr
         } else {
             out << describeError(e);
         }
+    } catch (Error & e) {
+        out << describeError(e);
     }
 }
 
