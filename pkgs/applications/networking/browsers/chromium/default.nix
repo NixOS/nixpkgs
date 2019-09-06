@@ -92,6 +92,10 @@ in let
 
   version = chromium.browser.version;
 
+  # This is here because we want to add the widevine shared object at the last
+  # minute in order to avoid a full rebuild of chromium. Additionally, this
+  # isn't in `browser.nix` so we can avoid having to re-expose attributes of
+  # the chromium derivation (see above: we introspect `sandboxExecutableName`).
   chromiumWV = let browser = chromium.browser; in if enableWideVine then
     runCommand (browser.name + "-wv") { version = browser.version; }
       ''
