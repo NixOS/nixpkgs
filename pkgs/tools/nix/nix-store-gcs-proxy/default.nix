@@ -17,7 +17,7 @@ buildGoPackage rec {
   meta = {
     description = "A HTTP nix store that proxies requests to Google Storage";
     homepage = "https://github.com/tweag/nix-store-gcs-proxy";
-    license = lib.licenses.apl2;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ zimbatm ];
   };
 }
