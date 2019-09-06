@@ -479,25 +479,25 @@ Value findAlongOptionPath(Context * ctx, std::string const & path)
         auto const & attr = *i;
         v = evaluateValue(ctx, &v);
         if (attr.empty()) {
-            throw Error("empty attribute name in selection path '" + path + "'");
+            throw Error("empty attribute name in selection path '%s'", path);
         }
         if (isOption(ctx, v) && !last_attribute) {
             Value getSubOptions =
                 evaluateValue(ctx, findAlongAttrPath(*ctx->state, "type.getSubOptions", *ctx->autoArgs, v));
             if (getSubOptions.type != tLambda) {
-                throw Error("Option's type.getSubOptions isn't a function at '" + attr + "' in path '" + path + "'");
+                throw Error("Option's type.getSubOptions isn't a function at '%s' in path '%s'", attr, path);
             }
             Value emptyString{};
             nix::mkString(emptyString, "");
             ctx->state->callFunction(getSubOptions, emptyString, v, nix::Pos{});
             // Note that we've consumed attr, but didn't actually use it.
         } else if (v.type != tAttrs) {
-            throw Error("attribute '" + attr + "' in path '" + path +
-                        "' attempts to index a value that should be a set but is " + showType(v));
+            throw Error("attribute '%s' in path '%s' attempts to index a value that should be a set but is %s", attr,
+                        path, showType(v));
         } else {
             auto const & next = v.attrs->find(ctx->state->symbols.create(attr));
             if (next == v.attrs->end()) {
-                throw Error("attribute '" + attr + "' in path '" + path + "' not found");
+                throw Error("attribute '%s' in path '%s' not found", attr, path);
             }
             v = *next->value;
         }
