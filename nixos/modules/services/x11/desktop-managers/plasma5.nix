@@ -211,6 +211,7 @@ in
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+      services.xserver.libinput.enable = mkDefault true;
 
       # Extra UDEV rules used by Solid
       services.udev.packages = [
