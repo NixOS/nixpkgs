@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bedtools";
-  version = "2.28.0";
+  version = "2.29.0";
 
   src = fetchFromGitHub {
     owner = "arq5x";
     repo = "bedtools2";
     rev = "v${version}";
-    sha256 = "1266bcn5hgbvysfi6nr4cqxlbxcx7vn7ng8kb0v3gz37qh2zxxw9";
+    sha256 = "0d6i985qqxp92ddq4n6558m70qi5rqhl724wrfys0hm0p6a9h56x";
   };
 
   buildInputs = [ zlib python bzip2 lzma ];

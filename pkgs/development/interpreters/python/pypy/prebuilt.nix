@@ -6,7 +6,7 @@
 # Dependencies
 , bzip2
 , zlib
-, openssl
+, openssl_1_0_2
 , expat
 , libffi
 , ncurses
@@ -44,7 +44,7 @@ let
   deps = [
     bzip2
     zlib
-    openssl
+    openssl_1_0_2
     expat
     libffi
     ncurses

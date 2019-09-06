@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gotools-unstable";
-  version = "2019-07-06";
-  rev = "72ffa07ba3db8d09f5215feec0f89464f3028f8e";
+  version = "2019-09-05";
+  rev = "6b3d1c9ba8bf7ce410f6b490852ec54953383362";
 
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "0c0s5aiwj807vxfzwrah32spwq8cnxvy0j117i5cbsqw2df80pgv";
+    sha256 = "0a2xjx9hqkash7fd2qv9hd93wcqdbfrmsdzjd91dwvnk48j61daf";
   };
 
   # Build of golang.org/x/tools/gopls fails with:
@@ -21,7 +21,7 @@ buildGoModule rec {
     rm -rf gopls
   '';
 
-  modSha256 = "16nkrpki9fnxsrxxxs9ljz49plcz393z0sqq2knkk30pmncpwd3q";
+  modSha256 = "16cfzmfr9jv8wz0whl433xdm614dk63fzjxv6l1xvkagjmki49iy";
 
   postConfigure = ''
     # Make the builtin tools available here

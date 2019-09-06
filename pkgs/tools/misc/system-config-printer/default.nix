@@ -61,6 +61,9 @@ stdenv.mkDerivation rec {
       # Manually expand literal "$(out)", which have failed to expand
       sed -e "s|ExecStart=\$(out)|ExecStart=$out|" \
           -i "$out/etc/systemd/system/configure-printer@.service"
+
+      substituteInPlace $out/etc/udev/rules.d/70-printers.rules \
+        --replace "udev-configure-printer" "$out/etc/udev/udev-configure-printer"
     '';
 
   meta = {

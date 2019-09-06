@@ -1704,9 +1704,7 @@ in
 
   gmic_krita_qt = libsForQt5.callPackage ../tools/graphics/gmic_krita_qt { };
 
-  goa = callPackage ../development/tools/goa {
-    buildGoPackage = buildGo110Package;
-  };
+  goa = callPackage ../development/tools/goa { };
 
   gohai = callPackage ../tools/system/gohai { };
 
@@ -2612,17 +2610,13 @@ in
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
-  diskrsync = callPackage ../tools/backup/diskrsync {
-    buildGoPackage = buildGo110Package;
-  };
+  diskrsync = callPackage ../tools/backup/diskrsync { };
 
   djbdns = callPackage ../tools/networking/djbdns { };
 
   dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy/1.x { };
 
-  dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy/2.x {
-    buildGoPackage = buildGo110Package;
-  };
+  dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy/2.x { };
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
@@ -3778,6 +3772,7 @@ in
   };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
+    stdenv = gcc7Stdenv;
     gfortran = null;
     szip = null;
     mpi = null;
@@ -4023,9 +4018,7 @@ in
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
-  ipget = callPackage ../applications/networking/ipget {
-    buildGoPackage = buildGo110Package;
-  };
+  ipget = callPackage ../applications/networking/ipget { };
 
   ipmitool = callPackage ../tools/system/ipmitool {
     openssl = openssl_1_0_2;
@@ -5093,9 +5086,7 @@ in
 
   nnn = callPackage ../applications/misc/nnn { };
 
-  notary = callPackage ../tools/security/notary {
-    buildGoPackage = buildGo110Package;
-  };
+  notary = callPackage ../tools/security/notary { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
@@ -6519,9 +6510,7 @@ in
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
 
-  tmsu = callPackage ../tools/filesystems/tmsu {
-    go = go_1_10;
-  };
+  tmsu = callPackage ../tools/filesystems/tmsu { };
 
   toilet = callPackage ../tools/misc/toilet { };
 
@@ -7531,7 +7520,8 @@ in
   gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { stdenv = gccStdenv; };
 
   gccFun = callPackage ../development/compilers/gcc/7;
-  gcc = gcc7;
+  # Temporary solution until #40038 is fixed
+  gcc = if stdenv.isDarwin then gcc7 else gcc8;
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
@@ -7913,10 +7903,6 @@ in
       inherit (darwin.apple_sdk.frameworks) Security;
     };
 
-  go_1_10 = callPackage ../development/compilers/go/1.10.nix {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
-
   go_1_11 = callPackage ../development/compilers/go/1.11.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
@@ -8187,7 +8173,9 @@ in
     buildLlvmTools = buildPackages.llvmPackages_6.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_6.libraries;
   } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    # with gcc-7 on i686: undefined reference to `__divmoddi4'
+    # Failing tests with gcc8.
+    stdenv = overrideCC stdenv (if stdenv.hostPlatform.isi686 then gcc6 else gcc7);
   });
 
   llvmPackages_7 = callPackage ../development/compilers/llvm/7 ({
@@ -13220,7 +13208,8 @@ in
 
   libsForQt512 = recurseIntoAttrs (lib.makeScope qt512.newScope mkLibsForQt5);
 
-  qt5 = qt512;
+  # TODO bump to 5.12 on darwin once it's not broken
+  qt5 = if stdenv.isDarwin then qt511 else qt512;
   libsForQt5 = if stdenv.isDarwin then libsForQt511 else libsForQt512;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
@@ -14365,9 +14354,6 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo110Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_10;
-  };
   buildGo111Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_11;
   };
@@ -14748,9 +14734,7 @@ in
 
   mediatomb = callPackage ../servers/mediatomb { };
 
-  meguca = callPackage ../servers/meguca {
-    buildGoPackage = buildGo110Package;
-  };
+  meguca = callPackage ../servers/meguca { };
 
   memcached = callPackage ../servers/memcached {};
 
@@ -15039,15 +15023,8 @@ in
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
-  inherit (callPackage ../servers/monitoring/prometheus {
-    buildGoPackage = buildGo110Package;
-  }) prometheus_1;
-
-  inherit (callPackage ../servers/monitoring/prometheus { })
-    prometheus_2;
-
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus = prometheus_1;
+  prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
   prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
@@ -15073,9 +15050,7 @@ in
   prometheus-process-exporter = callPackage ../servers/monitoring/prometheus/process-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
-  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix {
-    buildGoPackage = buildGo110Package;
-  };
+  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-tor-exporter = callPackage ../servers/monitoring/prometheus/tor-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
@@ -15519,9 +15494,7 @@ in
   dstat = callPackage ../os-specific/linux/dstat { };
 
   # unstable until the first 1.x release
-  fscrypt-experimental = callPackage ../os-specific/linux/fscrypt {
-    buildGoPackage = buildGo110Package;
-  };
+  fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
@@ -19557,15 +19530,7 @@ in
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
-    }) mumble mumble_rc murmur;
-
-  inherit (callPackages ../applications/networking/mumble {
-      avahi = avahi-compat;
-      jackSupport = config.mumble.jackSupport or false;
-      speechdSupport = config.mumble.speechdSupport or false;
-      pulseSupport = config.pulseaudio or false;
-      iceSupport = false;
-    }) murmur_rc;
+    }) mumble mumble_rc murmur murmur_rc;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
     mumble_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
@@ -21639,7 +21604,13 @@ in
 
   zathura = callPackage ../applications/misc/zathura { };
 
-  zeroc_ice = callPackage ../development/libraries/zeroc-ice {
+  zeroc-ice = callPackage ../development/libraries/zeroc-ice {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
+
+  zeroc-ice-36 = callPackage ../development/libraries/zeroc-ice/3.6.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -21719,9 +21690,6 @@ in
   go-ethereum = callPackage ../applications/blockchains/go-ethereum.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
-  go-ethereum-classic = callPackage ../applications/blockchains/go-ethereum-classic {
-    buildGoPackage = buildGo110Package;
   };
 
   jormungandr = callPackage ../applications/blockchains/jormungandr { };

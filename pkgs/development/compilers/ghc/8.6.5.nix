@@ -225,6 +225,10 @@ stdenv.mkDerivation (rec {
       egrep --quiet '^#!' <(head -n 1 $i) || continue
       sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
     done
+  ''
+  # Temporary work-around for https://github.com/NixOS/nixpkgs/issues/66277
+  + stdenv.lib.optionalString hostPlatform.isAarch64 ''
+    rm -rf "$doc/share/doc/ghc/html/libraries"
   '';
 
   passthru = {

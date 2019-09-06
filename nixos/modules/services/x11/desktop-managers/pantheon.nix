@@ -113,9 +113,9 @@ in
     services.colord.enable = mkDefault true;
     services.pantheon.files.enable = mkDefault true;
     services.tumbler.enable = mkDefault true;
-    services.dbus.packages = mkMerge [
-      ([ pkgs.pantheon.switchboard-plug-power ])
-      (mkIf config.services.printing.enable  ([pkgs.system-config-printer]) )
+    services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+    services.dbus.packages = [
+      pkgs.pantheon.switchboard-plug-power
     ];
     services.pantheon.contractor.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;

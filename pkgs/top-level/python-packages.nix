@@ -4370,6 +4370,8 @@ in {
 
   pyenchant = callPackage ../development/python-modules/pyenchant { };
 
+  pyev = callPackage ../development/python-modules/pyev { };
+
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
   pyext = callPackage ../development/python-modules/pyext { };
@@ -6185,6 +6187,8 @@ in {
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;
   })).python;
+
+  zeroc-ice = callPackage ../development/python-modules/zeroc-ice { };
 
   zm-py = callPackage ../development/python-modules/zm-py { };
 
