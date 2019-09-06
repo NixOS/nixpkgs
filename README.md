@@ -20,7 +20,9 @@ imports = [
 ];
 ```
 
-## Profiles
+## Incomplete list of Profiles
+
+See code for all available configurations.
 
 | Model                             | Path                                         |
 | --------------------------------- | -------------------------------------------- |
