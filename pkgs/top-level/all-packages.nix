@@ -1073,11 +1073,7 @@ in
     packetbeat6
     journalbeat6;
 
-  inherit (callPackages ../misc/logging/beats/7.x.nix {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  })
+  inherit (callPackages ../misc/logging/beats/7.x.nix { })
     filebeat7
     heartbeat7
     metricbeat7
@@ -2870,7 +2866,7 @@ in
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   elk6Version = "6.8.3";
-  elk7Version = "7.0.1";
+  elk7Version = "7.3.1";
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
     utillinux = utillinuxMinimal;
@@ -2910,13 +2906,7 @@ in
           sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
         };
       });
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "3.12";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1aqjl8dk9amd4zr99n8v2qxzgmr2hdvqfma4zh7a41rj6336c9sr";
-        };
-      });
+      pyyaml = super.pyyaml_3;
     };
   }).pkgs; toPythonApplication elasticsearch-curator;
 
