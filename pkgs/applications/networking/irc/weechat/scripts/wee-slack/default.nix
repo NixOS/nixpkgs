@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, buildEnv, fetchFromGitHub, pythonPackages }:
+{ stdenv, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
       src = ./libpath.patch;
       env = "${buildEnv {
         name = "wee-slack-env";
-        paths = with pythonPackages; [ websocket_client six ];
-      }}/${pythonPackages.python.sitePackages}";
+        paths = with python3Packages; [ websocket_client six ];
+      }}/${python3Packages.python.sitePackages}";
     })
   ];
 

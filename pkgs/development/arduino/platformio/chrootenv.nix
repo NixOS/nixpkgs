@@ -3,19 +3,8 @@
 let
   pio-pkgs = pkgs:
     let
-      python = pkgs.python.override {
+      python = pkgs.python3.override {
         packageOverrides = self: super: {
-
-          # https://github.com/platformio/platformio-core/issues/349
-          click = super.click.overridePythonAttrs (oldAttrs: rec {
-            version = "5.1";
-            src = oldAttrs.src.override {
-              inherit version;
-              sha256 = "678c98275431fad324275dec63791e4a17558b40e5a110e20a82866139a85a5a";
-            };
-            postPatch = "";
-          });
-
           platformio = self.callPackage ./core.nix { };
         };
       };
@@ -38,7 +27,7 @@ in buildFHSUserEnv {
 
   meta = with lib; {
     description = "An open source ecosystem for IoT development";
-    homepage = http://platformio.org;
+    homepage = "https://platformio.org";
     maintainers = with maintainers; [ mog ];
     license = licenses.asl20;
     platforms = with platforms; linux;

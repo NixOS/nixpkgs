@@ -2435,6 +2435,8 @@ in {
 
   ijson = callPackage ../development/python-modules/ijson {};
 
+  imagecodecs-lite = disabledIf (!isPy3k) (callPackage ../development/python-modules/imagecodecs-lite { });
+
   imagesize = callPackage ../development/python-modules/imagesize { };
 
   image-match = callPackage ../development/python-modules/image-match { };
@@ -4431,6 +4433,8 @@ in {
 
   pyupdate = callPackage ../development/python-modules/pyupdate {};
 
+  pyvmomi = callPackage ../development/python-modules/pyvmomi { };
+
   pyx = callPackage ../development/python-modules/pyx { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
@@ -6181,6 +6185,8 @@ in {
   x256 = callPackage ../development/python-modules/x256 { };
 
   yattag = callPackage ../development/python-modules/yattag { };
+
+  xenomapper = disabledIf (!isPy3k) (callPackage ../applications/science/biology/xenomapper { });
 
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;

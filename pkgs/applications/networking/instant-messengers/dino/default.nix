@@ -62,7 +62,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "Modern Jabber/XMPP Client using GTK+/Vala";
+    description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = https://github.com/dino/dino;
     license = licenses.gpl3;
     platforms = platforms.linux;

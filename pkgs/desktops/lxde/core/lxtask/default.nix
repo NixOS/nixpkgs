@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       with all xfce4 dependencies removed, some bugs fixed, and some
       improvement of UI. Although being part of LXDE, the Lightweight X11
       Desktop Environment, it's totally desktop independent and only
-      requires pure gtk+.
+      requires pure GTK.
     '';
     homepage = https://wiki.lxde.org/en/LXTask;
     license = stdenv.lib.licenses.gpl2Plus;

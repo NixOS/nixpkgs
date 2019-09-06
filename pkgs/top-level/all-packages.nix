@@ -360,6 +360,8 @@ in
     inherit url;
   };
 
+  installShellFiles = callPackage ../build-support/install-shell-files {};
+
   lazydocker = callPackage ../tools/misc/lazydocker { };
 
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
@@ -388,6 +390,8 @@ in
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackages) inherit-local; };
 
   nix-gitignore = callPackage ../build-support/nix-gitignore { };
+
+  ociTools = callPackage ../build-support/oci-tools { };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
@@ -2193,9 +2197,11 @@ in
   nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
 
   libceph = ceph.lib;
-  ceph = callPackage ../tools/filesystems/ceph {
-    boost = boost166.override { enablePython = true; };
-  };
+  inherit (callPackages ../tools/filesystems/ceph {
+    boost = boost167.override { enablePython = true; python = python37; };
+  })
+    ceph
+    ceph-client;
   ceph-dev = ceph;
 
   inherit (callPackages ../tools/security/certmgr { })
@@ -11223,7 +11229,7 @@ in
 
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
 
-  gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
+  gtk2 = callPackage ../development/libraries/gtk/2.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
@@ -11233,7 +11239,7 @@ in
     gdktarget = "x11";
   };
 
-  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
+  gtk3 = callPackage ../development/libraries/gtk/3.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
@@ -12723,7 +12729,7 @@ in
     withGUI = false;
   };
 
-  mlt = callPackage ../development/libraries/mlt {};
+  mlt = callPackage ../development/libraries/mlt { ffmpeg = ffmpeg_4; };
 
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
@@ -13306,7 +13312,7 @@ in
     kpmcore = callPackage ../development/libraries/kpmcore { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
-      ffmpeg = ffmpeg_2;
+      ffmpeg = ffmpeg_4;
     };
 
     openbr = callPackage ../development/libraries/openbr { };
@@ -15083,6 +15089,7 @@ in
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
   prometheus-postgres-exporter = callPackage ../servers/monitoring/prometheus/postgres-exporter.nix { };
+  prometheus-process-exporter = callPackage ../servers/monitoring/prometheus/process-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix {
@@ -15935,7 +15942,7 @@ in
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
-    phc-intel = callPackage ../os-specific/linux/phc-intel { };
+    phc-intel = if stdenv.lib.versionAtLeast kernel.version "4.10" then callPackage ../os-specific/linux/phc-intel { } else null;
 
     # Disable for kernels 4.15 and above due to compatibility issues
     prl-tools = if stdenv.lib.versionOlder kernel.version "4.15" then callPackage ../os-specific/linux/prl-tools { } else null;
@@ -16534,12 +16541,8 @@ in
 
   upower = callPackage ../os-specific/linux/upower { };
 
-  usbguard = libsForQt5.callPackage ../os-specific/linux/usbguard {
+  usbguard = callPackage ../os-specific/linux/usbguard {
     libgcrypt = null;
-  };
-
-  usbguard-nox = usbguard.override {
-    withGui = false;
   };
 
   usbtop = callPackage ../os-specific/linux/usbtop { };
@@ -19385,6 +19388,8 @@ in
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
   mhwaveedit = callPackage ../applications/audio/mhwaveedit {};
+
+  michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
   mid2key = callPackage ../applications/audio/mid2key { };
 
@@ -24144,6 +24149,8 @@ in
   nix-review = callPackage ../tools/package-management/nix-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
+
+  nixfmt = haskell.lib.justStaticExecutables haskellPackages.nixfmt;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 

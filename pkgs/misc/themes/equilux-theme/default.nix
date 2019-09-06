@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
-    description = "A Material Design theme for GNOME/GTK+ based desktop environments";
+    description = "A Material Design theme for GNOME/GTK based desktop environments";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.fpletz ];

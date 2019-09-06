@@ -83,13 +83,13 @@ stdenv.mkDerivation rec {
     platforms   = platforms.all;
 
     longDescription = ''
-      GTK+ is a highly usable, feature rich toolkit for creating
+      GTK is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform
-      compatibility and an easy to use API.  GTK+ it is written in C,
+      compatibility and an easy to use API.  GTK it is written in C,
       but has bindings to many other popular programming languages
-      such as C++, Python and C# among others.  GTK+ is licensed
+      such as C++, Python and C# among others.  GTK is licensed
       under the GNU LGPL 2.1 allowing development of both free and
-      proprietary software with GTK+ without any license fees or
+      proprietary software with GTK without any license fees or
       royalties.
     '';
   };

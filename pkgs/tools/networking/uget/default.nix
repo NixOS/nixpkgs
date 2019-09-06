@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
                ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
   meta = with stdenv.lib; {
-    description = "Download manager using gtk+ and libcurl";
+    description = "Download manager using GTK and libcurl";
     longDescription = ''
       uGet is a VERY Powerful download manager application with a large
       inventory of features but is still very light-weight and low on

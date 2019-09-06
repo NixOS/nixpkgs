@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
   installFlags = "prefix=$(out)";
 
   meta = with stdenv.lib; {
-    description = "D binding and OO wrapper for GTK+";
+    description = "D binding and OO wrapper for GTK";
     homepage = https://gtkd.org;
     license = licenses.lgpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;

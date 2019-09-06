@@ -48,7 +48,7 @@ in
       name = "mate";
       bgSupport = true;
       start = ''
-        # Set GTK_DATA_PREFIX so that GTK+ can find the themes
+        # Set GTK_DATA_PREFIX so that GTK can find the themes
         export GTK_DATA_PREFIX=${config.system.path}
 
         # Find theme engines

@@ -117,9 +117,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "A GTK+3 SPICE widget";
+    description = "GTK 3 SPICE widget";
     longDescription = ''
-      spice-gtk is a GTK+3 SPICE widget. It features glib-based
+      spice-gtk is a GTK 3 SPICE widget. It features glib-based
       objects for SPICE protocol parsing and a gtk widget for embedding
       the SPICE display into other applications such as virt-manager.
       Python bindings are available too.

@@ -81,6 +81,10 @@ in
         default = "";
         description = ''
           Defines the mapping from system users to database users.
+
+          The general form is:
+
+          map-name system-username database-username
         '';
       };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "Gtk+ widget for displaying OpenStreetMap tiles";
+    description = "GTK widget for displaying OpenStreetMap tiles";
     homepage = https://nzjrs.github.io/osm-gps-map;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hrdinka ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "2.24.4";
 
   meta = {
-    description = "Web content rendering engine, GTK+ port";
+    description = "Web content rendering engine, GTK port";
     homepage = https://webkitgtk.org/;
     license = licenses.bsd2;
     platforms = platforms.linux;

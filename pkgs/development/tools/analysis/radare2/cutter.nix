@@ -5,7 +5,8 @@
 , qtbase, qtsvg, qtwebengine
 # buildInputs
 , r2-for-cutter
-, python3 }:
+, python3
+, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "radare2-cutter";
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ qmake pkgconfig ];
-  buildInputs = [ qtbase qtsvg qtwebengine r2-for-cutter python3 ];
+  buildInputs = [ qtbase qtsvg qtwebengine r2-for-cutter python3 wrapQtAppsHook ];
 
   qmakeFlags = [
     "CONFIG+=link_pkgconfig"
