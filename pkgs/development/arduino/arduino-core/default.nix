@@ -24,8 +24,8 @@ let
   };
   # Some .so-files are later copied from .jar-s to $HOME, so patch them beforehand
   patchelfInJars =
-       lib.optional (stdenv.hostPlatform.system == "x86_64-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino1.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so";}
-    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino1.jar"; file = "libs/linux/libjSSC-2.8_x86.so";}
+       lib.optional (stdenv.hostPlatform.system == "x86_64-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino3.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so";}
+    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino3.jar"; file = "libs/linux/libjSSC-2.8_x86.so";}
   ;
   # abiVersion 6 is default, but we need 5 for `avrdude_bin` executable
   ncurses5 = ncurses.override { abiVersion = "5"; };
@@ -58,14 +58,14 @@ let
              + stdenv.lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
-  version = "1.8.5";
+  version = "1.8.9";
   name = "${flavor}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = "${version}";
-    sha256 = "0ww72qfk7fyvprz15lc80i1axfdacb5fij4h5j5pakrg76mng2c3";
+    sha256 = "0kblq0bqap2zzkflrj6rmdi8dvqxa28fcwwrc3lfmbz2893ni3w4";
   };
 
   teensyduino_version = "147";
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
     url = "http://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
     sha256 =
       lib.optionalString ("${teensy_architecture}" == "linux64")
-        "1f8s3by5lc6fazyaa9zc9kz3ar8zj8jabab1fy5jzh49fbd8bydx"
+        "1lv4in9j0r8s0cis4zdvbk2637vlj12w69wdxgcxcrwvkcdahkpa"
       + lib.optionalString ("${teensy_architecture}" == "linux32")
-        "1r9ral9aq5vp02dwgagifk5h403l7knxdyi1w23rqpcbbpa423lw"
+        "0zla3a6gd9prclgrbbgsmhf8ds8zb221m65x21pvz0y1cwsdvjpm"
       + lib.optionalString ("${teensy_architecture}" == "linuxarm")
-        "0sz18wns00kysmb2zv7a67dy9wpxiawq3ykfr07wjyg8h1fy3p6h";
+        "1w5m49wfd68zazli0lf3w4zykab8n7mzp3wnbjqfpx2vip80bqnz";
   };
 
 
@@ -216,6 +216,6 @@ stdenv.mkDerivation rec {
     homepage = http://arduino.cc/;
     license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ antono auntie robberer bjornfor ];
+    maintainers = with maintainers; [ antono auntie robberer bjornfor bergey ];
   };
 }
