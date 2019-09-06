@@ -464,7 +464,14 @@
      <literal>packetbeat5</literal>) of the ELK-stack and Elastic beats have been removed.
     </para>
    </listitem>
-
+   <listitem>
+    <para>
+     For NixOS 19.03, both Prometheus 1 and 2 were available to allow for
+     a seamless transition from version 1 to 2 with existing setups.
+     Because Prometheus 1 is no longer developed, it was removed.
+     Prometheus 2 is now configured with <literal>services.prometheus</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
