@@ -919,6 +919,8 @@ in {
 
   pyftdi = callPackage ../development/python-modules/pyftdi { };
 
+  pygam = callPackage ../development/python-modules/pygam { };
+
   pygame = callPackage ../development/python-modules/pygame { };
 
   pygbm = callPackage ../development/python-modules/pygbm { };
