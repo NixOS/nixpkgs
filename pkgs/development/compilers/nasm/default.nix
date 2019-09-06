@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     make golden && make test
   '';
 
+  NIX_CFLAGS_COMPILE="-Wno-error=attributes";
+
   meta = with stdenv.lib; {
     homepage = https://www.nasm.us/;
     description = "An 80x86 and x86-64 assembler designed for portability and modularity";
