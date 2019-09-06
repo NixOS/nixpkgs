@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://blog.lxde.org/category/pcmanfm/;
     license = licenses.gpl2Plus;
-    description = "File manager with GTK+ interface";
+    description = "File manager with GTK interface";
     maintainers = [ maintainers.ttuegel ];
     platforms = platforms.linux;
   };

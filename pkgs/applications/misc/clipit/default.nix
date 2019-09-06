@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool gtk2 xdotool hicolor-icon-theme ];
 
   meta = with stdenv.lib; {
-    description = "Lightweight GTK+ Clipboard Manager";
+    description = "Lightweight GTK Clipboard Manager";
     homepage    = "http://clipit.rspwn.com";
     license     = licenses.gpl3;
     platforms   = platforms.linux;

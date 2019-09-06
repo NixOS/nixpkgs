@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
 
   meta = with stdenv.lib; {
-    description = "Canvas widget for GTK+ based on the the Cairo 2D library";
+    description = "Canvas widget for GTK based on the the Cairo 2D library";
     homepage = https://wiki.gnome.org/Projects/GooCanvas;
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];

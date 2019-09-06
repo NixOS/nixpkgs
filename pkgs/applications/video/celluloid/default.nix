@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    description = "Simple GTK+ frontend for the mpv video player";
+    description = "Simple GTK frontend for the mpv video player";
     longDescription = ''
       GNOME MPV interacts with mpv via the client API exported by libmpv,
       allowing access to mpv's powerful playback capabilities through an

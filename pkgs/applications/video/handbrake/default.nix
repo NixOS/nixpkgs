@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       and containers. Very versatile and customizable.
       Package provides:
       CLI - `HandbrakeCLI`
-      GTK+ GUI - `ghb`
+      GTK GUI - `ghb`
     '';
     license = licenses.gpl2;
     maintainers = with maintainers; [ Anton-Latukha wmertens ];

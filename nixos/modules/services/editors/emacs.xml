@@ -59,7 +59,7 @@
        <para>
         The latest stable version of Emacs 25 using the
         <link
-                xlink:href="http://www.gtk.org">GTK+ 2</link>
+                xlink:href="http://www.gtk.org">GTK 2</link>
         widget toolkit.
        </para>
       </listitem>
@@ -321,7 +321,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
    <para>
     If you want, you can tweak the Emacs package itself from your
     <filename>emacs.nix</filename>. For example, if you want to have a
-    GTK+3-based Emacs instead of the default GTK+2-based binary and remove the
+    GTK 3-based Emacs instead of the default GTK 2-based binary and remove the
     automatically generated <filename>emacs.desktop</filename> (useful is you
     only use <command>emacsclient</command>), you can change your file
     <filename>emacs.nix</filename> in this way:
@@ -349,7 +349,7 @@ in [...]
 
    <para>
     After building this file as shown in <xref linkend="ex-emacsNix" />, you
-    will get an GTK3-based Emacs binary pre-loaded with your favorite packages.
+    will get an GTK 3-based Emacs binary pre-loaded with your favorite packages.
    </para>
   </section>
  </section>

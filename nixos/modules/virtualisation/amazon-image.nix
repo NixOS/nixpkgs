@@ -147,7 +147,7 @@ in
     networking.timeServers = [ "169.254.169.123" ];
 
     # udisks has become too bloated to have in a headless system
-    # (e.g. it depends on GTK+).
+    # (e.g. it depends on GTK).
     services.udisks2.enable = false;
   };
 }

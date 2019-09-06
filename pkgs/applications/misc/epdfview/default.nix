@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://packages.debian.org/wheezy/epdfview;
-    description = "A lightweight PDF document viewer using Poppler and GTK+";
+    description = "A lightweight PDF document viewer using Poppler and GTK";
     longDescription = ''
-        ePDFView is a free lightweight PDF document viewer using Poppler and
-        GTK+ libraries. The aim of ePDFView is to make a simple PDF document
-        viewer, in the lines of Evince but without using the Gnome libraries.
+      ePDFView is a free lightweight PDF document viewer using Poppler and
+      GTK libraries. The aim of ePDFView is to make a simple PDF document
+      viewer, in the lines of Evince but without using the Gnome libraries.
     '';
     license = licenses.gpl2;
     maintainers = [ maintainers.astsmtl ];

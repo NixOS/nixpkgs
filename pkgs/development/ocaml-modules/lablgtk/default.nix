@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       z77z roconnor vbgl
     ];
     homepage = http://lablgtk.forge.ocamlcore.org/;
-    description = "An OCaml interface to gtk+";
+    description = "An OCaml interface to GTK";
     license = licenses.lgpl21Plus;
   };
 }
