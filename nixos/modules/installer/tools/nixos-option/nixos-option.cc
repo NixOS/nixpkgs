@@ -434,6 +434,9 @@ void printOption(Context *ctx, Out &out, std::string const &path,
   out << "\n\nDefault:\n";
   printAttr(ctx, out, "default", option);
 
+  out << "\n\nType:\n";
+  printAttr(ctx, out, "type.description", option);
+
   out << "\n\nExample:\n";
   printAttr(ctx, out, "example", option);
 
