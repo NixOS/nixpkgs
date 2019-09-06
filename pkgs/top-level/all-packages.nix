@@ -4207,7 +4207,6 @@ in
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
-  kibana5 = callPackage ../development/tools/misc/kibana/5.x.nix { };
   kibana6 = callPackage ../development/tools/misc/kibana/6.x.nix { };
   kibana6-oss = callPackage ../development/tools/misc/kibana/6.x.nix {
     enableUnfree = false;
@@ -4309,7 +4308,6 @@ in
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
-  logstash5 = callPackage ../tools/misc/logstash/5.x.nix { };
   logstash6 = callPackage ../tools/misc/logstash/6.x.nix { };
   logstash6-oss = callPackage ../tools/misc/logstash/6.x.nix {
     enableUnfree = false;
