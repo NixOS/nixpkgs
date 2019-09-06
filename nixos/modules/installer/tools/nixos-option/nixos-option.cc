@@ -440,6 +440,45 @@ void printListing(Out & out, Value * v)
     }
 }
 
+bool optionTypeIs(Context * ctx, Value & v, std::string const & sought_type)
+{
+    try {
+        auto const & type_lookup = v.attrs->find(ctx->state->sType);
+        if (type_lookup == v.attrs->end()) {
+            return false;
+        }
+        Value type = evaluateValue(ctx, type_lookup->value);
+        if (type.type != tAttrs) {
+            return false;
+        }
+        auto const & name_lookup = type.attrs->find(ctx->state->sName);
+        if (name_lookup == type.attrs->end()) {
+            return false;
+        }
+        Value name = evaluateValue(ctx, name_lookup->value);
+        if (name.type != tString) {
+            return false;
+        }
+        return name.string.s == sought_type;
+    } catch (Error &) {
+        return false;
+    }
+}
+
+Value getSubOptions(Context * ctx, Value & option)
+{
+    Value getSubOptions =
+        evaluateValue(ctx, findAlongAttrPath(*ctx->state, "type.getSubOptions", *ctx->autoArgs, option));
+    if (getSubOptions.type != tLambda) {
+        throw Error("Option's type.getSubOptions isn't a function");
+    }
+    Value emptyString{};
+    nix::mkString(emptyString, "");
+    Value v;
+    ctx->state->callFunction(getSubOptions, emptyString, v, nix::Pos{});
+    return v;
+}
+
 // Carefully walk an option path, looking for sub-options when a path walks past
 // an option value.
 Value findAlongOptionPath(Context * ctx, std::string const & path)
@@ -453,16 +492,13 @@ Value findAlongOptionPath(Context * ctx, std::string const & path)
         if (attr.empty()) {
             throw Error("empty attribute name in selection path '%s'", path);
         }
-        if (isOption(ctx, v) && !last_attribute) {
-            Value getSubOptions =
-                evaluateValue(ctx, findAlongAttrPath(*ctx->state, "type.getSubOptions", *ctx->autoArgs, v));
-            if (getSubOptions.type != tLambda) {
-                throw Error("Option's type.getSubOptions isn't a function at '%s' in path '%s'", attr, path);
-            }
-            Value emptyString{};
-            nix::mkString(emptyString, "");
-            ctx->state->callFunction(getSubOptions, emptyString, v, nix::Pos{});
-            // Note that we've consumed attr, but didn't actually use it.
+        if (isOption(ctx, v) && optionTypeIs(ctx, v, "submodule")) {
+            v = getSubOptions(ctx, v);
+        }
+        if (isOption(ctx, v) && optionTypeIs(ctx, v, "loaOf") && !last_attribute) {
+            v = getSubOptions(ctx, v);
+            // Note that we've consumed attr, but didn't actually use it.  This is the path component that's looked up
+            // in the list or attribute set that doesn't name an option -- the "root" in "users.users.root.name".
         } else if (v.type != tAttrs) {
             throw Error("attribute '%s' in path '%s' attempts to index a value that should be a set but is %s", attr,
                         path, showType(v));
