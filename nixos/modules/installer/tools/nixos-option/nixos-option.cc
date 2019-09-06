@@ -169,8 +169,8 @@ std::string const appendPath(std::string const & prefix, std::string const & suf
 
 bool forbiddenRecursionName(std::string name) { return (!name.empty() && name[0] == '_') || name == "haskellPackages"; }
 
-void recurse(const std::function<bool(std::string const & path, std::variant<Value, std::exception_ptr>)> & f, Context * ctx,
-             Value v, std::string const & path)
+void recurse(const std::function<bool(std::string const & path, std::variant<Value, std::exception_ptr>)> & f,
+             Context * ctx, Value v, std::string const & path)
 {
     std::variant<Value, std::exception_ptr> evaluated;
     try {
@@ -231,8 +231,9 @@ void mapOptions(const std::function<void(std::string const & path)> & f, Context
 //   users.users.nixbld1 = ... .. ...
 //   ...
 //   users.users.systemd-timesync = ... .. ...
-void mapConfigValuesInOption(const std::function<void(std::string const & path, std::variant<Value, std::exception_ptr> v)> & f,
-                             std::string const & path, Context * ctx)
+void mapConfigValuesInOption(
+    const std::function<void(std::string const & path, std::variant<Value, std::exception_ptr> v)> & f,
+    std::string const & path, Context * ctx)
 {
     Value * option;
     try {
@@ -276,7 +277,8 @@ Value parseAndEval(EvalState * state, std::string const & expression, std::strin
     return v;
 }
 
-void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value, std::string const & path);
+void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value,
+                std::string const & path);
 
 void printList(Context * ctx, Out & out, Value & v)
 {
@@ -338,7 +340,7 @@ void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr
 {
     try {
         if (std::holds_alternative<std::exception_ptr>(maybe_value)) {
-          std::rethrow_exception(std::get<std::exception_ptr>(maybe_value));
+            std::rethrow_exception(std::get<std::exception_ptr>(maybe_value));
         }
         Value v = evaluateValue(ctx, &std::get<Value>(maybe_value));
         if (ctx->state->isDerivation(v)) {
