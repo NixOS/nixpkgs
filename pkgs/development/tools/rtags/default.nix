@@ -1,37 +1,49 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, apple_sdk, emacs, pkgconfig }:
+{ stdenv, lib, fetchFromGitHub
+, apple_sdk
+, cmake
+, emacs
+, llvmPackages
+, openssl
+, pkgconfig
+, rct
+}:
 
 stdenv.mkDerivation rec {
   pname = "rtags";
-  version = "2.16";
+  version = "2.33";
+
+  src = fetchFromGitHub {
+    owner = "andersbakken";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "14whz3l2595vm0hj67hl3i1yw0mslhz3c5j4r6c1j9z3jwf93xim";
+  };
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ llvmPackages.llvm openssl emacs ]
     ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
     ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
 
-  src = fetchgit {
-    rev = "refs/tags/v${version}";
-    fetchSubmodules = true;
-    url = "https://github.com/andersbakken/rtags.git";
-    sha256 = "15qmwkajw2zzfnw9hnv08p0asa6prg88nvqlxmv56c0dyhldjpkm";
-    # unicode file names lead to different checksums on HFS+ vs. other
-    # filesystems because of unicode normalisation
-    postFetch = ''
-      rm $out/src/rct/tests/testfile_*.txt
-    '';
-  };
+  # emulate `git submodule update --init`, they only support rct as source
+  prePatch = ''
+    rm -r src/rct
+    ln -sfv ${rct.src} src/rct
+  '';
 
   preConfigure = ''
     export LIBCLANG_CXXFLAGS="-isystem ${llvmPackages.clang.cc}/include $(llvm-config --cxxflags) -fexceptions" \
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
   '';
 
+  # seems to need rdm running as a daemon and additional setup
+  doCheck = false;
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "C/C++ client-server indexer based on clang";
-    homepage = https://github.com/andersbakken/rtags;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; x86_64 ++ aarch64;
+    homepage = "https://github.com/andersbakken/rtags";
+    license = licenses.gpl3;
+    platforms = with platforms; x86_64 ++ aarch64;
+    maintainers = with maintainers; [ jonringer ];
   };
 }
