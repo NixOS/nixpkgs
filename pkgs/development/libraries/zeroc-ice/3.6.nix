@@ -1,39 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, mcpp, bzip2, expat, openssl, lmdb
+{ stdenv, lib, fetchFromGitHub, mcpp, bzip2, expat, openssl, db5
 , darwin, libiconv, Security
 , cpp11 ? false
 }:
 
-let
-  zeroc_mcpp = mcpp.overrideAttrs (self: rec {
-    pname = "zeroc-mcpp";
-    version = "2.7.2.14";
-
-    src = fetchFromGitHub {
-      owner = "zeroc-ice";
-      repo = "mcpp";
-      rev = "v${version}";
-      sha256 = "1psryc2ql1cp91xd3f8jz84mdaqvwzkdq2pr96nwn03ds4cd88wh";
-    };
-
-    installFlags = [ "PREFIX=$(out)" ];
-  });
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "zeroc-ice";
-  version = "3.7.2";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    sha256 = "0m9lh79dfpcwcp2jhmj0wqdcsw3rl633x2hzfw9n2i34jjv64fvg";
+    sha256 = "05xympbns32aalgcfcpxwfd7bvg343f16xpg6jv5s335ski3cjy2";
   };
 
-  buildInputs = [ zeroc_mcpp bzip2 expat openssl lmdb ]
+  buildInputs = [ mcpp bzip2 expat openssl db5 ]
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
 
+  postUnpack = ''
+    sourceRoot=$sourceRoot/cpp
+  '';
+
   prePatch = lib.optional stdenv.isDarwin ''
-    substituteInPlace Make.rules.Darwin \
+    substituteInPlace config/Make.rules.Darwin \
         --replace xcrun ""
   '';
 
@@ -42,22 +31,21 @@ in stdenv.mkDerivation rec {
       "prefix=$out"
       "OPTIMIZE=yes"
       "USR_DIR_INSTALL=yes"
-      "LANGUAGES=cpp"
       "CONFIGS=${if cpp11 then "cpp11-shared" else "shared"}"
       "SKIP=slice2py" # provided by a separate package
     )
   '';
 
-  buildFlags = [ "srcs" ]; # no tests; they require network
-
-  enableParallelBuilding = true;
+  # cannot find -lIceXML (linking bin/transformdb)
+  enableParallelBuilding = false;
 
   outputs = [ "out" "bin" "dev" ];
 
   postInstall = ''
     mkdir -p $bin $dev/share
     mv $out/bin $bin
-    mv $out/share/ice $dev/share
+    mv $out/share/Ice-* $dev/share/ice
+    rm -rf $out/share/slice
   '';
 
   meta = with stdenv.lib; {
@@ -65,6 +53,5 @@ in stdenv.mkDerivation rec {
     description = "The internet communications engine";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
   };
 }

@@ -21654,7 +21654,13 @@ in
 
   zathura = callPackage ../applications/misc/zathura { };
 
-  zeroc_ice = callPackage ../development/libraries/zeroc-ice {
+  zeroc-ice = callPackage ../development/libraries/zeroc-ice {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
+
+  zeroc-ice-36 = callPackage ../development/libraries/zeroc-ice/3.6.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
