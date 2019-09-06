@@ -423,7 +423,7 @@ in
       };
 
       copyKernels = mkOption {
-        default = false;
+        default = true;
         type = types.bool;
         description = ''
           Whether the GRUB menu builder should copy kernels and initial
