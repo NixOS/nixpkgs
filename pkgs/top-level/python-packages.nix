@@ -3007,8 +3007,6 @@ in {
 
   effect = callPackage ../development/python-modules/effect {};
 
-  elpy = callPackage ../development/python-modules/elpy { };
-
   enum = callPackage ../development/python-modules/enum { };
 
   enum-compat = callPackage ../development/python-modules/enum-compat { };
