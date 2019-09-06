@@ -435,6 +435,9 @@ mapAliases ({
   # added 2019-08-01
   mumble_git = pkgs.mumble_rc;
   murmur_git = pkgs.murmur_rc;
+
+  # added 2019-09-06
+  zeroc_ice = pkgs.zeroc-ice;
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
