@@ -17,7 +17,7 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "sasview";
-  version = "4.2.0";
+  version = "4.2.2";
 
   checkInputs = with python.pkgs; [
     pytest
@@ -61,7 +61,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "SasView";
     repo = "sasview";
     rev = "v${version}";
-    sha256 = "0k3486h46k6406h0vla8h68fd78wh3dcaq5w6f12jh6g4cjxv9qa";
+    sha256 = "0w0n02vswmhhbwqk1z6ahq5z46sa8bp20j3l6w82jqsj5d2f10xz";
   };
 
   patches = [ ./pyparsing-fix.patch ./local_config.patch ];
