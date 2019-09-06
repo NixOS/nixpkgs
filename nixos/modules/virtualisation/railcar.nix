@@ -25,7 +25,7 @@ let
   mount = with types; (submodule {
     options = {
       type = mkOption {
-        type = string;
+        type = str;
         default = "none";
         description = ''
           The type of the filesystem to be mounted.
@@ -37,11 +37,11 @@ let
         '';
       };
       source = mkOption {
-        type = string;
+        type = str;
         description = "Source for the in-container mount";
       };
       options = mkOption {
-        type = loaOf (string);
+        type = loaOf (str);
         default = [ "bind" ];
         description = ''
           Mount options of the filesystem to be used.
@@ -64,7 +64,7 @@ in
       type = with types; loaOf (submodule ({ name, config, ... }: {
         options = {
           cmd = mkOption {
-            type = types.string;
+            type = types.lines;
             description = "Command or script to run inside the container";
           };
 
@@ -83,19 +83,19 @@ in
           };
 
           runType = mkOption {
-            type = types.string;
+            type = types.str;
             default = "oneshot";
             description = "The systemd service run type";
           };
 
           os = mkOption {
-            type = types.string;
+            type = types.str;
             default = "linux";
             description = "OS type of the container";
           };
 
           arch = mkOption {
-            type = types.string;
+            type = types.str;
             default = "x86_64";
             description = "Computer architecture type of the container";
           };
