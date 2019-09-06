@@ -63,10 +63,10 @@
       like games.
       <itemizedlist>
       <para>This can be achieved with the following options which the desktop manager default enables, excluding <literal>games</literal>.</para>
-      <listitem><para><link linkend="opt-services.gnome3.core-os-services.enable"><literal>services.gnome3.core-os-services.enable</literal></link></para></listitem>
-      <listitem><para><link linkend="opt-services.gnome3.core-shell.enable"><literal>services.gnome3.core-shell.enable</literal></link></para></listitem>
-      <listitem><para><link linkend="opt-services.gnome3.core-utilities.enable"><literal>services.gnome3.core-utilities.enable</literal></link></para></listitem>
-      <listitem><para><link linkend="opt-services.gnome3.games.enable"><literal>services.gnome3.games.enable</literal></link></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.core-os-services.enable"/></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.core-shell.enable"/></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.core-utilities.enable"/></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.games.enable"/></para></listitem>
       </itemizedlist>
       With these options we hope to give users finer grained control over their systems. Prior to this change you'd either have to manually
       disable options or use <option>environment.gnome3.excludePackages</option> which only excluded the optional applications.
@@ -426,6 +426,16 @@
     <para>
      The WeeChat plugin <literal>pkgs.weechatScripts.weechat-xmpp</literal> has been removed as it doesn't receive
      any updates from upstream and depends on outdated Python2-based modules.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Old unsupported versions (<literal>logstash5</literal>,
+     <literal>kibana5</literal>,
+     <literal>filebeat5</literal>,
+     <literal>heartbeat5</literal>,
+     <literal>metricbeat5</literal>,
+     <literal>packetbeat5</literal>) of the ELK-stack and Elastic beats have been removed.
     </para>
    </listitem>
 

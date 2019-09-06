@@ -1,7 +1,7 @@
 import ./make-test.nix ({pkgs, lib, ...}: {
   name = "All-in-one-basic-ceph-cluster";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ lejonet ];
+    maintainers = [ johanot lejonet ];
   };
 
   nodes = {

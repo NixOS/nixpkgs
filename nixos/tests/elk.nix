@@ -178,12 +178,6 @@ let
     '';
   };
 in mapAttrs mkElkTest {
-  ELK-5 = {
-    elasticsearch = pkgs.elasticsearch5;
-    logstash      = pkgs.logstash5;
-    kibana        = pkgs.kibana5;
-    journalbeat   = pkgs.journalbeat5;
-  };
   ELK-6 =
     if enableUnfree
     then {

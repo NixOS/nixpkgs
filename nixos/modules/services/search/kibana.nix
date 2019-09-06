@@ -150,7 +150,7 @@ in {
       description = "Kibana package to use";
       default = pkgs.kibana;
       defaultText = "pkgs.kibana";
-      example = "pkgs.kibana5";
+      example = "pkgs.kibana";
       type = types.package;
     };
 
