@@ -88,7 +88,7 @@ rec {
   /* Strict version of `foldl`.
 
      The difference is that evaluation is forced upon access. Usually used
-     with small whole results (in contract with lazily-generated list or large
+     with small whole results (in contrast with lazily-generated list or large
      lists where only a part is consumed.)
 
      Type: foldl' :: (b -> a -> b) -> b -> [a] -> b
