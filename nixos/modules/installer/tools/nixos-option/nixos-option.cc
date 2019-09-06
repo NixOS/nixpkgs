@@ -386,7 +386,7 @@ void printValue(Context *ctx, Out &out, std::variant<Value, Error> maybe_value,
       // misleading.  These values may or may not actually be "used" in the
       // config.  The thing throwing the error message assumes that if anything
       // ever looks at this value, it is a "use" of this value.  But here in
-      // nixos-options-summary, we are looking at this value only to print it.
+      // nixos-option, we are looking at this value only to print it.
       // In order to avoid implying that this undefined value is actually
       // referenced, eat the underlying error message and emit "«not defined»".
       out << "«not defined»";
@@ -534,9 +534,9 @@ int main(int argc, char **argv) {
   MyArgs myArgs(nix::baseNameOf(argv[0]),
                 [&](Strings::iterator &arg, const Strings::iterator &end) {
                   if (*arg == "--help") {
-                    nix::showManPage("nixos-options-summary");
+                    nix::showManPage("nixos-option");
                   } else if (*arg == "--version") {
-                    nix::printVersion("nixos-options-summary");
+                    nix::printVersion("nixos-option");
                   } else if (*arg == "--all") {
                     all = true;
                   } else if (*arg == "--path") {
