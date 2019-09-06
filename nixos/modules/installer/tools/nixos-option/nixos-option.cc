@@ -1,6 +1,5 @@
 #include <nix/config.h> // for nix/globals.hh's reference to SYSTEM
 
-#include <algorithm>               // for sort
 #include <functional>              // for function
 #include <iostream>                // for operator<<, basic_ostream, ostrin...
 #include <iterator>                // for next
@@ -276,46 +275,12 @@ Value parseAndEval(EvalState * state, std::string const & expression, std::strin
 
 void printValue(Context * ctx, Out & out, std::variant<Value, Error> maybe_value, std::string const & path);
 
-void printUnsortedList(Context * ctx, Out & out, Value & v)
+void printList(Context * ctx, Out & out, Value & v)
 {
     Out list_out(out, "[", "]", v.listSize());
     for (unsigned int n = 0; n < v.listSize(); ++n) {
         printValue(ctx, list_out, *v.listElems()[n], "");
         list_out << Out::sep;
-    }
-}
-
-void printSortedList(Context * ctx, Out & out, Value & v)
-{
-    std::vector<std::string> results;
-    for (unsigned int n = 0; n < v.listSize(); ++n) {
-        std::ostringstream buf;
-        Out buf_out(buf);
-        printValue(ctx, buf_out, *v.listElems()[n], "");
-        results.push_back(buf.str());
-    }
-    std::sort(results.begin(), results.end());
-    Out list_out(out, "[", "]", v.listSize());
-    for (auto const & v : results) {
-        list_out << v << Out::sep;
-    }
-}
-
-bool shouldSort(Context * ctx, Value & v)
-{
-    // Some lists should clearly be printed in sorted order, like
-    // environment.systemPackages.  Some clearly should not, like
-    // services.xserver.multitouch.buttonsMap.  As a conservative heuristic, sort
-    // lists of derivations.
-    return v.listSize() > 0 && ctx->state->isDerivation(*v.listElems()[0]);
-}
-
-void printList(Context * ctx, Out & out, Value & v)
-{
-    if (shouldSort(ctx, v)) {
-        printSortedList(ctx, out, v);
-    } else {
-        printUnsortedList(ctx, out, v);
     }
 }
 
