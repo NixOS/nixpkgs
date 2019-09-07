@@ -138,6 +138,7 @@ in {
           User = "sks";
           Group = "sks";
           Restart = "always";
+          TimeoutStartSec = "1h";
           ExecStart = "${sksPkg}/bin/sks db -hkp_address ${hkpAddress} -hkp_port ${hkpPort}";
         };
       };
