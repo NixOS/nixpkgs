@@ -8,7 +8,7 @@
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
-, eglPlatforms ? [ "x11" "surfaceless" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
+, eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "surfaceless" "wayland" "drm" ]
 , OpenGL, Xplugin
 }:
 
