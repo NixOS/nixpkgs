@@ -3598,7 +3598,6 @@ broken-packages:
   - cabin
   - cabocha
   - cached
-  - cachix
   - cacophony
   - caffegraph
   - cairo-core
