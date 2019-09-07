@@ -15,7 +15,7 @@ with lib;
     };
 
     # Enable touchpad support for many laptops.
-    synaptics.enable = true;
+    libinput.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
