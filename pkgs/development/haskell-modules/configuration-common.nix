@@ -77,13 +77,6 @@ self: super: {
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
 
-  # compatibility with servant-0.16.2. Remove with the next release
-  cachix = appendPatch super.cachix (pkgs.fetchpatch {
-    url = "https://github.com/cachix/cachix/commit/051679a99cd56e2497c0f05310035b6649129a13.patch";
-    sha256 = "198n5byp9mfiymgzpvyd42l6vqy6hfy9kdi7svfx7mcwsy7sg7kp";
-    stripLen = 1;
-  });
-
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
