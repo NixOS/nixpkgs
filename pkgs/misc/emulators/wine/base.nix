@@ -55,6 +55,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
+     # Needed for CFNotificationCenterAddObserver symbols.
+	   pkgs.buildPackages.darwin.cf-private
   ])
   ++ lib.optionals stdenv.isLinux  (with pkgs.xorg; [
      libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
