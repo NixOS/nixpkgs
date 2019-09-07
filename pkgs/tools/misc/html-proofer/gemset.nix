@@ -32,15 +32,15 @@
     version = "1.11.1";
   };
   html-proofer = {
-    dependencies = ["addressable" "mercenary" "nokogiri" "parallel" "rainbow" "timerizer" "typhoeus" "yell"];
+    dependencies = ["addressable" "mercenary" "nokogiri" "parallel" "rainbow" "typhoeus" "yell"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1a5h5ijrngfd4ri36g7bs5lcg4001i5xx7nlk35rsg34xpy8mp04";
+      sha256 = "0xkcchgvlqkk3xgn11vw8n42bhavj6nn6vqsbycbx1rqxgiljlhy";
       type = "gem";
     };
-    version = "3.12.0";
+    version = "3.12.2";
   };
   mercenary = {
     groups = ["default"];
@@ -102,16 +102,6 @@
       type = "gem";
     };
     version = "3.0.0";
-  };
-  timerizer = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "06zk04kprgj0abws15wqrk4q29f3wcx7z2jj3v25nnb2517lk66c";
-      type = "gem";
-    };
-    version = "0.3.2";
   };
   typhoeus = {
     dependencies = ["ethon"];
