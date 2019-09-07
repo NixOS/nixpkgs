@@ -14736,6 +14736,8 @@ in
 
   meteor = callPackage ../servers/meteor { };
 
+  micronaut = callPackage ../development/tools/micronaut {};
+
   minio = callPackage ../servers/minio { };
 
   # Backwards compatibility.
