@@ -4,6 +4,7 @@
 , fetchpatch
 , variant ? "standalone"
 , fetchFromGitHub
+, fetchFromGitLab
 , cmake
 , pkgconfig
 , opencv
@@ -19,7 +20,6 @@
 , gimp ? null
 , qtbase
 , qttools
-, fetchgit
 }:
 
 let
@@ -52,7 +52,7 @@ assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps 
 
 mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") ''-${variant}''}";
-  version = "2.3.6";
+  version = "2.7.1";
 
   gmic-community = fetchFromGitHub {
     owner = "dtschump";
@@ -61,46 +61,35 @@ mkDerivation rec {
     sha256 = "08d37b49qgh5d4rds7hvr5wjj4p1y8cnbidz1cyqsibq0555pwq2";
   };
 
-  CImg = fetchgit {
-    url = "https://framagit.org/dtschump/CImg";
-    rev = "90f5657d8eab7b549ef945103ef680e747385805";
-    sha256 = "1af3dwqq18dkw0lz2gvnlw8y0kc1cw01hnc72rf3pg2wyjcp0pvc";
+  CImg = fetchFromGitLab {
+    domain = "framagit.org";
+    owner = "dtschump";
+    repo = "CImg";
+    rev = "v.${version}";
+    sha256 = "1mfkjvf5r3ppc1dd6yvqn7xlhgzfg9k1k5v2sq2k9m70g8p7rgpd";
   };
 
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
-    # Version should e in sync with gmic. Basically the version string without dots
-    url = "http://gmic.eu/gmic_stdlib236.h";
-    sha256 = "0q5g87dsn9byd2qqsa9xrsggfb9qv055s3l2gc0jrcvpx2qbza4q";
+    url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] version}.h";
+    sha256 = "0v12smknr1s44s6wq2gbnw0hb98xrwp6i3zg9wf49cl7s9qf76j3";
   };
 
   gmic = fetchFromGitHub {
     owner = "dtschump";
     repo = "gmic";
     rev = "v.${version}";
-    sha256 = "1yg9ri3n07drv8gz4x0mn39ryi801ibl26jaza47m19ma893m8fi";
+    sha256 = "0pa6kflr1gqgzh8rk7bylvkxs989r5jy0q7b62mnzx8895slwfb5";
   };
 
   gmic_qt = fetchFromGitHub {
     owner = "c-koi";
     repo = "gmic-qt";
     rev = "v.${version}";
-    sha256 = "0j9wqlq67dwzir36yg58xy5lbblwizvgcvlmzcv9d6l901d5ayf3";
+    sha256 = "08a0660083wv5fb1w9qqhm4f8cfwbqq723qzqq647mid1n7sy959";
   };
 
   patches = [
-    # Add install targets
-    (fetchpatch {
-      url = https://github.com/c-koi/gmic-qt/commit/ec4babbaf06a8711a4fd841f7de4106cda765109.patch;
-      sha256 = "1rim6vjx3k0yw8mplq8ampb2ykfabjj6d8vynmp8lm6n8id99yr0";
-    })
-
-    # Fix translations installation
-    (fetchpatch {
-      url = https://github.com/c-koi/gmic-qt/commit/91f92ba589d6559541d5dfacf39dab4e0faaa106.patch;
-      sha256 = "1kh39349qcna386lx80kgj87xxlyh95xmwnv539z4zqnpzyqdxfs";
-    })
-
     # Install GIMP plug-in to a correct destination
     # https://github.com/c-koi/gmic-qt/pull/78
     ./fix-gimp-plugin-path.patch
@@ -116,10 +105,6 @@ mkDerivation rec {
     cp ${gmic_stdlib} gmic/src/gmic_stdlib.h
 
     cd gmic_qt
-  '';
-
-  preConfigure = ''
-    make -C ../gmic/src CImg.h gmic_stdlib.h
   '';
 
   nativeBuildInputs = [
