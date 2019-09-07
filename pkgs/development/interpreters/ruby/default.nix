@@ -1,5 +1,5 @@
 { stdenv, buildPackages, lib
-, fetchurl, fetchFromSavannah, fetchFromGitHub
+, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
@@ -34,7 +34,7 @@ let
     };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
-      , fetchurl, fetchFromSavannah, fetchFromGitHub
+      , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
@@ -90,7 +90,7 @@ let
 
         patches =
           (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops;
+            inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny};
 
