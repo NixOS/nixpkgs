@@ -22168,7 +22168,7 @@ in
   mrrescue = callPackage ../games/mrrescue { };
 
   mudlet = libsForQt5.callPackage ../games/mudlet {
-    inherit (lua51Packages) luafilesystem lrexlib-pcre luazip luasql-sqlite3;
+    lua = lua5_1;
   };
 
   n2048 = callPackage ../games/n2048 {};
