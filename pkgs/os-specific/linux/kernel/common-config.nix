@@ -568,6 +568,7 @@ let
     });
 
     misc = {
+      HID_BATTERY_STRENGTH = yes;
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
