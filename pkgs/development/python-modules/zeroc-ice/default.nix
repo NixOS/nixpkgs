@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, openssl, bzip2 }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, openssl, bzip2, darwin, libiconv, Security }:
 
 buildPythonPackage rec {
   pname = "zeroc-ice";
@@ -9,7 +9,12 @@ buildPythonPackage rec {
     sha256 = "1bs7h3k9nd1gls2azgp8gz9407cslxbi2x1gspab8p87a61pjim8";
   };
 
-  buildInputs = [ openssl bzip2 ];
+  buildInputs = [ openssl bzip2 ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
+
+  postPatch = lib.optional stdenv.isDarwin ''
+    sed -i '/xcrun/d' setup.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://zeroc.com/;

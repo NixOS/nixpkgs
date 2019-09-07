@@ -6192,7 +6192,9 @@ in {
     inherit python;
   })).python;
 
-  zeroc-ice = callPackage ../development/python-modules/zeroc-ice { };
+  zeroc-ice = callPackage ../development/python-modules/zeroc-ice {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
 
   zm-py = callPackage ../development/python-modules/zm-py { };
 

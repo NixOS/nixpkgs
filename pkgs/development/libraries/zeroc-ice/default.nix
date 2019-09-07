@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
 
   prePatch = lib.optional stdenv.isDarwin ''
-    substituteInPlace Make.rules.Darwin \
+    substituteInPlace config/Make.rules \
         --replace xcrun ""
   '';
 
