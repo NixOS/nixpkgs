@@ -9109,6 +9109,8 @@ in
 
   mspdebug = callPackage ../development/misc/msp430/mspdebug.nix { };
 
+  rappel = callPackage ../development/misc/rappel/default.nix { };
+
   pharo-vms = callPackage ../development/pharo/vm { };
   pharo = pharo-vms.multi-vm-wrapper;
   pharo-cog32 = pharo-vms.cog32;
