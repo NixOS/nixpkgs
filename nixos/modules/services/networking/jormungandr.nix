@@ -82,6 +82,9 @@ in {
       description = "jormungandr server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
+      environment = {
+        RUST_BACKTRACE = "full";
+      };
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = baseNameOf dataDir;
