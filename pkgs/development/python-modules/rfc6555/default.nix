@@ -11,9 +11,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = with pythonPackages; [ selectors2 ];
 
-  # tests are disabled as rfc6555's 'non-network' tests still require a
-  # functional DNS stack to pass.
-  doCheck = false;
+  checkInputs = with pythonPackages; [ mock pytest ];
+  # disabling tests that require a functional DNS IPv{4,6} stack to pass.
+  patches = [ ./disable_network_tests.patch ];
+  # default doCheck = true; is not enough, apparently
+  postCheck = ''
+    py.test tests/
+  '';
 
   meta = {
     description = "Python implementation of the Happy Eyeballs Algorithm";
