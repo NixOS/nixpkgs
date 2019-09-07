@@ -14979,8 +14979,6 @@ in
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
-  pgpool94 = pgpool.override { postgresql = postgresql_9_4; };
-
   pgpool = callPackage ../servers/sql/pgpool {
     pam = if stdenv.isLinux then pam else null;
     libmemcached = null; # Detection is broken upstream
@@ -14991,7 +14989,6 @@ in
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
 
   inherit (import ../servers/sql/postgresql pkgs)
-    postgresql_9_4
     postgresql_9_5
     postgresql_9_6
     postgresql_10

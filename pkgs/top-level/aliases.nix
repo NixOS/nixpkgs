@@ -265,7 +265,6 @@ mapAliases ({
   plexpy = tautulli; # plexpy got renamed to tautulli, added 2019-02-22
   pmtools = acpica-tools; # added 2018-11-01
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
-  postgresql94 = postgresql_9_4;
   postgresql95 = postgresql_9_5;
   postgresql96 = postgresql_9_6;
   postgresql100 = throw "deprecated 2018-10-21: use postgresql_10 instead";
