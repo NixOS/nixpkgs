@@ -5453,6 +5453,8 @@ in {
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
+  unicode-slugify = callPackage ../development/python-modules/unicode-slugify { };
+
   unidiff = callPackage ../development/python-modules/unidiff { };
 
   units = callPackage ../development/python-modules/units { };
