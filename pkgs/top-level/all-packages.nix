@@ -153,6 +153,8 @@ in
 
   castxml = callPackage ../development/tools/castxml { };
 
+  cereal = callPackage ../development/libraries/cereal { };
+
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
   cmark = callPackage ../development/libraries/cmark { };
