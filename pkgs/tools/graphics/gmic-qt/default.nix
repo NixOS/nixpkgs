@@ -1,11 +1,25 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
-, opencv, openexr, graphicsmagick, fftw, zlib, libjpeg, libtiff, libpng
-, curl, krita, qtbase, qttools
-, fetchgit }:
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, opencv
+, openexr
+, graphicsmagick
+, fftw
+, zlib
+, libjpeg
+, libtiff
+, libpng
+, curl
+, krita
+, qtbase
+, qttools
+, fetchgit
+}:
 
 let
   version = "2.3.6";
-
 in stdenv.mkDerivation rec {
   pname = "gmic_krita_qt";
   inherit version;
@@ -41,7 +55,7 @@ in stdenv.mkDerivation rec {
     owner = "c-koi";
     repo = "gmic-qt";
     rev = "v.${version}";
-    sha256= "0j9wqlq67dwzir36yg58xy5lbblwizvgcvlmzcv9d6l901d5ayf3";
+    sha256 = "0j9wqlq67dwzir36yg58xy5lbblwizvgcvlmzcv9d6l901d5ayf3";
   };
 
   unpackPhase = ''
@@ -60,14 +74,29 @@ in stdenv.mkDerivation rec {
     make -C ../gmic/src CImg.h gmic_stdlib.h
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  buildInputs = [
-    qtbase qttools fftw zlib libjpeg libtiff libpng
-    opencv openexr graphicsmagick curl krita
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
   ];
 
-  cmakeFlags = [ "-DGMIC_QT_HOST=krita" ];
+  buildInputs = [
+    qtbase
+    qttools
+    fftw
+    zlib
+    libjpeg
+    libtiff
+    libpng
+    opencv
+    openexr
+    graphicsmagick
+    curl
+    krita
+  ];
+
+  cmakeFlags = [
+    "-DGMIC_QT_HOST=krita"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin;
