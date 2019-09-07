@@ -1696,7 +1696,9 @@ in
 
   gmic-qt = libsForQt5.callPackage ../tools/graphics/gmic-qt { };
 
-  gmic-qt-krita = gmic-qt;
+  gmic-qt-krita = gmic-qt.override {
+    variant = "krita";
+  };
 
   goa = callPackage ../development/tools/goa { };
 
