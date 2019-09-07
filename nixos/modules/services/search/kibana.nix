@@ -9,7 +9,7 @@ let
   lt6_6 = builtins.compareVersions cfg.package.version "6.6" < 0;
 
   cfgFile = pkgs.writeText "kibana.json" (builtins.toJSON (
-    (filterAttrsRecursive (n: v: v != null) ({
+    (filterAttrsRecursive (n: v: v != null && v != []) ({
       server.host = cfg.listenAddress;
       server.port = cfg.port;
       server.ssl.certificate = cfg.cert;
