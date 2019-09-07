@@ -3181,6 +3181,12 @@
     githubId = 1047859;
     name = "Kaz Wesley";
   };
+  kcalvinalvin = {
+    email = "calvin@kcalvinalvin.info";
+    github = "kcalvinalvin";
+    githubId = 37185887;
+    name = "Calvin Kim";
+  };
   kentjames = {
     email = "jameschristopherkent@gmail.com";
     github = "kentjames";
