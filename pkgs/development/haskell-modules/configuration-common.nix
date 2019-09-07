@@ -1219,4 +1219,13 @@ self: super: {
   # https://github.com/elliottt/hsopenid/issues/15
   openid = markBroken super.openid;
 
+  # The test suite needs the packages's executables in $PATH to succeed.
+  arbtt = overrideCabal super.arbtt (drv: {
+    preCheck = ''
+      for i in $PWD/dist/build/*; do
+        export PATH="$i:$PATH"
+      done
+    '';
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
