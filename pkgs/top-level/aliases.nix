@@ -115,6 +115,7 @@ mapAliases ({
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   glib_networking = glib-networking; # added 2018-02-25
   gnome-mpv = celluloid; # added 2019-08-22
+  gmic_krita_qt = gmic-qt-krita; # added 2019-09-07
   gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
