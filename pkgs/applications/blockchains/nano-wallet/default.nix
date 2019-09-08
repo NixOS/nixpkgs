@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   pname = "nano-wallet";
-  version = "18.0";
+  version = "19.0";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "raiblocks";
     rev = "V${version}";
-    sha256 = "03f9g1x7rs7vic9yzsjxsh5ddx9ys78rssbfghbccfw9qrwylh3y";
+    sha256 = "1y5fc4cvfqh33imjkh91sqhy5bb9kh0icwyvdgm1cl564vnjax80";
     fetchSubmodules = true;
   };
 
@@ -37,6 +37,12 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     make nano_wallet
+  '';
+
+  # Move executables under bin directory
+  postInstall = ''
+    mkdir -p $out/bin
+    mv $out/nano* $out/bin/
   '';
 
   checkPhase = ''
