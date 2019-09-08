@@ -375,6 +375,13 @@ in
                 <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
               '';
             };
+            StrictModes = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Whether sshd should check file modes and ownership of directories
+              '';
+            };
             Ciphers = mkOption {
               type = types.listOf types.str;
               default = [
