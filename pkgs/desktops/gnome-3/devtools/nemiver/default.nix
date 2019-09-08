@@ -1,6 +1,24 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gnome3, gtk3, libxml2, intltool, itstool, gdb,
-  boost, sqlite, libgtop, glibmm, gtkmm3, vte, gtksourceview, gsettings-desktop-schemas,
-  gtksourceviewmm, wrapGAppsHook }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, gnome3
+, gtk3
+, libxml2
+, intltool
+, itstool
+, gdb
+, boost
+, sqlite
+, libgtop
+, glibmm
+, gtkmm3
+, vte
+, gtksourceview
+, gsettings-desktop-schemas
+, gtksourceviewmm
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "nemiver";
@@ -11,11 +29,25 @@ stdenv.mkDerivation rec {
     sha256 = "85ab8cf6c4f83262f441cb0952a6147d075c3c53d0687389a3555e946b694ef2";
   };
 
-  nativeBuildInputs = [ libxml2 intltool itstool pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [
+    libxml2
+    intltool
+    itstool
+    pkgconfig
+    wrapGAppsHook
+  ];
 
   buildInputs = [
-    gtk3 gdb boost sqlite libgtop
-    glibmm gtkmm3 vte gtksourceview gtksourceviewmm
+    gtk3
+    gdb
+    boost
+    sqlite
+    libgtop
+    glibmm
+    gtkmm3
+    vte
+    gtksourceview
+    gtksourceviewmm
     gsettings-desktop-schemas
   ];
 
