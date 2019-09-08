@@ -1,20 +1,24 @@
 { stdenv
 , fetchurl
 , pkgconfig
-, dbus-glib
-, intltool
 , libxslt
 , docbook_xsl
 , udev
 , libgudev
 , libusb1
+, glib
 , gobject-introspection
-, useSystemd ? true, systemd
+, gettext
+, systemd
+, useIMobileDevice ? true
+, libimobiledevice
 }:
 
 stdenv.mkDerivation rec {
   pname = "upower";
   version = "0.99.11";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = https://gitlab.freedesktop.org/upower/upower/uploads/93cfe7c8d66ed486001c4f3f55399b7a/upower-0.99.11.tar.xz;
@@ -22,32 +26,33 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    docbook_xsl
+    gettext
+    gobject-introspection
+    libxslt
     pkgconfig
   ];
 
   buildInputs = [
-    dbus-glib
-    intltool
-    libxslt
-    docbook_xsl
-    udev
     libgudev
     libusb1
-    gobject-introspection
+    udev
+    systemd
   ]
-  ++ stdenv.lib.optional useSystemd systemd
+  ++ stdenv.lib.optional useIMobileDevice libimobiledevice
   ;
 
+  propagatedBuildInputs = [
+    glib
+  ];
+
   configureFlags = [
-    "--with-backend=linux"
     "--localstatedir=/var"
-  ]
-  ++ stdenv.lib.optional useSystemd [
+    "--with-backend=linux"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemdutildir=${placeholder "out"}/lib/systemd"
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
-  ]
-  ;
+  ];
 
   doCheck = false; # fails with "env: './linux/integration-test': No such file or directory"
 
