@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, itk, vtk }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, itk, vtk }:
 
 stdenv.mkDerivation rec {
   _name    = "ANTs";
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     rev    = "37ad4e20be3a5ecd26c2e4e41b49e778a0246c3d";
     sha256 = "1hrdwv3m9xh3yf7l0rm2ggxc2xzckfb8srs88g485ibfszx7i03q";
   };
+
+  patches = [
+    # Fix build with gcc8
+    (fetchpatch {
+      url = "https://github.com/ANTsX/ANTs/commit/89af9b2694715bf8204993e032fa132f80cf37bd.patch";
+      sha256 = "1glkrwa1jmxxbmzihycxr576azjqby31jwpj165qc54c91pn0ams";
+    })
+  ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ itk vtk ];

@@ -8,8 +8,8 @@ with stdenv.lib;
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "7.0";
-  minorVersion = "0";
+  majorVersion = "7.1";
+  minorVersion = "1";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   name = "vtk-${os (qtLib != null) "qvtk-"}${version}";
   src = fetchurl {
     url = "${meta.homepage}files/release/${majorVersion}/VTK-${version}.tar.gz";
-    sha256 = "1hrjxkcvs3ap0bdhk90vymz5pgvxmg7q6sz8ab3wsyddbshr1abq";
+    sha256 = "0nm7xwwj7rnsxjdv2ssviys8nhci4n9iiiqm2y14s520hl2dsp1d";
   };
 
   buildInputs = [ cmake ]

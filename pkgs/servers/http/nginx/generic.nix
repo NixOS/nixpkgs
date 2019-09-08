@@ -70,7 +70,10 @@ stdenv.mkDerivation {
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = [
+    "-I${libxml2.dev}/include/libxml2"
+    "-Wno-error=implicit-fallthrough"
+  ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
   configurePlatforms = [];
 

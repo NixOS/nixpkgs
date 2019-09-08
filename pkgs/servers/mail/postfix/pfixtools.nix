@@ -42,7 +42,10 @@ stdenv.mkDerivation {
                       --replace /bin/bash ${bash}/bin/bash;
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=nonnull-compare";
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=unused-result" "-Wno-error=nonnull-compare"
+    "-Wno-error=format-truncation"
+  ];
 
   makeFlags = "DESTDIR=$(out) prefix=";
 

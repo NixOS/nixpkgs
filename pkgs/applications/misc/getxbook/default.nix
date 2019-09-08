@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ihwrx4gspj8l7fc8vxch6dpjrw1lvv9z3c19f0wxnmnxhv1cjvs";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" "-Wno-error=deprecated-declarations" ];
+
   buildInputs = [ openssl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   meta = with stdenv.lib; {
     description = "A collection of tools to download books from Google Books";
