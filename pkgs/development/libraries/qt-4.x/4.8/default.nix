@@ -93,12 +93,6 @@ stdenv.mkDerivation rec {
       #})
       ./qt4-gcc6.patch
       ./qt4-openssl-1.1.patch
-      (fetchpatch {
-        name = "qt4-gcc8.diff";
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/qt4-gcc8.patch?h=qt4&id=3ac369b8";
-        sha256 = "0zcdrlmanczr9cbrnc6f3nz6ldmj7rw5irlvndk89fl6fvj8zkwy";
-        extraPrefix = "./";
-      })
     ]
     ++ lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
