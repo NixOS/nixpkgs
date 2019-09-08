@@ -33,6 +33,8 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/LLNL/sundials/pull/20/commits/2d951bbe1ff7842fcd0dafa28c61b0aa94015f66.patch";
       sha256 = "0lcr6m4lk14yqrxah4rdscpczny5l7m1zpfsjh8bgspadfsgk512";
     })
+    # https://github.com/LLNL/sundials/pull/21
+    ./tests-parallel.patch
   ];
 
   cmakeFlags = [
