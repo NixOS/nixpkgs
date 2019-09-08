@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   patchPhase = ''
       sed 1i'#include <inttypes.h>' -i src/PGF.cpp
       sed s/__int64/int64_t/g -i src/PGF.cpp
+      rm include/FreeImage.h include/FreeImagePlus.h
   '';
 
   preConfigure = "dos2unix configure.ac; sh autogen.sh";
