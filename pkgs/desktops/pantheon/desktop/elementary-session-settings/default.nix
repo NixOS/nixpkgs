@@ -47,7 +47,7 @@ let
 
   dockitemAutostart = substituteAll {
     src = ./default-elementary-dockitems.desktop;
-    script = "${dockitems-script}";
+    script = dockitems-script;
   };
 
   executable = writeShellScriptBin "pantheon" ''

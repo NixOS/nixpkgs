@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtmidi";
-    rev = "${version}";
+    rev = version;
     sha256 = "1g31p6a96djlbk9jh5r4pjly3x76lhccva9hrw6xzdma8dsjzgyq";
   };
 

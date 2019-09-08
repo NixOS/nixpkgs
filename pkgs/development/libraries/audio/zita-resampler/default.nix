@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Resample library by Fons Adriaensen";
-    version = "${version}";
+    version = version;
     homepage = http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];

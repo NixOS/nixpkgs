@@ -12,7 +12,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "smartystreets";
     repo = "goconvey";
-    rev = "${version}";
+    rev = version;
     sha256 = "1ph18rkl3ns3fgin5i4j54w5a69grrmf3apcsmnpdn1wlrbs3dxh";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "spwhitt";
     repo = "nix-zsh-completions";
-    rev = "${version}";
+    rev = version;
     sha256 = "0fq1zlnsj1bb7byli7mwlz7nm2yszwmyx43ccczcv51mjjfivyp3";
   };
 

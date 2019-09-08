@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pali";
     repo = "udftools";
-    rev = "${version}";
+    rev = version;
     sha256 = "0mz04h3rki6ljwfs15z83gf4vv816w7xgz923waiqgmfj9xpvx87";
   };
 

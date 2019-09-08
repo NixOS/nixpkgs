@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "robertdavidgraham";
     repo   = "masscan";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0q0c7bsf0pbl8napry1qyg0gl4pd8wn872h4mz9b56dx4rx90vqg";
   };
 

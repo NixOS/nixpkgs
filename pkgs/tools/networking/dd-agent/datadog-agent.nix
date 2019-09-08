@@ -13,7 +13,7 @@ in buildGoPackage rec {
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = "${version}";
+    rev    = version;
     sha256 = "1dwdiaf357l9c6b2cps5mdyfma3c1mp96zzxg1826fvz3x8ix68z";
   };
 

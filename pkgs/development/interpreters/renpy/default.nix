@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ pygame_sdl2 tkinter ];
 
-  RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: "${path}") [
+  RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: path) [
     SDL2 SDL2.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out libGLU_combined fribidi zlib
   ]);
 

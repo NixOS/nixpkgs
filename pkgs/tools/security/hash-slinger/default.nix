@@ -8,8 +8,8 @@ in stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "letoams";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "05wn744ydclpnpyah6yfjqlfjlasrrhzj48lqmm5a91nyps5yqyn";
   };
 

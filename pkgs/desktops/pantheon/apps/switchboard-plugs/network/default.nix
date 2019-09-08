@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./nma.patch;
-      networkmanagerapplet = "${networkmanagerapplet}";
+      networkmanagerapplet = networkmanagerapplet;
     })
   ];
 

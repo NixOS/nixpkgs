@@ -36,7 +36,7 @@ let
     buildInputs = libs;
     PYTHON = if buildWithPypy
       then "${pypy}/pypy-c/pypy-c"
-      else "${python2.interpreter}";
+      else python2.interpreter;
     unpackPhase = ''
       cp -R ${pixie-src} pixie-src
       mkdir pypy-src

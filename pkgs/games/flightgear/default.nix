@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   desktopItem = makeDesktopItem {
     name = "flightgear";
     exec = "fgfs";
-    icon = "${iconsrc}";
+    icon = iconsrc;
     comment = "FlightGear Flight Simulator";
     desktopName = "FlightGear";
     genericName = "Flight simulator";

@@ -21,14 +21,14 @@ let
     lib.mapAttrs (name: gem:
       let
         test =
-          if builtins.isList gemTests."${name}"
+          if builtins.isList gemTests.${name}
           then pkgs.writeText "${name}.rb" ''
                 puts "${name} GEM_HOME: #{ENV['GEM_HOME']}"
-                ${lib.concatStringsSep "\n" (map (n: "require '${n}'") gemTests."${name}")}
+                ${lib.concatStringsSep "\n" (map (n: "require '${n}'") gemTests.${name})}
               ''
-          else pkgs.writeText "${name}.rb" gemTests."${name}";
+          else pkgs.writeText "${name}.rb" gemTests.${name};
 
-        deps = ruby.withPackages (g: [ g."${name}" ]);
+        deps = ruby.withPackages (g: [ g.${name} ]);
       in stdenv.mkDerivation {
         name = "test-gem-${ruby.name}-${name}";
         buildInputs = [ deps ];

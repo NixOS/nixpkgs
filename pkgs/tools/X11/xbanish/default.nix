@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jcs";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0vp8ja68hpmqkl61zyjar3czhmny1hbm74m8f393incfz1ymr3i8";
   };

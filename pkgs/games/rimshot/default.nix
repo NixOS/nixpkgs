@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "rimshot";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Create your own music";
     desktopName = "Rimshot";
     genericName = "rimshot";

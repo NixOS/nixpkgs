@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "git-secrets";
-    rev = "${version}";
+    rev = version;
     sha256 = "10lnxg0q855zi3d6804ivlrn6dc817kilzdh05mmz8a0ccvm2qc7";
   };
 

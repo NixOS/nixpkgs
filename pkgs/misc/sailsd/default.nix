@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sails-simulator";
     repo = "sailsd";
-    rev = "${version}";
+    rev = version;
     sha256 = "147cr4aw1kw4gv3bhn0cska855kmyah8m70vdw1q2lwz56lbf4mb";
   };
 

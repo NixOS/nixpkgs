@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sunng87";
     repo = "cargo-release";
-    rev = "${version}";
+    rev = version;
     sha256 = "14l5znr1nl69v2v3mdrlas85krq9jn280ssflmd0dz7i4fxiaflc";
   };
 

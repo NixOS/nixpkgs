@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
-    rev = "${version}";
+    rev = version;
     sha256 = "1fvlrqx1wgl79a9j3xhhhdihj4lkpbrchfsc27il0p52fynn4dji";
   };
 

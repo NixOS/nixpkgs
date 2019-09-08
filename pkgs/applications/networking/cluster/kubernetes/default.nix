@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./hack
   '';
 
-  WHAT="${concatStringsSep " " components}";
+  WHAT=concatStringsSep " " components;
 
   postBuild = ''
     ./hack/update-generated-docs.sh

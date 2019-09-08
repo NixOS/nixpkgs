@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "iblech";
     repo = "sshlatex";
-    rev = "${version}";
+    rev = version;
     sha256 = "0kaah8is74zba9373xccmsxmnnn6kh0isr4qpg21x3qhdzhlxl7q";
   };
 

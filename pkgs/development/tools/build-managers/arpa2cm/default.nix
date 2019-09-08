@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     sha256 = "093h7njj8d8iiwnw5byfxkkzlbny60fwv1w57j8f1lsd4yn6rih4";
     rev = "version-${version}";
-    repo = "${pname}";
+    repo = pname;
     owner = "arpa2";
   };
 

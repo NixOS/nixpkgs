@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linbox-team";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "10j6dspbsq7d2l4q3y0c1l1xwmaqqba2fxg59q5bhgk9h5d7q571";
   };

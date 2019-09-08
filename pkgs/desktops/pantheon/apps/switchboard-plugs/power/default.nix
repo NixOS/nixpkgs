@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./dpms-helper-exec.patch;
-      elementary_dpms_helper = "${elementary-dpms-helper}";
+      elementary_dpms_helper = elementary-dpms-helper;
     })
     ./hardcode-gsettings.patch
   ];

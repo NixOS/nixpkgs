@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
-    rev = "${version}";
+    rev = version;
     sha256 = "1pipc1f94jdppv597mqmcj2kw2rdvaqcbl512v7z8vir76p1a7gk";
   };
 

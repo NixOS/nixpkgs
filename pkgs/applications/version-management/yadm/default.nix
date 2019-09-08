@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner  = "TheLocehiliosan";
     repo   = "yadm";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0873jgks7dpfkj5km1jchxdrhf7lia70p0f8zsrh9p4crj5f4pc6";
   };
 

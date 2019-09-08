@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DanielAdolfsson";
     repo = "ndppd";
-    rev = "${version}";
+    rev = version;
     sha256 = "0niri5q9qyyyw5lmjpxk19pv3v4srjvmvyd5k6ks99mvqczjx9c0";
   };
 

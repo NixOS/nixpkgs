@@ -806,11 +806,11 @@ let
 
     RAppArmor = old.RAppArmor.overrideDerivation (attrs: {
       patches = [ ./patches/RAppArmor.patch ];
-      LIBAPPARMOR_HOME = "${pkgs.libapparmor}";
+      LIBAPPARMOR_HOME = pkgs.libapparmor;
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      MYSQL_DIR="${pkgs.mysql.connector-c}";
+      MYSQL_DIR=pkgs.mysql.connector-c;
       preConfigure = ''
         patchShebangs configure
       '';

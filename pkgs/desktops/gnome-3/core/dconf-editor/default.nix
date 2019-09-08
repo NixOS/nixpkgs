@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "${pname}";
+      packageName = pname;
       attrPath = "gnome3.${pname}";
     };
   };

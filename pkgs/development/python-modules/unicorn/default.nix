@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   # needs python2 at build time
-  PYTHON="${buildPackages.python2.interpreter}";
+  PYTHON=buildPackages.python2.interpreter;
 
   setupPyBuildFlags = [ "--plat-name" "linux" ];
 

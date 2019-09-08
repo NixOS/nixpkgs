@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       and the engine can be run standalone on a computer without a monitor.
     '';
 
-    version = "${version}";
+    version = version;
     homepage = http://essej.net/sooperlooper/index.html;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];

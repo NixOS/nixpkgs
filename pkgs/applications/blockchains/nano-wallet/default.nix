@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = let
     options = {
-      BOOST_ROOT = "${boost}";
+      BOOST_ROOT = boost;
       Boost_USE_STATIC_LIBS = "OFF";
       RAIBLOCKS_GUI = "ON";
       RAIBLOCKS_TEST = "ON";

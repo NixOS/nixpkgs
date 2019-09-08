@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "wordgrinder";
     owner = "davidgiven";
-    rev = "${version}";
+    rev = version;
     sha256 = "08lnq5wmspfqdjmqm15gizcq0xr7mg4h62qhvwj63v0sd6ks1cal";
   };
 
