@@ -27,12 +27,12 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.5";
+      version = "2.6";
       pname = "weechat";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "14giv8j1phmpg3i9whx45nmskan501lwcq352ps9z52rkja2qxsc";
+        sha256 = "1narazk28m7lmn1vqi7bhyvnr8apjrmaa4w1hbadn64hwr8ya1hb";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
