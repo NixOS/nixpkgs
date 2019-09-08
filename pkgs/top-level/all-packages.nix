@@ -4916,6 +4916,8 @@ in
 
   ndppd = callPackage ../applications/networking/ndppd { };
 
+  nemiver = callPackage ../development/tools/nemiver { };
+
   neofetch = callPackage ../tools/misc/neofetch { };
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };

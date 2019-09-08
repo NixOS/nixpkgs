@@ -74,7 +74,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "nemiver";
-      attrPath = "gnome3.nemiver";
       versionPolicy = "none";
     };
   };
