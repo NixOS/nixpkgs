@@ -52,7 +52,9 @@ luasocket,,,,,
 luasql-sqlite3,,,,,vyp
 luassert,,,,,
 luasystem,,,,,
+luautf8,,,,,pstn
 luazip,,,,,
+lua-yajl,,,,,pstn
 luuid,,,,,
 luv,,,,,
 markdown,,,,,

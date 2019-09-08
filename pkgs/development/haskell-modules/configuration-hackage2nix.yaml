@@ -3097,7 +3097,6 @@ broken-packages:
   - arbor-monad-metric
   - arbor-monad-metric-datadog
   - arbor-postgres
-  - arbtt
   - archiver
   - archlinux
   - archlinux-web
@@ -3598,7 +3597,6 @@ broken-packages:
   - cabin
   - cabocha
   - cached
-  - cachix
   - cacophony
   - caffegraph
   - cairo-core
@@ -5935,8 +5933,6 @@ broken-packages:
   - hmt-diagrams
   - hmumps
   - hnetcdf
-  - hnix
-  - hnix-store-remote
   - HNM
   - hnormalise
   - ho-rewriting

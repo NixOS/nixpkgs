@@ -1106,6 +1106,26 @@ luasystem = buildLuarocksPackage {
     };
   };
 };
+luautf8 = buildLuarocksPackage {
+  pname = "luautf8";
+  version = "0.1.1-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/luautf8-0.1.1-1.src.rock;
+    sha256 = "1832ilrlddh4h7ayx4l9j7z1p8c2hk5yr96cpxjjrmirkld23aji";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://github.com/starwing/luautf8";
+    description = "A UTF-8 support module for Lua";
+    maintainers = with maintainers; [ pstn ];
+    license = {
+      fullName = "MIT";
+    };
+  };
+};
 luazip = buildLuarocksPackage {
   pname = "luazip";
   version = "1.2.7-1";
@@ -1122,6 +1142,26 @@ luazip = buildLuarocksPackage {
     description = "Library for reading files inside zip files";
     license = {
       fullName = "MIT";
+    };
+  };
+};
+lua-yajl = buildLuarocksPackage {
+  pname = "lua-yajl";
+  version = "2.0-1";
+
+  src = fetchurl {
+    url    = https://luarocks.org/lua-yajl-2.0-1.src.rock;
+    sha256 = "0bsm519vs53rchcdf8g96ygzdx2bz6pa4vffqlvc7ap49bg5np4f";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://github.com/brimworks/lua-yajl";
+    description = "Integrate the yajl JSON library with Lua.";
+    maintainers = with maintainers; [ pstn ];
+    license = {
+      fullName = "MIT/X11";
     };
   };
 };

@@ -206,6 +206,11 @@
    </listitem>
    <listitem>
     <para>
+     PostgreSQL 9.4 is scheduled EOL during the 19.09 life cycle and has been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The options <option>services.prometheus.alertmanager.user</option> and
      <option>services.prometheus.alertmanager.group</option> have been removed
      because the alertmanager service is now using systemd's <link

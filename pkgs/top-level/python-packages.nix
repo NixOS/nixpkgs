@@ -4661,6 +4661,8 @@ in {
     inherit (pkgs) pkgconfig; # use normal pkgconfig, not the python package
   };
 
+  rfc6555 = callPackage ../development/python-modules/rfc6555 { };
+
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
   quamash = callPackage ../development/python-modules/quamash { };

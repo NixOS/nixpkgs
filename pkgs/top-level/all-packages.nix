@@ -1066,22 +1066,14 @@ in
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  inherit (callPackages ../misc/logging/beats/6.x.nix {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  })
+  inherit (callPackages ../misc/logging/beats/6.x.nix { })
     filebeat6
     heartbeat6
     metricbeat6
     packetbeat6
     journalbeat6;
 
-  inherit (callPackages ../misc/logging/beats/7.x.nix {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  })
+  inherit (callPackages ../misc/logging/beats/7.x.nix { })
     filebeat7
     heartbeat7
     metricbeat7
@@ -2873,8 +2865,8 @@ in
   evemu = callPackage ../tools/system/evemu { };
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
-  elk6Version = "6.7.2";
-  elk7Version = "7.0.1";
+  elk6Version = "6.8.3";
+  elk7Version = "7.3.1";
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
     utillinux = utillinuxMinimal;
@@ -2914,13 +2906,7 @@ in
           sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
         };
       });
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "3.12";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1aqjl8dk9amd4zr99n8v2qxzgmr2hdvqfma4zh7a41rj6336c9sr";
-        };
-      });
+      pyyaml = super.pyyaml_3;
     };
   }).pkgs; toPythonApplication elasticsearch-curator;
 
@@ -3442,6 +3428,8 @@ in
   };
 
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
+
+  gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
@@ -4341,6 +4329,8 @@ in
   medfile = callPackage ../development/libraries/medfile { };
 
   memtester = callPackage ../tools/system/memtester { };
+
+  mhonarc = perlPackages.MHonArc;
 
   minergate = callPackage ../applications/misc/minergate { };
 
@@ -8950,14 +8940,12 @@ in
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   })
-    ruby_2_3
     ruby_2_4
     ruby_2_5
     ruby_2_6;
 
   ruby = ruby_2_6;
 
-  rubyPackages_2_3 = recurseIntoAttrs ruby_2_3.gems;
   rubyPackages_2_4 = recurseIntoAttrs ruby_2_4.gems;
   rubyPackages_2_5 = recurseIntoAttrs ruby_2_5.gems;
   rubyPackages_2_6 = recurseIntoAttrs ruby_2_6.gems;
@@ -14999,8 +14987,6 @@ in
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
-  pgpool94 = pgpool.override { postgresql = postgresql_9_4; };
-
   pgpool = callPackage ../servers/sql/pgpool {
     pam = if stdenv.isLinux then pam else null;
     libmemcached = null; # Detection is broken upstream
@@ -15011,7 +14997,6 @@ in
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
 
   inherit (import ../servers/sql/postgresql pkgs)
-    postgresql_9_4
     postgresql_9_5
     postgresql_9_6
     postgresql_10
@@ -16279,7 +16264,7 @@ in
 
   semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
 
-  powerdns = callPackage ../servers/dns/powerdns { libressl = libressl_2_8; };
+  powerdns = callPackage ../servers/dns/powerdns { };
 
   dnsdist = callPackage ../servers/dns/dnsdist { };
 
@@ -20438,9 +20423,7 @@ in
 
   wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
 
-  sonic-pi = callPackage ../applications/audio/sonic-pi {
-    ruby = ruby_2_3;
-  };
+  sonic-pi = callPackage ../applications/audio/sonic-pi { };
 
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
@@ -22144,7 +22127,7 @@ in
   mrrescue = callPackage ../games/mrrescue { };
 
   mudlet = libsForQt5.callPackage ../games/mudlet {
-    inherit (lua51Packages) luafilesystem lrexlib-pcre luazip luasql-sqlite3;
+    lua = lua5_1;
   };
 
   n2048 = callPackage ../games/n2048 {};

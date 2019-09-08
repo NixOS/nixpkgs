@@ -49,13 +49,13 @@ let
         sha1 = "d32815404d689699f85a4ea4fa8755dd13a96048";
       };
     };
-    "chainpad-server-3.0.3" = {
+    "chainpad-server-3.0.5" = {
       name = "chainpad-server";
       packageName = "chainpad-server";
-      version = "3.0.3";
+      version = "3.0.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-3.0.3.tgz";
-        sha512 = "NRfV7FFBEYy4ZVX7h0P5znu55X8v5K4iGWeMGihkfWZLKu70GmCPUTwpBCP79dUvnCToKEa4/e8aoSPcvZC8pA==";
+        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-3.0.5.tgz";
+        sha512 = "USKOMSHsNjnme81Qy3nQ+ji9eCkBPokYH4T82LVHAI0aayTSCXcTPUDLVGDBCRqe8NsXU4io1WPXn1KiZwB8fA==";
       };
     };
     "content-disposition-0.5.2" = {
@@ -619,14 +619,14 @@ let
   };
 in
 {
-  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#3.0.0" = nodeEnv.buildNodePackage {
+  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#3.0.1" = nodeEnv.buildNodePackage {
     name = "cryptpad";
     packageName = "cryptpad";
-    version = "3.0.0";
+    version = "3.0.1";
     src = fetchgit {
       url = "https://github.com/xwiki-labs/cryptpad.git";
-      rev = "166ab65cd47a64e020528089244ed5be34f6e3c8";
-      sha256 = "35a3b733b5c128b7c7e1c0e7473f4a6a446d663f4c787745b36b1071205c1fd7";
+      rev = "4e5f6edac4f9a3a7a4756eb543d29dc9d1eef32a";
+      sha256 = "f32a93316b717246d1563baec70f9e1e7e5ec1be4f325a473cc37e656afa13cd";
     };
     dependencies = [
       sources."accepts-1.3.7"
@@ -634,7 +634,7 @@ in
       sources."async-limiter-1.0.1"
       sources."body-parser-1.18.3"
       sources."bytes-3.0.0"
-      sources."chainpad-server-3.0.3"
+      sources."chainpad-server-3.0.5"
       sources."content-disposition-0.5.2"
       sources."content-type-1.0.4"
       sources."cookie-0.3.1"

@@ -10661,23 +10661,26 @@ let
     };
   };
 
-  MHonArc = buildPerlPackage {
+  MHonArc = buildPerlPackage rec {
     pname = "MHonArc";
-    version = "2.6.18";
+    version = "2.6.19";
 
     src = fetchurl {
-      url    = "http://dcssrv1.oit.uci.edu/indiv/ehood/release/MHonArc/tar/MHonArc-2.6.18.tar.gz";
-      sha256 = "1xmf26dfwr8achprc3n1pxgl0mkiyr6pf25wq3dqgzqkghrrsxa2";
+      url = "https://www.mhonarc.org/release/MHonArc/tar/MHonArc-${version}.tar.gz";
+      sha256 = "0ll3v93yji334zqp6xfzfxc0127pmjcznmai1l5q6dzawrs2igzq";
     };
+
+    patches = [ ../development/perl-modules/mhonarc.patch ];
+
     outputs = [ "out" "dev" ]; # no "devdoc"
 
     installTargets = "install";
 
     meta = with stdenv.lib; {
-      homepage    = http://dcssrv1.oit.uci.edu/indiv/ehood/mhonarch.html;
+      homepage = "https://www.mhonarc.org/";
       description = "A mail-to-HTML converter";
       maintainers = with maintainers; [ lovek323 ];
-      license     = licenses.gpl2;
+      license = licenses.gpl2;
     };
   };
 
