@@ -6,6 +6,7 @@
 let
 self = stdenv.mkDerivation rec {
   name = "mysql-8.0.17";
+  version = "8.0.17";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${name}.tar.gz";
