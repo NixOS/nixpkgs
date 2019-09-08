@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, qtbase, qtmultimedia, qtsvg, qtdeclarative, qttools, qtgraphicaleffects, qtquickcontrols2, full
-, libsecret, libGL, libpulseaudio, glib, wrapQtAppsHook, makeDesktopItem, mkDerivation }:
+, libsecret, libGL, libpulseaudio, glib, wrapQtAppsHook, mkDerivation }:
 
 let
   version = "1.2.2-1";
@@ -10,17 +10,6 @@ let
 
     To work, gnome-keyring service must be enabled.
   '';
-
-  desktopItem = makeDesktopItem {
-    name = "protonmail-bridge";
-    exec = "protonmail-bridge";
-    icon = "protonmail-bridge";
-    comment = stdenv.lib.replaceStrings ["\n"] [" "] description;
-    desktopName = "ProtonMail Bridge";
-    genericName = "ProtonMail Bridge for Linux";
-    categories = "Utility;Security;Network;Email";
-  };
-
 in mkDerivation {
   pname = "protonmail-bridge";
   inherit version;
@@ -37,12 +26,10 @@ in mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,lib,share/applications}
-    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+    mkdir -p $out/{bin,lib,share}
 
     cp -r usr/lib/protonmail/bridge/protonmail-bridge $out/lib
-    cp usr/share/icons/protonmail/ProtonMail_Bridge.svg $out/share/icons/hicolor/scalable/apps/protonmail-bridge.svg
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp -r usr/share $out
 
     ln -s $out/lib/protonmail-bridge $out/bin/protonmail-bridge
   '';
@@ -67,6 +54,10 @@ in mkDerivation {
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${rpath}" \
       $out/lib/protonmail-bridge
+
+    substituteInPlace $out/share/applications/ProtonMail_Bridge.desktop \
+      --replace "/usr/" "$out/" \
+      --replace "Exec=protonmail-bridge" "Exec=$out/bin/protonmail-bridge"
   '';
 
   buildInputs = [ qtbase qtquickcontrols2 qtmultimedia qtgraphicaleffects qtdeclarative ];
