@@ -128,7 +128,10 @@ let
 
   buildInputs = buildInputs ++ pythonPath;
 
-  propagatedBuildInputs = propagatedBuildInputs ++ [ python ];
+  propagatedBuildInputs = propagatedBuildInputs ++ [ python
+  ] ++ lib.optionals (format == "setuptools") [
+    setuptools
+  ];
 
   inherit strictDeps;
 
