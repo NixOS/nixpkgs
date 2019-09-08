@@ -16,12 +16,12 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.17.1";
+  version = "1.17.2";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "f11331530f0eff69a758d62c2461cd98cdc2eae0147279d8fc86e0464eb7e8ca";
+    sha256 = "73615d3edc84dd7c4aeb212fa3748fb83217e00d201875a47327f55363cef2df";
   };
 
   nativeBuildInputs = [ gfortran pytest ];
