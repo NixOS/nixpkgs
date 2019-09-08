@@ -46,6 +46,14 @@ stdenv.mkDerivation ({
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  patches = [
+    (fetchpatch {
+      name = "0001-Fix-return-type-in-ORC-readMem-client-interface.patch";
+      url = "https://bugzilla.redhat.com/attachment.cgi?id=1389687";
+      sha256 = "0ga2123aclq3x9w72d0rm0az12m8c1i4r1106vh701hf4cghgbch";
+    })
+  ];
+
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
   # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd

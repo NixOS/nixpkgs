@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  # post gcc7, upstream bug: https://tickets.puppetlabs.com/browse/FACT-1828
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated";
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=catch-value" ];
 
   nativeBuildInputs = [ cmake ];
 

@@ -6,18 +6,18 @@
 , curl, ffmpeg, gdk-pixbuf, libaio, libmtp, loudmouth, lzo, lz4, mysql57, pcre, snappy, taglib, taglib_extras
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "amarok";
-  version = "2.9.0-20190731";
+  version = "2.9.0-20190824";
 
   src = fetchgit {
     # master has the Qt5 version as of April 2018 but a formal release has not
     # yet been made so change this back to the proper upstream when such a
     # release is out
     url    = git://anongit.kde.org/amarok.git;
-    # url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.CZ";
-    rev    = "783da6d8e93737f5e41a3bc017906dc1f94bb94f";
-    sha256 = "08bypxk5kaay98hbwz9pj3hwgiyk3qmn9qw99bnjkkkw9wzsxiy6";
+    # url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    rev    = "457fbda25a85a102bfda92aa7137e7ef5e4c8b00";
+    sha256 = "1ig2mg8pqany6m2zplkrvldcv4ibxwsypnyv5igm7nz7ax82cd5j";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

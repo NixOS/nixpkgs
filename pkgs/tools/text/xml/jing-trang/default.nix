@@ -13,6 +13,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ jdk ant saxon ];
 
+  CLASSPATH = "lib/saxon.jar";
+
   preBuild = "ant";
 
   installPhase = ''
