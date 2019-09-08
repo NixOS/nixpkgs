@@ -33,6 +33,8 @@ buildPythonPackage rec {
     })
   ];
 
+  dontUseCmakeConfigure = true;
+
   checkInputs = [ pytest cmake ]
     ++ (lib.optional (numpy != null) numpy)
     ++ (lib.optional (eigen != null) eigen)

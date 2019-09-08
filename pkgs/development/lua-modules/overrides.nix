@@ -235,6 +235,12 @@ with super;
     ];
   });
 
+  lua-yajl = super.lua-yajl.override({
+    buildInputs = [
+      pkgs.yajl
+    ];
+  });
+
   luuid = super.luuid.override(old: {
     externalDeps = [
       { name = "LIBUUID"; dep = pkgs.libuuid; }
