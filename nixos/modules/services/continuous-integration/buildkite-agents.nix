@@ -30,9 +30,6 @@ let
   '';
 
   buildkiteOptions =  { name ? "", config, ... }:
-  let
-    fullName = if name == "" then "buildkite-agent" else "buildkite-agent-${name}";
-  in
   { options = {
       enable = mkOption {
         default = true;
@@ -47,17 +44,19 @@ let
         type = types.package;
       };
 
-      dataDir = mkOption {
-        default = "/var/lib/${fullName}";
-        description = "The workdir for the agent";
-        type = types.str;
+      userName = mkOption {
+        readOnly = true;
+        default = name;
+        description = ''
+          Username of the systemd service this will run as.
+        '';
       };
 
-      fullName = mkOption {
+      statePath = mkOption {
         readOnly = true;
-        default = fullName;
+        default = "/var/lib/buildkite-${name}";
         description = ''
-          Full name of the systemd service unit and of the user it runs as.
+          Absolute path to the buildkite-agent's state directory
         '';
       };
 
@@ -114,7 +113,7 @@ let
         default = "";
         example = "touch $HOME/test";
         description = ''
-          Extra commands to execute (as root) while setting up the buildkite dir and config.
+          Extra commands to while setting up the buildkite dir and config.
           The directory ownership will be fixed up afterwards.
         '';
       };
@@ -224,9 +223,8 @@ in {
   };
 
   config.users.users = mapAgents (name: cfg: {
-    "${cfg.fullName}" =
-      { name = cfg.fullName;
-        home = cfg.dataDir;
+    "${cfg.userName}" =
+      { home = cfg.statePath;
         createHome = true;
         description = "Buildkite agent user";
         extraGroups = [ "keys" ];
@@ -234,55 +232,53 @@ in {
     });
 
   config.systemd.services = mapAgents (name: cfg: {
-    "${cfg.fullName}" =
+    "${name}" =
       { description = "Buildkite Agent";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         path = cfg.runtimePackages ++ [ cfg.package pkgs.coreutils ];
         environment = config.networking.proxy.envVars // {
-          HOME = cfg.dataDir;
+          HOME = cfg.statePath;
           NIX_REMOTE = "daemon";
           BUILDKITE_SHELL = cfg.shell;
         };
 
         ## NB: maximum care is taken so that secrets (ssh keys and the CI token)
-        ##     don't end up in the Nix store.
-        ## This preStart script runs as root
+        ## don't end up in the Nix store.
         preStart = let
-          sshDir = "${cfg.dataDir}/.ssh";
+          sshDir = "${cfg.statePath}/.ssh";
           sshKeyPath = toString cfg.sshKeyPath;
-          tagStr = lib.concatStringsSep "," (lib.mapAttrsToList (name: value: "${name}=${value}") cfg.tags);
+          tagStr = lib.concatStringsSep "," (lib.mapAttrsToList (k: v: "${k}=${v}") cfg.tags);
         in
           ''
             ${optionalString (cfg.sshKeyPath != null) ''
-              mkdir -m 0700 -p "${sshDir}"
+              mkdir -p "${sshDir}"
+              chmod 700 "${sshDir}"
               cp -f "${sshKeyPath}" "${sshDir}/id_rsa"
-              chmod 600 "${sshDir}"/id_rsa
+              chmod 600 "${sshDir}/id_rsa"
             ''}
 
-            cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
+            cat > "${cfg.statePath}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
             tags="${tagStr}"
-            build-path="${cfg.dataDir}/builds"
+            build-path="${cfg.statePath}/builds"
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}
             EOF
             ${cfg.extraSetup}
-            chown -R ${cfg.fullName} ${cfg.dataDir}
           '';
 
         serviceConfig =
-          { ExecStart = "${cfg.package}/bin/buildkite-agent start --config ${cfg.dataDir}/buildkite-agent.cfg";
-            User = cfg.fullName;
+          { ExecStart = "${cfg.package}/bin/buildkite-agent start --config ${cfg.statePath}/buildkite-agent.cfg";
+            User = cfg.userName;
             RestartSec = 5;
             Restart = "on-failure";
             TimeoutSec = 10;
             # set a long timeout to give buildkite-agent a chance to finish current builds
             TimeoutStopSec = "2 min";
             KillMode = "mixed";
-            # run the preStart script as root
-            PermissionsStartOnly = true;
+            StateDirectory = "buildkite-${cfg.userName}";
           };
       };
   });
