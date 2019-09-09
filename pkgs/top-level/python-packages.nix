@@ -3873,8 +3873,6 @@ in {
 
   monotonic = callPackage ../development/python-modules/monotonic { };
 
-  MySQL_python = callPackage ../development/python-modules/mysql_python { };
-
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
   namebench = callPackage ../development/python-modules/namebench { };
