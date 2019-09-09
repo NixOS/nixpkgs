@@ -7,7 +7,7 @@
 , libX11
 , libv4l
 , qt5
-, gtk2
+, gtk3
 , xmlto
 , docbook_xsl
 , autoreconfHook
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     dbus
   ] ++ lib.optionals enableVideo [
     libv4l
-    gtk2
+    gtk3
     qt5.qtbase
     qt5.qtx11extras
   ];
@@ -56,15 +56,19 @@ stdenv.mkDerivation rec {
     "--with-dbusconfdir=${placeholder "out"}/etc"
   ] else [
     "--without-dbus"
-  ]) ++ lib.optionals (!enableVideo) [
+  ]) ++ (if enableVideo then [
+    "--with-gtk=gtk3"
+  ] else [
     "--disable-video"
     "--without-gtk"
     "--without-qt"
-  ];
+  ]);
 
   dontWrapQtApps = true;
+  dontWrapGApps = true;
 
   postFixup = lib.optionalString enableVideo ''
+    wrapProgram "$out/bin/zbarcam-gtk" "''${gappsWrapperArgs[@]}"
     wrapQtApp "$out/bin/zbarcam-qt"
   '';
 
