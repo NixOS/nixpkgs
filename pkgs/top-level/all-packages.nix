@@ -5808,6 +5808,8 @@ in
 
   rc = callPackage ../shells/rc { };
 
+  rct = callPackage ../development/libraries/rct { };
+
   rdma-core = callPackage ../os-specific/linux/rdma-core { };
 
   react-native-debugger = callPackage ../development/tools/react-native-debugger { };
