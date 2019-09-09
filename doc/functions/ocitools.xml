@@ -31,10 +31,10 @@
    <title>Build Container</title>
 <programlisting>
 buildContainer {
-  cmd = with pkgs; writeScript "run.sh" ''
+  args = [ (with pkgs; writeScript "run.sh" ''
     #!${bash}/bin/bash
     ${coreutils}/bin/exec ${bash}/bin/bash
-  ''; <co xml:id='ex-ociTools-buildContainer-1' />
+  '').outPath ]; <co xml:id='ex-ociTools-buildContainer-1' />
 
   mounts = {
     "/data" = {
@@ -51,7 +51,7 @@ buildContainer {
    <calloutlist>
     <callout arearefs='ex-ociTools-buildContainer-1'>
      <para>
-      <varname>cmd</varname> specifies the program to run inside the container.
+      <varname>args</varname> specifies a set of arguments to run inside the container.
       This is the only required argument for <varname>buildContainer</varname>.
       All referenced packages inside the derivation will be made available
       inside the container
