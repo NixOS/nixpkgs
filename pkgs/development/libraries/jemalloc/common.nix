@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
   configureFlags = []
     ++ optional stripPrefix "--with-jemalloc-prefix="
     ++ optional disableInitExecTls "--disable-initial-exec-tls"
+    # jemalloc is unable to correctly detect transparent hugepage support on
+    # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
+    # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
+    ++ optionals (stdenv.isAarch32 && versionOlder version "5") [
+      "--disable-thp"
+      "je_cv_thp=no"
+    ]
   ;
 
   doCheck = true;

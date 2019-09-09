@@ -4915,6 +4915,8 @@ in
 
   ndppd = callPackage ../applications/networking/ndppd { };
 
+  nemiver = callPackage ../development/tools/nemiver { };
+
   neofetch = callPackage ../tools/misc/neofetch { };
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
@@ -7507,7 +7509,7 @@ in
   gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { stdenv = gccStdenv; };
 
   gccFun = callPackage ../development/compilers/gcc/8;
-  gcc = gcc8;
+  gcc = if stdenv.isDarwin then gcc7 else gcc8;
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
@@ -9307,6 +9309,8 @@ in
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
   chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome2.GConf; };
+
+  chromium-xorg-conf = callPackage ../os-specific/linux/chromium-xorg-conf { };
 
   chrpath = callPackage ../development/tools/misc/chrpath { };
 
@@ -13743,6 +13747,8 @@ in
 
   sundials = callPackage ../development/libraries/sundials { };
 
+  sundials_3 = callPackage ../development/libraries/sundials/3.x.nix { };
+
   sutils = callPackage ../tools/misc/sutils { };
 
   svrcore = callPackage ../development/libraries/svrcore { };
@@ -16511,6 +16517,8 @@ in
 
   wpa_supplicant_gui = libsForQt5.callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
 
+  xf86_input_cmt = callPackage ../os-specific/linux/xf86-input-cmt { };
+
   xf86_input_mtrack = callPackage ../os-specific/linux/xf86-input-mtrack { };
 
   xf86_input_multitouch = callPackage ../os-specific/linux/xf86-input-multitouch { };
@@ -16808,6 +16816,10 @@ in
   liberation_ttf = liberation_ttf_v2;
 
   liberation-sans-narrow = callPackage ../data/fonts/liberation-sans-narrow { };
+
+  libevdevc = callPackage ../os-specific/linux/libevdevc { };
+
+  libgestures = callPackage ../os-specific/linux/libgestures { };
 
   liberastika = callPackage ../data/fonts/liberastika { };
 
