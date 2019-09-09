@@ -31,10 +31,14 @@ stdenv.mkDerivation rec {
     #hardcoded path
     substituteInPlace src/cmd/acme/acme.c \
       --replace /lib/font/bit $out/plan9/font
+
     #deprecated flags
     find . -type f \
       -exec sed -i -e 's/_SVID_SOURCE/_DEFAULT_SOURCE/g' {} \; \
       -exec sed -i -e 's/_BSD_SOURCE/_DEFAULT_SOURCE/g' {} \;
+
+    substituteInPlace bin/9c \
+      --replace 'which uniq' '${which}/bin/which uniq'
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     #add missing ctrl+c\z\x\v keybind for non-Darwin
     substituteInPlace src/cmd/acme/text.c \
@@ -45,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    which perl
+    perl
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
     xorgproto libX11 libXext libXt fontconfig
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
