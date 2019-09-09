@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
+{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, jdk, bash
 , coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
 }:
 
@@ -52,7 +52,14 @@ let
                 --replace '/bin/mv'       'mv'
             fi
           done
+
+          # The way we handle the Open-JDK and -JRE (symlinking jre into jdk) does not allow for
+          # the usually possible relative path traversal to JDK libraries, which part of hadoops
+          # build relies on. So we need to fix up that path to point directly to the JDK.
+          substituteInPlace hadoop-common-project/hadoop-annotations/pom.xml \
+            --replace "\''${java.home}/../lib/tools.jar" '${jdk}/lib/openjdk/lib/tools.jar'
         '';
+
         dontConfigure = true; # do not trigger cmake hook
         mavenFlags = "-Drequire.snappy -Drequire.bzip2 -DskipTests -Pdist,native -e";
         buildPhase = ''
