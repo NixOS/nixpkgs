@@ -189,10 +189,10 @@ let
       hooksPath = mkOption {
         type = types.path;
         default = hooksDir config;
-        defaultText = "generated from services.buildkite-agent.hooks";
+        defaultText = "generated from services.buildkite-agents.<name>.hooks";
         description = ''
           Path to the directory storing the hooks.
-          Consider using <option>services.buildkite-agent.hooks.&lt;name&gt;</option>
+          Consider using <option>services.buildkite-agents.&lt;name&gt;.hooks.&lt;name&gt;</option>
           instead.
         '';
       };
@@ -285,8 +285,8 @@ in {
   config.assertions = mapAgents (name: cfg: [
       { assertion = cfg.hooksPath == hooksDir cfg || all isNull (attrValues cfg.hooks);
         message = ''
-          Options `services.buildkite-agent.hooksPath' and
-          `services.buildkite-agent.hooks.<name>' are mutually exclusive.
+          Options `services.buildkite-agents.<name>.hooksPath' and
+          `services.buildkite-agents.<name>.hooks.<name>' are mutually exclusive.
         '';
       }
   ]);
