@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = https://chromium.googlesource.com/chromiumos/platform/vboot_reference;
-    rev = "${checkout}";
+    rev = checkout;
     sha256 = "1zja4ma6flch08h5j2l1hqnxmw2xwylidnddxxd5y2x05dai9ddj";
   };
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Mono and stereo to B-format panning, horizontal rotator, square, hexagon and cube decoders.
     '';
-    version = "${version}";
+    version = version;
     homepage = http://kokkinizita.linuxaudio.org/linuxaudio/ladspa/index.html;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];

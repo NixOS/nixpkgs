@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage {
-  name = "${pkgs.file.name}";
+  name = pkgs.file.name;
 
   src = pkgs.file.src;
 

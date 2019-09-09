@@ -47,7 +47,7 @@ in
       }];
     };
 
-    systemd.services."mk-docker-opts" = {
+    systemd.services.mk-docker-opts = {
       description = "Pre-Docker Actions";
       path = with pkgs; [ gawk gnugrep ];
       script = ''
@@ -57,7 +57,7 @@ in
       serviceConfig.Type = "oneshot";
     };
 
-    systemd.paths."flannel-subnet-env" = {
+    systemd.paths.flannel-subnet-env = {
       wantedBy = [ "flannel.service" ];
       pathConfig = {
         PathModified = "/run/flannel/subnet.env";

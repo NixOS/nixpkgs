@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://github.com/dreadatour/pidgin-mra";
-    rev = "${version}";
+    rev = version;
     sha256 = "1adq57g11kw7bfpivyvfk3nlpjkc8raiw4bzn3gn4nx3m0wl99vw";
   };
 

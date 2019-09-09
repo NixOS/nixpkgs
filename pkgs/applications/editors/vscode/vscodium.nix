@@ -11,8 +11,8 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    "x86_64-linux" = "09rq5jx7aicwp3qqi5pcv6bmyyp1rm5cfa96hvy3f4grhq1fi132";
-    "x86_64-darwin" = "1y1lbb3q5myaz7jg21x5sl0in8wr46brqj9zyrg3f16zahsagzr4";
+    x86_64-linux = "09rq5jx7aicwp3qqi5pcv6bmyyp1rm5cfa96hvy3f4grhq1fi132";
+    x86_64-darwin = "1y1lbb3q5myaz7jg21x5sl0in8wr46brqj9zyrg3f16zahsagzr4";
   }.${system};
 in
   callPackage ./generic.nix rec {

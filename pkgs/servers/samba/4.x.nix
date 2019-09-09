@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     [ "--with-static-modules=NONE"
       "--with-shared-modules=ALL"
       "--with-system-mitkrb5"
-      "--with-system-mitkdc" "${krb5Full}"
+      "--with-system-mitkdc" krb5Full
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"

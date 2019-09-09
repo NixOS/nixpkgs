@@ -179,7 +179,7 @@ in
   config = mkIf cfg.enable {
 
     services.phpfpm.pools = {
-      "${poolName}" = {
+      ${poolName} = {
         inherit (cfg) user group;
 
         phpOptions = ''

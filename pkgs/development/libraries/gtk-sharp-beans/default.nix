@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mono";
     repo = "gtk-sharp-beans";
 
-    rev = "${version}";
+    rev = version;
     sha256 = "04sylwdllb6gazzs2m4jjfn14mil9l3cny2q0xf0zkhczzih6ah1";
   };
 

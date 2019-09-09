@@ -81,7 +81,7 @@ in stdenv.mkDerivation rec {
   LUPDATE="${qttools.dev}/bin/lupdate";
   LRELEASE="${qttools.dev}/bin/lrelease";
   MOC="${qtbase.dev}/bin/moc";
-  QTDIR="${qtbase.dev}";
+  QTDIR=qtbase.dev;
   RCC="${qtbase.dev}/bin/rcc";
   UIC="${qtbase.dev}/bin/uic";
 

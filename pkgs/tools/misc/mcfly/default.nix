@@ -3,7 +3,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
   version = "v0.3.1";
-  rev = "${version}";
+  rev = version;
 
   src = fetchFromGitHub {
     inherit rev;

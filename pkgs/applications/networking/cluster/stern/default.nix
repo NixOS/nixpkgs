@@ -11,7 +11,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "wercker";
     repo = "stern";
-    rev = "${version}";
+    rev = version;
     sha256 = "0xndlq0ks8flzx6rdd4lnkxpkbvdy9sj1jwys5yj7p989ls8by3n";
   };
 

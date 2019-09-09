@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "v8";
     repo = "v8";
-    rev = "${version}";
+    rev = version;
     inherit sha256;
   };
   patchPhase = ''

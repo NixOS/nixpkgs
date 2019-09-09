@@ -78,13 +78,13 @@ rec {
 
   platform-tools = import ./platform-tools.nix {
     inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
-    package = packages.platform-tools."${platformToolsVersion}";
+    package = packages.platform-tools.${platformToolsVersion};
   };
 
   build-tools = map (version:
     import ./build-tools.nix {
       inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
-      package = packages.build-tools."${version}";
+      package = packages.build-tools.${version};
     }
   ) buildToolsVersions;
 
@@ -95,7 +95,7 @@ rec {
 
   emulator = import ./emulator.nix {
     inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
-    package = packages.emulator."${emulatorVersion}"."${os}";
+    package = packages.emulator.${emulatorVersion}.${os};
   };
 
   platforms = map (version:
@@ -132,20 +132,20 @@ rec {
   lldb = map (version:
     import ./lldb.nix {
       inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
-      package = packages.lldb."${version}";
+      package = packages.lldb.${version};
     }
   ) lldbVersions;
 
   cmake = map (version:
     import ./cmake.nix {
       inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
-      package = packages.cmake."${version}";
+      package = packages.cmake.${version};
     }
   ) cmakeVersions;
 
   ndk-bundle = import ./ndk-bundle {
     inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs lib platform-tools;
-    package = packages.ndk-bundle."${ndkVersion}";
+    package = packages.ndk-bundle.${ndkVersion};
   };
 
   google-apis = map (version:

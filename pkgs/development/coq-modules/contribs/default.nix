@@ -3,13 +3,13 @@
 let mkContrib = repo: revs: param:
   stdenv.mkDerivation rec {
     name = "coq${coq.coq-version}-${repo}-${version}";
-    version = "${param.version}";
+    version = param.version;
 
     src = fetchFromGitHub {
       owner = "coq-contribs";
-      repo = "${repo}";
-      rev = "${param.rev}";
-      sha256 = "${param.sha256}";
+      repo = repo;
+      rev = param.rev;
+      sha256 = param.sha256;
     };
 
     buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];

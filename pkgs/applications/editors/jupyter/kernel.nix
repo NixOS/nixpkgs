@@ -8,7 +8,7 @@ let
     in {
       displayName = "Python 3";
       argv = [
-        "${env.interpreter}"
+        env.interpreter
         "-m"
         "ipykernel_launcher"
         "-f"

@@ -219,7 +219,7 @@ let
     };
 
     buildInputs = [ ArchiveExtract ];
-    TIDYP_DIR = "${pkgs.tidyp}";
+    TIDYP_DIR = pkgs.tidyp;
     propagatedBuildInputs = [ FileShareDir ];
   };
 

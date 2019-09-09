@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       without audible degradation.
     '';
 
-    version = "${version}";
+    version = version;
     homepage = http://shibatch.sourceforge.net/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ leenaars];

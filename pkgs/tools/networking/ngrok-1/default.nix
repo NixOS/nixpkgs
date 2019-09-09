@@ -3,7 +3,7 @@
 buildGoPackage rec {
   pname = "ngrok";
   version = "1.7.1";
-  rev = "${version}";
+  rev = version;
 
   goPackagePath = "ngrok";
 

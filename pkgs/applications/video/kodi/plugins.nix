@@ -487,7 +487,7 @@ let self = rec {
     src = fetchFromGitHub {
       owner = "peak3d";
       repo = "inputstream.adaptive";
-      rev = "${version}";
+      rev = version;
       sha256 = "09d9b35mpaf3g5m51viyan9hv7d2i8ndvb9wm0j7rs5gwsf0k71z";
     };
 

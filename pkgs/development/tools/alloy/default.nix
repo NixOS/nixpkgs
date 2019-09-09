@@ -7,7 +7,7 @@ let generic = { major, version, src }:
     nameMajor = "alloy${major}";
 
     desktopItem = makeDesktopItem rec {
-      name = "${nameMajor}";
+      name = nameMajor;
       exec = name;
       icon = name;
       desktopName = "Alloy ${major}";

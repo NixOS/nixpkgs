@@ -6,7 +6,7 @@ pythonPackages.buildPythonApplication rec {
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
-  PBR_VERSION = "${version}";
+  PBR_VERSION = version;
 
   src = fetchFromGitHub {
     owner = "openstack-infra";

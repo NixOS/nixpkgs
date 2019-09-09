@@ -12,8 +12,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "Vapor";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "LÖVE Distribution Client"; 
     desktopName = "Vapor";
     genericName = "vapor";

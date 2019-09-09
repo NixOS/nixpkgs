@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
-    rev = "${version}";
+    rev = version;
     sha256 = "15adg7ndjkzy04lizjmnvv0pf0snhzp6a8x74mndcm0zma0dia0z";
   };
 

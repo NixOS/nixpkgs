@@ -13,7 +13,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "securego";
     repo = "gosec";
-    rev = "${version}";
+    rev = version;
     sha256 = "1420yl4cjp4v4xv0l0wbahgl6bjhz77lx5va9hqa6abddmqvx1hg";
   };
 

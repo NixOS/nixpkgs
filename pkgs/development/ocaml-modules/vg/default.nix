@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     Renderers for PDF, SVG and the HTML canvas are distributed with the
     module. An API allows to implement new renderers.
     '';
-    homepage = "${webpage}";
+    homepage = webpage;
     inherit (ocaml.meta) platforms;
     license = licenses.isc;
     maintainers = [ maintainers.jirkamarsik ];

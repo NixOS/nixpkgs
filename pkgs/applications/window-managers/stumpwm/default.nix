@@ -35,8 +35,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://github.com/stumpwm/stumpwm";
-    rev = "${versionSpec.rev}";
-    sha256 = "${versionSpec.sha256}";
+    rev = versionSpec.rev;
+    sha256 = versionSpec.sha256;
   };
 
   # NOTE: The patch needs an update for the next release.

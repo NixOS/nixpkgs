@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-completions";
-    rev = "${version}";
+    rev = version;
     sha256 = "1yf4rz99acdsiy0y1v3bm65xvs2m0sl92ysz0rnnrlbd5amn283l";
   };
 

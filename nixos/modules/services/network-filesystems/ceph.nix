@@ -390,7 +390,7 @@ in
 
     systemd.targets = let
       targets = [
-        { "ceph" = { description = "Ceph target allowing to start/stop all ceph service instances at once";
+        { ceph = { description = "Ceph target allowing to start/stop all ceph service instances at once";
                      wantedBy = [ "multi-user.target" ]; }; }
       ] ++ optional cfg.mon.enable (makeTarget "mon")
         ++ optional cfg.mds.enable (makeTarget "mds")

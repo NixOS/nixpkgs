@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # ping @timokau for more info
   src = fetchFromGitHub {
     owner = "JohnCremona";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1910np1xzyjzszay24xn4b81qhpsvhp5aix9vdpknplni2mq8kwb";
   };

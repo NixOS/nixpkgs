@@ -11,7 +11,7 @@ in mkDerivation rec {
   src = fetchFromGitHub {
     owner = "shundhammer";
     repo = "qdirstat";
-    rev = "${version}";
+    rev = version;
     sha256 = "0q4ccjmlbqifg251kyxwys8wspdskr8scqhacyfrs9cmnjxcjqan";
   };
 

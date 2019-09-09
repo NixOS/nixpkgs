@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "nDPI";
-    rev = "${version}";
+    rev = version;
     sha256 = "0lc4vga89pm954vf92g9fa6xwsjkb13jd6wrcc35zy5j04nf9rzf";
   };
 

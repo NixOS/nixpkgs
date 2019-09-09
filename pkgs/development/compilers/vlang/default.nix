@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
-    rev = "${version}";
+    rev = version;
     sha256 = "0js92v2r1h4vaaha3z1spgi7qynlmr9vls41gxp284w4yhnjzv15";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   vc = fetchFromGitHub {
     owner = "vlang";
     repo = "vc";
-    rev = "${version}";
+    rev = version;
     sha256 = "0qx1drs1hr94w7vaaq5w8mkq7j1d3biffnmxkyz63yv8573k03bj";
   };
 

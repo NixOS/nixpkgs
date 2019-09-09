@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   version = "2.16.0";
   src = fetchFromGitHub {
     owner = "fredrik-johansson";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "0478671wfwy3gl26sbxh1jq1ih36z4k72waa8y2y2lvn649gb7cd";
   };
   buildInputs = [mpir gmp mpfr flint];

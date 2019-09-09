@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "JosephP91";
     repo = "curlcpp";
-    rev = "${version}";
+    rev = version;
     sha256 = "025qg5hym73xrvyhalv3jgbf9jqnnzkdjs3zwsgbpqx58zyd5bg5";
   };
 
