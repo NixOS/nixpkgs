@@ -57,6 +57,7 @@ let
     pygobject3
     pycairo
     pillow
+    setuptools
   ]);
 
   installedTestsPython = python3.withPackages (p: with p; [
