@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, cmake }:
+{ stdenv, fetchurl, lib, cmake, cacert }:
 
 let
 
@@ -29,6 +29,12 @@ let
     # removing ./configure pre-config.
     preConfigure = ''
       rm configure
+    '';
+
+    # Since 2.9.x the default location can't be configured from the build using
+    # DEFAULT_CA_FILE anymore, instead we have to patch the default value.
+    postPatch = lib.optionalString (lib.versionAtLeast version "2.9.2") ''
+      substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
     '';
 
     enableParallelBuilding = true;
