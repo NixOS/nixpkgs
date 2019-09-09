@@ -20,10 +20,7 @@ buildPythonPackage {
   # no test data
   doCheck = false;
 
-  preConfigure = ''
-    mkdir build
-    cd build
-    cmake ..
+  postConfigure = ''
     cd ../py_ext
   '';
 

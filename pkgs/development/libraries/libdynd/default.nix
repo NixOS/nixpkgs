@@ -20,6 +20,9 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=nonnull"
+    "-Wno-error=tautological-compare"
+    "-Wno-error=class-memaccess"
+    "-Wno-error=parentheses"
   ];
 
   buildInputs = [ cmake ];

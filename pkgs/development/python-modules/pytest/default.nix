@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
+, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy, python
 }:
 buildPythonPackage rec {
   version = "5.1.0";
@@ -17,12 +17,13 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ hypothesis mock ];
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
     ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
     ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
+
   # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
   checkPhase = ''
     runHook preCheck
@@ -35,15 +36,17 @@ buildPythonPackage rec {
     pytestcachePhase() {
         find $out -name .pytest_cache -type d -exec rm -rf {} +
     }
-
     preDistPhases+=" pytestcachePhase"
   '';
+
+  pythonImportsCheck = [
+    "pytest"
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://docs.pytest.org;
     description = "Framework for writing tests";
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
     license = licenses.mit;
-    platforms = platforms.unix;
   };
 }

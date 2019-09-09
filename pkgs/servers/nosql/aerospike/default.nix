@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ openssl zlib ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+
   preBuild = ''
     patchShebangs build/gen_version
     substituteInPlace build/gen_version --replace 'git describe' 'echo ${version}'

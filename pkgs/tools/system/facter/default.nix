@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  CXXFLAGS = "-fpermissive";
+  CXXFLAGS = "-fpermissive -Wno-error=catch-value";
   NIX_LDFLAGS = "-lblkid";
 
   cmakeFlags = [ "-DFACTER_RUBY=${ruby}/lib/libruby.so" ];

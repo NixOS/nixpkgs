@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./debug-info-from-env.patch ];
 
-  postPatch = ''
-    patchShebangs tests
-  '';
-
   hardeningDisable = [ "format" ];
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,

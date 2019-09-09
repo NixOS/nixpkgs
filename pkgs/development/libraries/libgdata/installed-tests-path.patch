@@ -1,5 +1,5 @@
 diff --git a/gdata/tests/meson.build b/gdata/tests/meson.build
-index 52154e7a..1a44d1d8 100644
+index 05184deb..3a9392d4 100644
 --- a/gdata/tests/meson.build
 +++ b/gdata/tests/meson.build
 @@ -1,5 +1,12 @@
@@ -17,17 +17,17 @@ index 52154e7a..1a44d1d8 100644
  
  tests_sources = files(
    'common.c',
-@@ -48,7 +55,7 @@ foreach test_name, extra_args: tests
+@@ -49,7 +56,7 @@ foreach test_name, extra_args: tests
      dependencies: common_deps + extra_args.get('dependencies', []),
      sources: tests_sources,
-     install: install_tests,
+     install: install_tests and not should_fail,
 -    install_dir: tests_execdir,
 +    install_dir: tests_bindir,
    )
  
    test(
-@@ -63,7 +70,7 @@ if install_tests
-   foreach test_name, extra_args: tests
+@@ -65,7 +72,7 @@ if install_tests
+     should_fail = extra_args.get('should_fail', false)
      tests_conf = {
        'TEST_TYPE': 'session',
 -      'TEST_ABS_PATH': gdata_prefix / tests_execdir / test_name,
@@ -35,10 +35,10 @@ index 52154e7a..1a44d1d8 100644
      }
  
      configure_file (
-@@ -71,13 +78,13 @@ if install_tests
+@@ -73,13 +80,13 @@ if install_tests
        output: test_name + '.test',
        configuration: tests_conf,
-       install: true,
+       install: not should_fail,
 -      install_dir: tests_metadir,
 +      install_dir: tests_datadir,
      )
@@ -51,7 +51,7 @@ index 52154e7a..1a44d1d8 100644
    )
  
    test_data = [
-@@ -96,6 +103,6 @@ if install_tests
+@@ -98,6 +105,6 @@ if install_tests
  
    install_data(
      test_data,
@@ -60,7 +60,7 @@ index 52154e7a..1a44d1d8 100644
    )
  endif
 diff --git a/meson.build b/meson.build
-index 7d2f5254..bed3e189 100644
+index 50441abb..5fc773b1 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -20,9 +20,9 @@ gdata_api_version_minor = 0
