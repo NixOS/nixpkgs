@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     xmlto
     autoreconfHook
     docbook_xsl
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -60,6 +61,12 @@ stdenv.mkDerivation rec {
     "--without-gtk"
     "--without-qt"
   ];
+
+  dontWrapQtApps = true;
+
+  postFixup = lib.optionalString enableVideo ''
+    wrapQtApp "$out/bin/zbarcam-qt"
+  '';
 
   meta = with lib; {
     description = "Bar code reader";
