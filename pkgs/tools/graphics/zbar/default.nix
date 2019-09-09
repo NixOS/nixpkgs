@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , imagemagickBig
 , pkgconfig
-, python2Packages
 , perl
 , libX11
 , libv4l
@@ -17,14 +16,11 @@
 , enableDbus ? stdenv.isLinux
 }:
 
-let
-  inherit (python2Packages) pygtk python;
-in
 stdenv.mkDerivation rec {
   pname = "zbar";
   version = "0.23";
 
-  outputs = [ "out" "py" "lib" "dev" "doc" "man" ];
+  outputs = [ "out" "lib" "dev" "doc" "man" ];
 
   src = fetchFromGitHub {
     owner = "mchehab";
@@ -42,8 +38,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     imagemagickBig
-    python
-    pygtk
     perl
     libX11
   ] ++ lib.optionals enableDbus [
@@ -55,7 +49,9 @@ stdenv.mkDerivation rec {
     qt5.qtx11extras
   ];
 
-  configureFlags = (if enableDbus then [
+  configureFlags = [
+    "--without-python"
+  ] ++ (if enableDbus then [
     "--with-dbusconfdir=${placeholder "out"}/etc"
   ] else [
     "--without-dbus"
@@ -63,11 +59,6 @@ stdenv.mkDerivation rec {
     "--disable-video"
     "--without-gtk"
     "--without-qt"
-  ];
-
-  makeFlags = [
-    "pyexecdir=${placeholder "py"}/${python.sitePackages}"
-    "pythondir=${placeholder "py"}/${python.sitePackages}"
   ];
 
   meta = with lib; {
