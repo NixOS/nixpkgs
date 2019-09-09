@@ -4840,6 +4840,8 @@ in {
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
+  scikits-odes = callPackage ../development/python-modules/scikits-odes { };
+
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };

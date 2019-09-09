@@ -3,6 +3,7 @@
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
 , libvisio, libcdr, libexif, potrace, cmake, hicolor-icon-theme
+, librsvg, wrapGAppsHook
 }:
 
 let
@@ -40,13 +41,15 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env ]
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env wrapGAppsHook ]
     ++ (with perlPackages; [ perl XMLParser ]);
   buildInputs = [
     libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     gsl poppler imagemagick libwpg librevenge
     libvisio libcdr libexif potrace hicolor-icon-theme
+
+    librsvg # for loading icons
 
     python2Env perlPackages.perl
   ];
