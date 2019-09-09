@@ -38,11 +38,8 @@ python3Packages.buildPythonApplication rec {
   checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ];
 
   postPatch = ''
-    # Invalid argument: 'perform_health_check' is not a valid setting
-    substituteInPlace tests/conftest.py \
-      --replace "perform_health_check=False" ""
-    substituteInPlace tests/unit/test_repair.py \
-      --replace $'@settings(perform_health_check=False)  # Using the random module for UIDs\n' ""
+    # see https://github.com/pimutils/vdirsyncer/pull/805
+    substituteInPlace setup.cfg --replace --duration --durations
 
     # for setuptools_scm:
     echo 'Version: ${version}' >PKG-INFO
