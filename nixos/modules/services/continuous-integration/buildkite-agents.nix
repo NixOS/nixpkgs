@@ -91,7 +91,7 @@ let
             (prev: cur: let pair = builtins.split "=" cur; in
                  prev // {"${lib.head pair}" = lib.last pair; })
             {} (lib.remove [] (builtins.split "," commas)); in
-          types.coercedTo types.string commasToAttrs (types.attrsOf types.str);
+          types.coercedTo types.str commasToAttrs (types.attrsOf types.str);
         default = {};
         example = { queue = "default"; docker = "true"; ruby2 = "true"; };
         description = ''
@@ -198,7 +198,7 @@ let
       };
 
       shell = mkOption {
-        type = types.string;
+        type = types.str;
         default = "${pkgs.bash}/bin/bash -e -c";
         description = ''
           Command that buildkite-agent 3 will execute when it spawns a shell.
