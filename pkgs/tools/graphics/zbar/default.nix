@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , imagemagickBig
 , pkgconfig
-, perl
 , libX11
 , libv4l
 , qt5
@@ -39,7 +38,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     imagemagickBig
-    perl
     libX11
   ] ++ lib.optionals enableDbus [
     dbus
