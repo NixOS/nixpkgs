@@ -1,12 +1,18 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, pkgconfig, gettext, python3
-, texinfo, help2man, libyaml, perl
+{ fetchFromGitHub
+, stdenv
+, autoreconfHook
+, pkgconfig
+, gettext
+, python3
+, texinfo
+, help2man
+, libyaml
+, perl
 }:
 
-let
-  version = "3.10.0";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "liblouis";
-  inherit version;
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "liblouis";
@@ -18,9 +24,13 @@ in stdenv.mkDerivation {
   outputs = [ "out" "dev" "man" "info" "doc" ];
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig gettext python3
+    autoreconfHook
+    pkgconfig
+    gettext
+    python3
     # Docs, man, info
-    texinfo help2man
+    texinfo
+    help2man
   ];
 
   buildInputs = [
