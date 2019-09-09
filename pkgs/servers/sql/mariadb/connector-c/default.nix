@@ -6,10 +6,7 @@
 
 with stdenv.lib;
 
-let
-  isVer3 = versionAtLeast version "3.0";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "mariadb-connector-c";
   inherit version;
 
@@ -24,7 +21,8 @@ in stdenv.mkDerivation {
   cmakeFlags = [
     "-DWITH_EXTERNAL_ZLIB=ON"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
-  ] ++ optional isVer3 "-DWITH_CURL=ON";
+    "-DWITH_CURL=ON"
+  ];
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
   preConfigure = optionalString stdenv.isDarwin ''
@@ -32,7 +30,7 @@ in stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ openssl zlib ] ++ optional isVer3 curl;
+  propagatedBuildInputs = [ curl openssl zlib ];
   buildInputs = [ libiconv ];
 
   enableParallelBuilding = true;
@@ -41,12 +39,10 @@ in stdenv.mkDerivation {
     ln -sv mariadb_config $out/bin/mysql_config
     ln -sv mariadb $out/lib/mysql
     ln -sv mariadb $out/include/mysql
-    ${optionalString isVer3 ''
-      ln -sv libmariadbclient.a $out/lib/mariadb/libmysqlclient.a
-      ln -sv libmariadbclient.a $out/lib/mariadb/libmysqlclient_r.a
-      ln -sv libmariadb.so $out/lib/mariadb/libmysqlclient.so
-      ln -sv libmariadb.so $out/lib/mariadb/libmysqlclient_r.so
-    ''}
+    ln -sv libmariadbclient.a $out/lib/mariadb/libmysqlclient.a
+    ln -sv libmariadbclient.a $out/lib/mariadb/libmysqlclient_r.a
+    ln -sv libmariadb.so $out/lib/mariadb/libmysqlclient.so
+    ln -sv libmariadb.so $out/lib/mariadb/libmysqlclient_r.so
   '';
 
   meta = {

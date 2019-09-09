@@ -14887,10 +14887,8 @@ in
   rpcbind = callPackage ../servers/rpcbind { };
 
   libmysqlclient = libmysqlclient_3_1;
-  libmysqlclient_2_3 = mariadb-connector-c_2_3;
   libmysqlclient_3_1 = mariadb-connector-c_3_1;
   mariadb-connector-c = mariadb-connector-c_3_1;
-  mariadb-connector-c_2_3 = callPackage ../servers/sql/mariadb/connector-c/2_3.nix { };
   mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
 
   mariadb-galera = mariadb-galera_25;
