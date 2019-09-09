@@ -699,6 +699,8 @@ let
 
       PREEMPT = no;
       PREEMPT_VOLUNTARY = yes;
+      
+      X86_AMD_PLATFORM_DEVICE = yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
