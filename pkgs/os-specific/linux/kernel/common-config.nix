@@ -158,6 +158,9 @@ let
       ATH9K_AHB             = option yes; # Ditto, AHB bus
       B43_PHY_HT            = option yes;
       BCMA_HOST_PCI         = option yes;
+      RTW88                 = whenAtLeast "5.2" module;
+      RTW88_8822BE          = whenAtLeast "5.2" yes;
+      RTW88_8822CE          = whenAtLeast "5.2" yes;
     };
 
     fb = {
