@@ -7,22 +7,25 @@
 , xorgserver
 , python3
 , wrapGAppsHook
+, sysprof
+, desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.32.2";
+  version = "3.34.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1h577i2ap7dpfy1jg101jvc6nzccc0csgvd55ahydlr8f94frcva";
+    sha256 = "0qdpw0fya8kr5737jf635455qb714wvhszkk82rlw48fqj8nk8ss";
   };
 
   mesonFlags = [
     "-Dxwayland-path=${xwayland}/bin/Xwayland"
     "-Dinstalled_tests=false" # TODO: enable these
+    "-Dprofiler=false"
   ];
 
   propagatedBuildInputs = [
@@ -39,6 +42,7 @@ stdenv.mkDerivation rec {
     # for cvt command
     xorgserver
     wrapGAppsHook
+    desktop-file-utils
   ];
 
   buildInputs = [
@@ -47,20 +51,18 @@ stdenv.mkDerivation rec {
     geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
     libxkbcommon pipewire xwayland
-    gnome-settings-daemon
+    gnome-settings-daemon # sysprof
   ];
 
   patches = [
+    (fetchpatch {
+      name = "ensure-emit-x11-display-opened.patch";
+      url = "https://gitlab.gnome.org/GNOME/mutter/commit/850ef518795dcc20d3b9a4f661f70ff8d0ddacb2.patch";
+      sha256 = "0cxdbrbcc8kfkvw7ryxjm2v1vk15jki7bawn128385r5hasabhxf";
+    })
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
-    })
-    # Fix a segmentation fault in dri_flush_front_buffer() upon
-    # suspend/resume. This change should be removed when Mutter
-    # is updated to 3.34.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/8307c0f7ab60760de53f764e6636893733543be8.diff";
-      sha256 = "1hzfva71xdqvvnx5smjsrjlgyrmc7dj94mpylkak0gwda5si0h2n";
     })
   ];
 
