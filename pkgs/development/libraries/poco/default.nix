@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, zlib, pcre, expat, sqlite, openssl, unixODBC, mysql }:
+{ stdenv, fetchurl, cmake, pkgconfig, zlib, pcre, expat, sqlite, openssl, unixODBC, libmysqlclient }:
 
 stdenv.mkDerivation rec {
   pname = "poco";
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ zlib pcre expat sqlite openssl unixODBC mysql.connector-c ];
+  buildInputs = [ zlib pcre expat sqlite openssl unixODBC libmysqlclient ];
 
-  MYSQL_DIR = mysql.connector-c;
+  MYSQL_DIR = libmysqlclient;
   MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
 
   cmakeFlags = [

@@ -4,7 +4,7 @@
   breeze-icons, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kcrash, kguiaddons, ki18n, kiconthemes, kitemviews, kio, ktexteditor, ktextwidgets,
   kwidgetsaddons, kxmlgui,
-  kdb, kproperty, kreport, lcms2, mysql, marble, postgresql
+  kdb, kproperty, kreport, lcms2, libmysqlclient, marble, postgresql
 }:
 
 mkDerivation rec {
@@ -23,7 +23,7 @@ mkDerivation rec {
     breeze-icons karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
     kcrash kguiaddons ki18n kiconthemes kitemviews kio ktexteditor ktextwidgets
     kwidgetsaddons kxmlgui
-    kdb kproperty kreport lcms2 mysql.connector-c marble postgresql
+    kdb kproperty kreport lcms2 libmysqlclient marble postgresql
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];
