@@ -41,7 +41,7 @@
 } @ args:
 
 let # Rename the function arguments
-  config0 = config;
+  configExpr = config;
   crossSystem0 = crossSystem;
 
 in let
@@ -50,36 +50,21 @@ in let
   # Allow both:
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
-  config1 =
-    if lib.isFunction config0
-    then config0 { inherit pkgs; }
-    else config0;
+  config =
+    if lib.isFunction configExpr
+    then configExpr { inherit pkgs; }
+    else configExpr;
 
   # From a minimum of `system` or `config` (actually a target triple, *not*
   # nixpkgs configuration), infer the other one and platform as needed.
   localSystem = lib.systems.elaborate (if builtins.isAttrs args.localSystem then (
     # Allow setting the platform in the config file. This take precedence over
     # the inferred platform, but not over an explicitly passed-in one.
-    builtins.intersectAttrs { platform = null; } config1
+    builtins.intersectAttrs { platform = null; } config
     // args.localSystem) else args.localSystem);
 
   crossSystem = if crossSystem0 == null then localSystem
                 else lib.systems.elaborate crossSystem0;
-
-  configEval = lib.evalModules {
-    modules = [
-      ./config.nix
-      ({ options, ... }: {
-        _file = "nixpkgs.config";
-        # filter-out known options, FIXME: remove this eventually
-        config = builtins.intersectAttrs options config1;
-      })
-    ];
-  };
-
-  # take all the rest as-is
-  config = lib.showWarnings configEval.config.warnings
-    (config1 // builtins.removeAttrs configEval.config [ "_module" ]);
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
