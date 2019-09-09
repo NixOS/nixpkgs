@@ -201,9 +201,9 @@ rec {
   # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
 
   docker_18_09 = makeOverridable dockerGen {
-    version = "18.09.8";
-    rev = "0dd43dd87fd530113bf44c9bba9ad8b20ce4637f";
-    sha256 = "07ljxdqylbfbq1939hqyaav966ga7ds5b38dn7af1h0aks86y2s3";
+    version = "18.09.9";
+    rev = "039a7df9ba8097dd987370782fcdd6ea79b26016";
+    sha256 = "0wqhjx9qs96q2jd091wffn3cyv2aslqn2cvpdpgljk8yr9s0yg7h";
     runcRev = "425e105d5a03fabd737a126ad93d62a9eeede87f";
     runcSha256 = "05s4p12mgmdcy7gjralh41wlgds6m69zdgwbpdn1xjj2487dmhxf";
     containerdRev = "894b81a4b802e4eb2a91d1ce216b8817763c29fb";
