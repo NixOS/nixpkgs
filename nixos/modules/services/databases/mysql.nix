@@ -153,6 +153,20 @@ in
                 Name of the user to ensure.
               '';
             };
+          authentication_option = mkOption {
+              type = types.str;
+              default = "socket";
+              description = ''
+                Authentication option to use either socket or password. If password is used password_hash has to be set.
+              '';
+            };
+          password_hash = mkOption {
+              type = types.str;
+              default = "";
+              description = ''
+                Password hash to set for user, default is empty, which means no password.
+              '';
+            };
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
@@ -406,7 +420,7 @@ in
 
                 ${concatMapStrings (user:
                   ''
-                    ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if isMariaDB then "unix_socket" else "auth_socket"};"
+                    ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' ${optionalString  (user.authentication_option == "password") ''IDENTIFIED BY PASSWORD '${user.password_hash}' ''} ${optionalString  (user.authentication_option == "socket") ''IDENTIFIED WITH  ${if isMariaDB then "unix_socket" else "auth_socket"} ''};"
                       ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
                         echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
                       '') user.ensurePermissions)}
@@ -423,3 +437,4 @@ in
   };
 
 }
+
