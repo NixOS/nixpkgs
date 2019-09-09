@@ -6,7 +6,7 @@ pythonPackages.buildPythonApplication rec {
     src = fetchFromGitHub {
       owner = "reorx";
       repo = pname;
-      rev = "${version}";
+      rev = version;
       sha256 = "1vriibcsq4j1hvm5yigbbmmv21dc40y5c9gvd31dg9qkaz26hml6";
     };
     doCheck = false; # No tests

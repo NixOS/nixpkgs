@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = let
     tool = pkg: name:
-      if pkg == null then {} else { "${name}" = "${pkg}/bin/${name}"; };
+      if pkg == null then {} else { ${name} = "${pkg}/bin/${name}"; };
 
     # Only FOSS toolchain supported out of the box, sorry!
     toolchainOverrides =

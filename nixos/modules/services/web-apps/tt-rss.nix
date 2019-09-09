@@ -520,7 +520,7 @@ let
     ];
 
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = {
+      ${poolName} = {
         inherit (cfg) user;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";

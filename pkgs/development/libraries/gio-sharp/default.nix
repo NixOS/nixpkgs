@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mono";
     repo = "gio-sharp";
 
-    rev = "${version}";
+    rev = version;
     sha256 = "13pc529pjabj7lq23dbndc26ssmg5wkhc7lfvwapm87j711m0zig";
   };
 

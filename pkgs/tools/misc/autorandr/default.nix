@@ -48,7 +48,7 @@ in
     src = fetchFromGitHub {
       owner = "phillipberndt";
       repo = "autorandr";
-      rev = "${version}";
+      rev = version;
       sha256 = "1bp1cqkrpg77rjyh4lq1agc719fmxn92jkiicf6nbhfl8kf3l3vy";
     };
 

@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "KiCad";
       repo = "kicad-${name}";
-      rev = "${version}";
+      rev = version;
       inherit sha256 name;
     };
     nativeBuildInputs = [

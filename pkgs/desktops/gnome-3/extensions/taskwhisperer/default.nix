@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       task = "${taskwarrior}/bin/task";
-      shell = "${runtimeShell}";
+      shell = runtimeShell;
     })
   ];
 

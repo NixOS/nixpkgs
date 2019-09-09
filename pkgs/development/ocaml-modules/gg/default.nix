@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       matrices, quaternions, axis aligned boxes, colors, color spaces, and
       raster data.
     '';
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];

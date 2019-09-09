@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
-    rev = "${version}";
+    rev = version;
     sha256 = "0kblq0bqap2zzkflrj6rmdi8dvqxa28fcwwrc3lfmbz2893ni3w4";
   };
 
@@ -72,22 +72,22 @@ stdenv.mkDerivation rec {
   teensyduino_src = fetchurl {
     url = "https://www.pjrc.com/teensy/td_${teensyduino_version}/TeensyduinoInstall.${teensy_architecture}";
     sha256 =
-      lib.optionalString ("${teensy_architecture}" == "linux64")
+      lib.optionalString (teensy_architecture == "linux64")
         "09ysanip5d2f5axzd81z2l74ayng60zqhjxmxs7xa5098fff46il"
-      + lib.optionalString ("${teensy_architecture}" == "linux32")
+      + lib.optionalString (teensy_architecture == "linux32")
         "1zw3cfv2p62dwg8838vh0gd1934b18cyx7c13azvwmrpj601l0xx"
-      + lib.optionalString ("${teensy_architecture}" == "linuxarm")
+      + lib.optionalString (teensy_architecture == "linuxarm")
         "12421z26ksx84aldw1pq0cakh8jhs33mwafgvfij0zfgn9x0i877";
     };
   # Used because teensyduino requires jars be a specific size
   arduino_dist_src = fetchurl {
     url = "http://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
     sha256 =
-      lib.optionalString ("${teensy_architecture}" == "linux64")
+      lib.optionalString (teensy_architecture == "linux64")
         "1lv4in9j0r8s0cis4zdvbk2637vlj12w69wdxgcxcrwvkcdahkpa"
-      + lib.optionalString ("${teensy_architecture}" == "linux32")
+      + lib.optionalString (teensy_architecture == "linux32")
         "0zla3a6gd9prclgrbbgsmhf8ds8zb221m65x21pvz0y1cwsdvjpm"
-      + lib.optionalString ("${teensy_architecture}" == "linuxarm")
+      + lib.optionalString (teensy_architecture == "linuxarm")
         "1w5m49wfd68zazli0lf3w4zykab8n7mzp3wnbjqfpx2vip80bqnz";
   };
 

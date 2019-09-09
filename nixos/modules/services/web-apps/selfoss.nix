@@ -115,7 +115,7 @@ in
 
   config = mkIf cfg.enable {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = {
+      ${poolName} = {
         user = "nginx";
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
-    rev = "${rev}";
+    rev = rev;
     sha256 = "1bpz44hxq5fpkv6jlgphzk7mxjiiah526jgb63ih5pd1hd2cfw1r";
   };
 

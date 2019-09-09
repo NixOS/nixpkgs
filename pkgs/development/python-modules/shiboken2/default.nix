@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     cd sources/shiboken2
   '';
 
-  CLANG_INSTALL_DIR = "${llvmPackages.libclang.out}";
+  CLANG_INSTALL_DIR = llvmPackages.libclang.out;
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvmPackages.libclang python qt5.qtbase qt5.qtxmlpatterns ];

@@ -6,7 +6,7 @@ let numVersion = "02.18"; # :(
 in
 stdenv.mkDerivation rec {
   name = "lshw-${numVersion}b";
-  version = "${numVersion}";
+  version = numVersion;
 
   src = fetchurl {
     url = "https://ezix.org/software/files/lshw-B.${version}.tar.gz";

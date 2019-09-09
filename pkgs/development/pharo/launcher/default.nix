@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = "Pharo";
-    exec = "${executable-name}";
+    exec = executable-name;
     icon = "pharo";
     comment = "Launcher for Pharo distributions";
     desktopName = "Pharo";

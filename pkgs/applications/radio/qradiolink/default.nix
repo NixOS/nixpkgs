@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "kantooon";
     repo = "qradiolink";
-    rev = "${version}";
+    rev = version;
     sha256 = "0xhg5zhjznmls5m3rhpk1qx0dipxmca12s85w15d0i7qwva2f1gi";
   };
 

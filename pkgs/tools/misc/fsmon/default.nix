@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nowsecure";
     repo = "fsmon";
-    rev = "${version}";
+    rev = version;
     sha256 = "1b99cd5k2zh30sagp3f55jvj1r48scxibv7aqqc2sp82sci59npg";
   };
 

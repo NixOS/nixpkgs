@@ -17,12 +17,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "0x1ws6iqflvzphg2srvdrn4xrr5wd5fnykkc9h006mj9rb5lp1k9";
-      "x86_64-darwin" = "0yjzgsbsgwa6gbp270fqfm1klm6f8n4s2xmay62gdgvnsj543cxz";
+      x86_64-linux  = "0x1ws6iqflvzphg2srvdrn4xrr5wd5fnykkc9h006mj9rb5lp1k9";
+      x86_64-darwin = "0yjzgsbsgwa6gbp270fqfm1klm6f8n4s2xmay62gdgvnsj543cxz";
     }
     else {
-      "x86_64-linux"  = "1nl6yic1j422l2c7mf8wv0ylfx6marrwm7d181z9nzdswq509kpg";
-      "x86_64-darwin" = "1sy4an9d1faifr3n2y45kalrd22yb68dnpjhi9h8q73c21gp8pzf";
+      x86_64-linux  = "1nl6yic1j422l2c7mf8wv0ylfx6marrwm7d181z9nzdswq509kpg";
+      x86_64-darwin = "1sy4an9d1faifr3n2y45kalrd22yb68dnpjhi9h8q73c21gp8pzf";
     };
 in
 stdenv.mkDerivation (rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}-${plat}-${arch}.tar.gz";
-    sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
+    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [ ./es-home-6.x.patch ];

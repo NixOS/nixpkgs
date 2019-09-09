@@ -62,7 +62,7 @@ in stdenv.mkDerivation {
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
 
   passthru = {
-    home = "${zulu}";
+    home = zulu;
   };
 
   meta = with stdenv.lib; {

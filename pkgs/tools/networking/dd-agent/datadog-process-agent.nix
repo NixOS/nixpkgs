@@ -8,7 +8,7 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0fc2flm0pa44mjxvn4fan0mkvg9yyg27w68xdgrnpdifj99kxxjf";
   };
 

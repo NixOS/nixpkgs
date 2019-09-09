@@ -44,7 +44,7 @@ stdenv.mkDerivation ({
     longDescription = ''
       Cppo is an equivalent of the C preprocessor targeted at the OCaml language and its variants.
     '';
-    homepage = "${webpage}";
+    homepage = webpage;
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
   };

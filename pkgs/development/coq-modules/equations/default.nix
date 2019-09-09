@@ -38,13 +38,13 @@ in
 stdenv.mkDerivation rec {
 
   name = "coq${coq.coq-version}-equations-${version}";
-  version = "${param.version}";
+  version = param.version;
 
   src = fetchFromGitHub {
     owner = "mattam82";
     repo = "Coq-Equations";
-    rev = "${param.rev}";
-    sha256 = "${param.sha256}";
+    rev = param.rev;
+    sha256 = param.sha256;
   };
 
   buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];

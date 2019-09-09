@@ -18,12 +18,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "0sc5709k3z7lb8qcjpj49s6vfv69ds2wc8319ag9x776nyz1pqxi";
-      "x86_64-darwin" = "0zh4q46vfdwaihs838ck8fap92i3b4x10wbpmx8mcwyfk5v0fkch";
+      x86_64-linux  = "0sc5709k3z7lb8qcjpj49s6vfv69ds2wc8319ag9x776nyz1pqxi";
+      x86_64-darwin = "0zh4q46vfdwaihs838ck8fap92i3b4x10wbpmx8mcwyfk5v0fkch";
     }
     else {
-      "x86_64-linux"  = "1pq17fasryharvw4byybvmcf5172hcmy6cp0m8bxhkxagwilprba";
-      "x86_64-darwin" = "11crpx2qs2nzkzv6fvs1gqn9v4zalxkzsc5br0fy1y02lzm26zbm";
+      x86_64-linux  = "1pq17fasryharvw4byybvmcf5172hcmy6cp0m8bxhkxagwilprba";
+      x86_64-darwin = "11crpx2qs2nzkzv6fvs1gqn9v4zalxkzsc5br0fy1y02lzm26zbm";
     };
 
 in stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
-    sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
+    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [

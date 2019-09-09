@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "rucksack";
-    rev = "${version}";
+    rev = version;
     sha256 = "0bcm20hqxqnq1j0zghb9i7z9frri6bbf7rmrv5g8dd626sq07vyv";
   };
 

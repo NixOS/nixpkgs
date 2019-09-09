@@ -7,7 +7,7 @@ let
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
     inherit ruby;
-    gemdir = ./rubyEnv- + "${if gitlabEnterprise then "ee" else "ce"}";
+    gemdir = ./rubyEnv- + (if gitlabEnterprise then "ee" else "ce");
     gemset =
       let x = import (gemdir + "/gemset.nix");
       in x // {

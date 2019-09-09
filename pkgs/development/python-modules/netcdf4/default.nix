@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   # Variables used to configure the build process
   USE_NCCONFIG="0";
-  HDF5_DIR="${hdf5}";
-  NETCDF4_DIR="${netcdf}";
-  CURL_DIR="${curl.dev}";
-  JPEG_DIR="${libjpeg.dev}";
+  HDF5_DIR=hdf5;
+  NETCDF4_DIR=netcdf;
+  CURL_DIR=curl.dev;
+  JPEG_DIR=libjpeg.dev;
 
   meta = with stdenv.lib; {
     description = "Interface to netCDF library (versions 3 and 4)";

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Hummer12007";
     repo = "brightnessctl";
-    rev = "${version}";
+    rev = version;
     sha256 = "1n1gb8ldgqv3vs565yhk1w4jfvrviczp94r8wqlkv5q6ab43c8w9";
   };
 

@@ -11,7 +11,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "F1ash";
     repo   = "qt-virt-manager";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "1z2kq88lljvr24z1kizvg3h7ckf545h4kjhhrjggkr0w4wjjwr43";
   };
 

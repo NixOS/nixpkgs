@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       provides low-level access to font tables and functions to decode some
       of them.
     '';
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];

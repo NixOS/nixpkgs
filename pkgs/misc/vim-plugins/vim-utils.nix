@@ -253,7 +253,7 @@ let
         # TODO: proper quoting
         toNix = x:
           if (builtins.isString x) then "'${x}'"
-          else if builtins.isAttrs x && builtins ? out then toNix "${x}" # a derivation
+          else if builtins.isAttrs x && builtins ? out then toNix x # a derivation
           else if builtins.isAttrs x then "{${lib.concatStringsSep ", " (lib.mapAttrsToList (n: v: "${toNix n}: ${toNix v}") x)}}"
           else if builtins.isList x then "[${lib.concatMapStringsSep ", " toNix x}]"
           else throw "turning ${lib.generators.toPretty {} x} into a VimL thing not implemented yet";

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ggreer";
     repo = "the_silver_searcher";
-    rev = "${version}";
+    rev = version;
     sha256 = "0cyazh7a66pgcabijd27xnk1alhsccywivv6yihw378dqxb22i1p";
   };
 

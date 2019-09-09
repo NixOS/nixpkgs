@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "crosswire";
     repo = "xiphos";
-    rev = "${version}";
+    rev = version;
     sha256 = "1vwf1ps6nrajxl1qbs6v1cgykmq5wn4j09j10gbcd3b2nvrprf3g";
   };
 

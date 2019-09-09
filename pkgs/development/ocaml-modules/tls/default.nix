@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "mirleft";
     repo   = "ocaml-tls";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "02wv4lia583imn3sfci4nqv6ac5nzig5j3yfdnlqa0q8bp9rfc6g";
   };
 

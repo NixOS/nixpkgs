@@ -9,7 +9,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1phz0a8jxg074k0im7shrrdfvdps7bn1fa4zwcf8q3sa2iig26l4";
   };
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ imagemagick xpdf tesseract ]}" ];
+  makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ imagemagick xpdf tesseract ]) ];
 
   propagatedBuildInputs = with python3Packages; [ unidecode dateparser pyyaml pillow chardet pdfminer ];
 
