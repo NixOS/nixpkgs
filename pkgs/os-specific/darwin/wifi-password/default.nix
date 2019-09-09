@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Get the password of the wifi you're on";
     platforms = stdenv.lib.platforms.darwin;
     license = stdenv.lib.licenses.mit;
-    maintainer = stdenv.lib.maintainers.nikitavoloboev;
+    maintainers = [ stdenv.lib.maintainers.nikitavoloboev ];
   };
 }
