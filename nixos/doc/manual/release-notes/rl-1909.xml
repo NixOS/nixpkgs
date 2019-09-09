@@ -449,9 +449,9 @@
    </listitem>
    <listitem>
      <para>
-       <option>services.xserver.desktopManager.xterm</option> is now disabled by default if <literal>stateVersion</literal> is 19.09 or higher.
-       Previously the xterm desktopManager was enabled when xserver was enabled, but it isn't useful for all people so it didn't make sense to
-       have any desktopManager enabled default.
+       <option>services.xserver.desktopManager.xterm</option> is now replaced by <option>services.xserver.desktopManager.xsession</option>.
+       Previously the xterm desktopManager was enabled when xserver was enabled, but it isn't useful for everyone and was confusing to new users.
+       <option>services.xserver.desktopManager.xsession</option> defaults to showing the user an error message describing how to configure a working X session.
      </para>
    </listitem>
    <listitem>
