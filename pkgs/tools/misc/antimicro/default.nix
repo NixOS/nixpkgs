@@ -7,7 +7,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AntiMicro";
     repo = "antimicro";
-    rev = "${version}";
+    rev = version;
     sha256 = "1q40ayxwwyq85lc89cnj1cm2nar625h4vhh8dvmb2qcxczaggf4v";
   };
 

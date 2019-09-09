@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "actor-framework";
     repo = "actor-framework";
-    rev = "${version}";
+    rev = version;
     sha256 = "10dcpmdsfq6r7hpvg413pqi1q3rjvgn7f87c17ghyz30x6rjhaic";
   };
 

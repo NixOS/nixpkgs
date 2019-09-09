@@ -7,7 +7,7 @@ let
 
   src = fetchFromGitHub {
     inherit owner repo sha256;
-    rev    = "${version}";
+    rev    = version;
   };
 
   backend = buildGoPackage {

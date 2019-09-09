@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
-    rev = "${version}";
+    rev = version;
     sha256 = "1dkmp5rhzp56sz9cfxill2pkdz2anwb8kkxkypvk2xhqi64cvkrs";
   };
 

@@ -3,7 +3,7 @@
 buildGoPackage rec {
   pname = "gdrive";
   version = "2.1.0";
-  rev     = "${version}";
+  rev     = version;
 
   goPackagePath = "github.com/prasmussen/gdrive";
 

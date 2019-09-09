@@ -7,7 +7,7 @@ python2Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mailpile";
     repo = "Mailpile";
-    rev = "${version}";
+    rev = version;
     sha256 = "1z5psh00fjr8gnl4yjcl4m9ywfj24y1ffa2rfb5q8hq4ksjblbdj";
   };
 

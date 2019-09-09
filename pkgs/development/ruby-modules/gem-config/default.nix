@@ -501,7 +501,7 @@ in
   sassc = attrs: {
     nativeBuildInputs = [ rake ];
     dontBuild = false;
-    SASS_LIBSASS_PATH = "${libsass}";
+    SASS_LIBSASS_PATH = libsass;
     postPatch = ''
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'

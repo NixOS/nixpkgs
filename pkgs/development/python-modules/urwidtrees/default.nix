@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "urwidtrees";
-    rev = "${version}";
+    rev = version;
     sha256 = "1n1kpidvkdnsqyb82vlvk78gmly96kh8351lqxn2pzgwwns6fml2";
   };
 

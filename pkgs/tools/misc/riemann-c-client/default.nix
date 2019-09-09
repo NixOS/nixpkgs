@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "algernon";
     repo = "riemann-c-client";
-    rev = "${name}";
+    rev = name;
     sha256 = "01gzqxqm1xvki2vd78c7my2kgp4fyhkcf5j5fmy8z0l93lgj82rr";
   };
 

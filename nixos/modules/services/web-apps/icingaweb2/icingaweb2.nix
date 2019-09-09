@@ -165,7 +165,7 @@ in {
 
   config = mkIf cfg.enable {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = {
+      ${poolName} = {
         user = "icingaweb2";
         phpOptions = ''
           extension = ${pkgs.phpPackages.imagick}/lib/php/extensions/imagick.so

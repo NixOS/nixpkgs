@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "megous";
     repo = "megatools";
-    rev = "${version}";
+    rev = version;
     sha256 = "001hw8j36ld03wwaphq3xdaazf2dpl36h84k8xmk524x8vlia8lk";
   };
 

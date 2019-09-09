@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rdanbrook";
     repo = "nestopia";
-    rev = "${version}";
+    rev = version;
     sha256 = "0frr0gvjh5mxzdhj0ii3sh671slgnzlm8naqlc4h87rx4p4sz2y2";
   };
 

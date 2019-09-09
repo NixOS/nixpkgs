@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "facette";
     repo = "facette";
-    rev = "${version}";
+    rev = version;
     sha256 = "0p28s2vn18cqg8p7bzhb38wky0m98d5xv3wvf1nmg1kmwhwim6mi";
   };
   nativeBuildInputs = [ go pkgconfig nodejs nodePackages.npm pandoc ];

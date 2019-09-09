@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./exec-path.patch;
-      file_roller = "${file-roller}";
-      gnome_bluetooth = "${gnome-bluetooth}";
+      file_roller = file-roller;
+      gnome_bluetooth = gnome-bluetooth;
     })
   ];
 

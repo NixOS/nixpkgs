@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
 
   doCheck = false;
 
-  MKLROOT = optionalString mklSupport "${mkl}";
+  MKLROOT = optionalString mklSupport mkl;
 
   enableParallelBuilding=true;
   buildFlags = [ "magma" "magma_sparse" ];

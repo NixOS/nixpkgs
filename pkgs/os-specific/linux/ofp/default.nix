@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenFastPath";
     repo = "ofp";
-    rev = "${version}";
+    rev = version;
     sha256 = "05902593fycgkwzk5g7wzgk0k40nrrgybplkdka3rqnlj6aydhqf";
   };
 

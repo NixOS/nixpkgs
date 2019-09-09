@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "shc";
   version = "4.0.3";
-  rev = "${version}";
+  rev = version;
 
   src = fetchFromGitHub {
     inherit rev;

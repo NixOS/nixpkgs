@@ -8,7 +8,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "JamesClonk";
     repo = "vultr";
-    rev = "${version}";
+    rev = version;
     sha256 = "1bx2x17aa6wfn4qy9lxk8sh7shs3x5ppz2z49s0xm8qq0rs1qi92";
   };
 

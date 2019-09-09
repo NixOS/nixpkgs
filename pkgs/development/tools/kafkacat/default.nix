@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "kafkacat";
-    rev = "${version}";
+    rev = version;
     sha256 = "0zs2nmf3ghm9iar7phc0ncqsb9nhipav94v6qmpxkfwxd2ljkpds";
   };
 

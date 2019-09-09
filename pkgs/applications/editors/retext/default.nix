@@ -35,7 +35,7 @@ in python.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "retext-project";
     repo = "retext";
-    rev = "${version}";
+    rev = version;
     sha256 = "1zcapywspc9v5zf5cxqkcy019np9n41gmryqixj66zsvd544c6si";
   };
 

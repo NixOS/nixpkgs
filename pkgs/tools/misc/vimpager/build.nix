@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
     owner  = "rkitover";
     repo   = "vimpager";
-    rev    = "${version}";
+    rev    = version;
   };
 
   buildInputs = [ coreutils sharutils ]; # for uuencode

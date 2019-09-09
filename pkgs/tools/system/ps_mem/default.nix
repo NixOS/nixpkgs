@@ -8,7 +8,7 @@ in pythonPackages.buildPythonApplication {
 
   src = fetchFromGitHub {
     owner = "pixelb";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0kcxlmfisbwf24p2k72njfyfp22fjr9p9zalg9b4w0yhnlzk24ph";
   };

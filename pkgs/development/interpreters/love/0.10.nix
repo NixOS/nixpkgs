@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchFromBitbucket {
     owner = "rude";
     repo = "love";
-    rev = "${version}";
+    rev = version;
     sha256 = "19yfmlcx6w8yi4ndm5lni8lrsvnn77bxw5py0dc293nzzlaqa9ym";
   };
 

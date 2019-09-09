@@ -6,7 +6,7 @@
     src = pkgs.fetchFromGitHub {
       owner = "skeeto";
       repo = "elisp-ffi";
-      rev = "${version}";
+      rev = version;
       sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
     };
     buildInputs = [ external.libffi ];
