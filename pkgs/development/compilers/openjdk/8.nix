@@ -187,10 +187,9 @@ let
         rm $out/lib/openjdk/bin/{policytool,appletviewer}
       ''}
 
-      # Move the JRE to a separate output
+      # Additionally copy the JRE to a separate output
       mkdir -p $jre/lib/openjdk
-      mv $out/lib/openjdk/jre $jre/lib/openjdk/jre
-      ln -s $jre/lib/openjdk/jre $out/lib/openjdk/jre
+      cp -r $out/lib/openjdk/jre $jre/lib/openjdk/jre
 
       # Setup fallback fonts
       ${lib.optionalString (!headless) ''
