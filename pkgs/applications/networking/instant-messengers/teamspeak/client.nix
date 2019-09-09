@@ -29,7 +29,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "teamspeak-client-${version}";
+  pname = "teamspeak-client";
 
   version = "3.3.0";
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   majorVer = "3.0";
   minorVer = "2";
   version = "${majorVer}.${minorVer}";
-  name = "libunique3-${version}";
+  pname = "libunique3";
   srcName = "libunique-${version}";
 
   src = fetchurl {

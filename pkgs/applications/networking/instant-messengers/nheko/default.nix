@@ -22,7 +22,7 @@ let
   };
 in
 mkDerivation rec {
-  name = "nheko-${version}";
+  pname = "nheko";
   version = "0.6.4";
 
   src = fetchFromGitHub {

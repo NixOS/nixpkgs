@@ -340,7 +340,7 @@
       cockroachdb = 313;
       zoneminder = 314;
       paperless = 315;
-      mailman = 316;
+      #mailman = 316;  # removed 2019-08-30
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -641,7 +641,7 @@
       cockroachdb = 313;
       zoneminder = 314;
       paperless = 315;
-      mailman = 316;
+      #mailman = 316;  # removed 2019-08-30
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

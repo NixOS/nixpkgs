@@ -3,7 +3,8 @@
 let version = "2.1.0.1"; in
 
 stdenv.mkDerivation {
-  name = "p8-platform-${version}";
+  pname = "p8-platform";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/Pulse-Eight/platform/archive/p8-platform-${version}.tar.gz";

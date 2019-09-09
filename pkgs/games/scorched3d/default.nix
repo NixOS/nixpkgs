@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "44";
-  name = "scorched3d-${version}";
+  pname = "scorched3d";
   src = fetchurl {
     url = "mirror://sourceforge/scorched3d/Scorched3D-${version}-src.tar.gz";
     sha256 = "1fldi9pn7cz6hc9h70pacgb7sbykzcac44yp3pkhn0qh4axj10qw";

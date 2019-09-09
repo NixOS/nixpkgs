@@ -5,7 +5,6 @@
   libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-terminal";
   version = "3.2.6";
 
@@ -60,7 +59,7 @@ stdenv.mkDerivation rec {
     "-DVERSION=${version}"
   ];
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Default terminal emulator for Deepin";

@@ -4,10 +4,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "2.6.5";
-  name = "dar-${version}";
+  pname = "dar";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dar/${name}.tar.gz";
+    url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
     sha256 = "1x2zr5nw3qq1vmbs4bva6mx1cx0180dri5i2971ynzcxybn75znd";
   };
 

@@ -1,7 +1,8 @@
 {stdenv, fetch, llvm, gmp, mpfr, libmpc, ncurses, zlib, version}:
 
 stdenv.mkDerivation rec {
-  name = "dragonegg-${version}";
+  pname = "dragonegg";
+  inherit version;
 
   src = fetch "dragonegg" "1va4wv2b1dj0dpzsksnpnd0jic52q7pqj79w3m9jwdb58h7104dw";
 
@@ -11,9 +12,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ llvm gmp mpfr libmpc ncurses zlib ];
 
   installPhase = ''
-    mkdir -p $out/lib $out/share/doc/${name}
+    mkdir -p $out/lib $out/share/doc/${pname}-${version}
     cp -d dragonegg.so $out/lib
-    cp README COPYING $out/share/doc/${name}
+    cp README COPYING $out/share/doc/${pname}-${version}
   '';
 
   meta = {

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "heaptrack-${version}";
+  pname = "heaptrack";
   version = "1.1.0";
 
   src = fetchFromGitHub {

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "5.3.0";
-  name = "fmt-${version}";
+  pname = "fmt";
 
   src = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
-    rev = "${version}";
+    rev = version;
     sha256 = "1hl9s69a5ql5nckc0ifh2fzlgsgv1wsn6yhqkpnrhasqkhj0hgv4";
   };
 

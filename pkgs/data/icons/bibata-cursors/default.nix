@@ -1,7 +1,7 @@
 { fetchFromGitHub, gnome-themes-extra, inkscape, stdenv, xcursorgen }:
 
 stdenv.mkDerivation rec {
-  name = "bibata-cursors-${version}";
+  pname = "bibata-cursors";
   version = "0.4.1";
 
   src = fetchFromGitHub {

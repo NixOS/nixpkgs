@@ -3,7 +3,6 @@
 
 stdenv.mkDerivation rec {
   pname = "getdns";
-  name = "${pname}-${version}";
   version = "1.5.1";
 
   src = fetchurl {

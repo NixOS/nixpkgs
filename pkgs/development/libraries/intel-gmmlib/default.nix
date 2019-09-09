@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "intel-gmmlib-${version}";
+  pname = "intel-gmmlib";
   version = "19.2.3";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "gmmlib";
-    rev    = name;
+    rev    = "${pname}-${version}";
     sha256 = "0hki53czv1na7h5b06fcwkd8bhn690ywg6dwjfs3x9fa4g48kqjb";
   };
 

@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "xinput_calibrator";
   version = "0.7.5";
-  name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/tias/${pname}/archive/v${version}.tar.gz";
     sha256 = "d8edbf84523d60f52311d086a1e3ad0f3536f448360063dd8029bf6290aa65e9";

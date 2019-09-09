@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation (rec {
   version = "19.06";
-  name = "rosegarden-${version}";
+  pname = "rosegarden";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rosegarden/${name}.tar.bz2";
+    url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.bz2";
     sha256 = "169qb58v2s8va59hzkih8nqb2aipsqlrbfs8q39ywqa8w5d60gcc";
   };
 

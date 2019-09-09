@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
-  name = "screen-${version}";
+  pname = "screen";
   version = "4.6.2";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/${name}.tar.gz";
+    url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
     sha256 = "0fps0fsipfbh7c2cnp7rjw9n79j0ysq21mk8hzifa33a1r924s8v";
   };
 

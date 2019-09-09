@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, allegro, SDL2 }:
 
 stdenv.mkDerivation rec {
-  name = "dumb-${version}";
+  pname = "dumb";
   version = "2.0.3";
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake ];

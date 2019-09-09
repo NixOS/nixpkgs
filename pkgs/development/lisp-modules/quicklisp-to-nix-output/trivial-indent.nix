@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''trivial-indent'';
   version = ''20190710-git'';
 

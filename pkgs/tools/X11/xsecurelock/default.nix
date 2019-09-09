@@ -3,7 +3,7 @@
 , pam, apacheHttpd, imagemagick, pamtester, xscreensaver, xset }:
 
 stdenv.mkDerivation rec {
-  name = "xsecurelock-${version}";
+  pname = "xsecurelock";
   version = "1.4.0";
 
   src = fetchFromGitHub {

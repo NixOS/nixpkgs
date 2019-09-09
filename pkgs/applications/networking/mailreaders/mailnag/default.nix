@@ -9,7 +9,7 @@
 let
   inherit (pythonPackages) python;
 in pythonPackages.buildPythonApplication rec {
-  name = "mailnag-${version}";
+  pname = "mailnag";
   version = "1.3.0";
 
   src = fetchurl {

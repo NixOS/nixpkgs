@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub } :
 stdenv.mkDerivation rec {
-  name = "proxychains-${version}";
+  pname = "proxychains";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "haad";
     repo = "proxychains";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "015skh3z1jmm8kxbm3nkqv1w56kcvabdmcbmpwzywxr4xnh3x3pc";
   };
 

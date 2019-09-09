@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, rustPlatform, libXinerama, libX11, pkgconfig }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   name = "wtftw-0.0pre20170921";
   src = fetchFromGitHub {
     owner = "kintaro";

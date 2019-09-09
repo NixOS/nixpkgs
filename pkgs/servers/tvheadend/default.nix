@@ -5,8 +5,9 @@
 let
   version = "4.2.8";
 
-in stdenv.mkDerivation rec {
-  name = "tvheadend-${version}";
+in stdenv.mkDerivation {
+  pname = "tvheadend";
+  inherit version;
 
   src = fetchFromGitHub {
     owner  = "tvheadend";

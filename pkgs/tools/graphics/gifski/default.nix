@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub, pkgconfig }:
 
 rustPlatform.buildRustPackage rec {
-  name = "gifski-${version}";
+  pname = "gifski";
   version = "0.8.7";
 
   src = fetchFromGitHub {

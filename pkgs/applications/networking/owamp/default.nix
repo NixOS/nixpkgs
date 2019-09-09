@@ -2,7 +2,7 @@
 , autoconf, automake, mandoc }:
 
 stdenv.mkDerivation rec {
-  name = "owamp-${version}";
+  pname = "owamp";
   version = "3.5.6";
   buildInputs = [ autoconf automake mandoc ];
   src = fetchFromGitHub {

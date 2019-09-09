@@ -1,7 +1,7 @@
 {stdenv, buildOcamlJane,
  ppx_core, ppx_tools, ppx_type_conv, bin_prot}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "ppx_bin_prot";
   hash = "0kwmrrrybdkmphqczsr3lg3imsxcjb8iy41syvn44s3kcjfyyzbz";
   propagatedBuildInputs = [ ppx_core ppx_tools ppx_type_conv bin_prot ];

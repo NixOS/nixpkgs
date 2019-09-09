@@ -59,8 +59,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.altcoins.bitcoind;
-        defaultText = "pkgs.altcoins.bitcoind";
+        default = pkgs.bitcoind;
+        defaultText = "pkgs.bitcoind";
         description = "The package providing bitcoin binaries.";
       };
       configFile = mkOption {

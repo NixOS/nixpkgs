@@ -1,11 +1,11 @@
 { stdenv, fetchurl, intltool, itstool, libxml2, yelp }:
 
 stdenv.mkDerivation rec {
-  name = "mate-user-guide-${version}";
+  pname = "mate-user-guide";
   version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "01kcszsjiriqp4hf1k4fhazi2yfqlkn415sfgx0jw0p821bzqf2h";
   };
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, intltool, libtorrentRasterbar, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "deluge-${version}";
+  pname = "deluge";
   version = "1.3.15";
 
   src = fetchurl {
-    url = "http://download.deluge-torrent.org/source/${name}.tar.bz2";
+    url = "http://download.deluge-torrent.org/source/${pname}-${version}.tar.bz2";
     sha256 = "1467b9hmgw59gf398mhbf40ggaka948yz3afh6022v753c9j7y6w";
   };
 

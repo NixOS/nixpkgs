@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec
 {
-  name = "openvdb-${version}";
+  pname = "openvdb";
   version = "6.1.0";
 
   src = fetchFromGitHub {

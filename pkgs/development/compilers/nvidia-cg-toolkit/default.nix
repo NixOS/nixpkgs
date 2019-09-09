@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   date = "April2012";
 
-  name = "nvidia-cg-toolkit-${version}";
+  pname = "nvidia-cg-toolkit";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then

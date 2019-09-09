@@ -56,7 +56,7 @@ in
 
       dns = mkOption {
         default = "1.1.1.1";
-        type = types.string;
+        type = types.str;
         description = ''
           Container DNS server.
         '';

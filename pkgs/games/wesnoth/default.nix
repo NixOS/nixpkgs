@@ -8,10 +8,8 @@ stdenv.mkDerivation rec {
   pname = "wesnoth";
   version = "1.14.7";
 
-  name = "${pname}-${version}";
-
   src = fetchurl {
-    url = "mirror://sourceforge/sourceforge/${pname}/${name}.tar.bz2";
+    url = "mirror://sourceforge/sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "0j2yvkcggj5k0r2cqk8ndnj77m37a00srfd9qg7pdpqffbinqpj7";
   };
 

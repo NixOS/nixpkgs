@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "20180716";
-  name = "neomutt-${version}";
+  pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";

@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "iferr-unstable-${version}";
+  pname = "iferr-unstable";
   version = "2018-06-15";
   rev = "bb332a3b1d9129b6486c7ddcb7030c11b05cfc88";
 

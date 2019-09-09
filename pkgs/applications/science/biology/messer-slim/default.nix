@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.2.1"; 
-  name = "messer-slim-${version}";
+  pname = "messer-slim";
 
   src = fetchurl {
     url = "https://github.com/MesserLab/SLiM/archive/v${version}.tar.gz";

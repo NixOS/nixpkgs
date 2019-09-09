@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version="1.1.3";
-  name = "gsmartcontrol-${version}";
+  pname = "gsmartcontrol";
 
   src = fetchurl {
     url = "mirror://sourceforge/gsmartcontrol/gsmartcontrol-${version}.tar.bz2";

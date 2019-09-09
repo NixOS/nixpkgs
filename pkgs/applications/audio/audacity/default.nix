@@ -8,7 +8,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "2.3.2";
-  name = "audacity-${version}";
+  pname = "audacity";
 
   src = fetchurl {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";

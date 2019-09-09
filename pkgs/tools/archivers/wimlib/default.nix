@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   version = "1.13.1";
-  name = "wimlib-${version}";
+  pname = "wimlib";
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ openssl fuse libxml2 ntfs3g ];
 
   src = fetchurl {
-    url = "https://wimlib.net/downloads/${name}.tar.gz";
+    url = "https://wimlib.net/downloads/${pname}-${version}.tar.gz";
     sha256 = "0pxgrpr3dr81rcf2jh71aiiq3v4anc5sj1nld18f2vhvbijbrx27";
   };
 

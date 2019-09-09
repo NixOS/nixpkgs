@@ -12,11 +12,11 @@ assert enableKDE       -> kdelibs4     != null;
 assert enableTelepathy -> telepathy-qt != null;
 
 stdenv.mkDerivation rec {
-  name = "tomahawk-${version}";
+  pname = "tomahawk";
   version = "0.8.4";
 
   src = fetchurl {
-    url = "http://download.tomahawk-player.org/${name}.tar.bz2";
+    url = "http://download.tomahawk-player.org/${pname}-${version}.tar.bz2";
     sha256 = "0j84h36wkjfjbsd7ybyji7rcc9wpjdbl0f1xdcc1g7h0nz34pc0g";
   };
 

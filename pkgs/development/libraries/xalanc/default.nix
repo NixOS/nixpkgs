@@ -5,7 +5,7 @@ let
              if stdenv.isDarwin then "macosx" else
              throw "Unsupported platform";
 in stdenv.mkDerivation rec {
-  name = "xalan-c-${version}";
+  pname = "xalan-c";
   version = "1.11";
 
   src = fetchurl {

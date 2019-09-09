@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, go, go-lib, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "go-dbus-generator";
   version = "0.6.6";
 
@@ -18,11 +17,11 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "GOCACHE=$(TMPDIR)/go-cache"
   ];
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Convert dbus interfaces to go-lang or qml wrapper code";

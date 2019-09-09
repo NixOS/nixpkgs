@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, qtbase, qtx11extras, qmake, pkgconfig, boost }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "twmn-git-2018-10-01";
 
   src = fetchFromGitHub {

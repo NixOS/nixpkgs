@@ -1,6 +1,5 @@
 {stdenv, fetchurl, pkgconfig, xorgproto}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "rgb";
   version = "1.0.6";
 

@@ -2,7 +2,7 @@
 , pcre, cfitsio, perl, gob2, vala, libtiff, json-glib }:
 
 stdenv.mkDerivation rec {
-  name = "giv-${version}";
+  pname = "giv";
   version = "0.9.26";
 
   src = fetchFromGitHub {

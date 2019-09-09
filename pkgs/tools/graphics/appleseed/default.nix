@@ -9,7 +9,7 @@ let boost_static = boost165.override {
 };
 in stdenv.mkDerivation rec {
 
-  name = "appleseed-${version}";
+  pname = "appleseed";
   version = "2.0.5-beta";
 
   src = fetchFromGitHub {

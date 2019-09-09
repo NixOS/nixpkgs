@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mbpfan-${version}";
+  pname = "mbpfan";
   version = "2.1.1";
   src = fetchFromGitHub {
     owner = "dgraziotin";

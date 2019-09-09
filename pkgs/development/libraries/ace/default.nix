@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libtool, perl }:
 
 stdenv.mkDerivation rec {
-  name = "ace-${version}";
+  pname = "ace";
   version = "6.5.6";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''substituteInPlace ./MPC/prj_install.pl \
     --replace /usr/bin/perl "${perl}/bin/perl"'';
-  
+
   preConfigure = ''
     export INSTALL_PREFIX=$out
     export ACE_ROOT=$(pwd)

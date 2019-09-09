@@ -7,10 +7,9 @@
 stdenv.mkDerivation rec {
   pname = "ibus-kkc";
   version = "1.5.22";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/download/v${version}/${name}.tar.gz";
+    url = "${meta.homepage}/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "1kj74c9zy9yxkjx7pz96mzqc13cf10yfmlgprr8sfd4ay192bzi2";
   };
 

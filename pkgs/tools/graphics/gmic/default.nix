@@ -12,8 +12,9 @@ let
     url = "https://github.com/dtschump/gmic/raw/v.${version}/CMakeLists.txt";
     sha256 = "0lv5jrg98cpbk13fl4xm7l4sk1axfz054q570bpi741w815d7cpg";
   };
-in stdenv.mkDerivation rec {
-  name = "gmic-${version}";
+in stdenv.mkDerivation {
+  pname = "gmic";
+  inherit version;
 
   outputs = [ "out" "lib" "dev" "man" ] ++ stdenv.lib.optional withGimpPlugin "gimpPlugin";
 

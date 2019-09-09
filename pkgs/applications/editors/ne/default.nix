@@ -2,7 +2,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "ne-${version}";
+  pname = "ne";
   version = "3.1.2";
   src = fetchFromGitHub {
     owner = "vigna";

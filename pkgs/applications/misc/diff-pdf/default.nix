@@ -7,8 +7,8 @@ let
     else
       [ wxGTK ];
 in
-stdenv.mkDerivation rec {
-  name = "diff-pdf-${version}";
+stdenv.mkDerivation {
+  pname = "diff-pdf";
   version = "2017-12-30";
 
   src = fetchFromGitHub {

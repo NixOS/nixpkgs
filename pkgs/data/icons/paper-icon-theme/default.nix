@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, meson, ninja, gtk3, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "paper-icon-theme";
   version = "2018-06-24";
 

@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fossil-${version}";
+  pname = "fossil";
   version = "2.9";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
       [
         "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
       ];
-    name = "${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
     sha256 = "0kwb7pkp7y2my916rhyl6kmcf0fk8gkzaxzy13hfgqs35nlsvchw";
   };
 

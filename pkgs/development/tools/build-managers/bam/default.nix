@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, lua5_3, python }:
 
 stdenv.mkDerivation rec {
-  name = "bam-${version}";
+  pname = "bam";
   version = "0.5.1";
 
   src = fetchFromGitHub {

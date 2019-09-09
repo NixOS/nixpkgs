@@ -17,10 +17,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "68.0.2";
+    ffversion = "69.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "2xzakpb6mp9hjqkim353afv059i4zfpmhflhv3l3qzajgjz36cacbmp4bkn4cghinm8krhp8z02264ww0bcraryjjwn5q0dzljrha2w";
+      sha512 = "2q0gky7a6ayb6mw8bw3s35q3ggibf7vfyrxgggz1l4lpcv6dwjj01x45071h106jkvnh71hycvp1cywf98lkybjbfp8c9kd8sivkd43";
     };
 
     patches = [
@@ -99,10 +99,10 @@ rec {
 
   firefox-esr-68 = common rec {
     pname = "firefox-esr";
-    ffversion = "68.0.2esr";
+    ffversion = "68.1.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0dyjayrbcq6dg8vmzbf7303aixnhpd6r777chxpdvqq892rgvw5q4f8yfb6pr8j978hahn4dz968vzmi6sp40y3hf62hnzdqpzd2bx1";
+      sha512 = "0n8iy9xwf8wldkknq3y3nlm0cmb48baamvz4wmmbpfb2kfrxbsj3wnnd9ayk9zxhrsdq0na9gvkc374mv06nyqijrahd67wljv08fx5";
     };
 
     patches = [
@@ -159,7 +159,7 @@ rec {
     };
   });
 
-in rec {
+in {
 
   icecat = iccommon rec {
     ffversion = "60.3.0";
@@ -249,7 +249,7 @@ in rec {
 
 in rec {
 
-  tor-browser-7-5 = (tbcommon rec {
+  tor-browser-7-5 = (tbcommon {
     ffversion = "52.9.0esr";
     tbversion = "7.5.6";
 
@@ -265,7 +265,7 @@ in rec {
     gtk3Support = false;
   };
 
-  tor-browser-8-5 = tbcommon rec {
+  tor-browser-8-5 = tbcommon {
     ffversion = "60.8.0esr";
     tbversion = "8.5.4";
 

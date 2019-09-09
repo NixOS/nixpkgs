@@ -51,7 +51,7 @@ in {
       description = "FusionInventory user";
     };
 
-    systemd.services."fusion-inventory" = {
+    systemd.services.fusion-inventory = {
       description = "Fusion Inventory Agent";
       wantedBy = [ "multi-user.target" ];
 

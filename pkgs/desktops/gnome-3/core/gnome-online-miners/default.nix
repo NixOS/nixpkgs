@@ -3,11 +3,11 @@
 , tracker, gfbgraph, librest, libsoup, json-glib, gmp, openssl, dleyna-server, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-online-miners-${version}";
+  pname = "gnome-online-miners";
   version = "3.30.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-online-miners/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-online-miners/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0pjamwwzn5wqgihyss357dyl2q70r0bngnqmwsqawchx5f9aja9c";
   };
 

@@ -46,7 +46,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "google-talk-plugin-${version}";
+  pname = "google-talk-plugin";
 
   # You can get the upstream version and SHA-1 hash from the following URLs:
   # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages | grep -E 'Version|SHA1'

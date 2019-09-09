@@ -1,6 +1,6 @@
 { stdenv, fetchurl, jre, runtimeShell }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "smc-6.6.3";
 
   src = fetchurl {

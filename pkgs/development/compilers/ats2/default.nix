@@ -26,7 +26,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name    = "ats2-${version}";
+  pname = "ats2";
   version = versionPkg;
 
   src = fetchurl {

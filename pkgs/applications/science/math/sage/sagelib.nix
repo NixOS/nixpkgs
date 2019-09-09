@@ -60,7 +60,7 @@
 buildPythonPackage rec {
   format = "other";
   version = src.version;
-  name = "sagelib-${version}";
+  pname = "sagelib";
   src = sage-src;
 
   nativeBuildInputs = [

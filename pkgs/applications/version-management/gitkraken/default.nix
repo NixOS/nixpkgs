@@ -12,7 +12,7 @@ let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
 in
 stdenv.mkDerivation rec {
-  name = "gitkraken-${version}";
+  pname = "gitkraken";
   version = "6.1.4";
 
   src = fetchurl {

@@ -12,7 +12,7 @@
 , autoreconfHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libunity";
   version = "unstable-2019-03-19";
 
@@ -48,8 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-static"
-    "--with-pygi-overrides-dir=${placeholder ''py''}/${python3.sitePackages}/gi/overrides"
+    "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
   meta = with stdenv.lib; {

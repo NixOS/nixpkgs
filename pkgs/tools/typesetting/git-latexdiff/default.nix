@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3.0";
-  name = "git-latexdiff-${version}";
+  pname = "git-latexdiff";
 
   src = fetchFromGitLab {
     sha256 = "05fnhr1pqvj8l25vi9hdccwfk4mv2f0pfhn05whbdvf66gyl4fs9";

@@ -7,7 +7,7 @@ let
     [ stdenv.cc.libc stdenv.cc.cc ];
 in
 stdenv.mkDerivation rec {
-  name    = "kdbplus-${version}";
+  pname = "kdbplus";
   version = "3.3";
 
   src = requireFile {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip ];
 
   phases = "unpackPhase installPhase";
-  unpackPhase = "mkdir ${name} && cd ${name} && unzip -qq ${src}";
+  unpackPhase = "mkdir ${pname}-${version} && cd ${pname}-${version} && unzip -qq ${src}";
   installPhase = ''
     mkdir -p $out/bin $out/libexec
 

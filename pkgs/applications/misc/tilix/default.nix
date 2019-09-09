@@ -19,7 +19,7 @@
 , hicolor-icon-theme
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tilix";
   version = "unstable-2019-08-03";
 

@@ -8,7 +8,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "keybase-gui-${version}";
+  pname = "keybase-gui";
   version = "4.3.1"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {

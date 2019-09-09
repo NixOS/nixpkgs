@@ -4,7 +4,7 @@
 , geoclue2, liboauth }:
 
 stdenv.mkDerivation rec {
-  name = "viking-${version}";
+  pname = "viking";
   version = "1.7";
 
   src = fetchurl {

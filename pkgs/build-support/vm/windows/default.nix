@@ -25,7 +25,7 @@ in {
     bootstrap = bootstrapper attrs.windowsImage;
   in {
     requiredSystemFeatures = [ "kvm" ];
-    builder = "${pkgs.stdenv.shell}";
+    builder = pkgs.stdenv.shell;
     args = ["-e" (bootstrap.resumeAndRun builder)];
     windowsImage = bootstrap.suspendedVM;
     origArgs = attrs.args;

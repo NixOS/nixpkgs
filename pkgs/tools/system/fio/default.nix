@@ -3,7 +3,7 @@
 , withGnuplot ? false, gnuplot ? null }:
 
 stdenv.mkDerivation rec {
-  name = "fio-${version}";
+  pname = "fio";
   version = "3.15";
 
   src = fetchFromGitHub {

@@ -10,7 +10,7 @@ ntfs3g      # ntfs3g
 
 stdenv.mkDerivation rec {
   version = "1.76";
-  name = "os-prober-${version}";
+  pname = "os-prober";
   src = fetchurl {
     url = "https://salsa.debian.org/philh/os-prober/-/archive/${version}/os-prober-${version}.tar.bz2";
     sha256 = "07rw3092pckh21vx6y4hzqcn3wn4cqmwxaaiq100lncnhmszg11g";

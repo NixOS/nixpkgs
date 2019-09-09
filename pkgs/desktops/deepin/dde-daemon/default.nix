@@ -7,7 +7,6 @@
   deepin, makeWrapper, xkeyboard_config, wrapGAppsHook }:
 
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "dde-daemon";
   version = "3.27.2.6";
 
@@ -122,7 +121,7 @@ buildGoPackage rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Daemon for handling Deepin Desktop Environment session settings";

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, zlib, perl, pkgconfig, python, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "rdkafka-${version}";
+  pname = "rdkafka";
   version = "1.0.1";
 
   src = fetchFromGitHub {

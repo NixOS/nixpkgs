@@ -5,7 +5,7 @@
 , libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-${version}";
+  pname = "dolphin-emu";
   version = "5.0";
 
   src = fetchFromGitHub {

@@ -64,7 +64,7 @@ let
 
   suffix = if channel != "stable" then "-" + channel else "";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version;
 
   name = "google-chrome${suffix}-${version}";

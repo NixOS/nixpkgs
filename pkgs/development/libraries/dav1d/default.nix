@@ -1,7 +1,10 @@
 { stdenv, fetchFromGitLab
 , meson, ninja, nasm, pkgconfig
 , withTools ? false, SDL2
+, useVulkan ? false, libplacebo, vulkan-loader, vulkan-headers
 }:
+
+assert useVulkan -> withTools;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
@@ -17,7 +20,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja nasm pkgconfig ];
   # TODO: doxygen (currently only HTML and not build by default).
-  buildInputs = stdenv.lib.optional withTools SDL2;
+  buildInputs = stdenv.lib.optional withTools SDL2
+    ++ stdenv.lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
 
   mesonFlags= [
     "-Denable_tools=${stdenv.lib.boolToString withTools}"

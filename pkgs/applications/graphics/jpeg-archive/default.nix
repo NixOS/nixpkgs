@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, mozjpeg, makeWrapper, coreutils, parallel, findutils }:
 
-stdenv.mkDerivation rec {
-  name = "jpeg-archive-${version}";
+stdenv.mkDerivation {
+  pname = "jpeg-archive";
   version = "2.2.0"; # can be found here https://github.com/danielgtaylor/jpeg-archive/blob/master/src/util.c#L15
 
   # update with

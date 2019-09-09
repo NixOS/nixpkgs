@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "attract-mode-${version}";
+  pname = "attract-mode";
   version = "2.2.0";
 
   src = fetchFromGitHub {

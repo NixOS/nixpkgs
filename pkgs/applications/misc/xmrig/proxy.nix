@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xmrig-proxy-${version}";
+  pname = "xmrig-proxy";
   version = "3.0.0";
 
   src = fetchFromGitHub {

@@ -6,7 +6,7 @@ let inherit (stdenv.lib) optional optionals; in
 
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
-  name = "knot-dns-${version}";
+  pname = "knot-dns";
   version = "2.8.3";
 
   src = fetchurl {

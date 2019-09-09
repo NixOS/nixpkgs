@@ -8,11 +8,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gdal-${version}";
+  pname = "gdal";
   version = "2.4.0";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/gdal/${version}/${name}.tar.xz";
+    url = "https://download.osgeo.org/gdal/${version}/${pname}-${version}.tar.xz";
     sha256 = "09qgy36z0jc9w05373m4n0vm4j54almdzql6z9p9zr9pdp61syf3";
   };
 

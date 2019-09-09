@@ -9,7 +9,7 @@ assert guiSupport -> (dbus != null);
 with lib;
 
 mkDerivation rec {
-  name = "qbittorrent-${version}";
+  pname = "qbittorrent";
   version = "4.1.7";
 
   src = fetchFromGitHub {

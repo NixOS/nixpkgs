@@ -10,7 +10,7 @@
 , withSamples ? false }:
 
 stdenv.mkDerivation rec {
-  name = "ogre-${version}";
+  pname = "ogre";
   version = "1.12.1";
 
   src = fetchurl {

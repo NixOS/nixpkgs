@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, libftdi1, libusb1, pkgconfig, hidapi }:
 
 stdenv.mkDerivation rec {
-  name = "openocd-${version}";
+  pname = "openocd";
   version = "0.10.0";
 
   src = fetchurl {
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     "-Wno-implicit-fallthrough"
     "-Wno-format-truncation"
     "-Wno-format-overflow"
+    "-Wno-error=tautological-compare"
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''

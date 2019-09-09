@@ -13,8 +13,8 @@ let
   description = "A Python-enhanced molecular graphics tool";
 
   desktopItem = makeDesktopItem {
-    name = "${pname}";
-    exec = "${pname}";
+    name = pname;
+    exec = pname;
     desktopName = "PyMol Molecular Graphics System";
     genericName = "Molecular Modeler";
     comment = description;

@@ -3,8 +3,9 @@
 
 let
   version = "0.4.1";
-in stdenv.mkDerivation rec {
-  name = "openmpt123-${version}";
+in stdenv.mkDerivation {
+  pname = "openmpt123";
+  inherit version;
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";

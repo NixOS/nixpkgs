@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2019.8";
-  name = "plantuml-${version}";
+  pname = "plantuml";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/plantuml/${version}/plantuml.${version}.jar";

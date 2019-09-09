@@ -17,7 +17,7 @@ stdenv'.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fireice-uk";
     repo = "xmr-stak";
-    rev = "${version}";
+    rev = version;
     sha256 = "1p8hx8gwnv7a49pffq1xmzmrfi3gs6dyra9dn2xi7cl75yn9kfhm";
   };
 

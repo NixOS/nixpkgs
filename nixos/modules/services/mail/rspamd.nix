@@ -308,7 +308,7 @@ in
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "rspamd";
         description = ''
           User to use when no root privileges are required.
@@ -316,7 +316,7 @@ in
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "rspamd";
         description = ''
           Group to use when no root privileges are required.
@@ -387,7 +387,7 @@ in
       gid = config.ids.gids.rspamd;
     };
 
-    environment.etc."rspamd".source = rspamdDir;
+    environment.etc.rspamd.source = rspamdDir;
 
     systemd.services.rspamd = {
       description = "Rspamd Service";

@@ -10,7 +10,8 @@ assert spellChecking -> gtkspell3 != null;
 let version = "0.145"; in
 
 stdenv.mkDerivation {
-  name = "pan-${version}";
+  pname = "pan";
+  inherit version;
 
   src = fetchurl {
     url = "http://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
@@ -37,7 +38,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "A GTK+-based Usenet newsreader good at both text and binaries";
+    description = "A GTK-based Usenet newsreader good at both text and binaries";
     homepage = http://pan.rebelbase.com/;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;

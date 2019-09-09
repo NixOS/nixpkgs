@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "radeon-profile-${version}";
+  pname = "radeon-profile";
   version = "20170714";
 
   nativeBuildInputs = [ qmake ];

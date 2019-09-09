@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "A library to delight your users with fancy features";
     longDescription = ''
-      The libdazzle library is a companion library to GObject and Gtk+. It
+      The libdazzle library is a companion library to GObject and GTK. It
       provides various features that we wish were in the underlying library but
       cannot for various reasons. In most cases, they are wildly out of scope
       for those libraries. In other cases, our design isn't quite generic

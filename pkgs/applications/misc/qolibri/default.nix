@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, libeb, lzo, qtbase
 , qtmultimedia, qttools, qtwebengine }:
 
-stdenv.mkDerivation rec {
-  name = "qolibri-${version}";
+stdenv.mkDerivation {
+  pname = "qolibri";
   version = "2018-11-14";
 
   src = fetchFromGitHub {

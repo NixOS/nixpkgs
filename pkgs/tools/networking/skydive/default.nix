@@ -2,7 +2,7 @@
 , go-bindata, libxml2, protobuf3_1, libpcap, pkgconfig, go-protobuf }:
 
 buildGoPackage rec {
-  name = "skydive-${version}";
+  pname = "skydive";
   version = "0.17.0";
   goPackagePath = "github.com/skydive-project/skydive";
 

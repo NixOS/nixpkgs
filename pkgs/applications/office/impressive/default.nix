@@ -8,7 +8,8 @@ in stdenv.mkDerivation {
     # This project was formerly known as KeyJNote.
     # See http://keyj.emphy.de/apple-lawsuit/ for details.
 
-    name = "impressive-${version}";
+    pname = "impressive";
+    inherit version;
 
     src = fetchurl {
       url = "mirror://sourceforge/impressive/Impressive-${version}.tar.gz";

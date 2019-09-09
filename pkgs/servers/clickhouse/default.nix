@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "clickhouse-${version}";
+  pname = "clickhouse";
   version = "19.13.1.11";
 
   src = fetchFromGitHub {

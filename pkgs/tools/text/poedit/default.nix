@@ -3,7 +3,7 @@
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "poedit-${version}";
+  pname = "poedit";
   version = "2.2.1";
 
   src = fetchurl {

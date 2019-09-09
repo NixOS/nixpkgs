@@ -5,7 +5,8 @@ let
   version = "2.1.1";
  in
 stdenv.mkDerivation rec {
-  name = "argyllcms-${version}";
+  pname = "argyllcms";
+  inherit version;
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a

@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gohufont-${version}";
+  pname = "gohufont";
   version = "2.1";
 
   src = fetchurl {
-    url = "http://font.gohu.org/${name}.tar.gz";
+    url = "http://font.gohu.org/${pname}-${version}.tar.gz";
     sha256 = "10dsl7insnw95hinkcgmp9rx39lyzb7bpx5g70vswl8d6p4n53bm";
   };
 

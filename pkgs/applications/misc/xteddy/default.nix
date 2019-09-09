@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, pkg-config, xorg, imlib2, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "xteddy-${version}";
+  pname = "xteddy";
   version = "2.2-5";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";

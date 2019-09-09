@@ -10,9 +10,9 @@
 , sha256
 , rev }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
-  name = "cataract-${version}";
+  pname = "cataract";
 
   src = fetchgit {
     url = "git://git.bzatek.net/cataract";

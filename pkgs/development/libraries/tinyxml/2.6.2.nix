@@ -4,7 +4,8 @@ let
   version = "2.6.2";
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
 in stdenv.mkDerivation {
-  name = "tinyxml-${version}";
+  pname = "tinyxml";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/tinyxml/tinyxml/${version}/tinyxml_2_6_2.zip";

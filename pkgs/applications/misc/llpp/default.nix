@@ -4,7 +4,7 @@ libGLU_combined, freetype, xclip, inotify-tools, procps }:
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
-  name = "llpp-${version}";
+  pname = "llpp";
   version = "30";
 
   src = fetchgit {

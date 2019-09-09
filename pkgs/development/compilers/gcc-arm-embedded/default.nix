@@ -14,7 +14,8 @@ let
     else "${majorVersion}-${year}-q${quarter}-${releaseType}"; # 4.7-2013-q3-update
 in
 stdenv.mkDerivation {
-  name = "gcc-arm-embedded-${version}";
+  pname = "gcc-arm-embedded";
+  inherit version;
 
   src = fetchurl {
     url = "https://launchpad.net/gcc-arm-embedded/${dirName_}/${subdirName_}/+download/gcc-arm-none-eabi-${underscoreVersion}-linux.tar.bz2";

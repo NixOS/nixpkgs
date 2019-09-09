@@ -6,11 +6,11 @@
 , gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gsettings-desktop-schemas-${version}";
+  pname = "gsettings-desktop-schemas";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gsettings-desktop-schemas/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gsettings-desktop-schemas/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0d8a6479vappgplq5crdr3ah0ykqcr3fw533wkx9v1a8lnrv8n9d";
   };
 

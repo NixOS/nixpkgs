@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name          = "kontemplate-${version}";
+  pname = "kontemplate";
   version       = "1.7.0";
   goPackagePath = "github.com/tazjin/kontemplate";
   goDeps        = ./deps.nix;

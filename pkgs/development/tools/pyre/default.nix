@@ -91,7 +91,7 @@ typeshed = stdenv.mkDerivation {
   phases = [ "unpackPhase" "installPhase" ];
   installPhase = "cp -r $src $out";
 };
-in python3.pkgs.buildPythonApplication rec {
+in python3.pkgs.buildPythonApplication {
   pname = "pyre-check";
   version = pyre-version;
   src = pyre-src;

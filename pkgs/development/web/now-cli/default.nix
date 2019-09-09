@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "now-cli-${version}";
+  pname = "now-cli";
   version = "15.8.7";
 
   # TODO: switch to building from source, if possible

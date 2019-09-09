@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "errcheck-${version}";
+  pname = "errcheck";
   version = "1.1.0";
 
   goPackagePath = "github.com/kisielk/errcheck";

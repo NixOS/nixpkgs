@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "git-extras-${version}";
+  pname = "git-extras";
   version = "4.7.0";
 
   src = fetchurl {

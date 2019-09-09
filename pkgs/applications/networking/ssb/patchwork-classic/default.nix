@@ -5,11 +5,11 @@
   glibc, systemd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   version = "2.12.0";
 
-  name = "patchwork-classic-${version}";
+  pname = "patchwork-classic";
 
   src = fetchurl {
     url    = "https://github.com/ssbc/patchwork-classic-electron/releases/download/v2.12.0/ssb-patchwork-electron_2.12.0_linux-amd64.deb";

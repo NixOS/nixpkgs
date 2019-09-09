@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "wxSVG-${version}";
+  pname = "wxSVG";
   srcName = "wxsvg-${version}";
   version = "1.5.20";
 

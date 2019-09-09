@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name    = "pgjwt-${version}";
+stdenv.mkDerivation {
+  pname = "pgjwt";
   version = "unstable-2017-04-24";
 
   src = fetchFromGitHub {

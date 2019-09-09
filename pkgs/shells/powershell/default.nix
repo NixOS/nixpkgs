@@ -14,7 +14,7 @@ let platformString = if stdenv.isDarwin then "osx"
                        (if stdenv.isLinux then [ pam lttng-ust ] else [ darwin.Libsystem ]);
 in
 stdenv.mkDerivation rec {
-  name = "powershell-${version}";
+  pname = "powershell";
   version = "6.2.2";
 
   src = fetchzip {

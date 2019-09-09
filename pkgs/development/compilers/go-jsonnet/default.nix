@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "go-jsonnet-${version}";
+  pname = "go-jsonnet";
   version = "0.13.0";
 
   goPackagePath = "github.com/google/go-jsonnet";

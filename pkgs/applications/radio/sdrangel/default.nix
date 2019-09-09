@@ -1,4 +1,5 @@
 {
+airspy,
 boost,
 cm256cc,
 cmake,
@@ -6,6 +7,7 @@ codec2,
 fetchFromGitHub,
 fftwFloat,
 glew,
+hackrf,
 lib,
 libav,
 libiio,
@@ -20,6 +22,7 @@ pkgconfig,
 qtbase,
 qtmultimedia,
 qtwebsockets,
+rtl-sdr,
 serialdv
 }:
 
@@ -49,9 +52,8 @@ in mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
     glew opencv3 libusb boost libopus limesuite libav libiio libpulseaudio
-    qtbase qtwebsockets qtmultimedia
-    fftwFloat
-    codec2' cm256cc serialdv
+    qtbase qtwebsockets qtmultimedia rtl-sdr airspy hackrf
+    fftwFloat codec2' cm256cc serialdv
   ];
   cmakeFlags = [
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"

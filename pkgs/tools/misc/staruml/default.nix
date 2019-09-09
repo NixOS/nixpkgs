@@ -10,7 +10,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "2.8.1";
-  name = "staruml-${version}";
+  pname = "staruml";
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {

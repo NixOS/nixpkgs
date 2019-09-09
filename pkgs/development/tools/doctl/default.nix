@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "doctl-${version}";
+  pname = "doctl";
   version = "${major}.${minor}.${patch}";
   major = "1";
   minor = "18";
@@ -9,7 +9,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/digitalocean/doctl";
 
   excludedPackages = ''\(doctl-gen-doc\|install-doctl\|release-doctl\)'';
-  buildFlagsArray = let t = "${goPackagePath}"; in ''
+  buildFlagsArray = let t = goPackagePath; in ''
      -ldflags=
         -X ${t}.Major=${major}
         -X ${t}.Minor=${minor}

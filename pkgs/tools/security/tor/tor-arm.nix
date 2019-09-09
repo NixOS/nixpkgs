@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-arm-${version}";
+  pname = "tor-arm";
   version = "1.4.5.0";
 
   src = fetchurl {

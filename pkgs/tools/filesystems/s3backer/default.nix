@@ -3,7 +3,7 @@
 , fuse, curl, expat }:
 
 stdenv.mkDerivation rec {
-  name = "s3backer-${version}";
+  pname = "s3backer";
   version = "1.5.2";
 
   src = fetchFromGitHub {

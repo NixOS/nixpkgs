@@ -12,7 +12,7 @@ let
     ];
   in
   stdenv.mkDerivation rec {
-    name = "eagle-${version}";
+    pname = "eagle";
     version = "9.4.2";
 
     src = fetchurl {
@@ -35,9 +35,6 @@ let
         libGL glib nss nspr expat alsaLib
         qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
       ];
-
-    doConfigure = false;
-    doBuild = false;
 
     installPhase = ''
       # Extract eagle tarball

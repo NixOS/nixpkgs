@@ -1,6 +1,6 @@
 { fetchurl, stdenv, allegro, libjpeg, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "racer-1.1";
 
   src = if stdenv.hostPlatform.system == "i686-linux" then fetchurl {

@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   version = "0.2.8.2";
 
-  name = "pipelight-${version}";
+  pname = "pipelight";
 
   src = fetchurl {
     url = "https://bitbucket.org/mmueller2012/pipelight/get/v${version}.tar.gz";

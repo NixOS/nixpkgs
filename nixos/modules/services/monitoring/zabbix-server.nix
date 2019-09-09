@@ -237,7 +237,7 @@ in
       fping.source = "${pkgs.fping}/bin/fping";
     };
 
-    systemd.services."zabbix-server" = {
+    systemd.services.zabbix-server = {
       description = "Zabbix Server";
 
       wantedBy = [ "multi-user.target" ];

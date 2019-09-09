@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   version = "2.14.2";
-  name = "helm-${version}";
+  pname = "helm";
 
   src = fetchFromGitHub {
     owner = "helm";

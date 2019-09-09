@@ -13,7 +13,6 @@
 assert withFlint -> flint != null;
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "eclib";
   version = "20190226"; # upgrade might break the sage interface
   # sage tests to run:
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
   # ping @timokau for more info
   src = fetchFromGitHub {
     owner = "JohnCremona";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1910np1xzyjzszay24xn4b81qhpsvhp5aix9vdpknplni2mq8kwb";
   };

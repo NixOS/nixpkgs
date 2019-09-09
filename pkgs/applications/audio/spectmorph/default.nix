@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, libjack2, lv2, glib, qt5, libao, cairo, libsndfile, fftwFloat }:
 
 stdenv.mkDerivation rec {
-  name = "spectmorph-${version}";
+  pname = "spectmorph";
   version = "0.5.0";
   src = fetchurl {
-    url = "http://spectmorph.org/files/releases/${name}.tar.bz2";
+    url = "http://spectmorph.org/files/releases/${pname}-${version}.tar.bz2";
     sha256 = "003wznv3sy1b4g55vqii9pr3i3bb3zmj7nqvwrz7vjsfn2xyd1bn";
   };
 

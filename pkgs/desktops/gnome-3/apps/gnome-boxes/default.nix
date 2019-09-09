@@ -11,10 +11,11 @@
 let
   version = "3.32.1";
 in stdenv.mkDerivation rec {
-  name = "gnome-boxes-${version}";
+  pname = "gnome-boxes";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "159sxii3g4s5pjb4s4i3kc4q162w5vicp4g6wvk1y2yv68bgmcl4";
   };
 

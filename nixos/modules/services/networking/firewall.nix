@@ -58,7 +58,7 @@ let
     ${text}
   ''; in "${dir}/bin/${name}";
 
-  defaultInterface = { default = mapAttrs (name: value: cfg."${name}") commonOptions; };
+  defaultInterface = { default = mapAttrs (name: value: cfg.${name}) commonOptions; };
   allInterfaces = defaultInterface // cfg.interfaces;
 
   startScript = writeShScript "firewall-start" ''

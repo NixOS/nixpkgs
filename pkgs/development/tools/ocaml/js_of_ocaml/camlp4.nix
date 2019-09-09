@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
 	version = "3.2.1";
-	name = "js_of_ocaml-camlp4-${version}"; 
+	pname = "js_of_ocaml-camlp4"; 
 
 	src = fetchFromGitHub {
 		owner = "ocsigen";

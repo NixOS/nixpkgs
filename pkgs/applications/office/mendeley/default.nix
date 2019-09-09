@@ -91,7 +91,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "mendeley-${version}";
+  pname = "mendeley";
+  inherit version;
 
   src = fetchurl {
     url = url;

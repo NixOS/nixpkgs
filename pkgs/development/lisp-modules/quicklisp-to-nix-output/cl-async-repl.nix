@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-async-repl'';
   version = ''cl-async-20190307-git'';
 

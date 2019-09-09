@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "firmware-linux-nonfree-${version}";
+  pname = "firmware-linux-nonfree";
   version = "2019-07-17";
 
   src = fetchgit {

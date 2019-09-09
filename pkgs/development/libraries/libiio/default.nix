@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libiio-${version}";
+  pname = "libiio";
   version = "0.18";
 
   src = fetchFromGitHub {

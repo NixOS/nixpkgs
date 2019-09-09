@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "go-symbols-${version}";
+  pname = "go-symbols";
   version = "0.1.1";
 
   goPackagePath = "github.com/acroca/go-symbols";

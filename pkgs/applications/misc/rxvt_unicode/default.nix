@@ -8,17 +8,17 @@ let
   description = "A clone of the well-known terminal emulator rxvt";
 
   desktopItem = makeDesktopItem {
-    name = "${pname}";
+    name = pname;
     exec = "urxvt";
     icon = "utilities-terminal";
     comment = description;
     desktopName = "URxvt";
-    genericName = "${pname}";
+    genericName = pname;
     categories = "System;TerminalEmulator;";
   };
 in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
 
   name = "${pname}${if perlSupport then "-with-perl" else ""}${if unicode3Support then "-with-unicode3" else ""}-${version}";
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation (rec {
     inherit description;
     homepage = http://software.schmorp.de/pkg/rxvt-unicode.html;
     downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";
-    maintainers = [ ];
+    maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.unix;
     license = licenses.gpl3;
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lcms2, jasper, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "libraw-${version}";
+  pname = "libraw";
   version = "0.19.3";
 
   src = fetchurl {

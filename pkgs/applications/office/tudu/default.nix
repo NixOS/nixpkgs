@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses }:
 stdenv.mkDerivation rec {
 
-  name = "tudu-${version}";
+  pname = "tudu";
   version = "0.10.3";
 
   src = fetchurl {
-    url = "https://code.meskio.net/tudu/${name}.tar.gz";
+    url = "https://code.meskio.net/tudu/${pname}-${version}.tar.gz";
     sha256 = "0140pw457cd05ysws998yhd3b087j98q8m0g3s4br942l65b8n2y";
   };
 

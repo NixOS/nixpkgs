@@ -2,7 +2,7 @@
 zlib, bzip2, lzma }:
 
 stdenv.mkDerivation rec {
-  name = "pacman-${version}";
+  pname = "pacman";
   version = "5.1.3";
 
   src = fetchurl {

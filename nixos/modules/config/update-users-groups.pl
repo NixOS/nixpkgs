@@ -267,6 +267,7 @@ foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
     next if !defined $u;
     $hashedPassword = "!" if !$spec->{mutableUsers};
     $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
+    chomp $hashedPassword;
     push @shadowNew, join(":", $name, $hashedPassword, @rest) . "\n";
     $shadowSeen{$name} = 1;
 }

@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "ghq-${version}";
-  version = "0.10.2";
+  pname = "ghq";
+  version = "0.12.6";
 
   goPackagePath = "github.com/motemen/ghq";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "motemen";
     repo = "ghq";
     rev = "v${version}";
-    sha256 = "1i7zmgv7760nrw8sayag90b8vvmbsiifgiqki5s3gs3ldnvlki5w";
+    sha256 = "14rm7fvphr7r9x0ys10vhzjwhfhhscgr574n1i1z4lzw551lrnp4";
   };
 
   goDeps = ./deps.nix;

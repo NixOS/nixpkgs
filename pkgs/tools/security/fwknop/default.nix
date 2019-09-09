@@ -7,7 +7,6 @@
 , buildClient ? true }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "fwknop";
   version = "2.6.10";
 

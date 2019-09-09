@@ -1,8 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-
-  name = "cimg-${version}";
+  pname = "cimg";
   version = "2.7.0";
 
   src = fetchurl {

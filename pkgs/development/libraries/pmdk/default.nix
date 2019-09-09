@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pmdk-${version}";
+  pname = "pmdk";
   version = "1.6";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, expat, proj, bzip2, zlib, boost, postgresql, lua}:
 
 stdenv.mkDerivation rec {
-  name = "osm2pgsql-${version}";
+  pname = "osm2pgsql";
   version = "0.96.0";
 
   src = fetchFromGitHub {

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, bison, m4 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "flex-2.6.1";
 
   src = fetchurl {

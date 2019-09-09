@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  name = "netsurf-${version}";
+  pname = "netsurf";
   version = "3.9";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, alsaLib }:
 
 stdenv.mkDerivation rec {
-  name = "sndio-${version}";
+  pname = "sndio";
   version = "1.6.0";
   enableParallelBuilding = true;
   buildInputs = [ alsaLib ];

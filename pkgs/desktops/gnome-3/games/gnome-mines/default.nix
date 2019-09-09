@@ -2,11 +2,11 @@
 , librsvg, gettext, itstool, python3, libxml2, libgnome-games-support, libgee, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-mines-${version}";
+  pname = "gnome-mines";
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mines/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-mines/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1nv966wkp2rqxzcdb76bwlbzpjqadcaqzrnkxpzwnvjjr167yx8g";
   };
 

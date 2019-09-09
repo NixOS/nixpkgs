@@ -11,7 +11,7 @@ let
 
   generic = { pname, version, sha256, description, buildInputs, ... }:
   let
-    name' = "${stdenv.lib.replaceStrings [ "-" ] [ "_" ] "${pname}"}-${version}";
+    name' = "${stdenv.lib.replaceStrings [ "-" ] [ "_" ] pname}-${version}";
   in stdenv.mkDerivation {
     name = "${pname}-${version}";
 

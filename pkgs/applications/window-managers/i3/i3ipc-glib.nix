@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "i3ipc-glib-${version}";
+  pname = "i3ipc-glib";
   version = "0.6.0";
 
   src = fetchFromGitHub {

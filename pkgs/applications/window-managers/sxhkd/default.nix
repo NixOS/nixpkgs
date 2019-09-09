@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sxhkd-${version}";
+  pname = "sxhkd";
   version = "0.6.1";
 
   src = fetchFromGitHub {

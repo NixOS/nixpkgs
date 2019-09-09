@@ -4,7 +4,7 @@
 let
   pname = "NetworkManager-openvpn";
   version = "1.8.10";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {

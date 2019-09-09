@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "todoist-${version}";
+  pname = "todoist";
   version = "0.13.1";
 
   src = fetchFromGitHub {

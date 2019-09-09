@@ -20,7 +20,7 @@ rec {
       (crates."memchr"."${deps."aho_corasick"."0.5.3"."memchr"}" deps)
     ]);
   };
-  features_.aho_corasick."0.5.3" = deps: f: updateFeatures f (rec {
+  features_.aho_corasick."0.5.3" = deps: f: updateFeatures f ({
     aho_corasick."0.5.3".default = (f.aho_corasick."0.5.3".default or true);
     memchr."${deps.aho_corasick."0.5.3".memchr}".default = true;
   }) [
@@ -39,7 +39,7 @@ rec {
     sha256 = "0an03kibhfcc0mcxf6a0mvbab0s7cggnvflw8jn0b15i351h828c";
     features = mkFeatures (features."bitflags"."0.4.0" or {});
   };
-  features_.bitflags."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.bitflags."0.4.0" = deps: f: updateFeatures f ({
     bitflags."0.4.0".default = (f.bitflags."0.4.0".default or true);
   }) [];
 
@@ -54,7 +54,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "1znq4b770mdp3kdj9yz199ylc2pmf8l5j2f281jjrcfhg1mm22h6";
   };
-  features_.bitflags."0.6.0" = deps: f: updateFeatures f (rec {
+  features_.bitflags."0.6.0" = deps: f: updateFeatures f ({
     bitflags."0.6.0".default = (f.bitflags."0.6.0".default or true);
   }) [];
 
@@ -69,7 +69,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "1hr72xg5slm0z4pxs2hiy4wcyx3jva70h58b7mid8l0a4c8f7gn5";
   };
-  features_.bitflags."0.7.0" = deps: f: updateFeatures f (rec {
+  features_.bitflags."0.7.0" = deps: f: updateFeatures f ({
     bitflags."0.7.0".default = (f.bitflags."0.7.0".default or true);
   }) [];
 
@@ -107,7 +107,7 @@ rec {
     sha256 = "1g1wmz2001qmfrd37dnd5qiss5njrw26aywmg6yhkmkbyrhjxb08";
     features = mkFeatures (features."bitflags"."1.0.4" or {});
   };
-  features_.bitflags."1.0.4" = deps: f: updateFeatures f (rec {
+  features_.bitflags."1.0.4" = deps: f: updateFeatures f ({
     bitflags."1.0.4".default = (f.bitflags."1.0.4".default or true);
   }) [];
 
@@ -122,7 +122,7 @@ rec {
     authors = [ "Guillaume Gomez <guillaume1.gomez@gmail.com>" ];
     sha256 = "15gm72wx9kd0n51454i58rmpkmig8swghrj2440frxxi9kqg97xd";
   };
-  features_.c_vec."1.2.1" = deps: f: updateFeatures f (rec {
+  features_.c_vec."1.2.1" = deps: f: updateFeatures f ({
     c_vec."1.2.1".default = (f.c_vec."1.2.1".default or true);
   }) [];
 
@@ -284,7 +284,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "11qrix06wagkplyk908i3423ps9m9np6c4vbcq81s9fyl244xv3n";
   };
-  features_.cfg_if."0.1.6" = deps: f: updateFeatures f (rec {
+  features_.cfg_if."0.1.6" = deps: f: updateFeatures f ({
     cfg_if."0.1.6".default = (f.cfg_if."0.1.6".default or true);
   }) [];
 
@@ -336,7 +336,7 @@ rec {
       (crates."pkg_config"."${deps."dbus"."0.4.1"."pkg_config"}" deps)
     ]);
   };
-  features_.dbus."0.4.1" = deps: f: updateFeatures f (rec {
+  features_.dbus."0.4.1" = deps: f: updateFeatures f ({
     dbus."0.4.1".default = (f.dbus."0.4.1".default or true);
     libc."${deps.dbus."0.4.1".libc}".default = true;
     pkg_config."${deps.dbus."0.4.1".pkg_config}".default = true;
@@ -359,7 +359,7 @@ rec {
       (crates."dbus"."${deps."dbus_macros"."0.0.6"."dbus"}" deps)
     ]);
   };
-  features_.dbus_macros."0.0.6" = deps: f: updateFeatures f (rec {
+  features_.dbus_macros."0.0.6" = deps: f: updateFeatures f ({
     dbus."${deps.dbus_macros."0.0.6".dbus}".default = true;
     dbus_macros."0.0.6".default = (f.dbus_macros."0.0.6".default or true);
   }) [
@@ -381,7 +381,7 @@ rec {
     ]);
     features = mkFeatures (features."dlib"."0.3.1" or {});
   };
-  features_.dlib."0.3.1" = deps: f: updateFeatures f (rec {
+  features_.dlib."0.3.1" = deps: f: updateFeatures f ({
     dlib."0.3.1".default = (f.dlib."0.3.1".default or true);
     libloading."${deps.dlib."0.3.1".libloading}".default = true;
   }) [
@@ -403,7 +403,7 @@ rec {
     ]);
     features = mkFeatures (features."dlib"."0.4.1" or {});
   };
-  features_.dlib."0.4.1" = deps: f: updateFeatures f (rec {
+  features_.dlib."0.4.1" = deps: f: updateFeatures f ({
     dlib."0.4.1".default = (f.dlib."0.4.1".default or true);
     libloading."${deps.dlib."0.4.1".libloading}".default = true;
   }) [
@@ -421,7 +421,7 @@ rec {
     authors = [ "David Tolnay <dtolnay@gmail.com>" ];
     sha256 = "1xysdxdm24sk5ysim7lps4r2qaxfnj0sbakhmps4d42yssx30cw8";
   };
-  features_.dtoa."0.4.3" = deps: f: updateFeatures f (rec {
+  features_.dtoa."0.4.3" = deps: f: updateFeatures f ({
     dtoa."0.4.3".default = (f.dtoa."0.4.3".default or true);
   }) [];
 
@@ -441,7 +441,7 @@ rec {
       (crates."wayland_sys"."${deps."dummy_rustwlc"."0.7.1"."wayland_sys"}" deps)
     ]);
   };
-  features_.dummy_rustwlc."0.7.1" = deps: f: updateFeatures f (rec {
+  features_.dummy_rustwlc."0.7.1" = deps: f: updateFeatures f ({
     bitflags."${deps.dummy_rustwlc."0.7.1".bitflags}".default = true;
     dummy_rustwlc."0.7.1".default = (f.dummy_rustwlc."0.7.1".default or true);
     libc."${deps.dummy_rustwlc."0.7.1".libc}".default = true;
@@ -498,7 +498,7 @@ rec {
     authors = [ "bluss" ];
     sha256 = "1bkb5aq7h9p4rzlgxagnda1f0dd11q0qz41bmdy11z18q1p8igy1";
   };
-  features_.fixedbitset."0.1.9" = deps: f: updateFeatures f (rec {
+  features_.fixedbitset."0.1.9" = deps: f: updateFeatures f ({
     fixedbitset."0.1.9".default = (f.fixedbitset."0.1.9".default or true);
   }) [];
 
@@ -517,7 +517,7 @@ rec {
       (crates."fuchsia_zircon_sys"."${deps."fuchsia_zircon"."0.3.3"."fuchsia_zircon_sys"}" deps)
     ]);
   };
-  features_.fuchsia_zircon."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.fuchsia_zircon."0.3.3" = deps: f: updateFeatures f ({
     bitflags."${deps.fuchsia_zircon."0.3.3".bitflags}".default = true;
     fuchsia_zircon."0.3.3".default = (f.fuchsia_zircon."0.3.3".default or true);
     fuchsia_zircon_sys."${deps.fuchsia_zircon."0.3.3".fuchsia_zircon_sys}".default = true;
@@ -537,7 +537,7 @@ rec {
     authors = [ "Raph Levien <raph@google.com>" ];
     sha256 = "08jp1zxrm9jbrr6l26bjal4dbm8bxfy57ickdgibsqxr1n9j3hf5";
   };
-  features_.fuchsia_zircon_sys."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.fuchsia_zircon_sys."0.3.3" = deps: f: updateFeatures f ({
     fuchsia_zircon_sys."0.3.3".default = (f.fuchsia_zircon_sys."0.3.3".default or true);
   }) [];
 
@@ -712,7 +712,7 @@ rec {
       (crates."unicode_width"."${deps."getopts"."0.2.18"."unicode_width"}" deps)
     ]);
   };
-  features_.getopts."0.2.18" = deps: f: updateFeatures f (rec {
+  features_.getopts."0.2.18" = deps: f: updateFeatures f ({
     getopts."0.2.18".default = (f.getopts."0.2.18".default or true);
     unicode_width."${deps.getopts."0.2.18".unicode_width}".default = true;
   }) [
@@ -1033,7 +1033,7 @@ rec {
     sha256 = "1nfkzz6vrgj0d9l3yzjkkkqzdgs68y294fjdbl7jq118qi8xc9d9";
     features = mkFeatures (features."itoa"."0.3.4" or {});
   };
-  features_.itoa."0.3.4" = deps: f: updateFeatures f (rec {
+  features_.itoa."0.3.4" = deps: f: updateFeatures f ({
     itoa."0.3.4".default = (f.itoa."0.3.4".default or true);
   }) [];
 
@@ -1051,7 +1051,7 @@ rec {
       (crates."rustc_serialize"."${deps."json_macro"."0.1.1"."rustc_serialize"}" deps)
     ]);
   };
-  features_.json_macro."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.json_macro."0.1.1" = deps: f: updateFeatures f ({
     json_macro."0.1.1".default = (f.json_macro."0.1.1".default or true);
     rustc_serialize."${deps.json_macro."0.1.1".rustc_serialize}".default = true;
   }) [
@@ -1078,7 +1078,7 @@ rec {
       (crates."winapi_build"."${deps."kernel32_sys"."0.2.2"."winapi_build"}" deps)
     ]);
   };
-  features_.kernel32_sys."0.2.2" = deps: f: updateFeatures f (rec {
+  features_.kernel32_sys."0.2.2" = deps: f: updateFeatures f ({
     kernel32_sys."0.2.2".default = (f.kernel32_sys."0.2.2".default or true);
     winapi."${deps.kernel32_sys."0.2.2".winapi}".default = true;
     winapi_build."${deps.kernel32_sys."0.2.2".winapi_build}".default = true;
@@ -1199,7 +1199,7 @@ rec {
       (crates."target_build_utils"."${deps."libloading"."0.3.4"."target_build_utils"}" deps)
     ]);
   };
-  features_.libloading."0.3.4" = deps: f: updateFeatures f (rec {
+  features_.libloading."0.3.4" = deps: f: updateFeatures f ({
     kernel32_sys."${deps.libloading."0.3.4".kernel32_sys}".default = true;
     lazy_static."${deps.libloading."0.3.4".lazy_static}".default = true;
     libloading."0.3.4".default = (f.libloading."0.3.4".default or true);
@@ -1231,7 +1231,7 @@ rec {
       (crates."cc"."${deps."libloading"."0.5.0"."cc"}" deps)
     ]);
   };
-  features_.libloading."0.5.0" = deps: f: updateFeatures f (rec {
+  features_.libloading."0.5.0" = deps: f: updateFeatures f ({
     cc."${deps.libloading."0.5.0".cc}".default = true;
     libloading."0.5.0".default = (f.libloading."0.5.0".default or true);
     winapi = fold recursiveUpdate {} [
@@ -1340,7 +1340,7 @@ rec {
     ]);
     features = mkFeatures (features."log"."0.4.6" or {});
   };
-  features_.log."0.4.6" = deps: f: updateFeatures f (rec {
+  features_.log."0.4.6" = deps: f: updateFeatures f ({
     cfg_if."${deps.log."0.4.6".cfg_if}".default = true;
     log."0.4.6".default = (f.log."0.4.6".default or true);
   }) [
@@ -1361,7 +1361,7 @@ rec {
       (crates."libc"."${deps."memchr"."0.1.11"."libc"}" deps)
     ]);
   };
-  features_.memchr."0.1.11" = deps: f: updateFeatures f (rec {
+  features_.memchr."0.1.11" = deps: f: updateFeatures f ({
     libc."${deps.memchr."0.1.11".libc}".default = true;
     memchr."0.1.11".default = (f.memchr."0.1.11".default or true);
   }) [
@@ -1392,7 +1392,7 @@ rec {
     ]);
     features = mkFeatures (features."nix"."0.6.0" or {});
   };
-  features_.nix."0.6.0" = deps: f: updateFeatures f (rec {
+  features_.nix."0.6.0" = deps: f: updateFeatures f ({
     bitflags."${deps.nix."0.6.0".bitflags}".default = true;
     cfg_if."${deps.nix."0.6.0".cfg_if}".default = true;
     libc."${deps.nix."0.6.0".libc}".default = true;
@@ -1426,7 +1426,7 @@ rec {
       (crates."void"."${deps."nix"."0.9.0"."void"}" deps)
     ]);
   };
-  features_.nix."0.9.0" = deps: f: updateFeatures f (rec {
+  features_.nix."0.9.0" = deps: f: updateFeatures f ({
     bitflags."${deps.nix."0.9.0".bitflags}".default = true;
     cfg_if."${deps.nix."0.9.0".cfg_if}".default = true;
     libc."${deps.nix."0.9.0".libc}".default = true;
@@ -1453,7 +1453,7 @@ rec {
       (crates."num_traits"."${deps."num_traits"."0.1.43"."num_traits"}" deps)
     ]);
   };
-  features_.num_traits."0.1.43" = deps: f: updateFeatures f (rec {
+  features_.num_traits."0.1.43" = deps: f: updateFeatures f ({
     num_traits = fold recursiveUpdate {} [
       { "${deps.num_traits."0.1.43".num_traits}".default = true; }
       { "0.1.43".default = (f.num_traits."0.1.43".default or true); }
@@ -1620,7 +1620,7 @@ rec {
       (crates."phf_shared"."${deps."phf_codegen"."0.7.23"."phf_shared"}" deps)
     ]);
   };
-  features_.phf_codegen."0.7.23" = deps: f: updateFeatures f (rec {
+  features_.phf_codegen."0.7.23" = deps: f: updateFeatures f ({
     phf_codegen."0.7.23".default = (f.phf_codegen."0.7.23".default or true);
     phf_generator."${deps.phf_codegen."0.7.23".phf_generator}".default = true;
     phf_shared."${deps.phf_codegen."0.7.23".phf_shared}".default = true;
@@ -1644,7 +1644,7 @@ rec {
       (crates."rand"."${deps."phf_generator"."0.7.23"."rand"}" deps)
     ]);
   };
-  features_.phf_generator."0.7.23" = deps: f: updateFeatures f (rec {
+  features_.phf_generator."0.7.23" = deps: f: updateFeatures f ({
     phf_generator."0.7.23".default = (f.phf_generator."0.7.23".default or true);
     phf_shared."${deps.phf_generator."0.7.23".phf_shared}".default = true;
     rand."${deps.phf_generator."0.7.23".rand}".default = true;
@@ -1669,7 +1669,7 @@ rec {
     ]);
     features = mkFeatures (features."phf_shared"."0.7.23" or {});
   };
-  features_.phf_shared."0.7.23" = deps: f: updateFeatures f (rec {
+  features_.phf_shared."0.7.23" = deps: f: updateFeatures f ({
     phf_shared."0.7.23".default = (f.phf_shared."0.7.23".default or true);
     siphasher."${deps.phf_shared."0.7.23".siphasher}".default = true;
   }) [
@@ -1687,7 +1687,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "0207fsarrm412j0dh87lfcas72n8mxar7q3mgflsbsrqnb140sv6";
   };
-  features_.pkg_config."0.3.14" = deps: f: updateFeatures f (rec {
+  features_.pkg_config."0.3.14" = deps: f: updateFeatures f ({
     pkg_config."0.3.14".default = (f.pkg_config."0.3.14".default or true);
   }) [];
 
@@ -2004,7 +2004,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "1mzhphkbwppwd1zam2jkgjk550cqgf6506i87bw2yzrvcsraiw7m";
   };
-  features_.regex_syntax."0.3.9" = deps: f: updateFeatures f (rec {
+  features_.regex_syntax."0.3.9" = deps: f: updateFeatures f ({
     regex_syntax."0.3.9".default = (f.regex_syntax."0.3.9".default or true);
   }) [];
 
@@ -2057,7 +2057,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "0rfk6p66mqkd3g36l0ddlv2rvnp1mp3lrq5frq9zz5cbnz5pmmxn";
   };
-  features_.rustc_serialize."0.3.24" = deps: f: updateFeatures f (rec {
+  features_.rustc_serialize."0.3.24" = deps: f: updateFeatures f ({
     rustc_serialize."0.3.24".default = (f.rustc_serialize."0.3.24".default or true);
   }) [];
 
@@ -2075,7 +2075,7 @@ rec {
       (crates."semver"."${deps."rustc_version"."0.1.7"."semver"}" deps)
     ]);
   };
-  features_.rustc_version."0.1.7" = deps: f: updateFeatures f (rec {
+  features_.rustc_version."0.1.7" = deps: f: updateFeatures f ({
     rustc_version."0.1.7".default = (f.rustc_version."0.1.7".default or true);
     semver."${deps.rustc_version."0.1.7".semver}".default = true;
   }) [
@@ -2131,7 +2131,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "05cdig0071hls2k8lxbqmyqpl0zjmc53i2d43mwzps033b8njh4n";
   };
-  features_.semver."0.1.20" = deps: f: updateFeatures f (rec {
+  features_.semver."0.1.20" = deps: f: updateFeatures f ({
     semver."0.1.20".default = (f.semver."0.1.20".default or true);
   }) [];
 
@@ -2225,7 +2225,7 @@ rec {
     authors = [ "Frank Denis <github@pureftpd.org>" ];
     sha256 = "1ganj1grxqnkvv4ds3vby039bm999jrr58nfq2x3kjhzkw2bnqkw";
   };
-  features_.siphasher."0.2.3" = deps: f: updateFeatures f (rec {
+  features_.siphasher."0.2.3" = deps: f: updateFeatures f ({
     siphasher."0.2.3".default = (f.siphasher."0.2.3".default or true);
   }) [];
 
@@ -2282,7 +2282,7 @@ rec {
       (crates."libc"."${deps."thread_id"."2.0.0"."libc"}" deps)
     ]);
   };
-  features_.thread_id."2.0.0" = deps: f: updateFeatures f (rec {
+  features_.thread_id."2.0.0" = deps: f: updateFeatures f ({
     kernel32_sys."${deps.thread_id."2.0.0".kernel32_sys}".default = true;
     libc."${deps.thread_id."2.0.0".libc}".default = true;
     thread_id."2.0.0".default = (f.thread_id."2.0.0".default or true);
@@ -2305,7 +2305,7 @@ rec {
       (crates."thread_id"."${deps."thread_local"."0.2.7"."thread_id"}" deps)
     ]);
   };
-  features_.thread_local."0.2.7" = deps: f: updateFeatures f (rec {
+  features_.thread_local."0.2.7" = deps: f: updateFeatures f ({
     thread_id."${deps.thread_local."0.2.7".thread_id}".default = true;
     thread_local."0.2.7".default = (f.thread_local."0.2.7".default or true);
   }) [
@@ -2323,7 +2323,7 @@ rec {
     authors = [ "Victor Berger <victor.berger@m4x.org>" ];
     sha256 = "1v7acraqyh6iibg87pwkxm41v783sminxm5k9f4ndra7r0vq4zvq";
   };
-  features_.token_store."0.1.2" = deps: f: updateFeatures f (rec {
+  features_.token_store."0.1.2" = deps: f: updateFeatures f ({
     token_store."0.1.2".default = (f.token_store."0.1.2".default or true);
   }) [];
 
@@ -2339,7 +2339,7 @@ rec {
     sha256 = "0886lc2aymwgy0lhavwn6s48ik3c61ykzzd3za6prgnw51j7bi4w";
     features = mkFeatures (features."unicode_width"."0.1.5" or {});
   };
-  features_.unicode_width."0.1.5" = deps: f: updateFeatures f (rec {
+  features_.unicode_width."0.1.5" = deps: f: updateFeatures f ({
     unicode_width."0.1.5".default = (f.unicode_width."0.1.5".default or true);
   }) [];
 
@@ -2354,7 +2354,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1cj548a91a93j8375p78qikaiam548xh84cb0ck8y119adbmsvbp";
   };
-  features_.utf8_ranges."0.1.3" = deps: f: updateFeatures f (rec {
+  features_.utf8_ranges."0.1.3" = deps: f: updateFeatures f ({
     utf8_ranges."0.1.3".default = (f.utf8_ranges."0.1.3".default or true);
   }) [];
 
@@ -2542,7 +2542,7 @@ rec {
       (crates."xml_rs"."${deps."wayland_scanner"."0.12.5"."xml_rs"}" deps)
     ]);
   };
-  features_.wayland_scanner."0.12.5" = deps: f: updateFeatures f (rec {
+  features_.wayland_scanner."0.12.5" = deps: f: updateFeatures f ({
     wayland_scanner."0.12.5".default = (f.wayland_scanner."0.12.5".default or true);
     xml_rs."${deps.wayland_scanner."0.12.5".xml_rs}".default = true;
   }) [
@@ -2737,7 +2737,7 @@ rec {
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "0a45b58ywf12vb7gvj6h3j264nydynmzyqz8d8rqxsj6icqv82as";
   };
-  features_.winapi."0.2.8" = deps: f: updateFeatures f (rec {
+  features_.winapi."0.2.8" = deps: f: updateFeatures f ({
     winapi."0.2.8".default = (f.winapi."0.2.8".default or true);
   }) [];
 
@@ -2760,7 +2760,7 @@ rec {
     ]) else []);
     features = mkFeatures (features."winapi"."0.3.6" or {});
   };
-  features_.winapi."0.3.6" = deps: f: updateFeatures f (rec {
+  features_.winapi."0.3.6" = deps: f: updateFeatures f ({
     winapi."0.3.6".default = (f.winapi."0.3.6".default or true);
     winapi_i686_pc_windows_gnu."${deps.winapi."0.3.6".winapi_i686_pc_windows_gnu}".default = true;
     winapi_x86_64_pc_windows_gnu."${deps.winapi."0.3.6".winapi_x86_64_pc_windows_gnu}".default = true;
@@ -2781,7 +2781,7 @@ rec {
     sha256 = "1lxlpi87rkhxcwp2ykf1ldw3p108hwm24nywf3jfrvmff4rjhqga";
     libName = "build";
   };
-  features_.winapi_build."0.1.1" = deps: f: updateFeatures f (rec {
+  features_.winapi_build."0.1.1" = deps: f: updateFeatures f ({
     winapi_build."0.1.1".default = (f.winapi_build."0.1.1".default or true);
   }) [];
 
@@ -2797,7 +2797,7 @@ rec {
     sha256 = "05ihkij18r4gamjpxj4gra24514can762imjzlmak5wlzidplzrp";
     build = "build.rs";
   };
-  features_.winapi_i686_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.winapi_i686_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f ({
     winapi_i686_pc_windows_gnu."0.4.0".default = (f.winapi_i686_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
@@ -2813,7 +2813,7 @@ rec {
     sha256 = "0n1ylmlsb8yg1v583i4xy0qmqg42275flvbc51hdqjjfjcl9vlbj";
     build = "build.rs";
   };
-  features_.winapi_x86_64_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.winapi_x86_64_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f ({
     winapi_x86_64_pc_windows_gnu."0.4.0".default = (f.winapi_x86_64_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
@@ -2992,7 +2992,7 @@ rec {
       (crates."bitflags"."${deps."xml_rs"."0.7.0"."bitflags"}" deps)
     ]);
   };
-  features_.xml_rs."0.7.0" = deps: f: updateFeatures f (rec {
+  features_.xml_rs."0.7.0" = deps: f: updateFeatures f ({
     bitflags."${deps.xml_rs."0.7.0".bitflags}".default = true;
     xml_rs."0.7.0".default = (f.xml_rs."0.7.0".default or true);
   }) [

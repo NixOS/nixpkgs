@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "consul_exporter-${version}";
+  pname = "consul_exporter";
   version = "0.3.0";
 
   goPackagePath = "github.com/prometheus/consul_exporter";

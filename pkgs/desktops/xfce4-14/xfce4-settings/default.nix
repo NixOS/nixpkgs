@@ -2,7 +2,7 @@
 , libnotify, libxfce4ui, libxfce4util, libxklavier
 , upower, xfconf, xf86inputlibinput }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
   version = "4.14.0";

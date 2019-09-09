@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "8.23";
-  name = "checkstyle-${version}";
+  pname = "checkstyle";
 
   src = fetchurl {
     url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";

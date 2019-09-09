@@ -5,7 +5,7 @@
   withX ? true }:
 
 stdenv.mkDerivation rec {
-  name = "open-vm-tools-${version}";
+  pname = "open-vm-tools";
   version = "10.3.10";
 
   src = fetchFromGitHub {

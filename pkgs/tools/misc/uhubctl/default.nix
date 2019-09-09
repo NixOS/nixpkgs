@@ -3,7 +3,7 @@
 , libusb
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uhubctl";
   version = "unstable-2019-07-31";
 

@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "neo4j-${version}";
+  pname = "neo4j";
   version = "3.5.8";
 
   src = fetchurl {

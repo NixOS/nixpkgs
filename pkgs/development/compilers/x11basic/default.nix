@@ -6,7 +6,6 @@
 stdenv.mkDerivation rec {
   pname = "X11basic";
   version = "1.26";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "kollokollo";

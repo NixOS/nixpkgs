@@ -9,6 +9,7 @@
       Damien Cassou @DamienCassou
       Thomas Tuegel @ttuegel
       Rodney Lorrimar @rvl
+      Adam Hoese @adisbladis
   -->
  <para>
   <link xlink:href="https://www.gnu.org/software/emacs/">Emacs</link> is an
@@ -58,7 +59,7 @@
        <para>
         The latest stable version of Emacs 25 using the
         <link
-                xlink:href="http://www.gtk.org">GTK+ 2</link>
+                xlink:href="http://www.gtk.org">GTK 2</link>
         widget toolkit.
        </para>
       </listitem>
@@ -130,15 +131,6 @@
     Emacs packages through nixpkgs.
    </para>
 
-   <note>
-    <para>
-     This documentation describes the new Emacs packages framework in NixOS
-     16.03 (<varname>emacsPackagesNg</varname>) which should not be confused
-     with the previous and deprecated framework
-     (<varname>emacs24Packages</varname>).
-    </para>
-   </note>
-
    <para>
     The first step to declare the list of packages you want in your Emacs
     installation is to create a dedicated derivation. This can be done in a
@@ -164,7 +156,7 @@ $ ./result/bin/emacs
 
 let
   myEmacs = pkgs.emacs; <co xml:id="ex-emacsNix-2" />
-  emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages; <co xml:id="ex-emacsNix-3" />
+  emacsWithPackages = (pkgs.emacsPackagesGen myEmacs).emacsWithPackages; <co xml:id="ex-emacsNix-3" />
 in
   emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [ <co xml:id="ex-emacsNix-4" />
     magit          # ; Integrate git &lt;C-x g&gt;
@@ -262,10 +254,10 @@ in
     <example xml:id="module-services-emacs-querying-packages">
      <title>Querying Emacs packages</title>
 <programlisting><![CDATA[
-nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.elpaPackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.melpaPackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.melpaStablePackages
-nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.orgPackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackages.elpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackages.melpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackages.melpaStablePackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackages.orgPackages
 ]]></programlisting>
     </example>
    </para>
@@ -329,7 +321,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
    <para>
     If you want, you can tweak the Emacs package itself from your
     <filename>emacs.nix</filename>. For example, if you want to have a
-    GTK+3-based Emacs instead of the default GTK+2-based binary and remove the
+    GTK 3-based Emacs instead of the default GTK 2-based binary and remove the
     automatically generated <filename>emacs.desktop</filename> (useful is you
     only use <command>emacsclient</command>), you can change your file
     <filename>emacs.nix</filename> in this way:
@@ -357,7 +349,7 @@ in [...]
 
    <para>
     After building this file as shown in <xref linkend="ex-emacsNix" />, you
-    will get an GTK3-based Emacs binary pre-loaded with your favorite packages.
+    will get an GTK 3-based Emacs binary pre-loaded with your favorite packages.
    </para>
   </section>
  </section>

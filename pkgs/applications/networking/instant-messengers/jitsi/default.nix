@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "jitsi-${version}";
+  pname = "jitsi";
   version = "2.10.5550";
 
   src = fetchurl {

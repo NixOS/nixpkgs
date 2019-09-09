@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "plowshare-${version}";
+  pname = "plowshare";
   version = "2.1.7";
 
   src = fetchFromGitHub {

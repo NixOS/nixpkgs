@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, libtool, libxml2, libcanberra-gtk3, gtk3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-media-${version}";
+  pname = "mate-media";
   version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "13g1n2ddgr1yxgl4fsqj3sgb9344b756kam9v3sq6vh0bxlr4yf2";
   };
 

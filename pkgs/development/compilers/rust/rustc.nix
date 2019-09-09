@@ -1,6 +1,6 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , fetchurl, file, python2, tzdata, ps
-, llvm_7, darwin, git, cmake, rustPlatform
+, llvmPackages_7, darwin, git, cmake, rustPlatform
 , which, libffi, gdb
 , withBundledLLVM ? false
 }:
@@ -9,20 +9,30 @@ let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
-  llvmSharedForBuild = pkgsBuildBuild.llvm_7.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvm_7.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvm_7.override { enableSharedLibraries = true; };
+  llvmPackages = llvmPackages_7;
+
+  llvmSharedForBuild = pkgsBuildBuild.llvmPackages.llvm.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvmPackages.llvm.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvmPackages.llvm.override { enableSharedLibraries = true; };
 
   # For use at runtime
-  llvmShared = llvm_7.override { enableSharedLibraries = true; };
-in stdenv.mkDerivation rec {
+  llvmShared = llvmPackages.llvm.override { enableSharedLibraries = true; };
+in
+
+stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.36.0";
+  version = "1.37.0";
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "06xv2p6zq03lidr0yaf029ii8wnjjqa894nkmrm6s0rx47by9i04";
+    sha256 = "1hrqprybhkhs6d9b5pjskfnc5z9v2l2gync7nb39qjb5s0h703hj";
   };
+
+  # Provide the compiler-rt sources needed for profiling.
+  preConfigure = ''
+    mkdir src/llvm-project/compiler-rt
+    tar xf ${llvmPackages.compiler-rt.src} -C src/llvm-project/compiler-rt --strip-components=1
+  '';
 
   __darwinAllowLocalNetworking = true;
 
@@ -37,7 +47,6 @@ in stdenv.mkDerivation rec {
   # Running `strip -S` when cross compiling can harm the cross rlibs.
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
-
 
   NIX_LDFLAGS =
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'

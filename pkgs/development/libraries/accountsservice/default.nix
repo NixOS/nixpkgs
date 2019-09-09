@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dadmin_group=wheel"
     "-Dlocalstatedir=/var"
-    "-Dsystemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
   ];
 
   postPatch = ''

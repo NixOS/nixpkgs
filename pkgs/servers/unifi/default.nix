@@ -2,8 +2,9 @@
 
 let
   generic = { version, sha256, suffix ? "" }:
-  stdenv.mkDerivation rec {
-    name = "unifi-controller-${version}";
+  stdenv.mkDerivation {
+    pname = "unifi-controller";
+    inherit version;
 
     src = fetchurl {
       url = "https://dl.ubnt.com/unifi/${version}${suffix}/unifi_sysvinit_all.deb";
@@ -17,8 +18,6 @@ let
       dpkg-deb -x $src ./
       runHook postUnpack
     '';
-
-    doConfigure = false;
 
     installPhase = ''
       runHook preInstall
@@ -39,7 +38,7 @@ let
     };
   };
 
-in rec {
+in {
 
   # https://community.ui.com/releases / https://www.ui.com/download/unifi
   # Outdated FAQ: https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
@@ -52,12 +51,5 @@ in rec {
   unifiStable = generic {
     version = "5.11.39";
     sha256 = "0v1gnvdazxa3bcbq8hl6796yw0mxzki2xn4s5im5k5ngmfmnswyj";
-  };
-
-  # TODO: update as it is outdated
-  unifiTesting = generic {
-    version = "5.11.18";
-    suffix = "-996baf2ca5";
-    sha256 = "14yyfn39ix8bnn0cb6bn0ly6pqxg81lvy83y40bk0y8vxfg6maqc";
   };
 }

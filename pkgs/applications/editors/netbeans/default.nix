@@ -15,7 +15,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "netbeans-${version}";
+  pname = "netbeans";
+  inherit version;
   src = fetchurl {
     url = "mirror://apache/incubator/netbeans/incubating-netbeans/incubating-${version}/incubating-netbeans-${version}-bin.zip";
     sha512 = "15mv59njrnq3sjfzb0n7xcc79kpixygf37cxvbswnvm651cw6lb1i9w8wbjivh0z4zcf3f62vbmshxh5pkaxqpqsg0iyy6gddfbwzwx";

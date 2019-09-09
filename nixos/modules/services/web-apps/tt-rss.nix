@@ -520,7 +520,7 @@ let
     ];
 
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
-      "${poolName}" = {
+      ${poolName} = {
         inherit (cfg) user;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
@@ -541,7 +541,7 @@ let
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
       virtualHosts = {
-        "${cfg.virtualHost}" = {
+        ${cfg.virtualHost} = {
           root = "${cfg.root}";
 
           locations."/" = {

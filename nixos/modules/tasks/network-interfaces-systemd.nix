@@ -72,7 +72,15 @@ in
           };
       in mkMerge [ {
         enable = true;
-        networks."99-main" = genericNetwork mkDefault;
+        networks."99-main" = (genericNetwork mkDefault) // {
+          # We keep the "broken" behaviour of applying this to all interfaces.
+          # In general we want to get rid of this workaround but there hasn't
+          # been any work on that.
+          # See the following issues for details:
+          # - https://github.com/NixOS/nixpkgs/issues/18962
+          # - https://github.com/NixOS/nixpkgs/issues/61629
+          matchConfig = mkDefault { Name = "*"; };
+        };
       }
       (mkMerge (forEach interfaces (i: {
         netdevs = mkIf i.virtual ({
@@ -160,14 +168,14 @@ in
                             (mapAttrsToList (k: _: k) do); "";
             # get those driverOptions that have been set
             filterSystemdOptions = filterAttrs (sysDOpt: kOpts:
-                                     any (kOpt: do ? "${kOpt}") kOpts.optNames);
+                                     any (kOpt: do ? ${kOpt}) kOpts.optNames);
             # build final set of systemd options to bond values
             buildOptionSet = mapAttrs (_: kOpts: with kOpts;
                                # we simply take the first set kernel bond option
                                # (one option has multiple names, which is silly)
-                               head (map (optN: valTransform (do."${optN}"))
+                               head (map (optN: valTransform (do.${optN}))
                                  # only map those that exist
-                                 (filter (o: do ? "${o}") optNames)));
+                                 (filter (o: do ? ${o}) optNames)));
             in seq assertNoUnknownOption
                    (buildOptionSet (filterSystemdOptions driverOptionMapping));
 

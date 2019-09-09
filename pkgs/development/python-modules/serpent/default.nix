@@ -9,8 +9,6 @@
 }:
 
 buildPythonPackage rec {
-
-  name = "${pname}-${version}";
   pname = "serpent";
   version = "1.27";
 

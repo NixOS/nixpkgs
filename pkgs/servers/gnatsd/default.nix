@@ -3,7 +3,7 @@
 with lib;
 
 buildGoPackage rec {
-  name = "gnatsd-${version}";
+  pname = "gnatsd";
   version = "1.4.0";
   rev = "v${version}";
 

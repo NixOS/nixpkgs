@@ -6,7 +6,8 @@ let
   version = "1.0.9";
 in
   stdenv.mkDerivation {
-    name = "airspy-${version}";
+    pname = "airspy";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "airspy";

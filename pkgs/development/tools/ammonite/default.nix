@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "ammonite-${version}";
+  pname = "ammonite";
   version = "1.6.9";
   scalaVersion = "2.12";
 

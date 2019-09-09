@@ -3,7 +3,7 @@
 # Although we copy in the udev rules here, you probably just want to use logitech-udev-rules instead of
 # adding this to services.udev.packages on NixOS
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "solaar-unstable";
   version = "2019-01-30";
 

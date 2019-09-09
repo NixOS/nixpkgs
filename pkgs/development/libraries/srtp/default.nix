@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libsrtp-${version}";
+  pname = "libsrtp";
   version = "2.2.0";
 
   src = fetchFromGitHub {

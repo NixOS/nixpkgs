@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenSurefireCommon_2_12_4 = map (obj: fetchMaven {
     version = "2.12.4";
     artifactId = "maven-surefire-common";

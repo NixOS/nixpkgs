@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, ninja, gflags, libsodium, protobuf }:
 
 stdenv.mkDerivation rec {
-  name = "eternal-terminal-${version}";
+  pname = "eternal-terminal";
   version = "5.1.10";
 
   src = fetchFromGitHub {

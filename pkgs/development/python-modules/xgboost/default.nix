@@ -12,7 +12,7 @@
 , datatable
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "xgboost";
   inherit (xgboost) version src meta;
 

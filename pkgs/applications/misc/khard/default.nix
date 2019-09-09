@@ -18,7 +18,7 @@ let
 
 in with python.pkgs; buildPythonApplication rec {
   version = "0.14.0";
-  name = "khard-${version}";
+  pname = "khard";
   namePrefix = "";
 
   src = fetchurl {

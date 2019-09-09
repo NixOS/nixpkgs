@@ -8,7 +8,9 @@ let
 
   nix = cfg.package.out;
 
-  isNix20 = versionAtLeast (getVersion nix) "2.0pre";
+  nixVersion = getVersion nix;
+
+  isNix20 = versionAtLeast nixVersion "2.0pre";
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
@@ -61,6 +63,9 @@ let
           builders =
         ''}
         system-features = ${toString cfg.systemFeatures}
+        ${optionalString (versionAtLeast nixVersion "2.3pre") ''
+          sandbox-fallback = false
+        ''}
         $extraOptions
         END
       '' + optionalString cfg.checkConfig (
@@ -495,12 +500,12 @@ in
       optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
         # a x86_64 builder can run code for `platform.gcc.arch` and minor architectures:
         [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ {
-          "sandybridge"    = [ "gccarch-westmere" ];
-          "ivybridge"      = [ "gccarch-westmere" "gccarch-sandybridge" ];
-          "haswell"        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
-          "broadwell"      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
-          "skylake"        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
-          "skylake-avx512" = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
+          sandybridge    = [ "gccarch-westmere" ];
+          ivybridge      = [ "gccarch-westmere" "gccarch-sandybridge" ];
+          haswell        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
+          broadwell      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
+          skylake        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
+          skylake-avx512 = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
         }.${pkgs.hostPlatform.platform.gcc.arch} or []
       )
     );

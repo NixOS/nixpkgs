@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.0";
-  name = "lsusb-${version}";
+  pname = "lsusb";
 
   src = fetchFromGitHub {
     owner = "jlhonora";

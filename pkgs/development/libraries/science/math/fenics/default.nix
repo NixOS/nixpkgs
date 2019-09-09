@@ -30,7 +30,8 @@ let
   version = "2017.1.0";
 
   dijitso = pythonPackages.buildPythonPackage {
-    name = "dijitso-${version}";
+    pname = "dijitso";
+    inherit version;
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/dijitso/downloads/dijitso-${version}.tar.gz";
       sha256 = "0mw6mynjmg6yl3l2k33yra2x84s4r6mh44ylhk9znjfk74jra8zg";
@@ -54,7 +55,8 @@ let
   };
 
   fiat = pythonPackages.buildPythonPackage {
-    name = "fiat-${version}";
+    pname = "fiat";
+    inherit version;
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/fiat/downloads/fiat-${version}.tar.gz";
       sha256 = "156ybz70n4n7p88q4pfkvbmg1xr2ll80inzr423mki0nml0q8a6l";
@@ -72,7 +74,8 @@ let
   };
 
   ufl = pythonPackages.buildPythonPackage {
-    name = "ufl-${version}";
+    pname = "ufl";
+    inherit version;
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/ufl/downloads/ufl-${version}.tar.gz";
       sha256 = "13ysimmwad429fjjs07j1fw1gq196p021j7mv66hwrljyh8gm1xg";
@@ -90,7 +93,8 @@ let
   };
 
   ffc = pythonPackages.buildPythonPackage {
-    name = "ffc-${version}";
+    pname = "ffc";
+    inherit version;
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/ffc/downloads/ffc-${version}.tar.gz";
       sha256 = "1cw7zsrjms11xrfg7x9wjd90x3w4v5s1wdwa18xqlycqz7cc8wr0";
@@ -109,7 +113,8 @@ let
   };
 
   instant = pythonPackages.buildPythonPackage {
-    name = "instant-${version}";
+    pname = "instant";
+    inherit version;
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/instant/downloads/instant-${version}.tar.gz";
       sha256 = "1rsyh6n04w0na2zirfdcdjip8k8ikb8fc2x94fq8ylc3lpcnpx9q";
@@ -125,7 +130,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "dolfin-${version}";
+  pname = "dolfin";
+  inherit version;
   src = fetchurl {
     url = "https://bitbucket.org/fenics-project/dolfin/downloads/dolfin-${version}.tar.gz";
     sha256 = "14hfb5q6rz79zmy742s2fiqkb9j2cgh5bsg99v76apcr84nklyds";

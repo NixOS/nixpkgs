@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "watchman-${version}";
+  pname = "watchman";
   version = "4.9.0";
 
   src = fetchFromGitHub {

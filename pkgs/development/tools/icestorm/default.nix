@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, pkgconfig, libftdi
+, pkgconfig, libftdi1
 , python3, pypy3
 
 # PyPy yields large improvements in build time and runtime performance,
@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "icestorm";
-  version = "2019.08.15";
+  version = "2019.08.31";
 
   pythonPkg = if usePyPy then pypy3 else python3;
   pythonInterp = pythonPkg.interpreter;
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "95949315364f8d9b0c693386aefadf44b28e2cf6";
-    sha256 = "05q1vxlf9l5z9mam8jbv58jqj7nsd8v7ssy753sharpgzzgdc8a2";
+    rev    = "04f1eb78ed8fd50516aee50102675041a8fd40cd";
+    sha256 = "10jdiw4mw0afcjq7xl3xs8z733mlrx927x620vs2yz91p757jxbd";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pythonPkg libftdi ];
+  buildInputs = [ pythonPkg libftdi1 ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;

@@ -115,7 +115,7 @@ in
           );
 
         slapdDatabases = {
-          "${dbSuffix}" = {
+          ${dbSuffix} = {
             conf = ''
               dn: olcBackend={1}mdb,cn=config
               objectClass: olcBackendConfig

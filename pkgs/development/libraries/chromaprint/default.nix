@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, boost, ffmpeg }:
 
 stdenv.mkDerivation rec {
-  name = "chromaprint-${version}";
+  pname = "chromaprint";
   version = "1.3.2";
 
   src = fetchurl {
-    url = "https://bitbucket.org/acoustid/chromaprint/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/acoustid/chromaprint/downloads/${pname}-${version}.tar.gz";
     sha256 = "0lln8dh33gslb9cbmd1hcv33pr6jxdwipd8m8gbsyhksiq6r1by3";
   };
 

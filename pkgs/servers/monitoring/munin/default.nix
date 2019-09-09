@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.0.49";
-  name = "munin-${version}";
+  pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";

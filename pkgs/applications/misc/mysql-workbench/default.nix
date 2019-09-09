@@ -14,7 +14,6 @@ let
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
   version = "8.0.15";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";

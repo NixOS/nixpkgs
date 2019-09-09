@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "ENABLE_MAN=yes"
     "DOCBOOK_XSL=${docbook_xsl}/share/xml/docbook-xsl-nons/manpages/docbook.xsl"
   ];

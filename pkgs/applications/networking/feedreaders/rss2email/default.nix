@@ -3,7 +3,6 @@
 with pythonPackages;
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "rss2email";
   version = "3.9"; # TODO: on next bump, the manpage will be updated.
   # Update nixos/modules/services/mail/rss2email.nix to point to it instead of
@@ -12,7 +11,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ feedparser beautifulsoup4 html2text ];
 
   src = fetchurl {
-    url = "mirror://pypi/r/rss2email/${name}.tar.gz";
+    url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
     sha256 = "02wj9zhmc2ym8ba1i0z9pm1c622z2fj7fxwagnxbvpr1402ahmr5";
   };
 

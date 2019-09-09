@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   version = "2.1.33";
   pname = "Tautulli";
-  name = "${pname}-${version}";
 
   pythonPath = [ python.pkgs.setuptools ];
   buildInputs = [ python.pkgs.setuptools ];

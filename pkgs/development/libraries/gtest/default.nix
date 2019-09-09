@@ -2,7 +2,7 @@
 , static ? false }:
 
 stdenv.mkDerivation rec {
-  name = "gtest-${version}";
+  pname = "gtest";
   version = "1.8.1";
 
   outputs = [ "out" "dev" ];

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, patchelf, makeWrapper, xorg, gcc, gcc-unwrapped }:
 
 stdenv.mkDerivation rec {
-   name = "IPMIView-${version}";
+   pname = "IPMIView";
    version = "2.14.0";
    buildVersion = "180213";
 

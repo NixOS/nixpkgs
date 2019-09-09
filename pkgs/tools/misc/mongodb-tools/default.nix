@@ -10,7 +10,7 @@ in
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "mongo-tools-${version}";
+  pname = "mongo-tools";
   version = "3.7.2";
   rev = "r${version}";
 

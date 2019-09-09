@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.0.10";
-  name = "libtiff-${version}";
+  pname = "libtiff";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";

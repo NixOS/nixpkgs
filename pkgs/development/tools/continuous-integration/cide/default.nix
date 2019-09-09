@@ -1,11 +1,11 @@
 { stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, docker, git, gnutar, gzip }:
 
 stdenv.mkDerivation rec {
-  name = "cide-${version}";
+  pname = "cide";
   version = "0.9.0";
 
   env = bundlerEnv {
-    name = "${name}-gems";
+    name = "${pname}-${version}-gems";
 
     gemdir = ./.;
   };

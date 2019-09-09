@@ -9,7 +9,7 @@ with rustPlatform;
 
 buildRustPackage rec {
   version = "0.22.0";
-  name = "geckodriver-${version}";
+  pname = "geckodriver";
 
   src = fetchFromGitHub {
     owner = "mozilla";

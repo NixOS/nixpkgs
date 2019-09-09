@@ -27,7 +27,7 @@ let
   };
 in
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "VCV-Rack-${version}";
+  pname = "VCV-Rack";
   version = "1.1.4";
 
   src = fetchFromGitHub {

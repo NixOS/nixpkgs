@@ -3,7 +3,7 @@
 , withSqlite ? false, sqlite
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "ledger_web";
   gemdir = ./.;
   exes = [ "ledger_web" ];

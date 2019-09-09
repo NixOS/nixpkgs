@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   inherit testedTargets;
 
-  name = "ispc-${version}";
+  pname = "ispc";
 
   src = fetchFromGitHub {
     owner = "ispc";

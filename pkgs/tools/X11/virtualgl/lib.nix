@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, libGL, libGLU, libX11, libXv, libXtst, libjpeg_turbo, fltk }:
 
 stdenv.mkDerivation rec {
-  name = "virtualgl-lib-${version}";
+  pname = "virtualgl-lib";
   version = "2.6.2";
 
   src = fetchurl {

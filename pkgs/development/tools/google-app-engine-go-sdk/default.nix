@@ -3,7 +3,7 @@
 with python27Packages;
 
 stdenv.mkDerivation rec {
-  name = "google-app-engine-go-sdk-${version}";
+  pname = "google-app-engine-go-sdk";
   version = "1.9.61";
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then

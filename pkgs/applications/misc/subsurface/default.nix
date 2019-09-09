@@ -6,8 +6,9 @@
 let
   version = "4.8.2";
 
-  libdc = stdenv.mkDerivation rec {
-    name = "libdivecomputer-ssrf-${version}";
+  libdc = stdenv.mkDerivation {
+    pname = "libdivecomputer-ssrf";
+    inherit version;
 
     src = fetchurl {
       url = "https://subsurface-divelog.org/downloads/libdivecomputer-subsurface-branch-${version}.tgz";
@@ -30,7 +31,7 @@ let
   };
 
   googlemaps = stdenv.mkDerivation rec {
-    name = "googlemaps-${version}";
+    pname = "googlemaps";
 
     version = "2017-12-18";
 
@@ -65,8 +66,9 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
-  name = "subsurface-${version}";
+in stdenv.mkDerivation {
+  pname = "subsurface";
+  inherit version;
 
   src = fetchurl {
     url = "https://subsurface-divelog.org/downloads/Subsurface-${version}.tgz";

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, postgresql }:
 
-stdenv.mkDerivation rec {
-  name = "tsearch-extras-${version}";
+stdenv.mkDerivation {
+  pname = "tsearch-extras";
   version = "0.4";
 
   src = fetchFromGitHub {

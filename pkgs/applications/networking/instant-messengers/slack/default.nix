@@ -57,7 +57,8 @@ let
       throw "Slack is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "slack-${version}";
+  pname = "slack";
+  inherit version;
 
   inherit src;
 

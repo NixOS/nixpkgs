@@ -2,7 +2,7 @@
 , gflags, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "folly-${version}";
+  pname = "folly";
   version = "2019.08.05.00";
 
   src = fetchFromGitHub {

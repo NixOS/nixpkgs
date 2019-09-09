@@ -5,7 +5,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sqlite-analyzer-${version}";
+  pname = "sqlite-analyzer";
   version = "3.28.0";
 
   src = assert version == sqlite.version; fetchurl {

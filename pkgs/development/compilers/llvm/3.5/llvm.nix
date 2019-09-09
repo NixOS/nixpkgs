@@ -17,8 +17,9 @@
 , enableSharedLibraries ? !stdenv.isDarwin
 }:
 
-stdenv.mkDerivation rec {
-  name = "llvm-${version}";
+stdenv.mkDerivation {
+  pname = "llvm";
+  inherit version;
 
   src = fetch "llvm" "0xf5q17kkxsrm2gsi93h4pwlv663kji73r2g4asb97klsmb626a4";
 

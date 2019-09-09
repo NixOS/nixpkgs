@@ -102,7 +102,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
-      after = [ "local-fs.target" "network.target" ] ++ optional apparmor "apparmor.service";
+      after = [ "network.target" ] ++ optional apparmor "apparmor.service";
       requires = mkIf apparmor [ "apparmor.service" ];
       wantedBy = [ "multi-user.target" ];
 

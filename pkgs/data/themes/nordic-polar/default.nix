@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "nordic-polar-${version}";
+  pname = "nordic-polar";
   version = "1.5.0";
 
   srcs = [

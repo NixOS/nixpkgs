@@ -2,11 +2,11 @@
 , libX11, libICE, perl, zip, unzip, gettext, slang, libssh2, openssl}:
 
 stdenv.mkDerivation rec {
-  name = "mc-${version}";
+  pname = "mc";
   version = "4.8.23";
 
   src = fetchurl {
-    url = "http://www.midnight-commander.org/downloads/${name}.tar.xz";
+    url = "http://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
     sha256 = "077z7phzq3m1sxyz7li77lyzv4rjmmh3wp2vy86pnc4387kpqzyx";
   };
 

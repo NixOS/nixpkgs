@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, libarcus, stb, protobuf }:
 
 stdenv.mkDerivation rec {
-  name = "curaengine-${version}";
+  pname = "curaengine";
   version = "4.2.0";
 
   src = fetchFromGitHub {

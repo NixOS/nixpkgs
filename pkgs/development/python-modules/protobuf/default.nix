@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (protobuf) name src version;
   inherit disabled doCheck;
 

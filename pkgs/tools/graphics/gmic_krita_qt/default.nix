@@ -7,7 +7,8 @@ let
   version = "2.3.6";
 
 in stdenv.mkDerivation rec {
-  name = "gmic_krita_qt-${version}";
+  pname = "gmic_krita_qt";
+  inherit version;
 
   gmic-community = fetchFromGitHub {
     owner = "dtschump";

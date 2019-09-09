@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec{
 
-  name = "fme-${version}";
+  pname = "fme";
   version = "1.1.3";
   
   src = fetchurl {

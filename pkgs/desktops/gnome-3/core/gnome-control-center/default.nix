@@ -60,6 +60,8 @@
 , udisks2
 , upower
 , vino
+, gnome-user-share
+, gnome-remote-desktop
 , wrapGAppsHook
 }:
 
@@ -99,7 +101,9 @@ stdenv.mkDerivation rec {
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
+    gnome-remote-desktop # optional, sharing panel
     gnome-settings-daemon
+    gnome-user-share # optional, sharing panel
     grilo
     grilo-plugins # for setting wallpaper from Flickr
     gsettings-desktop-schemas

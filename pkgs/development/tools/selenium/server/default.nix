@@ -8,7 +8,7 @@ let
   patchVersion = "0";
 
 in stdenv.mkDerivation rec {
-  name = "selenium-server-standalone-${version}";
+  pname = "selenium-server-standalone";
   version = "${minorVersion}.${patchVersion}";
 
   src = fetchurl {
@@ -21,10 +21,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [ jre makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/share/lib/${name}
-    cp $src $out/share/lib/${name}/${name}.jar
+    mkdir -p $out/share/lib/${pname}-${version}
+    cp $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar
     makeWrapper ${jre}/bin/java $out/bin/selenium-server \
-      --add-flags "-cp $out/share/lib/${name}/${name}.jar:${htmlunit-driver}/share/lib/${htmlunit-driver.name}/${htmlunit-driver.name}.jar" \
+      --add-flags "-cp $out/share/lib/${pname}-${version}/${pname}-${version}.jar:${htmlunit-driver}/share/lib/${htmlunit-driver.name}/${htmlunit-driver.name}.jar" \
       --add-flags ${optionalString chromeSupport "-Dwebdriver.chrome.driver=${chromedriver}/bin/chromedriver"} \
       --add-flags "org.openqa.grid.selenium.GridLauncherV3"
   '';

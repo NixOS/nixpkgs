@@ -133,7 +133,7 @@ let
           '';
         };
 
-        database = rec {
+        database = {
           host = mkOption {
             type = types.str;
             default = "localhost";

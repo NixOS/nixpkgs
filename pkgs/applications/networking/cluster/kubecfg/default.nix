@@ -3,7 +3,8 @@
 let version = "0.12.0"; in
 
 buildGoPackage {
-  name = "kubecfg-${version}";
+  pname = "kubecfg";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "bitnami";

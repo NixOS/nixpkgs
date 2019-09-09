@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dtach-${version}";
+  pname = "dtach";
   version = "0.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dtach/dtach/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/dtach/dtach/${version}/${pname}-${version}.tar.gz";
     sha256 = "1wwj2hlngi8qn2pisvhyfxxs8gyqjlgrrv5lz91w8ly54dlzvs9j";
   };
 

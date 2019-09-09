@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "xxHash-${version}";
+  pname = "xxHash";
   version = "0.7.1";
 
   src = fetchFromGitHub {

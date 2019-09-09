@@ -218,7 +218,7 @@ server = stdenv.mkDerivation (common // {
 });
 
 connector-c = stdenv.mkDerivation rec {
-  name = "mariadb-connector-c-${version}";
+  pname = "mariadb-connector-c";
   version = "2.3.7";
 
   src = fetchurl {
@@ -259,7 +259,7 @@ connector-c = stdenv.mkDerivation rec {
 };
 
 galera = stdenv.mkDerivation rec {
-  name = "mariadb-galera-${version}";
+  pname = "mariadb-galera";
   version = "25.3.26";
 
   src = fetchFromGitHub {
@@ -286,7 +286,7 @@ galera = stdenv.mkDerivation rec {
 
   installPhase = ''
     # copied with modifications from scripts/packages/freebsd.sh
-    GALERA_LICENSE_DIR="$share/licenses/${name}"
+    GALERA_LICENSE_DIR="$share/licenses/${pname}-${version}"
     install -d $out/{bin,lib/galera,share/doc/galera,$GALERA_LICENSE_DIR}
     install -m 555 "garb/garbd"                       "$out/bin/garbd"
     install -m 444 "libgalera_smm.so"                 "$out/lib/galera/libgalera_smm.so"

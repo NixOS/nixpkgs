@@ -56,10 +56,11 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "bumblebee-${version}";
+  pname = "bumblebee";
+  inherit version;
 
   src = fetchurl {
-    url = "https://bumblebee-project.org/${name}.tar.gz";
+    url = "https://bumblebee-project.org/${pname}-${version}.tar.gz";
     sha256 = "03p3gvx99lwlavznrpg9l7jnl1yfg2adcj8jcjj0gxp20wxp060h";
   };
 

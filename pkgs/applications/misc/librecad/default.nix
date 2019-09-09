@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   version = "2.1.3";
-  name = "librecad-${version}";
+  pname = "librecad";
 
   src = fetchurl {
     url = "https://github.com/LibreCAD/LibreCAD/tarball/${version}";
-    name = name + ".tar.gz";
+    name = "${pname}-${version}" + ".tar.gz";
     sha256 = "1czp8bja61hfav2m7184cq1np1n76w3w6vn0hlkp81hhz9zc62sx";
   };
 

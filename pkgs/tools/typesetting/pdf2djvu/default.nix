@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.13";
-  name = "pdf2djvu-${version}";
+  pname = "pdf2djvu";
 
   src = fetchurl {
-    url = "https://github.com/jwilk/pdf2djvu/releases/download/${version}/${name}.tar.xz";
+    url = "https://github.com/jwilk/pdf2djvu/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "0qscmfii1pvnb8g7kbl1rdiqyic6ybfiw4kwvy35qqi967c1daz0";
   };
 

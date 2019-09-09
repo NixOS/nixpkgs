@@ -1,6 +1,6 @@
 { fetchpatch }:
 
-rec {
+{
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;
@@ -23,7 +23,7 @@ rec {
 
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
-  tag_hardened = rec {
+  tag_hardened = {
     name = "tag-hardened";
     patch = ./tag-hardened.patch;
   };
@@ -58,8 +58,14 @@ rec {
     };
   };
 
-  export_kernel_fpu_functions = rec {
+  export_kernel_fpu_functions = {
     name = "export_kernel_fpu_functions";
     patch = ./export_kernel_fpu_functions.patch;
+  };
+
+  # patches from https://lkml.org/lkml/2019/7/15/1748
+  mac_nvme_t2 = rec {
+    name = "mac_nvme_t2";
+    patch = ./mac-nvme-t2.patch;
   };
 }

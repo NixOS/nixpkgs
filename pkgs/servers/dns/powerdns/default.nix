@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig
-, boost, libyamlcpp, libsodium, sqlite, protobuf, botan2, libressl
+, boost, libyamlcpp, libsodium, sqlite, protobuf, botan2, openssl
 , mysql57, postgresql, lua, openldap, geoip, curl, opendbx, unixODBC
 }:
 
 stdenv.mkDerivation rec {
-  name = "powerdns-${version}";
+  pname = "powerdns";
   version = "4.1.13";
 
   src = fetchurl {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl opendbx unixODBC botan2 libressl
+    libyamlcpp libsodium curl opendbx unixODBC botan2 openssl
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       "--with-modules=bind gmysql geoip godbc gpgsql gsqlite3 ldap lua mydns opendbx pipe random remote"
       --with-sqlite3
       --with-socketdir=/var/lib/powerdns
-      --with-libcrypto=${libressl.dev}
+      --with-libcrypto=${openssl.dev}
       --enable-libsodium
       --enable-botan
       --enable-tools

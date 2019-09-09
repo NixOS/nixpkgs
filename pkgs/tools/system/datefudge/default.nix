@@ -1,9 +1,8 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "datefudge";
   version = "1.22";
-  name = "${pname}-${version}";
 
   src = fetchgit {
     url = "https://salsa.debian.org/debian/datefudge.git";

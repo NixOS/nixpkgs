@@ -237,7 +237,7 @@ assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-full-${version}";
+  pname = "ffmpeg-full";
   version = "4.2";
 
   src = fetchurl {
@@ -272,7 +272,7 @@ stdenv.mkDerivation rec {
      *  Build flags
      */
     # On some ARM platforms --enable-thumb
-    "--enable-shared --disable-static"
+    "--enable-shared"
     (enableFeature true "pic")
     (if stdenv.cc.isClang then "--cc=clang" else null)
     (enableFeature smallBuild "small")

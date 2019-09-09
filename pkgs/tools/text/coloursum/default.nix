@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "coloursum-${version}";
+  pname = "coloursum";
   version = "0.1.0";
 
   src = fetchFromGitHub {

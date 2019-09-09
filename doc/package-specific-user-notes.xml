@@ -6,7 +6,7 @@
          answer some of the frequently asked questions
          related to Nixpkgs use.
 
-  Some useful information related to package use 
+  Some useful information related to package use
   can be found in <link linkend="chap-package-notes">package-specific development notes</link>.
 
  </para>
@@ -196,7 +196,7 @@ overrides = self: super: rec {
   haskell-mode = self.melpaPackages.haskell-mode;
   ...
 };
-((emacsPackagesNgGen emacs).overrideScope' overrides).emacsWithPackages (p: with p; [
+((emacsPackagesGen emacs).overrideScope' overrides).emacsWithPackages (p: with p; [
   # here both these package will use haskell-mode of our own choice
   ghc-mod
   dante

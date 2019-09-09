@@ -3,7 +3,7 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "vim-vint-${version}";
+  pname = "vim-vint";
   version = "0.3.20";
 
   src = fetchFromGitHub {

@@ -9,7 +9,7 @@
 , gtk3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-hexgl";
   version = "unstable-2019-08-21";
 

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.9";
-  name = "googler-${version}";
+  pname = "googler";
 
   src = fetchFromGitHub {
     owner = "jarun";

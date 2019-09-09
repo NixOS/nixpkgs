@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, rcs, git, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "src-${version}";
+  pname = "src";
   version = "1.26";
 
   src = fetchurl {
-    url = "http://www.catb.org/~esr/src/${name}.tar.gz";
+    url = "http://www.catb.org/~esr/src/${pname}-${version}.tar.gz";
     sha256 = "06npsnf2bfjgcs7wilhcqn24zn286nyy4qyp3yp88zapkxzlap23";
   };
 

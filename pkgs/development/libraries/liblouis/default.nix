@@ -4,8 +4,9 @@
 
 let
   version = "3.10.0";
-in stdenv.mkDerivation rec {
-  name = "liblouis-${version}";
+in stdenv.mkDerivation {
+  pname = "liblouis";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "liblouis";

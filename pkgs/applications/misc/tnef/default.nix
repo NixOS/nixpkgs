@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.4.17";
-  name = "tnef-${version}";
+  pname = "tnef";
 
   src = fetchFromGitHub {
     owner  = "verdammelt";

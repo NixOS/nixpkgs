@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ncurses, glibc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kermit-9.0.302";
 
   src = fetchurl {

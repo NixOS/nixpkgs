@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, runtimeShell }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "cmdstan-2.17.1";
 
   src = fetchurl {

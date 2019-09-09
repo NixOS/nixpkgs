@@ -1,7 +1,7 @@
 { stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, ... }:
 
 stdenv.mkDerivation rec {
-  name = "sonarr-${version}";
+  pname = "sonarr";
   version = "2.0.0.5338";
 
   src = fetchurl {

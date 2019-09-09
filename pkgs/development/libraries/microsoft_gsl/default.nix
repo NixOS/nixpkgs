@@ -5,7 +5,7 @@ let
   nativeBuild = stdenv.hostPlatform == stdenv.buildPlatform;
 in
 stdenv.mkDerivation rec {
-  name = "microsoft_gsl-${version}";
+  pname = "microsoft_gsl";
   version = "2.0.0";
 
   src = fetchFromGitHub {

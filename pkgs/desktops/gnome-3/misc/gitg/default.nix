@@ -30,20 +30,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gitg";
-  version = "3.32.0";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1wzsv7bh0a2w70f938hkpzbb9xkyrp3bil65c0q3yf2v72nbbn81";
+    sha256 = "0npg4kqpwl992fgjd2cn3fh84aiwpdp9kd8z7rw2xaj2iazsm914";
   };
-
-  patches = [
-    # https://gitlab.gnome.org/GNOME/gitg/issues/213
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gitg/merge_requests/83.patch";
-      sha256 = "1f7wx1d3k5pnp8zbrqssip57b9jxn3hc7a83psm7fny970qmd18z";
-    })
-  ];
 
   postPatch = ''
     chmod +x meson_post_install.py

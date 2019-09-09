@@ -16,13 +16,13 @@ with stdenv.lib;
 let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
-  name = "libvirt-${version}";
+  pname = "libvirt";
   version = "5.4.0";
 
   src =
     if buildFromTarball then
       fetchurl {
-        url = "http://libvirt.org/sources/${name}.tar.xz";
+        url = "http://libvirt.org/sources/${pname}-${version}.tar.xz";
         sha256 = "0ywf8m9yz2hxnic7fylzlmgy4m353r4vv5zsvp89zq5yh4h81yhw";
       }
     else

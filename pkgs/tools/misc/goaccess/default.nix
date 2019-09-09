@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3";
-  name = "goaccess-${version}";
+  pname = "goaccess";
 
   src = fetchurl {
     url = "https://tar.goaccess.io/goaccess-${version}.tar.gz";

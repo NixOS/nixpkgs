@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tflint";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "wata727";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x9kh0bvbil6z09v41gzk5sdiprqg288jfcjw1n2x809sj7c6vhf";
+    sha256 = "0aff7ckl245cyjs2rbgczkqlp2x6g4g458p4li0k1agk3m9bbq35";
   };
 
-  modSha256 = "0wig41m81kmy7l6sj6kk4ryc3m1b18n2vlf80x0bbhn46kyfnbgr";
+  modSha256 = "1facqppgpmmz2j7j77fa3mnjv2nzjxz4ya6xvyvyy92ma0ybclgh";
 
   subPackages = [ "." ];
 

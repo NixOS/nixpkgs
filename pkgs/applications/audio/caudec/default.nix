@@ -4,8 +4,9 @@ let
   version = "1.7.5";
 in
 
-stdenv.mkDerivation rec {
-  name = "caudec-${version}";
+stdenv.mkDerivation {
+  pname = "caudec";
+  inherit version;
 
   src = fetchurl {
     url = "http://caudec.net/downloads/caudec-${version}.tar.gz";

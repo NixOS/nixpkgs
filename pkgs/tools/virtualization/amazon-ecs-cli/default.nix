@@ -1,7 +1,7 @@
 { stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "amazon-ecs-cli-${version}";
+  pname = "amazon-ecs-cli";
   version = "1.15.1";
 
   src = fetchurl {

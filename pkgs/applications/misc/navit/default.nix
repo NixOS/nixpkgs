@@ -17,7 +17,7 @@ assert speechdSupport -> speechd != null;
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "navit-${version}";
+  pname = "navit";
   version = "0.5.3";
 
   src = fetchFromGitHub {

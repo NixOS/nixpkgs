@@ -6,8 +6,9 @@
 let
   generic =
     { version, sha256 }:
-    stdenv.mkDerivation rec {
-      name = "wt-${version}";
+    stdenv.mkDerivation {
+      pname = "wt";
+      inherit version;
 
       src = fetchFromGitHub {
         owner = "emweb";

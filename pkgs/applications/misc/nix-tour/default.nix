@@ -1,7 +1,7 @@
 { stdenv, fetchgit, electron, runtimeShell } :
 
 stdenv.mkDerivation rec {
-  name = "nix-tour-${version}";
+  pname = "nix-tour";
   version = "0.0.1";
 
   buildInputs = [ electron ];

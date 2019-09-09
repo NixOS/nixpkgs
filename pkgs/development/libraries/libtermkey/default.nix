@@ -1,7 +1,7 @@
 { stdenv, lib, fetchzip, libtool, pkgconfig, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "libtermkey-${version}";
+  pname = "libtermkey";
 
   version = "0.20";
 

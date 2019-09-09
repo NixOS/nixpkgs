@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
-  name = "fastjet-${version}";
+  pname = "fastjet";
   version = "3.3.2";
 
   src = fetchurl {

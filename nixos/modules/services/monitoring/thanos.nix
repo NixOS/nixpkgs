@@ -70,14 +70,14 @@ let
   } ''json2yaml -i $json -o $out'';
 
   thanos = cmd: "${cfg.package}/bin/thanos ${cmd}" +
-    (let args = cfg."${cmd}".arguments;
+    (let args = cfg.${cmd}.arguments;
      in optionalString (length args != 0) (" \\\n  " +
          concatStringsSep " \\\n  " args));
 
   argumentsOf = cmd: concatLists (collect isList
-    (flip mapParamsRecursive params."${cmd}" (path: param:
+    (flip mapParamsRecursive params.${cmd} (path: param:
       let opt = concatStringsSep "." path;
-          v = getAttrFromPath path cfg."${cmd}";
+          v = getAttrFromPath path cfg.${cmd};
       in param.toArgs opt v)));
 
   mkArgumentsOption = cmd: mkOption {
@@ -95,7 +95,7 @@ let
   };
 
   mapParamsRecursive =
-    let noParam = attr: !(attr ? "toArgs" && attr ? "option");
+    let noParam = attr: !(attr ? toArgs && attr ? option);
     in mapAttrsRecursiveCond noParam;
 
   paramsToOptions = mapParamsRecursive (_path: param: param.option);
@@ -218,8 +218,8 @@ let
         toArgs = optionToArgs;
         option = mkOption {
           type = types.str;
-          default = "/var/lib/${config.services.prometheus2.stateDir}/data";
-          defaultText = "/var/lib/\${config.services.prometheus2.stateDir}/data";
+          default = "/var/lib/${config.services.prometheus.stateDir}/data";
+          defaultText = "/var/lib/\${config.services.prometheus.stateDir}/data";
           description = ''
             Data directory of TSDB.
           '';
@@ -607,7 +607,7 @@ let
   assertRelativeStateDir = cmd: {
     assertions = [
       {
-        assertion = !hasPrefix "/" cfg."${cmd}".stateDir;
+        assertion = !hasPrefix "/" cfg.${cmd}.stateDir;
         message =
           "The option services.thanos.${cmd}.stateDir should not be an absolute directory." +
           " It should be a directory relative to /var/lib.";
@@ -679,22 +679,22 @@ in {
     (mkIf cfg.sidecar.enable {
       assertions = [
         {
-          assertion = config.services.prometheus2.enable;
+          assertion = config.services.prometheus.enable;
           message =
-            "Please enable services.prometheus2 when enabling services.thanos.sidecar.";
+            "Please enable services.prometheus when enabling services.thanos.sidecar.";
         }
         {
-          assertion = !(config.services.prometheus2.globalConfig.external_labels == null ||
-                        config.services.prometheus2.globalConfig.external_labels == {});
+          assertion = !(config.services.prometheus.globalConfig.external_labels == null ||
+                        config.services.prometheus.globalConfig.external_labels == {});
           message =
             "services.thanos.sidecar requires uniquely identifying external labels " +
             "to be configured in the Prometheus server. " +
-            "Please set services.prometheus2.globalConfig.external_labels.";
+            "Please set services.prometheus.globalConfig.external_labels.";
         }
       ];
       systemd.services.thanos-sidecar = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" "prometheus2.service" ];
+        after    = [ "network.target" "prometheus.service" ];
         serviceConfig = {
           User = "prometheus";
           Restart = "always";

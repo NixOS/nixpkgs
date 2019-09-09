@@ -1,8 +1,8 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "f-prot-${version}";
+  pname = "f-prot";
   version = "6.2.1";
 
   src = fetchurl {

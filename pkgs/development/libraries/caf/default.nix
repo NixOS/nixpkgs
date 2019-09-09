@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "actor-framework-${version}";
+  pname = "actor-framework";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "actor-framework";
     repo = "actor-framework";
-    rev = "${version}";
+    rev = version;
     sha256 = "10dcpmdsfq6r7hpvg413pqi1q3rjvgn7f87c17ghyz30x6rjhaic";
   };
 

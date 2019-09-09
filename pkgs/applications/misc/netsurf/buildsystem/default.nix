@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "netsurf-buildsystem-${version}";
+  pname = "netsurf-buildsystem";
   version = "1.8";
 
   src = fetchurl {

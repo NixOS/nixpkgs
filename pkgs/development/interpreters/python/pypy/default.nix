@@ -17,7 +17,7 @@ with stdenv.lib;
 
 let
   isPy3k = substring 0 1 pythonVersion == "3";
-  passthru = passthruFun rec {
+  passthru = passthruFun {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";

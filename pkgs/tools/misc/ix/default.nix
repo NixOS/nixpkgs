@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, curl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ix";
   version = "20190815";
 

@@ -8,7 +8,6 @@
 let drv = stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
   version = "164";
-  name = pname + "-" + version;
 
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchurl {

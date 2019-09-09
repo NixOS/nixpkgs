@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     broken = true; # 2018-08-07
   };
 
-  name = "bazel-${version}";
+  pname = "bazel";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";

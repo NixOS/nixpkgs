@@ -7,7 +7,7 @@ let params = {
     sha256 = "188avk9irwjsbs5ya4ka01mpk3vw4397kv2rmsncqrrrsa1pdddk";
   };
 };
-  param = params."${coq.coq-version}";
+  param = params.${coq.coq-version};
 in
 
 stdenv.mkDerivation rec {

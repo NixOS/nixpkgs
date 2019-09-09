@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "blackbox_exporter-${version}";
+  pname = "blackbox_exporter";
   version = "0.14.0";
   rev = version;
 

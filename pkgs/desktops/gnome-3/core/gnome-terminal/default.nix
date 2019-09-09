@@ -3,11 +3,11 @@
 , desktop-file-utils, itstool, wrapGAppsHook, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-terminal-${version}";
+  pname = "gnome-terminal";
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0shhpnagasyp1kxgjczfrivcxbgrrl3y8lzvp1z101m67h4jp6km";
   };
 

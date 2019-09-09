@@ -50,7 +50,7 @@ with versionMap.${majorVersion};
 
 stdenv.mkDerivation rec {
   version = "${scalaVersion}-${kafkaVersion}";
-  name = "apache-kafka-${version}";
+  pname = "apache-kafka";
 
   src = fetchurl {
     url = "mirror://apache/kafka/${kafkaVersion}/kafka_${version}.tgz";

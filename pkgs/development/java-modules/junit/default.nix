@@ -6,7 +6,7 @@ let
   poms = import (../poms.nix) { inherit fetchMaven; };
   collections = import (../collections.nix) { inherit pkgs; };
 in rec {
-  junitGen = { mavenDeps, sha512, version }: mavenbuild rec {
+  junitGen = { mavenDeps, sha512, version }: mavenbuild {
     inherit mavenDeps sha512 version;
 
     name = "junit-${version}";

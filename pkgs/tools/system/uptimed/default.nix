@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "uptimed-${version}";
+  pname = "uptimed";
   version = "0.4.1";
 
   src = fetchFromGitHub {

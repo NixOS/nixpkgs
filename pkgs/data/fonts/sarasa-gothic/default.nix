@@ -2,7 +2,7 @@
 
 let
   version = "0.8.0";
-in fetchurl rec {
+in fetchurl {
   name = "sarasa-gothic-${version}";
 
   url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/sarasa-gothic-ttc-${version}.7z";

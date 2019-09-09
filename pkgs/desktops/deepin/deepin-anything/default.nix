@@ -2,7 +2,6 @@
   dtkcore, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-anything";
   version = "0.1.0";
 
@@ -31,7 +30,7 @@ mkDerivation rec {
 
   makeFlags = [
     "DEB_HOST_MULTIARCH="
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
   ];
 
   postPatch = ''
@@ -52,7 +51,7 @@ mkDerivation rec {
     searchHardCodedPaths $modsrc  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin file search tool";

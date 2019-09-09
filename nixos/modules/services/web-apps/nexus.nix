@@ -80,14 +80,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users."${cfg.user}" = {
+    users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
       home = cfg.home;
       createHome = true;
     };
 
-    users.groups."${cfg.group}" = {};
+    users.groups.${cfg.group} = {};
 
     systemd.services.nexus = {
       description = "Sonatype Nexus3";

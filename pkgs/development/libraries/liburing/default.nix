@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "liburing-${version}";
+  pname = "liburing";
   version = "0.1";
 
   src = fetchgit {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "elfkickers-${version}";
+  pname = "elfkickers";
   version = "3.1";
 
   src = fetchurl {

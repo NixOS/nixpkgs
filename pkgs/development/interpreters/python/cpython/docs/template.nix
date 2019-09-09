@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl, lib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pythonMAJORMINOR-docs-TYPE-VERSION";
   src = fetchurl {
     url = URL;

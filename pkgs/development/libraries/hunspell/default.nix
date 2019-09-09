@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.7.0";
-  name = "hunspell-${version}";
+  pname = "hunspell";
 
   src = fetchurl {
     url = "https://github.com/hunspell/hunspell/archive/v${version}.tar.gz";

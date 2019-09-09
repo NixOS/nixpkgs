@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bluejeans-${version}";
+  pname = "bluejeans";
   version = "1.36.9";
 
   src =

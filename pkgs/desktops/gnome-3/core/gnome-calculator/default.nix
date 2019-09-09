@@ -3,11 +3,11 @@
 , gnome3, mpfr, gmp, libsoup, libmpc, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-calculator-${version}";
+  pname = "gnome-calculator";
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0fgpn3sc226s9fpzhik5rkkrf669037gc659ga2kn9jsyckj6p41";
   };
 

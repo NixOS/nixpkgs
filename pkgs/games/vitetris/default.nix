@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation rec {
-  name = "vitetris-${version}";
+  pname = "vitetris";
   version = "0.58.0";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, glib, gettext, bash }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-caffeine-${version}";
+  pname = "gnome-shell-extension-caffeine";
   version = "unstable-2019-04-02";
 
   src = fetchFromGitHub {

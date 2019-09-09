@@ -24,12 +24,12 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "postfix-${version}";
+  pname = "postfix";
 
   version = "3.4.6";
 
   src = fetchurl {
-    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
+    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
     sha256 = "09p3vg2xlh6iq45gp6zanbp1728fc31r7zz71r131vh20ssajx6n";
   };
 

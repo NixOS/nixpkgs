@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.6.2";
-  name = "docopt.cpp-${version}";
+  pname = "docopt.cpp";
 
   src = fetchFromGitHub {
     owner = "docopt";

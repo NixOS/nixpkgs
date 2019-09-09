@@ -2,7 +2,7 @@
   cairo, gdk-pixbuf, glib, gnome3, wrapGAppsHook, gtk3 }:
 
 buildGoPackage rec {
-  name = "coyim-${version}";
+  pname = "coyim";
   version = "0.3.11";
 
   goPackagePath = "github.com/coyim/coyim";

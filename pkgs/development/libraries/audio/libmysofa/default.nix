@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libmysofa-${version}";
+  pname = "libmysofa";
   version = "0.7";
 
   src = fetchFromGitHub {
