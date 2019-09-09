@@ -231,8 +231,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
 
-  nemiver = callPackage ./devtools/nemiver { };
-
 #### Games
 
   aisleriot = callPackage ./games/aisleriot { };
@@ -345,6 +343,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) gnome-video-effects; # added 2019-08-19
   inherit (pkgs) gnome-online-accounts grilo grilo-plugins tracker tracker-miners gnome-photos; # added 2019-08-23
   inherit (pkgs) glib-networking; # added 2019-09-02
+  inherit (pkgs) nemiver; # added 2019-09-09
 
   defaultIconTheme = adwaita-icon-theme;
   gtk = gtk3;
