@@ -24831,4 +24831,6 @@ in
 
   nix-store-gcs-proxy = callPackage ../tools/nix/nix-store-gcs-proxy {};
 
+  wifi-password = callPackage ../os-specific/darwin/wifi-password {};
+
 }
