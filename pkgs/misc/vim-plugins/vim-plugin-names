@@ -50,6 +50,7 @@ dannyob/quickfixstatus
 darfink/starsearch.vim
 dart-lang/dart-vim-plugin
 davidhalter/jedi-vim
+deoplete-plugins/deoplete-dictionary
 deoplete-plugins/deoplete-jedi
 derekelkins/agda-vim
 derekwyatt/vim-scala

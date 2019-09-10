@@ -831,6 +831,17 @@ let
     };
   };
 
+  deoplete-dictionary = buildVimPluginFrom2Nix {
+    pname = "deoplete-dictionary";
+    version = "2019-04-16";
+    src = fetchFromGitHub {
+      owner = "deoplete-plugins";
+      repo = "deoplete-dictionary";
+      rev = "e0879df5dce25b96d6a2a6f52a1a5e41d12b5992";
+      sha256 = "05p707b15fzhf0laqy3q0hi34vxpljy86cd5qvpjzx5h0ry32p09";
+    };
+  };
+
   deoplete-fish = buildVimPluginFrom2Nix {
     pname = "deoplete-fish";
     version = "2018-09-15";
