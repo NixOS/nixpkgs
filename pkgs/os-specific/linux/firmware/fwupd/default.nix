@@ -237,9 +237,9 @@ stdenv.mkDerivation rec {
   postFixup = ''
     find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
       | while IFS= read -r -d ''' file; do
-      if [[ "''${file}" != *.efi ]]; then
-        echo "Wrapping program ''${file}"
-        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+      if [[ "$file" != *.efi ]]; then
+        echo "Wrapping program $file"
+        wrapGApp "$file"
       fi
     done
   '';

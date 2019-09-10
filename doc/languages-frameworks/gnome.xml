@@ -210,7 +210,7 @@ mkDerivation {
   dontWrapGApps = true;
 
   # Arguments to be passed to `makeWrapper`, only used by qt5’s mkDerivation
-  qtWrapperArgs [
+  qtWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
   ];
 }
@@ -255,6 +255,16 @@ mkDerivation {
         </para>
        </listitem>
       </itemizedlist>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry xml:id="ssec-gnome-common-issues-weird-location">
+    <term>
+     I need to wrap a binary outside <filename>bin</filename> and <filename>libexec</filename> directories.
+    </term>
+    <listitem>
+     <para>
+      You can manually trigger the wrapping with <function>wrapGApp</function> in <literal>preFixup</literal> phase. It takes a path to a program as a first argument; the remaining arguments are passed directly to <function xlink:href="#fun-wrapProgram">wrapProgram</function> function.
      </para>
     </listitem>
    </varlistentry>

@@ -85,8 +85,8 @@ in stdenv.mkDerivation rec {
     find -L "$out/bin" -type f -executable -print0 \
       | while IFS= read -r -d ''' file; do
       if [[ "''${file}" != *-bin ]]; then
-        echo "Wrapping program ''${file}"
-        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+        echo "Wrapping program $file"
+        wrapGApp "$file"
       fi
     done
   '';
