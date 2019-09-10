@@ -72,6 +72,13 @@ in
         '';
       };
 
+      logQueries = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to log the results of DNS queries handled by dnsmasq.
+        '';
+      };
     };
 
   };
@@ -116,7 +123,8 @@ in
         serviceConfig = {
           Type = "dbus";
           BusName = "uk.org.thekelleys.dnsmasq";
-          ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
+          ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}"
+            + optionalString cfg.logQueries " -q";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           PrivateTmp = true;
           ProtectSystem = true;
