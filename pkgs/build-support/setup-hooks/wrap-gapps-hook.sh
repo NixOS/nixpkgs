@@ -8,6 +8,12 @@ find_gio_modules() {
 
 addEnvHooks "$targetOffset" find_gio_modules
 
+wrapGApp() {
+    local program="$1"
+    shift 1
+    wrapProgram "$program" "${gappsWrapperArgs[@]}" "$@"
+}
+
 # Note: $gappsWrapperArgs still gets defined even if $dontWrapGApps is set.
 wrapGAppsHook() {
   # guard against running multiple times (e.g. due to propagation)
@@ -52,7 +58,7 @@ wrapGAppsHook() {
         find "${targetDir}" -type f -executable -print0 \
           | while IFS= read -r -d '' file; do
           echo "Wrapping program '${file}'"
-          wrapProgram "${file}" "${gappsWrapperArgs[@]}"
+          wrapGApp "${file}"
         done
       fi
     done
@@ -71,7 +77,7 @@ wrapGAppsHook() {
           fi
         done
         echo "Wrapping link: '$linkPath'"
-        wrapProgram "${linkPath}" "${gappsWrapperArgs[@]}"
+        wrapGApp "${linkPath}"
       done
     fi
   fi
