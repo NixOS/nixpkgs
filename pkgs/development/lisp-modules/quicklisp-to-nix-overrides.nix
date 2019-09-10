@@ -43,6 +43,12 @@ in
     propagatedBuildInputs = (x.propagatedBuildInputs or [])
      ++ (with pkgs; [libfixposix gcc])
      ;
+    overrides = y: (x.overrides y) // {
+      prePatch = ''
+        sed 's|default \"libfixposix\"|default \"${pkgs.libfixposix}/lib/libfixposix\"|' -i src/syscalls/ffi-functions-unix.lisp
+      '';
+    };
+
   };
   cxml = skipBuildPhase;
   wookie = addNativeLibs (with pkgs; [libuv openssl]);
