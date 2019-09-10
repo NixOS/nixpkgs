@@ -22,10 +22,20 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix darwin build
     # https://gitlab.gnome.org/GNOME/libnotify/merge_requests/9
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libnotify/commit/55eb69247fe2b479ea43311503042fc03bf4e67d.patch";
-      sha256 = "1hlb5b7c5axiyir1i5j2pi94bm2gyr1ybkp6yaqy7yk6iiqlvv50";
-    })
+    (
+      fetchpatch {
+        url = "https://gitlab.gnome.org/GNOME/libnotify/commit/55eb69247fe2b479ea43311503042fc03bf4e67d.patch";
+        sha256 = "1hlb5b7c5axiyir1i5j2pi94bm2gyr1ybkp6yaqy7yk6iiqlvv50";
+      }
+    )
+
+    # add support for replacing an existing notification
+    (
+      fetchpatch {
+        url = "https://launchpadlibrarian.net/105791133/print-and-replace-id-v3.patch";
+        sha256 = "1lfk5msv81brz7f7srxi4s4l02nasskzmpq0b9ch8hbn79z86g0b";
+      }
+    )
   ];
 
   mesonFlags = [
@@ -55,8 +65,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://developer.gnome.org/notification-spec/;
     description = "A library that sends desktop notifications to a notification daemon";
+    homepage = "https://developer.gnome.org/notification-spec/";
     platforms = platforms.unix;
     maintainers = gnome3.maintainers;
     license = licenses.lgpl21;
