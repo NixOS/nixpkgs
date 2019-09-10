@@ -3,32 +3,37 @@
 , django, shortuuid, python-dateutil, pytest
 , pytest-django, pytestcov, mock, vobject
 , werkzeug, glibcLocales, factory_boy
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "2.1.9";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "08vggm6wrn5cbf8brfprif0rjrkqz06wddsw0ir1skkk8q2sp1b2";
+    sha256 = "1g7lg0iwmzfdb747fkfgcy890axpfyzv3606axhyd6cvkbg2mz4d";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/${pname}/${pname}/commit/e30b30c9a5c688b41e39b0e1e9dba1e5f0589adf.patch";
+      sha256 = "1dfpadqcdyq62pwws5dvhy0zb3r3b8flznhqni85l0vbk0cki0dd";
+    })
+  ];
   postPatch = ''
     substituteInPlace setup.py --replace "'tox'," ""
-
-    # not yet pytest 5 compatible?
-    rm tests/management/commands/test_set_fake_emails.py
-    rm tests/management/commands/test_set_fake_passwords.py
-    rm tests/management/commands/test_validate_templates.py
 
     # pip should not be used during tests...
     rm tests/management/commands/test_pipchecker.py
   '';
 
   propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") typing;
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 
   checkInputs = [
     django shortuuid python-dateutil pytest
