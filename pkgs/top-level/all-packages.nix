@@ -12114,6 +12114,8 @@ in
 
   libisoburn = callPackage ../development/libraries/libisoburn { };
 
+  libipt = callPackage ../development/libraries/libipt { };
+
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
