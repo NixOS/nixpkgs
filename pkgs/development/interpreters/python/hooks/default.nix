@@ -88,8 +88,9 @@ in rec {
       };
     } ./setuptools-check-hook.sh) {};
 
-  wheelUnpackHook = callPackage ({ }:
+  wheelUnpackHook = callPackage ({ wheel }:
     makeSetupHook {
       name = "wheel-unpack-hook.sh";
+      deps = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
 }
