@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, cmake }:
+{ stdenv, fetchurl, lib, cmake, cacert }:
 
 let
 
@@ -10,6 +10,10 @@ let
       url = "mirror://openbsd/LibreSSL/${pname}-${version}.tar.gz";
       inherit sha256;
     };
+
+    postPatch = ''
+      substituteInPlace tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
+    '';
 
     nativeBuildInputs = [ cmake ];
 
