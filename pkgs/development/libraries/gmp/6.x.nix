@@ -37,7 +37,9 @@ let self = stdenv.mkDerivation rec {
     "--build=${stdenv.buildPlatform.config}"
   ] ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
     ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
-    ++ optional (with stdenv.hostPlatform; (useAndroidPrebuilt || useiOSPrebuilt) && !isx86) "--disable-assembly"
+    # to build a .dll on windows, we need --disable-static + --enable-shared
+    # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
+    ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
     ;
 
   doCheck = true; # not cross;
