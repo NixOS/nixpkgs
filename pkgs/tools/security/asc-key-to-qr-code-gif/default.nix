@@ -15,15 +15,20 @@ stdenv.mkDerivation {
     sha256 = "0yrc302a2fhbzryb10718ky4fymfcps3lk67ivis1qab5kbp6z8r";
   };
 
-  buildInputs = [ imagemagick qrencode ] ++ stdenv.lib.optional testQR zbar;
   dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
 
-  preInstall = ''
-    substituteInPlace asc-to-gif.sh \
-      --replace "convert" "${imagemagick}/bin/convert" \
-      --replace "qrencode" "${qrencode.bin}/bin/qrencode"
+  preInstall = let
+    substitutions = [
+      ''--replace "convert" "${imagemagick}/bin/convert"''
+      ''--replace "qrencode" "${qrencode.bin}/bin/qrencode"''
+    ] ++ stdenv.lib.optional testQR [
+      ''--replace "hash zbarimg" "true"'' # hash does not work on NixOS
+      ''--replace "$(zbarimg --raw" "$(${zbar.out}/bin/zbarimg --raw"''
+    ];
+  in ''
+    substituteInPlace asc-to-gif.sh ${stdenv.lib.concatStringsSep " " substitutions}
   '';
 
   installPhase = ''

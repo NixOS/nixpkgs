@@ -21,8 +21,8 @@ in buildPythonApplication rec {
   doCheck = false;
 
   postFixup = ''
-    wrapQtApp bin/git-cola
-    wrapQtApp bin/git-dag
+    wrapQtApp $out/bin/git-cola
+    wrapQtApp $out/bin/git-dag
 
   '';
 

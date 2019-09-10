@@ -291,6 +291,16 @@ in
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
 
+    # Allow asswordless printer admin for members of wheel group
+    security.polkit.extraConfig = mkIf polkitEnabled ''
+      polkit.addRule(function(action, subject) {
+          if (action.id == "org.opensuse.cupspkhelper.mechanism.all-edit" &&
+              subject.isInGroup("wheel")){
+              return polkit.Result.YES;
+          }
+      });
+    '';
+
     # Cups uses libusb to talk to printers, and does not use the
     # linux kernel driver. If the driver is not in a black list, it
     # gets loaded, and then cups cannot access the printers.
