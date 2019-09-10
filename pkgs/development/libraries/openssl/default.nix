@@ -127,8 +127,8 @@ let
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2s";
-    sha256 = "15mbmg8hf7s12vr3v2bdc0pi9y4pdbnsxhzk4fyyap42jaa5rgfa";
+    version = "1.0.2t";
+    sha256 = "15mbmg9hf7s12vr3v2bdc0pi9y4pdbnsxhzk4fyyap42jaa5rgfa";
     patches = [
       ./1.0.2/nix-ssl-cert-file.patch
 
