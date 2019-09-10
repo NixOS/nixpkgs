@@ -1,23 +1,31 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, six, typing
+, six, typing, pygments
 , django, shortuuid, python-dateutil, pytest
 , pytest-django, pytestcov, mock, vobject
-, werkzeug, glibcLocales
+, werkzeug, glibcLocales, factory_boy
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "2.1.4";
+  version = "2.1.9";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1bp0ybarkrj66qx2gn9954vsjqq2ya1w4bppfhr763mkis8qnb4f";
+    sha256 = "08vggm6wrn5cbf8brfprif0rjrkqz06wddsw0ir1skkk8q2sp1b2";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace "'tox'," ""
+
+    # not yet pytest 5 compatible?
+    rm tests/management/commands/test_set_fake_emails.py
+    rm tests/management/commands/test_set_fake_passwords.py
+    rm tests/management/commands/test_validate_templates.py
+
+    # pip should not be used during tests...
+    rm tests/management/commands/test_pipchecker.py
   '';
 
   propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") typing;
@@ -25,7 +33,7 @@ buildPythonPackage rec {
   checkInputs = [
     django shortuuid python-dateutil pytest
     pytest-django pytestcov mock vobject
-    werkzeug glibcLocales
+    werkzeug glibcLocales factory_boy pygments
   ];
 
   LC_ALL = "en_US.UTF-8";
