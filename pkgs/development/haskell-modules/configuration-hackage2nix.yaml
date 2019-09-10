@@ -5827,6 +5827,7 @@ broken-packages:
   - hiccup
   - hichi
   - hid-examples
+  - hie-core
   - hieraclus
   - hierarchical-clustering
   - hierarchical-clustering-diagrams
@@ -8774,6 +8775,7 @@ broken-packages:
   - seqloc
   - seqloc-datafiles
   - sequence-formats
+  - sequenceTools
   - sequent-core
   - sequor
   - serialize-instances
