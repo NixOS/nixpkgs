@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
+{ stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper, removeReferencesTo, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, lvm2, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
@@ -82,12 +82,22 @@ rec {
       sha256 = sha256;
     };
 
+    patches = [
+      # Replace hard-coded cross-compiler with $CC
+      (fetchpatch {
+        url = https://github.com/docker/docker-ce/commit/2fdfb4404ab811cb00227a3de111437b829e55cf.patch;
+        sha256 = "1af20bzakhpfhaixc29qnl9iml9255xdinxdnaqp4an0n1xa686a";
+      })
+    ];
+
     # Optimizations break compilation of libseccomp c bindings
     hardeningDisable = [ "fortify" ];
 
-    nativeBuildInputs = [ pkgconfig ];
+    inherit (go.nativeDrv or go) GOOS GOARCH;
+
+    nativeBuildInputs = [ pkgconfig go-md2man go libtool removeReferencesTo ];
     buildInputs = [
-      makeWrapper removeReferencesTo go-md2man go libtool
+      makeWrapper
     ] ++ optionals (stdenv.isLinux) [
       sqlite lvm2 btrfs-progs systemd libseccomp
     ];
@@ -120,7 +130,7 @@ rec {
     '';
 
     # systemd 230 no longer has libsystemd-journal as a separate entity from libsystemd
-    patchPhase = ''
+    postPatch = ''
       substituteInPlace ./components/cli/scripts/build/.variables --replace "set -eu" ""
     '' + optionalString (stdenv.isLinux) ''
       patchShebangs .
@@ -159,12 +169,15 @@ rec {
       install -Dm644 ./components/cli/contrib/completion/zsh/_docker $out/share/zsh/site-functions/_docker
 
       # Include contributed man pages (cli)
+      cd ./components/cli
+
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       # Generate man pages from cobra commands
       echo "Generate man pages from cobra"
-      cd ./components/cli
       mkdir -p ./man/man1
       go build -o ./gen-manpages github.com/docker/cli/man
       ./gen-manpages --root . --target ./man/man1
+    '' + ''
 
       # Generate legacy pages from markdown
       echo "Generate legacy manpages"
@@ -183,7 +196,7 @@ rec {
     '';
 
     preFixup = ''
-      find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} '{}' +
+      find $out -type f -exec remove-references-to -t ${go.nativeDrv or go} -t ${stdenv.cc.cc} '{}' +
     '' + optionalString (stdenv.isLinux) ''
       find $out -type f -exec remove-references-to -t ${stdenv.glibc.dev} '{}' +
     '';
