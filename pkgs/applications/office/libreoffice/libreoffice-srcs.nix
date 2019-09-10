@@ -1,10 +1,10 @@
 [
   {
-    name = "libabw-0.1.2.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/libabw-0.1.2.tar.xz";
-    sha256 = "0b72944d5af81dda0a5c5803ee84cbac4b81441a4d767aa57029adc6744c2485";
+    name = "libabw-0.1.3.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/libabw-0.1.3.tar.xz";
+    sha256 = "e763a9dc21c3d2667402d66e202e3f8ef4db51b34b79ef41f56cacb86dcd6eed";
     md5 = "";
-    md5name = "0b72944d5af81dda0a5c5803ee84cbac4b81441a4d767aa57029adc6744c2485-libabw-0.1.2.tar.xz";
+    md5name = "e763a9dc21c3d2667402d66e202e3f8ef4db51b34b79ef41f56cacb86dcd6eed-libabw-0.1.3.tar.xz";
   }
   {
     name = "commons-logging-1.2-src.tar.gz";
@@ -805,11 +805,11 @@
     md5name = "0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz";
   }
   {
-    name = "libvisio-0.1.6.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/libvisio-0.1.6.tar.xz";
-    sha256 = "fe1002d3671d53c09bc65e47ec948ec7b67e6fb112ed1cd10966e211a8bb50f9";
+    name = "libvisio-0.1.7.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/libvisio-0.1.7.tar.xz";
+    sha256 = "8faf8df870cb27b09a787a1959d6c646faa44d0d8ab151883df408b7166bea4c";
     md5 = "";
-    md5name = "fe1002d3671d53c09bc65e47ec948ec7b67e6fb112ed1cd10966e211a8bb50f9-libvisio-0.1.6.tar.xz";
+    md5name = "8faf8df870cb27b09a787a1959d6c646faa44d0d8ab151883df408b7166bea4c-libvisio-0.1.7.tar.xz";
   }
   {
     name = "libwpd-0.10.3.tar.xz";

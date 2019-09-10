@@ -19122,12 +19122,13 @@ in
 
   libreoffice-args = {
     inherit (perlPackages) ArchiveZip IOCompress;
-    inherit (gnome2) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
     fontsConf = makeFontsConf {
       fontDirectories = [
-        carlito dejavu_fonts
-        freefont_ttf xorg.fontmiscmisc
+        carlito
+        dejavu_fonts
+        freefont_ttf
+        xorg.fontmiscmisc
         liberation_ttf_v1
         liberation_ttf_v2
       ];
@@ -19142,6 +19143,7 @@ in
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     libreoffice = callPackage ../applications/office/libreoffice
       (libreoffice-args // {
+        mkDerivation = stdenv.mkDerivation;
       });
   });
   libreoffice-fresh-unwrapped = libreoffice-fresh.libreoffice;
@@ -19149,9 +19151,18 @@ in
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     libreoffice = callPackage ../applications/office/libreoffice/still.nix
       (libreoffice-args // {
+        inherit (gnome2) GConf ORBit2 gnome_vfs;
       });
   });
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
+
+  libreoffice-kde = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+    libreoffice = libsForQt5.callPackage ../applications/office/libreoffice
+      (libreoffice-args // {
+        kdeIntegration = true;
+      });
+  });
+  libreoffice-kde-unwrapped = libreoffice-kde.libreoffice;
 
   libvmi = callPackage ../development/libraries/libvmi { };
 
