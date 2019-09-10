@@ -1100,7 +1100,7 @@ in
 
   bitbucket-cli = python2Packages.bitbucket-cli;
 
-  blink = callPackage ../applications/networking/instant-messengers/blink { };
+  blink = libsForQt5.callPackage ../applications/networking/instant-messengers/blink { };
 
   blockbook = callPackage ../servers/blockbook { };
 
