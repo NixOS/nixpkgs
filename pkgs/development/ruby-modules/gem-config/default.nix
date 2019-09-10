@@ -536,19 +536,6 @@ in
     ];
   };
 
-  sup = attrs: {
-    dontBuild = false;
-    # prevent sup from trying to dynamically install `xapian-ruby`.
-    nativeBuildInputs = [ bundler rake ];
-    postPatch = ''
-      cp ${./mkrf_conf_xapian.rb} ext/mkrf_conf_xapian.rb
-
-      substituteInPlace lib/sup/crypto.rb \
-        --replace 'which gpg2' \
-                  '${which}/bin/which gpg'
-    '';
-  };
-
   rb-readline = attrs: {
     dontBuild = false;
     postPatch = ''
