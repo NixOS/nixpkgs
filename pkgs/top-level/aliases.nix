@@ -212,6 +212,7 @@ mapAliases ({
   # so package reduced to alias
   mesa_drivers = mesa.drivers;
   midoriWrapper = midori; # added 2015-01
+  mkldnn = dnnl; # added 2019-09-10
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   module_init_tools = kmod; # added 2016-04-22
