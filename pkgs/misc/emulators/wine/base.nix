@@ -94,6 +94,15 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   # and enable doCheck
   doCheck = false;
 
+  # the relevant check in configure.ac will fail under nix as we are not
+  # using the system supplied compiler tools. We will subsequently *not*
+  # pass `-mmacosx-version-min` in the LDFLAGS, and end up with a linked
+  # binary against 10.14 which *does* contain a __DATA,__dyld section and
+  # then horribly fail to run on Mojave.
+  postConfigure = lib.optional (stdenv.hostPlatform.isDarwin) ''
+    sed -i 's|-nostartfiles -nodefaultlibs|-nostartfiles -nodefaultlibs -mmacosx-version-min=10.7|g' loader/Makefile
+  '';
+
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
   in ''
