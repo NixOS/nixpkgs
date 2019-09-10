@@ -3,7 +3,7 @@ args @ { fetchurl, ... }:
   baseName = ''lack-middleware-backtrace'';
   version = ''lack-20190521-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."uiop" ];
 
@@ -17,8 +17,8 @@ args @ { fetchurl, ... }:
   asdFilesToKeep = ["lack-middleware-backtrace.asd"];
   overrides = x: x;
 }
-/* (SYSTEM lack-middleware-backtrace DESCRIPTION NIL SHA256
-    0ng1k5jq7icfi8c8r3wqj3qrqkh2lyav5ab6mf3l5y4bfwbil593 URL
+/* (SYSTEM lack-middleware-backtrace DESCRIPTION System lacks description
+    SHA256 0ng1k5jq7icfi8c8r3wqj3qrqkh2lyav5ab6mf3l5y4bfwbil593 URL
     http://beta.quicklisp.org/archive/lack/2019-05-21/lack-20190521-git.tgz MD5
     7d7321550f0795e998c7afe4498e7a40 NAME lack-middleware-backtrace FILENAME
     lack-middleware-backtrace DEPS ((NAME uiop FILENAME uiop)) DEPENDENCIES

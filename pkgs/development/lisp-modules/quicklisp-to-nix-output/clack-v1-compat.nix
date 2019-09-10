@@ -3,7 +3,7 @@ args @ { fetchurl, ... }:
   baseName = ''clack-v1-compat'';
   version = ''clack-20190710-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."alexandria" args."anaphora" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."chipz" args."chunga" args."circular-streams" args."cl_plus_ssl" args."cl-annot" args."cl-ansi-text" args."cl-base64" args."cl-colors" args."cl-cookie" args."cl-fad" args."cl-ppcre" args."cl-reexport" args."cl-syntax" args."cl-syntax-annot" args."cl-utilities" args."clack" args."clack-handler-hunchentoot" args."clack-socket" args."clack-test" args."dexador" args."fast-http" args."fast-io" args."flexi-streams" args."http-body" args."hunchentoot" args."ironclad" args."jonathan" args."lack" args."lack-component" args."lack-middleware-backtrace" args."lack-util" args."let-plus" args."local-time" args."marshal" args."md5" args."named-readtables" args."nibbles" args."proc-parse" args."prove" args."quri" args."rfc2388" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."trivial-types" args."uiop" args."usocket" args."xsubseq" ];
 
@@ -17,7 +17,7 @@ args @ { fetchurl, ... }:
   asdFilesToKeep = ["clack-v1-compat.asd"];
   overrides = x: x;
 }
-/* (SYSTEM clack-v1-compat DESCRIPTION NIL SHA256
+/* (SYSTEM clack-v1-compat DESCRIPTION System lacks description SHA256
     1642myknfaajcyqllnhn9s17yb6dbj1yh9wmg1kbplwq9c3yjs7k URL
     http://beta.quicklisp.org/archive/clack/2019-07-10/clack-20190710-git.tgz
     MD5 9d8869ca599652d68dd759c8a6adcd3d NAME clack-v1-compat FILENAME

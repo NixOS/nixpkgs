@@ -5,7 +5,7 @@ args @ { fetchurl, ... }:
 
   parasites = [ "simple-date/postgres-glue" "simple-date/tests" ];
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."cl-postgres" args."fiveam" args."md5" args."usocket" ];
 
@@ -19,7 +19,7 @@ args @ { fetchurl, ... }:
   asdFilesToKeep = ["simple-date.asd"];
   overrides = x: x;
 }
-/* (SYSTEM simple-date DESCRIPTION NIL SHA256
+/* (SYSTEM simple-date DESCRIPTION System lacks description SHA256
     1vphrizbhbs3r5rq4b8dh4149bz11h5xxilragwf4l2i619k3cp5 URL
     http://beta.quicklisp.org/archive/postmodern/2019-05-21/postmodern-20190521-git.tgz
     MD5 102567f386757cd52aca500c0c348d90 NAME simple-date FILENAME simple-date
