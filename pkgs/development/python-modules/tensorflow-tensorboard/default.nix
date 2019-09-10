@@ -1,4 +1,5 @@
 { stdenv, lib, fetchPypi, buildPythonPackage, isPy3k
+, wheel
 , numpy
 , werkzeug
 , protobuf
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   }));
 
   propagatedBuildInputs = [
+    wheel
     numpy
     werkzeug
     protobuf
