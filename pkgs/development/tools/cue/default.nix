@@ -1,16 +1,17 @@
-{ buildGoModule, fetchgit, stdenv }:
+{ buildGoModule, fetchFromGitHub, stdenv }:
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.0.3";
+  version = "0.0.9";
 
-  src = fetchgit {
-    url = "https://cue.googlesource.com/cue";
+  src = fetchFromGitHub {
+    owner = "cuelang";
+    repo = "cue";
     rev = "v${version}";
-    sha256 = "1abvvgicr64ssiprkircih2nrbcr1yqxf1qkl21kh0ww1xfp0rw7";
+    sha256 = "1nnwfvw8pkzqqzkw3g32szpwwnwnyyghd3wk3qq3gzbj43ac38bp";
   };
 
-  modSha256 = "0r5vbplcfq1rsp2jnixq6lfbpcv7grf0q38na76qy7pjb57zikb6";
+  modSha256 = "18fd2sa8xgskky0nrjf3qndv8crrwbp9nq9f4i68bdc82p8a7gfs";
 
   subPackages = [ "cmd/cue" ];
 
