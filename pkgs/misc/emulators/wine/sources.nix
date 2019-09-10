@@ -12,6 +12,31 @@ let fetchurl = args@{url, sha256, ...}:
   pkgs.fetchFromGitHub { inherit owner repo rev sha256; } // args;
 in rec {
 
+  series3 = fetchurl rec {
+    version = "3.0.2";
+    url = "https://dl.winehq.org/wine/source/3.0/wine-${version}.tar.xz";
+    sha256 = "1zv3nk31s758ghp4795ym3w8l5868c2dllmjx9245qh9ahvp3mya";
+
+    ## see http://wiki.winehq.org/Gecko
+    gecko32 = fetchurl rec {
+      version = "2.47";
+      url = "http://dl.winehq.org/wine/wine-gecko/${version}/wine_gecko-${version}-x86.msi";
+      sha256 = "0fk4fwb4ym8xn0i5jv5r5y198jbpka24xmxgr8hjv5b3blgkd2iv";
+    };
+    gecko64 = fetchurl rec {
+      version = "2.47";
+      url = "http://dl.winehq.org/wine/wine-gecko/${version}/wine_gecko-${version}-x86_64.msi";
+      sha256 = "0zaagqsji6zaag92fqwlasjs8v9hwjci5c2agn9m7a8fwljylrf5";
+    };
+
+    ## see http://wiki.winehq.org/Mono
+    mono = fetchurl rec {
+      version = "4.7.3";
+      url = "http://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";
+      sha256 = "0fkd22v2vm3ml76x1ngg42byvmry24xb92vpl4j84zhw6wbq0jnj";
+    };
+  };
+
   stable = fetchurl rec {
     version = "4.0.2";
     url = "https://dl.winehq.org/wine/source/4.0/wine-${version}.tar.xz";
