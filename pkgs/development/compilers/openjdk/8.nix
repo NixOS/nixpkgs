@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, bash, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
-, alsaLib, cacert, perl, liberation_ttf, fontconfig, zlib
+{ stdenv, lib, fetchurl, pkgconfig, lndir, bash, cpio, file, which, unzip, zip
+, cups, freetype, alsaLib, cacert, perl, liberation_ttf, fontconfig, zlib
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , openjdk8-bootstrap
@@ -85,7 +85,7 @@ let
 
     outputs = [ "out" "jre" ];
 
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig lndir ];
     buildInputs = [
       cpio file which unzip zip perl openjdk8-bootstrap zlib cups freetype alsaLib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
@@ -190,7 +190,8 @@ let
       # Move the JRE to a separate output
       mkdir -p $jre/lib/openjdk
       mv $out/lib/openjdk/jre $jre/lib/openjdk/jre
-      ln -s $jre/lib/openjdk/jre $out/lib/openjdk/jre
+      mkdir $out/lib/openjdk/jre
+      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
       # Setup fallback fonts
       ${lib.optionalString (!headless) ''
