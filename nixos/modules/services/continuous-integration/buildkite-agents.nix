@@ -46,7 +46,7 @@ let
 
       userName = mkOption {
         readOnly = true;
-        default = name;
+        default = "buildkite-${name}";
         description = ''
           Username of the systemd service this will run as.
         '';
@@ -273,7 +273,7 @@ in {
             # set a long timeout to give buildkite-agent a chance to finish current builds
             TimeoutStopSec = "2 min";
             KillMode = "mixed";
-            StateDirectory = "buildkite-${cfg.userName}";
+            StateDirectory = cfg.userName;
           };
       };
   });
