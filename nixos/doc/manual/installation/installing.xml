@@ -393,7 +393,7 @@
      <filename>configuration.nix</filename> and will be overwritten by future
      invocations of <command>nixos-generate-config</command>; thus, you
      generally should not modify it.) Additionally, you may want to look at 
-     <link xlink:href="https://github.com/NixOS/nix-hardware">Hardware
+     <link xlink:href="https://github.com/NixOS/nixos-hardware">Hardware
      configuration for known-hardware</link> at this point or after
      installation.
       
