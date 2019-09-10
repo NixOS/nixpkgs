@@ -210,7 +210,7 @@ mkDerivation {
   dontWrapGApps = true;
 
   # Arguments to be passed to `makeWrapper`, only used by qt5’s mkDerivation
-  qtWrapperArgs [
+  qtWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
   ];
 }
