@@ -18,7 +18,8 @@ buildGoPackage rec {
 
   hardeningDisable = [ "fortify" ];
 
-  buildInputs = [ btrfs-progs go-md2man utillinux ];
+  nativeBuildInputs = [ go-md2man utillinux ];
+  buildInputs = [ btrfs-progs ];
   buildFlags = "VERSION=v${version}";
 
   BUILDTAGS = []
