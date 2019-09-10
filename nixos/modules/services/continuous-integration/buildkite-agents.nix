@@ -86,12 +86,7 @@ let
       };
 
       tags = mkOption {
-        type = let
-          commasToAttrs = commas: builtins.foldl'
-            (prev: cur: let pair = builtins.split "=" cur; in
-                 prev // {"${lib.head pair}" = lib.last pair; })
-            {} (lib.remove [] (builtins.split "," commas)); in
-          types.coercedTo types.str commasToAttrs (types.attrsOf types.str);
+        type = (types.attrsOf types.str);
         default = {};
         example = { queue = "default"; docker = "true"; ruby2 = "true"; };
         description = ''
