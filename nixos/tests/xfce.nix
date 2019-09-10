@@ -17,6 +17,8 @@ import ./make-test.nix ({ pkgs, ...} : {
       services.xserver.desktopManager.xfce.enable = true;
 
       environment.systemPackages = [ pkgs.xorg.xmessage ];
+
+      hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     };
 
   testScript =
