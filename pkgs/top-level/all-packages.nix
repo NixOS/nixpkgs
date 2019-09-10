@@ -1373,7 +1373,11 @@ in
 
   compactor = callPackage ../applications/networking/compactor { };
 
-  consul = callPackage ../servers/consul { };
+  consul = callPackage ../servers/consul {
+    # Version 1.6.0 fails to build with go 1.13 due to broken dependency:
+    #   go/src/github.com/hashicorp/consul/vendor/github.com/envoyproxy/go-control-plane/envoy/type/http_status.pb.go:11:2: code in directory /build/go/src/github.com/hashicorp/consul/vendor/github.com/envoyproxy/protoc-gen-validate/validate expects import "github.com/lyft/protoc-gen-validate/validate"
+    buildGoPackage = buildGo112Package;
+  };
 
   consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
 
