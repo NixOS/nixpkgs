@@ -115,6 +115,9 @@ let
 
       sshKeyPath = mkOption {
         type = types.nullOr types.path;
+        ## NB: maximum care is taken so that secrets (ssh keys and the CI token)
+        ## don't end up in the Nix store.
+        apply = final: if final == null then null else toString final;
         default = null;
         description = ''
           Private agent SSH key.
@@ -238,18 +241,15 @@ in {
           BUILDKITE_SHELL = cfg.shell;
         };
 
-        ## NB: maximum care is taken so that secrets (ssh keys and the CI token)
-        ## don't end up in the Nix store.
         preStart = let
           sshDir = "${cfg.statePath}/.ssh";
-          sshKeyPath = toString cfg.sshKeyPath;
           tagStr = lib.concatStringsSep "," (lib.mapAttrsToList (k: v: "${k}=${v}") cfg.tags);
         in
           ''
             ${optionalString (cfg.sshKeyPath != null) ''
               mkdir -p "${sshDir}"
               chmod 700 "${sshDir}"
-              cp -f "${sshKeyPath}" "${sshDir}/id_rsa"
+              cp -f "${cfg.sshKeyPath}" "${sshDir}/id_rsa"
               chmod 600 "${sshDir}/id_rsa"
             ''}
 
