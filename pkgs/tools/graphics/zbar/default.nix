@@ -5,7 +5,9 @@
 , pkgconfig
 , libX11
 , libv4l
-, qt5
+, qtbase
+, qtx11extras
+, wrapQtAppsHook
 , gtk3
 , xmlto
 , docbook_xsl
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     xmlto
     autoreconfHook
     docbook_xsl
-    qt5.wrapQtAppsHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -44,8 +46,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableVideo [
     libv4l
     gtk3
-    qt5.qtbase
-    qt5.qtx11extras
+    qtbase
+    qtx11extras
   ];
 
   configureFlags = [
