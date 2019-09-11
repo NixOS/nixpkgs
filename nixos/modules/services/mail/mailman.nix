@@ -184,7 +184,7 @@ in {
     systemd.services.mailman-web = {
       description = "Init Postorius DB";
       before = [ "httpd.service" ];
-      wantedBy = [ "httpd.service" ];
+      requiredBy = [ "httpd.service" ];
       script = ''
         ${djangoExe}/bin/mailman-django-admin migrate --pythonpath ${cfg.webRoot} --settings settings
         rm -rf static
