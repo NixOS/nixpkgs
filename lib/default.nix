@@ -71,7 +71,7 @@ let
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting getOutput getBin
       getLib getDev chooseDevOutputs zipWithNames zip
-      recurseIntoAttrs;
+      recurseIntoAttrs dontRecurseIntoAttrs;
     inherit (lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists

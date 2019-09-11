@@ -479,6 +479,11 @@ rec {
   recurseIntoAttrs =
     attrs: attrs // { recurseForDerivations = true; };
 
+  /* Undo the effect of recurseIntoAttrs.
+   */
+  dontRecurseIntoAttrs =
+    attrs: attrs // { recurseForDerivations = false; };
+
   /*** deprecated stuff ***/
 
   zipWithNames = zipAttrsWithNames;
