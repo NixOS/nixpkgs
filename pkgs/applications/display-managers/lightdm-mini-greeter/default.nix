@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, lightdm, gtk3 }:
+{ stdenv, linkFarm, lightdm-mini-greeter, fetchFromGitHub, autoreconfHook, pkgconfig, lightdm, gtk3, glib, gdk-pixbuf, wrapGAppsHook, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-mini-greeter";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1qi0bsqi8z2zv3303ww0kd7bciz6qx8na5bkvgrqlwyvq31czai5";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ lightdm gtk3 ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook ];
+  buildInputs = [ lightdm gtk3 glib gdk-pixbuf librsvg ];
 
   configureFlags = [ "--sysconfdir=/etc" ];
-  makeFlags = [ "configdir=$(out)/etc" ];
+  makeFlags = [ "configdir=${placeholder "out"}/etc" ];
 
   postInstall = ''
     substituteInPlace "$out/share/xgreeters/lightdm-mini-greeter.desktop" \

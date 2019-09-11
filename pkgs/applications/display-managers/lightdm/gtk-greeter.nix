@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \
-      --replace "Exec=lightdm-gtk-greeter" "Exec=$out/sbin/lightdm-gtk-greeter"
+      --replace "Exec=lightdm-gtk-greeter" "Exec=$out/bin/lightdm-gtk-greeter"
   '';
 
   passthru.xgreeters = linkFarm "lightdm-gtk-greeter-xgreeters" [{
