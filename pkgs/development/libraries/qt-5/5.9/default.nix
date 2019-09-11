@@ -42,7 +42,15 @@ let
       ./qtbase-openssl_1_1.patch
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
-    qtscript = [ ./qtscript.patch ];
+    qtscript = [
+      ./qtscript.patch
+      # needed due to changes in gcc 8.3, see https://bugreports.qt.io/browse/QTBUG-74196
+      # fixed in qtscript 5.12.2
+      (fetchpatch {
+        url = "https://github.com/qt/qtscript/commit/97ec1d1882a83c23c91f0f7daea48e05858d8c32.diff";
+        sha256 = "0khrapq13xzvxckzc9l7gqyjwibyd98vyqy6gmyhvsbm2kq8n6wi";
+      })
+    ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
     qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
