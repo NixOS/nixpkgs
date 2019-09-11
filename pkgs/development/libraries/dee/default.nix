@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     dbus-glib
   ];
 
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+
   configureFlags = [
     "--disable-gtk-doc"
     "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
