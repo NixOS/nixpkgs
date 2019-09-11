@@ -3032,7 +3032,7 @@ in
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = pkgs.protobuf3_6.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table-extra = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-extra { };
@@ -13562,12 +13562,6 @@ in
     sdnotify-wrapper = callPackage ../os-specific/linux/sdnotify-wrapper { };
   };
 
-  skydive = callPackage ../tools/networking/skydive {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  };
-
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
@@ -14114,7 +14108,7 @@ in
   x265 = callPackage ../development/libraries/x265 { };
 
   inherit (callPackages ../development/libraries/xapian { })
-    xapian_1_2_22 xapian_1_4;
+    xapian_1_4;
   xapian = xapian_1_4;
 
   xapian-omega = callPackage ../development/libraries/xapian/tools/omega {
@@ -19635,12 +19629,6 @@ in
   sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
 
   speedread = callPackage ../applications/misc/speedread { };
-
-  sup = callPackage ../applications/networking/mailreaders/sup {
-    bundlerApp = bundlerApp.override{
-      ruby = ruby.override { cursesSupport = true; };
-    };
-  };
 
   synapse = callPackage ../applications/misc/synapse { };
 
