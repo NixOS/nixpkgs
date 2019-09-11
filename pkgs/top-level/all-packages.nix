@@ -62,8 +62,6 @@ in
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
-  # Make various Nix tools consider the contents of the resulting
-  # attribute set when looking for what to build, find, etc.
   inherit (lib) recurseIntoAttrs;
 
   # This is intended to be the reverse of recurseIntoAttrs, as it is
