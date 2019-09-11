@@ -62,6 +62,12 @@ let
     installPhase = "install -D ${djangoPyEnv}/bin/django-admin $out/bin/mailman-django-admin";
   };
 
+  mailmanWeb = pkgs.python3Packages.mailman-web.override {
+    serverEMail = cfg.siteOwner;
+    archiverKey = cfg.hyperkittyApiKey;
+    allowedHosts = cfg.webHosts;
+  };
+
 in {
 
   ###### interface
@@ -88,10 +94,7 @@ in {
 
       webRoot = mkOption {
         type = types.path;
-        default = pkgs.python3Packages.mailman-web.override { serverEMail = cfg.siteOwner;
-                                                              archiverKey = cfg.hyperkittyApiKey;
-                                                              allowedHosts = cfg.webHosts;
-                                                            };
+        default = "${mailmanWeb}/${pkgs.python3.sitePackages}";
         defaultText = "pkgs.python3Packages.mailman-web";
         description = ''
           The web root for the Hyperkity + Postorius apps provided by Mailman.
