@@ -5005,6 +5005,8 @@ in
     boost = boost155;
   };
 
+  mbutil = python3Packages.callPackage ../applications/misc/mbutil { };
+
   mc = callPackage ../tools/misc/mc { };
 
   mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
