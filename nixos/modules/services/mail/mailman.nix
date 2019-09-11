@@ -19,6 +19,25 @@ let
    '';
   };
 
+  mailmanWeb = pkgs.python3Packages.mailman-web.override {
+    serverEMail = cfg.siteOwner;
+    archiverKey = cfg.hyperkittyApiKey;
+    allowedHosts = cfg.webHosts;
+  };
+
+  mailmanWebPyEnv = pkgs.python3.withPackages (x: with x; [mailman-web]);
+
+  mailmanWebExe = with pkgs; stdenv.mkDerivation {
+    inherit (mailmanWeb) name;
+    buildInputs = [makeWrapper];
+    unpackPhase = ":";
+    installPhase = ''
+      mkdir -p $out/bin
+      makeWrapper ${mailmanWebPyEnv}/bin/django-admin $out/bin/mailman-web \
+        --set DJANGO_SETTINGS_MODULE settings
+    '';
+  };
+
   mailmanCfg = ''
     [mailman]
     site_owner: ${cfg.siteOwner}
@@ -53,21 +72,6 @@ let
     # settings.
     api_key: ${cfg.hyperkittyApiKey}
   '';
-
-  mailmanWeb = pkgs.python3Packages.mailman-web.override {
-    serverEMail = cfg.siteOwner;
-    archiverKey = cfg.hyperkittyApiKey;
-    allowedHosts = cfg.webHosts;
-  };
-
-  mailmanWebPyEnv = pkgs.python3.withPackages (x: with x; [mailman-web]);
-
-  mailmanWebExe = with pkgs; stdenv.mkDerivation {
-    name = "mailman-django-" + python3Packages.mailman.version;
-    unpackPhase = ":";
-    installPhase = "install -D ${mailmanWebPyEnv}/bin/django-admin $out/bin/mailman-web";
-  };
-
 
 in {
 
@@ -187,10 +191,10 @@ in {
       before = [ "httpd.service" ];
       requiredBy = [ "httpd.service" ];
       script = ''
-        ${mailmanWebExe}/bin/mailman-web migrate --pythonpath ${cfg.webRoot} --settings settings
+        ${mailmanWebExe}/bin/mailman-web migrate
         rm -rf static
-        ${mailmanWebExe}/bin/mailman-web collectstatic --pythonpath ${cfg.webRoot} --settings settings
-        ${mailmanWebExe}/bin/mailman-web compress --pythonpath ${cfg.webRoot} --settings settings
+        ${mailmanWebExe}/bin/mailman-web collectstatic
+        ${mailmanWebExe}/bin/mailman-web compress
       '';
       serviceConfig = {
         User = config.services.httpd.user;
@@ -216,7 +220,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "mailman.service" "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web qcluster --pythonpath ${cfg.webRoot} --settings settings";
+        ExecStart = "${mailmanWebExe}/bin/mailman-web qcluster";
         User = config.services.httpd.user;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -227,7 +231,7 @@ in {
       description = "Trigger minutely Hyperkitty events";
       startAt = "minutely";
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs minutely --pythonpath ${cfg.webRoot} --settings settings";
+        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs minutely";
         User = config.services.httpd.user;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -238,7 +242,7 @@ in {
       description = "Trigger quarter-hourly Hyperkitty events";
       startAt = "*:00/15";
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs quarter_hourly --pythonpath ${cfg.webRoot} --settings settings";
+        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs quarter_hourly";
         User = config.services.httpd.user;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -249,7 +253,7 @@ in {
       description = "Trigger hourly Hyperkitty events";
       startAt = "hourly";
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs hourly --pythonpath ${cfg.webRoot} --settings settings";
+        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs hourly";
         User = config.services.httpd.user;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -260,7 +264,7 @@ in {
       description = "Trigger daily Hyperkitty events";
       startAt = "daily";
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs daily --pythonpath ${cfg.webRoot} --settings settings";
+        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs daily";
         User = config.services.httpd.user;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -271,7 +275,7 @@ in {
       description = "Trigger weekly Hyperkitty events";
       startAt = "weekly";
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs weekly --pythonpath ${cfg.webRoot} --settings settings";
+        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs weekly";
         User = config.services.httpd.user;
         WorkingDirectory = "/var/lib/mailman-web";
       };
@@ -282,7 +286,7 @@ in {
       description = "Trigger yearly Hyperkitty events";
       startAt = "yearly";
       serviceConfig = {
-        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs yearly --pythonpath ${cfg.webRoot} --settings settings";
+        ExecStart = "${mailmanWebExe}/bin/mailman-web runjobs yearly";
         User = config.services.httpd.user;
         WorkingDirectory = "/var/lib/mailman-web";
       };
