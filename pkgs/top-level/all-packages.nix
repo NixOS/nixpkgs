@@ -3036,7 +3036,7 @@ in
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = pkgs.protobuf3_6.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table-extra = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-extra { };
@@ -12133,6 +12133,8 @@ in
 
   libisoburn = callPackage ../development/libraries/libisoburn { };
 
+  libipt = callPackage ../development/libraries/libipt { };
+
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
@@ -13571,12 +13573,6 @@ in
     sdnotify-wrapper = callPackage ../os-specific/linux/sdnotify-wrapper { };
   };
 
-  skydive = callPackage ../tools/networking/skydive {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  };
-
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
@@ -14123,7 +14119,7 @@ in
   x265 = callPackage ../development/libraries/x265 { };
 
   inherit (callPackages ../development/libraries/xapian { })
-    xapian_1_2_22 xapian_1_4;
+    xapian_1_4;
   xapian = xapian_1_4;
 
   xapian-omega = callPackage ../development/libraries/xapian/tools/omega {
@@ -18412,8 +18408,6 @@ in
 
   getxbook = callPackage ../applications/misc/getxbook { };
 
-  ghq = gitAndTools.ghq;
-
   gimp = callPackage ../applications/graphics/gimp {
     gegl = gegl_0_4;
     lcms = lcms2;
@@ -18432,7 +18426,7 @@ in
 
   gitAndTools = recurseIntoAttrs (callPackage ../applications/version-management/git-and-tools {});
 
-  inherit (gitAndTools) git gitFull gitSVN git-cola svn2git git-radar git-secret git-secrets transcrypt git-crypt;
+  inherit (gitAndTools) git gitFull gitSVN git-cola svn2git git-radar git-secret git-secrets transcrypt git-crypt ghq;
 
   gitMinimal = git.override {
     withManual = false;
@@ -19642,12 +19636,6 @@ in
   sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
 
   speedread = callPackage ../applications/misc/speedread { };
-
-  sup = callPackage ../applications/networking/mailreaders/sup {
-    bundlerApp = bundlerApp.override{
-      ruby = ruby.override { cursesSupport = true; };
-    };
-  };
 
   synapse = callPackage ../applications/misc/synapse { };
 
@@ -22741,6 +22729,8 @@ in
     plasma-desktop plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
     plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
     systemsettings user-manager xdg-desktop-portal-kde;
+
+  kwin-tiling = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/tiling.nix { };
 
   ### SCIENCE
 

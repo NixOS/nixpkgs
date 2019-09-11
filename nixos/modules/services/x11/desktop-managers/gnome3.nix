@@ -240,6 +240,8 @@ in
 
       services.avahi.enable = mkDefault true;
 
+      xdg.portal.extraPortals = [ pkgs.gnome3.gnome-shell ];
+
       services.geoclue2.enable = mkDefault true;
       services.geoclue2.enableDemoAgent = false; # GNOME has its own geoclue agent
 
