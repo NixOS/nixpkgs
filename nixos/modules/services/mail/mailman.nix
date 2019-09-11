@@ -109,7 +109,7 @@ in {
       };
 
       webHosts = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = ''
           The list of hostnames and/or IP addresses from which the Mailman Web
