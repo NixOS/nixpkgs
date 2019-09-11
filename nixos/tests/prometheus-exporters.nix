@@ -297,6 +297,22 @@ let
       '';
     };
 
+    rspamd = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.rspamd.enable = true;
+      };
+      exporterTest = ''
+        waitForUnit("rspamd.service");
+        waitForUnit("prometheus-rspamd-exporter.service");
+        waitForOpenPort(11334);
+        waitForOpenPort(7980);
+        waitUntilSucceeds("curl -sSf localhost:7980/metrics | grep -q 'rspamd_scanned{host=\"rspamd\"} 0'");
+      '';
+    };
+
     snmp = {
       exporterConfig = {
         enable = true;
