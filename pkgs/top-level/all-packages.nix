@@ -9507,6 +9507,8 @@ in
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
+
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
