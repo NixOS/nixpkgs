@@ -1,0 +1,21 @@
+diff --git a/lib/DBus/Internal/Address.hs b/lib/DBus/Internal/Address.hs
+index 7365110..c01fad3 100644
+--- a/lib/DBus/Internal/Address.hs
++++ b/lib/DBus/Internal/Address.hs
+@@ -19,6 +19,7 @@ import           Data.Char (digitToInt, ord, chr)
+ import           Data.List (intercalate)
+ import qualified Data.Map
+ import           Data.Map (Map)
++import           Data.Maybe (listToMaybe)
+ import qualified System.Environment
+ import           Text.Printf (printf)
+ 
+@@ -151,7 +152,7 @@ getSystemAddress = do
+ getSessionAddress :: IO (Maybe Address)
+ getSessionAddress = do
+     env <- getenv "DBUS_SESSION_BUS_ADDRESS"
+-    return (env >>= parseAddress)
++    return $ maybe Nothing listToMaybe (env >>= parseAddresses)
+ 
+ -- | Returns the address in the environment variable
+ -- @DBUS_STARTER_ADDRESS@, which must be set.

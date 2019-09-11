@@ -86,6 +86,9 @@ self: super: {
     doCheck = !pkgs.stdenv.isDarwin;
   });
 
+  # See #68498 and rblaze/haskell-dbus#37
+  dbus = appendPatch super.dbus ./patches/dbus-session-multiple.patch;
+
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
