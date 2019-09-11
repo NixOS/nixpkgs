@@ -473,6 +473,12 @@ rec {
   /* Pick the outputs of packages to place in buildInputs */
   chooseDevOutputs = drvs: builtins.map getDev drvs;
 
+  /* Make various Nix tools consider the contents of the resulting
+     attribute set when looking for what to build, find, etc.
+   */
+  recurseIntoAttrs =
+    attrs: attrs // { recurseForDerivations = true; };
+
   /*** deprecated stuff ***/
 
   zipWithNames = zipAttrsWithNames;
