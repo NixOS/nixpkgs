@@ -22324,6 +22324,8 @@ in
 
   sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
 
+  shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
+
   sienna = callPackage ../games/sienna { love = love_0_10; };
 
   sil = callPackage ../games/sil { };
