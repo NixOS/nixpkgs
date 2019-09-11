@@ -2970,6 +2970,8 @@ in
 
   entr = callPackage ../tools/misc/entr { };
 
+  envoy = callPackage ../tools/networking/envoy { };
+
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
   eplot = callPackage ../tools/graphics/eplot { };

@@ -77,6 +77,11 @@ in stdenv.mkDerivation (fBuildAttrs // {
       # For example, in Tensorflow-gpu build:
       # platforms -> NIX_BUILD_TOP/tmp/install/35282f5123611afa742331368e9ae529/_embedded_binaries/platforms
       find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
+        # There is a top level symlink that points to the source directory, we need to keep that
+        target="$(readlink "$symlink")"
+        if [[ "$target" == "$NIX_BUILD_TOP/source" ]]; then
+          continue
+        fi
         name="$(basename "$symlink")"
         rm "$symlink" "$bazelOut/external/@$name.marker"
       done
@@ -145,6 +150,14 @@ in stdenv.mkDerivation (fBuildAttrs // {
       host_linkopts+=( "--host_linkopt=$flag" )
     done
     '' + ''
+
+    BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
+    USER=homeless-shelter \
+    bazel \
+      --output_base="$bazelOut" \
+      --output_user_root="$bazelUserRoot" \
+      sync \
+      --configure
 
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
     USER=homeless-shelter \
