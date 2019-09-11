@@ -65,10 +65,6 @@ let
       };
     })
 
-    (self: super: {
-      pyyaml = super.pyyaml_3;
-    })
-
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
