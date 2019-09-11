@@ -6,17 +6,17 @@ let
 
   cfg = config.services.mailman;
 
-  mailmanPyEnv = pkgs.python3.withPackages (ps: [ps.mailman ps.mailman-hyperkitty]);
+  mailmanPyEnv = pkgs.python3.withPackages (ps: with ps; [mailman mailman-hyperkitty]);
 
   mailmanExe = with pkgs; stdenv.mkDerivation {
     name = "mailman-" + python3Packages.mailman.version;
+    buildInputs = [makeWrapper];
     unpackPhase = ":";
     installPhase = ''
       mkdir -p $out/bin
-      sed >"$out/bin/mailman" <"${mailmanPyEnv}/bin/mailman" \
-        -e "2 iexport MAILMAN_CONFIG_FILE=/etc/mailman.cfg"
-      chmod +x $out/bin/mailman
-    '';
+      makeWrapper ${mailmanPyEnv}/bin/mailman $out/bin/mailman \
+        --set MAILMAN_CONFIG_FILE /etc/mailman.cfg
+   '';
   };
 
   mailmanCfg = ''
