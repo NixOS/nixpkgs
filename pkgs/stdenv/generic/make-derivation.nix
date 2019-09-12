@@ -286,6 +286,16 @@ in rec {
           # lets have a clean always accessible version here.
           name = attrs.name or "${attrs.pname}-${attrs.version}";
 
+          # Nix only knows of `name` attribute and considers `pname` what parseDrvName
+          # spits out. Unfortunately, that fails to account for many real-life packages
+          # that have variants or dashes followed by number in their name.
+          # Since many of packages in nixpkgs already have pname corresponding
+          # to project name, we will export it here. We will fallback to the parseDrvName
+          # algorithm when pname is not present.
+          # We handle the version similarly.
+          pname = attrs.pname or (builtins.parseDrvName attrs.name).name;
+          version = attrs.version or ((x: if x != "" then x else null) (builtins.parseDrvName attrs.name).version);
+
           # If the packager hasn't specified `outputsToInstall`, choose a default,
           # which is the name of `p.bin or p.out or p`;
           # if he has specified it, it will be overridden below in `// meta`.

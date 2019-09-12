@@ -188,7 +188,8 @@ let
     # Weirder stuff that doesn't appear in the documentation?
     knownVulnerabilities = listOf str;
     name = str;
-    version = str;
+    pname = str;
+    version = nullOr str;
     tag = str;
     updateWalker = bool;
     executables = listOf str;
