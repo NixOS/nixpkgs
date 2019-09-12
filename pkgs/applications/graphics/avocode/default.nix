@@ -1,6 +1,6 @@
 { stdenv, makeDesktopItem, fetchurl, unzip
 , gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, hicolor-icon-theme, libuuid, at-spi2-core
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [makeWrapper wrapGAppsHook];
-  buildInputs = [ unzip gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
+  buildInputs = [ unzip gtk3 gnome3.adwaita-icon-theme ];
 
   # src is producing multiple folder on unzip so we must
   # override unpackCmd to extract it into newly created folder

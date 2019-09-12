@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, which, qmake, mkDerivation,
-  qtbase, qtmultimedia, frei0r, opencolorio, hicolor-icon-theme, ffmpeg-full,
+  qtbase, qtmultimedia, frei0r, opencolorio, ffmpeg-full,
   CoreFoundation  }:
 
 mkDerivation rec {
@@ -13,9 +13,9 @@ mkDerivation rec {
     sha256 = "15q4qwf5rc3adssywl72jrhkpqk55ihpd5h5wf07baw0s47vv5kq";
   };
 
-  nativeBuildInputs = [ 
-    pkgconfig 
-    which 
+  nativeBuildInputs = [
+    pkgconfig
+    which
     qmake
   ];
 
@@ -26,7 +26,6 @@ mkDerivation rec {
     qtbase
     qtmultimedia
     qtmultimedia.dev
-    hicolor-icon-theme
   ] ++ stdenv.lib.optional stdenv.isDarwin CoreFoundation;
 
   meta = with stdenv.lib; {

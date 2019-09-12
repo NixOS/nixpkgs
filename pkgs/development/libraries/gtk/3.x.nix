@@ -24,7 +24,6 @@
 , libxkbcommon
 , gmp
 , gnome3
-, hicolor-icon-theme
 , gsettings-desktop-schemas
 , sassc
 , x11Support ? stdenv.isLinux
@@ -103,7 +102,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    hicolor-icon-theme # setup-hook
     makeWrapper
     meson
     ninja
