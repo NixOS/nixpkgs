@@ -150,3 +150,8 @@
 /pkgs/applications/editors/emacs-modes @adisbladis
 /pkgs/applications/editors/emacs       @adisbladis
 /pkgs/top-level/emacs-packages.nix     @adisbladis
+
+# Prometheus exporter modules and tests
+/nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz
+/nixos/modules/services/monitoring/prometheus/exporters.xml  @WilliButz
+/nixos/tests/prometheus-exporters.nix                        @WilliButz
