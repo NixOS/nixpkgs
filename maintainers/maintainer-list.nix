@@ -2602,6 +2602,15 @@
     email = "t@larkery.com";
     name = "Tom Hinton";
   };
+  hkjn = {
+    email = "me@hkjn.me";
+    name = "Henrik Jonsson";
+    github = "hkjn";
+    keys = [{
+      longkeyid = "rsa4096/0x03EFBF839A5FDC15";
+      fingerprint = "D618 7A03 A40A 3D56 62F5  4B46 03EF BF83 9A5F DC15";
+    }];
+  };
   hlolli = {
     email = "hlolli@gmail.com";
     github = "hlolli";

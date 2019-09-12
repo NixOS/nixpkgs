@@ -719,6 +719,8 @@ in {
 
   mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
 
+  mailman-web = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/web.nix { });
+
   mailmanclient = callPackage ../development/python-modules/mailmanclient { };
 
   mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
@@ -999,6 +1001,8 @@ in {
     `propagatedBuildInputs` may cause collisions.
   */
   pyqt5_with_qtwebkit = self.pyqt5.override { withWebKit = true; };
+
+  pyqt5_with_qtmultimedia = self.pyqt5.override { withMultimedia = true; };
 
   pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
     pythonPackages = self;

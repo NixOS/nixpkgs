@@ -51,7 +51,7 @@ let
 
     dontBuild = true;
     dontConfigure = true;
-    dontPatchElf = true;
+    dontPatchELF = true;
     dontWrapGApps = true;
 
     buildInputs = [ libsecret ] ++ atomEnv.packages;

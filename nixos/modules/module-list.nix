@@ -567,7 +567,6 @@
   ./services/networking/bird.nix
   ./services/networking/bitlbee.nix
   ./services/networking/charybdis.nix
-  ./services/networking/chrony.nix
   ./services/networking/cjdns.nix
   ./services/networking/cntlm.nix
   ./services/networking/connman.nix
@@ -650,14 +649,15 @@
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
-  ./services/networking/ntpd.nix
+  ./services/networking/ntp/chrony.nix
+  ./services/networking/ntp/ntpd.nix
+  ./services/networking/ntp/openntpd.nix
   ./services/networking/nullidentdmod.nix
   ./services/networking/nylon.nix
   ./services/networking/ocserv.nix
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
-  ./services/networking/openntpd.nix
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix

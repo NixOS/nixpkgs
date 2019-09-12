@@ -9,11 +9,11 @@ let
   keyFile = "${stateDir}/chrony.keys";
 
   configFile = pkgs.writeText "chrony.conf" ''
-    ${concatMapStringsSep "\n" (server: "server " + server) cfg.servers}
+    ${concatMapStringsSep "\n" (server: "server " + server + " iburst") cfg.servers}
 
     ${optionalString
       (cfg.initstepslew.enabled && (cfg.servers != []))
-      "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.initstepslew.servers}"
+      "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.servers}"
     }
 
     driftfile ${stateDir}/chrony.drift
@@ -24,7 +24,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  chronyFlags = "-m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
+  chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
 in
 {
   options = {
@@ -48,7 +48,6 @@ in
         default = {
           enabled = true;
           threshold = 1000; # by default, same threshold as 'ntpd -g' (1000s)
-          servers = cfg.servers;
         };
         description = ''
           Allow chronyd to make a rapid measurement of the system clock error at
@@ -76,6 +75,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+
     environment.systemPackages = [ pkgs.chrony ];
 
     users.groups = singleton
@@ -115,7 +116,7 @@ in
 
         unitConfig.ConditionCapability = "CAP_SYS_TIME";
         serviceConfig =
-          { Type = "forking";
+          { Type = "simple";
             ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
 
             ProtectHome = "yes";

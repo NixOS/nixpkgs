@@ -96,6 +96,7 @@ in
   ###### implementation
 
   config = mkIf config.services.ntp.enable {
+    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 
     # Make tools such as ntpq available in the system path.
     environment.systemPackages = [ pkgs.ntp ];

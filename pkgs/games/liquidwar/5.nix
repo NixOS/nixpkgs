@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  NIX_CFLAGS_COMPILE = [ "-lm" ];
+
   meta = with stdenv.lib; {
     description = ''The classic version of a quick tactics game LiquidWar'';
     maintainers = [ maintainers.raskin ];
