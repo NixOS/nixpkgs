@@ -17690,6 +17690,8 @@ in
 
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 
+  crun = callPackage ../applications/virtualization/crun {};
+
   csdp = callPackage ../applications/science/math/csdp { };
 
   ctop = callPackage ../tools/system/ctop { };
