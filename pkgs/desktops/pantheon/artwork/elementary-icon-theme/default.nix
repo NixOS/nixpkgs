@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
+  dontDropIconThemeCache = true;
+
   mesonFlags = [
     "-Dvolume_icons=false" # Tries to install some icons to /
     "-Dpalettes=false" # Don't install gimp and inkscape palette files
