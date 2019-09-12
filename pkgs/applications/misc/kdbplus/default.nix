@@ -1,10 +1,10 @@
-{ stdenv, requireFile, unzip, rlwrap, bash }:
+{ stdenv, requireFile, unzip, rlwrap, bash, zlib }:
 
 assert (stdenv.hostPlatform.system == "i686-linux");
 
 let
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.libc stdenv.cc.cc ];
+    [ stdenv.cc.libc stdenv.cc.cc zlib ];
 in
 stdenv.mkDerivation rec {
   pname = "kdbplus";
