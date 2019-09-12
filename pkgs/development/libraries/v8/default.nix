@@ -73,6 +73,11 @@ stdenv.mkDerivation rec {
     chmod u+w -R .
   '';
 
+  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace build/toolchain/linux/BUILD.gn \
+      --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+  '';
+
   gnFlags = [
     "use_custom_libcxx=false"
     "is_clang=${if stdenv.cc.isClang then "true" else "false"}"
