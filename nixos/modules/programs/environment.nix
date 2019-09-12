@@ -22,6 +22,7 @@ in
         EDITOR = mkDefault "nano";
         XCURSOR_PATH = [ "$HOME/.icons" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
+        GTK_DATA_PREFIX = "${config.system.path}"; # needed for gtk2 apps to find themes
       };
 
     environment.profiles = mkAfter
