@@ -20899,7 +20899,9 @@ in
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
-  trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
+  trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita {
+    inherit (kdeApplications) akonadi-contacts;
+  };
 
   tudu = callPackage ../applications/office/tudu { };
 
