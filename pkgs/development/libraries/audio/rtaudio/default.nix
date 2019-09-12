@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2,  alsaLib, rtmidi }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2,  alsaLib, pulseaudio, rtmidi }:
 
 stdenv.mkDerivation rec {
   version = "5.1.0";
@@ -13,18 +13,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ autoconf automake libtool libjack2 alsaLib rtmidi ];
+  buildInputs = [ autoconf automake libtool libjack2 alsaLib pulseaudio rtmidi ];
 
   preConfigure = ''
     ./autogen.sh --no-configure
     ./configure
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A set of C++ classes that provide a cross platform API for realtime audio input/output";
     homepage =  http://www.music.mcgill.ca/~gary/rtaudio/;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = licenses.mit;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.unix;
   };
 }

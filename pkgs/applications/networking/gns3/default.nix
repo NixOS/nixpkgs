@@ -2,7 +2,7 @@
 
 let
   stableVersion = "2.1.21";
-  previewVersion = "2.2.0rc4";
+  previewVersion = "2.2.0rc5";
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
         branch = if args.stable then "stable" else "preview";
@@ -18,7 +18,7 @@ in {
   };
   guiPreview = mkGui {
     stable = false;
-    sha256Hash = "14fzjaanaxya97wrya2lybxz6qv72fk4ws8i92zvjz4jkvjdk9n3";
+    sha256Hash = "0x4sp6yjnvzpk8cxdqlf51njckmvvkijdb7rvcb4hvqq1ab6gb2x";
   };
 
   serverStable = mkServer {
@@ -27,6 +27,6 @@ in {
   };
   serverPreview = mkServer {
     stable = false;
-    sha256Hash = "03s2kq5f8whk14rhprg9yp3918641b1cwj6djcbjw8xpz0n3w022";
+    sha256Hash = "0inj6fac0683s1sxaba3ljia90cfach0y42xylzgzza36wpyqpqg";
   };
 }

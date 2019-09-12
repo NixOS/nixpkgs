@@ -475,9 +475,13 @@ in {
 
   clifford = callPackage ../development/python-modules/clifford { };
 
+  clickclick = callPackage ../development/python-modules/clickclick { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
+
+  connexion = callPackage ../development/python-modules/connexion { };
 
   cozy = callPackage ../development/python-modules/cozy { };
 
@@ -714,6 +718,8 @@ in {
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
+
+  mailman-web = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/web.nix { });
 
   mailmanclient = callPackage ../development/python-modules/mailmanclient { };
 
@@ -995,6 +1001,8 @@ in {
     `propagatedBuildInputs` may cause collisions.
   */
   pyqt5_with_qtwebkit = self.pyqt5.override { withWebKit = true; };
+
+  pyqt5_with_qtmultimedia = self.pyqt5.override { withMultimedia = true; };
 
   pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
     pythonPackages = self;
@@ -1304,6 +1312,8 @@ in {
   aiohttp-remotes = callPackage ../development/python-modules/aiohttp-remotes { };
 
   aiohttp-socks = callPackage ../development/python-modules/aiohttp-socks { };
+
+  aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
@@ -2815,6 +2825,8 @@ in {
   statsd = callPackage ../development/python-modules/statsd { };
 
   starfish = callPackage ../development/python-modules/starfish { };
+
+  swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
 
   multi_key_dict = callPackage ../development/python-modules/multi_key_dict { };
 
