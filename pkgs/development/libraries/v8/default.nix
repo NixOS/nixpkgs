@@ -104,6 +104,17 @@ stdenv.mkDerivation rec {
     install -D d8 $out/bin/d8
     install -D obj/libv8_monolith.a $out/lib/libv8.a
     cp -r ../../include $out
+
+    mkdir -p $out/lib/pkgconfig
+    cat > $out/lib/pkgconfig/v8.pc << EOF
+    Name: v8
+    Description: V8 JavaScript Engine
+    Version: ${version}
+    Libs: -L$out/lib -lv8 -pthread
+    Cflags: -I$out/include
+    Libs: -L$out/lib -lpulse
+    Cflags: -I$out/include
+    EOF
   '';
 
   meta = with lib; {
