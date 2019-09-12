@@ -37,8 +37,6 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-    # Enables all features, so that we know when new dependencies are necessary.
-    "-Dauto_features=enabled"
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
   ];
 
