@@ -49,7 +49,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  setupHook = ./gtk3-setup-hook.sh;
+  setupHooks = [
+    ./gtk3-clean-immodules-cache.sh
+    ./drop-icon-theme-cache.sh
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
@@ -108,7 +111,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     sassc
-    setupHook
+    setupHooks
   ];
 
   buildInputs = [
