@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" "pic" "relro" "pie" ];
 
+  patches = [ ./i386.patch ];
+
   configureFlags = [ "BUILD_CC=${buildPackages.stdenv.cc.targetPrefix}cc" ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];

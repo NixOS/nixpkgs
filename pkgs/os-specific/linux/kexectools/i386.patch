@@ -1,0 +1,50 @@
+diff --git a/kexec/arch/i386/Makefile b/kexec/arch/i386/Makefile
+index 105cefd..f486103 100644
+--- a/kexec/arch/i386/Makefile
++++ b/kexec/arch/i386/Makefile
+@@ -7,6 +7,7 @@ i386_KEXEC_SRCS += kexec/arch/i386/kexec-elf-x86.c
+ i386_KEXEC_SRCS += kexec/arch/i386/kexec-elf-rel-x86.c
+ i386_KEXEC_SRCS += kexec/arch/i386/kexec-bzImage.c
+ i386_KEXEC_SRCS += kexec/arch/i386/kexec-multiboot-x86.c
++i386_KEXEC_SRCS += kexec/arch/i386/kexec-mb2-x86.c
+ i386_KEXEC_SRCS += kexec/arch/i386/kexec-beoboot-x86.c
+ i386_KEXEC_SRCS += kexec/arch/i386/kexec-nbi.c
+ i386_KEXEC_SRCS += kexec/arch/i386/x86-linux-setup.c
+@@ -14,7 +15,6 @@ i386_KEXEC_SRCS += kexec/arch/i386/crashdump-x86.c
+ 
+ dist += kexec/arch/i386/Makefile $(i386_KEXEC_SRCS)			\
+ 	kexec/arch/i386/crashdump-x86.h					\
+-	kexec/arch/i386/kexec-mb2-x86.c					\
+ 	kexec/arch/i386/kexec-x86.h					\
+ 	kexec/arch/i386/x86-linux-setup.h				\
+ 	kexec/arch/i386/include/arch/options.h
+diff --git a/kexec/arch/i386/kexec-x86.h b/kexec/arch/i386/kexec-x86.h
+index 1b58c3b..0f941df 100644
+--- a/kexec/arch/i386/kexec-x86.h
++++ b/kexec/arch/i386/kexec-x86.h
+@@ -60,6 +60,11 @@ int multiboot_x86_load(int argc, char **argv, const char *buf, off_t len,
+ 	struct kexec_info *info);
+ void multiboot_x86_usage(void);
+ 
++int multiboot2_x86_load(int argc, char **argv, const char *buf, off_t len,
++			struct kexec_info *info);
++void multiboot2_x86_usage(void);
++int multiboot2_x86_probe(const char *buf, off_t buf_len);
++
+ int elf_x86_probe(const char *buf, off_t len);
+ int elf_x86_load(int argc, char **argv, const char *buf, off_t len,
+ 	struct kexec_info *info);
+diff --git a/kexec/arch/x86_64/kexec-x86_64.h b/kexec/arch/x86_64/kexec-x86_64.h
+index 21c3a73..4cdeffb 100644
+--- a/kexec/arch/x86_64/kexec-x86_64.h
++++ b/kexec/arch/x86_64/kexec-x86_64.h
+@@ -33,9 +33,4 @@ int bzImage64_load(int argc, char **argv, const char *buf, off_t len,
+ 			struct kexec_info *info);
+ void bzImage64_usage(void);
+ 
+-int multiboot2_x86_load(int argc, char **argv, const char *buf, off_t len,
+-			struct kexec_info *info);
+-void multiboot2_x86_usage(void);
+-int multiboot2_x86_probe(const char *buf, off_t buf_len);
+-
+ #endif /* KEXEC_X86_64_H */
