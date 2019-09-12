@@ -74,9 +74,6 @@ let
   defaultSessionName = dmDefault + optionalString (wmDefault != "none") ("+" + wmDefault);
 in
 {
-  # Note: the order in which lightdm greeter modules are imported
-  # here determines the default: later modules (if enable) are
-  # preferred.
   imports = [
     ./lightdm-greeters/gtk.nix
     ./lightdm-greeters/mini.nix

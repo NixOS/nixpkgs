@@ -149,12 +149,6 @@ in {
         package = wrappedEnsoGreeter;
         name = "lightdm-enso-os-greeter";
       };
-
-      greeters = {
-        gtk = {
-          enable = mkDefault false;
-        };
-      };
     };
   };
 }
