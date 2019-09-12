@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, qttools
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, qttools
 
 , curl
 , glibcLocales
@@ -30,7 +30,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "keepassxc";
   version = "2.4.3";
 
@@ -103,9 +103,10 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional withKeePassKeeShareSecure quazip
   ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
 
-  preFixup = optionalString stdenv.isDarwin ''
-    # Make it work without Qt in PATH.
+  preFixup = if stdenv.isDarwin then ''
     wrapQtApp $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC
+  '' else ''
+    wrapQtApp $out/bin/keepassxc
   '';
 
   meta = {
