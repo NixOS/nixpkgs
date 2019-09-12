@@ -103,6 +103,7 @@ mkDerivation rec {
   ++ stdenv.lib.optional withKeePassKeeShareSecure quazip
   ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
 
+  dontWrapQtApps = true;
   preFixup = if stdenv.isDarwin then ''
     wrapQtApp $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC
   '' else ''
