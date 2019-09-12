@@ -9,8 +9,8 @@ buildPythonApplication rec {
   version = "9.0.0";
 
   src = fetchFromGitHub {
-    owner = repo;
-    repo = repo;
+    owner = "lesspass";
+    repo = "lesspass";
     rev = version;
     sha256 = "1mdv0c0fn4d72iigy8hz4s7kf7q3pg4gjjadxwxyjwsalapnsapk";
   };
