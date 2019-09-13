@@ -10,7 +10,8 @@
 let
   blivet = import ./blivet.nix {
     inherit stdenv fetchurl buildPythonApplication;
-    inherit pykickstart pyparted pyblock cryptsetup multipath_tools;
+    inherit pyparted pyblock cryptsetup multipath_tools;
+    inherit (python.pkgs) pykickstart;
     inherit useNixUdev;
     inherit (pkgs) lsof utillinux systemd;
     libselinux = pkgs.libselinux.override { enablePython = true; };
@@ -44,9 +45,9 @@ let
     inherit stdenv fetchurl python lvm2 dmraid;
   };
 
-  pykickstart = import ./pykickstart.nix {
-    inherit stdenv fetchurl python buildPythonApplication urlgrabber;
-  };
+  #pykickstart = import ./pykickstart.nix {
+  #  inherit stdenv fetchurl python buildPythonApplication urlgrabber;
+  #};
 
   pyparted = import ./pyparted.nix {
     inherit stdenv fetchurl python buildPythonApplication parted;
