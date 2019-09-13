@@ -77,7 +77,18 @@
     <option>--builders</option> <replaceable>builder-spec</replaceable>
    </arg>
 
+   <sbr/>
+
+   <arg>
+    <option>--flake</option> <replaceable>flake-uri</replaceable>
+   </arg>
+
+   <arg>
+    <option>--config</option> <replaceable>name</replaceable>
+   </arg>
+
    <sbr />
+
    <arg>
     <group choice='req'>
     <arg choice='plain'>
@@ -508,6 +519,35 @@
      </para>
     </listitem>
    </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--flake</option> <replaceable>flake-uri</replaceable>
+    </term>
+    <listitem>
+     <para>
+      Build the NixOS system from the specified flake. The flake must
+      contain an output named
+      <literal>nixosConfigurations.<replaceable>name</replaceable></literal>,
+      where <replaceable>name</replaceable> denotes the name of the
+      configuration and can be specified using the
+      <option>--config</option> option.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--config</option> <replaceable>name</replaceable>
+    </term>
+    <listitem>
+     <para>
+      Specifies which NixOS configuration to use from the
+      flake. Defaults to the current hostname.
+     </para>
+    </listitem>
+   </varlistentry>
+
   </variablelist>
 
   <para>
