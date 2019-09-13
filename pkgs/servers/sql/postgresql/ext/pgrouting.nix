@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A PostgreSQL/PostGIS extension that provides geospatial routing functionality";
     homepage    = https://pgrouting.org/;
     maintainers = [ maintainers.steve-chavez ];
-    platforms   = platforms.linux;
+    platforms   = postgresql.meta.platforms;
     license     = licenses.gpl2;
   };
 }
