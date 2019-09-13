@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://repmgr.org/";
     description = "Replication manager for PostgreSQL cluster";
     license = licenses.postgresql;
+    platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [ zimbatm ];
   };
 }
