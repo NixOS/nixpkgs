@@ -1,0 +1,33 @@
+diff --git a/Platform.c b/Platform.c
+index 1b20b98..6405b8b 100644
+--- a/Platform.c
++++ b/Platform.c
+
+@@ -986,14 +986,10 @@ static String Font_LookupOf(const String* fontName, const char type) {
+ }
+
+ String Font_Lookup(const String* fontName, int style) {
+-	String path;
+ 	if (!font_list.entries.count) Font_Init();
+-	path = String_Empty;
+-
+-	if (style & FONT_STYLE_BOLD)   path = Font_LookupOf(fontName, 'B');
+-	if (style & FONT_STYLE_ITALIC) path = Font_LookupOf(fontName, 'I');
+
+-	return path.length ? path : Font_LookupOf(fontName, 'R');
++	static const String path = String_FromConst("%fontdir%");
++	return path;
+ }
+
+ ReturnCode Font_Make(FontDesc* desc, const String* fontName, int size, int style) {
+@@ -1331,10 +1327,6 @@ static void Font_Init(void) {
+ 	if (err) Logger_Abort2(err, "Failed to init freetype");
+ 	FT_Add_Default_Modules(ft_lib);
+
+-	if (!File_Exists(&cachePath)) {
+-		Window_ShowDialog("One time load", "Initialising font cache, this can take several seconds.");
+-	}
+-
+ 	EntryList_Init(&font_list, FONT_CACHE_FILE, '=');
+ 	for (i = 0; i < Array_Elems(dirs); i++) {
+ 		Directory_Enum(&dirs[i], NULL, Font_DirCallback);

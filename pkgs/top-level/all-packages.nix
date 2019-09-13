@@ -21894,6 +21894,8 @@ in
 
   ckan = callPackage ../games/ckan { };
 
+  classicube = callPackage ../games/classicube {};
+
   cockatrice = libsForQt5.callPackage ../games/cockatrice {  };
 
   commandergenius = callPackage ../games/commandergenius { };
