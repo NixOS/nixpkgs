@@ -20873,9 +20873,7 @@ in
 
   tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 
-  twister = callPackage ../applications/networking/p2p/twister {
-    boost = boost160;
-  };
+  twister = callPackage ../applications/networking/p2p/twister { };
 
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
 
