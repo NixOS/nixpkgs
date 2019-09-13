@@ -1,4 +1,4 @@
-From 3d763f84872351c250ffea26150e73b02b8f4c6f Mon Sep 17 00:00:00 2001
+From d8927c969e3387ca2669a616c0ba53bce918a031 Mon Sep 17 00:00:00 2001
 From: Daniel Fullmer <danielrf12@gmail.com>
 Date: Fri, 13 Sep 2019 15:11:45 -0400
 Subject: [PATCH] Willus mod for k2pdfopt
@@ -904,10 +904,10 @@ index 000000000..45de8cfd3
 +#endif
 +}
 diff --git a/source/fitz/font.c b/source/fitz/font.c
-index 733d91dae..69c46d968 100644
+index 00c6e8f99..1448b4a56 100644
 --- a/source/fitz/font.c
 +++ b/source/fitz/font.c
-@@ -5,8 +5,11 @@
+@@ -4,8 +4,11 @@
  #include "draw-imp.h"
  
  #include <ft2build.h>
@@ -920,13 +920,13 @@ index 733d91dae..69c46d968 100644
  #include <assert.h>
  
 diff --git a/source/fitz/stext-device.c b/source/fitz/stext-device.c
-index 0ba944d44..3c05c51ac 100644
+index 2df90305e..b1f99e056 100644
 --- a/source/fitz/stext-device.c
 +++ b/source/fitz/stext-device.c
-@@ -692,6 +692,11 @@ fz_new_stext_device(fz_context *ctx, fz_stext_page *page, const fz_stext_options
- 	dev->trm = fz_identity;
+@@ -825,6 +825,11 @@ fz_new_stext_device(fz_context *ctx, fz_stext_page *page, const fz_stext_options
  	dev->lastchar = ' ';
  	dev->curdir = 1;
+ 	dev->lasttext = NULL;
 +    /* willus mod -- seems like this should be here, but not sure. */
 +    if (opts)
 +        dev->flags = opts->flags;
@@ -936,11 +936,11 @@ index 0ba944d44..3c05c51ac 100644
  	return (fz_device*)dev;
  }
 diff --git a/source/fitz/string.c b/source/fitz/string.c
-index e70ae6e6e..b310463f4 100644
+index f8eedb682..7a767983d 100644
 --- a/source/fitz/string.c
 +++ b/source/fitz/string.c
-@@ -448,6 +448,10 @@ fz_utflen(const char *s)
- 
+@@ -560,6 +560,10 @@ fz_utflen(const char *s)
+ */
  float fz_atof(const char *s)
  {
 +/* willus mod: atof(s), #if-#else-#endif */
@@ -949,20 +949,20 @@ index e70ae6e6e..b310463f4 100644
 +#else
  	float result;
  
- 	errno = 0;
-@@ -457,6 +461,7 @@ float fz_atof(const char *s)
+ 	if (s == NULL)
+@@ -572,6 +576,7 @@ float fz_atof(const char *s)
  		return 1;
  	result = fz_clamp(result, -FLT_MAX, FLT_MAX);
  	return result;
 +#endif
  }
  
- int fz_atoi(const char *s)
+ /*
 diff --git a/source/pdf/pdf-annot.c b/source/pdf/pdf-annot.c
-index 68de8898a..5d43485bd 100644
+index 4dfdf36fe..acff7d12a 100644
 --- a/source/pdf/pdf-annot.c
 +++ b/source/pdf/pdf-annot.c
-@@ -4,8 +4,20 @@
+@@ -5,8 +5,20 @@
  #include <string.h>
  #include <time.h>
  
@@ -983,12 +983,12 @@ index 68de8898a..5d43485bd 100644
 +    }
  #endif
  
- #define TEXT_ANNOT_SIZE (25.0f)
+ #define isdigit(c) (c >= '0' && c <= '9')
 diff --git a/source/pdf/pdf-link.c b/source/pdf/pdf-link.c
-index ae5beaa35..b5a52a000 100644
+index 37444b471..613cc05b9 100644
 --- a/source/pdf/pdf-link.c
 +++ b/source/pdf/pdf-link.c
-@@ -351,6 +351,9 @@ pdf_resolve_link(fz_context *ctx, pdf_document *doc, const char *uri, float *xp,
+@@ -345,6 +345,9 @@ pdf_resolve_link(fz_context *ctx, pdf_document *doc, const char *uri, float *xp,
  		}
  		return page;
  	}
@@ -999,10 +999,10 @@ index ae5beaa35..b5a52a000 100644
  	return -1;
  }
 diff --git a/source/pdf/pdf-parse.c b/source/pdf/pdf-parse.c
-index 501c5626a..927ba6cd5 100644
+index 04a772204..9dd0cd898 100644
 --- a/source/pdf/pdf-parse.c
 +++ b/source/pdf/pdf-parse.c
-@@ -586,9 +586,14 @@ pdf_parse_ind_obj(fz_context *ctx, pdf_document *doc,
+@@ -663,9 +663,14 @@ pdf_parse_ind_obj(fz_context *ctx, pdf_document *doc,
  			if (c == '\r')
  			{
  				c = fz_peek_byte(ctx, file);
@@ -1018,10 +1018,10 @@ index 501c5626a..927ba6cd5 100644
  			}
  			stm_ofs = fz_tell(ctx, file);
 diff --git a/source/pdf/pdf-xref.c b/source/pdf/pdf-xref.c
-index 2475b6e86..bc163563a 100644
+index 8f888059b..08de7bfba 100644
 --- a/source/pdf/pdf-xref.c
 +++ b/source/pdf/pdf-xref.c
-@@ -707,8 +707,11 @@ pdf_xref_size_from_old_trailer(fz_context *ctx, pdf_document *doc, pdf_lexbuf *b
+@@ -710,8 +710,11 @@ pdf_xref_size_from_old_trailer(fz_context *ctx, pdf_document *doc, pdf_lexbuf *b
  		if (!s)
  			fz_throw(ctx, FZ_ERROR_GENERIC, "xref subsection length missing");
  		len = fz_atoi(fz_strsep(&s, " "));
@@ -1033,7 +1033,7 @@ index 2475b6e86..bc163563a 100644
  
  		/* broken pdfs where the section is not on a separate line */
  		if (s && *s != '\0')
-@@ -1372,7 +1375,10 @@ pdf_init_document(fz_context *ctx, pdf_document *doc)
+@@ -1378,7 +1381,10 @@ pdf_init_document(fz_context *ctx, pdf_document *doc)
  	{
  		pdf_drop_xref_sections(ctx, doc);
  		fz_rethrow_if(ctx, FZ_ERROR_TRYLATER);
@@ -1044,7 +1044,7 @@ index 2475b6e86..bc163563a 100644
  		repaired = 1;
  	}
  
-@@ -1496,7 +1502,10 @@ pdf_drop_document_imp(fz_context *ctx, pdf_document *doc)
+@@ -1506,7 +1512,10 @@ pdf_drop_document_imp(fz_context *ctx, pdf_document *doc)
  		/* Swallow error, but continue dropping */
  	}
  
