@@ -2759,6 +2759,8 @@ in
 
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix {};
 
+  dyndnsc = python3Packages.callPackage ../applications/networking/dyndns/dyndnsc { };
+
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
   e2tools = callPackage ../tools/filesystems/e2tools { };
