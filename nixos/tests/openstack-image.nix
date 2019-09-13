@@ -1,13 +1,12 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 with import common/ec2.nix { inherit makeTest pkgs; };
-
 let
   image = (import ../lib/eval-config.nix {
     inherit system;
@@ -29,21 +28,28 @@ let
   snakeOilPrivateKeyFile = pkgs.writeText "private-key" snakeOilPrivateKey;
   snakeOilPublicKey = sshKeys.snakeOilPublicKey;
 
-in {
+in
+{
   metadata = makeEc2Test {
     name = "openstack-ec2-metadata";
     inherit image;
     sshPublicKey = snakeOilPublicKey;
     userData = ''
       SSH_HOST_ED25519_KEY_PUB:${snakeOilPublicKey}
-      SSH_HOST_ED25519_KEY:${replaceStrings ["\n"] ["|"] snakeOilPrivateKey}
+      SSH_HOST_ED25519_KEY:${replaceStrings [ "\n" ] [ "|" ] snakeOilPrivateKey}
     '';
     script = ''
       machine.start()
-      machine.wait_for_file("/etc/ec2-metadata/user-data")
       machine.wait_for_unit("sshd.service")
 
-      machine.succeed("grep unknown /etc/ec2-metadata/ami-manifest-path")
+      # afterburn.service usually isn't enabled by default, but pulled in as needed by dependent services.
+      # machine.wait_for_unit("afterburn.service")
+
+      # Test ssh keys from metadata are applied
+      # We can't wait for the afterburn-sshkeys@root.service due to #62155, so
+      # we wait for the authorized keys file to be created.
+      # machine.wait_for_unit("afterburn-sshkeys@root.service")
+      machine.wait_for_file("/root/.ssh/authorized_keys.d/afterburn")
 
       # We have no keys configured on the client side yet, so this should fail
       machine.fail("ssh -o BatchMode=yes localhost exit")
