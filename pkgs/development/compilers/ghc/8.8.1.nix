@@ -7,7 +7,8 @@
 
 , libiconv ? null, ncurses
 
-, enableDwarf ? !stdenv.isDarwin, elfutils # for DWARF support
+, enableDwarf ? !stdenv.targetPlatform.isDarwin &&
+                !stdenv.targetPlatform.isWindows, elfutils # for DWARF support
 
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
