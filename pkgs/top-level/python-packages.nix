@@ -489,6 +489,8 @@ in {
 
   curio = callPackage ../development/python-modules/curio { };
 
+  daemonocle = callPackage ../development/python-modules/daemonocle { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
