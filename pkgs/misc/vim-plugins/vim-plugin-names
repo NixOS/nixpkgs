@@ -1,5 +1,6 @@
 907th/vim-auto-save
 airblade/vim-gitgutter
+airblade/vim-rooter
 ajh17/Spacegray.vim
 albfan/nerdtree-git-plugin
 altercation/vim-colors-solarized
@@ -172,6 +173,7 @@ ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
 lfilho/cosco.vim
+lifepillar/vim-mucomplete
 LnL7/vim-nix
 LucHermitte/lh-brackets
 LucHermitte/lh-vim-lib
@@ -182,6 +184,7 @@ lumiliet/vim-twig
 luochen1990/rainbow
 lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
+machakann/vim-swap
 majutsushi/tagbar
 maksimr/vim-jsbeautify
 MarcWeber/vim-addon-actions
@@ -376,7 +379,9 @@ tikhomirov/vim-glsl
 tmux-plugins/vim-tmux
 tomasr/molokai
 tomlion/vim-solidity
+tommcdo/vim-exchange
 tommcdo/vim-lion
+tommcdo/vim-ninja-feet
 tomtom/tcomment_vim
 tomtom/tlib_vim
 tpope/vim-abolish
