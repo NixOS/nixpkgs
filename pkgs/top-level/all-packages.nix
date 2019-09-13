@@ -7472,7 +7472,9 @@ in
     crystal
     crystal2nix;
 
-  icr = callPackage ../development/tools/icr {};
+  icr = callPackage ../development/tools/icr {
+    openssl = openssl_1_0_2;
+  };
 
   scry = callPackage ../development/tools/scry {};
 
