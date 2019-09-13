@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee1e85575587c5b58ddafa25e1c1b01691ef172e139fc25585e5d3f02451da93";
+    sha256 = "004kfapkqxqy2s85pmddqv0fabxdxywxrlbi549p0v237pr2v94p";
   };
 
   checkInputs = [ pytest pytestrunner pyenchant ];
