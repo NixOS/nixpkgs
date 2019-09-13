@@ -35,6 +35,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [ cdrkit ] ++ kernel.moduleBuildDependencies;
 
+  postPatch = ''
+    substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
+      --replace "<ttm/" "<drm/ttm/"
+  '';
+
   unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
         isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
