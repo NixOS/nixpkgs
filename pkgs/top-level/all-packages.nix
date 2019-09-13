@@ -18637,6 +18637,8 @@ in
 
   hpl = callPackage ../tools/misc/hpl { mpi = openmpi; };
 
+  hpmyroom = libsForQt5.callPackage ../applications/networking/hpmyroom { };
+
   ht = callPackage ../applications/editors/ht { };
 
   hubstaff = callPackage ../applications/misc/hubstaff { };
