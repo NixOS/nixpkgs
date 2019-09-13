@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +24,8 @@ buildPythonPackage rec {
     pytest pylint/test -k "not ${lib.concatStringsSep " and not " (
       [ # Broken test
         "test_good_comprehension_checks"
+        # requires setuptools
+        "test_pkginfo"
         # See PyCQA/pylint#2535
         "test_libmodule" ] ++
       # Disable broken darwin tests
