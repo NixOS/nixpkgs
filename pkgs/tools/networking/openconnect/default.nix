@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, fetchgit, darwin } :
+{ stdenv, fetchurl, pkgconfig, openssl ? null, gnutls ? null, gmp, libxml2, p11-kit, libp11 ? null, stoken, zlib, fetchgit, darwin } :
 
 assert (openssl != null) == (gnutls == null);
+assert (openssl != null) -> (libp11 != null);
 
 let vpnc = fetchgit {
   url = "git://git.infradead.org/users/dwmw2/vpnc-scripts.git";
@@ -27,8 +28,9 @@ in stdenv.mkDerivation rec {
     "--without-openssl-version-check"
   ];
 
-  buildInputs = [ openssl gnutls gmp libxml2 stoken zlib ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC;
+  buildInputs = [ openssl gnutls gmp libxml2 p11-kit stoken zlib ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC
+    ++ stdenv.lib.optional (openssl != null) libp11;
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
