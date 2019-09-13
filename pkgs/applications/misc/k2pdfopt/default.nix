@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp -r ${v251a_src}/* $sourceRoot
   '';
 
-  patches = [ ./k2pdfopt.patch ];
+  patches = [ ./k2pdfopt.patch ./k2pdfopt-mupdf-1.16.1.patch ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     #  corresponding files in the respective source trees, resolving any errors
     #  with more recent versions of these depencencies, and running diff.
     mupdf_modded = mupdf.overrideAttrs (attrs: {
-      patches = attrs.patches ++ [ ./mupdf.patch ]; # Last verified with mupdf 1.14.0
+      patches = attrs.patches ++ [ ./mupdf.patch ]; # Last verified with mupdf 1.16.1
     });
     leptonica_modded = leptonica.overrideAttrs (attrs: {
       patches = [ ./leptonica.patch ]; # Last verified with leptonica 1.78.0
