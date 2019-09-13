@@ -3851,7 +3851,7 @@ in
 
   httping = callPackage ../tools/networking/httping {};
 
-  httplz = callPackage ../tools/networking/httplz { };
+  httplz = callPackage ../tools/networking/httplz { openssl = openssl_1_0_2; };
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
