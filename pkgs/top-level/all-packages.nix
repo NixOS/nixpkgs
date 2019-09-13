@@ -11410,6 +11410,8 @@ in
 
   isso = callPackage ../servers/isso { };
 
+  itk4 = callPackage ../development/libraries/itk/4.x.nix { };
+
   itk = callPackage ../development/libraries/itk { };
 
   jasper = callPackage ../development/libraries/jasper { };
