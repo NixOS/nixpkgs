@@ -966,8 +966,6 @@ in
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
-  arc-theme = callPackage ../misc/themes/arc { };
-
   arc-kde-theme = callPackage ../misc/themes/arc-kde { };
 
   adapta-gtk-theme = callPackage ../misc/themes/adapta { };
@@ -16548,6 +16546,8 @@ in
   ant-theme = callPackage ../data/themes/ant-theme { };
 
   arc-icon-theme = callPackage ../data/icons/arc-icon-theme { };
+
+  arc-theme = callPackage ../data/themes/arc { };
 
   arkpandora_ttf = callPackage ../data/fonts/arkpandora { };
 
