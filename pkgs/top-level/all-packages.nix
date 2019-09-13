@@ -18416,8 +18416,6 @@ in
 
   inherit (gnome3) gitg;
 
-  giv = callPackage ../applications/graphics/giv { };
-
   gmrun = callPackage ../applications/misc/gmrun {};
 
   gnucash = callPackage ../applications/office/gnucash {
