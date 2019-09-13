@@ -30,7 +30,6 @@ buildPythonPackage rec {
   doCheck = true;
 
   checkPhase = ''
-    ${python.interpreter} python${pythonSuffix}/smoketest.py
     ${python.interpreter} python${pythonSuffix}/pythontest.py
   '';
 
