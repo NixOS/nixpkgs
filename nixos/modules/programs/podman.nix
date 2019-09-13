@@ -87,11 +87,52 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment = {
+      etc."containers/libpod.conf".text = ''
+        cgroup_manager = "systemd"
+        cni_config_dir = "/etc/cni/net.d/"
+        cni_default_network = "podman"
+        cni_plugin_dir = ["${pkgs.cni-plugins}/bin/"]
+        conmon_path = ["${pkgs.conmon}/bin/conmon"]
+        image_default_transport = "docker://"
+        runtime = "${pkgs.crun}/bin/crun"
+        runtimes = ["${pkgs.crun}/bin/crun", "${pkgs.runc}/bin/runc"]
+        # pause
+        pause_image = "k8s.gcr.io/pause:3.1"
+        pause_command = "/pause"
+      '';
+      etc."cni/net.d/87-podman-bridge.conflist".text = (builtins.toJSON {
+        cniVersion = "0.3.0";
+        name = "podman";
+        plugins = [
+          {
+            type = "bridge";
+            bridge = "cni0";
+            isGateway = true;
+            ipMasq = true;
+            ipam = {
+              type = "host-local";
+              subnet = "10.88.0.0/16";
+              routes = [
+                { dst = "0.0.0.0/0"; }
+              ];
+            };
+          }
+          {
+            type = "portmap";
+            capabilities = {
+              portMappings = true;
+            };
+          }
+        ];
+      });
       etc."containers/registries.conf".text = registriesConf;
       etc."containers/policy.json".text = builtins.toJSON cfg.policy;
 
       systemPackages = lib.mkIf cfg.installSystemWide
-        (with pkgs; [ buildah fuse-overlayfs podman runc slirp4netns ]);
+      (with pkgs; [
+        buildah conmon crun fuse-overlayfs podman runc slirp4netns
+        iptables
+      ]);
     };
   };
 }
