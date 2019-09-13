@@ -806,8 +806,8 @@ in {
           export otp="$(<'${cfg.secrets.otpFile}')"
           export jws="$(<'${cfg.secrets.jwsFile}')"
           ${pkgs.jq}/bin/jq -n '{production: {secret_key_base: $ENV.secret,
-                                              otp_key_base: $ENV.db,
-                                              db_key_base: $ENV.otp,
+                                              otp_key_base: $ENV.otp,
+                                              db_key_base: $ENV.db,
                                               openid_connect_signing_key: $ENV.jws}}' \
                             > '${cfg.statePath}/config/secrets.yml'
         )
