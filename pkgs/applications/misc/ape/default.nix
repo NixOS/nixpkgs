@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "6.7-131003";
+  version = "6.7.180715";
 
   buildInputs = [ swiProlog makeWrapper ];
 
@@ -16,14 +16,12 @@ stdenv.mkDerivation rec {
      owner = "Attempto";
      repo = "APE";
      rev = version;
-     sha256 = "0cw47qjg4896kw3vps6rfs02asvscsqvcfdiwgfmqb3hvykb1sdx";
+     sha256 = "1jnr6y4kc6d5rjy6bbbnn4n7rl6ajpvw4xf4067wjh28c9scjwg3";
   };
 
   patchPhase = ''
-    # We move the file first to avoid "same file" error in the default case
-    cp ${lexicon} new_lexicon.pl
-    rm lexicon/clex_lexicon.pl
-    cp new_lexicon.pl lexicon/clex_lexicon.pl
+    # don't try to force /bin/bash
+    sed -i '/SHELL=\/bin\/bash/d' Makefile
   '';
 
   buildPhase = ''
