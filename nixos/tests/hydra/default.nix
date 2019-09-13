@@ -8,8 +8,10 @@ let
   trivialJob = pkgs.writeTextDir "trivial.nix" ''
    { trivial = builtins.derivation {
        name = "trivial";
-       system = "x86_64-linux";
+       system = "${system}";
        builder = "/bin/sh";
+       allowSubstitutes = false;
+       preferLocalBuild = true;
        args = ["-c" "echo success > $out; exit 0"];
      };
    }
@@ -57,7 +59,7 @@ let
             nix = {
               buildMachines = [{
                 hostName = "localhost";
-                systems = [ "x86_64-linux" ];
+                systems = [ system ];
               }];
 
               binaryCaches = [];
