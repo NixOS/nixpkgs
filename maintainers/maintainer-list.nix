@@ -3858,12 +3858,12 @@
     githubId = 34086;
     name = "Marc Weber";
   };
-	marenz = {
-		email = "marenz@arkom.men";
-		github = "marenz2569";
-		githubId = 12773269;
-		name = "Markus Schmidl";
-	};
+  marenz = {
+    email = "marenz@arkom.men";
+    github = "marenz2569";
+    githubId = 12773269;
+    name = "Markus Schmidl";
+  };
   markus1189 = {
     email = "markus1189@gmail.com";
     github = "markus1189";
@@ -5333,6 +5333,12 @@
     githubId = 3302;
     name = "Renzo Carbonara";
   };
+  reset = {
+    email = "jamie@onemoregame.com";
+    github = "reset";
+    name = "Jamie Winsor";
+    githubId = 54036;
+  };
   retrry = {
     email = "retrry@gmail.com";
     github = "retrry";
@@ -6649,7 +6655,7 @@
     githubId = 1525767;
     name = "Vaibhav Sagar";
   };
-  valebes = {  
+  valebes = {
     email = "valebes@gmail.com";
     github = "valebes";
     githubid = 10956211;

@@ -211,7 +211,11 @@ in
 
   dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
 
-  dotnet-sdk = callPackage ../development/compilers/dotnet/sdk { };
+  dotnet-sdk =
+    if stdenv.isDarwin then
+      callPackage ../development/compilers/dotnet/sdk/darwin { }
+    else
+      callPackage ../development/compilers/dotnet/sdk { };
 
   dispad = callPackage ../tools/X11/dispad { };
 
