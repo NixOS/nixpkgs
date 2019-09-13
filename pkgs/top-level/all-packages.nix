@@ -24686,6 +24686,8 @@ in
 
   hy = callPackage ../development/interpreters/hy {};
 
+  wmic-bin = callPackage ../servers/monitoring/plugins/wmic-bin.nix { };
+
   check-uptime = callPackage ../servers/monitoring/plugins/uptime.nix { };
 
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
