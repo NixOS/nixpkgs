@@ -15113,8 +15113,6 @@ in
     python = python3;
   };
 
-  sambaMaster = callPackage ../servers/samba/master.nix { };
-
   samba = samba4;
 
   # A lightweight Samba 3, useful for non-Linux-based OSes.
