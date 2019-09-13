@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libosmocore-${version}";
+  pname = "libosmocore";
   version = "1.2.0";
 
   src = fetchFromGitHub {

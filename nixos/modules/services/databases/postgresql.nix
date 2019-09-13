@@ -81,6 +81,10 @@ in
         default = "";
         description = ''
           Defines the mapping from system users to database users.
+
+          The general form is:
+
+          map-name system-username database-username
         '';
       };
 
@@ -224,7 +228,7 @@ in
       # systems!
       mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
             else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
-            else pkgs.postgresql_9_4);
+            else throw "postgresql_9_4 was removed, please upgrade your postgresql version.");
 
     services.postgresql.dataDir =
       mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"

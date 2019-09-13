@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, openssl, lua, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "imapfilter-${version}";
+  pname = "imapfilter";
   version = "2.6.12";
 
   src = fetchFromGitHub {

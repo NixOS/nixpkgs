@@ -3,7 +3,8 @@
 let
   version = "2.3.1";
 in stdenv.mkDerivation {
-  name = "gcolor3-${version}";
+  pname = "gcolor3";
+  inherit version;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

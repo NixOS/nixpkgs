@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, zeromq }:
 
 stdenv.mkDerivation rec {
-  name = "cppzmq-${version}";
+  pname = "cppzmq";
   version = "4.4.1";
 
   src = fetchFromGitHub {

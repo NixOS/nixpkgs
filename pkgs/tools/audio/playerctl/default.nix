@@ -1,7 +1,7 @@
 { stdenv, meson, ninja, fetchFromGitHub, glib, pkgconfig, gtk-doc, docbook_xsl, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "playerctl-${version}";
+  pname = "playerctl";
   version = "2.0.2";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "mailexporter-${version}";
+buildGoPackage {
+  pname = "mailexporter";
   version = "2019-07-14";
 
   goPackagePath = "github.com/cherti/mailexporter";

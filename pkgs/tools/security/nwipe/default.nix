@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.25";
-  name = "nwipe-${version}";
+  pname = "nwipe";
   src = fetchFromGitHub {
     owner = "martijnvanbrummelen";
     repo = "nwipe";

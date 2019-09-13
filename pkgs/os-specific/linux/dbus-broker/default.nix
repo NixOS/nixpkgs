@@ -2,7 +2,7 @@
 , dbus, linuxHeaders, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "dbus-broker-${version}";
+  pname = "dbus-broker";
   version = "21";
 
   src = fetchFromGitHub {

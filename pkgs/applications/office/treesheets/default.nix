@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name    = "treesheets-${version}";
+  pname = "treesheets";
   version = "1.0.1";
 
   src = fetchFromGitHub {

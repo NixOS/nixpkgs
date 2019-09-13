@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "jdupes-${version}";
+  pname = "jdupes";
   version = "1.13.2";
 
   src = fetchFromGitHub {

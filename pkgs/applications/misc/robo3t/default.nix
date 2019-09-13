@@ -2,7 +2,7 @@
   freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "robo3t-${version}";
+  pname = "robo3t";
   version = "1.3.1";
   rev = "7419c406";
 

@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.0-b31";
-  name = "i-score-${version}";
+  pname = "i-score";
 
   src = fetchFromGitHub {
     owner = "OSSIA";

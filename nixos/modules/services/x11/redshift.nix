@@ -81,7 +81,7 @@ in {
     # needed so that .desktop files are installed, which geoclue cares about
     environment.systemPackages = [ cfg.package ];
 
-    services.geoclue2.appConfig."redshift" = {
+    services.geoclue2.appConfig.redshift = {
       isAllowed = true;
       isSystem = true;
     };

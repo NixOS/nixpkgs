@@ -12,10 +12,11 @@ let
   version = "4.0.1";
 
 in stdenv.mkDerivation rec {
-  name = "openmpi-${version}";
+  pname = "openmpi";
+  inherit version;
 
   src = with stdenv.lib.versions; fetchurl {
-    url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${name}.tar.bz2";
+    url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
     sha256 = "02cpzcp113gj5hb0j2xc0cqma2fn04i2i0bzf80r71120p9bdryc";
   };
 

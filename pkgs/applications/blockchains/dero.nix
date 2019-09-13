@@ -2,7 +2,7 @@
 , lmdb, miniupnpc, readline }:
 
 stdenv.mkDerivation rec {
-  name = "dero-${version}";
+  pname = "dero";
   version = "0.11.6";
 
   src = fetchFromGitHub {

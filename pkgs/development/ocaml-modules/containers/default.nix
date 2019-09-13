@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
-    rev = "${version}";
+    rev = version;
     sha256 = "1wbarxphdrxvy7qsdp4p837h1zrv0z83pgs5lbz2h3kdnyvz2f1i";
   };
 

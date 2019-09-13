@@ -14,7 +14,7 @@
 , codecov
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "stumpy";
   version = "1.0";
 

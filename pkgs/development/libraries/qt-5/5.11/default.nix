@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 {
   newScope,
-  stdenv, fetchurl, fetchFromGitHub, makeSetupHook, makeWrapper,
+  stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
   llvmPackages_5,
@@ -55,7 +55,15 @@ let
       ./qtbase-fixguicmake.patch
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
-    qtscript = [ ./qtscript.patch ];
+    qtscript = [
+      ./qtscript.patch
+      # needed due to changes in gcc 8.3, see https://bugreports.qt.io/browse/QTBUG-74196
+      # fixed in qtscript 5.12.2
+      (fetchpatch {
+        url = "https://github.com/qt/qtscript/commit/97ec1d1882a83c23c91f0f7daea48e05858d8c32.diff";
+        sha256 = "0khrapq13xzvxckzc9l7gqyjwibyd98vyqy6gmyhvsbm2kq8n6wi";
+      })
+    ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
     qtwebengine = [

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, perlPackages }: stdenv.mkDerivation rec {
-  name = "schema2ldif-${version}";
+  pname = "schema2ldif";
   version = "1.3";
 
   src = fetchurl {

@@ -19,11 +19,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "samba-${version}";
+  pname = "samba";
   version = "4.10.6";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
+    url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
     sha256 = "0hpgdqlyczj98pkh2ldglvvnkrb1q541r3qikdvxq0qjvd9fpywy";
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     [ "--with-static-modules=NONE"
       "--with-shared-modules=ALL"
       "--with-system-mitkrb5"
-      "--with-system-mitkdc" "${krb5Full}"
+      "--with-system-mitkdc" krb5Full
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"

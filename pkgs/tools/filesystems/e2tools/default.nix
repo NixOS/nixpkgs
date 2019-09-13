@@ -3,10 +3,9 @@
 stdenv.mkDerivation rec {
   pname = "e2tools";
   version = "0.0.16";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://home.earthlink.net/~k_sheff/sw/${pname}/${name}.tar.gz";
+    url = "http://home.earthlink.net/~k_sheff/sw/${pname}/${pname}-${version}.tar.gz";
     sha256 = "16wlc54abqz06dpipjdkw58bncpkxlj5f55lkzy07k3cg0bqwg2f";
   };
 

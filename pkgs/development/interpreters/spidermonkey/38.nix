@@ -5,7 +5,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "38.8.0";
-  name = "spidermonkey-${version}";
+  pname = "spidermonkey";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.bz2";

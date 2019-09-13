@@ -20,11 +20,11 @@ let
     icuEnabled = atLeast "10";
 
   in stdenv.mkDerivation rec {
-    name = "postgresql-${version}";
+    pname = "postgresql";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
+      url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
 
@@ -167,14 +167,6 @@ let
   };
 
 in self: {
-
-  postgresql_9_4 = self.callPackage generic {
-    version = "9.4.24";
-    psqlSchema = "9.4";
-    sha256 = "0acl1wmah3r1a0qjjmpc256glccrjnzq4pkwklx4d9s6vmkks9aj";
-    this = self.postgresql_9_4;
-    inherit self;
-  };
 
   postgresql_9_5 = self.callPackage generic {
     version = "9.5.19";

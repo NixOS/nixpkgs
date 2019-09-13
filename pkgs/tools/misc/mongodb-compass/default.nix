@@ -52,7 +52,8 @@ let
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "mongodb-compass-${version}";
+  pname = "mongodb-compass";
+  inherit version;
 
   inherit src;
 

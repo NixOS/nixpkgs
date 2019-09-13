@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "CopyQ-${version}";
+  pname = "CopyQ";
   version = "3.9.0";
 
   src  = fetchFromGitHub {

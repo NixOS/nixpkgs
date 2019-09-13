@@ -60,7 +60,8 @@ let
 
   };
 in stdenv.mkDerivation rec {
-  name = "libreoffice-${version}";
+  pname = "libreoffice";
+  inherit version;
 
   inherit (primary-src) src;
 
@@ -278,7 +279,7 @@ in stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "${if withHelp then "" else "--without-help"}"
+    (if withHelp then "" else "--without-help")
     "--with-boost=${boost.dev}"
     "--with-boost-libdir=${boost.out}/lib"
     "--with-beanshell-jar=${bsh}"

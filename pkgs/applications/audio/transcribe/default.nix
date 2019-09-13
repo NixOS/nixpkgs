@@ -2,7 +2,7 @@
 , glib, gst_all_1,  gtk3, libSM, libX11, libpng12, pango, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "transcribe-${version}";
+  pname = "transcribe";
   version = "8.72";
 
   src = if stdenv.hostPlatform.system == "i686-linux" then

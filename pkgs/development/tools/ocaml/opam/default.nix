@@ -59,8 +59,8 @@ let
       sha256 = "0arv5zaikvcqbicdk47jpfgvjrqhqm71yq2zmj7pp6zf7bm0js6s";
     };
   };
-in stdenv.mkDerivation rec {
-  name = "opam-${version}";
+in stdenv.mkDerivation {
+  pname = "opam";
   version = "2.0.5";
 
   buildInputs = [ unzip curl ncurses ocaml makeWrapper getconf ] ++ lib.optional stdenv.isLinux bubblewrap;

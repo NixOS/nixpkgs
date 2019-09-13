@@ -1,6 +1,6 @@
 { stdenv, fetchzip, autoreconfHook, zlib, bzip2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bgpdump-2017-09-29";
 
   src = fetchzip {

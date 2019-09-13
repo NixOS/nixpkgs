@@ -129,7 +129,8 @@ common =
         inherit fromGit;
 
         perl-bindings = if includesPerl then nix else stdenv.mkDerivation {
-          name = "nix-perl-${version}";
+          pname = "nix-perl";
+          inherit version;
 
           inherit src;
 
@@ -173,10 +174,10 @@ in rec {
   };
 
   nixStable = callPackage common (rec {
-    name = "nix-2.2.2";
+    name = "nix-2.3";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "f80a1b4f9837a8d33209f0b7769d5038335459ff4303eccf3e9217a9eca8594c";
+      sha256 = "b1d1b4d87390941fc64b19776f1ed9e3871231d38f5a1f295dd13925acd3a98d";
     };
 
     inherit storeDir stateDir confDir boehmgc;

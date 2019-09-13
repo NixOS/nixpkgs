@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "diskus-${version}";
+  pname = "diskus";
   version = "0.5.0";
 
   src = fetchFromGitHub {

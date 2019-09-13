@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "kubicorn-${version}";
+  pname = "kubicorn";
   version = "2018-10-13-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "4c7f3623e9188fba43778271afe161a4facfb657";
 

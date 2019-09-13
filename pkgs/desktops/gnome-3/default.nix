@@ -53,10 +53,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gjs = callPackage ./core/gjs { };
 
-  glib-networking = pkgs.glib-networking.override {
-    inherit (pkgs) gsettings-desktop-schemas;
-  };
-
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
@@ -111,7 +107,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gucharmap = callPackage ./core/gucharmap { };
 
-  gvfs = pkgs.gvfs.override { gnome = gnome3; gnomeSupport = true; };
+  gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
   eog = callPackage ./core/eog { };
 
@@ -235,8 +231,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
 
-  nemiver = callPackage ./devtools/nemiver { };
-
 #### Games
 
   aisleriot = callPackage ./games/aisleriot { };
@@ -348,6 +342,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
   inherit (pkgs) gnome-video-effects; # added 2019-08-19
   inherit (pkgs) gnome-online-accounts grilo grilo-plugins tracker tracker-miners gnome-photos; # added 2019-08-23
+  inherit (pkgs) glib-networking; # added 2019-09-02
+  inherit (pkgs) nemiver; # added 2019-09-09
 
   defaultIconTheme = adwaita-icon-theme;
   gtk = gtk3;

@@ -35,12 +35,12 @@ let
   clientConfig = {
     options = {
       accept = mkOption {
-        type = types.string;
+        type = types.str;
         description = "IP:Port on which connections should be accepted.";
       };
 
       connect = mkOption {
-        type = types.string;
+        type = types.str;
         description = "IP:Port destination to connect to.";
       };
 
@@ -63,7 +63,7 @@ let
       };
 
       verifyHostname = mkOption {
-        type = with types; nullOr string;
+        type = with types; nullOr str;
         default = null;
         description = "If set, stunnel checks if the provided certificate is valid for the given hostname.";
       };
@@ -88,13 +88,13 @@ in
       };
 
       user = mkOption {
-        type = with types; nullOr string;
+        type = with types; nullOr str;
         default = "nobody";
         description = "The user under which stunnel runs.";
       };
 
       group = mkOption {
-        type = with types; nullOr string;
+        type = with types; nullOr str;
         default = "nogroup";
         description = "The group under which stunnel runs.";
       };

@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "glances-${version}";
+  pname = "glances";
   version = "3.1.2";
   disabled = isPyPy;
 

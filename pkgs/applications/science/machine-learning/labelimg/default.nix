@@ -1,6 +1,6 @@
 { stdenv, python2Packages, fetchurl }:
   python2Packages.buildPythonApplication rec {
-    name = "labelImg-${version}";
+    pname = "labelImg";
     version = "1.6.0";
     src = fetchurl {
       url = "https://github.com/tzutalin/labelImg/archive/v${version}.tar.gz";

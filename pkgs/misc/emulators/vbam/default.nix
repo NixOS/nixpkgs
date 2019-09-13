@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "visualboyadvance-m-${version}";
+  pname = "visualboyadvance-m";
   version = "2.1.3";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";

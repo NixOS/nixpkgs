@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rpm-${version}";
+  pname = "rpm";
   version = "4.14.2.1";
 
   src = fetchurl {

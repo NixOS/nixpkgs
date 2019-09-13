@@ -5,12 +5,11 @@
 stdenv.mkDerivation rec {
   pname = "tig";
   version = "2.4.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0i26yfn2vjgsg1kdvhhv55jwzds7ih7cnad1xqvilqm83zh47ksd";
   };
 

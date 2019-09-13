@@ -5,8 +5,8 @@
 , fixDarwinDylibNames, Cocoa ? null
 }:
 
-stdenv.mkDerivation rec {
-  name = "ycmd-${version}";
+stdenv.mkDerivation {
+  pname = "ycmd";
   version = "2018-09-20";
 
   src = fetchgit {

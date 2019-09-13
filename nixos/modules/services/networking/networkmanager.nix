@@ -8,6 +8,8 @@ let
   dynamicHostsEnabled =
     cfg.dynamicHosts.enable && cfg.dynamicHosts.hostsDirs != {};
 
+  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
+
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
@@ -81,9 +83,9 @@ let
   '';
 
   dispatcherTypesSubdirMap = {
-    "basic" = "";
-    "pre-up" = "pre-up.d/";
-    "pre-down" = "pre-down.d/";
+    basic = "";
+    pre-up = "pre-up.d/";
+    pre-down = "pre-down.d/";
   };
 
   macAddressOpt = mkOption {
@@ -156,7 +158,7 @@ in {
       };
 
       unmanaged = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = ''
           List of interfaces that will not be managed by NetworkManager.
@@ -177,10 +179,11 @@ in {
       basePackages = mkOption {
         type = types.attrsOf types.package;
         default = { inherit (pkgs)
-                            networkmanager modemmanager wpa_supplicant crda
+                            networkmanager modemmanager crda
                             networkmanager-openvpn networkmanager-vpnc
                             networkmanager-openconnect networkmanager-fortisslvpn
-                            networkmanager-l2tp networkmanager-iodine; };
+                            networkmanager-l2tp networkmanager-iodine; }
+                  // optionalAttrs (!delegateWireless) { inherit (pkgs) wpa_supplicant; };
         internal = true;
       };
 
@@ -377,8 +380,11 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = config.networking.wireless.enable == false;
-        message = "You can not use networking.networkmanager with networking.wireless";
+      { assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [];
+        message = ''
+          You can not use networking.networkmanager with networking.wireless.
+          Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
+        '';
       }
       { assertion = !dynamicHostsEnabled || (dynamicHostsEnabled && cfg.dns == "dnsmasq");
         message = ''
@@ -453,7 +459,7 @@ in {
 
     systemd.packages = cfg.packages;
 
-    systemd.services."NetworkManager" = {
+    systemd.services.NetworkManager = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
 
@@ -483,7 +489,7 @@ in {
       };
     };
 
-    systemd.services."NetworkManager-dispatcher" = {
+    systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
 
@@ -491,17 +497,16 @@ in {
       path = [ pkgs.iproute pkgs.utillinux pkgs.coreutils ];
     };
 
-    # Turn off NixOS' network management
-    networking = {
+    # Turn off NixOS' network management when networking is managed entirely by NetworkManager
+    networking = (mkIf (!delegateWireless) {
       useDHCP = false;
-      # use mkDefault to trigger the assertion about the conflict above
+      # Use mkDefault to trigger the assertion about the conflict above
       wireless.enable = mkDefault false;
-    };
+    }) // (mkIf cfg.enableStrongSwan {
+      networkmanager.packages = [ pkgs.networkmanager_strongswan ];
+    });
 
     security.polkit.extraConfig = polkitConf;
-
-    networking.networkmanager.packages =
-      mkIf cfg.enableStrongSwan [ pkgs.networkmanager_strongswan ];
 
     services.dbus.packages =
       optional cfg.enableStrongSwan pkgs.strongswanNM ++ cfg.packages;

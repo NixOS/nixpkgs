@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, SDL2_ttf, libsodium, pkg-config }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "unstable-2019-07-28";
   pname = "devilutionx";
 

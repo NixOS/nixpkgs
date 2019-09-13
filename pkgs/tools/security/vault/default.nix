@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
-  name = "vault-${version}";
+  pname = "vault";
   version = "1.2.2";
 
   src = fetchFromGitHub {

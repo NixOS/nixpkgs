@@ -16,7 +16,7 @@ let
   boostPython = boost.override { enablePython = true; };
 
 in stdenv.mkDerivation rec {
-  name = "twister-${version}";
+  pname = "twister";
   version = "0.9.34";
 
   src = fetchurl {

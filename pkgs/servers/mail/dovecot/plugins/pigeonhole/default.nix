@@ -1,7 +1,7 @@
 { stdenv, fetchurl, dovecot, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-pigeonhole-${version}";
+  pname = "dovecot-pigeonhole";
   version = "0.5.7.2";
 
   src = fetchurl {

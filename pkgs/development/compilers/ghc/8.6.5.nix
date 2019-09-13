@@ -7,6 +7,8 @@
 
 , libiconv ? null, ncurses
 
+, enableDwarf ? !stdenv.isDarwin, elfutils # for DWARF support
+
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
@@ -76,7 +78,8 @@ let
   libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
     ++ [libffi]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
-    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
+    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
+    ++ stdenv.lib.optional enableDwarf elfutils;
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
@@ -104,7 +107,7 @@ stdenv.mkDerivation (rec {
      name = "D5123.diff";
      sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
     })
-    (fetchpatch rec { # https://github.com/haskell/haddock/issues/900
+    (fetchpatch { # https://github.com/haskell/haddock/issues/900
      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/983.diff";
      name = "loadpluginsinmodules.diff";
      sha256 = "0bvvv0zsfq2581zsir97zfkggc1kkircbbajc2fz3b169ycpbha1";
@@ -179,6 +182,8 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
+  ] ++ stdenv.lib.optional enableDwarf [
+    "--enable-dwarf-unwind"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatability.
@@ -225,6 +230,10 @@ stdenv.mkDerivation (rec {
       egrep --quiet '^#!' <(head -n 1 $i) || continue
       sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
     done
+  ''
+  # Temporary work-around for https://github.com/NixOS/nixpkgs/issues/66277
+  + stdenv.lib.optionalString hostPlatform.isAarch64 ''
+    rm -rf "$doc/share/doc/ghc/html/libraries"
   '';
 
   passthru = {

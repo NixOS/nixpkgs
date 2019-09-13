@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "openmp-${version}";
+  pname = "openmp";
+  inherit version;
 
   src = fetch "openmp" "195dykamd39yhi5az7nqj3ksqhb3wq30l93jnfkxl0061qbknsgc";
 

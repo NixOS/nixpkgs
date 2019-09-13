@@ -6,7 +6,8 @@ let
   version = "2011-12-26";
 in
 stdenv.mkDerivation {
-  name = "xburst-tools-${version}";
+  pname = "xburst-tools";
+  inherit version;
 
   src = fetchgit {
     url = git://projects.qi-hardware.com/xburst-tools.git;

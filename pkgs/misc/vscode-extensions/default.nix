@@ -10,7 +10,7 @@ in
 # So an extension's attribute name should be of the form:
 # "${mktplcRef.publisher}.${mktplcRef.name}".
 #
-rec {
+{
 
   alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
     mktplcRef = {

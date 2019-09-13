@@ -30,7 +30,7 @@ assert cddaSupport -> libcdda != null;
 assert youtubeSupport -> youtube-dl != null;
 
 stdenv.mkDerivation rec {
-  name = "bomi-${version}";
+  pname = "bomi";
   version = "0.9.11";
 
   src = fetchFromGitHub {

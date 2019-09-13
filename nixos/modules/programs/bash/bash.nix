@@ -159,7 +159,7 @@ in
 
     };
 
-    environment.etc."profile".text =
+    environment.etc.profile.text =
       ''
         # /etc/profile: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for login shells.
@@ -184,7 +184,7 @@ in
         fi
       '';
 
-    environment.etc."bashrc".text =
+    environment.etc.bashrc.text =
       ''
         # /etc/bashrc: DO NOT EDIT -- this file has been generated automatically.
 
@@ -212,7 +212,7 @@ in
 
     # Configuration for readline in bash. We use "option default"
     # priority to allow user override using both .text and .source.
-    environment.etc."inputrc".source = mkOptionDefault ./inputrc;
+    environment.etc.inputrc.source = mkOptionDefault ./inputrc;
 
     users.defaultUserShell = mkDefault pkgs.bashInteractive;
 

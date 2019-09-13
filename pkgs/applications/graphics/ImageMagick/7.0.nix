@@ -19,8 +19,8 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
-  name = "imagemagick-${version}";
+stdenv.mkDerivation {
+  pname = "imagemagick";
   inherit (cfg) version;
 
   src = fetchFromGitHub {

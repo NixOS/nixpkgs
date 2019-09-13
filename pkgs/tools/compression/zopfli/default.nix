@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "zopfli-${version}";
+  pname = "zopfli";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zopfli";
-    rev = name;
-    name = "${name}-src";
+    rev = "${pname}-${version}";
+    name = "${pname}-${version}-src";
     sha256 = "1l551hx2p4qi0w9lk96qklbv6ll68gxbah07fhqx1ly28rv5wy9y";
   };
 

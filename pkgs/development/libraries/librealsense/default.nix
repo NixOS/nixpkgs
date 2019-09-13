@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, libusb, ninja, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "librealsense-${version}";
+  pname = "librealsense";
   version = "2.25.0";
 
   src = fetchFromGitHub {

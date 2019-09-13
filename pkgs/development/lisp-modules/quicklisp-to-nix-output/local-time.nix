@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''local-time'';
   version = ''20190710-git'';
 

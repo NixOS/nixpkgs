@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.3.4";
-  name = "zathura-pdf-mupdf-${version}";
+  pname = "zathura-pdf-mupdf";
 
   # pwmt.org server was down at the time of last update
   # src = fetchurl {

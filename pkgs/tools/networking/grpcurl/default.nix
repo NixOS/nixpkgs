@@ -3,7 +3,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "grpcurl-${version}";
+  pname = "grpcurl";
   version = "1.0.0";
   rev = "v${version}";
 

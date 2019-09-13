@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "urweb-${version}";
+  pname = "urweb";
   version = "20190217";
 
   src = fetchurl {
-    url = "https://github.com/urweb/urweb/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/urweb/urweb/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "1cl0x0sy7w1lazszc8q06q3wx0x0rczxh27vimrsw54s6s9y096s";
   };
 

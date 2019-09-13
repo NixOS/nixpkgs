@@ -20,7 +20,7 @@ let
     ));
 in
   stdenv.mkDerivation rec {
-    name = "neovim-unwrapped-${version}";
+    pname = "neovim-unwrapped";
     version = "0.3.8";
 
     src = fetchFromGitHub {

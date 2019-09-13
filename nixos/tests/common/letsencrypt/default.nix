@@ -56,11 +56,11 @@
 
 let
   softhsm = pkgs.stdenv.mkDerivation rec {
-    name = "softhsm-${version}";
+    pname = "softhsm";
     version = "1.3.8";
 
     src = pkgs.fetchurl {
-      url = "https://dist.opendnssec.org/source/${name}.tar.gz";
+      url = "https://dist.opendnssec.org/source/${pname}-${version}.tar.gz";
       sha256 = "0flmnpkgp65ym7w3qyg78d3fbmvq3aznmi66rgd420n33shf7aif";
     };
 

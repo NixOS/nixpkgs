@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vips-${version}";
+  pname = "vips";
   version = "8.8.1";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 , ncurses, libdrm, libpciaccess, libxcb }:
 
 stdenv.mkDerivation rec {
-  name = "radeontop-${version}";
+  pname = "radeontop";
   version = "2019-06-03";
 
   src = fetchFromGitHub {

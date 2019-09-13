@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ip2unix-${version}";
+  pname = "ip2unix";
   version = "2.1.0";
 
   src = fetchFromGitHub {

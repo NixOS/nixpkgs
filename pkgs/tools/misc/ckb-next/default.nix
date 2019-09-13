@@ -3,7 +3,7 @@
 
 mkDerivation rec {
   version = "0.3.2";
-  name = "ckb-next-${version}";
+  pname = "ckb-next";
 
   src = fetchFromGitHub {
     owner = "ckb-next";

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, erlang, pam, perl }:
 
 stdenv.mkDerivation rec {
-  name = "yaws-${version}";
+  pname = "yaws";
   version = "2.0.6";
 
   src = fetchurl {
-    url = "http://yaws.hyber.org/download/${name}.tar.gz";
+    url = "http://yaws.hyber.org/download/${pname}-${version}.tar.gz";
     sha256 = "03nh97g7smsgm6sw5asssmlq7zgx6y2gnn7jn0lv2x5mkf5nzyb9";
   };
 

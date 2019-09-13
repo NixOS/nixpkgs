@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner  = "ihabunek";
     repo   = "toot";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "11dgz082shxpbsxr4i41as040cfqinm5lbcg3bmsxqvc4hsz2nr5";
   };
 

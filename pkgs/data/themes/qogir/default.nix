@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
-  version = "2019-05-03";
+  version = "2019-08-31";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "031nqr47b3x8ahcym7cfc75y8sy53dcmrrrlywi7m1a10ckfp0pd";
+    sha256 = "1pqfnqc2c6f5cidg6c3y492hqlyn5ma4b7ra2lchw7g2dxfvq8w1";
   };
 
   buildInputs = [ gdk-pixbuf librsvg ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     patchShebangs .
     mkdir -p $out/share/themes
-    name= ./Install -d $out/share/themes
+    name= ./install.sh -d $out/share/themes
   '';
 
   meta = with stdenv.lib; {

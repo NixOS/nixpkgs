@@ -8,7 +8,7 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.8.2";
+  version = "1.8.8";
   # Note: Due to our strong dependency on the Arch patches it's probably best
   # to also wait for the Arch update (especially if the patches don't apply).
 
@@ -17,7 +17,7 @@ mkDerivation rec {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "0dls6s8721zjm8351fcgfbsifr9d7wsxbf5dra5cbk8r555ibf3j";
+    sha256 = "1aj1pnzc6bz8jbdrfwdj2r54jhw9z7b5fd1095r007zmlnzs51lv";
     fetchSubmodules = true;
   };
 
@@ -25,8 +25,8 @@ mkDerivation rec {
   archPatches = fetchsvn {
     url = "svn://svn.archlinux.org/community/telegram-desktop/trunk";
     # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
-    rev = "498563";
-    sha256 = "0g2y6impygqhfiqnyxc1ivxwl8j82q9qcnkqcjn6mwj3cisyxwnl";
+    rev = "509240";
+    sha256 = "1sf4mspbsqsnjzp9ys9l0asrx1bhj273d163i2bv1zhl4mmgpl3k";
   };
   privateHeadersPatch = fetchpatch {
     url = "https://github.com/telegramdesktop/tdesktop/commit/b9d3ba621eb8af638af46c6b3cfd7a8330bf0dd5.patch";

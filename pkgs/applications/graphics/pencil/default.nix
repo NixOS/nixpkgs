@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.0.4";
-  name = "pencil-${version}";
+  pname = "pencil";
 
   src = fetchurl {
     url    = "http://pencil.evolus.vn/dl/V${version}/Pencil_${version}_amd64.deb";

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "cloudfoundry-cli-${version}";
+  pname = "cloudfoundry-cli";
   version = "6.46.1";
 
   goPackagePath = "code.cloudfoundry.org/cli";

@@ -60,7 +60,7 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     longDescription = ''
-      Pinentry provides a console and (optional) GTK+ and Qt GUIs allowing users
+      Pinentry provides a console and (optional) GTK and Qt GUIs allowing users
       to enter a passphrase when `gpg' or `gpg2' is run and needs it.
     '';
     maintainers = [ maintainers.ttuegel ];

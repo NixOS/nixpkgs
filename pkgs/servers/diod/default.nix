@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "diod-${version}";
+  pname = "diod";
   version = "1.0.24";
 
   src = fetchurl {
-    url = "https://github.com/chaos/diod/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/chaos/diod/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "17wckwfsqj61yixz53nwkc35z66arb1x3napahpi64m7q68jn7gl";
   };
 

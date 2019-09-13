@@ -17,7 +17,7 @@ in
 stdenv.mkDerivation rec {
   version = "${prl_major}.2.1-41615";
   prl_major = "12";
-  name = "prl-tools-${version}";
+  pname = "prl-tools";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso

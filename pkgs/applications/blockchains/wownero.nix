@@ -6,7 +6,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "wownero-${version}";
+  pname = "wownero";
 
   version = "0.6.1.2";
   src = fetchFromGitHub {

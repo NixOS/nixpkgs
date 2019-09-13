@@ -1,15 +1,16 @@
-{lib, stdenv, fetchFromGitHub, cmake, pkgconfig, boost, libGL, qtbase}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, wrapQtAppsHook, boost, libGL
+, qtbase}:
 
 stdenv.mkDerivation rec {
 
-  name = "nano-wallet-${version}";
-  version = "18.0";
+  pname = "nano-wallet";
+  version = "19.0";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "raiblocks";
     rev = "V${version}";
-    sha256 = "03f9g1x7rs7vic9yzsjxsh5ddx9ys78rssbfghbccfw9qrwylh3y";
+    sha256 = "1y5fc4cvfqh33imjkh91sqhy5bb9kh0icwyvdgm1cl564vnjax80";
     fetchSubmodules = true;
   };
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = let
     options = {
-      BOOST_ROOT = "${boost}";
+      BOOST_ROOT = boost;
       Boost_USE_STATIC_LIBS = "OFF";
       RAIBLOCKS_GUI = "ON";
       RAIBLOCKS_TEST = "ON";
@@ -32,11 +33,17 @@ stdenv.mkDerivation rec {
     optionToFlag = name: value: "-D${name}=${value}";
   in lib.mapAttrsToList optionToFlag options;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
   buildInputs = [ boost libGL qtbase ];
 
   buildPhase = ''
     make nano_wallet
+  '';
+
+  # Move executables under bin directory
+  postInstall = ''
+    mkdir -p $out/bin
+    mv $out/nano* $out/bin/
   '';
 
   checkPhase = ''

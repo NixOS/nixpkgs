@@ -7,7 +7,8 @@ let
   version = "0.12.9.0";
 in
 stdenv.mkDerivation {
-  name = "aeon-${version}";
+  pname = "aeon";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "aeonix";

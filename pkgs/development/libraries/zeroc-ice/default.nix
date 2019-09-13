@@ -1,41 +1,72 @@
-{ stdenv, fetchFromGitHub, mcpp, bzip2, expat, openssl, db5
+{ stdenv, lib, fetchFromGitHub, mcpp, bzip2, expat, openssl, lmdb
 , darwin, libiconv, Security
+, cpp11 ? false
 }:
 
-stdenv.mkDerivation rec {
-  name = "zeroc-ice-${version}";
-  version = "3.6.3";
+let
+  zeroc_mcpp = mcpp.overrideAttrs (self: rec {
+    pname = "zeroc-mcpp";
+    version = "2.7.2.14";
+
+    src = fetchFromGitHub {
+      owner = "zeroc-ice";
+      repo = "mcpp";
+      rev = "v${version}";
+      sha256 = "1psryc2ql1cp91xd3f8jz84mdaqvwzkdq2pr96nwn03ds4cd88wh";
+    };
+
+    installFlags = [ "PREFIX=$(out)" ];
+  });
+
+in stdenv.mkDerivation rec {
+  pname = "zeroc-ice";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    sha256 = "05xympbns32aalgcfcpxwfd7bvg343f16xpg6jv5s335ski3cjy2";
+    sha256 = "0m9lh79dfpcwcp2jhmj0wqdcsw3rl633x2hzfw9n2i34jjv64fvg";
   };
 
-  patches = [ ./makefile.patch ];
+  buildInputs = [ zeroc_mcpp bzip2 expat openssl lmdb ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
 
-  buildInputs = [ mcpp bzip2 expat openssl db5 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=class-memaccess" ];
 
-  postUnpack = ''
-    sourceRoot=$sourceRoot/cpp
-  '';
-
-  prePatch = ''
-    substituteInPlace config/Make.rules.Darwin \
+  prePatch = lib.optional stdenv.isDarwin ''
+    substituteInPlace Make.rules.Darwin \
         --replace xcrun ""
   '';
 
-  makeFlags = [ "prefix=$(out)" "OPTIMIZE=yes" ];
+  preBuild = ''
+    makeFlagsArray+=(
+      "prefix=$out"
+      "OPTIMIZE=yes"
+      "USR_DIR_INSTALL=yes"
+      "LANGUAGES=cpp"
+      "CONFIGS=${if cpp11 then "cpp11-shared" else "shared"}"
+      "SKIP=slice2py" # provided by a separate package
+    )
+  '';
 
-  # cannot find -lIceXML (linking bin/transformdb)
-  #enableParallelBuilding = true;
+  buildFlags = [ "srcs" ]; # no tests; they require network
+
+  enableParallelBuilding = true;
+
+  outputs = [ "out" "bin" "dev" ];
+
+  postInstall = ''
+    mkdir -p $bin $dev/share
+    mv $out/bin $bin
+    mv $out/share/ice $dev/share
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.zeroc.com/ice.html;
     description = "The internet communications engine";
     license = licenses.gpl2;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

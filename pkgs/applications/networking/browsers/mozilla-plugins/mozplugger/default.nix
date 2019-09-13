@@ -1,7 +1,7 @@
 { stdenv, fetchurl, firefox, libX11, xorgproto }:
 
 stdenv.mkDerivation rec {
-  name = "mozplugger-${version}";
+  pname = "mozplugger";
   version = "2.1.6";
 
   src = fetchurl {
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     cp mozplugger.so "$out/lib/mozilla/plugins"
     cp mozplugger.7 "$out/share/man/man7"
 
-    mkdir -p "$out/share/${name}/plugin"
-    ln -s "$out/lib/mozilla/plugins/mozplugger.so" "$out/share/${name}/plugin"
+    mkdir -p "$out/share/${pname}-${version}/plugin"
+    ln -s "$out/lib/mozilla/plugins/mozplugger.so" "$out/share/${pname}-${version}/plugin"
   '';
 
   meta = {

@@ -7,7 +7,8 @@
 # TODO: make static compilation work
 
 stdenv.mkDerivation rec {
-  name    = "gerbil-${version}";
+  pname = "gerbil";
+  inherit version;
   inherit src;
 
   # Use makeStaticLibraries to enable creation of statically linked binaries

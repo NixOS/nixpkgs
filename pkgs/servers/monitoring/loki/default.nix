@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   version = "0.3.0";
-  name = "grafana-loki-${version}";
+  pname = "grafana-loki";
   goPackagePath = "github.com/grafana/loki";
 
   doCheck = true;

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "9542";
-  name = "ib-tws-${version}";
+  pname = "ib-tws";
 
   src = requireFile rec {
     name = "ibtws_${version}.jar";

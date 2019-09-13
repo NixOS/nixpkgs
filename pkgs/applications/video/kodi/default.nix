@@ -43,15 +43,15 @@ assert vdpauSupport -> libvdpau != null;
 assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
 
 let
-  kodiReleaseDate = "20190627";
-  kodiVersion = "18.3";
+  kodiReleaseDate = "20190901";
+  kodiVersion = "18.4";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "18fbl5hs3aqccrn0m3x7hp95wlafjav0yvrwmb5q3gj24mwf6jld";
+    sha256 = "1m0295czxabdcqyqf5m94av9d88pzhnzjvyfs1q07xqq82h313p7";
   };
 
   cmakeProto = fetchurl {
@@ -143,7 +143,7 @@ let
     postPatch         = cmakeProtoPatch;
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
     name = "kodi-${lib.optionalString useWayland "wayland-"}${kodiVersion}";
 
     src = kodi_src;

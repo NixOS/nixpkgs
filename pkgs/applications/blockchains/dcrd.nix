@@ -1,7 +1,7 @@
 { stdenv, lib, go, buildGoPackage, dep, fetchgit, git, cacert }:
 
 buildGoPackage rec {
-  name = "dcrd-${version}";
+  pname = "dcrd";
   version = "1.1.2";
   rev = "refs/tags/v${version}";
   goPackagePath = "github.com/decred/dcrd";

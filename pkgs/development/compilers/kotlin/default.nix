@@ -2,9 +2,9 @@
 
 let
   version = "1.3.41";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version;
-  name = "kotlin-${version}";
+  pname = "kotlin";
 
   src = fetchurl {
     url = "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip";

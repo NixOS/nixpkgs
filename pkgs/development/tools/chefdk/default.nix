@@ -1,6 +1,6 @@
 { lib, bundlerEnv, bundlerUpdateScript, ruby_2_4, perl, autoconf }:
 
-bundlerEnv rec {
+bundlerEnv {
   pname = "chef-dk";
 
   ruby = ruby_2_4;

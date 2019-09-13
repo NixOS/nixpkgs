@@ -3,7 +3,7 @@
 , libXi, xorgproto, libX11, libXext
 }:
 stdenv.mkDerivation rec {
-  name = "lazarus-${version}";
+  pname = "lazarus";
   version = "1.8.4";
 
   src = fetchurl {

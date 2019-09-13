@@ -5,7 +5,7 @@
 , portaudio, portmidi, fftw, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "denemo-${version}";
+  pname = "denemo";
   version = "2.3.0";
 
   src = fetchurl {

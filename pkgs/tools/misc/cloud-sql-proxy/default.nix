@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "cloud-sql-proxy-${version}";
+  pname = "cloud-sql-proxy";
   version = "1.13";
 
   goPackagePath = "github.com/GoogleCloudPlatform/cloudsql-proxy";

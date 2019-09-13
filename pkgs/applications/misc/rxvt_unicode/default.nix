@@ -8,17 +8,17 @@ let
   description = "A clone of the well-known terminal emulator rxvt";
 
   desktopItem = makeDesktopItem {
-    name = "${pname}";
+    name = pname;
     exec = "urxvt";
     icon = "utilities-terminal";
     comment = description;
     desktopName = "URxvt";
-    genericName = "${pname}";
+    genericName = pname;
     categories = "System;TerminalEmulator;";
   };
 in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
 
   name = "${pname}${if perlSupport then "-with-perl" else ""}${if unicode3Support then "-with-unicode3" else ""}-${version}";
 

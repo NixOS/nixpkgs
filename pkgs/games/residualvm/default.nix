@@ -9,7 +9,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "0.1.1";
-  name = "residualvm-${version}";
+  pname = "residualvm";
 
   src = fetchurl {
     url = "mirror://sourceforge/residualvm/residualvm-${version}-sources.tar.bz2";

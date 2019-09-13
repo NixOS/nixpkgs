@@ -1,7 +1,7 @@
 { stdenvNoCC, lib, fetchurl }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "fasm-bin-${version}";
+  pname = "fasm-bin";
 
   version = "1.73.16";
 

@@ -5,7 +5,7 @@ buildPythonApplication rec {
   version = "1.1.3";
   pname = "udocker";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = "udocker" ;
     rev = "v${version}";

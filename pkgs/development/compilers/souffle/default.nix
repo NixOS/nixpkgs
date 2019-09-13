@@ -9,7 +9,7 @@ let
   toolsPath = stdenv.lib.makeBinPath [ mcpp ];
 in
 stdenv.mkDerivation rec {
-  name    = "souffle-${version}";
+  pname = "souffle";
   version = "1.6.1";
 
   src = fetchFromGitHub {

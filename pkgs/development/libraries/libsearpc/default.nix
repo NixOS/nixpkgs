@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.1.0";
-  name = "libsearpc-${version}";
+  pname = "libsearpc";
 
   src = fetchFromGitHub {
     owner = "haiwen";

@@ -26,10 +26,10 @@ let params =
       sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
     };
   };
-  param = params."${coq.coq-version}";
+  param = params.${coq.coq-version};
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "coq${coq.coq-version}-coq-haskell-${param.version}";
 

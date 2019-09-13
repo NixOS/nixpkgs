@@ -1,6 +1,6 @@
 { mkXfceDerivation, exo, gtk3, gvfs, glib }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "gigolo";
   version = "0.5.0";

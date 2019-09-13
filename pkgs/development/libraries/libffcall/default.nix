@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libffcall-${version}";
+  pname = "libffcall";
   version = "2.1";
 
   src = fetchurl {

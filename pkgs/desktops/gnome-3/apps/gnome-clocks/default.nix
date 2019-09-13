@@ -5,11 +5,11 @@
 , gnome3, gdk-pixbuf, geoclue2, libgweather }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-clocks-${version}";
+  pname = "gnome-clocks";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-clocks/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-clocks/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1w6lgjdak3x76c9gyhd1lqrdmjfh8q77sjnrkcimylsg0jq913bc";
   };
 

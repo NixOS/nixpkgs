@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "ethabi-${version}";
+  pname = "ethabi";
   version = "7.0.0";
 
   src = fetchFromGitHub {

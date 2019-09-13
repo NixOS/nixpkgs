@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "fpart-${version}";
+  pname = "fpart";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "martymac";
     repo = "fpart";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0h3mqc1xj5j2z8s8g3pvvpbjs6x74dj8niyh3p2ymla35kbzskf4";
   };
 

@@ -43,7 +43,7 @@ in {
       };
 
       blacklistDevices = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
         description = ''
@@ -52,7 +52,7 @@ in {
       };
 
       blacklistPlugins = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [ "test" ];
         example = [ "udev" ];
         description = ''

@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "hhvm-${version}";
+  pname = "hhvm";
   version = "3.23.2";
 
   # use git version since we need submodules

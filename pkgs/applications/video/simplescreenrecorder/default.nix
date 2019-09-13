@@ -3,7 +3,7 @@
 }:
 
 mkDerivation rec {
-  name = "simplescreenrecorder-${version}";
+  pname = "simplescreenrecorder";
   version = "0.3.11";
 
   src = fetchurl {

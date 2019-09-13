@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.7.4";
-  name = "davix-${version}";
+  pname = "davix";
   nativeBuildInputs = [ cmake pkgconfig python3 ];
   buildInputs = [ openssl libxml2 boost libuuid ];
 

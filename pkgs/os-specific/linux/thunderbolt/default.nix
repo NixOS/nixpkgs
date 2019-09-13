@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "thunderbolt-${version}";
+  pname = "thunderbolt";
   version = "0.9.3";
   src = fetchFromGitHub {
     owner = "01org";

@@ -1,0 +1,263 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-language-gnome">
+ <title>GNOME</title>
+
+ <section xml:id="ssec-gnome-packaging">
+  <title>Packaging GNOME applications</title>
+
+  <para>
+   Programs in the GNOME universe are written in various languages but they all use GObject-based libraries like GLib, GTK or GStreamer. These libraries are often modular, relying on looking into certain directories to find their modules. However, due to Nix’s specific file system organization, this will fail without our intervention. Fortunately, the libraries usually allow overriding the directories through environment variables, either natively or thanks to a patch in nixpkgs. <link xlink:href="#fun-wrapProgram">Wrapping</link> the executables to ensure correct paths are available to the application constitutes a significant part of packaging a modern desktop application. In this section, we will describe various modules needed by such applications, environment variables needed to make the modules load, and finally a script that will do the work for us.
+  </para>
+
+  <section xml:id="ssec-gnome-settings">
+   <title>Settings</title>
+
+   <para>
+    <link xlink:href="https://developer.gnome.org/gio/stable/GSettings.html">GSettings</link> API is often used for storing settings. GSettings schemas are required, to know the type and other metadata of the stored values. GLib looks for <filename>glib-2.0/schemas/gschemas.compiled</filename> files inside the directories of <envar>XDG_DATA_DIRS</envar>.
+   </para>
+
+   <para>
+    On Linux, GSettings API is implemented using <link xlink:href="https://wiki.gnome.org/Projects/dconf">dconf</link> backend. You will need to add <literal>dconf</literal> GIO module to <envar>GIO_EXTRA_MODULES</envar> variable, otherwise the <literal>memory</literal> backend will be used and the saved settings will not be persistent.
+   </para>
+
+   <para>
+    Last you will need the dconf database D-Bus service itself. You can enable it using <option>programs.dconf.enable</option>.
+   </para>
+
+   <para>
+    Some applications will also require <package>gsettings-desktop-schemas</package> for things like reading proxy configuration or user interface customization. This dependency is often not mentioned by upstream, you should grep for <literal>org.gnome.desktop</literal> and <literal>org.gnome.system</literal> to see if the schemas are needed.
+   </para>
+  </section>
+
+  <section xml:id="ssec-gnome-icons">
+   <title>Icons</title>
+
+   <para>
+    When an application uses icons, an icon theme should be available in <envar>XDG_DATA_DIRS</envar>. The package for the default, icon-less <link xlink:href="https://www.freedesktop.org/wiki/Software/icon-theme/">hicolor-icon-theme</link> contains <link linkend="ssec-gnome-hooks-hicolor-icon-theme">a setup hook</link> that will pick up icon themes from <literal>buildInputs</literal> and pass it to our wrapper. Unfortunately, relying on that would mean every user has to download the theme included in the package expression no matter their preference. For that reason, we leave the installation of icon theme on the user. If you use one of the desktop environments, you probably already have an icon theme installed.
+   </para>
+  </section>
+
+  <section xml:id="ssec-gnome-themes">
+   <title>GTK Themes</title>
+
+   <para>
+    Previously, a GTK theme needed to be in <envar>XDG_DATA_DIRS</envar>. This is no longer necessary for most programs since GTK incorporated Adwaita theme. Some programs (for example, those designed for <link xlink:href="https://elementary.io/docs/human-interface-guidelines#human-interface-guidelines">elementary HIG</link>) might require a special theme like <package>pantheon.elementary-gtk-theme</package>.
+   </para>
+  </section>
+
+  <section xml:id="ssec-gnome-typelibs">
+   <title>GObject introspection typelibs</title>
+
+   <para>
+    <link xlink:href="https://wiki.gnome.org/Projects/GObjectIntrospection">GObject introspection</link> allows applications to use C libraries in other languages easily. It does this through <literal>typelib</literal> files searched in <envar>GI_TYPELIB_PATH</envar>.
+   </para>
+  </section>
+
+  <section xml:id="ssec-gnome-plugins">
+   <title>Various plug-ins</title>
+
+   <para>
+    If your application uses <link xlink:href="https://gstreamer.freedesktop.org/">GStreamer</link> or <link xlink:href="https://wiki.gnome.org/Projects/Grilo">Grilo</link>, you should set <envar>GST_PLUGIN_SYSTEM_PATH_1_0</envar> and <envar>GRL_PLUGIN_PATH</envar>, respectively.
+   </para>
+  </section>
+ </section>
+
+ <section xml:id="ssec-gnome-hooks">
+  <title>Onto <package>wrapGAppsHook</package></title>
+
+  <para>
+   Given the requirements above, the package expression would become messy quickly:
+<programlisting>
+preFixup = ''
+  for f in $(find $out/bin/ $out/libexec/ -type f -executable); do
+    wrapProgram "$f" \
+      --prefix GIO_EXTRA_MODULES : "${getLib gnome3.dconf}/lib/gio/modules" \
+      --prefix XDG_DATA_DIRS : "$out/share" \
+      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
+      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
+      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ pango json-glib ]}"
+  done
+'';
+</programlisting>
+   Fortunately, there is <package>wrapGAppsHook</package>, that does the wrapping for us. In particular, it works in conjunction with other setup hooks that will populate the variable:
+   <itemizedlist>
+    <listitem xml:id="ssec-gnome-hooks-wrapgappshook">
+     <para>
+      <package>wrapGAppsHook</package> itself will add the package’s <filename>share</filename> directory to <envar>XDG_DATA_DIRS</envar>.
+     </para>
+    </listitem>
+    <listitem xml:id="ssec-gnome-hooks-glib">
+     <para>
+      <package>glib</package> setup hook will populate <envar>GSETTINGS_SCHEMAS_PATH</envar> and then <package>wrapGAppsHook</package> will prepend it to <envar>XDG_DATA_DIRS</envar>.
+     </para>
+    </listitem>
+    <listitem xml:id="ssec-gnome-hooks-dconf">
+     <para>
+      <package>gnome3.dconf.lib</package> is a dependency of <package>wrapGAppsHook</package>, which then also adds it to the <envar>GIO_EXTRA_MODULES</envar> variable.
+     </para>
+    </listitem>
+    <listitem xml:id="ssec-gnome-hooks-hicolor-icon-theme">
+     <para>
+      <package>hicolor-icon-theme</package>’s setup hook will add icon themes to <envar>XDG_ICON_DIRS</envar> which is prepended to <envar>XDG_DATA_DIRS</envar> by <package>wrapGAppsHook</package>.
+     </para>
+    </listitem>
+    <listitem xml:id="ssec-gnome-hooks-gobject-introspection">
+     <para>
+      <package>gobject-introspection</package> setup hook populates <envar>GI_TYPELIB_PATH</envar> variable with <filename>lib/girepository-1.0</filename> directories of dependencies, which is then added to wrapper by <package>wrapGAppsHook</package>. It also adds <filename>share</filename> directories of dependencies to <envar>XDG_DATA_DIRS</envar>, which is intended to promote GIR files but it also <link xlink:href="https://github.com/NixOS/nixpkgs/issues/32790">pollutes the closures</link> of packages using <package>wrapGAppsHook</package>.
+     </para>
+     <warning>
+      <para>
+       The setup hook <link xlink:href="https://github.com/NixOS/nixpkgs/issues/56943">currently</link> does not work in expressions with <literal>strictDeps</literal> enabled, like Python packages. In those cases, you will need to disable it with <code>strictDeps = false;</code>.
+      </para>
+     </warning>
+    </listitem>
+    <listitem xml:id="ssec-gnome-hooks-gst-grl-plugins">
+     <para>
+      Setup hooks of <package>gst_all_1.gstreamer</package> and <package>gnome3.grilo</package> will populate the <envar>GST_PLUGIN_SYSTEM_PATH_1_0</envar> and <envar>GRL_PLUGIN_PATH</envar> variables, respectively, which will then be added to the wrapper by <literal>wrapGAppsHook</literal>.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </para>
+
+  <para>
+   You can also pass additional arguments to <literal>makeWrapper</literal> using <literal>gappsWrapperArgs</literal> in <literal>preFixup</literal> hook:
+<programlisting>
+preFixup = ''
+  gappsWrapperArgs+=(
+    # Thumbnailers
+    --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+    --prefix XDG_DATA_DIRS : "${librsvg}/share"
+    --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+  )
+'';
+</programlisting>
+  </para>
+ </section>
+
+ <section xml:id="ssec-gnome-updating">
+  <title>Updating GNOME packages</title>
+
+  <para>
+   Most GNOME package offer <link linkend="var-passthru-updateScript"><literal>updateScript</literal></link>, it is therefore possible to update to latest source tarball by running <command>nix-shell maintainers/scripts/update.nix --argstr package gnome3.nautilus</command> or even en masse with <command>nix-shell maintainers/scripts/update.nix --argstr path gnome3</command>. Read the package’s <filename>NEWS</filename> file to see what changed.
+  </para>
+ </section>
+
+ <section xml:id="ssec-gnome-common-issues">
+  <title>Frequently encountered issues</title>
+
+  <variablelist>
+   <varlistentry xml:id="ssec-gnome-common-issues-no-schemas">
+    <term>
+     <computeroutput>GLib-GIO-ERROR **: <replaceable>06:04:50.903</replaceable>: No GSettings schemas are installed on the system</computeroutput>
+    </term>
+    <listitem>
+     <para>
+      There are no schemas avalable in <envar>XDG_DATA_DIRS</envar>. Temporarily add a random package containing schemas like <package>gsettings-desktop-schemas</package> to <literal>buildInputs</literal>. <link linkend="ssec-gnome-hooks-glib"><package>glib</package></link> and <link linkend="ssec-gnome-hooks-wrapgappshook"><package>wrapGAppsHook</package></link> setup hooks will take care of making the schemas available to application and you will see the actual missing schemas with the <link linkend="ssec-gnome-common-issues-missing-schema">next error</link>. Or you can try looking through the source code for the actual schemas used.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry xml:id="ssec-gnome-common-issues-missing-schema">
+    <term>
+     <computeroutput>GLib-GIO-ERROR **: <replaceable>06:04:50.903</replaceable>: Settings schema ‘<replaceable>org.gnome.foo</replaceable>’ is not installed</computeroutput>
+    </term>
+    <listitem>
+     <para>
+      Package is missing some GSettings schemas. You can find out the package containing the schema with <command>nix-locate <replaceable>org.gnome.foo</replaceable>.gschema.xml</command> and let the hooks handle the wrapping as <link linkend="ssec-gnome-common-issues-no-schemas">above</link>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry xml:id="ssec-gnome-common-issues-double-wrapped">
+    <term>
+     When using <package>wrapGAppsHook</package> with special derivers you can end up with double wrapped binaries.
+    </term>
+    <listitem>
+     <para>
+      This is because derivers like <function>python.pkgs.buildPythonApplication</function> or <function>qt5.mkDerivation</function> have setup-hooks automatically added that produce wrappers with <package>makeWrapper</package>. The simplest way to workaround that is to disable the <package>wrapGAppsHook</package> automatic wrapping with <code>dontWrapGApps = true;</code> and pass the arguments it intended to pass to <package>makeWrapper</package> to another.
+     </para>
+     <para>
+      In the case of a Python application it could look like:
+<programlisting>
+python3.pkgs.buildPythonApplication {
+  pname = "gnome-music";
+  version = "3.32.2";
+
+  nativeBuildInputs = [
+    wrapGAppsHook
+    gobject-introspection
+    ...
+  ];
+
+  dontWrapGApps = true;
+
+  # Arguments to be passed to `makeWrapper`, only used by buildPython*
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
+}
+</programlisting>
+      And for a QT app like:
+<programlisting>
+mkDerivation {
+  pname = "calibre";
+  version = "3.47.0";
+
+  nativeBuildInputs = [
+    wrapGAppsHook
+    qmake
+    ...
+  ];
+
+  dontWrapGApps = true;
+
+  # Arguments to be passed to `makeWrapper`, only used by qt5’s mkDerivation
+  qtWrapperArgs [
+    "\${gappsWrapperArgs[@]}"
+  ];
+}
+</programlisting>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry xml:id="ssec-gnome-common-issues-unwrappable-package">
+    <term>
+     I am packaging a project that cannot be wrapped, like a library or GNOME Shell extension.
+    </term>
+    <listitem>
+     <para>
+      You can rely on applications depending on the library set the necessary environment variables but that it often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:
+      <itemizedlist>
+       <listitem xml:id="ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext">
+        <para>
+         <link xlink:href="https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/gnome-3/core/gnome-shell-extensions/default.nix#L21-L24">Replacing a <envar>GI_TYPELIB_PATH</envar> in GNOME Shell extension</link> – we are using <function>substituteAll</function> to include the path to a typelib into a patch.
+        </para>
+       </listitem>
+       <listitem xml:id="ssec-gnome-common-issues-unwrappable-package-gsettings">
+        <para>
+         The following examples are hardcoding GSettings schema paths. To get the schema paths we use the functions
+         <itemizedlist>
+          <listitem>
+           <para>
+            <function>glib.getSchemaPath</function> Takes a nix package attribute as an argument.
+           </para>
+          </listitem>
+          <listitem>
+           <para>
+            <function>glib.makeSchemaPath</function> Takes a package output like <literal>$out</literal> and a derivation name. You should use this if the schemas you need to hardcode are in the same derivation.
+           </para>
+          </listitem>
+         </itemizedlist>
+        </para>
+        <para xml:id="ssec-gnome-common-issues-unwrappable-package-gsettings-vala">
+         <link xlink:href="https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/pantheon/apps/elementary-files/default.nix#L78-L86">Hard-coding GSettings schema path in Vala plug-in (dynamically loaded library)</link> – here, <function>substituteAll</function> cannot be used since the schema comes from the same package preventing us from pass its path to the function, probably due to a <link xlink:href="https://github.com/NixOS/nix/issues/1846">Nix bug</link>.
+        </para>
+        <para xml:id="ssec-gnome-common-issues-unwrappable-package-gsettings-c">
+         <link xlink:href="https://github.com/NixOS/nixpkgs/blob/29c120c065d03b000224872251bed93932d42412/pkgs/development/libraries/glib-networking/default.nix#L31-L34">Hard-coding GSettings schema path in C library</link> – nothing special other than using <link xlink:href="https://github.com/NixOS/nixpkgs/pull/67957#issuecomment-527717467">Coccinelle patch</link> to generate the patch itself.
+        </para>
+       </listitem>
+      </itemizedlist>
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </section>
+</section>

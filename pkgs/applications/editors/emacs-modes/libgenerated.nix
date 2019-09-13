@@ -53,7 +53,7 @@ in {
                       , sha256 ? null
                       , ... }@args:
       let
-        sourceArgs = args."${variant}";
+        sourceArgs = args.${variant};
         version = sourceArgs.version or null;
         deps = sourceArgs.deps or null;
         error = sourceArgs.error or args.error or null;
@@ -78,7 +78,7 @@ in {
                 inherit sha256;
               };
             packageRequires = lib.optional (! isNull deps)
-              (map (dep: pkgargs."${dep}" or self."${dep}" or null)
+              (map (dep: pkgargs.${dep} or self.${dep} or null)
                    deps);
             meta = (sourceArgs.meta or {}) // {
               inherit broken;

@@ -1,6 +1,6 @@
 { stdenv, python2Packages, fetchFromGitHub }:
 
-python2Packages.buildPythonApplication rec {
+python2Packages.buildPythonApplication {
   pname = "broadlink-cli";
   inherit (python2Packages.broadlink) version;
 

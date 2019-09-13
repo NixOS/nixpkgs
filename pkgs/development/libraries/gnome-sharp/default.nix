@@ -13,13 +13,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-sharp-${version}";
+  pname = "gnome-sharp";
   version = "2.24.4";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "gnome-sharp";
-    rev = "${version}";
+    rev = version;
     sha256 = "15jsm6n0sih0nf3w8vmvik97q7l3imz4vkdzmp9k7bssiz4glj1z";
   };
 

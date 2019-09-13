@@ -48,7 +48,7 @@ in
       name = "mate";
       bgSupport = true;
       start = ''
-        # Set GTK_DATA_PREFIX so that GTK+ can find the themes
+        # Set GTK_DATA_PREFIX so that GTK can find the themes
         export GTK_DATA_PREFIX=${config.system.path}
 
         # Find theme engines
@@ -98,6 +98,9 @@ in
     programs.bash.vteIntegration = mkDefault true;
     programs.zsh.vteIntegration = mkDefault true;
 
+    # Mate uses this for printing
+    programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
@@ -105,7 +108,7 @@ in
     services.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
-    security.pam.services."mate-screensaver".unixAuth = true;
+    security.pam.services.mate-screensaver.unixAuth = true;
 
     environment.pathsToLink = [ "/share" ];
   };

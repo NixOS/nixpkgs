@@ -1,6 +1,5 @@
 {stdenv, fetchurl, autoreconfHook, givaro_3_7, pkgconfig, openblas, gmpxx}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "fflas-ffpack";
   version = "1.6.0";
   src = fetchurl {

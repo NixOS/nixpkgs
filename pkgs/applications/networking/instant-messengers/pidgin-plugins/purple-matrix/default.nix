@@ -3,8 +3,9 @@
 let
   version = "2018-08-03";
 in
-stdenv.mkDerivation rec {
-  name = "purple-matrix-unstable-${version}";
+stdenv.mkDerivation {
+  pname = "purple-matrix-unstable";
+  inherit version;
 
   src = fetchgit {
     url = "https://github.com/matrix-org/purple-matrix";

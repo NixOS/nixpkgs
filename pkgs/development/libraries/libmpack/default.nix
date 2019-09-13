@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libmpack-${version}";
+  pname = "libmpack";
   version = "1.0.5";
   src = fetchFromGitHub {
     owner = "tarruda";

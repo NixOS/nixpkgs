@@ -8,7 +8,7 @@
       "/share/terminfo"
     ];
 
-    environment.etc."terminfo" = {
+    environment.etc.terminfo = {
       source = "${config.system.path}/share/terminfo";
     };
 

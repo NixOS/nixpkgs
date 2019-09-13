@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''xembed'';
   version = ''clx-20190307-git'';
 

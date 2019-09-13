@@ -3,7 +3,7 @@
 , systemd ? null, withSystemd ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
-  name = "mosquitto-${version}";
+  pname = "mosquitto";
   version = "1.6.4";
 
   src = fetchFromGitHub {

@@ -14,11 +14,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name    = "SDL-${version}";
+  pname = "SDL";
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/release/${name}.tar.gz";
+    url    = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 

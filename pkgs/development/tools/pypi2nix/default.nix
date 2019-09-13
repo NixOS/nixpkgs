@@ -24,7 +24,8 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "pypi2nix-${version}";
+  pname = "pypi2nix";
+  inherit version;
   srcs = [
     src
     click

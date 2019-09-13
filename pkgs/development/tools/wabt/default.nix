@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "wabt-${version}";
+  pname = "wabt";
   version = "1.0.11";
 
   src = fetchFromGitHub {

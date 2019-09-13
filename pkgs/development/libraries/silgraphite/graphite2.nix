@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3.6";
-  name = "graphite2-${version}";
+  pname = "graphite2";
 
   src = fetchurl {
     url = "https://github.com/silnrsi/graphite/releases/download/"

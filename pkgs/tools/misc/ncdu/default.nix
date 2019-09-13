@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ncdu-${version}";
+  pname = "ncdu";
   version = "1.14.1";
 
   src = fetchurl {
-    url = "https://dev.yorhel.nl/download/${name}.tar.gz";
+    url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
     sha256 = "0gp1aszzrh8b6fhv8fspvkmr0qwc55z6z4w6l7r8j09sq7lf0cdy";
   };
 

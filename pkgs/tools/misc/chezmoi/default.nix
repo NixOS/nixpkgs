@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "chezmoi-${version}";
+  pname = "chezmoi";
   version = "1.5.5";
 
   goPackagePath = "github.com/twpayne/chezmoi";

@@ -1,7 +1,7 @@
 {stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ...}:
 
 stdenv.mkDerivation rec {
-  name = "diff-so-fancy-${version}";
+  pname = "diff-so-fancy";
   version = "1.2.6";
 
   src = fetchFromGitHub {

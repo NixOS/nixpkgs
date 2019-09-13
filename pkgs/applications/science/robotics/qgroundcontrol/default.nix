@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgroundcontrol-${version}";
+  pname = "qgroundcontrol";
   version = "3.3.0";
 
   qtInputs = [

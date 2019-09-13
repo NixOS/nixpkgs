@@ -2,7 +2,7 @@
 , openssl, openwsman }:
 
 stdenv.mkDerivation rec {
-  name = "wsmancli-${version}";
+  pname = "wsmancli";
   version = "2.6.0";
 
   src = fetchFromGitHub {

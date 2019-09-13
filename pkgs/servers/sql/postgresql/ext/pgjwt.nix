@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, postgresql }:
 
-stdenv.mkDerivation rec {
-  name    = "pgjwt-${version}";
+stdenv.mkDerivation {
+  pname = "pgjwt";
   version = "unstable-2017-04-24";
 
   src = fetchFromGitHub {
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
       sign() and verify() functions to create and verify JSON Web Tokens.
     '';
     license = licenses.mit;
+    platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [spinus];
   };
 }

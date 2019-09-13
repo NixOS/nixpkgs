@@ -2,7 +2,6 @@
   qt5integration, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-shortcut-viewer";
   version = "1.3.5";
 
@@ -26,7 +25,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Pop-up shortcut viewer for Deepin applications";

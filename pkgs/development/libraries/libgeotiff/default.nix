@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.5.1";
-  name = "libgeotiff-${version}";
+  pname = "libgeotiff";
 
   src = fetchFromGitHub {
     owner = "OSGeo";

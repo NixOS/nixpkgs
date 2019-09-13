@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, gdk-pixbuf, optipng, librsvg, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "elementary-xfce-icon-theme-${version}";
+  pname = "elementary-xfce-icon-theme";
   version = "0.13.1";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Elementary icons for Xfce and other GTK+ desktops like GNOME";
+    description = "Elementary icons for Xfce and other GTK desktops like GNOME";
     homepage = https://github.com/shimmerproject/elementary-xfce;
     license = licenses.gpl2;
     # darwin cannot deal with file names differing only in case

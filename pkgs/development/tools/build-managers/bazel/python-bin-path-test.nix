@@ -1,4 +1,4 @@
-{ writeText, bazel, bazelTest, runLocal }:
+{ writeText, bazel, bazelTest, runLocal, distDir }:
 
 let
   WORKSPACE = writeText "WORKSPACE" ''
@@ -45,6 +45,7 @@ let
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
+      --distdir=${distDir} \
           //python:bin
     '';
   };

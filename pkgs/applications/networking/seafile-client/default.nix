@@ -6,7 +6,7 @@ with stdenv.lib;
 
 mkDerivation rec {
   version = "6.2.11";
-  name = "seafile-client-${version}";
+  pname = "seafile-client";
 
   src = fetchFromGitHub {
     owner = "haiwen";

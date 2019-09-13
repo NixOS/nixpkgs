@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-rtsp-server-${version}";
+  pname = "gst-rtsp-server";
   version = "1.16.0";
 
   meta = with stdenv.lib; {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-rtsp-server/${name}.tar.xz";
+    url = "${meta.homepage}/src/gst-rtsp-server/${pname}-${version}.tar.xz";
     sha256 = "069zy159izy50blci9fli1i2r8jh91qkmgrz1n0xqciy3bn9x3hr";
   };
 

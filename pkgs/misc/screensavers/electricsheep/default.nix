@@ -3,7 +3,6 @@
 , glee }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "electricsheep";
   version = "2.7b33-2017-10-20";
 

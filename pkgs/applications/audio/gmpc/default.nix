@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gmpc-${version}";
+  pname = "gmpc";
   version = "11.8.16";
 
   libmpd = stdenv.mkDerivation {

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "amrwb-${version}";
+  pname = "amrwb";
   version = "11.0.0.0";
 
   srcAmr = fetchurl {

@@ -4,11 +4,11 @@
 , librsvg, coreutils, xwayland }:
 
 stdenv.mkDerivation rec {
-  name = "gdm-${version}";
+  pname = "gdm";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "12ypdz9i24hwbl1d1wnnxb8zlvfa4f49n9ac5cl9d6h8qp4b0gb4";
   };
 

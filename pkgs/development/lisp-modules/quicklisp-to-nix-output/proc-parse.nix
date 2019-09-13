@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''proc-parse'';
   version = ''20160318-git'';
 

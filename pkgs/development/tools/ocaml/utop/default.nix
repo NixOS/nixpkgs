@@ -7,8 +7,8 @@ then throw "utop is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
+  pname = "utop";
   version = "2.4.1";
-  name = "utop-${version}";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
 
      # derivation of just runtime deps so env vars created by
      # setup-hooks can be saved for use at runtime
-     runtime = stdenv.mkDerivation rec {
-       name = "utop-runtime-env-${version}";
+     runtime = stdenv.mkDerivation {
+       pname = "utop-runtime-env";
+       inherit version;
 
        buildInputs = [ findlib ] ++ propagatedBuildInputs;
 

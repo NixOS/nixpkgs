@@ -6,11 +6,11 @@
 , gdk-pixbuf, tracker, nautilus, xvfb_run }:
 
 stdenv.mkDerivation rec {
-  name = "totem-${version}";
+  pname = "totem";
   version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0yra8apc7smpwf7d1k8crhrm8d4wix24ds6i9yxbch1v11jnhr3v";
   };
 

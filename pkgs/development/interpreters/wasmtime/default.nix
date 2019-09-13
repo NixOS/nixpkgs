@@ -1,6 +1,6 @@
 { rustPlatform, fetchFromGitHub, lib, python, cmake, llvmPackages, clang }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "wasmtime";
   version = "20190521";
 

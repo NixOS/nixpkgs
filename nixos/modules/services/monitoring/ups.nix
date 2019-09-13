@@ -55,7 +55,7 @@ let
 
       description = mkOption {
         default = "";
-        type = types.string;
+        type = types.str;
         description = ''
           Description of the UPS.
         '';
@@ -71,7 +71,7 @@ let
 
       summary = mkOption {
         default = "";
-        type = types.string;
+        type = types.lines;
         description = ''
           Lines which would be added inside ups.conf for handling this UPS.
         '';

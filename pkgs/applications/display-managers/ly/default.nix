@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, linux-pam }:
 
 stdenv.mkDerivation rec { 
-  name = "ly-${version}";
+  pname = "ly";
   version = "0.2.1";
 
   src = fetchFromGitHub {

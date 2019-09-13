@@ -5,11 +5,9 @@
 , hicolor-icon-theme
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "libhandy";
   version = "0.0.11";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "devdoc" "glade" ];
   outputBin = "dev";
@@ -49,7 +47,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A library full of GTK+ widgets for mobile phones";
+    description = "A library full of GTK widgets for mobile phones";
     homepage = https://source.puri.sm/Librem5/libhandy;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];

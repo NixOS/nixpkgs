@@ -10,12 +10,13 @@
 let
   isFuse3 = stdenv.lib.hasPrefix "3" version;
 in stdenv.mkDerivation rec {
-  name = "fuse-${version}";
+  pname = "fuse";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "libfuse";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = sha256Hash;
   };
 

@@ -49,13 +49,13 @@ let
         sha1 = "d32815404d689699f85a4ea4fa8755dd13a96048";
       };
     };
-    "chainpad-server-3.0.3" = {
+    "chainpad-server-3.0.5" = {
       name = "chainpad-server";
       packageName = "chainpad-server";
-      version = "3.0.3";
+      version = "3.0.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-3.0.3.tgz";
-        sha512 = "NRfV7FFBEYy4ZVX7h0P5znu55X8v5K4iGWeMGihkfWZLKu70GmCPUTwpBCP79dUvnCToKEa4/e8aoSPcvZC8pA==";
+        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-3.0.5.tgz";
+        sha512 = "USKOMSHsNjnme81Qy3nQ+ji9eCkBPokYH4T82LVHAI0aayTSCXcTPUDLVGDBCRqe8NsXU4io1WPXn1KiZwB8fA==";
       };
     };
     "content-disposition-0.5.2" = {
@@ -364,13 +364,13 @@ let
         sha512 = "hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==";
       };
     };
-    "nthen-0.1.10" = {
+    "nthen-0.1.8" = {
       name = "nthen";
       packageName = "nthen";
-      version = "0.1.10";
+      version = "0.1.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/nthen/-/nthen-0.1.10.tgz";
-        sha512 = "W5LOhoFlQZSVg9SnRUJHgm3lOiT3HV6xq+Qo0dGKju2FWsDrKPwcgbJ9o5CORGz7UKKVhPScY9wOJHUogVG2UA==";
+        url = "https://registry.npmjs.org/nthen/-/nthen-0.1.8.tgz";
+        sha512 = "Oh2CwIbhj+wUT94lQV7LKmmgw3UYAGGd8oLIqp6btQN3Bz3PuWp4BuvtUo35H3rqDknjPfKx5P6mt7v+aJNjcw==";
       };
     };
     "on-finished-2.3.0" = {
@@ -619,14 +619,14 @@ let
   };
 in
 {
-  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#2.25.0" = nodeEnv.buildNodePackage {
+  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#3.0.1" = nodeEnv.buildNodePackage {
     name = "cryptpad";
     packageName = "cryptpad";
-    version = "2.25.0";
+    version = "3.0.1";
     src = fetchgit {
       url = "https://github.com/xwiki-labs/cryptpad.git";
-      rev = "0b17df3302fc4a7683a8790f305c8a2c7b1b4fe8";
-      sha256 = "261531da1745f9ff930bce3729afba2b7a52ee02f51340426ecf6b19204a21b7";
+      rev = "4e5f6edac4f9a3a7a4756eb543d29dc9d1eef32a";
+      sha256 = "f32a93316b717246d1563baec70f9e1e7e5ec1be4f325a473cc37e656afa13cd";
     };
     dependencies = [
       sources."accepts-1.3.7"
@@ -634,7 +634,7 @@ in
       sources."async-limiter-1.0.1"
       sources."body-parser-1.18.3"
       sources."bytes-3.0.0"
-      sources."chainpad-server-3.0.3"
+      sources."chainpad-server-3.0.5"
       sources."content-disposition-0.5.2"
       sources."content-type-1.0.4"
       sources."cookie-0.3.1"
@@ -669,7 +669,7 @@ in
       sources."mime-types-2.1.24"
       sources."ms-2.0.0"
       sources."negotiator-0.6.2"
-      sources."nthen-0.1.10"
+      sources."nthen-0.1.8"
       sources."on-finished-2.3.0"
       sources."parseurl-1.3.3"
       sources."path-to-regexp-0.1.7"

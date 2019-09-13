@@ -27,7 +27,7 @@ let
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
-in stdenv.mkDerivation (rec {
+in stdenv.mkDerivation ({
   name = "llvm-${version}";
 
   src = fetch "llvm" "1rvm5gqp5v8hfn17kqws3zhk94w4kxndal12bqa0y57p09nply24";

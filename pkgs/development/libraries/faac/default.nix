@@ -7,11 +7,11 @@ assert mp4v2Support -> (mp4v2 != null);
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "faac-${version}";
+  pname = "faac";
   version = "1.29.9.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/faac/${name}.tar.gz";
+    url = "mirror://sourceforge/faac/${pname}-${version}.tar.gz";
     sha256 = "0wf781vp7rzmxkx5h0w8j2i4xc63iixxikgbvvkdljbwhffj0pyl";
   };
 

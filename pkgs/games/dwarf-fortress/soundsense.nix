@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "2016-1_196";
   dfVersion = "0.44.12";
   inherit soundPack;
-  name = "soundsense-${version}";
+  pname = "soundsense";
   src = fetchzip {
     url = "http://df.zweistein.cz/soundsense/soundSense_${version}.zip";
     sha256 = "1gkrs69l3xsh858yjp204ddp29m668j630akm7arssc9359wxqkk";

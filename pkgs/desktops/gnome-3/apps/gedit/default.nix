@@ -5,11 +5,11 @@
 , gnome3, gspell, perl, itstool, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "gedit-${version}";
+  pname = "gedit";
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1q2rk7fym542c7k3bn2wlnzgy384gxacbifsjny0spbg95gfybvl";
   };
 

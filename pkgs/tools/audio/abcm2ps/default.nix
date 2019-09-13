@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, which, docutils, freetype, pango }:
 
 stdenv.mkDerivation rec {
-  name = "abcm2ps-${version}";
+  pname = "abcm2ps";
   version = "8.14.5";
 
   src = fetchFromGitHub {

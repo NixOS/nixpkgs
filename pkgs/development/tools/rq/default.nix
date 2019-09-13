@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "rq-${version}";
+  pname = "rq";
   version = "0.10.4";
 
   src = fetchFromGitHub {

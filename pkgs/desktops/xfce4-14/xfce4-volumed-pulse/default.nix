@@ -1,6 +1,6 @@
 { lib, mkXfceDerivation, gtk3, libnotify, libpulseaudio, keybinder3, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "xfce4-volumed-pulse";
   version = "0.2.3";

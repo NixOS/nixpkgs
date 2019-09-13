@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "jsonnet-${version}";
+  pname = "jsonnet";
   version = "0.13.0";
 
   src = fetchFromGitHub {

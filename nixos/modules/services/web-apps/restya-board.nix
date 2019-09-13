@@ -179,8 +179,9 @@ in
   config = mkIf cfg.enable {
 
     services.phpfpm.pools = {
-      "${poolName}" = {
+      ${poolName} = {
         inherit (cfg) user group;
+
         phpOptions = ''
           date.timezone = "CET"
 
@@ -207,7 +208,7 @@ in
     };
 
     services.nginx.enable = true;
-    services.nginx.virtualHosts."${cfg.virtualHost.serverName}" = {
+    services.nginx.virtualHosts.${cfg.virtualHost.serverName} = {
       listen = [ { addr = cfg.virtualHost.listenHost; port = cfg.virtualHost.listenPort; } ];
       serverName = cfg.virtualHost.serverName;
       root = runDir;
@@ -215,7 +216,6 @@ in
         index index.html index.php;
 
         gzip on;
-        gzip_disable "msie6";
 
         gzip_comp_level 6;
         gzip_min_length  1100;

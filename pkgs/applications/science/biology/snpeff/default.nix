@@ -1,7 +1,7 @@
 {stdenv, fetchurl, jre, unzip, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "snpeff-${version}";
+  pname = "snpeff";
   version = "4.3t";
 
   src = fetchurl {

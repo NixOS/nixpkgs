@@ -10,10 +10,9 @@
 mkDerivation rec {
   pname = "kexi";
   version = "3.2.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
+    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
     sha256 = "1zy1q7q9rfdaws3rwf3my22ywkn6g747s3ixfcg9r80mm2g3z0bs";
   };
 

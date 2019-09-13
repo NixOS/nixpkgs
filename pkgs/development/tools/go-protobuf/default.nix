@@ -1,7 +1,7 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "go-protobuf-${version}";
+  pname = "go-protobuf";
   version = "1.3.2";
 
   src = fetchFromGitHub {

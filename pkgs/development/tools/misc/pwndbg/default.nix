@@ -15,7 +15,7 @@
 , }:
 
 stdenv.mkDerivation rec {
-  name = "pwndbg-${version}";
+  pname = "pwndbg";
   version = "2019.01.25";
 
   src = fetchFromGitHub {

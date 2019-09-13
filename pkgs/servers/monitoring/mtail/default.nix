@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, gotools, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "mtail-${version}";
+  pname = "mtail";
   version = "3.0.0-rc4";
   goPackagePath = "github.com/google/mtail";
 

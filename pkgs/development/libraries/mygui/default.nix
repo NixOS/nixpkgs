@@ -4,7 +4,7 @@
 let
   renderSystem = if withOgre then "3" else "4";
 in stdenv.mkDerivation rec {
-  name = "mygui-${version}";
+  pname = "mygui";
   version = "3.2.2";
 
   src = fetchFromGitHub {

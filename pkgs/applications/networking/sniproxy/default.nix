@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gettext, libev, pcre, pkgconfig, udns }:
 
 stdenv.mkDerivation rec {
-  name = "sniproxy-${version}";
+  pname = "sniproxy";
   version = "0.6.0";
 
   src = fetchFromGitHub {

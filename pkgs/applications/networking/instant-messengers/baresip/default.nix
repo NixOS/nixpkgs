@@ -4,7 +4,7 @@
 }:
 stdenv.mkDerivation rec {
   version = "0.6.3";
-  name = "baresip-${version}";
+  pname = "baresip";
   src=fetchurl {
     url = "http://www.creytiv.com/pub/baresip-${version}.tar.gz";
     sha256 = "031hjm30v45h1sfknrf2f2ci10n712bdkcyf92y2hzllnik58068";

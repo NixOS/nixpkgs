@@ -12,11 +12,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "znc-${version}";
+  pname = "znc";
   version = "1.7.4";
 
   src = fetchurl {
-    url = "https://znc.in/releases/archive/${name}.tar.gz";
+    url = "https://znc.in/releases/archive/${pname}-${version}.tar.gz";
     sha256 = "0wcvqkpin8w4i72alnn0nxnrc9ih543qs34hqpk9xmz6m0hjk8xi";
   };
 

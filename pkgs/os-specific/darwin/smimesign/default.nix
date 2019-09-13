@@ -1,7 +1,7 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
-  name    = "smimesign-${version}";
+  pname = "smimesign";
   version = "v0.0.13";
 
   src = fetchFromGitHub {

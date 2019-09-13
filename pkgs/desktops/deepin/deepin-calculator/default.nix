@@ -2,7 +2,6 @@
   dtkwidget, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-calculator";
   version = "1.0.11";
 
@@ -37,7 +36,7 @@ mkDerivation rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Easy to use calculator for Deepin Desktop Environment";

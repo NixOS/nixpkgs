@@ -43,7 +43,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "google-play-music-desktop-player-${version}";
+  pname = "google-play-music-desktop-player";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/MarshallOfSound/Google-Play-Music-Desktop-Player-UNOFFICIAL-/releases/download/v${version}/google-play-music-desktop-player_${version}_amd64.deb";

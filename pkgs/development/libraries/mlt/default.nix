@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mlt-${version}";
+  pname = "mlt";
   version = "6.16.0";
 
   src = fetchFromGitHub {

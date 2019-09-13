@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, trousers, openssl, opencryptoki, autoreconfHook, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "simple-tpm-pk11-${version}";
+  pname = "simple-tpm-pk11";
   version = "0.06";
 
   src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 , smartSupport ? false, libatasmart }:
 
 stdenv.mkDerivation rec {
-  name = "thinkfan-${version}";
+  pname = "thinkfan";
   version = "0.9.3";
 
   src = fetchurl {

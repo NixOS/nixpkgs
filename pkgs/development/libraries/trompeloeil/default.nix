@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "trompeloeil-${version}";
+  pname = "trompeloeil";
   version = "34";
 
   src = fetchFromGitHub {

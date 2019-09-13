@@ -21,8 +21,9 @@ let
 
   tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
 
-in stdenv.mkDerivation rec {
-  name = "wavebox-${version}";
+in stdenv.mkDerivation {
+  pname = "wavebox";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/${tarball}";
     sha256 = "1yg2lib4h5illz0ss4hvr78s4v1cjbxlczjzaw6bqigyk95smm23";

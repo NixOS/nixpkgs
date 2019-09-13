@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "blackbox_exporter-${version}";
-  version = "0.14.0";
+  pname = "blackbox_exporter";
+  version = "0.15.0";
   rev = version;
 
   goPackagePath = "github.com/prometheus/blackbox_exporter";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "prometheus";
     repo = "blackbox_exporter";
-    sha256 = "1v5n59p9jl6y1ka9mqp0ibx1kpcb3gbpl0i6bhqpbr154frmqm4x";
+    sha256 = "06llb37xpn5zjnqkw526vbk4mfdiwrv3yg7aw4365p3gz5dk085i";
   };
 
   doCheck = true;

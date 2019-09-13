@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
 
 buildGoPackage rec {
-  name = "bazel-buildtools-${version}";
+  pname = "bazel-buildtools";
   version = "0.28.0";
   rev = "d7ccc5507c6c16e04f5e362e558d70b8b179b052";
 

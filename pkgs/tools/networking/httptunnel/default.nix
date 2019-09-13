@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.3";
-  name    = "httptunnel-${version}";
+  pname = "httptunnel";
 
   src = fetchurl {
-    url    = "http://www.nocrew.org/software/httptunnel/${name}.tar.gz";
+    url    = "http://www.nocrew.org/software/httptunnel/${pname}-${version}.tar.gz";
     sha256 = "0mn5s6p68n32xzadz6ds5i6bp44dyxzkq68r1yljlv470jr84bql";
   };
 

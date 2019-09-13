@@ -2,7 +2,7 @@
 
 let
   version = "20130214";
-in fetchzip rec {
+in fetchzip {
   name = "caladea-${version}";
 
   url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-${version}.tar.gz";

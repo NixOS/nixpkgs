@@ -11,10 +11,11 @@ assert enablePython -> python3 != null;
 let version = "9.14.4"; in
 
 stdenv.mkDerivation rec {
-  name = "bind-${version}";
+  pname = "bind";
+  inherit version;
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
+    url = "https://ftp.isc.org/isc/bind9/${version}/${pname}-${version}.tar.gz";
     sha256 = "0gxqws7ml15lwkjw9mdcd759gv5kk3s9m17j3vrp9448ls1gnbii";
   };
 

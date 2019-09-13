@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gtk2, libexif, pkgconfig, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "xzgv-${version}";
+  pname = "xzgv";
   version = "0.9.2";
   src = fetchurl {
     url = "mirror://sourceforge/xzgv/xzgv-${version}.tar.gz";

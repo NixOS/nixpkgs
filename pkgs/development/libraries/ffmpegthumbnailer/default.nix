@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ffmpegthumbnailer-${version}";
+  pname = "ffmpegthumbnailer";
   version = "2.2.0";
 
   src = fetchFromGitHub {

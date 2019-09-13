@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.11.1";
-  name = "liburcu-${version}";
+  pname = "liburcu";
 
   src = fetchurl {
     url = "https://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";

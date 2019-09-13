@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "click-${version}";
+  pname = "click";
   version = "0.4.2";
 
   src = fetchFromGitHub {

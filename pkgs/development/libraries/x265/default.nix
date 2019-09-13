@@ -16,7 +16,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "x265-${version}";
+  pname = "x265";
   version = "3.1.1";
 
   src = fetchurl {

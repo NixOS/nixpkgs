@@ -84,8 +84,8 @@ let
             # the fake derivations are used for filtering of hyphenation patterns
           else { inherit pname version; tlType = "run"; }
         )]
-        ++ lib.optional (attrs.sha512 ? "doc") (mkPkgV "doc")
-        ++ lib.optional (attrs.sha512 ? "source") (mkPkgV "source")
+        ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
+        ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
         ++ combinePkgs (attrs.deps or {});

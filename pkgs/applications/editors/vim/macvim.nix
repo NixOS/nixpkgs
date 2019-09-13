@@ -24,8 +24,8 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
-  name = "macvim-${version}";
+stdenv.mkDerivation {
+  pname = "macvim";
 
   version = "8.1.1722";
 

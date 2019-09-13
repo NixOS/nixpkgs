@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
-  # Optionally, it can use GTK+.
+  # Optionally, it can use GTK.
   buildInputs = [ pam libX11 libXext libXinerama libXdmcp libXt ];
 
   # Don't try to install `xlock' setuid. Password authentication works

@@ -6,7 +6,7 @@
     src = pkgs.fetchFromGitHub {
       owner = "skeeto";
       repo = "elisp-ffi";
-      rev = "${version}";
+      rev = version;
       sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
     };
     buildInputs = [ external.libffi ];
@@ -59,7 +59,7 @@
 
   font-lock-plus = callPackage ./font-lock-plus { };
 
-  ghc-mod = melpaBuild rec {
+  ghc-mod = melpaBuild {
     pname = "ghc";
     version = external.ghc-mod.version;
     src = external.ghc-mod.src;
@@ -75,7 +75,7 @@
     };
   };
 
-  haskell-unicode-input-method = melpaBuild rec {
+  haskell-unicode-input-method = melpaBuild {
     pname = "emacs-haskell-unicode-input-method";
     version = "20110905.2307";
     src = pkgs.fetchFromGitHub {
@@ -104,7 +104,7 @@
 
   icicles = callPackage ./icicles { };
 
-  rtags = melpaBuild rec {
+  rtags = melpaBuild {
     inherit (external.rtags) version src meta;
 
     pname = "rtags";
@@ -130,8 +130,6 @@
 
   railgun = callPackage ./railgun { };
 
-  gn = callPackage ./gn { };
-
   structured-haskell-mode = self.shm;
 
   thingatpt-plus = callPackage ./thingatpt-plus { };
@@ -145,12 +143,9 @@
   # From old emacsPackages (pre emacsPackagesNg)
   cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
-  coffee = callPackage ./coffee { };
   colorThemeSolarized = callPackage ./color-theme-solarized {
     colorTheme = self.color-theme;
   };
-  cua = callPackage ./cua { };
-  emacsClangCompleteAsync = callPackage ./emacs-clang-complete-async { };
   emacsSessionManagement = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
   hol_light_mode = callPackage ./hol_light { };

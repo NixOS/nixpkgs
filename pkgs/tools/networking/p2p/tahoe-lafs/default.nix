@@ -7,7 +7,7 @@
 
 pythonPackages.buildPythonApplication rec {
   version = "1.13.0";
-  name = "tahoe-lafs-${version}";
+  pname = "tahoe-lafs";
   namePrefix = "";
 
   src = fetchurl {
@@ -65,8 +65,8 @@ pythonPackages.buildPythonApplication rec {
       cd docs
 
       make singlehtml
-      mkdir -p "$doc/share/doc/${name}"
-      cp -rv _build/singlehtml/* "$doc/share/doc/${name}"
+      mkdir -p "$doc/share/doc/${pname}-${version}"
+      cp -rv _build/singlehtml/* "$doc/share/doc/${pname}-${version}"
 
       make info
       mkdir -p "$info/share/info"

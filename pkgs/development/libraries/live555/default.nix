@@ -2,7 +2,7 @@
 
 # Based on https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD
 stdenv.mkDerivation rec {
-  name = "live555-${version}";
+  pname = "live555";
   version = "2019.08.16";
 
   src = fetchurl { # the upstream doesn't provide a stable URL

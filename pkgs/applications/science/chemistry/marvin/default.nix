@@ -3,7 +3,6 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "marvin";
   version = "19.1.0";
 

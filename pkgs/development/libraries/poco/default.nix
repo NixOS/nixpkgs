@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake, pkgconfig, zlib, pcre, expat, sqlite, openssl, unixODBC, mysql }:
 
 stdenv.mkDerivation rec {
-  name = "poco-${version}";
+  pname = "poco";
 
   version = "1.9.2";
 
   src = fetchurl {
-    url = "https://pocoproject.org/releases/${name}/${name}-all.tar.gz";
+    url = "https://pocoproject.org/releases/${pname}-${version}/${pname}-${version}-all.tar.gz";
     sha256 = "0jkbxw6z8l7zpr7bh2xcyzk8a5apzyz4ranhl66gxna1ay0gpzvd";
   };
 

@@ -36,13 +36,13 @@
 let
   optional = stdenv.lib.optional;
 in mkDerivation rec {
-  name = "obs-studio-${version}";
+  pname = "obs-studio";
   version = "23.2.1";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
-    rev = "${version}";
+    rev = version;
     sha256 = "05brixq2z98mvn1q2rgdl27xj798509nv8yh6h0yzqyk9gly4anz";
   };
 

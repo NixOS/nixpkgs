@@ -80,7 +80,7 @@ let
 
   citrixWorkspaceForVersion = { major, minor, patch, x64hash, x86hash, x64suffix, x86suffix, homepage }:
     stdenv.mkDerivation rec {
-      name     = "citrix-workspace-${version}";
+      pname = "citrix-workspace";
       version  = "${major}.${minor}.${patch}";
       inherit homepage;
 

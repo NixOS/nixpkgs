@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.14.0-RC1";
-  name = "dotty-bare-${version}";
+  pname = "dotty-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/dotty-${version}.tar.gz";

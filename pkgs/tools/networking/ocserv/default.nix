@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocserv-${version}";
+  pname = "ocserv";
   version = "0.12.4";
 
   src = fetchFromGitLab {

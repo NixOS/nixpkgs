@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dhcping-${version}";
+  pname = "dhcping";
   version = "1.2";
 
   src = fetchurl {

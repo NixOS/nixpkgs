@@ -5,7 +5,7 @@ let
   makeDirs = output: subDir: pkgs: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) pkgs);
 
 in stdenv.mkDerivation rec {
-  name = "thc-hydra-${version}";
+  pname = "thc-hydra";
   version = "8.5";
 
   src = fetchurl {

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, php, gd, libpng, zlib, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "nagios-${version}";
+  pname = "nagios";
   version = "4.4.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nagios/nagios-4.x/${name}/${name}.tar.gz";
+    url = "mirror://sourceforge/nagios/nagios-4.x/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "0nkbv8lzpiknddiq0466dlpp3hw8lqmaidk8931hp4664cdsaw57";
   };
 

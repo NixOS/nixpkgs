@@ -7,10 +7,9 @@
 mkDerivation rec {
   pname = "kdb";
   version = "3.2.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
+    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
     sha256 = "0s909x34a56n3xwhqz27irl2gbzidax0685w2kf34f0liny872cg";
   };
 

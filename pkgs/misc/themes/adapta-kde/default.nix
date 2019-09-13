@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "adapta-kde-theme-${version}";
+  pname = "adapta-kde-theme";
   version = "20180512";
 
   src = fetchFromGitHub {

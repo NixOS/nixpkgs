@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   configureFlags = [
-    "--with-libpanel-applet-dir=${placeholder ''out''}/share/gnome-panel/applets"
+    "--with-libpanel-applet-dir=${placeholder "out"}/share/gnome-panel/applets"
   ];
 
   passthru = {

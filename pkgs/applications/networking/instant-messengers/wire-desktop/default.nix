@@ -18,13 +18,13 @@ let
   pname = "wire-desktop";
 
   version = {
-    "x86_64-linux" = "3.10.2904";
-    "x86_64-darwin" = "3.10.3133";
+    x86_64-linux = "3.10.2904";
+    x86_64-darwin = "3.10.3133";
   }.${system} or throwSystem;
 
   sha256 = {
-    "x86_64-linux" = "1vrz4568mlhylx17jw4z452f0vrd8yd8qkbpkcvnsbhs6k066xcn";
-    "x86_64-darwin" = "0d8g9fl3yciqp3aic374rzcywb5d5yipgni992khsfdfqhcvm3x9";
+    x86_64-linux = "1vrz4568mlhylx17jw4z452f0vrd8yd8qkbpkcvnsbhs6k066xcn";
+    x86_64-darwin = "0d8g9fl3yciqp3aic374rzcywb5d5yipgni992khsfdfqhcvm3x9";
   }.${system} or throwSystem;
 
   meta = with stdenv.lib; {
@@ -102,7 +102,7 @@ let
     '';
   };
 
-  darwin = stdenv.mkDerivation rec {
+  darwin = stdenv.mkDerivation {
     inherit pname version meta;
 
     src = fetchurl {

@@ -30,10 +30,10 @@ let
 
   generic = extensionsEnv: extraPassthru: stdenv.mkDerivation rec {
     version = "1.7.3";
-    name    = "password-store-${version}";
+    pname = "password-store";
 
     src = fetchurl {
-      url    = "https://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
+      url    = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
       sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
     };
 

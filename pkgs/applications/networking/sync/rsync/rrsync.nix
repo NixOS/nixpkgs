@@ -3,7 +3,7 @@
 let
   base = import ./base.nix { inherit stdenv fetchurl; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rrsync-${base.version}";
 
   src = base.src;

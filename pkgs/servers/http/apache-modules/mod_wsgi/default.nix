@@ -1,7 +1,7 @@
 { stdenv, fetchurl, apacheHttpd, python, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "mod_wsgi-${version}";
+  pname = "mod_wsgi";
   version = "4.6.7";
 
   src = fetchurl {

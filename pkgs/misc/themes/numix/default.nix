@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.6.7";
-  name = "numix-gtk-theme-${version}";
+  pname = "numix-gtk-theme";
 
   src = fetchFromGitHub {
     repo = "numix-gtk-theme";

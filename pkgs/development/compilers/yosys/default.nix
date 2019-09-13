@@ -8,14 +8,14 @@ with builtins;
 
 stdenv.mkDerivation rec {
   pname = "yosys";
-  version = "2019.08.21";
+  version = "2019.09.01";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "fe1b2337fd7950e1d563be5b8ccbaa81688261e4";
-      sha256 = "0z7sngc2z081yyhzh8c2kchg48sp2333hn1wa94q5vsgnyzlqrdw";
+      rev    = "4aa505d1b254b3fbb66af2d95b396a8f077da9d0";
+      sha256 = "16rhwmn1z2ppaq3wycgq713krq48s80a6h57vgzjzj17hgncg7hs";
       name   = "yosys";
     })
 

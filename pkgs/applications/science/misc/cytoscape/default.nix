@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "cytoscape-${version}";
+  pname = "cytoscape";
   version = "3.7.1";
 
   src = fetchurl {
-    url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "1mhsngbwbgdwl70wj7850zg94534lasihwv2ryifardm35mkh48k";
   };
 

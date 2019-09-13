@@ -8,7 +8,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gdal-${version}";
+  pname = "gdal";
   version = "3.0.1";
 
   src = fetchFromGitHub {

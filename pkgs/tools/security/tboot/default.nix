@@ -1,11 +1,11 @@
 { stdenv, fetchurl, trousers, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "tboot-${version}";
+  pname = "tboot";
   version = "1.9.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tboot/${name}.tar.gz";
+    url = "mirror://sourceforge/tboot/${pname}-${version}.tar.gz";
     sha256 = "06f0ggl6vrb5ghklblvh2ixgmmjv31rkp1vfj9qm497iqwq9ac00";
   };
 

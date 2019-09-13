@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.5";
-  name = "mydumper-${version}";
+  pname = "mydumper";
 
   src = fetchFromGitHub {
     owner  = "maxbube";

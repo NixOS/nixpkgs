@@ -19,11 +19,11 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "nano-${version}";
+  pname = "nano";
   version = "4.4";
 
   src = fetchurl {
-    url = "mirror://gnu/nano/${name}.tar.xz";
+    url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
     sha256 = "1iw2ypq34g1gfqyhgka2fz5yj5vrlz85q6zk7amgyj286ph25wia";
   };
 

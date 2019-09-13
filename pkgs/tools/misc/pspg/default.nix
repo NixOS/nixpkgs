@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, gnugrep, ncurses, pkgconfig, readline }:
 
 stdenv.mkDerivation rec {
-  name = "pspg-${version}";
+  pname = "pspg";
   version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = "pspg";
-    rev = "${version}";
+    rev = version;
     sha256 = "1lwzyimn28a7q8k2c8z7and4qhrdil0za8lixh96z6x4lcb0rz5q";
   };
 

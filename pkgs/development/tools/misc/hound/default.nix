@@ -7,7 +7,7 @@
 }:
 
 buildGoPackage rec {
-  name = "hound-unstable-${version}";
+  pname = "hound-unstable";
   version = "2018-11-02";
   rev = "74ec7448a234d8d09e800b92e52c92e378c07742";
 

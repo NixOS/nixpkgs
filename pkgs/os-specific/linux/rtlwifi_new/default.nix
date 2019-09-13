@@ -5,7 +5,7 @@ with lib;
 let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtlwifi";
 
 in stdenv.mkDerivation rec {
-  name = "rtlwifi_new-${version}";
+  pname = "rtlwifi_new";
   version = "2018-02-17";
 
   src = fetchFromGitHub {

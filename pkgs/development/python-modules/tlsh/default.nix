@@ -4,7 +4,7 @@
 , cmake
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tlsh";
   version = "3.4.5";
 
@@ -20,10 +20,7 @@ buildPythonPackage rec {
   # no test data
   doCheck = false;
 
-  preConfigure = ''
-    mkdir build
-    cd build
-    cmake ..
+  postConfigure = ''
     cd ../py_ext
   '';
 

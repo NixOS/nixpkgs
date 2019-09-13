@@ -2,7 +2,7 @@
 , fetchpatch, libiconv, pcre-cpp, libidn, lua5, miniupnpc, aspell, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "eiskaltdcpp-${version}";
+  pname = "eiskaltdcpp";
   version = "2.2.10";
 
   src = fetchFromGitHub {

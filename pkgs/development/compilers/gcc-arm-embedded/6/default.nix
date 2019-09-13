@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses5, python27 }:
 
 stdenv.mkDerivation rec {
-  name = "gcc-arm-embedded-${version}";
+  pname = "gcc-arm-embedded";
   version = "6-2017-q2-update";
   subdir = "6-2017q2";
 

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.15";
-  name = "smenu-${version}";
+  pname = "smenu";
 
   src = fetchFromGitHub {
     owner  = "p-gen";

@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ent-1.1";
 
   src = fetchurl {

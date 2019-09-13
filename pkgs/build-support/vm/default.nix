@@ -741,7 +741,7 @@ rec {
     # Note: no i386 release for Fedora >= 26
     fedora26x86_64 =
       let version = "26";
-      in rec {
+      in {
         name = "fedora-${version}-x86_64";
         fullName = "Fedora ${version} (x86_64)";
         packagesList = fetchurl rec {
@@ -756,7 +756,7 @@ rec {
 
     fedora27x86_64 =
       let version = "27";
-      in rec {
+      in {
         name = "fedora-${version}-x86_64";
         fullName = "Fedora ${version} (x86_64)";
         packagesList = fetchurl rec {
@@ -816,7 +816,7 @@ rec {
 
   /* The set of supported Dpkg-based distributions. */
 
-  debDistros = rec {
+  debDistros = {
 
     # Interestingly, the SHA-256 hashes provided by Ubuntu in
     # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are

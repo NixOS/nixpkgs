@@ -114,10 +114,10 @@ in
       name = "xfce4-14";
       bgSupport = true;
       start = ''
-        # Set GTK_PATH so that GTK+ can find the theme engines.
+        # Set GTK_PATH so that GTK can find the theme engines.
         export GTK_PATH="${config.system.path}/lib/gtk-2.0:${config.system.path}/lib/gtk-3.0"
 
-        # Set GTK_DATA_PREFIX so that GTK+ can find the Xfce themes.
+        # Set GTK_DATA_PREFIX so that GTK can find the Xfce themes.
         export GTK_DATA_PREFIX=${config.system.path}
 
         ${pkgs.runtimeShell} ${pkgs.xfce4-14.xinitrc} &
@@ -137,8 +137,7 @@ in
     services.gvfs.enable = true;
     services.gvfs.package = pkgs.xfce.gvfs;
     services.tumbler.enable = true;
-    services.dbus.packages =
-      optional config.services.printing.enable pkgs.system-config-printer;
+    services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
     services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
 
     # Enable default programs

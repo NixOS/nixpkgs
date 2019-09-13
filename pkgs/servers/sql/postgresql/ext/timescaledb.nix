@@ -7,7 +7,7 @@
 # }
 
 stdenv.mkDerivation rec {
-  name = "timescaledb-${version}";
+  pname = "timescaledb";
   version = "1.4.1";
 
   nativeBuildInputs = [ cmake ];

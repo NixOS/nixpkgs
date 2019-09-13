@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "wolfssl-${version}";
+  pname = "wolfssl";
   version = "4.1.0";
 
   src = fetchFromGitHub {

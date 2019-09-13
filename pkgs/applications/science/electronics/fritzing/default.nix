@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fritzing-${version}";
+  pname = "fritzing";
   version = "0.9.3b";
 
   src = fetchFromGitHub {

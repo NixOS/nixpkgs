@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''bordeaux-threads'';
   version = ''v0.8.6'';
 

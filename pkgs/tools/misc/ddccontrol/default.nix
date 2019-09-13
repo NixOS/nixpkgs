@@ -5,7 +5,8 @@
 
 let version = "0.4.4"; in
 stdenv.mkDerivation rec {
-  name = "ddccontrol-${version}";
+  pname = "ddccontrol";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ddccontrol";

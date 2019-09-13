@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage, bash }:
 
 buildGoPackage rec {
-  name = "direnv-${version}";
+  pname = "direnv";
   version = "2.20.1";
   goPackagePath = "github.com/direnv/direnv";
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libjpeg, libpng, libX11, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libxcomp-${version}";
+  pname = "libxcomp";
   version = "3.5.99.16";
 
   src = fetchurl {

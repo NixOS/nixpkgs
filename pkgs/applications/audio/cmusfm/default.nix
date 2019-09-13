@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, libnotify, gdk-pixbuf }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2018-10-11";
-  name = "cmusfm-unstable-${version}";
+  pname = "cmusfm-unstable";
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "cmusfm";

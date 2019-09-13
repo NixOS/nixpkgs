@@ -219,7 +219,7 @@ let
     };
 
     buildInputs = [ ArchiveExtract ];
-    TIDYP_DIR = "${pkgs.tidyp}";
+    TIDYP_DIR = pkgs.tidyp;
     propagatedBuildInputs = [ FileShareDir ];
   };
 
@@ -2876,6 +2876,18 @@ let
       homepage = https://github.com/rjbs/Config-MVP-Reader-INI;
       description = "An MVP config reader for .ini files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ConfigSimple = buildPerlPackage {
+    pname = "Config-Simple";
+    version = "4.59";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SH/SHERZODR/Config-Simple-4.59.tar.gz;
+      sha256 = "0m0hg29baarw5ds768q9r4rxb27im8kj4fazyf9gjqw4mmssjy6b";
+    };
+    meta = {
+      description = "Simple configuration file class";
     };
   };
 
@@ -6194,6 +6206,9 @@ let
       url = mirror://cpan/authors/id/E/ET/ETHER/FCGI-0.78.tar.gz;
       sha256 = "1cxavhzg4gyw4gl9kirpbdimjr8gk1rjc3pqs3xrnh1gjybld5xa";
     };
+    postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed -i '/use IO::File/d' Makefile.PL
+    '';
   };
 
   FCGIClient = buildPerlModule {
@@ -7522,7 +7537,7 @@ let
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
     meta = {
-      description = "Perl interface to the 3.x series of the gtk+ toolkit";
+      description = "Perl interface to the 3.x series of the GTK toolkit";
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -10646,23 +10661,26 @@ let
     };
   };
 
-  MHonArc = buildPerlPackage {
+  MHonArc = buildPerlPackage rec {
     pname = "MHonArc";
-    version = "2.6.18";
+    version = "2.6.19";
 
     src = fetchurl {
-      url    = "http://dcssrv1.oit.uci.edu/indiv/ehood/release/MHonArc/tar/MHonArc-2.6.18.tar.gz";
-      sha256 = "1xmf26dfwr8achprc3n1pxgl0mkiyr6pf25wq3dqgzqkghrrsxa2";
+      url = "https://www.mhonarc.org/release/MHonArc/tar/MHonArc-${version}.tar.gz";
+      sha256 = "0ll3v93yji334zqp6xfzfxc0127pmjcznmai1l5q6dzawrs2igzq";
     };
+
+    patches = [ ../development/perl-modules/mhonarc.patch ];
+
     outputs = [ "out" "dev" ]; # no "devdoc"
 
     installTargets = "install";
 
     meta = with stdenv.lib; {
-      homepage    = http://dcssrv1.oit.uci.edu/indiv/ehood/mhonarch.html;
+      homepage = "https://www.mhonarc.org/";
       description = "A mail-to-HTML converter";
       maintainers = with maintainers; [ lovek323 ];
-      license     = licenses.gpl2;
+      license = licenses.gpl2;
     };
   };
 
@@ -19364,7 +19382,7 @@ let
     };
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
-    #   Error: Unable to initialize GTK+, is DISPLAY set properly?"
+    #   Error: Unable to initialize GTK, is DISPLAY set properly?"
     doCheck = false;
     buildInputs = [ ExtUtilsXSpp ];
   };

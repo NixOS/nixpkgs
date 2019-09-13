@@ -1,7 +1,7 @@
 { stdenv, go, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "cadvisor-${version}";
+  pname = "cadvisor";
   version = "0.34.0";
 
   src = fetchFromGitHub {

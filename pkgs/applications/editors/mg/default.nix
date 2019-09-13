@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libbsd, ncurses, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "mg-${version}";
+  pname = "mg";
   version = "20171014";
 
   src = fetchurl {
-    url = "http://homepage.boetes.org/software/mg/${name}.tar.gz";
+    url = "http://homepage.boetes.org/software/mg/${pname}-${version}.tar.gz";
     sha256 = "0hakfikzsml7z0hja8m8mcahrmfy2piy81bq9nccsjplyfc9clai";
   };
 

@@ -7,7 +7,7 @@ then throw "js_of_ocaml-compiler is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-	name = "js_of_ocaml-compiler-${version}";
+	pname = "js_of_ocaml-compiler";
 	version = "3.3.0";
 
 	src = fetchFromGitHub {

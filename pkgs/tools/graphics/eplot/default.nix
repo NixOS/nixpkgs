@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gnuplot, ruby }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "eplot-2.07";
 
   # Upstream has been contacted (2015-03) regarding providing versioned

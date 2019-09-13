@@ -7,8 +7,8 @@
 , fetchpatch
 }:
 
-mkDerivation rec {
-  name = "vogl-${version}";
+mkDerivation {
+  pname = "vogl";
   version = "2016-05-13";
 
   src = fetchFromGitHub {

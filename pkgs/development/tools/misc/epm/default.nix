@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, rpm}:
 
 stdenv.mkDerivation rec {
-  name = "epm-${version}";
+  pname = "epm";
   version = "4.4";
 
   src = fetchFromGitHub {

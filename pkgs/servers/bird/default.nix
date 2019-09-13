@@ -6,11 +6,12 @@ let
 
   generic = { version, sha256, enableIPv6 ? false }:
     stdenv.mkDerivation rec {
-      name = "bird-${version}";
+      pname = "bird";
+      inherit version;
 
       src = fetchurl {
         inherit sha256;
-        url = "ftp://bird.network.cz/pub/bird/${name}.tar.gz";
+        url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
       };
 
       nativeBuildInputs = [ flex bison ];

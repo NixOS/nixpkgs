@@ -27,7 +27,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "dfasma-${version}";
+  pname = "dfasma";
   version = "1.4.5";
 
   src = fetchFromGitHub {

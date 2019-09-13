@@ -10,7 +10,8 @@
 let
   version = "git";
   bin = stdenv.mkDerivation {
-    name = "vdrift-${version}";
+    pname = "vdrift";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "vdrift";

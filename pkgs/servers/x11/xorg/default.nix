@@ -58,11 +58,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   encodings = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
-    name = "encodings-1.0.4";
+    name = "encodings-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/font/encodings-1.0.4.tar.bz2;
-      sha256 = "0ffmaw80vmfwdgvdkp6495xgsqszb6s0iira5j0j6pd4i0lk3mnf";
+      url = mirror://xorg/individual/font/encodings-1.0.5.tar.bz2;
+      sha256 = "0caafx0yqqnqyvbalxhh3mb0r9v36xmcy5zjhygb2i508dhy35mx";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -703,11 +703,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libX11 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
-    name = "libX11-1.6.7";
+    name = "libX11-1.6.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libX11-1.6.7.tar.bz2;
-      sha256 = "0j0k5bjz4kd7rx6z09n5ggxbzbi84wf78xx25ikx6jmsxwq9w3li";
+      url = mirror://xorg/individual/lib/libX11-1.6.8.tar.bz2;
+      sha256 = "1mbkwhhprhf49s2iwx7kiliprsdvd690zk44x3h53ql9q52si2dj";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -898,11 +898,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXi = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXfixes }: stdenv.mkDerivation {
-    name = "libXi-1.7.9";
+    name = "libXi-1.7.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.9.tar.bz2;
-      sha256 = "0idg1wc01hndvaa820fvfs7phvd1ymf0lldmq6386i7rhkzvirn2";
+      url = mirror://xorg/individual/lib/libXi-1.7.10.tar.bz2;
+      sha256 = "0q8hz3slga3w3ch8wp0k7ay9ilhz315qnab0w1y2x9w3cf7hv8rn";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1132,11 +1132,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libpciaccess = callPackage ({ stdenv, pkgconfig, fetchurl, zlib }: stdenv.mkDerivation {
-    name = "libpciaccess-0.14";
+    name = "libpciaccess-0.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libpciaccess-0.14.tar.bz2;
-      sha256 = "197jbcpvp4z4x6j705mq2y4fsnnypy6f85y8xalgwhgx5bhl7x9x";
+      url = mirror://xorg/individual/lib/libpciaccess-0.16.tar.bz2;
+      sha256 = "12glp4w1kgvmqn89lk19cgr6jccd3awxra4dxisp7pagi06rsk11";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1275,11 +1275,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   sessreg = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
-    name = "sessreg-1.1.1";
+    name = "sessreg-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/sessreg-1.1.1.tar.bz2;
-      sha256 = "1qd66mg2bnppqz4xgdjzif2488zl82vx2c26ld3nb8pnyginm9vq";
+      url = mirror://xorg/individual/app/sessreg-1.1.2.tar.bz2;
+      sha256 = "0crczl25zynkrslmm8sjaxszhrh4i33m7h5fg4wfdb3k8aarxjyz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1379,11 +1379,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xauth = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXext, libXmu, xorgproto }: stdenv.mkDerivation {
-    name = "xauth-1.0.10";
+    name = "xauth-1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xauth-1.0.10.tar.bz2;
-      sha256 = "0kgwz9rmxjfdvi2syf8g0ms5rr5cgyqx4n0n1m960kyz7k745zjs";
+      url = mirror://xorg/individual/app/xauth-1.1.tar.bz2;
+      sha256 = "032klzzw8r09z36x1272ssd79bcisz8j5p8gbdy111fiknvx27bd";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2458,11 +2458,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xinput = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXi, libXinerama, libXrandr }: stdenv.mkDerivation {
-    name = "xinput-1.6.2";
+    name = "xinput-1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinput-1.6.2.tar.bz2;
-      sha256 = "1i75mviz9dyqyf7qigzmxq8vn31i86aybm662fzjz5c086dx551n";
+      url = mirror://xorg/individual/app/xinput-1.6.3.tar.bz2;
+      sha256 = "1vb6xdd1xmk5f7pwc5zcbxfray5sf1vbnscqwf2yl8lv7gfq38im";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

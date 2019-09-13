@@ -6,8 +6,9 @@
 
 let
   version = "3.32.2";
-in stdenv.mkDerivation rec {
-  name = "gnome-notes-${version}";
+in stdenv.mkDerivation {
+  pname = "gnome-notes";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/bijiben-${version}.tar.xz";

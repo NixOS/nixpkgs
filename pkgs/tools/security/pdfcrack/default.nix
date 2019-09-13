@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pdfcrack-${version}";
+  pname = "pdfcrack";
   version = "0.17";
 
   src = fetchurl {

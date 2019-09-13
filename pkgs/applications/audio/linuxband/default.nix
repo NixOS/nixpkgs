@@ -4,10 +4,10 @@ let
   inherit (python2Packages) pyGtkGlade pygtksourceview python;
 in stdenv.mkDerivation rec {
   version = "12.02.1";
-  name = "linuxband-${version}";
+  pname = "linuxband";
 
   src = fetchurl {
-    url = "http://linuxband.org/assets/sources/${name}.tar.gz";
+    url = "http://linuxband.org/assets/sources/${pname}-${version}.tar.gz";
     sha256 = "1r71h4yg775m4gax4irrvygmrsclgn503ykmc2qwjsxa42ri4n2n";
   };
 

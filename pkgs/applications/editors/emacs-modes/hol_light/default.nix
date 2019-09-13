@@ -1,7 +1,7 @@
 { stdenv, fetchsvn }:
 
 stdenv.mkDerivation rec {
-  name    = "hol_light-mode-${version}";
+  pname = "hol_light-mode";
   version = "73";
 
   src = fetchsvn {

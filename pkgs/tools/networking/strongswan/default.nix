@@ -16,11 +16,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "strongswan-${version}";
+  pname = "strongswan";
   version = "5.8.0"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchurl {
-    url = "https://download.strongswan.org/${name}.tar.bz2";
+    url = "https://download.strongswan.org/${pname}-${version}.tar.bz2";
     sha256 = "0cq9m86ydd2i0awxkv4a256f4926p2f9pzlisyskl9fngl6f3c8m";
   };
 

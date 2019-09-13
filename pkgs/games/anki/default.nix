@@ -19,6 +19,7 @@
 , glibcLocales
 , nose
 , jsonschema
+, setuptools
 , send2trash
 , CoreAudio
 # This little flag adds a huge number of dependencies, but we assume that
@@ -38,7 +39,8 @@ let
     sha256-manual = "0pm5slxn78r44ggvbksz7rv9hmlnsvn9z811r6f63dsc8vm6mfml";
 
     manual = stdenv.mkDerivation {
-      name = "anki-manual-${version}";
+      pname = "anki-manual";
+      inherit version;
       src = fetchFromGitHub {
         owner = "dae";
         repo = "ankidocs";
@@ -69,11 +71,12 @@ let
 
 in
 buildPythonApplication rec {
-    name = "anki-${version}";
+    pname = "anki";
+    inherit version;
 
     src = fetchurl {
       urls = [
-        "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
+        "https://apps.ankiweb.net/downloads/current/${pname}-${version}-source.tgz"
         # "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
@@ -85,7 +88,7 @@ buildPythonApplication rec {
 
     propagatedBuildInputs = [
       pyqtwebengine sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
-      markdown jsonschema
+      markdown jsonschema setuptools
     ]
       ++ lib.optional plotsSupport matplotlib
       ++ lib.optional stdenv.isDarwin [ CoreAudio ]

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, libX11 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2016-09-30";
-  name = "xcwd-${version}";
+  pname = "xcwd";
 
   src = fetchFromGitHub {
     owner   = "schischi";

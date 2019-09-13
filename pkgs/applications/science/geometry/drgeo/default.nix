@@ -2,13 +2,13 @@
 , intltool, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "drgeo-${version}";
+  pname = "drgeo";
   version = "1.1.0";
 
   hardeningDisable = [ "format" ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/ofset/${name}.tar.gz";
+    url = "mirror://sourceforge/ofset/${pname}-${version}.tar.gz";
     sha256 = "05i2czgzhpzi80xxghinvkyqx4ym0gm9f38fz53idjhigiivp4wc";
   };
   patches = [ ./struct.patch ];

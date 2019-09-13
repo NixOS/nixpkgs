@@ -37,7 +37,7 @@ let
        picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
 
        [org.gnome.shell]
-       favorite-apps=[ 'org.gnome.Epiphany.desktop', 'evolution.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
+       favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
 
        ${cfg.extraGSettingsOverrides}
      EOF
@@ -227,25 +227,29 @@ in
 
     (mkIf serviceCfg.core-shell.enable {
       services.colord.enable = mkDefault true;
+      services.gnome3.chrome-gnome-shell.enable = mkDefault true;
       services.gnome3.glib-networking.enable = true;
       services.gnome3.gnome-remote-desktop.enable = mkDefault true;
       services.gnome3.gnome-settings-daemon.enable = true;
       services.gnome3.gnome-user-share.enable = mkDefault true;
       services.gnome3.rygel.enable = mkDefault true;
       services.gvfs.enable = true;
+      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
       systemd.packages = [ pkgs.gnome3.vino ];
-      services.dbus.packages =
-        optional config.services.printing.enable pkgs.system-config-printer;
+
+      services.avahi.enable = mkDefault true;
+
+      xdg.portal.extraPortals = [ pkgs.gnome3.gnome-shell ];
 
       services.geoclue2.enable = mkDefault true;
       services.geoclue2.enableDemoAgent = false; # GNOME has its own geoclue agent
 
-      services.geoclue2.appConfig."gnome-datetime-panel" = {
+      services.geoclue2.appConfig.gnome-datetime-panel = {
         isAllowed = true;
         isSystem = true;
       };
-      services.geoclue2.appConfig."gnome-color-panel" = {
+      services.geoclue2.appConfig.gnome-color-panel = {
         isAllowed = true;
         isSystem = true;
       };
@@ -261,16 +265,19 @@ in
         source-sans-pro
       ];
 
+      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
         gnome-backgrounds
         gnome-bluetooth
+        gnome-color-manager
         gnome-control-center
         gnome-getting-started-docs
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
         gnome-user-docs
+        pkgs.orca
         pkgs.glib # for gsettings
         pkgs.gnome-menus
         pkgs.gtk3.out # for gtk-launch
@@ -281,23 +288,43 @@ in
       ];
     })
 
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
-        baobab eog epiphany evince gucharmap nautilus totem yelp gnome-calculator
-        gnome-contacts gnome-font-viewer gnome-screenshot gnome-system-monitor simple-scan
-        gnome-terminal evolution file-roller gedit gnome-clocks gnome-music gnome-tweaks
-        pkgs.gnome-photos nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
-        gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool gnome-packagekit
-        gnome-software gnome-power-manager gnome-todo pkgs.gnome-usage
+        baobab
+        cheese
+        eog
+        epiphany
+        geary
+        gedit
+        gnome-calculator
+        gnome-calendar
+        gnome-characters
+        gnome-clocks
+        gnome-contacts
+        gnome-font-viewer
+        gnome-logs
+        gnome-maps
+        gnome-music
+        gnome-photos
+        gnome-screenshot
+        gnome-software
+        gnome-system-monitor
+        gnome-weather
+        nautilus
+        simple-scan
+        totem
+        yelp
+        # Unsure if sensible for NixOS
+        /* gnome-boxes */
       ] config.environment.gnome3.excludePackages);
 
       # Enable default programs
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
-      programs.gnome-documents.enable = mkDefault true;
       programs.gnome-terminal.enable = mkDefault true;
-      services.gnome3.seahorse.enable = mkDefault true;
+      programs.seahorse.enable = mkDefault true;
       services.gnome3.sushi.enable = mkDefault true;
 
       # Let nautilus find extensions

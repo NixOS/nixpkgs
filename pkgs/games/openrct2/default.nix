@@ -28,7 +28,7 @@ let
     sha256 = "1yb1ynkfmiankii3fngr9km5wbc07rp30nh0apkj6wryrhy7imgm";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit name;
 
   src = openrct2-src;

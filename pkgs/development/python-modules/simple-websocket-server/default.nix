@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "simple-websocket-server";
   version = "20180414";
   src = fetchFromGitHub {

@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, requireFile
 , autoPatchelfHook
 , fixDarwinDylibNames
 , unzip
@@ -22,65 +21,57 @@ let
 
   # determine the version number, there might be different ones per architecture
   version = {
-    "x86_64-linux" = "19.3.0.0.0";
-    "x86_64-darwin" = "18.1.0.0.0";
-  }."${stdenv.hostPlatform.system}" or throwSystem;
+    x86_64-linux = "19.3.0.0.0";
+    x86_64-darwin = "19.3.0.0.0";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   # hashes per component and architecture
   hashes = {
-    "x86_64-linux" = {
-      "basic"   = "1yk4ng3a9ka1mzgfph9br6rwclagbgfvmg6kja11nl5dapxdzaxy";
-      "sdk"     = "115v1gqr0czy7dcf2idwxhc6ja5b0nind0mf1rn8iawgrw560l99";
-      "sqlplus" = "0zj5h84ypv4n4678kfix6jih9yakb277l9hc0819iddc0a5slbi5";
-      "odbc"    = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
+    x86_64-linux = {
+      basic   = "1yk4ng3a9ka1mzgfph9br6rwclagbgfvmg6kja11nl5dapxdzaxy";
+      sdk     = "115v1gqr0czy7dcf2idwxhc6ja5b0nind0mf1rn8iawgrw560l99";
+      sqlplus = "0zj5h84ypv4n4678kfix6jih9yakb277l9hc0819iddc0a5slbi5";
+      odbc    = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
     };
-    "x86_64-darwin" = {
-      "basic"   = "fac3cdaaee7526f6c50ff167edb4ba7ab68efb763de24f65f63fb48cc1ba44c0";
-      "sdk"     = "98e6d797f1ce11e59b042b232f62380cec29ec7d5387b88a9e074b741c13e63a";
-      "sqlplus" = "02e66dc52398fced75e7efcb6b4372afcf617f7d88344fb7f0f4bb2bed371f3b";
-      "odbc"    = "5d0cdd7f9dd2e27affbc9b36ef9fc48e329713ecd36905fdd089366e365ae8a2";
+    x86_64-darwin = {
+      basic   = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
+      sdk     = "b46b4b87af593f7cfe447cfb903d1ae5073cec34049143ad8cdc9f3e78b23b27";
+      sqlplus = "f7565c3cbf898b0a7953fbb0017c5edd9d11d1863781588b7caf3a69937a2e9e";
+      odbc    = "f91da40684abaa866aa059eb26b1322f2d527670a1937d678404c991eadeb725";
     };
-  }."${stdenv.hostPlatform.system}" or throwSystem;
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   # rels per component and architecture, optional
   rels = {
-    "x86_64-darwin" = {
-      "sdk" = "2";
-    };
-  }."${stdenv.hostPlatform.system}" or {};
+  }.${stdenv.hostPlatform.system} or {};
 
   # convert platform to oracle architecture names
   arch = {
-    "x86_64-linux" = "linux.x64";
-    "x86_64-darwin" = "macos.x64";
-  }."${stdenv.hostPlatform.system}" or throwSystem;
+    x86_64-linux = "linux.x64";
+    x86_64-darwin = "macos.x64";
+  }.${stdenv.hostPlatform.system} or throwSystem;
+
+  shortArch = {
+    x86_64-linux = "linux";
+    x86_64-darwin = "macos";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   # calculate the filename of a single zip file
   srcFilename = component: arch: version: rel:
     "instantclient-${component}-${arch}-${version}" +
     (optionalString (rel != "") "-${rel}") +
-    (optionalString (arch == "linux.x64") "dbru") + # ¯\_(ツ)_/¯
+    (optionalString (arch == "linux.x64" || arch == "macos.x64") "dbru") + # ¯\_(ツ)_/¯
     ".zip";
 
-  # fetcher for the clickthrough artifacts (requiring manual download)
-  fetchClickThrough =  srcFilename: hash: (requireFile {
-    name = srcFilename;
-    url = "https://www.oracle.com/database/technologies/instant-client/downloads.html";
-    sha256 = hash;
-  });
-
   # fetcher for the non clickthrough artifacts
-  fetchSimple = srcFilename: hash: fetchurl {
-    url = "https://download.oracle.com/otn_software/linux/instantclient/193000/${srcFilename}";
+  fetcher = srcFilename: hash: fetchurl {
+    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/193000/${srcFilename}";
     sha256 = hash;
   };
 
-  # pick the appropriate fetcher depending on the platform
-  fetcher = if stdenv.hostPlatform.system == "x86_64-linux" then fetchSimple else fetchClickThrough;
-
   # assemble srcs
   srcs = map (component:
-    (fetcher (srcFilename component arch version rels."${component}" or "") hashes."${component}" or ""))
+    (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or ""))
   components;
 
   pname = "oracle-instantclient";

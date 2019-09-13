@@ -4,11 +4,11 @@
 , libcanberra-gtk3, libxslt, docbook_xsl, libpwquality }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-disk-utility-${version}";
+  pname = "gnome-disk-utility";
   version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-disk-utility/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-disk-utility/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "08vwbji9m1nhjjdiyhhaqi8cncys7i89b4bpy095f8475v8y05bg";
   };
 

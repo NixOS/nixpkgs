@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libGL, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "glxinfo-${version}";
+  pname = "glxinfo";
   version = "8.4.0";
 
   src = fetchurl {

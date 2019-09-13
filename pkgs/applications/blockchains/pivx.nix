@@ -9,7 +9,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "pivx-${version}";
+  pname = "pivx";
   version = "3.2.0";
 
   src = fetchFromGitHub {

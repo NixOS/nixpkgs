@@ -17,7 +17,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "hubstaff-${version}";
+  pname = "hubstaff";
+  inherit version;
 
   src = fetchurl { inherit sha256 url; };
 

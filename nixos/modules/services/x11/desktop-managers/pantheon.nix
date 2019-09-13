@@ -113,9 +113,9 @@ in
     services.colord.enable = mkDefault true;
     services.pantheon.files.enable = mkDefault true;
     services.tumbler.enable = mkDefault true;
-    services.dbus.packages = mkMerge [
-      ([ pkgs.pantheon.switchboard-plug-power ])
-      (mkIf config.services.printing.enable  ([pkgs.system-config-printer]) )
+    services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+    services.dbus.packages = [
+      pkgs.pantheon.switchboard-plug-power
     ];
     services.pantheon.contractor.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
@@ -145,6 +145,9 @@ in
     programs.dconf.enable = true;
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
+    # Otherwise you can't store NetworkManager Secrets with
+    # "Store the password only for this user"
+    programs.nm-applet.enable = true;
 
     # Shell integration for VTE terminals
     programs.bash.vteIntegration = mkDefault true;
@@ -191,6 +194,7 @@ in
         gtk3.out
         hicolor-icon-theme
         lightlocker
+        onboard
         plank
         qgnomeplatform
         shared-mime-info

@@ -3,11 +3,11 @@
 , qca-qt5, shared-mime-info }:
 
 stdenv.mkDerivation rec {
-  name = "okteta-${version}";
+  pname = "okteta";
   version = "0.26.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/okteta/${version}/src/${name}.tar.xz";
+    url = "mirror://kde/stable/okteta/${version}/src/${pname}-${version}.tar.xz";
     sha256 = "0k38hd9wq6jvzy0225y61rzr7lgwbac1haalhsrfpmyjy6d833dv";
   };
 

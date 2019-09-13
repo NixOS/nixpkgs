@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "duktape-${version}";
+  pname = "duktape";
   version = "2.4.0";
   src = fetchurl {
     url = "http://duktape.org/duktape-${version}.tar.xz";

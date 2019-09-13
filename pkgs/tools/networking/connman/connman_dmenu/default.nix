@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, connman, dmenu }:
 
-stdenv.mkDerivation rec {
-  name = "connman_dmenu-${version}";
+stdenv.mkDerivation {
+  pname = "connman_dmenu";
   version = "git-29-9-2015";
 
   src = fetchFromGitHub {

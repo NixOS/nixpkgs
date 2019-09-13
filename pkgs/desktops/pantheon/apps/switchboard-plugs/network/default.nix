@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./nma.patch;
-      networkmanagerapplet = "${networkmanagerapplet}";
+      networkmanagerapplet = networkmanagerapplet;
     })
   ];
 
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Networking Plug";

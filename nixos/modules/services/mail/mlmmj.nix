@@ -137,7 +137,7 @@ in
           ${pkgs.postfix}/bin/postmap ${stateDir}/transports
       '';
 
-    systemd.services."mlmmj-maintd" = {
+    systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";
       serviceConfig = {
         User = cfg.user;
@@ -146,7 +146,7 @@ in
       };
     };
 
-    systemd.timers."mlmmj-maintd" = {
+    systemd.timers.mlmmj-maintd = {
       description = "mlmmj maintenance timer";
       timerConfig.OnUnitActiveSec = cfg.maintInterval;
       wantedBy = [ "timers.target" ];

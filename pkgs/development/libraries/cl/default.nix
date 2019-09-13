@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.4";
-  name = "cl-${version}";
+  pname = "cl";
 
   src = fetchFromGitHub {
     owner = "tonyrog";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # 'cp' line taken from Arch recipe
   # https://projects.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/erlang-sdl
   installPhase = ''
-    DIR=$out/lib/erlang/lib/${name}
+    DIR=$out/lib/erlang/lib/${pname}-${version}
     mkdir -p $DIR
     cp -ruv c_src doc ebin include priv src $DIR
   '';

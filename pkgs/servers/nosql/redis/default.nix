@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "5.0.5";
-  name = "redis-${version}";
+  pname = "redis";
 
   src = fetchurl {
-    url = "http://download.redis.io/releases/${name}.tar.gz";
+    url = "http://download.redis.io/releases/${pname}-${version}.tar.gz";
     sha256 = "0xd3ak527cnkz2cn422l2ag9nsa6mhv7y2y49zwqy7fjk6bh0f91";
   };
 

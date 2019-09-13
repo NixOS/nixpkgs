@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, vte, gtk }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stupidterm";
   version = "2019-03-26";
 
@@ -27,10 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Simple wrapper around the VTE terminal emulator widget for GTK+";
-    longDescription = ''
-      Simple wrapper around the VTE terminal emulator widget for GTK+
-    '';
+    description = "Simple wrapper around the VTE terminal emulator widget for GTK";
     homepage = https://github.com/esmil/stupidterm;
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.etu ];

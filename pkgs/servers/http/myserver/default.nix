@@ -4,10 +4,11 @@
 let version = "0.11"; in
 
 stdenv.mkDerivation rec {
-  name = "myserver-${version}";
+  pname = "myserver";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnu/myserver/${version}/${name}.tar.xz";
+    url = "mirror://gnu/myserver/${version}/${pname}-${version}.tar.xz";
     sha256 = "02y3vv4hxpy5h710y79s8ipzshhc370gbz1wm85x0lnq5nqxj2ax";
   };
 

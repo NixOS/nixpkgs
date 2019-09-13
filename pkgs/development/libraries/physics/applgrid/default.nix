@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gfortran, hoppet, lhapdf, root5 }:
 
 stdenv.mkDerivation rec {
-  name = "applgrid-${version}";
+  pname = "applgrid";
   version = "1.4.70";
 
   src = fetchurl {
-    url = "https://www.hepforge.org/archive/applgrid/${name}.tgz";
+    url = "https://www.hepforge.org/archive/applgrid/${pname}-${version}.tgz";
     sha256 = "1yw9wrk3vjv84kd3j4s1scfhinirknwk6xq0hvj7x2srx3h93q9p";
   };
 

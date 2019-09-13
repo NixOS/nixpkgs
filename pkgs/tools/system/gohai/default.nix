@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "gohai-${version}";
+  pname = "gohai";
   version = "2018-05-23";
   rev = "60e13eaed98afa238ad6dfc98224c04fbb7b19b1";
 

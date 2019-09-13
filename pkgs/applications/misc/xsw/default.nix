@@ -4,7 +4,7 @@ let
   makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
 
 in stdenv.mkDerivation rec {
-  name = "xsw-${version}";
+  pname = "xsw";
   version = "0.1.2";
 
   src = fetchFromGitHub {

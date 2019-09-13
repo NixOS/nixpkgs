@@ -15,7 +15,7 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "phantomjs-${version}";
+  pname = "phantomjs";
   version = "2.1.1";
 
   src = fetchFromGitHub {

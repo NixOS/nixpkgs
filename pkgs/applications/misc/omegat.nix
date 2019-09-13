@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, jdk, makeWrapper}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "4.3.0";
   pname = "omegat";
 

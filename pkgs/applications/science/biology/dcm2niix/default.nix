@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.20190410";
-  name = "dcm2niix-${version}";
+  pname = "dcm2niix";
 
   src = fetchFromGitHub {
     owner = "rordenlab";

@@ -2,7 +2,7 @@
 , zlib, openssl, libevent, ncurses, ruby, msgpack, libssh }:
 
 stdenv.mkDerivation rec {
-  name = "tmate-${version}";
+  pname = "tmate";
   version = "2.3.0";
 
   src = fetchFromGitHub {

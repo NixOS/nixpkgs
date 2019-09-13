@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "georgewhewell";
     repo = "undervolt";
-    rev = "${version}";
+    rev = version;
     sha256 = "1d934lp8yczrfslmwff6fxzd4arja2vg00s5kwdr949bxpa6w59c";
   };
 

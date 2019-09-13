@@ -24,7 +24,8 @@ let
       };
     };
   in stdenv.mkDerivation {
-    name = "minetest-${version}";
+    pname = "minetest";
+    inherit version;
 
     src = sources.src;
 

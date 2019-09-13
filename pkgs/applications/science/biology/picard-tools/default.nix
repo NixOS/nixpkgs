@@ -1,7 +1,7 @@
 {stdenv, fetchurl, jre, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "picard-tools-${version}";
+  pname = "picard-tools";
   version = "2.20.5";
 
   src = fetchurl {

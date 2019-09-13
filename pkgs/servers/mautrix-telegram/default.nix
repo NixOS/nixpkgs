@@ -28,6 +28,7 @@ buildPythonPackage rec {
     telethon-session-sqlalchemy
     pillow
     lxml
+    setuptools
   ];
 
   # `alembic` (a database migration tool) is only needed for the initial setup,

@@ -1,6 +1,6 @@
 { mkXfceDerivation, gtk3, libxfce4ui, vte, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
   version = "0.8.8";

@@ -3,7 +3,7 @@
 , bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
 stdenv.mkDerivation rec {
-  name = "gzdoom-${version}";
+  pname = "gzdoom";
   version = "4.2.0";
 
   src = fetchFromGitHub {

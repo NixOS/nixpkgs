@@ -3,7 +3,7 @@
 
 mkDerivation rec {
   version = "1.1.1";
-  name = "cool-retro-term-${version}";
+  pname = "cool-retro-term";
 
   src = fetchFromGitHub {
     owner = "Swordfish90";

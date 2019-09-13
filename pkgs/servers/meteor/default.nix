@@ -4,7 +4,7 @@ let
   version = "1.8.1";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   pname = "meteor";
   src = fetchurl {

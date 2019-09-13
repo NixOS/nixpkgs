@@ -21,8 +21,9 @@ let
     categories = "Utility;Security;Network;Email";
   };
 
-in mkDerivation rec {
-  name = "protonmail-bridge-${version}";
+in mkDerivation {
+  pname = "protonmail-bridge";
+  inherit version;
 
   src = fetchurl {
     url = "https://protonmail.com/download/protonmail-bridge_${version}_amd64.deb";

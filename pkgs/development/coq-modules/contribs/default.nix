@@ -3,13 +3,13 @@
 let mkContrib = repo: revs: param:
   stdenv.mkDerivation rec {
     name = "coq${coq.coq-version}-${repo}-${version}";
-    version = "${param.version}";
+    version = param.version;
 
     src = fetchFromGitHub {
       owner = "coq-contribs";
-      repo = "${repo}";
-      rev = "${param.rev}";
-      sha256 = "${param.sha256}";
+      repo = repo;
+      rev = param.rev;
+      sha256 = param.sha256;
     };
 
     buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
@@ -34,7 +34,7 @@ let mkContrib = repo: revs: param:
       rev = "86ac28259030649ef51460e4de2441c8a1017751";
       sha256 = "09bbk2a7pn0j76mmapl583f8a20zqd3a1m9lkml8rpwml692bzi9";
     };
-  }."${coq.coq-version}";
+  }.${coq.coq-version};
 
   abp = mkContrib "abp" [ "8.5" "8.6" "8.7" ] {
     version = "v8.6.0";
@@ -219,7 +219,7 @@ let mkContrib = repo: revs: param:
       rev = "aa33052c1edfc5a65885942a67c2773b5d96f8cc";
       sha256 = "0mjgfdr9bzsch0dlk4vq1frkaig14dqh46r54cv0l15flxapg0iw";
     };
-  }."${coq.coq-version}";
+  }.${coq.coq-version};
 
   continuations = mkContrib "continuations" [ ] {
     version = "v8.5.0-13-g6885310";

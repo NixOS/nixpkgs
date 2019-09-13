@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libcap, acl }:
 
 stdenv.mkDerivation rec {
-  name = "bfs-${version}";
+  pname = "bfs";
   version = "1.5";
 
   src = fetchFromGitHub {

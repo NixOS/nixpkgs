@@ -18,7 +18,7 @@ let
     qtbase.bin qtdeclarative.bin qtquickcontrols2.bin qtgraphicaleffects qtmultimedia
   ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "spectral";
   version = "2019-03-03";
 

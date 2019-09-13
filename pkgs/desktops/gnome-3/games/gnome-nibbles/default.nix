@@ -3,11 +3,11 @@
 , libxml2, libgee, libgnome-games-support }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-nibbles-${version}";
+  pname = "gnome-nibbles";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nibbles/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-nibbles/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0g627pzbfywiy2rsh4aidgbln9s4j5m8pryw4cgr5ygc4z8l6l9p";
   };
 

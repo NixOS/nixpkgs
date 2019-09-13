@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, zlib, pciutils }:
 
 stdenv.mkDerivation rec {
-  name = "biosdevname-${version}";
+  pname = "biosdevname";
   version = "0.7.3";
 
   src = fetchFromGitHub {

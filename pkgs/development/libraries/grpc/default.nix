@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.23.0"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
-  name = "grpc-${version}";
+  pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";

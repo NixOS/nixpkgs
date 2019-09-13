@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   pname = "exiv2";
   version = "0.27.2";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "exiv2";
     repo  = "exiv2";
     rev = "v${version}";

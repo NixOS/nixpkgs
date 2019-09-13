@@ -95,7 +95,7 @@ let
   luaEnv = lua.withPackages(ps: with ps; [ luasocket ]);
 
 in stdenv.mkDerivation rec {
-  name = "mpv-${version}";
+  pname = "mpv";
   version = "0.29.1";
 
   src = fetchFromGitHub {

@@ -15,11 +15,11 @@ let
   libraries = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
 
 in stdenv.mkDerivation rec {
-  name = "logmein-hamachi-${version}";
+  pname = "logmein-hamachi";
   version = "2.1.0.198";
 
   src = fetchurl {
-    url = "https://www.vpn.net/installers/${name}-${arch}.tgz";
+    url = "https://www.vpn.net/installers/${pname}-${version}-${arch}.tgz";
     inherit sha256;
   };
 

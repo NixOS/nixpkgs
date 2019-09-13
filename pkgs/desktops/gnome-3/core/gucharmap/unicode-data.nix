@@ -1,6 +1,6 @@
 { fetchurl, stdenv, gnome3 }:
 stdenv.mkDerivation rec {
-  name = "unicode-data-${version}";
+  pname = "unicode-data";
   version = "12.0.0";
   srcs = [
     (fetchurl {

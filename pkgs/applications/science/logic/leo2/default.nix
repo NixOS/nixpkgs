@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, eprover, ocaml, perl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "leo2-${version}";
+  pname = "leo2";
   version = "1.6.2";
 
   src = fetchurl {

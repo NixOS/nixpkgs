@@ -10,7 +10,6 @@
 stdenv.mkDerivation rec {
   version = "1.16.5.1554-1e5ff713d";
   pname = "plexmediaserver";
-  name = "${pname}-${version}";
 
   # Fetch the source
   src = fetchurl {

@@ -62,7 +62,10 @@ installPhase() {
         sed -E "s#(libnvidia-opencl)#$i/lib/\\1#" nvidia.icd > nvidia.icd.fixed
         install -Dm644 nvidia.icd.fixed $i/etc/OpenCL/vendors/nvidia.icd
         if [ -e nvidia_icd.json.template ]; then
+            # template patching for version < 435
             sed "s#__NV_VK_ICD__#$i/lib/libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
+        fi
+        if [ -e nvidia_icd.json ]; then
             install -Dm644 nvidia_icd.json $i/share/vulkan/icd.d/nvidia.json
         fi
         if [ "$useGLVND" = "1" ]; then

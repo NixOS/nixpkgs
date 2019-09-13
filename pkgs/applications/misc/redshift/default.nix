@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "redshift-${version}";
+  pname = "redshift";
   version = "1.12";
 
   src = fetchFromGitHub {

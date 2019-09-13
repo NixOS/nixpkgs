@@ -1,7 +1,7 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "muparser-${version}";
+  pname = "muparser";
   version = "2.2.3";
   url-version = stdenv.lib.replaceChars ["."] ["_"] version;
 

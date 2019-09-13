@@ -2,7 +2,7 @@
 , SDL2, zlib, gtk3, libxml2, libXv, epoxy, minizip, portaudio }:
 
 stdenv.mkDerivation rec {
-  name = "snes9x-gtk-${version}";
+  pname = "snes9x-gtk";
   version = "1.57";
 
   src = fetchFromGitHub {

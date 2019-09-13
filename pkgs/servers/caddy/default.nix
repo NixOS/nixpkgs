@@ -1,7 +1,7 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "caddy-${version}";
+  pname = "caddy";
   version = "1.0.0";
 
   goPackagePath = "github.com/mholt/caddy";

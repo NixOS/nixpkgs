@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "envconsul-${version}";
+  pname = "envconsul";
   version = "0.7.3";
   rev = "v${version}";
 

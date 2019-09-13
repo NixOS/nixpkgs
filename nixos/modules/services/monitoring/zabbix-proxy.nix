@@ -252,7 +252,7 @@ in
       fping.source = "${pkgs.fping}/bin/fping";
     };
 
-    systemd.services."zabbix-proxy" = {
+    systemd.services.zabbix-proxy = {
       description = "Zabbix Proxy";
 
       wantedBy = [ "multi-user.target" ];

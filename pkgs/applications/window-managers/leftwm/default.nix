@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     src = fetchFromGitHub {
         owner = "leftwm";
         repo = "leftwm";
-        rev = "${version}";
+        rev = version;
         sha256 = "0ji7m2npkdg27gm33b19rxr50km0gm1h9czi1f425vxq65mlkl4y";
     };
 

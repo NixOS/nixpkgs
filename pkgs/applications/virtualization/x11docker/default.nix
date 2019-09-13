@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg }:
 stdenv.mkDerivation rec {
-  name = "x11docker-${version}";
+  pname = "x11docker";
   version = "6.0.0";
   src = fetchFromGitHub {
     owner = "mviereck";

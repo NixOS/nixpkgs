@@ -1,6 +1,5 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "terraform-docs";
   version = "0.6.0";
 

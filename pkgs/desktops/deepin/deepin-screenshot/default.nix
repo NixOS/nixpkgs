@@ -3,7 +3,6 @@
   deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-screenshot";
   version = "4.2.1";
 
@@ -49,7 +48,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Easy-to-use screenshot tool for Deepin Desktop Environment";

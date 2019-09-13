@@ -18,7 +18,7 @@ let
   global $CFG;
   $CFG = new stdClass();
 
-  $CFG->dbtype    = '${ { "mysql" = "mariadb"; "pgsql" = "pgsql"; }.${cfg.database.type} }';
+  $CFG->dbtype    = '${ { mysql = "mariadb"; pgsql = "pgsql"; }.${cfg.database.type} }';
   $CFG->dblibrary = 'native';
   $CFG->dbhost    = '${cfg.database.host}';
   $CFG->dbname    = '${cfg.database.name}';
@@ -92,8 +92,8 @@ in
         type = types.int;
         description = "Database host port.";
         default = {
-          "mysql" = 3306;
-          "pgsql" = 5432;
+          mysql = 3306;
+          pgsql = 5432;
         }.${cfg.database.type};
         defaultText = "3306";
       };
@@ -294,7 +294,7 @@ in
 
     systemd.services.httpd.after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
 
-    users.users."${user}".group = group;
+    users.users.${user}.group = group;
 
   };
 }

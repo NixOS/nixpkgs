@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libwhereami, libyamlcpp, openssl, ruby, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "facter-${version}";
+  pname = "facter";
   version = "3.13.2";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  CXXFLAGS = "-fpermissive";
+  CXXFLAGS = "-fpermissive -Wno-error=catch-value";
   NIX_LDFLAGS = "-lblkid";
 
   cmakeFlags = [ "-DFACTER_RUBY=${ruby}/lib/libruby.so" ];

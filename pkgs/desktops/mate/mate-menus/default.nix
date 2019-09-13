@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, gobject-introspection, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "mate-menus-${version}";
+  pname = "mate-menus";
   version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1lkakbf2f1815c146z4xp5f0h4lim6jzr02681wbvzalc6k97v5c";
   };
 

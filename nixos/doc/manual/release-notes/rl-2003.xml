@@ -1,0 +1,80 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.03">
+ <title>Release 20.03 (“Markhor”, 2020.03/??)</title>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.03-highlights">
+  <title>Highlights</title>
+
+  <para>
+   In addition to numerous new and upgraded packages, this release has the
+   following highlights:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Support is planned until the end of October 2020, handing over to 20.09.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.03-new-services">
+  <title>New Services</title>
+
+  <para>
+   The following new services were added since the last release:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.03-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.03-notable-changes">
+  <title>Other Notable Changes</title>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+ </section>
+</section>

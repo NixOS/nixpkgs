@@ -6,12 +6,11 @@
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
   version = "1.1.9";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
-    repo = "${pname}";
-    rev = "${name}";
+    repo = pname;
+    rev = "${pname}-${version}";
     sha256 = "1dzpl7f354rwp37bkr9h2yyafykcdn6m1qqfshqg77fj0pcsw8r2";
   };
 

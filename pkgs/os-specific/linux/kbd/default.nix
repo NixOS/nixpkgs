@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "kbd-${version}";
+  pname = "kbd";
   version = "2.0.4";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/kbd/${name}.tar.xz";
+    url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
     sha256 = "124swm93dm4ca0pifgkrand3r9gvj3019d4zkfxsj9djpvv0mnaz";
   };
 

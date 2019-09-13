@@ -3,7 +3,7 @@
   xfce, libwnck3, libdbusmenu, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "xfce4-vala-panel-appmenu-plugin-${version}";
+  pname = "xfce4-vala-panel-appmenu-plugin";
   version = "0.6.94";
 
   src = fetchFromGitHub {

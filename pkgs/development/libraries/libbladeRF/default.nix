@@ -13,7 +13,8 @@ let
   version = "2.2.0";
 
 in stdenv.mkDerivation {
-  name = "libbladeRF-${version}";
+  pname = "libbladeRF";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Nuand";

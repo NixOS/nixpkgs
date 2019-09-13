@@ -16,7 +16,7 @@ let
     <?php
     // Zabbix GUI configuration file.
     global $DB;
-    $DB['TYPE'] = '${ { "mysql" = "MYSQL"; "pgsql" = "POSTGRESQL"; "oracle" = "ORACLE"; }.${cfg.database.type} }';
+    $DB['TYPE'] = '${ { mysql = "MYSQL"; pgsql = "POSTGRESQL"; oracle = "ORACLE"; }.${cfg.database.type} }';
     $DB['SERVER'] = '${cfg.database.host}';
     $DB['PORT'] = '${toString cfg.database.port}';
     $DB['DATABASE'] = '${cfg.database.name}';
@@ -179,7 +179,7 @@ in
       '' + optionalString (cfg.database.type == "oracle") ''
         extension=${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so
       '';
-      phpEnv.ZABBIX_CONFIG = zabbixConfig;
+      phpEnv.ZABBIX_CONFIG = "${zabbixConfig}";
       settings = {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
@@ -197,7 +197,7 @@ in
             <Directory "${cfg.package}/share/zabbix">
               <FilesMatch "\.php$">
                 <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.listen}|fcgi://localhost/"
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
                 </If>
               </FilesMatch>
               AllowOverride all

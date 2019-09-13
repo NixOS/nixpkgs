@@ -51,7 +51,7 @@ in {
         serviceConfig.PermissionsStartOnly = true;
       };
 
-      systemd.services."nextcloud-setup"= {
+      systemd.services.nextcloud-setup= {
         requires = ["postgresql.service"];
         after = [
           "postgresql.service"
@@ -62,7 +62,7 @@ in {
       # At the time of writing, redis creates its socket with the "nobody"
       # group.  I figure this is slightly less bad than making the socket world
       # readable.
-      systemd.services."chown-redis-socket" = {
+      systemd.services.chown-redis-socket = {
         enable = true;
         script = ''
           until ${pkgs.redis}/bin/redis-cli ping; do

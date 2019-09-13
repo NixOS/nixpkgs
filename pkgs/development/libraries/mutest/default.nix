@@ -4,7 +4,7 @@
 , ninja
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mutest";
   version = "unstable-2019-08-26";
 

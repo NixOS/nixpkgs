@@ -1,11 +1,11 @@
 { stdenv, fetchurl, acl, libcap, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
-  name = "cdrtools-${version}";
+  pname = "cdrtools";
   version = "3.02a06";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdrtools/${name}.tar.bz2";
+    url = "mirror://sourceforge/cdrtools/${pname}-${version}.tar.bz2";
     sha256 = "1cayhfbhj5g2vgmkmq5scr23k0ka5fsn0dhn0n9yllj386csnygd";
   };
 

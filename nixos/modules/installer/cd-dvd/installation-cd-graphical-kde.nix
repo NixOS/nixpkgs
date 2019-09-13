@@ -13,9 +13,6 @@ with lib;
       enable = true;
       enableQt4Support = false;
     };
-
-    # Enable touchpad support for many laptops.
-    synaptics.enable = true;
   };
 
   environment.systemPackages = with pkgs; [

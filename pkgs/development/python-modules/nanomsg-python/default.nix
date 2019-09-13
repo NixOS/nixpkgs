@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, nanomsg }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "nanomsg-python";
   version = "1.0.20190114";
 

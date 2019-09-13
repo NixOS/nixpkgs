@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.2.1";
-  name = "hmmer-${version}";
+  pname = "hmmer";
 
   src = fetchurl {
-    url = "http://eddylab.org/software/hmmer/${name}.tar.gz";
+    url = "http://eddylab.org/software/hmmer/${pname}-${version}.tar.gz";
     sha256 = "171bivy6xhgjsz5nv53n81pc3frnwz29ylblawk2bv46szwjjqd5";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "librustzcash-unstable-${version}";
+  pname = "librustzcash-unstable";
   version = "2017-03-17";
 
   src = fetchFromGitHub {
