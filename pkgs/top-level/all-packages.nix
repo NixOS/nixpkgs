@@ -1989,11 +1989,7 @@ in
 
   mongodb-compass = callPackage ../tools/misc/mongodb-compass { };
 
-  mongodb-tools = callPackage ../tools/misc/mongodb-tools {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  };
+  mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
   moosefs = callPackage ../tools/filesystems/moosefs { };
 
@@ -4789,11 +4785,7 @@ in
 
   miredo = callPackage ../tools/networking/miredo { };
 
-  mirrorbits = callPackage ../servers/mirrorbits {
-    # XXX: this is failing with Go 1.12. Error is related to cgo, an
-    # update to this package might fix it.
-    buildGoPackage = buildGo111Package;
-  };
+  mirrorbits = callPackage ../servers/mirrorbits { };
 
   mitmproxy = callPackage ../tools/networking/mitmproxy { };
 
@@ -7899,10 +7891,6 @@ in
       inherit (darwin.apple_sdk.frameworks) Security;
     };
 
-  go_1_11 = callPackage ../development/compilers/go/1.11.nix {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
-
   go_1_12 = callPackage ../development/compilers/go/1.12.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
@@ -9315,8 +9303,6 @@ in
   chrpath = callPackage ../development/tools/misc/chrpath { };
 
   chruby = callPackage ../development/tools/misc/chruby { rubies = null; };
-
-  cide = callPackage ../development/tools/continuous-integration/cide { };
 
   cl-launch = callPackage ../development/tools/misc/cl-launch {};
 
@@ -13165,7 +13151,7 @@ in
   qt511 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.11) {
       inherit newScope;
-      inherit stdenv fetchurl fetchFromGitHub makeSetupHook makeWrapper;
+      inherit stdenv fetchurl fetchFromGitHub fetchpatch makeSetupHook makeWrapper;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
       harfbuzz = harfbuzzFull;
@@ -14338,18 +14324,11 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo111Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_11;
-  };
   buildGo112Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_12;
   };
 
   buildGoPackage = buildGo112Package;
-
-  buildGo111Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_11;
-  };
 
   buildGo112Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_12;
@@ -24325,7 +24304,7 @@ in
     terraform_plugins_test
     ;
 
-  terraform = terraform_0_11;
+  terraform = terraform_0_12;
   # deprecated
   terraform-full = terraform.full;
 
