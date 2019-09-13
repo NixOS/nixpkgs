@@ -7098,9 +7098,7 @@ in
   xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
 
   xflux = callPackage ../tools/misc/xflux { };
-  xflux-gui = callPackage ../tools/misc/xflux/gui.nix {
-    gnome_python = gnome2.gnome_python;
-  };
+  xflux-gui = python3Packages.callPackage ../tools/misc/xflux/gui.nix { };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
   libxfs = xfsprogs.dev;
