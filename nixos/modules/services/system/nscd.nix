@@ -37,6 +37,10 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    system.activationScripts.netgroup = ''
+      touch /etc/netgroup
+    '';
+
     environment.etc."nscd.conf".text = cfg.config;
 
     systemd.services.nscd =
