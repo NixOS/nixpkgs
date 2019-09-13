@@ -9,10 +9,19 @@
       jobs = import ./pkgs/top-level/release.nix {
         nixpkgs = self;
       };
+      lib = import ./lib;
     in
     {
-      lib = (import ./lib) // {
-        nixosSystem = import ./nixos/lib/eval-config.nix;
+      lib = lib // {
+        nixosSystem = { modules, ... } @ args:
+          import ./nixos/lib/eval-config.nix (args // {
+            modules = modules ++
+              [ { system.nixos.versionSuffix =
+                    ".${lib.substring 0 8 self.lastModified}.${self.shortRev}";
+                  system.nixos.revision = self.rev;
+                }
+              ];
+          });
       };
 
       checks.tarball = jobs.tarball;
