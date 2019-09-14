@@ -24706,7 +24706,7 @@ in
 
   diceware = callPackage ../tools/security/diceware { };
 
-  xml2rfc = callPackage ../tools/typesetting/xml2rfc { };
+  xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
   mmark = callPackage ../tools/typesetting/mmark { };
 
