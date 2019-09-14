@@ -124,7 +124,7 @@ in with py.pkgs; buildPythonApplication rec {
     # From setup.py
     aiohttp astral async-timeout attrs bcrypt certifi importlib-metadata jinja2
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
-    voluptuous voluptuous-serialize
+    setuptools voluptuous voluptuous-serialize
     # From http, frontend and recorder components and auth.mfa_modules.totp
     sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode
   ] ++ componentBuildInputs ++ extraBuildInputs;
