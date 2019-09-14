@@ -183,5 +183,23 @@ in stdenvNoCC.mkDerivation {
     docs-build $out
   '';
 
+  # Prints a preamble for direct help.
+  # FIXME: Add link to the manual html page for more details about authoring.
+  shellHook = ''
+    export IN_NIXPKGS_DOCS_SHELL+=1
+    if (( IN_NIXPKGS_DOCS_SHELL == 1 )); then
+    cat <<-EOF
+      Quick tips:
+
+       * Use docs-generate to generate dynamic content.
+       * Use docs-build to build the documentation.
+       * Use docs-validate to validate and debug issues.
+
+      Look at the manual for more information about authoring.
+       -> https://nixos.org/nixpkgs/manual/chap-contributing.html
+    EOF
+    fi
+  '';
+
   installPhase = ":";
 }
