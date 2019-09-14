@@ -111,6 +111,12 @@ let
     trap finish EXIT
 
     input="${root-file-name}"
+
+    if (( $# < 1 )); then
+      echo "Usage: docs-build <output>"
+      exit 2
+    fi
+
     output="$1"
 
     if [ ! -d ./generated ]; then
