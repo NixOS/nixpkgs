@@ -20,17 +20,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 // The one we copy is the global menu.
 const makeGlobalTOC = function () {
     const $body = document.body;
+    
+    // All the different page types in docbook.
+    const PAGE_TYPES = ["section", "chapter", "book"];
 
-    const $candidates = [].concat(
-        Array.from($body.querySelectorAll(".section > .toc")),
-        Array.from($body.querySelectorAll(".chapter > .toc")),
-        Array.from($body.querySelectorAll(".book > .toc"))
+    // Pick the TOC from the page contents.
+    const $candidate = $body.querySelector(
+        PAGE_TYPES.map((type) => "." + type + " > .toc").join(",")
     )
-    if ($candidates.length > 0) {
+
+    if ($candidate) {
         const $global_toc = document.createElement("div");
         $global_toc.id = "global_toc";
 
-        const $toc = $candidates[0].cloneNode(true);
+        const $toc = $candidate.cloneNode(true);
         $global_toc.appendChild($toc);
         $body.append($global_toc);
     }
