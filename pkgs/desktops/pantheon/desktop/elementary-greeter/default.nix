@@ -1,5 +1,7 @@
 { stdenv
 , fetchFromGitHub
+, linkFarm
+, elementary-greeter
 , pantheon
 , pkgconfig
 , meson
@@ -41,6 +43,11 @@ stdenv.mkDerivation rec {
       inherit repoName;
       attrPath = pname;
     };
+
+    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
+      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
+      name = "io.elementary.greeter.desktop";
+    }];
   };
 
   nativeBuildInputs = [

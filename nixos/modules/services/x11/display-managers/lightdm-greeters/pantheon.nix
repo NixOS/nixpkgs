@@ -8,11 +8,6 @@ let
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.pantheon;
 
-  xgreeters = pkgs.linkFarm "pantheon-greeter-xgreeters" [{
-    path = "${pkgs.pantheon.elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
-    name = "io.elementary.greeter.desktop";
-  }];
-
 in
 {
   options = {
@@ -36,7 +31,7 @@ in
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
-      package = xgreeters;
+      package = pkgs.pantheon.elementary-greeter.xgreeters;
       name = "io.elementary.greeter";
     };
 
