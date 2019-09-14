@@ -923,12 +923,12 @@ let
 
   deoplete-nvim = buildVimPluginFrom2Nix {
     pname = "deoplete-nvim";
-    version = "2019-09-09";
+    version = "2019-09-14";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "deoplete.nvim";
-      rev = "48b1643509e4ef3a4af6cf57df35e6c6ac1275ce";
-      sha256 = "192lph0kbs4mmbsz1jsjmrmy3an53bkd4lzyvn615r24qfbpcz14";
+      rev = "8df5ca1a9db11d919f3426f4d05b281be8913c89";
+      sha256 = "0c0g9h8fajmwb2snkqj093jwc8d1ypxcvmv7s80c90l635bks1yj";
     };
   };
 
@@ -1752,12 +1752,12 @@ let
 
   neosnippet-vim = buildVimPluginFrom2Nix {
     pname = "neosnippet-vim";
-    version = "2019-05-26";
+    version = "2019-09-14";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neosnippet.vim";
-      rev = "ed80ae8cee732d52eb841d509a95aca9c27ece7a";
-      sha256 = "1xkq4w8mz9rfh6xpiqa1rnzd9id59d1bn58pw2fhcrm04cr3rk49";
+      rev = "3838f45930e8d6c05807c925350585c48bd21a4b";
+      sha256 = "1m6skrdjr6d1waxarxch2hn7416q9r13yan1bd7qx2w5gika606a";
     };
   };
 
@@ -2137,12 +2137,12 @@ let
 
   riv-vim = buildVimPluginFrom2Nix {
     pname = "riv-vim";
-    version = "2019-02-18";
+    version = "2019-09-14";
     src = fetchFromGitHub {
       owner = "Rykka";
       repo = "riv.vim";
-      rev = "ac64a8c8daaa862b83d27432fe87c79ad2a0c845";
-      sha256 = "0vvpp04n7ndcljrfa0m4hwvv9h20abgwr29fzv5qnasvcxcsawcq";
+      rev = "87a1f2c1e487ee0021855fd0c65c3f3244f4fc61";
+      sha256 = "13430czv87r16wcyb2f8izfihkhm2q6k1ki5bhzpbakzk7vwxwms";
     };
   };
 
@@ -3116,12 +3116,12 @@ let
 
   vim-devicons = buildVimPluginFrom2Nix {
     pname = "vim-devicons";
-    version = "2019-08-18";
+    version = "2019-09-14";
     src = fetchFromGitHub {
       owner = "ryanoasis";
       repo = "vim-devicons";
-      rev = "830f0fe48a337ed26384c43929032786f05c8d24";
-      sha256 = "06lsb8lwdbb6l0nznmxb9akd4ss9cw76d03z9h4q9yfjydyqf5kn";
+      rev = "3e67b21c6e6f955ee5051608c559c2e91c2ce3e5";
+      sha256 = "0105s1d1pn1ga2zpqi1lgjnx36plgfsniqx1b560dvmg8wglzpwx";
     };
   };
 
