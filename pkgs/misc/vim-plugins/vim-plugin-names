@@ -324,6 +324,7 @@ rodjek/vim-puppet
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
+RRethy/vim-illuminate
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 Rykka/riv.vim
