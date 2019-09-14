@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.cytoscape.org;
     description = "A general platform for complex network analysis and visualization";
     license = stdenv.lib.licenses.lgpl21;
-    maintainers = [stdenv.lib.maintainers.mimadrid];
+    maintainers = [stdenv.lib.maintainers.mimame];
     platforms = stdenv.lib.platforms.unix;
   };
 }

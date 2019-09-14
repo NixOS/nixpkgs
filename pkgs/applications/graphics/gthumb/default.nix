@@ -103,6 +103,6 @@ stdenv.mkDerivation rec {
     description = "Image browser and viewer for GNOME";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }
