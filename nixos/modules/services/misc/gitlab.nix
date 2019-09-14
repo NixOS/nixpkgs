@@ -1,7 +1,5 @@
 { config, lib, pkgs, utils, ... }:
 
-# TODO: support non-postgresql
-
 with lib;
 
 let
