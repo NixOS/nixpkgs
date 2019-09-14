@@ -507,7 +507,10 @@ in
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
     '';
-  };
+  } // (if stdenv.isDarwin then {
+    # https://github.com/NixOS/nixpkgs/issues/19098
+    buildFlags = "--disable-lto";
+  } else {});
 
   scrypt = attrs:
     if stdenv.isDarwin then {
