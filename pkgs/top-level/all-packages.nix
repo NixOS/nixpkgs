@@ -679,6 +679,8 @@ in
 
   aws-okta = callPackage ../tools/security/aws-okta { };
 
+  okta-aws = callPackage ../tools/security/okta-aws { };
+
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
   aws_shell = pythonPackages.callPackage ../tools/admin/aws_shell { };
