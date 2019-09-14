@@ -98,10 +98,6 @@ in
               export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
             fi
           '') cfg.sessionPath}
-
-          # Settings from elementary-default-settings
-          export GTK_CSD=1
-          export GTK_MODULES=$GTK_MODULES:pantheon-filechooser-module
       fi
     '';
 
@@ -166,9 +162,13 @@ in
                               networkmanager-iodine networkmanager-l2tp; };
 
     # Override GSettings schemas
-    environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+    environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-    environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
+    environment.sessionVariables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
+
+    # Settings from elementary-default-settings
+    environment.sessionVariables.GTK_CSD = "1";
+    environment.sessionVariables.GTK_MODULES = "pantheon-filechooser-module";
 
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
