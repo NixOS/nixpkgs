@@ -1,4 +1,4 @@
-{ lib, writeText, docbook_xsl_ns, fetchFromGitHub, stdenvNoCC
+{ lib, writeText, docbook-xsl-ns, fetchFromGitHub, stdenvNoCC
 , nodePackages, runCommand, docbook5, documentation-highlighter
 , libxml2, libxslt, zip, xmlformat, docbook-index, coreutils
 , jing, xmloscopy, findutils }:
@@ -12,7 +12,7 @@ rec {
     <xsl:stylesheet
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       version="1.0">
-      <xsl:import href="${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl" />
+      <xsl:import href="${docbook-xsl-ns}/xml/xsl/docbook/epub/docbook.xsl" />
       <xsl:import href="${./parameters.xsl}"/>
     </xsl:stylesheet>
   '';
@@ -22,7 +22,7 @@ rec {
     <xsl:stylesheet
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       version="1.0">
-      <xsl:import href="${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunkfast.xsl" />
+      <xsl:import href="${docbook-xsl-ns}/xml/xsl/docbook/xhtml/chunkfast.xsl" />
       <xsl:import href="${./parameters.xsl}"/>
     </xsl:stylesheet>
   '';
@@ -32,7 +32,7 @@ rec {
     <xsl:stylesheet
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       version="1.0">
-      <xsl:import href="${docbook_xsl_ns}/xml/xsl/docbook/xhtml/docbook.xsl" />
+      <xsl:import href="${docbook-xsl-ns}/xml/xsl/docbook/xhtml/docbook.xsl" />
       <xsl:import href="${./parameters.xsl}"/>
     </xsl:stylesheet>
   '';
@@ -81,7 +81,7 @@ rec {
     (
       cd result
       ln -s ${docbook5}/xml/rng/docbook/docbook.rng ./docbook.rng
-      ln -s ${docbook_xsl_ns}/xml/xsl ./xsl
+      ln -s ${docbook-xsl-ns}/xml/xsl ./xsl
       ln -s ${epub-xsl} ./epub.xsl
       ln -s ${chunk-xhtml-xsl} ./chunk-xhtml.xsl
       ln -s ${onepage-xhtml-xsl} ./onepage-xhtml.xsl
@@ -98,7 +98,7 @@ rec {
       cp ${styles} ./web/style.css
       cp ${epub-overrides} ./web/overrides.css
       mkdir -p ./web/images/callouts/
-      cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg ./web/images/callouts/
+      cp ${docbook-xsl-ns}/xml/xsl/docbook/images/callouts/*.svg ./web/images/callouts/
 
       chmod -R u+w ./web
     )

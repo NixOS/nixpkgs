@@ -1,4 +1,4 @@
-{ lib, callPackage, buildEnv, writeShellScriptBin, docbook_xsl_ns, stdenvNoCC }:
+{ lib, callPackage, buildEnv, writeShellScriptBin, docbook-xsl-ns, stdenvNoCC }:
 {
   name
   , src
@@ -154,7 +154,7 @@ let
     cp ./generated/web/style.css "$scratch/epub/OEBPS/style.css"
     cp ${doclib.epub-overrides} "$scratch/epub/OEBPS/override.css"
     mkdir -p "$scratch/epub/OEBPS/images/callouts/"
-    cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg "$scratch/epub/OEBPS/images/callouts/"
+    cp ${docbook-xsl-ns}/xml/xsl/docbook/images/callouts/*.svg "$scratch/epub/OEBPS/images/callouts/"
 
     echo "application/epub+zip" > "$scratch/mimetype"
     zip -0Xq "$scratch/output.epub" "$scratch/mimetype"
