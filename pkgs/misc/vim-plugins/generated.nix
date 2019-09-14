@@ -609,6 +609,17 @@ let
     };
   };
 
+  colorizer = buildVimPluginFrom2Nix {
+    pname = "colorizer";
+    version = "2018-06-16";
+    src = fetchFromGitHub {
+      owner = "lilydjwg";
+      repo = "colorizer";
+      rev = "afc1491e5b9c36305ce710bdad2b48f069141183";
+      sha256 = "1dpiv9z8h6196acncyjhzd1qa56y17468fpxbfzrx5q2266sajc7";
+    };
+  };
+
   Colour-Sampler-Pack = buildVimPluginFrom2Nix {
     pname = "Colour-Sampler-Pack";
     version = "2012-11-30";
