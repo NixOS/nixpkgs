@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // Allows applying rules that would break usability without JS
     $body.classList.add("with-javascript");
 
+    redirectOldAnchor();
+
     // Adds the search engine
     new SearchEngine();
 
@@ -14,6 +16,35 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     makeGlobalTOC();
 });
+
+// Given an object where the keys are anchors, and the values
+// are new html location, redirects the user to the expected location.
+const redirectOldAnchor = function() {
+    const location = window.location;
+    // This is only right for as long as the only `index.html` is at the root.
+    // This is an assumption that is right for now.
+    const pathname = window.location.pathname;
+    if (
+        // For development usage, mainly. This is where the assumption will fail.
+        pathname.match(/\/index.html$/) ||
+        // For the nixos.org website
+        // If other deeper index.html files are produced, this check will still be good.
+        pathname.match(/\/manual\/(index.html)?$/)
+    ) {
+        const section = window.location.hash.replace(/^#/, "");
+        const page = window.anchorsIndex && window.anchorsIndex[section];
+        if (page) {
+            const new_pathname = pathname.replace(/(index\.html)?$/, page);
+            const url = [
+                location.protocol, "//",
+                location.host,
+                new_pathname,
+                location.hash
+            ].join("");
+            location.replace(url);
+        }
+    }
+}
 
 // Copies the docbook TOC.
 // The original one will be kept with all non-active nodes closed.
