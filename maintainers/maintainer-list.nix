@@ -4156,11 +4156,11 @@
     email = "miltador@yandex.ua";
     name = "Vasiliy Solovey";
   };
-  mimadrid = {
-    email = "mimadrid@ucm.es";
-    github = "mimadrid";
+  mimame = {
+    email = "miguel.madrid.mencia@gmail.com";
+    github = "mimame";
     githubId = 3269878;
-    name = "Miguel Madrid";
+    name = "Miguel Madrid Mencía";
   };
   minijackson = {
     email = "minijackson@riseup.net";
@@ -6649,7 +6649,7 @@
     githubId = 1525767;
     name = "Vaibhav Sagar";
   };
-  valebes = {  
+  valebes = {
     email = "valebes@gmail.com";
     github = "valebes";
     githubid = 10956211;
