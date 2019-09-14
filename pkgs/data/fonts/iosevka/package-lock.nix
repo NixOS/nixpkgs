@@ -117,6 +117,7 @@ let
   prepareDepend = { name, src, depends, ... }:
     ''
       unpackFile '${src}'
+      mkdir -p $(dirname "${name}")
       mv package '${name}'
       mkdir -p '${name}/node_modules'
       (
