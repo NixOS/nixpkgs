@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgs, darwin }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, openssl, pkgconfig, darwin, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0q9ng8vf01k65zmcm7bbkqyrkj5hs86zdxwrfj98f4xqxrm75rf6";
   };
 
-  buildInputs = with pkgs; [ openssl pkgconfig ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [ openssl pkgconfig ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   cargoBuildFlags = [ "--bin httplz" ];
   cargoPatches = [ ./cargo-lock.patch ];
