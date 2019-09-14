@@ -1052,6 +1052,8 @@ in {
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
 
+  pytest-check = callPackage ../development/python-modules/pytest-check { };
+
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
   pytest-flask = callPackage ../development/python-modules/pytest-flask { };
