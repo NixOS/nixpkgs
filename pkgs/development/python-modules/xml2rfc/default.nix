@@ -40,6 +40,6 @@ buildPythonPackage rec {
     # Well, parts might be considered unfree, if being strict; see:
     # http://metadata.ftp-master.debian.org/changelogs/non-free/x/xml2rfc/xml2rfc_2.9.6-1_copyright
     license = licenses.bsd3;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; [ vcunat yrashk ];
   };
 }
