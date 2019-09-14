@@ -17,10 +17,21 @@ let
     paths = [ doclib.standard-tools ] ++ generated-files;
   };
 
+  preamble = ''
+    set -eu
+
+    # The scripts will be noisy when used with `DEBUG=1 docs-*`
+    # or when they are part of a build (not in nix-shell).
+    if [[ -n ''${DEBUG:-} || -z ''${IN_NIX_SHELL:-} ]]; then
+      set -x
+      export RUST_BACKTRACE=1
+    fi
+  '';
+
   # a `docs-generate` command special for a nix-shell, since it
   # uses `nix-build` instead of hard-coding a path.
   tools.nix-shell-generate = writeShellScriptBin "docs-generate" ''
-    set -eux
+    ${preamble}
 
     nix-shell ${toString src} --run "docs-generate"
   '';
@@ -28,7 +39,7 @@ let
   tools.generate = writeShellScriptBin "docs-generate" ''
     PATH=${lib.makeBinPath (doclib.toolbox.build ++ nativeBuildInputs)}
 
-    set -eux
+    ${preamble}
 
     scratch=$(mktemp -d -t tmp.XXXXXXXXXX)
     function finish {
@@ -47,7 +58,7 @@ let
   tools.validate = writeShellScriptBin "docs-validate" ''
     PATH=${lib.makeBinPath (doclib.toolbox.dev)}
 
-    set -eux
+    ${preamble}
 
     if [ ! -d ./generated ]; then
       echo "Please run «docs-generate»"
@@ -69,7 +80,7 @@ let
    tools.format = writeShellScriptBin "docs-format" ''
     PATH=${lib.makeBinPath (doclib.toolbox.dev)}
 
-    set -eux
+    ${preamble}
 
 	  find "${toString src}" -name '*.xml' -type f -print0  \
       | xargs -0 -I{} -n1 \
@@ -79,7 +90,7 @@ let
   tools.debug = writeShellScriptBin "docs-debug" ''
     PATH=${lib.makeBinPath (doclib.toolbox.dev)}
 
-    set -eux
+    ${preamble}
 
     if [ ! -d ./generated ]; then
       echo "Please run «docs-generate»"
@@ -91,7 +102,7 @@ let
   tools.build = writeShellScriptBin "docs-build" ''
     PATH=${lib.makeBinPath (doclib.toolbox.build ++ nativeBuildInputs)}
 
-    set -eux
+    ${preamble}
 
     scratch=$(mktemp -d -t tmp.XXXXXXXXXX)
     function finish {
