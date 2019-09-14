@@ -93,7 +93,7 @@ rec {
 	    cp ${documentation-highlighter}/LICENSE ./web/highlightjs/
 	    cp ${documentation-highlighter}/mono-blue.css ./web/highlightjs/
 	    cp ${documentation-highlighter}/loader.js ./web/highlightjs/
-      cp ${./search.js} ./web/search.js
+      cp ${./docs.js} ./web/docs.js
       cp -r ${elasticlunr}/elasticlunr.min.js ./web/elasticlunr.min.js
       cp ${styles} ./web/style.css
       cp ${epub-overrides} ./web/overrides.css
