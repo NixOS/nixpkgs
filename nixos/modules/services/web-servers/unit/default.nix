@@ -129,14 +129,14 @@ in {
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "unit") (singleton {
-      name = "unit";
-      group = cfg.group;
+    users.users = optionalAttrs (cfg.user == "unit") {
+      unit.group = cfg.group;
       isSystemUser = true;
-    });
+    };
 
-    users.groups = optionalAttrs (cfg.group == "unit") (singleton {
-      name = "unit";
-    });
+    users.groups = optionalAttrs (cfg.group == "unit") {
+      unit = { };
+    };
+
   };
 }

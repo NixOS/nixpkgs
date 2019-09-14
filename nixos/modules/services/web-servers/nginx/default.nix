@@ -740,15 +740,16 @@ in
         listToAttrs acmePairs
     );
 
-    users.users = optionalAttrs (cfg.user == "nginx") (singleton
-      { name = "nginx";
+    users.users = optionalAttrs (cfg.user == "nginx") {
+      nginx = {
         group = cfg.group;
         uid = config.ids.uids.nginx;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "nginx") (singleton
-      { name = "nginx";
-        gid = config.ids.gids.nginx;
-      });
+    users.groups = optionalAttrs (cfg.group == "nginx") {
+      nginx.gid = config.ids.gids.nginx;
+    };
+
   };
 }

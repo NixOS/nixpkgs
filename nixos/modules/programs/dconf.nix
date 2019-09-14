@@ -6,7 +6,10 @@ let
   cfg = config.programs.dconf;
 
   mkDconfProfile = name: path:
-    { source = path; target = "dconf/profile/${name}"; };
+    {
+      name = "dconf/profile/${name}";
+      value.source = path; 
+    };
 
 in
 {
@@ -29,8 +32,8 @@ in
   ###### implementation
 
   config = mkIf (cfg.profiles != {} || cfg.enable) {
-    environment.etc = optionals (cfg.profiles != {})
-      (mapAttrsToList mkDconfProfile cfg.profiles);
+    environment.etc = optionalAttrs (cfg.profiles != {})
+      (mapAttrs' mkDconfProfile cfg.profiles);
 
     services.dbus.packages = [ pkgs.dconf ];
 

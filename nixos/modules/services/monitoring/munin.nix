@@ -317,18 +317,16 @@ in
 
     environment.systemPackages = [ pkgs.munin ];
 
-    users.users = [{
-      name = "munin";
+    users.users.munin = {
       description = "Munin monitoring user";
       group = "munin";
       uid = config.ids.uids.munin;
       home = "/var/lib/munin";
-    }];
+    };
 
-    users.groups = [{
-      name = "munin";
+    users.groups.munin = {
       gid = config.ids.gids.munin;
-    }];
+    };
 
   }) (mkIf nodeCfg.enable {
 

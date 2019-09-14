@@ -158,10 +158,10 @@ let
       (sec "addressbook")
       (strOpt "defaulturl" cfg.addressbook.defaulturl)
     ] ++ (optionalEmptyList "subscriptions" cfg.addressbook.subscriptions)
-      ++ (flip map
-      (collect (proto: proto ? port && proto ? address && proto ? name) cfg.proto)
+      ++ (flip mapAttrs
+      (collect (name: proto: proto ? port && proto ? address && proto ? name) cfg.proto)
       (proto: let protoOpts = [
-        (sec proto.name)
+        (sec name)
         (boolOpt "enabled" proto.enable)
         (strOpt "address" proto.address)
         (intOpt "port" proto.port)
@@ -181,10 +181,10 @@ let
 
   tunnelConf = let opts = [
     notice
-    (flip map
-      (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
+    (flip mapAttrs
+      (collect (name: tun: tun ? port && tun ? destination) cfg.outTunnels)
       (tun: let outTunOpts = [
-        (sec tun.name)
+        (sec name)
         "type = client"
         (intOpt "port" tun.port)
         (strOpt "destination" tun.destination)
@@ -204,10 +204,10 @@ let
         ++ (if tun ? crypto.tagsToSend then
             optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend else []);
         in concatStringsSep "\n" outTunOpts))
-    (flip map
-      (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
+    (flip mapAttrs
+      (collect (name: tun: tun ? port && tun ? address) cfg.inTunnels)
       (tun: let inTunOpts = [
-        (sec tun.name)
+        (sec name)
         "type = server"
         (intOpt "port" tun.port)
         (strOpt "host" tun.address)
