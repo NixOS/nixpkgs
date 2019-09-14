@@ -8957,7 +8957,9 @@ in
   spark = spark_24;
   spark_24 = callPackage ../applications/networking/cluster/spark { version = "2.4.3"; };
 
-  spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
+  spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix {
+    stdenv = gcc7Stdenv;
+  };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
     inherit (darwin) libobjc;
   } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
