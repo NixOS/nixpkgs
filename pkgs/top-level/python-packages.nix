@@ -5721,6 +5721,8 @@ in {
 
   basemap = callPackage ../development/python-modules/basemap { };
 
+  dict2xml = callPackage ../development/python-modules/dict2xml { };
+
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
   markdown2 = callPackage ../development/python-modules/markdown2 { };
