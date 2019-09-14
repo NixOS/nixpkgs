@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     ++ optional withGtk2 gtk2
     ++ optional withGtk3 gtk3;
 
+  enableParallelBuilding = true;
+
   installFlags = [ "PREFIX=$(out)" ];
 
   dontWrapQtApps = true;
