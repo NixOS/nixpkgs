@@ -30,11 +30,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.12.9";
+  version = "1.13";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1z32imbwmpkzgyh5c3vi7rbvzbq94xjk5qi2xm9sccj7kknmc3mb";
+    sha256 = "08pibdkfrn0909rzjzn3q1wj1whk1af058qxvbbyyhhx22vbih1z";
   };
 
   # perl is used for testing go vet
@@ -70,25 +70,25 @@ stdenv.mkDerivation rec {
     sed -i 's,/usr/bin,'"`pwd`", src/os/os_test.go
     sed -i 's,/bin/pwd,'"`type -P pwd`", src/os/os_test.go
     # Disable the unix socket test
-    sed -i '/TestShutdownUnix/areturn' src/net/net_test.go
+    sed -i '/TestShutdownUnix/at.Skip("Broken in nix")' src/net/net_test.go
     # Disable the hostname test
-    sed -i '/TestHostname/areturn' src/os/os_test.go
+    sed -i '/TestHostname/at.Skip("Broken in nix")' src/os/os_test.go
     # ParseInLocation fails the test
-    sed -i '/TestParseInSydney/areturn' src/time/format_test.go
+    sed -i '/TestParseInSydney/at.Skip("Broken in nix")' src/time/format_test.go
     # Remove the api check as it never worked
     sed -i '/src\/cmd\/api\/run.go/ireturn nil' src/cmd/dist/test.go
     # Remove the coverage test as we have removed this utility
-    sed -i '/TestCoverageWithCgo/areturn' src/cmd/go/go_test.go
+    sed -i '/TestCoverageWithCgo/at.Skip("Broken in nix")' src/cmd/go/go_test.go
     # Remove the timezone naming test
-    sed -i '/TestLoadFixed/areturn' src/time/time_test.go
+    sed -i '/TestLoadFixed/at.Skip("Broken in nix")' src/time/time_test.go
     # Remove disable setgid test
-    sed -i '/TestRespectSetgidDir/areturn' src/cmd/go/internal/work/build_test.go
+    sed -i '/TestRespectSetgidDir/at.Skip("Broken in nix")' src/cmd/go/internal/work/build_test.go
     # Remove cert tests that conflict with NixOS's cert resolution
-    sed -i '/TestEnvVars/areturn' src/crypto/x509/root_unix_test.go
+    sed -i '/TestEnvVars/at.Skip("Broken in nix")' src/crypto/x509/root_unix_test.go
     # TestWritevError hangs sometimes
-    sed -i '/TestWritevError/areturn' src/net/writev_test.go
+    sed -i '/TestWritevError/at.Skip("Broken in nix")' src/net/writev_test.go
     # TestVariousDeadlines fails sometimes
-    sed -i '/TestVariousDeadlines/areturn' src/net/timeout_test.go
+    sed -i '/TestVariousDeadlines/at.Skip("Broken in nix")' src/net/timeout_test.go
 
     sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
     sed -i 's,/etc/services,${iana-etc}/etc/services,' src/net/port_unix.go
@@ -107,15 +107,15 @@ stdenv.mkDerivation rec {
     sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
     sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
 
-    sed -i '/TestChdirAndGetwd/areturn' src/os/os_test.go
-    sed -i '/TestCredentialNoSetGroups/areturn' src/os/exec/exec_posix_test.go
-    sed -i '/TestRead0/areturn' src/os/os_test.go
-    sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
+    sed -i '/TestChdirAndGetwd/at.Skip("Broken in nix")' src/os/os_test.go
+    sed -i '/TestCredentialNoSetGroups/at.Skip("Broken in nix")' src/os/exec/exec_posix_test.go
+    sed -i '/TestRead0/at.Skip("Broken in nix")' src/os/os_test.go
+    sed -i '/TestSystemRoots/at.Skip("Broken in nix")' src/crypto/x509/root_darwin_test.go
 
-    sed -i '/TestGoInstallRebuildsStalePackagesInOtherGOPATH/areturn' src/cmd/go/go_test.go
-    sed -i '/TestBuildDashIInstallsDependencies/areturn' src/cmd/go/go_test.go
+    sed -i '/TestGoInstallRebuildsStalePackagesInOtherGOPATH/at.Skip("Broken in nix")' src/cmd/go/go_test.go
+    sed -i '/TestBuildDashIInstallsDependencies/at.Skip("Broken in nix")' src/cmd/go/go_test.go
 
-    sed -i '/TestDisasmExtld/areturn' src/cmd/objdump/objdump_test.go
+    sed -i '/TestDisasmExtld/at.Skip("Broken in nix")' src/cmd/objdump/objdump_test.go
 
     sed -i 's/unrecognized/unknown/' src/cmd/link/internal/ld/lib.go
 
@@ -199,7 +199,6 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    rm -r pkg/{bootstrap,obj}
     # Contains the wrong perl shebang when cross compiling,
     # since it is not used for anything we can deleted as well.
     rm src/regexp/syntax/make_perl_groups.pl
@@ -229,7 +228,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ goBootstrap ];
 
   meta = with stdenv.lib; {
-    branch = "1.12";
+    branch = "1.13";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;

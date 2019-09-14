@@ -1,8 +1,8 @@
 diff --git a/src/go/build/build.go b/src/go/build/build.go
-index b68a712..b60bf19 100644
+index f854760..daab37f 100644
 --- a/src/go/build/build.go
 +++ b/src/go/build/build.go
-@@ -1708,7 +1708,7 @@ func init() {
+@@ -1757,7 +1757,7 @@ func init() {
  }
  
  // ToolDir is the directory containing build tools.

@@ -1,14 +1,13 @@
---- source.org/src/cmd/dist/test.go	2018-02-22 10:40:40.089632339 +0000
-+++ source/src/cmd/dist/test.go	2018-02-22 10:56:53.075193788 +0000
-@@ -526,21 +526,6 @@
+diff --git a/src/cmd/dist/test.go b/src/cmd/dist/test.go
+index f63c946..f02eff7 100644
+--- a/src/cmd/dist/test.go
++++ b/src/cmd/dist/test.go
+@@ -574,29 +574,6 @@ func (t *tester) registerTests() {
  		})
  	}
  
 -	// Test internal linking of PIE binaries where it is supported.
--	if goos == "linux" && goarch == "amd64" && !isAlpineLinux() {
--		// Issue 18243: We don't have a way to set the default
--		// dynamic linker used in internal linking mode. So
--		// this test is skipped on Alpine.
+-	if goos == "linux" && (goarch == "amd64" || goarch == "arm64") {
 -		t.tests = append(t.tests, distTest{
 -			name:    "pie_internal",
 -			heading: "internal linking of -buildmode=pie",
@@ -17,8 +16,19 @@
 -				return nil
 -			},
 -		})
+-		// Also test a cgo package.
+-		if t.cgoEnabled {
+-			t.tests = append(t.tests, distTest{
+-				name:    "pie_internal_cgo",
+-				heading: "internal linking of -buildmode=pie",
+-				fn: func(dt *distTest) error {
+-					t.addCmd(dt, "src", t.goTest(), "os/user", "-buildmode=pie", "-ldflags=-linkmode=internal", t.timeout(60))
+-					return nil
+-				},
+-			})
+-		}
 -	}
 -
  	// sync tests
- 	t.tests = append(t.tests, distTest{
- 		name:    "sync_cpu",
+ 	if goos != "js" { // js doesn't support -cpu=10
+ 		t.tests = append(t.tests, distTest{
