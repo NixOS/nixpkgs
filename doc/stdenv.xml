@@ -2411,7 +2411,7 @@ addEnvHooks "$hostOffset" myBashFunction
       <para>
        The Bintools Wrapper was only just recently split off from CC Wrapper,
        so the division of labor is still being worked out. For example, it
-       shouldn't care about about the C standard library, but just take a
+       shouldn't care about the C standard library, but just take a
        derivation with the dynamic loader (which happens to be the glibc on
        linux). Dependency finding however is a task both wrappers will continue
        to need to share, and probably the most important to understand. It is
