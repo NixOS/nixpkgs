@@ -112,7 +112,9 @@ let
       pyocr = pyocrWithUserTesseract super;
       # These are pre-release versions, hence they are private to this pkg
       django-filter = self.callPackage ./python-modules/django-filter.nix {};
-      django-crispy-forms = self.callPackage ./python-modules/django-crispy-forms.nix {};
+      django-crispy-forms = self.callPackage ./python-modules/django-crispy-forms.nix {
+        pytest = self.callPackage ../../../development/python-modules/pytest/4.nix {};
+      };
     };
   };
 
