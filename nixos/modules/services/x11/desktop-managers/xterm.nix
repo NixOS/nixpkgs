@@ -13,7 +13,7 @@ in
 
     services.xserver.desktopManager.xterm.enable = mkOption {
       type = types.bool;
-      default = (versionOlder config.system.stateVersion "19.09");
+      default = false;
       description = "Enable a xterm terminal as a desktop manager.";
     };
 
