@@ -1,15 +1,15 @@
 { lib, fetchPypi, buildPythonPackage, intervaltree, pyflakes, requests, lxml, google-i18n-address
-, pycountry, html5lib, six
+, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "2.18.0";
+  version = "2.27.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e192236798615f34479a9bb9f30df72ce0e5f319df75ecc0473d896713a17451";
+    sha256 = "00v5gsshy1rmjd334d2awh0mvri949lmyk8f02wfr20rq6fc3xqd";
   };
 
   propagatedBuildInputs = [
@@ -21,13 +21,18 @@ buildPythonPackage rec {
     pycountry
     html5lib
     six
+    kitchen
+    pypdf2
+    dict2xml
+    weasyprint
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  doCheck = !stdenv.isDarwin;
+  # lxml tries to fetch from the internet
+  doCheck = false;
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";
