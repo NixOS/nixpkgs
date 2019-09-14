@@ -21832,6 +21832,8 @@ in
 
   chessx = libsForQt59.callPackage ../games/chessx { };
 
+  chiaki = libsForQt5.callPackage ../games/chiaki { };
+
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
   crispyDoom = callPackage ../games/crispy-doom { };
