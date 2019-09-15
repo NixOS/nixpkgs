@@ -15,7 +15,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    pytest
+    pytest -k "not test_contract_expression_checks"
   '';
 
   propagatedBuildInputs = [
