@@ -7150,9 +7150,6 @@ broken-packages:
   - marxup
   - masakazu-bot
   - MASMGen
-  - massiv
-  - massiv-io
-  - massiv-test
   - master-plan
   - matchable-th
   - matchers
@@ -8691,7 +8688,6 @@ broken-packages:
   - scenegraph
   - schedevr
   - schedule-planner
-  - scheduler
   - schedyield
   - schematic
   - scholdoc
