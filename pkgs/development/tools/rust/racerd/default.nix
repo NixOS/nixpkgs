@@ -1,8 +1,6 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper , Security }:
 
 with rustPlatform;
-
-with import <nixpkgs> {};
 
 buildRustPackage rec {
   pname = "racerd";
@@ -22,7 +20,7 @@ buildRustPackage rec {
   cargoSha256 = "15894qr0kpp5kivx0p71zmmfhfh8in0ydkvfirxh2r12x0r2jhdd";
 
   buildInputs = [ makeWrapper ]
-    ++ (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.Security ] else []);
+                ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 

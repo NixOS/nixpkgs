@@ -8357,7 +8357,9 @@ in
   rustracer = callPackage ../development/tools/rust/racer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  rustracerd = callPackage ../development/tools/rust/racerd { };
+  rustracerd = callPackage ../development/tools/rust/racerd {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
