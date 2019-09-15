@@ -167,7 +167,7 @@ self: super: {
     '';
   });
   system-fileio = doJailbreak super.system-fileio;
-  yaml = self.yaml_0_11_1_2;
+  yaml = super.yaml;
   haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.2.patch";
     sha256 = "146im1amywyl29kcldvgrxpwj22lrpzxysl7vc8rmn3hrq130dyc";
