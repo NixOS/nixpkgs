@@ -22,6 +22,7 @@ in {
         in if value == null then
           throw "services.redshift.longitude is set to null, you can remove this"
           else builtins.fromJSON value))
+    (mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
   ];
 
   options.services.redshift = {
