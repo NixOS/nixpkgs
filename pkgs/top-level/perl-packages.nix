@@ -18763,6 +18763,41 @@ let
     };
   };
 
+  Tirex = buildPerlPackage rec {
+    pname = "Tirex";
+    version = "0.6.1";
+
+    src = fetchFromGitHub {
+      owner  = "openstreetmap";
+      repo   = "tirex";
+      rev    = "v${version}";
+      sha256 = "0dskf50qm6yh3rx6j2nqydr1if71x6ik85hxsa2r9qgldcby2rgh";
+    };
+
+    buildInputs = [
+      GD
+      IPCShareLite
+      JSON
+      LWP
+      pkgs.cairo
+      pkgs.mapnik
+      pkgs.zlib
+    ];
+
+    installPhase = ''
+      make install DESTDIR=$out INSTALLOPTS=""
+      mv $out/$out/lib $out/$out/share $out
+      rmdir $out/$out $out/nix/store $out/nix
+    '';
+
+    meta = {
+      description = "Tools for running a map tile server";
+      homepage = https://github.com/openstreetmap/tirex;
+      maintainers = with maintainers; [ jglukasik ];
+      license = with stdenv.lib.licenses; [ gpl2 ];
+    };
+  };
+
   Tk = buildPerlPackage {
     pname = "Tk";
     version = "804.034";
