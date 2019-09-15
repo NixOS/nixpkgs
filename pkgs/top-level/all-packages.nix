@@ -18347,6 +18347,8 @@ in
 
   freenet = callPackage ../applications/networking/p2p/freenet { };
 
+  freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix {};
+
   freepv = callPackage ../applications/graphics/freepv { };
 
   xfontsel = callPackage ../applications/misc/xfontsel { };
@@ -19601,6 +19603,8 @@ in
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
   smtube = libsForQt5.callPackage ../applications/video/smtube {};
+
+  softmaker-office = callPackage ../applications/office/softmaker/softmaker_office.nix {};
 
   stride = callPackage ../applications/networking/instant-messengers/stride { };
 
