@@ -23,7 +23,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ python2 ];
 
   cmakeFlags = [
-    "-DUSE_OPTIMIZED_BLAS=ON"
     "-DCMAKE_Fortran_FLAGS=-fPIC"
     "-DLAPACKE=ON"
   ]
