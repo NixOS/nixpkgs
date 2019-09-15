@@ -103,24 +103,27 @@ EOF
       --replace 'libs = [ "sandbox" ]' 'libs = [ "/usr/lib/libsandbox.1.dylib" ]'
     '');
 
-  NIX_CFLAGS_COMPILE =
-  # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
-  # TODO: investigate and fix properly
-    lib.optionals (stdenv.hostPlatform.platform.gcc.arch or "" == "sandybridge") [ "-march=westmere" ] ++
-    lib.optionals stdenv.isDarwin [
-      "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
-      "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10"
+  NIX_CFLAGS_COMPILE = [
+    # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
+    "-Wno-class-memaccess"
+  ] ++ lib.optionals (stdenv.hostPlatform.platform.gcc.arch or "" == "sandybridge") [
+    # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
+    # TODO: investigate and fix properly
+    "-march=westmere"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
+    "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10"
 
-      #
-      # Prevent errors like
-      # /nix/store/xxx-apple-framework-CoreData/Library/Frameworks/CoreData.framework/Headers/NSEntityDescription.h:51:7:
-      # error: pointer to non-const type 'id' with no explicit ownership
-      #     id** _kvcPropertyAccessors;
-      #
-      # TODO remove when new Apple SDK is in
-      #
-      "-fno-objc-arc"
-    ];
+    #
+    # Prevent errors like
+    # /nix/store/xxx-apple-framework-CoreData/Library/Frameworks/CoreData.framework/Headers/NSEntityDescription.h:51:7:
+    # error: pointer to non-const type 'id' with no explicit ownership
+    #     id** _kvcPropertyAccessors;
+    #
+    # TODO remove when new Apple SDK is in
+    #
+    "-fno-objc-arc"
+  ];
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
