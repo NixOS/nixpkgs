@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
       --replace "/bin/ls" "ls"
 
     substituteInPlace t/110-compile/hello.o.do \
-      --replace "/usr/include" "${stdenv.cc.libc.dev}/include"
+      --replace "/usr/include" "${stdenv.lib.getDev stdenv.cc.libc}/include"
 
     substituteInPlace t/200-shell/nonshelltest.do \
       --replace "/usr/bin/env perl" "${perl}/bin/perl"
