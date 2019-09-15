@@ -5236,7 +5236,6 @@ broken-packages:
   - hakismet
   - hakka
   - hako
-  - hakyll
   - hakyll-agda
   - hakyll-blaze-templates
   - hakyll-contrib
