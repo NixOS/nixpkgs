@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev, avahi, freeipmi
-, libtool, makeWrapper }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, neon, libusb
+, openssl, udev, avahi, freeipmi, libtool, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "nut-2.7.4";
@@ -9,9 +9,18 @@ stdenv.mkDerivation rec {
     sha256 = "19r5dm07sfz495ckcgbfy0pasx0zy3faa0q7bih69lsjij8q43lq";
   };
 
+  patches = [
+    # patching the autoconf scripts requires autoreconfHook to recreate ./configure
+    (fetchpatch {
+      name = "support-openssl-1.1.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/networkupstools/nut/pull/504.patch";
+      sha256 = "0jyns8iynkf5920831dl93n16rrkqqg5hb97w9gdq62910d8scdx";
+    })
+  ];
+
   buildInputs = [ neon libusb openssl udev avahi freeipmi libtool ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
 
   configureFlags =
     [ "--with-all"
