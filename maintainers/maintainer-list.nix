@@ -2812,6 +2812,12 @@
     github = "johannesloetzsch";
     name = "Johannes Lötzsch";
   };
+  jacobdillon = {
+    email = "jacob.dillon@uconn.edu";
+    github = "jacobdillon";
+    githubId = 6379443;
+    name = "Jacob Dillon";
+  };
   jagajaga = {
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
