@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "1f66iss0kqk982azmxbk4xfm2i1csby91vdvly6cr04pz3i1r4rg";
   };
 
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+
   preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
     perl mkfiles.pl
     ( cd doc ; make );
