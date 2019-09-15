@@ -2,6 +2,8 @@
 
 with rustPlatform;
 
+with import <nixpkgs> {};
+
 buildRustPackage rec {
   pname = "racerd";
   version = "2019-03-20";
@@ -19,7 +21,8 @@ buildRustPackage rec {
 
   cargoSha256 = "15894qr0kpp5kivx0p71zmmfhfh8in0ydkvfirxh2r12x0r2jhdd";
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper ]
+    ++ (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.Security ] else []);
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 
