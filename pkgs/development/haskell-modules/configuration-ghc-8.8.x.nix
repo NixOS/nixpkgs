@@ -74,7 +74,15 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/vector-th-unbox-0.2.1.6.patch";
     sha256 = "0169yf9ms1g5mmkc5l6hpffzm34zdrqdng4df02nbdmfgba45h19";
   });
-  cabal-doctest = super.cabal-doctest_1_0_7;
+  cabal-doctest = overrideSrc (doJailbreak super.cabal-doctest) {
+    version = "1.0.7";
+    src = pkgs.fetchFromGitHub {
+      owner = "phadej";
+      repo = "cabal-doctest";
+      rev = "5abe80fe4ef2eca337bad719d957a0fe1b571392";
+      sha256 = "08040fjkdlg7ll3jrc7xpbn0ca6y22zlvngnz1inh511f4wvq80d";
+    };
+  };
   regex-base = overrideCabal (appendPatch super.regex-base (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-base-0.93.2.patch";
     sha256 = "01d1plrdx6hcspwn2h6y9pyi5366qk926vb5cl5qcl6x4m23l6y1";
