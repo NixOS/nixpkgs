@@ -15,9 +15,7 @@ let
       '';
       nativeBuildInputs = [ maven cmake pkgconfig ];
       buildInputs = [ fuse snappy zlib bzip2 opensslPkg protobuf2_5 ] ++ extraBuildInputs;
-      mavenFlags = [ "-Drequire.fuse" "-Drequire.snappy" "-Drequire.bzip2" "-DskipTests" "-Pdist,native" "-e" ]
-        ++ stdenv.lib.optional (stdenv.lib.versionAtLeast version "2.9") "-Drequire.zstd"
-        ++ stdenv.lib.optional (stdenv.lib.versionAtLeast version "3.0") "-Drequire.isal";
+      mavenFlags = [ "-DskipTests" "-Pdist,native" "-e" ];
 
       # perform fake build to make a fixed-output derivation of dependencies downloaded from maven central (~100Mb in ~3000 files)
       fetched-maven-deps = stdenv.mkDerivation {
