@@ -4082,6 +4082,8 @@ in {
 
   MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup { };
 
+  mbed-os-tools = callPackage ../development/python-modules/mbed-os-tools { };
+
   meld3 = callPackage ../development/python-modules/meld3 { };
 
   meliae = callPackage ../development/python-modules/meliae {};
