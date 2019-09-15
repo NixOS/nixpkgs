@@ -88,6 +88,7 @@ let
         disallowedReferences = [ maven.jdk ];
       };
     in
+      # `binary-distributon` bound to the runtime JRE
       stdenv.mkDerivation {
         pname = "hadoop";
         inherit version;
@@ -126,6 +127,10 @@ let
         installCheckPhase = ''
           $out/bin/hadoop checknative
         '';
+
+        # 3rd party applications using libhadoop.so should set $LD_LIBRARY_PATH to help its dlopen() locating libraries
+        passthru.LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath buildInputs;
+        passthru.openssl = opensslPkg;
 
         meta = with stdenv.lib; {
           homepage = "http://hadoop.apache.org/";
