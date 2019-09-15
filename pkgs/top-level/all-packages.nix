@@ -5957,6 +5957,8 @@ in
 
   samplicator = callPackage ../tools/networking/samplicator { };
 
+  sasquatch = callPackage ../tools/filesystems/sasquatch { };
+
   sasview = callPackage ../applications/science/misc/sasview {};
 
   scallion = callPackage ../tools/security/scallion { };
