@@ -159,6 +159,10 @@ in
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
+      "getty@tty1.service"
+    ];
+    systemd.services.display-manager.conflicts = [
+      "getty@tty1.service"
     ];
 
     systemd.services.display-manager.serviceConfig = {
