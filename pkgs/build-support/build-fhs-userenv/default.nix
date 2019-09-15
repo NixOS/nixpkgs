@@ -88,7 +88,7 @@ let
     done
 
     exec ${bubblewrap}/bin/bwrap \
-      --dev /dev \
+      --dev-bind /dev /dev \
       --proc /proc \
       --chdir "$(pwd)" \
       --unshare-all \
