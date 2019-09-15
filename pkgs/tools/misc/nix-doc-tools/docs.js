@@ -71,11 +71,11 @@ const makeGlobalTOC = function () {
         $expando.innerText = "Toggle table of contents";
         $expando.classList.add("toc-expando");
         $expando.addEventListener("click", (event) => {
-            if ($body.classList.contains("toc-hidden")) {
-                $body.classList.remove("toc-hidden");
+            if ($body.classList.contains("toc-toggle")) {
+                $body.classList.remove("toc-toggle");
             }
             else {
-                $body.classList.add("toc-hidden");
+                $body.classList.add("toc-toggle");
             }
         });
         $global_toc.appendChild($expando);

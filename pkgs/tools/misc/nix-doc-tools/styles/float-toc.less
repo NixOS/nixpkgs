@@ -9,125 +9,145 @@
 
 @__toc-vw: @toc-size * 1vw;
 
-// Enables only where it makes sense.
-#screen-sm-min({
-	#global_toc {
-		@_indent: @gutter/2;
+// Why is the toggle class `toc-toggle` rather than `toc-hidden` or a more
+// meaningful one?
+//
+// Simple! The toggle state is different depending on the width of the display!
+// The initial state on narrow display is to *hide* the TOC.
+// The initial state on wide displat is to *show* the TOC.
+// It is assumed that we don't want to detect the width at load to set an
+// initial state. (We don't.)
+// The *only* drawback of having this inverted toggle state is that on
+// transition from a wide window with the TOC hidden, to a narrow window, the
+// TOC will show up, and vice versa, on transition from a narrow window with
+// the TOC, to a wide window, the TOC will scurry away.
+// It is fixed by the user toggling the TOC.
+// It is much less fraught with peril than trying to guesstimate the initial
+// state in JavaScript.
 
-		position: fixed;
-		top: @header-height;
-		@{toc-side}: 0;
-		bottom: 0;
-		background: @toc-color;
+#global_toc {
+    @_indent: @gutter/2;
 
-        display: flex;
+    position: fixed;
+    top: @header-height;
+    @{toc-side}: 0;
+    bottom: 0;
+    background: @toc-color;
 
+    display: flex;
+
+    & > .toc {
+        overflow: auto;
+    }
+
+    .toc > p {
+        display: none;
+    }
+
+    span.current-page {
+        font-weight: bold;
+    }
+
+    li:not(.current-section) ul {
+        display: none;
+    }
+
+    ul, li {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    a {
+        display: block;
+    }
+
+    ul,
+    dl > dt {
+        margin-top: 0;
+        margin-bottom: 0;
+        a {
+            line-height: 2.5;
+        }
+    }
+    dl {
+        margin-left: -@gutter;
+        margin-right: -@gutter;
+    }
+    dl > dd {
+        padding-left: @gutter;
+        padding-right: @gutter;
+    }
+
+    // Links have padding
+    ul > li,
+    dl > dt {
+        a {
+            padding-left: @gutter;
+            padding-right: @gutter;
+        }
+    }
+
+    li.current-section,
+    dl > dd > dl {
+        border-left: @_indent solid @toc-active-color;
+    }
+    // This doesn't play well with single-sub-chapter categories.
+    // It looks weirdly broken while it isn't
+    // li .current-page {
+    //     border-left-color: @color-blue-light;
+    // }
+    .active {
+        background: @toc-active-color;
+    }
+}
+
+body.with-javascript {
+    //.book,
+    .section,
+    .chapter {
         & > .toc {
-            overflow: auto;
-        }
-        .toc-hidden & > .toc {
-            width: 0;
-        }
-
-        .toc > p {
             display: none;
         }
+    }
+}
 
-        span.current-page {
-            font-weight: bold;
-        }
+body.with-javascript {
+    padding-@{toc-side}: @toc-expando-size + @gutter;
+}
 
-        li:not(.current-section) ul {
-            display: none;
-        }
+#screen-xs-max({
+    #global_toc {
+        max-width: @toc-max-width;
+    }
 
-        ul, li {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
+    body:not(.toc-toggle) #global_toc > .toc {
+        width: 0;
+    }
+});
 
-		a {
-			display: block;
-		}
+#screen-sm-min({
+    body.toc-toggle #global_toc > .toc {
+        width: 0;
+    }
 
-        // // Gumshoe-operated single-page doc TOC.
-		// dl > dd {
-		// 	display: none;
-		// 	&.is-open {
-		// 		display: block;
-		// 	}
-		// }
-
-        ul,
-		dl > dt {
-			margin-top: 0;
-			margin-bottom: 0;
-			a {
-				line-height: 2.5;
-			}
-		}
-		dl {
-			margin-left: -@gutter;
-			margin-right: -@gutter;
-		}
-		dl > dd {
-			padding-left: @gutter;
-			padding-right: @gutter;
-		}
-
-        // Links have padding
-        ul > li,
-		dl > dt {
-			a {
-				padding-left: @gutter;
-				padding-right: @gutter;
-			}
-		}
-
-        li.current-section,
-		dl > dd > dl {
-			border-left: @_indent solid @toc-active-color;
-		}
-        // This doesn't play well with single-sub-chapter categories.
-        // It looks weirdly broken while it isn't
-        // li .current-page {
-        //     border-left-color: @color-blue-light;
-        // }
-		.active {
-			background: @toc-active-color;
-		}
-	}
-
-	body.with-javascript:not(.toc-hidden) {
+	body.with-javascript:not(.toc-toggle) {
 		padding-@{toc-side}: calc(@__toc-vw + @gutter * 1);
 	}
-	body.with-javascript.toc-hidden {
-		padding-@{toc-side}: @toc-expando-size + @gutter;
-	}
 
-    body:not(.toc-hidden) {
+    body:not(.toc-toggle) {
         #global_toc {
             width: @__toc-vw;
         }
     }
-
-	body.with-javascript {
-        //.book,
-        .section,
-        .chapter {
-            & > .toc {
-                display: none;
-            }
-        }
-	}
 });
+
 #screen-lg-min({
-	body.with-javascript:not(.toc-hidden) {
+	body.with-javascript:not(.toc-toggle) {
 		padding-@{toc-side}: calc(@toc-max-width + @gutter * 1);
 		max-width: @screen-lg;
 	}
-    body:not(.toc-hidden) {
+    body:not(.toc-toggle) {
         #global_toc {
             width: @toc-max-width;
         }
@@ -154,7 +174,6 @@
     }
 
     &::after {
-        content: "«";
         display: block;
         position: absolute;
         top: 50%;
@@ -162,8 +181,19 @@
         right: 0;
         transform: translateY(-50%);
         text-indent: 0;
-        .toc-hidden & {
+
+        // Selects the right symbol depending on the way the TOC toggles.
+        #screen-xs-max({
             content: "»";
-        }
+            .toc-toggle & {
+                content: "«";
+            }
+        });
+        #screen-sm-min({
+            content: "«";
+            .toc-toggle & {
+                content: "»";
+            }
+        });
     }
 }
