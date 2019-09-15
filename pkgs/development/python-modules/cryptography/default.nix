@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , openssl
 , cryptography_vectors
 , darwin
@@ -49,8 +50,9 @@ buildPythonPackage rec {
     hypothesis
   ];
 
+  # remove when https://github.com/pyca/cryptography/issues/4998 is fixed
   checkPhase = ''
-    py.test --disable-pytest-warnings tests
+    py.test --disable-pytest-warnings tests -k 'not load_ecdsa_no_named_curve'
   '';
 
   # The test assumes that if we're on Sierra or higher, that we use `getentropy`, but for binary
@@ -60,6 +62,13 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace ./tests/hazmat/backends/test_openssl.py --replace '"16.0"' '"99.0"'
   '';
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pyca/cryptography/commit/e575e3d482f976c4a1f3203d63ea0f5007a49a2a.patch";
+      sha256 = "0vg9prqsizd6gzh5j7lscsfxzxlhz7pacvzhgqmj1vhdhjwbblcp";
+    })
+  ];
 
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
   # can do until nix 1.11's release
