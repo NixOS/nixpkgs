@@ -1,9 +1,5 @@
-{ stdenv, fetchgit, ant, jdk, openjdk8, zulu8, git, xorg, udev, libGL, libGLU }:
+{ stdenv, fetchgit, ant, jdk, git, xorg, udev, libGL, libGLU }:
 
-let
-  # workaround https://github.com/NixOS/nixpkgs/issues/37364
-  jdk-without-symlinks = if jdk == openjdk8 then zulu8 else jdk;
-in
 {
   jogl_2_3_2 =
     let
@@ -32,7 +28,8 @@ in
           -exec sed -i 's@"libGLU.so"@"${libGLU}/lib/libGLU.so"@' {} \;
       '';
 
-      buildInputs = [ jdk-without-symlinks ant git udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXt xorg.libXxf86vm xorg.libXrender ];
+      nativeBuildInputs = [ jdk ant git ];
+      buildInputs = [ udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXt xorg.libXxf86vm xorg.libXrender ];
 
       buildPhase = ''
         cp -r ${gluegen-src} $NIX_BUILD_TOP/gluegen
