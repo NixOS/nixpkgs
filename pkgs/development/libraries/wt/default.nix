@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
-, pango, fcgi, firebird, mysql, postgresql, graphicsmagick, glew, openssl
+, pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
 , pcre, harfbuzz
 }:
 
@@ -22,7 +22,7 @@ let
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
         cmake boost doxygen qt48Full libharu
-        pango fcgi firebird mysql.connector-c postgresql graphicsmagick glew
+        pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
         openssl pcre
       ];
 
@@ -30,7 +30,7 @@ let
         "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DWT_CPP_11_MODE=-std=c++11"
         "-DGM_PREFIX=${graphicsmagick}"
-        "-DMYSQL_PREFIX=${mysql.connector-c}"
+        "-DMYSQL_PREFIX=${libmysqlclient}"
         "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
         "--no-warn-unused-cli"
       ];

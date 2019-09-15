@@ -1,6 +1,6 @@
 { coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv
 , enableLDAP ? false, openldap
-, enableMySQL ? false, mysql, zlib
+, enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
 , enablePAM ? false, pam
 , enableSPF ? true, libspf2
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ coreutils db openssl perl pcre ]
     ++ stdenv.lib.optional enableLDAP openldap
-    ++ stdenv.lib.optionals enableMySQL [ mysql.connector-c zlib ]
+    ++ stdenv.lib.optionals enableMySQL [ libmysqlclient zlib ]
     ++ stdenv.lib.optional enableAuthDovecot dovecot
     ++ stdenv.lib.optional enablePAM pam
     ++ stdenv.lib.optional enableSPF libspf2;
@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
       ''}
       ${stdenv.lib.optionalString enableMySQL ''
         s:^# \(LOOKUP_MYSQL=yes\)$:\1:
-        s:^# \(LOOKUP_MYSQL_PC=mysql.connector-c\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${mysql.connector-c}/lib/mysql -lssl -ldl -lm -lpthread -lz:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${mysql.connector-c}/lib/mysql -lssl -ldl -lm -lpthread -lz:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${mysql.connector-c}/include/mysql/:
+        s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient}/include/mysql/:
       ''}
       ${stdenv.lib.optionalString enableAuthDovecot ''
         s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
