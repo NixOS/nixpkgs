@@ -15625,6 +15625,8 @@ in
 
   osxfuse = callPackage ../os-specific/darwin/osxfuse { };
 
+  power-calibrate = callPackage ../os-specific/linux/power-calibrate { };
+
   powerstat = callPackage ../os-specific/linux/powerstat { };
 
   smemstat = callPackage ../os-specific/linux/smemstat { };
