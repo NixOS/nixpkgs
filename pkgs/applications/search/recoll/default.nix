@@ -8,19 +8,19 @@
 assert stdenv.hostPlatform.system != "powerpc-linux";
 
 stdenv.mkDerivation rec {
-  ver = "1.24.5";
-  name = "recoll-${ver}";
+  pname = "recoll";
+  version = "1.25.22";
 
   src = fetchurl {
-    url = "https://www.lesbonscomptes.com/recoll/${name}.tar.gz";
-    sha256 = "10m3a0ghnyipjcxapszlr8adyy2yaaxx4vgrkxrfmz13814z89cv";
+    url = "https://www.lesbonscomptes.com/recoll/${pname}-${version}.tar.gz";
+    sha256 = "1g05m4nfa0hyx0nzf3cl7g8c33y5z78fry3xhhic40xaa94i23ah";
   };
 
-  configureFlags = [ "--enable-recollq" ]
+  configureFlags = [ "--enable-recollq" "--disable-python-module" "--disable-python-chm" ]
     ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
     ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
 
-  buildInputs = [ xapian file python bison zlib ]
+  buildInputs = [ xapian file python bison zlib libxslt ]
     ++ lib.optional withGui qt4
     ++ lib.optional stdenv.isDarwin libiconv;
 
