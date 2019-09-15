@@ -1,0 +1,22 @@
+diff --git a/mbed/mbed.py b/mbed/mbed.py
+index 2edb549..d619918 100755
+--- a/mbed/mbed.py
++++ b/mbed/mbed.py
+@@ -56,13 +56,13 @@ from contextlib import contextmanager
+ ver = '1.10.2'
+ 
+ # Default paths to Mercurial and Git
+-hg_cmd = 'hg'
+-git_cmd = 'git'
++hg_cmd = '@mercurial@/bin/hg'
++git_cmd = '@git@/bin/git'
+ 
+ # override python command when running standalone Mbed CLI
+-python_cmd = sys.executable
++python_cmd = '@python@/bin/python'
+ if os.path.basename(python_cmd).startswith('mbed'):
+-    python_cmd = 'python'
++    python_cmd = '@python@/bin/python'
+ 
+ ignores = [
+     # Version control folders
