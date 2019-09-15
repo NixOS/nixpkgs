@@ -1,67 +1,81 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix ({ pkgs, lib, ...}: with lib; {
   name = "cfssl";
 
-  machine = { config, lib, pkgs, ... }:
-  {
+  machine = { config, lib, pkgs, ... }: {
     networking.firewall.allowedTCPPorts = [ config.services.cfssl.port ];
 
-    services.cfssl.enable = true;
-    systemd.services.cfssl.after = [ "cfssl-init.service" ];
-
-    systemd.services.cfssl-init = {
-      description = "Initialize the cfssl CA";
-      wantedBy    = [ "multi-user.target" ];
-      serviceConfig = {
-        User             = "cfssl";
-        Type             = "oneshot";
-        WorkingDirectory = config.services.cfssl.dataDir;
+    services.cfssl = {
+      enable = true;
+      dataDir = "/var/lib/cfssl";
+      configuration = {
+        signing = {
+          profiles = {
+            test = {
+              usages = ["digital signature"];
+              authKey = "default";
+              expiry = "720h";
+            };
+          };
+        };
+        authKeys = {
+          default.generate = true;
+        };
       };
-      script = with pkgs; ''
-        ${cfssl}/bin/cfssl genkey -initca ${pkgs.writeText "ca.json" (builtins.toJSON {
+      initca = {
+        enable = true;
+        csr = {
           hosts = [ "ca.example.com" ];
           key = {
-            algo = "rsa"; size = 4096; };
-            names = [
-              {
-                C = "US";
-                L = "San Francisco";
-                O = "Internet Widgets, LLC";
-                OU = "Certificate Authority";
-                ST = "California";
-              }
-            ];
-        })} | ${cfssl}/bin/cfssljson -bare ca
-      '';
+            algo = "rsa";
+            size = 4096;
+          };
+          names = singleton {
+            C = "US";
+            L = "San Francisco";
+            O = "Internet Widgets, LLC";
+            OU = "Certificate Authority";
+            ST = "California";
+          };
+        };
+      };
+      initssl.enable = true;
     };
   };
 
-  testScript =
-  let
-    cfsslrequest = with pkgs; writeScript "cfsslrequest" ''
-      curl -X POST -H "Content-Type: application/json" -d @${csr} \
-        http://localhost:8888/api/v1/cfssl/newkey | ${cfssl}/bin/cfssljson /tmp/certificate
+  testScript = let
+    cfsslrequest = req: with pkgs; writeScript "cfsslrequest" ''
+      auth_key=$(cat /var/lib/cfssl/default-key.secret)
+      auth_token=$(cat ${req} | ${openssl}/bin/openssl dgst -sha256 -mac HMAC -macopt hexkey:$auth_key -binary | base64 -w0)
+      req_base64=$(cat ${req} | base64 -w0)
+      newkey_req="{\"token\": \"$auth_token\", \"request\": \"$req_base64\"}"
+      ${curl}/bin/curl -X POST -k -H "Content-Type: application/json" -d "$newkey_req" \
+        https://localhost:8888/api/v1/cfssl/newkey | ${cfssl}/bin/cfssljson /tmp/certificate
+
+      sign_request=$(echo "{\"certificate_request\": \"$(cat /tmp/certificate.csr)\", \"profile\": \"test\"}" | sed ':a;N;$!ba;s/\n/\\n/g')
+      auth_token=$(echo "$sign_request" | ${openssl}/bin/openssl dgst -sha256 -mac HMAC -macopt hexkey:$auth_key -binary | base64 -w0)
+      req_base64=$(echo "$sign_request" | base64 -w0)
+      newkey_req="{\"token\": \"$auth_token\", \"request\": \"$req_base64\"}"
+      ${curl}/bin/curl -X POST -k -H "Content-Type: application/json" -d "$newkey_req" \
+        https://localhost:8888/api/v1/cfssl/authsign | ${cfssl}/bin/cfssljson /tmp/certificate
     '';
-    csr = pkgs.writeText "csr.json" (builtins.toJSON {
+    req = pkgs.writeText "csr.json" (builtins.toJSON {
       CN = "www.example.com";
       hosts = [ "example.com" "www.example.com" ];
       key = {
         algo = "rsa";
         size = 2048;
       };
-      names = [
-        {
-          C = "US";
-          L = "San Francisco";
-          O = "Example Company, LLC";
-          OU = "Operations";
-          ST = "California";
-        }
-      ];
+      names = singleton {
+        C = "US";
+        L = "San Francisco";
+        O = "Example Company, LLC";
+        OU = "Operations";
+        ST = "California";
+      };
     });
-  in
-    ''
-      $machine->waitForUnit('cfssl.service');
-      $machine->waitUntilSucceeds('${cfsslrequest}');
-      $machine->succeed('ls /tmp/certificate-key.pem');
-    '';
+  in ''
+    $machine->waitForUnit('cfssl.service');
+    $machine->succeed('${cfsslrequest req}');
+    $machine->succeed('${pkgs.openssl}/bin/openssl verify -CAfile /var/lib/cfssl/ca.pem /tmp/certificate.pem');
+  '';
 })
