@@ -66,6 +66,20 @@ const makeGlobalTOC = function () {
 
         const $toc = $candidate.cloneNode(true);
         $global_toc.appendChild($toc);
+
+        const $expando = document.createElement("button");
+        $expando.innerText = "Toggle table of contents";
+        $expando.classList.add("toc-expando");
+        $expando.addEventListener("click", (event) => {
+            if ($body.classList.contains("toc-hidden")) {
+                $body.classList.remove("toc-hidden");
+            }
+            else {
+                $body.classList.add("toc-hidden");
+            }
+        });
+        $global_toc.appendChild($expando);
+
         $body.append($global_toc);
     }
     else {

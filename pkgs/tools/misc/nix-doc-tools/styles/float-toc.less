@@ -2,24 +2,32 @@
 @toc-side: left;
 @toc-size: 33; // Percent of the width of the screen. NO units.
 @toc-max-width: @toc-size/100 * @screen-lg;
+@toc-expando-size: 1rem;
+
+@toc-color: #eee;
+@toc-active-color: darken(@toc-color, 10%);
 
 @__toc-vw: @toc-size * 1vw;
 
 // Enables only where it makes sense.
 #screen-sm-min({
-	// Floated TOC with scrollspy
 	#global_toc {
 		@_indent: @gutter/2;
-		@_color: #eee;
-		@_active: darken(@_color, 10%);
-		@_current: @color-blue-light;
 
 		position: fixed;
 		top: @header-height;
 		@{toc-side}: 0;
 		bottom: 0;
-		background: @_color;
-		overflow: auto;
+		background: @toc-color;
+
+        display: flex;
+
+        & > .toc {
+            overflow: auto;
+        }
+        .toc-hidden & > .toc {
+            width: 0;
+        }
 
         .toc > p {
             display: none;
@@ -79,7 +87,7 @@
 
         li.current-section,
 		dl > dd > dl {
-			border-left: @_indent solid @_active;
+			border-left: @_indent solid @toc-active-color;
 		}
         // This doesn't play well with single-sub-chapter categories.
         // It looks weirdly broken while it isn't
@@ -87,17 +95,22 @@
         //     border-left-color: @color-blue-light;
         // }
 		.active {
-			background: @_active;
+			background: @toc-active-color;
 		}
 	}
 
-	body.with-javascript {
+	body.with-javascript:not(.toc-hidden) {
 		padding-@{toc-side}: calc(@__toc-vw + @gutter * 1);
 	}
-
-	#global_toc {
-		width: @__toc-vw;
+	body.with-javascript.toc-hidden {
+		padding-@{toc-side}: @toc-expando-size + @gutter;
 	}
+
+    body:not(.toc-hidden) {
+        #global_toc {
+            width: @__toc-vw;
+        }
+    }
 
 	body.with-javascript {
         //.book,
@@ -110,11 +123,47 @@
 	}
 });
 #screen-lg-min({
-	body.with-javascript {
+	body.with-javascript:not(.toc-hidden) {
 		padding-@{toc-side}: calc(@toc-max-width + @gutter * 1);
 		max-width: @screen-lg;
 	}
-	#global_toc {
-		width: @toc-max-width;
-	}
+    body:not(.toc-hidden) {
+        #global_toc {
+            width: @toc-max-width;
+        }
+    }
 });
+
+#global_toc .toc-expando {
+    width: @toc-expando-size;
+    overflow: hidden;
+    text-indent: -999em;
+    position: relative;
+
+    background: @toc-color;
+    color: inherit;
+    border: 0;
+
+    text-transform: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    &:hover, &:focus {
+        background: @toc-active-color;
+    }
+
+    &::after {
+        content: "«";
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        text-indent: 0;
+        .toc-hidden & {
+            content: "»";
+        }
+    }
+}
