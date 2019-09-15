@@ -6407,6 +6407,12 @@
     githubId = 224674;
     name = "Thomas Pham";
   };
+  Thra11 = {
+    email = "tahall256@protonmail.ch";
+    github = "Thra11";
+    githubId = 1391883;
+    name = "Tom Hall";
+  };
   tilpner = {
     email = "till@hoeppner.ws";
     github = "tilpner";
