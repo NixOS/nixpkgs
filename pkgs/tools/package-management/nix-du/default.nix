@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, nix, boost, graphviz, darwin }:
 rustPlatform.buildRustPackage rec {
   pname = "nix-du";
-  version = "0.3.0-git-master";
+  version = "unstable-2019-07-15";
 
   src = fetchFromGitHub {
     owner = "symphorien";
