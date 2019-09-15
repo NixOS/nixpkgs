@@ -59,6 +59,7 @@ buildPythonPackage {
   meta = {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = https://developers.google.com/protocol-buffers/;
+    license = licenses.bsd3;
   };
 
   passthru.protobuf = protobuf;

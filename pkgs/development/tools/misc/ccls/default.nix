@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ stdenv, fetchFromGitHub
 , cmake, llvmPackages, rapidjson, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "ccls";
-  version = "0.20190314.1";
+  version = "0.20190823";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "1yvxliryqx2bc7r6ri4iafbrjx19jk8hnfbvq5xla72q0gqb97lf";
+    sha256 = "1qy1kf83mrvbhwl8m0h7ralwd3sid8y8fpk7pmy81y1nq8f1cf6f";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = with llvmPackages; [ clang-unwrapped llvm rapidjson ];
 
   cmakeFlags = [
-    "-DSYSTEM_CLANG=ON"
+    "-DCCLS_VERSION=${version}"
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
   ];
 

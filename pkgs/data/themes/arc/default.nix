@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
-  version = "20190330";
+  version = "20190910";
 
   src = fetchFromGitHub {
-    owner  = "NicoHood";
+    owner  = "arc-design";
     repo   = pname;
     rev    = version;
-    sha256 = "16n5svgkpa8azxgyy64zwjjc04r57wfzkdq9igqvbvwkbvx8aa89";
+    sha256 = "161kx9ii5ij1503nvhgn3pyqfj7cj03l1di2yf8kwwfczbi4mq3j";
   };
 
   nativeBuildInputs = [
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     optipng
     inkscape
     gtk3
-    gnome3.gnome-shell
   ];
 
   propagatedUserEnvPkgs = [
@@ -29,26 +28,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postPatch = ''
-    patchShebangs .
-    # TODO: remove this after update
-    ln -s 3.30 common/gnome-shell/3.32
-  '';
-
   preBuild = ''
     # Shut up inkscape's warnings about creating profile directory
     export HOME="$NIX_BUILD_ROOT"
   '';
 
-  configureFlags = [ "--disable-unity" ];
+  configureFlags = [
+    "--with-gnome-shell=${stdenv.lib.versions.majorMinor gnome3.gnome-shell.version}"
+    "--disable-unity"
+  ];
 
   postInstall = ''
     install -Dm644 -t $out/share/doc/${pname} AUTHORS *.md
   '';
 
   meta = with stdenv.lib; {
-    description = "A flat theme with transparent elements for GTK 3, GTK 2 and Gnome-Shell";
-    homepage    = https://github.com/NicoHood/arc-theme;
+    description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
+    homepage    = https://github.com/arc-design/arc-theme;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ simonvandel romildo ];
     platforms   = platforms.linux;

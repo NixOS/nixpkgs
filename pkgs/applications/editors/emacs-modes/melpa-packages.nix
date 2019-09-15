@@ -68,10 +68,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           inherit (self.melpaPackages) easy-kill;
         };
 
-        elpy = super.elpy.overrideAttrs(old: {
-          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs ++ [ external.elpy ];
-        });
-
         emacsql-sqlite = super.emacsql-sqlite.overrideAttrs(old: {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
