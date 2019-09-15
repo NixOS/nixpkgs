@@ -121,7 +121,7 @@ let
             --set OS_ARCH         "amd64" \
             --set JAVA_HOME       "${jre}" \
             --set LD_LIBRARY_PATH "${jre}/jre/lib/amd64/server:$out/lib/native" \
-            --set CLASSPATH       "$out/share/hadoop/hdfs/hadoop-hdfs-${version}.jar:$out/share/hadoop/common/hadoop-common-${version}.jar$(find $out/share/hadoop/{hdfs,common}/lib -type f -name '*.jar' -printf ':%p')"
+            --set CLASSPATH       "$out/share/hadoop/hdfs/hadoop-hdfs-${version}.jar:$out/share/hadoop/hdfs/hadoop-hdfs-client-${version}.jar:$out/share/hadoop/common/hadoop-common-${version}.jar$(find $out/share/hadoop/{hdfs,common}/lib -type f -name '*.jar' -printf ':%p')"
         '';
 
         doInstallCheck = true;
