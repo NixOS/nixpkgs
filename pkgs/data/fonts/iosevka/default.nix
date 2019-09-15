@@ -1,5 +1,5 @@
 {
-  stdenv, lib,
+  stdenv, lib, pkgs,
   fetchFromGitHub, fetchurl,
   nodejs, ttfautohint-nox, otfcc,
 
@@ -21,7 +21,8 @@ assert (family != null) -> set != null;
 assert (weights != []) -> set != null;
 
 let
-  installPackageLock = import ./package-lock.nix { inherit fetchurl lib; };
+  system = builtins.currentSystem;
+  nodePackages = import ./node-packages.nix { inherit pkgs system nodejs; };
 in
 
 let pname = if set != null then "iosevka-${set}" else "iosevka"; in
@@ -54,6 +55,9 @@ let
     (if family != null then "family=\"${family}\"" else null)
     (param "weights" weights)
   ]);
+  installNodeModules = unlines (lib.mapAttrsToList
+    (name: value: "mkdir -p node_modules/${name}\n cp -r ${value.outPath}/lib/node_modules/. node_modules")
+    nodePackages);
 in
 
 stdenv.mkDerivation {
@@ -61,20 +65,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ nodejs ttfautohint-nox otfcc ];
 
-  passAsFile = [ "installPackageLock" "config" "extraParameters" ];
-  installPackageLock = installPackageLock ./package-lock.json;
+  passAsFile = [ "config" "extraParameters" ];
   config = config;
   extraParameters = extraParameters;
 
-  preConfigure = ''
-    HOME=$TMPDIR
-    source "$installPackageLockPath";
-    npm --offline rebuild
-  '';
-
   configurePhase = ''
-    runHook preConfigure
-
+    mkdir -p node_modules/.bin
+    ${installNodeModules}
     ${optionalString (set != null) ''mv "$configPath" private-build-plans.toml''}
     ${optionalString (extraParameters != null) ''cat "$extraParametersPath" >> parameters.toml''}
   '';
