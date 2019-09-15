@@ -8691,7 +8691,6 @@ broken-packages:
   - scenegraph
   - schedevr
   - schedule-planner
-  - scheduler
   - schedyield
   - schematic
   - scholdoc
