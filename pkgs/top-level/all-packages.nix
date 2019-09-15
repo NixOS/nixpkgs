@@ -22403,6 +22403,8 @@ in
 
   tinyfugue = callPackage ../games/tinyfugue { };
 
+  tome2 = callPackage ../games/tome2 { };
+
   tome4 = callPackage ../games/tome4 { };
 
   toppler = callPackage ../games/toppler { };
