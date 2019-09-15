@@ -4421,6 +4421,8 @@ in {
 
   pyproj = callPackage ../development/python-modules/pyproj { };
 
+  pyocclient = callPackage ../development/python-modules/pyocclient {};
+
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pyrr = callPackage ../development/python-modules/pyrr { };
