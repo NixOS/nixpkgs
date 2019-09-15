@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash, nukeReferences
-, coreutils, glibc, protobuf2_5, fuse, snappy, zstd, zlib, bzip2, openssl_1_0_2, openssl_1_1, cyrus_sasl
+, coreutils, glibc, protobuf2_5, fuse, snappy, zstd, zlib, bzip2, openssl_1_0_2, openssl_1_1, isa-l, cyrus_sasl
 }:
 
 let
@@ -14,9 +14,10 @@ let
         install -D ${tomcat.src} $sourceRoot/hadoop-common-project/hadoop-kms/downloads/apache-tomcat-${tomcat.version}.tar.gz
       '';
       nativeBuildInputs = [ maven cmake pkgconfig ];
-      buildInputs = [ fuse snappy zstd zlib bzip2 opensslPkg protobuf2_5 ] ++ extraBuildInputs;
+      buildInputs = [ fuse snappy zlib bzip2 opensslPkg protobuf2_5 ] ++ extraBuildInputs;
       mavenFlags = [ "-Drequire.fuse" "-Drequire.snappy" "-Drequire.bzip2" "-DskipTests" "-Pdist,native" "-e" ]
-        ++ stdenv.lib.optional (stdenv.lib.versionAtLeast version "2.9") "-Drequire.zstd";
+        ++ stdenv.lib.optional (stdenv.lib.versionAtLeast version "2.9") "-Drequire.zstd"
+        ++ stdenv.lib.optional (stdenv.lib.versionAtLeast version "3.0") "-Drequire.isal";
 
       # perform fake build to make a fixed-output derivation of dependencies downloaded from maven central (~100Mb in ~3000 files)
       fetched-maven-deps = stdenv.mkDerivation {
@@ -81,7 +82,7 @@ let
             # all the references to Nix Store are in rpath and debug info, so nukeReferences can help here
             ${nukeReferences}/bin/nuke-refs "$f"
 
-            patchelf --set-rpath ${stdenv.lib.makeLibraryPath ([glibc stdenv.cc.cc isal opensslPkg snappy zstd zlib protobuf2_5] ++ extraBuildInputs)} "$f"
+            patchelf --set-rpath ${stdenv.lib.makeLibraryPath ([glibc stdenv.cc.cc] ++ buildInputs)} "$f"
           done
 
           patchelf --set-rpath ${stdenv.lib.makeLibraryPath [glibc fuse]} "$out/contrib/fuse-dfs/fuse_dfs"
@@ -110,10 +111,10 @@ let
             if [ -f "$n" ]; then # only regular files
               mv $n $out/bin.wrapped/
               makeWrapper $out/bin.wrapped/$(basename $n) $n \
-                --prefix PATH : "${stdenv.lib.makeBinPath [ which jre bash coreutils ]}" \
-                --prefix JAVA_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ opensslPkg snappy zstd zlib bzip2 ]}" \
-                --set JAVA_HOME "${jre}" \
-                --set HADOOP_PREFIX "$out"
+                --prefix PATH            : "${stdenv.lib.makeBinPath [ which jre bash coreutils ]}" \
+                --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath buildInputs}" \
+                --set    JAVA_HOME         "${jre}" \
+                --set    ${if stdenv.lib.versionOlder version "3.0" then "HADOOP_PREFIX" else "HADOOP_HOME"} "$out"
             fi
           done
           makeWrapper $out/contrib/fuse-dfs/fuse_dfs $out/bin/fuse_dfs_wrapper.sh \
@@ -121,6 +122,11 @@ let
             --set JAVA_HOME       "${jre}" \
             --set LD_LIBRARY_PATH "${jre}/jre/lib/amd64/server:$out/lib/native" \
             --set CLASSPATH       "$out/share/hadoop/hdfs/hadoop-hdfs-${version}.jar:$out/share/hadoop/common/hadoop-common-${version}.jar$(find $out/share/hadoop/{hdfs,common}/lib -type f -name '*.jar' -printf ':%p')"
+        '';
+
+        doInstallCheck = true;
+        installCheckPhase = ''
+          $out/bin/hadoop checknative
         '';
 
         meta = with stdenv.lib; {
@@ -174,19 +180,21 @@ in {
     dependencies-sha256 = "0jx51vsy1wa6mbcxfsgz07vdlwkg9n3pkp11dlpgivl0rr4krwij";
     tomcat = tomcat_6_0_48;
     opensslPkg = openssl_1_0_2;
+    extraBuildInputs = [ zstd ];
   };
   hadoop_3_1 = common {
     version = "3.1.2";
     sources-sha256 = "1dn6pqwpq9jm5123fpmb85w6chds1pinpvcpfqyb3m3mzk4pgwh2";
     dependencies-sha256 = "0ml0ywn8fpjc14263f144d0vyhbn271pwamyml7d9jhvjk3qnh1h";
     opensslPkg = openssl_1_1;
+    extraBuildInputs = [ zstd isa-l ];
   };
   hadoop_3_2 = common {
     version = "3.2.0";
     sources-sha256 = "0s2mfdph2psih6wynck59g7c909zgfg1ip7gjbl1id8j6y6l83f3";
     dependencies-sha256 = "1njvfa05d8170kd54wq9igv2vjfzh6sx5g0zaz9v1g29as8n6gb9";
     opensslPkg = openssl_1_1;
-    extraBuildInputs = [ cyrus_sasl ];
+    extraBuildInputs = [ zstd isa-l cyrus_sasl ];
     patches = [
       # fix build of oom-killer
       # https://issues.apache.org/jira/browse/YARN-8498?focusedCommentId=16722705&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-16722705
