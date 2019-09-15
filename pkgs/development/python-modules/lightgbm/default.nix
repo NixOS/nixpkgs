@@ -21,6 +21,11 @@ buildPythonPackage rec {
     cmake
   ];
 
+  configurePhase = ''
+    export HOME=$(mktemp -d)
+    cmake compile
+  '';
+
   # we never actually explicitly call the install command so this is the only way
   # to inject these options to it - however, openmp-library doesn't appear to have
   # any effect, so we have to inject it into NIX_LDFLAGS manually below
