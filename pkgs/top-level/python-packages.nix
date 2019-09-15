@@ -821,7 +821,7 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
-  perf = callPackage ../development/python-modules/perf { };
+  pyperf = callPackage ../development/python-modules/pyperf { };
 
   perfplot = callPackage ../development/python-modules/perfplot { };
 
