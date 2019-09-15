@@ -2180,8 +2180,7 @@ in
     ceph-client;
   ceph-dev = ceph;
 
-  inherit (callPackages ../tools/security/certmgr { })
-    certmgr certmgr-selfsigned;
+  certmgr = callPackages ../tools/security/certmgr { };
 
   cfdg = callPackage ../tools/graphics/cfdg { };
 
