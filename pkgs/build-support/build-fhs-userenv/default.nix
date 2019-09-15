@@ -19,19 +19,63 @@ let
 
   chrootenv = callPackage ./chrootenv {};
 
+  etcBindFlags = let
+    files = [
+      # NixOS Compatibility
+      "static"
+      # Users, Groups, NSS
+      "passwd"
+      "group"
+      "shadow"
+      "hosts"
+      "resolv.conf"
+      "nsswitch.conf"
+      # Sudo & Su
+      "login.defs"
+      "sudoers"
+      "sudoers.d"
+      # Time
+      "localtime"
+      "zoneinfo"
+      # Other Core Stuff
+      "machine-id"
+      "os-release"
+      # PAM
+      "pam.d"
+      # Fonts
+      "fonts"
+      # ALSA
+      "asound.conf"
+      # SSL
+      "ssl/certs"
+      "pki"
+    ];
+  in concatStringsSep " \\\n  "
+  (map (file: "--ro-bind-try /etc/${file} /etc/${file}") files);
+
   init = run: writeShellScriptBin "${name}-init" ''
     source /etc/profile
     exec ${run} "$@"
   '';
 
   bwrap_cmd = { init_args ? "" }: ''
-    blacklist="/nix /dev /proc"
+    blacklist="/nix /dev /proc /etc"
     ro_mounts=""
     for i in ${env}/*; do
       path="/''${i##*/}"
+      if [[ $path == '/etc' ]]; then
+        continue
+      fi
       ro_mounts="$ro_mounts --ro-bind $i $path"
       blacklist="$blacklist $path"
     done
+
+    if [[ -d ${env}/etc ]]; then
+      for i in ${env}/etc/*; do
+        path="/''${i##*/}"
+        ro_mounts="$ro_mounts --ro-bind $i /etc$path"
+      done
+    fi
 
     auto_mounts=""
     # loop through all directories in the root
@@ -51,7 +95,7 @@ let
       --share-net \
       --die-with-parent \
       --ro-bind /nix /nix \
-      --ro-bind /etc /host-etc \
+      ${etcBindFlags} \
       $ro_mounts \
       $auto_mounts \
       ${init runScript}/bin/${name}-init ${init_args}
