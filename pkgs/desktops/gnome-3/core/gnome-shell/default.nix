@@ -5,7 +5,8 @@
 , libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt, gcr, caribou
 , accountsservice, gdk-pixbuf, gdm, upower, ibus, networkmanagerapplet, libgnomekbd, gnome-desktop
 , gsettings-desktop-schemas, gnome-keyring, glib, gjs, mutter, evolution-data-server, gtk3
-, sassc, systemd, gst_all_1, adwaita-icon-theme, gnome-bluetooth, gnome-clocks, gnome-settings-daemon }:
+, sassc, systemd, gst_all_1, adwaita-icon-theme, gnome-bluetooth, gnome-clocks, gnome-settings-daemon
+, gnome-autoar, asciidoc-full }:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 
@@ -25,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales
-    sassc desktop-file-utils libxslt.bin python3
+    sassc desktop-file-utils libxslt.bin python3 asciidoc-full
   ];
   buildInputs = [
     systemd caribou
@@ -39,6 +40,7 @@ in stdenv.mkDerivation rec {
     at-spi2-core upower ibus gnome-desktop telepathy-logger gnome-settings-daemon
     gst_all_1.gst-plugins-good # recording
     gobject-introspection
+    gnome-autoar
 
     # not declared at build time, but typelib is needed at runtime
     libgweather networkmanagerapplet
@@ -48,8 +50,6 @@ in stdenv.mkDerivation rec {
     # see https://github.com/NixOS/nixpkgs/issues/25968
     caribou
   ];
-
-  mesonFlags = [ "-Dextensions_tool=false" ];
 
   patches = [
     (fetchpatch {
