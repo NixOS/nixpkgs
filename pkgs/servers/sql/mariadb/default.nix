@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
-, libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5
+, libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
 , libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
 , asio, buildEnv, check, scons
@@ -28,21 +28,21 @@ galeraLibs = buildEnv {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.3.17";
+  version = "10.3.18";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "15vh15az16932q42y9dxpzwxldmh0x4hvzrar3f8kblsqm7ym890";
+    sha256 = "1p6yvmahnkmsz50zjzp20ak7jzbqysly5bdl51nnrngrbfl6qib9";
     name   = "mariadb-${version}.tar.gz";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    ncurses openssl zlib pcre jemalloc libiconv
+    ncurses openssl zlib pcre jemalloc libiconv curl
   ] ++ optionals stdenv.isLinux [ libaio systemd libkrb5 ]
     ++ optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
@@ -53,7 +53,6 @@ common = rec { # attributes common to both builds
   patches = [
     ./cmake-includedir.patch
     ./cmake-libmariadb-includedir.patch
-    ./cmake-fix-crypt-libs.patch
   ];
 
   cmakeFlags = [
@@ -68,7 +67,7 @@ common = rec { # attributes common to both builds
     "-DINSTALL_DOCDIR=share/doc/mysql"
     "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
     "-DINSTALL_INCLUDEDIR=include/mysql"
-    "-DINSTALL_LIBDIR=lib/mysql"
+    "-DINSTALL_LIBDIR=lib"
     "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
     "-DINSTALL_INFODIR=share/mysql/docs"
     "-DINSTALL_MANDIR=share/man"
@@ -97,7 +96,7 @@ common = rec { # attributes common to both builds
   postInstall = ''
     rm "$out"/lib/mysql/plugin/daemon_example.ini
     mkdir -p "$dev"/bin && mv "$out"/bin/{mariadb_config,mysql_config} "$dev"/bin
-    mkdir -p "$dev"/lib/mysql && mv "$out"/lib/mysql/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a} "$dev"/lib/mysql
+    mkdir -p "$dev"/lib/ && mv "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a} "$dev"/lib
     mkdir -p "$dev"/lib/mysql/plugin && mv "$out"/lib/mysql/plugin/{caching_sha2_password.so,dialog.so,mysql_clear_password.so,sha256_password.so} "$dev"/lib/mysql/plugin
   '';
 
@@ -123,6 +122,7 @@ client = stdenv.mkDerivation (common // {
 
   patches = common.patches ++ [
     ./cmake-plugin-includedir.patch
+    ./cmake-without-plugin-auth-pam.patch
   ];
 
   cmakeFlags = common.cmakeFlags ++ [
@@ -136,14 +136,13 @@ client = stdenv.mkDerivation (common // {
       -DCMAKE_INSTALL_PREFIX_DEV=$dev"
   '';
 
-  postInstall =  common.postInstall + ''
+  postInstall = common.postInstall + ''
     rm -r "$out"/share/doc
     rm "$out"/bin/{mysqltest,mytop,wsrep_sst_rsync_wan}
-    libmysqlclient_path=$(readlink -f $out/lib/mysql/libmysqlclient${libExt})
-    rm "$out"/lib/mysql/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
-    mv "$libmysqlclient_path" "$out"/lib/mysql/libmysqlclient${libExt}
-    ln -sv libmysqlclient${libExt} "$out"/lib/mysql/libmysqlclient_r${libExt}
-
+    libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
+    rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
+    mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
+    ln -sv libmysqlclient${libExt} "$out"/lib/libmysqlclient_r${libExt}
   '';
 });
 
@@ -158,6 +157,7 @@ server = stdenv.mkDerivation (common // {
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
   ] ++ optional (stdenv.isLinux && !stdenv.isAarch32) numactl
+    ++ optional stdenv.isLinux linux-pam
     ++ optional (!stdenv.isDarwin) mytopEnv;
 
   patches = common.patches ++ [
@@ -166,7 +166,6 @@ server = stdenv.mkDerivation (common // {
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
-    "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
     "-DENABLED_LOCAL_INFILE=OFF"
     "-DWITH_READLINE=ON"
     "-DWITH_EXTRA_CHARSETS=all"
@@ -196,7 +195,7 @@ server = stdenv.mkDerivation (common // {
     chmod +x "$out"/bin/wsrep_sst_common
     rm "$out"/bin/mysql_client_test
     rm -r "$out"/data # Don't need testing data
-    rm "$out"/lib/mysql/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
+    rm "$out"/lib/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
     mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
   '' + optionalString withoutClient ''
     ${ # We don't build with GSSAPI on Darwin
