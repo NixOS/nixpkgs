@@ -3618,7 +3618,9 @@ in
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
 
-  grpcui = callPackage ../tools/networking/grpcui { };
+  grpcui = callPackage ../tools/networking/grpcui {
+    buildGoModule = buildGo112Module;
+  };
 
   grub = pkgsi686Linux.callPackage ../tools/misc/grub ({
     stdenv = overrideCC stdenv buildPackages.pkgsi686Linux.gcc6;
