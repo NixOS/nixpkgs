@@ -21912,7 +21912,9 @@ in
   };
   litecoind = litecoin.override { withGui = false; };
 
-  lnd = callPackage ../applications/blockchains/lnd.nix { };
+  lnd = callPackage ../applications/blockchains/lnd.nix {
+    buildGoModule = buildGo112Module;
+  };
 
   monero = callPackage ../applications/blockchains/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
