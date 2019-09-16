@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, openconnect, intltool, pkgconfig, autoreconfHook, networkmanager, gcr, libsecret, file
-, gtk3, withGnome ? true, gnome3, kmod }:
+, gtk3, withGnome ? true, gnome3, kmod, fetchpatch }:
 
 let
   pname   = "NetworkManager-openconnect";
@@ -16,6 +16,11 @@ in stdenv.mkDerivation {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit kmod openconnect;
+    })
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/NetworkManager-openconnect/merge_requests/9.patch";
+      sha256 = "0yd2dmq6gq6y4czr7dqdgaiqvw2vyv2gikznpfdxyfn2v1pcrk9m";
     })
   ];
 
