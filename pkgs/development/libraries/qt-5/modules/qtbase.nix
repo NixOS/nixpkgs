@@ -31,6 +31,8 @@ assert withGtk3 -> gtk3 != null;
 
 let
   compareVersion = v: builtins.compareVersions version v;
+  qmakeCacheName =
+    if compareVersion "5.12.4" >= 0 then ".qmake.stash" else ".qmake.cache";
 in
 
 stdenv.mkDerivation {
@@ -171,8 +173,15 @@ stdenv.mkDerivation {
         -qmldir $out/$qtQmlPrefix \
         -docdir $out/$qtDocPrefix"
 
-    createQmakeCache() {
-        cat >>"$1" <<EOF
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+  '';
+
+  postConfigure = ''
+    qmakeCacheInjectNixOutputs() {
+        local cache="$1/${qmakeCacheName}"
+        if ! [ -f "$cache" ]; then return; fi
+        echo "qmakeCacheInjectNixOutputs: $cache"
+        cat >>"$cache" <<EOF
     NIX_OUTPUT_BIN = $bin
     NIX_OUTPUT_DEV = $dev
     NIX_OUTPUT_OUT = $out
@@ -183,14 +192,9 @@ stdenv.mkDerivation {
     }
 
     find . -name '.qmake.conf' | while read conf; do
-        cache=$(dirname $conf)/.qmake.cache
-        echo "Creating \`$cache'"
-        createQmakeCache "$cache"
+        qmakeCacheInjectNixOutputs "$(dirname $conf)"
     done
-
-    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
   '';
-
 
   NIX_CFLAGS_COMPILE =
     [
