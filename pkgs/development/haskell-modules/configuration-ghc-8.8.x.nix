@@ -147,7 +147,6 @@ self: super: {
   });
   system-fileio = doJailbreak super.system-fileio;
   tasty-hedgehog = doJailbreak super.tasty-hedgehog;
-  yaml = super.yaml;
   haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.3.patch";
     sha256 = "1asl932mibr5y057xx8v1a7n3qy87lcnclsfh8pbxq1m3iwjkxy8";
@@ -160,8 +159,14 @@ self: super: {
   vault = dontHaddock super.vault;
 
   # The test suite does not know how to find the 'alex' binary.
-  # TODO remove patch when alex gets a newer release than 3.2.4
-  alex = overrideCabal (appendPatch super.alex ./patches/alex-3.2.4-ghc8.8.x.patch) (drv: {
+  alex = overrideCabal (overrideSrc super.alex {
+    src = pkgs.fetchFromGitHub {
+      owner = "simonmar";
+      repo = "alex";
+      rev = "11042dbcc45382c57216eecb1438b625e1cca350";
+      sha256 = "03ywnf0mh3fzb636kq8gjz0vs06qg9kqi3lsh0b24wsfw7pppysr";
+    };
+  }) (drv: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
