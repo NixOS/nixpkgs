@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, iodine, intltool, pkgconfig, networkmanager, libsecret, gtk3
-, withGnome ? true, gnome3 }:
+, withGnome ? true, gnome3, fetchpatch }:
 
 let
   pname = "NetworkManager-iodine";
@@ -16,6 +16,11 @@ in stdenv.mkDerivation {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit iodine;
+    })
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/network-manager-iodine/merge_requests/2.patch";
+      sha256 = "108pkf0mddj32s46k7jkmpwcaq2ylci4dqpp7wck3zm9q2jffff2";
     })
   ];
 
