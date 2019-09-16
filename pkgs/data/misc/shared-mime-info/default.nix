@@ -20,6 +20,6 @@ stdenv.mkDerivation {
     homepage = http://freedesktop.org/wiki/Software/shared-mime-info;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }

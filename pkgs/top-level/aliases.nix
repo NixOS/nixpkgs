@@ -56,6 +56,7 @@ mapAliases ({
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
+  cide = throw "deprecated in 2019-09-11: abandoned by upstream";
   cifs_utils = cifs-utils; # added 2016-08
   ckb = ckb-next; # added 2018-10-21
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
@@ -315,6 +316,7 @@ mapAliases ({
   s6PortableUtils = s6-portable-utils; # added 2018-07-23
   sagemath = sage; # added 2018-10-27
   sam = deadpixi-sam; # added 2018-04-25
+  sambaMaster = throw "removed 2019-09-13: outdated and no longer needed";
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
   saneBackendsGit = sane-backends-git; # added 2016-01-02

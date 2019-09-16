@@ -5,5 +5,6 @@
     "elm-upgrade",
     { "elm-analyse": "0.16.3" },
     "elm-live",
-    "elm-xref"
+    "elm-xref",
+    "@elm-tooling/elm-language-server"
 ]

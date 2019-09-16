@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper , Security }:
 
 with rustPlatform;
 
@@ -19,7 +19,8 @@ buildRustPackage rec {
 
   cargoSha256 = "15894qr0kpp5kivx0p71zmmfhfh8in0ydkvfirxh2r12x0r2jhdd";
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper ]
+                ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 

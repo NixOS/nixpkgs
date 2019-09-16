@@ -120,16 +120,24 @@ in {
       '';
     };
 
-    poolConfig = mkOption {
-      type = types.lines;
-      default = ''
-        pm = dynamic
-        pm.max_children = 32
-        pm.start_servers = 2
-        pm.min_spare_servers = 2
-        pm.max_spare_servers = 4
-        pm.max_requests = 500
+    poolSettings = mkOption {
+      type = with types; attrsOf (oneOf [ str int bool ]);
+      default = {
+        "pm" = "dynamic";
+        "pm.max_children" = "32";
+        "pm.start_servers" = "2";
+        "pm.min_spare_servers" = "2";
+        "pm.max_spare_servers" = "4";
+        "pm.max_requests" = "500";
+      };
+      description = ''
+        Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
       '';
+    };
+
+    poolConfig = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
       description = ''
         Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
       '';
@@ -287,6 +295,11 @@ in {
           message = "Please specify exactly one of adminpass or adminpassFile";
         }
       ];
+
+      warnings = optional (cfg.poolConfig != null) ''
+        Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
+        Please migrate your configuration to config.services.nextcloud.poolSettings.
+      '';
     }
 
     { systemd.timers.nextcloud-cron = {
@@ -423,7 +436,7 @@ in {
           settings = mapAttrs (name: mkDefault) {
             "listen.owner" = "nginx";
             "listen.group" = "nginx";
-          };
+          } // cfg.poolSettings;
           extraConfig = cfg.poolConfig;
         };
       };

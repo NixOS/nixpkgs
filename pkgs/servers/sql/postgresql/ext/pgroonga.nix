@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://pgroonga.github.io/";
     license = licenses.postgresql;
+    platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [ DerTim1 ];
   };
 }

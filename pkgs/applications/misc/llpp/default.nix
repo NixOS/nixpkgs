@@ -5,12 +5,12 @@ assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
   pname = "llpp";
-  version = "30";
+  version = "31";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
     rev = "v${version}";
-    sha256 = "0iilpzf12hs0zky58j55l4y5dvzv7fc53nsrg324n9vka92mppvd";
+    sha256 = "14ibsm1zzxfidjajcj30b5m9in10q3817izahsjvkmryrvvn6qsg";
     fetchSubmodules = false;
   };
 

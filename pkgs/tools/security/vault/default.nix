@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "1xljm7xmb4ldg3wx8s9kw1spffg4ywk4r1jqfa743czd2xxmqavl";
+    sha256 = "11zi12j09vi6j112a1n8f7sxwp15pbh0801bzh27ihcy01hlzdf8";
   };
 
-  modSha256 = "13pr3piv6hrsc562qagpn1h5wckiziyfqraj13172hdglz3n2i7q";
+  modSha256 = "10pr3piv6hrsc562qagpn1h5wckiziyfqraj13172hdglz3n2i7q";
 
   buildFlagsArray = [
     "-tags='vault'"

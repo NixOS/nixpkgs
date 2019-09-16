@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hq6y4rhz958q40145k4av8hx8jyvspg78xf741samd7vc3jd221";
   };
 
+  patches = [ ./jsoo.patch ];
+
   buildInputs = [ ocaml findlib ppx_tools js_of_ocaml js_of_ocaml-ppx ];
   propagatedBuildInputs = [ iri re ];
 
