@@ -15198,7 +15198,11 @@ in
 
   redstore = callPackage ../servers/http/redstore { };
 
-  restic = callPackage ../tools/backup/restic { };
+  restic = callPackage ../tools/backup/restic {
+    # Version 0.9.5 fails to build with go 1.13 due to dependency:
+    #    go: bazil.org/fuse@v0.0.0-20180421153158-65cc252bf669: Get https://proxy.golang.org/bazil.org/fuse/@v/v0.0.0-20180421153158-65cc252bf669.mod: dial tcp: lookup proxy.golang.org on [::1]:53: read udp [::1]:56450->[::1]:53: read: connection refused
+    buildGoPackage = buildGo112Package;
+  };
 
   restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
 
