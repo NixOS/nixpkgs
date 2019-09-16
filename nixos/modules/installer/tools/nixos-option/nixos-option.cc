@@ -340,8 +340,8 @@ void printMultiLineString(Out & out, const Value & v)
 void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value, const std::string & path)
 {
     try {
-        if (std::holds_alternative<std::exception_ptr>(maybe_value)) {
-            std::rethrow_exception(std::get<std::exception_ptr>(maybe_value));
+        if (auto ex = std::get_if<std::exception_ptr>(&maybe_value)) {
+            std::rethrow_exception(*ex);
         }
         Value v = evaluateValue(ctx, &std::get<Value>(maybe_value));
         if (ctx->state->isDerivation(v)) {
