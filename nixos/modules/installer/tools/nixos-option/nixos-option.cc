@@ -104,12 +104,12 @@ Out::Out(Out & o, const std::string & start, const std::string & end, LinePolicy
 // Stuff needed for evaluation
 struct Context
 {
-    Context(EvalState * state, Bindings * autoArgs, Value options_root, Value config_root)
+    Context(EvalState & state, Bindings & autoArgs, Value options_root, Value config_root)
         : state(state), autoArgs(autoArgs), options_root(options_root), config_root(config_root),
-          underscore_type(state->symbols.create("_type"))
+          underscore_type(state.symbols.create("_type"))
     {}
-    EvalState * state;
-    Bindings * autoArgs;
+    EvalState & state;
+    Bindings & autoArgs;
     Value options_root;
     Value config_root;
     Symbol underscore_type;
@@ -117,12 +117,12 @@ struct Context
 
 Value evaluateValue(Context * ctx, Value * v)
 {
-    ctx->state->forceValue(*v);
-    if (ctx->autoArgs->empty()) {
+    ctx->state.forceValue(*v);
+    if (ctx->autoArgs.empty()) {
         return *v;
     }
     Value called{};
-    ctx->state->autoCallFunction(*ctx->autoArgs, *v, called);
+    ctx->state.autoCallFunction(ctx->autoArgs, *v, called);
     return called;
 }
 
@@ -238,7 +238,7 @@ void mapConfigValuesInOption(
 {
     Value * option;
     try {
-        option = findAlongAttrPath(*ctx->state, path, *ctx->autoArgs, ctx->config_root);
+        option = findAlongAttrPath(ctx->state, path, ctx->autoArgs, ctx->config_root);
     } catch (Error &) {
         f(path, std::current_exception());
         return;
@@ -246,7 +246,7 @@ void mapConfigValuesInOption(
     recurse(
         [f, ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
             bool leaf = std::holds_alternative<std::exception_ptr>(v) || std::get<Value>(v).type != tAttrs ||
-                        ctx->state->isDerivation(std::get<Value>(v));
+                        ctx->state.isDerivation(std::get<Value>(v));
             if (!leaf) {
                 return true; // Keep digging
             }
@@ -261,20 +261,20 @@ std::string describeError(const Error & e) { return "«error: " + e.msg() + "»"
 void describeDerivation(Context * ctx, Out & out, Value v)
 {
     // Copy-pasted from nix/src/nix/repl.cc  :(
-    Bindings::iterator i = v.attrs->find(ctx->state->sDrvPath);
+    Bindings::iterator i = v.attrs->find(ctx->state.sDrvPath);
     PathSet pathset;
     try {
-        Path drvPath = i != v.attrs->end() ? ctx->state->coerceToPath(*i->pos, *i->value, pathset) : "???";
+        Path drvPath = i != v.attrs->end() ? ctx->state.coerceToPath(*i->pos, *i->value, pathset) : "???";
         out << "«derivation " << drvPath << "»";
     } catch (Error & e) {
         out << describeError(e);
     }
 }
 
-Value parseAndEval(EvalState * state, const std::string & expression, const std::string & path)
+Value parseAndEval(EvalState & state, const std::string & expression, const std::string & path)
 {
     Value v{};
-    state->eval(state->parseExprFromString(expression, absPath(path)), v);
+    state.eval(state.parseExprFromString(expression, absPath(path)), v);
     return v;
 }
 
@@ -344,7 +344,7 @@ void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr
             std::rethrow_exception(*ex);
         }
         Value v = evaluateValue(ctx, &std::get<Value>(maybe_value));
-        if (ctx->state->isDerivation(v)) {
+        if (ctx->state.isDerivation(v)) {
             describeDerivation(ctx, out, v);
         } else if (v.isList()) {
             printList(ctx, out, v);
@@ -353,7 +353,7 @@ void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr
         } else if (v.type == tString && std::string(v.string.s).find('\n') != std::string::npos) {
             printMultiLineString(out, v);
         } else {
-            ctx->state->forceValueDeep(v);
+            ctx->state.forceValueDeep(v);
             out << v;
         }
     } catch (ThrownError & e) {
@@ -397,7 +397,7 @@ void printAll(Context * ctx, Out & out)
 void printAttr(Context * ctx, Out & out, const std::string & path, Value * root)
 {
     try {
-        printValue(ctx, out, *findAlongAttrPath(*ctx->state, path, *ctx->autoArgs, *root), path);
+        printValue(ctx, out, *findAlongAttrPath(ctx->state, path, ctx->autoArgs, *root), path);
     } catch (Error & e) {
         out << describeError(e);
     }
@@ -444,7 +444,7 @@ void printListing(Out & out, Value * v)
 bool optionTypeIs(Context * ctx, Value & v, const std::string & sought_type)
 {
     try {
-        const auto & type_lookup = v.attrs->find(ctx->state->sType);
+        const auto & type_lookup = v.attrs->find(ctx->state.sType);
         if (type_lookup == v.attrs->end()) {
             return false;
         }
@@ -452,7 +452,7 @@ bool optionTypeIs(Context * ctx, Value & v, const std::string & sought_type)
         if (type.type != tAttrs) {
             return false;
         }
-        const auto & name_lookup = type.attrs->find(ctx->state->sName);
+        const auto & name_lookup = type.attrs->find(ctx->state.sName);
         if (name_lookup == type.attrs->end()) {
             return false;
         }
@@ -471,14 +471,14 @@ MakeError(OptionPathError, EvalError);
 Value getSubOptions(Context * ctx, Value & option)
 {
     Value getSubOptions =
-        evaluateValue(ctx, findAlongAttrPath(*ctx->state, "type.getSubOptions", *ctx->autoArgs, option));
+        evaluateValue(ctx, findAlongAttrPath(ctx->state, "type.getSubOptions", ctx->autoArgs, option));
     if (getSubOptions.type != tLambda) {
         throw OptionPathError("Option's type.getSubOptions isn't a function");
     }
     Value emptyString{};
     nix::mkString(emptyString, "");
     Value v;
-    ctx->state->callFunction(getSubOptions, emptyString, v, nix::Pos{});
+    ctx->state.callFunction(getSubOptions, emptyString, v, nix::Pos{});
     return v;
 }
 
@@ -506,7 +506,7 @@ Value findAlongOptionPath(Context * ctx, const std::string & path)
             } else if (v.type != tAttrs) {
                 throw OptionPathError("Value is %s while a set was expected", showType(v));
             } else {
-                const auto & next = v.attrs->find(ctx->state->symbols.create(attr));
+                const auto & next = v.attrs->find(ctx->state.symbols.create(attr));
                 if (next == v.attrs->end()) {
                     throw OptionPathError("Attribute not found", attr, path);
                 }
@@ -579,10 +579,10 @@ int main(int argc, char ** argv)
     auto store = nix::openStore();
     auto state = std::make_unique<EvalState>(myArgs.searchPath, store);
 
-    Value options_root = parseAndEval(state.get(), options_expr, path);
-    Value config_root = parseAndEval(state.get(), config_expr, path);
+    Value options_root = parseAndEval(*state, options_expr, path);
+    Value config_root = parseAndEval(*state, config_expr, path);
 
-    Context ctx{state.get(), myArgs.getAutoArgs(*state), options_root, config_root};
+    Context ctx{*state, *myArgs.getAutoArgs(*state), options_root, config_root};
     Out out(std::cout);
 
     if (all) {
@@ -599,7 +599,7 @@ int main(int argc, char ** argv)
         }
     }
 
-    ctx.state->printStats();
+    ctx.state.printStats();
 
     return 0;
 }
