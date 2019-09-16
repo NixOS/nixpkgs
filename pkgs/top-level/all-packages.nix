@@ -24607,7 +24607,9 @@ in
   terraform-full = terraform.full;
 
   terraform-providers = recurseIntoAttrs (
-    callPackage ../applications/networking/cluster/terraform-providers {}
+    callPackage ../applications/networking/cluster/terraform-providers {
+      inherit buildGo112Module;
+    }
   );
 
   terraform-docs = callPackage ../applications/networking/cluster/terraform-docs {};
