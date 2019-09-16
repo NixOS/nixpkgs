@@ -140,7 +140,7 @@ bool isOption(Context * ctx, const Value & v)
         if (evaluated_type.type != tString) {
             return false;
         }
-        return evaluated_type.string.s == static_cast<std::string>("option");
+        return static_cast<std::string>(evaluated_type.string.s) == "option";
     } catch (Error &) {
         return false;
     }
