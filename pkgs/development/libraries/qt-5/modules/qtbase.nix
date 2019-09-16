@@ -32,7 +32,7 @@ assert withGtk3 -> gtk3 != null;
 let
   compareVersion = v: builtins.compareVersions version v;
   qmakeCacheName =
-    if compareVersion "5.12.4" >= 0 then ".qmake.stash" else ".qmake.cache";
+    if compareVersion "5.12.4" < 0 then ".qmake.cache" else ".qmake.stash";
 in
 
 stdenv.mkDerivation {
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
       # Image formats
       libjpeg libpng libtiff
-      (if compareVersion "5.9.0" >= 0 then pcre2 else pcre16)
+      (if compareVersion "5.9.0" < 0 then pcre16 else pcre2)
     ]
     ++ (
       if stdenv.isDarwin
@@ -179,8 +179,10 @@ stdenv.mkDerivation {
   postConfigure = ''
     qmakeCacheInjectNixOutputs() {
         local cache="$1/${qmakeCacheName}"
-        if ! [ -f "$cache" ]; then return; fi
         echo "qmakeCacheInjectNixOutputs: $cache"
+        if ! [ -f "$cache" ]; then
+            echo >&2 "qmakeCacheInjectNixOutputs: WARNING: $cache does not exist"
+        fi
         cat >>"$cache" <<EOF
     NIX_OUTPUT_BIN = $bin
     NIX_OUTPUT_DEV = $dev
