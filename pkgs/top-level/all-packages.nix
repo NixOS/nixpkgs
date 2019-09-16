@@ -19193,7 +19193,10 @@ in
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
-  handbrake = callPackage ../applications/video/handbrake { };
+  handbrake = callPackage ../applications/video/handbrake {
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox Foundation VideoToolbox;
+    inherit (darwin) libobjc;
+  };
 
   lilyterm = callPackage ../applications/misc/lilyterm {
     inherit (gnome2) vte;
