@@ -77,5 +77,6 @@ in buildGoPackage rec {
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl ];
+    broken = stdenv.targetPlatform.isDarwin;
   };
 }
