@@ -3,7 +3,7 @@
   extra-cmake-modules,
   attica, karchive, kcompletion, kconfig, kcoreaddons, ki18n, kiconthemes,
   kio, kitemviews, kservice, ktextwidgets, kwidgetsaddons, kxmlgui, qtbase,
-  qtdeclarative,
+  qtdeclarative, kirigami2,
 }:
 
 mkDerivation {
@@ -12,7 +12,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     karchive kcompletion kconfig kcoreaddons ki18n kiconthemes kio kitemviews
-    ktextwidgets kwidgetsaddons qtbase qtdeclarative
+    ktextwidgets kwidgetsaddons qtbase qtdeclarative kirigami2
   ];
   propagatedBuildInputs = [ attica kservice kxmlgui ];
 }
