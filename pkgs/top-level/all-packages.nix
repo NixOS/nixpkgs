@@ -16346,7 +16346,11 @@ in
 
   gotests = callPackage ../development/tools/gotests { };
 
-  gotestsum = callPackage ../development/tools/gotestsum { };
+  gotestsum = callPackage ../development/tools/gotestsum {
+    # Version 0.3.5 fails to build with go 1.13:
+    #    build ./testjson/internal/badmain: cannot find module for path ./testjson/internal/badmain
+    buildGoModule = buildGo112Module;
+  };
 
   impl = callPackage ../development/tools/impl { };
 
