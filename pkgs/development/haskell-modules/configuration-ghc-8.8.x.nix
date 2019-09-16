@@ -149,6 +149,7 @@ self: super: {
     '';
   });
   system-fileio = doJailbreak super.system-fileio;
+  tasty-hedgehog = doJailbreak super.tasty-hedgehog;
   yaml = super.yaml;
   haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.3.patch";
