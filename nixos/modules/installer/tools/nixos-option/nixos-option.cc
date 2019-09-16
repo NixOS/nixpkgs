@@ -115,23 +115,23 @@ struct Context
     Symbol underscore_type;
 };
 
-Value evaluateValue(Context * ctx, Value * v)
+Value evaluateValue(Context & ctx, Value * v)
 {
-    ctx->state.forceValue(*v);
-    if (ctx->autoArgs.empty()) {
+    ctx.state.forceValue(*v);
+    if (ctx.autoArgs.empty()) {
         return *v;
     }
     Value called{};
-    ctx->state.autoCallFunction(ctx->autoArgs, *v, called);
+    ctx.state.autoCallFunction(ctx.autoArgs, *v, called);
     return called;
 }
 
-bool isOption(Context * ctx, const Value & v)
+bool isOption(Context & ctx, const Value & v)
 {
     if (v.type != tAttrs) {
         return false;
     }
-    const auto & actual_type = v.attrs->find(ctx->underscore_type);
+    const auto & actual_type = v.attrs->find(ctx.underscore_type);
     if (actual_type == v.attrs->end()) {
         return false;
     }
@@ -171,7 +171,7 @@ const std::string appendPath(const std::string & prefix, const std::string & suf
 bool forbiddenRecursionName(std::string name) { return (!name.empty() && name[0] == '_') || name == "haskellPackages"; }
 
 void recurse(const std::function<bool(const std::string & path, std::variant<Value, std::exception_ptr>)> & f,
-             Context * ctx, Value v, const std::string & path)
+             Context & ctx, Value v, const std::string & path)
 {
     std::variant<Value, std::exception_ptr> evaluated;
     try {
@@ -198,10 +198,10 @@ void recurse(const std::function<bool(const std::string & path, std::variant<Val
 }
 
 // Calls f on all the option names
-void mapOptions(const std::function<void(const std::string & path)> & f, Context * ctx, Value root)
+void mapOptions(const std::function<void(const std::string & path)> & f, Context & ctx, Value root)
 {
     recurse(
-        [f, ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
+        [f, &ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
             bool isOpt = std::holds_alternative<std::exception_ptr>(v) || isOption(ctx, std::get<Value>(v));
             if (isOpt) {
                 f(path);
@@ -234,11 +234,11 @@ void mapOptions(const std::function<void(const std::string & path)> & f, Context
 //   users.users.systemd-timesync = ... .. ...
 void mapConfigValuesInOption(
     const std::function<void(const std::string & path, std::variant<Value, std::exception_ptr> v)> & f,
-    const std::string & path, Context * ctx)
+    const std::string & path, Context & ctx)
 {
     Value * option;
     try {
-        option = findAlongAttrPath(ctx->state, path, ctx->autoArgs, ctx->config_root);
+        option = findAlongAttrPath(ctx.state, path, ctx.autoArgs, ctx.config_root);
     } catch (Error &) {
         f(path, std::current_exception());
         return;
@@ -246,7 +246,7 @@ void mapConfigValuesInOption(
     recurse(
         [f, ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
             bool leaf = std::holds_alternative<std::exception_ptr>(v) || std::get<Value>(v).type != tAttrs ||
-                        ctx->state.isDerivation(std::get<Value>(v));
+                        ctx.state.isDerivation(std::get<Value>(v));
             if (!leaf) {
                 return true; // Keep digging
             }
@@ -258,13 +258,13 @@ void mapConfigValuesInOption(
 
 std::string describeError(const Error & e) { return "«error: " + e.msg() + "»"; }
 
-void describeDerivation(Context * ctx, Out & out, Value v)
+void describeDerivation(Context & ctx, Out & out, Value v)
 {
     // Copy-pasted from nix/src/nix/repl.cc  :(
-    Bindings::iterator i = v.attrs->find(ctx->state.sDrvPath);
+    Bindings::iterator i = v.attrs->find(ctx.state.sDrvPath);
     PathSet pathset;
     try {
-        Path drvPath = i != v.attrs->end() ? ctx->state.coerceToPath(*i->pos, *i->value, pathset) : "???";
+        Path drvPath = i != v.attrs->end() ? ctx.state.coerceToPath(*i->pos, *i->value, pathset) : "???";
         out << "«derivation " << drvPath << "»";
     } catch (Error & e) {
         out << describeError(e);
@@ -278,10 +278,10 @@ Value parseAndEval(EvalState & state, const std::string & expression, const std:
     return v;
 }
 
-void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value,
+void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value,
                 const std::string & path);
 
-void printList(Context * ctx, Out & out, Value & v)
+void printList(Context & ctx, Out & out, Value & v)
 {
     Out list_out(out, "[", "]", v.listSize());
     for (unsigned int n = 0; n < v.listSize(); ++n) {
@@ -290,7 +290,7 @@ void printList(Context * ctx, Out & out, Value & v)
     }
 }
 
-void printAttrs(Context * ctx, Out & out, Value & v, const std::string & path)
+void printAttrs(Context & ctx, Out & out, Value & v, const std::string & path)
 {
     Out attrs_out(out, "{", "}", v.attrs->size());
     for (const auto & a : v.attrs->lexicographicOrder()) {
@@ -337,14 +337,14 @@ void printMultiLineString(Out & out, const Value & v)
     }
 }
 
-void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value, const std::string & path)
+void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value, const std::string & path)
 {
     try {
         if (auto ex = std::get_if<std::exception_ptr>(&maybe_value)) {
             std::rethrow_exception(*ex);
         }
         Value v = evaluateValue(ctx, &std::get<Value>(maybe_value));
-        if (ctx->state.isDerivation(v)) {
+        if (ctx.state.isDerivation(v)) {
             describeDerivation(ctx, out, v);
         } else if (v.isList()) {
             printList(ctx, out, v);
@@ -353,7 +353,7 @@ void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr
         } else if (v.type == tString && std::string(v.string.s).find('\n') != std::string::npos) {
             printMultiLineString(out, v);
         } else {
-            ctx->state.forceValueDeep(v);
+            ctx.state.forceValueDeep(v);
             out << v;
         }
     } catch (ThrownError & e) {
@@ -374,39 +374,39 @@ void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr
     }
 }
 
-void printConfigValue(Context * ctx, Out & out, const std::string & path, std::variant<Value, std::exception_ptr> v)
+void printConfigValue(Context & ctx, Out & out, const std::string & path, std::variant<Value, std::exception_ptr> v)
 {
     out << path << " = ";
     printValue(ctx, out, std::move(v), path);
     out << ";\n";
 }
 
-void printAll(Context * ctx, Out & out)
+void printAll(Context & ctx, Out & out)
 {
     mapOptions(
-        [ctx, &out](const std::string & option_path) {
+        [&ctx, &out](const std::string & option_path) {
             mapConfigValuesInOption(
-                [ctx, &out](const std::string & config_path, std::variant<Value, std::exception_ptr> v) {
+                [&ctx, &out](const std::string & config_path, std::variant<Value, std::exception_ptr> v) {
                     printConfigValue(ctx, out, config_path, v);
                 },
                 option_path, ctx);
         },
-        ctx, ctx->options_root);
+        ctx, ctx.options_root);
 }
 
-void printAttr(Context * ctx, Out & out, const std::string & path, Value * root)
+void printAttr(Context & ctx, Out & out, const std::string & path, Value * root)
 {
     try {
-        printValue(ctx, out, *findAlongAttrPath(ctx->state, path, ctx->autoArgs, *root), path);
+        printValue(ctx, out, *findAlongAttrPath(ctx.state, path, ctx.autoArgs, *root), path);
     } catch (Error & e) {
         out << describeError(e);
     }
 }
 
-void printOption(Context * ctx, Out & out, const std::string & path, Value * option)
+void printOption(Context & ctx, Out & out, const std::string & path, Value * option)
 {
     out << "Value:\n";
-    printAttr(ctx, out, path, &ctx->config_root);
+    printAttr(ctx, out, path, &ctx.config_root);
 
     out << "\n\nDefault:\n";
     printAttr(ctx, out, "default", option);
@@ -441,10 +441,10 @@ void printListing(Out & out, Value * v)
     }
 }
 
-bool optionTypeIs(Context * ctx, Value & v, const std::string & sought_type)
+bool optionTypeIs(Context & ctx, Value & v, const std::string & sought_type)
 {
     try {
-        const auto & type_lookup = v.attrs->find(ctx->state.sType);
+        const auto & type_lookup = v.attrs->find(ctx.state.sType);
         if (type_lookup == v.attrs->end()) {
             return false;
         }
@@ -452,7 +452,7 @@ bool optionTypeIs(Context * ctx, Value & v, const std::string & sought_type)
         if (type.type != tAttrs) {
             return false;
         }
-        const auto & name_lookup = type.attrs->find(ctx->state.sName);
+        const auto & name_lookup = type.attrs->find(ctx.state.sName);
         if (name_lookup == type.attrs->end()) {
             return false;
         }
@@ -468,26 +468,25 @@ bool optionTypeIs(Context * ctx, Value & v, const std::string & sought_type)
 
 MakeError(OptionPathError, EvalError);
 
-Value getSubOptions(Context * ctx, Value & option)
+Value getSubOptions(Context & ctx, Value & option)
 {
-    Value getSubOptions =
-        evaluateValue(ctx, findAlongAttrPath(ctx->state, "type.getSubOptions", ctx->autoArgs, option));
+    Value getSubOptions = evaluateValue(ctx, findAlongAttrPath(ctx.state, "type.getSubOptions", ctx.autoArgs, option));
     if (getSubOptions.type != tLambda) {
         throw OptionPathError("Option's type.getSubOptions isn't a function");
     }
     Value emptyString{};
     nix::mkString(emptyString, "");
     Value v;
-    ctx->state.callFunction(getSubOptions, emptyString, v, nix::Pos{});
+    ctx.state.callFunction(getSubOptions, emptyString, v, nix::Pos{});
     return v;
 }
 
 // Carefully walk an option path, looking for sub-options when a path walks past
 // an option value.
-Value findAlongOptionPath(Context * ctx, const std::string & path)
+Value findAlongOptionPath(Context & ctx, const std::string & path)
 {
     Strings tokens = parseAttrPath(path);
-    Value v = ctx->options_root;
+    Value v = ctx.options_root;
     for (auto i = tokens.begin(); i != tokens.end(); i++) {
         const auto & attr = *i;
         try {
@@ -506,7 +505,7 @@ Value findAlongOptionPath(Context * ctx, const std::string & path)
             } else if (v.type != tAttrs) {
                 throw OptionPathError("Value is %s while a set was expected", showType(v));
             } else {
-                const auto & next = v.attrs->find(ctx->state.symbols.create(attr));
+                const auto & next = v.attrs->find(ctx.state.symbols.create(attr));
                 if (next == v.attrs->end()) {
                     throw OptionPathError("Attribute not found", attr, path);
                 }
@@ -519,7 +518,7 @@ Value findAlongOptionPath(Context * ctx, const std::string & path)
     return v;
 }
 
-void printOne(Context * ctx, Out & out, const std::string & path)
+void printOne(Context & ctx, Out & out, const std::string & path)
 {
     try {
         Value option = findAlongOptionPath(ctx, path);
@@ -589,13 +588,13 @@ int main(int argc, char ** argv)
         if (!args.empty()) {
             throw UsageError("--all cannot be used with arguments");
         }
-        printAll(&ctx, out);
+        printAll(ctx, out);
     } else {
         if (args.empty()) {
-            printOne(&ctx, out, "");
+            printOne(ctx, out, "");
         }
         for (const auto & arg : args) {
-            printOne(&ctx, out, arg);
+            printOne(ctx, out, arg);
         }
     }
 
