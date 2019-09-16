@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, cpio, rsync, makeWrapper }:
+{ stdenv, fetchurl, cpio, rsync, xar, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "smlnj-bootstrap-${version}";
+  pname = "smlnj-bootstrap";
 
-  version = "110.84";
+  version = "110.91";
 
   src = fetchurl {
     url = "http://smlnj.cs.uchicago.edu/dist/working/${version}/smlnj-x86-${version}.pkg";
-    sha256 = "17fpnlxcfwx2ysg6y9c5wwx6s3jca981nb0pawfcg6xg9wcapyfz";
+    sha256 = "12jn50h5jz0ac1vzld2mb94p1dyc8h0mk0hip2wj5xqk1dbzwxl4";
   };
 
   buildInputs = [ cpio rsync makeWrapper ];
 
   unpackPhase = ''
-    /usr/bin/xar -xf $src
+    ${xar}/bin/xar -xf $src
     cd smlnj.pkg
   '';
 

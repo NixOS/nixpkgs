@@ -2,20 +2,20 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
-    jaro_winkler (1.5.2)
+    jaro_winkler (1.5.3)
     parallel (1.17.0)
     parser (2.6.3.0)
       ast (~> 2.4.0)
     rainbow (3.0.0)
-    rubocop (0.68.1)
+    rubocop (0.74.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.5, != 2.5.1.1)
+      parser (>= 2.6)
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 1.6)
-    ruby-progressbar (1.10.0)
-    unicode-display_width (1.5.0)
+      unicode-display_width (>= 1.4.0, < 1.7)
+    ruby-progressbar (1.10.1)
+    unicode-display_width (1.6.0)
 
 PLATFORMS
   ruby

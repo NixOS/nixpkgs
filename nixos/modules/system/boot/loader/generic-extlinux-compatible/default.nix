@@ -8,7 +8,7 @@ let
 
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
-  builder = import ./extlinux-conf-builder.nix { pkgs = pkgs.buildPackages; };
+  builder = import ./extlinux-conf-builder.nix { inherit pkgs; };
 in
 {
   options = {

@@ -3,12 +3,12 @@
 , liblo, liblrdf, libsamplerate, libsndfile, lirc ? null, qtbase }:
 
 stdenv.mkDerivation (rec {
-  version = "18.12";
-  name = "rosegarden-${version}";
+  version = "19.06";
+  pname = "rosegarden";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rosegarden/${name}.tar.bz2";
-    sha256 = "15i9fm0vkn3wsgahaxqi1j5zs0wc0j3wdwml0x49084gk2p328vb";
+    url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.bz2";
+    sha256 = "169qb58v2s8va59hzkih8nqb2aipsqlrbfs8q39ywqa8w5d60gcc";
   };
 
   patchPhase = ''

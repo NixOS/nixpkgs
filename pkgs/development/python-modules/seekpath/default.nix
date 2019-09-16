@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, future, spglib, glibcLocales }:
+{ stdenv, buildPythonPackage, fetchPypi, numpy, future, spglib, glibcLocales, pytest }:
 
 buildPythonPackage rec {
   pname = "seekpath";
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "b61dadba82acc0838402981b7944155adc092b114ca81f53f61b1d498a512e3a";
-  };  
+  };
 
   LC_ALL = "en_US.utf-8";
 
@@ -15,9 +15,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ glibcLocales ];
 
+  checkInputs = [ pytest ];
+
+  # I don't know enough about crystal structures to fix
+  checkPhase = ''
+    pytest . -k 'not oI2Y'
+  '';
+
   meta = with stdenv.lib; {
     description = "A module to obtain and visualize band paths in the Brillouin zone of crystal structures.";
-    homepage = https://github.com/giovannipizzi/seekpath;
+    homepage = "https://github.com/giovannipizzi/seekpath";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

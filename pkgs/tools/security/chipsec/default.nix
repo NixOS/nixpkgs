@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, python27Packages, nasm, libelf
+{ stdenv, lib, fetchFromGitHub, pythonPackages, nasm, libelf
 , kernel ? null, withDriver ? false }:
-python27Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "chipsec-${version}";
-  version = "1.3.7";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
-    sha256 = "00hwhi5f24y429zazhm77l1pp31q7fmx7ks3sfm6d16v89zbcp9a";
+    sha256 = "043gf21zygvrzvvkwv5xxpcv3ryj5m8klkgyhq0lnh6k594qrg77";
   };
 
   nativeBuildInputs = [

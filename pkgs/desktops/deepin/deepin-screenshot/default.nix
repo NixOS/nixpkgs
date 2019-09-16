@@ -1,17 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, xdg_utils, qttools, qtx11extras,
+{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, pkgconfig, xdg_utils, qttools, qtx11extras,
   dtkcore, dtkwidget, dtkwm, deepin-turbo, deepin-shortcut-viewer,
   deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "deepin-screenshot";
-  version = "4.1.10";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "00zmmnvm5wv9fkc9fbqs23jsqs1mnr68afl4irj6y287ic0pj61i";
+    sha256 = "16wy1ywp4lm7fg488laqxgxpir745rbpj9z410r6x7krpgjds189";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Easy-to-use screenshot tool for Deepin Desktop Environment";

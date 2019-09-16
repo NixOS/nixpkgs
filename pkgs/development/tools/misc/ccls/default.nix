@@ -1,25 +1,28 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ stdenv, fetchFromGitHub
 , cmake, llvmPackages, rapidjson, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name    = "ccls-${version}";
-  version = "0.20190301";
+  pname = "ccls";
+  version = "0.20190823";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "1n60mly993czq3mnb82k8yqjrbfnsnx5v5dmr8ylqif3awcsk04i";
+    sha256 = "1qy1kf83mrvbhwl8m0h7ralwd3sid8y8fpk7pmy81y1nq8f1cf6f";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = with llvmPackages; [ clang-unwrapped llvm rapidjson ];
 
   cmakeFlags = [
-    "-DSYSTEM_CLANG=ON"
+    "-DCCLS_VERSION=${version}"
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
-    "-DCMAKE_CXX_FLAGS=-fvisibility=hidden"
   ];
+
+  preConfigure = ''
+    cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
+  '';
 
   shell = runtimeShell;
   postFixup = ''

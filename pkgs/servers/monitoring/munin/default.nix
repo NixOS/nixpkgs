@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.43";
-  name = "munin-${version}";
+  version = "2.0.49";
+  pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "1ydhf9hcb3n5h0ss5f1zf9yz4r4njqxazlz931ixvx5gyhj9gq5l";
+    sha256 = "13m56wh5cq82pwvv4ngav1zyn2sajxxjigljrz8ycjriw0wvncsf";
   };
 
   buildInputs = [
@@ -96,10 +96,10 @@ stdenv.mkDerivation rec {
     PREFIX=$(out)
     DESTDIR=$(out)
     PERLLIB=$(out)/${perlPackages.perl.libPrefix}
-    PERL=${perlPackages.perl}/bin/perl
-    PYTHON=${python}/bin/python
-    RUBY=${ruby}/bin/ruby
-    JAVARUN=${jre}/bin/java
+    PERL=${perlPackages.perl.outPath}/bin/perl
+    PYTHON=${python.outPath}/bin/python
+    RUBY=${ruby.outPath}/bin/ruby
+    JAVARUN=${jre.outPath}/bin/java
     PLUGINUSER=munin
   '';
 

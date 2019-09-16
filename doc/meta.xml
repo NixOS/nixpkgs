@@ -30,7 +30,7 @@ meta = with stdenv.lib; {
   The meta-attributes of a package can be queried from the command-line using
   <command>nix-env</command>:
 <screen>
-$ nix-env -qa hello --json
+<prompt>$ </prompt>nix-env -qa hello --json
 {
     "hello": {
         "meta": {
@@ -70,7 +70,7 @@ $ nix-env -qa hello --json
   <command>nix-env</command> knows about the <varname>description</varname>
   field specifically:
 <screen>
-$ nix-env -qa hello --description
+<prompt>$ </prompt>nix-env -qa hello --description
 hello-2.3  A program that produces a familiar, friendly greeting
 </screen>
  </para>
@@ -272,11 +272,9 @@ meta.platforms = stdenv.lib.platforms.linux;
       <para>
        This attribute is special in that it is not actually under the
        <literal>meta</literal> attribute set but rather under the
-       <literal>passthru</literal> attribute set. This is due to a current
-       limitation of Nix, and will change as soon as Nixpkgs will be able to
-       depend on a new enough version of Nix. See
-       <link xlink:href="https://github.com/NixOS/nix/issues/2532">the relevant
-       issue</link> for more details.
+       <literal>passthru</literal> attribute set. This is due to how
+       <literal>meta</literal> attributes work, and the fact that they
+       are supposed to contain only metadata, not derivations.
       </para>
      </warning>
      <para>

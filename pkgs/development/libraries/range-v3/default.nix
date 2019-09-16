@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "range-v3-${version}";
+  pname = "range-v3";
   version = "0.5.0";
 
   src = fetchFromGitHub {

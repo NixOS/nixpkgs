@@ -1,14 +1,14 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, astroid, six, isort,
+{ stdenv, lib, buildPythonPackage, fetchPypi, astroid, six, isort,
   mccabe, configparser, backports_functools_lru_cache, singledispatch,
   pytest, pytestrunner, pyenchant }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee1e85575587c5b58ddafa25e1c1b01691ef172e139fc25585e5d3f02451da93";
+    sha256 = "004kfapkqxqy2s85pmddqv0fabxdxywxrlbi549p0v237pr2v94p";
   };
 
   checkInputs = [ pytest pytestrunner pyenchant ];
@@ -24,6 +24,8 @@ buildPythonPackage rec {
     pytest pylint/test -k "not ${lib.concatStringsSep " and not " (
       [ # Broken test
         "test_good_comprehension_checks"
+        # requires setuptools
+        "test_pkginfo"
         # See PyCQA/pylint#2535
         "test_libmodule" ] ++
       # Disable broken darwin tests

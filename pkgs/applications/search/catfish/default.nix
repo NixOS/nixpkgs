@@ -56,7 +56,7 @@ pythonPackages.buildPythonApplication rec {
     description = "A handy file search tool";
     longDescription = ''
       Catfish is a handy file searching tool. The interface is
-      intentionally lightweight and simple, using only GTK+3.
+      intentionally lightweight and simple, using only GTK 3.
       You can configure it to your needs by using several command line
       options.
     '';

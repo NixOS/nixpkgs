@@ -1,10 +1,10 @@
 {stdenv, fetchurl, gnome3, automake, autoconf, which, libtool, pkgconfig, graphviz, glib, gobject-introspection, expat}:
 stdenv.mkDerivation rec {
   version = "0.36.2";
-  name = "valadoc-${version}";
+  pname = "valadoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/valadoc/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/valadoc/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0hfaskbm7y4z4jf6lxm8hg4c0b8621qn1gchxjxcngq0cpx79z9h";
   };
 

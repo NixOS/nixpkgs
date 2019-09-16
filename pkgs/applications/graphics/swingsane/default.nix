@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "swingsane-${version}";
+  pname = "swingsane";
   version = "0.2";
 
   src = fetchurl {

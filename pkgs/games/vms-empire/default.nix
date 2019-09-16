@@ -3,11 +3,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec{
 
-  name = "vms-empire-${version}";
+  pname = "vms-empire";
   version = "1.14";
 
   src = fetchurl{
-    url = "http://www.catb.org/~esr/vms-empire/${name}.tar.gz";
+    url = "http://www.catb.org/~esr/vms-empire/${pname}-${version}.tar.gz";
     sha256 = "0cymzhivvaahgqz0p11w25a710ls4w0jhyqj789jas5s07nvd890";
   };
 

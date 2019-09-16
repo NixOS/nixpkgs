@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchurl, fetchpatch, isPy3k
+{ lib, buildPythonPackage, fetchurl, isPy3k
 , pytest, werkzeug, pygments
 }:
 

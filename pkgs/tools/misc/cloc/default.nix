@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "cloc-${version}";
+  pname = "cloc";
   version = "1.82";
 
   src = fetchFromGitHub {

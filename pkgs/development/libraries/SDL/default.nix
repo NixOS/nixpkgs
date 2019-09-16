@@ -1,11 +1,11 @@
-{ stdenv, config, libGLSupported, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
+{ stdenv, config, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL, libGLU
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 , libXext, libICE, libXrandr
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
-, cf-private
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -14,11 +14,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name    = "SDL-${version}";
+  pname = "SDL";
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/release/${name}.tar.gz";
+    url    = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
@@ -40,11 +40,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ]
     ++ optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
-    ++ optionals stdenv.isDarwin [
-      AudioUnit CoreAudio CoreServices Kernel OpenGL
-      # Needed for NSDefaultRunLoopMode symbols.
-      cf-private
-    ];
+    ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
   configureFlags = [
     "--disable-oss"

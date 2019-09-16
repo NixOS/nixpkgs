@@ -1,32 +1,29 @@
-{ stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkgconfig
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig
 , wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa_noglu
-, libpng, ffmpeg_4
+, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
+, libpng, ffmpeg_4, freerdp
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.5.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "1phiidyddzgaxy4gbqwmykxn0y8za6y5mp66l9dpd9i6fml153yq";
+    sha256 = "0jzxa6psbc7ddxli7rbfqxmv1svxnis51l1vch4hb9fdixqm284a";
   };
 
-  # $out for the library, $bin for rootston, and $examples for the example
-  # programs (in examples) AND rootston
-  outputs = [ "out" "bin" "examples" ];
+  # $out for the library and $examples for the example programs (in examples):
+  outputs = [ "out" "examples" ];
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
 
   buildInputs = [
     wayland libGL wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa_noglu
-    libpng ffmpeg_4
+    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
+    libpng ffmpeg_4 freerdp
   ];
 
   mesonFlags = [
@@ -34,31 +31,13 @@ in stdenv.mkDerivation rec {
     "-Dxcb-icccm=enabled" "-Dxcb-errors=enabled"
   ];
 
-  postPatch = ''
-    # It happens from time to time that the version wasn't updated:
-    sed -iE "s/version: '[0-9]\.[0-9]\.[0-9]'/version: '${version}.0'/" meson.build
-  '';
-
   postInstall = ''
-    # Copy the library to $bin and $examples
-    for output in "$bin" "$examples"; do
-      mkdir -p $output/lib
-      cp -P libwlroots* $output/lib/
-    done
+    # Copy the library to $examples
+    mkdir -p $examples/lib
+    cp -P libwlroots* $examples/lib/
   '';
 
   postFixup = ''
-    # Install rootston (the reference compositor) to $bin and $examples (this
-    # has to be done after the fixup phase to prevent broken binaries):
-    for output in "$bin" "$examples"; do
-      mkdir -p $output/bin
-      cp rootston/rootston $output/bin/
-      patchelf \
-        --set-rpath "$(patchelf --print-rpath $output/bin/rootston | sed s,$out,$output,g)" \
-        $output/bin/rootston
-      mkdir $output/etc
-      cp ../rootston/rootston.ini.example $output/etc/rootston.ini
-    done
     # Install ALL example programs to $examples:
     # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle
     # screenshot output-layout multi-pointer rotation tablet touch pointer
@@ -67,9 +46,6 @@ in stdenv.mkDerivation rec {
     cd ./examples
     for binary in $(find . -executable -type f -printf '%P\n' | grep -vE '\.so'); do
       cp "$binary" "$examples/bin/wlroots-$binary"
-      patchelf \
-        --set-rpath "$(patchelf --print-rpath $output/bin/rootston | sed s,$out,$examples,g)" \
-        "$examples/bin/wlroots-$binary"
     done
   '';
 

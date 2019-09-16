@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchurl, fetchPypi, stdenv, isPy27
+{ buildPythonPackage, fetchurl, stdenv, isPy27
 , nose, pillow, prettytable, pyyaml, dateutil, gdata
 , requests, mechanize, feedparser, lxml, gnupg, pyqt5
 , libyaml, simplejson, cssselect, futures, pdfminer

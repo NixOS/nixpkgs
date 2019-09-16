@@ -13,7 +13,8 @@
 let version = "unstable-2019-02-13";
 
 in stdenv.mkDerivation {
-  name = "planner-${version}";
+  pname = "planner";
+  inherit version;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -60,7 +61,7 @@ in stdenv.mkDerivation {
       Its goal is to be an easy-to-use no-nonsense cross-platform
       project management application.
 
-      Planner is a GTK+ application written in C and licensed under the
+      Planner is a GTK application written in C and licensed under the
       GPLv2 or any later version. It can store its data in either xml
       files or in a postgresql database. Projects can also be printed
       to PDF or exported to HTML for easy viewing from any web browser.

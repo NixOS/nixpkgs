@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sassc";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    sha256 = "14cbprnz70bv9qcs1aglvj9kkhf22as5xxz7gkv2ni8yjy8rp8q2";
+    sha256 = "1sxm54mkhs9m4vnl7vn11y17mhzamc403hv3966j1c7p2rbzg5pv";
   };
 
   patchPhase = ''

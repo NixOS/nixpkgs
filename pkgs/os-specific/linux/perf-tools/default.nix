@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{ stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation {
   name = "perf-tools-20171219";

@@ -1,5 +1,5 @@
 { stdenv, callPackage,
-  fetchurl, guile_1_8, qt4, zlib, xmodmap, which, makeWrapper, freetype,
+  fetchurl, guile_1_8, qt4, xmodmap, which, makeWrapper, freetype,
   tex ? null,
   aspell ? null,
   ghostscriptX ? null,

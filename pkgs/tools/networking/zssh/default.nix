@@ -3,10 +3,11 @@
 let
   version = "1.5c";
 in stdenv.mkDerivation rec {
-  name = "zssh-${version}";
+  pname = "zssh";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/zssh/${name}.tgz";
+    url = "mirror://sourceforge/zssh/${pname}-${version}.tgz";
     sha256 = "06z73iq59lz8ibjrgs7d3xl39vh9yld1988yx8khssch4pw41s52";
   };
 

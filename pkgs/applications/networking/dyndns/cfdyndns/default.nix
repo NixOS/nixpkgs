@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "cfdyndns-${version}";
+  pname = "cfdyndns";
   version = "0.0.1";
   src = fetchFromGitHub {
     owner = "colemickens";
@@ -12,7 +12,7 @@ buildRustPackage rec {
     sha256 = "1mcdjykrgh0jq6k6y664lai8sbgzk6j7k0r944f43vg63d1jql5b";
   };
 
-  cargoSha256 = "0k9d6pxsb4gvkqs00g71c1nnz773iccg4vajgn33qdym6m6qsjwy";
+  cargoSha256 = "1d7jpffkw2m2v37bfdqsl9sqwsl19cgglpa00lwy4ih09kzbc2n9";
 
   buildInputs = [ makeWrapper openssl ];
 

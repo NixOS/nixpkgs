@@ -4,16 +4,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fossil-${version}";
-  version = "2.8";
+  pname = "fossil";
+  version = "2.9";
 
   src = fetchurl {
     urls =
       [
         "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
       ];
-    name = "${name}.tar.gz";
-    sha256 = "0pbinf8d2kj1j7niblhzjd2l2khg6r2pn2xvig6gavz27p3vwcka";
+    name = "${pname}-${version}.tar.gz";
+    sha256 = "0kwb7pkp7y2my916rhyl6kmcf0fk8gkzaxzy13hfgqs35nlsvchw";
   };
 
   buildInputs = [ zlib openssl readline sqlite which ed ]

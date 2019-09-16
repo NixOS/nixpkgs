@@ -14,15 +14,6 @@ let
           bird6 = "1.9.x with IPv6 suport";
           bird2 = "2.x";
         }.${variant};
-      configFile = pkgs.stdenv.mkDerivation {
-        name = "${variant}.conf";
-        text = cfg.config;
-        preferLocalBuild = true;
-        buildCommand = ''
-          echo -n "$text" > $out
-          ${pkg}/bin/${birdBin} -d -p -c $out
-        '';
-      };
     in {
       ###### interface
       options = {
@@ -41,14 +32,24 @@ let
       ###### implementation
       config = mkIf cfg.enable {
         environment.systemPackages = [ pkg ];
+
+        environment.etc."bird/${variant}.conf".source = pkgs.writeTextFile {
+          name = "${variant}.conf";
+          text = cfg.config;
+          checkPhase = ''
+            ${pkg}/bin/${birdBin} -d -p -c $out
+          '';
+        };
+
         systemd.services.${variant} = {
           description = "BIRD Internet Routing Daemon (${descr})";
           wantedBy = [ "multi-user.target" ];
           reloadIfChanged = true;
+          restartTriggers = [ config.environment.etc."bird/${variant}.conf".source ];
           serviceConfig = {
             Type = "forking";
             Restart = "on-failure";
-            ExecStart = "${pkg}/bin/${birdBin} -c ${configFile} -u ${variant} -g ${variant}";
+            ExecStart = "${pkg}/bin/${birdBin} -c /etc/bird/${variant}.conf -u ${variant} -g ${variant}";
             ExecReload = "${pkg}/bin/${birdc} configure";
             ExecStop = "${pkg}/bin/${birdc} down";
             CapabilityBoundingSet = [ "CAP_CHOWN" "CAP_FOWNER" "CAP_DAC_OVERRIDE" "CAP_SETUID" "CAP_SETGID"

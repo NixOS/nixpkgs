@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.0.7.2'
-gem 'rails-deprecated_sanitizer', '~> 1.0.3'
+gem 'rails', '5.2.3'
 
 # Improves copy-on-write performance for MRI
 gem 'nakayoshi_fork', '~> 0.0.4'
@@ -12,19 +11,19 @@ gem 'responders', '~> 2.0'
 gem 'sprockets', '~> 3.7.0'
 
 # Default values for AR models
-gem 'gitlab-default_value_for', '~> 3.1.1', require: 'default_value_for'
+gem 'default_value_for', '~> 3.2.0'
 
 # Supported DBs
 gem 'mysql2', '~> 0.4.10', group: :mysql
 gem 'pg', '~> 1.1', group: :postgres
 
 gem 'rugged', '~> 0.28'
-gem 'grape-path-helpers', '~> 1.0'
+gem 'grape-path-helpers', '~> 1.1'
 
 gem 'faraday', '~> 0.12'
 
 # Authentication libraries
-gem 'devise', '~> 4.4'
+gem 'devise', '~> 4.6'
 gem 'doorkeeper', '~> 4.3'
 gem 'doorkeeper-openid_connect', '~> 1.5'
 gem 'omniauth', '~> 1.8'
@@ -42,6 +41,9 @@ gem 'omniauth-shibboleth', '~> 1.3.0'
 gem 'omniauth-twitter', '~> 1.4'
 gem 'omniauth_crowd', '~> 2.2.0'
 gem 'omniauth-authentiq', '~> 0.3.3'
+gem 'omniauth_openid_connect', '~> 0.3.1'
+gem "omniauth-ultraauth", '~> 0.0.2'
+gem 'omniauth-salesforce', '~> 1.0.5'
 gem 'rack-oauth2', '~> 1.9.3'
 gem 'jwt', '~> 2.1.0'
 
@@ -61,6 +63,8 @@ gem 'u2f', '~> 0.2.1'
 # GitLab Pages
 gem 'validates_hostname', '~> 1.0.6'
 gem 'rubyzip', '~> 1.2.2', require: 'zip'
+# GitLab Pages letsencrypt support
+gem 'acme-client', '~> 2.0.2'
 
 # Browser detection
 gem 'browser', '~> 2.5'
@@ -82,6 +86,8 @@ gem 'rack-cors', '~> 1.0.0', require: 'rack/cors'
 # GraphQL API
 gem 'graphql', '~> 1.8.0'
 gem 'graphiql-rails', '~> 1.4.10'
+gem 'apollo_upload_server', '~> 2.0.0.beta3'
+gem 'graphql-docs', '~> 1.6.0', group: [:development, :test]
 
 # Disable strong_params so that Mash does not respond to :permitted?
 gem 'hashie-forbidden_attributes'
@@ -97,7 +103,7 @@ gem 'carrierwave', '~> 1.3'
 gem 'mini_magick'
 
 # for backups
-gem 'fog-aws', '~> 3.3'
+gem 'fog-aws', '~> 3.5'
 # Locked until fog-google resolves https://github.com/fog/fog-google/issues/421.
 # Also see config/initializers/fog_core_patch.rb.
 gem 'fog-core', '= 2.1.0'
@@ -118,7 +124,7 @@ gem 'seed-fu', '~> 2.3.7'
 
 # Search
 gem 'elasticsearch-model', '~> 0.1.9'
-gem 'elasticsearch-rails', '~> 0.1.9'
+gem 'elasticsearch-rails', '~> 0.1.9', require: 'elasticsearch/rails/instrumentation'
 gem 'elasticsearch-api',   '5.0.3'
 gem 'aws-sdk'
 gem 'faraday_middleware-aws-signers-v4'
@@ -134,12 +140,13 @@ gem 'rdoc', '~> 6.0'
 gem 'org-ruby', '~> 0.9.12'
 gem 'creole', '~> 0.5.0'
 gem 'wikicloth', '0.8.1'
-gem 'asciidoctor', '~> 1.5.8'
-gem 'asciidoctor-plantuml', '0.0.8'
-gem 'rouge', '~> 3.1'
+gem 'asciidoctor', '~> 2.0.10'
+gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
+gem 'asciidoctor-plantuml', '0.0.9'
+gem 'rouge', '~> 3.5'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
-gem 'nokogiri', '~> 1.10.1'
+gem 'nokogiri', '~> 1.10.3'
 gem 'escape_utils', '~> 1.1'
 
 # Calendar rendering
@@ -159,6 +166,7 @@ end
 group :puma do
   gem 'puma', '~> 3.12', require: false
   gem 'puma_worker_killer', require: false
+  gem 'rack-timeout', require: false
 end
 
 # State machine
@@ -168,13 +176,13 @@ gem 'state_machines-activerecord', '~> 0.5.1'
 gem 'acts-as-taggable-on', '~> 6.0'
 
 # Background jobs
-gem 'sidekiq', '~> 5.2.1'
+gem 'sidekiq', '~> 5.2.7'
 gem 'sidekiq-cron', '~> 1.0'
 gem 'redis-namespace', '~> 1.6.0'
 gem 'gitlab-sidekiq-fetcher', '~> 0.4.0', require: 'sidekiq-reliable-fetch'
 
 # Cron Parser
-gem 'fugit', '~> 1.1'
+gem 'fugit', '~> 1.2.1'
 
 # HTTP requests
 gem 'httparty', '~> 0.16.4'
@@ -214,7 +222,7 @@ gem 'discordrb-webhooks-blackst0ne', '~> 3.3', require: false
 # HipChat integration
 gem 'hipchat', '~> 1.5.0'
 
-# JIRA integration
+# Jira integration
 gem 'jira-ruby', '~> 1.4'
 
 # Flowdock integration
@@ -267,8 +275,7 @@ gem 'chronic_duration', '~> 0.10.6'
 gem 'webpack-rails', '~> 0.9.10'
 gem 'rack-proxy', '~> 0.6.0'
 
-gem 'sass-rails', '~> 5.0.6'
-gem 'sass', '~> 3.5'
+gem 'sassc-rails', '~> 2.1.0'
 gem 'uglifier', '~> 2.7.2'
 
 gem 'addressable', '~> 2.5.2'
@@ -282,9 +289,12 @@ gem 'base32', '~> 0.3.0'
 gem "gitlab-license", "~> 1.0"
 
 # Sentry integration
-gem 'sentry-raven', '~> 2.7'
+gem 'sentry-raven', '~> 2.9'
 
 gem 'premailer-rails', '~> 1.9.7'
+
+# LabKit: Tracing and Correlation
+gem 'gitlab-labkit', '~> 0.3.0'
 
 # I18n
 gem 'ruby_parser', '~> 3.8', require: false
@@ -293,7 +303,7 @@ gem 'gettext_i18n_rails', '~> 1.8.0'
 gem 'gettext_i18n_rails_js', '~> 1.3'
 gem 'gettext', '~> 3.2.2', require: false, group: :development
 
-gem 'batch-loader', '~> 1.2.2'
+gem 'batch-loader', '~> 1.4.0'
 
 # Perf bar
 gem 'peek', '~> 1.0.1'
@@ -306,27 +316,24 @@ gem 'peek-redis', '~> 1.2.0'
 # Snowplow events tracking
 gem 'snowplow-tracker', '~> 0.6.1'
 
+# Memory benchmarks
+gem 'derailed_benchmarks', require: false
+
 # Metrics
 group :metrics do
   gem 'method_source', '~> 0.8', require: false
   gem 'influxdb', '~> 0.2', require: false
 
   # Prometheus
-  gem 'prometheus-client-mmap', '~> 0.9.4'
+  gem 'prometheus-client-mmap', '~> 0.9.8'
   gem 'raindrops', '~> 0.18'
-end
-
-group :tracing do
-  # OpenTracing
-  gem 'opentracing', '~> 0.4.3'
-  gem 'jaeger-client', '~> 0.10.0'
 end
 
 group :development do
   gem 'foreman', '~> 0.84.0'
   gem 'brakeman', '~> 4.2', require: false
 
-  gem 'letter_opener_web', '~> 1.3.0'
+  gem 'letter_opener_web', '~> 1.3.4'
   gem 'rblineprof', '~> 0.3.6', platform: :mri, require: false
 
   # Better errors handler
@@ -348,8 +355,8 @@ group :development, :test do
 
   gem 'database_cleaner', '~> 1.7.0'
   gem 'factory_bot_rails', '~> 4.8.2'
-  gem 'rspec-rails', '~> 3.7.0'
-  gem 'rspec-retry', '~> 0.4.5'
+  gem 'rspec-rails', '~> 3.8.0'
+  gem 'rspec-retry', '~> 0.6.1'
   gem 'rspec_profiling', '~> 0.0.5'
   gem 'rspec-set', '~> 0.1.3'
   gem 'rspec-parameterized', require: false
@@ -360,22 +367,24 @@ group :development, :test do
   # Generate Fake data
   gem 'ffaker', '~> 2.10'
 
-  gem 'capybara', '~> 2.16.1'
-  gem 'capybara-screenshot', '~> 1.0.18'
-  gem 'selenium-webdriver', '~> 3.12'
+  gem 'capybara', '~> 3.22.0'
+  gem 'capybara-screenshot', '~> 1.0.22'
+  gem 'selenium-webdriver', '~> 3.141'
 
   gem 'spring', '~> 2.0.0'
   gem 'spring-commands-rspec', '~> 1.0.4'
 
-  gem 'gitlab-styles', '~> 2.4', require: false
+  gem 'gitlab-styles', '~> 2.7', require: false
   # Pin these dependencies, otherwise a new rule could break the CI pipelines
-  gem 'rubocop', '~> 0.54.0'
+  gem 'rubocop', '~> 0.69.0'
+  gem 'rubocop-performance', '~> 1.1.0'
   gem 'rubocop-rspec', '~> 1.22.1'
 
   gem 'scss_lint', '~> 0.56.0', require: false
-  gem 'haml_lint', '~> 0.28.0', require: false
-  gem 'simplecov', '~> 0.14.0', require: false
+  gem 'haml_lint', '~> 0.31.0', require: false
+  gem 'simplecov', '~> 0.16.1', require: false
   gem 'bundler-audit', '~> 0.5.0', require: false
+  gem 'mdl', '~> 0.5.0', require: false
 
   gem 'benchmark-ips', '~> 2.3.0', require: false
 
@@ -392,7 +401,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'shoulda-matchers', '~> 3.1.2', require: false
+  gem 'shoulda-matchers', '~> 4.0.1', require: false
   gem 'email_spec', '~> 2.2.0'
   gem 'json-schema', '~> 2.8.0'
   gem 'webmock', '~> 3.5.1'
@@ -412,6 +421,9 @@ gem 'html2text'
 
 gem 'ruby-prof', '~> 0.17.0'
 gem 'rbtrace', '~> 0.4', require: false
+gem 'memory_profiler', '~> 0.9', require: false
+gem 'benchmark-memory', '~> 0.1', require: false
+gem 'activerecord-explain-analyze', '~> 0.1', require: false
 
 # OAuth
 gem 'oauth2', '~> 1.4'
@@ -427,7 +439,7 @@ gem 'sys-filesystem', '~> 1.1.6'
 gem 'net-ntp'
 
 # SSH host key support
-gem 'net-ssh', '~> 5.0'
+gem 'net-ssh', '~> 5.2'
 gem 'sshkey', '~> 2.0'
 
 # Required for ED25519 SSH host key support
@@ -437,11 +449,11 @@ group :ed25519 do
 end
 
 # Gitaly GRPC client
-gem 'gitaly-proto', '~> 1.19.0', require: 'gitaly'
+gem 'gitaly-proto', '~> 1.37.0', require: 'gitaly'
 
-gem 'grpc', '~> 1.15.0'
+gem 'grpc', '~> 1.19.0'
 
-gem 'google-protobuf', '~> 3.6'
+gem 'google-protobuf', '~> 3.7.1'
 
 gem 'toml-rb', '~> 1.0.0', require: false
 

@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchurl, makeWrapper, perlPackages }:
+{ stdenv, fetchurl, makeWrapper, perlPackages }:
 
 let
   perlDeps = with perlPackages; [ TimeDate ];
 in
 stdenv.mkDerivation rec {
   version = "3.20";
-  name = "mb2md-${version}";
+  pname = "mb2md";
 
   src = fetchurl {
     url = "http://batleth.sapienti-sat.org/projects/mb2md/mb2md-${version}.pl.gz";

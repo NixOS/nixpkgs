@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = http://svn.openstreetmap.org/applications/rendering/gosmore;
     sha256 = "0qsckpqx7i7f8gkqhkzdamr65250afk1rpnh3nbman35kdv3dsxi";
-    rev = "${version}";
+    rev = version;
     ignoreExternals = true;
   };
 

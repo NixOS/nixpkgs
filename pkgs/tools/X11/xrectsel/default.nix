@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "xrectsel-${version}";
+  pname = "xrectsel";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "lolilolicon";
     repo = "xrectsel";
-    rev = "${version}";
+    rev = version;
     sha256 = "0prl4ky3xzch6xcb673mcixk998d40ngim5dqc5374b1ls2r6n7l";
   };
 

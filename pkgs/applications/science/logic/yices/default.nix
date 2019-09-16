@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
 
 stdenv.mkDerivation rec {
-  name    = "yices-${version}";
+  pname = "yices";
   version = "2.6.1";
 
   src = fetchFromGitHub {

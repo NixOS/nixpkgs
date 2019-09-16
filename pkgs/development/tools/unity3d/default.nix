@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, file, getopt
-, gtk2, gtk3, gdk_pixbuf, glib, libGL, libGLU, nss, nspr, udev, tbb
+, gtk2, gtk3, gdk-pixbuf, glib, libGL, libGLU, nss, nspr, udev, tbb
 , alsaLib, GConf, cups, libcap, fontconfig, freetype, pango
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
 , libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
@@ -9,12 +9,12 @@
 
 let
   libPath64 = lib.makeLibraryPath [
-    gcc.cc gtk2 gdk_pixbuf glib libGL libGLU nss nspr
+    gcc.cc gtk2 gdk-pixbuf glib libGL libGLU nss nspr
     alsaLib GConf cups libcap fontconfig freetype pango
     cairo dbus expat zlib libpng12 udev tbb
     libX11 libXcursor libXdamage libXfixes libXrender libXi
     libXcomposite libXext libXrandr libXtst libSM libICE libxcb
-    libpqxx gtk3 
+    libpqxx gtk3
   ];
   libPath32 = lib.makeLibraryPath [ gcc_32bit.cc ];
   binPath = lib.makeBinPath [ nodejs gnutar ];
@@ -22,8 +22,8 @@ let
   ver = "2018.3.0";
   build = "f2";
 
-in stdenv.mkDerivation rec {
-  name = "unity-editor-${version}";
+in stdenv.mkDerivation {
+  pname = "unity-editor";
   version = "${ver}x${build}";
 
   src = fetchurl {
@@ -82,7 +82,7 @@ in stdenv.mkDerivation rec {
     }
 
     upm_linux=$unitydir/Data/Resources/PackageManager/Server/UnityPackageManager
-    
+
 
     orig_size=$(stat --printf=%s $upm_linux)
 
@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
     # ^-- grep points here
     #
     # var_* are as described above
-    # shift_by seems to be safe so long as all patchelf adjustments occur 
+    # shift_by seems to be safe so long as all patchelf adjustments occur
     # before any locations pointed to by hardcoded offsets
 
     var_skip=20

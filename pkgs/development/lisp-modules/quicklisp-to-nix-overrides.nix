@@ -39,7 +39,7 @@ in
     };
   };
   hunchentoot = addNativeLibs [pkgs.openssl];
-  iolib = x: rec {
+  iolib = x: {
     propagatedBuildInputs = (x.propagatedBuildInputs or [])
      ++ (with pkgs; [libfixposix gcc])
      ;
@@ -163,6 +163,13 @@ $out/lib/common-lisp/query-fs"
   postmodern = x: {
     overrides = y : (x.overrides y) // {
       meta.broken = true; # 2018-04-10
+    };
+  };
+  split-sequence = x: {
+    overrides = y: (x.overrides y) // {
+      preConfigure = ''
+        sed -i -e '/:components/i:serial t' split-sequence.asd
+      '';
     };
   };
 }

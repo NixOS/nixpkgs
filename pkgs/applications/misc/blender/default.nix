@@ -1,7 +1,7 @@
 { config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, pythonPackages
+, libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, python3Packages
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
@@ -11,14 +11,15 @@
 
 with lib;
 
-let python = pythonPackages.python; in
+let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
-  name = "blender-2.79b";
+  pname = "blender";
+  version = "2.80";
 
   src = fetchurl {
-    url = "https://download.blender.org/source/${name}.tar.gz";
-    sha256 = "1g4kcdqmf67srzhi3hkdnr4z1ph4h9sza1pahz38mrj998q4r52c";
+    url = "https://download.blender.org/source/${pname}-${version}.tar.gz";
+    sha256 = "1h550jisdbis50hxwk5kxrvrk1a6sh2fsri3yyj66vhzbi87x7fd";
   };
 
   nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
@@ -36,7 +37,6 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      substituteInPlace doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '';
 
@@ -47,10 +47,7 @@ stdenv.mkDerivation rec {
       "-DWITH_INSTALL_PORTABLE=OFF"
       "-DWITH_FFTW3=ON"
       #"-DWITH_SDL=ON"
-      "-DWITH_GAMEENGINE=ON"
       "-DWITH_OPENCOLORIO=ON"
-      "-DWITH_SYSTEM_OPENJPEG=ON"
-      "-DWITH_PLAYER=ON"
       "-DWITH_OPENSUBDIV=ON"
       "-DPYTHON_LIBRARY=${python.libPrefix}m"
       "-DPYTHON_LIBPATH=${python}/lib"
@@ -58,13 +55,10 @@ stdenv.mkDerivation rec {
       "-DPYTHON_VERSION=${python.pythonVersion}"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
+      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python.sitePackages}"
     ]
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optionals cudaSupport
-      [ "-DWITH_CYCLES_CUDA_BINARIES=ON"
-        # Disable architectures before sm_30 to support new CUDA toolkits.
-        "-DCYCLES_CUDA_BINARIES_ARCH=sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61"
-      ]
+    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON"
     ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
@@ -78,7 +72,7 @@ stdenv.mkDerivation rec {
   postInstall = optionalString enableNumpy
     ''
       wrapProgram $out/bin/blender \
-        --prefix PYTHONPATH : ${pythonPackages.numpy}/${python.sitePackages}
+        --prefix PYTHONPATH : ${python3Packages.numpy}/${python.sitePackages}
     '';
 
   # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be

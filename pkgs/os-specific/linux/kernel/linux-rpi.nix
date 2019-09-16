@@ -4,7 +4,7 @@ let
   modDirVersion = "4.14.98";
   tag = "1.20190215";
 in
-lib.overrideDerivation (buildLinux (args // rec {
+lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
   inherit modDirVersion;
 
@@ -16,9 +16,9 @@ lib.overrideDerivation (buildLinux (args // rec {
   };
 
   defconfig = {
-    "armv6l-linux" = "bcmrpi_defconfig";
-    "armv7l-linux" = "bcm2709_defconfig";
-    "aarch64-linux" = "bcmrpi3_defconfig";
+    armv6l-linux = "bcmrpi_defconfig";
+    armv7l-linux = "bcm2709_defconfig";
+    aarch64-linux = "bcmrpi3_defconfig";
   }.${stdenv.hostPlatform.system} or (throw "linux_rpi not supported on '${stdenv.hostPlatform.system}'");
 
   features = {
@@ -26,7 +26,7 @@ lib.overrideDerivation (buildLinux (args // rec {
   } // (args.features or {});
 
   extraMeta.hydraPlatforms = [ "aarch64-linux" ];
-})) (oldAttrs: {
+} // (args.argsOverride or {}))) (oldAttrs: {
   postConfigure = ''
     # The v7 defconfig has this set to '-v7' which screws up our modDirVersion.
     sed -i $buildRoot/.config -e 's/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=""/'

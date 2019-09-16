@@ -1,4 +1,4 @@
-{ options, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -116,17 +116,17 @@ in
       url = mkOption {
         description = "The URL to an InfluxDB server that serves as the default database";
         example = "http://localhost:8086";
-        type = types.string;
+        type = types.str;
       };
 
       username = mkOption {
         description = "The username to connect to the remote InfluxDB server";
-        type = types.string;
+        type = types.str;
       };
 
       password = mkOption {
         description = "The password to connect to the remote InfluxDB server";
-        type = types.string;
+        type = types.str;
       };
     };
 
@@ -137,7 +137,7 @@ in
         description = "The URL to the Alerta REST API";
         default = "http://localhost:5000";
         example = "http://localhost:5000";
-        type = types.string;
+        type = types.str;
       };
 
       token = mkOption {
@@ -163,6 +163,10 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kapacitor ];
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.kapacitor = {
       description = "Kapacitor Real-Time Stream Processing Engine";
       wantedBy = [ "multi-user.target" ];
@@ -171,12 +175,7 @@ in
         ExecStart = "${pkgs.kapacitor}/bin/kapacitord -config ${kapacitorConf}";
         User = "kapacitor";
         Group = "kapacitor";
-        PermissionsStartOnly = true;
       };
-      preStart = ''
-        mkdir -p ${cfg.dataDir}
-        chown ${cfg.user}:${cfg.group} ${cfg.dataDir}
-      '';
     };
 
     users.users.kapacitor = {

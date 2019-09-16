@@ -1,0 +1,65 @@
+diff --git a/src/frame/frame.cpp b/src/frame/frame.cpp
+index 90d06f8..7cdad04 100644
+--- a/src/frame/frame.cpp
++++ b/src/frame/frame.cpp
+@@ -375,7 +375,7 @@ void Frame::keyPressEvent(QKeyEvent *e)
+ #ifdef QT_DEBUG
+     case Qt::Key_Escape:        qApp->quit();                               break;
+ #endif
+-    case Qt::Key_F1:            QProcess::startDetached("dman", QStringList("dde"));  break;
++    case Qt::Key_F1:            QProcess::startDetached("@dman@", QStringList("dde"));  break;
+     default:;
+     }
+ }
+diff --git a/src/frame/modules/datetime/timezone_dialog/timezone.cpp b/src/frame/modules/datetime/timezone_dialog/timezone.cpp
+index 3dd4aad..5f1b363 100644
+--- a/src/frame/modules/datetime/timezone_dialog/timezone.cpp
++++ b/src/frame/modules/datetime/timezone_dialog/timezone.cpp
+@@ -46,7 +46,7 @@ namespace installer {
+ namespace {
+ 
+ // Absolute path to zone.tab file.
+-const char kZoneTabFile[] = "/usr/share/zoneinfo/zone.tab";
++const char kZoneTabFile[] = "@tzdata@/share/zoneinfo/zone.tab";
+ 
+ // Absolute path to backward timezone file.
+ const char kTimezoneAliasFile[] = "/timezone_alias";
+diff --git a/src/frame/modules/network/connectionvpneditpage.cpp b/src/frame/modules/network/connectionvpneditpage.cpp
+index e292865..95c5a2b 100644
+--- a/src/frame/modules/network/connectionvpneditpage.cpp
++++ b/src/frame/modules/network/connectionvpneditpage.cpp
+@@ -215,7 +215,7 @@ void ConnectionVpnEditPage::exportConnConfig()
+     qDebug() << Q_FUNC_INFO << args;
+ 
+     QProcess p;
+-    p.start("nmcli", args);
++    p.start("@nmcli@", args);
+     p.waitForFinished();
+     qDebug() << p.readAllStandardOutput();
+     qDebug() << p.readAllStandardError();
+diff --git a/src/frame/modules/network/vpnpage.cpp b/src/frame/modules/network/vpnpage.cpp
+index 521a603..450d1a6 100644
+--- a/src/frame/modules/network/vpnpage.cpp
++++ b/src/frame/modules/network/vpnpage.cpp
+@@ -224,7 +224,7 @@ void VpnPage::importVPN()
+     qDebug() << args;
+ 
+     QProcess p;
+-    p.start("nmcli", args);
++    p.start("@nmcli@", args);
+     p.waitForFinished();
+     const auto stat = p.exitCode();
+     const QString output = p.readAllStandardOutput();
+diff --git a/src/frame/modules/sync/syncworker.cpp b/src/frame/modules/sync/syncworker.cpp
+index 3f929bf..6f240d9 100644
+--- a/src/frame/modules/sync/syncworker.cpp
++++ b/src/frame/modules/sync/syncworker.cpp
+@@ -24,7 +24,7 @@ SyncWorker::SyncWorker(SyncModel *model, QObject *parent)
+ 
+     m_model->setSyncIsValid(
+         QProcess::execute(
+-            "which", QStringList() << "/usr/lib/deepin-sync-daemon/deepin-sync-daemon") ==
++            "@which@", QStringList() << "@deepin_sync@/lib/deepin-sync-daemon/deepin-sync-daemon") ==
+             0 &&
+         valueByQSettings<bool>(DCC_CONFIG_FILES, "CloudSync", "AllowCloudSync", false));
+ }

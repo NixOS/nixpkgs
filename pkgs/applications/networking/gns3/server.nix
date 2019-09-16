@@ -1,6 +1,6 @@
 { stable, branch, version, sha256Hash }:
 
-{ stdenv, python3, fetchFromGitHub, fetchpatch }:
+{ stdenv, python3, fetchFromGitHub }:
 
 let
   python = if stable then python3.override {

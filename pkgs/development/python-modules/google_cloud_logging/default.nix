@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13ac67399289b202b409e6cef7a87dea32ddabf902f69a677bd05554f6aecf0b";
+    sha256 = "a70201ca9f3972ff0e3272c5628b22ed9227e10ac00e570c28087377733632df";
   };
 
   checkInputs = [ pytest mock webapp2 django flask ];

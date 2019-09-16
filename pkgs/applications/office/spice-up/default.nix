@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, gdk_pixbuf
+, gdk-pixbuf
 , gtk3
 , gettext
 , ninja
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spice-up";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Spice-up";
     rev = version;
-    sha256 = "0vgs2z6yr0d5vwb04wd2s22144pdrjhqik9xs69q4dxjxa84iw0h";
+    sha256 = "1pix911l4ddn50026a5sbpqfzba6fmw40m1yzbknmkgd2ny28f0m";
   };
 
   USER = "pbuilder";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pantheon.elementary-icon-theme
     pantheon.granite
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     json-glib
     libevdev

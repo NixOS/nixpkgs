@@ -10,7 +10,7 @@ in
 # So an extension's attribute name should be of the form:
 # "${mktplcRef.publisher}.${mktplcRef.name}".
 #
-rec {
+{
 
   alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
     mktplcRef = {
@@ -62,7 +62,9 @@ rec {
 
   ms-vscode.cpptools = callPackage ./cpptools {};
 
-  ms-python.python = callPackage ./python {};
+  ms-python.python = callPackage ./python {
+    extractNuGet = callPackage ./python/extract-nuget.nix { };
+  };
 
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {

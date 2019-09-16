@@ -5,15 +5,15 @@ let
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_i386.deb";
-      sha256 = "136ci4q0ns0qzikndlkbab947m47zv2nmnn8mda2374ip43kn6ri";
+      sha256 = "03bky9vja7fijz45n44b6gawd6q8yd30nx6nya9lqdlxd1bkqmji";
     } else fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_amd64.deb";
-      sha256 = "1cw10lr7hrsr9xvq3wv1wkyk7jqsgfnnlkq4km9kxr39f51hv6na";
+      sha256 = "03bky9vja7fijz45n44b6gawd6q8yd30nx6nya9lqdlxd1bkqmji";
     };
 in stdenv.mkDerivation {
   # https://www.rescuetime.com/updates/linux_release_notes.html
-  name = "rescuetime-2.14.2.1";
+  name = "rescuetime-2.14.3.1";
   inherit src;
   buildInputs = [ dpkg makeWrapper ];
   # avoid https://github.com/NixOS/patchelf/issues/99

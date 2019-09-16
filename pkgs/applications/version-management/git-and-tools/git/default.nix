@@ -14,25 +14,29 @@
 , darwin
 , withLibsecret ? false
 , pkgconfig, glib, libsecret
+, gzip # needed at runtime by gitweb.cgi
 }:
 
 assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.21.0";
+  version = "2.23.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
+
+  gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
 
 stdenv.mkDerivation {
-  name = "git-${version}";
+  pname = "git";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0a0d0b07rmvs985zpndxxy0vzr0vq53kq5kyd68iv6gf8gkirjwc";
+    sha256 = "0rv0y45gcd3h191isppn77acih695v4pipdj031jvs9rd1ds0kr3";
   };
 
-  outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
+  outputs = [ "out" ];
 
   hardeningDisable = [ "format" ];
 
@@ -96,7 +100,9 @@ stdenv.mkDerivation {
 
   postBuild = ''
     make -C contrib/subtree
-  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + (stdenv.lib.optionalString perlSupport ''
+    make -C contrib/diff-highlight
+  '') + (stdenv.lib.optionalString stdenv.isDarwin ''
     make -C contrib/credential/osxkeychain
   '') + (stdenv.lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret
@@ -162,16 +168,13 @@ stdenv.mkDerivation {
       EOS
       )"
       perl -0777 -i -pe "$SCRIPT" \
-        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,stash,submodule,subtree,web--browse}
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse}
 
 
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing
       ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
     '' + stdenv.lib.optionalString perlSupport ''
-      # put in separate package for simpler maintenance
-      mv $out/share/gitweb $gitweb/
-
       # wrap perl commands
       makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/git-credential-netrc \
                   --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
@@ -185,6 +188,16 @@ stdenv.mkDerivation {
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsexportcommit \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
+
+      # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
+      # gitweb.cgi, need to patch so that it's found
+      sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
+          $out/share/gitweb/gitweb.cgi
+      # Give access to CGI.pm and friends (was removed from perl core in 5.22)
+      for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
+          sed -i -e "/use CGI /i use lib \"$p/${perlPackages.perl.libPrefix}\";" \
+              "$out/share/gitweb/gitweb.cgi"
+      done
     ''
 
    + (if svnSupport then ''
@@ -306,6 +319,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens ];
+    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens globin ];
   };
 }

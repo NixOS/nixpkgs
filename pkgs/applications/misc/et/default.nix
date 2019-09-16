@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libnotify, gdk_pixbuf }:
+{ stdenv, fetchFromGitHub, pkgconfig, libnotify, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = "et-${version}";
+  pname = "et";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "geistesk";
     repo = "et";
-    rev = "${version}";
+    rev = version;
     sha256 = "167w9qwfpd63rgy0xmkkkh5krmd91q42c3ijy3j099krgdfbb9bc";
   };
 
-  buildInputs = [ libnotify gdk_pixbuf ];
+  buildInputs = [ libnotify gdk-pixbuf ];
   nativeBuildInputs = [ pkgconfig ];
 
   installPhase = ''

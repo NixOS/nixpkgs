@@ -18,7 +18,7 @@ buildPythonPackage rec {
      homepage = https://github.com/Pylons/waitress;
      description = "Waitress WSGI server";
      license = licenses.zpl20;
-     maintainers = with maintainers; [ garbas domenkozar ];
+     maintainers = with maintainers; [ domenkozar ];
   };
 
 }

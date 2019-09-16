@@ -312,7 +312,23 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
       Maximum number of layers to create.
      </para>
      <para>
-      <emphasis>Default:</emphasis> <literal>24</literal>
+      <emphasis>Default:</emphasis> <literal>100</literal>
+     </para>
+     <para>
+      <emphasis>Maximum:</emphasis> <literal>125</literal>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>extraCommands</varname> <emphasis>optional</emphasis>
+    </term>
+    <listitem>
+     <para>
+       Shell commands to run while building the final layer, without access
+       to most of the layer contents. Changes to this layer are "on top"
+       of all the other layers, so can create additional directories
+       and files.
      </para>
     </listitem>
    </varlistentry>
@@ -480,9 +496,9 @@ pullImage {
     <literal>nix-prefetch-docker</literal> command can be used to get required
     image parameters:
 
-<programlisting>
-$ nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
-</programlisting>
+<screen>
+<prompt>$ </prompt>nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
+</screen>
 
     Since a given <varname>imageName</varname> may transparently refer to a
     manifest list of images which support multiple architectures and/or
@@ -491,17 +507,17 @@ $ nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql 
     By default it will match the OS and architecture of the host the command is
     run on.
 
-<programlisting>
-$ nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
-</programlisting>
+<screen>
+<prompt>$ </prompt>nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
+</screen>
 
     Desired image name and tag can be set using
     <option>--final-image-name</option> and <option>--final-image-tag</option>
     arguments:
 
-<programlisting>
-$ nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr.io/my-project/mysql --final-image-tag prod
-</programlisting>
+<screen>
+<prompt>$ </prompt>nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr.io/my-project/mysql --final-image-tag prod
+</screen>
   </para>
  </section>
 
@@ -537,7 +553,7 @@ exportImage {
 
   name = someLayeredImage.name;
 }
-  </programlisting>
+</programlisting>
   </example>
 
   <para>

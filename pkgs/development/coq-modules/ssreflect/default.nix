@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coq, ncurses, which
+{ stdenv, coq, ncurses, which
 , graphviz, mathcomp, withDoc ? false
 }:
 

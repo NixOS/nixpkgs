@@ -3,7 +3,6 @@
 pythonPackages.buildPythonApplication rec {
   pname = "http-prompt";
   version = "1.0.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -30,6 +29,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/eliangcs/http-prompt;
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.linux; # can only test on linux
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -4,6 +4,8 @@
 , meson
 , ninja
 , python3
+, mutest
+, nixosTests
 , glib
 , gtk-doc
 , docbook_xsl
@@ -13,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "graphene";
-  version = "1.8.6";
+  version = "1.10.0";
 
   outputs = [ "out" "devdoc" "installedTests" ];
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "ebassi";
     repo = pname;
     rev = version;
-    sha256 = "1hdbdzcz86jrvsq5h954ph9q62m8jr2a5s5acklxhdkfqn5bkbv8";
+    sha256 = "16vqwih5bfxv7r3mm7iiha804rpsxzxjfrs4kx76d9q5yg2hayxr";
   };
 
   patches = [
@@ -30,8 +32,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-    "-Dinstalled_test_datadir=${placeholder ''installedTests''}/share"
-    "-Dinstalled_test_bindir=${placeholder ''installedTests''}/libexec"
+    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
+    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
   ];
 
   nativeBuildInputs = [
@@ -41,16 +43,26 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
+    gobject-introspection
     python3
   ];
 
   buildInputs = [
+    glib
     gobject-introspection
   ];
 
   checkInputs = [
-    glib
+    mutest
   ];
+
+  doCheck = true;
+
+  passthru = {
+    tests = {
+      installedTests = nixosTests.graphene;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A thin layer of graphic data types";

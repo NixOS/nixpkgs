@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, which, pkgconfig, SDL2, libGLU_combined, openalSoft
+{ stdenv, fetchFromGitHub, which, pkgconfig, SDL2, libGL, openalSoft
 , curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
 }:
 
-stdenv.mkDerivation rec {
-  name = "ioquake3-git-${version}";
-  version = "2018-12-14";
+stdenv.mkDerivation {
+  pname = "ioquake3-git";
+  version = "2019-05-29";
 
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "b0d2b141e702aafc3dcf77a026e12757f00e45ed";
+    rev = "350b8f9c7c88c002dccea4f0350f1919b86d3b4e";
     sha256 = "17qkqi22f2fyh6bnfcf1zz2lycgv08d6aw52sf0hqw7r3qq86d08";
   };
 
   nativeBuildInputs = [ which pkgconfig ];
   buildInputs = [
-    SDL2 libGLU_combined openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
+    SDL2 libGL openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
     freetype mumble
   ];
 

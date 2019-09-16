@@ -30,7 +30,7 @@ in {
       };
 
       config = mkOption {
-        type = with types; attrsOf (either str (either int bool));
+        type = with types; attrsOf (oneOf [ str int bool ]);
         default = {};
         description = ''
           The configuration to give rss2email.
@@ -43,9 +43,8 @@ in {
           <literal>[DEFAULT]</literal> block along with the
           <literal>to</literal> parameter.
 
-          See
-          <literal>https://github.com/rss2email/rss2email/blob/master/r2e.1</literal>
-          for more information on which parameters are accepted.
+          See <literal>man r2e</literal> for more information on which
+          parameters are accepted.
         '';
       };
 

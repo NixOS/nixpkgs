@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "3.5";
+  version = "3.10";
 in fetchzip {
   name = "inter-${version}";
 
@@ -12,14 +12,14 @@ in fetchzip {
     unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256 = "0zqixzzbb3n1j4jvpjm0hlxc32j53hgq4j078gihjkhgvjhsklf2";
+  sha256 = "029fjpgdml8qx2cqn4rnh2xm3z4cnh74jlzjb8pbfm2azsnvi6r1";
 
   meta = with lib; {
     homepage = https://rsms.me/inter/;
     description = "A typeface specially designed for user interfaces";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ demize ];
+    maintainers = with maintainers; [ demize dtzWill ];
   };
 }
 

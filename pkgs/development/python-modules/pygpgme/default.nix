@@ -20,6 +20,6 @@ buildPythonPackage rec {
     homepage = "https://launchpad.net/pygpgme";
     description = "A Python wrapper for the GPGME library";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

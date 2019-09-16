@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
-, file, librsvg, gnome3, gdk_pixbuf, python3
+, file, librsvg, gnome3, gdk-pixbuf, python3
 , telepathy-glib, telepathy-farstream, glibcLocales
 , clutter-gtk, clutter-gst, gst_all_1, cogl, gnome-online-accounts
 , gcr, libsecret, folks, libpulseaudio, telepathy-mission-control
@@ -10,11 +10,11 @@
 , isocodes, enchant, libchamplain, geoclue2, geocode-glib, cheese, libgudev }:
 
 stdenv.mkDerivation rec {
-  name = "empathy-${version}";
+  pname = "empathy";
   version = "3.25.90";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/empathy/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/empathy/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0sn10fcymc6lyrabk7vx8lpvlaxxkqnmcwj9zdkfa8qf3388k4nc";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gtk3 glib webkitgtk icu gnome-online-accounts
     telepathy-glib clutter-gtk clutter-gst cogl
     gst_all_1.gstreamer gst_all_1.gst-plugins-base
-    gcr libsecret libpulseaudio gdk_pixbuf
+    gcr libsecret libpulseaudio gdk-pixbuf
     libnotify clutter libsoup gnutls libgee p11-kit
     libcanberra-gtk3 telepathy-farstream farstream
     gnome3.adwaita-icon-theme gsettings-desktop-schemas

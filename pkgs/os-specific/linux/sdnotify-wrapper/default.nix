@@ -1,4 +1,4 @@
-{ lib, fetchurl, runCommandCC, skawarePackages }:
+{ lib, runCommandCC, skawarePackages }:
 
 with skawarePackages;
 

@@ -1,4 +1,4 @@
-{ buildOpenRAMod, fetchFromGitHub, abbrevCommit, extraPostFetch }:
+{ buildOpenRAMod, fetchFromGitHub, extraPostFetch }:
 
 let
   unsafeBuildOpenRAMod = attrs: name: (buildOpenRAMod attrs name).overrideAttrs (_: {

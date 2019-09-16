@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-polkit"
-    "--with-udev-base-dir=${placeholder ''out''}/lib/udev"
-    "--with-dbus-sys-dir=${placeholder ''out''}/etc/dbus-1/system.d"
-    "--with-systemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
+    "--with-udev-base-dir=${placeholder "out"}/lib/udev"
+    "--with-dbus-sys-dir=${placeholder "out"}/etc/dbus-1/system.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-systemd-suspend-resume"

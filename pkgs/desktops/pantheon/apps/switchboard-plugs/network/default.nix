@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, substituteAll, vala
-, libgee, granite, gtk3, networkmanager, networkmanagerapplet, switchboard, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, substituteAll
+, vala
+, libgee
+, granite
+, gtk3
+, networkmanager
+, networkmanagerapplet
+, switchboard
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
@@ -19,7 +32,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -38,12 +50,12 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./nma.patch;
-      networkmanagerapplet = "${networkmanagerapplet}";
+      networkmanagerapplet = networkmanagerapplet;
     })
   ];
 
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Networking Plug";

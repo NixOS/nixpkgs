@@ -1,19 +1,31 @@
-{ stdenv, fetchFromGitLab, meson, ninja, nasm }:
+{ stdenv, fetchFromGitLab
+, meson, ninja, nasm, pkgconfig
+, withTools ? false, SDL2
+, useVulkan ? false, libplacebo, vulkan-loader, vulkan-headers
+}:
+
+assert useVulkan -> withTools;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = version;
-    sha256 = "1m5vdg64iqxpi37l84mcfiq313g9z55zf66s85j2rqik6asmxbqg";
+    sha256 = "1fbalfzw8j00vwbrh9h8kjdx6h99dr10vmvbpg3rhsspmxq9h66h";
   };
 
-  nativeBuildInputs = [ meson ninja nasm ];
+  nativeBuildInputs = [ meson ninja nasm pkgconfig ];
   # TODO: doxygen (currently only HTML and not build by default).
+  buildInputs = stdenv.lib.optional withTools SDL2
+    ++ stdenv.lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
+
+  mesonFlags= [
+    "-Denable_tools=${stdenv.lib.boolToString withTools}"
+  ];
 
   meta = with stdenv.lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";

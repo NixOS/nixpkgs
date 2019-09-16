@@ -4,7 +4,7 @@ gd, geoip, perl }:
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "openresty-${version}";
+  pname = "openresty";
   version = "1.15.8.1";
 
   src = fetchurl {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, binutils-unwrapped, scons, gnum4, p7zip, glibc_multi, mesa_noglu
+{ stdenv, fetchurl, binutils-unwrapped, scons, gnum4, p7zip, glibc_multi, mesa
 , xorg, libGLU_combined, openal
 , lib, makeWrapper, makeDesktopItem }:
 
@@ -10,7 +10,7 @@ let
     desktopName = pname;
     name = pname;
     exec = "@out@/bin/${pname}";
-    icon = "${pname}";
+    icon = pname;
     terminal = "False";
     comment = "The Dark Mod - stealth FPS inspired by the Thief series";
     type = "Application";
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
     p7zip scons gnum4 makeWrapper
   ];
   buildInputs = [
-    glibc_multi mesa_noglu.dev xorg.libX11.dev openal
+    glibc_multi mesa.dev xorg.libX11.dev openal
     xorg.libXext.dev xorg.libXxf86vm.dev
     libGLU_combined
   ];
@@ -96,7 +96,7 @@ EOF
     description = "The Dark Mod - stealth FPS inspired by the Thief series";
     homepage = "http://www.thedarkmod.com";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ cf6b88f ];
+    maintainers = with maintainers; [ cizra ];
     platforms = with platforms; [ "x86_64-linux" ];  # tdm also supports x86, but I don't have a x86 install at hand to test.
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, gfortran, perl, which, config
+{ stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -86,13 +86,13 @@ let
   mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 in
 stdenv.mkDerivation rec {
-  name = "openblas-${version}";
-  version = "0.3.6";
+  pname = "openblas";
+  version = "0.3.7";
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "12vg0g3s4m49fr8z04j15yrgscqnaaflnkckjbffqxnrf90fcav1";
+    sha256 = "0vs1dlzyla02wajpkfzz8x3lfpgmwiaaizq2nmdjbkzkb7jnxhhz";
   };
 
   inherit blas64;

@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
-    repo = "${baseName}";
-    rev = "${version}";
+    repo = baseName;
+    rev = version;
     sha256 = "0mf8lsyq1z3b5p47c00lnwc8n7v9nzs1fd2g9c9hnz6fjd2ka44w";
   };
 

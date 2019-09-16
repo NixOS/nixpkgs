@@ -10,7 +10,7 @@ assert appliance == null || stdenv.lib.isDerivation appliance;
 assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
-  name = "libguestfs-${version}";
+  pname = "libguestfs";
   version = "1.38.6";
 
   src = fetchurl {

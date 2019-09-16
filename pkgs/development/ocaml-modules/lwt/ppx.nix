@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, lwt, ppx_tools_versioned }:
+{ buildDunePackage, lwt, ppx_tools_versioned }:
 
 buildDunePackage {
   pname = "lwt_ppx";

@@ -85,7 +85,7 @@ in
         {
           server = {
             config = '''
-              # Simplest server configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
+              # Simplest server configuration: https://community.openvpn.net/openvpn/wiki/StaticKeyMiniHowto
               # server :
               dev tun
               ifconfig 10.8.0.1 10.8.0.2
@@ -182,12 +182,12 @@ in
               options = {
                 username = mkOption {
                   description = "The username to store inside the credentials file.";
-                  type = types.string;
+                  type = types.str;
                 };
 
                 password = mkOption {
                   description = "The password to store inside the credentials file.";
-                  type = types.string;
+                  type = types.str;
                 };
               };
             });

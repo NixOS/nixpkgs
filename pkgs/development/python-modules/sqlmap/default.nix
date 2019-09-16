@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "sqlmap";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "894584fdb8d0e25e9f9ac0da20058e23c27d5ca55904cc0326e1a84101beef32";
+    sha256 = "84e0da1a3d846df2f7c886540828f374b357924207e915c8885e0472acdf68dd";
   };
 
   # No tests in archive

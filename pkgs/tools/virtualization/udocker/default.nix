@@ -2,14 +2,14 @@
 
 buildPythonApplication rec {
 
-  version = "1.1.1";
+  version = "1.1.3";
   pname = "udocker";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = "udocker" ;
     rev = "v${version}";
-    sha256 = "134xk7rfj0xki9znryk5qf1nsfa318ahrrsi1k6ia7kipp7i3hb4";
+    sha256 = "1c8y1p3brj987drikwrby8m1hdr40ja4anx0p4xsij3ll2h62w6z";
   };
 
   buildInputs = [ proot patchelf fakechroot runc simplejson pycurl coreutils ];

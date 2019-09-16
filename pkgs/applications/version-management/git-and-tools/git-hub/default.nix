@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gitMinimal, python2Packages }:
 
 stdenv.mkDerivation rec {
-  name = "git-hub-${version}";
+  pname = "git-hub";
   version = "1.0.3";
 
   src = fetchFromGitHub {

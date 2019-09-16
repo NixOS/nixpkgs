@@ -397,9 +397,9 @@ startAll;
      </para>
      <para>
 <programlisting>
-        $machine->systemctl("list-jobs --no-pager"); // runs `systemctl list-jobs --no-pager`
-        $machine->systemctl("list-jobs --no-pager", "any-user"); // spawns a shell for `any-user` and runs `systemctl --user list-jobs --no-pager`
-      </programlisting>
+$machine->systemctl("list-jobs --no-pager"); // runs `systemctl list-jobs --no-pager`
+$machine->systemctl("list-jobs --no-pager", "any-user"); // spawns a shell for `any-user` and runs `systemctl --user list-jobs --no-pager`
+</programlisting>
      </para>
     </listitem>
    </varlistentry>
@@ -410,10 +410,10 @@ startAll;
   To test user units declared by <literal>systemd.user.services</literal> the
   optional <literal>$user</literal> argument can be used:
 <programlisting>
-    $machine->start;
-    $machine->waitForX;
-    $machine->waitForUnit("xautolock.service", "x-session-user");
-  </programlisting>
+$machine->start;
+$machine->waitForX;
+$machine->waitForUnit("xautolock.service", "x-session-user");
+</programlisting>
   This applies to <literal>systemctl</literal>, <literal>getUnitInfo</literal>,
   <literal>waitForUnit</literal>, <literal>startJob</literal> and
   <literal>stopJob</literal>.

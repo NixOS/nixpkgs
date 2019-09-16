@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchFromGitHub, go, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "tmsu-${version}";
+  pname = "tmsu";
   version = "0.7.4";
 
   go-sqlite3 = fetchgit {

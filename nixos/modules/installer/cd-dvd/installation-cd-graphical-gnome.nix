@@ -1,7 +1,7 @@
 # This module defines a NixOS installation CD that contains X11 and
 # GNOME 3.
 
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 with lib;
 

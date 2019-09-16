@@ -1,32 +1,31 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, substituteAll, makeWrapper, meson
+{ stdenv, fetchFromGitHub, pantheon, pkgconfig, substituteAll, meson
 , ninja, vala, desktop-file-utils, gtk3, granite, libgee, elementary-settings-daemon
-, gnome-desktop, mutter, gobject-introspection, elementary-icon-theme, wingpanel-with-indicators
-, elementary-gtk-theme, nixos-artwork, elementary-default-settings, lightdm, numlockx
+, gnome-desktop, mutter, elementary-icon-theme, wingpanel-with-indicators
+, elementary-gtk-theme, nixos-artwork, lightdm, numlockx
 , clutter-gtk, libGL, dbus, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  pname = "greeter";
+  pname = "elementary-greeter";
   version = "3.3.1";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "greeter";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
     sha256 = "1vkq4z0hrmvzv4sh2qkxjajdxcycd1zj97a3pc8n4yb858pqfyzc";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig

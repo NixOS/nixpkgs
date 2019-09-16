@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "theme-vertex";
   version = "20170128";
 

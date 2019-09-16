@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''iolib_dot_conf'';
   version = ''iolib-v0.8.3'';
 

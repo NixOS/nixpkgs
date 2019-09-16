@@ -6,9 +6,9 @@
 , freetype, tcl, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "openmsx-${version}";
+  pname = "openmsx";
   version = "git-2017-11-02";
 
   src = fetchFromGitHub {

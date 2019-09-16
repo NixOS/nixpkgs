@@ -3,7 +3,6 @@
 , fetchPypi
 , ipaddress
 , python
-, pythonOlder
 }:
 
 buildPythonPackage rec {

@@ -361,7 +361,7 @@ in
     environment.systemPackages = [ pkgs.znapzend ];
 
     systemd.services = {
-      "znapzend" = {
+      znapzend = {
         description = "ZnapZend - ZFS Backup System";
         wantedBy    = [ "zfs.target" ];
         after       = [ "zfs.target" ];

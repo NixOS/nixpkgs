@@ -2,7 +2,7 @@
 , wayland, wayland-protocols }:
 
 stdenv.mkDerivation rec {
-  name = "wl-clipboard-${version}";
+  pname = "wl-clipboard";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig wayland-protocols ];
   buildInputs = [ wayland ];
-  mesonFlags = [ "-Dauto_features=enabled" ];
 
   meta = with stdenv.lib; {
     description = "Command-line copy/paste utilities for Wayland";

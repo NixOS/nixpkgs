@@ -1,10 +1,9 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, glib,
   gtk3, libgtop, bamf, json-glib, libcanberra-gtk3, libxkbcommon,
   libstartup_notification, deepin-wallpapers, deepin-desktop-schemas,
-  deepin }:
+  deepin, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-metacity";
   version = "3.22.24";
 
@@ -21,6 +20,7 @@ stdenv.mkDerivation rec {
     libtool
     glib.dev
     gnome3.gnome-common
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "2D window manager for Deepin";

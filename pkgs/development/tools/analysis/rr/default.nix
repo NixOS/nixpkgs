@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.2.0";
-  name = "rr-${version}";
+  pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";

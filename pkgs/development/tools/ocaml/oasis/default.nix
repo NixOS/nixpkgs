@@ -1,8 +1,8 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.4.10";
-  name = "ocaml-oasis-${version}";
+  pname = "ocaml-oasis";
 
   # You must manually update the url, not just the version. OCamlforge keys off
   # the number after download.php, not the filename.

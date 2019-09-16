@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, alsaLib, atk, cairo, cups, udev, hicolor-icon-theme
-, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, gtk3, gnome3
+{ stdenv, fetchurl, alsaLib, atk, cairo, cups, udev
+, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
 , runtimeShell, gsettings-desktop-schemas }:
 
 let
-  versionSuffix = "20190412141809.5262f90fd9";
+  versionSuffix = "20190813132700.6f497ec371";
 in
 
 stdenv.mkDerivation rec {
-  name = "keybase-gui-${version}";
-  version = "3.2.2"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  pname = "keybase-gui";
+  version = "4.3.1"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    sha256 = "20f0cbfae52a8afbc88c1130279b2c2ced21fd498eee7e43c88f5b88abd8f21b";
+    sha256 = "1mbbfy1aijqr8209jjja6dm2nzw721qqw94839df047rcwnd38pg";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gsettings-desktop-schemas
     gtk3
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
-  dontPatchElf = true;
+  dontPatchELF = true;
 
   unpackPhase = ''
     ar xf $src

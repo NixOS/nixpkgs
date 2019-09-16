@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
     homepage = http://geos.refractions.net/;
-    license = "GPL";
+    license = licenses.lgpl21;
   };
 }

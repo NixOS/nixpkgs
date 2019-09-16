@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3, fetchpatch,
+{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
   pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
   vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:
@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://fontmanager.github.io/;
-    description = "Simple font management for GTK+ desktop environments";
+    description = "Simple font management for GTK desktop environments";
     longDescription = ''
       Font Manager is intended to provide a way for average users to
       easily manage desktop fonts, without having to resort to command
       line tools or editing configuration files by hand. While designed
       primarily with the Gnome Desktop Environment in mind, it should
-      work well with other Gtk+ desktop environments.
+      work well with other GTK desktop environments.
 
       Font Manager is NOT a professional-grade font management solution.
     '';

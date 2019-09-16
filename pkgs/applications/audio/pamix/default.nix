@@ -3,7 +3,7 @@
 , libpulseaudio, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "pamix-${version}";
+  pname = "pamix";
   version = "1.6";
 
   src = fetchFromGitHub {

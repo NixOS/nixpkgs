@@ -8,7 +8,7 @@ let
     desktopName = pname;
     name = pname;
     exec = "@out@/bin/${pname}";
-    icon = "${pname}";
+    icon = pname;
     terminal = "False";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
@@ -24,6 +24,11 @@ in stdenv.mkDerivation rec {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
     sha256 = "0mc5dgh2x9nbili7gy6srjhb23ckalf08wqq2amyjr5rq392jvd7";
   };
+
+  prePatch = ''
+    # http://forums.te4.org/viewtopic.php?f=42&t=49478&view=next#p234354
+    sed -i 's|#include <GL/glext.h>||' src/tgl.h
+  '';
 
   nativeBuildInputs = [ makeWrapper unzip premake4 ];
 

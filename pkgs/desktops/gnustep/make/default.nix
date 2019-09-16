@@ -4,8 +4,9 @@ let
   version = "2.7.0";
 in
 
-stdenv.mkDerivation rec {
-  name = "gnustep-make-${version}";
+stdenv.mkDerivation {
+  pname = "gnustep-make";
+  inherit version;
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${version}.tar.gz";

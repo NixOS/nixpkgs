@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mxml-${version}";
+  pname = "mxml";
   version = "3.0";
 
   src = fetchFromGitHub {

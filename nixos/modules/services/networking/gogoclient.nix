@@ -34,7 +34,7 @@ in
 
       password = mkOption {
         default = "";
-        type = types.string;
+        type = types.str;
         description = ''
           Path to a file (as a string), containing your gogoNET password, if any.
         '';

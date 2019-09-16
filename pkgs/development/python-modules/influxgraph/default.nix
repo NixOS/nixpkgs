@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
-, influxdb, graphite_api, memcached, gnugrep
+, influxdb, graphite_api, memcached
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, libcap, acl }:
 
 stdenv.mkDerivation rec {
-  name = "bfs-${version}";
-  version = "1.4.1";
+  pname = "bfs";
+  version = "1.5";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "1y5w8gws4j1i334ap4rsl64scr0hlyrdkdl7ffaghs8fqa6mjmsb";
+    sha256 = "0lyrxbmfr4ckz4hx5dgz8xbq479l5rlyrqf205v6c82cap4zyv4x";
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ libcap acl ];

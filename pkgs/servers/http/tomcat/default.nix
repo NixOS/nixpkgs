@@ -3,11 +3,11 @@
 let
 
   common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (rec {
-    name = "apache-tomcat-${version}";
+    pname = "apache-tomcat";
     version = "${versionMajor}.${versionMinor}";
 
     src = fetchurl {
-      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${name}.tar.gz";
+      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 
@@ -44,13 +44,13 @@ in {
 
   tomcat85 = common {
     versionMajor = "8";
-    versionMinor = "5.35";
-    sha256 = "0n6agr2wn8m5mv0asz73hy2194n9rk7mh5wsp2pz7aq0andbhh5s";
+    versionMinor = "5.42";
+    sha256 = "1d90abwwvl0ghr0g0drk48j37wr2zgw74vws9z2rshyzrwgbvgp3";
   };
 
   tomcat9 = common {
     versionMajor = "9";
-    versionMinor = "0.13";
-    sha256 = "1rsrnmkkrbzrj56jk2wh8hrr79kfkk3fz1j0abk3midn1jnbgxxq";
+    versionMinor = "0.21";
+    sha256 = "0nsylbqvky4pf3wpsx3a29b85lvwk91ay37mljk9636qffjj1vjh";
   };
 }

@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/disintegration/imaging";
-      rev = "061e8a750a4db9667cdf9e2af7f4029ba506cb3b";
-      sha256 = "13fkknwz2iby5rdzv9sgam6p27zdgxis3sxgyls9sdir5lbhjhm7";
+      rev = "465faf0892b5c7b3325643b0e47282e1331672e7";
+      sha256 = "1z9rkphmqgyphznl53pp1gmf0dfrfrmr95bx46p422ldml26c5a0";
     };
   }
   {
@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/fogleman/gg";
-      rev = "72436a171bf31757dc87fb8fa9f7485307350307";
-      sha256 = "116ysxj7nv9zw5ff75p2mriwf6fx4qzdik9za8cy0l0vih78qvjq";
+      rev = "f194ddec6f45226fc9e1b4a61b7237f186edd543";
+      sha256 = "095g5hpqvpy5w9l4kb65cif013snsvlbw6sgln0kwdix0z099j3i";
     };
   }
   {
@@ -77,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/image";
-      rev = "6d32002ffd7577f23673706728e1c510698cecb1";
-      sha256 = "03jzn07kfgdzzm4785xngcksv9ix6q1lf12b8j91flc0v7swsd1b";
+      rev = "7e034cad644213bc79b336b52fce73624259aeca";
+      sha256 = "04n4yi0p2yjv8sr9dmnzwc2k6hvzzvl6jdq2xd043kvjwzk583va";
     };
   }
   {
@@ -86,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "f4e77d36d62c17c2336347bb2670ddbd02d092b7";
-      sha256 = "0avjnglqqg9ya0cbhp23m4namykii219kxjywxn4cd7pfcc5arha";
+      rev = "3b0461eec859c4b73bb64fdc8285971fd33e3938";
+      sha256 = "0l00c8l0a8xnv6qdpwfzxxsr58jggacgzdrwiprrfx2xqm37b6d5";
     };
   }
   {

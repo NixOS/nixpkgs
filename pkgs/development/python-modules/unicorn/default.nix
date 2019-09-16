@@ -1,7 +1,6 @@
-{ stdenv, buildPackages, buildPythonPackage, fetchPypi, isPy3k }:
+{ stdenv, buildPackages, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name  = "${pname}-${version}";
   pname = "unicorn";
   version = "1.0.1";
 
@@ -11,7 +10,7 @@ buildPythonPackage rec {
   };
 
   # needs python2 at build time
-  PYTHON="${buildPackages.python2.interpreter}";
+  PYTHON=buildPackages.python2.interpreter;
 
   setupPyBuildFlags = [ "--plat-name" "linux" ];
 

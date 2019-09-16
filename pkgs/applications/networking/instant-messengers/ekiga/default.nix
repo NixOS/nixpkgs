@@ -5,10 +5,11 @@
 , libXrandr, which, libxslt, libtasn1, gmp, nettle, sqlite, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ekiga-4.0.1";
+  pname = "ekiga";
+  version = "4.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/ekiga/4.0/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "5f4f491c9496cf65ba057a9345d6bb0278f4eca07bcda5baeecf50bfcd9a4a3b";
   };
 
@@ -52,17 +53,21 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with stdenv.lib; {
-    description = "VOIP/Videoconferencing app with full SIP and H.323 support";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-  };
-
   passthru = {
     updateInfo = {
       downloadPage = "mirror://gnome/sources/ekiga";
     };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "VOIP/Videoconferencing app with full SIP and H.323 support";
+    homepage = "https://www.ekiga.org/";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }
 

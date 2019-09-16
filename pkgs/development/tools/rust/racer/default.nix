@@ -1,37 +1,49 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "racer-${version}";
-  version = "2.0.14";
+  pname = "racer";
+  version = "2.1.22";
 
   src = fetchFromGitHub {
     owner = "racer-rust";
     repo = "racer";
-    rev = version;
-    sha256 = "0kgax74qa09axq7b175ph3psprgidwgsml83wm1qwdq16gpxiaif";
+    rev = "v${version}";
+    sha256 = "1n808h4jqxkvpjwmj8jgi4y5is5zvr8vn42mwb3yi13mix32cysa";
   };
 
-  cargoSha256 = "1j3fviimdxn6xa75z0l9wkgdnznp8q20jjs42mql6ql782dga5lk";
+  cargoSha256 = "0njaa9vk2i9g1c6sq20b7ls97nl532rfv3is7d8dwz51nrwk6jxs";
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper ]
+                ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-  preCheck = ''
-    export RUST_SRC_PATH="${rustPlatform.rustcSrc}"
+  # a nightly compiler is required unless we use this cheat code.
+  RUSTC_BOOTSTRAP=1;
+
+  RUST_SRC_PATH = rustPlatform.rustcSrc;
+  postInstall = ''
+    wrapProgram $out/bin/racer --set-default RUST_SRC_PATH $rustcSrc
   '';
-  patches = [
-    (substituteAll {
-      src = ./rust-src.patch;
-      inherit (rustPlatform) rustcSrc;
-    })
-    ./ignore-tests.patch
-  ];
-  doCheck = true;
+
+  checkPhase = ''
+    cargo test -- \
+      --skip nameres::test_do_file_search_std \
+      --skip util::test_get_rust_src_path_rustup_ok \
+      --skip util::test_get_rust_src_path_not_rust_source_tree \
+      --skip extern --skip completes_pub_fn --skip find_crate_doc \
+      --skip follows_use_local_package --skip follows_use_for_reexport \
+      --skip follows_rand_crate --skip get_completion_in_example_dir
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/racer --version
+  '';
 
   meta = with stdenv.lib; {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = https://github.com/racer-rust/racer;
     license = licenses.mit;
-    maintainers = with maintainers; [ jagajaga globin ];
+    maintainers = with maintainers; [ jagajaga ];
     platforms = platforms.all;
   };
 }

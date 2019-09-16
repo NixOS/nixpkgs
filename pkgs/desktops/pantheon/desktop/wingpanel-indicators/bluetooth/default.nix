@@ -1,6 +1,20 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3
-, ninja, vala, gtk3, granite, libnotify, wingpanel, libgee, libxml2
-, gobject-introspection, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, granite
+, libnotify
+, wingpanel
+, libgee
+, libxml2
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-bluetooth";
@@ -20,7 +34,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     libxml2
     meson
     ninja
@@ -39,7 +52,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py

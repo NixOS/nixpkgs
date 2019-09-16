@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "timewarrior-${version}";
+  pname = "timewarrior";
   version = "1.1.1";
 
   enableParallelBuilding = true;

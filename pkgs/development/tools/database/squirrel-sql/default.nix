@@ -7,7 +7,8 @@
 let
   version = "3.9.1";
 in stdenv.mkDerivation rec {
-  name = "squirrel-sql-${version}";
+  pname = "squirrel-sql";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";

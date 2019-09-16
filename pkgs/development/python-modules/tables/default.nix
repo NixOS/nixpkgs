@@ -1,17 +1,17 @@
 { stdenv, fetchPypi, python, buildPythonPackage
-, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc }:
+, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
 
 buildPythonPackage rec {
-  version = "3.4.4";
+  version = "3.5.2";
   pname = "tables";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bdc5c073712af2a43babd139c4855fc99496bb2c3f3f5d1b4770a985e6f9ce29";
+    sha256 = "1hikrki0hx94ass31pn0jyz9iy0zhnkjacfk86m21cxsc8if685j";
   };
 
   buildInputs = [ hdf5 cython bzip2 lzo c-blosc ];
-  propagatedBuildInputs = [ numpy numexpr six ];
+  propagatedBuildInputs = [ numpy numexpr six mock ];
 
   # The setup script complains about missing run-paths, but they are
   # actually set.

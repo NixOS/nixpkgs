@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, openal }:
 
 stdenv.mkDerivation rec {
-  name = "alure-${version}";
+  pname = "alure";
   version = "1.2";
 
   src = fetchurl {

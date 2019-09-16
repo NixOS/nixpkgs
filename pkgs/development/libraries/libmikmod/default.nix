@@ -1,7 +1,7 @@
 { stdenv, fetchurl, texinfo, alsaLib, libpulseaudio, CoreAudio }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
   name = "libmikmod-3.3.11.1";

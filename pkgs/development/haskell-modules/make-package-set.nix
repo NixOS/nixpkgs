@@ -187,7 +187,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     # for any version that has been released on hackage as opposed to only
     # versions released before whatever version of all-cabal-hashes you happen
     # to be currently using.
-    callHackageDirect = {pkg, ver, sha256}@args:
+    callHackageDirect = {pkg, ver, sha256}:
       let pkgver = "${pkg}-${ver}";
       in self.callCabal2nix pkg (pkgs.fetchzip {
            url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";

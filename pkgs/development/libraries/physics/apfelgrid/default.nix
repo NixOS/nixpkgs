@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, apfel, applgrid, lhapdf, root5 }:
 
 stdenv.mkDerivation rec {
-  name = "apfelgrid-${version}";
+  pname = "apfelgrid";
   version = "1.0.1";
 
   src = fetchFromGitHub {

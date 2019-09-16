@@ -1,34 +1,31 @@
-From c550bf4a41e9f86351b0a65ea3d6c9ab616e27c0 Mon Sep 17 00:00:00 2001
+From 2bf6614a6d7516e194e39eb691c05b486860153c Mon Sep 17 00:00:00 2001
 From: worldofpeace <worldofpeace@protonmail.ch>
 Date: Thu, 16 May 2019 21:15:15 -0400
 Subject: [PATCH] meson: add options for tests installation dirs
 
 ---
- meson_options.txt     |  6 ++++++
- src/tests/meson.build | 19 ++++++++++++++-----
+ meson_options.txt |  6 ++++++
+ tests/meson.build | 19 ++++++++++++++-----
  2 files changed, 20 insertions(+), 5 deletions(-)
 
 diff --git a/meson_options.txt b/meson_options.txt
-index c938805..c1e9e95 100644
+index 578bdae..6f5fa23 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -19,6 +19,12 @@ option('arm_neon', type: 'boolean',
- option('tests', type: 'boolean',
+@@ -22,3 +22,9 @@ option('tests', type: 'boolean',
+ option('installed_tests', type: 'boolean',
         value: true,
-        description: 'Build the test suite (requires GObject)')
+        description: 'Install tests')
 +option('installed_test_datadir', type: 'string',
 +       value: '',
 +       description: 'Installation directory for data files in tests')
 +option('installed_test_bindir', type: 'string',
 +       value: '',
 +       description: 'Installation directory for binary files in tests')
- option('benchmarks', type: 'boolean',
-        value: true,
-        description: 'Build the benchmarks suite (requires GObject)')
-diff --git a/src/tests/meson.build b/src/tests/meson.build
-index 62129c6..0186400 100644
---- a/src/tests/meson.build
-+++ b/src/tests/meson.build
+diff --git a/tests/meson.build b/tests/meson.build
+index 1f9bd0e..0253ac3 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
 @@ -22,8 +22,17 @@ unit_tests = [
  python = python3.find_python()
  gen_installed_test = join_paths(meson.current_source_dir(), 'gen-installed-test.py')
@@ -47,33 +44,33 @@ index 62129c6..0186400 100644
 +    test_bindir = join_paths(get_option('prefix'), get_option('libexecdir'), test_suffix)
 +endif
  
- foreach unit: unit_tests
-   wrapper = '@0@.test'.format(unit)
-@@ -32,13 +41,13 @@ foreach unit: unit_tests
-                        command: [
-                          python,
-                          gen_installed_test,
--                         '--testdir=@0@'.format(installed_test_bindir),
-+                         '--testdir=@0@'.format(test_bindir),
-                          '--testname=@0@'.format(unit),
-                          '--outdir=@OUTDIR@',
-                          '--outfile=@0@'.format(wrapper),
-                        ],
-                        install: true,
--                       install_dir: installed_test_datadir)
-+                       install_dir: test_datadir)
+ # Make tests conditional on having mutest-1 installed system-wide, or
+ # available as a subproject
+@@ -42,13 +51,13 @@ if mutest_dep.found()
+       command: [
+         python,
+         gen_installed_test,
+-        '--testdir=@0@'.format(installed_test_bindir),
++        '--testdir=@0@'.format(test_bindir),
+         '--testname=@0@'.format(unit),
+         '--outdir=@OUTDIR@',
+         '--outfile=@0@'.format(wrapper),
+       ],
+       install: get_option('installed_tests'),
+-      install_dir: installed_test_datadir,
++      install_dir: test_datadir,
+     )
  
-   exe = executable(unit, unit + '.c',
-                    dependencies: graphene_dep,
-@@ -50,7 +59,7 @@ foreach unit: unit_tests
-                      '-DGLIB_DISABLE_DEPRECATION_WARNINGS',
-                    ],
-                    install: true,
--                   install_dir: installed_test_bindir)
-+                   install_dir: test_bindir)
- 
-   test(unit, exe, args: [ '--tap', '-k' ])
- endforeach
+     test(unit,
+@@ -57,7 +66,7 @@ if mutest_dep.found()
+         include_directories: graphene_inc,
+         c_args: common_cflags,
+         install: get_option('installed_tests'),
+-        install_dir: installed_test_bindir,
++        install_dir: test_bindir,
+       ),
+       env: ['MUTEST_OUTPUT=tap'],
+       protocol: 'tap',
 -- 
-2.21.0
+2.22.0
 

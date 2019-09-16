@@ -15,7 +15,9 @@
 - [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nix-review --run "nix-review wip"`
 - [ ] Tested execution of all binary files (usually in `./result/bin/`)
 - [ ] Determined the impact on package closure size (by running `nix path-info -S` before and after)
-- [ ] Assured whether relevant documentation is up to date
+- [ ] Ensured that relevant documentation is up to date
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
 
----
+###### Notify maintainers
+
+cc @

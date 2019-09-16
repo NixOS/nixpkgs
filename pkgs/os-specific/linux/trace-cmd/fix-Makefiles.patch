@@ -1,0 +1,52 @@
+diff --git a/Documentation/Makefile b/Documentation/Makefile
+index 21e42fd..826361d 100644
+--- a/Documentation/Makefile
++++ b/Documentation/Makefile
+@@ -108,7 +108,11 @@ $(IMGS_INSTALL): %.png.install : %.png force
+ 
+ GUI_INSTALL = $(HTML_INSTALL) $(IMGS_INSTALL)
+ 
+-install: $(MAN1_INSTALL) $(MAN5_INSTALL) $(GUI_INSTALL)
++install_man: $(MAN1_INSTALL) $(MAN5_INSTALL)
++
++install_gui: $(GUI_INSTALL)
++
++install: install_man install_gui
+ 
+ clean:
+ 	(cd $(obj); \
+diff --git a/Makefile b/Makefile
+index 2bcc383..107ead0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -289,7 +289,7 @@ libtraceevent.a: $(LIBTRACEEVENT_STATIC)
+ libtracecmd.a: $(LIBTRACECMD_STATIC)
+ libtracecmd.so: $(LIBTRACECMD_SHARED)
+ 
+-libs: $(LIBTRACECMD_SHARED) $(LIBTRACEEVENT_SHARED)
++libs: $(LIBTRACECMD_SHARED) $(LIBTRACEEVENT_SHARED) $(LIBTRACECMD_STATIC) $(LIBTRACEEVENT_STATIC)
+ 
+ plugins: force $(obj)/plugins/trace_plugin_dir $(obj)/plugins/trace_python_dir
+ 	$(Q)$(MAKE) -C $(src)/plugins
+@@ -345,6 +345,8 @@ install_gui: install_cmd gui
+ install_libs: libs
+ 	$(Q)$(call do_install,$(LIBTRACECMD_SHARED),$(libdir_SQ))
+ 	$(Q)$(call do_install,$(LIBTRACEEVENT_SHARED),$(libdir_SQ))
++	$(Q)$(call do_install,$(LIBTRACECMD_STATIC),$(libdir_SQ))
++	$(Q)$(call do_install,$(LIBTRACEEVENT_STATIC),$(libdir_SQ))
+ 	$(Q)$(call do_install,$(src)/include/traceevent/event-parse.h,$(includedir_SQ)/traceevent)
+ 	$(Q)$(call do_install,$(src)/include/traceevent/trace-seq.h,$(includedir_SQ)/traceevent)
+ 	$(Q)$(call do_install,$(src)/include/trace-cmd/trace-cmd.h,$(includedir_SQ))
+@@ -356,6 +358,12 @@ doc:
+ doc_clean:
+ 	$(MAKE) -C $(src)/Documentation clean
+ 
++install_man:
++	$(MAKE) -C $(src)/Documentation install_man
++
++install_gui_docs:
++	$(MAKE) -C $(src)/Documentation install_gui
++
+ install_doc:
+ 	$(MAKE) -C $(src)/Documentation install
+ 

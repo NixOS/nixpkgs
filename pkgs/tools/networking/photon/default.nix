@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, makeWrapper }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "photon";

@@ -19,7 +19,7 @@ in
 
 with versionMap.${version};
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation  {
   name = "fluidsynth-${fluidsynthVersion}";
   version = fluidsynthVersion;
 

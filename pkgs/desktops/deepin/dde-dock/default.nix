@@ -1,20 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
-  qtsvg, libsForQt5, polkit, gsettings-qt, dtkcore, dtkwidget,
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
+  qtsvg, polkit, gsettings-qt, dtkcore, dtkwidget,
   dde-qt-dbus-factory, dde-network-utils, dde-daemon,
   deepin-desktop-schemas, xorg, glib, wrapGAppsHook, deepin,
-  plugins ? [], symlinkJoin, makeWrapper }:
+  plugins ? [], symlinkJoin, makeWrapper, libdbusmenu }:
 
 let
-unwrapped = stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+unwrapped = mkDerivation rec {
   pname = "dde-dock";
-  version = "4.9.9";
+  version = "4.10.3";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0vscm808q63bbl84q9l3vhhd8mw86wfjdh55rvyj42qpa5q4mvlz";
+    sha256 = "17iy78r0frpv42g521igfdcgdklbifzig1wzxq2nl14fq0bgxg4v";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,7 @@ unwrapped = stdenv.mkDerivation rec {
     dtkwidget
     glib.bin
     gsettings-qt
-    libsForQt5.libdbusmenu
+    libdbusmenu
     polkit
     qtsvg
     qtx11extras
@@ -69,7 +68,7 @@ unwrapped = stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Dock for Deepin Desktop Environment";

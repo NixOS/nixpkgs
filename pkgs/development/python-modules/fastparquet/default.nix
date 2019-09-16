@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, fetchpatch, numba, numpy, pandas,
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, numba, numpy, pandas,
 pytestrunner, thrift, pytest, python-snappy, lz4 }:
 
 buildPythonPackage rec {

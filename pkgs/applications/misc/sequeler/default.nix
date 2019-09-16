@@ -11,13 +11,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "sequeler";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1x2ikagjsgnhhhwkj09ihln17mq4wjq3wwbnf02j2p3jpp4i8w1i";
+    sha256 = "0mxlhyfqmd4zg0psdmr62rhmvssw8jslm7a1nvh93675ns3vfrs5";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig pantheon.vala gettext wrapGAppsHook python3 desktop-file-utils ];

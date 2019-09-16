@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.7.4";
-  name = "corebird-${version}";
+  pname = "corebird";
 
   src = fetchFromGitHub {
     owner = "baedert";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Native Gtk+ Twitter client for the Linux desktop";
+    description = "Native GTK Twitter client for the Linux desktop";
     longDescription = "Corebird is a modern, easy and fun Twitter client.";
     homepage = https://corebird.baedert.org/;
     license = stdenv.lib.licenses.gpl3;

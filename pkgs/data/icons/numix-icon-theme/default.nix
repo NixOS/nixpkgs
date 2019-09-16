@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "numix-icon-theme";
   version = "18.07.17";
 

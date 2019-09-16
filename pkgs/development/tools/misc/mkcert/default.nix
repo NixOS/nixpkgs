@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mkcert";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1aadnsx5pfmryf8mgxg9g0i083dm1pmrc6v4ln2mm3n89wwqc9b7";
+    sha256 = "0xcmvzh5lq8vs3b0f1zw645fxdr8471v7prl1656q02v38f58ly7";
   };
 
-  modSha256 = "0snvvwhyfq01nwgjz55dgd5skpg7z0dzix7sdag90cslbrr983i1";
+  modSha256 = "0an12l15a82mks6gipczdpcf2vklk14wjjnk0ccl3kdjwiw7f4wd";
 
   meta = with lib; {
     homepage = https://github.com/FiloSottile/mkcert;

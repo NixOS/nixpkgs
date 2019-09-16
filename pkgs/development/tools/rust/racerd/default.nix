@@ -1,29 +1,33 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper , Security }:
 
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "racerd-${version}";
-  version = "2017-09-15";
+  pname = "racerd";
+  version = "2019-03-20";
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "racerd";
-    rev = "29cd4c6fd2a9301e49931c2e065b2e10c4b587e4";
-    sha256 = "0knz881mjhd8q2i8ydggaa7lfpiqy11wjmnv5p80n1d8zca6yb7z";
+    rev = "6f74488e58e42314a36ff000bae796fe54c1bdd1";
+    sha256 = "1lg7j2plxpn5l65jxhsm99vmy08ljdb666hm0y1nnmmzalrakrg1";
   };
+
+  # a nightly compiler is required unless we use this cheat code.
+  RUSTC_BOOTSTRAP=1;
 
   doCheck = false;
 
-  cargoSha256 = "00gxj98zdkbrc5cxd4w5hk7iwv9a1kwa535hhspx9xd02r4d8rzl";
+  cargoSha256 = "15894qr0kpp5kivx0p71zmmfhfh8in0ydkvfirxh2r12x0r2jhdd";
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper ]
+                ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 
   installPhase = ''
     mkdir -p $out/bin
     cp -p target/release/racerd $out/bin/
-    wrapProgram $out/bin/racerd --set RUST_SRC_PATH "$RUST_SRC_PATH"
+    wrapProgram $out/bin/racerd --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
   '';
 
   meta = with stdenv.lib; {

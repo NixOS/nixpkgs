@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mmottl";
     repo = "lacaml";
-    rev = "${version}";
+    rev = version;
     sha256 = "1aflg07cc9ak9mg1cr0qr368c9s141glwlarl5nhalf6hhq7ibcb";
   };
 

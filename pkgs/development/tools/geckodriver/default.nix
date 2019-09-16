@@ -9,7 +9,7 @@ with rustPlatform;
 
 buildRustPackage rec {
   version = "0.22.0";
-  name = "geckodriver-${version}";
+  pname = "geckodriver";
 
   src = fetchFromGitHub {
     owner = "mozilla";
@@ -20,7 +20,7 @@ buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoSha256 = "1a8idl6falz0n9irh1p8hv5w2pmiknzsfnxl70k1psnznrpk2y8n";
+  cargoSha256 = "1pwg35kgn5z2zrlj1dwcbbdmkgmnvfxpxv4klzsxxg4m9xr1pfy4";
 
   meta = with lib; {
     description = "Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers";

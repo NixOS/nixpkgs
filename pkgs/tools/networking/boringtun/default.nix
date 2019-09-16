@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "04i53dvxld2a0xzr0gfl895rcwfvisj1rfs7rl0444gml8s8xyb3";
   };
 
-  cargoSha256 = "0mqgd5r3rdzaw3vkmz0rswn3cwq9b4im6g4rrq7wr7pgrzq96xwm";
+  cargoSha256 = "1gvmshwg9b486933vfgkg2r8nn6w6dyz42hqjy74p785fcg0v5hs";
 
   # To prevent configuration phase error that is caused by
   # lacking a new line in file ".cargo/config",

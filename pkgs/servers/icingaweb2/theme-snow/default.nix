@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, gawk }: with lib; stdenv.mkDerivation rec {
+{ stdenv, lib, fetchFromGitHub }: with lib; stdenv.mkDerivation rec {
   name = "icingaweb2-theme-snow";
   version = "1.0.0";
 

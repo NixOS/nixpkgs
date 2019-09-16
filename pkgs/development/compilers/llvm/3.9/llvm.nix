@@ -20,8 +20,6 @@
 assert (stdenv.hostPlatform != stdenv.buildPlatform) -> !enableSharedLibraries;
 
 let
-  src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
-
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with stdenv.lib;
     let parts = splitString "." version; in
@@ -29,10 +27,13 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "llvm-${version}";
+  pname = "llvm";
+  inherit version;
+
+  src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
 
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}.src llvm
     sourceRoot=$PWD/llvm
     unpackFile ${compiler-rt_src}
@@ -162,8 +163,6 @@ stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
-
-  passthru.src = src;
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";

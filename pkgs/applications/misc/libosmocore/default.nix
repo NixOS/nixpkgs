@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libosmocore-${version}";
-  version = "1.0.1";
+  pname = "libosmocore";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
     rev = version;
-    sha256 = "08xbj2calh1zkp79kxbq01vnh0y7nkgd4cgsivrzlyqahilbzvd9";
+    sha256 = "1535y6r4csvslrxcki80ya6zhhc5jw2nvy9bymb55ln77pf853vg";
   };
 
   propagatedBuildInputs = [

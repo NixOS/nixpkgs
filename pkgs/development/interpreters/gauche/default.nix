@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gauche-${version}";
-  version = "0.9.7";
+  pname = "gauche";
+  version = "0.9.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/gauche/Gauche-${version}.tgz";
-    sha256 = "181nycikma0rwrb1h6mi3kys11f8628pq8g5r3fg5hiz5sabscrd";
+    sha256 = "0jxp1ladpy8kvfvk561c64spf1c3d6giqla6zscqkd6qa480vcry";
   };
 
   nativeBuildInputs = [ pkgconfig texinfo ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "--with-iconv=${libiconv}"
     "--with-dbm=gdbm"
     "--with-zlib=${zlib}"
-    "--with-ca-bundle=$SSL_CERT_FILE"
+    "--with-ca-bundle=$NIX_SSL_CERT_FILE"
     # TODO: Enable slib
     #       Current slib in nixpkgs is specialized to Guile
     # "--with-slib=${slibGuile}/lib/slib"

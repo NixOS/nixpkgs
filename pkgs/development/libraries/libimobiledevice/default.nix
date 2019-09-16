@@ -5,8 +5,6 @@ stdenv.mkDerivation rec {
   pname = "libimobiledevice";
   version = "2019-04-04";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
@@ -34,7 +32,6 @@ stdenv.mkDerivation rec {
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
-    "--disable-static"
     "--disable-openssl"
     "--without-cython"
   ];

@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, django_environ, mock, django, six
+, django_environ, mock, django
 , pytest, pytestrunner, pytest-django
 }:
 buildPythonPackage rec {

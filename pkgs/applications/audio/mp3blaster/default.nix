@@ -3,7 +3,7 @@ stdenv.mkDerivation rec {
 
   version = "3.2.6";
 
-  name = "mp3blaster-${version}";
+  pname = "mp3blaster";
 
   src = fetchFromGitHub {
     owner = "stragulus";

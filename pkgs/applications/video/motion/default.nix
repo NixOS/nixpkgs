@@ -2,7 +2,7 @@
 , ffmpeg, libjpeg, libmicrohttpd }:
 
 stdenv.mkDerivation rec {
-  name = "motion-${version}";
+  pname = "motion";
   version = "4.2.2";
 
   src = fetchFromGitHub {

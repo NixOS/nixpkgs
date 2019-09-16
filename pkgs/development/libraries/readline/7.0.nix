@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "readline-${version}";
+  pname = "readline";
   version = "7.0p${toString (builtins.length upstreamPatches)}";
 
   src = fetchurl {

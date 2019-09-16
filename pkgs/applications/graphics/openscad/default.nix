@@ -1,10 +1,33 @@
-{ stdenv, fetchFromGitHub, qt5, libsForQt5
-, bison, flex, eigen, boost, libGLU_combined, glew, opencsg, cgal
-, mpfr, gmp, glib, pkgconfig, harfbuzz, gettext, freetype, fontconfig
-, double-conversion, lib3mf, libzip
+{ stdenv
+, fetchFromGitHub
+, qtbase
+, qtmultimedia
+, qscintilla
+, bison
+, flex
+, eigen
+, boost
+, libGLU_combined
+, glew
+, opencsg
+, cgal
+, mpfr
+, gmp
+, glib
+, pkgconfig
+, harfbuzz
+, gettext
+, freetype
+, fontconfig
+, double-conversion
+, lib3mf
+, libzip
+, mkDerivation
+, qtmacextras
+, qmake
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "openscad";
   version = "2019.05";
 
@@ -15,14 +38,14 @@ stdenv.mkDerivation rec {
     sha256 = "1qz384jqgk75zxk7sqd22ma9pyd94kh4h6a207ldx7p9rny6vc5l";
   };
 
-  nativeBuildInputs = [ bison flex pkgconfig gettext qt5.qmake ];
+  nativeBuildInputs = [ bison flex pkgconfig gettext qmake ];
 
   buildInputs = [
     eigen boost glew opencsg cgal mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
+    qtbase qtmultimedia qscintilla
   ] ++ stdenv.lib.optional stdenv.isLinux libGLU_combined
-    ++ (with qt5; [qtbase qtmultimedia] ++ stdenv.lib.optional stdenv.isDarwin qtmacextras)
-    ++ (with libsForQt5; [qscintilla])
+    ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
   ;
 
   qmakeFlags = [ "VERSION=${version}" ];

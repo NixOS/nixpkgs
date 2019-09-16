@@ -9,9 +9,8 @@
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
 , onlyLibVLC ? false
-, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null
+, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null, wrapQtAppsHook ? null
 , jackSupport ? false
-, fetchpatch
 , removeReferencesTo
 , chromecastSupport ? true, protobuf, libmicrodns
 }:
@@ -22,15 +21,15 @@
 
 with stdenv.lib;
 
-assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null);
+assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
 
 stdenv.mkDerivation rec {
-  name = "vlc-${version}";
-  version = "3.0.6";
+  pname = "vlc";
+  version = "3.0.8";
 
   src = fetchurl {
-    url = "http://get.videolan.org/vlc/${version}/${name}.tar.xz";
-    sha256 = "1lvyyahv6g9zv7m5g5qinyrwmw47zdsd5ysimb862j7kw15nvh8q";
+    url = "http://get.videolan.org/vlc/${version}/${pname}-${version}.tar.xz";
+    sha256 = "e0149ef4a20a19b9ecd87309c2d27787ee3f47dfd47c6639644bc1f6fd95bdf6";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -50,7 +49,8 @@ stdenv.mkDerivation rec {
     ++ optional jackSupport libjack2
     ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
-  nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ];
+  nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ]
+    ++ optionals withQt5 [ wrapQtAppsHook ];
 
   enableParallelBuilding = true;
 

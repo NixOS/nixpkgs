@@ -2,6 +2,7 @@
 , python
 , groff
 , less
+, fetchpatch
 }:
 
 let
@@ -21,23 +22,17 @@ let
           sha256 = "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1";
         };
       });
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "3.13";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
-        };
-      });
+      pyyaml = super.pyyaml_3;
     };
   };
 
 in py.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.16.162"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.16.215"; # N.B: if you change this, change botocore to a matching version too
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1v5n1klzkysshp73mhrminvkqqqw9mskdaw7xjhpqfrvcdnp60vv";
+    sha256 = "13r32z8iyza4gvpf81l6l2ywv37yxi4bb08ry7cli5m6ny9xqlq8";
   };
 
   # No tests included

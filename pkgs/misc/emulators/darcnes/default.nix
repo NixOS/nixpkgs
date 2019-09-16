@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libX11, libXt, libXext, libXaw }:
 
 stdenv.mkDerivation rec {
-  name = "darcnes-${version}";
+  pname = "darcnes";
   version = "9b0401";
 
   src = fetchurl {

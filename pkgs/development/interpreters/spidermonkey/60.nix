@@ -1,10 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip
+{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, buildPackages
 , which, readline, zlib, icu }:
+
+with stdenv.lib;
 
 let
   version = "60.4.0";
-in stdenv.mkDerivation rec {
-  name = "spidermonkey-${version}";
+in stdenv.mkDerivation {
+  pname = "spidermonkey";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
@@ -24,7 +27,7 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     export CXXFLAGS="-fpermissive"
     export LIBXUL_DIST=$out
-    export PYTHON="${python2.interpreter}"
+    export PYTHON="${buildPackages.python2.interpreter}"
 
     # We can't build in js/src/, so create a build dir
     mkdir obj
@@ -45,7 +48,16 @@ in stdenv.mkDerivation rec {
     # https://src.fedoraproject.org/rpms/mozjs38/c/761399aba092bcb1299bb4fccfd60f370ab4216e
     "--enable-optimize"
     "--enable-release"
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # Spidermonkey seems to use different host/build terminology for cross
+    # compilation here.
+    "--host=${stdenv.buildPlatform.config}"
+    "--target=${stdenv.hostPlatform.config}"
   ];
+
+  configurePlatforms = [];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   # Remove unnecessary static lib
   preFixup = ''

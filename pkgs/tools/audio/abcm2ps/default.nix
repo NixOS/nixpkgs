@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, which, docutils, freetype, pango }:
 
 stdenv.mkDerivation rec {
-  name = "abcm2ps-${version}";
-  version = "8.14.4";
+  pname = "abcm2ps";
+  version = "8.14.5";
 
   src = fetchFromGitHub {
     owner = "leesavide";
     repo = "abcm2ps";
     rev = "v${version}";
-    sha256 = "0k53yf8plkkwsgg2vk468fkhvvwxnz5jk77n1159l0g362k36p0n";
+    sha256 = "1i6db49khqy8bqg21cn90b1fvyw8mh1asdswzssr6dr2g8bhdwmq";
   };
 
   configureFlags = [

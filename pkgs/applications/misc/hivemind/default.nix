@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "hivemind-${version}";
+  pname = "hivemind";
   version = "1.0.4";
   goPackagePath = "github.com/DarthSim/hivemind";
 

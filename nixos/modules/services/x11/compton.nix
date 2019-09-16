@@ -7,52 +7,35 @@ let
 
   cfg = config.services.compton;
 
+  pairOf = x: with types; addCheck (listOf x) (y: length y == 2);
+
   floatBetween = a: b: with lib; with types;
     addCheck str (x: versionAtLeast x a && versionOlder x b);
 
-  pairOf = x: with types; addCheck (listOf x) (y: lib.length y == 2);
+  toConf = attrs: concatStringsSep "\n"
+    (mapAttrsToList
+      (k: v: let
+        sep = if isAttrs v then ":" else "=";
+        # Basically a tinkered lib.generators.mkKeyValueDefault
+        mkValueString = v:
+          if isBool v        then boolToString v
+          else if isInt v    then toString v
+          else if isFloat v  then toString v
+          else if isString v then ''"${escape [ ''"'' ] v}"''
+          else if isList v   then "[ "
+            + concatMapStringsSep " , " mkValueString v
+            + " ]"
+          else if isAttrs v  then "{ "
+            + concatStringsSep " "
+              (mapAttrsToList
+                (key: value: "${toString key}=${mkValueString value};")
+                v)
+            + " }"
+          else abort "compton.mkValueString: unexpected type (v = ${v})";
+      in "${escape [ sep ] k}${sep}${mkValueString v};")
+      attrs);
 
-  opacityRules = optionalString (length cfg.opacityRules != 0)
-    (concatMapStringsSep ",\n" (rule: ''"${rule}"'') cfg.opacityRules);
-
-  configFile = pkgs.writeText "compton.conf"
-    (optionalString cfg.fade ''
-      # fading
-      fading = true;
-      fade-delta    = ${toString cfg.fadeDelta};
-      fade-in-step  = ${elemAt cfg.fadeSteps 0};
-      fade-out-step = ${elemAt cfg.fadeSteps 1};
-      fade-exclude  = ${toJSON cfg.fadeExclude};
-    '' + 
-    optionalString cfg.shadow ''
-
-      # shadows
-      shadow = true;
-      shadow-offset-x = ${toString (elemAt cfg.shadowOffsets 0)};
-      shadow-offset-y = ${toString (elemAt cfg.shadowOffsets 1)};
-      shadow-opacity  = ${cfg.shadowOpacity};
-      shadow-exclude  = ${toJSON cfg.shadowExclude};
-    '' + ''
-
-      # opacity
-      active-opacity   = ${cfg.activeOpacity};
-      inactive-opacity = ${cfg.inactiveOpacity};
-
-      wintypes:
-      {
-        popup_menu = { opacity = ${cfg.menuOpacity}; }
-        dropdown_menu = { opacity = ${cfg.menuOpacity}; }
-      };
-
-      opacity-rule = [
-        ${opacityRules}
-      ];
-
-      # other options
-      backend = ${toJSON cfg.backend};
-      vsync = ${lib.boolToString cfg.vSync};
-      refresh-rate = ${toString cfg.refreshRate};
-    '' + cfg.extraOptions);
+  configFile = pkgs.writeText "compton.conf" (toConf cfg.settings);
 
 in {
 
@@ -98,7 +81,7 @@ in {
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
-        "focused = 1" 
+        "focused = 1"
       ];
       description = ''
         List of conditions of windows that should not be faded.
@@ -138,7 +121,7 @@ in {
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
-        "focused = 1" 
+        "focused = 1"
       ];
       description = ''
         List of conditions of windows that should have no shadow.
@@ -173,6 +156,15 @@ in {
       '';
     };
 
+    wintypes = mkOption {
+      type = types.attrs;
+      default = { popup_menu = { opacity = cfg.menuOpacity; }; dropdown_menu = { opacity = cfg.menuOpacity; }; };
+      example = {};
+      description = ''
+        Rules for specific window types.
+      '';
+    };
+
     opacityRules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -201,7 +193,7 @@ in {
         let
           res = x != "none";
           msg = "The type of services.compton.vSync has changed to bool:"
-                + " interpreting ${x} as ${lib.boolToString res}";
+                + " interpreting ${x} as ${boolToString res}";
         in
           if isBool x then x
           else warn msg res;
@@ -222,23 +214,13 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.compton;
-      defaultText = "pkgs.compton";
-      example = literalExample "pkgs.compton";
-      description = ''
-        Compton derivation to use.
-      '';
-    };
-
-    extraOptions = mkOption {
-      type = types.lines;
-      default = "";
-      example = ''
-        unredir-if-possible = true;
-        dbe = true;
-      '';
+    settings = let
+      configTypes = with types; oneOf [ bool int float str ];
+      # types.loaOf converts lists to sets
+      loaOf = t: with types; either (listOf t) (attrsOf t);
+    in mkOption {
+      type = loaOf (types.either configTypes (loaOf (types.either configTypes (loaOf configTypes))));
+      default = {};
       description = ''
         Additional Compton configuration.
       '';
@@ -246,6 +228,42 @@ in {
   };
 
   config = mkIf cfg.enable {
+    services.compton.settings = let
+      # Hard conversion to float, literally lib.toInt but toFloat
+      toFloat = str: let
+        may_be_float = builtins.fromJSON str;
+      in if builtins.isFloat may_be_float
+        then may_be_float
+        else throw "Could not convert ${str} to float.";
+    in {
+      # fading
+      fading           = mkDefault cfg.fade;
+      fade-delta       = mkDefault cfg.fadeDelta;
+      fade-in-step     = mkDefault (toFloat (elemAt cfg.fadeSteps 0));
+      fade-out-step    = mkDefault (toFloat (elemAt cfg.fadeSteps 1));
+      fade-exclude     = mkDefault cfg.fadeExclude;
+
+      # shadows
+      shadow           = mkDefault cfg.shadow;
+      shadow-offset-x  = mkDefault (elemAt cfg.shadowOffsets 0);
+      shadow-offset-y  = mkDefault (elemAt cfg.shadowOffsets 1);
+      shadow-opacity   = mkDefault (toFloat cfg.shadowOpacity);
+      shadow-exclude   = mkDefault cfg.shadowExclude;
+
+      # opacity
+      active-opacity   = mkDefault (toFloat cfg.activeOpacity);
+      inactive-opacity = mkDefault (toFloat cfg.inactiveOpacity);
+
+      wintypes         = mkDefault cfg.wintypes;
+
+      opacity-rule     = mkDefault cfg.opacityRules;
+
+      # other options
+      backend          = mkDefault cfg.backend;
+      vsync            = mkDefault cfg.vSync;
+      refresh-rate     = mkDefault cfg.refreshRate;
+    };
+
     systemd.user.services.compton = {
       description = "Compton composite manager";
       wantedBy = [ "graphical-session.target" ];
@@ -257,13 +275,13 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/compton --config ${configFile}";
+        ExecStart = "${pkgs.compton}/bin/compton --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ pkgs.compton ];
   };
 
 }

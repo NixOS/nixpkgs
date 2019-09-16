@@ -11,14 +11,14 @@ let
   arch = if stdenv.is64bit then "x64" else "ia32";
 
 in
-stdenv.mkDerivation rec {
-  name = "v8-${version}";
+stdenv.mkDerivation {
+  pname = "v8";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "v8";
     repo = "v8";
-    rev = "${version}";
+    rev = version;
     inherit sha256;
   };
   patchPhase = ''

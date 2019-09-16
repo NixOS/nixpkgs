@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
-  name = "subsonic-${version}";
+  pname = "subsonic";
   version = "6.1.5";
 
   src = fetchurl {
@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
   # for a directory to be created in the unpack phase.
   unpackPhase = ''
     runHook preUnpack
-    mkdir ${name}
-    tar -C ${name} -xzf $src
+    mkdir ${pname}-${version}
+    tar -C ${pname}-${version} -xzf $src
     runHook postUnpack
   '';
   installPhase = ''
     runHook preInstall
     mkdir $out
-    cp -r ${name}/* $out
+    cp -r ${pname}-${version}/* $out
     runHook postInstall
   '';
 

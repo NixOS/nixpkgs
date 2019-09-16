@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''fiveam'';
   version = ''v1.4.1'';
 

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "dtc";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
     rev = "refs/tags/v${version}";
-    sha256 = "075gj8bbahfdb8dlif3d2dpzjrkyf3bwbcmx96zpwhlgs0da8jxh";
+    sha256 = "1jhhfrg22h53lvm2lqhd66pyk20pil08ry03wcwyx1c3ln27k73z";
   };
 
   nativeBuildInputs = [ flex bison pkgconfig swig which ];

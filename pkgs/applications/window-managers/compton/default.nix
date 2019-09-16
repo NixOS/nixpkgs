@@ -1,24 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, asciidoc, docbook_xml_dtd_45
+{ stdenv, lib, fetchFromGitHub, pkgconfig, uthash, asciidoc, docbook_xml_dtd_45
 , docbook_xsl, libxslt, libxml2, makeWrapper, meson, ninja
 , xorgproto, libxcb ,xcbutilrenderutil, xcbutilimage, pixman, libev
-, dbus, libconfig, libdrm, libGL, pcre, libX11, libXcomposite, libXdamage
-, libXinerama, libXrandr, libXrender, libXext, xwininfo, libxdg_basedir }:
+, dbus, libconfig, libdrm, libGL, pcre, libX11
+, libXinerama, libXext, xwininfo, libxdg_basedir }:
 stdenv.mkDerivation rec {
   pname = "compton";
-  version = "6.2";
-
-  COMPTON_VERSION = "v${version}";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner  = "yshui";
     repo   = "compton";
-    rev    = COMPTON_VERSION;
-    sha256 = "03fi9q8zw2qrwpkmy1bnavgfh91ci9in5fdi17g4s5s0n2l7yil7";
+    rev    = "v${version}";
+    sha256 = "1vwa5f0nifc1913diqd6cp5k1dlfyc2ijxbcdj1s37ywpx6c63c3";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     meson ninja
     pkgconfig
+    uthash
     asciidoc
     docbook_xml_dtd_45
     docbook_xsl
@@ -39,11 +39,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dbuild_docs=true"
   ];
-
-  preBuild = ''
-    git() { echo "v${version}"; }
-    export -f git
-  '';
 
   installFlags = [ "PREFIX=$(out)" ];
 

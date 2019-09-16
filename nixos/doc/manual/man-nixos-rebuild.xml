@@ -7,45 +7,47 @@
   <refmiscinfo class="source">NixOS</refmiscinfo>
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
+
  <refnamediv>
   <refname><command>nixos-rebuild</command>
   </refname><refpurpose>reconfigure a NixOS machine</refpurpose>
  </refnamediv>
+
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-rebuild</command><group choice='req'> 
+   <command>nixos-rebuild</command><group choice='req'>
    <arg choice='plain'>
     <option>switch</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>boot</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>test</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>build</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>dry-build</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>dry-activate</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>edit</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>build-vm</option>
    </arg>
-    
+
    <arg choice='plain'>
     <option>build-vm-with-bootloader</option>
    </arg>
@@ -54,33 +56,34 @@
    <arg>
     <option>--upgrade</option>
    </arg>
-    
+
    <arg>
     <option>--install-bootloader</option>
    </arg>
-    
+
    <arg>
     <option>--no-build-nix</option>
    </arg>
-    
+
    <arg>
     <option>--fast</option>
    </arg>
-    
+
    <arg>
     <option>--rollback</option>
    </arg>
-    
+
    <arg>
     <option>--builders</option> <replaceable>builder-spec</replaceable>
    </arg>
+
    <sbr />
    <arg>
-    <group choice='req'> 
+    <group choice='req'>
     <arg choice='plain'>
      <option>--profile-name</option>
     </arg>
-     
+
     <arg choice='plain'>
      <option>-p</option>
     </arg>
@@ -90,10 +93,41 @@
    <arg>
     <option>--show-trace</option>
    </arg>
+   <arg>
+    <option>-I</option>
+    <replaceable>path</replaceable>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--verbose</option></arg>
+     <arg choice='plain'><option>-v</option></arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--max-jobs</option></arg>
+     <arg choice='plain'><option>-j</option></arg>
+    </group>
+    <replaceable>number</replaceable>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--keep-failed</option></arg>
+     <arg choice='plain'><option>-K</option></arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--keep-going</option></arg>
+     <arg choice='plain'><option>-k</option></arg>
+    </group>
+   </arg>
   </cmdsynopsis>
  </refsynopsisdiv>
+
  <refsection>
   <title>Description</title>
+
   <para>
    This command updates the system so that it corresponds to the configuration
    specified in <filename>/etc/nixos/configuration.nix</filename>. Thus, every
@@ -101,11 +135,14 @@
    NixOS module, you must run <command>nixos-rebuild</command> to make the
    changes take effect. It builds the new system in
    <filename>/nix/store</filename>, runs its activation script, and stop and
-   (re)starts any system services if needed.
+   (re)starts any system services if needed. Please note that user services need
+   to be started manually as they aren't detected by the activation script at the moment.
   </para>
+
   <para>
    This command has one required argument, which specifies the desired
    operation. It must be one of the following:
+
    <variablelist>
     <varlistentry>
      <term>
@@ -122,6 +159,7 @@
       </para>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
       <option>boot</option>
@@ -135,6 +173,7 @@
       </para>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
       <option>test</option>
@@ -149,6 +188,7 @@
       </para>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
       <option>build</option>
@@ -160,13 +200,14 @@
        the current directory, which points to the output of the top-level
        “system” derivation. This is essentially the same as doing
 <screen>
-$ nix-build /path/to/nixpkgs/nixos -A system
+<prompt>$ </prompt>nix-build /path/to/nixpkgs/nixos -A system
 </screen>
        Note that you do not need to be <literal>root</literal> to run
        <command>nixos-rebuild build</command>.
       </para>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
       <option>dry-build</option>
@@ -178,6 +219,7 @@ $ nix-build /path/to/nixpkgs/nixos -A system
       </para>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
       <option>dry-activate</option>
@@ -192,6 +234,7 @@ $ nix-build /path/to/nixpkgs/nixos -A system
       </para>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
       <option>edit</option>
@@ -202,6 +245,7 @@ $ nix-build /path/to/nixpkgs/nixos -A system
       </para>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
       <option>build-vm</option>
@@ -215,16 +259,18 @@ $ nix-build /path/to/nixpkgs/nixos -A system
        at the script that starts the VM. Thus, to test a NixOS configuration in
        a virtual machine, you should do the following:
 <screen>
-$ nixos-rebuild build-vm
-$ ./result/bin/run-*-vm
+<prompt>$ </prompt>nixos-rebuild build-vm
+<prompt>$ </prompt>./result/bin/run-*-vm
 </screen>
       </para>
+
       <para>
        The VM is implemented using the <literal>qemu</literal> package. For
        best performance, you should load the <literal>kvm-intel</literal> or
        <literal>kvm-amd</literal> kernel modules to get hardware
        virtualisation.
       </para>
+
       <para>
        The VM mounts the Nix store of the host through the 9P file system. The
        host Nix store is read-only, so Nix commands that modify the Nix store
@@ -232,6 +278,7 @@ $ ./result/bin/run-*-vm
        <command>nixos-rebuild</command>; to change the VM’s configuration,
        you must halt the VM and re-run the commands above.
       </para>
+
       <para>
        The VM has its own <literal>ext3</literal> root file system, which is
        automatically created when the VM is first started, and is persistent
@@ -242,6 +289,7 @@ $ ./result/bin/run-*-vm
       </para>
      </listitem>
     </varlistentry>
+
     <varlistentry>
      <term>
       <option>build-vm-with-bootloader</option>
@@ -264,11 +312,13 @@ $ ./result/bin/run-*-vm
    </variablelist>
   </para>
  </refsection>
+
  <refsection>
   <title>Options</title>
   <para>
    This command accepts the following options:
   </para>
+
   <variablelist>
    <varlistentry>
     <term>
@@ -280,6 +330,7 @@ $ ./result/bin/run-*-vm
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <option>--install-bootloader</option>
@@ -291,6 +342,7 @@ $ ./result/bin/run-*-vm
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <option>--no-build-nix</option>
@@ -306,6 +358,7 @@ $ ./result/bin/run-*-vm
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <option>--fast</option>
@@ -319,6 +372,7 @@ $ ./result/bin/run-*-vm
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <option>--rollback</option>
@@ -333,6 +387,7 @@ $ ./result/bin/run-*-vm
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <option>--builders</option> <replaceable>builder-spec</replaceable>
@@ -352,6 +407,7 @@ $ ./result/bin/run-*-vm
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <option>--profile-name</option>
@@ -375,13 +431,14 @@ $ ./result/bin/run-*-vm
       <filename>test.nix</filename> without affecting the default system
       profile, you would do:
 <screen>
-$ nixos-rebuild switch -p test -I nixos-config=./test.nix
+<prompt>$ </prompt>nixos-rebuild switch -p test -I nixos-config=./test.nix
 </screen>
       The new configuration will appear in the GRUB 2 submenu “NixOS -
       Profile 'test'”.
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <option>--build-host</option>
@@ -407,6 +464,7 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <option>--target-host</option>
@@ -419,6 +477,7 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
       be accessible over ssh, and for the commands <option>switch</option>,
       <option>boot</option> and <option>test</option> you need root access.
      </para>
+
      <para>
       If <option>--build-host</option> is not explicitly specified,
       <option>--build-host</option> will implicitly be set to the same value as
@@ -427,6 +486,7 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
       place remotely (and no build artifacts will be copied to the local
       machine).
      </para>
+
      <para>
       You can include a remote user name in the host name
       (<replaceable>user@host</replaceable>). You can also set ssh options by
@@ -435,6 +495,7 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
     </listitem>
    </varlistentry>
   </variablelist>
+
   <para>
    In addition, <command>nixos-rebuild</command> accepts various Nix-related
    flags, including <option>--max-jobs</option> / <option>-j</option>,
@@ -443,8 +504,10 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
    <option>-v</option>. See the Nix manual for details.
   </para>
  </refsection>
+
  <refsection>
   <title>Environment</title>
+
   <variablelist>
    <varlistentry>
     <term>
@@ -457,6 +520,7 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <envar>NIX_SSHOPTS</envar>
@@ -470,9 +534,12 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
    </varlistentry>
   </variablelist>
  </refsection>
+
  <refsection>
   <title>Files</title>
+
   <variablelist>
+
    <varlistentry>
     <term>
      <filename>/run/current-system</filename>
@@ -483,6 +550,7 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
      </para>
     </listitem>
    </varlistentry>
+
    <varlistentry>
     <term>
      <filename>/nix/var/nix/profiles/system</filename>
@@ -494,8 +562,10 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
      </para>
     </listitem>
    </varlistentry>
+
   </variablelist>
  </refsection>
+
  <refsection>
   <title>Bugs</title>
   <para>

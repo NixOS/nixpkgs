@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage, go-md2man
+{ lib, fetchFromGitHub, buildGoPackage, go-md2man
 , pkgconfig, libapparmor, apparmor-parser, libseccomp, which }:
 
 with lib;
 
 buildGoPackage rec {
-  name = "runc-${version}";
+  pname = "runc";
   version = "1.0.0-rc8";
 
   src = fetchFromGitHub {

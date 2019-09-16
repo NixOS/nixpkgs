@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "btrfs-dedupe-${version}";
+  pname = "btrfs-dedupe";
   version = "1.1.0";
 
 
@@ -12,7 +12,7 @@ buildRustPackage rec {
     sha256 = "0qy1g4crhfgs2f5cmrsjv6qscg3r66gb8n6sxhimm9ksivhjyyjp";
   };
 
-  cargoSha256 = "0dmn9bccicxhqcj9zrsxxp0vb5ma12a1hs9brpc22n4g1qy4yzcn";
+  cargoSha256 = "1sz3fswb76rnk7x4kpl1rnj2yxbhpx6q8kv8xxiqdr7qyphpi98r";
 
   buildInputs = [ lzo zlib ];
 

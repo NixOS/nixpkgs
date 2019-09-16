@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, crystal, shards, which }:
+{ stdenv, lib, fetchFromGitHub, crystal, shards, llvm, which }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "scry";
-  # 0.7.1 doesn't work with crystal > 0.25
-  version = "0.7.1.20180919";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner  = "crystal-lang-tools";
@@ -12,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1yq7jap3y5pr2yqc6fn6bxshzwv7dz3w97incq7wpcvi7ibb4lcn";
   };
 
-  nativeBuildInputs = [ crystal shards which ];
+  patches = lib.optional (lib.versionAtLeast crystal.version "0.28") ./fix_for_crystal_0_28_and_above.patch;
+
+  nativeBuildInputs = [ crystal shards llvm which ];
 
   buildPhase = ''
     runHook preBuild

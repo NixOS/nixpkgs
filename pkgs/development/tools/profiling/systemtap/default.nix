@@ -6,15 +6,16 @@ let
   ## fetchgit info
   url = git://sourceware.org/git/systemtap.git;
   rev = "release-${version}";
-  sha256 = "075p45ndr4pzrf5679hcsw1ws4x0xqvx3m037v04545762hki6la";
-  version = "4.0";
+  sha256 = "0mmpiq7bsrwhp7z07a1pwka4q6d2fbmdx5wp83nxj31rvdxhqwnw";
+  version = "4.1";
 
   inherit (kernel) stdenv;
   inherit (stdenv) lib;
 
   ## stap binaries
   stapBuild = stdenv.mkDerivation {
-    name = "systemtap-${version}";
+    pname = "systemtap";
+    inherit version;
     src = fetchgit { inherit url rev sha256; };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];

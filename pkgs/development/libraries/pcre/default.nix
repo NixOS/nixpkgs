@@ -13,7 +13,7 @@ let
     else  if (variant == "cpp") then "pcre-cpp"
     else  variant;
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {

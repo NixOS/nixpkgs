@@ -20,8 +20,8 @@ let
     wildcard=YES
     quiet=${boolToStr cfg.quiet}
     verbose=${boolToStr cfg.verbose}
-    ${lib.concatStringsSep "," cfg.domains}
     ${cfg.extraConfig}
+    ${lib.concatStringsSep "," cfg.domains}
   '';
 
 in

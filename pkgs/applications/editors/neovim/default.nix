@@ -20,14 +20,14 @@ let
     ));
 in
   stdenv.mkDerivation rec {
-    name = "neovim-unwrapped-${version}";
-    version = "0.3.5";
+    pname = "neovim-unwrapped";
+    version = "0.3.8";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "113lrr9gwimvvzlkwlishm4cjqcf30xq9jfxn7vh41ckgnbiwf3w";
+      sha256 = "15flii3p4g9f65xy9jpkb8liajrvhm5ck4j39z6d6b1nkxr6ghwb";
     };
 
     patches = [
@@ -37,6 +37,7 @@ in
       ./system_rplugin_manifest.patch
     ];
 
+    dontFixCmake = true;
     enableParallelBuilding = true;
 
     buildInputs = [
@@ -76,7 +77,7 @@ in
     disallowedReferences = [ stdenv.cc ];
 
     cmakeFlags = [
-      "-DLUA_PRG=${neovimLuaEnv}/bin/lua"
+      "-DLUA_PRG=${neovimLuaEnv.interpreter}"
       "-DGPERF_PRG=${gperf}/bin/gperf"
     ]
     ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
@@ -121,7 +122,7 @@ in
       # those contributions were copied from Vim (identified in the commit logs
       # by the vim-patch token). See LICENSE for details."
       license = with licenses; [ asl20 vim ];
-      maintainers = with maintainers; [ manveru garbas rvolosatovs ];
+      maintainers = with maintainers; [ manveru rvolosatovs ];
       platforms   = platforms.unix;
     };
   }

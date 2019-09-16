@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goffice";
-  version = "0.10.44";
+  version = "0.10.45";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1fd7cm6j0g0mqgpqs4y22b4gd2ll4mcyvg4d0q22d5ndjapl4q3d";
+    sha256 = "702ba567e9ec0bbdd9b1a8161cd24648b4868d57a6cb89128f13c125f6f31947";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A Glib/GTK+ set of document centric objects and utilities";
+    description = "A Glib/GTK set of document centric objects and utilities";
 
     longDescription = ''
       There are common operations for document centric applications that are

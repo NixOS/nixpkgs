@@ -2,7 +2,6 @@
 , libev
 , buildPythonPackage
 , fetchPypi
-, pkgs
 , cython
 , futures
 , six
@@ -21,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.17.1";
+  version = "3.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y6pnm7vzg9ip1nbly3i8mmwqmcy8g38ix74vdzvvaxwxil9bmvi";
+    sha256 = "1w9a7fdl626m977cjj9zclh4a0mr3s4q9jpwm1fsmpi7v3gbribi";
   };
 
   buildInputs = [

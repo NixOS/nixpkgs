@@ -1,28 +1,40 @@
- { stdenv, pythonPackages, nginx }:
+{ stdenv, python3Packages, nginx }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
+python3Packages.buildPythonApplication rec {
   pname = "devpi-server";
-  version = "4.4.0";
+  version = "5.1.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0y77kcnk26pfid8vsw07v2k61x9sdl6wbmxg5qxnz3vd7703xpkl";
+    sha256 = "254fceee846532a5fec4e6bf52a59eb8f236efc657678a542b5200da4bb3abbc";
   };
 
-  propagatedBuildInputs = with pythonPackages;
-    [ devpi-common execnet itsdangerous pluggy waitress pyramid passlib ];
-  checkInputs = with pythonPackages; [ nginx webtest pytest beautifulsoup4 pytest-timeout mock pyyaml ];
-  preCheck = ''
-    # These tests pass with pytest 3.3.2 but not with pytest 3.4.0.
-    sed -i 's/test_basic/noop/' test_devpi_server/test_log.py
-    sed -i 's/test_new/noop/' test_devpi_server/test_log.py
-    sed -i 's/test_thread_run_try_again/noop/' test_devpi_server/test_replica.py
-  '';
+  propagatedBuildInputs = with python3Packages; [
+    py
+    appdirs
+    devpi-common
+    execnet
+    itsdangerous
+    repoze_lru
+    passlib
+    pluggy
+    pyramid
+    strictyaml
+    waitress
+  ];
+
+  checkInputs = with python3Packages; [
+    beautifulsoup4
+    nginx
+    pytest
+    pytest-flake8
+    pytestpep8
+    webtest
+  ] ++ stdenv.lib.optionals isPy27 [ mock ];
+
+  # test_genconfig.py needs devpi-server on PATH
   checkPhase = ''
-    runHook preCheck
-    cd test_devpi_server/
-    PATH=$PATH:$out/bin pytest --slow -rfsxX
+    PATH=$PATH:$out/bin pytest ./test_devpi_server --slow -rfsxX
   '';
 
   meta = with stdenv.lib;{

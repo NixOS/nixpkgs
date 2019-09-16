@@ -20,18 +20,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig python3 gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig python3 gobject-introspection
+    gtk-doc
+    # Without these, enabling the 'gtk_doc' gives us `FAILED: meson-install`
+    docbook_xsl docbook_xml_dtd_412
+  ];
   buildInputs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base gnutls ];
   propagatedBuildInputs = [ glib gupnp-igd ];
 
   mesonFlags = [
-    "-Dgupnp=enabled"
-    "-Dgstreamer=enabled"
-    "-Dignored-network-interface-prefix=enabled"
-    "-Dexamples=enabled"
-    "-Dtests=enabled"
-    "-Dgtk_doc=enabled"
-    "-Dintrospection=enabled"
+    # Enables all features, so that we know when new dependencies are necessary.
+    "-Dauto_features=enabled"
+    "-Dgtk_doc=enabled" # Disabled by default as of libnice-0.1.15
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
   ];
 
   # TODO; see #53293 etc.

@@ -1,4 +1,4 @@
-{ qtModule, stdenv, lib, qtbase }:
+{ qtModule, stdenv, lib, qtbase, qtdeclarative }:
 
 with lib;
 
@@ -31,6 +31,9 @@ qtModule {
   ] ++ optionals stdenv.isDarwin [
     "bin/macdeployqt"
   ];
+
+  NIX_CFLAGS_COMPILE =
+    lib.optional stdenv.isDarwin ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
 
   setupHook = ../hooks/qttools-setup-hook.sh;
 }

@@ -9,14 +9,14 @@ let
   toolsPath = stdenv.lib.makeBinPath [ mcpp ];
 in
 stdenv.mkDerivation rec {
-  name    = "souffle-${version}";
-  version = "1.5.1";
+  pname = "souffle";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "06sa250z3v8hs91p6cqdzlwwaq96j6zmfrrld1fzd1b620aa5iys";
+    sha256 = "004c5iicjnlzn1yz1k7a28s4xdqx00016rr870drdq2z30mxfgz8";
   };
 
   nativeBuildInputs = [ autoreconfHook bison flex mcpp doxygen graphviz makeWrapper perl ];

@@ -1,56 +1,71 @@
-{ stdenv, lib, fetchurl, coursier, jdk, jre, python, makeWrapper }:
+{ stdenv, lib, fetchurl, coursier, python, makeWrapper }:
 
 let
   baseName = "bloop";
-  version = "1.2.5";
-  deps = stdenv.mkDerivation {
-    name = "${baseName}-deps-${version}";
+  version = "1.3.2";
+  nailgunCommit = "9327a60a"; # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
+
+  client = stdenv.mkDerivation {
+    name = "${baseName}-client-${version}";
+
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
+      sha256 = "0z4as5ibmzkd145wsch9caiy4037bgg780gcf7pyns0cv9n955b4";
+    };
+
+    phases = [ "installPhase" ];
+
+    installPhase = ''cp $src $out'';
+  };
+
+  server = stdenv.mkDerivation {
+    name = "${baseName}-server-${version}";
     buildCommand = ''
+      mkdir -p $out/bin
+
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch ch.epfl.scala:bloop-frontend_2.12:${version} \
+      ${coursier}/bin/coursier bootstrap ch.epfl.scala:bloop-frontend_2.12:${version} \
         -r "bintray:scalameta/maven" \
         -r "bintray:scalacenter/releases" \
-        -r "https://oss.sonatype.org/content/repositories/staging" > deps
-      mkdir -p $out/share/java
-      cp $(< deps) $out/share/java/
+        -r "https://oss.sonatype.org/content/repositories/staging" \
+        --deterministic \
+        -f --main bloop.Server -o $out/bin/blp-server
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "19373fyb0g7irrdzb1vsjmyv5xj84qwbcfb6lm076px7wfyn0w1c";
+    outputHash     = "0k9zc9q793fkfwcssbkmzb0nxmgb99rwi0pjkqhvf719vmgvhc2a";
+  };
+
+  zsh = stdenv.mkDerivation {
+    name = "${baseName}-zshcompletion-${version}";
+
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/scalacenter/bloop/v${version}/etc/zsh/_bloop";
+      sha256 = "09qq5888vaqlqan2jbs2qajz2c3ff13zj8r0x2pcxsqmvlqr02hp";
+    };
+
+    phases = [ "installPhase" ];
+
+    installPhase = ''cp $src $out'';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
-  # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
-  nailgunCommit = "0c325237";
-
-  buildInputs = [ jdk makeWrapper deps ];
+  buildInputs = [ makeWrapper ];
 
   phases = [ "installPhase" ];
-
-  client = fetchurl {
-    url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
-    sha256 = "0qjw4nsyb4cxg96jj1yv5c0ivcxvmscxxqfzll5w9p1pjb30bq0n";
-  };
-
-  zshCompletion = fetchurl {
-    url = "https://raw.githubusercontent.com/scalacenter/bloop/v${version}/etc/zsh/_bloop";
-    sha256 = "1id6f1fgy2rk0q5aad6ffivhbxa94fallzsc04l9n0y1s2xdhqpm";
-  };
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/zsh/site-functions
 
-    cp ${client} $out/bin/blp-client
-    cp ${zshCompletion} $out/share/zsh/site-functions/_bloop
-    chmod +x $out/bin/blp-client
+    ln -s ${server}/bin/blp-server $out/blp-server
+    ln -s ${zsh} $out/share/zsh/site-functions/_bloop
 
-    makeWrapper ${jre}/bin/java $out/bin/blp-server \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
-      --add-flags "-cp $CLASSPATH bloop.Server"
-    makeWrapper $out/bin/blp-client $out/bin/bloop \
+    cp ${client} $out/bloop
+    chmod +x $out/bloop
+    makeWrapper $out/bloop $out/bin/bloop \
       --prefix PATH : ${lib.makeBinPath [ python ]}
   '';
 

@@ -2,9 +2,12 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx
+, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx
+, bash
 
 , libiconv ? null, ncurses
+
+, enableDwarf ? !stdenv.isDarwin, elfutils # for DWARF support
 
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
@@ -75,7 +78,8 @@ let
   libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
     ++ [libffi]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
-    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
+    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
+    ++ stdenv.lib.optional enableDwarf elfutils;
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
@@ -85,12 +89,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.8.0.20190424";
+  version = "8.8.1";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.8.1-alpha1/ghc-${version}-src.tar.xz";
-    sha256 = "1lwzy4q9hhaayamr1ij3lk8l7zdwfqza5b2racylp7xn2y9wanl9";
+    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "06kj4fhvijinjafiy4s873n60qly323rdlz9bmc79nhlp3cq72lh";
   };
 
   enableParallelBuilding = true;
@@ -109,7 +113,7 @@ stdenv.mkDerivation (rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isLinux ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -163,6 +167,8 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
+  ] ++ stdenv.lib.optional enableDwarf [
+    "--enable-dwarf-unwind"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatability.
@@ -179,7 +185,7 @@ stdenv.mkDerivation (rec {
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = [ perl ] ++ (libDeps hostPlatform);
+  buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;

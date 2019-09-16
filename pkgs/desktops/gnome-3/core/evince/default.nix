@@ -11,7 +11,7 @@
 , gtk3
 , pango
 , atk
-, gdk_pixbuf
+, gdk-pixbuf
 , shared-mime-info
 , itstool
 , gnome3
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     gtk3
     pango
     atk
-    gdk_pixbuf
+    gdk-pixbuf
     libxml2
     gsettings-desktop-schemas
     poppler
@@ -104,7 +104,6 @@ stdenv.mkDerivation rec {
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
 
   mesonFlags = [
-    "-Dauto_features=enabled"
     "-Dnautilus=false"
     "-Dps=enabled"
     "-Dgtk_doc=false"

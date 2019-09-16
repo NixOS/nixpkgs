@@ -21,7 +21,7 @@ let
   k8sgitMajor = "0";
   k8sgitMinor = "1";
 in buildGoPackage rec {
-  name = "openshift-origin-${version}";
+  pname = "openshift-origin";
   inherit version;
 
   src = fetchFromGitHub {

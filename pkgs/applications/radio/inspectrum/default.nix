@@ -9,7 +9,7 @@
 , liquid-dsp
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "inspectrum-unstable-2017-05-31";
 
   src = fetchFromGitHub {

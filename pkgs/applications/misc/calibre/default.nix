@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, poppler_utils, pkgconfig, libpng
+{ stdenv, mkDerivation,  fetchurl, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
-, makeWrapper, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
-, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo
+, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
+, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo, qt5
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.42.0";
-  name = "calibre-${version}";
+mkDerivation rec {
+  pname = "calibre";
+  version = "3.47.1";
 
   src = fetchurl {
-    url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0ymdhws3cb44p3fb24vln1wx6s7qnb8rr241jvm6qbj5rnp984dm";
+    url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
+    sha256 = "17lz6rawlv268vv8i5kj59rswsipq3c14066adaz1paw54zr62dk";
   };
 
   patches = [
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake removeReferencesTo ];
+  nativeBuildInputs = [ pkgconfig qmake removeReferencesTo wrapGAppsHook ];
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
-    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
+    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
   ] ++ (with python2Packages; [
     apsw cssselect css-parser dateutil dnspython html5-parser lxml mechanize netifaces pillow
     python pyqt5_with_qtwebkit sip
@@ -70,11 +70,6 @@ stdenv.mkDerivation rec {
     sed -i "s/env python[0-9.]*/python/" $PYFILES
     sed -i "2i import sys; sys.argv[0] = 'calibre'" $out/bin/calibre
 
-    for a in $out/bin/*; do
-      wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix PATH : ${poppler_utils.out}/bin
-    done
-
     # Replace @out@ by the output path.
     mkdir -p $out/share/applications/
     cp {$calibreDesktopItem,$ebookEditDesktopItem,$ebookViewerDesktopItem}/share/applications/* $out/share/applications/
@@ -88,17 +83,29 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # Wrap manually
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+
   # Remove some references to shrink the closure size. This reference (as of
   # 2018-11-06) was a single string like the following:
   #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
   preFixup = ''
     remove-references-to -t ${podofo.dev} $out/lib/calibre/calibre/plugins/podofo.so
+
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        ''${qtWrapperArgs[@]} \
+        ''${gappsWrapperArgs[@]} \
+        --prefix PYTHONPATH : $PYTHONPATH \
+        --prefix PATH : ${poppler_utils.out}/bin
+    done
   '';
 
   disallowedReferences = [ podofo.dev ];
 
   calibreDesktopItem = makeDesktopItem {
-    name = "calibre";
+    name = "calibre-gui";
     desktopName = "calibre";
     exec = "@out@/bin/calibre --detach %F";
     genericName = "E-book library management";
@@ -144,7 +151,7 @@ stdenv.mkDerivation rec {
   };
 
   ebookEditDesktopItem = makeDesktopItem {
-    name = "calibre-edit-ebook";
+    name = "calibre-edit-book";
     desktopName = "Edit E-book";
     genericName = "E-book Editor";
     comment = "Edit e-books";

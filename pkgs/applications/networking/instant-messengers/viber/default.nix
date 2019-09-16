@@ -3,8 +3,8 @@
  libpulseaudio, libxml2, libxslt, libGLU_combined, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "viber-${version}";
+stdenv.mkDerivation {
+  pname = "viber";
   version = "7.0.0.1035";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dpkg makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   libPath = stdenv.lib.makeLibraryPath [
       alsaLib

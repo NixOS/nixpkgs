@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, cmake, yasm
+{ stdenv, fetchurl, fetchpatch, cmake, nasm, numactl
+, numaSupport ? stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)  # Enabled by default on NUMA platforms
 , debugSupport ? false # Run-time sanity checks (debugging)
 , highbitdepthSupport ? false # false=8bits per channel, true=10/12bits per channel
 , werrorSupport ? false # Warnings as errors
@@ -15,27 +16,21 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "x265-${version}";
-  version = "2.9";
+  pname = "x265";
+  version = "3.1.1";
 
   src = fetchurl {
     urls = [
       "https://get.videolan.org/x265/x265_${version}.tar.gz"
       "ftp://ftp.videolan.org/pub/videolan/x265/x265_${version}.tar.gz"
     ];
-    sha256 = "090hp4216isis8q5gb7bwzia8rfyzni54z21jnwm97x3hiy6ibpb";
+    sha256 = "1l68lgdbsi4wjz5vad98ggx7mf92rnvzlq34m6w0a08ark3h0yc2";
   };
 
   enableParallelBuilding = true;
 
   patches = [
-    # Fix issue #442 (linking issue on non-x86 platforms)
-    # Applies on v2.9 only, this should be removed at next update
-    (fetchpatch {
-      url = "https://bitbucket.org/multicoreware/x265/commits/471726d3a0462739ff8e3518eb1a1e8a01de4e8d/raw";
-      sha256 = "0mj8lb8ng8lrhzjavap06vjhqf6j0r3sn76c6rhs3012f86lv928";
-    })
-    # Fix build on ARM (#406) 
+    # Fix build on ARM (#406)
     (fetchpatch {
       url = "https://bitbucket.org/multicoreware/x265/issues/attachments/406/multicoreware/x265/1527562952.26/406/X265-2.8-asm-primitives.patch";
       sha256 = "1vf8bpl37gbd9dcbassgkq9i0rp24qm3bl6hx9zv325174bn402v";
@@ -67,7 +62,7 @@ stdenv.mkDerivation rec {
     rm $out/lib/*.a
   '';
 
-  nativeBuildInputs = [ cmake yasm ];
+  nativeBuildInputs = [ cmake nasm ] ++ stdenv.lib.optional numaSupport numactl;
 
   meta = with stdenv.lib; {
     description = "Library for encoding h.265/HEVC video streams";

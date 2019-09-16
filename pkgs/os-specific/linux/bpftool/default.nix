@@ -1,9 +1,9 @@
-{ stdenv, fetchurl
+{ stdenv
 , libopcodes, libbfd, libelf
 , linuxPackages_latest
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bpftool";
   inherit (linuxPackages_latest.kernel) version src;
 

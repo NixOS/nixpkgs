@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, procps, pcre, cacert, llvm, Security, Foundation
+{ stdenv, fetchurl, tzdata, iana-etc, runCommand
+, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages, pkgsTargetTarget
 }:
@@ -17,24 +17,24 @@ let
   '';
 
   goarch = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
+    i686 = "386";
+    x86_64 = "amd64";
+    aarch64 = "arm64";
+    arm = "arm";
+    armv5tel = "arm";
+    armv6l = "arm";
+    armv7l = "arm";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
 in
 
 stdenv.mkDerivation rec {
-  name = "go-${version}";
-  version = "1.12.1";
+  pname = "go";
+  version = "1.12.9";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "12l12mmgqvy3nbscy7sz83qj4m6iz5a322aq9sk45f7l9ml2gq8b";
+    sha256 = "1z32imbwmpkzgyh5c3vi7rbvzbq94xjk5qi2xm9sccj7kknmc3mb";
   };
 
   # perl is used for testing go vet
@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej velovix mic92 ];
+    maintainers = with maintainers; [ cstrahan orivej velovix mic92 rvolosatovs ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -245,6 +245,9 @@ in {
       # Disable flat volumes to enable relative ones
       hardware.pulseaudio.daemon.config.flat-volumes = mkDefault "no";
 
+      # Upstream defaults to speex-float-1 which results in audible artifacts
+      hardware.pulseaudio.daemon.config.resample-method = mkDefault "speex-float-5";
+
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
 

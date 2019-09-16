@@ -1,4 +1,4 @@
-{ stdenv, writeText, lib, ruby, defaultGemConfig, callPackage, test, stubs, should}:
+{ callPackage, test, stubs, should}:
 let
   bundlerEnv = callPackage ./default.nix stubs // {
     basicEnv = callPackage ../bundled-common stubs;

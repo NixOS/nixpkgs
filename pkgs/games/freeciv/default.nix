@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, zlib, bzip2, pkgconfig, curl, lzma, gettext, libiconv
+{ stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python
+, zlib, bzip2, curl, lzma, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
-, gtkClient ? false, gtk2
+, gtkClient ? false, gtk3
+, qtClient ? false, qt5
 , server ? true, readline
 , enableSqlite ? true, sqlite
 }:
@@ -8,31 +10,42 @@
 let
   inherit (stdenv.lib) optional optionals;
 
-  name = "freeciv";
+in stdenv.mkDerivation rec {
+  pname = "freeciv";
   version = "2.6.0";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
-  inherit version;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/freeciv/${name}-${version}.tar.bz2";
-    sha256 = "16f9wsnn7073s6chzbm3819swd0iw019p9nrzr3diiynk28kj83w";
+  src = fetchFromGitHub {
+    owner = "freeciv";
+    repo = "freeciv";
+    rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    sha256 = "1b3q5k9wpv7z24svz01ybw8d8wlzkkdr6ia5hgp6cxk6vq67n67s";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  postPatch = ''
+    for f in {common,utility}/*.py; do
+      substituteInPlace $f \
+        --replace '/usr/bin/env python' ${python.interpreter}
+    done
+  '';
 
-  buildInputs = [ zlib bzip2 curl lzma gettext libiconv ]
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  buildInputs = [ lua5_3 zlib bzip2 curl lzma gettext libiconv ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
-    ++ optionals gtkClient [ gtk2 ]
+    ++ optionals gtkClient [ gtk3 ]
+    ++ optionals qtClient  [ qt5.qtbase ]
     ++ optional server readline
     ++ optional enableSqlite sqlite;
 
   configureFlags = [ "--enable-shared" ]
     ++ optional sdlClient "--enable-client=sdl"
+    ++ optionals qtClient [
+      "--enable-client=qt"
+      "--with-qt5-includes=${qt5.qtbase.dev}/include"
+    ]
     ++ optional enableSqlite "--enable-fcdb=sqlite3"
     ++ optional (!gtkClient) "--enable-fcmp=cli"
-    ++ optional (!server) "--disable-server";
+    ++ optional (!server)    "--disable-server";
 
   enableParallelBuilding = true;
 
@@ -46,11 +59,11 @@ stdenv.mkDerivation {
       to the space age...
     '';
 
-    homepage = http://freeciv.wikia.com/;
+    homepage = http://www.freeciv.org; # http only
     license = licenses.gpl2;
 
     maintainers = with maintainers; [ pierron ];
     platforms = platforms.unix;
-    hydraPlatforms = stdenv.lib.platforms.linux; # sdl-config times out on darwin
+    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };
 }

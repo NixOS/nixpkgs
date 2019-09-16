@@ -9,8 +9,9 @@ let version = "0.29.2"; in
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "bup-${version}";
+stdenv.mkDerivation {
+  pname = "bup";
+  inherit version;
 
   src = fetchFromGitHub {
     repo = "bup";

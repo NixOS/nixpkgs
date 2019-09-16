@@ -8,12 +8,12 @@ assert stdenv.cc ? libc ;
 assert stdenv.cc.libc != null ;
 
 stdenv.mkDerivation rec {
-  name = "gcl-${version}";
+  pname = "gcl";
   version = "2.6.12";
 
   src = fetchurl {
     sha256 = "1s4hs2qbjqmn9h88l4xvsifq5c3dlc5s74lyb61rdi5grhdlkf4f";
-    url = "http://gnu.spinellicreations.com/gcl/${name}.tar.gz";
+    url = "http://gnu.spinellicreations.com/gcl/${pname}-${version}.tar.gz";
   };
 
   patches = [(fetchurl {

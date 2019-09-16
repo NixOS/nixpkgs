@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, jdk, jre, git, gradle_4_10, perl, makeWrapper, writeText }:
+{ stdenv, fetchFromGitHub, jre, git, gradle_4_10, perl, makeWrapper }:
 
 let
   name = "mxisd-${version}";
-  version = "1.4.3";
-  rev = "cd890d114a46e4a3792c57cc7a35b95b2c466a16";
+  version = "1.4.5";
+  rev = "a964b073bfa7552e94fe51f48e18830b1051b0b7";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "kamax-matrix";
     repo = "mxisd";
-    sha256 = "05plcf6bq19fmx528fgnib4bw9gz36irwlnfsykys1bpmi60wj69";
+    sha256 = "1h1lx531rjswh0m2zdsmfizrkkx9bh414v9m321hbbfzk3f98fkk";
   };
 
 

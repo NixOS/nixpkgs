@@ -1,9 +1,9 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''closure-common'';
   version = ''20181018-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."alexandria" args."babel" args."trivial-features" args."trivial-gray-streams" ];
 
@@ -17,7 +17,7 @@ rec {
   asdFilesToKeep = ["closure-common.asd"];
   overrides = x: x;
 }
-/* (SYSTEM closure-common DESCRIPTION NIL SHA256
+/* (SYSTEM closure-common DESCRIPTION System lacks description SHA256
     18bp7jnxma9hscp09fa723ws9nnynjil935rp8dy9hp6ypghpxpn URL
     http://beta.quicklisp.org/archive/closure-common/2018-10-18/closure-common-20181018-git.tgz
     MD5 b09ee60c258a29f0c107960ec4c04ada NAME closure-common FILENAME

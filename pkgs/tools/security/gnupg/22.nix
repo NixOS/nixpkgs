@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libgpgerror
-, libiconv, npth, gettext, texinfo, pcsclite, sqlite
+{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+, libgpgerror, libiconv, npth, gettext, texinfo, pcsclite, sqlite
 , buildPackages
 
 # Each of the dependencies below are optional.
@@ -14,13 +14,13 @@ with stdenv.lib;
 assert guiSupport -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-${version}";
+  pname = "gnupg";
 
-  version = "2.2.15";
+  version = "2.2.17";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "0m6lyphbb20i84isdxzfhcbzyc682hdrdv4aqkzmhrdksycf536b";
+    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
+    sha256 = "056mgy09lvsi03531a437qj58la1j2x1y1scvfi53diris3658mg";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -32,8 +32,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-libusb-include-path.patch
+    ./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
   ];
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = ''
+    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
+        configure doc/dirmngr.texi doc/gnupg.info-1
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 

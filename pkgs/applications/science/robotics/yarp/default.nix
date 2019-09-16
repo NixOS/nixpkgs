@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "yarp-${version}";
+  pname = "yarp";
   version = "2.3.70.2";
   src = fetchFromGitHub {
     owner = "robotology";

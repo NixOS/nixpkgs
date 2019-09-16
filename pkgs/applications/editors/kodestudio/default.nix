@@ -20,8 +20,9 @@ let
 
 in
 
-  stdenv.mkDerivation rec {
-    name = "kodestudio-${version}";
+  stdenv.mkDerivation {
+    pname = "kodestudio";
+    inherit version;
 
     src = fetchurl {
         url = urlStr;

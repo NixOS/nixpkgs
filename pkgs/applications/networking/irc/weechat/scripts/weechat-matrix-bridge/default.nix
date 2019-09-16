@@ -31,9 +31,9 @@ stdenv.mkDerivation {
     mkdir -p $out/{share,lib}
 
     cp {matrix.lua,olm.lua} $out/share
-    cp ${cjson}/lib/lua/5.2/cjson.so $out/lib/cjson.so
+    cp ${cjson}/lib/lua/${cjson.lua.luaversion}/cjson.so $out/lib/cjson.so
     cp ${olm}/lib/libolm.so $out/lib/libolm.so
-    cp ${luaffi}/lib/ffi.so $out/lib/ffi.so
+    cp ${luaffi}/lib/lua/${luaffi.lua.luaversion}/ffi.so $out/lib/ffi.so
   '';
 
   meta = with stdenv.lib; {
@@ -42,5 +42,9 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ ma27 ];
     license = licenses.mit; # see https://github.com/torhve/weechat-matrix-protocol-script/blob/0052e7275ae149dc5241226391c9b1889ecc3c6b/matrix.lua#L53
     platforms = platforms.unix;
+
+    # As of 2019-06-30, all of the dependencies are available on macOS but the
+    # package itself does not build.
+    broken = stdenv.isDarwin;
   };
 }

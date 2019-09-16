@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, pam, yacc, flex }:
 
 stdenv.mkDerivation rec {
-  name    = "libcgroup-${version}";
+  pname = "libcgroup";
   version = "0.41";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libcg/${name}.tar.bz2";
+    url = "mirror://sourceforge/libcg/${pname}-${version}.tar.bz2";
     sha256 = "0lgvyq37gq84sk30sg18admxaj0j0p5dq3bl6g74a1ppgvf8pqz4";
   };
 

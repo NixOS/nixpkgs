@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "20161001";
-  name = "dict-db-wiktionary-${version}";
+  pname = "dict-db-wiktionary";
   data = fetchurl {
     url = "http://dumps.wikimedia.org/enwiktionary/${version}/enwiktionary-${version}-pages-articles.xml.bz2";
     sha256 = "0g3k7kxp2nzg0v56i4cz253af3aqvhn1lwkys2fnam51cn3yqm7m";

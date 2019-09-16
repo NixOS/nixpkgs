@@ -41,14 +41,10 @@ let
   release = if hasAttr dfVersion twbt-releases
             then getAttr dfVersion twbt-releases
             else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
-
-  warning = if release.prerelease then builtins.trace "[TWBT] Version ${version} is a prerelease. Careful!"
-                                  else null;
-
 in
 
 stdenvNoCC.mkDerivation rec {
-  name = "twbt-${version}";
+  pname = "twbt";
   version = release.twbtRelease;
 
   src = fetchurl {

@@ -38,6 +38,8 @@ let
       "-Wno-error=int-in-bool-context"
       "-Wno-error=maybe-uninitialized"
       "-Wno-error=unused-function"
+      "-Wno-error=ignored-qualifiers"
+      "-Wno-error=catch-value"
     ];
   };
 

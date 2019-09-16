@@ -2,7 +2,7 @@
 , qtbase, libvirt, cutelyst, grantlee }:
 
 stdenv.mkDerivation rec {
-  name = "virtlyst-${version}";
+  pname = "virtlyst";
   version = "1.2.0";
 
   src = fetchFromGitHub {

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.6";
-  name = "libaal-${version}";
+  pname = "libaal";
 
   src = fetchurl {
-    url = "mirror://sourceforge/reiser4/${name}.tar.gz";
+    url = "mirror://sourceforge/reiser4/${pname}-${version}.tar.gz";
     sha256 = "176f2sns6iyxv3h9zyirdinjwi05gdak48zqarhib2s38rvm98di";
   };
 

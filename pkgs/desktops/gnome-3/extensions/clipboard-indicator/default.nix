@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-clipboard-indicator-${version}";
+  pname = "gnome-shell-extension-clipboard-indicator";
   version = "30";
 
   src = fetchFromGitHub {

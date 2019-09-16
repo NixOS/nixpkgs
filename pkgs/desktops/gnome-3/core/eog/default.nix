@@ -1,5 +1,5 @@
 { fetchurl, stdenv, meson, ninja, gettext, itstool, pkgconfig, libxml2, libjpeg, libpeas, gnome3
-, gtk3, glib, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop, lcms2, gdk_pixbuf, exempi
+, gtk3, glib, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop, lcms2, gdk-pixbuf, exempi
 , shared-mime-info, wrapGAppsHook, librsvg, libexif, gobject-introspection, python3 }:
 
 let
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook libxml2 gobject-introspection python3 ];
 
   buildInputs = [
-    libjpeg gtk3 gdk_pixbuf glib libpeas librsvg lcms2 gnome-desktop libexif exempi
+    libjpeg gtk3 gdk-pixbuf glib libpeas librsvg lcms2 gnome-desktop libexif exempi
     gsettings-desktop-schemas shared-mime-info adwaita-icon-theme
   ];
 
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Thumbnailers
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )

@@ -438,6 +438,7 @@ in
       default =
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
+          "af_alg" "algif_skcipher"
 
           (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
@@ -475,7 +476,7 @@ in
 
     boot.initrd.luks.devices = mkOption {
       default = { };
-      example = { "luksroot".device = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08"; };
+      example = { luksroot.device = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08"; };
       description = ''
         The encrypted disk that should be opened before the root
         filesystem is mounted. Both LVM-over-LUKS and LUKS-over-LVM

@@ -2,7 +2,7 @@
 , mpd_clientlib, gettext, boost }:
 
 stdenv.mkDerivation rec {
-  name = "ncmpc-${version}";
+  pname = "ncmpc";
   version = "0.34";
 
   src = fetchFromGitHub {
@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ncurses mpd_clientlib boost ];
   nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+
+  mesonFlags = [
+    "-Dlirc=disabled"
+    "-Dregex=disabled"
+    "-Ddocumentation=disabled"
+  ];
 
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";

@@ -1,6 +1,6 @@
 { stdenv, fetchzip, jre, makeWrapper }:
 stdenv.mkDerivation rec {
-  name = "h2-${version}";
+  pname = "h2";
 
   version = "1.4.193";
 

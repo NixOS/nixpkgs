@@ -1,6 +1,6 @@
 # This builder is for FoundationDB CMake build system.
 
-{ lib, fetchurl, fetchpatch, fetchFromGitHub
+{ lib, fetchFromGitHub
 , cmake, ninja, boost, python3, openjdk, mono, libressl
 
 , gccStdenv, llvmPackages
@@ -16,13 +16,13 @@ let
 
   makeFdb =
     { version
-    , branch
+    , branch # unused
     , sha256
     , rev ? "refs/tags/${version}"
     , officialRelease ? true
     , patches ? []
-    }: stdenv.mkDerivation rec {
-        name = "foundationdb-${version}";
+    }: stdenv.mkDerivation {
+        pname = "foundationdb";
         inherit version;
 
         src = fetchFromGitHub {

@@ -5,7 +5,7 @@ let
   cfg = config.docker-containers;
 
   dockerContainer =
-    { name, config, ... }: {
+    { ... }: {
 
       options = {
 

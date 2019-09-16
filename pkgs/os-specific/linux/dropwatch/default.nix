@@ -4,7 +4,6 @@
 stdenv.mkDerivation rec {
   pname = "dropwatch";
   version = "1.5";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "nhorman";

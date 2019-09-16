@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, utillinux }:
+{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, utillinux }:
 
 with lib;
 
 buildGoPackage rec {
-  name = "containerd-${version}";
+  pname = "containerd";
   version = "1.2.6";
 
   src = fetchFromGitHub {

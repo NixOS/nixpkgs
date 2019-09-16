@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
-  name    = "unicorn-emulator-${version}";
+  pname = "unicorn-emulator";
   version = "1.0.1";
 
   src = fetchurl {

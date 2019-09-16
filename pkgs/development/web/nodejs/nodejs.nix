@@ -4,7 +4,7 @@
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
 , darwin, xcbuild
-, procps
+, procps, icu
 }:
 
 with stdenv.lib;
@@ -30,7 +30,9 @@ let
      *  as that would put the paths into bin/nodejs.
      *  Including pkgconfig in build inputs would also have the same effect!
      */
-  ]) (builtins.attrNames sharedLibDeps);
+  ]) (builtins.attrNames sharedLibDeps) ++ [
+    "--with-intl=system-icu"
+  ];
 
   copyLibHeaders =
     map
@@ -51,10 +53,10 @@ in
     };
 
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-      ++ [ python2 zlib libuv openssl http-parser ];
+      ++ [ python2 zlib libuv openssl http-parser icu ];
 
-    nativeBuildInputs = [ which utillinux ]
-      ++ optionals stdenv.isDarwin [ pkgconfig xcbuild ];
+    nativeBuildInputs = [ which utillinux pkgconfig ]
+      ++ optionals stdenv.isDarwin [ xcbuild ];
 
     configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
 
@@ -112,7 +114,7 @@ in
     '';
 
     passthru.updateScript = import ./update.nix {
-      inherit stdenv writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
+      inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
       inherit (stdenv) lib;
       inherit majorVersion;
     };

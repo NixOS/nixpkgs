@@ -1,7 +1,7 @@
 { stdenv, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv, gtk2, at-spi2-atk }:
 
 let
-  version = "3.1.8";
+  version = "3.1.13";
   name = "electron-${version}";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
@@ -19,19 +19,19 @@ let
     src = {
       i686-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-ia32.zip";
-        sha256 = "1vq4vanlwixgk1q4v5d24f1ywgy2af1r14f9byzfy89vwds77yk9";
+        sha256 = "04i0rcp4ajp4nf4arcl5crcc7a85sf0ixqd8jx07k2b1irv4dc23";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-        sha256 = "13zds8bzn4z11544llkh99fw75gddxs5b9h1m5xgjzw37vf6rpws";
+        sha256 = "1psmbplz6jhnnf6hmfhxbmmhn4n1dpnhzbc12pxn645xhfpk9ark";
       };
       armv7l-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-armv7l.zip";
-        sha256 = "0rfw1ydlmixyhifpmm2qyxapx3iqav4nlnzp2km9z7a0hpc4lii6";
+        sha256 = "1pzs2cj12xw18jwab0mb8xhndwd95lbsj5ml5xdw2mb0ip5jsvsa";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-arm64.zip";
-        sha256 = "0qrnvzjz78fblfg4r6xpzc40p10y6865gqpwx2h5vsdfp6sgq898";
+        sha256 = "13pc7xn0dkb8i31vg9zplqcvb7r9r7q3inmr3419b5p9bl0687x8";
       };
     }.${stdenv.hostPlatform.system} or throwSystem;
 
@@ -59,7 +59,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-darwin-x64.zip";
-      sha256 = "0ms75306dq2ym838zk9d9nypnd8yjipl0zqyq9bvd4r32p241hw9";
+      sha256 = "1vvjm4jifzjqvbs2kjlwg1h9p2czr2b5imjr9hld1j8nyfrzb0dx";
     };
 
     buildInputs = [ unzip ];

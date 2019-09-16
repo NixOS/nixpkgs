@@ -4,11 +4,14 @@
 # /usr/bin/env gets special treatment so that ".../bin/env python" is
 # rewritten to /nix/store/<hash>/bin/python.  Interpreters that are
 # already in the store are left untouched.
+# A script file must be marked as executable, otherwise it will not be
+# considered.
 
 fixupOutputHooks+=(patchShebangsAuto)
 
-# Run patch shebangs on a directory.
-# patchShebangs [--build | --host] directory
+# Run patch shebangs on a directory or file.
+# Can take multiple paths as arguments.
+# patchShebangs [--build | --host] PATH...
 
 # Flags:
 # --build : Lookup commands available at build-time
@@ -29,9 +32,7 @@ patchShebangs() {
         shift
     fi
 
-    local dir="$1"
-
-    header "patching script interpreter paths in $dir"
+    echo "patching script interpreter paths in $@"
     local f
     local oldPath
     local newPath
@@ -40,7 +41,10 @@ patchShebangs() {
     local oldInterpreterLine
     local newInterpreterLine
 
-    [ -e "$dir" ] || return 0
+    if [ $# -eq 0 ]; then
+        echo "No arguments supplied to patchShebangs" >0
+        return 0
+    fi
 
     local f
     while IFS= read -r -d $'\0' f; do
@@ -62,7 +66,7 @@ patchShebangs() {
             # - options: something starting with a '-'
             # - environment variables: foo=bar
             if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
-                echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
+                echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >0
                 exit 1
             fi
 
@@ -95,7 +99,7 @@ patchShebangs() {
                 rm "$timestamp"
             fi
         fi
-    done < <(find "$dir" -type f -perm -0100 -print0)
+    done < <(find "$@" -type f -perm -0100 -print0)
 
     stopNest
 }

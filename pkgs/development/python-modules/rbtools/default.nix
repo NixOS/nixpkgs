@@ -6,7 +6,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rbtools";
   version = "0.7.2";
   disabled = isPy3k;

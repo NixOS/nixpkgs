@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, vte-ng, gtk3, ncurses, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "termite-${version}";
+  pname = "termite";
   version = "15";
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "A simple VTE-based terminal";
     license = licenses.lgpl2Plus;
     homepage = https://github.com/thestinger/termite/;
-    maintainers = with maintainers; [ koral garbas ];
+    maintainers = with maintainers; [ koral ];
     platforms = platforms.all;
   };
 }

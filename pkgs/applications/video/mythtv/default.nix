@@ -2,11 +2,11 @@
 , libpulseaudio, fftwSinglePrec , lame, zlib, libGLU_combined, alsaLib, freetype
 , perl, pkgconfig , libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
 , libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2
-, linuxHeaders
+, linuxHeaders, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
-  name = "mythtv-${version}";
+  pname = "mythtv";
   version = "29.1";
 
   src = fetchFromGitHub {
@@ -15,6 +15,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0pjxv4bmq8h285jsr02svgaa03614arsyk12fn9d4rndjsi2cc3x";
   };
+
+  patches = [
+    # Fixes build with exiv2 0.27.1.
+    (fetchpatch {
+      name = "004-exiv2.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/004-exiv2.patch?h=mythtv&id=76ea37f8556805b205878772ad7874e487c0d946";
+      sha256 = "0mh542f53qgky0w3s2bv0gmcxzvmb10834z3cfff40fby2ffr6k8";
+    })
+  ];
 
   setSourceRoot = ''sourceRoot=$(echo */mythtv)'';
 

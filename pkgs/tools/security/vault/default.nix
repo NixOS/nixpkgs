@@ -1,36 +1,25 @@
-{ stdenv, fetchFromGitHub, go, gox, removeReferencesTo }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-stdenv.mkDerivation rec {
-  name = "vault-${version}";
-  version = "1.1.2";
+buildGoModule rec {
+  pname = "vault";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "1916zqmh4cam9nw3k95wiqizlpkbbm5qhfz4lblqba8pzc2y9v32";
+    sha256 = "11zi12j09vi6j112a1n8f7sxwp15pbh0801bzh27ihcy01hlzdf8";
   };
 
-  nativeBuildInputs = [ go gox removeReferencesTo ];
+  modSha256 = "10pr3piv6hrsc562qagpn1h5wckiziyfqraj13172hdglz3n2i7q";
 
-  preBuild = ''
-    patchShebangs ./
-    substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'
-    sed -i s/'^GIT_DIRTY=.*'/'GIT_DIRTY="+NixOS"'/ scripts/build.sh
+  buildFlagsArray = [
+    "-tags='vault'"
+    "-ldflags=\"-X github.com/hashicorp/vault/sdk/version.GitCommit='v${version}'\""
+  ];
 
-    mkdir -p .git/hooks src/github.com/hashicorp
-    ln -s $(pwd) src/github.com/hashicorp/vault
-
-    export GOPATH=$(pwd)
-    export GOCACHE="$TMPDIR/go-cache"
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin $out/share/bash-completion/completions
-
-    cp pkg/*/* $out/bin/
-    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
-
+  postInstall = ''
+    mkdir -p $out/share/bash-completion/completions
     echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
   '';
 

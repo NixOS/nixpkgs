@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Amtk;
-    description = "Actions, Menus and Toolbars Kit for GTK+ applications";
+    description = "Actions, Menus and Toolbars Kit for GTK applications";
     maintainers = [ maintainers.manveru ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

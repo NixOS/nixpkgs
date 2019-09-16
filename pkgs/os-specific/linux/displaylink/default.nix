@@ -10,7 +10,7 @@ let
   libPath = lib.makeLibraryPath [ stdenv.cc.cc utillinux libusb1 evdi ];
 
 in stdenv.mkDerivation rec {
-  name = "displaylink-${version}";
+  pname = "displaylink";
   version = "4.4.24";
 
   src = requireFile rec {

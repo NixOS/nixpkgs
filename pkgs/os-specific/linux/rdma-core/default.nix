@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pandoc
-, ethtool, iproute, libnl, udev, python, perl
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, docutils
+, pandoc, ethtool, iproute, libnl, udev, python, perl
+, makeWrapper
 } :
 
 let
-  version = "23.1";
+  version = "25.0";
 
 in stdenv.mkDerivation {
-  name = "rdma-core-${version}";
+  pname = "rdma-core";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "0blwqfj73bnk7byj2mavvnyh87mwhpzwgzg60s9vv9jnfcnbhlhk";
+    sha256 = "1r1gfps1xckky06ib1rbf6lp58v2jqpy1ipkr45rf55gpaxf93cj";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig pandoc ];
+  nativeBuildInputs = [ cmake pkgconfig pandoc docutils makeWrapper ];
   buildInputs = [ libnl ethtool iproute udev python perl ];
 
   cmakeFlags = [
@@ -28,6 +30,22 @@ in stdenv.mkDerivation {
       --replace ethtool "${ethtool}/bin/ethtool" \
       --replace 'ip addr' "${iproute}/bin/ip addr" \
       --replace 'ip link' "${iproute}/bin/ip link"
+
+    substituteInPlace srp_daemon/srp_daemon.sh.in \
+      --replace /bin/rm rm
+  '';
+
+  postInstall = ''
+    # cmake script is buggy, move file manually
+    mkdir -p $out/${perl.libPrefix}
+    mv $out/share/perl5/* $out/${perl.libPrefix}
+  '';
+
+  postFixup = ''
+    for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
+      echo "wrapping $pls"
+      wrapProgram $pls --prefix PERL5LIB : "$out/${perl.libPrefix}"
+    done
   '';
 
   meta = with stdenv.lib; {

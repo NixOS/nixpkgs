@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonApplication, EditorConfig, fetchpatch, pytest, six }:
+{ lib, fetchPypi, buildPythonApplication, editorconfig, pytest, six }:
 
 buildPythonApplication rec {
   pname = "jsbeautifier";
   version = "1.10.0";
 
-  propagatedBuildInputs = [ six EditorConfig ];
+  propagatedBuildInputs = [ six editorconfig ];
   checkInputs = [ pytest ];
 
   src = fetchPypi {

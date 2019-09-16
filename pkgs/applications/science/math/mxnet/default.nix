@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, bash, cmake
-, opencv, gtest, openblas, liblapack, perl
+, opencv3, gtest, openblas, liblapack, perl
 , cudaSupport ? config.cudaSupport or false, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport, cudnn
 }:
@@ -7,25 +7,23 @@
 assert cudnnSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
-  name = "mxnet-${version}";
-  version = "1.2.1";
+  pname = "mxnet";
+  version = "1.4.1";
 
-  # Fetching from git does not work at the time (1.2.1) due to an
-  # incorrect hash in one of the submodules. The provided tarballs
-  # contain all necessary sources.
   src = fetchurl {
     url = "https://github.com/apache/incubator-mxnet/releases/download/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
-    sha256 = "053zbdgs4j8l79ipdz461zc7wyfbfcflmi5bw7lj2q08zm1glnb2";
+    sha256 = "1d0lhlpdaxycjzpwwrpgjd3v2q2ka89v5rr13ddxayy7ld2hxiaj";
   };
 
   nativeBuildInputs = [ cmake perl ];
 
-  buildInputs = [ opencv gtest openblas liblapack ]
+  buildInputs = [ opencv3 gtest openblas liblapack ]
               ++ lib.optionals cudaSupport [ cudatoolkit nvidia_x11 ]
               ++ lib.optional cudnnSupport cudnn;
 
   cmakeFlags =
-    (if cudaSupport then [
+    [ "-DUSE_MKL_IF_AVAILABLE=OFF" ]
+    ++ (if cudaSupport then [
       "-DUSE_OLDCMAKECUDA=ON"  # see https://github.com/apache/incubator-mxnet/issues/10743
       "-DCUDA_ARCH_NAME=All"
       "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"

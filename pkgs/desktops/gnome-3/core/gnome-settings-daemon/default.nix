@@ -39,11 +39,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "3.32.0";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15w3sn9qf1zqlmk8c93kgrh2a20s62m5yfizkp21m5ylrrd07f63";
+    sha256 = "02d0s0g2mmqfib44r3sf0499r08p61s8l2ndsjssbam1bi7x2dks";
   };
 
   patches = [
@@ -93,6 +93,12 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dudev_dir=${placeholder "out"}/lib/udev"
+  ];
+
+  NIX_CFLAGS_COMPILE = [
+    # Default for release buildtype but passed manually because
+    # we're using plain
+    "-DG_DISABLE_CAST_CHECKS"
   ];
 
   # So the polkit policy can reference /run/current-system/sw/bin/gnome-settings-daemon/gsd-backlight-helper

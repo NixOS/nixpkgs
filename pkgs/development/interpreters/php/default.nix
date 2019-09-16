@@ -1,10 +1,10 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
-{ lib, stdenv, fetchurl, flex, bison, autoconf
+{ lib, stdenv, fetchurl, autoconf, bison, libtool, pkgconfig, re2c
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pcre, pcre2, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+, openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
-, libzip, re2c, valgrind
+, libzip, valgrind
 }:
 
 with lib;
@@ -17,7 +17,7 @@ let
   , withSystemd ? config.php.systemd or stdenv.isLinux
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
-  , mhashSupport ? config.php.mhash or true
+  , mhashSupport ? config.php.mhash or false
   , mysqlndSupport ? config.php.mysqlnd or true
   , mysqliSupport ? config.php.mysqli or true
   , pdo_mysqlSupport ? config.php.pdo_mysql or true
@@ -48,7 +48,7 @@ let
   , ftpSupport ? config.php.ftp or true
   , fpmSupport ? config.php.fpm or true
   , gmpSupport ? config.php.gmp or true
-  , ztsSupport ? config.php.zts or false
+  , ztsSupport ? (config.php.zts or false) || (apxs2Support)
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
@@ -59,10 +59,8 @@ let
   , cliSupport ? config.php.cli or true
   , pharSupport ? config.php.phar or true
   , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
-  , re2cSupport ? config.php.re2c or true
-  , cgotoSupport ? (config.php.cgoto or false) && (re2cSupport)
+  , cgotoSupport ? config.php.cgoto or false
   , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
-  , valgrindPcreSupport ? (config.php.valgrindPcreSupport or false) && (valgrindSupport) && (versionAtLeast version "7.2")
   }:
 
     let
@@ -76,8 +74,8 @@ let
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [ pkgconfig autoconf ];
-      buildInputs = [ flex bison ]
+      nativeBuildInputs = [ autoconf bison libtool pkgconfig re2c ];
+      buildInputs = [ ]
         ++ optional (versionOlder version "7.3") pcre
         ++ optional (versionAtLeast version "7.3") pcre2
         ++ optional withSystemd systemd
@@ -108,7 +106,6 @@ let
         ++ optional tidySupport html-tidy
         ++ optional argon2Support libargon2
         ++ optional libzipSupport libzip
-        ++ optional re2cSupport re2c
         ++ optional valgrindSupport valgrind;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
@@ -192,8 +189,7 @@ let
       ++ optional (!pharSupport) "--disable-phar"
       ++ optional xmlrpcSupport "--with-xmlrpc"
       ++ optional cgotoSupport "--enable-re2c-cgoto"
-      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}"
-      ++ optional valgrindPcreSupport "--with-pcre-valgrind";
+      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}";
 
       hardeningDisable = [ "bindnow" ];
 
@@ -257,25 +253,17 @@ let
     };
 
 in {
-  php71 = generic {
-    version = "7.1.29";
-    sha256 = "0dc3p3xq430vawcryw3xb4d1ckkz44rdnvfr833jsrl2zrzd2a45";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
-  };
-
   php72 = generic {
-    version = "7.2.18";
-    sha256 = "0wjb9j5slqjx1fn00ljwgy4vlxvz9a6s9677h5z20wqi5nqjf6ps";
+    version = "7.2.22";
+    sha256 = "12phn0rrd5r1j6xlz83h7v6gszmj4lb5gwj927psbbc6nn1rh2n1";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.5";
-    sha256 = "0pn3c9fj24v0r57d3cz67nisg6vjyw2yn5il7j1c6rw2z47bi023";
+    version = "7.3.9";
+    sha256 = "1i33v50rbqrfwjwch1d46mbpwbxrg1xfycs9mjl7xsy9m04rg753";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;

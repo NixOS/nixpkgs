@@ -7,7 +7,6 @@
 } :
 
 pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "devpi-client";
   version = "4.1.0";
 

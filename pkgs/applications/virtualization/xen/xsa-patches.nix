@@ -5,7 +5,7 @@ let
     url = "https://xenbits.xen.org/xsa/xsa${name}.patch";
     inherit sha256;
   });
-in rec {
+in {
   # 4.5
   XSA_190 = (xsaPatch {
     name = "190-4.5";
@@ -66,28 +66,10 @@ in rec {
     sha256 = "0nnznkrvfbbc8z64dr9wvbdijd4qbpc0wz2j5vpmx6b32sm7932f";
   });
 
-  # 4.8
-  XSA_202 = (xsaPatch {
-    name = "202";
-    sha256 = "0j1d5akcjgx8w2c6w6p9znv77fkmps0880m2xgpbgs1ra9grshm1";
-  });
-
-  # 4.8
-  XSA_203 = (xsaPatch {
-    name = "203";
-    sha256 = "1s1q7xskvpg87ivwfaiqr0cj3ajdkhkhpmpikfkvq127h8hhmd8j";
-  });
-
   # 4.5
   XSA_204_45 = (xsaPatch {
     name = "204-4.5";
     sha256 = "083z9pbdz3f532fnzg7n2d5wzv6rmqc0f4mvc3mnmkd0rzqw8vcp";
-  });
-
-  # 4.8
-  XSA_204 = (xsaPatch {
-    name = "204-4.8";
-    sha256 = "0rs498s4w2alz3h6jhlr2y0ni630vhggmxbrd1p1p3gcv8p6zzrr";
   });
 
   # 4.5
@@ -190,84 +172,10 @@ in rec {
     })
   ];
 
-  # 4.8
-  XSA_206 = [
-    (xsaPatch {
-      name = "206-4.8/0001-xenstored-apply-a-write-transaction-rate-limit";
-      sha256 = "1c81d93i3qx7l38f9af0sd84w5x51zvn262mzl25ilcklql4kzl6";
-    })
-    (xsaPatch {
-      name = "206-4.8/0002-xenstored-Log-when-the-write-transaction-rate-limit-";
-      sha256 = "0b8iw409wi1x6p0swpnr51lcdlla1lgxjv5f910sj4wl96bca84q";
-    })
-    (xsaPatch {
-      name = "206-4.8/0003-oxenstored-comments-explaining-some-variables";
-      sha256 = "1d3n0y9syya4kaavrvqn01d3wsn85gmw7qrbylkclznqgkwdsr2p";
-    })
-    (xsaPatch {
-      name = "206-4.8/0004-oxenstored-handling-of-domain-conflict-credit";
-      sha256 = "020rw7hgc0dmhr4admz91kd99b4z1bdpji47nsy1255bjgvwc01k";
-    })
-    (xsaPatch {
-      name = "206-4.8/0005-oxenstored-ignore-domains-with-no-conflict-credit";
-      sha256 = "1ilhcgyn803bxvfbqv0ihfrh9jfpp0lidkv7i4613f9v9vjm8q0h";
-    })
-    (xsaPatch {
-      name = "206-4.8/0006-oxenstored-add-transaction-info-relevant-to-history-";
-      sha256 = "1dbd9pzda6hn9wj9pck44dlgz9nxvch3bzgrpaivanww8llxdfzz";
-    })
-    (xsaPatch {
-      name = "206-4.8/0007-oxenstored-support-commit-history-tracking";
-      sha256 = "1jfr56c22fqkhj6fnv1ha7zsid86zm9l0nihpb8m932xgc4a6h9h";
-    })
-    (xsaPatch {
-      name = "206-4.8/0008-oxenstored-only-record-operations-with-side-effects-";
-      sha256 = "1y845hj8krjdrirbd2jx4jqgnylwjv7bxnk7474lkld5kdnlbjyf";
-    })
-    (xsaPatch {
-      name = "206-4.8/0009-oxenstored-discard-old-commit-history-on-txn-end";
-      sha256 = "1lcr9gz2b77x74sr1flfymyyz4xzs04iv88rc1633ibyqxmvk0lx";
-    })
-    (xsaPatch {
-      name = "206-4.8/0010-oxenstored-track-commit-history";
-      sha256 = "1qwnivak4y038mpby75aaz0y70r0l3yc3hsz6wl5x0b74q6yy0ja";
-    })
-    (xsaPatch {
-      name = "206-4.8/0011-oxenstored-blame-the-connection-that-caused-a-transa";
-      sha256 = "0p2w5ddyhc6d95dnlxzc5k77j063p02d53ab7m7ijfm7m6gknq8y";
-    })
-    (xsaPatch {
-      name = "206-4.8/0012-oxenstored-allow-self-conflicts";
-      sha256 = "1571l81m30cbmqm4pk33q33p3dy58sfy2lnkl2wbgl2b3mkk657l";
-    })
-    (xsaPatch {
-      name = "206-4.8/0013-oxenstored-do-not-commit-read-only-transactions";
-      sha256 = "15985wl635w22dddjyx5l97b5p6m55mzv5ygk7xr0jx7mi192f9x";
-    })
-    (xsaPatch {
-      name = "206-4.8/0014-oxenstored-don-t-wake-to-issue-no-conflict-credit";
-      sha256 = "08672w4gaf2n3r8xy09h874gh5lg2vnrkjzq6xzvzdhdl092mipw";
-    })
-    (xsaPatch {
-      name = "206-4.8/0015-oxenstored-transaction-conflicts-improve-logging";
-      sha256 = "0ck98ms0py8wjsc38pbx6222x7n6l90zckfa7m7nnszsyc0sxxad";
-    })
-    (xsaPatch {
-      name = "206-4.8/0016-oxenstored-trim-history-in-the-frequent_ops-function";
-      sha256 = "014zs6i4gzrimn814k5i7gz66vbb0adkzr2qyai7i4fxc9h9r7w8";
-    })
-  ];
-
   # 4.5 - 4.8
   XSA_207 = (xsaPatch {
     name = "207";
     sha256 = "0wdlhijmw9mdj6a82pyw1rwwiz605dwzjc392zr3fpb2jklrvibc";
-  });
-
-  # 4.8
-  XSA_210 = (xsaPatch {
-    name = "210";
-    sha256 = "02mykxqxnsrd0sr4ij022j8y7618wzi2a6j6j761vx8qgmh11xai";
   });
 
   # 4.5 - 4.8
@@ -280,12 +188,6 @@ in rec {
   XSA_213_45 = (xsaPatch {
     name = "213-4.5";
     sha256 = "1vnqf89ydacr5bq3d6z2r33xb2sn5vsd934rncyc28ybc9rvj6wm";
-  });
-
-  # 4.8
-  XSA_213 = (xsaPatch {
-    name = "213-4.8";
-    sha256 = "0ia3zr6r3bqy2h48fdy7p0iz423lniy3i0qkdvzgv5a8m80darr2";
   });
 
   # 4.5 - 4.8
@@ -304,12 +206,6 @@ in rec {
   XSA_217_45 = (xsaPatch {
     name = "217-4.5";
     sha256 = "067pgsfrb9py2dhm1pk9g8f6fs40vyfrcxhj8c12vzamb6svzmn4";
-  });
-
-  # 4.6 - 4.8
-  XSA_217 = (xsaPatch {
-    name = "217";
-    sha256 = "1khs5ilif14dzcm7lmikjzkwsrfzlmir1rgrgzkc411gf18ylzmj";
   });
 
   # 4.5
@@ -332,44 +228,16 @@ in rec {
     })
   ];
 
-  # 4.8
-  XSA_218 = [
-    (xsaPatch {
-      name = "218-4.8/0001-gnttab-fix-unmap-pin-accounting-race";
-      sha256 = "0r363frai239r2wmwxi48kcr50gbk5l64nja0h9lppi3z2y3dkdd";
-    })
-    (xsaPatch {
-      name = "218-4.8/0002-gnttab-Avoid-potential-double-put-of-maptrack-entry";
-      sha256 = "07wm06i7frv7bsaykakx3g9h0hfqv96zcadvwf6wv194dggq1plc";
-    })
-    (xsaPatch {
-      name = "218-4.8/0003-gnttab-correct-maptrack-table-accesses";
-      sha256 = "0ad0irc3p4dmla8sp3frxbh2qciji1dipkslh0xqvy2hyf9p80y9";
-    })
-  ];
-
   # 4.5
   XSA_219_45 = (xsaPatch {
     name = "219-4.5";
     sha256 = "003msr5vhsc66scmdpgn0lp3p01g4zfw5vj86y5lw9ajkbaywdsm";
   });
 
-  # 4.8
-  XSA_219 = (xsaPatch {
-    name = "219-4.8";
-    sha256 = "16q7kiamy86x8qdvls74wmq5j72kgzgdilryig4q1b21mp0ij1jq";
-  });
-
   # 4.5
   XSA_220_45 = (xsaPatch {
     name = "220-4.5";
     sha256 = "1dj9nn6lzxlipjb3nb7b9m4337fl6yn2bd7ap1lqrjn8h9zkk1pp";
-  });
-
-  # 4.8
-  XSA_220 = (xsaPatch {
-    name = "220-4.8";
-    sha256 = "0214qyqx7qap5y1pdi9fm0vz4y2fbyg71gaq36fisknj35dv2mh5";
   });
 
   # 4.5 - 4.8
@@ -387,18 +255,6 @@ in rec {
     (xsaPatch {
       name = "222-2-4.5";
       sha256 = "1hw8rhc7q4v309f4w11gxfsn5x1pirvxkg7s4kr711fnmvp9hkzd";
-    })
-  ];
-
-  # 4.8
-  XSA_222 = [
-    (xsaPatch {
-      name = "222-1";
-      sha256 = "0x02x4kqwfw255638fh2zcxwig1dy6kadlmqim1jgnjgmrvvqas2";
-    })
-    (xsaPatch {
-      name = "222-2-4.8";
-      sha256 = "1xhyp6q3c5l8djh965g1i8201m2wvhms8k886h4sn30hks38giin";
     })
   ];
 
@@ -428,32 +284,6 @@ in rec {
     })
   ];
 
-  # 4.8
-  XSA_224 = [
-    (xsaPatch {
-      name = "224-4.8/0001-gnttab-Fix-handling-of-dev_bus_addr-during-unmap";
-      sha256 = "1k326yan5811qzyvpdfkv801a19nyd09nsqayi8gyh58xx9c21m4";
-    })
-    (xsaPatch {
-      name = "224-4.8/0002-gnttab-never-create-host-mapping-unless-asked-to";
-      sha256 = "06nj1x59bbx9hrj26xmvbw8z805lfqhld9hm0ld0fs6dmcpqzcck";
-    })
-    (xsaPatch {
-      name = "224-4.8/0003-gnttab-correct-logic-to-get-page-references-during-m";
-      sha256 = "0kmag6fdsskgplcvzqp341yfi6pgc14wvjj58bp7ydb9hdk53qx2";
-    })
-    (xsaPatch {
-      name = "224-4.8/0004-gnttab-__gnttab_unmap_common_complete-is-all-or-noth";
-      sha256 = "1ww80pi7jr4gjpymkcw8qxmr5as18b2asdqv35527nqprylsff9f";
-    })
-  ];
-
-  # 4.6 - 4.8
-  XSA_225 = (xsaPatch {
-    name = "225";
-    sha256 = "0lcp2bs0r849xnvhrdf8s821v36cqdbzk8lwz6chrjhjalk6ha2g";
-  });
-
   # 4.5
   XSA_226_45 = [
     (xsaPatch {
@@ -466,40 +296,10 @@ in rec {
     })
   ];
 
-  # 4.8 - 4.9
-  XSA_226 = [
-    (xsaPatch {
-      name = "226-4.9/0001-gnttab-dont-use-possibly-unbounded-tail-calls";
-      sha256 = "1hx47ppv5q33cw4dwp82lgvv4fp28gx7rxijw0iaczsv8bvb8vcg";
-    })
-    (xsaPatch {
-      name = "226-4.9/0002-gnttab-fix-transitive-grant-handling";
-      sha256 = "1gzp8m2zfihwlk71c3lqyd0ajh9h11pvkhzhw0mawckxy0qksvlc";
-    })
-  ];
-
   # 4.5
   XSA_227_45 = (xsaPatch {
     name = "227-4.5";
     sha256 = "1qfjfisgqm4x98qw54x2qrvgjnvvzizx9p1pjhcnsps9q6g1y3x8";
-  });
-
-  # 4.8 - 4.9
-  XSA_227 = (xsaPatch {
-    name = "227";
-    sha256 = "0zdcm43i5n08rh7rrnb0fcssvd4fgawwmizsa16w2ak7pzvgmg94";
-  });
-
-  # 4.8
-  XSA_228_48 = (xsaPatch {
-    name = "228-4.8";
-    sha256 = "085pnzwyv0rdb51hv5vhbhwfyxl0wg8sxcm912gjq8z7da5cv10n";
-  });
-
-  # 4.9
-  XSA_228 = (xsaPatch {
-    name = "228";
-    sha256 = "0c9nvfpnr5ira7ha3fszhvvh71nsxrvmzrab56xwjhl2dbw2yy23";
   });
 
   # 4.5 - 4.9
@@ -512,12 +312,6 @@ in rec {
   XSA_231_45 = (xsaPatch {
     name = "231-4.5";
     sha256 = "06gwx2f1lg51dfk2b4zxp7wv9c4pxdi87pg2asvmxqc78ir7l5s6";
-  });
-
-  # 4.8 - 4.9
-  XSA_231 = (xsaPatch {
-    name = "231-4.9";
-    sha256 = "09r8xxq2fd52wrk6i0y0sk3nbidfg6pzzrkx327hfmdjj76iyz3b";
   });
 
   # 4.5 - 4.9
@@ -538,40 +332,16 @@ in rec {
     sha256 = "1ji6hbgybb4gbgz5l5fis9midnvjbddzam8d63377rkzdyb3yz9f";
   });
 
-  # 4.8
-  XSA_234_48 = (xsaPatch {
-    name = "234-4.8";
-    sha256 = "08n1pf7z5y67dmay1ap39bi81clgkx82fpmfn7jsh8k4aw94jrsa";
-  });
-
-  # 4.9
-  XSA_234 = (xsaPatch {
-    name = "234-4.9";
-    sha256 = "1znmxg432is0virw8321gax8zqq2zcmi2pc5p2j31sixylixsvzx";
-  });
-
   # 4.5
   XSA_235_45 = (xsaPatch {
     name = "235-4.5";
     sha256 = "0hhgnql2gji111020z4wiyzg23wqs6ymanb67rg11p4qad1fp3ff";
   });
 
-  # 4.8 - 4.9
-  XSA_235 = (xsaPatch {
-    name = "235-4.9";
-    sha256 = "1rj4jkmh79wm30jq9f8x65qv3al8l91zc3m5s23q0x6abn3pfb9z";
-  });
-
   # 4.5
   XSA_236_45 = (xsaPatch {
     name = "236-4.5";
     sha256 = "0hcla86x81wykssd2967gblp7fzx61290p4ls4v0hcyxdg2bs2yz";
-  });
-
-  # 4.8 - 4.9
-  XSA_236 = (xsaPatch {
-    name = "236-4.9";
-    sha256 = "0vqxy7mgflga05l33j3488fwxmdw3p9yxj4ylhk9n3nw8id72ghq";
   });
 
   # 4.5
@@ -598,76 +368,16 @@ in rec {
     })
   ];
 
-  # 4.8
-  XSA_237_48 = [
-    (xsaPatch {
-      name = "237-4.8/0001-x86-dont-allow-MSI-pIRQ-mapping-on-unowned-device";
-      sha256 = "0qjisp37lwi2611mp7fbbm1s7m0bx726rrg79dnxs2mj0skw59iv";
-    })
-    (xsaPatch {
-      name = "237-4.8/0002-x86-enforce-proper-privilege-when-mapping-pIRQ-s";
-      sha256 = "05q1dny13jrqhjfwak7r635mqp9chpibjvn8b7d90japc1nzpq62";
-    })
-    (xsaPatch {
-      name = "237-4.8/0003-x86-MSI-disallow-redundant-enabling";
-      sha256 = "1907lv8nb2zhpb6k6jlw4m0hm0n0lyd69vfr3wpzbc56dn0w7jqd";
-    })
-    (xsaPatch {
-      name = "237-4.8/0004-x86-IRQ-conditionally-preserve-irq-pirq-mapping-on-error";
-      sha256 = "06nrq0bx3p9ipab2r1why6qm4g32dj0x5q24hfkwc6ih0l9xwf8h";
-    })
-    (xsaPatch {
-      name = "237-4.8/0005-x86-FLASK-fix-unmap-domain-IRQ-XSM-hook";
-      sha256 = "1nbg7bjw2hv55gnkhf6chkh35va6brs08acq1d5jxncl6kv0amc1";
-    })
-  ];
-
-  # 4.9
-  XSA_237 = [
-    (xsaPatch {
-      name = "237-4.9/0001-x86-dont-allow-MSI-pIRQ-mapping-on-unowned-device";
-      sha256 = "1cbl24mqxa62h0wgsnrpcs6y6vs53znzj7g8dfsbmf74xwrd4px6";
-    })
-    (xsaPatch {
-      name = "237-4.9/0002-x86-enforce-proper-privilege-when-mapping-pIRQ-s";
-      sha256 = "0p60148j18b78pxz0dx5ymh1gyrhg2cgmxq0jxmbk090bc4jql35";
-    })
-    (xsaPatch {
-      name = "237-4.9/0003-x86-MSI-disallow-redundant-enabling";
-      sha256 = "1907lv8nb2zhpb6k6jlw4m0hm0n0lyd69vfr3wpzbc56dn0w7jqd";
-    })
-    (xsaPatch {
-      name = "237-4.9/0004-x86-IRQ-conditionally-preserve-irq-pirq-mapping-on-error";
-      sha256 = "0q95z5641amni53agimnzbspva53p0hz5wl16zaz2yhnjasj5pzr";
-    })
-    (xsaPatch {
-      name = "237-4.9/0005-x86-FLASK-fix-unmap-domain-IRQ-XSM-hook";
-      sha256 = "0bnqx9w7ppgx8wxj2zw09z0rkv1jzn3r0bd76cz0r22wz29fsdp2";
-    })
-  ];
-
   # 4.5
   XSA_238_45 = (xsaPatch {
     name = "238-4.5";
     sha256 = "1x2fg5vfv5jc084h5gjm6fq0nxjpzvi96px3sqzz4pvsvy4y4i1z";
   });
 
-  # 4.8 - 4.9
-  XSA_238 = (xsaPatch {
-    name = "238";
-    sha256 = "1cbmg1bi5ajh7qbwsl92ynaxw2c3p7i24p3wds81r4n93r0y5dxk";
-  });
-
   # 4.5
   XSA_239_45 = (xsaPatch {
     name = "239-4.5";
     sha256 = "06bi8q3973yajxsdj7pcqarvb56q2gisxdiy0cpbyffbmpkfv3h6";
-  });
-
-  # 4.8 - 4.9
-  XSA_239 = (xsaPatch {
-    name = "239";
-    sha256 = "1a9r8j7167s43ds5i7v7mm4y970vjnbhhkrjzpmzlcx8kcz96vh3";
   });
 
   # 4.5
@@ -682,40 +392,10 @@ in rec {
     })
   ];
 
-  # 4.8
-  XSA_240_48 = [
-    (xsaPatch {
-      name = "240-4.8/0001-x86-limit-linear-page-table-use-to-a-single-level";
-      sha256 = "0m44qhhqk2pdwqg8g28pypqrylq6iw00k9qrzf6qd0iza2y42kgj";
-    })
-    (xsaPatch {
-      name = "240-4.8/0002-x86-mm-Disable-PV-linear-pagetables-by-default";
-      sha256 = "1jd720wvngj9wq3fprdhakxvqlff0jd8zcx2pd3vsn2qvjbvr2gf";
-    })
-  ];
-
-  # 4.9
-  XSA_240 = [
-    (xsaPatch {
-      name = "240-4.9/0001-x86-limit-linear-page-table-use-to-a-single-level";
-      sha256 = "1759ni80aifakm44g4cc6pnmbcn1xjic8j66fvj0vibm0wqk6xck";
-    })
-    (xsaPatch {
-      name = "240-4.9/0002-x86-mm-Disable-PV-linear-pagetables-by-default";
-      sha256 = "0g6dpi006p5cjxw5d8h33p0429fdmdm6nqzj0m63ralpqvns3ib5";
-    })
-  ];
-
   # 4.5 - 4.8
   XSA_241 = (xsaPatch {
     name = "241-4.8";
     sha256 = "16zb75kzs98f4mdxhbyczk5mbh9dvn6j3yhfafki34x1dfdnq4pj";
-  });
-
-  # 4.9
-  XSA_241_49 = (xsaPatch {
-    name = "241-4.9";
-    sha256 = "0xlhin7wkhmlnbp9mqcbq3q4drdwb5la482ja9nwkhi8i867p6wc";
   });
 
   # 4.5 - 4.9
@@ -736,28 +416,10 @@ in rec {
     })
   ];
 
-  # 4.8
-  XSA_243_48 = (xsaPatch {
-    name = "243-4.8";
-    sha256 = "1q60zn55l9wpq45nrxh0av59sjz0jg8pkjm1gkyywkdsgg4fg5z4";
-  });
-
-  # 4.9
-  XSA_243 = (xsaPatch {
-    name = "243";
-    sha256 = "06fnbnh9zlsbkqih9ipnb7a8gly54m7lp17d854j1r370ad3c4yg";
-  });
-
   # 4.5
   XSA_244_45 = (xsaPatch {
     name = "244-4.5";
     sha256 = "05ci3vdl1ywfjpzcvsy1k52whxjk8pxzj7dh3r94yqasr56i5v2l";
-  });
-
-  # 4.8 - 4.9
-  XSA_244 = (xsaPatch {
-    name = "244";
-    sha256 = "10308xsgmhb0vg6fk0ql8v94zifv6dcv6vkaicryfp405yj2rzkm";
   });
 
   # 4.5 - 4.9
@@ -777,26 +439,6 @@ in rec {
     (xsaPatch {
       name = "246-4.7";
       sha256 = "13rad4k8z3bq15d67dhgy96kdbrjiq9sy8px0jskbpx9ygjdahkn";
-    })
-  ];
-
-  # 4.8 - 4.9
-  XSA_246 = [
-    (xsaPatch {
-      name = "246-4.9";
-      sha256 = "0z68vm0z5zvv9gm06pxs9kxq2q9fdbl0l0cm71ggzdplg1vw0snz";
-    })
-  ];
-
-  # 4.8
-  XSA_247_48 = [
-    (xsaPatch {
-      name = "247-4.8/0001-p2m-Always-check-to-see-if-removing-a-p2m-entry-actu";
-      sha256 = "0kvjrk90n69s721c2qj2df5raml3pjk6bg80aig353p620w6s3xh";
-    })
-    (xsaPatch {
-      name = "247-4.8/0002-p2m-Check-return-value-of-p2m_set_entry-when-decreas";
-      sha256 = "1s9kv6h6dd8psi5qf5l5gpk9qhq8blckwhl76cjbldcgi6imb3nr";
     })
   ];
 
@@ -820,14 +462,6 @@ in rec {
     })
   ];
 
-  # 4.8
-  XSA_248_48 = [
-    (xsaPatch {
-      name = "248-4.8";
-      sha256 = "1ycw29q22ymxg18kxpr5p7vhpmp8klssbp5gq77hspxzz2mb96q1";
-    })
-  ];
-
   # 4.5 .. 4.9
   XSA_249 = [
    (xsaPatch {
@@ -835,6 +469,7 @@ in rec {
       sha256 = "0v6ngzqhkz7yv4n83xlpxfbkr2qyg5b1cds7ikkinm86hiqy6agl";
     })
   ];
+
   # 4.5
   XSA_250_45 = [
    (xsaPatch {
@@ -842,13 +477,7 @@ in rec {
       sha256 = "0pqldl6qnl834gvfp90z247q9xcjh3835s2iffnajz7jhjb2145d";
     })
   ];
-  # 4.8 ...
-  XSA_250 = [
-   (xsaPatch {
-      name = "250";
-      sha256 = "1wpigg8kmha57sspqqln3ih9nbczsw6rx3v72mc62lh62qvwd7x8";
-    })
-  ];
+
   # 4.5
   XSA_251_45 = [
    (xsaPatch {
@@ -856,81 +485,4 @@ in rec {
       sha256 = "0lc94cx271z09r0mhxaypyd9d4740051p28idf5calx5228dqjgm";
     })
   ];
-  # 4.8
-  XSA_251_48 = [
-   (xsaPatch {
-      name = "251-4.8";
-      sha256 = "079wi0j6iydid2zj7k584w2c393kgh588w7sjz2nn4039qn8k9mq";
-    })
-  ];
-  # 4.8
-  XSA_252_49 = [
-   (xsaPatch {
-      name = "252-4.9";
-      sha256 = "03sbn90nlkk5ba1n168rxjkc7x3mqj7rfqvspbwblmwikfbnms2n";
-    })
-  ];
-  # 4.8
-  XSA_255_49_1= [
-   (xsaPatch {
-      name = "255-4.9-1";
-      sha256 = "0gbin7yxbkq40lvm3gvj1vffavvbng3zpd2m8l1kqyz0rv4vm9zc";
-    })
-  ];
-  # 4.8
-  XSA_255_49_2= [
-   (xsaPatch {
-      name = "255-4.9-2";
-      sha256 = "0fyg5nnyfpfr80qq83pr64zjp5w1nx94bdblzsjap8gaqcahyr12";
-    })
-  ];
-  # 4.8
-  XSA_256_48= [
-   (xsaPatch {
-      name = "256-4.8";
-      sha256 = "1w84f717kxwx0h3rw18r4f8pl0l1h5xlj5fy80sr0ws4xkp1qdn4";
-    })
-  ];
-
-
-  # 4.10
-  XSA_252 = [
-   (xsaPatch {
-      name = "252";
-      sha256 = "0v4sg20dnvnwrjh3x69gk81v2kmcql7g2s044vg3wcxhzvij1rrn";
-    })
-  ];
-
-  # 4.10
-  XSA_253 = [
-   (xsaPatch {
-      name = "253";
-      sha256 = "0445vzlzy3gd499xraqh5r4qjar6qr0y3813h22jy1n84nhxz27i";
-    })
-  ];
-
-  # 4.10
-  XSA_255_1 = [
-   (xsaPatch {
-      name = "255-1";
-      sha256 = "05g2f3ji1rrjlw3yw4nrns50pnmsib8ybrf64scr1817mj0q9myr";
-    })
-  ];
-
-  # 4.10
-  XSA_255_2 = [
-   (xsaPatch {
-      name = "255-2";
-      sha256 = "08wbngw5z0f9g8di59hww3hhi7j9z49bpc4xlwn5akfcwbgf0961";
-    })
-  ];
-
-  # 4.10
-  XSA_256 = [
-   (xsaPatch {
-      name = "256";
-      sha256 = "1hicwhbwj6k25px55f4ncx1c5xiihi8pfvsb3kv57k7kaicb7pza";
-    })
-  ];
-
 }

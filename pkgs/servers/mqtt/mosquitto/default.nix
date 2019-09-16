@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, docbook_xsl, libxslt
+{ stdenv, lib, fetchFromGitHub, cmake, docbook_xsl, libxslt
 , openssl, libuuid, libwebsockets, c-ares, libuv
 , systemd ? null, withSystemd ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
-  name = "mosquitto-${version}";
-  version = "1.6.1";
+  pname = "mosquitto";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner  = "eclipse";
     repo   = "mosquitto";
     rev    = "v${version}";
-    sha256 = "0mpllj719cmirynbcgiankdzyg7bn6vpvxxhg8zr18lic5dvgm3p";
+    sha256 = "1kr1dgc4nzhyg3rzymbv4rka3rpb30rwsy6binb7apnw3n3ff58l";
   };
 
   postPatch = ''

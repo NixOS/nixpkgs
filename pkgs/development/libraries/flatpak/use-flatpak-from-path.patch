@@ -1,6 +1,8 @@
+diff --git a/common/flatpak-dir.c b/common/flatpak-dir.c
+index 8f9dc66c..d3ab6e5f 100644
 --- a/common/flatpak-dir.c
 +++ b/common/flatpak-dir.c
-@@ -5758,7 +5758,7 @@ export_desktop_file (const char   *app,
+@@ -6701,7 +6701,7 @@ export_desktop_file (const char         *app,
  
        new_exec = g_string_new ("");
        g_string_append_printf (new_exec,
@@ -9,7 +11,7 @@
                                escaped_branch,
                                escaped_arch);
  
-@@ -6935,8 +6935,8 @@ flatpak_dir_deploy (FlatpakDir          *self,
+@@ -7891,8 +7891,8 @@ flatpak_dir_deploy (FlatpakDir          *self,
                                         error))
          return FALSE;
  
@@ -21,28 +23,28 @@
                                      G_FILE_CREATE_REPLACE_DESTINATION, NULL, cancellable, error))
          return FALSE;
 diff --git a/tests/test-bundle.sh b/tests/test-bundle.sh
-index 6937b041..01f8add7 100755
+index dff17f33..a9857adc 100755
 --- a/tests/test-bundle.sh
 +++ b/tests/test-bundle.sh
 @@ -59,7 +59,7 @@ assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/master/active/files
  assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/master/active/export
  assert_has_file $FL_DIR/exports/share/applications/org.test.Hello.desktop
  # Ensure Exec key is rewritten
--assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=.*/flatpak run --branch=master --arch=$ARCH --command=hello.sh org.test.Hello$"
-+assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=flatpak run --branch=master --arch=$ARCH --command=hello.sh org.test.Hello$"
+-assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=.*/flatpak run --branch=master --arch=$ARCH --command=hello\.sh org\.test\.Hello$"
++assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=flatpak run --branch=master --arch=$ARCH --command=hello\.sh org\.test\.Hello$"
  assert_has_file $FL_DIR/exports/share/icons/hicolor/64x64/apps/org.test.Hello.png
  assert_has_file $FL_DIR/exports/share/icons/HighContrast/64x64/apps/org.test.Hello.png
  
 diff --git a/tests/test-run.sh b/tests/test-run.sh
-index 9d83d82e..234e4ec6 100755
+index 233df9ad..76e0b23b 100644
 --- a/tests/test-run.sh
 +++ b/tests/test-run.sh
-@@ -42,7 +42,7 @@ assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/master/active/files
- assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/master/active/export
+@@ -45,7 +45,7 @@ assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/stable/active/files
+ assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/stable/active/export
  assert_has_file $FL_DIR/exports/share/applications/org.test.Hello.desktop
  # Ensure Exec key is rewritten
--assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=.*/flatpak run --branch=master --arch=$ARCH --command=hello.sh org.test.Hello$"
-+assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=flatpak run --branch=master --arch=$ARCH --command=hello.sh org.test.Hello$"
+-assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=.*/flatpak run --branch=stable --arch=$ARCH --command=hello\.sh org\.test\.Hello$"
++assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=flatpak run --branch=stable --arch=$ARCH --command=hello\.sh org\.test\.Hello$"
  assert_has_file $FL_DIR/exports/share/icons/hicolor/64x64/apps/org.test.Hello.png
  assert_not_has_file $FL_DIR/exports/share/icons/hicolor/64x64/apps/dont-export.png
  assert_has_file $FL_DIR/exports/share/icons/HighContrast/64x64/apps/org.test.Hello.png

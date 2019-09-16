@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "w_scan-${version}";
+  pname = "w_scan";
   version = "20170107";
 
   src = fetchurl {
-    url = "http://wirbel.htpc-forum.de/w_scan/${name}.tar.bz2";
+    url = "http://wirbel.htpc-forum.de/w_scan/${pname}-${version}.tar.bz2";
     sha256 = "1zkgnj2sfvckix360wwk1v5s43g69snm45m0drnzyv7hgf5g7q1q";
   };
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf
+{ stdenv, fetchurl, makeDesktopItem
 , libXrender, libXrandr, libXcursor, libX11, libXext, libXi, libxcb
-, cups , libGL, glib, nss, nspr, expat, alsaLib
+ , libGL, glib, nss, nspr, expat, alsaLib
 , qtbase, qtdeclarative, qtsvg, qtlocation, qtwebchannel, qtwebengine
 }:
 
@@ -12,12 +12,12 @@ let
     ];
   in
   stdenv.mkDerivation rec {
-    name = "eagle-${version}";
-    version = "9.3.2";
+    pname = "eagle";
+    version = "9.4.2";
 
     src = fetchurl {
       url = "https://eagle-updates.circuits.io/downloads/${builtins.replaceStrings ["."] ["_"] version}/Autodesk_EAGLE_${version}_English_Linux_64bit.tar.gz";
-      sha256 = "0xrrd2d86gxrkbqvssbg8zki40hk05h48w73b0hv7wnc7wg1msir";
+      sha256 = "0lrwrvqcb91mcggmicvwjrngccsdy0f06l7a8nfgp9ckn4d9vmg2";
     };
 
     desktopItem = makeDesktopItem {
@@ -35,9 +35,6 @@ let
         libGL glib nss nspr expat alsaLib
         qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
       ];
-
-    doConfigure = false;
-    doBuild = false;
 
     installPhase = ''
       # Extract eagle tarball

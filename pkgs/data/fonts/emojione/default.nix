@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, inkscape, imagemagick, potrace, svgo, scfbuild }:
 
 stdenv.mkDerivation rec {
-  name = "emojione-${version}";
+  pname = "emojione";
   version = "1.4";
 
   src = fetchFromGitHub {

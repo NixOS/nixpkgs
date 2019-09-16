@@ -1,7 +1,7 @@
 { stdenv, fetchzip, autoreconfHook, libcrafter, libpcap, lua }:
 
 stdenv.mkDerivation rec {
-  name = "tracebox-${version}";
+  pname = "tracebox";
   version = "0.2";
 
   src = fetchzip {

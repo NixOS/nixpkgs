@@ -6,12 +6,12 @@
 }:
 
 mkDerivation rec {
-  name = "skrooge-${version}";
-  version = "2.19.1";
+  pname = "skrooge";
+  version = "2.20.0";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/skrooge/${name}.tar.xz";
-    sha256 = "04pajy540vwff1y84ndrnscvlggiwfkr6w65g4hpa75cg7m169ya";
+    url = "http://download.kde.org/stable/skrooge/${pname}-${version}.tar.xz";
+    sha256 = "0rakfngp7j2x7h1isg6lbc5kva6k1kg99dz0zl43dc28s15can1w";
   };
 
   nativeBuildInputs = [

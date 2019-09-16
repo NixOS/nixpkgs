@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.47.0";
+  version = "1.49.2";
 
   src = fetchFromGitHub {
-    owner = "ncw";
+    owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nxwjr9jly6wh1ixr6a7zhlg4b3298v940040fsm0n3lcljd37zx";
+    sha256 = "1a90fr7cw78qhwdgkjwshap345jk1ipm3nnk7xf3nayiyibvk5dg";
   };
 
-  modSha256 = "02p5dd450bbfyq80nd0w8f9kpv25k1855mf0gcv0cy9zq3f3r7q7";
+  modSha256 = "158mpmy8q67dk1ks9p926n1670gsk7rhd0vpjh44f4g64ddnhk03";
 
   subPackages = [ "." ];
 

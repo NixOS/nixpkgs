@@ -1,20 +1,21 @@
 { stdenv, makeDesktopItem, fetchurl, unzip
-, gdk_pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, hicolor-icon-theme, libuuid
+, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, hicolor-icon-theme, libuuid, at-spi2-core
 }:
 
 stdenv.mkDerivation rec {
-  name = "avocode-${version}";
-  version = "3.7.2";
+  pname = "avocode";
+  version = "3.9.2";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "0qwghs9q91ifywvrn8jgnnqzfrbbsi4lf92ikxq0dmdv734pdw0c";
+    sha256 = "18yzw7bss1dkmmd8lxr9x8s46qmpnqci202g16zrp6j9jdj094d3";
   };
 
   libPath = stdenv.lib.makeLibraryPath (with xorg; [
     stdenv.cc.cc.lib
-    gdk_pixbuf
+    at-spi2-core.out
+    gdk-pixbuf
     glib
     gtk3
     atk

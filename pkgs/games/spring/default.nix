@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "spring-${version}";
+  pname = "spring";
   version = "104.0";
 
   src = fetchurl {

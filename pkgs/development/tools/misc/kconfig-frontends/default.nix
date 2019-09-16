@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
+
   meta = with stdenv.lib; {
     description = "Out of Linux tree packaging of the kconfig infrastructure";
     longDescription = ''

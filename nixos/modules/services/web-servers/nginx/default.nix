@@ -4,23 +4,25 @@ with lib;
 
 let
   cfg = config.services.nginx;
+  certs = config.security.acme.certs;
+  vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
+  acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME && vhostConfig.useACMEHost == null) vhostsConfigs;
   virtualHosts = mapAttrs (vhostName: vhostConfig:
     let
       serverName = if vhostConfig.serverName != null
         then vhostConfig.serverName
         else vhostName;
-      acmeDirectory = config.security.acme.directory;
     in
     vhostConfig // {
       inherit serverName;
     } // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
-      sslCertificateKey = "${acmeDirectory}/${serverName}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
+      sslCertificate = "${certs.${serverName}.directory}/fullchain.pem";
+      sslCertificateKey = "${certs.${serverName}.directory}/key.pem";
+      sslTrustedCertificate = "${certs.${serverName}.directory}/full.pem";
     }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
-      sslCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
-      sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
+      sslCertificate = "${certs.${vhostConfig.useACMEHost}.directory}/fullchain.pem";
+      sslCertificateKey = "${certs.${vhostConfig.useACMEHost}.directory}/key.pem";
+      sslTrustedCertificate = "${certs.${vhostConfig.useACMEHost}.directory}/fullchain.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -64,7 +66,7 @@ let
       include ${cfg.package}/conf/uwsgi_params;
 
       ${optionalString (cfg.resolver.addresses != []) ''
-        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
+        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
       ''}
       ${upstreamConfig}
 
@@ -92,7 +94,6 @@ let
 
       ${optionalString (cfg.recommendedGzipSettings) ''
         gzip on;
-        gzip_disable "msie6";
         gzip_proxied any;
         gzip_comp_level 5;
         gzip_types
@@ -161,6 +162,10 @@ let
 
     ${cfg.appendConfig}
   '';
+
+  configPath = if cfg.enableReload
+    then "/etc/nginx/nginx.conf"
+    else configFile;
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
@@ -269,17 +274,6 @@ let
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
-  mkBasicAuth = vhostName: authDef: let
-    htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
-      concatStringsSep "\n" (mapAttrsToList (user: password: ''
-        ${user}:{PLAIN}${password}
-      '') authDef)
-    );
-  in ''
-    auth_basic secured;
-    auth_basic_user_file ${htpasswdFile};
-  '';
-
   mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
     concatStringsSep "\n" (mapAttrsToList (user: password: ''
       ${user}:{PLAIN}${password}
@@ -442,6 +436,16 @@ in
         ";
       };
 
+      enableReload = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Reload nginx when configuration file changes (instead of restart).
+          The configuration file is exposed at <filename>/etc/nginx/nginx.conf</filename>.
+          See also <literal>systemd.services.*.restartIfChanged</literal>.
+        '';
+      };
+
       stateDir = mkOption {
         default = "/var/spool/nginx";
         description = "
@@ -468,7 +472,7 @@ in
       };
 
       clientMaxBodySize = mkOption {
-        type = types.string;
+        type = types.str;
         default = "10m";
         description = "Set nginx global client_max_body_size.";
       };
@@ -519,6 +523,15 @@ in
               description = ''
                 By default, nginx caches answers using the TTL value of a response.
                 An optional valid parameter allows overriding it
+              '';
+            };
+            ipv6 = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
+                If looking up of IPv6 addresses is not desired, the ipv6=off parameter can be
+                specified.
               '';
             };
           };
@@ -634,16 +647,17 @@ in
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
-      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      wants = concatLists (map (vhostConfig: ["acme-${vhostConfig.serverName}.service" "acme-selfsigned-${vhostConfig.serverName}.service"]) acmeEnabledVhosts);
+      after = [ "network.target" ] ++ map (vhostConfig: "acme-selfsigned-${vhostConfig.serverName}.service") acmeEnabledVhosts;
       stopIfChanged = false;
       preStart =
         ''
         ${cfg.preStart}
-        ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
+        ${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir} -t
         '';
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecStart = "${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";
@@ -651,10 +665,23 @@ in
       };
     };
 
+    environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
+      source = configFile;
+    };
+
+    systemd.services.nginx-config-reload = mkIf cfg.enableReload {
+      wantedBy = [ "nginx.service" ];
+      restartTriggers = [ configFile ];
+      script = ''
+        if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
+          ${pkgs.systemd}/bin/systemctl reload nginx.service
+        fi
+      '';
+      serviceConfig.RemainAfterExit = true;
+    };
+
     security.acme.certs = filterAttrs (n: v: v != {}) (
       let
-        vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
-        acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME && vhostConfig.useACMEHost == null) vhostsConfigs;
         acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
             user = cfg.user;
             group = lib.mkDefault cfg.group;

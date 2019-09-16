@@ -13,18 +13,8 @@ with pkgs.lib;
 
     machine =
       { config, pkgs, ... }:
-      { services.mysql.enable = true;
-        services.mysql.package = pkgs.mariadb;
-        services.mysql.ensureDatabases = [ "gitea" ];
-        services.mysql.ensureUsers = [
-          { name = "gitea";
-            ensurePermissions = { "gitea.*" = "ALL PRIVILEGES"; };
-          }
-        ];
-
-        services.gitea.enable = true;
+      { services.gitea.enable = true;
         services.gitea.database.type = "mysql";
-        services.gitea.database.socket = "/run/mysqld/mysqld.sock";
       };
 
     testScript = ''
@@ -42,10 +32,8 @@ with pkgs.lib;
 
     machine =
       { config, pkgs, ... }:
-      {
-        services.gitea.enable = true;
+      { services.gitea.enable = true;
         services.gitea.database.type = "postgres";
-        services.gitea.database.passwordFile = pkgs.writeText "db-password" "secret";
       };
 
     testScript = ''

@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub
 , ninja
-, boost
 , meson
 , pkgconfig
 , wrapGAppsHook
@@ -12,7 +11,6 @@
 , python3Packages
 , file
 , cairo
-, sqlite
 , gettext
 , gnome3
 }:
@@ -23,6 +21,11 @@ python3Packages.buildPythonApplication rec {
 
   pname = "cozy";
   version = "0.6.7";
+
+  # Temporary fix
+  # See https://github.com/NixOS/nixpkgs/issues/57029
+  # and https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   src = fetchFromGitHub {
     owner = "geigi";
@@ -71,7 +74,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A modern audio book player for Linux using GTK+ 3";
+    description = "A modern audio book player for Linux using GTK 3";
     homepage = https://cozy.geigi.de/;
     maintainers = [ maintainers.makefu ];
     license = licenses.gpl3;

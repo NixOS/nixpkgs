@@ -78,6 +78,6 @@ stdenv.mkDerivation {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

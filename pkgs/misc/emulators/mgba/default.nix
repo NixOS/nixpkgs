@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, pkgconfig
+{ stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkgconfig
 , cmake, epoxy, libzip, ffmpeg, imagemagick, SDL2, qtbase, qtmultimedia, libedit
 , qttools, minizip }:
 
@@ -14,18 +14,18 @@ let
     startupNotify = "false";
   };
 in stdenv.mkDerivation rec {
-  name = "mgba-${version}";
-  version = "0.7.1";
+  pname = "mgba";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "0q0yg2zna7gjbvpaswyykbg3lr9k3c8l8fydqa407xrgq77lahq4";
+    sha256 = "0g0xa1mzvan0sl1p5c784j2g5mcw9kd2b7wiahy06gy0c1nmbcnp";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ makeWrapper pkgconfig cmake ];
+  nativeBuildInputs = [ wrapQtAppsHook pkgconfig cmake ];
 
   buildInputs = [
     libzip epoxy ffmpeg imagemagick SDL2 qtbase qtmultimedia libedit minizip
@@ -34,8 +34,6 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
-    wrapProgram $out/bin/mgba-qt --suffix QT_PLUGIN_PATH : \
-      ${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
 
   meta = with stdenv.lib; {

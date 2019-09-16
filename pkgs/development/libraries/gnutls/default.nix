@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext
+, unbound, dns-root-data, gettext, cacert
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withSecurity ? false, Security  # darwin Security.framework
@@ -8,7 +8,7 @@
 
 assert guileBindings -> guile != null;
 let
-  version = "3.6.7";
+  version = "3.6.9";
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
-    sha256 = "1ql8l6l5bxks2pgpwb1602zc0j6ivhpy27hdfc49h8xgbanhjd2v";
+    sha256 = "1jqz5s3lv8sa53348cfi9nr5pw5l55n8m40b8msdvv0pb2jzqca3";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -72,6 +72,9 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ nettle ];
 
   inherit doCheck;
+  # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` broke tests with:
+  #   Error setting the x509 trust file: Error while reading file.
+  checkInputs = [ cacert ];
 
   # Fixup broken libtool and pkgconfig files
   preFixup = lib.optionalString (!isDarwin) ''

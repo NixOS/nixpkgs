@@ -3,7 +3,7 @@
 let
   name = stdenv.lib.replaceStrings ["kcachegrind"] ["qcachegrind"] kcachegrind.name;
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit name;
 
   src = kcachegrind.src;

@@ -1,4 +1,4 @@
-{ stdenv, callPackage, cleanPackaging, fetchurl, writeScript, file }:
+{ stdenv, cleanPackaging, fetchurl }:
 let lib = stdenv.lib;
 in {
   # : string

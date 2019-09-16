@@ -1,15 +1,15 @@
 { lib, buildPythonPackage, fetchPypi
-, tzlocal, requests, vobject, lxml }:
+, tzlocal, requests, vobject, lxml, nose }:
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "0.6.0";
+  version = "0.6.1";
 
-  propagatedBuildInputs = [ tzlocal requests vobject lxml ];
+  propagatedBuildInputs = [ tzlocal requests vobject lxml nose ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ll9knpc50yxx858hrvfnapdi2a6g1pz9cnjhwffry2x7r4ckarz";
+    sha256 = "eddb7f4e6a3eb5f02eaa2227817a53ac4372d4c4d51876536f4c6f00282f569e";
   };
 
   meta = with lib; {

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
-  name = "nerdfonts-${version}";
+  pname = "nerdfonts";
   src = fetchFromGitHub {
     owner = "ryanoasis";
     repo = "nerd-fonts";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/ryanoasis/nerd-fonts;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
     hydraPlatforms = []; # 'Output limit exceeded' on Hydra
   };
 }

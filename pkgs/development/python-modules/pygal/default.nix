@@ -41,6 +41,10 @@ buildPythonPackage rec {
     export LANG=en_US.UTF-8
   '';
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
+  '';
+
   propagatedBuildInputs = [ cairosvg tinycss cssselect ]
     ++ stdenv.lib.optionals (!isPyPy) [ lxml ];
 

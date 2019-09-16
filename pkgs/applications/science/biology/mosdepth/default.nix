@@ -4,26 +4,26 @@ let
   hts-nim = fetchFromGitHub {
     owner = "brentp";
     repo = "hts-nim";
-    rev = "v0.2.5";
-    sha256 = "1fma99rjqxgg9dihkd10hm1jjp5amsk5wsxnvq1lk4mcsjix5xqb";
+    rev = "v0.2.14";
+    sha256 = "0d1z4b6mrppmz3hgkxd4wcy79w68icvhi7q7n3m2k17n8f3xbdx3";
   };
 
   docopt = fetchFromGitHub {
     owner = "docopt";
     repo = "docopt.nim";
-    rev = "v0.6.5";
-    sha256 = "0yx79m4jkdcazwlky55nwf39zj5kdhymrrdrjq29mahiwx83x5zr";
+    rev = "v0.6.7";
+    sha256 = "1ga7ckg21fzwwvh26jp2phn2h3pvkn8g8sm13dxif33rp471bv37";
   };
 
 in stdenv.mkDerivation rec {
-  name = "mosdepth-${version}";
-  version = "0.2.3";
+  pname = "mosdepth";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "brentp";
     repo = "mosdepth";
     rev = "v${version}";
-    sha256 = "1b9frrwhcvay3alhn0d02jccc2qlbij1732hzq9nhwnr4kvsvxx7";
+    sha256 = "0i9pl9lsli3y84ygxanrr525gfg8fs9h481944cbzsmqmbldwvgk";
   };
 
   buildInputs = [ nim ];

@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "performous-${version}";
+  pname = "performous";
   version = "1.1";
 
   meta = with stdenv.lib; {

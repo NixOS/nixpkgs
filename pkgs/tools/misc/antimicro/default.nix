@@ -1,13 +1,13 @@
 { mkDerivation, lib, cmake, pkgconfig, SDL2, qtbase, qttools, xorg, fetchFromGitHub }:
 
 mkDerivation rec {
-  name = "antimicro-${version}";
+  pname = "antimicro";
   version = "2.23";
 
   src = fetchFromGitHub {
     owner = "AntiMicro";
     repo = "antimicro";
-    rev = "${version}";
+    rev = version;
     sha256 = "1q40ayxwwyq85lc89cnj1cm2nar625h4vhh8dvmb2qcxczaggf4v";
   };
 

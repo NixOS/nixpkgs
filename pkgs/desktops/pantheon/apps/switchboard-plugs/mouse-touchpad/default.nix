@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitHub, pantheon, fetchpatch, meson, ninja, pkgconfig, vala
-, libgee, granite, gtk3, switchboard, elementary-settings-daemon, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, switchboard
+, elementary-settings-daemon
+, glib
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
@@ -17,7 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/Views/General.vala --subst-var-by GSD_GSETTINGS ${elementary-settings-daemon}/share/gsettings-schemas/${elementary-settings-daemon.name}/glib-2.0/schemas
+    substituteInPlace src/Views/General.vala \
+      --subst-var-by GSD_GSETTINGS ${glib.getSchemaPath elementary-settings-daemon}
   '';
 
   passthru = {
@@ -27,7 +40,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -35,13 +47,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glib
     granite
     gtk3
     libgee
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Mouse & Touchpad Plug";

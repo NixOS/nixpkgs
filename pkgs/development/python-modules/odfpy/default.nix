@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, isPy27
 , defusedxml
 , pytest
 }:

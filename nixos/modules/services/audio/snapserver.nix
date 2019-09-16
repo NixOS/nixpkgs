@@ -4,7 +4,6 @@ with lib;
 
 let
 
-  package = "snapcast";
   name = "snapserver";
 
   cfg = config.services.snapserver;

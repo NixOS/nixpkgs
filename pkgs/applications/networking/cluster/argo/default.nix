@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "argo-${version}";
+  pname = "argo";
   version = "2.2.1";
 
   src = fetchFromGitHub {

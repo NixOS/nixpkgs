@@ -11,7 +11,6 @@
 stdenv.mkDerivation rec {
   pname = "ogre";
   version = "1.9.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "OGRECave";

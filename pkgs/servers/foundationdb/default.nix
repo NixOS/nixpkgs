@@ -29,7 +29,7 @@ in with builtins; {
   # Older versions use the bespoke 'vsmake' build system
   # ------------------------------------------------------
 
-  foundationdb51 = vsmakeBuild rec {
+  foundationdb51 = vsmakeBuild {
     version = "5.1.7";
     branch  = "release-5.1";
     sha256  = "1rc472ih24f9s5g3xmnlp3v62w206ny0pvvw02bzpix2sdrpbp06";
@@ -42,7 +42,7 @@ in with builtins; {
     ];
   };
 
-  foundationdb52 = vsmakeBuild rec {
+  foundationdb52 = vsmakeBuild {
     version = "5.2.8";
     branch  = "release-5.2";
     sha256  = "1kbmmhk2m9486r4kyjlc7bb3wd50204i0p6dxcmvl6pbp1bs0wlb";
@@ -55,7 +55,7 @@ in with builtins; {
     ];
   };
 
-  foundationdb60 = vsmakeBuild rec {
+  foundationdb60 = vsmakeBuild {
     version = "6.0.18";
     branch  = "release-6.0";
     sha256  = "0q1mscailad0z7zf1nypv4g7gx3damfp45nf8nzyq47nsw5gz69p";
@@ -68,10 +68,10 @@ in with builtins; {
   # 6.1 and later versions should always use CMake
   # ------------------------------------------------------
 
-  foundationdb61 = cmakeBuild rec {
-    version = "6.1.8";
+  foundationdb61 = cmakeBuild {
+    version = "6.1.10";
     branch  = "release-6.1";
-    sha256  = "1qd9yf3a7a99nfx7vky0jy8r74yrxjwp9imc6792awn66256pxiv";
+    sha256  = "1v278zlrki3da2i2258j2b4rk4fq6d9bj623z01bjrvmaqxc2gry";
 
     patches = [
       ./patches/clang-libcxx.patch

@@ -5,14 +5,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "calamares";
-  version = "3.2.7";
+  version = "3.2.11";
 
   # release including submodule
   src = fetchurl {
-    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0dnxas0nca10vbqgspy27gn81izrpl5nqy66zxbkh4pfxmi7zqdk";
+    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "1djrc8p6kll8szycyj86v02jphiw2xwfhn563siykphfqr0jknlw";
   };
 
   buildInputs = [

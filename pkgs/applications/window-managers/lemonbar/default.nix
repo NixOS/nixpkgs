@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, libxcb }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "lemonbar-1.3";
   
   src = fetchurl {

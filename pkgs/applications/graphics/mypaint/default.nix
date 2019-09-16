@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg, gobject-introspection, hicolor-icon-theme
-, gdk_pixbuf, pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
+, gdk-pixbuf, pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
 
 let
   inherit (python2Packages) python pycairo pygobject3 numpy;
-in stdenv.mkDerivation rec {
-  name = "mypaint-${version}";
+in stdenv.mkDerivation {
+  pname = "mypaint";
   version = "1.2.1";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3 gdk_pixbuf json_c lcms2 libpng librsvg pycairo pygobject3 python hicolor-icon-theme
+    gtk3 gdk-pixbuf json_c lcms2 libpng librsvg pycairo pygobject3 python hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [ numpy ];

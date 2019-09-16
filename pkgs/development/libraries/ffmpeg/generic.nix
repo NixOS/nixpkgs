@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
-, x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers
+, x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
 , openglSupport ? false, libGLU_combined ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
@@ -65,11 +65,11 @@ assert openglSupport -> libGLU_combined != null;
 
 stdenv.mkDerivation rec {
 
-  name = "ffmpeg-${version}";
+  pname = "ffmpeg";
   inherit version;
 
   src = fetchurl {
-    url = "https://www.ffmpeg.org/releases/${name}.tar.bz2";
+    url = "https://www.ffmpeg.org/releases/${pname}-${version}.tar.bz2";
     inherit sha256;
   };
 
@@ -89,7 +89,6 @@ stdenv.mkDerivation rec {
       "--enable-version3"
     # Build flags
       "--enable-shared"
-      "--disable-static"
       (ifMinVer "0.6" "--enable-pic")
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
@@ -145,6 +144,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "2.8" "--enable-libopus")
       "--enable-libspeex"
       (ifMinVer "2.8" "--enable-libx265")
+      (ifMinVer "4.2" (enableFeature (dav1d != null) "libdav1d"))
     # Developer flags
       (enableFeature debugDeveloper "debug")
       (enableFeature optimizationsDeveloper "optimizations")
@@ -170,7 +170,8 @@ stdenv.mkDerivation rec {
     ++ optional isLinux alsaLib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
-    ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL);
+    ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
+    ++ optional (reqMin "4.2") dav1d;
 
   enableParallelBuilding = true;
 

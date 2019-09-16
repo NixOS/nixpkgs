@@ -1,5 +1,4 @@
 { stdenv
-, substituteAll
 , fetchurl
 , meson
 , ninja
@@ -78,7 +77,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   mesonFlags = [
-    "-Dauto_features=enabled"
     "-Dgstreamer=1.0"
     "-Dcelt051=disabled"
   ];

@@ -6,8 +6,8 @@
 # there’s a WIP branch here:
 # https://github.com/UltraStar-Deluxe/UltraStar-Creator/commits/BASS_removed
 
-stdenv.mkDerivation rec {
-  name = "ultrastar-creator-${version}";
+stdenv.mkDerivation {
+  pname = "ultrastar-creator";
   version = "2019-04-23";
 
   src = fetchFromGitHub {

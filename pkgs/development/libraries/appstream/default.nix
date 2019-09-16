@@ -1,11 +1,11 @@
-{ stdenv, fetchpatch, fetchFromGitHub, meson, ninja, pkgconfig, gettext
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
 , libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
 , pcre, itstool, gperf, vala
 }:
 
 stdenv.mkDerivation rec {
-  name = "appstream-${version}";
+  pname = "appstream";
   version = "0.12.6";
 
   src = fetchFromGitHub {

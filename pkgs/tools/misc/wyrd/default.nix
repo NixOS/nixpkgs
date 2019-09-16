@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.4.6";
-  name = "wyrd-${version}";
+  pname = "wyrd";
 
   src = fetchurl {
     url = "http://pessimization.com/software/wyrd/wyrd-${version}.tar.gz";

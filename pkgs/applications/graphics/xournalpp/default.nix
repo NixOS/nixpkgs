@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 
 , cmake
 , gettext
@@ -14,38 +13,25 @@
 , hicolor-icon-theme
 , libsndfile
 , libxml2
+, libzip
 , pcre
 , poppler
 , portaudio
 , zlib
-
-# Plugins don't appear to be working in this version, so disable them by not
-# building with Lua support by default. In a future version, try switching this
-# to 'true' and seeing if the top-level Plugin menu appears.
-, withLua ? false, lua
+# plugins
+, withLua ? true, lua
 }:
 
 stdenv.mkDerivation rec {
-  name = "xournalpp-${version}";
-  version = "1.0.8";
+  pname = "xournalpp";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     rev = version;
-    sha256 = "01q84xjp9z1krna10gjj562km6i3wdq8cg7paxax1k6bh52ryvf6";
+    sha256 = "0yg70hsx58s3wb5kzccivrqa7kvmdapygxmif1j64hddah2rqcn9";
   };
-
-  patches = [
-    # This patch removes the unused 'xopp-recording.sh' file which breaks the
-    # cmake build; this patch isn't in a release yet, and should be removed at
-    # or after 1.0.9 is released.
-    (fetchpatch {
-      name = "remove-xopp-recording.sh.patch";
-      url = "https://github.com/xournalpp/xournalpp/commit/a17a3f2c80c607a22d0fdeb66d38358bea7e4d85.patch";
-      sha256 = "10pcpvklm6kr0lv2xrsbpg2037ni9j6dmxgjf56p466l3gz60iwy";
-    })
-  ];
 
   nativeBuildInputs = [ cmake gettext pkgconfig wrapGAppsHook ];
   buildInputs =
@@ -55,12 +41,15 @@ stdenv.mkDerivation rec {
       hicolor-icon-theme
       libsndfile
       libxml2
+      libzip
       pcre
       poppler
       portaudio
       zlib
     ]
     ++ lib.optional withLua lua;
+
+  hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
 

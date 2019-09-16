@@ -27,10 +27,7 @@ in {
           dbtype = "pgsql";
           dbname = "nextcloud";
           dbuser = "nextcloud";
-          dbhost = "localhost";
-          dbpassFile = toString (pkgs.writeText "db-pass-file" ''
-            hunter2
-          '');
+          dbhost = "/run/postgresql";
           inherit adminuser;
           adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
             ${adminpass}
@@ -54,7 +51,7 @@ in {
         serviceConfig.PermissionsStartOnly = true;
       };
 
-      systemd.services."nextcloud-setup"= {
+      systemd.services.nextcloud-setup= {
         requires = ["postgresql.service"];
         after = [
           "postgresql.service"
@@ -65,7 +62,7 @@ in {
       # At the time of writing, redis creates its socket with the "nobody"
       # group.  I figure this is slightly less bad than making the socket world
       # readable.
-      systemd.services."chown-redis-socket" = {
+      systemd.services.chown-redis-socket = {
         enable = true;
         script = ''
           until ${pkgs.redis}/bin/redis-cli ping; do
@@ -84,10 +81,12 @@ in {
 
       services.postgresql = {
         enable = true;
-        initialScript = pkgs.writeText "psql-init" ''
-          create role nextcloud with login password 'hunter2';
-          create database nextcloud with owner nextcloud;
-        '';
+        ensureDatabases = [ "nextcloud" ];
+        ensureUsers = [
+          { name = "nextcloud";
+            ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
+          }
+        ];
       };
     };
   };

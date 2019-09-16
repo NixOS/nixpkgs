@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "fd-${version}";
-  version = "7.3.0";
+  pname = "fd";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "0y4657w1pi4x9nmbv551dj00dyiv935m8ph7jlv00chwy3hrb3yi";
+    sha256 = "108p1p9bxhg4qzwfs6wqcakcvlpqw3w498jkz1vhmg6jp1mbmgdr";
   };
 
-  cargoSha256 = "0dfv6nia3v3f3rwbjh2h3zdqd48vw8gwilhq0z4n6xvjzk7qydj5";
+  cargoSha256 = "0ylanxcb1vrhvm9h3lvq8nh28362wi5hjy0pqdv5lh40pphcknnz";
 
   preFixup = ''
     install -Dm644 "$src/doc/fd.1" "$out/man/man1/fd.1"
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [ dywedir globin ];
     platforms = platforms.all;
   };
 }

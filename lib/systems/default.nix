@@ -3,7 +3,6 @@
 
 rec {
   doubles = import ./doubles.nix { inherit lib; };
-  forMeta = import ./for-meta.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
@@ -15,7 +14,9 @@ rec {
   # `parsed` is inferred from args, both because there are two options with one
   # clearly prefered, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
-  elaborate = args: let
+  elaborate = args': let
+    args = if lib.isString args' then { system = args'; }
+           else args';
     final = {
       # Prefer to parse `config` as it is strictly more informative.
       parsed = parse.mkSystemFromString (if args ? config then args.config else args.system);
@@ -57,13 +58,13 @@ rec {
       uname = {
         # uname -s
         system = {
-          "linux" = "Linux";
-          "windows" = "Windows";
-          "darwin" = "Darwin";
-          "netbsd" = "NetBSD";
-          "freebsd" = "FreeBSD";
-          "openbsd" = "OpenBSD";
-          "wasi" = "Wasi";
+          linux = "Linux";
+          windows = "Windows";
+          darwin = "Darwin";
+          netbsd = "NetBSD";
+          freebsd = "FreeBSD";
+          openbsd = "OpenBSD";
+          wasi = "Wasi";
         }.${final.parsed.kernel.name} or null;
 
          # uname -p
@@ -85,10 +86,10 @@ rec {
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
         else {
-          "powerpc" = "ppc";
-          "powerpcle" = "ppc";
-          "powerpc64" = "ppc64";
-          "powerpc64le" = "ppc64le";
+          powerpc = "ppc";
+          powerpcle = "ppc";
+          powerpc64 = "ppc64";
+          powerpc64le = "ppc64le";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
       emulator = pkgs: let

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "tty-clock-${version}";
+  pname = "tty-clock";
   version = "2.3";
 
   src = fetchFromGitHub {

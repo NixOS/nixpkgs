@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchzip, python3, python3Packages, writeScript }:
+{ stdenv, makeWrapper, fetchzip, python3, python3Packages }:
 let
   threaded_servers = python3Packages.buildPythonPackage {
     name = "threaded_servers";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   pname = "quickserve";
   version = "2018";
 
-  unpackPhase = ":";
+  dontUnpack = true;
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''

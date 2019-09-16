@@ -2,10 +2,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "FIL-plugins-${version}";
+  pname = "FIL-plugins";
   version = "0.3.0";
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
+    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1scfv9j7jrp50r565haa4rvxn1vk2ss86xssl5qgcr8r45qz42qw";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       All switches and controls are internally smoothed, so they can be used 'live' whithout any clicks or zipper noises.
       This should make this plugin a good candidate for use in systems that allow automation of plugin control ports, such as Ardour, or for stage use.
     '';
-    version = "${version}";
+    version = version;
     homepage = http://kokkinizita.linuxaudio.org/linuxaudio/ladspa/index.html;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];

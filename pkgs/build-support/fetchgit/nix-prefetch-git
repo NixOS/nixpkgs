@@ -265,12 +265,14 @@ make_deterministic_repo(){
     rm -f .git/config
 
     # Garbage collect unreferenced objects.
-    git gc --prune=all
+    # Note: --keep-largest-pack prevents non-deterministic ordering of packs
+    #   listed in .git/objects/info/packs by only using a single pack
+    git gc --prune=all --keep-largest-pack
     )
 }
 
 
-_clone_user_rev() {
+clone_user_rev() {
     local dir="$1"
     local url="$2"
     local rev="${3:-HEAD}"
@@ -307,19 +309,29 @@ _clone_user_rev() {
     fi
 }
 
-clone_user_rev() {
-    if ! test -n "$QUIET"; then
-        _clone_user_rev "$@"
-    else
-        errfile="$(mktemp "${TMPDIR:-/tmp}/git-checkout-err-XXXXXXXX")"
-        # shellcheck disable=SC2064
-        trap "rm -rf \"$errfile\"" EXIT
-        _clone_user_rev "$@" 2> "$errfile" || (
-            status="$?"
-            cat "$errfile" >&2
-            exit "$status"
-        )
+exit_handlers=()
+
+run_exit_handlers() {
+    exit_status=$?
+    for handler in "${exit_handlers[@]}"; do
+        eval "$handler $exit_status"
+    done
+}
+
+trap run_exit_handlers EXIT
+
+quiet_exit_handler() {
+    exec 2>&3 3>&-
+    if [ $1 -ne 0 ]; then
+        cat "$errfile" >&2
     fi
+    rm -f "$errfile"
+}
+
+quiet_mode() {
+    errfile="$(mktemp "${TMPDIR:-/tmp}/git-checkout-err-XXXXXXXX")"
+    exit_handlers+=(quiet_exit_handler)
+    exec 3>&2 2>"$errfile"
 }
 
 json_escape() {
@@ -362,6 +374,14 @@ EOF
     fi
 }
 
+remove_tmpPath() {
+    rm -rf "$tmpPath"
+}
+
+if test -n "$QUIET"; then
+    quiet_mode
+fi
+
 if test -z "$branchName"; then
     branchName=fetchgit
 fi
@@ -390,8 +410,7 @@ else
     if test -z "$finalPath"; then
 
         tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
-        # shellcheck disable=SC2064
-        trap "rm -rf \"$tmpPath\"" EXIT
+        exit_handlers+=(remove_tmpPath)
 
         tmpFile="$tmpPath/$(url_to_name "$url" "$rev")"
         mkdir -p "$tmpFile"

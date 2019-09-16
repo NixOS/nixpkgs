@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "2048-in-terminal-${version}";
+  pname = "2048-in-terminal";
   version = "2017-11-29";
 
   src = fetchFromGitHub {

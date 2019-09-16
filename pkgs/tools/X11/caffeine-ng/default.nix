@@ -1,22 +1,27 @@
-{ gdk_pixbuf, glib, gobject-introspection, gtk3, lib, libnotify, pkgs,
-  pythonPackages, wrapGAppsHook
+{ gdk-pixbuf, glib, gobject-introspection, gtk3, lib, libnotify,
+  python3Packages, wrapGAppsHook
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "caffeine-ng";
   version = "3.4.2";
 
-  src = pythonPackages.fetchPypi{
+  src = python3Packages.fetchPypi{
     inherit pname version;
     sha256="05k8smjlfjcccgmp8qi04l7106k46fs4p8fl5bdqqjwv6pwl7y4w";
   };
 
   nativeBuildInputs = [ wrapGAppsHook glib ];
-  buildInputs = [ gdk_pixbuf gobject-introspection libnotify gtk3 ];
-  pythonPath = with pythonPackages; [
-    dbus-python docopt ewmh pygobject3 pyxdg
-    setproctitle setuptools setuptools_scm wheel
+  buildInputs = [ 
+    gdk-pixbuf gobject-introspection libnotify gtk3 
+    python3Packages.setuptools_scm
   ];
+  pythonPath = with python3Packages; [
+    dbus-python docopt ewmh pygobject3 pyxdg
+    setproctitle 
+  ];
+
+  doCheck = false; # There are no tests.
 
   postBuild = ''
     mkdir -p $out/share

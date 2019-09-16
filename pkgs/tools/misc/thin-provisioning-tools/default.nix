@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, expat, libaio, boost }:
 
 stdenv.mkDerivation rec {
-  name = "thin-provisioning-tools-${version}";
+  pname = "thin-provisioning-tools";
   version = "0.7.6";
 
   src = fetchFromGitHub {
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "A suite of tools for manipulating the metadata of the dm-thin device-mapper target";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
   };
 }

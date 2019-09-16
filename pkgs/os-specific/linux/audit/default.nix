@@ -1,12 +1,14 @@
 {
   stdenv, buildPackages, fetchurl, fetchpatch,
+  runCommand,
+  autoconf, automake, libtool,
   enablePython ? false, python ? null,
 }:
 
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "audit-2.8.5";
+  name = "audit-2.8.5"; # at the next release, remove the patches below!
 
   src = fetchurl {
     url = "https://people.redhat.com/sgrubb/audit/${name}.tar.gz";
@@ -16,6 +18,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = stdenv.lib.optionals stdenv.hostPlatform.isMusl
+    [ autoconf automake libtool ];
   buildInputs = stdenv.lib.optional enablePython python;
 
   configureFlags = [
@@ -29,17 +33,24 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # TODO: Remove the musl patches when
+  #         https://github.com/linux-audit/audit-userspace/pull/25
+  #       is available with the next release.
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl [
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/main/audit/0002-auparse-remove-use-of-rawmemchr.patch?id=3e57180fdf3f90c30a25aea44f57846efc93a696";
-      name = "0002-auparse-remove-use-of-rawmemchr.patch";
-      sha256 = "1caaqbfgb2rq3ria5bz4n8x30ihgihln6w9w9a46k62ba0wh9rkz";
-    })
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/main/audit/0003-all-get-rid-of-strndupa.patch?id=3e57180fdf3f90c30a25aea44f57846efc93a696";
-      name = "0003-all-get-rid-of-strndupa.patch";
-      sha256 = "1ddrm6a0ijrf7caw1wpw2kkbjp2lkxkmc16v51j5j7dvdalc6591";
-    })
+    (
+      let patch = fetchpatch {
+            url = "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
+            name = "Add-substitue-functions-for-strndupa-rawmemchr.patch";
+            sha256 = "015bvzflg1s1k5viap30nznlpjj44a66khyc8yq0waa68qwvdlsd";
+          };
+      in
+        runCommand "Add-substitue-functions-for-strndupa-rawmemchr.patch-fix-copyright-merge-conflict" {} ''
+          cp ${patch} $out
+          substituteInPlace $out --replace \
+              '-* Copyright (c) 2007-09,2011-16,2018 Red Hat Inc., Durham, North Carolina.' \
+              '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
+        ''
+    )
   ];
 
   prePatch = ''

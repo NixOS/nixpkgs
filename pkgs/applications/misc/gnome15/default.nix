@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, gnome_python, gnome_python_desktop }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gnome15-2016-06-10";
 
   src = fetchFromGitHub {

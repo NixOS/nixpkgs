@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mailcore2-${version}";
+  pname = "mailcore2";
 
   version = "0.6.3";
 

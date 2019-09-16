@@ -1,11 +1,12 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, curl, libgit2_0_27, ncurses, pkgconfig, readline }:
+{ stdenv, buildGoPackage, fetchFromGitHub, curl, libgit2, ncurses, pkgconfig, readline }:
 let
   version = "0.3.1";
 in
 buildGoPackage {
-  name = "grv-${version}";
+  pname = "grv";
+  inherit version;
 
-  buildInputs = [ ncurses readline curl libgit2_0_27 ];
+  buildInputs = [ ncurses readline curl libgit2 ];
   nativeBuildInputs = [ pkgconfig ];
 
   goPackagePath = "github.com/rgburke/grv";

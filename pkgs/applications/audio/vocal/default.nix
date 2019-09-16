@@ -14,7 +14,6 @@
 , libnotify
 , sqlite
 , gst_all_1
-, libsoup
 , json-glib
 , libgee
 , wrapGAppsHook
@@ -22,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vocal";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "needle-and-thread";
     repo = pname;
     rev = version;
-    sha256 = "0jz72nmc6qmadsvcpk339x1fm4wg6yx9r1bagr7mcgnz3x5papnr";
+    sha256 = "1c4n89rdl9r13kmmh2qymmy9sa6shjwai7df48k2kfn0pnzq5mad";
   };
 
   nativeBuildInputs = [

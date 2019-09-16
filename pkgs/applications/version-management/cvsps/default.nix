@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, cvs, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "cvsps-${version}";
+  pname = "cvsps";
   version = "2.1";
 
   src = fetchurl {

@@ -83,6 +83,9 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
 
   SLAB_FREELIST_HARDENED = whenAtLeast "4.14" yes;
 
+  # Randomize page allocator when page_alloc.shuffle=1
+  SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
+
   # Allow enabling slub/slab free poisoning with slub_debug=P
   SLUB_DEBUG = yes;
 

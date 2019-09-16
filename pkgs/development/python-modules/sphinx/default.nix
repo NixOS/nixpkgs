@@ -22,6 +22,7 @@
 , requests
 , sphinxcontrib-websupport
 , typing
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     pygments
     alabaster
     Babel
+    setuptools
     snowballstemmer
     six
     sqlalchemy

@@ -1,8 +1,8 @@
-{stdenv, fetchpatch, fetchFromGitHub, python3}:
+{stdenv, fetchFromGitHub, python3}:
 
 stdenv.mkDerivation rec {
   version = "1.6";
-  name = "ddgr-${version}";
+  pname = "ddgr";
 
   src = fetchFromGitHub {
     owner = "jarun";

@@ -3,6 +3,7 @@
 , fetchPypi
 , mecab
 , swig
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,12 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     mecab # for mecab-config
     swig
+    setuptools_scm
   ];
 
   buildInputs = [ mecab ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "A python wrapper for mecab: Morphological Analysis engine";

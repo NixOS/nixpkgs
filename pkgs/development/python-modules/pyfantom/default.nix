@@ -3,7 +3,7 @@
 , fetchgit
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyfantom";
   version = "unstable-2013-12-18";
 

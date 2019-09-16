@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr, buildPackages }:
+{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, zip, which, readline, icu, zlib, nspr, buildPackages }:
 
 let
   version = "52.9.0";
-in stdenv.mkDerivation rec {
-  name = "spidermonkey-${version}";
+in stdenv.mkDerivation {
+  pname = "spidermonkey";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";

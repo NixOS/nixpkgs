@@ -80,8 +80,11 @@ in
         # Syntax depends on being IPv6 or IPv4.
         (iface: if elem ":" (stringToCharacters iface) then "[${iface}]:53" else "${iface}:53")
         cfg.interfaces;
-      socketConfig.ListenDatagram = listenStreams;
-      socketConfig.FreeBind = true;
+      socketConfig = {
+        ListenDatagram = listenStreams;
+        FreeBind = true;
+        FileDescriptorName = "dns";
+      };
     };
 
     systemd.sockets.kresd-tls = mkIf (cfg.listenTLS != []) rec {

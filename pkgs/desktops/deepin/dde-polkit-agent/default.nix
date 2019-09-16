@@ -1,16 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, polkit-qt,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, polkit-qt,
   dtkcore, dtkwidget, dde-qt-dbus-factory, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dde-polkit-agent";
-  version = "0.2.6";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1ih78sxhnn6hbx9mzhalx95dk18f217mjbvymf8dky2vkmw8vnmx";
+    sha256 = "0syg121slpd6d9xpifgcf85lg9ca0k96cl1g3rjvsmczs2d2ffgf";
   };
 
   nativeBuildInputs = [
@@ -27,10 +26,6 @@ stdenv.mkDerivation rec {
     polkit-qt
   ];
 
-  patches = [
-    ./dde-polkit-agent.plugins-dir.patch
-  ];
-
   postPatch = ''
     searchHardCodedPaths
     patchShebangs translate_generation.sh
@@ -43,7 +38,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "PolicyKit agent for Deepin Desktop Environment";

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "jdupes-${version}";
-  version = "1.12";
+  pname = "jdupes";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "jbruchon";
     repo  = "jdupes";
     rev   = "v${version}";
-    sha256 = "1m5506scjbf2820p7mbsdsb2acg9jm74sb1604m9iz8v3dcn9dm6";
+    sha256 = "1dzw1h9x9addkxf7r8lb8y09wmdkx8i61f5m96589r88jjk965xy";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
     # directories have such files and will be removed.
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # broken Makefile, the above also removes tests
 
   postInstall = ''
-    install -Dm644 -t $out/share/doc/jdupes CHANGES LICENSE README
+    install -Dm644 -t $out/share/doc/jdupes CHANGES LICENSE README.md
   '';
 
   meta = with stdenv.lib; {

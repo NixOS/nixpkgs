@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, czmq }:
 
 stdenv.mkDerivation rec {
-  name = "czmqpp-${version}";
+  pname = "czmqpp";
   version = "1.2.0";
 
   src = fetchFromGitHub {

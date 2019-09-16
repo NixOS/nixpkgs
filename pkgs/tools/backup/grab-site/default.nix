@@ -1,14 +1,14 @@
 { stdenv, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
-  version = "2.1.15";
+  version = "2.1.16";
   name = "grab-site-${version}";
 
   src = fetchFromGitHub {
-    rev = "${version}";
+    rev = version;
     owner = "ArchiveTeam";
     repo = "grab-site";
-    sha256 = "1h3ajsj1c2wlxji1san97vmjd9d97dv0rh0jw1p77irkcvhzfpj8";
+    sha256 = "01n3mi9q593sd2bbmbbp5pn2c3pkwj7iqmy02zbh8ciqskraja4z";
   };
 
   propagatedBuildInputs = with python3Packages; [

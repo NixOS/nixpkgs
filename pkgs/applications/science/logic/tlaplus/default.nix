@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tlaplus-${version}";
+  pname = "tlaplus";
   version = "1.5.6";
 
   src = fetchFromGitHub {

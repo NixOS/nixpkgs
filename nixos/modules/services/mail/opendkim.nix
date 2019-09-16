@@ -101,13 +101,16 @@ in {
 
     environment.systemPackages = [ pkgs.opendkim ];
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.keyPath}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.opendkim = {
       description = "OpenDKIM signing and verification daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        mkdir -p "${cfg.keyPath}"
         cd "${cfg.keyPath}"
         if ! test -f ${cfg.selector}.private; then
           ${pkgs.opendkim}/bin/opendkim-genkey -s ${cfg.selector} -d all-domains-generic-key
@@ -116,7 +119,6 @@ in {
           cat ${cfg.selector}.txt
           echo "-------------------------------------------------------------"
         fi
-        chown ${cfg.user}:${cfg.group} ${cfg.selector}.private
       '';
 
       serviceConfig = {
@@ -124,7 +126,6 @@ in {
         User = cfg.user;
         Group = cfg.group;
         RuntimeDirectory = optional (cfg.socket == defaultSock) "opendkim";
-        PermissionsStartOnly = true;
       };
     };
 

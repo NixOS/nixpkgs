@@ -11,14 +11,12 @@
 , gsettings-desktop-schemas
 , gtk3
 , ibus
-, intltool
 , libcanberra-gtk3
 , libpulseaudio
 , libxkbfile
 , libxml2
 , pkgconfig
 , polkit
-, substituteAll
 , upower
 , wrapGAppsHook
 , writeTextFile

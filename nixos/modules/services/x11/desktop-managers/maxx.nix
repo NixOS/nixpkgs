@@ -10,7 +10,7 @@ in {
     enable = mkEnableOption "MaXX desktop environment";
   };
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.maxx ];
 
     # there is hardcoded path in binaries

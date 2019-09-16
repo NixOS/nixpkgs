@@ -69,9 +69,7 @@ in
 
       promptInit = mkOption {
         default = ''
-          if [ "$TERM" != dumb ]; then
-              autoload -U promptinit && promptinit && prompt walters
-          fi
+          autoload -U promptinit && promptinit && prompt walters && setopt prompt_sp
         '';
         description = ''
           Shell script code used to initialise the zsh prompt.
@@ -135,7 +133,7 @@ in
 
     programs.zsh.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
-    environment.etc."zshenv".text =
+    environment.etc.zshenv.text =
       ''
         # /etc/zshenv: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for all shells.
@@ -159,7 +157,7 @@ in
         fi
       '';
 
-    environment.etc."zprofile".text =
+    environment.etc.zprofile.text =
       ''
         # /etc/zprofile: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for login shells.
@@ -178,7 +176,7 @@ in
         fi
       '';
 
-    environment.etc."zshrc".text =
+    environment.etc.zshrc.text =
       ''
         # /etc/zshrc: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for interactive shells.
@@ -194,8 +192,6 @@ in
         HISTSIZE=${toString cfg.histSize}
         HISTFILE=${cfg.histFile}
 
-        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
-
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
         # Tell zsh how to find installed completions
@@ -209,9 +205,19 @@ in
 
         ${cfg.interactiveShellInit}
 
+        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
+
         ${zshAliases}
 
         ${cfg.promptInit}
+
+        # Need to disable features to support TRAMP
+        if [ "$TERM" = dumb ]; then
+            unsetopt zle prompt_cr prompt_subst
+            unset RPS1 RPROMPT
+            PS1='$ '
+            PROMPT='$ '
+        fi
 
         # Read system-wide modifications.
         if test -f /etc/zshrc.local; then
@@ -219,7 +225,7 @@ in
         fi
       '';
 
-    environment.etc."zinputrc".source = ./zinputrc;
+    environment.etc.zinputrc.source = ./zinputrc;
 
     environment.systemPackages = [ pkgs.zsh ]
       ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;

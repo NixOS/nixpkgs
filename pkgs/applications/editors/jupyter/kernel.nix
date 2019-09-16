@@ -8,7 +8,7 @@ let
     in {
       displayName = "Python 3";
       argv = [
-        "${env.interpreter}"
+        env.interpreter
         "-m"
         "ipykernel_launcher"
         "-f"
@@ -26,7 +26,7 @@ in
 
   # Definitions is an attribute set.
 
-  create = { definitions ?  default }: with lib; stdenv.mkDerivation rec {
+  create = { definitions ?  default }: with lib; stdenv.mkDerivation {
 
     name = "jupyter-kernels";
 
@@ -37,15 +37,15 @@ in
     installPhase =  ''
       mkdir kernels
 
-      ${concatStringsSep "\n" (mapAttrsToList (kernelName: kernel:
+      ${concatStringsSep "\n" (mapAttrsToList (kernelName: unfilteredKernel:
         let
-          config = builtins.toJSON {
-            display_name = if (kernel.displayName != "")
-              then kernel.displayName
-              else kernelName;
-            argv = kernel.argv;
-            language = kernel.language;
-          };
+          allowedKernelKeys = ["argv" "displayName" "language" "interruptMode" "env" "metadata" "logo32" "logo64"];
+          kernel = filterAttrs (n: v: (any (x: x == n) allowedKernelKeys)) unfilteredKernel;
+          config = builtins.toJSON (
+            kernel
+            // {display_name = if (kernel.displayName != "") then kernel.displayName else kernelName;}
+            // (optionalAttrs (kernel ? interruptMode) { interrupt_mode = kernel.interruptMode; })
+          );
           logo32 =
             if (kernel.logo32 != null)
             then "ln -s ${kernel.logo32} 'kernels/${kernelName}/logo-32x32.png';"

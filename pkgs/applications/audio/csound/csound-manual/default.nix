@@ -4,7 +4,7 @@
   libxslt
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "csound-manual";
   version = "unstable-2019-02-22";
 

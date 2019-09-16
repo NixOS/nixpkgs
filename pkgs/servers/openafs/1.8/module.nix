@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, which, autoconf, automake, flex, yacc
+{ stdenv, fetchurl, which, autoconf, automake, flex, yacc
 , kernel, glibc, perl, libtool_2, kerberos }:
 
 with (import ./srcs.nix { inherit fetchurl; });
@@ -7,7 +7,7 @@ let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 

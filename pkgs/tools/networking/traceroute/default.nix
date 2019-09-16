@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "traceroute-${version}";
+  pname = "traceroute";
   version = "2.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/traceroute/${name}.tar.gz";
+    url = "mirror://sourceforge/traceroute/${pname}-${version}.tar.gz";
     sha256 = "3669d22a34d3f38ed50caba18cd525ba55c5c00d5465f2d20d7472e5d81603b6";
   };
 

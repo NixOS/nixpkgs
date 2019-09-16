@@ -1,4 +1,4 @@
-{ options, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -83,6 +83,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.logDir}' - alerta alerta - -"
+    ];
+
     systemd.services.alerta = {
       description = "Alerta Monitoring System";
       wantedBy = [ "multi-user.target" ];
@@ -94,12 +98,7 @@ in
         ExecStart = "${pkgs.python36Packages.alerta-server}/bin/alertad run --port ${toString cfg.port} --host ${cfg.bind}";
         User = "alerta";
         Group = "alerta";
-        PermissionsStartOnly = true;
       };
-      preStart = ''
-        mkdir -p ${cfg.logDir}
-        chown alerta:alerta ${cfg.logDir}
-      '';
     };
 
     environment.systemPackages = [ pkgs.python36Packages.alerta ];

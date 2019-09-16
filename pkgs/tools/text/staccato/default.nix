@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "staccato-${version}";
+  pname = "staccato";
   version = "0.1.6";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1zbd1gx0ik2r7bavcid776j37g6rzd3f6cs94kq1qar4gyf1gqjm";
   };
 
-  cargoSha256 = "074mfyanwdykg6wci2ia63wcnnyik741g8n624pac215sg4i95h7";
+  cargoSha256 = "0h1822hba6lpv14y6hgn8qgh7p812b3kkf592ggr6yjlhqfh37n7";
 
   meta = {
     broken = true;

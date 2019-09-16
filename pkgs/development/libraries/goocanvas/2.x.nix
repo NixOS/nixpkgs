@@ -3,12 +3,13 @@
 let
   version = "2.0.4";
 in stdenv.mkDerivation rec {
-  name = "goocanvas-${version}";
+  pname = "goocanvas";
+  inherit version;
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goocanvas/2.0/${name}.tar.xz";
+    url = "mirror://gnome/sources/goocanvas/2.0/${pname}-${version}.tar.xz";
     sha256 = "141fm7mbqib0011zmkv3g8vxcjwa7hypmq71ahdyhnj2sjvy4a67";
   };
 
@@ -22,7 +23,7 @@ in stdenv.mkDerivation rec {
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
 
   meta = with stdenv.lib; {
-    description = "Canvas widget for GTK+ based on the the Cairo 2D library";
+    description = "Canvas widget for GTK based on the the Cairo 2D library";
     homepage = https://wiki.gnome.org/Projects/GooCanvas;
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];

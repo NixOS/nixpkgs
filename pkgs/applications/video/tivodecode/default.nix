@@ -6,7 +6,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "tivodecode-${version}";
+  pname = "tivodecode";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/tivodecode/tivodecode/${version}/tivodecode-${version}.tar.gz";

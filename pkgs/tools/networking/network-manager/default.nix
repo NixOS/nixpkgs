@@ -2,20 +2,19 @@
 , gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
 , libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, gnused, coreutils, iputils, kmod, jansson, gtk-doc, libxslt
+, ethtool, gnused, iputils, kmod, jansson, gtk-doc, libxslt
 , docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43
-, openconnect, curl, meson, ninja, libpsl, libredirect }:
+, openconnect, curl, meson, ninja, libpsl }:
 
 let
-  pname = "NetworkManager";
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
-  name = "network-manager-${version}";
-  version = "1.18.0";
+  pname = "network-manager";
+  version = "1.18.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19lb5afx4iq8dgfsy26x9j4194v8f64vwr3nq6dk1ix3wljxzs66";
+    url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
+    sha256 = "1hx5dx5dgdqh3p8fq7q1pxy2bx2iymc74lj60ycrf7ydfjlprnad";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -28,6 +27,7 @@ in stdenv.mkDerivation rec {
     "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
     "-Ddhcpcd=no"
+    "-Ddhcpcanon=no"
     "-Dpppd=${ppp}/bin/pppd"
     "-Diptables=${iptables}/bin/iptables"
     # to enable link-local connections
@@ -49,12 +49,13 @@ in stdenv.mkDerivation rec {
     "-Dqt=false"
     # Allow using iwd when configured to do so
     "-Diwd=true"
+    "-Dlibaudit=yes-disabled-by-default"
   ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit iputils kmod openconnect ethtool coreutils dbus;
+      inherit iputils kmod openconnect ethtool gnused dbus;
       inherit (stdenv) shell;
     })
 
@@ -118,7 +119,7 @@ in stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/NetworkManager;
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom rickynils domenkozar obadz ];
+    maintainers = with maintainers; [ phreedom domenkozar obadz ];
     platforms = platforms.linux;
   };
 }

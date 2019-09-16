@@ -5,10 +5,9 @@
 buildPythonPackage rec {
   pname = "llfuse";
   version = "1.3.6";
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
+    url = "mirror://pypi/l/llfuse/${pname}-${version}.tar.bz2";
     sha256 = "1j9fzxpgmb4rxxyl9jcf84zvznhgi3hnh4hg5vb0qaslxkvng8ii";
   };
 

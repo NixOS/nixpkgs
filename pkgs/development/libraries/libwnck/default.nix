@@ -1,14 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtk2, intltool, xorg }:
 
-let
-  ver_maj = "2.31";
-  ver_min = "0";
-in
 stdenv.mkDerivation rec {
-  name = "libwnck-${ver_maj}.${ver_min}";
+  pname = "libwnck";
+  version = "2.31.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libwnck/${ver_maj}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "17isfjvrzgj5znld2a7zsk9vd39q9wnsysnw5jr8iz410z935xw3";
   };
 
@@ -23,6 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for creating task lists and pagers";
+    homepage = "https://gitlab.gnome.org/GNOME/libwnck";
     license = stdenv.lib.licenses.lgpl21;
+    maintainers = with stdenv.lib.maintainers; [ johnazoidberg ];
   };
 }

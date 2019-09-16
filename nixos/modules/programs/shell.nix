@@ -12,7 +12,7 @@ with lib;
       ''
         # Set up the per-user profile.
         mkdir -m 0755 -p "$NIX_USER_PROFILE_DIR"
-        if [ "$(stat --printf '%u' "$NIX_USER_PROFILE_DIR")" != "$(id -u)" ]; then
+        if [ "$(stat -c '%u' "$NIX_USER_PROFILE_DIR")" != "$(id -u)" ]; then
             echo "WARNING: the per-user profile dir $NIX_USER_PROFILE_DIR should belong to user id $(id -u)" >&2
         fi
 
@@ -34,7 +34,7 @@ with lib;
           # Create the per-user garbage collector roots directory.
           NIX_USER_GCROOTS_DIR="/nix/var/nix/gcroots/per-user/$USER"
           mkdir -m 0755 -p "$NIX_USER_GCROOTS_DIR"
-          if [ "$(stat --printf '%u' "$NIX_USER_GCROOTS_DIR")" != "$(id -u)" ]; then
+          if [ "$(stat -c '%u' "$NIX_USER_GCROOTS_DIR")" != "$(id -u)" ]; then
               echo "WARNING: the per-user gcroots dir $NIX_USER_GCROOTS_DIR should belong to user id $(id -u)" >&2
           fi
 

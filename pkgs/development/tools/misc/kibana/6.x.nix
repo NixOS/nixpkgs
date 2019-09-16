@@ -2,7 +2,6 @@
 , enableUnfree ? true
 , stdenv
 , makeWrapper
-, fetchzip
 , fetchurl
 , nodejs-10_x
 , coreutils
@@ -19,12 +18,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "1i3zmzxihplwd8n994lfxhhgygdg3qxjqgrj1difa8w3vss0zbfn";
-      "x86_64-darwin" = "09a96ms9id77infxd9xxfs6r7j01mn0rz5yw3g9sl92j9ri7r52c";
+      x86_64-linux  = "1xwklhqxk5rmdrgy2simwvijzq29kyq5w2w3hy53xh2i1zlnyvq3";
+      x86_64-darwin = "1qpdn28mrpggd55khzqqld6r89l0hb870rigxcw2i8p2yx3jv106";
     }
     else {
-      "x86_64-linux"  = "166rhxr0qlv1yarj2mg1c3b8mxvhl70jhz53azq7ic6laj55q7fk";
-      "x86_64-darwin" = "0ngngkbl036p2mzwhp8qafi3aqzk398a218w12srfqny5n630vdk";
+      x86_64-linux  = "1wpnwal2rq5v2bsp5qil9j6dplif7ql5394sy4ia5ghp2fzifxmf";
+      x86_64-darwin = "12z8i0wbw10c097glbpdy350p0h3957433f51qfx2p0ghgkzkhzv";
     };
 
 in stdenv.mkDerivation rec {
@@ -33,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
-    sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
+    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [
@@ -58,7 +57,7 @@ in stdenv.mkDerivation rec {
     description = "Visualize logs and time-stamped data";
     homepage = http://www.elasticsearch.org/overview/kibana;
     license = if enableUnfree then licenses.elastic else licenses.asl20;
-    maintainers = with maintainers; [ offline rickynils basvandijk ];
+    maintainers = with maintainers; [ offline basvandijk ];
     platforms = with platforms; unix;
   };
 }

@@ -1,71 +1,117 @@
-{ stdenv, requireFile, autoPatchelfHook, fixDarwinDylibNames, unzip, libaio, makeWrapper, odbcSupport ? false, unixODBC }:
+{ stdenv
+, fetchurl
+, autoPatchelfHook
+, fixDarwinDylibNames
+, unzip
+, libaio
+, makeWrapper
+, odbcSupport ? true
+, unixODBC
+}:
 
 assert odbcSupport -> unixODBC != null;
 
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
-  baseVersion = "12.2";
-  version = "${baseVersion}.0.1.0";
-
-  requireSource = component: arch: version: rel: hash: (requireFile rec {
-    name = "instantclient-${component}-${arch}-${version}" + (optionalString (rel != "") "-${rel}") + ".zip";
-    url = "http://www.oracle.com/technetwork/database/database-technologies/instant-client/downloads/index.html";
-    sha256 = hash;
-  });
-
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
+  # assemble list of components
+  components = [ "basic" "sdk" "sqlplus" ] ++ optional odbcSupport "odbc";
+
+  # determine the version number, there might be different ones per architecture
+  version = {
+    x86_64-linux = "19.3.0.0.0";
+    x86_64-darwin = "19.3.0.0.0";
+  }.${stdenv.hostPlatform.system} or throwSystem;
+
+  # hashes per component and architecture
+  hashes = {
+    x86_64-linux = {
+      basic   = "1yk4ng3a9ka1mzgfph9br6rwclagbgfvmg6kja11nl5dapxdzaxy";
+      sdk     = "115v1gqr0czy7dcf2idwxhc6ja5b0nind0mf1rn8iawgrw560l99";
+      sqlplus = "0zj5h84ypv4n4678kfix6jih9yakb277l9hc0819iddc0a5slbi5";
+      odbc    = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
+    };
+    x86_64-darwin = {
+      basic   = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
+      sdk     = "b46b4b87af593f7cfe447cfb903d1ae5073cec34049143ad8cdc9f3e78b23b27";
+      sqlplus = "f7565c3cbf898b0a7953fbb0017c5edd9d11d1863781588b7caf3a69937a2e9e";
+      odbc    = "f91da40684abaa866aa059eb26b1322f2d527670a1937d678404c991eadeb725";
+    };
+  }.${stdenv.hostPlatform.system} or throwSystem;
+
+  # rels per component and architecture, optional
+  rels = {
+  }.${stdenv.hostPlatform.system} or {};
+
+  # convert platform to oracle architecture names
   arch = {
-    "x86_64-linux" = "linux.x64";
-    "x86_64-darwin" = "macos.x64";
-  }."${stdenv.hostPlatform.system}" or throwSystem;
+    x86_64-linux = "linux.x64";
+    x86_64-darwin = "macos.x64";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
-  srcs = {
-    "x86_64-linux" = [
-      (requireSource "basic" arch version "" "5015e3c9fba84e009f7519893f798a1622c37d1ae2c55104ff502c52a0fe5194")
-      (requireSource "sdk" arch version "" "7f404c3573c062ce487a51ac4cfe650c878d7edf8e73b364ec852645ed1098cb")
-      (requireSource "sqlplus" arch version "" "d49b2bd97376591ca07e7a836278933c3f251875c215044feac73ba9f451dfc2") ]
-      ++ optional odbcSupport (requireSource "odbc" arch version "2" "365a4ae32c7062d9fbc3fb41add748e7881f774484a175a4b41a2c294ce9095d");
-    "x86_64-darwin" = [
-      (requireSource "basic" arch version "2" "3ed3102e5a24f0da638694191edb34933309fb472eb1df21ad5c86eedac3ebb9")
-      (requireSource "sdk" arch version "2" "e0befca9c4e71ebc9f444957ffa70f01aeeec5976ea27c40406471b04c34848b")
-      (requireSource "sqlplus" arch version "2" "d147cbb5b2a954fdcb4b642df4f0bd1153fd56e0f56e7fa301601b4f7e2abe0e") ]
-      ++ optional odbcSupport (requireSource "odbc" arch version "2" "1805c1ab6c8c5e8df7bdcc35d7f2b94c329ecf4dff9bde55d5f9b159ecd8b64e");
-  }."${stdenv.hostPlatform.system}" or throwSystem;
+  shortArch = {
+    x86_64-linux = "linux";
+    x86_64-darwin = "macos";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
+  # calculate the filename of a single zip file
+  srcFilename = component: arch: version: rel:
+    "instantclient-${component}-${arch}-${version}" +
+    (optionalString (rel != "") "-${rel}") +
+    (optionalString (arch == "linux.x64" || arch == "macos.x64") "dbru") + # ¯\_(ツ)_/¯
+    ".zip";
+
+  # fetcher for the non clickthrough artifacts
+  fetcher = srcFilename: hash: fetchurl {
+    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/193000/${srcFilename}";
+    sha256 = hash;
+  };
+
+  # assemble srcs
+  srcs = map (component:
+    (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or ""))
+  components;
+
+  pname = "oracle-instantclient";
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
-in stdenv.mkDerivation rec {
-  inherit version srcs;
-  name = "oracle-instantclient-${version}";
+in stdenv.mkDerivation {
+  inherit pname version srcs;
 
   buildInputs = [ stdenv.cc.cc.lib ]
-    ++ optionals (stdenv.isLinux) [ libaio ]
+    ++ optional stdenv.isLinux libaio
     ++ optional odbcSupport unixODBC;
 
   nativeBuildInputs = [ makeWrapper unzip ]
     ++ optional stdenv.isLinux autoPatchelfHook
     ++ optional stdenv.isDarwin fixDarwinDylibNames;
 
+  outputs = [ "out" "dev" "lib"];
+
   unpackCmd = "unzip $curSrc";
 
   installPhase = ''
-    mkdir -p "$out/"{bin,include,lib,"share/java","share/${name}/demo/"}
-    install -Dm755 {sqlplus,adrci,genezi} $out/bin
-    ${optionalString stdenv.isDarwin ''
-      for exe in "$out/bin/"* ; do
-        install_name_tool -add_rpath "$out/lib" "$exe"
-      done
-    ''}
-    ln -sfn $out/bin/sqlplus $out/bin/sqlplus64
-    install -Dm644 *${extLib}* $out/lib
+    mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
+    install -Dm755 {adrci,genezi,uidrvci,sqlplus} $out/bin
+
+    # cp to preserve symlinks
+    cp -P *${extLib}* $lib/lib
+
     install -Dm644 *.jar $out/share/java
     install -Dm644 sdk/include/* $out/include
-    install -Dm644 sdk/demo/* $out/share/${name}/demo
+    install -Dm644 sdk/demo/* $out/share/${pname}-${version}/demo
 
-    # PECL::oci8 will not build without this
-    # this symlink only exists in dist zipfiles for some platforms
-    ln -sfn $out/lib/libclntsh${extLib}.12.1 $out/lib/libclntsh${extLib}
+    # provide alias
+    ln -sfn $out/bin/sqlplus $out/bin/sqlplus64
+  '';
+
+  postFixup = optionalString stdenv.isDarwin ''
+    for exe in "$out/bin/"* ; do
+      if [ ! -L "$exe" ]; then
+        install_name_tool -add_rpath "$lib/lib" "$exe"
+      fi
+    done
   '';
 
   meta = with stdenv.lib; {

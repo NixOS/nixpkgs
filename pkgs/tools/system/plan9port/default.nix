@@ -1,14 +1,17 @@
-{ stdenv, fetchFromGitHub, which, libX11, libXt, fontconfig, freetype
+{ stdenv, fetchFromGitHub, which
+, darwin ? null
 , xorgproto ? null
+, libX11
 , libXext ? null
-, zlib ? null
+, libXt ? null
+, fontconfig ? null
+, freetype ? null
 , perl ? null  # For building web manuals
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "plan9port";
   version = "2019-02-25";
-  name = "${pname}-${version}";
 
   src =  fetchFromGitHub {
     owner = "9fans";
@@ -17,14 +20,24 @@ stdenv.mkDerivation rec {
     sha256 = "1lp17948q7vpl8rc2bf5a45bc8jqyj0s3zffmks9r25ai42vgb43";
   };
 
+  patches = [
+    ./tmpdir.patch
+    ./darwin-sw_vers.patch
+    ./darwin-cfframework.patch
+  ];
+
   postPatch = ''
     #hardcoded path
     substituteInPlace src/cmd/acme/acme.c \
       --replace /lib/font/bit $out/plan9/font
+
     #deprecated flags
     find . -type f \
       -exec sed -i -e 's/_SVID_SOURCE/_DEFAULT_SOURCE/g' {} \; \
       -exec sed -i -e 's/_BSD_SOURCE/_DEFAULT_SOURCE/g' {} \;
+
+    substituteInPlace bin/9c \
+      --replace 'which uniq' '${which}/bin/which uniq'
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     #add missing ctrl+c\z\x\v keybind for non-Darwin
     substituteInPlace src/cmd/acme/text.c \
@@ -34,31 +47,38 @@ stdenv.mkDerivation rec {
       --replace "case Kcmd+'v':" "case 0x16: case Kcmd+'v':"
   '';
 
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [
-    which perl libX11 fontconfig xorgproto libXt libXext
+  buildInputs = [
+    perl
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    xorgproto libX11 libXext libXt fontconfig
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    darwin.cf-private Carbon Cocoa IOKit Metal QuartzCore
+  ]);
 
   builder = ./builder.sh;
-
-  libX11_dev = libX11.dev;
   libXt_dev = libXt.dev;
-  libXext_dev = libXext.dev;
-  fontconfig_dev = fontconfig.dev;
-  freetype_dev = freetype.dev;
-  zlib_dev = zlib.dev;
 
-  xorgproto_exp = xorgproto;
-  libX11_exp = libX11;
-  libXt_exp = libXt;
-  libXext_exp = libXext;
-  freetype_exp = freetype;
-  zlib_exp = zlib;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/9 rc -c 'echo rc is working.'
 
-  fontconfig_lib = fontconfig.lib;
-
-  NIX_LDFLAGS="-lgcc_s";
-  enableParallelBuilding = true;
+    # 9l can find and use its libs
+    cd $TMP
+    cat >test.c <<EOF
+    #include <u.h>
+    #include <libc.h>
+    #include <thread.h>
+    void
+    threadmain(int argc, char **argv)
+    {
+        threadexitsall(nil);
+    }
+    EOF
+    $out/bin/9 9c -o test.o test.c
+    $out/bin/9 9l -o test test.o
+    ./test
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://9fans.github.io/plan9port/;

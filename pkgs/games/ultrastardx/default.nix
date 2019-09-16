@@ -11,7 +11,7 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "ultrastardx-${version}";
+  pname = "ultrastardx";
   version = "2017.8.0";
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
@@ -23,9 +23,10 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ fpc libpng ] ++ sharedLibs;
 
+  # https://github.com/UltraStar-Deluxe/USDX/issues/462
   postPatch = ''
-    # autoconf substitutes strange things otherwise
     substituteInPlace src/config.inc.in \
+      --subst-var-by lua_LIB_NAME liblua.so \
       --subst-var-by libpcre_LIBNAME libpcre.so.1
   '';
 

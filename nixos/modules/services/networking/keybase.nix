@@ -26,6 +26,7 @@ in {
 
     systemd.user.services.keybase = {
       description = "Keybase service";
+      unitConfig.ConditionUser = "!@system";
       serviceConfig = {
         ExecStart = ''
           ${pkgs.keybase}/bin/keybase service --auto-forked

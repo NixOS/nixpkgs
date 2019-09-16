@@ -49,8 +49,8 @@ index 0bdec4b4..e876177e 100644
 +++ b/libsolidity/CMakeLists.txt
 @@ -29,6 +29,7 @@ endif()
  
- add_library(solidity ${sources} ${headers})
- target_link_libraries(solidity PUBLIC yul evmasm langutil devcore ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+ add_library(solidity ${sources} ${z3_SRCS} ${cvc4_SRCS})
+ target_link_libraries(solidity PUBLIC yul evmasm langutil devcore Boost::boost Boost::filesystem Boost::system)
 +install(TARGETS solidity LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
  
  if (${Z3_FOUND})

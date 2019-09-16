@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
 , lvm2, pam, python, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "snapper-${version}";
+  pname = "snapper";
   version = "0.8.3";
 
   src = fetchFromGitHub {

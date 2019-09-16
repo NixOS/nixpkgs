@@ -1,8 +1,8 @@
 { stdenv
 , fetchurl
 , fetchpatch
-, vala_0_42
-, intltool
+, vala
+, gettext
 , pkgconfig
 , gtk3
 , glib
@@ -24,34 +24,27 @@
 , meson
 , ninja
 , python3
+, hicolor-icon-theme
+, libdazzle
 }:
 
 stdenv.mkDerivation rec {
   pname = "gitg";
-  version = "3.30.1";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1fz8q1aiql6k740savdjh0vzbyhcflgf94cfdhvzcrrvm929n2ss";
+    sha256 = "0npg4kqpwl992fgjd2cn3fh84aiwpdp9kd8z7rw2xaj2iazsm914";
   };
-
-  patches = [
-    # Fix build with latest libgit2-glib
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gitg/commit/42bceea265f53fe7fd4a41037b936deed975fc6c.patch;
-      sha256 = "1xq245rsi1bi66lswk33pdiazfaagxf77836ds5q73900rx4r7fw";
-    })
-  ];
 
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
-    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
 
     substituteInPlace tests/libgitg/test-commit.vala --replace "/bin/bash" "${bash}/bin/bash"
   '';
 
-  doCheck = false; # FAIL: tests-gitg gtk_style_context_add_provider_for_screen: assertion 'GDK_IS_SCREEN (screen)' failed
+  doCheck = true;
 
   enableParallelBuilding = true;
 
@@ -63,6 +56,7 @@ stdenv.mkDerivation rec {
     gtksourceview
     gtkspell3
     json-glib
+    libdazzle
     libgee
     libgit2-glib
     libpeas
@@ -72,12 +66,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    intltool
+    hicolor-icon-theme
+    gettext
     meson
     ninja
     pkgconfig
     python3
-    vala_0_42 # fails build with 0.44, drop in >3.30.1
+    vala
     wrapGAppsHook
   ];
 

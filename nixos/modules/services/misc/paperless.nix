@@ -50,7 +50,7 @@ in
     };
 
     ocrLanguages = mkOption {
-      type = with types; nullOr (listOf string);
+      type = with types; nullOr (listOf str);
       default = null;
       description = ''
         Languages available for OCR via Tesseract, specified as

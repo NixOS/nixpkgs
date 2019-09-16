@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
-    rev = "${version}";
+    rev = version;
     sha256 = "1isn0p0i2a7dlbrdk5ib01xa1wgi6bi9ka4xl4vj8iw1q4i5fqv9";
   };
 
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

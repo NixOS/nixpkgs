@@ -11,12 +11,12 @@ assert pulseSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   version = "1.19.1";
-  name = "openal-soft-${version}";
+  pname = "openal-soft";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0b0g0q1c36nfb289xcaaj3cmyfpiswvvgky3qyalsf9n4dj7vnzi";
   };
 

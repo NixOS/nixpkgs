@@ -1,5 +1,5 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, pythonOlder, astroid,
-  isort, mccabe, pytest, pytestrunner, pyenchant }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, astroid,
+  isort, mccabe, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "pylint";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
 
-  checkInputs = [ pytest pyenchant ];
+  checkInputs = [ pytest ];
 
   propagatedBuildInputs = [ astroid isort mccabe ];
 

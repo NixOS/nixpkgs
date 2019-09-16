@@ -1,0 +1,89 @@
+From e68d983a6befd223087916cb3fe31baee77decc4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Sun, 12 May 2019 08:50:07 -0300
+Subject: [PATCH 1/2] Use qt library to determine where to look for application
+ files
+
+---
+ dde-file-manager-lib/shutil/fileutils.cpp     | 34 ++++++++++++-------
+ .../shutil/mimesappsmanager.cpp               | 11 ++----
+ 2 files changed, 25 insertions(+), 20 deletions(-)
+
+diff --git a/dde-file-manager-lib/shutil/fileutils.cpp b/dde-file-manager-lib/shutil/fileutils.cpp
+index ae8120d3..d6a0573a 100644
+--- a/dde-file-manager-lib/shutil/fileutils.cpp
++++ b/dde-file-manager-lib/shutil/fileutils.cpp
+@@ -242,13 +242,19 @@ bool FileUtils::isArchive(const QString &path)
+  */
+ QStringList FileUtils::getApplicationNames() {
+   QStringList appNames;
+-  QDirIterator it("/usr/share/applications", QStringList("*.desktop"),
+-                  QDir::Files | QDir::NoDotAndDotDot,
+-                  QDirIterator::Subdirectories);
+-  while (it.hasNext()) {
+-    it.next();
+-    appNames.append(it.fileName());
++
++  const QStringList desktopDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
++  qDebug() << "dde-file-manager getApplicationNames desktopDirs:" << desktopDirs;
++  for (const QString &dir : desktopDirs) {
++    QDirIterator it(dir, QStringList("*.desktop"),
++                    QDir::Files | QDir::NoDotAndDotDot,
++                    QDirIterator::Subdirectories);
++    while (it.hasNext()) {
++      it.next();
++      appNames.append(it.fileName());
++    }
+   }
++  
+   return appNames;
+ }
+ //---------------------------------------------------------------------------
+@@ -259,12 +265,16 @@ QStringList FileUtils::getApplicationNames() {
+  */
+ QList<DesktopFile> FileUtils::getApplications() {
+   QList<DesktopFile> apps;
+-  QDirIterator it("/usr/share/applications", QStringList("*.desktop"),
+-                  QDir::Files | QDir::NoDotAndDotDot,
+-                  QDirIterator::Subdirectories);
+-  while (it.hasNext()) {
+-    it.next();
+-    apps.append(DesktopFile(it.filePath()));
++  const QStringList desktopDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
++  qDebug() << "dde-file-manager getApplications desktopDirs:" << desktopDirs;
++  for (const QString &dir : desktopDirs) {
++    QDirIterator it(dir, QStringList("*.desktop"),
++                    QDir::Files | QDir::NoDotAndDotDot,
++                    QDirIterator::Subdirectories);
++    while (it.hasNext()) {
++      it.next();
++      apps.append(DesktopFile(it.filePath()));
++    }
+   }
+   return apps;
+ }
+diff --git a/dde-file-manager-lib/shutil/mimesappsmanager.cpp b/dde-file-manager-lib/shutil/mimesappsmanager.cpp
+index c6149702..c9e53630 100644
+--- a/dde-file-manager-lib/shutil/mimesappsmanager.cpp
++++ b/dde-file-manager-lib/shutil/mimesappsmanager.cpp
+@@ -542,14 +542,9 @@ QStringList MimesAppsManager::getrecommendedAppsFromMimeWhiteList(const DUrl &ur
+ 
+ QStringList MimesAppsManager::getApplicationsFolders()
+ {
+-    QStringList desktopFolders;
+-    desktopFolders << QString("/usr/share/applications/")
+-                   << QString("/usr/local/share/applications/")
+-                   << QString("/usr/share/gnome/applications/")
+-                   << QString("/var/lib/flatpak/exports/share/applications")
+-                   << QDir::homePath() + QString("/.local/share/flatpak/exports/share/applications")
+-                   << QDir::homePath() + QString( "/.local/share/applications" );
+-    return desktopFolders;
++    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
++    qDebug() << "dde-file-manager getApplicationsFolders:" << paths;
++    return paths;
+ }
+ 
+ QString MimesAppsManager::getMimeAppsCacheFile()
+-- 
+2.21.0
+

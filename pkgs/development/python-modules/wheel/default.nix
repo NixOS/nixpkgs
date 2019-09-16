@@ -1,30 +1,34 @@
 { lib
+, setuptools
+, pip
 , buildPythonPackage
 , fetchPypi
 , pytest
 , pytestcov
 , coverage
 , jsonschema
+, bootstrapped-pip
 }:
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.33.1";
+  version = "0.33.6";
+  format = "other";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "66a8fd76f28977bb664b098372daef2b27f60dc4d1688cfab7b37a09448f0e9d";
+    sha256 = "10c9da68765315ed98850f8e048347c3eb06dd81822dc2ab1d4fde9dc9702646";
   };
 
   checkInputs = [ pytest pytestcov coverage ];
+  nativeBuildInputs = [ bootstrapped-pip setuptools ];
 
-  propagatedBuildInputs = [ jsonschema ];
-
+  catchConflicts = false;
   # No tests in archive
   doCheck = false;
 
   # We add this flag to ignore the copy installed by bootstrapped-pip
-  installFlags = [ "--ignore-installed" ];
+  pipInstallFlags = [ "--ignore-installed" ];
 
   meta = {
     description = "A built-package format for Python";

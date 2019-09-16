@@ -2,7 +2,7 @@
 , glib, libGLU_combined, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk3, pango
 , makeWrapper , python, pythonPackages, lib
-, lsof, curl, libuuid, cups, mesa_drivers
+, lsof, curl, libuuid, cups, mesa
 }:
 
 let
@@ -18,7 +18,7 @@ let
 
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
-    mesa_drivers
+    mesa.drivers
     libGLU_combined
     fontconfig
     freetype
@@ -39,10 +39,10 @@ let
     libuuid
     cups
   ]);
-  package = stdenv.mkDerivation rec {
+  package = stdenv.mkDerivation {
 
     inherit (data) version;
-    name = "enpass-${version}";
+    pname = "enpass";
 
     src = fetchurl {
       inherit (data) sha256;
@@ -80,7 +80,7 @@ let
     '';
   };
   updater = {
-    update = stdenv.mkDerivation rec {
+    update = stdenv.mkDerivation {
       name = "enpass-update-script";
       SCRIPT =./update_script.py;
 

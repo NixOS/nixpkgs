@@ -1,11 +1,11 @@
 { stdenv, lib, fetchurl, darwin, aalib, ncurses, xorg, libmikmod }:
 
 stdenv.mkDerivation rec {
-  name    = "bb-${version}";
+  pname = "bb";
   version = "1.3rc1";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/aa-project/bb/${version}/${name}.tar.gz";
+    url    = "mirror://sourceforge/aa-project/bb/${version}/${pname}-${version}.tar.gz";
     sha256 = "1i411glxh7g4pfg4gw826lpwngi89yrbmxac8jmnsfvrfb48hgbr";
   };
 

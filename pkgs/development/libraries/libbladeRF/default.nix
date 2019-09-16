@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, cmake, git, doxygen, help2man, ncurses, tecla
+{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, git, doxygen, help2man, ncurses, tecla
 , libusb1, udev }:
 
 let
@@ -13,7 +13,8 @@ let
   version = "2.2.0";
 
 in stdenv.mkDerivation {
-  name = "libbladeRF-${version}";
+  pname = "libbladeRF";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Nuand";

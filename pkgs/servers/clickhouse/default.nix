@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, libtool
+{ stdenv, fetchFromGitHub, cmake, libtool
 , boost, capnproto, cctz, clang-unwrapped, double-conversion, gperftools, icu
 , libcpuid, libxml2, lld, llvm, lz4 , mysql, openssl, poco, re2, rdkafka
 , readline, sparsehash, unixODBC, zstd, ninja, jemalloc, brotli, protobuf, xxHash
 }:
 
 stdenv.mkDerivation rec {
-  name = "clickhouse-${version}";
-  version = "19.6.2.11";
+  pname = "clickhouse";
+  version = "19.13.1.11";
 
   src = fetchFromGitHub {
     owner  = "yandex";
     repo   = "ClickHouse";
     rev    = "v${version}-stable";
-    sha256 = "0bs38a8dm5x43klx4nc5dwkkxpab12lp2chyvc2y47c75j7rn5d7";
+    sha256 = "1j9jhgl2z84id5z6rbvyal7aha5v3m8pd393cmcsf1bf0fiz8qmc";
   };
 
   nativeBuildInputs = [ cmake libtool ninja ];

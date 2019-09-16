@@ -1,21 +1,21 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem
-, atk, cairo, gdk_pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
+, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
 , lsb-release, freetype, fontconfig, pangox_compat, polkit, polkit_gnome }:
 
 let
   sha256 = {
-    "x86_64-linux" = "08kdxsg9npb1nmlr2jyq7p238735kqkp7c5xckxn6rc4cp12n2y2";
-    "i686-linux"   = "11r5d4234zbkkgyrd7q9x3w7s7lailnq7z4x8cnhpr8vipzrg7h2";
-  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
+    x86_64-linux = "08kdxsg9npb1nmlr2jyq7p238735kqkp7c5xckxn6rc4cp12n2y2";
+    i686-linux   = "11r5d4234zbkkgyrd7q9x3w7s7lailnq7z4x8cnhpr8vipzrg7h2";
+  }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   arch = {
-    "x86_64-linux" = "amd64";
-    "i686-linux"   = "i686";
-  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
+    x86_64-linux = "amd64";
+    i686-linux   = "i686";
+  }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   description = "Desktop sharing application, providing remote support and online meetings";
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "anydesk";
     exec = "@out@/bin/anydesk";
     icon = "anydesk";
@@ -26,16 +26,16 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "anydesk-${version}";
+  pname = "anydesk";
   version = "4.0.1";
 
   src = fetchurl {
-    url = "https://download.anydesk.com/linux/${name}-${arch}.tar.gz";
+    url = "https://download.anydesk.com/linux/${pname}-${version}-${arch}.tar.gz";
     inherit sha256;
   };
 
   buildInputs = [
-    atk cairo gdk_pixbuf glib gtk2 stdenv.cc.cc pango
+    atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
     gnome2.gtkglext libGLU_combined freetype fontconfig
     pangox_compat polkit polkit_gnome
   ] ++ (with xorg; [

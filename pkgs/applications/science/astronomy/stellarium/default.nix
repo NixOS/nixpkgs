@@ -1,31 +1,26 @@
 { mkDerivation, lib, fetchFromGitHub
 , cmake, freetype, libpng, libGLU_combined, openssl, perl, libiconv
 , qtscript, qtserialport, qttools
-, qtmultimedia, qtlocation, makeWrapper, qtbase
+, qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
 }:
 
 mkDerivation rec {
-  name = "stellarium-${version}";
-  version = "0.19.0";
+  pname = "stellarium";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "1x9s9v9ann93nyqd8n8adwhx66xgq5vp0liyzl1h1ji6qk8jla3c";
+    sha256 = "0hf1wv2bb5j7ny2xh29mj9m4hjblhn02zylay8gl85w7xlqs7s5r";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
 
   buildInputs = [
     freetype libpng libGLU_combined openssl libiconv qtscript qtserialport qttools
-    qtmultimedia qtlocation qtbase makeWrapper
+    qtmultimedia qtlocation qtbase
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/stellarium \
-      --prefix QT_PLUGIN_PATH : "${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins"
-  '';
 
   meta = with lib; {
     description = "Free open-source planetarium";

@@ -3,11 +3,11 @@
 , webkitgtk, gettext, itstool, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "devhelp-${version}";
+  pname = "devhelp";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/devhelp/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/devhelp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "06sa83zggk29wcg75fl3gqh0rmi7cd3gsbk09a2z23r7vpy7xanq";
   };
 

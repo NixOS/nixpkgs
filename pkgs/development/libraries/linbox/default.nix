@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , givaro
 , pkgconfig
@@ -10,16 +9,15 @@
 , withSage ? false # sage support
 }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "linbox";
-  version = "1.6.2";
+  version = "1.6.3";
 
 
   src = fetchFromGitHub {
     owner = "linbox-team";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "038br15hhc8dc1hq0pkv6vb1qx9hjr7hjv3w9fq9qwkd870h2v1q";
+    sha256 = "10j6dspbsq7d2l4q3y0c1l1xwmaqqba2fxg59q5bhgk9h5d7q571";
   };
 
   nativeBuildInputs = [
@@ -39,14 +37,14 @@ stdenv.mkDerivation rec {
     "--disable-optimization"
   ] ++ stdenv.lib.optionals stdenv.isx86_64 {
     # disable SIMD instructions (which are enabled *when available* by default)
-    "default"        = [ "--disable-sse3" "--disable-ssse3" "--disable-sse41" "--disable-sse42" "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    "westmere"       = [                                                                        "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    "sandybridge"    = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    "ivybridge"      = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    "haswell"        = [                                                                                                                         "--disable-fma4" ];
-    "broadwell"      = [                                                                                                                         "--disable-fma4" ];
-    "skylake"        = [                                                                                                                         "--disable-fma4" ];
-    "skylake-avx512" = [                                                                                                                         "--disable-fma4" ];
+    default        = [ "--disable-sse3" "--disable-ssse3" "--disable-sse41" "--disable-sse42" "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
+    westmere       = [                                                                        "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
+    sandybridge    = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
+    ivybridge      = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
+    haswell        = [                                                                                                                         "--disable-fma4" ];
+    broadwell      = [                                                                                                                         "--disable-fma4" ];
+    skylake        = [                                                                                                                         "--disable-fma4" ];
+    skylake-avx512 = [                                                                                                                         "--disable-fma4" ];
   }.${stdenv.hostPlatform.platform.gcc.arch or "default"}
   ++ stdenv.lib.optionals withSage [
     "--enable-sage"

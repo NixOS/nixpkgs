@@ -1,19 +1,26 @@
-{ buildGoPackage, fetchurl, lib }:
+{ buildGoPackage, fetchFromGitHub, lib }:
 
-buildGoPackage
-  { name = "cri-tools-1.0.0-alpha.0";
-    src = fetchurl
-      { url = "https://github.com/kubernetes-incubator/cri-tools/archive/v1.0.0-alpha.0.tar.gz";
-        sha256 = "1la26f38xafb7g9hrppjq7gmajiyr8idcwbian7n412q9m0lb3ic";
-      };
+buildGoPackage rec {
+  pname = "cri-tools";
+  version = "1.15.0";
+  src = fetchFromGitHub {
+    owner = "kubernetes-sigs";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "03fhddncwqrdyxz43m3bak9dlrsqzibqqja3p94nic4ydk2hry62";
+  };
 
-    goPackagePath = "github.com/kubernetes-incubator/cri-tools";
-    subPackages = [ "cmd/crictl" "cmd/critest" ];
+  goPackagePath = "github.com/kubernetes-sigs/cri-tools";
 
-    meta = {
-      license = lib.licenses.asl20;
-    };
+  buildPhase = ''
+    pushd go/src/${goPackagePath}
+    make
+  '';
 
-    goDeps = ./deps.nix;
-  }
-
+  meta = with lib; {
+    description = "CLI and validation tools for Kubelet Container Runtime Interface (CRI)";
+    homepage = https://github.com/kubernetes-sigs/cri-tools;
+    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ saschagrunert ];
+  };
+}

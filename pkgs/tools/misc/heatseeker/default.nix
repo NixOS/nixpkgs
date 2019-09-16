@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "heatseeker-${version}";
+  pname = "heatseeker";
   version = "1.5.1";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "1fcrbjwnhcz71i70ppy0rcgk5crwwmbkm9nrk1kapvks33pv0az7";
   };
 
-  cargoSha256 = "0kqkzjd90v19qvl3iv1vv2fi8h0z75b0yn0z5jq8w4m94fvh0p95";
+  cargoSha256 = "0m3sxbz1iii31s30cnv1970i1mwfhl6gm19k8wv0n7zji30ayx07";
 
   # some tests require a tty, this variable turns them off for Travis CI,
   # which we can also make use of

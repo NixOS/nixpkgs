@@ -103,7 +103,7 @@ in
     }];
 
     systemd = {
-      timers."mysql-backup" = {
+      timers.mysql-backup = {
         description = "Mysql backup timer";
         wantedBy = [ "timers.target" ];
         timerConfig = {
@@ -112,7 +112,7 @@ in
           Unit = "mysql-backup.service";
         };
       };
-      services."mysql-backup" = {
+      services.mysql-backup = {
         description = "Mysql backup service";
         enable = true;
         serviceConfig = {

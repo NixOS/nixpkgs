@@ -31,9 +31,28 @@ stdenv.mkDerivation {
    separate Nix expression from <filename>pkgs/all-packages.nix</filename>, you
    need to pass it as a function argument.) Specifying a
    <varname>name</varname> and a <varname>src</varname> is the absolute minimum
-   you need to do. Many packages have dependencies that are not provided in the
-   standard environment. It’s usually sufficient to specify those
-   dependencies in the <varname>buildInputs</varname> attribute:
+   Nix requires. For convenience, you can also use <varname>pname</varname> and
+   <varname>version</varname> attributes and <literal>mkDerivation</literal>
+   will automatically set <varname>name</varname> to
+   <literal>"${pname}-${version}"</literal> by default. Since
+   <link xlink:href="https://github.com/NixOS/rfcs/pull/35">RFC 0035</link>,
+   this is preferred for packages in Nixpkgs, as it allows us to reuse the
+   version easily:
+<programlisting>
+stdenv.mkDerivation rec {
+  pname = "libfoo";
+  version = "1.2.3";
+  src = fetchurl {
+    url = "http://example.org/libfoo-source-${version}.tar.bz2";
+    sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
+  };
+}</programlisting>
+  </para>
+
+  <para>
+   Many packages have dependencies that are not provided in the standard
+   environment. It’s usually sufficient to specify those dependencies in the
+   <varname>buildInputs</varname> attribute:
 <programlisting>
 stdenv.mkDerivation {
   name = "libfoo-1.2.3";
@@ -324,7 +343,7 @@ let f(h, t, i) = i + (if i &lt;= 0 then h else t - 1)
 let f(h, h + 1, i) = i + (if i &lt;= 0 then h else (h + 1) - 1)
 let f(h, h + 1, i) = i + (if i &lt;= 0 then h else h)
 let f(h, h + 1, i) = i + h
-  </programlisting>
+</programlisting>
    This is where "sum-like" comes in from above: We can just sum all of the
    host offsets to get the host offset of the transitive dependency. The target
    offset is the transitive dependency is simply the host offset + 1, just as
@@ -680,7 +699,7 @@ passthru = {
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-passthru-updateScript">
     <term>
      <varname>passthru.updateScript</varname>
     </term>
@@ -709,19 +728,16 @@ passthru.updateScript = writeScript "update-zoom-us" ''
 <programlisting>
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 </programlisting>
-      Note that the update scripts will be run in parallel by default; you
-      should avoid running <command>git commit</command> or any other commands
-      that cannot handle that.
+     </para>
+     <para>
+      The script will be usually run from the root of the Nixpkgs repository
+      but you should not rely on that. Also note that the update scripts will
+      be run in parallel by default; you should avoid running <command>git
+      commit</command> or any other commands that cannot handle that.
      </para>
      <para>
       For information about how to run the updates, execute
-      <cmdsynopsis>
-       <command>nix-shell</command> 
-       <arg>
-        maintainers/scripts/update.nix
-       </arg>
-      </cmdsynopsis>
-      .
+      <command>nix-shell maintainers/scripts/update.nix</command>.
      </para>
     </listitem>
    </varlistentry>
@@ -770,7 +786,7 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
         set, the default value is used, which is <literal>$prePhases
         unpackPhase patchPhase $preConfigurePhases configurePhase
         $preBuildPhases buildPhase checkPhase $preInstallPhases installPhase
-        fixupPhase $preDistPhases distPhase $postPhases</literal>.
+        fixupPhase installCheckPhase $preDistPhases distPhase $postPhases</literal>.
        </para>
        <para>
         Usually, if you just want to add a few phases, it’s more convenient
@@ -973,6 +989,16 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
     </varlistentry>
     <varlistentry>
      <term>
+      <varname>dontUnpack</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the unpack phase.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <varname>dontMakeSourcesWritable</varname>
      </term>
      <listitem>
@@ -1090,6 +1116,16 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       <para>
        A list of strings passed as additional arguments to the configure
        script.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>dontConfigure</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the configure phase.
       </para>
      </listitem>
     </varlistentry>
@@ -1563,6 +1599,16 @@ installTargets = "install-bin install-doc";</programlisting>
 
    <variablelist>
     <title>Variables controlling the fixup phase</title>
+    <varlistentry>
+     <term>
+      <varname>dontFixup</varname>
+     </term>
+     <listitem>
+      <para>
+        Set to true to skip the fixup phase.
+      </para>
+     </listitem>
+    </varlistentry>
     <varlistentry>
      <term>
       <varname>dontStrip</varname>
@@ -2213,7 +2259,7 @@ someVar=$(stripHash $name)
    array by doing something like
 <programlisting language="bash">
 addEnvHooks "$hostOffset" myBashFunction
-  </programlisting>
+</programlisting>
   </para>
 
   <para>
@@ -2365,7 +2411,7 @@ addEnvHooks "$hostOffset" myBashFunction
       <para>
        The Bintools Wrapper was only just recently split off from CC Wrapper,
        so the division of labor is still being worked out. For example, it
-       shouldn't care about about the C standard library, but just take a
+       shouldn't care about the C standard library, but just take a
        derivation with the dynamic loader (which happens to be the glibc on
        linux). Dependency finding however is a task both wrappers will continue
        to need to share, and probably the most important to understand. It is
@@ -2583,13 +2629,11 @@ addEnvHooks "$hostOffset" myBashFunction
     </varlistentry>
     <varlistentry>
      <term>
-      GStreamer
+      GNOME platform
      </term>
      <listitem>
       <para>
-       Adds the GStreamer plugins subdirectory of each build input to the
-       <envar>GST_PLUGIN_SYSTEM_PATH_1_0</envar> or
-       <envar>GST_PLUGIN_SYSTEM_PATH</envar> environment variable.
+       Hooks related to GNOME platform and related libraries like GLib, GTK and GStreamer are described in <xref linkend="sec-language-gnome" />.
       </para>
      </listitem>
     </varlistentry>
@@ -2651,8 +2695,8 @@ addEnvHooks "$hostOffset" myBashFunction
        that is supposed to be inspected, add <literal>breakpointHook</literal>
        to <literal>nativeBuildInputs</literal>.
 <programlisting>
-         nativeBuildInputs = [ breakpointHook ];
-       </programlisting>
+nativeBuildInputs = [ breakpointHook ];
+</programlisting>
        When a build failure happens there will be an instruction printed that
        shows how to attach with <literal>cntr</literal> to the build sandbox.
       </para>
@@ -2666,6 +2710,49 @@ addEnvHooks "$hostOffset" myBashFunction
         <command>nix build</command>.
        </para>
       </note>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      installShellFiles
+     </term>
+     <listitem>
+      <para>
+       This hook helps with installing manpages and shell completion files. It
+       exposes 2 shell functions <literal>installManPage</literal> and
+       <literal>installShellCompletion</literal> that can be used from your
+       <literal>postInstall</literal> hook.
+      </para>
+      <para>
+       The <literal>installManPage</literal> function takes one or more paths
+       to manpages to install. The manpages must have a section suffix, and may
+       optionally be compressed (with <literal>.gz</literal> suffix). This
+       function will place them into the correct directory.
+      </para>
+      <para>
+       The <literal>installShellCompletion</literal> function takes one or more
+       paths to shell completion files. By default it will autodetect the shell
+       type from the completion file extension, but you may also specify it by
+       passing one of <literal>--bash</literal>, <literal>--fish</literal>, or
+       <literal>--zsh</literal>. These flags apply to all paths listed after
+       them (up until another shell flag is given). Each path may also have a
+       custom installation name provided by providing a flag <literal>--name
+       NAME</literal> before the path. If this flag is not provided, zsh
+       completions will be renamed automatically such that
+       <literal>foobar.zsh</literal> becomes <literal>_foobar</literal>.
+<programlisting>
+nativeBuildInputs = [ installShellFiles ];
+postInstall = ''
+  installManPage doc/foobar.1 doc/barfoo.3
+  # explicit behavior
+  installShellCompletion --bash --name foobar.bash share/completions.bash
+  installShellCompletion --fish --name foobar.fish share/completions.fish
+  installShellCompletion --zsh --name _foobar share/completions.zsh
+  # implicit behavior
+  installShellCompletion share/completions/foobar.{bash,fish,zsh}
+'';
+</programlisting>
+      </para>
      </listitem>
     </varlistentry>
     <varlistentry>
@@ -2847,7 +2934,7 @@ addEnvHooks "$hostOffset" myBashFunction
          printf(help_message);
                             ^
 cc1plus: some warnings being treated as errors
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -2869,7 +2956,7 @@ cc1plus: some warnings being treated as errors
 <programlisting>
 bin/blib.a(bios_console.o): In function `bios_handle_cup':
 /tmp/nix-build-ipxe-20141124-5cbdc41.drv-0/ipxe-5cbdc41/src/arch/i386/firmware/pcbios/bios_console.c:86: undefined reference to `__stack_chk_fail'
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -2898,19 +2985,19 @@ bin/blib.a(bios_console.o): In function `bios_handle_cup':
 <programlisting>
 malloc.c:404:15: error: return type is an incomplete type
 malloc.c:410:19: error: storage size of 'ms' isn't known
-    </programlisting>
+</programlisting>
 <programlisting>
 strdup.h:22:1: error: expected identifier or '(' before '__extension__'
-    </programlisting>
+</programlisting>
 <programlisting>
 strsep.c:65:23: error: register name not specified for 'delim'
-    </programlisting>
+</programlisting>
 <programlisting>
 installwatch.c:3751:5: error: conflicting types for '__open_2'
-    </programlisting>
+</programlisting>
 <programlisting>
 fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -2935,7 +3022,7 @@ fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute erro
 <programlisting>
 ccbLfRgg.s: Assembler messages:
 ccbLfRgg.s:33: Error: missing or invalid displacement expression `private_key_len@GOTOFF'
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -2999,7 +3086,7 @@ ccbLfRgg.s:33: Error: missing or invalid displacement expression `private_key_le
      </para>
 <programlisting>
 intel_drv.so: undefined symbol: vgaHWFreeHWRec
-    </programlisting>
+</programlisting>
     </listitem>
    </varlistentry>
   </variablelist>

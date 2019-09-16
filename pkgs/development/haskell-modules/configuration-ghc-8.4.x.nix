@@ -40,6 +40,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Needs Cabal 3.0.x.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_0_0_0; });
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_0_0_0; };
+
   # Restricts aeson to <1.4
   # https://github.com/purescript/purescript/pull/3537
   purescript = doJailbreak super.purescript;
@@ -75,5 +79,8 @@ self: super: {
   # Older GHC versions need these additional dependencies.
   aeson = addBuildDepend super.aeson self.contravariant;
   base-compat-batteries = addBuildDepend super.base-compat-batteries self.contravariant;
+
+  # Newer versions don't compile.
+  resolv = self.resolv_0_1_1_2;
 
 }

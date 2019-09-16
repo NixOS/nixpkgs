@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook
+{ stdenv, fetchurl, autoreconfHook
 , IOKit ? null , ApplicationServices ? null }:
 
 let
@@ -13,10 +13,11 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "smartmontools-${version}";
+  pname = "smartmontools";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
+    url = "mirror://sourceforge/smartmontools/${pname}-${version}.tar.gz";
     sha256 = "077nx2rn9szrg6isdh0938zbp7vr3dsyxl4jdyyzv1xwhqksrqg5";
   };
 

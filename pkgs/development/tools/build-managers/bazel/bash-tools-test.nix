@@ -1,4 +1,4 @@
-{ stdenv, writeText, runCommandCC, bazel }:
+{ writeText, bazel, runLocal, bazelTest, distDir }:
 
 # Tests that certain executables are available in bazel-executed bash shells.
 
@@ -22,21 +22,23 @@ let
     )
   '';
 
-  runLocal = name: script: runCommandCC name { preferLocalBuild = true; } script;
-
-  workspaceDir = runLocal "our_workspace" ''
+  workspaceDir = runLocal "our_workspace" {} ''
     mkdir $out
     cp ${WORKSPACE} $out/WORKSPACE
     cp ${fileIn} $out/input.txt
     cp ${fileBUILD} $out/BUILD
   '';
 
-  testBazel = runLocal "bazel-test-bash-tools" ''
-    export HOME=$(mktemp -d)
-    cp -r ${workspaceDir} wd && chmod +w wd && cd wd
-    ${bazel}/bin/bazel build :tool_usage
-    cp bazel-genfiles/output.txt $out
-    echo "Testing content" && [ "$(cat $out | wc -l)" == "2" ] && echo "OK"
-  '';
+  testBazel = bazelTest {
+    name = "bazel-test-bash-tools";
+    bazelPkg = bazel;
+    inherit workspaceDir;
+
+    bazelScript = ''
+      ${bazel}/bin/bazel build :tool_usage --distdir=${distDir}
+      cp bazel-genfiles/output.txt $out
+      echo "Testing content" && [ "$(cat $out | wc -l)" == "2" ] && echo "OK"
+    '';
+  };
 
 in testBazel

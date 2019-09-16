@@ -7,22 +7,24 @@ let
   boostWithPython3 = boost.override { python = python3; enablePython = true; };
 in
 stdenv.mkDerivation rec {
-  name = "trellis-${version}";
-  version = "2019.04.22";
+  pname = "trellis";
+  version = "2019.09.01";
+  realVersion = with stdenv.lib; with builtins;
+    "1.0-53-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "symbiflow";
        repo   = "prjtrellis";
-       rev    = "5eb0ad870f30422b95d090ac9a476343809c62b9";
-       sha256 = "10jkjfhqdr2bff41mh3w8a7kszf2whqqgk5s1z5z07mlh6zfdjlg";
+       rev    = "98871e0e2959bc8cb4de3c7ebe2b9eddc4efe00c";
+       sha256 = "1yq7ih2xvhfvdpijmbqjq6jcngl6710kiv66hkww5ih8j5dzsq5l";
        name   = "trellis";
      })
     (fetchFromGitHub {
       owner  = "symbiflow";
       repo   = "prjtrellis-db";
-      rev    = "d0b219af41ae3da6150645fbc5cc5613b530603f";
-      sha256 = "1mnzvrqrcbfypvbagwyf6arv3kmj6q7n27gcmyk6ap2xnavkx4bq";
+      rev    = "b4d626b6402c131e9a035470ffe4cf33ccbe7986";
+      sha256 = "0k26lq6c049ja8hhqcljwjb1y5k4gcici23l2n86gyp83jr03ilx";
       name   = "database";
     })
   ];
@@ -32,6 +34,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ];
 
   preConfigure = with builtins; ''
+    substituteInPlace libtrellis/CMakeLists.txt \
+      --replace "git describe --tags" "echo ${realVersion}"
+
     rmdir database && ln -sfv ${elemAt srcs 1} ./database
 
     source environment.sh
@@ -48,7 +53,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = https://github.com/symbiflow/prjtrellis;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with maintainers; [ q3k thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ q3k thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

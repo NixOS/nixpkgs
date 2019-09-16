@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "Bottleneck";
   version = "1.2.1";
-  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;

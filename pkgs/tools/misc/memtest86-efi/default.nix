@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, utillinux, libguestfs-with-appliance }:
+{ lib, stdenv, fetchurl, unzip, libguestfs-with-appliance }:
 
 stdenv.mkDerivation rec {
   pname = "memtest86-efi";

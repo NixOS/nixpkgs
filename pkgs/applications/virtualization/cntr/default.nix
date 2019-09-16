@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cntr-${version}";
+  pname = "cntr";
   version = "1.2.0";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0lmbsnjia44h4rskqkv9yc7xb6f3qjgbg8kcr9zqnr7ivr5fjcxg";
   };
 
-  cargoSha256 = "0gainr5gfy0bbhr6078zvgx0kzp53slxjp37d3da091ikgzgfn51";
+  cargoSha256 = "0xkwza9fx61pvlsm0s3dxc9i09mqp6c9df8w63fyiq7174vjxryx";
 
   meta = with stdenv.lib; {
     description = "A container debugging tool based on FUSE";

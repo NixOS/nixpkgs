@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-html-parse'';
   version = ''20161031-git'';
 

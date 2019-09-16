@@ -1,8 +1,18 @@
 { stdenv
 , fetchurl
-, static ? true
+# Note: If `{ static = false; shared = false; }`, upstream's default is used
+#       (which is building both static and shared as of zlib 1.2.11).
 , shared ? true
+, static ? true
+# If true, a separate .static ouput is created and the .a is moved there.
+# In this case `pkg-config` will auto detection will currently not work if the
+# .static output is given as `buildInputs` to another package (#66461), because
+# the `.pc` file lists only the main output's lib dir.
+# If false, and if `{ static = true; }`, the .a stays in the main output.
+, splitStaticOutput ? static
 }:
+
+assert splitStaticOutput -> static;
 
 stdenv.mkDerivation (rec {
   name = "zlib-${version}";
@@ -26,14 +36,35 @@ stdenv.mkDerivation (rec {
   '';
 
   outputs = [ "out" "dev" ]
-    ++ stdenv.lib.optional (shared && static) "static";
+    ++ stdenv.lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  configureFlags = stdenv.lib.optional shared "--shared"
-                   ++ stdenv.lib.optional (static && !shared) "--static";
+  # For zlib's ./configure (as of verion 1.2.11), the order
+  # of --static/--shared flags matters!
+  # `--shared --static` builds only static libs, while
+  # `--static --shared` builds both.
+  # So we use the latter order to be able to build both.
+  # Also, giving just `--shared` builds both,
+  # giving just `--static` builds only static,
+  # and giving nothing builds both.
+  # So we have 3 possible ways to build both:
+  # `--static --shared`, `--shared` and giving nothing.
+  # Of these, we choose `--shared`, only because that's
+  # what we did in the past and we can avoid mass rebuilds this way.
+  # As a result, we pass `--static` only when we want just static.
+  configureFlags = stdenv.lib.optional (static && !shared) "--static"
+                   ++ stdenv.lib.optional shared "--shared";
 
-  postInstall = stdenv.lib.optionalString (shared && static) ''
+  # Note we don't need to set `dontDisableStatic`, because static-disabling
+  # works by grepping for `enable-static` in the `./configure` script
+  # (see `pkgs/stdenv/generic/setup.sh`), and zlib's handwritten one does
+  # not have such.
+  # It wouldn't hurt setting `dontDisableStatic = static && !splitStaticOutput`
+  # here (in case zlib ever switches to autoconf in the future),
+  # but we don't do it simply to avoid mass rebuilds.
+
+  postInstall = stdenv.lib.optionalString splitStaticOutput ''
     moveToOutput lib/libz.a "$static"
   ''
     # jww (2015-01-06): Sometimes this library install as a .so, even on
@@ -54,6 +85,8 @@ stdenv.mkDerivation (rec {
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.hostPlatform.isDarwin) "-static-libgcc";
 
+  # We don't strip on static cross-compilation because of reports that native
+  # stripping corrupted the target library; see commit 12e960f5 for the report.
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
   configurePlatforms = [];
 
@@ -63,11 +96,16 @@ stdenv.mkDerivation (rec {
     "LIBRARY_PATH=$(out)/lib"
   ];
 
+  enableParallelBuilding = true;
+  doCheck = true;
+
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "-f" "win32/Makefile.gcc"
   ] ++ stdenv.lib.optionals shared [
+    # Note that as of writing (zlib 1.2.11), this flag only has an effect
+    # for Windows as it is specific to `win32/Makefile.gcc`.
     "SHARED_MODE=1"
   ];
 
@@ -86,5 +124,5 @@ stdenv.mkDerivation (rec {
     export CHOST=${stdenv.hostPlatform.config}
   '';
 } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.libc == "msvcrt") {
-  configurePhase = ":";
+  dontConfigure = true;
 })

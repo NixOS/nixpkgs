@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "mps-${version}";
+  pname = "mps";
   version = "1.117.0";
 
   src = fetchurl {
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     "-Wno-implicit-fallthrough"
     "-Wno-error=clobbered"
+    "-Wno-error=cast-function-type"
   ];
 
 

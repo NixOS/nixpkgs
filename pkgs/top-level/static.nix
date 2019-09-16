@@ -12,9 +12,9 @@
 
 self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
-                                 overrideInStdenv
-                                 makeStaticLibraries;
-  inherit (super.lib) foldl optional flip id optionalAttrs composeExtensions;
+                                 makeStaticLibraries
+                                 propagateBuildInputs;
+  inherit (super.lib) foldl optional flip id composeExtensions;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,
@@ -31,7 +31,7 @@ self: super: let
     });
   };
 
-  staticAdapters = [ makeStaticLibraries ]
+  staticAdapters = [ makeStaticLibraries propagateBuildInputs ]
 
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
@@ -54,6 +54,14 @@ self: super: let
 
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
+  gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
+  gcc5Stdenv = foldl (flip id) super.gcc5Stdenv staticAdapters;
+  gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
+  gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
+  gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;
+  gcc9Stdenv = foldl (flip id) super.gcc9Stdenv staticAdapters;
+  clangStdenv = foldl (flip id) super.clangStdenv staticAdapters;
+  libcxxStdenv = foldl (flip id) super.libcxxStdenv staticAdapters;
 
   haskell = super.haskell // {
     packageOverrides = composeExtensions
@@ -81,9 +89,6 @@ in {
   };
   busybox = super.busybox.override {
     enableStatic = true;
-  };
-  v8 = super.v8.override {
-    static = true;
   };
   libiberty = super.libiberty.override {
     staticBuild = true;
@@ -158,7 +163,11 @@ in {
         enableShared = false;
         inherit libcxxabi;
       };
+      libunwind = super.llvmPackages_8.libraries.libunwind.override {
+        enableShared = false;
+      };
     };
   };
 
+  python27 = super.python27.override { static = true; };
 }

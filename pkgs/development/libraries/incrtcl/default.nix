@@ -1,7 +1,7 @@
 {stdenv, fetchurl, tcl}:
 
-stdenv.mkDerivation rec {
-  name = "incrtcl-${version}";
+stdenv.mkDerivation {
+  pname = "incrtcl";
   version = "4.0.4";
 
   src = fetchurl {

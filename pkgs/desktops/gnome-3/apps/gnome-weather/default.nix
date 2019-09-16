@@ -2,11 +2,11 @@
 , libgweather, meson, ninja, geoclue2, gnome-desktop, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-weather-${version}";
+  pname = "gnome-weather";
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-weather/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0jfxdfbjkrk3x48w6nxgbmazd6jw1fh4mfw12hlly4rs0cjw698s";
   };
 

@@ -3,7 +3,8 @@
 let version = "2.7.1"; in
 
 stdenv.mkDerivation {
-  name = "logisim-${version}";
+  pname = "logisim";
+  inherit version;
   
   src = fetchurl {
     url = "mirror://sourceforge/project/circuit/2.7.x/${version}/logisim-generic-${version}.jar";

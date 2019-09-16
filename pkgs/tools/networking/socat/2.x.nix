@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl2;
     maintainers = [ maintainers.eelco ];
+    broken = true;  # broken with openssl 1.1
   };
 }

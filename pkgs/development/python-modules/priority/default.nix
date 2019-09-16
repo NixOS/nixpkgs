@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, pytest, hypothesis }:
+{ lib, buildPythonPackage, fetchPypi, pytest, hypothesis }:
 
 buildPythonPackage rec {
   pname = "priority";

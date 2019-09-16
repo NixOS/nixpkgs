@@ -5,7 +5,7 @@
 , icu
 , gobject-introspection
 , dbus-glib
-, vala
+, vala_0_40
 , python3
 , autoreconfHook
 }:
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    vala
+    # https://gitlab.gnome.org/GNOME/vala/issues/803
+    vala_0_40
     autoreconfHook
     gobject-introspection
     python3
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-gtk-doc"
-    "--with-pygi-overrides-dir=${placeholder ''py''}/${python3.sitePackages}/gi/overrides"
+    "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
   meta = with stdenv.lib; {

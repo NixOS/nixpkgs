@@ -9,7 +9,7 @@
 { stdenv, fetchurl, fetchzip
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
-, llvm, cmake
+, cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
 # standard library dependencies
@@ -77,10 +77,9 @@ in
 stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
-  name = "${pname}-${version}";
 
   src = fetchzip {
-    url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
+    url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = src_sha256;
   };
   prePatch = ''
@@ -130,10 +129,10 @@ stdenv.mkDerivation rec {
   makeFlags =
     let
       arch = head (splitString "-" stdenv.system);
-      march = { "x86_64" = stdenv.hostPlatform.platform.gcc.arch or "x86-64"; "i686" = "pentium4"; }."${arch}"
+      march = { x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64"; i686 = "pentium4"; }.${arch}
               or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
-      cpuTarget = { "x86_64" = "x86-64"; "i686" = "pentium4"; }."${arch}"
+      cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; }.${arch}
                   or (throw "unsupported architecture: ${arch}");
     in [
       "ARCH=${arch}"
@@ -173,15 +172,10 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_ZLIB=1"
     ];
 
-  NIX_CFLAGS_COMPILE = [ "-fPIC" ];
-
   LD_LIBRARY_PATH = makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
     openspecfun pcre2
   ];
-
-  dontStrip = true;
-  dontPatchELF = true;
 
   enableParallelBuilding = true;
 

@@ -6,7 +6,6 @@
 , decorator
 , imageio
 , imageio-ffmpeg
-, isPy3k
 , proglog
 , requests
 , tqdm

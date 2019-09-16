@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, json-glib, libfm-qt, qtbase, qttools, qtx11extras }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, json-glib, libfm-qt, qtbase, qttools, qtx11extras }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-archiver";
   version = "0.0.96";
 
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Archive tool for the LXQt desktop environment";
     homepage = https://github.com/lxqt/lxqt-archiver/;
     license = licenses.gpl2;

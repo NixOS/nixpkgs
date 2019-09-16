@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   version = "0.4.4";
-  name = "rink-${version}";
+  pname = "rink";
 
   src = fetchFromGitHub {
     owner = "tiffany352";
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0xmmxm7zwmq7w0pspx17glg4mjgh9l61w0h2k7n97x6p35i198d1";
+  cargoSha256 = "1ijfvfhgjgzlpi1hjhy435m7vq568grh84bmkdlj3m83jxjcz874";
 
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ openssl gmp ncurses ];

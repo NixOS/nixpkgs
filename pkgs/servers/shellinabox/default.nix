@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.20";
-  name = "shellinabox-${version}";
+  pname = "shellinabox";
 
   src = fetchFromGitHub {
     owner = "shellinabox";

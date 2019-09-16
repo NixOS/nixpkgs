@@ -1,7 +1,24 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pantheon, pkgconfig, meson, python3
-, ninja, substituteAll, vala, gtk3, granite, wingpanel, evolution-data-server
-, libical, libgee, libxml2, libsoup, gobject-introspection
-, elementary-calendar, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, evolution-data-server
+, libical
+, libgee
+, libxml2
+, libsoup
+, elementary-calendar
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
@@ -21,7 +38,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     libxml2
     meson
     ninja
@@ -55,7 +71,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py

@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "noip-2.1.9-1";
 
   src = fetchurl {

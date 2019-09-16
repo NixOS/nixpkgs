@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
 
 let
-  _version = "2.8.2";
-  _build = "450";
+  _version = "2.8.4";
+  _build = "453";
   version = "${_version}-${_build}";
   name = "jameica-${version}";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
-    sha256 = "197n35lvx51k6cbp3fhndvfb38sikl4mjqcd42fgvn2khy2sij68";
+    sha256 = "1imm3wpdrgh2sr2wh9vgaf2mp1ixs845vgzk5ib82mak7lg9m1zl";
   };
 
   # there is also a build.gradle, but it only seems to be used to vendor 3rd party libraries

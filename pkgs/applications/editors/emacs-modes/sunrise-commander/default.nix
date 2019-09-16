@@ -1,6 +1,6 @@
 {stdenv, fetchgit, emacs}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "sunrise-commander-6r435";
 
   src = fetchgit {

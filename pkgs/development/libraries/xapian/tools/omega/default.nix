@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, xapian, perl, pcre, zlib, libmagic }:
 
 stdenv.mkDerivation rec {
-  name = "xapian-omega-${version}";
+  pname = "xapian-omega";
   inherit (xapian) version;
 
   src = fetchurl {

@@ -89,6 +89,10 @@ let
 
   git-extras = callPackage ./git-extras { };
 
+  git-gone = callPackage ./git-gone {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-hub = callPackage ./git-hub { };
 
   git-ignore = callPackage ./git-ignore { };
@@ -113,7 +117,11 @@ let
 
   git-secrets = callPackage ./git-secrets { };
 
+  git-standup = callPackage ./git-standup { };
+
   git-stree = callPackage ./git-stree { };
+
+  git-subrepo = callPackage ./git-subrepo { };
 
   git-sync = callPackage ./git-sync { };
 
@@ -127,6 +135,8 @@ let
 
   gitflow = callPackage ./gitflow { };
 
+  gitstatus = callPackage ./gitstatus { };
+
   grv = callPackage ./grv { };
 
   hub = callPackage ./hub {
@@ -137,7 +147,7 @@ let
 
   lab = callPackage ./lab { };
 
-  pre-commit = callPackage ./pre-commit { };
+  pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 

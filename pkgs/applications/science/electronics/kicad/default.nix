@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "KiCad";
       repo = "kicad-${name}";
-      rev = "${version}";
+      rev = version;
       inherit sha256 name;
     };
     nativeBuildInputs = [
@@ -26,7 +26,7 @@ let
   } // attrs);
 
 in stdenv.mkDerivation rec {
-  name = "kicad-${version}";
+  pname = "kicad";
   series = "5.0";
   version = "5.1.2";
 

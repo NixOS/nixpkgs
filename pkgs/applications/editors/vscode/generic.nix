@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeDesktopItem
+{ stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig
@@ -11,7 +11,7 @@
 let
   inherit (stdenv.hostPlatform) system;
 in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
 
     inherit pname version src sourceRoot;
 

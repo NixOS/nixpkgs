@@ -1,9 +1,8 @@
-{ stdenv, lib, fetchurl, cmake, eigen, zlib }:
+{ stdenv, fetchurl, cmake, eigen, zlib }:
 
 stdenv.mkDerivation rec {
   pname   = "niftyseg";
   version = "1.0";
-  name = "${pname}-${version}";
   src = fetchurl {
     url    = "https://github.com/KCL-BMEIS/NiftySeg/archive/v${version}.tar.gz";
     sha256 = "11q6yldsxp3k6gfp94c0xhcan2y3finzv8lzizmrc79yps3wjkn0";

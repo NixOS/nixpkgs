@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "jxrlib";
   version = "1.1";
 

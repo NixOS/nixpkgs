@@ -2,7 +2,8 @@
 let
   version = "12";
 in stdenv.mkDerivation {
-  name = "fwupdate-${version}";
+  pname = "fwupdate";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/rhinstaller/fwupdate/releases/download/${version}/fwupdate-${version}.tar.bz2";
     sha256 = "00w7jsg7wrlq4cpfz26m9rbv2jwyf0sansf343vfq02fy5lxars1";

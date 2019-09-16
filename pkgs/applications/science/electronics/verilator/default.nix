@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name    = "verilator-${version}";
-  version = "4.014";
+  pname = "verilator";
+  version = "4.016";
 
   src = fetchurl {
-    url    = "https://www.veripool.org/ftp/${name}.tgz";
-    sha256 = "1srk9a03hbq8rdp4mma817aiq61c2hbrs66qv25zj3dfnfqigxgd";
+    url    = "https://www.veripool.org/ftp/${pname}-${version}.tgz";
+    sha256 = "18fqm6pgscy504ql27i150fdsd2j91hw5qsnpymws3pvqj2qz2ij";
   };
 
   enableParallelBuilding = true;

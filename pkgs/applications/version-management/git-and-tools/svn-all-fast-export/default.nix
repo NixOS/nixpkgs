@@ -4,7 +4,8 @@ let
   version = "1.0.16";
 in
 stdenv.mkDerivation {
-  name = "svn-all-fast-export-${version}";
+  pname = "svn-all-fast-export";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "svn-all-fast-export";

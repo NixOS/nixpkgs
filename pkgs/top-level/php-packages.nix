@@ -4,7 +4,7 @@ let
   self = with self; {
     buildPecl = import ../build-support/build-pecl.nix {
       inherit php;
-      inherit (pkgs) stdenv autoreconfHook fetchurl;
+      inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
     };
 
     # Wrap mkDerivation to prepend pname with "php-" to make names consistent
@@ -15,7 +15,7 @@ let
 
   isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
 
-  apcu = buildPecl rec {
+  apcu = buildPecl {
     version = "5.1.17";
     pname = "apcu";
 
@@ -29,7 +29,7 @@ let
     outputs = [ "out" "dev" ];
   };
 
-  apcu_bc = buildPecl rec {
+  apcu_bc = buildPecl {
     version = "1.0.5";
     pname = "apcu_bc";
 
@@ -38,11 +38,11 @@ let
     buildInputs = [ apcu (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
-  ast = buildPecl rec {
-    version = "1.0.1";
+  ast = buildPecl {
+    version = "1.0.3";
     pname = "ast";
 
-    sha256 = "0ja74k2lmxwhhvp9y9kc7khijd7s2dqma5x8ghbhx9ajkn0wg8iq";
+    sha256 = "1sk9bkyw3ck9jgvlazxx8zl2nv6lc0gq66v1rfcby9v0zyydb7xr";
   };
 
   box = mkDerivation rec {
@@ -73,15 +73,15 @@ let
   };
 
   composer = mkDerivation rec {
-    version = "1.8.5";
+    version = "1.9.0";
     pname = "composer";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "05qfgh2dz8pjf47ndyhkicqbnqzwypk90cczd4c6d8jl9gbiqk2f";
+      sha256 = "0x88bin1c749ajymz2cqjx8660a3wxvndpv4xr6w3pib16fzdpy9";
     };
 
-    unpackPhase = ":";
+    dontUnpack = true;
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -102,7 +102,7 @@ let
   };
 
   couchbase = buildPecl rec {
-    version = "2.6.0";
+    version = "2.6.1";
     pname = "couchbase";
 
     buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
@@ -111,7 +111,7 @@ let
       owner = "couchbase";
       repo = "php-couchbase";
       rev = "v${version}";
-      sha256 = "0lhcvgd4a0wvxniinxajj48p5krbp44h8932021qq14rv94r4k0b";
+      sha256 = "0jdzgcvab1vpxai23brmmvizjjq2d2dik9aklz6bzspfb512qjd6";
     };
 
     configureFlags = [ "--with-couchbase" ];
@@ -142,13 +142,18 @@ let
     ];
   };
 
-  event = buildPecl rec {
-    version = "2.5.0";
+  event = buildPecl {
+    version = "2.5.3";
     pname = "event";
 
-    sha256 = "1igbxla4s784z7lw1jar6pjyfn596040a52kfmawwclqf9qcvx0v";
+    sha256 = "12liry5ldvgwp1v1a6zgfq8w6iyyxmsdj4c71bp157nnf58cb8hb";
 
-    configureFlags = [ "--with-event-libevent-dir=${pkgs.libevent.dev}" ];
+    configureFlags = [
+      "--with-event-libevent-dir=${pkgs.libevent.dev}"
+      "--with-event-core"
+      "--with-event-extra"
+      "--with-event-pthreads"
+    ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ openssl libevent ];
 
@@ -162,7 +167,7 @@ let
     };
   };
 
-  igbinary = buildPecl rec {
+  igbinary = buildPecl {
     version = "3.0.1";
     pname = "igbinary";
 
@@ -173,22 +178,22 @@ let
     outputs = [ "out" "dev" ];
   };
 
-  imagick = buildPecl rec {
-    version = "3.4.3";
+  imagick = buildPecl {
+    version = "3.4.4";
     pname = "imagick";
 
-    sha256 = "0z2nc92xfc5axa9f2dy95rmsd2c81q8cs1pm4anh0a50x9g5ng0z";
+    sha256 = "0xvhaqny1v796ywx83w7jyjyd0nrxkxf34w9zi8qc8aw8qbammcd";
 
     configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
-  mailparse = assert !isPhp73; buildPecl rec {
-    version = "3.0.2";
+  mailparse = buildPecl {
+    version = "3.0.3";
     pname = "mailparse";
 
-    sha256 = "0fw447ralqihsjnn0fm2hkaj8343cvb90v0d1wfclgz49256y6nq";
+    sha256 = "00nk14jbdbln93mx3ag691avc11ff94hkadrcv5pn51c6ihsxbmz";
   };
 
   memcached = buildPecl rec {
@@ -210,24 +215,44 @@ let
     buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
-  oci8 = buildPecl rec {
+  mongodb = buildPecl {
+    pname = "mongodb";
+    version = "1.5.5";
+
+    sha256 = "0gpywk3wkimjrva1p95a7abvl3s8yccalf6yimn3nbkpvn2kknm6";
+
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [
+      cyrus_sasl
+      icu
+      openssl
+      snappy
+      zlib
+      (if isPhp73 then pcre2 else pcre)
+    ] ++ lib.optional (pkgs.stdenv.isDarwin) pkgs.darwin.apple_sdk.frameworks.Security;
+  };
+
+  oci8 = buildPecl {
     version = "2.2.0";
     pname = "oci8";
 
     sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
+    buildInputs = [ pkgs.oracle-instantclient ];
+    configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
 
-    buildInputs = [ pkgs.re2c pkgs.oracle-instantclient ];
-    configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
+    postPatch = ''
+      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+    '';
   };
 
-  pcs = buildPecl rec {
+  pcs = buildPecl {
     version = "1.3.3";
     pname = "pcs";
 
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
   };
 
-  pdo_sqlsrv = buildPecl rec {
+  pdo_sqlsrv = buildPecl {
     version = "5.6.1";
     pname = "pdo_sqlsrv";
 
@@ -237,12 +262,12 @@ let
   };
 
   php-cs-fixer = mkDerivation rec {
-    version = "2.14.2";
+    version = "2.15.1";
     pname = "php-cs-fixer";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "1d5msgrkiim8iwkkrq3m1cnx7wfi96m1qs6rbh279kw5ysvzkaj9";
+      sha256 = "0qbqdki6vj8bgj5m2k4mi0qgj17r6s2v2q7yc30hhgvksf7vamlc";
     };
 
     phases = [ "installPhase" ];
@@ -367,12 +392,12 @@ let
   };
 
   phpstan = mkDerivation rec {
-    version = "0.11.7";
+    version = "0.11.15";
     pname = "phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "0148ygnmj8wwal432isfq3zhf7qw902sfd2llwl6nw4wf0a6kf73";
+      sha256 = "1fa3bq5k548jpyph2rxkgnarblyy5f1m55awjcps8mjqbw9r6439";
     };
 
     phases = [ "installPhase" ];
@@ -402,7 +427,7 @@ let
 
   pinba = if isPhp73 then pinba73 else pinba7;
 
-  pinba7 = assert !isPhp73; buildPecl rec {
+  pinba7 = assert !isPhp73; buildPecl {
     version = "1.1.1";
     pname = "pinba";
 
@@ -423,7 +448,7 @@ let
     };
   };
 
-  pinba73 = assert isPhp73; buildPecl rec {
+  pinba73 = assert isPhp73; buildPecl {
     version = "1.1.2-dev";
     pname = "pinba";
 
@@ -444,11 +469,11 @@ let
     };
   };
 
-  protobuf = buildPecl rec {
-    version = "3.7.1";
+  protobuf = buildPecl {
+    version = "3.9.0";
     pname = "protobuf";
 
-    sha256 = "0fbf29851dpgjfdgi6i1dgy047dfiazm6qh943w22zbj35l7g2yc";
+    sha256 = "1pyfxrfdbzzg5al4byyazdrvy7yad13zwq7papbb2d8gkvc3f3kh";
 
     buildInputs = with pkgs; [ (if isPhp73 then pcre2 else pcre) ];
 
@@ -488,23 +513,44 @@ let
     };
   };
 
-  pthreads = assert (pkgs.config.php.zts or false); buildPecl rec {
-    version = "3.1.5";
+  pthreads = if isPhp73 then pthreads32-dev else pthreads32;
+
+  pthreads32 = assert (pkgs.config.php.zts or false); assert !isPhp73; buildPecl rec {
+    version = "3.2.0";
     pname = "pthreads";
 
-    sha256 = "1ziap0py3zrc7qj9lw4nzq6wx1viyj8v9y1babchizzan014x6p5";
+    src = pkgs.fetchFromGitHub {
+      owner = "krakjoe";
+      repo = "pthreads";
+      rev = "v${version}";
+      sha256 = "17hypm75d4w7lvz96jb7s0s87018yzmmap0l125d5fd7abnhzfvv";
+    };
 
-    meta.broken = true;
+    buildInputs = with pkgs; [ pcre.dev ];
   };
 
-  redis = buildPecl rec {
-    version = "4.3.0";
+  pthreads32-dev = assert (pkgs.config.php.zts or false); assert isPhp73; buildPecl {
+    version = "3.2.0-dev";
+    pname = "pthreads";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "krakjoe";
+      repo = "pthreads";
+      rev = "4d1c2483ceb459ea4284db4eb06646d5715e7154";
+      sha256 = "07kdxypy0bgggrfav2h1ccbv67lllbvpa3s3zsaqci0gq4fyi830";
+    };
+
+    buildInputs = with pkgs; [ pcre2.dev ];
+  };
+
+  redis = buildPecl {
+    version = "5.0.2";
     pname = "redis";
 
-    sha256 = "18hvll173mlp6dk6xvgajkjf4min8f5gn809nr1ahq4r6kn4rw60";
+    sha256 = "0b5pw17lzqknhijfymksvf8fm1zilppr97ypb31n599jw3mxf62f";
   };
 
-  sqlsrv = buildPecl rec {
+  sqlsrv = buildPecl {
     version = "5.6.1";
     pname = "sqlsrv";
 
@@ -513,7 +559,7 @@ let
     buildInputs = [ pkgs.unixODBC ];
   };
 
-  v8 = buildPecl rec {
+  v8 = buildPecl {
     version = "0.2.2";
     pname = "v8";
 
@@ -524,7 +570,7 @@ let
     meta.broken = true;
   };
 
-  v8js = assert !isPhp73; buildPecl rec {
+  v8js = assert !isPhp73; buildPecl {
     version = "2.1.0";
     pname = "v8js";
 
@@ -535,7 +581,7 @@ let
     meta.broken = true;
   };
 
-  xdebug = buildPecl rec {
+  xdebug = buildPecl {
     version = "2.7.1";
     pname = "xdebug";
 
@@ -545,7 +591,7 @@ let
     checkTarget = "test";
   };
 
-  yaml = buildPecl rec {
+  yaml = buildPecl {
     version = "2.0.4";
     pname = "yaml";
 
@@ -558,7 +604,7 @@ let
     nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
-  zmq = assert !isPhp73; buildPecl rec {
+  zmq = assert !isPhp73; buildPecl {
     version = "1.1.3";
     pname = "zmq";
 

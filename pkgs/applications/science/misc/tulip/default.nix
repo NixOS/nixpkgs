@@ -1,13 +1,14 @@
 { fetchurl, stdenv, libxml2, freetype, libGLU_combined, glew, qt4
 , cmake, makeWrapper, libjpeg, python }:
 
-let version = "5.1.0"; in
+let version = "5.2.1"; in
 stdenv.mkDerivation rec {
-  name = "tulip-${version}";
+  pname = "tulip";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/auber/${name}_src.tar.gz";
-    sha256 = "1i70y8b39gkpxfalr9844pa3l4bnnyw5y7ngxdqibil96k2b9q9h";
+    url = "mirror://sourceforge/auber/${pname}-${version}_src.tar.gz";
+    sha256 = "0bqmqy6sri87a8xv5xf7ffaq5zin4hiaa13g0l64b84i7yckfwky";
   };
 
   buildInputs = [ libxml2 freetype glew libGLU_combined qt4 libjpeg python ];

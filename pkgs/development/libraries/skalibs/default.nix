@@ -1,11 +1,11 @@
-{ stdenv, skawarePackages }:
+{ skawarePackages }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "skalibs";
-  version = "2.8.0.0";
-  sha256 = "06hyiq68jh32qwr2mydw3dbnm4zzpynnnmprd5g4iqavsycyvh53";
+  version = "2.8.1.0";
+  sha256 = "1fk6n402ywn4kpy6ng7sfnnqcg0mp6wq2hrv8sv3kxd0nh3na723";
 
   description = "A set of general-purpose C programming libraries";
 

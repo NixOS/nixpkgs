@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile }:
+{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile, isPyPy }:
 
 let
   blasImplementation = lib.nameFromURL blas.name "-";
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
-      "${blasImplementation}" = {
+      ${blasImplementation} = {
         include_dirs = "${blas}/include";
         library_dirs = "${blas}/lib";
       } // lib.optionalAttrs (blasImplementation == "mkl") {
@@ -16,12 +16,12 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.16.3";
+  version = "1.17.2";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "78a6f89da87eeb48014ec652a65c4ffde370c036d780a995edaeb121d3625621";
+    sha256 = "73615d3edc84dd7c4aeb212fa3748fb83217e00d201875a47327f55363cef2df";
   };
 
   nativeBuildInputs = [ gfortran pytest ];
@@ -45,6 +45,8 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
+
   checkPhase = ''
     runHook preCheck
     pushd dist
@@ -58,10 +60,9 @@ in buildPythonPackage rec {
     inherit blasImplementation cfg;
   };
 
-  # Disable two tests
-  # - test_f2py: f2py isn't yet on path.
+  # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_f2py,test_large_file_support";
+  NOSE_EXCLUDE="test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";

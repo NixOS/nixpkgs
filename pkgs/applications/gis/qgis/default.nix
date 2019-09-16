@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, symlinkJoin
+{ lib, makeWrapper, symlinkJoin
 , qgis-unwrapped, extraPythonPackages ? (ps: [ ])
 }:
 with lib;

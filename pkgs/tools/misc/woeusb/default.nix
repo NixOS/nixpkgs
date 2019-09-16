@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.3.0";
-  name = "woeusb-${version}";
+  pname = "woeusb";
 
   src = fetchFromGitHub {
     owner = "slacka";

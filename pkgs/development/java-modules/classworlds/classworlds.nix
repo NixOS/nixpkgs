@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   classworlds_1_1_alpha2 = map (obj: fetchMaven {
     version = "1.1-alpha-2";
     artifactId = "classworlds";

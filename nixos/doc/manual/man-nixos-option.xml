@@ -13,19 +13,19 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-option</command> 
+   <command>nixos-option</command>
    <arg>
     <option>-I</option> <replaceable>path</replaceable>
    </arg>
-    
+
    <arg>
     <option>--verbose</option>
    </arg>
-    
+
    <arg>
     <option>--xml</option>
    </arg>
-    
+
    <arg choice="plain">
     <replaceable>option.name</replaceable>
    </arg>
@@ -103,13 +103,13 @@
   <title>Examples</title>
   <para>
    Investigate option values:
-<screen>$ nixos-option boot.loader
+<screen><prompt>$ </prompt>nixos-option boot.loader
 This attribute set contains:
 generationsDir
 grub
 initScript
 
-$ nixos-option boot.loader.grub.enable
+<prompt>$ </prompt>nixos-option boot.loader.grub.enable
 Value:
 true
 

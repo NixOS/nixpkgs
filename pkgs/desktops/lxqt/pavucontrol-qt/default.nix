@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt, libpulseaudio,
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt, libpulseaudio,
   pcre, qtbase, qttools, qtx11extras }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "pavucontrol-qt";
   version = "0.14.1";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
     homepage = https://github.com/lxqt/pavucontrol-qt;
     license = licenses.gpl2;

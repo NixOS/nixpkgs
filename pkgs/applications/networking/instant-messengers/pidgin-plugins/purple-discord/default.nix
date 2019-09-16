@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, pidgin, json-glib }:
 
-stdenv.mkDerivation rec {
-  name = "purple-discord-${version}";
+stdenv.mkDerivation {
+  pname = "purple-discord";
   version = "unstable-2018-04-10";
 
   src = fetchFromGitHub {

@@ -1,14 +1,15 @@
-{ pkgs, newScope }:
+{ newScope }:
 
 let
   callPackage = newScope self;
 
   self = rec {
-  
+
     atril = callPackage ./atril { };
     caja = callPackage ./caja { };
     caja-dropbox = callPackage ./caja-dropbox { };
     caja-extensions = callPackage ./caja-extensions { };
+    caja-with-extensions = callPackage ./caja-with-extensions { };
     engrampa = callPackage ./engrampa { };
     eom = callPackage ./eom { };
     libmatekbd = callPackage ./libmatekbd { };
@@ -86,7 +87,7 @@ let
       mozo
       pluma
     ];
-  
+
   };
 
 in self

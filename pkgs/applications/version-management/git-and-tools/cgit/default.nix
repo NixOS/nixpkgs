@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
+{ stdenv, fetchurl, fetchpatch, openssl, zlib, asciidoc, libxml2, libxslt
 , docbook_xsl, pkgconfig, luajit
-, groff, gzip, bzip2, xz
+, coreutils, gnused, groff, docutils
+, gzip, bzip2, xz
 , python, wrapPython, pygments, markdown
 }:
 
 stdenv.mkDerivation rec {
-  name = "cgit-${version}";
+  pname = "cgit";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "https://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
+    url = "https://git.zx2c4.com/cgit/snapshot/${pname}-${version}.tar.xz";
     sha256 = "1gw2j5xc5qdx2hwiwkr8h6kgya7v9d9ff9j32ga1dys0cca7qm1w";
   };
 
@@ -20,6 +21,14 @@ stdenv.mkDerivation rec {
     url    = "mirror://kernel/software/scm/git/git-2.18.0.tar.xz";
     sha256 = "14hfwfkrci829a9316hnvkglnqqw1p03cw9k56p4fcb078wbwh4b";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "prevent-dos-limit-path-length.patch";
+      url = "https://git.zx2c4.com/cgit/patch/?id=54c407a74a35d4ee9ffae94cc5bc9096c9f7f54a";
+      sha256 = "1qlbpqsc293lmc9hzwf1j4jr5qlv8cm1r249v3yij5s4wki1595j";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig ] ++ [ python wrapPython ];
   buildInputs = [
@@ -35,6 +44,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace filters/html-converters/man2html \
       --replace 'groff' '${groff}/bin/groff'
+
+    substituteInPlace filters/html-converters/rst2html \
+      --replace 'rst2html.py' '${docutils}/bin/rst2html.py'
   '';
 
   # Give cgit a git source tree and pass configuration parameters (as make
@@ -57,6 +69,10 @@ stdenv.mkDerivation rec {
     cp cgitrc.5 "$out/share/man/man5"
 
     wrapPythonProgramsIn "$out/lib/cgit/filters" "$out $pythonPath"
+
+    for script in $out/lib/cgit/filters/*.sh $out/lib/cgit/filters/html-converters/txt2html; do
+      wrapProgram $script --prefix PATH : '${stdenv.lib.makeBinPath [ coreutils gnused ]}'
+    done
   '';
 
   meta = {

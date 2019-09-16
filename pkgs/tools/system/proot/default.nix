@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub
 , talloc, docutils, swig, python, coreutils, enablePython ? true }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "proot";
-  version = "5.1.0.20190305";
+  version = "20190510";
 
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
-    rev = "ff61c86cb26f71c06af22574d9d4cc3a77292781";
-    sha256 = "0qink34bjv0lshf3c8997w39r8yxgbhxpjbxw47l5xkvimlpc0dl";
+    rev = "803e54d8a1b3d513108d3fc413ba6f7c80220b74";
+    sha256 = "0gwzqm5wpscj3fchlv3qggf3zzn0v00s4crb5ciwljan1zrqadhy";
   };
 
   postPatch = ''

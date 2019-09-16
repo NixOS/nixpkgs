@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
 
 stdenv.mkDerivation rec {
-  name = "pg_repack-${version}";
+  pname = "pg_repack";
   version = "1.4.4";
 
   buildInputs = [ postgresql openssl zlib readline ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D bin/pg_repack -t $out/bin/
     install -D lib/pg_repack.so -t $out/lib/
-    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/extension
+    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {

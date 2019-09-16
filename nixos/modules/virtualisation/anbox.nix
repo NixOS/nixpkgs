@@ -56,7 +56,7 @@ in
 
       dns = mkOption {
         default = "1.1.1.1";
-        type = types.string;
+        type = types.str;
         description = ''
           Container DNS server.
         '';
@@ -100,12 +100,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
       preStart = let
-        initsh = let
-          ip = cfg.ipv4.container.address;
-          gw = cfg.ipv4.gateway.address;
-          dns = cfg.ipv4.dns;
-        in
-        pkgs.writeText "nixos-init" (''
+        initsh = pkgs.writeText "nixos-init" (''
           #!/system/bin/sh
           setprop nixos.version ${config.system.nixos.version}
 

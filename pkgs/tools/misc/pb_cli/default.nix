@@ -1,12 +1,12 @@
 { screenshots ? true, video ? false, clipboard ? true
-, stdenv, pkgs, jq, curl, fetchFromGitHub, makeWrapper, maim ? null, xclip ? null, capture ? null }:
+, stdenv, jq, curl, fetchFromGitHub, makeWrapper, maim ? null, xclip ? null, capture ? null }:
 
 assert screenshots -> maim != null;
 assert video -> capture != null;
 assert clipboard -> xclip != null;
 
 stdenv.mkDerivation rec {
-  name = "pb_cli-unstable-${version}";
+  pname = "pb_cli-unstable";
   version = "2019-03-10";
 
   src = fetchFromGitHub {

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "buck";
-  version = "2019.05.06.01";
+  version = "2019.06.17.01";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bcj1g8hmcpdgz3c2sxglxxq1jn1x0p9dk6hml8ajkn4h82kw12y";
+    sha256 = "1nmphjxqwp51j16qajgvi853dm7654x1w1737xr81zzpcbjw6qig";
   };
 
   patches = [ ./pex-mtime.patch ];
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://buckbuild.com/;
+    homepage = "https://buck.build/";
     description = "A high-performance build tool";
-    maintainers = [ maintainers.jgertm ];
+    maintainers = [ maintainers.jgertm maintainers.marsam ];
     license = licenses.asl20;
     platforms = platforms.all;
   };

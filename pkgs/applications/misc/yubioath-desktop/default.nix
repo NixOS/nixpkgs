@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, fetchFromGitHub
-, qmake, qtbase, qtquickcontrols, qtsvg
-, python3, pyotherside, ncurses
+{ stdenv, fetchurl, mkDerivation
+, qmake, qtbase, qtquickcontrols
+, python3, pyotherside
 , pcsclite, yubikey-personalization
 , yubikey-manager, makeWrapper }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "yubioath-desktop";
-  version = "4.3.4";
+  version = "4.3.6";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
-    sha256 = "0hb7j71032sigs8zd5r8yr0m59sjkb24vhs2l4jarpvj8q7hv30d";
+    sha256 = "0s04anjbb5zm98kfdpp9hr68k3mx3gqlp8fa1miy7nq87pr4f7a5";
   };
 
   doCheck = false;
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       cp resources/icons/*.{icns,ico,png,xpm} $out/share/yubioath/icons
       substituteInPlace $out/share/applications/yubioath-desktop.desktop \
         --replace 'Exec=yubioath-desktop' "Exec=$out/bin/yubioath-desktop" \
+        --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/yubioath.png"
   '';
 
   meta = with stdenv.lib; {

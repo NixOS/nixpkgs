@@ -21,7 +21,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "2019-02-22";
-  name = "icicles-${version}";
+  pname = "icicles";
 
   srcs = forAll ({name, sha256}: fetchurl { url = "https://www.emacswiki.org/emacs/download/${name}"; inherit sha256; });
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = "emacs --batch -L . -f batch-byte-compile *.el";
 
-  installPhase = "mkdir -p $out/share/emacs/site-lisp/emacswiki/${name}/; cp *.el *.elc $out/share/emacs/site-lisp/emacswiki/${name}/";
+  installPhase = "mkdir -p $out/share/emacs/site-lisp/emacswiki/${pname}-${version}/; cp *.el *.elc $out/share/emacs/site-lisp/emacswiki/${pname}-${version}/";
 
   meta = {
     homepage = https://www.emacswiki.org/emacs/Icicles;

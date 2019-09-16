@@ -61,13 +61,12 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-tests"
-    "--disable-static"
     "--disable-dmrc"
   ] ++ optional withQt4 "--enable-liblightdm-qt"
     ++ optional withQt5 "--enable-liblightdm-qt5";
 
   installFlags = [
-    "sysconfdir=${placeholder ''out''}/etc"
+    "sysconfdir=${placeholder "out"}/etc"
     "localstatedir=\${TMPDIR}"
   ];
 

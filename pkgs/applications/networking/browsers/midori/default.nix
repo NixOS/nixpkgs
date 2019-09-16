@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, ninja, pkgconfig, intltool, vala, wrapGAppsHook, gcr, libpeas
-, gtk3, webkitgtk, sqlite, gsettings-desktop-schemas, libsoup, glib-networking, gnome3
+, gtk3, webkitgtk, sqlite, gsettings-desktop-schemas, libsoup, glib-networking
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "Lightweight WebKitGTK+ web browser";
+    description = "Lightweight WebKitGTK web browser";
     homepage = https://www.midori-browser.org/;
     license = with licenses; [ lgpl21Plus ];
     platforms = with platforms; linux;

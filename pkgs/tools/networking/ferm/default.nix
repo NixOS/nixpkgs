@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.4.1";
-  name = "ferm-${version}";
+  pname = "ferm";
 
   src = fetchurl {
     url = "http://ferm.foo-projects.org/download/2.4/ferm-${version}.tar.xz";

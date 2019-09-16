@@ -2,15 +2,15 @@
 , desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
 , libnotify, libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext
 , sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
-, xvfb_run, dbus, shared-mime-info, libunwind, folks, glib-networking }:
+, xvfb_run, dbus, shared-mime-info, libunwind, libunity, folks, glib-networking }:
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.32.1";
+  version = "3.32.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "07y5ii5bn7fgdpr88307fwxiafm5fwdxmzwhi6h1y4z880nnzp7f";
+    sha256 = "0sg53zq81v28hdqiy5d048skwfgsa8ck0z7ywsagdh7iaqin68gq";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme enchant2 gcr gmime gnome-online-accounts
     gsettings-desktop-schemas gtk3 isocodes json-glib libcanberra-gtk3
     libgee libnotify libsecret sqlite webkitgtk glib-networking
-    libunwind folks
+    libunwind libunity folks
   ];
 
   checkInputs = [ xvfb_run dbus ];

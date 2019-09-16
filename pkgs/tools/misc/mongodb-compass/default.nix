@@ -1,10 +1,10 @@
 { stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, libnotify, libxcb, nspr, nss, systemd, xorg }:
+, gnome2, gnome3, libnotify, libxcb, nspr, nss, systemd, xorg }:
 
 let
 
-  version = "1.13.1";
+  version = "1.17.0";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -19,7 +19,7 @@ let
     glib
     gnome2.GConf
     gnome2.gdk_pixbuf
-    gnome2.gtk
+    gnome3.gtk
     gnome2.pango
     libnotify
     libxcb
@@ -46,18 +46,19 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        sha256 = "0x23jshnr0rafm5sn2vhq2y2gryg8mksahzyv5fszblgaxay234p";
+        sha256 = "085xq1ik8kyza1kq9kn0pf98zk6g2qa21clxhn48rgnqk20aninv";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "mongodb-compass-${version}";
+  pname = "mongodb-compass";
+  inherit version;
 
   inherit src;
 
   buildInputs = [ dpkg ];
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildCommand = ''
     IFS=$'\n'

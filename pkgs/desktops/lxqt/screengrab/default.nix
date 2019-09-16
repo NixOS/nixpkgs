@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, libqtxdg, xorg, autoPatchelfHook }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, libqtxdg, xorg, autoPatchelfHook }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "screengrab";
   version = "1.101";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     xorg.libXdmcp
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Crossplatform tool for fast making screenshots";
     homepage = https://github.com/lxqt/screengrab;
     license = licenses.gpl2;
