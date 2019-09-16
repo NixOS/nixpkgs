@@ -12,12 +12,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.17.0";
+  version = "1.17.1";
   pname = "netdata";
 
   src = fetchurl {
     url = "https://github.com/netdata/netdata/releases/download/v${version}/netdata-v${version}.tar.gz";
-    sha256 = "099xvndf5lql4ipwqhm38lpc65yicmpmkk3a7c2j4m48l3vqw9y6";
+    sha256 = "0k49ms295b9icccvknyqyqlsy911h06c7h7aql5havcx5m5jxq7w";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
