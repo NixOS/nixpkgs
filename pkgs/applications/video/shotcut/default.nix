@@ -7,13 +7,13 @@ assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "19.08.16";
+  version = "19.09.14";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "0alnnfgimfs8fjddkcfx4pzyijwz5dgnqic5qazaza6f4kf60801";
+    sha256 = "1cl8ba1n0h450r4n5mfqmyjaxvczs3m19blwxslqskvmxy5my3cn";
   };
 
   enableParallelBuilding = true;
@@ -36,7 +36,7 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2 ]}"
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2]}"
     "--prefix PATH : ${mlt}/bin"
     ];
 
