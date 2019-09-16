@@ -236,7 +236,23 @@ in
       services.gvfs.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
-      systemd.packages = [ pkgs.gnome3.vino ];
+
+      systemd.packages = with pkgs.gnome3; [ vino gnome-session gnome-settings-daemon ];
+
+      # gnome-settings-daemon.nix is shared between several desktop
+      # environments (eg. mate and pantheon) so specify these gnome-shell specific
+      # service dependencies here instead.
+      systemd.user.targets."gnome-session-initialized".wants = [
+        "gsd-a11y-settings.target" "gsd-housekeeping.target" "gsd-power.target"
+        "gsd-color.target" "gsd-keyboard.target" "gsd-print-notifications.target"
+        "gsd-datetime.target" "gsd-media-keys.target" "gsd-rfkill.target"
+        "gsd-screensaver-proxy.target" "gsd-sound.target" "gsd-smartcard.target"
+        "gsd-sharing.target" "gsd-wacom.target" "gsd-wwan.target"
+      ];
+
+      systemd.user.targets."gnome-session-x11-services".wants = [
+        "gsd-xsettings.target"
+      ];
 
       services.avahi.enable = mkDefault true;
 
