@@ -1005,7 +1005,7 @@ self: super: {
   spdx = dontCheck super.spdx;
 
   # The test suite does not know how to find the 'alex' binary.
-  alex = overrideCabal (appendPatch super.alex ./patches/alex-3.2.4-ghc8.8.x.patch) (drv: {
+  alex = overrideCabal super.alex (drv: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });

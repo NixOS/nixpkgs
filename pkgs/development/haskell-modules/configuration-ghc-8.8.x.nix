@@ -161,4 +161,11 @@ self: super: {
   });
   tls = self.tls_1_5_1;
   vault = dontHaddock super.vault;
+
+  # The test suite does not know how to find the 'alex' binary.
+  # TODO remove patch when alex gets a newer release than 3.2.4
+  alex = overrideCabal (appendPatch super.alex ./patches/alex-3.2.4-ghc8.8.x.patch) (drv: {
+    testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
+    preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
+  });
 }
