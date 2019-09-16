@@ -159,4 +159,5 @@ self: super: {
     sha256 = "0a3159rnaw6shjzdm46799crd4pxh33s23qy51xa7z6nv5q8wsb5";
   });
   tls = self.tls_1_5_1;
+  vault = dontHaddock super.vault;
 }
