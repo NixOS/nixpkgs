@@ -430,9 +430,7 @@ void printOption(Context & ctx, Out & out, const std::string & path, Value & opt
 
 void printListing(Out & out, Value & v)
 {
-    // Print this header on stderr rather than stdout, presumably to make it
-    // slightly easier to consume this output in other tools.
-    std::cerr << "This attribute set contains:\n";
+    out << "This attribute set contains:\n";
     for (const auto & a : v.attrs->lexicographicOrder()) {
         std::string name = a->name;
         if (!name.empty() && name[0] != '_') {
