@@ -3,9 +3,9 @@
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
 
     # Update this if linux_latest-libre fails to build.
-    # $ curl https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/ | grep -Eo 'Revision [0-9]+'
-    rev = "16791";
-    sha256 = "1lpaka4hs7yrpnrzfybd6radjylwvw2p4aly68pypykqs2srvm7j";
+    # $ curl https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/tags/ | grep -Eo 'Revision [0-9]+'
+    rev = "16796";
+    sha256 = "0dm35778xfcxlr6gcg5qyqxaqkhp55xdc4f9l1788fcmqgyhk9qb";
   }
 , ...
 }:
