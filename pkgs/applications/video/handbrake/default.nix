@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
   # (default distribution bundles&builds 3rd party libs),
   # don't trigger cmake build
   dontUseCmakeConfigure = true;
-  enableParallelBuilding = true;
+  # cp: cannot create regular file './internal_defaults.json': File exists
+  enableParallelBuilding = false;
 
   preConfigure = ''
     patchShebangs scripts
