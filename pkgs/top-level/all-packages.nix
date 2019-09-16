@@ -24593,7 +24593,11 @@ in
 
   jx = callPackage ../applications/networking/cluster/jx {};
 
-  prow = callPackage ../applications/networking/cluster/prow {};
+  prow = callPackage ../applications/networking/cluster/prow {
+    # Version 2019-08-14 fails to build with go 1.13 due to dependencies:
+    #   go: golang.org/x/lint@v0.0.0-20190301231843-5614ed5bae6f used for two different module paths (github.com/golang/lint and golang.org/x/lint)
+    buildGoModule = buildGo112Module;
+  };
 
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_11
