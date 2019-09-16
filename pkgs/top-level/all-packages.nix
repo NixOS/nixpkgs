@@ -22523,7 +22523,9 @@ in
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
-  scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
+  scaleway-cli = callPackage ../tools/admin/scaleway-cli {
+    buildGoPackage = buildGo112Package;
+  };
 
   scid = callPackage ../games/scid {
     tcl = tcl-8_5;
