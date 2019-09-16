@@ -1,6 +1,6 @@
 { stdenv, libsodium, fetchFromGitHub, wget, pkgconfig, autoreconfHook, openssl, db62, boost
 , zlib, gtest, gmock, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent
-, withGui }:
+, libsnark, withGui }:
 
 let librustzcash = callPackage ./librustzcash {};
 in
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ gtest gmock gmp openssl wget db62 boost zlib
-                  protobuf libevent libsodium librustzcash ]
+                  protobuf libevent libsodium librustzcash libsnark ]
                   ++ optionals stdenv.isLinux [ utillinux ]
                   ++ optionals withGui [ qt4 qrencode ];
 
