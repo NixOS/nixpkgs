@@ -56,13 +56,13 @@ class Out
         MULTI_LINE
     };
     explicit Out(std::ostream & ostream) : ostream(ostream), policy(ONE_LINE), write_since_sep(true) {}
-    Out(Out & o, std::string const & start, std::string const & end, LinePolicy policy);
-    Out(Out & o, std::string const & start, std::string const & end, int count)
+    Out(Out & o, const std::string & start, const std::string & end, LinePolicy policy);
+    Out(Out & o, const std::string & start, const std::string & end, int count)
         : Out(o, start, end, count < 2 ? ONE_LINE : MULTI_LINE)
     {}
-    Out(Out const &) = delete;
+    Out(const Out &) = delete;
     Out(Out &&) = default;
-    Out & operator=(Out const &) = delete;
+    Out & operator=(const Out &) = delete;
     Out & operator=(Out &&) = delete;
     ~Out() { ostream << end; }
 
@@ -92,7 +92,7 @@ template <> Out & operator<<<Out::Separator>(Out & o, Out::Separator /* thing */
     return o;
 }
 
-Out::Out(Out & o, std::string const & start, std::string const & end, LinePolicy policy)
+Out::Out(Out & o, const std::string & start, const std::string & end, LinePolicy policy)
     : ostream(o.ostream), indentation(policy == ONE_LINE ? o.indentation : o.indentation + "  "),
       end(policy == ONE_LINE ? end : o.indentation + end), policy(policy), write_since_sep(true)
 {
@@ -125,12 +125,12 @@ Value evaluateValue(Context * ctx, Value * v)
     return called;
 }
 
-bool isOption(Context * ctx, Value const & v)
+bool isOption(Context * ctx, const Value & v)
 {
     if (v.type != tAttrs) {
         return false;
     }
-    auto const & actual_type = v.attrs->find(ctx->underscore_type);
+    const auto & actual_type = v.attrs->find(ctx->underscore_type);
     if (actual_type == v.attrs->end()) {
         return false;
     }
@@ -149,7 +149,7 @@ bool isOption(Context * ctx, Value const & v)
 // These are needed for paths like:
 //    fileSystems."/".fsType
 //    systemd.units."dbus.service".text
-std::string quoteAttribute(std::string const & attribute)
+std::string quoteAttribute(const std::string & attribute)
 {
     if (isVarName(attribute)) {
         return attribute;
@@ -159,7 +159,7 @@ std::string quoteAttribute(std::string const & attribute)
     return buf.str();
 }
 
-std::string const appendPath(std::string const & prefix, std::string const & suffix)
+const std::string appendPath(const std::string & prefix, const std::string & suffix)
 {
     if (prefix.empty()) {
         return quoteAttribute(suffix);
@@ -169,8 +169,8 @@ std::string const appendPath(std::string const & prefix, std::string const & suf
 
 bool forbiddenRecursionName(std::string name) { return (!name.empty() && name[0] == '_') || name == "haskellPackages"; }
 
-void recurse(const std::function<bool(std::string const & path, std::variant<Value, std::exception_ptr>)> & f,
-             Context * ctx, Value v, std::string const & path)
+void recurse(const std::function<bool(const std::string & path, std::variant<Value, std::exception_ptr>)> & f,
+             Context * ctx, Value v, const std::string & path)
 {
     std::variant<Value, std::exception_ptr> evaluated;
     try {
@@ -184,11 +184,11 @@ void recurse(const std::function<bool(std::string const & path, std::variant<Val
     if (std::holds_alternative<std::exception_ptr>(evaluated)) {
         return;
     }
-    Value const & evaluated_value = std::get<Value>(evaluated);
+    const Value & evaluated_value = std::get<Value>(evaluated);
     if (evaluated_value.type != tAttrs) {
         return;
     }
-    for (auto const & child : evaluated_value.attrs->lexicographicOrder()) {
+    for (const auto & child : evaluated_value.attrs->lexicographicOrder()) {
         if (forbiddenRecursionName(child->name)) {
             continue;
         }
@@ -197,10 +197,10 @@ void recurse(const std::function<bool(std::string const & path, std::variant<Val
 }
 
 // Calls f on all the option names
-void mapOptions(const std::function<void(std::string const & path)> & f, Context * ctx, Value root)
+void mapOptions(const std::function<void(const std::string & path)> & f, Context * ctx, Value root)
 {
     recurse(
-        [f, ctx](std::string const & path, std::variant<Value, std::exception_ptr> v) {
+        [f, ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
             bool isOpt = std::holds_alternative<std::exception_ptr>(v) || isOption(ctx, std::get<Value>(v));
             if (isOpt) {
                 f(path);
@@ -232,8 +232,8 @@ void mapOptions(const std::function<void(std::string const & path)> & f, Context
 //   ...
 //   users.users.systemd-timesync = ... .. ...
 void mapConfigValuesInOption(
-    const std::function<void(std::string const & path, std::variant<Value, std::exception_ptr> v)> & f,
-    std::string const & path, Context * ctx)
+    const std::function<void(const std::string & path, std::variant<Value, std::exception_ptr> v)> & f,
+    const std::string & path, Context * ctx)
 {
     Value * option;
     try {
@@ -243,7 +243,7 @@ void mapConfigValuesInOption(
         return;
     }
     recurse(
-        [f, ctx](std::string const & path, std::variant<Value, std::exception_ptr> v) {
+        [f, ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
             bool leaf = std::holds_alternative<std::exception_ptr>(v) || std::get<Value>(v).type != tAttrs ||
                         ctx->state->isDerivation(std::get<Value>(v));
             if (!leaf) {
@@ -255,7 +255,7 @@ void mapConfigValuesInOption(
         ctx, *option, path);
 }
 
-std::string describeError(Error const & e) { return "«error: " + e.msg() + "»"; }
+std::string describeError(const Error & e) { return "«error: " + e.msg() + "»"; }
 
 void describeDerivation(Context * ctx, Out & out, Value v)
 {
@@ -270,7 +270,7 @@ void describeDerivation(Context * ctx, Out & out, Value v)
     }
 }
 
-Value parseAndEval(EvalState * state, std::string const & expression, std::string const & path)
+Value parseAndEval(EvalState * state, const std::string & expression, const std::string & path)
 {
     Value v{};
     state->eval(state->parseExprFromString(expression, absPath(path)), v);
@@ -278,7 +278,7 @@ Value parseAndEval(EvalState * state, std::string const & expression, std::strin
 }
 
 void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value,
-                std::string const & path);
+                const std::string & path);
 
 void printList(Context * ctx, Out & out, Value & v)
 {
@@ -289,7 +289,7 @@ void printList(Context * ctx, Out & out, Value & v)
     }
 }
 
-void printAttrs(Context * ctx, Out & out, Value & v, std::string const & path)
+void printAttrs(Context * ctx, Out & out, Value & v, const std::string & path)
 {
     Out attrs_out(out, "{", "}", v.attrs->size());
     for (const auto & a : v.attrs->lexicographicOrder()) {
@@ -300,7 +300,7 @@ void printAttrs(Context * ctx, Out & out, Value & v, std::string const & path)
     }
 }
 
-void multiLineStringEscape(Out & out, std::string const & s)
+void multiLineStringEscape(Out & out, const std::string & s)
 {
     int i;
     for (i = 1; i < s.size(); i++) {
@@ -319,7 +319,7 @@ void multiLineStringEscape(Out & out, std::string const & s)
     }
 }
 
-void printMultiLineString(Out & out, Value const & v)
+void printMultiLineString(Out & out, const Value & v)
 {
     std::string s = v.string.s;
     Out str_out(out, "''", "''", Out::MULTI_LINE);
@@ -336,7 +336,7 @@ void printMultiLineString(Out & out, Value const & v)
     }
 }
 
-void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value, std::string const & path)
+void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value, const std::string & path)
 {
     try {
         if (std::holds_alternative<std::exception_ptr>(maybe_value)) {
@@ -373,7 +373,7 @@ void printValue(Context * ctx, Out & out, std::variant<Value, std::exception_ptr
     }
 }
 
-void printConfigValue(Context * ctx, Out & out, std::string const & path, std::variant<Value, std::exception_ptr> v)
+void printConfigValue(Context * ctx, Out & out, const std::string & path, std::variant<Value, std::exception_ptr> v)
 {
     out << path << " = ";
     printValue(ctx, out, std::move(v), path);
@@ -383,9 +383,9 @@ void printConfigValue(Context * ctx, Out & out, std::string const & path, std::v
 void printAll(Context * ctx, Out & out)
 {
     mapOptions(
-        [ctx, &out](std::string const & option_path) {
+        [ctx, &out](const std::string & option_path) {
             mapConfigValuesInOption(
-                [ctx, &out](std::string const & config_path, std::variant<Value, std::exception_ptr> v) {
+                [ctx, &out](const std::string & config_path, std::variant<Value, std::exception_ptr> v) {
                     printConfigValue(ctx, out, config_path, v);
                 },
                 option_path, ctx);
@@ -393,7 +393,7 @@ void printAll(Context * ctx, Out & out)
         ctx, ctx->options_root);
 }
 
-void printAttr(Context * ctx, Out & out, std::string const & path, Value * root)
+void printAttr(Context * ctx, Out & out, const std::string & path, Value * root)
 {
     try {
         printValue(ctx, out, *findAlongAttrPath(*ctx->state, path, *ctx->autoArgs, *root), path);
@@ -402,7 +402,7 @@ void printAttr(Context * ctx, Out & out, std::string const & path, Value * root)
     }
 }
 
-void printOption(Context * ctx, Out & out, std::string const & path, Value * option)
+void printOption(Context * ctx, Out & out, const std::string & path, Value * option)
 {
     out << "Value:\n";
     printAttr(ctx, out, path, &ctx->config_root);
@@ -440,10 +440,10 @@ void printListing(Out & out, Value * v)
     }
 }
 
-bool optionTypeIs(Context * ctx, Value & v, std::string const & sought_type)
+bool optionTypeIs(Context * ctx, Value & v, const std::string & sought_type)
 {
     try {
-        auto const & type_lookup = v.attrs->find(ctx->state->sType);
+        const auto & type_lookup = v.attrs->find(ctx->state->sType);
         if (type_lookup == v.attrs->end()) {
             return false;
         }
@@ -451,7 +451,7 @@ bool optionTypeIs(Context * ctx, Value & v, std::string const & sought_type)
         if (type.type != tAttrs) {
             return false;
         }
-        auto const & name_lookup = type.attrs->find(ctx->state->sName);
+        const auto & name_lookup = type.attrs->find(ctx->state->sName);
         if (name_lookup == type.attrs->end()) {
             return false;
         }
@@ -481,13 +481,13 @@ Value getSubOptions(Context * ctx, Value & option)
 
 // Carefully walk an option path, looking for sub-options when a path walks past
 // an option value.
-Value findAlongOptionPath(Context * ctx, std::string const & path)
+Value findAlongOptionPath(Context * ctx, const std::string & path)
 {
     Strings tokens = parseAttrPath(path);
     Value v = ctx->options_root;
     for (auto i = tokens.begin(); i != tokens.end(); i++) {
         bool last_attribute = std::next(i) == tokens.end();
-        auto const & attr = *i;
+        const auto & attr = *i;
         v = evaluateValue(ctx, &v);
         if (attr.empty()) {
             throw Error("empty attribute name in selection path '%s'", path);
@@ -503,7 +503,7 @@ Value findAlongOptionPath(Context * ctx, std::string const & path)
             throw Error("attribute '%s' in path '%s' attempts to index a value that should be a set but is %s", attr,
                         path, showType(v));
         } else {
-            auto const & next = v.attrs->find(ctx->state->symbols.create(attr));
+            const auto & next = v.attrs->find(ctx->state->symbols.create(attr));
             if (next == v.attrs->end()) {
                 throw Error("attribute '%s' in path '%s' not found", attr, path);
             }
@@ -513,7 +513,7 @@ Value findAlongOptionPath(Context * ctx, std::string const & path)
     return v;
 }
 
-void printOne(Context * ctx, Out & out, std::string const & path)
+void printOne(Context * ctx, Out & out, const std::string & path)
 {
     try {
         Value option = findAlongOptionPath(ctx, path);
@@ -588,7 +588,7 @@ int main(int argc, char ** argv)
         if (args.empty()) {
             printOne(&ctx, out, "");
         }
-        for (auto const & arg : args) {
+        for (const auto & arg : args) {
             printOne(&ctx, out, arg);
         }
     }
