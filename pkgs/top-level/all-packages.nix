@@ -1872,6 +1872,10 @@ in
 
   optar = callPackage ../tools/graphics/optar {};
 
+  pastel = callPackage ../applications/misc/pastel {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   patdiff = callPackage ../tools/misc/patdiff { };
 
   pbpst = callPackage ../applications/misc/pbpst { };
