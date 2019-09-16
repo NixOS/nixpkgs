@@ -115,14 +115,14 @@ struct Context
     Symbol underscore_type;
 };
 
-Value evaluateValue(Context & ctx, Value * v)
+Value evaluateValue(Context & ctx, Value & v)
 {
-    ctx.state.forceValue(*v);
+    ctx.state.forceValue(v);
     if (ctx.autoArgs.empty()) {
-        return *v;
+        return v;
     }
     Value called{};
-    ctx.state.autoCallFunction(ctx.autoArgs, *v, called);
+    ctx.state.autoCallFunction(ctx.autoArgs, v, called);
     return called;
 }
 
@@ -136,7 +136,7 @@ bool isOption(Context & ctx, const Value & v)
         return false;
     }
     try {
-        Value evaluated_type = evaluateValue(ctx, actual_type->value);
+        Value evaluated_type = evaluateValue(ctx, *actual_type->value);
         if (evaluated_type.type != tString) {
             return false;
         }
@@ -175,7 +175,7 @@ void recurse(const std::function<bool(const std::string & path, std::variant<Val
 {
     std::variant<Value, std::exception_ptr> evaluated;
     try {
-        evaluated = evaluateValue(ctx, &v);
+        evaluated = evaluateValue(ctx, v);
     } catch (Error &) {
         evaluated = std::current_exception();
     }
@@ -343,7 +343,7 @@ void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr
         if (auto ex = std::get_if<std::exception_ptr>(&maybe_value)) {
             std::rethrow_exception(*ex);
         }
-        Value v = evaluateValue(ctx, &std::get<Value>(maybe_value));
+        Value v = evaluateValue(ctx, std::get<Value>(maybe_value));
         if (ctx.state.isDerivation(v)) {
             describeDerivation(ctx, out, v);
         } else if (v.isList()) {
@@ -394,19 +394,19 @@ void printAll(Context & ctx, Out & out)
         ctx, ctx.options_root);
 }
 
-void printAttr(Context & ctx, Out & out, const std::string & path, Value * root)
+void printAttr(Context & ctx, Out & out, const std::string & path, Value & root)
 {
     try {
-        printValue(ctx, out, *findAlongAttrPath(ctx.state, path, ctx.autoArgs, *root), path);
+        printValue(ctx, out, *findAlongAttrPath(ctx.state, path, ctx.autoArgs, root), path);
     } catch (Error & e) {
         out << describeError(e);
     }
 }
 
-void printOption(Context & ctx, Out & out, const std::string & path, Value * option)
+void printOption(Context & ctx, Out & out, const std::string & path, Value & option)
 {
     out << "Value:\n";
-    printAttr(ctx, out, path, &ctx.config_root);
+    printAttr(ctx, out, path, ctx.config_root);
 
     out << "\n\nDefault:\n";
     printAttr(ctx, out, "default", option);
@@ -428,12 +428,12 @@ void printOption(Context & ctx, Out & out, const std::string & path, Value * opt
     out << "\n";
 }
 
-void printListing(Out & out, Value * v)
+void printListing(Out & out, Value & v)
 {
     // Print this header on stderr rather than stdout because the old shell script
     // implementation did.  I don't know why.
     std::cerr << "This attribute set contains:\n";
-    for (const auto & a : v->attrs->lexicographicOrder()) {
+    for (const auto & a : v.attrs->lexicographicOrder()) {
         std::string name = a->name;
         if (!name.empty() && name[0] != '_') {
             out << name << "\n";
@@ -448,7 +448,7 @@ bool optionTypeIs(Context & ctx, Value & v, const std::string & sought_type)
         if (type_lookup == v.attrs->end()) {
             return false;
         }
-        Value type = evaluateValue(ctx, type_lookup->value);
+        Value type = evaluateValue(ctx, *type_lookup->value);
         if (type.type != tAttrs) {
             return false;
         }
@@ -456,7 +456,7 @@ bool optionTypeIs(Context & ctx, Value & v, const std::string & sought_type)
         if (name_lookup == type.attrs->end()) {
             return false;
         }
-        Value name = evaluateValue(ctx, name_lookup->value);
+        Value name = evaluateValue(ctx, *name_lookup->value);
         if (name.type != tString) {
             return false;
         }
@@ -470,7 +470,7 @@ MakeError(OptionPathError, EvalError);
 
 Value getSubOptions(Context & ctx, Value & option)
 {
-    Value getSubOptions = evaluateValue(ctx, findAlongAttrPath(ctx.state, "type.getSubOptions", ctx.autoArgs, option));
+    Value getSubOptions = evaluateValue(ctx, *findAlongAttrPath(ctx.state, "type.getSubOptions", ctx.autoArgs, option));
     if (getSubOptions.type != tLambda) {
         throw OptionPathError("Option's type.getSubOptions isn't a function");
     }
@@ -491,7 +491,7 @@ Value findAlongOptionPath(Context & ctx, const std::string & path)
         const auto & attr = *i;
         try {
             bool last_attribute = std::next(i) == tokens.end();
-            v = evaluateValue(ctx, &v);
+            v = evaluateValue(ctx, v);
             if (attr.empty()) {
                 throw OptionPathError("empty attribute name");
             }
@@ -522,11 +522,11 @@ void printOne(Context & ctx, Out & out, const std::string & path)
 {
     try {
         Value option = findAlongOptionPath(ctx, path);
-        option = evaluateValue(ctx, &option);
+        option = evaluateValue(ctx, option);
         if (isOption(ctx, option)) {
-            printOption(ctx, out, path, &option);
+            printOption(ctx, out, path, option);
         } else {
-            printListing(out, &option);
+            printListing(out, option);
         }
     } catch (Error & e) {
         std::cerr << "error: " << e.msg()
