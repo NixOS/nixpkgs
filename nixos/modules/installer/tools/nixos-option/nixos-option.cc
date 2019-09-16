@@ -56,7 +56,7 @@ class Out
         ONE_LINE,
         MULTI_LINE
     };
-    explicit Out(std::ostream & ostream) : ostream(ostream), policy(ONE_LINE), write_since_sep(true) {}
+    explicit Out(std::ostream & ostream) : ostream(ostream), policy(ONE_LINE), writeSinceSep(true) {}
     Out(Out & o, const std::string & start, const std::string & end, LinePolicy policy);
     Out(Out & o, const std::string & start, const std::string & end, int count)
         : Out(o, start, end, count < 2 ? ONE_LINE : MULTI_LINE)
@@ -72,16 +72,16 @@ class Out
     std::string indentation;
     std::string end;
     LinePolicy policy;
-    bool write_since_sep;
+    bool writeSinceSep;
     template <typename T> friend Out & operator<<(Out & o, T thing);
 };
 
 template <typename T> Out & operator<<(Out & o, T thing)
 {
-    if (!o.write_since_sep && o.policy == Out::MULTI_LINE) {
+    if (!o.writeSinceSep && o.policy == Out::MULTI_LINE) {
         o.ostream << o.indentation;
     }
-    o.write_since_sep = true;
+    o.writeSinceSep = true;
     o.ostream << thing;
     return o;
 }
@@ -89,13 +89,13 @@ template <typename T> Out & operator<<(Out & o, T thing)
 template <> Out & operator<<<Out::Separator>(Out & o, Out::Separator /* thing */)
 {
     o.ostream << (o.policy == Out::ONE_LINE ? " " : "\n");
-    o.write_since_sep = false;
+    o.writeSinceSep = false;
     return o;
 }
 
 Out::Out(Out & o, const std::string & start, const std::string & end, LinePolicy policy)
     : ostream(o.ostream), indentation(policy == ONE_LINE ? o.indentation : o.indentation + "  "),
-      end(policy == ONE_LINE ? end : o.indentation + end), policy(policy), write_since_sep(true)
+      end(policy == ONE_LINE ? end : o.indentation + end), policy(policy), writeSinceSep(true)
 {
     o << start;
     *this << Out::sep;
@@ -104,15 +104,15 @@ Out::Out(Out & o, const std::string & start, const std::string & end, LinePolicy
 // Stuff needed for evaluation
 struct Context
 {
-    Context(EvalState & state, Bindings & autoArgs, Value options_root, Value config_root)
-        : state(state), autoArgs(autoArgs), options_root(options_root), config_root(config_root),
-          underscore_type(state.symbols.create("_type"))
+    Context(EvalState & state, Bindings & autoArgs, Value optionsRoot, Value configRoot)
+        : state(state), autoArgs(autoArgs), optionsRoot(optionsRoot), configRoot(configRoot),
+          underscoreType(state.symbols.create("_type"))
     {}
     EvalState & state;
     Bindings & autoArgs;
-    Value options_root;
-    Value config_root;
-    Symbol underscore_type;
+    Value optionsRoot;
+    Value configRoot;
+    Symbol underscoreType;
 };
 
 Value evaluateValue(Context & ctx, Value & v)
@@ -131,16 +131,16 @@ bool isOption(Context & ctx, const Value & v)
     if (v.type != tAttrs) {
         return false;
     }
-    const auto & actual_type = v.attrs->find(ctx.underscore_type);
-    if (actual_type == v.attrs->end()) {
+    const auto & atualType = v.attrs->find(ctx.underscoreType);
+    if (atualType == v.attrs->end()) {
         return false;
     }
     try {
-        Value evaluated_type = evaluateValue(ctx, *actual_type->value);
-        if (evaluated_type.type != tString) {
+        Value evaluatedType = evaluateValue(ctx, *atualType->value);
+        if (evaluatedType.type != tString) {
             return false;
         }
-        return static_cast<std::string>(evaluated_type.string.s) == "option";
+        return static_cast<std::string>(evaluatedType.string.s) == "option";
     } catch (Error &) {
         return false;
     }
@@ -238,7 +238,7 @@ void mapConfigValuesInOption(
 {
     Value * option;
     try {
-        option = findAlongAttrPath(ctx.state, path, ctx.autoArgs, ctx.config_root);
+        option = findAlongAttrPath(ctx.state, path, ctx.autoArgs, ctx.configRoot);
     } catch (Error &) {
         f(path, std::current_exception());
         return;
@@ -278,26 +278,25 @@ Value parseAndEval(EvalState & state, const std::string & expression, const std:
     return v;
 }
 
-void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value,
-                const std::string & path);
+void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path);
 
 void printList(Context & ctx, Out & out, Value & v)
 {
-    Out list_out(out, "[", "]", v.listSize());
+    Out listOut(out, "[", "]", v.listSize());
     for (unsigned int n = 0; n < v.listSize(); ++n) {
-        printValue(ctx, list_out, *v.listElems()[n], "");
-        list_out << Out::sep;
+        printValue(ctx, listOut, *v.listElems()[n], "");
+        listOut << Out::sep;
     }
 }
 
 void printAttrs(Context & ctx, Out & out, Value & v, const std::string & path)
 {
-    Out attrs_out(out, "{", "}", v.attrs->size());
+    Out attrsOut(out, "{", "}", v.attrs->size());
     for (const auto & a : v.attrs->lexicographicOrder()) {
         std::string name = a->name;
-        attrs_out << name << " = ";
-        printValue(ctx, attrs_out, *a->value, appendPath(path, name));
-        attrs_out << ";" << Out::sep;
+        attrsOut << name << " = ";
+        printValue(ctx, attrsOut, *a->value, appendPath(path, name));
+        attrsOut << ";" << Out::sep;
     }
 }
 
@@ -323,27 +322,27 @@ void multiLineStringEscape(Out & out, const std::string & s)
 void printMultiLineString(Out & out, const Value & v)
 {
     std::string s = v.string.s;
-    Out str_out(out, "''", "''", Out::MULTI_LINE);
+    Out strOut(out, "''", "''", Out::MULTI_LINE);
     std::string::size_type begin = 0;
     while (begin < s.size()) {
         std::string::size_type end = s.find('\n', begin);
         if (end == std::string::npos) {
-            multiLineStringEscape(str_out, s.substr(begin, s.size() - begin));
+            multiLineStringEscape(strOut, s.substr(begin, s.size() - begin));
             break;
         }
-        multiLineStringEscape(str_out, s.substr(begin, end - begin));
-        str_out << Out::sep;
+        multiLineStringEscape(strOut, s.substr(begin, end - begin));
+        strOut << Out::sep;
         begin = end + 1;
     }
 }
 
-void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybe_value, const std::string & path)
+void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path)
 {
     try {
-        if (auto ex = std::get_if<std::exception_ptr>(&maybe_value)) {
+        if (auto ex = std::get_if<std::exception_ptr>(&maybeValue)) {
             std::rethrow_exception(*ex);
         }
-        Value v = evaluateValue(ctx, std::get<Value>(maybe_value));
+        Value v = evaluateValue(ctx, std::get<Value>(maybeValue));
         if (ctx.state.isDerivation(v)) {
             describeDerivation(ctx, out, v);
         } else if (v.isList()) {
@@ -384,14 +383,14 @@ void printConfigValue(Context & ctx, Out & out, const std::string & path, std::v
 void printAll(Context & ctx, Out & out)
 {
     mapOptions(
-        [&ctx, &out](const std::string & option_path) {
+        [&ctx, &out](const std::string & optionPath) {
             mapConfigValuesInOption(
-                [&ctx, &out](const std::string & config_path, std::variant<Value, std::exception_ptr> v) {
-                    printConfigValue(ctx, out, config_path, v);
+                [&ctx, &out](const std::string & configPath, std::variant<Value, std::exception_ptr> v) {
+                    printConfigValue(ctx, out, configPath, v);
                 },
-                option_path, ctx);
+                optionPath, ctx);
         },
-        ctx, ctx.options_root);
+        ctx, ctx.optionsRoot);
 }
 
 void printAttr(Context & ctx, Out & out, const std::string & path, Value & root)
@@ -406,7 +405,7 @@ void printAttr(Context & ctx, Out & out, const std::string & path, Value & root)
 void printOption(Context & ctx, Out & out, const std::string & path, Value & option)
 {
     out << "Value:\n";
-    printAttr(ctx, out, path, ctx.config_root);
+    printAttr(ctx, out, path, ctx.configRoot);
 
     out << "\n\nDefault:\n";
     printAttr(ctx, out, "default", option);
@@ -439,26 +438,26 @@ void printListing(Out & out, Value & v)
     }
 }
 
-bool optionTypeIs(Context & ctx, Value & v, const std::string & sought_type)
+bool optionTypeIs(Context & ctx, Value & v, const std::string & soughtType)
 {
     try {
-        const auto & type_lookup = v.attrs->find(ctx.state.sType);
-        if (type_lookup == v.attrs->end()) {
+        const auto & typeLookup = v.attrs->find(ctx.state.sType);
+        if (typeLookup == v.attrs->end()) {
             return false;
         }
-        Value type = evaluateValue(ctx, *type_lookup->value);
+        Value type = evaluateValue(ctx, *typeLookup->value);
         if (type.type != tAttrs) {
             return false;
         }
-        const auto & name_lookup = type.attrs->find(ctx.state.sName);
-        if (name_lookup == type.attrs->end()) {
+        const auto & nameLookup = type.attrs->find(ctx.state.sName);
+        if (nameLookup == type.attrs->end()) {
             return false;
         }
-        Value name = evaluateValue(ctx, *name_lookup->value);
+        Value name = evaluateValue(ctx, *nameLookup->value);
         if (name.type != tString) {
             return false;
         }
-        return name.string.s == sought_type;
+        return name.string.s == soughtType;
     } catch (Error &) {
         return false;
     }
@@ -484,11 +483,11 @@ Value getSubOptions(Context & ctx, Value & option)
 Value findAlongOptionPath(Context & ctx, const std::string & path)
 {
     Strings tokens = parseAttrPath(path);
-    Value v = ctx.options_root;
+    Value v = ctx.optionsRoot;
     for (auto i = tokens.begin(); i != tokens.end(); i++) {
         const auto & attr = *i;
         try {
-            bool last_attribute = std::next(i) == tokens.end();
+            bool lastAttribute = std::next(i) == tokens.end();
             v = evaluateValue(ctx, v);
             if (attr.empty()) {
                 throw OptionPathError("empty attribute name");
@@ -496,7 +495,7 @@ Value findAlongOptionPath(Context & ctx, const std::string & path)
             if (isOption(ctx, v) && optionTypeIs(ctx, v, "submodule")) {
                 v = getSubOptions(ctx, v);
             }
-            if (isOption(ctx, v) && optionTypeIs(ctx, v, "loaOf") && !last_attribute) {
+            if (isOption(ctx, v) && optionTypeIs(ctx, v, "loaOf") && !lastAttribute) {
                 v = getSubOptions(ctx, v);
                 // Note that we've consumed attr, but didn't actually use it.  This is the path component that's looked
                 // up in the list or attribute set that doesn't name an option -- the "root" in "users.users.root.name".
@@ -538,8 +537,8 @@ int main(int argc, char ** argv)
 {
     bool all = false;
     std::string path = ".";
-    std::string options_expr = "(import <nixpkgs/nixos> {}).options";
-    std::string config_expr = "(import <nixpkgs/nixos> {}).config";
+    std::string optionsExpr = "(import <nixpkgs/nixos> {}).options";
+    std::string configExpr = "(import <nixpkgs/nixos> {}).config";
     std::vector<std::string> args;
 
     struct MyArgs : nix::LegacyArgs, nix::MixEvalArgs
@@ -557,9 +556,9 @@ int main(int argc, char ** argv)
         } else if (*arg == "--path") {
             path = nix::getArg(*arg, arg, end);
         } else if (*arg == "--options_expr") {
-            options_expr = nix::getArg(*arg, arg, end);
+            optionsExpr = nix::getArg(*arg, arg, end);
         } else if (*arg == "--config_expr") {
-            config_expr = nix::getArg(*arg, arg, end);
+            configExpr = nix::getArg(*arg, arg, end);
         } else if (!arg->empty() && arg->at(0) == '-') {
             return false;
         } else {
@@ -576,10 +575,10 @@ int main(int argc, char ** argv)
     auto store = nix::openStore();
     auto state = std::make_unique<EvalState>(myArgs.searchPath, store);
 
-    Value options_root = parseAndEval(*state, options_expr, path);
-    Value config_root = parseAndEval(*state, config_expr, path);
+    Value optionsRoot = parseAndEval(*state, optionsExpr, path);
+    Value configRoot = parseAndEval(*state, configExpr, path);
 
-    Context ctx{*state, *myArgs.getAutoArgs(*state), options_root, config_root};
+    Context ctx{*state, *myArgs.getAutoArgs(*state), optionsRoot, configRoot};
     Out out(std::cout);
 
     if (all) {
