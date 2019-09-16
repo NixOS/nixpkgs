@@ -60,6 +60,7 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit libgnomekbd unzip;
+      gsettings = "${glib.bin}/bin/gsettings";
     })
   ];
 
