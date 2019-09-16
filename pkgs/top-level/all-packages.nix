@@ -10191,7 +10191,11 @@ in
 
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
-  terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
+  terraform-lsp = callPackage ../development/tools/misc/terraform-lsp {
+    # Version 0.0.5 fails to build with go 1.13 due to dependency:
+    #   build github.com/juliosueiras/terraform-lsp: cannot load github.com/googleapis/gax-go/v2: github.com/googleapis/gax-go@v2.0.0+incompatible: reading file:///nix/store/ihiyd3mqa5gvfm2k2716hpl16knak798-terraform-lsp-0.0.5-go-modules/github.com/googleapis/gax-go/@v/v2.0.0+incompatible.zip: Not Found
+    buildGoModule = buildGo112Module;
+  };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
