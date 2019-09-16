@@ -159,14 +159,11 @@ self: super: {
   vault = dontHaddock super.vault;
 
   # The test suite does not know how to find the 'alex' binary.
-  alex = overrideCabal (overrideSrc super.alex {
-    src = pkgs.fetchFromGitHub {
-      owner = "simonmar";
-      repo = "alex";
-      rev = "11042dbcc45382c57216eecb1438b625e1cca350";
-      sha256 = "03ywnf0mh3fzb636kq8gjz0vs06qg9kqi3lsh0b24wsfw7pppysr";
-    };
-  }) (drv: {
+  # TODO dont fetch patch if https://github.com/simonmar/alex/issues/140 is resolved
+  alex = overrideCabal (appendPatch super.alex (pkgs.fetchpatch {
+    url = "https://github.com/simonmar/alex/commit/deaae6eddef5186bfd0e42e2c3ced39e26afa4d6.patch";
+    sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
+  })) (drv: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
