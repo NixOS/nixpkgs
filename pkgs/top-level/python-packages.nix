@@ -715,6 +715,8 @@ in {
 
   mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
 
+  mailman-web = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/web.nix { });
+
   mailmanclient = callPackage ../development/python-modules/mailmanclient { };
 
   mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
@@ -1981,15 +1983,17 @@ in {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
-  pytest = if isPy3k then
-    callPackage ../development/python-modules/pytest {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override { doCheck = false; };
-    }
-  else callPackage ../development/python-modules/pytest/2.nix {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override { doCheck = false; };
-    };
+  pytest = if isPy3k then self.pytest_5 else self.pytest_4;
+
+  pytest_5 = callPackage ../development/python-modules/pytest {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
+  };
+
+  pytest_4 = callPackage ../development/python-modules/pytest/4.nix {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
+  };
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 

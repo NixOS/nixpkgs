@@ -891,6 +891,12 @@
      Prometheus 2 is now configured with <literal>services.prometheus</literal>.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       Citrix Receiver (<literal>citrix_receiver</literal>) has been dropped in favor of Citrix Workspace
+       (<literal>citrix_workspace</literal>).
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
+{ stdenv, fetchurl, fetchpatch, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
 , gcc, nettools, iproute, linuxHeaders }:
 
 # NOTE: use $out/etc/iked.conf as sample configuration and also set: dhcp_file "/etc/iked.dhcp";
@@ -8,14 +8,25 @@
 # so I'm sticking with 3.4
 
 stdenv.mkDerivation rec {
-  name = "ike-2.2.1";
+  pname = "ike";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "https://www.shrew.net/download/ike/${name}-release.tgz";
+    url = "https://www.shrew.net/download/ike/${pname}-${version}-release.tgz";
     sha256 = "0fhyr2psd93b0zf7yfb72q3nqnh65mymgq5jpjcsj9jv5kfr6l8y";
   };
 
-  buildInputs = [ cmake openssl libedit flex bison qt4 makeWrapper nettools iproute ];
+  patches = [
+    # required for openssl 1.1.x compatibility
+    (fetchpatch {
+      name = "openssl-1.1.0.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/openssl-1.1.0.patch?h=ike&id=3a56735ddc26f750df4720f4baba0728bb4cb458";
+      sha256 = "1hw8q4xy858rivpjkq5288q3mc75d52bg4w3n30y99h05wik0h51";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake flex bison makeWrapper ];
+  buildInputs = [ openssl libedit qt4 nettools iproute ];
 
   configurePhase = ''
     mkdir -p $out/{bin,sbin,lib}
