@@ -1109,7 +1109,7 @@ in
   blur-effect = callPackage ../tools/graphics/blur-effect { };
 
   charles = charles4;
-  inherit (callPackage ../applications/networking/charles {})
+  inherit (callPackages ../applications/networking/charles {})
     charles3
     charles4
   ;
@@ -1376,7 +1376,7 @@ in
 
   corebird = callPackage ../applications/networking/corebird { };
 
-  inherit (callPackage ../tools/misc/coreboot-utils { })
+  inherit (callPackages ../tools/misc/coreboot-utils { })
     msrtool
     cbmem
     ifdtool
@@ -4760,7 +4760,7 @@ in
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
-  inherit (callPackage ../tools/networking/miniupnpc
+  inherit (callPackages ../tools/networking/miniupnpc
             { inherit (darwin) cctools; })
     miniupnpc_1 miniupnpc_2;
   miniupnpc = miniupnpc_1;
@@ -8193,7 +8193,7 @@ in
 
   mkcl = callPackage ../development/compilers/mkcl {};
 
-  inherit (callPackage ../development/compilers/mlton {})
+  inherit (callPackages ../development/compilers/mlton {})
     mlton20130715
     mlton20180207Binary
     mlton20180207
@@ -8461,7 +8461,7 @@ in
 
   vlang = callPackage ../development/compilers/vlang { };
 
-  inherit (callPackage ../development/compilers/vala { })
+  inherit (callPackages ../development/compilers/vala { })
     vala_0_36
     vala_0_38
     vala_0_40
@@ -8921,7 +8921,7 @@ in
 
   solargraph = callPackage ../development/ruby-modules/solargraph { };
 
-  inherit (callPackage ../development/interpreters/ruby {
+  inherit (callPackages ../development/interpreters/ruby {
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   })
@@ -9088,14 +9088,14 @@ in
 
   adtool = callPackage ../tools/admin/adtool { };
 
-  inherit (callPackage ../development/tools/alloy { })
+  inherit (callPackages ../development/tools/alloy { })
     alloy4
     alloy5
     alloy;
 
   augeas = callPackage ../tools/system/augeas { };
 
-  inherit (callPackage ../tools/admin/ansible { })
+  inherit (callPackages ../tools/admin/ansible { })
     ansible
     ansible_2_6
     ansible_2_7;
@@ -11760,7 +11760,7 @@ in
   libdvdread = callPackage ../development/libraries/libdvdread { };
   libdvdread_4_9_9 = callPackage ../development/libraries/libdvdread/4.9.9.nix { };
 
-  inherit (callPackage ../development/libraries/libdwarf { })
+  inherit (callPackages ../development/libraries/libdwarf { })
     libdwarf dwarfdump;
 
   libeatmydata = callPackage ../development/libraries/libeatmydata { };
@@ -12993,7 +12993,7 @@ in
     withQt4 = true;
   };
 
-  inherit (callPackage ../development/libraries/physfs { })
+  inherit (callPackages ../development/libraries/physfs { })
     physfs_2
     physfs;
 
@@ -14929,7 +14929,7 @@ in
 
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
 
-  inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { })
+  inherit (callPackages ../servers/monitoring/plugins/labs_consol_de.nix { })
     check-mssql-health
     check-nwc-health
     check-ups-health;
@@ -15338,7 +15338,7 @@ in
   alsaOss = callPackage ../os-specific/linux/alsa-oss { };
   alsaTools = callPackage ../os-specific/linux/alsa-tools { };
 
-  inherit (callPackage ../misc/arm-trusted-firmware {})
+  inherit (callPackages ../misc/arm-trusted-firmware {})
     buildArmTrustedFirmware
     armTrustedFirmwareAllwinner
     armTrustedFirmwareQemu
@@ -15894,7 +15894,7 @@ in
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
-    inherit (callPackage ../os-specific/linux/zfs {
+    inherit (callPackages ../os-specific/linux/zfs {
       configFile = "kernel";
       inherit kernel;
      }) zfsStable zfsUnstable;
@@ -16402,7 +16402,7 @@ in
   twa = callPackage ../tools/networking/twa { };
 
   # Upstream U-Boots:
-  inherit (callPackage ../misc/uboot {})
+  inherit (callPackages ../misc/uboot {})
     buildUBoot
     ubootTools
     ubootA20OlinuxinoLime
@@ -16508,7 +16508,7 @@ in
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
-  inherit (callPackage ../os-specific/linux/zfs {
+  inherit (callPackages ../os-specific/linux/zfs {
     configFile = "user";
   }) zfsStable zfsUnstable;
 
@@ -17778,7 +17778,7 @@ in
   dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
   };
 
-  inherit (callPackage ../applications/virtualization/docker {})
+  inherit (callPackages ../applications/virtualization/docker {})
     docker_18_09
     docker_19_03;
 
@@ -20599,7 +20599,7 @@ in
 
   sublime3-dev = sublime3Packages.sublime3-dev;
 
-  inherit (callPackage ../applications/version-management/sublime-merge {})
+  inherit (callPackages ../applications/version-management/sublime-merge {})
     sublime-merge
     sublime-merge-dev;
 
@@ -20740,7 +20740,7 @@ in
 
   termtosvg = callPackage ../tools/misc/termtosvg { };
 
-  inherit (callPackage ../applications/graphics/tesseract {})
+  inherit (callPackages ../applications/graphics/tesseract {})
     tesseract3
     tesseract4;
   tesseract = tesseract3;
@@ -22295,7 +22295,7 @@ in
 
   scummvm = callPackage ../games/scummvm { };
 
-  inherit (callPackage ../games/scummvm/games.nix { })
+  inherit (callPackages ../games/scummvm/games.nix { })
     beneath-a-steel-sky
     drascula-the-vampire-strikes-back
     flight-of-the-amazon-queen
@@ -22547,7 +22547,7 @@ in
 
   xtris = callPackage ../games/xtris { };
 
-  inherit (callPackage ../games/quake2/yquake2 {
+  inherit (callPackages ../games/quake2/yquake2 {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
   })
     yquake2
@@ -23127,7 +23127,7 @@ in
 
   boogie = dotnetPackages.Boogie;
 
-  inherit (callPackage ./coq-packages.nix {
+  inherit (callPackages ./coq-packages.nix {
     inherit (ocaml-ng) ocamlPackages_4_05;
   }) mkCoqPackages
     coqPackages_8_5  coq_8_5
@@ -23825,7 +23825,7 @@ in
 
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
-  inherit (callPackage ../applications/networking/cluster/kops {})
+  inherit (callPackages ../applications/networking/cluster/kops {})
     mkKops
     kops_1_12
     kops_1_13
@@ -23874,7 +23874,7 @@ in
 
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
-  inherit (callPackage ../tools/package-management/nix {
+  inherit (callPackages ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
       boehmgc = boehmgc.override { enableLargeConfig = true; };
@@ -24320,7 +24320,7 @@ in
 
   prow = callPackage ../applications/networking/cluster/prow {};
 
-  inherit (callPackage ../applications/networking/cluster/terraform {})
+  inherit (callPackages ../applications/networking/cluster/terraform {})
     terraform_0_11
     terraform_0_11-full
     terraform_0_12
@@ -24459,7 +24459,7 @@ in
 
     inherit wineBuild;
 
-    inherit (callPackage ./wine-packages.nix {})
+    inherit (callPackages ./wine-packages.nix {})
       minimal base full stable unstable staging fonts;
   });
 
