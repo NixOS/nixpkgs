@@ -31,6 +31,7 @@
 using nix::absPath;
 using nix::Bindings;
 using nix::Error;
+using nix::EvalError;
 using nix::EvalState;
 using nix::Path;
 using nix::PathSet;
@@ -465,12 +466,14 @@ bool optionTypeIs(Context * ctx, Value & v, const std::string & sought_type)
     }
 }
 
+MakeError(OptionPathError, EvalError);
+
 Value getSubOptions(Context * ctx, Value & option)
 {
     Value getSubOptions =
         evaluateValue(ctx, findAlongAttrPath(*ctx->state, "type.getSubOptions", *ctx->autoArgs, option));
     if (getSubOptions.type != tLambda) {
-        throw Error("Option's type.getSubOptions isn't a function");
+        throw OptionPathError("Option's type.getSubOptions isn't a function");
     }
     Value emptyString{};
     nix::mkString(emptyString, "");
@@ -486,28 +489,31 @@ Value findAlongOptionPath(Context * ctx, const std::string & path)
     Strings tokens = parseAttrPath(path);
     Value v = ctx->options_root;
     for (auto i = tokens.begin(); i != tokens.end(); i++) {
-        bool last_attribute = std::next(i) == tokens.end();
         const auto & attr = *i;
-        v = evaluateValue(ctx, &v);
-        if (attr.empty()) {
-            throw Error("empty attribute name in selection path '%s'", path);
-        }
-        if (isOption(ctx, v) && optionTypeIs(ctx, v, "submodule")) {
-            v = getSubOptions(ctx, v);
-        }
-        if (isOption(ctx, v) && optionTypeIs(ctx, v, "loaOf") && !last_attribute) {
-            v = getSubOptions(ctx, v);
-            // Note that we've consumed attr, but didn't actually use it.  This is the path component that's looked up
-            // in the list or attribute set that doesn't name an option -- the "root" in "users.users.root.name".
-        } else if (v.type != tAttrs) {
-            throw Error("attribute '%s' in path '%s' attempts to index a value that should be a set but is %s", attr,
-                        path, showType(v));
-        } else {
-            const auto & next = v.attrs->find(ctx->state->symbols.create(attr));
-            if (next == v.attrs->end()) {
-                throw Error("attribute '%s' in path '%s' not found", attr, path);
+        try {
+            bool last_attribute = std::next(i) == tokens.end();
+            v = evaluateValue(ctx, &v);
+            if (attr.empty()) {
+                throw OptionPathError("empty attribute name");
             }
-            v = *next->value;
+            if (isOption(ctx, v) && optionTypeIs(ctx, v, "submodule")) {
+                v = getSubOptions(ctx, v);
+            }
+            if (isOption(ctx, v) && optionTypeIs(ctx, v, "loaOf") && !last_attribute) {
+                v = getSubOptions(ctx, v);
+                // Note that we've consumed attr, but didn't actually use it.  This is the path component that's looked
+                // up in the list or attribute set that doesn't name an option -- the "root" in "users.users.root.name".
+            } else if (v.type != tAttrs) {
+                throw OptionPathError("Value is %s while a set was expected", showType(v));
+            } else {
+                const auto & next = v.attrs->find(ctx->state->symbols.create(attr));
+                if (next == v.attrs->end()) {
+                    throw OptionPathError("Attribute not found", attr, path);
+                }
+                v = *next->value;
+            }
+        } catch (OptionPathError & e) {
+            throw OptionPathError("At '%s' in path '%s': %s", attr, path, e.msg());
         }
     }
     return v;
