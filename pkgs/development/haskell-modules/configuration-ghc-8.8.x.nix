@@ -94,9 +94,9 @@ self: super: {
     sha256 = "0l8x0pbsn18fj5ak5q0g5rva4xw1s9yc4d86a1pfyaz467b9i5a4";
   });
   happy = super.happy;
-  hedgehog = appendPatch super.hedgehog (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hedgehog-0.6.1.patch";
-    sha256 = "04xwznd3lfgracfz68ls6vfm19rhq8fb74r6ii0grpv6cx4rr21i";
+  hedgehog = appendPatch (doJailbreak super.hedgehog) (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/hedgehog-1.0.patch";
+    sha256 = "16gadh1hb74jqvzc9c893sffb1y2vjglblyrqjwp7xfhccq7g8yw";
   });
   easytest = self.easytest_0_3;
   regex-tdfa = appendPatch super.regex-tdfa (pkgs.fetchpatch {
