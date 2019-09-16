@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0qhmv65il14lns817yxhma784jw5bz629svzh2ykrmilx5f7dxqc";
   };
 
-  modSha256 = "01dqw4x9rbi1kqrfygais0jzmbqxgzx298xy7f52z0npschpigiv";
+  modSha256 = "1nnp5ijz4n34gc97rar4wlvlbx21ndpjyb2mc6gxdk1wzx3mgswp";
 
   meta = {
     homepage = https://github.com/sachaos/todoist;
