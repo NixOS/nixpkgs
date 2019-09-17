@@ -43,7 +43,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 14.5
+  # LTS Haskell 14.6
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -55,7 +55,7 @@ default-package-overrides:
   - adjunctions ==4.4
   - adler32 ==0.1.2.0
   - advent-of-code-api ==0.1.2.3
-  - aeson ==1.4.4.0
+  - aeson ==1.4.5.0
   - aeson-attoparsec ==0.0.0
   - aeson-better-errors ==0.9.1.0
   - aeson-casing ==0.2.0.0
@@ -98,7 +98,7 @@ default-package-overrides:
   - appendmap ==0.1.5
   - apply-refact ==0.6.0.0
   - apportionment ==0.0.0.3
-  - approximate ==0.3.1
+  - approximate ==0.3.2
   - app-settings ==0.2.0.12
   - arbor-lru-cache ==0.1.1.0
   - arithmoi ==0.9.0.0
@@ -356,7 +356,7 @@ default-package-overrides:
   - comonad ==5.0.5
   - compact ==0.1.0.1
   - compactmap ==0.1.4.2.1
-  - compensated ==0.7.2
+  - compensated ==0.7.3
   - compiler-warnings ==0.1.0
   - composable-associations ==0.1.0.0
   - composable-associations-aeson ==0.1.0.0
@@ -509,7 +509,7 @@ default-package-overrides:
   - dependent-map ==0.2.4.0
   - dependent-sum ==0.4
   - dependent-sum-template ==0.0.0.6
-  - deque ==0.4.2.3
+  - deque ==0.4.3
   - deriveJsonNoPrefix ==0.1.0.1
   - deriving-compat ==0.5.7
   - derulo ==1.0.5
@@ -623,7 +623,7 @@ default-package-overrides:
   - eventful-sqlite ==0.2.0
   - eventful-test-helpers ==0.2.0
   - event-list ==0.1.2
-  - eventstore ==1.3.0
+  - eventstore ==1.3.1
   - every ==0.0.1
   - exact-combinatorics ==0.2.0.9
   - exact-pi ==0.5.0.1
@@ -775,7 +775,7 @@ default-package-overrides:
   - ghc-lib-parser ==8.8.0.20190424
   - ghc-parser ==0.2.0.3
   - ghc-paths ==0.1.0.12
-  - ghc-prof ==1.4.1.5
+  - ghc-prof ==1.4.1.6
   - ghc-syntax-highlighter ==0.0.4.0
   - ghc-tcplugins-extra ==0.3
   - ghc-typelits-extra ==0.3.1
@@ -806,7 +806,7 @@ default-package-overrides:
   - glabrous ==2.0.0
   - glaze ==0.3.0.1
   - glazier ==1.0.0.0
-  - GLFW-b ==3.2.1.0
+  - GLFW-b ==3.2.1.1
   - Glob ==0.10.0
   - gloss ==1.13.0.1
   - gloss-algorithms ==1.13.0.1
@@ -863,8 +863,8 @@ default-package-overrides:
   - haskell-gi-base ==0.23.0
   - haskell-gi-overloading ==1.0
   - haskell-lexer ==1.0.2
-  - haskell-lsp ==0.15.0.1
-  - haskell-lsp-types ==0.15.0.1
+  - haskell-lsp ==0.15.0.0
+  - haskell-lsp-types ==0.15.0.0
   - haskell-names ==0.9.6
   - haskell-spacegoo ==0.2.0.1
   - haskell-src ==1.0.3.0
@@ -967,7 +967,7 @@ default-package-overrides:
   - hslua-aeson ==1.0.0
   - hslua-module-system ==0.2.1
   - hslua-module-text ==0.2.1
-  - HsOpenSSL ==0.11.4.16
+  - HsOpenSSL ==0.11.4.17
   - HsOpenSSL-x509-system ==0.1.0.3
   - hsp ==0.10.0
   - hspec ==2.7.1
@@ -1063,7 +1063,7 @@ default-package-overrides:
   - hxt-unicode ==9.0.2.4
   - hybrid-vectors ==0.2.2
   - hyper ==0.1.0.3
-  - hyperloglog ==0.4.2
+  - hyperloglog ==0.4.3
   - hyphenation ==0.8
   - hyraxAbif ==0.2.3.15
   - iconv ==0.4.1.3
@@ -1086,7 +1086,7 @@ default-package-overrides:
   - indexed-list-literals ==0.2.1.2
   - infer-license ==0.2.0
   - inflections ==0.4.0.4
-  - influxdb ==1.7.1
+  - influxdb ==1.7.1.1
   - ini ==0.4.1
   - inj ==1.0
   - inline-c ==0.7.0.1
@@ -1201,7 +1201,7 @@ default-package-overrides:
   - leapseconds-announced ==2017.1.0.1
   - learn-physics ==0.6.4
   - lens ==4.17.1
-  - lens-action ==0.2.3
+  - lens-action ==0.2.4
   - lens-aeson ==1.0.2
   - lens-datetime ==0.3
   - lens-family ==1.2.3
@@ -1277,10 +1277,10 @@ default-package-overrides:
   - markdown-unlit ==0.5.0
   - markov-chain ==0.0.3.4
   - massiv ==0.4.1.0
-  - massiv-io ==0.1.6.0
+  - massiv-io ==0.1.7.0
   - massiv-test ==0.1.0
   - mathexpr ==0.3.0.0
-  - math-functions ==0.3.2.0
+  - math-functions ==0.3.2.1
   - matplotlib ==0.7.4
   - matrices ==0.5.0
   - matrix ==0.3.6.1
@@ -1329,7 +1329,6 @@ default-package-overrides:
   - missing-foreign ==0.1.1
   - MissingH ==1.4.1.0
   - mixed-types-num ==0.4.0.1
-  - mixpanel-client ==0.2.1
   - mltool ==0.2.0.1
   - mmap ==0.5.9
   - mmark ==0.0.7.1
@@ -1425,7 +1424,7 @@ default-package-overrides:
   - network-anonymous-i2p ==0.10.0
   - network-attoparsec ==0.12.2
   - network-bsd ==2.8.0.0
-  - network-byte-order ==0.1.1.0
+  - network-byte-order ==0.1.1.1
   - network-conduit-tls ==1.3.2
   - network-house ==0.1.0.2
   - network-info ==0.2.0.10
@@ -1437,8 +1436,8 @@ default-package-overrides:
   - network-transport ==0.5.4
   - network-transport-composed ==0.2.1
   - network-uri ==2.6.1.0
-  - newtype ==0.2.1.0
-  - newtype-generics ==0.5.3
+  - newtype ==0.2.2.0
+  - newtype-generics ==0.5.4
   - nicify-lib ==1.0.1
   - NineP ==0.0.2.1
   - nix-paths ==1.0.1
@@ -1480,7 +1479,7 @@ default-package-overrides:
   - OneTuple ==0.2.2
   - Only ==0.1
   - oo-prototypes ==0.1.0.0
-  - opaleye ==0.6.7004.0
+  - opaleye ==0.6.7004.1
   - OpenAL ==1.7.0.5
   - open-browser ==0.2.1.0
   - openexr-write ==0.1.0.2
@@ -1663,7 +1662,7 @@ default-package-overrides:
   - protocol-buffers ==2.4.12
   - protocol-buffers-descriptor ==2.4.12
   - protocol-radius ==0.0.1.1
-  - protocol-radius-test ==0.1.0.0
+  - protocol-radius-test ==0.1.0.1
   - proto-lens ==0.5.1.0
   - proto-lens-arbitrary ==0.1.2.7
   - proto-lens-optparse ==0.1.1.5
@@ -1679,8 +1678,7 @@ default-package-overrides:
   - purescript-bridge ==0.13.0.0
   - pure-zlib ==0.6.6
   - pushbullet-types ==0.4.1.0
-  - pusher-http-haskell ==1.5.1.9
-  - PyF ==0.8.1.0
+  - pusher-http-haskell ==1.5.1.10
   - qchas ==1.1.0.1
   - qm-interpolated-string ==0.3.0.0
   - qnap-decrypt ==0.3.5
@@ -1733,7 +1731,7 @@ default-package-overrides:
   - read-editor ==0.1.0.2
   - read-env-var ==1.0.0.0
   - reanimate ==0.1.5.0
-  - reanimate-svg ==0.9.1.0
+  - reanimate-svg ==0.9.1.1
   - rebase ==1.3.1.1
   - record-dot-preprocessor ==0.2
   - record-hasfield ==1.0
@@ -1769,6 +1767,8 @@ default-package-overrides:
   - repa ==3.4.1.4
   - repa-algorithms ==3.4.1.3
   - repa-io ==3.4.1.1
+  - replace-attoparsec ==1.0.1.0
+  - replace-megaparsec ==1.1.3.0
   - repline ==0.2.1.0
   - req ==2.1.0
   - req-conduit ==1.0.0
@@ -1883,7 +1883,7 @@ default-package-overrides:
   - servant-pipes ==0.15
   - servant-ruby ==0.9.0.0
   - servant-server ==0.16.2
-  - servant-static-th ==0.2.2.0
+  - servant-static-th ==0.2.2.1
   - servant-swagger ==1.1.7.1
   - servant-swagger-ui ==0.3.4.3.22.2
   - servant-swagger-ui-core ==0.3.3
@@ -1921,7 +1921,7 @@ default-package-overrides:
   - simple ==0.11.3
   - simple-cabal ==0.0.0.1
   - simple-cmd ==0.2.0.1
-  - simple-cmd-args ==0.1.2
+  - simple-cmd-args ==0.1.3
   - simple-log ==0.9.12
   - simple-reflect ==0.3.3
   - simple-sendfile ==0.2.28
@@ -2011,7 +2011,7 @@ default-package-overrides:
   - strict ==0.3.2
   - strict-base-types ==0.6.1
   - strict-concurrency ==0.2.4.3
-  - strict-list ==0.1.4
+  - strict-list ==0.1.5
   - stringbuilder ==0.5.1
   - string-class ==0.1.7.0
   - string-combinators ==0.6.0.5
@@ -2180,7 +2180,7 @@ default-package-overrides:
   - tonatona-servant ==0.1.0.2
   - torsor ==0.1
   - tostring ==0.2.1.1
-  - TotalMap ==0.1.0.0
+  - TotalMap ==0.1.1.1
   - tracing ==0.0.4.0
   - transaction ==0.1.1.3
   - transformers-base ==0.4.5.2
@@ -2245,11 +2245,11 @@ default-package-overrides:
   - unique-logic ==0.4
   - unique-logic-tf ==0.5.1
   - unit-constraint ==0.0.0
-  - universe ==1.1
+  - universe ==1.1.1
   - universe-base ==1.1.1
   - universe-dependent-sum ==1.1.0.1
   - universe-instances-base ==1.1
-  - universe-instances-extended ==1.1
+  - universe-instances-extended ==1.1.1
   - universe-instances-trans ==1.1
   - universe-reverse-instances ==1.1
   - universum ==1.5.0
@@ -2309,7 +2309,7 @@ default-package-overrides:
   - verbosity ==0.3.0.0
   - versions ==3.5.1.1
   - ViennaRNAParser ==1.3.3
-  - viewprof ==0.0.0.29
+  - viewprof ==0.0.0.30
   - vinyl ==0.11.0
   - vivid ==0.4.2.3
   - vivid-osc ==0.5.0.0
@@ -2339,7 +2339,7 @@ default-package-overrides:
   - wai-transformers ==0.1.0
   - wai-websockets ==3.0.1.2
   - warp ==3.2.28
-  - warp-tls ==3.2.7
+  - warp-tls ==3.2.8
   - warp-tls-uid ==0.2.0.6
   - wave ==0.2.0
   - wcwidth ==0.0.2
@@ -2435,7 +2435,7 @@ default-package-overrides:
   - yesod-csp ==0.2.5.0
   - yesod-eventsource ==1.6.0
   - yesod-fb ==0.5.0
-  - yesod-form ==1.6.6
+  - yesod-form ==1.6.7
   - yesod-form-bootstrap4 ==2.1.2
   - yesod-gitrepo ==0.3.0
   - yesod-gitrev ==0.2.1
