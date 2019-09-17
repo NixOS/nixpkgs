@@ -69,7 +69,6 @@ in
 
       exo
       garcon
-      gtk-xfce-engine
       libxfce4ui
       xfconf
 
