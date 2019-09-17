@@ -19695,6 +19695,8 @@ in
 
   micro = callPackage ../applications/editors/micro { };
 
+  mle = callPackage ../applications/editors/mle { };
+
   nano = callPackage ../applications/editors/nano { };
 
   nanoblogger = callPackage ../applications/misc/nanoblogger { };
