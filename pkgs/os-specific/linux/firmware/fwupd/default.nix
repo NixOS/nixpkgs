@@ -2,6 +2,7 @@
 
 { stdenv
 , fetchurl
+, fetchpatch
 , substituteAll
 , gtk-doc
 , pkgconfig
@@ -152,6 +153,11 @@ stdenv.mkDerivation rec {
       src = ./installed-tests-path.patch;
       # needs a different set of modules than po/make-images
       inherit installedTestsPython;
+    })
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/commit/41a25be6f4b371c367904284e9251cd461ad5cfe.patch";
+      sha256 = "0vv3x2pq5bpmg9c8ax5dsqcblw45n7jmzgw6p8h4asyjy57mzhaq";
     })
   ];
 

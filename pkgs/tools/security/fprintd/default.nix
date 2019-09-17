@@ -1,6 +1,6 @@
 { thinkpad ? false
 , stdenv, fetchurl, pkgconfig, intltool, libfprint-thinkpad ? null
-, libfprint ? null, glib, dbus-glib, polkit, nss, pam, systemd }:
+, libfprint ? null, glib, dbus-glib, polkit, nss, pam, systemd, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "fprintd" + stdenv.lib.optionalString thinkpad "-thinkpad";
@@ -11,16 +11,23 @@ stdenv.mkDerivation rec {
     sha256 = "124s0g9syvglgsmqnavp2a8c0zcq8cyaph8p8iyvbla11vfizs9l";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/libfprint/fprintd/merge_requests/16.patch";
+      sha256 = "1y39zsmxjll9hip8464qwhq5qg06c13pnafyafgxdph75lvhdll7";
+    })
+  ];
+
   buildInputs = [ glib dbus-glib polkit nss pam systemd ]
     ++ stdenv.lib.optional thinkpad libfprint-thinkpad
     ++ stdenv.lib.optional (!thinkpad) libfprint;
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  configureFlags = [ 
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system" 
-    "--localstatedir=/var" 
-    "--sysconfdir=${placeholder "out"}/etc" 
+  configureFlags = [
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--localstatedir=/var"
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
 
   meta = with stdenv.lib; {

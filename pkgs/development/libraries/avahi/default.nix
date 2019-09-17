@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
-      "--disable-gtk"
+      "--disable-gtk" "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
       (stdenv.lib.enableFeature gtk3Support "gtk3")
       "--${if qt4Support then "enable" else "disable"}-qt4"
       (stdenv.lib.enableFeature withPython "python")

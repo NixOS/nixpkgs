@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
   #dontAddPrefix = true;
 
   mesonFlags = [
-    "-Ddbuspolicydir=${placeholder "out"}/etc/dbus-1/system.d"
+    "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ostree, rpm, which, autoconf, automake, libtool, pkgconfig, cargo, rustc,
   gobject-introspection, gtk-doc, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gperf, cmake,
   libcap, glib, systemd, json-glib, libarchive, libsolv, librepo, polkit,
-  bubblewrap, pcre, check, python, json_c, libmodulemd_1, utillinux, sqlite, cppunit }:
+  bubblewrap, pcre, check, python, json_c, libmodulemd_1, utillinux, sqlite, cppunit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/50953#issuecomment-449777169
     # https://github.com/NixOS/nixpkgs/pull/50953#issuecomment-452177080
     ./fix-introspection-build.patch
+
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://github.com/coreos/rpm-ostree/commit/60053d0d3d2279d120ae7007c6048e499d2c4d14.patch";
+      sha256 = "0ig21zip09iy2da7ksg87jykaj3q8jyzh8r7yrpzyql85qxiwm0m";
+    })
   ];
 
   outputs = [ "out" "dev" "man" "devdoc" ];
