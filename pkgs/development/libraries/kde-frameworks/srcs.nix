@@ -315,11 +315,11 @@
     };
   };
   kio = {
-    version = "5.62.0";
+    version = "5.62.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.62/kio-5.62.0.tar.xz";
-      sha256 = "70b5c93d8d0be16f4b454bcdafe9533b654f13ef55e816c9024d4d3c5df52d86";
-      name = "kio-5.62.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.62/kio-5.62.1.tar.xz";
+      sha256 = "4b149085bcfbcd729d808a34bcbd4b11f5f9526aa919c82eaddabc1e88113df0";
+      name = "kio-5.62.1.tar.xz";
     };
   };
   kirigami2 = {
