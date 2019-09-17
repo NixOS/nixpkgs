@@ -2488,7 +2488,8 @@ in
     cudnn_cudatoolkit_9_1
     cudnn_cudatoolkit_9_2
     cudnn_cudatoolkit_10
-    cudnn_cudatoolkit_10_0;
+    cudnn_cudatoolkit_10_0
+    cudnn_cudatoolkit_10_1;
 
   cudnn = cudnn_cudatoolkit_9;
 
