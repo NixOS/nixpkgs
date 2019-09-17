@@ -75,7 +75,6 @@ in
 
       mousepad
       parole
-      pavucontrol
       ristretto
       xfce4-appfinder
       xfce4-screenshooter
@@ -89,9 +88,11 @@ in
       thunar
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.hardware.pulseaudio.enable xfce4-pulseaudio-plugin
       ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optionals cfg.enableXfwm [
+      ++ optionals config.hardware.pulseaudio.enable [
+        pavucontrol
+        xfce4-pulseaudio-plugin
+      ] ++ optionals cfg.enableXfwm [
         xfwm4
         xfwm4-themes
       ] ++ optionals (!cfg.noDesktop) [
