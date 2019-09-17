@@ -22494,6 +22494,8 @@ in
 
   synthv1 = callPackage ../applications/audio/synthv1 { };
 
+  system-syzygy = callPackage ../games/system-syzygy { };
+
   t4kcommon = callPackage ../games/t4kcommon { };
 
   tcl2048 = callPackage ../games/tcl2048 { };
