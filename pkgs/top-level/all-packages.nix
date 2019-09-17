@@ -15895,6 +15895,8 @@ in
 
   osxfuse = callPackage ../os-specific/darwin/osxfuse { };
 
+  osxsnarf = callPackage ../os-specific/darwin/osxsnarf { };
+
   power-calibrate = callPackage ../os-specific/linux/power-calibrate { };
 
   powerstat = callPackage ../os-specific/linux/powerstat { };
