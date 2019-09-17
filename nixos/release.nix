@@ -292,6 +292,12 @@ in rec {
         services.xserver.desktopManager.xfce.enable = true;
       });
 
+    gnome3 = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.gdm.enable = true;
+        services.xserver.desktopManager.gnome3.enable = true;
+      });
+
     # Linux/Apache/PostgreSQL/PHP stack.
     lapp = makeClosure ({ pkgs, ... }:
       { services.httpd.enable = true;
