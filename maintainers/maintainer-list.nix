@@ -184,6 +184,12 @@
     githubId = 1250775;
     name = "Adolfo E. García Castro";
   };
+  adsr = {
+    email = "as@php.net";
+    github = "adsr";
+    githubId = 315003;
+    name = "Adam Saponara";
+  };
   aepsil0n = {
     email = "eduard.bopp@aepsil0n.de";
     github = "aepsil0n";
