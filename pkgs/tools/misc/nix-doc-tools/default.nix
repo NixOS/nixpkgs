@@ -139,10 +139,15 @@ let
       ./generated/chunk-xhtml.xsl \
       ${combined-file-name}
 
+    (
+    combined="$PWD/${combined-file-name}"
+    cd $output/share/doc/${name}/html/
     docbook-index \
-      ./${combined-file-name} \
-      $output/share/doc/${name}/html/ \
-      $output/share/doc/${name}/html/index.js
+      --anchors \
+      "$combined" \
+      ./ \
+      ./index.js
+    )
 
     # Build the EPUB docs
     mkdir -p "$scratch/epub/OEBPS"
