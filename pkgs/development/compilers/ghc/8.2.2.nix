@@ -8,7 +8,8 @@
 
 , libiconv ? null, ncurses
 
-, enableDwarf ? !stdenv.isDarwin, elfutils # for DWARF support
+, enableDwarf ? !stdenv.targetPlatform.isDarwin &&
+                !stdenv.targetPlatform.isWindows, elfutils # for DWARF support
 
 , useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
