@@ -16993,6 +16993,8 @@ in
 
   publicsuffix-list = callPackage ../data/misc/publicsuffix-list { };
 
+  qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
+
   qogir-theme = callPackage ../data/themes/qogir { };
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
