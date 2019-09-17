@@ -197,7 +197,14 @@ let
       fi
     ''; # */
 
-
+  # Required for udev to set up predictible interfaces names
+  linkUnits = pkgs.runCommand "link-units" {
+      allowedReferences = [ extraUtils ];
+      preferLocalBuild = true;
+  } ''
+    mkdir -p $out
+    cp -v ${udev}/lib/systemd/network/99-default.link $out/
+  '';
   udevRules = pkgs.runCommand "udev-rules" {
       allowedReferences = [ extraUtils ];
       preferLocalBuild = true;
@@ -259,7 +266,7 @@ let
       ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
-    inherit udevRules extraUtils modulesClosure;
+    inherit udevRules extraUtils modulesClosure linkUnits;
 
     inherit (config.boot) resumeDevice;
 

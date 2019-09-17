@@ -204,6 +204,8 @@ done
 # Create device nodes in /dev.
 @preDeviceCommands@
 echo "running udev..."
+mkdir -p /etc/systemd
+ln -sfn @linkUnits@ /etc/systemd/network
 mkdir -p /etc/udev
 ln -sfn @udevRules@ /etc/udev/rules.d
 mkdir -p /dev/.mdadm
