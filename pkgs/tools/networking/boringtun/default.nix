@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "boringtun";
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   # lacking a new line in file ".cargo/config",
   # we append a new line to the end of file.
   preConfigure = "echo '' >> .cargo/config";
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   # Testing this project requires sudo, Docker and network access, etc.
   doCheck = false;
