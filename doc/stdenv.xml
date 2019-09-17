@@ -2793,6 +2793,28 @@ nativeBuildInputs = [ breakpointHook ];
     </varlistentry>
     <varlistentry>
      <term>
+      patchDesktopFileExecHook
+     </term>
+     <listitem>
+      <para>
+       This setup hook patches the <literal>Exec=</literal> clauses of all
+       desktop files in <literal>$out/share/applications</literal> to use an
+       absolute path to the executable.
+      </para>
+      <para>
+       The corresponding executables must reside in <literal>$out/bin</literal> or be
+       provided by one of the <envar>buildInputs</envar> for substitution to
+       work.
+      </para>
+      <para>
+       If the package provides desktop files in a non-standard location, you
+       can call <command>patchDesktopFileExecIn</command> with the folder where
+       they are located as an argument.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       unzip
      </term>
      <listitem>
