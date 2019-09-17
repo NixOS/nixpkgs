@@ -17,4 +17,7 @@ buildLinux (args // rec {
   # Should the testing kernels ever be built on Hydra?
   extraMeta.hydraPlatforms = [];
 
+  # Testing kernels are not maintained on stable releases
+  extraMeta.broken = true;
+
 } // (args.argsOverride or {}))
