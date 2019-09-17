@@ -16949,6 +16949,8 @@ in
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
 
+  papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme { };
+
   papis = with python3Packages; toPythonApplication papis;
 
   paps = callPackage ../tools/misc/paps { };
