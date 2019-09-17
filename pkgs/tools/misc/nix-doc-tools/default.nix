@@ -129,6 +129,17 @@ let
       --noxincludenode "$input" \
       --output "${combined-file-name}"
 
+    # Build the man pages
+    mkdir -p $output/share/man
+    xsltproc --nonet \
+      --maxdepth 6000 \
+      --param man.output.in.separate.dir 1 \
+      --param man.output.base.dir "'$output/share/man/'" \
+      --param man.endnotes.are.numbered 0 \
+      --param man.break.after.slash 1 \
+      ${docbook-xsl-ns}/xml/xsl/docbook/manpages/docbook.xsl \
+      ${combined-file-name}
+
     # Build the HTML docs
     mkdir -p "$output/share/doc/${name}/html"
     cp -r ./generated/web/* "$output/share/doc/${name}/html"
