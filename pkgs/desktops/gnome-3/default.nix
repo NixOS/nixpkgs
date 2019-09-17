@@ -215,8 +215,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-weather = callPackage ./apps/gnome-weather { };
 
-  nautilus-sendto = callPackage ./apps/nautilus-sendto { };
-
   polari = callPackage ./apps/polari { };
 
   seahorse = callPackage ./apps/seahorse { };
@@ -356,4 +354,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   corePackages = throw "deprecated 2019-08-25: please use `services.gnome3.core-shell.enable`";
   optionalPackages = throw "deprecated 2019-08-25: please use `services.gnome3.core-utilities.enable`";
   gamesPackages = throw "deprecated 2019-08-25: please use `services.gnome3.games.enable`";
+
+  nautilus-sendto = throw "deprecated 2019-09-17: abandoned";
 })
