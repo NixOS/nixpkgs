@@ -74,11 +74,14 @@ in
       xfconf
 
       mousepad
+      parole
+      pavucontrol
       ristretto
       xfce4-appfinder
       xfce4-screenshooter
       xfce4-session
       xfce4-settings
+      xfce4-taskmanager
       xfce4-terminal
 
       # TODO: resync patch for plugins
@@ -88,10 +91,12 @@ in
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
       ++ optional config.hardware.pulseaudio.enable xfce4-pulseaudio-plugin
       ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optional cfg.enableXfwm xfwm4
-      ++ optionals (!cfg.noDesktop) [
-        xfce4-panel
+      ++ optionals cfg.enableXfwm [
+        xfwm4
+        xfwm4-themes
+      ] ++ optionals (!cfg.noDesktop) [
         xfce4-notifyd
+        xfce4-panel
         xfdesktop
       ];
 
