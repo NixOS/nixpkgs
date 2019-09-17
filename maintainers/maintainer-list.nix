@@ -5898,6 +5898,12 @@
       fingerprint = "ADF4 C13D 0E36 1240 BD01  9B51 D1DE 6D7F 6936 63A5";
     }];
   };
+  simonchatts = {
+    email = "code@chatts.net";
+    github = "simonchatts";
+    githubId = 11135311;
+    name = "Simon Chatterjee";
+  };
   simonvandel = {
     email = "simon.vandel@gmail.com";
     github = "simonvandel";
