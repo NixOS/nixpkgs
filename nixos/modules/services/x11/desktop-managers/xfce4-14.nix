@@ -53,6 +53,7 @@ in
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
+      gnome3.gnome-themes-extra
       gnome3.adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
