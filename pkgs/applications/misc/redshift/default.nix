@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
-, gtk3, python, pygobject3, hicolor-icon-theme, pyxdg, desktopFileHook
+, gtk3, python, pygobject3, hicolor-icon-theme, pyxdg, patchDesktopFileExecHook
 
 , withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     wrapGAppsHook
     wrapPython
-    desktopFileHook
+    patchDesktopFileExecHook
   ];
 
   configureFlags = [

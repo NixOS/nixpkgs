@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , SDL2, SDL2_image
-, pkgconfig, desktopFileHook
+, pkgconfig, patchDesktopFileExecHook
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2 SDL2_image
   ];
-  nativeBuildInputs = [ pkgconfig desktopFileHook ];
+  nativeBuildInputs = [ pkgconfig patchDesktopFileExecHook ];
 
   patches = [
     (fetchpatch {

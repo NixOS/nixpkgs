@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation, desktopFileHook,
+{ stdenv, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation, patchDesktopFileExecHook,
   avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
 }:
 
@@ -13,7 +13,7 @@ mkDerivation rec {
     sha256 = "1fy7xjwqyisapf8wv50gwpbgbv5b4ldf7766w453h5iw10d18kh0";
   };
 
-  nativeBuildInputs = [ desktopFileHook ];
+  nativeBuildInputs = [ patchDesktopFileExecHook ];
   buildInputs = [ cmake curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
 
   meta = {

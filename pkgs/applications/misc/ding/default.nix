@@ -1,4 +1,4 @@
-{ aspell, aspellDicts_de, aspellDicts_en, buildEnv, desktopFileHook, fetchurl, fortune, gnugrep, makeWrapper, stdenv, tk, tre }:
+{ aspell, aspellDicts_de, aspellDicts_en, buildEnv, patchDesktopFileExecHook, fetchurl, fortune, gnugrep, makeWrapper, stdenv, tk, tre }:
 let
   aspellEnv = buildEnv {
     name = "env-ding-aspell";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0chjqs3z9zs1w3l7b5lsaj682rgnkf9kibcbzhggqqcn1pbvl5sq";
   };
 
-  nativeBuildInputs = [ makeWrapper desktopFileHook ];
+  nativeBuildInputs = [ makeWrapper patchDesktopFileExecHook ];
   buildInputs = [ aspellEnv fortune gnugrep tk tre ];
 
   patches = [ ./dict.patch ];

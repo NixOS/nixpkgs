@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, vala, gnome3,
   dbus, bamf, clutter-gtk, pantheon, libgee, libcanberra-gtk3,
   libwnck3, deepin-menu, deepin-mutter, deepin-wallpapers,
-  deepin-desktop-schemas, wrapGAppsHook, desktopFileHook, deepin }:
+  deepin-desktop-schemas, wrapGAppsHook, patchDesktopFileExecHook, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     gnome3.gnome-common
     wrapGAppsHook
     deepin.setupHook
-    desktopFileHook
+    patchDesktopFileExecHook
   ];
 
   buildInputs = [

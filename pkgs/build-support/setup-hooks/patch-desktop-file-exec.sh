@@ -6,17 +6,17 @@
 # $out/bin/foo exists and is executable
 # It can also pick foo in buildInputs.
 
-fixupOutputHooks+=('autoPatchDesktopFiles;')
+fixupOutputHooks+=('autoPatchDesktopFileExec;')
 
-autoPatchDesktopFiles () {
+autoPatchDesktopFileExec () {
     # shellcheck disable=2154
     dir="${!outputBin}/share/applications";
     if [[ -d $dir ]]; then
-        patchDesktopFiles "$dir";
+        patchDesktopFileExecIn "$dir";
     fi;
 }
 
-patchDesktopFiles () {
+patchDesktopFileExecIn () {
     echo "fixing Exec= paths in desktop files of $1";
     for desktopFile in "$1"/**.desktop; do
         lines="$(grep -E '^\s*Exec' "$desktopFile")"
