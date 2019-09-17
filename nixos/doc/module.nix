@@ -22,8 +22,6 @@ let
     };
   };
 
-  sources = lib.sourceFilesBySuffices ./. [".nix" ".xml"];
-
   modulesDoc = builtins.toFile "modules.xml" ''
     <section xmlns:xi="http://www.w3.org/2001/XInclude" id="modules">
     ${(lib.concatMapStrings (path: ''
@@ -45,7 +43,7 @@ in rec {
 
   manual = pkgs.nix-doc-tools {
     name = "nixos-manual";
-    src = sources;
+    src = ./manual;
     generated-files = [
       generatedSources
     ];
@@ -54,7 +52,27 @@ in rec {
   manualHTML = manual;
   manualHTMLShell = pkgs.nix-doc-tools {
     name = "nixos-manual";
-    src = ./.;
+    src = ./manual;
+    generated-files = [
+      generatedSources
+    ];
+    nix-shell = true;
+  };
+
+  manpages = pkgs.nix-doc-tools {
+    name = "nixos-man-pages";
+    root-file-name = "man-pages.xml";
+    combined-file-name = "man-pages-combined.xml";
+    src = ./man-pages;
+    generated-files = [
+      generatedSources
+    ];
+  };
+  manpagesShell = pkgs.nix-doc-tools {
+    name = "nixos-man-pages";
+    root-file-name = "man-pages.xml";
+    combined-file-name = "man-pages-combined.xml";
+    src = ./man-pages;
     generated-files = [
       generatedSources
     ];
