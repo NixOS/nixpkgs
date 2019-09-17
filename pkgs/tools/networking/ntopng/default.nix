@@ -62,5 +62,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
+    broken = true;  # broken since commit "libpcap: 1.8.1 -> 1.9.0"
   };
 }
