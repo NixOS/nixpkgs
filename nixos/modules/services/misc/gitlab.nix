@@ -29,6 +29,9 @@ let
     } // cfg.extraDatabaseConfig;
   };
 
+  # We only want to create a database if we're actually going to connect to it.
+  databaseActuallyCreateLocally = cfg.databaseCreateLocally && cfg.databaseHost == "";
+
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
     bin_dir = "${cfg.packages.gitaly}/bin"
@@ -273,8 +276,8 @@ in {
         description = ''
           Whether a database should be automatically created on the
           local host. Set this to <literal>false</literal> if you plan
-          on provisioning a local database yourself or use an external
-          one.
+          on provisioning a local database yourself. This has no effect
+          if <option>services.gitlab.databaseHost</option> is customized.
         '';
       };
 
@@ -564,8 +567,8 @@ in {
 
     assertions = [
       {
-        assertion = cfg.databaseCreateLocally -> (cfg.user == cfg.databaseUsername);
-        message = "For local automatic database provisioning services.gitlab.user and services.gitlab.databaseUsername should be identical.";
+        assertion = databaseActuallyCreateLocally -> (cfg.user == cfg.databaseUsername);
+        message = ''For local automatic database provisioning (services.gitlab.databaseCreateLocally == true) with peer authentication (services.gitlab.databaseHost == "") to work services.gitlab.user and services.gitlab.databaseUsername must be identical.'';
       }
       {
         assertion = (cfg.databaseHost != "") -> (cfg.databasePasswordFile != null);
@@ -599,14 +602,14 @@ in {
     services.redis.enable = mkDefault true;
 
     # We use postgres as the main data store.
-    services.postgresql = optionalAttrs cfg.databaseCreateLocally {
+    services.postgresql = optionalAttrs databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = singleton { name = cfg.databaseUsername; };
     };
     # The postgresql module doesn't currently support concepts like
     # objects owners and extensions; for now we tack on what's needed
     # here.
-    systemd.services.postgresql.postStart = mkAfter (optionalString cfg.databaseCreateLocally ''
+    systemd.services.postgresql.postStart = mkAfter (optionalString databaseActuallyCreateLocally ''
       $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
       current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.databaseName}'")
       if [[ "$current_owner" != "${cfg.databaseUsername}" ]]; then
