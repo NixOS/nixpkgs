@@ -326,5 +326,5 @@ in rec {
     gcc = gcc7;
   };
 
-  cudatoolkit_10 = cudatoolkit_10_0;
+  cudatoolkit_10 = cudatoolkit_10_1;
 }
