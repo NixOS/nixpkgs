@@ -30,8 +30,14 @@
  -->
  <xsl:param name="generate.section.toc.level" select="1" />
 
-<!-- <xsl:param name="qanda.in.toc" select="1" />-->
-<xsl:template name="make.toc">
+<!-- Based off of:
+ https://github.com/docbook/xslt10-stylesheets/blob/release/1.79.2/xsl/html/autotoc.xsl#L30-L123
+Major changes:
+
+ * `root-nodes` is set selected from `/`, and is used instead of `nodes`
+   when generating the toc.
+ -->
+ <xsl:template name="make.toc">
   <xsl:param name="toc-context" select="."/>
   <xsl:param name="toc.title.p" select="true()"/>
   <xsl:param name="nodes" select="/NOT-AN-ELEMENT"/>
