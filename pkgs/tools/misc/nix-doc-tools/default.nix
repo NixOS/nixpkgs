@@ -124,14 +124,16 @@ let
       exit 1
     fi
 
-    xmllint --nonet \
+    echo "combining..."
+    time xmllint --nonet \
       --xinclude \
       --noxincludenode "$input" \
       --output "${combined-file-name}"
 
+    echo "building man pages..."
     # Build the man pages
     mkdir -p $output/share/man
-    xsltproc --nonet \
+    time xsltproc --nonet \
       --maxdepth 6000 \
       --param man.output.in.separate.dir 1 \
       --param man.output.base.dir "'$output/share/man/'" \
@@ -141,10 +143,11 @@ let
       ${combined-file-name}
 
     # Build the HTML docs
+    echo "building HTML docs..."
     mkdir -p "$output/share/doc/${name}/html"
     cp -r ./generated/web/* "$output/share/doc/${name}/html"
     chmod -R u+w "$output/share/doc/${name}/html"
-    xsltproc \
+    time xsltproc \
       --nonet --xinclude \
       --output "$output/share/doc/${name}/html/" \
       ./generated/chunk-xhtml.xsl \
@@ -153,7 +156,8 @@ let
     (
     combined="$PWD/${combined-file-name}"
     cd $output/share/doc/${name}/html/
-    docbook-index \
+    echo "    ...indexing"
+    time docbook-index \
       --anchors \
       "$combined" \
       ./ \
@@ -161,8 +165,9 @@ let
     )
 
     # Build the EPUB docs
+    echo "building epub..."
     mkdir -p "$scratch/epub/OEBPS"
-    xsltproc --nonet \
+    time xsltproc --nonet \
       --output "$scratch/epub/" \
       ./generated/epub.xsl \
       ${combined-file-name}
