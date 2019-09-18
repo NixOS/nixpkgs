@@ -715,6 +715,8 @@ let
 
     process = callPackage ../development/ocaml-modules/process { };
 
+    ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
+
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
