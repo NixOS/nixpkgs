@@ -94,6 +94,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-greeter = callPackage ./desktop/elementary-greeter { };
 
+  elementary-onboarding = callPackage ./desktop/elementary-onboarding { };
+
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
   elementary-session-settings = callPackage ./desktop/elementary-session-settings {
