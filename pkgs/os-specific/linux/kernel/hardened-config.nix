@@ -11,8 +11,7 @@
 { stdenv, version }:
 
 with stdenv.lib;
-with import ../../../../lib/kernel.nix { inherit (stdenv) lib; inherit version; };
-
+with stdenv.lib.kernel;
 assert (versionAtLeast version "4.9");
 
 optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
