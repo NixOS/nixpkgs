@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, makeWrapper, electron_5, dpkg, gtk3, glib, gsettings-desktop-schemas, wrapGAppsHook }:
+{ stdenv, fetchurl
+, dpkg, atomEnv, makeWrapper, wrapGAppsHook, autoPatchelfHook
+, glib, gtk3, gsettings-desktop-schemas
+, systemd, fontconfig
+, withPandoc ? false, pandoc }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "typora";
@@ -13,43 +19,46 @@ stdenv.mkDerivation rec {
     dpkg
     makeWrapper
     wrapGAppsHook
+
+    atomEnv.packages
+    autoPatchelfHook
   ];
 
   buildInputs = [
     glib
-    gsettings-desktop-schemas
     gtk3
+    gsettings-desktop-schemas
   ];
 
-  unpackPhase = "dpkg-deb -x $src .";
-
-  dontWrapGApps = true;
+  unpackPhase = ''
+    dpkg-deb -x $src .
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share
+    mkdir -p $out/bin $out/lib $out/share
     {
       cd usr
-      mv share/typora/resources/app $out/share/typora
-      mv share/{applications,icons,doc} $out/share/
+      mv share/typora $out/lib
+      mv share/{doc,icons,applications} $out/share/
     }
+
+    ln -sT $out/lib/typora/Typora $out/bin/typora
 
     runHook postInstall
   '';
 
-  postFixup = ''
-    makeWrapper ${electron_5}/bin/electron $out/bin/typora \
-      --add-flags $out/share/typora \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}"
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${makeLibraryPath [ systemd fontconfig stdenv.cc.cc ]})
+    ${optionalString withPandoc ''gappsWrapperArgs+=(--prefix PATH : "${pandoc}/bin")''} \
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A minimal Markdown reading & writing app";
     homepage = https://typora.io;
     license = licenses.unfree;
     maintainers = with maintainers; [ jensbin worldofpeace ];
-    platforms = [ "x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }
