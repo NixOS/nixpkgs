@@ -12,7 +12,7 @@ let
       inherit (stdenv.hostPlatform) system;
     };
 
-  hsPkgs = haskell.packages.ghc864.override {
+  hsPkgs = haskell.packages.ghc865.override {
     overrides = self: super: with haskell.lib;
       let elmPkgs = rec {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
