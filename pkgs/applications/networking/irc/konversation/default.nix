@@ -1,5 +1,6 @@
 { mkDerivation
 , lib
+, breeze-icons
 , fetchurl
 , fetchpatch
 , extra-cmake-modules
@@ -48,6 +49,7 @@ in mkDerivation rec {
   ];
 
   buildInputs = [
+    breeze-icons
     kbookmarks
     karchive
     kconfig
