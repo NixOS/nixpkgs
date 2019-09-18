@@ -14,12 +14,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "perf";
-  version = "1.6.0";
+  pname = "pyperf";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vrv83v8rhyl51yaxlqzw567vz5a9qwkymk3vqvcl5sa2yd3mzgp";
+    sha256 = "8d0143a22a13ee10c997a648f30b82cdc40175d5a20b11055ae058a82e45d371";
   };
 
   checkInputs = [ nose psutil ] ++
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to generate and modify perf";
-    homepage = https://github.com/vstinner/perf;
+    homepage = "https://pyperf.readthedocs.io/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };
