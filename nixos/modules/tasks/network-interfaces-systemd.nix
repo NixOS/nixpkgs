@@ -72,16 +72,20 @@ in
           };
       in mkMerge [ {
         enable = true;
-        networks."99-main" = (genericNetwork mkDefault) // {
-          # We keep the "broken" behaviour of applying this to all interfaces.
-          # In general we want to get rid of this workaround but there hasn't
-          # been any work on that.
-          # See the following issues for details:
-          # - https://github.com/NixOS/nixpkgs/issues/18962
-          # - https://github.com/NixOS/nixpkgs/issues/61629
-          matchConfig = mkDefault { Name = "*"; };
-        } // optionalAttrs (cfg.networkdUnmanagedInterfaces != "") {
-          name = "!${cfg.networkdUnmanagedInterfaces}";
+        networks = {
+         "90-unmanaged" = optionalAttrs (cfg.networkdUnmanagedInterfaces != "") {
+            matchConfig.Name = "${cfg.networkdUnmanagedInterfaces}";
+            linkConfig.Unmanaged = true;
+          };
+          "99-main" = (genericNetwork mkDefault) // {
+            # We keep the "broken" behaviour of applying this to all interfaces.
+            # In general we want to get rid of this workaround by setting the interface in
+            # networkdUnmanagedInterfaces attribute.
+            # See the following issues for details:
+            # - https://github.com/NixOS/nixpkgs/issues/18962
+            # - https://github.com/NixOS/nixpkgs/issues/61629
+            matchConfig = mkDefault { Name = "*"; };
+          };
         };
       }
       (mkMerge (forEach interfaces (i: {
