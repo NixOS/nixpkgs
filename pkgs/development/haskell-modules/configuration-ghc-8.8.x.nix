@@ -170,4 +170,7 @@ self: super: {
   # https://github.com/sol/hpack/issues/371
   hpack = markBrokenVersion "0.32.0" super.hpack;
 
+  # Upstream ships a broken Setup.hs file.
+  csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
+
 }
