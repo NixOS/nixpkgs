@@ -8,9 +8,6 @@
 
 , libiconv ? null, ncurses
 
-, enableDwarf ? !stdenv.targetPlatform.isDarwin &&
-                !stdenv.targetPlatform.isWindows, elfutils # for DWARF support
-
 , useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
@@ -72,8 +69,7 @@ let
   # Splicer will pull out correct variations
   libDeps = platform: [ ncurses ]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
-    ++ stdenv.lib.optional (platform.libc != "glibc") libiconv
-    ++ stdenv.lib.optional enableDwarf elfutils;
+    ++ stdenv.lib.optional (platform.libc != "glibc") libiconv;
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
@@ -207,8 +203,6 @@ stdenv.mkDerivation (rec {
   ] ++ stdenv.lib.optionals (targetPlatform.isDarwin && targetPlatform.isAarch64) [
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     "--disable-large-address-space"
-  ] ++ stdenv.lib.optional enableDwarf [
-    "--enable-dwarf-unwind"
   ];
 
   # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
