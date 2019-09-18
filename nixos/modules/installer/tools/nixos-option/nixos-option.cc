@@ -475,6 +475,11 @@ bool optionTypeIs(Context & ctx, Value & v, const std::string & soughtType)
     }
 }
 
+bool isAggregateOptionType(Context & ctx, Value & v)
+{
+    return optionTypeIs(ctx, v, "attrsOf") || optionTypeIs(ctx, v, "listOf") || optionTypeIs(ctx, v, "loaOf");
+}
+
 MakeError(OptionPathError, EvalError);
 
 Value getSubOptions(Context & ctx, Value & option)
@@ -507,7 +512,7 @@ Value findAlongOptionPath(Context & ctx, const std::string & path)
             if (isOption(ctx, v) && optionTypeIs(ctx, v, "submodule")) {
                 v = getSubOptions(ctx, v);
             }
-            if (isOption(ctx, v) && optionTypeIs(ctx, v, "loaOf") && !lastAttribute) {
+            if (isOption(ctx, v) && isAggregateOptionType(ctx, v) && !lastAttribute) {
                 v = getSubOptions(ctx, v);
                 // Note that we've consumed attr, but didn't actually use it.  This is the path component that's looked
                 // up in the list or attribute set that doesn't name an option -- the "root" in "users.users.root.name".
