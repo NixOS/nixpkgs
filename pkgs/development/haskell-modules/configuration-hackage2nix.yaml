@@ -3116,6 +3116,7 @@ broken-packages:
   - armor
   - arpa
   - arpack
+  - array-builder
   - array-chunks
   - array-forth
   - array-primops
@@ -4741,6 +4742,11 @@ broken-packages:
   - feed-translator
   - feed2lj
   - feed2twitter
+  - fei-base
+  - fei-cocoapi
+  - fei-dataiter
+  - fei-examples
+  - fei-nn
   - feldspar-compiler
   - feldspar-language
   - fenfire
@@ -4786,6 +4792,7 @@ broken-packages:
   - findhttp
   - fingertree-psqueue
   - fingertree-tf
+  - finitary-derive
   - FiniteMap
   - firefly-example
   - first-and-last
@@ -5087,6 +5094,7 @@ broken-packages:
   - ghci-history-parser
   - ghci-lib
   - ghci-ng
+  - ghcide
   - ghcjs-base-stub
   - ghcjs-dom-jsffi
   - ghcjs-fetch
@@ -5709,6 +5717,7 @@ broken-packages:
   - hdbi-tests
   - hdf
   - hDFA
+  - hdiff
   - hdigest
   - hdirect
   - hdis86
@@ -6376,6 +6385,7 @@ broken-packages:
   - ide-backend-server
   - ideas
   - ideas-math
+  - ideas-math-types
   - idempotent
   - identifiers
   - idiii
@@ -9561,6 +9571,7 @@ broken-packages:
   - through-text
   - throwable-exceptions
   - thumbnail-plus
+  - thumbnail-polish
   - tic-tac-toe
   - tickle
   - TicTacToe
