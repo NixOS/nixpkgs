@@ -402,13 +402,14 @@ void printAttr(Context & ctx, Out & out, const std::string & path, Value & root)
     }
 }
 
-bool has_example(Context & ctx, Value & option) {
-  try {
-      findAlongAttrPath(ctx.state, "example", ctx.autoArgs, option);
-      return true;
-  } catch (Error &) {
-      return false;
-  }
+bool has_example(Context & ctx, Value & option)
+{
+    try {
+        findAlongAttrPath(ctx.state, "example", ctx.autoArgs, option);
+        return true;
+    } catch (Error &) {
+        return false;
+    }
 }
 
 void printOption(Context & ctx, Out & out, const std::string & path, Value & option)
