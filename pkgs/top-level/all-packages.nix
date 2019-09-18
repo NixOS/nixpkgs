@@ -15698,11 +15698,13 @@ in
       ];
   };
 
+  linux_5_3 = callPackage ../os-specific/linux/kernel/linux-5.3.nix {
+    kernelPatches = [ kernelPatches.bridge_stp_helper ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
-      kernelPatches.modinst_arg_list_too_long
-      kernelPatches.export_kernel_fpu_functions
     ];
   };
 
@@ -15777,6 +15779,8 @@ in
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
     e1000e = if stdenv.lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
+
+    intel-speed-select = if stdenv.lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
@@ -15892,7 +15896,7 @@ in
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_5_2;
+  linuxPackages_latest = linuxPackages_5_3;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -15903,6 +15907,7 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_2);
+  linuxPackages_5_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_3);
 
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
