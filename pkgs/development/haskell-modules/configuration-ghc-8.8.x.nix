@@ -167,4 +167,7 @@ self: super: {
   # over-specified version constraints
   aeson-diff = doJailbreak super.aeson-diff;
 
+  # https://github.com/sol/hpack/issues/371
+  hpack = markBrokenVersion "0.32.0" super.hpack;
+
 }
