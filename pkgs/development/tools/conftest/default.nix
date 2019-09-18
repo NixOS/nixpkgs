@@ -2,27 +2,32 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.12.0";
+  version = "0.14.0";
+
+  # Something subtle in the go sum db is causing every download to
+  # get a new sum (and thus breaking the hash). This disables the
+  # fetching of the sum from the go sum database.
+  modBuildPhase = ''
+    runHook preBuild
+    GONOSUMDB=* go mod download
+    runHook postBuild
+  '';
 
   src = fetchFromGitHub {
     owner = "instrumenta";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "0blrbbnvnnxyw0idhglqdz16i7g6g86a6kw2iw707bg0yfdl1ncq";
+    sha256 = "0fjz6ad8rnznlp1kiyb3c6anhjs6v6acgziw4hmyz0xva4jnspsh";
   };
 
-  patches = [
-    # Version 0.12.0 does not build with go 1.13. See https://github.com/instrumenta/conftest/pull/85.
-    # TODO: Remove once https://github.com/instrumenta/conftest/pull/85 is merged and lands in a release.
-    ./go-1.13-deps.patch
-  ];
+  modSha256 = "1xwqlqx5794hsi14h5gqg69gjcqcma24ha0fxn0vffqgqs2cz1d1";
 
   buildFlagsArray = ''
     -ldflags=
         -X main.version=${version}
   '';
 
-  modSha256 = "11999ywy73ng45gl1qypky8342jvishcp11bdxbigvqhwl2zbpav";
+  subPackages = [ "cmd" ];
 
   meta = with lib; {
     description = "Write tests against structured configuration data";
