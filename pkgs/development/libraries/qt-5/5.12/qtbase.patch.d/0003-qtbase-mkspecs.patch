@@ -1,7 +1,7 @@
-From cfcd1f6e1ac53bfbd7d35f0e1aefbdbaa1726f4d Mon Sep 17 00:00:00 2001
+From f02c0371160b5d90df4030fc55921c6acb0e6914 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
-Date: Tue, 17 Sep 2019 05:32:35 -0500
-Subject: [PATCH 03/10] qtbase-mkspecs
+Date: Wed, 18 Sep 2019 05:39:39 -0500
+Subject: [PATCH 03/11] qtbase-mkspecs
 
 ---
  mkspecs/features/create_cmake.prf             | 53 ++++--------
@@ -10,13 +10,12 @@ Subject: [PATCH 03/10] qtbase-mkspecs
  mkspecs/features/qml_plugin.prf               |  2 +-
  mkspecs/features/qt_app.prf                   |  2 +-
  mkspecs/features/qt_build_paths.prf           |  4 +-
- mkspecs/features/qt_common.prf                | 31 -------
  mkspecs/features/qt_docs.prf                  | 10 +--
  mkspecs/features/qt_example_installs.prf      |  2 +-
  mkspecs/features/qt_functions.prf             |  2 +-
  mkspecs/features/qt_installs.prf              | 22 ++---
  mkspecs/features/qt_plugin.prf                |  2 +-
- 12 files changed, 39 insertions(+), 173 deletions(-)
+ 11 files changed, 39 insertions(+), 142 deletions(-)
 
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
 index c9910dda..e9bc8076 100644
@@ -318,48 +317,6 @@ index 3bb3823a..655b7b7d 100644
 +    MODULE_BASE_OUTDIR = $$NIX_OUTPUT_OUT
 +    MODULE_QMAKE_OUTDIR = $$NIX_OUTPUT_OUT
  }
-diff --git a/mkspecs/features/qt_common.prf b/mkspecs/features/qt_common.prf
-index caecb68a..dc5c2178 100644
---- a/mkspecs/features/qt_common.prf
-+++ b/mkspecs/features/qt_common.prf
-@@ -25,37 +25,6 @@ contains(TEMPLATE, .*lib) {
-     if(!host_build|!cross_compile):qtConfig(reduce_exports): CONFIG += hide_symbols
-     unix:qtConfig(reduce_relocations): CONFIG += bsymbolic_functions
-     qtConfig(separate_debug_info): CONFIG += separate_debug_info
--
--    !isEmpty(_QMAKE_SUPER_CACHE_): \
--        rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
--    else: \
--        rplbase = $$MODULE_BASE_OUTDIR
--    host_build {
--        qqt_libdir = \$\$\$\$[QT_HOST_LIBS]
--        qt_libdir = $$[QT_HOST_LIBS]
--    } else {
--        qqt_libdir = \$\$\$\$[QT_INSTALL_LIBS]
--        qt_libdir = $$[QT_INSTALL_LIBS]
--    }
--    contains(QMAKE_DEFAULT_LIBDIRS, $$qt_libdir) {
--        lib_replace0.match = $$rplbase/lib/
--        lib_replace0.replace = $$qqt_libdir/
--        lib_replace0.CONFIG = path
--        QMAKE_PRL_INSTALL_REPLACE += lib_replace0
--        lib_replace.match = "[^ ']*$$rplbase/lib"
--        lib_replace.replace =
--    } else {
--        lib_replace.match = $$rplbase/lib
--        lib_replace.replace = $$qqt_libdir
--    }
--    lib_replace.CONFIG = path
--    QMAKE_PRL_INSTALL_REPLACE += lib_replace
--    !equals(qt_libdir, $$rplbase/lib) {
--        qtlibdir_replace.match = $$qt_libdir
--        qtlibdir_replace.replace = $$qqt_libdir
--        qtlibdir_replace.CONFIG = path
--        QMAKE_PRL_INSTALL_REPLACE += qtlibdir_replace
--    }
- }
- 
- # The remainder of this file must not apply to host tools/libraries,
 diff --git a/mkspecs/features/qt_docs.prf b/mkspecs/features/qt_docs.prf
 index 3b74cd4d..6bfbbe6e 100644
 --- a/mkspecs/features/qt_docs.prf

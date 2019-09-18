@@ -57,13 +57,14 @@ let
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
-        ./qtbase.patch.d/0004-qtbase-cmake.patch
-        ./qtbase.patch.d/0005-qtbase-gtk3.patch
-        ./qtbase.patch.d/0006-qtbase-xcursor.patch
-        ./qtbase.patch.d/0007-qtbase-xcompose.patch
-        ./qtbase.patch.d/0008-qtbase-tzdir.patch
-        ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
-        ./qtbase.patch.d/0010-qtbase-assert.patch
+        ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
+        ./qtbase.patch.d/0005-qtbase-cmake.patch
+        ./qtbase.patch.d/0006-qtbase-gtk3.patch
+        ./qtbase.patch.d/0007-qtbase-xcursor.patch
+        ./qtbase.patch.d/0008-qtbase-xcompose.patch
+        ./qtbase.patch.d/0009-qtbase-tzdir.patch
+        ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
+        ./qtbase.patch.d/0011-qtbase-assert.patch
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];

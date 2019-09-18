@@ -1,7 +1,7 @@
-From 689670949eac83e1ba76425a1fc17efeb920eff1 Mon Sep 17 00:00:00 2001
+From d41d33acb53d54aee01c61e61a569687eadd78f8 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:34:28 -0500
-Subject: [PATCH 04/10] qtbase-cmake
+Subject: [PATCH 05/11] qtbase-cmake
 
 ---
  mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in  |  2 +-

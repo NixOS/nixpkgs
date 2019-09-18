@@ -1,7 +1,7 @@
-From 7211024a1d54232f9a6f91f7aac467e0e8893691 Mon Sep 17 00:00:00 2001
+From e94cdbb790beb51babaa61e373f64bac96fcaee2 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:36:10 -0500
-Subject: [PATCH 07/10] qtbase-xcompose
+Subject: [PATCH 08/11] qtbase-xcompose
 
 ---
  .../compose/generator/qtablegenerator.cpp                    | 5 +----

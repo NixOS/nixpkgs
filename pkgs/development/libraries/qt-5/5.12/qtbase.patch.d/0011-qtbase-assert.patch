@@ -1,7 +1,7 @@
-From 60a2d764708234a06828c76d91db77565e08d872 Mon Sep 17 00:00:00 2001
+From 4464f24a507b05ff7280f1161f33bbf3b645d17d Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:37:04 -0500
-Subject: [PATCH 10/10] qtbase-assert
+Subject: [PATCH 11/11] qtbase-assert
 
 ---
  src/testlib/qtestassert.h | 7 +++++--
