@@ -53,6 +53,7 @@ let
     qtbase = [
       ./qtbase.patch
       ./qtbase-fixguicmake.patch
+      ./qtbase-trayicons.patch # can be removed with 5.12.4 or 5.13
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
@@ -67,6 +68,10 @@ let
         ./qtwebkit-darwin-no-qos-classes.patch
       ];
     qttools = [ ./qttools.patch ];
+    qtwayland = [
+      ./qtwayland-fix-webengine-freezeups-1.patch # can be removed with 5.12.4 or 5.13
+      ./qtwayland-fix-webengine-freezeups-2.patch # can be removed with 5.12.4 or 5.13
+    ];
   };
 
   qtModule =
