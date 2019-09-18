@@ -164,4 +164,7 @@ self: super: {
     sha256 = "0zsgzn0nvdxvqi5z0za3gzlhql2x5d5cr0kkr19j5c67fy177w6b";
   });
 
+  # over-specified version constraints
+  aeson-diff = doJailbreak super.aeson-diff;
+
 }
