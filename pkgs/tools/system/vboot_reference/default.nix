@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dont_static_link.patch ];
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "ar qc" '${stdenv.cc.bintools.targetPrefix}ar qc'
+  '';
+
   preBuild = ''
     patchShebangs scripts
   '';
