@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \
         -e 's@ -Werror @ @' \
-        -e 's@/usr/sbin/sendmail@${system-sendmail}@' -i Makefile
+        -e 's@/usr/sbin/sendmail@${system-sendmail}/bin/sendmail@' -i Makefile
   '';
 
   meta = with stdenv.lib; {
