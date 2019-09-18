@@ -20970,6 +20970,12 @@ in
 
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
 
+  gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim {
+    gtk = pkgs.gtk3;
+  };
+
+  gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
+
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { pythonPackages = python3Packages; };
 
   vis = callPackage ../applications/editors/vis {
