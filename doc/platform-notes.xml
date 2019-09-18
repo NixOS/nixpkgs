@@ -12,12 +12,7 @@
   <itemizedlist>
    <listitem>
     <para>
-     The Darwin <literal>stdenv</literal> uses clang instead of gcc. When
-     referring to the compiler <varname>$CC</varname> or <command>cc</command>
-     will work in both cases. Some builds hardcode gcc/g++ in their build
-     scripts, that can usually be fixed with using something like
-     <literal>makeFlags = [ "CC=cc" ];</literal> or by patching the build
-     scripts.
+     The Darwin <literal>stdenv</literal> uses clang instead of gcc. When referring to the compiler <varname>$CC</varname> or <command>cc</command> will work in both cases. Some builds hardcode gcc/g++ in their build scripts, that can usually be fixed with using something like <literal>makeFlags = [ "CC=cc" ];</literal> or by patching the build scripts.
     </para>
 <programlisting>
 stdenv.mkDerivation {
@@ -31,12 +26,7 @@ stdenv.mkDerivation {
    </listitem>
    <listitem>
     <para>
-     On Darwin, libraries are linked using absolute paths, libraries are
-     resolved by their <literal>install_name</literal> at link time. Sometimes
-     packages won't set this correctly causing the library lookups to fail at
-     runtime. This can be fixed by adding extra linker flags or by running
-     <command>install_name_tool -id</command> during the
-     <function>fixupPhase</function>.
+     On Darwin, libraries are linked using absolute paths, libraries are resolved by their <literal>install_name</literal> at link time. Sometimes packages won't set this correctly causing the library lookups to fail at runtime. This can be fixed by adding extra linker flags or by running <command>install_name_tool -id</command> during the <function>fixupPhase</function>.
     </para>
 <programlisting>
 stdenv.mkDerivation {
@@ -48,16 +38,10 @@ stdenv.mkDerivation {
    </listitem>
    <listitem>
     <para>
-     Even if the libraries are linked using absolute paths and resolved via
-     their <literal>install_name</literal> correctly, tests can sometimes fail
-     to run binaries. This happens because the <varname>checkPhase</varname>
-     runs before the libraries are installed.
+     Even if the libraries are linked using absolute paths and resolved via their <literal>install_name</literal> correctly, tests can sometimes fail to run binaries. This happens because the <varname>checkPhase</varname> runs before the libraries are installed.
     </para>
     <para>
-     This can usually be solved by running the tests after the
-     <varname>installPhase</varname> or alternatively by using
-     <varname>DYLD_LIBRARY_PATH</varname>. More information about this variable
-     can be found in the <citerefentry>
+     This can usually be solved by running the tests after the <varname>installPhase</varname> or alternatively by using <varname>DYLD_LIBRARY_PATH</varname>. More information about this variable can be found in the <citerefentry>
      <refentrytitle>dyld</refentrytitle>
      <manvolnum>1</manvolnum></citerefentry> manpage.
     </para>
@@ -78,11 +62,7 @@ stdenv.mkDerivation {
    </listitem>
    <listitem>
     <para>
-     Some packages assume xcode is available and use <command>xcrun</command>
-     to resolve build tools like <command>clang</command>, etc. This causes
-     errors like <code>xcode-select: error: no developer tools were found at
-     '/Applications/Xcode.app'</code> while the build doesn't actually depend
-     on xcode.
+     Some packages assume xcode is available and use <command>xcrun</command> to resolve build tools like <command>clang</command>, etc. This causes errors like <code>xcode-select: error: no developer tools were found at '/Applications/Xcode.app'</code> while the build doesn't actually depend on xcode.
     </para>
 <programlisting>
 stdenv.mkDerivation {
@@ -95,9 +75,7 @@ stdenv.mkDerivation {
 }
 </programlisting>
     <para>
-     The package <literal>xcbuild</literal> can be used to build projects that
-     really depend on Xcode. However, this replacement is not 100% compatible
-     with Xcode and can occasionally cause issues.
+     The package <literal>xcbuild</literal> can be used to build projects that really depend on Xcode. However, this replacement is not 100% compatible with Xcode and can occasionally cause issues.
     </para>
    </listitem>
   </itemizedlist>

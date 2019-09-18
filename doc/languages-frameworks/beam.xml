@@ -7,12 +7,7 @@
   <title>Introduction</title>
 
   <para>
-   In this document and related Nix expressions, we use the term,
-   <emphasis>BEAM</emphasis>, to describe the environment. BEAM is the name of
-   the Erlang Virtual Machine and, as far as we're concerned, from a packaging
-   perspective, all languages that run on the BEAM are interchangeable. That
-   which varies, like the build system, is transparent to users of any given
-   BEAM package, so we make no distinction.
+   In this document and related Nix expressions, we use the term, <emphasis>BEAM</emphasis>, to describe the environment. BEAM is the name of the Erlang Virtual Machine and, as far as we're concerned, from a packaging perspective, all languages that run on the BEAM are interchangeable. That which varies, like the build system, is transparent to users of any given BEAM package, so we make no distinction.
   </para>
  </section>
 
@@ -20,57 +15,36 @@
   <title>Structure</title>
 
   <para>
-   All BEAM-related expressions are available via the top-level
-   <literal>beam</literal> attribute, which includes:
+   All BEAM-related expressions are available via the top-level <literal>beam</literal> attribute, which includes:
   </para>
 
   <itemizedlist>
    <listitem>
     <para>
-     <literal>interpreters</literal>: a set of compilers running on the BEAM,
-     including multiple Erlang/OTP versions
-     (<literal>beam.interpreters.erlangR19</literal>, etc), Elixir
-     (<literal>beam.interpreters.elixir</literal>) and LFE
-     (<literal>beam.interpreters.lfe</literal>).
+     <literal>interpreters</literal>: a set of compilers running on the BEAM, including multiple Erlang/OTP versions (<literal>beam.interpreters.erlangR19</literal>, etc), Elixir (<literal>beam.interpreters.elixir</literal>) and LFE (<literal>beam.interpreters.lfe</literal>).
     </para>
    </listitem>
    <listitem>
     <para>
-     <literal>packages</literal>: a set of package sets, each compiled with a
-     specific Erlang/OTP version, e.g.
-     <literal>beam.packages.erlangR19</literal>.
+     <literal>packages</literal>: a set of package sets, each compiled with a specific Erlang/OTP version, e.g. <literal>beam.packages.erlangR19</literal>.
     </para>
    </listitem>
   </itemizedlist>
 
   <para>
-   The default Erlang compiler, defined by
-   <literal>beam.interpreters.erlang</literal>, is aliased as
-   <literal>erlang</literal>. The default BEAM package set is defined by
-   <literal>beam.packages.erlang</literal> and aliased at the top level as
-   <literal>beamPackages</literal>.
+   The default Erlang compiler, defined by <literal>beam.interpreters.erlang</literal>, is aliased as <literal>erlang</literal>. The default BEAM package set is defined by <literal>beam.packages.erlang</literal> and aliased at the top level as <literal>beamPackages</literal>.
   </para>
 
   <para>
-   To create a package set built with a custom Erlang version, use the lambda,
-   <literal>beam.packagesWith</literal>, which accepts an Erlang/OTP derivation
-   and produces a package set similar to
-   <literal>beam.packages.erlang</literal>.
+   To create a package set built with a custom Erlang version, use the lambda, <literal>beam.packagesWith</literal>, which accepts an Erlang/OTP derivation and produces a package set similar to <literal>beam.packages.erlang</literal>.
   </para>
 
   <para>
-   Many Erlang/OTP distributions available in
-   <literal>beam.interpreters</literal> have versions with ODBC and/or Java
-   enabled. For example, there's
-   <literal>beam.interpreters.erlangR19_odbc_javac</literal>, which corresponds
-   to <literal>beam.interpreters.erlangR19</literal>.
+   Many Erlang/OTP distributions available in <literal>beam.interpreters</literal> have versions with ODBC and/or Java enabled. For example, there's <literal>beam.interpreters.erlangR19_odbc_javac</literal>, which corresponds to <literal>beam.interpreters.erlangR19</literal>.
   </para>
 
   <para xml:id="erlang-call-package">
-   We also provide the lambda,
-   <literal>beam.packages.erlang.callPackage</literal>, which simplifies
-   writing BEAM package definitions by injecting all packages from
-   <literal>beam.packages.erlang</literal> into the top-level context.
+   We also provide the lambda, <literal>beam.packages.erlang.callPackage</literal>, which simplifies writing BEAM package definitions by injecting all packages from <literal>beam.packages.erlang</literal> into the top-level context.
   </para>
  </section>
 
@@ -81,24 +55,16 @@
    <title>Rebar3</title>
 
    <para>
-    By default, Rebar3 wants to manage its own dependencies. This is perfectly
-    acceptable in the normal, non-Nix setup, but in the Nix world, it is not.
-    To rectify this, we provide two versions of Rebar3:
+    By default, Rebar3 wants to manage its own dependencies. This is perfectly acceptable in the normal, non-Nix setup, but in the Nix world, it is not. To rectify this, we provide two versions of Rebar3:
     <itemizedlist>
      <listitem>
       <para>
-       <literal>rebar3</literal>: patched to remove the ability to download
-       anything. When not running it via <literal>nix-shell</literal> or
-       <literal>nix-build</literal>, it's probably not going to work as
-       desired.
+       <literal>rebar3</literal>: patched to remove the ability to download anything. When not running it via <literal>nix-shell</literal> or <literal>nix-build</literal>, it's probably not going to work as desired.
       </para>
      </listitem>
      <listitem>
       <para>
-       <literal>rebar3-open</literal>: the normal, unmodified Rebar3. It should
-       work exactly as would any other version of Rebar3. Any Erlang package
-       should rely on <literal>rebar3</literal> instead. See
-       <xref
+       <literal>rebar3-open</literal>: the normal, unmodified Rebar3. It should work exactly as would any other version of Rebar3. Any Erlang package should rely on <literal>rebar3</literal> instead. See <xref
             linkend="rebar3-packages"/>.
       </para>
      </listitem>
@@ -110,10 +76,7 @@
    <title>Mix &amp; Erlang.mk</title>
 
    <para>
-    Both Mix and Erlang.mk work exactly as expected. There is a bootstrap
-    process that needs to be run for both, however, which is supported by the
-    <literal>buildMix</literal> and <literal>buildErlangMk</literal>
-    derivations, respectively.
+    Both Mix and Erlang.mk work exactly as expected. There is a bootstrap process that needs to be run for both, however, which is supported by the <literal>buildMix</literal> and <literal>buildErlangMk</literal> derivations, respectively.
    </para>
   </section>
  </section>
@@ -122,13 +85,7 @@
   <title>How to Install BEAM Packages</title>
 
   <para>
-   BEAM packages are not registered at the top level, simply because they are
-   not relevant to the vast majority of Nix users. They are installable using
-   the <literal>beam.packages.erlang</literal> attribute set (aliased as
-   <literal>beamPackages</literal>), which points to packages built by the
-   default Erlang/OTP version in Nixpkgs, as defined by
-   <literal>beam.interpreters.erlang</literal>. To list the available packages
-   in <literal>beamPackages</literal>, use the following command:
+   BEAM packages are not registered at the top level, simply because they are not relevant to the vast majority of Nix users. They are installable using the <literal>beam.packages.erlang</literal> attribute set (aliased as <literal>beamPackages</literal>), which points to packages built by the default Erlang/OTP version in Nixpkgs, as defined by <literal>beam.interpreters.erlang</literal>. To list the available packages in <literal>beamPackages</literal>, use the following command:
   </para>
 
 <screen>
@@ -143,8 +100,7 @@ beamPackages.rebar3-pc  pc-1.1.0
 </screen>
 
   <para>
-   To install any of those packages into your profile, refer to them by their
-   attribute path (first column):
+   To install any of those packages into your profile, refer to them by their attribute path (first column):
   </para>
 
 <screen>
@@ -152,9 +108,7 @@ beamPackages.rebar3-pc  pc-1.1.0
 </screen>
 
   <para>
-   The attribute path of any BEAM package corresponds to the name of that
-   particular package in <link xlink:href="https://hex.pm">Hex</link> or its
-   OTP Application/Release name.
+   The attribute path of any BEAM package corresponds to the name of that particular package in <link xlink:href="https://hex.pm">Hex</link> or its OTP Application/Release name.
   </para>
  </section>
 
@@ -168,13 +122,8 @@ beamPackages.rebar3-pc  pc-1.1.0
     <title>Rebar3 Packages</title>
 
     <para>
-     The Nix function, <literal>buildRebar3</literal>, defined in
-     <literal>beam.packages.erlang.buildRebar3</literal> and aliased at the top
-     level, can be used to build a derivation that understands how to build a
-     Rebar3 project. For example, we can build
-     <link
-        xlink:href="https://github.com/erlang-nix/hex2nix">hex2nix</link>
-     as follows:
+     The Nix function, <literal>buildRebar3</literal>, defined in <literal>beam.packages.erlang.buildRebar3</literal> and aliased at the top level, can be used to build a derivation that understands how to build a Rebar3 project. For example, we can build <link
+        xlink:href="https://github.com/erlang-nix/hex2nix">hex2nix</link> as follows:
     </para>
 
 <programlisting>
@@ -196,25 +145,16 @@ buildRebar3 rec {
 </programlisting>
 
     <para>
-     Such derivations are callable with
-     <literal>beam.packages.erlang.callPackage</literal> (see
-     <xref
-        linkend="erlang-call-package"/>). To call this package using
-     the normal <literal>callPackage</literal>, refer to dependency packages
-     via <literal>beamPackages</literal>, e.g.
-     <literal>beamPackages.ibrowse</literal>.
+     Such derivations are callable with <literal>beam.packages.erlang.callPackage</literal> (see <xref
+        linkend="erlang-call-package"/>). To call this package using the normal <literal>callPackage</literal>, refer to dependency packages via <literal>beamPackages</literal>, e.g. <literal>beamPackages.ibrowse</literal>.
     </para>
 
     <para>
-     Notably, <literal>buildRebar3</literal> includes
-     <literal>beamDeps</literal>, while <literal>stdenv.mkDerivation</literal>
-     does not. BEAM dependencies added there will be correctly handled by the
-     system.
+     Notably, <literal>buildRebar3</literal> includes <literal>beamDeps</literal>, while <literal>stdenv.mkDerivation</literal> does not. BEAM dependencies added there will be correctly handled by the system.
     </para>
 
     <para>
-     If a package needs to compile native code via Rebar3's port compilation
-     mechanism, add <literal>compilePort = true;</literal> to the derivation.
+     If a package needs to compile native code via Rebar3's port compilation mechanism, add <literal>compilePort = true;</literal> to the derivation.
     </para>
    </section>
 
@@ -222,9 +162,7 @@ buildRebar3 rec {
     <title>Erlang.mk Packages</title>
 
     <para>
-     Erlang.mk functions similarly to Rebar3, except we use
-     <literal>buildErlangMk</literal> instead of
-     <literal>buildRebar3</literal>.
+     Erlang.mk functions similarly to Rebar3, except we use <literal>buildErlangMk</literal> instead of <literal>buildRebar3</literal>.
     </para>
 
 <programlisting>
@@ -257,8 +195,7 @@ buildErlangMk {
     <title>Mix Packages</title>
 
     <para>
-     Mix functions similarly to Rebar3, except we use
-     <literal>buildMix</literal> instead of <literal>buildRebar3</literal>.
+     Mix functions similarly to Rebar3, except we use <literal>buildMix</literal> instead of <literal>buildRebar3</literal>.
     </para>
 
 <programlisting>
@@ -323,11 +260,7 @@ buildHex {
    <title>Accessing an Environment</title>
 
    <para>
-    Often, we simply want to access a valid environment that contains a
-    specific package and its dependencies. We can accomplish that with the
-    <literal>env</literal> attribute of a derivation. For example, let's say we
-    want to access an Erlang REPL with <literal>ibrowse</literal> loaded up. We
-    could do the following:
+    Often, we simply want to access a valid environment that contains a specific package and its dependencies. We can accomplish that with the <literal>env</literal> attribute of a derivation. For example, let's say we want to access an Erlang REPL with <literal>ibrowse</literal> loaded up. We could do the following:
    </para>
 
 <screen>
@@ -373,8 +306,7 @@ ok</computeroutput>
 </screen>
 
    <para>
-    Notice the <literal>-A beamPackages.ibrowse.env</literal>. That is the key
-    to this functionality.
+    Notice the <literal>-A beamPackages.ibrowse.env</literal>. That is the key to this functionality.
    </para>
   </section>
 
@@ -382,11 +314,7 @@ ok</computeroutput>
    <title>Creating a Shell</title>
 
    <para>
-    Getting access to an environment often isn't enough to do real development.
-    Usually, we need to create a <literal>shell.nix</literal> file and do our
-    development inside of the environment specified therein. This file looks a
-    lot like the packaging described above, except that <literal>src</literal>
-    points to the project root and we call the package directly.
+    Getting access to an environment often isn't enough to do real development. Usually, we need to create a <literal>shell.nix</literal> file and do our development inside of the environment specified therein. This file looks a lot like the packaging described above, except that <literal>src</literal> points to the project root and we call the package directly.
    </para>
 
 <programlisting>
@@ -414,8 +342,7 @@ in
     <title>Building in a Shell (for Mix Projects)</title>
 
     <para>
-     We can leverage the support of the derivation, irrespective of the build
-     derivation, by calling the commands themselves.
+     We can leverage the support of the derivation, irrespective of the build derivation, by calling the commands themselves.
     </para>
 
 <programlisting>
@@ -477,12 +404,8 @@ analyze: build plt
 </programlisting>
 
     <para>
-     Using a <literal>shell.nix</literal> as described (see
-     <xref
-      linkend="creating-a-shell"/>) should just work. Aside from
-     <literal>test</literal>, <literal>plt</literal>, and
-     <literal>analyze</literal>, the Make targets work just fine for all of the
-     build derivations.
+     Using a <literal>shell.nix</literal> as described (see <xref
+      linkend="creating-a-shell"/>) should just work. Aside from <literal>test</literal>, <literal>plt</literal>, and <literal>analyze</literal>, the Make targets work just fine for all of the build derivations.
     </para>
    </section>
   </section>
@@ -492,25 +415,14 @@ analyze: build plt
   <title>Generating Packages from Hex with <literal>hex2nix</literal></title>
 
   <para>
-   Updating the <link xlink:href="https://hex.pm">Hex</link> package set
-   requires
-   <link
-    xlink:href="https://github.com/erlang-nix/hex2nix">hex2nix</link>.
-   Given the path to the Erlang modules (usually
-   <literal>pkgs/development/erlang-modules</literal>), it will dump a file
-   called <literal>hex-packages.nix</literal>, containing all the packages that
-   use a recognized build system in
-   <link
-    xlink:href="https://hex.pm">Hex</link>. It can't be determined,
-   however, whether every package is buildable.
+   Updating the <link xlink:href="https://hex.pm">Hex</link> package set requires <link
+    xlink:href="https://github.com/erlang-nix/hex2nix">hex2nix</link>. Given the path to the Erlang modules (usually <literal>pkgs/development/erlang-modules</literal>), it will dump a file called <literal>hex-packages.nix</literal>, containing all the packages that use a recognized build system in <link
+    xlink:href="https://hex.pm">Hex</link>. It can't be determined, however, whether every package is buildable.
   </para>
 
   <para>
-   To make life easier for our users, try to build every
-   <link
-      xlink:href="https://hex.pm">Hex</link> package and remove those
-   that fail. To do that, simply run the following command in the root of your
-   <literal>nixpkgs</literal> repository:
+   To make life easier for our users, try to build every <link
+      xlink:href="https://hex.pm">Hex</link> package and remove those that fail. To do that, simply run the following command in the root of your <literal>nixpkgs</literal> repository:
   </para>
 
 <screen>
@@ -518,11 +430,8 @@ analyze: build plt
 </screen>
 
   <para>
-   That will attempt to build every package in <literal>beamPackages</literal>.
-   Then manually remove those that fail. Hopefully, someone will improve
-   <link
-      xlink:href="https://github.com/erlang-nix/hex2nix">hex2nix</link>
-   in the future to automate the process.
+   That will attempt to build every package in <literal>beamPackages</literal>. Then manually remove those that fail. Hopefully, someone will improve <link
+      xlink:href="https://github.com/erlang-nix/hex2nix">hex2nix</link> in the future to automate the process.
   </para>
  </section>
 </section>
