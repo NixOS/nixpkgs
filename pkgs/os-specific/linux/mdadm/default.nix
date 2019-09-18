@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \
         -e 's@ -Werror @ @' \
-        -e 's@/usr/sbin/sendmail@${system-sendmail}@' -i Makefile
+        -e 's@/usr/sbin/sendmail@${system-sendmail}/bin/sendmail@' -i Makefile
     sed -i \
         -e 's@/usr/bin/basename@${coreutils}/bin/basename@g' \
         -e 's@BINDIR/blkid@${utillinux}/bin/blkid@g' \
