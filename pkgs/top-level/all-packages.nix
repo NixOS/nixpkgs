@@ -1794,6 +1794,8 @@ in
 
   lynis = callPackage ../tools/security/lynis { };
 
+  mailspring = callPackage ../applications/networking/mailreaders/mailspring { };
+
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
 
   mathics = pythonPackages.mathics;
