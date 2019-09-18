@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libjpeg libtiff librsvg libiconv ];
 
   meta = with stdenv.lib; {
-    description = "A library and viewer for the DJVU file format for scanned images";
+    description = "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
     homepage = http://djvu.sourceforge.net;
     license = licenses.gpl2;
     maintainers = with maintainers; [ Anton-Latukha ];
