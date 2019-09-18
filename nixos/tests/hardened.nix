@@ -10,6 +10,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];
+      environment.memoryAllocator.provider = "graphene-hardened";
       nix.useSandbox = false;
       virtualisation.emptyDiskImages = [ 4096 ];
       boot.initrd.postDeviceCommands = ''
