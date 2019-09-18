@@ -398,13 +398,11 @@ stdenv.mkDerivation {
       moveToOutput bin "$dev"
     ''
 
-    + (
-        # fixup .pc file (where to find 'moc' etc.)
-        ''
-          sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
-              -e "/^host_bins=/ c host_bins=$dev/bin"
-        ''
-    );
+    # fixup .pc file (where to find 'moc' etc.)
+    + ''
+      sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
+          -e "/^host_bins=/ c host_bins=$dev/bin"
+    '';
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
