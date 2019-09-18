@@ -164,9 +164,6 @@ self: super: {
     sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
   });
 
-  # break out of 'time >=1.4.2 && <1.9'
-  HStringTemplate = doJailbreak super.HStringTemplate;
-
   # don't use obsolete "defaultUserHooks" in Setup.hs
   X11 = appendPatch super.X11 (pkgs.fetchpatch {
     url = "https://github.com/xmonad/X11/commit/8d817617afa1b54e6c50a9cc552dc1c0804c1794.patch";
