@@ -114,6 +114,7 @@ self: super: {
     sha256 = "1dsqmx0sw62x4glh43c0sbizd2y00v5xybiqadn96v6pmfrap5cp";
   });
   lens = self.lens_4_18_1;
+  xmonad-contrib = self.xmonad-contrib_0_16;
   polyparse = appendPatch (doJailbreak super.polyparse) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/polyparse-1.12.1.patch";
     sha256 = "01b2gnsq0x4fd9na8zpk6pajym55mbz64hgzawlwxdw0y6681kr5";
