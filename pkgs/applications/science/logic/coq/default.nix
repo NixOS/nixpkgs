@@ -9,6 +9,7 @@
 , ocamlPackages, ncurses
 , buildIde ? true
 , glib, gnome3, wrapGAppsHook
+, darwin
 , csdp ? null
 , version
 }:
@@ -105,6 +106,7 @@ self = stdenv.mkDerivation {
   ++ stdenv.lib.optionals buildIde
     (if versionAtLeast "8.10"
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
+     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
      else [ ocamlPackages.lablgtk ]);
 
   postPatch = ''
