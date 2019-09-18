@@ -109,8 +109,9 @@ in
     services.pantheon.files.enable = mkDefault true;
     services.tumbler.enable = mkDefault true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-    services.dbus.packages = [
-      pkgs.pantheon.switchboard-plug-power
+    services.dbus.packages = with pkgs.pantheon; [
+      switchboard-plug-power
+      elementary-default-settings
     ];
     services.pantheon.contractor.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;

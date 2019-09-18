@@ -18,6 +18,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   ];
 
   desktop = [
+    elementary-default-settings
     elementary-session-settings
     elementary-shortcut-overlay
     gala
