@@ -5,17 +5,12 @@
  <title>pkgs.dockerTools</title>
 
  <para>
-  <varname>pkgs.dockerTools</varname> is a set of functions for creating and
-  manipulating Docker images according to the
-  <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#docker-image-specification-v120">
-  Docker Image Specification v1.2.0 </link>. Docker itself is not used to
-  perform any of the operations done by these functions.
+  <varname>pkgs.dockerTools</varname> is a set of functions for creating and manipulating Docker images according to the <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#docker-image-specification-v120"> Docker Image Specification v1.2.0 </link>. Docker itself is not used to perform any of the operations done by these functions.
  </para>
 
  <warning>
   <para>
-   The <varname>dockerTools</varname> API is unstable and may be subject to
-   backwards-incompatible changes in the future.
+   The <varname>dockerTools</varname> API is unstable and may be subject to backwards-incompatible changes in the future.
   </para>
  </warning>
 
@@ -23,15 +18,11 @@
   <title>buildImage</title>
 
   <para>
-   This function is analogous to the <command>docker build</command> command,
-   in that it can be used to build a Docker-compatible repository tarball
-   containing a single image with one or multiple layers. As such, the result
-   is suitable for being loaded in Docker with <command>docker load</command>.
+   This function is analogous to the <command>docker build</command> command, in that it can be used to build a Docker-compatible repository tarball containing a single image with one or multiple layers. As such, the result is suitable for being loaded in Docker with <command>docker load</command>.
   </para>
 
   <para>
-   The parameters of <varname>buildImage</varname> with relative example values
-   are described below:
+   The parameters of <varname>buildImage</varname> with relative example values are described below:
   </para>
 
   <example xml:id='ex-dockerTools-buildImage'>
@@ -63,135 +54,89 @@ buildImage {
   </example>
 
   <para>
-   The above example will build a Docker image <literal>redis/latest</literal>
-   from the given base image. Loading and running this image in Docker results
-   in <literal>redis-server</literal> being started automatically.
+   The above example will build a Docker image <literal>redis/latest</literal> from the given base image. Loading and running this image in Docker results in <literal>redis-server</literal> being started automatically.
   </para>
 
   <calloutlist>
    <callout arearefs='ex-dockerTools-buildImage-1'>
     <para>
-     <varname>name</varname> specifies the name of the resulting image. This is
-     the only required argument for <varname>buildImage</varname>.
+     <varname>name</varname> specifies the name of the resulting image. This is the only required argument for <varname>buildImage</varname>.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-buildImage-2'>
     <para>
-     <varname>tag</varname> specifies the tag of the resulting image. By
-     default it's <literal>null</literal>, which indicates that the nix output
-     hash will be used as tag.
+     <varname>tag</varname> specifies the tag of the resulting image. By default it's <literal>null</literal>, which indicates that the nix output hash will be used as tag.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-buildImage-3'>
     <para>
-     <varname>fromImage</varname> is the repository tarball containing the base
-     image. It must be a valid Docker image, such as exported by
-     <command>docker save</command>. By default it's <literal>null</literal>,
-     which can be seen as equivalent to <literal>FROM scratch</literal> of a
-     <filename>Dockerfile</filename>.
+     <varname>fromImage</varname> is the repository tarball containing the base image. It must be a valid Docker image, such as exported by <command>docker save</command>. By default it's <literal>null</literal>, which can be seen as equivalent to <literal>FROM scratch</literal> of a <filename>Dockerfile</filename>.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-buildImage-4'>
     <para>
-     <varname>fromImageName</varname> can be used to further specify the base
-     image within the repository, in case it contains multiple images. By
-     default it's <literal>null</literal>, in which case
-     <varname>buildImage</varname> will peek the first image available in the
-     repository.
+     <varname>fromImageName</varname> can be used to further specify the base image within the repository, in case it contains multiple images. By default it's <literal>null</literal>, in which case <varname>buildImage</varname> will peek the first image available in the repository.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-buildImage-5'>
     <para>
-     <varname>fromImageTag</varname> can be used to further specify the tag of
-     the base image within the repository, in case an image contains multiple
-     tags. By default it's <literal>null</literal>, in which case
-     <varname>buildImage</varname> will peek the first tag available for the
-     base image.
+     <varname>fromImageTag</varname> can be used to further specify the tag of the base image within the repository, in case an image contains multiple tags. By default it's <literal>null</literal>, in which case <varname>buildImage</varname> will peek the first tag available for the base image.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-buildImage-6'>
     <para>
-     <varname>contents</varname> is a derivation that will be copied in the new
-     layer of the resulting image. This can be similarly seen as <command>ADD
-     contents/ /</command> in a <filename>Dockerfile</filename>. By default
-     it's <literal>null</literal>.
+     <varname>contents</varname> is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as <command>ADD contents/ /</command> in a <filename>Dockerfile</filename>. By default it's <literal>null</literal>.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-buildImage-runAsRoot'>
     <para>
-     <varname>runAsRoot</varname> is a bash script that will run as root in an
-     environment that overlays the existing layers of the base image with the
-     new resulting layer, including the previously copied
-     <varname>contents</varname> derivation. This can be similarly seen as
-     <command>RUN ...</command> in a <filename>Dockerfile</filename>.
+     <varname>runAsRoot</varname> is a bash script that will run as root in an environment that overlays the existing layers of the base image with the new resulting layer, including the previously copied <varname>contents</varname> derivation. This can be similarly seen as <command>RUN ...</command> in a <filename>Dockerfile</filename>.
      <note>
       <para>
-       Using this parameter requires the <literal>kvm</literal> device to be
-       available.
+       Using this parameter requires the <literal>kvm</literal> device to be available.
       </para>
      </note>
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-buildImage-8'>
     <para>
-     <varname>config</varname> is used to specify the configuration of the
-     containers that will be started off the built image in Docker. The
-     available options are listed in the
-     <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions">
-     Docker Image Specification v1.2.0 </link>.
+     <varname>config</varname> is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions"> Docker Image Specification v1.2.0 </link>.
     </para>
    </callout>
   </calloutlist>
 
   <para>
-   After the new layer has been created, its closure (to which
-   <varname>contents</varname>, <varname>config</varname> and
-   <varname>runAsRoot</varname> contribute) will be copied in the layer itself.
-   Only new dependencies that are not already in the existing layers will be
-   copied.
+   After the new layer has been created, its closure (to which <varname>contents</varname>, <varname>config</varname> and <varname>runAsRoot</varname> contribute) will be copied in the layer itself. Only new dependencies that are not already in the existing layers will be copied.
   </para>
 
   <para>
-   At the end of the process, only one new single layer will be produced and
-   added to the resulting image.
+   At the end of the process, only one new single layer will be produced and added to the resulting image.
   </para>
 
   <para>
-   The resulting repository will only list the single image
-   <varname>image/tag</varname>. In the case of
-   <xref linkend='ex-dockerTools-buildImage'/> it would be
-   <varname>redis/latest</varname>.
+   The resulting repository will only list the single image <varname>image/tag</varname>. In the case of <xref linkend='ex-dockerTools-buildImage'/> it would be <varname>redis/latest</varname>.
   </para>
 
   <para>
-   It is possible to inspect the arguments with which an image was built using
-   its <varname>buildArgs</varname> attribute.
+   It is possible to inspect the arguments with which an image was built using its <varname>buildArgs</varname> attribute.
   </para>
 
   <note>
    <para>
-    If you see errors similar to <literal>getProtocolByName: does not exist (no
-    such protocol name: tcp)</literal> you may need to add
-    <literal>pkgs.iana-etc</literal> to <varname>contents</varname>.
+    If you see errors similar to <literal>getProtocolByName: does not exist (no such protocol name: tcp)</literal> you may need to add <literal>pkgs.iana-etc</literal> to <varname>contents</varname>.
    </para>
   </note>
 
   <note>
    <para>
-    If you see errors similar to <literal>Error_Protocol ("certificate has
-    unknown CA",True,UnknownCa)</literal> you may need to add
-    <literal>pkgs.cacert</literal> to <varname>contents</varname>.
+    If you see errors similar to <literal>Error_Protocol ("certificate has unknown CA",True,UnknownCa)</literal> you may need to add <literal>pkgs.cacert</literal> to <varname>contents</varname>.
    </para>
   </note>
 
   <example xml:id="example-pkgs-dockerTools-buildImage-creation-date">
    <title>Impurely Defining a Docker Layer's Creation Date</title>
    <para>
-    By default <function>buildImage</function> will use a static date of one
-    second past the UNIX Epoch. This allows <function>buildImage</function> to
-    produce binary reproducible images. When listing images with
-    <command>docker images</command>, the newly created images will be listed
-    like this:
+    By default <function>buildImage</function> will use a static date of one second past the UNIX Epoch. This allows <function>buildImage</function> to produce binary reproducible images. When listing images with <command>docker images</command>, the newly created images will be listed like this:
    </para>
 <screen><![CDATA[
 $ docker images
@@ -199,9 +144,7 @@ REPOSITORY   TAG      IMAGE ID       CREATED        SIZE
 hello        latest   08c791c7846e   48 years ago   25.2MB
 ]]></screen>
    <para>
-    You can break binary reproducibility but have a sorted, meaningful
-    <literal>CREATED</literal> column by setting <literal>created</literal> to
-    <literal>now</literal>.
+    You can break binary reproducibility but have a sorted, meaningful <literal>CREATED</literal> column by setting <literal>created</literal> to <literal>now</literal>.
    </para>
 <programlisting><![CDATA[
 pkgs.dockerTools.buildImage {
@@ -214,8 +157,7 @@ pkgs.dockerTools.buildImage {
 }
 ]]></programlisting>
    <para>
-    and now the Docker CLI will display a reasonable date and sort the images
-    as expected:
+    and now the Docker CLI will display a reasonable date and sort the images as expected:
 <screen><![CDATA[
 $ docker images
 REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
@@ -230,8 +172,7 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
   <title>buildLayeredImage</title>
 
   <para>
-   Create a Docker image with many of the store paths being on their own layer
-   to improve sharing between images.
+   Create a Docker image with many of the store paths being on their own layer to improve sharing between images.
   </para>
 
   <variablelist>
@@ -264,8 +205,7 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
     </term>
     <listitem>
      <para>
-      Top level paths in the container. Either a single derivation, or a list
-      of derivations.
+      Top level paths in the container. Either a single derivation, or a list of derivations.
      </para>
      <para>
       <emphasis>Default:</emphasis> <literal>[]</literal>
@@ -278,10 +218,7 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
     </term>
     <listitem>
      <para>
-      Run-time configuration of the container. A full list of the options are
-      available at in the
-      <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions">
-      Docker Image Specification v1.2.0 </link>.
+      Run-time configuration of the container. A full list of the options are available at in the <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions"> Docker Image Specification v1.2.0 </link>.
      </para>
      <para>
       <emphasis>Default:</emphasis> <literal>{}</literal>
@@ -294,9 +231,7 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
     </term>
     <listitem>
      <para>
-      Date and time the layers were created. Follows the same
-      <literal>now</literal> exception supported by
-      <literal>buildImage</literal>.
+      Date and time the layers were created. Follows the same <literal>now</literal> exception supported by <literal>buildImage</literal>.
      </para>
      <para>
       <emphasis>Default:</emphasis> <literal>1970-01-01T00:00:01Z</literal>
@@ -325,10 +260,7 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
     </term>
     <listitem>
      <para>
-       Shell commands to run while building the final layer, without access
-       to most of the layer contents. Changes to this layer are "on top"
-       of all the other layers, so can create additional directories
-       and files.
+      Shell commands to run while building the final layer, without access to most of the layer contents. Changes to this layer are "on top" of all the other layers, so can create additional directories and files.
      </para>
     </listitem>
    </varlistentry>
@@ -338,8 +270,7 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
    <title>Behavior of <varname>contents</varname> in the final image</title>
 
    <para>
-    Each path directly listed in <varname>contents</varname> will have a
-    symlink in the root of the image.
+    Each path directly listed in <varname>contents</varname> will have a symlink in the root of the image.
    </para>
 
    <para>
@@ -350,8 +281,7 @@ pkgs.dockerTools.buildLayeredImage {
   contents = [ pkgs.hello ];
 }
 ]]></programlisting>
-    will create symlinks for all the paths in the <literal>hello</literal>
-    package:
+    will create symlinks for all the paths in the <literal>hello</literal> package:
 <screen><![CDATA[
 /bin/hello -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/bin/hello
 /share/info/hello.info -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/share/info/hello.info
@@ -364,13 +294,11 @@ pkgs.dockerTools.buildLayeredImage {
    <title>Automatic inclusion of <varname>config</varname> references</title>
 
    <para>
-    The closure of <varname>config</varname> is automatically included in the
-    closure of the final image.
+    The closure of <varname>config</varname> is automatically included in the closure of the final image.
    </para>
 
    <para>
-    This allows you to make very simple Docker images with very little code.
-    This container will start up and run <command>hello</command>:
+    This allows you to make very simple Docker images with very little code. This container will start up and run <command>hello</command>:
 <programlisting><![CDATA[
 pkgs.dockerTools.buildLayeredImage {
   name = "hello";
@@ -384,31 +312,23 @@ pkgs.dockerTools.buildLayeredImage {
    <title>Adjusting <varname>maxLayers</varname></title>
 
    <para>
-    Increasing the <varname>maxLayers</varname> increases the number of layers
-    which have a chance to be shared between different images.
+    Increasing the <varname>maxLayers</varname> increases the number of layers which have a chance to be shared between different images.
    </para>
 
    <para>
-    Modern Docker installations support up to 128 layers, however older
-    versions support as few as 42.
+    Modern Docker installations support up to 128 layers, however older versions support as few as 42.
    </para>
 
    <para>
-    If the produced image will not be extended by other Docker builds, it is
-    safe to set <varname>maxLayers</varname> to <literal>128</literal>. However
-    it will be impossible to extend the image further.
+    If the produced image will not be extended by other Docker builds, it is safe to set <varname>maxLayers</varname> to <literal>128</literal>. However it will be impossible to extend the image further.
    </para>
 
    <para>
-    The first (<literal>maxLayers-2</literal>) most "popular" paths will have
-    their own individual layers, then layer #<literal>maxLayers-1</literal>
-    will contain all the remaining "unpopular" paths, and finally layer
-    #<literal>maxLayers</literal> will contain the Image configuration.
+    The first (<literal>maxLayers-2</literal>) most "popular" paths will have their own individual layers, then layer #<literal>maxLayers-1</literal> will contain all the remaining "unpopular" paths, and finally layer #<literal>maxLayers</literal> will contain the Image configuration.
    </para>
 
    <para>
-    Docker's Layers are not inherently ordered, they are content-addressable
-    and are not explicitly layered until they are composed in to an Image.
+    Docker's Layers are not inherently ordered, they are content-addressable and are not explicitly layered until they are composed in to an Image.
    </para>
   </section>
  </section>
@@ -417,10 +337,7 @@ pkgs.dockerTools.buildLayeredImage {
   <title>pullImage</title>
 
   <para>
-   This function is analogous to the <command>docker pull</command> command, in
-   that it can be used to pull a Docker image from a Docker registry. By
-   default <link xlink:href="https://hub.docker.com/">Docker Hub</link> is used
-   to pull images.
+   This function is analogous to the <command>docker pull</command> command, in that it can be used to pull a Docker image from a Docker registry. By default <link xlink:href="https://hub.docker.com/">Docker Hub</link> is used to pull images.
   </para>
 
   <para>
@@ -445,76 +362,51 @@ pullImage {
   <calloutlist>
    <callout arearefs='ex-dockerTools-pullImage-1'>
     <para>
-     <varname>imageName</varname> specifies the name of the image to be
-     downloaded, which can also include the registry namespace (e.g.
-     <literal>nixos</literal>). This argument is required.
+     <varname>imageName</varname> specifies the name of the image to be downloaded, which can also include the registry namespace (e.g. <literal>nixos</literal>). This argument is required.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-pullImage-2'>
     <para>
-     <varname>imageDigest</varname> specifies the digest of the image to be
-     downloaded. This argument is required.
+     <varname>imageDigest</varname> specifies the digest of the image to be downloaded. This argument is required.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-pullImage-3'>
     <para>
-     <varname>finalImageName</varname>, if specified, this is the name of the
-     image to be created. Note it is never used to fetch the image since we
-     prefer to rely on the immutable digest ID. By default it's equal to
-     <varname>imageName</varname>.
+     <varname>finalImageName</varname>, if specified, this is the name of the image to be created. Note it is never used to fetch the image since we prefer to rely on the immutable digest ID. By default it's equal to <varname>imageName</varname>.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-pullImage-4'>
     <para>
-     <varname>finalImageTag</varname>, if specified, this is the tag of the
-     image to be created. Note it is never used to fetch the image since we
-     prefer to rely on the immutable digest ID. By default it's
-     <literal>latest</literal>.
+     <varname>finalImageTag</varname>, if specified, this is the tag of the image to be created. Note it is never used to fetch the image since we prefer to rely on the immutable digest ID. By default it's <literal>latest</literal>.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-pullImage-5'>
     <para>
-     <varname>sha256</varname> is the checksum of the whole fetched image. This
-     argument is required.
+     <varname>sha256</varname> is the checksum of the whole fetched image. This argument is required.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-pullImage-6'>
     <para>
-     <varname>os</varname>, if specified, is the operating system of the
-     fetched image. By default it's <literal>linux</literal>.
+     <varname>os</varname>, if specified, is the operating system of the fetched image. By default it's <literal>linux</literal>.
     </para>
    </callout>
    <callout arearefs='ex-dockerTools-pullImage-7'>
     <para>
-     <varname>arch</varname>, if specified, is the cpu architecture of the
-     fetched image. By default it's <literal>x86_64</literal>.
+     <varname>arch</varname>, if specified, is the cpu architecture of the fetched image. By default it's <literal>x86_64</literal>.
     </para>
    </callout>
   </calloutlist>
 
   <para>
-    <literal>nix-prefetch-docker</literal> command can be used to get required
-    image parameters:
-
+   <literal>nix-prefetch-docker</literal> command can be used to get required image parameters:
 <screen>
 <prompt>$ </prompt>nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
 </screen>
-
-    Since a given <varname>imageName</varname> may transparently refer to a
-    manifest list of images which support multiple architectures and/or
-    operating systems, you can supply the <option>--os</option> and
-    <option>--arch</option> arguments to specify exactly which image you want.
-    By default it will match the OS and architecture of the host the command is
-    run on.
-
+   Since a given <varname>imageName</varname> may transparently refer to a manifest list of images which support multiple architectures and/or operating systems, you can supply the <option>--os</option> and <option>--arch</option> arguments to specify exactly which image you want. By default it will match the OS and architecture of the host the command is run on.
 <screen>
 <prompt>$ </prompt>nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
 </screen>
-
-    Desired image name and tag can be set using
-    <option>--final-image-name</option> and <option>--final-image-tag</option>
-    arguments:
-
+   Desired image name and tag can be set using <option>--final-image-name</option> and <option>--final-image-tag</option> arguments:
 <screen>
 <prompt>$ </prompt>nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr.io/my-project/mysql --final-image-tag prod
 </screen>
@@ -525,17 +417,12 @@ pullImage {
   <title>exportImage</title>
 
   <para>
-   This function is analogous to the <command>docker export</command> command,
-   in that it can be used to flatten a Docker image that contains multiple
-   layers. It is in fact the result of the merge of all the layers of the
-   image. As such, the result is suitable for being imported in Docker with
-   <command>docker import</command>.
+   This function is analogous to the <command>docker export</command> command, in that it can be used to flatten a Docker image that contains multiple layers. It is in fact the result of the merge of all the layers of the image. As such, the result is suitable for being imported in Docker with <command>docker import</command>.
   </para>
 
   <note>
    <para>
-    Using this function requires the <literal>kvm</literal> device to be
-    available.
+    Using this function requires the <literal>kvm</literal> device to be available.
    </para>
   </note>
 
@@ -557,14 +444,11 @@ exportImage {
   </example>
 
   <para>
-   The parameters relative to the base image have the same synopsis as
-   described in <xref linkend='ssec-pkgs-dockerTools-buildImage'/>, except that
-   <varname>fromImage</varname> is the only required argument in this case.
+   The parameters relative to the base image have the same synopsis as described in <xref linkend='ssec-pkgs-dockerTools-buildImage'/>, except that <varname>fromImage</varname> is the only required argument in this case.
   </para>
 
   <para>
-   The <varname>name</varname> argument is the name of the derivation output,
-   which defaults to <varname>fromImage.name</varname>.
+   The <varname>name</varname> argument is the name of the derivation output, which defaults to <varname>fromImage.name</varname>.
   </para>
  </section>
 
@@ -572,11 +456,7 @@ exportImage {
   <title>shadowSetup</title>
 
   <para>
-   This constant string is a helper for setting up the base files for managing
-   users and groups, only if such files don't exist already. It is suitable for
-   being used in a <varname>runAsRoot</varname>
-   <xref linkend='ex-dockerTools-buildImage-runAsRoot'/> script for cases like
-   in the example below:
+   This constant string is a helper for setting up the base files for managing users and groups, only if such files don't exist already. It is suitable for being used in a <varname>runAsRoot</varname> <xref linkend='ex-dockerTools-buildImage-runAsRoot'/> script for cases like in the example below:
   </para>
 
   <example xml:id='ex-dockerTools-shadowSetup'>
@@ -598,9 +478,7 @@ buildImage {
   </example>
 
   <para>
-   Creating base files like <literal>/etc/passwd</literal> or
-   <literal>/etc/login.defs</literal> is necessary for shadow-utils to
-   manipulate users and groups.
+   Creating base files like <literal>/etc/passwd</literal> or <literal>/etc/login.defs</literal> is necessary for shadow-utils to manipulate users and groups.
   </para>
  </section>
 </section>
