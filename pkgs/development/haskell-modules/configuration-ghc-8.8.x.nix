@@ -163,4 +163,8 @@ self: super: {
     url = "https://github.com/simonmar/alex/commit/deaae6eddef5186bfd0e42e2c3ced39e26afa4d6.patch";
     sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
   });
+
+  # break out of 'time >=1.4.2 && <1.9'
+  HStringTemplate = doJailbreak super.HStringTemplate;
+
 }
