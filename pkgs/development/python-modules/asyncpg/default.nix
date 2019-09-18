@@ -12,10 +12,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/MagicStack/asyncpg/commit/aaeb7076e5acb045880b46155014c0640624797e.patch";
-      sha256 = "0r6g6pvb39vzci8g67mv9rlrvavqvfz6vlv8988wv53bpz1mss3p";
-    })
+    ./flake8.patch
   ];
 
   checkInputs = [

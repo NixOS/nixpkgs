@@ -1,0 +1,37 @@
+From aaeb7076e5acb045880b46155014c0640624797e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert=20Sch=C3=BCtz?=
+ <robert.schuetz@stud.uni-heidelberg.de>
+Date: Tue, 22 Jan 2019 08:25:33 +0100
+Subject: [PATCH] Check for .flake8 after importing flake8
+
+This way, tests won't fail if both the flake8 module and the .flake8 file are missing.
+---
+ tests/test__sourcecode.py | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tests/test__sourcecode.py b/tests/test__sourcecode.py
+index e3dc08c..28ffdea 100644
+--- a/tests/test__sourcecode.py
++++ b/tests/test__sourcecode.py
+@@ -17,16 +17,16 @@ def find_root():
+ class TestFlake8(unittest.TestCase):
+ 
+     def test_flake8(self):
+-        root_path = find_root()
+-        config_path = os.path.join(root_path, '.flake8')
+-        if not os.path.exists(config_path):
+-            raise RuntimeError('could not locate .flake8 file')
+-
+         try:
+             import flake8  # NoQA
+         except ImportError:
+             raise unittest.SkipTest('flake8 module is missing')
+ 
++        root_path = find_root()
++        config_path = os.path.join(root_path, '.flake8')
++        if not os.path.exists(config_path):
++            raise RuntimeError('could not locate .flake8 file')
++
+         try:
+             subprocess.run(
+                 [sys.executable, '-m', 'flake8', '--config', config_path],
