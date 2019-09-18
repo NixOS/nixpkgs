@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -86,11 +85,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
-  '';
-
-  # launches elementary-calendar on selection
-  preFixup = ''
-     gappsWrapperArgs+=( --prefix PATH : "${elementary-calendar}/bin" )
   '';
 
   meta = with stdenv.lib; {
