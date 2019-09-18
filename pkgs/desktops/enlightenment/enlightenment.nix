@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
-  xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
-  luajit, bzip2, libpthreadstubs, gdbm, libcap, mesa,
-  xkeyboard_config, pcre,
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, alsaLib, bzip2,
+  efl, gdbm, libXdmcp, libXrandr, libcap, libffi, libpthreadstubs,
+  libxcb, luajit, mesa, pam, pcre, xcbutilkeysyms, xkeyboard_config,
 
   bluetoothSupport ? true, bluez5,
   pulseSupport ? !stdenv.isDarwin, libpulseaudio,
@@ -17,27 +16,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson
-    ninja
     (pkgconfig.override { vanilla = true; })
     gettext
+    meson
+    ninja
   ];
 
   buildInputs = [
+    alsaLib
+    bzip2
     efl
+    gdbm
     libXdmcp
-    libxcb
-    xcbutilkeysyms
     libXrandr
     libffi
-    pam
-    alsaLib
-    luajit
-    bzip2
     libpthreadstubs
-    gdbm
-    pcre
+    libxcb
+    luajit
     mesa
+    pam
+    pcre
+    xcbutilkeysyms
     xkeyboard_config
   ]
   ++ stdenv.lib.optional stdenv.isLinux libcap
