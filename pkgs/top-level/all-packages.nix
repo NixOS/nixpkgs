@@ -9206,6 +9206,8 @@ in
 
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
+  bingrep = callPackage ../development/tools/analysis/bingrep { };
+
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
