@@ -170,4 +170,14 @@ self: super: {
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
 
+  # Upstream ships a broken Setup.hs file.
+  string-qq = overrideSrc (dontCheck super.string-qq) {
+    src = pkgs.fetchFromGitHub {
+      owner = "dmwit";
+      repo = "string-qq";
+      rev = "b396f5ef36a9b23f1d3fafcc91f2222cd1ad24fe";
+      sha256 = "1z2f1yry8wi0jb38dgz7rl89zl63fhngf7xk4ljw240vn315jj8s";
+    };
+  };
+
 }
