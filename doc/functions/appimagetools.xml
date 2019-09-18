@@ -5,17 +5,12 @@
  <title>pkgs.appimageTools</title>
 
  <para>
-  <varname>pkgs.appimageTools</varname> is a set of functions for extracting
-  and wrapping <link xlink:href="https://appimage.org/">AppImage</link> files.
-  They are meant to be used if traditional packaging from source is infeasible,
-  or it would take too long. To quickly run an AppImage file,
-  <literal>pkgs.appimage-run</literal> can be used as well.
+  <varname>pkgs.appimageTools</varname> is a set of functions for extracting and wrapping <link xlink:href="https://appimage.org/">AppImage</link> files. They are meant to be used if traditional packaging from source is infeasible, or it would take too long. To quickly run an AppImage file, <literal>pkgs.appimage-run</literal> can be used as well.
  </para>
 
  <warning>
   <para>
-   The <varname>appimageTools</varname> API is unstable and may be subject to
-   backwards-incompatible changes in the future.
+   The <varname>appimageTools</varname> API is unstable and may be subject to backwards-incompatible changes in the future.
   </para>
  </warning>
 
@@ -23,9 +18,7 @@
   <title>AppImage formats</title>
 
   <para>
-   There are different formats for AppImages, see
-   <link xlink:href="https://github.com/AppImage/AppImageSpec/blob/74ad9ca2f94bf864a4a0dac1f369dd4f00bd1c28/draft.md#image-format">the
-   specification</link> for details.
+   There are different formats for AppImages, see <link xlink:href="https://github.com/AppImage/AppImageSpec/blob/74ad9ca2f94bf864a4a0dac1f369dd4f00bd1c28/draft.md#image-format">the specification</link> for details.
   </para>
 
   <itemizedlist>
@@ -55,8 +48,7 @@ type2.AppImage: ELF 64-bit LSB executable, x86-64, version 1 (SYSV) (Lepton 3.x)
 </screen>
 
   <para>
-   Note how the type 1 AppImage is described as an <literal>ISO 9660 CD-ROM
-   filesystem</literal>, and the type 2 AppImage is not.
+   Note how the type 1 AppImage is described as an <literal>ISO 9660 CD-ROM filesystem</literal>, and the type 2 AppImage is not.
   </para>
  </section>
 
@@ -64,8 +56,7 @@ type2.AppImage: ELF 64-bit LSB executable, x86-64, version 1 (SYSV) (Lepton 3.x)
   <title>Wrapping</title>
 
   <para>
-   Depending on the type of AppImage you're wrapping, you'll have to use
-   <varname>wrapType1</varname> or <varname>wrapType2</varname>.
+   Depending on the type of AppImage you're wrapping, you'll have to use <varname>wrapType1</varname> or <varname>wrapType2</varname>.
   </para>
 
 <programlisting>
@@ -91,23 +82,16 @@ appimageTools.wrapType2 { # or wrapType1
    </callout>
    <callout arearefs='ex-appimageTools-wrapping-2'>
     <para>
-     <varname>extraPkgs</varname> allows you to pass a function to include
-     additional packages inside the FHS environment your AppImage is going to
-     run in. There are a few ways to learn which dependencies an application
-     needs:
+     <varname>extraPkgs</varname> allows you to pass a function to include additional packages inside the FHS environment your AppImage is going to run in. There are a few ways to learn which dependencies an application needs:
      <itemizedlist>
       <listitem>
        <para>
-        Looking through the extracted AppImage files, reading its scripts and
-        running <command>patchelf</command> and <command>ldd</command> on its
-        executables. This can also be done in <command>appimage-run</command>,
-        by setting <command>APPIMAGE_DEBUG_EXEC=bash</command>.
+        Looking through the extracted AppImage files, reading its scripts and running <command>patchelf</command> and <command>ldd</command> on its executables. This can also be done in <command>appimage-run</command>, by setting <command>APPIMAGE_DEBUG_EXEC=bash</command>.
        </para>
       </listitem>
       <listitem>
        <para>
-        Running <command>strace -vfefile</command> on the wrapped executable,
-        looking for libraries that can't be found.
+        Running <command>strace -vfefile</command> on the wrapped executable, looking for libraries that can't be found.
        </para>
       </listitem>
      </itemizedlist>
