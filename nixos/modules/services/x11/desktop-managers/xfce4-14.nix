@@ -114,12 +114,6 @@ in
       name = "xfce4-14";
       bgSupport = true;
       start = ''
-        # Set GTK_PATH so that GTK can find the theme engines.
-        export GTK_PATH="${config.system.path}/lib/gtk-2.0:${config.system.path}/lib/gtk-3.0"
-
-        # Set GTK_DATA_PREFIX so that GTK can find the Xfce themes.
-        export GTK_DATA_PREFIX=${config.system.path}
-
         ${pkgs.runtimeShell} ${pkgs.xfce4-14.xinitrc} &
         waitPID=$!
       '';
