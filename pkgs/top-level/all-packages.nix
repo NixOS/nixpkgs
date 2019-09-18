@@ -4981,6 +4981,8 @@ in
 
   networkmanager_dmenu = callPackage ../tools/networking/network-manager/dmenu.nix  { };
 
+  nm-tray = libsForQt5.callPackage ../tools/networking/network-manager/tray.nix { };
+
   newsboat = callPackage ../applications/networking/feedreaders/newsboat {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
