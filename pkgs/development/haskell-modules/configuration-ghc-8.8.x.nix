@@ -147,6 +147,7 @@ self: super: {
   });
   tls = self.tls_1_5_1;
   vault = dontHaddock super.vault;
+  monad-par = dontCheck super.monad-par;   # test suite does not compile in monad-par-0.3.4.8
 
   # TODO dont fetch patch if https://github.com/simonmar/alex/issues/140 is resolved
   alex = appendPatch super.alex (pkgs.fetchpatch {
