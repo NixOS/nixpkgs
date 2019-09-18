@@ -101,10 +101,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-tdfa-1.2.3.1.patch";
     sha256 = "1lhas4s2ms666prb475gaw2bqw1v4y8cxi66sy20j727sx7ppjs7";
   });
-  shakespeare = appendPatch super.shakespeare (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shakespeare-2.0.20.patch";
-    sha256 = "1dgx41ylahj4wk8r422aik0d7qdpawdga4gqz905nvlnhqjla58y";
-  });
   socks = appendPatch (doJailbreak super.socks) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/socks-0.6.0.patch";
     sha256 = "1dsqmx0sw62x4glh43c0sbizd2y00v5xybiqadn96v6pmfrap5cp";
