@@ -33,6 +33,8 @@ mkDerivation rec {
     sed 's_qApp->applicationDirPath(), "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/docks/encodedock.cpp
     NICE=$(type -P nice)
     sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
+    # Fix VAAPI auto-config: https://github.com/mltframework/shotcut/issues/771
+    sed 's#"-vaapi_device" << ":0"#"-vaapi_device" << "/dev/dri/renderD128"#' -i src/docks/encodedock.cpp
   '';
 
   qtWrapperArgs = [
