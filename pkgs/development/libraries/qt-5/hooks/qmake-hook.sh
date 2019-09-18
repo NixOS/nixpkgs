@@ -1,3 +1,5 @@
+. @fix_qmake_libtool@
+
 qmakeFlags=( $qmakeFlags )
 
 qmakePrePhase() {

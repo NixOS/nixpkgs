@@ -100,6 +100,7 @@ stdenv.mkDerivation {
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
     . ${../hooks/move-qt-dev-tools.sh}
+    . ${../hooks/fix-qmake-libtool.sh}
   '';
 
   postPatch =
