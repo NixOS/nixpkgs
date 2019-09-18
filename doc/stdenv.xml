@@ -736,8 +736,8 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
       commit</command> or any other commands that cannot handle that.
      </para>
      <para>
-      For information about how to run the updates, execute
-      <command>nix-shell maintainers/scripts/update.nix</command>.
+      For information about how to run the updates, execute <command>nix-shell
+      maintainers/scripts/update.nix</command>.
      </para>
     </listitem>
    </varlistentry>
@@ -764,7 +764,8 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
    to <emphasis>add</emphasis> some commands to a phase, e.g. by defining
    <literal>postInstall</literal> or <literal>preFixup</literal>, as skipping
    some of the default actions may have unexpected consequences. The default
-   script for each phase is defined in the file <filename>pkgs/stdenv/generic/setup.sh</filename>.
+   script for each phase is defined in the file
+   <filename>pkgs/stdenv/generic/setup.sh</filename>.
   </para>
 
   <section xml:id="ssec-controlling-phases">
@@ -786,7 +787,8 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
         set, the default value is used, which is <literal>$prePhases
         unpackPhase patchPhase $preConfigurePhases configurePhase
         $preBuildPhases buildPhase checkPhase $preInstallPhases installPhase
-        fixupPhase installCheckPhase $preDistPhases distPhase $postPhases</literal>.
+        fixupPhase installCheckPhase $preDistPhases distPhase
+        $postPhases</literal>.
        </para>
        <para>
         Usually, if you just want to add a few phases, it’s more convenient
@@ -1605,7 +1607,7 @@ installTargets = "install-bin install-doc";</programlisting>
      </term>
      <listitem>
       <para>
-        Set to true to skip the fixup phase.
+       Set to true to skip the fixup phase.
       </para>
      </listitem>
     </varlistentry>
@@ -2411,12 +2413,12 @@ addEnvHooks "$hostOffset" myBashFunction
       <para>
        The Bintools Wrapper was only just recently split off from CC Wrapper,
        so the division of labor is still being worked out. For example, it
-       shouldn't care about the C standard library, but just take a
-       derivation with the dynamic loader (which happens to be the glibc on
-       linux). Dependency finding however is a task both wrappers will continue
-       to need to share, and probably the most important to understand. It is
-       currently accomplished by collecting directories of host-platform
-       dependencies (i.e. <varname>buildInputs</varname> and
+       shouldn't care about the C standard library, but just take a derivation
+       with the dynamic loader (which happens to be the glibc on linux).
+       Dependency finding however is a task both wrappers will continue to need
+       to share, and probably the most important to understand. It is currently
+       accomplished by collecting directories of host-platform dependencies
+       (i.e. <varname>buildInputs</varname> and
        <varname>nativeBuildInputs</varname>) in environment variables. The
        Bintools Wrapper's setup hook causes any <filename>lib</filename> and
        <filename>lib64</filename> subdirectories to be added to
@@ -2633,7 +2635,8 @@ addEnvHooks "$hostOffset" myBashFunction
      </term>
      <listitem>
       <para>
-       Hooks related to GNOME platform and related libraries like GLib, GTK and GStreamer are described in <xref linkend="sec-language-gnome" />.
+       Hooks related to GNOME platform and related libraries like GLib, GTK and
+       GStreamer are described in <xref linkend="sec-language-gnome" />.
       </para>
      </listitem>
     </varlistentry>
@@ -2688,12 +2691,12 @@ addEnvHooks "$hostOffset" myBashFunction
        At <filename>/var/lib/cntr</filename> the sandboxed filesystem is
        mounted. All commands and files of the system are still accessible
        within the shell. To execute commands from the sandbox use the cntr exec
-       subcommand. <command>cntr</command> is only supported
-       on Linux-based platforms. To use it first add <literal>cntr</literal> to
-       your <literal>environment.systemPackages</literal> on NixOS or
-       alternatively to the root user on non-NixOS systems. Then in the package
-       that is supposed to be inspected, add <literal>breakpointHook</literal>
-       to <literal>nativeBuildInputs</literal>.
+       subcommand. <command>cntr</command> is only supported on Linux-based
+       platforms. To use it first add <literal>cntr</literal> to your
+       <literal>environment.systemPackages</literal> on NixOS or alternatively
+       to the root user on non-NixOS systems. Then in the package that is
+       supposed to be inspected, add <literal>breakpointHook</literal> to
+       <literal>nativeBuildInputs</literal>.
 <programlisting>
 nativeBuildInputs = [ breakpointHook ];
 </programlisting>
@@ -2703,11 +2706,11 @@ nativeBuildInputs = [ breakpointHook ];
       <note>
        <title>Caution with remote builds</title>
        <para>
-        This won't work with remote builds as the build environment is on
-        a different machine and can't be accessed by <command>cntr</command>.
-        Remote builds can be turned off by setting <literal>--option builders ''</literal>
-        for <command>nix-build</command> or <literal>--builders ''</literal> for
-        <command>nix build</command>.
+        This won't work with remote builds as the build environment is on a
+        different machine and can't be accessed by <command>cntr</command>.
+        Remote builds can be turned off by setting <literal>--option builders
+        ''</literal> for <command>nix-build</command> or <literal>--builders
+        ''</literal> for <command>nix build</command>.
        </para>
       </note>
      </listitem>
@@ -2806,17 +2809,78 @@ postInstall = ''
     </varlistentry>
     <varlistentry>
      <term>
-      meson
+      Meson
      </term>
      <listitem>
       <para>
-       Overrides the configure phase to run meson to generate Ninja files. You
-       can disable this behavior by setting configurePhase to a custom value,
-       or by setting dontUseMesonConfigure. To run these files, you should
-       accompany meson with ninja. mesonFlags controls only the flags passed to
-       meson. By default, parallel building is enabled as Meson supports
+       Overrides the configure phase to run meson to generate Ninja files. To
+       run these files, you should accompany Meson with ninja. By default,
+       <varname>enableParallelBuilding</varname> is enabled as Meson supports
        parallel building almost everywhere.
       </para>
+      <variablelist>
+       <title>Variables controlling Meson</title>
+       <varlistentry>
+        <term>
+         <varname>mesonFlags</varname>
+        </term>
+        <listitem>
+         <para>
+          Controls the flags passed to meson.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>mesonBuildType</varname>
+        </term>
+        <listitem>
+         <para>
+          Which
+          <link
+          xlink:href="https://mesonbuild.com/Builtin-options.html#core-options"><command>--buildtype</command></link>
+          to pass to Meson. We default to <literal>plain</literal>.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>mesonAutoFeatures</varname>
+        </term>
+        <listitem>
+         <para>
+          What value to set
+          <link
+          xlink:href="https://mesonbuild.com/Builtin-options.html#core-options"><command>-Dauto_features=</command></link>
+          to. We default to <command>enabled</command>.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>mesonWrapMode</varname>
+        </term>
+        <listitem>
+         <para>
+          What value to set
+          <link
+          xlink:href="https://mesonbuild.com/Builtin-options.html#core-options"><command>-Dwrap_mode=</command></link>
+          to. We default to <command>nodownload</command> as we disallow
+          network access.
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         <varname>dontUseMesonConfigure</varname>
+        </term>
+        <listitem>
+         <para>
+          Disables using Meson's <varname>configurePhase</varname>.
+         </para>
+        </listitem>
+       </varlistentry>
+      </variablelist>
      </listitem>
     </varlistentry>
     <varlistentry>
@@ -2851,8 +2915,8 @@ postInstall = ''
       <para>
        Overrides the configure, build, and install phases. This will run the
        "waf" script used by many projects. If wafPath (default ./waf) doesn’t
-       exist, it will copy the version of waf available in Nixpkgs. wafFlags can
-       be used to pass flags to the waf script.
+       exist, it will copy the version of waf available in Nixpkgs. wafFlags
+       can be used to pass flags to the waf script.
       </para>
      </listitem>
     </varlistentry>
