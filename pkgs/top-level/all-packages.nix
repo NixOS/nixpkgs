@@ -576,7 +576,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  ammonite = callPackage ../development/tools/ammonite {};
+  inherit (callPackages ../development/tools/ammonite {})
+    ammonite_2_12
+    ammonite_2_13;
+  ammonite = if scala == scala_2_12 then ammonite_2_12 else ammonite_2_13;
 
   amp = callPackage ../applications/editors/amp {};
 
