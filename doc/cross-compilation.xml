@@ -485,10 +485,10 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
     <xref
     linkend="ssec-cross-dependency-categorization"/> are specified as
     lists of derivations given to <varname>mkDerivation</varname>, as
-    documented in <xref linkend="ssec-stdenv-dependencies"/>. In short,
-    each list of dependencies for "host → target" of "foo → bar" is called
-    <varname>depsFooBar</varname>, with exceptions for backwards
-    compatibility that <varname>depsBuildHost</varname> is instead called
+    documented in <xref linkend="ssec-stdenv-dependencies"/>. In short, each
+    list of dependencies for "host → target" of "foo → bar" is called
+    <varname>depsFooBar</varname>, with exceptions for backwards compatibility
+    that <varname>depsBuildHost</varname> is instead called
     <varname>nativeBuildInputs</varname> and <varname>depsHostTarget</varname>
     is instead called <varname>buildInputs</varname>. Nixpkgs is now structured
     so that each <varname>depsFooBar</varname> is automatically taken from
@@ -507,9 +507,8 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
     <varname>buildPackages</varname>, <varname>pkgs</varname>, and
     <varname>targetPackages</varname>. Those are now redefined as aliases to
     <varname>pkgsBuildHost</varname>, <varname>pkgsHostTarget</varname>, and
-    <varname>pkgsTargetTarget</varname>. It is acceptable, even
-    recommended, to use them for libraries to show that the host platform is
-    irrelevant.
+    <varname>pkgsTargetTarget</varname>. It is acceptable, even recommended, to
+    use them for libraries to show that the host platform is irrelevant.
    </para>
 
    <para>
@@ -581,14 +580,15 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
     <varname>pkgsHostTarget</varname> refers to the current one, and
     <varname>pkgsTargetTarget</varname> refers to the next one. When there is
     no previous or next stage, they instead refer to the current stage. Note
-    how all the invariants regarding the mapping between dependency and depending
-    packages' build host and target platforms are preserved.
+    how all the invariants regarding the mapping between dependency and
+    depending packages' build host and target platforms are preserved.
     <varname>pkgsBuildTarget</varname> and <varname>pkgsHostHost</varname> are
     more complex in that the stage fitting the requirements isn't always a
     fixed chain of "prevs" and "nexts" away (modulo the "saturating"
-    self-references at the ends). We just special case each instead. All the primary
-    edges are implemented is in <filename>pkgs/stdenv/booter.nix</filename>,
-    and secondarily aliases in <filename>pkgs/top-level/stage.nix</filename>.
+    self-references at the ends). We just special case each instead. All the
+    primary edges are implemented is in
+    <filename>pkgs/stdenv/booter.nix</filename>, and secondarily aliases in
+    <filename>pkgs/top-level/stage.nix</filename>.
    </para>
 
    <note>
@@ -645,19 +645,19 @@ nix-build &lt;nixpkgs&gt; --arg crossSystem '{ config = "&lt;arch&gt;-&lt;os&gt;
      "infinite recursions" / cycles. When only package sets that don't mention
      target are used, the package set forms a directed acyclic graph. This
      means that all cycles that exist are confined to one stage. This means
-     they are a lot smaller, and easier to follow in the code or a backtrace. It
-     also means they are present in native and cross builds alike, and so more
-     likely to be caught by CI and other users.
+     they are a lot smaller, and easier to follow in the code or a backtrace.
+     It also means they are present in native and cross builds alike, and so
+     more likely to be caught by CI and other users.
     </para>
     <para>
      Thirdly, it is because everything target-mentioning only exists to
      accommodate compilers with lousy build systems that insist on the compiler
      itself and standard library being built together. Of course that is bad
-     because bigger derivations means longer rebuilds. It is also problematic because
-     it tends to make the standard libraries less like other libraries than
-     they could be, complicating code and build systems alike. Because of the
-     other problems, and because of these innate disadvantages, compilers ought
-     to be packaged another way where possible.
+     because bigger derivations means longer rebuilds. It is also problematic
+     because it tends to make the standard libraries less like other libraries
+     than they could be, complicating code and build systems alike. Because of
+     the other problems, and because of these innate disadvantages, compilers
+     ought to be packaged another way where possible.
     </para>
    </note>
 

@@ -14,7 +14,7 @@ self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
                                  makeStaticLibraries
                                  propagateBuildInputs;
-  inherit (super.lib) foldl optional flip id composeExtensions;
+  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,
@@ -72,10 +72,12 @@ in {
   ncurses = super.ncurses.override {
     enableStatic = true;
   };
-  libxml2 = super.libxml2.override {
+  libxml2 = super.libxml2.override ({
     enableShared = false;
     enableStatic = true;
-  };
+  } // optionalAttrs super.stdenv.hostPlatform.isDarwin {
+    pythonSupport = false;
+  });
   zlib = super.zlib.override {
     static = true;
     shared = false;

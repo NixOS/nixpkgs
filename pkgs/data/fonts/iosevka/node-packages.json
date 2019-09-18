@@ -1,0 +1,20 @@
+[
+    "caryll-shapeops",
+    "libspiro-js",
+    "megaminx",
+    "object-assign",
+    "otfcc-ttcize",
+    "primitive-quadify-off-curves",
+    "toml",
+    "topsort",
+    "ttf2woff",
+    "ttf2woff2",
+    "unorm",
+    "verda",
+    "yargs",
+    "colors",
+    "patel",
+    "patrisika-scopes",
+    "eslint",
+    "stylus"
+]

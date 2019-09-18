@@ -51,10 +51,10 @@ buildContainer {
    <calloutlist>
     <callout arearefs='ex-ociTools-buildContainer-1'>
      <para>
-      <varname>args</varname> specifies a set of arguments to run inside the container.
-      This is the only required argument for <varname>buildContainer</varname>.
-      All referenced packages inside the derivation will be made available
-      inside the container
+      <varname>args</varname> specifies a set of arguments to run inside the
+      container. This is the only required argument for
+      <varname>buildContainer</varname>. All referenced packages inside the
+      derivation will be made available inside the container
      </para>
     </callout>
     <callout arearefs='ex-ociTools-buildContainer-2'>
@@ -66,8 +66,8 @@ buildContainer {
     </callout>
     <callout arearefs='ex-ociTools-buildContainer-3'>
      <para>
-       <varname>readonly</varname> makes the container's rootfs read-only if it is set to true.
-       The default value is false <literal>false</literal>.
+      <varname>readonly</varname> makes the container's rootfs read-only if it
+      is set to true. The default value is false <literal>false</literal>.
      </para>
     </callout>
    </calloutlist>

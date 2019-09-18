@@ -45,6 +45,8 @@ let
   $CFG->aspellpath = '${pkgs.aspell}/bin/aspell';
   $CFG->pathtodot = '${pkgs.graphviz}/bin/dot';
 
+  ${cfg.extraConfig}
+
   require_once('${cfg.package}/share/moodle/lib/setup.php');
 
   // There is no php closing tag in this file,
@@ -170,6 +172,19 @@ in
       description = ''
         Options for the Moodle PHP pool. See the documentation on <literal>php-fpm.conf</literal>
         for details on configuration directives.
+      '';
+    };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Any additional text to be appended to the config.php
+        configuration file. This is a PHP script. For configuration
+        details, see <link xlink:href="https://docs.moodle.org/37/en/Configuration_file"/>.
+      '';
+      example = ''
+        $CFG->disableupdatenotifications = true;
       '';
     };
   };

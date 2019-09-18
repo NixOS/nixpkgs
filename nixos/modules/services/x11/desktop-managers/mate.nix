@@ -48,12 +48,6 @@ in
       name = "mate";
       bgSupport = true;
       start = ''
-        # Set GTK_DATA_PREFIX so that GTK can find the themes
-        export GTK_DATA_PREFIX=${config.system.path}
-
-        # Find theme engines
-        export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
-
         export XDG_MENU_PREFIX=mate-
 
         # Let caja find extensions
