@@ -1,6 +1,9 @@
-{ zlib, gcc, stdenv, fetchFromGitHub, overrideCC }:
+{ zlib, gcc, fetchFromGitHub, gccStdenv }:
 
-(overrideCC stdenv gcc).mkDerivation rec {
+# We require GCC because the source code uses GCC specific features that e.g.
+# clang lacks, which causes a build failure on darwin (where clang is the C
+# compiler provided by stdenv).
+gccStdenv.mkDerivation rec {
   pname = "ls4";
 
   version = "unstable-2019-07-31";
@@ -28,7 +31,7 @@
     sha256 = "11j34qia9pb9jqfqggzpypi7y6bq7pdhx9pvl845n9cysc8zsdfj";
   };
 
-  meta = with stdenv.lib; {
+  meta = with gccStdenv.lib; {
     description = "A solver for temporal logic, in particular a PLTL-prover based on labelled superposition with partial model guidance. Based off of minisat";
     homepage = "https://github.com/quickbeam123/ls4";
     license = licenses.mit;
