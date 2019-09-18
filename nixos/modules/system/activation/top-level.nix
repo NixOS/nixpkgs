@@ -90,7 +90,7 @@ let
 
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
 
-      ${config.system.extraSystemBuilderCmds}
+      . ${pkgs.writeShellScript "extra-system-builder" config.system.extraSystemBuilderCmds}
     '';
 
   # Putting it all together.  This builds a store path containing
