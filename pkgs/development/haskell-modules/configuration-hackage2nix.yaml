@@ -2910,6 +2910,7 @@ broken-packages:
   - antiope-messages
   - antiope-optparse-applicative
   - antiope-s3
+  - antiope-shell
   - antiope-sns
   - antiope-sqs
   - antiope-swf
@@ -8610,6 +8611,7 @@ broken-packages:
   - selenium
   - selenium-server
   - selinux
+  - semantic-source
   - Semantique
   - semdoc
   - semi-iso
