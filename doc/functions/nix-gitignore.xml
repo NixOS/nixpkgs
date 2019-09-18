@@ -5,21 +5,14 @@
  <title>pkgs.nix-gitignore</title>
 
  <para>
-  <function>pkgs.nix-gitignore</function> is a function that acts similarly to
-  <literal>builtins.filterSource</literal> but also allows filtering with the
-  help of the gitignore format.
+  <function>pkgs.nix-gitignore</function> is a function that acts similarly to <literal>builtins.filterSource</literal> but also allows filtering with the help of the gitignore format.
  </para>
 
  <section xml:id="sec-pkgs-nix-gitignore-usage">
   <title>Usage</title>
 
   <para>
-   <literal>pkgs.nix-gitignore</literal> exports a number of functions, but
-   you'll most likely need either <literal>gitignoreSource</literal> or
-   <literal>gitignoreSourcePure</literal>. As their first argument, they both
-   accept either 1. a file with gitignore lines or 2. a string with gitignore
-   lines, or 3. a list of either of the two. They will be concatenated into a
-   single big string.
+   <literal>pkgs.nix-gitignore</literal> exports a number of functions, but you'll most likely need either <literal>gitignoreSource</literal> or <literal>gitignoreSourcePure</literal>. As their first argument, they both accept either 1. a file with gitignore lines or 2. a string with gitignore lines, or 3. a list of either of the two. They will be concatenated into a single big string.
   </para>
 
 <programlisting><![CDATA[
@@ -40,8 +33,7 @@
   ]]></programlisting>
 
   <para>
-   These functions are derived from the <literal>Filter</literal> functions by
-   setting the first filter argument to <literal>(_: _: true)</literal>:
+   These functions are derived from the <literal>Filter</literal> functions by setting the first filter argument to <literal>(_: _: true)</literal>:
   </para>
 
 <programlisting><![CDATA[
@@ -50,12 +42,7 @@ gitignoreSource = gitignoreFilterSource (_: _: true);
   ]]></programlisting>
 
   <para>
-   Those filter functions accept the same arguments the
-   <literal>builtins.filterSource</literal> function would pass to its filters,
-   thus <literal>fn: gitignoreFilterSourcePure fn ""</literal> should be
-   extensionally equivalent to <literal>filterSource</literal>. The file is
-   blacklisted iff it's blacklisted by either your filter or the
-   gitignoreFilter.
+   Those filter functions accept the same arguments the <literal>builtins.filterSource</literal> function would pass to its filters, thus <literal>fn: gitignoreFilterSourcePure fn ""</literal> should be extensionally equivalent to <literal>filterSource</literal>. The file is blacklisted iff it's blacklisted by either your filter or the gitignoreFilter.
   </para>
 
   <para>
@@ -71,8 +58,7 @@ gitignoreFilter = ign: root: filterPattern (gitignoreToPatterns ign) root;
   <title>gitignore files in subdirectories</title>
 
   <para>
-   If you wish to use a filter that would search for .gitignore files in
-   subdirectories, just like git does by default, use this function:
+   If you wish to use a filter that would search for .gitignore files in subdirectories, just like git does by default, use this function:
   </para>
 
 <programlisting><![CDATA[
