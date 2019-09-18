@@ -1,0 +1,139 @@
+From 9aced4f9571e74cc57b853598aa4b3f38d66363d Mon Sep 17 00:00:00 2001
+From: Johan Klokkhammer Helsing <johan.helsing@qt.io>
+Date: Thu, 1 Nov 2018 13:48:52 +0100
+Subject: [PATCH 1/2] Client: Don't be exposed if we want to create a sub or
+ shell surface
+
+Because some shells don't allow attaching buffers before configure, we need to
+not be exposed until we know that we don't want a shell surface.
+
+Change-Id: Ida7101a99f953d02cf6401e4ea8d28cfabd6e102
+Reviewed-by: Giulio Camuffo <giulio.camuffo@kdab.com>
+Reviewed-by: David Edmundson <davidedmundson@kde.org>
+---
+ src/client/qwaylanddisplay.cpp | 13 ++++++-------
+ src/client/qwaylanddisplay_p.h |  6 +++---
+ src/client/qwaylandwindow.cpp  | 18 +++++++++++++++---
+ 3 files changed, 24 insertions(+), 13 deletions(-)
+
+diff --git a/src/client/qwaylanddisplay.cpp b/src/client/qwaylanddisplay.cpp
+index a2957e0d..f2bd3160 100644
+--- a/src/client/qwaylanddisplay.cpp
++++ b/src/client/qwaylanddisplay.cpp
+@@ -88,13 +88,6 @@ struct wl_surface *QWaylandDisplay::createSurface(void *handle)
+     return surface;
+ }
+ 
+-QWaylandShellSurface *QWaylandDisplay::createShellSurface(QWaylandWindow *window)
+-{
+-    if (!mWaylandIntegration->shellIntegration())
+-        return nullptr;
+-    return mWaylandIntegration->shellIntegration()->createShellSurface(window);
+-}
+-
+ struct ::wl_region *QWaylandDisplay::createRegion(const QRegion &qregion)
+ {
+     struct ::wl_region *region = mCompositor.create_region();
+@@ -108,12 +101,18 @@ struct ::wl_region *QWaylandDisplay::createRegion(const QRegion &qregion)
+ ::wl_subsurface *QWaylandDisplay::createSubSurface(QWaylandWindow *window, QWaylandWindow *parent)
+ {
+     if (!mSubCompositor) {
++        qCWarning(lcQpaWayland) << "Can't create subsurface, not supported by the compositor.";
+         return nullptr;
+     }
+ 
+     return mSubCompositor->get_subsurface(window->object(), parent->object());
+ }
+ 
++QWaylandShellIntegration *QWaylandDisplay::shellIntegration() const
++{
++    return mWaylandIntegration->shellIntegration();
++}
++
+ QWaylandClientBufferIntegration * QWaylandDisplay::clientBufferIntegration() const
+ {
+     return mWaylandIntegration->clientBufferIntegration();
+diff --git a/src/client/qwaylanddisplay_p.h b/src/client/qwaylanddisplay_p.h
+index 0dd8d7af..cc6a0a72 100644
+--- a/src/client/qwaylanddisplay_p.h
++++ b/src/client/qwaylanddisplay_p.h
+@@ -94,7 +94,7 @@ class QWaylandQtKeyExtension;
+ class QWaylandWindow;
+ class QWaylandIntegration;
+ class QWaylandHardwareIntegration;
+-class QWaylandShellSurface;
++class QWaylandShellIntegration;
+ class QWaylandCursorTheme;
+ 
+ typedef void (*RegistryListener)(void *data,
+@@ -115,13 +115,13 @@ public:
+     QWaylandScreen *screenForOutput(struct wl_output *output) const;
+ 
+     struct wl_surface *createSurface(void *handle);
+-    QWaylandShellSurface *createShellSurface(QWaylandWindow *window);
+     struct ::wl_region *createRegion(const QRegion &qregion);
+     struct ::wl_subsurface *createSubSurface(QWaylandWindow *window, QWaylandWindow *parent);
+ 
++    QWaylandShellIntegration *shellIntegration() const;
+     QWaylandClientBufferIntegration *clientBufferIntegration() const;
+-
+     QWaylandWindowManagerIntegration *windowManagerIntegration() const;
++
+ #if QT_CONFIG(cursor)
+     void setCursor(struct wl_buffer *buffer, struct wl_cursor_image *image, qreal dpr);
+     void setCursor(const QSharedPointer<QWaylandBuffer> &buffer, const QPoint &hotSpot, qreal dpr);
+diff --git a/src/client/qwaylandwindow.cpp b/src/client/qwaylandwindow.cpp
+index 4ac2ca51..600ea1df 100644
+--- a/src/client/qwaylandwindow.cpp
++++ b/src/client/qwaylandwindow.cpp
+@@ -50,6 +50,7 @@
+ #include "qwaylandnativeinterface_p.h"
+ #include "qwaylanddecorationfactory_p.h"
+ #include "qwaylandshmbackingstore_p.h"
++#include "qwaylandshellintegration_p.h"
+ 
+ #if QT_CONFIG(wayland_datadevice)
+ #include "qwaylanddatadevice_p.h"
+@@ -138,8 +139,9 @@ void QWaylandWindow::initWindow()
+         }
+     } else if (shouldCreateShellSurface()) {
+         Q_ASSERT(!mShellSurface);
++        Q_ASSERT(mDisplay->shellIntegration());
+ 
+-        mShellSurface = mDisplay->createShellSurface(this);
++        mShellSurface = mDisplay->shellIntegration()->createShellSurface(this);
+         if (mShellSurface) {
+             // Set initial surface title
+             setWindowTitle(window()->title());
+@@ -211,6 +213,9 @@ void QWaylandWindow::initializeWlSurface()
+ 
+ bool QWaylandWindow::shouldCreateShellSurface() const
+ {
++    if (!mDisplay->shellIntegration())
++        return false;
++
+     if (shouldCreateSubSurface())
+         return false;
+ 
+@@ -963,9 +968,16 @@ void QWaylandWindow::unfocus()
+ 
+ bool QWaylandWindow::isExposed() const
+ {
++    if (!window()->isVisible())
++        return false;
++
+     if (mShellSurface)
+-        return window()->isVisible() && mShellSurface->isExposed();
+-    return QPlatformWindow::isExposed();
++        return mShellSurface->isExposed();
++
++    if (mSubSurfaceWindow)
++        return mSubSurfaceWindow->parent()->isExposed();
++
++    return !(shouldCreateShellSurface() || shouldCreateSubSurface());
+ }
+ 
+ bool QWaylandWindow::isActive() const
+-- 
+2.22.0
+
