@@ -1,5 +1,5 @@
 { stdenv }:
-with import ../../../../lib/kernel.nix { inherit (stdenv) lib; version = null; };
+with stdenv.lib.kernel;
 {
     # DRM_AMDGPU = yes;
 
