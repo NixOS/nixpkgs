@@ -7,8 +7,6 @@
 
 , libiconv ? null, ncurses
 
-, enableDwarf ? !stdenv.isDarwin, elfutils # for DWARF support
-
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
@@ -78,8 +76,7 @@ let
   libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
     ++ [libffi]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
-    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
-    ++ stdenv.lib.optional enableDwarf elfutils;
+    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
@@ -167,8 +164,6 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
-  ] ++ stdenv.lib.optional enableDwarf [
-    "--enable-dwarf-unwind"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatability.

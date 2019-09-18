@@ -48,7 +48,11 @@ stdenv.mkDerivation {
   # The sparkle patch modified the nibs, so we have to recompile them
   postPatch = ''
     for nib in MainMenu Preferences; do
-      /usr/bin/ibtool --compile src/MacVim/English.lproj/$nib.nib/keyedobjects.nib src/MacVim/English.lproj/$nib.nib
+      # redirect stdin/stdout/stderr to /dev/null because ibtool marks them nonblocking
+      # and not redirecting screws with subsequent commands.
+      # redirecting stderr is unfortunate but I don't know of a reasonable way to remove O_NONBLOCK
+      # from the fds.
+      /usr/bin/ibtool --compile src/MacVim/English.lproj/$nib.nib/keyedobjects.nib src/MacVim/English.lproj/$nib.nib >/dev/null 2>/dev/null </dev/null
     done
   '';
 

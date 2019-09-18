@@ -12,7 +12,7 @@
       source = "${config.system.path}/share/terminfo";
     };
 
-    environment.profileRelativeEnvVars = {
+    environment.profileRelativeSessionVariables = {
       TERMINFO_DIRS = [ "/share/terminfo" ];
     };
 

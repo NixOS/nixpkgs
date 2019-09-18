@@ -156,9 +156,9 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      A link or a list of links to the location of Changelog for a package.
-     A link may use expansion to refer to the correct changelog version.
-             Example:
+      A link or a list of links to the location of Changelog for a package. A
+      link may use expansion to refer to the correct changelog version.
+      Example:
       <literal>"https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${version}"</literal>
      </para>
     </listitem>
@@ -273,8 +273,8 @@ meta.platforms = stdenv.lib.platforms.linux;
        This attribute is special in that it is not actually under the
        <literal>meta</literal> attribute set but rather under the
        <literal>passthru</literal> attribute set. This is due to how
-       <literal>meta</literal> attributes work, and the fact that they
-       are supposed to contain only metadata, not derivations.
+       <literal>meta</literal> attributes work, and the fact that they are
+       supposed to contain only metadata, not derivations.
       </para>
      </warning>
      <para>

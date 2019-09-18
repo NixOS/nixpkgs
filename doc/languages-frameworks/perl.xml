@@ -141,8 +141,8 @@ ClassC3Componentised = buildPerlPackage rec {
  <para>
   On Darwin, if a script has too many
   <literal>-I<replaceable>dir</replaceable></literal> flags in its first line
-  (its “shebang line”), it will not run. This can be worked around by calling
-  the <literal>shortenPerlShebang</literal> function from the
+  (its “shebang line”), it will not run. This can be worked around by
+  calling the <literal>shortenPerlShebang</literal> function from the
   <literal>postInstall</literal> phase:
 <programlisting>
 { stdenv, buildPerlPackage, fetchurl, shortenPerlShebang }:
@@ -162,10 +162,10 @@ ImageExifTool = buildPerlPackage {
   '';
 };
 </programlisting>
- This will remove the <literal>-I</literal> flags from the shebang line,
- rewrite them in the <literal>use lib</literal> form, and put them on the next
- line instead. This function can be given any number of Perl scripts as
- arguments; it will modify them in-place.
+  This will remove the <literal>-I</literal> flags from the shebang line,
+  rewrite them in the <literal>use lib</literal> form, and put them on the next
+  line instead. This function can be given any number of Perl scripts as
+  arguments; it will modify them in-place.
  </para>
 
  <section xml:id="ssec-generation-from-CPAN">
