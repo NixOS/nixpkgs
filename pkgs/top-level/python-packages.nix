@@ -2117,6 +2117,16 @@ in {
 
   darcsver = callPackage ../development/python-modules/darcsver { };
 
+  dash = callPackage ../development/python-modules/dash { };
+
+  dash-core-components = callPackage ../development/python-modules/dash-core-components { };
+
+  dash-html-components = callPackage ../development/python-modules/dash-html-components { };
+
+  dash-renderer = callPackage ../development/python-modules/dash-renderer { };
+
+  dash-table = callPackage ../development/python-modules/dash-table { };
+
   dask = callPackage ../development/python-modules/dask { };
 
   dask-glm = callPackage ../development/python-modules/dask-glm { };
