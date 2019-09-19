@@ -6,7 +6,9 @@ let
 
   cfg = config.services.mattermost;
 
-  defaultConfig = builtins.fromJSON (readFile "${pkgs.mattermost}/config/config.json");
+  defaultConfig = builtins.fromJSON (builtins.replaceStrings [ "\\u0026" ] [ "&" ]
+    (readFile "${pkgs.mattermost}/config/config.json")
+  );
 
   mattermostConf = foldl recursiveUpdate defaultConfig
     [ { ServiceSettings.SiteURL = cfg.siteUrl;
