@@ -120,5 +120,5 @@ in rec {
     sha256 = "10czkhclnisdz6k5qfiicmvx47m9177l5dkhjn29g43khnmpkr8l";
   };
 
-  vala = vala_0_44;
+  vala = vala_0_46;
 }
