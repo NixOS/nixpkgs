@@ -229,6 +229,7 @@ in
       services.colord.enable = mkDefault true;
       services.gnome3.chrome-gnome-shell.enable = mkDefault true;
       services.gnome3.glib-networking.enable = true;
+      services.gnome3.gnome-initial-setup.enable = mkDefault true;
       services.gnome3.gnome-remote-desktop.enable = mkDefault true;
       services.gnome3.gnome-settings-daemon.enable = true;
       services.gnome3.gnome-user-share.enable = mkDefault true;
