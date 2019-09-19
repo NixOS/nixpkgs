@@ -86,6 +86,10 @@ stdenv.mkDerivation (args // {
     ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
     [target."${rustHostConfig}"]
     "linker" = "${ccForHost}"
+    ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
+      stdenv.lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
+    "rustflags" = [ "-C", "target-feature=+crt-static", "-C", "link-arg=-lgcc" ]
+    ''}
     ''}
     EOF
 
