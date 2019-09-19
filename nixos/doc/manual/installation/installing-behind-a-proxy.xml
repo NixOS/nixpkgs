@@ -6,13 +6,16 @@
  <title>Installing behind a proxy</title>
 
  <para>
-  To install NixOS behind a proxy, do the following before running <literal>nixos-install</literal>.
+  To install NixOS behind a proxy, do the following before running
+  <literal>nixos-install</literal>.
  </para>
 
  <orderedlist numeration="arabic">
   <listitem>
    <para>
-    Update proxy configuration in <literal>/mnt/etc/nixos/configuration.nix</literal> to keep the internet accessible after reboot.
+    Update proxy configuration in
+    <literal>/mnt/etc/nixos/configuration.nix</literal> to keep the internet
+    accessible after reboot.
    </para>
 <programlisting>
 networking.proxy.default = &quot;http://user:password@proxy:port/&quot;;
@@ -21,7 +24,8 @@ networking.proxy.noProxy = &quot;127.0.0.1,localhost,internal.domain&quot;;
   </listitem>
   <listitem>
    <para>
-    Setup the proxy environment variables in the shell where you are running <literal>nixos-install</literal>.
+    Setup the proxy environment variables in the shell where you are running
+    <literal>nixos-install</literal>.
    </para>
 <programlisting>
 # proxy_url=&quot;http://user:password@proxy:port/&quot;
@@ -35,7 +39,10 @@ networking.proxy.noProxy = &quot;127.0.0.1,localhost,internal.domain&quot;;
 
  <note>
   <para>
-   If you are switching networks with different proxy configurations, use the <literal>nesting.clone</literal> option in <literal>configuration.nix</literal> to switch proxies at runtime. Refer to <xref linkend="ch-options" /> for more information.
+   If you are switching networks with different proxy configurations, use the
+   <literal>nesting.clone</literal> option in
+   <literal>configuration.nix</literal> to switch proxies at runtime. Refer to
+   <xref linkend="ch-options" /> for more information.
   </para>
  </note>
 </section>

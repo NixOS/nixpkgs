@@ -5,13 +5,18 @@
          xml:id="module-services-weechat">
  <title>WeeChat</title>
  <para>
-  <link xlink:href="https://weechat.org/">WeeChat</link> is a fast and extensible IRC client.
+  <link xlink:href="https://weechat.org/">WeeChat</link> is a fast and
+  extensible IRC client.
  </para>
  <section xml:id="module-services-weechat-basic-usage">
   <title>Basic Usage</title>
 
   <para>
-   By default, the module creates a <literal><link xlink:href="https://www.freedesktop.org/wiki/Software/systemd/">systemd</link></literal> unit which runs the chat client in a detached <literal><link xlink:href="https://www.gnu.org/software/screen/">screen</link></literal> session.
+   By default, the module creates a
+   <literal><link xlink:href="https://www.freedesktop.org/wiki/Software/systemd/">systemd</link></literal>
+   unit which runs the chat client in a detached
+   <literal><link xlink:href="https://www.gnu.org/software/screen/">screen</link></literal>
+   session.
   </para>
 
   <para>
@@ -26,14 +31,19 @@
   </para>
 
   <para>
-   The service is managed by a dedicated user named <literal>weechat</literal> in the state directory <literal>/var/lib/weechat</literal>.
+   The service is managed by a dedicated user named <literal>weechat</literal>
+   in the state directory <literal>/var/lib/weechat</literal>.
   </para>
  </section>
  <section xml:id="module-services-weechat-reattach">
   <title>Re-attaching to WeeChat</title>
 
   <para>
-   WeeChat runs in a screen session owned by a dedicated user. To explicitly allow your another user to attach to this session, the <literal>screenrc</literal> needs to be tweaked by adding <link xlink:href="https://www.gnu.org/software/screen/manual/html_node/Multiuser.html#Multiuser">multiuser</link> support:
+   WeeChat runs in a screen session owned by a dedicated user. To explicitly
+   allow your another user to attach to this session, the
+   <literal>screenrc</literal> needs to be tweaked by adding
+   <link xlink:href="https://www.gnu.org/software/screen/manual/html_node/Multiuser.html#Multiuser">multiuser</link>
+   support:
 <programlisting>
 {
   <link linkend="opt-programs.screen.screenrc">programs.screen.screenrc</link> = ''
@@ -49,7 +59,8 @@ screen -x weechat/weechat-screen
   </para>
 
   <para>
-   <emphasis>The session name can be changed using <link linkend="opt-services.weechat.sessionName">services.weechat.sessionName.</link></emphasis>
+   <emphasis>The session name can be changed using
+   <link linkend="opt-services.weechat.sessionName">services.weechat.sessionName.</link></emphasis>
   </para>
  </section>
 </chapter>

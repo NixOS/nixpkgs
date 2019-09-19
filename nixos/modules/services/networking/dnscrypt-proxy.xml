@@ -5,7 +5,11 @@
          xml:id="sec-dnscrypt-proxy">
  <title>DNSCrypt client proxy</title>
  <para>
-  The DNSCrypt client proxy relays DNS queries to a DNSCrypt enabled upstream resolver. The traffic between the client and the upstream resolver is encrypted and authenticated, mitigating the risk of MITM attacks, DNS poisoning attacks, and third-party snooping (assuming the upstream is trustworthy).
+  The DNSCrypt client proxy relays DNS queries to a DNSCrypt enabled upstream
+  resolver. The traffic between the client and the upstream resolver is
+  encrypted and authenticated, mitigating the risk of MITM attacks, DNS
+  poisoning attacks, and third-party snooping (assuming the upstream is
+  trustworthy).
  </para>
  <sect1 xml:id="sec-dnscrypt-proxy-configuration">
   <title>Basic configuration</title>
@@ -18,14 +22,18 @@
   </para>
 
   <para>
-   Enabling the client proxy does not alter the system nameserver; to relay local queries, prepend <literal>127.0.0.1</literal> to <option>networking.nameservers</option>.
+   Enabling the client proxy does not alter the system nameserver; to relay
+   local queries, prepend <literal>127.0.0.1</literal> to
+   <option>networking.nameservers</option>.
   </para>
  </sect1>
  <sect1 xml:id="sec-dnscrypt-proxy-forwarder">
   <title>As a forwarder for another DNS client</title>
 
   <para>
-   To run the DNSCrypt proxy client as a forwarder for another DNS client, change the default proxy listening port to a non-standard value and point the other client to it:
+   To run the DNSCrypt proxy client as a forwarder for another DNS client,
+   change the default proxy listening port to a non-standard value and point
+   the other client to it:
 <programlisting>
 <xref linkend="opt-services.dnscrypt-proxy.localPort"/> = 43;
 </programlisting>

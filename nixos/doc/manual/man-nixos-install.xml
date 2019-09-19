@@ -13,72 +13,72 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-install</command> 
+   <command>nixos-install</command>
    <arg>
     <arg choice='plain'>
      <option>-I</option>
     </arg>
      <replaceable>path</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--root</option>
     </arg>
      <replaceable>root</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--system</option>
     </arg>
      <replaceable>path</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--no-channel-copy</option>
     </arg>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--no-root-passwd</option>
     </arg>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--no-bootloader</option>
     </arg>
    </arg>
-    
+
    <arg>
-    <group choice='req'> 
+    <group choice='req'>
     <arg choice='plain'>
      <option>--max-jobs</option>
     </arg>
-     
+
     <arg choice='plain'>
      <option>-j</option>
     </arg>
      </group> <replaceable>number</replaceable>
    </arg>
-    
+
    <arg>
     <option>--cores</option> <replaceable>number</replaceable>
    </arg>
-    
+
    <arg>
     <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--show-trace</option>
     </arg>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--help</option>
@@ -89,32 +89,43 @@
  <refsection>
   <title>Description</title>
   <para>
-   This command installs NixOS in the file system mounted on <filename>/mnt</filename>, based on the NixOS configuration specified in <filename>/mnt/etc/nixos/configuration.nix</filename>. It performs the following steps:
+   This command installs NixOS in the file system mounted on
+   <filename>/mnt</filename>, based on the NixOS configuration specified in
+   <filename>/mnt/etc/nixos/configuration.nix</filename>. It performs the
+   following steps:
    <itemizedlist>
     <listitem>
      <para>
-      It copies Nix and its dependencies to <filename>/mnt/nix/store</filename>.
+      It copies Nix and its dependencies to
+      <filename>/mnt/nix/store</filename>.
      </para>
     </listitem>
     <listitem>
      <para>
-      It runs Nix in <filename>/mnt</filename> to build the NixOS configuration specified in <filename>/mnt/etc/nixos/configuration.nix</filename>.
+      It runs Nix in <filename>/mnt</filename> to build the NixOS configuration
+      specified in <filename>/mnt/etc/nixos/configuration.nix</filename>.
      </para>
     </listitem>
     <listitem>
      <para>
-      It installs the GRUB boot loader on the device specified in the option <option>boot.loader.grub.device</option> (unless <option>--no-bootloader</option> is specified), and generates a GRUB configuration file that boots into the NixOS configuration just installed.
+      It installs the GRUB boot loader on the device specified in the option
+      <option>boot.loader.grub.device</option> (unless
+      <option>--no-bootloader</option> is specified), and generates a GRUB
+      configuration file that boots into the NixOS configuration just
+      installed.
      </para>
     </listitem>
     <listitem>
      <para>
-      It prompts you for a password for the root account (unless <option>--no-root-passwd</option> is specified).
+      It prompts you for a password for the root account (unless
+      <option>--no-root-passwd</option> is specified).
      </para>
     </listitem>
    </itemizedlist>
   </para>
   <para>
-   This command is idempotent: if it is interrupted or fails due to a temporary problem (e.g. a network issue), you can safely re-run it.
+   This command is idempotent: if it is interrupted or fails due to a temporary
+   problem (e.g. a network issue), you can safely re-run it.
   </para>
  </refsection>
  <refsection>
@@ -129,7 +140,9 @@
     </term>
     <listitem>
      <para>
-      Defaults to <filename>/mnt</filename>. If this option is given, treat the directory <replaceable>root</replaceable> as the root of the NixOS installation.
+      Defaults to <filename>/mnt</filename>. If this option is given, treat the
+      directory <replaceable>root</replaceable> as the root of the NixOS
+      installation.
      </para>
     </listitem>
    </varlistentry>
@@ -139,10 +152,16 @@
     </term>
     <listitem>
      <para>
-      If this option is provided, <command>nixos-install</command> will install the specified closure rather than attempt to build one from <filename>/mnt/etc/nixos/configuration.nix</filename>.
+      If this option is provided, <command>nixos-install</command> will install
+      the specified closure rather than attempt to build one from
+      <filename>/mnt/etc/nixos/configuration.nix</filename>.
      </para>
      <para>
-      The closure must be an appropriately configured NixOS system, with boot loader and partition configuration that fits the target host. Such a closure is typically obtained with a command such as <command>nix-build -I nixos-config=./configuration.nix '&lt;nixos&gt;' -A system --no-out-link</command>
+      The closure must be an appropriately configured NixOS system, with boot
+      loader and partition configuration that fits the target host. Such a
+      closure is typically obtained with a command such as <command>nix-build
+      -I nixos-config=./configuration.nix '&lt;nixos&gt;' -A system
+      --no-out-link</command>
      </para>
     </listitem>
    </varlistentry>
@@ -152,7 +171,10 @@
     </term>
     <listitem>
      <para>
-      Add a path to the Nix expression search path. This option may be given multiple times. See the NIX_PATH environment variable for information on the semantics of the Nix search path. Paths added through <replaceable>-I</replaceable> take precedence over NIX_PATH.
+      Add a path to the Nix expression search path. This option may be given
+      multiple times. See the NIX_PATH environment variable for information on
+      the semantics of the Nix search path. Paths added through
+      <replaceable>-I</replaceable> take precedence over NIX_PATH.
      </para>
     </listitem>
    </varlistentry>
@@ -165,7 +187,9 @@
     </term>
     <listitem>
      <para>
-      Sets the maximum number of build jobs that Nix will perform in parallel to the specified number. The default is <literal>1</literal>. A higher value is useful on SMP systems or to exploit I/O latency.
+      Sets the maximum number of build jobs that Nix will perform in parallel
+      to the specified number. The default is <literal>1</literal>. A higher
+      value is useful on SMP systems or to exploit I/O latency.
      </para>
     </listitem>
    </varlistentry>
@@ -175,7 +199,15 @@
     </term>
     <listitem>
      <para>
-      Sets the value of the <envar>NIX_BUILD_CORES</envar> environment variable in the invocation of builders. Builders can use this variable at their discretion to control the maximum amount of parallelism. For instance, in Nixpkgs, if the derivation attribute <varname>enableParallelBuilding</varname> is set to <literal>true</literal>, the builder passes the <option>-j<replaceable>N</replaceable></option> flag to GNU Make. The value <literal>0</literal> means that the builder should use all available CPU cores in the system.
+      Sets the value of the <envar>NIX_BUILD_CORES</envar> environment variable
+      in the invocation of builders. Builders can use this variable at their
+      discretion to control the maximum amount of parallelism. For instance, in
+      Nixpkgs, if the derivation attribute
+      <varname>enableParallelBuilding</varname> is set to
+      <literal>true</literal>, the builder passes the
+      <option>-j<replaceable>N</replaceable></option> flag to GNU Make. The
+      value <literal>0</literal> means that the builder should use all
+      available CPU cores in the system.
      </para>
     </listitem>
    </varlistentry>
@@ -185,7 +217,8 @@
     </term>
     <listitem>
      <para>
-      Set the Nix configuration option <replaceable>name</replaceable> to <replaceable>value</replaceable>.
+      Set the Nix configuration option <replaceable>name</replaceable> to
+      <replaceable>value</replaceable>.
      </para>
     </listitem>
    </varlistentry>
@@ -195,7 +228,8 @@
     </term>
     <listitem>
      <para>
-      Causes Nix to print out a stack trace in case of Nix expression evaluation errors.
+      Causes Nix to print out a stack trace in case of Nix expression
+      evaluation errors.
      </para>
     </listitem>
    </varlistentry>
@@ -214,7 +248,12 @@
  <refsection>
   <title>Examples</title>
   <para>
-   A typical NixOS installation is done by creating and mounting a file system on <filename>/mnt</filename>, generating a NixOS configuration in <filename>/mnt/etc/nixos/configuration.nix</filename>, and running <command>nixos-install</command>. For instance, if we want to install NixOS on an <literal>ext4</literal> file system created in <filename>/dev/sda1</filename>:
+   A typical NixOS installation is done by creating and mounting a file system
+   on <filename>/mnt</filename>, generating a NixOS configuration in
+   <filename>/mnt/etc/nixos/configuration.nix</filename>, and running
+   <command>nixos-install</command>. For instance, if we want to install NixOS
+   on an <literal>ext4</literal> file system created in
+   <filename>/dev/sda1</filename>:
 <screen>
 <prompt>$ </prompt>mkfs.ext4 /dev/sda1
 <prompt>$ </prompt>mount /dev/sda1 /mnt

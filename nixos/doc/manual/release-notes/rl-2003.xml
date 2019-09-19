@@ -13,7 +13,8 @@
   <title>Highlights</title>
 
   <para>
-   In addition to numerous new and upgraded packages, this release has the following highlights:
+   In addition to numerous new and upgraded packages, this release has the
+   following highlights:
   </para>
 
   <itemizedlist>
@@ -41,6 +42,7 @@
     <para />
    </listitem>
   </itemizedlist>
+
  </section>
 
  <section xmlns="http://docbook.org/ns/docbook"
@@ -51,7 +53,8 @@
   <title>Backward Incompatibilities</title>
 
   <para>
-   When upgrading from a previous release, please be aware of the following incompatible changes:
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
   </para>
 
   <itemizedlist>
