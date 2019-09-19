@@ -61,9 +61,8 @@ do
     if
         PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
     then
-        upper_case="$(echo "$cmd" | tr "[:lower:]" "[:upper:]")"
-        export "${role_pre}${upper_case}=@targetPrefix@${cmd}";
-        export "${upper_case}${role_post}=@targetPrefix@${cmd}";
+        export "${role_pre}${cmd^^}=@targetPrefix@${cmd}";
+        export "${cmd^^}${role_post}=@targetPrefix@${cmd}";
     fi
 done
 
