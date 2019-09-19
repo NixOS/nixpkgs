@@ -5,19 +5,27 @@
          xml:id="sec-kernel-config">
  <title>Linux Kernel</title>
  <para>
-  You can override the Linux kernel and associated packages using the option <option>boot.kernelPackages</option>. For instance, this selects the Linux 3.10 kernel:
+  You can override the Linux kernel and associated packages using the option
+  <option>boot.kernelPackages</option>. For instance, this selects the Linux
+  3.10 kernel:
 <programlisting>
 <xref linkend="opt-boot.kernelPackages"/> = pkgs.linuxPackages_3_10;
 </programlisting>
-  Note that this not only replaces the kernel, but also packages that are specific to the kernel version, such as the NVIDIA video drivers. This ensures that driver packages are consistent with the kernel.
+  Note that this not only replaces the kernel, but also packages that are
+  specific to the kernel version, such as the NVIDIA video drivers. This
+  ensures that driver packages are consistent with the kernel.
  </para>
  <para>
-  The default Linux kernel configuration should be fine for most users. You can see the configuration of your current kernel with the following command:
+  The default Linux kernel configuration should be fine for most users. You can
+  see the configuration of your current kernel with the following command:
 <programlisting>
 zcat /proc/config.gz
 </programlisting>
-  If you want to change the kernel configuration, you can use the <option>packageOverrides</option> feature (see <xref
-linkend="sec-customising-packages" />). For instance, to enable support for the kernel debugger KGDB:
+  If you want to change the kernel configuration, you can use the
+  <option>packageOverrides</option> feature (see
+  <xref
+linkend="sec-customising-packages" />). For instance, to enable support
+  for the kernel debugger KGDB:
 <programlisting>
 nixpkgs.config.packageOverrides = pkgs:
   { linux_3_4 = pkgs.linux_3_4.override {
@@ -28,31 +36,44 @@ nixpkgs.config.packageOverrides = pkgs:
     };
   };
 </programlisting>
-  <varname>extraConfig</varname> takes a list of Linux kernel configuration options, one per line. The name of the option should not include the prefix <literal>CONFIG_</literal>. The option value is typically <literal>y</literal>, <literal>n</literal> or <literal>m</literal> (to build something as a kernel module).
+  <varname>extraConfig</varname> takes a list of Linux kernel configuration
+  options, one per line. The name of the option should not include the prefix
+  <literal>CONFIG_</literal>. The option value is typically
+  <literal>y</literal>, <literal>n</literal> or <literal>m</literal> (to build
+  something as a kernel module).
  </para>
  <para>
-  Kernel modules for hardware devices are generally loaded automatically by <command>udev</command>. You can force a module to be loaded via <xref linkend="opt-boot.kernelModules"/>, e.g.
+  Kernel modules for hardware devices are generally loaded automatically by
+  <command>udev</command>. You can force a module to be loaded via
+  <xref linkend="opt-boot.kernelModules"/>, e.g.
 <programlisting>
 <xref linkend="opt-boot.kernelModules"/> = [ "fuse" "kvm-intel" "coretemp" ];
 </programlisting>
-  If the module is required early during the boot (e.g. to mount the root file system), you can use <xref linkend="opt-boot.initrd.kernelModules"/>:
+  If the module is required early during the boot (e.g. to mount the root file
+  system), you can use <xref linkend="opt-boot.initrd.kernelModules"/>:
 <programlisting>
 <xref linkend="opt-boot.initrd.kernelModules"/> = [ "cifs" ];
 </programlisting>
-  This causes the specified modules and their dependencies to be added to the initial ramdisk.
+  This causes the specified modules and their dependencies to be added to the
+  initial ramdisk.
  </para>
  <para>
-  Kernel runtime parameters can be set through <xref linkend="opt-boot.kernel.sysctl"/>, e.g.
+  Kernel runtime parameters can be set through
+  <xref linkend="opt-boot.kernel.sysctl"/>, e.g.
 <programlisting>
 <xref linkend="opt-boot.kernel.sysctl"/>."net.ipv4.tcp_keepalive_time" = 120;
 </programlisting>
-  sets the kernel’s TCP keepalive time to 120 seconds. To see the available parameters, run <command>sysctl -a</command>.
+  sets the kernel’s TCP keepalive time to 120 seconds. To see the available
+  parameters, run <command>sysctl -a</command>.
  </para>
  <section xml:id="sec-linux-config-customizing">
   <title>Customize your kernel</title>
 
   <para>
-   The first step before compiling the kernel is to generate an appropriate <literal>.config</literal> configuration. Either you pass your own config via the <literal>configfile</literal> setting of <literal>linuxManualConfig</literal>:
+   The first step before compiling the kernel is to generate an appropriate
+   <literal>.config</literal> configuration. Either you pass your own config
+   via the <literal>configfile</literal> setting of
+   <literal>linuxManualConfig</literal>:
 <screen><![CDATA[
   custom-kernel = super.linuxManualConfig {
     inherit (super) stdenv hostPlatform;
@@ -63,11 +84,17 @@ nixpkgs.config.packageOverrides = pkgs:
     allowImportFromDerivation = true;
   };
   ]]></screen>
-   You can edit the config with this snippet (by default <command>make menuconfig</command> won't work out of the box on nixos):
+   You can edit the config with this snippet (by default <command>make
+   menuconfig</command> won't work out of the box on nixos):
 <screen><![CDATA[
       nix-shell -E 'with import <nixpkgs> {}; kernelToOverride.overrideAttrs (o: {nativeBuildInputs=o.nativeBuildInputs ++ [ pkgconfig ncurses ];})'
   ]]></screen>
-   or you can let nixpkgs generate the configuration. Nixpkgs generates it via answering the interactive kernel utility <command>make config</command>. The answers depend on parameters passed to <filename>pkgs/os-specific/linux/kernel/generic.nix</filename> (which you can influence by overriding <literal>extraConfig, autoModules, modDirVersion, preferBuiltin, extraConfig</literal>).
+   or you can let nixpkgs generate the configuration. Nixpkgs generates it via
+   answering the interactive kernel utility <command>make config</command>. The
+   answers depend on parameters passed to
+   <filename>pkgs/os-specific/linux/kernel/generic.nix</filename> (which you
+   can influence by overriding <literal>extraConfig, autoModules,
+   modDirVersion, preferBuiltin, extraConfig</literal>).
 <screen><![CDATA[
 
   mptcp93.override ({
@@ -94,7 +121,9 @@ nixpkgs.config.packageOverrides = pkgs:
   <title>Developing kernel modules</title>
 
   <para>
-   When developing kernel modules it's often convenient to run edit-compile-run loop as quickly as possible. See below snippet as an example of developing <literal>mellanox</literal> drivers.
+   When developing kernel modules it's often convenient to run edit-compile-run
+   loop as quickly as possible. See below snippet as an example of developing
+   <literal>mellanox</literal> drivers.
   </para>
 
 <screen><![CDATA[

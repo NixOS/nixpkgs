@@ -5,13 +5,17 @@
          xml:id="module-services-prometheus-exporters">
  <title>Prometheus exporters</title>
  <para>
-  Prometheus exporters provide metrics for the <link xlink:href="https://prometheus.io">prometheus monitoring system</link>.
+  Prometheus exporters provide metrics for the
+  <link xlink:href="https://prometheus.io">prometheus monitoring system</link>.
  </para>
  <section xml:id="module-services-prometheus-exporters-configuration">
   <title>Configuration</title>
 
   <para>
-   One of the most common exporters is the <link xlink:href="https://github.com/prometheus/node_exporter">node exporter</link>, it provides hardware and OS metrics from the host it's running on. The exporter could be configured as follows:
+   One of the most common exporters is the
+   <link xlink:href="https://github.com/prometheus/node_exporter">node
+   exporter</link>, it provides hardware and OS metrics from the host it's
+   running on. The exporter could be configured as follows:
 <programlisting>
   services.prometheus.exporters.node = {
     enable = true;
@@ -26,20 +30,34 @@
     firewallFilter = "-i br0 -p tcp -m tcp --dport 9100";
   };
 </programlisting>
-   It should now serve all metrics from the collectors that are explicitly enabled and the ones that are <link xlink:href="https://github.com/prometheus/node_exporter#enabled-by-default">enabled by default</link>, via http under <literal>/metrics</literal>. In this example the firewall should just allow incoming connections to the exporter's port on the bridge interface <literal>br0</literal> (this would have to be configured seperately of course). For more information about configuration see <literal>man configuration.nix</literal> or search through the <link xlink:href="https://nixos.org/nixos/options.html#prometheus.exporters">available options</link>.
+   It should now serve all metrics from the collectors that are explicitly
+   enabled and the ones that are
+   <link xlink:href="https://github.com/prometheus/node_exporter#enabled-by-default">enabled
+   by default</link>, via http under <literal>/metrics</literal>. In this
+   example the firewall should just allow incoming connections to the
+   exporter's port on the bridge interface <literal>br0</literal> (this would
+   have to be configured seperately of course). For more information about
+   configuration see <literal>man configuration.nix</literal> or search through
+   the
+   <link xlink:href="https://nixos.org/nixos/options.html#prometheus.exporters">available
+   options</link>.
   </para>
  </section>
  <section xml:id="module-services-prometheus-exporters-new-exporter">
   <title>Adding a new exporter</title>
 
   <para>
-   To add a new exporter, it has to be packaged first (see <literal>nixpkgs/pkgs/servers/monitoring/prometheus/</literal> for examples), then a module can be added. The postfix exporter is used in this example:
+   To add a new exporter, it has to be packaged first (see
+   <literal>nixpkgs/pkgs/servers/monitoring/prometheus/</literal> for
+   examples), then a module can be added. The postfix exporter is used in this
+   example:
   </para>
 
   <itemizedlist>
    <listitem>
     <para>
-     Some default options for all exporters are provided by <literal>nixpkgs/nixos/modules/services/monitoring/prometheus/exporters.nix</literal>:
+     Some default options for all exporters are provided by
+     <literal>nixpkgs/nixos/modules/services/monitoring/prometheus/exporters.nix</literal>:
     </para>
    </listitem>
    <listitem override='none'>
@@ -88,7 +106,11 @@
    </listitem>
    <listitem>
     <para>
-     As there is already a package available, the module can now be added. This is accomplished by adding a new file to the <literal>nixos/modules/services/monitoring/prometheus/exporters/</literal> directory, which will be called postfix.nix and contains all exporter specific options and configuration:
+     As there is already a package available, the module can now be added. This
+     is accomplished by adding a new file to the
+     <literal>nixos/modules/services/monitoring/prometheus/exporters/</literal>
+     directory, which will be called postfix.nix and contains all exporter
+     specific options and configuration:
 <programlisting>
 # nixpgs/nixos/modules/services/prometheus/exporters/postfix.nix
 { config, lib, pkgs, options }:
@@ -155,16 +177,21 @@ in
    </listitem>
    <listitem>
     <para>
-     This should already be enough for the postfix exporter. Additionally one could now add assertions and conditional default values. This can be done in the 'meta-module' that combines all exporter definitions and generates the submodules: <literal>nixpkgs/nixos/modules/services/prometheus/exporters.nix</literal>
+     This should already be enough for the postfix exporter. Additionally one
+     could now add assertions and conditional default values. This can be done
+     in the 'meta-module' that combines all exporter definitions and generates
+     the submodules:
+     <literal>nixpkgs/nixos/modules/services/prometheus/exporters.nix</literal>
     </para>
    </listitem>
   </itemizedlist>
  </section>
  <section xml:id="module-services-prometheus-exporters-update-exporter-module">
   <title>Updating an exporter module</title>
-
-  <para>
-   Should an exporter option change at some point, it is possible to add information about the change to the exporter definition similar to <literal>nixpkgs/nixos/modules/rename.nix</literal>:
+   <para>
+     Should an exporter option change at some point, it is possible to add
+     information about the change to the exporter definition similar to
+     <literal>nixpkgs/nixos/modules/rename.nix</literal>:
 <programlisting>
 { config, lib, pkgs, options }:
 
@@ -195,6 +222,6 @@ in
   ];
 }
 </programlisting>
-  </para>
- </section>
+    </para>
+  </section>
 </chapter>

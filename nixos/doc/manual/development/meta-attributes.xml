@@ -6,12 +6,18 @@
  <title>Meta Attributes</title>
 
  <para>
-  Like Nix packages, NixOS modules can declare meta-attributes to provide extra information. Module meta attributes are defined in the <filename
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/misc/meta.nix">meta.nix</filename> special module.
+  Like Nix packages, NixOS modules can declare meta-attributes to provide extra
+  information. Module meta attributes are defined in the
+  <filename
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/misc/meta.nix">meta.nix</filename>
+  special module.
  </para>
 
  <para>
-  <literal>meta</literal> is a top level attribute like <literal>options</literal> and <literal>config</literal>. Available meta-attributes are <literal>maintainers</literal> and <literal>doc</literal>.
+  <literal>meta</literal> is a top level attribute like
+  <literal>options</literal> and <literal>config</literal>. Available
+  meta-attributes are <literal>maintainers</literal> and
+  <literal>doc</literal>.
  </para>
 
  <para>
@@ -45,8 +51,11 @@
   </callout>
   <callout arearefs='modules-meta-2'>
    <para>
-    <varname>doc</varname> points to a valid DocBook file containing the module documentation. Its contents is automatically added to <xref
-      linkend="ch-configuration"/>. Changes to a module documentation have to be checked to not break building the NixOS manual:
+    <varname>doc</varname> points to a valid DocBook file containing the module
+    documentation. Its contents is automatically added to
+    <xref
+      linkend="ch-configuration"/>. Changes to a module documentation
+    have to be checked to not break building the NixOS manual:
    </para>
 <programlisting>$ nix-build nixos/release.nix -A manual</programlisting>
   </callout>

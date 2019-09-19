@@ -6,8 +6,12 @@
  <title>Syntax Summary</title>
 
  <para>
-  Below is a summary of the most important syntactic constructs in the Nix expression language. It’s not complete. In particular, there are many other built-in functions. See the <link
-xlink:href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix manual</link> for the rest.
+  Below is a summary of the most important syntactic constructs in the Nix
+  expression language. It’s not complete. In particular, there are many other
+  built-in functions. See the
+  <link
+xlink:href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
+  manual</link> for the rest.
  </para>
 
  <informaltable frame='none'>

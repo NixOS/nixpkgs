@@ -14,7 +14,8 @@
 </programlisting>
  </para>
  <para>
-  Optionally, <emphasis>compton</emphasis> can be enabled for nice graphical effects, some example settings:
+  Optionally, <emphasis>compton</emphasis> can be enabled for nice graphical
+  effects, some example settings:
 <programlisting>
 <link linkend="opt-services.compton.enable">services.compton</link> = {
   <link linkend="opt-services.compton.enable">enable</link>          = true;
@@ -26,7 +27,9 @@
 </programlisting>
  </para>
  <para>
-  Some Xfce programs are not installed automatically. To install them manually (system wide), put them into your <xref linkend="opt-environment.systemPackages"/>.
+  Some Xfce programs are not installed automatically. To install them manually
+  (system wide), put them into your
+  <xref linkend="opt-environment.systemPackages"/>.
  </para>
  <simplesect xml:id="sec-xfce-thunar-volumes">
   <title>Thunar Volume Support</title>
@@ -41,17 +44,25 @@
  <simplesect xml:id="sec-xfce-polkit">
   <title>Polkit Authentication Agent</title>
   <para>
-   There is no authentication agent automatically installed alongside Xfce. To allow mounting of local (non-removable) filesystems, you will need to install one. Installing <emphasis>polkit_gnome</emphasis>, a rebuild, logout and login did the trick.
+   There is no authentication agent automatically installed alongside Xfce. To
+   allow mounting of local (non-removable) filesystems, you will need to
+   install one. Installing <emphasis>polkit_gnome</emphasis>, a rebuild, logout
+   and login did the trick.
   </para>
  </simplesect>
  <simplesect xml:id="sec-xfce-troubleshooting">
   <title>Troubleshooting</title>
   <para>
-   Even after enabling udisks2, volume management might not work. Thunar and/or the desktop takes time to show up. Thunar will spit out this kind of message on start (look at <command>journalctl --user -b</command>).
+   Even after enabling udisks2, volume management might not work. Thunar and/or
+   the desktop takes time to show up. Thunar will spit out this kind of message
+   on start (look at <command>journalctl --user -b</command>).
 <programlisting>
 Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with dbus name org.gtk.Private.UDisks2VolumeMonitor is not supported
 </programlisting>
-   This is caused by some needed GNOME services not running. This is all fixed by enabling "Launch GNOME services on startup" in the Advanced tab of the Session and Startup settings panel. Alternatively, you can run this command to do the same thing.
+   This is caused by some needed GNOME services not running. This is all fixed
+   by enabling "Launch GNOME services on startup" in the Advanced tab of the
+   Session and Startup settings panel. Alternatively, you can run this command
+   to do the same thing.
 <programlisting>
 <prompt>$ </prompt>xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
 </programlisting>

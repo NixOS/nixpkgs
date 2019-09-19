@@ -6,7 +6,8 @@
  <title>Running Tests interactively</title>
 
  <para>
-  The test itself can be run interactively. This is particularly useful when developing or debugging a test:
+  The test itself can be run interactively. This is particularly useful when
+  developing or debugging a test:
 <screen>
 <prompt>$ </prompt>nix-build nixos/tests/login.nix -A driver
 <prompt>$ </prompt>./result/bin/nixos-test-driver
@@ -20,7 +21,10 @@ starting VDE switch for network 1
 <prompt>&gt;</prompt> $machine->succeed("touch /tmp/foo")
 <prompt>&gt;</prompt> print($machine->succeed("pwd")) # Show stdout of command
 </screen>
-  The function <command>testScript</command> executes the entire test script and drops you back into the test driver command line upon its completion. This allows you to inspect the state of the VMs after the test (e.g. to debug the test script).
+  The function <command>testScript</command> executes the entire test script
+  and drops you back into the test driver command line upon its completion.
+  This allows you to inspect the state of the VMs after the test (e.g. to debug
+  the test script).
  </para>
 
  <para>
@@ -29,10 +33,12 @@ starting VDE switch for network 1
 <prompt>$ </prompt>nix-build nixos/tests/login.nix -A driver
 <prompt>$ </prompt>./result/bin/nixos-run-vms
 </screen>
-  The script <command>nixos-run-vms</command> starts the virtual machines defined by test.
+  The script <command>nixos-run-vms</command> starts the virtual machines
+  defined by test.
  </para>
 
  <para>
-  The machine state is kept across VM restarts in <filename>/tmp/vm-state-</filename><varname>machinename</varname>.
+  The machine state is kept across VM restarts in
+  <filename>/tmp/vm-state-</filename><varname>machinename</varname>.
  </para>
 </section>
