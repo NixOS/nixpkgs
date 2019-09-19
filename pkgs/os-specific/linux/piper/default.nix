@@ -4,7 +4,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "piper";
-  version = "0.2.903";
+  version = "0.3";
 
   format = "other";
 
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner  = "libratbag";
     repo   = "piper";
     rev    =  version;
-    sha256 = "0zh4lm074x5gwvx663bapdyv8lf84yjwfg8cpf77rszyja1hx13a";
+    sha256 = "1vz7blhx6qsfrk5znwr0fj1k8vahnlaz6rn7ifcgxmq398mmz8z7";
   };
 
   nativeBuildInputs = [ meson ninja gettext pkgconfig wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
