@@ -131,6 +131,7 @@ in rec {
   manualHTMLShell = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTMLShell);
   doc-support = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML.doc-support);
   manual = manualHTML; # TODO(@oxij): remove eventually
+
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
   manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
   manpagesShell = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpagesShell);

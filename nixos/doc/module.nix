@@ -59,6 +59,7 @@ in rec {
   };
 
   manualHTML = manual;
+  manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
   manualHTMLShell = pkgs.nix-doc-tools {
     name = "nixos-manual";
     src = ./manual;
