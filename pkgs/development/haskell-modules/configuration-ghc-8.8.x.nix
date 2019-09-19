@@ -70,11 +70,10 @@ self: super: {
       sha256 = "1p1pinca33vd10iy7hl20c1fc99vharcgcai6z3ngqbq50k2pd3q";
     };
   };
-  vector-th-unbox = appendPatch super.vector-th-unbox (pkgs.fetchpatch {
+  vector-th-unbox = appendPatch (doJailbreak super.vector-th-unbox) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/vector-th-unbox-0.2.1.6.patch";
     sha256 = "0169yf9ms1g5mmkc5l6hpffzm34zdrqdng4df02nbdmfgba45h19";
   });
-  cabal-doctest = super.cabal-doctest_1_0_7;
   regex-base = overrideCabal (appendPatch super.regex-base (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-base-0.93.2.patch";
     sha256 = "01d1plrdx6hcspwn2h6y9pyi5366qk926vb5cl5qcl6x4m23l6y1";
@@ -85,10 +84,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-posix-0.95.2.patch";
     sha256 = "006yli58jpqp786zm1xlncjsilc38iv3a09r4pv94l587sdzasd2";
   });
-  haskell-src-exts = appendPatch super.haskell-src-exts (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/haskell-src-exts-1.21.0.patch";
-    sha256 = "0alb28hcsp774c9s73dgrajcb44vgv1xqfg2n5a9y2bpyngqscs3";
-  });
   optparse-applicative = appendPatch (doJailbreak super.optparse-applicative) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/optparse-applicative-0.14.3.0.patch";
     sha256 = "068sjj98jqiq3h8h03mg4w2pa11q8lxkx2i4lmxivq77xyhlwq3y";
@@ -97,22 +92,14 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hackage-security-0.5.3.0.patch";
     sha256 = "0l8x0pbsn18fj5ak5q0g5rva4xw1s9yc4d86a1pfyaz467b9i5a4";
   });
-  happy = appendPatch super.happy (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/happy-1.19.11.patch";
-    sha256 = "16m659kxbq0s87ak2y1pqggfy67yfvcwc0zi3hcphf3v8735xhkk";
-  });
-  hedgehog = appendPatch super.hedgehog (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hedgehog-0.6.1.patch";
-    sha256 = "04xwznd3lfgracfz68ls6vfm19rhq8fb74r6ii0grpv6cx4rr21i";
+  hedgehog = appendPatch (doJailbreak super.hedgehog) (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/hedgehog-1.0.patch";
+    sha256 = "16gadh1hb74jqvzc9c893sffb1y2vjglblyrqjwp7xfhccq7g8yw";
   });
   easytest = self.easytest_0_3;
   regex-tdfa = appendPatch super.regex-tdfa (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-tdfa-1.2.3.1.patch";
     sha256 = "1lhas4s2ms666prb475gaw2bqw1v4y8cxi66sy20j727sx7ppjs7";
-  });
-  attoparsec = appendPatch (doJailbreak super.attoparsec) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/attoparsec-0.13.2.2.patch";
-    sha256 = "13i1p5g0xzxnv966nlyb77mfmxvg9jzbym1d36h1ajn045yf4igl";
   });
   cassava = appendPatch super.cassava (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/cassava-0.5.1.0.patch";
@@ -122,7 +109,7 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shakespeare-2.0.20.patch";
     sha256 = "1dgx41ylahj4wk8r422aik0d7qdpawdga4gqz905nvlnhqjla58y";
   });
-  socks = appendPatch super.socks (pkgs.fetchpatch {
+  socks = appendPatch (doJailbreak super.socks) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/socks-0.6.0.patch";
     sha256 = "1dsqmx0sw62x4glh43c0sbizd2y00v5xybiqadn96v6pmfrap5cp";
   });
@@ -159,14 +146,21 @@ self: super: {
     '';
   });
   system-fileio = doJailbreak super.system-fileio;
-  yaml = self.yaml_0_11_1_2;
+  tasty-hedgehog = doJailbreak super.tasty-hedgehog;
   haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.2.patch";
-    sha256 = "146im1amywyl29kcldvgrxpwj22lrpzxysl7vc8rmn3hrq130dyc";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.3.patch";
+    sha256 = "1asl932mibr5y057xx8v1a7n3qy87lcnclsfh8pbxq1m3iwjkxy8";
   });
   asn1-encoding = appendPatch (dontCheck (doJailbreak super.asn1-encoding)) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/asn1-encoding-0.9.5.patch";
     sha256 = "0a3159rnaw6shjzdm46799crd4pxh33s23qy51xa7z6nv5q8wsb5";
   });
   tls = self.tls_1_5_1;
+  vault = dontHaddock super.vault;
+
+  # TODO dont fetch patch if https://github.com/simonmar/alex/issues/140 is resolved
+  alex = appendPatch super.alex (pkgs.fetchpatch {
+    url = "https://github.com/simonmar/alex/commit/deaae6eddef5186bfd0e42e2c3ced39e26afa4d6.patch";
+    sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
+  });
 }

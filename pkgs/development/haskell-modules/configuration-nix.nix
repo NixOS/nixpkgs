@@ -589,7 +589,7 @@ self: super: builtins.intersectAttrs super {
   snap-server = dontCheck super.snap-server;
 
   # Tests require internet
-  dhall_1_25_0 = dontCheck super.dhall_1_25_0;
+  dhall_1_26_0 = dontCheck super.dhall_1_26_0;
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
 
