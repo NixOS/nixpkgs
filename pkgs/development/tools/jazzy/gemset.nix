@@ -209,10 +209,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0cwsmijhb845lrkwq1gxwa6a698vp47gdxcpav30dghrf1ikyzqm";
+      sha256 = "0kdja4bhzak79xvfpwwakqsjw07vfg458d62k08a416im7xcfcmc";
       type = "gem";
     };
-    version = "0.11.0";
+    version = "0.11.1";
   };
   liferaft = {
     source = {
@@ -301,10 +301,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "07j29vbgsi9v7kpx4lqpmh0hx59i420jig73dy46wx3id1i7vdqz";
+      sha256 = "1zsyv6abqrk7lpql5f1ja4m88bfy9qndi8xykpss6cpvjdmi3ydb";
       type = "gem";
     };
-    version = "3.10.0";
+    version = "3.11.0";
   };
   ruby-macho = {
     groups = ["default"];
@@ -322,10 +322,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "178iflma5z4qk2lfzlxk8kh942skj45q6v6xwllkqng9xbjlyzkf";
+      sha256 = "09bnid7r5z5hcin5hykvpvv8xig27wbbckxwis60z2aaxq4j9siz";
       type = "gem";
     };
-    version = "2.2.0";
+    version = "2.2.1";
   };
   sqlite3 = {
     groups = ["default"];
