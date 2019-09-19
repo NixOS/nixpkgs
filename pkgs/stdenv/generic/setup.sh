@@ -403,6 +403,7 @@ findInputs() {
     # The current package's host and target offset together
     # provide a <=-preserving homomorphism from the relative
     # offsets to current offset
+    local -i mapOffsetResult
     function mapOffset() {
         local -ri inputOffset="$1"
         if (( "$inputOffset" <= 0 )); then
@@ -410,7 +411,7 @@ findInputs() {
         else
             local -ri outputOffset="$inputOffset - 1 + $targetOffset"
         fi
-        echo "$outputOffset"
+        mapOffsetResult="$outputOffset"
     }
 
     # Host offset relative to that of the package whose immediate
@@ -422,8 +423,8 @@ findInputs() {
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
-        local -i hostOffsetNext
-        hostOffsetNext="$(mapOffset relHostOffset)"
+        mapOffset relHostOffset
+        local -i hostOffsetNext="$mapOffsetResult"
 
         # Ensure we're in bounds relative to the package currently
         # being built.
@@ -441,8 +442,8 @@ findInputs() {
 
             # Target offset relative to the package currently being
             # built.
-            local -i targetOffsetNext
-            targetOffsetNext="$(mapOffset relTargetOffset)"
+            mapOffset relTargetOffset
+            local -i targetOffsetNext="$mapOffsetResult"
 
             # Once again, ensure we're in bounds relative to the
             # package currently being built.
