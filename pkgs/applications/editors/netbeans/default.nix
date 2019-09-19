@@ -58,7 +58,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";
-    homepage = "https://netbeans.org/";
+    homepage = "https://netbeans.apache.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ sander rszibele ];
     platforms = stdenv.lib.platforms.unix;
