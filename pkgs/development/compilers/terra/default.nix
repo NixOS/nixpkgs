@@ -5,21 +5,23 @@
 let
   luajitArchive = "LuaJIT-2.0.5.tar.gz";
   luajitSrc = fetchurl {
-    url = "http://luajit.org/download/${luajitArchive}";
+    url    = "http://luajit.org/download/${luajitArchive}";
     sha256 = "0yg9q4q6v028bgh85317ykc9whgxgysp76qzaqgq55y6jy11yjw7";
   };
 in
 
 stdenv.mkDerivation rec {
-  pname = "terra-git";
-  version = "1.0.0-beta1";
+  pname = "terra";
+  version = "1.0.0pre1175_${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
-    owner = "zdevito";
-    repo = "terra";
-    rev = "release-${version}";
-    sha256 = "1blv3mbmlwb6fxkck6487ck4qq67cbwq6s1zlp86hy2wckgf8q2c";
+    owner  = "zdevito";
+    repo   = "terra";
+    rev    = "ef6a75ffee15a30f3c74f4e6943851cfbc0fec3d";
+    sha256 = "0aky17vbv3d9zng34hp17p9zb00dbzwhvzsdjzrrqvk9lmyvix0s";
   };
+
+  hardeningDisable = [ "fortify" ];
 
   outputs = [ "bin" "dev" "out" "static" ];
 
