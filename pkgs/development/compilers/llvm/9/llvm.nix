@@ -77,6 +77,10 @@ in stdenv.mkDerivation (rec {
     rm test/CodeGen/AArch64/wineh4.mir
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
+
+    # Fix test so that no extra locale files are needed
+    substituteInPlace test/tools/llvm-ar/mri-utf8.test \
+      --replace en_US.UTF-8 C.UTF-8
   '';
 
   # hacky fix: created binaries need to be run before installation
