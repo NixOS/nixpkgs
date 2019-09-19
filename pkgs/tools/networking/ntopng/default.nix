@@ -1,41 +1,44 @@
-{ stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
-, geoip, geolite-legacy, sqlite, which, autoreconfHook, git
-, pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool
+{ stdenv, fetchurl, fetchFromGitHub, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
+, geoip, geolite-legacy, sqlite, which, autoreconfHook, git, mariadb, readline80
+, pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool, libmaxminddb
 }:
 
 # ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
 # directory, but we use luajit, zeromq, and rrdtool from nixpkgs
 
-stdenv.mkDerivation rec {
-  name = "ntopng-2.0";
+let
+  ndpi = fetchurl {
+    url = "https://github.com/ntop/nDPI/archive/2.6.tar.gz";
+    sha256 = "07prvgdbs09kyq83s5n8j0mdqrc7jwl0acr0k43ihnrq824vdpzg";
+  };
+in stdenv.mkDerivation rec {
+  version = "3.8";
+  name = "ntopng-${version}";
 
-  src = fetchurl {
-    urls = [
-      "mirror://sourceforge/project/ntop/ntopng/old/${name}.tar.gz"
-      "mirror://sourceforge/project/ntop/ntopng/${name}.tar.gz"
-    ];
-    sha256 = "0l82ivh05cmmqcvs26r6y69z849d28njipphqzvnakf43ggddgrw";
+  src = fetchFromGitHub {
+    owner = "ntop";
+    repo = "ntopng";
+    rev = version;
+    sha256 = "170cqggrja4am34cwwb4h92hyb38jpsb81rqwncqd0lydqx114f0";
   };
 
   patches = [
     ./0001-Undo-weird-modification-of-data_dir.patch
-    ./0002-Remove-requirement-to-have-writeable-callback-dir.patch
-    ./0003-New-libpcap-defines-SOCKET.patch
   ];
 
-  buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 glib geoip geolite-legacy
-    sqlite which autoreconfHook git pkgconfig groff curl json_c luajit zeromq
+  buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 libmaxminddb glib geoip geolite-legacy
+    sqlite which autoreconfHook git pkgconfig groff curl json_c luajit zeromq mariadb readline80
     rrdtool ];
-
 
   autoreconfPhase = ''
     substituteInPlace autogen.sh --replace "/bin/rm" "rm"
-    substituteInPlace nDPI/autogen.sh --replace "/bin/rm" "rm"
     $shell autogen.sh
   '';
 
   preConfigure = ''
     substituteInPlace Makefile.in --replace "/bin/rm" "rm"
+    mkdir nDPI
+    tar --extract --gzip --file=${ndpi} --strip-components=1 --directory=nDPI
   '';
 
   preBuild = ''

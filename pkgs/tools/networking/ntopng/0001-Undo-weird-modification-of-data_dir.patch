@@ -1,12 +1,14 @@
 diff --git a/src/Prefs.cpp b/src/Prefs.cpp
-index 76385c4..db8d20d 100755
+index 2220a2f..99d12a2 100755
 --- a/src/Prefs.cpp
 +++ b/src/Prefs.cpp
-@@ -795,7 +795,6 @@ int Prefs::checkOptions() {
-          ntop->getTrace()->traceEvent(TRACE_ERROR, "Unable to create log %s", path);
-     }
+@@ -1366,9 +1366,6 @@ int Prefs::checkOptions() {
+   if(install_dir)
+     ntop->set_install_dir(install_dir);
  
--  free(data_dir); data_dir = strdup(ntop->get_install_dir());
-   docs_dir      = ntop->getValidPath(docs_dir);
-   scripts_dir   = ntop->getValidPath(scripts_dir);
-   callbacks_dir = ntop->getValidPath(callbacks_dir);
+-  free(data_dir);
+-  data_dir = strdup(ntop->get_install_dir());
+-
+   if(!prefs_dir)
+     prefs_dir = strdup(ntop->get_working_dir());
+ 
