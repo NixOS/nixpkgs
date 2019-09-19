@@ -47,6 +47,15 @@ in rec {
     generated-files = [
       generatedSources
     ];
+    olinks = {
+      # self-referential, as the generated options uses olinks. This
+      # is because the generated options also appear in man pages,
+      # and *that* doc set must use olinks.
+      #
+      # note: nix-doc-tools internally uses a passthru, so this isn't
+      #       actually an infinite loop.
+      manual = manual;
+    };
   };
 
   manualHTML = manual;
@@ -67,6 +76,9 @@ in rec {
     generated-files = [
       generatedSources
     ];
+    olinks = {
+      manual = manual;
+    };
   };
   manpagesShell = pkgs.nix-doc-tools {
     name = "nixos-man-pages";
