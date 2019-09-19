@@ -14533,6 +14533,8 @@ in
 
   bosun = callPackage ../servers/monitoring/bosun { };
 
+  buildkite-agent-metrics = callPackage ../servers/monitoring/buildkite-agent-metrics { };
+
   cayley = callPackage ../servers/cayley { };
 
   charybdis = callPackage ../servers/irc/charybdis { };
