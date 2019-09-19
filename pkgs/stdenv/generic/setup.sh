@@ -98,7 +98,7 @@ _callImplicitHook() {
 # hooks exits the hook, not the caller. Also will only pass args if
 # command can take them
 _eval() {
-    if [ "$(type -t "$1")" = function ]; then
+    if declare -F "$1" > /dev/null 2>&1; then
         set +u
         "$@" # including args
     else
