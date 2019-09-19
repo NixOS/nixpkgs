@@ -15415,7 +15415,9 @@ in
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
-  sqlite-analyzer = lowPrio (callPackage ../development/libraries/sqlite/analyzer.nix { });
+  sqlite-analyzer = lowPrio (callPackage ../development/libraries/sqlite/tools.nix { }).sqlite-analyzer;
+
+  sqldiff = lowPrio (callPackage ../development/libraries/sqlite/tools.nix { }).sqldiff;
 
   sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
 
