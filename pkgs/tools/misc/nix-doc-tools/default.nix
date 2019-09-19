@@ -1,10 +1,15 @@
-{ lib, callPackage, buildEnv, writeShellScriptBin, docbook-xsl-ns, stdenvNoCC }:
+{ lib, callPackage, buildEnv, writeShellScriptBin, docbook-xsl-ns
+, stdenvNoCC, writeTextFile }:
 {
   name
   , src
   , generated-files ? []
   , root-file-name ? "manual.xml"
   , combined-file-name ? "manual-full.xml"
+  # olinks: provide an attrset of other manuals for cross-referencing.
+  # The attribute name is the olink target doc name, the attribute set
+  # value is documentation built by nix-doc-tools.
+  , olinks ? {}
   , nativeBuildInputs ? []
   , preBuild ? ":"
   , nix-shell ? false
@@ -12,9 +17,52 @@
 let
   doclib = callPackage ./lib.nix {};
 
+  olinkdb = writeTextFile {
+    name = "olinkdb";
+    destination = "/olinkdb.xml";
+    text = ''
+      <?xml version="1.0" encoding="utf-8"?>
+      <!DOCTYPE targetset SYSTEM
+        "file://${docbook-xsl-ns}/xml/xsl/docbook/common/targetdatabase.dtd" [
+        ${lib.concatStrings (lib.mapAttrsToList (name: docs: ''
+          <!ENTITY ${name} SYSTEM "file://${docs.olinkdb}">
+        '') olinks)}
+      ]>
+      <targetset>
+        <targetsetinfo>
+          Allows for cross-referencing olinks between the manuals.
+        </targetsetinfo>
+        ${lib.concatStrings (lib.mapAttrsToList (name: _: ''
+          <document targetdoc="${name}">&${name};</document>
+        '') olinks)}
+      </targetset>
+    '';
+  };
+
+  generated-olinkdb = stdenvNoCC.mkDerivation {
+    name = "${name}-olinkdb.xml";
+    inherit src;
+
+    buildInputs = doclib.toolbox.build;
+
+    buildPhase = ''
+      time xsltproc \
+        --nonet --xinclude \
+        --stringparam collect.xref.targets only \
+        --stringparam targets.filename "$out" \
+        --nonet \
+        --output "$out" \
+        ${doclib.standard-tools}/chunk-xhtml.xsl \
+        ${combined-file-name}
+    '';
+
+    installPhase = ":";
+  };
+
+
   generated = buildEnv {
     name = "docs-tooling-${name}";
-    paths = [ doclib.standard-tools ] ++ generated-files;
+    paths = [ doclib.standard-tools olinkdb ] ++ generated-files;
   };
 
   preamble = ''
@@ -135,6 +183,7 @@ let
     mkdir -p $output/share/man
     time xsltproc --nonet \
       --maxdepth 6000 \
+      --stringparam target.database.document "./generated/olinkdb.xml" \
       --param man.output.in.separate.dir 1 \
       --param man.output.base.dir "'$output/share/man/'" \
       --param man.endnotes.are.numbered 0 \
@@ -149,6 +198,7 @@ let
     chmod -R u+w "$output/share/doc/${name}/html"
     time xsltproc \
       --nonet --xinclude \
+      --stringparam target.database.document "./generated/olinkdb.xml" \
       --output "$output/share/doc/${name}/html/" \
       ./generated/chunk-xhtml.xsl \
       ${combined-file-name}
@@ -169,6 +219,7 @@ let
     mkdir -p "$scratch/epub/OEBPS"
     time xsltproc --nonet \
       --output "$scratch/epub/" \
+      --stringparam target.database.document "./generated/olinkdb.xml" \
       ./generated/epub.xsl \
       ${combined-file-name}
 
@@ -203,6 +254,10 @@ in stdenvNoCC.mkDerivation {
     docs-generate
     docs-build $out
   '';
+
+  passthru = {
+    olinkdb = generated-olinkdb;
+  };
 
   # Prints a preamble for direct help.
   # FIXME: Add link to the manual html page for more details about authoring.
