@@ -14,8 +14,10 @@ let
     storage = dataDir;
     p2p = {
       public_address = "/ip4/127.0.0.1/tcp/8299";
-      messages = "high";
-      blocks = "high";
+      topics_of_interest = {
+        messages = "high";
+        blocks = "high";
+      };
     };
     rest = {
       listen = "127.0.0.1:8607";
