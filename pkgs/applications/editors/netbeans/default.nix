@@ -8,7 +8,7 @@ let
     name = "netbeans";
     exec = "netbeans";
     comment = "Integrated Development Environment";
-    desktopName = "Netbeans IDE";
+    desktopName = "Apache NetBeans IDE";
     genericName = "Integrated Development Environment";
     categories = "Application;Development;";
     icon = "netbeans";
