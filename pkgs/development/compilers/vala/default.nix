@@ -28,11 +28,6 @@ let
         #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
         "0.40" = ./disable-graphviz-0.40.12.patch;
 
-        "0.42" = fp {
-          commit = "f2b4f9ec6f44dced7f88df849cca68961419eeb8";
-          sha256 = "112qhdzix0d7lfpfcam1cxprzmfzpwypb1226m5ma1vq9qy0sn7g";
-        };
-
         # NOTE: the openembedded-core project doesn't have a patch for 0.44.1
         # We've reverted the addition of the "--disable-valadoc" option
         # and then applied the following patch.
@@ -113,11 +108,6 @@ in rec {
   vala_0_40 = generic {
     version = "0.40.16";
     sha256 = "0vv25fmr9jqiqf080vak1x4raa4w3cz3n5ysjglqsq9qfx304i7b";
-  };
-
-  vala_0_42 = generic {
-    version = "0.42.7";
-    sha256 = "029ksbsdpl581wzy570kj4kkw8b4bizgh494c051zsvkwck55p83";
   };
 
   vala_0_44 = generic {

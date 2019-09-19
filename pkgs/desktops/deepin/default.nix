@@ -39,7 +39,7 @@ let
     deepin-turbo = callPackage ./deepin-turbo { };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
     deepin-wm = callPackage ./deepin-wm {
-      vala = pkgs.vala_0_42;
+      vala = pkgs.vala_0_40;
     };
     dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
