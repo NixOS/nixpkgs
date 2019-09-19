@@ -291,7 +291,6 @@ mapAliases ({
   pyo3-pack = maturin;
   pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
-  qt_gstreamer1 = qt-gstreamer1;  # added 2017-02
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   qtpfsgui = throw "Is now luminanceHDR"; # added 2019-06-26
