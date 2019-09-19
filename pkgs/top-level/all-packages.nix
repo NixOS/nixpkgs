@@ -21190,6 +21190,8 @@ in
 
   wayv = callPackage ../tools/X11/wayv {};
 
+  webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
+
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
 
   wrapWeechat = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
