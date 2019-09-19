@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, fetchgit, fetchpatch, makeWrapper
+{ mkDerivation, lib, fetchurl, fetchgit, fetchpatch
 , qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8
 , withDocumentation ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   baseVersion = "4.9";
@@ -21,7 +21,7 @@ let
   });
 in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qtcreator";
   version = "${baseVersion}.${revision}";
 
