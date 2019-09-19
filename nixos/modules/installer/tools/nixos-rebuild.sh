@@ -236,6 +236,12 @@ if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
     export PATH=@nix@/bin:$PATH
 fi
 
+# Use /etc/nixos/flake.nix if it exists. It can be a symlink to the
+# actual flake.
+if [[ -z $flake && -e /etc/nixos/flake.nix ]]; then
+    flake="$(dirname "$(readlink -f /etc/nixos/flake.nix)")"
+fi
+
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 # FIXME: get nixos-rebuild from $flake.
 if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast && -z $flake ]]; then
