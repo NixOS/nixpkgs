@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 
-  src = fetch "libcxx" "0y4vc9z36c1zlq15cnibdzxnc1xi5glbc6klnm8a41q3db4541kz";
+  src = fetch "libcxx" "136j3v7il9aq8wyp48klx6sifnl5asj4lf5c8yx08cjx5fbn4h9w";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -13,10 +13,6 @@ stdenv.mkDerivation {
   '';
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
-
-  prePatch = ''
-    substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
-  '';
 
   preConfigure = ''
     # Get headers from the cxxabi source so we can see private headers not installed by the cxxabi package

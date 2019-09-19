@@ -1,8 +1,8 @@
 { stdenv, version, fetch, cmake, python, llvm, libcxxabi }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "compiler-rt";
   inherit version;
-  src = fetch "compiler-rt" "0dqqf8f930l8gag4d9qjgn1n0pj0nbv2anviqqhdi1rkhas8z0hi";
+  src = fetch pname "03ni43lbkp63lr3p6sc94dphqmvnz5av5mml0xmk930xvnbcvr2n";
 
   nativeBuildInputs = [ cmake python llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;

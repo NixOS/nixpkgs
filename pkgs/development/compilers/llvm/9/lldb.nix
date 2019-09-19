@@ -14,11 +14,11 @@
 , darwin
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lldb";
   inherit version;
 
-  src = fetch "lldb" "1mriw4adrwm6kzabrjr7yqmdiylxd6glf6samd80dp8idnm9p9z8";
+  src = fetch pname "1507dl0xw03nppxpz2xsq4s30jdbkplx4w14za54ngqm3xm2yk0y";
 
   postPatch = ''
     # Fix up various paths that assume llvm and clang are installed in the same place
@@ -29,6 +29,8 @@ stdenv.mkDerivation {
     sed -i 's,"$.LLVM_LIBRARY_DIR.",${llvm}/lib ${clang-unwrapped}/lib,' \
       cmake/modules/LLDBStandalone.cmake
   '';
+
+  patches = [ ./lldb-procfs.patch ];
 
   nativeBuildInputs = [ cmake python which swig ];
   buildInputs = [ ncurses zlib libedit libxml2 llvm ]

@@ -27,11 +27,12 @@ let
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
-in stdenv.mkDerivation ({
-  name = "llvm-${version}";
+in stdenv.mkDerivation (rec {
+  pname = "llvm";
+  inherit version;
 
-  src = fetch "llvm" "1rvm5gqp5v8hfn17kqws3zhk94w4kxndal12bqa0y57p09nply24";
-  polly_src = fetch "polly" "1lfjdz3ilj5xmjxvicd8f5ykybks67ry2pdb777352r3mzlgg8g8";
+  src = fetch pname "117ymdz1by2nkfq1c2p9m4050dp848kbjbiv6nsfj8hzy9f5d86n";
+  polly_src = fetch "polly" "0cyl2gsibf1dhqvkyw1qb0f8q58ib6cihzyh4f9kj9g77ll95ym4";
 
   unpackPhase = ''
     unpackFile $src
@@ -150,7 +151,7 @@ in stdenv.mkDerivation ({
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
+  pname = "llvm-manpages";
 
   buildPhase = ''
     make docs-llvm-man
