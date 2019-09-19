@@ -19120,7 +19120,7 @@ in
 
   libowfat = callPackage ../development/libraries/libowfat { };
 
-  librecad = callPackage ../applications/misc/librecad { };
+  librecad = libsForQt5.callPackage ../applications/misc/librecad { };
 
   libreoffice = hiPrio libreoffice-still;
   libreoffice-unwrapped = libreoffice.libreoffice;
