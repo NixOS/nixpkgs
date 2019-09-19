@@ -449,7 +449,8 @@ findInputs() {
             [[ -f "$pkg/nix-support/$file" ]] || continue
 
             local pkgNext
-            for pkgNext in $(< "$pkg/nix-support/$file"); do
+            read -r -d '' pkgNext < "$pkg/nix-support/$file" || true
+            for pkgNext in $pkgNext; do
                 findInputs "$pkgNext" "$hostOffsetNext" "$targetOffsetNext"
             done
         done
