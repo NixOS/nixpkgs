@@ -1,4 +1,4 @@
-From 18e87f3de05ffbed6f5d9b4f9a3fc20373f4c06b Mon Sep 17 00:00:00 2001
+From 354713a61005b9a4743b9db0d76c72514c4579f8 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:36:25 -0500
 Subject: [PATCH 09/11] qtbase-tzdir

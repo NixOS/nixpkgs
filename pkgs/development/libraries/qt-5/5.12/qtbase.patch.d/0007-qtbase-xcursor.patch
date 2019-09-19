@@ -1,4 +1,4 @@
-From b8581b324f47f1e8e5b994ab138f2850583a9f6c Mon Sep 17 00:00:00 2001
+From b4fe78eb31f30ef499970b2ca7e7947c025588af Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:35:58 -0500
 Subject: [PATCH 07/11] qtbase-xcursor

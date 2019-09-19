@@ -1,12 +1,11 @@
-From 1dbf4dd6dc4cc30a3e705a12117f1764201a8402 Mon Sep 17 00:00:00 2001
+From e32f2e184bf2adce216351b2a1e7390e8d9c31b9 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:37:15 -0500
 Subject: [PATCH 02/11] qtbase-mac
 
 ---
  src/corelib/kernel/qcore_mac_p.h | 16 ++++++++++++++--
- src/testlib/qappletestlogger.cpp |  2 +-
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/src/corelib/kernel/qcore_mac_p.h b/src/corelib/kernel/qcore_mac_p.h
 index f96e7358..650946b7 100644
@@ -41,19 +40,6 @@ index f96e7358..650946b7 100644
 +#endif
  
  // -------------------------------------------------------------------------
- 
-diff --git a/src/testlib/qappletestlogger.cpp b/src/testlib/qappletestlogger.cpp
-index dfeadebd..2a74330c 100644
---- a/src/testlib/qappletestlogger.cpp
-+++ b/src/testlib/qappletestlogger.cpp
-@@ -43,7 +43,7 @@
- 
- QT_BEGIN_NAMESPACE
- 
--#if defined(QT_USE_APPLE_UNIFIED_LOGGING)
-+#if defined(QT_USE_APPLE_UNIFIED_LOGGING) && 0
- 
- using namespace QTestPrivate;
  
 -- 
 2.22.1
