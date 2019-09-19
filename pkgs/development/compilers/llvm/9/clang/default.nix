@@ -41,13 +41,6 @@ let
 
     patches = [
       ./purity.patch
-      ./clang-xpc.patch
-      # Backport for -static-pie, which the latter touches, and which is nice in
-      # its own right.
-      ./static-pie.patch
-      # Backport for the `--unwindlib=[libgcc|compiler-rt]` flag, which is
-      # needed for our bootstrapping to not interfere with C.
-      ./unwindlib.patch
       # https://reviews.llvm.org/D51899
       ./compiler-rt-baremetal.patch
     ];
