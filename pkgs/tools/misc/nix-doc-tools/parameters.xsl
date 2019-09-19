@@ -36,7 +36,9 @@ Major changes:
 
  * `root-nodes` is set selected from `/`, and is used instead of `nodes`
    when generating the toc.
- -->
+-->
+<!--
+TODO !!! WAY SLOW
  <xsl:template name="make.toc">
   <xsl:param name="toc-context" select="."/>
   <xsl:param name="toc.title.p" select="true()"/>
@@ -132,7 +134,7 @@ Major changes:
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
-
+-->
 
 
  <xsl:template name="toc.contexutalization.classes">
