@@ -664,6 +664,8 @@ let
       then sexplib_108_08_00
       else null;
 
+    ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
+
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
 
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
@@ -714,8 +716,6 @@ let
     printbox = callPackage ../development/ocaml-modules/printbox { };
 
     process = callPackage ../development/ocaml-modules/process { };
-
-    ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
