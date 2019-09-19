@@ -17,7 +17,8 @@ fi
 # code). The hooks for <hookName> are the shell function or variable
 # <hookName>, and the values of the shell array ‘<hookName>Hooks’.
 runHook() {
-    local oldOpts="$(shopt -po nounset)"
+    local oldOpts="-u"
+    shopt -qo nounset || oldOpts="+u"
     set -u # May be called from elsewhere, so do `set -u`.
 
     local hookName="$1"
@@ -32,7 +33,7 @@ runHook() {
         set -u # To balance `_eval`
     done
 
-    eval "${oldOpts}"
+    set "$oldOpts"
     return 0
 }
 
@@ -40,7 +41,8 @@ runHook() {
 # Run all hooks with the specified name, until one succeeds (returns a
 # zero exit code). If none succeed, return a non-zero exit code.
 runOneHook() {
-    local oldOpts="$(shopt -po nounset)"
+    local oldOpts="-u"
+    shopt -qo nounset || oldOpts="+u"
     set -u # May be called from elsewhere, so do `set -u`.
 
     local hookName="$1"
@@ -57,7 +59,7 @@ runOneHook() {
         set -u # To balance `_eval`
     done
 
-    eval "${oldOpts}"
+    set "$oldOpts"
     return "$ret"
 }
 
@@ -500,10 +502,11 @@ activatePackage() {
     (( "$hostOffset" <= "$targetOffset" )) || exit -1
 
     if [ -f "$pkg" ]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         source "$pkg"
-        eval "$oldOpts"
+        set "$oldOpts"
     fi
 
     # Only dependencies whose host platform is guaranteed to match the
@@ -522,10 +525,11 @@ activatePackage() {
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         source "$pkg/nix-support/setup-hook"
-        eval "$oldOpts"
+        set "$oldOpts"
     fi
 }
 
@@ -1273,17 +1277,19 @@ showPhaseHeader() {
 
 genericBuild() {
     if [ -f "${buildCommandPath:-}" ]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         source "$buildCommandPath"
-        eval "$oldOpts"
+        set "$oldOpts"
         return
     fi
     if [ -n "${buildCommand:-}" ]; then
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         eval "$buildCommand"
-        eval "$oldOpts"
+        set "$oldOpts"
         return
     fi
 
@@ -1313,10 +1319,11 @@ genericBuild() {
 
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
-        local oldOpts="$(shopt -po nounset)"
+        local oldOpts="-u"
+        shopt -qo nounset || oldOpts="+u"
         set +u
         eval "${!curPhase:-$curPhase}"
-        eval "$oldOpts"
+        set "$oldOpts"
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
