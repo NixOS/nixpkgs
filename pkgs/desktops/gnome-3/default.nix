@@ -79,6 +79,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   libgnome-keyring = callPackage ./core/libgnome-keyring { };
 
+  gnome-initial-setup = callPackage ./core/gnome-initial-setup { };
+
   gnome-online-miners = callPackage ./core/gnome-online-miners { };
 
   gnome-remote-desktop = callPackage ./core/gnome-remote-desktop { };
