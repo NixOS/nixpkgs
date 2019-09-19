@@ -53,6 +53,7 @@ in
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
+      gnome3.gnome-themes-extra
       gnome3.adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
@@ -69,16 +70,17 @@ in
 
       exo
       garcon
-      gtk-xfce-engine
       libxfce4ui
       xfconf
 
       mousepad
+      parole
       ristretto
       xfce4-appfinder
       xfce4-screenshooter
       xfce4-session
       xfce4-settings
+      xfce4-taskmanager
       xfce4-terminal
 
       # TODO: resync patch for plugins
@@ -86,12 +88,16 @@ in
       thunar
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.hardware.pulseaudio.enable xfce4-pulseaudio-plugin
       ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optional cfg.enableXfwm xfwm4
-      ++ optionals (!cfg.noDesktop) [
-        xfce4-panel
+      ++ optionals config.hardware.pulseaudio.enable [
+        pavucontrol
+        xfce4-pulseaudio-plugin
+      ] ++ optionals cfg.enableXfwm [
+        xfwm4
+        xfwm4-themes
+      ] ++ optionals (!cfg.noDesktop) [
         xfce4-notifyd
+        xfce4-panel
         xfdesktop
       ];
 
