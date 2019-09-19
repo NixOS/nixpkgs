@@ -319,11 +319,13 @@ in
       (isYes "BINFMT_ELF")
     ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
 
-    assertions = let
+    # nixpkgs kernels are assumed to have all required features
+    assertions = if config.boot.kernelPackages.kernel ? features then [] else
+      let
         structuredCfg = lib.kernel.loadConfig config.boot.kernelPackages.kernel.configfile;
 
         # temporary duplicate of os-specific/linux/kernel/manual-config.nix
-        # it will be removed in favor of lib.kernel functions
+        # they will be consolidated in lib/kernel.nix
         cfg = let attrName = attr: attr; in {
           isSet = attr: hasAttr (attrName attr) cfg;
 
