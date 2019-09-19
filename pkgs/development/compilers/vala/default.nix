@@ -39,6 +39,8 @@ let
         #     0.42.4: https://github.com/openembedded/openembedded-core/raw/f2b4f9ec6f44dced7f88df849cca68961419eeb8/meta/recipes-devtools/vala/vala/disable-graphviz.patch
         "0.44" = ./disable-graphviz-0.44.3.patch;
 
+        "0.46" = ./disable-graphviz-0.46.1.patch;
+
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
     disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
@@ -121,6 +123,11 @@ in rec {
   vala_0_44 = generic {
     version = "0.44.7";
     sha256 = "0z5xy4qc95rm2gj7s2k14xm1xp3mrf0yz64fx4kddqjxkpsz87xz";
+  };
+
+  vala_0_46 = generic {
+    version = "0.46.1";
+    sha256 = "10czkhclnisdz6k5qfiicmvx47m9177l5dkhjn29g43khnmpkr8l";
   };
 
   vala = vala_0_44;
