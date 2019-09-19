@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1795sad0jr2da2pn28nbqsvpld6zw8gf9yscywixkbabf7ls66fn";
+      sha256 = "1ackqjkwkfm3kazlyy4nwdjf6wwjlajql1hrznaki5138nw4gxs4";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1197,8 +1197,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_25_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_25_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_26_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_26_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1227,5 +1227,8 @@ self: super: {
       done
     '';
   });
+
+  # The LTS-14.x version of optparse-applicative is too old.
+  cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

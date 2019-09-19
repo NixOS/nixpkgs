@@ -244,7 +244,7 @@ Additional information.
 
    <para>
     When sandbox builds are enabled, Nix will setup an isolated environment for each build process. It is used to remove further hidden dependencies set by the build environment to improve reproducibility. This includes access to the network during the build outside of <function>fetch*</function> functions and files outside the Nix store. Depending on the operating system access to other resources are blocked as well (ex. inter process communication is isolated on Linux); see <link
-      xlink:href="https://nixos.org/nix/manual/#description-45">build-use-sandbox</link> in Nix manual for details.
+      xlink:href="https://nixos.org/nix/manual/#conf-sandbox">sandbox</link> in Nix manual for details.
    </para>
 
    <para>
@@ -265,7 +265,7 @@ Additional information.
      <listitem>
       <para>
        <emphasis role="bold">Globally enable sandboxing on non-NixOS platforms</emphasis>: add the following to: <filename>/etc/nix/nix.conf</filename>
-<screen>build-use-sandbox = true</screen>
+<screen>sandbox = true</screen>
       </para>
      </listitem>
     </itemizedlist>
