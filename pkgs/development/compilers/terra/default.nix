@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "static" ];
 
+  patches = [ ./nix-cflags.patch ];
+
   postPatch = ''
     substituteInPlace Makefile --replace \
       '-lcurses' '-lncurses'
