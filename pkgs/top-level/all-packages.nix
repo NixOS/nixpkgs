@@ -16595,6 +16595,8 @@ in
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
+  cascadia-code = callPackage ../data/fonts/cascadia-code { };
+
   cherry = callPackage ../data/fonts/cherry { };
 
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder {};
