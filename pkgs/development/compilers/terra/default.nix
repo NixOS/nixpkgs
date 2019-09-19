@@ -9,7 +9,6 @@ let
     sha256 = "0yg9q4q6v028bgh85317ykc9whgxgysp76qzaqgq55y6jy11yjw7";
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "terra";
   version = "1.0.0pre1175_${builtins.substring 0 7 src.rev}";
@@ -21,15 +20,21 @@ stdenv.mkDerivation rec {
     sha256 = "0aky17vbv3d9zng34hp17p9zb00dbzwhvzsdjzrrqvk9lmyvix0s";
   };
 
-  hardeningDisable = [ "fortify" ];
+  nativeBuildInputs = [ lua ];
+  buildInputs = with llvmPackages; [ llvm clang-unwrapped ncurses ];
 
+  doCheck = true;
+  enableParallelBuilding = true;
+  hardeningDisable = [ "fortify" ];
   outputs = [ "bin" "dev" "out" "static" ];
 
   patches = [ ./nix-cflags.patch ];
-
   postPatch = ''
-    substituteInPlace Makefile --replace \
-      '-lcurses' '-lncurses'
+    substituteInPlace Makefile \
+      --replace '-lcurses' '-lncurses'
+
+    substituteInPlace src/terralib.lua \
+      --subst-var-by NIX_LIBC_INCLUDE ${stdenv.cc.libc.dev}/include
   '';
 
   preBuild = ''
@@ -42,6 +47,8 @@ stdenv.mkDerivation rec {
     cp ${luajitSrc} build/${luajitArchive}
   '';
 
+  checkPhase = "(cd tests && ../terra run)";
+
   installPhase = ''
     install -Dm755 -t $bin/bin release/bin/terra
     install -Dm755 -t $out/lib release/lib/terra${stdenv.hostPlatform.extensions.sharedLibrary}
@@ -50,8 +57,6 @@ stdenv.mkDerivation rec {
     mkdir -pv $dev/include
     cp -rv release/include/terra $dev/include
   '';
-
-  buildInputs = with llvmPackages; [ lua llvm clang-unwrapped ncurses ];
 
   meta = with stdenv.lib; {
     description = "A low-level counterpart to Lua";
