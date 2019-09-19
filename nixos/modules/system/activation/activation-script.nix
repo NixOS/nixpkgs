@@ -205,7 +205,7 @@ in
       ''
       else ''
         rm -f /usr/bin/env
-        rmdir --ignore-fail-on-non-empty /usr/bin /usr
+        rmdir -p /usr/bin || true
       '';
 
     system.activationScripts.ld-linux =
@@ -218,7 +218,7 @@ in
               mv -f ${target}.tmp ${target} # atomically replace
             '' else ''
               rm -f ${target}
-              rmdir --ignore-fail-on-non-empty $(dirname ${target})
+              rmdir $(dirname ${target}) || true
             '')
           {
             "i686-linux"   ."/lib/ld-linux.so.2"          = "${pkgs.glibc.out}/lib/ld-linux.so.2";
