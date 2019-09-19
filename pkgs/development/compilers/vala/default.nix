@@ -22,10 +22,6 @@ let
         };
 
       in {
-        "0.38" = fp {
-          commit = "2c290f7253bba5ceb0d32e7d0b0ec0d0e81cc263";
-          sha256 = "056ybapfx18d7xw1k8k85nsjrc26qk2q2d9v9nz2zrcwbq5brhkp";
-        };
 
         # NOTE: the openembedded-core project doesn't have a patch for 0.40.12
         # We've fixed the single merge conflict in the following patch.
@@ -110,12 +106,6 @@ in rec {
   vala_0_36 = generic {
     version = "0.36.19";
     sha256 = "05si2f4zjvq0q3wqfh1wxdq20jy1xqxq2skqh8vfh2jyp355lwar";
-  };
-
-  vala_0_38 = generic {
-    version = "0.38.10";
-    sha256  = "1rdwwqs973qv225v8b5izcgwvqn56jxgr4pa3wxxbliar3aww5sw";
-    extraNativeBuildInputs = [ autoconf ] ++ lib.optional stdenv.isDarwin libtool;
   };
 
   vala_0_40 = generic {
