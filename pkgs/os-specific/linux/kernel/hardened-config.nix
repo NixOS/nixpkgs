@@ -12,6 +12,8 @@
 
 with stdenv.lib;
 with stdenv.lib.kernel;
+with (stdenv.lib.kernel.whenHelpers version);
+
 assert (versionAtLeast version "4.9");
 
 optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
