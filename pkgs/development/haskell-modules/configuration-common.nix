@@ -1228,4 +1228,7 @@ self: super: {
     '';
   });
 
+  # The LTS-14.x version of optparse-applicative is too old.
+  cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
