@@ -73,21 +73,18 @@ _callImplicitHook() {
     set -u
     local def="$1"
     local hookName="$2"
-    case "$(type -t "$hookName")" in
-        (function|alias|builtin)
-            set +u
-            "$hookName";;
-        (file)
-            set +u
-            source "$hookName";;
-        (keyword) :;;
-        (*) if [ -z "${!hookName:-}" ]; then
-                return "$def";
-            else
-                set +u
-                eval "${!hookName}"
-            fi;;
-    esac
+    if declare -F "$hookName" > /dev/null; then
+        set +u
+        "$hookName"
+    elif type -p "$hookName" > /dev/null; then
+        set +u
+        source "$hookName"
+    elif [ -n "${!hookName:-}" ]; then
+        set +u
+        eval "${!hookName}"
+    else
+        return "$def"
+    fi
     # `_eval` expects hook to need nounset disable and leave it
     # disabled anyways, so Ok to to delegate. The alternative of a
     # return trap is no good because it would affect nested returns.
