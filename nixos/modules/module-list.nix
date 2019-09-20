@@ -40,31 +40,31 @@
   ./config/vpnc.nix
   ./config/vte.nix
   ./config/zram.nix
-  ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
-  ./hardware/bladeRF.nix
-  ./hardware/brightnessctl.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
-  ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
-  ./hardware/ledger.nix
-  ./hardware/logitech.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
   ./hardware/network/intel-2200bg.nix
-  ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/openrazer.nix
-  ./hardware/pcmcia.nix
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
-  ./hardware/steam-hardware.nix
-  ./hardware/usb-wwan.nix
-  ./hardware/onlykey.nix
+  ./hardware/udev-rules/acpilight.nix
+  ./hardware/udev-rules/bladeRF.nix
+  ./hardware/udev-rules/brightnessctl.nix
+  ./hardware/udev-rules/digitalbitbox.nix
+  ./hardware/udev-rules/ledger.nix
+  ./hardware/udev-rules/logitech.nix
+  ./hardware/udev-rules/nitrokey.nix
+  ./hardware/udev-rules/onlykey.nix
+  ./hardware/udev-rules/pcmcia.nix
+  ./hardware/udev-rules/steam-hardware.nix
+  ./hardware/udev-rules/usb-wwan.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
