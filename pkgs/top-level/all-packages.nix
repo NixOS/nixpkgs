@@ -19318,6 +19318,8 @@ in
 
   meld = callPackage ../applications/version-management/meld { };
 
+  meli = callPackage ../applications/networking/mailreaders/meli { };
+
   meme = callPackage ../applications/graphics/meme { };
 
   mcomix = callPackage ../applications/graphics/mcomix { };
