@@ -51,16 +51,17 @@ stdenv.mkDerivation {
 
     mkdir -p $out/lib/ycmd/third_party/{gocode,godef,racerd/target/release}
 
-    for p in jedi waitress frozendict bottle parso python-future requests; do
-      cp -r third_party/$p $out/lib/ycmd/third_party
-    done
+    # Copy everything: the structure of third_party has been known to change.
+    # When linking our own libraries below, do so with '-f'
+    # to clobber anything we may have copied here.
+    cp -r third_party/* $out/lib/ycmd/third_party/
 
   '' + lib.optionalString (gocode != null) ''
-    ln -s ${gocode}/bin/gocode $out/lib/ycmd/third_party/gocode
+    ln -sf ${gocode}/bin/gocode $out/lib/ycmd/third_party/gocode
   '' + lib.optionalString (godef != null) ''
-    ln -s ${godef}/bin/godef $out/lib/ycmd/third_party/godef
+    ln -sf ${godef}/bin/godef $out/lib/ycmd/third_party/godef
   '' + lib.optionalString (rustracerd != null) ''
-    ln -s ${rustracerd}/bin/racerd $out/lib/ycmd/third_party/racerd/target/release
+    ln -sf ${rustracerd}/bin/racerd $out/lib/ycmd/third_party/racerd/target/release
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so
