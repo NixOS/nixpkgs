@@ -14,6 +14,7 @@
 
 , langC
 , langCC
+, langD ? false
 , langFortran
 , langJava ? false, javaAwtGtk ? false, javaAntlr ? null, javaEcj ? null
 , langAda ? false
@@ -114,6 +115,7 @@ let
         lib.concatStrings (lib.intersperse ","
           (  lib.optional langC        "c"
           ++ lib.optional langCC       "c++"
+          ++ lib.optional langD        "d"
           ++ lib.optional langFortran  "fortran"
           ++ lib.optional langJava     "java"
           ++ lib.optional langAda      "ada"
@@ -173,6 +175,9 @@ let
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
+    ]
+    ++ lib.optionals (langD) [
+      "--with-target-system-zlib=yes"
     ]
   ;
 

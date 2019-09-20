@@ -8545,6 +8545,15 @@ in
   gcc-arm-embedded-9 = callPackage ../development/compilers/gcc-arm-embedded/9 {};
   gcc-arm-embedded = gcc-arm-embedded-9;
 
+  gdc = gdc9;
+  gdc9 = wrapCC (gcc9.cc.override {
+    name = "gdc";
+    langCC = false;
+    langC = false;
+    langD = true;
+    profiledCompiler = false;
+  });
+
   gforth = callPackage ../development/compilers/gforth {};
 
   gleam = callPackage ../development/compilers/gleam {
@@ -9324,7 +9333,7 @@ in
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
 
-    inherit cc bintools libc extraPackages;
+    inherit cc bintools libc extraPackages zlib;
   } // extraArgs; in self);
 
   wrapCC = cc: wrapCCWith {
