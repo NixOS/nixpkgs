@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, buildPythonPackage, isPy3k, fetchurl, rpkg, offtrac, urlgrabber, pyopenssl, python_fedora }:
+{ stdenv, buildPythonApplication, buildPythonPackage, isPy3k, fetchurl, rpkg, offtrac, urlgrabber, pyopenssl, python_fedora, git }:
 
 let
   fedora_cert = buildPythonPackage rec {
@@ -25,6 +25,7 @@ in buildPythonApplication rec {
   };
   patches = [ ./fix-paths.patch ];
   propagatedBuildInputs = [ rpkg offtrac urlgrabber fedora_cert ];
+  checkInputs = [ git ];
 
   meta = with stdenv.lib; {
     description = "Subclass of the rpkg project for dealing with rpm packaging";
