@@ -2,7 +2,10 @@
 
 with lib;
 
-{
+let
+  android-udev-rules = pkgs.callPackage ./udev-rules/android-udev-rules.nix {};
+
+in {
 
   ###### interface
 

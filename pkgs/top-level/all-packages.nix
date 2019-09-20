@@ -16547,8 +16547,6 @@ in
 
   andika = callPackage ../data/fonts/andika { };
 
-  android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
-
   ankacoder = callPackage ../data/fonts/ankacoder { };
   ankacoder-condensed = callPackage ../data/fonts/ankacoder/condensed.nix { };
 
