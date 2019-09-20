@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "2018-09-20";
+  version = "2019-09-19";
 
   src = fetchgit {
     url = "https://github.com/Valloric/ycmd.git";
-    rev = "bf658fd78722c517674c0aaf2381e199bca8f163";
-    sha256 = "1lwa8xr76vapfpncvp81cn3m9219yw14fl7fzk5gnly60zkphbbl";
+    rev = "c6d360775b0c5c82e2513dce7b625f8bf3812702";
+    sha256 = "19rxlval20gg65xc5p7q9cnzfm9zw2j0m6vxxk0vqlalcyh0rnzd";
   };
 
   nativeBuildInputs = [ cmake ];
