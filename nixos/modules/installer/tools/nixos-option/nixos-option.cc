@@ -402,7 +402,7 @@ void printAttr(Context & ctx, Out & out, const std::string & path, Value & root)
     }
 }
 
-bool has_example(Context & ctx, Value & option)
+bool hasExample(Context & ctx, Value & option)
 {
     try {
         findAlongAttrPath(ctx.state, "example", ctx.autoArgs, option);
@@ -423,7 +423,7 @@ void printOption(Context & ctx, Out & out, const std::string & path, Value & opt
     out << "\n\nType:\n";
     printAttr(ctx, out, "type.description", option);
 
-    if (has_example(ctx, option)) {
+    if (hasExample(ctx, option)) {
         out << "\n\nExample:\n";
         printAttr(ctx, out, "example", option);
     }
