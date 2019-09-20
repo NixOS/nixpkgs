@@ -17730,6 +17730,8 @@ in
 
   das_watchdog = callPackage ../tools/system/das_watchdog { };
 
+  komodo-python3-dbgp = callPackage ../development/tools/komodo-python3-dbgp {};
+
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
 
   dd-agent = callPackage ../tools/networking/dd-agent/5.nix { };
