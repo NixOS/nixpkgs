@@ -1,9 +1,16 @@
 {stdenv, lib}:
+let mergeFeatures =
+  with lib;
+  zipAttrsWith (key: values:
+    if isAttrs (head values)
+    then mergeFeatures values
+    else any id values);
+in
 {
   kernel = stdenv.hostPlatform.parsed.kernel.name;
   abi = stdenv.hostPlatform.parsed.abi.name;
   cpu = stdenv.hostPlatform.parsed.cpu.name;
-   updateFeatures = f: up: functions: builtins.deepSeq f (lib.lists.foldl' (features: fun: fun features) (lib.attrsets.recursiveUpdate f up) functions);
+   updateFeatures = f: up: functions: builtins.deepSeq f (lib.lists.foldl' (features: fun: fun features) (mergeFeatures [ f up ]) functions);
    mapFeatures = features: map (fun: fun { features = features; });
    mkFeatures = feat: lib.lists.foldl (features: featureName:
      if feat.${featureName} or false then
