@@ -16803,8 +16803,6 @@ in
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
 
-  ledger-udev-rules = callPackage ../os-specific/linux/ledger-udev-rules {};
-
   inherit (callPackages ../data/fonts/redhat-liberation-fonts { })
     liberation_ttf_v1
     liberation_ttf_v2
@@ -16838,8 +16836,6 @@ in
   lmodern = callPackage ../data/fonts/lmodern { };
 
   lobster-two = callPackage ../data/fonts/lobster-two {};
-
-  logitech-udev-rules = callPackage ../os-specific/linux/logitech-udev-rules {};
 
   # lohit-fonts.assamese lohit-fonts.bengali lohit-fonts.devanagari lohit-fonts.gujarati lohit-fonts.gurmukhi
   # lohit-fonts.kannada lohit-fonts.malayalam lohit-fonts.marathi lohit-fonts.nepali lohit-fonts.odia
@@ -24704,7 +24700,6 @@ in
   xrq = callPackage ../applications/misc/xrq { };
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
-  nitrokey-udev-rules = callPackage ../tools/security/nitrokey-app/udev-rules.nix { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 

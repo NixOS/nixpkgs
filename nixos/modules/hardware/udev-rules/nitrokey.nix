@@ -6,6 +6,28 @@ let
 
   cfg = config.hardware.nitrokey;
 
+  nitrokey-rules = pkgs.stdenv.mkDerivation {
+    name = "nitrokey-udev-rules-${pkgs.stdenv.lib.getVersion pkgs.nitrokey-app}";
+
+    inherit (pkgs.nitrokey-app) src;
+
+    dontBuild = true;
+
+    patchPhase = ''
+      substituteInPlace libnitrokey/data/41-nitrokey.rules --replace plugdev "${cfg.group}"
+    '';
+
+    installPhase = ''
+      mkdir -p $out/etc/udev/rules.d
+      cp libnitrokey/data/41-nitrokey.rules $out/etc/udev/rules.d
+    '';
+
+    meta = {
+      description = "udev rules for Nitrokeys";
+      inherit (pkgs.nitrokey-app.meta) homepage license maintainers;
+    };
+  };
+
 in
 
 {
@@ -31,11 +53,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [
-      (pkgs.nitrokey-udev-rules.override (attrs:
-        { inherit (cfg) group; }
-      ))
-    ];
+    services.udev.packages = [ nitrokey-rules ];
     users.groups.${cfg.group} = {};
   };
 }
