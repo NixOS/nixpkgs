@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, sqlite, tcl }:
+{ stdenv, fetchurl, unzip, sqlite, tcl, Foundation }:
 
 let
   archiveVersion = import ./archive-version.nix stdenv.lib;
@@ -12,7 +12,7 @@ let
     };
 
     nativeBuildInputs = [ unzip ];
-    buildInputs = [ tcl ];
+    buildInputs = [ tcl ] ++ stdenv.lib.optional stdenv.isDarwin Foundation;
 
     makeFlags = [ makeTarget ];
 
