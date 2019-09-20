@@ -83,10 +83,6 @@
     <option>--flake</option> <replaceable>flake-uri</replaceable>
    </arg>
 
-   <arg>
-    <option>--config</option> <replaceable>name</replaceable>
-   </arg>
-
    <sbr />
 
    <arg>
@@ -525,7 +521,7 @@
 
    <varlistentry>
     <term>
-     <option>--flake</option> <replaceable>flake-uri</replaceable>
+     <option>--flake</option> <replaceable>flake-uri</replaceable>[<replaceable>name</replaceable>]
     </term>
     <listitem>
      <para>
@@ -533,22 +529,9 @@
       the directory containing the target of the symlink
       <filename>/etc/nixos/flake.nix</filename>, if it exists. The
       flake must contain an output named
-      <literal>nixosConfigurations.<replaceable>name</replaceable></literal>,
-      where <replaceable>name</replaceable> denotes the name of the
-      configuration and can be specified using the
-      <option>--config</option> option.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term>
-     <option>--config</option> <replaceable>name</replaceable>
-    </term>
-    <listitem>
-     <para>
-      Specifies which NixOS configuration to use from the
-      flake. Defaults to the current hostname.
+      <literal>nixosConfigurations.<replaceable>name</replaceable></literal>. If
+      <replaceable>name</replaceable> is omitted, it default to the
+      current host name.
      </para>
     </listitem>
    </varlistentry>

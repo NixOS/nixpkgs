@@ -64,6 +64,7 @@ my $configFile;
 my $hostAddress;
 my $localAddress;
 my $flake;
+my $flakeAttr = "container";
 
 GetOptions(
     "help" => sub { showHelp() },
@@ -90,6 +91,11 @@ my $action = $ARGV[0] or die "$0: no action specified\n";
 if (defined $configFile and defined $extraConfig) {
     die "--config and --config-file are mutually incompatible. " .
         "Please define on or the other, but not both";
+}
+
+if (defined $flake && $flake =~ /^(.*)#([^#"]+)$/) {
+    $flake = $1;
+    $flakeAttr = $2;
 }
 
 # Execute the selected action.
@@ -137,7 +143,7 @@ EOF
 
 sub buildFlake {
     system("nix", "build", "-o", "$systemPath.tmp", "--",
-           "$flake:nixosConfigurations.container.config.system.build.toplevel") == 0
+           "$flake#nixosConfigurations.\"$flakeAttr\".config.system.build.toplevel") == 0
         or die "$0: failed to build container from flake '$flake'\n";
     $systemPath = readlink("$systemPath.tmp") or die;
     unlink("$systemPath.tmp");

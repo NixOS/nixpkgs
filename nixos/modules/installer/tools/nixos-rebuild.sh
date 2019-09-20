@@ -100,10 +100,6 @@ while [ "$#" -gt 0 ]; do
         flake="$1"
         shift 1
         ;;
-      --config)
-        flakeAttr="nixosConfigurations.$1"
-        shift 1
-        ;;
       *)
         echo "$0: unknown option \`$i'"
         exit 1
@@ -254,12 +250,20 @@ fi
 
 # For convenience, use the hostname as the default configuration to
 # build from the flake.
-if [[ -n $flake && -z $flakeAttr ]]; then
-    hostname=$(cat /proc/sys/kernel/hostname)
-    if [[ -z $hostname ]]; then
-        hostname=default
+if [[ -n $flake ]]; then
+    if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
+       flake="${BASH_REMATCH[1]}"
+       flakeAttr="${BASH_REMATCH[2]}"
     fi
-    flakeAttr="nixosConfigurations.\"$hostname\""
+    if [[ -z $flakeAttr ]]; then
+        hostname=$(cat /proc/sys/kernel/hostname)
+        if [[ -z $hostname ]]; then
+            hostname=default
+        fi
+        flakeAttr="nixosConfigurations.\"$hostname\""
+    else
+        flakeAttr="nixosConfigurations.\"$flakeAttr\""
+    fi
 fi
 
 # Resolve the flake.
@@ -391,17 +395,13 @@ fi
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
 if [ -z "$rollback" ]; then
-    if [[ -z $flake ]]; then
-        echo "building the system configuration..." >&2
-    else
-        echo "building the system configuration '$flake:$flakeAttr'..." >&2
-    fi
+    echo "building the system configuration..." >&2
     if [ "$action" = switch -o "$action" = boot ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         else
             outLink=$tmpDir/result
-            nix build "$flake:$flakeAttr.config.system.build.toplevel" --keep-going "${extraBuildFlags[@]}" --out-link $outLink
+            nix build "$flake#$flakeAttr.config.system.build.toplevel" --keep-going "${extraBuildFlags[@]}" --out-link $outLink
             pathToConfig="$(readlink -f $outLink)"
         fi
         copyToTarget "$pathToConfig"
@@ -410,7 +410,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
-            nix build "$flake:$flakeAttr.config.system.build.toplevel" --keep-going "${extraBuildFlags[@]}"
+            nix build "$flake#$flakeAttr.config.system.build.toplevel" --keep-going "${extraBuildFlags[@]}"
             pathToConfig="$(readlink -f ./result)"
         fi
     elif [ "$action" = build-vm ]; then
