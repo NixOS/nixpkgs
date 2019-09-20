@@ -916,6 +916,13 @@
        becomes <literal>services.gitlab.databasePasswordFile = "/path/to/secret_file"</literal> where the
        file <literal>secret_file</literal> contains the string <literal>supersecurepassword</literal>.
      </para>
+     <para>
+       The state path (<option>services.gitlab.statePath</option>) now has the following restriction:
+       no parent directory can be owned by any other user than <literal>root</literal> or the user
+       specified in <option>services.gitlab.user</option>; i.e. if <option>services.gitlab.statePath</option>
+       is set to <literal>/var/lib/gitlab/state</literal>, <literal>gitlab</literal> and all parent directories
+       must be owned by either <literal>root</literal> or the user specified in <option>services.gitlab.user</option>.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
