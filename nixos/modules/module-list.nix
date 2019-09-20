@@ -40,8 +40,11 @@
   ./config/vpnc.nix
   ./config/vte.nix
   ./config/zram.nix
+  ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/all-udev-rules.nix
+  ./hardware/bladeRF.nix
+  ./hardware/brightnessctl.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
@@ -53,13 +56,10 @@
   ./hardware/network/intel-2200bg.nix
   ./hardware/opengl.nix
   ./hardware/openrazer.nix
+  ./hardware/pcmcia.nix
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
-  ./hardware/udev-rules/acpilight.nix
-  ./hardware/udev-rules/bladeRF.nix
-  ./hardware/udev-rules/brightnessctl.nix
-  ./hardware/udev-rules/pcmcia.nix
-  ./hardware/udev-rules/steam-hardware.nix
+  ./hardware/steam-hardware.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
