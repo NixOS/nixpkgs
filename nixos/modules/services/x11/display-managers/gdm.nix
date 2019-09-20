@@ -150,6 +150,11 @@ in
           mkdir -p /run/gdm/.config/pulse
           ln -sf ${pulseConfig} /run/gdm/.config/pulse/default.pa
           chown -R gdm:gdm /run/gdm/.config
+        '' + optionalString config.services.gnome3.gnome-initial-setup.enable ''
+          # Create stamp file for gnome-initial-setup to prevent run.
+          cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
+          yes
+          EOF
         '';
       };
 
