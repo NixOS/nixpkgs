@@ -21933,6 +21933,8 @@ in
 
   egoboo = callPackage ../games/egoboo { };
 
+  eidolon = callPackage ../games/eidolon { };
+
   EmptyEpsilon = callPackage ../games/empty-epsilon { };
 
   endgame-singularity = callPackage ../games/endgame-singularity { };
