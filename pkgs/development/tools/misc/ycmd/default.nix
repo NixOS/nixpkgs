@@ -1,6 +1,7 @@
 { stdenv, lib, fetchgit, cmake, llvmPackages, boost, python
 , gocode ? null
 , godef ? null
+, gotools ? null
 , rustracerd ? null
 , fixDarwinDylibNames, Cocoa ? null
 }:
@@ -49,19 +50,28 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
 
-    mkdir -p $out/lib/ycmd/third_party/{gocode,godef,racerd/target/release}
-
     # Copy everything: the structure of third_party has been known to change.
     # When linking our own libraries below, do so with '-f'
     # to clobber anything we may have copied here.
+    mkdir -p $out/lib/ycmd/third_party
     cp -r third_party/* $out/lib/ycmd/third_party/
 
   '' + lib.optionalString (gocode != null) ''
-    ln -sf ${gocode}/bin/gocode $out/lib/ycmd/third_party/gocode
+    TARGET=$out/lib/ycmd/third_party/gocode
+    mkdir -p $TARGET
+    ln -sf ${gocode}/bin/gocode $TARGET
   '' + lib.optionalString (godef != null) ''
-    ln -sf ${godef}/bin/godef $out/lib/ycmd/third_party/godef
+    TARGET=$out/lib/ycmd/third_party/godef
+    mkdir -p $TARGET
+    ln -sf ${godef}/bin/godef $TARGET
+  '' + lib.optionalString (gotools != null) ''
+    TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
+    mkdir -p $TARGET
+    ln -sf ${gotools}/bin/gopls $TARGET
   '' + lib.optionalString (rustracerd != null) ''
-    ln -sf ${rustracerd}/bin/racerd $out/lib/ycmd/third_party/racerd/target/release
+    TARGET=$out/lib/ycmd/third_party/racerd/target/release
+    mkdir -p $TARGET
+    ln -sf ${rustracerd}/bin/racerd $TARGET
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so
