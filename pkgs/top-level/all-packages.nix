@@ -6070,6 +6070,8 @@ in
 
   shrikhand = callPackage ../data/fonts/shrikhand { };
 
+  shunit2 = callPackage ../tools/misc/shunit2 { };
+
   sic = callPackage ../applications/networking/irc/sic { };
 
   siege = callPackage ../tools/networking/siege {};
