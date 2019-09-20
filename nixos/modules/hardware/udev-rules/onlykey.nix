@@ -26,7 +26,12 @@ with lib;
   ####### implementation
 
   config = mkIf config.hardware.onlykey.enable {
-    services.udev.extraRules = builtin.readFile ./onlykey.udev;
+    services.udev.extraRules = ''
+      ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_DEVICE_IGNORE}="1"
+      ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789A]?", ENV{MTP_NO_PROBE}="1"
+      SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789ABCD]?", GROUP+="plugdev"
+      KERNEL=="ttyACM*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", GROUP+="plugdev"
+    '';
   };
 
 
