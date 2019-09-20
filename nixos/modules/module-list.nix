@@ -41,6 +41,7 @@
   ./config/vte.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/all-udev-rules.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
