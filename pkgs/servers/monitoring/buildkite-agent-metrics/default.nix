@@ -1,14 +1,10 @@
 { lib, go, buildGoPackage, fetchFromGitHub }:
 
-let
-  goPackagePath = "github.com/buildkite/buildkite-agent-metrics";
-in
 buildGoPackage rec {
   pname = "buildkite-agent-metrics";
   version = "5.1.0";
   goDeps = ./deps.nix;
-
-  inherit goPackagePath;
+  goPackagePath = "github.com/buildkite/buildkite-agent-metrics";
 
   preBuild = ''
     rm -rf go/src/${goPackagePath}/vendor
