@@ -280,6 +280,16 @@ with lib;
     (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
     (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
 
+    # Udev Rules
+    (mkRenamedOptionModule [ "hardware" "digitalbitbox" "enable" ] [ "hardware" "enableAllUdevRules" ])
+    (mkRenamedOptionModule [ "hardware" "ledger" "enable" ] [ "hardware" "enableAllUdevRules" ])
+    (mkRenamedOptionModule [ "hardware" "logitech" "enable" ] [ "hardware" "enableAllUdevRules" ])
+    (mkRemovedOptionModule [ "hardware" "logitech" "enableGraphical" ] "This option was removed.")
+    (mkRenamedOptionModule [ "hardware" "nitrokey" "enable" ] [ "hardware" "enableAllUdevRules" ])
+    (mkRemovedOptionModule [ "hardware" "nitrokey" "group" ] "This option was removed.")
+    (mkRenamedOptionModule [ "hardware" "onlykey" "enable" ] [ "hardware" "enableAllUdevRules" ])
+    (mkRenamedOptionModule [ "hardware" "usbWwan" "enable" ] [ "hardware" "enableAllUdevRules" ])
+
   ] ++ (forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]

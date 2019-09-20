@@ -26,7 +26,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    hardware.digitalbitbox.enable = true;
+    hardware.enableAllUdevRules = true;
   };
 
   meta = {

@@ -1,9 +1,5 @@
 { stdenv, fetchFromGitHub }:
 
-## Usage
-# In NixOS, simply add this package to services.udev.packages:
-#   services.udev.packages = [ pkgs.android-udev-rules ];
-
 stdenv.mkDerivation rec {
   pname = "android-udev-rules";
   version = "20190315";

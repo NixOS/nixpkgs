@@ -58,14 +58,8 @@
   ./hardware/udev-rules/acpilight.nix
   ./hardware/udev-rules/bladeRF.nix
   ./hardware/udev-rules/brightnessctl.nix
-  ./hardware/udev-rules/digitalbitbox.nix
-  ./hardware/udev-rules/ledger.nix
-  ./hardware/udev-rules/logitech.nix
-  ./hardware/udev-rules/nitrokey.nix
-  ./hardware/udev-rules/onlykey.nix
   ./hardware/udev-rules/pcmcia.nix
   ./hardware/udev-rules/steam-hardware.nix
-  ./hardware/udev-rules/usb-wwan.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix

@@ -3,7 +3,10 @@
 with lib;
 
 let
-  android-udev-rules = pkgs.callPackage ./udev-rules/android-udev-rules.nix {};
+  android-udev-rules = pkgs.callPackage ./udev-rules/android.nix {};
+  ledger-udev-rules = pkgs.callPackage ./udev-rules/ledger.nix {};
+  logitech-udev-rules = pkgs.callPackage ./udev-rules/logitech.nix {};
+  nitrokey-udev-rules = pkgs.callPackage ./udev-rules/nitrokey.nix {};
 
 in {
 
@@ -25,11 +28,24 @@ in {
   ###### implementation
 
   config = mkIf config.hardware.enableAllUdevRules {
-    hardware.digitalbitbox.enable = true;
-    hardware.ledger.enable = true;
-    hardware.logitech.enable = true;
-    hardware.nitrokey.enable = true;
-    hardware.onlykey.enable = true;
-    hardware.usbWwan.enable = true;
+    services.udev.extraRules = ''
+      # digitalbitbox
+      SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
+      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
+
+      # onlykey
+      ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="60fc", ENV{ID_MM_DEVICE_IGNORE}="1"
+      ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="60fc", ENV{MTP_NO_PROBE}="1"
+      SUBSYSTEMS=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="60fc", MODE:="0666"
+      KERNEL=="ttyACM*", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="60fc", MODE:="0666"
+    '';
+
+    services.udev.packages = [
+      android-udev-rules
+      ledger-udev-rules
+      logitech-udev-rules
+      nitrokey-udev-rules
+      pkgs.usb-modeswitch-data
+    ];
   };
 }

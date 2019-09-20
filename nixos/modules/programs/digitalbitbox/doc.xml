@@ -40,7 +40,7 @@
   <para>
    The digitalbitbox hardware package enables the udev rules for Digital Bitbox devices and may be installed as follows:
 <programlisting>
-<xref linkend="opt-hardware.digitalbitbox.enable"/> = true;
+<xref linkend="opt-hardware.enableAllUdevRules"/> = true;
 </programlisting>
   </para>
 
