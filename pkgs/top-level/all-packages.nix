@@ -14581,6 +14581,8 @@ in
 
   dkimproxy = callPackage ../servers/mail/dkimproxy { };
 
+  do-agent = callPackage ../servers/monitoring/do-agent { };
+
   dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
 
