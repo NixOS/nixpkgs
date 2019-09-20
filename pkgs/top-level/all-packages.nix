@@ -3886,6 +3886,8 @@ in
 
   icoutils = callPackage ../tools/graphics/icoutils { };
 
+  idid = haskell.lib.justStaticExecutables (haskellPackages.callPackage ../applications/office/idid { });
+
   idutils = callPackage ../tools/misc/idutils { };
 
   idle3tools = callPackage ../tools/system/idle3tools { };
