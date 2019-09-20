@@ -15,16 +15,12 @@ in
         Enables udev rules for Digital Bitbox devices.
       '';
     };
-
-    package = mkOption {
-      type = types.package;
-      default = pkgs.digitalbitbox;
-      defaultText = "pkgs.digitalbitbox";
-      description = "The Digital Bitbox package to use. This can be used to install a package with udev rules that differ from the defaults.";
-    };
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [ cfg.package ];
+    services.udev.extraRules = ''
+      SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
+      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
+    '';
   };
 }

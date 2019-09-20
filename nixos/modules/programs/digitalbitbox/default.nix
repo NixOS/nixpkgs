@@ -26,10 +26,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    hardware.digitalbitbox = {
-      enable = true;
-      package = cfg.package;
-    };
+    hardware.digitalbitbox.enable = true;
   };
 
   meta = {

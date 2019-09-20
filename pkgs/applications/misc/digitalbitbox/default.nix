@@ -14,12 +14,6 @@
 , qttools
 , qtwebsockets
 , qtmultimedia
-, udevRule51 ? ''
-,   SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
-, ''
-, udevRule52 ? ''
-,   KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
-, ''
 , writeText
 }:
 
@@ -43,10 +37,7 @@
 #     system.udev.packages = [ pkgs.digitalbitbox ];
 
 # See https://digitalbitbox.com/start_linux for more information.
-let
-  copyUdevRuleToOutput = name: rule:
-    "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "digitalbitbox";
   version = "2.2.2";
 
@@ -69,7 +60,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     libevent
     libtool
-    udev
     libusb
     qrencode
 
@@ -105,11 +95,6 @@ in stdenv.mkDerivation rec {
 
     wrapProgram "$out/bin/dbb-cli" --prefix LD_LIBRARY_PATH : "$out/lib"
     wrapProgram "$out/bin/dbb-app" --prefix LD_LIBRARY_PATH : "$out/lib"
-
-    # Provide udev rules as documented in https://digitalbitbox.com/start_linux
-    mkdir -p "$out/etc/udev/rules.d"
-    ${copyUdevRuleToOutput "51-hid-digitalbox.rules" udevRule51}
-    ${copyUdevRuleToOutput "52-hid-digitalbox.rules" udevRule52}
   '';
 
   enableParallelBuilding = true;
