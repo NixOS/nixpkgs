@@ -7506,7 +7506,7 @@ in
   gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { stdenv = gccStdenv; };
 
   gccFun = callPackage ../development/compilers/gcc/8;
-  gcc = if stdenv.isDarwin then gcc7 else gcc8;
+  gcc = gcc8;
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
