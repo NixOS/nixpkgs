@@ -1,6 +1,6 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "certigo";
   version = "1.11.0";
 
@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1vi4gn484kc7vyxnm2nislzy587h2h4gc8d197vslhyfygac9y7b";
   };
 
-  modSha256 = "0x0iq3w5310dg8lp2kkw82iryfhs9p4707538f5dcxjsllpqvcvj";
+  goPackagePath = "github.com/square/certigo";
 
   meta = with stdenv.lib; {
     description = "A utility to examine and validate certificates in a variety of formats";
