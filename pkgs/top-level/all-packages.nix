@@ -23341,6 +23341,8 @@ in
 
   zdoom = callPackage ../games/zdoom { };
 
+  zemeroth = callPackage ../games/zemeroth { };
+
   zod = callPackage ../games/zod { };
 
   zoom = callPackage ../games/zoom { };
