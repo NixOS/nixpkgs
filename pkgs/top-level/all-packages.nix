@@ -6409,8 +6409,6 @@ in
 
   termplay = callPackage ../tools/misc/termplay { };
 
-  testdisk-photorec = callPackage ../tools/system/testdisk-photorec { };
-
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = if stdenv.isDarwin
@@ -6836,7 +6834,12 @@ in
 
   xe = callPackage ../tools/system/xe { };
 
-  testdisk = callPackage ../tools/misc/testdisk { };
+  testdisk = libsForQt5.callPackage ../tools/system/testdisk {
+    enableExtFs = !stdenv.isDarwin;
+    enableNtfs = !stdenv.isDarwin;
+  };
+
+  testdisk-qt = testdisk.override { enableQt = true; };
 
   textql = callPackage ../development/tools/textql { };
 
