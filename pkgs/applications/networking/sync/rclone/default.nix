@@ -1,6 +1,6 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "rclone";
   version = "1.49.3";
 
@@ -11,11 +11,11 @@ buildGoModule rec {
     sha256 = "0dd5xrbf62n4y77zzaai1rc069ism1ikvcw43hzja3mzwfa0sqqa";
   };
 
-  modSha256 = "158mpmy8q67dk1ks9p926n1670gsk7rhd0vpjh44f4g64ddnhk03";
+  goPackagePath = "github.com/rclone/rclone";
 
   subPackages = [ "." ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "bin" "out" "man" ];
 
   postInstall = ''
     install -D -m644 $src/rclone.1 $man/share/man/man1/rclone.1
