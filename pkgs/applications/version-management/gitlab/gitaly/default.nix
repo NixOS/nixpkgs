@@ -40,7 +40,7 @@ in buildGoPackage rec {
 
   postInstall = ''
     mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib,git-hooks,gitlab-shell} $ruby
+    cp -rv $src/ruby/{lib,proto,gitlab-shell} $ruby
 
     # gitlab-shell will try to read its config relative to the source
     # code by default which doesn't work in nixos because it's a
