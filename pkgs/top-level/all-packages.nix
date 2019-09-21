@@ -17226,6 +17226,8 @@ in
 
   yanone-kaffeesatz = callPackage ../data/fonts/yanone-kaffeesatz {};
 
+  yaru-theme = callPackage ../data/themes/yaru {};
+
   zafiro-icons = callPackage ../data/icons/zafiro-icons { };
 
   zeal = libsForQt5.callPackage ../data/documentation/zeal { };
