@@ -4,7 +4,7 @@
 , odbcSupport ? true, unixODBC
 , snmpSupport ? true, net_snmp
 , sshSupport ? true, libssh2
-, mysqlSupport ? false, libmysqlclient
+, mysqlSupport ? false, mysql
 , postgresqlSupport ? false, postgresql
 }:
 
@@ -40,7 +40,7 @@ in
       ++ optional ldapSupport openldap
       ++ optional snmpSupport net_snmp
       ++ optional sshSupport libssh2
-      ++ optional mysqlSupport libmysqlclient
+      ++ optional mysqlSupport mysql.connector-c
       ++ optional postgresqlSupport postgresql;
 
       configureFlags = [

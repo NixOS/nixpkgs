@@ -1,4 +1,4 @@
-{ fetchurl, buildPerlPackage, DBI, DevelChecklib, libmysqlclient }:
+{ fetchurl, buildPerlPackage, DBI, DevelChecklib, mysql }:
 
 buildPerlPackage {
   pname = "DBD-mysql";
@@ -9,7 +9,7 @@ buildPerlPackage {
     sha256 = "0y4djb048i09dk19av7mzfb3khr72vw11p3ayw2p82jsy4gm8j2g";
   };
 
-  buildInputs = [ libmysqlclient DevelChecklib ] ;
+  buildInputs = [ mysql.connector-c DevelChecklib ] ;
   propagatedBuildInputs = [ DBI ];
 
   doCheck = false;

@@ -8,7 +8,6 @@
 , qtbase
 , qtx11extras
 , wrapQtAppsHook
-, wrapGAppsHook
 , gtk3
 , xmlto
 , docbook_xsl
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
     autoreconfHook
     docbook_xsl
     wrapQtAppsHook
-    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -73,7 +71,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = lib.optionalString enableVideo ''
-    wrapGApp "$out/bin/zbarcam-gtk"
+    wrapProgram "$out/bin/zbarcam-gtk" "''${gappsWrapperArgs[@]}"
     wrapQtApp "$out/bin/zbarcam-qt"
   '';
 

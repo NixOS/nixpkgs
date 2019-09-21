@@ -1,15 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, libmysqlclient }:
+{ stdenv, buildPythonPackage, fetchPypi, mysql }:
 
 buildPythonPackage rec {
   pname = "mysqlclient";
   version = "1.4.4";
 
   nativeBuildInputs = [
-    libmysqlclient
+    mysql.connector-c
   ];
 
   buildInputs = [
-    libmysqlclient
+    mysql.connector-c
   ];
 
   # Tests need a MySQL database
