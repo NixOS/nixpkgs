@@ -693,7 +693,7 @@
     name = "Aycan iRiCAN";
   };
   babariviere = {
-    email = "babariviere@protonmail.com";
+    email = "babathriviere@gmail.com";
     github = "babariviere";
     githubId = 12128029;
     name = "babariviere";

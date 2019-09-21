@@ -174,8 +174,10 @@ in
     boot.postBootCommands = ''
       # On the first boot do some maintenance tasks
       if [ -f /nix-path-registration ]; then
+        set -euo pipefail
+        set -x
         # Figure out device names for the boot device and root filesystem.
-        rootPart=$(readlink -f /dev/disk/by-label/NIXOS_SD)
+        rootPart=$(${pkgs.utillinux}/bin/findmnt -n -o SOURCE /)
         bootDevice=$(lsblk -npo PKNAME $rootPart)
 
         # Resize the root partition and the filesystem to fit the disk

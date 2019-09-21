@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, pkgconfig, glib
-, perl, ncurses, hamlib, xmlrpc_c }:
+, perl, ncurses5, hamlib, xmlrpc_c }:
 
 stdenv.mkDerivation rec {
   pname = "tlf";
@@ -13,15 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf automake pkgconfig perl ];
-  buildInputs = [ glib ncurses hamlib xmlrpc_c ];
+  buildInputs = [ glib ncurses5 hamlib xmlrpc_c ];
 
   configureFlags = [ "--enable-hamlib" "--enable-fldigi-xmlrpc" ];
 
   postInstall = ''
     mkdir -p $out/lib
-
-    # Hack around lack of libtinfo in NixOS
-    ln -s ${ncurses.out}/lib/libncursesw.so.6 $out/lib/libtinfo.so.5
+    ln -s ${ncurses5.out}/lib/libtinfo.so.5 $out/lib/libtinfo.so.5
   '';
 
   meta = with stdenv.lib; {

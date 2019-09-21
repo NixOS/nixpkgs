@@ -5,19 +5,24 @@
          xml:id="module-program-plotinus">
  <title>Plotinus</title>
  <para>
-  <emphasis>Source:</emphasis> <filename>modules/programs/plotinus.nix</filename>
+  <emphasis>Source:</emphasis>
+  <filename>modules/programs/plotinus.nix</filename>
  </para>
  <para>
-  <emphasis>Upstream documentation:</emphasis> <link xlink:href="https://github.com/p-e-w/plotinus"/>
+  <emphasis>Upstream documentation:</emphasis>
+  <link xlink:href="https://github.com/p-e-w/plotinus"/>
  </para>
  <para>
   Plotinus is a searchable command palette in every modern GTK application.
  </para>
  <para>
-  When in a GTK 3 application and Plotinus is enabled, you can press <literal>Ctrl+Shift+P</literal> to open the command palette. The command palette provides a searchable list of of all menu items in the application.
+  When in a GTK 3 application and Plotinus is enabled, you can press
+  <literal>Ctrl+Shift+P</literal> to open the command palette. The command
+  palette provides a searchable list of of all menu items in the application.
  </para>
  <para>
-  To enable Plotinus, add the following to your <filename>configuration.nix</filename>:
+  To enable Plotinus, add the following to your
+  <filename>configuration.nix</filename>:
 <programlisting>
 <xref linkend="opt-programs.plotinus.enable"/> = true;
 </programlisting>

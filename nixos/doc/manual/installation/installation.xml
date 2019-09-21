@@ -6,7 +6,8 @@
  <title>Installation</title>
  <partintro xml:id="ch-installation-intro">
   <para>
-   This section describes how to obtain, install, and configure NixOS for first-time use.
+   This section describes how to obtain, install, and configure NixOS for
+   first-time use.
   </para>
  </partintro>
  <xi:include href="obtaining.xml" />

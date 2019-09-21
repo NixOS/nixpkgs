@@ -7,10 +7,12 @@
 <!-- FIXME: render nicely -->
 <!-- FIXME: source can be added automatically -->
  <para>
-  <emphasis>Source:</emphasis> <filename>modules/services/databases/postgresql.nix</filename>
+  <emphasis>Source:</emphasis>
+  <filename>modules/services/databases/postgresql.nix</filename>
  </para>
  <para>
-  <emphasis>Upstream documentation:</emphasis> <link xlink:href="http://www.postgresql.org/docs/"/>
+  <emphasis>Upstream documentation:</emphasis>
+  <link xlink:href="http://www.postgresql.org/docs/"/>
  </para>
 <!-- FIXME: more stuff, like maintainer? -->
  <para>
@@ -21,12 +23,18 @@
   <title>Configuring</title>
 
   <para>
-   To enable PostgreSQL, add the following to your <filename>configuration.nix</filename>:
+   To enable PostgreSQL, add the following to your
+   <filename>configuration.nix</filename>:
 <programlisting>
 <xref linkend="opt-services.postgresql.enable"/> = true;
 <xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_11;
 </programlisting>
-   Note that you are required to specify the desired version of PostgreSQL (e.g. <literal>pkgs.postgresql_11</literal>). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for <xref linkend="opt-services.postgresql.package"/> such as the most recent release of PostgreSQL.
+   Note that you are required to specify the desired version of PostgreSQL
+   (e.g. <literal>pkgs.postgresql_11</literal>). Since upgrading your
+   PostgreSQL version requires a database dump and reload (see below), NixOS
+   cannot provide a default value for
+   <xref linkend="opt-services.postgresql.package"/> such as the most recent
+   release of PostgreSQL.
   </para>
 
 <!--
@@ -43,7 +51,9 @@ Type "help" for help.
 -->
 
   <para>
-   By default, PostgreSQL stores its databases in <filename>/var/lib/postgresql/$psqlSchema</filename>. You can override this using <xref linkend="opt-services.postgresql.dataDir"/>, e.g.
+   By default, PostgreSQL stores its databases in
+   <filename>/var/lib/postgresql/$psqlSchema</filename>. You can override this using
+   <xref linkend="opt-services.postgresql.dataDir"/>, e.g.
 <programlisting>
 <xref linkend="opt-services.postgresql.dataDir"/> = "/data/postgresql";
 </programlisting>
@@ -60,14 +70,18 @@ Type "help" for help.
   <title>Options</title>
 
   <para>
-   A complete list of options for the PostgreSQL module may be found <link linkend="opt-services.postgresql.enable">here</link>.
+   A complete list of options for the PostgreSQL module may be found
+   <link linkend="opt-services.postgresql.enable">here</link>.
   </para>
  </section>
  <section xml:id="module-services-postgres-plugins">
   <title>Plugins</title>
 
   <para>
-   Plugins collection for each PostgreSQL version can be accessed with <literal>.pkgs</literal>. For example, for <literal>pkgs.postgresql_11</literal> package, its plugin collection is accessed by <literal>pkgs.postgresql_11.pkgs</literal>:
+   Plugins collection for each PostgreSQL version can be accessed with
+   <literal>.pkgs</literal>. For example, for
+   <literal>pkgs.postgresql_11</literal> package, its plugin collection is
+   accessed by <literal>pkgs.postgresql_11.pkgs</literal>:
 <screen>
 <prompt>$ </prompt>nix repl '&lt;nixpkgs&gt;'
 
@@ -84,9 +98,8 @@ postgresql_11.pkgs.pg_partman        postgresql_11.pkgs.pgroonga
 ...
 </screen>
   </para>
-
   <para>
-   To add plugins via NixOS configuration, set <literal>services.postgresql.extraPlugins</literal>:
+    To add plugins via NixOS configuration, set <literal>services.postgresql.extraPlugins</literal>:
 <programlisting>
 <xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_11;
 <xref linkend="opt-services.postgresql.extraPlugins"/> = with pkgs.postgresql_11.pkgs; [
@@ -95,9 +108,10 @@ postgresql_11.pkgs.pg_partman        postgresql_11.pkgs.pgroonga
 ];
 </programlisting>
   </para>
-
   <para>
-   You can build custom PostgreSQL-with-plugins (to be used outside of NixOS) using function <literal>.withPackages</literal>. For example, creating a custom PostgreSQL package in an overlay can look like:
+   You can build custom PostgreSQL-with-plugins (to be used outside of NixOS) using
+   function <literal>.withPackages</literal>. For example, creating a custom
+   PostgreSQL package in an overlay can look like:
 <programlisting>
 self: super: {
   postgresql_custom = self.postgresql_11.withPackages (ps: [
@@ -107,9 +121,8 @@ self: super: {
 }
 </programlisting>
   </para>
-
   <para>
-   Here's a recipe on how to override a particular plugin through an overlay:
+    Here's a recipe on how to override a particular plugin through an overlay:
 <programlisting>
 self: super: {
   postgresql_11 = super.postgresql_11.override { this = self.postgresql_11; } // {

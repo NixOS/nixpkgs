@@ -6,7 +6,12 @@
  <title>Booting from a USB Drive</title>
 
  <para>
-  For systems without CD drive, the NixOS live CD can be booted from a USB stick. You can use the <command>dd</command> utility to write the image: <command>dd if=<replaceable>path-to-image</replaceable> of=<replaceable>/dev/sdX</replaceable></command>. Be careful about specifying the correct drive; you can use the <command>lsblk</command> command to get a list of block devices.
+  For systems without CD drive, the NixOS live CD can be booted from a USB
+  stick. You can use the <command>dd</command> utility to write the image:
+  <command>dd if=<replaceable>path-to-image</replaceable>
+  of=<replaceable>/dev/sdX</replaceable></command>. Be careful about specifying
+  the correct drive; you can use the <command>lsblk</command> command to get a
+  list of block devices.
   <note>
    <title>On macOS</title>
    <para>
@@ -20,12 +25,16 @@
 Unmount of all volumes on diskN was successful
 <prompt>$ </prompt>sudo dd if=nix.iso of=/dev/rdiskN
 </screen>
-    Using the 'raw' <command>rdiskN</command> device instead of <command>diskN</command> completes in minutes instead of hours. After <command>dd</command> completes, a GUI dialog "The disk you inserted was not readable by this computer" will pop up, which can be ignored.
+    Using the 'raw' <command>rdiskN</command> device instead of
+    <command>diskN</command> completes in minutes instead of hours. After
+    <command>dd</command> completes, a GUI dialog "The disk you inserted was
+    not readable by this computer" will pop up, which can be ignored.
    </para>
   </note>
  </para>
 
  <para>
-  The <command>dd</command> utility will write the image verbatim to the drive, making it the recommended option for both UEFI and non-UEFI installations.
+  The <command>dd</command> utility will write the image verbatim to the drive,
+  making it the recommended option for both UEFI and non-UEFI installations.
  </para>
 </section>

@@ -13,19 +13,19 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-option</command> 
+   <command>nixos-option</command>
    <arg>
     <option>-I</option> <replaceable>path</replaceable>
    </arg>
-    
+
    <arg>
     <option>--verbose</option>
    </arg>
-    
+
    <arg>
     <option>--xml</option>
    </arg>
-    
+
    <arg choice="plain">
     <replaceable>option.name</replaceable>
    </arg>
@@ -34,10 +34,13 @@
  <refsection>
   <title>Description</title>
   <para>
-   This command evaluates the configuration specified in <filename>/etc/nixos/configuration.nix</filename> and returns the properties of the option name given as argument.
+   This command evaluates the configuration specified in
+   <filename>/etc/nixos/configuration.nix</filename> and returns the properties
+   of the option name given as argument.
   </para>
   <para>
-   When the option name is not an option, the command prints the list of attributes contained in the attribute set.
+   When the option name is not an option, the command prints the list of
+   attributes contained in the attribute set.
   </para>
  </refsection>
  <refsection>
@@ -52,7 +55,8 @@
     </term>
     <listitem>
      <para>
-      This option is passed to the underlying <command>nix-instantiate</command> invocation.
+      This option is passed to the underlying
+      <command>nix-instantiate</command> invocation.
      </para>
     </listitem>
    </varlistentry>
@@ -62,7 +66,8 @@
     </term>
     <listitem>
      <para>
-      This option enables verbose mode, which currently is just the Bash <command>set</command> <option>-x</option> debug mode.
+      This option enables verbose mode, which currently is just the Bash
+      <command>set</command> <option>-x</option> debug mode.
      </para>
     </listitem>
    </varlistentry>
@@ -87,7 +92,8 @@
     </term>
     <listitem>
      <para>
-      Path to the main NixOS configuration module. Defaults to <filename>/etc/nixos/configuration.nix</filename>.
+      Path to the main NixOS configuration module. Defaults to
+      <filename>/etc/nixos/configuration.nix</filename>.
      </para>
     </listitem>
    </varlistentry>
@@ -124,7 +130,8 @@ Defined by:
  <refsection>
   <title>Bugs</title>
   <para>
-   The author listed in the following section is wrong. If there is any other bug, please report to Nicolas Pierron.
+   The author listed in the following section is wrong. If there is any other
+   bug, please report to Nicolas Pierron.
   </para>
  </refsection>
 </refentry>

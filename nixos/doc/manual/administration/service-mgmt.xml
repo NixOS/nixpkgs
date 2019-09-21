@@ -5,10 +5,21 @@
          xml:id="sec-systemctl">
  <title>Service Management</title>
  <para>
-  In NixOS, all system services are started and monitored using the systemd program. Systemd is the “init” process of the system (i.e. PID 1), the parent of all other processes. It manages a set of so-called “units”, which can be things like system services (programs), but also mount points, swap files, devices, targets (groups of units) and more. Units can have complex dependencies; for instance, one unit can require that another unit must be successfully started before the first unit can be started. When the system boots, it starts a unit named <literal>default.target</literal>; the dependencies of this unit cause all system services to be started, file systems to be mounted, swap files to be activated, and so on.
+  In NixOS, all system services are started and monitored using the systemd
+  program. Systemd is the “init” process of the system (i.e. PID 1), the
+  parent of all other processes. It manages a set of so-called “units”,
+  which can be things like system services (programs), but also mount points,
+  swap files, devices, targets (groups of units) and more. Units can have
+  complex dependencies; for instance, one unit can require that another unit
+  must be successfully started before the first unit can be started. When the
+  system boots, it starts a unit named <literal>default.target</literal>; the
+  dependencies of this unit cause all system services to be started, file
+  systems to be mounted, swap files to be activated, and so on.
  </para>
  <para>
-  The command <command>systemctl</command> is the main way to interact with <command>systemd</command>. Without any arguments, it shows the status of active units:
+  The command <command>systemctl</command> is the main way to interact with
+  <command>systemd</command>. Without any arguments, it shows the status of
+  active units:
 <screen>
 <prompt>$ </prompt>systemctl
 -.mount          loaded active mounted   /
@@ -19,7 +30,8 @@ graphical.target loaded active active    Graphical Interface
 </screen>
  </para>
  <para>
-  You can ask for detailed status information about a unit, for instance, the PostgreSQL database service:
+  You can ask for detailed status information about a unit, for instance, the
+  PostgreSQL database service:
 <screen>
 <prompt>$ </prompt>systemctl status postgresql.service
 postgresql.service - PostgreSQL Server
@@ -39,7 +51,9 @@ Jan 07 15:55:57 hagbard postgres[2390]: [1-1] LOG:  database system is ready to 
 Jan 07 15:55:57 hagbard postgres[2420]: [1-1] LOG:  autovacuum launcher started
 Jan 07 15:55:57 hagbard systemd[1]: Started PostgreSQL Server.
 </screen>
-  Note that this shows the status of the unit (active and running), all the processes belonging to the service, as well as the most recent log messages from the service.
+  Note that this shows the status of the unit (active and running), all the
+  processes belonging to the service, as well as the most recent log messages
+  from the service.
  </para>
  <para>
   Units can be stopped, started or restarted:
@@ -48,7 +62,9 @@ Jan 07 15:55:57 hagbard systemd[1]: Started PostgreSQL Server.
 # systemctl start postgresql.service
 # systemctl restart postgresql.service
 </screen>
-  These operations are synchronous: they wait until the service has finished starting or stopping (or has failed). Starting a unit will cause the dependencies of that unit to be started as well (if necessary).
+  These operations are synchronous: they wait until the service has finished
+  starting or stopping (or has failed). Starting a unit will cause the
+  dependencies of that unit to be started as well (if necessary).
  </para>
 <!-- - cgroups: each service and user session is a cgroup
 

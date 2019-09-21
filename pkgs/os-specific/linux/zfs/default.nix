@@ -151,7 +151,7 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    # incompatibleKernelVersion = "4.20";
+    incompatibleKernelVersion = "5.3";
 
     # this package should point to the latest release.
     version = "0.8.1";
@@ -165,7 +165,7 @@ in {
 
   zfsUnstable = common {
     # comment/uncomment if breaking kernel versions are known
-    # incompatibleKernelVersion = "4.19";
+    incompatibleKernelVersion = "5.3";
 
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "0.8.1";

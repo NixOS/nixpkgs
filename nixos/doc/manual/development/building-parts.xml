@@ -5,11 +5,14 @@
         xml:id="sec-building-parts">
  <title>Building Specific Parts of NixOS</title>
  <para>
-  With the command <command>nix-build</command>, you can build specific parts of your NixOS configuration. This is done as follows:
+  With the command <command>nix-build</command>, you can build specific parts
+  of your NixOS configuration. This is done as follows:
 <screen>
 <prompt>$ </prompt>cd <replaceable>/path/to/nixpkgs/nixos</replaceable>
 <prompt>$ </prompt>nix-build -A config.<replaceable>option</replaceable></screen>
-  where <replaceable>option</replaceable> is a NixOS option with type “derivation” (i.e. something that can be built). Attributes of interest include:
+  where <replaceable>option</replaceable> is a NixOS option with type
+  “derivation” (i.e. something that can be built). Attributes of interest
+  include:
   <variablelist>
    <varlistentry>
     <term>
@@ -17,7 +20,10 @@
     </term>
     <listitem>
      <para>
-      The top-level option that builds the entire NixOS system. Everything else in your configuration is indirectly pulled in by this option. This is what <command>nixos-rebuild</command> builds and what <filename>/run/current-system</filename> points to afterwards.
+      The top-level option that builds the entire NixOS system. Everything else
+      in your configuration is indirectly pulled in by this option. This is
+      what <command>nixos-rebuild</command> builds and what
+      <filename>/run/current-system</filename> points to afterwards.
      </para>
      <para>
       A shortcut to build this is:
@@ -42,7 +48,8 @@
     </term>
     <listitem>
      <para>
-      A tree of symlinks that form the static parts of <filename>/etc</filename>.
+      A tree of symlinks that form the static parts of
+      <filename>/etc</filename>.
      </para>
     </listitem>
    </varlistentry>
@@ -55,7 +62,9 @@
     </term>
     <listitem>
      <para>
-      The initial ramdisk and kernel of the system. This allows a quick way to test whether the kernel and the initial ramdisk boot correctly, by using QEMU’s <option>-kernel</option> and <option>-initrd</option> options:
+      The initial ramdisk and kernel of the system. This allows a quick way to
+      test whether the kernel and the initial ramdisk boot correctly, by using
+      QEMU’s <option>-kernel</option> and <option>-initrd</option> options:
 <screen>
 <prompt>$ </prompt>nix-build -A config.system.build.initialRamdisk -o initrd
 <prompt>$ </prompt>nix-build -A config.system.build.kernel -o kernel
@@ -86,18 +95,24 @@
     </term>
     <listitem>
      <para>
-      This builds the unit with the specified name. Note that since unit names contain dots (e.g. <literal>httpd.service</literal>), you need to put them between quotes, like this:
+      This builds the unit with the specified name. Note that since unit names
+      contain dots (e.g. <literal>httpd.service</literal>), you need to put
+      them between quotes, like this:
 <screen>
 <prompt>$ </prompt>nix-build -A 'config.systemd.units."httpd.service".unit'
 </screen>
-      You can also test individual units, without rebuilding the whole system, by putting them in <filename>/run/systemd/system</filename>:
+      You can also test individual units, without rebuilding the whole system,
+      by putting them in <filename>/run/systemd/system</filename>:
 <screen>
 <prompt>$ </prompt>cp $(nix-build -A 'config.systemd.units."httpd.service".unit')/httpd.service \
     /run/systemd/system/tmp-httpd.service
 <prompt># </prompt>systemctl daemon-reload
 <prompt># </prompt>systemctl start tmp-httpd.service
 </screen>
-      Note that the unit must not have the same name as any unit in <filename>/etc/systemd/system</filename> since those take precedence over <filename>/run/systemd/system</filename>. That’s why the unit is installed as <filename>tmp-httpd.service</filename> here.
+      Note that the unit must not have the same name as any unit in
+      <filename>/etc/systemd/system</filename> since those take precedence over
+      <filename>/run/systemd/system</filename>. That’s why the unit is
+      installed as <filename>tmp-httpd.service</filename> here.
      </para>
     </listitem>
    </varlistentry>

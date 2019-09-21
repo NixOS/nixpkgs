@@ -6070,6 +6070,8 @@ in
 
   shrikhand = callPackage ../data/fonts/shrikhand { };
 
+  shunit2 = callPackage ../tools/misc/shunit2 { };
+
   sic = callPackage ../applications/networking/irc/sic { };
 
   siege = callPackage ../tools/networking/siege {};
@@ -7274,6 +7276,8 @@ in
   jush = callPackage ../shells/jush { };
 
   ksh = callPackage ../shells/ksh { };
+
+  liquidprompt = callPackage ../shells/liquidprompt { };
 
   mksh = callPackage ../shells/mksh { };
 
@@ -11082,9 +11086,6 @@ in
 
   qt-mobility = callPackage ../development/libraries/qt-mobility {};
 
-  qt-gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
-
-  qt-gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155; };
 
   qtstyleplugin-kvantum-qt4 = callPackage ../development/libraries/qtstyleplugin-kvantum-qt4 { };
 
@@ -12693,8 +12694,6 @@ in
 
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
-  mono-zeroconf = callPackage ../development/libraries/mono-zeroconf { };
-
   movit = callPackage ../development/libraries/movit { };
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
@@ -12965,6 +12964,8 @@ in
   orcania = callPackage ../development/libraries/orcania { };
 
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
+
+  osmid = callPackage ../applications/audio/osmid {};
 
   osinfo-db = callPackage ../data/misc/osinfo-db { };
   osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
@@ -15014,6 +15015,7 @@ in
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
+  prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
   prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
   prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
@@ -16964,6 +16966,8 @@ in
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
+
+  papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme { };
 
   papis = with python3Packages; toPythonApplication papis;
 
@@ -19700,6 +19704,8 @@ in
 
   pdfdiff = callPackage ../applications/misc/pdfdiff { };
 
+  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
+
   mupdf = callPackage ../applications/misc/mupdf { };
 
   mystem = callPackage ../applications/misc/mystem { };
@@ -19985,6 +19991,8 @@ in
   purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
 
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
+
+  purple-slack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-slack { };
 
   purple-vk-plugin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-vk-plugin { };
 
@@ -22720,7 +22728,6 @@ in
   solarc-gtk-theme = callPackage ../misc/themes/solarc { };
 
   xfce = xfce4-12;
-  xfceUnstable = xfce4-14;
 
   xfce4-12 = recurseIntoAttrs (callPackage ../desktops/xfce { });
   xfce4-14 = recurseIntoAttrs (callPackage ../desktops/xfce4-14 { });

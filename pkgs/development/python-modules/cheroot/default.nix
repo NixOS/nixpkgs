@@ -34,6 +34,9 @@ buildPythonPackage rec {
     pytest -k 'not tls' ${lib.optionalString stdenv.isDarwin "--deselect=cheroot/test/test_ssl.py::test_http_over_https_error --deselect=cheroot/test/test_server.py::test_bind_addr_unix"}
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "High-performance, pure-Python HTTP";
     homepage = https://github.com/cherrypy/cheroot;

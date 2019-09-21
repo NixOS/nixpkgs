@@ -77,4 +77,6 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     ln -s "$item/share/applications" $out/share
   '';
 
+} // stdenv.lib.optionalAttrs (!(meta.license.free or true)) {
+  preferLocalBuild = true;
 }

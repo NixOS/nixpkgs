@@ -138,6 +138,13 @@ let
       ./patches/jumbo-sorted.patch
       ./patches/no-build-timestamps.patch
       ./patches/widevine.patch
+      # Revert "Implement GetFallbackFont on Linux" to fix a performance regression
+      # Remove after https://bugs.chromium.org/p/chromium/issues/detail?id=1003997 is fixed
+      (fetchpatch {
+        url = "https://github.com/chromium/chromium/commit/5a32abe4247f80fdb55c55a289b906b0e42faa5f.patch";
+        sha256 = "1a4jqmki6cyi2dwvaszh01db2diqnz1d50mhpdpby3dd1cw0xmfy";
+        revert = true;
+      })
 
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
@@ -227,8 +234,9 @@ let
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
-      # at least 2X compilation speedup
-      use_jumbo_build = true;
+      # Use jumbo for a 2x (at least) compilation speedup, except where it is currently broken:
+      # https://gist.github.com/ivan/6fe7014c1b1cc35dec133fa6de0549d9
+      use_jumbo_build = (version != "78.0.3904.17");
 
       proprietary_codecs = false;
       use_sysroot = false;

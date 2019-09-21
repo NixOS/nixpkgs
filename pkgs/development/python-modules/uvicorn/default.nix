@@ -1,23 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , click
 , h11
 , httptools
 , uvloop
 , websockets
 , wsproto
+, pytest
+, requests
 , isPy27
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.8.4";
+  version = "0.9.0";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1l8rfm30inx9pma893i7sby9h7y910k58841zqaajksn563b882k";
+  src = fetchFromGitHub {
+    owner = "encode";
+    repo = pname;
+    rev = version;
+    sha256 = "0z4h04mbkzqgpk698bac6f50jxkf02ils6khzl7zbw7yvi6gkkc8";
   };
 
   propagatedBuildInputs = [
@@ -29,11 +33,15 @@ buildPythonPackage rec {
     wsproto
   ];
 
-  checkPhase = ''
-    $out/bin/uvicorn --help
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "h11==0.8.*" "h11"
   '';
 
-  patches = [ ./setup.patch ];
+  checkInputs = [ pytest requests ];
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
     homepage = https://www.uvicorn.org/;

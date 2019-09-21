@@ -32,6 +32,7 @@ rec {
       homepage = http://www.mozilla.com/en-US/firefox/;
       maintainers = with lib.maintainers; [ eelco andir ];
       platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
       license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {

@@ -10,6 +10,10 @@
  </para>
 
  <para>
-  Disables <link linkend="opt-sound.enable">sound</link>, <link linkend="opt-boot.vesa">vesa</link>, serial consoles, <link linkend="opt-systemd.enableEmergencyMode">emergency mode</link>, <link linkend="opt-boot.loader.grub.splashImage">grub splash images</link> and configures the kernel to reboot automatically on panic.
+  Disables <link linkend="opt-sound.enable">sound</link>,
+  <link linkend="opt-boot.vesa">vesa</link>, serial consoles,
+  <link linkend="opt-systemd.enableEmergencyMode">emergency mode</link>,
+  <link linkend="opt-boot.loader.grub.splashImage">grub splash images</link>
+  and configures the kernel to reboot automatically on panic.
  </para>
 </section>
