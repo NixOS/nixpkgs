@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchurl
 , python
-, jdk, cmake, libxml2, zlib, python3, ncurses
+, jdk, cmake, libxml2, zlib, python3, ncurses5
 }:
 
 with stdenv.lib;
@@ -34,7 +34,7 @@ let
 
           lldbLibPath=$out/clion-${version}/bin/lldb/linux/lib
           interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-          ln -s ${ncurses.out}/lib/libncurses.so $lldbLibPath/libtinfo.so.5
+          ln -s ${ncurses5.out}/lib/libtinfo.so.5 $lldbLibPath/libtinfo.so.5
 
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
