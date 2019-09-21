@@ -34,6 +34,13 @@
     </para>
    </listitem>
    <listitem>
+    <para>
+     Postgresql for NixOS service now defaults to v11. <literal>pkgs.postgresql</literal> is still 9.6, but
+     may be updated in future release. To prevent future update problems replace <literal>pkgs.postgresql</literal>
+     with an explicitly versioned <literal>pkgs.postgresql_9_6</literal>.
+    </para>
+   </listitem>
+   <listitem>
      <para>
        The binfmt module is now easier to use. Additional systems can
        be added through <option>boot.binfmt.emulatedSystems</option>.
