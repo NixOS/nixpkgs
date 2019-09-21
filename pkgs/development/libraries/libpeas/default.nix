@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
+  patches = [
+    ./fix-libpeas-gtk-pc.patch
+  ];
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
