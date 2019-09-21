@@ -16595,6 +16595,8 @@ in
 
   carlito = callPackage ../data/fonts/carlito {};
 
+  cascadia-code = callPackage ../data/fonts/cascadia-code { };
+
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
   cherry = callPackage ../data/fonts/cherry { };
