@@ -1277,6 +1277,8 @@ in {
 
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
+  algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
+
   altair = callPackage ../development/python-modules/altair { };
 
   vega = callPackage ../development/python-modules/vega { };
