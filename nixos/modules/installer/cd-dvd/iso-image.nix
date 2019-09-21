@@ -24,7 +24,7 @@ let
         # Name appended to menuentry defaults to params if no specific name given.
         option.name or (if option ? params then "(${option.params})" else "")
         }' ${if option ? class then " --class ${option.class}" else ""} {
-          linux ${defaults.image} ${defaults.params} ${
+          linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
           initrd ${defaults.initrd}
@@ -267,6 +267,12 @@ let
     clear
     set timeout=10
     ${grubMenuCfg}
+
+    # If the parameter iso_path is set, append the findiso parameter to the kernel
+    # line. We need this to allow the nixos iso to be booted from grub directly.
+    if [ \''${iso_path} ] ; then
+      set isoboot="findiso=\''${iso_path}"
+    fi
 
     #
     # Menu entries
@@ -615,6 +621,9 @@ in
         }
         { source = "${efiDir}/EFI";
           target = "/EFI";
+        }
+        { source = pkgs.writeText "loopback.cfg" "source /EFI/boot/grub.cfg";
+          target = "/boot/grub/loopback.cfg";
         }
       ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
