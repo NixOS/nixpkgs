@@ -24,8 +24,8 @@ let
     src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
-      rev    = "0dab7227acfd43f9b2a8209aedb668945073dd2d";
-      sha256 = "101v8vs4a5qyhvs1lvz33lxqmlb4b0bnian7w2g7jd34zvj14z0j";
+      rev    = "20af0932d47de9ee38ba421a532eb666787a16b2";
+      sha256 = "0zy4hx1bysqlh4628h8lvlvsr85wzq1cq7slhd5na2zbx89bzq8f";
     };
 
     outputs = [ "out" "dev" ];

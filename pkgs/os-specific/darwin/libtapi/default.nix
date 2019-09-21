@@ -5,14 +5,14 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "tpoechtrager";
     repo = "apple-libtapi";
-    rev = "cc6f49238569aa8991373195c889364f5dcd5617";
-    sha256 = "00n9sr0khp2dsmsg7mfssq12b9cvdi03arzkpadvkaldy5vixb5s";
+    rev = "3efb201881e7a76a21e0554906cf306432539cef";
+    sha256 = "1vzm2sbszmxssbsik6363gs8r0il2kvp6faw97r52w4gyrlw14zf";
   };
 
   nativeBuildInputs = [ cmake python ];
 
   preConfigure = ''
-    cd src/apple-llvm/src
+    cd src/llvm
   '';
 
   cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=OFF" ];
