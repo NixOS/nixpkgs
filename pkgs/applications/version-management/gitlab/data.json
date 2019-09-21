@@ -15,16 +15,16 @@
     }
   },
   "ee": {
-    "version": "12.2.3",
-    "repo_hash": "1552wfs4qxv9p9p2kj51w6y29bzw8a3d9crl4zyrf9l5xcbayzvf",
-    "deb_hash": "12dmawy67kyjjivjihr1ggny9ia5n5n3zyqjygkx09wyc3n4a9rc",
-    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_12.2.3-ee.0_amd64.deb/download.deb",
+    "version": "12.2.5",
+    "repo_hash": "0s6k7b3adfk50m70ds8jn46l5ki67qsy7bpjiy76q5zim9365ji2",
+    "deb_hash": "12qqg8wd4h28qlh62fm1k2wjgvs16akq0si5jj6va38si1xv4xgj",
+    "deb_url": "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_12.2.5-ee.0_amd64.deb/download.deb",
     "owner": "gitlab-org",
     "repo": "gitlab-ee",
-    "rev": "v12.2.3-ee",
+    "rev": "v12.2.5-ee",
     "passthru": {
       "GITALY_SERVER_VERSION": "1.59.2",
-      "GITLAB_PAGES_VERSION": "1.7.1",
+      "GITLAB_PAGES_VERSION": "1.7.2",
       "GITLAB_SHELL_VERSION": "9.3.0",
       "GITLAB_WORKHORSE_VERSION": "8.8.1"
     }
