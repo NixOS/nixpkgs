@@ -76,8 +76,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Let’s wrap the daemons
     for file in $out/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/service/{{daemon,nativeMessagingHost}.js,components/folks.py}; do
-      echo "Wrapping program ''${file}"
-      wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+      echo "Wrapping program $file"
+      wrapGApp "$file"
     done
   '';
 

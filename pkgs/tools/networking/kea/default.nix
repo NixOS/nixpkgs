@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, openssl, botan2, log4cplus
-, boost, python3, postgresql, mysql, gmp, bzip2 }:
+, boost, python3, postgresql, libmysqlclient, gmp, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "kea";
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--with-pgsql=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.connector-c}/bin/mysql_config"
+    "--with-mysql=${libmysqlclient}/bin/mysql_config"
   ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    openssl log4cplus boost python3 mysql.connector-c
+    openssl log4cplus boost python3 libmysqlclient
     botan2 gmp bzip2
   ];
 
