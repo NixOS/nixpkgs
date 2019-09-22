@@ -15,7 +15,7 @@ buildGoModule rec {
   modSha256 = "0mjhw778x40c2plmjlkiry4rwvr9xkz65b88a61j86liv2plbmq2";
 
   meta = with stdenv.lib; {
-    description = "Fast and powerful Git hooks manager for any type of projects.";
+    description = "Fast and powerful Git hooks manager for any type of projects";
     homepage = https://evilmartians.com/chronicles/lefthook-knock-your-teams-code-back-into-shape?utm_source=lefthook;
     license = licenses.mit;
     maintainers = with maintainers; [ rencire ];
