@@ -4201,6 +4201,8 @@ in {
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
+  picos = callPackage ../development/python-modules/picos { };
+
   piep = callPackage ../development/python-modules/piep { };
 
   piexif = callPackage ../development/python-modules/piexif { };
