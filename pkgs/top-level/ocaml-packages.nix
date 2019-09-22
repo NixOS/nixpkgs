@@ -664,6 +664,8 @@ let
       then sexplib_108_08_00
       else null;
 
+    ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
+
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
 
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
@@ -695,6 +697,8 @@ let
       else null;
 
     ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf {};
+
+    ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc {};
 
     ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
 

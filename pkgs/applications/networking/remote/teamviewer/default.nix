@@ -54,6 +54,7 @@ mkDerivation rec {
   '';
 
   dontStrip = true;
+  preferLocalBuild = true;
 
   meta = with lib; {
     homepage = http://www.teamviewer.com;

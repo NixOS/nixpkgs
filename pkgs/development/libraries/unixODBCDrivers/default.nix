@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, libmysqlclient, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, curl, libuuid, autoPatchelfHook }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, mariadb, sqlite, zlib, libxml2, dpkg, lib, kerberos, curl, libuuid, autoPatchelfHook }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -29,23 +29,18 @@
 
   mariadb = stdenv.mkDerivation rec {
     pname = "mariadb-connector-odbc";
-    version = "3.1.2";
+    version = "2.0.10";
 
     src = fetchurl {
-      url = "https://downloads.mariadb.org/interstitial/connector-odbc-${version}/${pname}-${version}-ga-src.tar.gz";
-      sha256 = "0iibly2mbqijqyq4pzpb6dh40clqhvqrhgnj8knm4bw3nlksd0d5";
+      url = "https://downloads.mariadb.org/interstitial/connector-odbc-${version}/src/${pname}-${version}-ga-src.tar.gz";
+      sha256 = "0b6ximy0dg0xhqbrm1l7pn8hjapgpmddi67kh54h6i9cq9hqfdvz";
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC libmysqlclient openssl ];
+    buildInputs = [ unixODBC mariadb.connector-c ];
 
     cmakeFlags = [
-      "-DWITH_OPENSSL=ON"
-    ];
-
-   NIX_CFLAGS_COMPILE = [
-     "-I${libmysqlclient}/include/mysql"
-     "-L${libmysqlclient}/lib/mysql"
+      "-DMARIADB_INCLUDE_DIR=${mariadb.connector-c}/include/mariadb"
     ];
 
     passthru = {

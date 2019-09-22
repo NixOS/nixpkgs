@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libtool, perl, bsdbuild, gettext, mandoc
 , libpng, libjpeg, xlibsWrapper, libXinerama, freetype, SDL, libGLU_combined
-, libsndfile, portaudio, libmysqlclient, fontconfig
+, libsndfile, portaudio, mysql, fontconfig
 }:
 
 let srcs = import ./srcs.nix { inherit fetchurl; }; in
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     "--with-gettext=${gettext}"
     "--with-jpeg=${libjpeg.dev}"
     "--with-gl=${libGLU_combined}"
-    "--with-mysql=${libmysqlclient}"
+    "--with-mysql=${mysql.connector-c}"
     "--with-manpages=yes"
   ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig libtool gettext ];
 
   buildInputs = [
-    bsdbuild perl xlibsWrapper libXinerama SDL libGLU_combined libmysqlclient mandoc
+    bsdbuild perl xlibsWrapper libXinerama SDL libGLU_combined mysql.connector-c mandoc
     freetype.dev libpng libjpeg.dev fontconfig portaudio libsndfile
   ];
 

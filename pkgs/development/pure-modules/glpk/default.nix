@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl,
-  pkgconfig, pure, glpk, gmp, libtool, libmysqlclient, libiodbc }:
+  pkgconfig, pure, glpk, gmp, libtool, mysql, libiodbc }:
 
 stdenv.mkDerivation rec {
   baseName = "glpk";
@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   glpkWithExtras = lib.overrideDerivation glpk (attrs: {
-    propagatedBuildInputs = [ gmp libtool libmysqlclient libiodbc ];
+    propagatedBuildInputs = [ gmp libtool mysql.connector-c libiodbc ];
 
     CPPFLAGS = "-I${gmp.dev}/include";
 
     preConfigure = ''
       substituteInPlace configure \
-        --replace /usr/include/mysql ${libmysqlclient}/include/mysql
+        --replace /usr/include/mysql ${mysql.connector-c}/include/mysql
     '';
     configureFlags = [ "--enable-dl"
                        "--enable-odbc"

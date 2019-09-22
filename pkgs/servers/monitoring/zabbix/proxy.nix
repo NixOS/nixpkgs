@@ -3,7 +3,7 @@
 , snmpSupport ? true, net_snmp
 , sshSupport ? true, libssh2
 , sqliteSupport ? false, sqlite
-, mysqlSupport ? false, libmysqlclient
+, mysqlSupport ? false, mysql
 , postgresqlSupport ? false, postgresql
 }:
 
@@ -37,7 +37,7 @@ in
       ++ optional snmpSupport net_snmp
       ++ optional sqliteSupport sqlite
       ++ optional sshSupport libssh2
-      ++ optional mysqlSupport libmysqlclient
+      ++ optional mysqlSupport mysql.connector-c
       ++ optional postgresqlSupport postgresql;
 
       configureFlags = [

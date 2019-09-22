@@ -576,7 +576,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  ammonite = callPackage ../development/tools/ammonite {};
+  inherit (callPackages ../development/tools/ammonite {})
+    ammonite_2_12
+    ammonite_2_13;
+  ammonite = if scala == scala_2_12 then ammonite_2_12 else ammonite_2_13;
 
   amp = callPackage ../applications/editors/amp {};
 
@@ -1963,7 +1966,7 @@ in
     libkrb5 = null;
     systemd = null;
     jemalloc = null;
-    libmysqlclient = null;
+    mysql = null;
     postgresql = null;
     libdbi = null;
     net_snmp = null;
@@ -6070,6 +6073,8 @@ in
 
   shrikhand = callPackage ../data/fonts/shrikhand { };
 
+  shunit2 = callPackage ../tools/misc/shunit2 { };
+
   sic = callPackage ../applications/networking/irc/sic { };
 
   siege = callPackage ../tools/networking/siege {};
@@ -7274,6 +7279,8 @@ in
   jush = callPackage ../shells/jush { };
 
   ksh = callPackage ../shells/ksh { };
+
+  liquidprompt = callPackage ../shells/liquidprompt { };
 
   mksh = callPackage ../shells/mksh { };
 
@@ -9141,6 +9148,8 @@ in
   astyle = callPackage ../development/tools/misc/astyle { };
 
   awf = callPackage ../development/tools/misc/awf { };
+
+  aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   electron_6 = callPackage ../development/tools/electron/6.x.nix { };
 
@@ -11082,9 +11091,6 @@ in
 
   qt-mobility = callPackage ../development/libraries/qt-mobility {};
 
-  qt-gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
-
-  qt-gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155; };
 
   qtstyleplugin-kvantum-qt4 = callPackage ../development/libraries/qtstyleplugin-kvantum-qt4 { };
 
@@ -11320,6 +11326,8 @@ in
   hwloc = callPackage ../development/libraries/hwloc {};
 
   hydra = callPackage ../development/tools/misc/hydra { };
+
+  hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
@@ -11704,7 +11712,7 @@ in
   libdbi = callPackage ../development/libraries/libdbi { };
 
   libdbiDriversBase = libdbiDrivers.override {
-    libmysqlclient = null;
+    mysql = null;
     sqlite = null;
   };
 
@@ -12422,8 +12430,9 @@ in
 
   libwhereami = callPackage ../development/libraries/libwhereami { };
 
+  giflib = giflib_5_1;
   giflib_4_1 = callPackage ../development/libraries/giflib/4.1.nix { };
-  giflib     = callPackage ../development/libraries/giflib { };
+  giflib_5_1 = callPackage ../development/libraries/giflib/5.1.nix { };
 
   libunarr = callPackage ../development/libraries/libunarr { };
 
@@ -12693,8 +12702,6 @@ in
 
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
-  mono-zeroconf = callPackage ../development/libraries/mono-zeroconf { };
-
   movit = callPackage ../development/libraries/movit { };
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
@@ -12848,6 +12855,8 @@ in
 
   one_gadget = callPackage ../development/tools/misc/one_gadget { };
 
+  onedrive = callPackage ../applications/networking/sync/onedrive { };
+
   oneko = callPackage ../applications/misc/oneko { };
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
@@ -12965,6 +12974,8 @@ in
   orcania = callPackage ../development/libraries/orcania { };
 
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
+
+  osmid = callPackage ../applications/audio/osmid {};
 
   osinfo-db = callPackage ../data/misc/osinfo-db { };
   osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
@@ -13130,7 +13141,7 @@ in
     cups = if stdenv.isLinux then cups else null;
 
     # XXX: mariadb doesn't built on fbsd as of nov 2015
-    libmysqlclient = if (!stdenv.isFreeBSD) then libmysqlclient else null;
+    mysql = if (!stdenv.isFreeBSD) then mysql else null;
 
     inherit (pkgs.darwin) libobjc;
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
@@ -13889,7 +13900,7 @@ in
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
-  unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers { });
+  unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers {});
 
   ustr = callPackage ../development/libraries/ustr { };
 
@@ -14877,17 +14888,8 @@ in
 
   rpcbind = callPackage ../servers/rpcbind { };
 
-  libmysqlclient = libmysqlclient_3_1;
-  libmysqlclient_3_1 = mariadb-connector-c_3_1;
-  mariadb-connector-c = mariadb-connector-c_3_1;
-  mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
-
-  mariadb-galera = mariadb-galera_25;
-  mariadb-galera_25 = callPackage ../servers/sql/mariadb/galera/25.nix {
-    asio = asio_1_10;
-  };
-
   mariadb = callPackage ../servers/sql/mariadb {
+    asio = asio_1_10;
     # As per mariadb's cmake, "static jemalloc_pic.a can only be used up to jemalloc 4".
     # https://jira.mariadb.org/browse/MDEV-15034
     jemalloc = jemalloc450.override ({ disableInitExecTls = true; });
@@ -15014,6 +15016,7 @@ in
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
+  prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
   prometheus-aws-s3-exporter = callPackage ../servers/monitoring/prometheus/aws-s3-exporter.nix { };
   prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
@@ -16601,6 +16604,8 @@ in
 
   carlito = callPackage ../data/fonts/carlito {};
 
+  cascadia-code = callPackage ../data/fonts/cascadia-code { };
+
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
   cherry = callPackage ../data/fonts/cherry { };
@@ -16965,6 +16970,8 @@ in
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
 
+  papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme { };
+
   papis = with python3Packages; toPythonApplication papis;
 
   paps = callPackage ../tools/misc/paps { };
@@ -17215,6 +17222,8 @@ in
   xorg-rgb = callPackage ../data/misc/xorg-rgb {};
 
   yanone-kaffeesatz = callPackage ../data/fonts/yanone-kaffeesatz {};
+
+  yaru-theme = callPackage ../data/themes/yaru {};
 
   zafiro-icons = callPackage ../data/icons/zafiro-icons { };
 
@@ -18728,7 +18737,7 @@ in
 
   spotifyd = callPackage ../applications/audio/spotifyd {
     withALSA = stdenv.isLinux;
-    withPulseAudio = config.pulseaudio or true;
+    withPulseAudio = config.pulseaudio or stdenv.isLinux;
     withPortAudio = stdenv.isDarwin;
   };
 
@@ -19700,6 +19709,8 @@ in
 
   pdfdiff = callPackage ../applications/misc/pdfdiff { };
 
+  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
+
   mupdf = callPackage ../applications/misc/mupdf { };
 
   mystem = callPackage ../applications/misc/mystem { };
@@ -19985,6 +19996,8 @@ in
   purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
 
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
+
+  purple-slack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-slack { };
 
   purple-vk-plugin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-vk-plugin { };
 
@@ -22720,7 +22733,6 @@ in
   solarc-gtk-theme = callPackage ../misc/themes/solarc { };
 
   xfce = xfce4-12;
-  xfceUnstable = xfce4-14;
 
   xfce4-12 = recurseIntoAttrs (callPackage ../desktops/xfce { });
   xfce4-14 = recurseIntoAttrs (callPackage ../desktops/xfce4-14 { });
@@ -24145,7 +24157,7 @@ in
   mnemonicode = callPackage ../misc/mnemonicode { };
 
   mysql-workbench = callPackage ../applications/misc/mysql-workbench (let mysql = mysql57; in {
-    gdal = gdal.override {libmysqlclient = mysql // {lib = {dev = mysql;};};};
+    gdal = gdal.override {mysql = mysql // {lib = {dev = mysql;};};};
     mysql = mysql;
     pcre = pcre-cpp;
   });

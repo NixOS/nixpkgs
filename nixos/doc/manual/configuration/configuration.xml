@@ -6,7 +6,11 @@
  <title>Configuration</title>
  <partintro xml:id="ch-configuration-intro">
   <para>
-   This chapter describes how to configure various aspects of a NixOS machine through the configuration file <filename>/etc/nixos/configuration.nix</filename>. As described in <xref linkend="sec-changing-config" />, changes to this file only take effect after you run <command>nixos-rebuild</command>.
+   This chapter describes how to configure various aspects of a NixOS machine
+   through the configuration file
+   <filename>/etc/nixos/configuration.nix</filename>. As described in
+   <xref linkend="sec-changing-config" />, changes to this file only take
+   effect after you run <command>nixos-rebuild</command>.
   </para>
  </partintro>
  <xi:include href="config-syntax.xml" />

@@ -10,11 +10,14 @@
 <programlisting>
 <xref linkend="opt-services.openssh.enable"/> = true;
 </programlisting>
-  By default, root logins using a password are disallowed. They can be disabled entirely by setting <xref linkend="opt-services.openssh.permitRootLogin"/> to <literal>"no"</literal>.
+  By default, root logins using a password are disallowed. They can be disabled
+  entirely by setting <xref linkend="opt-services.openssh.permitRootLogin"/> to
+  <literal>"no"</literal>.
  </para>
 
  <para>
-  You can declaratively specify authorised RSA/DSA public keys for a user as follows:
+  You can declaratively specify authorised RSA/DSA public keys for a user as
+  follows:
 <!-- FIXME: this might not work if the user is unmanaged. -->
 <programlisting>
 <link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">users.users.alice.openssh.authorizedKeys.keys</link> =

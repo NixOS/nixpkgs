@@ -1,3 +1,7 @@
+This patch has been edited to apply to squashfs 4.4, commit
+52eb4c279cd283ed9802dd1ceb686560b22ffb67. Below is the original
+message body of the patch.
+
 From 7bda7c75748f36b0a50f93e46144d5a4de4974ad Mon Sep 17 00:00:00 2001
 From: Amin Hassani <ahassani@google.com>
 Date: Thu, 15 Dec 2016 10:43:15 -0800
@@ -16,20 +20,24 @@ increased_size = (number_of_unfragmented_files_in_image + number of fragments) *
 
 The 4k alignment can be enabled by flag '-4k-align'
 ---
-diff -u a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
---- a/squashfs-tools/mksquashfs.c	2019-07-06 15:50:22.214873176 +0000
-+++ b/squashfs-tools/mksquashfs.c	2019-07-06 15:51:22.244802582 +0000
-@@ -100,7 +100,9 @@
+ squashfs-tools/mksquashfs.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
+index a45b77f..07b1c06 100644
+--- a/squashfs-tools/mksquashfs.c
++++ b/squashfs-tools/mksquashfs.c
+@@ -102,7 +102,9 @@ int old_exclude = TRUE;
  int use_regex = FALSE;
  int nopad = FALSE;
  int exit_on_error = FALSE;
 +int do_4k_align = FALSE;
- static off_t squashfs_start_offset = 0;
+ long long start_offset = 0;
 +#define ALIGN_UP(bytes, size) (bytes = (bytes + size - 1) & ~(size - 1))
  
  long long global_uid = -1, global_gid = -1;
  
-@@ -1495,6 +1497,9 @@
+@@ -1546,6 +1548,9 @@ void unlock_fragments()
  	 * queue at this time.
  	 */
  	while(!queue_empty(locked_fragment)) {
@@ -39,17 +47,17 @@ diff -u a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
  		write_buffer = queue_get(locked_fragment);
  		frg = write_buffer->block;	
  		size = SQUASHFS_COMPRESSED_SIZE_BLOCK(fragment_table[frg].size);
-@@ -2414,6 +2419,9 @@
- 	compressed_size = SQUASHFS_COMPRESSED_SIZE_BLOCK(c_byte);
- 	write_buffer->size = compressed_size;
- 	if(fragments_locked == FALSE) {
-+		// 4k align the start of each fragment.
-+		if(do_4k_align)
-+			ALIGN_UP(bytes, 4096);
- 		fragment_table[file_buffer->block].size = c_byte;
- 		fragment_table[file_buffer->block].start_block = bytes;
- 		write_buffer->block = bytes;
-@@ -2728,6 +2736,10 @@
+@@ -2478,6 +2483,9 @@ void *frag_deflator(void *arg)
+ 		write_buffer->size = compressed_size;
+ 		pthread_mutex_lock(&fragment_mutex);
+ 		if(fragments_locked == FALSE) {
++			// 4k align the start of each fragment.
++			if(do_4k_align)
++				ALIGN_UP(bytes, 4096);
+ 			fragment_table[file_buffer->block].size = c_byte;
+ 			fragment_table[file_buffer->block].start_block = bytes;
+ 			write_buffer->block = bytes;
+@@ -2877,6 +2885,10 @@ int write_file_blocks(squashfs_inode *inode, struct dir_ent *dir_ent,
  	long long sparse = 0;
  	struct file_buffer *fragment_buffer = NULL;
  
@@ -60,7 +68,7 @@ diff -u a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
  	if(pre_duplicate(read_size))
  		return write_file_blocks_dup(inode, dir_ent, read_buffer, dup);
  
-@@ -4808,6 +4820,7 @@
+@@ -4972,6 +4984,7 @@ void write_filesystem_tables(struct squashfs_super_block *sBlk, int nopad)
  		"compressed", no_fragments ? "no" : noF ? "uncompressed" :
  		"compressed", no_xattrs ? "no" : noX ? "uncompressed" :
  		"compressed", noI || noId ? "uncompressed" : "compressed");
@@ -68,7 +76,7 @@ diff -u a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
  	printf("\tduplicates are %sremoved\n", duplicate_checking ? "" :
  		"not ");
  	printf("Filesystem size %.2f Kbytes (%.2f Mbytes)\n", bytes / 1024.0,
-@@ -5570,6 +5583,8 @@
+@@ -5853,6 +5866,8 @@ print_compressor_options:
  			root_name = argv[i];
  		} else if(strcmp(argv[i], "-version") == 0) {
  			VERSION();
@@ -77,7 +85,7 @@ diff -u a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
  		} else {
  			ERROR("%s: invalid option\n\n", argv[0]);
  printOptions:
-@@ -5613,6 +5628,7 @@
+@@ -5904,6 +5919,7 @@ printOptions:
  			ERROR("\t\t\tdirectory containing that directory, "
  				"rather than the\n");
  			ERROR("\t\t\tcontents of the directory\n");
@@ -85,3 +93,6 @@ diff -u a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
  			ERROR("\nFilesystem filter options:\n");
  			ERROR("-p <pseudo-definition>\tAdd pseudo file "
  				"definition\n");
+-- 
+2.23.0
+

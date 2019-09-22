@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postFixup = ''
+  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
     # config_gnome3 uses the helper to find GNOME proxy settings
     wrapProgram $out/libexec/pxgsettings --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
   '';

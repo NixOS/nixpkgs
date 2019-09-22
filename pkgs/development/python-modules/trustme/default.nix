@@ -36,6 +36,9 @@ buildPythonPackage rec {
     pytest
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "High quality TLS certs while you wait, for the discerning tester";
     homepage = https://github.com/python-trio/trustme;

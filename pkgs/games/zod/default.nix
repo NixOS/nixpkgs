@@ -1,5 +1,5 @@
 { fetchurl, stdenv, unrar, unzip, SDL, SDL_image, SDL_ttf, SDL_mixer
-, libmysqlclient, makeWrapper }:
+, mysql, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "zod-engine-2011-03-18";
@@ -24,9 +24,9 @@ stdenv.mkDerivation {
     sourceRoot=`pwd`/src
   '';
 
-  buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer libmysqlclient makeWrapper ];
+  buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer mysql.connector-c makeWrapper ];
 
-  NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
+  NIX_LDFLAGS = "-L${mysql.connector-c}/lib/mysql";
 
   installPhase = ''
     mkdir -p $out/bin $out/share/zod

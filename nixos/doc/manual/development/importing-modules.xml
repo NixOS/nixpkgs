@@ -6,7 +6,8 @@
  <title>Importing Modules</title>
 
  <para>
-  Sometimes NixOS modules need to be used in configuration but exist outside of Nixpkgs. These modules can be imported:
+  Sometimes NixOS modules need to be used in configuration but exist outside of
+  Nixpkgs. These modules can be imported:
  </para>
 
 <programlisting>
@@ -24,7 +25,9 @@
 </programlisting>
 
  <para>
-  The environment variable <literal>NIXOS_EXTRA_MODULE_PATH</literal> is an absolute path to a NixOS module that is included alongside the Nixpkgs NixOS modules. Like any NixOS module, this module can import additional modules:
+  The environment variable <literal>NIXOS_EXTRA_MODULE_PATH</literal> is an
+  absolute path to a NixOS module that is included alongside the Nixpkgs NixOS
+  modules. Like any NixOS module, this module can import additional modules:
  </para>
 
 <programlisting>

@@ -20,6 +20,8 @@ buildPythonPackage rec {
     sha256 = "0blcnrd5vky2k1m1p1skx4516dr1jx76yyb0c6fi82si6mqd0b4l";
   };
 
+  patches = lib.optional stdenv.isDarwin ./darwin_sandbox.patch;
+
   buildInputs = [
     libuv
   ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
@@ -30,6 +32,9 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pyopenssl psutil ];
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Fast implementation of asyncio event loop on top of libuv";
