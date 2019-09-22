@@ -19859,8 +19859,9 @@ in
   osquery = callPackage ../tools/system/osquery { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon {
-    # https://forum.palemoon.org/viewtopic.php?f=57&t=15296#p111146
-    stdenv = gcc49Stdenv;
+    # https://www.palemoon.org/sourcecode.shtml
+    # gcc7 preferred for version 28.x
+    stdenv = gcc7Stdenv;
   };
 
   pamix = callPackage ../applications/audio/pamix { };
