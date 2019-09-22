@@ -22,11 +22,11 @@
 }:
 
 let
-  version = "0.29.0";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "01cb6f2e808bd016cf0e217e12373c9efb808123e58b37885be8364458d3a40a";
+    sha256 = "1b4c9wav5zsldlwzsb064z3m5l4ns8i90bsvd5f215fxd45sy7f6";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -46,15 +46,16 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       (if stdenv.hostPlatform.isDarwin
-       then srcs."java_tools_javac11_darwin-v4.0.zip"
-       else srcs."java_tools_javac11_linux-v4.0.zip")
-      srcs."coverage_output_generator-v1.0.zip"
+       then srcs."java_tools_javac11_darwin-v5.1.zip"
+       else srcs."java_tools_javac11_linux-v5.1.zip")
+      srcs."coverage_output_generator-v2.0.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.8.tar.gz"
-      srcs."0.27.1.tar.gz"
+      srcs."android_tools_pkg-0.10.tar.gz"
+      srcs."0.28.3.tar.gz"
       srcs.rules_pkg
       srcs.rules_cc
       srcs.rules_java
+      srcs.rules_proto
       ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -106,7 +107,7 @@ let
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
-    src = srcDepsSet."java_tools_javac11_${system}-v4.0.zip";
+    src = srcDepsSet."java_tools_javac11_${system}-v5.1.zip";
 
     nativeBuildInputs = [ autoPatchelfHook unzip ];
     buildInputs = [ gcc-unwrapped ];
