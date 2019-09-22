@@ -1,6 +1,6 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "lazydocker";
   version = "0.7.4";
 
@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "03l6gs4p9p8g0ai6wqg9024rp0pd13m0b9y3sy1ww5afwxb82br6";
   };
 
-  modSha256 = "1hzrin8dfsfnxpc37szc1449s235w0dr24albswz06fjnl4bbs5y";
+  goPackagePath = "github.com/jesseduffield/lazydocker";
 
   subPackages = [ "." ];
 
