@@ -4289,6 +4289,8 @@ in
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
+  keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
+
   kexpand = callPackage ../development/tools/kexpand { };
 
   keybase = callPackage ../tools/security/keybase {

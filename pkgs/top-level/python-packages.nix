@@ -6004,6 +6004,8 @@ in {
 
   keepkey = callPackage ../development/python-modules/keepkey { };
 
+  keepkey_agent = callPackage ../development/python-modules/keepkey_agent { };
+
   libagent = callPackage ../development/python-modules/libagent { };
 
   ledger_agent = callPackage ../development/python-modules/ledger_agent { };
