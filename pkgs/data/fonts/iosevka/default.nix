@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
       remarshal -i "$privateBuildPlanJSONPath" -o private-build-plans.toml -if json -of toml
     ''}
     ${lib.optionalString (extraParameters != null) ''
-      remarshal -i "$extraParametersJSONPath" -o parameters.toml -if json -of toml
+      echo -e "\n" >> parameters.toml
+      remarshal -i "$extraParametersJSONPath" -if json -of toml >> parameters.toml
     ''}
     runHook postConfigure
   '';
