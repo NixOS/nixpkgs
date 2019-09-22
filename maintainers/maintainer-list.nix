@@ -5370,6 +5370,12 @@
     github = "rickynils";
     name = "Rickard Nilsson";
   };
+  rileyinman = {
+    email = "rileyminman@gmail.com";
+    github = "rileyinman";
+    githubId = 37246692;
+    name = "Riley Inman";
+  };
   ris = {
     email = "code@humanleg.org.uk";
     github = "risicle";

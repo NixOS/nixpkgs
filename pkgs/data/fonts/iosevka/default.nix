@@ -75,6 +75,12 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cstrahan jfrankenau ttuegel babariviere ];
+    maintainers = with maintainers; [
+      cstrahan
+      jfrankenau
+      ttuegel
+      babariviere
+      rileyinman
+    ];
   };
 }
