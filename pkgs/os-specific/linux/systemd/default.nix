@@ -31,7 +31,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
-    ./0002-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
     ./0003-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0004-Start-getty-on-lxc.patch
     ./0005-Fix-NixOS-containers.patch
