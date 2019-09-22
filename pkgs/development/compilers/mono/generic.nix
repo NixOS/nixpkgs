@@ -42,10 +42,6 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix $out $configureFlags
   '';
 
-  # Attempt to fix this error when running "mcs --version":
-  # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
-  dontStrip = true;
-
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
   patches = [ ./pkgconfig-before-gac.patch ];

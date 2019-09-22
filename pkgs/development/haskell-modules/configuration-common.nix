@@ -146,16 +146,11 @@ self: super: {
     else super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
-  hakyll = appendPatch
-    (if pkgs.stdenv.isDarwin
+  hakyll = if pkgs.stdenv.isDarwin
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll)
-    (pkgs.fetchpatch {
-      url = https://github.com/jaspervdj/hakyll/commit/25a4460b75b3c9f3ce339b3311b084d92994f5f1.patch;
-      sha256 = "sha256-F59WHt52LOKGsGoaD3LAIZFEMe9s9WHfGxQgSh9Q8uQ=";
-    });
+    else super.hakyll;
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
@@ -1230,5 +1225,11 @@ self: super: {
 
   # The LTS-14.x version of optparse-applicative is too old.
   cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
+
+  # https://github.com/brendanhay/amazonka/commit/657b70d174fe5cb61e56cb8b9c5e57f1ec216f2b
+  amazonka = appendPatch super.amazonka ./patches/amazonka-Allow-http-client-0.6.patch;
+
+  # https://github.com/brendanhay/amazonka/commit/657b70d174fe5cb61e56cb8b9c5e57f1ec216f2b
+  amazonka-core = appendPatch super.amazonka-core ./patches/amazonka-core-Allow-http-client-0.6.patch;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
