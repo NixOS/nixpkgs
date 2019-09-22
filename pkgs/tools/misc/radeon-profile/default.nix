@@ -5,7 +5,7 @@
 mkDerivation rec {
 
   pname = "radeon-profile";
-  version = "20170714";
+  version = "20190903";
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase qtcharts libXrandr libdrm ];
@@ -14,12 +14,12 @@ mkDerivation rec {
     owner  = "marazmista";
     repo   = "radeon-profile";
     rev    = version;
-    sha256 = "08fv824iq00zbl9xk9zsfs8gkk8rsy6jlxbmszrjfx7ji28hansd";
+    sha256 = "0ax5417q03xjwi3pn7yyjdb90ssaygdprfgb1pz9nkyk6773ckx5";
   }) + "/radeon-profile";
 
-  postInstall = ''
-    mkdir -p $out/bin
-    cp ./radeon-profile $out/bin/radeon-profile
+  preConfigure = ''
+    substituteInPlace radeon-profile.pro \
+      --replace "/usr/" "$out/"
   '';
 
   meta = with lib; {
