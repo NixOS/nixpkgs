@@ -4,7 +4,6 @@
 , gettext
 , glib
 , gtk3
-, hicolor-icon-theme
 , libgee
 , libdazzle
 , meson
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gtk3
-    hicolor-icon-theme
     libdazzle
     libgee
     pantheon.granite
