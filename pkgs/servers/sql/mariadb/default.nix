@@ -3,7 +3,7 @@
 , libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
 , asio, buildEnv, check, scons
-, less
+, less, fetchpatch
 , withoutClient ? false
 }:
 
@@ -56,7 +56,12 @@ common = rec { # attributes common to both builds
   patches = [
     ./cmake-includedir.patch
     ./cmake-libmariadb-includedir.patch
-  ];
+  ] ++ optional stdenv.hostPlatform.isDarwin (fetchpatch {
+    url = "https://github.com/MariaDB/mariadb-connector-c/commit/ee91b2c98a63acb787114dee4f2694e154630928.patch";
+    extraPrefix = "libmariadb/";
+    sha256 = "06i865zwyhs9fvrgmargzn09pbg1cmably3c4wifd241bj8ig8qk";
+    stripLen = 1;
+  });
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
