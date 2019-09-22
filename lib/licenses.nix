@@ -218,9 +218,9 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Common Public License 1.0";
   };
 
-  curl = {
-    fullName = "MIT/X11 derivate";
-    url = "https://curl.haxx.se/docs/copyright.html";
+  curl = spdx {
+    spdxId = "curl";
+    fullName = "curl License";
   };
 
   doc = spdx {
