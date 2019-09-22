@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, pruneLibtoolFiles, flex, bison
 , libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
-, modeCompat ? false
+, nftablesCompat ? false
 }:
 
 with stdenv.lib;
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     "--enable-libipq"
     "--enable-nfsynproxy"
     "--enable-shared"
-  ] ++ optional (!modeCompat) "--disable-nftables";
+  ] ++ optional (!nftablesCompat) "--disable-nftables";
 
   outputs = [ "out" "dev" ];
 
-  postInstall = optional modeCompat ''
+  postInstall = optional nftablesCompat ''
     rm $out/sbin/{iptables,iptables-restore,iptables-save,ip6tables,ip6tables-restore,ip6tables-save}
     ln -sv xtables-nft-multi $out/bin/iptables
     ln -sv xtables-nft-multi $out/bin/iptables-restore

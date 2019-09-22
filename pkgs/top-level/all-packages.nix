@@ -15631,7 +15631,7 @@ in
 
   iptables = iptables-legacy;
   iptables-legacy = callPackage ../os-specific/linux/iptables { };
-  iptables-compat = callPackage ../os-specific/linux/iptables { modeCompat = true; };
+  iptables-nftables-compat = callPackage ../os-specific/linux/iptables { nftablesCompat = true; };
 
   iptstate = callPackage ../os-specific/linux/iptstate { } ;
 
