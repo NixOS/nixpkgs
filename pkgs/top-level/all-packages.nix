@@ -2224,6 +2224,8 @@ in
 
   dadadodo = callPackage ../tools/text/dadadodo { };
 
+  daemon = callPackage ../tools/system/daemon { };
+
   daemonize = callPackage ../tools/system/daemonize { };
 
   daq = callPackage ../applications/networking/ids/daq { };
