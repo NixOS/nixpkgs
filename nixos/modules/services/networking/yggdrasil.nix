@@ -155,7 +155,19 @@ in {
         BindReadOnlyPaths = mkIf configFileProvided
           [ "${cfg.configFile}:/run/yggdrasil/configFile.json" ];
 
-        DynamicUser = true;
+        # TODO: as of yggdrasil 0.3.8 and systemd 243, yggdrasil fails
+        # to set up the network adapter when DynamicUser is set.  See
+        # github.com/yggdrasil-network/yggdrasil-go/issues/557.  The
+        # following options are implied by DynamicUser according to
+        # the systemd.exec documentation, and can be removed if the
+        # upstream issue is fixed and DynamicUser is set to true:
+        PrivateTmp = true;
+        RemoveIPC = true;
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        RestrictSUIDSGID = true;
+        # End of list of options implied by DynamicUser.
+
         AmbientCapabilities = "CAP_NET_ADMIN";
         CapabilityBoundingSet = "CAP_NET_ADMIN";
         MemoryDenyWriteExecute = true;
