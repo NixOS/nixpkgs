@@ -1,6 +1,8 @@
-{ stdenv, fetchFromGitHub, qtbase, qtcharts, qmake, libXrandr, libdrm }:
+{ lib, mkDerivation, fetchFromGitHub
+, qtbase, qtcharts, qmake, libXrandr, libdrm
+}:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
 
   pname = "radeon-profile";
   version = "20170714";
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
     cp ./radeon-profile $out/bin/radeon-profile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application to read current clocks of AMD Radeon cards";
     homepage    = https://github.com/marazmista/radeon-profile;
     license     = licenses.gpl2Plus;
