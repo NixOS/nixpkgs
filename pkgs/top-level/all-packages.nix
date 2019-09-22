@@ -9149,6 +9149,8 @@ in
 
   awf = callPackage ../development/tools/misc/awf { };
 
+  aws-adfs = with python3Packages; toPythonApplication aws-adfs;
+
   electron_6 = callPackage ../development/tools/electron/6.x.nix { };
 
   electron_5 = callPackage ../development/tools/electron/5.x.nix { };
