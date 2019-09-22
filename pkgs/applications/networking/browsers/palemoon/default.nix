@@ -55,6 +55,7 @@ in stdenv.mkDerivation rec {
   configurePhase = ''
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
     export MOZCONFIG=$(pwd)/mozconfig
+    export MOZ_NOSPAM=1
     export builddir=$(pwd)/pmbuild
 
     echo > $MOZCONFIG "
