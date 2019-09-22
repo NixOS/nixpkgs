@@ -10227,6 +10227,9 @@ in
 
   nsis = callPackage ../development/tools/nsis { };
 
+  ### DEVELOPMENT / TOOLS / VERSION CONTROL
+  lefthook = callPackage ../development/tools/version-control/lefthook {};
+
   ### DEVELOPMENT / LIBRARIES
 
   a52dec = callPackage ../development/libraries/a52dec { };
