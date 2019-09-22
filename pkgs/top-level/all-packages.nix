@@ -4225,6 +4225,8 @@ in
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
+  lefthook = gitAndTools.lefthook;
+
   lego = callPackage ../tools/admin/lego { };
 
   leocad = callPackage ../applications/graphics/leocad { };
@@ -10226,9 +10228,6 @@ in
   mypy = with python3Packages; toPythonApplication mypy;
 
   nsis = callPackage ../development/tools/nsis { };
-
-  ### DEVELOPMENT / TOOLS / VERSION CONTROL
-  lefthook = callPackage ../development/tools/version-control/lefthook {};
 
   ### DEVELOPMENT / LIBRARIES
 
