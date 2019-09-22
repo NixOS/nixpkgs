@@ -3488,8 +3488,8 @@ in
 
   google-authenticator = callPackage ../os-specific/linux/google-authenticator { };
 
-  google-cloud-sdk = python2.pkgs.google-cloud-sdk;
-  google-cloud-sdk-gce = python2.pkgs.google-cloud-sdk-gce;
+  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
+  google-cloud-sdk-gce = google-cloud-sdk.override { with-gce = true; };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
