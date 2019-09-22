@@ -22309,6 +22309,8 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  ledger_agent = with python3Packages; toPythonApplication ledger_agent;
+
   ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
 
   litecoin  = callPackage ../applications/blockchains/litecoin.nix {
