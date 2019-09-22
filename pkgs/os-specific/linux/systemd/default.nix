@@ -22,14 +22,39 @@ in stdenv.mkDerivation {
   version = "243";
   pname = "systemd";
 
-  # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
-  # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "NixOS";
+    owner = "systemd";
     repo = "systemd";
-    rev = "7019836a26ebdc1ba20c03d06dbb3a613833bd0f";
-    sha256 = "0ywaq5jfy177k4q5hwr43v66sz62l1bqhgyxs2vk9m1d5kvrjwk6";
+    rev = "efb536d0cbe2e58f80e501d19999928c75e08f6a";
+    sha256 = "0rnm1s517dprfxdki6gdiy9w22ka7mb98y3n3shf3vcvq30alsm8";
   };
+
+  patches = [
+    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
+    ./0002-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
+    ./0003-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0004-Start-getty-on-lxc.patch
+    ./0005-Fix-NixOS-containers.patch
+    ./0006-kmod-static-nodes.service-Don-t-require-lib-modules.patch
+    ./0007-Look-for-fsck-in-the-right-place.patch
+    ./0008-Add-some-NixOS-specific-unit-directories.patch
+    ./0009-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0010-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0011-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0012-Fix-hwdb-paths.patch
+    ./0013-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0014-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0015-catalog-don-t-update-on-install.patch
+    ./0016-hwdb-don-t-run-update-on-install.patch
+    ./0017-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0018-Fix-mount-option-x-initrd.mount-handling-35268-16.patch
+    ./0019-Install-default-configuration-into-out-share-factory.patch
+    ./0020-inherit-systemd-environment-when-calling-generators.patch
+    ./0021-reintroduce-the-no-such-path-PATH-that-was-dropped-s.patch
+    ./0022-add-rootprefix-to-lookup-dir-paths.patch
+    ./0023-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0024-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+  ];
 
   outputs = [ "out" "lib" "man" "dev" ];
 
