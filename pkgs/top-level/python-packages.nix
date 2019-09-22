@@ -6001,6 +6001,8 @@ in {
 
   libagent = callPackage ../development/python-modules/libagent { };
 
+  ledger_agent = callPackage ../development/python-modules/ledger_agent { };
+
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
 
   ecpy = callPackage ../development/python-modules/ecpy { };
