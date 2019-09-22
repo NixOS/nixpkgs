@@ -15240,6 +15240,8 @@ in
 
   shaarli-material = callPackage ../servers/web-apps/shaarli/material-theme.nix { };
 
+  shiori = callPackage ../servers/web-apps/shiori { };
+
   matomo = callPackage ../servers/web-apps/matomo { };
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
