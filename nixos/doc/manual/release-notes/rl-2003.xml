@@ -23,6 +23,11 @@
      Support is planned until the end of October 2020, handing over to 20.09.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Postgresql for NixOS service now defaults to v11.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
