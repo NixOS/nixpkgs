@@ -613,6 +613,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     url = https://enterprise.dejacode.com/licenses/public/purdue-bsd;
   };
 
+  qhull = spdx {
+    spdxId = "Qhull";
+    fullName = "Qhull License";
+  };
+
   qpl = spdx {
     spdxId = "QPL-1.0";
     fullName = "Q Public License 1.0";
