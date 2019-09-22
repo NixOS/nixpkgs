@@ -4,7 +4,6 @@ buildGoModule rec {
   pname = "lefthook";
   version = "0.6.3";
 
-  goPackagePath = "github.com/Arkweid/lefthook";
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "Arkweid";
@@ -16,7 +15,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Fast and powerful Git hooks manager for any type of projects";
-    homepage = https://evilmartians.com/chronicles/lefthook-knock-your-teams-code-back-into-shape?utm_source=lefthook;
+    homepage = "https://github.com/Arkweid/lefthook";
     license = licenses.mit;
     maintainers = with maintainers; [ rencire ];
   };
