@@ -4,7 +4,7 @@
 , fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat zlib guile ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile ]
     ++ stdenv.lib.optional pythonSupport python3
     ++ stdenv.lib.optional doCheck dejagnu;
 
