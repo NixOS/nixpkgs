@@ -6711,6 +6711,8 @@ in
 
   trezord = callPackage ../servers/trezord { };
 
+  trezor_agent = with python3Packages; toPythonApplication trezor_agent;
+
   tthsum = callPackage ../applications/misc/tthsum { };
 
   chaps = callPackage ../tools/security/chaps { };
