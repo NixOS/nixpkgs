@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
     then "iosevka-${set}"
     else "iosevka";
 
-  inherit (src) version;
+  version = "2.3.0";
 
-  src = nodePackages."iosevka-https://github.com/be5invis/Iosevka/archive/v2.3.0.tar.gz";
+  src = nodePackages."iosevka-https://github.com/be5invis/Iosevka/archive/v${version}.tar.gz";
   sourceRoot = "${src.name}/lib/node_modules/iosevka";
 
   nativeBuildInputs = [
