@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib
+{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib, fetchpatch
 , aws-c-common, aws-c-event-stream, aws-checksums
 , CoreAudio, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
@@ -49,6 +49,13 @@ stdenv.mkDerivation rec {
     '';
 
   __darwinAllowLocalNetworking = true;
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/aws/aws-sdk-cpp/commit/42991ab549087c81cb630e5d3d2413e8a9cf8a97.patch";
+      sha256 = "0myq5cm3lvl5r56hg0sc0zyn1clbkd9ys0wr95ghw6bhwpvfv8gr";
+    })
+  ];
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";
