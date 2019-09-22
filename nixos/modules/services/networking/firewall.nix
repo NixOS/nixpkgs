@@ -334,7 +334,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.iptables;
-        example = pkgs.iptables-compat;
+        defaultText = "pkgs.iptables";
+        example = literalExample "pkgs.iptables-nftables-compat";
         description =
           ''
             The iptables package to use for running the firewall service."
