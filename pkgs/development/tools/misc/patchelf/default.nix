@@ -1,27 +1,16 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-${version}";
-  version = "0.10";
+  name = "patchelf-0.9";
 
   src = fetchurl {
     url = "https://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
-    sha256 = "1wzwvnlyf853hw9zgqq5522bvf8gqadk8icgqa41a5n7593csw7n";
+    sha256 = "a0f65c1ba148890e9f2f7823f4bedf7ecad5417772f64f994004f59a39014f83";
   };
-
-  # Drop test that fails on musl (?)
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace tests/Makefile.am \
-      --replace "set-rpath-library.sh" ""
-  '';
 
   setupHook = [ ./setup-hook.sh ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
-
-  # if not Musl, fails 8 out of 25 tests, problems when loading libc.so.6
-  doCheck = stdenv.hostPlatform.isMusl;
+  doCheck = false; # fails 8 out of 24 tests, problems when loading libc.so.6
 
   meta = with stdenv.lib; {
     homepage = https://nixos.org/patchelf.html;

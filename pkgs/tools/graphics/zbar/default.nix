@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
+  # Disable assertions which include -dev QtBase file paths.
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+
   configureFlags = [
     "--without-python"
   ] ++ (if enableDbus then [

@@ -3466,6 +3466,17 @@ let
     };
   };
 
+  vim-gui-position = buildVimPluginFrom2Nix {
+    pname = "vim-gui-position";
+    version = "2019-06-06";
+    src = fetchFromGitHub {
+      owner = "brennanfee";
+      repo = "vim-gui-position";
+      rev = "065d0dcf96c28cfc0003d72c1b3c49203632f62a";
+      sha256 = "11kv9kkya9sybslg7lfhhcn2fi3n735zvprg8ch6kd58m82xr4n3";
+    };
+  };
+
   vim-gutentags = buildVimPluginFrom2Nix {
     pname = "vim-gutentags";
     version = "2019-05-06";

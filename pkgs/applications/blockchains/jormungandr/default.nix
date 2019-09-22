@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     install -d $out/bin $out/templates
     install -m755 target/*/release/jormungandr $out/bin/
     install -m755 target/*/release/jcli $out/bin/
+    install -m755 target/*/release/jormungandr-scenario-tests	$out/bin/
     install -m755 scripts/send-transaction $out/templates
     install -m755 scripts/jcli-helpers $out/bin/
     install -m755 scripts/bootstrap $out/bin/jormungandr-bootstrap
