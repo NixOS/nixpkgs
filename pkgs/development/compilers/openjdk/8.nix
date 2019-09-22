@@ -219,6 +219,8 @@ let
       ln -s $jre/lib/openjdk/jre $out/jre
     '';
 
+    propagatedBuildInputs = [ setJavaClassPath ];
+
     preFixup = ''
       # Propagate the setJavaClassPath setup hook from the JRE so that
       # any package that depends on the JRE has $CLASSPATH set up

@@ -216,6 +216,7 @@ mapAliases ({
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   module_init_tools = kmod; # added 2016-04-22
+  mono-zeroconf = throw "deprecated 2019-09-20: abandoned by upstream.";
   mpich2 = mpich;  # added 2018-08-06
   msf = metasploit; # added 2018-04-25
   libmsgpack = msgpack; # added 2018-08-17
@@ -389,6 +390,7 @@ mapAliases ({
   winusb = woeusb; # added 2017-12-22
   wireguard = wireguard-tools; # added 2018-05-19
   morituri = whipper; # added 2018-09-13
+  xfceUnstable = xfce4-14; # added 2019-09-17
   x11 = xlibsWrapper; # added 2015-09
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25

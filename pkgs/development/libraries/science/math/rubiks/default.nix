@@ -76,6 +76,6 @@ stdenv.mkDerivation rec {
       mit # Dik T. Winter's software
     ];
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
