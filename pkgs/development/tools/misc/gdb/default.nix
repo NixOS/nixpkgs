@@ -13,7 +13,7 @@
 
 let
   basename = "gdb-${version}";
-  version = "8.3";
+  version = "8.3.1";
 in
 
 assert pythonSupport -> python3 != null;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "0bnpzz0rl672xg5547q5qck2sxi6cnyixmk8bbb4gifw17ipwbw0";
+    sha256 = "1i2pjwaafrlz7wqm40b4znr77ai32rjsxkpl2az38yyarpbv8m8y";
   };
 
   postPatch = if stdenv.isDarwin then ''
