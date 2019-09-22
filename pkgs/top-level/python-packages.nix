@@ -721,7 +721,7 @@ in {
 
   mailman-web = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/web.nix { });
 
-  mailmanclient = callPackage ../development/python-modules/mailmanclient { };
+  mailmanclient = disabledIf (!isPy3k) (callPackage ../development/python-modules/mailmanclient { });
 
   mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
 
@@ -2145,9 +2145,9 @@ in {
 
   libais = callPackage ../development/python-modules/libais { };
 
-  libfdt = disabledIf isPy3k (toPythonModule (pkgs.dtc.override {
-    python2 = python;
-  }));
+  libfdt = toPythonModule (pkgs.dtc.override {
+    inherit python;
+  });
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 

@@ -96,27 +96,18 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/hedgehog-1.0.patch";
     sha256 = "16gadh1hb74jqvzc9c893sffb1y2vjglblyrqjwp7xfhccq7g8yw";
   });
-  easytest = self.easytest_0_3;
+  easytest = markBroken super.easytest;
+  easytest_0_3 = markBroken super.easytest_0_3;
   regex-tdfa = appendPatch super.regex-tdfa (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-tdfa-1.2.3.1.patch";
     sha256 = "1lhas4s2ms666prb475gaw2bqw1v4y8cxi66sy20j727sx7ppjs7";
-  });
-  cassava = appendPatch super.cassava (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/cassava-0.5.1.0.patch";
-    sha256 = "11scwwjp94si90vb8v5yr291g9qwv5l223z8y0g0lc63932bp63g";
-  });
-  shakespeare = appendPatch super.shakespeare (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shakespeare-2.0.20.patch";
-    sha256 = "1dgx41ylahj4wk8r422aik0d7qdpawdga4gqz905nvlnhqjla58y";
   });
   socks = appendPatch (doJailbreak super.socks) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/socks-0.6.0.patch";
     sha256 = "1dsqmx0sw62x4glh43c0sbizd2y00v5xybiqadn96v6pmfrap5cp";
   });
-  lens = appendPatch (doJailbreak super.lens) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/lens-4.17.1.patch";
-    sha256 = "0w89ipi6dfkx5vlw4a64hh6fd0bm9hg33mwpghliyyxik5jmilv1";
-  });
+  lens = self.lens_4_18_1;
+  xmonad-contrib = self.xmonad-contrib_0_16;
   polyparse = appendPatch (doJailbreak super.polyparse) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/polyparse-1.12.1.patch";
     sha256 = "01b2gnsq0x4fd9na8zpk6pajym55mbz64hgzawlwxdw0y6681kr5";
@@ -157,10 +148,37 @@ self: super: {
   });
   tls = self.tls_1_5_1;
   vault = dontHaddock super.vault;
+  monad-par = dontCheck super.monad-par;   # test suite does not compile in monad-par-0.3.4.8
 
   # TODO dont fetch patch if https://github.com/simonmar/alex/issues/140 is resolved
   alex = appendPatch super.alex (pkgs.fetchpatch {
     url = "https://github.com/simonmar/alex/commit/deaae6eddef5186bfd0e42e2c3ced39e26afa4d6.patch";
     sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
   });
+
+  # don't use obsolete "defaultUserHooks" in Setup.hs
+  X11 = appendPatch super.X11 (pkgs.fetchpatch {
+    url = "https://github.com/xmonad/X11/commit/8d817617afa1b54e6c50a9cc552dc1c0804c1794.patch";
+    sha256 = "0zsgzn0nvdxvqi5z0za3gzlhql2x5d5cr0kkr19j5c67fy177w6b";
+  });
+
+  # over-specified version constraints
+  aeson-diff = doJailbreak super.aeson-diff;
+
+  # https://github.com/sol/hpack/issues/371
+  hpack = markBrokenVersion "0.32.0" super.hpack;
+
+  # Upstream ships a broken Setup.hs file.
+  csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
+
+  # Upstream ships a broken Setup.hs file.
+  string-qq = overrideSrc (dontCheck super.string-qq) {
+    src = pkgs.fetchFromGitHub {
+      owner = "dmwit";
+      repo = "string-qq";
+      rev = "b396f5ef36a9b23f1d3fafcc91f2222cd1ad24fe";
+      sha256 = "1z2f1yry8wi0jb38dgz7rl89zl63fhngf7xk4ljw240vn315jj8s";
+    };
+  };
+
 }

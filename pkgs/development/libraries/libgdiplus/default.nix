@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lgif";
 
+  outputs = [ "out" "dev" ];
+
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
