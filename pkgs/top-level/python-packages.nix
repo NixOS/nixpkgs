@@ -1898,6 +1898,8 @@ in {
 
   eth-utils = callPackage ../development/python-modules/eth-utils { };
 
+  impacket = callPackage ../development/python-modules/impacket { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
