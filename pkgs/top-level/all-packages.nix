@@ -5441,6 +5441,8 @@ in
 
   peco = callPackage ../tools/text/peco { };
 
+  peepdf = callPackage ../tools/security/peepdf { };
+
   pg_top = callPackage ../tools/misc/pg_top { };
 
   pgcenter = callPackage ../tools/misc/pgcenter { };
