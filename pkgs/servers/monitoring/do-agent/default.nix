@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "do-agent-${version}";
+  pname = "do-agent";
   version = "3.5.6";
 
   src = fetchFromGitHub {
