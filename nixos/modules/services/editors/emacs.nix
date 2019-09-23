@@ -95,8 +95,10 @@ in {
 
     environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
 
-    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "${editorScript}/bin/emacseditor");
-  };
+  } // (if cfg.defaultEditor then {
+    ## Touch EDITOR var only if `cfg.defaultEditor`
+    environment.variables.EDITOR = mkOverride 900 "${editorScript}/bin/emacseditor";
+  } else {});
 
   meta.doc = ./emacs.xml;
 }
