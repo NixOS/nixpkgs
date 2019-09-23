@@ -231,6 +231,6 @@ in stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ eelco andir ];
+    maintainers = with maintainers; [ eelco andir mic92 ];
   };
 }
