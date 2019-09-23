@@ -17,14 +17,14 @@ let
       };
   };
 in buildGoPackage rec {
-  version = "1.59.2";
+  version = "1.65.0";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "05w9dd4l92r02sqpmp45rijr4ibvlcxxszqpqzdnrh3cwsjnmpc2";
+    sha256 = "0pig9fcgm8ipbygylbf0brjagv90b0qq91l7aj9z6ajnmcxhgjg2";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";

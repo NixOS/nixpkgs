@@ -55,8 +55,6 @@ class GitLabRepo:
         :param arch: amd64
         :return: url of the debian package
         """
-        if self.owner != "gitlab-org" or self.repo not in ['gitlab-ce', 'gitlab-ee']:
-            raise Exception(f"don't know how to get deb_url for {self.url}")
         return f"https://packages.gitlab.com/gitlab/gitlab-{flavour}/packages" + \
                f"/debian/stretch/gitlab-{flavour}_{version}-{flavour}.0_{arch}.deb/download.deb"
 
@@ -101,16 +99,6 @@ class GitLabRepo:
                     passthru=passthru)
 
 
-def _flavour2gitlabrepo(flavour: str):
-    if flavour not in ['ce', 'ee']:
-        raise Exception(f"unknown gitlab flavour: {flavour}, needs to be ce or ee")
-
-    owner = 'gitlab-org'
-    repo = 'gitlab-' + flavour
-
-    return GitLabRepo(owner, repo)
-
-
 def _update_data_json(filename: str, repo: GitLabRepo, rev: str, flavour: str):
     flavour_data = repo.get_data(rev, flavour)
 
@@ -149,7 +137,7 @@ def cli():
 @click.argument('flavour')
 def update_data(rev: str, flavour: str):
     """Update data.nix for a selected flavour"""
-    r = _flavour2gitlabrepo(flavour)
+    r = GitLabRepo('gitlab-org', 'gitlab')
 
     if rev == 'latest':
         # filter out pre and re releases
@@ -174,7 +162,7 @@ def update_rubyenv(flavour):
     if flavour not in ['ce', 'ee']:
         raise Exception(f"unknown gitlab flavour: {flavour}, needs to be ce or ee")
 
-    r = _flavour2gitlabrepo(flavour)
+    r = GitLabRepo('gitlab-org', 'gitlab')
     rubyenv_dir = pathlib.Path(__file__).parent / f"rubyEnv-{flavour}"
 
     # load rev from data.json
