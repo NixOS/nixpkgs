@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitLab, git, go }:
+{ stdenv, fetchFromGitLab, buildGoPackage, git, go }:
 
-stdenv.mkDerivation rec {
+buildGoPackage rec {
   pname = "gitlab-workhorse";
 
   version = "8.10.0";
@@ -12,9 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "11cfhh48dga5ghfcijb68gbx0nfr5bs3vvp2j1gam9ac37fpvk0x";
   };
 
+  goPackagePath= "gitlab.com/gitlab-org/";
+  goDeps = ./deps.nix;
+
   buildInputs = [ git go ];
 
-  makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" "GOCACHE=$(TMPDIR)/go-cache" ];
+  #makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" "GOCACHE=$(TMPDIR)/go-cache" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.gitlab.com/;
