@@ -1,4 +1,15 @@
-{ stdenv, ruby, bundler, fetchFromGitLab, go }:
+{ stdenv, ruby, bundlerEnv, rubocop, rake, fetchFromGitLab, go }:
+
+let
+  rubyEnv = bundlerEnv rec {
+    name = "gitlab-shell-env";
+    inherit ruby;
+    gemdir = ./rubyEnv;
+    groups = [
+      "default" "test"
+    ];
+  };
+in
 
 stdenv.mkDerivation rec {
   version = "10.0.0";
@@ -11,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n1llkb0jrqxm10l9wqmqxjycydqphgz0chbbf395d8pywyz826x";
   };
 
-  buildInputs = [ ruby bundler go ];
+  buildInputs = [ rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler go rubocop ];
 
   patches = [ ./remove-hardcoded-locations.patch ];
 
