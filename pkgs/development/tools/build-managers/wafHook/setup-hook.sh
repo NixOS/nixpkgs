@@ -10,6 +10,11 @@ wafConfigurePhase() {
         wafConfigureFlags="${prefixKey:---prefix=}$prefix $wafConfigureFlags"
     fi
 
+    if ! command -v python >/dev/null 2>&1; then
+	echo "Adding python to path"
+        PATH="@python@/bin:$PATH"
+    fi
+
     local flagsArray=(
         @crossFlags@
         "${flagsArray[@]}"
