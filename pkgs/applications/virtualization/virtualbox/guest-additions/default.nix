@@ -12,9 +12,16 @@ let
   # It's likely to work again in some future update.
   xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
     in if abi == "119" || abi == "120" then "118" else abi;
-in
 
-stdenv.mkDerivation {
+  # Specifies how to patch binaries to make sure that libraries loaded using
+  # dlopen are found. We grep binaries for specific library names and patch
+  # RUNPATH in matching binaries to contain the needed library paths.
+  dlopenLibs = [
+    { name = "libdbus-1.so"; pkg = dbus; }
+    { name = "libXfixes.so"; pkg = xorg.libXfixes; }
+  ];
+
+in stdenv.mkDerivation {
   name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
@@ -134,13 +141,13 @@ stdenv.mkDerivation {
   # Stripping breaks these binaries for some reason.
   dontStrip = true;
 
-  # Some code dlopen() libdbus, patch RUNPATH in fixupPhase so it isn't stripped.
-  postFixup = ''
-    for i in $(grep -F libdbus-1.so -l -r $out/{lib,bin}); do
+  # Patch RUNPATH according to dlopenLibs (see the comment there).
+  postFixup = lib.concatMapStrings (library: ''
+    for i in $(grep -F ${lib.escapeShellArg library.name} -l -r $out/{lib,bin}); do
       origRpath=$(patchelf --print-rpath "$i")
-      patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ dbus ]}" "$i"
+      patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ library.pkg ]}" "$i"
     done
-  '';
+  '') dlopenLibs;
 
   meta = {
     description = "Guest additions for VirtualBox";
