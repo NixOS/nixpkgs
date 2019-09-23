@@ -3886,6 +3886,8 @@ in {
 
   neuronpy = callPackage ../development/python-modules/neuronpy { };
 
+  persisting-theory = callPackage ../development/python-modules/persisting-theory { };
+
   pint = callPackage ../development/python-modules/pint { };
 
   pygal = callPackage ../development/python-modules/pygal { };
