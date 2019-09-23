@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, cargo-vendor, python3 }:
+{ stdenv, cacert, git, cargo, python3 }:
 let cargo-vendor-normalise = stdenv.mkDerivation {
   name = "cargo-vendor-normalise";
   src = ./cargo-vendor-normalise.py;
@@ -20,7 +20,7 @@ in
 { name ? "cargo-deps", src, srcs, patches, sourceRoot, sha256, cargoUpdateHook ? "" }:
 stdenv.mkDerivation {
   name = "${name}-vendor";
-  nativeBuildInputs = [ cacert cargo-vendor git cargo-vendor-normalise cargo ];
+  nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ];
   inherit src srcs patches sourceRoot;
 
   phases = "unpackPhase patchPhase installPhase";
