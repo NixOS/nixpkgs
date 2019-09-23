@@ -429,6 +429,13 @@ rec {
     propagatedBuildInputs = [ core ];
   };
 
+  sexp_pretty = janePackage {
+    pname = "sexp_pretty";
+    hash = "06hdsaszc5cd7fphiblbn4r1sh36xgjwf2igzr2rvlzqs7jiv2v4";
+    meta.description = "S-expression pretty-printer";
+    propagatedBuildInputs = [ ppx_base re sexplib ];
+  };
+
   ### Packages at version 0.11, with dependencies at version 0.12
 
   configurator = janePackage {
