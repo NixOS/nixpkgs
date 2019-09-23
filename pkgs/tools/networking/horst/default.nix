@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, pkgconfig, ncurses, libnl }:
 
 stdenv.mkDerivation rec {
-  name = "horst-${version}";
+  pname = "horst";
   version = "5.1";
 
   src = fetchFromGitHub {

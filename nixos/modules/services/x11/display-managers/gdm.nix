@@ -96,6 +96,14 @@ in
         type = types.bool;
       };
 
+      autoSuspend = mkOption {
+        default = true;
+        description = ''
+          Suspend the machine after inactivity.
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -134,8 +142,6 @@ in
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
           XDG_DATA_DIRS = "${cfg.session.desktops}/share/";
-          # Find the mouse
-          XCURSOR_PATH = "~/.icons:${pkgs.gnome3.adwaita-icon-theme}/share/icons";
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
@@ -176,10 +182,40 @@ in
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
-    programs.dconf.profiles.gdm = pkgs.writeText "dconf-gdm-profile" ''
-      system-db:local
-      ${gdm}/share/dconf/profile/gdm
-    '';
+    programs.dconf.profiles.gdm =
+    let
+      customDconf = pkgs.writeTextFile {
+        name = "gdm-dconf";
+        destination = "/dconf/gdm-custom";
+        text = ''
+          ${optionalString (!cfg.gdm.autoSuspend) ''
+            [org/gnome/settings-daemon/plugins/power]
+            sleep-inactive-ac-type='nothing'
+            sleep-inactive-battery-type='nothing'
+            sleep-inactive-ac-timeout=0
+            sleep-inactive-battery-timeout=0
+          ''}
+        '';
+      };
+
+      customDconfDb = pkgs.stdenv.mkDerivation {
+        name = "gdm-dconf-db";
+        buildCommand = ''
+          ${pkgs.gnome3.dconf}/bin/dconf compile $out ${customDconf}/dconf
+        '';
+      };
+    in pkgs.stdenv.mkDerivation {
+      name = "dconf-gdm-profile";
+      buildCommand = ''
+        # Check that the GDM profile starts with what we expect.
+        if [ $(head -n 1 ${gdm}/share/dconf/profile/gdm) != "user-db:user" ]; then
+          echo "GDM dconf profile changed, please update gdm.nix"
+          exit 1
+        fi
+        # Insert our custom DB behind it.
+        sed '2ifile-db:${customDconfDb}' ${gdm}/share/dconf/profile/gdm > $out
+      '';
+    };
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
@@ -224,7 +260,7 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = gdm
-        session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so

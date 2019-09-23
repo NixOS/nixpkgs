@@ -97,7 +97,7 @@ rec {
       gtk2
       bzip2
       zlib
-      gdk_pixbuf
+      gdk-pixbuf
 
       xorg.libXinerama
       xorg.libXdamage
@@ -189,6 +189,7 @@ rec {
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
+      at-spi2-core
     ];
   };
 }

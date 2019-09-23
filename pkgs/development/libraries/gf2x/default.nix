@@ -4,7 +4,7 @@
 , optimize ? false # impure hardware optimizations
 }:
 stdenv.mkDerivation rec {
-  name = "gf2x-${version}";
+  pname = "gf2x";
   version = "1.2"; # remember to also update the url
 
   src = fetchurl {

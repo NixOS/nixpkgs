@@ -1,8 +1,8 @@
 { stdenv, fetchurl, tcl, tk, fetchpatch } :
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "8.4.3";
-  name = "tix-${version}";
+  pname = "tix";
   src = fetchurl {
      url = "mirror://sourceforge/tix/tix/8.4.3/Tix8.4.3-src.tar.gz";
      sha256 = "1jq3dkyk9mqkj4cg7mdk5r0cclqsby9l2b7wrysi0zk5yw7h8bsn";

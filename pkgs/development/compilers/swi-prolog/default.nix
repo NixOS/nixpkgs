@@ -13,7 +13,8 @@ let
     '';
 in
 stdenv.mkDerivation {
-  name = "swi-prolog-${version}";
+  pname = "swi-prolog";
+  inherit version;
 
   src = fetchgit {
     url = "https://github.com/SWI-Prolog/swipl-devel";

@@ -3,13 +3,6 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95";
-        };
-      });
       tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
         version = "5.1.1";
         src = oldAttrs.src.override {
@@ -54,6 +47,6 @@ in python.pkgs.buildPythonApplication rec {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = https://esphome.io/;
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda globin ];
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, fetchgit, openssl, curl, coreutils, gawk, bash, which }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "esniper-2.35.0-15-g91d2665";
 
   src = fetchgit {

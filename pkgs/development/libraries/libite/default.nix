@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libconfuse }:
 
 stdenv.mkDerivation rec {
-  name = "libite-${version}";
+  pname = "libite";
   version = "2.0.2";
 
   src = fetchFromGitHub {

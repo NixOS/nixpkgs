@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, fetchgx, gx-go }:
 
 buildGoPackage rec {
-  name = "ipfs-cluster-${version}";
+  pname = "ipfs-cluster";
   version = "0.9.0";
   rev = "v${version}";
 
@@ -9,7 +9,7 @@ buildGoPackage rec {
 
   extraSrcPaths = [
     (fetchgx {
-      inherit name src;
+      inherit  src;name = "${pname}-${version}";
       sha256 = "1k7xcirvi07p5g9gr9jcx5h39wk7jxfsyjrn5yraa8xdqhn6b6nx";
     })
   ];

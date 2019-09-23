@@ -4,14 +4,14 @@
 }:
 
 buildGoPackage rec {
-  name = "podman-${version}";
-  version = "1.3.2";
+  pname = "podman";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner  = "containers";
     repo   = "libpod";
     rev    = "v${version}";
-    sha256 = "1j5n08273igj6wm9rrwks9nnklv91060bn1yv3ak78csxc05whs3";
+    sha256 = "1jg7fdshqz0x71339i0wndskb17x1k5rwpkjiwd463f96fnbfp4x";
   };
 
   goPackagePath = "github.com/containers/libpod";
@@ -39,7 +39,7 @@ buildGoPackage rec {
     homepage = https://podman.io/;
     description = "A program for managing pods, containers and container images";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [ vdemeester saschagrunert ];
     platforms = platforms.linux;
   };
 }

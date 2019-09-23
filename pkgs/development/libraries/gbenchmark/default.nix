@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, gtest }:
 
 stdenv.mkDerivation rec {
-  name = "gbenchmark-${version}";
+  pname = "gbenchmark";
   version = "1.5.0";
 
   src = fetchFromGitHub {

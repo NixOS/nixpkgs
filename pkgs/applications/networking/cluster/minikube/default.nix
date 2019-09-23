@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, go-bindata, libvirt, qemu
+{ stdenv, buildGoModule, fetchFromGitHub, go-bindata, libvirt, qemu
 , gpgme, makeWrapper, vmnet
 , docker-machine-kvm, docker-machine-kvm2
 , extraDrivers ? []
@@ -11,12 +11,11 @@ let
   binPath = drivers
             ++ stdenv.lib.optionals stdenv.isLinux ([ libvirt qemu ]);
 
-in buildGoPackage rec {
+in buildGoModule rec {
   pname   = "minikube";
-  name    = "${pname}-${version}";
-  version = "1.0.1";
+  version = "1.2.0";
 
-  kubernetesVersion = "1.14.1";
+  kubernetesVersion = "1.15.0";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -24,15 +23,15 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "1fgyaq8789wc3h6xmn4iw6if2jxdv5my35yn6ipx3q6i4hagxl4b";
+    sha256 = "0l9znrp49877cp1bkwx84c8lv282ga5a946rjbxi8gznkf3kwaw7";
   };
+
+  modSha256 = "1cp63n0x2lgbqvvymx9byx48r42qw6w224x5x4iiarc2nryfdhn0";
 
   buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin vmnet;
   subPackages = [ "cmd/minikube" ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin "cmd/drivers/hyperkit";
 
   preBuild = ''
-    pushd go/src/${goPackagePath} >/dev/null
-
     go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets deploy/addons/...
 
     VERSION_MAJOR=$(grep "^VERSION_MAJOR" Makefile | sed "s/^.*\s//")
@@ -47,21 +46,16 @@ in buildGoPackage rec {
       -X k8s.io/minikube/pkg/version.isoPath=$ISO_BUCKET \
       -X k8s.io/minikube/vendor/k8s.io/client-go/pkg/version.gitVersion=$KUBERNETES_VERSION \
       -X k8s.io/minikube/vendor/k8s.io/kubernetes/pkg/version.gitVersion=$KUBERNETES_VERSION"
-
-    popd >/dev/null
   '';
 
   postInstall = ''
-    mkdir -p $bin/share/bash-completion/completions/
-    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $bin/bin/minikube completion bash > $bin/share/bash-completion/completions/minikube
-    mkdir -p $bin/share/zsh/site-functions/
-    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $bin/bin/minikube completion zsh > $bin/share/zsh/site-functions/_minikube
-  '';
-
-  postFixup = ''
-    wrapProgram $bin/bin/${pname} --prefix PATH : $bin/bin:${stdenv.lib.makeBinPath binPath}
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mv $bin/bin/hyperkit $bin/bin/docker-machine-driver-hyperkit
+    wrapProgram $out/bin/${pname} --prefix PATH : $out/bin:${stdenv.lib.makeBinPath binPath}
+    mkdir -p $out/share/bash-completion/completions/
+    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $out/bin/minikube completion bash > $out/share/bash-completion/completions/minikube
+    mkdir -p $out/share/zsh/site-functions/
+    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $out/bin/minikube completion zsh > $out/share/zsh/site-functions/_minikube
+  ''+ stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mv $out/bin/hyperkit $out/bin/docker-machine-driver-hyperkit
   '';
 
   meta = with stdenv.lib; {

@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitHub
-, openssl
+, openssl_1_0_2
 , zlib
 , libssh
 , cmake
@@ -16,7 +16,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "git-dit-${version}";
+  pname = "git-dit";
   version = "0.4.0";
 
   src = fetchFromGitHub {
@@ -35,7 +35,7 @@ buildRustPackage rec {
   ];
 
   buildInputs = [
-    openssl
+    openssl_1_0_2
     libssh
     zlib
   ] ++ stdenv.lib.optionals (stdenv.isDarwin) [

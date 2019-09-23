@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0yq1bcsjzsz7yz4rp69izsdn47rvkld4wki2xmapp8gg2s9i8709";
   };
 
-  buildInputs = [ pytest mock ];
+  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ six ];
   checkPhase = "py.test tests.py";
 

@@ -1,4 +1,4 @@
-{ fetchurl, substituteAll, stdenv, pkgconfig, gnome3, gettext, gobject-introspection, upower, cairo
+{ fetchurl, fetchpatch, substituteAll, stdenv, pkgconfig, gnome3, gettext, gobject-introspection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
 , ninja, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , gsettings-desktop-schemas, glib, gtk3, gnome-desktop
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   pname = "mutter";
   version = "3.32.2";
 
+  outputs = [ "out" "dev" "man" ];
+
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1h577i2ap7dpfy1jg101jvc6nzccc0csgvd55ahydlr8f94frcva";
@@ -20,6 +22,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dxwayland-path=${xwayland}/bin/Xwayland"
+    "-Dinstalled_tests=false" # TODO: enable these
   ];
 
   propagatedBuildInputs = [
@@ -51,6 +54,13 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
+    })
+    # Fix a segmentation fault in dri_flush_front_buffer() upon
+    # suspend/resume. This change should be removed when Mutter
+    # is updated to 3.34.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/commit/8307c0f7ab60760de53f764e6636893733543be8.diff";
+      sha256 = "1hzfva71xdqvvnx5smjsrjlgyrmc7dj94mpylkak0gwda5si0h2n";
     })
   ];
 

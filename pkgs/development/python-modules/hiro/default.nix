@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Time manipulation utilities for Python";
-    homepage = http://hiro.readthedocs.io/en/latest/;
+    homepage = https://hiro.readthedocs.io/en/latest/;
     license = licenses.mit;
     maintainers = with maintainers; [ nyarly ];
   };

@@ -4,7 +4,7 @@ let
   system = if stdenv.hostPlatform.system == "x86_64-linux" then "linux64" else "linux32";
 in
 stdenv.mkDerivation rec {
-  name = "ocz-ssd-guru-${version}";
+  pname = "ocz-ssd-guru";
   version = "1.0.1170";
 
   src = fetchurl {

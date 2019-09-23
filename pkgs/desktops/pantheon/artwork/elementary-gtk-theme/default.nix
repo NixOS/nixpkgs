@@ -1,22 +1,27 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+}:
 
 stdenv.mkDerivation rec {
-  pname = "stylesheet";
-  version = "5.2.4";
+  pname = "elementary-gtk-theme";
+  version = "5.2.5";
 
-  name = "elementary-gtk-theme-${version}";
+  repoName = "stylesheet";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "1zhh9s4bmmk69k6j0klvfjmyv32wnwf0g575brm6gswn47nr2fni";
+    sha256 = "0934rfdwkn4315mhayzba8a3b6i1xczp66gl6n45hh5c81gb2p65";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-gtk-theme";
+      inherit repoName;
+      attrPath = pname;
     };
   };
 

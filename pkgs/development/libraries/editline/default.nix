@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "editline-${version}";
+  pname = "editline";
   version = "1.16.1";
   src = fetchFromGitHub {
     owner = "troglobit";

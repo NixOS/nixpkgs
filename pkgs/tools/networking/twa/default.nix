@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "twa-${version}";
+  pname = "twa";
   version = "1.8.0";
 
   src = fetchFromGitHub {

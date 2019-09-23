@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dvd-vr-${version}";
+  pname = "dvd-vr";
   version = "0.9.7";
   src = fetchurl {
     url = "https://www.pixelbeat.org/programs/dvd-vr/dvd-vr-${version}.tar.gz";

@@ -3,12 +3,12 @@
 , qca-qt5, shared-mime-info }:
 
 stdenv.mkDerivation rec {
-  name = "okteta-${version}";
-  version = "0.26.1";
+  pname = "okteta";
+  version = "0.26.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/okteta/${version}/src/${name}.tar.xz";
-    sha256 = "1bqq3ax47xym3ikwn6xsshs1b5gpfg5djrnkzszqnp127f1fxi54";
+    url = "mirror://kde/stable/okteta/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "0k38hd9wq6jvzy0225y61rzr7lgwbac1haalhsrfpmyjy6d833dv";
   };
 
   nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];

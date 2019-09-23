@@ -8,11 +8,11 @@
 }:
 
 mkDerivation rec {
-  name = "trojita-${version}";
+  pname = "trojita";
   version = "0.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/trojita/trojita/${name}.tar.xz";
+    url = "mirror://sourceforge/trojita/trojita/${pname}-${version}.tar.xz";
     sha256 = "1n9n07md23ny6asyw0xpih37vlwzp7vawbkprl7a1bqwfa0si3g0";
   };
 

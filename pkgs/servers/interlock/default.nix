@@ -3,7 +3,7 @@
 , buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "interlock-${version}";
+  pname = "interlock";
   version = "2016.04.13";
   rev = "v${version}";
 

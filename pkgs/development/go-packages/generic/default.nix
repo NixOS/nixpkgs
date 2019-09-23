@@ -72,14 +72,19 @@ let
 
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
-  package = go.stdenv.mkDerivation (
+  package = stdenv.mkDerivation (
     (builtins.removeAttrs args [ "goPackageAliases" "disabled" "extraSrcs"]) // {
 
     nativeBuildInputs = [ removeReferencesTo go ]
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
     buildInputs = buildInputs;
 
-    inherit (go) GOOS GOARCH;
+    inherit (go) GOOS GOARCH GO386 CGO_ENABLED;
+
+    GOHOSTARCH = go.GOHOSTARCH or null;
+    GOHOSTOS = go.GOHOSTOS or null;
+
+    GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure

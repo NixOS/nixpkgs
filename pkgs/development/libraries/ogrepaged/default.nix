@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, cmake, pkgconfig, ois, ogre, libX11, boost }:
 
 stdenv.mkDerivation rec {
-  name = "ogre-paged-${version}";
+  pname = "ogre-paged";
   version = "1.2.0";
 
   src = fetchurl {

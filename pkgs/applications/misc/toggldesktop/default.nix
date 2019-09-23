@@ -12,7 +12,7 @@ let
   };
 
   bugsnag-qt = stdenv.mkDerivation rec {
-    name = "bugsnag-qt-${version}";
+    pname = "bugsnag-qt";
     version = "20180522.005732";
 
     src = fetchzip {
@@ -25,7 +25,7 @@ let
   };
 
   qxtglobalshortcut = stdenv.mkDerivation rec {
-    name = "qxtglobalshortcut-${version}";
+    pname = "qxtglobalshortcut";
     version = "f584471dada2099ba06c574bdfdd8b078c2e3550";
 
     src = fetchzip {
@@ -38,7 +38,7 @@ let
   };
 
   qt-oauth-lib = stdenv.mkDerivation rec {
-    name = "qt-oauth-lib-${version}";
+    pname = "qt-oauth-lib";
     version = "20190125.190943";
 
     src = fetchzip {

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, gettext, python3, pkgconfig, gnome3, gtk3
-, gobject-introspection, gdk_pixbuf, librsvg, libgweather
+, gobject-introspection, gdk-pixbuf, librsvg, libgweather
 , geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup, gsettings-desktop-schemas
 , webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
 
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     gtk3 geoclue2 gjs libgee folks gfbgraph
     geocode-glib libchamplain libsoup
-    gdk_pixbuf librsvg libgweather
+    gdk-pixbuf librsvg libgweather
     gsettings-desktop-schemas evolution-data-server
     gnome-online-accounts gnome3.adwaita-icon-theme
     webkitgtk

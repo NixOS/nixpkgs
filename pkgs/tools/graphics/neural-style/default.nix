@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, torch, loadcaffe, fetchurl, bash}:
 stdenv.mkDerivation rec {
-  name = "neural-style-${version}";
+  pname = "neural-style";
   version = "0.0pre2016.08.15";
   buildInputs = [torch loadcaffe];
   src = fetchFromGitHub {

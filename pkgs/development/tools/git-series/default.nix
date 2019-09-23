@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, openssl, cmake, perl, pkgconfig, zlib }:
+{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, openssl_1_0_2, cmake, perl, pkgconfig, zlib }:
 
 with rustPlatform;
 
 buildRustPackage rec {
   version = "0.9.1";
-  name = "git-series-${version}";
+  pname = "git-series";
 
   src = fetchFromGitHub {
     owner = "git-series";
@@ -27,7 +27,7 @@ buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ openssl zlib ];
+  buildInputs = [ openssl_1_0_2 zlib ];
 
   postBuild = ''
     install -D "$src/git-series.1" "$out/man/man1/git-series.1"

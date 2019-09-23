@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "kt-${version}";
+  pname = "kt";
   version = "12.1.0";
 
   src = fetchFromGitHub {

@@ -4,11 +4,11 @@
 , Security }:
 
 let
-  libc = if stdenv ? "cross" then libcCross else stdenv.cc.libc;
+  libc = if stdenv ? cross then libcCross else stdenv.cc.libc;
 in
 
 stdenv.mkDerivation rec {
-  name = "go-${version}";
+  pname = "go";
   version = "1.4-bootstrap-20161024";
   revision = "79d85a4965ea7c46db483314c3981751909d7883";
 

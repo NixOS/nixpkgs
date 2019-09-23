@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools,
   qtwebchannel, qtx11extras,
   gnome2, nss, nspr, alsaLib, atk, cairo, cups, dbus,
-  expat, fontconfig, gdk_pixbuf, glib, gtk2,
+  expat, fontconfig, gdk-pixbuf, glib, gtk2,
   libxcb, pango, pulseaudio, xorg, deepin }:
 
 let
@@ -14,7 +14,7 @@ let
     dbus
     expat
     fontconfig
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gtk2
@@ -38,8 +38,7 @@ let
   libPath = stdenv.lib.makeLibraryPath rpahtLibraries;
 in
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "qcef";
   version = "1.1.6";
 
@@ -91,7 +90,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Qt5 binding of Chromium Embedded Framework";

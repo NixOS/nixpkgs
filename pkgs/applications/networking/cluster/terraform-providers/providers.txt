@@ -10,7 +10,7 @@
 terraform-providers terraform-provider- terraform-provider-\\(azure-classic\\|scaffolding\\)
 
 # include terraform-provider-matchbox
-coreos/terraform-provider-matchbox
+poseidon/terraform-provider-matchbox
 
 # include terraform-provider-nixos
 tweag/terraform-provider-nixos
@@ -20,6 +20,3 @@ tweag/terraform-provider-secret
 
 # include terraform-provider-segment
 ajbosco/terraform-provider-segment
-
-# include terraform-provider-ansible
-nbering/terraform-provider-ansible

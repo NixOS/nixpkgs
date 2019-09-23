@@ -84,6 +84,16 @@ in {
         type = types.bool;
         description = "Cadvisor storage driver, enable secure communication.";
       };
+
+      extraOptions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Additional cadvisor options.
+          
+          See <link xlink:href='https://github.com/google/cadvisor/blob/master/docs/runtime_options.md'/> for available options.
+        '';
+      };
     };
   };
 
@@ -112,6 +122,7 @@ in {
             -logtostderr=true \
             -listen_ip="${cfg.listenAddress}" \
             -port="${toString cfg.port}" \
+            ${escapeShellArgs cfg.extraOptions} \
             ${optionalString (cfg.storageDriver != null) ''
               -storage_driver "${cfg.storageDriver}" \
               -storage_driver_user "${cfg.storageDriverHost}" \

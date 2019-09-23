@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2018.1";
-  name = "gnome-desktop-testing-${version}";
+  pname = "gnome-desktop-testing";
 
   src = fetchgit {
     url = https://gitlab.gnome.org/GNOME/gnome-desktop-testing.git;

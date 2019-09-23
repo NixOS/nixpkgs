@@ -49,7 +49,9 @@ let
       sha256 = "1m4dx901biqgnr4w4wz8a2z9r9dxyw7wv6m6mqglqwf2lxinqmp4";
     })
     # (alpine patches {1,4,5,6,8} are needed for apparmor 2.11, but not 2.12)
-  ];
+    ] ++ [
+      ./cross.patch
+    ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
   # common derivation infra. Too much copy-paste to fix one by one.
@@ -185,7 +187,7 @@ let
     '';
     inherit patches;
     postPatch = "cd ./parser";
-    makeFlags = ''LANGS= USE_SYSTEM=1 INCLUDEDIR=${libapparmor}/include'';
+    makeFlags = ''LANGS= USE_SYSTEM=1 INCLUDEDIR=${libapparmor}/include AR=${stdenv.cc.bintools.targetPrefix}ar'';
     installFlags = ''DESTDIR=$(out) DISTRO=unknown'';
 
     inherit doCheck;

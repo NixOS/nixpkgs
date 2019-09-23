@@ -3,10 +3,9 @@
 buildPythonPackage rec {
   pname = "hmmlearn";
   version = "0.2.2";
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "mirror://pypi/h/hmmlearn/${name}.tar.gz";
+    url = "mirror://pypi/h/hmmlearn/${pname}-${version}.tar.gz";
     sha256 = "081c53xs5wn5vikwslallwdv0am09w9cbbggl5dbkqpnic9zx4h4";
   };
 

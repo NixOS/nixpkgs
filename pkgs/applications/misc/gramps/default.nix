@@ -10,7 +10,7 @@ let
   inherit (pythonPackages) python buildPythonApplication;
 in buildPythonApplication rec {
   version = "5.0.1";
-  name = "gramps-${version}";
+  pname = "gramps";
 
   nativeBuildInputs = [ wrapGAppsHook gettext ];
   buildInputs = [ intltool gtk3 gobject-introspection pango gnome3.gexiv2 ] 
@@ -48,7 +48,7 @@ in buildPythonApplication rec {
     eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
     if [ -e "$eapth" ]; then
         # move colliding easy_install.pth to specifically named one
-        mv "$eapth" $(dirname "$eapth")/${name}.pth
+        mv "$eapth" $(dirname "$eapth")/${pname}-${version}.pth
     fi
 
     rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*

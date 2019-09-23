@@ -1,7 +1,7 @@
 { brotli, cmake, fetchFromGitHub, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "woff2-${version}";
+  pname = "woff2";
   version = "1.0.2";
 
   src = fetchFromGitHub {

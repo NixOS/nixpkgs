@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, qmake, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "rocket-${version}";
+stdenv.mkDerivation {
+  pname = "rocket";
   version = "2018-06-09";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase ];
 
-  configurePhase = ":";
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/bin

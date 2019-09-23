@@ -2,21 +2,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bitwarden_rs";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "14c2blzkmdd9s0gpf6b7y141yx9s2v2gmwy5l1lgqjhi3h6jpcqr";
+    sha256 = "0jfb4b2lp2v01aw615lx0qj1qh73hyrbjn9kva7zqp74wcfw12gp";
   };
+
+  cargoPatches = [
+    # type annotations required: cannot resolve `std::string::String: std::convert::AsRef<_>`
+    ./cargo-lock-lettre.patch
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security CoreServices ];
 
   RUSTC_BOOTSTRAP = 1;
 
-  cargoSha256 = "038l6alcdc0g4avpbzxgd2k09nr3wrsbry763bq2c77qqgwldj8r";
+  cargoSha256 = "0p39gqrqdmgqhngp1qyh6jl0sp0ifj5n3bxfqafjbspb4zph3ls4";
 
   meta = with stdenv.lib; {
     description = "An unofficial lightweight implementation of the Bitwarden server API using Rust and SQLite";

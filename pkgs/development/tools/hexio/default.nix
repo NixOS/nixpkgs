@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "hexio";
-  name = "${pname}-${version}";
   version = "1.0-RC1";
 
   src = fetchFromGitHub {

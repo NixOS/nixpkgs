@@ -44,8 +44,10 @@ in
           message bus.  Specifically, files in the following directories
           will be included into their respective DBus configuration paths:
           <filename><replaceable>pkg</replaceable>/etc/dbus-1/system.d</filename>
+          <filename><replaceable>pkg</replaceable>/share/dbus-1/system.d</filename>
           <filename><replaceable>pkg</replaceable>/share/dbus-1/system-services</filename>
           <filename><replaceable>pkg</replaceable>/etc/dbus-1/session.d</filename>
+          <filename><replaceable>pkg</replaceable>/share/dbus-1/session.d</filename>
           <filename><replaceable>pkg</replaceable>/share/dbus-1/services</filename>
         '';
       };

@@ -4,8 +4,8 @@ let
   # Newer versions of sdl-gpu don't work with Riko4 (corrupted graphics),
   # and this library does not have a proper release version, so let the
   # derivation for this stay next to the Riko4 derivation for now.
-  sdl-gpu = stdenv.mkDerivation rec {
-    name = "sdl-gpu-${version}";
+  sdl-gpu = stdenv.mkDerivation {
+    pname = "sdl-gpu";
     version = "2018-11-01";
     src = fetchFromGitHub {
       owner = "grimfang4";
@@ -27,7 +27,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "riko4-${version}";
+  pname = "riko4";
   version = "0.1.0";
   src = fetchFromGitHub {
     owner = "incinirate";

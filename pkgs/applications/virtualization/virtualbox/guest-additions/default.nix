@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "1njgxb18r8a1m8fk2b32mmnbwciip3wcxwyhza5k73bx4q2sifac";
+    sha256 = "098kibz8dkiqd8shm44n4h6iyszcbj0ikav1b4vsi75dqzw8d9n8";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -34,6 +34,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [ cdrkit ] ++ kernel.moduleBuildDependencies;
+
+  postPatch = ''
+    substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
+      --replace "<ttm/" "<drm/ttm/"
+  '';
 
   unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
@@ -55,8 +60,6 @@ stdenv.mkDerivation {
       else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
     }
   '';
-
-  doConfigure = false;
 
   buildPhase = ''
     # Build kernel modules.

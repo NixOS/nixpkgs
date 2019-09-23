@@ -3,12 +3,12 @@
 , libxml2, libgee, libgnome-games-support }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-nibbles-${version}";
-  version = "3.31.3";
+  pname = "gnome-nibbles";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nibbles/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0wg0l3aghkxcwp74liw115qjzy6w18hn80mhsz4lrjpnbpaivi18";
+    url = "mirror://gnome/sources/gnome-nibbles/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0g627pzbfywiy2rsh4aidgbln9s4j5m8pryw4cgr5ygc4z8l6l9p";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool itstool libxml2 ];

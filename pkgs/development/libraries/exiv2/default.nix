@@ -14,19 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.27.1";
+  version = "0.27.2";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "exiv2";
     repo  = "exiv2";
-    rev = version;
-    sha256 = "0b5m921070fkyif0zlyb49gly3p6xd0hv1jyym4j25hx12gzbx0c";
+    rev = "v${version}";
+    sha256 = "0n8il52yzbmvbkryrl8waz7hd9a2fdkw8zsrmhyh63jlvmmc31gf";
   };
-
-  patches = [
-    # https://github.com/Exiv2/exiv2/commit/aae88060ca85a483cd7fe791ba116c04d96c0bf9#comments
-    ./fix-cmake.patch
-  ];
 
   cmakeFlags = [
     "-DEXIV2_BUILD_PO=ON"
@@ -58,7 +53,7 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = true;
 
   # Test setup found by inspecting ${src}/.travis/run.sh; problems without cmake.
   checkTarget = "tests";
@@ -72,6 +67,14 @@ stdenv.mkDerivation rec {
     ${stdenv.lib.optionalString stdenv.isAarch64 ''
       rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
     ''}
+
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:`pwd`/lib
+      # Removing tests depending on charset conversion
+      substituteInPlace ../test/Makefile --replace "conversions.sh" ""
+      rm -f ../tests/bugfixes/redmine/test_issue_460.py
+      rm -f ../tests/bugfixes/redmine/test_issue_662.py
+     ''}
   '';
 
   postCheck = ''

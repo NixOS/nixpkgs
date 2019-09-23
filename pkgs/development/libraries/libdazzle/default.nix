@@ -2,7 +2,7 @@
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, glibcLocales, dbus, xvfb_run, glib, gtk3, gnome3 }:
 
 let
-  version = "3.32.2";
+  version = "3.32.3";
   pname = "libdazzle";
 in
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libdazzle/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hgi7gnkna9n42nh7p81crrw0jjj22yr8acych60wxh6hzxqsgs1";
+    sha256 = "1s37hv12ikfzhvh86qzgmfcjm3wvp12l2vsr0whl5xmm2harp3bc";
   };
 
   nativeBuildInputs = [ ninja meson pkgconfig vala gobject-introspection libxml2 gtk-doc docbook_xsl docbook_xml_dtd_43 glibcLocales dbus xvfb_run ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "A library to delight your users with fancy features";
     longDescription = ''
-      The libdazzle library is a companion library to GObject and Gtk+. It
+      The libdazzle library is a companion library to GObject and GTK. It
       provides various features that we wish were in the underlying library but
       cannot for various reasons. In most cases, they are wildly out of scope
       for those libraries. In other cases, our design isn't quite generic

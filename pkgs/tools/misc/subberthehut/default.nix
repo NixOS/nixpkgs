@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, xmlrpc_c, glib, zlib }:
 stdenv.mkDerivation rec {
-  name = "subberthehut-${version}";
+  pname = "subberthehut";
   version = "20";
 
   src = fetchFromGitHub {

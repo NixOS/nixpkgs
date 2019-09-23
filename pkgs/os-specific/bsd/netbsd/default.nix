@@ -38,14 +38,14 @@ let
     HOST_SH = "${buildPackages.bash}/bin/sh";
 
     MACHINE_ARCH = {
-      "i686" = "i386";
+      i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
 
     MACHINE = {
-      "x86_64" = "amd64";
-      "aarch64" = "evbarm64";
-      "i686" = "i386";
+      x86_64 = "amd64";
+      aarch64 = "evbarm64";
+      i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
 
@@ -79,7 +79,7 @@ let
   ##
   ## START BOOTSTRAPPING
   ##
-  makeMinimal = mkDerivation rec {
+  makeMinimal = mkDerivation {
     path = "tools/make";
     sha256 = "1xbzfd4i7allrkk1if74a8ymgpizyj0gkvdigzzj37qar7la7nc1";
     version = "8.0";

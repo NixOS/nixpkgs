@@ -69,7 +69,7 @@ let
   # functions to generate systemd.service entries
 
   systemdEntry = service: cfgFile: (mapAttrs' ( name: cfg:
-    (nameValuePair "beegfs-${service}-${name}" (mkIf cfg."${service}".enable {
+    (nameValuePair "beegfs-${service}-${name}" (mkIf cfg.${service}.enable {
     wantedBy = [ "multi-user.target" ];
     requires = [ "network-online.target" ];
     after = [ "network-online.target" ];

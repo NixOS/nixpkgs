@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version  = "0.7.5";
-  name = "libsolv-${version}";
+  pname = "libsolv";
 
   src = fetchFromGitHub {
     owner  = "openSUSE";

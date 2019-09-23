@@ -3,10 +3,11 @@
 let version = "8.4.2";
 in
 stdenv.mkDerivation rec {
-  name = "qpdf-${version}";
+  pname = "qpdf";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/qpdf/qpdf/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/qpdf/qpdf/${version}/${pname}-${version}.tar.gz";
     sha256 = "1hrys6zmia8fw6f6ih3ckgsc1jr12fizdwaiy7dyd64kxxjhm8v9";
   };
 

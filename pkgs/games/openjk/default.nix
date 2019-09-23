@@ -19,7 +19,7 @@ let
     genericName = "Jedi Academy";
     categories = "Game;";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "OpenJK";
   version = "2019-06-24";
 

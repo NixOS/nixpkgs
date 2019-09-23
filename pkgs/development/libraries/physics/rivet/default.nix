@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fastjet, ghostscript, gsl, hepmc, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
+{ stdenv, fetchurl, fastjet, ghostscript, gsl, hepmc2, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "rivet-${version}";
+  pname = "rivet";
   version = "2.7.2";
 
   src = fetchurl {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     xkeyval
     xstring
     ;};
-  buildInputs = [ hepmc imagemagick python2 latex makeWrapper ];
+  buildInputs = [ hepmc2 imagemagick python2 latex makeWrapper ];
   propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
 
   preConfigure = ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-fastjet=${fastjet}"
-    "--with-hepmc=${hepmc}"
+    "--with-hepmc=${hepmc2}"
     "--with-yoda=${yoda}"
   ];
 

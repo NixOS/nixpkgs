@@ -2,7 +2,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "tcc-${version}";
+  pname = "tcc";
   version = "0.9.27";
 
   src = fetchFromRepoOrCz {

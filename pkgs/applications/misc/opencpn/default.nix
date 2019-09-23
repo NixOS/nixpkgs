@@ -2,7 +2,7 @@
   gettext, glib, portaudio }:
 
 stdenv.mkDerivation rec {
-  name = "opencpn-${version}";
+  pname = "opencpn";
   version = "5.0.0";
 
   src = fetchFromGitHub {

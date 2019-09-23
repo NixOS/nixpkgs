@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype

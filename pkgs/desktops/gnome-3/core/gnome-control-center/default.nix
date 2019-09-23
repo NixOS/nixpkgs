@@ -1,15 +1,69 @@
-{ fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, ibus, gettext, upower, wrapGAppsHook
-, libcanberra-gtk3, accountsservice, libpwquality, libpulseaudio
-, gdk_pixbuf, librsvg, libgudev, libsecret, gnome-color-manager
-, libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
-, libkrb5, networkmanagerapplet, networkmanager, glibc
-, libwacom, samba, shared-mime-info, tzdata, libgnomekbd
-, docbook_xsl, modemmanager, clutter, clutter-gtk, cheese, gnome-session
-, fontconfig, sound-theme-freedesktop, grilo, python3
-, gtk3, glib, glib-networking, gsettings-desktop-schemas
-, gnome-desktop, gnome-settings-daemon, gnome-online-accounts
-, vino, gnome-bluetooth, tracker, adwaita-icon-theme
-, udisks2, gsound, libhandy, cups, mutter }:
+{ fetchurl
+, stdenv
+, substituteAll
+, accountsservice
+, adwaita-icon-theme
+, cheese
+, clutter
+, clutter-gtk
+, colord
+, colord-gtk
+, cups
+, docbook_xsl
+, fontconfig
+, gdk-pixbuf
+, gettext
+, glib
+, glib-networking
+, glibc
+, gnome-bluetooth
+, gnome-color-manager
+, gnome-desktop
+, gnome-online-accounts
+, gnome-session
+, gnome-settings-daemon
+, gnome3
+, grilo
+, grilo-plugins
+, gsettings-desktop-schemas
+, gsound
+, gtk3
+, ibus
+, libcanberra-gtk3
+, libgnomekbd
+, libgtop
+, libgudev
+, libhandy
+, libkrb5
+, libpulseaudio
+, libpwquality
+, librsvg
+, libsecret
+, libsoup
+, libwacom
+, libxml2
+, libxslt
+, meson
+, modemmanager
+, mutter
+, networkmanager
+, networkmanagerapplet
+, ninja
+, pkgconfig
+, polkit
+, python3
+, samba
+, shared-mime-info
+, sound-theme-freedesktop
+, tracker
+, tzdata
+, udisks2
+, upower
+, vino
+, gnome-user-share
+, gnome-remote-desktop
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
@@ -21,20 +75,63 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext wrapGAppsHook libxslt docbook_xsl
-    shared-mime-info python3
+    docbook_xsl
+    gettext
+    libxslt
+    meson
+    ninja
+    pkgconfig
+    python3
+    shared-mime-info
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    ibus gtk3 glib glib-networking upower gsettings-desktop-schemas
-    libxml2 gnome-desktop gnome-settings-daemon polkit libgtop
-    gnome-online-accounts libsoup colord libpulseaudio fontconfig colord-gtk
-    accountsservice libkrb5 networkmanagerapplet libwacom samba
-    grilo libpwquality vino libcanberra-gtk3 libgudev libsecret
-    gdk_pixbuf adwaita-icon-theme librsvg clutter clutter-gtk cheese
-    networkmanager modemmanager gnome-bluetooth tracker
-    udisks2 gsound libhandy
+    accountsservice
+    adwaita-icon-theme
+    cheese
+    clutter
+    clutter-gtk
+    colord
+    colord-gtk
+    fontconfig
+    gdk-pixbuf
+    glib
+    glib-networking
+    gnome-bluetooth
+    gnome-desktop
+    gnome-online-accounts
+    gnome-remote-desktop # optional, sharing panel
+    gnome-settings-daemon
+    gnome-user-share # optional, sharing panel
+    grilo
+    grilo-plugins # for setting wallpaper from Flickr
+    gsettings-desktop-schemas
+    gsound
+    gtk3
+    ibus
+    libcanberra-gtk3
+    libgtop
+    libgudev
+    libhandy
+    libkrb5
+    libpulseaudio
+    libpwquality
+    librsvg
+    libsecret
+    libsoup
+    libwacom
+    libxml2
+    modemmanager
     mutter # schemas for the keybindings
+    networkmanager
+    networkmanagerapplet
+    polkit
+    samba
+    tracker
+    udisks2
+    upower
+    vino
   ];
 
   patches = [
@@ -60,7 +157,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${sound-theme-freedesktop}/share"
       # Thumbnailers (for setting user profile pictures)
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       # WM keyboard shortcuts
       --prefix XDG_DATA_DIRS : "${mutter}/share"

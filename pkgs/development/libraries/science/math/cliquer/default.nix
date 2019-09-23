@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.21";
-  name = "cliquer-${version}";
+  pname = "cliquer";
 
   # autotoolized version of the original cliquer
   src = fetchFromGitHub {
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

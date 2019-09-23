@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nss-pam-ldapd-${version}";
+  pname = "nss-pam-ldapd";
   version = "0.9.10";
 
   src = fetchurl {
-    url = "https://arthurdejong.org/nss-pam-ldapd/${name}.tar.gz";
+    url = "https://arthurdejong.org/nss-pam-ldapd/${pname}-${version}.tar.gz";
     sha256 = "1cqamcr6qpgwxijlr6kg7jspjamjra8w0haan0qssn0yxn95d7c0";
   };
 

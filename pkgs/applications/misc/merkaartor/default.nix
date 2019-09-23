@@ -2,7 +2,7 @@
 , qtbase, qtsvg, qtwebkit }:
 
 stdenv.mkDerivation rec {
-  name = "merkaartor-${version}";
+  pname = "merkaartor";
   version = "0.18.3";
 
   src = fetchFromGitHub {
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost gdal proj qtbase qtsvg qtwebkit ];
 
   enableParallelBuilding = true;
+
+  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
 
   postInstall = ''
     wrapProgram $out/bin/merkaartor \

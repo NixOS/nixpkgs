@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.4.8";
-  name = "freeorion-${version}";
+  pname = "freeorion";
 
   src = fetchFromGitHub {
     owner  = "freeorion";

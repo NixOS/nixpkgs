@@ -75,9 +75,8 @@ addEntry() {
 
     copyToKernelsDir "$path/kernel"; kernel=$result
     copyToKernelsDir "$path/initrd"; initrd=$result
-    # XXX UGLY: maybe the system config should have a top-level "dtbs" entry?
-    dtbDir=$(readlink -m "$path/kernel/../dtbs")
-    if [ -d "$dtbDir" ]; then
+    dtbDir=$(readlink -m "$path/dtbs")
+    if [ -e "$dtbDir" ]; then
         copyToKernelsDir "$dtbDir"; dtbs=$result
     fi
 

@@ -1,9 +1,9 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, cmake, xlibsWrapper
-, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver, cf-private
+, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
 , libX11, libXi, libXtst, libXrandr, xinput, curl, openssl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "synergy-${version}";
+  pname = "synergy";
   version = "1.8.8";
 
   src = fetchFromGitHub {
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake curl openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices Carbon Cocoa CoreServices ScreenSaver cf-private
+    ApplicationServices Carbon Cocoa CoreServices ScreenSaver
   ] ++ lib.optionals stdenv.isLinux [ xlibsWrapper libX11 libXi libXtst libXrandr xinput ];
 
   installPhase = ''

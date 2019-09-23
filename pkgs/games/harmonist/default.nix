@@ -3,13 +3,13 @@
 buildGoPackage rec {
 
   pname = "harmonist";
-  version = "0.1";
+  version = "0.2";
 
   goPackagePath = "git.tuxfamily.org/harmonist/harmonist.git";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/harmonist/releases/${pname}-${version}.tar.gz";
-    sha256 = "1cvhfvscd80qz95pqkblnyjhz1l87k7y6vmzyzap893mpjk9a3pm";
+    sha256 = "1r78v312x2k1v9rkxkxffs5vxn9sc0dcszm66yw10p7qy9lyvicd";
   };
 
   goDeps = ./deps.nix;

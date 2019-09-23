@@ -5,7 +5,7 @@
 assert sensord -> rrdtool != null;
 
 stdenv.mkDerivation rec {
-  name = "lm-sensors-${version}";
+  pname = "lm-sensors";
   version = "3.5.0";
 
   src = fetchzip {

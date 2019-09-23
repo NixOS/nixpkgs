@@ -3,11 +3,10 @@
 stdenv.mkDerivation rec {
   pname = "mp3splt";
   version = "2.6.2";
-  name = "${pname}-${version}";
 
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1aiv20gypb6r84qabz8gblk8vi42cg3x333vk2pi3fyqvl82phry";
   };
 

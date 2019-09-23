@@ -1,44 +1,46 @@
 { stdenv, lib, fetchurl, pkgconfig, perl
 , libjpeg, udev
 , withUtils ? true
-, withGUI ? true, alsaLib, libX11, qtbase, libGLU
+, withGUI ? true, alsaLib, libX11, qtbase, libGLU, wrapQtAppsHook
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
 
-stdenv.mkDerivation rec {
-  name = "v4l-utils-${version}";
-  version = "1.16.6";
+let
+  withQt = withUtils && withGUI;
+
+# we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
+in stdenv.mkDerivation rec {
+  pname = "v4l-utils";
+  version = "1.16.7";
 
   src = fetchurl {
-    url = "https://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
-    sha256 = "1bkqlrizx0j2rd6ybam2x17bjrpwzl4v4szmnzm3cmixis3w3npr";
+    url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "1ng0x3wj3a1ckfd00yxa4za43xms92gdp7rdag060b7p39z7m4gf";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" ] ++ lib.optional withUtils "lib" ++ [ "dev" ];
 
-  configureFlags =
-    if withUtils then [
-      "--with-udevdir=${placeholder "out"}/lib/udev"
-    ] else [
-      "--disable-v4l-utils"
-    ];
+  configureFlags = (if withUtils then [
+    "--with-localedir=${placeholder "lib"}/share/locale"
+    "--with-udevdir=${placeholder "out"}/lib/udev"
+  ] else [
+    "--disable-v4l-utils"
+  ]);
 
   postFixup = ''
     # Create symlink for V4l1 compatibility
     ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig perl ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [ udev ] ++ lib.optionals (withUtils && withGUI) [ alsaLib libX11 qtbase libGLU ];
+  buildInputs = [ udev ] ++ lib.optionals withQt [ alsaLib libX11 qtbase libGLU ];
 
   propagatedBuildInputs = [ libjpeg ];
 
-  NIX_CFLAGS_COMPILE = lib.optional (withUtils && withGUI) "-std=c++11";
-
   postPatch = ''
-    patchShebangs .
+    patchShebangs utils/cec-ctl/msg2ctl.pl
   '';
 
   meta = with stdenv.lib; {

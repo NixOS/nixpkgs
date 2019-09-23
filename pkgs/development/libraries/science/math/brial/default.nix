@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.5";
-  name = "brial-${version}";
+  pname = "brial";
 
   src = fetchFromGitHub {
     owner = "BRiAl";
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Legacy version of PolyBoRi maintained by sagemath developers";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

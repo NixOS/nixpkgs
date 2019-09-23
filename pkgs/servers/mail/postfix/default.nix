@@ -24,13 +24,13 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "postfix-${version}";
+  pname = "postfix";
 
-  version = "3.4.5";
+  version = "3.4.6";
 
   src = fetchurl {
-    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "17riwr21i9p1h17wpagfiwkpx9bbx7dy4gpdl219a11akm7saawb";
+    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
+    sha256 = "09p3vg2xlh6iq45gp6zanbp1728fc31r7zz71r131vh20ssajx6n";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -96,12 +96,12 @@ in stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = http://www.postfix.org/;
     description = "A fast, easy to administer, and secure mail server";
-    license = with lib.licenses; [ ipl10 epl20 ];
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.rickynils ];
+    license = with licenses; [ ipl10 epl20 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rickynils globin ];
   };
 
 }

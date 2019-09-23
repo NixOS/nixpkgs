@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev, avahi, freeipmi
-, libtool, makeWrapper }:
+, libtool, makeWrapper, nss }:
 
 stdenv.mkDerivation rec {
   name = "nut-2.7.4";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "19r5dm07sfz495ckcgbfy0pasx0zy3faa0q7bih69lsjij8q43lq";
   };
 
-  buildInputs = [ neon libusb openssl udev avahi freeipmi libtool ];
+  buildInputs = [ neon libusb openssl udev avahi freeipmi libtool nss ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 

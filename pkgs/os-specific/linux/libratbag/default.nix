@@ -2,7 +2,7 @@
 , glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "libratbag-${version}";
+  pname = "libratbag";
   version = "0.9.905";
 
   src = fetchFromGitHub {

@@ -1,6 +1,7 @@
+;; -*- lexical-binding: t; -*-
 (defun nix--profile-paths ()
-  "Returns a list of all paths in the NIX_PROFILES environment
-variable, ordered from more-specific (the user profile) to the
+  "Return a list of all paths in NIX_PROFILES.
+The list is ordered from more-specific (the user profile) to the
 least specific (the system profile)"
   (reverse (split-string (or (getenv "NIX_PROFILES") ""))))
 
@@ -23,6 +24,7 @@ least specific (the system profile)"
 
 
 ;;; Make `woman' find the man pages
+(defvar woman-manpath)
 (eval-after-load 'woman
   '(setq woman-manpath
          (append (mapcar (lambda (x) (concat x "/share/man/"))
@@ -30,6 +32,7 @@ least specific (the system profile)"
                  woman-manpath)))
 
 ;;; Make tramp work for remote NixOS machines
+(defvar tramp-remote-path)
 (eval-after-load 'tramp-sh
   ;; TODO: We should also add the other `NIX_PROFILES' to this path.
   ;; However, these are user-specific, so we would need to discover
@@ -42,6 +45,7 @@ least specific (the system profile)"
 ;;; the current file:
 ;;; from: /nix/store/<hash>-emacs-<version>/share/emacs/site-lisp/site-start.el
 ;;; to:   /nix/store/<hash>-emacs-<version>/share/emacs/<version>/src/
+(defvar find-function-C-source-directory)
 (let ((emacs
        (file-name-directory                      ; .../emacs/
         (directory-file-name                     ; .../emacs/site-lisp

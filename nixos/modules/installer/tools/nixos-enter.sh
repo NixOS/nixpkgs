@@ -16,7 +16,8 @@ fi
 
 mountPoint=/mnt
 system=/nix/var/nix/profiles/system
-command=($system/sw/bin/bash "--login")
+command=("$system/sw/bin/bash" "--login")
+silent=0
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -32,8 +33,11 @@ while [ "$#" -gt 0 ]; do
             exit 1
             ;;
         --command|-c)
-            command=($system/sw/bin/bash "-c" "$1")
+            command=("$system/sw/bin/bash" "-c" "$1")
             shift 1
+            ;;
+        --silent)
+            silent=1
             ;;
         --)
             command=("$@")
@@ -51,11 +55,20 @@ if [[ ! -e $mountPoint/etc/NIXOS ]]; then
     exit 126
 fi
 
-mkdir -m 0755 -p "$mountPoint/dev" "$mountPoint/sys"
+mkdir -p "$mountPoint/dev" "$mountPoint/sys"
+chmod 0755 "$mountPoint/dev" "$mountPoint/sys"
 mount --rbind /dev "$mountPoint/dev"
 mount --rbind /sys "$mountPoint/sys"
 
+# If silent, write both stdout and stderr of activation script to /dev/null
+# otherwise, write both streams to stderr of this process
+if [ "$silent" -eq 0 ]; then
+    PIPE_TARGET="/dev/stderr"
+else
+    PIPE_TARGET="/dev/null"
+fi
+
 # Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
-LOCALE_ARCHIVE=$system/sw/lib/locale/locale-archive chroot "$mountPoint" "$system/activate" >&2 || true
+LOCALE_ARCHIVE="$system/sw/lib/locale/locale-archive" chroot "$mountPoint" "$system/activate" >>$PIPE_TARGET 2>&1 || true
 
 exec chroot "$mountPoint" "${command[@]}"

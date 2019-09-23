@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "reporter-${version}";
+  pname = "reporter";
   version = "2.1.0";
   rev = "v${version}";
 

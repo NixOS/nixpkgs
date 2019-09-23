@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ stdenv, lib, fetchFromGitHub, makeWrapper
 , pkgconfig, which, perl, libXrandr
-, cairo, dbus, systemd, gdk_pixbuf, glib, libX11, libXScrnSaver
+, cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
 , libXinerama, libnotify, pango, xorgproto, librsvg, dunstify ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "dunst-${version}";
-  version = "1.4.0";
+  pname = "dunst";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     rev = "v${version}";
-    sha256 = "1rwbylygd88r61yrxc7ckg9svgq8b1i2falr0mk9sabqxzn9050s";
+    sha256 = "0xjj1f2jr1ja5grj6wrx5jjz1sx5fpqnvkw7nqi4452j3nc4p4l2";
   };
 
   nativeBuildInputs = [ perl pkgconfig which systemd makeWrapper ];
 
   buildInputs = [
-    cairo dbus gdk_pixbuf glib libX11 libXScrnSaver
+    cairo dbus gdk-pixbuf glib libX11 libXScrnSaver
     libXinerama libnotify pango xorgproto librsvg libXrandr
   ];
 
@@ -33,19 +33,19 @@ stdenv.mkDerivation rec {
 
   buildFlags = if dunstify then [ "dunstify" ] else [];
 
-  postInstall = stdenv.lib.optionalString dunstify ''
+  postInstall = lib.optionalString dunstify ''
     install -Dm755 dunstify $out/bin
   '' + ''
     wrapProgram $out/bin/dunst \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight and customizable notification daemon";
-    homepage = https://dunst-project.org/;
+    homepage = "https://dunst-project.org/";
     license = licenses.bsd3;
     # NOTE: 'unix' or even 'all' COULD work too, I'm not sure
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

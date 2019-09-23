@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, cyrus_sasl, libevent }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libmemcached-1.0.18";
 
   src = fetchurl {

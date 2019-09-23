@@ -3,7 +3,7 @@
 , makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
 
 stdenv.mkDerivation rec {
-  name = "springlobby-${version}";
+  pname = "springlobby";
   version = "0.267";
 
   src = fetchurl {

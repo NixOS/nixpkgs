@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, scipy, cython, networkx, joblib, nose }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, scipy, cython, networkx, joblib, nose, pyyaml }:
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.8.1";
-  
+  version = "0.11.0";
+
   src = fetchFromGitHub {
     repo = pname;
     owner = "jmschrei";
     rev = "v${version}";
-    sha256 = "085nka5bh88bxbd5vl1azyv9cfpp6grz2ngclc85f9kgccac1djr";
+    sha256 = "0gf7z343ag4g7pfccn1sdap3ihkaxrc9ca75awjhmsa2cyqs66df";
   };
 
-  propagatedBuildInputs = [ numpy scipy cython networkx joblib ];
+  propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];
 
   checkInputs = [ nose ];
 
@@ -20,9 +20,5 @@ buildPythonPackage rec {
     homepage = https://github.com/jmschrei/pomegranate;
     license = licenses.mit;
     maintainers = with maintainers; [ rybern ];
-
-    # "pomegranate does not yet work with networkx 2.0"
-    # see https://github.com/jmschrei/pomegranate/issues/209
-    broken = true; 
   };
 }

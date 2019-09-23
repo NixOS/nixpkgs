@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ibus, ibus-table, pkgconfig, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-table-others-${version}";
+  pname = "ibus-table-others";
   version = "1.3.9";
 
   src = fetchurl {
-    url = "https://github.com/moebiuscurve/ibus-table-others/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/moebiuscurve/ibus-table-others/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "0270a9njyzb1f8nw5w9ghwxcl3m6f13d8p8a01fjm8rnjs04mcb3";
   };
 

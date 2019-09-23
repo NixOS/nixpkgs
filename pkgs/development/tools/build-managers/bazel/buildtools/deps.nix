@@ -5,17 +5,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/golang/protobuf";
-      rev = "b5d812f8a3706043e23a9cd5babf2e5423744d30";
-      sha256 = "15am4s4646qy6iv0g3kkqq52rzykqjhm4bf08dk0fy2r58knpsyl";
+      rev = "4c88cc3f1a34ffade77b79abc53335d1e511f25b";
+      sha256 = "0chbdc4q55z7myiwnbvhryc5ihf6cxh8p4w3c1imy2gyzjn9sf4r";
     };
   }
   {
-    goPackagePath = "github.com/google/skylark";
+    goPackagePath = "go.starlark.net";
     fetch = {
       type = "git";
-      url = "https://github.com/google/skylark";
-      rev = "a5f7082aabed29c0e429c722292c66ec8ecf9591";
-      sha256 = "16vsa6ngsby27n6indj441r1glcdfgipjcwcb0rs6zl2dqlqr286";
+      url = "https://github.com/google/starlark-go";
+      rev = "988906f77f657477aa7ebf4d8fb5f12d6c50b767";
+      sha256 = "0ivmbcq3avaxj8ixbc60h706d6wk9wi2mnsid6a483ia4yn7w9k8";
     };
   }
 ]

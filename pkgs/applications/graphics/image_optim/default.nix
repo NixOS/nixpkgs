@@ -1,4 +1,4 @@
-{ lib, bundlerApp, ruby, makeWrapper,
+{ lib, bundlerApp, bundlerUpdateScript, makeWrapper,
   withPngcrush ? true,       pngcrush ? null,
   withPngout ? true,         pngout ? null,
   withAdvpng ? true,         advancecomp ? null,
@@ -45,8 +45,6 @@ bundlerApp {
   pname = "image_optim";
   gemdir = ./.;
 
-  inherit ruby;
-
   exes = [ "image_optim" ];
 
   buildInputs = [ makeWrapper ];
@@ -56,11 +54,13 @@ bundlerApp {
       --prefix PATH : ${makeBinPath optionalDepsPath}
   '';
 
+  passthru.updateScript = bundlerUpdateScript "image_optim";
+
   meta = with lib; {
     description = "Command line tool and ruby interface to optimize (lossless compress, optionally lossy) jpeg, png, gif and svg images using external utilities (advpng, gifsicle, jhead, jpeg-recompress, jpegoptim, jpegrescan, jpegtran, optipng, pngcrush, pngout, pngquant, svgo)";
     homepage    = https://github.com/toy/image_optim;
     license     = licenses.mit;
-    maintainers = with maintainers; [ srghma ];
+    maintainers = with maintainers; [ srghma nicknovitski ];
     platforms   = platforms.all;
   };
 }

@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin

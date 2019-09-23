@@ -1,16 +1,10 @@
 { lib, buildPythonPackage, fetchPypi,
-  cssselect, cssutils, lxml, mock, nose, requests
+  cssselect, cssutils, lxml, mock, nose, requests, cachetools
 }:
 
 buildPythonPackage rec {
   pname = "premailer";
   version = "3.3.0";
-
-  meta = {
-    description = "Turns CSS blocks into style attributes ";
-    homepage = https://github.com/peterbe/premailer;
-    license = lib.licenses.bsd3;
-  };
 
   src = fetchPypi {
     inherit pname version;
@@ -18,5 +12,11 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ mock nose ];
-  propagatedBuildInputs = [ cssselect cssutils lxml requests ];
+  propagatedBuildInputs = [ cachetools cssselect cssutils lxml requests ];
+
+  meta = {
+    description = "Turns CSS blocks into style attributes ";
+    homepage = https://github.com/peterbe/premailer;
+    license = lib.licenses.bsd3;
+  };
 }

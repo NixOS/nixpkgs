@@ -16,7 +16,7 @@
 
   postPatch = "substituteInPlace Makefile --replace libsystemd-daemon libsystemd";
 
-  buildInputs = [ fontconfig libjpeg libcap freetype ]
+  buildInputs = [ fontconfig libjpeg libcap freetype perl ]
   ++ lib.optional enableSystemd systemd
   ++ lib.optional enableBidi fribidi;
 

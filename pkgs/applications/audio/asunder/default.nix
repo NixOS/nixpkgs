@@ -13,9 +13,9 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "2.9.3";
-  name = "asunder-${version}";
+  pname = "asunder";
   src = fetchurl {
-    url = "http://littlesvr.ca/asunder/releases/${name}.tar.bz2";
+    url = "http://littlesvr.ca/asunder/releases/${pname}-${version}.tar.bz2";
     sha256 = "1630i1df06y840v3fgdf75jxw1s8kwbfn5bhi0686viah0scccw5";
   };
 

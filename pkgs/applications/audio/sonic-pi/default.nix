@@ -1,4 +1,6 @@
-{ stdenv
+{ mkDerivation
+, lib
+, qtbase
 , fetchFromGitHub
 , fftwSinglePrec
 , ruby
@@ -6,22 +8,23 @@
 , aubio
 , cmake
 , pkgconfig
-, qt5
-, libsForQt5
 , boost
 , bash
-, makeWrapper
 , jack2Full
+, supercollider
+, qscintilla
+, qwt
 }:
 
 let
-  supercollider = libsForQt5.callPackage ../../../development/interpreters/supercollider {
-    fftw = fftwSinglePrec;
-  };
 
-in stdenv.mkDerivation rec {
+  supercollider_single_prec = supercollider.override {  fftw = fftwSinglePrec; };
+
+in
+
+mkDerivation rec {
   version = "3.1.0";
-  name = "sonic-pi-${version}";
+  pname = "sonic-pi";
 
   src = fetchFromGitHub {
     owner = "samaaron";
@@ -33,15 +36,14 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     bash
     cmake
-    makeWrapper
     pkgconfig
-    qt5.qtbase
-    libsForQt5.qscintilla
-    libsForQt5.qwt
+    qtbase
+    qscintilla
+    qwt
     ruby
     libffi
     aubio
-    supercollider
+    supercollider_single_prec
     boost
   ];
 
@@ -80,20 +82,23 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-
     cp -r . $out
-    wrapProgram $out/bin/sonic-pi \
+    runHook postInstall
+  '';
+
+  # $out/bin/sonic-pi is a shell script, and wrapQtAppsHook doesn't wrap them.
+  dontWrapQtApps = true;
+  preFixup = ''
+    wrapQtApp "$out/bin/sonic-pi" \
       --prefix PATH : ${ruby}/bin:${bash}/bin:${supercollider}/bin:${jack2Full}/bin \
       --set AUBIO_LIB "${aubio}/lib/libaubio.so"
-
-    runHook postInstall
   '';
 
   meta = {
     homepage = http://sonic-pi.net/;
     description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ Phlogistique kamilchm ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Phlogistique kamilchm ];
+    platforms = lib.platforms.linux;
   };
 }

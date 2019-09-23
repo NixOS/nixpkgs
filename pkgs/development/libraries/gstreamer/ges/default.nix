@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-editing-services-${version}";
+  pname = "gstreamer-editing-services";
   version = "1.16.0";
 
   meta = with stdenv.lib; {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gstreamer-editing-services/${name}.tar.xz";
+    url = "${meta.homepage}/src/gstreamer-editing-services/${pname}-${version}.tar.xz";
     sha256 = "1las94jkx83sxmzi5w6b0xm89dqqwzpdsb6h9w9ixndhnbpzm8w2";
   };
 
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection python flex perl ];
 
   propagatedBuildInputs = [ gst-plugins-base libxml2 ];
+
+  mesonFlags = [
+    "-Dgtk_doc=disabled"
+  ];
 
   patches = [
     ./fix_pkgconfig_includedir.patch

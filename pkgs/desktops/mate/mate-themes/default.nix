@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig, intltool, mate, gtk2, gtk3,
-  gtk_engines, gtk-engine-murrine, gdk_pixbuf, librsvg }:
+  gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
-  name = "mate-themes-${version}";
+  pname = "mate-themes";
   version = "3.22.20";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/themes/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/themes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0c3dhf8p9nc2maky4g9xr04iil9wwbdkmhpzynlc6lfg4ksqq2bx";
   };
 
   nativeBuildInputs = [ pkgconfig intltool gtk3 ];
 
-  buildInputs = [ mate.mate-icon-theme gtk2 gtk_engines gdk_pixbuf librsvg ];
+  buildInputs = [ mate.mate-icon-theme gtk2 gtk_engines gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

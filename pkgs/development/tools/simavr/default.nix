@@ -4,7 +4,7 @@
 , GLUT }:
 
 stdenv.mkDerivation rec {
-  name = "simavr-${version}";
+  pname = "simavr";
   version = "1.5";
 
   src = fetchFromGitHub {

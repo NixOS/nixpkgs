@@ -1,14 +1,14 @@
-{ lib, fetchurl, python3Packages, qtbase, makeWrapper }:
+{ lib, fetchurl, python3Packages, qtbase, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.0.7";
+  version = "4.0.10";
 
   src = fetchurl {
     url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "d63ef2d52cff0b821b745067d752fd0c7f2902fa23eaf8e9392c54864cae5c77";
+    sha256 = "48270e12956a2f4ef4d2b0cb60611e47f136b734a3741dab176542a32ae59ee5";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     btchip
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
@@ -54,10 +54,6 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
-
-    # Please remove this when #44047 is fixed
-    wrapProgram $out/bin/electron-cash \
-      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
   '';
 
   doInstallCheck = true;

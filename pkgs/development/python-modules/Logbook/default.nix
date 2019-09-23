@@ -18,6 +18,9 @@ buildPythonPackage rec {
     py.test tests
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     homepage = https://pythonhosted.org/Logbook/;
     description = "A logging replacement for Python";

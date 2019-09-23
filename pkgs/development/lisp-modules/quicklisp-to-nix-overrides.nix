@@ -39,15 +39,28 @@ in
     };
   };
   hunchentoot = addNativeLibs [pkgs.openssl];
-  iolib = x: rec {
+  iolib = x: {
     propagatedBuildInputs = (x.propagatedBuildInputs or [])
      ++ (with pkgs; [libfixposix gcc])
      ;
+    overrides = y: (x.overrides y) // {
+      prePatch = ''
+        sed 's|default \"libfixposix\"|default \"${pkgs.libfixposix}/lib/libfixposix\"|' -i src/syscalls/ffi-functions-unix.lisp
+      '';
+    };
+
   };
   cxml = skipBuildPhase;
   wookie = addNativeLibs (with pkgs; [libuv openssl]);
   lev = addNativeLibs [pkgs.libev];
-  cl_plus_ssl = addNativeLibs [pkgs.openssl];
+  cl_plus_ssl = x: rec {
+    propagatedBuildInputs = [pkgs.openssl];
+    overrides = y: (x.overrides y) // {
+      prePatch = ''
+        sed 's|libssl.so|${pkgs.openssl.out}/lib/libssl.so|' -i src/reload.lisp
+      '';
+    };
+  };
   cl-colors = skipBuildPhase;
   cl-libuv = addNativeLibs [pkgs.libuv];
   cl-async-ssl = addNativeLibs [pkgs.openssl (import ./openssl-lib-marked.nix)];
@@ -85,7 +98,14 @@ $out/lib/common-lisp/query-fs"
       '';
     };
   };
-  sqlite = addNativeLibs [pkgs.sqlite];
+  sqlite = x: {
+    propagatedBuildInputs = [pkgs.sqlite];
+    overrides = y: (x.overrides y) // {
+      prePatch = ((x.overrides y).preConfigure or "") + ''
+        sed 's|libsqlite3|${pkgs.sqlite.out}/lib/libsqlite3|' -i sqlite-ffi.lisp
+      '';
+    };
+  };
   swank = x: {
     overrides = y: (x.overrides y) // {
       postPatch = ''
@@ -163,6 +183,13 @@ $out/lib/common-lisp/query-fs"
   postmodern = x: {
     overrides = y : (x.overrides y) // {
       meta.broken = true; # 2018-04-10
+    };
+  };
+  split-sequence = x: {
+    overrides = y: (x.overrides y) // {
+      preConfigure = ''
+        sed -i -e '/:components/i:serial t' split-sequence.asd
+      '';
     };
   };
 }

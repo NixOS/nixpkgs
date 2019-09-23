@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "stog-${version}";
+  pname = "stog";
   version = "0.18.0";
   src = fetchFromGitLab {
     domain = "framagit.org";

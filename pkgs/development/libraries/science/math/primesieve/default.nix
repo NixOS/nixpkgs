@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "primesieve-${version}";
+  pname = "primesieve";
   version = "7.4";
 
   nativeBuildInputs = [cmake];

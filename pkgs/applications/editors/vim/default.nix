@@ -6,24 +6,20 @@
     sha256 = "18ifhv5q9prd175q3vxbqf6qyvkk6bc7d2lhqdk0q78i68kv9y0c";
   }
 # apple frameworks
-, cf-private, Carbon, Cocoa
+, Carbon, Cocoa
 }:
 
 let
   common = callPackage ./common.nix {};
 in
-stdenv.mkDerivation rec {
-  name = "vim-${version}";
+stdenv.mkDerivation {
+  pname = "vim";
 
   inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
 
   nativeBuildInputs = [ gettext pkgconfig ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon Cocoa
-      # Needed for OBJC_CLASS_$_NSArray symbols.
-      cf-private
-    ];
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
   configureFlags = [
     "--enable-multibyte"

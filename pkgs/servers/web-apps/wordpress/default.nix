@@ -1,13 +1,24 @@
-  # Upgrading? We have a test! nix-build ./nixos/tests/wordpress.nix
-{ fetchFromGitHub, lib } : fetchFromGitHub {
-  owner = "WordPress";
-  repo = "WordPress";
-  rev = "5.0.2";
-  sha256 = "1r8y62mdv6ji82hcn94gngi68mwilxh69gpx8r83k0cy08s99sln";
-  meta = {
-    homepage = https://wordpress.org;
-    description = "WordPress is open source software you can use to create a beautiful website, blog, or app.";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.basvandijk ];
+{ stdenv, fetchurl }:
+
+stdenv.mkDerivation rec {
+  pname = "wordpress";
+  version = "5.2.3";
+
+  src = fetchurl {
+    url = "https://wordpress.org/${pname}-${version}.tar.gz";
+    sha256 = "07gqdzhnqivyfah386lwyz984y9k2bc0hmji1y2pbvv0a60r63wr";
+  };
+
+  installPhase = ''
+    mkdir -p $out/share/wordpress
+    cp -r . $out/share/wordpress
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://wordpress.org";
+    description = "WordPress is open source software you can use to create a beautiful website, blog, or app";
+    license = [ licenses.gpl2 ];
+    maintainers = [ maintainers.basvandijk ];
+    platforms = platforms.all;
   };
 }

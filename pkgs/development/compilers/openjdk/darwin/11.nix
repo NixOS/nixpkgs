@@ -52,7 +52,10 @@ let
       home = jdk;
     };
 
-    meta.platforms = stdenv.lib.platforms.darwin;
+    meta = with stdenv.lib; {
+      license = licenses.gpl2;
+      platforms = platforms.darwin;
+    };
 
   };
 in jdk

@@ -7,11 +7,11 @@ assert sslSupport -> openssl != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "sylpheed-${version}";
+  pname = "sylpheed";
   version = "3.7.0";
 
   src = fetchurl {
-    url = "https://sylpheed.sraoss.jp/sylpheed/v3.7/${name}.tar.xz";
+    url = "https://sylpheed.sraoss.jp/sylpheed/v3.7/${pname}-${version}.tar.xz";
     sha256 = "0j9y5vdzch251s264diw9clrn88dn20bqqkwfmis9l7m8vmwasqd";
   };
 

@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
   pname = "libsavitar";
-  version = "4.1.0";
+  version = "4.2.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libSavitar";
     rev = version;
-    sha256 = "132bgcvjkr61pzf244hwz8gxzpg1i50na4bkcipwnyxdravdkkgf";
+    sha256 = "0cqskd8rcg7pih8nj3s2i137lwxpibmdmym6f8hii14ashny73i1";
   };
 
   postPatch = ''
-    sed -i 's#''${Python3_SITELIB}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
+    sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = https://github.com/Ultimaker/libSavitar;
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar orivej ];
+    maintainers = with maintainers; [ abbradar orivej gebner ];
   };
 }

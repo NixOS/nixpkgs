@@ -4,8 +4,8 @@
 let
   binPath = lib.makeBinPath [ recordmydesktop jack2 xwininfo ];
 
-in stdenv.mkDerivation rec {
-  name = "qt-recordmydesktop-${version}";
+in stdenv.mkDerivation {
+  pname = "qt-recordmydesktop";
   version = "0.3.8-svn${recordmydesktop.rev}";
 
   src = fetchsvn {

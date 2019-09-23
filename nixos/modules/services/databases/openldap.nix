@@ -47,26 +47,26 @@ in
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "openldap";
         description = "User account under which slapd runs.";
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "openldap";
         description = "Group account under which slapd runs.";
       };
 
       urlList = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [ "ldap:///" ];
         description = "URL list slapd should listen on.";
         example = [ "ldaps:///" ];
       };
 
       dataDir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/db/openldap";
         description = "The database directory.";
       };
@@ -237,8 +237,8 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.rootpwFile != null || cfg.rootpw != null;
-        message = "Either services.openldap.rootpw or services.openldap.rootpwFile must be set";
+        assertion = cfg.configDir != null || cfg.rootpwFile != null || cfg.rootpw != null;
+        message = "services.openldap: Unless configDir is set, either rootpw or rootpwFile must be set";
       }
     ];
 

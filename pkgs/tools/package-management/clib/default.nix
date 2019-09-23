@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.8.1";
-  name = "clib-${version}";
+  pname = "clib";
 
   src = fetchFromGitHub {
     rev    = version;

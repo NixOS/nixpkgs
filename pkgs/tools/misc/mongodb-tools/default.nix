@@ -1,27 +1,38 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, openssl_1_0_2, pkgconfig, libpcap }:
+{ stdenv
+, lib
+, buildGoPackage
+, fetchFromGitHub
+, openssl_1_0_2
+, pkgconfig
+, libpcap
+}:
 
 let
   tools = [
-    "bsondump" "mongodump" "mongoexport" "mongofiles" "mongoimport"
-    "mongoreplay" "mongorestore" "mongostat" "mongotop"
+    "bsondump"
+    "mongoimport"
+    "mongoexport"
+    "mongodump"
+    "mongorestore"
+    "mongostat"
+    "mongofiles"
+    "mongotop"
+    "mongoreplay"
   ];
-in
+  version = "4.2.0";
 
-with stdenv.lib;
-
-buildGoPackage rec {
-  name = "mongo-tools-${version}";
-  version = "3.7.2";
-  rev = "r${version}";
+in buildGoPackage {
+  pname = "mongo-tools";
+  inherit version;
 
   goPackagePath = "github.com/mongodb/mongo-tools";
-  subPackages = map (t: t + "/main") tools;
+  subPackages = tools;
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "r${version}";
     owner = "mongodb";
     repo = "mongo-tools";
-    sha256 = "1y5hd4qw7422sqkj8vmy4agscvin3ck54r515bjrzn69iw73nhfl";
+    sha256 = "0mjwvx0cxvb6zam6jyr3753xjnwcygxcjzqhhlsq0b3xnwws9yh7";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -31,18 +42,18 @@ buildGoPackage rec {
   # Let's work around this with our own installer
   buildPhase = ''
     # move vendored codes so nixpkgs go builder could find it
-    mv go/src/github.com/mongodb/mongo-tools/vendor/src/* go/src/github.com/mongodb/mongo-tools/vendor/
-
     runHook preBuild
+
     ${stdenv.lib.concatMapStrings (t: ''
       go build -o "$bin/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
     '') tools}
+
     runHook postBuild
   '';
 
   meta = {
     homepage = https://github.com/mongodb/mongo-tools;
     description = "Tools for the MongoDB";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

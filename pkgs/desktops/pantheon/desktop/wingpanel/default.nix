@@ -1,5 +1,22 @@
-{ stdenv, fetchFromGitHub, pantheon, wrapGAppsHook, pkgconfig, meson, ninja
-, vala, gala, gtk3, libgee, granite, gettext, mutter, json-glib, python3 }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, wrapGAppsHook
+, pkgconfig
+, meson
+, ninja
+, vala
+, gala
+, gtk3
+, libgee
+, granite
+, gettext
+, mutter
+, json-glib
+, python3
+, elementary-gtk-theme
+, elementary-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
@@ -29,6 +46,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-gtk-theme
+    elementary-icon-theme
     gala
     granite
     gtk3

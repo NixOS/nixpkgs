@@ -30,7 +30,7 @@ let dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
       sys.symlinkDir=INSTALLDIR/bin
     ''; };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "neoload-4.1.4";
 
   src = fetchurl (

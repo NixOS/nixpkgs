@@ -49,7 +49,7 @@ let
     postFetch = "cd $out && git tag ${rev}";
   };
 
-  soci = fetchgit rec {
+  soci = fetchgit {
     url = "https://github.com/SOCI/soci.git";
     rev = "3a1f602b3021b925d38828e3ff95f9e7f8887ff7";
     sha256 = "0lnps42cidlrn43h13b9yc8cs3fwgz7wb6a1kfc9rnw7swkh757f";
@@ -84,7 +84,7 @@ let
     postFetch = "cd $out && git tag ${rev}";
   };
 
-  google-test = fetchgit rec {
+  google-test = fetchgit {
     url = "https://github.com/google/googletest.git";
     rev = "c3bb0ee2a63279a803aaad956b9b26d74bf9e6e2";
     sha256 = "0pj5b6jnrj5lrccz2disr8hklbnzd8hwmrwbfqmvhiwb9q9p0k2k";
@@ -92,7 +92,7 @@ let
     fetchSubmodules = false;
   };
 
-  google-benchmark = fetchgit rec {
+  google-benchmark = fetchgit {
     url = "https://github.com/google/benchmark.git";
     rev = "5b7683f49e1e9223cf9927b24f6fd3d6bd82e3f8";
     sha256 = "0qg70j47zqnrbszlgrzmxpr4g88kq0gyq6v16bhaggfm83c6mg6i";
@@ -100,7 +100,7 @@ let
     fetchSubmodules = false;
   };
 in stdenv.mkDerivation rec {
-  name = "rippled-${version}";
+  pname = "rippled";
   version = "1.2.1";
 
   src = fetchFromGitHub {

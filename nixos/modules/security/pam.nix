@@ -415,7 +415,7 @@ let
 
           # Session management.
           ${optionalString cfg.setEnvironment ''
-            session required pam_env.so envfile=${config.system.build.pamEnvironment}
+            session required pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
           ''}
           session required pam_unix.so
           ${optionalString cfg.setLoginUid
@@ -685,7 +685,7 @@ in
       };
       id = mkOption {
         example = "42";
-        type = types.string;
+        type = types.str;
         description = "client id";
       };
 
@@ -741,13 +741,6 @@ in
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
-
-    systemd.tmpfiles.rules = optionals
-      (any (s: s.updateWtmp) (attrValues config.security.pam.services))
-      [
-        "f /var/log/wtmp"
-        "f /var/log/lastlog"
-      ];
 
     security.pam.services =
       { other.text =

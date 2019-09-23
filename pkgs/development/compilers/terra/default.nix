@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "terra-git-${version}";
+  pname = "terra-git";
   version = "1.0.0-beta1";
 
   src = fetchFromGitHub {

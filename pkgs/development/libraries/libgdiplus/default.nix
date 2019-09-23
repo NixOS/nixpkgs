@@ -2,7 +2,7 @@
 , libtiff, giflib, libjpeg, libpng
 , libXrender, libexif, autoreconfHook, fetchpatch }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libgdiplus-5.6.1";
 
   src = fetchFromGitHub {
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
           sha256 = "07wmc88cd1lqifs5x6npryni65jyy9gi8lgr2i1lb7v0fhvlyswg";
     })
   ];
+
+  outputs = [ "out" "dev" ];
 
   hardeningDisable = [ "format" ];
 

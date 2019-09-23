@@ -1,20 +1,35 @@
-{ stdenv, lib, fetchurl, jre, makeWrapper, bash, gnused }:
+{ stdenv, lib, fetchurl, fetchFromGitHub
+, jre, makeWrapper, bash, gnused }:
 
-let 
-  scalaVersion = "2.12"; 
-in
 stdenv.mkDerivation rec {
-  name = "confluent-platform-${version}";
-  version = "5.2.1";
+  pname = "confluent-platform";
+  version = "5.3.0";
+  scalaVersion = "2.12";
 
   src = fetchurl {
     url = "http://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}-${scalaVersion}.tar.gz";
-    sha256 = "11fdcc557aca782e87352ed6e655c37c71fb7b3a003796ee956970b01dedbbb1";
+    sha256 = "14cilq63fib5yvj40504aj6wssi7xw4f7c2jadlzdmdxzh4ixqmp";
+  };
+
+  confluentCli = fetchFromGitHub {
+    owner = "confluentinc";
+    repo = "confluent-cli";
+    rev = "v${version}";
+    sha256 = "18yvp56b8l074qfkgr4afirgd43g8b023n9ija6dnk6p6dib1f4j";
   };
 
   buildInputs = [ jre makeWrapper bash ];
 
   installPhase = ''
+    cp -R $confluentCli confluent-cli
+    chmod -R +w confluent-cli
+
+    (
+      export CONFLUENT_HOME=$PWD
+      cd confluent-cli
+      make install
+    )
+
     mkdir -p $out
     cp -R bin etc share src $out
     rm -rf $out/bin/windows
@@ -32,7 +47,7 @@ stdenv.mkDerivation rec {
       wrapProgram $p \
         --set JAVA_HOME "${jre}" \
         --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
-        --prefix PATH : "${bash}/bin:${gnused}/bin"
+        --prefix PATH : "${jre}/bin:${bash}/bin:${gnused}/bin"
     done
   '';
 

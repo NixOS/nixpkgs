@@ -2,14 +2,14 @@
   stdenv, fetchurl,
   automoc4, cmake_2_8, libxslt, perl, pkgconfig, shared-mime-info,
   attica, docbook_xml_dtd_42, docbook_xsl, giflib,
-  libdbusmenu_qt, libjpeg, phonon, qt4
+  libdbusmenu_qt, libjpeg, phonon, qt4, openssl
 }:
 
 stdenv.mkDerivation rec {
   version = "4.14.38";
-  name = "kdelibs-${version}";
+  pname = "kdelibs";
   src = fetchurl {
-    url = "mirror://kde/stable/applications/17.08.3/src/${name}.tar.xz";
+    url = "mirror://kde/stable/applications/17.08.3/src/${pname}-${version}.tar.xz";
     sha256 = "1zn3yb09sd22bm54is0rn98amj0398zybl550dp406419sil7z9p";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     automoc4 cmake_2_8 libxslt perl pkgconfig shared-mime-info
   ];
   buildInputs = [
-    attica giflib libdbusmenu_qt libjpeg
+    attica giflib libdbusmenu_qt libjpeg openssl
   ];
   propagatedBuildInputs = [ qt4 phonon ];
 

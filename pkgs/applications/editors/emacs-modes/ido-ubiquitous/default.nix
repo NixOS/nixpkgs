@@ -4,7 +4,8 @@ let
   version = "3.6-4-gb659bf8";
 in
 stdenv.mkDerivation {
-  name = "ido-ubiquitous-${version}";
+  pname = "ido-ubiquitous";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "DarwinAwardWinner";

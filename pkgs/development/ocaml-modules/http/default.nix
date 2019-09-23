@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace "SHELL=/bin/bash" "SHELL=$BASH"
   '';
 
-  configurePhase = "true";	# Skip configure phase
+  dontConfigure = true;	# Skip configure phase
 
   buildPhase = ''
     make all opt

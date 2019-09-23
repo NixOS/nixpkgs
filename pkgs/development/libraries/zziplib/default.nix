@@ -1,7 +1,7 @@
 { docbook_xml_dtd_412, fetchurl, stdenv, perl, python2, zip, xmlto, zlib, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "zziplib-${version}";
+  pname = "zziplib";
   version = "0.13.69";
 
   src = fetchurl {

@@ -31,9 +31,9 @@ stdenv.mkDerivation {
     mkdir -p $out/{share,lib}
 
     cp {matrix.lua,olm.lua} $out/share
-    cp ${cjson}/lib/lua/5.2/cjson.so $out/lib/cjson.so
+    cp ${cjson}/lib/lua/${cjson.lua.luaversion}/cjson.so $out/lib/cjson.so
     cp ${olm}/lib/libolm.so $out/lib/libolm.so
-    cp ${luaffi}/lib/ffi.so $out/lib/ffi.so
+    cp ${luaffi}/lib/lua/${luaffi.lua.luaversion}/ffi.so $out/lib/ffi.so
   '';
 
   meta = with stdenv.lib; {

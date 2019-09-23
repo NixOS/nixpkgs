@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation rec {
   version = "1.0";
-  name = "pharo-share-${version}";
+  pname = "pharo-share";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   sources10Zip = fetchurl {
     url = http://files.pharo.org/sources/PharoV10.sources.zip;

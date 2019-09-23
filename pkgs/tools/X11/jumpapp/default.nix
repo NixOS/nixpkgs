@@ -1,7 +1,7 @@
 { stdenv, lib, perl, pandoc, fetchFromGitHub, xdotool, wmctrl, xprop, nettools }:
 
 stdenv.mkDerivation rec {
-  name = "jumpapp-${version}";
+  pname = "jumpapp";
   version = "1.0";
 
   src = fetchFromGitHub {

@@ -196,6 +196,22 @@ in rec {
   );
 
 
+  # A disk image that can be imported to Amazon EC2 and registered as an AMI
+  amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import nixpkgs { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ versionModule
+          ./maintainers/scripts/ec2/amazon-image.nix
+        ];
+    }).config.system.build.amazonImage)
+
+  );
+
+
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
     { toplevel = (import lib/eval-config.nix {
@@ -274,6 +290,12 @@ in rec {
     xfce = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.xfce.enable = true;
+      });
+
+    gnome3 = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.gdm.enable = true;
+        services.xserver.desktopManager.gnome3.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.

@@ -3,7 +3,7 @@
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
   txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
   isort, pylint, flake8, buildbot-worker, buildbot-pkg, parameterized,
-  glibcLocales }:
+  git, glibcLocales }:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.3.1";
+    version = "2.4.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0qzr6my8zvaj0a1jwyaf254rdgm1xcyq8zp4b6fa5aqigfld4dfg";
+      sha256 = "141ad2g1j5y0n5cdnd18m55ss0gqjlz5ky85rb6qfn73dgw42vmz";
     };
 
     propagatedBuildInputs = [
@@ -37,7 +37,6 @@ let
       twisted
       jinja2
       zope_interface
-      future
       sqlalchemy
       sqlalchemy_migrate
       dateutil
@@ -65,6 +64,7 @@ let
       buildbot-worker
       buildbot-pkg
       parameterized
+      git
       glibcLocales
     ];
 
@@ -95,7 +95,7 @@ let
     meta = with lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
-      maintainers = with maintainers; [ nand0p ryansydnor ];
+      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };
   };

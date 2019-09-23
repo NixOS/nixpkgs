@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "fdupes-${version}";
+  pname = "fdupes";
   version = "1.6.1";
 
   src = fetchFromGitHub {

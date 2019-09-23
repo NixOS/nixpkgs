@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3Packages; [
-    paperwork-backend pypillowfight gtk3 cairo pyxdg dateutil
+    paperwork-backend pypillowfight gtk3 cairo pyxdg dateutil setuptools
   ];
 
   makeWrapperArgs = [

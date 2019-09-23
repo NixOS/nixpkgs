@@ -9,7 +9,7 @@
 , fontconfig
 , freetype
 , gconf
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , gtk2
@@ -58,8 +58,8 @@ let
   inherit (generated) version sources;
 
   mozillaPlatforms = {
-    "i686-linux" = "linux-i686";
-    "x86_64-linux" = "linux-x86_64";
+    i686-linux = "linux-i686";
+    x86_64-linux = "linux-x86_64";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
@@ -104,7 +104,7 @@ stdenv.mkDerivation {
       fontconfig
       freetype
       gconf
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
       gtk2
@@ -205,6 +205,6 @@ stdenv.mkDerivation {
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
     platforms = builtins.attrNames mozillaPlatforms;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ taku0 ];
   };
 }

@@ -111,7 +111,10 @@ in
   config = mkIf cfg.enable {
     systemd.services.gitlab-runner = {
       path = cfg.packages;
-      environment = config.networking.proxy.envVars;
+      environment = config.networking.proxy.envVars // {
+        # Gitlab runner will not start if the HOME variable is not set
+        HOME = cfg.workDir;
+      };
       description = "Gitlab Runner";
       after = [ "network.target" ]
         ++ optional hasDocker "docker.service";

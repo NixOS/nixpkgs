@@ -8,7 +8,7 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     owner = "txthinking";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "04gx1p447wabw3d18s9sm8ynlvj2bp8ac9dsgs08kd1dyrsjlljk";
   };

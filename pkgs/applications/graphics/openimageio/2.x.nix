@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.0.8";
+  version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "Release-${version}";
-    sha256 = "0nk72h7q1n664b268zkhibb7a3i7fb3nl2z7fg31ys5r9zlq6mnp";
+    sha256 = "0k60kgfahsqcgmydsf1kh1qzshn8mksaw772z48a40qnx28pfjys";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];
@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
     "-DUSE_PYTHON=OFF"
     "-DUSE_QT=OFF"
     # GNUInstallDirs
-    "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin"
-    "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "dev"}/include"
     "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkgconfig
   ];
 

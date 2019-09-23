@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, qmake, qtscript }:
+{ lib, mkDerivation, fetchurl, qmake, qtscript }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "smplayer-19.5.0";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A complete front-end for MPlayer";
     homepage = http://smplayer.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

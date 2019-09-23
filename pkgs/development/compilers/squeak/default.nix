@@ -2,7 +2,7 @@
 , libpthreadstubs, pango, pkgconfig, libpulseaudio, which }:
 
 stdenv.mkDerivation rec {
-  name = "squeak-${version}";
+  pname = "squeak";
   version = "4.10.2.2614";
 
   src = fetchurl {

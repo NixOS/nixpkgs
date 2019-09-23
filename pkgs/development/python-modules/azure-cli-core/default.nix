@@ -33,11 +33,11 @@
 
 buildPythonPackage rec {
   pname = "azure-cli-core";
-  version = "2.0.66";
+  version = "2.0.71";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fp6b2x1l9bg07pca7asm80rnjlc4kkm061s3nrb55yj6awsnim5";
+    sha256 = "01pqdh16l2c9a6b1az9galmm1szvhg7fyf9shq872wanw1xx88dj";
   };
 
   propagatedBuildInputs = [

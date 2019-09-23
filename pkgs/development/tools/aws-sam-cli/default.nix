@@ -56,7 +56,7 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace requirements/base.txt --replace "requests==2.20.1" "requests==2.21.0"
+    substituteInPlace requirements/base.txt --replace "requests==2.20.1" "requests==2.22.0"
     substituteInPlace requirements/base.txt --replace "six~=1.11.0" "six~=1.12.0"
     substituteInPlace requirements/base.txt --replace "PyYAML~=3.12" "PyYAML~=5.1"
   '';

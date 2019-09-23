@@ -13,7 +13,7 @@ let
     patches = oldAttrs.patches ++ [ ./openssh-nixos-sandbox.patch ];
   });
 in stdenv.mkDerivation rec {
-  name = "monkeysphere-${version}";
+  pname = "monkeysphere";
   version = "0.44";
 
   # The patched OpenSSH binary MUST NOT be used (except in the check phase):

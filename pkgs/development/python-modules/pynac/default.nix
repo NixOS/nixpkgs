@@ -3,7 +3,7 @@
 , fetchurl
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pynac";
   version = "0.2";
 

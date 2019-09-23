@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "GPy";
   version = "1.9.8";
-  name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

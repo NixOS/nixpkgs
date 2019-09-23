@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, pkgconfig, makeWrapper
+, pkgconfig, wrapQtAppsHook
 , poppler, qt5, gnuplot
 }:
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkgconfig qt5.qttools qt5.qmake wrapQtAppsHook ];
   QT_PLUGIN_PATH = "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}";
 
-  nativeBuildInputs = [ pkgconfig qt5.qttools qt5.qmake makeWrapper ];
   buildInputs = [ qt5.qtbase poppler ];
   enableParallelBuilding = true;
 
@@ -50,9 +50,5 @@ stdenv.mkDerivation rec {
     "QCOLLECTIONGENERATORCOMMAND=qhelpgenerator"
   ];
 
-  postFixup = ''
-    wrapProgram "$out/bin/qtikz" \
-      --prefix QT_PLUGIN_PATH : "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}" \
-      --prefix PATH : "${gnuplot}/bin"
-  '';
+  qtWrapperArgs = [ ''--prefix PATH : "${gnuplot}/bin"'' ];
 }

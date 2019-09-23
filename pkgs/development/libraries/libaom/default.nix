@@ -1,7 +1,7 @@
 { stdenv, fetchgit, yasm, perl, cmake, pkgconfig, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "libaom-${version}";
+  pname = "libaom";
   version = "1.0.0-errata1";
 
   src = fetchgit {

@@ -7,7 +7,7 @@ let
     [ libXmu libXt libX11 libXext libXxf86vm libjack2 ];
 in
 stdenv.mkDerivation rec {
-  name = "baudline-${version}";
+  pname = "baudline";
   version = "1.08";
 
   src =

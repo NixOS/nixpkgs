@@ -7,7 +7,7 @@
 , pytest
 , mock
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "adb-homeassistant";
   version = "1.3.1";
 

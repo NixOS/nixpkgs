@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "z-lua";
-  version = "1.7.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "skywind3000";
     repo = "z.lua";
     rev = "v${version}";
-    sha256 = "01n4x84rpmyjyfga90s2s63gdk17z944hz35fk95qnshc5fapfq8";
+    sha256 = "13cfdghkprkaxgrbwsjndbza2mjxm2x774lnq7q4gfyc48mzwi70";
   };
 
   dontBuild = true;
 
-  buildInputs = [ lua ];
+  buildInputs = [ (lua.withPackages (p: with p; [ luafilesystem ])) ];
 
   installPhase = ''
     install -Dm755 z.lua $out/bin/z

@@ -1,5 +1,5 @@
 { stdenv, substituteAll, fetchurl, fetchFromGitHub, autoreconfHook, gettext, makeWrapper, pkgconfig
-, vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobject-introspection, gtk2
+, vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk-pixbuf, gobject-introspection, gtk2
 , gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePython2Library ? false
 , enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null
 , buildPackages, runtimeShell }:
@@ -33,14 +33,14 @@ let
   };
   emojiData = stdenv.mkDerivation {
     name = "emoji-data-5.0";
-    unpackPhase = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir $out
       ${builtins.toString (flip mapAttrsToList emojiSrcs (k: v: "cp ${v} $out/emoji-${k}.txt;"))}
     '';
   };
   cldrEmojiAnnotation = stdenv.mkDerivation rec {
-    name = "cldr-emoji-annotation-${version}";
+    pname = "cldr-emoji-annotation";
     version = "31.90.0_1";
     src = fetchFromGitHub {
       owner = "fujiwarat";
@@ -60,9 +60,9 @@ let
       sha256 = "a1a3ca4381eb91f7b65afe7cb7df615cdcf67993fef4b486585f66b349993a10";
     };
   };
-  ucd = stdenv.mkDerivation rec {
+  ucd = stdenv.mkDerivation {
     name = "ucd-12.0.0";
-    unpackPhase = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir $out
       ${builtins.toString (flip mapAttrsToList ucdSrcs (k: v: "cp ${v} $out/${k}.txt;"))}
@@ -80,7 +80,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ibus-${version}";
+  pname = "ibus";
   version = "1.5.20";
 
   src = fetchFromGitHub {
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus
     dconf
-    gdk_pixbuf
+    gdk-pixbuf
     gobject-introspection
     python3.pkgs.pygobject3 # for pygobject overrides
     gtk2

@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "sift-${version}";
+  pname = "sift";
   version = "0.9.0";
   rev = "v${version}";
 

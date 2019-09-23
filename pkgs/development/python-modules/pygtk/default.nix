@@ -52,7 +52,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "GTK+-2 bindings";
+    description = "GTK 2 Python bindings";
     homepage = "https://gitlab.gnome.org/Archive/pygtk";
     platforms = platforms.all;
     license = with licenses; [ lgpl21Plus ];

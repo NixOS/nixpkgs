@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "rftg-${version}";
+  pname = "rftg";
   version = "0.9.4";
 
   src = fetchurl {

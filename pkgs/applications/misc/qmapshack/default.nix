@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, cmake, qtscript, qtwebengine, gdal, proj, routino, quazip }:
+{ mkDerivation, lib, fetchurl, fetchpatch, cmake, qtscript, qtwebengine, gdal, proj, routino, quazip }:
 
-stdenv.mkDerivation rec {
-  name = "qmapshack-${version}";
-  version = "1.13.0";
+mkDerivation rec {
+  pname = "qmapshack";
+  version = "1.13.1";
 
   src = fetchurl {
-    url = "https://bitbucket.org/maproom/qmapshack/downloads/${name}.tar.gz";
-    sha256 = "1cv1f718r8vqyk2l6w3alz2aqjvb4msz8705pm9yr5ndi28qyrba";
+    url = "https://bitbucket.org/maproom/qmapshack/downloads/${pname}-${version}.tar.gz";
+    sha256 = "15x1b2q0hr1vx006f9hjc4cvfjvxvfdwybw32qvczdyc3crq0mc9";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://bitbucket.org/maproom/qmapshack/wiki/Home;
     description = "Plan your next outdoor trip";
     license = licenses.gpl3;

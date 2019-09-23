@@ -21,12 +21,13 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "uhd-${version}";
+  pname = "uhd";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
-    rev = "${uhdVer}";
+    rev = uhdVer;
     sha256 = "0y1hff4vslfv36vxgvjqajg4862a11d4wgr0vcb0visgh1bi8qgy";
   };
 

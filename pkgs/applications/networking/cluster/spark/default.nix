@@ -15,18 +15,19 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
 
-  name = "spark-${version}";
+  pname = "spark";
+  inherit version;
 
   src = fetchzip {
     inherit sha256;
-    url    = "mirror://apache/spark/${name}/${name}-bin-without-hadoop.tgz";
+    url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
   };
 
   buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
     ++ optional RSupport R
     ++ optional mesosSupport mesos;
 
-  untarDir = "${name}-bin-without-hadoop";
+  untarDir = "${pname}-${version}-bin-without-hadoop";
   installPhase = ''
     mkdir -p $out/{lib/${untarDir}/conf,bin,/share/java}
     mv * $out/lib/${untarDir}

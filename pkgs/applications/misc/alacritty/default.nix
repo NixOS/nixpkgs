@@ -22,11 +22,10 @@
   libxcb,
   libxkbcommon,
   wayland,
+  xdg_utils,
 
   # Darwin Frameworks
-  cf-private,
   AppKit,
-  CoreFoundation,
   CoreGraphics,
   CoreServices,
   CoreText,
@@ -74,13 +73,13 @@ in buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-    ++ lib.optionals stdenv.isDarwin [
-      AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL
-      # Needed for CFURLResourceIsReachable symbols.
-      cf-private
-    ];
+    ++ lib.optionals stdenv.isDarwin [ AppKit CoreGraphics CoreServices CoreText Foundation OpenGL ];
 
   outputs = [ "out" "terminfo" ];
+  postPatch = ''
+    substituteInPlace alacritty_terminal/src/config/mouse.rs \
+      --replace xdg-open ${xdg_utils}/bin/xdg-open
+  '';
 
   postBuild = lib.optionalString stdenv.isDarwin "make app";
 

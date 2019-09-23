@@ -1,25 +1,32 @@
 { lib
+, python
 , buildPythonPackage
+, bootstrapped-pip
 , fetchPypi
 , mock
 , scripttest
 , virtualenv
 , pretend
 , pytest
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "19.1.1";
+  version = "19.2.3";
+  format = "other";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44d3d7d3d30a1eb65c7e5ff1173cdf8f7467850605ac7cc3707b6064bddd0958";
+    sha256 = "e7a31f147974362e6c82d84b91c7f2bdf57e4d3163d3d454e6c3e71944d67135";
   };
+
+  nativeBuildInputs = [ bootstrapped-pip ];
 
   # pip detects that we already have bootstrapped_pip "installed", so we need
   # to force it a little.
-  installFlags = [ "--ignore-installed" ];
+  pipInstallFlags = [ "--ignore-installed" ];
 
   checkInputs = [ mock scripttest virtualenv pretend pytest ];
   # Pip wants pytest, but tests are not distributed

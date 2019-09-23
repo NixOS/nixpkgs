@@ -16,7 +16,7 @@ let
     "-t ${topic}"
   ];
 
-in rec {
+in {
   name = "mosquitto";
   meta = with pkgs.stdenv.lib; {
     maintainers = with maintainers; [ peterhoeg ];
@@ -34,7 +34,7 @@ in rec {
         enable = true;
         host = "0.0.0.0";
         checkPasswords = true;
-        users."${username}" = {
+        users.${username} = {
           inherit password;
           acl = [
             "topic readwrite ${topic}"
@@ -49,21 +49,40 @@ in rec {
 
   testScript = let
     file = "/tmp/msg";
-    payload = "wootWOOT";
+    sub = args:
+      "(${cmd "sub"} -C 1 ${args} | tee ${file} &)";
   in ''
     startAll;
     $server->waitForUnit("mosquitto.service");
 
     $server->fail("test -f ${file}");
-    $server->execute("(${cmd "sub"} -C 1 | tee ${file} &)");
-
     $client1->fail("test -f ${file}");
-    $client1->execute("(${cmd "sub"} -C 1 | tee ${file} &)");
+    $client2->fail("test -f ${file}");
 
-    $client2->succeed("${cmd "pub"} -m ${payload}");
 
-    $server->succeed("grep -q ${payload} ${file}");
+    # QoS = 0, so only one subscribers should get it
+    $server->execute("${sub "-q 0"}");
 
-    $client1->succeed("grep -q ${payload} ${file}");
+    # we need to give the subscribers some time to connect
+    $client2->execute("sleep 5");
+    $client2->succeed("${cmd "pub"} -m FOO -q 0");
+
+    $server->waitUntilSucceeds("grep -q FOO ${file}");
+    $server->execute("rm ${file}");
+
+
+    # QoS = 1, so both subscribers should get it
+    $server->execute("${sub "-q 1"}");
+    $client1->execute("${sub "-q 1"}");
+
+    # we need to give the subscribers some time to connect
+    $client2->execute("sleep 5");
+    $client2->succeed("${cmd "pub"} -m BAR -q 1");
+
+    $server->waitUntilSucceeds("grep -q BAR ${file}");
+    $server->execute("rm ${file}");
+
+    $client1->waitUntilSucceeds("grep -q BAR ${file}");
+    $client1->execute("rm ${file}");
   '';
 })

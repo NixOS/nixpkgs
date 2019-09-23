@@ -9,6 +9,7 @@ import ./make-test.nix ({ pkgs, ... }:
 
   machine = { pkgs, ... }: {
     services.flatpak.enable = true;
+    xdg.portal.enable = true;
     environment.systemPackages = with pkgs; [ gnome-desktop-testing flatpak-builder ] ++ flatpak-builder.installedTestsDependencies;
     virtualisation.diskSize = 2048;
   };

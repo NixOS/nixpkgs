@@ -5,13 +5,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "maxscale-${version}";
+  pname = "maxscale";
   version = "2.1.17";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "MaxScale";
-    rev = "${name}";
+    rev = "${pname}-${version}";
     sha256 = "161kc6aqqj3z509q4qwvsd86h06hlyzdask4gawn2ij0h3ca58q6";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-appindicator-${version}";
+  pname = "gnome-shell-extension-appindicator";
   version = "29";
 
   src = fetchFromGitHub {

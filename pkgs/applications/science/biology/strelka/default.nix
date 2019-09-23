@@ -1,17 +1,18 @@
 {stdenv, fetchFromGitHub, cmake, zlib, python2}:
 
 stdenv.mkDerivation rec {
-  name = "strelka-${version}";
-  version = "2.9.5";
+  pname = "strelka";
+  version = "2.9.10";
 
   src = fetchFromGitHub {
     owner = "Illumina";
     repo = "strelka";
     rev = "v${version}";
-    sha256 = "0x4a6nkx1jnyag9svghsdjz1fz6q7qx5pn77wphdfnk81f9yspf8";
+    sha256 = "1nykbmim1124xh22nrhrsn8xgjb3s2y7akrdapn9sl1gdych4ppf";
   };
 
-  buildInputs = [ cmake zlib python2 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib python2 ];
 
   preConfigure = ''
     sed -i 's|/usr/bin/env python|${python2}/bin/python|' src/python/lib/makeRunScript.py

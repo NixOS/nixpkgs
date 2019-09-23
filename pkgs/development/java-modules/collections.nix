@@ -2,7 +2,7 @@
 
 with pkgs.javaPackages;
 
-rec {
+{
   mavenLibs_2_0_1 = [
     mavenArtifact_2_0_1
     mavenArtifactManager_2_0_1

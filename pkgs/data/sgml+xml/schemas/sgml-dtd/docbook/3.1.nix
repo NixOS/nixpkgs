@@ -17,7 +17,7 @@ in
 stdenv.mkDerivation {
   name = "docbook-sgml-3.1";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   nativeBuildInputs = [ unzip ];
 

@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "migu-${version}";
+  pname = "migu";
   version = "20150712";
 
   srcs = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     find $srcs -name '*.ttf' | xargs install -m644 --target $out/share/fonts/truetype/migu -D

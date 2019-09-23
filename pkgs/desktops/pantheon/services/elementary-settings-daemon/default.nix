@@ -44,16 +44,16 @@ stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
   version = "3.30.2";
 
-  projectName = "gnome-settings-daemon";
+  repoName = "gnome-settings-daemon";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${projectName}/${stdenv.lib.versions.majorMinor version}/${projectName}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${repoName}/${stdenv.lib.versions.majorMinor version}/${repoName}-${version}.tar.xz";
     sha256 = "0c663csa3gnsr6wm0xfll6aani45snkdj7zjwjfzcwfh8w4a3z12";
   };
 
   # Source for ubuntu's patchset
   src2 = fetchgit {
-    url = "https://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/${projectName}";
+    url = "https://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/${repoName}";
     rev = "refs/tags/ubuntu/${version}-1ubuntu1";
     sha256 = "02awkhw6jqm7yh812mw0nsdmsljfi8ksz8mvd2qpns5pcv002g2c";
   };
@@ -150,9 +150,15 @@ stdenv.mkDerivation rec {
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    # Default for release buildtype but passed manually because
+    # we're using plain
+    "-DG_DISABLE_CAST_CHECKS"
+  ];
+
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = projectName;
+      packageName = repoName;
       attrPath = "pantheon.${pname}";
     };
   };

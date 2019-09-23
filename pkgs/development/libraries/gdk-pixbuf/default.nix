@@ -83,7 +83,6 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gdk_pixbuf";
     };
 
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc

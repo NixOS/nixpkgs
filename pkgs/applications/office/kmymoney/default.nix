@@ -1,4 +1,5 @@
 { stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
+, wrapQtAppsHook
 
 , akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
 , kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
@@ -14,12 +15,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "kmymoney-${version}";
-  version = "5.0.4";
+  pname = "kmymoney";
+  version = "5.0.5";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-    sha256 = "06lbavhl9b8cybnss2mmy3g5w8qn2vl6zhipvbl11lsr3j9bsa8q";
+    url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "1hghs4676kn2giwpwz1y7p6djpmi41x64idf3ybiz8ky14a5s977";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     doxygen extra-cmake-modules graphviz kdoctools python2Packages.wrapPython
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -57,13 +59,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   installCheckInputs = [ xvfb_run ];
-  installCheckPhase = let
-    pluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}";
-  in lib.optionalString doInstallCheck ''
-    QT_PLUGIN_PATH=${lib.escapeShellArg pluginPath} \
+  installCheckPhase =
+    lib.optionalString doInstallCheck ''
       xvfb-run -s '-screen 0 1024x768x24' make test \
-      ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
-  '';
+        ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
+    '';
 
   meta = {
     description = "Personal finance manager for KDE";

@@ -8,12 +8,12 @@ let
   version = "11.2";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchFromBitbucket {
     owner = "rude";
     repo = "love";
-    rev = "${version}";
+    rev = version;
     sha256 = "0q1lsgc1621czrg49nmabq6am9sgxa9syxrwzlksqqr4dyzw4nmf";
   };
 

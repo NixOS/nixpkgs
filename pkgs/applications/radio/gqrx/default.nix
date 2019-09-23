@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
+, mkDerivation
 # drivers (optional):
 , rtl-sdr, hackrf
 , pulseaudioSupport ? true, libpulseaudio
@@ -6,8 +7,8 @@
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
-stdenv.mkDerivation rec {
-  name = "gqrx-${version}";
+mkDerivation rec {
+  pname = "gqrx";
   version = "2.11.5";
 
   src = fetchFromGitHub {

@@ -2,13 +2,12 @@
 , openldap
 }:
 
-# NOTE: Please check if any changes here are applicable to ../realpine/ as well
 stdenv.mkDerivation rec {
-  name = "alpine-${version}";
+  pname = "alpine";
   version = "2.21";
 
   src = fetchurl {
-    url = "http://alpine.freeiz.com/alpine/release/src/${name}.tar.xz";
+    url = "http://alpine.x10host.com/alpine/release/src/${pname}-${version}.tar.xz";
     sha256 = "0f3llxrmaxw7w9w6aixh752md3cdc91mwfmbarkm8s413f4bcc30";
   };
 
@@ -23,11 +22,11 @@ stdenv.mkDerivation rec {
     "--with-passfile=.pine-passfile"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Console mail reader";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = https://www.washington.edu/alpine/;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    homepage = "http://alpine.x10host.com/";
   };
 }

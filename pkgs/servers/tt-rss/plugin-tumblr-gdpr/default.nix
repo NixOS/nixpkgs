@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ... }: stdenv.mkDerivation rec {
-  name = "tt-rss-plugin-tumblr-gdpr-${version}";
+  pname = "tt-rss-plugin-tumblr-gdpr";
   version = "2.1";
 
   src = fetchFromGitHub {

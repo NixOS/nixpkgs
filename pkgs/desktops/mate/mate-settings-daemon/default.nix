@@ -4,11 +4,11 @@
   wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-settings-daemon-${version}";
+  pname = "mate-settings-daemon";
   version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0yr5v6b9hdk20j29smbw1k4fkyg82i5vlflmgly0vi5whgc74gym";
   };
 

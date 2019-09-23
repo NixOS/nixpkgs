@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "gox-${version}";
+buildGoPackage {
+  pname = "gox";
   version = "20181025";
 
   goPackagePath = "github.com/mitchellh/gox";

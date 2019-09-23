@@ -10,13 +10,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mbedtls-${version}";
+  pname = "mbedtls";
   version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1mk3xv61wvqqrzd6jnrz8csyfnwwwwpjzywj3fsfy99p51d7wqgw";
   };
 

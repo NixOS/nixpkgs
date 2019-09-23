@@ -42,6 +42,7 @@ buildPythonPackage rec {
       # Irrelevant in nixpkgs
       excludes = [ "setup.py" "setup.cfg" "release/docker/*" ];
     })
+    ./pytest5.patch
   ];
 
   postPatch = ''
@@ -54,7 +55,7 @@ buildPythonPackage rec {
   checkPhase = ''
     export HOME=$(mktemp -d)
     export LC_CTYPE=en_US.UTF-8
-    pytest -k 'not test_find_unclaimed_URLs'
+    pytest -k 'not test_find_unclaimed_URLs and not test_tcp'
   '';
 
   propagatedBuildInputs = [
@@ -62,7 +63,7 @@ buildPythonPackage rec {
     h2 hyperframe kaitaistruct passlib
     pyasn1 pyopenssl pyparsing pyperclip
     ruamel_yaml tornado urwid brotlipy
-    sortedcontainers ldap3 wsproto
+    sortedcontainers ldap3 wsproto setuptools
   ];
 
   checkInputs = [

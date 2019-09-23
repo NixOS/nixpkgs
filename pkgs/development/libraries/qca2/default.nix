@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qt, darwin }:
+{ stdenv, fetchurl, openssl_1_0_2, cmake, pkgconfig, qt, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "qca-${version}";
+  pname = "qca";
   version = "2.1.3";
 
   src = fetchurl {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qt ]
+  buildInputs = [ openssl_1_0_2 qt ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   enableParallelBuilding = true;

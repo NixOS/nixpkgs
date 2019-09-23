@@ -1,11 +1,11 @@
 { stdenv, fetchurl, texinfo, ncurses, lzma }:
 
 stdenv.mkDerivation rec {
-  name = "texinfo-${version}";
+  pname = "texinfo";
   version = "4.13a";
 
   src = fetchurl {
-    url = "mirror://gnu/texinfo/${name}.tar.lzma";
+    url = "mirror://gnu/texinfo/${pname}-${version}.tar.lzma";
     sha256 = "1rf9ckpqwixj65bw469i634897xwlgkm5i9g2hv3avl6mv7b0a3d";
   };
 

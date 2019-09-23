@@ -1,7 +1,7 @@
 { stdenv, openssl, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "open-isns-${version}";
+  pname = "open-isns";
   version = "0.99";
 
   src = fetchFromGitHub {

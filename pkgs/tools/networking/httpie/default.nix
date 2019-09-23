@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "httpie-1.0.2";
+python3Packages.buildPythonApplication rec {
+  pname = "httpie";
+  version = "1.0.3";
 
-  src = fetchurl {
-    url = "mirror://pypi/h/httpie/${name}.tar.gz";
-    sha256 = "1ax22jh5lpjywpj7lsl072wdhr1pxiqzmxhyph5diwxxzs2nqrzw";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "103fcigpxf4nqmrdqjnyz7d9n4n16906slwmmqqc0gkxv8hnw6vd";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pygments requests ];
+  propagatedBuildInputs = with python3Packages; [ pygments requests setuptools ];
 
   doCheck = false;
 

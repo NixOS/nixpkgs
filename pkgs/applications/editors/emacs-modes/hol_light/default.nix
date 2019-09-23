@@ -1,7 +1,7 @@
 { stdenv, fetchsvn }:
 
 stdenv.mkDerivation rec {
-  name    = "hol_light-mode-${version}";
+  pname = "hol_light-mode";
   version = "73";
 
   src = fetchsvn {
@@ -22,5 +22,8 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.gpl2Plus;
     platforms   = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+
+    # Fails trying to fetch dependencies in build
+    # broken = true;
   };
 }

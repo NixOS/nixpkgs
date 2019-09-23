@@ -40,7 +40,7 @@ with lib;
       systemPackages = [ pkgs.pfixtools ];
     };
 
-    systemd.services."pfix-srsd" = {
+    systemd.services.pfix-srsd = {
       description = "Postfix sender rewriting scheme daemon";
       before = [ "postfix.service" ];
       #note that we use requires rather than wants because postfix

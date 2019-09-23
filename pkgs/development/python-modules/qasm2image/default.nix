@@ -11,7 +11,7 @@
 , pythonOlder
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "qasm2image";
   version = "0.8.0";
 

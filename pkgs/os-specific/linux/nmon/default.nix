@@ -1,7 +1,7 @@
 { fetchurl, stdenv, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "nmon-${version}";
+  pname = "nmon";
   version = "16k";
 
   src = fetchurl {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
-  unpackPhase = ":";
+  dontUnpack = true;
   buildPhase = "cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D X86";
   installPhase = ''
     mkdir -p $out/bin

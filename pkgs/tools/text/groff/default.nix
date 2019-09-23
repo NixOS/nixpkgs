@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "groff-${version}";
+  pname = "groff";
   version = "1.22.3";
 
   src = fetchurl {
-    url = "mirror://gnu/groff/${name}.tar.gz";
+    url = "mirror://gnu/groff/${pname}-${version}.tar.gz";
     sha256 = "1998v2kcs288d3y7kfxpvl369nqi06zbbvjzafyvyl3pr7bajj1s";
   };
 

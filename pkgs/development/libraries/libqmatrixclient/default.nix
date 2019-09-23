@@ -2,8 +2,9 @@
 , qtbase, qtmultimedia }:
 
 let
-  generic = version: sha256: prefix: stdenv.mkDerivation rec {
-    name = "libqmatrixclient-${version}";
+  generic = version: sha256: prefix: stdenv.mkDerivation {
+    pname = "libqmatrixclient";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "QMatrixClient";

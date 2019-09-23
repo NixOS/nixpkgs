@@ -14,7 +14,7 @@ let
   }:
     stdenv.mkDerivation (a // {
       inherit installPhase;
-      unpackPhase = "true";
+      dontUnpack = true;
       buildInputs = [ unzip ];
       meta = a.meta // {
         platforms = graylog.meta.platforms;

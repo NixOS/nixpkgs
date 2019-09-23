@@ -2,7 +2,7 @@
 , pkgconfig, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "duperemove-${version}";
+  pname = "duperemove";
   version = "0.11.1";
 
   src = fetchFromGitHub {

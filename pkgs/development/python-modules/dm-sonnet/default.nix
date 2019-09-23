@@ -18,7 +18,7 @@ let
   version = "1.33";
 
   # first build all binaries and generate setup.py using bazel
-  bazel-build = buildBazelPackage rec {
+  bazel-build = buildBazelPackage {
     name = "dm-sonnet-bazel-${version}";
 
     src = fetchFromGitHub {
@@ -36,7 +36,7 @@ let
     bazelTarget = ":install";
 
     fetchAttrs = {
-      sha256 = "0f2rlzrlazmgjrsin8vq3jfv431cc8sx8lxsr6x4wgd4jx5d1zzy";
+      sha256 = "0mxma7jajm42v1hv6agl909xra0azihj588032ivhlmmh403x6wg";
     };
 
     bazelFlags = [
@@ -60,7 +60,7 @@ let
   };
 
 # now use pip to install the package prepared by bazel
-in buildPythonPackage rec {
+in buildPythonPackage {
   pname = "dm-sonnet";
   inherit version;
 

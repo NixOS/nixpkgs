@@ -10,11 +10,11 @@ let luaValue = if luaSupport then lua5 else "no";
 in
 
 stdenv.mkDerivation rec {
-  name = "modsecurity-${version}";
+  pname = "modsecurity";
   version = "2.9.3";
 
   src = fetchurl {
-    url = "https://www.modsecurity.org/tarball/${version}/${name}.tar.gz";
+    url = "https://www.modsecurity.org/tarball/${version}/${pname}-${version}.tar.gz";
     sha256 = "0611nskd2y6yagrciqafxdn4rxbdk2v4swf45kc1sgwx2sfh34j1";
   };
 

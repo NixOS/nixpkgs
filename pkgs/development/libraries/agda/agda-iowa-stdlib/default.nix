@@ -1,14 +1,14 @@
 { stdenv, agda, fetchFromGitHub }:
 
 agda.mkDerivation (self: rec {
-  version = "1.4.0";
+  version = "1.5.0";
   name = "agda-iowa-stdlib-${version}";
 
   src = fetchFromGitHub {
     owner = "cedille";
     repo  = "ial";
     rev = "v${version}";
-    sha256 = "1gwxpybxwdj5ipbb3gapm7r5hfl3g6sj9kp13954pdmx8d5b0gma";
+    sha256 = "0dlis6v6nzbscf713cmwlx8h9n2gxghci8y21qak3hp18gkxdp0g";
   };
 
   sourceDirectories = [ "./." ];

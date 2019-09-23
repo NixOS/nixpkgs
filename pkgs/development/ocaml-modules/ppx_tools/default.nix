@@ -20,7 +20,10 @@ let param = {
   "4.07" = {
     version = "5.1+4.06.0";
     sha256 = "1ww4cspdpgjjsgiv71s0im5yjkr3544x96wsq1vpdacq7dr7zwiw"; };
-}."${ocaml.meta.branch}";
+  "4.08" = {
+    version = "5.3+4.08.0";
+    sha256 = "0vdmhs3hpmh5iclx4lzgdpf362m4l35zprxs73r84z1yhr4jcr4m"; };
+}.${ocaml.meta.branch};
 in
   stdenv.mkDerivation {
     name = "ocaml${ocaml.version}-ppx_tools-${param.version}";

@@ -1,7 +1,22 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, python3, ninja, vala, gtk3, granite, wingpanel, libnotify
-, pulseaudio, libcanberra-gtk3, libgee, libxml2, wrapGAppsHook
-, elementary-icon-theme }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, libnotify
+, pulseaudio
+, libcanberra-gtk3
+, libgee
+, libxml2
+, wrapGAppsHook
+, elementary-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-sound";
@@ -41,7 +56,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py

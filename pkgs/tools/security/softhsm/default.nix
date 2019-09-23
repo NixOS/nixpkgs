@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "softhsm-${version}";
+  pname = "softhsm";
   version = "2.5.0";
 
   src = fetchurl {
-    url = "https://dist.opendnssec.org/source/${name}.tar.gz";
+    url = "https://dist.opendnssec.org/source/${pname}-${version}.tar.gz";
     sha256 = "1cijq78jr3mzg7jj11r0krawijp99p253f4qdqr94n728p7mdalj";
   };
 

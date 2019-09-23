@@ -3,10 +3,7 @@
          xml:id="chap-meta">
  <title>Meta-attributes</title>
  <para>
-  Nix packages can declare <emphasis>meta-attributes</emphasis> that contain
-  information about a package such as a description, its homepage, its license,
-  and so on. For instance, the GNU Hello package has a <varname>meta</varname>
-  declaration like this:
+  Nix packages can declare <emphasis>meta-attributes</emphasis> that contain information about a package such as a description, its homepage, its license, and so on. For instance, the GNU Hello package has a <varname>meta</varname> declaration like this:
 <programlisting>
 meta = with stdenv.lib; {
   description = "A program that produces a familiar, friendly greeting";
@@ -22,13 +19,10 @@ meta = with stdenv.lib; {
 </programlisting>
  </para>
  <para>
-  Meta-attributes are not passed to the builder of the package. Thus, a change
-  to a meta-attribute doesn’t trigger a recompilation of the package. The
-  value of a meta-attribute must be a string.
+  Meta-attributes are not passed to the builder of the package. Thus, a change to a meta-attribute doesn’t trigger a recompilation of the package. The value of a meta-attribute must be a string.
  </para>
  <para>
-  The meta-attributes of a package can be queried from the command-line using
-  <command>nix-env</command>:
+  The meta-attributes of a package can be queried from the command-line using <command>nix-env</command>:
 <screen>
 <prompt>$ </prompt>nix-env -qa hello --json
 {
@@ -67,8 +61,7 @@ meta = with stdenv.lib; {
 
 
 </screen>
-  <command>nix-env</command> knows about the <varname>description</varname>
-  field specifically:
+  <command>nix-env</command> knows about the <varname>description</varname> field specifically:
 <screen>
 <prompt>$ </prompt>nix-env -qa hello --description
 hello-2.3  A program that produces a familiar, friendly greeting
@@ -88,18 +81,13 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      A short (one-line) description of the package. This is shown by
-      <command>nix-env -q --description</command> and also on the Nixpkgs
-      release pages.
+      A short (one-line) description of the package. This is shown by <command>nix-env -q --description</command> and also on the Nixpkgs release pages.
      </para>
      <para>
-      Don’t include a period at the end. Don’t include newline characters.
-      Capitalise the first character. For brevity, don’t repeat the name of
-      package — just describe what it does.
+      Don’t include a period at the end. Don’t include newline characters. Capitalise the first character. For brevity, don’t repeat the name of package — just describe what it does.
      </para>
      <para>
-      Wrong: <literal>"libpng is a library that allows you to decode PNG
-      images."</literal>
+      Wrong: <literal>"libpng is a library that allows you to decode PNG images."</literal>
      </para>
      <para>
       Right: <literal>"A library for decoding PNG images"</literal>
@@ -122,9 +110,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      Release branch. Used to specify that a package is not going to receive
-      updates that are not in this branch; for example, Linux kernel 3.0 is
-      supposed to be updated to 3.0.X, not 3.1.
+      Release branch. Used to specify that a package is not going to receive updates that are not in this branch; for example, Linux kernel 3.0 is supposed to be updated to 3.0.X, not 3.1.
      </para>
     </listitem>
    </varlistentry>
@@ -134,8 +120,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      The package’s homepage. Example:
-      <literal>https://www.gnu.org/software/hello/manual/</literal>
+      The package’s homepage. Example: <literal>https://www.gnu.org/software/hello/manual/</literal>
      </para>
     </listitem>
    </varlistentry>
@@ -145,8 +130,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      The page where a link to the current version can be found. Example:
-      <literal>https://ftp.gnu.org/gnu/hello/</literal>
+      The page where a link to the current version can be found. Example: <literal>https://ftp.gnu.org/gnu/hello/</literal>
      </para>
     </listitem>
    </varlistentry>
@@ -156,10 +140,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      A link or a list of links to the location of Changelog for a package.
-     A link may use expansion to refer to the correct changelog version.
-             Example:
-      <literal>"https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${version}"</literal>
+      A link or a list of links to the location of Changelog for a package. A link may use expansion to refer to the correct changelog version. Example: <literal>"https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${version}"</literal>
      </para>
     </listitem>
    </varlistentry>
@@ -169,46 +150,32 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      The license, or licenses, for the package. One from the attribute set
-      defined in
-      <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
-      <filename>nixpkgs/lib/licenses.nix</filename></link>. At this moment
-      using both a list of licenses and a single license is valid. If the
-      license field is in the form of a list representation, then it means that
-      parts of the package are licensed differently. Each license should
-      preferably be referenced by their attribute. The non-list attribute value
-      can also be a space delimited string representation of the contained
-      attribute shortNames or spdxIds. The following are all valid examples:
+      The license, or licenses, for the package. One from the attribute set defined in <link
+          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix"> <filename>nixpkgs/lib/licenses.nix</filename></link>. At this moment using both a list of licenses and a single license is valid. If the license field is in the form of a list representation, then it means that parts of the package are licensed differently. Each license should preferably be referenced by their attribute. The non-list attribute value can also be a space delimited string representation of the contained attribute shortNames or spdxIds. The following are all valid examples:
       <itemizedlist>
        <listitem>
         <para>
-         Single license referenced by attribute (preferred)
-         <literal>stdenv.lib.licenses.gpl3</literal>.
+         Single license referenced by attribute (preferred) <literal>stdenv.lib.licenses.gpl3</literal>.
         </para>
        </listitem>
        <listitem>
         <para>
-         Single license referenced by its attribute shortName (frowned upon)
-         <literal>"gpl3"</literal>.
+         Single license referenced by its attribute shortName (frowned upon) <literal>"gpl3"</literal>.
         </para>
        </listitem>
        <listitem>
         <para>
-         Single license referenced by its attribute spdxId (frowned upon)
-         <literal>"GPL-3.0"</literal>.
+         Single license referenced by its attribute spdxId (frowned upon) <literal>"GPL-3.0"</literal>.
         </para>
        </listitem>
        <listitem>
         <para>
-         Multiple licenses referenced by attribute (preferred) <literal>with
-         stdenv.lib.licenses; [ asl20 free ofl ]</literal>.
+         Multiple licenses referenced by attribute (preferred) <literal>with stdenv.lib.licenses; [ asl20 free ofl ]</literal>.
         </para>
        </listitem>
        <listitem>
         <para>
-         Multiple licenses referenced as a space delimited string of attribute
-         shortNames (frowned upon) <literal>"asl20 free ofl"</literal>.
+         Multiple licenses referenced as a space delimited string of attribute shortNames (frowned upon) <literal>"asl20 free ofl"</literal>.
         </para>
        </listitem>
       </itemizedlist>
@@ -222,13 +189,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      A list of names and e-mail addresses of the maintainers of this Nix
-      expression. If you would like to be a maintainer of a package, you may
-      want to add yourself to
-      <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix"><filename>nixpkgs/maintainers/maintainer-list.nix</filename></link>
-      and write something like <literal>[ stdenv.lib.maintainers.alice
-      stdenv.lib.maintainers.bob ]</literal>.
+      A list of names and e-mail addresses of the maintainers of this Nix expression. If you would like to be a maintainer of a package, you may want to add yourself to <link
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix"><filename>nixpkgs/maintainers/maintainer-list.nix</filename></link> and write something like <literal>[ stdenv.lib.maintainers.alice stdenv.lib.maintainers.bob ]</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -238,10 +200,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      The <emphasis>priority</emphasis> of the package, used by
-      <command>nix-env</command> to resolve file name conflicts between
-      packages. See the Nix manual page for <command>nix-env</command> for
-      details. Example: <literal>"10"</literal> (a low-priority package).
+      The <emphasis>priority</emphasis> of the package, used by <command>nix-env</command> to resolve file name conflicts between packages. See the Nix manual page for <command>nix-env</command> for details. Example: <literal>"10"</literal> (a low-priority package).
      </para>
     </listitem>
    </varlistentry>
@@ -251,15 +210,11 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </term>
     <listitem>
      <para>
-      The list of Nix platform types on which the package is supported. Hydra
-      builds packages according to the platform specified. If no platform is
-      specified, the package does not have prebuilt binaries. An example is:
+      The list of Nix platform types on which the package is supported. Hydra builds packages according to the platform specified. If no platform is specified, the package does not have prebuilt binaries. An example is:
 <programlisting>
 meta.platforms = stdenv.lib.platforms.linux;
 </programlisting>
-      Attribute Set <varname>stdenv.lib.platforms</varname> defines
-      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix">
-      various common lists</link> of platforms types.
+      Attribute Set <varname>stdenv.lib.platforms</varname> defines <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix"> various common lists</link> of platforms types.
      </para>
     </listitem>
    </varlistentry>
@@ -270,23 +225,14 @@ meta.platforms = stdenv.lib.platforms.linux;
     <listitem>
      <warning>
       <para>
-       This attribute is special in that it is not actually under the
-       <literal>meta</literal> attribute set but rather under the
-       <literal>passthru</literal> attribute set. This is due to how
-       <literal>meta</literal> attributes work, and the fact that they
-       are supposed to contain only metadata, not derivations.
+       This attribute is special in that it is not actually under the <literal>meta</literal> attribute set but rather under the <literal>passthru</literal> attribute set. This is due to how <literal>meta</literal> attributes work, and the fact that they are supposed to contain only metadata, not derivations.
       </para>
      </warning>
      <para>
-      An attribute set with as values tests. A test is a derivation, which
-      builds successfully when the test passes, and fails to build otherwise. A
-      derivation that is a test needs to have <literal>meta.timeout</literal>
-      defined.
+      An attribute set with as values tests. A test is a derivation, which builds successfully when the test passes, and fails to build otherwise. A derivation that is a test needs to have <literal>meta.timeout</literal> defined.
      </para>
      <para>
-      The NixOS tests are available as <literal>nixosTests</literal> in
-      parameters of derivations. For instance, the OpenSMTPD derivation
-      includes lines similar to:
+      The NixOS tests are available as <literal>nixosTests</literal> in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
 <programlisting>
 { /* ... */, nixosTests }:
 {
@@ -305,13 +251,7 @@ meta.platforms = stdenv.lib.platforms.linux;
     </term>
     <listitem>
      <para>
-      A timeout (in seconds) for building the derivation. If the derivation
-      takes longer than this time to build, it can fail due to breaking the
-      timeout. However, all computers do not have the same computing power,
-      hence some builders may decide to apply a multiplicative factor to this
-      value. When filling this value in, try to keep it approximately
-      consistent with other values already present in
-      <literal>nixpkgs</literal>.
+      A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, it can fail due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in <literal>nixpkgs</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -321,13 +261,7 @@ meta.platforms = stdenv.lib.platforms.linux;
     </term>
     <listitem>
      <para>
-      The list of Nix platform types for which the Hydra instance at
-      <literal>hydra.nixos.org</literal> will build the package. (Hydra is the
-      Nix-based continuous build system.) It defaults to the value of
-      <varname>meta.platforms</varname>. Thus, the only reason to set
-      <varname>meta.hydraPlatforms</varname> is if you want
-      <literal>hydra.nixos.org</literal> to build the package on a subset of
-      <varname>meta.platforms</varname>, or not at all, e.g.
+      The list of Nix platform types for which the Hydra instance at <literal>hydra.nixos.org</literal> will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of <varname>meta.platforms</varname>. Thus, the only reason to set <varname>meta.hydraPlatforms</varname> is if you want <literal>hydra.nixos.org</literal> to build the package on a subset of <varname>meta.platforms</varname>, or not at all, e.g.
 <programlisting>
 meta.platforms = stdenv.lib.platforms.linux;
 meta.hydraPlatforms = [];
@@ -341,10 +275,7 @@ meta.hydraPlatforms = [];
     </term>
     <listitem>
      <para>
-      If set to <literal>true</literal>, the package is marked as “broken”,
-      meaning that it won’t show up in <literal>nix-env -qa</literal>, and
-      cannot be built or installed. Such packages should be removed from
-      Nixpkgs eventually unless they are fixed.
+      If set to <literal>true</literal>, the package is marked as “broken”, meaning that it won’t show up in <literal>nix-env -qa</literal>, and cannot be built or installed. Such packages should be removed from Nixpkgs eventually unless they are fixed.
      </para>
     </listitem>
    </varlistentry>
@@ -354,12 +285,7 @@ meta.hydraPlatforms = [];
     </term>
     <listitem>
      <para>
-      If set to <literal>true</literal>, the package is tested to be updated
-      correctly by the <literal>update-walker.sh</literal> script without
-      additional settings. Such packages have <varname>meta.version</varname>
-      set and their homepage (or the page specified by
-      <varname>meta.downloadPage</varname>) contains a direct link to the
-      package tarball.
+      If set to <literal>true</literal>, the package is tested to be updated correctly by the <literal>update-walker.sh</literal> script without additional settings. Such packages have <varname>meta.version</varname> set and their homepage (or the page specified by <varname>meta.downloadPage</varname>) contains a direct link to the package tarball.
      </para>
     </listitem>
    </varlistentry>
@@ -369,17 +295,11 @@ meta.hydraPlatforms = [];
   <title>Licenses</title>
 
   <para>
-   The <varname>meta.license</varname> attribute should preferrably contain a
-   value from <varname>stdenv.lib.licenses</varname> defined in
-   <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
-   <filename>nixpkgs/lib/licenses.nix</filename></link>, or in-place license
-   description of the same format if the license is unlikely to be useful in
-   another expression.
+   The <varname>meta.license</varname> attribute should preferrably contain a value from <varname>stdenv.lib.licenses</varname> defined in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix"> <filename>nixpkgs/lib/licenses.nix</filename></link>, or in-place license description of the same format if the license is unlikely to be useful in another expression.
   </para>
 
   <para>
-   Although it's typically better to indicate the specific license, a few
-   generic options are available:
+   Although it's typically better to indicate the specific license, a few generic options are available:
    <variablelist>
     <varlistentry>
      <term>
@@ -397,18 +317,10 @@ meta.hydraPlatforms = [];
      </term>
      <listitem>
       <para>
-       Unfree package that can be redistributed in binary form. That is, it’s
-       legal to redistribute the <emphasis>output</emphasis> of the derivation.
-       This means that the package can be included in the Nixpkgs channel.
+       Unfree package that can be redistributed in binary form. That is, it’s legal to redistribute the <emphasis>output</emphasis> of the derivation. This means that the package can be included in the Nixpkgs channel.
       </para>
       <para>
-       Sometimes proprietary software can only be redistributed unmodified.
-       Make sure the builder doesn’t actually modify the original binaries;
-       otherwise we’re breaking the license. For instance, the NVIDIA X11
-       drivers can be redistributed unmodified, but our builder applies
-       <command>patchelf</command> to make them work. Thus, its license is
-       <varname>"unfree"</varname> and it cannot be included in the Nixpkgs
-       channel.
+       Sometimes proprietary software can only be redistributed unmodified. Make sure the builder doesn’t actually modify the original binaries; otherwise we’re breaking the license. For instance, the NVIDIA X11 drivers can be redistributed unmodified, but our builder applies <command>patchelf</command> to make them work. Thus, its license is <varname>"unfree"</varname> and it cannot be included in the Nixpkgs channel.
       </para>
      </listitem>
     </varlistentry>
@@ -418,9 +330,7 @@ meta.hydraPlatforms = [];
      </term>
      <listitem>
       <para>
-       Unfree package that cannot be redistributed. You can build it yourself,
-       but you cannot redistribute the output of the derivation. Thus it cannot
-       be included in the Nixpkgs channel.
+       Unfree package that cannot be redistributed. You can build it yourself, but you cannot redistribute the output of the derivation. Thus it cannot be included in the Nixpkgs channel.
       </para>
      </listitem>
     </varlistentry>
@@ -430,9 +340,7 @@ meta.hydraPlatforms = [];
      </term>
      <listitem>
       <para>
-       This package supplies unfree, redistributable firmware. This is a
-       separate value from <varname>unfree-redistributable</varname> because
-       not everybody cares whether firmware is free.
+       This package supplies unfree, redistributable firmware. This is a separate value from <varname>unfree-redistributable</varname> because not everybody cares whether firmware is free.
       </para>
      </listitem>
     </varlistentry>

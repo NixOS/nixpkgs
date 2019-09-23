@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.9i";
-  name = "paml-${version}";
+  pname = "paml";
   src = fetchurl {
     url = "http://abacus.gene.ucl.ac.uk/software/paml${version}.tgz";
     sha256 = "1k5lcyls6c33ppp5fxl8ply2fy7i2k0gcqaifsl7gnc81d8ay4dw";

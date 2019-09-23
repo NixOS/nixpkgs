@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, substituteAll, pkgconfig
-, vala, libgee, granite, gtk3, libxml2, switchboard, tzdata }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, substituteAll
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, libxml2
+, switchboard
+, tzdata
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
@@ -42,7 +55,7 @@ stdenv.mkDerivation rec {
     ./clock-format.patch
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Date & Time Plug";

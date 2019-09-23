@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.1";
-  name = "rss-glx-${version}";
+  pname = "rss-glx";
 
   src = fetchurl {
     url = "mirror://sourceforge/rss-glx/rss-glx_${version}.tar.bz2";

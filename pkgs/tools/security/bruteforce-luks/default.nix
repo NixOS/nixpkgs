@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, cryptsetup }:
 
 stdenv.mkDerivation rec {
-  name = "bruteforce-luks-${version}";
+  pname = "bruteforce-luks";
   version = "1.3.2";
 
   src = fetchFromGitHub {

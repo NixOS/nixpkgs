@@ -1,4 +1,9 @@
-{ makeWrapper, symlinkJoin, switchboard, switchboardPlugs, plugs }:
+{ makeWrapper
+, symlinkJoin
+, switchboard
+, switchboardPlugs
+, plugs
+}:
 
 let
   selectedPlugs = if plugs == null then switchboardPlugs else plugs;

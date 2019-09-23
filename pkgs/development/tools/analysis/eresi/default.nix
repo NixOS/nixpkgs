@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, which, openssl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "eresi-${version}";
+  pname = "eresi";
   version = "0.83-a3-phoenix";
 
   src = fetchFromGitHub {

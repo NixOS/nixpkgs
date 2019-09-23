@@ -3,8 +3,8 @@
 , js_of_ocaml, ocaml_lwt, lwt_log
 }:
 
-stdenv.mkDerivation rec {
-	name = "js_of_ocaml-lwt-${version}"; 
+stdenv.mkDerivation {
+	pname = "js_of_ocaml-lwt"; 
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;
 

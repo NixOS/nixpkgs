@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper, pkgconfig
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig
 , qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf3_6, speex, libcap
 , alsaLib, python
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
-, iceSupport ? false, zeroc_ice ? null
+, iceSupport ? false, zeroc-ice ? null, zeroc-ice-36 ? null
 }:
 
 assert jackSupport -> libjack2 != null;
 assert speechdSupport -> speechd != null;
 assert pulseSupport -> libpulseaudio != null;
-assert iceSupport -> zeroc_ice != null;
+assert iceSupport -> zeroc-ice != null && zeroc-ice-36 != null;
 
 with stdenv.lib;
 let
-  generic = overrides: source: stdenv.mkDerivation (source // overrides // {
+  generic = overrides: source: (if source.qtVersion == 5 then qt5.mkDerivation else stdenv.mkDerivation) (source // overrides // {
     name = "${overrides.type}-${source.version}";
 
     patches = (source.patches or []) ++ optional jackSupport ./mumble-jack-support.patch;
@@ -26,7 +26,7 @@ let
     # protobuf is freezed to 3.6 because of this bug: https://github.com/mumble-voip/mumble/issues/3617
     # this could be reverted to the latest version in a future release of mumble as it is already fixed in master
     buildInputs = [ boost protobuf3_6 avahi ]
-      ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
+      ++ optional (source.qtVersion == 4) qt4
       ++ (overrides.buildInputs or [ ]);
 
     qmakeFlags = [
@@ -41,24 +41,26 @@ let
       "CONFIG+=no-bundled-speex"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
       ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
-      ++ optional (!iceSupport) "CONFIG+=no-ice"
       ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
-       qmakeFlags="$qmakeFlags DEFINES+=PLUGIN_PATH=$out/lib"
+       qmakeFlags="$qmakeFlags DEFINES+=PLUGIN_PATH=$out/lib/mumble"
        patchShebangs scripts
     '';
 
     makeFlags = [ "release" ];
 
     installPhase = ''
-      mkdir -p $out/{lib,bin}
-      find release -type f -not -name \*.\* -exec cp {} $out/bin \;
-      find release -type f -name \*.\* -exec cp {} $out/lib \;
+      runHook preInstall
 
+      ${overrides.installPhase}
+
+      # doc stuff
       mkdir -p $out/share/man/man1
-      cp man/mum* $out/share/man/man1
-    '' + (overrides.installPhase or "");
+      install -Dm644 man/mum* $out/share/man/man1/
+
+      runHook postInstall
+    '';
 
     enableParallelBuilding = true;
 
@@ -74,7 +76,7 @@ let
   client = source: generic {
     type = "mumble";
 
-    nativeBuildInputs = optionals (source.qtVersion == 5) [ qt5.qttools ];
+    nativeBuildInputs = optional (source.qtVersion == 5) qt5.qttools;
     buildInputs = [ libopus libsndfile speex ]
       ++ optional (source.qtVersion == 5) qt5.qtsvg
       ++ optional stdenv.isLinux alsaLib
@@ -89,28 +91,40 @@ let
     NIX_CFLAGS_COMPILE = optional speechdSupport "-I${speechd}/include/speech-dispatcher";
 
     installPhase = ''
-      mkdir -p $out/share/applications
-      cp scripts/mumble.desktop $out/share/applications
+      # bin stuff
+      install -Dm755 release/mumble $out/bin/mumble
+      install -Dm755 scripts/mumble-overlay $out/bin/mumble-overlay
 
-      mkdir -p $out/share/icons{,/hicolor/scalable/apps}
-      cp icons/mumble.svg $out/share/icons
-      ln -s $out/share/icons/mumble.svg $out/share/icons/hicolor/scalable/apps
+      # lib stuff
+      mkdir -p $out/lib/mumble
+      cp -P release/libmumble.so* $out/lib
+      cp -P release/libcelt* $out/lib/mumble
+      cp -P release/plugins/* $out/lib/mumble
+
+      # icons
+      install -Dm644 scripts/mumble.desktop $out/share/applications/mumble.desktop
+      install -Dm644 icons/mumble.svg $out/share/icons/hicolor/scalable/apps/mumble.svg
     '';
   } source;
 
-  server = generic {
+  server = source: let ice = if source.qtVersion == 4 then zeroc-ice-36 else zeroc-ice; in generic {
     type = "murmur";
 
     postPatch = optional iceSupport ''
-      grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc_ice}/,g'
+      grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${ice.dev}/share/ice/,g'
     '';
 
     configureFlags = [
       "CONFIG+=no-client"
-    ];
+    ] ++ optional (!iceSupport) "CONFIG+=no-ice";
 
-    buildInputs = [ libcap ] ++ optional iceSupport zeroc_ice;
-  };
+    buildInputs = [ libcap ] ++ optional iceSupport ice;
+
+    installPhase = ''
+      # bin stuff
+      install -Dm755 release/murmurd $out/bin/murmurd
+    '';
+  } source;
 
   stableSource = rec {
     version = "1.2.19";
@@ -138,31 +152,22 @@ let
     ];
   };
 
-  gitSource = rec {
-    version = "2018-07-01";
+  rcSource = rec {
+    version = "1.3.0-rc2";
     qtVersion = 5;
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
-      rev = "c19ac8c0b0f934d2ff206858d7cb66352d6eb418";
-      sha256 = "1mzp1bgn49ycs16d6r8icqq35wq25198fs084vyq6j5f78ni7pvz";
+      rev = version;
+      sha256 = "00irlzz5q4drmsfbwrkyy7p7w8a5fc1ip5vyicq3g3cy58dprpqr";
       fetchSubmodules = true;
     };
   };
 in {
   mumble     = client stableSource;
-  mumble_git = client gitSource;
+  mumble_rc  = client rcSource;
   murmur     = server stableSource;
-  murmur_git = (server gitSource).overrideAttrs (old: {
-    meta = old.meta // { broken = iceSupport; };
-
-    nativeBuildInputs = old.nativeBuildInputs or [] ++ [ makeWrapper ];
-
-    installPhase = old.installPhase or "" + ''
-      wrapProgram $out/bin/murmurd --suffix QT_PLUGIN_PATH : \
-        ${getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}
-    '';
-  });
+  murmur_rc  = server rcSource;
 }

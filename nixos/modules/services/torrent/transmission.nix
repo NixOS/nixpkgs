@@ -84,13 +84,25 @@ in
           The directory where transmission will create files.
         '';
       };
+
+      user = mkOption {
+        type = types.str;
+        default = "transmission";
+        description = "User account under which Transmission runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "transmission";
+        description = "Group account under which Transmission runs.";
+      };
     };
   };
 
   config = mkIf cfg.enable {
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
-      after = [ "local-fs.target" "network.target" ] ++ optional apparmor "apparmor.service";
+      after = [ "network.target" ] ++ optional apparmor "apparmor.service";
       requires = mkIf apparmor [ "apparmor.service" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -99,7 +111,8 @@ in
       serviceConfig.ExecStartPre = preStart;
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-      serviceConfig.User = "transmission";
+      serviceConfig.User = cfg.user;
+      serviceConfig.Group = cfg.group;
       # NOTE: transmission has an internal umask that also must be set (in settings.json)
       serviceConfig.UMask = "0002";
     };
@@ -107,14 +120,19 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ pkgs.transmission ];
 
-    users.groups.transmission.gid = config.ids.gids.transmission;
-    users.users.transmission = {
-      group = "transmission";
-      uid = config.ids.uids.transmission;
-      description = "Transmission BitTorrent user";
-      home = homeDir;
-      createHome = true;
-    };
+    users.users = optionalAttrs (cfg.user == "transmission") (singleton
+      { name = "transmission";
+        group = cfg.group;
+        uid = config.ids.uids.transmission;
+        description = "Transmission BitTorrent user";
+        home = homeDir;
+        createHome = true;
+      });
+
+    users.groups = optionalAttrs (cfg.group == "transmission") (singleton
+      { name = "transmission";
+        gid = config.ids.gids.transmission;
+      });
 
     # AppArmor profile
     security.apparmor.profiles = mkIf apparmor [

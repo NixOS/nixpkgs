@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mesos_exporter-${version}";
+  pname = "mesos_exporter";
   version = "0.1.0";
   rev = version;
 

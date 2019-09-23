@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "pprof-unstable-${version}";
+  pname = "pprof-unstable";
   version = "2018-08-15";
   rev = "781f11b1fcf71fae9d185e7189b5e686f575075a";
 

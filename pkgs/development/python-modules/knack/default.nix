@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "knack";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kxxj9m2mvva9rz11m6pgdg0mi712d28faj4633rl23qa53sh7i8";
+    sha256 = "08g15kwfppdr7vhbsg6qclpqbf11d9k3hwgrmvhh5fa1jrk95b5i";
   };
 
   propagatedBuildInputs = [
@@ -40,9 +40,8 @@ buildPythonPackage rec {
     pytest
   ];
 
-  # tries to make a '/homeless-shelter' dir
   checkPhase = ''
-    pytest -k 'not test_cli_exapp1'
+    HOME=$TMPDIR pytest .
   '';
 
   meta = with lib; {

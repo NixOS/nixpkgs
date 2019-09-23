@@ -1,15 +1,15 @@
 { stdenv, fetchurl, lib, makeWrapper,
   # build dependencies
   alsaLib, atk, cairo, cups, dbus, expat, fontconfig,
-  freetype, gdk_pixbuf, glib, gnome2, nspr, nss, xorg,
+  freetype, gdk-pixbuf, glib, gnome2, nspr, nss, xorg,
   glibc, systemd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   version = "2.12.0";
 
-  name = "patchwork-classic-${version}";
+  pname = "patchwork-classic";
 
   src = fetchurl {
     url    = "https://github.com/ssbc/patchwork-classic-electron/releases/download/v2.12.0/ssb-patchwork-electron_2.12.0_linux-amd64.deb";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       expat
       fontconfig
       freetype
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       gnome2.GConf
       gnome2.gtk
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Electron wrapper for Patchwork Classic: run as a desktop app outside the browser";
     homepage    = "https://github.com/ssbc/patchwork-classic-electron";
-    license     = licenses.gpl3; 
+    license     = licenses.gpl3;
     maintainers = with maintainers; [ mrVanDalo ];
     platforms   = platforms.linux;
   };

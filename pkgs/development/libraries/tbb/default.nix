@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
 
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "tbb-${version}";
+  pname = "tbb";
   version = "2019_U8";
 
   src = fetchFromGitHub {

@@ -26,7 +26,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "retroarch-bare-${version}";
+  pname = "retroarch-bare";
   version = "1.7.5";
 
   src = fetchFromGitHub {

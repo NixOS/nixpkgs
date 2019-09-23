@@ -4,11 +4,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "guile-reader-${version}";
+  pname = "guile-reader";
   version = "0.6.2";
 
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/guile-reader/${name}.tar.gz";
+    url = "http://download.savannah.nongnu.org/releases/guile-reader/${pname}-${version}.tar.gz";
     sha256 = "0592s2s8ampqmqwilc4fvcild6rb9gy79di6vxv5kcdmv23abkgx";
   };
 

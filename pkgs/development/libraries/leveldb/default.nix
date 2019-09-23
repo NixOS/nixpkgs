@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "leveldb-${version}";
+  pname = "leveldb";
   version = "1.20";
 
   src = fetchFromGitHub {

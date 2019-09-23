@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perlPackages, makeWrapper}:
 
 perlPackages.buildPerlPackage rec {
-  name = "linode-cli-${version}";
+  pname = "linode-cli";
   version = "1.4.7";
 
   src = fetchFromGitHub {

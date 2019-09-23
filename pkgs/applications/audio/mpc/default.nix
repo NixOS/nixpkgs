@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, mpd_clientlib }:
 
 stdenv.mkDerivation rec {
-  name = "mpc-${version}";
+  pname = "mpc";
   version = "0.28";
 
   src = fetchFromGitHub {

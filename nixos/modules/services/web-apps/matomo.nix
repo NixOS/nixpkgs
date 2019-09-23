@@ -4,14 +4,13 @@ let
   cfg = config.services.matomo;
 
   user = "matomo";
-  group = "matomo";
   dataDir = "/var/lib/${user}";
   deprecatedDataDir = "/var/lib/piwik";
 
   pool = user;
-  # it's not possible to use /run/phpfpm-${pool}/${pool}.sock because /run/phpfpm/ is root:root 0770,
+  # it's not possible to use /run/phpfpm/${pool}.sock because /run/phpfpm/ is root:root 0770,
   # and therefore is not accessible by the web server.
-  phpSocket = "/run/phpfpm-${pool}/${pool}.sock";
+  phpSocket = "/run/phpfpm-${pool}.sock";
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
@@ -138,12 +137,9 @@ in {
       isSystemUser = true;
       createHome = true;
       home = dataDir;
-      group  = "${group}";
+      group  = user;
     };
-    users.users.${config.services.nginx.user} = {
-      extraGroups = [ "${group}" ];
-    };
-    users.groups.${group} = {};
+    users.groups.${user} = {};
 
     systemd.services.matomo-setup-update = {
       # everything needs to set up and up to date before Matomo php files are executed
@@ -173,14 +169,14 @@ in {
           echo "Migrating from ${deprecatedDataDir} to ${dataDir}"
           mv -T ${deprecatedDataDir} ${dataDir}
         fi
-        chown -R ${user}:${group} ${dataDir}
+        chown -R ${user}:${user} ${dataDir}
         chmod -R ug+rwX,o-rwx ${dataDir}
         '';
       script = ''
             # Use User-Private Group scheme to protect Matomo data, but allow administration / backup via 'matomo' group
             # Copy config folder
             chmod g+s "${dataDir}"
-            cp -r "${cfg.package}/config" "${dataDir}/"
+            cp -r "${cfg.package}/share/config" "${dataDir}/"
             chmod -R u+rwX,g+rwX,o-rwx "${dataDir}"
 
             # check whether user setup has already been done
@@ -237,14 +233,12 @@ in {
       else if (cfg.webServerUser != null) then cfg.webServerUser else "";
     in {
       ${pool} = {
-        socketName = "${pool}";
-        phpPackage = pkgs.php;
-        user = "${user}";
-        group = "${group}";
+        listen = phpSocket;
         extraConfig = ''
           listen.owner = ${socketOwner}
-          listen.group = ${group}
+          listen.group = root
           listen.mode = 0600
+          user = ${user}
           env[PIWIK_USER_PATH] = ${dataDir}
           ${cfg.phpfpmProcessManagerConfig}
         '';

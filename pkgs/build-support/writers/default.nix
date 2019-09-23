@@ -10,12 +10,12 @@ rec {
   #   makeScriptWriter { interpreter = "${pkgs.dash}/bin/dash"; } "hello" "echo hello world"
   makeScriptWriter = { interpreter, check ? "" }: nameOrPath: content:
     assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.string.check content);
+    assert lib.or (types.path.check content) (types.str.check content);
     let
       name = last (builtins.split "/" nameOrPath);
     in
 
-    pkgs.runCommand name (if (types.string.check content) then {
+    pkgs.runCommand name (if (types.str.check content) then {
       inherit content interpreter;
       passAsFile = [ "content" ];
     } else {
@@ -42,11 +42,11 @@ rec {
   #   writeSimpleC = makeBinWriter { compileScript = name: "gcc -o $out $contentPath"; }
   makeBinWriter = { compileScript }: nameOrPath: content:
     assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.string.check content);
+    assert lib.or (types.path.check content) (types.str.check content);
     let
       name = last (builtins.split "/" nameOrPath);
     in
-    pkgs.runCommand name (if (types.string.check content) then {
+    pkgs.runCommand name (if (types.str.check content) then {
       inherit content;
       passAsFile = [ "content" ];
     } else {

@@ -1,7 +1,7 @@
 { stdenv, meson, ninja, gettext, fetchurl
 , pkgconfig, gtk3, glib, libsoup, gsettings-desktop-schemas
 , itstool, libxml2, python3Packages
-, gnome3, gdk_pixbuf, libnotify, gobject-introspection, wrapGAppsHook }:
+, gnome3, gdk-pixbuf, libnotify, gobject-introspection, wrapGAppsHook }:
 
 let
   pname = "gnome-tweaks";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 glib gsettings-desktop-schemas
-    gdk_pixbuf gnome3.adwaita-icon-theme
+    gdk-pixbuf gnome3.adwaita-icon-theme
     libnotify gnome3.gnome-shell python3Packages.pygobject3
     libsoup gnome3.gnome-settings-daemon gnome3.nautilus
     gnome3.mutter gnome3.gnome-desktop gobject-introspection

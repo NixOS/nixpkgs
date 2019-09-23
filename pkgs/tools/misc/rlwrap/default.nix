@@ -1,11 +1,11 @@
 { stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "rlwrap-${version}";
+  pname = "rlwrap";
   version = "0.43";
 
   src = fetchurl {
-    url = "https://github.com/hanslub42/rlwrap/releases/download/v${version}/${name}.tar.gz";
+    url = "https://github.com/hanslub42/rlwrap/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "0bzb7ylk2770iv59v2d0gypb21y2xn87m299s9rqm6rdi2vx11lf";
   };
 

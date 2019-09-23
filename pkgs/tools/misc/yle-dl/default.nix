@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rtmpdump, php, pythonPackages, ffmpeg }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "yle-dl-${version}";
+  pname = "yle-dl";
   version = "2.31";
 
   src = fetchFromGitHub {

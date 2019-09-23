@@ -9,7 +9,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "dxx-rebirth-${version}";
+  pname = "dxx-rebirth";
   version = "0.59.100";
 
   src = fetchurl {

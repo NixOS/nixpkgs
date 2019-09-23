@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, boost, brigand, catch2 }:
 
 stdenv.mkDerivation rec {
-  name = "fcppt-${version}";
-  version = "3.0.0";
+  pname = "fcppt";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "freundlich";
     repo = "fcppt";
     rev = version;
-    sha256 = "0l78fjhy9nl3afrf0da9da4wzp1sx3kcyc2j6b71i60kvk44v4in";
+    sha256 = "09mah52m3lih2n0swpsh8qb72yzl4nixaq99xp7wxyxxprhf4bpa";
   };
 
   nativeBuildInputs = [ cmake ];

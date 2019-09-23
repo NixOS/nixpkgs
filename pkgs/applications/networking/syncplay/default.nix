@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, buildPythonApplication, pyside, twisted, certifi }:
 
 buildPythonApplication rec {
-  name = "syncplay-${version}";
-  version = "1.6.3";
+  pname = "syncplay";
+  version = "1.6.4";
 
   format = "other";
 
@@ -10,7 +10,7 @@ buildPythonApplication rec {
     owner = "Syncplay";
     repo = "syncplay";
     rev = "v${version}";
-    sha256 = "03xw44lxdk1h9kbvfviqzpmxxld6zvp07i0hvdm1chchyp0a109h";
+    sha256 = "0afh2a0l1c3hwgj5q6wy0v5iimg8qcjam3pw7b8mf63lasx6iqk4";
   };
 
   propagatedBuildInputs = [ pyside twisted certifi ] ++ twisted.extras.tls;

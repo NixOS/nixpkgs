@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rclone, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "git-annex-remote-rclone-${version}";
+  pname = "git-annex-remote-rclone";
   version = "0.6";
   rev = "v${version}";
 

@@ -36,7 +36,7 @@ rec {
     example ? null,
     # String describing the option.
     description ? null,
-    # Related packages used in the manual (see `genRelatedPackages` in ../nixos/doc/manual/default.nix).
+    # Related packages used in the manual (see `genRelatedPackages` in ../nixos/lib/make-options-doc/default.nix).
     relatedPackages ? null,
     # Option type, providing type-checking and value merging.
     type ? null,

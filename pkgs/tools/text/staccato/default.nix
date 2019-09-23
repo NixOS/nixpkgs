@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "staccato-${version}";
+  pname = "staccato";
   version = "0.1.6";
 
   src = fetchFromGitHub {

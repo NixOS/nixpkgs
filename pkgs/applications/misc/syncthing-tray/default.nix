@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage, pkgconfig, libappindicator-gtk3 }:
 
 buildGoPackage rec {
-  name = "syncthing-tray-${version}";
+  pname = "syncthing-tray";
   version = "0.7";
 
   goPackagePath = "github.com/alex2108/syncthing-tray";

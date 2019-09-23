@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub
 , talloc, docutils, swig, python, coreutils, enablePython ? true }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "proot";
   version = "20190510";
 

@@ -3,7 +3,7 @@
 let
   common = opts: callPackage (import ./common.nix opts);
 in
-  rec {
+  {
     sublime3-dev = common {
       buildVersion = "3208";
       dev = true;

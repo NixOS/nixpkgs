@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, openssl, libxml2, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "s3fs-fuse-${version}";
+  pname = "s3fs-fuse";
   version = "1.85";
 
   src = fetchFromGitHub {

@@ -4,7 +4,7 @@ let
   generic = { patches ? [] }:
     buildGoPackage rec {
       version = "1.6.4";
-      name = "certmgr-${version}";
+      pname = "certmgr";
 
       goPackagePath = "github.com/cloudflare/certmgr/";
 

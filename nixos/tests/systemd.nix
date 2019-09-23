@@ -1,4 +1,4 @@
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ... }: {
   name = "systemd";
 
   machine = { lib, ... }: {
@@ -20,6 +20,14 @@ import ./make-test.nix {
     systemd.user.extraConfig = "DefaultEnvironment=\"XXX_USER=bar\"";
     services.journald.extraConfig = "Storage=volatile";
     services.xserver.displayManager.auto.user = "alice";
+
+    systemd.shutdown.test = pkgs.writeScript "test.shutdown" ''
+      #!${pkgs.stdenv.shell}
+      PATH=${lib.makeBinPath (with pkgs; [ utillinux coreutils ])}
+      mount -t 9p shared -o trans=virtio,version=9p2000.L /tmp/shared
+      touch /tmp/shared/shutdown-test
+      umount /tmp/shared
+    '';
 
     systemd.services.testservice1 = {
       description = "Test Service 1";
@@ -63,11 +71,32 @@ import ./make-test.nix {
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35268
     subtest "file system with x-initrd.mount is not unmounted", sub {
+      $machine->succeed('mountpoint -q /test-x-initrd-mount');
+      $machine->shutdown;
+      system('qemu-img', 'convert', '-O', 'raw',
+             'vm-state-machine/empty2.qcow2', 'x-initrd-mount.raw');
+      my $extinfo = `${pkgs.e2fsprogs}/bin/dumpe2fs x-initrd-mount.raw`;
+      die "File system was not cleanly unmounted: $extinfo"
+        unless $extinfo =~ /^Filesystem state: *clean$/m;
+    };
+
+    subtest "systemd-shutdown works", sub {
       $machine->shutdown;
       $machine->waitForUnit('multi-user.target');
-      # If the file system was unmounted during the shutdown the file system
-      # has a last mount time, because the file system wasn't checked.
-      $machine->fail('dumpe2fs /dev/vdb | grep -q "^Last mount time: *n/a"');
+      $machine->succeed('test -e /tmp/shared/shutdown-test');
     };
+
+   # Test settings from /etc/sysctl.d/50-default.conf are applied
+   subtest "systemd sysctl settings are applied", sub {
+     $machine->waitForUnit('multi-user.target');
+     $machine->succeed('sysctl net.core.default_qdisc | grep -q "fq_codel"');
+   };
+
+   # Test cgroup accounting is enabled
+   subtest "systemd cgroup accounting is enabled", sub {
+     $machine->waitForUnit('multi-user.target');
+     $machine->succeed('systemctl show testservice1.service -p IOAccounting | grep -q "yes"');
+     $machine->succeed('systemctl status testservice1.service | grep -q "CPU:"');
+   };
   '';
-}
+})

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python interface to Library Genesis";
-    homepage = http://habanero.readthedocs.io/en/latest/;
+    homepage = https://habanero.readthedocs.io/en/latest/;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nico202 ];
   };

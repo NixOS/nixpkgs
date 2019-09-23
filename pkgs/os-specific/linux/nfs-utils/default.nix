@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3
+, python3, buildPackages
 }:
 
 let
@@ -8,19 +8,19 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-${version}";
-  version = "2.3.4";
+  pname = "nfs-utils";
+  version = "2.4.1";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${name}.tar.xz";
-    sha256 = "1kcn11glc3rma1gvykbk1s542mgz36ipi7yqxlk9jyh8hsiqncpq";
+    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0dkp11a7i01c378ri68bf6k56z27kz8zzvpqm7mip6s7jkd4l9w5";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
   # put it in the "lib" output, and the headers in "dev"
   outputs = [ "out" "dev" "lib" "man" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig buildPackages.stdenv.cc ];
 
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
@@ -47,14 +47,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc.bin}/bin/rpcgen";
 
-  patches = [
-    # Fixes build on i686.
-    (fetchpatch {
-      name = "sqlite.c-Use-PRIx64-macro-to-print-64-bit-integers.patch";
-      url = "http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff_plain;h=a8133e1fd174267536cd459e19cfe0a1cbbe037c;hp=a709f25c1da4a2fb44a1f3fd060298fbbd88aa3c";
-      sha256 = "03azkw13xhp8f49777p08xziy0d7crz65qrisjbkzjnx1wczdqy5";
-    })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/cb880042d48d77af412d4688f24b8310ae44f55f/main/nfs-utils/0011-exportfs-only-do-glibc-specific-hackery-on-glibc.patch";
       sha256 = "0rrddrykz8prk0dcgfvmnz0vxn09dbgq8cb098yjjg19zz6d7vid";

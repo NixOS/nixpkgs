@@ -39,7 +39,7 @@ assert withMisc -> libeb != null;
 
 stdenv.mkDerivation rec {
   version = "1.8.8";
-  name = "uim-${version}";
+  pname = "uim";
 
   src = fetchFromGitHub {
     owner = "uim";

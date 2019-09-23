@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "madonctl-${version}";
+  pname = "madonctl";
   version = "1.1.0";
 
   goPackagePath = "github.com/McKael/madonctl";

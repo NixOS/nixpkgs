@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "dbmate-${version}";
+  pname = "dbmate";
   version = "1.4.1";
 
   goPackagePath = "github.com/amacneil/dbmate";

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, qmake, qtbase, qtscript }:
 
 stdenv.mkDerivation rec {
-  name = "qbs-${version}";
+  pname = "qbs";
 
   version = "1.13.1";
 

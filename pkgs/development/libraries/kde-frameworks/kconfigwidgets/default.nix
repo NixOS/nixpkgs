@@ -11,10 +11,5 @@ mkDerivation {
   propagatedBuildInputs = [ kauth kcodecs kconfig kwidgetsaddons ];
   patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   outputs = [ "out" "dev" ];
-  preConfigure = ''
-    outputBin=dev
-  '';
-  postInstall = ''
-    moveToOutput share/man $dev
-  '';
+  outputBin = "dev";
 }

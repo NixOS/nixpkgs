@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   date = "April2012";
 
-  name = "nvidia-cg-toolkit-${version}";
+  pname = "nvidia-cg-toolkit";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://developer.nvidia.com/cg-toolkit;
+    homepage = https://developer.nvidia.com/cg-toolkit;
     license = lib.licenses.unfreeRedistributable;
   };
 }

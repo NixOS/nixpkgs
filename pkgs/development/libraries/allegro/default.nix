@@ -4,11 +4,11 @@
 , libXxf86vm, openal, libGLU_combined }:
 
 stdenv.mkDerivation rec {
-  name = "allegro-${version}";
+  pname = "allegro";
   version="4.4.2";
 
   src = fetchurl {
-    url = "https://github.com/liballeg/allegro5/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/liballeg/allegro5/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
   };
 

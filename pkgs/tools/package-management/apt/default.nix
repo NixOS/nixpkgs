@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "apt-${version}";
+  pname = "apt";
 
   version = "1.4.6";
 

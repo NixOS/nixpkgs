@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, coreutils, root }:
 
 stdenv.mkDerivation rec {
-  name = "hepmc3-${version}";
+  pname = "hepmc3";
   version = "3.1.1";
 
   src = fetchurl {

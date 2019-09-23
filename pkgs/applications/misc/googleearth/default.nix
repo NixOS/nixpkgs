@@ -40,7 +40,8 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  name = "googleearth-${version}";
+  pname = "googleearth";
+  inherit version;
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-stable/google-earth-stable_${version}-r0_${arch}.deb";
     inherit sha256;

@@ -7,10 +7,10 @@
 stdenv.mkDerivation rec {
   version = "5.9.4.5";
   revision = "8010a90f6e246b32364e3fb46ef2c9d1be9c9a2b";
-  name = "monodevelop-${version}";
+  pname = "monodevelop";
 
   src = fetchurl {
-    url = "https://download.mono-project.com/sources/monodevelop/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/monodevelop/${pname}-${version}.tar.bz2";
     sha256 = "0bim4bfv3zwijafl9g0cx3159zq43dlcv74mnyrda41j4p52w5ji";
   };
 

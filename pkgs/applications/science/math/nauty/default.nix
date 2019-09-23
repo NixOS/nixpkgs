@@ -3,7 +3,7 @@
 , fetchurl
 }:
 stdenv.mkDerivation rec {
-  name = "nauty-${version}";
+  pname = "nauty";
   version = "26r11";
   src = fetchurl {
     url = "http://pallini.di.uniroma1.it/nauty${version}.tar.gz";
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
     # Prevent nauty from sniffing some cpu features. While those are very
     # widely available, it can lead to nasty bugs when they are not available:
     # https://groups.google.com/forum/#!topic/sage-packaging/Pe4SRDNYlhA
-    "default"        = [ "--disable-clz" "--disable-popcnt" ];
-    "westmere"       = [ "--disable-clz" ];
-    "sandybridge"    = [ "--disable-clz" ];
-    "ivybridge"      = [ "--disable-clz" ];
+    default        = [ "--disable-clz" "--disable-popcnt" ];
+    westmere       = [ "--disable-clz" ];
+    sandybridge    = [ "--disable-clz" ];
+    ivybridge      = [ "--disable-clz" ];
   }.${stdenv.hostPlatform.platform.gcc.arch or "default"} or [];
   buildInputs = [];
   installPhase = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = ''Programs for computing automorphism groups of graphs and digraphs'';
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     homepage = http://pallini.di.uniroma1.it/;
   };
 }

@@ -3,10 +3,12 @@
 , rustPlatform
 , pkgconfig
 , openssl
+, curl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "wasm-pack-${version}";
+  pname = "wasm-pack";
   version = "0.8.1";
 
   src = fetchFromGitHub {
@@ -20,7 +22,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
+
 
   # Tests fetch external resources and build artifacts.
   # Disabled to work with sandboxing

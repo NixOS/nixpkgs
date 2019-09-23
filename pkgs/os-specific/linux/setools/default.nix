@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bison, flex, python3 , swig
+{ stdenv, fetchFromGitHub, python3
 , libsepol, libselinux, checkpolicy
 , withGraphics ? false
 }:
@@ -8,16 +8,16 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "setools";
-  version = "2017-11-10";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
-    owner = "TresysTechnology";
+    owner = "SELinuxProject";
     repo = pname;
-    rev = "a1aa0f33f5c428d3f9fe82960ed5de36f38047f7";
-    sha256 = "0iyj35fff93cprjkzbkg9dn5xz8dg5h2kjx3476fl625nxxskndn";
+    rev = version;
+    sha256 = "18kklv26dwm2fdjjzfflvxsq83b2svnwf4g18xq7wsfsri121a90";
   };
 
-  nativeBuildInputs = [ bison flex swig ];
+  nativeBuildInputs = [ cython ];
   buildInputs = [ libsepol ];
   propagatedBuildInputs = [ enum34 libselinux networkx ]
     ++ optionals withGraphics [ pyqt5 ];
@@ -34,8 +34,8 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    description = "SELinux Tools";
-    homepage = https://github.com/TresysTechnology/setools/wiki;
+    description = "SELinux Policy Analysis Tools";
+    homepage = https://github.com/SELinuxProject/setools;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

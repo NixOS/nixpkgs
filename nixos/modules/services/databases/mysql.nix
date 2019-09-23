@@ -319,7 +319,9 @@ in
           ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
           ExecStartPost =
             let
-              setupScript = pkgs.writeShellScript "mysql-setup" ''
+              setupScript = pkgs.writeScript "mysql-setup" ''
+                #!${pkgs.runtimeShell} -e
+
                 ${optionalString (!hasNotify) ''
                   # Wait until the MySQL server is available for use
                   count=0

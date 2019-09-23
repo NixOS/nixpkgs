@@ -1,7 +1,6 @@
 { stdenv, makeWrapper, fetchFromGitHub, cmake, alsaLib, mesa_glu, libXcursor, libXinerama, libXrandr, xorgserver }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "bonzomatic";
   version = "2018-03-29";
 

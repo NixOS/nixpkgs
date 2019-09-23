@@ -1,11 +1,12 @@
 { stdenv, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
 , gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
 , gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3
-, bcrypt, gobject-introspection, gsettings-desktop-schemas }:
+, bcrypt, gobject-introspection, gsettings-desktop-schemas
+, pango, gdk-pixbuf, atk }:
 
 buildPythonApplication rec {
   version = "0.9.4";
-  name = "syncthing-gtk-${version}";
+  pname = "syncthing-gtk";
 
   src = fetchFromGitHub {
     owner = "syncthing";
@@ -18,6 +19,7 @@ buildPythonApplication rec {
     wrapGAppsHook
     # For setup hook populating GI_TYPELIB_PATH
     gobject-introspection
+    pango gdk-pixbuf atk libnotify
   ];
 
   buildInputs = [

@@ -291,7 +291,7 @@ in {
 
       group = mkOption {
         type = types.str;
-        default = "nogroup";
+        default = defaultUser;
         description = ''
           Syncthing will be run under this group (group will not be created if it doesn't exist.
           This can be your user name).
@@ -372,16 +372,18 @@ in {
 
     systemd.packages = [ pkgs.syncthing ];
 
-    users = mkIf (cfg.systemService && cfg.user == defaultUser) {
-      users."${defaultUser}" =
+    users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
+      ${defaultUser} =
         { group = cfg.group;
           home  = cfg.dataDir;
           createHome = true;
           uid = config.ids.uids.syncthing;
           description = "Syncthing daemon user";
         };
+    };
 
-      groups."${defaultUser}".gid =
+    users.groups = mkIf (cfg.systemService && cfg.group == defaultUser) {
+      ${defaultUser}.gid =
         config.ids.gids.syncthing;
     };
 
@@ -403,18 +405,12 @@ in {
           Group = cfg.group;
           ExecStartPre = mkIf (cfg.declarative.cert != null || cfg.declarative.key != null)
             "+${pkgs.writers.writeBash "syncthing-copy-keys" ''
-              mkdir -p ${cfg.configDir}
-              chown ${cfg.user}:${cfg.group} ${cfg.configDir}
-              chmod 700 ${cfg.configDir}
+              install -dm700 -o ${cfg.user} -g ${cfg.group} ${cfg.configDir}
               ${optionalString (cfg.declarative.cert != null) ''
-                cp ${toString cfg.declarative.cert} ${cfg.configDir}/cert.pem
-                chown ${cfg.user}:${cfg.group} ${cfg.configDir}/cert.pem
-                chmod 400 ${cfg.configDir}/cert.pem
+                install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.declarative.cert} ${cfg.configDir}/cert.pem
               ''}
               ${optionalString (cfg.declarative.key != null) ''
-                cp ${toString cfg.declarative.key} ${cfg.configDir}/key.pem
-                chown ${cfg.user}:${cfg.group} ${cfg.configDir}/key.pem
-                chmod 400 ${cfg.configDir}/key.pem
+                install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.declarative.key} ${cfg.configDir}/key.pem
               ''}
             ''}"
           ;

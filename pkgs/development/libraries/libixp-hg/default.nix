@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   rev = "148";
   version = "hg-2012-12-02";
-  name = "libixp-${version}";
+  pname = "libixp";
 
   src = fetchurl {
     url = https://storage.googleapis.com/google-code-archive-source/v2/code.google.com/libixp/source-archive.zip;

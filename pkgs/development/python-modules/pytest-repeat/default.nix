@@ -24,7 +24,8 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ setuptools_scm pytest ];
+  buildInputs = [ setuptools_scm ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     py.test

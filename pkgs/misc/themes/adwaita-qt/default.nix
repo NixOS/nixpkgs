@@ -1,16 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, qtbase }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, qtbase }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "adwaita-qt";
-  version = "1.0";
-
-  name = "${pname}-${version}";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = pname;
     rev = version;
-    sha256 = "0xn8bianmdj15k11mnw52by9vxkmvpqr2s304kl3dbjj1l7v4cd7";
+    sha256 = "1jlh4l3sxiwglgx6h4aqi364gr4xipmn09bk88cp997r9sm8jcp9";
   };
 
   nativeBuildInputs = [
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
        --replace "DESTINATION \"\''${QT_PLUGINS_DIR}/styles" "DESTINATION \"$qtPluginPrefix/styles"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A style to bend Qt applications to look like they belong into GNOME Shell";
     homepage = https://github.com/FedoraQt/adwaita-qt;
     license = licenses.gpl2Plus;

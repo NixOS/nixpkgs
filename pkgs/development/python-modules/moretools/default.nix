@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "moretools";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f531cc79b7cd0c4aab590d5d4d0291f7cf6f083398be1dd523224b3385b732f4";
+    sha256 = "1rvd9kl0163gm5kqwsb2m44x87sp72k5pirvcmhy2ffix4pzadqp";
   };
 
   checkPhase = ''
