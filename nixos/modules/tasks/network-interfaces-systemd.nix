@@ -38,6 +38,12 @@ in
     } {
       assertion = cfg.defaultGateway6 == null || cfg.defaultGateway6.interface == null;
       message = "networking.defaultGateway6.interface is not supported by networkd.";
+    } {
+      assertion = cfg.useDHCP == false;
+      message = ''
+        networking.useDHCP is not supported by networkd.
+        Please use per interface configuration and set the global option to false.
+      '';
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
@@ -56,9 +62,7 @@ in
         genericNetwork = override:
           let gateway = optional (cfg.defaultGateway != null) cfg.defaultGateway.address
             ++ optional (cfg.defaultGateway6 != null) cfg.defaultGateway6.address;
-          in {
-            DHCP = override (dhcpStr cfg.useDHCP);
-          } // optionalAttrs (gateway != [ ]) {
+          in optionalAttrs (gateway != [ ]) {
             routes = override [
               {
                 routeConfig = {
@@ -97,7 +101,7 @@ in
         networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
-            (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
+            (if i.useDHCP != null then i.useDHCP else false));
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
           networkConfig.IPv6PrivacyExtensions = "kernel";
