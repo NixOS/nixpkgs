@@ -716,7 +716,7 @@ in
 
   amuleDaemon = appendToName "daemon" (amule.override {
     monolithic = false;
-    daemon = true;
+    enableDaemon = true;
   });
 
   amuleGui = appendToName "gui" (amule.override {
@@ -20192,7 +20192,7 @@ in
 
   quasselDaemon = quassel.override {
     monolithic = false;
-    daemon = true;
+    enableDaemon = true;
     withKDE = false;
     tag = "-daemon-qt5";
   };

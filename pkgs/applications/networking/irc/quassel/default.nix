@@ -1,5 +1,5 @@
 { monolithic ? true # build monolithic Quassel
-, daemon ? false # build Quassel daemon
+, enableDaemon ? false # build Quassel daemon
 , client ? false # build Quassel client
 , tag ? "-kf5" # tag added to the package name
 , static ? false # link statically
@@ -21,11 +21,11 @@
 
 let
     buildClient = monolithic || client;
-    buildCore = monolithic || daemon;
+    buildCore = monolithic || enableDaemon;
 in
 
-assert monolithic -> !client && !daemon;
-assert client || daemon -> !monolithic;
+assert monolithic -> !client && !enableDaemon;
+assert client || enableDaemon -> !monolithic;
 assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
@@ -63,12 +63,12 @@ in with stdenv; mkDerivation rec {
   ]
     ++ edf static "STATIC"
     ++ edf monolithic "WANT_MONO"
-    ++ edf daemon "WANT_CORE"
+    ++ edf enableDaemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"
     ++ edf withKDE "WITH_KDE";
 
   preFixup =
-    lib.optionalString daemon ''
+    lib.optionalString enableDaemon ''
         wrapProgram "$out/bin/quasselcore" --suffix PATH : "${qtbase.bin}/bin"
     '' +
     lib.optionalString buildClient ''
