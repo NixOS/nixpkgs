@@ -27,8 +27,8 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "7019836a26ebdc1ba20c03d06dbb3a613833bd0f";
-    sha256 = "0ywaq5jfy177k4q5hwr43v66sz62l1bqhgyxs2vk9m1d5kvrjwk6";
+    rev = "ccec67cab6c0fda85a1762eee7aeea422a0dc15e";
+    sha256 = "12nq2ah33amhyfma464a4ssf90wh2ai8c7w55j381cks8jliny40";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -231,6 +231,6 @@ in stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ eelco andir ];
+    maintainers = with maintainers; [ eelco andir mic92 ];
   };
 }
