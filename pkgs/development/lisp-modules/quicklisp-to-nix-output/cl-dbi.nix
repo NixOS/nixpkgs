@@ -3,7 +3,7 @@ args @ { fetchurl, ... }:
   baseName = ''cl-dbi'';
   version = ''20190521-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-annot" args."cl-syntax" args."cl-syntax-annot" args."closer-mop" args."dbi" args."named-readtables" args."split-sequence" args."trivial-types" ];
 
@@ -17,7 +17,7 @@ args @ { fetchurl, ... }:
   asdFilesToKeep = ["cl-dbi.asd"];
   overrides = x: x;
 }
-/* (SYSTEM cl-dbi DESCRIPTION NIL SHA256
+/* (SYSTEM cl-dbi DESCRIPTION System lacks description SHA256
     1q0hhgxnd91v020zh9ivlmzhzz5ald6q1bm5i5cawzh0xfyfhhvg URL
     http://beta.quicklisp.org/archive/cl-dbi/2019-05-21/cl-dbi-20190521-git.tgz
     MD5 ba77d3a955991b406f56cc1a09e71dc2 NAME cl-dbi FILENAME cl-dbi DEPS
