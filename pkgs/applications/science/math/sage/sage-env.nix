@@ -44,6 +44,7 @@
 , gsl
 , ntl
 , jdk
+, less
 }:
 
 # This generates a `sage-env` shell file that will be sourced by sage on startup.
@@ -92,6 +93,7 @@ let
     rubiks
     flintqs
     jdk # only needed for `jmol` which may be replaced in the future
+    less # needed to prevent transient test errors until https://github.com/ipython/ipython/pull/11864 is resolved
   ]
   ));
 in
