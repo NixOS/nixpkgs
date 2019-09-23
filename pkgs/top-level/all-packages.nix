@@ -14946,6 +14946,8 @@ in
     check-nwc-health
     check-ups-health;
 
+  check-openvpn = callPackage ../servers/monitoring/plugins/openvpn.nix { };
+
   checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
 
   neo4j = callPackage ../servers/nosql/neo4j { };
