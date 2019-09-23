@@ -9371,6 +9371,8 @@ in
     ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
+  commitlint = nodePackages."commitlint-8.2.x";
+
   cpptest = callPackage ../development/libraries/cpptest { };
 
   cppi = callPackage ../development/tools/misc/cppi { };

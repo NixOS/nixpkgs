@@ -1,7 +1,7 @@
 [
   "@angular/cli"
 , "@antora/cli"
-, "@antora/site-generator-default" 
+, "@antora/site-generator-default"
 , "@vue/cli"
 , "@webassemblyjs/cli"
 , "@webassemblyjs/repl"
@@ -20,6 +20,7 @@
 , "clean-css"
 , "coffee-script"
 , "coinmon"
+, {"commitlint": "8.2.x"}
 , "configurable-http-proxy"
 , "cordova"
 , "cpy-cli"
