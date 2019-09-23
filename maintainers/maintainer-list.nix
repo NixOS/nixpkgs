@@ -1472,6 +1472,11 @@
     github = "ericbmerritt";
     name = "Eric Merritt";
   };
+  ericdallo = {
+    email = "ercdll1337@gmail.com";
+    github = "ericdallo";
+    name = "Eric Dallo";
+  };
   ericsagnes = {
     email = "eric.sagnes@gmail.com";
     github = "ericsagnes";
