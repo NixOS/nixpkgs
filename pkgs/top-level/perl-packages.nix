@@ -12665,6 +12665,21 @@ let
     };
   };
 
+  NetPrometheus = buildPerlModule {
+    pname = "Net-Prometheus";
+    version = "0.07";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.07.tar.gz;
+      sha256 = "1dh498b26wdaip053hw52317jjmb2n2r5209a1zv5yfrlxpblqm7";
+    };
+    propagatedBuildInputs = [ RefUtil StructDumb ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "export monitoring metrics for F<prometheus>";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   NetSCP = buildPerlPackage {
     pname = "Net-SCP";
     version = "0.08.reprise";
