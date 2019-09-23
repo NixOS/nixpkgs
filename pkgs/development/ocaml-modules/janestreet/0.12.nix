@@ -436,6 +436,14 @@ rec {
     propagatedBuildInputs = [ ppx_base re sexplib ];
   };
 
+  expect_test_helpers_kernel = janePackage {
+    pname = "expect_test_helpers_kernel";
+    hash = "18ya187y2i2hfxr771sd9vy5jdsa30vhs56yjdhwk06v01b2fzbq";
+    meta.description = "Helpers for writing expectation tests";
+    buildInputs = [ ppx_jane ];
+    propagatedBuildInputs = [ core_kernel sexp_pretty ];
+  };
+
   ### Packages at version 0.11, with dependencies at version 0.12
 
   configurator = janePackage {
