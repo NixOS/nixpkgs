@@ -444,6 +444,13 @@ rec {
     propagatedBuildInputs = [ core_kernel sexp_pretty ];
   };
 
+  expect_test_helpers = janePackage {
+    pname = "expect_test_helpers";
+    hash = "0ixqck2lnsmz107yw0q2sr8va80skjpldx7lz4ymjiq2vsghk0rb";
+    meta.description = "Async helpers for writing expectation tests";
+    propagatedBuildInputs = [ async expect_test_helpers_kernel ];
+  };
+
   ### Packages at version 0.11, with dependencies at version 0.12
 
   configurator = janePackage {
