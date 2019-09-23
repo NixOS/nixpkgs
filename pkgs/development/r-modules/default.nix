@@ -441,6 +441,7 @@ let
     nlme = [ pkgs.libiconv ];
     Matrix = [ pkgs.libiconv ];
     mgcv = [ pkgs.libiconv ];
+    minqa = [ pkgs.libiconv ];
     igraph = [ pkgs.libiconv ];
     ape = [ pkgs.libiconv ];
     expm = [ pkgs.libiconv ];
