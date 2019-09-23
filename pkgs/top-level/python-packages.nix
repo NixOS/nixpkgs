@@ -163,6 +163,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  aioredis = callPackage ../development/python-modules/aioredis { };
+
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
   ansi2html = callPackage ../development/python-modules/ansi2html { };
