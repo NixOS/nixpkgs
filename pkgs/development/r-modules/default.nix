@@ -449,6 +449,7 @@ let
     pan = [ pkgs.libiconv ];
     phangorn = [ pkgs.libiconv ];
     quadprog = [ pkgs.libiconv ];
+    randomForest = [ pkgs.libiconv ];
     sundialr = [ pkgs.libiconv ];
   };
 
