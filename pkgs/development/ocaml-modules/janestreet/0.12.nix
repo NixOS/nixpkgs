@@ -451,6 +451,13 @@ rec {
     propagatedBuildInputs = [ async expect_test_helpers_kernel ];
   };
 
+  patience_diff = janePackage {
+    pname = "patience_diff";
+    hash = "055kd3piadjnplip8c8q99ssh79d4irmhg2wng7aida5pbqp2p9f";
+    meta.description = "Diff library using Bram Cohen's patience diff algorithm";
+    propagatedBuildInputs = [ core_kernel ];
+  };
+
   ### Packages at version 0.11, with dependencies at version 0.12
 
   configurator = janePackage {
