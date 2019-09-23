@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    gst-python pygobject3 pykka tornado_4 requests
+    gst-python pygobject3 pykka tornado_4 requests setuptools
   ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python;
 
   # There are no tests

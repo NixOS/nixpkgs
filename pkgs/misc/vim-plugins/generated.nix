@@ -1122,6 +1122,17 @@ let
     };
   };
 
+  float-preview-nvim = buildVimPluginFrom2Nix {
+    pname = "float-preview-nvim";
+    version = "2019-04-07";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "float-preview.nvim";
+      rev = "c5431b6d9bd4a8002f1a3eec42e9458ef4453ff3";
+      sha256 = "0ylrp0pmg822m7zp7dhyhmb05zbiy4gbq40l4whs249v0v4s9vyd";
+    };
+  };
+
   floobits-neovim = buildVimPluginFrom2Nix {
     pname = "floobits-neovim";
     version = "2018-08-01";

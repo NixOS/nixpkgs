@@ -239,6 +239,7 @@ nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
+ncm2/float-preview.nvim
 ncm2/ncm2
 ncm2/ncm2-bufword
 ncm2/ncm2-jedi

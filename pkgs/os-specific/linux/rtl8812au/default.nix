@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel, bc }:
+{ stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
 
 stdenv.mkDerivation rec {
   name = "rtl8812au-${kernel.version}-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fy0f8ihxd0i5kr8gmky8v8xl0ns6bhxfdn64c97c5irzdvg37sr";
   };
 
-  nativeBuildInputs = [ bc ];
+  nativeBuildInputs = [ bc nukeReferences ];
   buildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" "format" ];
@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+  '';
+
+  postInstall = ''
+    nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
   meta = with stdenv.lib; {
