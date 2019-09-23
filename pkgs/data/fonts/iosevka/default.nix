@@ -1,5 +1,5 @@
-{ stdenv, lib, pkgs
-, nodejs, remarshal, ttfautohint-nox, otfcc
+{ stdenv, lib, pkgs, fetchFromGitHub
+, nodejs, nodePackages, remarshal, ttfautohint-nox, otfcc
 
 # Custom font set options.
 # See https://github.com/be5invis/Iosevka#build-your-own-style
@@ -12,12 +12,6 @@
 
 assert (privateBuildPlan != null) -> set != null;
 
-let
-  nodePackages = import ./node-packages.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
-in
 stdenv.mkDerivation rec {
   pname =
     if set != null
@@ -26,11 +20,16 @@ stdenv.mkDerivation rec {
 
   version = "2.3.0";
 
-  src = nodePackages."iosevka-https://github.com/be5invis/Iosevka/archive/v${version}.tar.gz";
-  sourceRoot = "${src.name}/lib/node_modules/iosevka";
+  src = fetchFromGitHub {
+    owner = "be5invis";
+    repo = "Iosevka";
+    rev = version;
+    sha256 = "1qnbxhx9wvij9zia226mc3sy8j7bfsw5v1cvxvsbbwjskwqdamvv";
+  };
 
   nativeBuildInputs = [
     nodejs
+    nodePackages."iosevka-build-deps-../../data/fonts/iosevka"
     remarshal
     otfcc
     ttfautohint-nox
@@ -49,6 +48,7 @@ stdenv.mkDerivation rec {
       echo -e "\n" >> parameters.toml
       remarshal -i "$extraParametersJSONPath" -if json -of toml >> parameters.toml
     ''}
+    cp -r ${nodePackages."iosevka-build-deps-../../data/fonts/iosevka"}/lib/node_modules/iosevka-build-deps/* ./
     runHook postConfigure
   '';
 
