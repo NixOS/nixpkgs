@@ -2067,6 +2067,12 @@
     githubId = 195032;
     name = "Eric Evenchick";
   };
+  evenbrenden = {
+    email = "evenbrenden@gmail.com";
+    github = "evenbrenden";
+    githubId = 2512008;
+    name = "Even Brenden";
+  };
   exfalso = {
     email = "0slemi0@gmail.com";
     github = "exfalso";

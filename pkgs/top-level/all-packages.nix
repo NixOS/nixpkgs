@@ -1759,6 +1759,8 @@ in
 
   jellyfin = callPackage ../servers/jellyfin { };
 
+  jotta-cli = callPackage ../applications/misc/jotta-cli { };
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   kisslicer = callPackage ../tools/misc/kisslicer { };
