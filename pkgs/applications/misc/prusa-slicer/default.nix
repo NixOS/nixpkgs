@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, cmake, pkgconfig
-, boost, cereal, curl, expat, glew, libpng, tbb, wxGTK30
+, boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK30
 , gtest, nlopt, xorg, makeDesktopItem
 }:
 let
@@ -19,12 +19,11 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
-  # We could add Eigen, but it doesn't currently compile with the version in
-  # nixpkgs.
   buildInputs = [
     boost
     cereal
     curl
+    eigen
     expat
     glew
     libpng
@@ -40,6 +39,11 @@ stdenv.mkDerivation rec {
   # for finding the nlopt library, which doesn't pick up the package in the nix store.
   # We need to set the path via the NLOPT environment variable instead.
   NLOPT = nlopt;
+
+  # Disable compiler warnings that clutter the build log
+  # It seems to be a known issue for Eigen:
+  # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
+  NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
 
   prePatch = ''
     # In nix ioctls.h isn't available from the standard kernel-headers package
