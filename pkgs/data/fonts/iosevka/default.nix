@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "Iosevka";
-    rev = version;
+    rev = "v${version}";
     sha256 = "1qnbxhx9wvij9zia226mc3sy8j7bfsw5v1cvxvsbbwjskwqdamvv";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       echo -e "\n" >> parameters.toml
       remarshal -i "$extraParametersJSONPath" -if json -of toml >> parameters.toml
     ''}
-    cp -r ${nodePackages."iosevka-build-deps-../../data/fonts/iosevka"}/lib/node_modules/iosevka-build-deps/* ./
+    ln -s ${nodePackages."iosevka-build-deps-../../data/fonts/iosevka"}/lib/node_modules/iosevka-build-deps/node_modules .
     runHook postConfigure
   '';
 
