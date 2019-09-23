@@ -2927,6 +2927,8 @@ in {
 
   django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
+  django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
+
   django_environ = callPackage ../development/python-modules/django_environ { };
 
   django_evolution = callPackage ../development/python-modules/django_evolution { };
