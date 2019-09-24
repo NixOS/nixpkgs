@@ -3,6 +3,15 @@
 
 # Custom font set options.
 # See https://github.com/be5invis/Iosevka#build-your-own-style
+# Ex:
+# privateBuildPlan = {
+#   family = "Iosevka Expanded";
+#
+#   design = [
+#     "sans"
+#     "expanded"
+#   ];
+# };
 , privateBuildPlan ? null
 # Extra parameters. Can be used for ligature mapping.
 , extraParameters ? null
