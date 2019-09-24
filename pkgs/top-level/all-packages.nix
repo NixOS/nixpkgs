@@ -213,6 +213,8 @@ in
 
   dotnet-sdk = callPackage ../development/compilers/dotnet/sdk { };
 
+  dotnet-sdk_3 = callPackage ../development/compilers/dotnet/sdk/3.nix { };
+
   dispad = callPackage ../tools/X11/dispad { };
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
