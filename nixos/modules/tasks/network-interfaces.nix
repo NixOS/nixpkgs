@@ -903,6 +903,11 @@ in
         Whether to use DHCP to obtain an IP address and other
         configuration for all network interfaces that are not manually
         configured.
+
+        Using this option is highly discouraged and also incompatible with
+        <option>networking.useNetworkd</option>. Please use
+        <option>networking.interfaces.&lt;name&gt;.useDHCP</option> instead
+        and set this to false.
       '';
     };
 
