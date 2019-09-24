@@ -24836,4 +24836,6 @@ in
   uhubctl = callPackage ../tools/misc/uhubctl {};
 
   kodelife = callPackage ../applications/graphics/kodelife {};
+
+  mailspring = callPackage ../applications/networking/mailreaders/mailspring {};
 }

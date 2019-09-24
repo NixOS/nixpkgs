@@ -127,6 +127,7 @@
   ./programs/kbdlight.nix
   ./programs/less.nix
   ./programs/light.nix
+  ./programs/mailspring.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
   ./programs/mtr.nix
