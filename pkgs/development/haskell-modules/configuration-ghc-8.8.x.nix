@@ -106,8 +106,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/socks-0.6.0.patch";
     sha256 = "1dsqmx0sw62x4glh43c0sbizd2y00v5xybiqadn96v6pmfrap5cp";
   });
-  lens = self.lens_4_18_1;
-  xmonad-contrib = self.xmonad-contrib_0_16;
   polyparse = appendPatch (doJailbreak super.polyparse) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/polyparse-1.12.1.patch";
     sha256 = "01b2gnsq0x4fd9na8zpk6pajym55mbz64hgzawlwxdw0y6681kr5";
@@ -146,7 +144,6 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/asn1-encoding-0.9.5.patch";
     sha256 = "0a3159rnaw6shjzdm46799crd4pxh33s23qy51xa7z6nv5q8wsb5";
   });
-  tls = self.tls_1_5_1;
   vault = dontHaddock super.vault;
   monad-par = dontCheck super.monad-par;   # test suite does not compile in monad-par-0.3.4.8
 
@@ -174,14 +171,10 @@ self: super: {
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
 
-  # Upstream ships a broken Setup.hs file.
-  string-qq = overrideSrc (dontCheck super.string-qq) {
-    src = pkgs.fetchFromGitHub {
-      owner = "dmwit";
-      repo = "string-qq";
-      rev = "b396f5ef36a9b23f1d3fafcc91f2222cd1ad24fe";
-      sha256 = "1z2f1yry8wi0jb38dgz7rl89zl63fhngf7xk4ljw240vn315jj8s";
-    };
-  };
+  # use latest version to fix the build
+  lens = self.lens_4_18_1;
+  string-qq = self.string-qq_0_0_4;
+  tls = self.tls_1_5_1;
+  xmonad-contrib = self.xmonad-contrib_0_16;
 
 }
