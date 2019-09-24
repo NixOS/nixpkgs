@@ -215,6 +215,8 @@ in
 
   dotnet-runtime_3 = callPackage ../development/tools/dotnet/runtime/default.nix { };
 
+  dotnet-runtime_2 = callPackage ../development/tools/dotnet/runtime/2.nix { };
+
   dotnet-sdk = callPackage ../development/compilers/dotnet/sdk { };
 
   dispad = callPackage ../tools/X11/dispad { };
