@@ -4,7 +4,7 @@
 let version = "1.5.4-beta-rolling";
     yakyakNpmDeps = nodePackages."yakyakNpmDeps-../../applications/networking/instant-messengers/yakyak";
     hangupsjs = nodePackages."hangupsjs-1.3.8".override(oldAttrs: {
-      buildInputs = oldAttrs.buildInputs ++ [ nodePackages."coffee-script" ];
+      buildInputs = oldAttrs.buildInputs ++ [ nodePackages."coffee-script-1.12.7" ];
     });
 
 in stdenv.mkDerivation rec {
