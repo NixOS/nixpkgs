@@ -15449,7 +15449,9 @@ in
 
   shiori = callPackage ../servers/web-apps/shiori { };
 
-  matomo = callPackage ../servers/web-apps/matomo { };
+  inherit (callPackages ../servers/web-apps/matomo {})
+    matomo
+    matomo-beta;
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
