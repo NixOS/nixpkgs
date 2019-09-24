@@ -12,7 +12,7 @@ buildGoPackage rec {
     sha256 = "11cfhh48dga5ghfcijb68gbx0nfr5bs3vvp2j1gam9ac37fpvk0x";
   };
 
-  goPackagePath= "gitlab.com/gitlab-org/";
+  goPackagePath= "gitlab.com/gitlab-org/gitlab-workhorse";
   goDeps = ./deps.nix;
 
   buildInputs = [ git go ];
