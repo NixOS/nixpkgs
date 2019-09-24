@@ -24884,4 +24884,5 @@ in
 
   wifi-password = callPackage ../os-specific/darwin/wifi-password {};
 
+  zulip-desktop = callPackage ../applications/networking/instant-messengers/zulip-desktop { };
 }

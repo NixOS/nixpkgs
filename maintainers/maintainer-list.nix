@@ -3254,6 +3254,12 @@
     email = "info+nix@chmist.com";
     name = "karolchmist";
   };
+  kaychaks = {
+    email = "git@kaushikc.org";
+    github = "kaychaks";
+    githubId = 648615;
+    name = "Kaushik Chakraborty";
+  };
   kazcw = {
     email = "kaz@lambdaverse.org";
     github = "kazcw";
