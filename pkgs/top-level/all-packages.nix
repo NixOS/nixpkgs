@@ -21608,6 +21608,8 @@ in
 
   youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
 
+  youtube-dl-gui = with python2Packages; toPythonApplication youtube-dl-gui;
+
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
   ytcc = callPackage ../tools/networking/ytcc { };

@@ -1228,6 +1228,8 @@ in {
 
   trio = callPackage ../development/python-modules/trio {};
 
+  twodict = callPackage ../development/python-modules/twodict {};
+
   sniffio = callPackage ../development/python-modules/sniffio { };
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
@@ -5136,6 +5138,8 @@ in {
     ffmpegSupport = false;
     phantomjsSupport = false;
   };
+
+  youtube-dl-gui = callPackage ../tools/misc/youtube-dl-gui {};
 
   zconfig = callPackage ../development/python-modules/zconfig { };
 
