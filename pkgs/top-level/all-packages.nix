@@ -211,6 +211,10 @@ in
 
   dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
 
+  dotnet-runtime = dotnet-runtime_3;
+
+  dotnet-runtime_3 = callPackage ../development/tools/dotnet/runtime/default.nix { };
+
   dotnet-sdk = callPackage ../development/compilers/dotnet/sdk { };
 
   dispad = callPackage ../tools/X11/dispad { };
