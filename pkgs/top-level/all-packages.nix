@@ -4447,7 +4447,7 @@ in
     nodejs = pkgs.nodejs-12_x;
   });
 
-  nodePackages_10_x = (callPackage ../development/node-packages/default-v10.nix {
+  nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
   });
 
