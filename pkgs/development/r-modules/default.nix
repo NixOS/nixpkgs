@@ -445,6 +445,7 @@ let
     ape = [ pkgs.libiconv ];
     expm = [ pkgs.libiconv ];
     mnormt = [ pkgs.libiconv ];
+    pan = [ pkgs.libiconv ];
     phangorn = [ pkgs.libiconv ];
     quadprog = [ pkgs.libiconv ];
     sundialr = [ pkgs.libiconv ];
