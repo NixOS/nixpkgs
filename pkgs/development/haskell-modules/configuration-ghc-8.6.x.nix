@@ -95,4 +95,7 @@ self: super: {
   # Newer versions don't compile.
   resolv = self.resolv_0_1_1_2;
 
+  # cabal2nix needs the latest version of Cabal.
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_3_0_0_0; });
+
 }
