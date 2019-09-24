@@ -8,12 +8,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vmatare";
     repo = "thinkfan";
-    rev = "${version}";
+    rev = version;
     sha256 = "1983p8aryfgpyhflh5r5xz27y136a4vvm7plgrg44q4aicqbcp8j";
   };
 
   configureFlags = [
-    "-DCMAKE_INSTALL_DOCDIR==share/doc/${pname}"
+    "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
     "-DUSE_NVML=OFF"
     "-DUSE_ATASMART=ON"
     "-DUSE_YAML=ON"
