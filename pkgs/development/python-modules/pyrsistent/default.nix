@@ -9,16 +9,20 @@
 
 buildPythonPackage rec {
   pname = "pyrsistent";
-  version = "0.15.2";
+  version = "0.15.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fjwnxg7q1b02j7hk1wqm5xdn7wck9j2g3ggkkizab6l77kjws8n";
+    sha256 = "0cv5xvhfhlj88pb0ghdwivkfcmgi6503qjwxx4r6n06nd6hpzd1l";
   };
 
   propagatedBuildInputs = [ six ];
 
   checkInputs = [ pytestrunner pytest hypothesis ];
+
+  postPatch = ''
+    substituteInPlace setup.py --replace 'pytest<5' 'pytest'
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/tobgu/pyrsistent/;
