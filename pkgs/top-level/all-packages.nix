@@ -15187,6 +15187,8 @@ in
     sensu-go-backend
     sensu-go-cli;
 
+  check-wmiplus = callPackage ../servers/monitoring/plugins/wmiplus { };
+
   uchiwa = callPackage ../servers/monitoring/uchiwa { };
 
   shishi = callPackage ../servers/shishi {
