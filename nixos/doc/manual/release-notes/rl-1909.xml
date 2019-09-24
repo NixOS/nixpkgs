@@ -930,6 +930,14 @@
       The <literal>nodejs-11_x</literal> package has been removed as it's EOLed by upstream.
      </para>
    </listitem>
+   <listitem>
+    <para>
+      The <option>networking.useDHCP</option> option is unsupported in combination with
+      <option>networking.useNetworkd</option> in anticipation of defaulting to it by default.
+      It has to be set to <literal>false</literal> and enabled per
+      interface with <option>networking.interfaces.&lt;name&gt;.useDHCP = true;</option>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
