@@ -4,10 +4,36 @@
 with lib;
 
 let
+  inherit (pkgs) alsaUtils pulseaudio;
 
-  inherit (pkgs) alsaUtils;
+  cfg = config.sound;
+  pulseCfg = config.hardware.pulseaudio;
+  pulseaudioEnabled = pulseCfg.enable;
 
-  pulseaudioEnabled = config.hardware.pulseaudio.enable;
+  volumeCmds =
+    let
+      inherit (cfg.mediaKeys) volumeStep;
+      amixer = "${alsaUtils}/bin/amixer";
+      pactl = "${pulseaudio}/bin/pactl";
+    in
+      {
+        pulseVolume =
+          {
+            up = "${pactl} set-sink-volume @DEFAULT_SINK@ +${volumeStep}";
+            down = "${pactl} set-sink-volume @DEFAULT_SINK@ -${volumeStep}";
+            mute = "${pactl} set-sink-mute @DEFAULT_SINK@ toggle";
+            micMute = "${pactl} set-source-mute @DEFAULT_SOURCE@ toggle";
+            userService = true;
+          };
+        alsaVolume =
+          {
+            up = "${amixer} -q set Master ${volumeStep}%+ unmute";
+            down = "${amixer} -q set Master ${volumeStep}%- unmute";
+            mute = "${amixer} -q set Master toggle";
+            micMute = "${amixer} -q set Capture toggle";
+            userService = false;
+          };
+      };
 
 in
 
@@ -83,13 +109,14 @@ in
 
   ###### implementation
 
-  config = mkIf config.sound.enable {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [ alsaUtils ];
 
-    environment.etc = mkIf (!pulseaudioEnabled && config.sound.extraConfig != "")
+    environment.etc = mkIf (!pulseaudioEnabled && cfg.extraConfig != "")
       [
-        { source = pkgs.writeText "asound.conf" config.sound.extraConfig;
+        {
+          source = pkgs.writeText "asound.conf" cfg.extraConfig;
           target = "asound.conf";
         }
       ];
@@ -97,10 +124,11 @@ in
     # ALSA provides a udev rule for restoring volume settings.
     services.udev.packages = [ alsaUtils ];
 
-    boot.kernelModules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
+    boot.kernelModules = optional cfg.enableOSSEmulation "snd_pcm_oss";
 
     systemd.services.alsa-store =
-      { description = "Store Sound Card State";
+      {
+        description = "Store Sound Card State";
         wantedBy = [ "multi-user.target" ];
         unitConfig.RequiresMountsFor = "/var/lib/alsa";
         unitConfig.ConditionVirtualization = "!systemd-nspawn";
@@ -112,23 +140,49 @@ in
         };
       };
 
-    services.actkbd = mkIf config.sound.mediaKeys.enable {
+    services.actkbd = mkIf cfg.mediaKeys.enable {
       enable = true;
-      bindings = [
-        # "Mute" media key
-        { keys = [ 113 ]; events = [ "key" ];       command = "${alsaUtils}/bin/amixer -q set Master toggle"; }
+      bindings =
+        let
+          volume =
+            if pulseaudioEnabled
+            then volumeCmds.pulseVolume
+            else volumeCmds.alsaVolume;
+        in
+          [
+            # "Mute" media key
+            {
+              userMode = volume.userService;
+              keys = [ 113 ];
+              events = [ "key" ];
+              command = "${volume.mute}";
+            }
 
-        # "Lower Volume" media key
-        { keys = [ 114 ]; events = [ "key" "rep" ]; command = "${alsaUtils}/bin/amixer -q set Master ${config.sound.mediaKeys.volumeStep}- unmute"; }
+            # "Mic Mute" media key
+            {
+              userMode = volume.userService;
+              keys = [ 190 ];
+              events = [ "key" ];
+              command = "${volume.micMute}";
+            }
 
-        # "Raise Volume" media key
-        { keys = [ 115 ]; events = [ "key" "rep" ]; command = "${alsaUtils}/bin/amixer -q set Master ${config.sound.mediaKeys.volumeStep}+ unmute"; }
+            # "Lower Volume" media key
+            {
+              userMode = volume.userService;
+              keys = [ 114 ];
+              events = [ "key" "rep" ];
+              command = "${volume.down}";
+            }
 
-        # "Mic Mute" media key
-        { keys = [ 190 ]; events = [ "key" ];       command = "${alsaUtils}/bin/amixer -q set Capture toggle"; }
-      ];
+            # "Raise Volume" media key
+            {
+              userMode = volume.userService;
+              keys = [ 115 ];
+              events = [ "key" "rep" ];
+              command = "${volume.up}";
+            }
+          ];
     };
-
   };
 
 }
