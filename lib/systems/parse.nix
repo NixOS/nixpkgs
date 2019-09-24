@@ -431,7 +431,10 @@ rec {
 
   in mkSystem parsed;
 
-  mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
+  splitConfig = s: if builtins ? split then builtins.filter builtins.isString (builtins.split "-" s)
+                   else lib.splitString "-" s;
+
+  mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (splitConfig s));
 
   doubleFromSystem = { cpu, kernel, abi, ... }:
     /**/ if abi == abis.cygnus       then "${cpu.name}-cygwin"
