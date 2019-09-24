@@ -172,6 +172,7 @@ self: super: {
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
 
   # use latest version to fix the build
+  hackage-db = self.hackage-db_2_1_0;
   lens = self.lens_4_18_1;
   string-qq = self.string-qq_0_0_4;
   tls = self.tls_1_5_1;
