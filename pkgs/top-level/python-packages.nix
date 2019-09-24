@@ -523,6 +523,10 @@ in {
 
   dominate = callPackage ../development/python-modules/dominate { };
 
+  dotnetcore2 = callPackage ../development/python-modules/dotnetcore2 {
+    inherit (pkgs) substituteAll dotnet-sdk;
+  };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
