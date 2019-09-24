@@ -22,4 +22,6 @@ build-idris-package  {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };
+
+  broken = true;
 }
