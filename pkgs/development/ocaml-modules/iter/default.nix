@@ -1,22 +1,20 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, qtest, result }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, mdx, qtest, result }:
 
 buildDunePackage rec {
-  pname = "sequence";
-  version = "1.1";
-
-  minimumOCamlVersion = "4.02";
+  pname = "iter";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;
     rev = version;
-    sha256 = "08j37nldw47syq3yw4mzhhvya43knl0d7biddp0q9hwbaxhzgi44";
+    sha256 = "0j2sg50byn0ppmf6l36ksip7zx1d3gv7sc4hbbxs2rmx39jr7vxh";
   };
 
-  buildInputs = [ qtest ];
+  buildInputs = lib.optionals doCheck [ mdx qtest ];
   propagatedBuildInputs = [ result ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
 
   meta = {
     homepage = https://github.com/c-cube/sequence;
@@ -27,6 +25,6 @@ buildDunePackage rec {
       like `filter`, `map`, `take`, `drop` and `append` can be performed before the
       sequence is iterated/folded on.
     '';
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }
