@@ -137,6 +137,12 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     # breaks under load: https://github.com/golang/go/issues/25628
     ./skip-test-extra-files-on-386.patch
+    # fixes gc_test.go, which was problematic on hydra for at least i686.
+    # see issues referenced in the patch itself.
+    (fetchurl {
+      url = "https://github.com/golang/go/commit/aae0b5b0b26bf4fd26cad0111535d703691a9083.patch";
+      sha256 = "0s9i2sv5mr9cgmz7c1yqw7ry0vx940l296vnrlci39v6n520c1vh";
+    })
   ];
 
   postPatch = ''
