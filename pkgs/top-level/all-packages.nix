@@ -4447,7 +4447,7 @@ in
     nodejs = pkgs.nodejs-12_x;
   });
 
-  nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
+  nodePackages_10_x = (callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
   });
 
@@ -18768,6 +18768,8 @@ in
   waybar = callPackage ../applications/misc/waybar {
     pulseSupport = config.pulseaudio or false;
   };
+
+  yakyak = callPackage ../applications/networking/instant-messengers/yakyak { };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;

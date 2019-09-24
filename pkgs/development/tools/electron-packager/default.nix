@@ -1,4 +1,9 @@
-{ stdenv, nodePackages, electron, nodejs }:
+# This electron-packager is a patched wrapper around a nodePackage
+# which can be used as a replecement for packages requireing it
+# to build an electron app using nixpkg's own electron build.
+# Set `dontPatchELF = true;` in your deriavtion to prevent SIGTRAP.
+
+{ stdenv, atomEnv, nodePackages, electron, nodejs }:
 
 stdenv.mkDerivation rec {
   name = "electron-packager";
@@ -20,7 +25,10 @@ stdenv.mkDerivation rec {
       --replace "const zipPath = await download.downloadElectronZip(downloadOpts)" \
                 "const zipPath = '${electron}/lib/electron';" \
       --replace "await unzip(zipPath, buildDir)" \
-                "await fs.copy(zipPath, buildDir)"
+                "await fs.copy(zipPath, buildDir); \
+                 const isWrapped = await fs.pathExists('${electron}/lib/electron/.electron-wrapped'); \
+                 isWrapped && await fs.copy('${electron}/lib/electron/.electron-wrapped', \
+                                             path.join(buildDir, 'electron'));"
 
     # fallback to $tmp if tmpdir is not specifically provided
     substituteInPlace ./lib/node_modules/electron-packager/src/common.js \
@@ -35,20 +43,20 @@ stdenv.mkDerivation rec {
                                  parseInt('755', 8)); \
                  await fs.ensureDir(this.originalResourcesAppDir);
                  await fs.copy(this.opts.dir, this.originalResourcesAppDir"
-    '';
+  '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r ./lib $out
-    ln -s  $out/lib/node_modules/electron-packager/bin/electron-packager.js \
-           $out/bin/electron-packager
+      mkdir -p $out/bin
+      cp -r ./lib $out
+      ln -s  $out/lib/node_modules/electron-packager/bin/electron-packager.js \
+             $out/bin/electron-packager
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/oracle/graal;
+    homepage = https://github.com/electron/electron-packager;
     description = "Customize and package your Electron app with OS-specific bundles via JS or CLI";
     license = licenses.bsd2;
     maintainers = with maintainers; [ hlolli ];
-    platforms = [ electron.meta.platforms ];
+    platforms = electron.meta.platforms;
   };
 }

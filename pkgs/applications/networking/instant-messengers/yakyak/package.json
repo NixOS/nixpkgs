@@ -1,0 +1,31 @@
+{
+  "name": "yakyakNpmDeps",
+  "version": "1.5.4-beta-rolling",
+  "dependencies": {
+    "auto-launch": "^5.0.5",
+    "autosize": "^4.0.2",
+    "coffee-script": "^1.9.2",
+    "gulp": "^4.0.0",
+    "gulp-coffee": "^3.0.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-changed": "^3.2.0",
+    "gulp-filter": "^5.1.0",
+    "gulp-install": "^1.1.0",
+    "gulp-less": "^4.0.1",
+    "gulp-livereload": "4.0.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-util": "^3.0.6",
+    "i18n": "^0.8.3",
+    "mime-types": "^2.1.21",
+    "moment": "^2.22.2",
+    "node-notifier": "^5.3.0",
+    "notr": "^1.1.2",
+    "q": "^1.5.1",
+    "request": "^2.88.0",
+    "rimraf": "^2.4.2",
+    "tmp": "0.0.31",
+    "trifl": "0.0.10",
+    "uber-url-regex": "^5.0.5"
+  }
+}

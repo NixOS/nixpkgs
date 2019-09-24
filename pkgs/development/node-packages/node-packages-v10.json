@@ -1,7 +1,7 @@
 [
   "@angular/cli"
 , "@antora/cli"
-, "@antora/site-generator-default" 
+, "@antora/site-generator-default"
 , "@vue/cli"
 , "@webassemblyjs/cli"
 , "@webassemblyjs/repl"
@@ -19,6 +19,7 @@
 , "castnow"
 , "clean-css"
 , "coffee-script"
+, { "coffee-script": "1.12.7" }
 , "coinmon"
 , "configurable-http-proxy"
 , "cordova"
@@ -32,6 +33,7 @@
 , "dnschain"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
+, { "electron-packager": "v14.0.6" }
 , "elm-live"
 , "elm-oracle"
 , "emoj"
@@ -49,6 +51,7 @@
 , "gtop"
 , "gulp"
 , "gulp-cli"
+, {"hangupsjs": "1.3.8"}
 , "html-minifier"
 , "htmlhint"
 , "http-server"
@@ -160,6 +163,7 @@
 , "webtorrent-cli"
 , "wring"
 , "write-good"
+, { "yakyakNpmDeps": "../../applications/networking/instant-messengers/yakyak" }
 , "yarn"
 , "yo"
 ]
