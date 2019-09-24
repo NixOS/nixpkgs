@@ -9,6 +9,11 @@ let
 
   ruby = cfg.packages.gitlab.ruby;
 
+  postgresqlPackage = if config.services.postgresql.enable then
+                        config.services.postgresql.package
+                      else
+                        pkgs.postgresql;
+
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
@@ -140,7 +145,7 @@ let
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
      '';
@@ -155,7 +160,7 @@ let
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
      '';
   };
@@ -677,7 +682,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        config.services.postgresql.package
+        postgresqlPackage
         gitAndTools.git
         ruby
         openssh
@@ -758,7 +763,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        config.services.postgresql.package
+        postgresqlPackage
         gitAndTools.git
         openssh
         nodejs
