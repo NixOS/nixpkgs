@@ -100,8 +100,6 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/hedgehog-1.0.patch";
     sha256 = "16gadh1hb74jqvzc9c893sffb1y2vjglblyrqjwp7xfhccq7g8yw";
   });
-  easytest = markBroken super.easytest;
-  easytest_0_3 = markBroken super.easytest_0_3;
   regex-tdfa = appendPatch super.regex-tdfa (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-tdfa-1.2.3.1.patch";
     sha256 = "1lhas4s2ms666prb475gaw2bqw1v4y8cxi66sy20j727sx7ppjs7";
@@ -149,6 +147,11 @@ self: super: {
 
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
+
+  # mark broken packages
+  easytest = markBroken super.easytest;
+  easytest_0_3 = markBroken super.easytest_0_3;
+  haskell-src = markBrokenVersion "1.0.3.0" super.haskell-src;
 
   # use latest version to fix the build
   hackage-db = self.hackage-db_2_1_0;
