@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thinkfan";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "vmatare";
     repo = "thinkfan";
     rev = version;
-    sha256 = "1983p8aryfgpyhflh5r5xz27y136a4vvm7plgrg44q4aicqbcp8j";
+    sha256 = "107vw0962hrwva3wra9n3hxlbfzg82ldc10qssv3dspja88g8psr";
   };
 
   configureFlags = [
