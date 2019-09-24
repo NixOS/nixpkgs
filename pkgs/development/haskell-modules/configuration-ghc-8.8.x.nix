@@ -166,7 +166,10 @@ self: super: {
   aeson-diff = doJailbreak super.aeson-diff;
 
   # https://github.com/sol/hpack/issues/371
-  hpack = markBrokenVersion "0.32.0" super.hpack;
+  hpack = appendPatch super.hpack (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/hpack-0.32.0.patch";
+    sha256 = "11ccl9f7vwbf5cpzknlyvrwgkzpajk4vq9jk9yb5f9la9ggwb244";
+  });
 
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
