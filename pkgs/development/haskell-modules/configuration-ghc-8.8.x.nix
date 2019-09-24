@@ -149,6 +149,7 @@ self: super: {
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
 
   # mark broken packages
+  bencode = markBrokenVersion "0.6.0.0" super.bencode;
   easytest = markBroken super.easytest;
   easytest_0_3 = markBroken super.easytest_0_3;
   haskell-src = markBrokenVersion "1.0.3.0" super.haskell-src;
