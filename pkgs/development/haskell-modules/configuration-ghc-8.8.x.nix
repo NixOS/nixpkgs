@@ -42,6 +42,7 @@ self: super: {
   xhtml = null;
 
   # Ignore overly restrictive upper version bounds.
+  aeson-diff = doJailbreak super.aeson-diff;
   async = doJailbreak super.async;
   cabal-install = doJailbreak super.cabal-install;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
@@ -57,8 +58,11 @@ self: super: {
   quickcheck-instances = doJailbreak super.quickcheck-instances;
   setlocale = doJailbreak super.setlocale;
   split = doJailbreak super.split;
+  system-fileio = doJailbreak super.system-fileio;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
+  tasty-hedgehog = doJailbreak super.tasty-hedgehog;
   test-framework = doJailbreak super.test-framework;
+  th-expand-syns = doJailbreak super.th-expand-syns;
 
   # These packages don't work and need patching and/or an update.
   primitive = overrideSrc (doJailbreak super.primitive) {
@@ -123,19 +127,6 @@ self: super: {
   chell = overrideCabal (doJailbreak super.chell) (_drv: {
     broken = false;
   });
-  th-expand-syns = doJailbreak super.th-expand-syns;
-  shelly = overrideCabal (appendPatch (doJailbreak super.shelly) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shelly-1.8.1.patch";
-    sha256 = "1kglbwrr4ra81v9x3bfsk5l6pyl0my2a1zkr3qjjx7acn0dfpgbc";
-  })) (drv: {
-    editedCabalFile = null;
-    preConfigure = ''
-      cp -v ${pkgs.fetchurl {url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/shelly-1.8.1.cabal"; sha256 = "0crf0m077wky76f5nav2p9q4fa5q4yhv5l4bq9hd073dzdaywhz0";}} shelly.cabal
-      sed -i -e 's/< 1.9,/< 2,/' shelly.cabal # bump time version
-    '';
-  });
-  system-fileio = doJailbreak super.system-fileio;
-  tasty-hedgehog = doJailbreak super.tasty-hedgehog;
   haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.3.patch";
     sha256 = "1asl932mibr5y057xx8v1a7n3qy87lcnclsfh8pbxq1m3iwjkxy8";
@@ -159,9 +150,6 @@ self: super: {
     sha256 = "0zsgzn0nvdxvqi5z0za3gzlhql2x5d5cr0kkr19j5c67fy177w6b";
   });
 
-  # over-specified version constraints
-  aeson-diff = doJailbreak super.aeson-diff;
-
   # https://github.com/sol/hpack/issues/371
   hpack = appendPatch super.hpack (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/hpack-0.32.0.patch";
@@ -177,5 +165,6 @@ self: super: {
   string-qq = self.string-qq_0_0_4;
   tls = self.tls_1_5_1;
   xmonad-contrib = self.xmonad-contrib_0_16;
+  shelly = self.shelly_1_9_0;
 
 }
