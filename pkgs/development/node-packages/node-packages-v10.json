@@ -57,6 +57,7 @@
 , "indium"
 , "ionic"
 , "ios-deploy"
+, { "iosevka-build-deps": "../../data/fonts/iosevka" }
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"
