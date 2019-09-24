@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmakeCurses, libyamlcpp, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, libyamlcpp, pkgconfig
 , smartSupport ? false, libatasmart }:
 
 stdenv.mkDerivation rec {
@@ -12,18 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "107vw0962hrwva3wra9n3hxlbfzg82ldc10qssv3dspja88g8psr";
   };
 
-  configureFlags = [
+  cmakeFlags = [
     "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
     "-DUSE_NVML=OFF"
-    "-DUSE_ATASMART=ON"
-    "-DUSE_YAML=ON"
-  ];
+  ] ++ stdenv.lib.optional smartSupport "-DUSE_ATASMART=ON";
 
-  nativeBuildInputs = [ cmakeCurses pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [libyamlcpp] ++ stdenv.lib.optional smartSupport libatasmart;
-
-  cmakeFlags = stdenv.lib.optional smartSupport "-DUSE_ATASMART=ON";
+  buildInputs = [ libyamlcpp ] ++ stdenv.lib.optional smartSupport libatasmart;
 
   installPhase = ''
     install -Dm755 {.,$out/bin}/thinkfan
@@ -34,10 +30,10 @@ stdenv.mkDerivation rec {
     install -Dm644 {src,$out/share/man/man1}/thinkfan.1
   '';
 
-  meta = {
-    license = stdenv.lib.licenses.gpl3;
-    homepage = https://github.com/vmatare/thinkfan;
-    maintainers = with stdenv.lib.maintainers; [ domenkozar ];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    license = licenses.gpl3;
+    homepage = "https://github.com/vmatare/thinkfan";
+    maintainers = with maintainers; [ domenkozar ];
+    platforms = platforms.linux;
   };
 }
