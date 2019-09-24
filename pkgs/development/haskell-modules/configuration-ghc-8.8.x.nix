@@ -162,9 +162,10 @@ self: super: {
   # use latest version to fix the build
   hackage-db = self.hackage-db_2_1_0;
   lens = self.lens_4_18_1;
+  microlens = self.microlens_0_4_11_2;
+  shelly = self.shelly_1_9_0;
   string-qq = self.string-qq_0_0_4;
   tls = self.tls_1_5_1;
   xmonad-contrib = self.xmonad-contrib_0_16;
-  shelly = self.shelly_1_9_0;
 
 }
