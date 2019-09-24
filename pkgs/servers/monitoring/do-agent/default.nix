@@ -16,7 +16,7 @@ buildGoModule rec {
       -X main.version=${version}
   '';
 
-  modSha256 = "0ydjwxdkcz0blpzwapiaq66vh7nrcg4j91z6h7v4ynnw2rgp7pmy";
+  modSha256 = "164bwqg996097db399j7lar6gj9xpshjdmyapvzg7zh655xlkf3d";
 
   meta = with lib; {
     description = "DigitalOcean droplet system metrics agent";
