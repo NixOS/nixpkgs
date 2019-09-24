@@ -11876,6 +11876,8 @@ in
 
   liburing = callPackage ../development/libraries/liburing { };
 
+  librseq = callPackage ../development/libraries/librseq { };
+
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
   libsecret = callPackage ../development/libraries/libsecret { };
