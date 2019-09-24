@@ -1052,6 +1052,8 @@ in {
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
 
+  pytest-check = callPackage ../development/python-modules/pytest-check { };
+
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
   pytest-flask = callPackage ../development/python-modules/pytest-flask { };
@@ -3112,8 +3114,6 @@ in {
   flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
-
-  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
 
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 

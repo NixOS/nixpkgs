@@ -3,7 +3,7 @@ args @ { fetchurl, ... }:
   baseName = ''lack-util'';
   version = ''lack-20190521-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."nibbles" ];
 
@@ -17,7 +17,7 @@ args @ { fetchurl, ... }:
   asdFilesToKeep = ["lack-util.asd"];
   overrides = x: x;
 }
-/* (SYSTEM lack-util DESCRIPTION NIL SHA256
+/* (SYSTEM lack-util DESCRIPTION System lacks description SHA256
     0ng1k5jq7icfi8c8r3wqj3qrqkh2lyav5ab6mf3l5y4bfwbil593 URL
     http://beta.quicklisp.org/archive/lack/2019-05-21/lack-20190521-git.tgz MD5
     7d7321550f0795e998c7afe4498e7a40 NAME lack-util FILENAME lack-util DEPS

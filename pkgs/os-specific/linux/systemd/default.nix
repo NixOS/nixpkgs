@@ -15,10 +15,7 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-let
-  pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   version = "243";
   pname = "systemd";
 

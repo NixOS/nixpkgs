@@ -30,6 +30,7 @@
 , "dat"
 , "dhcp"
 , "dnschain"
+, "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "elm-live"
 , "elm-oracle"

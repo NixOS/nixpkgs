@@ -239,6 +239,7 @@ nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
+ncm2/float-preview.nvim
 ncm2/ncm2
 ncm2/ncm2-bufword
 ncm2/ncm2-jedi
@@ -445,6 +446,7 @@ vim-scripts/PreserveNoEOL
 vim-scripts/random.vim
 vim-scripts/Rename
 vim-scripts/ReplaceWithRegister
+vim-scripts/ShowMultiBase
 vim-scripts/tabmerge
 vim-scripts/taglist.vim
 vim-scripts/wombat256.vim
