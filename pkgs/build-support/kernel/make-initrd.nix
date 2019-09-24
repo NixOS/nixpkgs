@@ -28,6 +28,8 @@ in stdenv.mkDerivation rec {
 
   builder = ./make-initrd.sh;
 
+  preferLocalBuild = true;
+
   makeUInitrd = stdenv.hostPlatform.platform.kernelTarget == "uImage";
 
   nativeBuildInputs = [ perl cpio ]

@@ -9,6 +9,7 @@
 stdenvNoCC.mkDerivation {
   name = kernel.name + "-shrunk";
   builder = ./modules-closure.sh;
+  preferLocalBuild = true;
   nativeBuildInputs = [ nukeReferences kmod ];
   inherit kernel firmware rootModules allowMissing;
   allowedReferences = ["out"];
