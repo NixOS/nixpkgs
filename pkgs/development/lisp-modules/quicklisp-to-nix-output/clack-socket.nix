@@ -3,7 +3,7 @@ args @ { fetchurl, ... }:
   baseName = ''clack-socket'';
   version = ''clack-20190710-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ ];
 
@@ -17,7 +17,7 @@ args @ { fetchurl, ... }:
   asdFilesToKeep = ["clack-socket.asd"];
   overrides = x: x;
 }
-/* (SYSTEM clack-socket DESCRIPTION NIL SHA256
+/* (SYSTEM clack-socket DESCRIPTION System lacks description SHA256
     1642myknfaajcyqllnhn9s17yb6dbj1yh9wmg1kbplwq9c3yjs7k URL
     http://beta.quicklisp.org/archive/clack/2019-07-10/clack-20190710-git.tgz
     MD5 9d8869ca599652d68dd759c8a6adcd3d NAME clack-socket FILENAME

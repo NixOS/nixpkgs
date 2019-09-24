@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, gradle_3_5, perl, makeWrapper, jre, gsettings-desktop-schemas }:
+{ stdenv, fetchFromGitHub, gradle_4_10, perl, makeWrapper, jre, gsettings-desktop-schemas }:
 
 let
-  version = "0.9.2";
+  version = "0.9.3-3";
   name = "mucommander-${version}";
 
   src = fetchFromGitHub {
     owner = "mucommander";
     repo = "mucommander";
     rev = version;
-    sha256 = "1fvij0yjjz56hsyddznx7mdgq1zm25fkng3axl03iyrij976z7b8";
+    sha256 = "1zhglsx3b5k6np3ppfkkrqz9wg0j7ip598xxfgn75gjl020w0can";
   };
 
   postPatch = ''
     # there is no .git anyway
     substituteInPlace build.gradle \
       --replace "git = org.ajoberstar.grgit.Grgit.open(file('.'))"  "" \
-      --replace "revision = git.head().id"                          "revision = 'abcdefgh'"
+      --replace "revision = git.head().id"                          "revision = 'abcdefgh'" \
+      --replace "proguard.enabled =" "// proguard.enabled =" \
+      --replace "version = '0.9.4'" "version = '${version}'"
 
     # disable gradle plugins with native code and their targets
     perl -i.bak1 -pe "s#(^\s*id '.+' version '.+'$)#// \1#" build.gradle
@@ -34,7 +36,7 @@ let
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
     inherit src postPatch;
-    nativeBuildInputs = [ gradle_3_5 perl ];
+    nativeBuildInputs = [ gradle_4_10 perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon build
@@ -47,12 +49,12 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "199a9rc1pp9jjwpy83743qhjczfz0d1mkbic6si9bh8l62nw8qc7";
+    outputHash = "1v5a76pvk7llbyv2rg50wlxc2wf468l2cslz1vi20aihycbyky7j";
   };
 
 in stdenv.mkDerivation {
   inherit name src postPatch;
-  nativeBuildInputs = [ gradle_3_5 perl makeWrapper ];
+  nativeBuildInputs = [ gradle_4_10 perl makeWrapper ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
@@ -63,7 +65,7 @@ in stdenv.mkDerivation {
                                 repositories { mavenLocal(); maven { url '${deps}' } }
                                #" {} \;
 
-    gradle --offline --no-daemon build
+    gradle --offline --no-daemon distTar
   '';
 
   installPhase = ''
