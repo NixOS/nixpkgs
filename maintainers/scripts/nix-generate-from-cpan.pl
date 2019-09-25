@@ -226,7 +226,7 @@ sub pkg_to_attr {
 
 sub get_pkg_name {
     my ($module) = @_;
-    return ( $module->package_name, $module->package_version );
+    return ( $module->package_name, $module->package_version =~ s/^v(\d)/$1/r );
 }
 
 sub read_meta {
