@@ -132,8 +132,9 @@ if [[ -z $noBootLoader ]]; then
     echo "installing the boot loader..."
     # Grub needs an mtab.
     ln -sfn /proc/mounts $mountPoint/etc/mtab
-    NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -- /run/current-system/bin/switch-to-configuration boot
+    export NIXOS_INSTALL_BOOTLOADER=1
 fi
+nixos-enter --root "$mountPoint" -- /run/current-system/bin/switch-to-configuration boot
 
 # Ask the user to set a root password, but only if the passwd command
 # exists (i.e. when mutable user accounts are enabled).
