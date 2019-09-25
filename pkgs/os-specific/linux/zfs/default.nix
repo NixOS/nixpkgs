@@ -26,10 +26,11 @@ let
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
         versionAtLeast kernel.version incompatibleKernelVersion then
-       throw ''
+       warn ''
          Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
          ${stdenv.lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
        ''
+       null
     else stdenv.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
