@@ -304,6 +304,8 @@ let
 
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 
+    iter = callPackage ../development/ocaml-modules/iter { };
+
     javalib = callPackage ../development/ocaml-modules/javalib {
       extlib = ocaml_extlib;
     };
@@ -620,8 +622,6 @@ let
     };
 
     seq = callPackage ../development/ocaml-modules/seq { };
-
-    sequence = callPackage ../development/ocaml-modules/sequence { };
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 

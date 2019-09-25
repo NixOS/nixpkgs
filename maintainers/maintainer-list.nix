@@ -1480,6 +1480,16 @@
     github = "davidrusu";
     name = "David Rusu";
   };
+  davidtwco = {
+    email = "nix@david.davidtw.co";
+    github = "davidtwco";
+    githubId = 1295100;
+    name = "David Wood";
+    keys = [{
+      longkeyid = "rsa4096/0x01760B4F9F53F154";
+      fingerprint = "5B08 313C 6853 E5BF FA91  A817 0176 0B4F 9F53 F154";
+    }];
+  };
   davorb = {
     email = "davor@davor.se";
     github = "davorb";
@@ -5369,6 +5379,12 @@
     email = "rickynils@gmail.com";
     github = "rickynils";
     name = "Rickard Nilsson";
+  };
+  rileyinman = {
+    email = "rileyminman@gmail.com";
+    github = "rileyinman";
+    githubId = 37246692;
+    name = "Riley Inman";
   };
   ris = {
     email = "code@humanleg.org.uk";

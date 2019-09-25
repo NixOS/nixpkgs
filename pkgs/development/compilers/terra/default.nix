@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       --replace '-lcurses' '-lncurses'
 
     substituteInPlace src/terralib.lua \
-      --subst-var-by NIX_LIBC_INCLUDE ${stdenv.cc.libc.dev}/include
+      --subst-var-by NIX_LIBC_INCLUDE ${stdenv.lib.getDev stdenv.cc.libc}/include
   '';
 
   preBuild = ''

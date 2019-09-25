@@ -1,8 +1,16 @@
-{ stdenv, fetchurl, pkgconfig
-, djvulibre, qt4, xorg, libtiff
-, darwin }:
+{ stdenv
+, mkDerivation
+, fetchurl
+, pkgconfig
+, djvulibre
+, qtbase
+, qttools
+, xorg
+, libtiff
+, darwin
+}:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "djview";
   version = "4.10.6";
 
@@ -11,20 +19,56 @@ stdenv.mkDerivation rec {
     sha256 = "08bwv8ppdzhryfcnifgzgdilb12jcnivl4ig6hd44f12d76z6il4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    qttools
+  ];
 
-  buildInputs = [ djvulibre qt4 xorg.libXt libtiff ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AGL ];
+  buildInputs = [
+    djvulibre
+    qtbase
+    xorg.libXt
+    libtiff
+  ] ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AGL;
+
+  configureFlags = [
+    "--disable-silent-rules"
+    "--disable-dependency-tracking"
+    "--with-x"
+    "--with-tiff"
+    # NOTE: 2019-09-19: experimental "--enable-npdjvu" fails
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--enable-mac";
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
   };
 
   meta = with stdenv.lib; {
-    homepage = http://djvu.sourceforge.net/djview4.html;
-    description = "A portable DjVu viewer and browser plugin";
+    description = "A portable DjVu viewer (Qt5) and browser (nsdejavu) plugin";
+    homepage = "http://djvu.sourceforge.net/djview4.html";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = with maintainers; [ Anton-Latukha ];
+    longDescription = ''
+      The portable DjVu viewer (Qt5) and browser (nsdejavu) plugin.
+
+      Djview highlights:
+        - entirely based on the public DjVulibre api.
+        - entirely written in portable Qt5.
+        - works natively under Unix/X11, MS Windows, and macOS X.
+        - continuous scrolling of pages
+        - side-by-side display of pages
+        - ability to specify a url to the djview command
+        - all plugin and cgi options available from the command line
+        - all silly annotations implemented
+        - display thumbnails as a grid
+        - display outlines
+        - page names supported (see djvused command set-page-title)
+        - metadata dialog (see djvused command set-meta)
+        - implemented as reusable Qt widgets
+
+      nsdejavu: browser plugin for DjVu. It internally uses djview.
+      Has CGI-style arguments to configure the view of document (see man).
+    '';
   };
 }
