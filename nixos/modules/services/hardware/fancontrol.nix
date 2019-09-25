@@ -8,12 +8,7 @@ let
 in {
 
   options.hardware.fancontrol = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      example = true;
-      description = "Whether to enable fancontrol (requires a configuration file, see pwmconfig)";
-    };
+    enable = mkEnableOption "Whether to enable fancontrol (requires a configuration file, see pwmconfig)";
 
     configFile = mkOption {
       type = types.str;
@@ -29,7 +24,6 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        User = "root";
         ExecStart = "${pkgs.lm_sensors}/bin/fancontrol ${cfg.configFile}";
       };
     };
