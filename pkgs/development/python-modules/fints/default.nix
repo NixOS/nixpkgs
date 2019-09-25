@@ -4,6 +4,7 @@
 , pytest
 , requests
 , sepaxml
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
       --replace 'sepaxml==2.0.*' 'sepaxml~=2.0'
   '';
 
-  propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
+  propagatedBuildInputs = [ requests mt-940 sepaxml bleach setuptools ];
 
   checkInputs = [ pytest ];
 
