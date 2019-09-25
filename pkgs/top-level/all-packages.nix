@@ -1249,7 +1249,7 @@ in
 
   cue2pops = callPackage ../tools/cd-dvd/cue2pops { };
 
-  cabal2nix = haskell.lib.overrideCabal (haskell.lib.generateOptparseApplicativeCompletion "cabal2nix" haskellPackages.cabal2nix) (drv: {
+  cabal2nix = haskell.lib.overrideCabal (haskell.lib.generateOptparseApplicativeCompletion "cabal2nix" haskell.packages.ghc881.cabal2nix) (drv: {
     isLibrary = false;
     enableSharedExecutables = false;
     executableToolDepends = (drv.executableToolDepends or []) ++ [ makeWrapper ];
@@ -1874,6 +1874,10 @@ in
   xkbd = callPackage ../applications/misc/xkbd { };
 
   optar = callPackage ../tools/graphics/optar {};
+
+  pastel = callPackage ../applications/misc/pastel {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   patdiff = callPackage ../tools/misc/patdiff { };
 
@@ -11637,11 +11641,11 @@ in
   libcanberra = callPackage ../development/libraries/libcanberra {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
-  libcanberra-gtk3 = pkgs.libcanberra.override {
-    gtk = gtk3.override { x11Support = true; };
+  libcanberra-gtk2 = pkgs.libcanberra.override {
+    gtk = gtk2-x11;
   };
-  libcanberra-gtk2 = pkgs.libcanberra-gtk3.override {
-    gtk = gtk2.override { gdktarget = "x11"; };
+  libcanberra-gtk3 = pkgs.libcanberra.override {
+    gtk = gtk3-x11;
   };
 
   libcanberra_kde = if (config.kde_runtime.libcanberraWithoutGTK or true)
@@ -14975,6 +14979,8 @@ in
     check-nwc-health
     check-ups-health;
 
+  check-openvpn = callPackage ../servers/monitoring/plugins/openvpn.nix { };
+
   checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
 
   neo4j = callPackage ../servers/nosql/neo4j { };
@@ -15192,6 +15198,8 @@ in
     sensu-go-agent
     sensu-go-backend
     sensu-go-cli;
+
+  check-wmiplus = callPackage ../servers/monitoring/plugins/wmiplus { };
 
   uchiwa = callPackage ../servers/monitoring/uchiwa { };
 
@@ -17819,7 +17827,7 @@ in
 
   djvu2pdf = callPackage ../tools/typesetting/djvu2pdf { };
 
-  djview = callPackage ../applications/graphics/djview { };
+  djview = libsForQt5.callPackage ../applications/graphics/djview { };
   djview4 = pkgs.djview;
 
   dmenu = callPackage ../applications/misc/dmenu { };
@@ -20933,7 +20941,9 @@ in
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
-  trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
+  trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita {
+    inherit (kdeApplications) akonadi-contacts;
+  };
 
   tudu = callPackage ../applications/office/tudu { };
 
@@ -24244,6 +24254,8 @@ in
 
   qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 
+  py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
+
   redprl = callPackage ../applications/science/logic/redprl { };
 
   retroarchBare = callPackage ../misc/emulators/retroarch {
@@ -24805,7 +24817,7 @@ in
 
   diceware = callPackage ../tools/security/diceware { };
 
-  xml2rfc = callPackage ../tools/typesetting/xml2rfc { };
+  xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
   mmark = callPackage ../tools/typesetting/mmark { };
 

@@ -2,6 +2,7 @@
 airblade/vim-gitgutter
 airblade/vim-rooter
 ajh17/Spacegray.vim
+aklt/plantuml-syntax
 albfan/nerdtree-git-plugin
 altercation/vim-colors-solarized
 alvan/vim-closetag

@@ -201,11 +201,11 @@ let
         platforms = platforms.linux;
       };
     }) (attrs: {
-      patchPhase = attrs.patchPhase + ''
+      patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
         # Patch built-in mono for ReSharperHost to start successfully
         interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
         patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
-      '';
+      '');
     });
 
   buildRubyMine = { name, version, src, license, description, wmClass, ... }:
