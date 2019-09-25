@@ -1401,6 +1401,8 @@ in
 
   chntpw = callPackage ../tools/security/chntpw { };
 
+  clipman = callPackage ../tools/misc/clipman { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   coprthr = callPackage ../development/libraries/coprthr { };
