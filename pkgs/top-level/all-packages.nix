@@ -775,6 +775,8 @@ in
 
   clair = callPackage ../tools/admin/clair { };
 
+  clarissa = callPackage ../tools/misc/clarissa { };
+
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
