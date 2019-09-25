@@ -19,7 +19,7 @@ let
 
   common = { version
     , sha256
-    , extraPatches
+    , extraPatches ? []
     , rev ? "zfs-${version}"
     , isUnstable ? false
     , incompatibleKernelVersion ? null }:
@@ -105,6 +105,7 @@ let
       installFlags = [
         "sysconfdir=\${out}/etc"
         "DEFAULT_INITCONF_DIR=\${out}/default"
+        "INSTALL_MOD_PATH=\${out}"
       ];
 
       postInstall = optionalString buildKernel ''
@@ -159,10 +160,6 @@ in {
     version = "0.8.1";
 
     sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
-
-    extraPatches = [
-      ./build-fixes-stable.patch
-    ];
   };
 
   zfsUnstable = common {
@@ -177,9 +174,6 @@ in {
     isUnstable = true;
 
     extraPatches = [
-      # you can use this branch to rebase this patch
-      # https://github.com/Mic92/zfs/commits/nixos-fixes
-      ./build-fixes-unstable.patch
       # https://github.com/zfsonlinux/zfs/pull/9361
       (fetchpatch {
         url = "https://github.com/zfsonlinux/zfs/commit/184d9ab2e65a94eb3eecbb7c303e8349ec40c4ea.patch";
