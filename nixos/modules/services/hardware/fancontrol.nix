@@ -8,7 +8,7 @@ let
 in {
 
   options.hardware.fancontrol = {
-    enable = mkEnableOption "Whether to enable fancontrol (requires a configuration file, see pwmconfig)";
+    enable = mkEnableOption "fancontrol (requires a configuration file, see pwmconfig)";
 
     configFile = mkOption {
       type = types.str;
