@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, utillinux, nukeReferences, coreutils
 , perl, buildPackages
 , configFile ? "all"
 
@@ -45,8 +45,9 @@ let
         patchShebangs scripts
         # The arrays must remain the same length, so we repeat a flag that is
         # already part of the command and therefore has no effect.
-        substituteInPlace ./module/zfs/zfs_ctldir.c --replace '"/usr/bin/env", "umount"' '"${utillinux}/bin/umount", "-n"' \
-                                                    --replace '"/usr/bin/env", "mount"'  '"${utillinux}/bin/mount", "-n"'
+        substituteInPlace ./module/${optionalString (isUnstable) "os/linux/"}zfs/zfs_ctldir.c \
+          --replace '"/usr/bin/env", "umount"' '"${utillinux}/bin/umount", "-n"' \
+          --replace '"/usr/bin/env", "mount"'  '"${utillinux}/bin/mount", "-n"'
       '' + optionalString buildUser ''
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount" \
                                                       --replace "/bin/mount"              "${utillinux}/bin/mount"
@@ -91,6 +92,7 @@ let
         "--sysconfdir=/etc"
         "--localstatedir=/var"
         "--enable-systemd"
+        "--disable-initramfs"
       ] ++ optionals buildKernel ([
         "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
         "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -111,12 +113,12 @@ let
         echo "${utillinux}" >> "$out/nix-support/extra-refs"
       '' + optionalString buildUser ''
         # Remove provided services as they are buggy
-        rm $out/etc/systemd/system/zfs-import-*.service
+        rm $out/etc/systemd/system/zfs-import*.service
 
         sed -i '/zfs-import-scan.service/d' $out/etc/systemd/system/*
 
         for i in $out/etc/systemd/system/*; do
-        substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
+          substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
         done
 
         # Fix pkgconfig.
@@ -159,7 +161,7 @@ in {
     sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
 
     extraPatches = [
-      ./build-fixes-unstable.patch
+      ./build-fixes-stable.patch
     ];
   };
 
@@ -168,13 +170,21 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.1";
+    version = "24-09-2019";
+    rev = "d359e99c38f66732d42278c32d52cfcf1839aa4f";
 
-    sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
+    sha256 = "13jg1pd06bcx9nf1z4jmsasnbghvy825s52x78j7m9r4jd4i70fy";
     isUnstable = true;
 
     extraPatches = [
+      # you can use this branch to rebase this patch
+      # https://github.com/Mic92/zfs/commits/nixos-fixes
       ./build-fixes-unstable.patch
+      # https://github.com/zfsonlinux/zfs/pull/9361
+      (fetchpatch {
+        url = "https://github.com/zfsonlinux/zfs/commit/184d9ab2e65a94eb3eecbb7c303e8349ec40c4ea.patch";
+        sha256 = "03qn1ppmy8qg8n6msmh5cbpkzi8dwr3ij7iy3i2gs1cxrhykgk4m";
+      })
     ];
   };
 }
