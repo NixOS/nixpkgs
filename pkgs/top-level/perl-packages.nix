@@ -12280,6 +12280,20 @@ let
     doCheck = false; # Test performs network access.
   };
 
+  MustacheSimple = buildPerlPackage {
+    pname = "Mustache-Simple";
+    version = "1.3.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CM/CMS/Mustache-Simple-v1.3.6.tar.gz";
+      sha256 = "51db5d51ff4b25a670d8bfabe3902b6d45434ecf78b29bc1fff19af6e7383003";
+    };
+    propagatedBuildInputs = [ YAMLLibYAML ];
+    meta = {
+      description = "A simple Mustache Renderer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   namespaceautoclean = buildPerlPackage {
     pname = "namespace-autoclean";
     version = "0.28";
