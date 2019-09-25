@@ -28,7 +28,7 @@ in {
         MINPWM=hwmon0/pwm2=0
         MAXPWM=hwmon0/pwm2=255
       '';
-      description = "Configuration likely generated with pwmconfig.";
+      description = "Contents for configuration file. See <citerefentry><refentrytitle>pwmconfig</refentrytitle><manvolnum>8</manvolnum></citerefentry>.";
     };
   };
 
