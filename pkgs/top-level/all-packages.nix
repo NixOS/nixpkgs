@@ -11641,11 +11641,11 @@ in
   libcanberra = callPackage ../development/libraries/libcanberra {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
-  libcanberra-gtk3 = pkgs.libcanberra.override {
-    gtk = gtk3.override { x11Support = true; };
+  libcanberra-gtk2 = pkgs.libcanberra.override {
+    gtk = gtk2-x11;
   };
-  libcanberra-gtk2 = pkgs.libcanberra-gtk3.override {
-    gtk = gtk2.override { gdktarget = "x11"; };
+  libcanberra-gtk3 = pkgs.libcanberra.override {
+    gtk = gtk3-x11;
   };
 
   libcanberra_kde = if (config.kde_runtime.libcanberraWithoutGTK or true)
