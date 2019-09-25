@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    description = "A minimalist fan control program. Originally designed
+specifically for IBM/Lenovo Thinkpads, it now supports any kind of system via
+the sysfs hwmon interface (/sys/class/hwmon).";
     license = licenses.gpl3;
     homepage = "https://github.com/vmatare/thinkfan";
     maintainers = with maintainers; [ domenkozar ];
