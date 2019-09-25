@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, makeDesktopItem
 , makeWrapper
 , patchelf
 , fontconfig
@@ -35,9 +36,19 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./BMCSecurity/${stunnelBinary}
   '';
 
+  desktopItem = makeDesktopItem rec {
+    name = "IPMIView";
+    exec = "IPMIView";
+    desktopName = name;
+    genericName = "Supermicro BMC manager";
+    categories = "Network;Configuration";
+  };
+
   installPhase = ''
     mkdir -p $out/bin
     cp -R . $out/
+
+    ln -s ${desktopItem}/share $out/share
 
     # LD_LIBRARY_PATH: fontconfig is used from java code
     # PATH: iputils is used for ping, and psmisc is for killall
