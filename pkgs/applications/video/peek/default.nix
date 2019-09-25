@@ -19,6 +19,8 @@
 , python3
 , libxml2
 , gst_all_1
+, which
+, gifski
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${stdenv.lib.makeBinPath [ ffmpeg ]})
+    gappsWrapperArgs+=(--prefix PATH : ${stdenv.lib.makeBinPath [ which ffmpeg gifski ]})
   '';
 
   meta = with stdenv.lib; {
