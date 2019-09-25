@@ -10,7 +10,7 @@ with lib;
     services.udisks2.enable = mkDefault false;
     powerManagement.enable = mkDefault false;
 
-    networking.useHostResolvConf = mkDefault true;
+    networking.useHostResolvConf = mkDefault (!config.services.resolved.enable);
 
     # Containers should be light-weight, so start sshd on demand.
     services.openssh.startWhenNeeded = mkDefault true;

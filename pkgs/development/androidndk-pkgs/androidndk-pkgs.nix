@@ -103,6 +103,6 @@ rec {
     cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include $out/include
     chmod +w $out/include
     cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include/${targetInfo.triple}/* $out/include
-    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/lib $out/lib
+    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/${if hostInfo.arch == "x86_64" then "lib64" else "lib"} $out/lib
   '';
 }

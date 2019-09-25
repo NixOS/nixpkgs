@@ -2003,6 +2003,17 @@ let
     };
   };
 
+  plantuml-syntax = buildVimPluginFrom2Nix {
+    pname = "plantuml-syntax";
+    version = "2019-07-18";
+    src = fetchFromGitHub {
+      owner = "aklt";
+      repo = "plantuml-syntax";
+      rev = "0024021f01c349c2828aeb50a1e131997adea066";
+      sha256 = "1abqpbgz0d0ik4w5frha62i0s3f2w5xsgfa34c0jbwzzq0fkvkk7";
+    };
+  };
+
   pony-vim-syntax = buildVimPluginFrom2Nix {
     pname = "pony-vim-syntax";
     version = "2017-09-26";
