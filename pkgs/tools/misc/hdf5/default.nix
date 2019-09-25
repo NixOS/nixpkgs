@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     inherit mpi;
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ removeReferencesTo ];
 
   buildInputs = []
@@ -51,6 +53,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+    moveToOutput bin/h5cc "''${!outputDev}"
   '';
 
   meta = {
