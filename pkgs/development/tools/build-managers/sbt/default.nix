@@ -6,9 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://dl.bintray.com/sbt/native-packages/sbt/${version}/${pname}-${version}.tgz"
+      "https://piccolo.link/sbt-${version}.tgz",
       "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz"
-      "https://cocl.us/sbt-${version}.tgz"
     ];
     sha256 = "1ncjc4yrnhp2kc5xw3ismnyx5n71541760rzs81hxi8x8vi36x5b";
   };
