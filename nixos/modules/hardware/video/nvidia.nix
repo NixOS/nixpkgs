@@ -203,7 +203,7 @@ in
         KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
       '';
 
-    boot.blacklistedKernelModules = [ "nouveau" "nvidiafb" ];
+    boot.blacklistedKernelModules = [ "nouveau" "nvidiafb" "i2c_nvidia_gpu" ];
 
     services.acpid.enable = true;
 
