@@ -30,14 +30,15 @@ stdenv.mkDerivation rec {
     "--with-lapack-libs=-l${blas.linkName}"
   ] ++ stdenv.lib.optionals stdenv.isx86_64 {
     # disable SIMD instructions (which are enabled *when available* by default)
-    default        = [ "--disable-sse3" "--disable-ssse3" "--disable-sse41" "--disable-sse42" "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    westmere       = [                                                                        "--disable-avx" "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    sandybridge    = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    ivybridge      = [                                                                                        "--disable-avx2" "--disable-fma" "--disable-fma4" ];
-    haswell        = [                                                                                                                         "--disable-fma4" ];
-    broadwell      = [                                                                                                                         "--disable-fma4" ];
-    skylake        = [                                                                                                                         "--disable-fma4" ];
-    skylake-avx512 = [                                                                                                                         "--disable-fma4" ];
+    # for now we need to be careful to disable *all* relevant versions of an instruction set explicitly (https://github.com/linbox-team/fflas-ffpack/issues/284)
+    default        = [ "--disable-sse3" "--disable-ssse3" "--disable-sse41" "--disable-sse42" "--disable-avx" "--disable-avx2" "--disable-avx512f" "--disable-avx512dq" "--disable-avx512vl" "--disable-fma" "--disable-fma4" ];
+    westmere       = [                                                                        "--disable-avx" "--disable-avx2" "--disable-avx512f" "--disable-avx512dq" "--disable-avx512vl" "--disable-fma" "--disable-fma4" ];
+    sandybridge    = [                                                                                        "--disable-avx2" "--disable-avx512f" "--disable-avx512dq" "--disable-avx512vl" "--disable-fma" "--disable-fma4" ];
+    ivybridge      = [                                                                                        "--disable-avx2" "--disable-avx512f" "--disable-avx512dq" "--disable-avx512vl" "--disable-fma" "--disable-fma4" ];
+    haswell        = [                                                                                                                                                                       "--disable-fma4" ];
+    broadwell      = [                                                                                                                                                                       "--disable-fma4" ];
+    skylake        = [                                                                                                                                                                       "--disable-fma4" ];
+    skylake-avx512 = [                                                                                                                                                                       "--disable-fma4" ];
   }.${stdenv.hostPlatform.platform.gcc.arch or "default"};
 
   doCheck = true;
