@@ -7,7 +7,7 @@ let
 
 in {
 
-  options.services.fancontrol = {
+  options.hardware.fancontrol = {
     enable = mkOption {
       type = types.bool;
       default = false;
