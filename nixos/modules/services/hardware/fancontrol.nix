@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.services.fancontrol;
+  cfg = config.hardware.fancontrol;
 
 in {
 
