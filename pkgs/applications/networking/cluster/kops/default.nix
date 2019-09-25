@@ -43,7 +43,7 @@ let
           description = "Easiest way to get a production Kubernetes up and running";
           homepage = https://github.com/kubernetes/kops;
           license = licenses.asl20;
-          maintainers = with maintainers; [offline zimbatm];
+          maintainers = with maintainers; [offline zimbatm kampka];
           platforms = platforms.unix;
         };
       } // attrs';
@@ -57,7 +57,7 @@ in rec {
   };
 
   kops_1_13 = mkKops {
-    version = "1.13.0";
-    sha256 = "04kbbg3gqzwzzzq1lmnpw2gqky3pfwfk7pc0laxv2yssk9wac5k1";
+    version = "1.13.1";
+    sha256 = "0knypbrpipxplgdg6r0r6ycsj7w46virmzwn5s4sdim0y8d2ppyb";
   };
 }
