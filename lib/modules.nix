@@ -592,11 +592,14 @@ rec {
     { options = setAttrByPath optionName (mkOption {
         visible = false;
       });
-      config.warnings =
-        let opt = getAttrFromPath optionName options; in
-        optional opt.isDefined ''
+      config.assertions =
+        let opt = getAttrFromPath optionName options; in [{
+          assertion = !opt.isDefined;
+          message = ''
             The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
-            ${replacementInstructions}'';
+            ${replacementInstructions}
+          '';
+        }];
     };
 
   /* Return a module that causes a warning to be shown if the
