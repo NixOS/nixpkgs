@@ -107,7 +107,7 @@ in stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
 
-    wrapProgram "$out/bin/kicad" "''${gappsWrapperArgs[@]}"
+    wrapProgram "$out/bin/kicad" "''${gappsWrapperArgs[@]}" --prefix LD_LIBRARY_PATH : "${libngspice}/lib"
   '';
 
   meta = {
