@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "btfs";
-  version = "2.19";
+  version = "2.20";
 
   src = fetchFromGitHub {
     owner  = "johang";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1b58zqha2hpnk4ysp9870wd9pkyy6l106ghp0z0x655q70npj0wn";
+    sha256 = "1xil18nmivakdv6rz4sd3203gzfisdvj79spni59kv7dby64rxdz";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
