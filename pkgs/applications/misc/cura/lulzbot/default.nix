@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchgit, cmake, jq, python3Packages, qtbase, qtquickcontrols2 }:
+{ lib, mkDerivation, wrapQtAppsHook, callPackage, fetchgit, cmake, jq, python3, qtbase, qtquickcontrols2 }:
 
 let
   # admittedly, we're using (printer firmware) blobs when we could compile them ourselves.
@@ -10,23 +10,23 @@ let
   };
 
   libarcusLulzbot = callPackage ./libarcus.nix {
-    inherit (python3Packages) buildPythonPackage sip pythonOlder;
+    inherit (python3.pkgs) buildPythonPackage sip pythonOlder;
   };
   libsavitarLulzbot = callPackage ./libsavitar.nix {
-    inherit (python3Packages) buildPythonPackage sip pythonOlder;
+    inherit (python3.pkgs) buildPythonPackage sip pythonOlder;
   };
 
-  inherit (python3Packages) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
+  inherit (python3.pkgs) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
   curaengine = callPackage ./curaengine.nix {
     inherit libarcusLulzbot;
   };
   uraniumLulzbot = callPackage ./uranium.nix {
     inherit callPackage libarcusLulzbot;
-    inherit (python3Packages) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
+    inherit (python3.pkgs) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;
   };
 in
-python3Packages.buildPythonApplication rec {
-  name = "cura-lulzbot-${version}";
+mkDerivation rec {
+  pname = "cura-lulzbot";
   version = "3.6.20";
 
   src = fetchgit {
@@ -35,11 +35,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1xkqf89anxmy2aw0vr604ln7qsibacgk9l2g8jlf467hja8f0dzq";
   };
 
-  format = "other"; # using cmake to build
   buildInputs = [ qtbase qtquickcontrols2 ];
   # numpy-stl temporarily disabled due to https://code.alephobjects.com/T8415
-  propagatedBuildInputs = with python3Packages; [ pyserial requests zeroconf ] ++ [ libsavitarLulzbot uraniumLulzbot libarcusLulzbot ]; # numpy-stl
-  nativeBuildInputs = [ cmake python3Packages.wrapPython ];
+  propagatedBuildInputs = with python3.pkgs; [ pyserial requests zeroconf ] ++ [ libsavitarLulzbot uraniumLulzbot libarcusLulzbot ]; # numpy-stl
+  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
   cmakeFlags = [
     "-DURANIUM_DIR=${uraniumLulzbot.src}"
@@ -66,6 +65,11 @@ python3Packages.buildPythonApplication rec {
       uranium = uraniumLulzbot.version;
     }}
     EOF
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
+    wrapQtApp "$out/bin/cura-lulzbot"
   '';
 
   meta = with lib; {
