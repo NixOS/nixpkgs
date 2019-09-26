@@ -3,14 +3,14 @@
 , libX11, xcbutil, xcbutilxrm }:
 
 stdenv.mkDerivation rec {
-  version = "0.2";
+  version = "0.3";
   pname = "2bwm";
 
   src = fetchFromGitHub {
     owner  = "venam";
     repo   = "2bwm";
     rev    = "v${version}";
-    sha256 = "1la1ixpm5knsj2gvdcmxzj1jfbzxvhmgzps4f5kbvx5047xc6ici";
+    sha256 = "1xwib612ahv4rg9yl5injck89dlpyp5475xqgag0ydfd0r4sfld7";
   };
 
   # Allow users set their own list of patches
