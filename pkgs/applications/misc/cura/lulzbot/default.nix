@@ -27,12 +27,12 @@ let
 in
 python3Packages.buildPythonApplication rec {
   name = "cura-lulzbot-${version}";
-  version = "3.6.18";
+  version = "3.6.20";
 
   src = fetchgit {
     url = https://code.alephobjects.com/source/cura-lulzbot.git;
-    rev = "71f1ac5a2b9f535175a3858a565930348358a9ca";
-    sha256 = "0by06fpxvdgy858lwhsccbmvkdq67j2s1cz8v6jnrnjrsxk7vzka";
+    rev = "df5f905482114194eb1cfb85a7aed851b4a6d32a";
+    sha256 = "1xkqf89anxmy2aw0vr604ln7qsibacgk9l2g8jlf467hja8f0dzq";
   };
 
   format = "other"; # using cmake to build
