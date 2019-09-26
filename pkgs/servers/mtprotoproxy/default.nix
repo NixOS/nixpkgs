@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, pyaes, pycrypto, wrapPython }:
+{ stdenv, fetchFromGitHub, python, pyaes, pycrypto, uvloop, wrapPython }:
 
 stdenv.mkDerivation rec {
   pname = "mtprotoproxy";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wrapPython ];
-  pythonPath = [ pyaes pycrypto ];
+  pythonPath = [ pyaes pycrypto uvloop ];
 
   installPhase = ''
     install -Dm755 mtprotoproxy.py $out/bin/mtprotoproxy
