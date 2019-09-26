@@ -4890,6 +4890,8 @@ in {
 
   pdfkit = callPackage ../development/python-modules/pdfkit { };
 
+  pdfrw = callPackage ../development/python-modules/pdfrw { };
+
   periodictable = callPackage ../development/python-modules/periodictable { };
 
   pgcli = callPackage ../development/tools/database/pgcli {};
