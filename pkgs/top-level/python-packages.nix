@@ -4819,6 +4819,8 @@ in {
 
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
 
+  pagelabels = callPackage ../development/python-modules/pagelabels { };
+
   pamqp = callPackage ../development/python-modules/pamqp { };
 
   parsedatetime = callPackage ../development/python-modules/parsedatetime { };
