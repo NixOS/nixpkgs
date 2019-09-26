@@ -3651,6 +3651,12 @@
     githubId = 307589;
     name = "Nathaniel Baxter";
   };
+  liff = {
+    email = "liff@iki.fi";
+    github = "liff";
+    githubId = 124475;
+    name = "Olli Helenius";
+  };
   lightbulbjim = {
     email = "chris@killred.net";
     github = "lightbulbjim";
