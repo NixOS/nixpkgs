@@ -29,7 +29,7 @@ setuptoolsShellHook() {
         export PATH="$tmp_path/bin:$PATH"
         export PYTHONPATH="@pythonSitePackages@:$PYTHONPATH"
         mkdir -p "$tmp_path/@pythonSitePackages@"
-        eval "@pythonInterpreter@ -m pip -e . --prefix $tmp_path >&2"
+        @pythonInterpreter@ -m pip -e . --prefix $tmp_path >&2
     fi
 
     runHook postShellHook
