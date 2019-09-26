@@ -109,6 +109,13 @@ stdenv.mkDerivation rec {
     # now set the cache dir to be withing the .sage directory. This is not
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
+
+    # https://trac.sagemath.org/ticket/28472
+    (fetchpatch {
+      name = "eclib-20190909.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=d27dc479a5772d59e4bc85d805b6ffd595284f1d";
+      sha256 = "1nf1s9y7n30lhlbdnam7sghgaq9nasmv96415gl5jlcf7a3hlxk3";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
