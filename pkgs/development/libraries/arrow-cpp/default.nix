@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "0a0xrsbr7dd1yp34yw82jw7psfkfvm935jhd5mam32vrsjvdsj4r";
+    sha256 = "0n7xrn5490r2snjl45pm2a4pr2x8a29sh8mpyi4nj5pr9f62s1yi";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ./darwin.patch
     ];
 
-  nativeBuildInputs = [ cmake autoconf /* for vendored jemalloc */ ]
+  nativeBuildInputs = [ cmake autoconf /* for vendored jemalloc */ flatbuffers ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = [
     boost brotli double-conversion flatbuffers gflags glog gtest lz4 rapidjson
@@ -44,17 +44,13 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake_modules/FindLz4.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
 
     patchShebangs build-support/
-
-    # Fix build for ARROW_USE_SIMD=OFF
-    # https://jira.apache.org/jira/browse/ARROW-5007
-    sed -i src/arrow/util/sse-util.h -e '1i#include "arrow/util/logging.h"'
-    sed -i src/arrow/util/neon-util.h -e '1i#include "arrow/util/logging.h"'
   '';
 
   cmakeFlags = [
     "-DARROW_BUILD_TESTS=ON"
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
     "-DARROW_PARQUET=ON"
+    "-DARROW_PLASMA=ON"
     "-DARROW_PYTHON=ON"
     "-Duriparser_SOURCE=SYSTEM"
   ] ++ stdenv.lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
@@ -75,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = https://arrow.apache.org/;
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    maintainers = with stdenv.lib.maintainers; [ tobim veprbl ];
   };
 }
