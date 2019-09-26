@@ -95,6 +95,9 @@ in {
   libiberty = super.libiberty.override {
     staticBuild = true;
   };
+  libpfm = super.libpfm.override {
+    enableShared = false;
+  };
   ipmitool = super.ipmitool.override {
     static = true;
   };
