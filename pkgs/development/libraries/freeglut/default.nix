@@ -1,13 +1,13 @@
 { stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
 
-let version = "3.0.0";
+let version = "3.2.0";
 in stdenv.mkDerivation {
   pname = "freeglut";
   inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";
-    sha256 = "18knkyczzwbmyg8hr4zh8a1i5ga01np2jzd1rwmsh7mh2n2vwhra";
+    sha256 = "1h8f4dl6d3ah3qpabzg9fba4qr9gh3vj82m2h8jgb9s3rsgyy202";
   };
 
   outputs = [ "out" "dev" ];
