@@ -6288,6 +6288,8 @@ in {
   runway-python = callPackage ../development/python-modules/runway-python { };
 
   pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
+
+  hcloud = callPackage ../development/python-modules/hcloud { };
 });
 
 in fix' (extends overrides packages)
