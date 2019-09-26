@@ -3390,7 +3390,11 @@ in
 
   git-crecord = callPackage ../applications/version-management/git-crecord { };
 
-  git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
+  git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs {
+    # Version 2.8.0 fails with go1.13
+    #    go: github.com/alexbrainman/sspi@v0.0.0-20180125232955-4729b3d4d858: Get https://proxy.golang.org/github.com/alexbrainman/sspi/@v/v0.0.0-20180125232955-4729b3d4d858.mod: dial tcp: lookup proxy.golang.org on [::1]:53: read udp [::1]:32932->[::1]:53: read: connection refused
+    buildGoPackage = buildGo112Package;
+  });
 
   git-lfs1 = callPackage ../applications/version-management/git-lfs/1.nix { };
 
