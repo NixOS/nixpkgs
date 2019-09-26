@@ -1,0 +1,24 @@
+From 657b147c0d7830f3600f3dc7feaa4815a7e19fde Mon Sep 17 00:00:00 2001
+From: sebres <serg.brester@sebres.de>
+Date: Wed, 10 Oct 2018 12:25:53 +0200
+Subject: [PATCH] fixed dependency issue if setup invoked using python 3.x:
+ invocation of 2to3 takes place after setup (and __init__.py) loaded; closes
+ gh-2255.
+
+---
+ fail2ban/__init__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fail2ban/__init__.py b/fail2ban/__init__.py
+index fa6dcf77b..61789a45f 100644
+--- a/fail2ban/__init__.py
++++ b/fail2ban/__init__.py
+@@ -82,7 +82,7 @@ def _root_notice(msg, *args, **kwargs):
+ 
+ # short names for pure numeric log-level ("Level 25" could be truncated by short formats):
+ def _init():
+-	for i in xrange(50):
++	for i in range(50):
+ 		if logging.getLevelName(i).startswith('Level'):
+ 			logging.addLevelName(i, '#%02d-Lev.' % i)
+ _init()

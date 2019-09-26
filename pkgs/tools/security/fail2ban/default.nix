@@ -1,10 +1,11 @@
-{ stdenv, fetchFromGitHub, python, pythonPackages, gamin }:
+{ stdenv, fetchFromGitHub
+, gamin, python3Packages }:
 
-let version = "0.10.4"; in
+with python3Packages;
 
-pythonPackages.buildPythonApplication {
+buildPythonApplication rec {
   pname = "fail2ban";
-  inherit version;
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner  = "fail2ban";
@@ -13,9 +14,12 @@ pythonPackages.buildPythonApplication {
     sha256 = "07ik6rm856q0ic2r7vbg6j3hsdcdgkv44hh5ck0c2y21fqwrck3l";
   };
 
-  propagatedBuildInputs = [ gamin ]
-    ++ (stdenv.lib.optional stdenv.isLinux pythonPackages.systemd);
+  patches = [
+    ./python3.patch
+  ];
 
+  propagatedBuildInputs = [ gamin ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ systemd pyinotify dnspython ];
   preConfigure = ''
     for i in config/action.d/sendmail*.conf; do
       substituteInPlace $i \
@@ -36,11 +40,9 @@ pythonPackages.buildPythonApplication {
     ${python}/bin/${python.executable} setup.py install_data --install-dir=$out --root=$out
   '';
 
-  postInstall = let
-    sitePackages = "$out/lib/${python.libPrefix}/site-packages";
-  in ''
+  postInstall = ''
     # see https://github.com/NixOS/nixpkgs/issues/4968
-    rm -rf ${sitePackages}/etc ${sitePackages}/usr ${sitePackages}/var;
+    rm -rf $out/lib/${python.libPrefix}/site-packages/{etc,usr,var}
   '';
 
   meta = with stdenv.lib; {
