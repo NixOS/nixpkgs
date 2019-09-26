@@ -1,4 +1,5 @@
-{ stdenv, pkgs, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, gcc7Stdenv, pkgs, buildBazelPackage, lib, fetchFromGitHub
+, fetchpatch, symlinkJoin
 # Python deps
 , buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast, python
 # Python libraries
@@ -76,7 +77,12 @@ let
     mock
   ]);
 
-  bazel-build = buildBazelPackage {
+  bazel-build = buildBazelPackage.override {
+    stdenv = if cudaSupport then
+      gcc7Stdenv
+    else
+      stdenv;
+  } {
     name = "${pname}-${version}";
 
     src = fetchFromGitHub {
@@ -264,7 +270,7 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "196pm3ynfafqlcxah07hkvphf536hpix1ydgsynr1yg08aynlvvx"
+        "12bgxq4arxacak4h2lynbz44yqzwjz2aq361z4bgz48c4mk31agd"
       else
         "138r85n27ijzwxfwb5pcfyb79v14368jpckw0vmciz6pwf11bd9g";
     };
