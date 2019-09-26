@@ -2,13 +2,13 @@
 
 python2Packages.buildPythonApplication rec {
   pname = "crudini";
-  version = "0.9";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner  = "pixelb";
     repo   = "crudini";
     rev    = version;
-    sha256 = "0x9z9lsygripj88gadag398pc9zky23m16wmh8vbgw7ld1nhkiav";
+    sha256 = "0298hvg0fpk0m0bjpwryj3icksbckwqqsr9w1ain55wf5s0v24k3";
   };
 
   nativeBuildInputs = [ help2man ];
