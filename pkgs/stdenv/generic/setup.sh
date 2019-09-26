@@ -280,6 +280,8 @@ for i in $initialPath; do
     fi
 done
 
+unset i
+
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "initial path: $PATH"
 fi
@@ -309,11 +311,11 @@ declare -a pkgsBuildBuild pkgsBuildHost pkgsBuildTarget
 declare -a pkgsHostHost pkgsHostTarget
 declare -a pkgsTargetTarget
 
-declare -ra pkgBuildAccumVars=(pkgsBuildBuild pkgsBuildHost pkgsBuildTarget)
-declare -ra pkgHostAccumVars=(pkgsHostHost pkgsHostTarget)
-declare -ra pkgTargetAccumVars=(pkgsTargetTarget)
+declare -a pkgBuildAccumVars=(pkgsBuildBuild pkgsBuildHost pkgsBuildTarget)
+declare -a pkgHostAccumVars=(pkgsHostHost pkgsHostTarget)
+declare -a pkgTargetAccumVars=(pkgsTargetTarget)
 
-declare -ra pkgAccumVarVars=(pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars)
+declare -a pkgAccumVarVars=(pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars)
 
 
 # Hooks
@@ -322,11 +324,11 @@ declare -a envBuildBuildHooks envBuildHostHooks envBuildTargetHooks
 declare -a envHostHostHooks envHostTargetHooks
 declare -a envTargetTargetHooks
 
-declare -ra pkgBuildHookVars=(envBuildBuildHook envBuildHostHook envBuildTargetHook)
-declare -ra pkgHostHookVars=(envHostHostHook envHostTargetHook)
-declare -ra pkgTargetHookVars=(envTargetTargetHook)
+declare -a pkgBuildHookVars=(envBuildBuildHook envBuildHostHook envBuildTargetHook)
+declare -a pkgHostHookVars=(envHostHostHook envHostTargetHook)
+declare -a pkgTargetHookVars=(envTargetTargetHook)
 
-declare -ra pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
+declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
 
 # Add env hooks for all sorts of deps with the specified host offset.
 addEnvHooks() {
@@ -342,26 +344,26 @@ addEnvHooks() {
 
 # Propagated dep files
 
-declare -ra propagatedBuildDepFiles=(
+declare -a propagatedBuildDepFiles=(
     propagated-build-build-deps
     propagated-native-build-inputs # Legacy name for back-compat
     propagated-build-target-deps
 )
-declare -ra propagatedHostDepFiles=(
+declare -a propagatedHostDepFiles=(
     propagated-host-host-deps
     propagated-build-inputs # Legacy name for back-compat
 )
-declare -ra propagatedTargetDepFiles=(
+declare -a propagatedTargetDepFiles=(
     propagated-target-target-deps
 )
-declare -ra propagatedDepFilesVars=(
+declare -a propagatedDepFilesVars=(
     propagatedBuildDepFiles
     propagatedHostDepFiles
     propagatedTargetDepFiles
 )
 
 # Platform offsets: build = -1, host = 0, target = 1
-declare -ra allPlatOffsets=(-1 0 1)
+declare -a allPlatOffsets=(-1 0 1)
 
 
 # Mutually-recursively find all build inputs. See the dependency section of the
@@ -603,6 +605,13 @@ _addToEnv() {
 
 # Run the package-specific hooks set by the setup-hook scripts.
 _addToEnv
+
+
+# Unset setup-specific declared variables
+unset allPlatOffsets
+unset pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars pkgAccumVarVars
+unset pkgBuildHookVars pkgHostHookVars pkgTargetHookVars pkgHookVarVars
+unset propagatedBuildDepFiles propagatedHostDepFiles propagatedTargetDepFiles propagatedDepFilesVars
 
 
 _addRpathPrefix "$out"
