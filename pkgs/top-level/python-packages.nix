@@ -717,7 +717,7 @@ in {
 
   mailman-web = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/web.nix { });
 
-  mailmanclient = callPackage ../development/python-modules/mailmanclient { };
+  mailmanclient = disabledIf (!isPy3k) (callPackage ../development/python-modules/mailmanclient { });
 
   mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
 
@@ -3100,8 +3100,6 @@ in {
   flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
-
-  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
 
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
@@ -5708,6 +5706,8 @@ in {
   ofxtools = callPackage ../development/python-modules/ofxtools { };
 
   basemap = callPackage ../development/python-modules/basemap { };
+
+  dict2xml = callPackage ../development/python-modules/dict2xml { };
 
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 

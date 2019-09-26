@@ -236,7 +236,7 @@ in
 
       locations."/".root = "${runDir}/client";
 
-      locations."~ \.php$" = {
+      locations."~ \\.php$" = {
         tryFiles = "$uri =404";
         extraConfig = ''
           include ${pkgs.nginx}/conf/fastcgi_params;
@@ -247,7 +247,7 @@ in
         '';
       };
 
-      locations."~* \.(css|js|less|html|ttf|woff|jpg|jpeg|gif|png|bmp|ico)" = {
+      locations."~* \\.(css|js|less|html|ttf|woff|jpg|jpeg|gif|png|bmp|ico)" = {
         root = "${runDir}/client";
         extraConfig = ''
           if (-f $request_filename) {

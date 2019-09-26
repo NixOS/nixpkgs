@@ -121,7 +121,7 @@ common =
         homepage = https://nixos.org/;
         license = stdenv.lib.licenses.lgpl2Plus;
         maintainers = [ stdenv.lib.maintainers.eelco ];
-        platforms = stdenv.lib.platforms.all;
+        platforms = stdenv.lib.platforms.unix;
         outputsToInstall = [ "out" "man" ];
       };
 
@@ -200,13 +200,13 @@ in rec {
   });
 
   nixFlakes = lib.lowPrio (callPackage common rec {
-    name = "nix-2.3${suffix}";
-    suffix = "pre20190830_04np4n6";
+    name = "nix-2.4${suffix}";
+    suffix = "pre20190922_382aa05";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "aa82f8b2d2a2c42f0d713e8404b668cef1a4b108";
-      hash = "sha256-09ZHwpxf9pRDacCSGTHYx+fnKYgxKx8G37Jqb4wl1xI=";
+      rev = "382aa05ff71b61379f5c2792eaf517bdf4a5c5bf";
+      hash = "sha256-k4vV3Q1YVmLd+49AETnsSGetpDjD6sdd9yBrnpi8Q3g=";
     };
     fromGit = true;
 

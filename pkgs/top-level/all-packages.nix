@@ -713,7 +713,7 @@ in
 
   amuleDaemon = appendToName "daemon" (amule.override {
     monolithic = false;
-    daemon = true;
+    enableDaemon = true;
   });
 
   amuleGui = appendToName "gui" (amule.override {
@@ -2514,6 +2514,8 @@ in
   cvs_fast_export = callPackage ../applications/version-management/cvs-fast-export { };
 
   dadadodo = callPackage ../tools/text/dadadodo { };
+
+  daemon = callPackage ../tools/system/daemon { };
 
   daemonize = callPackage ../tools/system/daemonize { };
 
@@ -18242,7 +18244,6 @@ in
       libpng = libpng_apng;
       python = python2;
       gnused = gnused_422;
-      icu = icu63;
       inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
                                             Kerberos AVFoundation MediaToolbox
                                             CoreLocation Foundation AddressBook;
@@ -20118,7 +20119,7 @@ in
 
   quasselDaemon = quassel.override {
     monolithic = false;
-    daemon = true;
+    enableDaemon = true;
     withKDE = false;
     tag = "-daemon-qt5";
   };
@@ -24705,7 +24706,7 @@ in
 
   diceware = callPackage ../tools/security/diceware { };
 
-  xml2rfc = callPackage ../tools/typesetting/xml2rfc { };
+  xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
   mmark = callPackage ../tools/typesetting/mmark { };
 
