@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dmtcp";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "dmtcp";
     repo = "dmtcp";
     rev = version;
-    sha256 = "1sq38in4wk855yhfnzbs9xpnps97fhja93w08xjmx7szzm33g5a8";
+    sha256 = "01skyhr573w1dygvkwz66lvir2jsq443fjwkysglwxvmrdfz9kwd";
   };
 
   dontDisableStatic = true;
