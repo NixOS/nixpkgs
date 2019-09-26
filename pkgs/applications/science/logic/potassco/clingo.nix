@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01czx26p8gv81ahrh650x208hjhd8bx1kb688fmk1m4pw4yg5bfv";
   };
 
-  buildInputs = [];
-  nativeBuildInputs = [cmake];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ "-DCLINGO_BUILD_WITH_PYTHON=OFF" ];
 

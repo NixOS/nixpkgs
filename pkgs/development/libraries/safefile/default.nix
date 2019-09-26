@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "1y0gikds2nr8jk8smhrl617njk23ymmpxyjb2j1xbj0k82xspv78";
   };
 
-  buildInputs = [];
-
   passthru = {
     updateScript = ''
       #!${runtimeShell}
