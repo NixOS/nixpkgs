@@ -2,7 +2,7 @@
 
 mkDerivation rec {
   pname = "cura";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
@@ -14,8 +14,8 @@ mkDerivation rec {
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
-    rev = "4.2.0"; # TODO: change back to `version` after 4.2.1
-    sha256 = "17x43v0np58qbdfk3wz1k7i9pl0plndx9gmf7y0n23nl9f1qzb0m";
+    rev = version;
+    sha256 = "141cv1f2pv2pznhgj32zg8bw3kmw9002g6rx16jq7lhclr0x3xls";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
