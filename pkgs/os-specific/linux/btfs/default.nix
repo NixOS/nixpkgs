@@ -14,13 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    boost fuse libtorrentRasterbar curl
+    boost fuse libtorrentRasterbar curl python3
   ];
-
-  preInstall = ''
-    substituteInPlace scripts/btplay \
-      --replace "/usr/bin/env python" "${python3.interpreter}"
-  '';
 
   meta = with stdenv.lib; {
     description = "A bittorrent filesystem based on FUSE";
