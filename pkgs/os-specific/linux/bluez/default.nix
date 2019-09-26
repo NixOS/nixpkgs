@@ -1,13 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  python3, readline, udev, libical, systemd, fetchpatch,
-  enableWiimote ? false, enableMidi ? false, enableSixaxis ? false }:
+{ stdenv, lib, fetchurl, pkgconfig, dbus, glib, alsaLib,
+  python3, readline, udev, libical, systemd, json_c,
+  enableHealth ? false,
+  enableMesh ? false,
+  enableMidi ? false,
+  enableNfc ? false,
+  enableSap ? false,
+  enableSixaxis ? false,
+  enableWiimote ? false,
+}:
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.50";
+  version = "5.51";
+  name = "bluez-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "048r91vx9gs5nwwbah2s0xig04nwk14c5s0vb7qmaqdvighsmz2z";
+    sha256 = "1fpbsl9kkfq6mn6n0dg4h0il4c7fzhwhn79gh907k5b2kwszpvgb";
   };
 
   pythonPath = with python3.pkgs; [
@@ -17,25 +25,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus glib alsaLib python3 python3.pkgs.wrapPython
     readline udev libical
-  ];
+  ] ++ lib.optional enableSap json_c;
 
   nativeBuildInputs = [ pkgconfig ];
 
   outputs = [ "out" "dev" "test" ];
-
-  patches = [
-    ./bluez-5.37-obexd_without_systemd-1.patch
-    (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=1880b299086659844889cdaf687133aca5eaf102";
-      name = "CVE-2018-10910-1.patch";
-      sha256 = "17spsxza27gif8jpxk7360ynvwii1llfdfwg35rwywjjmvww0qj4";
-    })
-    (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=9213ff7642a33aa481e3c61989ad60f7985b9984";
-      name = "CVE-2018-10910-2.patch";
-      sha256 = "0j7klbhym64yhn86dbsmybqmwx47bviyyhx931izl1p29z2mg8hn";
-    })
-  ];
 
   postConfigure = ''
     substituteInPlace tools/hid2hci.rules \
@@ -54,9 +48,14 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
     "--with-udevdir=${placeholder "out"}/lib/udev"
-    ] ++ optional enableWiimote [ "--enable-wiimote" ]
+    ] ++ optional enableHealth  [ "--enable-health" ]
+      ++ optional enableMesh    [ "--enable-mesh" ]
       ++ optional enableMidi    [ "--enable-midi" ]
-      ++ optional enableSixaxis [ "--enable-sixaxis" ]);
+      ++ optional enableNfc     [ "--enable-nfc" ]
+      ++ optional enableSap     [ "--enable-sap" ]
+      ++ optional enableSixaxis [ "--enable-sixaxis" ]
+      ++ optional enableWiimote [ "--enable-wiimote" ]
+  );
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
