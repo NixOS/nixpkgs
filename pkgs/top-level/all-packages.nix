@@ -15853,9 +15853,13 @@ in
   bluez = bluez5;
 
   bluezFull = bluez.override {
-    enableWiimote = true;
+    enableHealth = true;
+    enableMesh = true;
     enableMidi = true;
+    enableNfc = true;
+    enableSap = true;
     enableSixaxis = true;
+    enableWiimote = true;
   };
 
   inherit (python3Packages) bedup;
