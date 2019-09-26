@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "addic7ed-cli";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "16nmyw7j2igx5dxflwiwblf421g69rxb879n1553wv6hxi4x27in";
+    sha256 = "182cpwxpdybsgl1nps850ysvvjbqlnx149kri4hxhgm58nqq0qf5";
   };
 
   propagatedBuildInputs = with python3Packages; [
