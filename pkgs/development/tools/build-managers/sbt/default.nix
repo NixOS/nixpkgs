@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
       "https://piccolo.link/sbt-${version}.tgz"
       "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz"
     ];
-    sha256 = "1ncjc4yrnhp2kc5xw3ismnyx5n71541760rzs81hxi8x8vi36x5b";
+    sha256 = "0vrj9wlw5kf6w7nzhf58dyik0n7rnc9aivjpsz85m299j4wyz37d";
   };
 
   patchPhase = ''
