@@ -10,12 +10,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jormungandr";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchgit {
     url = "https://github.com/input-output-hk/${pname}";
     rev = "v${version}";
-    sha256 = "19jqnja4mxyfgg79m4ak4815wjxvkg6qn04gk21c15xl3i8b4zf6";
+    sha256 = "1zdy0yymsipk0a5kcjnkpnzllnx27xvd6331a4w231azj5x1gif2";
     fetchSubmodules = true;
   };
 
