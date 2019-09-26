@@ -1,6 +1,7 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , fetchurl, file, python2, tzdata, ps
 , llvm_7, darwin, git, cmake, rustPlatform
+, pkgconfig, openssl
 , which, libffi, gdb
 , withBundledLLVM ? false
 }:
@@ -17,11 +18,11 @@ let
   llvmShared = llvm_7.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.37.0";
+  version = "1.38.0";
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "1hrqprybhkhs6d9b5pjskfnc5z9v2l2gync7nb39qjb5s0h703hj";
+    sha256 = "101dlpsfkq67p0hbwx4acqq6n90dj4bbprndizpgh1kigk566hk4";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -157,10 +158,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     file python2 ps rustPlatform.rust.rustc git cmake
     which libffi removeReferencesTo
+    pkgconfig
   ] # Only needed for the debuginfo tests
     ++ optional (!stdenv.isDarwin) gdb;
 
-  buildInputs = optional stdenv.isDarwin Security
+  buildInputs = [ openssl ]
+    ++ optional stdenv.isDarwin Security
     ++ optional (!withBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];
