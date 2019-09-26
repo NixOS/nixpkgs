@@ -50,11 +50,22 @@ let
   };
 
   patches = {
-    qtbase = [
-      ./qtbase.patch
-      ./qtbase-fixguicmake.patch
-      ./qtbase-trayicons.patch # can be removed with 5.12.4 or 5.13
-    ];
+    qtbase =
+      optionals stdenv.isDarwin [
+        ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
+        ./qtbase.patch.d/0002-qtbase-mac.patch
+      ]
+      ++ [
+        ./qtbase.patch.d/0003-qtbase-mkspecs.patch
+        ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
+        ./qtbase.patch.d/0005-qtbase-cmake.patch
+        ./qtbase.patch.d/0006-qtbase-gtk3.patch
+        ./qtbase.patch.d/0007-qtbase-xcursor.patch
+        ./qtbase.patch.d/0008-qtbase-xcompose.patch
+        ./qtbase.patch.d/0009-qtbase-tzdir.patch
+        ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
+        ./qtbase.patch.d/0011-qtbase-assert.patch
+      ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
@@ -75,10 +86,6 @@ let
         ./qtwebkit-darwin-no-qos-classes.patch
       ];
     qttools = [ ./qttools.patch ];
-    qtwayland = [
-      ./qtwayland-fix-webengine-freezeups-1.patch # can be removed with 5.12.4 or 5.13
-      ./qtwayland-fix-webengine-freezeups-2.patch # can be removed with 5.12.4 or 5.13
-    ];
   };
 
   qtModule =
@@ -160,9 +167,7 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
-          inherit (stdenv) isDarwin;
-          qtbase_dev = self.qtbase.dev;
-          fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
+          fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;
 
