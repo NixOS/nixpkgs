@@ -2,22 +2,21 @@
 
 stdenv.mkDerivation rec {
 
-  version = "0.5";
+  version = "0.6";
   name = "clarissa-${version}";
 
   src = fetchFromGitLab {
     owner = "evils";
     repo = "clarissa";
-    rev = "d98f5fce06cd165699a93c6d3189e49d8d2ecca0";
-    sha256 = "1c74m2w7aicidgaxl6a1i79py4kh15dhqsppkvbxb67sd726xg4i";
+    rev = "v${version}";
+    sha256 = "0xm9v9h4v7s2rdwzfjnmlfas18x9qirrcn01qvclca63pypz3xdk";
   };
 
   buildInputs = with pkgs; [ libpcap perl ];
 
   doCheck = true;
 
-# set the Makefile paths to the nix store directory we're making
-  installFlags = [ "DESTDIR=$(out)" "SYSDINST=0" ];
+  installFlags = [ "DESTDIR=$(out)" "PREFIX=" "SYSDINST=false" ];
 
   meta = with stdenv.lib; {
     description = "Near real-time network census daemon";

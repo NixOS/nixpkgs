@@ -775,7 +775,7 @@ in
 
   clair = callPackage ../tools/admin/clair { };
 
-  clarissa = callPackage ../tools/misc/clarissa { };
+  clarissa = callPackage ../tools/networking/clarissa { };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
