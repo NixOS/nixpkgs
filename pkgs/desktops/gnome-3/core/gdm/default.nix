@@ -57,6 +57,12 @@ stdenv.mkDerivation rec {
       sha256 = "10kbjn0kis0xf95dfzq4w6xazyfbcz8yj9lrixg5jb3srrnp0hhf";
     })
 
+    # https://gitlab.gnome.org/GNOME/gdm/merge_requests/84
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gdm/commit/2136c3baab81b6ec2115180f67ada91727e948f7.patch";
+      sha256 = "1ispxh4p6hdh3bx9x86497gzlwpgj32x2ymmv60wafg76vmrlcc2";
+    })
+
     # Change hardcoded paths to nix store paths.
     (substituteAll {
       src = ./fix-paths.patch;
