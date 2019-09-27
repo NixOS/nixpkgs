@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "icdiff";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "jeffkaufman";
     repo = "icdiff";
     rev = "release-${version}";
-    sha256 = "1micpm7kq9swfscmp4mg37fnzgzpsg7704yi33c5sd6cmgbdabxm";
+    sha256 = "080v8h09pv8qwplin4kwfm0kmqjwdqjfxbpcdrv16sv4hwfwl5qd";
   };
 
   meta = with stdenv.lib; {
