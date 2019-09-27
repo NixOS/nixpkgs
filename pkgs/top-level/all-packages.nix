@@ -19772,6 +19772,8 @@ in
 
   speedread = callPackage ../applications/misc/speedread { };
 
+  station = callPackage ../applications/networking/station { };
+
   synapse = callPackage ../applications/misc/synapse { };
 
   synapse-bt = callPackage ../applications/networking/p2p/synapse-bt {
