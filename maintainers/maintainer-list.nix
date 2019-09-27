@@ -3551,6 +3551,12 @@
     github = "Lassulus";
     name = "Lassulus";
   };
+  lattfein = {
+    email = "lattfein@gmail.com";
+    github = "lattfein";
+    githubId = 53550838;
+    name = "Koki Yasuno";
+  };
   layus = {
     email = "layus.on@gmail.com";
     github = "layus";
