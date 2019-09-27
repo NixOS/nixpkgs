@@ -35,6 +35,7 @@ with stdenv; mkDerivation rec {
   enableParallelBuilding = true;
   cmakeFlags =
     [ "-DARCH=generic;ice40;ecp5"
+      "-DBUILD_TESTS=ON"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
       "-DTRELLIS_ROOT=${trellis}/share/trellis"
       "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
@@ -57,6 +58,7 @@ with stdenv; mkDerivation rec {
       --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
   '';
 
+  doCheck = true;
 
   postFixup = lib.optionalString enableGui ''
     wrapQtApp $out/bin/nextpnr-generic
