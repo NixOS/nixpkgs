@@ -4,13 +4,13 @@ with lib;
 
 buildGoPackage rec {
   pname = "zsh-history";
-  version = "2019-08-29";
+  version = "2019-10-27";
 
   src = fetchFromGitHub {
     owner = "b4b4r07";
     repo = "history";
-    rev = "108698699b5fa03faec1bba1bdf7b8d1204535e6";
-    sha256 = "0c11m7nkxc904zl3qf07h2an1dis6iizrvyfnhp1nslnmjrkida4";
+    rev = "527e6f51873992fbf9c1aad70aa3009a0027a8de";
+    sha256 = "12dc380zfg3b9k7rcsyzi9dxqh28c4957b3fsx1nxvqvdm3ralm2";
   };
 
   goDeps = ./deps.nix;
