@@ -8,16 +8,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2019.09.01";
+  version = "2019.09.27";
+  # git describe --tags
   realVersion = with stdenv.lib; with builtins;
-    "1.0-53-g${substring 0 7 (elemAt srcs 0).rev}";
+    "1.0-71-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "symbiflow";
        repo   = "prjtrellis";
-       rev    = "98871e0e2959bc8cb4de3c7ebe2b9eddc4efe00c";
-       sha256 = "1yq7ih2xvhfvdpijmbqjq6jcngl6710kiv66hkww5ih8j5dzsq5l";
+       rev    = "06904938dfe8f52392e73f7c8b1e034327887c27";
+       sha256 = "1yk13pipj7wp2mma0qcss4sa0wx8h60x0l0x9awh8g2iyk1y8nfw";
        name   = "trellis";
      })
     (fetchFromGitHub {
@@ -32,11 +33,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boostWithPython3 ];
   nativeBuildInputs = [ cmake python3 ];
+  cmakeFlags = [ "-DCURRENT_GIT_VERSION=${realVersion}" ];
 
   preConfigure = with builtins; ''
-    substituteInPlace libtrellis/CMakeLists.txt \
-      --replace "git describe --tags" "echo ${realVersion}"
-
     rmdir database && ln -sfv ${elemAt srcs 1} ./database
 
     source environment.sh
