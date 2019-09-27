@@ -14,20 +14,11 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
-  goPackagePath = "history";
+  goPackagePath = "github.com/b4b4r07/history";
 
-  preConfigure = ''
-    # Extract the source
-    mkdir -p "$NIX_BUILD_TOP/go/src/github.com/b4b4r07"
-    cp -a $NIX_BUILD_TOP/source "$NIX_BUILD_TOP/go/src/github.com/b4b4r07/history"
-    export GOPATH=$NIX_BUILD_TOP/go/src/github.com/b4b4r07/history:$GOPATH
-  '';
-
-  installPhase = ''
-    install -d "$bin/bin"
-    install -m 0755 $NIX_BUILD_TOP/go/bin/history "$bin/bin"
+  postInstall = ''
     install -d $out/share
-    cp -r $NIX_BUILD_TOP/go/src/history/misc/* $out/share
+    cp -r $NIX_BUILD_TOP/go/src/${goPackagePath}/misc/* $out/share
     cp -r $out/share/zsh/completions $out/share/zsh/site-functions
   '';
 
@@ -37,6 +28,5 @@ buildGoPackage rec {
     homepage = https://github.com/b4b4r07/history;
     platforms = platforms.unix;
     maintainers = with maintainers; [ kampka ];
-    outputsToInstall = [ "out" "bin" ];
   };
 }
