@@ -47,6 +47,24 @@ stdenv.mkDerivation rec {
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
+    (fetchpatch {
+        name = "CVE-2019-10216.patch";
+        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=5b85ddd19a8420a1bd2d5529325be35d78e94234";
+        sha256 = "165svml4knq1xlysfvj7vc07h68bhv3rgvl83xrhxsxdzs1ign31";
+    })
+    (fetchpatch {
+        name = "CVE-2019-14811.CVE-2019-14812.CVE-2019-14813.patch";
+        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=885444fcbe10dc42787ecb76686c8ee4dd33bf33";
+        sha256 = "19928sr7xpx7iibk9gn127g0r1yv2lcfpwgk2ipzz4wgrs3f5j70";
+    })
+    (fetchpatch {
+        name = "CVE-2019-14817-partial.patch";
+        url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=cd1b1cacadac2479e291efe611979bdc1b3bdb19";
+        # patch doesn't apply cleanly to all files, but at least partially applying it fixes
+        # *most* of the problematic sites.
+        excludes = ["Resource/Init/pdf_font.ps"];
+        sha256 = "0f8qgdqpv7bldc9akvjj10af2h2876cvnz4q3nvg4a00rk5i05wn";
+    })
   ];
 
   outputs = [ "out" "man" "doc" ];
