@@ -196,6 +196,8 @@ mapAliases ({
   libtidy = html-tidy;  # added 2014-12-21
   libudev = udev; # added 2018-04-25
   links = links2; # added 2016-01-31
+  linux_rpi0 = linux_rpi1;
+  linuxPackages_rpi0 = linuxPackages_rpi1;
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   lua5_1_sockets = lua51Packages.luasocket; # added 2017-05-02
