@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "moolticute";
-  version = "0.30.8";
+  version = "0.42.1";
 
   src = fetchurl {
     url = "https://github.com/mooltipass/moolticute/archive/v${version}.tar.gz";
-    sha256 = "1qi18r2v0mpw1y007vjgzhiia89fpgsbg2wirxgngl21yxdns1pf";
+    sha256 = "1qx8hz1ikblhryvm33bbbqaz17jhykrirjrs9lhps7s2lpkwsrbw";
   };
 
   preConfigure = "mkdir -p build && cd build";
