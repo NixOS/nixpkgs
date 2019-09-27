@@ -72,6 +72,8 @@ makeScope newScope (self: with self; {
     inherit (gnome3) libsoup;
   };
 
+  xfce4-screensaver = callPackage ./xfce4-screensaver { };
+
   xfce4-session = callPackage ./xfce4-session { };
   xinitrc = "${xfce4-session}/etc/xdg/xfce4/xinitrc";
 

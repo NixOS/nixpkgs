@@ -87,7 +87,10 @@ in
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
       ++ optional config.hardware.pulseaudio.enable xfce4-pulseaudio-plugin
-      ++ optional config.powerManagement.enable xfce4-power-manager
+      ++ optionals config.powerManagement.enable [
+        xfce4-power-manager
+        xfce4-screensaver
+      ]
       ++ optional cfg.enableXfwm xfwm4
       ++ optionals (!cfg.noDesktop) [
         xfce4-panel
@@ -139,6 +142,7 @@ in
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
     services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.dbus.packages = optional (config.powerManagement.enable) pkgs.xfce4-14.xfce4-screensaver;
 
     # Enable default programs
     programs.dconf.enable = true;
