@@ -1401,6 +1401,8 @@ in
 
   chntpw = callPackage ../tools/security/chntpw { };
 
+  clipman = callPackage ../tools/misc/clipman { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   coprthr = callPackage ../development/libraries/coprthr { };
@@ -2628,6 +2630,10 @@ in
 
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk8;
+  };
+
+  diffr = callPackage ../tools/text/diffr {
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
@@ -10719,7 +10725,6 @@ in
     blas = if stdenv.isDarwin then blas else openblas;
   };
 
-  fflas-ffpack_1 = callPackage ../development/libraries/fflas-ffpack/1.nix {};
   linbox = callPackage ../development/libraries/linbox {
     # We need to use blas instead of openblas on darwin, see
     # https://github.com/NixOS/nixpkgs/pull/45013 and
@@ -15715,10 +15720,32 @@ in
     kernelPatches = linux_4_19.kernelPatches;
   };
 
-  linux_rpi = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
+  linux_rpi1 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
     kernelPatches = with kernelPatches; [
       bridge_stp_helper
     ];
+    rpiVersion = 1;
+  };
+
+  linux_rpi2 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
+    kernelPatches = with kernelPatches; [
+      bridge_stp_helper
+    ];
+    rpiVersion = 2;
+  };
+
+  linux_rpi3 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
+    kernelPatches = with kernelPatches; [
+      bridge_stp_helper
+    ];
+    rpiVersion = 3;
+  };
+
+  linux_rpi4 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
+    kernelPatches = with kernelPatches; [
+      bridge_stp_helper
+    ];
+    rpiVersion = 4;
   };
 
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
@@ -15972,7 +15999,10 @@ in
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
-  linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
+  linuxPackages_rpi1 = linuxPackagesFor pkgs.linux_rpi1;
+  linuxPackages_rpi2 = linuxPackagesFor pkgs.linux_rpi2;
+  linuxPackages_rpi3 = linuxPackagesFor pkgs.linux_rpi3;
+  linuxPackages_rpi4 = linuxPackagesFor pkgs.linux_rpi4;
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
@@ -21197,6 +21227,8 @@ in
   waypipe = callPackage ../applications/networking/remote/waypipe { };
 
   wayv = callPackage ../tools/X11/wayv {};
+
+  webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
 

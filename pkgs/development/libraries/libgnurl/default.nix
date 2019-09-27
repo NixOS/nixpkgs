@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgnurl";
-  version = "7.65.3";
+  version = "7.66.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnurl-${version}.tar.gz";
-    sha256 = "19l7jw3x83qk7yay5968pc39vzvxl55mhn1nmjh51miyda405qa9";
+    sha256 = "03bkzcld384z7i3zh3k9k3pr0xpyqbcr8cxjqya1zqs5lk7i55x5";
   };
 
   nativeBuildInputs = [ libtool groff perl pkgconfig python2 ];

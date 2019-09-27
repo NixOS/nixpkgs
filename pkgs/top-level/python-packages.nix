@@ -855,6 +855,8 @@ in {
 
   pymysql = callPackage ../development/python-modules/pymysql { };
 
+  pymupdf = callPackage ../development/python-modules/pymupdf { };
+
   Pmw = callPackage ../development/python-modules/Pmw { };
 
   py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };

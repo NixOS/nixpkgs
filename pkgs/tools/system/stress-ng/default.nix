@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.10.02";
+  version = "0.10.05";
 
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "100daxz0j80jhmpfnqa78mvfwq1qj7zb67y7w9f747a0f1havvim";
+    sha256 = "0hkghs99fl8kzg3lkkd4w6cj5133zr9a415py0ng60kzrfffmgdy";
   };
 
   # All platforms inputs then Linux-only ones
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile --replace "/usr" ""
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.hostPlatform.isMusl "-D_LINUX_SYSINFO_H=1";
 
   # Won't build on i686 because the binary will be linked again in the
   # install phase without checking the dependencies. This will prevent
