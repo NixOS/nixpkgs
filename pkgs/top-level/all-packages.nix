@@ -22923,6 +22923,8 @@ in
 
   kallisto = callPackage ../applications/science/biology/kallisto { };
 
+  macse = callPackage ../applications/science/biology/macse { };
+
   migrate = callPackage ../applications/science/biology/migrate { };
 
   mirtk = callPackage ../development/libraries/science/biology/mirtk { };
