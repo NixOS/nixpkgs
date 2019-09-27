@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , linkFarm
+, substituteAll
 , elementary-greeter
 , pantheon
 , pkgconfig
@@ -86,6 +87,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sysconfdir-install.patch
+    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
+    (substituteAll {
+      src = ./hardcode-fallback-background.patch;
+      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png";
+    })
   ];
 
   preFixup = ''
