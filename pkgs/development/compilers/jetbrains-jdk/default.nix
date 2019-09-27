@@ -7,12 +7,12 @@
 
 let drv = stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
-  version = "451";
+  version = "485.1";
 
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchurl {
       url = "https://bintray.com/jetbrains/intellij-jbr/download_file?file_path=jbrsdk-11_0_4-linux-x64-b${version}.tar.gz";
-      sha256 = "05khf817i8lywfdp68a6lniv8hgi20rmnxqp3963k6vw41ar9qba";
+      sha256 = "18jnn0dra9nsnyllwq0ljxzr58k2pg8d0kg10y39vnxwccic4f76";
     }
   else
     throw "unsupported system: ${stdenv.hostPlatform.system}";
