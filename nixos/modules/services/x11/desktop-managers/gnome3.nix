@@ -155,10 +155,10 @@ in
 
       environment.systemPackages = cfg.sessionPath;
 
-      environment.variables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
+      environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
 
       # Override GSettings schemas
-      environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
        # If gnome3 is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
@@ -346,10 +346,10 @@ in
 
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package
-      environment.variables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
+      environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
 
       # Override default mimeapps for nautilus
-      environment.variables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
+      environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
 
       environment.pathsToLink = [
         "/share/nautilus-python/extensions"
