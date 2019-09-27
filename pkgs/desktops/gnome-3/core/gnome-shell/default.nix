@@ -2,7 +2,7 @@
 , python3, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
 , libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
 , libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
-, libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt, gcr, caribou
+, libpulseaudio, libical, gobject-introspection, gstreamer, wrapGAppsHook, libxslt, gcr
 , accountsservice, gdk-pixbuf, gdm, upower, ibus, networkmanagerapplet, libgnomekbd, gnome-desktop
 , gsettings-desktop-schemas, gnome-keyring, glib, gjs, mutter, evolution-data-server, gtk3
 , sassc, systemd, gst_all_1, adwaita-icon-theme, gnome-bluetooth, gnome-clocks, gnome-settings-daemon
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     sassc desktop-file-utils libxslt.bin python3 asciidoc-full
   ];
   buildInputs = [
-    systemd caribou
+    systemd
     gsettings-desktop-schemas gnome-keyring glib gcr json-glib accountsservice
     libcroco libsecret libsoup polkit gdk-pixbuf librsvg
     clutter networkmanager libstartup_notification telepathy-glib
@@ -44,11 +44,6 @@ in stdenv.mkDerivation rec {
 
     # not declared at build time, but typelib is needed at runtime
     libgweather networkmanagerapplet
-  ];
-  propagatedUserEnvPkgs = [
-    # Needed to support on-screen keyboard used with touch screen devices
-    # see https://github.com/NixOS/nixpkgs/issues/25968
-    caribou
   ];
 
   patches = [
