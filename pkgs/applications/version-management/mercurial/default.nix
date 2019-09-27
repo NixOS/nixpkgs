@@ -3,9 +3,9 @@
 , ApplicationServices
 , mercurialSrc ? fetchurl rec {
     meta.name = "mercurial-${meta.version}";
-    meta.version = "4.9.1";
+    meta.version = "5.1.1";
     url = "https://mercurial-scm.org/release/${meta.name}.tar.gz";
-    sha256 = "0iybbkd9add066729zg01kwz5hhc1s6lhp9rrnsmzq6ihyxj3p8v";
+    sha256 = "17z42rfjdkrks4grzgac66nfh285zf1pwxd2zwx1p71pw2jqpz1m";
   }
 }:
 
