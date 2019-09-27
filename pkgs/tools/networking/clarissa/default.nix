@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = https://gitlab.com/evils/clarissa/;
     license = licenses.bsd3;
     platforms = platforms.linux;
+    maintainers = [ maintainers.evils ];
   };
 }
