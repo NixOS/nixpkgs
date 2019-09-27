@@ -2,6 +2,7 @@
 , pkgconfig, bison, flex
 , tcl, readline, libffi, python3
 , protobuf, zlib
+, verilog
 }:
 
 with builtins;
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
       --replace 'LD = gcc' 'LD = $(CXX)' \
       --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
+    patchShebangs tests
   '';
 
   preBuild = ''
@@ -61,6 +63,13 @@ stdenv.mkDerivation rec {
     # we have to do this ourselves for some reason...
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
   '';
+
+  doCheck = true;
+  checkInputs = [ verilog ];
+  # checkPhase defaults to VERBOSE=y, which gets passed down to abc,
+  # which then does $(VERBOSE)gcc, which then complains about not
+  # being able to find ygcc. Life is pain.
+  checkFlags = [ " " ];
 
   meta = {
     description = "Framework for RTL synthesis tools";
