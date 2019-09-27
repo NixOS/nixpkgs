@@ -891,6 +891,10 @@ in
 
   pass = callPackage ../tools/security/pass { };
 
+  pass-wayland = callPackage ../tools/security/pass {
+    waylandSupport = true;
+  };
+
   passExtensions = recurseIntoAttrs pass.extensions;
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
