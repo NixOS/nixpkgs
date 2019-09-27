@@ -49,9 +49,8 @@ buildPythonPackage rec {
     export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
   '';
 
-  # a couple failing tests and also installCheck tries to build_ext again
+  # installCheck tries to build_ext again
   doInstallCheck = false;
-  doCheck = false;
 
   checkPhase = ''
     python -m unittest discover
