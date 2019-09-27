@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
 , accountsservice, libX11, gnome3, systemd, autoreconfHook
 , gtk3, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
-, librsvg, coreutils, xwayland, nixos-icons }:
+, librsvg, coreutils, xwayland, nixos-icons, fetchpatch }:
 
 let
 
@@ -51,6 +51,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
+    # See: https://gitlab.gnome.org/GNOME/gdm/issues/515
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gdm/commit/0e05e2fd3c2a3b28ed4db0e51e4646aa6af67a5f.patch";
+      sha256 = "10kbjn0kis0xf95dfzq4w6xazyfbcz8yj9lrixg5jb3srrnp0hhf";
+    })
+
     # Change hardcoded paths to nix store paths.
     (substituteAll {
       src = ./fix-paths.patch;
