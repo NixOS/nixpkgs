@@ -29,7 +29,7 @@ with super;
     # Parse out a version number without the Lua version inserted
     version = with pkgs.lib; let
       version' = super.cqueues.version;
-      rel = splitString "." version';
+      rel = splitVersion version';
       date = head rel;
       rev = last (splitString "-" (last rel));
     in "${date}-${rev}";
