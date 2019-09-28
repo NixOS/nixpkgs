@@ -6936,7 +6936,10 @@ in
 
   unbound = callPackage ../tools/networking/unbound { };
 
-  units = callPackage ../tools/misc/units { };
+  units = callPackage ../tools/misc/units {
+    enableCurrenciesUpdater = true;
+    pythonPackages = python3Packages;
+  };
 
   unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
 
