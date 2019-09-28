@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchpatch, buildPythonPackage, swig, pcsclite, PCSC }:
+{ stdenv, fetchPypi, buildPythonPackage, swig, pcsclite, PCSC }:
 
 let
   # Package does not support configuring the pcsc library.
@@ -29,14 +29,6 @@ buildPythonPackage rec {
 
   NIX_CFLAGS_COMPILE = optionalString (! withApplePCSC)
     "-I ${getDev pcsclite}/include/PCSC";
-
-  # The error message differs depending on the macOS host version.
-  # Since Nix reports a constant host version, but proxies to the
-  # underlying library, it's not possible to determine the correct
-  # expected error message.  This patch allows both errors to be
-  # accepted.
-  # See: https://github.com/LudovicRousseau/pyscard/issues/77
-  patches = optionals withApplePCSC [ ./ignore-macos-bug.patch ];
 
   propagatedBuildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];
   nativeBuildInputs = [ swig ];
