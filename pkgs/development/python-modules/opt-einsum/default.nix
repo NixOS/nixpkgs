@@ -1,11 +1,11 @@
 { buildPythonPackage, fetchPypi, lib, numpy, pytest, pytestpep8, pytestcov }:
 buildPythonPackage rec {
-  version = "2.3.2";
+  version = "3.0.1";
   pname = "opt_einsum";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0ny3v8x83mzpwmqjdzqhzy2pzwyy4wx01r1h9i29xw3yvas69m6k";
+    sha256 = "1agyvq26x0zd6j3wzgczl4apx8v7cb9w1z50azn8c3pq9jphgfla";
   };
 
   checkInputs = [
