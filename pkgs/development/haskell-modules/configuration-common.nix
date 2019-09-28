@@ -1035,6 +1035,8 @@ self: super: {
     generateOptparseApplicativeCompletion "dhall" (
       dontCheck super.dhall
   );
+  dhall_1_26_1 = dontCheck super.dhall_1_26_1;
+
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
   # https://github.com/dhall-lang/dhall-haskell/pull/997
@@ -1191,8 +1193,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_26_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_26_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_26_1; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_26_1; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
