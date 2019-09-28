@@ -7,10 +7,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake python llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+  cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false || stdenv.isDarwin) [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
