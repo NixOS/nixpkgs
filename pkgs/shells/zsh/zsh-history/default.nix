@@ -1,6 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage }:
-
-with lib;
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   pname = "zsh-history";
@@ -22,7 +20,7 @@ buildGoPackage rec {
     cp -r $out/share/zsh/completions $out/share/zsh/site-functions
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A CLI to provide enhanced history for your shell";
     license = licenses.mit;
     homepage = https://github.com/b4b4r07/history;
