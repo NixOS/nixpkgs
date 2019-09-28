@@ -2,13 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , html5lib
-, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "mechanize";
   version = "0.4.3";
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Stateful programmatic web browsing in Python";
-    homepage = http://wwwsearch.sourceforge.net/;
+    homepage = "https://github.com/python-mechanize/mechanize";
     license = "BSD-style";
   };
 
