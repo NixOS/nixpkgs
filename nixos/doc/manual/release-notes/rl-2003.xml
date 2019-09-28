@@ -28,6 +28,14 @@
      Postgresql for NixOS service now defaults to v11.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The graphical installer image starts the graphical session automatically.
+     Before you'd be greeted by a tty and asked to enter <command>systemctl start display-manager</command>.
+     It is now possible to disable the display-manager from running by selecting the <literal>Disable display-manager</literal>
+     quirk in the boot menu.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
