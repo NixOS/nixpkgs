@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "zetup";
-  version = "0.2.52";
+  version = "0.2.63";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ce97276acf0425499251c5eb700f6a3820adc52859df1e03c6d0f0b88a452cd";
+    sha256 = "1lz0apj4nbmm0aq1fqw3cmaziy3v0b74d9yrhy9znmxrw3nfn9d2";
   };
 
   # Python 3.7 compatibility
