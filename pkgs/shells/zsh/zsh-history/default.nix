@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage, installShellFiles }:
 
 buildGoPackage rec {
   pname = "zsh-history";
@@ -11,13 +11,15 @@ buildGoPackage rec {
     sha256 = "12dc380zfg3b9k7rcsyzi9dxqh28c4957b3fsx1nxvqvdm3ralm2";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   goDeps = ./deps.nix;
   goPackagePath = "github.com/b4b4r07/history";
 
   postInstall = ''
     install -d $out/share
     cp -r $NIX_BUILD_TOP/go/src/${goPackagePath}/misc/* $out/share
-    cp -r $out/share/zsh/completions $out/share/zsh/site-functions
+    installShellCompletion --zsh --name _history $out/share/zsh/completions/_history
   '';
 
   meta = with lib; {
