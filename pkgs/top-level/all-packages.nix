@@ -21366,6 +21366,8 @@ in
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
 
+  x11spice = callPackage ../tools/X11/x11spice { };
+
   x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
 
   x2goserver = callPackage ../applications/networking/remote/x2goserver { };
