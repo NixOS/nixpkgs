@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
-  version = "0.2.14";
+  version = "0.2.16";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
     rev = "v${version}";
-    sha256 = "1hbcyc5rdrvdnvvsgaykqamq4i0yq8wqq5qjp6zjf4jlaxxif4nz";
+    sha256 = "097hg18h7gya2w0wl5jkav79nb3qzcc4ycsryq7nhxa0h1agvinc";
   };
 
-  cargoSha256 = "15gd8shg0mn4vsma2hckj6w8gkwr58iniyfw1vjrh4clw4x7ibb4";
+  cargoSha256 = "0ar4bfwn3qxa6wsz2hd7nv1wr824h74jy3xqba2qsy0rsfwy1bmm";
 
   cargoBuildFlags = [
     "--no-default-features"
