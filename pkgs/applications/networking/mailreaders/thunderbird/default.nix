@@ -25,11 +25,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "68.1.0";
+  version = "68.1.1";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "06036nawpm987q33567nhz55qybbcl55h5rdhjbhck5qmyj1qi383xqac5niwyk7c0gaq4ygwc5a24pysf85crjdway2zmqyjxp2apb";
+    sha512 = "2ng5wwd7fn9247ggzlxx96scc2nalaahzvxkzvb87mp9fbfcsi3v9dh370cm42px8hrknnsp2lrfk9hqx4287zyn9pl3k9vr6a9cswl";
   };
 
   # from firefox, but without sound libraries
