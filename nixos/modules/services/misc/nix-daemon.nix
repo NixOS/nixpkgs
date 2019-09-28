@@ -11,6 +11,7 @@ let
   nixVersion = getVersion nix;
 
   isNix20 = versionAtLeast nixVersion "2.0pre";
+  isNix23 = versionAtLeast nixVersion "2.3pre";
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
@@ -63,7 +64,7 @@ let
           builders =
         ''}
         system-features = ${toString cfg.systemFeatures}
-        ${optionalString (versionAtLeast nixVersion "2.3pre") ''
+        ${optionalString isNix23 ''
           sandbox-fallback = false
         ''}
         $extraOptions
@@ -74,7 +75,7 @@ let
             '' else ''
               echo "Checking that Nix can read nix.conf..."
               ln -s $out ./nix.conf
-              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
+              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net"} >/dev/null
             '')
       );
 
