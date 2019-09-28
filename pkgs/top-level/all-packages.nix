@@ -18518,6 +18518,8 @@ in
 
   freerdpUnstable = freerdp;
 
+  friture = libsForQt5.callPackage ../applications/audio/friture { };
+
   fte = callPackage ../applications/editors/fte { };
 
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
