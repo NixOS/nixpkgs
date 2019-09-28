@@ -16,8 +16,6 @@
 , libxml2
 , libsoup
 , elementary-calendar
-, elementary-icon-theme
-, wrapGAppsHook
 , fetchurl
 }:
 
@@ -62,7 +60,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     old-evolution-data-server
     granite
     gtk3
