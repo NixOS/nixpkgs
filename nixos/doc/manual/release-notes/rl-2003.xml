@@ -73,7 +73,7 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+     <para>SD images are now compressed by default using <literal>bzip2</literal>.</para>
    </listitem>
   </itemizedlist>
  </section>
