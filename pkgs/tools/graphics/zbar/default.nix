@@ -17,6 +17,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0hlxakpyjg4q9hp7yp3har1n78341b4knwyll28hn48vykg28pza";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig xmlto autoreconfHook docbook_xsl ];
 
   buildInputs = [
