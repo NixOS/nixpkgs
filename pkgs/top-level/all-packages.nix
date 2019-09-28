@@ -9309,6 +9309,8 @@ in
 
   bpftool = callPackage ../os-specific/linux/bpftool { };
 
+  bpm-tools = callPackage ../tools/audio/bpm-tools { };
+
   byacc = callPackage ../development/tools/parsing/byacc { };
 
   cadre = callPackage ../development/tools/cadre { };
