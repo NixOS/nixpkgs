@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description  = "1Password command-line tool";
     homepage     = https://support.1password.com/command-line/;
     downloadPage = https://app-updates.agilebits.com/product_history/CLI;
-    maintainers  = with maintainers; [ joelburget ];
+    maintainers  = with maintainers; [ joelburget marsam ];
     license      = licenses.unfree;
     platforms    = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
