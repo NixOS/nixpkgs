@@ -66,11 +66,11 @@ in
   cl-async-ssl = addNativeLibs [pkgs.openssl (import ./openssl-lib-marked.nix)];
   cl-async-test = addNativeLibs [pkgs.openssl];
   clsql = x: {
-    propagatedBuildInputs = with pkgs; [mysql.connector-c postgresql sqlite zlib];
+    propagatedBuildInputs = with pkgs; [libmysqlclient postgresql sqlite zlib];
     overrides = y: (x.overrides y) // {
       preConfigure = ((x.overrides y).preConfigure or "") + ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql.connector-c}/include/mysql"
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql.connector-c}/lib/mysql"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.libmysqlclient}/include/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.libmysqlclient}/lib/mysql"
       '';
     };
   };
@@ -90,7 +90,7 @@ $out/lib/common-lisp/query-fs"
     };
   };
   cffi = addNativeLibs [pkgs.libffi];
-  cl-mysql = addNativeLibs [pkgs.mysql];
+  cl-mysql = addNativeLibs [pkgs.libmysqlclient];
   cl-ppcre-template = x: {
     overrides = y: (x.overrides y) // {
       postPatch = ''

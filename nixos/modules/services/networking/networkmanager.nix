@@ -469,11 +469,15 @@ in {
         mkdir -m 700 -p /etc/ipsec.d
         mkdir -m 755 -p ${stateDirs}
       '';
+
+      aliases = [ "dbus-org.freedesktop.NetworkManager.service" ];
     };
 
     systemd.services.NetworkManager-wait-online = {
       wantedBy = [ "network-online.target" ];
     };
+
+    systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
 
     systemd.services.nm-setup-hostsdirs = mkIf dynamicHostsEnabled {
       wantedBy = [ "NetworkManager.service" ];
@@ -496,6 +500,7 @@ in {
 
       # useful binaries for user-specified hooks
       path = [ pkgs.iproute pkgs.utillinux pkgs.coreutils ];
+      aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
     };
 
     # Turn off NixOS' network management when networking is managed entirely by NetworkManager

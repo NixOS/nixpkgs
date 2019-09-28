@@ -2,7 +2,7 @@
 , libXrender, libXinerama, libXcursor, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, libGLU, openssl, dbus, cups, pkgconfig
-, libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
+, libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
     (mk (!stdenv.isFreeBSD) "opengl") "-xrender" "-xrandr" "-xinerama" "-xcursor" "-xinput" "-xfixes" "-fontconfig"
     "-qdbus" (mk (cups != null) "cups") "-glib" "-dbus-linked" "-openssl-linked"
 
-    "-${if mysql != null then "plugin" else "no"}-sql-mysql" "-system-sqlite"
+    "-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql" "-system-sqlite"
 
     "-exceptions" "-xmlpatterns"
 
@@ -192,7 +192,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
-    ++ lib.optionals (mysql != null) [ mysql.connector-c ]
+    ++ lib.optionals (libmysqlclient != null) [ libmysqlclient ]
     ++ lib.optionals gtkStyle [ gtk2 gdk-pixbuf ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
