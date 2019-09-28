@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "canmatrix";
-  version = "0.7";
+  version = "0.8";
 
   # uses fetchFromGitHub as PyPi release misses test/ dir
   src = fetchFromGitHub {
     owner = "ebroecker";
     repo = pname;
     rev = version;
-    sha256 = "0q8qb282nfgirl8r2i9c8whm3hvr14ig2r42ssgnv2hya971cwjq";
+    sha256 = "1wzflapyj2j4xsi7d7gfmznmxbgr658n092xyq9nac46rbhpcphg";
   };
 
   propagatedBuildInputs = [
