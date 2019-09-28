@@ -9641,6 +9641,8 @@ in
 
   gotty = callPackage ../servers/gotty { };
 
+  gotify-client = callPackage ../applications/networking/gotify-client { };
+
   gputils = callPackage ../development/tools/misc/gputils { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle {
