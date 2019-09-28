@@ -42,6 +42,14 @@ in {
         Whether or not the remote IP of a WireGuard peer should be exposed via prometheus.
       '';
     };
+
+    addr = mkOption {
+      type = types.str;
+      default = "0.0.0.0";
+      description = ''
+        IP address of the exporter.
+      '';
+    };
   };
   serviceOpts = {
     path = [ pkgs.wireguard-tools ];
@@ -51,6 +59,7 @@ in {
       ExecStart = ''
         ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
           -p ${toString cfg.port} \
+          -l ${cfg.addr} \
           ${optionalString cfg.verbose "-v"} \
           ${optionalString cfg.singleSubnetPerField "-s"} \
           ${optionalString cfg.withRemoteIp "-r"} \
