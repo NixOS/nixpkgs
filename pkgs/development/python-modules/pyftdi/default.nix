@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyftdi";
-  version = "0.29.4";
+  version = "0.30.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jy0xbqvmhy0nq9v86759d96raa8p52yq8ik3ji5kjlx7cizq67v";
+    sha256 = "0avmxz38bkl6hp3fn1jm31qahsdp76j454mfnpxwx5wlk35iss09";
   };
 
   propagatedBuildInputs = [ pyusb pyserial ];
