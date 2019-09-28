@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.0.25";
+  version = "1.0.28";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "rasterio";
     rev = version;
-    sha256 = "15m0ajcrxjdzahdkxa3mylk87l31zz48k99bvmmx96hcl31cf347";
+    sha256 = "05rn2ijjv64a765gkpwcq3bb933gzp35zj4l9sk0agh19462myjx";
   };
 
   checkInputs = [ boto3 pytest pytestcov packaging hypothesis ] ++ lib.optional (!isPy3k) mock;
