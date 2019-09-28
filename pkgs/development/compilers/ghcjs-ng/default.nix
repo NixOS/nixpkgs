@@ -104,5 +104,4 @@ in stdenv.mkDerivation {
 
     meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
     meta.maintainers = [lib.maintainers.elvishjerricco];
-    meta.hydraPlatforms = [];
   }
