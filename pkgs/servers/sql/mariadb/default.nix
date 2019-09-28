@@ -234,7 +234,12 @@ connector-c = stdenv.mkDerivation rec {
     name   = "mariadb-connector-c-${version}-src.tar.gz";
   };
 
-  # outputs = [ "dev" "out" ]; FIXME: cmake variables don't allow that < 3.0
+  postPatch = ''
+    substituteInPlace mariadb_config/mariadb_config.c.in \
+        --replace '-I@PREFIX_INSTALL_DIR@' "-I''${!outputDev}"
+  '';
+
+  outputs = [ "out" "dev" ];
   cmakeFlags = [
     "-DWITH_EXTERNAL_ZLIB=ON"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
@@ -251,10 +256,14 @@ connector-c = stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    moveToOutput bin/mariadb_config ''${!outputDev}
+  '';
+
   postFixup = ''
-    ln -sv mariadb_config $out/bin/mysql_config
-    ln -sv mariadb $out/lib/mysql
-    ln -sv mariadb $out/include/mysql
+    ln -sv mariadb_config ''${!outputDev}/bin/mysql_config
+    ln -sv mariadb ''${!outputLib}/lib/mysql
+    ln -sv mariadb ''${!outputDev}/include/mysql
   '';
 
   meta = with stdenv.lib; {
