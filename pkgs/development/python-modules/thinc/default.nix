@@ -8,7 +8,7 @@
 , cymem
 , darwin
 , msgpack-numpy
-, msgpack-python
+, msgpack
 , preshed
 , numpy
 , murmurhash
@@ -44,7 +44,7 @@ buildPythonPackage rec {
    cython
    cymem
    msgpack-numpy
-   msgpack-python
+   msgpack
    preshed
    numpy
    murmurhash

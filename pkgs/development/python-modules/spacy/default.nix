@@ -15,7 +15,7 @@
 , regex
 , cymem
 , pathlib
-, msgpack-python
+, msgpack
 , msgpack-numpy
 , jsonschema
 , blis
@@ -50,7 +50,7 @@ buildPythonPackage rec {
    requests
    regex
    ftfy
-   msgpack-python
+   msgpack
    msgpack-numpy
    jsonschema
    blis
