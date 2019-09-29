@@ -69,6 +69,10 @@ in {
       haskellStaticAdapter;
   };
 
+  nghttp2 = super.nghttp2.override {
+    enableApp = false;
+  };
+
   ncurses = super.ncurses.override {
     enableStatic = true;
   };
@@ -78,14 +82,14 @@ in {
   } // optionalAttrs super.stdenv.hostPlatform.isDarwin {
     pythonSupport = false;
   });
-  zlib = super.zlib.override {
+  zlib = (super.zlib.override {
     static = true;
     shared = false;
 
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
-  };
+  }).static;
   xz = super.xz.override {
     enableStatic = true;
   };
