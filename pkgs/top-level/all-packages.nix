@@ -10420,7 +10420,9 @@ in
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
-  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
+  cachix = haskellPackages.cachix.bin;
+
+  niv = haskellPackages.niv.bin;
 
   capnproto = callPackage ../development/libraries/capnproto { };
 

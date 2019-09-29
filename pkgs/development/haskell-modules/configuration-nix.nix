@@ -94,11 +94,9 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  cachix = overrideCabal (addBuildTools (enableSeparateBinOutput super.cachix) [pkgs.boost]) (drv: {
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace cachix.cabal --replace "c++14" "c++17"
-    '';
-  });
+  cachix = addBuildTools (enableSeparateBinOutput super.cachix) [pkgs.boost];
+
+  niv = enableSeparateBinOutput super.niv;
 
   ghcid = enableSeparateBinOutput super.ghcid;
 
