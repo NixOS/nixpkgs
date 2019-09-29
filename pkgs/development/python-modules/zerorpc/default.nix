@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, future, gevent, msgpack-python, pyzmq }:
+{ lib, buildPythonPackage, fetchPypi, future, gevent, msgpack, pyzmq }:
 
 buildPythonPackage rec {
   pname = "zerorpc";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "14d0nmprs0nm17d8kg2f7qalsi8x7c4damsccqgncylj7mpnk9hh";
   };
 
-  propagatedBuildInputs = [ future gevent msgpack-python pyzmq ];
+  propagatedBuildInputs = [ future gevent msgpack pyzmq ];
 
   doCheck = false; # pypi version doesn't include tests
 
