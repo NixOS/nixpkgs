@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, substituteAll
 , meson
 , ninja
 , pkgconfig
@@ -16,6 +17,7 @@
 , libgdata
 , libmediaart
 , grilo
+, gst_all_1
 , gnome-online-accounts
 , gmime
 , gom
@@ -35,6 +37,21 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0jldaixc4kzycn5v8ixkjld1n0z3dp0l1p3vchgdwpvdvc7kcfw0";
   };
+
+  patches = [
+    # grl-chromaprint requires the following GStreamer elements:
+    # * fakesink (gstreamer)
+    # * playbin (gst-plugins-base)
+    # * chromaprint (gst-plugins-bad)
+    (substituteAll {
+      src = ./chromaprint-gst-plugins.patch;
+      load_plugins = stdenv.lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'') (with gst_all_1; [
+        gstreamer
+        gst-plugins-base
+        gst-plugins-bad
+      ]);
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -64,6 +81,7 @@ stdenv.mkDerivation rec {
     libmediaart
     tracker
     dleyna-server
+    gst_all_1.gstreamer
   ];
 
   passthru = {
