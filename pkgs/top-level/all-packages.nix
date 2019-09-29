@@ -11225,6 +11225,8 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
+  gtk3-nocsd = callPackage ../development/libraries/gtk3-nocsd { };
+
   # On darwin gtk uses cocoa by default instead of x11.
   gtk3-x11 = gtk3.override {
     cairo = cairo.override { x11Support = true; };
