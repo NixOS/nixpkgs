@@ -4888,6 +4888,12 @@
     github = "pcarrier";
     name = "Pierre Carrier";
   };
+  peanutbutter144 = {
+    email = "tom@ient.me";
+    github = "peanutbutter144";
+    githubID = 43531981;
+    name = "Tom Ient";
+  };
   periklis = {
     email = "theopompos@gmail.com";
     github = "periklis";
