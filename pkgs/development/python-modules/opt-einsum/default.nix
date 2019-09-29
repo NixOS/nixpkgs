@@ -1,4 +1,5 @@
-{ buildPythonPackage, fetchPypi, lib, numpy, pytest, pytestpep8, pytestcov }:
+{ buildPythonPackage, fetchPypi, lib, numpy, pytest_4 }:
+
 buildPythonPackage rec {
   version = "2.3.2";
   pname = "opt_einsum";
@@ -9,9 +10,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytest
-    pytestpep8
-    pytestcov
+    pytest_4
   ];
 
   checkPhase = ''
