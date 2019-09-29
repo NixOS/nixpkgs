@@ -1227,10 +1227,4 @@ self: super: {
   # The LTS-14.x version of optparse-applicative is too old.
   cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
 
-  # https://github.com/brendanhay/amazonka/commit/657b70d174fe5cb61e56cb8b9c5e57f1ec216f2b
-  amazonka = appendPatch super.amazonka ./patches/amazonka-Allow-http-client-0.6.patch;
-
-  # https://github.com/brendanhay/amazonka/commit/657b70d174fe5cb61e56cb8b9c5e57f1ec216f2b
-  amazonka-core = appendPatch super.amazonka-core ./patches/amazonka-core-Allow-http-client-0.6.patch;
-
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
