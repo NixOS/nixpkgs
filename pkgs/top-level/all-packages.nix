@@ -19750,6 +19750,8 @@ in
 
   sidplayfp = callPackage ../applications/audio/sidplayfp { };
 
+  sndpeek = callPackage ../applications/audio/sndpeek { };
+
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
   mpop = callPackage ../applications/networking/mpop {
