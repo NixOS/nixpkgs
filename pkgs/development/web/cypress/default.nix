@@ -26,7 +26,11 @@ stdenv.mkDerivation rec{
     mkdir -p $out/bin $out/opt/cypress
     cp -vr * $out/opt/cypress/
     # Let's create the file binary_state ourselves to make the npm package happy on initial verification.
-    echo '{"verified": true}' > $out/opt/cypress/binary_state.json
+    # Cypress now verifies version by reading bin/resources/app/package.json
+    mkdir -p $out/bin/resources/app
+    echo '{"version":"3.4.1"}' > $out/bin/resources/app/package.json
+    # Cypress now looks for binary_state.json in bin
+    echo '{"verified": true}' > $out/bin/binary_state.json
     ln -s $out/opt/cypress/Cypress $out/bin/Cypress
   '';
 
