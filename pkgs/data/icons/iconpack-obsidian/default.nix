@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3 }:
+{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "iconpack-obsidian";
@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gtk3 ];
+
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   installPhase = ''
      mkdir -p $out/share/icons

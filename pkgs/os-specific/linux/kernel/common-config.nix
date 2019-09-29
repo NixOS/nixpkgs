@@ -42,6 +42,8 @@ let
       CRASH_DUMP                = option no;
       # Easier debugging of NFS issues.
       SUNRPC_DEBUG              = yes;
+      # Provide access to tunables like sched_migration_cost_ns
+      SCHED_DEBUG               = yes;
     };
 
     power-management = {
@@ -149,6 +151,13 @@ let
       NF_TABLES_ARP               = whenAtLeast "4.17" yes;
       NF_TABLES_IPV6              = whenAtLeast "4.17" yes;
       NF_TABLES_BRIDGE            = whenBetween "4.17" "5.3" yes;
+
+      # needed for ss
+      INET_DIAG         = yes;
+      INET_TCP_DIAG     = module;
+      INET_UDP_DIAG     = module;
+      INET_RAW_DIAG     = whenAtLeast "4.14" module;
+      INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
     };
 
     wireless = {

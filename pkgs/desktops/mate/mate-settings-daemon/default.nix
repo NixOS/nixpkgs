@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, dbus-glib, libxklavier,
   libcanberra-gtk3, libnotify, nss, polkit, gnome3, gtk3, mate,
   pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
-  wrapGAppsHook }:
+  wrapGAppsHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0idw02z0iig0pfxvlhc4dq4sr7kl1w50xscvg0jzzswnxid2l4ip";
   };
+
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/mate-desktop/mate-settings-daemon/pull/296.patch";
+      sha256 = "00dfn8h47zw3wr7yya82vvp19wsw51whn8jwgayn4hkjd161s9nm";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig

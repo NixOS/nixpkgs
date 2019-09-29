@@ -70,6 +70,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/accountsservice/accountsservice/commit/0e712e935abd26499ff5995ab363e5bfd9ee7c4c.patch";
       sha256 = "1y60a5fmgfqjzprwpizilrazqn3mggdlgc5sgcpsprsp62fv78rl";
     })
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/accountsservice/accountsservice/commit/ced73d0fcbd2a54085a660d260482fc70d79bd5c.patch";
+      sha256 = "0s7fknfgxl8hnf6givmhfg4586fjb2n64i9arh1w7xnq7x9x8d4c";
+    })
   ];
 
   meta = with stdenv.lib; {

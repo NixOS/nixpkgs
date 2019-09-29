@@ -378,9 +378,6 @@ stdenv.mkDerivation ({
       stdenv.lib.platforms.freebsd ++
       stdenv.lib.platforms.illumos ++
       stdenv.lib.platforms.darwin;
-
-    # See #40038
-    broken = stdenv.isDarwin;
   };
 }
 

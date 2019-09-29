@@ -11,7 +11,6 @@
 , gtk3
 , glib
 , gettext
-, hicolor-icon-theme
 , gobject-introspection
 , wrapGAppsHook
 }:
@@ -56,7 +55,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    hicolor-icon-theme
     libgee
   ];
 

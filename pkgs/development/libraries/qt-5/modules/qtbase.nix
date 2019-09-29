@@ -31,6 +31,8 @@ assert withGtk3 -> gtk3 != null;
 
 let
   compareVersion = v: builtins.compareVersions version v;
+  qmakeCacheName =
+    if compareVersion "5.12.4" < 0 then ".qmake.cache" else ".qmake.stash";
 in
 
 stdenv.mkDerivation {
@@ -47,7 +49,7 @@ stdenv.mkDerivation {
 
       # Image formats
       libjpeg libpng libtiff
-      (if compareVersion "5.9.0" >= 0 then pcre2 else pcre16)
+      (if compareVersion "5.9.0" < 0 then pcre16 else pcre2)
     ]
     ++ (
       if stdenv.isDarwin
@@ -98,6 +100,7 @@ stdenv.mkDerivation {
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
     . ${../hooks/move-qt-dev-tools.sh}
+    . ${../hooks/fix-qmake-libtool.sh}
   '';
 
   postPatch =
@@ -171,8 +174,17 @@ stdenv.mkDerivation {
         -qmldir $out/$qtQmlPrefix \
         -docdir $out/$qtDocPrefix"
 
-    createQmakeCache() {
-        cat >>"$1" <<EOF
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+  '';
+
+  postConfigure = ''
+    qmakeCacheInjectNixOutputs() {
+        local cache="$1/${qmakeCacheName}"
+        echo "qmakeCacheInjectNixOutputs: $cache"
+        if ! [ -f "$cache" ]; then
+            echo >&2 "qmakeCacheInjectNixOutputs: WARNING: $cache does not exist"
+        fi
+        cat >>"$cache" <<EOF
     NIX_OUTPUT_BIN = $bin
     NIX_OUTPUT_DEV = $dev
     NIX_OUTPUT_OUT = $out
@@ -183,14 +195,9 @@ stdenv.mkDerivation {
     }
 
     find . -name '.qmake.conf' | while read conf; do
-        cache=$(dirname $conf)/.qmake.cache
-        echo "Creating \`$cache'"
-        createQmakeCache "$cache"
+        qmakeCacheInjectNixOutputs "$(dirname $conf)"
     done
-
-    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
   '';
-
 
   NIX_CFLAGS_COMPILE =
     [
@@ -392,13 +399,11 @@ stdenv.mkDerivation {
       moveToOutput bin "$dev"
     ''
 
-    + (
-        # fixup .pc file (where to find 'moc' etc.)
-        ''
-          sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
-              -e "/^host_bins=/ c host_bins=$dev/bin"
-        ''
-    );
+    # fixup .pc file (where to find 'moc' etc.)
+    + ''
+      sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
+          -e "/^host_bins=/ c host_bins=$dev/bin"
+    '';
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 

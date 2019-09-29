@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "${package-name}-${version}";
@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook gtk3 moka-icon-theme ];
+
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   postFixup = "gtk-update-icon-cache $out/share/icons/Arc";
 

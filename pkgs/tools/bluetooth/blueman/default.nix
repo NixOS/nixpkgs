@@ -3,7 +3,7 @@
 , gnome3, librsvg, wrapGAppsHook, gobject-introspection
 , withNetworkManager ?
     config.networking.networkmanager.enable or false, networkmanager
-, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
+, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
 
 let
   pythonPackages = python3Packages;
@@ -28,6 +28,14 @@ in stdenv.mkDerivation rec {
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio
                 ++ lib.optional withNetworkManager networkmanager;
+
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/blueman-project/blueman/pull/1103.patch";
+      sha256 = "0zqdi6ya97jljwinn10n9q6bixl23ww55c0pkhskn140qnrj42wf";
+    })
+  ];
 
   postPatch = lib.optionalString withPulseAudio ''
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py

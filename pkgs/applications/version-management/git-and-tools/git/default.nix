@@ -141,8 +141,9 @@ stdenv.mkDerivation {
       cp -a contrib $out/share/git/
       mkdir -p $out/share/emacs/site-lisp
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
+      mkdir -p $out/share/bash-completion/completions
+      ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
       mkdir -p $out/etc/bash_completion.d
-      ln -s $out/share/git/contrib/completion/git-completion.bash $out/etc/bash_completion.d/
       ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
 
       # grep is a runtime dependency, need to patch so that it's found

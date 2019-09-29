@@ -1,0 +1,46 @@
+From e32f2e184bf2adce216351b2a1e7390e8d9c31b9 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Tue, 17 Sep 2019 05:37:15 -0500
+Subject: [PATCH 02/11] qtbase-mac
+
+---
+ src/corelib/kernel/qcore_mac_p.h | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/src/corelib/kernel/qcore_mac_p.h b/src/corelib/kernel/qcore_mac_p.h
+index f96e7358..650946b7 100644
+--- a/src/corelib/kernel/qcore_mac_p.h
++++ b/src/corelib/kernel/qcore_mac_p.h
+@@ -212,7 +212,7 @@ private:
+ 
+ // --------------------------------------------------------------------------
+ 
+-#if !defined(QT_BOOTSTRAPPED)
++#if 0
+ 
+ QT_END_NAMESPACE
+ #include <os/activity.h>
+@@ -290,7 +290,19 @@ QT_MAC_WEAK_IMPORT(_os_activity_current);
+ 
+ #define QT_APPLE_SCOPED_LOG_ACTIVITY(...) QAppleLogActivity scopedLogActivity = QT_APPLE_LOG_ACTIVITY(__VA_ARGS__).enter();
+ 
+-#endif // !defined(QT_BOOTSTRAPPED)
++#else // !defined(QT_BOOTSTRAPPED)
++
++#define QT_APPLE_LOG_ACTIVITY_WITH_PARENT3(...)
++#define QT_APPLE_LOG_ACTIVITY_WITH_PARENT2(...)
++#define QT_APPLE_LOG_ACTIVITY_WITH_PARENT(...)
++
++#define QT_APPLE_LOG_ACTIVITY2(...)
++#define QT_APPLE_LOG_ACTIVITY1(...)
++#define QT_APPLE_LOG_ACTIVITY(...)
++
++#define QT_APPLE_SCOPED_LOG_ACTIVITY(...)
++
++#endif
+ 
+ // -------------------------------------------------------------------------
+ 
+-- 
+2.22.1
+
