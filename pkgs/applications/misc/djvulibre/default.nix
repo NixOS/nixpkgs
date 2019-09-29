@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0psh3zl9dj4n4r3lx25390nx34xz0bg0ql48zdskhq354ljni5p6";
   };
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "bin" "out" "dev" "lib" "man" ];
 
   buildInputs = [
     libjpeg
