@@ -124,7 +124,7 @@ in
     # TODO: gnome-keyring's xdg autostarts will still be in the environment (from elementary-session-settings) if disabled forcefully
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-settings-daemon.enable = true;
-    services.gnome3.gnome-settings-daemon.package = pkgs.pantheon.elementary-settings-daemon;
+    services.udev.packages = [ pkgs.pantheon.elementary-settings-daemon ];
     services.gvfs.enable = true;
     services.gnome3.rygel.enable = mkDefault true;
     services.gsignond.enable = mkDefault true;
