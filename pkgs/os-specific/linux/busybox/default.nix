@@ -1,7 +1,7 @@
 { stdenv, lib, buildPackages, fetchurl
 , enableStatic ? false
 , enableMinimal ? false
-, useMusl ? stdenv.hostPlatform.libc == "musl"
+, useMusl ? stdenv.hostPlatform.libc == "musl", musl
 , extraConfig ? ""
 }:
 
@@ -86,6 +86,10 @@ stdenv.mkDerivation rec {
     make oldconfig
 
     runHook postConfigure
+  '';
+
+  postConfigure = lib.optionalString useMusl ''
+    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
