@@ -22,6 +22,7 @@ import ./make-test.nix ({ pkgs, ...} : {
         {
           networking = {
             dhcpcd.enable = false;
+            useNetworkd = true;
             interfaces.eth1.ipv6.addresses = mkOverride 0 [ { address = "fd00::1"; prefixLength = 64; } ];
             interfaces.eth1.ipv4.addresses = mkOverride 0 [ { address = "192.168.1.1"; prefixLength = 24; } ];
           };
