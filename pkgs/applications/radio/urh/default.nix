@@ -4,13 +4,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urh";
-  version = "2.7.3";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jrrj9c4ddm37m8j0g693xjimpnlvx7lan5kxish5p14xpwdak35";
+    sha256 = "0v9038gl8340vdw8l30vjgjh5z7yys5w1cv9smgm1fzkcys392mh";
   };
 
   buildInputs = [ hackrf rtl-sdr airspy limesuite libiio ]
