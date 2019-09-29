@@ -5812,6 +5812,8 @@ in
 
   recordmydesktop = callPackage ../applications/video/recordmydesktop { };
 
+  rx = callPackage ../applications/graphics/rx { };
+
   gtk-recordmydesktop = callPackage ../applications/video/recordmydesktop/gtk.nix {
     jack2 = jack2Full;
   };
