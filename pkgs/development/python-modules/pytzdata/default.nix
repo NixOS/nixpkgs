@@ -1,20 +1,20 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ lib, buildPythonPackage, fetchPypi, }:
 
 buildPythonPackage rec {
   pname = "pytzdata";
-  version = "2019.1";
+  version = "2019.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0469062f799c66480fcc7eae69a8270dc83f0e6522c0e70db882d6bd708d378";
+    sha256 = "029ss9ympv6xyixa9x2zhl356np1qfm3qwgh94m68lyqmx91kag8";
   };
 
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Timezone database for Python";
-    homepage = https://github.com/sdispater/pytzdata;
+    homepage = "https://github.com/sdispater/pytzdata";
     license = licenses.mit;
   };
 }
