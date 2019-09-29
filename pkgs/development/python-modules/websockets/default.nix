@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , pytest
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,9 @@ buildPythonPackage rec {
   };
 
   disabled = pythonOlder "3.3";
+
+  # Tests fail on Darwin with `OSError: AF_UNIX path too long`
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "WebSocket implementation in Python 3";
