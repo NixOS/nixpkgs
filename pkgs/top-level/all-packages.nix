@@ -891,6 +891,10 @@ in
 
   pass = callPackage ../tools/security/pass { };
 
+  pass-wayland = callPackage ../tools/security/pass {
+    waylandSupport = true;
+  };
+
   passExtensions = recurseIntoAttrs pass.extensions;
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
@@ -11876,6 +11880,8 @@ in
 
   liburing = callPackage ../development/libraries/liburing { };
 
+  librseq = callPackage ../development/libraries/librseq { };
+
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
   libsecret = callPackage ../development/libraries/libsecret { };
@@ -20745,7 +20751,7 @@ in
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
   syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray { };
-  syncthingtray-minumal = libsForQt5.callPackage ../applications/misc/syncthingtray {
+  syncthingtray-minimal = libsForQt5.callPackage ../applications/misc/syncthingtray {
     webviewSupport = false;
     jsSupport = false;
     kioPluginSupport = false;
@@ -22488,6 +22494,8 @@ in
 
   synthv1 = callPackage ../applications/audio/synthv1 { };
 
+  system-syzygy = callPackage ../games/system-syzygy { };
+
   t4kcommon = callPackage ../games/t4kcommon { };
 
   tcl2048 = callPackage ../games/tcl2048 { };
@@ -22930,6 +22938,8 @@ in
   };
 
   kallisto = callPackage ../applications/science/biology/kallisto { };
+
+  macse = callPackage ../applications/science/biology/macse { };
 
   migrate = callPackage ../applications/science/biology/migrate { };
 

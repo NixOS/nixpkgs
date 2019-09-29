@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libpwquality";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "libpwquality";
     repo = "libpwquality";
     rev = "${pname}-${version}";
-    sha256 = "0k564hj2q13z5ag8cj6rnkzm1na7001k4chz4f736p6aqvspv0bd";
+    sha256 = "150gk1d0gq9cig3ylyns7fgihgm3qb1basncahgyh1kzxplrdqm7";
   };
 
   nativeBuildInputs = [ autoreconfHook perl ];

@@ -2,20 +2,21 @@
 , pkgconfig, bison, flex
 , tcl, readline, libffi, python3
 , protobuf, zlib
+, verilog
 }:
 
 with builtins;
 
 stdenv.mkDerivation rec {
   pname = "yosys";
-  version = "2019.09.01";
+  version = "2019.09.27";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "4aa505d1b254b3fbb66af2d95b396a8f077da9d0";
-      sha256 = "16rhwmn1z2ppaq3wycgq713krq48s80a6h57vgzjzj17hgncg7hs";
+      rev    = "c372e7baf9c48d41ebdbea4486a72e8dfaaddd3d";
+      sha256 = "18cyz900haf8lkpddqn0sns0a3hc8fqndzz7gg391671hzvy820k";
       name   = "yosys";
     })
 
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
       --replace 'LD = gcc' 'LD = $(CXX)' \
       --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
+    patchShebangs tests
   '';
 
   preBuild = ''
@@ -61,6 +63,13 @@ stdenv.mkDerivation rec {
     # we have to do this ourselves for some reason...
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
   '';
+
+  doCheck = true;
+  checkInputs = [ verilog ];
+  # checkPhase defaults to VERBOSE=y, which gets passed down to abc,
+  # which then does $(VERBOSE)gcc, which then complains about not
+  # being able to find ygcc. Life is pain.
+  checkFlags = [ " " ];
 
   meta = {
     description = "Framework for RTL synthesis tools";
