@@ -103,6 +103,13 @@ in {
               description = ''
                 Set this to <literal>true</literal> if the SSID of the network is hidden.
               '';
+              example = literalExample ''
+                { echelon = {
+                    hidden = true;
+                    psk = "abcdefgh";
+                  };
+                }
+              '';
             };
 
             priority = mkOption {
@@ -146,10 +153,13 @@ in {
         '';
         default = {};
         example = literalExample ''
-          { echelon = {
+          { echelon = {                   # SSID with no spaces or special characters
               psk = "abcdefgh";
             };
-            "free.wifi" = {};
+            "echelon's AP" = {            # SSID with spaces and/or special characters
+               psk = "ijklmnop";
+            };
+            "free.wifi" = {};             # Public wireless network
           }
         '';
       };

@@ -3143,7 +3143,10 @@ in {
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
 
-  opt-einsum = callPackage ../development/python-modules/opt-einsum {};
+  opt-einsum = if isPy27 then
+      callPackage ../development/python-modules/opt-einsum/2.nix {}
+    else
+      callPackage ../development/python-modules/opt-einsum {};
 
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
@@ -3813,13 +3816,6 @@ in {
   msgpack = callPackage ../development/python-modules/msgpack {};
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy {};
-
-  msgpack-python = self.msgpack.overridePythonAttrs {
-    pname = "msgpack-python";
-    postPatch = ''
-      substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
-    '';
-  };
 
   msrplib = callPackage ../development/python-modules/msrplib { };
 

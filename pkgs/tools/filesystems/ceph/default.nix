@@ -89,7 +89,7 @@ let
     ps.six
   ]);
 
-  version = "14.2.3";
+  version = "14.2.4";
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
@@ -97,7 +97,7 @@ in rec {
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "1pa8czb205pz4vjfh82gsgickj3cdjrx51mcx7acsyqgp3dfvl33";
+      sha256 = "1y6hixh6srd5aswhzq0sf0dbygwhx0ardx3w3f7qazf5rapvd03i";
     };
 
     patches = [

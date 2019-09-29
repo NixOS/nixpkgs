@@ -20621,7 +20621,7 @@ in
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
   syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray { };
-  syncthingtray-minumal = libsForQt5.callPackage ../applications/misc/syncthingtray {
+  syncthingtray-minimal = libsForQt5.callPackage ../applications/misc/syncthingtray {
     webviewSupport = false;
     jsSupport = false;
     kioPluginSupport = false;
@@ -24109,7 +24109,9 @@ in
 
   pgmanage = callPackage ../applications/misc/pgmanage { };
 
-  pgadmin = callPackage ../applications/misc/pgadmin { };
+  pgadmin = callPackage ../applications/misc/pgadmin {
+    openssl = openssl_1_0_2;
+  };
 
   pgf = pgf2;
 
