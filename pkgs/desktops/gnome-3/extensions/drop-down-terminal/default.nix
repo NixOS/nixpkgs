@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, substituteAll, gnome3, vte }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-drop-down-terminal";
@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
   };
 
   uuid = "drop-down-terminal@gs-extensions.zzrough.org";
+
+  patches = [
+    (substituteAll {
+      src = ./fix_gjs.patch;
+      vte = vte;
+      gjs = gnome3.gjs;
+    })
+  ];
 
   installPhase = ''
     mkdir -p $out/share/gnome-shell/extensions
