@@ -7898,8 +7898,6 @@ in
 
   fstar = callPackage ../development/compilers/fstar { };
 
-  pyre = callPackage ../development/tools/pyre { };
-
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
   glslang = callPackage ../development/compilers/glslang {
