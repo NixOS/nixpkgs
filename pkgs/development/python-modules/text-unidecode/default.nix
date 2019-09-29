@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "text-unidecode";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a1375bb2ba7968740508ae38d92e1f889a0832913cb1c447d5e2046061a396d";
+    sha256 = "14xb99fdv52j21dsljgsbmbaqv10ps4b453p229r29sdn4xn1mms";
   };
 
   checkInputs = [ pytest ];
