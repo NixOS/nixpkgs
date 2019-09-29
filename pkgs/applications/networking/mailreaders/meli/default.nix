@@ -6,11 +6,9 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchgit {
     url = "https://git.meli.delivery/meli/meli.git";
-    rev = "${version}";
-    sha256 = "1rw6vm00aihnikpsm72lrx3svng6jfkyznwjg5xs9ffnqvix6pih";
+    rev = "51bb50abf38b4a6fc16acdb350fa3a889c6330da";
+    sha256 = "0d20ij8cqykpkvgxxg34hbpsprz0s0bhh5g8vqm68x11753qfhb7";
   };
-
-  cargoPatches = [ ./cargo-lock.patch ];
 
   cargoSha256 = "sha256:0zlml5pf5cdckxqqv811m4h88m5yg8df62ssd71djl1cw9syz63x";
 
