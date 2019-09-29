@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-drop-down-terminal-${version}";
+  pname = "gnome-shell-extension-drop-down-terminal";
   version = "24";
 
   src = fetchFromGitHub {
