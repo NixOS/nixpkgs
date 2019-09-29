@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "serverlessrepo";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "533389d41a51450e50cc01405ab766550170149c08e1c85b3a1559b0fab4cb25";
+    sha256 = "1xf0g97jym4607kikkiassrnmcfniz5syaigxlz09d9p8h70sd0c";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
       A Python library with convenience helpers for working with the
       AWS Serverless Application Repository.
     '';
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ dhkl ];
   };
 }
