@@ -21,6 +21,7 @@
 , blis
 , wasabi
 , srsly
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -55,6 +56,7 @@ buildPythonPackage rec {
    blis
    wasabi
    srsly
+   setuptools
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
