@@ -18,6 +18,7 @@
 , grilo
 , gnome-online-accounts
 , gmime
+, gom
 , json-glib
 , avahi
 , tracker
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     libarchive
     libsoup
     gmime
+    gom
     json-glib
     avahi
     libmediaart
