@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "s3ql";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "release-${version}";
-    sha256 = "01ky0jc1s3w9dry5siz9b69jf2maiargz99axgxvyihap0d7qs52";
+    sha256 = "1rb1y1hl6qgwpkfc85ivkk0l0f5dh8skpfaipnvndn73mlya96mk";
   };
 
   checkInputs = [ which ] ++ (with python3Packages; [ cython pytest ]);
