@@ -3745,7 +3745,7 @@ in
 
   halibut = callPackage ../tools/typesetting/halibut { };
 
-  halide = callPackage ../development/compilers/halide { llvmPackages=llvmPackages_6; };
+  halide = callPackage ../development/compilers/halide { };
 
   ham = pkgs.perlPackages.ham;
 
