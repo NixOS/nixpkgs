@@ -2808,6 +2808,11 @@
     githubId = 26877687;
     name = "Yurii Izorkin";
   };
+  jacg = {
+    name = "Jacek Generowicz";
+    email = "jacg@my-post-office.net";
+    githubId = "2570854";
+  };
   jasoncarr = {
     email = "jcarr250@gmail.com";
     github = "jasoncarr0";
@@ -3391,7 +3396,11 @@
     github = "kmein";
     githubId = 10352507;
   };
-
+  knairda = {
+    email = "adrian@kummerlaender.eu";
+    name = "Adrian Kummerlaender";
+    github = "KnairdA";
+  };
   knedlsepp = {
     email = "josef.kemetmueller@gmail.com";
     github = "knedlsepp";

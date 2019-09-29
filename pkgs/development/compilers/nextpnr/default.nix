@@ -14,13 +14,14 @@ let
 in
 with stdenv; mkDerivation rec {
   pname = "nextpnr";
-  version = "2019.08.31";
+  version = "2019.09.28";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "nextpnr";
-    rev    = "c0b7379e8672b6263152d5e340e62f22179fdc8b";
-    sha256 = "174n962xiwyzy53cn192h9rq95h951k3xy6bs43p5ya592ai5mjh";
+    rev    = "7cd1e0495122847611b17a8d1f007d97a05b288c";
+    sha256 = "13y739l92plb22g73jf35pyh3y94b2vq0i65r9c31r2rb7fw4bbl";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs
@@ -34,14 +35,13 @@ with stdenv; mkDerivation rec {
   enableParallelBuilding = true;
   cmakeFlags =
     [ "-DARCH=generic;ice40;ecp5"
+      "-DBUILD_TESTS=ON"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
       "-DTRELLIS_ROOT=${trellis}/share/trellis"
       "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
       "-DSERIALIZE_CHIPDB=OFF"
-      # use PyPy for icestorm if enabled
-      "-DPYTHON_EXECUTABLE=${icestorm.pythonInterp}"
     ]
     ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF")
     ++ (lib.optional (enableGui && stdenv.isDarwin)
@@ -52,8 +52,13 @@ with stdenv; mkDerivation rec {
   patchPhase = with builtins; ''
     substituteInPlace ./CMakeLists.txt \
       --replace 'git log -1 --format=%h' 'echo ${substring 0 11 src.rev}'
+
+    # use PyPy for icestorm if enabled
+    substituteInPlace ./ice40/family.cmake \
+      --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
   '';
 
+  doCheck = true;
 
   postFixup = lib.optionalString enableGui ''
     wrapQtApp $out/bin/nextpnr-generic

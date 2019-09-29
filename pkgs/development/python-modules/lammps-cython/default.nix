@@ -9,7 +9,7 @@
 , pymatgen
 , ase
 , pytestrunner
-, pytest
+, pytest_4
 , pytestcov
 , isPy3k
 , openssh
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ cython pytestrunner ];
-  checkInputs = [ pytest pytestcov openssh ];
+  checkInputs = [ pytest_4 pytestcov openssh ];
   propagatedBuildInputs = [ mpi4py pymatgen ase numpy ];
 
   preBuild = ''

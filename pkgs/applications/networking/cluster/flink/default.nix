@@ -8,8 +8,8 @@ let
       sha256 = "18wqcqi3gyqd40nspih99gq7ylfs20b35f4dcrspffagwkfp2l4z";
     };
     "1.6" = {
-      flinkVersion = "1.8.1";
-      sha256 = "1ynxlkdxvrgww9hh7rlkhybrp5vl2slj3pqg2qzc8khpcgqx1h2g";
+      flinkVersion = "1.9.0";
+      sha256 = "1dzfcmqz5j4b545wq2q3xb2xkbhqllr04s3av1afv54y61l5y952";
     };
   };
 in

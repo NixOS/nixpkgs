@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-user-session"
     "--libexecdir=${placeholder ''out''}/libexec"
+    "--datadir=/etc"
     "--localstatedir=/var"
     "--runstatedir=/run"
     "--sysconfdir=/etc"

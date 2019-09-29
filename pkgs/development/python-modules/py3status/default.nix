@@ -22,11 +22,11 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.19";
+  version = "3.20";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10ikvdx39phr7n01qa6y9i5lqg3blv0d6y1pwqniczaf558cfp3l";
+    sha256 = "14p0ikbgy1pgphy00gvi6zpkz2kf5mwmawbdqs0l57s0fzrz7xwz";
   };
 
   doCheck = false;

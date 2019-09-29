@@ -19,7 +19,7 @@ let
 
   common = { version
     , sha256
-    , extraPatches
+    , extraPatches ? []
     , rev ? "zfs-${version}"
     , isUnstable ? false
     , incompatibleKernelVersion ? null }:
@@ -103,6 +103,7 @@ let
       installFlags = [
         "sysconfdir=\${out}/etc"
         "DEFAULT_INITCONF_DIR=\${out}/default"
+        "INSTALL_MOD_PATH=\${out}"
       ];
 
       postInstall = optionalString buildKernel ''
@@ -154,13 +155,9 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.8.1";
+    version = "0.8.2";
 
-    sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
-
-    extraPatches = [
-      ./build-fixes-unstable.patch
-    ];
+    sha256 = "0miax0h2wg4b2kn8n93804faajy2n1sh25knyy2hg3k77nlr4pni";
   };
 
   zfsUnstable = common {
@@ -168,13 +165,9 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.1";
+    version = "0.8.2";
 
-    sha256 = "0wlbziijx08a9bmbyq4gfz4by9l5jrx44g18i99qnfm78k2q8a84";
+    sha256 = "0miax0h2wg4b2kn8n93804faajy2n1sh25knyy2hg3k77nlr4pni";
     isUnstable = true;
-
-    extraPatches = [
-      ./build-fixes-unstable.patch
-    ];
   };
 }

@@ -68,9 +68,9 @@ let
   } // lib.optionalAttrs stdenv'.isDarwin {
     MKRELRO = "no";
   } // lib.optionalAttrs (stdenv'.cc.isClang or false) {
-    HAVE_LLVM = lib.head (lib.splitString "." (lib.getVersion stdenv'.cc.cc));
+    HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
   } // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
-    HAVE_GCC = lib.head (lib.splitString "." (lib.getVersion stdenv'.cc.cc));
+    HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
   } // lib.optionalAttrs (attrs.headersOnly or false) {
     installPhase = "includesPhase";
     dontBuild = true;

@@ -855,6 +855,8 @@ in {
 
   pymysql = callPackage ../development/python-modules/pymysql { };
 
+  pymupdf = callPackage ../development/python-modules/pymupdf { };
+
   Pmw = callPackage ../development/python-modules/Pmw { };
 
   py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
@@ -3830,13 +3832,6 @@ in {
   msgpack = callPackage ../development/python-modules/msgpack {};
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy {};
-
-  msgpack-python = self.msgpack.overridePythonAttrs {
-    pname = "msgpack-python";
-    postPatch = ''
-      substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
-    '';
-  };
 
   msrplib = callPackage ../development/python-modules/msrplib { };
 

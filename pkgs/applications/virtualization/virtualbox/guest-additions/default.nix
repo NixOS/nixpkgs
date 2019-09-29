@@ -1,9 +1,9 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, zlib, xorg, dbus, virtualbox }:
+, zlib, xorg, dbus, virtualbox, dos2unix }:
 
 let
   version = virtualbox.version;
-  xserverVListFunc = builtins.elemAt (stdenv.lib.splitString "." xorg.xorgserver.version);
+  xserverVListFunc = builtins.elemAt (stdenv.lib.splitVersion xorg.xorgserver.version);
 
   # Forced to 1.18 in <nixpkgs/nixos/modules/services/x11/xserver.nix>
   # as it even fails to build otherwise.  Still, override this even here,
@@ -32,9 +32,6 @@ in stdenv.mkDerivation {
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
 
-  # If you add a patch you probably need this.
-  #patchFlags = [ "-p1" "-d" "install/src/vboxguest-${version}" ];
-
   hardeningDisable = [ "pic" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
@@ -42,10 +39,17 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [ cdrkit ] ++ kernel.moduleBuildDependencies;
 
-  postPatch = ''
+
+  prePatch = ''
     substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
       --replace "<ttm/" "<drm/ttm/"
+    ${dos2unix}/bin/dos2unix src/vboxguest-${version}/vboxguest/r0drv/linux/mp-r0drv-linux.c
   '';
+
+  patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
+  # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
+  # https://www.virtualbox.org/ticket/18911
+  patches = [ ./kernel-5.3-fix.patch ];
 
   unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''

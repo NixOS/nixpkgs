@@ -21,14 +21,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.14.3";
+  version = "0.14.6";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0wi6b6b1nyp16rcpcghk6by62wy6qsamv1xdymyn0zbqgd8h9n6b";
+    sha256 = "1rb5ys9xsdhd2qa3kz5gqzz111c6b14za98va6hlglk69wqlmb51";
   };
 
   buildInputs = [
@@ -89,7 +89,7 @@ buildPythonApplication rec {
     mkdir -p $out
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
-    ln -s ../Applications/kitty.app/Contents/MacOS/kitty-deref-symlink "$out/bin/kitty"
+    ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
     mkdir "$out/Applications"
     cp -r kitty.app "$out/Applications/kitty.app"
     '' else ''
@@ -123,6 +123,6 @@ buildPythonApplication rec {
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs ];
+    maintainers = with maintainers; [ tex rvolosatovs ma27 ];
   };
 }

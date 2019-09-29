@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "bugzilla";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     pname = "python-${pname}";
     inherit version;
-    sha256 = "0x3jjb1g5bgjdj0jf0jmcg80hn5x2isf49frwvf2ykdl3fxd5gxc";
+    sha256 = "0q8c3k0kdnd11g2s56cp8va9365x0xfr2m2zn9fgxjijdyhwdic5";
   };
 
   buildInputs = [ pep8 coverage logilab_common ];
