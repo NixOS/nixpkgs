@@ -15,6 +15,13 @@
 , skipPip ? true }:
 
 let
+  # HA locks a lot of versions at the time of release as that is what they test
+  # against. It doesn't mean that we *have* to use the exact same versions, so
+  # we can either ignore the version requirement completely # using
+  # unpinnedPackages or simply override in defaultOverrides
+  unpinnedPackages = [
+    "python-slugify"
+  ];
 
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
@@ -34,20 +41,8 @@ let
       "e6347742ac8f35ded4a46ff835c60e68c22a536a8ae5c4422966d06946b6d4c6")
     (mkOverride "cryptography_vectors" "2.7" # required by cryptography==2.7
       "f12dfb9bd669a68004074cb5b26df6e93ed1a95ebd1a999dff0a840212ff68bc")
-    (mkOverride "importlib-metadata" "0.18"
-      "cb6ee23b46173539939964df59d3d72c3e0c1b5d54b84f1d8a7e912fe43612db")
-    (mkOverride "python-slugify" "3.0.2"
-      "57163ffb345c7e26063435a27add1feae67fa821f1ef4b2f292c25847575d758")
-    (mkOverride "pyyaml" "5.1.1"
-      "b4bb4d3f5e232425e25dda21c070ce05168a786ac9eda43768ab7f3ac2770955")
     (mkOverride "requests" "2.22.0"
       "11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4")
-    (mkOverride "ruamel_yaml" "0.15.97"
-      "17dbf6b7362e7aee8494f7a0f5cffd44902a6331fe89ef0853b855a7930ab845")
-    (mkOverride "voluptuous" "0.11.5"
-      "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
-    (mkOverride "voluptuous-serialize" "2.1.0"
-      "d30fef4f1aba251414ec0b315df81a06da7bf35201dcfb1f6db5253d738a154f")
 
     # used by auth.mfa_modules.totp
     (mkOverride "pyotp" "2.2.7"
@@ -113,8 +108,12 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "0qxdsr7zh2yqzignbhi8gcp67ba6gcp2yiyr1rww33a42r4fi0g5";
+    sha256 = "1nayn86p636fbf5ssmgv26c9qjd13cpkxcclgl2rcrqwvaxxjf0l";
   };
+
+  postPatch = lib.concatMapStringsSep "\n" (e: ''
+    sed -i setup.py -e 's/"${e}[<>=].*/"${e}",/'
+  '') unpinnedPackages;
 
   propagatedBuildInputs = [
     # From setup.py
@@ -142,8 +141,8 @@ in with py.pkgs; buildPythonApplication rec {
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
   meta = with lib; {
-    homepage = https://home-assistant.io/;
     description = "Open-source home automation platform running on Python 3";
+    homepage = "https://home-assistant.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fleaz dotlambda globin ];
   };
