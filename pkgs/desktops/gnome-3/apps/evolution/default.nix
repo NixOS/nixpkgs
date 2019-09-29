@@ -38,6 +38,7 @@
 , procps
 , p11-kit
 , openldap
+, spamassassin
 }:
 
 stdenv.mkDerivation rec {
@@ -102,6 +103,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_LIBCRYPTUI=OFF"
     "-DENABLE_PST_IMPORT=OFF"
     "-DENABLE_YTNEF=OFF"
+    "-DWITH_SPAMASSASSIN=${spamassassin}/bin/spamassassin"
+    "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
+    "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
+    "-DWITH_OPENLDAP=${openldap}"
   ];
 
   requiredSystemFeatures = [
