@@ -1,8 +1,8 @@
 diff --git a/kde-modules/KDEInstallDirs.cmake b/kde-modules/KDEInstallDirs.cmake
-index 275fd65..a04596c 100644
+index 0acd33f..c04b0a5 100644
 --- a/kde-modules/KDEInstallDirs.cmake
 +++ b/kde-modules/KDEInstallDirs.cmake
-@@ -232,34 +232,6 @@
+@@ -236,35 +236,6 @@
  # GNUInstallDirs code deals with re-configuring, but that is dealt with
  # by the _define_* macros in this module).
  set(_LIBDIR_DEFAULT "lib")
@@ -17,6 +17,7 @@ index 275fd65..a04596c 100644
 -# See https://wiki.debian.org/Multiarch
 -if((CMAKE_SYSTEM_NAME MATCHES "Linux|kFreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "GNU")
 -   AND NOT CMAKE_CROSSCOMPILING
+-   AND NOT EXISTS "/etc/arch-release"
 -   AND NOT DEFINED ENV{FLATPAK_ID})
 -  if (EXISTS "/etc/debian_version") # is this a debian system ?
 -    if(CMAKE_LIBRARY_ARCHITECTURE)

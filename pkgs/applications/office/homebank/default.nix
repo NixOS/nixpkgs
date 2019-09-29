@@ -1,5 +1,5 @@
 { fetchurl, stdenv, gtk, pkgconfig, libofx, intltool, wrapGAppsHook
-, hicolor-icon-theme, libsoup, gnome3 }:
+, libsoup, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "homebank-5.2.8";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ gtk libofx intltool hicolor-icon-theme libsoup
+  buildInputs = [ gtk libofx intltool libsoup
     gnome3.adwaita-icon-theme ];
 
   meta = with stdenv.lib; {

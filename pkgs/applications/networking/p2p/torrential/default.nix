@@ -6,7 +6,6 @@
 , curl
 , glib
 , gtk3
-, hicolor-icon-theme
 , libb64
 , libevent
 , libgee
@@ -14,7 +13,8 @@
 , libunity
 , miniupnpc
 , openssl
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "torrential";
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     curl
     glib
     gtk3
-    hicolor-icon-theme
     libb64
     libevent
     libgee

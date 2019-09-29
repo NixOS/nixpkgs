@@ -16,7 +16,6 @@
 , glib
 , wrapGAppsHook
 , libunwind
-, hicolor-icon-theme
 }:
 
 stdenv.mkDerivation {
@@ -38,7 +37,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     desktop-file-utils
     dmd
-    hicolor-icon-theme # for setup-hook
     meson
     ninja
     pkgconfig

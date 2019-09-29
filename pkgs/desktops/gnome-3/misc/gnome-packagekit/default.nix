@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, packagekit, polkit
-, gtk3, systemd, wrapGAppsHook, desktop-file-utils, hicolor-icon-theme }:
+, gtk3, systemd, wrapGAppsHook, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-packagekit";
@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig meson ninja gettext wrapGAppsHook desktop-file-utils
-    hicolor-icon-theme # for setup-hook
   ];
 
   buildInputs = [ gtk3 packagekit systemd polkit ];

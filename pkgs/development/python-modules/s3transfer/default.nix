@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "f23d5cb7d862b104401d9021fc82e5fa0e0cf57b7660a1331425aab0c691d021";
   };
 
-  foo = 1;
+  outputs = [ "out" "dev" ];
 
   propagatedBuildInputs =
     [ botocore

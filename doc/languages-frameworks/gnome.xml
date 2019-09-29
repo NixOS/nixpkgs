@@ -32,7 +32,11 @@
    <title>Icons</title>
 
    <para>
-    When an application uses icons, an icon theme should be available in <envar>XDG_DATA_DIRS</envar>. The package for the default, icon-less <link xlink:href="https://www.freedesktop.org/wiki/Software/icon-theme/">hicolor-icon-theme</link> contains <link linkend="ssec-gnome-hooks-hicolor-icon-theme">a setup hook</link> that will pick up icon themes from <literal>buildInputs</literal> and pass it to our wrapper. Unfortunately, relying on that would mean every user has to download the theme included in the package expression no matter their preference. For that reason, we leave the installation of icon theme on the user. If you use one of the desktop environments, you probably already have an icon theme installed.
+    When an application uses icons, an icon theme should be available in <envar>XDG_DATA_DIRS</envar> during runtime. The package for the default, icon-less <link xlink:href="https://www.freedesktop.org/wiki/Software/icon-theme/">hicolor-icon-theme</link> (should be propagated by every icon theme) contains <link linkend="ssec-gnome-hooks-hicolor-icon-theme">a setup hook</link> that will pick up icon themes from <literal>buildInputs</literal> and pass it to our wrapper. Unfortunately, relying on that would mean every user has to download the theme included in the package expression no matter their preference. For that reason, we leave the installation of icon theme on the user. If you use one of the desktop environments, you probably already have an icon theme installed.
+   </para>
+
+   <para>
+    To avoid costly file system access when locating icons, GTK, <link xlink:href="https://woboq.com/blog/qicon-reads-gtk-icon-cache-in-qt57.html">as well as Qt</link>, can rely on <filename>icon-theme.cache</filename> files from the themes’ top-level directories. These files are generated using <command>gtk-update-icon-cache</command>, which is expected to be run whenever an icon is added or removed to an icon theme (typically an application icon into <literal>hicolor</literal> theme) and some programs do indeed run this after icon installation. However, since packages are installed into their own prefix by Nix, this would lead to conflicts. For that reason, <package>gtk3</package> provides a <link xlink:href="#ssec-gnome-hooks-gtk-drop-icon-theme-cache">setup hook</link> that will clean the file from installation. Since most applications only ship their own icon that will be loaded on start-up, it should not affect them too much. On the other hand, icon themes are much larger and more widely used so we need to cache them. Because we recommend installing icon themes globally, we will generate the cache files from all packages in a profile using a NixOS module. You can enable the cache generation using <option>gtk.iconCache.enable</option> option if your desktop environment does not already do that.
    </para>
   </section>
 
@@ -89,6 +93,11 @@ preFixup = ''
     <listitem xml:id="ssec-gnome-hooks-glib">
      <para>
       <package>glib</package> setup hook will populate <envar>GSETTINGS_SCHEMAS_PATH</envar> and then <package>wrapGAppsHook</package> will prepend it to <envar>XDG_DATA_DIRS</envar>.
+     </para>
+    </listitem>
+    <listitem xml:id="ssec-gnome-hooks-gtk-drop-icon-theme-cache">
+     <para>
+      One of <package>gtk3</package>’s setup hooks will remove <filename>icon-theme.cache</filename> files from package’s icon theme directories to avoid conflicts. Icon theme packages should prevent this with <code>dontDropIconThemeCache = true;</code>.
      </para>
     </listitem>
     <listitem xml:id="ssec-gnome-hooks-dconf">
