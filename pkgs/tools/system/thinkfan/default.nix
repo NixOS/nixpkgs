@@ -22,12 +22,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ libyamlcpp ] ++ stdenv.lib.optional smartSupport libatasmart;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 {.,$out/bin}/thinkfan
 
     cd "$NIX_BUILD_TOP"; cd "$sourceRoot" # attempt to be a bit robust
     install -Dm644 {.,$out/share/doc/thinkfan}/README
     cp -R examples $out/share/doc/thinkfan
     install -Dm644 {src,$out/share/man/man1}/thinkfan.1
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
