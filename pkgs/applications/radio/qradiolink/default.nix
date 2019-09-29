@@ -5,7 +5,7 @@
 } :
 
 let
-  version = "0.5.2";
+  version = "0.5.0";
 
 in stdenv.mkDerivation {
   pname = "qradiolink";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     owner = "kantooon";
     repo = "qradiolink";
     rev = version;
-    sha256 = "0djhrr96b8sr2vi6hwbzgzlp9771622dp93f0rsphsyxlwbzsrgl";
+    sha256 = "0xhg5zhjznmls5m3rhpk1qx0dipxmca12s85w15d0i7qwva2f1gi";
   };
 
   preBuild = ''
