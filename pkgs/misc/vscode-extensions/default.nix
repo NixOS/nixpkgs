@@ -2,6 +2,19 @@
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
+
+  # The arch tag comes from 'PlatformName' defined here:
+  # https://github.com/Microsoft/vscode-python/blob/master/src/client/activation/types.ts
+  arch =
+    if stdenv.isLinux && stdenv.isx86_64 then "linux-x64"
+    else if stdenv.isDarwin then "osx-x64"
+    else throw "Only x86_64 Linux and Darwin are supported.";
+
+  python-language-server = callPackage ./python/language-server.nix {
+    extractNuGet = callPackage ./python/extract-nuget.nix {};
+    inherit arch;
+  };
+
 in
 #
 # Unless there is a good reason not to, we attempt to use the same name as the
@@ -63,8 +76,11 @@ in
   ms-vscode.cpptools = callPackage ./cpptools {};
 
   ms-python.python = callPackage ./python {
+    languageServer = python-language-server;
     extractNuGet = callPackage ./python/extract-nuget.nix { };
   };
+
+  inherit python-language-server;
 
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {

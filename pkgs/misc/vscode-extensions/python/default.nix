@@ -6,6 +6,7 @@
 , ctagsUseFixed ? true, ctags     # When `true`, the ctags default setting will be fixed to specified.
                                   # Use version from `PATH` for default setting otherwise.
                                   # Defaults to `true` as usually not defined on a per projet basis.
+, languageServer
 }:
 
 assert pythonUseFixed -> null != python;
@@ -15,28 +16,6 @@ let
   pythonDefaultsTo = if pythonUseFixed then "${python}/bin/python" else "python";
   ctagsDefaultsTo = if ctagsUseFixed then "${ctags}/bin/ctags" else "ctags";
 
-  # The arch tag comes from 'PlatformName' defined here:
-  # https://github.com/Microsoft/vscode-python/blob/master/src/client/activation/types.ts
-  arch =
-    if stdenv.isLinux && stdenv.isx86_64 then "linux-x64"
-    else if stdenv.isDarwin then "osx-x64"
-    else throw "Only x86_64 Linux and Darwin are supported.";
-
-  languageServerSha256 = {
-    linux-x64 = "0j9251f8dfccmg0x9gzg1cai4k5zd0alcfpb0443gs4jqakl0lr2";
-    osx-x64 = "070qwwl08fa24rsnln4i5x9mfriqaw920l6v2j8d1r0zylxnyjsa";
-  }.${arch};
-
-  # version is languageServerVersion in the package.json
-  languageServer = extractNuGet rec {
-    name = "Python-Language-Server";
-    version = "0.3.40";
-
-    src = fetchurl {
-      url = "https://pvsc.azureedge.net/python-language-server-stable/${name}-${arch}.${version}.nupkg";
-      sha256 = languageServerSha256;
-    };
-  };
 in vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "python";
