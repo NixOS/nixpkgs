@@ -3144,6 +3144,11 @@
     githubId = 392720;
     name = "Jon Banafato";
   };
+  jonathanmarler = {
+    email = "johnnymarler@gmail.com";
+    github = "marler8997";
+    name = "Jonathan Marler";
+  };
   jonathanreeve = {
     email = "jon.reeve@gmail.com";
     github = "JonathanReeve";
