@@ -48,6 +48,18 @@ in
     };
   };
 
+  james-yu.latex-workshop = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "latex-workshop";
+      publisher = "James-Yu";
+      version = "8.2.0"; 
+      sha256 = "1ai16aam4v5jzhxgms589q0l24kyk1a9in6z4i7g05b3sahyxab2";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
+    };
+  };
+
   justusadam.language-haskell = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "language-haskell";
