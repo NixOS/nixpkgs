@@ -1,6 +1,7 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi
+{ stdenv, lib, buildPythonPackage, isPy3k, fetchPypi
 , mock
 , meld3
+, pytest
 , setuptools
 }:
 
@@ -13,7 +14,13 @@ buildPythonPackage rec {
     sha256 = "02pindhq84hb9a7ykyaqw8i2iqb21h69lpmclyqh7fm1446rji4n";
   };
 
-  checkInputs = [ mock ];
+  # wants to write to /tmp/foo which is likely already owned by another
+  # nixbld user on hydra
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ mock pytest ];
+  checkPhase = ''
+    pytest
+  '';
 
   propagatedBuildInputs = [ meld3 setuptools ];
 
