@@ -108,14 +108,6 @@ in
       "/share/gtksourceview-4.0"
     ];
 
-    # Use the correct gnome3 packageSet
-    networking.networkmanager.basePackages = mkIf config.networking.networkmanager.enable {
-      inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
-      inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
-      networkmanager-openconnect networkmanager-fortisslvpn
-      networkmanager-iodine networkmanager-l2tp;
-    };
-
     services.xserver.desktopManager.session = [{
       name = "xfce4-14";
       bgSupport = true;

@@ -5,6 +5,18 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
+  basePackages = with pkgs; [
+    crda
+    modemmanager
+    networkmanager
+    networkmanager-fortisslvpn
+    networkmanager-iodine
+    networkmanager-l2tp
+    networkmanager-openconnect
+    networkmanager-openvpn
+    networkmanager-vpnc
+   ] ++ optional (!delegateWireless) wpa_supplicant;
+
   dynamicHostsEnabled =
     cfg.dynamicHosts.enable && cfg.dynamicHosts.hostsDirs != {};
 
@@ -176,25 +188,13 @@ in {
         '';
       };
 
-      # Ugly hack for using the correct gnome3 packageSet
-      basePackages = mkOption {
-        type = types.attrsOf types.package;
-        default = { inherit (pkgs)
-                            networkmanager modemmanager crda
-                            networkmanager-openvpn networkmanager-vpnc
-                            networkmanager-openconnect networkmanager-fortisslvpn
-                            networkmanager-l2tp networkmanager-iodine; }
-                  // optionalAttrs (!delegateWireless) { inherit (pkgs) wpa_supplicant; };
-        internal = true;
-      };
-
       packages = mkOption {
-        type = types.listOf types.path;
+        type = types.listOf types.package;
         default = [ ];
         description = ''
           Extra packages that provide NetworkManager plugins.
         '';
-        apply = list: (attrValues cfg.basePackages) ++ list;
+        apply = list: basePackages ++ list;
       };
 
       dhcp = mkOption {
@@ -395,7 +395,7 @@ in {
       }
     ];
 
-    environment.etc = with cfg.basePackages; [
+    environment.etc = with pkgs; [
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
       }
