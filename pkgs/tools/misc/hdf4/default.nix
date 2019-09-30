@@ -63,7 +63,10 @@ stdenv.mkDerivation rec {
     export DYLD_LIBRARY_PATH=$(pwd)/bin
   '';
 
-  excludedTests = stdenv.lib.optionals stdenv.isDarwin [
+  excludedTests = [
+    "MFHDF_TEST-cdftest"
+    "MFHDF_TEST-cdftest-shared"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "MFHDF_TEST-hdftest"
     "MFHDF_TEST-hdftest-shared"
     "HDP-dumpsds-18"
