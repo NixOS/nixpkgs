@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, options, ... }:
 
 with lib;
 
@@ -6,6 +6,10 @@ let
 
   cfg = config.services.redshift;
   lcfg = config.location;
+
+  target = if (cfg.settings.redshift.adjustment-method or null) == "drm" then "basic.target" else "graphical-session.target";
+
+  generatedConfig = pkgs.writeText "redshift-generated.conf" (generators.toINI {} cfg.settings);
 
 in {
 
@@ -23,7 +27,14 @@ in {
           throw "services.redshift.longitude is set to null, you can remove this"
           else builtins.fromJSON value))
     (mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
-  ];
+    (mkRemovedOptionModule [ "services" "redshift" "extraOptions" ] "All Redshift configuration is now available through services.redshift.settings instead.")
+  ] ++
+  (map (option: mkRenamedOptionModule ([ "services" "redshift" ] ++ option.old) [ "services" "redshift" "settings" "redshift" option.new ]) [
+      { old = [ "temperature" "day" ];    new = "temp-day"; }
+      { old = [ "temperature" "night" ];  new = "temp-night"; }
+      { old = [ "brightness" "day" ];     new = "brightness-day"; }
+      { old = [ "brightness" "night" ];   new = "brightness-night"; }
+    ]);
 
   options.services.redshift = {
     enable = mkOption {
@@ -35,42 +46,41 @@ in {
       '';
     };
 
-    temperature = {
-      day = mkOption {
-        type = types.int;
-        default = 5500;
-        description = ''
-          Colour temperature to use during the day, between
-          <literal>1000</literal> and <literal>25000</literal> K.
-        '';
-      };
-      night = mkOption {
-        type = types.int;
-        default = 3700;
-        description = ''
-          Colour temperature to use at night, between
-          <literal>1000</literal> and <literal>25000</literal> K.
-        '';
-      };
+    settings = mkOption {
+      type = with types; attrsOf (attrsOf (nullOr (oneOf [ str float bool int ])));
+      default = {};
+      description = ''
+        The configuration to pass to redshift.
+        See <command>man redshift</command> under the section
+        CONFIGURATION FILE for options.
+      '';
+      example = literalExample ''{
+        redshift = {
+          dawn-time = "05:00-06:00";
+          dusk-time = "22:00-23:00";
+          temp-night = 3000;
+        };
+      };'';
+      apply = c:
+        if !(c ? redshift.dawn-time || c ? redshift.dusk-time) && !(c ? redshift.location-provider) && options.locations.provider.isDefined then
+          c // {
+            redshift.location-provider = lcfg.provider;
+          }
+        else
+          c;
     };
 
-    brightness = {
-      day = mkOption {
-        type = types.str;
-        default = "1";
-        description = ''
-          Screen brightness to apply during the day,
-          between <literal>0.1</literal> and <literal>1.0</literal>.
-        '';
-      };
-      night = mkOption {
-        type = types.str;
-        default = "1";
-        description = ''
-          Screen brightness to apply during the night,
-          between <literal>0.1</literal> and <literal>1.0</literal>.
-        '';
-      };
+    configFile = mkOption {
+      type = types.path;
+      example = "~/.config/redshift/redshift.conf";
+      description = ''
+        Configuration file for redshift. It is recommended to use the
+        <option>settings</option> option instead.
+        </para>
+        <para>
+        Setting this option will override any configuration file auto-generated
+        through the <option>settings</option> option.
+      '';
     };
 
     package = mkOption {
@@ -82,18 +92,21 @@ in {
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = [ "-v" "-m randr" ];
-      description = ''
-        Additional command-line arguments to pass to
-        <command>redshift</command>.
-      '';
-    };
   };
 
   config = mkIf cfg.enable {
+    services.redshift.configFile = mkDefault generatedConfig;
+
+    assertions = mkIf (cfg.configFile == generatedConfig) [ {
+        assertion = (cfg.settings ? redshift.dawn-time) == (cfg.settings ? redshift.dusk-time);
+        message = "Time of dawn and time of dusk must be provided together.";
+    } ];
+
+    services.redshift.settings.manual = {
+      lat = mkIf options.location.latitude.isDefined lcfg.latitude;
+      lon = mkIf options.location.longitude.isDefined lcfg.longitude;
+    };
+
     # needed so that .desktop files are installed, which geoclue cares about
     environment.systemPackages = [ cfg.package ];
 
@@ -102,23 +115,14 @@ in {
       isSystem = true;
     };
 
-    systemd.user.services.redshift =
-    let
-      providerString = if lcfg.provider == "manual"
-        then "${toString lcfg.latitude}:${toString lcfg.longitude}"
-        else lcfg.provider;
-    in
-    {
+    systemd.user.services.redshift = {
       description = "Redshift colour temperature adjuster";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+      wantedBy = [ target ];
+      partOf = [ target ];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/redshift \
-            -l ${providerString} \
-            -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
-            -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
-            ${lib.strings.concatStringsSep " " cfg.extraOptions}
+            -c ${cfg.configFile}
         '';
         RestartSec = 3;
         Restart = "always";
