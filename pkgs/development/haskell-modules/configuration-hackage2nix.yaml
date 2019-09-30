@@ -3128,6 +3128,7 @@ broken-packages:
   - base-feature-macros
   - base-generics
   - base-io-access
+  - base62
   - base64-conduit
   - baserock-schema
   - BASIC
@@ -3703,6 +3704,7 @@ broken-packages:
   - codex
   - coin
   - coinbase-exchange
+  - coinbase-pro
   - coincident-root-loci
   - colada
   - colchis
@@ -6474,6 +6476,7 @@ broken-packages:
   - json-python
   - json-schema
   - json-togo
+  - json-tokens
   - json-tools
   - json-tracer
   - json2
@@ -7392,6 +7395,7 @@ broken-packages:
   - net-spider-cli
   - net-spider-pangraph
   - net-spider-rpl
+  - net-spider-rpl-cli
   - netclock
   - netcore
   - netease-fm
@@ -7929,6 +7933,7 @@ broken-packages:
   - porte
   - PortFusion
   - ports
+  - poseidon-postgis
   - posix-acl
   - posix-api
   - posix-realtime
@@ -8553,6 +8558,7 @@ broken-packages:
   - scholdoc-types
   - scidb-hquery
   - science-constants-dimensional
+  - scientific-notation
   - SciFlow
   - SciFlow-drmaa
   - scion
