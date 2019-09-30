@@ -159,11 +159,6 @@ in
     qt5.style = "adwaita";
 
     networking.networkmanager.enable = mkDefault true;
-    networking.networkmanager.basePackages =
-      { inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
-        inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
-                              networkmanager-openconnect networkmanager-fortisslvpn
-                              networkmanager-iodine networkmanager-l2tp; };
 
     # Override GSettings schemas
     environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
