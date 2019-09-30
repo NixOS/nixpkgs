@@ -21,9 +21,11 @@ buildGoModule rec {
 
   modSha256 = "0z3asz7v1izg81f9xifx9s2sp5hly173hajsn9idi3bkv0h78is2";
 
-  buildInputs = [
+  nativeBuildInputs = [
     pkgconfig
-    gobject-introspection
+  ];
+
+  buildInputs = [
     pango
     cairo
     gtk2
