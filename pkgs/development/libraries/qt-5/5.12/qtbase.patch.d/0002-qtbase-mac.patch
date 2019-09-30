@@ -1,4 +1,4 @@
-From 203c9338dc92c2c36007cfe6633387348976637e Mon Sep 17 00:00:00 2001
+From c8ca2cd3ebd870f52a25ea7d1962df993767be5b Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:37:15 -0500
 Subject: [PATCH 02/11] qtbase-mac
@@ -13,10 +13,10 @@ Subject: [PATCH 02/11] qtbase-mac
  6 files changed, 19 insertions(+), 7 deletions(-)
 
 diff --git a/src/corelib/kernel/qcore_mac_p.h b/src/corelib/kernel/qcore_mac_p.h
-index f96e7358..650946b7 100644
+index 168e0418e4..32542c332c 100644
 --- a/src/corelib/kernel/qcore_mac_p.h
 +++ b/src/corelib/kernel/qcore_mac_p.h
-@@ -212,7 +212,7 @@ private:
+@@ -213,7 +213,7 @@ private:
  
  // --------------------------------------------------------------------------
  
@@ -25,7 +25,7 @@ index f96e7358..650946b7 100644
  
  QT_END_NAMESPACE
  #include <os/activity.h>
-@@ -290,7 +290,19 @@ QT_MAC_WEAK_IMPORT(_os_activity_current);
+@@ -291,7 +291,19 @@ QT_MAC_WEAK_IMPORT(_os_activity_current);
  
  #define QT_APPLE_SCOPED_LOG_ACTIVITY(...) QAppleLogActivity scopedLogActivity = QT_APPLE_LOG_ACTIVITY(__VA_ARGS__).enter();
  
@@ -112,5 +112,5 @@ index e63e89a7..213b6945 100644
  #endif
  #if defined(HAVE_XCTEST)
 -- 
-2.23.0
+2.23.GIT
 
