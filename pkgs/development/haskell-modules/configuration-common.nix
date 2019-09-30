@@ -1204,7 +1204,7 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   # need newer version of ghc-libparser
-  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_0_20190723; };
+  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_1; };
 
   # https://github.com/sol/hpack/issues/366
   hpack = self.hpack_0_32_0;
