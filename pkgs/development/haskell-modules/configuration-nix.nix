@@ -94,6 +94,7 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
+  # cachix needs boost_context dur to Nix, until boost has multiple outputs this is the easiest
   cachix = addBuildTools (enableSeparateBinOutput super.cachix) [pkgs.boost];
 
   niv = enableSeparateBinOutput super.niv;
