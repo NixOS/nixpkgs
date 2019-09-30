@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     (substituteAll {
-      src = ./fix_gjs.patch;
+      src = ./fix_vte_and_gjs_on_extension.patch;
       vte = vte;
       gjs = gnome3.gjs;
+    })
+    (substituteAll {
+      src = ./fix_vte_on_terminal.patch;
+      vte = vte;
     })
   ];
 

@@ -1,0 +1,12 @@
+--- a/drop-down-terminal@gs-extensions.zzrough.org/terminal.js
++++ b/drop-down-terminal@gs-extensions.zzrough.org/terminal.js
+@@ -14,6 +14,9 @@
+ // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ // Author: Stéphane Démurget <stephane.demurget@free.fr>
++
++imports.gi.GIRepository.Repository.prepend_search_path('@vte@/lib/girepository-1.0')
++
+ const Lang = imports.lang;
+ 
+ const Pango = imports.gi.Pango;
