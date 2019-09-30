@@ -13,14 +13,14 @@ let mkpath = p: n:
 in
 
 stdenv.mkDerivation rec {
-  version = "2.11.0";
+  version = "2.15.0";
   pname = "ocsigenserver";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
     rev = version;
-    sha256 = "0y1ngki7w9s10ip7nj9qb7254bd5sp01xxz16sxyj7l7qz603hy2";
+    sha256 = "15qdkxcbl9c1bbn0fh9awjw0hjn7r6awcn288a9vyxln7icdbifw";
   };
 
   buildInputs = [ which makeWrapper ocaml findlib
