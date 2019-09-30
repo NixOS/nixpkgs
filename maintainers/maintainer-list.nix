@@ -2847,6 +2847,12 @@
     githubId = 820715;
     name = "Jake Logemann";
   };
+  jakestanger = {
+    email = "mail@jstanger.dev";
+    github = "JakeStanger";
+    githubId = 5057870;
+    name = "Jake Stanger";
+  };
   jakewaksbaum = {
     email = "jake.waksbaum@gmail.com";
     github = "jbaum98";
