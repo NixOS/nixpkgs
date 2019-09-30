@@ -2485,7 +2485,6 @@ extra-packages:
   - dbus <1                             # for xmonad-0.26
   - deepseq == 1.3.0.1                  # required to build Cabal with GHC 6.12.3
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
-  - ghc-lib-parser == 8.8.0.20190723    # required by hlint-2.2.2
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock < 2.17                      # required on GHC 7.10.x
   - haddock == 2.17.*                   # required on GHC 8.0.x
