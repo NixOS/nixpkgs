@@ -78,6 +78,18 @@ in
     extractNuGet = callPackage ./python/extract-nuget.nix { };
   };
 
+  skyapps.fish-vscode = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "fish-vscode";
+      publisher = "skyapps";
+      version = "0.2.1";
+      sha256 = "0y1ivymn81ranmir25zk83kdjpjwcqpnc9r3jwfykjd9x0jib2hl";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
+    };
+  };
+
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "vim";
