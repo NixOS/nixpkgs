@@ -643,7 +643,10 @@ in {
     inherit (pkgs) graphviz;
   };
 
-  gsd = callPackage ../development/python-modules/gsd { };
+  gsd = if isPy27 then
+      callPackage ../development/python-modules/gsd/1.7.nix { }
+    else
+      callPackage ../development/python-modules/gsd { };
 
   gssapi = callPackage ../development/python-modules/gssapi {
     inherit (pkgs) darwin krb5Full;
