@@ -36,6 +36,18 @@ in
     };
   };
 
+  cmschuetz12.wal = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+        name = "wal";
+        publisher = "cmschuetz12";
+        version = "0.1.0";
+        sha256 = "0q089jnzqzhjfnv0vlb5kf747s3mgz64r7q3zscl66zb2pz5q4zd";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
+    };
+  };
+
   formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "auto-close-tag";
