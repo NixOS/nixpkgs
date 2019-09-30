@@ -42,6 +42,8 @@ let
       CRASH_DUMP                = option no;
       # Easier debugging of NFS issues.
       SUNRPC_DEBUG              = yes;
+      # Provide access to tunables like sched_migration_cost_ns
+      SCHED_DEBUG               = yes;
     };
 
     power-management = {

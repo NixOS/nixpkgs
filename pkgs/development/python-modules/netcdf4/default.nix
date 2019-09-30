@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, pytest
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, pytest
 , numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
 }:
 buildPythonPackage rec {
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   # Variables used to configure the build process
   USE_NCCONFIG="0";
-  HDF5_DIR=hdf5;
+  HDF5_DIR = lib.getDev hdf5;
   NETCDF4_DIR=netcdf;
   CURL_DIR=curl.dev;
   JPEG_DIR=libjpeg.dev;
