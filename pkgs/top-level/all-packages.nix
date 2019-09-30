@@ -9756,7 +9756,7 @@ in
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
 
-  jenkins-job-builder = pythonPackages.jenkins-job-builder;
+  jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
 
   kafkacat = callPackage ../development/tools/kafkacat { };
 
