@@ -25873,6 +25873,8 @@ in
 
   prow = callPackage ../applications/networking/cluster/prow { };
 
+  termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py {};
+
   inherit (callPackage ../applications/networking/cluster/terraform {
     # terraform 0.12 crashes with go1.14 on darwin https://github.com/hashicorp/terraform/issues/24287
     buildGoPackage = if stdenv.isDarwin then buildGo113Package else buildGoPackage;
