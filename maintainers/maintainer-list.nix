@@ -5869,6 +5869,12 @@
     githubId = 819413;
     name = "Benedict Aas";
   };
+  shyim = {
+    email = "s.sayakci@gmail.com";
+    github = "shyim";
+    githubId = 6224096;
+    name = "Soner Sayakci";
+  };
   siddharthist = {
     email = "langston.barrett@gmail.com";
     github = "langston-barrett";
