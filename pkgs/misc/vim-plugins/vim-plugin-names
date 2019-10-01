@@ -86,6 +86,7 @@ fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
 frigoeu/psc-ide-vim
+fsharp/vim-fsharp
 garbas/vim-snipmate
 glts/vim-textobj-comment
 gmarik/vundle
