@@ -448,13 +448,6 @@
      </para>
    </listitem>
    <listitem>
-     <para>
-       <option>services.xserver.desktopManager.xterm</option> is now disabled by default if <literal>stateVersion</literal> is 19.09 or higher.
-       Previously the xterm desktopManager was enabled when xserver was enabled, but it isn't useful for all people so it didn't make sense to
-       have any desktopManager enabled default.
-     </para>
-   </listitem>
-   <listitem>
     <para>
      The WeeChat plugin <literal>pkgs.weechatScripts.weechat-xmpp</literal> has been removed as it doesn't receive
      any updates from upstream and depends on outdated Python2-based modules.

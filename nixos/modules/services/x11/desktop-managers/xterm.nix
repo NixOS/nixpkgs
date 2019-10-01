@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.services.xserver.desktopManager.xterm;
-  xSessionEnabled = config.services.xserver.enable;
+  xserverEnabled = config.services.xserver.enable;
 
 in
 
@@ -14,8 +14,8 @@ in
 
     services.xserver.desktopManager.xterm.enable = mkOption {
       type = types.bool;
-      default = (versionOlder config.system.stateVersion "19.09") && xSessionEnabled;
-      defaultText = if versionOlder config.system.stateVersion "19.09" then "config.services.xserver.enable" else "false";
+      default = xserverEnabled;
+      defaultText = "config.services.xserver.enable";
       description = "Enable a xterm terminal as a desktop manager.";
     };
 
