@@ -6230,6 +6230,8 @@ in
 
   stdman = callPackage ../data/documentation/stdman { };
 
+  stenc = callPackage ../tools/backup/stenc { };
+
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
   storebrowse = callPackage ../tools/system/storebrowse { };
