@@ -60,4 +60,9 @@ in rec {
     version = "1.13.2";
     sha256 = "0lkkg34vn020r62ga8vg5d3a8jwvq00xlv3p1s01nkz33f6salng";
   };
+  
+  kops_1_14 = mkKops {
+    version = "1.14.0";
+    sha256 = "0zd2plsdn45wf73qspv9yaxa0crwfy5h6ws3lvw96vxvrkhl96l2";
+  };
 }
