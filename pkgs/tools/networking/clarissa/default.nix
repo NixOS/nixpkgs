@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgs, libpcap, perl }:
+{ stdenv, fetchFromGitLab, libpcap, perl }:
 
 stdenv.mkDerivation rec {
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xm9v9h4v7s2rdwzfjnmlfas18x9qirrcn01qvclca63pypz3xdk";
   };
 
-  buildInputs = with pkgs; [ libpcap perl ];
+  buildInputs = [ libpcap perl ];
 
   doCheck = true;
 
