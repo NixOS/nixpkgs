@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ romildo ];
   };
 }
