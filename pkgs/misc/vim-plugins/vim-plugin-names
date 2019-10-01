@@ -464,6 +464,7 @@ wellle/tmux-complete.vim
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
+wsdjeg/vim-fetch
 xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview

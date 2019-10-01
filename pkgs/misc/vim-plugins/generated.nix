@@ -3334,6 +3334,17 @@ let
     };
   };
 
+  vim-fetch = buildVimPluginFrom2Nix {
+    pname = "vim-fetch";
+    version = "2019-04-03";
+    src = fetchFromGitHub {
+      owner = "wsdjeg";
+      repo = "vim-fetch";
+      rev = "76c08586e15e42055c9c21321d9fca0677442ecc";
+      sha256 = "0avcqjcqvxgj00r477ps54rjrwvmk5ygqm3qrzghbj9m1gpyp2kz";
+    };
+  };
+
   vim-fireplace = buildVimPluginFrom2Nix {
     pname = "vim-fireplace";
     version = "2019-09-01";
@@ -4595,8 +4606,8 @@ let
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-startify";
-      rev = "5369e219e5f20c67d5bdde045c5547db5667f7e0";
-      sha256 = "1sxawa7mysx23bnfbpqxp328mj3v8ipjyrq544kzwnvkkxrdbrkp";
+      rev = "af03e075a3c0dfe5ca17fd49c59a3f4c30a4b342";
+      sha256 = "1dd2vhszck76mpxz2m9qlmyvsravx9xslh4j68y8ygap97y2ykzi";
     };
   };
 
