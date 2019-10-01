@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "janus";
@@ -9,7 +9,9 @@ buildPythonPackage rec {
     sha256 = "cfc221683160b91b35bae1917e2957b78dad10a2e634f4f8ed119ed72e2a88ef";
   };
 
- checkInputs = [ pytest ];
+  disabled = pythonOlder "3.6";
+
+  checkInputs = [ pytest ];
 
   meta = with lib; {
     description = "Mixed sync-async queue";
