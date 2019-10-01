@@ -1,4 +1,6 @@
-{ fetchurl, extractNuGet, arch }:
+{ gcc-unwrapped, curl, fetchurl, extractNuGet, arch, autoPatchelfHook, unzip
+, lttng-ust
+}:
 let
 
   languageServerSha256 = {
@@ -11,13 +13,11 @@ in
     name = "Python-Language-Server";
     version = "0.4.24";
 
+    buildInputs = [ autoPatchelfHook curl unzip gcc-unwrapped.lib lttng-ust ];
     src = fetchurl {
       url = "https://pvsc.azureedge.net/python-language-server-stable/${name}-${arch}.${version}.nupkg";
       sha256 = languageServerSha256;
     };
 
-    preInstall = ''
-      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" Microsoft.Python.LanguageServer
-    '';
   }
 
