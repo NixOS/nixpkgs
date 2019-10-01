@@ -15,5 +15,9 @@ in
       url = "https://pvsc.azureedge.net/python-language-server-stable/${name}-${arch}.${version}.nupkg";
       sha256 = languageServerSha256;
     };
+
+    preInstall = ''
+      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" Microsoft.Python.LanguageServer
+    '';
   }
 
