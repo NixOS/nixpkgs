@@ -3389,6 +3389,17 @@ let
     };
   };
 
+  vim-fsharp = buildVimPluginFrom2Nix {
+    pname = "vim-fsharp";
+    version = "2018-11-13";
+    src = fetchFromGitHub {
+      owner = "fsharp";
+      repo = "vim-fsharp";
+      rev = "012d98c981139976551a4d9779f5cce7f8d84d5c";
+      sha256 = "0ds300kjhm352ni3fwivsrnc9ls021d2x29f4cdszillamcgs7pw";
+    };
+  };
+
   vim-ft-diff_fold = buildVimPluginFrom2Nix {
     pname = "vim-ft-diff_fold";
     version = "2013-02-10";
