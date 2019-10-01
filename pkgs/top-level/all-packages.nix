@@ -22589,6 +22589,10 @@ in
 
   open-sans = callPackage ../data/fonts/open-sans { };
 
+  openmoji-color = callPackage ../data/fonts/openmoji { variant = "color"; };
+
+  openmoji-black = callPackage ../data/fonts/openmoji { variant = "black"; };
+
   openzone-cursors = callPackage ../data/themes/openzone { };
 
   oranchelo-icon-theme = callPackage ../data/icons/oranchelo-icon-theme { };
