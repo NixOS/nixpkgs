@@ -19,7 +19,7 @@ let
         };
       };
     groups = [
-      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test"
+      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
     ];
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
