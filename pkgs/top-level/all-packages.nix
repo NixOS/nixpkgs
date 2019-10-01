@@ -18833,6 +18833,8 @@ in
 
   super-productivity = callPackage ../applications/networking/super-productivity { };
 
+  wlr-randr = callPackage ../tools/misc/wlr-randr { };
+
   wlroots = callPackage ../development/libraries/wlroots { };
 
   sway = callPackage ../applications/window-managers/sway { };
