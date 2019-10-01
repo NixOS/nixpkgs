@@ -7,11 +7,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  cmakeFlags = [
+  cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
-  '' + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  '' + stdenv.lib.optionalString (stdenv.hostPlatform.useLLVM or false) ''
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
     substituteInPlace lib/builtins/clear_cache.c \
