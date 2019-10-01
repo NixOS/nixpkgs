@@ -1,15 +1,21 @@
 { stdenv, unzip }:
-{ name, version, src, ... }:
+{ name, version, src, ... } @ args:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   inherit name version src;
 
   buildInputs = [ unzip ];
   dontBuild = true;
-  unpackPhase = "unzip $src";
+  unpackPhase = ''
+    runHook preUnpack
+    unzip $src
+    runHook postUnpack
+  '';
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out"
     chmod -R +w .
     find . -mindepth 1 -maxdepth 1 | xargs cp -a -t "$out"
+    runHook postInstall
   '';
-}
+} // args)
