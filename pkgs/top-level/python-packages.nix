@@ -563,6 +563,10 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  entrance = callPackage ../development/python-modules/entrance { routerFeatures = false; };
+
+  entrance-with-router-features = callPackage ../development/python-modules/entrance { routerFeatures = true; };
+
   eradicate = callPackage ../development/python-modules/eradicate {  };
 
   face = callPackage ../development/python-modules/face { };
@@ -688,6 +692,8 @@ in {
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   inquirer = callPackage ../development/python-modules/inquirer { };
+
+  janus = callPackage ../development/python-modules/janus { };
 
   jira = callPackage ../development/python-modules/jira { };
 
