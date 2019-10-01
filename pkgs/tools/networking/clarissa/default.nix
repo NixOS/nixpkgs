@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" "SYSDINST=false" ];
+  installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" "SYSDINST=false" ];
 
   meta = with stdenv.lib; {
     description = "Near real-time network census daemon";
