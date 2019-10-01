@@ -11755,6 +11755,8 @@ in
 
   libclxclient = callPackage ../development/libraries/libclxclient  { };
 
+  libco-canonical = callPackage ../development/libraries/libco-canonical { };
+
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
