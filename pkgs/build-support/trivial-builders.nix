@@ -332,6 +332,21 @@ rec {
       '') entries}
     '';
 
+  /*
+   * Easily create a linkFarm from a set of derivations.
+   *
+   * This calls linkFarm with a list of entries created from the list of input
+   * derivations.  It turns each input derivation into an attribute set
+   * like { name = drv.name ; path = drv }, and passes this to linkFarm.
+   *
+   * Example:
+   *
+   * # Symlinks the hello, gcc, and ghc derivations in $out
+   * linkFarmFromDrvs "example" [ pkgs.hello pkgs.gcc pkgs.ghc ]
+   */
+  linkFarmFromDrvs = name: drvs:
+    let mkEntryFromDrv = drv: { name = drv.name; path = drv; };
+    in linkFarm name (map mkEntryFromDrv drvs);
 
   /* Print an error message if the file with the specified name and
    * hash doesn't exist in the Nix store. This function should only
