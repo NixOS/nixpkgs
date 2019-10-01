@@ -43,6 +43,11 @@ let
       scalaVersion = "2.12";
       sha256 = "1svdnhdzq9a6jsig513i0ahaysfgar5i385bq9fz7laga6a4z3qv";
     };
+    "2.3" = {
+      kafkaVersion = "2.3.0";
+      scalaVersion = "2.12";
+      sha256 = "1rz3xqv26h0zv5pmk65znzn08gycmrfj6vvbmrvl9i7hm4hm2vyq";
+    };
   };
 in
 
