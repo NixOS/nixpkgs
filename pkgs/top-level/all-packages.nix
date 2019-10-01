@@ -13442,6 +13442,8 @@ in
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 
+  raft-canonical = callPackage ../development/libraries/raft-canonical { };
+
   range-v3 = callPackage ../development/libraries/range-v3 {};
 
   rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
