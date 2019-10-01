@@ -5818,6 +5818,12 @@
     githubId = 1151264;
     name = "Sebastian Graf";
   };
+  shahrukh330 = {
+    email = "shahrukh330@gmail.com";
+    github = "shahrukh330";
+    githubId = 1588288;
+    name = "Shahrukh Khan";
+  };
   shanemikel = {
     email = "shanemikel1@gmail.com";
     github = "shanemikel";

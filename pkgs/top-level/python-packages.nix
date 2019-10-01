@@ -4689,6 +4689,8 @@ in {
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
+  qds_sdk = callPackage ../development/python-modules/qds_sdk { };
+
   quamash = callPackage ../development/python-modules/quamash { };
 
   quandl = callPackage ../development/python-modules/quandl { };
