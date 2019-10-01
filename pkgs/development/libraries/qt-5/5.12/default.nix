@@ -65,7 +65,7 @@ let
         ./qtbase.patch.d/0009-qtbase-tzdir.patch
         ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0011-qtbase-assert.patch
-        ./qtbase.patch.d/0012-fix-header-module.patch
+        ./qtbase.patch.d/0012-fix-header_module.patch
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
