@@ -1,7 +1,7 @@
 From 492f6555bb09f207c83387441f0f23ba4602dfff Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Wed, 18 Sep 2019 05:39:50 -0500
-Subject: [PATCH 04/11] qtbase-replace-libdir
+Subject: [PATCH 04/12] qtbase-replace-libdir
 
 ---
  mkspecs/features/qt_common.prf | 20 ++------------------

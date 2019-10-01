@@ -1,7 +1,7 @@
 From 203c9338dc92c2c36007cfe6633387348976637e Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:37:15 -0500
-Subject: [PATCH 02/11] qtbase-mac
+Subject: [PATCH 02/12] qtbase-mac
 
 ---
  src/corelib/kernel/qcore_mac_p.h | 16 ++++++++++++++--

@@ -1,7 +1,7 @@
 From db9686362ae34e02538e449e0edfe3d61065b2e9 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:36:25 -0500
-Subject: [PATCH 09/11] qtbase-tzdir
+Subject: [PATCH 09/12] qtbase-tzdir
 
 ---
  src/corelib/tools/qtimezoneprivate_tz.cpp | 20 ++++++++++++++------

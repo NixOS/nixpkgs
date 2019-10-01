@@ -1,7 +1,7 @@
 From 361a9395704ca1ee170a8bb3823ba860293eecee Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Tue, 17 Sep 2019 05:34:00 -0500
-Subject: [PATCH 01/11] qtbase-mkspecs-mac
+Subject: [PATCH 01/12] qtbase-mkspecs-mac
 
 ---
  mkspecs/common/mac.conf               |   2 +-

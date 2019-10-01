@@ -1,7 +1,7 @@
 From 8bdbddc2e5fef1553b1ba0297d3c03b38e9b947b Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Wed, 18 Sep 2019 05:39:39 -0500
-Subject: [PATCH 03/11] qtbase-mkspecs
+Subject: [PATCH 03/12] qtbase-mkspecs
 
 ---
  mkspecs/features/create_cmake.prf             | 53 ++++--------
