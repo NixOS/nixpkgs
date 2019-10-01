@@ -872,11 +872,6 @@
    </listitem>
    <listitem>
     <para>
-     <option>services.xserver.desktopManager.xterm</option> is now disabled by default. It was not useful except for debugging purposes and was confusingly set as default in some circumstances.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      The WeeChat plugin <literal>pkgs.weechatScripts.weechat-xmpp</literal> has been removed as it doesn't receive any updates from upstream and depends on outdated Python2-based modules.
     </para>
    </listitem>
