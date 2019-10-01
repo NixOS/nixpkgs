@@ -5272,6 +5272,8 @@ in
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
+  update-systemd-resolved = callPackage ../tools/networking/openvpn/update-systemd-resolved.nix { };
+
   opae = callPackage ../development/libraries/opae { };
 
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
@@ -15477,11 +15479,11 @@ in
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
   busybox = callPackage ../os-specific/linux/busybox { };
-  busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix { 
+  busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix {
     # musl roadmap has RISC-V support projected for 1.1.20
     busybox = if !stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.libc != "bionic"
               then pkgsStatic.busybox
-              else busybox; 
+              else busybox;
   };
 
   cachefilesd = callPackage ../os-specific/linux/cachefilesd { };
