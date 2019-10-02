@@ -11,12 +11,7 @@
     "${patchSet}/patches/ruby/2.5/head/railsexpress/02-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/2.5/head/railsexpress/03-more-detailed-stacktrace.patch"
   ];
-  "2.6.4" = [
-    (fetchpatch {
-      url = "https://git.ruby-lang.org/ruby.git/patch/?id=ade1283ca276f7d589ffd3539fbc7b9817f682d5";
-      sha256 = "1vgrckmzz0ykyxgzyp8fcifa93xz2hvyfil79bw1gc3xx94wnnxd";
-    })
-  ] ++ ops useRailsExpress [
+  "2.6.5" = ops useRailsExpress [
     "${patchSet}/patches/ruby/2.6/head/railsexpress/01-fix-broken-tests-caused-by-ad.patch"
     "${patchSet}/patches/ruby/2.6/head/railsexpress/02-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/2.6/head/railsexpress/03-more-detailed-stacktrace.patch"
