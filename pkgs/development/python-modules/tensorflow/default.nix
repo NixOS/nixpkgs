@@ -297,6 +297,15 @@ let
         cp -Lr "$PWD/dist" "$python"
       '';
     };
+
+    meta = with stdenv.lib; {
+      description = "Computation using data flow graphs for scalable machine learning";
+      homepage = http://tensorflow.org;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ jyp abbradar ];
+      platforms = platforms.linux;
+      broken = !(xlaSupport -> cudaSupport);
+    };
   };
 
 in buildPythonPackage {
@@ -347,12 +356,5 @@ in buildPythonPackage {
 
   passthru.libtensorflow = bazel-build.out;
 
-  meta = with stdenv.lib; {
-    description = "Computation using data flow graphs for scalable machine learning";
-    homepage = http://tensorflow.org;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jyp abbradar ];
-    platforms = platforms.linux;
-    broken = !(xlaSupport -> cudaSupport);
-  };
+  inherit (bazel-build) meta;
 }
