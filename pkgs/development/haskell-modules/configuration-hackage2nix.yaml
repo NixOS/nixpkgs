@@ -2591,6 +2591,7 @@ unsupported-platforms:
   alsa-pcm:                                     [ x86_64-darwin ]
   alsa-seq:                                     [ x86_64-darwin ]
   AWin32Console:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  barbly:                                       [ i686-linux, x86_64-linux ]
   bindings-directfb:                            [ x86_64-darwin ]
   d3d11binding:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   DirectSound:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3116,7 +3117,6 @@ broken-packages:
   - Bang
   - bank-holiday-usa
   - banwords
-  - barbly
   - barchart
   - barcodes-code128
   - barecheck
