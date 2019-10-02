@@ -26,7 +26,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext" );
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext", "makeWrapper" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -189,6 +189,12 @@ while (<>) {
         $isFont = 1;
     }
 
+    if (@@ = glob("$tmpDir/*/app-defaults/")) {
+        push @nativeRequires, "makeWrapper";
+        push @requires, "xbitmaps";
+        push @{$extraAttrs{$pkg}}, "postInstall = postInstallResources xbitmaps;";
+    }
+
     if ($isFont) {
         push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ];";
     }
@@ -250,7 +256,14 @@ print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 { lib, newScope, pixman }:
 
-lib.makeScope newScope (self: with self; {
+let postInstallResources = xbitmaps: ''
+    for bin in \$out/bin/*; do
+      wrapProgram \$bin \\
+        --suffix XFILESEARCHPATH : \$out/share/X11/%T/%N%C:\$out/include/X11/%T/%N:\${xbitmaps}/include/X11/%T/%N
+    done
+  '';
+
+in lib.makeScope newScope (self: with self; {
 
   inherit pixman;
 

@@ -22,21 +22,6 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ self.xorgproto ];
   });
 
-  bitmap = super.bitmap.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ makeWrapper ];
-    postInstall = ''
-      paths=(
-        "$out/share/X11/%T/%N"
-        "$out/include/X11/%T/%N"
-        "${self.xbitmaps}/include/X11/%T/%N"
-      )
-      wrapProgram "$out/bin/bitmap" \
-        --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
-      makeWrapper "$out/bin/bitmap" "$out/bin/bitmap-color" \
-        --suffix XFILESEARCHPATH : "$out/share/X11/%T/%N-color"
-    '';
-  });
-
   encodings = super.encodings.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ self.mkfontscale ];
   });
@@ -778,17 +763,6 @@ self: super:
   xrandr = super.xrandr.overrideAttrs (attrs: {
     postInstall = ''
       rm $out/bin/xkeystone
-    '';
-  });
-
-  xcalc = super.xcalc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [] ++ [
-      "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
-    ];
-    nativeBuildInputs = attrs.nativeBuildInputs or [] ++ [ makeWrapper ];
-    postInstall = ''
-      wrapProgram $out/bin/xcalc \
-        --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults
     '';
   });
 }
