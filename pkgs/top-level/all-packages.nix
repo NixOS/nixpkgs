@@ -4412,10 +4412,6 @@ in
   nodejs-slim-10_x = callPackage ../development/web/nodejs/v10.nix {
     enableNpm = false;
   };
-  nodejs-11_x = callPackage ../development/web/nodejs/v11.nix { };
-  nodejs-slim-11_x = callPackage ../development/web/nodejs/v11.nix {
-    enableNpm = false;
-  };
   nodejs-12_x = callPackage ../development/web/nodejs/v12.nix { };
   nodejs-slim-12_x = callPackage ../development/web/nodejs/v12.nix {
     enableNpm = false;
