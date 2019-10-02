@@ -1,7 +1,7 @@
 { patchSet, useRailsExpress, ops, patchLevel, fetchpatch }:
 
 {
-  "2.4.7" = ops useRailsExpress [
+  "2.4.9" = ops useRailsExpress [
     "${patchSet}/patches/ruby/2.4/head/railsexpress/01-skip-broken-tests.patch"
     "${patchSet}/patches/ruby/2.4/head/railsexpress/02-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/2.4/head/railsexpress/03-display-more-detailed-stack-trace.patch"
