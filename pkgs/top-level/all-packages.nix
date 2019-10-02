@@ -1378,7 +1378,7 @@ in
 
   copyright-update = callPackage ../tools/text/copyright-update { };
 
-  corebird = throw "corebird has been discontinued, use cawbird instead";
+  corebird = throw "deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
 
   inherit (callPackage ../tools/misc/coreboot-utils { })
     msrtool
