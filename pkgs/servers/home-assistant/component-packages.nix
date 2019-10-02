@@ -583,7 +583,7 @@
     "pushsafer" = ps: with ps; [  ];
     "pvoutput" = ps: with ps; [  ];
     "pyload" = ps: with ps; [  ];
-    "python_script" = ps: with ps; [  ];
+    "python_script" = ps: with ps; [ restrictedpython ];
     "qbittorrent" = ps: with ps; [  ];
     "qld_bushfire" = ps: with ps; [  ];
     "qnap" = ps: with ps; [  ];
@@ -814,7 +814,7 @@
     "vicare" = ps: with ps; [  ];
     "vivotek" = ps: with ps; [  ];
     "vizio" = ps: with ps; [  ];
-    "vlc" = ps: with ps; [  ];
+    "vlc" = ps: with ps; [ python-vlc ];
     "vlc_telnet" = ps: with ps; [  ];
     "voicerss" = ps: with ps; [  ];
     "volkszaehler" = ps: with ps; [  ];
