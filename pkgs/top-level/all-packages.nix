@@ -6905,6 +6905,8 @@ in
 
   uwsgi = callPackage ../servers/uwsgi { };
 
+  v2ray = callPackage ../tools/networking/v2ray { };
+
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
   vampire = callPackage ../applications/science/logic/vampire {};
