@@ -66,6 +66,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   #### APPS
 
+  appcenter = callPackage ./apps/appcenter { };
+
   elementary-calculator = callPackage ./apps/elementary-calculator { };
 
   elementary-calendar = callPackage ./apps/elementary-calendar { };
