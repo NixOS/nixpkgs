@@ -13162,6 +13162,8 @@ in
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
+  protolock = callPackage ../development/libraries/protolock { };
+
   protozero = callPackage ../development/libraries/protozero { };
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
