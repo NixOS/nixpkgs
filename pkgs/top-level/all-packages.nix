@@ -20218,6 +20218,8 @@ in
     python = python3;
   };
 
+  qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
+
   qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
       withGrass = false;
   };
