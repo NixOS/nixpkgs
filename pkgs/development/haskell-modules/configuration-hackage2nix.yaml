@@ -2486,13 +2486,8 @@ extra-packages:
   - deepseq == 1.3.0.1                  # required to build Cabal with GHC 6.12.3
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
-  - haddock < 2.17                      # required on GHC 7.10.x
-  - haddock == 2.17.*                   # required on GHC 8.0.x
-  - haddock-api == 2.15.*               # required on GHC 7.8.x
-  - haddock-api == 2.16.*               # required on GHC 7.10.x
-  - haddock-api == 2.17.*               # required on GHC 8.0.x
-  - haddock-library == 1.2.*            # required for haddock-api-2.16.x
-  - haddock-library == 1.4.3            # required for haddock-api-2.17.x
+  - haddock == 2.22.*                   # required on GHC 8.0.x
+  - haddock-api == 2.22.*               # required on GHC 7.8.x
   - happy <1.19.6                       # newer versions break Agda
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
