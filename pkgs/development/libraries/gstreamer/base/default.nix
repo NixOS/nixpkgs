@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-base/${pname}-${version}.tar.xz";
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1bmmdwbyy89ayb85xc48y217f6wdmpz96f30zm6v53z2a5xsm4s0";
   };
 

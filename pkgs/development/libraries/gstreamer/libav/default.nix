@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-libav/${pname}-${version}.tar.xz";
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "16ixqpfrr7plaaz14n3vagr2q5xbfkv7gpmcsyndrkx98f813b6z";
   };
 

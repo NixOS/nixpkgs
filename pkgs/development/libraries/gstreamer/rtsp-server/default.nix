@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-rtsp-server/${pname}-${version}.tar.xz";
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "069zy159izy50blci9fli1i2r8jh91qkmgrz1n0xqciy3bn9x3hr";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gstreamer-editing-services/${pname}-${version}.tar.xz";
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1las94jkx83sxmzi5w6b0xm89dqqwzpdsb6h9w9ixndhnbpzm8w2";
   };
 
