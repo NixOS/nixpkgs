@@ -90,6 +90,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-videos = callPackage ./apps/elementary-videos { };
 
+  sideload = callPackage ./apps/sideload { };
+
   #### DESKTOP
 
   elementary-default-settings = callPackage ./desktop/elementary-default-settings { };
