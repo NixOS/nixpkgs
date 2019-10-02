@@ -2051,6 +2051,12 @@
     github = "ertes";
     name = "Ertugrul Söylemez";
   };
+  esclear = {
+    email = "esclear@users.noreply.github.com";
+    github = "esclear";
+    githubId = 7432848;
+    name = "Daniel Albert";
+  };
   Esteth = {
     email = "adam.copp@gmail.com";
     name = "Adam Copp";

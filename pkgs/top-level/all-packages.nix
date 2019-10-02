@@ -24305,6 +24305,8 @@ in
     openssl = openssl_1_0_2;
   };
 
+  pgmodeler = libsForQt5.callPackage ../applications/misc/pgmodeler { };
+
   pgf = pgf2;
 
   # Keep the old PGF since some documents don't render properly with
