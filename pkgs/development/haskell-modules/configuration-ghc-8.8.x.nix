@@ -84,9 +84,11 @@ self: super: {
   })) (drv: {
     preConfigure = "sed -i -e 's/base >=4 && < 4.13,/base,/' regex-base.cabal";
   });
-  regex-posix = appendPatch super.regex-posix (pkgs.fetchpatch {
+  regex-posix = overrideCabal (appendPatch super.regex-posix (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-posix-0.95.2.patch";
     sha256 = "006yli58jpqp786zm1xlncjsilc38iv3a09r4pv94l587sdzasd2";
+  })) (drv: {
+    preConfigure = "sed -i -e 's/base >= 4 && < 4.13/base/' regex-posix.cabal";
   });
   optparse-applicative = appendPatch (doJailbreak super.optparse-applicative) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/optparse-applicative-0.14.3.0.patch";

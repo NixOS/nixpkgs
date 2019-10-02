@@ -1035,6 +1035,8 @@ self: super: {
     generateOptparseApplicativeCompletion "dhall" (
       dontCheck super.dhall
   );
+  dhall_1_26_1 = dontCheck super.dhall_1_26_1;
+
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
   # https://github.com/dhall-lang/dhall-haskell/pull/997
@@ -1054,12 +1056,13 @@ self: super: {
   # https://github.com/haskell-hvr/hgettext/issues/14
   hgettext = doJailbreak super.hgettext;
 
+  # 2.23.0 supports GHC 8.x and up
+  haddock = super.haddock_2_22_0;
   # haddock-api-2.22.0: Break out of “QuickCheck ==2.11.*, hspec >=2.4.4 && <2.6”
-  haddock-api = dontHaddock (doJailbreak (super.haddock-api));
+  haddock-api = dontHaddock (doJailbreak (super.haddock-api_2_22_0));
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
-  # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
@@ -1191,8 +1194,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_26_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_26_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_26_1; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_26_1; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1202,7 +1205,7 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   # need newer version of ghc-libparser
-  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_0_20190723; };
+  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_1; };
 
   # https://github.com/sol/hpack/issues/366
   hpack = self.hpack_0_32_0;
@@ -1224,11 +1227,5 @@ self: super: {
 
   # The LTS-14.x version of optparse-applicative is too old.
   cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
-
-  # https://github.com/brendanhay/amazonka/commit/657b70d174fe5cb61e56cb8b9c5e57f1ec216f2b
-  amazonka = appendPatch super.amazonka ./patches/amazonka-Allow-http-client-0.6.patch;
-
-  # https://github.com/brendanhay/amazonka/commit/657b70d174fe5cb61e56cb8b9c5e57f1ec216f2b
-  amazonka-core = appendPatch super.amazonka-core ./patches/amazonka-core-Allow-http-client-0.6.patch;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
