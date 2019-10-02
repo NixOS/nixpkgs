@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, ninja, vala,
   gettext, at-spi2-core, dbus, epoxy, expect, gtk3, json-glib,
   libXdmcp, libgee, libpthreadstubs, librsvg, libsecret, libtasn1,
-  libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux,
+  libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux, gnutls, pcre2,
   libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     pcre
     vte
     wnck
+    gnutls
+    pcre2
   ];
 
   postPatch = ''

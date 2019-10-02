@@ -7,7 +7,6 @@ let
     "ghc863Binary"
     "ghc844"
     "ghcjs"
-    "ghcjs84"
     "ghcjs86"
     "integer-simple"
   ];
@@ -70,12 +69,6 @@ in {
       llvmPackages = pkgs.llvmPackages_6;
     };
     ghcjs = compiler.ghcjs86;
-    ghcjs84 = callPackage ../development/compilers/ghcjs-ng {
-      bootPkgs = packages.ghc844;
-      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.4/git.json;
-      stage0 = ../development/compilers/ghcjs-ng/8.4/stage0.nix;
-      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix {};
-    };
     ghcjs86 = callPackage ../development/compilers/ghcjs-ng {
       bootPkgs = packages.ghc865;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.6/git.json;
@@ -133,12 +126,6 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
     ghcjs = packages.ghcjs86;
-    ghcjs84 = callPackage ../development/haskell-modules rec {
-      buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjs84;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
-    };
     ghcjs86 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs86;

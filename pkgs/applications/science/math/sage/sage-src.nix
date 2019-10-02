@@ -10,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.8";
+  version = "8.9";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0jm7zdkz8wfgrmf6620jfr8kgvprrz3qfl8gzx6rl5z5cm734b6x";
+    sha256 = "1bwga58x3s8z42w5h51c232f91ndsc1861dlb1glhax3pn0rhn3a";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -48,10 +48,6 @@ stdenv.mkDerivation rec {
     # Not necessary since library location is set explicitly
     # https://trac.sagemath.org/ticket/27660#ticket
     ./patches/do-not-test-find-library.patch
-
-
-    # https://trac.sagemath.org/ticket/28007
-    ./patches/threejs-offline.patch
 
     # Parallelize docubuild using subprocesses, fixing an isolation issue. See
     # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
@@ -95,14 +91,6 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
       sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
       stripLen = 1;
-    })
-
-    # https://trac.sagemath.org/ticket/26932
-    (fetchSageDiff {
-      name = "givaro-4.1.0_fflas-ffpack-2.4.0_linbox-1.6.0.patch";
-      base = "8.8.beta4";
-      rev = "c11d9cfa23ff9f77681a8f12742f68143eed4504";
-      sha256 = "0xzra7mbgqvahk9v45bjwir2mqz73hrhhy314jq5nxrb35ysdxyi";
     })
 
     # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can

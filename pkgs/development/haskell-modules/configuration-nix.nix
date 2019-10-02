@@ -94,11 +94,9 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  cachix = overrideCabal (addBuildTools (enableSeparateBinOutput super.cachix) [pkgs.boost]) (drv: {
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace cachix.cabal --replace "c++14" "c++17"
-    '';
-  });
+  cachix = enableSeparateBinOutput super.cachix;
+
+  niv = enableSeparateBinOutput super.niv;
 
   ghcid = enableSeparateBinOutput super.ghcid;
 
@@ -589,7 +587,6 @@ self: super: builtins.intersectAttrs super {
   snap-server = dontCheck super.snap-server;
 
   # Tests require internet
-  dhall_1_26_0 = dontCheck super.dhall_1_26_0;
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
 

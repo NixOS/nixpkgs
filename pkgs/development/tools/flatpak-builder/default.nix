@@ -43,7 +43,7 @@
 let
   installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
-  version = "1.0.8";
+  version = "1.0.9";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
   inherit version;
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0ns1vv2phhd3vsi2749cajwapapx7xa841kkvssixwgfa575d912";
+    sha256 = "00qd770qjsiyd8qhhhyn7zg6jyi283ix5dhjzcfdn9yr3h53kvyn";
   };
 
   nativeBuildInputs = [

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "anjuta";
-  version = "3.28.0";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/anjuta/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ya7ajai9rx9g597sr5wawr6l5pb2s34bbjdsbnx0lkrhnjv11xh";
+    sha256 = "13ql7axw6zz387s7pa1m7wmh7qps3x7fk53h9832vq1yxlq33aa2";
   };
 
   passthru = {
