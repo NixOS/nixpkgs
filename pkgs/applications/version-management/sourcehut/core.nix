@@ -75,6 +75,7 @@ buildPythonPackage rec {
     homepage = https://git.sr.ht/~sircmpwn/srht;
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
+    broken = true;
     maintainers = with maintainers; [ eadwu ];
   };
 }
