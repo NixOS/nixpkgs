@@ -10,7 +10,6 @@
 , onboard
 , at-spi2-core
 , elementary-default-settings
-, writeShellScriptBin
 , elementary-settings-daemon
 , runtimeShell
 }:
@@ -50,9 +49,9 @@ let
     script = dockitems-script;
   };
 
-  executable = writeShellScriptBin "pantheon" ''
-    export XDG_CONFIG_DIRS=${elementary-settings-daemon}/etc/xdg:$XDG_CONFIG_DIRS
-    export XDG_DATA_DIRS=${placeholder "out"}/share:$XDG_DATA_DIRS
+  executable = writeScript "pantheon" ''
+    export XDG_CONFIG_DIRS=${elementary-settings-daemon}/etc/xdg:${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
+    export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
     exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
   '';
 
@@ -95,13 +94,17 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/gnome-session/sessions
     cp -av gnome-session/pantheon.session $out/share/gnome-session/sessions
 
+    mkdir -p $out/libexec
+    substitute ${executable} $out/libexec/pantheon --subst-var out
+    chmod +x $out/libexec/pantheon
+
     mkdir -p $out/share/xsessions
     cp -av xsessions/pantheon.desktop $out/share/xsessions
   '';
 
   postFixup = ''
     substituteInPlace $out/share/xsessions/pantheon.desktop \
-      --replace "gnome-session --session=pantheon" "${executable}/bin/pantheon" \
+      --replace "gnome-session --session=pantheon" "$out/libexec/pantheon" \
       --replace "wingpanel" "${wingpanel}/bin/wingpanel"
 
     for f in $out/etc/xdg/autostart/*; do mv "$f" "''${f%.desktop}-pantheon.desktop"; done

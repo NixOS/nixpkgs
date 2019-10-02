@@ -155,10 +155,10 @@ in
 
       environment.systemPackages = cfg.sessionPath;
 
-      environment.variables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
+      environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
 
       # Override GSettings schemas
-      environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
        # If gnome3 is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
@@ -229,6 +229,7 @@ in
       services.colord.enable = mkDefault true;
       services.gnome3.chrome-gnome-shell.enable = mkDefault true;
       services.gnome3.glib-networking.enable = true;
+      services.gnome3.gnome-initial-setup.enable = mkDefault true;
       services.gnome3.gnome-remote-desktop.enable = mkDefault true;
       services.gnome3.gnome-settings-daemon.enable = true;
       services.gnome3.gnome-user-share.enable = mkDefault true;
@@ -236,7 +237,23 @@ in
       services.gvfs.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
-      systemd.packages = [ pkgs.gnome3.vino ];
+
+      systemd.packages = with pkgs.gnome3; [ vino gnome-session gnome-settings-daemon ];
+
+      # gnome-settings-daemon.nix is shared between several desktop
+      # environments (eg. mate and pantheon) so specify these gnome-shell specific
+      # service dependencies here instead.
+      systemd.user.targets."gnome-session-initialized".wants = [
+        "gsd-a11y-settings.target" "gsd-housekeeping.target" "gsd-power.target"
+        "gsd-color.target" "gsd-keyboard.target" "gsd-print-notifications.target"
+        "gsd-datetime.target" "gsd-media-keys.target" "gsd-rfkill.target"
+        "gsd-screensaver-proxy.target" "gsd-sound.target" "gsd-smartcard.target"
+        "gsd-sharing.target" "gsd-wacom.target" "gsd-wwan.target"
+      ];
+
+      systemd.user.targets."gnome-session-x11-services".wants = [
+        "gsd-xsettings.target"
+      ];
 
       services.avahi.enable = mkDefault true;
 
@@ -329,10 +346,10 @@ in
 
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package
-      environment.variables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
+      environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
 
       # Override default mimeapps for nautilus
-      environment.variables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
+      environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
 
       environment.pathsToLink = [
         "/share/nautilus-python/extensions"

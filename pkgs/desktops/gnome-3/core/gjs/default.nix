@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.56.2";
+  version = "1.58.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1b5321krn89p3f7s2ik6gpfnc61apzljhlnbqky8c88f7n6832ac";
+    sha256 = "1wvywpng27y0264pq9anxdi1xy280x6mcnbgiggn804pql4nml8y";
   };
 
   passthru = {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "installedTests" ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ libxml2 gobject-introspection gtk3 glib pango readline dbus ];
+  buildInputs = [ libxml2 gobject-introspection glib pango readline dbus ];
 
   propagatedBuildInputs = [ spidermonkey_60 ];
 

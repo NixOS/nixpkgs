@@ -1,6 +1,6 @@
 { at-spi2-core, cmake, dbus, dbus-glib, docbook_xsl, epoxy, fetchpatch, fetchFromGitHub
 , glib, gtk3, harfbuzz, hicolor-icon-theme, libXdmcp, libXtst, libpthreadstubs
-, libselinux, libsepol, libtasn1, libxkbcommon, libxslt, p11-kit, pcre
+, libselinux, libsepol, libtasn1, libxkbcommon, libxslt, p11-kit, pcre2
 , pkgconfig, stdenv, utillinuxMinimal, vte, wrapGAppsHook, xmlto
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook libxslt ];
 
   buildInputs =
-    [ gtk3 dbus dbus-glib vte pcre harfbuzz libpthreadstubs libXdmcp
+    [ gtk3 dbus dbus-glib vte pcre2 harfbuzz libpthreadstubs libXdmcp
       utillinuxMinimal glib hicolor-icon-theme docbook_xsl xmlto libselinux
       libsepol libxkbcommon epoxy at-spi2-core libXtst libtasn1 p11-kit
     ];
