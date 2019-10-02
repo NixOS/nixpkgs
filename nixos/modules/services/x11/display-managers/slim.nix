@@ -141,6 +141,10 @@ in
         # Export the config/themes for slimlock.
         export SLIM_THEMESDIR=${slimThemesDir}
       '';
+    # This is required to use slimlock with xautolock.
+    services.xserver.displayManager.importedVariables = [
+      "SLIM_THEMESDIR"
+    ];
 
     # Allow null passwords so that the user can login as root on the
     # installation CD.
