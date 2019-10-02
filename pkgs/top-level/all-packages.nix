@@ -1385,7 +1385,7 @@ in
 
   copyright-update = callPackage ../tools/text/copyright-update { };
 
-  corebird = callPackage ../applications/networking/corebird { };
+  corebird = throw "corebird has been discontinued, use cawbird instead";
 
   inherit (callPackage ../tools/misc/coreboot-utils { })
     msrtool
