@@ -6062,6 +6062,16 @@
     githubId = 307899;
     name = "Gurkan Gur";
   };
+  servalcatty = {
+    email = "servalcat@pm.me";
+    github = "servalcatty";
+    githubid = 51969817;
+    name = "Serval";
+    keys = [{
+      longkeyid = "rsa4096/0x4A2AAAA382F8294C";
+      fingerprint = "A317 37B3 693C 921B 480C  C629 4A2A AAA3 82F8 294C";
+    }];
+  };
   sfrijters = {
     email = "sfrijters@gmail.com";
     github = "sfrijters";
