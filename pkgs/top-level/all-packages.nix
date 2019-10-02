@@ -9006,8 +9006,7 @@ in
 
   self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
-  spark = spark_24;
-  spark_24 = callPackage ../applications/networking/cluster/spark { version = "2.4.3"; };
+  spark = callPackage ../applications/networking/cluster/spark { };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
