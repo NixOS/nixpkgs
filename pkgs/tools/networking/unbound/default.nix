@@ -9,6 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "1ykdy62sgzv33ggkmzwx2h0ifm7hyyxyfkb4zckv7gz4f28xsm8v";
   };
 
+  # https://github.com/NLnetLabs/unbound/pull/90
+  postPatch = ''
+    substituteInPlace validator/val_secalgo.c \
+      --replace '&nettle_secp_256r1' 'nettle_get_secp_256r1()' \
+      --replace '&nettle_secp_384r1' 'nettle_get_secp_384r1()'
+  '';
+
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
   buildInputs = [ openssl nettle expat libevent ];
