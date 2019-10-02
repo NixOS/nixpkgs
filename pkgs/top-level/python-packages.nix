@@ -1698,6 +1698,8 @@ in {
     inherit (pkgs) pkgconfig;
   };
 
+  HTSeq = callPackage ../development/python-modules/HTSeq { };
+
   httpserver = callPackage ../development/python-modules/httpserver {};
 
   bleach = callPackage ../development/python-modules/bleach { };
