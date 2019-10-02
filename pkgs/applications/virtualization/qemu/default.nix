@@ -83,6 +83,11 @@ stdenv.mkDerivation rec {
       name = "CVE-2019-12155.patch";
       sha256 = "0h2q71mcz3gvlrbfkqcgla74jdg73hvzcrwr4max2ckpxx8x9207";
     })
+    (fetchpatch {
+      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=6f5d8671225dc77190647f18a27a0d156d4ca97a";
+      name = "CVE-2019-13164.patch";
+      sha256 = "1ypcdlpg3nap0kg9xkrgrqw33j5ah4j7l4i2cp6d5ap8vrw9nn3l";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
