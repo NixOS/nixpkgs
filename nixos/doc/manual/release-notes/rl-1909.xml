@@ -924,6 +924,12 @@
        must be owned by either <literal>root</literal> or the user specified in <option>services.gitlab.user</option>.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The Twitter client <literal>corebird</literal> has been dropped as <link xlink:href="https://www.patreon.com/posts/corebirds-future-18921328">it is discontinued and does not work against the new Twitter API</link>.
+       Please use the fork <literal>cawbird</literal> instead which has been adapted to the API changes and is still maintained.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
