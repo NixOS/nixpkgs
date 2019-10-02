@@ -1381,8 +1381,6 @@ in
 
   copyright-update = callPackage ../tools/text/copyright-update { };
 
-  corebird = throw "corebird has been discontinued, use cawbird instead";
-
   inherit (callPackage ../tools/misc/coreboot-utils { })
     msrtool
     cbmem
