@@ -8,18 +8,6 @@ in
 {
   options.services.do-agent = {
     enable = mkEnableOption "do-agent, the DigitalOcean droplet metrics agent";
-
-    user = mkOption {
-      type = types.str;
-      default = "do-agent";
-      description = "User account under which do-agent runs.";
-    };
-
-    group = mkOption {
-      type = types.str;
-      default = "do-agent";
-      description = "Group account under which do-agent runs.";
-    };
   };
 
   config = mkIf cfg.enable {
@@ -38,16 +26,8 @@ in
         ProtectSystem = "full";
         ProtectHome = "yes";
         NoNewPrivileges = "yes";
+        DynamicUser = "yes";
       };
     };
-
-    users.users = optionalAttrs (cfg.user == "do-agent") (singleton
-      { name = "do-agent";
-        group = cfg.group;
-      });
-
-    users.groups = optionalAttrs (cfg.group == "do-agent") (singleton
-      { name = "do-agent";
-      });
   };
 }
