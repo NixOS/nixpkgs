@@ -392,6 +392,7 @@ in
       };
 
       environment.etc."zfs/zed.d".source = "${packages.zfsUser}/etc/zfs/zed.d/";
+      environment.etc."zfs/zpool.d".source = "${packages.zfsUser}/etc/zfs/zpool.d/";
 
       system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ packages.zfsUser ]
