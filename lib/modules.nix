@@ -41,7 +41,13 @@ rec {
 
         options = {
           _module.args = mkOption {
-            type = types.attrsOf types.unspecified;
+            # Because things like `mkIf` are entirely useless for
+            # `_module.args` (because there's no way modules can check which
+            # arguments were passed), we'll use `lazyAttrsOf` which drops
+            # support for that, in turn it's lazy in its values. This means e.g.
+            # a `_module.args.pkgs = import (fetchTarball { ... }) {}` won't
+            # start a download when `pkgs` wasn't evaluated.
+            type = types.lazyAttrsOf types.unspecified;
             internal = true;
             description = "Arguments passed to each module.";
           };
