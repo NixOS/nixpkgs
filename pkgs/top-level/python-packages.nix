@@ -1800,6 +1800,8 @@ in {
 
   characteristic = callPackage ../development/python-modules/characteristic { };
 
+  chart-studio = callPackage ../development/python-modules/chart-studio { };
+
   cheetah = callPackage ../development/python-modules/cheetah { };
 
   cherrypy = if isPy3k then
