@@ -47,9 +47,9 @@ in stdenv.mkDerivation rec {
       cp "./black/svg/$filename" "./font/tmp-black/$filename"
     done
 
-    hexcodes=($(uniq<<<"$hexcodes"))
+    hexcodes=($(uniq<<<"''${hexcodes[@]}"))
 
-    for h in $hexcodes; do
+    for h in ''${hexcodes[@]}; do
       filename="$h.svg"
       if [ ! -e "./color/svg/$filename" ]; then
         echo "$h is missing -> substitute with \"Missing Glyph\": $filename"
