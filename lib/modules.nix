@@ -591,6 +591,7 @@ rec {
     { options, ... }:
     { options = setAttrByPath optionName (mkOption {
         visible = false;
+        apply = x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
       config.assertions =
         let opt = getAttrFromPath optionName options; in [{
