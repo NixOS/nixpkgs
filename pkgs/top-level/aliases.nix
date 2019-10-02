@@ -48,6 +48,7 @@ mapAliases ({
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
+  bro = zeek; # added 2019-09-29
   btrfsProgs = btrfs-progs; # added 2016-01-03
   bittorrentSync = throw "bittorrentSync has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
@@ -66,6 +67,7 @@ mapAliases ({
   compton-git = compton; # added 2019-05-20
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
+  corebird = throw "deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
   cpp-gsl = microsoft_gsl; # added 2019-05-24
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08

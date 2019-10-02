@@ -35,7 +35,9 @@ buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
+      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6" \
+      --replace "thinc>=7.0.8,<7.1.0" "thinc>=7.0.8" \
+      --replace "blis>=0.2.2,<0.3.0" "blis>=0.2.2"
   '';
 
   propagatedBuildInputs = [

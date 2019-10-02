@@ -1,21 +1,22 @@
-{ stdenv, fetchzip, jdk, makeWrapper }:
+{ stdenv, fetchzip, jdk, makeWrapper, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "micronaut";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchzip {
     url = "https://github.com/micronaut-projects/micronaut-core/releases/download/v${version}/${pname}-${version}.zip";
     sha256 = "0lfl2hfakpdcfii3a3jr6kws731jamy4fb3dmlnj5ydk0zbnmk6r";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   installPhase = ''
     rm bin/mn.bat
     cp -r . $out
     wrapProgram $out/bin/mn \
       --prefix JAVA_HOME : ${jdk} 
+    installShellCompletion --bash --name mn.bash bin/mn_completion
   '';
 
   meta = with stdenv.lib; {

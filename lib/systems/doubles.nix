@@ -7,7 +7,7 @@ let
 
   all = [
     "aarch64-linux"
-    "armv5tel-linux" "armv6l-linux" "armv7l-linux"
+    "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux"
 
     "mipsel-linux"
 

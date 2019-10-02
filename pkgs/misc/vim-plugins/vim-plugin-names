@@ -85,7 +85,9 @@ fenetikm/falcon
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
+freitass/todo.txt-vim
 frigoeu/psc-ide-vim
+fsharp/vim-fsharp
 garbas/vim-snipmate
 glts/vim-textobj-comment
 gmarik/vundle
@@ -464,6 +466,7 @@ wellle/tmux-complete.vim
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
+wsdjeg/vim-fetch
 xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview

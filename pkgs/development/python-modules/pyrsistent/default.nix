@@ -20,6 +20,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestrunner pytest_4 hypothesis ];
 
+  postPatch = ''
+    substituteInPlace setup.py --replace 'pytest<5' 'pytest'
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/tobgu/pyrsistent/;
     description = "Persistent/Functional/Immutable data structures";

@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "3.32.1";
+  version = "3.34.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0nxa2jz1g73wypdsj19r4plf4hfkhs9mpl7gbhsiyqp1rkn84ahn";
+    sha256 = "12j455id5g616cn0nnj73v83aqgpavrsqszw1r5yhbpyc76lg03m";
   };
 
   patches = [

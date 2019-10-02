@@ -10,6 +10,7 @@
 , pkginfo
 , html5lib
 , shellingham
+, subprocess32
 , tomlkit
 , typing
 , pathlib2
@@ -63,7 +64,7 @@ in buildPythonPackage rec {
     shellingham
     tomlkit
   ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
-    ++ lib.optionals isPy27 [ virtualenv functools32 ];
+    ++ lib.optionals isPy27 [ virtualenv functools32 subprocess32 ];
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"

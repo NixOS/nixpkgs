@@ -6,17 +6,15 @@
 , libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk, vte
 }:
 
-# TODO: ovirt (optional)
-
 let
-  version = "3.32.1";
+  version = "3.34.0";
 in stdenv.mkDerivation rec {
   pname = "gnome-boxes";
   inherit version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "159sxii3g4s5pjb4s4i3kc4q162w5vicp4g6wvk1y2yv68bgmcl4";
+    sha256 = "07qjrb1qgfznvm0l2jm99d212dvw3iaw76czq5q1msnghpdw67qd";
   };
 
   doCheck = true;
@@ -39,10 +37,6 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio ]}")
   '';
-
-  mesonFlags = [
-    "-Dovirt=false"
-  ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py # patchShebangs requires executable file

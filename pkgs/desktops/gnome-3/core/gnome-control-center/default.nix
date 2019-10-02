@@ -67,11 +67,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "3.32.2";
+  version = "3.34.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "03np0mhfl9kkdw4cb711pda0cli9zgh2bq2gqn2zwbdi3qnhk9gs";
+    sha256 = "1jr3bbpycdzk26b83fsxw1my0aldi86v0733k42y4x45vacaanqa";
   };
 
   nativeBuildInputs = [
