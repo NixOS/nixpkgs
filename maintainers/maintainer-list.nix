@@ -7140,6 +7140,12 @@
     githubId = 1866448;
     name = "Eric Bailey";
   };
+  yvt = {
+    email = "i@yvt.jp";
+    github = "yvt";
+    githubId = 5253988;
+    name = "yvt";
+  };
   z77z = {
     email = "maggesi@math.unifi.it";
     github = "maggesi";
