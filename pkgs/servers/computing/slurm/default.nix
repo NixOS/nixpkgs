@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
 , python, munge, perl, pam, openssl, zlib
-, ncurses, mysql, gtk2, lua, hwloc, numactl
+, ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, libssh2, xorg, lz4
 # enable internal X11 support via libssh2
 , enableX11 ? true
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
     curl python munge perl pam openssl zlib
-      mysql.connector-c ncurses gtk2 lz4
+      libmysqlclient ncurses gtk2 lz4
       lua hwloc numactl readline freeipmi
   ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 

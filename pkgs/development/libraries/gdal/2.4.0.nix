@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
+, postgresql, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
 , libiconv, libxml2
 , netcdfSupport ? true, netcdf, hdf5, curl
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.connector-c or mysql}/bin/mysql_config"
+    "--with-mysql=${libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff.dev}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"

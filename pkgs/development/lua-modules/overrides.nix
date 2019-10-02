@@ -29,7 +29,7 @@ with super;
     # Parse out a version number without the Lua version inserted
     version = with pkgs.lib; let
       version' = super.cqueues.version;
-      rel = splitString "." version';
+      rel = splitVersion version';
       date = head rel;
       rev = last (splitString "-" (last rel));
     in "${date}-${rev}";
@@ -154,12 +154,12 @@ with super;
   luadbi-mysql = super.luadbi-mysql.override({
     extraVariables = ''
       -- Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR='${pkgs.mysql.connector-c}/include/mysql';
-      MYSQL_LIBDIR='${pkgs.mysql.connector-c}/lib/mysql';
+      MYSQL_INCDIR='${pkgs.libmysqlclient}/include/mysql';
+      MYSQL_LIBDIR='${pkgs.libmysqlclient}/lib/mysql';
     '';
     buildInputs = [
       pkgs.mysql.client
-      pkgs.mysql.connector-c
+      pkgs.libmysqlclient
     ];
   });
 

@@ -322,7 +322,6 @@ self: super: {
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
   matplotlib = dontCheck super.matplotlib;
   memcache = dontCheck super.memcache;
-  MemoTrie = dontHaddock (dontCheck super.MemoTrie);
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
   modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)

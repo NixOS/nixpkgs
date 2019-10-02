@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.connector-c; });
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.libmysqlclient; });
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
@@ -593,4 +593,8 @@ self: super: builtins.intersectAttrs super {
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
 
+  # Hadolint wants to build a statically linked binary by default.
+  hadolint = overrideCabal super.hadolint (drv: {
+    preConfigure = "sed -i -e /ld-options:/d hadolint.cabal";
+  });
 }

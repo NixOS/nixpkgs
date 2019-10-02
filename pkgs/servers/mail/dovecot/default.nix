@@ -3,7 +3,7 @@
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
 # Auth modules
-, withMySQL ? false, mysql
+, withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
 , withSQLite ? true, sqlite
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
-    ++ lib.optional withMySQL mysql.connector-c
+    ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withSQLite sqlite;
 

@@ -563,6 +563,10 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  entrance = callPackage ../development/python-modules/entrance { routerFeatures = false; };
+
+  entrance-with-router-features = callPackage ../development/python-modules/entrance { routerFeatures = true; };
+
   eradicate = callPackage ../development/python-modules/eradicate {  };
 
   face = callPackage ../development/python-modules/face { };
@@ -688,6 +692,8 @@ in {
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   inquirer = callPackage ../development/python-modules/inquirer { };
+
+  janus = callPackage ../development/python-modules/janus { };
 
   jira = callPackage ../development/python-modules/jira { };
 
@@ -854,6 +860,8 @@ in {
   pymystem3 = callPackage ../development/python-modules/pymystem3 { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
+
+  pymupdf = callPackage ../development/python-modules/pymupdf { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
 
@@ -3163,7 +3171,10 @@ in {
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
 
-  opt-einsum = callPackage ../development/python-modules/opt-einsum {};
+  opt-einsum = if isPy27 then
+      callPackage ../development/python-modules/opt-einsum/2.nix {}
+    else
+      callPackage ../development/python-modules/opt-einsum {};
 
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
@@ -3833,13 +3844,6 @@ in {
   msgpack = callPackage ../development/python-modules/msgpack {};
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy {};
-
-  msgpack-python = self.msgpack.overridePythonAttrs {
-    pname = "msgpack-python";
-    postPatch = ''
-      substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
-    '';
-  };
 
   msrplib = callPackage ../development/python-modules/msrplib { };
 
@@ -4684,6 +4688,8 @@ in {
   rfc6555 = callPackage ../development/python-modules/rfc6555 { };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
+
+  qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
   quamash = callPackage ../development/python-modules/quamash { };
 
@@ -5726,6 +5732,8 @@ in {
   ofxtools = callPackage ../development/python-modules/ofxtools { };
 
   basemap = callPackage ../development/python-modules/basemap { };
+
+  dict2xml = callPackage ../development/python-modules/dict2xml { };
 
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 

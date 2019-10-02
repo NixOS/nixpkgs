@@ -14,7 +14,7 @@
   zlib,
 
   # optional dependencies
-  cups ? null, mysql ? null, postgresql ? null,
+  cups ? null, libmysqlclient ? null, postgresql ? null,
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.connector-c
+    ++ lib.optional (libmysqlclient != null) libmysqlclient
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
@@ -285,7 +285,7 @@ stdenv.mkDerivation {
       "-L" "${openssl.out}/lib"
       "-I" "${openssl.dev}/include"
       "-system-sqlite"
-      ''-${if mysql != null then "plugin" else "no"}-sql-mysql''
+      ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
       ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
       "-make libs"
@@ -349,9 +349,9 @@ stdenv.mkDerivation {
           "-L" "${cups.lib}/lib"
           "-I" "${cups.dev}/include"
         ]
-        ++ lib.optionals (mysql != null) [
-          "-L" "${mysql.out}/lib"
-          "-I" "${mysql.out}/include"
+        ++ lib.optionals (libmysqlclient != null) [
+          "-L" "${libmysqlclient}/lib"
+          "-I" "${libmysqlclient}/include"
         ]
     );
 

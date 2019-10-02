@@ -43,7 +43,8 @@ in buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py --replace \
       "requests-toolbelt>=0.8.0,<0.9.0" \
-      "requests-toolbelt>=0.8.0,<0.10.0"
+      "requests-toolbelt>=0.8.0,<0.10.0" \
+      --replace 'pyrsistent>=0.14.2,<0.15.0' 'pyrsistent>=0.14.2,<0.16.0'
   '';
 
   format = "pyproject";

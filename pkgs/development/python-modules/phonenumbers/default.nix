@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.10.17";
+  version = "8.10.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "023rcv3qishd5n33gj22dzgq51kzpk41ckcmim96s1xvdbd2sxg9";
+    sha256 = "0xdj4faxvcmkw1war203yxcb66jhhbgscjyqxjifknr0mxax3ngw";
   };
 
   meta = {

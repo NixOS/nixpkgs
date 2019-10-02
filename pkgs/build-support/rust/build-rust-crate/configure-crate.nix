@@ -21,7 +21,7 @@
 , workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
     versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
-    version = lib.splitString "." (lib.head version_);
+    version = lib.splitVersion (lib.head version_);
     rustcOpts = lib.lists.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
         (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
@@ -150,4 +150,3 @@ in ''
   fi
   runHook postConfigure
 ''
-

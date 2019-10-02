@@ -1,14 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
 , dbus-python, setuptools_scm, entrypoints, secretstorage
 , pytest, pytest-flake8 }:
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "19.1.0";
+  version = "19.2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13frfmws03jdyz9wxb4ylkvk80qiyb6a3h3sn7wx3ry97bn5li3a";
+    sha256 = "1cvlm48fggl12m19j9vcnrlplidr2sjf8h3pdyki58f9y357q0wi";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

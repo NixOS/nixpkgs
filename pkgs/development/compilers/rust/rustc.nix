@@ -1,7 +1,8 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, fetchurl, file, python2, tzdata, ps
-, llvmPackages_7, darwin, git, cmake, rustPlatform
-, which, libffi, gdb
+, fetchurl, file, python2
+, llvm_7, darwin, git, cmake, rustPlatform
+, pkgconfig, openssl
+, which, libffi
 , withBundledLLVM ? false
 }:
 
@@ -9,30 +10,20 @@ let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
-  llvmPackages = llvmPackages_7;
-
-  llvmSharedForBuild = pkgsBuildBuild.llvmPackages.llvm.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvmPackages.llvm.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvmPackages.llvm.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = pkgsBuildBuild.llvm_7.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvm_7.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvm_7.override { enableSharedLibraries = true; };
 
   # For use at runtime
-  llvmShared = llvmPackages.llvm.override { enableSharedLibraries = true; };
-in
-
-stdenv.mkDerivation rec {
+  llvmShared = llvm_7.override { enableSharedLibraries = true; };
+in stdenv.mkDerivation rec {
   pname = "rustc";
-  version = "1.37.0";
+  version = "1.38.0";
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "1hrqprybhkhs6d9b5pjskfnc5z9v2l2gync7nb39qjb5s0h703hj";
+    sha256 = "101dlpsfkq67p0hbwx4acqq6n90dj4bbprndizpgh1kigk566hk4";
   };
-
-  # Provide the compiler-rt sources needed for profiling.
-  preConfigure = ''
-    mkdir src/llvm-project/compiler-rt
-    tar xf ${llvmPackages.compiler-rt.src} -C src/llvm-project/compiler-rt --strip-components=1
-  '';
 
   __darwinAllowLocalNetworking = true;
 
@@ -107,18 +98,6 @@ stdenv.mkDerivation rec {
       --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
   '';
 
-  patches = [
-    ./patches/net-tcp-disable-tests.patch
-
-    # Re-evaluate if this we need to disable this one
-    #./patches/stdsimd-disable-doctest.patch
-
-    # Fails on hydra - not locally; the exact reason is unknown.
-    # Comments in the test suggest that some non-reproducible environment
-    # variables such $RANDOM can make it fail.
-    # ./patches/disable-test-inherit-env.patch
-  ];
-
   # the rust build system complains that nix alters the checksums
   dontFixLibtool = true;
 
@@ -131,73 +110,25 @@ stdenv.mkDerivation rec {
     sed -i configure \
       -e '/probe_need CFG_CURL curl/d'
 
-    # On Hydra: `TcpListener::bind(&addr)`: Address already in use (os error 98)'
-    sed '/^ *fn fast_rebind()/i#[ignore]' -i src/libstd/net/tcp.rs
-
-    # https://github.com/rust-lang/rust/issues/39522
-    echo removing gdb-version-sensitive tests...
-    find src/test/debuginfo -type f -execdir grep -q ignore-gdb-version '{}' \; -print -delete
-    rm src/test/debuginfo/{borrowed-c-style-enum.rs,c-style-enum-in-composite.rs,gdb-pretty-struct-and-enums.rs,generic-enum-with-different-disr-sizes.rs}
-
     # Useful debugging parameter
     # export VERBOSE=1
-  '' + optionalString stdenv.isDarwin ''
-    # Disable all lldb tests.
-    # error: Can't run LLDB test because LLDB's python path is not set
-    rm -vr src/test/debuginfo/*
-    rm -v src/test/run-pass/backtrace-debuginfo.rs || true
-
-    # error: No such file or directory
-    rm -v src/test/ui/run-pass/issues/issue-45731.rs || true
-
-    # Disable tests that fail when sandboxing is enabled.
-    substituteInPlace src/libstd/sys/unix/ext/net.rs \
-        --replace '#[test]' '#[test] #[ignore]'
-    substituteInPlace src/test/run-pass/env-home-dir.rs \
-        --replace 'home_dir().is_some()' true
-    rm -v src/test/run-pass/fds-are-cloexec.rs || true  # FIXME: pipes?
-    rm -v src/test/ui/run-pass/threads-sendsync/sync-send-in-std.rs || true  # FIXME: ???
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
   # use it for the normal build. This disables cmake in Nix.
   dontUseCmakeConfigure = true;
 
-  # ps is needed for one of the test cases
   nativeBuildInputs = [
-    file python2 ps rustPlatform.rust.rustc git cmake
-    which libffi removeReferencesTo
-  ] # Only needed for the debuginfo tests
-    ++ optional (!stdenv.isDarwin) gdb;
+    file python2 rustPlatform.rust.rustc git cmake
+    which libffi removeReferencesTo pkgconfig
+  ];
 
-  buildInputs = optional stdenv.isDarwin Security
+  buildInputs = [ openssl ]
+    ++ optional stdenv.isDarwin Security
     ++ optional (!withBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
-
-  # Disable codegen units and hardening for the tests.
-  preCheck = ''
-    export RUSTFLAGS=
-    export TZDIR=${tzdata}/share/zoneinfo
-    export hardeningDisable=all
-  '' +
-  # Ensure TMPDIR is set, and disable a test that removing the HOME
-  # variable from the environment falls back to another home
-  # directory.
-  optionalString stdenv.isDarwin ''
-    export TMPDIR=/tmp
-    sed -i '28s/home_dir().is_some()/true/' ./src/test/run-pass/env-home-dir.rs
-  '';
-
-  # 1. Upstream is not running tests on aarch64:
-  # see https://github.com/rust-lang/rust/issues/49807#issuecomment-380860567
-  # So we do the same.
-  # 2. Tests run out of memory for i686
-  #doCheck = !stdenv.isAarch64 && !stdenv.isi686;
-
-  # Disabled for now; see https://github.com/NixOS/nixpkgs/pull/42348#issuecomment-402115598.
-  doCheck = false;
 
   # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so
   # and thus a transitive dependency on ncurses

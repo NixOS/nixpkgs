@@ -1,6 +1,6 @@
 { stdenv, makeStaticLibraries,
   coreutils, rsync, bash,
-  openssl, zlib, sqlite, libxml2, libyaml, mysql, lmdb, leveldb, postgresql,
+  openssl, zlib, sqlite, libxml2, libyaml, libmysqlclient, lmdb, leveldb, postgresql,
   version, git-version, gambit, src }:
 
 # TODO: distinct packages for gerbil-release and gerbil-devel
@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   inherit src;
 
   # Use makeStaticLibraries to enable creation of statically linked binaries
-  buildInputs_libraries = [ openssl zlib sqlite libxml2 libyaml mysql.connector-c lmdb leveldb postgresql ];
+  buildInputs_libraries = [ openssl zlib sqlite libxml2 libyaml libmysqlclient lmdb leveldb postgresql ];
   buildInputs_staticLibraries = map makeStaticLibraries buildInputs_libraries;
 
   buildInputs = [ gambit rsync bash ]
     ++ buildInputs_libraries ++ buildInputs_staticLibraries;
 
-  NIX_CFLAGS_COMPILE = [ "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ];
+  NIX_CFLAGS_COMPILE = [ "-I${libmysqlclient}/include/mysql" "-L${libmysqlclient}/lib/mysql" ];
 
   postPatch = ''
     echo '(define (gerbil-version-string) "v${git-version}")' > src/gerbil/runtime/gx-version.scm
@@ -40,7 +40,7 @@ ZLIB=${makeStaticLibraries zlib}/lib/libz.a
 # SQLITE=${makeStaticLibraries sqlite}/lib/sqlite.a # MISSING!
 # LIBXML2=${makeStaticLibraries libxml2}/lib/libxml2.a # MISSING!
 # YAML=${makeStaticLibraries libyaml}/lib/libyaml.a # MISSING!
-MYSQL=${makeStaticLibraries mysql.connector-c}/lib/mariadb/libmariadb.a
+MYSQL=${makeStaticLibraries libmysqlclient}/lib/mariadb/libmariadb.a
 # LMDB=${makeStaticLibraries lmdb}/lib/mysql/libmysqlclient_r.a # MISSING!
 LEVELDB=${makeStaticLibraries lmdb}/lib/libleveldb.a
 EOF

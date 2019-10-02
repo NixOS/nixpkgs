@@ -165,8 +165,8 @@ let
     else
       "# No refind for ${targetArch}"
   ;
-  
-  grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs; 
+
+  grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
   grubMenuCfg = ''
     #
@@ -561,8 +561,6 @@ in
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" ];
-
-    boot.blacklistedKernelModules = [ "nouveau" ];
 
     boot.initrd.kernelModules = [ "loop" ];
 

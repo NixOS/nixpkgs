@@ -43,6 +43,12 @@ buildPythonPackage rec {
     pytest
   '';
 
+  # LICENCE.md gets propagated without this, causing collisions
+  # see https://github.com/encode/uvicorn/issues/392
+  postInstall = ''
+    rm $out/LICENSE.md
+  '';
+
   meta = with lib; {
     homepage = https://www.uvicorn.org/;
     description = "The lightning-fast ASGI server";

@@ -102,6 +102,21 @@ runTests {
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
   };
 
+  testSplitVersionSingle = {
+    expr = versions.splitVersion "1";
+    expected = [ "1" ];
+  };
+
+  testSplitVersionDouble = {
+    expr = versions.splitVersion "1.2";
+    expected = [ "1" "2" ];
+  };
+
+  testSplitVersionTriple = {
+    expr = versions.splitVersion "1.2.3";
+    expected = [ "1" "2" "3" ];
+  };
+
   testIsStorePath =  {
     expr =
       let goodPath =

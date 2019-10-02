@@ -71,9 +71,8 @@ python3.pkgs.buildPythonApplication rec  {
     patchShebangs meson_post_install.py
   '';
 
-  preFixup = ''
-    buildPythonPath "$out $propagatedBuildInputs"
-    patchPythonScript "$out/libexec/lollypop-sp"
+  postFixup = ''
+    wrapPythonProgramsIn $out/libexec "$out $propagatedBuildInputs"
   '';
 
   # Produce only one wrapper using wrap-python passing

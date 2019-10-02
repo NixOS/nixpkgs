@@ -69,6 +69,10 @@ in {
       haskellStaticAdapter;
   };
 
+  nghttp2 = super.nghttp2.override {
+    enableApp = false;
+  };
+
   ncurses = super.ncurses.override {
     enableStatic = true;
   };
@@ -78,14 +82,14 @@ in {
   } // optionalAttrs super.stdenv.hostPlatform.isDarwin {
     pythonSupport = false;
   });
-  zlib = super.zlib.override {
+  zlib = (super.zlib.override {
     static = true;
     shared = false;
 
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
-  };
+  }).static;
   xz = super.xz.override {
     enableStatic = true;
   };
@@ -94,6 +98,9 @@ in {
   };
   libiberty = super.libiberty.override {
     staticBuild = true;
+  };
+  libpfm = super.libpfm.override {
+    enableShared = false;
   };
   ipmitool = super.ipmitool.override {
     static = true;
@@ -112,7 +119,9 @@ in {
     static = true;
   };
   openblas = super.openblas.override { enableStatic = true; };
-  openssl = super.openssl.override {
+  nix = super.nix.override { withAWS = false; };
+  # openssl 1.1 doesn't compile
+  openssl = super.openssl_1_0_2.override {
     static = true;
 
     # Don’t use new stdenv for openssl because it doesn’t like the
@@ -122,6 +131,10 @@ in {
   boost = super.boost.override {
     enableStatic = true;
     enableShared = false;
+
+    # Don’t use new stdenv for boost because it doesn’t like the
+    # --disable-shared flag
+    stdenv = super.stdenv;
   };
   gmp = super.gmp.override {
     withStatic = true;
@@ -154,6 +167,15 @@ in {
       enableShared = false;
       enableStatic = true;
     };
+  };
+
+  curl = super.curl.override {
+    # a very sad story: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
+    gssSupport = false;
+  };
+
+  brotli = super.brotli.override {
+    staticOnly = true;
   };
 
   llvmPackages_8 = super.llvmPackages_8 // {

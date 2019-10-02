@@ -53,6 +53,10 @@ mkDerivation rec {
   # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
   enableParallelBuilding = false; # true by default due to qmake
 
+  preBuild = ''
+    sed -re 's/qscintilla2_qt5/qscintilla2/g' -i Makefile
+  '';
+
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications

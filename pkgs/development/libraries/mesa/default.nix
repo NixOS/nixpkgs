@@ -28,7 +28,7 @@ with stdenv.lib;
 
 let
   version = "19.1.5";
-  branch  = head (splitString "." version);
+  branch  = versions.major version;
 in
 
 stdenv.mkDerivation {

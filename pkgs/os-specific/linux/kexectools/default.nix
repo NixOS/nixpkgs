@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
 
-  patches = stdenv.lib.optionals stdenv.hostPlatform.isi686 [
+  patches = [
     # fix build on i686
     # See: https://src.fedoraproject.org/rpms/kexec-tools/c/cb1e5463b5298b064e9b6c86ad6fe3505fec9298
     (fetchpatch {

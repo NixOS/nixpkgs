@@ -636,16 +636,16 @@
           license = lib.licenses.free;
         };
       }) {};
-    csv-mode = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+    csv-mode = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "csv-mode";
         ename = "csv-mode";
-        version = "1.8";
+        version = "1.9";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/csv-mode-1.8.el";
-          sha256 = "1ywgc61pnawiwfpjgxavfpfxqd3dm9niq6srbc70pd54ca6yqby6";
+          url = "https://elpa.gnu.org/packages/csv-mode-1.9.el";
+          sha256 = "0sdnyi9in904k49yy5imapypnmk75lv14k9c1yyjhjpalvvh6br1";
         };
-        packageRequires = [ emacs ];
+        packageRequires = [ cl-lib emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/csv-mode.html";
           license = lib.licenses.free;
@@ -720,10 +720,10 @@
       elpaBuild {
         pname = "debbugs";
         ename = "debbugs";
-        version = "0.19";
+        version = "0.20";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/debbugs-0.19.tar";
-          sha256 = "0cpby8f088cqb5mpd756a2mb706x763k15cg2xdmmsxl415k3yw4";
+          url = "https://elpa.gnu.org/packages/debbugs-0.20.tar";
+          sha256 = "03mmb1zvbqlsznl5agq8k3xrlcz310vnsa2zn0y8myanm4ra51zm";
         };
         packageRequires = [ cl-lib emacs soap-client ];
         meta = {
@@ -3327,10 +3327,10 @@
       elpaBuild {
         pname = "verilog-mode";
         ename = "verilog-mode";
-        version = "2019.6.21.103209889";
+        version = "2019.9.23.4801067";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/verilog-mode-2019.6.21.103209889.el";
-          sha256 = "0hlcp2jhm30bzx6iabdb31aqv0dmmim30g9z5kqb0hl1bd1dnm9m";
+          url = "https://elpa.gnu.org/packages/verilog-mode-2019.9.23.4801067.el";
+          sha256 = "0jaba2cqiiknjqc7qz6047hpjd87hznl6b154ai1900i52kjbs21";
         };
         packageRequires = [];
         meta = {

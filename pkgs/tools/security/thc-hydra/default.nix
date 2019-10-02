@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, mysql, postgresql
+{ stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql
 , withGUI ? false, makeWrapper, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = lib.optionals withGUI [ pkgconfig makeWrapper ];
 
   buildInputs = [
-    zlib openssl ncurses libidn pcre libssh mysql.connector-c postgresql
+    zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql
   ] ++ lib.optional withGUI gtk2;
 
   enableParallelBuilding = true;

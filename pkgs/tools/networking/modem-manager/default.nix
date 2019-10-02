@@ -32,13 +32,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = ''
-    # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
-    # aliases ourselves.
-    ln -s $out/etc/systemd/system/ModemManager.service \
-      $out/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service
-  '';
-
   meta = with stdenv.lib; {
     description = "WWAN modem manager, part of NetworkManager";
     homepage = https://www.freedesktop.org/wiki/Software/ModemManager/;
