@@ -1,0 +1,42 @@
+From 1e010beda2896bdf3082fb37a3e49f8ce20e04d8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Thu, 2 May 2019 05:28:08 +0100
+Subject: [PATCH] x86/fpu: Export kernel_fpu_{begin,end}() with
+ EXPORT_SYMBOL_GPL
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+We need these symbols in zfs as the fpu implementation breaks userspace:
+
+https://github.com/zfsonlinux/zfs/issues/9346
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ arch/x86/kernel/fpu/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 12c70840980e..352538b3bb5d 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -102,7 +102,7 @@ void kernel_fpu_begin(void)
+ 	}
+ 	__cpu_invalidate_fpregs_state();
+ }
+-EXPORT_SYMBOL_GPL(kernel_fpu_begin);
++EXPORT_SYMBOL(kernel_fpu_begin);
+ 
+ void kernel_fpu_end(void)
+ {
+@@ -111,7 +111,7 @@ void kernel_fpu_end(void)
+ 	this_cpu_write(in_kernel_fpu, false);
+ 	preempt_enable();
+ }
+-EXPORT_SYMBOL_GPL(kernel_fpu_end);
++EXPORT_SYMBOL(kernel_fpu_end);
+ 
+ /*
+  * Save the FPU state (mark it for reload if necessary):
+-- 
+2.23.0
+
