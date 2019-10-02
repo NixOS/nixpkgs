@@ -16,6 +16,7 @@
 , "bower"
 , "bower2nix"
 , "browserify"
+, "carto"
 , "castnow"
 , "clean-css"
 , "coffee-script"
