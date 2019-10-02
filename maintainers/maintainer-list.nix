@@ -7067,6 +7067,7 @@
   yvt = {
     email = "i@yvt.jp";
     github = "yvt";
+    githubId = 5253988;
     name = "yvt";
   };
   z77z = {
