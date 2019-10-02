@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, appimageTools }:
+{ stdenv, fetchurl, makeDesktopItem, appimageTools, imagemagick }:
 
 let
   pname = "ledger-live-desktop";
@@ -20,6 +20,8 @@ in appimageTools.wrapType2 rec {
     mv $out/bin/${name} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/ledger-live-desktop.desktop $out/share/applications/ledger-live-desktop.desktop
     install -m 444 -D ${appimageContents}/ledger-live-desktop.png $out/share/icons/hicolor/1024x1024/apps/ledger-live-desktop.png
+    ${imagemagick}/bin/convert ${appimageContents}/ledger-live-desktop.png -resize 512x512 ledger-live-desktop_512.png
+    install -m 444 -D ledger-live-desktop_512.png $out/share/icons/hicolor/512x512/apps/ledger-live-desktop.png
     substituteInPlace $out/share/applications/ledger-live-desktop.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
