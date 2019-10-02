@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Powerful network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub marsam ];
     platforms = platforms.unix;
   };
 }
