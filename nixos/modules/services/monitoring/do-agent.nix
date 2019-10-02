@@ -16,7 +16,8 @@ in
     systemd.services.do-agent = {
       description = "DigitalOcean Droplet Metrics Agent";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.do-agent}/bin/do-agent --syslog";
         Restart = "always";
