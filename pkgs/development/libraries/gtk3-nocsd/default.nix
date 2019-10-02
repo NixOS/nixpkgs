@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk3-nocsd";
-  version = "3";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
-    owner = "PCMan";
-    repo = "gtk3-nocsd";
+    owner = "ZaWertun";
+    repo = "${pname}";
     rev = "v${version}";
-    sha256 = "1x3bk03qilnvbrg7xgw26his5w21lwsbvy4ll23inqfyh4rszllb";
+    sha256 = "035rrn9jq9bdfkmmj6xl4q8paqx7xf3hxsw6gslgk86sh7x56lvi";
   };
 
   nativeBuildInputs = [
