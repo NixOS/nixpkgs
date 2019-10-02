@@ -17,7 +17,7 @@ let
     pname = "gitlab-shell-go";
     inherit src version;
 
-    patches = [ ./remove-hardcoded-locations.patch ];
+    patches = [ ./remove-hardcoded-locations-go.patch ];
 
     goPackagePath = "gitlab.com/gitlab-org/gitlab-shell";
     goDeps = ./deps.nix;
@@ -36,8 +36,8 @@ in
 stdenv.mkDerivation {
   pname = "gitlab-shell";
   inherit src version;
-  
-  patches = [ ./remove-hardcoded-locations.patch ];
+
+  patches = [ ./remove-hardcoded-locations-ruby.patch ];
 
   # gitlab-shell will try to read its config relative to the source
   # code by default which doesn't work in nixos because it's a
