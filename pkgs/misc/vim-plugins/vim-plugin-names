@@ -365,6 +365,7 @@ Shougo/unite.vim
 Shougo/vimproc.vim
 Shougo/vimshell.vim
 shumphrey/fugitive-gitlab.vim
+sickill/vim-pasta
 SirVer/ultisnips
 sjl/gundo.vim
 sjl/splice.vim
