@@ -94,7 +94,8 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  cachix = enableSeparateBinOutput super.cachix;
+  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
+  cachix = disableLibraryProfiling (enableSeparateBinOutput super.cachix);
 
   niv = enableSeparateBinOutput super.niv;
 
