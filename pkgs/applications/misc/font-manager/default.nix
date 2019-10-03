@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
       Font Manager is NOT a professional-grade font management solution.
     '';
     license = licenses.gpl3;
-    repositories.git = https://github.com/FontManager/master;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };
