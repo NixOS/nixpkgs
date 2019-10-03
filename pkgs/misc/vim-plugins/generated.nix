@@ -4260,6 +4260,17 @@ let
     };
   };
 
+  vim-pasta = buildVimPluginFrom2Nix {
+    pname = "vim-pasta";
+    version = "2018-09-08";
+    src = fetchFromGitHub {
+      owner = "sickill";
+      repo = "vim-pasta";
+      rev = "cb4501a123d74fc7d66ac9f10b80c9d393746c66";
+      sha256 = "14rswwx24i75xzgkbx1hywan1msn2ki26353ly2pyvznnqss1pwq";
+    };
+  };
+
   vim-pathogen = buildVimPluginFrom2Nix {
     pname = "vim-pathogen";
     version = "2018-12-13";
