@@ -9088,6 +9088,23 @@ let
     };
   };
 
+  JSONValidator = buildPerlPackage {
+    pname = "JSON-Validator";
+    version = "3.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-3.15.tar.gz";
+      sha256 = "ce14ed018b9843ef022c4c14e2171545d3da92e533c8f122b8e33f27444b2a6c";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ Mojolicious YAMLLibYAML DataValidateDomain DataValidateIP NetIDNEncode ];
+    meta = {
+      homepage = "https://github.com/mojolicious/json-validator";
+      description = "Validate data against a JSON schema";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
  JSONWebToken = buildPerlModule {
     pname = "JSON-WebToken";
     version = "0.10";
