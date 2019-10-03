@@ -4706,6 +4706,8 @@ in
     (https://github.com/NixOS/nixpkgs/issues/76093) */
   matrix-synapse = callPackage ../servers/matrix-synapse { /*python3 = python38;*/ };
 
+  matrix-synapse-plugins = recurseIntoAttrs matrix-synapse.plugins;
+
   matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
 
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
