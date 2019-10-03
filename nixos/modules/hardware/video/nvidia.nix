@@ -111,6 +111,11 @@ in
   config = mkIf enabled {
     assertions = [
       {
+        assertion = with config.services.xserver.displayManager; gdm.nvidiaWayland -> cfg.modesetting.enable;
+        message = "You cannot use wayland with GDM without modesetting enabled for NVIDIA drivers, set `hardware.nvidia.modesetting.enable = true`";
+      }
+
+      {
         assertion = !optimusCfg.enable ||
           (optimusCfg.nvidiaBusId != "" && optimusCfg.intelBusId != "");
         message = ''
