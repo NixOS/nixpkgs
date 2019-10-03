@@ -104,6 +104,7 @@ haya14busa/incsearch.vim
 haya14busa/vim-asterisk
 heavenshell/vim-jsdoc
 hecal3/vim-leader-guide
+henrik/vim-indexed-search
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hotwatermorning/auto-git-diff
