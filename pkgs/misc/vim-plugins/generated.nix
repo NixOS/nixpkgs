@@ -2939,6 +2939,17 @@ let
     };
   };
 
+  vim-asterisk = buildVimPluginFrom2Nix {
+    pname = "vim-asterisk";
+    version = "2019-09-23";
+    src = fetchFromGitHub {
+      owner = "haya14busa";
+      repo = "vim-asterisk";
+      rev = "7cf0d8f379babbdbf538aefe3af444ac4ba21dce";
+      sha256 = "0y21ziz36sqa84dy9pv2jnr0ppalxn54bsk82zfc6064h3bqn77r";
+    };
+  };
+
   vim-auto-save = buildVimPluginFrom2Nix {
     pname = "vim-auto-save";
     version = "2019-03-19";
