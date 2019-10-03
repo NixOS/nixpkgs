@@ -34,7 +34,7 @@ buildGoPackage rec {
     '';
     homepage = https://github.com/variadico/noti;
     license = licenses.mit;
-    maintainers = with maintainers; [ stites ];
+    maintainers = with maintainers; [ stites marsam ];
     platforms = platforms.all;
   };
 }
