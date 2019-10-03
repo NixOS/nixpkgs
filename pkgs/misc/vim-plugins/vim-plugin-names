@@ -142,6 +142,7 @@ josa42/coc-go
 jpalardy/vim-slime
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
+Julian/vim-textobj-variable-segment
 junegunn/fzf.vim
 junegunn/goyo.vim
 junegunn/limelight.vim
