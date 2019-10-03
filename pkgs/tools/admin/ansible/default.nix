@@ -7,21 +7,21 @@
 
   ansible_2_7 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
     pname = "ansible";
-    version = "2.7.11";
+    version = "2.7.13";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "0zipzm9al6k74h88b6zkddpcbxqs4cms7lidid6wn1vx3d3dxrp7";
+      sha256 = "1bmff1ynqgl15vya7hafji0g47gdv19986hw3v75b1cypyhqg71k";
     };
   }));
 
   ansible_2_6 = with python3Packages; toPythonApplication (ansible.overridePythonAttrs(old: rec {
     pname = "ansible";
-    version = "2.6.17";
+    version = "2.6.19";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "0ixr3g1nb02xblqyk87bzag8sj8phy37m24xflabfl1k2zfh0313";
+      sha256 = "01nafwmyk15xplfb2q3jpqr7r9j5h1ri7ixl8w8mxl10yvfwkkyv";
     };
   }));
 }
