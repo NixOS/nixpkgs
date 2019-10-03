@@ -25008,4 +25008,6 @@ in
 
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen {};
 
+  coz = callPackage ../development/tools/analysis/coz {};
+
 }
