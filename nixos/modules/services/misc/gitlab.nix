@@ -782,6 +782,7 @@ in {
           preStart = ''
             cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
             rm -rf ${cfg.statePath}/db/*
+            rm -rf ${cfg.statePath}/config/initializers/*
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
 
