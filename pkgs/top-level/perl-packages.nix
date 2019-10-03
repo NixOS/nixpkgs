@@ -15068,6 +15068,21 @@ let
     };
   };
 
+  SessionToken = buildPerlPackage rec {
+    pname = "Session-Token";
+    version = "1.503";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FRACTAL/Session-Token-1.503.tar.gz";
+      sha256 = "32c3df96ef455c71870363acd950ddc4fbc848c594f4bc55b21b44cf979f79a1";
+    };
+    meta = {
+      homepage = "https://github.com/hoytech/Session-Token";
+      description = "Secure, efficient, simple random session token generation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   SetInfinite = buildPerlPackage {
     pname = "Set-Infinite";
     version = "0.65";
