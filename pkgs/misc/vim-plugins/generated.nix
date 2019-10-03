@@ -3742,6 +3742,17 @@ let
     };
   };
 
+  vim-indexed-search = buildVimPluginFrom2Nix {
+    pname = "vim-indexed-search";
+    version = "2019-07-04";
+    src = fetchFromGitHub {
+      owner = "henrik";
+      repo = "vim-indexed-search";
+      rev = "5af020bba084b699d0453f242d7d76711d64b1e3";
+      sha256 = "0cq265yqksh7jqazxn7qxr7bclrk2pq7py4c29wspsvbi0m3m8rc";
+    };
+  };
+
   vim-ipython = buildVimPluginFrom2Nix {
     pname = "vim-ipython";
     version = "2015-06-23";
