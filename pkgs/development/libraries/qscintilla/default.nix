@@ -34,15 +34,16 @@ in stdenv.mkDerivation rec {
 
   patches = lib.optional (stdenv.isDarwin && withQt5) [ xcodePatch ];
 
+  # Make sure that libqscintilla2.so is available in $out/lib since it is expected
+  # by some packages such as sqlitebrowser
+  postFixup = ''
+    ln -s $out/lib/libqscintilla2_qt?.so $out/lib/libqscintilla2.so
+  '';
+
   enableParallelBuilding = true;
 
-  # By default qscintilla will name the library with a qt version suffix which
-  # confuses the crap out of sqlitebrowser and possibly others so we simply
-  # strip the suffix as we don't need it and the various FindQScintilla.cmake
-  # files floating around *should* look for the un-suffixed version.
   postPatch = ''
     substituteInPlace qscintilla.pro \
-      --replace '_qt$''${QT_MAJOR_VERSION}'   "" \
       --replace '$$[QT_INSTALL_LIBS]'         $out/lib \
       --replace '$$[QT_INSTALL_HEADERS]'      $out/include \
       --replace '$$[QT_INSTALL_TRANSLATIONS]' $out/translations \
