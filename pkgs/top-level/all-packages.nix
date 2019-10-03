@@ -22975,6 +22975,8 @@ in
 
   seaview = callPackage ../applications/science/biology/seaview { };
 
+  SPAdes = callPackage ../applications/science/biology/spades { };
+
   trimal = callPackage ../applications/science/biology/trimal { };
 
   varscan = callPackage ../applications/science/biology/varscan { };
