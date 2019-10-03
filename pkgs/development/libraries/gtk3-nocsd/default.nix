@@ -11,18 +11,23 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ZaWertun";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "035rrn9jq9bdfkmmj6xl4q8paqx7xf3hxsw6gslgk86sh7x56lvi";
   };
 
-  nativeBuildInputs = [
-    pkgconfig
+  buildInputs = [
     gtk3
     gobject-introspection
   ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  nativeBuildInputs = [
+    pkgconfig
+  ];
+
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+  ];
 
   meta = with stdenv.lib; {
     description = "A hack to disable gtk+ 3 client side decoration";
