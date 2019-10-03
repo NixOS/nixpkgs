@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, gnugrep, gnused,
+{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
   majorVersion ? "1.0" }:
 
 let
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ jre makeWrapper bash gnugrep gnused coreutils ];
+  buildInputs = [ jre makeWrapper bash gnugrep gnused coreutils ps ];
 
   installPhase = ''
     mkdir -p $out
@@ -75,6 +75,9 @@ stdenv.mkDerivation rec {
     # allow us the specify logging directory using env
     substituteInPlace $out/bin/kafka-run-class.sh \
       --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
+
+    substituteInPlace $out/bin/kafka-server-stop.sh \
+      --replace 'ps' '${ps}/bin/ps'
 
     for p in $out/bin\/*.sh; do
       wrapProgram $p \
