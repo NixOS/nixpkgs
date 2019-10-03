@@ -49,6 +49,10 @@ in stdenv.mkDerivation rec {
       --replace '$$[QT_HOST_DATA]/mkspecs'    $out/mkspecs \
       --replace '$$[QT_INSTALL_DATA]/mkspecs' $out/mkspecs \
       --replace '$$[QT_INSTALL_DATA]'         $out/share${lib.optionalString (! withQt5) "/qt"}
+    substituteInPlace features/qscintilla2.prf \
+      --replace '_qt$''${QT_MAJOR_VERSION}'   "" \
+      --replace '$$[QT_INSTALL_LIBS]'         $out/lib \
+      --replace '$$[QT_INSTALL_HEADERS]'      $out/include
   '';
 
   meta = with stdenv.lib; {
