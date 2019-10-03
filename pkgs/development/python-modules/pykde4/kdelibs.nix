@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://cgit.kde.org/kdelibs.git/patch/?id=2c3762feddf7e66cf6b64d9058f625a715694a00";
       sha256 = "1wbzywh8lcc66n6y3pxs18h7cwkq6g216faz27san33jpl8ra1i9";
-      name = "kdelibs-D22989.patch";
+      name = "CVE-2019-14744.patch";
     })
   ];
 
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
+    hydraPlatforms = platforms.none;
     homepage = http://www.kde.org;
     license = with licenses; [ gpl2 fdl12 lgpl21 ];
   };
