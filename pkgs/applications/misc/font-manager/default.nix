@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
+{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3, fetchpatch,
   pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
   vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
 }:
@@ -40,6 +40,15 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddisable_pycompile=true"
+  ];
+
+  patches = [
+    # fix build with Vala 0.46
+    (fetchpatch {
+      url = "https://github.com/FontManager/font-manager/commit/c73b40de11f376f4515a0edfe97fb3721a264b35.patch";
+      sha256 = "0lacwsifgvda2r3z6j2a0svdqr6mgav7zkvih35xa8155y8wfpnw";
+      excludes = [ "fedora/font-manager.spec" ];
+    })
   ];
 
   postPatch = ''
