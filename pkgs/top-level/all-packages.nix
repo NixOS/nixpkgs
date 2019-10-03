@@ -22494,6 +22494,10 @@ in
 
   openxcom = callPackage ../games/openxcom { };
 
+  openxray = callPackage ../games/openxray {
+    stdenv = gcc8Stdenv;
+  };
+
   orthorobot = callPackage ../games/orthorobot { };
 
   pacvim = callPackage ../games/pacvim { };
