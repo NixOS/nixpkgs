@@ -20,3 +20,6 @@ tweag/terraform-provider-secret
 
 # include terraform-provider-segment
 ajbosco/terraform-provider-segment
+
+# include terraform-provider-qubole
+vihag/terraform-provider-qubole
