@@ -31,12 +31,14 @@ stdenv.mkDerivation rec {
     substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver.out}/bin/X"
   '';
 
+  initialVT = "7";
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-plymouth=yes"
     "--enable-gdm-xsession"
-    # "--with-initial-vt=7"
+    "--with-initial-vt=${initialVT}"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
   ];
