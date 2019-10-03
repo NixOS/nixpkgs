@@ -15,15 +15,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postUnpack = ''
-    sourceRoot=''${sourceRoot}/src
-    echo Source root reset to ''${sourceRoot}
-  '';
+  sourceRoot = "${pname}-${version}/src";
 
   meta = with stdenv.lib; {
     description = "St. Petersburg genome assembler: assembly toolkit containing various assembly pipelines";
     license = licenses.gpl2;
-    homepage = http://cab.spbu.ru/software/spades/;
+    homepage = "http://cab.spbu.ru/software/spades/";
     platforms = platforms.unix;
     maintainers = [ maintainers.bzizou ];
   };
