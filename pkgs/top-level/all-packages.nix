@@ -10467,7 +10467,8 @@ in
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
-  cachix = haskellPackages.cachix.bin;
+  # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
+  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
 
   niv = haskellPackages.niv.bin;
 
