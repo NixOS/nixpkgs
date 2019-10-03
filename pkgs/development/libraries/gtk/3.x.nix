@@ -68,6 +68,12 @@ stdenv.mkDerivation rec {
     })
     # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1002
     ./01-build-Fix-path-handling-in-pkgconfig.patch
+    # 3.32.11 had wrong version in .pc
+    # drop in next release
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk/commit/70c4b66d99f66b9da27ded63f2c26e3c13ce07f8.patch";
+      sha256 = "0nkc3y85wp5sn8xbr7c5zcpn9gsd5zcmdhjqwpmq54jwmg07fk52";
+    })
   ] ++ optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
