@@ -463,7 +463,10 @@ in {
         mkdir -m 755 -p ${stateDirs}
       '';
 
-      aliases = [ "dbus-org.freedesktop.NetworkManager.service" ];
+      aliases = [
+        "dbus-org.freedesktop.NetworkManager.service"
+        "network-manager.service"
+      ];
     };
 
     systemd.services.NetworkManager-wait-online = {

@@ -96,13 +96,6 @@ in stdenv.mkDerivation rec {
     ln -s $PWD/libnm/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
   '';
 
-  postInstall = ''
-    # Add the legacy service name from before #51382 to prevent NetworkManager
-    # from not starting back up:
-    # TODO: remove this once 19.10 is released
-    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
-  '';
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
