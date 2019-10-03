@@ -20453,6 +20453,11 @@ in
       urxvt_font_size
       urxvt_theme_switch
       urxvt_vtwheel
+      urxvt_bidi
+    ];
+    perlDeps = [
+      # This needs the perl module it self provides
+      urxvt_bidi
     ];
   };
 
@@ -20464,6 +20469,7 @@ in
   urxvt_font_size = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-font-size { };
   urxvt_theme_switch = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-theme-switch { };
   urxvt_vtwheel = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-vtwheel.nix { };
+  urxvt_bidi = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-bidi { };
 
   uade123 = callPackage ../applications/audio/uade123 {};
 
