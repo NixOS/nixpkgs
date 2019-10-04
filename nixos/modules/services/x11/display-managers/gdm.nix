@@ -152,6 +152,7 @@ in
           chown -R gdm:gdm /run/gdm/.config
         '' + optionalString config.services.gnome3.gnome-initial-setup.enable ''
           # Create stamp file for gnome-initial-setup to prevent run.
+          mkdir -p /run/gdm/.config
           cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
           yes
           EOF
