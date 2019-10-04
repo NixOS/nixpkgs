@@ -7,6 +7,7 @@
 , libtirpc
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
+, smartmontools, sysstat, sudo
 
 # Kernel dependencies
 , kernel ? null
@@ -129,6 +130,13 @@ let
         # Add Bash completions.
         install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
         (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      '';
+
+      postFixup = ''
+        path="PATH=${makeBinPath [ coreutils gawk gnused gnugrep utillinux smartmontools sysstat sudo ]}"
+        for i in $out/libexec/zfs/zpool.d/*; do
+          sed -i "2i$path" $i
+        done
       '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
