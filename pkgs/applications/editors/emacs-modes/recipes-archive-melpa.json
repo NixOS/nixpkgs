@@ -55545,14 +55545,14 @@
  },
  {
   "ename": "lsp-mode",
-  "commit": "1a7b69312e688211089a23b75910c05efb507e35",
+  "commit": "898cc59239f9aef6012baabf29fa35a9c7fd8d70",
   "sha256": "0cklwllqxzsvs4wvvvsc1pqpmp9w99m8wimpby6v6wlijfg6y1m9",
   "fetcher": "github",
   "repo": "emacs-lsp/lsp-mode",
   "unstable": {
    "version": [
-    20190926,
-    514
+    20191004,
+    1532
    ],
    "deps": [
     "dash",
@@ -55562,8 +55562,8 @@
     "markdown-mode",
     "spinner"
    ],
-   "commit": "0546d33e345c63265a6df812f2713e62dbe6a7ad",
-   "sha256": "1rp8abwx2pbm4zmsy13hkvhvxgpz876dnlfvxijvxchnf0dxwba4"
+   "commit": "9d75c6d58830646349d2f3fc061df361b668b679",
+   "sha256": "1vsl86dvyw8c3x16n5bb8m217d2zrb3c3l97pcvnliskyncvy5sh"
   },
   "stable": {
    "version": [
