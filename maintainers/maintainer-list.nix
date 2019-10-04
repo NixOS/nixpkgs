@@ -7203,6 +7203,12 @@
     email = "zef@zef.me";
     name = "Zef Hemel";
   };
+  zfnmxt = {
+    name = "zfnmxt";
+    email = "zfnmxt@zfnmxt.com";
+    github = "zfnmxt";
+    githubId = 37446532;
+  };
   zgrannan = {
     email = "zgrannan@gmail.com";
     github = "zgrannan";
