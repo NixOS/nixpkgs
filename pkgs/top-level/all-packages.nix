@@ -10064,6 +10064,10 @@ in
 
   scss-lint = callPackage ../development/tools/scss-lint { };
 
+  shadowenv = callPackage ../tools/misc/shadowenv {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   shake = haskell.lib.justStaticExecutables haskellPackages.shake;
 
   shallot = callPackage ../tools/misc/shallot { };
