@@ -4200,6 +4200,8 @@ in {
 
   periodictable = callPackage ../development/python-modules/periodictable { };
 
+  pgcli = callPackage ../development/tools/database/pgcli {};
+
   pg8000 = callPackage ../development/python-modules/pg8000 { };
   pg8000_1_12 = callPackage ../development/python-modules/pg8000/1_12.nix { };
 

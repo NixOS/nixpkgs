@@ -9949,7 +9949,7 @@ in
 
   peg = callPackage ../development/tools/parsing/peg { };
 
-  pgcli = callPackage ../development/tools/database/pgcli {};
+  pgcli = pkgs.python3Packages.pgcli;
 
   phantomjs = callPackage ../development/tools/phantomjs { };
 
