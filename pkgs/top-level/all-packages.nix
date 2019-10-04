@@ -14552,6 +14552,8 @@ in
 
     mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
+    mod_tile = callPackage ../servers/http/apache-modules/mod_tile { };
+
     mod_wsgi  = self.mod_wsgi2;
     mod_wsgi2 = callPackage ../servers/http/apache-modules/mod_wsgi { python = python2; ncurses = null; };
     mod_wsgi3 = callPackage ../servers/http/apache-modules/mod_wsgi { python = python3; };
