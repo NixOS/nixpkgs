@@ -17729,6 +17729,8 @@ in
 
   cinelerra = callPackage ../applications/video/cinelerra { };
 
+  cipher = callPackage ../applications/misc/cipher { };
+
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (xorg) libSM;
   };
