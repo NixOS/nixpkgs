@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "5.1.10";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTCP";
     rev = "refs/tags/et-v${version}";
-    sha256 = "0jh89229bd9s82h3aj6faaybwr5xvnk8w2kgz47gq263pz021zpl";
+    sha256 = "05hbcbbxpvwm17ascnrwrz413kp3i94kp4px3vqx0f635rm41dqc";
   };
 
   nativeBuildInputs = [ cmake ninja ];
