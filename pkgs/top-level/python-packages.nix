@@ -2428,8 +2428,7 @@ in {
 
   fx2 = callPackage ../development/python-modules/fx2 { };
 
-  # gaia isn't supported with python3 and it's not available from pypi
-  gaia = disabledIf (isPyPy || isPy3k) (toPythonModule (pkgs.gaia.override {
+  gaia = (toPythonModule (pkgs.gaia.override {
     pythonPackages = self;
     pythonSupport = true;
   }));
