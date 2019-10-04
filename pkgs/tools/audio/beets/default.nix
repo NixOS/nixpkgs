@@ -6,49 +6,49 @@
 # Attributes needed for tests of the external plugins
 , callPackage, beets
 
-, enableAcousticbrainz ? true
+, enableAcousticbrainz        ? true
 # The closure size will grow rather big if this'll be enabled
 , enableAcousticbrainzSubmit  ? false, essentia ? null
-, enableAcoustid       ? true
-, enableBadfiles       ? true, flac ? null, mp3val ? null
-, enableConvert        ? true, ffmpeg ? null
-, enableDiscogs        ? true
-, enableEmbyupdate     ? true
-, enableFetchart       ? true
-, enableGmusic         ? true
-, enableKeyfinder      ? true, keyfinder-cli ? null
-, enableKodiupdate     ? true
-, enableLastfm         ? true
-, enableLoadext        ? true
-, enableMpd            ? true
-, enablePlaylist       ? true
-, enableReplaygain     ? true, bs1770gain ? null
-, enableSonosUpdate    ? true
-, enableSubsonicupdate ? true
-, enableThumbnails     ? true
-, enableWeb            ? true
+, enableAcoustid              ? true
+, enableBadfiles              ? true, flac ? null, mp3val ? null
+, enableConvert               ? true, ffmpeg ? null
+, enableDiscogs               ? true
+, enableEmbyupdate            ? true
+, enableFetchart              ? true
+, enableGmusic                ? true
+, enableKeyfinder             ? true, keyfinder-cli ? null
+, enableKodiupdate            ? true
+, enableLastfm                ? true
+, enableLoadext               ? true
+, enableMpd                   ? true
+, enablePlaylist              ? true
+, enableReplaygain            ? true, bs1770gain ? null
+, enableSonosUpdate           ? true
+, enableSubsonicupdate        ? true
+, enableThumbnails            ? true
+, enableWeb                   ? true
 
 # External plugins
-, enableAlternatives   ? false
-, enableCopyArtifacts  ? false
+, enableAlternatives          ? false
+, enableCopyArtifacts         ? false
 
 , bashInteractive, bash-completion
 }:
 
-assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
+assert enableAcoustid             -> pythonPackages.pyacoustid     != null;
 assert enableAcousticbrainzSubmit -> essentia != null;
-assert enableBadfiles    -> flac != null && mp3val != null;
-assert enableConvert     -> ffmpeg != null;
-assert enableDiscogs     -> pythonPackages.discogs_client != null;
-assert enableFetchart    -> pythonPackages.responses      != null;
-assert enableGmusic      -> pythonPackages.gmusicapi      != null;
-assert enableKeyfinder   -> keyfinder-cli != null;
-assert enableLastfm      -> pythonPackages.pylast         != null;
-assert enableMpd         -> pythonPackages.mpd2           != null;
-assert enableReplaygain  -> bs1770gain                    != null;
-assert enableSonosUpdate -> pythonPackages.soco           != null;
-assert enableThumbnails  -> pythonPackages.pyxdg          != null;
-assert enableWeb         -> pythonPackages.flask          != null;
+assert enableBadfiles             -> flac != null && mp3val != null;
+assert enableConvert              -> ffmpeg != null;
+assert enableDiscogs              -> pythonPackages.discogs_client != null;
+assert enableFetchart             -> pythonPackages.responses      != null;
+assert enableGmusic               -> pythonPackages.gmusicapi      != null;
+assert enableKeyfinder            -> keyfinder-cli != null;
+assert enableLastfm               -> pythonPackages.pylast         != null;
+assert enableMpd                  -> pythonPackages.mpd2           != null;
+assert enableReplaygain           -> bs1770gain                    != null;
+assert enableSonosUpdate          -> pythonPackages.soco           != null;
+assert enableThumbnails           -> pythonPackages.pyxdg          != null;
+assert enableWeb                  -> pythonPackages.flask          != null;
 
 with stdenv.lib;
 
@@ -133,7 +133,7 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.gst-python
     pythonPackages.pygobject3
     gobject-introspection
-  ] ++ optional enableAcoustid      pythonPackages.pyacoustid
+  ] ++ optional enableAcoustid              pythonPackages.pyacoustid
     ++ optional enableAcousticbrainzSubmit  essentia
     ++ optional (enableFetchart
               || enableEmbyupdate
@@ -142,18 +142,18 @@ in pythonPackages.buildPythonApplication rec {
               || enablePlaylist
               || enableSubsonicupdate
               || enableAcousticbrainz)
-                                    pythonPackages.requests
-    ++ optional enableConvert       ffmpeg
-    ++ optional enableDiscogs       pythonPackages.discogs_client
-    ++ optional enableGmusic        pythonPackages.gmusicapi
-    ++ optional enableKeyfinder     keyfinder-cli
-    ++ optional enableLastfm        pythonPackages.pylast
-    ++ optional enableMpd           pythonPackages.mpd2
-    ++ optional enableSonosUpdate   pythonPackages.soco
-    ++ optional enableThumbnails    pythonPackages.pyxdg
-    ++ optional enableWeb           pythonPackages.flask
-    ++ optional enableAlternatives  plugins.alternatives
-    ++ optional enableCopyArtifacts plugins.copyartifacts;
+                                            pythonPackages.requests
+    ++ optional enableConvert               ffmpeg
+    ++ optional enableDiscogs               pythonPackages.discogs_client
+    ++ optional enableGmusic                pythonPackages.gmusicapi
+    ++ optional enableKeyfinder             keyfinder-cli
+    ++ optional enableLastfm                pythonPackages.pylast
+    ++ optional enableMpd                   pythonPackages.mpd2
+    ++ optional enableSonosUpdate           pythonPackages.soco
+    ++ optional enableThumbnails            pythonPackages.pyxdg
+    ++ optional enableWeb                   pythonPackages.flask
+    ++ optional enableAlternatives          plugins.alternatives
+    ++ optional enableCopyArtifacts         plugins.copyartifacts;
 
   buildInputs = [
     imagemagick
