@@ -4544,6 +4544,39 @@ let
     };
   };
 
+  DeviceMAC = buildPerlPackage {
+    pname = "Device-MAC";
+    version = "1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JASONK/Device-MAC-1.00.tar.gz";
+      sha256 = "c42182a9a8489a314cbfe6e1c8452f32b3b626aa6c89fee1d8925e6dfb64fad5";
+    };
+    buildInputs = [ TestMost TestDifferences TestException TestWarn TestDeep ];
+    propagatedBuildInputs = [ DeviceOUI Moose ];
+    meta = {
+      description = "Handle hardware MAC Addresses (EUI-48 and EUI-64)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  DeviceOUI = buildPerlPackage {
+    pname = "Device-OUI";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JASONK/Device-OUI-1.04.tar.gz";
+      sha256 = "4b367e61b1fadde77fb6fb729f3cd5acd1d46e71218d96f406bcba38d43b4bef";
+    };
+    buildInputs = [ TestException ];
+    patches = [ ../development/perl-modules/Device-OUI-1.04-hash.patch ];
+    propagatedBuildInputs = [ ClassAccessorGrouped SubExporter LWP ];
+    meta = {
+      description = "Resolve an Organizationally Unique Identifier";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   DBDMock = buildPerlModule {
     pname = "DBD-Mock";
     version = "1.45";
