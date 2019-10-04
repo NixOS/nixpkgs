@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, which
-, SDL2, libogg, libvorbis, smpeg2, flac, libmodplug
-, CoreServices, AudioUnit, AudioToolbox
-, enableNativeMidi ? false, fluidsynth ? null }:
+{ stdenv, lib, fetchurl, pkgconfig, which
+, SDL2, libogg, libvorbis, flac, libmodplug
+, mpg123, opusfile, fluidsynth
+, CoreServices, AudioUnit, AudioToolbox }:
 
 stdenv.mkDerivation rec {
   pname = "SDL2_mixer";
@@ -12,19 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "0694vsz5bjkcdgfdra6x9fq8vpzrl8m6q96gh58df7065hw5mkxl";
   };
 
-  preAutoreconf = ''
-    aclocal
-  '';
-
-  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+  nativeBuildInputs = [ pkgconfig which ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
-  propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug ];
+  propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth flac libmodplug mpg123 opusfile ];
 
-  configureFlags = [ "--disable-music-ogg-shared" ]
-    ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl"
-    ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
+  configureFlags =
+    [ "--disable-music-ogg-shared"
+      "--disable-music-flac-shared"
+      "--disable-music-mod-modplug-shared"
+      "--disable-music-mp3-mpg123-shared"
+      "--disable-music-opus-shared"
+      "--disable-music-midi-fluidsynth-shared"
+    ] ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
 
   meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";
