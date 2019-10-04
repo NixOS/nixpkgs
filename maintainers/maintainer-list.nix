@@ -692,6 +692,12 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  b42 = {
+    email = "martin@martinmilata.cz";
+    github = "mmilata";
+    githubId = 85857;
+    name = "Martin Milata";
+  };
   babariviere = {
     email = "babathriviere@gmail.com";
     github = "babariviere";
