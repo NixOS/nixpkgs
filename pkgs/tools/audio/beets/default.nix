@@ -170,7 +170,7 @@ in pythonPackages.buildPythonApplication rec {
     rarfile
     responses
     # The following are plugin's deps but there are tests for them so we add them
-    # to our input no matter what the user may override in his overlays.
+    # to our input no matter what users may override in their overlays.
     pyxdg
     pylast
     discogs_client
