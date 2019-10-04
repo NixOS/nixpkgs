@@ -6719,6 +6719,8 @@ in
 
   vampire = callPackage ../applications/science/logic/vampire {};
 
+  variety = callPackage ../applications/misc/variety {};
+
   vdmfec = callPackage ../applications/backup/vdmfec {};
 
   vk-messenger = callPackage ../applications/networking/instant-messengers/vk-messenger {};
