@@ -841,6 +841,8 @@ in
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
+  gaia = callPackage ../development/libraries/gaia { };
+
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
