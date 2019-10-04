@@ -17,6 +17,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover -s test
   '';
 
+  checkInputs = [ postgresql ];
   propagatedBuildInputs = [ postgresql ];
 
   meta = with stdenv.lib; {
