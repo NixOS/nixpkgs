@@ -7,6 +7,8 @@
 , callPackage, beets
 
 , enableAcousticbrainz ? true
+# The closure size will grow rather big if this'll be enabled
+, enableAcousticbrainzSubmit  ? false, essentia ? null
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
 , enableConvert        ? true, ffmpeg ? null
@@ -34,6 +36,7 @@
 }:
 
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
+assert enableAcousticbrainzSubmit -> essentia != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
 assert enableConvert     -> ffmpeg != null;
 assert enableDiscogs     -> pythonPackages.discogs_client != null;
@@ -52,6 +55,7 @@ with stdenv.lib;
 let
   optionalPlugins = {
     acousticbrainz = enableAcousticbrainz;
+    absubmit = enableAcousticbrainzSubmit;
     badfiles = enableBadfiles;
     chroma = enableAcoustid;
     convert = enableConvert;
@@ -130,6 +134,7 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.pygobject3
     gobject-introspection
   ] ++ optional enableAcoustid      pythonPackages.pyacoustid
+    ++ optional enableAcousticbrainzSubmit  essentia
     ++ optional (enableFetchart
               || enableEmbyupdate
               || enableKodiupdate
@@ -196,6 +201,9 @@ in pythonPackages.buildPythonApplication rec {
     ' beetsplug/replaygain.py
     sed -i -e 's/if has_program.*bs1770gain.*:/if True:/' \
       test/test_replaygain.py
+  '' + optionalString enableAcousticbrainzSubmit ''
+    # Replace the extractor's executable name searched in $PATH with the absolute path of the executable from the store
+    sed -i -e s,streaming_extractor_music,${essentia}/bin/essentia_streaming_extractor_music,g beetsplug/absubmit.py
   '';
 
   postInstall = ''
