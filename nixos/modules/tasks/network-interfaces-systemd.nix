@@ -98,8 +98,11 @@ in
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
             (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
-          address = forEach (interfaceIps i)
-            (ip: "${ip.address}/${toString ip.prefixLength}");
+          addresses = forEach (interfaceIps i)
+            (ip: { addressConfig = {
+              Address = "${ip.address}/${toString ip.prefixLength}";
+              Broadcast = mkIf (ip ? "broadcast" && ip.broadcast != null) ip.broadcast;
+            }; } );
           networkConfig.IPv6PrivacyExtensions = "kernel";
         } ];
       })))
