@@ -5,13 +5,13 @@
 
 buildGoPackage rec {
   pname = "podman";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner  = "containers";
     repo   = "libpod";
     rev    = "v${version}";
-    sha256 = "1jg7fdshqz0x71339i0wndskb17x1k5rwpkjiwd463f96fnbfp4x";
+    sha256 = "0s9jxcjx9bkml606rn29358pfavd85m6zshra4qkpbc1iwa6hgr9";
   };
 
   goPackagePath = "github.com/containers/libpod";
