@@ -203,7 +203,7 @@ in pythonPackages.buildPythonApplication rec {
       test/test_replaygain.py
   '' + optionalString enableAcousticbrainzSubmit ''
     # Replace the extractor's executable name searched in $PATH with the absolute path of the executable from the store
-    sed -i -e s,streaming_extractor_music,${essentia}/bin/essentia_streaming_extractor_music,g beetsplug/absubmit.py
+    sed -i -e 's,streaming_extractor_music,${essentia}/bin/essentia_streaming_extractor_music,g' beetsplug/absubmit.py
   '';
 
   postInstall = ''
