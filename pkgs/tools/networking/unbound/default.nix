@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, nettle, expat, libevent, dns-root-data }:
+{ stdenv, fetchurl, fetchpatch, openssl, nettle, expat, libevent, dns-root-data }:
 
 stdenv.mkDerivation rec {
   name = "unbound-${version}";
@@ -8,6 +8,15 @@ stdenv.mkDerivation rec {
     url = "https://unbound.net/downloads/${name}.tar.gz";
     sha256 = "05xrb8havr2vgjsdy7n85kgnvk1mg7qwhjp4a8n6pg4jhd5zjnj1";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cve-2019-16866.diff";
+      url = "https://github.com/NLnetLabs/unbound/commit/b60c4a472c8.diff";
+      includes = [ "util/data/msgparse.c" ];
+      sha256 = "0id0mac9413pbc3z6yjha1sg7syxnari1qinxv5dp5jl98n1752p";
+    })
+  ];
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
