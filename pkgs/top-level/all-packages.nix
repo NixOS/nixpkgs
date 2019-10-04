@@ -16729,7 +16729,7 @@ in
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
-  cherry = callPackage ../data/fonts/cherry { };
+  cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
 
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder {};
 
