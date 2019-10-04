@@ -1,32 +1,24 @@
-{ stdenv, darwin, fetchsvn, autoconf, automake, pkgconfig, makeWrapper, SDL2 }:
+{ stdenv, lib, darwin, fetchurl, pkgconfig, makeWrapper, SDL2 }:
 
 stdenv.mkDerivation rec {
-  name = "smpeg2-svn${version}";
-  version = "412";
+  name = "smpeg2-${version}";
+  version = "2.0.0";
 
-  src = fetchsvn {
-    url = svn://svn.icculus.org/smpeg/trunk;
-    rev = version;
-    sha256 = "1irf2d8f150j8cx8lbb0pz1rijap536crsz0mw871xrh6wd2fd96";
+  src = fetchurl {
+    url = "https://www.libsdl.org/projects/smpeg/release/${name}.tar.gz";
+    sha256 = "1cwlakc4qk1wzsx7drrsf3zi4jp6ci6nx6qsckx48jkl26r6b6lp";
   };
 
   patches = [
     ./gcc6.patch
-    ./sdl2.patch
   ];
 
-  nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   buildInputs = [ SDL2 ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
-
-  preConfigure = ''
-    sh autogen.sh
-  '';
+    ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
   postInstall = ''
-    sed -e 's,#include "\(SDL.*.h\)",#include <SDL2/\1>,' -i $out/include/smpeg2/*.h
-
     wrapProgram $out/bin/smpeg2-config \
       --prefix PATH ":" "${pkgconfig}/bin" \
       --prefix PKG_CONFIG_PATH ":" "${SDL2.dev}/lib/pkgconfig"
