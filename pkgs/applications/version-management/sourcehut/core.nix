@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchNodeModules, buildPythonPackage
 , pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
 , sqlalchemy, flask_login, beautifulsoup4, sqlalchemy-utils, celery, alembic
-, sassc, nodejs-11_x
+, sassc, nodejs
 , writeText }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   node_modules = fetchNodeModules {
     src = "${src}/srht";
-    nodejs = nodejs-11_x;
+    nodejs = nodejs;
     sha256 = "0axl50swhcw8llq8z2icwr4nkr5qsw2riih0a040f9wx4xiw4p6p";
   };
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     sassc
-    nodejs-11_x
+    nodejs
   ];
 
   propagatedBuildInputs = [
