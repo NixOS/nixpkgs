@@ -22,7 +22,7 @@
     KERNEL!="card*", GOTO="pulseaudio_end"
 
     # Lenovo T490
-    ATTRS{subsystem_vendor}=="0x17aa", ATTRS{subsystem_device}=="0x2279", ENV{PULSE_PROFILE_SET}="${t490ProfileSet}"
+    ATTRS{vendor}=="0x8086" ATTRS{device}=="0x9dc8" ATTRS{subsystem_vendor}=="0x17aa", ATTRS{subsystem_device}=="0x2279", ENV{PULSE_PROFILE_SET}="${t490ProfileSet}"
 
     LABEL="pulseaudio_end"
     '';
