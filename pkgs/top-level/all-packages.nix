@@ -14719,6 +14719,8 @@ in
 
   gofish = callPackage ../servers/gopher/gofish { };
 
+  guacamole = callPackage ../servers/guacamole { pango = gnome2.pango; };
+
   grafana = callPackage ../servers/monitoring/grafana { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
