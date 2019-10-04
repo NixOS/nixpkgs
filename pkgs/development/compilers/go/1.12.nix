@@ -96,6 +96,12 @@ stdenv.mkDerivation rec {
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
 
+    # Disable TestGcSys because it's flakey in our tests, but the failure is not
+    # reproducible by multiple people in other environments.
+    # See https://github.com/NixOS/nixpkgs/issues/68361#issuecomment-537849272 and following
+    # NOTE: Try re-enabling for releases newer than 1.12.9
+    sed -i '/TestGcSys/areturn' src/runtime/gc_test.go
+
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isAarch32 ''
