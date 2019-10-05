@@ -9,7 +9,7 @@
 , qt4
 , python
 , pythonSupport ? true
-# Default to false since it brakes the build
+# Default to false since it breaks the build, see https://github.com/MTG/gaia/issues/11
 , stlfacadeSupport ? false
 , assertsSupport ? true
 , cyclopsSupport ? true
