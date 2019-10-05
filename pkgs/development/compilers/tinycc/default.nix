@@ -4,10 +4,11 @@ with lib;
 stdenv.mkDerivation rec {
   pname = "tcc";
   version = "0.9.27";
+  upstreamVersion = "release_${concatStringsSep "_" (builtins.splitVersion version)}";
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
-    rev = "release_0_9_27";
+    rev = upstreamVersion;
     sha256 = "12mm1lqywz0akr2yb2axjfbw8lwv57nh395vzsk534riz03ml977";
   };
 
