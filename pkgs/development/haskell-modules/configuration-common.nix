@@ -1250,4 +1250,6 @@ self: super: {
     postFetch = "sed -i -e s,gtk.cabal-renamed,gtk.cabal, $out";
   });
 
+  termonad = super.termonad.override { libpcre2 = pkgs.pcre2; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
