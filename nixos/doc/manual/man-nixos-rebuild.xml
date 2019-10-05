@@ -9,8 +9,8 @@
  </refmeta>
 
  <refnamediv>
-  <refname><command>nixos-rebuild</command>
-  </refname><refpurpose>reconfigure a NixOS machine</refpurpose>
+  <refname><command>nixos-rebuild</command></refname>
+  <refpurpose>reconfigure a NixOS machine</refpurpose>
  </refnamediv>
 
  <refsynopsisdiv>
