@@ -13,6 +13,9 @@
 , elementary-settings-daemon
 , runtimeShell
 , writeText
+, meson
+, ninja
+, git
 }:
 
 let
@@ -77,17 +80,23 @@ stdenv.mkDerivation rec {
     sha256 = "1vrjm7bklkfv0dyafm312v4hxzy6lb7p1ny4ijkn48kr719gc71k";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
-    };
-  };
+  postPatch = ''
+    ${git}/bin/git apply --verbose ${./meson.patch}
+  '';
 
-  dontBuild = true;
-  dontConfigure = true;
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
-  installPhase = ''
+  mesonFlags = [
+    "-Ddefaults-list=false"
+    "-Dpatched-gsd-autostarts=false"
+    "-Dpatched-ubuntu-autostarts=false"
+    "-Dfallback-session=GNOME"
+  ];
+
+  postInstall = ''
     mkdir -p $out/share/applications
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
@@ -98,15 +107,9 @@ stdenv.mkDerivation rec {
 
     cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
 
-    mkdir -p $out/share/gnome-session/sessions
-    cp -av gnome-session/pantheon.session $out/share/gnome-session/sessions
-
     mkdir -p $out/libexec
     substitute ${executable} $out/libexec/pantheon --subst-var out
     chmod +x $out/libexec/pantheon
-
-    mkdir -p $out/share/xsessions
-    cp -av xsessions/pantheon.desktop $out/share/xsessions
   '';
 
   postFixup = ''
@@ -122,6 +125,13 @@ stdenv.mkDerivation rec {
       sed -i "s,OnlyShowIn=GNOME;,OnlyShowIn=Pantheon;," $autostart
     done
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      inherit repoName;
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Session settings for elementary";
