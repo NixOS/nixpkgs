@@ -165,6 +165,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  ansi2html = callPackage ../development/python-modules/ansi2html { };
+
   anytree = callPackage ../development/python-modules/anytree {
     inherit (pkgs) graphviz;
   };
