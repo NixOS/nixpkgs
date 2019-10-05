@@ -100,7 +100,9 @@ self: super: builtins.intersectAttrs super {
   niv = enableSeparateBinOutput super.niv;
 
   # Ensure the necessary frameworks for Darwin.
-  OpenAL = addExtraLibrary super.OpenAL (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.OpenAL);
+  OpenAL = if pkgs.stdenv.isDarwin
+    then addExtraLibrary super.OpenAL pkgs.darwin.apple_sdk.frameworks.OpenAL
+    else super.OpenAL;
 
   ghcid = enableSeparateBinOutput super.ghcid;
 
