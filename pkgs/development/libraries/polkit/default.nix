@@ -9,7 +9,7 @@
 let
 
   system = "/run/current-system/sw";
-  setuid = "/run/wrappers/bin"; #TODO: from <nixos> config.security.wrapperDir;
+  setuid = "/run/wrappers/bin";
 
 in
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   ];
 
   inherit doCheck;
-  checkInputs = [dbus];
+  checkInputs = [ dbus ];
   checkPhase = ''
     # tests need access to the system bus
     dbus-run-session --config-file=${./system_bus.conf} -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS make check'
