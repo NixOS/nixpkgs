@@ -22958,6 +22958,8 @@ in
     stdenv = gcc49Stdenv;
   };
 
+  bbtools = callPackage ../applications/science/biology/bbtools { };
+
   bedtools = callPackage ../applications/science/biology/bedtools { };
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
