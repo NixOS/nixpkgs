@@ -32,7 +32,7 @@ import ./make-test.nix ({ pkgs, ...} :
     };
     hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     virtualisation.memorySize = 1024;
-    environment.systemPackages = [ sddm_theme ];
+    services.xserver.displayManager.sddm.themePackages = [ sddm_theme ];
   };
 
   testScript = { nodes, ... }: let

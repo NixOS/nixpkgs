@@ -28,6 +28,11 @@ let
     ${cfg.stopScript}
   '';
 
+  themesEnv = pkgs.buildEnv {
+    name = "sddm-themes";
+    paths = [ sddm ] ++ cfg.themePackages;
+  };
+
   cfgFile = pkgs.writeText "sddm.conf" ''
     [General]
     HaltCommand=${pkgs.systemd}/bin/systemctl poweroff
@@ -38,7 +43,7 @@ let
 
     [Theme]
     Current=${cfg.theme}
-    ThemeDir=/run/current-system/sw/share/sddm/themes
+    ThemeDir=${themesEnv}/share/sddm/themes
     FacesDir=/run/current-system/sw/share/sddm/faces
 
     [Users]
@@ -119,6 +124,16 @@ in
         default = "";
         description = ''
           Greeter theme to use.
+        '';
+      };
+
+      themePackages = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        description = ''
+          Extra theme packages for sddm.
+          Add your themes here and then set the `theme` option
+          to the name of the theme you want to display.
         '';
       };
 

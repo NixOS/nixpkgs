@@ -221,6 +221,7 @@ in
 
       services.xserver.displayManager.sddm = {
         theme = mkDefault "breeze";
+        themePackages = with pkgs; [ plasma-workspace ];
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
