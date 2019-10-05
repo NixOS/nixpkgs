@@ -1,9 +1,13 @@
 { stdenv, lib, fetchFromGitHub, python3Packages, file, less, highlight
-, imagePreviewSupport ? true, w3m ? null}:
+, imagePreviewSupport ? true, w3m ? null
+, pdfPreviewSupport ? true, poppler_utils ? null
+, videoPreviewSupport ? true, ffmpegthumbnailer ? null}:
 
 with stdenv.lib;
 
 assert imagePreviewSupport -> w3m != null;
+assert pdfPreviewSupport -> poppler_utils != null;
+assert videoPreviewSupport -> ffmpegthumbnailer != null;
 
 python3Packages.buildPythonApplication rec {
   name = "ranger-${version}";
@@ -20,7 +24,9 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = [ file ]
-    ++ lib.optional (imagePreviewSupport) [ python3Packages.pillow ];
+    ++ lib.optional (imagePreviewSupport) [ python3Packages.pillow ]
+    ++ lib.optional (pdfPreviewSupport) [ poppler_utils ]
+    ++ lib.optional (videoPreviewSupport) [ ffmpegthumbnailer ];
 
   checkPhase = ''
     py.test tests
@@ -52,6 +58,12 @@ python3Packages.buildPythonApplication rec {
     # give image previews out of the box when building with w3m
     substituteInPlace ranger/config/rc.conf \
       --replace "set preview_images false" "set preview_images true"
+  '' + optionalString pdfPreviewSupport ''
+    # edits scope.sh and enables video previews via ffmpegthumbnailer
+    sed -i -e '/#\s*application\/pdf/,/&& exit\s6/s/#//' ranger/data/scope.sh
+  '' + optionalString videoPreviewSupport ''
+    # edits scope.sh and enables pdf previews via pdftoppm
+    sed -i -e '/#\s*video/,/exit 1/s/#//' ranger/data/scope.sh
   '';
 
   meta =  with lib; {
