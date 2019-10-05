@@ -290,6 +290,14 @@ let
         ${buildMenuAdditionalParamsGrub2 config "video=1920x1080@60"}
       }
 
+      # If we boot into a graphical environment where X is autoran
+      # and always crashes, it makes the media unusable. Allow the user
+      # to disable this.
+      submenu "Disable display-manager" --class quirk-disable-displaymanager {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 config "systemd.mask=display-manager.service"}
+      }
+
       # Some laptop and convertibles have the panel installed in an
       # inconvenient way, rotated away from the keyboard.
       # Those entries makes it easier to use the installer.
