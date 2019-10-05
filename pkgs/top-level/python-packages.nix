@@ -3784,6 +3784,8 @@ in {
 
   mozterm = callPackage ../development/python-modules/mozterm { };
 
+  mpld3 = callPackage ../development/python-modules/mpld3 { };
+
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
   multidict = callPackage ../development/python-modules/multidict { };
