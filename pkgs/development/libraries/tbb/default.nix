@@ -25,6 +25,10 @@ with stdenv.lib; stdenv.mkDerivation rec {
     rm $out/include/index.html
   '';
 
+  postFixup = ''
+    substituteAll ${./FindTBB.cmake} $out/FindTBB.cmake
+  '';
+
   enableParallelBuilding = true;
 
   meta = {
