@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/MTG/gaia";
-    description = "C++ library with python bindings which implements similarity measures and classiﬁcations on the results of audio analysis, and generates classiﬁcation models that Essentia can use to compute high-level description of music";
+    description = "General library to work with points in a semimetric space";
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.agpl3;
   };
