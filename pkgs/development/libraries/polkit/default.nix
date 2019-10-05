@@ -40,9 +40,13 @@ stdenv.mkDerivation rec {
     [ glib gtk-doc pkgconfig intltool perl ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
-    [ glib expat pam spidermonkey_60 ]
+    [ expat pam spidermonkey_60 ]
     ++ stdenv.lib.optional useSystemd systemd
     ++ stdenv.lib.optional withGnome gobject-introspection;
+
+  propagatedBuildInputs = [
+    glib # in .pc Requires
+  ];
 
   NIX_CFLAGS_COMPILE = " -Wno-deprecated-declarations "; # for polkit 0.114 and glib 2.56
 
