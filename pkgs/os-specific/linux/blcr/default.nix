@@ -1,9 +1,5 @@
 { stdenv, fetchurl, kernel, perl, makeWrapper }:
 
-# BLCR version 0.8.6 should works with linux kernel up to version 3.17.x
-
-assert stdenv.lib.versionOlder "3.18" kernel.version;
-
 stdenv.mkDerivation {
   name = "blcr_${kernel.version}-0.8.6pre4";
 
@@ -36,6 +32,7 @@ stdenv.mkDerivation {
     homepage = https://ftg.lbl.gov/projects/CheckpointRestart/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
+    broken = stdenv.lib.versionOlder "3.18" kernel.version;
     maintainers = with stdenv.lib.maintainers; [
       z77z
     ];
