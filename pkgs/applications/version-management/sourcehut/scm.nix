@@ -39,11 +39,7 @@ buildPythonPackage rec {
       origin=http://meta.sr.ht.local
     '';
   in ''
-    # Validation needs config option(s)
-    # webhooks <- ( private-key )
-    # meta.sr.ht <- ( origin )
-    # builds.sr.ht <- ( origin, oauth-client-id )
-    cp ${config} config.ini
+    cp -f ${config} config.ini
   '';
 
   meta = with stdenv.lib; {

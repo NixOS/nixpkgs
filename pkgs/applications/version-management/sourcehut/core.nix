@@ -55,7 +55,6 @@ buildPythonPackage rec {
     cp -r ${node_modules} srht/node_modules
   '';
 
-  # No actual? tests but seems like it needs this anyway
   preCheck = let
     config = writeText "config.ini" ''
       [webhooks]
@@ -65,10 +64,7 @@ buildPythonPackage rec {
       origin=http://meta.sr.ht.local
     '';
   in ''
-    # Validation needs config option(s)
-    # webhooks <- ( private-key )
-    # meta.sr.ht <- ( origin )
-    cp ${config} config.ini
+    cp -f ${config} config.ini
   '';
 
   meta = with stdenv.lib; {
