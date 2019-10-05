@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ bbigras davidtwco ];
     platforms = platforms.all;
   };
 }
