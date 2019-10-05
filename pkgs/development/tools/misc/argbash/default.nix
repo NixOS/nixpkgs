@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "argbash";
+  pname = "argbash";
 
   version = "2.8.1";
 
