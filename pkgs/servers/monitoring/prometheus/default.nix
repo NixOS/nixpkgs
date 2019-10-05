@@ -5,7 +5,7 @@ let
 in
 buildGoPackage rec {
   pname = "prometheus";
-  version = "2.12.0";
+  version = "2.13.0";
 
   inherit goPackagePath;
 
@@ -13,7 +13,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "1ci9dc512c1hry1b8jqif0mrnks6w3yagwm3jf69ihcwilr2n7vs";
+    sha256 = "15fk231kdp3h5w0ym3d84y9z255qqykzyhvv12fg0wchkv8vfhcj";
   };
 
   buildFlagsArray = let
