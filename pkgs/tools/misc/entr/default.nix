@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   dontAddPrefix = true;
   doCheck = true;
   checkTarget = "test";
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
     homepage = http://entrproject.org/;
