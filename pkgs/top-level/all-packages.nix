@@ -23011,6 +23011,8 @@ in
 
   kallisto = callPackage ../applications/science/biology/kallisto { };
 
+  kssd = callPackage ../applications/science/biology/kssd { };
+
   macse = callPackage ../applications/science/biology/macse { };
 
   migrate = callPackage ../applications/science/biology/migrate { };
