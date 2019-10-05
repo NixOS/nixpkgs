@@ -6044,7 +6044,7 @@ in
 
   projectlibre = callPackage ../applications/misc/projectlibre { };
 
-  projectm = callPackage ../applications/audio/projectm { };
+  projectm = libsForQt5.callPackage ../applications/audio/projectm { };
 
   proot = callPackage ../tools/system/proot { };
 
