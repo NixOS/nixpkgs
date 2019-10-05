@@ -10,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.9";
+  version = "9.0.beta0";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "1bwga58x3s8z42w5h51c232f91ndsc1861dlb1glhax3pn0rhn3a";
+    sha256 = "0fjqhdi9mzq5qwnm9p1gg2fsc8m1nrpdkixq8wafjyfxj13bpbxj";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/25358
     (fetchpatch {
       name = "safe-directory-test-without-patch.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id2=8bdc326ba57d1bb9664f63cf165a9e9920cc1afc&id=dc673c17555efca611f68398d5013b66e9825463";
-      sha256 = "1hhannz7xzprijakn2w2d0rhd5zv2zikik9p51i87bas3nc658f7";
+      url = "https://git.sagemath.org/sage.git/patch/?id=093c46e2667c299ef07d276089e47962668ac4c6";
+      sha256 = "0knkyvkgj7r8d3sy7b065dmzrqlshza05yzha2gxga7mb7pph4iq";
     })
 
     # Unfortunately inclusion in upstream sage was rejected. Instead the bug was
@@ -97,13 +97,6 @@ stdenv.mkDerivation rec {
     # now set the cache dir to be withing the .sage directory. This is not
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
-
-    # https://trac.sagemath.org/ticket/28472
-    (fetchpatch {
-      name = "eclib-20190909.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id=d27dc479a5772d59e4bc85d805b6ffd595284f1d";
-      sha256 = "1nf1s9y7n30lhlbdnam7sghgaq9nasmv96415gl5jlcf7a3hlxk3";
-    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
