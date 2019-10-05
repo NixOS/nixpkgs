@@ -1,5 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub
-, git, gnupg, pass, qtbase, qtsvg, qttools, qmake
+, git, gnupg, pass, pwgen
+, qtbase, qtsvg, qttools, qmake
 }:
 
 mkDerivation rec {
@@ -25,7 +26,7 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ git gnupg pass ]}"
+    "--suffix PATH : ${lib.makeBinPath [ git gnupg pass pwgen ]}"
   ];
 
   postInstall = ''
