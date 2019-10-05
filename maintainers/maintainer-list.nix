@@ -7275,4 +7275,10 @@
     githubId = 1986844;
     name = "Daniel Wheeler";
   };
+  santiagoalvarez = {
+    email = "kblo.thiago@gmail.com";
+    github = "santiagoalvarez";
+    githubId = 96600;
+    name = "Thiago Areias";
+  };
 }
