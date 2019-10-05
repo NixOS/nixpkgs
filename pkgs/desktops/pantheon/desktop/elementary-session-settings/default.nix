@@ -12,6 +12,7 @@
 , elementary-default-settings
 , elementary-settings-daemon
 , runtimeShell
+, writeText
 }:
 
 let
@@ -32,22 +33,28 @@ let
     #!${runtimeShell}
 
     elementary_default_settings="${elementary-default-settings}"
-    dock_items="$elementary_default_settings/share/elementary/config/plank/dock1/launchers"/*
+    dock_items="$elementary_default_settings/etc/skel/.config/plank/dock1/launchers"/*
 
     if [ ! -d "$HOME/.config/plank/dock1" ]; then
         echo "Instantiating default Plank Dockitems..."
 
-        mkdir -p $HOME/.config/plank/dock1/launchers
-        cp -r --no-preserve=mode,ownership $dock_items $HOME/.config/plank/dock1/launchers/
+        mkdir -p "$HOME/.config/plank/dock1/launchers"
+        cp -r --no-preserve=mode,ownership $dock_items "$HOME/.config/plank/dock1/launchers/"
     else
         echo "Plank Dockitems already instantiated"
     fi
   '';
 
-  dockitemAutostart = substituteAll {
-    src = ./default-elementary-dockitems.desktop;
-    script = dockitems-script;
-  };
+  dockitemAutostart = writeText "default-elementary-dockitems.desktop" ''
+    [Desktop Entry]
+    Type=Application
+    Name=Instantiate Default elementary dockitems
+    Exec=${dockitems-script}
+    StartupNotify=false
+    NoDisplay=true
+    OnlyShowIn=Pantheon;
+    X-GNOME-Autostart-Phase=EarlyInitialization
+  '';
 
   executable = writeScript "pantheon" ''
     export XDG_CONFIG_DIRS=${elementary-settings-daemon}/etc/xdg:${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
