@@ -17101,6 +17101,8 @@ in
 
   plano-theme = callPackage ../data/themes/plano { };
 
+  plasma-chili-theme = callPackage ../data/themes/chili/plasma-chili.nix {};
+
   plata-theme = callPackage ../data/themes/plata {
     inherit (mate) marco;
   };
