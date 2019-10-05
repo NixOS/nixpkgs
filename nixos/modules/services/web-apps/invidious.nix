@@ -188,7 +188,7 @@ let
   nginxConfig = lib.mkIf cfg.nginx {
 
     services.invidious.settings = {
-      https_only = config.services.nginx.virtualHosts.${cfg.settings.domain}.forceSSL;
+      #https_only = config.services.nginx.virtualHosts.${cfg.settings.domain}.forceSSL;
 
       /*
       TODO: What does this do?
@@ -204,11 +204,9 @@ let
 
     services.nginx = {
       enable = true;
-      virtualHosts.${cfg.settings.domain} = {
-        locations."/".proxyPass = "http://localhost:${cfg.port}";
-        # TODO: Do we need to set root for this to work?
-        enableACME = lib.mkDefault true;
-        forceSSL = lib.mkDefault true;
+      virtualHosts.${cfg.settings.domain or null} = {
+        locations."/".proxyPass = "http://localhost:${toString cfg.port}";
+        forceSSL = lib.mkIf (cfg.settings.https_only or false) true;
       };
     };
 
