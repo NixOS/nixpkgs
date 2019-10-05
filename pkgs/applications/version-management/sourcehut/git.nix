@@ -4,7 +4,7 @@
 , srht, pygit2, scmsrht }:
 
 let
-  version = "0.32.3";
+  version = "0.33.1";
 
   buildDispatcher = src: buildGoModule {
     inherit src version;
@@ -20,7 +20,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     rev = version;
-    sha256 = "0grycmblhm9dnhcf1kcmn6bclgb9znahk2026dan58m9j9pja5vw";
+    sha256 = "0vwjkpvgscr01xhbzmhizqmg1wjhnj7jw9qcsv0s190fqach7ml8";
   };
 
   patches = [
