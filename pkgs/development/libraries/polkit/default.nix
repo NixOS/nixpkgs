@@ -48,8 +48,6 @@ stdenv.mkDerivation rec {
     glib # in .pc Requires
   ];
 
-  NIX_CFLAGS_COMPILE = " -Wno-deprecated-declarations "; # for polkit 0.114 and glib 2.56
-
   preConfigure = ''
     chmod +x test/mocklibc/bin/mocklibc{,-test}.in
     patchShebangs .
