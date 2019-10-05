@@ -29,8 +29,9 @@ mkDerivation rec {
   ];
 
   postInstall = ''
-    install -D qtpass.desktop $out/share/applications/qtpass.desktop
+    install -D qtpass.desktop -t $out/share/applications
     install -D artwork/icon.svg $out/share/icons/hicolor/scalable/apps/qtpass-icon.svg
+    install -D qtpass.1 -t $out/share/man/man1
   '';
 
   meta = with lib; {
