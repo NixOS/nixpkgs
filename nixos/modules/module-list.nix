@@ -27,6 +27,7 @@
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
+  ./config/theming.nix
   ./config/qt5.nix
   ./config/resolvconf.nix
   ./config/shells-environment.nix
