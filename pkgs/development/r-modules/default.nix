@@ -276,7 +276,6 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
-    libamtrack = [ pkgs.gsl_1 ];
     magick = [ pkgs.imagemagick.dev ];
     mvabund = [ pkgs.gsl_1 ];
     mwaved = [ pkgs.fftw.dev ];
@@ -647,7 +646,6 @@ let
     "SimpleTable"
     "SOLOMON"
     "soundecology"
-    "SPACECAP"
     "spacodiR"
     "spatsurv"
     "sqldf"
