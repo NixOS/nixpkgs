@@ -8,8 +8,8 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><filename>configuration.nix</filename>
-  </refname><refpurpose>NixOS system configuration specification</refpurpose>
+  <refname><filename>configuration.nix</filename></refname>
+  <refpurpose>NixOS system configuration specification</refpurpose>
  </refnamediv>
  <refsection>
   <title>Description</title>
