@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (cyclopsSupport) [ "--with-cyclops" ]
   ;
   # only gaiafusion is a python executable that needs patchShebangs
-  postInstall = (if pythonSupport then ''
+  postInstall = lib.optionalString ''
     # We can't use patchShebangs because it will use bare bones $python/bin/python
     # and we need a python environment with pyyaml
     wrapProgram $out/bin/gaiafusion --prefix PYTHONPATH : $out/${python.sitePackages}:${pythonEnv}/${python.sitePackages}
-  '' else "");
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/MTG/gaia";
