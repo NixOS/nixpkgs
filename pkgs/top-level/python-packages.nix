@@ -2372,6 +2372,11 @@ in {
 
   fx2 = callPackage ../development/python-modules/fx2 { };
 
+  gaia = (toPythonModule (pkgs.gaia.override {
+    pythonPackages = self;
+    pythonSupport = true;
+  }));
+
   gateone = callPackage ../development/python-modules/gateone { };
 
   GeoIP = callPackage ../development/python-modules/GeoIP { };

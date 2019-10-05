@@ -7,15 +7,15 @@
 , wafHook
 , makeWrapper
 , qt4
-, python
-, pythonSupport ? true
+, pythonPackages
+, pythonSupport ? false
 # Default to false since it breaks the build, see https://github.com/MTG/gaia/issues/11
 , stlfacadeSupport ? false
 , assertsSupport ? true
 , cyclopsSupport ? true
 }:
 
-assert pythonSupport -> python != null;
+assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "gaia";
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   '';
 
   # This is not exactly specified in upstream's README but it's needed by the
-  # resultings $out/bin/gaiafusion script
+  # resulting $out/bin/gaiafusion script
   pythonEnv = (if pythonSupport then
-    python.withPackages(ps: with ps; [
+    pythonPackages.python.withPackages(ps: with ps; [
       pyyaml
     ])
   else null);
@@ -66,10 +66,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (cyclopsSupport) [ "--with-cyclops" ]
   ;
   # only gaiafusion is a python executable that needs patchShebangs
-  postInstall = lib.optionalString ''
+  postInstall = lib.optionalString (pythonSupport) ''
     # We can't use patchShebangs because it will use bare bones $python/bin/python
     # and we need a python environment with pyyaml
-    wrapProgram $out/bin/gaiafusion --prefix PYTHONPATH : $out/${python.sitePackages}:${pythonEnv}/${python.sitePackages}
+    wrapProgram $out/bin/gaiafusion --prefix PYTHONPATH : $out/${pythonPackages.python.sitePackages}:${pythonEnv}/${pythonPackages.python.sitePackages}
   '';
 
   meta = with lib; {
