@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.20.1";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     rev = "v${version}";
-    sha256 = "0v6x19rv7i03rp4wmg97yw9wybafpn8r2gb0l6ha3d218vhb71ln";
+    sha256 = "0nyka4w7vzx3n93y44vblc9pjqaymd867fmp0yd8kk2v56cyf4vd";
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ bbigras davidtwco ];
     platforms = platforms.all;
   };
 }
