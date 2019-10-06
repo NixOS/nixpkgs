@@ -51,6 +51,7 @@
   ./hardware/device-tree.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
+  ./hardware/leap-motion.nix
   ./hardware/ledger.nix
   ./hardware/logitech.nix
   ./hardware/mcelog.nix
