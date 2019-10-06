@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
   postInstall = ''
-    wrapProgram $out/bin/racer --set-default RUST_SRC_PATH $rustcSrc
+    wrapProgram $out/bin/racer --set-default RUST_SRC_PATH ${rustPlatform.rustcSrc}
   '';
 
   checkPhase = ''
