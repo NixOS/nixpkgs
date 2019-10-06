@@ -53,7 +53,7 @@ with lib;
     "netrom"
     "rose"
 
-    # Old filesystems
+    # Old or rare or insufficiently audited filesystems
     "adfs"
     "affs"
     "bfs"
