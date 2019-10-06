@@ -157,6 +157,7 @@ self: super: {
   lens = self.lens_4_18_1;
   memory = self.memory_0_15_0;
   microlens = self.microlens_0_4_11_2;
+  regex-pcre-builtin = self.regex-pcre-builtin_0_95_0_8_8_35;
   shelly = self.shelly_1_9_0;
   string-qq = self.string-qq_0_0_4;
   tls = self.tls_1_5_1;
