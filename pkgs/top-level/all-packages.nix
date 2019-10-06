@@ -4337,6 +4337,8 @@ in
 
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
+  matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
+
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
