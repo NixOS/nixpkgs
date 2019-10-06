@@ -47,13 +47,13 @@ in
 
 {
   bird = generic {
-    version = "1.6.6";
-    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
+    version = "1.6.8";
+    sha256 = "1ch0pkkhd7axdjlvhprynh9q08x0nm984nvkm1cjb7gm5rfsnqbc";
   };
 
   bird6 = generic {
-    version = "1.6.6";
-    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
+    version = "1.6.8";
+    sha256 = "1ch0pkkhd7axdjlvhprynh9q08x0nm984nvkm1cjb7gm5rfsnqbc";
     enableIPv6 = true;
   };
 
