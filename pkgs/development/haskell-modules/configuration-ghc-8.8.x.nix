@@ -115,11 +115,11 @@ self: super: {
     broken = false;
   });
   haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.3.patch";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/82d0fd9967af0699f0ccb5b38f2f0cbef6ed22de/patches/haskell-src-meta-0.8.3.patch";
     sha256 = "1asl932mibr5y057xx8v1a7n3qy87lcnclsfh8pbxq1m3iwjkxy8";
   });
   asn1-encoding = appendPatch (dontCheck (doJailbreak super.asn1-encoding)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/asn1-encoding-0.9.5.patch";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/82d0fd9967af0699f0ccb5b38f2f0cbef6ed22de/patches/asn1-encoding-0.9.5.patch";
     sha256 = "0a3159rnaw6shjzdm46799crd4pxh33s23qy51xa7z6nv5q8wsb5";
   });
   vault = dontHaddock super.vault;
@@ -139,7 +139,7 @@ self: super: {
 
   # https://github.com/sol/hpack/issues/371
   hpack = appendPatch super.hpack (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/hpack-0.32.0.patch";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/82d0fd9967af0699f0ccb5b38f2f0cbef6ed22de/patches/hpack-0.32.0.patch";
     sha256 = "11ccl9f7vwbf5cpzknlyvrwgkzpajk4vq9jk9yb5f9la9ggwb244";
   });
 
