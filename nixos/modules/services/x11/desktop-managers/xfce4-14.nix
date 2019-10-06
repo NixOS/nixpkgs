@@ -91,7 +91,11 @@ in
       ++ optional config.powerManagement.enable xfce4-power-manager
       ++ optionals config.hardware.pulseaudio.enable [
         pavucontrol
-        xfce4-pulseaudio-plugin
+        # volume up/down keys support:
+        # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
+        # but can only be used with xfce4-panel, so for no-desktop usage we still include
+        # xfce4-volumed-pulse
+        (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
       ] ++ optionals cfg.enableXfwm [
         xfwm4
         xfwm4-themes
