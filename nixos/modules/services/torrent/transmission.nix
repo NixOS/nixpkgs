@@ -7,6 +7,7 @@ let
   apparmor = config.security.apparmor.enable;
 
   homeDir = cfg.home;
+  downloadDirPermissions = cfg.downloadDirPermissions;
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
 
@@ -16,16 +17,14 @@ let
   # for users in group "transmission" to have access to torrents
   fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 
-  # Directories transmission expects to exist and be ug+rwx.
-  directoriesToManage = [ homeDir settingsDir fullSettings.download-dir fullSettings.incomplete-dir ];
-
   preStart = pkgs.writeScript "transmission-pre-start" ''
     #!${pkgs.runtimeShell}
     set -ex
-    for DIR in ${escapeShellArgs directoriesToManage}; do
+    for DIR in "${homeDir}" "${settingsDir}" "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"; do
       mkdir -p "$DIR"
-      chmod 770 "$DIR"
     done
+    chmod 700 "${homeDir}" "${settingsDir}"
+    chmod ${downloadDirPermissions} "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"
     cp -f ${settingsFile} ${settingsDir}/settings.json
   '';
 in
@@ -68,6 +67,16 @@ in
 
           See https://github.com/transmission/transmission/wiki/Editing-Configuration-Files
           for documentation.
+        '';
+      };
+
+      downloadDirPermissions = mkOption {
+        type = types.string;
+        default = "770";
+        example = "775";
+        description = ''
+          The permissions to set for download-dir and incomplete-dir.
+          They will be applied on every service start.
         '';
       };
 
