@@ -3037,6 +3037,11 @@
     githubId = 184898;
     name = "Jirka Marsik";
   };
+  jitwit = {
+    email = "jrn@bluefarm.ca";
+    github = "jitwit";
+    name = "jitwit";
+  };
   jlesquembre = {
     email = "jl@lafuente.me";
     github = "jlesquembre";

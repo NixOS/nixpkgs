@@ -7450,6 +7450,12 @@ in
     inherit (darwin) cctools;
   };
 
+  chez-srfi = callPackage ../development/chez-modules/chez-srfi { };
+
+  chez-mit = callPackage ../development/chez-modules/chez-mit { };
+
+  chez-scmutils = callPackage ../development/chez-modules/chez-scmutils { };
+
   clang = llvmPackages.clang;
   clang-manpages = llvmPackages.clang-manpages;
 
