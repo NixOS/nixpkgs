@@ -51,8 +51,8 @@ in
     python = python2;
   };
   varnish6 = common {
-    version = "6.2.0";
-    sha256 = "0lwfk2gq99c653h5f51fs3j37r0gh2pf0p4w5z986nm2mi9z6yn3";
+    version = "6.2.1";
+    sha256 = "15qfvw3fp05bgyspcm6gbsnxhs430p4z3fwz5kkd1z68jb90b3pj";
     python = python3;
     extraNativeBuildInputs = [ python3.pkgs.sphinx ];
   };
