@@ -4,7 +4,6 @@
   which, xdg_utils, wrapGAppsHook }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dde-launcher";
   version = "4.6.13";
 
@@ -64,7 +63,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin Desktop Environment launcher module";

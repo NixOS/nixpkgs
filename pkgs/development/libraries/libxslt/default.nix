@@ -11,10 +11,9 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "libxslt";
   version = "1.1.33";
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "http://xmlsoft.org/sources/${name}.tar.gz";
+    url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
     sha256 = "1j1q1swnsy8jgi9x7mclvkrqhfgn09886gdlr9wzk7a08i8n0dlf";
   };
 

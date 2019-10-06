@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "braincurses-${version}";
+  pname = "braincurses";
   version = "1.1.0";
 
   src = fetchFromGitHub {

@@ -4,10 +4,11 @@
 let
   common = { version, sha256, python, extraNativeBuildInputs ? [] }:
     stdenv.mkDerivation rec {
-      name = "varnish-${version}";
+      pname = "varnish";
+      inherit version;
 
       src = fetchurl {
-        url = "https://varnish-cache.org/_downloads/${name}.tgz";
+        url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
         inherit sha256;
       };
 

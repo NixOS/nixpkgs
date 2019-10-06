@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, language ? "en_US" }:
 
 stdenv.mkDerivation rec {
-  name = "geogebra-${version}";
+  pname = "geogebra";
   version = "5-0-535-0";
 
   preferLocalBuild = true;

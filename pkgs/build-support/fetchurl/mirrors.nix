@@ -1,4 +1,4 @@
-rec {
+{
 
   # Content-addressable Nix mirrors.
   hashedMirrors = [
@@ -7,6 +7,13 @@ rec {
 
   # Mirrors for mirror://site/filename URIs, where "site" is
   # "sourceforge", "gnu", etc.
+
+  luarocks = [
+    https://luarocks.org
+    https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/
+    http://luafr.org/moonrocks
+    http://luarocks.logiceditor.com/rocks
+  ];
 
   # SourceForge.
   sourceforge = [
@@ -167,6 +174,20 @@ rec {
     https://cpan.metacpan.org/
     https://cpan.perl.org/
     http://backpan.perl.org/  # for old releases
+  ];
+
+  # CentOS.
+  centos = [
+    http://mirror.centos.org/centos/
+    # For old releases
+    http://vault.centos.org/
+    https://archive.kernel.org/centos-vault/
+    http://ftp.jaist.ac.jp/pub/Linux/CentOS-vault/
+    http://mirrors.aliyun.com/centos-vault/
+    https://mirror.chpc.utah.edu/pub/vault.centos.org/
+    https://mirror.its.sfu.ca/mirror/CentOS-vault/
+    https://mirror.math.princeton.edu/pub/centos-vault/
+    https://mirrors.tripadvisor.com/centos-vault/
   ];
 
   # Debian.
@@ -385,7 +406,7 @@ rec {
   # Steam Runtime mirrors
   steamrt = [
     http://repo.steampowered.com/steamrt/
-    https://abbradar.net/steamrt/
+    https://public.abbradar.moe/steamrt/
   ];
 
   # Python PyPI mirrors

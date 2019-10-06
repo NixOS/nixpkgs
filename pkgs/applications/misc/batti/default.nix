@@ -7,11 +7,11 @@ let
   inherit (pythonPackages) dbus-python pygtk python;
 in stdenv.mkDerivation rec {
 
-  name = "batti-${version}";
+  pname = "batti";
   version = "0.3.8";
 
   src = fetchurl {
-    url = "https://batti-gtk.googlecode.com/files/${name}.tar.gz";
+    url = "https://batti-gtk.googlecode.com/files/${pname}-${version}.tar.gz";
     sha256 = "072d92gpsiiin631589nj77i2w1425p6db0qxyml7myscfy9jgx6";
   };
 

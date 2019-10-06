@@ -3,7 +3,7 @@
 , fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "pcsxr-${version}";
+  pname = "pcsxr";
   version = "1.9.94";
 
   # codeplex does not support direct downloading
@@ -67,14 +67,14 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mkdir -p "$out/share/doc/${name}"
+    mkdir -p "$out/share/doc/${pname}-${version}"
     cp README \
        AUTHORS \
        doc/keys.txt \
        doc/tweaks.txt \
        ChangeLog.df \
        ChangeLog \
-       "$out/share/doc/${name}"
+       "$out/share/doc/${pname}-${version}"
   '';
 
   meta = with stdenv.lib; {

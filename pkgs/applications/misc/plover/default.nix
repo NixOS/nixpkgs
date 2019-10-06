@@ -2,7 +2,7 @@
 
 {
   stable = with python27Packages; buildPythonPackage rec {
-    name    = "plover-${version}";
+    pname = "plover";
     version = "3.1.1";
 
     meta = with stdenv.lib; {
@@ -24,7 +24,7 @@
   };
 
   dev = with python36Packages; buildPythonPackage rec {
-    name    = "plover-${version}";
+    pname = "plover";
     version = "4.0.0.dev8";
 
     meta = with stdenv.lib; {

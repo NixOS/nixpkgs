@@ -7,7 +7,7 @@
 # - download dune2 into [datadir] http://www.bestoldgames.net/eng/old-games/dune-2.php
 
 stdenv.mkDerivation rec {
-  name = "opendune-${version}";
+  pname = "opendune";
   version = "0.9";
 
   src = fetchFromGitHub {

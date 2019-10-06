@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.3.2";
-  name = "shairport-sync-${version}";
+  pname = "shairport-sync";
 
   src = fetchFromGitHub {
     sha256 = "14f09sj2rxmixd5yjmwp82j49rxn1fvcxkvh7qjif893xgk98a3w";

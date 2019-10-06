@@ -6,7 +6,7 @@ let
 
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
-  xEnv = config.systemd.services."display-manager".environment;
+  xEnv = config.systemd.services.display-manager.environment;
   cfg = dmcfg.lightdm;
 
   dmDefault = xcfg.desktopManager.default;
@@ -114,7 +114,7 @@ in
 
         };
         name = mkOption {
-          type = types.string;
+          type = types.str;
           description = ''
             The name of a .desktop file in the directory specified
             in the 'package' option.
@@ -232,36 +232,41 @@ in
     # Enable the accounts daemon to find lightdm's dbus interface
     environment.systemPackages = [ lightdm ];
 
-    security.pam.services.lightdm = {
-      allowNullPassword = true;
-      startSession = true;
-    };
-    security.pam.services.lightdm-greeter = {
-      allowNullPassword = true;
-      startSession = true;
-      text = ''
-        auth     required pam_env.so envfile=${config.system.build.pamEnvironment}
-        auth     required pam_permit.so
+    security.pam.services.lightdm.text = ''
+        auth      substack      login
+        account   include       login
+        password  substack      login
+        session   include       login
+    '';
 
-        account  required pam_permit.so
+    security.pam.services.lightdm-greeter.text = ''
+        auth     required       pam_succeed_if.so audit quiet_success user = lightdm
+        auth     optional       pam_permit.so
 
-        password required pam_deny.so
+        account  required       pam_succeed_if.so audit quiet_success user = lightdm
+        account  sufficient     pam_unix.so
 
-        session  required pam_env.so envfile=${config.system.build.pamEnvironment}
-        session  required pam_unix.so
-        session  optional ${pkgs.systemd}/lib/security/pam_systemd.so
-      '';
-    };
+        password required       pam_deny.so
+
+        session  required       pam_succeed_if.so audit quiet_success user = lightdm
+        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
+        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  optional       pam_keyinit.so force revoke
+        session  optional       pam_permit.so
+    '';
+
     security.pam.services.lightdm-autologin.text = ''
-        auth     requisite pam_nologin.so
-        auth     required  pam_succeed_if.so uid >= 1000 quiet
-        auth     required  pam_permit.so
+        auth      requisite     pam_nologin.so
 
-        account  include   lightdm
+        auth      required      pam_succeed_if.so uid >= 1000 quiet
+        auth      required      pam_permit.so
 
-        password include   lightdm
+        account   sufficient    pam_unix.so
 
-        session  include   lightdm
+        password  requisite     pam_unix.so nullok sha512
+
+        session   optional      pam_keyinit.so revoke
+        session   include       login
     '';
 
     users.users.lightdm = {

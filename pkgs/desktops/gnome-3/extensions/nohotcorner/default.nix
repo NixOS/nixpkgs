@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-nohotcorner-${version}";
+  pname = "gnome-shell-extension-nohotcorner";
   version = "19.0";
 
   src = fetchFromGitHub {

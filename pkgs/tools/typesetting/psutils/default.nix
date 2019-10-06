@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "psutils-17";
 
   src = fetchurl {

@@ -5,10 +5,11 @@ let
   version = "1.08.20121209";
 
   freedink_data = stdenv.mkDerivation rec {
-    name = "freedink-data-${version}";
+    pname = "freedink-data";
+    inherit version;
 
     src = fetchurl {
-      url = "mirror://gnu/freedink/${name}.tar.gz";
+      url = "mirror://gnu/freedink/${pname}-${version}.tar.gz";
       sha256 = "1mhns09l1s898x18ahbcy9gabrmgsr8dv7pm0a2ivid8mhxahn1j";
     };
 
@@ -16,10 +17,11 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "freedink-${version}";
+  pname = "freedink";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnu/freedink/${name}.tar.gz";
+    url = "mirror://gnu/freedink/${pname}-${version}.tar.gz";
     sha256 = "19xximbcm6506kvpf3s0q96697kmzca3yrjdr6dgphklp33zqsqr";
   };
 

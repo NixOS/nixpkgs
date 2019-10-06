@@ -47,6 +47,7 @@ in
   codimd = handleTest ./codimd.nix {};
   colord = handleTest ./colord.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
+  containers-ephemeral = handleTest ./containers-ephemeral.nix {};
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
   containers-hosts = handleTest ./containers-hosts.nix {};
   containers-imperative = handleTest ./containers-imperative.nix {};
@@ -73,7 +74,7 @@ in
   #ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
   ecryptfs = handleTest ./ecryptfs.nix {};
-  ejabberd = handleTest ./ejabberd.nix {};
+  ejabberd = handleTest ./xmpp/ejabberd.nix {};
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
   env = handleTest ./env.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
@@ -86,6 +87,7 @@ in
   flatpak = handleTest ./flatpak.nix {};
   flatpak-builder = handleTest ./flatpak-builder.nix {};
   fluentd = handleTest ./fluentd.nix {};
+  fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   fsck = handleTest ./fsck.nix {};
   fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64
   gdk-pixbuf = handleTest ./gdk-pixbuf.nix {};
@@ -93,8 +95,11 @@ in
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
   gjs = handleTest ./gjs.nix {};
+  glib-networking = handleTest ./glib-networking.nix {};
+  glusterfs = handleTest ./glusterfs.nix {};
   gnome3-xorg = handleTest ./gnome3-xorg.nix {};
   gnome3 = handleTest ./gnome3.nix {};
+  gnome-photos = handleTest ./gnome-photos.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
   google-oslogin = handleTest ./google-oslogin {};
@@ -114,6 +119,7 @@ in
   hound = handleTest ./hound.nix {};
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
+  icingaweb2 = handleTest ./icingaweb2.nix {};
   iftop = handleTest ./iftop.nix {};
   incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
@@ -124,6 +130,7 @@ in
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
+  jormungandr = handleTest ./jormungandr.nix {};
   kafka = handleTest ./kafka.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-latest = handleTest ./kernel-latest.nix {};
@@ -138,6 +145,8 @@ in
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
+  libgdata = handleTest ./libgdata.nix {};
+  libxmlb = handleTest ./libxmlb.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
@@ -150,10 +159,13 @@ in
   mediawiki = handleTest ./mediawiki.nix {};
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
+  metabase = handleTest ./metabase.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
+  minidlna = handleTest ./minidlna.nix {};
   misc = handleTest ./misc.nix {};
   mongodb = handleTest ./mongodb.nix {};
+  moodle = handleTest ./moodle.nix {};
   morty = handleTest ./morty.nix {};
   mosquitto = handleTest ./mosquitto.nix {};
   mpd = handleTest ./mpd.nix {};
@@ -193,6 +205,7 @@ in
   # openstack-image-userdata doesn't work in a sandbox as the simulated openstack instance needs network access
   #openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
+  os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
   osquery = handleTest ./osquery.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
   ostree = handleTest ./ostree.nix {};
@@ -215,15 +228,16 @@ in
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   printing = handleTest ./printing.nix {};
   prometheus = handleTest ./prometheus.nix {};
-  prometheus2 = handleTest ./prometheus-2.nix {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
-  prosody = handleTest ./prosody.nix {};
+  prosody = handleTest ./xmpp/prosody.nix {};
+  prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
   quagga = handleTest ./quagga.nix {};
   quake3 = handleTest ./quake3.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
+  redis = handleTest ./redis.nix {};
   redmine = handleTest ./redmine.nix {};
   roundcube = handleTest ./roundcube.nix {};
   rspamd = handleTest ./rspamd.nix {};
@@ -248,7 +262,9 @@ in
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
+  systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
+  systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
@@ -256,6 +272,7 @@ in
   tinydns = handleTest ./tinydns.nix {};
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
+  trezord = handleTest ./trezord.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   upnp = handleTest ./upnp.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
@@ -267,6 +284,7 @@ in
   xautolock = handleTest ./xautolock.nix {};
   xdg-desktop-portal = handleTest ./xdg-desktop-portal.nix {};
   xfce = handleTest ./xfce.nix {};
+  xfce4-14 = handleTest ./xfce4-14.nix {};
   xmonad = handleTest ./xmonad.nix {};
   xrdp = handleTest ./xrdp.nix {};
   xss-lock = handleTest ./xss-lock.nix {};

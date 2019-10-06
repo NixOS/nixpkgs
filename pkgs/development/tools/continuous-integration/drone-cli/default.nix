@@ -2,7 +2,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "drone-cli-${version}";
+  pname = "drone-cli";
   version = "0.8.6";
   revision = "v${version}";
   goPackagePath = "github.com/drone/drone-cli";

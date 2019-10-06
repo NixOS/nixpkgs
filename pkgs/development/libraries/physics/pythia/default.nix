@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, fastjet, hepmc2, lhapdf, rsync, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "pythia-${version}";
+  pname = "pythia";
   version = "8.243";
 
   src = fetchurl {

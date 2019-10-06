@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, substituteAll, openconnect, intltool, pkgconfig, networkmanager, libsecret
+{ stdenv, fetchurl, substituteAll, openconnect, intltool, pkgconfig, autoreconfHook, networkmanager, gcr, libsecret, file
 , gtk3, withGnome ? true, gnome3, kmod }:
 
 let
   pname   = "NetworkManager-openconnect";
-  version = "1.2.4";
-in stdenv.mkDerivation rec {
+  version = "1.2.6";
+in stdenv.mkDerivation {
   name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15j98wwspv6mcmy91w30as5qc1bzsnhlk060xhjy4qrvd37y0xx1";
+    sha256 = "0nlp290nkawc4wqm978n4vhzg3xdqi8kpjjx19l855vab41rh44m";
   };
 
   patches = [
@@ -20,13 +20,14 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openconnect networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 gcr libsecret ];
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig file ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--enable-absolute-paths"
+    "--without-libnm-glib"
   ];
 
   passthru = {

@@ -6,7 +6,7 @@ let
   backend   = if stdenv.isDarwin then "darwin" else "unix";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${shortName}-${version}";
   src  = fetchgit {
     url    = "https://github.com/andlabs/libui.git";

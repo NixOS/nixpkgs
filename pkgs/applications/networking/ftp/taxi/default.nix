@@ -5,8 +5,6 @@ stdenv.mkDerivation rec {
   pname = "taxi";
   version = "0.0.1";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;

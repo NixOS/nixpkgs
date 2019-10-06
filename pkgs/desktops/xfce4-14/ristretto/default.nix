@@ -1,18 +1,13 @@
-{ mkXfceDerivation, automakeAddFlags, exo, dbus-glib, gtk2, libexif
+{ mkXfceDerivation, automakeAddFlags, exo, gtk3, glib, libexif
 , libxfce4ui, libxfce4util, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
-  version = "0.8.4";
+  version = "0.10.0";
 
-  postPatch = ''
-    automakeAddFlags src/Makefile.am ristretto_CFLAGS DBUS_GLIB_CFLAGS
-    automakeAddFlags src/Makefile.am ristretto_LDADD DBUS_GLIB_LIBS
-  '';
+  sha256 = "07h7wbq3xh2ac6q4kp2ai1incfn0zfxxngap7hzqx47a5xw2mrm8";
 
-  nativeBuildInputs = [ automakeAddFlags exo ];
-  buildInputs = [ dbus-glib gtk2 libexif libxfce4ui libxfce4util xfconf ];
-
-  sha256 = "0vnivwl0xwhzpflys9zwds6x9gqd3v069qn04afmakhi2m8qr6hf";
+  nativeBuildInputs = [ exo ];
+  buildInputs = [ glib gtk3 libexif libxfce4ui libxfce4util xfconf ];
 }

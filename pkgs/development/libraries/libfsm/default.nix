@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "libfsm-${version}";
+  pname = "libfsm";
   version = "0.1pre1869_${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {

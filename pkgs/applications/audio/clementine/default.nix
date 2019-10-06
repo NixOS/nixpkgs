@@ -67,7 +67,8 @@ let
   '';
 
   free = stdenv.mkDerivation {
-    name = "clementine-free-${version}";
+    pname = "clementine-free";
+    inherit version;
     inherit src patches nativeBuildInputs postPatch;
 
     # gst_plugins needed for setup-hooks
@@ -95,7 +96,8 @@ let
 
   # Unfree Spotify blob for Clementine
   unfree = stdenv.mkDerivation {
-    name = "clementine-blob-${version}";
+    pname = "clementine-blob";
+    inherit version;
     # Use the same patches and sources as Clementine
     inherit src nativeBuildInputs postPatch;
 

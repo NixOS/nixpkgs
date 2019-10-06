@@ -3,14 +3,14 @@
 , glib, gtk3, at-spi2-core, upower, openssh, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-gsconnect-${version}";
-  version = "23";
+  pname = "gnome-shell-gsconnect";
+  version = "26";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    sha256 = "011asrhkly9zhvnng2mh9v06yw39fx244pmqz5yk9rd9m4c32xid";
+    sha256 = "01p8b3blsnxi2i89nddkm51wbbw5irwii2qlvlrzfh8hhh37my0a";
   };
 
   patches = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       gapplication = "${glib.bin}/bin/gapplication";
-      mutter_gsettings_path = "${gnome3.mutter}/share/gsettings-schemas/${gnome3.mutter.name}/glib-2.0/schemas";
+      mutter_gsettings_path = glib.getSchemaPath gnome3.mutter;
     })
   ];
 
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     upower
     gnome3.caribou
     gnome3.gjs # for running daemon
-    gnome3.evolution-data-server # folks.py requires org.gnome.Evolution.DefaultSources gsettings; TODO: hardcode the schema path to the library (similarly to https://github.com/NixOS/nixpkgs/issues/47226)
+    gnome3.evolution-data-server # for libebook-contacts typelib
   ];
 
   mesonFlags = [
     "-Dgnome_shell_libdir=${gnome3.gnome-shell}/lib"
-    "-Dgsettings_schemadir=${placeholder "out"}/share/gsettings-schemas/${name}/glib-2.0/schemas"
+    "-Dgsettings_schemadir=${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}"
     "-Dchrome_nmhdir=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
     "-Dchromium_nmhdir=${placeholder "out"}/etc/chromium/native-messaging-hosts"
     "-Dopenssl_path=${openssl}/bin/openssl"
@@ -76,8 +76,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Let’s wrap the daemons
     for file in $out/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/service/{{daemon,nativeMessagingHost}.js,components/folks.py}; do
-      echo "Wrapping program ''${file}"
-      wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+      echo "Wrapping program $file"
+      wrapGApp "$file"
     done
   '';
 

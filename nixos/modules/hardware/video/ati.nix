@@ -33,7 +33,7 @@ in
 
     boot.blacklistedKernelModules = [ "radeon" ];
 
-    environment.etc."ati".source = "${ati_x11}/etc/ati";
+    environment.etc.ati.source = "${ati_x11}/etc/ati";
 
   };
 

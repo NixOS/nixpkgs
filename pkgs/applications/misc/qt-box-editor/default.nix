@@ -7,7 +7,7 @@
 , tesseract
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qt-box-editor";
   version = "unstable-2019-07-12";
 

@@ -23,7 +23,7 @@
 , gtk_engines
 , alsaLib
 , zlib
-, version ? "19.6.0"
+, version ? "19.8.0"
 }:
 
 let
@@ -50,6 +50,17 @@ let
         x86suffix = "60";
         homepage  = https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html;
       };
+
+      "19.8.0" = {
+        major     = "19";
+        minor     = "8";
+        patch     = "0";
+        x64hash   = "0f8djw8lp5wihb23y09yac1mh09w1qp422h72r6zfx9k1lqfsdbw";
+        x86hash   = "0afcqirb4q349r3izy88vqkszg6y2wg14iwypk6nrmvwgvcl6jdn";
+        x64suffix = "20";
+        x86suffix = "20";
+        homepage  = https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html;
+      };
     };
 
     # Copied this file largely from the citrix-receiver package
@@ -62,18 +73,20 @@ let
       versions = [ ];
     in
       lib.listToAttrs
-        (lib.flip map versions
+        (lib.forEach versions
           (v: lib.nameValuePair v (throw "Unsupported citrix_workspace version: ${v}")));
   in
     deprecatedVersions // supportedVersions;
 
   citrixWorkspaceForVersion = { major, minor, patch, x64hash, x86hash, x64suffix, x86suffix, homepage }:
     stdenv.mkDerivation rec {
-      name     = "citrix-workspace-${version}";
+      pname = "citrix-workspace";
       version  = "${major}.${minor}.${patch}";
       inherit homepage;
 
       prefixWithBitness = if stdenv.is64bit then "linuxx64" else "linuxx86";
+
+      preferLocalBuild = true;
 
       src = requireFile rec {
         name    = if stdenv.is64bit then "${prefixWithBitness}-${version}.${x64suffix}.tar.gz" else "${prefixWithBitness}-${version}.${x86suffix}.tar.gz";

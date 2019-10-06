@@ -22,11 +22,11 @@
 }:
 
 let
-  version = "0.28.1";
+  version = "0.29.0";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0503fax70w7h6v00mkrrrgf1m5n0vkjqs76lyg95alhzc4yldsic";
+    sha256 = "01cb6f2e808bd016cf0e217e12373c9efb808123e58b37885be8364458d3a40a";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -46,11 +46,15 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       (if stdenv.hostPlatform.isDarwin
-       then srcs.${"java_tools_javac11_darwin-v2.0.zip"}
-       else srcs.${"java_tools_javac11_linux-v2.0.zip"})
-      srcs.${"coverage_output_generator-v1.0.zip"}
+       then srcs."java_tools_javac11_darwin-v4.0.zip"
+       else srcs."java_tools_javac11_linux-v4.0.zip")
+      srcs."coverage_output_generator-v1.0.zip"
       srcs.build_bazel_rules_nodejs
-      srcs.${"android_tools_pkg-0.7.tar.gz"}
+      srcs."android_tools_pkg-0.8.tar.gz"
+      srcs."0.27.1.tar.gz"
+      srcs.rules_pkg
+      srcs.rules_cc
+      srcs.rules_java
       ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -102,7 +106,7 @@ let
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
-    src = srcDepsSet."java_tools_javac11_${system}-v2.0.zip";
+    src = srcDepsSet."java_tools_javac11_${system}-v4.0.zip";
 
     nativeBuildInputs = [ autoPatchelfHook unzip ];
     buildInputs = [ gcc-unwrapped ];
@@ -121,7 +125,8 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "bazel-${version}";
+  pname = "bazel";
+  inherit version;
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -217,18 +222,18 @@ stdenv.mkDerivation rec {
       };
 
     in {
-      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
-      cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; };
-      java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; };
-      protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; };
-      pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; };
+      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; };
+      cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
+      java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
+      protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest distDir; };
+      pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest distDir; };
 
-      bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
 
-      cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
-      javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
-      protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
-      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
+      javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
+      protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
 
       # downstream packages using buildBazelPackage
       # fixed-output hashes of the fetch phase need to be spot-checked manually
@@ -462,6 +467,7 @@ stdenv.mkDerivation rec {
     # the reference to .name
     mkdir $out/etc
     echo "build --override_repository=${remote_java_tools.name}=${remote_java_tools}" > $out/etc/bazelrc
+    echo "build --distdir=${distDir}" >> $out/etc/bazelrc
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
@@ -511,6 +517,8 @@ stdenv.mkDerivation rec {
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
     echo "${python3}" >> $out/nix-support/depends
+  '' + lib.optionalString stdenv.isDarwin ''
+    echo "${cctools}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;

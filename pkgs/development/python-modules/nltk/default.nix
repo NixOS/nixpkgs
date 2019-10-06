@@ -1,13 +1,13 @@
 { fetchPypi, buildPythonPackage, lib, six, singledispatch, isPy3k }:
 
 buildPythonPackage rec {
-  version = "3.4.4";
+  version = "3.4.5";
   pname = "nltk";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1dbwwhsbsp31bvvksq7kyrfs6s27lp8wgwqs4qf6hajkz2jj0k3n";
+    sha256 = "153x2clrnigs74jdgnn3qmljdjj4gprmvpdvh49i18ls4m8mbm5y";
   };
 
   propagatedBuildInputs = [ six ] ++ lib.optional (!isPy3k) singledispatch;

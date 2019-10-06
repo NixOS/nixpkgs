@@ -1,9 +1,9 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, zlib, xorg, dbus, virtualbox }:
+, zlib, xorg, dbus, virtualbox, dos2unix }:
 
 let
   version = virtualbox.version;
-  xserverVListFunc = builtins.elemAt (stdenv.lib.splitString "." xorg.xorgserver.version);
+  xserverVListFunc = builtins.elemAt (stdenv.lib.splitVersion xorg.xorgserver.version);
 
   # Forced to 1.18 in <nixpkgs/nixos/modules/services/x11/xserver.nix>
   # as it even fails to build otherwise.  Still, override this even here,
@@ -12,21 +12,25 @@ let
   # It's likely to work again in some future update.
   xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
     in if abi == "119" || abi == "120" then "118" else abi;
-in
 
-stdenv.mkDerivation {
+  # Specifies how to patch binaries to make sure that libraries loaded using
+  # dlopen are found. We grep binaries for specific library names and patch
+  # RUNPATH in matching binaries to contain the needed library paths.
+  dlopenLibs = [
+    { name = "libdbus-1.so"; pkg = dbus; }
+    { name = "libXfixes.so"; pkg = xorg.libXfixes; }
+  ];
+
+in stdenv.mkDerivation {
   name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "1njgxb18r8a1m8fk2b32mmnbwciip3wcxwyhza5k73bx4q2sifac";
+    sha256 = "098kibz8dkiqd8shm44n4h6iyszcbj0ikav1b4vsi75dqzw8d9n8";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
-
-  # If you add a patch you probably need this.
-  #patchFlags = [ "-p1" "-d" "install/src/vboxguest-${version}" ];
 
   hardeningDisable = [ "pic" ];
 
@@ -34,6 +38,18 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [ cdrkit ] ++ kernel.moduleBuildDependencies;
+
+
+  prePatch = ''
+    substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
+      --replace "<ttm/" "<drm/ttm/"
+    ${dos2unix}/bin/dos2unix src/vboxguest-${version}/vboxguest/r0drv/linux/mp-r0drv-linux.c
+  '';
+
+  patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
+  # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
+  # https://www.virtualbox.org/ticket/18911
+  patches = [ ./kernel-5.3-fix.patch ];
 
   unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
@@ -55,8 +71,6 @@ stdenv.mkDerivation {
       else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
     }
   '';
-
-  doConfigure = false;
 
   buildPhase = ''
     # Build kernel modules.
@@ -131,13 +145,13 @@ stdenv.mkDerivation {
   # Stripping breaks these binaries for some reason.
   dontStrip = true;
 
-  # Some code dlopen() libdbus, patch RUNPATH in fixupPhase so it isn't stripped.
-  postFixup = ''
-    for i in $(grep -F libdbus-1.so -l -r $out/{lib,bin}); do
+  # Patch RUNPATH according to dlopenLibs (see the comment there).
+  postFixup = lib.concatMapStrings (library: ''
+    for i in $(grep -F ${lib.escapeShellArg library.name} -l -r $out/{lib,bin}); do
       origRpath=$(patchelf --print-rpath "$i")
-      patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ dbus ]}" "$i"
+      patchelf --set-rpath "$origRpath:${lib.makeLibraryPath [ library.pkg ]}" "$i"
     done
-  '';
+  '') dlopenLibs;
 
   meta = {
     description = "Guest additions for VirtualBox";

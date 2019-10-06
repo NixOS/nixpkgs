@@ -4,13 +4,13 @@
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
-, iceSupport ? false, zeroc_ice ? null
+, iceSupport ? false, zeroc-ice ? null, zeroc-ice-36 ? null
 }:
 
 assert jackSupport -> libjack2 != null;
 assert speechdSupport -> speechd != null;
 assert pulseSupport -> libpulseaudio != null;
-assert iceSupport -> zeroc_ice != null;
+assert iceSupport -> zeroc-ice != null && zeroc-ice-36 != null;
 
 with stdenv.lib;
 let
@@ -41,7 +41,6 @@ let
       "CONFIG+=no-bundled-speex"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
       ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
-      ++ optional (!iceSupport) "CONFIG+=no-ice"
       ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
@@ -108,24 +107,24 @@ let
     '';
   } source;
 
-  server = generic {
+  server = source: let ice = if source.qtVersion == 4 then zeroc-ice-36 else zeroc-ice; in generic {
     type = "murmur";
 
     postPatch = optional iceSupport ''
-      grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc_ice}/,g'
+      grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${ice.dev}/share/ice/,g'
     '';
 
     configureFlags = [
       "CONFIG+=no-client"
-    ];
+    ] ++ optional (!iceSupport) "CONFIG+=no-ice";
 
-    buildInputs = [ libcap ] ++ optional iceSupport zeroc_ice;
+    buildInputs = [ libcap ] ++ optional iceSupport ice;
 
     installPhase = ''
       # bin stuff
       install -Dm755 release/murmurd $out/bin/murmurd
     '';
-  };
+  } source;
 
   stableSource = rec {
     version = "1.2.19";
@@ -170,7 +169,5 @@ in {
   mumble     = client stableSource;
   mumble_rc  = client rcSource;
   murmur     = server stableSource;
-  murmur_rc  = (server rcSource).overrideAttrs (old: {
-    meta = old.meta // { broken = iceSupport; };
-  });
+  murmur_rc  = server rcSource;
 }

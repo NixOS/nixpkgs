@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, cmake, zlib, python2}:
 
 stdenv.mkDerivation rec {
-  name = "strelka-${version}";
+  pname = "strelka";
   version = "2.9.10";
 
   src = fetchFromGitHub {

@@ -9,7 +9,7 @@ let
   version = "20180227";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "arpa2";

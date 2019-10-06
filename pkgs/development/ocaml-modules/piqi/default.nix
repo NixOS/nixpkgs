@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.6.14";
-  name    = "piqi-${version}";
+  pname = "piqi";
  
   src = fetchurl {
     url = "https://github.com/alavrik/piqi/archive/v${version}.tar.gz";

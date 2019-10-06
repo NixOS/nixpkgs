@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "pagemon-${version}";
+  pname = "pagemon";
   version = "0.01.16";
 
   src = fetchFromGitHub {

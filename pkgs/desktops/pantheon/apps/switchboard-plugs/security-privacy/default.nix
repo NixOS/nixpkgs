@@ -9,6 +9,7 @@
 , libgee
 , granite
 , gtk3
+, glib
 , polkit
 , zeitgeist
 , switchboard
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glib
     granite
     gtk3
     libgee
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   patches = [
     ./hardcode-gsettings.patch
@@ -60,9 +62,9 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
 
     substituteInPlace src/Views/LockPanel.vala \
-      --subst-var-by LIGHTLOCKER_GSETTINGS_PATH ${lightlocker}/share/gsettings-schemas/${lightlocker.name}/glib-2.0/schemas
+      --subst-var-by LIGHTLOCKER_GSETTINGS_PATH ${glib.getSchemaPath lightlocker}
     substituteInPlace src/Views/FirewallPanel.vala \
-      --subst-var-by SWITCHBOARD_SEC_PRIV_GSETTINGS_PATH $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
+      --subst-var-by SWITCHBOARD_SEC_PRIV_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   meta = with stdenv.lib; {

@@ -5,7 +5,8 @@ let
   version = "2.1.1";
  in
 stdenv.mkDerivation rec {
-  name = "argyllcms-${version}";
+  pname = "argyllcms";
+  inherit version;
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
@@ -115,7 +116,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.argyllcms.com;
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

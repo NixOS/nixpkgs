@@ -15,7 +15,7 @@ let
     passthru.module_name = module_name;
   });
 
-in rec {
+in {
 
   backlog = zncDerivation rec {
     name = "znc-backlog-${version}";

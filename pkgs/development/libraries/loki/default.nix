@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "loki-${version}";
+  pname = "loki";
   version = "0.1.7";
 
   src = fetchurl {

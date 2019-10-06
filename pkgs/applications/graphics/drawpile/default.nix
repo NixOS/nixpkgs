@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, mkDerivation
 , fetchurl
 , cmake
 , extra-cmake-modules
@@ -31,7 +32,7 @@
 , enableKisTablet ? false # enable improved graphics tablet support
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   commonDeps = [
@@ -57,8 +58,8 @@ let
     qtx11extras
   ];
 
-in stdenv.mkDerivation rec {
-  name = "drawpile-${version}";
+in mkDerivation rec {
+  pname = "drawpile";
   version = "2.1.11";
 
   src = fetchurl {

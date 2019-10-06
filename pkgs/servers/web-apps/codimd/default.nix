@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitHub, fetchpatch, makeWrapper
-, which, nodejs, yarn2nix, python2, phantomjs2 }:
+, which, nodejs, yarn2nix, python2 }:
 
 yarn2nix.mkYarnPackage rec {
   name = "codimd";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner  = "codimd";
     repo   = "server";
     rev    = version;
-    sha256 = "0cljgc056p19pjzphwkcfbvgp642w3r6p626w2fl6m5kdk78qd1g";
+    sha256 = "1sd7r5ws1k7dxmr57m67c1k23pzbkn25k2wvcnbrqn7gza6mhlf0";
   };
 
   nativeBuildInputs = [ which makeWrapper ];
-  extraBuildInputs = [ python2 phantomjs2 ];
+  extraBuildInputs = [ python2 ];
 
   yarnNix = ./yarn.nix;
   yarnLock = ./yarn.lock;
@@ -45,10 +45,6 @@ yarn2nix.mkYarnPackage rec {
     unset OLD_HOME
     popd
 
-    pushd node_modules/phantomjs-prebuilt
-    npm run install
-    popd
-
     npm run build
 
     runHook postBuild
@@ -77,7 +73,7 @@ yarn2nix.mkYarnPackage rec {
     description = "Realtime collaborative markdown notes on all platforms";
     license = licenses.agpl3;
     homepage = "https://github.com/codimd/server";
-    maintainers = with maintainers; [ willibutz ma27 ];
+    maintainers = with maintainers; [ willibutz ma27 globin ];
     platforms = platforms.linux;
   };
 }

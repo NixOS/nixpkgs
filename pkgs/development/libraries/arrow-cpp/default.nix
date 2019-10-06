@@ -10,7 +10,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "arrow-cpp-${version}";
+  pname = "arrow-cpp";
   version = "0.14.1";
 
   src = fetchurl {

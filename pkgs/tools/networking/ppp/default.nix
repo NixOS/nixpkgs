@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "2.4.7";
-  name = "ppp-${version}";
+  pname = "ppp";
 
   src = fetchurl {
-    url = "mirror://samba/ppp/${name}.tar.gz";
+    url = "mirror://samba/ppp/${pname}-${version}.tar.gz";
     sha256 = "0c7vrjxl52pdwi4ckrvfjr08b31lfpgwf3pp0cqy76a77vfs7q02";
   };
 

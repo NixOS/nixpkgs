@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.steve-chavez ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.postgresql;
+    broken = versionAtLeast postgresql.version "11.0";
   };
 }

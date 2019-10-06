@@ -1,6 +1,5 @@
 {stdenv, fetchurl, gmp, mpir, cddlib}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "gfan";
   version = "0.6.2";
 

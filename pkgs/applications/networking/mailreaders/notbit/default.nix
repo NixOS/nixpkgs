@@ -4,8 +4,8 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "notbit-${version}";
+stdenv.mkDerivation {
+  pname = "notbit";
   version = "2018-01-09";
 
   src = fetchFromGitHub {

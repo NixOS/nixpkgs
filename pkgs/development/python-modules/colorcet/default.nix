@@ -34,9 +34,9 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.config/matplotlib
     echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
+    ln -s $HOME/.config/matplotlib $HOME/.matplotlib
 
-    # disable matplotlib tests on darwin, because it requires a framework build of Python
-    pytest ${stdenv.lib.optionalString stdenv.isDarwin "--ignore=colorcet/tests/test_matplotlib.py"} colorcet
+    pytest colorcet
   '';
 
   meta = with stdenv.lib; {

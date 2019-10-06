@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, qtbase, qttools, qmake }:
 
-stdenv.mkDerivation rec {
-  name = "librepcb-${version}";
+stdenv.mkDerivation {
+  pname = "librepcb";
   version = "0.1.0";
 
   src = fetchFromGitHub {

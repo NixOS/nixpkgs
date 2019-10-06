@@ -1,6 +1,6 @@
 { stdenv, substituteAll, fetchurl
 , zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
-, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
+, sqlite, openssl_1_0_2, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
 , self, gdbm, db, lzma
 , python-setup-hook
 # For the Python package set
@@ -17,7 +17,7 @@ with stdenv.lib;
 
 let
   isPy3k = substring 0 1 pythonVersion == "3";
-  passthru = passthruFun rec {
+  passthru = passthruFun {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
@@ -40,7 +40,7 @@ in with passthru; stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
+    bzip2 openssl_1_0_2 pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
   ]  ++ optionals isPy3k [
     lzma
   ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [

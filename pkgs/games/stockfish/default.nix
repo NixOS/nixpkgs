@@ -9,7 +9,8 @@ in
 
 stdenv.mkDerivation {
 
-  name = "stockfish-${version}";
+  pname = "stockfish";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/official-stockfish/Stockfish/archive/sf_${version}.tar.gz";

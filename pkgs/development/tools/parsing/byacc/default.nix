@@ -1,13 +1,13 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "byacc-${version}";
+  pname = "byacc";
   version = "20190617";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.invisible-island.net/byacc/${name}.tgz"
-      "https://invisible-mirror.net/archives/byacc/${name}.tgz"
+      "ftp://ftp.invisible-island.net/byacc/${pname}-${version}.tgz"
+      "https://invisible-mirror.net/archives/byacc/${pname}-${version}.tgz"
     ];
     sha256 = "13ai0az00c86s4k94cpgh48nf5dfccpvccpw635z42wjgcb6hy7q";
   };

@@ -13,11 +13,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "0.0.20190702";
+  version = "0.0.20190913";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "1xl4hzqrny3855s7h1k24py81gdjyfv0mhv6y528f6p0h38r89s3";
+    sha256 = "08ns5d6xbl0qylb98mml0yh0yp837a1sm3hvpra21by1dvx8k0dg";
   };
 
   sourceRoot = "source/src/tools";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://git.zx2c4.com/WireGuard/refs/";
     homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 ];
+    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ];
     platforms = platforms.unix;
   };
 }

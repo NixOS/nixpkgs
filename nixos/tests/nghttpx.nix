@@ -15,7 +15,7 @@ in
 
         services.nginx = {
           enable = true;
-          virtualHosts."server" = {
+          virtualHosts.server = {
             locations."/".root = nginxRoot;
           };
         };

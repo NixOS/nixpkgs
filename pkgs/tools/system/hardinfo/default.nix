@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hardinfo-${version}";
+  pname = "hardinfo";
   version = "0.5.1";
 
   src = fetchurl {

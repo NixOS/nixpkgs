@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, gcc, asciidoc, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "colm-${version}";
+  pname = "colm";
   version = "0.13.0.7";
 
   src = fetchurl {
-    url = "https://www.colm.net/files/colm/${name}.tar.gz";
+    url = "https://www.colm.net/files/colm/${pname}-${version}.tar.gz";
     sha256 = "0f76iri173l2wja2v7qrwmf958cqwh5g9x4bhj2z8wknmlla6gz4";
   };
 

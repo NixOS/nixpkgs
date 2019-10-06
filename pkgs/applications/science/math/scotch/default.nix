@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "6.0.4";
-  name = "scotch-${version}";
+  pname = "scotch";
   src_name = "scotch_${version}";
 
   buildInputs = [ bison openmpi flex zlib ];

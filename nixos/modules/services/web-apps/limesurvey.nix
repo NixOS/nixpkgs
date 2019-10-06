@@ -120,15 +120,15 @@ in
     };
 
     poolConfig = mkOption {
-      type = types.lines;
-      default = ''
-        pm = dynamic
-        pm.max_children = 32
-        pm.start_servers = 2
-        pm.min_spare_servers = 2
-        pm.max_spare_servers = 4
-        pm.max_requests = 500
-      '';
+      type = with types; attrsOf (oneOf [ str int bool ]);
+      default = {
+        "pm" = "dynamic";
+        "pm.max_children" = 32;
+        "pm.start_servers" = 2;
+        "pm.min_spare_servers" = 2;
+        "pm.max_spare_servers" = 4;
+        "pm.max_requests" = 500;
+      };
       description = ''
         Options for the LimeSurvey PHP pool. See the documentation on <literal>php-fpm.conf</literal>
         for details on configuration directives.
@@ -203,17 +203,12 @@ in
     };
 
     services.phpfpm.pools.limesurvey = {
-      listen = "/run/phpfpm/limesurvey.sock";
-      extraConfig = ''
-        listen.owner = ${config.services.httpd.user};
-        listen.group = ${config.services.httpd.group};
-        user = ${user};
-        group = ${group};
-
-        env[LIMESURVEY_CONFIG] = ${limesurveyConfig}
-
-        ${cfg.poolConfig}
-      '';
+      inherit user group;
+      phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
+      settings = {
+        "listen.owner" = config.services.httpd.user;
+        "listen.group" = config.services.httpd.group;
+      } // cfg.poolConfig;
     };
 
     services.httpd = {
@@ -241,7 +236,7 @@ in
             <Directory "${pkg}/share/limesurvey">
               <FilesMatch "\.php$">
                 <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.listen}|fcgi://localhost/"
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
                 </If>
               </FilesMatch>
 
@@ -282,7 +277,7 @@ in
 
     systemd.services.httpd.after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
 
-    users.users."${user}".group = group;
+    users.users.${user}.group = group;
 
   };
 }

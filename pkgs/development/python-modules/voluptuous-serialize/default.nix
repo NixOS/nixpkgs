@@ -2,13 +2,13 @@
 
 buildPythonPackage rec  {
   pname = "voluptuous-serialize";
-  version = "2.1.0";
+  version = "2.2.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d30fef4f1aba251414ec0b315df81a06da7bf35201dcfb1f6db5253d738a154f";
+    sha256 = "0ggiisrq7cbk307d09fdwfdcjb667jv90lx6gfwhxfpxgq66cccb";
   };
 
   propagatedBuildInputs = [

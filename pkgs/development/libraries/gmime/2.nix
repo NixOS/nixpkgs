@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "2.6.23";
-  name = "gmime-${version}";
+  pname = "gmime";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gmime/2.6/${name}.tar.xz";
+    url = "mirror://gnome/sources/gmime/2.6/${pname}-${version}.tar.xz";
     sha256 = "0slzlzcr3h8jikpz5a5amqd0csqh2m40gdk910ws2hnaf5m6hjbi";
   };
 

@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''fast-io'';
   version = ''20171023-git'';
 

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.18";
-  name = "hebcal-${version}";
+  pname = "hebcal";
 
   src = fetchFromGitHub {
     owner = "hebcal";

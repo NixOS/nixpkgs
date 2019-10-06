@@ -45,6 +45,9 @@ buildPythonPackage rec {
     pytest tests --ignore tests/test_timeouts.py
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "A py.test plugin to validate Jupyter notebooks";
     homepage = https://github.com/computationalmodelling/nbval;

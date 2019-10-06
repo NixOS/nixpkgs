@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tint2-${version}";
+  pname = "tint2";
   version = "16.7";
 
   src = fetchFromGitLab {

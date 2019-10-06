@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "serviio-${version}";
+  pname = "serviio";
   version = "2.0";
 
   src = fetchurl {
-    url = "http://download.serviio.org/releases/${name}-linux.tar.gz";
+    url = "http://download.serviio.org/releases/${pname}-${version}-linux.tar.gz";
     sha256 = "1zq1ax0pdxfn0nw0vm7s23ik47w8nwh1n83a7yka8dnknxjf5nng";
   };
 

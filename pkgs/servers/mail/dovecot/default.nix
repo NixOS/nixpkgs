@@ -3,25 +3,25 @@
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
 # Auth modules
-, withMySQL ? false, mysql
+, withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
 , withSQLite ? true, sqlite
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.7.1";
+  name = "dovecot-2.3.7.2";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
     [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
-    ++ lib.optional withMySQL mysql.connector-c
+    ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withSQLite sqlite;
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "1hq333vj4px4xa9djl8c1v3c8rac98v2mrb9vx1wisg6frpiv9f5";
+    sha256 = "0q0jgcv3ni2znkgyhc966ffphj1wk73y76wssh0yciqafs2f0v36";
   };
 
   enableParallelBuilding = true;
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://dovecot.org/;
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz globin ];
     platforms = stdenv.lib.platforms.unix;
   };
   passthru.tests = {

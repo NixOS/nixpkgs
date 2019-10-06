@@ -5,7 +5,7 @@
 , qtbase
 }:
 with pythonPackages;
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "qscintilla";
   version = qscintilla.version;
   src = qscintilla.src;
@@ -14,6 +14,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [ lndir sip qtbase ];
   buildInputs = [ qscintilla ];
   propagatedBuildInputs = [ pyqt5 ];
+
+  postPatch = ''
+    substituteInPlace Python/configure.py \
+      --replace \
+      "target_config.py_module_dir" \
+      "'$out/${python.sitePackages}'"
+  '';
 
   preConfigure = ''
     mkdir -p $out
@@ -26,6 +33,7 @@ buildPythonPackage rec {
       --stubsdir=$out/${python.sitePackages}/PyQt5 \
       --apidir=$out/api/${python.libPrefix} \
       --qsci-incdir=${qscintilla}/include \
+      --qsci-featuresdir=${qscintilla}/mkspecs/features \
       --qsci-libdir=${qscintilla}/lib \
       --pyqt-sipdir=${pyqt5}/share/sip/PyQt5 \
       --qsci-sipdir=$out/share/sip/PyQt5 \

@@ -225,6 +225,16 @@ in rec {
     };
   };
 
+  sysstat = mkDerivation {
+    pluginName = "sysstat";
+    src = fetchFromGitHub {
+      owner = "samoshkin";
+      repo = "tmux-plugin-sysstat";
+      rev = "29e150f403151f2341f3abcb2b2487a5f011dd23";
+      sha256 = "013mv9p6r2r0ls3p60l8hdad4hm8niv3wr27vgm925gxmibi4hyq";
+    };
+  };
+
   tmux-colors-solarized = mkDerivation {
     pluginName = "tmuxcolors";
     src = fetchFromGitHub {

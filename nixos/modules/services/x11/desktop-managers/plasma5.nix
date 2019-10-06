@@ -72,7 +72,7 @@ in
 
       security.wrappers = {
         kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/libexec/kcheckpass";
-        "start_kdeinit".source = "${lib.getBin pkgs.kinit}/libexec/kf5/start_kdeinit";
+        start_kdeinit.source = "${lib.getBin pkgs.kinit}/libexec/kf5/start_kdeinit";
         kwin_wayland = {
           source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
           capabilities = "cap_sys_nice+ep";
@@ -210,8 +210,8 @@ in
       # Enable helpful DBus services.
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.dbus.packages =
-        mkIf config.services.printing.enable [ pkgs.system-config-printer ];
+      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+      services.xserver.libinput.enable = mkDefault true;
 
       # Extra UDEV rules used by Solid
       services.udev.packages = [

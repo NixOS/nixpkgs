@@ -6,6 +6,7 @@
 , qtdeclarative
 , qtwebchannel
 , withConnectivity ? false, qtconnectivity
+, withMultimedia ? false, qtmultimedia
 , withWebKit ? false, qtwebkit
 , withWebSockets ? false, qtwebsockets
 }:
@@ -50,6 +51,7 @@ in buildPythonPackage rec {
     qtwebchannel
   ]
     ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
   ;
@@ -121,6 +123,7 @@ in buildPythonPackage rec {
     ]
     ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
     ++ lib.optional withWebKit "PyQt5.QtWebKit"
+    ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
     ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
     ;
     imports = lib.concatMapStrings (module: "import ${module};") modules;

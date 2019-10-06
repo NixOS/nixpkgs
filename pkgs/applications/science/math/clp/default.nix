@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.17.2";
-  name = "clp-${version}";
+  pname = "clp";
   src = fetchurl {
     url = "https://www.coin-or.org/download/source/Clp/Clp-${version}.tgz";
     sha256 = "1fkmgpn0zaraymi6s3isrrscgjxggcs2yjrx7jfy4hb1jacx71zz";

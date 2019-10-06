@@ -1,4 +1,4 @@
-{ callPackage, wxGTK30 }:
+{ callPackage, wxGTK30, openssl_1_0_2 }:
 
 rec {
   lib = callPackage ../development/beam-modules/lib.nix {};
@@ -16,6 +16,7 @@ rec {
     # These are standard Erlang versions, using the generic builder.
     erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
       wxGTK = wxGTK30;
+      openssl = openssl_1_0_2;
     };
     erlangR18_odbc = erlangR18.override { odbcSupport = true; };
     erlangR18_javac = erlangR18.override { javacSupport = true; };
@@ -25,6 +26,7 @@ rec {
     erlangR18_nox = erlangR18.override { wxSupport = false; };
     erlangR19 = lib.callErlang ../development/interpreters/erlang/R19.nix {
       wxGTK = wxGTK30;
+      openssl = openssl_1_0_2;
     };
     erlangR19_odbc = erlangR19.override { odbcSupport = true; };
     erlangR19_javac = erlangR19.override { javacSupport = true; };
@@ -80,7 +82,7 @@ rec {
 
   # Each field in this tuple represents all Beam packages in nixpkgs built with
   # appropriate Erlang/OTP version.
-  packages = rec {
+  packages = {
 
     # Packages built with default Erlang version.
     erlang = packagesWith interpreters.erlang;

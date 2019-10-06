@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchFromGitHub
 , buildPythonPackage
 , pycrypto
 , paramiko
@@ -18,11 +18,13 @@
 
 buildPythonPackage rec {
   pname = "ansible";
-  version = "2.8.2";
+  version = "2.8.4";
 
-  src = fetchurl {
-    url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-    sha256 = "1e5ba829ca0602c55b33da399b06f99b135a34014b661d1c36d8892a1e2d3730";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible";
+    rev = "v${version}";
+    sha256 = "1fp7zz8awfv70nn8i6x0ggx4472377hm7787x16qv2kz4nb069ki";
   };
 
   prePatch = ''

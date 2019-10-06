@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libu2f-host, libu2f-server, pam }:
 
 stdenv.mkDerivation rec {
-  name    = "pam_u2f-${version}";
+  pname = "pam_u2f";
   version = "1.0.8";
 
   src     = fetchurl {
-    url = "https://developers.yubico.com/pam-u2f/Releases/${name}.tar.gz";
+    url = "https://developers.yubico.com/pam-u2f/Releases/${pname}-${version}.tar.gz";
     sha256 = "16awjzx348imjz141fzzldy00qpdmw2g37rnq430w5mnzak078jj";
   };
 

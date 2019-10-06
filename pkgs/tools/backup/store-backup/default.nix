@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   version = "3.5";
 
-  name = "store-backup-${version}";
+  pname = "store-backup";
 
   enableParallelBuilding = true;
 

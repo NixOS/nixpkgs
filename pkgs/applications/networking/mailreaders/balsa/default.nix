@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "balsa-${version}";
+  pname = "balsa";
   version = "2.5.7";
 
   src = fetchurl {
-    url = "https://pawsa.fedorapeople.org/balsa/${name}.tar.bz2";
+    url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.bz2";
     sha256 = "0yfqhfpwm1qnwmbpr6dfn2f5w8a8xxq51pn8ypgg0fw973l1c1nx";
   };
 

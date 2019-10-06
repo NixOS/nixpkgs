@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "intel-media-sdk-${version}";
+  pname = "intel-media-sdk";
   version = "19.1.0";
 
   src = fetchurl {

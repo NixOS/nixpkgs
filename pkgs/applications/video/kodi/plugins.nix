@@ -51,7 +51,7 @@ let self = rec {
   };
 
   mkKodiPlugin = { plugin, namespace, version, sourceDir ? null, ... }@args:
-  toKodiPlugin (stdenv.mkDerivation (rec {
+  toKodiPlugin (stdenv.mkDerivation ({
     name = "kodi-plugin-${plugin}-${version}";
 
     dontStrip = true;
@@ -70,7 +70,7 @@ let self = rec {
 
   mkKodiABIPlugin = { plugin, namespace, version, extraBuildInputs ? [],
     extraRuntimeDependencies ? [], extraInstallPhase ? "", ... }@args:
-  toKodiPlugin (stdenv.mkDerivation (rec {
+  toKodiPlugin (stdenv.mkDerivation ({
     name = "kodi-plugin-${plugin}-${version}";
 
     dontStrip = true;
@@ -172,7 +172,7 @@ let self = rec {
     };
 
     mkController = controller: {
-        "${controller}" = mkKodiPlugin rec {
+        ${controller} = mkKodiPlugin rec {
           plugin = pname + "-" + controller;
           namespace = "game.controller." + controller;
           sourceDir = "addons/" + namespace;
@@ -310,7 +310,7 @@ let self = rec {
 
   };
 
-  steam-launcher = mkKodiPlugin rec {
+  steam-launcher = mkKodiPlugin {
 
     plugin = "steam-launcher";
     namespace = "script.steam.launcher";
@@ -487,7 +487,7 @@ let self = rec {
     src = fetchFromGitHub {
       owner = "peak3d";
       repo = "inputstream.adaptive";
-      rev = "${version}";
+      rev = version;
       sha256 = "09d9b35mpaf3g5m51viyan9hv7d2i8ndvb9wm0j7rs5gwsf0k71z";
     };
 

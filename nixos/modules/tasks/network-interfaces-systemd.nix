@@ -12,7 +12,7 @@ let
     i.ipv4.addresses
     ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
-  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "no";
+  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
@@ -72,9 +72,17 @@ in
           };
       in mkMerge [ {
         enable = true;
-        networks."99-main" = genericNetwork mkDefault;
+        networks."99-main" = (genericNetwork mkDefault) // {
+          # We keep the "broken" behaviour of applying this to all interfaces.
+          # In general we want to get rid of this workaround but there hasn't
+          # been any work on that.
+          # See the following issues for details:
+          # - https://github.com/NixOS/nixpkgs/issues/18962
+          # - https://github.com/NixOS/nixpkgs/issues/61629
+          matchConfig = mkDefault { Name = "*"; };
+        };
       }
-      (mkMerge (flip map interfaces (i: {
+      (mkMerge (forEach interfaces (i: {
         netdevs = mkIf i.virtual ({
           "40-${i.name}" = {
             netdevConfig = {
@@ -90,7 +98,7 @@ in
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
             (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
-          address = flip map (interfaceIps i)
+          address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
           networkConfig.IPv6PrivacyExtensions = "kernel";
         } ];
@@ -102,7 +110,7 @@ in
             Kind = "bridge";
           };
         };
-        networks = listToAttrs (flip map bridge.interfaces (bi:
+        networks = listToAttrs (forEach bridge.interfaces (bi:
           nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
             DHCP = mkOverride 0 (dhcpStr false);
             networkConfig.Bridge = name;
@@ -160,20 +168,20 @@ in
                             (mapAttrsToList (k: _: k) do); "";
             # get those driverOptions that have been set
             filterSystemdOptions = filterAttrs (sysDOpt: kOpts:
-                                     any (kOpt: do ? "${kOpt}") kOpts.optNames);
+                                     any (kOpt: do ? ${kOpt}) kOpts.optNames);
             # build final set of systemd options to bond values
             buildOptionSet = mapAttrs (_: kOpts: with kOpts;
                                # we simply take the first set kernel bond option
                                # (one option has multiple names, which is silly)
-                               head (map (optN: valTransform (do."${optN}"))
+                               head (map (optN: valTransform (do.${optN}))
                                  # only map those that exist
-                                 (filter (o: do ? "${o}") optNames)));
+                                 (filter (o: do ? ${o}) optNames)));
             in seq assertNoUnknownOption
                    (buildOptionSet (filterSystemdOptions driverOptionMapping));
 
         };
 
-        networks = listToAttrs (flip map bond.interfaces (bi:
+        networks = listToAttrs (forEach bond.interfaces (bi:
           nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
             DHCP = mkOverride 0 (dhcpStr false);
             networkConfig.Bond = name;

@@ -14,7 +14,7 @@
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "regextester-${version}";
+  pname = "regextester";
   version = "1.0.1";
 
   src = fetchFromGitHub {

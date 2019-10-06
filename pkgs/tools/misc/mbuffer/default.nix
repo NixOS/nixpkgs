@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "20190725";
-  name = "mbuffer-${version}";
+  pname = "mbuffer";
 
   src = fetchurl {
     url = "http://www.maier-komor.de/software/mbuffer/mbuffer-${version}.tgz";

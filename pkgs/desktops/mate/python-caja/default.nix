@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, mate, python3Packages }:
 
 stdenv.mkDerivation rec {
-  name = "python-caja-${version}";
+  pname = "python-caja";
   version = "1.22.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1zwdjvxci72j0181nlfq6912lw3aq8j3746brlp7wlzn22qp7b0k";
   };
 

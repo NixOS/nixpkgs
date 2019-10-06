@@ -6,11 +6,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openexr-${version}";
+  pname = "openexr";
   version = lib.getVersion ilmbase;
 
   src = fetchurl {
-    url = "https://github.com/openexr/openexr/releases/download/v${version}/${name}.tar.gz";
+    url = "https://github.com/openexr/openexr/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "19jywbs9qjvsbkvlvzayzi81s976k53wg53vw4xj66lcgylb6v7x";
   };
 

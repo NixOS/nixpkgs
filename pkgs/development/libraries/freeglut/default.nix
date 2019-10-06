@@ -2,7 +2,8 @@
 
 let version = "3.0.0";
 in stdenv.mkDerivation {
-  name = "freeglut-${version}";
+  pname = "freeglut";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";

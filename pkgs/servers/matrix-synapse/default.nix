@@ -23,11 +23,11 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pr17n52vdq490q6c282nqnn51j5k0lf7mzaazpxjy4q86pxdfy5";
+    sha256 = "1nz9bhy5hraa1h7100vr0innz8npnpha6xr9j2ln7h3cgwv73739";
   };
 
   patches = [
@@ -36,6 +36,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools
     bcrypt
     bleach
     canonicaljson

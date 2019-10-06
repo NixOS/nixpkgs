@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "kanboard-${version}";
+  pname = "kanboard";
   version = "1.2.9";
 
   src = fetchFromGitHub {

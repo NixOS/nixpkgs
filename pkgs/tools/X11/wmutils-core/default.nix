@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libxcb }:
 
 stdenv.mkDerivation rec {
-  name = "wmutils-core-${version}";
+  pname = "wmutils-core";
   version = "1.1";
 
   src = fetchurl {

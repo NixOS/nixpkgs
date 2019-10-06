@@ -1,8 +1,9 @@
 { stdenv, fetchmtn, qt4, qmake4Hook, pkgconfig, graphviz }:
 
 let version = "1.0-mtn-head"; in
-stdenv.mkDerivation rec {
-  name = "guitone-${version}";
+stdenv.mkDerivation {
+  pname = "guitone";
+  inherit version;
 
   #src = fetchurl {
   #  url = "${meta.homepage}/count.php/from=default/${version}/${name}.tgz";

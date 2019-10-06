@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "radicale-${version}";
+  pname = "radicale";
   version = "1.1.6";
 
   src = fetchurl {

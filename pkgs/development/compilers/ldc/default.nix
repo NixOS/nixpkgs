@@ -21,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ldc-${version}";
+  pname = "ldc";
+  inherit version;
 
   enableParallelBuilding = true;
 

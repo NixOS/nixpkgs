@@ -3,7 +3,7 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
-      , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
+      , glibc, zlib, readline, openssl, openssl_1_0_2, icu, systemd, libossp_uuid
       , pkgconfig, libxml2, tzdata
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
@@ -20,11 +20,11 @@ let
     icuEnabled = atLeast "10";
 
   in stdenv.mkDerivation rec {
-    name = "postgresql-${version}";
+    pname = "postgresql";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
+      url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
 
@@ -32,9 +32,10 @@ let
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
-      [ zlib readline openssl libxml2 makeWrapper ]
+      [ zlib readline libxml2 makeWrapper ]
       ++ lib.optionals icuEnabled [ icu ]
       ++ lib.optionals enableSystemd [ systemd ]
+      ++ [ (if atLeast "9.5" then openssl else openssl_1_0_2) ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = lib.optionals icuEnabled [ pkgconfig ];
@@ -133,7 +134,7 @@ let
       homepage    = https://www.postgresql.org;
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
-      maintainers = with maintainers; [ ocharles thoughtpolice danbst ];
+      maintainers = with maintainers; [ ocharles thoughtpolice danbst globin ];
       platforms   = platforms.unix;
       knownVulnerabilities = optional (!atLeast "9.4")
         "PostgreSQL versions older than 9.4 are not maintained anymore!";
@@ -166,14 +167,6 @@ let
   };
 
 in self: {
-
-  postgresql_9_4 = self.callPackage generic {
-    version = "9.4.24";
-    psqlSchema = "9.4";
-    sha256 = "0acl1wmah3r1a0qjjmpc256glccrjnzq4pkwklx4d9s6vmkks9aj";
-    this = self.postgresql_9_4;
-    inherit self;
-  };
 
   postgresql_9_5 = self.callPackage generic {
     version = "9.5.19";

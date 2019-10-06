@@ -30,7 +30,7 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "moc-${version}";
+  pname = "moc";
   version = "2.5.2";
 
   src = fetchurl {

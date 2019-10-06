@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "racer-${version}";
+  pname = "racer";
   version = "2.1.22";
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = https://github.com/racer-rust/racer;
     license = licenses.mit;
-    maintainers = with maintainers; [ jagajaga globin ];
+    maintainers = with maintainers; [ jagajaga ];
     platforms = platforms.all;
   };
 }

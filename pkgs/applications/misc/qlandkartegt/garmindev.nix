@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, libusb }:
 
 stdenv.mkDerivation rec {
-  name = "garmindev-${version}";
+  pname = "garmindev";
   version = "0.3.4";
 
   src = fetchurl {
-    url = "https://bitbucket.org/maproom/qlandkarte-gt/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/maproom/qlandkarte-gt/downloads/${pname}-${version}.tar.gz";
     sha256 = "1mc7rxdn9790pgbvz02xzipxp2dp9h4hfq87xgawa18sp9jqzhw6";
   };
 

@@ -3,12 +3,12 @@
 , libxml2, sane-backends, vala, gnome3, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "simple-scan-${version}";
-  version = "3.32.2.1";
+  pname = "simple-scan";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/simple-scan/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0xqb642bsd2hddsm4bd199vyq8jcipdlxm0br3mjlc5vjcxgkxyp";
+    url = "mirror://gnome/sources/simple-scan/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1fxqrwhpvm7y83zrn85wg2avwlcmkfjvv1gb6br6v58zi6fvny3k";
   };
 
   buildInputs = [

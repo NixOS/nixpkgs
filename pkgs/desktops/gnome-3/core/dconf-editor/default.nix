@@ -3,13 +3,13 @@
 
 let
   pname = "dconf-editor";
-  version = "3.32.0";
+  version = "3.34.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1fmsmlh16njjm948grz20mzrsvb4wjj7pl1fvkrkxqi7mhr177gi";
+    sha256 = "0dgkgzrk4q8753j3lvz4ykyfs7pv1fvdmi516ryv3q20k24kxb9j";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "${pname}";
+      packageName = pname;
       attrPath = "gnome3.${pname}";
     };
   };

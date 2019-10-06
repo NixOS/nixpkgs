@@ -1,6 +1,6 @@
 {buildPythonPackage, fetchurl, rpmextract, python, wirelesstools, gettext}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rhpl";
   version = "0.218";
   format = "other";

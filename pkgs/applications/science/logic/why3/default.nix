@@ -1,8 +1,8 @@
 { callPackage, fetchurl, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
-stdenv.mkDerivation rec {
-  name    = "why3-${version}";
+stdenv.mkDerivation {
+  pname = "why3";
   version = "1.2.0";
 
   src = fetchurl {

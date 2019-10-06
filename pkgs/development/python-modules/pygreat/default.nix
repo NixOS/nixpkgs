@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, future, pyusb }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pygreat";
   version = "2019.5.1.dev0";
 

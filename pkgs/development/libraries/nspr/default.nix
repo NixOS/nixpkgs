@@ -5,7 +5,8 @@
 let version = "4.21"; in
 
 stdenv.mkDerivation {
-  name = "nspr-${version}";
+  pname = "nspr";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";

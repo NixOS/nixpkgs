@@ -9,7 +9,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "nvbn";
-    repo = "${pname}";
+    repo = pname;
     rev = version;
     sha256 = "1qhxwjjgrzpqrqjv7l2847ywpln76lyd6j8bl9gz2r6kl0fx2fqs";
   };

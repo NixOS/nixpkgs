@@ -1,6 +1,6 @@
 { lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
-bundlerEnv rec {
+bundlerEnv {
   inherit ruby;
   pname = "teamocil";
   gemdir = ./.;

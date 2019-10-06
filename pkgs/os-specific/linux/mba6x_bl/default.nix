@@ -1,6 +1,6 @@
 { fetchFromGitHub, kernel, stdenv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "mba6x_bl-2016-12-08";
 
   src = fetchFromGitHub {

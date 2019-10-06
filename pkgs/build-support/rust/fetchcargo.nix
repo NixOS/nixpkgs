@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, cargo-vendor, python3 }:
+{ stdenv, cacert, git, cargo, python3 }:
 let cargo-vendor-normalise = stdenv.mkDerivation {
   name = "cargo-vendor-normalise";
   src = ./cargo-vendor-normalise.py;
@@ -17,10 +17,19 @@ let cargo-vendor-normalise = stdenv.mkDerivation {
   preferLocalBuild = true;
 };
 in
-{ name ? "cargo-deps", src, srcs, patches, sourceRoot, sha256, cargoUpdateHook ? "" }:
+{ name ? "cargo-deps"
+, src
+, srcs
+, patches
+, sourceRoot
+, sha256
+, cargoUpdateHook ? ""
+, # whenever to also include the Cargo.lock in the output
+  copyLockfile ? false
+}:
 stdenv.mkDerivation {
   name = "${name}-vendor";
-  nativeBuildInputs = [ cacert cargo-vendor git cargo-vendor-normalise cargo ];
+  nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ];
   inherit src srcs patches sourceRoot;
 
   phases = "unpackPhase patchPhase installPhase";
@@ -37,6 +46,9 @@ stdenv.mkDerivation {
         exit 1
     fi
 
+    # Keep the original around for copyLockfile
+    cp Cargo.lock Cargo.lock.orig
+
     export CARGO_HOME=$(mktemp -d cargo-home.XXX)
     CARGO_CONFIG=$(mktemp cargo-config.XXXX)
 
@@ -52,6 +64,10 @@ stdenv.mkDerivation {
     if ! cmp $CARGO_CONFIG ${./fetchcargo-default-config.toml} > /dev/null; then
       install -D $CARGO_CONFIG $out/.cargo/config;
     fi;
+
+  '' + stdenv.lib.optionalString copyLockfile ''
+    # add the Cargo.lock to allow hash invalidation
+    cp Cargo.lock.orig $out/Cargo.lock
   '';
 
   outputHashAlgo = "sha256";

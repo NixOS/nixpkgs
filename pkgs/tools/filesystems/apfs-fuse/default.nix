@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fuse3, bzip2, zlib, attr, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "apfs-fuse-unstable";
   version = "2019-07-23";
 

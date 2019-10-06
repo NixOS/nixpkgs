@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "mailexporter-${version}";
+buildGoPackage {
+  pname = "mailexporter";
   version = "2019-07-14";
 
   goPackagePath = "github.com/cherti/mailexporter";
@@ -24,7 +24,7 @@ buildGoPackage rec {
     description = "Export Prometheus-style metrics about mail server functionality";
     homepage = "https://github.com/cherti/mailexporter";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = with maintainers; [ willibutz globin ];
     platforms = platforms.linux;
   };
 }

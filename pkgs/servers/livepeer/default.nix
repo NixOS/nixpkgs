@@ -3,7 +3,7 @@
 }:
 
 buildGoPackage rec {
-  name = "livepeer-${version}";
+  pname = "livepeer";
   version = "0.2.4";
 
   goPackagePath = "github.com/livepeer/go-livepeer";

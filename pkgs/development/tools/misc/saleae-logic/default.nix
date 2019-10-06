@@ -27,7 +27,6 @@ assert stdenv.hostPlatform.system == "x86_64-linux";
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
   version = "1.2.18";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     name = "saleae-logic-${version}-64bit.zip";

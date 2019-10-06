@@ -78,7 +78,7 @@ let
   in imap1 mkHead cfg.xrandrHeads;
 
   xrandrDeviceSection = let
-    monitors = flip map xrandrHeads (h: ''
+    monitors = forEach xrandrHeads (h: ''
       Option "monitor-${h.config.output}" "${h.name}"
     '');
     # First option is indented through the space in the config but any
@@ -659,7 +659,7 @@ in
     systemd.services.display-manager =
       { description = "X11 Server";
 
-        after = [ "systemd-udev-settle.service" "local-fs.target" "acpid.service" "systemd-logind.service" ];
+        after = [ "systemd-udev-settle.service" "acpid.service" "systemd-logind.service" ];
         wants = [ "systemd-udev-settle.service" ];
 
         restartIfChanged = false;

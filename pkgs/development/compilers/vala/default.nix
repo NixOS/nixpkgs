@@ -22,26 +22,19 @@ let
         };
 
       in {
-        "0.38" = fp {
-          commit = "2c290f7253bba5ceb0d32e7d0b0ec0d0e81cc263";
-          sha256 = "056ybapfx18d7xw1k8k85nsjrc26qk2q2d9v9nz2zrcwbq5brhkp";
-        };
 
         # NOTE: the openembedded-core project doesn't have a patch for 0.40.12
         # We've fixed the single merge conflict in the following patch.
         #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
         "0.40" = ./disable-graphviz-0.40.12.patch;
 
-        "0.42" = fp {
-          commit = "f2b4f9ec6f44dced7f88df849cca68961419eeb8";
-          sha256 = "112qhdzix0d7lfpfcam1cxprzmfzpwypb1226m5ma1vq9qy0sn7g";
-        };
-
         # NOTE: the openembedded-core project doesn't have a patch for 0.44.1
         # We've reverted the addition of the "--disable-valadoc" option
         # and then applied the following patch.
         #     0.42.4: https://github.com/openembedded/openembedded-core/raw/f2b4f9ec6f44dced7f88df849cca68961419eeb8/meta/recipes-devtools/vala/vala/disable-graphviz.patch
         "0.44" = ./disable-graphviz-0.44.3.patch;
+
+        "0.46" = ./disable-graphviz-0.46.1.patch;
 
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
@@ -108,30 +101,24 @@ let
 
 in rec {
   vala_0_36 = generic {
-    version = "0.36.19";
-    sha256 = "05si2f4zjvq0q3wqfh1wxdq20jy1xqxq2skqh8vfh2jyp355lwar";
-  };
-
-  vala_0_38 = generic {
-    version = "0.38.10";
-    sha256  = "1rdwwqs973qv225v8b5izcgwvqn56jxgr4pa3wxxbliar3aww5sw";
-    extraNativeBuildInputs = [ autoconf ] ++ lib.optional stdenv.isDarwin libtool;
+    version = "0.36.20";
+    sha256 = "19v7zjhr9yxkh9lxg46n9gjr0lb7j6v0xqfhrdvgz18xhj3hm5my";
   };
 
   vala_0_40 = generic {
-    version = "0.40.15";
-    sha256 = "0mfayli159yyw6abjf6sgq41j54mr3nspg25b1kxhypcz0scjm19";
-  };
-
-  vala_0_42 = generic {
-    version = "0.42.7";
-    sha256 = "029ksbsdpl581wzy570kj4kkw8b4bizgh494c051zsvkwck55p83";
+    version = "0.40.16";
+    sha256 = "0vv25fmr9jqiqf080vak1x4raa4w3cz3n5ysjglqsq9qfx304i7b";
   };
 
   vala_0_44 = generic {
-    version = "0.44.5";
-    sha256 = "0zy2kfcvhikczfzhk5l7pkw6mvn3d6vw8cv7g08iah85p22q33xv";
+    version = "0.44.7";
+    sha256 = "0z5xy4qc95rm2gj7s2k14xm1xp3mrf0yz64fx4kddqjxkpsz87xz";
   };
 
-  vala = vala_0_44;
+  vala_0_46 = generic {
+    version = "0.46.1";
+    sha256 = "10czkhclnisdz6k5qfiicmvx47m9177l5dkhjn29g43khnmpkr8l";
+  };
+
+  vala = vala_0_46;
 }

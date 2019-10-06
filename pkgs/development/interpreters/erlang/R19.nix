@@ -1,6 +1,6 @@
 { mkDerivation, fetchpatch }:
 
-mkDerivation rec {
+mkDerivation {
   version = "19.3.6.11";
   sha256 = "0b02iv8dly1vkc2xnqqi030sdj34h4gji2h4qgilllajr1f868vm";
 

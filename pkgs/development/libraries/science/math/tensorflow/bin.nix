@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, patchelf
+, addOpenGLRunpath
 , cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
 }:
 
@@ -35,6 +35,9 @@ let
     else ''
       patchelf --set-rpath "${rpath}:$out/lib" $out/lib/libtensorflow.so
       patchelf --set-rpath "${rpath}" $out/lib/libtensorflow_framework.so
+      ${optionalString cudaSupport ''
+        addOpenGLRunpath $out/lib/libtensorflow.so $out/lib/libtensorflow_framework.so
+      ''}
     '';
 
 in stdenv.mkDerivation rec {
@@ -42,6 +45,8 @@ in stdenv.mkDerivation rec {
   inherit (packages) version;
 
   src = fetchurl url;
+
+  nativeBuildInputs = optional cudaSupport addOpenGLRunpath;
 
   # Patch library to use our libc, libstdc++ and others
   buildCommand = ''

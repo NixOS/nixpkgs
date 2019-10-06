@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub, fetchsvn, fetchpatch
-, pkgconfig, pythonPackages, cmake, wrapGAppsHook, wrapQtAppsHook, gcc8
+, pkgconfig, pythonPackages, cmake, wrapGAppsHook, wrapQtAppsHook, gcc9
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
@@ -7,15 +7,17 @@
 with lib;
 
 mkDerivation rec {
-  name = "telegram-desktop-${version}";
-  version = "1.8.0";
+  pname = "telegram-desktop";
+  version = "1.8.13";
+  # Note: Due to our strong dependency on the Arch patches it's probably best
+  # to also wait for the Arch update (especially if the patches don't apply).
 
   # Telegram-Desktop with submodules
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "09r62dra6gab8hiyzyysslgqkzswf8vwfkcixbcb0jk5la0m07yy";
+    sha256 = "19p4cjzk7jyhrd4sd8dq1r1zksff23zyg5rh5vlr3kqd372bffzz";
     fetchSubmodules = true;
   };
 
@@ -23,19 +25,23 @@ mkDerivation rec {
   archPatches = fetchsvn {
     url = "svn://svn.archlinux.org/community/telegram-desktop/trunk";
     # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
-    rev = "498563";
-    sha256 = "0g2y6impygqhfiqnyxc1ivxwl8j82q9qcnkqcjn6mwj3cisyxwnl";
+    rev = "512849";
+    sha256 = "1hl7znvv6qr4cwpkj8wlplpa63i1lhk2iax7hb4l1s1a4mijx9ls";
   };
   privateHeadersPatch = fetchpatch {
     url = "https://github.com/telegramdesktop/tdesktop/commit/b9d3ba621eb8af638af46c6b3cfd7a8330bf0dd5.patch";
     sha256 = "1s5xvcp9dk0jfywssk8xfcsh7bk5xxif8xqnba0413lfx5rgvs5v";
   };
 
+  # Note: It would be best if someone could get as many patches upstream as
+  # possible (we currently depend a lot on custom patches...).
   patches = [
     "${archPatches}/tdesktop.patch"
     "${archPatches}/no-gtk2.patch"
-    # "${archPatches}/Use-system-wide-font.patch"
+    "${archPatches}/Revert-Disable-DemiBold-fallback-for-Semibold.patch"
     "${archPatches}/tdesktop_lottie_animation_qtdebug.patch"
+    # "${archPatches}/Revert-Change-some-private-header-includes.patch"
+    # "${archPatches}/Use-system-wide-font.patch"
   ];
 
   postPatch = ''
@@ -45,11 +51,11 @@ mkDerivation rec {
       --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
 
-  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook wrapQtAppsHook gcc8 ];
-
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
   dontWrapQtApps = true;
+
+  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook wrapQtAppsHook gcc9 ];
 
   buildInputs = [
     qtbase qtimageformats gtk3 libappindicator-gtk3
@@ -83,7 +89,6 @@ mkDerivation rec {
 
   preConfigure = ''
     # Patches to revert:
-    patch -R -Np1 -i "${archPatches}/demibold.patch"
     patch -R -Np1 -i "${privateHeadersPatch}"
 
     # Patches to apply:
@@ -94,17 +99,17 @@ mkDerivation rec {
     # disable static-qt for rlottie
     sed "/RLOTTIE_WITH_STATIC_QT/d" -i "Telegram/gyp/lib_rlottie.gyp"
 
-    sed -i Telegram/gyp/telegram_linux.gypi \
+    sed -i Telegram/gyp/telegram/linux.gypi \
       -e 's,/usr,/does-not-exist,g' \
       -e 's,appindicator-0.1,appindicator3-0.1,g' \
       -e 's,-flto,,g'
 
-    sed -i Telegram/gyp/qt.gypi \
+    sed -i Telegram/gyp/modules/qt.gypi \
       -e "s,/usr/include/qt/QtCore/,${qtbase.dev}/include/QtCore/,g" \
       -e 's,\d+",\d+" | head -n1,g'
-    sed -i Telegram/gyp/qt_moc.gypi \
+    sed -i Telegram/gyp/modules/qt_moc.gypi \
       -e "s,/usr/bin/moc,moc,g"
-    sed -i Telegram/gyp/qt_rcc.gypi \
+    sed -i Telegram/gyp/modules/qt_rcc.gypi \
       -e "s,/usr/bin/rcc,rcc,g"
 
     # Build system assumes x86, but it works fine on non-x86 if we patch this one flag out
@@ -157,6 +162,10 @@ mkDerivation rec {
 
   meta = {
     description = "Telegram Desktop messaging app";
+    longDescription = ''
+      Desktop client for the Telegram messenger, based on the Telegram API and
+      the MTProto secure protocol.
+    '';
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = https://desktop.telegram.org/;

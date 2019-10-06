@@ -1,16 +1,16 @@
 { stdenv, fetchurl, mkfontscale, mkfontdir }:
 
 stdenv.mkDerivation rec {
-  name = "unifont-${version}";
+  pname = "unifont";
   version = "12.1.03";
 
   ttf = fetchurl {
-    url = "mirror://gnu/unifont/${name}/${name}.ttf";
+    url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.ttf";
     sha256 = "10igjlf05d97h3vcggr2ahxmq9ljby4ypja2g4s9bvxs2w1si51p";
   };
 
   pcf = fetchurl {
-    url = "mirror://gnu/unifont/${name}/${name}.pcf.gz";
+    url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
     sha256 = "1cd1fnk3m7giqp099kynnjj4m7q00lqm4ybqb1vzd2wi3j4a1awf";
   };
 

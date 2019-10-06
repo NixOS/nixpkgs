@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, libevent, c-ares, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "pgbouncer-${version}";
-  version = "1.10.0";
+  pname = "pgbouncer";
+  version = "1.11.0";
 
   src = fetchurl {
-    url = "https://pgbouncer.github.io/downloads/files/${version}/${name}.tar.gz";
-    sha256 = "1m8vsxyna5grs5p0vnxf3fxxnkk9aqjf3qmr2bbkpkhlzr11986q";
+    url = "https://pgbouncer.github.io/downloads/files/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0w3y53kwnkcm9fmf28zbjvqk6ivfic5f2k3nflvca1i8iaj2z044";
   };
 
   buildInputs = [ libevent openssl c-ares pkg-config ];

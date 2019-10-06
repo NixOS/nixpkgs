@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.6.0";
-  name = "zsh-syntax-highlighting-${version}";
+  pname = "zsh-syntax-highlighting";
 
   src = fetchFromGitHub {
     owner = "zsh-users";

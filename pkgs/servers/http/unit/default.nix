@@ -4,7 +4,6 @@
 , withPHP73 ? false, php73
 , withPerl ? true, perl
 , withPerldevel ? false, perldevel
-, withRuby_2_3 ? false, ruby_2_3
 , withRuby_2_4 ? false, ruby_2_4
 , withRuby ? true, ruby
 , withSSL ? true, openssl ? null
@@ -15,14 +14,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.9.0";
-  name = "unit-${version}";
+  version = "1.11.0";
+  pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
-    rev = "${version}";
-    sha256 = "0f7smgshfzksks2jfhi53g87wiyy38vwgj6aa70ql61m135dx7b1";
+    rev = version;
+    sha256 = "05qplbwki8kcj0xy9d39gf8lhwwg2cx24waxd1q5cb0fq9a5hprm";
   };
 
   nativeBuildInputs = [ which ];
@@ -33,7 +32,6 @@ stdenv.mkDerivation rec {
     ++ optional withPHP73 php73
     ++ optional withPerl perl
     ++ optional withPerldevel perldevel
-    ++ optional withRuby_2_3 ruby_2_3
     ++ optional withRuby_2_4 ruby_2_4
     ++ optional withRuby ruby
     ++ optional withSSL openssl;
@@ -53,7 +51,6 @@ stdenv.mkDerivation rec {
     ${optionalString withPHP73      "./configure php     --module=php73     --config=${php73.dev}/bin/php-config  --lib-path=${php73}/lib"}
     ${optionalString withPerl       "./configure perl    --module=perl      --perl=${perl}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl    --module=perl529   --perl=${perldevel}/bin/perl"}
-    ${optionalString withRuby_2_3   "./configure ruby    --module=ruby23    --ruby=${ruby_2_3}/bin/ruby"}
     ${optionalString withRuby_2_4   "./configure ruby    --module=ruby24    --ruby=${ruby_2_4}/bin/ruby"}
     ${optionalString withRuby       "./configure ruby    --module=ruby      --ruby=${ruby}/bin/ruby"}
   '';

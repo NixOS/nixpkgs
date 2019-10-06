@@ -1,32 +1,25 @@
-{ blessed
-, buildPythonPackage
-, fetchPypi
-, lib
+{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
+, blessed
+, docutils
 , libcxx
 , libcxxabi
 , llvm
 , openmp
 , pytest
-, pythonOlder
-, stdenv
-, substituteAll
 , typesentry
 }:
 
 buildPythonPackage rec {
   pname = "datatable";
-  version = "0.8.0";
+  version = "0.9.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s8z81zffrckvdwrrl0pkjc7gsdvjxw59xgg6ck81dl7gkh5grjk";
+    sha256 = "1shwjkm9nyaj6asn57vwdd74pn13pggh14r6dzv729lzxm7nm65f";
   };
 
-  patches = [
-    # Disable the compiler monkey patching, and remove the task that's copying
-    # the native dependencies to the build directory.
-    ./remove-compiler-monkeypatch_disable-native-relocation.patch
-  ] ++ lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     # Replace the library auto-detection with hardcoded paths.
     (substituteAll {
       src = ./hardcode-library-paths.patch;
@@ -37,16 +30,13 @@ buildPythonPackage rec {
     })
   ];
 
-  disabled = pythonOlder "3.5";
-
   propagatedBuildInputs = [ typesentry blessed ];
   buildInputs = [ llvm ] ++ lib.optionals stdenv.isDarwin [ openmp ];
-  checkInputs = [ pytest ];
+  checkInputs = [ docutils pytest ];
 
   LLVM = llvm;
 
   checkPhase = ''
-    # py.test adds local datatable to path, which doesn't contain built native library.
     mv datatable datatable.hidden
     pytest
   '';

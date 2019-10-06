@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, unzip, pkgconfig, libXpm, fltk13, freeimage }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "posterazor-1.5.1";
 
   src = fetchurl {

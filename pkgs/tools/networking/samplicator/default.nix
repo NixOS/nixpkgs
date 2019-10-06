@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "samplicator-${version}";
+  pname = "samplicator";
   version = "1.3.8rc1";
 
   nativeBuildInputs = [ autoreconfHook ];

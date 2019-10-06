@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.22.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "093w8mgvl8ylqlqnfz06ijkmlnkxcjszf9zg6k5ybjw7dwal0jhz";
+    sha256 = "18hf794frncqvq3n4j5n8kip0gp6ch4pf5b3n6809q0c1paf6rp5";
   };
 
   nativeBuildInputs = [ cython pkgconfig ]

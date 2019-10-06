@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "obs-linuxbrowser-${version}";
+  pname = "obs-linuxbrowser";
   version = "0.6.1";
   src = fetchFromGitHub {
     owner = "bazukas";

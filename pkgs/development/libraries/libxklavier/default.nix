@@ -5,11 +5,12 @@ let
   version = "5.4";
 in
 stdenv.mkDerivation rec {
-  name = "libxklavier-${version}";
+  pname = "libxklavier";
+  inherit version;
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/git/libxklavier";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1w1x5mrgly2ldiw3q2r6y620zgd89gk7n90ja46775lhaswxzv7a";
   };
 

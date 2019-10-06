@@ -3,7 +3,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "sauce-connect-${version}";
+  pname = "sauce-connect";
   version = "4.5.4";
 
   src = fetchurl (

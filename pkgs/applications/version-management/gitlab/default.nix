@@ -7,7 +7,7 @@ let
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
     inherit ruby;
-    gemdir = ./rubyEnv- + "${if gitlabEnterprise then "ee" else "ce"}";
+    gemdir = ./rubyEnv- + (if gitlabEnterprise then "ee" else "ce");
     gemset =
       let x = import (gemdir + "/gemset.nix");
       in x // {
@@ -44,7 +44,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gitlab${if gitlabEnterprise then "-ee" else ""}-${version}";
 
   src = sources.gitlab;
@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
     # Work around unpacking deb containing binary with suid bit
     tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
     tar -xf gitlab-deb-data.tar
+    rm gitlab-deb-data.tar
 
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt # only directory in data.tar.gz

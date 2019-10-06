@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libtoxcore, pidgin, autoreconfHook, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "tox-prpl-${version}";
+  pname = "tox-prpl";
   version = "0.5.1";
 
   src = fetchFromGitHub {

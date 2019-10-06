@@ -4,7 +4,8 @@ let
   version = "2.0.0";
 in
 stdenv.mkDerivation {
-  name = "avr-libc-${version}";
+  pname = "avr-libc";
+  inherit version;
 
   src = fetchurl {
     url = https://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2;

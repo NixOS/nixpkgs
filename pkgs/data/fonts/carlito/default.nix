@@ -2,7 +2,7 @@
 
 let
   version = "20130920";
-in fetchzip rec {
+in fetchzip {
   name = "carlito-${version}";
 
   url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";

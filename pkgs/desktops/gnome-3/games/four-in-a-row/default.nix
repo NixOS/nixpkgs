@@ -1,21 +1,21 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, gettext, meson, libcanberra-gtk3, librsvg, itstool, vala
+, gettext, meson, gsound, librsvg, itstool, vala
 , python3, ninja, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "four-in-a-row-${version}";
-  version = "3.32.0";
+  pname = "four-in-a-row";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0h4wmbkdp7x3gp9sbxmvla316m8n6iy4f5sq0ksldj0z7ghlx9zl";
+    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1wf0545lhmqf2hfi7wc8bqs7b9g43rm0df0ssza6517xzc4lx7jl";
   };
 
   nativeBuildInputs = [
     pkgconfig wrapGAppsHook gettext meson itstool vala
     ninja python3 desktop-file-utils
   ];
-  buildInputs = [ gtk3 libcanberra-gtk3 librsvg gnome3.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gsound librsvg gnome3.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

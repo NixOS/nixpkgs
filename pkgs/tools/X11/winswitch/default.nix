@@ -3,12 +3,12 @@
 
 let
   base = pythonPackages.buildPythonApplication rec {
-    name = "winswitch-${version}";
+    pname = "winswitch";
     namePrefix = "";
     version = "0.12.23";
 
     src = fetchurl {
-      url = "http://winswitch.org/src/${name}.src.tar.bz2";
+      url = "http://winswitch.org/src/${pname}-${version}.src.tar.bz2";
       sha256 = "1m0akjcdlsgng426rwvzlcl76kjm993icj0pggvha40cizig1yd9";
     };
 

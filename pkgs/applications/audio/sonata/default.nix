@@ -41,7 +41,7 @@ in buildPythonApplication rec {
     longDescription = ''
       Sonata is an elegant client for the Music Player Daemon.
 
-      Written in Python and using the GTK+ 3 widget set, its features
+      Written in Python and using the GTK 3 widget set, its features
       include:
 
        - Expanded and collapsed views

@@ -1,5 +1,5 @@
-{ python37, openssl_1_1
-, callPackage }:
+{ python37, openssl
+, callPackage, recurseIntoAttrs }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
 # Then we expose them through all-packages.nix as an application through `toPythonApplication`
@@ -23,19 +23,9 @@ let
       todosrht = self.callPackage ./todo.nix { };
 
       scmsrht = self.callPackage ./scm.nix { };
-
-      # OVERRIDES
-
-      cryptography = super.cryptography.override {
-        openssl = openssl_1_1;
-      };
-
-      pyopenssl = super.pyopenssl.override {
-        openssl = openssl_1_1;
-      };
     };
   };
-in with python.pkgs; {
+in with python.pkgs; recurseIntoAttrs {
   inherit python;
   buildsrht = toPythonApplication buildsrht;
   dispatchsrht = toPythonApplication dispatchsrht;

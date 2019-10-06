@@ -5,7 +5,7 @@
 #   services.udev.packages = [ pkgs.android-udev-rules ];
 
 stdenv.mkDerivation rec {
-  name = "android-udev-rules-${version}";
+  pname = "android-udev-rules";
   version = "20190315";
 
   src = fetchFromGitHub {

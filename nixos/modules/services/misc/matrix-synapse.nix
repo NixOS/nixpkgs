@@ -374,7 +374,7 @@ in {
             user = cfg.database_user;
             database = cfg.database_name;
           };
-        }."${cfg.database_type}";
+        }.${cfg.database_type};
         description = ''
           Arguments to pass to the engine.
         '';
@@ -684,7 +684,7 @@ in {
         fi
       '';
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;

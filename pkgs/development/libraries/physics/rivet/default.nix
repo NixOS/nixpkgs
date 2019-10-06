@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fastjet, ghostscript, gsl, hepmc2, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "rivet-${version}";
+  pname = "rivet";
   version = "2.7.2";
 
   src = fetchurl {

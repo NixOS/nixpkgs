@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ glib pcre json-glib ];
   cmakeFlags = [
-    "-DCHROMIUM_MANIFEST_DESTINATION=${placeholder ''out''}/etc/chromium/native-messaging-hosts"
-    "-DCHROME_MANIFEST_DESTINATION=${placeholder ''out''}/etc/opt/chrome/native-messaging-hosts"
-    "-DFIREFOX_MANIFEST_DESTINATION=${placeholder ''out''}/lib/mozilla/native-messaging-hosts"
+    "-DCHROMIUM_MANIFEST_DESTINATION=${placeholder "out"}/etc/chromium/native-messaging-hosts"
+    "-DCHROME_MANIFEST_DESTINATION=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
+    "-DFIREFOX_MANIFEST_DESTINATION=${placeholder "out"}/lib/mozilla/native-messaging-hosts"
   ];
 
   meta = with stdenv.lib; {

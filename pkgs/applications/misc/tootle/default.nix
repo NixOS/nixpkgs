@@ -7,7 +7,7 @@
 let
   pname = "tootle";
   version = "0.2.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

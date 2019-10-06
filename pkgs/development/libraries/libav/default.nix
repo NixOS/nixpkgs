@@ -33,10 +33,11 @@ let
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {
-    name = "libav-${version}";
+    pname = "libav";
+    inherit version;
 
     src = fetchurl {
-      url = "${meta.homepage}/releases/${name}.tar.xz";
+      url = "${meta.homepage}/releases/${pname}-${version}.tar.xz";
       inherit sha1; # upstream directly provides sha1 of releases over https
     };
 

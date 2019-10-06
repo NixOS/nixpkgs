@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libcanberra-gtk3, gettext, itstool, libxml2, libgnome-games-support
+, librsvg, gsound, gettext, itstool, libxml2, libgnome-games-support
 , libgee, meson, ninja, python3, desktop-file-utils , hicolor-icon-theme, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-robots-${version}";
-  version = "3.32.0";
+  pname = "gnome-robots";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-robots/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1xp1sijl5k7wmnbb0hdgh4ajxgp74k7fcnmd5c6rw6lf51wpinyh";
+    url = "mirror://gnome/sources/gnome-robots/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "18vnx5096d3mc2i7w4ma9hflsqfnvahl29aifjnvhdm5ji8qi0mb";
   };
 
   passthru = {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme # For setup-hook
   ];
   buildInputs = [
-    gtk3 librsvg libcanberra-gtk3 libgnome-games-support libgee adwaita-icon-theme
+    gtk3 librsvg gsound libgnome-games-support libgee adwaita-icon-theme
   ];
 
   postPatch = ''

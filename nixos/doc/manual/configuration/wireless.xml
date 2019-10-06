@@ -19,10 +19,17 @@
   NixOS lets you specify networks for wpa_supplicant declaratively:
 <programlisting>
 <xref linkend="opt-networking.wireless.networks"/> = {
-  echelon = {
+  echelon = {                # SSID with no spaces or special characters
     psk = "abcdefgh";
   };
-  "free.wifi" = {};
+  "echelon's AP" = {         # SSID with spaces and/or special characters
+    psk = "ijklmnop";
+  };
+  echelon = {                # Hidden SSID
+    hidden = true;
+    psk = "qrstuvwx";
+  };
+  free.wifi = {};            # Public wireless network
 };
 </programlisting>
   Be aware that keys will be written to the nix store in plaintext! When no

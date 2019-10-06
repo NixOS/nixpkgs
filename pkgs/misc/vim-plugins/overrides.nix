@@ -49,16 +49,16 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.146";
+    version = "0.1.154";
     LanguageClient-neovim-src = fetchurl {
       url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
-      sha256 = "1xm98pyzf2dlh04ijjf3nkh37lyqspbbjddkjny1g06xxb4kfxnk";
+      sha256 = "03sp643nihj9p2s9cx2dcazhz68s30qx7igqprgsmr1040rhg2py";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0dixvmwq611wg2g3rp1n1gqali46904fnhb90gcpl9a1diqb34sh";
+      cargoSha256 = "1bvbls2l1xa0s3k11crvd98il4i20z5sn0hqmsc1b915k03qq4zj";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -125,12 +125,12 @@ self: super: {
   # Only official releases contains the required index.js file
   coc-nvim = buildVimPluginFrom2Nix rec {
     pname = "coc-nvim";
-    version = "0.0.73";
+    version = "0.0.74";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
       rev = "v${version}";
-      sha256 = "1z7573rbh806nmkh75hr1kbhxr4jysv6k9x01fcyjfwricpa3cf7";
+      sha256 = "1s4nib2mnhagd0ymx254vf7l1iijwrh2xdqn3bdm4f1jnip81r10";
     };
   };
 
@@ -164,6 +164,10 @@ self: super: {
       patchShebangs .
       ./install.sh
     '';
+  });
+
+  defx-nvim = super.defx-nvim.overrideAttrs(old: {
+    dependencies = with super; [ nvim-yarp ];
   });
 
   deoplete-fish = super.deoplete-fish.overrideAttrs(old: {

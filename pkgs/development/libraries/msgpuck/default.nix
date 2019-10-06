@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "msgpuck-${version}";
+  pname = "msgpuck";
   version = "2.0";
 
   src = fetchFromGitHub {
     owner = "rtsisyk";
     repo = "msgpuck";
-    rev = "${version}";
+    rev = version;
     sha256 = "0cjq86kncn3lv65vig9cqkqqv2p296ymcjjbviw0j1s85cfflps0";
   };
 

@@ -340,7 +340,7 @@ self: super:
     installFlags = "sdkdir=\${out}/include/xorg";
   });
 
-  xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: rec {
+  xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
     installFlags = "sdkdir=\${dev}/include/xorg";
   });
@@ -468,7 +468,7 @@ self: super:
         <model>
           <configItem>
             <name>${name}</name>
-            <_description>${layout.description}</_description>
+            <description>${layout.description}</description>
             <vendor>${layout.description}</vendor>
           </configItem>
         </model>
@@ -484,8 +484,8 @@ self: super:
         <layout>
           <configItem>
             <name>${name}</name>
-            <_shortDescription>${name}</_shortDescription>
-            <_description>${layout.description}</_description>
+            <shortDescription>${name}</shortDescription>
+            <description>${layout.description}</description>
             <languageList>
               ${concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
             </languageList>

@@ -30,7 +30,7 @@
   libtool,
   thrift
 }:
-gcc8Stdenv.mkDerivation rec {
+gcc8Stdenv.mkDerivation {
   pname = "scylladb";
   version = "3.0.5";
 

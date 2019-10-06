@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "jhiccup-${version}";
+  pname = "jhiccup";
   version = "2.0.10";
 
   src = fetchzip {

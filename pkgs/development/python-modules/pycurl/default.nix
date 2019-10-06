@@ -38,7 +38,10 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest tests -k "not test_ssl_in_static_libs \
                      and not test_keyfunction \
-                     and not test_keyfunction_bogus_return"
+                     and not test_keyfunction_bogus_return \
+                     and not test_libcurl_ssl_gnutls \
+                     and not test_libcurl_ssl_nss \
+                     and not test_libcurl_ssl_openssl"
   '';
 
   preConfigure = ''

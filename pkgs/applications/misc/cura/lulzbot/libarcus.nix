@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchgit, fetchurl, cmake, sip, protobuf, pythonOlder }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "libarcus";
   version = "3.6.18";
   format = "other";

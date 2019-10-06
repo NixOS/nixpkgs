@@ -16,9 +16,10 @@
 , glib
 , wrapGAppsHook
 , libunwind
+, hicolor-icon-theme
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tilix";
   version = "unstable-2019-08-03";
 
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     dmd
+    hicolor-icon-theme # for setup-hook
     meson
     ninja
     pkgconfig

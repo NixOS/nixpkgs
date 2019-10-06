@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "stxxl-${version}";
+  pname = "stxxl";
   version = "1.4.1";
 
   src = fetchurl {

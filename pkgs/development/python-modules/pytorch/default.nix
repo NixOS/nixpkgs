@@ -44,6 +44,7 @@ in buildPythonPackage rec {
       })
     ];
 
+  dontUseCmakeConfigure = true;
   preConfigure = lib.optionalString cudaSupport ''
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''

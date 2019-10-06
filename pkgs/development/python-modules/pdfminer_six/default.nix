@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
-    rev = "${version}";
+    rev = version;
     sha256 = "1v8pcx43fgidv1g54s92k85anvcss08blkhm4yi1hn1ybl0mmw6c";
   };
 

@@ -40,7 +40,7 @@
 let
   drvName = "android-studio-${channel}-${version}";
   androidStudio = stdenv.mkDerivation {
-    name = drvName;
+    name = "${drvName}-unwrapped";
 
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.tar.gz";
@@ -133,7 +133,7 @@ let
     multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
 in runCommand
-  "${drvName}-wrapper"
+  drvName
   {
     startScript = ''
       #!${bash}/bin/bash

@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
-, pango, fcgi, firebird, mysql, postgresql, graphicsmagick, glew, openssl
-, pcre
+, pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
+, pcre, harfbuzz
 }:
 
 let
   generic =
     { version, sha256 }:
-    stdenv.mkDerivation rec {
-      name = "wt-${version}";
+    stdenv.mkDerivation {
+      pname = "wt";
+      inherit version;
 
       src = fetchFromGitHub {
         owner = "emweb";
@@ -21,7 +22,7 @@ let
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
         cmake boost doxygen qt48Full libharu
-        pango fcgi firebird mysql.connector-c postgresql graphicsmagick glew
+        pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
         openssl pcre
       ];
 
@@ -29,7 +30,8 @@ let
         "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DWT_CPP_11_MODE=-std=c++11"
         "-DGM_PREFIX=${graphicsmagick}"
-        "-DMYSQL_PREFIX=${mysql.connector-c}"
+        "-DMYSQL_PREFIX=${libmysqlclient}"
+        "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
         "--no-warn-unused-cli"
       ];
 
@@ -43,12 +45,12 @@ let
     };
 in {
   wt3 = generic {
-    version = "3.4.0";
-    sha256 = "0y0b2h9jf5cg1gdh48dj32pj5nsvipab1cgygncxf98c46ikhysg";
+    version = "3.4.1";
+    sha256 = "1bsx7hmy6g2x9p3vl5xw9lv1xk891pnvs93a87s15g257gznkjmj";
   };
 
   wt4 = generic {
-    version = "4.1.0";
-    sha256 = "1a9nl5gs8m8pssf2l3z6kbl2rc9fw5ad7lfslw5yr3gzi0zqn05x";
+    version = "4.1.1";
+    sha256 = "1f1imx5kbpqlysrqx5h75hf2f8pkq972rz42x0pl6cxbnsyzngid";
   };
 }

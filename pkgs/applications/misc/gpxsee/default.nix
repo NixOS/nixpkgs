@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "gpxsee";
-  version = "7.11";
+  version = "7.15";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "1b4ky7m990h3rmam9lb1w6vns1mxd8ri6is3a8qgdl8kd6xcl5d7";
+    sha256 = "036g17479nqy3kvy3dy3cn7yi7r57rsp28gkcay0qhf9h0az76p3";
   };
 
   nativeBuildInputs = [ qmake ];
@@ -28,7 +28,7 @@ mkDerivation rec {
       all common GPS log file formats.
     '';
     license = licenses.gpl3;
-    maintainers = [ maintainers.womfoo ];
+    maintainers = with maintainers; [ womfoo sikmir ];
     platforms = platforms.linux;
   };
 }

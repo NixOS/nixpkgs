@@ -111,6 +111,38 @@ in {
     inherit passthruFun;
   };
 
+  # Minimal versions of Python (built without optional dependencies)
+  python3Minimal = (callPackage ./cpython {
+    self = python3Minimal;
+    sourceVersion = {
+      major = "3";
+      minor = "7";
+      patch = "4";
+      suffix = "";
+    };
+    sha256 = "0gxiv5617zd7dnqm5k9r4q2188lk327nf9jznwq9j6b8p0s92ygv";
+    inherit (darwin) CF configd;
+    inherit passthruFun;
+
+    # strip down that python version as much as possible
+    openssl = null;
+    readline = null;
+    ncurses = null;
+    gdbm = null;
+    sqlite = null;
+    stripConfig = true;
+    stripIdlelib = true;
+    stripTests = true;
+    stripTkinter = true;
+    rebuildBytecode = false;
+    stripBytecode = true;
+  }).overrideAttrs(old: {
+    pname = "python3-minimal";
+    meta = old.meta // {
+      maintainers = [];
+    };
+  });
+
   pypy27 = callPackage ./pypy {
     self = pypy27;
     sourceVersion = {

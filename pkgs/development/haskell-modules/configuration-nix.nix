@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.connector-c; });
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.libmysqlclient; });
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
@@ -94,7 +94,16 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  cachix = enableSeparateBinOutput super.cachix;
+  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
+  cachix = disableLibraryProfiling super.cachix;
+
+  niv = enableSeparateBinOutput super.niv;
+
+  # Ensure the necessary frameworks for Darwin.
+  OpenAL = if pkgs.stdenv.isDarwin
+    then addExtraLibrary super.OpenAL pkgs.darwin.apple_sdk.frameworks.OpenAL
+    else super.OpenAL;
+
   ghcid = enableSeparateBinOutput super.ghcid;
 
   hzk = overrideCabal super.hzk (drv: {
@@ -531,10 +540,6 @@ self: super: builtins.intersectAttrs super {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
 
-  # Doctests hang only when compiling with nix.
-  # https://github.com/cdepillabout/termonad/issues/15
-  termonad = dontCheck super.termonad;
-
   # Expects z3 to be on path so we replace it with a hard
   sbv = overrideCabal super.sbv (drv: {
     postPatch = ''
@@ -588,8 +593,11 @@ self: super: builtins.intersectAttrs super {
   snap-server = dontCheck super.snap-server;
 
   # Tests require internet
-  dhall_1_25_0 = dontCheck super.dhall_1_25_0;
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
 
+  # Hadolint wants to build a statically linked binary by default.
+  hadolint = overrideCabal super.hadolint (drv: {
+    preConfigure = "sed -i -e /ld-options:/d hadolint.cabal";
+  });
 }

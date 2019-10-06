@@ -3,12 +3,12 @@
 # at runtime, need jdk
 
 stdenv.mkDerivation rec {
-  name = "groovy-${version}";
-  version = "2.5.7";
+  pname = "groovy";
+  version = "2.5.8";
 
   src = fetchurl {
     url = "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
-    sha256 = "1q69xg7p790dfk09wyijpx8y85n8g9lfd0fikl6qr73k9zz5v41x";
+    sha256 = "0hl7m9fpmrn9ppxbb3pm68048xpzig7q6hqyg121gvcziywi9ys9";
   };
 
   buildInputs = [ unzip makeWrapper ];

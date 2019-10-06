@@ -2,7 +2,6 @@
 stdenv.mkDerivation rec {
   pname = "pgloader";
   version = "3.6.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/dimitri/pgloader/releases/download/v3.6.1/pgloader-bundle-3.6.1.tgz";

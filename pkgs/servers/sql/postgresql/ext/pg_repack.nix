@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
 
 stdenv.mkDerivation rec {
-  name = "pg_repack-${version}";
+  pname = "pg_repack";
   version = "1.4.4";
 
   buildInputs = [ postgresql openssl zlib readline ];

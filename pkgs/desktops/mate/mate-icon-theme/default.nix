@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, librsvg, hicolor-icon-theme, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "mate-icon-theme-${version}";
-  version = "1.22.1";
+  pname = "mate-icon-theme";
+  version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1pn1xbmr4w4mi45nwk1qh18z9rlngmkhp9bw671yn4k6sii8fi3k";
+    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0r2bk4flb6kjj97badj2lnml4lfwpl2ym5hkf7r6f7cj8g6pzc4r";
   };
 
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils ];

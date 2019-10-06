@@ -11,7 +11,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "2.3.1";
-  name = "tengine-${version}";
+  pname = "tengine";
 
   src = fetchurl {
     url = "https://github.com/alibaba/tengine/archive/${version}.tar.gz";

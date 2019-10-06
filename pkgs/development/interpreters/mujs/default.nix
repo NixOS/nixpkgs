@@ -1,7 +1,7 @@
 { stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "mujs-${version}";
+  pname = "mujs";
   version = "1.0.6";
 
   src = fetchurl {

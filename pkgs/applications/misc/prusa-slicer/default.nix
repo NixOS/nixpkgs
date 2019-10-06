@@ -8,7 +8,7 @@ let
                  else "2.4";
 in
 stdenv.mkDerivation rec {
-  name = "prusa-slicer-${version}";
+  pname = "prusa-slicer";
   version = "2.0.0";
 
   enableParallelBuilding = true;
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # xs/src/libnest2d/cmake_modules/FindNLopt.cmake in the package source -
   # for finding the nlopt library, which doesn't pick up the package in the nix store.
   # We need to set the path via the NLOPT environment variable instead.
-  NLOPT = "${nlopt}";
+  NLOPT = nlopt;
 
   prePatch = ''
     # In nix ioctls.h isn't available from the standard kernel-headers package

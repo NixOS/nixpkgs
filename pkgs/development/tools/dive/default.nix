@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dive";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "wagoodman";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0az9b800zwk5sd90s8ssg8amf0a4dl7nrglkirp51d8hh3rs6nzl";
+    sha256 = "1pyrdff5qqc0l3h4nssa9a7qnfqwy2p6ywc8nbwyc7wvzgdiczb8";
   };
 
-  modSha256 = "1rc9nqri66kgjpxqcgwllyd0qmk46gs3wmsfdj1w43p6ybnaf3qw";
+  modSha256 = "1fk9z7a6wghrs15pc28g5ri7rkbb1ifjb91rscwqsmh10r2wik4w";
 
   meta = with lib; {
     description = "A tool for exploring each layer in a docker image";

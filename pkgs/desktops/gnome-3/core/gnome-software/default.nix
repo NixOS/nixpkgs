@@ -10,12 +10,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gnome-software-${version}";
-  version = "3.32.4";
+  pname = "gnome-software";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0g30wdrpypj23npvx85wqh1i4a8bbg00ainz7wmsvry21hcny4d4";
+    url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1mr03s6f38pbgvgpb1p91csqms369f1lzqyk5nfam5jqyl273nzk";
   };
 
   patches = [

@@ -3,7 +3,6 @@
   dde-qt-dbus-factory, dtkcore, deepin }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dtkwidget";
   version = "2.0.14";
 
@@ -41,7 +40,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin graphical user interface library";

@@ -30,7 +30,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "claws-mail-${version}";
+  pname = "claws-mail";
   version = "3.17.4";
 
   src = fetchurl {

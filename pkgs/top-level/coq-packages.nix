@@ -127,7 +127,7 @@ in rec {
     version = "8.9.1";
   };
   coq_8_10 = callPackage ../applications/science/logic/coq {
-    version = "8.10+beta2";
+    version = "8.10+beta3";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
@@ -137,7 +137,7 @@ in rec {
   coqPackages_8_9 = mkCoqPackages coq_8_9;
   coqPackages_8_10 = mkCoqPackages coq_8_10;
   coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
-    coqPackages_8_8
+    coqPackages_8_9
   );
   coq = coqPackages.coq;
 

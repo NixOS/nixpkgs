@@ -1,28 +1,34 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, makeWrapper
+, ncurses
 }:
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.19.1";
+  version = "0.22.0";
+
+  overrideModAttrs = _oldAttrs : _oldAttrs // {
+    preBuild = ''export GOPROXY="https://gocenter.io"'';
+  };
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19qzg5blqm5p7rrnaqh4f9aj53i743mawjnd1h9lfahbgmil1d24";
-  };
+    sha256 = "1d8lp94cw8rh9r9y64awxafhw9fmp33v3m761gzy500hrxal2rzb";
+   };
 
-  modSha256 = "1q21pc4yyiq4dihsb9n7261ssj52nnik8dq6fg4gvlnnpgcjp570";
+  modSha256 = "0m180571j4564py5mzdcbyypk71fdlp2vkfdwi6q85nd2q94sx6h";
 
-  # As per https://github.com/wtfutil/wtf/issues/501, one of the
-  # dependencies can't be fetched, so vendored dependencies should
-  # be used instead
-  modBuildPhase = ''
-    runHook preBuild
-    make build -mod=vendor
-    runHook postBuild
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    mv "$out/bin/wtf" "$out/bin/wtfutil"
+    wrapProgram "$out/bin/wtfutil" --prefix PATH : "${ncurses.dev}/bin"
   '';
 
   meta = with lib; {

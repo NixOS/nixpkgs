@@ -7,7 +7,7 @@ let
     else throw "Unsupported architecture";
 
 in stdenv.mkDerivation rec {
-  name = "ut2004-demo-${version}";
+  pname = "ut2004-demo";
   version = "3334";
 
   src = fetchurl {

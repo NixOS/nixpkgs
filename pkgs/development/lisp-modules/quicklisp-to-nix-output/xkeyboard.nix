@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''xkeyboard'';
   version = ''clx-20120811-git'';
 

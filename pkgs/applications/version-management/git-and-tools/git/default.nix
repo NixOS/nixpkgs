@@ -21,18 +21,19 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.22.0";
+  version = "2.23.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
 
 stdenv.mkDerivation {
-  name = "git-${version}";
+  pname = "git";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "17zj6jwx3s6bybd290f1mj5iym1r64560rmnf0p63x4akxclp7hm";
+    sha256 = "0rv0y45gcd3h191isppn77acih695v4pipdj031jvs9rd1ds0kr3";
   };
 
   outputs = [ "out" ];
@@ -318,6 +319,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens ];
+    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens globin ];
   };
 }

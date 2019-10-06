@@ -5,11 +5,11 @@
 , pulseaudioSupport ? true, libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "audio-recorder-${version}";
+  pname = "audio-recorder";
   version = "2.1.3";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
     url = "${meta.homepage}/+archive/ubuntu/ppa/+files/audio-recorder_${version}%7Ebionic.tar.gz";
     sha256 = "160pnmnmc9zwzyclsci3w1qwlgxkfx1y3x5ck6i587w78570an1r";
   };

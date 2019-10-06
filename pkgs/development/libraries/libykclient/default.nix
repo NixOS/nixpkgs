@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, curl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libykclient";
   version = "unstable-2019-03-18";
   src = fetchFromGitHub {

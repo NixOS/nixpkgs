@@ -104,6 +104,9 @@ in buildFHSUserEnv {
     # WINE
     cups lcms2 mpg123 cairo unixODBC samba4 sane-backends openldap
     ocl-icd utillinux
+
+    # Winetricks
+    fribidi
   ] ++ xorgDeps pkgs;
 
   extraInstallCommands = ''

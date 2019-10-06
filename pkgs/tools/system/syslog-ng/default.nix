@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.balabit.com/network-security/syslog-ng/;
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ rickynils  fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
   };
 }

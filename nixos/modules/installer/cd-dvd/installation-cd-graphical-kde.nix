@@ -13,9 +13,6 @@ with lib;
       enable = true;
       enableQt4Support = false;
     };
-
-    # Enable touchpad support for many laptops.
-    synaptics.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
@@ -25,14 +22,8 @@ with lib;
 
   system.activationScripts.installerDesktop = let
 
-    manualDesktopFile = pkgs.writeScript "nixos-manual.desktop" ''
-      [Desktop Entry]
-      Version=1.0
-      Type=Application
-      Name=NixOS Manual
-      Exec=firefox ${config.system.build.manual.manual}/share/doc/nixos/index.html
-      Icon=text-html
-    '';
+    # Comes from documentation.nix when xserver and nixos.enable are true.
+    manualDesktopFile = "/run/current-system/sw/share/applications/nixos-manual.desktop";
 
     homeDir = "/home/nixos/";
     desktopDir = homeDir + "Desktop/";

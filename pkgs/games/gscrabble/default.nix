@@ -2,7 +2,7 @@
 , gtk3, wrapGAppsHook, gst_all_1, gobject-introspection
 , python3Packages, gnome3, hicolor-icon-theme }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "gscrabble";
   version = "unstable-2019-03-11";
 

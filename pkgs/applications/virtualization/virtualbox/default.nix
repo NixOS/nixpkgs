@@ -1,8 +1,8 @@
 { config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
-, qttools, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus
+, qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
+, alsaLib, curl, libvpx, nettools, dbus, substituteAll
 , makeself, perl
 , javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
@@ -21,10 +21,11 @@ let
   buildType = "release";
   # Remember to change the extpackRev and version in extpack.nix and
   # guest-additions/default.nix as well.
-  main = "11sxx2zaablkvjiw0i5g5i5ibak6bsq6fldrcxwbcby6318shnhv";
-  version = "6.0.8";
+  main = "1y6j73axjns8ng3m8zs31zwx71wmm91n6vrhdpxphx16jf518djj";
+  version = "6.0.10";
 in stdenv.mkDerivation {
-  name = "virtualbox-${version}";
+  pname = "virtualbox";
+  inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
@@ -36,7 +37,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ]
     ++ optional (!headless) wrapQtAppsHook;
 
-  # Wrap manually because we just need to wrap one executable
+  # Wrap manually because we wrap just a small number of executables.
   dontWrapQtApps = true;
 
   buildInputs =
@@ -78,8 +79,22 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
+     # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
+     # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
+     # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
+     # and also because it would unset QT_PLUGIN_PATH for security reasons. We work around
+     # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
+     # after the code that unsets it. Note that qtsvg is included so that SVG icons from
+     # the user's icon theme can be loaded.
+  ++ optional (!headless && enableHardening) (substituteAll {
+      src = ./qt-env-vars.patch;
+      qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
+    })
   ++ [
     ./qtx11extras.patch
+    # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
+    # https://www.virtualbox.org/ticket/18911
+    ./kernel-5.3-fix.patch
   ];
 
   postPatch = ''
@@ -183,6 +198,11 @@ in stdenv.mkDerivation {
 
   preFixup = optionalString (!headless) ''
     wrapQtApp $out/bin/VirtualBox
+  ''
+  # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
+  # the source code (see postPatch).
+  + optionalString (!headless && !enableHardening) ''
+    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
   '';
 
   passthru = {

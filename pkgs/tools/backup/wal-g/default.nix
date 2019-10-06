@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, brotli }:
 
 buildGoPackage rec {
-  name = "wal-g-${version}";
+  pname = "wal-g";
   version = "0.2.0";
 
   src = fetchFromGitHub {

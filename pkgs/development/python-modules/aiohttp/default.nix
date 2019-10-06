@@ -40,13 +40,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
     ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
 
-  # Don't error on cryptography deprecation warning
-  postPatch = ''
-    substituteInPlace pytest.ini --replace "filterwarnings = error" ""
+  checkPhase = ''
+    pytest -k "not test__get_valid_log_format_exc and not test_access_logger_atoms"
   '';
-
-  # coroutine 'noop2' was never awaited
-  doCheck = false;
 
   meta = with lib; {
     description = "Asynchronous HTTP Client/Server for Python and asyncio";

@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ lgpl21 gpl2 ];
     homepage = https://www.displaylink.com/;
-    broken = versionOlder kernel.version "4.9" || versionAtLeast kernel.version "4.18" || stdenv.isAarch64;
+    broken = versionOlder kernel.version "4.9" || versionAtLeast kernel.version "5.3" || stdenv.isAarch64;
   };
 }

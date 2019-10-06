@@ -8,14 +8,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2019.08.09";
+  version = "2019.09.27";
+  # git describe --tags
+  realVersion = with stdenv.lib; with builtins;
+    "1.0-71-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "symbiflow";
        repo   = "prjtrellis";
-       rev    = "a67379179985bb12a611c75d975548cdf6e7d12e";
-       sha256 = "0vqwfsblf7ylz0jnnf532kap5s1d1zcvbavxmb6a4v32b9xfdv35";
+       rev    = "06904938dfe8f52392e73f7c8b1e034327887c27";
+       sha256 = "1yk13pipj7wp2mma0qcss4sa0wx8h60x0l0x9awh8g2iyk1y8nfw";
        name   = "trellis";
      })
     (fetchFromGitHub {
@@ -30,6 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boostWithPython3 ];
   nativeBuildInputs = [ cmake python3 ];
+  cmakeFlags = [ "-DCURRENT_GIT_VERSION=${realVersion}" ];
 
   preConfigure = with builtins; ''
     rmdir database && ln -sfv ${elemAt srcs 1} ./database
@@ -48,7 +52,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = https://github.com/symbiflow/prjtrellis;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with maintainers; [ q3k thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ q3k thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

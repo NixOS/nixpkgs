@@ -19,7 +19,7 @@
 
 { stdenv, lib
 , buildPackages
-, fetchurl ? null
+, fetchurl, fetchpatch
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 , bison
@@ -95,7 +95,15 @@ stdenv.mkDerivation ({
     ]
     ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
-    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
+    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
+
+    # Remove after upgrading to glibc 2.28+
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) (fetchpatch {
+      url = "https://sourceware.org/git/?p=glibc.git;a=patch;h=780684eb04298977bc411ebca1eadeeba4877833";
+      name = "correct-pwent-parsing-issue-and-resulting-build.patch";
+      sha256 = "08fja894vzaj8phwfhsfik6jj2pbji7kypy3q8pgxvsd508zdv1q";
+      excludes = [ "ChangeLog" ];
+    });
 
   postPatch =
     ''

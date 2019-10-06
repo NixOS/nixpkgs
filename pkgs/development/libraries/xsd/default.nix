@@ -3,8 +3,8 @@
 let
   fixed_paths = ''LDFLAGS="-L${xercesc}/lib" CPPFLAGS="-I${xercesc}/include"'';
 in
-stdenv.mkDerivation rec {
-  name = "xsd-${version}";
+stdenv.mkDerivation {
+  pname = "xsd";
   version = "4.0.0";
 
   src = fetchurl {

@@ -1,35 +1,32 @@
-{ mkXfceDerivation, automakeAddFlags, exo, garcon, gtk3
-, libnotify ? null, libxfce4ui, libxfce4util, libxklavier ? null
-, upower ? null, xfconf, xf86inputlibinput ? null }:
+{ mkXfceDerivation, automakeAddFlags, exo, garcon, gtk3, glib
+, libnotify, libxfce4ui, libxfce4util, libxklavier
+, upower, xfconf, xf86inputlibinput }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.14pre2";
-  rev = "xfce-4.14pre2";
+  version = "4.14.0";
 
-  sha256 = "0agi5flbzbc9q29yh7wbk3giif74finf4shq3q7v2h91w5kvyc9j";
+  sha256 = "13gmxd4sfgd6wky7s03bar58w9vl4i6jv2wncd6iajww791y5akn";
 
   postPatch = ''
-    automakeAddFlags xfce4-settings-editor/Makefile.am xfce4_settings_editor_CFLAGS DBUS_GLIB_CFLAGS
     for f in $(find . -name \*.c); do
       substituteInPlace $f --replace \"libinput-properties.h\" '<xorg/libinput-properties.h>'
     done
   '';
 
-  nativeBuildInputs = [ automakeAddFlags ];
-
   buildInputs = [
     exo
     garcon
+    glib
     gtk3
     libnotify
     libxfce4ui
     libxfce4util
     libxklavier
     upower
-    xfconf
     xf86inputlibinput
+    xfconf
   ];
 
   configureFlags = [

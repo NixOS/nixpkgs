@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libx86emu-${version}";
+  pname = "libx86emu";
   version = "2.3";
 
   src = fetchFromGitHub {

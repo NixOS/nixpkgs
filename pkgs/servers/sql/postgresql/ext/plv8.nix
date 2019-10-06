@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "plv8";
-  version = "2.3.12";
+  version = "2.3.13";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ v8 postgresql ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "plv8";
     repo = "plv8";
     rev = "v${version}";
-    sha256 = "1yi1ibiibvd0x4z5dm698w32ljrj3yr4j25jm1zkgkwd4ii8y644";
+    sha256 = "12xpcc1ylzyy75wi1m4vijknzv2gxab05w9z90jb03faq18cnlql";
   };
 
   makefile = "Makefile.shared";
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
-    maintainers = with maintainers; [ volth ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ volth marsam ];
+    platforms = [ "x86_64-linux" ];
     license = licenses.postgresql;
   };
 }

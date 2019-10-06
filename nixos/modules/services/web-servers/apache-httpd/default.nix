@@ -12,7 +12,7 @@ let
 
   php = mainCfg.phpPackage.override { apacheHttpd = httpd.dev; /* otherwise it only gets .out */ };
 
-  phpMajorVersion = head (splitString "." php.version);
+  phpMajorVersion = lib.versions.major (lib.getVersion php);
 
   mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = httpd; };
 
@@ -670,8 +670,7 @@ in
       { description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];
-        wants = [ "keys.target" ];
-        after = [ "network.target" "fs.target" "keys.target" ];
+        after = [ "network.target" "fs.target" ];
 
         path =
           [ httpd pkgs.coreutils pkgs.gnugrep ]

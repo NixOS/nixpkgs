@@ -36,7 +36,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "caffe-${version}";
+  pname = "caffe";
   version = "1.0";
 
   src = fetchFromGitHub {

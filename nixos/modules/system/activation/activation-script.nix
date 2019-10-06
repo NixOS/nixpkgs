@@ -184,7 +184,14 @@ in
         find /var/empty -mindepth 1 -delete
         chmod 0555 /var/empty
         chown root:root /var/empty
+
+        ${ # reasons for not setting immutable flag:
+           # 1. flag is not changeable inside a container
+           # 2. systemd-nspawn can not perform chown in case of --private-users-chown
+           #    then the owner is nobody and ssh will not start
+          optionalString (!config.boot.isContainer) ''
         ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
+          ''}
       '';
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
@@ -218,7 +225,7 @@ in
 
     systemd.user = {
       services.nixos-activation = {
-        description = "Run user specific NixOS activation";
+        description = "Run user-specific NixOS activation";
         script = config.system.userActivationScripts.script;
         unitConfig.ConditionUser = "!@system";
         serviceConfig.Type = "oneshot";

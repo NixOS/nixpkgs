@@ -2,20 +2,21 @@
 , pkgconfig, bison, flex
 , tcl, readline, libffi, python3
 , protobuf, zlib
+, verilog
 }:
 
 with builtins;
 
 stdenv.mkDerivation rec {
   pname = "yosys";
-  version = "2019.08.13";
+  version = "2019.09.27";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "19d6b8846f55b4c7be705619f753bec86deadac8";
-      sha256 = "185sbkxajx3k9j03n0cxq2qvzwfwdbcxp19h8vnk7ghd5y9gp602";
+      rev    = "c372e7baf9c48d41ebdbea4486a72e8dfaaddd3d";
+      sha256 = "18cyz900haf8lkpddqn0sns0a3hc8fqndzz7gg391671hzvy820k";
       name   = "yosys";
     })
 
@@ -40,11 +41,16 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ../yosys-abc/Makefile \
-      --replace 'CC   := gcc' ""
+      --replace 'CC   := gcc' "" \
+      --replace 'CXX  := g++' ""
     substituteInPlace ./Makefile \
       --replace 'CXX = clang' "" \
-      --replace 'ABCMKARGS = CC="$(CXX)"' 'ABCMKARGS =' \
+      --replace 'LD = clang++' 'LD = $(CXX)' \
+      --replace 'CXX = gcc' "" \
+      --replace 'LD = gcc' 'LD = $(CXX)' \
+      --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
+    patchShebangs tests
   '';
 
   preBuild = ''
@@ -57,6 +63,13 @@ stdenv.mkDerivation rec {
     # we have to do this ourselves for some reason...
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
   '';
+
+  doCheck = true;
+  checkInputs = [ verilog ];
+  # checkPhase defaults to VERBOSE=y, which gets passed down to abc,
+  # which then does $(VERBOSE)gcc, which then complains about not
+  # being able to find ygcc. Life is pain.
+  checkFlags = [ " " ];
 
   meta = {
     description = "Framework for RTL synthesis tools";
@@ -71,7 +84,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = http://www.clifford.at/yosys/;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

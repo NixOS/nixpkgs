@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
 , python, munge, perl, pam, openssl, zlib
-, ncurses, mysql, gtk2, lua, hwloc, numactl
+, ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, libssh2, xorg, lz4
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
 
 stdenv.mkDerivation rec {
-  name = "slurm-${version}";
+  pname = "slurm";
   version = "19.05.2.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "SchedMD";
     repo = "slurm";
     # The release tags use - instead of .
-    rev = "${builtins.replaceStrings ["."] ["-"] name}";
+    rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
     sha256 = "1k19z0qyjr6nwqxv93wbnnhy498788rc4fl9zyf0smc5yq1zbjir";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
     curl python munge perl pam openssl zlib
-      mysql.connector-c ncurses gtk2 lz4
+      libmysqlclient ncurses gtk2 lz4
       lua hwloc numactl readline freeipmi
   ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 

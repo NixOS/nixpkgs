@@ -18,6 +18,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   ];
 
   desktop = [
+    elementary-default-settings
     elementary-session-settings
     elementary-shortcut-overlay
     gala
@@ -90,9 +91,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-default-settings = callPackage ./desktop/elementary-default-settings { };
 
-  elementary-greeter = callPackage ./desktop/elementary-greeter {
-    inherit (gnome3) gnome-desktop;
-  };
+  elementary-greeter = callPackage ./desktop/elementary-greeter { };
 
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 

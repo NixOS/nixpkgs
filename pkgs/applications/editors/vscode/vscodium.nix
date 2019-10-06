@@ -4,20 +4,26 @@ let
   inherit (stdenv.hostPlatform) system;
 
   plat = {
-    "x86_64-linux" = "linux-x64";
-    "x86_64-darwin" = "darwin";
+    x86_64-linux = "linux-x64";
+    x86_64-darwin = "darwin";
   }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    "x86_64-linux" = "1ay4zvkbln2wf2j1d71mn13b6p2fqvzgz45mzrgaqwsszhbg4xzp";
-    "x86_64-darwin" = "17r9krb1qd92ybx078hkw9zlyym6kbnmbl91vjdilsq77bkf9jmw";
+    x86_64-linux = "15m7mfb8gmx3pwydc37blj0rxwgmkrnqfj6y79rpqlr2dg92gwlb";
+    x86_64-darwin = "080k4fnfa5ylmmya6zprgci3gld9mrbqsfnk53hgcny91ykl5xj5";
+  }.${system};
+
+  sourceRoot = {
+    x86_64-linux = ".";
+    x86_64-darwin = "";
   }.${system};
 in
   callPackage ./generic.nix rec {
+    inherit sourceRoot;
 
-    version = "1.36.1";
+    version = "1.38.1";
     pname = "vscodium";
 
     executableName = "codium";
@@ -28,8 +34,6 @@ in
       url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";
       inherit sha256;
     };
-
-    sourceRoot = ".";
 
     meta = with stdenv.lib; {
       description = ''

@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchgit, qtbase, cmake, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
-mkDerivation rec {
+mkDerivation {
   pname = "kernelshark";
   version = "0.9.8";
 

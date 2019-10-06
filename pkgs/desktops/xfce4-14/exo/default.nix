@@ -1,26 +1,18 @@
-{ mkXfceDerivation, docbook_xsl, libxslt, perlPackages, gtk3
+{ mkXfceDerivation, docbook_xsl, glib, libxslt, perlPackages, gtk3
 , libxfce4ui, libxfce4util }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "exo";
-  version = "4.14pre2";
-  rev = "xfce-4.14pre2";
+  version = "0.12.8";
 
-  sha256 = "0s91fv4yzafmdi25c63yin15sa25cfcyarpvavr4q3mmmiamzpi0";
+  sha256 = "013am7q4pwfncf4hk2a3hv7yx2vxgzb5xm8qsi9mxkj29xdhrvs5";
 
-  nativeBuildInputs = [ libxslt perlPackages.URI ];
-  buildInputs = [ gtk3 libxfce4ui libxfce4util ];
+  nativeBuildInputs = [ libxslt perlPackages.URI docbook_xsl ];
+  buildInputs = [ gtk3 glib libxfce4ui libxfce4util ];
 
-  postPatch = ''
-    substituteInPlace exo-helper/Makefile.am \
-      --replace 'exo_helper_2_CFLAGS =' \
-                'exo_helper_2_CFLAGS = $(GIO_UNIX_CFLAGS)'
-
-    substituteInPlace docs/reference/Makefile.am \
-      --replace http://docbook.sourceforge.net/release/xsl/current \
-                ${docbook_xsl}/share/xml/docbook-xsl
-  '';
+  # Workaround https://bugzilla.xfce.org/show_bug.cgi?id=15825
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = {
     description = "Application library for Xfce";
