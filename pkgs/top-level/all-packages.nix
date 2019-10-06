@@ -18504,6 +18504,8 @@ in
 
   fomp = callPackage ../applications/audio/fomp { };
 
+  formatter = callPackage ../applications/misc/formatter { };
+
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
 
   freecad = qt5.callPackage ../applications/graphics/freecad { mpi = openmpi; };
