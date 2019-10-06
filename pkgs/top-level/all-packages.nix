@@ -7746,7 +7746,8 @@ in
     isl = isl_0_17;
   }));
 
-  gfortran = gfortran7;
+  # Version 8.x is marked broken on Darwin: https://gist.github.com/GrahamcOfBorg/bef0231b7129681950f03c4ac06781c8.
+  gfortran = if stdenv.isDarwin then gfortran7 else gfortran8;
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
