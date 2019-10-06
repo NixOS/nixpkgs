@@ -43,4 +43,8 @@ stdenv.mkDerivation rec {
 
     maintainers = with lib.maintainers; [ lheckemann ];
   };
+
+  passthru = {
+      shellPath = "/bin/osh";
+  };
 }
