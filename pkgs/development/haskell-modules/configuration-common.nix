@@ -691,13 +691,8 @@ self: super: {
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
-  # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
-  cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;
-  pango = disableHardening (addBuildTool super.pango self.buildHaskellPackages.gtk2hs-buildtools) ["fortify"];
-  gtk =
-    if pkgs.stdenv.isDarwin
-    then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
-    else super.gtk;
+  # Enable have-quartz-gtk flag on Darwin.
+  gtk = if pkgs.stdenv.isDarwin then appendConfigureFlag super.gtk "-fhave-quartz-gtk" else super.gtk;
 
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
@@ -1230,9 +1225,14 @@ self: super: {
 
   # https://github.com/gtk2hs/gtk2hs/issues/276
   glib = appendPatch super.glib (pkgs.fetchpatch {
-    url = https://github.com/gtk2hs/gtk2hs/pull/282.patch;
-    name = "undefine-gcc-attribute-syntax";
+    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/4bb428e144ef2de9390f0f2239dcc50b7fc9a259.patch;
     sha256 = "1s72s683p2n5ri1a030zywciq0020ms64cmsy48axndp6dp9vri7";
+    stripLen = 1;
+  });
+  # https://github.com/gtk2hs/gtk2hs/issues/276
+  pango = appendPatch super.pango (pkgs.fetchpatch {
+    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/0a6016e89ce98415bb395ca0cfafeaacf3b3fce6.patch;
+    sha256 = "1n9spriinyif4h1h9mfj9k87b80kcs39qlym5yxnxxg0yszqqcpc";
     stripLen = 1;
   });
 
