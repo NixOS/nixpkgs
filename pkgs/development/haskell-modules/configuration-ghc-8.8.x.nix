@@ -75,6 +75,7 @@ self: super: {
   regex-base = self.regex-base_0_94_0_0;
   regex-pcre-builtin = self.regex-pcre-builtin_0_95_1_1_8_43;
   regex-posix = self.regex-posix_0_96_0_0;
+  regex-tdfa = self.regex-tdfa_1_3_0;
   shelly = self.shelly_1_9_0;
   string-qq = self.string-qq_0_0_4;
   tls = self.tls_1_5_1;
@@ -86,10 +87,6 @@ self: super: {
   hackage-security = appendPatch (doJailbreak super.hackage-security) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hackage-security-0.5.3.0.patch";
     sha256 = "0l8x0pbsn18fj5ak5q0g5rva4xw1s9yc4d86a1pfyaz467b9i5a4";
-  });
-  regex-tdfa = appendPatch (doJailbreak super.regex-tdfa) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-tdfa-1.2.3.1.patch";
-    sha256 = "1lhas4s2ms666prb475gaw2bqw1v4y8cxi66sy20j727sx7ppjs7";
   });
   socks = appendPatch (doJailbreak super.socks) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/socks-0.6.0.patch";
