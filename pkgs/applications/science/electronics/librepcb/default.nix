@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, qttools, qmake }:
+{ stdenv, fetchFromGitHub, qtbase, qttools, qmake, wrapQtAppsHook }:
 
 stdenv.mkDerivation {
   pname = "librepcb";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
   buildInputs = [ qtbase ];
 
@@ -24,6 +24,10 @@ stdenv.mkDerivation {
       mkdir -p $out/share/librepcb/fontobene
       cp share/librepcb/fontobene/newstroke.bene $out/share/librepcb/fontobene/
     '';
+
+  preFixup = ''
+    wrapQtApp $out/bin/librepcb
+  '';
 
   meta = with stdenv.lib; {
     description = "A free EDA software to develop printed circuit boards";
