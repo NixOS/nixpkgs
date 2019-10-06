@@ -1228,4 +1228,12 @@ self: super: {
   # The LTS-14.x version of optparse-applicative is too old.
   cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
 
+  # https://github.com/gtk2hs/gtk2hs/issues/276
+  glib = appendPatch super.glib (pkgs.fetchpatch {
+    url = https://github.com/gtk2hs/gtk2hs/pull/282.patch;
+    name = "undefine-gcc-attribute-syntax";
+    sha256 = "1s72s683p2n5ri1a030zywciq0020ms64cmsy48axndp6dp9vri7";
+    stripLen = 1;
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
