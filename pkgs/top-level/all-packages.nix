@@ -14503,6 +14503,7 @@ in
   ### DEVELOPMENT / R MODULES
 
   R = callPackage ../applications/science/math/R {
+    gfortran = gfortran8;
     # TODO: split docs into a separate output
     texLive = texlive.combine {
       inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
