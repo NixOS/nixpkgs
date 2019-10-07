@@ -938,6 +938,17 @@
       interface with <option>networking.interfaces.&lt;name&gt;.useDHCP = true;</option>
     </para>
    </listitem>
+   <listitem>
+     <para>
+       Because of the systemd upgrade,
+       <application>systemd-timesyncd</application> will no longer work if
+       <option>system.stateVersion</option> is not set correctly. When
+       upgrading from NixOS 19.03, please make sure that
+       <option>system.stateVersion</option> is set to
+       <literal>"19.03"</literal>, or lower if the installation dates back to an
+       earlier version of NixOS.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
