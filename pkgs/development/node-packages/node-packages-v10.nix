@@ -46895,6 +46895,7 @@ in
       description = "Microsoft Azure Cross Platform Command Line tool";
       homepage = https://github.com/Azure/azure-xplat-cli;
       license = "Apache-2.0";
+      broken = true;
     };
     production = true;
     bypassCache = true;
