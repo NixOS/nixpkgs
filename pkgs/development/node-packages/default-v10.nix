@@ -35,6 +35,10 @@ nodePackages // {
     name = "bitwarden-cli-${drv.version}";
   });
 
+  insect = nodePackages.insect.override {
+    nativeBuildInputs = [ pkgs.psc-package pkgs.purescript nodePackages.pulp ];
+  };
+
   ios-deploy = nodePackages.ios-deploy.override (drv: {
     nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.buildPackages.rsync ];
     preRebuild = ''
