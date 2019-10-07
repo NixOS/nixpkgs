@@ -797,6 +797,8 @@ in
 
   crumbs = callPackage ../applications/misc/crumbs { };
 
+  boxfort = callPackage ../development/libraries/boxfort { };
+
   crc32c = callPackage ../development/libraries/crc32c { };
 
   cue = callPackage ../development/tools/cue { };
