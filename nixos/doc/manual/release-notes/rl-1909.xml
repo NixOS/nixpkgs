@@ -739,7 +739,7 @@
       </para>
      </listitem>
     </itemizedlist>
-     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>,
+     This also configures the kernel to pass core dumps to <literal>systemd-coredump</literal>,
      and restricts the SysRq key combinations to the sync command only.
      These sysctl snippets can be found in <literal>/etc/sysctl.d/50-*.conf</literal>,
      and overridden via <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link>
@@ -748,12 +748,15 @@
    </listitem>
    <listitem>
     <para>
-      Coredumps are now acquired by <literal>systemd-coredump</literal> by default.
-      <literal>systemd-coredump</literal> behaviour can still be modified via
-      <option>systemd.coredump.extraConfig</option>.
-      To stick to the old behaviour (having the kernel dump to a file called <literal>core</literal>
-      in the working directory), without piping it through <literal>systemd-coredump</literal>, set
-      <option>boot.kernel.sysctl."kernel.core_pattern"</option> to <literal>"core"</literal>.
+      Core dumps are now processed by <literal>systemd-coredump</literal>
+      by default. <literal>systemd-coredump</literal> behaviour can
+      still be modified via
+      <option>systemd.coredump.extraConfig</option>. To stick to the
+      old behaviour (having the kernel dump to a file called
+      <literal>core</literal> in the working directory), without piping
+      it through <literal>systemd-coredump</literal>, set
+      <option>systemd.coredump.enable</option> to
+      <literal>false</literal>.
     </para>
    </listitem>
    <listitem>
