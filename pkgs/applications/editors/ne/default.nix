@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ne";
-  version = "3.1.2";
+  version = "3.2.1";
   src = fetchFromGitHub {
     owner = "vigna";
     repo = "ne";
     rev = version;
-    sha256 = "154grh9gdzydnqn9xxj7zpia9cc5x6a7y1g73vwizr9bkg92l5cc";
+    sha256 = "0h6d08cnwrk96ss83i9bragwwanph6x54sm3ak1z81146dsqsiif";
   };
   buildInputs = [ ncurses texlive.combined.scheme-medium texinfo perl ghostscript ];
   dontBuild = true;
