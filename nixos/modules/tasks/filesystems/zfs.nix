@@ -558,9 +558,7 @@ in
         after = [ "zfs-import.target" ];
         path = [ packages.zfsUser ];
         startAt = cfgTrim.interval;
-        script = ''
-          zpool list -H -o name | xargs --no-run-if-empty -n1 zpool trim
-        '';
+        serviceConfig.ExecStart = "${pkgs.runtimeShell} -c 'zpool list -H -o name | xargs --no-run-if-empty -n1 zpool trim'";
       };
     })
   ];
