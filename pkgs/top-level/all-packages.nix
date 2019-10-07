@@ -15643,6 +15643,8 @@ in
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
+  health-check = callPackage ../os-specific/linux/health-check { };
+
   hibernate = callPackage ../os-specific/linux/hibernate { };
 
   hostapd = callPackage ../os-specific/linux/hostapd { };
