@@ -16022,6 +16022,8 @@ in
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
+    turbostat = callPackage ../os-specific/linux/turbostat { };
+
     usbip = callPackage ../os-specific/linux/usbip { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
