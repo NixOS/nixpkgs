@@ -80,5 +80,6 @@ buildPythonPackage rec {
     homepage = https://pythonnet.github.io;
     license = licenses.mit;
     maintainers = with maintainers; [ jraygauthier ];
+    broken = true;
   };
 }

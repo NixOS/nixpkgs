@@ -26,6 +26,7 @@ buildPythonPackage rec {
     homepage = https://github.com/salimfadhley/jenkinsapi;
     maintainers = with maintainers; [ drets ];
     license = licenses.mit;
+    broken = true;
   };
 
 }

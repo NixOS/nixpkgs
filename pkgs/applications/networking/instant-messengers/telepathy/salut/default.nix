@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "Link-local XMPP connection manager for Telepathy";
     platforms = platforms.gnu ++ platforms.linux; # Random choice
     maintainers = [ maintainers.lethalman ];
+    broken = true;
   };
 }

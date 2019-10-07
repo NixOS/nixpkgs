@@ -45,5 +45,6 @@ buildPythonPackage {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lsix ];
     homepage = https://www.riverbankcomputing.com/software/qscintilla/;
+    broken = true;
   };
 }
