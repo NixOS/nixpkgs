@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencascade-occt";
-  version = "7.3.0p3";
+  version = "7.4.0";
   commit = "V${builtins.replaceStrings ["."] ["_"] version}";
 
   src = fetchurl {
     name = "occt-${commit}.tar.gz";
     url = "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=${commit};sf=tgz";
-    sha256 = "0k9c3ypcnjcilq1dhsf6xxbd52gyq4h5rchvp30k3c8ph4ris5pz";
+    sha256 = "0n6p9bjxi7j6aqf2wmhx31lhmmkizgychzri4l5y6lzgbh3w454n";
   };
 
   nativeBuildInputs = [ cmake ninja ];
