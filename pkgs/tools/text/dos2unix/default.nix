@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dos2unix";
-  version = "7.4.0";
+  version = "7.4.1";
 
   src = fetchurl {
     url = "https://waterlan.home.xs4all.nl/dos2unix/${pname}-${version}.tar.gz";
-    sha256 = "12h4c61g376bhq03y5g2xszkrkrj5hwd928rly3xsp6rvfmnbixs";
+    sha256 = "08w6yywzirsxq8bh87jycvvw922ybhc2l426j2iqzliyn1h8mm8w";
   };
 
   configurePhase = ''
