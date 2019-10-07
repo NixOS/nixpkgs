@@ -225,6 +225,8 @@ let
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
+    duff = callPackage ../development/ocaml-modules/duff { };
+
     dune = callPackage ../development/tools/ocaml/dune { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
