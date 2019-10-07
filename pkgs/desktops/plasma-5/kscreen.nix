@@ -14,4 +14,5 @@ mkDerivation {
     libkscreen qtdeclarative qtgraphicaleffects kwindowsystem kdeclarative
     plasma-framework
   ];
+  meta.broken = true;
 }

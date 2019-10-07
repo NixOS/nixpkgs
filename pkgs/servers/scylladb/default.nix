@@ -92,5 +92,6 @@ gcc8Stdenv.mkDerivation {
     license = licenses.agpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.farlion ];
+    broken = true;
   };
 }

@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage    = https://pytorch.org/;
     license     = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ericsagnes ];
+    broken = true;
   };
 }

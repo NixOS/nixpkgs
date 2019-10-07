@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = http://supervisord.org/;
     license = licenses.free; # http://www.repoze.org/LICENSE.txt
     maintainers = with maintainers; [ zimbatm ];
+    broken = true;
   };
 }

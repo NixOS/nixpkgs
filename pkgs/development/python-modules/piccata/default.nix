@@ -15,5 +15,6 @@ buildPythonPackage rec {
     description = "Simple CoAP (RFC7252) toolkit";
     homepage = "https://github.com/NordicSemiconductor/piccata";
     maintainers = with lib.maintainers; [ gebner ];
+    broken = true;
   };
 }

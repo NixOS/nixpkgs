@@ -32,6 +32,7 @@ buildPythonPackage rec {
     homepage = https://github.com/alex/django-taggit/tree/master/;
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
+    broken = true;
   };
 
 }

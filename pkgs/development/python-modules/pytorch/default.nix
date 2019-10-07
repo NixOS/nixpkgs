@@ -106,5 +106,6 @@ in buildPythonPackage rec {
     license     = lib.licenses.bsd3;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ teh thoughtpolice ];
+    broken = true;
   };
 }
