@@ -77,6 +77,7 @@ gcc8Stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs ./configure.py
+    patchShebangs seastar/json/json2code.py
   '';
 
   configurePhase = ''
