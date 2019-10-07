@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation {
   pname = "tilix";
-  version = "unstable-2019-08-03";
+  version = "unstable-2019-10-02";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
-    rev = "09ec4e8e113703ca795946d8d2a83091e7b741e4";
-    sha256 = "1vvp6l25xygzhbhscg8scik8y59nl8a92ri024ijk0c0lclga05m";
+    rev = "ffcd31e3c0e1a560ce89468152d8726065e8fb1f";
+    sha256 = "1bzv7xiqhyblz1rw8ln4zpspmml49vnshn1zsv9di5q7kfgpqrgq";
   };
 
   # Default upstream else LDC fails to link
@@ -54,15 +54,6 @@ stdenv.mkDerivation {
     gtkd
     libsecret
     libunwind
-  ];
-
-  patches = [
-    # Depends on libsecret optionally
-    # https://github.com/gnunn1/tilix/pull/1745
-    (fetchpatch {
-      url = "https://github.com/gnunn1/tilix/commit/e38dd182bfb92419d70434926ef9c0530189aab8.patch";
-      sha256 = "1ws4iyzi67crzlp9p7cw8jr752b3phcg5ymx5aj0bh6321g38kfk";
-    })
   ];
 
   postPatch = ''
