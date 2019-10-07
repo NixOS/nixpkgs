@@ -48,6 +48,8 @@ stdenv.mkDerivation {
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
         isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
         chmod 755 ./VBoxLinuxAdditions.run
+        # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
+        sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
         ./VBoxLinuxAdditions.run --noexec --keep
       ''
       else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
