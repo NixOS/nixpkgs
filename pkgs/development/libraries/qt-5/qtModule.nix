@@ -17,6 +17,9 @@ mkDerivation (args // {
   inherit src;
   patches = args.patches or patches.${name} or [];
 
+  # Satisfy the mkDerivation check in the setup hook of qtbase.
+  _qt_mkDerivation = true;
+
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
 

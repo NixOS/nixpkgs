@@ -1,3 +1,13 @@
+if [ -z "$_qt_mkDerivation" ]
+then
+    cat >&2 <<EOF
+Did not detect supported mkDerivation. Build aborted!
+
+Please refer to the Nixpkgs manual section 'Support for specific programming languages and frameworks/Qt'.
+EOF
+    exit 1
+fi
+
 qtPluginPrefix=@qtPluginPrefix@
 qtQmlPrefix=@qtQmlPrefix@
 qtDocPrefix=@qtDocPrefix@

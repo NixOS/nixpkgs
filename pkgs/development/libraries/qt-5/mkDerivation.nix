@@ -9,6 +9,9 @@ args:
 let
   args_ = {
 
+    # Satisfy the mkDerivation check in the setup hook of qtbase.
+    _qt_mkDerivation = true;
+
     qmakeFlags = [ ("CONFIG+=" + (if debug then "debug" else "release")) ]
               ++ (args.qmakeFlags or []);
 
