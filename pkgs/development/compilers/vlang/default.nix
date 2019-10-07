@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ glfw freetype openssl ]
+  propagatedBuildInputs = [ glfw freetype openssl ]
     ++ stdenv.lib.optional stdenv.hostPlatform.isUnix upx;
 
   buildPhase = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cc -std=gnu11 $CFLAGS -w -o v $vc/v.c -lm $LDFLAGS
     ./v -prod -cflags `$CFLAGS` -o v compiler
     # Exclude thirdparty/vschannel as it is windows-specific.
-    find thirdparty -path thirdparty/vschannel -prune -o -type f -name "*.c" -execdir cc -std=gnu11 $CFLAGS -w -c {} ';'
+    find thirdparty -path thirdparty/vschannel -prune -o -type f -name "*.c" -execdir cc -std=gnu11 $CFLAGS -w -c {} $LDFLAGS ';'
     runHook postBuild
   '';
 
