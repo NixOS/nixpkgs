@@ -9508,6 +9508,8 @@ in
 
   lattice-diamond = callPackage ../development/tools/lattice-diamond { };
 
+  direvent = callPackage ../development/tools/misc/direvent { };
+
   distcc = callPackage ../development/tools/misc/distcc {
     libiberty_static = libiberty.override { staticBuild = true; };
   };
