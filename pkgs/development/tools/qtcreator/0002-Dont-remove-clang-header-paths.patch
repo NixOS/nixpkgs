@@ -1,0 +1,13 @@
+diff --git a/src/plugins/cpptools/headerpathfilter.cpp b/src/plugins/cpptools/headerpathfilter.cpp
+index e2d1e6a..1a1d839 100644
+--- a/src/plugins/cpptools/headerpathfilter.cpp
++++ b/src/plugins/cpptools/headerpathfilter.cpp
+@@ -134,8 +134,6 @@ void removeClangSystemHeaderPaths(HeaderPaths &headerPaths)
+ 
+ void HeaderPathFilter::tweakHeaderPaths()
+ {
+-    removeClangSystemHeaderPaths(builtInHeaderPaths);
+-
+     auto split = resourceIterator(builtInHeaderPaths,
+                                   projectPart.toolChainTargetTriple.contains("darwin"));
+ 
