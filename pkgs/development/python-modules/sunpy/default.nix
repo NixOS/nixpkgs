@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "1.0.2";
+  version = "1.0.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dmfzxxsjjax9wf2ljyl4z07pxbshrj828zi5qnsa9rgk4148q9x";
+    sha256 = "0z5j9b7sa4cw3hikhg9ng0w6z8vr3xshpq5s9f36wdg8lx6zaha0";
   };
 
   propagatedBuildInputs = [
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
-    pytest sunpy -k "not test_rotation"
+    pytest sunpy -k "not test_rotation and not README"
   '';
 
   meta = with lib; {
