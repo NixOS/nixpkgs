@@ -2060,6 +2060,8 @@ in
     epubcheck = null;
   };
 
+  asciidoctorj = callPackage ../tools/typesetting/asciidoctorj { };
+
   asunder = callPackage ../applications/audio/asunder { };
 
   autossh = callPackage ../tools/networking/autossh { };
