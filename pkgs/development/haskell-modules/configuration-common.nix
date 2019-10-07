@@ -691,9 +691,6 @@ self: super: {
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
-  # Enable have-quartz-gtk flag on Darwin.
-  gtk = if pkgs.stdenv.isDarwin then appendConfigureFlag super.gtk "-fhave-quartz-gtk" else super.gtk;
-
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal super.stunclient (drv: {
