@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     license = "LGPL+link exception";
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

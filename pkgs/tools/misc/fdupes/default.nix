@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/adrianlopezroche/fdupes;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.z77z ];
+    maintainers = [ maintainers.maggesi ];
   };
 }

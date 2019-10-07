@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
       stdenv.lib.maintainers.vbmithr
     ];
   };

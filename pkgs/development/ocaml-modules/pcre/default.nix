@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "An efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
     license = licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [ z77z vbmithr ];
+    maintainers = with maintainers; [ maggesi vbmithr ];
   };
 }

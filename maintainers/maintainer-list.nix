@@ -7164,8 +7164,8 @@
     githubId = 5253988;
     name = "yvt";
   };
-  z77z = {
-    email = "maggesi@math.unifi.it";
+  maggesi = {
+    email = "marco.maggesi@gmail.com";
     github = "maggesi";
     githubId = 1809783;
     name = "Marco Maggesi";
