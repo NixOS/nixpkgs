@@ -2130,6 +2130,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
+    meta.broken = true;
   }) {};
 
   xf86videosavage = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
@@ -2143,6 +2144,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
+    meta.broken = true;
   }) {};
 
   xf86videosiliconmotion = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {

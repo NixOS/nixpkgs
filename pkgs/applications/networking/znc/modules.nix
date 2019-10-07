@@ -94,6 +94,7 @@ in {
       description = "ZNC FiSH module";
       homepage = https://github.com/dctrwatson/znc-fish;
       maintainers = [ stdenv.lib.maintainers.offline ];
+      broken = true;
     };
   };
 

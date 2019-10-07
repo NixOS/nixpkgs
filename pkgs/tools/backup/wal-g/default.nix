@@ -21,5 +21,6 @@ buildGoPackage rec {
     license = stdenv.lib.licenses.asl20;
     description = "An archival restoration tool for Postgres";
     maintainers = [ stdenv.lib.maintainers.ocharles ];
+    broken = true;
   };
 }
