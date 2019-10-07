@@ -5,12 +5,18 @@
 # Python libraries
 , numpy, tensorflow-tensorboard, backports_weakref, mock, enum34, absl-py
 , future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
+, functools32
+, opt-einsum
 , termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
 # Common deps
 , git, swig, which, binutils, glibcLocales, cython
 # Common libraries
 , jemalloc, openmpi, astor, gast, grpc, sqlite, openssl, jsoncpp, re2
 , curl, snappy, flatbuffers, icu, double-conversion, libpng, libjpeg, giflib
+# Upsteam by default includes cuda support since tensorflow 1.15. We could do
+# that in nix as well. It would make some things easier and less confusing, but
+# it would also make the default tensorflow package unfree. See
+# https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
 , cudaSupport ? false, nvidia_x11 ? null, cudatoolkit ? null, cudnn ? null, nccl ? null
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
@@ -33,7 +39,13 @@ let
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-merged";
-    paths = [ cudatoolkit.out cudatoolkit.lib ];
+    paths = [
+      cudatoolkit.lib
+      cudatoolkit.out
+      # for some reason some of the required libs are in the targets/x86_64-linux
+      # directory; not sure why but this works around it
+      "${cudatoolkit}/targets/${stdenv.system}"
+    ];
   };
 
   cudatoolkit_cc_joined = symlinkJoin {
@@ -55,12 +67,12 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.14.0";
+  version = "1.15.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
   pythonEnv = python.withPackages (_:
-    [ # python deps needed during wheel build time
+    [ # python deps needed during wheel build time (not runtime, see the buildPythonPackage part for that)
       numpy
       keras-preprocessing
       protobuf
@@ -74,6 +86,7 @@ let
       wheel
   ] ++ lib.optionals (!isPy3k)
   [ future
+    functools32
     mock
   ]);
 
@@ -84,7 +97,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "06jvwlsm14b8rqwd8q8796r0vmn0wk64s4ps2zg0sapkmp9vvcmi";
+      sha256 = "1j8vysfblkyydrr67qr3i7kvaq5ygnjlx8hw9a9pc95ac462jq7i";
     };
 
     patches = [
@@ -98,13 +111,6 @@ let
         name = "fix-compile-with-cuda-and-mpi.patch";
         url = "https://github.com/tensorflow/tensorflow/pull/29673/commits/498e35a3bfe38dd75cf1416a1a23c07c3b59e6af.patch";
         sha256 = "1m2qmwv1ysqa61z6255xggwbq6mnxbig749bdvrhnch4zydxb4di";
-      })
-
-      # https://github.com/tensorflow/tensorflow/issues/29220
-      (fetchpatch {
-        name = "bazel-0.27.patch";
-        url = "https://github.com/tensorflow/tensorflow/commit/cfccbdb8c4a92dd26382419dceb4d934c2380391.patch";
-        sha256 = "1l56wjia2c4685flsfkkgy471wx3c66wyv8khspv06zchj0k0liw";
       })
     ];
 
@@ -157,7 +163,6 @@ let
       # "com_github_googleapis_googleapis"
       # "com_github_googlecloudplatform_google_cloud_cpp"
       "com_google_protobuf"
-      "com_google_protobuf_cc"
       "com_googlesource_code_re2"
       "curl"
       "cython"
@@ -175,11 +180,11 @@ let
       "lmdb"
       "nasm"
       # "nsync" # not packaged in nixpkgs
+      "opt_einsum_archive"
       "org_sqlite"
       "pasta"
       "pcre"
       "png_archive"
-      "protobuf_archive"
       "six_archive"
       "snappy"
       "swig"
@@ -266,9 +271,9 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "196pm3ynfafqlcxah07hkvphf536hpix1ydgsynr1yg08aynlvvx"
+        "1rbg8w8pjf15hpvzrclsi19lhsrwdns6f8psb1wz35ay0ggdw8c0"
       else
-        "138r85n27ijzwxfwb5pcfyb79v14368jpckw0vmciz6pwf11bd9g";
+        "0j9r7xgmkc5cj53m32jk8x0qkz05bcvnwjkd9g6l6wy10anx7kvq";
     };
 
     buildAttrs = {
@@ -345,9 +350,10 @@ in buildPythonPackage {
     termcolor
     wrapt
     grpcio
+    opt-einsum
   ] ++ lib.optionals (!isPy3k) [
     mock
-    future # FIXME
+    future
   ] ++ lib.optionals (pythonOlder "3.4") [
     backports_weakref enum34
   ] ++ lib.optionals withTensorboard [
