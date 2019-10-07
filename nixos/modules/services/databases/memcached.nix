@@ -67,6 +67,7 @@ in
     users.users = optional (cfg.user == "memcached") {
       name = "memcached";
       description = "Memcached server user";
+      isSystemUser = true;
     };
 
     environment.systemPackages = [ memcached ];

@@ -47,18 +47,18 @@ in
 
 {
   bird = generic {
-    version = "1.6.6";
-    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
+    version = "1.6.8";
+    sha256 = "1ch0pkkhd7axdjlvhprynh9q08x0nm984nvkm1cjb7gm5rfsnqbc";
   };
 
   bird6 = generic {
-    version = "1.6.6";
-    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
+    version = "1.6.8";
+    sha256 = "1ch0pkkhd7axdjlvhprynh9q08x0nm984nvkm1cjb7gm5rfsnqbc";
     enableIPv6 = true;
   };
 
   bird2 = generic {
-    version = "2.0.5";
-    sha256 = "1lr963ywy0mkrhgs5969wc354lizddsagrlbf8x84yb5s9pp6jsf";
+    version = "2.0.6";
+    sha256 = "1ankpxvmn12kzgv5vh7awnkj34jzjciy5baq3smkj079db74r4wh";
   };
 }

@@ -165,6 +165,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  ansi2html = callPackage ../development/python-modules/ansi2html { };
+
   anytree = callPackage ../development/python-modules/anytree {
     inherit (pkgs) graphviz;
   };
@@ -1385,9 +1387,9 @@ in {
 
   amqplib = callPackage ../development/python-modules/amqplib {};
 
-  antlr4-python2-runtime = callPackage ../development/python-modules/antlr4-python2-runtime {};
+  antlr4-python2-runtime = callPackage ../development/python-modules/antlr4-python2-runtime { antlr4 = pkgs.antlr4; };
 
-  antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {};
+  antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime { antlr4 = pkgs.antlr4; };
 
   apipkg = callPackage ../development/python-modules/apipkg {};
 
@@ -1698,6 +1700,8 @@ in {
     inherit (pkgs) pkgconfig;
   };
 
+  HTSeq = callPackage ../development/python-modules/HTSeq { };
+
   httpserver = callPackage ../development/python-modules/httpserver {};
 
   bleach = callPackage ../development/python-modules/bleach { };
@@ -1799,6 +1803,8 @@ in {
   certifi = callPackage ../development/python-modules/certifi { };
 
   characteristic = callPackage ../development/python-modules/characteristic { };
+
+  chart-studio = callPackage ../development/python-modules/chart-studio { };
 
   cheetah = callPackage ../development/python-modules/cheetah { };
 
@@ -4199,6 +4205,8 @@ in {
   pdfkit = callPackage ../development/python-modules/pdfkit { };
 
   periodictable = callPackage ../development/python-modules/periodictable { };
+
+  pgcli = callPackage ../development/tools/database/pgcli {};
 
   pg8000 = callPackage ../development/python-modules/pg8000 { };
   pg8000_1_12 = callPackage ../development/python-modules/pg8000/1_12.nix { };

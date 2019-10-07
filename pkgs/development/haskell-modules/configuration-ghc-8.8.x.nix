@@ -98,10 +98,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hackage-security-0.5.3.0.patch";
     sha256 = "0l8x0pbsn18fj5ak5q0g5rva4xw1s9yc4d86a1pfyaz467b9i5a4";
   });
-  hedgehog = appendPatch (doJailbreak super.hedgehog) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/hedgehog-1.0.patch";
-    sha256 = "16gadh1hb74jqvzc9c893sffb1y2vjglblyrqjwp7xfhccq7g8yw";
-  });
   regex-tdfa = appendPatch super.regex-tdfa (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/regex-tdfa-1.2.3.1.patch";
     sha256 = "1lhas4s2ms666prb475gaw2bqw1v4y8cxi66sy20j727sx7ppjs7";
@@ -161,6 +157,7 @@ self: super: {
   lens = self.lens_4_18_1;
   memory = self.memory_0_15_0;
   microlens = self.microlens_0_4_11_2;
+  regex-pcre-builtin = self.regex-pcre-builtin_0_95_0_8_8_35;
   shelly = self.shelly_1_9_0;
   string-qq = self.string-qq_0_0_4;
   tls = self.tls_1_5_1;

@@ -1,5 +1,5 @@
 { stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python
-, lib, valgrind, makeWrapper, fetchFromGitHub }:
+, lib, valgrind, makeWrapper, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation {
   src = fetchFromGitHub {
@@ -14,6 +14,14 @@ stdenv.mkDerivation {
   version = "1.5.1.81";
 
   buildInputs = [ which attr makeWrapper python ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/xtreemfs/xtreemfs/commit/ebfdc2fff56c09f310159d92026883941e42a953.patch";
+      sha256 = "075w00ad88qm6xpm5679m0gfzkrc53w17sk7ycybf4hzxjs29ygy";
+      name = "xtreemfs-fix-for-openssl_1_1";
+    })
+  ];
 
   preConfigure = ''
     export JAVA_HOME=${jdk}
@@ -66,6 +74,5 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ raskin matejc ];
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
-    broken = true;  # does not support openssl 1.1
   };
 }

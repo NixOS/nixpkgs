@@ -180,9 +180,17 @@ let format' = format; in let
     export NIX_STATE_DIR=$TMPDIR/state
     nix-store --load-db < ${closureInfo}/registration
 
-    echo "running nixos-install..."
-    nixos-install --root $root --no-bootloader --no-root-passwd \
-      --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""
+    mkdir -m 0755 -p "$root/etc"
+    touch "$root/etc/NIXOS"
+
+    echo "copying system..."
+    nix-env --store "$root" --substituters "auto?trusted=1" \
+        -p "$root/nix/var/nix/profiles/system" --set "${config.system.build.toplevel}" --quiet
+
+    echo "copying channel..."
+    mkdir -p "$root/nix/var/nix/profiles/per-user/root"
+    nix-env --store "$root" --substituters "auto?trusted=1" \
+        -p "$root/nix/var/nix/profiles/per-user/root/channels" --set "${channelSources}" --quiet
 
     echo "copying staging root to image..."
     cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* /
