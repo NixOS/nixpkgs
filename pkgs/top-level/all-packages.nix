@@ -3988,7 +3988,9 @@ in
 
   intecture-auth = callPackage ../tools/admin/intecture/auth.nix { };
 
-  intecture-cli = callPackage ../tools/admin/intecture/cli.nix { };
+  intecture-cli = callPackage ../tools/admin/intecture/cli.nix {
+    openssl = openssl_1_0_2;
+  };
 
   intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
 
