@@ -1,39 +1,28 @@
 {
-  enableXft ? true, libXft ? null, patches ? [], stdenv, lua, gettext, pkgconfig, xlibsWrapper, libXinerama, libXrandr, libX11,
-  xterm, xmessage, makeWrapper, fetchFromGitHub, mandoc, which
+  enableXft ? true, libXft ? null, stdenv, lua, gettext, readline, pkgconfig, xlibsWrapper, libXinerama, libXrandr, libX11,
+  xterm, xmessage, makeWrapper, fetchFromGitHub, mandoc, which, groff
 }:
 
 assert enableXft -> libXft != null;
 
-let
-  pname = "notion";
-  version = "3-2017050501";
-  inherit patches;
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+stdenv.mkDerivation rec {
+  name = "notion-unstable-2019-11-09";
   meta = with stdenv.lib; {
-    description = "Tiling tabbed window manager, follow-on to the ion window manager";
-    homepage = http://notion.sourceforge.net;
+    description = "Tiling tabbed window manager";
+    homepage = https://notionwm.net;
     platforms = platforms.linux;
-    license   = licenses.notion_lgpl;
-    maintainers = with maintainers; [jfb];
+    license   = licenses.lgpl21;
+    maintainers = with maintainers; [jfb raboof];
   };
   src = fetchFromGitHub {
     owner = "raboof";
-    repo = pname;
-    rev = version;
-    sha256 = "1wq5ylpsw5lkbm3c2bzmx2ajlngwib30adxlqbvq4bgkaf9zjh65";
+    repo = "notion";
+    rev = "b1bce6786684ff25a929aaa7ca4ce1c9c5bce904";
+    sha256 = "1kpqg7vnamhzpalx8ak3nc896sn146aqaljxaagl2szfqk9jzgdp";
   };
 
-  patches = patches;
-  postPatch = ''
-    substituteInPlace system-autodetect.mk --replace '#PRELOAD_MODULES=1' 'PRELOAD_MODULES=1'
-    substituteInPlace man/Makefile --replace "nroff -man -Tlatin1" "${mandoc}/bin/mandoc -T man"
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [makeWrapper xlibsWrapper lua gettext mandoc which libXinerama libXrandr libX11 ] ++ stdenv.lib.optional enableXft libXft;
+  nativeBuildInputs = [ pkgconfig groff ];
+  buildInputs = [makeWrapper xlibsWrapper lua gettext mandoc which libXinerama libXrandr libX11 readline] ++ stdenv.lib.optional enableXft libXft;
 
   buildFlags = "LUA_DIR=${lua} X11_PREFIX=/no-such-path PREFIX=\${out}";
   installFlags = "PREFIX=\${out}";
