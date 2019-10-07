@@ -41,7 +41,7 @@ gcc8Stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  patches = [ ./seastar-configure-script-paths.patch ];
+  patches = [ ./seastar-configure-script-paths.patch ./configure-etc-osrelease.patch ];
 
   nativeBuildInputs = [
    pkgconfig
