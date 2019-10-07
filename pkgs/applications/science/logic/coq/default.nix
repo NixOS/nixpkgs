@@ -101,7 +101,9 @@ self = stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [ ocaml findlib camlp5 num ])
+  buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
+  ++ [ ocamlPackages.num ]
   ++ stdenv.lib.optionals buildIde
     (if versionAtLeast "8.10"
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
