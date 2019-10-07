@@ -147,7 +147,7 @@ self: super: {
 
   barbly = if pkgs.stdenv.isDarwin
     then addBuildDepend super.barbly pkgs.darwin.apple_sdk.frameworks.AppKit
-    else super.halive;
+    else super.barbly;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
   hakyll = if pkgs.stdenv.isDarwin
