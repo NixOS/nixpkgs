@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    dask
   ];
 
   propagatedBuildInputs = [
+    dask
     datashape
     numpy
     pandas
@@ -39,6 +39,14 @@ buildPythonPackage rec {
   postConfigure = ''
     substituteInPlace setup.py \
       --replace "versioneer.get_version()" "'0.5.1'"
+  '';
+
+  # inspect.getargspec can't handle type hints,
+  # this should be upstreamed, but the blaze community
+  # is depressingly inactive.
+  postPatch = ''
+    substituteInPlace odo/utils.py \
+      --replace "getargspec" "getfullargspec"
   '';
 
   # disable 6/315 tests
