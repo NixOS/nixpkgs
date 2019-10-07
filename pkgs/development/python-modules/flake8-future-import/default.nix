@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = https://github.com/xZise/flake8-future-import;
     description = "A flake8 extension to check for the imported __future__ modules to make it easier to have a consistent code base";
     license = lib.licenses.mit;
+    broken = true;
   };
 }

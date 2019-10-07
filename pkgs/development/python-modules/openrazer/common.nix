@@ -13,5 +13,6 @@
     license = licenses.gpl2;
     maintainers = with maintainers; [ roelvandijk ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

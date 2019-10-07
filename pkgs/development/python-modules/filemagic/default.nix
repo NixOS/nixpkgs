@@ -25,5 +25,6 @@ buildPythonPackage {
     homepage = https://github.com/aliles/filemagic;
     license = licenses.asl20;
     maintainers = with maintainers; [ earvstedt ];
+    broken = true;
   };
 }

@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     license = licenses.lgpl21;
+    broken = true;
   };
 }

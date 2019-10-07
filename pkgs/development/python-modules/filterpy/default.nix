@@ -31,5 +31,6 @@ buildPythonPackage rec {
     description = "Kalman filtering and optimal estimation library";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

@@ -38,5 +38,6 @@ buildPythonPackage rec {
     description = "Efficient, Pythonic bidirectional map data structures and related functionality";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jakewaksbaum ];
+    broken = true;
   };
 }

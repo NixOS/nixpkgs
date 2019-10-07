@@ -16,5 +16,6 @@ buildPythonPackage rec {
     description = "Read and write Ruby-marshalled data";
     license = licenses.wtfpl;
     maintainers = [ maintainers.ryantm ];
+    broken = true;
   };
 }

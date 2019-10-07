@@ -85,5 +85,6 @@ stdenv.mkDerivation rec {
     homepage = http://libguestfs.org/;
     maintainers = with maintainers; [offline];
     platforms = platforms.linux;
+    broken = true;
   };
 }

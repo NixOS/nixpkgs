@@ -116,5 +116,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

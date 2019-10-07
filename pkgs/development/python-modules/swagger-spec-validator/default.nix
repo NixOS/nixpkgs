@@ -31,6 +31,7 @@ buildPythonPackage rec {
     license = licenses.asl20;
     description = "Validation of Swagger specifications";
     maintainers = with maintainers; [ vanschelven ];
+    broken = true;
   };
 }
 
