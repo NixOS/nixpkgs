@@ -919,12 +919,12 @@ in rec {
 
     src1 = fetchurl {
       url = http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt;
-      sha256 = "1psqm094zl4prk2f8h18jv0d471hxykzd1zdnrlx7gzrzy6pz5r3";
+      sha256 = "1nf4py2mg0mlv9s5a7had2wn29z2v6bcca0fs6rbpdn4nqc4s7dm";
     };
 
     src2 = fetchurl {
       url = http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt;
-      sha256 = "17ss1sdr3k70zbyx2z9xf74345slrp41gbkpih8axrmg4x92fgm1";
+      sha256 = "0f88il1ds6qazy1ghxviqcwsywrbf6pzl2lmzf4f3qvhdfb6f1y0";
     };
 
     langInputs = [ en ];
