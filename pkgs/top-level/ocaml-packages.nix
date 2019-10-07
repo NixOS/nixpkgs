@@ -239,6 +239,8 @@ let
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
+    eqaf = callPackage ../development/ocaml-modules/eqaf { };
+
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
