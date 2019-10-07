@@ -443,8 +443,8 @@ mapAliases ({
   };
 
   # added 2019-08-01
-  mumble_git = pkgs.mumble_rc;
-  murmur_git = pkgs.murmur_rc;
+  mumble_git = pkgs.mumble;
+  murmur_git = pkgs.murmur;
 
   # added 2019-09-06
   zeroc_ice = pkgs.zeroc-ice;
