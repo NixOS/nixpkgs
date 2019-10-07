@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch }:
+{ stdenv, lib, fetchurl, fetchpatch, readline }:
 
 stdenv.mkDerivation rec {
   pname = "oil";
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
+  buildInputs = [ readline ];
+  configureFlags = [ "--with-readline" ];
+
   # Stripping breaks the bundles by removing the zip file from the end.
   dontStrip = true;
 
@@ -39,5 +42,9 @@ stdenv.mkDerivation rec {
     ];
 
     maintainers = with lib.maintainers; [ lheckemann ];
+  };
+
+  passthru = {
+      shellPath = "/bin/osh";
   };
 }
