@@ -31,6 +31,7 @@ buildPythonPackage rec {
     homepage = "http://fedoraproject.org/wiki/Pykickstart";
     description = "Read and write Fedora kickstart files";
     license = licenses.gpl2Plus;
+    broken = true;
   };
 
 }
