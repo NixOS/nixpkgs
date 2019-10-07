@@ -1,24 +1,24 @@
-{ lib, fetchFromGitHub, buildGoPackage, installShellFiles }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "zsh-history";
-  version = "2019-10-27";
+  version = "2019-10-07";
 
   src = fetchFromGitHub {
     owner = "b4b4r07";
     repo = "history";
-    rev = "527e6f51873992fbf9c1aad70aa3009a0027a8de";
-    sha256 = "12dc380zfg3b9k7rcsyzi9dxqh28c4957b3fsx1nxvqvdm3ralm2";
+    rev = "a08ad2dcffc852903ae54b0c5704b8a085009ef7";
+    sha256 = "0r3p04my40dagsq1dssnk583qrlcps9f7ajp43z7mq73q3hrya5s";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  goDeps = ./deps.nix;
+  modSha256 = "0f10b86gyn7m7lw43c8y1m30mdg0i092a319v3cb2qj05jb9vn42";
   goPackagePath = "github.com/b4b4r07/history";
 
   postInstall = ''
     install -d $out/share
-    cp -r $NIX_BUILD_TOP/go/src/${goPackagePath}/misc/* $out/share
+    cp -r "$NIX_BUILD_TOP/source/misc/"* "$out/share"
     installShellCompletion --zsh --name _history $out/share/zsh/completions/_history
   '';
 
