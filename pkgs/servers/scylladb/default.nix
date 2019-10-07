@@ -83,10 +83,12 @@ gcc8Stdenv.mkDerivation {
   configurePhase = ''
     ./configure.py --mode=release
   '';
+
   installPhase = ''
     mkdir $out
     cp -r * $out/
   '';
+
   meta = with stdenv.lib; {
     description = "NoSQL data store using the seastar framework, compatible with Apache Cassandra";
     homepage = "https://scylladb.com";
