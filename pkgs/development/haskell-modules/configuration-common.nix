@@ -1241,5 +1241,11 @@ self: super: {
     sha256 = "1fadmibpk0q38fzp6a8ss6b1kh7v5d5mw3s9i45cd4dsg86hqb0i";
     stripLen = 1;
   });
+  gtk = appendPatch super.gtk (pkgs.fetchpatch {
+    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/a09720ae8fdc2f9391ba88308312e42d091a4f88.patch;
+    sha256 = "12ja6sprzl9si51rng8s2xx66ihpm6d6p00qi5czkpkrhr0457n7";
+    stripLen = 1;
+    postFetch = "sed -i -e s,gtk.cabal-renamed,gtk.cabal, $out";
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
