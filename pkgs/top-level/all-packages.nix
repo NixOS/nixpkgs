@@ -19672,13 +19672,13 @@ in
 
   multimon-ng = callPackage ../applications/radio/multimon-ng { };
 
-  murmur = (libsForQt5.callPackage ../applications/networking/mumble {
+  murmur = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
     }).murmur;
 
-  mumble = (libsForQt5.callPackage ../applications/networking/mumble {
+  mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
