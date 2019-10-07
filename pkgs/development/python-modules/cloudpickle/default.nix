@@ -1,27 +1,38 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock }:
+{ lib, buildPythonPackage, fetchPypi, isPy27
+, pytest
+, mock
+, psutil
+, futures
+}:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "0.8.1";
+  version = "1.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3ea6fd33b7521855a97819b3d645f92d51c8763d3ab5df35197cd8e96c19ba6f";
+    sha256 = "0nc87ylxq1xm00xphfj5crh42rhi9am4zaszzx9k44qf2kbh294j";
   };
 
-  buildInputs = [ pytest mock ];
+  propagatedBuildInputs = lib.optionals isPy27 [ futures ];
 
-  # See README for tests invocation
+  checkInputs = [ pytest mock psutil ];
+  # Disable tests which use subprocesses, as they will not inherit
+  # correct PYTHONPATH, thus will fail to load modules such as 'psutil'
   checkPhase = ''
-    PYTHONPATH=$PYTHONPATH:'.:tests' py.test
+    cd tests
+    pytest -k 'not (Protocol \
+      or process \
+      or interactive \
+      or file_handles \
+      or locally_defined_function \
+      or dynamic_module)'
   '';
 
-  # TypeError: cannot serialize '_io.FileIO' object
-  doCheck = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extended pickling support for Python objects";
     homepage = https://github.com/cloudpipe/cloudpickle;
     license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ jonringer ];
   };
 }
