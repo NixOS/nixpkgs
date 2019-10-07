@@ -1229,10 +1229,14 @@ self: super: {
     sha256 = "1s72s683p2n5ri1a030zywciq0020ms64cmsy48axndp6dp9vri7";
     stripLen = 1;
   });
-  # https://github.com/gtk2hs/gtk2hs/issues/276
   pango = appendPatch super.pango (pkgs.fetchpatch {
     url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/0a6016e89ce98415bb395ca0cfafeaacf3b3fce6.patch;
     sha256 = "1n9spriinyif4h1h9mfj9k87b80kcs39qlym5yxnxxg0yszqqcpc";
+    stripLen = 1;
+  });
+  gtk3 = appendPatch super.gtk3 (pkgs.fetchpatch {
+    url = https://github.com/gtk2hs/gtk2hs/pull/282/commits/cc0d8e8ef9bdffc776182a1f92225750bfea8f57.patch;
+    sha256 = "175zs694d04d7jfj8xq33rizw38bc3ninr00n26jyrg39vgkmc5j";
     stripLen = 1;
   });
 
