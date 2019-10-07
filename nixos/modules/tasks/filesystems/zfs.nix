@@ -552,14 +552,14 @@ in
       };
     })
 
-    (mkIf cfgTrim.enable {
+    (mkIf (enableZfs && cfgTrim.enable) {
       systemd.services.zpool-trim = {
         description = "ZFS pools trim";
         after = [ "zfs-import.target" ];
         path = [ packages.zfsUser ];
         startAt = cfgTrim.interval;
         script = ''
-          zpool list -H -o name | xargs -n1 zpool trim
+          zpool list -H -o name | xargs --no-run-if-empty -n1 zpool trim
         '';
       };
     })
