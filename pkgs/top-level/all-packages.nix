@@ -799,6 +799,8 @@ in
 
   boxfort = callPackage ../development/libraries/boxfort { };
 
+  criterion = callPackage ../development/libraries/criterion { };
+
   crc32c = callPackage ../development/libraries/crc32c { };
 
   cue = callPackage ../development/tools/cue { };
