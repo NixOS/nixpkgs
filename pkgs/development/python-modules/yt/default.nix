@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = https://github.com/yt-project/yt;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

@@ -32,6 +32,7 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = https://snug.readthedocs.io/en/latest/;
     maintainers = with maintainers; [ mredaelli ];
+    broken = true;
   };
 
 }
