@@ -4268,6 +4268,15 @@
     githubId = 5698461;
     name = "Maciej Kazulak";
   };
+  mkf = {
+    email = "m@mikf.pl";
+    github = "mkf";
+    name = "Michał Krzysztof Feiler";
+    keys = [{
+      longkeyid = "rsa4096/0xE35C2D7C2C6AC724";
+      fingerprint = "1E36 9940 CC7E 01C4 CFE8  F20A E35C 2D7C 2C6A C724";
+    }];
+  };
   mkg = {
     email = "mkg@vt.edu";
     github = "mkgvt";
