@@ -175,6 +175,8 @@ in {
 
   apprise = callPackage ../development/python-modules/apprise { };
 
+  aresponses = callPackage ../development/python-modules/aresponses { };
+
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
   asana = callPackage ../development/python-modules/asana { };
