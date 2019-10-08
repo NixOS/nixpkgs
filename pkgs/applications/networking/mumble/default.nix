@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, mkDerivation
-, qtbase, qttools, qtsvg, qmake, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, qt5
+, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib, python
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
@@ -14,12 +14,12 @@ assert iceSupport -> zeroc-ice != null;
 
 with stdenv.lib;
 let
-  generic = overrides: source: mkDerivation (source // overrides // {
+  generic = overrides: source: qt5.mkDerivation (source // overrides // {
     name = "${overrides.type}-${source.version}";
 
     patches = (source.patches or []) ++ optional jackSupport ./mumble-jack-support.patch;
 
-    nativeBuildInputs = [ pkgconfig python qmake ]
+    nativeBuildInputs = [ pkgconfig python qt5.qmake ]
       ++ (overrides.nativeBuildInputs or [ ]);
 
     buildInputs = [ boost protobuf avahi ]
@@ -72,8 +72,8 @@ let
   client = source: generic {
     type = "mumble";
 
-    nativeBuildInputs = [ qttools ];
-    buildInputs = [ libopus libsndfile speex qtsvg ]
+    nativeBuildInputs = [ qt5.qttools ];
+    buildInputs = [ libopus libsndfile speex qt5.qtsvg ]
       ++ optional stdenv.isLinux alsaLib
       ++ optional jackSupport libjack2
       ++ optional speechdSupport speechd
