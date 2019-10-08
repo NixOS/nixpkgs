@@ -38,6 +38,10 @@
    </listitem>
    <listitem>
      <para>
+       By default zfs pools will now be trimmed on a weekly basis.
+       Trimming is only done on supported devices (i.e. NVME or SSDs)
+       and should improve throughput and lifetime of these devices.
+       It is controlled by the <varname>services.zfs.trim.enable</varname> varname.
        The zfs scrub service (<varname>services.zfs.autoScrub.enable</varname>)
        and the zfs autosnapshot service (<varname>services.zfs.autoSnapshot.enable</varname>)
        are now only enabled if zfs is set in <varname>config.boot.initrd.supportedFilesystems</varname> or
