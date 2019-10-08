@@ -450,6 +450,7 @@ let
       name = "Virtual";
       machine = {
         networking.useNetworkd = networkd;
+        networking.useDHCP = false;
         networking.interfaces.tap0 = {
           ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
           ipv6.addresses = [ { address = "2001:1470:fffd:2096::"; prefixLength = 64; } ];
