@@ -8099,8 +8099,6 @@ in
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
-  jikes = callPackage ../development/compilers/jikes { };
-
   julia_07 = callPackage ../development/compilers/julia/0.7.nix {
     gmp = gmp6;
     openblas = openblasCompat;
