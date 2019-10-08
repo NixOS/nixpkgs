@@ -8,6 +8,8 @@
 , qtdeclarative
 , libpulseaudio
 , glm
+
+, wrapQtAppsHook
 }:
 
 mkDerivation rec {
@@ -33,6 +35,8 @@ mkDerivation rec {
     qtdeclarative
     libpulseaudio
     glm
+
+    wrapQtAppsHook
   ];
 
   configureFlags = [
