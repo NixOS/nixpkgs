@@ -16,9 +16,7 @@ let
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
 
-  enableAutoSnapshots = cfgSnapshots.enable;
-  enableAutoScrub = cfgScrub.enable;
-  enableZfs = inInitrd || inSystem || enableAutoSnapshots || enableAutoScrub;
+  enableZfs = inInitrd || inSystem;
 
   kernel = config.boot.kernelPackages;
 
@@ -395,7 +393,7 @@ in
 
       system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ packages.zfsUser ]
-        ++ optional enableAutoSnapshots autosnapPkg; # so the user can run the command to see flags
+        ++ optional cfgSnapshots.enable autosnapPkg; # so the user can run the command to see flags
 
       services.udev.packages = [ packages.zfsUser ]; # to hook zvol naming, etc.
       systemd.packages = [ packages.zfsUser ];
@@ -487,7 +485,7 @@ in
       systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })
 
-    (mkIf enableAutoSnapshots {
+    (mkIf (enableZfs && cfgSnapshots.enable) {
       systemd.services = let
                            descr = name: if name == "frequent" then "15 mins"
                                     else if name == "hourly" then "hour"
@@ -525,7 +523,7 @@ in
                             }) snapshotNames);
     })
 
-    (mkIf enableAutoScrub {
+    (mkIf (enableZfs && cfgScrub.enable) {
       systemd.services.zfs-scrub = {
         description = "ZFS pools scrubbing";
         after = [ "zfs-import.target" ];
