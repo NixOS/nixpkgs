@@ -31,7 +31,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = http://www.gitlab.com/;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin talyz ];
     license = licenses.mit;
   };
 }
