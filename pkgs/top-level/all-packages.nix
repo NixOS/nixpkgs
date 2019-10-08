@@ -480,6 +480,8 @@ in
 
   abduco = callPackage ../tools/misc/abduco { };
 
+  act = callPackage ../tools/admin/act { };
+
   acct = callPackage ../tools/system/acct { };
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
