@@ -17658,6 +17658,7 @@ in
     ubootRaspberryPiZero
     ubootRock64
     ubootRockPro64
+    ubootROCPCRK3399
     ubootSheevaplug
     ubootSopine
     ubootUtilite

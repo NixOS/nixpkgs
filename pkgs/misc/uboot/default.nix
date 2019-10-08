@@ -350,6 +350,13 @@ in {
     filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
 
+  ubootROCPCRK3399 = buildUBoot {
+    defconfig = "roc-pc-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = [ "spl/u-boot-spl.bin" "u-boot.itb" "idbloader.img"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+  };
+
   ubootSheevaplug = buildUBoot {
     defconfig = "sheevaplug_defconfig";
     extraMeta.platforms = ["armv5tel-linux"];
