@@ -18222,6 +18222,8 @@ in
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
+  envelope = callPackage ../applications/office/envelope { };
+
   eolie = callPackage ../applications/networking/browsers/eolie { };
 
   epdfview = callPackage ../applications/misc/epdfview { };
