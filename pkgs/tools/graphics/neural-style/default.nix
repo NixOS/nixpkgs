@@ -54,6 +54,5 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.raskin];
     # Eats a lot of RAM
     platforms = ["x86_64-linux"];
-    broken = true;
   };
 }

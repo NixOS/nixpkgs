@@ -45,6 +45,5 @@ buildPythonPackage rec {
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
     maintainers = with maintainers; [ makefu ];
-    broken = true;
   };
 }

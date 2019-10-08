@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     homepage = http://delta.affinix.com/qca;
     maintainers = [ maintainers.sander ];
     platforms = platforms.unix;
-    broken = true;
   };
 }
