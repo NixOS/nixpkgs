@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p bundix common-updater-scripts nix nix-prefetch-git python3 python3Packages.requests python3Packages.lxml python3Packages.click python3Packages.click-log vgo2nix
+#! nix-shell -i python3 -p bundix common-updater-scripts nix nix-prefetch-git python3 python3Packages.requests python3Packages.lxml python3Packages.click python3Packages.click-log vgo2nix yarn2nix-moretea.yarn2nix
 
 import click
 import click_log
@@ -46,24 +46,6 @@ class GitLabRepo:
         j = json.loads(out)
         return j['sha256']
 
-    def get_deb_url(self, flavour: str, version: str, arch: str = 'amd64') -> str:
-        """
-        gitlab builds debian packages, which we currently need as we don't build the frontend on our own
-        this returns the url of a given flavour, version and arch
-        :param flavour: 'ce' or 'ee'
-        :param version: a version, without 'v' prefix and '-ee' suffix
-        :param arch: amd64
-        :return: url of the debian package
-        """
-        if flavour not in ['ce', 'ee']:
-            raise Exception(f"don't know how to get deb_url for flavour {flavour}")
-        return f"https://packages.gitlab.com/gitlab/gitlab-{flavour}/packages" + \
-               f"/debian/stretch/gitlab-{flavour}_{version}-{flavour}.0_{arch}.deb/download.deb"
-
-    def get_deb_hash(self, flavour: str, version: str) -> str:
-        out = subprocess.check_output(['nix-prefetch-url', self.get_deb_url(flavour, version)])
-        return out.decode('utf-8').strip()
-
     @staticmethod
     def rev2version(tag: str) -> str:
         """
@@ -93,8 +75,6 @@ class GitLabRepo:
                                                                'GITLAB_SHELL_VERSION', 'GITLAB_WORKHORSE_VERSION']}
         return dict(version=self.rev2version(rev),
                     repo_hash=self.get_git_hash(rev),
-                    deb_hash=self.get_deb_hash(flavour, version),
-                    deb_url=self.get_deb_url(flavour, version),
                     owner=self.owner,
                     repo=self.repo,
                     rev=rev,
@@ -191,6 +171,27 @@ def update_rubyenv(flavour):
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
 
+@cli.command('update-yarnpkgs')
+def update_yarnpkgs():
+    """Update yarnPkgs"""
+
+    # yarn.lock is identical between the repos
+    repo = _flavour2gitlabrepo('ee')
+    yarnpkgs_dir = pathlib.Path(__file__).parent
+
+    # load rev from data.json
+    data = _get_data_json()
+    rev = data['ee']['rev']
+
+    with open(yarnpkgs_dir / 'yarn.lock', 'w') as f:
+        f.write(repo.get_file('yarn.lock', rev))
+
+    with open(yarnpkgs_dir / 'yarnPkgs.nix', 'w') as f:
+        subprocess.run(['yarn2nix'], cwd=yarnpkgs_dir, check=True, stdout=f)
+
+    os.unlink(yarnpkgs_dir / 'yarn.lock')
+
+
 @cli.command('update-gitaly')
 def update_gitaly():
     """Update gitaly"""
@@ -267,6 +268,7 @@ def update_all(ctx):
     for flavour in ['ce', 'ee']:
         ctx.invoke(update_data, rev='latest', flavour=flavour)
         ctx.invoke(update_rubyenv, flavour=flavour)
+    ctx.invoke(update_yarnpkgs)
     ctx.invoke(update_gitaly)
     ctx.invoke(update_gitlab_shell)
     ctx.invoke(update_gitlab_workhorse)
