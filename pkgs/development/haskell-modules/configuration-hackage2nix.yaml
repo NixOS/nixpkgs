@@ -6805,6 +6805,7 @@ broken-packages:
   - lifter
   - ligature
   - lightning-haskell
+  - lightstep-haskell
   - lighttpd-conf
   - lighttpd-conf-qq
   - lilypond
