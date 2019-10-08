@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     description = "An open source Spotify client running as a UNIX daemon";
     homepage = "https://github.com/Spotifyd/spotifyd";
     license = with licenses; [ gpl3 ];
-    maintainers = [ maintainers.anderslundstedt ];
+    maintainers = [ maintainers.anderslundstedt maintainers.marsam ];
     platforms = platforms.unix;
   };
 }
