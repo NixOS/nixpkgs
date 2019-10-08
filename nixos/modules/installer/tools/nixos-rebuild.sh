@@ -268,7 +268,7 @@ fi
 
 # Resolve the flake.
 if [[ -n $flake ]]; then
-    flake=$(nix flake info --json -- "$flake" | jq -r .uri)
+    flake=$(nix flake info --json -- "$flake" | jq -r .url)
 fi
 
 # Find configuration.nix and open editor instead of building.
