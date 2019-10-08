@@ -2,8 +2,10 @@
 , libarchive, db, pcre, libedit, libossp_uuid, libXpm
 , libSM, libXt, freetype, pkgconfig, fontconfig, makeWrapper ? stdenv.isDarwin
 , git, cacert, cmake, libyaml
+, libjpeg, libX11, libXext, libXft, libXinerama
 , extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
 , extraPacks     ? []
+, withGui ? false
 }:
 
 let
@@ -25,6 +27,7 @@ stdenv.mkDerivation {
   buildInputs = [ cacert git cmake gmp readline openssl
     libarchive libyaml db pcre libedit libossp_uuid
     zlib pkgconfig ]
+  ++ stdenv.lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
   ++ extraLibraries
   ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
 
@@ -68,7 +71,7 @@ stdenv.mkDerivation {
     description = "A Prolog compiler and interpreter";
     license = "LGPL";
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.optionals (!withGui) stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.meditans ];
   };
 }

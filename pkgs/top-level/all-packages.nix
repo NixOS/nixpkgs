@@ -8495,6 +8495,7 @@ in
   swift = callPackage ../development/compilers/swift { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
+  swiPrologWithGui = callPackage ../development/compilers/swi-prolog { withGui = true; };
 
   tbb = callPackage ../development/libraries/tbb { };
 
