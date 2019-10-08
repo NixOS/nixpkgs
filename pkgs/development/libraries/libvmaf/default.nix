@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256="13ajbcidngjvgl0rr7l0mb43h651p5pqj3d1linrfk9c222b9fs3";
   };
 
-  buildInputs = [ autoconf automake intltool libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake intltool libtool pkgconfig ];
   doCheck = true;
 
   installPhase = ''
