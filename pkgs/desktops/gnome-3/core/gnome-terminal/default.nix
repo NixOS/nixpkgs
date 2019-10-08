@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.34.0";
+  version = "3.34.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0wcavripfsr691qkcjb71vccffz0wx2q5qh4clwnk1hi8j1hz9l5";
+    sha256 = "06fqgyfzjqj5k3cr9ig6xa85ml7ifgwfj4gi9z5f0pyc62lwvzlg";
   };
 
   buildInputs = [
@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
     vala desktop-file-utils wrapGAppsHook pcre2
     hicolor-icon-theme # for setup-hook
   ];
-
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   # Silly ./configure, it looks for dbus file from gnome-shell in the
   # installation tree of the package it is configuring.
