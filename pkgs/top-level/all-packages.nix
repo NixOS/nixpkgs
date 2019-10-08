@@ -12561,6 +12561,8 @@ in
 
   libvisual = callPackage ../development/libraries/libvisual { };
 
+  libvmaf = callPackage ../development/libraries/libvmaf { };
+
   libvncserver = callPackage ../development/libraries/libvncserver {};
 
   libviper = callPackage ../development/libraries/libviper { };
