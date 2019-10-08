@@ -5,11 +5,13 @@
 , scipy
 , matplotlib
 , pytest
+, isPy3k
 }:
 
 buildPythonPackage rec {
   version = "1.4.5";
   pname = "filterpy";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -31,6 +33,5 @@ buildPythonPackage rec {
     description = "Kalman filtering and optimal estimation library";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
-    broken = true;
   };
 }

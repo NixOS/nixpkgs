@@ -10,11 +10,13 @@
 , nose
 , cython
 , python
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "yt";
   version = "3.5.1";
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -48,6 +50,5 @@ buildPythonPackage rec {
     homepage = https://github.com/yt-project/yt;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
-    broken = true;
   };
 }

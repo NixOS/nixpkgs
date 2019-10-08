@@ -1,8 +1,9 @@
-{ buildPythonPackage, fetchPypi, lib, ipaddress }:
+{ buildPythonPackage, fetchPypi, lib, ipaddress, isPy3k }:
 
 buildPythonPackage rec {
   pname = "piccata";
   version = "1.0.1";
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -15,6 +16,5 @@ buildPythonPackage rec {
     description = "Simple CoAP (RFC7252) toolkit";
     homepage = "https://github.com/NordicSemiconductor/piccata";
     maintainers = with lib.maintainers; [ gebner ];
-    broken = true;
   };
 }

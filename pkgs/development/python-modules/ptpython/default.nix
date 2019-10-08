@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, prompt_toolkit, docopt , jedi, pygments }:
+{ stdenv, buildPythonPackage, fetchPypi, prompt_toolkit, docopt , jedi, pygments, isPy3k }:
 
 buildPythonPackage rec {
   pname = "ptpython";
   version = "2.0.4";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,6 +20,5 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ mlieberman85 ];
     platforms = platforms.all;
-    broken = true;
   };
 }

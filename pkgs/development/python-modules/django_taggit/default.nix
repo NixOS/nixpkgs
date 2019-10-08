@@ -6,12 +6,13 @@
 , django
 , mock
 , isort
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "django-taggit";
   version = "1.1.0";
-  disabled = pythonOlder "2.7";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -32,7 +33,6 @@ buildPythonPackage rec {
     homepage = https://github.com/alex/django-taggit/tree/master/;
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
-    broken = true;
   };
 
 }

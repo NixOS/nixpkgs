@@ -11,6 +11,7 @@
 , setproctitle
 , stdenv
 , wrapGAppsHook
+, isPy3k
 }:
 
 let
@@ -18,6 +19,8 @@ let
 in
 buildPythonApplication (common // rec {
   pname = "openrazer_daemon";
+
+  disabled = !isPy3k;
 
   sourceRoot = "source/daemon";
 

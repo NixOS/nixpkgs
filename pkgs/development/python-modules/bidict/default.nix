@@ -7,11 +7,13 @@
 , pytest-benchmark
 , sortedcollections
 , sortedcontainers
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "bidict";
   version = "0.18.2";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -38,6 +40,5 @@ buildPythonPackage rec {
     description = "Efficient, Pythonic bidirectional map data structures and related functionality";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jakewaksbaum ];
-    broken = true;
   };
 }

@@ -2,11 +2,13 @@
 , buildPythonPackage
 , fetchurl
 , nose
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "minidb";
   version = "2.0.2";
+  disabled = !isPy3k;
 
   src = fetchurl {
     url = "https://github.com/thp/minidb/archive/${version}.tar.gz";
@@ -24,7 +26,6 @@ buildPythonPackage rec {
     homepage = https://thp.io/2010/minidb/;
     license = stdenv.lib.licenses.isc;
     maintainers = [ stdenv.lib.maintainers.tv ];
-    broken = true;
   };
 
 }
