@@ -5,8 +5,7 @@
 }:
 
 let
-  flavour = if gitlabEnterprise then "ee" else "ce";
-  data = (builtins.fromJSON (builtins.readFile ./data.json)).${flavour};
+  data = (builtins.fromJSON (builtins.readFile ./data.json));
 
   version = data.version;
   src = fetchFromGitLab {
@@ -19,7 +18,7 @@ let
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
     inherit ruby;
-    gemdir = ./rubyEnv- + (if gitlabEnterprise then "ee" else "ce");
+    gemdir = ./rubyEnv;
     gemset =
       let x = import (gemdir + "/gemset.nix");
       in x // {
@@ -93,7 +92,7 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "gitlab${if gitlabEnterprise then "-ee" else ""}-${version}";
+  name = "gitlab${lib.optionalString gitlabEnterprise "-ee"}-${version}";
 
   inherit src;
 
@@ -104,6 +103,11 @@ stdenv.mkDerivation {
   patches = [ ./remove-hardcoded-locations.patch ];
 
   postPatch = ''
+    ${lib.optionalString (!gitlabEnterprise) ''
+      # Remove all proprietary components
+      rm -rf ee
+    ''}
+
     # For reasons I don't understand "bundle exec" ignores the
     # RAILS_ENV causing tests to be executed that fail because we're
     # not installing development and test gems above. Deleting the
@@ -138,7 +142,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit rubyEnv;
+    inherit rubyEnv assets;
     ruby = rubyEnv.wrappedRuby;
     GITALY_SERVER_VERSION = data.passthru.GITALY_SERVER_VERSION;
     GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
