@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/Netflix/vmaf";
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF).";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = [ maintainers.cfsmp3 ];
   };
