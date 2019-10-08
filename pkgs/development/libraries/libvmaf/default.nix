@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoconf, automake, intltool, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "libvmaf";
