@@ -152,6 +152,7 @@ in
           chown -R gdm:gdm /run/gdm/.config
         '' + optionalString config.services.gnome3.gnome-initial-setup.enable ''
           # Create stamp file for gnome-initial-setup to prevent run.
+          mkdir -p /run/gdm/.config
           cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
           yes
           EOF
@@ -165,9 +166,15 @@ in
       "systemd-machined.service"
       "systemd-user-sessions.service"
       "getty@tty1.service"
+      "plymouth-quit.service"
+      "plymouth-start.service"
     ];
     systemd.services.display-manager.conflicts = [
       "getty@tty1.service"
+      "plymouth-quit.service"
+    ];
+    systemd.services.display-manager.onFailure = [
+      "plymouth-quit.service"
     ];
 
     systemd.services.display-manager.serviceConfig = {
@@ -177,6 +184,9 @@ in
       BusName = "org.gnome.DisplayManager";
       StandardOutput = "syslog";
       StandardError = "inherit";
+      ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
+      KeyringMode = "shared";
+      EnvironmentFile = "-/etc/locale.conf";
     };
 
     systemd.services.display-manager.path = [ pkgs.gnome3.gnome-session ];

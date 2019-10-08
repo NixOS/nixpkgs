@@ -12,6 +12,10 @@
 , elementary-default-settings
 , elementary-settings-daemon
 , runtimeShell
+, writeText
+, meson
+, ninja
+, git
 }:
 
 let
@@ -32,22 +36,28 @@ let
     #!${runtimeShell}
 
     elementary_default_settings="${elementary-default-settings}"
-    dock_items="$elementary_default_settings/share/elementary/config/plank/dock1/launchers"/*
+    dock_items="$elementary_default_settings/etc/skel/.config/plank/dock1/launchers"/*
 
     if [ ! -d "$HOME/.config/plank/dock1" ]; then
         echo "Instantiating default Plank Dockitems..."
 
-        mkdir -p $HOME/.config/plank/dock1/launchers
-        cp -r --no-preserve=mode,ownership $dock_items $HOME/.config/plank/dock1/launchers/
+        mkdir -p "$HOME/.config/plank/dock1/launchers"
+        cp -r --no-preserve=mode,ownership $dock_items "$HOME/.config/plank/dock1/launchers/"
     else
         echo "Plank Dockitems already instantiated"
     fi
   '';
 
-  dockitemAutostart = substituteAll {
-    src = ./default-elementary-dockitems.desktop;
-    script = dockitems-script;
-  };
+  dockitemAutostart = writeText "default-elementary-dockitems.desktop" ''
+    [Desktop Entry]
+    Type=Application
+    Name=Instantiate Default elementary dockitems
+    Exec=${dockitems-script}
+    StartupNotify=false
+    NoDisplay=true
+    OnlyShowIn=Pantheon;
+    X-GNOME-Autostart-Phase=EarlyInitialization
+  '';
 
   executable = writeScript "pantheon" ''
     export XDG_CONFIG_DIRS=${elementary-settings-daemon}/etc/xdg:${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
@@ -70,17 +80,23 @@ stdenv.mkDerivation rec {
     sha256 = "1vrjm7bklkfv0dyafm312v4hxzy6lb7p1ny4ijkn48kr719gc71k";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
-    };
-  };
+  postPatch = ''
+    ${git}/bin/git apply --verbose ${./meson.patch}
+  '';
 
-  dontBuild = true;
-  dontConfigure = true;
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
-  installPhase = ''
+  mesonFlags = [
+    "-Ddefaults-list=false"
+    "-Dpatched-gsd-autostarts=false"
+    "-Dpatched-ubuntu-autostarts=false"
+    "-Dfallback-session=GNOME"
+  ];
+
+  postInstall = ''
     mkdir -p $out/share/applications
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
@@ -91,15 +107,9 @@ stdenv.mkDerivation rec {
 
     cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
 
-    mkdir -p $out/share/gnome-session/sessions
-    cp -av gnome-session/pantheon.session $out/share/gnome-session/sessions
-
     mkdir -p $out/libexec
     substitute ${executable} $out/libexec/pantheon --subst-var out
     chmod +x $out/libexec/pantheon
-
-    mkdir -p $out/share/xsessions
-    cp -av xsessions/pantheon.desktop $out/share/xsessions
   '';
 
   postFixup = ''
@@ -115,6 +125,13 @@ stdenv.mkDerivation rec {
       sed -i "s,OnlyShowIn=GNOME;,OnlyShowIn=Pantheon;," $autostart
     done
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      inherit repoName;
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Session settings for elementary";

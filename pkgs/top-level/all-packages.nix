@@ -1629,6 +1629,8 @@ in
     bison = bison2;
   };
 
+  fileshare = callPackage ../servers/fileshare {};
+
   fileshelter = callPackage ../servers/web-apps/fileshelter { };
 
   firecracker = callPackage ../applications/virtualization/firecracker { };
@@ -1712,6 +1714,8 @@ in
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
   gosu = callPackage ../tools/misc/gosu { };
+
+  gotify-cli = callPackage ../tools/misc/gotify-cli { };
 
   gping = callPackage ../tools/networking/gping { };
 
@@ -3745,6 +3749,8 @@ in
 
   hash-slinger = callPackage ../tools/security/hash-slinger { };
 
+  hasmail = callPackage ../applications/networking/mailreaders/hasmail { };
+
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
   half = callPackage ../development/libraries/half { };
@@ -4341,6 +4347,11 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdcat = callPackage ../tools/text/mdcat {
+    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (pythonPackages) ansi2html;
+  };
+
   medfile = callPackage ../development/libraries/medfile { };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -4448,10 +4459,6 @@ in
 
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix { };
   nodejs-slim-10_x = callPackage ../development/web/nodejs/v10.nix {
-    enableNpm = false;
-  };
-  nodejs-11_x = callPackage ../development/web/nodejs/v11.nix { };
-  nodejs-slim-11_x = callPackage ../development/web/nodejs/v11.nix {
     enableNpm = false;
   };
   nodejs-12_x = callPackage ../development/web/nodejs/v12.nix { };
@@ -7900,8 +7907,6 @@ in
 
   fstar = callPackage ../development/compilers/fstar { };
 
-  pyre = callPackage ../development/tools/pyre { };
-
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
   glslang = callPackage ../development/compilers/glslang {
@@ -9011,8 +9016,7 @@ in
 
   self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
-  spark = spark_24;
-  spark_24 = callPackage ../applications/networking/cluster/spark { version = "2.4.3"; };
+  spark = callPackage ../applications/networking/cluster/spark { };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
@@ -9316,6 +9320,8 @@ in
   libbpf = callPackage ../os-specific/linux/libbpf { };
 
   bpftool = callPackage ../os-specific/linux/bpftool { };
+
+  bpm-tools = callPackage ../tools/audio/bpm-tools { };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
 
@@ -9951,7 +9957,7 @@ in
 
   peg = callPackage ../development/tools/parsing/peg { };
 
-  pgcli = callPackage ../development/tools/database/pgcli {};
+  pgcli = pkgs.python3Packages.pgcli;
 
   phantomjs = callPackage ../development/tools/phantomjs { };
 
@@ -10069,6 +10075,10 @@ in
   sbt-extras = callPackage ../development/tools/build-managers/sbt-extras { };
 
   scss-lint = callPackage ../development/tools/scss-lint { };
+
+  shadowenv = callPackage ../tools/misc/shadowenv {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   shake = haskell.lib.justStaticExecutables haskellPackages.shake;
 
@@ -10469,7 +10479,8 @@ in
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
-  cachix = haskellPackages.cachix.bin;
+  # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
+  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
 
   niv = haskellPackages.niv.bin;
 
@@ -13156,6 +13167,8 @@ in
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
+  protolock = callPackage ../development/libraries/protolock { };
+
   protozero = callPackage ../development/libraries/protozero { };
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
@@ -14103,8 +14116,6 @@ in
 
   wayland = callPackage ../development/libraries/wayland { };
 
-  wayland_1_9 = callPackage ../development/libraries/wayland/1.9.nix { };
-
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
   waylandpp = callPackage ../development/libraries/waylandpp { };
@@ -14497,6 +14508,7 @@ in
   ### DEVELOPMENT / R MODULES
 
   R = callPackage ../applications/science/math/R {
+    gfortran = gfortran8;
     # TODO: split docs into a separate output
     texLive = texlive.combine {
       inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
@@ -15637,6 +15649,8 @@ in
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
+  health-check = callPackage ../os-specific/linux/health-check { };
+
   hibernate = callPackage ../os-specific/linux/hibernate { };
 
   hostapd = callPackage ../os-specific/linux/hostapd { };
@@ -15734,6 +15748,8 @@ in
 
   osxfuse = callPackage ../os-specific/darwin/osxfuse { };
 
+  power-calibrate = callPackage ../os-specific/linux/power-calibrate { };
+
   powerstat = callPackage ../os-specific/linux/powerstat { };
 
   smemstat = callPackage ../os-specific/linux/smemstat { };
@@ -15828,7 +15844,7 @@ in
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.export_kernel_fpu_functions
+        kernelPatches.export_kernel_fpu_functions."4.14"
       ];
   };
 
@@ -15836,7 +15852,7 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.export_kernel_fpu_functions
+        kernelPatches.export_kernel_fpu_functions."4.14"
       ];
   };
 
@@ -15844,12 +15860,15 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.export_kernel_fpu_functions
+        kernelPatches.export_kernel_fpu_functions."4.14"
       ];
   };
 
   linux_5_3 = callPackage ../os-specific/linux/kernel/linux-5.3.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ];
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.export_kernel_fpu_functions."5.3"
+    ];
   };
 
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
@@ -15907,8 +15926,6 @@ in
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    blcr = if stdenv.lib.versionOlder "3.18" kernel.version then callPackage ../os-specific/linux/blcr { } else null;
-
     chipsec = callPackage ../tools/security/chipsec {
       inherit kernel;
       withDriver = true;
@@ -15925,6 +15942,8 @@ in
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
     evdi = callPackage ../os-specific/linux/evdi { };
+
+    fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
 
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
@@ -16012,6 +16031,8 @@ in
     tmon = callPackage ../os-specific/linux/tmon { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
+
+    turbostat = callPackage ../os-specific/linux/turbostat { };
 
     usbip = callPackage ../os-specific/linux/usbip { };
 
@@ -17733,6 +17754,8 @@ in
 
   cinelerra = callPackage ../applications/video/cinelerra { };
 
+  cipher = callPackage ../applications/misc/cipher { };
+
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (xorg) libSM;
   };
@@ -18498,6 +18521,8 @@ in
 
   fomp = callPackage ../applications/audio/fomp { };
 
+  formatter = callPackage ../applications/misc/formatter { };
+
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
 
   freecad = qt5.callPackage ../applications/graphics/freecad { mpi = openmpi; };
@@ -18521,6 +18546,8 @@ in
   };
 
   freerdpUnstable = freerdp;
+
+  friture = libsForQt5.callPackage ../applications/audio/friture { };
 
   fte = callPackage ../applications/editors/fte { };
 
@@ -19657,13 +19684,18 @@ in
 
   multimon-ng = callPackage ../applications/radio/multimon-ng { };
 
-  inherit (callPackages ../applications/networking/mumble {
+  murmur = (libsForQt5.callPackage ../applications/networking/mumble {
+      avahi = avahi-compat;
+      pulseSupport = config.pulseaudio or false;
+      iceSupport = config.murmur.iceSupport or true;
+    }).murmur;
+
+  mumble = (libsForQt5.callPackage ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
-      iceSupport = config.murmur.iceSupport or true;
-    }) mumble mumble_rc murmur murmur_rc;
+    }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
     mumble_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
@@ -19779,6 +19811,8 @@ in
   sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
 
   speedread = callPackage ../applications/misc/speedread { };
+
+  station = callPackage ../applications/networking/station { };
 
   synapse = callPackage ../applications/misc/synapse { };
 
@@ -22787,8 +22821,9 @@ in
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
-    nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
+    mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
+    nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
     sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
@@ -23089,6 +23124,8 @@ in
       sumatra;
 
   seaview = callPackage ../applications/science/biology/seaview { };
+
+  SPAdes = callPackage ../applications/science/biology/spades { };
 
   trimal = callPackage ../applications/science/biology/trimal { };
 
@@ -23547,8 +23584,10 @@ in
   caffeine-ng = callPackage ../tools/X11/caffeine-ng {};
 
   cntk = callPackage ../applications/science/math/cntk {
+    stdenv = gcc7Stdenv;
     inherit (linuxPackages) nvidia_x11;
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
+    cudaSupport = pkgs.config.cudaSupport or false;
   };
 
   ecm = callPackage ../applications/science/math/ecm { };
@@ -25007,5 +25046,7 @@ in
   wifi-password = callPackage ../os-specific/darwin/wifi-password {};
 
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen {};
+
+  coz = callPackage ../development/tools/analysis/coz {};
 
 }

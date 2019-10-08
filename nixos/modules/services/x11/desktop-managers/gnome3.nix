@@ -28,6 +28,8 @@ let
         (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n")
         (defaultPackages ++ cfg.extraGSettingsOverridePackages)}
 
+     cp -f ${pkgs.gnome3.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
@@ -209,14 +211,6 @@ in
 
       networking.networkmanager.enable = mkDefault true;
 
-      # Use the correct gnome3 packageSet
-      networking.networkmanager.basePackages = {
-        inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
-        inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
-        networkmanager-openconnect networkmanager-fortisslvpn
-        networkmanager-iodine networkmanager-l2tp;
-      };
-
       services.xserver.updateDbusEnvironment = true;
 
       # Needed for themes and backgrounds
@@ -238,22 +232,7 @@ in
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
 
-      systemd.packages = with pkgs.gnome3; [ vino gnome-session gnome-settings-daemon ];
-
-      # gnome-settings-daemon.nix is shared between several desktop
-      # environments (eg. mate and pantheon) so specify these gnome-shell specific
-      # service dependencies here instead.
-      systemd.user.targets."gnome-session-initialized".wants = [
-        "gsd-a11y-settings.target" "gsd-housekeeping.target" "gsd-power.target"
-        "gsd-color.target" "gsd-keyboard.target" "gsd-print-notifications.target"
-        "gsd-datetime.target" "gsd-media-keys.target" "gsd-rfkill.target"
-        "gsd-screensaver-proxy.target" "gsd-sound.target" "gsd-smartcard.target"
-        "gsd-sharing.target" "gsd-wacom.target" "gsd-wwan.target"
-      ];
-
-      systemd.user.targets."gnome-session-x11-services".wants = [
-        "gsd-xsettings.target"
-      ];
+      systemd.packages = with pkgs.gnome3; [ vino gnome-session ];
 
       services.avahi.enable = mkDefault true;
 

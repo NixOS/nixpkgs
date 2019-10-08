@@ -3566,9 +3566,6 @@ broken-packages:
   - Checked
   - checked
   - checkmate
-  - chell
-  - chell-hunit
-  - chell-quickcheck
   - chessIO
   - chevalier-common
   - chiasma
@@ -8623,6 +8620,7 @@ broken-packages:
   - sensenet
   - sentence-jp
   - sentry
+  - seonbi
   - seqaid
   - SeqAlign
   - seqid
@@ -8857,6 +8855,7 @@ broken-packages:
   - sme
   - smerdyakov
   - smiles
+  - smith
   - smith-cli
   - smith-client
   - Smooth

@@ -1,4 +1,5 @@
 { buildPythonApplication
+, isPy3k
 , daemonize
 , dbus-python
 , fetchFromGitHub
@@ -20,6 +21,8 @@ buildPythonApplication (common // rec {
   pname = "openrazer_daemon";
 
   sourceRoot = "source/daemon";
+
+  disabled = !isPy3k;
 
   outputs = [ "out" "man" ];
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace " netem " " "
   '';
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   makeFlags = [
     "DESTDIR="

@@ -429,6 +429,35 @@ rec {
     propagatedBuildInputs = [ core ];
   };
 
+  sexp_pretty = janePackage {
+    pname = "sexp_pretty";
+    hash = "06hdsaszc5cd7fphiblbn4r1sh36xgjwf2igzr2rvlzqs7jiv2v4";
+    meta.description = "S-expression pretty-printer";
+    propagatedBuildInputs = [ ppx_base re sexplib ];
+  };
+
+  expect_test_helpers_kernel = janePackage {
+    pname = "expect_test_helpers_kernel";
+    hash = "18ya187y2i2hfxr771sd9vy5jdsa30vhs56yjdhwk06v01b2fzbq";
+    meta.description = "Helpers for writing expectation tests";
+    buildInputs = [ ppx_jane ];
+    propagatedBuildInputs = [ core_kernel sexp_pretty ];
+  };
+
+  expect_test_helpers = janePackage {
+    pname = "expect_test_helpers";
+    hash = "0ixqck2lnsmz107yw0q2sr8va80skjpldx7lz4ymjiq2vsghk0rb";
+    meta.description = "Async helpers for writing expectation tests";
+    propagatedBuildInputs = [ async expect_test_helpers_kernel ];
+  };
+
+  patience_diff = janePackage {
+    pname = "patience_diff";
+    hash = "055kd3piadjnplip8c8q99ssh79d4irmhg2wng7aida5pbqp2p9f";
+    meta.description = "Diff library using Bram Cohen's patience diff algorithm";
+    propagatedBuildInputs = [ core_kernel ];
+  };
+
   ### Packages at version 0.11, with dependencies at version 0.12
 
   configurator = janePackage {

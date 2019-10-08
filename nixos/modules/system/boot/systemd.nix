@@ -546,6 +546,16 @@ in
       '';
     };
 
+    systemd.coredump.enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether core dumps should be processed by
+        <command>systemd-coredump</command>. If disabled, core dumps
+        appear in the current directory of the crashing process.
+      '';
+    };
+
     systemd.coredump.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -983,6 +993,10 @@ in
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
+
+    boot.kernel.sysctl = mkIf (!cfg.coredump.enable) {
+      "kernel.core_pattern" = "core";
+    };
   };
 
   # FIXME: Remove these eventually.

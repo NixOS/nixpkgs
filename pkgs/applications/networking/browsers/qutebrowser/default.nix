@@ -10,23 +10,23 @@ assert withMediaPlayback -> gst_all_1 != null;
 
 let
   pdfjs = let
-    version = "2.1.266";
+    version = "2.2.228";
   in
   fetchzip rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "1ybbnpz2jcdikzwr7r13lq528vxj3bpms1fqmg3n1zgs30cqpkby";
+    sha256 = "0yik4vfnz46j844jfw1gq5cshgzry42kpy2d5rr7fbn9fjf98bw6";
     stripRoot = false;
   };
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.7.0";
+  version = "1.8.1";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0wyjmb2qvnw3gn0ypgckwblmn7kasi12dfwp343hi6wscqripw7i";
+    sha256 = "0ckffbw2zlg0afz4rgyywzdprnqs74va5qj0xqlaqc14ziiypxnw";
   };
 
   # Needs tox
@@ -108,6 +108,6 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     homepage    = https://github.com/The-Compiler/qutebrowser;
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jagajaga rnhmjoj ];
+    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry ];
   };
 }

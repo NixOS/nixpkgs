@@ -273,17 +273,22 @@ with super;
      sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
      rm -rf deps/libuv
     '';
-    propagatedBuildInputs = [
-      pkgs.libuv
-    ];
+
+    buildInputs = [ pkgs.libuv ];
 
     passthru = {
-      libluv = self.luv.override({
+      libluv = self.luv.override ({
         preBuild = self.luv.preBuild + ''
-         sed -i 's,\(option(BUILD_MODULE.*\)ON,\1OFF,' CMakeLists.txt
-         sed -i 's,\(option(BUILD_SHARED_LIBS.*\)OFF,\1ON,' CMakeLists.txt
-         sed -i 's,${"\${INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
+          sed -i 's,\(option(BUILD_MODULE.*\)ON,\1OFF,' CMakeLists.txt
+          sed -i 's,\(option(BUILD_SHARED_LIBS.*\)OFF,\1ON,' CMakeLists.txt
+          sed -i 's,${"\${INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
         '';
+
+        nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
+
+        # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
+        NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+          (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
       });
     };
   });
