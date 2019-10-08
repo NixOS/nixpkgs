@@ -81,5 +81,7 @@ buildPythonPackage rec {
     homepage = https://datashader.org;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    # numpy is much stricter on types, this package is no longer valid
+    broken = true;
   };
 }
