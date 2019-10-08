@@ -49,6 +49,12 @@
        zfs as soon as any zfs mountpoint is configured in <varname>fileSystems</varname>.
      </para>
    </listitem>
+   <listitem>
+    <para>
+      <command>nixos-option</command> has been rewritten in C++, speeding it up, improving correctness,
+      and adding a <option>--all</option> option which prints all options and their values.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
