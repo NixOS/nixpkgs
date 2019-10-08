@@ -2331,6 +2331,8 @@ in
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
+  evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
+
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
   libskk = callPackage ../development/libraries/libskk {
