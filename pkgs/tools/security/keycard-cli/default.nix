@@ -17,6 +17,11 @@ buildGoPackage rec {
     sha256 = "1jnbaq57i6i9bad1hcvd28mxfqq6v8rv806c6l74vlb79ff4v1wb";
   };
 
+  buildFlagsArray = [
+    "-ldflags="
+    "-X main.version=${version}"
+  ];
+
   meta = with lib; {
     description = "A command line tool and shell to manage keycards";
     homepage = "https://keycard.status.im";
