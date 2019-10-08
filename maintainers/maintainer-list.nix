@@ -6958,6 +6958,12 @@
     githubId = 36407913;
     name = "Uli Baum";
   };
+  xfix = {
+    email = "konrad@borowski.pw";
+    github = "xfix";
+    githubId = 1297598;
+    name = "Konrad Borowski";
+  };
   xnaveira = {
     email = "xnaveira@gmail.com";
     github = "xnaveira";
