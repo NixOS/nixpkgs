@@ -11164,6 +11164,7 @@ in
 
   gnutls = callPackage ../development/libraries/gnutls/default.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
+    utillinux = utillinuxMinimal; # break the cyclic dependency
   };
 
   gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
