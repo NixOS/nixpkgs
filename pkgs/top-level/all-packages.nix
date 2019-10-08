@@ -25037,4 +25037,6 @@ in
 
   coz = callPackage ../development/tools/analysis/coz {};
 
+  keycard-cli = callPackage ../tools/security/keycard-cli {};
+
 }
