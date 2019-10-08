@@ -1692,7 +1692,7 @@ someVar=$(stripHash $name)
     </term>
     <listitem>
      <para>
-      Convenience function for <literal>makeWrapper</literal> that automatically creates a sane wrapper file It takes all the same arguments as <literal>makeWrapper</literal>, except for <literal>--argv0</literal>.
+      Convenience function for <literal>makeWrapper</literal> that automatically creates a sane wrapper file. It takes all the same arguments as <literal>makeWrapper</literal>, except for <literal>--argv0</literal>.
      </para>
      <para>
       It cannot be applied multiple times, since it will overwrite the wrapper file.
@@ -1869,7 +1869,7 @@ addEnvHooks "$hostOffset" myBashFunction
   </para>
 
   <para>
-   Here are some more packages that provide a setup hook. Since the list of hooks is extensible, this is not an exhaustive list the mechanism is only to be used as a last resort, it might cover most uses.
+   Here are some more packages that provide a setup hook. Since the list of hooks is extensible, this is not an exhaustive list. The mechanism is only to be used as a last resort, so it might cover most uses.
    <variablelist>
     <varlistentry>
      <term>
