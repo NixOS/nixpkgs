@@ -356,6 +356,16 @@
     github = "alunduil";
     name = "Alex Brandt";
   };
+  alva = {
+    email = "alva@skogen.is";
+    github = "fjallarefur";
+    githubId = 42881386;
+    name = "Alva";
+    keys = [{
+      longkeyid = "ed25519/0xF53E323342F7A6D3";
+      fingerprint = "B422 CFB1 C9EF 73F7 E1E2 698D F53E 3233 42F7 A6D3A";
+    }];
+  };
   amar1729 = {
     email = "amar.paul16@gmail.com";
     github = "amar1729";
