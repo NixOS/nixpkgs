@@ -7519,7 +7519,7 @@ in
 
   dbmate = callPackage ../development/tools/database/dbmate { };
 
-  devpi-client = callPackage ../development/tools/devpi-client {};
+  devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
   devpi-server = callPackage ../development/tools/devpi-server {};
 
