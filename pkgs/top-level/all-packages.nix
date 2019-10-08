@@ -20880,10 +20880,6 @@ in
     protobuf = protobuf3_1;
   };
 
-  seg3d = callPackage ../applications/graphics/seg3d {
-    wxGTK = wxGTK28.override { unicode = false; };
-  };
-
   sent = callPackage ../applications/misc/sent { };
 
   seq24 = callPackage ../applications/audio/seq24 { };
