@@ -111,7 +111,7 @@ buildHostCmd() {
     if [ -z "$buildHost" ]; then
         "$@"
     elif [ -n "$remoteNix" ]; then
-        ssh $SSHOPTS "$buildHost" PATH="$remoteNix:$PATH" "$@"
+        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix:$PATH" "$@"
     else
         ssh $SSHOPTS "$buildHost" "$@"
     fi
