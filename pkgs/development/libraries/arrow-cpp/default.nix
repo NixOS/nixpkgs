@@ -80,12 +80,21 @@ in stdenv.mkDerivation rec {
     if doInstallCheck then "${parquet-testing}/data" else null;
   installCheckInputs = [ perl which ];
   installCheckPhase = (stdenv.lib.optionalString stdenv.isDarwin ''
-    for f in release/*test; do
+    for f in release/*test{,s}; do
       install_name_tool -add_rpath "$out"/lib  "$f"
     done
-  '') + ''
-    ctest -L unittest -V
-  '';
+  '')
+  + (let
+    excludedTests = stdenv.lib.optionals stdenv.isDarwin [
+      # Some plasma tests need to be patched to use a shorter AF_UNIX socket
+      # path on Darwin. See https://github.com/NixOS/nix/pull/1085
+      "plasma-external-store-tests"
+      "plasma-client-tests"
+    ];
+  in ''
+    ctest -L unittest -V \
+      --exclude-regex '(${builtins.concatStringsSep "|" excludedTests})'
+  '');
 
   meta = {
     description = "A  cross-language development platform for in-memory data";
