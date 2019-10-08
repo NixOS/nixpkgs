@@ -1,5 +1,5 @@
 {
-  epoch = 201909;
+  edition = 201909;
 
   description = "A collection of packages for the Nix package manager";
 
