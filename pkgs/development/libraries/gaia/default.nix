@@ -36,41 +36,44 @@ stdenv.mkDerivation rec {
       --replace "/etc/init.d" "$out/etc/init.d"
   '';
 
-  # This is not exactly specified in upstream's README but it's needed by the
-  # resulting $out/bin/gaiafusion script
-  pythonEnv = (if pythonSupport then
-    pythonPackages.python.withPackages(ps: with ps; [
-      pyyaml
-    ])
-  else null);
-
   nativeBuildInputs = [
     wafHook
     pkgconfig
     swig
-    makeWrapper
-  ];
+  ]
+    # The gaiafusion binary inside $out/bin needs a shebangs patch, and
+    # wrapping with the appropriate $PYTHONPATH
+    ++ lib.optionals (pythonSupport) [
+      pythonPackages.wrapPython
+    ]
+  ;
+
   buildInputs = [
     libyaml
     qt4
-  ]
+  ];
+
+  propagatedBuildInputs = []
     ++ lib.optionals (pythonSupport) [
-      pythonEnv
+      # This is not exactly specified in upstream's README but it's needed by the
+      # resulting $out/bin/gaiafusion script
+      pythonPackages.pyyaml
     ]
   ;
-  wafConfigureFlags = [
-  ]
+
+  wafConfigureFlags = []
     ++ lib.optionals (pythonSupport) [ "--with-python-bindings" ]
     ++ lib.optionals (stlfacadeSupport) [ "--with-stlfacade" ]
     ++ lib.optionals (assertsSupport) [ "--with-asserts" ]
     ++ lib.optionals (cyclopsSupport) [ "--with-cyclops" ]
   ;
-  # only gaiafusion is a python executable that needs patchShebangs
-  postInstall = lib.optionalString (pythonSupport) ''
-    # We can't use patchShebangs because it will use bare bones $python/bin/python
-    # and we need a python environment with pyyaml
-    wrapProgram $out/bin/gaiafusion --prefix PYTHONPATH : $out/${pythonPackages.python.sitePackages}:${pythonEnv}/${pythonPackages.python.sitePackages}
-  '';
+
+  postFixup = ''
+  ''
+    + lib.optionalString pythonSupport ''
+      wrapPythonPrograms
+    ''
+  ;
 
   meta = with lib; {
     homepage = "https://github.com/MTG/gaia";
