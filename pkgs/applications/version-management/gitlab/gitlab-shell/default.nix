@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     description = "SSH access and repository management app for GitLab";
     homepage = http://www.gitlab.com/;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin talyz ];
     license = licenses.mit;
   };
 }
