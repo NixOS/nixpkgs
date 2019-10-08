@@ -2,6 +2,7 @@
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
 , python, gss, mysql, system-sendmail }:
 
+let inherit (stdenv.lib) getDev; in
 stdenv.mkDerivation rec {
   name = "${project}-${version}";
   project = "mailutils";
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/chown root:mail/d' \
            -e 's/chmod [24]755/chmod 0755/' \
       */Makefile{.in,.am}
-    sed -i 's:/usr/lib/mysql:${mysql.connector-c}/lib/mysql:' configure.ac
+    sed -i 's:/usr/lib/mysql:${getDev mysql.connector-c}/lib/mysql:' configure.ac
     sed -i 's/0\.18/0.19/' configure.ac
     sed -i -e 's:mysql/mysql.h:mysql.h:' \
            -e 's:mysql/errmsg.h:errmsg.h:' \
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
     (fetchurl { url = "${p}/weed.at"; sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh"; })
   ];
 
-  NIX_CFLAGS_COMPILE = "-L${mysql.connector-c}/lib/mysql -I${mysql.connector-c}/include/mysql";
+  NIX_CFLAGS_COMPILE = "-L${mysql.connector-c}/lib/mysql -I${getDev mysql.connector-c}/include/mysql";
 
   checkInputs = [ dejagnu ];
   doCheck = false; # fails 1 out of a bunch of tests, looks like a bug

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--with-dbi-libdir=${libdbi}/lib"
   ] ++ optionals (mysql != null) [
     "--with-mysql"
-    "--with-mysql-incdir=${mysql.connector-c}/include/mysql"
+    "--with-mysql-incdir=${getDev mysql.connector-c}/include/mysql"
     "--with-mysql-libdir=${mysql.connector-c}/lib/mysql"
   ] ++ optionals (sqlite != null) [
     "--with-sqlite3"
