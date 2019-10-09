@@ -777,6 +777,8 @@ in
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
+  cloudflare-wrangler = callPackage ../development/tools/cloudflare-wrangler { };
+
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   ccextractor = callPackage ../applications/video/ccextractor { };
