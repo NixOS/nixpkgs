@@ -10123,6 +10123,8 @@ in
 
   sbt-extras = callPackage ../development/tools/build-managers/sbt-extras { };
 
+  scc = callPackage ../development/tools/misc/scc { };
+
   scss-lint = callPackage ../development/tools/scss-lint { };
 
   shadowenv = callPackage ../tools/misc/shadowenv {
