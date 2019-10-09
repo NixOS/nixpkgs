@@ -9,11 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "15pg9j27mjzl78mpzkdqd84kdafj0g6j72f8wgjrpp2qkxjy2ddi";
   };
 
-  meta = {
+  configureFlags = [ "--enable-padlock" "--enable-intelaes" ];
+
+  meta = with stdenv.lib; {
     description = "AES encrypting or decrypting pipe";
     homepage = http://loop-aes.sourceforge.net/aespipe.README;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.goibhniu ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }
