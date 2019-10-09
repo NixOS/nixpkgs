@@ -714,4 +714,11 @@
       version = "0.2.0";
       sha256  = "0ic5b9djhnb1bs2bz3zdprgy3r55dng09xgc4d9l9fyp85g2amaz";
     };
+  wavefront =
+    {
+      owner   = "spaceapegames";
+      repo    = "terraform-provider-wavefront";
+      version = "2.1.0";
+      sha256  = "1ir2wkg5mfng7h5544kar1arkjb5ffjhki5qr25a5x0rpwlg99sx";
+    };
 }
