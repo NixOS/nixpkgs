@@ -11277,6 +11277,23 @@ let
     };
   };
 
+  MojoJWT = buildPerlModule {
+    pname = "Mojo-JWT";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-JWT-0.08.tar.gz";
+      sha256 = "c910229e1182266b6666a2d65deea381a04e48d3aa788c42461b3184006934de";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/jberger/Mojo-JWT";
+      description = "JSON Web Token the Mojo way";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MonitoringPlugin = buildPerlPackage {
     pname = "Monitoring-Plugin";
     version = "0.40";
