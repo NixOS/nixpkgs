@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, cmake, boost, ffmpeg }:
+{ stdenv, fetchFromGitHub, cmake, boost, ffmpeg }:
 
 stdenv.mkDerivation rec {
   pname = "chromaprint";
-  version = "1.3.2";
+  version = "1.4.3";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/acoustid/chromaprint/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0lln8dh33gslb9cbmd1hcv33pr6jxdwipd8m8gbsyhksiq6r1by3";
+  src = fetchFromGitHub {
+    owner = "acoustid";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "110js8gspaamqpy6wqshr6vjc55xbgiqy4bqni5jr8ljsialll26";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ boost ffmpeg ];
 
-  cmakeFlags = [ "-DBUILD_EXAMPLES=ON" ];
+  cmakeFlags = [ "-DBUILD_TOOLS=ON" ];
 
   meta = with stdenv.lib; {
     homepage = https://acoustid.org/chromaprint;
