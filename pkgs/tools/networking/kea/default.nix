@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--with-pgsql=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.connector-c}/bin/mysql_config"
+    "--with-mysql=${mysql.connector-c.dev}/bin/mysql_config"
   ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
