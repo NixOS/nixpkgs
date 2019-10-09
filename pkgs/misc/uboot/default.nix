@@ -82,7 +82,7 @@ let
       homepage = http://www.denx.de/wiki/U-Boot/;
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = [ maintainers.dezgeg ];
+      maintainers = with maintainers; [ dezgeg samueldr ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" ]);
 
