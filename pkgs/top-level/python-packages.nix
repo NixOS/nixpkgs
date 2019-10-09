@@ -254,6 +254,8 @@ in {
 
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
 
+  aioinflux = callPackage ../development/python-modules/aioinflux { };
+
   aiojobs = callPackage ../development/python-modules/aiojobs { };
 
   aiokafka = callPackage ../development/python-modules/aiokafka { };
