@@ -6328,6 +6328,8 @@ in
 
   sslmate = callPackage ../development/tools/sslmate { };
 
+  sshoogr = callPackage ../tools/networking/sshoogr { };
+
   ssmtp = callPackage ../tools/networking/ssmtp { };
 
   ssocr = callPackage ../applications/misc/ssocr { };
