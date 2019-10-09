@@ -19,7 +19,7 @@
     nativeBuildInputs     = [ setuptools_scm ];
     buildInputs           = [ pytest mock ];
     propagatedBuildInputs = [
-      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl
+      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl dbus-python
     ];
   };
 
