@@ -10455,6 +10455,8 @@ in
 
   box2d = callPackage ../development/libraries/box2d { };
 
+  boxfort = callPackage ../development/libraries/boxfort { };
+
   buddy = callPackage ../development/libraries/buddy { };
 
   bulletml = callPackage ../development/libraries/bulletml { };
