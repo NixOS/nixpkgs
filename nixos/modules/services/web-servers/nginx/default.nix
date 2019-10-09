@@ -122,6 +122,14 @@ let
         include ${recommendedProxyConfig};
       ''}
 
+      ${optionalString (cfg.mapHashBucketSize != null) ''
+        map_hash_bucket_size ${toString cfg.mapHashBucketSize};
+      ''}
+
+      ${optionalString (cfg.mapHashMaxSize != null) ''
+        map_hash_max_size ${toString cfg.mapHashMaxSize};
+      ''}
+
       # $connection_upgrade is used for websocket proxying
       map $http_upgrade $connection_upgrade {
           default upgrade;
@@ -508,6 +516,23 @@ in
           and not only at start, you have to set
           services.nginx.resolver, too.
         '';
+      };
+
+      mapHashBucketSize = mkOption {
+        type = types.nullOr (types.enum [ 32 64 128 ]);
+        default = null;
+        description = ''
+            Sets the bucket size for the map variables hash tables. Default
+            value depends on the processor’s cache line size.
+          '';
+      };
+
+      mapHashMaxSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the maximum size of the map variables hash tables.
+          '';
       };
 
       resolver = mkOption {
