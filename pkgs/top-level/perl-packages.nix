@@ -4619,6 +4619,23 @@ let
     };
   };
 
+  DBICxTestDatabase = buildPerlPackage {
+    pname = "DBICx-TestDatabase";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JR/JROCKWAY/DBICx-TestDatabase-0.05.tar.gz";
+      sha256 = "8e3bc2530b01216188c3aa65acdbd2f59c4e631f3ae085dfc439abd89f8f0acf";
+    };
+    buildInputs = [ DBIxClass ];
+    propagatedBuildInputs = [ DBDSQLite SQLTranslator ];
+    meta = {
+      homepage = "https://metacpan.org/pod/DBICx::TestDatabase";
+      description = "Create a temporary database from a DBIx::Class::Schema";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   DBIxClass = buildPerlPackage {
     pname = "DBIx-Class";
     version = "0.082841";
@@ -4663,6 +4680,23 @@ let
     meta = {
       description = "Cursor class with built-in caching support";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DBIxClassDynamicDefault = buildPerlPackage {
+    pname = "DBIx-Class-DynamicDefault";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/DBIx-Class-DynamicDefault-0.04.tar.gz";
+      sha256 = "228f51ab224642584b4dc63db6de2667c5bfae2a894a9376b210a104806a5afb";
+    };
+    buildInputs = [ DBICxTestDatabase ];
+    propagatedBuildInputs = [ DBIxClass ];
+    meta = {
+      homepage = "https://metacpan.org/pod/DBIx::Class::DynamicDefault";
+      description = "Automatically set and update fields";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
