@@ -1,19 +1,20 @@
-{ stdenv, python3, fetchFromGitHub, makeWrapper, makeDesktopItem }:
+{ stdenv, python3, fetchFromGitHub, makeWrapper, makeDesktopItem
+, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "leo-editor";
-  version = "5.7.3";
+  version = "6.0";
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
-    rev = version;
-    sha256 = "0ri6l6cxwva450l05af5vs1lsgrz6ciwd02njdgphs9pm1vwxbl9";
+    rev = "v${version}";
+    sha256 = "16hfhqxzkkzrv7mza24dypvm4zcarir6kw6fxvib2icrd12jyr6m";
   };
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper python3 ];
+  nativeBuildInputs = [ makeWrapper wrapQtAppsHook python3 ];
   propagatedBuildInputs = with python3.pkgs; [ pyqt5 docutils ];
 
   desktopItem = makeDesktopItem {
@@ -53,13 +54,15 @@ stdenv.mkDerivation rec {
     makeWrapper ${python3.interpreter} $out/bin/leo \
       --set PYTHONPATH "$PYTHONPATH:$out/share/leo-editor" \
       --add-flags "-O $out/share/leo-editor/launchLeo.py"
+
+    wrapQtApp $out/bin/leo
   '';
 
   meta = with stdenv.lib; {
     homepage = http://leoeditor.com;
     description = "A powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
-    license = licenses.mit;
+    license = with licenses; [ mit bsd3 ];
     maintainers = with maintainers; [ leonardoce ramkromberg ];
   };
 }
