@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-ldconfig"
     "--exec-prefix=\${prefix}"
+    "--enable-extras"
     "--enable-mount-helper"
     "--enable-posix-acls"
     "--enable-xattr-mappings"
