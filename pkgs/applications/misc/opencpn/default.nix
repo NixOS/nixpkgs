@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;
     homepage = https://opencpn.org/;
-    broken = true;
   };
 }
