@@ -1,6 +1,6 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoPackage, fetchFromGitHub, lib }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "golangci-lint";
   version = "1.17.1";
   goPackagePath = "github.com/golangci/golangci-lint";
@@ -13,8 +13,6 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "1hs24nimv11c63a90ds8ps1lli16m3apsbrd9vpbq2rmxdbpwqac";
   };
-
-  modSha256 = "0k0831rg6ygjffrq5y9488aiacskky7g6bvsfrgfz0g7i0mig1n6";
 
   meta = with lib; {
     description = "Linters Runner for Go. 5x faster than gometalinter. Nice colored output.";

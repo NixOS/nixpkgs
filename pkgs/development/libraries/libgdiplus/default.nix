@@ -2,32 +2,20 @@
 , libtiff, giflib, libjpeg, libpng
 , libXrender, libexif, autoreconfHook, fetchpatch }:
 
-stdenv.mkDerivation {
-  name = "libgdiplus-5.6.1";
+stdenv.mkDerivation rec {
+  pname = "libgdiplus";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "libgdiplus";
-    rev = "5.6.1";
-    sha256 = "023xf3l2s0mxcdbl2viglzrkhx3lwcrpm66fiq7cfdqz80d4vsj2";
+    rev = version;
+    sha256 = "07a3n7i35mn5j2djah64by785b1hzy8ckk1pz0xwvk716yzb7sxg";
   };
 
   NIX_LDFLAGS = "-lgif";
 
-  patches = [ # Series of patches cherry-picked from master, all fixes various sigsegv (or required by other patch)
-    (fetchpatch {
-          url = "https://github.com/mono/libgdiplus/commit/d33a2580a94701ff33abe28c22881d6173be57d0.patch";
-          sha256 = "0rr54jylscn4icqjprqhwrncyr92r0d7kmfrrq3myskplpqv1c11";
-    })
-    (fetchpatch {
-          url ="https://github.com/mono/libgdiplus/commit/aa6aa53906935572f52f519fe4ab9ebedc051d08.patch";
-          sha256 = "1wg0avm8qv5cb4vk80baflfzszm6q7ydhn89c3h6kq68hg6zsf1f";
-    })
-    (fetchpatch {
-          url = "https://github.com/mono/libgdiplus/commit/81e45a1d5a3ac3cf035bcc3fabb2859818b6cc04.patch";
-          sha256 = "07wmc88cd1lqifs5x6npryni65jyy9gi8lgr2i1lb7v0fhvlyswg";
-    })
-  ];
+  outputs = [ "out" "dev" ];
 
   hardeningDisable = [ "format" ];
 

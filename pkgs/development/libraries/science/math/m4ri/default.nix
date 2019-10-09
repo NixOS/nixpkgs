@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Library to do fast arithmetic with dense matrices over F_2";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

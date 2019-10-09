@@ -1,6 +1,6 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, enableShared ? true }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   version = "4.10.1";
   pname = "libpfm";
 
@@ -30,4 +30,8 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.pierron ];
     platforms = platforms.linux;
   };
+} // stdenv.lib.optionalAttrs ( ! enableShared )
+{
+  CONFIG_PFMLIB_SHARED = "n";
 }
+)

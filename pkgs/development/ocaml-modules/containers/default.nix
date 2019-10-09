@@ -1,53 +1,26 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, cppo, gen, sequence, qtest, ounit, result
-, qcheck }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml
+, iter, result, uchar
+, gen, mdx, ounit, qcheck, uutf
+}:
 
-let
-
-  mkpath = p:
-      "${p}/lib/ocaml/${ocaml.version}/site-lib";
-
-  version = "1.4";
-
-in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-containers-${version}";
+buildDunePackage rec {
+  version = "2.6.1";
+  pname = "containers";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
     rev = version;
-    sha256 = "1wbarxphdrxvy7qsdp4p837h1zrv0z83pgs5lbz2h3kdnyvz2f1i";
+    sha256 = "02iq01pq6047hab5s8zpprwr21cygvzfcfj2lpsyj823f28crhmv";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild cppo gen sequence qtest ounit qcheck ];
+  buildInputs = [ iter ];
 
-  propagatedBuildInputs = [ result ];
+  checkInputs = lib.optionals doCheck [ gen mdx ounit qcheck uutf ];
 
-  preConfigure = ''
-    # The following is done so that the '#use "topfind"' directive works in the ocaml top-level
-    export HOME="$(mktemp -d)"
-    export OCAML_TOPLEVEL_PATH="${mkpath findlib}"
-    cat <<EOF > $HOME/.ocamlinit
-let () =
-  try Topdirs.dir_directory (Sys.getenv "OCAML_TOPLEVEL_PATH")
-  with Not_found -> ()
-;;
-EOF
-  '';
+  propagatedBuildInputs = [ result uchar ];
 
-  configureFlags = [
-    "--enable-unix"
-    "--enable-thread"
-    "--enable-tests"
-    "--enable-docs"
-    "--disable-bench"
-  ];
-
-  doCheck = true;
-  checkTarget = "test";
-
-  createFindlibDestdir = true;
+  doCheck = !lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     homepage = https://github.com/c-cube/ocaml-containers;
@@ -62,7 +35,6 @@ EOF
       It also features optional libraries for dealing with strings, and
       helpers for unix and threads.
     '';
-    license = stdenv.lib.licenses.bsd2;
-    platforms = ocaml.meta.platforms or [];
+    license = lib.licenses.bsd2;
   };
 }

@@ -15,10 +15,7 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-let
-  pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   version = "243";
   pname = "systemd";
 
@@ -223,7 +220,7 @@ in stdenv.mkDerivation {
   # in a backwards-incompatible way.  If the interface version of two
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 3;
+  passthru.interfaceVersion = 2;
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;

@@ -12280,6 +12280,20 @@ let
     doCheck = false; # Test performs network access.
   };
 
+  MustacheSimple = buildPerlPackage {
+    pname = "Mustache-Simple";
+    version = "1.3.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CM/CMS/Mustache-Simple-v1.3.6.tar.gz";
+      sha256 = "51db5d51ff4b25a670d8bfabe3902b6d45434ecf78b29bc1fff19af6e7383003";
+    };
+    propagatedBuildInputs = [ YAMLLibYAML ];
+    meta = {
+      description = "A simple Mustache Renderer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   namespaceautoclean = buildPerlPackage {
     pname = "namespace-autoclean";
     version = "0.28";
@@ -12661,6 +12675,21 @@ let
     propagatedBuildInputs = [ NetDNS ];
     meta = {
       description = "Programmable DNS resolver class for offline emulation of DNS";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetPrometheus = buildPerlModule {
+    pname = "Net-Prometheus";
+    version = "0.07";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.07.tar.gz;
+      sha256 = "1dh498b26wdaip053hw52317jjmb2n2r5209a1zv5yfrlxpblqm7";
+    };
+    propagatedBuildInputs = [ RefUtil StructDumb ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "export monitoring metrics for F<prometheus>";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -15733,6 +15762,20 @@ let
       description = "A Perl module for stripping bits of non-deterministic information";
       license = licenses.gpl3;
       maintainers = with maintainers; [ pSub ];
+    };
+  };
+
+  StructDumb = buildPerlModule {
+    pname = "Struct-Dumb";
+    version = "0.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.09.tar.gz;
+      sha256 = "0g9rziaqxkm00vh30g1yfwzq3b1xl23p8fbm4rszqsp641wr2z9k";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "make simple lightweight record-like structures";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

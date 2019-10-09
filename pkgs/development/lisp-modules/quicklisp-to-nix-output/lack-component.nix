@@ -3,7 +3,7 @@ args @ { fetchurl, ... }:
   baseName = ''lack-component'';
   version = ''lack-20190521-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ ];
 
@@ -17,7 +17,7 @@ args @ { fetchurl, ... }:
   asdFilesToKeep = ["lack-component.asd"];
   overrides = x: x;
 }
-/* (SYSTEM lack-component DESCRIPTION NIL SHA256
+/* (SYSTEM lack-component DESCRIPTION System lacks description SHA256
     0ng1k5jq7icfi8c8r3wqj3qrqkh2lyav5ab6mf3l5y4bfwbil593 URL
     http://beta.quicklisp.org/archive/lack/2019-05-21/lack-20190521-git.tgz MD5
     7d7321550f0795e998c7afe4498e7a40 NAME lack-component FILENAME

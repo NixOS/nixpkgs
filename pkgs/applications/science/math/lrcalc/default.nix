@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://math.rutgers.edu/~asbuch/lrcalc/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

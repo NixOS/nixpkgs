@@ -268,7 +268,12 @@ in
     };
 
     services.zfs.trim = {
-      enable = mkEnableOption "Enables periodic TRIM on all ZFS pools.";
+      enable = mkOption {
+        description = "Whether to enable periodic TRIM on all ZFS pools.";
+        default = true;
+        example = false;
+        type = types.bool;
+      };
 
       interval = mkOption {
         default = "weekly";

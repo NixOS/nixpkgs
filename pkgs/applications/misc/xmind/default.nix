@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jxq2fiq69q9ly0m6hx2qfybqad22sl42ciw636071khpqgc885f";
   };
 
+  preferLocalBuild = true;
+
   patches = [ ./java-env-config-fixes.patch ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -61,7 +63,7 @@ stdenv.mkDerivation rec {
         cp -r $out/libexec/configuration/ \$HOME/.xmind/configuration-cathy/
       fi
 
-      exec "$out/libexec/XMind" "$@"
+      exec "$out/libexec/XMind" "\$@"
     EOF
     chmod +x $out/bin/XMind
 

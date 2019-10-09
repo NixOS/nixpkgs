@@ -24,6 +24,8 @@ let
 
   darcsToGit = callPackage ./darcs-to-git { };
 
+  delta = callPackage ./delta { };
+
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
   ghq = callPackage ./ghq { };
@@ -146,6 +148,8 @@ let
   hubUnstable = throw "use gitAndTools.hub instead";
 
   lab = callPackage ./lab { };
+
+  lefthook = callPackage ./lefthook { };
 
   pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 

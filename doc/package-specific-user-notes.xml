@@ -1,53 +1,26 @@
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="package-specific-user-notes">
  <title>Package-specific usage notes</title>
  <para>
-         These chapters includes some notes
-         that apply to specific packages and should
-         answer some of the frequently asked questions
-         related to Nixpkgs use.
-
-  Some useful information related to package use
-  can be found in <link linkend="chap-package-notes">package-specific development notes</link>.
-
+  These chapters includes some notes that apply to specific packages and should answer some of the frequently asked questions related to Nixpkgs use. Some useful information related to package use can be found in <link linkend="chap-package-notes">package-specific development notes</link>.
  </para>
  <section xml:id="opengl">
   <title>OpenGL</title>
 
   <para>
-   Packages that use OpenGL have NixOS desktop as their primary target. The
-   current solution for loading the GPU-specific drivers is based on
-   <literal>libglvnd</literal> and looks for the driver implementation in
-   <literal>LD_LIBRARY_PATH</literal>. If you are using a non-NixOS
-   GNU/Linux/X11 desktop with free software video drivers, consider launching
-   OpenGL-dependent programs from Nixpkgs with Nixpkgs versions of
-   <literal>libglvnd</literal> and <literal>mesa_drivers</literal> in
-   <literal>LD_LIBRARY_PATH</literal>. For proprietary video drivers you might
-   have luck with also adding the corresponding video driver package.
+   Packages that use OpenGL have NixOS desktop as their primary target. The current solution for loading the GPU-specific drivers is based on <literal>libglvnd</literal> and looks for the driver implementation in <literal>LD_LIBRARY_PATH</literal>. If you are using a non-NixOS GNU/Linux/X11 desktop with free software video drivers, consider launching OpenGL-dependent programs from Nixpkgs with Nixpkgs versions of <literal>libglvnd</literal> and <literal>mesa_drivers</literal> in <literal>LD_LIBRARY_PATH</literal>. For proprietary video drivers you might have luck with also adding the corresponding video driver package.
   </para>
  </section>
  <section xml:id="locales">
   <title>Locales</title>
 
   <para>
-   To allow simultaneous use of packages linked against different versions of
-   <literal>glibc</literal> with different locale archive formats Nixpkgs
-   patches <literal>glibc</literal> to rely on
-   <literal>LOCALE_ARCHIVE</literal> environment variable.
+   To allow simultaneous use of packages linked against different versions of <literal>glibc</literal> with different locale archive formats Nixpkgs patches <literal>glibc</literal> to rely on <literal>LOCALE_ARCHIVE</literal> environment variable.
   </para>
 
   <para>
-   On non-NixOS distributions this variable is obviously not set. This can
-   cause regressions in language support or even crashes in some
-   Nixpkgs-provided programs. The simplest way to mitigate this problem is
-   exporting the <literal>LOCALE_ARCHIVE</literal> variable pointing to
-   <literal>${glibcLocales}/lib/locale/locale-archive</literal>. The drawback
-   (and the reason this is not the default) is the relatively large (a hundred
-   MiB) size of the full set of locales. It is possible to build a custom set
-   of locales by overriding parameters <literal>allLocales</literal> and
-   <literal>locales</literal> of the package.
+   On non-NixOS distributions this variable is obviously not set. This can cause regressions in language support or even crashes in some Nixpkgs-provided programs. The simplest way to mitigate this problem is exporting the <literal>LOCALE_ARCHIVE</literal> variable pointing to <literal>${glibcLocales}/lib/locale/locale-archive</literal>. The drawback (and the reason this is not the default) is the relatively large (a hundred MiB) size of the full set of locales. It is possible to build a custom set of locales by overriding parameters <literal>allLocales</literal> and <literal>locales</literal> of the package.
   </para>
  </section>
-
  <section xml:id="sec-emacs">
   <title>Emacs</title>
 
@@ -55,15 +28,7 @@
    <title>Configuring Emacs</title>
 
    <para>
-    The Emacs package comes with some extra helpers to make it easier to
-    configure. <varname>emacsWithPackages</varname> allows you to manage
-    packages from ELPA. This means that you will not have to install that
-    packages from within Emacs. For instance, if you wanted to use
-    <literal>company</literal>, <literal>counsel</literal>,
-    <literal>flycheck</literal>, <literal>ivy</literal>,
-    <literal>magit</literal>, <literal>projectile</literal>, and
-    <literal>use-package</literal> you could use this as a
-    <filename>~/.config/nixpkgs/config.nix</filename> override:
+    The Emacs package comes with some extra helpers to make it easier to configure. <varname>emacsWithPackages</varname> allows you to manage packages from ELPA. This means that you will not have to install that packages from within Emacs. For instance, if you wanted to use <literal>company</literal>, <literal>counsel</literal>, <literal>flycheck</literal>, <literal>ivy</literal>, <literal>magit</literal>, <literal>projectile</literal>, and <literal>use-package</literal> you could use this as a <filename>~/.config/nixpkgs/config.nix</filename> override:
    </para>
 
 <screen>
@@ -83,15 +48,7 @@
 </screen>
 
    <para>
-    You can install it like any other packages via <command>nix-env -iA
-    myEmacs</command>. However, this will only install those packages. It will
-    not <literal>configure</literal> them for us. To do this, we need to
-    provide a configuration file. Luckily, it is possible to do this from
-    within Nix! By modifying the above example, we can make Emacs load a custom
-    config file. The key is to create a package that provide a
-    <filename>default.el</filename> file in
-    <filename>/share/emacs/site-start/</filename>. Emacs knows to load this
-    file automatically when it starts.
+    You can install it like any other packages via <command>nix-env -iA myEmacs</command>. However, this will only install those packages. It will not <literal>configure</literal> them for us. To do this, we need to provide a configuration file. Luckily, it is possible to do this from within Nix! By modifying the above example, we can make Emacs load a custom config file. The key is to create a package that provide a <filename>default.el</filename> file in <filename>/share/emacs/site-start/</filename>. Emacs knows to load this file automatically when it starts.
    </para>
 
 <screen>
@@ -173,22 +130,11 @@ cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
 </screen>
 
    <para>
-    This provides a fairly full Emacs start file. It will load in addition to
-    the user's presonal config. You can always disable it by passing
-    <command>-q</command> to the Emacs command.
+    This provides a fairly full Emacs start file. It will load in addition to the user's presonal config. You can always disable it by passing <command>-q</command> to the Emacs command.
    </para>
 
    <para>
-    Sometimes <varname>emacsWithPackages</varname> is not enough, as this
-    package set has some priorities imposed on packages (with the lowest
-    priority assigned to Melpa Unstable, and the highest for packages manually
-    defined in <filename>pkgs/top-level/emacs-packages.nix</filename>). But you
-    can't control this priorities when some package is installed as a
-    dependency. You can override it on per-package-basis, providing all the
-    required dependencies manually - but it's tedious and there is always a
-    possibility that an unwanted dependency will sneak in through some other
-    package. To completely override such a package you can use
-    <varname>overrideScope'</varname>.
+    Sometimes <varname>emacsWithPackages</varname> is not enough, as this package set has some priorities imposed on packages (with the lowest priority assigned to Melpa Unstable, and the highest for packages manually defined in <filename>pkgs/top-level/emacs-packages.nix</filename>). But you can't control this priorities when some package is installed as a dependency. You can override it on per-package-basis, providing all the required dependencies manually - but it's tedious and there is always a possibility that an unwanted dependency will sneak in through some other package. To completely override such a package you can use <varname>overrideScope'</varname>.
    </para>
 
 <screen>
@@ -204,59 +150,39 @@ overrides = self: super: rec {
 </screen>
   </section>
  </section>
-
  <section xml:id="dlib">
   <title>DLib</title>
 
   <para>
-    <link xlink:href="http://dlib.net/">DLib</link> is a modern, C++-based toolkit which
-    provides several machine learning algorithms.
+   <link xlink:href="http://dlib.net/">DLib</link> is a modern, C++-based toolkit which provides several machine learning algorithms.
   </para>
 
   <section xml:id="compiling-without-avx-support">
    <title>Compiling without AVX support</title>
 
    <para>
-     Especially older CPUs don't support
-     <link xlink:href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX</link>
-     (<abbrev>Advanced Vector Extensions</abbrev>) instructions that are used by DLib to
-     optimize their algorithms.
+    Especially older CPUs don't support <link xlink:href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX</link> (<abbrev>Advanced Vector Extensions</abbrev>) instructions that are used by DLib to optimize their algorithms.
    </para>
 
    <para>
-    On the affected hardware errors like <literal>Illegal instruction</literal> will occur.
-    In those cases AVX support needs to be disabled:
+    On the affected hardware errors like <literal>Illegal instruction</literal> will occur. In those cases AVX support needs to be disabled:
 <programlisting>self: super: {
   dlib = super.dlib.override { avxSupport = false; };
 }</programlisting>
    </para>
   </section>
  </section>
-
  <section xml:id="unfree-software">
   <title>Unfree software</title>
 
   <para>
-   All users of Nixpkgs are free software users, and many users (and
-   developers) of Nixpkgs want to limit and tightly control their exposure to
-   unfree software. At the same time, many users need (or want)
-   to run some specific
-   pieces of proprietary software. Nixpkgs includes some expressions for unfree
-   software packages. By default unfree software cannot be installed and
-   doesn’t show up in searches. To allow installing unfree software in a
-   single Nix invocation one can export
-   <literal>NIXPKGS_ALLOW_UNFREE=1</literal>. For a persistent solution, users
-   can set <literal>allowUnfree</literal> in the Nixpkgs configuration.
+   All users of Nixpkgs are free software users, and many users (and developers) of Nixpkgs want to limit and tightly control their exposure to unfree software. At the same time, many users need (or want) to run some specific pieces of proprietary software. Nixpkgs includes some expressions for unfree software packages. By default unfree software cannot be installed and doesn’t show up in searches. To allow installing unfree software in a single Nix invocation one can export <literal>NIXPKGS_ALLOW_UNFREE=1</literal>. For a persistent solution, users can set <literal>allowUnfree</literal> in the Nixpkgs configuration.
   </para>
 
   <para>
-   Fine-grained control is possible by defining
-   <literal>allowUnfreePredicate</literal> function in config; it takes the
-   <literal>mkDerivation</literal> parameter attrset and returns
-   <literal>true</literal> for unfree packages that should be allowed.
+   Fine-grained control is possible by defining <literal>allowUnfreePredicate</literal> function in config; it takes the <literal>mkDerivation</literal> parameter attrset and returns <literal>true</literal> for unfree packages that should be allowed.
   </para>
  </section>
-
  <section xml:id="sec-steam">
   <title>Steam</title>
 
@@ -264,13 +190,7 @@ overrides = self: super: rec {
    <title>Steam in Nix</title>
 
    <para>
-    Steam is distributed as a <filename>.deb</filename> file, for now only as
-    an i686 package (the amd64 package only has documentation). When unpacked,
-    it has a script called <filename>steam</filename> that in Ubuntu (their
-    target distro) would go to <filename>/usr/bin </filename>. When run for the
-    first time, this script copies some files to the user's home, which include
-    another script that is the ultimate responsible for launching the steam
-    binary, which is also in $HOME.
+    Steam is distributed as a <filename>.deb</filename> file, for now only as an i686 package (the amd64 package only has documentation). When unpacked, it has a script called <filename>steam</filename> that in Ubuntu (their target distro) would go to <filename>/usr/bin </filename>. When run for the first time, this script copies some files to the user's home, which include another script that is the ultimate responsible for launching the steam binary, which is also in $HOME.
    </para>
 
    <para>
@@ -278,8 +198,7 @@ overrides = self: super: rec {
     <itemizedlist>
      <listitem>
       <para>
-       We don't have <filename>/bin/bash</filename> and many scripts point
-       there. Similarly for <filename>/usr/bin/python</filename> .
+       We don't have <filename>/bin/bash</filename> and many scripts point there. Similarly for <filename>/usr/bin/python</filename> .
       </para>
      </listitem>
      <listitem>
@@ -289,8 +208,7 @@ overrides = self: super: rec {
      </listitem>
      <listitem>
       <para>
-       The <filename>steam.sh</filename> script in $HOME can not be patched, as
-       it is checked and rewritten by steam.
+       The <filename>steam.sh</filename> script in $HOME can not be patched, as it is checked and rewritten by steam.
       </para>
      </listitem>
      <listitem>
@@ -302,11 +220,7 @@ overrides = self: super: rec {
    </para>
 
    <para>
-    The current approach to deploy Steam in NixOS is composing a FHS-compatible
-    chroot environment, as documented
-    <link xlink:href="http://sandervanderburg.blogspot.nl/2013/09/composing-fhs-compatible-chroot.html">here</link>.
-    This allows us to have binaries in the expected paths without disrupting
-    the system, and to avoid patching them to work in a non FHS environment.
+    The current approach to deploy Steam in NixOS is composing a FHS-compatible chroot environment, as documented <link xlink:href="http://sandervanderburg.blogspot.nl/2013/09/composing-fhs-compatible-chroot.html">here</link>. This allows us to have binaries in the expected paths without disrupting the system, and to avoid patching them to work in a non FHS environment.
    </para>
   </section>
 
@@ -318,9 +232,7 @@ overrides = self: super: rec {
 <programlisting>hardware.opengl.driSupport32Bit = true;</programlisting>
     in your <filename>/etc/nixos/configuration.nix</filename>. You'll also need
 <programlisting>hardware.pulseaudio.support32Bit = true;</programlisting>
-    if you are using PulseAudio - this will enable 32bit ALSA apps integration.
-    To use the Steam controller or other Steam supported controllers such as
-    the DualShock 4 or Nintendo Switch Pro, you need to add
+    if you are using PulseAudio - this will enable 32bit ALSA apps integration. To use the Steam controller or other Steam supported controllers such as the DualShock 4 or Nintendo Switch Pro, you need to add
 <programlisting>hardware.steam-hardware.enable = true;</programlisting>
     to your configuration.
    </para>
@@ -351,19 +263,14 @@ overrides = self: super: rec {
        <itemizedlist>
         <listitem>
          <para>
-          The <literal>newStdcpp</literal> parameter was removed since NixOS
-          17.09 and should not be needed anymore.
+          The <literal>newStdcpp</literal> parameter was removed since NixOS 17.09 and should not be needed anymore.
          </para>
         </listitem>
         <listitem>
          <para>
-          Steam ships statically linked with a version of libcrypto that
-          conflics with the one dynamically loaded by radeonsi_dri.so. If you
-          get the error
+          Steam ships statically linked with a version of libcrypto that conflics with the one dynamically loaded by radeonsi_dri.so. If you get the error
 <programlisting>steam.sh: line 713: 7842 Segmentation fault (core dumped)</programlisting>
-          have a look at
-          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/20269">this
-          pull request</link>.
+          have a look at <link xlink:href="https://github.com/NixOS/nixpkgs/pull/20269">this pull request</link>.
          </para>
         </listitem>
        </itemizedlist>
@@ -377,8 +284,7 @@ overrides = self: super: rec {
        <orderedlist>
         <listitem>
          <para>
-          There is no java in steam chrootenv by default. If you get a message
-          like
+          There is no java in steam chrootenv by default. If you get a message like
 <programlisting>/home/foo/.local/share/Steam/SteamApps/common/towns/towns.sh: line 1: java: command not found</programlisting>
           You need to add
 <programlisting> steam.override { withJava = true; };</programlisting>
@@ -396,8 +302,7 @@ overrides = self: super: rec {
    <title>steam-run</title>
 
    <para>
-    The FHS-compatible chroot used for steam can also be used to run other
-    linux games that expect a FHS environment. To do it, add
+    The FHS-compatible chroot used for steam can also be used to run other linux games that expect a FHS environment. To do it, add
 <programlisting>pkgs.(steam.override {
           nativeOnly = true;
           newStdcpp = true;
@@ -407,49 +312,29 @@ overrides = self: super: rec {
    </para>
   </section>
  </section>
-
  <section xml:id="sec-citrix">
   <title>Citrix Receiver &amp; Citrix Workspace App</title>
 
   <para>
    <note>
     <para>
-     Please note that the <literal>citrix_receiver</literal> package has been deprecated since its
-     development was <link xlink:href="https://docs.citrix.com/en-us/citrix-workspace-app.html">discontinued by upstream</link>
-     and will be replaced by <link xlink:href="https://www.citrix.com/products/workspace-app/">the citrix workspace app</link>.
+     Please note that the <literal>citrix_receiver</literal> package has been deprecated since its development was <link xlink:href="https://docs.citrix.com/en-us/citrix-workspace-app.html">discontinued by upstream</link> and has been replaced by <link xlink:href="https://www.citrix.com/products/workspace-app/">the citrix workspace app</link>.
     </para>
    </note>
-   <link xlink:href="https://www.citrix.com/products/receiver/">Citrix Receiver</link> and
-   <link xlink:href="https://www.citrix.com/products/workspace-app/">Citrix Workspace App</link>
-   are a remote desktop viewers which provide access to
-   <link xlink:href="https://www.citrix.com/products/xenapp-xendesktop/">XenDesktop</link>
-   installations.
+   <link xlink:href="https://www.citrix.com/products/receiver/">Citrix Receiver</link> and <link xlink:href="https://www.citrix.com/products/workspace-app/">Citrix Workspace App</link> are a remote desktop viewers which provide access to <link xlink:href="https://www.citrix.com/products/xenapp-xendesktop/">XenDesktop</link> installations.
   </para>
 
   <section xml:id="sec-citrix-base">
    <title>Basic usage</title>
 
    <para>
-    The tarball archive needs to be downloaded manually as the license
-    agreements of the vendor for
-    <link xlink:href="https://www.citrix.com/downloads/citrix-receiver/">Citrix Receiver</link>
-    or <link xlink:href="https://www.citrix.de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html">Citrix Workspace</link>
-    need to be accepted first.
-    Then run <command>nix-prefetch-url file://$PWD/linuxx64-$version.tar.gz</command>.
-    With the archive available
-    in the store the package can be built and installed with Nix.
+    The tarball archive needs to be downloaded manually as the license agreements of the vendor for <link xlink:href="https://www.citrix.com/downloads/citrix-receiver/">Citrix Receiver</link> or <link xlink:href="https://www.citrix.de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html">Citrix Workspace</link> need to be accepted first. Then run <command>nix-prefetch-url file://$PWD/linuxx64-$version.tar.gz</command>. With the archive available in the store the package can be built and installed with Nix.
    </para>
 
    <warning>
     <title>Caution with <command>nix-shell</command> installs</title>
     <para>
-     It's recommended to install <literal>Citrix Receiver</literal>
-     and/or <literal>Citrix Workspace</literal> using
-     <literal>nix-env -i</literal> or globally to
-     ensure that the <literal>.desktop</literal> files are installed properly
-     into <literal>$XDG_CONFIG_DIRS</literal>. Otherwise it won't be possible to
-     open <literal>.ica</literal> files automatically from the browser to start
-     a Citrix connection.
+     It's recommended to install <literal>Citrix Receiver</literal> and/or <literal>Citrix Workspace</literal> using <literal>nix-env -i</literal> or globally to ensure that the <literal>.desktop</literal> files are installed properly into <literal>$XDG_CONFIG_DIRS</literal>. Otherwise it won't be possible to open <literal>.ica</literal> files automatically from the browser to start a Citrix connection.
     </para>
    </warning>
   </section>
@@ -458,21 +343,11 @@ overrides = self: super: rec {
    <title>Custom certificates</title>
 
    <para>
-    The <literal>Citrix Receiver</literal> and <literal>Citrix Workspace App</literal>
-    in <literal>nixpkgs</literal> trust several certificates
-    <link xlink:href="https://curl.haxx.se/docs/caextract.html">from the
-    Mozilla database</link> by default. However several companies using Citrix
-    might require their own corporate certificate. On distros with imperative
-    packaging these certs can be stored easily in
-    <link xlink:href="https://developer-docs.citrix.com/projects/receiver-for-linux-command-reference/en/13.7/"><literal>$ICAROOT</literal></link>,
-    however this directory is a store path in <literal>nixpkgs</literal>. In
-    order to work around this issue the package provides a simple mechanism to
-    add custom certificates without rebuilding the entire package using
-    <literal>symlinkJoin</literal>:
+    The <literal>Citrix Workspace App</literal> in <literal>nixpkgs</literal> trust several certificates <link xlink:href="https://curl.haxx.se/docs/caextract.html">from the Mozilla database</link> by default. However several companies using Citrix might require their own corporate certificate. On distros with imperative packaging these certs can be stored easily in <link xlink:href="https://developer-docs.citrix.com/projects/receiver-for-linux-command-reference/en/13.7/"><literal>$ICAROOT</literal></link>, however this directory is a store path in <literal>nixpkgs</literal>. In order to work around this issue the package provides a simple mechanism to add custom certificates without rebuilding the entire package using <literal>symlinkJoin</literal>:
 <programlisting>
 <![CDATA[with import <nixpkgs> { config.allowUnfree = true; };
 let extraCerts = [ ./custom-cert-1.pem ./custom-cert-2.pem /* ... */ ]; in
-citrix_workspace.override { # the same applies for `citrix_receiver` if used.
+citrix_workspace.override {
   inherit extraCerts;
 }]]>
 </programlisting>

@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "documize-community";
-  version = "3.2.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "documize";
     repo = "community";
     rev = "v${version}";
-    sha256 = "13r0x1mbprhk19a1cikq8cl553xdrxin9arw90am69iv6rcps3w3";
+    sha256 = "1n7cdi76yfdk79ky7six72jg2px0b4hb9s16nshz3qvss469dn2j";
   };
 
   goPackagePath = "github.com/documize/community";

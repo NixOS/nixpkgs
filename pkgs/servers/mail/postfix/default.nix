@@ -3,7 +3,7 @@
 , buildPackages
 , withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
-, withMySQL ? false, mysql
+, withMySQL ? false, libmysqlclient
 , withSQLite ? false, sqlite
 }:
 
@@ -12,7 +12,7 @@ let
     "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ]
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
      ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
    auxlibs = lib.concatStringsSep " " ([
@@ -26,17 +26,17 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.4.6";
+  version = "3.4.7";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "09p3vg2xlh6iq45gp6zanbp1728fc31r7zz71r131vh20ssajx6n";
+    sha256 = "0rzr0n1gljhmxidsslbr9505xcv0hm8jahkp4dm87a1v3l956cpy";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
   buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
                 ++ lib.optional withPgSQL postgresql
-                ++ lib.optional withMySQL mysql.connector-c
+                ++ lib.optional withMySQL libmysqlclient
                 ++ lib.optional withSQLite sqlite
                 ++ lib.optional withLDAP openldap;
 

@@ -14,6 +14,8 @@
 , mutter
 , json-glib
 , python3
+, elementary-gtk-theme
+, elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-gtk-theme
+    elementary-icon-theme
     gala
     granite
     gtk3

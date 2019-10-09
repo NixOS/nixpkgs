@@ -20,7 +20,7 @@
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, tzdata, icu, libffi
-, cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
+, cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
@@ -349,11 +349,11 @@ in
   };
 
   mysql = attrs: {
-    buildInputs = [ mysql.connector-c zlib openssl ];
+    buildInputs = [ libmysqlclient zlib openssl ];
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql.connector-c zlib openssl ];
+    buildInputs = [ libmysqlclient zlib openssl ];
   };
 
   ncursesw = attrs: {
@@ -507,7 +507,10 @@ in
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
     '';
-  };
+  } // (if stdenv.isDarwin then {
+    # https://github.com/NixOS/nixpkgs/issues/19098
+    buildFlags = "--disable-lto";
+  } else {});
 
   scrypt = attrs:
     if stdenv.isDarwin then {

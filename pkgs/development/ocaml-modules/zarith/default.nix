@@ -6,9 +6,9 @@
 let source =
   if stdenv.lib.versionAtLeast ocaml.version "4.02"
   then {
-    version = "1.8";
-    url = https://github.com/ocaml/Zarith/archive/release-1.8.tar.gz;
-    sha256 = "1cn63c97aij19nrw5hc1zh1jpnbsdkzq99zyyk649c4s3xi3iqq7";
+    version = "1.9.1";
+    url = https://github.com/ocaml/Zarith/archive/release-1.9.1.tar.gz;
+    sha256 = "0pfa271476dic5pvn6kxz3dfswxs6kqm2cxmhdx5xq2ayca05gj9";
   } else {
     version = "1.3";
     url = http://forge.ocamlcore.org/frs/download.php/1471/zarith-1.3.tgz;

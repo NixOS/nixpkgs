@@ -7,7 +7,7 @@
 , hvplot
 , jinja2
 , msgpack-numpy
-, msgpack-python
+, msgpack
 , numpy
 , pandas
 , panel
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     hvplot
     jinja2
     msgpack-numpy
-    msgpack-python
+    msgpack
     numpy
     pandas
     panel

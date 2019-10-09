@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
     homepage = https://electrum-ltc.org/;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ asymmetric ];
+    maintainers = with maintainers; [ ];
   };
 }
 

@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
+  verifyCargoDeps = true;
 
   meta = with stdenv.lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
@@ -63,6 +64,9 @@ When the `Cargo.lock`, provided by upstream, is not in sync with the
 `Cargo.toml`, it is possible to use `cargoPatches` to update it. All patches
 added in `cargoPatches` will also be prepended to the patches in `patches` at
 build-time.
+
+When `verifyCargoDeps` is set to `true`, the build will also verify that the
+`cargoSha256` is not out of date by comparing the `Cargo.lock` file in both the `cargoDeps` and `src`. Note that this option changes the value of `cargoSha256` since it also copies the `Cargo.lock` in it. To avoid breaking backward-compatibility this option is not enabled by default but hopefully will be in the future.
 
 ## Compiling Rust crates using Nix instead of Cargo
 

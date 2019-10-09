@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "A visualization tool for interactive exploration of genomic datasets";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }

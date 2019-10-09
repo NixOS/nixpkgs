@@ -25,11 +25,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "68.0";
+  version = "68.1.1";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "2cz583rwfpj4z5cwg2vfy4ha0pz4xs9g7li078rmk6x19haiv8s9fwijd82xgxax0afn8wk80bq5kd8yz38l9432f6bar8xnwb21y4i";
+    sha512 = "2ng5wwd7fn9247ggzlxx96scc2nalaahzvxkzvb87mp9fbfcsi3v9dh370cm42px8hrknnsp2lrfk9hqx4287zyn9pl3k9vr6a9cswl";
   };
 
   # from firefox, but without sound libraries
@@ -52,6 +52,11 @@ in stdenv.mkDerivation rec {
   patches = [
     # Remove buildconfig.html to prevent a dependency on clang etc.
     ./no-buildconfig.patch
+    (fetchpatch {
+      # https://phabricator.services.mozilla.com/D47796
+      url = "https://d3kxowhw4s8amj.cloudfront.net/file/data/a54c6fszaol23yh5aa27/PHID-FILE-sql3i57neyrztfdngrwe/D47796.diff";
+      sha256 = "18i1bk6rz875dly2vnkrdgbah8kx0lv4akjzl0i9gxc58hi5q3nq";
+    })
   ]
   ++ lib.optional (lib.versionOlder version "69")
     (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29

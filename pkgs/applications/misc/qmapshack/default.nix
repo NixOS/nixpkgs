@@ -1,12 +1,18 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, cmake, qtscript, qtwebengine, gdal, proj, routino, quazip }:
+{ mkDerivation, lib, fetchFromGitHub, cmake
+, qtscript, qtwebengine, gdal, proj, routino, quazip }:
 
 mkDerivation rec {
   pname = "qmapshack";
-  version = "1.13.1";
+  version = "1.13.2";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/maproom/qmapshack/downloads/${pname}-${version}.tar.gz";
-    sha256 = "15x1b2q0hr1vx006f9hjc4cvfjvxvfdwybw32qvczdyc3crq0mc9";
+  src = fetchFromGitHub {
+    owner = "Maproom";
+    repo = pname;
+    # TODO: remove it on next release.
+    # 1.13.2 release tarball is essentially broken, use fixed commit instead.
+    # See https://github.com/maproom/qmapshack/pull/4 for more details.
+    rev = "763cfc149566325cce9e4690cb7b5f986048f86a"; #"V_${version}";
+    sha256 = "1lfivhm9rv9ly1srlmb7d80s77306xplg23lx35vav879bri29rx";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,21 +28,15 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
-    (fetchpatch {
-      url = "https://bitbucket.org/maproom/qmapshack/raw/d0b1b595578a83fda981ccc1ff24166fa636ba1d/FindPROJ4.patch";
-      sha256 = "1nx4ax233bnnj478cmjpm5c1qqmyn1navlihf10q6hhbanay9n99";
-    })
-    (fetchpatch {
-      url = "https://bitbucket.org/maproom/qmapshack/raw/d0b1b595578a83fda981ccc1ff24166fa636ba1d/FindQuaZip5.patch";
-      sha256 = "0z1b2dz2zlz685mxgn8bmh1fyhxpf6dzd6jvkkjyk2kvnrdxv3b9";
-    })
+    "${src}/FindPROJ4.patch"
+    "${src}/FindQuaZip5.patch"
   ];
 
   meta = with lib; {
-    homepage = https://bitbucket.org/maproom/qmapshack/wiki/Home;
-    description = "Plan your next outdoor trip";
+    homepage = https://github.com/Maproom/qmapshack;
+    description = "Consumer grade GIS software";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda sikmir ];
     platforms = with platforms; linux;
   };
 }

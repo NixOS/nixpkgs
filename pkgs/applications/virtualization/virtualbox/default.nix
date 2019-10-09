@@ -92,6 +92,9 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
+    # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
+    # https://www.virtualbox.org/ticket/18911
+    ./kernel-5.3-fix.patch
   ];
 
   postPatch = ''

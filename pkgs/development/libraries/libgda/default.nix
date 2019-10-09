@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3, gobject-introspection, vala, libgee
 , overrideCC, gcc6
-, mysqlSupport ? false, mysql ? null
+, mysqlSupport ? false, libmysqlclient ? null
 , postgresSupport ? false, postgresql ? null
 }:
 
-assert mysqlSupport -> mysql != null;
+assert mysqlSupport -> libmysqlclient != null;
 assert postgresSupport -> postgresql != null;
 
 (if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
@@ -25,7 +25,7 @@ assert postgresSupport -> postgresql != null;
 
   nativeBuildInputs = [ pkgconfig intltool itstool libxml2 gobject-introspection vala ];
   buildInputs = with stdenv.lib; [ gtk3 openssl libgee ]
-    ++ optional (mysqlSupport) mysql.connector-c
+    ++ optional (mysqlSupport) libmysqlclient
     ++ optional (postgresSupport) postgresql;
 
   passthru = {

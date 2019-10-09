@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     sandybridge    = [ "--disable-clz" ];
     ivybridge      = [ "--disable-clz" ];
   }.${stdenv.hostPlatform.platform.gcc.arch or "default"} or [];
-  buildInputs = [];
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/nauty} "$dev"/{lib,include/nauty}
 
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
     description = ''Programs for computing automorphism groups of graphs and digraphs'';
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     homepage = http://pallini.di.uniroma1.it/;
   };
 }

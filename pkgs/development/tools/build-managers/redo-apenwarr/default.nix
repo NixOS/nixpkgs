@@ -17,10 +17,10 @@ in stdenv.mkDerivation rec {
   pname = "redo-apenwarr";
   version = "0.42";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitHub rec {
     owner = "apenwarr";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "redo";
+    rev = "${repo}-${version}";
     sha256 = "1060yb7hrxm8c7bfvb0y4j0acpxsj6hbykw1d9549zpkxxr9nsgm";
   };
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
       --replace "/bin/ls" "ls"
 
     substituteInPlace t/110-compile/hello.o.do \
-      --replace "/usr/include" "${stdenv.cc.libc.dev}/include"
+      --replace "/usr/include" "${stdenv.lib.getDev stdenv.cc.libc}/include"
 
     substituteInPlace t/200-shell/nonshelltest.do \
       --replace "/usr/bin/env perl" "${perl}/bin/perl"

@@ -20,10 +20,10 @@ in rec {
       };
     } ./flit-build-hook.sh) {};
 
-  pipBuildHook = callPackage ({ pip }:
+  pipBuildHook = callPackage ({ pip, wheel }:
     makeSetupHook {
       name = "pip-build-hook.sh";
-      deps = [ pip ];
+      deps = [ pip wheel ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
       };

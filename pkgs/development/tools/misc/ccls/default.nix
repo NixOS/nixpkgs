@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ccls";
-  version = "0.20190823";
+  version = "0.20190823.3";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "1qy1kf83mrvbhwl8m0h7ralwd3sid8y8fpk7pmy81y1nq8f1cf6f";
+    sha256 = "1sx31zp6q2qc6fz3r78rx34zp2x4blrqzxwbpww71vb6lp1clmdm";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage    = https://github.com/MaskRay/ccls;
     license     = licenses.asl20;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 tobim ];
   };
 }

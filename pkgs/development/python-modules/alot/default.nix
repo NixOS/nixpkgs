@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "alot";
-  version = "0.8";
+  version = "0.8.1";
   outputs = [ "out" ] ++ lib.optional withManpage "man";
 
   disabled = !isPy3k;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "pazz";
     repo = "alot";
     rev = version;
-    sha256 = "1isn0p0i2a7dlbrdk5ib01xa1wgi6bi9ka4xl4vj8iw1q4i5fqv9";
+    sha256 = "1gzis6w45d860mr2qbmjhnbrhy6d9xwhw27wpmvs56vndafvv9d3";
   };
 
   nativeBuildInputs = lib.optional withManpage sphinx;
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ geistesk ];
   };
 }

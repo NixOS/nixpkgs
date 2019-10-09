@@ -52,6 +52,9 @@ let
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
       CPU_FREQ_GOV_SCHEDUTIL           = whenAtLeast "4.9" yes;
       PM_WAKELOCKS                     = yes;
+      # Power-capping framework and support for INTEL RAPL
+      POWERCAP                         = yes;
+      INTEL_RAPL                       = module;
     };
 
     external-firmware = {

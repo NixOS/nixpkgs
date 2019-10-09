@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Online backups for the truly paranoid";
     homepage    = "http://www.tarsnap.com/";
-    license     = "tarsnap";
+    license     = stdenv.lib.licenses.unfree;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice roconnor ];
   };

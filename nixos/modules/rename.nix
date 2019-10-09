@@ -66,6 +66,8 @@ with lib;
 
     (mkRenamedOptionModule [ "services" "clamav" "updater" "config" ] [ "services" "clamav" "updater" "extraConfig" ])
 
+    (mkRemovedOptionModule [ "services" "pykms" "verbose" ] "Use services.pykms.logLevel instead")
+
     (mkRemovedOptionModule [ "security" "setuidOwners" ] "Use security.wrappers instead")
     (mkRemovedOptionModule [ "security" "setuidPrograms" ] "Use security.wrappers instead")
 
@@ -231,7 +233,6 @@ with lib;
     (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
     (mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
     (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
-    (mkRemovedOptionModule [ "systemd" "coredump" "enable" ] "Enabled by default. Set boot.kernel.sysctl.\"kernel.core_pattern\" = \"core\"; to disable.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -273,19 +274,8 @@ with lib;
     (mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
     (mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
 
-    # Redshift
-    (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "latitude" ] config;
-        in if value == null then
-          throw "services.redshift.latitude is set to null, you can remove this"
-          else builtins.fromJSON value))
-    (mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "longitude" ] config;
-        in if value == null then
-          throw "services.redshift.longitude is set to null, you can remove this"
-          else builtins.fromJSON value))
+    # BLCR
+    (mkRemovedOptionModule [ "environment.blcr.enable" ] "The BLCR module has been removed")
 
     # Redis
     (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")

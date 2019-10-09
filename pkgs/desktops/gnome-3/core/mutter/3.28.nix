@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/os-patches/commit/d636a44885c5be662997f8e19f7dcd26670b3219.patch";
       sha256 = "12pbxk6f39a09jxjam5a5hxl4whp3cifzpck2m7fpp0n98nc63qh";
     })
+    # See patch commit message
+    ./0001-Revert-ClutterActor-Preserve-valid-paint-volumes-til.patch
   ];
 
   configureFlags = [

@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "routinator";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13xfnlaqjisi9fm1p7ydhgrh86ccbfwkxbnrv8abdx80jwb0lm15";
+    sha256 = "1knqgq8xrlvwfc3y2hki6p0zr4dblm7max37y01p3bf641gs748z";
   };
 
   cargoSha256 = "13sx7mbirhrd0is7gvnk0mir5qizbhrlvsn0v55ibf3bybjsb644";

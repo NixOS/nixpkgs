@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gtk3, perl, vte, pcre, glib , makeWrapper }:
+{ stdenv, fetchurl, cmake, pkgconfig, gtk3, perl, vte, pcre2, glib , makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "sakura";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl pkgconfig ];
 
-  buildInputs = [ makeWrapper gtk3 vte pcre glib ];
+  buildInputs = [ makeWrapper gtk3 vte pcre2 glib ];
 
   # Wrapper sets path to gsettings-schemata so sakura knows where to find colorchooser, fontchooser ...
   postInstall = "wrapProgram $out/bin/sakura --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/";

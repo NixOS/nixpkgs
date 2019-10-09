@@ -23,6 +23,19 @@
      Support is planned until the end of October 2020, handing over to 20.09.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Postgresql for NixOS service now defaults to v11.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The graphical installer image starts the graphical session automatically.
+     Before you'd be greeted by a tty and asked to enter <command>systemctl start display-manager</command>.
+     It is now possible to disable the display-manager from running by selecting the <literal>Disable display-manager</literal>
+     quirk in the boot menu.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -73,7 +86,7 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+     <para>SD images are now compressed by default using <literal>bzip2</literal>.</para>
    </listitem>
   </itemizedlist>
  </section>

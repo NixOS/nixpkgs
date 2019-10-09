@@ -30,6 +30,7 @@ let
     DBUser = ${cfg.database.user}
     ${optionalString (cfg.database.passwordFile != null) "Include ${passwordFile}"}
     ${optionalString (mysqlLocal && cfg.database.socket != null) "DBSocket = ${cfg.database.socket}"}
+    PidFile = ${runtimeDir}/zabbix_server.pid
     SocketDir = ${runtimeDir}
     FpingLocation = /run/wrappers/bin/fping
     ${optionalString (cfg.modules != {}) "LoadModulePath = ${moduleEnv}/lib"}

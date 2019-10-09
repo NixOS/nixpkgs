@@ -478,6 +478,69 @@
      Prometheus 2 is now configured with <literal>services.prometheus</literal>.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       Citrix Receiver (<literal>citrix_receiver</literal>) has been dropped in favor of Citrix Workspace
+       (<literal>citrix_workspace</literal>).
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <literal>services.gitlab</literal> module has had its literal secret options (<option>services.gitlab.smtp.password</option>,
+       <option>services.gitlab.databasePassword</option>,
+       <option>services.gitlab.initialRootPassword</option>,
+       <option>services.gitlab.secrets.secret</option>,
+       <option>services.gitlab.secrets.db</option>,
+       <option>services.gitlab.secrets.otp</option> and
+       <option>services.gitlab.secrets.jws</option>) replaced by file-based versions (<option>services.gitlab.smtp.passwordFile</option>,
+       <option>services.gitlab.databasePasswordFile</option>,
+       <option>services.gitlab.initialRootPasswordFile</option>,
+       <option>services.gitlab.secrets.secretFile</option>,
+       <option>services.gitlab.secrets.dbFile</option>,
+       <option>services.gitlab.secrets.otpFile</option> and
+       <option>services.gitlab.secrets.jwsFile</option>). This was done so that secrets aren't stored
+       in the world-readable nix store, but means that for each option you'll have to create a file with
+       the same exact string, add "File" to the end of the option name, and change the definition to a
+       string pointing to the corresponding file; e.g. <literal>services.gitlab.databasePassword = "supersecurepassword"</literal>
+       becomes <literal>services.gitlab.databasePasswordFile = "/path/to/secret_file"</literal> where the
+       file <literal>secret_file</literal> contains the string <literal>supersecurepassword</literal>.
+     </para>
+     <para>
+       The state path (<option>services.gitlab.statePath</option>) now has the following restriction:
+       no parent directory can be owned by any other user than <literal>root</literal> or the user
+       specified in <option>services.gitlab.user</option>; i.e. if <option>services.gitlab.statePath</option>
+       is set to <literal>/var/lib/gitlab/state</literal>, <literal>gitlab</literal> and all parent directories
+       must be owned by either <literal>root</literal> or the user specified in <option>services.gitlab.user</option>.
+     </para>
+     <para>
+      The <option>networking.useDHCP</option> option is unsupported in combination with
+      <option>networking.useNetworkd</option> in anticipation of defaulting to it by default.
+      It has to be set to <literal>false</literal> and enabled per
+      interface with <option>networking.interfaces.&lt;name&gt;.useDHCP = true;</option>
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The Twitter client <literal>corebird</literal> has been dropped as <link xlink:href="https://www.patreon.com/posts/corebirds-future-18921328">it is discontinued and does not work against the new Twitter API</link>.
+       Please use the fork <literal>cawbird</literal> instead which has been adapted to the API changes and is still maintained.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+      The <literal>nodejs-11_x</literal> package has been removed as it's EOLed by upstream.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Because of the systemd upgrade,
+       <application>systemd-timesyncd</application> will no longer work if
+       <option>system.stateVersion</option> is not set correctly. When
+       upgrading from NixOS 19.03, please make sure that
+       <option>system.stateVersion</option> is set to
+       <literal>"19.03"</literal>, or lower if the installation dates back to an
+       earlier version of NixOS.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -676,7 +739,7 @@
       </para>
      </listitem>
     </itemizedlist>
-     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>,
+     This also configures the kernel to pass core dumps to <literal>systemd-coredump</literal>,
      and restricts the SysRq key combinations to the sync command only.
      These sysctl snippets can be found in <literal>/etc/sysctl.d/50-*.conf</literal>,
      and overridden via <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link>
@@ -685,12 +748,15 @@
    </listitem>
    <listitem>
     <para>
-      Coredumps are now acquired by <literal>systemd-coredump</literal> by default.
-      <literal>systemd-coredump</literal> behaviour can still be modified via
-      <option>systemd.coredump.extraConfig</option>.
-      To stick to the old behaviour (having the kernel dump to a file called <literal>core</literal>
-      in the working directory), without piping it through <literal>systemd-coredump</literal>, set
-      <option>boot.kernel.sysctl."kernel.core_pattern"</option> to <literal>"core"</literal>.
+      Core dumps are now processed by <literal>systemd-coredump</literal>
+      by default. <literal>systemd-coredump</literal> behaviour can
+      still be modified via
+      <option>systemd.coredump.extraConfig</option>. To stick to the
+      old behaviour (having the kernel dump to a file called
+      <literal>core</literal> in the working directory), without piping
+      it through <literal>systemd-coredump</literal>, set
+      <option>systemd.coredump.enable</option> to
+      <literal>false</literal>.
     </para>
    </listitem>
    <listitem>

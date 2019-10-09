@@ -5,23 +5,18 @@
  <title>Overriding</title>
 
  <para>
-  Sometimes one wants to override parts of <literal>nixpkgs</literal>, e.g.
-  derivation attributes, the results of derivations.
+  Sometimes one wants to override parts of <literal>nixpkgs</literal>, e.g. derivation attributes, the results of derivations.
  </para>
 
  <para>
-  These functions are used to make changes to packages, returning only single
-  packages. <link xlink:href="#chap-overlays">Overlays</link>, on the other
-  hand, can be used to combine the overridden packages across the entire
-  package set of Nixpkgs.
+  These functions are used to make changes to packages, returning only single packages. <link xlink:href="#chap-overlays">Overlays</link>, on the other hand, can be used to combine the overridden packages across the entire package set of Nixpkgs.
  </para>
 
  <section xml:id="sec-pkg-override">
   <title>&lt;pkg&gt;.override</title>
 
   <para>
-   The function <varname>override</varname> is usually available for all the
-   derivations in the nixpkgs expression (<varname>pkgs</varname>).
+   The function <varname>override</varname> is usually available for all the derivations in the nixpkgs expression (<varname>pkgs</varname>).
   </para>
 
   <para>
@@ -47,10 +42,7 @@ mypkg = pkgs.callPackage ./mypkg.nix {
   </para>
 
   <para>
-   In the first example, <varname>pkgs.foo</varname> is the result of a
-   function call with some default arguments, usually a derivation. Using
-   <varname>pkgs.foo.override</varname> will call the same function with the
-   given new arguments.
+   In the first example, <varname>pkgs.foo</varname> is the result of a function call with some default arguments, usually a derivation. Using <varname>pkgs.foo.override</varname> will call the same function with the given new arguments.
   </para>
  </section>
 
@@ -58,12 +50,7 @@ mypkg = pkgs.callPackage ./mypkg.nix {
   <title>&lt;pkg&gt;.overrideAttrs</title>
 
   <para>
-   The function <varname>overrideAttrs</varname> allows overriding the
-   attribute set passed to a <varname>stdenv.mkDerivation</varname> call,
-   producing a new derivation based on the original one. This function is
-   available on all derivations produced by the
-   <varname>stdenv.mkDerivation</varname> function, which is most packages in
-   the nixpkgs expression <varname>pkgs</varname>.
+   The function <varname>overrideAttrs</varname> allows overriding the attribute set passed to a <varname>stdenv.mkDerivation</varname> call, producing a new derivation based on the original one. This function is available on all derivations produced by the <varname>stdenv.mkDerivation</varname> function, which is most packages in the nixpkgs expression <varname>pkgs</varname>.
   </para>
 
   <para>
@@ -76,30 +63,16 @@ helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
   </para>
 
   <para>
-   In the above example, the <varname>separateDebugInfo</varname> attribute is
-   overridden to be true, thus building debug info for
-   <varname>helloWithDebug</varname>, while all other attributes will be
-   retained from the original <varname>hello</varname> package.
+   In the above example, the <varname>separateDebugInfo</varname> attribute is overridden to be true, thus building debug info for <varname>helloWithDebug</varname>, while all other attributes will be retained from the original <varname>hello</varname> package.
   </para>
 
   <para>
-   The argument <varname>oldAttrs</varname> is conventionally used to refer to
-   the attr set originally passed to <varname>stdenv.mkDerivation</varname>.
+   The argument <varname>oldAttrs</varname> is conventionally used to refer to the attr set originally passed to <varname>stdenv.mkDerivation</varname>.
   </para>
 
   <note>
    <para>
-    Note that <varname>separateDebugInfo</varname> is processed only by the
-    <varname>stdenv.mkDerivation</varname> function, not the generated, raw Nix
-    derivation. Thus, using <varname>overrideDerivation</varname> will not work
-    in this case, as it overrides only the attributes of the final derivation.
-    It is for this reason that <varname>overrideAttrs</varname> should be
-    preferred in (almost) all cases to <varname>overrideDerivation</varname>,
-    i.e. to allow using <varname>stdenv.mkDerivation</varname> to process input
-    arguments, as well as the fact that it is easier to use (you can use the
-    same attribute names you see in your Nix code, instead of the ones
-    generated (e.g. <varname>buildInputs</varname> vs
-    <varname>nativeBuildInputs</varname>), and it involves less typing).
+    Note that <varname>separateDebugInfo</varname> is processed only by the <varname>stdenv.mkDerivation</varname> function, not the generated, raw Nix derivation. Thus, using <varname>overrideDerivation</varname> will not work in this case, as it overrides only the attributes of the final derivation. It is for this reason that <varname>overrideAttrs</varname> should be preferred in (almost) all cases to <varname>overrideDerivation</varname>, i.e. to allow using <varname>stdenv.mkDerivation</varname> to process input arguments, as well as the fact that it is easier to use (you can use the same attribute names you see in your Nix code, instead of the ones generated (e.g. <varname>buildInputs</varname> vs <varname>nativeBuildInputs</varname>), and it involves less typing).
    </para>
   </note>
  </section>
@@ -109,34 +82,18 @@ helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
 
   <warning>
    <para>
-    You should prefer <varname>overrideAttrs</varname> in almost all cases, see
-    its documentation for the reasons why.
-    <varname>overrideDerivation</varname> is not deprecated and will continue
-    to work, but is less nice to use and does not have as many abilities as
-    <varname>overrideAttrs</varname>.
+    You should prefer <varname>overrideAttrs</varname> in almost all cases, see its documentation for the reasons why. <varname>overrideDerivation</varname> is not deprecated and will continue to work, but is less nice to use and does not have as many abilities as <varname>overrideAttrs</varname>.
    </para>
   </warning>
 
   <warning>
    <para>
-    Do not use this function in Nixpkgs as it evaluates a Derivation before
-    modifying it, which breaks package abstraction and removes error-checking
-    of function arguments. In addition, this evaluation-per-function
-    application incurs a performance penalty, which can become a problem if
-    many overrides are used. It is only intended for ad-hoc customisation, such
-    as in <filename>~/.config/nixpkgs/config.nix</filename>.
+    Do not use this function in Nixpkgs as it evaluates a Derivation before modifying it, which breaks package abstraction and removes error-checking of function arguments. In addition, this evaluation-per-function application incurs a performance penalty, which can become a problem if many overrides are used. It is only intended for ad-hoc customisation, such as in <filename>~/.config/nixpkgs/config.nix</filename>.
    </para>
   </warning>
 
   <para>
-   The function <varname>overrideDerivation</varname> creates a new derivation
-   based on an existing one by overriding the original's attributes with the
-   attribute set produced by the specified function. This function is available
-   on all derivations defined using the <varname>makeOverridable</varname>
-   function. Most standard derivation-producing functions, such as
-   <varname>stdenv.mkDerivation</varname>, are defined using this function,
-   which means most packages in the nixpkgs expression,
-   <varname>pkgs</varname>, have this function.
+   The function <varname>overrideDerivation</varname> creates a new derivation based on an existing one by overriding the original's attributes with the attribute set produced by the specified function. This function is available on all derivations defined using the <varname>makeOverridable</varname> function. Most standard derivation-producing functions, such as <varname>stdenv.mkDerivation</varname>, are defined using this function, which means most packages in the nixpkgs expression, <varname>pkgs</varname>, have this function.
   </para>
 
   <para>
@@ -154,27 +111,16 @@ mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
   </para>
 
   <para>
-   In the above example, the <varname>name</varname>, <varname>src</varname>,
-   and <varname>patches</varname> of the derivation will be overridden, while
-   all other attributes will be retained from the original derivation.
+   In the above example, the <varname>name</varname>, <varname>src</varname>, and <varname>patches</varname> of the derivation will be overridden, while all other attributes will be retained from the original derivation.
   </para>
 
   <para>
-   The argument <varname>oldAttrs</varname> is used to refer to the attribute
-   set of the original derivation.
+   The argument <varname>oldAttrs</varname> is used to refer to the attribute set of the original derivation.
   </para>
 
   <note>
    <para>
-    A package's attributes are evaluated *before* being modified by the
-    <varname>overrideDerivation</varname> function. For example, the
-    <varname>name</varname> attribute reference in <varname>url =
-    "mirror://gnu/hello/${name}.tar.gz";</varname> is filled-in *before* the
-    <varname>overrideDerivation</varname> function modifies the attribute set.
-    This means that overriding the <varname>name</varname> attribute, in this
-    example, *will not* change the value of the <varname>url</varname>
-    attribute. Instead, we need to override both the <varname>name</varname>
-    *and* <varname>url</varname> attributes.
+    A package's attributes are evaluated *before* being modified by the <varname>overrideDerivation</varname> function. For example, the <varname>name</varname> attribute reference in <varname>url = "mirror://gnu/hello/${name}.tar.gz";</varname> is filled-in *before* the <varname>overrideDerivation</varname> function modifies the attribute set. This means that overriding the <varname>name</varname> attribute, in this example, *will not* change the value of the <varname>url</varname> attribute. Instead, we need to override both the <varname>name</varname> *and* <varname>url</varname> attributes.
    </para>
   </note>
  </section>
@@ -183,9 +129,7 @@ mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
   <title>lib.makeOverridable</title>
 
   <para>
-   The function <varname>lib.makeOverridable</varname> is used to make the
-   result of a function easily customizable. This utility only makes sense for
-   functions that accept an argument set and return an attribute set.
+   The function <varname>lib.makeOverridable</varname> is used to make the result of a function easily customizable. This utility only makes sense for functions that accept an argument set and return an attribute set.
   </para>
 
   <para>
@@ -197,16 +141,11 @@ c = lib.makeOverridable f { a = 1; b = 2; };
   </para>
 
   <para>
-   The variable <varname>c</varname> is the value of the <varname>f</varname>
-   function applied with some default arguments. Hence the value of
-   <varname>c.result</varname> is <literal>3</literal>, in this example.
+   The variable <varname>c</varname> is the value of the <varname>f</varname> function applied with some default arguments. Hence the value of <varname>c.result</varname> is <literal>3</literal>, in this example.
   </para>
 
   <para>
-   The variable <varname>c</varname> however also has some additional
-   functions, like <link linkend="sec-pkg-override">c.override</link> which can
-   be used to override the default arguments. In this example the value of
-   <varname>(c.override { a = 4; }).result</varname> is 6.
+   The variable <varname>c</varname> however also has some additional functions, like <link linkend="sec-pkg-override">c.override</link> which can be used to override the default arguments. In this example the value of <varname>(c.override { a = 4; }).result</varname> is 6.
   </para>
  </section>
 </section>

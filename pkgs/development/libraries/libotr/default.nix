@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1x8rliydhbibmzwdbyr7pd7n87m2jmxnqkpvaalnf4154hj1hfwb";
   };
 
+  outputs = [ "bin" "out" "dev" ];
+
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
   propagatedBuildInputs = [ libgcrypt ];
 
   meta = with stdenv.lib; {

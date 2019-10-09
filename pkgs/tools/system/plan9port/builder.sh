@@ -22,7 +22,7 @@ plan9portLinkFlags()
 configurePhase()
 {
     (
-        echo CC9=\"$(which $CC)\"
+        echo CC9=\"$(command -v $CC)\"
         echo CFLAGS=\"$NIX_CFLAGS_COMPILE\"
         echo LDFLAGS=\"$(plan9portLinkFlags)\"
         echo X11=\"${libXt_dev}/include\"

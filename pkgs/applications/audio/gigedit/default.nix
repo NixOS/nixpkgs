@@ -4,14 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gigedit";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "087pc919q28r1vw31c7w4m14bqnp4md1i2wbmk8w0vmwv2cbx2ni";
+    sha256 = "08db12crwf0dy1dbyrmivqqpg5zicjikqkmf2kb1ywpq0a9hcxrb";
   };
-
-  patches = [ ./gigedit-1.1.0-pangomm-2.40.1.patch ];
 
   preConfigure = "make -f Makefile.svn";
 
