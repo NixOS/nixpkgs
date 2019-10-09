@@ -10600,6 +10600,8 @@ in
 
   cre2 = callPackage ../development/libraries/cre2 { };
 
+  criterion = callPackage ../development/libraries/criterion { };
+
   croaring = callPackage ../development/libraries/croaring { };
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
