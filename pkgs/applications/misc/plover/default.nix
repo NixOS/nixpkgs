@@ -43,6 +43,6 @@
     postPatch = "sed -i /PyQt5/d setup.cfg";
 
     checkInputs           = [ pytest mock ];
-    propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth ];
+    propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
   };
 }
