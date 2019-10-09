@@ -481,7 +481,8 @@ in
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
-        install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
+        # Create directories in /nix.
+        ${nix}/bin/nix ping-store
 
         # Subscribe the root user to the NixOS channel by default.
         if [ ! -e "/root/.nix-channels" ]; then
