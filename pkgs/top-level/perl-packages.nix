@@ -2121,6 +2121,21 @@ let
     };
   };
 
+  CLASS = buildPerlPackage {
+    pname = "CLASS";
+    version = "1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSCHWERN/CLASS-1.00.tar.gz";
+      sha256 = "c5185620815701b3fec21314ccd8c5693e6bfd519431527da3370a8164220671";
+    };
+    meta = {
+      homepage = "https://metacpan.org/pod/CLASS";
+      description = "Alias for __PACKAGE__";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ClassAccessor = buildPerlPackage {
     pname = "Class-Accessor";
     version = "0.51";
