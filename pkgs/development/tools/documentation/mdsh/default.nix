@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdsh";
-  version = "0.1.4";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "zimbatm";
     repo = "mdsh";
     rev = "v${version}";
-    sha256 = "0m3f5mrdmnmkfsy7mc6x3jf4ainmq0z42mv935ikcdbjwwjbd5gq";
+    sha256 = "1751lll93cimyj7bxxdwdxn5w0zb2mzjpbnk1c93jfsvzlz1wzbl";
   };
 
-  cargoSha256 = "0adc525hbs7j7zasvcdxy7k6pf145hs711hjbzgwf72k514ypyrl";
+  cargoSha256 = "0b8rg4pz4mpm60iwwmfw4l1p1g9sh1fwf693aqxi8g4vrjf0zniv";
   verifyCargoDeps = true;
 
   meta = with stdenv.lib; {

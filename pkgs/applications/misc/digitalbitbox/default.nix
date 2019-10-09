@@ -138,5 +138,6 @@ in stdenv.mkDerivation rec {
       vidbina
     ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

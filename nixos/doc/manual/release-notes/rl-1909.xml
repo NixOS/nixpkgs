@@ -512,6 +512,12 @@
        is set to <literal>/var/lib/gitlab/state</literal>, <literal>gitlab</literal> and all parent directories
        must be owned by either <literal>root</literal> or the user specified in <option>services.gitlab.user</option>.
      </para>
+     <para>
+      The <option>networking.useDHCP</option> option is unsupported in combination with
+      <option>networking.useNetworkd</option> in anticipation of defaulting to it by default.
+      It has to be set to <literal>false</literal> and enabled per
+      interface with <option>networking.interfaces.&lt;name&gt;.useDHCP = true;</option>
+    </para>
    </listitem>
    <listitem>
      <para>
@@ -522,6 +528,17 @@
    <listitem>
      <para>
       The <literal>nodejs-11_x</literal> package has been removed as it's EOLed by upstream.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Because of the systemd upgrade,
+       <application>systemd-timesyncd</application> will no longer work if
+       <option>system.stateVersion</option> is not set correctly. When
+       upgrading from NixOS 19.03, please make sure that
+       <option>system.stateVersion</option> is set to
+       <literal>"19.03"</literal>, or lower if the installation dates back to an
+       earlier version of NixOS.
      </para>
    </listitem>
   </itemizedlist>
@@ -722,7 +739,7 @@
       </para>
      </listitem>
     </itemizedlist>
-     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>,
+     This also configures the kernel to pass core dumps to <literal>systemd-coredump</literal>,
      and restricts the SysRq key combinations to the sync command only.
      These sysctl snippets can be found in <literal>/etc/sysctl.d/50-*.conf</literal>,
      and overridden via <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link>
@@ -731,12 +748,15 @@
    </listitem>
    <listitem>
     <para>
-      Coredumps are now acquired by <literal>systemd-coredump</literal> by default.
-      <literal>systemd-coredump</literal> behaviour can still be modified via
-      <option>systemd.coredump.extraConfig</option>.
-      To stick to the old behaviour (having the kernel dump to a file called <literal>core</literal>
-      in the working directory), without piping it through <literal>systemd-coredump</literal>, set
-      <option>boot.kernel.sysctl."kernel.core_pattern"</option> to <literal>"core"</literal>.
+      Core dumps are now processed by <literal>systemd-coredump</literal>
+      by default. <literal>systemd-coredump</literal> behaviour can
+      still be modified via
+      <option>systemd.coredump.extraConfig</option>. To stick to the
+      old behaviour (having the kernel dump to a file called
+      <literal>core</literal> in the working directory), without piping
+      it through <literal>systemd-coredump</literal>, set
+      <option>systemd.coredump.enable</option> to
+      <literal>false</literal>.
     </para>
    </listitem>
    <listitem>

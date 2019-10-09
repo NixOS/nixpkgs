@@ -6870,6 +6870,9 @@ in
 
   wsmancli = callPackage ../tools/system/wsmancli {};
 
+  wstunnel = haskell.lib.justStaticExecutables
+    (haskellPackages.callPackage ../tools/networking/wstunnel {});
+
   wolfebin = callPackage ../tools/networking/wolfebin {
     python = python2;
   };
@@ -7746,7 +7749,8 @@ in
     isl = isl_0_17;
   }));
 
-  gfortran = gfortran7;
+  # Version 8.x is marked broken on Darwin: https://gist.github.com/GrahamcOfBorg/bef0231b7129681950f03c4ac06781c8.
+  gfortran = if stdenv.isDarwin then gfortran7 else gfortran8;
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
@@ -8098,8 +8102,6 @@ in
       });
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
-
-  jikes = callPackage ../development/compilers/jikes { };
 
   julia_07 = callPackage ../development/compilers/julia/0.7.nix {
     gmp = gmp6;
@@ -9012,8 +9014,7 @@ in
 
   self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
-  spark = spark_24;
-  spark_24 = callPackage ../applications/networking/cluster/spark { version = "2.4.3"; };
+  spark = callPackage ../applications/networking/cluster/spark { };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
@@ -13162,6 +13163,8 @@ in
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
+  protolock = callPackage ../development/libraries/protolock { };
+
   protozero = callPackage ../development/libraries/protozero { };
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
@@ -14501,7 +14504,6 @@ in
   ### DEVELOPMENT / R MODULES
 
   R = callPackage ../applications/science/math/R {
-    gfortran = gfortran8;
     # TODO: split docs into a separate output
     texLive = texlive.combine {
       inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
@@ -15642,6 +15644,8 @@ in
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
+  health-check = callPackage ../os-specific/linux/health-check { };
+
   hibernate = callPackage ../os-specific/linux/hibernate { };
 
   hostapd = callPackage ../os-specific/linux/hostapd { };
@@ -15734,6 +15738,8 @@ in
   openisns = callPackage ../os-specific/linux/open-isns { };
 
   osxfuse = callPackage ../os-specific/darwin/osxfuse { };
+
+  power-calibrate = callPackage ../os-specific/linux/power-calibrate { };
 
   powerstat = callPackage ../os-specific/linux/powerstat { };
 
@@ -15928,6 +15934,8 @@ in
 
     evdi = callPackage ../os-specific/linux/evdi { };
 
+    fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
+
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
     e1000e = if stdenv.lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
@@ -16014,6 +16022,8 @@ in
     tmon = callPackage ../os-specific/linux/tmon { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
+
+    turbostat = callPackage ../os-specific/linux/turbostat { };
 
     usbip = callPackage ../os-specific/linux/usbip { };
 
@@ -18502,6 +18512,8 @@ in
 
   fomp = callPackage ../applications/audio/fomp { };
 
+  formatter = callPackage ../applications/misc/formatter { };
+
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
 
   freecad = qt5.callPackage ../applications/graphics/freecad { mpi = openmpi; };
@@ -19663,13 +19675,18 @@ in
 
   multimon-ng = callPackage ../applications/radio/multimon-ng { };
 
-  inherit (callPackages ../applications/networking/mumble {
+  murmur = (callPackages ../applications/networking/mumble {
+      avahi = avahi-compat;
+      pulseSupport = config.pulseaudio or false;
+      iceSupport = config.murmur.iceSupport or true;
+    }).murmur;
+
+  mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
-      iceSupport = config.murmur.iceSupport or true;
-    }) mumble mumble_rc murmur murmur_rc;
+    }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
     mumble_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
@@ -19914,6 +19931,8 @@ in
   obs-linuxbrowser = callPackage ../applications/video/obs-studio/linuxbrowser.nix { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
+
+  obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
@@ -22795,8 +22814,9 @@ in
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
-    nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
+    mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
+    nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
     sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
@@ -25021,5 +25041,7 @@ in
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen {};
 
   coz = callPackage ../development/tools/analysis/coz {};
+
+  keycard-cli = callPackage ../tools/security/keycard-cli {};
 
 }

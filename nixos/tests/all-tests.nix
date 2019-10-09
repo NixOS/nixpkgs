@@ -35,6 +35,7 @@ in
   boot-stage1 = handleTest ./boot-stage1.nix {};
   borgbackup = handleTest ./borgbackup.nix {};
   buildbot = handleTest ./buildbot.nix {};
+  caddy = handleTest ./caddy.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
   cassandra = handleTest ./cassandra.nix {};
   ceph = handleTestOn ["x86_64-linux"] ./ceph.nix {};
@@ -262,7 +263,6 @@ in
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
-  systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
