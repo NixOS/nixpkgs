@@ -81,7 +81,11 @@ let
 
     dontStrip = true;
 
-    meta.platforms = platforms.x86_64;
+    meta = {
+      license = stdenv.lib.licenses.unfree;
+      maintainers = with stdenv.lib.maintainers; [ taku0 ];
+      platforms = platforms.x86_64;
+    };
   };
 
 in {
