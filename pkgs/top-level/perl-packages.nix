@@ -743,6 +743,23 @@ let
     };
   };
 
+  AuthenOATH = buildPerlPackage {
+    pname = "Authen-OATH";
+    version = "2.0.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/Authen-OATH-2.0.1.tar.gz";
+      sha256 = "1a813dbdc05c3fbd9dd39dbcfd85e2cfb0ba3d0f652cf6b26ec83ab8146ddc77";
+    };
+    buildInputs = [ TestNeeds ];
+    propagatedBuildInputs = [ DigestHMAC Moo TypeTiny ];
+    meta = {
+      homepage = "https://github.com/oalders/authen-oath";
+      description = "OATH One Time Passwords";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   AuthenPassphrase = buildPerlModule {
     pname = "Authen-Passphrase";
     version = "0.008";
