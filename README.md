@@ -33,6 +33,7 @@ See code for all available configurations.
 | [Apple MacBook Pro 10,1][]        | `<nixos-hardware/apple/macbook-pro/10-1>`          |
 | Apple MacBook Pro 12,1            | `<nixos-hardware/apple/macbook-pro/12-1>`          |
 | BeagleBoard PocketBeagle          | `<nixos-hardware/beagleboard/pocketbeagle>`        |
+| [Dell XPS E7240][]                | `<nixos-hardware/dell/e7240>`                      |
 | [Dell XPS 13 9360][]              | `<nixos-hardware/dell/xps/13-9360>`                |
 | [Dell XPS 13 9370][]              | `<nixos-hardware/dell/xps/13-9370>`                |
 | [Dell XPS 13 9380][]              | `<nixos-hardware/dell/xps/13-9380>`                |
@@ -67,6 +68,7 @@ See code for all available configurations.
 
 [Acer Aspire 4810T]: acer/aspire/4810t
 [Apple MacBook Pro 10,1]: apple/macbook-pro/10-1
+[Dell XPS E7240][]: dell/e7240
 [Dell XPS 13 9360]: dell/xps/13-9360
 [Dell XPS 13 9370]: dell/xps/13-9370
 [Dell XPS 13 9380]: dell/xps/13-9380
