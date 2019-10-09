@@ -2973,6 +2973,22 @@ let
     };
   };
 
+  ConvertBase32 = buildPerlPackage {
+    pname = "Convert-Base32";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IK/IKEGAMI/Convert-Base32-0.06.tar.gz";
+      sha256 = "4ba82c167c41f455aa8284738727e4c94a2ebcb1c4ce797f6fda07245a642115";
+    };
+    buildInputs = [ TestException ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Convert::Base32";
+      description = "Encoding and decoding of base32 strings";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ConvertColor = buildPerlModule {
     pname = "Convert-Color";
     version = "0.11";
