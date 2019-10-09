@@ -142,7 +142,6 @@
   ./programs/seahorse.nix
   ./programs/slock.nix
   ./programs/shadow.nix
-  ./programs/shell.nix
   ./programs/spacefm.nix
   ./programs/singularity.nix
   ./programs/ssh.nix
