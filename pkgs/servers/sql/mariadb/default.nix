@@ -144,6 +144,7 @@ client = stdenv.mkDerivation (common // {
     rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
     mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
     ln -sv libmysqlclient${libExt} "$out"/lib/libmysqlclient_r${libExt}
+    ln -sv libmysqlclient${libExt} "$out"/lib/libmariadb${libExt}
   '';
 });
 
