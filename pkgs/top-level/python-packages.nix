@@ -1610,6 +1610,8 @@ in {
 
   circus = callPackage ../development/python-modules/circus {};
 
+  ciso8601 = callPackage ../development/python-modules/ciso8601 { };
+
   colorcet = callPackage ../development/python-modules/colorcet { };
 
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };
