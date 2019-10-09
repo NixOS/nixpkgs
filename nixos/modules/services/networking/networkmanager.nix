@@ -197,7 +197,7 @@ in {
 
       dhcp = mkOption {
         type = types.enum [ "dhclient" "dhcpcd" "internal" ];
-        default = "dhclient";
+        default = "internal";
         description = ''
           Which program (or internal library) should be used for DHCP.
         '';
