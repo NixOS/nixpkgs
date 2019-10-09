@@ -1,0 +1,25 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-booting-iso-from-grub">
+ <title>Booting from ISO on disk via grub</title>
+
+ <para>
+  For systems without CD drive, the NixOS live CD can be booted directly via grub. 
+  Place the ISO image on your boot partition in a <literal>iso</literal> sub-directory, e.g. <literal>/boot/iso</literal>.
+  Source the <literal>autoiso.cfg</literal> from <literal>/docs</literal> of the <literal>grub</literal> package.
+  You can also get it from <link xlink:href="https://git.savannah.gnu.org/gitweb/?p=grub.git;a=blob_plain;f=docs/autoiso.cfg;hb=HEAD">https://git.savannah.gnu.org/gitweb/?p=grub.git;a=blob_plain;f=docs/autoiso.cfg;hb=HEAD</link>.
+  and it will be detected by https://github.com/rhboot/grub2/blob/master/docs/autoiso.cfg, when you source it in your <literal>grub.cfg</literal> or <literal>custom.cfg</literal>.
+
+<screen>
+<prompt>$ </prompt>cd /boot
+<prompt>$ </prompt>mkdir -p iso && cd iso
+<prompt>$ </prompt>wget https://releases.nixos.org/nixos/unstable/nixos-20.03pre196201.07d4df59626/nixos-graphical-20.03pre196201.07d4df59626-x86_64-linux.iso
+<prompt>$ </prompt>cd ../grub
+<prompt>$ </prompt>wget "https://git.savannah.gnu.org/gitweb/?p=grub.git;a=blob_plain;f=docs/autoiso.cfg;hb=HEAD"
+<prompt>$ </prompt>echo "source autoiso.cfg" >>custom.cfg
+</screen>
+
+ </para>
+</section>
