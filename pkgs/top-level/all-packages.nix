@@ -6232,6 +6232,8 @@ in
 
   srcml = callPackage ../applications/version-management/srcml { };
 
+  srt-to-vtt-cl = callPackage ../tools/cd-dvd/srt-to-vtt-cl { };
+
   sourcehut = callPackage ../applications/version-management/sourcehut { };
 
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
