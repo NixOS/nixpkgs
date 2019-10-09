@@ -867,6 +867,12 @@
       in their docs.</link>
      </para>
     </listitem>
+    <listitem>
+     <para>
+      <literal>system.autoUpgrade.allowReboot</literal> triggers an automatic reboot if the kernel, its modules or the initrd is different to the booted system.
+      It is off by default.
+     </para>
+    </listitem>
   </itemizedlist>
  </section>
 </section>
