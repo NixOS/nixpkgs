@@ -7152,6 +7152,16 @@
     githubId = 1866448;
     name = "Eric Bailey";
   };
+  Yumasi = {
+    email = "gpagnoux@gmail.com";
+    github = "Yumasi";
+    githubId = 24368641;
+    name = "Guillaume Pagnoux";
+    keys = [{
+      longkeyid = "rsa4096/0xEC5065899AEAAF4C";
+      fingerprint = "85F8 E850 F8F2 F823 F934  535B EC50 6589 9AEA AF4C";
+    }];
+  };
   yvt = {
     email = "i@yvt.jp";
     github = "yvt";
