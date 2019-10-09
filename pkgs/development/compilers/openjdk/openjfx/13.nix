@@ -3,7 +3,7 @@
 , ffmpeg, python, ruby }:
 
 let
-  major = "12";
+  major = "13";
   update = "";
   build = "14";
   repover = "${major}${update}+${build}";
@@ -15,8 +15,8 @@ let
     version = "${major}${update}-${build}";
 
     src = fetchurl {
-      url = "https://hg.openjdk.java.net/openjfx/${major}/rt/archive/${repover}.tar.gz";
-      sha256 = "16jjfjkrg57wsj9mmm52i2kl3byz3ba1f9f8wwc8zwqm4cpjzliz";
+      url = "https://hg.openjdk.java.net/openjfx/${major}-dev/rt/archive/${repover}.tar.gz";
+      sha256 = "0nviv9fiwzp1z4gjbp8iz9mf601nadzcy0sx74f5y3v41a3l59qb";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg ];
@@ -28,6 +28,9 @@ let
       CONF = Release
       JDK_HOME = ${openjdk11_headless.home}
     '' + args.gradleProperties or "");
+
+    #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
+    NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
 
     buildPhase = ''
       runHook preBuild
@@ -59,8 +62,8 @@ let
     outputHashMode = "recursive";
     # Downloaded AWT jars differ by platform.
     outputHash = {
-      x86_64-linux = "1z5qar5l28ja4pkf5l5m48xbv3x1yrnilsv9lpf2j3vkdk9h1nci";
-      i686-linux = "0rbygvjc7w197fi5nxldqdrm6mpiyd3n45042g3gd4s5qk08spjd";
+      x86_64-linux = "077zss95iq6iskx7ghz1c57ymydpzj0wm7r1pkznw99l9xwvdmqi";
+      i686-linux = "03gglr2sh77cyg16qw9g45ji33dg7i93s5s30hz3mh420g112qa0";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
@@ -71,6 +74,9 @@ in makePackage {
     COMPILE_MEDIA = true
     COMPILE_WEBKIT = true
   '';
+
+  #openjdk build fails if licenses are identical, so we must patch this trivial difference
+  patches = [ ./openjfx-mesa-license.patch ];
 
   preBuild = ''
     swtJar="$(find ${deps} -name org.eclipse.swt\*.jar)"

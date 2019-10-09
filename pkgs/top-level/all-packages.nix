@@ -8039,7 +8039,7 @@ in
 
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
 
-  openjfx12 = callPackage ../development/compilers/openjdk/openjfx/12.nix { };
+  openjfx13 = callPackage ../development/compilers/openjdk/openjfx/13.nix { };
 
   openjdk8-bootstrap =
     if adoptopenjdk-hotspot-bin-8.meta.available then
@@ -8084,21 +8084,33 @@ in
     else
       openjdk11.override { headless = true; };
 
+  openjdk13-bootstrap =
+    if adoptopenjdk-hotspot-bin-13.meta.available then
+      adoptopenjdk-hotspot-bin-13
+    else
+      /* adoptopenjdk not available for i686, so fall back to our old build of 12 for bootstrapping */
+      callPackage ../development/compilers/openjdk/12.nix {
+        openjfx = openjfx11; /* need this despite next line :-( */
+        enableJavaFX = false;
+        headless = true;
+        inherit (gnome2) GConf gnome_vfs;
+      };
+
   /* current JDK */
-  openjdk12 =
+  openjdk13 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin { }
     else
       callPackage ../development/compilers/openjdk {
-        openjfx = openjfx12;
+        openjfx = openjfx13;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk12_headless =
+  openjdk13_headless =
     if stdenv.isDarwin then
-      openjdk12
+      openjdk13
     else
-      openjdk12.override { headless = true; };
+      openjdk13.override { headless = true; };
 
   openjdk = openjdk8;
   openjdk_headless = openjdk8_headless;
@@ -8110,8 +8122,8 @@ in
   jdk11 = openjdk11;
   jdk11_headless = openjdk11_headless;
 
-  jdk12 = openjdk12;
-  jdk12_headless = openjdk12_headless;
+  jdk13 = openjdk13;
+  jdk13_headless = openjdk13_headless;
 
   jdk = jdk8;
   jre = jre8;
