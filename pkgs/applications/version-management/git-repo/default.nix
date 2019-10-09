@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "1.13.6";
+  version = "1.13.7";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "1a12h84anf3sshkkcv30ljgibb35gmh01bmi6sicyhxbn1hrfi3w";
+    sha256 = "019pnf0g2dzdrbmckd96xq9md1qh8r5bwfj02qjrdg228lc9hzv4";
   };
 
   nativeBuildInputs = [ makeWrapper ];
