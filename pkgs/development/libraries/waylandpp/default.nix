@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "waylandpp";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "NilsBrause";
     repo = pname;
     rev = version;
-    sha256 = "16h57hzd688664qcyznzhjp3hxipdkzgv46x82yhkww24av8b55n";
+    sha256 = "1lm8amlk70gmpj7ipdk2lg05b8dpbyd03sc4h38pm7n0cwxl15gp";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
