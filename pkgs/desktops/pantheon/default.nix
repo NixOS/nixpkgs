@@ -59,7 +59,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   maintainers = with pkgs.stdenv.lib.maintainers; [ worldofpeace ];
 
   mutter = pkgs.gnome3.mutter328;
-  vala = pkgs.vala_0_40;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 

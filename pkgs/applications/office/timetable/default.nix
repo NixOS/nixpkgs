@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , glib
 , gtk3
+, vala
 , hicolor-icon-theme
 , json-glib
 , libgee
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-    pantheon.vala
+    vala
     python3
     wrapGAppsHook
   ];
