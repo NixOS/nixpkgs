@@ -16681,6 +16681,8 @@ in
 
   aileron = callPackage ../data/fonts/aileron { };
 
+  amber-theme = callPackage ../data/themes/amber { };
+
   amiri = callPackage ../data/fonts/amiri { };
 
   andagii = callPackage ../data/fonts/andagii { };
