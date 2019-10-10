@@ -1,8 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
 , libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
 , libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
-, fixDarwinDylibNames, cctools, CoreServices
-, asio, buildEnv, check, scons, less
+, fixDarwinDylibNames, cctools, CoreServices, less
 , withoutClient ? false
 }:
 
@@ -35,8 +34,8 @@ common = rec { # attributes common to both builds
 
   buildInputs = [
     ncurses openssl zlib pcre jemalloc libiconv curl
-  ] ++ optionals stdenv.isLinux [ libaio systemd libkrb5 ]
-    ++ optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
+  ] ++ optionals stdenv.hostPlatform.isLinux [ libaio systemd libkrb5 ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -74,7 +73,7 @@ common = rec { # attributes common to both builds
     "-DWITH_SAFEMALLOC=OFF"
     "-DWITH_UNIT_TESTS=OFF"
     "-DEMBEDDED_LIBRARY=OFF"
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     # On Darwin without sandbox, CMake will find the system java and attempt to build with java support, but
     # then it will fail during the actual build. Let's just disable the flag explicitly until someone decides
     # to pass in java explicitly.
@@ -139,18 +138,18 @@ server = stdenv.mkDerivation (common // {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = common.nativeBuildInputs ++ [ bison ] ++ optional (!stdenv.isDarwin) makeWrapper;
+  nativeBuildInputs = common.nativeBuildInputs ++ [ bison ] ++ optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
 
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optional (stdenv.isLinux && !stdenv.isAarch32) numactl
-    ++ optional stdenv.isLinux linux-pam
-    ++ optional (!stdenv.isDarwin) mytopEnv;
+  ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
+    ++ optional stdenv.hostPlatform.isLinux linux-pam
+    ++ optional (!stdenv.hostPlatform.isDarwin) mytopEnv;
 
   patches = common.patches ++ [
     ./cmake-without-client.patch
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     ./cmake-without-plugin-auth-pam.patch
   ];
 
@@ -165,39 +164,39 @@ server = stdenv.mkDerivation (common // {
     "-DWITH_INNODB_DISALLOW_WRITES=ON"
     "-DWITHOUT_EXAMPLE=1"
     "-DWITHOUT_FEDERATED=1"
-  ] ++ stdenv.lib.optionals withoutClient [
+  ] ++ optionals withoutClient [
     "-DWITHOUT_CLIENT=ON"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_TOKUDB=1"
   ];
 
-  preConfigure = optionalString (!stdenv.isDarwin) ''
+  preConfigure = optionalString (!stdenv.hostPlatform.isDarwin) ''
     patchShebangs scripts/mytop.sh
   '';
 
   postInstall = common.postInstall + ''
     chmod +x "$out"/bin/wsrep_sst_common
-    rm "$out"/bin/mysql_client_test
+    rm "$out"/bin/{mysql_client_test,mysqltest}
     rm -r "$out"/data # Don't need testing data
-    rm "$out"/lib/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
     mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
   '' + optionalString withoutClient ''
     ${ # We don't build with GSSAPI on Darwin
-      optionalString (!stdenv.isDarwin) ''
+      optionalString (!stdenv.hostPlatform.isDarwin) ''
         rm "$out"/lib/mysql/plugin/auth_gssapi_client.so
       ''
     }
     rm "$out"/lib/mysql/plugin/client_ed25519.so
-  '' + optionalString (!stdenv.isDarwin) ''
+    rm "$out"/lib/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
+  '' + optionalString (!stdenv.hostPlatform.isDarwin) ''
     sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
   '';
 
   # perlPackages.DBDmysql is broken on darwin
-  postFixup = optionalString (!stdenv.isDarwin) ''
+  postFixup = optionalString (!stdenv.hostPlatform.isDarwin) ''
     wrapProgram $out/bin/mytop --set PATH ${less}/bin/less
   '';
 
-  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
+  CXXFLAGS = optionalString stdenv.hostPlatform.isi686 "-fpermissive";
 });
 in mariadb
