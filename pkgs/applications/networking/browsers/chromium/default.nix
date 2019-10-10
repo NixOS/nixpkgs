@@ -62,7 +62,7 @@ in let
         if upstream-info.channel == "stable" then
           "./opt/google/chrome/libwidevinecdm.so"
         else if upstream-info.channel == "beta" then
-          "./opt/google/chrome-beta/libwidevinecdm.so"
+          "./opt/google/chrome-beta/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
         else if upstream-info.channel == "dev" then
           "./opt/google/chrome-unstable/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
         else
