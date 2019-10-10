@@ -4266,6 +4266,7 @@ broken-packages:
   - docker
   - docker-build-cacher
   - dockercook
+  - docrecords
   - DocTest
   - doctest-discover-configurator
   - doctest-driver-gen
@@ -7926,6 +7927,9 @@ broken-packages:
   - pool-conduit
   - popenhs
   - poppler
+  - porcupine-core
+  - porcupine-http
+  - porcupine-s3
   - portager
   - porte
   - PortFusion
@@ -8238,10 +8242,12 @@ broken-packages:
   - reactive-thread
   - reactor
   - read-io
+  - reader-soup
   - readline-statevar
   - readpyc
   - readshp
   - really-simple-xml-parser
+  - reanimate
   - reasonable-lens
   - record
   - record-aeson
@@ -8273,6 +8279,7 @@ broken-packages:
   - reflex-animation
   - reflex-backend-wai
   - reflex-basic-host
+  - reflex-dom-retractable
   - reflex-dom-svg
   - reflex-gloss
   - reflex-gloss-scene
@@ -9971,6 +9978,7 @@ broken-packages:
   - webshow
   - websockets-rpc
   - websockets-simple
+  - websockets-simple-extra
   - webwire
   - weighted
   - weighted-regexp
