@@ -1162,6 +1162,8 @@ in {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+  rcfile = callPackage ../development/python-modules/rcfile { };
+
   rig = callPackage ../development/python-modules/rig { };
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
