@@ -745,6 +745,8 @@ let
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
+    spelll = callPackage ../development/ocaml-modules/spelll { };
+
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
