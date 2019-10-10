@@ -949,6 +949,10 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+    systemfonts = old.systemfonts.overrideDerivation (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
     littler = old.littler.overrideAttrs (attrs: with pkgs; {
       buildInputs = [ pcre lzma zlib bzip2 icu which ] ++ attrs.buildInputs;
       postInstall = ''
