@@ -1,26 +1,25 @@
 { stdenv, fetchFromGitHub, htslib, zlib, bzip2, lzma, ncurses, boost }:
 
 stdenv.mkDerivation rec {
-
   pname = "delly";
   version = "0.8.1";
 
   src = fetchFromGitHub {
       owner = "dellytools";
-      repo = "${pname}";
+      repo = pname;
       rev = "v${version}";
       sha256 = "18gm86j1g1k4z1cjv2m5v9rsl1xqs2w3dhwcsnzx2mhkrvmlc4i1";
   };
 
   buildInputs = [ zlib htslib bzip2 lzma ncurses boost ];
 
-  prePhase = ''
-    EBROOTHTSLIB=${htslib}
-  '';
+  EBROOTHTSLIB = htslib;
 
   installPhase = ''
     runHook preInstall
+
     install -Dm555 src/delly $out/bin/delly
+
     runHook postInstall
   '';
 
@@ -37,7 +36,5 @@ stdenv.mkDerivation rec {
       split-reads and read-depth to sensitively and accurately delineate
       genomic rearrangements throughout the genome.
     '';
-
   };
-
 }
