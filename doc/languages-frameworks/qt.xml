@@ -24,7 +24,7 @@ mkDerivation { <co xml:id='qt-default-nix-co-2' />
  <calloutlist>
   <callout arearefs='qt-default-nix-co-1'>
    <para>
-    Import <literal>mkDerivation</literal> and Qt (such as <literal>qtbase</literal> modules directly. <emphasis>Do not</emphasis> import Qt package sets; the Qt versions of dependencies may not be coherent, causing build and runtime failures.
+    Import <literal>mkDerivation</literal> and Qt modules (such as <literal>qtbase</literal>) directly. <emphasis>Do not</emphasis> import Qt package sets; the Qt versions of dependencies may not be coherent, causing build and runtime failures.
    </para>
   </callout>
   <callout arearefs='qt-default-nix-co-2'>
