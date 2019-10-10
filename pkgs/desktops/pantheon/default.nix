@@ -219,4 +219,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
 
+  ### ALIASES
+
+  vala = pkgs.vala; # added 2019-10-10
+
 })
