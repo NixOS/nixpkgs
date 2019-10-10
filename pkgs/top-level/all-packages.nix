@@ -8535,8 +8535,6 @@ in
     vala_0_46
     vala;
 
-  valadoc = callPackage ../development/tools/valadoc { };
-
   wcc = callPackage ../development/compilers/wcc { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
