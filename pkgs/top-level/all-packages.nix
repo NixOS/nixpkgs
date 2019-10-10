@@ -22900,6 +22900,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  streamlit = python3Packages.callPackage ../applications/science/machine-learning/streamlit { };
+
   stuntrally = callPackage ../games/stuntrally {
     ogre = ogre1_9;
     mygui = mygui.override {
