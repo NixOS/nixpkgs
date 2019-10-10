@@ -1040,6 +1040,8 @@ in {
     inherit (pkgs) cmake qt5 ninja;
   });
 
+  pySMART_smartx = callPackage ../development/python-modules/pySMART_smartx { };
+
   shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
     inherit (pkgs) cmake qt5 llvmPackages;
   });
