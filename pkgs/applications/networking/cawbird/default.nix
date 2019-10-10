@@ -3,14 +3,14 @@
 , glib-networking, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.1";
+  version = "1.0.2";
   pname = "cawbird";
 
   src = fetchFromGitHub {
     owner = "IBBoard";
     repo = "cawbird";
     rev = "v${version}";
-    sha256 = "sha256:0bk33fh32nnv6ya6j0ij34abw6a3g6m8fq13303slhhja8xhvmb1";
+    sha256 = "sha256:0b79ngwilicqkgacva93cir4rmk15yzgsih56yb3a4n6bqjispay";
   };
 
   nativeBuildInputs = [
