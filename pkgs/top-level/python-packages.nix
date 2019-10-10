@@ -3601,6 +3601,8 @@ in {
     inherit (pkgs) kerberos;
   };
 
+  lazy_import = callPackage ../development/python-modules/lazy_import { };
+
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
   ldaptor = callPackage ../development/python-modules/ldaptor { };
