@@ -5767,6 +5767,8 @@ in {
 
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 
+  torchtext = callPackage ../development/python-modules/torchtext { };
+
   torchvision = callPackage ../development/python-modules/torchvision { };
 
   jenkinsapi = callPackage ../development/python-modules/jenkinsapi { };
