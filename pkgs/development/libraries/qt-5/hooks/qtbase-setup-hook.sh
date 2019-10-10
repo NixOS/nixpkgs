@@ -1,9 +1,12 @@
 if [ -z "$_qt_mkDerivation" ]
 then
     cat >&2 <<EOF
-Did not detect supported mkDerivation. Build aborted!
+Did not detect supported 'mkDerivation'. Build aborted!
 
-Please refer to the Nixpkgs manual section 'Support for specific programming languages and frameworks/Qt'.
+Please refer to the Nixpkgs manual for help with Qt packaging:
+https://nixos.org/nixpkgs/manual/#sec-language-qt
+
+In particular, see the notes about 'mkDerivation' and 'mkDerivationWith'.
 EOF
     exit 1
 fi
