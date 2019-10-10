@@ -89,12 +89,13 @@ gcc8Stdenv.mkDerivation {
     cp -r * $out/
   '';
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with stdenv.lib; {
     description = "NoSQL data store using the seastar framework, compatible with Apache Cassandra";
     homepage = "https://scylladb.com";
     license = licenses.agpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.farlion ];
-    requiredSystemFeatures = [ "big-parallel" ];
   };
 }
