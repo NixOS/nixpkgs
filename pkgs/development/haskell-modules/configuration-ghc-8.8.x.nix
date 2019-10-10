@@ -77,10 +77,7 @@ self: super: {
   regex-posix = self.regex-posix_0_96_0_0;
   regex-tdfa = self.regex-tdfa_1_3_0;
   shelly = self.shelly_1_9_0;
-  string-qq = self.string-qq_0_0_4;
   tls = self.tls_1_5_1;
-  vector-th-unbox = self.vector-th-unbox_0_2_1_7;
-  X11 = self.X11_1_9_1;
   xmonad-contrib = self.xmonad-contrib_0_16;
 
   # These packages don't work and need patching and/or an update.
