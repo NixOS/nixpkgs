@@ -38,7 +38,6 @@ mkDerivationWith myDeriver {
   # ...
 }
 </programlisting>
-    If you cannot use <literal>mkDerivationWith</literal>, please refer to <xref linkend='qt-runtime-dependencies' />.
    </para>
   </callout>
   <callout arearefs='qt-default-nix-co-3'>
@@ -51,14 +50,7 @@ mkDerivationWith myDeriver {
  <formalpara xml:id='qt-runtime-dependencies'>
   <title>Locating runtime dependencies</title>
   <para>
-   Qt applications need to be wrapped to find runtime dependencies. If you cannot use <literal>mkDerivation</literal> or <literal>mkDerivationWith</literal> above, include <literal>wrapQtAppsHook</literal> in <literal>nativeBuildInputs</literal>:
-<programlisting>
-stdenv.mkDerivation {
-  # ...
-
-  nativeBuildInputs = [ wrapQtAppsHook ];
-}
-</programlisting>
+   Qt applications need to be wrapped to find runtime dependencies. A hook <literal>wrapQtAppsHook</literal> is provided by <literal>mkDerivation</literal> and <literal>mkDerivationWith</literal> to produce the wrappers. In most cases, the hook works automatically, but for the remaining cases, its settings are described below.
   </para>
  </formalpara>
 
