@@ -85,18 +85,6 @@ mkDerivation {
   </para>
  </note>
 
- <para>
-  Libraries are built with every available version of Qt. Use the <literal>meta.broken</literal> attribute to disable the package for unsupported Qt versions:
-<programlisting>
-mkDerivation {
-  # ...
-
-  # Disable this library with Qt &lt; 5.9.0
-  meta.broken = builtins.compareVersions qtbase.version "5.9.0" &lt; 0;
-}
-</programlisting>
- </para>
-
  <formalpara>
   <title>Adding a library to Nixpkgs</title>
   <para>
@@ -119,6 +107,18 @@ mkDerivation {
    </example>
   </para>
  </formalpara>
+
+ <para>
+  Libraries are built with every available version of Qt. Use the <literal>meta.broken</literal> attribute to disable the package for unsupported Qt versions:
+<programlisting>
+mkDerivation {
+  # ...
+
+  # Disable this library with Qt &lt; 5.9.0
+  meta.broken = builtins.compareVersions qtbase.version "5.9.0" &lt; 0;
+}
+</programlisting>
+ </para>
 
  <formalpara>
   <title>Adding an application to Nixpkgs</title>
