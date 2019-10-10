@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , meson
 , ninja
+, vala
 , pkgconfig
 , gtk3
 , python3
@@ -31,7 +32,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    pantheon.vala
+    vala
     gettext
     gobject-introspection # For setup hook
     libxml2
