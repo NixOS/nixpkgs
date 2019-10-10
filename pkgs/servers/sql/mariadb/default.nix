@@ -44,7 +44,6 @@ common = rec { # attributes common to both builds
 
   patches = [
     ./cmake-includedir.patch
-    ./cmake-libmariadb-includedir.patch
   ];
 
   cmakeFlags = [
@@ -86,10 +85,14 @@ common = rec { # attributes common to both builds
   ];
 
   postInstall = ''
+    # Remove Development components. Need to use libmysqlclient.
     rm "$out"/lib/mysql/plugin/daemon_example.ini
-    mkdir -p "$dev"/bin && mv "$out"/bin/{mariadb_config,mysql_config} "$dev"/bin
-    mkdir -p "$dev"/lib/ && mv "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a} "$dev"/lib
-    mkdir -p "$dev"/lib/mysql/plugin && mv "$out"/lib/mysql/plugin/{caching_sha2_password.so,dialog.so,mysql_clear_password.so,sha256_password.so} "$dev"/lib/mysql/plugin
+    rm "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a}
+    rm "$out"/lib/mysql/plugin/{caching_sha2_password.so,dialog.so,mysql_clear_password.so,sha256_password.so}
+    rm "$out"/bin/{mariadb_config,mysql_config}
+    rm -r $out/include
+    rm -r $out/lib/pkgconfig
+    rm -r $out/share/{aclocal,pkgconfig}
   '';
 
   enableParallelBuilding = true;
@@ -108,9 +111,7 @@ common = rec { # attributes common to both builds
 client = stdenv.mkDerivation (common // {
   pname = "mariadb-client";
 
-  outputs = [ "out" "dev" "man" ];
-
-  propagatedBuildInputs = [ openssl zlib ]; # required from mariadb.pc
+  outputs = [ "out" "man" ];
 
   patches = common.patches ++ [
     ./cmake-plugin-includedir.patch
@@ -122,11 +123,6 @@ client = stdenv.mkDerivation (common // {
     "-DWITH_WSREP=OFF"
     "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
   ];
-
-  preConfigure = ''
-   cmakeFlags="$cmakeFlags \
-      -DCMAKE_INSTALL_PREFIX_DEV=$dev"
-  '';
 
   postInstall = common.postInstall + ''
     rm -r "$out"/share/doc
@@ -141,7 +137,7 @@ client = stdenv.mkDerivation (common // {
 server = stdenv.mkDerivation (common // {
   pname = "mariadb-server";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = common.nativeBuildInputs ++ [ bison ] ++ optional (!stdenv.isDarwin) makeWrapper;
 
@@ -176,12 +172,7 @@ server = stdenv.mkDerivation (common // {
     "-DWITHOUT_TOKUDB=1"
   ];
 
-  preConfigure = ''
-    cmakeFlags="$cmakeFlags \
-      -DCMAKE_INSTALL_PREFIX_DEV=$dev
-      -DINSTALL_SHAREDIR=$dev/share/mysql
-      -DINSTALL_SUPPORTFILESDIR=$dev/share/mysql"
-  '' + optionalString (!stdenv.isDarwin) ''
+  preConfigure = optionalString (!stdenv.isDarwin) ''
     patchShebangs scripts/mytop.sh
   '';
 
