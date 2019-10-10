@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/granite/raw/0550b44ed6400c9b1ff7e70871913747df2ff323/f/00-datetime-clock-format-gsettings.patch";
       sha256 = "0i9yvdmn77x5fjdwd1raw6ym8js8yxa7w6ydc7syx7hcyls00dmq";
     })
+
+    # Fix build latest vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/granite/commit/fd26013c84afdeb6300ae2f4a574856753fc2b58.patch";
+      sha256 = "01nxqhj8gr61n6wx6ccrqdn25nmbrhhk437k21g4mxqx0gnih265";
+    })
   ];
 
   passthru = {
