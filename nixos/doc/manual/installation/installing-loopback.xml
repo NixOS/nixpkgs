@@ -14,7 +14,7 @@
 
 <screen>
 <prompt>$ </prompt>cd /boot
-<prompt>$ </prompt>mkdir -p iso && cd iso
+<prompt>$ </prompt>mkdir -p iso; cd iso
 <prompt>$ </prompt>wget https://releases.nixos.org/nixos/unstable/nixos-20.03pre196201.07d4df59626/nixos-graphical-20.03pre196201.07d4df59626-x86_64-linux.iso
 <prompt>$ </prompt>cd ../grub
 <prompt>$ </prompt>wget "https://git.savannah.gnu.org/gitweb/?p=grub.git;a=blob_plain;f=docs/autoiso.cfg;hb=HEAD"
