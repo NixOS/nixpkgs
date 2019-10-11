@@ -4140,6 +4140,8 @@ in
 
   jsduck = callPackage ../development/tools/jsduck { };
 
+  jtc = callPackage ../development/tools/jtc { };
+
   jumpapp = callPackage ../tools/X11/jumpapp {};
 
   jucipp = callPackage ../applications/editors/jucipp { };
