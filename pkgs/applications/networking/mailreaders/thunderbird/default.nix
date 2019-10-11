@@ -52,11 +52,6 @@ in stdenv.mkDerivation rec {
   patches = [
     # Remove buildconfig.html to prevent a dependency on clang etc.
     ./no-buildconfig.patch
-    (fetchpatch {
-      # https://phabricator.services.mozilla.com/D47796
-      url = "https://d3kxowhw4s8amj.cloudfront.net/file/data/a54c6fszaol23yh5aa27/PHID-FILE-sql3i57neyrztfdngrwe/D47796.diff";
-      sha256 = "18i1bk6rz875dly2vnkrdgbah8kx0lv4akjzl0i9gxc58hi5q3nq";
-    })
   ]
   ++ lib.optional (lib.versionOlder version "69")
     (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
