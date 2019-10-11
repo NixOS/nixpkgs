@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     # TODO
     # upstream doesn't support newer openssl versions
     # https://github.com/PIVX-Project/PIVX/issues/748
-    # openssl_1_0_2 should be replaced with opennsl ASAP
+    # openssl_1_0_2 should be replaced with openssl ASAP
   };
 }
