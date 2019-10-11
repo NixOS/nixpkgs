@@ -2282,7 +2282,7 @@
     name = "Frede Emil";
   };
   freepotion = {
-    email = "free.potion@yandex.ru";
+    email = "42352817+freepotion@users.noreply.github.com";
     github = "freepotion";
     githubId = 42352817;
     name = "Free Potion";
