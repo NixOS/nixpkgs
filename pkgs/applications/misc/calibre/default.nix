@@ -1,16 +1,17 @@
 { stdenv, mkDerivation,  fetchurl, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
 , unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
-, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo, qt5
+, hunspell, xdg_utils, makeDesktopItem, wrapGAppsHook
+, removeReferencesTo, qt5
 }:
 
 mkDerivation rec {
   pname = "calibre";
-  version = "3.47.1";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "17lz6rawlv268vv8i5kj59rswsipq3c14066adaz1paw54zr62dk";
+    sha256 = "0z4qcpzy3fhab8l5c0lsvzzb7f45vw4xlh7bl6xzia3bqas8jgrn";
   };
 
   patches = [
@@ -39,7 +40,7 @@ mkDerivation rec {
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
-    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
+    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp hunspell xdg_utils
   ] ++ (with python2Packages; [
     apsw cssselect css-parser dateutil dnspython html5-parser lxml mechanize netifaces pillow
     python pyqt5_with_qtwebkit sip
