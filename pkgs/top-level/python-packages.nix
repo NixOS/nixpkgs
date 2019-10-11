@@ -4447,6 +4447,8 @@ in {
 
   pybfd = callPackage ../development/python-modules/pybfd { };
 
+  py2bit = callPackage ../development/python-modules/py2bit { };
+
   pyblock = callPackage ../development/python-modules/pyblock { };
 
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };
