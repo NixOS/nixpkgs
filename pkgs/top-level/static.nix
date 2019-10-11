@@ -181,6 +181,10 @@ in {
     staticOnly = true;
   };
 
+  zstd = super.zstd.override {
+    static = true;
+  };
+
   llvmPackages_8 = super.llvmPackages_8 // {
     libraries = super.llvmPackages_8.libraries // rec {
       libcxxabi = super.llvmPackages_8.libraries.libcxxabi.override {

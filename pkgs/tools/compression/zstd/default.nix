@@ -1,9 +1,10 @@
-{ stdenv, fetchFromGitHub, gnugrep
+{ stdenv, fetchFromGitHub, fetchpatch, gnugrep
 , fixDarwinDylibNames
 , file
-, legacySupport ? false }:
+, legacySupport ? false
+, static ? false, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "zstd";
   version = "1.4.3";
 
@@ -27,11 +28,11 @@ stdenv.mkDerivation rec {
       --replace 'MD5SUM="md5 -r"' 'MD5SUM="md5sum"'
   '';
 
-  installFlags = [
+  installFlags = stdenv.lib.optionals (!static) [
     "PREFIX=$(out)"
   ];
 
-  preInstall = ''
+  preInstall = stdenv.lib.optionalString (!static) ''
     substituteInPlace programs/zstdgrep \
       --replace ":-grep" ":-${gnugrep}/bin/grep" \
       --replace ":-zstdcat" ":-$out/bin/zstdcat"
@@ -59,4 +60,15 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej ];
   };
-}
+} // stdenv.lib.optionalAttrs static {
+  nativeBuildInputs = [ cmake ];
+  patches = [(fetchpatch {
+    url = "https://github.com/facebook/zstd/commit/bda4669edc38c61e033bcf3905932e6d79c9d64a.diff";
+    sha256 = "0asnslwb5k6g8yfr263fddarfmawsmvpdvbfyww773na2mmvhk66";
+  })];
+  cmakeFlags = [
+    "-DZSTD_BUILD_SHARED:BOOL=OFF"
+    "-DZSTD_LEGACY_SUPPORT:BOOl=${if legacySupport then "ON" else "OFF"}"
+  ];
+  cmakeDir = "../build/cmake";
+})
