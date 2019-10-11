@@ -14,8 +14,14 @@ let
     x86_64-linux = "15m7mfb8gmx3pwydc37blj0rxwgmkrnqfj6y79rpqlr2dg92gwlb";
     x86_64-darwin = "080k4fnfa5ylmmya6zprgci3gld9mrbqsfnk53hgcny91ykl5xj5";
   }.${system};
+
+  sourceRoot = {
+    x86_64-linux = ".";
+    x86_64-darwin = "";
+  }.${system};
 in
   callPackage ./generic.nix rec {
+    inherit sourceRoot;
 
     version = "1.38.1";
     pname = "vscodium";
@@ -28,8 +34,6 @@ in
       url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";
       inherit sha256;
     };
-
-    sourceRoot = ".";
 
     meta = with stdenv.lib; {
       description = ''

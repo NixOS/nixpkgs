@@ -7,11 +7,13 @@
 , pytest-benchmark
 , sortedcollections
 , sortedcontainers
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "bidict";
   version = "0.18.2";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

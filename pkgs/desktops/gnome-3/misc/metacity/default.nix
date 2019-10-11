@@ -16,13 +16,13 @@
 
 let
   pname = "metacity";
-  version = "3.34.0";
+  version = "3.34.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0ih95lmw56z6pha7p035ahqpvpw9sxfam3cxm7fambib5qrky192";
+    sha256 = "0ga57b71i2gbd723gbs3pxy1jnf44q5mnwq5yhxzn2irbh2d3iri";
   };
 
   patches = [

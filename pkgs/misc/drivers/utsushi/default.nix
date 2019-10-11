@@ -150,5 +150,6 @@ stdenv.mkDerivation rec {
         - XP-960 Series
       '';
       license = stdenv.lib.licenses.gpl3Plus;
+      broken = true;
   };
 }

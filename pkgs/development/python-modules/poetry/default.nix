@@ -87,5 +87,6 @@ in buildPythonPackage rec {
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
+    broken = true;
   };
 }

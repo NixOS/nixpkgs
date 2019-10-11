@@ -49,8 +49,8 @@ lib.overrideDerivation (buildLinux (args // {
       cp -v "$dtbDir/$1" "$dtbDir/$2"
     }
   '' + lib.optionalString (lib.elem stdenv.hostPlatform.system ["armv6l-linux"]) ''
-    copyDTB bcm2708-rpi-0-w.dtb bcm2835-rpi-zero.dtb
-    copyDTB bcm2708-rpi-0-w.dtb bcm2835-rpi-zero-w.dtb
+    copyDTB bcm2708-rpi-zero-w.dtb bcm2835-rpi-zero.dtb
+    copyDTB bcm2708-rpi-zero-w.dtb bcm2835-rpi-zero-w.dtb
     copyDTB bcm2708-rpi-b.dtb bcm2835-rpi-a.dtb
     copyDTB bcm2708-rpi-b.dtb bcm2835-rpi-b.dtb
     copyDTB bcm2708-rpi-b.dtb bcm2835-rpi-b-rev2.dtb

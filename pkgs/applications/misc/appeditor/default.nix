@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, vala
 , meson
 , ninja
 , pkgconfig
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook

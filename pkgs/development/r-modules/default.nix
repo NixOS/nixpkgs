@@ -249,7 +249,7 @@ let
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
-    data_table = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+    data_table = [pkgs.zlib.dev] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
@@ -276,7 +276,6 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
-    libamtrack = [ pkgs.gsl_1 ];
     magick = [ pkgs.imagemagick.dev ];
     mvabund = [ pkgs.gsl_1 ];
     mwaved = [ pkgs.fftw.dev ];
@@ -358,6 +357,7 @@ let
     stringi = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl_1 ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
+    systemfonts = [ pkgs.fontconfig.dev pkgs.freetype.dev ];
     TAQMNGR = [ pkgs.zlib.dev ];
     tesseract = [ pkgs.tesseract pkgs.leptonica ];
     tiff = [ pkgs.libtiff.dev ];
@@ -425,6 +425,7 @@ let
     spate = [ pkgs.pkgconfig ];
     stringi = [ pkgs.pkgconfig ];
     sysfonts = [ pkgs.pkgconfig ];
+    systemfonts = [ pkgs.pkgconfig ];
     tesseract = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
@@ -647,7 +648,6 @@ let
     "SimpleTable"
     "SOLOMON"
     "soundecology"
-    "SPACECAP"
     "spacodiR"
     "spatsurv"
     "sqldf"
@@ -946,6 +946,10 @@ let
     });
 
     rlang = old.rlang.overrideDerivation (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    systemfonts = old.systemfonts.overrideDerivation (attrs: {
       preConfigure = "patchShebangs configure";
     });
 

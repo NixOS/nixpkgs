@@ -23,7 +23,7 @@
 , gtk_engines
 , alsaLib
 , zlib
-, version ? "19.8.0"
+, version ? "19.10.0"
 }:
 
 let
@@ -48,7 +48,7 @@ let
         x86hash   = "16v3kgavrh62z6vxcbw6mn7h0bfishpl7m92k7g1p2882r1f8vaf";
         x64suffix = "60";
         x86suffix = "60";
-        homepage  = https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html;
+        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest.html;
       };
 
       "19.8.0" = {
@@ -59,7 +59,18 @@ let
         x86hash   = "0afcqirb4q349r3izy88vqkszg6y2wg14iwypk6nrmvwgvcl6jdn";
         x64suffix = "20";
         x86suffix = "20";
-        homepage  = https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html;
+        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest1.html;
+      };
+
+      "19.10.0" = {
+        major     = "19";
+        minor     = "10";
+        patch     = "0";
+        x64hash   = "1l4q4pmfiw9gmml6j5b3hls2101xf5m8p6855nhfhvqlisrj9h14";
+        x86hash   = "000zjik8wf8b6fadnsai0p77b4n2l95544zx503iyrb9pv53bj3y";
+        x64suffix = "15";
+        x86suffix = "15";
+        homepage  = https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest1.html;
       };
     };
 

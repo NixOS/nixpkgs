@@ -7,12 +7,12 @@
             "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip"
         ]
     },
-    "0.27.1.tar.gz": {
-        "name": "0.27.1.tar.gz",
-        "sha256": "28cb3666da80fbc62d4c46814f5468dd5d0b59f9064c0b933eee3140d706d330",
+    "0.28.3.tar.gz": {
+        "name": "0.28.3.tar.gz",
+        "sha256": "d8c2f20deb2f6143bac792d210db1a4872102d81529fe0ea3476c1696addd7ff",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/0.27.1.tar.gz",
-            "https://github.com/bazelbuild/bazel-toolchains/archive/0.27.1.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/0.28.3.tar.gz",
+            "https://github.com/bazelbuild/bazel-toolchains/archive/0.28.3.tar.gz"
         ]
     },
     "0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip": {
@@ -21,14 +21,6 @@
         "urls": [
             "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip",
             "https://github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip"
-        ]
-    },
-    "41c28e43dffbae39c52dd4b91932d1209e5a8893.tar.gz": {
-        "name": "41c28e43dffbae39c52dd4b91932d1209e5a8893.tar.gz",
-        "sha256": "fdc34621839104b57363a258eab9d821b02ff7837923cfe7fb6fd67182780829",
-        "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/41c28e43dffbae39c52dd4b91932d1209e5a8893.tar.gz",
-            "https://github.com/bazelbuild/skydoc/archive/41c28e43dffbae39c52dd4b91932d1209e5a8893.tar.gz"
         ]
     },
     "441afe1bfdadd6236988e9cac159df6b5a9f5a98.zip": {
@@ -55,19 +47,19 @@
             "https://github.com/bazelbuild/rules_sass/archive/8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz"
         ]
     },
-    "android_tools_pkg-0.8.tar.gz": {
-        "name": "android_tools_pkg-0.8.tar.gz",
-        "sha256": "a9eac6e1b27d5549edaaa724b20eb1cdae6253b84f44d5744c30372bd523cfcd",
+    "97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz": {
+        "name": "97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+        "sha256": "602e7161d9195e50246177e7c55b2f39950a9cf7366f74ed5f22fd45750cd208",
         "urls": [
-            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.8.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+            "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz"
         ]
     },
-    "b0cc14be5da05168b01db282fe93bdf17aa2b9f4.tar.gz": {
-        "name": "b0cc14be5da05168b01db282fe93bdf17aa2b9f4.tar.gz",
-        "sha256": "88b0a90433866b44bb4450d4c30bc5738b8c4f9c9ba14e9661deb123f56a833d",
+    "android_tools_pkg-0.10.tar.gz": {
+        "name": "android_tools_pkg-0.10.tar.gz",
+        "sha256": "9c5081f93276fefb3db7ca61cc1225ff6d1913e7e315568265bb1a728265a9b1",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/b0cc14be5da05168b01db282fe93bdf17aa2b9f4.tar.gz",
-            "https://github.com/bazelbuild/rules_proto/archive/b0cc14be5da05168b01db282fe93bdf17aa2b9f4.tar.gz"
+            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.10.tar.gz"
         ]
     },
     "bazel_j2objc": {
@@ -90,11 +82,11 @@
     },
     "bazel_toolchains": {
         "name": "bazel_toolchains",
-        "sha256": "28cb3666da80fbc62d4c46814f5468dd5d0b59f9064c0b933eee3140d706d330",
-        "strip_prefix": "bazel-toolchains-0.27.1",
+        "sha256": "d8c2f20deb2f6143bac792d210db1a4872102d81529fe0ea3476c1696addd7ff",
+        "strip_prefix": "bazel-toolchains-0.28.3",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/0.27.1.tar.gz",
-            "https://github.com/bazelbuild/bazel-toolchains/archive/0.27.1.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/0.28.3.tar.gz",
+            "https://github.com/bazelbuild/bazel-toolchains/archive/0.28.3.tar.gz"
         ]
     },
     "build_bazel_rules_nodejs": {
@@ -106,6 +98,14 @@
             "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip"
         ]
     },
+    "c7bbde2950769aac9a99364b0926230060a3ce04.tar.gz": {
+        "name": "c7bbde2950769aac9a99364b0926230060a3ce04.tar.gz",
+        "sha256": "e6a76586b264f30679688f65f7e71ac112d1446681010a13bf22d9ca071f34b7",
+        "urls": [
+            "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/c7bbde2950769aac9a99364b0926230060a3ce04.tar.gz",
+            "https://github.com/bazelbuild/skydoc/archive/c7bbde2950769aac9a99364b0926230060a3ce04.tar.gz"
+        ]
+    },
     "com_google_googletest": {
         "name": "com_google_googletest",
         "sha256": "0fb00ff413f6b9b80ccee44a374ca7a18af7315aea72a43c62f2acd1ca74e9b5",
@@ -115,11 +115,11 @@
             "https://github.com/google/googletest/archive/f13bbe2992d188e834339abe6f715b2b2f840a77.tar.gz"
         ]
     },
-    "coverage_output_generator-v1.0.zip": {
-        "name": "coverage_output_generator-v1.0.zip",
-        "sha256": "cc470e529fafb6165b5be3929ff2d99b38429b386ac100878687416603a67889",
+    "coverage_output_generator-v2.0.zip": {
+        "name": "coverage_output_generator-v2.0.zip",
+        "sha256": "3a6951051272d51613ac4c77af6ce238a3db321bf06506fde1b8866eb18a89dd",
         "urls": [
-            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v1.0.zip"
+            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.0.zip"
         ]
     },
     "desugar_jdk_libs": {
@@ -158,32 +158,32 @@
     },
     "io_bazel_skydoc": {
         "name": "io_bazel_skydoc",
-        "sha256": "fdc34621839104b57363a258eab9d821b02ff7837923cfe7fb6fd67182780829",
-        "strip_prefix": "skydoc-41c28e43dffbae39c52dd4b91932d1209e5a8893",
+        "sha256": "e6a76586b264f30679688f65f7e71ac112d1446681010a13bf22d9ca071f34b7",
+        "strip_prefix": "skydoc-c7bbde2950769aac9a99364b0926230060a3ce04",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/41c28e43dffbae39c52dd4b91932d1209e5a8893.tar.gz",
-            "https://github.com/bazelbuild/skydoc/archive/41c28e43dffbae39c52dd4b91932d1209e5a8893.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/c7bbde2950769aac9a99364b0926230060a3ce04.tar.gz",
+            "https://github.com/bazelbuild/skydoc/archive/c7bbde2950769aac9a99364b0926230060a3ce04.tar.gz"
         ]
     },
-    "java_tools_javac11_darwin-v4.0.zip": {
-        "name": "java_tools_javac11_darwin-v4.0.zip",
-        "sha256": "fbf5bf22e9aab9c622e4c8c59314a1eef5ea09eafc5672b4f3250dc0b971bbcc",
+    "java_tools_javac11_darwin-v5.1.zip": {
+        "name": "java_tools_javac11_darwin-v5.1.zip",
+        "sha256": "2fa01b4cb69e33f85a96ba0620a2e6261f789eefdbeaeb1d2879140b50108db7",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v4.0/java_tools_javac11_darwin-v4.0.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v5.1/java_tools_javac11_darwin-v5.1.zip"
         ]
     },
-    "java_tools_javac11_linux-v4.0.zip": {
-        "name": "java_tools_javac11_linux-v4.0.zip",
-        "sha256": "96e223094a12c842a66db0bb7bb6866e88e26e678f045842911f9bd6b47161f5",
+    "java_tools_javac11_linux-v5.1.zip": {
+        "name": "java_tools_javac11_linux-v5.1.zip",
+        "sha256": "ea2ee2f9eab37e04eae5aa8a266373132fe57676c25ea033504bc5438d6bc1ba",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v4.0/java_tools_javac11_linux-v4.0.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v5.1/java_tools_javac11_linux-v5.1.zip"
         ]
     },
-    "java_tools_javac11_windows-v4.0.zip": {
-        "name": "java_tools_javac11_windows-v4.0.zip",
-        "sha256": "a1de51447b2ba2eab923d589ba6c72c289c16e6091e6a3bb3e67a05ef4ad200c",
+    "java_tools_javac11_windows-v5.1.zip": {
+        "name": "java_tools_javac11_windows-v5.1.zip",
+        "sha256": "b2cfebc049c349268a7ca0e5ff37160899f87f6fe6a80a789de3df90db4ce4ef",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v4.0/java_tools_javac11_windows-v4.0.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v5.1/java_tools_javac11_windows-v5.1.zip"
         ]
     },
     "java_tools_langtools_javac10": {
@@ -405,11 +405,11 @@
     },
     "rules_proto": {
         "name": "rules_proto",
-        "sha256": "88b0a90433866b44bb4450d4c30bc5738b8c4f9c9ba14e9661deb123f56a833d",
-        "strip_prefix": "rules_proto-b0cc14be5da05168b01db282fe93bdf17aa2b9f4",
+        "sha256": "602e7161d9195e50246177e7c55b2f39950a9cf7366f74ed5f22fd45750cd208",
+        "strip_prefix": "rules_proto-97d8af4dc474595af3900dd85cb3a29ad28cc313",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/b0cc14be5da05168b01db282fe93bdf17aa2b9f4.tar.gz",
-            "https://github.com/bazelbuild/rules_proto/archive/b0cc14be5da05168b01db282fe93bdf17aa2b9f4.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+            "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz"
         ]
     },
     "zulu10.2+3-jdk10.0.1-linux_x64-allmodules.tar.gz": {

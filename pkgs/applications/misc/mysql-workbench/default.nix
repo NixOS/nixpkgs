@@ -37,6 +37,12 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  # have it look for 4.7.2 instead of 4.7.1
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "antlr-4.7.1-complete.jar" "antlr-4.7.2-complete.jar"
+  '';
+
   nativeBuildInputs = [
     cmake ninja pkgconfig jre swig wrapGAppsHook
   ];

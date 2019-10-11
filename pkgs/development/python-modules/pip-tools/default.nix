@@ -50,5 +50,6 @@ buildPythonPackage rec {
     homepage = https://github.com/jazzband/pip-tools/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ zimbatm ];
+    broken = true;
   };
 }

@@ -3,7 +3,7 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-19.09">
- <title>Release 19.09 (“Loris”, 2019/09/??)</title>
+ <title>Release 19.09 (“Loris”, 2019/10/09)</title>
 
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -22,6 +22,26 @@
     <para>
      End of support is planned for end of April 2020, handing over to 20.03.
     </para>
+   </listitem>
+   <listitem>
+    <para>
+     Nix has been updated to 2.3; see its
+     <link xlink:href="https://nixos.org/nix/manual/#ssec-relnotes-2.3">release
+     notes</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>Core version changes:</para>
+    <para>systemd: 239 -&gt; 243</para>
+    <para>gcc: 7 -&gt; 8</para>
+    <para>glibc: 2.27 (unchanged)</para>
+    <para>linux: 4.19 LTS (unchanged)</para>
+    <para>openssl: 1.0 -&gt; 1.1</para>
+   </listitem>
+   <listitem>
+    <para>Desktop version changes:</para>
+    <para>plasma5: 5.14 -&gt; 5.16</para>
+    <para>gnome3: 3.30 -&gt; 3.32</para>
    </listitem>
    <listitem>
     <para>
@@ -512,11 +532,33 @@
        is set to <literal>/var/lib/gitlab/state</literal>, <literal>gitlab</literal> and all parent directories
        must be owned by either <literal>root</literal> or the user specified in <option>services.gitlab.user</option>.
      </para>
+     <para>
+      The <option>networking.useDHCP</option> option is unsupported in combination with
+      <option>networking.useNetworkd</option> in anticipation of defaulting to it by default.
+      It has to be set to <literal>false</literal> and enabled per
+      interface with <option>networking.interfaces.&lt;name&gt;.useDHCP = true;</option>
+    </para>
    </listitem>
    <listitem>
      <para>
        The Twitter client <literal>corebird</literal> has been dropped as <link xlink:href="https://www.patreon.com/posts/corebirds-future-18921328">it is discontinued and does not work against the new Twitter API</link>.
        Please use the fork <literal>cawbird</literal> instead which has been adapted to the API changes and is still maintained.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+      The <literal>nodejs-11_x</literal> package has been removed as it's EOLed by upstream.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Because of the systemd upgrade,
+       <application>systemd-timesyncd</application> will no longer work if
+       <option>system.stateVersion</option> is not set correctly. When
+       upgrading from NixOS 19.03, please make sure that
+       <option>system.stateVersion</option> is set to
+       <literal>"19.03"</literal>, or lower if the installation dates back to an
+       earlier version of NixOS.
      </para>
    </listitem>
   </itemizedlist>
@@ -717,7 +759,7 @@
       </para>
      </listitem>
     </itemizedlist>
-     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>,
+     This also configures the kernel to pass core dumps to <literal>systemd-coredump</literal>,
      and restricts the SysRq key combinations to the sync command only.
      These sysctl snippets can be found in <literal>/etc/sysctl.d/50-*.conf</literal>,
      and overridden via <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link>
@@ -726,12 +768,15 @@
    </listitem>
    <listitem>
     <para>
-      Coredumps are now acquired by <literal>systemd-coredump</literal> by default.
-      <literal>systemd-coredump</literal> behaviour can still be modified via
-      <option>systemd.coredump.extraConfig</option>.
-      To stick to the old behaviour (having the kernel dump to a file called <literal>core</literal>
-      in the working directory), without piping it through <literal>systemd-coredump</literal>, set
-      <option>boot.kernel.sysctl."kernel.core_pattern"</option> to <literal>"core"</literal>.
+      Core dumps are now processed by <literal>systemd-coredump</literal>
+      by default. <literal>systemd-coredump</literal> behaviour can
+      still be modified via
+      <option>systemd.coredump.extraConfig</option>. To stick to the
+      old behaviour (having the kernel dump to a file called
+      <literal>core</literal> in the working directory), without piping
+      it through <literal>systemd-coredump</literal>, set
+      <option>systemd.coredump.enable</option> to
+      <literal>false</literal>.
     </para>
    </listitem>
    <listitem>

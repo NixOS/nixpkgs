@@ -7,14 +7,14 @@
 }:
 
 let
-  version = "3.34.0";
+  version = "3.34.1";
 in stdenv.mkDerivation rec {
   pname = "gnome-boxes";
   inherit version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "07qjrb1qgfznvm0l2jm99d212dvw3iaw76czq5q1msnghpdw67qd";
+    sha256 = "1758k5b79kyywdg67b4byqhva9045i13lzg5r62my950c4c2p0pc";
   };
 
   doCheck = true;

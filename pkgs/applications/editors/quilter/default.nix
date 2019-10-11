@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, meson, ninja, python3
+{ stdenv, fetchFromGitHub, pkgconfig, meson, ninja, python3, vala
 , gtk3, desktop-file-utils, gtksourceview, webkitgtk, gtkspell3, pantheon
 , libgee, discount, wrapGAppsHook }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook

@@ -872,11 +872,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXfont2 = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
-    name = "libXfont2-2.0.3";
+    name = "libXfont2-2.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont2-2.0.3.tar.bz2;
-      sha256 = "0klwmimmhm3axpj8pwn5l41lbggh47r5aazhw63zxkbwfgyvg2hf";
+      url = mirror://xorg/individual/lib/libXfont2-2.0.4.tar.bz2;
+      sha256 = "1rk9pjxcm01lbr1dxhnvk4f2qrn6zp068qjbvvz5w0z5d0rin5bd";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -1288,11 +1288,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   setxkbmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
-    name = "setxkbmap-1.3.1";
+    name = "setxkbmap-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/setxkbmap-1.3.1.tar.bz2;
-      sha256 = "1qfk097vjysqb72pq89h0la3462kbb2dh1d11qzs2fr67ybb7pd9";
+      url = mirror://xorg/individual/app/setxkbmap-1.3.2.tar.bz2;
+      sha256 = "1xdrxs65v7d0rw1yaz0vsz55w4hxym99216p085ya9978j379wlg";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

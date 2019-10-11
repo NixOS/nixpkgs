@@ -101,8 +101,10 @@ guns/xterm-color-table.vim
 hashivim/vim-terraform
 haya14busa/incsearch-easymotion.vim
 haya14busa/incsearch.vim
+haya14busa/vim-asterisk
 heavenshell/vim-jsdoc
 hecal3/vim-leader-guide
+henrik/vim-indexed-search
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hotwatermorning/auto-git-diff
@@ -140,6 +142,7 @@ josa42/coc-go
 jpalardy/vim-slime
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
+Julian/vim-textobj-variable-segment
 junegunn/fzf.vim
 junegunn/goyo.vim
 junegunn/limelight.vim
@@ -362,6 +365,7 @@ Shougo/unite.vim
 Shougo/vimproc.vim
 Shougo/vimshell.vim
 shumphrey/fugitive-gitlab.vim
+sickill/vim-pasta
 SirVer/ultisnips
 sjl/gundo.vim
 sjl/splice.vim

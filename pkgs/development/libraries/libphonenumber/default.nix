@@ -1,17 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, gmock, boost, pkgconfig, protobuf, icu }:
 
-let
-  version = "8.9.9";
-in
-stdenv.mkDerivation {
-  name = "phonenumber-${version}";
-  inherit version;
+stdenv.mkDerivation rec {
+  pname = "phonenumber";
+  version = "8.10.20";
 
   src = fetchFromGitHub {
     owner = "googlei18n";
     repo = "libphonenumber";
     rev = "v${version}";
-    sha256 = "005visnfnr84blgdi0yp4hrzskwbsnawrzv6lqfi9f073l6w5j6w";
+    sha256 = "12xszrd4mrjabhzsp0xvy2qx2rxl36y5a00xfsh0w7bc299rq13v";
   };
 
   nativeBuildInputs = [

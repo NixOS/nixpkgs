@@ -8,7 +8,7 @@
 , doCheck ? config.doCheckByDefault or false
 , coreutils, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
-, darwin
+, darwin, fetchpatch
 }:
 
 with stdenv.lib;
@@ -55,40 +55,46 @@ stdenv.mkDerivation rec {
     sha256 = "046sqfmr84blxh4vkipmh8ff7wd19fxmh6lnr5ibchx3l02p49bc";
   };
 
-  patches = optional stdenv.isDarwin ./darwin-compilation.patch
-    ++ optional doCheck ./skip-timer-test.patch
-    ++ optionals stdenv.hostPlatform.isMusl [
-      ./quark_init_on_demand.patch
-      ./gobject_init_on_demand.patch
-    ] ++ [
-      ./schema-override-variable.patch
-      # Require substituteInPlace in postPatch
-      ./fix-gio-launch-desktop-path.patch
+  patches = optionals stdenv.isDarwin [
+    ./darwin-compilation.patch
+    # fix loading dylibs on darwin
+    # Remove on 2.62.1
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/commit/e2409e5e180f1fa369d0e87e38e4d646d9f68791.patch";
+      sha256 = "1dhjwlsqdgnn8fr8pzfrnd63m7pdgf7mizdyn8lwg17ggvq6qsqf";
+    })
+  ] ++ optionals stdenv.hostPlatform.isMusl [
+    ./quark_init_on_demand.patch
+    ./gobject_init_on_demand.patch
+  ] ++ [
+    ./schema-override-variable.patch
+    # Require substituteInPlace in postPatch
+    ./fix-gio-launch-desktop-path.patch
 
-      # GLib contains many binaries used for different purposes;
-      # we will install them to different outputs:
-      # 1. Tools for desktop environment ($bin)
-      #    * gapplication (non-darwin)
-      #    * gdbus
-      #    * gio
-      #    * gio-launch-desktop (symlink to $out)
-      #    * gsettings
-      # 2. Development/build tools ($dev)
-      #    * gdbus-codegen
-      #    * gio-querymodules
-      #    * glib-compile-resources
-      #    * glib-compile-schemas
-      #    * glib-genmarshal
-      #    * glib-gettextize
-      #    * glib-mkenums
-      #    * gobject-query
-      #    * gresource
-      #    * gtester
-      #    * gtester-report
-      # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
-      #    * gio-launch-desktop
-      ./split-dev-programs.patch
-    ];
+    # GLib contains many binaries used for different purposes;
+    # we will install them to different outputs:
+    # 1. Tools for desktop environment ($bin)
+    #    * gapplication (non-darwin)
+    #    * gdbus
+    #    * gio
+    #    * gio-launch-desktop (symlink to $out)
+    #    * gsettings
+    # 2. Development/build tools ($dev)
+    #    * gdbus-codegen
+    #    * gio-querymodules
+    #    * glib-compile-resources
+    #    * glib-compile-schemas
+    #    * glib-genmarshal
+    #    * glib-gettextize
+    #    * glib-mkenums
+    #    * gobject-query
+    #    * gresource
+    #    * gtester
+    #    * gtester-report
+    # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
+    #    * gio-launch-desktop
+    ./split-dev-programs.patch
+  ] ++ optional doCheck ./skip-timer-test.patch;
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 

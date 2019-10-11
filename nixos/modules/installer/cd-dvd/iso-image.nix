@@ -24,7 +24,7 @@ let
         # Name appended to menuentry defaults to params if no specific name given.
         option.name or (if option ? params then "(${option.params})" else "")
         }' ${if option ? class then " --class ${option.class}" else ""} {
-          linux ${defaults.image} ${defaults.params} ${
+          linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
           initrd ${defaults.initrd}
@@ -268,6 +268,12 @@ let
     set timeout=10
     ${grubMenuCfg}
 
+    # If the parameter iso_path is set, append the findiso parameter to the kernel
+    # line. We need this to allow the nixos iso to be booted from grub directly.
+    if [ \''${iso_path} ] ; then
+      set isoboot="findiso=\''${iso_path}"
+    fi
+
     #
     # Menu entries
     #
@@ -282,6 +288,14 @@ let
       submenu "Suggests resolution @1080p" --class hidpi-1080p {
         ${grubMenuCfg}
         ${buildMenuAdditionalParamsGrub2 config "video=1920x1080@60"}
+      }
+
+      # If we boot into a graphical environment where X is autoran
+      # and always crashes, it makes the media unusable. Allow the user
+      # to disable this.
+      submenu "Disable display-manager" --class quirk-disable-displaymanager {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 config "systemd.mask=display-manager.service"}
       }
 
       # Some laptop and convertibles have the panel installed in an
@@ -615,6 +629,9 @@ in
         }
         { source = "${efiDir}/EFI";
           target = "/EFI";
+        }
+        { source = pkgs.writeText "loopback.cfg" "source /EFI/boot/grub.cfg";
+          target = "/boot/grub/loopback.cfg";
         }
       ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";

@@ -71,6 +71,7 @@ let
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
+      moveToOutput "lib/libclang-cpp.*" "$lib"
       substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang."
 

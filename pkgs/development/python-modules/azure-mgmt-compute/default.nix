@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.0.0";
+  version = "8.0.0";
   pname = "azure-mgmt-compute";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1zdypc8f825n60341ai2482rwgsc7l8dpr691j8hqz571l80y85w";
+    sha256 = "06hmf9iq2yqpmmvw7pr9zm4v427q03i436lnin3aczizfndrk76i";
   };
 
   postInstall = if isPy3k then "" else ''

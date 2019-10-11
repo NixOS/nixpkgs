@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tmatrix";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "M4444";
     repo = "TMatrix";
     rev = "v${version}";
-    sha256 = "1g0gn4p02vjc6l8lc78wlx4xkd74ha7ybx9fvvdr6mizk0cyjili";
+    sha256 = "1x9drk3wdsd6vzcypk3x068sqcbgis488s9fhcpsv8xgb496rd6y";
   };
 
   nativeBuildInputs = [ cmake ];
