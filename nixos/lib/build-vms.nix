@@ -43,6 +43,7 @@ rec {
             # Ensure that NixOS configurations don't have -dev paths
             # or gcc.out in their closures.
             system.forbiddenDependencies = mkDefault "(-dev$)|(-gcc-[0-9\.]+$)|(gcc-wrapper)";
+            system.maxClosureSize = mkDefault (1024 * 1024 * 1024);
           }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
     };

@@ -421,6 +421,16 @@ in
       '';
     };
 
+    system.maxClosureSize = mkOption {
+      default = null;
+      example = "-dev$";
+      type = types.nullOr types.int;
+      description = ''
+        The maximum size of the system closure in bytes (computed as the sum of
+        the NAR serializations of the store paths in the closure).
+      '';
+    };
+
   };
 
   config = {
@@ -550,13 +560,22 @@ in
     system.build.vm = pkgs.runCommand "nixos-vm"
       { preferLocalBuild = true;
         closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel ]; };
-        inherit (config.system) forbiddenDependencies;
+        inherit (config.system) forbiddenDependencies maxClosureSize;
         inherit (config.system.build) toplevel;
       }
       ''
         if [[ -n $forbiddenDependencies ]]; then
           if devPaths="$(grep -E -- "$forbiddenDependencies" $closureInfo/store-paths)"; then
-            printf "VM has the following disallowed paths in its system closure %s:\n%s" "$toplevel" "$devPaths"
+            printf "System closure '%s' contains the following disallowed paths:\n%s" "$toplevel" "$devPaths"
+            exit 1
+          fi
+        fi
+
+        # FIXME: implement using outputChecks.out.maxClosureSize.
+        if [[ -n $maxClosureSize ]]; then
+          closureSize="$(cat $closureInfo/total-nar-size)"
+          if [[ $closureSize -gt $maxClosureSize ]]; then
+            printf "System closure '%s' is %d bytes but only %d are allowed." "$toplevel" "$closureSize" "$maxClosureSize"
             exit 1
           fi
         fi

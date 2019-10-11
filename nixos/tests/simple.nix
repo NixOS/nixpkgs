@@ -6,6 +6,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
+    system.maxClosureSize = 640 * 1024 * 1024;
   };
 
   testScript =
