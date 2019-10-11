@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, capstone, bison, flex }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase, capstone, bison, flex }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "boomerang";
   version = "0.5.1";
 
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://boomerang.sourceforge.net/;
+  meta = with lib; {
+    homepage = https://github.com/BoomerangDecompiler/boomerang;
     license = licenses.bsd3;
     description = "A general, open source, retargetable decompiler";
     maintainers = with maintainers; [ dtzWill ];
