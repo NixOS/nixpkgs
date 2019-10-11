@@ -15097,6 +15097,7 @@ in
     postgresql_9_6
     postgresql_10
     postgresql_11
+    postgresql_12
   ;
   postgresql = postgresql_11.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;

@@ -82,7 +82,9 @@ let
       ''
         moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
         moveToOutput "lib/libpgcommon.a" "$out"
+        moveToOutput "lib/libpgcommon_shlib.a" "$out"
         moveToOutput "lib/libpgport.a" "$out"
+        moveToOutput "lib/libpgport_shlib.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
@@ -200,4 +202,11 @@ in self: {
     inherit self;
   };
 
+  postgresql_12 = self.callPackage generic {
+    version = "12.0";
+    psqlSchema = "12";
+    sha256 = "1ijm13gx1d9ai09n26nbdc77n9b8akh6pj21yy9vfn7p2mr3k8nd";
+    this = self.postgresql_12;
+    inherit self;
+  };
 }

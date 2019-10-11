@@ -34,6 +34,7 @@ let
 
         services.postgresqlBackup.enable = true;
         services.postgresqlBackup.databases = optional (!backup-all) "postgres";
+        services.postgresqlBackup.pgdumpOptions = "-Cb";
       };
 
     testScript = let
