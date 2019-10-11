@@ -851,7 +851,7 @@ in {
 
             initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
             ${gitlab-rake}/bin/gitlab-rake gitlab:db:configure GITLAB_ROOT_PASSWORD="$initial_root_password" \
-                                                               GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
+                                                               GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}' > /dev/null
 
             # We remove potentially broken links to old gitlab-shell versions
             rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
