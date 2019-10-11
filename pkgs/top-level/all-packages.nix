@@ -6648,6 +6648,8 @@ in
 
   ttyrec = callPackage ../tools/misc/ttyrec { };
 
+  ttygif = callPackage ../tools/misc/ttygif { };
+
   ttylog = callPackage ../tools/misc/ttylog { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
