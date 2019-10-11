@@ -1250,4 +1250,8 @@ self: super: {
     postFetch = "sed -i -e s,gtk.cabal-renamed,gtk.cabal, $out";
   });
 
+  # Version bounds for http-client are too strict:
+  # https://github.com/bitnomial/prometheus/issues/34
+  prometheus = doJailbreak super.prometheus;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
