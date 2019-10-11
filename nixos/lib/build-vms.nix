@@ -36,9 +36,14 @@ rec {
       baseModules =  (import ../modules/module-list.nix) ++
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
-          { key = "no-manual"; documentation.nixos.enable = false; }
-          { key = "qemu"; system.build.qemu = qemu; }
-          { key = "nodes"; _module.args.nodes = nodes; }
+          { key = "vm";
+            documentation.nixos.enable = false;
+            system.build.qemu = qemu;
+            _module.args.nodes = nodes;
+            # Ensure that NixOS configurations don't have -dev paths
+            # or gcc.out in their closures.
+            system.forbiddenDependencies = mkDefault "(-dev$)|(-gcc-[0-9\.]+$)|(gcc-wrapper)";
+          }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
     };
 

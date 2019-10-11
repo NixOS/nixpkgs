@@ -410,6 +410,17 @@ in
           '';
       };
 
+    # FIXME: should move this to top-level.nix.
+    system.forbiddenDependencies = mkOption {
+      default = null;
+      example = "-dev$";
+      type = types.nullOr types.str;
+      description = ''
+        An extended regular expression that matches store paths that
+        should not appear in the system closure.
+      '';
+    };
+
   };
 
   config = {
@@ -536,10 +547,22 @@ in
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
-    system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
+    system.build.vm = pkgs.runCommand "nixos-vm"
+      { preferLocalBuild = true;
+        closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel ]; };
+        inherit (config.system) forbiddenDependencies;
+        inherit (config.system.build) toplevel;
+      }
       ''
+        if [[ -n $forbiddenDependencies ]]; then
+          if devPaths="$(grep -E -- "$forbiddenDependencies" $closureInfo/store-paths)"; then
+            printf "VM has the following disallowed paths in its system closure %s:\n%s" "$toplevel" "$devPaths"
+            exit 1
+          fi
+        fi
+
         mkdir -p $out/bin
-        ln -s ${config.system.build.toplevel} $out/system
+        ln -s "$toplevel" $out/system
         ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${vmName}-vm
       '';
 
