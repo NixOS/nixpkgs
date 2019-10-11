@@ -32,7 +32,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->sleep(10);
 
       # Check that logging in has given the user ownership of devices.
-      $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+      $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
 
       $machine->succeed("su - alice -c 'DISPLAY=:0.0 xfce4-terminal &'");
       $machine->waitForWindow(qr/Terminal/);

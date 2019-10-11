@@ -48,12 +48,12 @@ import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
       # Check whether systemd gives and removes device ownership as
       # needed.
       subtest "device permissions", sub {
-          $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+          $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
           $machine->sendKeys("alt-f1");
           $machine->waitUntilSucceeds("[ \$(fgconsole) = 1 ]");
-          $machine->fail("getfacl /dev/snd/timer | grep -q alice");
+          $machine->fail("getfacl -p /dev/snd/timer | grep -q alice");
           $machine->succeed("chvt 2");
-          $machine->waitUntilSucceeds("getfacl /dev/snd/timer | grep -q alice");
+          $machine->waitUntilSucceeds("getfacl -p /dev/snd/timer | grep -q alice");
       };
 
       # Log out.
