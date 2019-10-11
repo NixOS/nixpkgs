@@ -18,8 +18,8 @@
  # Determine ID_NET_DRIVER if there's no ID_NET_DRIVER or DRIVERS (old udev?)
  ENV{ID_NET_DRIVER}=="?*", GOTO="nm_drivers_end"
  DRIVERS=="?*", GOTO="nm_drivers_end"
--PROGRAM="/bin/sh -c 'ethtool -i $1 | sed -n s/^driver:\ //p' -- $env{INTERFACE}", RESULT=="?*", ENV{ID_NET_DRIVER}="%c"
-+PROGRAM="@shell@ -c '@ethtool@/bin/ethtool -i $1 | @gnused@/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", RESULT=="?*", ENV{ID_NET_DRIVER}="%c"
+-PROGRAM="/bin/sh -c '/usr/sbin/ethtool -i $$1 |/usr/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", ENV{ID_NET_DRIVER}="%c"
++PROGRAM="@shell@ -c '@ethtool@/bin/ethtool -i $1 | @gnused@/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", ENV{ID_NET_DRIVER}="%c"
  
  LABEL="nm_drivers_end"
 --- a/data/NetworkManager.service.in

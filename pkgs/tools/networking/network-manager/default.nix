@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, dbus, dbus-glib
+{ stdenv, fetchurl, fetchpatch, substituteAll, intltool, pkgconfig, dbus, dbus-glib
 , gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
 , libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
@@ -53,6 +53,13 @@ in stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # fix udev warning
+    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/27d380b70ea839c7badab420361e4e65e023e8e9
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/27d380b70ea839c7badab420361e4e65e023e8e9.patch";
+      sha256 = "02mnvslp9iyca492p1lrj6r1hh1fiywhvmi0p5m3qnz7n65x32xb";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       inherit iputils kmod openconnect ethtool gnused dbus;
