@@ -8644,6 +8644,8 @@ in
 
   vlang = callPackage ../development/compilers/vlang { };
 
+  vala-lint = callPackage ../development/tools/vala-lint { };
+
   inherit (callPackage ../development/compilers/vala { })
     vala_0_36
     vala_0_40
