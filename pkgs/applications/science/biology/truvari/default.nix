@@ -9,7 +9,6 @@
 , pyfaidx
 , intervaltree
 }:
-
 pythonPackages.buildPythonPackage rec {
 
   pname = "truvari";

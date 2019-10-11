@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pytest
 }:
-
 buildPythonPackage rec {
 
   pname = "PyVCF";
