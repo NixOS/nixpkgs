@@ -24666,6 +24666,8 @@ in
 
   vttest = callPackage ../tools/misc/vttest { };
 
+  wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
+
   wasm-pack = callPackage ../development/tools/wasm-pack {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
