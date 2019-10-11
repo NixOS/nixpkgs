@@ -96,6 +96,15 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
+  versionRange = min-version: upto-version:
+    let inherit (upstream-info) version;
+        result = versionAtLeast version min-version && versionOlder version upto-version;
+        stable-version = (import ./upstream-info.nix).stable.version;
+    in if versionAtLeast stable-version upto-version
+       then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
+            result
+       else result;
+
   base = rec {
     name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) channel version;
@@ -148,6 +157,7 @@ let
       # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
+      # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/plain/chromium-vaapi.patch?h=chromium-vaapi
       ./patches/chromium-vaapi.patch
