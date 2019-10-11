@@ -1521,10 +1521,10 @@
       elpaBuild {
         pname = "hyperbole";
         ename = "hyperbole";
-        version = "7.0.3";
+        version = "7.0.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/hyperbole-7.0.3.tar";
-          sha256 = "1mvplaxfjji00gg8rkhidfsdl8knwi6c0ai149zm4djsfaww3ikh";
+          url = "https://elpa.gnu.org/packages/hyperbole-7.0.6.tar";
+          sha256 = "08gi4v76s53nfmn3s0qcxc3zii0pspjfd6ry7jq1kgm3z34x8hab";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2385,10 +2385,10 @@
       elpaBuild {
         pname = "phps-mode";
         ename = "phps-mode";
-        version = "0.3.1";
+        version = "0.3.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/phps-mode-0.3.1.tar";
-          sha256 = "1h6s5k156mbbkaysb07vcb13k3izs91pwigzcfh6jvv3lak4azg5";
+          url = "https://elpa.gnu.org/packages/phps-mode-0.3.4.tar";
+          sha256 = "0c5lrxrmb8v9wgxmqxs55bilf473m9zvrk00ycnkcasj07f51029";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2725,10 +2725,10 @@
       elpaBuild {
         pname = "relint";
         ename = "relint";
-        version = "1.10";
+        version = "1.11";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/relint-1.10.el";
-          sha256 = "1l0lh4pkksw7brmhhbaikwzs4zkgd2962ks1zy7m262dvkhxjfv8";
+          url = "https://elpa.gnu.org/packages/relint-1.11.tar";
+          sha256 = "0c7d35kp5k11fnyjrq9cg8i2r005gs57pmb3rvpf8ilwv0scn1m7";
         };
         packageRequires = [ xr ];
         meta = {
@@ -3151,10 +3151,10 @@
       elpaBuild {
         pname = "tramp";
         ename = "tramp";
-        version = "2.4.2.2";
+        version = "2.4.2.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/tramp-2.4.2.2.tar";
-          sha256 = "0bjfnxxyn8xgw10ybnjrza2gfwqifa3q7rh0bp6pidlhg45718p8";
+          url = "https://elpa.gnu.org/packages/tramp-2.4.2.3.tar";
+          sha256 = "0qw115bdvgmm8xfbc2x97yk6mgdimq2a1wb28bxd69l9nmcrisi8";
         };
         packageRequires = [ emacs ];
         meta = {
