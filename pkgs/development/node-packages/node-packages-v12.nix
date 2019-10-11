@@ -814,13 +814,13 @@ let
         sha512 = "eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==";
       };
     };
-    "hosted-git-info-2.8.4" = {
+    "hosted-git-info-2.8.5" = {
       name = "hosted-git-info";
       packageName = "hosted-git-info";
-      version = "2.8.4";
+      version = "2.8.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.8.4.tgz";
-        sha512 = "pzXIvANXEFrc5oFFXRMkbLPQ2rXRoDERwDLyrcUxGhaZhgP54BBSl9Oheh7Vv0T090cszWBxPjkQQ5Sq1PbBRQ==";
+        url = "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.8.5.tgz";
+        sha512 = "kssjab8CvdXfcXMXVcvsXum4Hwdq9XGtRD3TteMEvEbq0LXyiNQr6AprqKqfeaDXze7SxWvRxdpwE6ku7ikLkg==";
       };
     };
     "http-signature-1.2.0" = {
@@ -2656,7 +2656,7 @@ in
       sources."har-schema-2.0.0"
       sources."har-validator-5.1.3"
       sources."has-unicode-2.0.1"
-      sources."hosted-git-info-2.8.4"
+      sources."hosted-git-info-2.8.5"
       sources."http-signature-1.2.0"
       sources."inflight-1.0.6"
       sources."inherits-2.0.4"

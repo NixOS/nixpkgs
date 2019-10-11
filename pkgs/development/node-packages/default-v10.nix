@@ -116,4 +116,6 @@ nodePackages // {
   thelounge = nodePackages.thelounge.override {
     buildInputs = [ nodePackages.node-pre-gyp ];
   };
+
+  three = nodePackages."three-0.108.0".override {};
 }

@@ -141,7 +141,7 @@
 , "textlint-rule-unexpanded-acronym"
 , "textlint-rule-write-good"
 , "thelounge"
-, "three"
+, {"three": "0.108.0"}
 , "tiddlywiki"
 , "titanium"
 , "triton"
