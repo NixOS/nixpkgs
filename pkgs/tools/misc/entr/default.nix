@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Run arbitrary commands when files change";
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub synthetica ];
   };
 }

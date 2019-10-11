@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
+, vala
 , pkgconfig
 , python3
 , glib
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook

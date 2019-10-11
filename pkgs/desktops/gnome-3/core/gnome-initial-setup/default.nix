@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , substituteAll
 , gettext
 , meson
@@ -37,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "3.34.0";
+  version = "3.34.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19ly8xrj7vvjlhhbh6y2cm5l02qgq9wqfczrjdn0llkga9f8b8sc";
+    sha256 = "18dzx9z9bcfqfn1jivzm9m5lkcij1c9y8x77zlpxj733dgpi07z7";
   };
 
   nativeBuildInputs = [
@@ -78,11 +77,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Disable g-i-s service in GDM
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-initial-setup/commit/b67b5cc48c418415eb3233f78ab089bc447b1952.patch";
-      sha256 = "050zc6cnil71bf7ijav6w6bkr33lqwglipcg7anw9jcn7mcakhlq";
-    })
     (substituteAll {
       src = ./fix-paths.patch;
       inherit tzdata libgnomekbd;

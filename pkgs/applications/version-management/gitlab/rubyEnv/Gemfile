@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gem 'rails', '5.2.3'
 
+gem 'bootsnap', '~> 1.4'
+
 # Improves copy-on-write performance for MRI
 gem 'nakayoshi_fork', '~> 0.0.4'
 
@@ -14,8 +16,7 @@ gem 'sprockets', '~> 3.7.0'
 gem 'default_value_for', '~> 3.2.0'
 
 # Supported DBs
-gem 'mysql2', '~> 0.4.10', group: :mysql
-gem 'pg', '~> 1.1', group: :postgres
+gem 'pg', '~> 1.1'
 
 gem 'rugged', '~> 0.28'
 gem 'grape-path-helpers', '~> 1.1'
@@ -53,6 +54,7 @@ gem 'gssapi', group: :kerberos
 # Spam and anti-bot protection
 gem 'recaptcha', '~> 4.11', require: 'recaptcha/rails'
 gem 'akismet', '~> 2.0'
+gem 'invisible_captcha', '~> 0.12.1'
 
 # Two-factor authentication
 gem 'devise-two-factor', '~> 3.0.0'
@@ -84,7 +86,10 @@ gem 'grape-entity', '~> 0.7.1'
 gem 'rack-cors', '~> 1.0.0', require: 'rack/cors'
 
 # GraphQL API
-gem 'graphql', '~> 1.8.0'
+gem 'graphql', '~> 1.9.11'
+# NOTE: graphiql-rails v1.5+ doesn't work: https://gitlab.com/gitlab-org/gitlab-ce/issues/67293
+# TODO: remove app/views/graphiql/rails/editors/show.html.erb when https://github.com/rmosolgo/graphiql-rails/pull/71 is released:
+# https://gitlab.com/gitlab-org/gitlab-ce/issues/67263
 gem 'graphiql-rails', '~> 1.4.10'
 gem 'apollo_upload_server', '~> 2.0.0.beta3'
 gem 'graphql-docs', '~> 1.6.0', group: [:development, :test]
@@ -107,7 +112,7 @@ gem 'fog-aws', '~> 3.5'
 # Locked until fog-google resolves https://github.com/fog/fog-google/issues/421.
 # Also see config/initializers/fog_core_patch.rb.
 gem 'fog-core', '= 2.1.0'
-gem 'fog-google', '~> 1.8'
+gem 'fog-google', '~> 1.9'
 gem 'fog-local', '~> 0.6'
 gem 'fog-openstack', '~> 1.0'
 gem 'fog-rackspace', '~> 0.1.1'
@@ -143,10 +148,10 @@ gem 'wikicloth', '0.8.1'
 gem 'asciidoctor', '~> 2.0.10'
 gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
 gem 'asciidoctor-plantuml', '0.0.9'
-gem 'rouge', '~> 3.5'
+gem 'rouge', '~> 3.7'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
-gem 'nokogiri', '~> 1.10.3'
+gem 'nokogiri', '~> 1.10.4'
 gem 'escape_utils', '~> 1.1'
 
 # Calendar rendering
@@ -179,7 +184,7 @@ gem 'acts-as-taggable-on', '~> 6.0'
 gem 'sidekiq', '~> 5.2.7'
 gem 'sidekiq-cron', '~> 1.0'
 gem 'redis-namespace', '~> 1.6.0'
-gem 'gitlab-sidekiq-fetcher', '~> 0.4.0', require: 'sidekiq-reliable-fetch'
+gem 'gitlab-sidekiq-fetcher', '0.5.2', require: 'sidekiq-reliable-fetch'
 
 # Cron Parser
 gem 'fugit', '~> 1.2.1'
@@ -209,12 +214,12 @@ gem 'js_regex', '~> 3.1'
 # User agent parsing
 gem 'device_detector'
 
-# Cache
-gem 'redis-rails', '~> 5.0.2'
-
 # Redis
-gem 'redis', '~> 3.2'
+gem 'redis', '~> 4.0'
 gem 'connection_pool', '~> 2.0'
+
+# Redis session store
+gem 'redis-rails', '~> 5.0.2'
 
 # Discord integration
 gem 'discordrb-webhooks-blackst0ne', '~> 3.3', require: false
@@ -223,7 +228,8 @@ gem 'discordrb-webhooks-blackst0ne', '~> 3.3', require: false
 gem 'hipchat', '~> 1.5.0'
 
 # Jira integration
-gem 'jira-ruby', '~> 1.4'
+gem 'jira-ruby', '~> 1.7'
+gem 'atlassian-jwt', '~> 0.2.0'
 
 # Flowdock integration
 gem 'flowdock', '~> 0.7'
@@ -241,7 +247,7 @@ gem 'asana', '~> 0.8.1'
 gem 'ruby-fogbugz', '~> 0.2.1'
 
 # Kubernetes integration
-gem 'kubeclient', '~> 4.2.2'
+gem 'kubeclient', '~> 4.4.0'
 
 # Sanitize user input
 gem 'sanitize', '~> 4.6'
@@ -270,7 +276,7 @@ gem 'fast_blank'
 
 # Parse time & duration
 gem 'chronic', '~> 0.10.2'
-gem 'chronic_duration', '~> 0.10.6'
+gem 'gitlab_chronic_duration', '~> 0.10.6.1'
 
 gem 'webpack-rails', '~> 0.9.10'
 gem 'rack-proxy', '~> 0.6.0'
@@ -283,7 +289,6 @@ gem 'font-awesome-rails', '~> 4.7'
 gem 'gemojione', '~> 3.3'
 gem 'gon', '~> 6.2'
 gem 'request_store', '~> 1.3'
-gem 'virtus', '~> 1.0.1'
 gem 'base32', '~> 0.3.0'
 
 gem "gitlab-license", "~> 1.0"
@@ -294,7 +299,7 @@ gem 'sentry-raven', '~> 2.9'
 gem 'premailer-rails', '~> 1.9.7'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.3.0'
+gem 'gitlab-labkit', '~> 0.5'
 
 # I18n
 gem 'ruby_parser', '~> 3.8', require: false
@@ -306,12 +311,8 @@ gem 'gettext', '~> 3.2.2', require: false, group: :development
 gem 'batch-loader', '~> 1.4.0'
 
 # Perf bar
-gem 'peek', '~> 1.0.1'
-gem 'peek-gc', '~> 0.0.2'
-gem 'peek-mysql2', '~> 1.2.0', group: :mysql
-gem 'peek-pg', '~> 1.3.0', group: :postgres
-gem 'peek-rblineprof', '~> 0.2.0'
-gem 'peek-redis', '~> 1.2.0'
+# https://gitlab.com/gitlab-org/gitlab-ee/issues/13996
+gem 'gitlab-peek', '~> 0.0.1', require: 'peek'
 
 # Snowplow events tracking
 gem 'snowplow-tracker', '~> 0.6.1'
@@ -325,13 +326,14 @@ group :metrics do
   gem 'influxdb', '~> 0.2', require: false
 
   # Prometheus
-  gem 'prometheus-client-mmap', '~> 0.9.8'
+  gem 'prometheus-client-mmap', '~> 0.9.10'
   gem 'raindrops', '~> 0.18'
 end
 
 group :development do
   gem 'foreman', '~> 0.84.0'
   gem 'brakeman', '~> 4.2', require: false
+  gem 'danger', '~> 6.0', require: false
 
   gem 'letter_opener_web', '~> 1.3.4'
   gem 'rblineprof', '~> 0.3.6', platform: :mri, require: false
@@ -345,7 +347,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'bootsnap', '~> 1.4'
   gem 'bullet', '~> 5.5.0', require: !!ENV['ENABLE_BULLET']
   gem 'pry-byebug', '~> 3.5.1', platform: :mri
   gem 'pry-rails', '~> 0.3.4'
@@ -384,14 +385,11 @@ group :development, :test do
   gem 'haml_lint', '~> 0.31.0', require: false
   gem 'simplecov', '~> 0.16.1', require: false
   gem 'bundler-audit', '~> 0.5.0', require: false
-  gem 'mdl', '~> 0.5.0', require: false
 
   gem 'benchmark-ips', '~> 2.3.0', require: false
 
   gem 'license_finder', '~> 5.4', require: false
   gem 'knapsack', '~> 1.17'
-
-  gem 'activerecord_sane_schema_dumper', '1.0'
 
   gem 'stackprof', '~> 0.2.10', require: false
 
@@ -406,7 +404,6 @@ group :test do
   gem 'json-schema', '~> 2.8.0'
   gem 'webmock', '~> 3.5.1'
   gem 'rails-controller-testing'
-  gem 'sham_rack', '~> 1.3.6'
   gem 'concurrent-ruby', '~> 1.1'
   gem 'test-prof', '~> 0.2.5'
   gem 'rspec_junit_formatter'
@@ -419,7 +416,7 @@ gem 'mail_room', '~> 0.9.1'
 gem 'email_reply_trimmer', '~> 0.1'
 gem 'html2text'
 
-gem 'ruby-prof', '~> 0.17.0'
+gem 'ruby-prof', '~> 1.0.0'
 gem 'rbtrace', '~> 0.4', require: false
 gem 'memory_profiler', '~> 0.9', require: false
 gem 'benchmark-memory', '~> 0.1', require: false
@@ -448,8 +445,8 @@ group :ed25519 do
   gem 'bcrypt_pbkdf', '~> 1.0'
 end
 
-# Gitaly GRPC client
-gem 'gitaly-proto', '~> 1.37.0', require: 'gitaly'
+# Gitaly GRPC protocol definitions
+gem 'gitaly', '~> 1.58.0'
 
 gem 'grpc', '~> 1.19.0'
 
@@ -461,6 +458,7 @@ gem 'toml-rb', '~> 1.0.0', require: false
 gem 'flipper', '~> 0.13.0'
 gem 'flipper-active_record', '~> 0.13.0'
 gem 'flipper-active_support_cache_store', '~> 0.13.0'
+gem 'unleash', '~> 0.1.5'
 
 # Structured logging
 gem 'lograge', '~> 0.5'
@@ -468,3 +466,6 @@ gem 'grape_logging', '~> 1.7'
 
 # DNS Lookup
 gem 'net-dns', '~> 0.9.0'
+
+# Countries list
+gem 'countries', '~> 3.0'

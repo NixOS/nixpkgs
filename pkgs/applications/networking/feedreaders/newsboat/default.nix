@@ -53,5 +53,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ dotlambda nicknovitski ];
     license     = licenses.mit;
     platforms   = platforms.unix;
+    broken = true;
   };
 }

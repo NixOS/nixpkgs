@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1w3m3qbjn0igydsbpf22w29lzf1pkxv7dlny5mbyrb6j0q6wlx0b";
   };
 
+  patches = [ ./remove-workaround.patch ];
+
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
   buildInputs = [ wxGTK30 ];
 

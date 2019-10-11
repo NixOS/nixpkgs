@@ -20,9 +20,9 @@ in
 buildPythonApplication (common // rec {
   pname = "openrazer_daemon";
 
-  sourceRoot = "source/daemon";
-
   disabled = !isPy3k;
+
+  sourceRoot = "source/daemon";
 
   outputs = [ "out" "man" ];
 

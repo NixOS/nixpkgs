@@ -220,6 +220,42 @@ in
       exec ${lightdm}/sbin/lightdm
     '';
 
+    # Replaces getty and plymouth quit since it quits plymouth on it's own.
+    systemd.services.display-manager.conflicts = [
+      "getty@tty7.service"
+      "plymouth-quit.service"
+     ];
+
+    # Pull in dependencies of services we replace.
+    systemd.services.display-manager.after = [
+      "rc-local.service"
+      "systemd-machined.service"
+      "systemd-user-sessions.service"
+      "getty@tty7.service"
+      "user.slice"
+    ];
+
+    # user.slice needs to be present
+    systemd.services.display-manager.requires = [
+      "user.slice"
+    ];
+
+    # lightdm stops plymouth so when it fails make sure plymouth stops.
+    systemd.services.display-manager.onFailure = [
+      "plymouth-quit.service"
+    ];
+
+    systemd.services.display-manager.serviceConfig = {
+      BusName = "org.freedesktop.DisplayManager";
+      IgnoreSIGPIPE = "no";
+      # This allows lightdm to pass the LUKS password through to PAM.
+      # login keyring is unlocked automatic when autologin is used.
+      KeyringMode = "shared";
+      KillMode = "mixed";
+      StandardError = "inherit";
+      StandardOutput = "syslog";
+    };
+
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
     environment.etc."lightdm/users.conf".source = usersConf;
 

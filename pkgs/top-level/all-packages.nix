@@ -2245,12 +2245,16 @@ in
   citrix_receiver_13_8_0  = citrix_receiver;
 
   citrix_workspace_unwrapped = callPackage ../applications/networking/remote/citrix-workspace { };
+  citrix_workspace_unwrapped_19_10_0 = citrix_workspace_unwrapped.override { version = "19.10.0"; };
   citrix_workspace_unwrapped_19_8_0 = citrix_workspace_unwrapped.override { version = "19.8.0"; };
   citrix_workspace_unwrapped_19_6_0 = citrix_workspace_unwrapped.override { version = "19.6.0"; };
   citrix_workspace_unwrapped_19_3_0 = citrix_workspace_unwrapped.override { version = "19.3.0"; };
 
   citrix_workspace = callPackage ../applications/networking/remote/citrix-workspace/wrapper.nix {
     citrix_workspace = citrix_workspace_unwrapped;
+  };
+  citrix_workspace_19_10_0 = callPackage ../applications/networking/remote/citrix-workspace/wrapper.nix {
+    citrix_workspace = citrix_workspace_unwrapped_19_10_0;
   };
   citrix_workspace_19_8_0 = callPackage ../applications/networking/remote/citrix-workspace/wrapper.nix {
     citrix_workspace = citrix_workspace_unwrapped_19_8_0;
@@ -2330,6 +2334,8 @@ in
   usb-modeswitch-data = callPackage ../development/tools/misc/usb-modeswitch/data.nix { };
 
   anthy = callPackage ../tools/inputmethods/anthy { };
+
+  evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
 
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
@@ -4138,6 +4144,8 @@ in
 
   jsduck = callPackage ../development/tools/jsduck { };
 
+  jtc = callPackage ../development/tools/jtc { };
+
   jumpapp = callPackage ../tools/X11/jumpapp {};
 
   jucipp = callPackage ../applications/editors/jucipp { };
@@ -4330,6 +4338,8 @@ in
   kippo = callPackage ../servers/kippo { };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
+
+  ma1sd = callPackage ../servers/ma1sd { };
 
   mailcatcher = callPackage ../development/web/mailcatcher { };
 
@@ -6870,6 +6880,9 @@ in
 
   wsmancli = callPackage ../tools/system/wsmancli {};
 
+  wstunnel = haskell.lib.justStaticExecutables
+    (haskellPackages.callPackage ../tools/networking/wstunnel {});
+
   wolfebin = callPackage ../tools/networking/wolfebin {
     python = python2;
   };
@@ -7519,7 +7532,7 @@ in
 
   dbmate = callPackage ../development/tools/database/dbmate { };
 
-  devpi-client = callPackage ../development/tools/devpi-client {};
+  devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
   devpi-server = callPackage ../development/tools/devpi-server {};
 
@@ -7746,7 +7759,8 @@ in
     isl = isl_0_17;
   }));
 
-  gfortran = gfortran7;
+  # Version 8.x is marked broken on Darwin: https://gist.github.com/GrahamcOfBorg/bef0231b7129681950f03c4ac06781c8.
+  gfortran = if stdenv.isDarwin then gfortran7 else gfortran8;
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
@@ -8100,8 +8114,6 @@ in
       });
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
-
-  jikes = callPackage ../development/compilers/jikes { };
 
   julia_07 = callPackage ../development/compilers/julia/0.7.nix {
     gmp = gmp6;
@@ -11665,7 +11677,7 @@ in
   libb2 = callPackage ../development/libraries/libb2 { };
 
   libbap = callPackage ../development/libraries/libbap {
-    inherit (ocamlPackages) bap ocaml findlib ctypes;
+    inherit (ocaml-ng.ocamlPackages_4_06) bap ocaml findlib ctypes;
   };
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
@@ -14508,7 +14520,6 @@ in
   ### DEVELOPMENT / R MODULES
 
   R = callPackage ../applications/science/math/R {
-    gfortran = gfortran8;
     # TODO: split docs into a separate output
     texLive = texlive.combine {
       inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
@@ -16685,6 +16696,8 @@ in
   agave = callPackage ../data/fonts/agave { };
 
   aileron = callPackage ../data/fonts/aileron { };
+
+  amber-theme = callPackage ../data/themes/amber { };
 
   amiri = callPackage ../data/fonts/amiri { };
 
@@ -19357,7 +19370,7 @@ in
 
   linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
-  llpp = ocaml-ng.ocamlPackages_4_07.callPackage ../applications/misc/llpp { };
+  llpp = ocamlPackages.callPackage ../applications/misc/llpp { };
 
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
@@ -19684,13 +19697,13 @@ in
 
   multimon-ng = callPackage ../applications/radio/multimon-ng { };
 
-  murmur = (libsForQt5.callPackage ../applications/networking/mumble {
+  murmur = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
     }).murmur;
 
-  mumble = (libsForQt5.callPackage ../applications/networking/mumble {
+  mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
@@ -19940,6 +19953,8 @@ in
   obs-linuxbrowser = callPackage ../applications/video/obs-studio/linuxbrowser.nix { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
+
+  obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
@@ -22823,7 +22838,6 @@ in
     impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
     mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
-    nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
     sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
@@ -22834,6 +22848,7 @@ in
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
 
+    nohotcorner = throw "removed 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
     mediaplayer = throw "deprecated 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
   };
 
@@ -23008,6 +23023,8 @@ in
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
+  
+  delly = callPackage ../applications/science/biology/delly { };
 
   diamond = callPackage ../applications/science/biology/diamond { };
 
@@ -24501,8 +24518,8 @@ in
   sct = callPackage ../tools/X11/sct {};
 
   scylladb = callPackage ../servers/scylladb {
-   thrift = thrift-0_10;
-   };
+    thrift = thrift-0_10;
+  };
 
   seafile-shared = callPackage ../misc/seafile-shared { };
 
@@ -24660,6 +24677,8 @@ in
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
 
   vttest = callPackage ../tools/misc/vttest { };
+
+  wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
   wasm-pack = callPackage ../development/tools/wasm-pack {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -25048,5 +25067,7 @@ in
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen {};
 
   coz = callPackage ../development/tools/analysis/coz {};
+
+  keycard-cli = callPackage ../tools/security/keycard-cli {};
 
 }

@@ -2282,7 +2282,7 @@
     name = "Frede Emil";
   };
   freepotion = {
-    email = "free.potion@yandex.ru";
+    email = "42352817+freepotion@users.noreply.github.com";
     github = "freepotion";
     githubId = 42352817;
     name = "Free Potion";
@@ -6522,6 +6522,12 @@
     githubId = 224674;
     name = "Thomas Pham";
   };
+  Thra11 = {
+    email = "tahall256@protonmail.ch";
+    github = "Thra11";
+    githubId = 1391883;
+    name = "Tom Hall";
+  };
   tilpner = {
     email = "till@hoeppner.ws";
     github = "tilpner";
@@ -7064,6 +7070,12 @@
     github = "xeji";
     githubId = 36407913;
     name = "Uli Baum";
+  };
+  xfix = {
+    email = "konrad@borowski.pw";
+    github = "xfix";
+    githubId = 1297598;
+    name = "Konrad Borowski";
   };
   xnaveira = {
     email = "xnaveira@gmail.com";
