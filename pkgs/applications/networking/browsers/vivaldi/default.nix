@@ -82,8 +82,7 @@ in stdenv.mkDerivation rec {
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${stdenv.lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + stdenv.lib.optionalString enableWidevine ''
-    rm $out/opt/${vivaldiName}/libwidevinecdm.so
-    ln -s ${vivaldi-widevine}/lib/libwidevinecdm.so $out/opt/${vivaldiName}/libwidevinecdm.so
+    ln -sf ${vivaldi-widevine}/lib/libwidevinecdm.so $out/opt/${vivaldiName}/libwidevinecdm.so
   '';
 
   meta = with stdenv.lib; {
