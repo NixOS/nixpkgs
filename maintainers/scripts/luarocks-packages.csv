@@ -37,6 +37,7 @@ lua-zlib,,,,,koral
 lua_cliargs,,,,,
 luabitop,,,,,
 luacheck,,,,,
+luacov,,,,,
 luadbi,,,,,
 luadbi-mysql,,,,,
 luadbi-postgresql,,,,,
