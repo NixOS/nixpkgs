@@ -6008,7 +6008,10 @@ in {
 
   packet-python = callPackage ../development/python-modules/packet-python { };
 
-  pwntools = callPackage ../development/python-modules/pwntools { };
+  pwntools = if isPy3k then
+       callPackage ../development/python-modules/pwntools { }
+     else
+       callPackage ../development/python-modules/pwntools/2.nix { };
 
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 

@@ -1,36 +1,32 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ stdenv, buildPythonPackage, fetchFromGitHub
 , Mako, packaging, pysocks, pygments, ROPGadget
 , capstone, paramiko, pip, psutil
 , pyelftools, pyserial, dateutil
-, requests, tox, unicorn, intervaltree, fetchpatch }:
+, requests, sortedcontainers, tox, unicorn
+, intervaltree }:
+
 
 buildPythonPackage rec {
-  version = "3.12.0";
+  version = "unstable-2019-10-09";
   pname = "pwntools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "09a7yhsyqxb4xf2r6mbn3p5zx1wp89lxq7lj34y4zbin6ns5929s";
+  src = fetchFromGitHub {
+    owner = "Gallopsled";
+    repo = pname;
+    rev = "fb1178418b11c7aabc816331fbc2874231121a25";
+    sha256 = "130qar90i0vl3s1yqahf3m31mlsmbgj1lnqhdmncwyzhjzbp0x33";
   };
 
-  propagatedBuildInputs = [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pyserial dateutil requests tox unicorn intervaltree ];
+  propagatedBuildInputs = [
+		Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pyserial dateutil requests sortedcontainers tox unicorn intervaltree
+	];
 
-  disabled = isPy3k;
-  doCheck = false; # no setuptools tests for the package
-
-  # Can be removed when 3.13.0 is released
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Gallopsled/pwntools/commit/9859f54a21404174dd17efee02f91521a2dd09c5.patch";
-      sha256 = "0p0h87npn1mwsd8ciab7lg74bk3ahlk5r0mjbvx4jhihl2gjc3z2";
-    })
-  ];
-
+  doCheck = false; # no unit tests for the package
 
   meta = with stdenv.lib; {
     homepage = "http://pwntools.com";
     description = "CTF framework and exploit development library";
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs kristoff3r ];
+    maintainers = with maintainers; [ bennofs kristoff3r pamplemousse ];
   };
 }
