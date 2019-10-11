@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  doCheck = true;
+  enableParallelBuilding = true;
+
   preCheck = ''
     patchShebangs run_tests.sh
   '';
