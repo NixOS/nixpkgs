@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, which, substituteAll }:
 
 stdenv.mkDerivation rec {
-  pname = "srt-to-vtt-cl";
+  pname = "srt-to-vtt-cl-unstable";
   version = "2019-01-03";
 
   src = fetchFromGitHub {
