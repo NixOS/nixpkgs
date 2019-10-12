@@ -1,7 +1,7 @@
 { stdenv, fetchurl, mpd_clientlib, curl, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "mpdscribble-${version}";
+  pname = "mpdscribble";
   version = "0.22";
 
   src = fetchurl {

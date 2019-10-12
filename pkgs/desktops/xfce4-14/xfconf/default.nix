@@ -1,6 +1,6 @@
 { mkXfceDerivation, libxfce4util }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfconf";
   version = "4.14.1";

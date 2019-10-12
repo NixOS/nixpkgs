@@ -20,8 +20,9 @@ in
       { NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
         PAGER = mkDefault "less -R";
         EDITOR = mkDefault "nano";
-        XCURSOR_PATH = [ "$HOME/.icons" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
+        GTK_DATA_PREFIX = "${config.system.path}"; # needed for gtk2 apps to find themes
+        GTK_EXE_PREFIX = "${config.system.path}";
       };
 
     environment.profiles = mkAfter
@@ -30,7 +31,7 @@ in
       ];
 
     # TODO: move most of these elsewhere
-    environment.profileRelativeEnvVars =
+    environment.profileRelativeSessionVariables =
       { PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
         KDEDIRS = [ "" ];

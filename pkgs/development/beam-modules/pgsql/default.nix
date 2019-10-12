@@ -6,7 +6,7 @@ let
           buildInputs = [ drv ];
     };
 
-  pkg = self: buildRebar3 rec {
+  pkg = self: buildRebar3 {
     name = "pgsql";
     version = "25+beta.2";
 

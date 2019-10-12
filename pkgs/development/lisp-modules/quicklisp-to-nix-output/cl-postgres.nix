@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-postgres'';
   version = ''postmodern-20190521-git'';
 

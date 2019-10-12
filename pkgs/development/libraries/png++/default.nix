@@ -4,7 +4,7 @@
 assert docSupport -> doxygen != null;
 
 stdenv.mkDerivation rec {
-  name = "pngpp-${version}";
+  pname = "pngpp";
   version = "0.2.10";
 
   src = fetchurl {

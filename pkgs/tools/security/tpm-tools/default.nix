@@ -4,10 +4,11 @@ let
   version = "1.3.9.1";
 in
 stdenv.mkDerivation rec {
-  name = "tpm-tools-${version}";
+  pname = "tpm-tools";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/trousers/tpm-tools/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/trousers/tpm-tools/${version}/${pname}-${version}.tar.gz";
     sha256 = "0s7srgghykxnlb1g4izabzf2gfb1knxc0nzn6bly49h8cpi19dww";
   };
 

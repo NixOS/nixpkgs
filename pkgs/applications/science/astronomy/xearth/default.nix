@@ -1,11 +1,11 @@
 { stdenv, fetchurl, imake, gccmakedep, libXt, libXext }:
 
 stdenv.mkDerivation rec {
-  name = "xearth-${version}";
+  pname = "xearth";
   version = "1.1";
 
   src = fetchurl {
-    url = "http://xearth.org/${name}.tar.gz";
+    url = "http://xearth.org/${pname}-${version}.tar.gz";
     sha256 = "bcb1407cc35b3f6dd3606b2c6072273b6a912cbd9ed1ae22fb2d26694541309c";
   };
 

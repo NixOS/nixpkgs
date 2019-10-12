@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusContainerDefault_1_0_alpha9 = map (obj: fetchMaven {
     version = "1.0-alpha-9";
     artifactId = "plexus-container-default";

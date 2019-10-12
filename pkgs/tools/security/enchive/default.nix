@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "enchive-${version}";
+  pname = "enchive";
   version = "3.4";
   src = fetchFromGitHub {
     owner = "skeeto";

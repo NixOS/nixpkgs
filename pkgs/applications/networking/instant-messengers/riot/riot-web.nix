@@ -4,12 +4,12 @@
 # Versions of `riot-web` and `riot-desktop` should be kept in sync.
 
 stdenv.mkDerivation rec {
-  name= "riot-web-${version}";
-  version = "1.3.3";
+  pname = "riot-web";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://github.com/vector-im/riot-web/releases/download/v${version}/riot-v${version}.tar.gz";
-    sha256 = "1n5h7q3h0akw09p4z7nwprxsa8jnmwbvwn2npq7zz62ccasb4fv9";
+    sha256 = "0bbal3y4clgp7j703f3ll5zwhbpjz6zpw3qslwza6lik4g4k0vaj";
   };
 
   installPhase = let

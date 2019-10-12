@@ -7,7 +7,7 @@
 , qtscript
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "ofono-phonesim";
   version = "unstable-2014-04-22";
 

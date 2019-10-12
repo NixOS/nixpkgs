@@ -4,7 +4,7 @@ with rustPlatform;
 
 buildRustPackage rec {
   version = "0.4.1";
-  name = "loc-${version}";
+  pname = "loc";
 
   src = fetchFromGitHub {
     owner = "cgag";

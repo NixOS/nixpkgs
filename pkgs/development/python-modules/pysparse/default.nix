@@ -8,7 +8,7 @@
 , python
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pysparse";
   version = "1.3-dev";
   disabled = !isPy27;

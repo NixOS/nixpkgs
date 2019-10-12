@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "airsonic-${version}";
+  pname = "airsonic";
   version = "10.4.0";
 
   src = fetchurl {

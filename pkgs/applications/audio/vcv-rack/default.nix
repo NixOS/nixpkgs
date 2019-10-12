@@ -1,6 +1,6 @@
 { stdenv, makeWrapper, fetchFromBitbucket, fetchFromGitHub, pkgconfig
 , alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
-, libzip, rtaudio, rtmidi, speex }:
+, libzip, rtaudio, rtmidi, speex, libsamplerate }:
 
 let
   glfw-git = glfw.overrideAttrs (oldAttrs: rec {
@@ -27,14 +27,14 @@ let
   };
 in
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "VCV-Rack-${version}";
-  version = "1.1.4";
+  pname = "VCV-Rack";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "04kg0nm7w19s2zfrsxjfl3bs4sy3bzf28kzl4hayzwv480667ybx";
+    sha256 = "172v66v2vb6l9dpsq6fb6xn035igwhpjci8w3kz2na3rvmz1bc5w";
     fetchSubmodules = true;
   };
 
@@ -58,7 +58,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ glfw-git alsaLib curl glew gtk2-x11 jansson libjack2 libzip rtaudio rtmidi speex ];
+  buildInputs = [ glfw-git alsaLib curl glew gtk2-x11 jansson libjack2 libzip rtaudio rtmidi speex libsamplerate ];
 
   buildFlags = "Rack";
 

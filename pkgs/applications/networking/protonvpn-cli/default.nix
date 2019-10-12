@@ -28,12 +28,9 @@ in stdenv.mkDerivation rec {
         "  echo \"Connecting...\"" \
         "  sed -ri 's@${expectedUpdateResolvPath}@${actualUpdateResolvePath}@g' \"\$openvpn_config\"; echo \"Connecting...\""
     cp protonvpn-cli.sh "$out/bin/protonvpn-cli"
-    ln -s "$out/bin/protonvpn-cli" "$out/bin/pvpn"
-  '';
-
-  postInstallPhase = ''
-    wrapProgram $out/protonvpn-cli \
+    wrapProgram $out/bin/protonvpn-cli \
       --prefix PATH : ${lib.makeBinPath [ coreutils openvpn python dialog wget update-resolv-conf ]}
+    ln -s "$out/bin/protonvpn-cli" "$out/bin/pvpn"
   '';
 
   meta = with stdenv.lib; {

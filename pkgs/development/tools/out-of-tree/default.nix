@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "out-of-tree";
-  version = "1.0.1";
+  version = "1.1.1";
 
   buildInputs = [ makeWrapper ];
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
   src = fetchgit {
     rev = "refs/tags/v${version}";
     url = "https://code.dumpstack.io/tools/${pname}.git";
-    sha256 = "0p0ps73w6lmsdyf7irqgbhfxjg5smgbn081d06pnr1zmxvw8dryx";
+    sha256 = "048jda3vng11mg62fd3d8vs9yjsp569zlfylnkqv8sb6wd1qn66d";
   };
 
   goDeps = ./deps.nix;

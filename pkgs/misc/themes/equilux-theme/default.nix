@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gnome3, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
 
 stdenv.mkDerivation rec {
-  name = "equilux-theme-${version}";
+  pname = "equilux-theme";
   version = "20181029";
 
   src = fetchFromGitHub {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
-    description = "A Material Design theme for GNOME/GTK+ based desktop environments";
+    description = "A Material Design theme for GNOME/GTK based desktop environments";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.fpletz ];

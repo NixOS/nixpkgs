@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Logging infrastructure for OCaml";
-    homepage = "${webpage}";
+    homepage = webpage;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.sternenseemann ];
     license = licenses.isc;

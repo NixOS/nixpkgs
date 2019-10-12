@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''drakma'';
   version = ''v2.0.5'';
 

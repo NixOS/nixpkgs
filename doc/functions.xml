@@ -4,8 +4,7 @@
          xml:id="chap-functions">
  <title>Functions reference</title>
  <para>
-  The nixpkgs repository has several utility functions to manipulate Nix
-  expressions.
+  The nixpkgs repository has several utility functions to manipulate Nix expressions.
  </para>
  <xi:include href="functions/library.xml" />
  <xi:include href="functions/overrides.xml" />
@@ -20,4 +19,5 @@
  <xi:include href="functions/appimagetools.xml" />
  <xi:include href="functions/prefer-remote-fetch.xml" />
  <xi:include href="functions/nix-gitignore.xml" />
+ <xi:include href="functions/ocitools.xml" />
 </chapter>

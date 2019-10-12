@@ -36,7 +36,7 @@ let
 
   poolOpts = { name, ... }:
     let
-      poolOpts = cfg.pools."${name}";
+      poolOpts = cfg.pools.${name};
     in
     {
       options = {

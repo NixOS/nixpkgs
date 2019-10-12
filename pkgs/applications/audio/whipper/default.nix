@@ -30,7 +30,7 @@ python2.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao utillinux flac sox ]}"
+    "--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao utillinux flac sox ])
   ];
 
   # some tests require internet access

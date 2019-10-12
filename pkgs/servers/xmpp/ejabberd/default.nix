@@ -45,7 +45,8 @@ in stdenv.mkDerivation rec {
   LANG = "en_US.UTF-8";
 
   deps = stdenv.mkDerivation {
-    name = "ejabberd-deps-${version}";
+    pname = "ejabberd-deps";
+    inherit version;
 
     inherit src;
 

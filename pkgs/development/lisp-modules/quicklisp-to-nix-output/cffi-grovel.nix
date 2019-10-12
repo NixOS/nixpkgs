@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cffi-grovel'';
   version = ''cffi_0.20.1'';
 

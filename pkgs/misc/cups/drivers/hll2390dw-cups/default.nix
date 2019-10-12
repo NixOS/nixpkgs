@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hll2390dw-cups-${version}";
+  pname = "hll2390dw-cups";
   version = "4.0.0-1";
 
   src = fetchurl {

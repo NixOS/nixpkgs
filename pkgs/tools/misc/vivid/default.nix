@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "${pname}-${version}";
   pname = "vivid";
   version = "0.4.0";
 

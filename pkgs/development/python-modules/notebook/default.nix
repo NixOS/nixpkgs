@@ -64,6 +64,9 @@ buildPythonPackage rec {
     else ""}
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
     homepage = https://jupyter.org/;

@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let version = "1.100"; in
-fetchzip rec {
+fetchzip {
   name = "ankacoder-${version}";
   url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoder.${version}.zip";
 

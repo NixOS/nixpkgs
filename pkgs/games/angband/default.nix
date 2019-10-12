@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, ncurses5 }:
 
 stdenv.mkDerivation rec {
+  pname = "angband";
   version = "4.2.0";
-  name = "angband-${version}";
 
   src = fetchFromGitHub {
     owner = "angband";

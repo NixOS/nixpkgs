@@ -3,7 +3,7 @@
 , libqmatrixclient_0_5 }:
 
 let
-  generic = version: sha256: prefix: library: mkDerivation rec {
+  generic = version: sha256: prefix: library: mkDerivation {
     pname = "quaternion";
     inherit version;
 

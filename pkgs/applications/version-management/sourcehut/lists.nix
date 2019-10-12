@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.36.3";
+  version = "0.38.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     rev = version;
-    sha256 = "1q2z2pjwz4zifsrkxab9b9jh1vzayjqych1cx3i4859f1swl2gwa";
+    sha256 = "02nfl9xnqx0p98kmcy8bzdwzlnl57k5a04i6gnvimc84c11a9chz";
   };
 
   patches = [

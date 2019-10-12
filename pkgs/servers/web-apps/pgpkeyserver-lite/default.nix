@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "pgpkeyserver-lite-${version}";
+stdenv.mkDerivation {
+  pname = "pgpkeyserver-lite";
   version = "2017-07-18";
 
   src = fetchFromGitHub {

@@ -5,18 +5,16 @@ let
   glplugin = fetchFromGitHub {
     owner = "lausser";
     repo   = "GLPlugin";
-    rev    = "e8e1a2907a54435c932b3e6c584ba1d679754849";
-    sha256 = "0wb55a9pmgbilfffx0wkiikg9830qd66j635ypczqp4basslpq5b";
+    rev    = "ef3107f01afe55fad5452e64ac5bbea00b18a8d5";
+    sha256 = "047fwrycsl2vmpi4wl46fs6f8y191d6qc9ms5rvmrj1dm2r828ws";
   };
 
   generic = { pname, version, sha256, description, buildInputs, ... }:
-  let
-    name' = "${stdenv.lib.replaceStrings [ "-" ] [ "_" ] "${pname}"}-${version}";
-  in stdenv.mkDerivation {
-    name = "${pname}-${version}";
+  stdenv.mkDerivation {
+    inherit pname version;
 
     src = fetchurl {
-      url = "https://labs.consol.de/assets/downloads/nagios/${name'}.tar.gz";
+      url = "https://labs.consol.de/assets/downloads/nagios/${pname}-${version}.tar.bz";
       inherit sha256;
     };
 
@@ -55,24 +53,24 @@ let
 in {
   check-mssql-health = generic {
     pname       = "check_mssql_health";
-    version     = "2.6.4.14";
-    sha256      = "0w6gybrs7imx169l8740s0ax3adya867fw0abrampx59mnsj5pm1";
+    version     = "2.6.4.15";
+    sha256      = "12z0b3c2p18viy7s93r6bbl8fvgsqh80136d07118qhxshp1pwxg";
     description = "Check plugin for Microsoft SQL Server.";
     buildInputs = [ perlPackages.DBDsybase ];
   };
 
   check-nwc-health = generic {
     pname       = "check_nwc_health";
-    version     = "7.0.1.3";
-    sha256      = "0rgd6zgd7kplx3z72n8zbzwkh8vnd83361sk9ibh6ng78sds1sl5";
+    version     = "7.10.0.6";
+    sha256      = "092rhaqnk3403z0y60x38vgh65gcia3wrd6gp8mr7wszja38kxv2";
     description = "Check plugin for network equipment.";
     buildInputs = [ perlPackages.NetSNMP ];
   };
 
   check-ups-health = generic {
     pname       = "check_ups_health";
-    version     = "2.8.2.2";
-    sha256      = "1gc2wjsymay2vk5ywc1jj9cvrbhs0fs851x8l4nc75df2g75v521";
+    version     = "2.8.3.3";
+    sha256      = "0qc2aglppwr9ms4p53kh9nr48625sqrbn46xs0k9rx5sv8hil9hm";
     description = "Check plugin for UPSs.";
     buildInputs = [ perlPackages.NetSNMP ];
   };

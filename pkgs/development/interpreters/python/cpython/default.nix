@@ -129,8 +129,8 @@ in with passthru; stdenv.mkDerivation {
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
-  CPPFLAGS = "${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}";
-  LDFLAGS = "${concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs)}";
+  CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+  LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
   LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
   # Determinism: We fix the hashes of str, bytes and datetime objects.
@@ -142,6 +142,8 @@ in with passthru; stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (sqlite != null && isPy3k) [
+    "--enable-loadable-sqlite-extensions"
   ] ++ optionals (openssl != null) [
     "--with-openssl=${openssl.dev}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

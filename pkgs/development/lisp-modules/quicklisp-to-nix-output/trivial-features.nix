@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''trivial-features'';
   version = ''20190710-git'';
 

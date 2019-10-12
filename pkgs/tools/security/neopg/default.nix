@@ -11,7 +11,7 @@
 , gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "neopg-${version}";
+  pname = "neopg";
   version = "0.0.6";
 
   src = fetchFromGitHub {

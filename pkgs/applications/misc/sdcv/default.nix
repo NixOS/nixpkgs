@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, glib, gettext, readline }:
 
 stdenv.mkDerivation rec {
-  name = "sdcv-${version}";
+  pname = "sdcv";
   version = "0.5.2";
 
   src = fetchFromGitHub {

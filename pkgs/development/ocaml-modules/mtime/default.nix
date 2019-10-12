@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, js_of_ocaml
-, jsooSupport ? true
+, jsooSupport ? lib.versionAtLeast ocaml.version "4.03"
 }:
 
 with lib;

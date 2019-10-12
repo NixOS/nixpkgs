@@ -53,7 +53,8 @@ let
       throw "super-productivity is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "super-productivity-${version}";
+  pname = "super-productivity";
+  inherit version;
 
   inherit src;
 

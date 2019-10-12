@@ -1,6 +1,6 @@
 { mkXfceDerivation, tzdata, exo, garcon, gtk2, gtk3, glib, gettext, glib-networking, libxfce4ui, libxfce4util, libwnck3, xfconf, gobject-introspection }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-panel";
   version = "4.14.0";

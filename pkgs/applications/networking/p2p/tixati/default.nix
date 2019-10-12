@@ -1,7 +1,7 @@
 { stdenv, fetchurl, glib, zlib, dbus, dbus-glib, gtk2, gdk-pixbuf, cairo, pango }:
 
 stdenv.mkDerivation rec {
-  name = "tixati-${version}";
+  pname = "tixati";
   version = "2.62";
 
   src = fetchurl {

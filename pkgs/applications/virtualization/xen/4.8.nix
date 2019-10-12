@@ -64,7 +64,7 @@ callPackage (import ./generic.nix (rec {
 
   # Sources needed to build tools and firmwares.
   xenfiles = optionalAttrs withInternalQemu {
-    "qemu-xen" = {
+    qemu-xen = {
       src = fetchgit {
         url = https://xenbits.xen.org/git-http/qemu-xen.git;
         rev = "refs/tags/qemu-xen-${version}";
@@ -78,7 +78,7 @@ callPackage (import ./generic.nix (rec {
       meta.description = "Xen's fork of upstream Qemu";
     };
   } // optionalAttrs withInternalTraditionalQemu {
-    "qemu-xen-traditional" = {
+    qemu-xen-traditional = {
       src = fetchgit {
         url = https://xenbits.xen.org/git-http/qemu-xen-traditional.git;
         rev = "refs/tags/xen-${version}";
@@ -123,7 +123,7 @@ callPackage (import ./generic.nix (rec {
       meta.description = "Xen's fork of iPXE";
     };
   } // optionalAttrs withLibHVM {
-    "xen-libhvm-dir-remote" = {
+    xen-libhvm-dir-remote = {
       src = fetchgit {
         name = "xen-libhvm";
         url = https://github.com/michalpalka/xen-libhvm;
@@ -167,8 +167,15 @@ callPackage (import ./generic.nix (rec {
     xenpmdpatch
   ];
 
-  # Fix build on Glibc 2.24.
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = [
+    # Fix build on Glibc 2.24
+    "-Wno-error=deprecated-declarations"
+    # Fix build with GCC8
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=format-truncation"
+    "-Wno-error=array-bounds"
+  ];
 
   postPatch = ''
     # Avoid a glibc >= 2.25 deprecation warnings that get fatal via -Werror.

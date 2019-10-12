@@ -4,13 +4,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "percona-xtrabackup-${version}";
+  pname = "percona-xtrabackup";
   version = "2.4.12";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-xtrabackup";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1w17v2c677b3vfnm81bs63kjbfiin7f12wl9fbgp83hfpyx5msan";
   };
 

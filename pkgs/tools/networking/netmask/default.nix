@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "netmask-${version}";
+  pname = "netmask";
   version = "2.4.4";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python, cunit, dpdk, libaio, libuuid, numactl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "spdk-${version}";
+  pname = "spdk";
   version = "19.04";
 
   src = fetchFromGitHub {

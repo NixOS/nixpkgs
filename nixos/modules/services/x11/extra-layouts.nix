@@ -158,7 +158,10 @@ in
 
     });
 
-    services.xserver.xkbDir = "${pkgs.xkb_patched}/etc/X11/xkb";
+    services.xserver = {
+      xkbDir = "${pkgs.xkb_patched}/etc/X11/xkb";
+      exportConfiguration = config.services.xserver.displayManager.startx.enable;
+    };
 
   };
 

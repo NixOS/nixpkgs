@@ -1,6 +1,6 @@
 {stdenv, fetchurl, perl, bash}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "atool-0.39.0";
   src = fetchurl {
     url = mirror://savannah/atool/atool-0.39.0.tar.gz;

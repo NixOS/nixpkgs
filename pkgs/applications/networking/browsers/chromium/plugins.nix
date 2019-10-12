@@ -6,7 +6,6 @@
 , fetchzip
 , patchelfUnstable
 , enablePepperFlash ? false
-, enableWideVine ? false
 
 , upstream-info
 }:
@@ -44,67 +43,13 @@ let
     echo ${toString quoted} > "''$${output}/nix-support/wrapper-flags"
   '';
 
-  widevine = stdenv.mkDerivation {
-    name = "chromium-binary-plugin-widevine";
-
-    src = upstream-info.binary;
-
-    nativeBuildInputs = [ patchelfUnstable ];
-
-    phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
-
-    unpackCmd = let
-      chan = if upstream-info.channel == "dev"    then "chrome-unstable"
-        else if upstream-info.channel == "stable" then "chrome"
-        else "chrome-${upstream-info.channel}";
-    in ''
-      mkdir -p plugins
-      ar p "$src" data.tar.xz | tar xJ -C plugins --strip-components=4 \
-        ./opt/google/${chan}/libwidevinecdm.so \
-        ./opt/google/${chan}/libwidevinecdmadapter.so
-    '';
-
-    doCheck = true;
-    checkPhase = ''
-      ! find -iname '*.so' -exec ldd {} + | grep 'not found'
-    '';
-
-    PATCH_RPATH = mkrpath [ gcc.cc glib nspr nss ];
-
-    patchPhase = ''
-      chmod +x libwidevinecdm.so libwidevinecdmadapter.so
-      patchelf --set-rpath "$PATCH_RPATH" libwidevinecdm.so
-      patchelf --set-rpath "$out/lib:$PATCH_RPATH" libwidevinecdmadapter.so
-    '';
-
-    installPhase = let
-      wvName = "Widevine Content Decryption Module";
-      wvDescription = "Playback of encrypted HTML audio/video content";
-      wvMimeTypes = "application/x-ppapi-widevine-cdm";
-      wvModule = "@out@/lib/libwidevinecdmadapter.so";
-      wvInfo = "#${wvName}#${wvDescription};${wvMimeTypes}";
-    in ''
-      install -vD libwidevinecdm.so \
-        "$out/lib/libwidevinecdm.so"
-      install -vD libwidevinecdmadapter.so \
-        "$out/lib/libwidevinecdmadapter.so"
-
-      ${mkPluginInfo {
-        flags = [ "--register-pepper-plugins=${wvModule}${wvInfo}" ];
-        envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "@out@/lib";
-      }}
-    '';
-
-    meta.platforms = platforms.x86_64;
-  };
-
   flash = stdenv.mkDerivation rec {
-    name = "flashplayer-ppapi-${version}";
-    version = "32.0.0.238";
+    pname = "flashplayer-ppapi";
+    version = "32.0.0.255";
 
     src = fetchzip {
       url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/${version}/flash_player_ppapi_linux.x86_64.tar.gz";
-      sha256 = "0jqx68lfqjpy6wbxdi0giclvh9mc9rha92hqdj1nx42v95k3gc65";
+      sha256 = "1rqb54kqxq66vvqk5yrr3rsy3wcj9r9wnkngk27c7jayzm6bwgvv";
       stripRoot = false;
     };
 
@@ -140,6 +85,5 @@ let
   };
 
 in {
-  enabled = optional enableWideVine widevine
-         ++ optional enablePepperFlash flash;
+  enabled = optional enablePepperFlash flash;
 }

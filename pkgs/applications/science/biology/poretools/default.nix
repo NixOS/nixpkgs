@@ -3,7 +3,6 @@
 pythonPackages.buildPythonPackage rec {
   pname = "poretools";
   version = "unstable-2016-07-10";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     repo = pname;

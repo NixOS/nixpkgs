@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, postgresql, perl, perlPackages, which }:
 
 stdenv.mkDerivation rec {
-  name = "pgtap-${version}";
+  pname = "pgtap";
   version = "1.0.0";
 
   src = fetchFromGitHub {

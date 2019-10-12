@@ -44,6 +44,10 @@
 , shared-mime-info
 , gsettings-desktop-schemas
 
+# Hardening
+, graphene-hardened-malloc
+, useHardenedMalloc ? graphene-hardened-malloc != null && builtins.elem stdenv.system graphene-hardened-malloc.meta.platforms
+
 # Whether to disable multiprocess support to work around crashing tabs
 # TODO: fix the underlying problem instead of this terrible work-around
 , disableContentSandbox ? true
@@ -89,34 +93,28 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "8.5.4";
+  version = "8.5.5";
 
   lang = "en-US";
 
   srcs = {
-    "x86_64-linux" = fetchurl {
-      urls = [
-        "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
-        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
-      ];
-      sha256 = "0nnzynk3nlnd847c8jjghs9anmr5a2hv7nk1qxigigxqa5vqy96z";
+    x86_64-linux = fetchurl {
+      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
+      sha256 = "00r5k9bbfpv3s6shxqypl13psr1zz51xiyz3vmm4flhr2qa4ycsz";
     };
 
-    "i686-linux" = fetchurl {
-      urls = [
-        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
-        "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
-      ];
-      sha256 = "1b34skl3hwvpy0r4l5ykgnnwhbz7cvly2gi9ib4h7lijjfafiys1";
+    i686-linux = fetchurl {
+      url = "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
+      sha256 = "1nxvw5kiggfr4n5an436ass84cvwjviaa894kfm72yf2ls149f29";
     };
   };
 in
 
 stdenv.mkDerivation rec {
-  name = "tor-browser-bundle-bin-${version}";
+  pname = "tor-browser-bundle-bin";
   inherit version;
 
-  src = srcs."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -251,6 +249,9 @@ stdenv.mkDerivation rec {
     GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
     EOF
 
+    WRAPPER_LD_PRELOAD=${optionalString useHardenedMalloc
+      "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}
+
     WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
       gnome3.adwaita-icon-theme
       shared-mime-info
@@ -333,6 +334,8 @@ stdenv.mkDerivation rec {
     #
     # XDG_DATA_DIRS is set to prevent searching system dirs (looking for .desktop & icons)
     exec env -i \
+      LD_PRELOAD=$WRAPPER_LD_PRELOAD \
+      \
       TZ=":" \
       TZDIR="\''${TZDIR:-}" \
       LOCALE_ARCHIVE="\$LOCALE_ARCHIVE" \

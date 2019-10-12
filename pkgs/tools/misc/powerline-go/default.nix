@@ -3,7 +3,6 @@
 buildGoModule rec {
   pname = "powerline-go";
   version = "1.13.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "justjanne";

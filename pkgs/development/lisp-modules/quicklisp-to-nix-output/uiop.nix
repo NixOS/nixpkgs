@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''uiop'';
   version = ''3.3.3'';
 

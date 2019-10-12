@@ -1,7 +1,7 @@
 { stdenv, fetchurl, xz }:
 
 stdenv.mkDerivation rec {
-  name = "autoconf-archive-${version}";
+  pname = "autoconf-archive";
   version = "2019.01.06";
 
   src = fetchurl {

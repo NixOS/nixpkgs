@@ -7,7 +7,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "1.1.7";
   pname = "python-lpod";
   # lpod library currently does not support Python 3.x

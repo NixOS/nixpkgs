@@ -5,7 +5,7 @@ with pkgs.javaPackages;
 
 let
   fetchMaven = pkgs.callPackage ./m2install.nix { };
-in rec {
+in {
   inherit fetchMaven;
 
   animalSniffer_1_11 = map (obj: fetchMaven {
@@ -19,7 +19,7 @@ in rec {
     { type = "jar"; sha512 = "24dih4wp7p1rddvxcznlz42yxhqlln5ljdbvwnp75rsyf3ng25zv881ixk5qx8canr1lxx4kh22kwkaahz3qnw54fqn7w5z58m5768n"; }
   ];
 
-  mavenClean_2_5 = map (obj: fetchMaven rec {
+  mavenClean_2_5 = map (obj: fetchMaven {
     version = "2.5";
     artifactId = "maven-clean-plugin";
     groupId = "org.apache.maven.plugins";
@@ -30,7 +30,7 @@ in rec {
     { type = "jar"; sha512 = "2fprppwpmzyvaynadm6slk382khlpf5s8sbi5x249qcaw2vkg5n77q79lgq981v9kjlr5wighjzpjqv8gdig45m2p37mcfwsy3jsv89"; }
   ];
 
-  mavenCompiler_3_1 = map (obj: fetchMaven rec {
+  mavenCompiler_3_1 = map (obj: fetchMaven {
     version = "3.1";
     artifactId = "maven-compiler-plugin";
     groupId = "org.apache.maven.plugins";
@@ -41,7 +41,7 @@ in rec {
     { type = "jar"; sha512 = "1dvq13yc8yacxr66pkvwwd4cvx0jln8dv9fh5gmd5vir05h8l5j4y324r1bklnzpx0ancs5ad8z944zgmpaq3w195kfsarmndp0gv2y"; }
   ];
 
-  mavenEnforcer_1_3_1 = map (obj: fetchMaven rec {
+  mavenEnforcer_1_3_1 = map (obj: fetchMaven {
     version = "1.3.1";
     artifactId = "maven-enforcer-plugin";
     groupId = "org.apache.maven.plugins";
@@ -52,7 +52,7 @@ in rec {
     { type = "jar"; sha512 = "15sb9qmxgbq82nzc9x66152va121vf33nn0ah2g4z169cv6jnjq05gk1472k59imypvwsh9hd3hqi9q6g8d0sawgk5l1ax900cx7n25"; }
   ];
 
-  mavenInstall_2_4 = map (obj: fetchMaven rec {
+  mavenInstall_2_4 = map (obj: fetchMaven {
     version = "2.4";
     artifactId = "maven-install-plugin";
     groupId = "org.apache.maven.plugins";
@@ -63,7 +63,7 @@ in rec {
     { type = "jar"; sha512 = "35hbj5hbz085y1dxfmza6m207kn68q2g1k5a9mc75i9pj8fww7xm7xzcdv81xyxjm3r4qbqf1izlg16l99b93rfii9rg8kqz8mxqmb6"; }
   ];
 
-  mavenJar_2_4 = map (obj: fetchMaven rec {
+  mavenJar_2_4 = map (obj: fetchMaven {
     version = "2.4";
     artifactId = "maven-jar-plugin";
     groupId = "org.apache.maven.plugins";
@@ -74,7 +74,7 @@ in rec {
     { type = "jar"; sha512 = "0frbikq8jm5pynlmv51k349kiaipd9jsrh6970313s0g6n4i0ws9vi232wc1mjrc3d27k63xqmb97jzgbbc6q337ypv5vil1ql9wh0d"; }
   ];
 
-  mavenReplacer_1_5_3 = map (obj: fetchMaven rec {
+  mavenReplacer_1_5_3 = map (obj: fetchMaven {
     version = "1.5.3";
     artifactId = "replacer";
     groupId = "com.google.code.maven-replacer-plugin";
@@ -85,7 +85,7 @@ in rec {
     { type = "jar"; sha512 = "0f2rngcxpll0iigv115132fld5n6shjfn7m981sg7mdzlj75q2h5knd4x1ip33w60cm1j0rmqaxp1y6qn76ykvhprdyy9smiy667l9x"; }
   ];
 
-  mavenResources_2_6 = map (obj: fetchMaven rec {
+  mavenResources_2_6 = map (obj: fetchMaven {
     version = "2.6";
     artifactId = "maven-resources-plugin";
     groupId = "org.apache.maven.plugins";
@@ -96,7 +96,7 @@ in rec {
     { type = "jar"; sha512 = "3j8smsx6wk085iic5qhknrszixxna6szmvk2rn9zkn75ffjr7ham72hw9cmxf5160j73n8f2cmcbw1x462fqy12fqqpmzx08i1sbwcv"; }
   ];
 
-  mavenSurefire_2_12_4 = map (obj: fetchMaven rec {
+  mavenSurefire_2_12_4 = map (obj: fetchMaven {
     version = "2.12.4";
     artifactId = "maven-surefire-plugin";
     groupId = "org.apache.maven.plugins";
@@ -107,7 +107,7 @@ in rec {
     { type = "jar"; sha512 = "2sjq2l8i97h3ay8wwrsi75cfs9d1im5ar2sn2zv4q6xsv4v3hh5y481l9xwc5dnbcfdjs38ald0z60pxpcyiqrng6h69s2ws8fhb0mm"; }
   ];
 
-  mavenSurefire_2_17 = map (obj: fetchMaven rec {
+  mavenSurefire_2_17 = map (obj: fetchMaven {
     version = "2.17";
     artifactId = "maven-surefire-plugin";
     groupId = "org.apache.maven.plugins";

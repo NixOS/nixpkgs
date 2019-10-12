@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An app to send/receive SMS, make USSD requests, control mobile data usage and more";
     longDescription = ''
-      A simple GTK+ based GUI compatible with Modem manager, Wader and oFono
+      A simple GTK based GUI compatible with Modem manager, Wader and oFono
       system services able to control EDGE/3G/4G broadband modem specific
       functions. You can check balance of your SIM card, send or receive SMS
       messages, control mobile traffic consumption and more.

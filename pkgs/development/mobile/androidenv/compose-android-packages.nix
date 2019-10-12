@@ -78,13 +78,13 @@ rec {
 
   platform-tools = import ./platform-tools.nix {
     inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
-    package = packages.platform-tools."${platformToolsVersion}";
+    package = packages.platform-tools.${platformToolsVersion};
   };
 
   build-tools = map (version:
     import ./build-tools.nix {
       inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
-      package = packages.build-tools."${version}";
+      package = packages.build-tools.${version};
     }
   ) buildToolsVersions;
 
@@ -95,20 +95,20 @@ rec {
 
   emulator = import ./emulator.nix {
     inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
-    package = packages.emulator."${emulatorVersion}"."${os}";
+    package = packages.emulator.${emulatorVersion}.${os};
   };
 
   platforms = map (version:
     deployAndroidPackage {
       inherit os;
-      package = packages.platforms."${version}";
+      package = packages.platforms.${version};
     }
   ) platformVersions;
 
   sources = map (version:
     deployAndroidPackage {
       inherit os;
-      package = packages.sources."${version}";
+      package = packages.sources.${version};
     }
   ) platformVersions;
 
@@ -132,33 +132,33 @@ rec {
   lldb = map (version:
     import ./lldb.nix {
       inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
-      package = packages.lldb."${version}";
+      package = packages.lldb.${version};
     }
   ) lldbVersions;
 
   cmake = map (version:
     import ./cmake.nix {
       inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
-      package = packages.cmake."${version}";
+      package = packages.cmake.${version};
     }
   ) cmakeVersions;
 
   ndk-bundle = import ./ndk-bundle {
     inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs lib platform-tools;
-    package = packages.ndk-bundle."${ndkVersion}";
+    package = packages.ndk-bundle.${ndkVersion};
   };
 
   google-apis = map (version:
     deployAndroidPackage {
       inherit os;
-      package = addons.addons."${version}".google_apis;
+      package = addons.addons.${version}.google_apis;
     }
   ) (builtins.filter (platformVersion: platformVersion < "26") platformVersions); # API level 26 and higher include Google APIs by default
 
   google-tv-addons = map (version:
     deployAndroidPackage {
       inherit os;
-      package = addons.addons."${version}".google_tv_addon;
+      package = addons.addons.${version}.google_tv_addon;
     }
   ) platformVersions;
 
@@ -225,10 +225,10 @@ rec {
       # Link extras
       ${lib.concatMapStrings (identifier:
         let
-          path = addons.extras."${identifier}".path;
+          path = addons.extras.${identifier}.path;
           addon = deployAndroidPackage {
             inherit os;
-            package = addons.extras."${identifier}";
+            package = addons.extras.${identifier};
           };
         in
         ''

@@ -6,10 +6,10 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   version = "2.9";
 
-  name = "wpa_supplicant-${version}";
+  pname = "wpa_supplicant";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${name}.tar.gz";
+    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
     sha256 = "05qzak1mssnxcgdrafifxh9w86a4ha69qabkg4bsigk499xyxggw";
   };
 

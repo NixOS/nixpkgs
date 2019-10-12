@@ -4,7 +4,7 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "postfix_exporter-${version}";
+  pname = "postfix_exporter";
   version = "0.1.2";
 
   goPackagePath = "github.com/kumina/postfix_exporter";

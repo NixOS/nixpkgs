@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''usocket'';
   version = ''0.8.2'';
 

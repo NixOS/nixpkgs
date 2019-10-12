@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gmp, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mosml-${version}";
+  pname = "mosml";
   version = "2.10.1";
 
   buildInputs = [ gmp perl ];

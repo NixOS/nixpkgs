@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, postgresql, protobufc }:
 
 stdenv.mkDerivation rec {
-  name = "cstore_fdw-${version}";
+  pname = "cstore_fdw";
   version = "1.6.2";
 
   nativeBuildInputs = [ protobufc ];

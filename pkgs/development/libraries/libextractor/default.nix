@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./fix-gcc8-build.patch
     # Fixes build with exiv2 0.27
     (fetchpatch {
       name = "libextractor-exiv2-0.27.patch";

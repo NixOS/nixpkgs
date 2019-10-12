@@ -271,6 +271,33 @@
     };
   }
   {
+    goPackagePath = "github.com/kr/pretty";
+    fetch = {
+      type = "git";
+      url = "https://github.com/kr/pretty";
+      rev = "v0.1.0";
+      sha256 = "18m4pwg2abd0j9cn5v3k2ksk9ig4vlwxmlw9rrglanziv9l967qp";
+    };
+  }
+  {
+    goPackagePath = "github.com/kr/pty";
+    fetch = {
+      type = "git";
+      url = "https://github.com/kr/pty";
+      rev = "v1.1.1";
+      sha256 = "0383f0mb9kqjvncqrfpidsf8y6ns5zlrc91c6a74xpyxjwvzl2y6";
+    };
+  }
+  {
+    goPackagePath = "github.com/kr/text";
+    fetch = {
+      type = "git";
+      url = "https://github.com/kr/text";
+      rev = "v0.1.0";
+      sha256 = "1gm5bsl01apvc84bw06hasawyqm4q84vx1pm32wr9jnd7a8vjgj1";
+    };
+  }
+  {
     goPackagePath = "github.com/libgit2/git2go";
     fetch = {
       type = "git";
@@ -478,15 +505,6 @@
     };
   }
   {
-    goPackagePath = "gitlab.com/gitlab-org/gitaly-proto";
-    fetch = {
-      type = "git";
-      url = "https://gitlab.com/gitlab-org/gitaly-proto.git";
-      rev = "v1.36.0";
-      sha256 = "0xma8ys3lf1bdhlkmcis31xs1h1dshcr5796wwfwnzijwk6422m3";
-    };
-  }
-  {
     goPackagePath = "gitlab.com/gitlab-org/labkit";
     fetch = {
       type = "git";
@@ -509,8 +527,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "c2843e01d9a2";
-      sha256 = "01xgxbj5r79nmisdvpq48zfy8pzaaj90bn6ngd4nf33j9ar1dp8r";
+      rev = "20be4c3c3ed5";
+      sha256 = "1ph7y8v30hc95h1dwr7vrhg1nzs47a261qin6zg8mhf12g5k2lxb";
     };
   }
   {
@@ -554,8 +572,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "d0b11bdaac8a";
-      sha256 = "18yfsmw622l7gc5sqriv5qmck6903vvhivpzp8i3xfy3z33dybdl";
+      rev = "953cdadca894";
+      sha256 = "0gkha4whk8xkcv3isigbs250akag99isxnd3v9xmy0kl3g88hxy1";
     };
   }
   {
@@ -626,8 +644,8 @@
     fetch = {
       type = "git";
       url = "https://gopkg.in/check.v1";
-      rev = "20d25e280405";
-      sha256 = "0k1m83ji9l1a7ng8a7v40psbymxasmssbrrhpdv2wl4rhs0nc3np";
+      rev = "788fd7840127";
+      sha256 = "0v3bim0j375z81zrpr5qv42knqs0y2qv2vkjiqi5axvb78slki1a";
     };
   }
   {

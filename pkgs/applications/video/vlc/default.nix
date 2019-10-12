@@ -5,7 +5,7 @@
 , libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
-, libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
+, libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
 , onlyLibVLC ? false
@@ -24,11 +24,11 @@ with stdenv.lib;
 assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
 
 stdenv.mkDerivation rec {
-  name = "vlc-${version}";
+  pname = "vlc";
   version = "3.0.8";
 
   src = fetchurl {
-    url = "http://get.videolan.org/vlc/${version}/${name}.tar.xz";
+    url = "http://get.videolan.org/vlc/${version}/${pname}-${version}.tar.xz";
     sha256 = "e0149ef4a20a19b9ecd87309c2d27787ee3f47dfd47c6639644bc1f6fd95bdf6";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpgerror
     libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
     systemd gnutls avahi libcddb SDL SDL_image libmtp unzip taglib libarchive
-    libkate libtiger libv4l samba liboggz libass libdvbpsi libva
+    libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
     xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
     libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
     fluidsynth wayland wayland-protocols

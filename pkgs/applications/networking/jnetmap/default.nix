@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "jnetmap-${version}";
+  pname = "jnetmap";
   version = "0.5.4";
 
   src = fetchurl {

@@ -3,8 +3,8 @@
 , openssl, libuuid, gnu-efi, libbfd
 }:
 
-stdenv.mkDerivation rec {
-  name = "sbsigntool-${version}";
+stdenv.mkDerivation {
+  pname = "sbsigntool";
   version = "0.9.1";
 
   src = fetchgit {

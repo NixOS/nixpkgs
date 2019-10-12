@@ -16,7 +16,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cairo2 ];
 
   meta = {
-    description = "OCaml interface to gtk+-3";
+    description = "OCaml interface to GTK 3";
     homepage = "http://lablgtk.forge.ocamlcore.org/";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];

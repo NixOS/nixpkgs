@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "highlight-${version}";
+  pname = "highlight";
   version = "3.53";
 
   src = fetchFromGitLab {

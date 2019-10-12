@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kodelife";
-  version = "0.8.3.93";
+  version = "0.8.5.99";
 
   src = fetchzip {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-linux-x86_64.zip";
-    sha256 = "1gidh0745g5mc8h5ypm2wamv1paymnrq3nh3yx1j70jwjg8v2v7g";
+    sha256 = "189i2j6kaygjb5pccynxv4pwqpy67jf9nfi7fjfhbrmjpqnmkp90";
   };
 
   dontConfigure = true;

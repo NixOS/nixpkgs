@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub , cairomm, cmake, libjack2, libpthreadstubs, libXdmcp, libxshmfence, libsndfile, lv2, ntk, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "artyFX-${version}";
+  pname = "artyFX";
   version = "1.3";
 
   src = fetchFromGitHub {

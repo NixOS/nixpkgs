@@ -17,7 +17,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kisslicer-1.6.3";
 
   src = fetchzip {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, ocaml }:
 
 stdenv.mkDerivation rec {
-  name = "ott-${version}";
+  pname = "ott";
   version = "0.28";
 
   src = fetchFromGitHub {

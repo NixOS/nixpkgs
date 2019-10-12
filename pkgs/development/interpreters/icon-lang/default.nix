@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libX11, libXt , withGraphics ? true }:
 
 stdenv.mkDerivation rec {
-  name = "icon-lang-${version}";
+  pname = "icon-lang";
   version = "9.5.1";
   src = fetchFromGitHub {
     owner = "gtownsend";

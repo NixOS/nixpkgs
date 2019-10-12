@@ -8,7 +8,7 @@
 # - https://github.com/Mic92/dotfiles/blob/ba2a01144cfdc71c829d872a3fc816c64663ad7f/nixos/vms/matchbox/modules/cloud-print-connector.nix
 
 buildGoPackage rec {
-  name = "cloud-print-connector-unstable-${version}";
+  pname = "cloud-print-connector-unstable";
   version = "1.16";
   rev = "481ad139cc023a3ba65e769f08f277368fa8a5de";
 

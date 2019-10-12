@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.18";
-  name    = "commons-compress-${version}";
+  pname = "commons-compress";
 
   src = fetchurl {
-    url    = "mirror://apache/commons/compress/binaries/${name}-bin.tar.gz";
+    url    = "mirror://apache/commons/compress/binaries/${pname}-${version}-bin.tar.gz";
     sha256 = "0ciwzq134rqh1fp7qba091rajf2pdagfb665rarni7glb2x4lha1";
   };
 

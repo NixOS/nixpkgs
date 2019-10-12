@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gfortran, perl }:
 
 stdenv.mkDerivation rec {
-  name = "hoppet-${version}";
+  pname = "hoppet";
   version = "1.2.0";
 
   src = fetchurl {
-    url = "https://hoppet.hepforge.org/downloads/${name}.tgz";
+    url = "https://hoppet.hepforge.org/downloads/${pname}-${version}.tgz";
     sha256 = "0j7437rh4xxbfzmkjr22ry34xm266gijzj6mvrq193fcsfzipzdz";
   };
 

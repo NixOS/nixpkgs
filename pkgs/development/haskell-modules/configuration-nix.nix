@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.connector-c; });
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.libmysqlclient; });
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
@@ -94,7 +94,21 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  cachix = enableSeparateBinOutput super.cachix;
+  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
+  cachix = disableLibraryProfiling super.cachix;
+
+  niv = enableSeparateBinOutput super.niv;
+
+  # Ensure the necessary frameworks for Darwin.
+  OpenAL = if pkgs.stdenv.isDarwin
+    then addExtraLibrary super.OpenAL pkgs.darwin.apple_sdk.frameworks.OpenAL
+    else super.OpenAL;
+
+  # Ensure the necessary frameworks for Darwin.
+  proteaaudio = if pkgs.stdenv.isDarwin
+    then addExtraLibrary super.proteaaudio pkgs.darwin.apple_sdk.frameworks.AudioToolbox
+    else super.proteaaudio;
+
   ghcid = enableSeparateBinOutput super.ghcid;
 
   hzk = overrideCabal super.hzk (drv: {
@@ -153,7 +167,11 @@ self: super: builtins.intersectAttrs super {
   gio = disableHardening (addPkgconfigDepend (addBuildTool super.gio self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
   glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
   gtk3 = disableHardening (super.gtk3.override { inherit (pkgs) gtk3; }) ["fortify"];
-  gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.buildHaskellPackages.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
+  gtk = let gtk1 = addBuildTool super.gtk self.buildHaskellPackages.gtk2hs-buildtools;
+            gtk2 = addPkgconfigDepend gtk1 pkgs.gtk2;
+            gtk3 = disableHardening gtk1 ["fortify"];
+            gtk4 = if pkgs.stdenv.isDarwin then appendConfigureFlag gtk3 "-fhave-quartz-gtk" else gtk4;
+        in gtk3;
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
 
@@ -584,8 +602,17 @@ self: super: builtins.intersectAttrs super {
   snap-server = dontCheck super.snap-server;
 
   # Tests require internet
-  dhall_1_25_0 = dontCheck super.dhall_1_25_0;
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
+
+  # Hadolint wants to build a statically linked binary by default.
+  hadolint = overrideCabal super.hadolint (drv: {
+    preConfigure = "sed -i -e /ld-options:/d hadolint.cabal";
+  });
+
+  # gtk2hs-buildtools is listed in setupHaskellDepends, but we
+  # need it during the build itself, too.
+  cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;
+  pango = disableHardening (addBuildTool super.pango self.buildHaskellPackages.gtk2hs-buildtools) ["fortify"];
 
 }

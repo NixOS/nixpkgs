@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "fontmatrix-${version}";
+  pname = "fontmatrix";
   version = "0.6.0";
 
   src = fetchFromGitHub {

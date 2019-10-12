@@ -30,6 +30,7 @@
 , "dat"
 , "dhcp"
 , "dnschain"
+, "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "elm-live"
 , "elm-oracle"
@@ -56,6 +57,7 @@
 , "indium"
 , "ionic"
 , "ios-deploy"
+, { "iosevka-build-deps": "../../data/fonts/iosevka" }
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"
@@ -109,6 +111,7 @@
 , "s3http"
 , "semver"
 , "serve"
+, "serverless"
 , "shout"
 , "sloc"
 , "smartdc"

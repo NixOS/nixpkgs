@@ -1,13 +1,12 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-
-  name = "cimg-${version}";
-  version = "2.7.0";
+  pname = "cimg";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "http://cimg.eu/files/CImg_${version}.zip";
-    sha256 = "1la6332cppyciyn3pflbchxa3av72a70p0n1c9sm1hgfbjlydqnv";
+    sha256 = "1lw1hjk65zyd5x9w113yrqyy8db45jdzzkqslkipaiskl9f81y9z";
   };
 
   nativeBuildInputs = [ unzip ];

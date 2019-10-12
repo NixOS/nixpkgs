@@ -2,7 +2,8 @@
 let
   version = "2.11.0";
 in stdenv.mkDerivation {
-  name = "todo.txt-cli-${version}";
+  pname = "todo.txt-cli";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/ginatrapani/todo.txt-cli/releases/download/v${version}/todo.txt_cli-${version}.tar.gz";

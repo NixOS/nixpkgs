@@ -13,10 +13,10 @@ let
     categories = "Application;Development;";
   };
 in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
 
   inherit version;
-  name = "sqldeveloper-${version}";
+  pname = "sqldeveloper";
 
   src = requireFile rec {
     name = "sqldeveloper-${version}-no-jre.zip";

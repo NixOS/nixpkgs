@@ -6,7 +6,7 @@
 let
   mkDict =
   { name, readmeFile, dictFileName, ... }@args:
-  stdenv.mkDerivation (rec {
+  stdenv.mkDerivation ({
     inherit name;
     installPhase = ''
       # hunspell dicts
@@ -141,11 +141,12 @@ let
     };
 
   mkDictFromWordlist =
-    { shortName, shortDescription, dictFileName, src }:
+    { shortName, shortDescription, srcFileName, dictFileName, src }:
     mkDict rec {
-      inherit src dictFileName;
+      inherit src srcFileName dictFileName;
       version = "2018.04.16";
       name = "hunspell-dict-${shortName}-wordlist-${version}";
+      srcReadmeFile = "README_" + srcFileName + ".txt";
       readmeFile = "README_" + dictFileName + ".txt";
       meta = with stdenv.lib; {
         description = "Hunspell dictionary for ${shortDescription} from Wordlist";
@@ -158,7 +159,12 @@ let
       phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
-        unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
+        unzip $src ${srcFileName}.dic ${srcFileName}.aff ${srcReadmeFile}
+      '';
+      postUnpack = ''
+        mv ${srcFileName}.dic ${dictFileName}.dic || true
+        mv ${srcFileName}.aff ${dictFileName}.aff || true
+        mv ${srcReadmeFile} ${readmeFile}         || true
       '';
     };
 
@@ -294,6 +300,7 @@ in rec {
   en-us = mkDictFromWordlist {
     shortName = "en-us";
     shortDescription = "English (United States)";
+    srcFileName = "en_US";
     dictFileName = "en_US";
     src = fetchurl {
       url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-2018.04.16.zip;
@@ -301,10 +308,23 @@ in rec {
     };
   };
 
+  en_US-large = en-us-large;
+  en-us-large = mkDictFromWordlist {
+    shortName = "en-us-large";
+    shortDescription = "English (United States) Large";
+    srcFileName = "en_US-large";
+    dictFileName = "en_US";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-large-2018.04.16.zip;
+      sha256 = "1xm9jgqbivp5cb78ykjxg47vzq1yqj82l7r4q5cjpivrv99s49qc";
+    };
+  };
+
   en_CA = en-ca;
   en-ca = mkDictFromWordlist {
     shortName = "en-ca";
     shortDescription = "English (Canada)";
+    srcFileName = "en_CA";
     dictFileName = "en_CA";
     src = fetchurl {
       url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-2018.04.16.zip;
@@ -312,24 +332,50 @@ in rec {
     };
   };
 
+  en_CA-large = en-ca-large;
+  en-ca-large = mkDictFromWordlist {
+    shortName = "en-ca-large";
+    shortDescription = "English (Canada) Large";
+    srcFileName = "en_CA-large";
+    dictFileName = "en_CA";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-large-2018.04.16.zip;
+      sha256 = "1200xxyvv6ni8nk52v3059c367817vnrkm0cdh38rhiigb5flfha";
+    };
+  };
+
+  en_AU = en-au;
   en-au = mkDictFromWordlist {
     shortName = "en-au";
     shortDescription = "English (Australia)";
+    srcFileName = "en_AU";
     dictFileName = "en_AU";
     src = fetchurl {
       url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-2018.04.16.zip;
       sha256 = "1kp06npl1kd05mm9r52cg2iwc13x02zwqgpibdw15b6x43agg6f5";
     };
   };
-  en_AU = en-au;
+
+  en_AU-large = en-au-large;
+  en-au-large = mkDictFromWordlist {
+    shortName = "en-au-large";
+    shortDescription = "English (Australia) Large";
+    srcFileName = "en_AU-large";
+    dictFileName = "en_AU";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-large-2018.04.16.zip;
+      sha256 = "14l1w4dpk0k1js2wwq5ilfil89ni8cigph95n1rh6xi4lzxj7h6g";
+    };
+  };
 
   en_GB-ise = en-gb-ise;
   en-gb-ise = mkDictFromWordlist {
     shortName = "en-gb-ise";
     shortDescription = "English (United Kingdom, 'ise' ending)";
-    dictFileName = "en_GB-ise";
+    srcFileName = "en_GB-ise";
+    dictFileName = "en_GB";
     src = fetchurl {
-      url = mirror://sourceforge/wordlist/speller//hunspell-en_GB-ise-2018.04.16.zip;
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ise-2018.04.16.zip;
       sha256 = "0ylg1zvfvsawamymcc9ivrqcb9qhlpgpnizm076xc56jz554xc2l";
     };
   };
@@ -338,10 +384,23 @@ in rec {
   en-gb-ize = mkDictFromWordlist {
     shortName = "en-gb-ize";
     shortDescription = "English (United Kingdom, 'ize' ending)";
-    dictFileName = "en_GB-ize";
+    srcFileName = "en_GB-ize";
+    dictFileName = "en_GB";
     src = fetchurl {
-      url = mirror://sourceforge/wordlist/speller//hunspell-en_GB-ize-2018.04.16.zip;
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ize-2018.04.16.zip;
       sha256 = "1rmwy6sxmd400cwjf58az6g14sq28p18f5mlq8ybg8y33q9m42ps";
+    };
+  };
+
+  en_GB-large = en-gb-large;
+  en-gb-large = mkDictFromWordlist {
+    shortName = "en-gb-large";
+    shortDescription = "English (United Kingdom) Large";
+    srcFileName = "en_GB-large";
+    dictFileName = "en_GB";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-large-2018.04.16.zip;
+      sha256 = "1y4d7x5vvi1qh1s3i09m0vvqrpdzzqhsdngr8nsh7hc5bnlm37mi";
     };
   };
 
@@ -542,7 +601,7 @@ in rec {
   /* ITALIAN */
 
   it_IT = it-it;
-  it-it =  mkDictFromLinguistico rec {
+  it-it =  mkDictFromLinguistico {
     shortName = "it-it";
     dictFileName = "it_IT";
     shortDescription = "Hunspell dictionary for 'Italian (Italy)' from Linguistico";
@@ -598,7 +657,7 @@ in rec {
   /* SWEDISH */
 
   sv_SE = sv-se;
-  sv-se = mkDictFromDSSO rec {
+  sv-se = mkDictFromDSSO {
     shortName = "sv-se";
     dictFileName = "sv_SE";
     shortDescription = "Swedish (Sweden)";
@@ -606,7 +665,7 @@ in rec {
 
   # Finlandian Swedish (hello Linus Torvalds)
   sv_FI = sv-fi;
-  sv-fi = mkDictFromDSSO rec {
+  sv-fi = mkDictFromDSSO {
     shortName = "sv-fi";
     dictFileName = "sv_FI";
     shortDescription = "Swedish (Finland)";

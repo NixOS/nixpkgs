@@ -1,14 +1,14 @@
 { buildGoPackage, fetchFromGitHub, go-bindata, lib }:
 
 buildGoPackage rec {
-  name = "morph-${version}";
-  version = "1.2.0";
+  pname = "morph";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "dbcdk";
     repo = "morph";
     rev = "v${version}";
-    sha256 = "0jhypvj45yjg4cn4rvb2j9091pl6z5j541vcfaln5sb3ds14fkwf";
+    sha256 = "0nwl9n5b0lnil96573wa3hyr3vyvfiwvmpkla3pmwkpmriac4xrg";
   };
 
   goPackagePath = "github.com/dbcdk/morph";

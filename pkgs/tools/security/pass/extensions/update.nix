@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "pass-update-${version}";
+  pname = "pass-update";
   version = "2.0";
 
   src = fetchFromGitHub {

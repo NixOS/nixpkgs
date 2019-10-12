@@ -13,6 +13,7 @@ mkDerivation {
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ libgit2 ];
   propagatedBuildInputs = [

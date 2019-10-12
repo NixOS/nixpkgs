@@ -2,7 +2,7 @@
 , z3, python }:
 
 stdenv.mkDerivation rec {
-  name = "cuter-${version}";
+  pname = "cuter";
   version = "0.1";
 
   src = fetchFromGitHub {

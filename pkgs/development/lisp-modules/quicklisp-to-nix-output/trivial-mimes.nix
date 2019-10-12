@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''trivial-mimes'';
   version = ''20190710-git'';
 

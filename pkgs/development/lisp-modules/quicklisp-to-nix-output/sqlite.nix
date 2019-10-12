@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''sqlite'';
   version = ''cl-20130615-git'';
 

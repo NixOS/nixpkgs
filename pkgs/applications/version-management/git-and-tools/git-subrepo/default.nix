@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
-    "INSTALL_LIB=${placeholder ''out''}/bin"
-    "INSTALL_MAN=${placeholder ''out''}/share/man/man1"
+    "PREFIX=${placeholder "out"}"
+    "INSTALL_LIB=${placeholder "out"}/bin"
+    "INSTALL_MAN=${placeholder "out"}/share/man/man1"
   ];
 
   patches = [

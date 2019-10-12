@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "dnsmasq_exporter-${version}";
+  pname = "dnsmasq_exporter";
   version = "0.1.0";
 
   goPackagePath = "github.com/google/dnsmasq_exporter";

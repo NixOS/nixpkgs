@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libX11, zlib, xorgproto, libGL ? null, freeglut ? null }:
 
 stdenv.mkDerivation rec {
-  name = "construo-${version}";
+  pname = "construo";
   version = "0.2.3";
 
   src = fetchurl {
-    url = "https://github.com/Construo/construo/releases/download/v${version}/${name}.tar.gz";
+    url = "https://github.com/Construo/construo/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "1wmj527hbj1qv44cdsj6ahfjrnrjwg2dp8gdick8nd07vm062qxa";
   };
 

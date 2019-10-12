@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "saltstack";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0z9f25d2wpf3lnqzmmnrlvl5b1f7kqwjjf4nzs9x2bpf91s5zny1";
   };

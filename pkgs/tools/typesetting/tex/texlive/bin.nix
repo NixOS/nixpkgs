@@ -17,7 +17,7 @@ let
   year = "2018";
   version = year; # keep names simple for now
 
-  common = rec {
+  common = {
     src = fetchurl {
       urls = [
         "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0414-source.tar.xz"
@@ -91,7 +91,8 @@ texliveYear = year;
 
 
 core = stdenv.mkDerivation rec {
-  name = "texlive-bin-${version}";
+  pname = "texlive-bin";
+  inherit version;
 
   inherit (common) src patches postPatch preAutoreconf postAutoreconf;
 
@@ -183,7 +184,8 @@ core = stdenv.mkDerivation rec {
 
 inherit (core-big) metafont metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
-  name = "texlive-core-big.bin-${version}";
+  pname = "texlive-core-big.bin";
+  inherit version;
 
   inherit (common) src patches postPatch preAutoreconf postAutoreconf;
 
@@ -246,7 +248,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
 
 dvisvgm = stdenv.mkDerivation {
-  name = "texlive-dvisvgm.bin-${version}";
+  pname = "texlive-dvisvgm.bin";
+  inherit version;
 
   inherit (common) src;
 
@@ -263,7 +266,8 @@ dvisvgm = stdenv.mkDerivation {
 
 
 dvipng = stdenv.mkDerivation {
-  name = "texlive-dvipng.bin-${version}";
+  pname = "texlive-dvipng.bin";
+  inherit version;
 
   inherit (common) src;
 
@@ -318,7 +322,8 @@ latexindent = perlPackages.buildPerlPackage rec {
 inherit biber;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {
-  name = "texlive-bibtex-x.bin-${version}";
+  pname = "texlive-bibtex-x.bin";
+  inherit version;
 
   inherit (common) src;
 
@@ -335,7 +340,8 @@ bibtex8 = stdenv.mkDerivation {
 
 
 xdvi = stdenv.mkDerivation {
-  name = "texlive-xdvi.bin-${version}";
+  pname = "texlive-xdvi.bin";
+  inherit version;
 
   inherit (common) src;
 
@@ -363,7 +369,8 @@ xdvi = stdenv.mkDerivation {
 {
 
 xindy = stdenv.mkDerivation {
-  name = "texlive-xindy.bin-${version}";
+  pname = "texlive-xindy.bin";
+  inherit version;
 
   inherit (common) src;
 

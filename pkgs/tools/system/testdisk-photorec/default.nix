@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "testdisk-photorec-${version}";
+  pname = "testdisk-photorec";
   version = "7.0";
   src = fetchurl {
     url = "https://www.cgsecurity.org/testdisk-${version}.tar.bz2";

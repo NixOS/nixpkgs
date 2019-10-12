@@ -11,8 +11,8 @@ let arch =
     else if stdenv.hostPlatform.system == "i686-linux" then "32"
     else throw "Unsupported system ${stdenv.hostPlatform.system}";
 
-in stdenv.mkDerivation rec {
-  name = "cnijfilter-${version}";
+in stdenv.mkDerivation {
+  pname = "cnijfilter";
 
   /* important note about versions: cnijfilter packages seem to use
      versions in a non-standard way.  the version indicates which

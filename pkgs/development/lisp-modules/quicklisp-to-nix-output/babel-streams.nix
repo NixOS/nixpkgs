@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''babel-streams'';
   version = ''babel-20171227-git'';
 

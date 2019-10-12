@@ -1,6 +1,6 @@
 { mkXfceDerivation, exo, gtk3, libxfce4ui, libxfce4util, libwnck3, xfconf, libnotify, garcon, thunar }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "xfce";
   pname = "xfdesktop";
   version = "4.14.1";

@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.6.2";
-  name = "darktable-${version}";
+  pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";

@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , cmake
 , pkgconfig
+, vala
 , pantheon
 , curl
 , glib
@@ -14,7 +15,8 @@
 , libunity
 , miniupnpc
 , openssl
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "torrential";
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pantheon.vala
+    vala
     pkgconfig
     wrapGAppsHook
   ];

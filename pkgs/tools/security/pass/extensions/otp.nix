@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, oathToolkit }:
 
 stdenv.mkDerivation rec {
-  name = "pass-otp-${version}";
+  pname = "pass-otp";
   version = "1.2.0";
 
   src = fetchFromGitHub {

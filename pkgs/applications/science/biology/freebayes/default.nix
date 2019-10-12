@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, zlib, bzip2, lzma }:
 
 stdenv.mkDerivation rec {
-  name    = "freebayes-${version}";
+  pname = "freebayes";
   version = "2017-08-23";
 
   src = fetchFromGitHub {

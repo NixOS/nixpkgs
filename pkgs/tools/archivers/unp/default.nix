@@ -7,8 +7,8 @@
 let
   runtime_bins =  [ file unzip gzip ] ++ extraBackends;
 
-in stdenv.mkDerivation rec {
-  name = "unp-${version}";
+in stdenv.mkDerivation {
+  pname = "unp";
   version = "2.0-pre7";
   buildInputs = [ perl makeWrapper ];
 

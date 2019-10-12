@@ -34,6 +34,7 @@ let
     "node"
     "postfix"
     "postgres"
+    "rspamd"
     "snmp"
     "surfboard"
     "tor"
@@ -132,14 +133,10 @@ let
     in
     mkIf conf.enable {
       warnings = conf.warnings or [];
-      users.users = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
-        "${name}-exporter" = {
-          description = ''
-            Prometheus ${name} exporter service user
-          '';
-          isSystemUser = true;
-          inherit (conf) group;
-        };
+      users.users."${name}-exporter" = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
+        description = "Prometheus ${name} exporter service user";
+        isSystemUser = true;
+        inherit (conf) group;
       });
       users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
         "${name}-exporter" = {};
@@ -197,6 +194,8 @@ in
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
     services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
+  })] ++ [(mkIf config.services.rspamd.enable {
+    services.prometheus.exporters.rspamd.url = mkDefault "http://localhost:11334/stat";
   })] ++ (mapAttrsToList (name: conf:
     mkExporterConf {
       inherit name;

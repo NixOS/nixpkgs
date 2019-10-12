@@ -35,7 +35,7 @@ in {
         '';
       };
       extraArgs = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = ''
           A list of commandline-switches forwarded to a riemann-tool.

@@ -5,7 +5,7 @@
   incidenceeditor, kcalcore, kcalutils, kconfig, kdbusaddons, kdeclarative,
   kdepim-apps-libs, kholidays, ki18n, kmime, ktexteditor, ktnef, libgravatar,
   libksieve, mailcommon, mailimporter, messagelib, poppler, prison, kpkpass,
-  kitinerary
+  kitinerary, kontactinterface
 }:
 
 mkDerivation {
@@ -20,6 +20,6 @@ mkDerivation {
     incidenceeditor kcalcore kcalutils kconfig kdbusaddons kdeclarative
     kdepim-apps-libs kholidays ki18n kmime ktexteditor ktnef libgravatar
     libksieve mailcommon mailimporter messagelib poppler prison kpkpass
-    kitinerary
+    kitinerary kontactinterface
   ];
 }

@@ -37,6 +37,9 @@ buildPythonPackage rec {
     HOME=$(mktemp -d) pytest ipykernel -k "not (test_sys_path or test_sys_path_profile_dir or test_complete)"
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "IPython Kernel for Jupyter";
     homepage = http://ipython.org/;

@@ -3,7 +3,7 @@
 let
   pname = "cxxtest";
   version = "4.4";
-in python2Packages.buildPythonApplication rec {
+in python2Packages.buildPythonApplication {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

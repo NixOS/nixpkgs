@@ -14,8 +14,10 @@ let
     storage = dataDir;
     p2p = {
       public_address = "/ip4/127.0.0.1/tcp/8299";
-      messages = "high";
-      blocks = "high";
+      topics_of_interest = {
+        messages = "high";
+        blocks = "high";
+      };
     };
     rest = {
       listen = "127.0.0.1:8607";
@@ -54,7 +56,7 @@ in {
      };
 
       genesisBlockHash = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         example = "d70495af81ae8600aca3e642b2427327cb6001ec4d7a0037e96a00dabed163f9";
         description = ''
@@ -82,6 +84,9 @@ in {
       description = "jormungandr server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
+      environment = {
+        RUST_BACKTRACE = "full";
+      };
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = baseNameOf dataDir;

@@ -1,42 +1,33 @@
-{ stdenv, buildPythonPackage, fetchPypi, alembic, aiosmtpd, dnspython
-, flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
-, requests, zope_configuration, click, falcon, importlib-resources
-, zope_component
-}:
+{ stdenv, fetchurl, python2 }:
 
-buildPythonPackage rec {
+stdenv.mkDerivation rec {
   pname = "mailman";
-  version = "3.2.2";
+  version = "2.1.29";
 
-  patches = [ ./0001-Find-external-tools-via-PATH-rather-than-hard-coding.patch ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "09s9p5pb8gff6zblwidyq830yfgcvv50p5drdaxj1qpy8w46lvc6";
+  src = fetchurl {
+    url = "mirror://gnu/mailman/${pname}-${version}.tgz";
+    sha256 = "0b0dpwf6ap260791c7lg2vpw30llf19hymbf2hja3s016rqp5243";
   };
 
-  propagatedBuildInputs = [
-    alembic aiosmtpd click dnspython falcon flufl_bounce flufl_i18n flufl_lock
-    importlib-resources lazr_config passlib requests zope_configuration
-    zope_component
+  buildInputs = [ python2 python2.pkgs.dnspython ];
+
+  patches = [ ./fix-var-prefix.patch ];
+
+  configureFlags = [
+    "--without-permcheck"
+    "--with-cgi-ext=.cgi"
+    "--with-var-prefix=/var/lib/mailman"
   ];
 
-  # Mailman assumes that those scripts in $out/bin are Python scripts. Wrapping
-  # them in shell code breaks this assumption. The proper way to use mailman is
-  # to create a specialized python interpreter:
-  #
-  #   python37.withPackages (ps: [ps.mailman])
-  #
-  # This gives a properly wrapped 'mailman' command plus an interpreter that
-  # has all the necessary search paths to execute unwrapped 'master' and
-  # 'runner' scripts. The setup is a little tricky, but fortunately NixOS is
-  # about to get a OS module that takes care of those details.
-  dontWrapPythonPrograms = true;
+  installTargets = "doinstall"; # Leave out the 'update' target that's implied by 'install'.
+
+  makeFlags = [ "DIRSETGID=:" ];
 
   meta = {
     homepage = https://www.gnu.org/software/mailman/;
-    description = "Free software for managing electronic mail discussion and newsletter lists";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ peti ];
+    description = "Free software for managing electronic mail discussion and e-newsletter lists";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

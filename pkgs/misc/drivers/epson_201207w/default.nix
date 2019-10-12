@@ -5,7 +5,8 @@ let
 in
   stdenv.mkDerivation {
 
-    name = "epson_201207w-${version}";
+    pname = "epson_201207w";
+    inherit version;
 
     src = fetchurl {
       url = "https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201207w-${version}-1lsb3.2.src.rpm";

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, capstone, libbfd, libelf, libiberty, readline }:
 
-stdenv.mkDerivation rec {
-  name = "wcc-unstable-${version}";
+stdenv.mkDerivation {
+  pname = "wcc-unstable";
   version = "2018-04-05";
 
   src = fetchFromGitHub {

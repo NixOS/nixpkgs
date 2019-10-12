@@ -58,6 +58,10 @@ in python.pkgs.buildPythonApplication rec {
   # no tests implemented
   doCheck = false;
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "pyyaml==5.1" "pyyaml"
+  '';
+
   meta = with lib; {
     description = "Sandboxed python execution environment for writing automation apps for Home Assistant";
     homepage = https://github.com/home-assistant/appdaemon;

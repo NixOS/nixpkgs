@@ -1,14 +1,13 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "datefudge";
-  version = "1.22";
-  name = "${pname}-${version}";
+  version = "1.23";
 
   src = fetchgit {
     url = "https://salsa.debian.org/debian/datefudge.git";
-    rev = "fe27db47a0f250fb56164114fff8ae8d5af47ab6";
-    sha256 = "1fmd05r00wx4zc90lbi804jl7xwdl11jq2a1kp5lqimk3yyvfw4c";
+    rev = "090d3aace17640478f7f5119518b2f4196f62617";
+    sha256 = "0r9g8v9xnv60hq3j20wqy34kyig3sc2pisjxl4irn7jjx85f1spv";
   };
 
   patchPhase = ''

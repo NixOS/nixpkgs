@@ -5,7 +5,8 @@
 let
   version = "2017-03-15";
 in mkDerivation rec {
-  name = "kde2-decoration-${version}";
+  pname = "kde2-decoration";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "repos-holder";

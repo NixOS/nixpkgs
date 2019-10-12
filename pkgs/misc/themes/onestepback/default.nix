@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "onestepback-${version}";
+  pname = "onestepback";
   version = "0.991";
 
   srcs = [

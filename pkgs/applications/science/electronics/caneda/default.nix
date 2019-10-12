@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt }:
 
 stdenv.mkDerivation rec {
-  name = "caneda-${version}";
+  pname = "caneda";
   version = "0.3.1";
 
   src = fetchFromGitHub {

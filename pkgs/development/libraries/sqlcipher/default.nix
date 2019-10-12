@@ -3,7 +3,7 @@
 assert readline != null -> ncurses != null;
 
 stdenv.mkDerivation rec {
-  name = "sqlcipher-${version}";
+  pname = "sqlcipher";
   version = "4.2.0";
 
   src = fetchFromGitHub {

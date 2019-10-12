@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=format-truncation"
     "-Wno-error=pointer-compare"
     "-Wno-error=memset-elt-size"
+    "-Wno-error=restrict"
   ];
 
   postPatch = ''

@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''form-fiddle'';
   version = ''20190710-git'';
 

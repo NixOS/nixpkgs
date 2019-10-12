@@ -2,7 +2,7 @@
 , readline }:
 
 stdenv.mkDerivation rec {
-  name    = "mercury-${version}";
+  pname = "mercury";
   version = "14.01.1";
 
   src = fetchurl {

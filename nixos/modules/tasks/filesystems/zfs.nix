@@ -268,7 +268,12 @@ in
     };
 
     services.zfs.trim = {
-      enable = mkEnableOption "Enables periodic TRIM on all ZFS pools.";
+      enable = mkOption {
+        description = "Whether to enable periodic TRIM on all ZFS pools.";
+        default = true;
+        example = false;
+        type = types.bool;
+      };
 
       interval = mkOption {
         default = "weekly";
@@ -469,7 +474,7 @@ in
                       map createSyncService allPools ++
                       map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
-      systemd.targets."zfs-import" =
+      systemd.targets.zfs-import =
         let
           services = map (pool: "zfs-import-${pool}.service") dataPools;
         in
@@ -479,7 +484,7 @@ in
             wantedBy = [ "zfs.target" ];
           };
 
-      systemd.targets."zfs".wantedBy = [ "multi-user.target" ];
+      systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })
 
     (mkIf enableAutoSnapshots {

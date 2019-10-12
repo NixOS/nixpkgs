@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "goconst-${version}";
+  pname = "goconst";
   version = "1.1.0";
 
   goPackagePath = "github.com/jgautheron/goconst";

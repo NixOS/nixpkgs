@@ -4,7 +4,7 @@ networkmanager, ppp, libsecret, withGnome ? true, gnome3 }:
 let
   pname = "NetworkManager-fortisslvpn";
   version = "1.2.10";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {

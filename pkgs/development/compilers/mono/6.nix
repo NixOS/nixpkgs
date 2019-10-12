@@ -1,6 +1,6 @@
 { callPackage, Foundation, libobjc }:
 
-callPackage ./generic.nix (rec {
+callPackage ./generic.nix ({
   inherit Foundation libobjc;
   version = "6.0.0.313";
   srcArchiveSuffix = "tar.xz";

@@ -14,7 +14,7 @@
 with lib;
 
 buildGoPackage rec {
-  name = "singularity-${version}";
+  pname = "singularity";
   version = "3.2.1";
 
   src = fetchFromGitHub {

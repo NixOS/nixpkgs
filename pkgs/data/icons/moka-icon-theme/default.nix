@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, faba-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "moka-icon-theme";
   version = "5.4.0";
 

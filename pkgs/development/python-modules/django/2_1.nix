@@ -24,11 +24,6 @@ buildPythonPackage rec {
     })
   ];
 
-  # patch only $out/bin to avoid problems with starter templates (see #3134)
-  postFixup = ''
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
-  '';
-
   propagatedBuildInputs = [ pytz ];
 
   # too complicated to setup

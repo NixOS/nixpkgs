@@ -2,7 +2,6 @@
   mtdev, cairo, deepin, qtbase }:
 
 mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "qt5dxcb-plugin";
   version = "1.2.2";
 
@@ -26,12 +25,12 @@ mkDerivation rec {
   ];
 
   qmakeFlags = [
-    "INSTALL_PATH=${placeholder ''out''}/${qtbase.qtPluginPrefix}/platforms"
+    "INSTALL_PATH=${placeholder "out"}/${qtbase.qtPluginPrefix}/platforms"
   ];
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugin for DDE";

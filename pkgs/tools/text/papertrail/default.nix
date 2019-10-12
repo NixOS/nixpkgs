@@ -1,7 +1,7 @@
 { stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
 
 let
-  papertrail-env = bundlerEnv rec {
+  papertrail-env = bundlerEnv {
     name = "papertrail-env";
     inherit ruby;
     gemfile = ./Gemfile;

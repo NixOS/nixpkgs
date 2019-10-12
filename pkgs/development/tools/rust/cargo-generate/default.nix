@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, Security, openssl, pkgconfig, libiconv, curl }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cargo-generate-${version}";
+  pname = "cargo-generate";
   version = "0.3.0";
 
   src = fetchFromGitHub {

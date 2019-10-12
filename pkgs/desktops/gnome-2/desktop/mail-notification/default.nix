@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   rev = "9ae8768";
   version = "5.4";
-  name = "mail-notification-${version}";
+  pname = "mail-notification";
 
   src = fetchFromGitHub {
     inherit rev;

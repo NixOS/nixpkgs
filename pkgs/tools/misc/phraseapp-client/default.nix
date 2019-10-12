@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "phraseapp-client-${version}";
+  pname = "phraseapp-client";
   version = "1.11.0";
 
   goPackagePath = "github.com/phrase/phraseapp-client";

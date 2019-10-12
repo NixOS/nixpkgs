@@ -2,8 +2,8 @@
 , Cocoa,  OpenGL
 }:
 
-stdenv.mkDerivation rec {
-  name = "bullet-${version}";
+stdenv.mkDerivation {
+  pname = "bullet";
   version = "2019-03-27";
 
   src = fetchFromGitHub {

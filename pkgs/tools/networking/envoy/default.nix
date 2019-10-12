@@ -127,7 +127,7 @@ let
   # Generate the BUILD file.
   buildFile =
     let field = name: attrs:
-      if attrs ? "${name}" then "    ${name} = ${attrs.${name}},\n" else "";
+      if attrs ? ${name} then "    ${name} = ${attrs.${name}},\n" else "";
     in
     ''
     licenses(["notice"])  # Apache 2
@@ -215,7 +215,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "envoy-${version}";
+  pname = "envoy";
   version = "1.3.0";
 
   src = fetchFromGitHub {

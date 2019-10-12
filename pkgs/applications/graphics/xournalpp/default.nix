@@ -23,7 +23,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xournalpp-${version}";
+  pname = "xournalpp";
   version = "1.0.12";
 
   src = fetchFromGitHub {

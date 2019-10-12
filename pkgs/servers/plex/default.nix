@@ -9,7 +9,7 @@
 , dataDir ? "/var/lib/plex"
 }:
 
-buildFHSUserEnv rec {
+buildFHSUserEnv {
   name = "plexmediaserver";
   inherit (plexRaw) meta;
 

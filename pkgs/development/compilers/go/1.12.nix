@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tzdata, iana-etc, runCommand
+{ stdenv, fetchurl, fetchpatch, tzdata, iana-etc, runCommand
 , perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages, pkgsTargetTarget
@@ -17,13 +17,13 @@ let
   '';
 
   goarch = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
+    i686 = "386";
+    x86_64 = "amd64";
+    aarch64 = "arm64";
+    arm = "arm";
+    armv5tel = "arm";
+    armv6l = "arm";
+    armv7l = "arm";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
 in
@@ -137,6 +137,11 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     # breaks under load: https://github.com/golang/go/issues/25628
     ./skip-test-extra-files-on-386.patch
+    (fetchpatch { # probably included in >= 1.12.10
+      url = "https://github.com/golang/go/commit/aae0b5b0b.diff";
+      name = "TestGcSys-too-much-memory.diff";
+      sha256 = "1bl9d2pl6n99n9g65cq91sygmp1iva5rmrxbprwn4xd0ql36psa8";
+    })
   ];
 
   postPatch = ''

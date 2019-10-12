@@ -2,7 +2,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "tabula-${version}";
+  pname = "tabula";
   version = "1.2.1";
 
 

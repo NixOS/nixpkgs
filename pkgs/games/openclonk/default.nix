@@ -11,7 +11,7 @@ let
   };
 in stdenv.mkDerivation rec {
   version = "8.1";
-  name = "openclonk-${version}";
+  pname = "openclonk";
 
   src = fetchurl {
     url = "https://www.openclonk.org/builds/release/8.1/openclonk-${version}-src.tar.bz2";

@@ -8,7 +8,7 @@
 # different for every user.
 
 stdenv.mkDerivation rec {
-  name = "cplex-${version}";
+  pname = "cplex";
   version = "128";
   
   src =

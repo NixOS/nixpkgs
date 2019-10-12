@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''pgloader'';
   version = ''v3.4.1'';
 

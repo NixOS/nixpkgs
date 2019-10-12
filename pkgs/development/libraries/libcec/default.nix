@@ -3,7 +3,8 @@
 let version = "4.0.4"; in
 
 stdenv.mkDerivation {
-  name = "libcec-${version}";
+  pname = "libcec";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/Pulse-Eight/libcec/archive/libcec-${version}.tar.gz";

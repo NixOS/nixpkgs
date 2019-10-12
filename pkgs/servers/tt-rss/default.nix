@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tt-rss-${version}";
+  pname = "tt-rss";
   version = "2019-01-29";
   rev = "c7c9c5fb0ab6b3d4ea3078865670d6c1dfe2ecac";
 

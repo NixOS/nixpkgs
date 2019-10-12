@@ -58,7 +58,9 @@
   ./hardware/network/intel-2200bg.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
+  ./hardware/openrazer.nix
   ./hardware/pcmcia.nix
+  ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
   ./hardware/steam-hardware.nix
   ./hardware/usb-wwan.nix
@@ -96,7 +98,6 @@
   ./programs/autojump.nix
   ./programs/bash/bash.nix
   ./programs/bcc.nix
-  ./programs/blcr.nix
   ./programs/browserpass.nix
   ./programs/captive-browser.nix
   ./programs/ccache.nix
@@ -138,9 +139,9 @@
   ./programs/qt5ct.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
+  ./programs/seahorse.nix
   ./programs/slock.nix
   ./programs/shadow.nix
-  ./programs/shell.nix
   ./programs/spacefm.nix
   ./programs/singularity.nix
   ./programs/ssh.nix
@@ -148,16 +149,19 @@
   ./programs/sysdig.nix
   ./programs/systemtap.nix
   ./programs/sway.nix
+  ./programs/system-config-printer.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/tsm-client.nix
   ./programs/udevil.nix
+  ./programs/usbtop.nix
   ./programs/venus.nix
   ./programs/vim.nix
   ./programs/wavemon.nix
   ./programs/way-cooler.nix
   ./programs/waybar.nix
   ./programs/wireshark.nix
+  ./programs/x2goserver.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
@@ -214,8 +218,6 @@
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
   ./services/backup/duplicati.nix
-  ./services/backup/crashplan.nix
-  ./services/backup/crashplan-small-business.nix
   ./services/backup/duplicity.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
@@ -280,6 +282,7 @@
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
+  ./services/desktops/blueman.nix
   ./services/desktops/deepin/deepin.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
@@ -294,18 +297,19 @@
   ./services/desktops/gnome3/chrome-gnome-shell.nix
   ./services/desktops/gnome3/evolution-data-server.nix
   ./services/desktops/gnome3/glib-networking.nix
+  ./services/desktops/gnome3/gnome-initial-setup.nix
   ./services/desktops/gnome3/gnome-keyring.nix
   ./services/desktops/gnome3/gnome-online-accounts.nix
-  ./services/desktops/gnome3/gnome-remote-desktop.nix
   ./services/desktops/gnome3/gnome-online-miners.nix
+  ./services/desktops/gnome3/gnome-remote-desktop.nix
   ./services/desktops/gnome3/gnome-settings-daemon.nix
   ./services/desktops/gnome3/gnome-user-share.nix
   ./services/desktops/gnome3/rygel.nix
-  ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix
   ./services/desktops/gnome3/tracker.nix
   ./services/desktops/gnome3/tracker-miners.nix
   ./services/desktops/profile-sync-daemon.nix
+  ./services/desktops/system-config-printer.nix
   ./services/desktops/telepathy.nix
   ./services/desktops/tumbler.nix
   ./services/desktops/zeitgeist.nix
@@ -323,6 +327,7 @@
   ./services/hardware/bluetooth.nix
   ./services/hardware/bolt.nix
   ./services/hardware/brltty.nix
+  ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
   ./services/hardware/fwupd.nix
   ./services/hardware/illum.nix
@@ -376,6 +381,7 @@
   ./services/mail/mail.nix
   ./services/mail/mailcatcher.nix
   ./services/mail/mailhog.nix
+  ./services/mail/mailman.nix
   ./services/mail/mlmmj.nix
   ./services/mail/offlineimap.nix
   ./services/mail/opendkim.nix
@@ -496,6 +502,7 @@
   ./services/monitoring/das_watchdog.nix
   ./services/monitoring/datadog-agent.nix
   ./services/monitoring/dd-agent/dd-agent.nix
+  ./services/monitoring/do-agent.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/grafana.nix
   ./services/monitoring/grafana-reporter.nix
@@ -561,7 +568,6 @@
   ./services/networking/bird.nix
   ./services/networking/bitlbee.nix
   ./services/networking/charybdis.nix
-  ./services/networking/chrony.nix
   ./services/networking/cjdns.nix
   ./services/networking/cntlm.nix
   ./services/networking/connman.nix
@@ -644,14 +650,15 @@
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
-  ./services/networking/ntpd.nix
+  ./services/networking/ntp/chrony.nix
+  ./services/networking/ntp/ntpd.nix
+  ./services/networking/ntp/openntpd.nix
   ./services/networking/nullidentdmod.nix
   ./services/networking/nylon.nix
   ./services/networking/ocserv.nix
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
-  ./services/networking/openntpd.nix
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
@@ -697,6 +704,7 @@
   ./services/networking/supybot.nix
   ./services/networking/syncthing.nix
   ./services/networking/syncthing-relay.nix
+  ./services/networking/syncplay.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
@@ -770,6 +778,7 @@
   ./services/system/uptimed.nix
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix
+  ./services/torrent/magnetico.nix
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
   ./services/torrent/transmission.nix
@@ -789,6 +798,7 @@
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix
   ./services/web-apps/miniflux.nix
+  ./services/web-apps/moodle.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
@@ -796,6 +806,7 @@
   ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
+  ./services/web-apps/shiori.nix
   ./services/web-apps/virtlyst.nix
   ./services/web-apps/wordpress.nix
   ./services/web-apps/youtrack.nix
@@ -844,6 +855,7 @@
   ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
+  ./services/x11/hardware/cmt.nix
   ./services/x11/gdk-pixbuf.nix
   ./services/x11/redshift.nix
   ./services/x11/urxvtd.nix
@@ -928,6 +940,7 @@
   ./virtualisation/anbox.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
+  ./virtualisation/cri-o.nix
   ./virtualisation/docker.nix
   ./virtualisation/docker-containers.nix
   ./virtualisation/ecs-agent.nix
@@ -941,6 +954,7 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/qemu-guest-agent.nix
+  ./virtualisation/railcar.nix
   ./virtualisation/rkt.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix

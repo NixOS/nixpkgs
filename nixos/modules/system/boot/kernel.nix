@@ -108,7 +108,7 @@ in
     boot.extraModulePackages = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "[ pkgs.linuxPackages.nvidia_x11 ]";
+      example = literalExample "[ config.boot.kernelPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
@@ -261,7 +261,7 @@ in
         source = kernelModulesConf;
       };
 
-    systemd.services."systemd-modules-load" =
+    systemd.services.systemd-modules-load =
       { wantedBy = [ "multi-user.target" ];
         restartTriggers = [ kernelModulesConf ];
         serviceConfig =

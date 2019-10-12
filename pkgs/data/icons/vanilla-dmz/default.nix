@@ -1,7 +1,7 @@
 { stdenv, lib, fetchzip, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "vanilla-dmz-${version}";
+  pname = "vanilla-dmz";
   version = "0.4.4";
   src = fetchzip {
     url = "http://ftp.de.debian.org/debian/pool/main/d/dmz-cursor-theme/dmz-cursor-theme_${version}.tar.gz";

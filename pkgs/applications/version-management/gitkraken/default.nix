@@ -12,12 +12,12 @@ let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
 in
 stdenv.mkDerivation rec {
-  name = "gitkraken-${version}";
-  version = "6.1.4";
+  pname = "gitkraken";
+  version = "6.2.1";
 
   src = fetchurl {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "10m6pwdwdxj6x64bc7mrvlvwkgqrd5prh9xx7xhvbz55q6gx4vdr";
+    sha256 = "1l1w8gr4ss0g2k7bfslnc7df4ls1av59jjjc8mrx97wsndrm3vxg";
   };
 
   libPath = makeLibraryPath [

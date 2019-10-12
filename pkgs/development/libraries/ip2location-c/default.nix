@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "ip2location-c-${version}";
+  pname = "ip2location-c";
   version = "7.0.2"; # meta.homepage might change after a major update
 
   src = fetchurl {

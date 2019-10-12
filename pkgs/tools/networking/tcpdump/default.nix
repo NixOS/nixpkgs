@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libpcap, perl }:
 
-stdenv.mkDerivation rec {
-  name = "tcpdump-${version}";
+stdenv.mkDerivation {
+  pname = "tcpdump";
   version = "4.9.2";
 
   # leaked embargoed security update

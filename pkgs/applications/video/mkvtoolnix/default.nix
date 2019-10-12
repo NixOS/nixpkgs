@@ -13,13 +13,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "36.0.0";
+  version = "37.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "114j9n2m6dkh7vqzyhcsjzzffadr0lzyjmh31cbl4mvvkg9j5z6r";
+    sha256 = "0r1qzvqc6xx7rmv4v4fjc70cqy832h8v0fjf6c5ljbg1c6pgkl0l";
   };
 
   nativeBuildInputs = [
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"
     (enableFeature withGUI "qt")
   ];
+
+  CXXFLAGS = optional stdenv.cc.isClang "-std=c++14";
 
   dontWrapQtApps = true;
   postFixup = optionalString withGUI ''

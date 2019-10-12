@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-ugly-${version}";
+  pname = "gst-plugins-ugly";
   version = "1.16.0";
 
   meta = with lib; {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-ugly/${name}.tar.xz";
+    url = "${meta.homepage}/src/gst-plugins-ugly/${pname}-${version}.tar.xz";
     sha256 = "1hm46c1fy9vl1wfwipsj41zp79cm7in1fpmjw24j5hriy32n82g3";
   };
 

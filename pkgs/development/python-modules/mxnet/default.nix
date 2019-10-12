@@ -8,7 +8,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (pkgs.mxnet) name version src meta;
 
   buildInputs = [ pkgs.mxnet ];

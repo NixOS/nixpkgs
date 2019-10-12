@@ -1,4 +1,4 @@
-{stdenv, fetchurl
+{stdenv, fetchFromGitHub
 , curl, makeWrapper, which, unzip
 , lua
 # for 'luarocks pack'
@@ -9,11 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luarocks";
-  version = "3.1.3";
+  version = "3.2.1";
 
-  src = fetchurl {
-    url="http://luarocks.org/releases/luarocks-${version}.tar.gz";
-    sha256="04q5k6drypsnbp1wspr9ns72k8kjf62a787a6jg1bb2s95gl6wy5";
+  src = fetchFromGitHub {
+    owner = "luarocks";
+    repo = "luarocks";
+    rev = "v${version}";
+    sha256 = "0viiafmb8binksda79ah828q1dfnb6jsqlk7vyndl2xvx9yfn4y2";
   };
 
   patches = [ ./darwin-3.1.3.patch ];

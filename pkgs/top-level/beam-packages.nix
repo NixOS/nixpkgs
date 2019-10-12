@@ -82,7 +82,7 @@ rec {
 
   # Each field in this tuple represents all Beam packages in nixpkgs built with
   # appropriate Erlang/OTP version.
-  packages = rec {
+  packages = {
 
     # Packages built with default Erlang version.
     erlang = packagesWith interpreters.erlang;
