@@ -5019,6 +5019,17 @@ let
     };
   };
 
+  vim-visual-increment = buildVimPluginFrom2Nix {
+    pname = "vim-visual-increment";
+    version = "2015-07-02";
+    src = fetchFromGitHub {
+      owner = "triglav";
+      repo = "vim-visual-increment";
+      rev = "e50e8f7c062cec759f665278eb58535df1611a23";
+      sha256 = "1gd6mxp9y80wf7nxcm02104l54gqz5k3dgv1h98jl9a7q9swb8y6";
+    };
+  };
+
   vim-visual-multi = buildVimPluginFrom2Nix {
     pname = "vim-visual-multi";
     version = "2019-09-26";
