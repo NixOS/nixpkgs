@@ -3276,6 +3276,12 @@
     githubId = 8460;
     name = "John Wiegley";
   };
+  jwijenbergh = {
+    email = "jeroenwijenbergh@protonmail.com";
+    github = "jwijenbergh";
+    githubId = 46386452;
+    name = "Jeroen Wijenbergh";
+  };
   jwilberding = {
     email = "jwilberding@afiniate.com";
     name = "Jordan Wilberding";
