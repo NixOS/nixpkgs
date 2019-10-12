@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl }:
+{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-tui";
@@ -12,9 +12,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "029g80mcqvmckszpbzm4hxs5w63n41ah4rc1b93i9c1nzvncd811";
-  
+
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   meta = with stdenv.lib; {
     description = "Spotify for the terminal written in Rust";
