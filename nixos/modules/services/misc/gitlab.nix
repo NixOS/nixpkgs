@@ -547,6 +547,10 @@ in {
         openssh
         nodejs
         gnupg
+
+        # Needed for GitLab project imports
+        gnutar
+        gzip
       ];
       serviceConfig = {
         Type = "simple";

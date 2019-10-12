@@ -133,7 +133,6 @@ let
     patches = optional enableWideVine ./patches/widevine.patch ++ [
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
-      ./patches/jumbo-sorted.patch
       ./patches/no-build-timestamps.patch
 
       # Unfortunately, chromium regularly breaks on major updates and
@@ -231,8 +230,6 @@ let
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
-      # at least 2X compilation speedup
-      use_jumbo_build = true;
 
       proprietary_codecs = false;
       use_sysroot = false;

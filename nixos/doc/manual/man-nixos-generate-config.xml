@@ -8,8 +8,8 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-generate-config</command>
-  </refname><refpurpose>generate NixOS configuration modules</refpurpose>
+  <refname><command>nixos-generate-config</command></refname>
+  <refpurpose>generate NixOS configuration modules</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>

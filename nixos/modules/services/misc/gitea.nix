@@ -289,8 +289,9 @@ in
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
         secretKey = "${cfg.stateDir}/custom/conf/secret_key";
       in ''
-        # Make sure that the stateDir exists, as well as the conf dir in there
+        # Make sure that the stateDir exists, as well as the conf and log dir in there
         mkdir -p ${cfg.stateDir}/conf
+        mkdir -p ${cfg.stateDir}/log
 
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
