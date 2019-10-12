@@ -6252,6 +6252,8 @@ in
 
   sshguard = callPackage ../tools/security/sshguard {};
 
+  sshping = callPackage ../tools/networking/sshping {};
+
   suricata = callPackage ../applications/networking/ids/suricata {
     python = python3;
   };
