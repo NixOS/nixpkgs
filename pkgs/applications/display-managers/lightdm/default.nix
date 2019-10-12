@@ -116,6 +116,10 @@ stdenv.mkDerivation rec {
       --replace /bin/rm ${busybox}/bin/rm
   '';
 
+  postInstall = ''
+    rm -rf $out/etc/apparmor.d $out/etc/init $out/etc/pam.d
+  '';
+
   meta = {
     homepage = https://github.com/CanonicalLtd/lightdm;
     description = "A cross-desktop display manager";
