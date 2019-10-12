@@ -1981,6 +1981,17 @@ let
     };
   };
 
+  open-browser-github-vim = buildVimPluginFrom2Nix {
+    pname = "open-browser-github-vim";
+    version = "2018-03-14";
+    src = fetchFromGitHub {
+      owner = "tyru";
+      repo = "open-browser-github.vim";
+      rev = "6f63e9c8b9482858af12c2dc60f6df2854e57f28";
+      sha256 = "06wvj6sqqzf52ng0k0p9g8wnlrljnia6h4d65681plqyxakbvi2w";
+    };
+  };
+
   open-browser-vim = buildVimPluginFrom2Nix {
     pname = "open-browser-vim";
     version = "2018-11-29";

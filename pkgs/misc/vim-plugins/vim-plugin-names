@@ -426,6 +426,7 @@ twerth/ir_black
 twinside/vim-haskellconceal
 Twinside/vim-hoogle
 tyru/caw.vim
+tyru/open-browser-github.vim
 tyru/open-browser.vim
 ujihisa/neco-look
 valloric/youcompleteme
