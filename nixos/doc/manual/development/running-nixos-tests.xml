@@ -6,8 +6,11 @@
  <title>Running Tests</title>
 
  <para>
-  You can run tests using <command>nix-build</command>. For example, to run the test <filename
-xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix">login.nix</filename>, you just do:
+  You can run tests using <command>nix-build</command>. For example, to run the
+  test
+  <filename
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix">login.nix</filename>,
+  you just do:
 <screen>
 <prompt>$ </prompt>nix-build '&lt;nixpkgs/nixos/tests/login.nix>'
 </screen>
@@ -21,7 +24,11 @@ machine: QEMU running (pid 8841)
 …
 6 out of 6 tests succeeded
 </screen>
-  After building/downloading all required dependencies, this will perform a build that starts a QEMU/KVM virtual machine containing a NixOS system. The virtual machine mounts the Nix store of the host; this makes VM creation very fast, as no disk image needs to be created. Afterwards, you can view a pretty-printed log of the test:
+  After building/downloading all required dependencies, this will perform a
+  build that starts a QEMU/KVM virtual machine containing a NixOS system. The
+  virtual machine mounts the Nix store of the host; this makes VM creation very
+  fast, as no disk image needs to be created. Afterwards, you can view a
+  pretty-printed log of the test:
 <screen>
 <prompt>$ </prompt>firefox result/log.html
 </screen>

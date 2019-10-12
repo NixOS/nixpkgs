@@ -161,11 +161,11 @@ self: super: {
   system-fileio = doJailbreak super.system-fileio;
   yaml = self.yaml_0_11_1_2;
   haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.2.patch";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/8be3fb8a6779d0317066d501a3b9dffdf6bb06b0/patches/haskell-src-meta-0.8.2.patch";
     sha256 = "146im1amywyl29kcldvgrxpwj22lrpzxysl7vc8rmn3hrq130dyc";
   });
   asn1-encoding = appendPatch (dontCheck (doJailbreak super.asn1-encoding)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/asn1-encoding-0.9.5.patch";
+    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/82d0fd9967af0699f0ccb5b38f2f0cbef6ed22de/patches/asn1-encoding-0.9.5.patch";
     sha256 = "0a3159rnaw6shjzdm46799crd4pxh33s23qy51xa7z6nv5q8wsb5";
   });
   tls = self.tls_1_5_1;

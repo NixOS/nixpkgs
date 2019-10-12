@@ -2,11 +2,13 @@
 , buildPythonPackage
 , fetchurl
 , nose
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "minidb";
   version = "2.0.2";
+  disabled = !isPy3k;
 
   src = fetchurl {
     url = "https://github.com/thp/minidb/archive/${version}.tar.gz";

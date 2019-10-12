@@ -6,7 +6,8 @@
  <title>Administration</title>
  <partintro xml:id="ch-running-intro">
   <para>
-   This chapter describes various aspects of managing a running NixOS system, such as how to use the <command>systemd</command> service manager.
+   This chapter describes various aspects of managing a running NixOS system,
+   such as how to use the <command>systemd</command> service manager.
   </para>
  </partintro>
  <xi:include href="service-mgmt.xml" />

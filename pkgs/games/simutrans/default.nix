@@ -164,6 +164,7 @@ let
       license = with licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ kkallio vcunat phile314 ];
       platforms = with platforms; linux; # TODO: ++ darwin;
+      broken = true;
     };
   };
 

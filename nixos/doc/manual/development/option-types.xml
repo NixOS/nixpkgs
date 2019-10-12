@@ -6,14 +6,18 @@
  <title>Options Types</title>
 
  <para>
-  Option types are a way to put constraints on the values a module option can take. Types are also responsible of how values are merged in case of multiple value definitions.
+  Option types are a way to put constraints on the values a module option can
+  take. Types are also responsible of how values are merged in case of multiple
+  value definitions.
  </para>
 
  <section xml:id="sec-option-types-basic">
   <title>Basic Types</title>
 
   <para>
-   Basic types are the simplest available types in the module system. Basic types include multiple string types that mainly differ in how definition merging is handled.
+   Basic types are the simplest available types in the module system. Basic
+   types include multiple string types that mainly differ in how definition
+   merging is handled.
   </para>
 
   <variablelist>
@@ -33,7 +37,8 @@
     </term>
     <listitem>
      <para>
-      A boolean, its values can be <literal>true</literal> or <literal>false</literal>.
+      A boolean, its values can be <literal>true</literal> or
+      <literal>false</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -43,7 +48,9 @@
     </term>
     <listitem>
      <para>
-      A filesystem path, defined as anything that when coerced to a string starts with a slash. Even if derivations can be considered as path, the more specific <literal>types.package</literal> should be preferred.
+      A filesystem path, defined as anything that when coerced to a string
+      starts with a slash. Even if derivations can be considered as path, the
+      more specific <literal>types.package</literal> should be preferred.
      </para>
     </listitem>
    </varlistentry>
@@ -80,7 +87,12 @@
     </term>
     <listitem>
      <para>
-      Signed integers with a fixed length (8, 16 or 32 bits). They go from <inlineequation><mathphrase>−2<superscript>n</superscript>/2</mathphrase> </inlineequation> to <inlineequation> <mathphrase>2<superscript>n</superscript>/2−1</mathphrase> </inlineequation> respectively (e.g. <literal>−128</literal> to <literal>127</literal> for 8 bits).
+      Signed integers with a fixed length (8, 16 or 32 bits). They go from
+      <inlineequation><mathphrase>−2<superscript>n</superscript>/2</mathphrase>
+      </inlineequation> to <inlineequation>
+      <mathphrase>2<superscript>n</superscript>/2−1</mathphrase>
+      </inlineequation> respectively (e.g. <literal>−128</literal> to
+      <literal>127</literal> for 8 bits).
      </para>
     </listitem>
    </varlistentry>
@@ -100,7 +112,12 @@
     </term>
     <listitem>
      <para>
-      Unsigned integers with a fixed length (8, 16 or 32 bits). They go from <inlineequation><mathphrase>0</mathphrase></inlineequation> to <inlineequation> <mathphrase>2<superscript>n</superscript>−1</mathphrase> </inlineequation> respectively (e.g. <literal>0</literal> to <literal>255</literal> for 8 bits).
+      Unsigned integers with a fixed length (8, 16 or 32 bits). They go from
+      <inlineequation><mathphrase>0</mathphrase></inlineequation> to
+      <inlineequation>
+      <mathphrase>2<superscript>n</superscript>−1</mathphrase>
+      </inlineequation> respectively (e.g. <literal>0</literal> to
+      <literal>255</literal> for 8 bits).
      </para>
     </listitem>
    </varlistentry>
@@ -120,7 +137,8 @@
     </term>
     <listitem>
      <para>
-      A port number. This type is an alias to <link linkend='types.ints.ux'><varname>types.ints.u16</varname></link>.
+      A port number. This type is an alias to
+      <link linkend='types.ints.ux'><varname>types.ints.u16</varname></link>.
      </para>
     </listitem>
    </varlistentry>
@@ -147,7 +165,8 @@
     </term>
     <listitem>
      <para>
-      A string. Multiple definitions are concatenated with a new line <literal>"\n"</literal>.
+      A string. Multiple definitions are concatenated with a new line
+      <literal>"\n"</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -157,7 +176,8 @@
     </term>
     <listitem>
      <para>
-      A string. Multiple definitions are concatenated with a comma <literal>","</literal>.
+      A string. Multiple definitions are concatenated with a comma
+      <literal>","</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -167,7 +187,8 @@
     </term>
     <listitem>
      <para>
-      A string. Multiple definitions are concatenated with a collon <literal>":"</literal>.
+      A string. Multiple definitions are concatenated with a collon
+      <literal>":"</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -177,7 +198,9 @@
     </term>
     <listitem>
      <para>
-      A string matching a specific regular expression. Multiple definitions cannot be merged. The regular expression is processed using <literal>builtins.match</literal>.
+      A string matching a specific regular expression. Multiple definitions
+      cannot be merged. The regular expression is processed using
+      <literal>builtins.match</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -198,7 +221,9 @@
     </term>
     <listitem>
      <para>
-      One element of the list <replaceable>l</replaceable>, e.g. <literal>types.enum [ "left" "right" ]</literal>. Multiple definitions cannot be merged.
+      One element of the list <replaceable>l</replaceable>, e.g.
+      <literal>types.enum [ "left" "right" ]</literal>. Multiple definitions
+      cannot be merged.
      </para>
     </listitem>
    </varlistentry>
@@ -208,7 +233,8 @@
     </term>
     <listitem>
      <para>
-      A string with a custom separator <replaceable>sep</replaceable>, e.g. <literal>types.separatedString "|"</literal>.
+      A string with a custom separator <replaceable>sep</replaceable>, e.g.
+      <literal>types.separatedString "|"</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -218,7 +244,9 @@
     </term>
     <listitem>
      <para>
-      An integer between <replaceable>lowest</replaceable> and <replaceable>highest</replaceable> (both inclusive). Useful for creating types like <literal>types.port</literal>.
+      An integer between <replaceable>lowest</replaceable> and
+      <replaceable>highest</replaceable> (both inclusive). Useful for creating
+      types like <literal>types.port</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -228,7 +256,11 @@
     </term>
     <listitem>
      <para>
-      A set of sub options <replaceable>o</replaceable>. <replaceable>o</replaceable> can be an attribute set or a function returning an attribute set. Submodules are used in composed types to create modular options. Submodule are detailed in <xref
+      A set of sub options <replaceable>o</replaceable>.
+      <replaceable>o</replaceable> can be an attribute set or a function
+      returning an attribute set. Submodules are used in composed types to
+      create modular options. Submodule are detailed in
+      <xref
           linkend='section-option-types-submodule' />.
      </para>
     </listitem>
@@ -240,7 +272,9 @@
   <title>Composed Types</title>
 
   <para>
-   Composed types are types that take a type as parameter. <literal>listOf int</literal> and <literal>either int str</literal> are examples of composed types.
+   Composed types are types that take a type as parameter. <literal>listOf
+   int</literal> and <literal>either int str</literal> are examples of composed
+   types.
   </para>
 
   <variablelist>
@@ -250,7 +284,8 @@
     </term>
     <listitem>
      <para>
-      A list of <replaceable>t</replaceable> type, e.g. <literal>types.listOf int</literal>. Multiple definitions are merged with list concatenation.
+      A list of <replaceable>t</replaceable> type, e.g. <literal>types.listOf
+      int</literal>. Multiple definitions are merged with list concatenation.
      </para>
     </listitem>
    </varlistentry>
@@ -260,7 +295,9 @@
     </term>
     <listitem>
      <para>
-      An attribute set of where all the values are of <replaceable>t</replaceable> type. Multiple definitions result in the joined attribute set.
+      An attribute set of where all the values are of
+      <replaceable>t</replaceable> type. Multiple definitions result in the
+      joined attribute set.
      </para>
     </listitem>
    </varlistentry>
@@ -270,7 +307,8 @@
     </term>
     <listitem>
      <para>
-      An attribute set or a list of <replaceable>t</replaceable> type. Multiple definitions are merged according to the value.
+      An attribute set or a list of <replaceable>t</replaceable> type. Multiple
+      definitions are merged according to the value.
      </para>
     </listitem>
    </varlistentry>
@@ -280,7 +318,8 @@
     </term>
     <listitem>
      <para>
-      <literal>null</literal> or type <replaceable>t</replaceable>. Multiple definitions are merged according to type <replaceable>t</replaceable>.
+      <literal>null</literal> or type <replaceable>t</replaceable>. Multiple
+      definitions are merged according to type <replaceable>t</replaceable>.
      </para>
     </listitem>
    </varlistentry>
@@ -290,7 +329,8 @@
     </term>
     <listitem>
      <para>
-      Ensures that type <replaceable>t</replaceable> cannot be merged. It is used to ensure option definitions are declared only once.
+      Ensures that type <replaceable>t</replaceable> cannot be merged. It is
+      used to ensure option definitions are declared only once.
      </para>
     </listitem>
    </varlistentry>
@@ -300,7 +340,9 @@
     </term>
     <listitem>
      <para>
-      Type <replaceable>t1</replaceable> or type <replaceable>t2</replaceable>, e.g. <literal>with types; either int str</literal>. Multiple definitions cannot be merged.
+      Type <replaceable>t1</replaceable> or type <replaceable>t2</replaceable>,
+      e.g. <literal>with types; either int str</literal>. Multiple definitions
+      cannot be merged.
      </para>
     </listitem>
    </varlistentry>
@@ -310,7 +352,9 @@
     </term>
     <listitem>
      <para>
-      Type <replaceable>t1</replaceable> or type <replaceable>t2</replaceable> and so forth, e.g. <literal>with types; oneOf [ int str bool ]</literal>. Multiple definitions cannot be merged.
+      Type <replaceable>t1</replaceable> or type <replaceable>t2</replaceable> and so forth,
+      e.g. <literal>with types; oneOf [ int str bool ]</literal>. Multiple definitions
+      cannot be merged.
      </para>
     </listitem>
    </varlistentry>
@@ -320,7 +364,12 @@
     </term>
     <listitem>
      <para>
-      Type <replaceable>to</replaceable> or type <replaceable>from</replaceable> which will be coerced to type <replaceable>to</replaceable> using function <replaceable>f</replaceable> which takes an argument of type <replaceable>from</replaceable> and return a value of type <replaceable>to</replaceable>. Can be used to preserve backwards compatibility of an option if its type was changed.
+      Type <replaceable>to</replaceable> or type
+      <replaceable>from</replaceable> which will be coerced to type
+      <replaceable>to</replaceable> using function <replaceable>f</replaceable>
+      which takes an argument of type <replaceable>from</replaceable> and
+      return a value of type <replaceable>to</replaceable>. Can be used to
+      preserve backwards compatibility of an option if its type was changed.
      </para>
     </listitem>
    </varlistentry>
@@ -331,15 +380,22 @@
   <title>Submodule</title>
 
   <para>
-   <literal>submodule</literal> is a very powerful type that defines a set of sub-options that are handled like a separate module.
+   <literal>submodule</literal> is a very powerful type that defines a set of
+   sub-options that are handled like a separate module.
   </para>
 
   <para>
-   It takes a parameter <replaceable>o</replaceable>, that should be a set, or a function returning a set with an <literal>options</literal> key defining the sub-options. Submodule option definitions are type-checked accordingly to the <literal>options</literal> declarations. Of course, you can nest submodule option definitons for even higher modularity.
+   It takes a parameter <replaceable>o</replaceable>, that should be a set, or
+   a function returning a set with an <literal>options</literal> key defining
+   the sub-options. Submodule option definitions are type-checked accordingly
+   to the <literal>options</literal> declarations. Of course, you can nest
+   submodule option definitons for even higher modularity.
   </para>
 
   <para>
-   The option set can be defined directly (<xref linkend='ex-submodule-direct' />) or as reference (<xref linkend='ex-submodule-reference' />).
+   The option set can be defined directly
+   (<xref linkend='ex-submodule-direct' />) or as reference
+   (<xref linkend='ex-submodule-reference' />).
   </para>
 
   <example xml:id='ex-submodule-direct'>
@@ -382,7 +438,12 @@ options.mod = mkOption {
   </example>
 
   <para>
-   The <literal>submodule</literal> type is especially interesting when used with composed types like <literal>attrsOf</literal> or <literal>listOf</literal>. When composed with <literal>listOf</literal> (<xref linkend='ex-submodule-listof-declaration' />), <literal>submodule</literal> allows multiple definitions of the submodule option set (<xref linkend='ex-submodule-listof-definition' />).
+   The <literal>submodule</literal> type is especially interesting when used
+   with composed types like <literal>attrsOf</literal> or
+   <literal>listOf</literal>. When composed with <literal>listOf</literal>
+   (<xref linkend='ex-submodule-listof-declaration' />),
+   <literal>submodule</literal> allows multiple definitions of the submodule
+   option set (<xref linkend='ex-submodule-listof-definition' />).
   </para>
 
   <example xml:id='ex-submodule-listof-declaration'>
@@ -413,7 +474,10 @@ config.mod = [
   </example>
 
   <para>
-   When composed with <literal>attrsOf</literal> (<xref linkend='ex-submodule-attrsof-declaration' />), <literal>submodule</literal> allows multiple named definitions of the submodule option set (<xref linkend='ex-submodule-attrsof-definition' />).
+   When composed with <literal>attrsOf</literal>
+   (<xref linkend='ex-submodule-attrsof-declaration' />),
+   <literal>submodule</literal> allows multiple named definitions of the
+   submodule option set (<xref linkend='ex-submodule-attrsof-definition' />).
   </para>
 
   <example xml:id='ex-submodule-attrsof-declaration'>
@@ -446,7 +510,8 @@ config.mod.two = { foo = 2; bar = "two"; };</screen>
   <title>Extending types</title>
 
   <para>
-   Types are mainly characterized by their <literal>check</literal> and <literal>merge</literal> functions.
+   Types are mainly characterized by their <literal>check</literal> and
+   <literal>merge</literal> functions.
   </para>
 
   <variablelist>
@@ -456,8 +521,13 @@ config.mod.two = { foo = 2; bar = "two"; };</screen>
     </term>
     <listitem>
      <para>
-      The function to type check the value. Takes a value as parameter and return a boolean. It is possible to extend a type check with the <literal>addCheck</literal> function (<xref
-          linkend='ex-extending-type-check-1' />), or to fully override the check function (<xref linkend='ex-extending-type-check-2' />).
+      The function to type check the value. Takes a value as parameter and
+      return a boolean. It is possible to extend a type check with the
+      <literal>addCheck</literal> function
+      (<xref
+          linkend='ex-extending-type-check-1' />), or to fully
+      override the check function
+      (<xref linkend='ex-extending-type-check-2' />).
      </para>
      <example xml:id='ex-extending-type-check-1'>
       <title>Adding a type check</title>
@@ -485,7 +555,11 @@ nixThings = mkOption {
     </term>
     <listitem>
      <para>
-      Function to merge the options values when multiple values are set. The function takes two parameters, <literal>loc</literal> the option path as a list of strings, and <literal>defs</literal> the list of defined values as a list. It is possible to override a type merge function for custom needs.
+      Function to merge the options values when multiple values are set. The
+      function takes two parameters, <literal>loc</literal> the option path as
+      a list of strings, and <literal>defs</literal> the list of defined values
+      as a list. It is possible to override a type merge function for custom
+      needs.
      </para>
     </listitem>
    </varlistentry>
@@ -496,8 +570,12 @@ nixThings = mkOption {
   <title>Custom Types</title>
 
   <para>
-   Custom types can be created with the <literal>mkOptionType</literal> function. As type creation includes some more complex topics such as submodule handling, it is recommended to get familiar with <filename
-  xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/types.nix">types.nix</filename> code before creating a new type.
+   Custom types can be created with the <literal>mkOptionType</literal>
+   function. As type creation includes some more complex topics such as
+   submodule handling, it is recommended to get familiar with
+   <filename
+  xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/types.nix">types.nix</filename>
+   code before creating a new type.
   </para>
 
   <para>
@@ -521,7 +599,8 @@ nixThings = mkOption {
     </term>
     <listitem>
      <para>
-      Description of the type used in documentation. Give information of the type and any of its arguments.
+      Description of the type used in documentation. Give information of the
+      type and any of its arguments.
      </para>
     </listitem>
    </varlistentry>
@@ -531,7 +610,10 @@ nixThings = mkOption {
     </term>
     <listitem>
      <para>
-      A function to type check the definition value. Takes the definition value as a parameter and returns a boolean indicating the type check result, <literal>true</literal> for success and <literal>false</literal> for failure.
+      A function to type check the definition value. Takes the definition value
+      as a parameter and returns a boolean indicating the type check result,
+      <literal>true</literal> for success and <literal>false</literal> for
+      failure.
      </para>
     </listitem>
    </varlistentry>
@@ -550,7 +632,8 @@ nixThings = mkOption {
        </term>
        <listitem>
         <para>
-         The option path as a list of strings, e.g. <literal>["boot" "loader "grub" "enable"]</literal>.
+         The option path as a list of strings, e.g. <literal>["boot" "loader
+         "grub" "enable"]</literal>.
         </para>
        </listitem>
       </varlistentry>
@@ -560,7 +643,12 @@ nixThings = mkOption {
        </term>
        <listitem>
         <para>
-         The list of sets of defined <literal>value</literal> and <literal>file</literal> where the value was defined, e.g. <literal>[ { file = "/foo.nix"; value = 1; } { file = "/bar.nix"; value = 2 } ]</literal>. The <literal>merge</literal> function should return the merged value or throw an error in case the values are impossible or not meant to be merged.
+         The list of sets of defined <literal>value</literal> and
+         <literal>file</literal> where the value was defined, e.g. <literal>[ {
+         file = "/foo.nix"; value = 1; } { file = "/bar.nix"; value = 2 }
+         ]</literal>. The <literal>merge</literal> function should return the
+         merged value or throw an error in case the values are impossible or
+         not meant to be merged.
         </para>
        </listitem>
       </varlistentry>
@@ -573,7 +661,13 @@ nixThings = mkOption {
     </term>
     <listitem>
      <para>
-      For composed types that can take a submodule as type parameter, this function generate sub-options documentation. It takes the current option prefix as a list and return the set of sub-options. Usually defined in a recursive manner by adding a term to the prefix, e.g. <literal>prefix: elemType.getSubOptions (prefix ++ [<replaceable>"prefix"</replaceable>])</literal> where <replaceable>"prefix"</replaceable> is the newly added prefix.
+      For composed types that can take a submodule as type parameter, this
+      function generate sub-options documentation. It takes the current option
+      prefix as a list and return the set of sub-options. Usually defined in a
+      recursive manner by adding a term to the prefix, e.g. <literal>prefix:
+      elemType.getSubOptions (prefix ++
+      [<replaceable>"prefix"</replaceable>])</literal> where
+      <replaceable>"prefix"</replaceable> is the newly added prefix.
      </para>
     </listitem>
    </varlistentry>
@@ -583,7 +677,11 @@ nixThings = mkOption {
     </term>
     <listitem>
      <para>
-      For composed types that can take a submodule as type parameter, this function should return the type parameters submodules. If the type parameter is called <literal>elemType</literal>, the function should just recursively look into submodules by returning <literal>elemType.getSubModules;</literal>.
+      For composed types that can take a submodule as type parameter, this
+      function should return the type parameters submodules. If the type
+      parameter is called <literal>elemType</literal>, the function should just
+      recursively look into submodules by returning
+      <literal>elemType.getSubModules;</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -593,7 +691,14 @@ nixThings = mkOption {
     </term>
     <listitem>
      <para>
-      For composed types that can take a submodule as type parameter, this function can be used to substitute the parameter of a submodule type. It takes a module as parameter and return the type with the submodule options substituted. It is usually defined as a type function call with a recursive call to <literal>substSubModules</literal>, e.g for a type <literal>composedType</literal> that take an <literal>elemtype</literal> type parameter, this function should be defined as <literal>m: composedType (elemType.substSubModules m)</literal>.
+      For composed types that can take a submodule as type parameter, this
+      function can be used to substitute the parameter of a submodule type. It
+      takes a module as parameter and return the type with the submodule
+      options substituted. It is usually defined as a type function call with a
+      recursive call to <literal>substSubModules</literal>, e.g for a type
+      <literal>composedType</literal> that take an <literal>elemtype</literal>
+      type parameter, this function should be defined as <literal>m:
+      composedType (elemType.substSubModules m)</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -603,7 +708,9 @@ nixThings = mkOption {
     </term>
     <listitem>
      <para>
-      A function to merge multiple type declarations. Takes the type to merge <literal>functor</literal> as parameter. A <literal>null</literal> return value means that type cannot be merged.
+      A function to merge multiple type declarations. Takes the type to merge
+      <literal>functor</literal> as parameter. A <literal>null</literal> return
+      value means that type cannot be merged.
      </para>
      <variablelist>
       <varlistentry>
@@ -618,7 +725,8 @@ nixThings = mkOption {
       </varlistentry>
      </variablelist>
      <para>
-      Note: There is a generic <literal>defaultTypeMerge</literal> that work with most of value and composed types.
+      Note: There is a generic <literal>defaultTypeMerge</literal> that work
+      with most of value and composed types.
      </para>
     </listitem>
    </varlistentry>
@@ -628,7 +736,8 @@ nixThings = mkOption {
     </term>
     <listitem>
      <para>
-      An attribute set representing the type. It is used for type operations and has the following keys:
+      An attribute set representing the type. It is used for type operations
+      and has the following keys:
      </para>
      <variablelist>
       <varlistentry>
@@ -657,7 +766,10 @@ nixThings = mkOption {
        </term>
        <listitem>
         <para>
-         Holds the value parameter for value types. The types that have a <literal>payload</literal> are the <literal>enum</literal>, <literal>separatedString</literal> and <literal>submodule</literal> types.
+         Holds the value parameter for value types. The types that have a
+         <literal>payload</literal> are the <literal>enum</literal>,
+         <literal>separatedString</literal> and <literal>submodule</literal>
+         types.
         </para>
        </listitem>
       </varlistentry>
@@ -667,7 +779,9 @@ nixThings = mkOption {
        </term>
        <listitem>
         <para>
-         A binary operation that can merge the payloads of two same types. Defined as a function that take two payloads as parameters and return the payloads merged.
+         A binary operation that can merge the payloads of two same types.
+         Defined as a function that take two payloads as parameters and return
+         the payloads merged.
         </para>
        </listitem>
       </varlistentry>

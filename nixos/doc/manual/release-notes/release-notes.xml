@@ -5,7 +5,8 @@
           xml:id="ch-release-notes">
  <title>Release Notes</title>
  <para>
-  This section lists the release notes for each stable version of NixOS and current unstable revision.
+  This section lists the release notes for each stable version of NixOS and
+  current unstable revision.
  </para>
  <xi:include href="rl-1909.xml" />
  <xi:include href="rl-1903.xml" />

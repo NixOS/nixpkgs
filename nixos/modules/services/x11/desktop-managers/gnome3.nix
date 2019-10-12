@@ -28,6 +28,8 @@ let
         (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n")
         (defaultPackages ++ cfg.extraGSettingsOverridePackages)}
 
+     cp -f ${pkgs.gnome3.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
@@ -208,14 +210,6 @@ in
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
       networking.networkmanager.enable = mkDefault true;
-
-      # Use the correct gnome3 packageSet
-      networking.networkmanager.basePackages = {
-        inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
-        inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
-        networkmanager-openconnect networkmanager-fortisslvpn
-        networkmanager-iodine networkmanager-l2tp;
-      };
 
       services.xserver.updateDbusEnvironment = true;
 

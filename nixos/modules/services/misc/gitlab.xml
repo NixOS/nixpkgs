@@ -11,11 +11,14 @@
   <title>Prerequisites</title>
 
   <para>
-   The gitlab service exposes only an Unix socket at <literal>/run/gitlab/gitlab-workhorse.socket</literal>. You need to configure a webserver to proxy HTTP requests to the socket.
+   The gitlab service exposes only an Unix socket at
+   <literal>/run/gitlab/gitlab-workhorse.socket</literal>. You need to
+   configure a webserver to proxy HTTP requests to the socket.
   </para>
 
   <para>
-   For instance, the following configuration could be used to use nginx as frontend proxy:
+   For instance, the following configuration could be used to use nginx as
+   frontend proxy:
 <programlisting>
 <link linkend="opt-services.nginx.enable">services.nginx</link> = {
   <link linkend="opt-services.nginx.enable">enable</link> = true;
@@ -36,11 +39,14 @@
   <title>Configuring</title>
 
   <para>
-   Gitlab depends on both PostgreSQL and Redis and will automatically enable both services. In the case of PostgreSQL, a database and a role will be created.
+   Gitlab depends on both PostgreSQL and Redis and will automatically enable
+   both services. In the case of PostgreSQL, a database and a role will be
+   created.
   </para>
 
   <para>
-   The default state dir is <literal>/var/gitlab/state</literal>. This is where all data like the repositories and uploads will be stored.
+   The default state dir is <literal>/var/gitlab/state</literal>. This is where
+   all data like the repositories and uploads will be stored.
   </para>
 
   <para>
@@ -79,19 +85,31 @@ services.gitlab = {
   </para>
 
   <para>
-   If you're setting up a new Gitlab instance, generate new secrets. You for instance use <literal>tr -dc A-Za-z0-9 &lt; /dev/urandom | head -c 128 &gt; /var/keys/gitlab/db</literal> to generate a new db secret. Make sure the files can be read by, and only by, the user specified by <link
-   linkend="opt-services.gitlab.user">services.gitlab.user</link>. Gitlab encrypts sensitive data stored in the database. If you're restoring an existing Gitlab instance, you must specify the secrets secret from <literal>config/secrets.yml</literal> located in your Gitlab state folder.
+   If you're setting up a new Gitlab instance, generate new
+   secrets. You for instance use <literal>tr -dc A-Za-z0-9 &lt;
+   /dev/urandom | head -c 128 &gt; /var/keys/gitlab/db</literal> to
+   generate a new db secret. Make sure the files can be read by, and
+   only by, the user specified by <link
+   linkend="opt-services.gitlab.user">services.gitlab.user</link>. Gitlab
+   encrypts sensitive data stored in the database. If you're restoring
+   an existing Gitlab instance, you must specify the secrets secret
+   from <literal>config/secrets.yml</literal> located in your Gitlab
+   state folder.
   </para>
 
   <para>
-   Refer to <xref linkend="ch-options" /> for all available configuration options for the <link linkend="opt-services.gitlab.enable">services.gitlab</link> module.
+   Refer to <xref linkend="ch-options" /> for all available configuration
+   options for the
+   <link linkend="opt-services.gitlab.enable">services.gitlab</link> module.
   </para>
  </section>
  <section xml:id="module-services-gitlab-maintenance">
   <title>Maintenance</title>
 
   <para>
-   You can run Gitlab's rake tasks with <literal>gitlab-rake</literal> which will be available on the system when gitlab is enabled. You will have to run the command as the user that you configured to run gitlab with.
+   You can run Gitlab's rake tasks with <literal>gitlab-rake</literal> which
+   will be available on the system when gitlab is enabled. You will have to run
+   the command as the user that you configured to run gitlab with.
   </para>
 
   <para>

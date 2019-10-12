@@ -16,15 +16,20 @@
 <screen>
 # reboot
 </screen>
-  which is equivalent to <command>systemctl reboot</command>. Alternatively, you can quickly reboot the system using <literal>kexec</literal>, which bypasses the BIOS by directly loading the new kernel into memory:
+  which is equivalent to <command>systemctl reboot</command>. Alternatively,
+  you can quickly reboot the system using <literal>kexec</literal>, which
+  bypasses the BIOS by directly loading the new kernel into memory:
 <screen>
 # systemctl kexec
 </screen>
  </para>
  <para>
-  The machine can be suspended to RAM (if supported) using <command>systemctl suspend</command>, and suspended to disk using <command>systemctl hibernate</command>.
+  The machine can be suspended to RAM (if supported) using <command>systemctl
+  suspend</command>, and suspended to disk using <command>systemctl
+  hibernate</command>.
  </para>
  <para>
-  These commands can be run by any user who is logged in locally, i.e. on a virtual console or in X11; otherwise, the user is asked for authentication.
+  These commands can be run by any user who is logged in locally, i.e. on a
+  virtual console or in X11; otherwise, the user is asked for authentication.
  </para>
 </chapter>

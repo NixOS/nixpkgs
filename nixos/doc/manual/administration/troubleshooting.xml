@@ -5,7 +5,8 @@
         xml:id="ch-troubleshooting">
  <title>Troubleshooting</title>
  <para>
-  This chapter describes solutions to common problems you might encounter when you manage your NixOS system.
+  This chapter describes solutions to common problems you might encounter when
+  you manage your NixOS system.
  </para>
  <xi:include href="boot-problems.xml" />
  <xi:include href="maintenance-mode.xml" />

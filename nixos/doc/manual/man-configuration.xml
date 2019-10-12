@@ -8,13 +8,16 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><filename>configuration.nix</filename>
-  </refname><refpurpose>NixOS system configuration specification</refpurpose>
+  <refname><filename>configuration.nix</filename></refname>
+  <refpurpose>NixOS system configuration specification</refpurpose>
  </refnamediv>
  <refsection>
   <title>Description</title>
   <para>
-   The file <filename>/etc/nixos/configuration.nix</filename> contains the declarative specification of your NixOS system configuration. The command <command>nixos-rebuild</command> takes this file and realises the system configuration specified therein.
+   The file <filename>/etc/nixos/configuration.nix</filename> contains the
+   declarative specification of your NixOS system configuration. The command
+   <command>nixos-rebuild</command> takes this file and realises the system
+   configuration specified therein.
   </para>
  </refsection>
  <refsection>

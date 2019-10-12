@@ -42,7 +42,7 @@ edk2.mkDerivation projectDscPath {
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
 
     # Uses Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
-    # FIXME: why is it different from Debian dir layout? https://anonscm.debian.org/cgit/pkg-qemu/edk2.git/tree/debian/rules
+    # FIXME: why is it different from Debian dir layout? https://salsa.debian.org/qemu-team/edk2/blob/debian/debian/rules
     dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=/dev/zero bs=1M    count=64
     dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=$fd/FV/QEMU_EFI.fd conv=notrunc
     dd of=$fd/AAVMF/vars-template-pflash.raw if=/dev/zero bs=1M    count=64

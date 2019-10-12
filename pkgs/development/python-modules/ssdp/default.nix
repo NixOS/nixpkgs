@@ -3,11 +3,13 @@
 , fetchPypi
 , pbr
 , pytest
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "ssdp";
   version = "1.0.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

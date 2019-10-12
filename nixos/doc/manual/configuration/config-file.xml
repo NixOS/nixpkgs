@@ -13,7 +13,15 @@
 { <replaceable>option definitions</replaceable>
 }
 </programlisting>
-  The first line (<literal>{ config, pkgs, ... }:</literal>) denotes that this is actually a function that takes at least the two arguments <varname>config</varname> and <varname>pkgs</varname>. (These are explained later.) The function returns a <emphasis>set</emphasis> of option definitions (<literal>{ <replaceable>...</replaceable> }</literal>). These definitions have the form <literal><replaceable>name</replaceable> = <replaceable>value</replaceable></literal>, where <replaceable>name</replaceable> is the name of an option and <replaceable>value</replaceable> is its value. For example,
+  The first line (<literal>{ config, pkgs, ... }:</literal>) denotes that this
+  is actually a function that takes at least the two arguments
+  <varname>config</varname> and <varname>pkgs</varname>. (These are explained
+  later.) The function returns a <emphasis>set</emphasis> of option definitions
+  (<literal>{ <replaceable>...</replaceable> }</literal>). These definitions
+  have the form <literal><replaceable>name</replaceable> =
+  <replaceable>value</replaceable></literal>, where
+  <replaceable>name</replaceable> is the name of an option and
+  <replaceable>value</replaceable> is its value. For example,
 <programlisting>
 { config, pkgs, ... }:
 
@@ -22,11 +30,19 @@
   <xref linkend="opt-services.httpd.documentRoot"/> = "/webroot";
 }
 </programlisting>
-  defines a configuration with three option definitions that together enable the Apache HTTP Server with <filename>/webroot</filename> as the document root.
+  defines a configuration with three option definitions that together enable
+  the Apache HTTP Server with <filename>/webroot</filename> as the document
+  root.
  </para>
 
  <para>
-  Sets can be nested, and in fact dots in option names are shorthand for defining a set containing another set. For instance, <xref linkend="opt-services.httpd.enable"/> defines a set named <varname>services</varname> that contains a set named <varname>httpd</varname>, which in turn contains an option definition named <varname>enable</varname> with value <literal>true</literal>. This means that the example above can also be written as:
+  Sets can be nested, and in fact dots in option names are shorthand for
+  defining a set containing another set. For instance,
+  <xref linkend="opt-services.httpd.enable"/> defines a set named
+  <varname>services</varname> that contains a set named
+  <varname>httpd</varname>, which in turn contains an option definition named
+  <varname>enable</varname> with value <literal>true</literal>. This means that
+  the example above can also be written as:
 <programlisting>
 { config, pkgs, ... }:
 
@@ -39,15 +55,22 @@
   };
 }
 </programlisting>
-  which may be more convenient if you have lots of option definitions that share the same prefix (such as <literal>services.httpd</literal>).
+  which may be more convenient if you have lots of option definitions that
+  share the same prefix (such as <literal>services.httpd</literal>).
  </para>
 
  <para>
-  NixOS checks your option definitions for correctness. For instance, if you try to define an option that doesn’t exist (that is, doesn’t have a corresponding <emphasis>option declaration</emphasis>), <command>nixos-rebuild</command> will give an error like:
+  NixOS checks your option definitions for correctness. For instance, if you
+  try to define an option that doesn’t exist (that is, doesn’t have a
+  corresponding <emphasis>option declaration</emphasis>),
+  <command>nixos-rebuild</command> will give an error like:
 <screen>
 The option `services.httpd.enable' defined in `/etc/nixos/configuration.nix' does not exist.
 </screen>
-  Likewise, values in option definitions must have a correct type. For instance, <option>services.httpd.enable</option> must be a Boolean (<literal>true</literal> or <literal>false</literal>). Trying to give it a value of another type, such as a string, will cause an error:
+  Likewise, values in option definitions must have a correct type. For
+  instance, <option>services.httpd.enable</option> must be a Boolean
+  (<literal>true</literal> or <literal>false</literal>). Trying to give it a
+  value of another type, such as a string, will cause an error:
 <screen>
 The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is not a boolean.
 </screen>
@@ -66,10 +89,12 @@ The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is no
 <programlisting>
 <xref linkend="opt-networking.hostName"/> = "dexter";
 </programlisting>
-      Special characters can be escaped by prefixing them with a backslash (e.g. <literal>\"</literal>).
+      Special characters can be escaped by prefixing them with a backslash
+      (e.g. <literal>\"</literal>).
      </para>
      <para>
-      Multi-line strings can be enclosed in <emphasis>double single quotes</emphasis>, e.g.
+      Multi-line strings can be enclosed in <emphasis>double single
+      quotes</emphasis>, e.g.
 <programlisting>
 <xref linkend="opt-networking.extraHosts"/> =
   ''
@@ -77,7 +102,13 @@ The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is no
     10.0.0.1 server
   '';
 </programlisting>
-      The main difference is that it strips from each line a number of spaces equal to the minimal indentation of the string as a whole (disregarding the indentation of empty lines), and that characters like <literal>"</literal> and <literal>\</literal> are not special (making it more convenient for including things like shell code). See more info about this in the Nix manual <link
+      The main difference is that it strips from each line a number of spaces
+      equal to the minimal indentation of the string as a whole (disregarding
+      the indentation of empty lines), and that characters like
+      <literal>"</literal> and <literal>\</literal> are not special (making it
+      more convenient for including things like shell code). See more info
+      about this in the Nix manual
+      <link
       xlink:href="https://nixos.org/nix/manual/#ssec-values">here</link>.
      </para>
     </listitem>
@@ -106,7 +137,12 @@ The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is no
 <programlisting>
 <xref linkend="opt-boot.kernel.sysctl"/>."net.ipv4.tcp_keepalive_time" = 60;
 </programlisting>
-      (Note that here the attribute name <literal>net.ipv4.tcp_keepalive_time</literal> is enclosed in quotes to prevent it from being interpreted as a set named <literal>net</literal> containing a set named <literal>ipv4</literal>, and so on. This is because it’s not a NixOS option but the literal name of a Linux kernel setting.)
+      (Note that here the attribute name
+      <literal>net.ipv4.tcp_keepalive_time</literal> is enclosed in quotes to
+      prevent it from being interpreted as a set named <literal>net</literal>
+      containing a set named <literal>ipv4</literal>, and so on. This is
+      because it’s not a NixOS option but the literal name of a Linux kernel
+      setting.)
      </para>
     </listitem>
    </varlistentry>
@@ -116,7 +152,8 @@ The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is no
     </term>
     <listitem>
      <para>
-      Sets were introduced above. They are name/value pairs enclosed in braces, as in the option definition
+      Sets were introduced above. They are name/value pairs enclosed in braces,
+      as in the option definition
 <programlisting>
 <xref linkend="opt-fileSystems"/>."/boot" =
   { device = "/dev/sda1";
@@ -133,7 +170,8 @@ The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is no
     </term>
     <listitem>
      <para>
-      The important thing to note about lists is that list elements are separated by whitespace, like this:
+      The important thing to note about lists is that list elements are
+      separated by whitespace, like this:
 <programlisting>
 <xref linkend="opt-boot.kernelModules"/> = [ "fuse" "kvm-intel" "coretemp" ];
 </programlisting>
@@ -150,7 +188,9 @@ swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
     </term>
     <listitem>
      <para>
-      Usually, the packages you need are already part of the Nix Packages collection, which is a set that can be accessed through the function argument <varname>pkgs</varname>. Typical uses:
+      Usually, the packages you need are already part of the Nix Packages
+      collection, which is a set that can be accessed through the function
+      argument <varname>pkgs</varname>. Typical uses:
 <programlisting>
 <xref linkend="opt-environment.systemPackages"/> =
   [ pkgs.thunderbird
@@ -159,7 +199,10 @@ swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
 <xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_10;
 </programlisting>
-      The latter option definition changes the default PostgreSQL package used by NixOS’s PostgreSQL service to 10.x. For more information on packages, including how to add new ones, see <xref linkend="sec-custom-packages"/>.
+      The latter option definition changes the default PostgreSQL package used
+      by NixOS’s PostgreSQL service to 10.x. For more information on
+      packages, including how to add new ones, see
+      <xref linkend="sec-custom-packages"/>.
      </para>
     </listitem>
    </varlistentry>

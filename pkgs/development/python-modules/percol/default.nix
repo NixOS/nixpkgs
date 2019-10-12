@@ -19,6 +19,7 @@ buildPythonPackage rec {
     description = "Adds flavor of interactive filtering to the traditional pipe concept of shell";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
+    broken = true;
   };
 
 }

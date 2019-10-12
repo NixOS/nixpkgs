@@ -6,23 +6,33 @@
  <title>Adding Custom Packages</title>
 
  <para>
-  It’s possible that a package you need is not available in NixOS. In that case, you can do two things. First, you can clone the Nixpkgs repository, add the package to your clone, and (optionally) submit a patch or pull request to have it accepted into the main Nixpkgs repository. This is described in detail in the <link
-xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs manual</link>. In short, you clone Nixpkgs:
+  It’s possible that a package you need is not available in NixOS. In that
+  case, you can do two things. First, you can clone the Nixpkgs repository, add
+  the package to your clone, and (optionally) submit a patch or pull request to
+  have it accepted into the main Nixpkgs repository. This is described in
+  detail in the <link
+xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs
+  manual</link>. In short, you clone Nixpkgs:
 <screen>
 <prompt>$ </prompt>git clone https://github.com/NixOS/nixpkgs
 <prompt>$ </prompt>cd nixpkgs
 </screen>
-  Then you write and test the package as described in the Nixpkgs manual. Finally, you add it to <literal>environment.systemPackages</literal>, e.g.
+  Then you write and test the package as described in the Nixpkgs manual.
+  Finally, you add it to <literal>environment.systemPackages</literal>, e.g.
 <programlisting>
 <xref linkend="opt-environment.systemPackages"/> = [ pkgs.my-package ];
 </programlisting>
-  and you run <command>nixos-rebuild</command>, specifying your own Nixpkgs tree:
+  and you run <command>nixos-rebuild</command>, specifying your own Nixpkgs
+  tree:
 <screen>
 # nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs</screen>
  </para>
 
  <para>
-  The second possibility is to add the package outside of the Nixpkgs tree. For instance, here is how you specify a build of the <link xlink:href="https://www.gnu.org/software/hello/">GNU Hello</link> package directly in <filename>configuration.nix</filename>:
+  The second possibility is to add the package outside of the Nixpkgs tree. For
+  instance, here is how you specify a build of the
+  <link xlink:href="https://www.gnu.org/software/hello/">GNU Hello</link>
+  package directly in <filename>configuration.nix</filename>:
 <programlisting>
 <xref linkend="opt-environment.systemPackages"/> =
   let
@@ -36,7 +46,8 @@ xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs manual</link>. In short, yo
   in
   [ my-hello ];
 </programlisting>
-  Of course, you can also move the definition of <literal>my-hello</literal> into a separate Nix expression, e.g.
+  Of course, you can also move the definition of <literal>my-hello</literal>
+  into a separate Nix expression, e.g.
 <programlisting>
 <xref linkend="opt-environment.systemPackages"/> = [ (import ./my-hello.nix) ];
 </programlisting>
