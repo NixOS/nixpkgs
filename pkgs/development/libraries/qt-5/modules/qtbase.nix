@@ -22,6 +22,7 @@
   libGL,
   buildExamples ? false,
   buildTests ? false,
+  debug ? false,
   developerBuild ? false,
   decryptSslTraffic ? false
 }:
@@ -39,6 +40,7 @@ stdenv.mkDerivation {
 
   name = "qtbase-${version}";
   inherit qtCompatVersion src version;
+  inherit debug;
 
   propagatedBuildInputs =
     [
