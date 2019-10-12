@@ -393,6 +393,7 @@ thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tikhomirov/vim-glsl
 tmux-plugins/vim-tmux
+tmux-plugins/vim-tmux-focus-events
 tomasr/molokai
 tomlion/vim-solidity
 tommcdo/vim-exchange
