@@ -365,16 +365,9 @@ rec {
         else
           mergeDefinitions loc opt.type defs';
 
-
-      # The value with a check that it is defined
-      valueDefined = if res.isDefined then res.mergedValue else
-        # (nixos-option detects this specific error message and gives it special
-        # handling.  If changed here, please change it there too.)
-        throw "The option `${showOption loc}' is used but not defined.";
-
       # Apply the 'apply' function to the merged value. This allows options to
       # yield a value computed from the definitions
-      value = if opt ? apply then opt.apply valueDefined else valueDefined;
+      value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
     in opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
@@ -408,11 +401,17 @@ rec {
       };
     defsFinal = defsFinal'.values;
 
-    # Type-check the remaining definitions, and merge them.
-    mergedValue = foldl' (res: def:
-      if type.check def.value then res
-      else throw "The option value `${showOption loc}' in `${def.file}' is not of type `${type.description}'.")
-      (type.merge loc defsFinal) defsFinal;
+    # Type-check the remaining definitions, and merge them. Or throw if no definitions.
+    mergedValue =
+      if isDefined then
+        foldl' (res: def:
+          if type.check def.value then res
+          else throw "The option value `${showOption loc}' in `${def.file}' is not of type `${type.description}'."
+        ) (type.merge loc defsFinal) defsFinal
+      else
+        # (nixos-option detects this specific error message and gives it special
+        # handling.  If changed here, please change it there too.)
+        throw "The option `${showOption loc}' is used but not defined.";
 
     isDefined = defsFinal != [];
 
