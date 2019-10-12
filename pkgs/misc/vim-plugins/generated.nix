@@ -5118,6 +5118,17 @@ let
     };
   };
 
+  vim-yaml = buildVimPluginFrom2Nix {
+    pname = "vim-yaml";
+    version = "2019-01-07";
+    src = fetchFromGitHub {
+      owner = "stephpy";
+      repo = "vim-yaml";
+      rev = "0da1975ec394154349db744c1996fe2ef8fa5ed0";
+      sha256 = "0kvsy6k4snwykpxk49x06jizxqrjjmbhhdcwiyiqy0029n05322l";
+    };
+  };
+
   vim-yapf = buildVimPluginFrom2Nix {
     pname = "vim-yapf";
     version = "2018-10-04";
