@@ -2637,6 +2637,11 @@
     githubId = 1401179;
     name = "Guanpeng Xu";
   };
+  hexa = {
+    github = "mweinelt";
+    githubId = 131599;
+    name = "Martin Weinelt";
+  };
   hhm = {
     email = "heehooman+nixpkgs@gmail.com";
     github = "hhm0";
