@@ -1,11 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
-  psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
-  qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
+{ stdenv, python, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
+  psutil, pyflakes, rope, pylint, keyring, numpydoc,
+  qtconsole, qtawesome, nbconvert, mccabe, pyopengl, pygments,
   spyder-kernels, qtpy, pyzmq, chardet
 , pyqtwebengine
 }:
 
-buildPythonPackage rec {
+
+let
+
+spyderWithPackages = select: buildPythonPackage rec {
   pname = "spyder";
   version = "3.3.6";
 
@@ -15,8 +18,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
-    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
+    jedi pycodestyle psutil pyflakes rope pylint keyring
+    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl spyder-kernels
     pygments qtpy pyzmq chardet pyqtwebengine
   ];
 
@@ -33,11 +36,13 @@ buildPythonPackage rec {
     categories = "Application;Development;Editor;IDE;";
   };
 
+  # Remove dependency on pyqtwebengine (still part of pyqt 5.11 version we have in nixpkgs)
+  # Drop unneeded (cautionary) upstream limit on Qt version as we have newer
+  # Exec python with the user specified package set (#70986)
   postPatch = ''
-    # remove dependency on pyqtwebengine
-    # this is still part of the pyqt 5.11 version we have in nixpkgs
     sed -i /pyqtwebengine/d setup.py
     substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
+    substituteInPlace spyder/utils/misc.py --replace "return executable" "return '${(python.withPackages select).interpreter}'"
   '';
 
   # Create desktop item
@@ -46,6 +51,11 @@ buildPythonPackage rec {
     cp spyder/images/spyder.svg $out/share/icons
     cp -r $desktopItem/share/applications/ $out/share
   '';
+
+  # Provide a withPackages to expand the IPython package set
+  passthru = {
+    withPackages = select': spyderWithPackages (packages: select packages ++ select' packages);
+  };
 
   meta = with stdenv.lib; {
     description = "Scientific python development environment";
@@ -59,4 +69,6 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ gebner ];
   };
-}
+};
+
+in spyderWithPackages (packages: with packages; [ spyder-kernels ])
