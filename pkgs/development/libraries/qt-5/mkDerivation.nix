@@ -9,9 +9,6 @@ args:
 let
   args_ = {
 
-    qmakeFlags = [ ("CONFIG+=" + (if debug then "debug" else "release")) ]
-              ++ (args.qmakeFlags or []);
-
     NIX_CFLAGS_COMPILE = toString (
       optional (!debug) "-DQT_NO_DEBUG"
       ++ lib.toList (args.NIX_CFLAGS_COMPILE or []));
