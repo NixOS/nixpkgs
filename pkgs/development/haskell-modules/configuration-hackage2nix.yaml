@@ -9344,7 +9344,6 @@ broken-packages:
   - tasty-laws
   - tasty-lens
   - tasty-stats
-  - tasty-tap
   - Taxonomy
   - TaxonomyTools
   - TBC
