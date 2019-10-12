@@ -4854,6 +4854,17 @@ let
     };
   };
 
+  vim-textobj-haskell = buildVimPluginFrom2Nix {
+    pname = "vim-textobj-haskell";
+    version = "2014-10-27";
+    src = fetchFromGitHub {
+      owner = "gibiansky";
+      repo = "vim-textobj-haskell";
+      rev = "ca656e98ea31e201f5bc543909398a6c8bb5d537";
+      sha256 = "096pjjl3ngw0hsh59j2x6pdrpqvp657rcxfyl9kw13ndqyd867xs";
+    };
+  };
+
   vim-textobj-multiblock = buildVimPluginFrom2Nix {
     pname = "vim-textobj-multiblock";
     version = "2014-06-02";

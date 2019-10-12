@@ -91,6 +91,7 @@ freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fsharp/vim-fsharp
 garbas/vim-snipmate
+gibiansky/vim-textobj-haskell
 glts/vim-textobj-comment
 gmarik/vundle
 godlygeek/csapprox
