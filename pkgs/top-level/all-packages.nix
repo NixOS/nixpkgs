@@ -1949,6 +1949,8 @@ in
 
   stagit = callPackage ../development/tools/stagit { };
 
+  step-cli = callPackage ../tools/security/step-cli { };
+
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
   sweep-visualizer = callPackage ../tools/misc/sweep-visualizer { };
