@@ -7,7 +7,7 @@
 , fontconfig, intltool }:
 
 stdenv.mkDerivation {
-  name = "cinelerra-unstable-2018-05-16";
+  name = "cinelerra-cv-2018-05-16";
 
   src = fetchFromGitHub {
     owner = "ratopi";
@@ -16,13 +16,17 @@ stdenv.mkDerivation {
     sha256 = "0a8kfm1v96sv6jh4568crg6nkr6n3579i9xksfj8w199s6yxzsbk";
   };
 
-  # touch config.rpath: work around bug in automake 1.10 ?
   preConfigure = ''
     find -type f -print0 | xargs --null sed -e "s@/usr/bin/perl@${perl}/bin/perl@" -i
-    touch config.rpath
     ./autogen.sh
     sed -i -e "s@/usr/bin/file@${file}/bin/file@" ./configure
   '';
+
+  ## fix bug with parallel building
+  preBuild = ''
+    make -C cinelerra versioninfo.h
+  '';
+  enableParallelBuilding = true;
 
   buildInputs =
     [ automake
@@ -37,10 +41,6 @@ stdenv.mkDerivation {
       perl
       fontconfig intltool
     ];
-
-  # $ make -C cinelerra edl.o
-  # edl.C:50:25: fatal error: versioninfo.h: No such file or directory
-  enableParallelBuilding = false;
 
   meta = {
     description = "Video Editor";
