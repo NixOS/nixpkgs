@@ -453,6 +453,7 @@ vim-scripts/jdaddy.vim
 vim-scripts/matchit.zip
 vim-scripts/mayansmoke
 vim-scripts/PreserveNoEOL
+vim-scripts/prev_indent
 vim-scripts/random.vim
 vim-scripts/Rename
 vim-scripts/ReplaceWithRegister

@@ -2069,6 +2069,17 @@ let
     };
   };
 
+  prev_indent = buildVimPluginFrom2Nix {
+    pname = "prev_indent";
+    version = "2014-03-08";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "prev_indent";
+      rev = "79e9b1b9a6895bfd15463c45595ca599987a4b23";
+      sha256 = "03xqdwfkc7a84742ldsggi7ix99c7dhpmg6j13gkasyfk487ryh6";
+    };
+  };
+
   psc-ide-vim = buildVimPluginFrom2Nix {
     pname = "psc-ide-vim";
     version = "2019-09-17";
