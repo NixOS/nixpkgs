@@ -181,6 +181,7 @@ in {
 
     users.users = optional (cfg.user == defaultUser) {
       name = defaultUser;
+      isSystemUser = true;
     };
 
     users.groups = optional (cfg.group == defaultUser) {

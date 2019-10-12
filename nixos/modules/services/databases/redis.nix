@@ -194,7 +194,10 @@ in
       allowedTCPPorts = [ cfg.port ];
     };
 
-    users.users.redis.description = "Redis database user";
+    users.users.redis = {
+      description = "Redis database user";
+      isSystemUser = true;
+    };
 
     environment.systemPackages = [ cfg.package ];
 

@@ -106,7 +106,7 @@ let
       nameValuePair "borgbackup-job-${name}" (stringAfter [ "users" ] (''
         # Eensure that the home directory already exists
         # We can't assert createHome == true because that's not the case for root
-        cd "${config.users.users.${cfg.user}.home}"                                                                                                         
+        cd "${config.users.users.${cfg.user}.home}"
         ${install} -d .config/borg
         ${install} -d .cache/borg
       '' + optionalString (isLocalPath cfg.repo) ''

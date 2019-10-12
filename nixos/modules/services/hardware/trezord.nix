@@ -74,6 +74,7 @@ in {
     users.users.trezord = {
       group = "trezord";
       description = "Trezor bridge daemon user";
+      isSystemUser = true;
     };
 
     users.groups.trezord = {};

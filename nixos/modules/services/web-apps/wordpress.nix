@@ -367,7 +367,10 @@ in
       })
     ];
 
-    users.users.${user}.group = group;
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
 
   };
 }

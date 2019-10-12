@@ -95,6 +95,7 @@ in
     users.users = optional (cfg.user == "matterbridge")
       { name = "matterbridge";
         group = "matterbridge";
+        isSystemUser = true;
       };
 
     users.groups = optional (cfg.group == "matterbridge")
