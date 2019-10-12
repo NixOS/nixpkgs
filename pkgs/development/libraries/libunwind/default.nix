@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoreconfHook, xz }:
 
 stdenv.mkDerivation rec {
-  name = "libunwind-${version}";
+  pname = "libunwind";
   version = "1.3.1";
 
   src = fetchurl {
-    url = "mirror://savannah/libunwind/${name}.tar.gz";
+    url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
     sha256 = "1y0l08k6ak1mqbfj6accf9s5686kljwgsl4vcqpxzk5n74wpm6a3";
   };
 

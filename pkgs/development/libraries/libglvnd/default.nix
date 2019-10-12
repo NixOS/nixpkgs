@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python2, pkgconfig, libX11, libXext, xorgproto, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
-  name = "libglvnd-${version}";
+  pname = "libglvnd";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
     "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
+
+    "-Wno-error=array-bounds"
   ] ++ lib.optional stdenv.cc.isClang "-Wno-error";
 
   # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
@@ -43,10 +45,11 @@ stdenv.mkDerivation rec {
     });
   outputs = [ "out" "dev" ];
 
-  # Set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # Set RUNPATH so that libGLX can find driver libraries in /run/opengl-driver(-32)/lib.
+  # Note that libEGL does not need it because it uses driver config files which should
+  # contain absolute paths to libraries.
   postFixup = ''
-    addOpenGLRunpath $out/lib/libGLX.so $out/lib/libEGL.so
+    addOpenGLRunpath $out/lib/libGLX.so
   '';
 
   passthru = { inherit (addOpenGLRunpath) driverLink; };

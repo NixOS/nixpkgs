@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "thrift-${version}";
+  pname = "thrift";
   version = "0.12.0";
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/thrift/${version}/${name}.tar.gz";
+    url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
     sha256 = "0a04v7dgm1qzgii7v0sisnljhxc9xpq2vxkka60scrdp6aahjdn3";
   };
 

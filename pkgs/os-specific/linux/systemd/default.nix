@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, iptables, gnu-efi
+, iptables, gnu-efi, bashInteractive
 , gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
@@ -15,17 +15,17 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-stdenv.mkDerivation rec {
-  version = "242";
-  name = "systemd-${version}";
+stdenv.mkDerivation {
+  version = "243";
+  pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "nixos-v${version}";
-    sha256 = "0ldyhfxdy4qlgygvpc92wp0qp6p1c9y3rnm77zwbkga48x60d9i8";
+    rev = "ccec67cab6c0fda85a1762eee7aeea422a0dc15e";
+    sha256 = "12nq2ah33amhyfma464a4ssf90wh2ai8c7w55j381cks8jliny40";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   #dontAddPrefix = true;
 
   mesonFlags = [
-    "-Ddbuspolicydir=${placeholder "out"}/etc/dbus-1/system.d"
+    "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
+    "-Ddebug-shell=${bashInteractive}/bin/bash"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
     "-Dlz4=true"
@@ -100,6 +101,13 @@ stdenv.mkDerivation rec {
     "-Dsulogin-path=${utillinux}/bin/sulogin"
     "-Dmount-path=${utillinux}/bin/mount"
     "-Dumount-path=${utillinux}/bin/umount"
+    "-Dcreate-log-dirs=false"
+    # Upstream uses cgroupsv2 by default. To support docker and other
+    # container managers we still need v1.
+    "-Ddefault-hierarchy=hybrid"
+    # Upstream defaulted to disable manpages since they optimize for the much
+    # more frequent development builds
+    "-Dman=true"
   ];
 
   preConfigure = ''
@@ -107,7 +115,7 @@ stdenv.mkDerivation rec {
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
+    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c units/systemd-logind.service.in units/systemd-nspawn@.service.in; do
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
@@ -117,6 +125,7 @@ stdenv.mkDerivation rec {
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
         --replace /sbin/sulogin ${lib.getBin utillinux}/sbin/sulogin \
+        --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
         --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
@@ -213,7 +222,7 @@ stdenv.mkDerivation rec {
   # in a backwards-incompatible way.  If the interface version of two
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 3;
+  passthru.interfaceVersion = 2;
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
@@ -221,6 +230,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = [ maintainers.eelco ];
+    maintainers = with maintainers; [ eelco andir mic92 ];
   };
 }

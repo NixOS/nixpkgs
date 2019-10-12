@@ -7,7 +7,7 @@
 #
 pythonPackages.buildPythonApplication rec {
     version = "1.1.1";
-    name = "bugseverywhere-${version}";
+    pname = "bugseverywhere";
 
     src = fetchurl {
       url =

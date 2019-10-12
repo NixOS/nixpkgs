@@ -2,7 +2,7 @@
 , makeWrapper, libtiff
 , enableX11 ? false, libX11 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
   name = "netpbm-10.82.01";

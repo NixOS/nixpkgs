@@ -162,7 +162,7 @@ in
 
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
         wants = [ "network.target" "systemd-udev-settle.service" ];
-        before = [ "network.target" ];
+        before = [ "network-online.target" ];
         after = [ "systemd-udev-settle.service" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable

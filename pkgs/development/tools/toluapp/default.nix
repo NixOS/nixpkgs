@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.93";
-  name = "toluapp-${version}";
+  pname = "toluapp";
 
   src = fetchFromGitHub {
     owner = "LuaDist";
     repo  = "toluapp";
-    rev   = "${version}";
+    rev   = version;
     sha256 = "0zd55bc8smmgk9j4cf0jpibb03lgsvl0knpwhplxbv93mcdnw7s0";
   };
 

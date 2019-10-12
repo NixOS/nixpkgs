@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "libscrypt-${version}";
+  pname = "libscrypt";
   version = "1.21";
 
   src = fetchFromGitHub {

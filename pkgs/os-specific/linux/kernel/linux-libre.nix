@@ -1,11 +1,11 @@
 { stdenv, lib, fetchsvn, linux
 , scripts ? fetchsvn {
-    url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/tags/";
+    url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
 
     # Update this if linux_latest-libre fails to build.
-    # $ curl https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/tags/ | grep -Eo 'Revision [0-9]+'
-    rev = "16330";
-    sha256 = "1d7rsq2m6lp1784cgdg95aspgrnzxm6q9dxqalxja5cac8n6p11y";
+    # $ curl https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/ | grep -Eo 'Revision [0-9]+'
+    rev = "16794";
+    sha256 = "1lpaka4hs7yrpnrzfybd6radjylwvw2p4aly68pypykqs2srvm7j";
   }
 , ...
 }:
@@ -25,7 +25,7 @@ in linux.override {
       name = "${linux.name}-libre-src";
       src = linux.src;
       buildPhase = ''
-        ${scripts}/${majorMinor}-gnu/deblob-${majorMinor} \
+        ${scripts}/${majorMinor}/deblob-${majorMinor} \
             ${major} ${minor} ${patch}
       '';
       checkPhase = ''

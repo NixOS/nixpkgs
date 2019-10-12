@@ -1,29 +1,48 @@
-{ buildPythonPackage, stdenv, fetchPypi, fetchpatch
-, numpy, pandas, plotly, six, colorlover
-, ipython, ipywidgets, nose
+{ lib, buildPythonPackage, fetchPypi, fetchpatch
+, chart-studio
+, colorlover
+, ipython
+, ipywidgets
+, nose
+, numpy
+, pandas
+, six
+, statsmodels
 }:
 
 buildPythonPackage rec {
   pname = "cufflinks";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "014098a4568199957198c0a7fe3dbeb3b4010b6de8d692a41fe3b3ac107b660e";
+    sha256 = "163lag5g4micpqm3m4qy9b5r06a7pw45nq80x4skxc7dcrly2ygd";
   };
 
   propagatedBuildInputs = [
-    numpy pandas plotly six colorlover
-    ipython ipywidgets
+    chart-studio
+    colorlover
+    ipython
+    ipywidgets
+    numpy
+    pandas
+    six
+    statsmodels
   ];
 
   patches = [
-    # Plotly 3.8 compatibility. Remove with the next release. See https://github.com/santosjorge/cufflinks/pull/178
+    # Plotly 4 compatibility. Remove with next release, assuming it gets merged.
     (fetchpatch {
-      url = "https://github.com/santosjorge/cufflinks/commit/cc4c23c2b45b870f6801d1cb0312948e1f73f424.patch";
-      sha256 = "1psl2h7vscpzvb4idr6s175v8znl2mfhkcyhb1926p4saswmghw1";
+      url = "https://github.com/santosjorge/cufflinks/pull/202/commits/e291dce14181858cb457404adfdaf2624b6d0594.patch";
+      sha256 = "1l0dahwqn3cxg49v3i3amwi80dmx2bi5zrazmgzpwsfargmk2kd1";
     })
   ];
+
+  # in plotly4+, the plotly.plotly module was moved to chart-studio.plotly
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "plotly>=3.0.0,<4.0.0a0" "chart-studio"
+  '';
 
   checkInputs = [ nose ];
 
@@ -31,10 +50,10 @@ buildPythonPackage rec {
     nosetests -xv tests.py
   '';
 
-  meta = {
-    homepage = https://github.com/santosjorge/cufflinks;
+  meta = with lib; {
     description = "Productivity Tools for Plotly + Pandas";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ globin ];
+    homepage = "https://github.com/santosjorge/cufflinks";
+    license = licenses.mit;
+    maintainers = with maintainers; [ globin ];
   };
 }

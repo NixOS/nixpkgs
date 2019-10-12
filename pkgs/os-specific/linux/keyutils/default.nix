@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "keyutils-${version}";
+  pname = "keyutils";
   version = "1.6";
 
   src = fetchurl {
-    url = "https://people.redhat.com/dhowells/keyutils/${name}.tar.bz2";
+    url = "https://people.redhat.com/dhowells/keyutils/${pname}-${version}.tar.bz2";
     sha256 = "05bi5ja6f3h3kdi7p9dihlqlfrsmi1wh1r2bdgxc0180xh6g5bnk";
   };
 

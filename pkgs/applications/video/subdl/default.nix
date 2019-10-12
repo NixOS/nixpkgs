@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python3 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "subdl-0.0pre.2017.11.06";
 
   src = fetchFromGitHub {

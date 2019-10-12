@@ -6,30 +6,35 @@
 
 buildPythonPackage rec {
   pname = "pelican";
-  version = "4.0.1";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";
     rev = version;
-    sha256 = "09fcwnnfln0cl5v0qpxzrllj27znrg6dbhaksxrl0192c3mbyjvl";
+    sha256 = "08lwbkgqdf6qx9vg17qj70k7nz2j34ymlnrc4cbz7xj98cw4ams1";
+    # Remove unicode file names which leads to different checksums on HFS+
+    # vs. other filesystems because of unicode normalisation.
+    extraPostFetch = ''
+      rm -r $out/pelican/tests/output/custom_locale/posts
+    '';
   };
 
   doCheck = true;
 
+  # Exclude custom locale test, which files were removed above to fix the source checksum
   checkPhase = ''
-    python -Wd -m unittest discover
+    nosetests -sv --exclude=test_custom_locale_generation_works pelican
   '';
 
   buildInputs = [
     glibcLocales
     # Note: Pelican has to adapt to a changed CLI of pandoc before enabling this
     # again. Compare https://github.com/getpelican/pelican/pull/2252.
-    # Version 4.0.1 is incompatible with our current pandoc version.
+    # Version 4.1.1 is incompatible with our current pandoc version.
     # pandoc
     git
     mock
-    nose
     markdown
     typogrify
   ];
@@ -37,6 +42,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
     blinker pillow beautifulsoup4 markupsafe lxml
+  ];
+
+  checkInputs = [
+    nose
   ];
 
   postPatch= ''
@@ -65,6 +74,6 @@ buildPythonPackage rec {
     description = "A tool to generate a static blog from reStructuredText or Markdown input files";
     homepage = http://getpelican.com/;
     license = licenses.agpl3;
-    maintainers = with maintainers; [ offline prikhi garbas ];
+    maintainers = with maintainers; [ offline prikhi ];
   };
 }

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.3.2";
-  name = "opaline-${version}";
+  pname = "opaline";
 
   src = fetchFromGitHub {
     owner = "jaapb";

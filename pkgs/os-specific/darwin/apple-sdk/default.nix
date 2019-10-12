@@ -4,7 +4,7 @@ let
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     version = "10.12";
-    name    = "MacOS_SDK-${version}";
+    pname = "MacOS_SDK";
 
     # This URL comes from https://swscan.apple.com/content/catalogs/others/index-10.12.merged-1.sucatalog, which we found by:
     #  1. Google: site:swscan.apple.com and look for a name that seems appropriate for your version
@@ -156,7 +156,7 @@ in rec {
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit pkgs.darwin.CF CoreGraphics CoreServices CoreText
+        OpenGL ApplicationServices Carbon IOKit CoreGraphics CoreServices CoreText
       ];
 
       installPhase = ''
@@ -185,6 +185,10 @@ in rec {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/PrivateFrameworks/"
       ];
+    });
+
+    CoreFoundation = stdenv.lib.overrideDerivation super.CoreFoundation (drv: {
+      setupHook = ./cf-setup-hook.sh;
     });
 
     CoreMedia = stdenv.lib.overrideDerivation super.CoreMedia (drv: {
@@ -222,7 +226,7 @@ in rec {
 
   bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;
-    inherit (pkgs.darwin) CF cf-private libobjc;
+    inherit (pkgs.darwin) libobjc;
   });
 
   frameworks = bareFrameworks // overrides bareFrameworks;

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation  rec {
-  name = "zynaddsubfx-${version}";
+  pname = "zynaddsubfx";
   version = "3.0.5";
 
   src = fetchurl {

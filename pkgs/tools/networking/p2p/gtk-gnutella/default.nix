@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A GTK+ Gnutella client, optimized for speed and scalability";
+    description = "A GTK Gnutella client, optimized for speed and scalability";
     homepage = "http://gtk-gnutella.sourceforge.net/"; # Code: https://github.com/gtk-gnutella/gtk-gnutella
     changelog = "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${version}/ChangeLog";
     license = licenses.gpl2Plus;

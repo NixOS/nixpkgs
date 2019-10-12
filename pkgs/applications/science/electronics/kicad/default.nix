@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "KiCad";
       repo = "kicad-${name}";
-      rev = "${version}";
+      rev = version;
       inherit sha256 name;
     };
     nativeBuildInputs = [
@@ -26,7 +26,7 @@ let
   } // attrs);
 
 in stdenv.mkDerivation rec {
-  name = "kicad-${version}";
+  pname = "kicad";
   series = "5.0";
   version = "5.1.2";
 
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     libGLU_combined zlib libX11 wxGTK pcre libXdmcp glew glm libpthreadstubs
     cairo curl openssl boost
-    swig python
+    swig (python.withPackages (ps: with ps; [ wxPython ]))
   ] ++ optional (oceSupport) opencascade
     ++ optional (ngspiceSupport) libngspice;
 
@@ -107,7 +107,7 @@ in stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
 
-    wrapProgram "$out/bin/kicad" "''${gappsWrapperArgs[@]}"
+    wrapGApp "$out/bin/kicad"
   '';
 
   meta = {

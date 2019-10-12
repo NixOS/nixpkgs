@@ -1,11 +1,11 @@
 { abiCompat ? null,
   stdenv, makeWrapper, fetchurl, fetchpatch, buildPackages,
   automake, autoconf, gettext, libiconv, libtool, intltool,
-  freetype, tradcpp, fontconfig, meson, ninja,
+  freetype, tradcpp, fontconfig, meson, ninja, ed,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
-  mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
+  mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6,
-  cf-private, ApplicationServices, Carbon, Cocoa, Xplugin
+  ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
 let
@@ -79,6 +79,13 @@ self: super:
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
+    patches = [
+      # Fixes an issue that happens when cross-compiling for us.
+      (fetchpatch {
+        url = "https://cgit.freedesktop.org/xorg/lib/libX11/patch/?id=0327c427d62f671eced067c6d9b69f4e216a8cac";
+        sha256 = "11k2mx56hjgw886zf1cdf2nhv7052d5rggimfshg6lq20i38vpza";
+      })
+    ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -340,7 +347,7 @@ self: super:
     installFlags = "sdkdir=\${out}/include/xorg";
   });
 
-  xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: rec {
+  xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
     installFlags = "sdkdir=\${dev}/include/xorg";
   });
@@ -368,6 +375,8 @@ self: super:
   xf86videoglide   = super.xf86videoglide.overrideAttrs   (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videoi128    = super.xf86videoi128.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videosavage  = super.xf86videosavage.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videotga     = super.xf86videotga.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videov4l     = super.xf86videov4l.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videovoodoo  = super.xf86videovoodoo.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
@@ -382,7 +391,7 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa_noglu llvm_6 ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ mesa llvm_6 ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
@@ -413,9 +422,6 @@ self: super:
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [intltool];
 
-    #TODO: resurrect patches for US_intl?
-    patches = [ ./xkeyboard-config-eo.patch ];
-
     configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
 
     # 1: compatibility for X11/xkb location
@@ -425,6 +431,85 @@ self: super:
       mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
     '';
   });
+
+  # xkeyboardconfig variant extensible with custom layouts.
+  # See nixos/modules/services/x11/extra-layouts.nix
+  xkeyboardconfig_custom = { layouts ? { } }:
+  let
+    patchIn = name: layout:
+    with layout;
+    with lib;
+    ''
+        # install layout files
+        ${optionalString (compatFile   != null) "cp '${compatFile}'   'compat/${name}'"}
+        ${optionalString (geometryFile != null) "cp '${geometryFile}' 'geometry/${name}'"}
+        ${optionalString (keycodesFile != null) "cp '${keycodesFile}' 'keycodes/${name}'"}
+        ${optionalString (symbolsFile  != null) "cp '${symbolsFile}'  'symbols/${name}'"}
+        ${optionalString (typesFile    != null) "cp '${typesFile}'    'types/${name}'"}
+
+        # patch makefiles
+        for type in compat geometry keycodes symbols types; do
+          if ! test -f "$type/${name}"; then
+            continue
+          fi
+          test "$type" = geometry && type_name=geom || type_name=$type
+          ${ed}/bin/ed -v $type/Makefile.am <<EOF
+        /''${type_name}_DATA =
+        a
+        ${name} \\
+        .
+        w
+        EOF
+          ${ed}/bin/ed -v $type/Makefile.in <<EOF
+        /''${type_name}_DATA =
+        a
+        ${name} \\
+        .
+        w
+        EOF
+        done
+
+        # add model description
+        ${ed}/bin/ed -v rules/base.xml <<EOF
+        /<\/modelList>
+        -
+        a
+        <model>
+          <configItem>
+            <name>${name}</name>
+            <description>${layout.description}</description>
+            <vendor>${layout.description}</vendor>
+          </configItem>
+        </model>
+        .
+        w
+        EOF
+
+        # add layout description
+        ${ed}/bin/ed -v rules/base.xml <<EOF
+        /<\/layoutList>
+        -
+        a
+        <layout>
+          <configItem>
+            <name>${name}</name>
+            <shortDescription>${name}</shortDescription>
+            <description>${layout.description}</description>
+            <languageList>
+              ${concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
+            </languageList>
+          </configItem>
+          <variantList/>
+        </layout>
+        .
+        w
+        EOF
+    '';
+  in
+    self.xkeyboardconfig.overrideAttrs (old: {
+      buildInputs = old.buildInputs ++ [ automake ];
+      postPatch   = with lib; concatStrings (mapAttrsToList patchIn layouts);
+    });
 
   xload = super.xload.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ gettext ];
@@ -472,11 +557,7 @@ self: super:
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
             nativeBuildInputs = [ pkgconfig ];
-            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ]
-              ++ stdenv.lib.optionals stdenv.isDarwin [
-                # Needed for NSDefaultRunLoopMode symbols.
-                cf-private
-              ];
+            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
             postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
         } else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
@@ -507,7 +588,7 @@ self: super:
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = commonBuildInputs ++ [ libdrm mesa_noglu ];
+        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];

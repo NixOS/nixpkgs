@@ -6,33 +6,33 @@
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
-, pythonSupport ? true, pythonPackages
+, pythonSupport ? true, python3Packages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
 }:
 
 let
-  inherit (pythonPackages) python;
+  inherit (python3Packages) python;
   plugins = [
     { name = "perl"; enabled = perlSupport; cmakeFlag = "ENABLE_PERL"; buildInputs = [ perl ]; }
     { name = "tcl"; enabled = tclSupport; cmakeFlag = "ENABLE_TCL"; buildInputs = [ tcl ]; }
     { name = "ruby"; enabled = rubySupport; cmakeFlag = "ENABLE_RUBY"; buildInputs = [ ruby ]; }
     { name = "guile"; enabled = guileSupport; cmakeFlag = "ENABLE_GUILE"; buildInputs = [ guile ]; }
     { name = "lua"; enabled = luaSupport; cmakeFlag = "ENABLE_LUA"; buildInputs = [ lua5 ]; }
-    { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON"; buildInputs = [ python ]; }
+    { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON3"; buildInputs = [ python ]; }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.5";
-      name = "weechat-${version}";
+      version = "2.6";
+      pname = "weechat";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "14giv8j1phmpg3i9whx45nmskan501lwcq352ps9z52rkja2qxsc";
+        sha256 = "1narazk28m7lmn1vqi7bhyvnr8apjrmaa4w1hbadn64hwr8ya1hb";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -76,7 +76,7 @@ let
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = stdenv.lib.licenses.gpl3;
-        maintainers = with stdenv.lib.maintainers; [ lovek323 garbas the-kenny lheckemann ma27 ];
+        maintainers = with stdenv.lib.maintainers; [ lovek323 the-kenny lheckemann ma27 ];
         platforms = stdenv.lib.platforms.unix;
       };
     }

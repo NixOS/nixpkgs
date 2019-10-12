@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.7";
-  name = "libnabo-${version}";
+  pname = "libnabo";
 
   src = fetchFromGitHub {
     owner = "ethz-asl";

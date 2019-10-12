@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cups }:
 
-stdenv.mkDerivation rec {
-  name = "epson-escpr-${version}";
+stdenv.mkDerivation {
+  pname = "epson-escpr";
   version = "1.6.16";
 
   src = fetchurl {

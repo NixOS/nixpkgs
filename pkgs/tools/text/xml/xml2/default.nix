@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libxml2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "xml2-0.5";
 
   src = fetchurl {

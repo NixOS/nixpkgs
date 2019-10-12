@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , meson
 , ninja
+, vala
 , pkgconfig
 , gtk3
 , python3
@@ -18,7 +19,7 @@
 let
   pname = "Transporter";
   version = "1.3.3";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -31,7 +32,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    pantheon.vala
+    vala
     gettext
     gobject-introspection # For setup hook
     libxml2

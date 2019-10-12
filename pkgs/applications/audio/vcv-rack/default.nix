@@ -1,17 +1,22 @@
 { stdenv, makeWrapper, fetchFromBitbucket, fetchFromGitHub, pkgconfig
 , alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
-, libzip, rtaudio, rtmidi, speex }:
+, libzip, rtaudio, rtmidi, speex, libsamplerate }:
 
 let
   glfw-git = glfw.overrideAttrs (oldAttrs: rec {
     name = "glfw-git-${version}";
-    version = "unstable-2018-05-29";
+    version = "2019-06-30";
     src = fetchFromGitHub {
-      owner = "glfw";
+      owner = "AndrewBelt";
       repo = "glfw";
-      rev = "0be4f3f75aebd9d24583ee86590a38e741db0904";
-      sha256 = "0zbcjgc7ks25yi949k0wjknfl00a4dqmz45mhp00k62vlq2sj0i5";
+      rev = "d9ab59efc781c392128a449361a381fcc93cf6f3";
+      sha256 = "1ykkq6qq8y6j5hlfj2zp1p87kr33vwhywziprz20v5avx1q7rjm8";
     };
+    # We patch the source to export a function that was added to the glfw fork
+    # for Rack so it is present when we build glfw as a shared library.
+    # See https://github.com/AndrewBelt/glfw/pull/1 for discussion of this issue
+    # with upstream.
+    patches = [ ./glfw.patch ];
     buildInputs = oldAttrs.buildInputs ++ [ libXext libXi ];
   });
   pfft-source = fetchFromBitbucket {
@@ -22,51 +27,49 @@ let
   };
 in
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "VCV-Rack-${version}";
-  version = "0.6.2b";
+  pname = "VCV-Rack";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "17ynhxcci6dyn1yi871fd8yli4924fh12pmk510djwkcj5crhas6";
+    sha256 = "172v66v2vb6l9dpsq6fb6xn035igwhpjci8w3kz2na3rvmz1bc5w";
     fetchSubmodules = true;
   };
 
+  patches = [ ./rack-minimize-vendoring.patch ];
+
   prePatch = ''
-    ln -s ${pfft-source} dep/jpommier-pffft-source
+    cp -r ${pfft-source} dep/jpommier-pffft-source
 
     mkdir -p dep/include
 
     cp dep/jpommier-pffft-source/*.h dep/include
-    cp dep/nanosvg/src/*.h dep/include
+    cp dep/nanosvg/**/*.h dep/include
     cp dep/nanovg/src/*.h dep/include
     cp dep/osdialog/*.h dep/include
     cp dep/oui-blendish/*.h dep/include
 
     substituteInPlace include/audio.hpp --replace "<RtAudio.h>" "<rtaudio/RtAudio.h>"
     substituteInPlace compile.mk --replace "-march=nocona" ""
-    substituteInPlace Makefile \
-       --replace "-Wl,-Bstatic" "" \
-       --replace "-lglfw3" "-lglfw"
   '';
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ glfw-git alsaLib curl glew gtk2-x11 jansson libjack2 libzip rtaudio rtmidi speex ];
+  buildInputs = [ glfw-git alsaLib curl glew gtk2-x11 jansson libjack2 libzip rtaudio rtmidi speex libsamplerate ];
 
   buildFlags = "Rack";
 
   installPhase = ''
     install -D -m755 -t $out/bin Rack
-    cp -r res $out/
 
-    mkdir -p $out/share/rack
-    cp LICENSE.txt LICENSE-dist.txt $out/share/rack
+    mkdir -p $out/share/vcv-rack
+    cp -r res Core.json template.vcv LICENSE* cacert.pem $out/share/vcv-rack
 
     # Override the default global resource file directory
-    wrapProgram $out/bin/Rack --add-flags "-g $out"
+    wrapProgram $out/bin/Rack --add-flags "-s $out/share/vcv-rack"
   '';
 
   meta = with stdenv.lib; {
@@ -75,7 +78,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
     # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or under a
     # no-derivatives clause
     license = with licenses; [ bsd3 cc-by-nc-40 unfreeRedistributable ];
-    maintainers = with maintainers; [ moredread ];
+    maintainers = with maintainers; [ moredread nathyong ];
     platforms = platforms.linux;
   };
 }

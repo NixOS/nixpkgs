@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, xorg, libGLU_combined }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "AntTweakBar-1.16";
 
   buildInputs = [ unzip xorg.libX11 libGLU_combined ];

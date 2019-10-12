@@ -1,19 +1,23 @@
-{ stdenv, fetchurl, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
+{ stdenv, fetchFromGitHub, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages, libLAS
+, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python2Packages, libLAS, proj-datumgrid
 }:
 
-stdenv.mkDerivation {
-  name = "grass-7.2.2";
-  src = fetchurl {
-    url = https://grass.osgeo.org/grass72/source/grass-7.2.2.tar.gz;
-    sha256 = "0yzljbrxlqp4wbw08n1dvmm4vmwkg8glf1ff4xyh589r5ryb7gxv";
+stdenv.mkDerivation rec {
+  name = "grass";
+  version = "7.6.1";
+
+  src = with stdenv.lib; fetchFromGitHub {
+    owner = "OSGeo";
+    repo = "grass";
+    rev = "${name}_${replaceStrings ["."] ["_"] version}";
+    sha256 = "1amjk9rz7vw5ha7nyl5j2bfwj5if9w62nlwx5qbp1x7spldimlll";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.connector-c blas
-  libLAS ]
+  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo proj
+  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
+  libLAS proj-datumgrid ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
 
   # On Darwin the installer tries to symlink the help files into a system
@@ -22,6 +26,8 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
+    "--with-proj-includes=${proj.dev}/include"
+    "--with-proj-lib=${proj}/lib"
     "--without-opengl"
     "--with-readline"
     "--with-wxwidgets"
@@ -31,8 +37,8 @@ stdenv.mkDerivation {
     "--with-postgres-libs=${postgresql.lib}/lib/"
     # it complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
-    "--with-mysql-includes=${mysql.connector-c}/include/mysql"
-    "--with-mysql-libs=${mysql.connector-c}/lib/mysql"
+    "--with-mysql-includes=${libmysqlclient}/include/mysql"
+    "--with-mysql-libs=${libmysqlclient}/lib/mysql"
     "--with-blas"
     "--with-liblas=${libLAS}/bin/liblas-config"
   ];
@@ -49,9 +55,11 @@ stdenv.mkDerivation {
       scripts/d.what.vect/d.what.vect.py \
       scripts/g.extension/g.extension.py \
       scripts/g.extension.all/g.extension.all.py \
+      scripts/r.drain/r.drain.py \
       scripts/r.pack/r.pack.py \
       scripts/r.tileset/r.tileset.py \
       scripts/r.unpack/r.unpack.py \
+      scripts/v.clip/v.clip.py \
       scripts/v.rast.stats/v.rast.stats.py \
       scripts/v.to.lines/v.to.lines.py \
       scripts/v.what.strds/v.what.strds.py \
@@ -72,13 +80,15 @@ stdenv.mkDerivation {
     done
   '';
 
+  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1" ];
+
   postInstall = ''
-    wrapProgram $out/bin/grass72 \
+    wrapProgram $out/bin/grass76 \
     --set PYTHONPATH $PYTHONPATH \
     --set GRASS_PYTHON ${python2Packages.python}/bin/${python2Packages.python.executable} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
-    ln -s $out/grass-*/lib $out/lib
-    ln -s $out/grass-*/include $out/include
+    ln -s $out/grass*/lib $out/lib
+    ln -s $out/grass*/include $out/include
   '';
 
   enableParallelBuilding = true;

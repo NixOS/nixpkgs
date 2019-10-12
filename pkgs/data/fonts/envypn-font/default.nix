@@ -1,6 +1,6 @@
 { stdenv, fetchurl, mkfontdir, mkfontscale }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "envypn-font-1.7.1";
 
   src = fetchurl {

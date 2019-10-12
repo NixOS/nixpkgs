@@ -7,7 +7,7 @@ let patchedLibmilter = stdenv.lib.overrideDerivation  libmilter (_ : {
 in
 
 stdenv.mkDerivation rec {
-  name = "rmilter-${version}";
+  pname = "rmilter";
   version = "1.10.0";
 
   src = fetchFromGitHub {

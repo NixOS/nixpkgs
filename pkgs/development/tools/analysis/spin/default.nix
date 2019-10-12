@@ -6,7 +6,7 @@ let
   ibinPath = stdenv.lib.makeBinPath [ gcc tk swarm graphviz tk ];
 
 in stdenv.mkDerivation rec {
-  name = "spin-${version}";
+  pname = "spin";
   version = "6.4.9";
   url-version = stdenv.lib.replaceChars ["."] [""] version;
 

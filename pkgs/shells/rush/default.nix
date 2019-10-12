@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rush";
-  version = "1.9";
+  version = "2.1";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "12x7dyi9vl3lwlv618156nzpi5s0li93wcx2c26h4z7la20yq2yk";
+    sha256 = "17i4mggr3rnfz0xbhqvd86jqva40c535fhlwkb2l4hjcbpg8blcf";
   };
 
   doCheck = true;

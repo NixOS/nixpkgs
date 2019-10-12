@@ -26,17 +26,18 @@ assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     pname = "polybar";
-    version = "3.3.1";
+    version = "3.4.0";
 
     src = fetchFromGitHub {
       owner = "jaagr";
       repo = pname;
       rev = version;
-      sha256 = "0qwi6q3qkrz2ip1jd4pxlnsrs2a9ywxyf8rgvbzyilr334rsiywh";
+      sha256 = "1g3zj0788cdlm8inpl19279bw8zjcy7dzj7q4f1l2d8c8g1jhv0m";
       fetchSubmodules = true;
     };
 
     meta = with stdenv.lib; {
+      homepage = "https://polybar.github.io/";
       description = "A fast and easy-to-use tool for creating status bars";
       longDescription = ''
         Polybar aims to help users build beautiful and highly customizable
@@ -68,8 +69,8 @@ stdenv.mkDerivation rec {
     ];
 
     postConfigure = ''
-      substituteInPlace ../include/settings.hpp --replace \
-        "${stdenv.cc}" "${stdenv.cc.name}"
+      substituteInPlace generated-sources/settings.hpp \
+        --replace "${stdenv.cc}" "${stdenv.cc.name}"
     '';
 
     postInstall = if (i3Support || i3GapsSupport) then ''

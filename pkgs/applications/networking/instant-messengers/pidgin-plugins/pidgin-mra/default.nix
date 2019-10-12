@@ -3,12 +3,13 @@
 let
   version = "54b2992";
 in
-stdenv.mkDerivation rec {
-  name = "pidgin-mra-${version}";
+stdenv.mkDerivation {
+  pname = "pidgin-mra";
+  inherit version;
 
   src = fetchgit {
     url = "https://github.com/dreadatour/pidgin-mra";
-    rev = "${version}";
+    rev = version;
     sha256 = "1adq57g11kw7bfpivyvfk3nlpjkc8raiw4bzn3gn4nx3m0wl99vw";
   };
 

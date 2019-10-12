@@ -10,7 +10,6 @@
 , glib
 , gsettings-desktop-schemas
 , gtk3
-, hicolor-icon-theme
 , libsndfile
 , libxml2
 , libzip
@@ -23,7 +22,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xournalpp-${version}";
+  pname = "xournalpp";
   version = "1.0.12";
 
   src = fetchFromGitHub {
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     [ glib
       gsettings-desktop-schemas
       gtk3
-      hicolor-icon-theme
       libsndfile
       libxml2
       libzip

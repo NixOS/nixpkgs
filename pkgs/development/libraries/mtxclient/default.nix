@@ -2,7 +2,7 @@
 , boost, openssl, zlib, libsodium, olm, nlohmann_json }:
 
 stdenv.mkDerivation rec {
-  name = "mtxclient-${version}";
+  pname = "mtxclient";
   version = "0.2.1";
 
   src = fetchFromGitHub {
@@ -27,5 +27,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
+
+    # As of 2019-06-30, all of the dependencies are available on macOS but the
+    # package itself does not build.
+    broken = stdenv.isDarwin;
   };
 }

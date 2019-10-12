@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "9.2.6";
-  name = "qsstv-${version}";
+  pname = "qsstv";
 
   src = fetchurl {
     url = "http://users.telenet.be/on4qz/qsstv/downloads/qsstv_${version}.tar.gz";

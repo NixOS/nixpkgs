@@ -18,6 +18,21 @@ index e519018de..556a4127d 100644
  				PRODUCT_BUNDLE_IDENTIFIER = org.vim.MacVim;
  				PRODUCT_NAME = MacVim;
  				VERSIONING_SYSTEM = "apple-generic";
+diff --git a/src/MacVim/PSMTabBarControl/source/PSMTabBarCell.m b/src/MacVim/PSMTabBarControl/source/PSMTabBarCell.m
+index 6f1a06e46..a12e2cea4 100644
+--- a/src/MacVim/PSMTabBarControl/source/PSMTabBarCell.m
++++ b/src/MacVim/PSMTabBarControl/source/PSMTabBarCell.m
+@@ -13,7 +13,9 @@
+ #import "PSMTabDragAssistant.h"
+ 
+ 
+-@implementation PSMTabBarCell
++@implementation PSMTabBarCell {
++    id _controlView;
++}
+ 
+ #pragma mark -
+ #pragma mark Creation/Destruction
 diff --git a/src/MacVim/vimrc b/src/MacVim/vimrc
 index 23a06bf37..dfb10fe94 100644
 --- a/src/MacVim/vimrc
@@ -77,6 +92,18 @@ diff --git a/src/auto/configure b/src/auto/configure
 index 9e6a82f4a..3c6d1a89b 100755
 --- a/src/auto/configure
 +++ b/src/auto/configure
+@@ -4705,10 +4705,8 @@ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+   else
+-    if test -z "$MACOSX_DEPLOYMENT_TARGET"; then
+-      macosx_deployment_target=`/usr/bin/sw_vers -productVersion|/usr/bin/sed -e 's/^\([0-9]*\.[0-9]*\).*/\1/'`
++      macosx_deployment_target=${MACOSX_DEPLOYMENT_TARGET:-10.12}
+       XCODEFLAGS="$XCODEFLAGS MACOSX_DEPLOYMENT_TARGET=$macosx_deployment_target"
+-    fi
+   fi
+ 
+ 
 @@ -5829,10 +5829,7 @@ $as_echo "not found" >&6; }
  
      for path in "${vi_cv_path_mzscheme_pfx}/lib" "${SCHEME_LIB}"; do

@@ -4,7 +4,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "ssh-agents-${version}";
+  pname = "ssh-agents";
   version = "1.0.1";
 
   src = fetchFromGitHub {

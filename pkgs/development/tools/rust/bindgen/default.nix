@@ -3,13 +3,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
-  version = "0.49.2";
+  version = "0.51.0";
+
+  RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0m9c7zswp87yj7y972ghbx5z7lwbhdxb9qyws5cwiazkl582q0qj";
+    sha256 = "1hlak8b57pndmdfkpfl17xxc91a6b239698bcm4yzlvliyscjgz1";
   };
 
   cargoSha256 = "1311d0wjjj99m59zd2n6r4aq6lwbbpyj54ha2z9g4yd1hn344r91";

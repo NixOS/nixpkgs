@@ -45,17 +45,9 @@ let
                 if [ "$hookName" != postHook ]; then
                     postHooks+=("source @dev@/nix-support/setup-hook")
                 else
-                    # Propagate $${out} output
-                    propagatedUserEnvPkgs="$propagatedUserEnvPkgs @${out}@"
-
-                    if [ -z "$outputDev" ]; then
-                        echo "error: \$outputDev is unset!" >&2
-                        exit 1
-                    fi
-
                     # Propagate $dev so that this setup hook is propagated
                     # But only if there is a separate $dev output
-                    if [ "$outputDev" != out ]; then
+                    if [ "''${outputDev:?}" != out ]; then
                         propagatedBuildInputs="$propagatedBuildInputs @dev@"
                     fi
                 fi
@@ -72,13 +64,12 @@ let
           let
 
             inherit (args) name;
-            inherit (srcs."${name}") src version;
+            inherit (srcs.${name}) src version;
 
             outputs = args.outputs or [ "bin" "dev" "out" ];
-            hasBin = lib.elem "bin" outputs;
-            hasDev = lib.elem "dev" outputs;
+            hasSeparateDev = lib.elem "dev" outputs;
 
-            defaultSetupHook = if hasBin && hasDev then propagateBin else null;
+            defaultSetupHook = if hasSeparateDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
 
             meta = {
@@ -86,7 +77,7 @@ let
               license = with lib.licenses; [
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];
-              maintainers = [ lib.maintainers.ttuegel ];
+              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
               platforms = lib.platforms.linux;
             } // (args.meta or {});
 

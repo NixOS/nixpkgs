@@ -1,0 +1,29 @@
+diff --git a/makefile b/makefile
+index eb13054..a3a1125 100644
+--- a/makefile
++++ b/makefile
+@@ -27,12 +27,10 @@ $(BUILDDIR)libstrangle32.so: $(BUILDDIR)
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -m32 -o $(BUILDDIR)libstrangle32.so $(SOURCES)
+ 
+ install: all
+-	install -m 0644 -D -T $(BUILDDIR)libstrangle.conf $(DESTDIR)/etc/ld.so.conf.d/libstrangle.conf
+ 	install -m 0755 -D -T $(BUILDDIR)libstrangle32.so $(DESTDIR)$(LIB32_PATH)/libstrangle.so
+ 	install -m 0755 -D -T $(BUILDDIR)libstrangle64.so $(DESTDIR)$(LIB64_PATH)/libstrangle.so
+ 	install -m 0755 -D -T $(SOURCEDIR)strangle.sh $(DESTDIR)$(bindir)/strangle
+ 	install -m 0644 -D -T COPYING $(DESTDIR)$(DOC_PATH)/LICENSE
+-	ldconfig
+ 
+ clean:
+ 	rm -f $(BUILDDIR)libstrangle64.so
+diff --git a/src/strangle.sh b/src/strangle.sh
+index e280e86..b2dd42b 100755
+--- a/src/strangle.sh
++++ b/src/strangle.sh
+@@ -31,6 +31,5 @@ if [ "$#" -eq 0 ]; then
+   exit 1
+ fi
+ 
+-# Execute the strangled program under a clean environment
+ # pass through the FPS and overriden LD_PRELOAD environment variables
+-exec env FPS="${FPS}" LD_PRELOAD="${LD_PRELOAD}:libstrangle.so" "$@"
++FPS="${FPS}" LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:@out@/lib/libstrangle/lib64:@out@/lib/libstrangle/lib32" LD_PRELOAD="${LD_PRELOAD}:libstrangle.so" exec "$@"

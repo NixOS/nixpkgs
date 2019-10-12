@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, vim, mysql
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, vim, libmysqlclient
 , libaio }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "sysbench-1.0.17";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ vim mysql.connector-c libaio ];
+  buildInputs = [ vim libmysqlclient libaio ];
 
   src = fetchFromGitHub {
     owner = "akopytov";

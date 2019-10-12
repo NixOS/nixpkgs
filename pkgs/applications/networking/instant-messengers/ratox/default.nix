@@ -6,7 +6,7 @@ with stdenv.lib;
 let
   configFile = optionalString (conf!=null) (builtins.toFile "config.h" conf);
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "ratox-0.4.20180303";
 
   src = fetchgit {

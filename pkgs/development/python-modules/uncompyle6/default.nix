@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "uncompyle6";
-  version = "3.3.3";
+  version = "3.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9c492a560ff1c8713f0947cfc3ab755c368e26421d13087cd5b6c01b1529ea5b";
+    sha256 = "0w4m0jywjb0w1y73nkb05zmjxb4plpfi3w2g1rgrf45afa2aqm8z";
   };
 
   checkInputs = [ nose pytest hypothesis six ];

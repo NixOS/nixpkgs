@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "chessx-${version}";
+  pname = "chessx";
   version = "1.5.0";
 
   src = fetchurl {
@@ -31,9 +31,6 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/applications"
     cp -pr release/chessx "$out/bin"
     cp -pr unix/chessx.desktop "$out/share/applications"
-
-    wrapProgram $out/bin/chessx \
-      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
 
     runHook postInstall
   '';

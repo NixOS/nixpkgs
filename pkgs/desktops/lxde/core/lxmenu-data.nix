@@ -1,11 +1,11 @@
 { stdenv, fetchurl, intltool }:
 
 stdenv.mkDerivation rec {
-  name = "lxmenu-data-${version}";
+  pname = "lxmenu-data";
   version = "0.1.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lxde/${name}.tar.xz";
+    url = "mirror://sourceforge/lxde/${pname}-${version}.tar.xz";
     sha256 = "9fe3218d2ef50b91190162f4f923d6524c364849f87bcda8b4ed8eb59b80bab8";
   };
 

@@ -12,17 +12,17 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.28.4"; # not really, git
-  name = "notmuch-${version}";
+  version = "0.29.1";
+  pname = "notmuch";
 
   passthru = {
-    pythonSourceRoot = "${name}/bindings/python";
+    pythonSourceRoot = "${pname}-${version}/bindings/python";
     inherit version;
   };
 
   src = fetchurl {
-    url = "https://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1jjnhs4xs4gksvg0a9qn68rxrj41im5bh58snka2pkj20nxwmcds";
+    url = "https://notmuchmail.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "0rg3rwghd3wivf3bmqcqpkkd5c779ld5hi363zjcw5fl6a7gqilq";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -40,16 +40,12 @@ stdenv.mkDerivation rec {
     patchShebangs configure
     patchShebangs test/
 
-    for src in \
-      util/crypto.c \
-      notmuch-config.c
-    do
-      substituteInPlace "$src" \
-        --replace \"gpg\" \"${gnupg}/bin/gpg\"
-    done
-
     substituteInPlace lib/Makefile.local \
       --replace '-install_name $(libdir)' "-install_name $out/lib"
+
+    substituteInPlace emacs/notmuch-emacs-mua \
+      --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
+      --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
   '';
 
   configureFlags = [ "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions" ];
@@ -68,7 +64,7 @@ stdenv.mkDerivation rec {
   in ''
     ln -s ${test-database} test/test-databases/database-v1.tar.xz
   '';
-  doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0");
+  doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");
   checkTarget = "test";
   checkInputs = [
     which dtach openssl bash
@@ -83,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = https://notmuchmail.org/;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ flokli garbas the-kenny ];
+    maintainers = with maintainers; [ flokli puckipedia the-kenny ];
     platforms   = platforms.unix;
   };
 }

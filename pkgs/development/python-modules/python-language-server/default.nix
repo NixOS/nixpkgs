@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
-, configparser, futures, future, jedi, pluggy, python-jsonrpc-server
-, pytest, mock, pytestcov, coverage
+, backports_functools_lru_cache, configparser, futures, future, jedi, pluggy, python-jsonrpc-server
+, pytest, mock, pytestcov, coverage, setuptools
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
   # The following packages are optional and
@@ -21,13 +21,13 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.26.1";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "003fy8bbvwibnsnyxw1qwg2rxnhbfylqs67ixr6fdnw6mmrzd6fg";
+    sha256 = "16d8i43r75h0cijggkkmmpnycn29wlbjp63mgg3s4nbrxfa96x2k";
   };
 
   # The tests require all the providers, disable otherwise.
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     HOME=$TEMPDIR pytest
   '';
 
-  propagatedBuildInputs = [ jedi pluggy future python-jsonrpc-server ]
+  propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server ]
     ++ stdenv.lib.optional (withProvider "autopep8") autopep8
     ++ stdenv.lib.optional (withProvider "mccabe") mccabe
     ++ stdenv.lib.optional (withProvider "pycodestyle") pycodestyle
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optional (withProvider "rope") rope
     ++ stdenv.lib.optional (withProvider "yapf") yapf
     ++ stdenv.lib.optional isPy27 configparser
-    ++ stdenv.lib.optional (pythonOlder "3.2") futures;
+    ++ stdenv.lib.optionals (pythonOlder "3.2") [ backports_functools_lru_cache futures ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/palantir/python-language-server;

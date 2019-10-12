@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "mod_auth_mellon-${version}";
+  pname = "mod_auth_mellon";
   version = "0.13.1";
 
   src = fetchFromGitHub {

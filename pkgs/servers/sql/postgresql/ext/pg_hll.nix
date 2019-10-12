@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
-  name = "pg_hll-${version}";
+  pname = "pg_hll";
   version = "2.12";
 
   buildInputs = [ postgresql ];
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/{lib,share/extension}
+    mkdir -p $out/{lib,share/postgresql/extension}
 
     cp *.so      $out/lib
-    cp *.sql     $out/share/extension
-    cp *.control $out/share/extension
+    cp *.sql     $out/share/postgresql/extension
+    cp *.control $out/share/postgresql/extension
   '';
 
   meta = with stdenv.lib; {

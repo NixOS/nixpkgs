@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.12.c";
-  name = "i3lock-color-${version}";
+  pname = "i3lock-color";
 
   src = fetchFromGitHub {
     owner = "PandorasFox";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
         - keyboard-layout
     '';
     homepage = https://github.com/PandorasFox/i3lock-color;
-    maintainers = with maintainers; [ garbas malyn ];
+    maintainers = with maintainers; [ malyn ];
     license = licenses.bsd3;
 
     # Needs the SSE2 instruction set. See upstream issue

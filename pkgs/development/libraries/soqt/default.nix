@@ -1,6 +1,6 @@
 { fetchhg, stdenv, coin3d, qt5, cmake, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "soqt";
   version = "1.6.0a";
 

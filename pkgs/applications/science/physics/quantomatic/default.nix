@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "quantomatic-${version}";
+  pname = "quantomatic";
   version = "0.7";
 
   src = fetchurl {

@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name    = "${pname}-${version}";
   pname   = "amazon-ecs-agent";
   version = "1.18.0";
 

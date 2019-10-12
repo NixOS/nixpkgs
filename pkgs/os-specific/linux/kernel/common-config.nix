@@ -42,6 +42,8 @@ let
       CRASH_DUMP                = option no;
       # Easier debugging of NFS issues.
       SUNRPC_DEBUG              = yes;
+      # Provide access to tunables like sched_migration_cost_ns
+      SCHED_DEBUG               = yes;
     };
 
     power-management = {
@@ -52,6 +54,9 @@ let
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
       CPU_FREQ_GOV_SCHEDUTIL           = whenAtLeast "4.9" yes;
       PM_WAKELOCKS                     = yes;
+      # Power-capping framework and support for INTEL RAPL
+      POWERCAP                         = yes;
+      INTEL_RAPL                       = module;
     };
 
     external-firmware = {
@@ -123,6 +128,7 @@ let
       IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
       NET_CLS_BPF                 = whenAtLeast "4.4" module;
       NET_ACT_BPF                 = whenAtLeast "4.4" module;
+      NET_SCHED                   = yes;
       L2TP_V3                     = yes;
       L2TP_IP                     = module;
       L2TP_ETH                    = module;
@@ -144,7 +150,14 @@ let
       NF_TABLES_IPV4              = whenAtLeast "4.17" yes;
       NF_TABLES_ARP               = whenAtLeast "4.17" yes;
       NF_TABLES_IPV6              = whenAtLeast "4.17" yes;
-      NF_TABLES_BRIDGE            = whenAtLeast "4.17" yes;
+      NF_TABLES_BRIDGE            = whenBetween "4.17" "5.3" yes;
+
+      # needed for ss
+      INET_DIAG         = yes;
+      INET_TCP_DIAG     = module;
+      INET_UDP_DIAG     = module;
+      INET_RAW_DIAG     = whenAtLeast "4.14" module;
+      INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
     };
 
     wireless = {
@@ -157,6 +170,9 @@ let
       ATH9K_AHB             = option yes; # Ditto, AHB bus
       B43_PHY_HT            = option yes;
       BCMA_HOST_PCI         = option yes;
+      RTW88                 = whenAtLeast "5.2" module;
+      RTW88_8822BE          = whenAtLeast "5.2" yes;
+      RTW88_8822CE          = whenAtLeast "5.2" yes;
     };
 
     fb = {
@@ -567,6 +583,7 @@ let
     });
 
     misc = {
+      HID_BATTERY_STRENGTH = yes;
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
@@ -629,8 +646,8 @@ let
       IDLE_PAGE_TRACKING  = yes;
       IRDA_ULTRA          = whenOlder "4.17" yes; # Ultra (connectionless) protocol
 
-      JOYSTICK_IFORCE_232 = option yes; # I-Force Serial joysticks and wheels
-      JOYSTICK_IFORCE_USB = option yes; # I-Force USB joysticks and wheels
+      JOYSTICK_IFORCE_232 = { optional = true; tristate = whenOlder "5.3" "y"; }; # I-Force Serial joysticks and wheels
+      JOYSTICK_IFORCE_USB = { optional = true; tristate = whenOlder "5.3" "y"; }; # I-Force USB joysticks and wheels
       JOYSTICK_XPAD_FF    = option yes; # X-Box gamepad rumble support
       JOYSTICK_XPAD_LEDS  = option yes; # LED Support for Xbox360 controller 'BigX' LED
 
@@ -697,13 +714,17 @@ let
 
       PREEMPT = no;
       PREEMPT_VOLUNTARY = yes;
+      
+      X86_AMD_PLATFORM_DEVICE = yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
-      # Enable memory hotplug support
-      # Allows you to dynamically add & remove memory to a VM client running NixOS without requiring a reboot
+      # Enable CPU/memory hotplug support
+      # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
+      ACPI_HOTPLUG_CPU = yes;
       ACPI_HOTPLUG_MEMORY = yes;
       MEMORY_HOTPLUG = yes;
       MEMORY_HOTREMOVE = yes;
+      HOTPLUG_CPU = yes;
       MIGRATION = yes;
       SPARSEMEM = yes;
 

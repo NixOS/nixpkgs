@@ -71,7 +71,7 @@ let
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting getOutput getBin
       getLib getDev chooseDevOutputs zipWithNames zip;
-    inherit (lists) singleton foldr fold foldl foldl' imap0 imap1
+    inherit (lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
@@ -134,5 +134,7 @@ let
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       fakeSha256 fakeSha512
       nixType imap;
+    inherit (versions)
+      splitVersion;
   });
 in lib

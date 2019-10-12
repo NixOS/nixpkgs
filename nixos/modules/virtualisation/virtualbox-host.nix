@@ -122,7 +122,7 @@ in
 
     # Since we lack the right setuid/setcap binaries, set up a host-only network by default.
   } (mkIf cfg.addNetworkInterface {
-    systemd.services."vboxnet0" =
+    systemd.services.vboxnet0 =
       { description = "VirtualBox vboxnet0 Interface";
         requires = [ "dev-vboxnetctl.device" ];
         after = [ "dev-vboxnetctl.device" ];

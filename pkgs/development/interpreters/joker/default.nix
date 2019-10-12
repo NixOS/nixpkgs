@@ -1,25 +1,17 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "joker-${version}";
-  version = "0.12.2";
-
-  goPackagePath = "github.com/candid82/joker";
+buildGoModule rec {
+  pname = "joker";
+  version = "0.12.7";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "candid82";
     repo = "joker";
-    sha256 = "0cqz8k53fzz3xqx9czk3hgq164dsbvnk51s0j29g1bmkbl51c2vm";
+    sha256 = "0panmhrg1i158xbvqvq3s3217smbj7ynwlaiks18pmss36xx9dk4";
   };
 
-  preBuild = "go generate ./...";
-
-  dontInstallSrc = true;
-
-  excludedPackages = "gen"; # Do not install private generators.
-
-  goDeps = ./deps.nix;
+  modSha256 = "0i16vf7n1xfz5kp9w3fvyc9y9wgz4h396glgpdaznpxjr12rb43j";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/candid82/joker;

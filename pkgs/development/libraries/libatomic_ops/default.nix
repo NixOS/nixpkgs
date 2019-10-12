@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libatomic_ops-${version}";
+  pname = "libatomic_ops";
   version = "7.6.10";
 
   src = fetchurl {

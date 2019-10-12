@@ -2,12 +2,12 @@
 , pcre, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, freetype, gdb, git, perl, mysql, gmp, libyaml, libedit
+, libxslt, freetype, gdb, git, perl, libmysqlclient, gmp, libyaml, libedit
 , libvpx, imagemagick, fribidi, gperf, which, ocamlPackages
 }:
 
 stdenv.mkDerivation rec {
-  name    = "hhvm-${version}";
+  pname = "hhvm";
   version = "3.23.2";
 
   # use git version since we need submodules
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ cmake pkgconfig boost libunwind mysql.connector-c libmemcached pcre gdb git perl
+    [ cmake pkgconfig boost libunwind libmysqlclient libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt libkrb5

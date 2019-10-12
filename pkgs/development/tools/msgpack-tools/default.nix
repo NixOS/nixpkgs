@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, unzip }:
 stdenv.mkDerivation rec {
-  name = "msgpack-tools-${version}";
+  pname = "msgpack-tools";
   version = "0.6";
 
   src = fetchFromGitHub {

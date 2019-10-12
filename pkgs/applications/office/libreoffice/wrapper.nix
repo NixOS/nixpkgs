@@ -2,7 +2,7 @@
 let
   jdk = libreoffice.jdk;
 in
-(runCommand "${libreoffice.name}" {
+(runCommand libreoffice.name {
   inherit dbus libreoffice jdk bash;
 } ''
   mkdir -p "$out/bin"

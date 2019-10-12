@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "quvi-scripts-${version}";
+  pname = "quvi-scripts";
   version="0.9.20131130";
 
   src = fetchurl {

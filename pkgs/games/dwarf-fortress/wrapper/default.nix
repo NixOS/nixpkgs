@@ -80,7 +80,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dwarf-fortress-${dwarf-fortress.dfVersion}";
 
   dfInit = substituteAll {

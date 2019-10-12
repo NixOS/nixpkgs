@@ -1,17 +1,17 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "todoist-${version}";
-  version = "0.13.1";
+  pname = "todoist";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "todoist";
     rev = "v${version}";
-    sha256 = "1kwvlsjr2a7wdhlwpxxpdh87wz8k9yjwl59vl2g7ya6m0rvhd3mc";
+    sha256 = "0qhmv65il14lns817yxhma784jw5bz629svzh2ykrmilx5f7dxqc";
   };
 
-  modSha256 = "09n6abyaqwz4zcdz8934rvpbxhp4v2nmm5v739kkcc98c3h93i64";
+  modSha256 = "1nnp5ijz4n34gc97rar4wlvlbx21ndpjyb2mc6gxdk1wzx3mgswp";
 
   meta = {
     homepage = https://github.com/sachaos/todoist;

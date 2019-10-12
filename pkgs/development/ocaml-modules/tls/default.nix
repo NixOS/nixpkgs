@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg
-, ppx_sexp_conv, result, x509, nocrypto, cstruct, ppx_cstruct, cstruct-unix, ounit
+, ppx_sexp_conv, result, x509, nocrypto, cstruct-sexp, ppx_cstruct, cstruct-unix, ounit
 , lwt     ? null}:
 
 with stdenv.lib;
@@ -11,23 +11,24 @@ then throw "tls is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "0.9.0";
+  version = "0.10.4";
   name = "ocaml${ocaml.version}-tls-${version}";
 
   src = fetchFromGitHub {
     owner  = "mirleft";
     repo   = "ocaml-tls";
-    rev    = "${version}";
-    sha256 = "0qgw8lq8pk9hss7b5i6fr08pi711i0zqx7yyjgcil47ipjig6c31";
+    rev    = version;
+    sha256 = "02wv4lia583imn3sfci4nqv6ac5nzig5j3yfdnlqa0q8bp9rfc6g";
   };
 
-  buildInputs = [ ocaml ocamlbuild findlib topkg ppx_sexp_conv ounit ppx_cstruct cstruct-unix ];
-  propagatedBuildInputs = [ cstruct nocrypto result x509 ] ++
+  buildInputs = [ ocaml ocamlbuild findlib topkg ppx_sexp_conv ppx_cstruct ]
+  ++ optionals doCheck [ ounit cstruct-unix ];
+  propagatedBuildInputs = [ cstruct-sexp nocrypto result x509 ] ++
                           optional withLwt lwt;
 
-  buildPhase = "${topkg.run} build --tests true --with-mirage false --with-lwt ${if withLwt then "true" else "false"}";
+  buildPhase = "${topkg.run} build --tests ${boolToString doCheck} --with-mirage false --with-lwt ${boolToString withLwt}";
 
-  doCheck = true;
+  doCheck = versionAtLeast ocaml.version "4.06";
   checkPhase = "${topkg.run} test";
 
   inherit (topkg) installPhase;

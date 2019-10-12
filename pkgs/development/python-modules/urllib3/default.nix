@@ -11,6 +11,8 @@ buildPythonPackage rec {
     sha256 = "2393a695cd12afedd0dcb26fe5d50d0cf248e5a66f75dbd89a3d4eb333a61af4";
   };
 
+  outputs = [ "out" "dev" ];
+
   NOSE_EXCLUDE = stdenv.lib.concatStringsSep "," [
     "test_headers" "test_headerdict" "test_can_validate_ip_san" "test_delayed_body_read_timeout"
     "test_timeout_errors_cause_retries" "test_select_multiple_interrupts_with_event"

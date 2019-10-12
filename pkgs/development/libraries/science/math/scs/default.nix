@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, blas, liblapack, gfortran, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  name = "scs-${version}";
+  pname = "scs";
   version = "2.0.2";
 
   src = fetchFromGitHub {

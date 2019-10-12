@@ -13,6 +13,7 @@ let
                       || cfg.extraAliases != "";
   haveTransport = cfg.transport != "";
   haveVirtual = cfg.virtual != "";
+  haveLocalRecipients = cfg.localRecipients != null;
 
   clientAccess =
     optional (cfg.dnsBlacklistOverrides != "")
@@ -244,6 +245,7 @@ let
 
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
+  localRecipientMapFile = pkgs.writeText "postfix-local-recipient-map" (concatMapStrings (x: x + " ACCEPT\n") cfg.localRecipients);
   checkClientAccessFile = pkgs.writeText "postfix-check-client-access" cfg.dnsBlacklistOverrides;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
   masterCfFile = pkgs.writeText "postfix-master.cf" masterCfContent;
@@ -445,7 +447,7 @@ in
       };
 
       config = mkOption {
-        type = with types; attrsOf (either bool (either str (listOf str)));
+        type = with types; attrsOf (oneOf [ bool str (listOf str) ]);
         description = ''
           The main.cf configuration file as key value set.
         '';
@@ -506,6 +508,19 @@ in
         '';
       };
 
+      localRecipients = mkOption {
+        type = with types; nullOr (listOf str);
+        default = null;
+        description = ''
+          List of accepted local users. Specify a bare username, an
+          <literal>"@domain.tld"</literal> wild-card, or a complete
+          <literal>"user@domain.tld"</literal> address. If set, these names end
+          up in the local recipient map -- see the local(8) man-page -- and
+          effectively replace the system user database lookup that's otherwise
+          used by default.
+        '';
+      };
+
       transport = mkOption {
         default = "";
         description = "
@@ -515,7 +530,7 @@ in
 
       dnsBlacklists = mkOption {
         default = [];
-        type = with types; listOf string;
+        type = with types; listOf str;
         description = "dns blacklist servers to use with smtpd_client_restrictions";
       };
 
@@ -742,6 +757,7 @@ in
       // optionalAttrs haveAliases { alias_maps = [ "${cfg.aliasMapType}:/etc/postfix/aliases" ]; }
       // optionalAttrs haveTransport { transport_maps = [ "hash:/etc/postfix/transport" ]; }
       // optionalAttrs haveVirtual { virtual_alias_maps = [ "${cfg.virtualMapType}:/etc/postfix/virtual" ]; }
+      // optionalAttrs haveLocalRecipients { local_recipient_maps = [ "hash:/etc/postfix/local_recipients" ] ++ optional haveAliases "$alias_maps"; }
       // optionalAttrs (cfg.dnsBlacklists != []) { smtpd_client_restrictions = clientRestrictions; }
       // optionalAttrs cfg.useSrs {
         sender_canonical_maps = [ "tcp:127.0.0.1:10001" ];
@@ -861,19 +877,22 @@ in
     }
 
     (mkIf haveAliases {
-      services.postfix.aliasFiles."aliases" = aliasesFile;
+      services.postfix.aliasFiles.aliases = aliasesFile;
     })
     (mkIf haveTransport {
-      services.postfix.mapFiles."transport" = transportFile;
+      services.postfix.mapFiles.transport = transportFile;
     })
     (mkIf haveVirtual {
-      services.postfix.mapFiles."virtual" = virtualFile;
+      services.postfix.mapFiles.virtual = virtualFile;
+    })
+    (mkIf haveLocalRecipients {
+      services.postfix.mapFiles.local_recipients = localRecipientMapFile;
     })
     (mkIf cfg.enableHeaderChecks {
-      services.postfix.mapFiles."header_checks" = headerChecksFile;
+      services.postfix.mapFiles.header_checks = headerChecksFile;
     })
     (mkIf (cfg.dnsBlacklists != []) {
-      services.postfix.mapFiles."client_access" = checkClientAccessFile;
+      services.postfix.mapFiles.client_access = checkClientAccessFile;
     })
   ]);
 }

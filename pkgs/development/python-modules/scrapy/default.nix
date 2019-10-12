@@ -2,7 +2,7 @@
   testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
   service-identity, parsel, pydispatcher, cssselect, lib }:
 buildPythonPackage rec {
-  version = "1.6.0";
+  version = "1.7.3";
   pname = "Scrapy";
 
   checkInputs = [ glibcLocales mock pytest botocore testfixtures pillow ];
@@ -25,12 +25,13 @@ buildPythonPackage rec {
   # Ignore test_retry_dns_error because tries to resolve an invalid dns and weirdly fails with "Reactor was unclean"
   # Ignore xml encoding test on darwin because lxml can't find encodings https://bugs.launchpad.net/lxml/+bug/707396
   checkPhase = ''
-    pytest -p no:doctest --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py --deselect tests/test_crawl.py::CrawlTestCase::test_retry_dns_error ${lib.optionalString stdenv.isDarwin "--deselect tests/test_utils_iterators.py::LxmlXmliterTestCase::test_xmliter_encoding"}
+    substituteInPlace pytest.ini --replace "addopts = --doctest-modules" "addopts ="
+    pytest --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py --deselect tests/test_crawl.py::CrawlTestCase::test_retry_dns_error ${lib.optionalString stdenv.isDarwin "--deselect tests/test_utils_iterators.py::LxmlXmliterTestCase::test_xmliter_encoding"}
   '';
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "558dfd10ac53cb324ecd7eefd3eac412161c7507c082b01b0bcd2c6e2e9f0766";
+    sha256 = "fe5a40177960e97d42d1c752a73edb40f76a85a24076dec8535cffa499eb08c8";
   };
 
   postInstall = ''

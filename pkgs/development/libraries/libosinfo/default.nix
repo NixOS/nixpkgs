@@ -1,32 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gobject-introspection, gtk-doc, docbook_xsl
-, glib, libsoup, libxml2, libxslt, check, curl, perl, hwdata, osinfo-db, vala ? null
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, gobject-introspection, gtk-doc, docbook_xsl
+, glib, libsoup, libxml2, libxslt, check, curl, perl, hwdata, osinfo-db, substituteAll
+, vala ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "12b0xj9fz9q91d1pz9xm6aqap5k1ip0m9m3qvqmwjy1lk1kjasdz";
+    sha256 = "1iwh35mahch1ls3sgq7wz8kamxrxisrff5ciqzyh2qxlrqf5qf1w";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig vala intltool gobject-introspection gtk-doc docbook_xsl
+    pkgconfig vala gettext gobject-introspection gtk-doc docbook_xsl
   ];
   buildInputs = [ glib libsoup libxml2 libxslt ];
   checkInputs = [ check curl perl ];
 
   patches = [
-    ./osinfo-db-data-dir.patch
+    (substituteAll {
+      src = ./osinfo-db-data-dir.patch;
+      osinfo_db_data_dir = "${osinfo-db}/share";
+    })
   ];
-
-  postPatch = ''
-    patchShebangs .
-    substituteInPlace osinfo/osinfo_loader.c --subst-var-by OSINFO_DB_DATA_DIR "${osinfo-db}/share"
-  '';
 
   configureFlags = [
     "--with-usb-ids-path=${hwdata}/share/hwdata/usb.ids"

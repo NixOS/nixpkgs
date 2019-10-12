@@ -1,11 +1,11 @@
 { fetchurl, stdenv, ant, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "fop-${version}";
+  pname = "fop";
   version = "2.1";
 
   src = fetchurl {
-    url = "mirror://apache/xmlgraphics/fop/source/${name}-src.tar.gz";
+    url = "mirror://apache/xmlgraphics/fop/source/${pname}-${version}-src.tar.gz";
     sha256 = "165rx13q47l6qc29ppr7sg1z26vw830s3rkklj5ap7wgvy0ivbz5";
   };
 

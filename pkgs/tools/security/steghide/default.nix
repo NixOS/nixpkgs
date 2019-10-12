@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   buildInputs = [ libjpeg libmcrypt zlib libmhash gettext libtool ];
   version = "0.5.1";
-  name = "steghide-${version}";
+  pname = "steghide";
 
   src = fetchurl {
     url = "mirror://sourceforge/steghide/steghide/${version}/steghide-${version}.tar.gz" ;

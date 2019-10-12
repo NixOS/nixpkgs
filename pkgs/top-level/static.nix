@@ -12,8 +12,9 @@
 
 self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
-                                 makeStaticLibraries;
-  inherit (super.lib) foldl optional flip id composeExtensions;
+                                 makeStaticLibraries
+                                 propagateBuildInputs;
+  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,
@@ -30,7 +31,7 @@ self: super: let
     });
   };
 
-  staticAdapters = [ makeStaticLibraries ]
+  staticAdapters = [ makeStaticLibraries propagateBuildInputs ]
 
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
@@ -53,6 +54,14 @@ self: super: let
 
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
+  gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
+  gcc5Stdenv = foldl (flip id) super.gcc5Stdenv staticAdapters;
+  gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
+  gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
+  gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;
+  gcc9Stdenv = foldl (flip id) super.gcc9Stdenv staticAdapters;
+  clangStdenv = foldl (flip id) super.clangStdenv staticAdapters;
+  libcxxStdenv = foldl (flip id) super.libcxxStdenv staticAdapters;
 
   haskell = super.haskell // {
     packageOverrides = composeExtensions
@@ -60,21 +69,27 @@ in {
       haskellStaticAdapter;
   };
 
+  nghttp2 = super.nghttp2.override {
+    enableApp = false;
+  };
+
   ncurses = super.ncurses.override {
     enableStatic = true;
   };
-  libxml2 = super.libxml2.override {
+  libxml2 = super.libxml2.override ({
     enableShared = false;
     enableStatic = true;
-  };
-  zlib = super.zlib.override {
+  } // optionalAttrs super.stdenv.hostPlatform.isDarwin {
+    pythonSupport = false;
+  });
+  zlib = (super.zlib.override {
     static = true;
     shared = false;
 
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
-  };
+  }).static;
   xz = super.xz.override {
     enableStatic = true;
   };
@@ -83,6 +98,9 @@ in {
   };
   libiberty = super.libiberty.override {
     staticBuild = true;
+  };
+  libpfm = super.libpfm.override {
+    enableShared = false;
   };
   ipmitool = super.ipmitool.override {
     static = true;
@@ -101,7 +119,9 @@ in {
     static = true;
   };
   openblas = super.openblas.override { enableStatic = true; };
-  openssl = super.openssl.override {
+  nix = super.nix.override { withAWS = false; };
+  # openssl 1.1 doesn't compile
+  openssl = super.openssl_1_0_2.override {
     static = true;
 
     # Don’t use new stdenv for openssl because it doesn’t like the
@@ -111,6 +131,10 @@ in {
   boost = super.boost.override {
     enableStatic = true;
     enableShared = false;
+
+    # Don’t use new stdenv for boost because it doesn’t like the
+    # --disable-shared flag
+    stdenv = super.stdenv;
   };
   gmp = super.gmp.override {
     withStatic = true;
@@ -145,6 +169,15 @@ in {
     };
   };
 
+  curl = super.curl.override {
+    # a very sad story: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
+    gssSupport = false;
+  };
+
+  brotli = super.brotli.override {
+    staticOnly = true;
+  };
+
   llvmPackages_8 = super.llvmPackages_8 // {
     libraries = super.llvmPackages_8.libraries // rec {
       libcxxabi = super.llvmPackages_8.libraries.libcxxabi.override {
@@ -154,9 +187,11 @@ in {
         enableShared = false;
         inherit libcxxabi;
       };
+      libunwind = super.llvmPackages_8.libraries.libunwind.override {
+        enableShared = false;
+      };
     };
   };
 
   python27 = super.python27.override { static = true; };
-
 }

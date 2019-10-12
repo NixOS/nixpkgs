@@ -7,14 +7,16 @@ let
 
   all = [
     "aarch64-linux"
-    "armv5tel-linux" "armv6l-linux" "armv7l-linux"
+    "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux"
 
     "mipsel-linux"
 
     "i686-cygwin" "i686-freebsd" "i686-linux" "i686-netbsd" "i686-openbsd"
 
-    "x86_64-cygwin" "x86_64-darwin" "x86_64-freebsd" "x86_64-linux"
+    "x86_64-cygwin" "x86_64-freebsd" "x86_64-linux"
     "x86_64-netbsd" "x86_64-openbsd" "x86_64-solaris"
+
+    "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin"
 
     "x86_64-windows" "i686-windows"
 
@@ -24,14 +26,14 @@ let
 
     "riscv32-linux" "riscv64-linux"
 
-    "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "powerpc-none" "msp430-none"
+    "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "powerpc-none" "msp430-none" "riscv64-none" "riscv32-none"
   ];
 
   allParsed = map parse.mkSystemFromString all;
 
   filterDoubles = f: map parse.doubleFromSystem (lists.filter f allParsed);
 
-in rec {
+in {
   inherit all;
 
   none = [];

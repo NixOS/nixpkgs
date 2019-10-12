@@ -3,12 +3,12 @@
 let
   version = "3.12";
   pname = "ps_mem";
-in pythonPackages.buildPythonApplication rec {
+in pythonPackages.buildPythonApplication {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "pixelb";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0kcxlmfisbwf24p2k72njfyfp22fjr9p9zalg9b4w0yhnlzk24ph";
   };

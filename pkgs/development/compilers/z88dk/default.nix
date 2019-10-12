@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   #_FORTIFY_SOURCE requires compiling with optimization (-O)
   NIX_CFLAGS_COMPILE = "-O";
 
-  short_rev = "${builtins.substring 0 7 src.rev}";
+  short_rev = builtins.substring 0 7 src.rev;
   makeFlags = [
     "git_rev=${short_rev}"
     "version=${version}"

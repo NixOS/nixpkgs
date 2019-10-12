@@ -36,10 +36,11 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "ghostscript-${version}";
+  pname = "ghostscript";
+  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${name}.tar.xz";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${pname}-${version}.tar.xz";
     inherit sha512;
   };
 

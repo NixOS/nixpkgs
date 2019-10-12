@@ -2,6 +2,7 @@
 , meson
 , ninja
 , pkgconfig
+, fetchpatch
 
 , platform-tools
 , ffmpeg
@@ -9,10 +10,10 @@
 }:
 
 let
-  version = "1.8";
+  version = "1.10";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}.jar";
-    sha256 = "1h755k5xpchlm7wq2yk5mlwjnh7y4yhviffixacby0srj3pmb443";
+    sha256 = "144k25x6ha89l9p5a1dm6r3fqvgqszzwrhvkvk0r44vg0i71msyb";
   };
 in
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cx7y3w699s3i8s53l1mb7lkrnbix457hf17liwh00jzb0i7aga7";
+    sha256 = "0hhncqcs49n9g8sgvwbyvkaq4b1dhrpn7qgnaj6grjcb0i27vzaq";
   };
 
   # postPatch:
@@ -39,12 +40,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ffmpeg SDL2 ];
 
+  # FIXME: remove on update to > 1.10
+  patches = [(fetchpatch {
+    url = "https://github.com/Genymobile/scrcpy/commit/c05056343b56be65ae887f8b7ead61a8072622b9.diff";
+    sha256 = "1xh24gr2g2i9rk0zyv19jx54hswrq12ssp227vxbhsbamin9ir5b";
+  })];
+
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
     echo -n > server/meson.build
   '';
 
-  mesonFlags = ["-Doverride_server_path=${prebuilt_server}"];
+  mesonFlags = [ "-Doverride_server_path=${prebuilt_server}" ];
   postInstall = ''
     mkdir -p "$out/share/scrcpy"
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server.jar"

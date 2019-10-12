@@ -31,5 +31,6 @@ buildPythonPackage rec {
     '';
     license = stdenv.lib.licenses.mit;
     maintainers = with maintainers; [ nalbyuites ];
+    broken = true;
   };
 }

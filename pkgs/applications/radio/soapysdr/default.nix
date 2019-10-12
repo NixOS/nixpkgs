@@ -13,7 +13,8 @@ let
   extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
 
 in stdenv.mkDerivation {
-  name = "soapysdr-${version}";
+  pname = "soapysdr";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";

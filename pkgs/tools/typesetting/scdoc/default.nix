@@ -1,20 +1,18 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "scdoc-${version}";
-  version = "1.9.4";
+  pname = "scdoc";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/scdoc/archive/${version}.tar.gz";
-    sha256 = "00zc3rzj97gscby31djlqyczvqpyhrl66i44czwzmmn7rc5j03m1";
+    sha256 = "0lk8wpz95ld1fnpnc3xkhvnd58px1vbhvlpkr8labi2ck65y10il";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "-static" "" \
       --replace "/usr/local" "$out"
-    # It happens from time to time that the version wasn't updated:
-    sed -iE 's/VERSION=[0-9]\.[0-9]\.[0-9]/VERSION=${version}/' Makefile
   '';
 
   doCheck = true;

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fping, rrdtool, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "smokeping-${version}";
+  pname = "smokeping";
   version = "2.6.11";
   src = fetchurl {
     url = "https://oss.oetiker.ch/smokeping/pub/smokeping-${version}.tar.gz";

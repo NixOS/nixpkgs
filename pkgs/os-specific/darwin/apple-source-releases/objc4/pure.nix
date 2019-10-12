@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "551.1";
-  name    = "objc4-${version}";
+  pname = "objc4";
 
   src = fetchapplesource {
     inherit version;

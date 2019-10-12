@@ -1,0 +1,12 @@
+diff --git a/src/gallium/targets/opencl/meson.build b/src/gallium/targets/opencl/meson.build
+index 317ad8dab4a..5567308caf0 100644
+--- a/src/gallium/targets/opencl/meson.build
++++ b/src/gallium/targets/opencl/meson.build
+@@ -68,6 +68,6 @@ if with_opencl_icd
+     input : 'mesa.icd.in',
+     output : 'mesa.icd',
+     install : true,
+-    install_dir : join_paths(get_option('sysconfdir'), 'OpenCL', 'vendors'),
++    install_dir : join_paths(get_option('prefix'), 'etc', 'OpenCL', 'vendors'),
+   )
+ endif

@@ -5,12 +5,12 @@
 , gnome3, gspell, perl, itstool, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "gedit-${version}";
-  version = "3.32.2";
+  pname = "gedit";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1q2rk7fym542c7k3bn2wlnzgy384gxacbifsjny0spbg95gfybvl";
+    url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0zjh3p3lns7a7kx3g3v7gkgcqdzyx1zyv8ssr6d5ljfb7hfyb59y";
   };
 
   nativeBuildInputs = [
@@ -31,10 +31,6 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
     patchShebangs plugins/externaltools/scripts/gedit-tool-merge.pl
   '';
-
-  mesonFlags = [
-    "--buildtype=plain" # don't require git
-  ];
 
   # Reliably fails to generate gedit-file-browser-enum-types.h in time
   enableParallelBuilding = false;

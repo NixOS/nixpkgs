@@ -43,13 +43,12 @@ self: super:
   # integer-simple is wrong.
   #integer-simple = null;
 
-  # These packages are core libraries in GHC 7.10.x, but not here.
+  # These packages are core libraries in GHC 8.6..x, but not here.
   bin-package-db = null;
-  haskeline = self.haskeline_0_7_3_1;
-  hoopl = self.hoopl_3_10_2_1;
-  hpc = self.hpc_0_6_0_2;
-  terminfo = self.terminfo_0_4_1_1;
-  xhtml = self.xhtml_3000_2_1;
+  haskeline = self.haskeline_0_7_5_0;
+  hpc = self.hpc_0_6_0_3;
+  terminfo = self.terminfo_0_4_1_4;
+  xhtml = self.xhtml_3000_2_2_1;
 
 ## OTHER PACKAGES
 
@@ -115,7 +114,6 @@ self: super:
       ];
       license = pkgs.stdenv.lib.licenses.mit;
       description = "bindings for https://github.com/Matt-Esch/virtual-dom";
-      inherit (src) homepage;
     }) {};
 
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {

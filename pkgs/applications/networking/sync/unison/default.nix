@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation (rec {
 
-  name = "unison-${version}";
+  pname = "unison";
   version = "2.51.2";
   src = fetchFromGitHub {
     owner = "bcpierce00";

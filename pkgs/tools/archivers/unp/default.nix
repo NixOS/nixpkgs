@@ -7,8 +7,8 @@
 let
   runtime_bins =  [ file unzip gzip ] ++ extraBackends;
 
-in stdenv.mkDerivation rec {
-  name = "unp-${version}";
+in stdenv.mkDerivation {
+  pname = "unp";
   version = "2.0-pre7";
   buildInputs = [ perl makeWrapper ];
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     name = "unp_2.0_pre7+nmu1.tar.bz2";
   };
 
-  configurePhase = "true";
+  dontConfigure = true;
   buildPhase = "true";
   installPhase = ''
   mkdir -p $out/bin

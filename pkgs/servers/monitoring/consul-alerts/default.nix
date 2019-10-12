@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "consul-alerts-${version}";
+  pname = "consul-alerts";
   version = "0.5.0";
   rev = "v${version}";
 

@@ -11,7 +11,7 @@ let
   ccomp-platform = if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux";
 in
 stdenv.mkDerivation rec {
-  name    = "compcert-${version}";
+  pname = "compcert";
   version = "3.5";
 
   src = fetchFromGitHub {
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./configure \
+      --replace '|8.9.0' '|8.9.0|8.9.1' \
       --replace '{toolprefix}gcc' '{toolprefix}cc'
   '';
 

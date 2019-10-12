@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''http-body'';
   version = ''20181210-git'';
 

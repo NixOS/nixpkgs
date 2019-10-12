@@ -2,7 +2,7 @@
 , libnl }:
 
 stdenv.mkDerivation rec {
-  name = "bmon-${version}";
+  pname = "bmon";
   version = "4.0";
 
   src = fetchFromGitHub {

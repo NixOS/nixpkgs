@@ -7,8 +7,8 @@
 # }
 
 stdenv.mkDerivation rec {
-  name = "timescaledb-${version}";
-  version = "1.3.1";
+  pname = "timescaledb";
+  version = "1.4.2";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "1q3c4qsy4vb00a4p15km4w5d5xcppigf7rp4mqr3wln7i4d4lvnx";
+    sha256 = "06mchpfjh4kskxq5r8b84870gl37xcqdf14n96qjb4nbyw9l8xcc";
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     for x in CMakeLists.txt sql/CMakeLists.txt; do
       substituteInPlace "$x" \
-        --replace 'DESTINATION "''${PG_SHAREDIR}/extension"' "DESTINATION \"$out/share/extension\""
+        --replace 'DESTINATION "''${PG_SHAREDIR}/extension"' "DESTINATION \"$out/share/postgresql/extension\""
     done
 
     for x in src/CMakeLists.txt src/loader/CMakeLists.txt tsl/src/CMakeLists.txt; do
@@ -36,17 +36,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postInstall = ''
-    # work around an annoying bug, by creating $out/bin, so buildEnv doesn't freak out later
-    # see https://github.com/NixOS/nixpkgs/issues/22653
-
-    mkdir -p $out/bin
-  '';
-
   meta = with stdenv.lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage    = https://www.timescale.com/;
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [ volth marsam ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;
   };

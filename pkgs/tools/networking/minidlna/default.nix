@@ -3,7 +3,8 @@
 let version = "1.2.1"; in
 
 stdenv.mkDerivation {
-  name = "minidlna-${version}";
+  pname = "minidlna";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/minidlna/minidlna/${version}/minidlna-${version}.tar.gz";

@@ -1,0 +1,40 @@
+{ stdenv, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook }:
+
+stdenv.mkDerivation rec{
+  pname = "cypress";
+  version = "3.4.1";
+
+  src = fetchzip {
+    url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
+    sha256 = "1gyl5c86gr5sv6z5rkg0afdxqrmsxmyrimm1p5q6jlrlyzki1bfs";
+  };
+
+  # don't remove runtime deps
+  dontPatchELF = true;
+
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
+
+  buildInputs = with xorg; [
+    libXScrnSaver libXdamage libXtst
+  ] ++ [
+    nss gtk2 alsaLib gnome2.GConf gtk3 unzip
+  ];
+
+  runtimeDependencies = [ udev.lib ];
+
+  installPhase = ''
+    mkdir -p $out/bin $out/opt/cypress
+    cp -vr * $out/opt/cypress/
+    # Let's create the file binary_state ourselves to make the npm package happy on initial verification.
+    echo '{"verified": true}' > $out/opt/cypress/binary_state.json
+    ln -s $out/opt/cypress/Cypress $out/bin/Cypress
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Fast, easy and reliable testing for anything that runs in a browser";
+    homepage = "https://www.cypress.io";
+    license = licenses.mit;
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [ tweber mmahut ];
+  };
+}

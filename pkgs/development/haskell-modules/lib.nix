@@ -163,6 +163,7 @@ rec {
   markBroken = drv: overrideCabal drv (drv: { broken = true; hydraPlatforms = []; });
   unmarkBroken = drv: overrideCabal drv (drv: { broken = false; });
   markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
+  markUnbroken = drv: overrideCabal drv (drv: { broken = false; });
 
   enableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = true; });
   disableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = false; });

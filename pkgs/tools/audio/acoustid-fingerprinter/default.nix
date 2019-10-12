@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchpatch, cmake, pkgconfig, qt4, taglib, chromaprint, ffmpeg }:
 
 stdenv.mkDerivation rec {
-  name = "acoustid-fingerprinter-${version}";
+  pname = "acoustid-fingerprinter";
   version = "0.6";
 
   src = fetchurl {
     url = "https://bitbucket.org/acoustid/acoustid-fingerprinter/downloads/"
-        + "${name}.tar.gz";
+        + "${pname}-${version}.tar.gz";
     sha256 = "0ckglwy95qgqvl2l6yd8ilwpd6qs7yzmj8g7lnxb50d12115s5n0";
   };
 
