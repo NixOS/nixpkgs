@@ -214,13 +214,13 @@ MarcWeber/vim-addon-sql
 MarcWeber/vim-addon-syntax-checker
 MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
-MaxMEllon/vim-jsx-pretty
 markonm/traces.vim
 martinda/Jenkinsfile-vim-syntax
 mattn/emmet-vim
 mattn/gist-vim
 mattn/webapi-vim
 maximbaz/lightline-ale
+MaxMEllon/vim-jsx-pretty
 mbbill/undotree
 megaannum/forms
 megaannum/self
@@ -346,8 +346,8 @@ scrooloose/syntastic
 sebastianmarkow/deoplete-rust
 sheerun/vim-polyglot
 Shougo/context_filetype.vim
-Shougo/denite.nvim
 Shougo/defx.nvim
+Shougo/denite.nvim
 Shougo/deol.nvim
 Shougo/deoplete-lsp
 Shougo/deoplete.nvim
@@ -386,6 +386,7 @@ thinca/vim-quickrun
 thinca/vim-scouter
 thinca/vim-themis
 thinca/vim-visualstar
+thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tikhomirov/vim-glsl
 tmux-plugins/vim-tmux
