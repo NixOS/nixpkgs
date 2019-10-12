@@ -3247,6 +3247,17 @@ let
     };
   };
 
+  vim-diminactive = buildVimPluginFrom2Nix {
+    pname = "vim-diminactive";
+    version = "2017-08-27";
+    src = fetchFromGitHub {
+      owner = "blueyed";
+      repo = "vim-diminactive";
+      rev = "6f2e14e6ff6a038285937c378ec3685e6ff7ee36";
+      sha256 = "14jf5hh3v2f5wb10v09ygx15pxbwziv20pwv0fqkakxwf0vqwd50";
+    };
+  };
+
   vim-dirdiff = buildVimPluginFrom2Nix {
     pname = "vim-dirdiff";
     version = "2019-05-14";

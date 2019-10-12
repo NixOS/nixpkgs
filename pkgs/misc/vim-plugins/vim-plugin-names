@@ -23,6 +23,7 @@ bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
 bling/vim-bufferline
+blueyed/vim-diminactive
 bogado/file-line
 brennanfee/vim-gui-position
 bronson/vim-trailing-whitespace
