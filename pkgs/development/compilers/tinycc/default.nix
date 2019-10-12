@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     Libs: -L$out/lib -Wl,--rpath $out/lib -ltcc -ldl
     Cflags: -I$out/include
     EOF
-    install -Dt $out/lib/pkgconfig libtcc.pc
+    install -Dt $out/lib/pkgconfig libtcc.pc -m 444
   '';
 
   doCheck = true;
