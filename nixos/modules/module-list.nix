@@ -13,6 +13,7 @@
   ./config/appstream.nix
   ./config/console.nix
   ./config/xdg/sounds.nix
+  ./config/gtk/gtk.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
   ./config/i18n.nix
