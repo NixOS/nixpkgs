@@ -4689,6 +4689,8 @@ in
 
   ltris = callPackage ../games/ltris { };
 
+  lv = callPackage ../tools/text/lv { };
+
   lxc = callPackage ../os-specific/linux/lxc { };
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
   lxd = callPackage ../tools/admin/lxd { };

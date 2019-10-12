@@ -3324,6 +3324,12 @@
     email = "info+nix@chmist.com";
     name = "karolchmist";
   };
+  kayhide = {
+    email = "kayhide@gmail.com";
+    github = "kayhide";
+    githubId = 1730718;
+    name = "Hideaki Kawai";
+  };
   kazcw = {
     email = "kaz@lambdaverse.org";
     github = "kazcw";
