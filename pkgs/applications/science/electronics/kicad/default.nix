@@ -101,6 +101,7 @@ in stdenv.mkDerivation rec {
     for module in $modules; do
       lndir $module/share $out/share
     done
+    true
   '';
 
   preFixup = ''
