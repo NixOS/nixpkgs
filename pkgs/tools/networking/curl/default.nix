@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
       name = "CVE-2019-5435.patch";
       sha256 = "00w12yhq8q260n91i1xrynz3vn4w3lypgl19cm893s35pbvg7y17";
     })
+    # fetchpatch is way to hard due to bootstapping, and fetchurl from github isn't stable
+    ./cve-2019-5481.diff
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
