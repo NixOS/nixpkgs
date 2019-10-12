@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.61.0";
+  version = "0.61.1";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0zrbb1b77k6bm2qdnra08jnbyllv6vj29790igmp6fzs59xf3kak";
+    sha256 = "1afdrxxkaivvviazxkg5blsf2x24sjkfj92ib0d3q5pm8dihjrhj";
   };
 
   outputs = [ "out" "dev" ];
