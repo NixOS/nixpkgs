@@ -120,12 +120,17 @@ nixos https://nixos.org/channels/nixos-unstable
    to <filename>configuration.nix</filename>:
 <programlisting>
 <xref linkend="opt-system.autoUpgrade.enable"/> = true;
+<xref linkend="opt-system.autoUpgrade.allowReboot"/> = true;
 </programlisting>
    This enables a periodically executed systemd service named
-   <literal>nixos-upgrade.service</literal>. It runs <command>nixos-rebuild
-   switch --upgrade</command> to upgrade NixOS to the latest version in the
-   current channel. (To see when the service runs, see <command>systemctl
-   list-timers</command>.) You can also specify a channel explicitly, e.g.
+   <literal>nixos-upgrade.service</literal>. If the <literal>allowReboot</literal>
+   option is <literal>false</literal>, it runs <command>nixos-rebuild switch
+   --upgrade</command> to upgrade NixOS to the latest version in the current
+   channel. (To see when the service runs, see <command>systemctl list-timers</command>.)
+   If <literal>allowReboot</literal> is <literal>true</literal>, then the
+   system will automatically reboot if the new generation contains a different
+   kernel, initrd or kernel modules.
+   You can also specify a channel explicitly, e.g.
 <programlisting>
 <xref linkend="opt-system.autoUpgrade.channel"/> = https://nixos.org/channels/nixos-19.09;
 </programlisting>
