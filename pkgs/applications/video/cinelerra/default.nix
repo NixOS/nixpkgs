@@ -7,13 +7,13 @@
 , fontconfig, intltool }:
 
 stdenv.mkDerivation {
-  name = "cinelerra-unstable-2016-01-12";
+  name = "cinelerra-unstable-2018-05-16";
 
   src = fetchFromGitHub {
     owner = "ratopi";
     repo = "CinelerraCV";
-    rev = "454be60e201c18c1fc3f1f253a6d2184fcfc94c4";
-    sha256 = "1n4kshqhgnr7aivsi8dgx48phyd2nzvv4szbc82mndklvs9jfb7r";
+    rev = "d9c0dbf4393717f0a42f4b91c3e1ed5b16f955dc";
+    sha256 = "0a8kfm1v96sv6jh4568crg6nkr6n3579i9xksfj8w199s6yxzsbk";
   };
 
   # touch config.rpath: work around bug in automake 1.10 ?
