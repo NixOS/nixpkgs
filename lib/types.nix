@@ -302,6 +302,30 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # A version of attrsOf that's lazy in its values at the expense of
+    # conditional definitions not working properly. E.g. defining a value with
+    # `foo.attr = mkIf false 10`, then `foo ? attr == true`, whereas with
+    # attrsOf it would correctly be `false`. Accessing `foo.attr` would throw an
+    # error that it's not defined. Use only if conditional definitions don't make sense.
+    lazyAttrsOf = elemType: mkOptionType rec {
+      name = "lazyAttrsOf";
+      description = "lazy attribute set of ${elemType.description}s";
+      check = isAttrs;
+      merge = loc: defs:
+        zipAttrsWith (name: defs:
+          let merged = mergeDefinitions (loc ++ [name]) elemType defs;
+          # mergedValue will trigger an appropriate error when accessed
+          in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
+        )
+        # Push down position info.
+        (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs);
+      emptyValue = { value = {}; };
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
+      functor = (defaultFunctor name) // { wrapped = elemType; };
+    };
+
     # List or attribute set of ...
     loaOf = elemType:
       let
