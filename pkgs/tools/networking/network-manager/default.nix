@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
     "-Dcrypto=gnutls"
     "-Dsession_tracking=systemd"
     "-Dmodem_manager=true"
+    "-Dpolkit_agent=true"
     "-Dnmtui=true"
     "-Ddocs=true"
     "-Dtests=no"
