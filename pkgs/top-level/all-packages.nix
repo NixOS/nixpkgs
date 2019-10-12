@@ -15342,6 +15342,8 @@ in
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
+  spring-boot = callPackage ../development/tools/spring-boot { };
+
   squid = callPackage ../servers/squid { };
 
   sslh = callPackage ../servers/sslh { };
