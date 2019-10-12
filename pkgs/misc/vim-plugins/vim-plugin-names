@@ -236,6 +236,7 @@ mhinz/vim-signify
 mhinz/vim-startify
 michaeljsmith/vim-indent-object
 mileszs/ack.vim
+milkypostman/vim-togglelist
 mindriot101/vim-yapf
 mk12/vim-lean
 mkasa/lushtags

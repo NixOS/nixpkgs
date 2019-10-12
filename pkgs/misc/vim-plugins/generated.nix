@@ -4942,6 +4942,17 @@ let
     };
   };
 
+  vim-togglelist = buildVimPluginFrom2Nix {
+    pname = "vim-togglelist";
+    version = "2013-04-07";
+    src = fetchFromGitHub {
+      owner = "milkypostman";
+      repo = "vim-togglelist";
+      rev = "cafedc49860950200f28f2e1d95ab6a87b79d113";
+      sha256 = "17y4ply2irz81gjv5hb51dy7wzv3l3sq6qaska31lswd5dgh1ifg";
+    };
+  };
+
   vim-toml = buildVimPluginFrom2Nix {
     pname = "vim-toml";
     version = "2019-08-28";
