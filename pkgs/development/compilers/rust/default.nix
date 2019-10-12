@@ -59,11 +59,14 @@
         pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
         pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages_5.stdenv; };
       });
+      rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
       cargo = self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
         inherit CoreFoundation Security;
       };
+      clippy = self.callPackage ./clippy.nix { inherit Security; };
+      rls = self.callPackage ./rls { inherit CoreFoundation Security; };
     });
   };
 }

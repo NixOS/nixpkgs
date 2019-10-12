@@ -1,15 +1,8 @@
-{ lib, python3, platformio, esptool, git, protobuf3_7 }:
+{ lib, python3, platformio, esptool, git, protobuf3_7, fetchpatch }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95";
-        };
-      });
       tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
         version = "5.1.1";
         src = oldAttrs.src.override {
@@ -25,11 +18,17 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.12.2";
+  version = "1.13.6";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "935fc3d0f05b2f5911c29f60c9b5538bed584a31455b492944007d8b1524462c";
+    sha256 = "53148fc43c6cc6736cb7aa4cc1189caa305812061f55289ff916f8bd731ac623";
+  };
+
+  patches = fetchpatch {
+    url = https://github.com/esphome/esphome/pull/694.patch;
+    includes = [ "esphome/voluptuous_schema.py" ];
+    sha256 = "0i2v1d6mcgc94i9rkaqmls7iyfbaisdji41sfc7bh7cf2j824im9";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
@@ -54,6 +53,6 @@ in python.pkgs.buildPythonApplication rec {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = https://esphome.io/;
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda globin ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "mop-${version}";
+  pname = "mop";
   version = "0.2.0";
   rev = "bc666ec165d08b43134f7ec0bf29083ad5466243";
 

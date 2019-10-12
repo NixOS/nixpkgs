@@ -2,7 +2,6 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "dotfiles";
-  name = "${pname}-${version}";
   version = "0.6.4";
 
   src = pythonPackages.fetchPypi {

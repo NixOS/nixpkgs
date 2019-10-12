@@ -105,8 +105,8 @@ in {
         default = null;
         example = {
           serverAliases = [
-            "matomo.$\{config.networking.domain\}"
-            "stats.$\{config.networking.domain\}"
+            "matomo.\${config.networking.domain}"
+            "stats.\${config.networking.domain}"
           ];
           enableACME = false;
         };
@@ -115,7 +115,7 @@ in {
             Either this option or the webServerUser option is mandatory.
             Set this to {} to just enable the virtualHost if you don't need any customization.
             If enabled, then by default, the <option>serverName</option> is
-            <literal>${user}.$\{config.networking.hostName\}.$\{config.networking.domain\}</literal>,
+            <literal>''${user}.''${config.networking.hostName}.''${config.networking.domain}</literal>,
             SSL is active, and certificates are acquired via ACME.
             If this is set to null (the default), no nginx virtualHost will be configured.
         '';
@@ -176,7 +176,7 @@ in {
             # Use User-Private Group scheme to protect Matomo data, but allow administration / backup via 'matomo' group
             # Copy config folder
             chmod g+s "${dataDir}"
-            cp -r "${cfg.package}/config" "${dataDir}/"
+            cp -r "${cfg.package}/share/config" "${dataDir}/"
             chmod -R u+rwX,g+rwX,o-rwx "${dataDir}"
 
             # check whether user setup has already been done
@@ -225,22 +225,24 @@ in {
       serviceConfig.UMask = "0007";
     };
 
-    services.phpfpm.poolConfigs = let
+    services.phpfpm.pools = let
       # workaround for when both are null and need to generate a string,
       # which is illegal, but as assertions apparently are being triggered *after* config generation,
       # we have to avoid already throwing errors at this previous stage.
       socketOwner = if (cfg.nginx != null) then config.services.nginx.user
       else if (cfg.webServerUser != null) then cfg.webServerUser else "";
     in {
-      ${pool} = ''
-        listen = "${phpSocket}"
-        listen.owner = ${socketOwner}
-        listen.group = root
-        listen.mode = 0600
-        user = ${user}
-        env[PIWIK_USER_PATH] = ${dataDir}
-        ${cfg.phpfpmProcessManagerConfig}
-      '';
+      ${pool} = {
+        listen = phpSocket;
+        extraConfig = ''
+          listen.owner = ${socketOwner}
+          listen.group = root
+          listen.mode = 0600
+          user = ${user}
+          env[PIWIK_USER_PATH] = ${dataDir}
+          ${cfg.phpfpmProcessManagerConfig}
+        '';
+      };
     };
 
 
@@ -273,7 +275,7 @@ in {
           fastcgi_pass unix:${phpSocket};
         '';
         # Any other attempt to access any php files is forbidden
-        locations."~* ^.+\.php$".extraConfig = ''
+        locations."~* ^.+\\.php$".extraConfig = ''
           return 403;
         '';
         # Disallow access to unneeded directories
@@ -282,7 +284,7 @@ in {
           return 403;
         '';
         # Disallow access to several helper files
-        locations."~* \.(?:bat|git|ini|sh|txt|tpl|xml|md)$".extraConfig = ''
+        locations."~* \\.(?:bat|git|ini|sh|txt|tpl|xml|md)$".extraConfig = ''
           return 403;
         '';
         # No crawling of this site for bots that obey robots.txt - no useful information here.

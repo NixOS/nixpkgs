@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensc-${version}";
+  pname = "opensc";
   version = "0.19.0";
 
   src = fetchFromGitHub {

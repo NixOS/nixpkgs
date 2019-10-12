@@ -3,7 +3,7 @@
 , glib, intltool, gtk3, gtksourceview, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "xpad-${version}";
+  pname = "xpad";
   version = "5.4.0";
 
   src = fetchurl {

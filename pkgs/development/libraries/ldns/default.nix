@@ -4,10 +4,8 @@ stdenv.mkDerivation rec {
   pname = "ldns";
   version = "1.7.0";
 
-  name = "${pname}-${version}";
-
   src = fetchurl {
-    url = "https://www.nlnetlabs.nl/downloads/ldns/${name}.tar.gz";
+    url = "https://www.nlnetlabs.nl/downloads/ldns/${pname}-${version}.tar.gz";
     sha256 = "1k56jw4hz8njspfxcfw0czf1smg0n48ylia89ziwyx5k9wdmp7y1";
   };
 

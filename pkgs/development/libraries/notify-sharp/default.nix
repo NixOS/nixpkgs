@@ -2,14 +2,14 @@
 , mono, gtk-sharp-3_0, dbus-sharp-1_0, dbus-sharp-glib-1_0 }:
 
 stdenv.mkDerivation rec {
-  name = "notify-sharp-${version}";
+  pname = "notify-sharp";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "GNOME";
     repo = "notify-sharp";
 
-    rev = "${version}";
+    rev = version;
     sha256 = "1vm7mnmxdwrgy4mr07lfva8sa6a32f2ah5x7w8yzcmahaks3sj5m";
   };
 

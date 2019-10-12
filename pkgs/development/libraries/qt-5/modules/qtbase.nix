@@ -14,7 +14,7 @@
   zlib,
 
   # optional dependencies
-  cups ? null, mysql ? null, postgresql ? null,
+  cups ? null, libmysqlclient ? null, postgresql ? null,
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
@@ -78,11 +78,9 @@ stdenv.mkDerivation {
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
-       # Needed for OBJC_CLASS_$_NSDate symbols.
-    ++ lib.optional stdenv.isDarwin darwin.cf-private
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.connector-c
+    ++ lib.optional (libmysqlclient != null) libmysqlclient
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
@@ -148,6 +146,11 @@ stdenv.mkDerivation {
             sed -i mkspecs/common/linux.conf \
                 -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
                 -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
+          '' +
+        lib.optionalString (stdenv.hostPlatform.isx86_32 && stdenv.cc.isGNU)
+          ''
+            sed -i mkspecs/common/gcc-base-unix.conf \
+                -e "/^QMAKE_LFLAGS_SHLIB/ s/-shared/-shared -static-libgcc/"
           ''
     );
 
@@ -231,6 +234,8 @@ stdenv.mkDerivation {
       "-widgets"
       "-opengl desktop"
       "-icu"
+      "-L" "${icu.out}/lib"
+      "-I" "${icu.dev}/include"
       "-pch"
     ]
     ++ lib.optionals (compareVersion "5.11.0" < 0)
@@ -250,14 +255,14 @@ stdenv.mkDerivation {
       if (!stdenv.hostPlatform.isx86_64)
       then [ "-no-sse2" ]
       else lib.optionals (compareVersion "5.9.0" >= 0) {
-        "default"        = [ "-sse2" "-no-sse3" "-no-ssse3" "-no-sse4.1" "-no-sse4.2" "-no-avx" "-no-avx2" ];
-        "westmere"       = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2" "-no-avx" "-no-avx2" ];
-        "sandybridge"    = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
-        "ivybridge"      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
-        "haswell"        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-        "broadwell"      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-        "skylake"        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-        "skylake-avx512" = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        default        = [ "-sse2" "-no-sse3" "-no-ssse3" "-no-sse4.1" "-no-sse4.2" "-no-avx" "-no-avx2" ];
+        westmere       = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2" "-no-avx" "-no-avx2" ];
+        sandybridge    = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        ivybridge      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
+        haswell        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        broadwell      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        skylake        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
+        skylake-avx512 = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
       }.${stdenv.hostPlatform.platform.gcc.arch or "default"}
     )
     ++ [
@@ -267,12 +272,20 @@ stdenv.mkDerivation {
 
     ++ [
       "-system-zlib"
+      "-L" "${zlib.out}/lib"
+      "-I" "${zlib.dev}/include"
       "-system-libjpeg"
+      "-L" "${libjpeg.out}/lib"
+      "-I" "${libjpeg.dev}/include"
       "-system-harfbuzz"
+      "-L" "${harfbuzz.out}/lib"
+      "-I" "${harfbuzz.dev}/include"
       "-system-pcre"
       "-openssl-linked"
+      "-L" "${openssl.out}/lib"
+      "-I" "${openssl.dev}/include"
       "-system-sqlite"
-      ''-${if mysql != null then "plugin" else "no"}-sql-mysql''
+      ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
       ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
       "-make libs"
@@ -299,10 +312,14 @@ stdenv.mkDerivation {
           "-system-xcb"
           "-xcb"
           "-qpa xcb"
+          "-L" "${libX11.out}/lib"
+          "-I" "${libX11.out}/include"
+          "-L" "${libXext.out}/lib"
+          "-I" "${libXext.out}/include"
+          "-L" "${libXrender.out}/lib"
+          "-I" "${libXrender.out}/include"
 
-          "-system-xkbcommon"
           "-libinput"
-          "-xkbcommon-evdev"
 
           "-no-eglfs"
           "-no-gbm"
@@ -322,6 +339,19 @@ stdenv.mkDerivation {
           # https://github.com/NixOS/nixpkgs/issues/38832
           "-no-feature-renameat2"
           "-no-feature-getentropy"
+        ]
+        ++ lib.optionals (compareVersion "5.12.1" < 0) [
+          # use -xkbcommon and -xkbcommon-evdev for versions before 5.12.1
+          "-system-xkbcommon"
+          "-xkbcommon-evdev"
+        ]
+        ++ lib.optionals (cups != null) [
+          "-L" "${cups.lib}/lib"
+          "-I" "${cups.dev}/include"
+        ]
+        ++ lib.optionals (libmysqlclient != null) [
+          "-L" "${libmysqlclient}/lib"
+          "-I" "${libmysqlclient}/include"
         ]
     );
 

@@ -1,10 +1,12 @@
-diff -Naur a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
---- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java	2019-06-12 20:39:37.420705161 -0700
-+++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java	2019-06-12 20:44:18.894429744 -0700
-@@ -428,24 +428,7 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+index 8e772005cd..6ffa1c919c 100644
+--- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
++++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+@@ -432,25 +432,7 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
+       String content;
        try {
          content = FileSystemUtils.readContent(markerPath, StandardCharsets.UTF_8);
-         String markerRuleKey = readMarkerFile(content, markerData);
+-        String markerRuleKey = readMarkerFile(content, markerData);
 -        boolean verified = false;
 -        if (Preconditions.checkNotNull(ruleKey).equals(markerRuleKey)
 -            && Objects.equals(
@@ -17,19 +19,21 @@ diff -Naur a/src/main/java/com/google/devtools/build/lib/rules/repository/Reposi
 -        }
 -
 -        if (verified) {
-           return new Fingerprint().addString(content).digestAndReset();
+-          return new Fingerprint().addString(content).digestAndReset();
 -        } else {
 -          // So that we are in a consistent state if something happens while fetching the repository
 -          markerPath.delete();
 -          return null;
 -        }
++        return new Fingerprint().addString(content).digestAndReset();
        } catch (IOException e) {
          throw new RepositoryFunctionException(e, Transience.TRANSIENT);
        }
-diff -Naur a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
---- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java	2019-06-12 20:39:37.538708196 -0700
-+++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java	2019-06-12 20:44:18.863429602 -0700
-@@ -146,7 +146,6 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+index c282d57ab6..f9b0c08627 100644
+--- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
++++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+@@ -146,7 +146,6 @@ public class JavaSubprocessFactory implements SubprocessFactory {
      ProcessBuilder builder = new ProcessBuilder();
      builder.command(params.getArgv());
      if (params.getEnv() != null) {

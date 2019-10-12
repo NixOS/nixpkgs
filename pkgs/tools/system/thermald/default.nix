@@ -2,14 +2,14 @@
 , pkgconfig, dbus, dbus-glib, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "thermald-${version}";
-  version = "1.8";
+  pname = "thermald";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "1g1l7k8yxj8bl1ysdx8v6anv1s7xk9j072y44gwki70dy48n7j92";
+    sha256 = "1ajhivl9jifcf12nbk281yayk7666v65m249aclyli0bz1kh8cfs";
   };
 
   nativeBuildInputs = [ pkgconfig ];

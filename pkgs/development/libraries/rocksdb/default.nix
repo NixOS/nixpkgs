@@ -1,20 +1,22 @@
-{ stdenv, fetchFromGitHub, lib, bzip2, cmake, gflags, lz4, snappy, zlib, zstd, enableLite ? false }:
+{ stdenv, fetchFromGitHub, lib, bzip2, cmake, lz4, snappy, zlib, zstd, enableLite ? false }:
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "6.1.2";
+  version = "6.2.4";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gy2zjga3r8k9pbn2b0b5fzv4m0h2ip3zmyja1i7fli9n56civ3y";
+    sha256 = "08077agbimm7738xrknkw6fjw9f8jv6x3igp8b5pmsj9l954ywma";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ bzip2 gflags lz4 snappy zlib zstd ];
+  buildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
-  patches = [ ./0001-findzlib.patch ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "find_package(zlib " "find_package(ZLIB "
+  '';
 
   cmakeFlags = [
     "-DPORTABLE=1"
@@ -27,6 +29,7 @@ stdenv.mkDerivation rec {
     "-DWITH_SNAPPY=1"
     "-DWITH_ZLIB=1"
     "-DWITH_ZSTD=1"
+    "-DWITH_GFLAGS=0"
     (lib.optional
         (stdenv.hostPlatform.system == "i686-linux"
          || stdenv.hostPlatform.system == "x86_64-linux")

@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, python3, sass, glib, gdk_pixbuf, libxml2,
+{ stdenv, fetchFromGitHub, python3, sass, glib, gdk-pixbuf, libxml2,
   inkscape, optipng, gtk-engine-murrine
 }:
 
 stdenv.mkDerivation rec {
   version = "20170810";
-  name = "numix-solarized-gtk-theme-${version}";
+  pname = "numix-solarized-gtk-theme";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l4xvsiyg15kp6xwpvm3jckxyhr1lxd678lkhrcyf40n7rd4xinl";
   };
 
-  nativeBuildInputs = [ python3 sass glib gdk_pixbuf libxml2 inkscape optipng ];
+  nativeBuildInputs = [ python3 sass glib gdk-pixbuf libxml2 inkscape optipng ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

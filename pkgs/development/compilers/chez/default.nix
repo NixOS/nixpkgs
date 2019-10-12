@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "chez-scheme-${version}";
+  pname = "chez-scheme";
   version = "9.5.2";
 
   src = fetchFromGitHub {
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses libiconv libX11 libuuid ];
 
   enableParallelBuilding = true;
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   /*
   ** We patch out a very annoying 'feature' in ./configure, which

@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "rainicorn-${version}";
+  pname = "rainicorn";
   version = "1.0.0";
 
   src = fetchFromGitHub {

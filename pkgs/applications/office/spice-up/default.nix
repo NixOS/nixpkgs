@@ -1,8 +1,9 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, gdk_pixbuf
+, gdk-pixbuf
 , gtk3
+, vala
 , gettext
 , ninja
 , pantheon
@@ -12,7 +13,8 @@
 , libevdev
 , libgee
 , libsoup
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "spice-up";
@@ -32,13 +34,13 @@ stdenv.mkDerivation rec {
     gettext
     ninja
     pkgconfig
-    pantheon.vala
+    vala
     wrapGAppsHook
   ];
   buildInputs = [
     pantheon.elementary-icon-theme
     pantheon.granite
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     json-glib
     libevdev

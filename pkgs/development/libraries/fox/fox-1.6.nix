@@ -7,10 +7,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "fox-${version}";
+  pname = "fox";
+  inherit version;
 
   src = fetchurl {
-    url = "ftp://ftp.fox-toolkit.org/pub/${name}.tar.gz";
+    url = "ftp://ftp.fox-toolkit.org/pub/${pname}-${version}.tar.gz";
     sha256 = "08w98m6wjadraw1pi13igzagly4b2nfa57kdqdnkjfhgkvg1bvv5";
   };
 

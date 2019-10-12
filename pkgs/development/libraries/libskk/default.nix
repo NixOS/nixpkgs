@@ -4,7 +4,7 @@
   libgee, json-glib, skk-dicts, libxkbcommon }:
 
 stdenv.mkDerivation rec {
-  name = "libskk-${version}";
+  pname = "libskk";
   version = "1.0.5";
 
   src = fetchFromGitHub {

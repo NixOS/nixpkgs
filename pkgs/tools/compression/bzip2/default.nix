@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bzip2-${version}";
+  pname = "bzip2";
   version = "1.0.6.0.1";
 
   /* We use versions patched to use autotools style properly,
       saving lots of trouble. */
   src = fetchurl {
     urls = map
-      (prefix: prefix + "/people/sbrabec/bzip2/tarballs/${name}.tar.gz")
+      (prefix: prefix + "/people/sbrabec/bzip2/tarballs/${pname}-${version}.tar.gz")
       [
         "http://ftp.uni-kl.de/pub/linux/suse"
         "ftp://ftp.hs.uni-hamburg.de/pub/mirrors/suse"
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./CVE-2016-3189.patch
+    ./cve-2019-12900.patch
   ];
 
   postPatch = ''

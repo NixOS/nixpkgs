@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "buildbot-pkg";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bpqiih15b5kzx1r542m8j7ydbnmgzhdnkaxv0z7gjv21k78m5i5";
+    sha256 = "0dfx3b6w9b326a0jrgc42a5ki84ya7bvx10pm62bfcby0mixhd4y";
   };
 
   postPatch = ''
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = http://buildbot.net/;
     description = "Buildbot Packaging Helper";
-    maintainers = with maintainers; [ nand0p ryansydnor ];
+    maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
     license = licenses.gpl2;
   };
 }

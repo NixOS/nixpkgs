@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ intltool gtk2 ];
 
   meta = {
-    description = "Theme engines for GTK+ 2";
+    description = "Theme engines for GTK 2";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
   };

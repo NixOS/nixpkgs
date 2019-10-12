@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, which, sassc, glib, libxml2, gdk_pixbuf, librsvg, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, autoreconfHook, which, sassc, glib, libxml2, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "greybird";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     librsvg
   ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "Grey and blue theme from the Shimmer Project for GTK+-based environments";
+    description = "Grey and blue theme from the Shimmer Project for GTK-based environments";
     homepage = https://github.com/shimmerproject/Greybird;
     license = with licenses; [ gpl2Plus ]; # or alternatively: cc-by-nc-sa-30
     platforms = platforms.linux;

@@ -10,7 +10,7 @@ in
 # So an extension's attribute name should be of the form:
 # "${mktplcRef.publisher}.${mktplcRef.name}".
 #
-rec {
+{
 
   alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
     mktplcRef = {
@@ -36,6 +36,18 @@ rec {
     };
   };
 
+  cmschuetz12.wal = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+        name = "wal";
+        publisher = "cmschuetz12";
+        version = "0.1.0";
+        sha256 = "0q089jnzqzhjfnv0vlb5kf747s3mgz64r7q3zscl66zb2pz5q4zd";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
+    };
+  };
+
   formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "auto-close-tag";
@@ -45,6 +57,18 @@ rec {
     };
     meta = {
       license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  james-yu.latex-workshop = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "latex-workshop";
+      publisher = "James-Yu";
+      version = "8.2.0"; 
+      sha256 = "1ai16aam4v5jzhxgms589q0l24kyk1a9in6z4i7g05b3sahyxab2";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
     };
   };
 
@@ -62,7 +86,21 @@ rec {
 
   ms-vscode.cpptools = callPackage ./cpptools {};
 
-  ms-python.python = callPackage ./python {};
+  ms-python.python = callPackage ./python {
+    extractNuGet = callPackage ./python/extract-nuget.nix { };
+  };
+
+  skyapps.fish-vscode = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "fish-vscode";
+      publisher = "skyapps";
+      version = "0.2.1";
+      sha256 = "0y1ivymn81ranmir25zk83kdjpjwcqpnc9r3jwfykjd9x0jib2hl";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
+    };
+  };
 
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {

@@ -52,13 +52,13 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "digikam";
     rev    = "v${version}";
-    sha256 = "0h0jqfgpanhxfi3r7cgip58ppypqx79z6c5jj7i7f19hp2zziip8";
+    sha256 = "1l1nb1nwicmip2jxhn5gzr7h60igvns0zs3kzp36r6qf4wvg3v2z";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -104,6 +104,8 @@ mkDerivation rec {
     oxygen
     threadweaver
   ];
+
+  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"

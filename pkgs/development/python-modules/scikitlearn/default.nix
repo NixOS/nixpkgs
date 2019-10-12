@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , gfortran, glibcLocales
 , numpy, scipy, pytest, pillow
 , cython
@@ -39,6 +40,15 @@ buildPythonPackage rec {
     joblib
   ];
   checkInputs = [ pytest ];
+
+  patches = [
+    # Fixes tests by changing threshold of a test-case that broke
+    # with numpy versions >= 1.17. This should be removed for versions > 0.21.2.
+	( fetchpatch {
+	  url = "https://github.com/scikit-learn/scikit-learn/commit/b730befc821caec5b984d9ff3aa7bc4bd7f4d9bb.patch";
+	  sha256 = "0z36m05mv6d494qwq0688rgwa7c4bbnm5s2rcjlrp29fwn3fy1bv";
+	})
+  ];
 
   LC_ALL="en_US.UTF-8";
 

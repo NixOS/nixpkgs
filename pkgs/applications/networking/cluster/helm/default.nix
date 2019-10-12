@@ -1,14 +1,14 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  version = "2.11.0";
-  name = "helm-${version}";
+  version = "2.14.3";
+  pname = "helm";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "1z810a6mxyrrw4i908dip8aqsj95c0kmv6xpb1wwhskg1zmf85wk";
+    sha256 = "18ly31db2kxybjlisz8dfz3cdxs7j2wsh4rx5lwhbm5hpp42h17d";
   };
 
   goPackagePath = "k8s.io/helm";
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   # Thsese are the original flags from the helm makefile
   buildFlagsArray = ''
-    -ldflags=-X k8s.io/helm/pkg/version.Version=v${version}
+    -ldflags=-X k8s.io/helm/pkg/version.Version=v${version} -X k8s.io/helm/pkg/version.GitTreeState=clean -X k8s.io/helm/pkg/version.BuildMetadata=
     -w
     -s
   '';

@@ -1,63 +1,89 @@
-{ stdenv, fetchurl, lib, makeWrapper
-, substituteAll
+{ stdenv
+, fetchurl
+, makeDesktopItem
 , jre
-, gtk2, glib
+, gtk3
+, glib
+, gnome3
+, wrapGAppsHook
+, hicolor-icon-theme
 , libXtst
 , which
 }:
 
 stdenv.mkDerivation rec {
-  name = "smartgithg-${version}";
-  version = "18.2.4";
+  pname = "smartgithg";
+  version = "19.1.1";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    sha256 = "0ch6vcvndn1fpx05ym9yp2ssfw2af6ac0pw8ssvjkc676zc0jr73";
+    sha256 = "0i0dvyy9d63f4hk8czlyk83ai0ywhqp7wbdkq3s87l7irwgs42jy";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ jre ];
+  buildInputs = [ jre gnome3.adwaita-icon-theme hicolor-icon-theme gtk3 ];
 
-  buildCommand = let
-    pkg_path = "$out/${name}";
-    bin_path = "$out/bin";
-    install_freedesktop_items = substituteAll {
-      inherit (stdenv) shell;
-      isExecutable = true;
-      src = ./install_freedesktop_items.sh;
-    };
-    runtime_paths = lib.makeBinPath [
-      jre
-      #git mercurial subversion # the paths are requested in configuration
-      which
-    ];
-    runtime_lib_paths = lib.makeLibraryPath [
-      gtk2 glib
-      libXtst
-    ];
-  in ''
-    tar xvzf $src
-    mkdir -pv $out
-    mkdir -pv ${pkg_path}
-    # unpacking should have produced a dir named 'smartgit'
-    cp -a smartgit/* ${pkg_path}
-    # prevent using packaged jre
-    rm -r ${pkg_path}/jre
-    mkdir -pv ${bin_path}
-    jre=${jre.home}
-    makeWrapper ${pkg_path}/bin/smartgit.sh ${bin_path}/smartgit \
-      --prefix PATH : ${runtime_paths} \
-      --prefix LD_LIBRARY_PATH : ${runtime_lib_paths} \
+  preFixup = with stdenv.lib; ''
+    gappsWrapperArgs+=( \
+      --prefix PATH : ${makeBinPath [ jre which ]} \
+      --prefix LD_LIBRARY_PATH : ${makeLibraryPath [
+        gtk3
+        glib
+        libXtst
+      ]} \
       --prefix JRE_HOME : ${jre} \
       --prefix JAVA_HOME : ${jre} \
-      --prefix SMARTGITHG_JAVA_HOME : ${jre}
-    sed -i '/ --login/d' ${pkg_path}/bin/smartgit.sh
-    patchShebangs $out
-    cp ${bin_path}/smartgit ${bin_path}/smartgithg
-
-    ${install_freedesktop_items} "${pkg_path}/bin" "$out"
+      --prefix SMARTGITHG_JAVA_HOME : ${jre} \
+    ) \
   '';
+
+  installPhase = ''
+    runHook preInstall
+
+    sed -i '/ --login/d' bin/smartgit.sh
+    mkdir -pv $out/{bin,share/applications,share/icons/hicolor/scalable/apps/}
+    cp -av ./{dictionaries,lib} $out/
+    cp -av bin/smartgit.sh $out/bin/smartgit
+    ln -sfv $out/bin/smartgit $out/bin/smartgithg
+
+    cp -av $desktopItem/share/applications/* $out/share/applications/
+    for icon_size in 32 48 64 128 256; do
+        path=$icon_size'x'$icon_size
+        icon=bin/smartgit-$icon_size.png
+        mkdir -p $out/share/icons/hicolor/$path/apps
+        cp $icon $out/share/icons/hicolor/$path/apps/smartgit.png
+    done
+
+    cp -av bin/smartgit.svg $out/share/icons/hicolor/scalable/apps/
+
+    runHook postInstall
+  '';
+
+  desktopItem = with stdenv.lib; makeDesktopItem rec {
+    name = "smartgit";
+    exec = "smartgit";
+    comment = meta.description;
+    icon = "smartgit";
+    desktopName = "SmartGit";
+    categories = concatStringsSep ";" [
+      "Application"
+      "Development"
+      "RevisionControl"
+    ];
+    mimeType = concatStringsSep ";" [
+      "x-scheme-handler/git"
+      "x-scheme-handler/smartgit"
+      "x-scheme-handler/sourcetree"
+    ];
+    startupNotify = "true";
+    extraEntries = ''
+      Keywords=git
+      StartupWMClass=${name}
+      Version=1.0
+      Encoding=UTF-8
+    '';
+  };
 
   meta = with stdenv.lib; {
     description = "GUI for Git, Mercurial, Subversion";

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, libunwind, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "strace-${version}";
-  version = "5.1";
+  pname = "strace";
+  version = "5.3";
 
   src = fetchurl {
-    url = "https://strace.io/files/${version}/${name}.tar.xz";
-    sha256 = "12wsga1v3rab24gr0mpfip7j7gwr90m8f9h6fviqxa3xgnwl38zm";
+    url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0ix06z4vnc49mv76f22kixz8dsh7daqv9mpgwcgl0mlnfjc124vc";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

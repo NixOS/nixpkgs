@@ -2,7 +2,7 @@
 , doxygen, freetype, libX11, libftdi, libusb, libusb1, ncurses, perl }:
 
 stdenv.mkDerivation rec {
-  name = "lcdproc-${version}";
+  pname = "lcdproc";
   version = "0.5.9";
 
   src = fetchFromGitHub {

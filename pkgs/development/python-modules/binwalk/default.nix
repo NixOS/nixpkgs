@@ -15,8 +15,8 @@
 
 let visualizationSupport = (pyqtgraph != null);
 in
-buildPythonPackage rec {
-  name = "binwalk-${version}";
+buildPythonPackage {
+  pname = "binwalk";
   version = "2.1.1";
 
   src = fetchFromGitHub {

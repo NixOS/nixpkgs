@@ -1,7 +1,7 @@
 { cairo, fetchzip, glib, gnome3, gtk3, gobject-introspection, pkgconfig, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "osm-gps-map-${version}";
+  pname = "osm-gps-map";
   version = "1.1.0";
 
   src = fetchzip {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "Gtk+ widget for displaying OpenStreetMap tiles";
+    description = "GTK widget for displaying OpenStreetMap tiles";
     homepage = https://nzjrs.github.io/osm-gps-map;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hrdinka ];

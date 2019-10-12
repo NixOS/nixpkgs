@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, git, glibc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.2.1";
-  name = "lepton-${version}";
+  pname = "lepton";
 
   src = fetchFromGitHub {
     repo = "lepton";

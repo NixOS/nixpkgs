@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pz90h21f74n8i3cx5ndxm4r3rismkx5qbw1c0cmfci9a3009rq5";
+    sha256 = "0rhmwq1jra2cs0j09z2ks4vnv0svi8lj21nq9qq50i52x4ml4yb7";
   };
 
   propagatedBuildInputs = [ nose plumbum ];

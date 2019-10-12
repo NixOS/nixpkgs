@@ -8,10 +8,11 @@ let
   pname = "krusader";
   version = "2.7.1";
 in mkDerivation rec {
-  name = "krusader-${version}";
+  pname = "krusader";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${name}.tar.xz";
+    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
     sha256 = "1svxj1qygyr3a4dkx0nh2d6r4q7pfj00brzghl94mf4q0rz4vhfm";
   };
 

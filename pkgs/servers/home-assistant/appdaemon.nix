@@ -38,15 +38,6 @@ let
           sha256 = "0f390693f46173d8ffb95669acbb0e2a3ec54ecce676703510ad47f1a6d9dc83";
         };
       });
-
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "436bc774ecf7c103814098159fbb84c2715d25980175292c648f2da143909f95";
-        };
-      });
-
     };
   };
 
@@ -66,6 +57,10 @@ in python.pkgs.buildPythonApplication rec {
 
   # no tests implemented
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "pyyaml==5.1" "pyyaml"
+  '';
 
   meta = with lib; {
     description = "Sandboxed python execution environment for writing automation apps for Home Assistant";

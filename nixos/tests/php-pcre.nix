@@ -8,30 +8,25 @@ import ./make-test.nix ({ ...}: {
     services.httpd = {
       enable = true;
       adminAddr = "please@dont.contact";
-      extraSubservices = lib.singleton {
-        function = f: {
-          enablePHP = true;
-          phpOptions = "pcre.jit = true";
+      enablePHP = true;
+      phpOptions = "pcre.jit = true";
+      extraConfig =
+      let
+        testRoot = pkgs.writeText "index.php"
+        ''
+          <?php
+            preg_match('/(${testString})/', '${testString}', $result);
+            var_dump($result);
+          ?>
+        '';
+      in
+        ''
+          Alias / ${testRoot}/
 
-          extraConfig =
-          let
-            testRoot = pkgs.writeText "index.php"
-            ''
-              <?php
-                preg_match('/(${testString})/', '${testString}', $result);
-                var_dump($result);
-              ?>
-            '';
-          in
-            ''
-              Alias / ${testRoot}/
-
-              <Directory ${testRoot}>
-                Require all granted
-              </Directory>
-            '';
-        };
-      };
+          <Directory ${testRoot}>
+            Require all granted
+          </Directory>
+        '';
     };
   };
   testScript = { ... }:

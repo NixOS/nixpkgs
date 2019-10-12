@@ -9,8 +9,6 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "man" ];
 
-  doBuild = false;
-
   installPhase = ''
     mkdir -p \
       "$out/bin" \

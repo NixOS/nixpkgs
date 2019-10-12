@@ -18,7 +18,7 @@ let
   packages = ( self:
 
 let
-  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy38 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   callPackage = pkgs.newScope self;
 
@@ -42,39 +42,20 @@ let
       }
       else ff;
 
-  buildPythonPackage = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
-    flit = self.flit;
-    # We want Python libraries to be named like e.g. "python3.6-${name}"
-    inherit namePrefix;
-    inherit toPythonModule;
+  buildPythonPackage = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/mk-python-derivation.nix {
+    inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
+    inherit toPythonModule; # Libraries provide modules
   }));
 
-  buildPythonApplication = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
-    flit = self.flit;
-    namePrefix = "";
-    toPythonModule = x: x; # Application does not provide modules.
+  buildPythonApplication = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/mk-python-derivation.nix {
+    namePrefix = "";        # Python applications should not have any prefix
+    toPythonModule = x: x;  # Application does not provide modules.
   }));
 
   # See build-setupcfg/default.nix for documentation.
   buildSetupcfg = import ../build-support/build-setupcfg self;
 
-  fetchPypi = makeOverridable( {format ? "setuptools", ... } @attrs:
-    let
-      fetchWheel = {pname, version, sha256, python ? "py2.py3", abi ? "none", platform ? "any"}:
-      # Fetch a wheel. By default we fetch an universal wheel.
-      # See https://www.python.org/dev/peps/pep-0427/#file-name-convention for details regarding the optional arguments.
-        let
-          url = "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
-        in pkgs.fetchurl {inherit url sha256;};
-      fetchSource = {pname, version, sha256, extension ? "tar.gz"}:
-      # Fetch a source tarball.
-        let
-          url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.${extension}";
-        in pkgs.fetchurl {inherit url sha256;};
-      fetcher = (if format == "wheel" then fetchWheel
-        else if format == "setuptools" then fetchSource
-        else throw "Unsupported kind ${kind}");
-    in fetcher (builtins.removeAttrs attrs ["format"]) );
+  fetchPypi = callPackage ../development/interpreters/python/fetchpypi.nix {};
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
@@ -126,6 +107,9 @@ in {
   inherit toPythonModule toPythonApplication;
   inherit buildSetupcfg;
 
+  inherit (callPackage ../development/interpreters/python/hooks { })
+    flitBuildHook pipBuildHook pipInstallHook pytestCheckHook pythonCatchConflictsHook pythonImportsCheckHook pythonRemoveBinBytecodeHook setuptoolsBuildHook setuptoolsCheckHook wheelUnpackHook;
+
   # helpers
 
   wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {inherit python; inherit (pkgs) makeSetupHook makeWrapper; };
@@ -137,13 +121,15 @@ in {
 
   recursivePthLoader = callPackage ../development/python-modules/recursive-pth-loader { };
 
-  setuptools = toPythonModule (callPackage ../development/python-modules/setuptools { });
+  setuptools = callPackage ../development/python-modules/setuptools { };
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
   acoustics = callPackage ../development/python-modules/acoustics { };
 
   py3to2 = callPackage ../development/python-modules/3to2 { };
+
+  pynamodb = callPackage ../development/python-modules/pynamodb { };
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
@@ -179,6 +165,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  ansi2html = callPackage ../development/python-modules/ansi2html { };
+
   anytree = callPackage ../development/python-modules/anytree {
     inherit (pkgs) graphviz;
   };
@@ -191,9 +179,16 @@ in {
 
   asana = callPackage ../development/python-modules/asana { };
 
+  asdf = callPackage ../development/python-modules/asdf { };
+
   asciimatics = callPackage ../development/python-modules/asciimatics { };
 
-  ase = callPackage ../development/python-modules/ase { };
+  asciitree = callPackage ../development/python-modules/asciitree { };
+
+  ase = if isPy27 then
+          callPackage ../development/python-modules/ase/3.17.nix { }
+        else
+          callPackage ../development/python-modules/ase { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
@@ -250,27 +245,43 @@ in {
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
+  azure-cli-core = callPackage ../development/python-modules/azure-cli-core { };
+
+  azure-cli-telemetry = callPackage ../development/python-modules/azure-cli-telemetry { };
+
   azure-common = callPackage ../development/python-modules/azure-common { };
 
   azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
 
-  azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
+  azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
 
-  azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
+  azure-batch = callPackage ../development/python-modules/azure-batch { };
 
-  azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
+  azure-cosmosdb-nspkg = callPackage ../development/python-modules/azure-cosmosdb-nspkg { };
 
-  azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
+  azure-cosmosdb-table = callPackage ../development/python-modules/azure-cosmosdb-table { };
 
-  azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
+  azure-datalake-store = callPackage ../development/python-modules/azure-datalake-store { };
 
-  azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
+  azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
 
-  azure-storage = callPackage ../development/python-modules/azure-storage { };
+  azure-graphrbac = callPackage ../development/python-modules/azure-graphrbac { };
+
+  azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
+
+  azure-loganalytics = callPackage ../development/python-modules/azure-loganalytics { };
+
+  azure-servicebus = callPackage ../development/python-modules/azure-servicebus { };
+
+  azure-servicefabric = callPackage ../development/python-modules/azure-servicefabric { };
+
+  azure-servicemanagement-legacy = callPackage ../development/python-modules/azure-servicemanagement-legacy { };
 
   azure-storage-nspkg = callPackage ../development/python-modules/azure-storage-nspkg { };
 
   azure-storage-common = callPackage ../development/python-modules/azure-storage-common { };
+
+  azure-storage = callPackage ../development/python-modules/azure-storage { };
 
   azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
 
@@ -278,14 +289,136 @@ in {
 
   azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
 
-  azure-servicemanagement-legacy = callPackage ../development/python-modules/azure-servicemanagement-legacy { };
+  azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
+
+  azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
+
+  azure-mgmt-advisor = callPackage ../development/python-modules/azure-mgmt-advisor { };
+
+  azure-mgmt-applicationinsights = callPackage ../development/python-modules/azure-mgmt-applicationinsights { };
+
+  azure-mgmt-authorization = callPackage ../development/python-modules/azure-mgmt-authorization { };
+
+  azure-mgmt-batch = callPackage ../development/python-modules/azure-mgmt-batch { };
+
+  azure-mgmt-batchai = callPackage ../development/python-modules/azure-mgmt-batchai { };
+
+  azure-mgmt-billing = callPackage ../development/python-modules/azure-mgmt-billing { };
+
+  azure-mgmt-cdn = callPackage ../development/python-modules/azure-mgmt-cdn { };
+
+  azure-mgmt-cognitiveservices = callPackage ../development/python-modules/azure-mgmt-cognitiveservices { };
+
+  azure-mgmt-commerce = callPackage ../development/python-modules/azure-mgmt-commerce { };
+
+  azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
+
+  azure-mgmt-consumption = callPackage ../development/python-modules/azure-mgmt-consumption { };
+
+  azure-mgmt-containerinstance = callPackage ../development/python-modules/azure-mgmt-containerinstance { };
+
+  azure-mgmt-containerservice = callPackage ../development/python-modules/azure-mgmt-containerservice { };
+
+  azure-mgmt-cosmosdb = callPackage ../development/python-modules/azure-mgmt-cosmosdb { };
+
+  azure-mgmt-datafactory = callPackage ../development/python-modules/azure-mgmt-datafactory { };
+
+  azure-mgmt-datalake-analytics = callPackage ../development/python-modules/azure-mgmt-datalake-analytics { };
+
+  azure-mgmt-datalake-nspkg = callPackage ../development/python-modules/azure-mgmt-datalake-nspkg { };
+
+  azure-mgmt-datalake-store = callPackage ../development/python-modules/azure-mgmt-datalake-store { };
+
+  azure-mgmt-datamigration = callPackage ../development/python-modules/azure-mgmt-datamigration { };
+
+  azure-mgmt-devspaces = callPackage ../development/python-modules/azure-mgmt-devspaces { };
+
+  azure-mgmt-devtestlabs = callPackage ../development/python-modules/azure-mgmt-devtestlabs { };
+
+  azure-mgmt-dns = callPackage ../development/python-modules/azure-mgmt-dns { };
+
+  azure-mgmt-eventgrid = callPackage ../development/python-modules/azure-mgmt-eventgrid { };
+
+  azure-mgmt-eventhub = callPackage ../development/python-modules/azure-mgmt-eventhub { };
+
+  azure-mgmt-hanaonazure = callPackage ../development/python-modules/azure-mgmt-hanaonazure { };
+
+  azure-mgmt-iotcentral = callPackage ../development/python-modules/azure-mgmt-iotcentral { };
+
+  azure-mgmt-iothub = callPackage ../development/python-modules/azure-mgmt-iothub { };
+
+  azure-mgmt-iothubprovisioningservices = callPackage ../development/python-modules/azure-mgmt-iothubprovisioningservices { };
+
+  azure-mgmt-keyvault = callPackage ../development/python-modules/azure-mgmt-keyvault { };
+
+  azure-mgmt-loganalytics = callPackage ../development/python-modules/azure-mgmt-loganalytics { };
+
+  azure-mgmt-logic = callPackage ../development/python-modules/azure-mgmt-logic { };
+
+  azure-mgmt-machinelearningcompute = callPackage ../development/python-modules/azure-mgmt-machinelearningcompute { };
+
+  azure-mgmt-managementgroups = callPackage ../development/python-modules/azure-mgmt-managementgroups { };
+
+  azure-mgmt-managementpartner = callPackage ../development/python-modules/azure-mgmt-managementpartner { };
+
+  azure-mgmt-maps = callPackage ../development/python-modules/azure-mgmt-maps { };
+
+  azure-mgmt-marketplaceordering = callPackage ../development/python-modules/azure-mgmt-marketplaceordering { };
+
+  azure-mgmt-media = callPackage ../development/python-modules/azure-mgmt-media { };
+
+  azure-mgmt-monitor = callPackage ../development/python-modules/azure-mgmt-monitor { };
+
+  azure-mgmt-msi = callPackage ../development/python-modules/azure-mgmt-msi { };
+
+  azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
+
+  azure-mgmt-notificationhubs = callPackage ../development/python-modules/azure-mgmt-notificationhubs { };
+
+  azure-mgmt-policyinsights = callPackage ../development/python-modules/azure-mgmt-policyinsights { };
+
+  azure-mgmt-powerbiembedded = callPackage ../development/python-modules/azure-mgmt-powerbiembedded { };
+
+  azure-mgmt-rdbms = callPackage ../development/python-modules/azure-mgmt-rdbms { };
+
+  azure-mgmt-recoveryservices = callPackage ../development/python-modules/azure-mgmt-recoveryservices { };
+
+  azure-mgmt-recoveryservicesbackup = callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup { };
+
+  azure-mgmt-redis = callPackage ../development/python-modules/azure-mgmt-redis { };
+
+  azure-mgmt-relay = callPackage ../development/python-modules/azure-mgmt-relay { };
+
+  azure-mgmt-reservations = callPackage ../development/python-modules/azure-mgmt-reservations { };
+
+  azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
+
+  azure-mgmt-scheduler = callPackage ../development/python-modules/azure-mgmt-scheduler { };
+
+  azure-mgmt-search = callPackage ../development/python-modules/azure-mgmt-search { };
+
+  azure-mgmt-servicebus = callPackage ../development/python-modules/azure-mgmt-servicebus { };
+
+  azure-mgmt-servicefabric = callPackage ../development/python-modules/azure-mgmt-servicefabric { };
+
+  azure-mgmt-signalr = callPackage ../development/python-modules/azure-mgmt-signalr { };
+
+  azure-mgmt-sql = callPackage ../development/python-modules/azure-mgmt-sql { };
+
+  azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
+
+  azure-mgmt-subscription = callPackage ../development/python-modules/azure-mgmt-subscription { };
+
+  azure-mgmt-trafficmanager = callPackage ../development/python-modules/azure-mgmt-trafficmanager { };
+
+  azure-mgmt-web = callPackage ../development/python-modules/azure-mgmt-web { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
 
   bap = callPackage ../development/python-modules/bap {
-    bap = pkgs.ocamlPackages.bap;
+    bap = pkgs.ocaml-ng.ocamlPackages_4_06.bap;
   };
 
   baselines = callPackage ../development/python-modules/baselines { };
@@ -340,9 +473,21 @@ in {
 
   clikit = callPackage ../development/python-modules/clikit { };
 
+  cliff = callPackage ../development/python-modules/cliff { };
+
+  clifford = callPackage ../development/python-modules/clifford { };
+
+  clickclick = callPackage ../development/python-modules/clickclick { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  cnvkit = callPackage ../development/python-modules/cnvkit { };
+
+  connexion = callPackage ../development/python-modules/connexion { };
+
   cozy = callPackage ../development/python-modules/cozy { };
+
+  codespell = callPackage ../development/python-modules/codespell { };
 
   curio = callPackage ../development/python-modules/curio { };
 
@@ -352,11 +497,15 @@ in {
 
   btchip = callPackage ../development/python-modules/btchip { };
 
-  datatable = callPackage ../development/python-modules/datatable { };
+  datatable = callPackage ../development/python-modules/datatable {
+    inherit (pkgs.llvmPackages) openmp libcxx libcxxabi;
+  };
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datasette = callPackage ../development/python-modules/datasette { };
+
+  datashader = callPackage ../development/python-modules/datashader { };
 
   dbf = callPackage ../development/python-modules/dbf { };
 
@@ -370,11 +519,19 @@ in {
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
 
+  diofant = callPackage ../development/python-modules/diofant { };
+
   docrep = callPackage ../development/python-modules/docrep { };
 
   dominate = callPackage ../development/python-modules/dominate { };
 
+  dotnetcore2 = callPackage ../development/python-modules/dotnetcore2 {
+    inherit (pkgs) substituteAll dotnet-sdk;
+  };
+
   emcee = callPackage ../development/python-modules/emcee { };
+
+  emailthreads = callPackage ../development/python-modules/emailthreads { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
 
@@ -408,6 +565,10 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  entrance = callPackage ../development/python-modules/entrance { routerFeatures = false; };
+
+  entrance-with-router-features = callPackage ../development/python-modules/entrance { routerFeatures = true; };
+
   eradicate = callPackage ../development/python-modules/eradicate {  };
 
   face = callPackage ../development/python-modules/face { };
@@ -418,11 +579,17 @@ in {
 
   fasttext = callPackage ../development/python-modules/fasttext {  };
 
+  facedancer = callPackage ../development/python-modules/facedancer {  };
+
   favicon = callPackage ../development/python-modules/favicon {  };
+
+  fdint = callPackage ../development/python-modules/fdint { };
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
+
+  filemagic = callPackage ../development/python-modules/filemagic { };
 
   fints = callPackage ../development/python-modules/fints { };
 
@@ -430,9 +597,15 @@ in {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
-  fdint = callPackage ../development/python-modules/fdint { };
+  flufl_bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
 
-  filemagic = callPackage ../development/python-modules/filemagic { };
+  flufl_i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
+
+  flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
+
+  foxdot = callPackage ../development/python-modules/foxdot { };
+
+  fsspec = callPackage ../development/python-modules/fsspec { };
 
   fuse = callPackage ../development/python-modules/fuse-python {
     inherit (pkgs) fuse pkgconfig;
@@ -442,11 +615,17 @@ in {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  geoip2 = callPackage ../development/python-modules/geoip2 { };
+
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
   gin-config = callPackage ../development/python-modules/gin-config { };
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
+
+  glymur = callPackage ../development/python-modules/glymur { };
+
+  glob2 = callPackage ../development/python-modules/glob2 { };
 
   glom = callPackage ../development/python-modules/glom { };
 
@@ -460,7 +639,9 @@ in {
 
   gsd = callPackage ../development/python-modules/gsd { };
 
-  gssapi = callPackage ../development/python-modules/gssapi { };
+  gssapi = callPackage ../development/python-modules/gssapi {
+    inherit (pkgs) darwin krb5Full;
+  };
 
   guestfs = callPackage ../development/python-modules/guestfs { };
 
@@ -478,11 +659,15 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  handout = callPackage ../development/python-modules/handout { };
+
   helper = callPackage ../development/python-modules/helper { };
 
   histbook = callPackage ../development/python-modules/histbook { };
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
+
+  hocr-tools = callPackage ../development/python-modules/hocr-tools { };
 
   holoviews = callPackage ../development/python-modules/holoviews { };
 
@@ -510,15 +695,23 @@ in {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  janus = callPackage ../development/python-modules/janus { };
+
   jira = callPackage ../development/python-modules/jira { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
+
+  kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
     mpi = pkgs.openmpi;
   };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
+
+  lazr_config = callPackage ../development/python-modules/lazr/config.nix { };
+
+  lazr_delegates = callPackage ../development/python-modules/lazr/delegates.nix { };
 
   libmr = callPackage ../development/python-modules/libmr { };
 
@@ -528,11 +721,21 @@ in {
 
   logster = callPackage ../development/python-modules/logster { };
 
+  loguru = callPackage ../development/python-modules/loguru { };
+
   logzero = callPackage ../development/python-modules/logzero { };
 
   macropy = callPackage ../development/python-modules/macropy { };
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
+
+  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
+
+  mailman-web = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/web.nix { });
+
+  mailmanclient = disabledIf (!isPy3k) (callPackage ../development/python-modules/mailmanclient { });
+
+  mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
 
   manhole = callPackage ../development/python-modules/manhole { };
 
@@ -540,9 +743,13 @@ in {
 
   matchpy = callPackage ../development/python-modules/matchpy { };
 
-  monty = callPackage ../development/python-modules/monty { };
+  maxminddb = callPackage ../development/python-modules/maxminddb { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
+
+  mkl-service = callPackage ../development/python-modules/mkl-service { };
+
+  monty = callPackage ../development/python-modules/monty { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
@@ -591,6 +798,8 @@ in {
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
 
+  oath = callPackage ../development/python-modules/oath { };
+
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
@@ -624,7 +833,7 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
-  perf = callPackage ../development/python-modules/perf { };
+  pyperf = callPackage ../development/python-modules/pyperf { };
 
   perfplot = callPackage ../development/python-modules/perfplot { };
 
@@ -634,9 +843,9 @@ in {
 
   pims = callPackage ../development/python-modules/pims { };
 
-  plantuml = callPackage ../tools/misc/plantuml { };
-
   poetry = callPackage ../development/python-modules/poetry { };
+
+  postorius = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/postorius.nix { });
 
   pplpy = callPackage ../development/python-modules/pplpy { };
 
@@ -648,9 +857,13 @@ in {
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
+  purl = callPackage ../development/python-modules/purl { };
+
   pymystem3 = callPackage ../development/python-modules/pymystem3 { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
+
+  pymupdf = callPackage ../development/python-modules/pymupdf { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
 
@@ -673,6 +886,8 @@ in {
   };
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
+
+  pybids = callPackage ../development/python-modules/pybids { };
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
@@ -710,17 +925,23 @@ in {
 
   pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
 
+  pydy = callPackage ../development/python-modules/pydy { };
+
   pyexiv2 = disabledIf isPy3k (toPythonModule (callPackage ../development/python-modules/pyexiv2 {}));
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
   pyfakefs = callPackage ../development/python-modules/pyfakefs {};
 
+  pyfaidx = callPackage ../development/python-modules/pyfaidx { };
+
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
   pyftdi = callPackage ../development/python-modules/pyftdi { };
 
   pygame = callPackage ../development/python-modules/pygame { };
+
+  pygbm = callPackage ../development/python-modules/pygbm { };
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
@@ -795,6 +1016,12 @@ in {
   */
   pyqt5_with_qtwebkit = self.pyqt5.override { withWebKit = true; };
 
+  pyqt5_with_qtmultimedia = self.pyqt5.override { withMultimedia = true; };
+
+  pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
+    pythonPackages = self;
+  };
+
   pysc2 = callPackage ../development/python-modules/pysc2 { };
 
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
@@ -817,6 +1044,8 @@ in {
     inherit (pkgs) cmake qt5 llvmPackages;
   });
 
+  simplefix = callPackage ../development/python-modules/simplefix { };
+
   pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
     inherit (pkgs) cmake qt5;
   });
@@ -824,6 +1053,8 @@ in {
   pyslurm = callPackage ../development/python-modules/pyslurm {
     slurm = pkgs.slurm;
   };
+
+  pysmf = callPackage ../development/python-modules/pysmf { };
 
   pyspinel = callPackage ../development/python-modules/pyspinel {};
 
@@ -835,15 +1066,23 @@ in {
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
 
+  pytest-check = callPackage ../development/python-modules/pytest-check { };
+
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
+  pytest-flask = callPackage ../development/python-modules/pytest-flask { };
+
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
+
+  pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
+
+  pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
 
@@ -895,9 +1134,13 @@ in {
 
   python-utils = callPackage ../development/python-modules/python-utils { };
 
+  python-vipaccess = callPackage ../development/python-modules/python-vipaccess { };
+
   pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
   pytricia =  callPackage ../development/python-modules/pytricia { };
+
+  pytrends = callPackage ../development/python-modules/pytrends { };
 
   py-vapid = callPackage ../development/python-modules/py-vapid { };
 
@@ -925,6 +1168,8 @@ in {
 
   rlp = callPackage ../development/python-modules/rlp { };
 
+  rq = callPackage ../development/python-modules/rq { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };
@@ -947,6 +1192,8 @@ in {
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
+  simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
+
   singledispatch = callPackage ../development/python-modules/singledispatch { };
 
   sip = callPackage ../development/python-modules/sip { };
@@ -956,6 +1203,8 @@ in {
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
+
+  slicedimage = callPackage ../development/python-modules/slicedimage { };
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
@@ -969,9 +1218,15 @@ in {
 
   spglib = callPackage ../development/python-modules/spglib { };
 
+  sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
+
   sslib = callPackage ../development/python-modules/sslib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
+
+  stm32loader = callPackage ../development/python-modules/stm32loader { };
+
+  stumpy = callPackage ../development/python-modules/stumpy { };
 
   sumo = callPackage ../development/python-modules/sumo { };
 
@@ -1004,11 +1259,19 @@ in {
 
   toggl-cli = callPackage ../development/python-modules/toggl-cli { };
 
+  uamqp = callPackage ../development/python-modules/uamqp {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CFNetwork Security;
+  };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
-  uvloop = callPackage ../development/python-modules/uvloop { };
+  uvloop = callPackage ../development/python-modules/uvloop {
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
+  };
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
+
+  vdf = callPackage ../development/python-modules/vdf { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
 
@@ -1022,11 +1285,15 @@ in {
 
   yarg = callPackage ../development/python-modules/yarg { };
 
+  yt = callPackage ../development/python-modules/yt { };
+
   # packages defined here
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
+
+  algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
   altair = callPackage ../development/python-modules/altair { };
 
@@ -1052,6 +1319,8 @@ in {
 
   aioh2 = callPackage ../development/python-modules/aioh2 { };
 
+  aioftp = callPackage ../development/python-modules/aioftp { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
@@ -1062,11 +1331,15 @@ in {
 
   aiohttp-socks = callPackage ../development/python-modules/aiohttp-socks { };
 
+  aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aioresponses = callPackage ../development/python-modules/aioresponses { };
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
+
+  aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
@@ -1094,6 +1367,8 @@ in {
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 {};
 
+  anonip = callPackage ../development/python-modules/anonip { };
+
   asgiref = callPackage ../development/python-modules/asgiref { };
 
   python-editor = callPackage ../development/python-modules/python-editor { };
@@ -1112,7 +1387,9 @@ in {
 
   amqplib = callPackage ../development/python-modules/amqplib {};
 
-  antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {};
+  antlr4-python2-runtime = callPackage ../development/python-modules/antlr4-python2-runtime { antlr4 = pkgs.antlr4; };
+
+  antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime { antlr4 = pkgs.antlr4; };
 
   apipkg = callPackage ../development/python-modules/apipkg {};
 
@@ -1135,7 +1412,11 @@ in {
 
   astor = callPackage ../development/python-modules/astor {};
 
+  asyncpg = callPackage ../development/python-modules/asyncpg { };
+
   asyncssh = callPackage ../development/python-modules/asyncssh { };
+
+  atpublic = callPackage ../development/python-modules/atpublic { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
@@ -1146,8 +1427,6 @@ in {
   args = callPackage ../development/python-modules/args { };
 
   argcomplete = callPackage ../development/python-modules/argcomplete { };
-
-  area53 = callPackage ../development/python-modules/area53 { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
@@ -1162,6 +1441,8 @@ in {
   arelle-headless = callPackage ../development/python-modules/arelle {
     gui = false;
   };
+
+  delegator-py = callPackage ../development/python-modules/delegator-py { };
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
@@ -1259,6 +1540,8 @@ in {
 
   bidict = callPackage ../development/python-modules/bidict { };
 
+  bids-validator = callPackage ../development/python-modules/bids-validator { };
+
   binwalk = callPackage ../development/python-modules/binwalk { };
 
   binwalk-full = appendToName "full" (self.binwalk.override {
@@ -1290,6 +1573,8 @@ in {
 
   boltztrap2 = callPackage ../development/python-modules/boltztrap2 { };
 
+  boolean-py = callPackage ../development/python-modules/boolean-py { };
+
   bumps = callPackage ../development/python-modules/bumps {};
 
   cached-property = callPackage ../development/python-modules/cached-property { };
@@ -1300,6 +1585,8 @@ in {
   });
 
   capstone = callPackage ../development/python-modules/capstone { };
+
+  capturer = callPackage ../development/python-modules/capturer { };
 
   cement = callPackage ../development/python-modules/cement {};
 
@@ -1323,6 +1610,10 @@ in {
 
   circus = callPackage ../development/python-modules/circus {};
 
+  colorcet = callPackage ../development/python-modules/colorcet { };
+
+  coloredlogs = callPackage ../development/python-modules/coloredlogs { };
+
   colorclass = callPackage ../development/python-modules/colorclass {};
 
   colorlog = callPackage ../development/python-modules/colorlog { };
@@ -1336,6 +1627,8 @@ in {
   cornice = callPackage ../development/python-modules/cornice { };
 
   cram = callPackage ../development/python-modules/cram { };
+
+  crc16 = callPackage ../development/python-modules/crc16 { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
 
@@ -1406,6 +1699,8 @@ in {
   html5-parser = callPackage ../development/python-modules/html5-parser {
     inherit (pkgs) pkgconfig;
   };
+
+  HTSeq = callPackage ../development/python-modules/HTSeq { };
 
   httpserver = callPackage ../development/python-modules/httpserver {};
 
@@ -1503,9 +1798,13 @@ in {
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
+  cerberus11 = callPackage ../development/python-modules/cerberus11 { };
+
   certifi = callPackage ../development/python-modules/certifi { };
 
   characteristic = callPackage ../development/python-modules/characteristic { };
+
+  chart-studio = callPackage ../development/python-modules/chart-studio { };
 
   cheetah = callPackage ../development/python-modules/cheetah { };
 
@@ -1621,6 +1920,8 @@ in {
 
   eth-utils = callPackage ../development/python-modules/eth-utils { };
 
+  impacket = callPackage ../development/python-modules/impacket { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
@@ -1635,10 +1936,10 @@ in {
 
   openant = callPackage ../development/python-modules/openant { };
 
-  opencv = toPythonModule (pkgs.opencv.override {
+  opencv = disabledIf isPy3k (toPythonModule (pkgs.opencv.override {
     enablePython = true;
     pythonPackages = self;
-  });
+  }));
 
   opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
@@ -1651,6 +1952,8 @@ in {
   });
 
   openidc-client = callPackage ../development/python-modules/openidc-client {};
+
+  optuna = callPackage ../development/python-modules/optuna { };
 
   idna = callPackage ../development/python-modules/idna { };
 
@@ -1675,6 +1978,8 @@ in {
   portpicker = callPackage ../development/python-modules/portpicker { };
 
   pkginfo = callPackage ../development/python-modules/pkginfo { };
+
+  pre-commit = callPackage ../development/python-modules/pre-commit { };
 
   pretend = callPackage ../development/python-modules/pretend { };
 
@@ -1710,18 +2015,19 @@ in {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
-  pytest = self.pytest_42;
+  pytest = if isPy3k then self.pytest_5 else self.pytest_4;
 
-  pytest_42 = callPackage ../development/python-modules/pytest {
+  pytest_5 = callPackage ../development/python-modules/pytest {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
 
-  # Keep 3 because many test suites are not yet compatible with Pytest 4.
-  pytest_3 = callPackage ../development/python-modules/pytest/3.10.nix {
+  pytest_4 = callPackage ../development/python-modules/pytest/4.nix {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
+
+  pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
@@ -1732,6 +2038,10 @@ in {
   pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
+
+  pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
+
+  pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
 
   pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
 
@@ -1747,6 +2057,8 @@ in {
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
+  pytest-doctestplus = callPackage ../development/python-modules/pytest-doctestplus { };
+
   pytest-faulthandler = callPackage ../development/python-modules/pytest-faulthandler { };
 
   pytest-fixture-config = callPackage ../development/python-modules/pytest-fixture-config { };
@@ -1757,6 +2069,8 @@ in {
 
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
 
+  pytest-remotedata = callPackage ../development/python-modules/pytest-remotedata { };
+
   pytest-sanic = callPackage ../development/python-modules/pytest-sanic { };
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
@@ -1765,7 +2079,11 @@ in {
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
+  pytest-mpl = callPackage ../development/python-modules/pytest-mpl { };
+
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
+
+  pytest-openfiles = callPackage ../development/python-modules/pytest-openfiles { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 
@@ -1779,6 +2097,8 @@ in {
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
+  pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
+
   pytest-repeat = callPackage ../development/python-modules/pytest-repeat { };
 
   pytestrunner = callPackage ../development/python-modules/pytestrunner { };
@@ -1790,6 +2110,8 @@ in {
   pytest-services = callPackage ../development/python-modules/pytest-services { };
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
+
+  pytest-socket = callPackage ../development/python-modules/pytest-socket { };
 
   pytestcov = callPackage ../development/python-modules/pytest-cov { };
 
@@ -1845,9 +2167,9 @@ in {
 
   libais = callPackage ../development/python-modules/libais { };
 
-  libfdt = disabledIf isPy3k (toPythonModule (pkgs.dtc.override {
-    python2 = python;
-  }));
+  libfdt = toPythonModule (pkgs.dtc.override {
+    inherit python;
+  });
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 
@@ -1896,6 +2218,8 @@ in {
 
   demjson = callPackage ../development/python-modules/demjson { };
 
+  deprecated = callPackage ../development/python-modules/deprecated { };
+
   deprecation = callPackage ../development/python-modules/deprecation { };
 
   derpconf = callPackage ../development/python-modules/derpconf { };
@@ -1941,6 +2265,8 @@ in {
 
   dropbox = callPackage ../development/python-modules/dropbox {};
 
+  drms = callPackage ../development/python-modules/drms { };
+
   ds4drv = callPackage ../development/python-modules/ds4drv {
     inherit (pkgs) fetchFromGitHub bluez;
   };
@@ -1960,8 +2286,6 @@ in {
     pythonPackages = self;
   });
 
-  EditorConfig = callPackage ../development/python-modules/editorconfig { };
-
   edward = callPackage ../development/python-modules/edward { };
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
@@ -1971,6 +2295,8 @@ in {
   elasticsearchdsl = self.elasticsearch-dsl;
 
   elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
+
+  elementpath = callPackage ../development/python-modules/elementpath { };
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
@@ -1991,6 +2317,8 @@ in {
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
 
   execnet = callPackage ../development/python-modules/execnet { };
+
+  executor = callPackage ../development/python-modules/executor { };
 
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
@@ -2048,15 +2376,13 @@ in {
 
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
 
+  fx2 = callPackage ../development/python-modules/fx2 { };
+
   gateone = callPackage ../development/python-modules/gateone { };
 
-  # TODO: Remove after 19.03 is branched off:
-  gcutil = throw ''
-    pythonPackages.gcutil is deprecated and can be replaced with "gcloud
-    compute" from the package google-cloud-sdk.
-  '';
-
   GeoIP = callPackage ../development/python-modules/GeoIP { };
+
+  glasgow = callPackage ../development/python-modules/glasgow { };
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
@@ -2092,6 +2418,8 @@ in {
   google-music-proto = callPackage ../development/python-modules/google-music-proto { };
 
   google-music-utils = callPackage ../development/python-modules/google-music-utils { };
+
+  google-pasta = callPackage ../development/python-modules/google-pasta { };
 
   gpapi = callPackage ../development/python-modules/gpapi { };
   gplaycli = callPackage ../development/python-modules/gplaycli { };
@@ -2141,11 +2469,17 @@ in {
 
   ijson = callPackage ../development/python-modules/ijson {};
 
+  imagecodecs-lite = disabledIf (!isPy3k) (callPackage ../development/python-modules/imagecodecs-lite { });
+
   imagesize = callPackage ../development/python-modules/imagesize { };
 
   image-match = callPackage ../development/python-modules/image-match { };
 
-  imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
+  imbalanced-learn =
+    if isPy27 then
+      callPackage ../development/python-modules/imbalanced-learn/0.4.nix { }
+    else
+      callPackage ../development/python-modules/imbalanced-learn { };
 
   immutables = callPackage ../development/python-modules/immutables {};
 
@@ -2177,6 +2511,8 @@ in {
 
   JPype1 = callPackage ../development/python-modules/JPype1 {};
 
+  jpylyzer = callPackage ../development/python-modules/jpylyzer {};
+
   josepy = callPackage ../development/python-modules/josepy {};
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
@@ -2184,6 +2520,8 @@ in {
   jug = callPackage ../development/python-modules/jug {};
 
   jsmin = callPackage ../development/python-modules/jsmin { };
+
+  jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
@@ -2207,7 +2545,11 @@ in {
 
   libthumbor = callPackage ../development/python-modules/libthumbor { };
 
+  license-expression = callPackage ../development/python-modules/license-expression { };
+
   lightblue = callPackage ../development/python-modules/lightblue { };
+
+  lightgbm = callPackage ../development/python-modules/lightgbm { };
 
   lightning = callPackage ../development/python-modules/lightning { };
 
@@ -2260,6 +2602,8 @@ in {
 
   natsort = callPackage ../development/python-modules/natsort { };
 
+  naturalsort = callPackage ../development/python-modules/naturalsort { };
+
   ncclient = callPackage ../development/python-modules/ncclient {};
 
   logfury = callPackage ../development/python-modules/logfury { };
@@ -2272,9 +2616,16 @@ in {
 
   Nikola = callPackage ../development/python-modules/Nikola { };
 
+  nmigen = callPackage ../development/python-modules/nmigen { };
+
+  nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
+
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
+
+  openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
+  openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
 
   oset = callPackage ../development/python-modules/oset { };
 
@@ -2354,7 +2705,7 @@ in {
 
   pycares = callPackage ../development/python-modules/pycares { };
 
-  pycuda = callPackage ../development/python-modules/pycuda rec {
+  pycuda = callPackage ../development/python-modules/pycuda {
     cudatoolkit = pkgs.cudatoolkit_7_5;
     inherit (pkgs.stdenv) mkDerivation;
   };
@@ -2425,6 +2776,18 @@ in {
 
   subliminal = callPackage ../development/python-modules/subliminal {};
 
+  sunpy = callPackage ../development/python-modules/sunpy { };
+
+  hyperkitty = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/hyperkitty.nix { });
+
+  robot-detection = callPackage ../development/python-modules/robot-detection {};
+
+  cssmin = callPackage ../development/python-modules/cssmin {};
+
+  django-paintstore = callPackage ../development/python-modules/django-paintstore {};
+
+  django-q = callPackage ../development/python-modules/django-q {};
+
   hyperlink = callPackage ../development/python-modules/hyperlink {};
 
   zope_copy = callPackage ../development/python-modules/zope_copy {};
@@ -2448,6 +2811,8 @@ in {
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
   regex = callPackage ../development/python-modules/regex { };
+
+  regional = callPackage ../development/python-modules/regional { };
 
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
 
@@ -2473,6 +2838,8 @@ in {
 
   roman = callPackage ../development/python-modules/roman { };
 
+  rotate-backups = callPackage ../tools/backup/rotate-backups { };
+
   librosa = callPackage ../development/python-modules/librosa { };
 
   samplerate = callPackage ../development/python-modules/samplerate { };
@@ -2482,6 +2849,10 @@ in {
   ssdp = callPackage ../development/python-modules/ssdp { };
 
   statsd = callPackage ../development/python-modules/statsd { };
+
+  starfish = callPackage ../development/python-modules/starfish { };
+
+  swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
 
   multi_key_dict = callPackage ../development/python-modules/multi_key_dict { };
 
@@ -2500,6 +2871,8 @@ in {
   watchdog = callPackage ../development/python-modules/watchdog { };
 
   zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
+
+  validators = callPackage ../development/python-modules/validators { };
 
   validictory = callPackage ../development/python-modules/validictory { };
 
@@ -2549,6 +2922,8 @@ in {
 
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
 
+  django-csp = callPackage ../development/python-modules/django-csp { };
+
   django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
   django_environ = callPackage ../development/python-modules/django_environ { };
@@ -2565,6 +2940,10 @@ in {
 
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
+  django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
+
+  django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
+
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
   django-picklefield = callPackage ../development/python-modules/django-picklefield { };
@@ -2578,6 +2957,8 @@ in {
   django-sites = callPackage ../development/python-modules/django-sites { };
 
   django-sr = callPackage ../development/python-modules/django-sr { };
+
+  django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
@@ -2660,8 +3041,6 @@ in {
 
   effect = callPackage ../development/python-modules/effect {};
 
-  elpy = callPackage ../development/python-modules/elpy { };
-
   enum = callPackage ../development/python-modules/enum { };
 
   enum-compat = callPackage ../development/python-modules/enum-compat { };
@@ -2702,7 +3081,7 @@ in {
 
   filelock = callPackage ../development/python-modules/filelock {};
 
-  fiona = callPackage ../development/python-modules/fiona { gdal = pkgs.gdal; };
+  fiona = callPackage ../development/python-modules/fiona { gdal_2 = pkgs.gdal_2; };
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
@@ -2715,6 +3094,8 @@ in {
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
+
+  flake8-polyfill = callPackage ../development/python-modules/flake8-polyfill { };
 
   flaky = callPackage ../development/python-modules/flaky { };
 
@@ -2754,8 +3135,6 @@ in {
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
-  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
-
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
   flask_principal = callPackage ../development/python-modules/flask-principal { };
@@ -2788,13 +3167,20 @@ in {
 
   grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
 
+  greatfet = callPackage ../development/python-modules/greatfet { };
+
+  pygreat = callPackage ../development/python-modules/pygreat { };
+
   pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
 
-  opt-einsum = callPackage ../development/python-modules/opt-einsum {};
+  opt-einsum = if isPy27 then
+      callPackage ../development/python-modules/opt-einsum/2.nix {}
+    else
+      callPackage ../development/python-modules/opt-einsum {};
 
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
@@ -2874,6 +3260,8 @@ in {
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
   gipc = callPackage ../development/python-modules/gipc { };
+
+  git-revise = callPackage ../development/python-modules/git-revise { };
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
@@ -3124,6 +3512,8 @@ in {
 
   isort = callPackage ../development/python-modules/isort {};
 
+  isoweek = callPackage ../development/python-modules/isoweek {};
+
   jabberbot = callPackage ../development/python-modules/jabberbot {};
 
   jedi = callPackage ../development/python-modules/jedi { };
@@ -3188,7 +3578,13 @@ in {
 
   kitchen = callPackage ../development/python-modules/kitchen { };
 
+  knack = callPackage ../development/python-modules/knack { };
+
   kubernetes = callPackage ../development/python-modules/kubernetes { };
+
+  k5test = callPackage ../development/python-modules/k5test {
+    inherit (pkgs) krb5Full findutils which;
+  };
 
   pylast = callPackage ../development/python-modules/pylast { };
 
@@ -3222,6 +3618,8 @@ in {
   };
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
+
+  python-unshare = callPackage ../development/python-modules/python-unshare { };
 
   fs = callPackage ../development/python-modules/fs { };
 
@@ -3422,6 +3820,8 @@ in {
 
   mockito = callPackage ../development/python-modules/mockito { };
 
+  modeled = callPackage ../development/python-modules/modeled { };
+
   moderngl = callPackage ../development/python-modules/moderngl { };
 
   modestmaps = callPackage ../development/python-modules/modestmaps { };
@@ -3443,20 +3843,13 @@ in {
 
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
-  mpv = callPackage ../development/python-modules/mpv { };
+  mpv = callPackage ../development/python-modules/mpv { mpv = pkgs.mpv; };
 
   mrbob = callPackage ../development/python-modules/mrbob {};
 
   msgpack = callPackage ../development/python-modules/msgpack {};
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy {};
-
-  msgpack-python = self.msgpack.overridePythonAttrs {
-    pname = "msgpack-python";
-    postPatch = ''
-      substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
-    '';
-  };
 
   msrplib = callPackage ../development/python-modules/msrplib { };
 
@@ -3508,11 +3901,11 @@ in {
 
   pymysqlsa = callPackage ../development/python-modules/pymysqlsa { };
 
+  merkletools = callPackage ../development/python-modules/merkletools { };
+
   monosat = disabledIf (!isPy3k) (pkgs.monosat.python { inherit buildPythonPackage; inherit (self) cython; });
 
   monotonic = callPackage ../development/python-modules/monotonic { };
-
-  MySQL_python = callPackage ../development/python-modules/mysql_python { };
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
@@ -3600,15 +3993,28 @@ in {
 
   ntplib = callPackage ../development/python-modules/ntplib { };
 
+  num2words = callPackage ../development/python-modules/num2words { };
+
   numba = callPackage ../development/python-modules/numba { };
+
+  numcodecs = callPackage ../development/python-modules/numcodecs { };
 
   numexpr = callPackage ../development/python-modules/numexpr { };
 
   Nuitka = callPackage ../development/python-modules/nuitka { };
 
-  numpy = callPackage ../development/python-modules/numpy {
-    blas = pkgs.openblasCompat;
-  };
+  numpy = let
+    numpy_ = callPackage ../development/python-modules/numpy {
+      blas = pkgs.openblasCompat;
+    };
+    numpy_2 = numpy_.overridePythonAttrs(oldAttrs: rec {
+      version = "1.16.5";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "8bb452d94e964b312205b0de1238dd7209da452343653ab214b5d681780e7a0c";
+      };
+    });
+  in if pythonOlder "3.5" then numpy_2 else numpy_;
 
   numpydoc = callPackage ../development/python-modules/numpydoc { };
 
@@ -3670,8 +4076,7 @@ in {
 
   cachetools = callPackage ../development/python-modules/cachetools {};
 
-  cmd2_9 = callPackage ../development/python-modules/cmd2 {};
-  cmd2 = self.cmd2_9;
+  cmd2 = callPackage ../development/python-modules/cmd2 {};
 
   warlock = callPackage ../development/python-modules/warlock { };
 
@@ -3684,6 +4089,8 @@ in {
   WSME = callPackage ../development/python-modules/WSME { };
 
   zake = callPackage ../development/python-modules/zake { };
+
+  zarr = callPackage ../development/python-modules/zarr { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
 
@@ -3717,7 +4124,10 @@ in {
 
   pagerduty = callPackage ../development/python-modules/pagerduty { };
 
-  pandas = callPackage ../development/python-modules/pandas { };
+  pandas = if isPy3k then
+    callPackage ../development/python-modules/pandas { }
+  else
+    callPackage ../development/python-modules/pandas/2.nix { };
 
   panel = callPackage ../development/python-modules/panel { };
 
@@ -3738,6 +4148,8 @@ in {
   parameterized = callPackage ../development/python-modules/parameterized { };
 
   paramz = callPackage ../development/python-modules/paramz { };
+
+  parfive = callPackage ../development/python-modules/parfive { };
 
   parsel = callPackage ../development/python-modules/parsel { };
 
@@ -3761,7 +4173,10 @@ in {
 
   pathlib2 = callPackage ../development/python-modules/pathlib2 { };
 
-  pathpy = callPackage ../development/python-modules/path.py { };
+  pathpy = if isPy3k then
+    callPackage ../development/python-modules/path.py { }
+  else
+    callPackage ../development/python-modules/path.py/2.nix { };
 
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
 
@@ -3769,11 +4184,15 @@ in {
 
   fixtures = callPackage ../development/python-modules/fixtures { };
 
+  fipy = callPackage ../development/python-modules/fipy { };
+
   pelican = callPackage ../development/python-modules/pelican {
     inherit (pkgs) glibcLocales git;
   };
 
   pep8 = callPackage ../development/python-modules/pep8 { };
+
+  pep8-naming = callPackage ../development/python-modules/pep8-naming { };
 
   pep257 = callPackage ../development/python-modules/pep257 { };
 
@@ -3787,6 +4206,8 @@ in {
 
   periodictable = callPackage ../development/python-modules/periodictable { };
 
+  pgcli = callPackage ../development/tools/database/pgcli {};
+
   pg8000 = callPackage ../development/python-modules/pg8000 { };
   pg8000_1_12 = callPackage ../development/python-modules/pg8000/1_12.nix { };
 
@@ -3796,7 +4217,11 @@ in {
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
+  pgpy = callPackage ../development/python-modules/pgpy { };
+
   pickleshare = callPackage ../development/python-modules/pickleshare { };
+
+  picos = callPackage ../development/python-modules/picos { };
 
   piep = callPackage ../development/python-modules/piep { };
 
@@ -3814,6 +4239,10 @@ in {
   pika = callPackage ../development/python-modules/pika { };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
+
+  pikepdf = callPackage ../development/python-modules/pikepdf { };
+
+  kmapper = callPackage ../development/python-modules/kmapper { };
 
   kmsxx = (callPackage ../development/libraries/kmsxx {
     inherit (pkgs.kmsxx) stdenv;
@@ -3839,8 +4268,6 @@ in {
   soundfile = callPackage ../development/python-modules/soundfile { };
 
   pysoundfile = self.soundfile;  # Alias added 23-06-2019
-
-  python3pika = callPackage ../development/python-modules/python3pika { };
 
   python-jenkins = callPackage ../development/python-modules/python-jenkins { };
 
@@ -3878,6 +4305,8 @@ in {
   premailer = callPackage ../development/python-modules/premailer { };
 
   prettytable = callPackage ../development/python-modules/prettytable { };
+
+  property-manager = callPackage ../development/python-modules/property-manager { };
 
   prompt_toolkit = let
     filename = if isPy3k then ../development/python-modules/prompt_toolkit else ../development/python-modules/prompt_toolkit/1.nix;
@@ -3969,13 +4398,11 @@ in {
     inherit (pkgs) graphviz;
   };
 
-  pydot_ng = callPackage ../development/python-modules/pydot_ng { };
+  pydot_ng = callPackage ../development/python-modules/pydot_ng { graphviz = pkgs.graphviz; };
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
   pyenchant = callPackage ../development/python-modules/pyenchant { };
-
-  pyev = callPackage ../development/python-modules/pyev { };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
@@ -4014,11 +4441,7 @@ in {
 
   pyotp = callPackage ../development/python-modules/pyotp { };
 
-  pyproj = callPackage ../development/python-modules/pyproj {
-    # pyproj does *work* if you want to use a system supplied proj, but with the current version(s) the tests fail by
-    # a few decimal places, so caveat emptor.
-    proj = null;
-  };
+  pyproj = callPackage ../development/python-modules/pyproj { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
@@ -4034,7 +4457,11 @@ in {
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
+  pysparse = callPackage ../development/python-modules/pysparse { };
+
   pyupdate = callPackage ../development/python-modules/pyupdate {};
+
+  pyvmomi = callPackage ../development/python-modules/pyvmomi { };
 
   pyx = callPackage ../development/python-modules/pyx { };
 
@@ -4182,6 +4609,8 @@ in {
 
   python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
+  python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
+
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
   python-wifi = callPackage ../development/python-modules/python-wifi { };
@@ -4210,13 +4639,32 @@ in {
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
+  pyamg = callPackage ../development/python-modules/pyamg { };
+
   pyaml = callPackage ../development/python-modules/pyaml { };
 
   pyyaml = callPackage ../development/python-modules/pyyaml { };
 
+  pyyaml_3 = (callPackage ../development/python-modules/pyyaml { }).overridePythonAttrs (oldAttrs: rec {
+    version = "3.13";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
+    };
+    # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
+    patches = singleton (pkgs.fetchpatch {
+      url = "https://github.com/yaml/pyyaml/commit/c5b135fe39d41cffbdc006f28ccb2032df6005e0.patch";
+      sha256 = "0x1v45rkmj194c41d1nqi3ihj9z4rsy8zvpfcd8p960g1fia7fhn";
+    });
+    # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
+    doCheck = false;
+  });
+
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
-  rasterio = callPackage ../development/python-modules/rasterio { };
+  rasterio = callPackage ../development/python-modules/rasterio {
+    gdal = pkgs.gdal_2; # gdal 3.0 not supported yet
+  };
 
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
 
@@ -4247,7 +4695,11 @@ in {
     inherit (pkgs) pkgconfig; # use normal pkgconfig, not the python package
   };
 
+  rfc6555 = callPackage ../development/python-modules/rfc6555 { };
+
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
+
+  qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
   quamash = callPackage ../development/python-modules/quamash { };
 
@@ -4299,6 +4751,8 @@ in {
   rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
     python2 = python;
   }));
+
+  ripser = callPackage ../development/python-modules/ripser { };
 
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
@@ -4386,6 +4840,11 @@ in {
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
 
+  sequoia = disabledIf (isPyPy || !isPy3k) (toPythonModule (pkgs.sequoia.override {
+    pythonPackages = self;
+    pythonSupport = true;
+  }));
+
   safe = callPackage ../development/python-modules/safe { };
 
   sampledata = callPackage ../development/python-modules/sampledata { };
@@ -4396,11 +4855,11 @@ in {
 
   scipy = let
     scipy_ = callPackage ../development/python-modules/scipy { };
-    scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: {
-      version = "1.2.1";
+    scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: rec {
+      version = "1.2.2";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "e085d1babcb419bbe58e2e805ac61924dac4ca45a07c9fa081144739e500aa3c";
+        sha256 = "a4331e0b8dab1ff75d2c67b5158a8bb9a83c799d7140094dda936d876c7cfbb1";
       };
     });
   in if pythonOlder "3.5" then scipy_1_2 else scipy_;
@@ -4417,6 +4876,14 @@ in {
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
+  scikits-odes = callPackage ../development/python-modules/scikits-odes { };
+
+  scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
+
+  scikit-tda = callPackage ../development/python-modules/scikit-tda { };
+
+  scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
+
   scp = callPackage ../development/python-modules/scp {};
 
   seaborn = callPackage ../development/python-modules/seaborn { };
@@ -4429,6 +4896,8 @@ in {
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
+  setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
+
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
   shippai = callPackage ../development/python-modules/shippai {};
@@ -4437,9 +4906,13 @@ in {
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
 
+  shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
+
   shodan = callPackage ../development/python-modules/shodan { };
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
+
+  showit = callPackage ../development/python-modules/showit { };
 
   simplejson = callPackage ../development/python-modules/simplejson { };
 
@@ -4502,6 +4975,8 @@ in {
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
+  sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
@@ -4524,6 +4999,8 @@ in {
   };
 
   tabulate = callPackage ../development/python-modules/tabulate { };
+
+  tadasets = callPackage ../development/python-modules/tadasets { };
 
   tempita = callPackage ../development/python-modules/tempita { };
 
@@ -4583,6 +5060,8 @@ in {
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
+  umap-learn = callPackage ../development/python-modules/umap-learn { };
+
   umemcache = callPackage ../development/python-modules/umemcache {};
 
   uritools = callPackage ../development/python-modules/uritools { };
@@ -4590,6 +5069,8 @@ in {
   update_checker = callPackage ../development/python-modules/update_checker {};
 
   update-copyright = callPackage ../development/python-modules/update-copyright {};
+
+  update-dotdee = callPackage ../development/python-modules/update-dotdee { };
 
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
@@ -4603,6 +5084,8 @@ in {
 
   user-agents = callPackage ../development/python-modules/user-agents { };
 
+  verboselogs = callPackage ../development/python-modules/verboselogs { };
+
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
   virtkey = callPackage ../development/python-modules/virtkey {
@@ -4612,6 +5095,8 @@ in {
   virtual-display = callPackage ../development/python-modules/virtual-display { };
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
+
+  vsts = callPackage ../development/python-modules/vsts { };
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
@@ -4635,8 +5120,6 @@ in {
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
 
-  wikipedia = callPackage ../development/python-modules/wikipedia { };
-
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
   magic-wormhole-mailbox-server = callPackage ../development/python-modules/magic-wormhole-mailbox-server { };
@@ -4650,11 +5133,20 @@ in {
     inherit (pkgs) pkgconfig;
   };
 
+  wxPython_4_0 = callPackage ../development/python-modules/wxPython/4.0.nix {
+    inherit (pkgs) pkgconfig;
+    wxGTK = pkgs.wxGTK30.override { withGtk2 = false; withWebKit = true; };
+  };
+
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
+
+  xmlschema = callPackage ../development/python-modules/xmlschema { };
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
   xarray = callPackage ../development/python-modules/xarray { };
+
+  xapian = callPackage ../development/python-modules/xapian { xapian = pkgs.xapian; };
 
   xlwt = callPackage ../development/python-modules/xlwt { };
 
@@ -4683,6 +5175,8 @@ in {
 
   persistent = callPackage ../development/python-modules/persistent {};
 
+  persim = callPackage ../development/python-modules/persim { };
+
   xdot = callPackage ../development/python-modules/xdot { };
 
   zetup = callPackage ../development/python-modules/zetup { };
@@ -4700,6 +5194,8 @@ in {
   ruamel_ordereddict = callPackage ../development/python-modules/ruamel_ordereddict { };
 
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
+
+  ruffus = callPackage ../development/python-modules/ruffus { };
 
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
@@ -4858,7 +5354,9 @@ in {
 
   sphinxcontrib_newsfeed = callPackage ../development/python-modules/sphinxcontrib_newsfeed { };
 
-  sphinxcontrib_plantuml = callPackage ../development/python-modules/sphinxcontrib_plantuml { };
+  sphinxcontrib_plantuml = callPackage ../development/python-modules/sphinxcontrib_plantuml {
+    inherit (pkgs) plantuml;
+  };
 
   sphinxcontrib-spelling = callPackage ../development/python-modules/sphinxcontrib-spelling { };
 
@@ -4881,6 +5379,10 @@ in {
   sure = callPackage ../development/python-modules/sure { };
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
+
+  swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
+
+  openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
@@ -4942,11 +5444,15 @@ in {
 
   units = callPackage ../development/python-modules/units { };
 
+  unittest-data-provider = callPackage ../development/python-modules/unittest-data-provider { };
+
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
+
+  trackpy = callPackage ../development/python-modules/trackpy { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
@@ -4985,6 +5491,8 @@ in {
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
   xlib = callPackage ../development/python-modules/xlib { };
+
+  yappi = callPackage ../development/python-modules/yappi { };
 
   zbase32 = callPackage ../development/python-modules/zbase32 { };
 
@@ -5079,7 +5587,7 @@ in {
 
   larch = callPackage ../development/python-modules/larch { };
 
-  websocket_client = callPackage ../development/python-modules/websockets_client { };
+  websocket_client = callPackage ../development/python-modules/websocket_client { };
 
   webhelpers = callPackage ../development/python-modules/webhelpers { };
 
@@ -5235,6 +5743,8 @@ in {
 
   basemap = callPackage ../development/python-modules/basemap { };
 
+  dict2xml = callPackage ../development/python-modules/dict2xml { };
+
   dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
   markdown2 = callPackage ../development/python-modules/markdown2 { };
@@ -5274,6 +5784,8 @@ in {
   pyregion = callPackage ../development/python-modules/pyregion {};
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
+
+  python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   pluggy = callPackage ../development/python-modules/pluggy {};
 
@@ -5397,15 +5909,23 @@ in {
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow =
-    if stdenv.isDarwin
-    then callPackage ../development/python-modules/tensorflow/bin.nix { }
-    else callPackage ../development/python-modules/tensorflow/bin.nix rec {
-      cudaSupport = pkgs.config.cudaSupport or false;
-      inherit (pkgs.linuxPackages) nvidia_x11;
-      cudatoolkit = pkgs.cudatoolkit_10_0;
-      cudnn = pkgs.cudnn_cudatoolkit_10_0;
-    };
+  tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit_10;
+    cudnn = pkgs.cudnn_cudatoolkit_10;
+  };
+
+  tensorflow-build = callPackage ../development/python-modules/tensorflow {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit_10;
+    cudnn = pkgs.cudnn_cudatoolkit_10;
+    nccl = pkgs.nccl_cudatoolkit_10;
+    openssl = pkgs.openssl_1_0_2;
+  };
+
+  tensorflow = if stdenv.isDarwin then self.tensorflow-bin else self.tensorflow-build;
 
   tensorflowWithoutCuda = self.tensorflow.override {
     cudaSupport = false;
@@ -5516,6 +6036,8 @@ in {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
+  solo-python = disabledIf (! pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
+
   suseapi = callPackage ../development/python-modules/suseapi { };
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
@@ -5523,6 +6045,8 @@ in {
   stripe = callPackage ../development/python-modules/stripe { };
 
   strict-rfc3339 = callPackage ../development/python-modules/strict-rfc3339 { };
+
+  strictyaml = callPackage ../development/python-modules/strictyaml { };
 
   twilio = callPackage ../development/python-modules/twilio { };
 
@@ -5576,6 +6100,8 @@ in {
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
   node-semver = callPackage ../development/python-modules/node-semver { };
+
+  diskcache = callPackage ../development/python-modules/diskcache { };
 
   distro = callPackage ../development/python-modules/distro { };
 
@@ -5649,7 +6175,10 @@ in {
 
   us = callPackage ../development/python-modules/us { };
 
-  wsproto = callPackage ../development/python-modules/wsproto { };
+  wsproto = if (pythonAtLeast "3.6") then
+      callPackage ../development/python-modules/wsproto { }
+    else
+      callPackage ../development/python-modules/wsproto/0.14.nix { };
 
   h11 = callPackage ../development/python-modules/h11 { };
 
@@ -5681,6 +6210,10 @@ in {
 
   IBMQuantumExperience = callPackage ../development/python-modules/ibmquantumexperience { };
 
+  ibis = callPackage ../development/python-modules/ibis { };
+
+  ibis-framework = callPackage ../development/python-modules/ibis-framework { };
+
   qiskit = callPackage ../development/python-modules/qiskit { };
 
   qasm2image = callPackage ../development/python-modules/qasm2image { };
@@ -5691,9 +6224,13 @@ in {
 
   yattag = callPackage ../development/python-modules/yattag { };
 
+  xenomapper = disabledIf (!isPy3k) (callPackage ../applications/science/biology/xenomapper { });
+
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;
   })).python;
+
+  zeroc-ice = callPackage ../development/python-modules/zeroc-ice { };
 
   zm-py = callPackage ../development/python-modules/zm-py { };
 
@@ -5741,6 +6278,28 @@ in {
   flickrapi = callPackage ../development/python-modules/flickrapi { };
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
+
+  mwparserfromhell = callPackage ../development/python-modules/mwparserfromhell { };
+
+  starlette = callPackage ../development/python-modules/starlette { };
+
+  uvicorn = callPackage ../development/python-modules/uvicorn { };
+
+  pydantic = callPackage ../development/python-modules/pydantic { };
+
+  fastapi = callPackage ../development/python-modules/fastapi { };
+
+  stringcase = callPackage ../development/python-modules/stringcase { };
+
+  webrtcvad = callPackage ../development/python-modules/webrtcvad { };
+
+  wget = callPackage ../development/python-modules/wget { };
+
+  runway-python = callPackage ../development/python-modules/runway-python { };
+
+  pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
+
+  hcloud = callPackage ../development/python-modules/hcloud { };
 });
 
 in fix' (extends overrides packages)

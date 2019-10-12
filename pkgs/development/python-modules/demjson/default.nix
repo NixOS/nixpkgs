@@ -1,9 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy36 }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "demjson";
   version = "2.2.4";
-  disabled = isPy36;
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;

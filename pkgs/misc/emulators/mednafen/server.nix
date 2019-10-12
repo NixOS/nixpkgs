@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mednafen-server-${version}";
+  pname = "mednafen-server";
   version = "0.5.2";
 
   src = fetchurl {

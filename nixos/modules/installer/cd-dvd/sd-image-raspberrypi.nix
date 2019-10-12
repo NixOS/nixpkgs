@@ -19,10 +19,10 @@ in
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.consoleLogLevel = lib.mkDefault 7;
-  boot.kernelPackages = pkgs.linuxPackages_rpi;
+  boot.kernelPackages = pkgs.linuxPackages_rpi1;
 
   sdImage = {
-    populateBootCommands = let
+    populateFirmwareCommands = let
       configTxt = pkgs.writeText "config.txt" ''
         # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
         # when attempting to show low-voltage or overtemperature warnings.
@@ -45,4 +45,8 @@ in
       ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./files/boot
     '';
   };
+
+  # the installation media is also the installation target,
+  # so we don't want to provide the installation configuration.nix.
+  installer.cloneConfig = false;
 }

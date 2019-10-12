@@ -1,4 +1,5 @@
-{ stdenv, config, libGLSupported, fetchurl, pkgconfig
+{ stdenv, config, fetchurl, pkgconfig
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
@@ -13,7 +14,7 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, audiofile, cf-private, libiconv
+, audiofile, libiconv
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -22,12 +23,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "SDL2-${version}";
-  version = "2.0.9";
+  pname = "SDL2";
+  version = "2.0.10";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "1c94ndagzkdfqaa838yqg589p1nnqln8mv0hpwfhrkbfczf8cl95";
+    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
+    sha256 = "0mqxp6w5jhbq6y1j690g9r3gpzwjxh4czaglw8x05l7hl49nqrdl";
   };
 
   outputs = [ "out" "dev" ];
@@ -57,11 +58,7 @@ stdenv.mkDerivation rec {
     ++ dlopenBuildInputs
     ++ optional  ibusSupport ibus
     ++ optional  fcitxSupport fcitx
-    ++ optionals stdenv.isDarwin [
-      AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL
-      # Needed for NSDefaultRunLoopMode symbols.
-      cf-private
-    ];
+    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;
 

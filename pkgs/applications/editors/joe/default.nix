@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "4.6";
-  name = "joe-${version}";
+  pname = "joe";
 
   src = fetchurl {
-    url = "mirror://sourceforge/joe-editor/${name}.tar.gz";
+    url = "mirror://sourceforge/joe-editor/${pname}-${version}.tar.gz";
     sha256 = "1pmr598xxxm9j9dl93kq4dv36zyw0q2dh6d7x07hf134y9hhlnj9";
   };
 

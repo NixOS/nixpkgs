@@ -1,26 +1,23 @@
-{ stdenv, ncurses, buildGoPackage, fetchFromGitHub, writeText, runtimeShell }:
+{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, }:
 
-buildGoPackage rec {
-  name = "fzf-${version}";
-  version = "0.17.5";
-  rev = "${version}";
-
-  goPackagePath = "github.com/junegunn/fzf";
+buildGoModule rec {
+  pname = "fzf";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "junegunn";
-    repo = "fzf";
-    sha256 = "04kalm25sn5k24nrdmbkafp4zvxpm2l3rxchvccl0kz0j3szh62z";
+    repo = pname;
+    rev = version;
+    sha256 = "0pwpr4fpw56yzzkcabzzgbgwraaxmp7xzzmap7w1xsrkbj7dl2xl";
   };
 
-  outputs = [ "bin" "out" "man" ];
+  modSha256 = "0xc4166d74ix5nzjphrq4rgw7qpskz05ymzl77i2qh2nhbdb53p0";
+
+  outputs = [ "out" "man" ];
 
   fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
 
   buildInputs = [ ncurses ];
-
-  goDeps = ./deps.nix;
 
   patchPhase = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$bin'|" plugin/fzf.vim
@@ -33,30 +30,34 @@ buildGoPackage rec {
   '';
 
   preInstall = ''
-    mkdir -p $bin/share/fish/vendor_functions.d $bin/share/fish/vendor_conf.d
-    cp $src/shell/key-bindings.fish $bin/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    cp ${fishHook} $bin/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+    mkdir -p $out/share/fish/{vendor_functions.d,vendor_conf.d}
+    cp $src/shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    cp ${fishHook} $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
   '';
 
   postInstall = ''
-    cp $src/bin/fzf-tmux $bin/bin
+    name="${pname}-${version}"
+
+    cp $src/bin/fzf-tmux $out/bin
+
     mkdir -p $man/share/man
     cp -r $src/man/man1 $man/share/man
-    mkdir -p $out/share/vim-plugins/${name}
-    cp -r $src/plugin $out/share/vim-plugins/${name}
 
-    cp -R $src/shell $bin/share/fzf
-    cat <<SCRIPT > $bin/bin/fzf-share
+    mkdir -p $out/share/vim-plugins/$name
+    cp -r $src/plugin $out/share/vim-plugins/$name
+
+    cp -R $src/shell $out/share/fzf
+    cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
     # Run this script to find the fzf shared folder where all the shell
     # integration scripts are living.
-    echo $bin/share/fzf
+    echo $out/share/fzf
     SCRIPT
-    chmod +x $bin/bin/fzf-share
+    chmod +x $out/bin/fzf-share
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/junegunn/fzf;
+  meta = with lib; {
+    homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
     platforms = platforms.unix;

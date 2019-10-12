@@ -16,7 +16,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "pktgen-${version}";
+  pname = "pktgen";
   version = "3.5.0";
 
   src = fetchurl {

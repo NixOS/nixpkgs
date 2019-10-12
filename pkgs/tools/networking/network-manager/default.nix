@@ -7,15 +7,14 @@
 , openconnect, curl, meson, ninja, libpsl }:
 
 let
-  pname = "NetworkManager";
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
-  name = "network-manager-${version}";
-  version = "1.18.0";
+  pname = "network-manager";
+  version = "1.18.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19lb5afx4iq8dgfsy26x9j4194v8f64vwr3nq6dk1ix3wljxzs66";
+    url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
+    sha256 = "1hx5dx5dgdqh3p8fq7q1pxy2bx2iymc74lj60ycrf7ydfjlprnad";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -28,6 +27,7 @@ in stdenv.mkDerivation rec {
     "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
     "-Ddhcpcd=no"
+    "-Ddhcpcanon=no"
     "-Dpppd=${ppp}/bin/pppd"
     "-Diptables=${iptables}/bin/iptables"
     # to enable link-local connections
@@ -49,6 +49,7 @@ in stdenv.mkDerivation rec {
     "-Dqt=false"
     # Allow using iwd when configured to do so
     "-Diwd=true"
+    "-Dlibaudit=yes-disabled-by-default"
   ];
 
   patches = [
@@ -96,11 +97,6 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
-    # aliases ourselves.
-    ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
-
     # Add the legacy service name from before #51382 to prevent NetworkManager
     # from not starting back up:
     # TODO: remove this once 19.10 is released
@@ -118,7 +114,7 @@ in stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/NetworkManager;
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom rickynils domenkozar obadz ];
+    maintainers = with maintainers; [ phreedom domenkozar obadz ];
     platforms = platforms.linux;
   };
 }

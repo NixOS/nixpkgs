@@ -1,14 +1,25 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, glib, libgee, vala, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, glib
+, libgee
+, vala
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "cerbere";
-  version = "0.2.4";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0f9jr6q5z6nir5b77f96wm9rx6r6s9i0sr1yrymg3n7jyjgrvdwp";
+    sha256 = "12y6gg4vyc1rhdm2c7pr7bgmdrah7ddphyh25fgh3way8l9gh7vw";
   };
 
   passthru = {

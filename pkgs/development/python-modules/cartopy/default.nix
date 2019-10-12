@@ -1,9 +1,10 @@
 { buildPythonPackage, lib, fetchPypi
-, pytest, filelock, mock, pep8
+, pytest_4, filelock, mock, pep8
 , cython, isPy27
-, six, pyshp, shapely, geos, proj, numpy
+, six, pyshp, shapely, geos, numpy
 , gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
 , xvfb_run
+, proj_5 # see https://github.com/SciTools/cartopy/pull/1252 for status on proj 6 support
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0q9ckfi37cxj7jwnqnzij62vwcf4krccx576vv5lhvpgvplxjjs2";
   };
 
-  checkInputs = [ filelock mock pytest pep8 ];
+  checkInputs = [ filelock mock pytest_4 pep8 ];
 
   # several tests require network connectivity: we disable them.
   # also py2.7's tk is over-eager in trying to open an x display,
@@ -27,17 +28,17 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
     ${maybeXvfbRun} pytest --pyargs cartopy \
       -m "not network and not natural_earth" \
-      -k "not test_nightshade_image"
+      -k "not test_nightshade_image and not background_img"
   '';
 
   nativeBuildInputs = [
     cython
     geos # for geos-config
-    proj
+    proj_5
   ];
 
   buildInputs = [
-    geos proj
+    geos proj_5
   ];
 
   propagatedBuildInputs = [

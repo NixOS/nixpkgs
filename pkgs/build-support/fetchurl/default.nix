@@ -49,8 +49,11 @@ in
   # first element of `urls').
   name ? ""
 
-  # Different ways of specifying the hash.
-, outputHash ? ""
+, # SRI hash.
+  hash ? ""
+
+, # Legacy ways of specifying the hash.
+  outputHash ? ""
 , outputHashAlgo ? ""
 , md5 ? ""
 , sha1 ? ""
@@ -103,7 +106,8 @@ let
     else throw "fetchurl requires either `url` or `urls` to be set";
 
   hash_ =
-    if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
+    if hash != "" then { outputHashAlgo = null; outputHash = hash; }
+    else if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
     else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }

@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''anaphora'';
   version = ''20180228-git'';
 

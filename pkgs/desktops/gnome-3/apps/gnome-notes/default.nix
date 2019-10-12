@@ -1,17 +1,18 @@
 { stdenv, meson, ninja, gettext, fetchurl, pkgconfig
 , wrapGAppsHook, itstool, desktop-file-utils, python3
-, glib, gtk3, evolution-data-server
+, glib, gtk3, evolution-data-server, gnome-online-accounts
 , libuuid, webkitgtk, zeitgeist
-, gnome3, libxml2, gsettings-desktop-schemas }:
+, gnome3, libxml2, gsettings-desktop-schemas, tracker }:
 
 let
-  version = "3.32.1";
-in stdenv.mkDerivation rec {
-  name = "gnome-notes-${version}";
+  version = "3.34.0";
+in stdenv.mkDerivation {
+  pname = "gnome-notes";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
-    sha256 = "02b7afg3ps0hxp5dkb4kv6315ydc2r6bxgk1kamwp581lc7ghd67";
+    sha256 = "0wrnsspcg4s0vdfc23cc84xy02k3b19yim9s4k0vv23b69n37n1l";
   };
 
   doCheck = true;
@@ -26,8 +27,8 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib gtk3 libuuid webkitgtk gnome3.tracker
-    gnome3.gnome-online-accounts zeitgeist
+    glib gtk3 libuuid webkitgtk tracker
+    gnome-online-accounts zeitgeist
     gsettings-desktop-schemas
     evolution-data-server
     gnome3.adwaita-icon-theme

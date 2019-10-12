@@ -15,13 +15,12 @@
 , gobject-introspection
 , wrapGAppsHook
 , lastFMSupport ? true
-, wikipediaSupport ? true
-, youtubeSupport ? true, youtube-dl
+, youtubeSupport ? true
 }:
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.0.12";
+  version = "1.1.4.16";
 
   format = "other";
   doCheck = false;
@@ -30,7 +29,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "0jc40p2yw3zp035c87crav2lq0iraf35ag9w26vzmbjvgpvwzb86";
+    sha256 = "1azfxc1vc1j4ph0zrfsgz2gac1vwmbj65j6wjlxx3nr8kia4mccl";
   };
 
   nativeBuildInputs = [
@@ -64,7 +63,6 @@ python3.pkgs.buildPythonApplication rec  {
     pygobject3
   ]
   ++ lib.optional lastFMSupport pylast
-  ++ lib.optional wikipediaSupport wikipedia
   ++ lib.optional youtubeSupport youtube-dl
   ;
 
@@ -73,10 +71,18 @@ python3.pkgs.buildPythonApplication rec  {
     patchShebangs meson_post_install.py
   '';
 
-  preFixup = ''
-    buildPythonPath "$out $propagatedBuildInputs"
-    patchPythonScript "$out/libexec/lollypop-sp"
+  postFixup = ''
+    wrapPythonProgramsIn $out/libexec "$out $propagatedBuildInputs"
   '';
+
+  # Produce only one wrapper using wrap-python passing
+  # gappsWrapperArgs to wrap-python additional wrapper
+  # argument
+  dontWrapGApps = true;
+
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
 
   meta = with lib; {
     description = "A modern music player for GNOME";

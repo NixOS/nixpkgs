@@ -1,5 +1,5 @@
 { stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
-  openssl, sqlite, zlib, dbus, dbus-glib, gdk_pixbuf, cairo, python3,
+  openssl, sqlite, zlib, dbus, dbus-glib, gdk-pixbuf, cairo, python3,
   libsodium, postgresql, gmp, foundationdb, ... }:
 
 let
@@ -13,11 +13,6 @@ in
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
       ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
-  };
-
-  cargo-vendor = attrs: {
-    buildInputs = [ openssl zlib curl ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
   };
 
   libz-sys = attrs: {
@@ -62,7 +57,7 @@ in
   };
 
   gdk-pixbuf = attrs: {
-    buildInputs = [ gdk_pixbuf ];
+    buildInputs = [ gdk-pixbuf ];
   };
 
   libgit2-sys = attrs: {

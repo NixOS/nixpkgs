@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p nodePackages.node2nix nodePackages.bower2nix
+#! nix-shell -i bash  -I nixpkgs=../../../.. -p nodePackages.node2nix nodePackages.bower2nix
 set -euo pipefail
 
 node2nix -6 \

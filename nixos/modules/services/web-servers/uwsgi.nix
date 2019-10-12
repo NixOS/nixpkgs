@@ -72,7 +72,7 @@ in {
       };
 
       runDir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/run/uwsgi";
         description = "Where uWSGI communication sockets can live";
       };

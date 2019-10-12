@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgs }:
 
 stdenv.mkDerivation rec {
-  name = "pipes-${version}";
+  pname = "pipes";
   version = "1.3.0";
 
   src = fetchurl {

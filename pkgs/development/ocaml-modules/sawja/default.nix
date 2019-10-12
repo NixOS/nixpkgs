@@ -7,7 +7,7 @@ let
   version = "1.5.6";
   webpage = "http://sawja.inria.fr/";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
-    homepage = "${webpage}";
+    homepage = webpage;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms or [];

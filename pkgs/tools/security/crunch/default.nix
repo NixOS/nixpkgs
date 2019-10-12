@@ -1,11 +1,11 @@
 { stdenv, fetchurl, which }:
 
 stdenv.mkDerivation  rec {
-  name = "crunch-${version}";
+  pname = "crunch";
   version = "3.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/crunch-wordlist/${name}.tgz";
+    url = "mirror://sourceforge/crunch-wordlist/${pname}-${version}.tgz";
     sha256 = "0mgy6ghjvzr26yrhj1bn73qzw6v9qsniskc5wqq1kk0hfhy6r3va";
   };
 

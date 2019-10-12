@@ -8,7 +8,8 @@ in
 if (stdenv.hostPlatform.system != "x86_64-linux" && stdenv.hostPlatform.system != "x86_64-darwin" && stdenv.hostPlatform.system != "i686-linux")
 then throw "Check https://developer.spotify.com/technologies/libspotify/ for a tarball for your system and add it here"
 else stdenv.mkDerivation {
-  name = "libspotify-${version}";
+  pname = "libspotify";
+  inherit version;
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -61,7 +62,8 @@ else stdenv.mkDerivation {
       then throw ''
         Please visit ${libspotify.meta.homepage} to get an api key then set config.libspotify.apiKey accordingly
       '' else stdenv.mkDerivation {
-        name = "libspotify-samples-${version}";
+        pname = "libspotify-samples";
+        inherit version;
         src = libspotify.src;
   nativeBuildInputs = [ pkgconfig ];
         buildInputs = [ libspotify readline ]

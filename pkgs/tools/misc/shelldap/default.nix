@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perlPackages }:
 perlPackages.buildPerlPackage rec {
-  name = "shelldap-${version}";
+  pname = "shelldap";
   version = "1.4.0";
   src = fetchurl {
     url = "https://bitbucket.org/mahlon/shelldap/downloads/shelldap-${version}.tar.gz";

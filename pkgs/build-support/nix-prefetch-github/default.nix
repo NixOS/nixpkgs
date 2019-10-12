@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-prefetch-github";
-  version = "2.3";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "seppeljordan";
     repo = "nix-prefetch-github";
     rev = "v${version}";
-    sha256 = "0b2hgfyxhlqq6lyi5cr98dz6if5kl6b3kq67f2lzfkalydywl1dh";
+    sha256 = "13wvq13iiva97a16kahfpxar5ppb015nnbn7d4v9s9jyxdickc2c";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -1,6 +1,6 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, libogg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "tremor-unstable-2018-03-16";
 
   src = fetchgit {

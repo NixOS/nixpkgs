@@ -4,7 +4,7 @@
 , version, src
 , ...}:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   name = "nettle-${version}";
 
   inherit src;

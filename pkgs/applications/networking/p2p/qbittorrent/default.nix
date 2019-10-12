@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
@@ -6,17 +6,17 @@
 }:
 
 assert guiSupport -> (dbus != null);
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
-  name = "qbittorrent-${version}";
-  version = "4.1.6";
+mkDerivation rec {
+  pname = "qbittorrent";
+  version = "4.1.8";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qbittorrent";
     rev = "release-${version}";
-    sha256 = "1y9kv84sy5fg64wbl4xpm8qh0hjba7ibk045cazp0m736rjmxk8c";
+    sha256 = "1mx59mazfmd5yaqdgb6cm8hr5sbp2xgzz3y3yipq1fwq85dj3r5w";
   };
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported

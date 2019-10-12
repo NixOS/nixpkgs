@@ -1,7 +1,7 @@
 { stdenv, fetchurl ,pkgconfig, libatomic_ops , boehmgc }:
 
 stdenv.mkDerivation rec {
-  name = "chase-${version}";
+  pname = "chase";
   version = "0.5.2";
 
   nativeBuildInputs = [ pkgconfig ];

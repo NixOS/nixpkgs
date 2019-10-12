@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "faba-mono-icons";
   version = "2016-04-30";
 

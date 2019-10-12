@@ -1,28 +1,44 @@
-{ fetchFromGitHub, stdenv, pkgconfig, exiv2, libxml2, gtk2
-, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
+{ fetchFromGitHub, stdenv, fetchpatch, pkgconfig, exiv2, libxml2, gtk3
+, libxslt, docbook_xsl, docbook_xml_dtd_42, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "gpscorrelate-${version}";
-  version = "1.6.1";
+  pname = "gpscorrelate";
+  version = "unstable-2019-09-03";
 
   src = fetchFromGitHub {
-    owner = "freefoote";
-    repo = "gpscorrelate";
-    rev = version;
-    sha256 = "1z0fc75rx7dl6nnydksa578qv116j2c2xs1czfiijzxjghx8njdj";
+    owner = "dfandrich";
+    repo = pname;
+    rev = "e1dd44a34f67b1ab7201440e60a840258ee448d2";
+    sha256 = "0gjwwdqh9dprzylmmnk3gm41khka9arkij3i9amd8y7d49pm9rlv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    exiv2 libxml2 gtk2
-    libxslt docbook_xsl 
+  patches = [ ./fix-localedir.diff ];
+
+  nativeBuildInputs = [
+    desktop-file-utils
     docbook_xml_dtd_42
+    docbook_xsl
+    libxslt
+    pkgconfig
   ];
 
-  patchPhase = ''
-    sed -i "Makefile" \
-        -es",^[[:blank:]]*prefix[[:blank:]]*=.*$,prefix = $out,g"
-  '';
+  buildInputs = [
+    exiv2
+    gtk3
+    libxml2
+  ];
+
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "GTK=3"
+    "CC=cc"
+    "CXX=c++"
+    "CFLAGS=-DENABLE_NLS"
+  ];
+
+  doCheck = true;
+
+  installTargets = [ "install" "install-po" "install-desktop-file" ];
 
   meta = with stdenv.lib; {
     description = "A GPS photo correlation tool, to add EXIF geotags";
@@ -44,7 +60,8 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2Plus;
-    homepage = https://github.com/freefoote/gpscorrelate;
+    homepage = "https://github.com/dfandrich/gpscorrelate";
     platforms = platforms.linux;
+    maintainers = with maintainers; [ sikmir ];
   };
 }

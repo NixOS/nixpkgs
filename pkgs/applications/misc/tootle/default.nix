@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, python3, libgee, gsettings-desktop-schemas
+, vala, meson, ninja, pkgconfig, python3, libgee, gsettings-desktop-schemas
 , gnome3, pantheon, gobject-introspection, wrapGAppsHook
 , gtk3, json-glib, glib, glib-networking, hicolor-icon-theme
 }:
@@ -7,7 +7,7 @@
 let
   pname = "tootle";
   version = "0.2.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    pantheon.vala
+    vala
     wrapGAppsHook
   ];
   buildInputs = [

@@ -1,14 +1,12 @@
-{ stdenv, bash, which, autoconf, automake, fetchurl, coq }:
+{ stdenv, bash, which, autoconf, automake, fetchzip, coq }:
 
 let params =
   if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
-    version = "3.1.0";
-    uid = "37901";
-    sha256 = "02szrgz9m0ac51la1lqpiv6i2g0zbgx9gz5rp0q1g00ajldyna5c";
+    version = "3.2.0";
+    sha256 = "15bi36x7zj0glsb3s2gwqd4wswhfzh36rbp7imbyff53a7nna95l";
   } else {
     version = "2.6.1";
-    uid = "37454";
-    sha256 = "06msp1fwpqv6p98a3i1nnkj7ch9rcq3rm916yxq8dxf51lkghrin";
+    sha256 = "1y4czkfrd8p37vwv198nns4hz1brfv71na17pxsidwpxy7qnyfw1";
   }
 ; in
 
@@ -17,8 +15,8 @@ stdenv.mkDerivation rec {
   name = "coq${coq.coq-version}-flocq-${version}";
   inherit (params) version;
 
-  src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/${params.uid}/flocq-${version}.tar.gz";
+  src = fetchzip {
+    url = "https://gitlab.inria.fr/flocq/flocq/-/archive/flocq-${version}.tar.gz";
     inherit (params) sha256;
   };
 
@@ -46,6 +44,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" ];
   };
 }

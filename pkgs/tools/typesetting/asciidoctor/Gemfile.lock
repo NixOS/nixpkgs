@@ -8,6 +8,11 @@ GEM
     asciidoctor (2.0.10)
     asciidoctor-diagram (1.5.18)
       asciidoctor (>= 1.5.0, < 3.x)
+    asciidoctor-epub3 (1.5.0.alpha.9)
+      asciidoctor (>= 1.5.0, < 3.0.0)
+      concurrent-ruby (~> 1.1.5)
+      gepub (~> 1.0.2)
+      thread_safe (~> 0.3.6)
     asciidoctor-mathematical (0.3.0)
       asciidoctor (~> 2.0, >= 2.0.0)
       mathematical (~> 1.5, >= 1.5.8)
@@ -27,12 +32,18 @@ GEM
     concurrent-ruby (1.1.5)
     css_parser (1.7.0)
       addressable
+    gepub (1.0.4)
+      nokogiri (>= 1.8.2, < 1.11)
+      rubyzip (>= 1.1.1)
     hashery (2.1.2)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     mathematical (1.6.12)
       ruby-enum (~> 0.4)
+    mini_portile2 (2.4.0)
     multi_json (1.13.1)
+    nokogiri (1.10.3)
+      mini_portile2 (~> 2.4.0)
     pdf-core (0.7.0)
     pdf-reader (2.2.0)
       Ascii85 (~> 1.0.0)
@@ -54,12 +65,14 @@ GEM
     prawn-templates (0.1.1)
       pdf-reader (~> 2.0)
       prawn (~> 2.2)
-    public_suffix (3.1.0)
+    public_suffix (3.1.1)
     pygments.rb (1.2.1)
       multi_json (>= 1.0.0)
+    rouge (3.5.1)
     ruby-enum (0.7.2)
       i18n
     ruby-rc4 (0.1.5)
+    rubyzip (1.2.3)
     safe_yaml (1.0.5)
     thread_safe (0.3.6)
     treetop (1.5.3)
@@ -72,10 +85,12 @@ PLATFORMS
 DEPENDENCIES
   asciidoctor
   asciidoctor-diagram
+  asciidoctor-epub3
   asciidoctor-mathematical
   asciidoctor-pdf
   coderay
   pygments.rb
+  rouge
 
 BUNDLED WITH
    1.17.2

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libmnl }:
 
 stdenv.mkDerivation rec {
-  name = "libnetfilter_cttimeout-${version}";
+  pname = "libnetfilter_cttimeout";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnetfilter_cttimeout/files/${name}.tar.bz2";
+    url = "https://netfilter.org/projects/libnetfilter_cttimeout/files/${pname}-${version}.tar.bz2";
     sha256 = "aeab12754f557cba3ce2950a2029963d817490df7edb49880008b34d7ff8feba";
   };
 

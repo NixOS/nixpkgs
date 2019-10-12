@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "check-${version}";
+  pname = "check";
   version = "0.12.0";
 
   src = fetchurl {

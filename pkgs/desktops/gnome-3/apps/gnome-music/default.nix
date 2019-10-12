@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, gettext, fetchurl, gdk_pixbuf, tracker
+{ stdenv, meson, ninja, gettext, fetchurl, gdk-pixbuf, tracker
 , libxml2, python3, libnotify, wrapGAppsHook, libmediaart
 , gobject-introspection, gnome-online-accounts, grilo, grilo-plugins
 , pkgconfig, gtk3, glib, desktop-file-utils, appstream-glib
@@ -6,19 +6,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "3.32.2";
+  version = "3.34.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0cn7l1d3ayima1w3bxpshijabd7ibhnvqxv2mpvffzizk04ln6hk";
+    sha256 = "1a566ifx08clfm22qzdh1i6w8cr2kv7avqzkk6zgc5adba0vmzx4";
   };
 
   nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
   buildInputs = with gst_all_1; [
     gtk3 glib libmediaart gnome-online-accounts gobject-introspection
-    gdk_pixbuf gnome3.adwaita-icon-theme python3
+    gdk-pixbuf gnome3.adwaita-icon-theme python3
     grilo grilo-plugins libnotify libdazzle libsoup
     gsettings-desktop-schemas tracker
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly

@@ -20,7 +20,7 @@ let
     inherit rev sha256;
   };
 
-  core = stdenv.mkDerivation rec {
+  core = stdenv.mkDerivation {
     name = "${pname}-${version}";
     inherit src;
     buildInputs = [ cmake zlib gmp jdk8 ];
@@ -39,6 +39,7 @@ let
       platforms   = platforms.unix;
       license     = if includeGplCode then licenses.gpl2 else licenses.mit;
       homepage    = https://github.com/sambayless/monosat;
+      broken = true;
     };
   };
 

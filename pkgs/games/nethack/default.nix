@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
-, less, makeWrapper
+, less
 , buildPackages
 , x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkgconfig, qt5
 }:
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
                       ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
                       ++ lib.optionals qtMode [
                            pkgconfig mkfontdir qt5.qtbase.dev
-                           qt5.qtmultimedia.dev makeWrapper
+                           qt5.qtmultimedia.dev qt5.wrapQtAppsHook
                            bdftopcf
                          ];
 
@@ -97,6 +97,10 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preFixup = stdenv.lib.optionalString qtMode ''
+    wrapQtApp "$out/games/nethack"
+  '';
+
   postInstall = ''
     mkdir -p $out/games/lib/nethackuserdir
     for i in xlogfile logfile perm record save; do
@@ -135,11 +139,6 @@ in stdenv.mkDerivation rec {
     ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
     install -Dm 555 util/{makedefs,dgn_comp,lev_comp} -t $out/libexec/nethack/
     ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
-  '';
-
-  postFixup = lib.optionalString qtMode ''
-    wrapProgram $out/bin/nethack-qt \
-      --prefix QT_PLUGIN_PATH : "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
   '';
 
   meta = with stdenv.lib; {

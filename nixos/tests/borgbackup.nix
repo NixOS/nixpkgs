@@ -44,7 +44,7 @@ in {
     client = { ... }: {
       services.borgbackup.jobs = {
         
-        local = rec {
+        local = {
           paths = dataDir;
           repo = localRepo;
           preHook = ''

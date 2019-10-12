@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tthsum-${version}";
+  pname = "tthsum";
   version = "1.3.2";
 
   src = fetchurl {

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libtool, perl, bsdbuild, gettext, mandoc
 , libpng, libjpeg, xlibsWrapper, libXinerama, freetype, SDL, libGLU_combined
-, libsndfile, portaudio, mysql, fontconfig
+, libsndfile, portaudio, libmysqlclient, fontconfig
 }:
 
 let srcs = import ./srcs.nix { inherit fetchurl; }; in
-stdenv.mkDerivation rec {
-  name = "libagar-${version}";
+stdenv.mkDerivation {
+  pname = "libagar";
   inherit (srcs) version src;
 
   preConfigure = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--with-gettext=${gettext}"
     "--with-jpeg=${libjpeg.dev}"
     "--with-gl=${libGLU_combined}"
-    "--with-mysql=${mysql.connector-c}"
+    "--with-mysql=${libmysqlclient}"
     "--with-manpages=yes"
   ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libtool gettext ];
 
   buildInputs = [
-    bsdbuild perl xlibsWrapper libXinerama SDL libGLU_combined mysql.connector-c mandoc
+    bsdbuild perl xlibsWrapper libXinerama SDL libGLU_combined libmysqlclient mandoc
     freetype.dev libpng libjpeg.dev fontconfig portaudio libsndfile
   ];
 

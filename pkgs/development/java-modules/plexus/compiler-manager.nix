@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusCompilerManager_2_2 = map (obj: fetchMaven {
     version = "2.2";
     artifactId = "plexus-compiler-manager";

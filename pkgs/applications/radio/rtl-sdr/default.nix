@@ -1,7 +1,7 @@
 { stdenv, fetchgit, cmake, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
-  name = "rtl-sdr-${version}";
+  pname = "rtl-sdr";
   version = "0.6.0";
 
   src = fetchgit {

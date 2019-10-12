@@ -27,6 +27,7 @@ pythonPackages.buildPythonApplication rec {
     lxml
     pyyaml
     requests
+    setuptools
     toml
     zodb
   ]);

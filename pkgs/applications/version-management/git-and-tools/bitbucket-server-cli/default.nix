@@ -1,4 +1,4 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
 bundlerEnv rec {
   name = "bitbucket-server-cli-${version}";
@@ -9,11 +9,13 @@ bundlerEnv rec {
 
   pname = "atlassian-stash";
 
+  passthru.updateScript = bundlerUpdateScript "gitAndTools.bitbucket-server-cli";
+
   meta = with lib; {
     description = "A command line interface to interact with BitBucket Server (formerly Atlassian Stash)";
     homepage    = https://bitbucket.org/atlassian/bitbucket-server-cli;
     license     = licenses.mit;
-    maintainers = with maintainers; [ jgertm ];
+    maintainers = with maintainers; [ jgertm nicknovitski ];
     platforms   = platforms.unix;
   };
 }

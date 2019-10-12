@@ -1,7 +1,7 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "gopher-${version}";
+  pname = "gopher";
   version = "3.0.11";
 
   src = fetchurl {

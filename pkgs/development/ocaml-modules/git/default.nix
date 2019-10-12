@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, buildDunePackage
-, astring, decompress, fmt, hex, logs, mstruct, ocaml_lwt, ocamlgraph, uri
+, astring, decompress, fmt, hex, logs, mstruct, ocaml_lwt, ocamlgraph, ocplib-endian, uri
 , alcotest, mtime, nocrypto
 }:
 
@@ -15,7 +15,7 @@ buildDunePackage rec {
 	};
 
 	buildInputs = [ alcotest mtime nocrypto ];
-	propagatedBuildInputs = [ astring decompress fmt hex logs mstruct ocaml_lwt ocamlgraph uri ];
+	propagatedBuildInputs = [ astring decompress fmt hex logs mstruct ocaml_lwt ocamlgraph ocplib-endian uri ];
 	doCheck = true;
 
 	meta = {

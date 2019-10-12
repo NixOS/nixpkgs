@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "clasp-${version}";
+  pname = "clasp";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/clasp/${version}/clasp-${version}-source.tar.gz";

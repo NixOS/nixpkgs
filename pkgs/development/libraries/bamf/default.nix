@@ -3,7 +3,7 @@
 , xorgserver, dbus, python2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "bamf-${version}";
+  pname = "bamf";
   version = "0.5.4";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
 
   # fix paths
   makeFlags = [
-    "INTROSPECTION_GIRDIR=${placeholder ''dev''}/share/gir-1.0/"
-    "INTROSPECTION_TYPELIBDIR=${placeholder ''out''}/lib/girepository-1.0"
+    "INTROSPECTION_GIRDIR=${placeholder "dev"}/share/gir-1.0/"
+    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
   preConfigure = ''
@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
   # TODO: Requires /etc/machine-id
   doCheck = false;
 
-  # ignore deprecation errors
-  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
 
   meta = with stdenv.lib; {
     description = "Application matching framework";

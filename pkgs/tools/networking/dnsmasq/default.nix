@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ eelco fpletz ];
+    maintainers = with maintainers; [ eelco fpletz globin ];
   };
 }

@@ -2,7 +2,7 @@
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform, swig ? null, python}:
 
 stdenv.mkDerivation rec {
-  name = "libnl-${version}";
+  pname = "libnl";
   version = "3.4.0";
 
   src = fetchFromGitHub {

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "darkhttpd-${version}";
+  pname = "darkhttpd";
   version = "1.12";
 
   src = fetchurl {
-    url = "https://unix4lyfe.org/darkhttpd/${name}.tar.bz2";
+    url = "https://unix4lyfe.org/darkhttpd/${pname}-${version}.tar.bz2";
     sha256 = "0185wlyx4iqiwfigp1zvql14zw7gxfacncii3d15yaxk4av1f155";
   };
 

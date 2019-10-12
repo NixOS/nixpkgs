@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ makeWrapper perl perlPackages.XMLSimple ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
   buildPhase = "true";
 
   installPhase =

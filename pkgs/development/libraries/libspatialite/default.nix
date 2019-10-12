@@ -11,11 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ libxml2 sqlite zlib proj geos libiconv ];
 
   configureFlags = [ "--disable-freexl" ];
 
   enableParallelBuilding = true;
+
+  CFLAGS = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
 
   postInstall = "" + optionalString stdenv.isDarwin ''
     ln -s $out/lib/mod_spatialite.{so,dylib}

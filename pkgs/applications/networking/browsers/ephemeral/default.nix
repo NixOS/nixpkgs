@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , desktop-file-utils
+, vala
 , gettext
 , glib
 , gtk3
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
-  version = "5.1.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ephemeral";
     rev = version;
-    sha256 = "1wfrbbdw429q2mkycn87fhci0jidcsflk5f2lbzfzccbcs8msffz";
+    sha256 = "1bl5x79nvzq49azcghc2sx9l709524zixh7py8ddccfnhrq641w8";
   };
 
   nativeBuildInputs = [
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook

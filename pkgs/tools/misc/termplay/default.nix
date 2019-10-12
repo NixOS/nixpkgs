@@ -1,6 +1,6 @@
 { rustPlatform, fetchFromGitHub, lib, makeWrapper, gst_all_1, libsixel }:
 rustPlatform.buildRustPackage rec {
-  name = "termplay-${version}";
+  pname = "termplay";
   version = "2.0.4";
 
   src = fetchFromGitHub {

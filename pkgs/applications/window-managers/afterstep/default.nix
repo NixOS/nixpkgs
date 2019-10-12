@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "afterstep-${version}";
+  pname = "afterstep";
   version = "2.2.12";
   sourceName = "AfterStep-${version}";
 

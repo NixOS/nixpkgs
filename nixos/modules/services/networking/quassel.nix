@@ -104,17 +104,16 @@ in
         gid = config.ids.gids.quassel;
       }];
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${user} - - -"
+    ];
+
     systemd.services.quassel =
       { description = "Quassel IRC client daemon";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ] ++ optional config.services.postgresql.enable "postgresql.service"
                                      ++ optional config.services.mysql.enable "mysql.service";
-
-        preStart = ''
-          mkdir -p ${cfg.dataDir}
-          chown ${user} ${cfg.dataDir}
-        '';
 
         serviceConfig =
         {
@@ -126,7 +125,6 @@ in
           ] ++ optional cfg.requireSSL "--require-ssl"
             ++ optional (cfg.certificateFile != null) "--ssl-cert=${cfg.certificateFile}");
           User = user;
-          PermissionsStartOnly = true;
         };
       };
 

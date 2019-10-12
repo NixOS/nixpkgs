@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, gfortran, openblas, openmpi, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "getdp-${version}";
+  pname = "getdp";
   version = "3.0.4";
   src = fetchurl {
     url = "http://getdp.info/src/getdp-${version}-source.tgz";

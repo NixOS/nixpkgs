@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   bsh_2_0_b4 = map (obj: fetchMaven {
     version = "2.0b4";
     artifactId = "bsh";

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.45.4";
-  name = "expect-${version}";
+  pname = "expect";
 
   src = fetchurl {
     url = "mirror://sourceforge/expect/Expect/${version}/expect${version}.tar.gz";

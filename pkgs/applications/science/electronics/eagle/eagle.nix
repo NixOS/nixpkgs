@@ -12,12 +12,12 @@ let
     ];
   in
   stdenv.mkDerivation rec {
-    name = "eagle-${version}";
-    version = "9.4.1";
+    pname = "eagle";
+    version = "9.5.0";
 
     src = fetchurl {
       url = "https://eagle-updates.circuits.io/downloads/${builtins.replaceStrings ["."] ["_"] version}/Autodesk_EAGLE_${version}_English_Linux_64bit.tar.gz";
-      sha256 = "0p3kxryvk853rx24phcadvmqn6f37rnnql8sf6cqn9cqhrrkbvlq";
+      sha256 = "0wakaja98mkdgcxp18d7499i0254ns1xhnx4bag2lqi7j8qn8rqy";
     };
 
     desktopItem = makeDesktopItem {
@@ -35,9 +35,6 @@ let
         libGL glib nss nspr expat alsaLib
         qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
       ];
-
-    doConfigure = false;
-    doBuild = false;
 
     installPhase = ''
       # Extract eagle tarball
